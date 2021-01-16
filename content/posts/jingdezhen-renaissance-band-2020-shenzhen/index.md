@@ -52,33 +52,33 @@ lightgallery: true
 
 好了，下面是演出的照片集锦：
 
-![](/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg "Live House 入口的宣传海报")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg "Live House 入口的宣传海报")
 
 
-![](/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg "老村长1")
-![](/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg "老村长2")
-![](/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg "老村长3")
-![](/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg "拉小提琴的小哥哥")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg "老村长1")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg "老村长2")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg "老村长3")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg "拉小提琴的小哥哥")
 
-![](/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg "九三舞蹈")
-![](/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg "小提琴伴奏")
-![](/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg "九三是朝廷命官")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg "九三舞蹈")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg "小提琴伴奏")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg "九三是朝廷命官")
 
-![](/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg "阿弥陀佛")
-![](/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg "唱")
-![](/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg "唱")
-![](/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg "唱")
-![](/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg "唱")
-![](/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg "唱")
-![](/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg "九三最漂亮的一瞬间")
-![](/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg "九三超帅气")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg "阿弥陀佛")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg "唱")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg "唱")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg "唱")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg "唱")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg "唱")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg "九三最漂亮的一瞬间")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg "九三超帅气")
 
 结束：
 
-![](/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg "Live House 后台")
-![](/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg "结束鞠躬")
-![](/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg "大合照")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg "Live House 后台")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg "结束鞠躬")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg "大合照")
 
 签售：
 
-![](/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg "签售")
+![](https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg "签售")
