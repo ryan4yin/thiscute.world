@@ -1,7 +1,7 @@
 ---
 title: "《十二国记》"
 date: 2018-04-27T10:49:14+08:00
-draft: true
+draft: false
 
 resources:
 - name: "featured-image"
