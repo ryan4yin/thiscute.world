@@ -2,6 +2,13 @@
 title: "少有人迹的校园"
 date: 2018-04-27T12:22:09+08:00
 draft: false
+
+resources:
+- name: "featured-image"
+  src: "featured-image.png"
+
+tags: ["闲言碎语"]
+categories: ["随笔"]
 ---
 
 2017年2月的18号，清晨6点。天还只是朦朦亮，当空挂着半边弯月，一颗不知名的星星(大约是大角星)缀在月的旁边。

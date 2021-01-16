@@ -2,6 +2,13 @@
 title: "忽而假末"
 date: 2017-02-06T20:17:55+08:00
 draft: false
+
+resources:
+- name: "featured-image"
+  src: "featured-image.png"
+
+tags: ["闲言碎语"]
+categories: ["随笔"]
 ---
 
 
