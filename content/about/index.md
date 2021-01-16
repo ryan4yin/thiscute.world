@@ -1,30 +1,53 @@
 ---
-title: "About Me"
+title: "关于"
 date: 2021-01-16T00:24:31+08:00
 draft: false
 ---
 
+## 关于我
+
 >有很多的绝望，但也有美的时刻，只不过在美的时刻，时间是不同于以往的。 --《刺猬的优雅》
 
+我常用的中文昵称是「**於清樂**」，英文 ID 是「**ryan4yin**」，95 后。
 
-<a href="https://github.com/anuraghazra/github-readme-stats">
-  <img align="right" src="https://github-readme-stats.vercel.app/api?username=ryan4yin&show_icons=true&hide_border=false&icon_color=ffb90f&title_color=586069&count_private=true&include_all_commits=true" />
-</a>
+因为兴趣爱好，大学学的专业是「声学」，也因为兴趣爱好，目前的职业是 DevOps 工程师。
 
-- 🔭 I’m currently working on DevOps.
-- 🌱 I’m currently learning or using:
-  - Language: Go, Python
-  - Network: Istio, Envoy, Clilium
-  - Telemetry: Prometheus+Grafana, OpenTelemetry
-  - Kubernetes: Kubevela, Kubernetes Operator
-  - DevOps: Pulumi/Terraform, Flagger, Argo Workflow
-  - Virtual Machine: ProxmoxVE, QEMU/KVM
+目前专注于以 Kubernetes 为核心的 CNCF 技术圈，思考如何利用 CNCF 圈子里的工具提升开发团队的效率（CI/CD），
+降低运维成本，或者提供更高级的特性。
 
-## Skills
+你可以在我的 [Github Profile 页面](https://github.com/ryan4yin)看到我在技术方面的更多介绍。
 
-![](https://img.shields.io/badge/-Kubernetes-326de6?style=flat-square&logo=Kubernetes&logoColor=fff)
-![](https://img.shields.io/badge/-Linux-000000?style=flat-square&logo=Linux&logoColor=fff)
-![](https://img.shields.io/badge/-Python-3776ab?style=flat-square&logo=Python&logoColor=fff)
-![](https://img.shields.io/badge/-Go-007d9c?style=flat-square&logo=Go&logoColor=fff)
 
+## 关于此空间
+
+
+>“对我来说，博客首先是一种知识管理工具，其次才是传播工具。我的技术文章，主要用来整理我还不懂的知识。我只写那些我还没有完全掌握的东西，那些我精通的东西，往往没有动力写。炫耀从来不是我的动机，好奇才是。"  -- 阮一峰
+
+
+学习技术时，边学边做笔记是我的一个个人习惯。
+偶尔有些伤春悲秋的想法，想随便写写吐槽一下，也是我大学写日记养成的习惯。
+
+最开始是 2016 年 6 月，我开始在「博客园」上写文章。
+中间有用过 hexo+next-theme 搭个人博客，但是个人博客没啥流量，没人看没人评论就完全没有成就感，因此域名到期后就没续。
+
+有人阅读我的文章，为它点个赞、分享或者评论，我才能感受到自己写的东西是有意义的，因此我又回到了「博客园」。
+「博客园」的 SEO 做得很好，「博客园首页」也是一个很好的引流途径，这些结合起来，就能满足我的小小虚荣心。
+
+但是 2020 年通过独立博客，见识了各种各样的大佬们。大家的博客，通过一条条友链连接在一起，我觉得这非常有趣。
+而且个人博客的主题更丰富多彩，通过 github actions + github pages 来搭博客，也没啥成本。
+恰好最近又买了一个域名 `ryan4yin.space`，十年有效期。
+
+于是就有了这个网站。
+
+------
+
+我以前用博客园的时候，习惯将它当作笔记本使用，各色各样的笔记都直接往「博客园」里放，偶尔有一两篇自觉写得还不错，对别人可能有帮助的，我会发布到「博客园首页」。
+
+但是这种做法其实不好，笔记主要是给自己看的，写得不一定清楚明白，不适合直接分享出来。
+应该有专门的地方来放这些东西，所以我现在将所有的个人笔记，都保存在了 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge) 里面。
+
+而这个独立博客，主要内容应该是：
+
+- [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge) 中，写得比较清楚明白，可能对别人有价值的内容
+- 我的闲言碎语
 
