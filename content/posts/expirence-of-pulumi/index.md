@@ -17,7 +17,9 @@ categories: ["技术"]
 
 >pulumi 入门请移步官方文档：[pulumi get started](https://www.pulumi.com/docs/get-started/install/)
 
-pulumi 是一个基础设施的自动管理工具，使用 Python/TS/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：
+<!--more-->
+
+pulumi 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：
 
 - AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库...几乎所有的云上资源
 - 本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源
@@ -44,9 +46,13 @@ pulumi 是一个基础设施的自动管理工具，使用 Python/TS/Go/Dotnet �
 
 ## 我对 Pulumi 的看法
 
-pulumi 和 [terraform](https://www.terraform.io/) 一样，都是自动化管理基础设施的工具，但是它解决了 terraform 配置的一个痛点：配置语法太过简单，导致配置繁琐，而且还要额外学习一门 DSL - hcl。
+有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 [Terraform](https://www.terraform.io/).
 
-terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，表现力不够强。
+实际上我们一开始使用的也是 Terraform，但是后来使用 Pulumi 完全重写了一遍。
+
+主要原因是，Pulumi 解决了 Terraform 配置的一个痛点：配置语法太过简单，导致配置繁琐。而且还要额外学习一门 DSL - HCL
+
+Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，表现力不够强。
 这导致在更复杂的场景下，我们无法更自动化地进行基础设施配置，而需要更复杂的步骤：
 
 1. 借助 Python 等其他语言先生成出 HCL 配置
