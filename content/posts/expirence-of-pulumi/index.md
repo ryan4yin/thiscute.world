@@ -11,18 +11,12 @@ tags: ["基础设施即代码", "云原生", "Pulumi","Terraform"]
 categories: ["技术"]
 ---
 
-## [Plumi](https://github.com/pulumi/pulumi) - 基础设施代码化
-
->本文不是一篇 pulumi 入门文档！文章主要内容是我对 pulumi 的一些思考，以及使用 pulumi 遇到的各种问题+解决方法。
-
->pulumi 入门请移步官方文档：[pulumi get started](https://www.pulumi.com/docs/get-started/install/)
-
-<!--more-->
-
-pulumi 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：
+[Plumi](https://github.com/pulumi/pulumi) 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：
 
 - AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库...几乎所有的云上资源
 - 本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源
+
+<!--more-->
 
 相比直接调用 AWS/阿里云/Kubernetes 的 API，使用 pulumi 的好处有：
 
@@ -44,7 +38,7 @@ pulumi 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/
 **实际使用体验**：我们使用 Pulumi 自动化了阿里云测试环境搭建 95%+ 的操作，这个比例随着阿里云的 pulumi provider 的完善，还可以进一步提高！
 
 
-## 我对 Pulumi 的看法
+## Pulumi vs Terraform
 
 有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 [Terraform](https://www.terraform.io/).
 
@@ -81,6 +75,11 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
 1. 更方便测试：可以使用各编程语言中流行的测试框架来测试 pulumi 配置！
 1. 使用代码编写 Kubernetes 配置，no-yaml
    1. yaml 也存在和 HCL 一样的问题，配置太死板，导致我们现在需要通过 helm/kustomize + python 来生成 yaml ...
+
+
+>以下内容是我对 pulumi 的一些思考，以及使用 pulumi 遇到的各种问题+解决方法，适合对 pulumi 有一定了解的同学阅读。
+
+>如果你刚接触 Pulumi 而且有兴趣学习，请先移步 pulumi 官方文档入个门：[pulumi get started](https://www.pulumi.com/docs/get-started/install/)
 
 ## 使用建议
 
