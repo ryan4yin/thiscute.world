@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "istio.jpg"
 
-tags: ["Kubernetes", "Istio", "Service Mesh"]
+tags: ["Kubernetes", "Istio", "服务网格"]
 categories: ["技术"]
 ---
 
@@ -59,7 +59,7 @@ JWK 中 RSA 公钥的具体定义参见 [RSA Keys - JSON Web Algorithms (JWA)](h
 
 ### 2. JWK 的生成
 
-要生成 JWK 公钥，需要先生成私钥，生成方法参见 [JWT 签名算法 HS256、RS256 及 ES256 及密钥生成 ](https://www.cnblogs.com/kirito-c/p/12402066.html#228229456)。
+要生成 JWK 公钥，需要先生成私钥，生成方法参见 [JWT 签名算法 HS256、RS256 及 ES256 及密钥生成]({{< relref "jwt-algorithm-key-generation/index.md#使用-openssl-生成-rsaecc-公私钥" >}})。
 
 >公钥不需要用上述方法生成，因为我们需要的是 JWK 格式的公钥。后面会通过 python 生成出 JWK 公钥。
 
