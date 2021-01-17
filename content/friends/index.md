@@ -38,6 +38,8 @@ var myFriends = [
     ["https://www.jianshu.com/u/af3a36ae8d16", "/avatar/li2niu.png", "@李二牛", "深耕Web服务端 马拉松爱好者(PB330)"], 
     ["https://www.i-lab.top/", "https://www.i-lab.top/favicon.ico", "@震邦的算法日常", "南北传"], 
     ["https://xingaqr.com/", "https://xingaqr.com/avatar.png", "@单单", "但知行好事，莫要问前程"], 
+    ["https://farer.org/", "/avatar/farer.jpg", "@Stray Episode", "Scientific Evocation"], 
+    ["https://touko.moe/", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
 ];
 
 
