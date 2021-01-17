@@ -5,7 +5,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "dns.png"
 
 tags: ["DNS"]
 categories: ["技术"]
