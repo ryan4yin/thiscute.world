@@ -5,7 +5,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "https-secure.png"
 
 tags: ["HTTPS", "TLS", "OpenSSL", "加密"]
 categories: ["技术"]
