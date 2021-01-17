@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "qemu-kvm-libvirt-go.png"
 
-tags: ["虚拟化", "KVM", "Libvirt", "QEMU"]
+tags: ["虚拟化", "KVM", "libvirt", "QEMU"]
 categories: ["技术"]
 ---
 
