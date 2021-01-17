@@ -7,7 +7,7 @@ resources:
   src: "featured-image.png"
 
 tags: ["总结"]
-categories: ["随笔"]
+categories: ["随笔", "技术"]
 ---
 
 
