@@ -280,7 +280,11 @@ pulumi 和 terraform 都有一个缺点，就是封装层次太高了。
 - [pulumi-alicloud](https://github.com/pulumi/pulumi-alicloud): 管理阿里云资源
 - [pulumi-vault](https://github.com/pulumi/pulumi-vault): 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。
 
-我创建的 provider：
+## 我创建维护的 Provider
+
+由于 Pulumi 生态还比较小，有些 provider 只有 terraform 才有。
+
+我为了造(方)福(便)大(自)众(己)，创建并维护了两个本地虚拟机相关的 Providers:
 
 - [ryan4yin/pulumi-proxmox](https://github.com/ryan4yin/pulumi-proxmox): 目前只用来自动创建 PVE 虚拟机
    - 可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群
