@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "featured-image.jpg"
 
 tags: ["闲言碎语"]
 categories: ["随笔"]
