@@ -19,6 +19,8 @@ Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authen
 
 这里以 RSA256 算法为例进行介绍，ES256 的配置方式也是一样的。
 
+<!--more-->
+
 ### 1. 介绍 JWK 与 JWKS
 
 Istio 要求提供 JWKS 格式的信息，用于 JWT 签名验证。因此这里得先介绍一下 JWK 和 JWKS. 
