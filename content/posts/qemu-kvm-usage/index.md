@@ -60,9 +60,7 @@ sudo yast2 virtualization
 # enter to terminal ui, select kvm + kvm tools, and then install it.
 ```
 
-完了还需要安装 ebtables/iptables，这两个工具也是用来做网络虚拟化的。
-了解 docker 的应该知道，docker 就是使用 iptables 实现的容器虚拟网络。
-
+安装完成后，还不能直接使用，需要做些额外的工作。请继续往下走。
 
 ### 1. libguestfs - 虚拟机磁盘映像处理工具
 
@@ -147,6 +145,14 @@ $ cat /sys/module/kvm_intel/parameters/nested
 Y
 ```
 
+至此，KVM 的安装就大功告成啦，现在应该可以在系统中找到 virt-manager 的图标，进去就可以使用了。
+virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这里就不详细介绍了，自己摸索摸索应该就会了。
+
+
+-------------
+
+>如下内容是进阶篇，主要介绍如何通过命令行来管理虚拟机磁盘，以及 KVM。
+如果你还是 kvm 新手，建议先通过图形界面 virt-manager 熟悉熟悉，再往下继续读。
 
 ## 二、虚拟机磁盘映像管理
 
