@@ -60,16 +60,19 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
 2. 通过 `terraform` 命令行进行 plan 与 apply
 3. 通过 Python 代码解析 `terraform.tfstat`，获取 apply 结果，再进行进一步操作。
 
-进一步思考，**既然其他编程语言如 Python/Go 的引入不可避免，那是不是能使用它们彻底替代掉 HCL 呢？能不能直接使用 Python/Go 编写配置？**
+这显然非常繁琐，主要困难就在于 Python 和 Terraform 之间的交互。
+
+进一步思考，**既然其他编程语言如 Python/Go 的引入不可避免，那是不是能使用它们彻底替代掉 HCL 呢？能不能直接使用 Python/Go 编写配置？**如果 Terraform 原生就支持 Python/Go 来编写配置，那就不存在交互问题了。
 
 相比于使用领域特定语言 HCL，使用通用编程语言编写配置，好处有： 
 
-1. Python/Go/TypeScript 等通用的编程语言，能满足你的一切需求，而且作为一个开发人员/DevOps，你应该对它们相当熟悉。
-2. 更方便测试：可以使用各编程语言中流行的测试框架来测试 pulumi 配置！
-3. 使用代码编写 Kubernetes 配置，no-yaml
-   1. yaml 也存在和 HCL 一样的问题，配置太死板，导致我们现在需要通过 helm/kustomize + python 来生成 yaml ...
+1. Python/Go/TypeScript 等通用的编程语言，能满足你的一切需求。
+2. 作为一个开发人员/DevOps，你应该对 Python/Go 等语言相当熟悉，可以直接利用上已有的经验。
+3. 更方便测试：可以使用各编程语言中流行的测试框架来测试 pulumi 配置！
 
-于是 Pulumi 横空出世，它的特点有：
+于是 Pulumi 横空出世。
+
+## Pulumi 特点介绍
 
 4. 原生支持通过 Python/Go/TypeScript/Dotnet 等语言编写配置，也就完全解决了上述的 terraform 和 python 的交互问题。
 5. pulumi 是目前最流行的 真-IaaS 工具（另一个是刚出炉没多久的 terraform-cdk），对各语言的支持都很成熟。
