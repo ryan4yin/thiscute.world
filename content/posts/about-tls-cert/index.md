@@ -18,8 +18,16 @@ categories: ["技术"]
 1. 非对称加密算法（RSA/ECC 等）可以方便地对数据进行签名/验证，但是计算速度慢。
 2. 对称加密算法（ChaCha20/AES 等）计算速度快，强度高，但是无法安全地生成与保管密钥。
 
-于是 TLS 协议在握手阶段使用非对称算法验证服务端，并安全地生成一个对称密钥，然后使用对称算法进行加密通信。
-这里讲「安全地生成一个对称密钥」（Elliptic Curve Diffie-Hellman (ECDHE) key exchange），提供了「完美前向保密（Perfect Forward Secrecy）」特性，前向保密能够保护过去进行的通讯不受密码或密钥在未来暴露的威胁。（tls1.1/tls1.2 也可以使用非前向安全的算法！要注意！）
+于是 TLS 协议在握手阶段使用非对称算法验证服务端，并使用 ECDHE 密钥交换算法（Elliptic Curve Diffie-Hellman key exchange）安全地生成一个临时的对称密钥，然后使用对称算法进行加密通信。
+
+然后在后续的每次数据交换过程中，都使用 ECDHE 算法生成新的对称密钥，然后使用新密钥加密解密数据。
+
+![perfect-forward-secrecy-diagram](/images/about-tls-cert/perfect-forward-secrecy-diagram.webp)
+
+上述的 TLS 协议流程，提供了「完美前向保密（Perfect Forward Secrecy）」特性，前向保密能够保护过去进行的通讯不受密码或密钥在未来暴露的威胁。
+即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，黑客必须破解出整个 TLS 连接中所有事务的对称密钥，才能得到完整的数据。
+
+>tls1.1/tls1.2 也可以使用非前向安全的算法！要注意！
 
 >本文的主要介绍 TLS 协议在使用方面的内容，ECDHE 等算法及 TLS 握手流程的详细内容，请查阅其他文档。
 
