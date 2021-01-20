@@ -97,7 +97,7 @@ TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域�
 
 而「自签名证书」主要是方便，能不用还是尽量不要使用。
 
-#### 1.1 向权威CA机构申请「受信 TLS 证书」
+### 2. 向权威CA机构申请「受信 TLS 证书」
 
 免费的 TLS 证书有两种方式获取：
 
@@ -114,7 +114,7 @@ TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域�
 收费证书可以在各 TLS 提供商处购买，比如国内的阿里云腾讯云等。
 
 
-#### 1.2 生成「本地签名证书 - tls_locally_signed_cert」
+### 3. 生成「本地签名证书 - tls_locally_signed_cert」
 
 除了公网可用的受信证书，在内网环境，我们需要也使用 TLS 证书保障通信安全，这时我们可能会选择自己生成证书，而不是向权威机构申请证书。
 
@@ -203,7 +203,7 @@ TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域�
 
 上述流程生成一个 x509 证书链，详细的参数说明，参见 [RFC5280 - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile](https://tools.ietf.org/html/rfc5280)
 
-#### 1.3 关于证书寿命
+### 4. 关于证书寿命
 
 对于公开服务，服务端证书的有效期不要超过 825 天（27 个月）！而 2020 年 11 月起，新申请的服务端证书有效期缩短到了 398 天（13 个月）。目前 Apple/Mozilla/Chrome 都发表了相应声明，证书有效期超过上述限制的，将被浏览器/Apple设备禁止使用。
 
@@ -216,7 +216,7 @@ TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域�
 目前很多 Web 服务器/代理，都支持自动轮转 Let's Encrypt 证书。
 另外 Vault 等安全工具，也支持自动轮转私有证书。
 
-#### 1.4 拓展1：基于 ECC 算法的 TLS 证书
+### 5. 拓展1：基于 ECC 算法的 TLS 证书
 
 >Let's Encrypt 目前也已经支持了 ECC 证书。
 
@@ -242,7 +242,7 @@ openssl req -x509 -sha256 -days 3650 -key key.pem -in csr.csr -out certificate.p
 ## 方法二：使用 ca 进行签名，方法参考前面
 ```
 
-#### 1.5 拓展2：使用 OpenSSL 生成 SSH/JWT 密钥对
+### 6. 拓展2：使用 OpenSSL 生成 SSH/JWT 密钥对
 
 RSA/ECC 这两类非对称加密算法被广泛的应用在各类加密通讯中。
 SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名算法，因此使用 OpenSSL 生成的密钥对，也应该能用于 SSH 协议加密、JWT 签名等场景。
