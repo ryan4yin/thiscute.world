@@ -355,9 +355,7 @@ JWT 签名及验证只需要使用标准的私钥-公钥对，即 `ecc-private-k
 **如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。**
 
 
-## 五、拓展知识
-
-### 1. TLS 双向认证(Mutual TLS authentication, mTLS)
+## 五、TLS 双向认证(Mutual TLS authentication, mTLS)
 
 TLS 协议（tls1.0+，RFC: [TLS1.2 - RFC5246](https://tools.ietf.org/html/rfc5246#section-7.4.4)）中，定义了服务端请求验证客户端证书的方法。这
 个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。
@@ -404,7 +402,7 @@ mTLS 的应用场景主要在「零信任网络架构」，或者叫「无边界
    1. 主要参数是两个：`ssl_client_certificate /etc/nginx/client-ca.pem` 和 `ssl_verify_client on`
 
 
-#### 1.1 mTLS 的安全性
+### mTLS 的安全性
 
 如果将 mTLS 用在 App 安全上，存在的风险是：
 
@@ -419,7 +417,9 @@ mTLS 和「公钥锁定/证书锁定」对比：
 2. mTLS: 服务端和客户端都要验证对方。
    1. 保证双边可信，在客户端证书不被破解的情况下，就能 Ban 掉所有的爬虫或代理技术。
 
-### 2. TLS 协议的客户端逆向/破解手段总结
+## 六 TLS 协议的破解手段
+
+### 1. 客户端逆向/破解手段总结
 
 要获取一个应用的数据，有两个方向：
 
@@ -430,7 +430,7 @@ mTLS 和「公钥锁定/证书锁定」对比：
 待续
 
 
-## 六、通过 OpenSSL 对 TLS 证书进行 CURD（增删查改）
+## 七、通过 OpenSSL 对 TLS 证书进行 CURD（增删查改）
 
 ### 1. 查询与验证
 
