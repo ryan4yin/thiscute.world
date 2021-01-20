@@ -263,11 +263,11 @@ openssl req -x509 -sha256 -days 3650 -key key.pem -in csr.csr -out certificate.p
 ### 6. 拓展2：使用 OpenSSL 生成 SSH/JWT 密钥对
 
 RSA/ECC 这两类非对称加密算法被广泛的应用在各类加密通讯中。
-SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名算法，因此使用 OpenSSL 生成的密钥对，也应该能用于 SSH 协议加密、JWT 签名等场景。
+SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加密算法，因此使用 OpenSSL 生成的密钥对，也应该能用于 SSH 协议加密、JWT 签名等场景。
 
 >ECDSA 是一种基于 ECC 和 DSA 的加密算法
 
-既然 SSH/TLS/JWT 使用的是相同的算法，那理所当然地，SSH/JWT 密钥对应该也可以通过 OpenSSL 生成出来。
+既然 SSH/TLS/JWT 使用的是相同的密钥对，那理所当然地，SSH/JWT 密钥对应该也可以通过 OpenSSL 生成出来。
 
 生成 RSA 密钥对的命令如下：
 
@@ -299,6 +299,13 @@ JWT 签名及验证只需要使用标准的私钥-公钥对，即 `ecc-private-k
 而 SSH 需要使用专用的公钥格式，因此它的使用的密钥对应该是 `ecc-private-key.pem`/`ecc-public.pub`
 
 注：SSH 目前推荐使用 ed25519 算法，而 JWT 目前推荐使用 ECDSA 算法。
+
+#### 6.1 加密与签名
+
+加密与解密：公钥用于对数据进行加密，私钥用于对数据进行解密
+签名与验证：私钥用于对数据进行签名，公钥用于对签名进行验证
+
+- [加密与签名的公私钥，用途刚好相反！](https://www.zhihu.com/question/25912483/answer/31653639)
 
 ## 四、服务端与客户端的证书配置
 
