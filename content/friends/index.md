@@ -42,7 +42,7 @@ var myFriends = [
     ["https://touko.moe/", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
     ["https://k8s.li/", "https://blog.k8s.li/avatar.png", "@木子", "垃圾佬、搬砖社畜、运维工程师 <= DevOps"], 
     ["https://chanshiyu.com/", "https://cdn.jsdelivr.net/gh/chanshiyucx/yoi/blog/avatar.jpg", "@蝉时雨", "蝉鸣如雨 花宵道中 <= 前端/Java后端"], 
-    ["https://www.addesp.com", "https://www.addesp.com/avatar", "@ADD-SP", "记录 & 分享 & 感受"], 
+    ["https://www.addesp.com", "/avatar/add-sp.jpg", "@ADD-SP", "记录 & 分享 & 感受"], 
 ];
 
 
