@@ -30,3 +30,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           cname: ryan4yin.space
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '15.x'
+      - name: Push Argolia Index
+        run: |
+          npm install algoliasearch
+          node push_argolia_index.js
+        env:
+          ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
