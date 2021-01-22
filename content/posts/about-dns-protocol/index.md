@@ -1,13 +1,13 @@
 ---
 title: "Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例"
-date: 2021-01-17T21:55:23+08:00
-draft: true
+date: 2020-03-29T15:49:23+08:00
+draft: false
 
 resources:
 - name: "featured-image"
   src: "dns.png"
 
-tags: ["DNS"]
+tags: ["DNS", "CoreDNS", "网络"]
 categories: ["技术"]
 ---
 
@@ -23,17 +23,17 @@ categories: ["技术"]
 
 网上搜一圈没找到类似带 UI 的 DNS 工具，搜到的 powerdns/bind 相比 coredns 也没看出啥优势来，所以决定就用 CoreDNS，刚好熟悉一下它的具体使用。
 
-不过讲 CoreDNS 前，我们还是先来熟悉一下 DNS 吧。
+不过讲 CoreDNS 前，我们还是先来熟悉一下 DNS 的基础概念吧。
 
 ## 一、DNS 是个啥？
 
->没有写得很清楚，不适合初学。建议先通过别的资料熟悉下 DNS。
+>没有写得很清楚，不适合初学。建议先通过别的资料熟悉下 DNS 基础。
 
 DNS，即域名系统（Domain Name System），是一项负责将一个 human readable 的所谓域名，转换成一个 ip 地址的协议。
 
 而域名的好处，有如下几项：
 
-1. 域名对人类更友好，可读的字符串总比一串 ip 数字好记。
+1. 域名对人类更友好，可读的字符串比一串 ip 数字可好记多了。
 1. 一个域名可以对应多个 ip，可实现所谓的负载均衡。
 1. 多个域名可以对应同一个 ip，以不同的域名访问该 ip，能访问不同的应用。（通过 nginx 做代理实现）
 
@@ -75,7 +75,7 @@ DNS 虽然说一般只用来查个 ip 地址，但是它提供的记录类型还
 1. **顶级域（Top Level Domains, TLD）**：`.com` `.cn` 等国际、国家级的域名
     - 顶级域名服务器负责解析`次级域名`，给出次级域名的 DNS 服务器地址。
     - 每个顶级域名都对应各自的服务器，它们之间是完全独立的。`.cn` 的域名解析仅由 `.cn` 顶级域名服务器提供。
-    - 目前国际 DNS 系统中已有上千个 TLD，包括中文「.我爱你」甚至藏文域名，详细列表参见 [IANA TLD u数据库](http://www.iana.org/domains/root/db)
+    - 目前国际 DNS 系统中已有上千个 TLD，包括中文「.我爱你」甚至藏文域名，详细列表参见 [IANA TLD 数据库](http://www.iana.org/domains/root/db)
     - 除了国际可用的 TLD，还有一类类似「内网 IP 地址」的“私有 TLD”，最常见的比如  xxx.local xxx.lan，被广泛用在集群通信中。后面详细介绍
 1. **次级域（Second Level Domains）**：这个才是个人/企业能够买到的域名，比如 `baidu.com`
     - 每个次级域名都有一到多个权威 DNS 服务器，这些 DNS 服务器会以 NS 记录的形式保存在对应的顶级域名（TLD）服务器中。 
@@ -85,10 +85,11 @@ DNS 虽然说一般只用来查个 ip 地址，但是它提供的记录类型还
 
 普通用户通常是通过域名提供商如阿里云购买的次级域名，接下来我们以 `rea.ink` 为例介绍域名的购买到可用的整个流程。
 
-这时阿里云会向该中插入几条 NS 记录，指向阿里云的次级 DNS 服务器（`vip1.alidns.com`）。
+域名的购买与使用流程：
 
 1. 你在某域名提供商处购买了一个域名 `rea.ink`
 1. 域名提供商向 `.ink` 对应的顶级域名服务器中插入一条以上的 NS 记录，指向它自己的次级 DNS 服务器，如 `dns25.hichina.com.`
+    - 阿里云会向 TLD 中插入几条 NS 记录，指向阿里云的次级 DNS 服务器（如 `vip1.alidns.com`）。
 1. 你在该域名提供商的 DNS 管理界面中添加 `A` 记录，值为你的服务器 IP。
 1. OK 现在 ping 一下 `rea.ink`，就会发现它已经解析到你自己的服务器了。
 
@@ -130,21 +131,20 @@ DNS 记录允许使用通配符 `*`，并且该通配符可匹配任意级数的
 可缓存总得有个过期时间吧！为了精确地控制 DNS 记录的过期时间，每条 DNS 记录都要求设置一个时间属性——TTL，单位为秒。这个时间可以自定义。
 
 任何一条 DNS 缓存，在超过过期时间后都必须丢弃！
+另外在没超时的时候，DNS 缓存也可以被主动或者被动地刷新。
 
 ## 四、本地 DNS 服务器与私有 DNS 域
 
 这类服务器只在当前局域网内有效，是一个私有的 DNS 服务器，企业常用。一般通过 DHCP 或者手动配置的方式，使内网的服务器都默认使用局域网 DNS 服务器进行解析。该服务器可以只解析自己的私有 DNS 域，而将其他 DNS 域的解析 forward 到公网 DNS 解析器去。
 
 这个私有 DNS 域，会覆盖掉公网的同名域(如果公网上有这个域的话)。
-私有 dns 域也可使用公网不存在的 TLD，比如 xxx.local xxx.lan 等。vmware vcenter 就默认使用 vsphere.local 作为它的 sso (单点登录)系统的域名。
+私有 dns 域也可使用公网不存在的 TLD，比如 xxx.local xxx.lan 等。vmware vcenter 就默认使用 vsphere.local 作为它的 sso (单点登录)系统的域名。kubernetes 默认使用 `svc.cluster.local` 作为集群内部域名。
 
 私有 DNS 域的选择，参见 [DNS 私有域的选择：internal.xxx.com xxx.local 还是 xxx.zone？](https://www.cnblogs.com/kirito-c/p/12624815.html)
 
 局域网 DNS 服务器的规模与层级，视局域网的大小而定。一般小公司一个就行，要容灾设三个副本也够了。
 
-以 CoreDNS 为例，局域网 DNS 服务器也可以被设置成一个 DNS Resolver，可以设置只转发特定域名的 DNS 解析。这叫将某个域设为转发区域。
-
-著名的 Kubernetes 容器集群系统（它内部使用的是自己的虚拟局域网），就是使用的 CoreDNS 进行局域网的域名解析，以实现服务发现功能。
+以 CoreDNS 为例，局域网 DNS 服务器也可以被设置成一个 DNS Resolver，可以设置只转发特定域名的 DNS 解析。这叫将某个域设为「转发区域」。
 
 ## 五、操作系统的 DNS 解析器
 
