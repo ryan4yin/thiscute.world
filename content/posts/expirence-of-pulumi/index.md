@@ -74,10 +74,12 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
 
 于是 Pulumi 横空出世。
 
+>另一个和 Pulumi 功能类似的工具，是刚出炉没多久的 terraform-cdk，但是目前它还很不成熟。
+
 ## Pulumi 特点介绍
 
 4. 原生支持通过 Python/Go/TypeScript/Dotnet 等语言编写配置，也就完全解决了上述的 terraform 和 python 的交互问题。
-5. pulumi 是目前最流行的 真-IaaS 工具（另一个是刚出炉没多久的 terraform-cdk），对各语言的支持都很成熟。
+5. pulumi 是目前最流行的 真-IaaS 工具，对各语言的支持都很成熟。
 6. 兼容 terraform 的所有 provider，只是需要自行使用 [pulumi-tf-provider-boilerplate](https://github.com/pulumi/pulumi-tf-provider-boilerplate) 重新打包，有些麻烦。
    1. pulumi 官方的 provider 几乎全都是封装的 terraform provider，包括 aws/azure/alicloud，目前只发现 kubernetes 是原生的（独苗啊）。
 7. 状态管理和 secrets 管理有如下几种选择：
@@ -99,15 +101,13 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
 
 1. **建议查看对应的 terraform provider 文档：pulumi 的 provider 基本都是封装的 terraform 版本，而且文档是自动生成的，比（简）较（直）难（一）看（坨）懂（shi），examples 也少。**
 2. stack: pulumi 官方提供了两种 stack 用法：[「单体」和「微-stack」](https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/)
-   1. 单体: one stack hold them all，通过 stack 参数来控制步骤。stack 用来区分环境 dev/pro 等。
+   1. 单体: one stack rule them all，通过 stack 参数来控制步骤。stack 用来区分环境 dev/pro 等。
    2. 微-stack: 每一个 stack 是一个步骤，所有 stack 组成一个完整的项目。
    3. 实际使用中，我发现「微-stack」模式需要使用到 pulumi 的 inter-stack dependencies，报一堆的错，而且不够灵活。因此目前更推荐「单体」模式。
 
 我们最近使用 pulumi 完全重写了以前用 terraform 编写的云上配置，简化了很多繁琐的配置，也降低了我们 Python 运维代码和 terraform 之间的交互难度。
 另外我们还充分利用上了 Python 的类型检查和语法检查，很多错误 IDE 都能直接给出提示，强化了配置的一致性和可维护性。
 
-体验上，terraform 只是配置编写方式，以及状态管理有些不同。实际上都是通过同样的 provider 管理云上资源。
-目前我们使用 pulumi/terraform，实现了云上环境（资源组、VPC专有网络、k8s集群、数据库、账号权限系统、负载均衡等等）的一键搭建与销毁。
 不过由于阿里云 provider 暂时还：
 
 1. 不支持管理 ASM 服务网格、DTS 数据传输等资源
@@ -120,7 +120,7 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
 
 ## 常见问题
 
-### 1. pulumi 的 `Output` 常见问题
+### 1. `Output` 的用法
 
 1. pulumi 通过资源之间的属性引用（`Output[str]`）来确定依赖关系，如果你通过自定义的属性(`str`)解耦了资源依赖，会导致资源创建顺序错误而创建失败。
 2. `Output[str]` 是一个异步属性，类似 Future，不能被用在 pulumi 参数之外的地方！
@@ -132,9 +132,11 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
    3. `Output.all(output1, output2, ...).apply(lambda it: print(it))` 可用于将多个 `output` 值，拼接成一个 `Output` 类型，其内部的 raw 值为一个 tuple 对象 `(str1, str2, ...)`.
       1. 官方举例：`connection_string = Output.all(sql_server.name, database.name).apply(lambda args: f"Server=tcp:{args[0]}.database.windows.net;initial catalog={args[1]}...")`
 
-### 2. 如果使用多个云账号/多个k8s集群？
+### 2. 如何使用多个云账号/多个 k8s 集群？
 
 默认情况下 pulumi 使用默认的 provider，但是 pulumi 所有的资源都有一个额外的 `opts` 参数，可用于设定其他 provider。
+
+通过这个 `opts`，我们可以实现在一个 pulumi 项目中，使用多个云账号，或者管理多个 k8s 集群。
 
 示例：
 
@@ -180,8 +182,8 @@ vpc_id = infra.require("resources.vpc.id")
    1. 修复方法：`pulumi stack export`，删除 pending 资源，再 `pulumi stack import`
 2. 手动删除了云上资源，或者修改了一些对资源管理无影响的参数，对 `pulumi` 没有影响，它能正确检测到这种情况。
    1. 可以通过 `pulumi refresh` 手动从云上拉取最新的资源状态。
-3. 手动更改了资源之间的关系（比如绑定 EIP 之类的），很可能导致 pulumi 无法正确管理资源之间的依赖。
-
+3. 手动更改了资源之间的依赖关系（比如绑定 EIP 之类的），很可能导致 pulumi 无法正确管理资源之间的依赖。
+   - 这种情况必须先手动还原依赖关系（或者把相关资源全部手动删除掉），然后才能继续使用 pulumi。
 
 ### 5. pulumi-kubernetes？
 
@@ -236,7 +238,8 @@ deployment = Deployment(
 
 ### 6. 阿里云资源 replace 报错？
 
-部分只能创建删除，不允许修改的资源，做变更时会报错：「Resources aleardy exists」，
+阿里云有部分资源，只能创建删除，不允许修改，比如「资源组」。
+对这类资源做变更时，pulumi 会直接报错：「Resources aleardy exists」，
 这类资源，通常都有一个「force」参数，指示是否强制修改——即先删除再重建。
 
 ### 7. 有些资源属性无法使用 pulumi 配置？ 
@@ -245,7 +248,7 @@ deployment = Deployment(
 
 比如阿里云很多资源的属性，pulumi 都无法完全配置，因为 alicloud provider 的功能还不够全面。
 
-目前我们生产环境，大概 90%+ 的东西，都可以使用 pulumi 实现自动化配置。
+目前我们生产环境，大概 95%+ 的东西，都可以使用 pulumi 实现自动化配置。
 而其他 OSS 的高级参数、新出的 ASM 服务网格、kubernetes 的授权管理、ElasticSearch7 等资源，还是需要手动配置。
 
 这个没办法，只能等阿里云提供支持。
@@ -283,7 +286,7 @@ pulumi 和 terraform 都有一个缺点，就是封装层次太高了。
 
 在很多情况下，都可能发生资源状态被破坏的问题：
 
-1. 在创建资源 A，因为参数是已知的，你直接使用了常量而不是 output。这会导致 pulumi 无法识别到依赖关系！从而创建失败，或者删除时资源状态被破坏！
+1. 在创建资源 A，因为参数是已知的，你直接使用了常量而不是 `Output`。这会导致 pulumi 无法识别到依赖关系！从而创建失败，或者删除时资源状态被破坏！
 1. 有一个 pulumi stack 一次在三台物理机上创建资源。你白天创建资源晚上删除资源，但是某一台物理机晚上会关机。这将导致 pulumi 无法查询到这台物理机上的资源状态，这个 pulumi stack 在晚上就无法使用，它会一直报错！
 
 
