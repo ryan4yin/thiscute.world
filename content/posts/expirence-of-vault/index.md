@@ -34,7 +34,7 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 ![](/images/expirence-of-vault/vault-layers.png "vault layers")
 
 可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
-Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 Http API 三个部分。
+Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。
 
 「安全屏障(security barrier)」是 Vault(金库) 周围的加密「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过「屏障(barrier)」。
 barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 的过程中被验证与解密。
