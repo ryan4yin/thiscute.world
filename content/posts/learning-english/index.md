@@ -7,8 +7,8 @@ resources:
 - name: "featured-image"
   src: "grimgargroup.jpg"
 
-tags: ["Manjaro", "Linux", "Arch Linux"]
-categories: ["技术"]
+tags: [“英语”, "语言学习"]
+categories: ["随笔"]
 ---
 
 对我而言，学英语是一件挺痛苦的事。从初中开始学英文，可从来不觉得它有趣，主动性也就不强。
