@@ -41,6 +41,6 @@ categories: ["随笔"]
 
 最近看一个动漫看完不过瘾，转去看这部动漫的轻小说。轻小说中文翻译的太呆板，发现居然有英文的，直接啃起了英文。。
 
-换了好几部小说，现在在看 Grimgar of Fantasy and Ash，还找了个英文动漫网站，颇有以后看动漫也只看英文字幕的打算。希望能持续下去吧。
+换了好几部小说，现在在看 [Grimgar of Fantasy and Ash](https://www.baka-tsuki.org/project/index.php?title=Hai_to_Gensou_no_Grimgar) [Tasogare-iro no Uta Tsukai(黄昏色の詠使い)](https://www.baka-tsuki.org/project/index.php?title=Tasogare-iro_no_Uta_Tsukai)，还找了个英文动漫网站，颇有以后看动漫也只看英文字幕的打算。希望能持续下去吧。
 
 不过也有点苦恼，因为暑假就要找工作，现在却沉迷看英文小说。。本来这个月该学算法的，可半个月都过了，我的进度大概才认真的时候的五天的样子。。真不知道未来会是啥样。
