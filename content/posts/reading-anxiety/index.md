@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "featured-image.png"
 
-tags: ["闲言碎语"]
+tags: []
 categories: ["随笔"]
 ---
 
