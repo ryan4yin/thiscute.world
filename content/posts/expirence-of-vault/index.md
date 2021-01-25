@@ -555,11 +555,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: vault-auth
+  namespace: vault
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: vault-auth
+  namespace: vault
   annotations:
     kubernetes.io/service-account.name: vault-auth
 type: kubernetes.io/service-account-token
@@ -575,7 +577,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: vault-auth
-    namespace: default
+    namespace: vault
 ```
 
 现在在 vault 实例这边，启用 kubernetes 身份验证，在 vault 实例内，执行如下命令：
