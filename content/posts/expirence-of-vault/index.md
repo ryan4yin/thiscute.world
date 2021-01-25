@@ -168,7 +168,7 @@ listener "tcp" {
 
 然后 `docker-compose up -d` 就能启动运行一个 vault 实例。
 
-### 2. 通过 helm 部署 vault 
+### 2. 通过 helm 部署 vault {#install-by-helm}
 
 >推荐用于生产环境
 
@@ -185,7 +185,8 @@ helm search repo hashicorp/vault -l | head
 helm pull hashicorp/vault --version 0.7.0 --untar
 ```
 
-参照下载下来的 `./vault/values.yaml` 编写 `custom-values.yaml`，以 `mysql` 为后端存储的配置示例如下:
+参照下载下来的 `./vault/values.yaml` 编写 `custom-values.yaml`，
+部署一个以 `mysql` 为后端存储的 HA vault，配置示例如下:
 
 ```yaml
 global:
@@ -193,11 +194,26 @@ global:
   # will enable or disable all the components within this chart by default.
   enabled: true
   # TLS for end-to-end encrypted transport
-  tlsDisable: true
+  tlsDisable: false
 
 injector:
   # True if you want to enable vault agent injection.
   enabled: true
+
+  replicas: 1
+
+  # If multiple replicas are specified, by default a leader-elector side-car
+  # will be created so that only one injector attempts to create TLS certificates.
+  leaderElector:
+    enabled: true
+    image:
+      repository: "gcr.io/google_containers/leader-elector"
+      tag: "0.4"
+    ttl: 60s
+
+  # If true, will enable a node exporter metrics endpoint at /metrics.
+  metrics:
+    enabled: false
 
   # Mount Path of the Vault Kubernetes Auth Method.
   authPath: "auth/kubernetes"
@@ -279,7 +295,7 @@ server:
   # Helm project by default.  It is possible to manually configure Vault to use a
   # different HA backend.
   ha:
-    enabled: false
+    enabled: true
     replicas: 3
 
     # Set the api_addr configuration for Vault HA
@@ -406,7 +422,7 @@ Web UI 适合手工操作，而 sdk/`terraform-provider-vault` 则适合用于�
 
 前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount + Role 为每个 Pod 单独分配权限。
 
-首先启用启用 Kubernetes 身份验证:
+首先启用 Vault 的 Kubernetes 身份验证:
 
 ```shell
 # 配置身份认证需要在 vault pod 中执行，启动 vault-0 的交互式会话
@@ -416,13 +432,137 @@ export VAULT_ADDR='http://localhost:8200'
  
 # 启用 Kubernetes 身份验证
 vault auth enable kubernetes
- 
-# 添加 vault 用于访问 kube-apiserver API 的配置：jwt 内容、apiserver url、CA证书
+
+# kube-apiserver API 配置，vault 需要通过 kube-apiserver 完成对 serviceAccount 的身份验证
 vault write auth/kubernetes/config \
     token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
     kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" \
     kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 ```
+
+#### 1.1 使用集群外部的 valut 实例
+
+>如果你没这个需求，请跳过这一节。
+
+>详见 [Install the Vault Helm chart configured to address an external Vault](https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault)
+
+kubernetes 也可以和外部的 vault 实例集成，集群中只部署 vault-agent.
+
+这适用于多个 kubernetes 集群以及其他 APP 共用一个 vault 实例的情况，比如我们本地的多个开发测试集群，就都共用着同一个 vault 实例，方便统一管理应用的 secrets.
+
+首先，使用 helm chart 部署 vault-agent，接入外部的 vault 实例。使用的 `custom-values.yaml` 示例如下：
+
+```yaml
+global:
+  # enabled is the master enabled switch. Setting this to true or false
+  # will enable or disable all the components within this chart by default.
+  enabled: true
+  # TLS for end-to-end encrypted transport
+  tlsDisable: false
+
+injector:
+  # True if you want to enable vault agent injection.
+  enabled: true
+
+  replicas: 1
+
+  # If multiple replicas are specified, by default a leader-elector side-car
+  # will be created so that only one injector attempts to create TLS certificates.
+  leaderElector:
+    enabled: true
+    image:
+      repository: "gcr.io/google_containers/leader-elector"
+      tag: "0.4"
+    ttl: 60s
+
+  # If true, will enable a node exporter metrics endpoint at /metrics.
+  metrics:
+    enabled: false
+
+  # External vault server address for the injector to use. Setting this will
+  # disable deployment of a  vault server along with the injector.
+  # TODO 这里的 https ca.crt 要怎么设置？mTLS 又该如何配置？
+  externalVaultAddr: "https://<external-vault-url>"
+
+  # Mount Path of the Vault Kubernetes Auth Method.
+  authPath: "auth/kubernetes"
+
+  certs:
+    # secretName is the name of the secret that has the TLS certificate and
+    # private key to serve the injector webhook. If this is null, then the
+    # injector will default to its automatic management mode that will assign
+    # a service account to the injector to generate its own certificates.
+    secretName: null
+
+    # caBundle is a base64-encoded PEM-encoded certificate bundle for the
+    # CA that signed the TLS certificate that the webhook serves. This must
+    # be set if secretName is non-null.
+    caBundle: ""
+
+    # certName and keyName are the names of the files within the secret for
+    # the TLS cert and private key, respectively. These have reasonable
+    # defaults but can be customized if necessary.
+    certName: tls.crt
+    keyName: tls.key
+```
+
+部署命令和 [通过 helm 部署 vault](#install-by-helm) 一致，只要更换 `custom-values.yaml` 就行。
+
+vault-agent 部署完成后，第二步是为 vault 创建 serviceAccount、secret 和 ClusterRoleBinding，以允许 vault 审查 kubernetes 的 token, 完成对 pod 的身份验证. yaml 配置如下：
+
+```yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vault-auth
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-auth
+  annotations:
+    kubernetes.io/service-account.name: vault-auth
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: role-tokenreview-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - kind: ServiceAccount
+    name: vault-auth
+    namespace: default
+```
+
+现在在 vault 实例这边，启用 kubernetes 身份验证，在 vault 实例内，执行如下命令：
+
+```shell
+export VAULT_TOKEN='<your-root-token>'
+export VAULT_ADDR='http://localhost:8200'
+ 
+# 启用 Kubernetes 身份验证
+vault auth enable kubernetes
+ 
+# kube-apiserver API 配置，vault 需要通过 kube-apiserver 完成对 serviceAccount 的身份验证
+# TOKEN_REVIEW_JWT: 就是我们前面创建的 secret `vault-auth`
+TOKEN_REVIEW_JWT=$(kubectl get secret vault-auth -o go-template='{{ .data.token }}' | base64 --decode)
+# kube-apiserver 的 ca 证书
+KUBE_CA_CERT=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 --decode)
+# kube-apiserver 的 url
+KUBE_HOST=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.server}')
+
+vault write auth/kubernetes/config \
+        token_reviewer_jwt="$TOKEN_REVIEW_JWT" \
+        kubernetes_host="$KUBE_HOST" \
+        kubernetes_ca_cert="$KUBE_CA_CERT"
+```
+
+这样，就完成了 kubernetes 与外部 vault 的集成！
 
 ### 2. 关联 k8s rbac 权限系统和 vault
 
@@ -459,7 +599,7 @@ path "my-app/data/*" {
 
 ### 3. 部署 Pod
 
->参考文档：https://www.vaultproject.io/docs/platform/k8s/injector
+>参考文档：<https://www.vaultproject.io/docs/platform/k8s/injector>
 
 下一步就是将配置注入到微服务容器中，这需要使用到 Agent Sidecar Injector。
 vault 通过 sidecar 实现配置的自动注入与动态更新。
