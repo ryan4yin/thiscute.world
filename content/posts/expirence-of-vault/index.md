@@ -582,6 +582,8 @@ subjects:
 
 现在在 vault 实例这边，启用 kubernetes 身份验证，在 vault 实例内，执行如下命令：
 
+>vault 实例内显然没有 kubectl 和 kubeconfig，简便起见，下列的 vault 命令也可以通过 Web UI 完成。
+
 ```shell
 export VAULT_TOKEN='<your-root-token>'
 export VAULT_ADDR='http://localhost:8200'
@@ -591,12 +593,13 @@ vault auth enable kubernetes
  
 # kube-apiserver API 配置，vault 需要通过 kube-apiserver 完成对 serviceAccount 的身份验证
 # TOKEN_REVIEW_JWT: 就是我们前面创建的 secret `vault-auth`
-TOKEN_REVIEW_JWT=$(kubectl get secret vault-auth -o go-template='{{ .data.token }}' | base64 --decode)
+TOKEN_REVIEW_JWT=$(kubectl -n vault get secret vault-auth -o go-template='{{ .data.token }}' | base64 --decode)
 # kube-apiserver 的 ca 证书
-KUBE_CA_CERT=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 --decode)
+KUBE_CA_CERT=$(kubectl -n vault config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}' | base64 --decode)
 # kube-apiserver 的 url
 KUBE_HOST=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.server}')
 
+# 如果
 vault write auth/kubernetes/config \
         token_reviewer_jwt="$TOKEN_REVIEW_JWT" \
         kubernetes_host="$KUBE_HOST" \
