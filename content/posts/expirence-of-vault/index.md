@@ -1,7 +1,7 @@
 ---
 title: "Vault 的介绍、安装及使用"
 date: 2021-01-24T09:31:41+08:00
-draft: true
+draft: false
 
 resources:
 - name: "featured-image"
