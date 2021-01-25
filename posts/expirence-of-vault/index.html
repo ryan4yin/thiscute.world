@@ -111,7 +111,7 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 <span class=c1># 查看 vault 版本号</span>
 helm search repo hashicorp/vault -l <span class=p>|</span> head
 <span class=c1># 下载某个版本号的 vault</span>
-helm pull hashicorp/vault --version 0.7.0 --untar
+helm pull hashicorp/vault --version  0.9.0 --untar
 </code></pre></td></tr></table></div></div><p>参照下载下来的 <code>./vault/values.yaml</code> 编写 <code>custom-values.yaml</code>，
 部署一个以 <code>mysql</code> 为后端存储的 HA vault，配置示例如下:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>  1
 </span><span class=lnt>  2
