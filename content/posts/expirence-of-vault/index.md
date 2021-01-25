@@ -182,7 +182,7 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 # 查看 vault 版本号
 helm search repo hashicorp/vault -l | head
 # 下载某个版本号的 vault
-helm pull hashicorp/vault --version 0.7.0 --untar
+helm pull hashicorp/vault --version  0.9.0 --untar
 ```
 
 参照下载下来的 `./vault/values.yaml` 编写 `custom-values.yaml`，
