@@ -599,7 +599,6 @@ KUBE_CA_CERT=$(kubectl -n vault config view --raw --minify --flatten -o jsonpath
 # kube-apiserver 的 url
 KUBE_HOST=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.server}')
 
-# 如果
 vault write auth/kubernetes/config \
         token_reviewer_jwt="$TOKEN_REVIEW_JWT" \
         kubernetes_host="$KUBE_HOST" \
@@ -679,7 +678,7 @@ spec:
   template:
     metadata:
       annotations:
-        vault.hashicorp.com/agent-configmap: my-app-vault-config
+        vault.hashicorp.com/agent-configmap: my-app-vault-config  # vault 的 hcl 配置
         vault.hashicorp.com/agent-init-first: 'true'  # 是否提前初始化
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/agent-limits-cpu: 250m
@@ -694,6 +693,15 @@ spec:
         # 此处省略若干配置...
       serviceAccountName: my-app-account
 ```
+
+常见错误：
+
+- vault-agent(sidecar) 报错: `namespace not authorized`
+  - `auth/kubernetes/config` 中的 role 没有绑定 Pod 的 namespace
+- vault-agent(sidecar) 报错: `permission denied`
+  - 检查 `vault` 实例的日志，应该有对应的错误日志，很可能是 `auth/kubernetes/config` 没配对，vault 无法验证 kube-apiserver 的 tls 证书，或者使用的 kubernetes token 没有权限。
+- vault-agent(sidecar) 报错: `service account not authorized`
+  - `auth/kubernetes/config` 中的 role 没有绑定 Pod 使用的 serviceAccount
 
 ### 4. vault agent 配置
 
