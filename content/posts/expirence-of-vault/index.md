@@ -197,6 +197,9 @@ helm pull hashicorp/vault --version  0.9.0 --untar
 参照下载下来的 `./vault/values.yaml` 编写 `custom-values.yaml`，
 部署一个以 `mysql` 为后端存储的 HA vault，配置示例如下:
 
+>配置内容虽然多，但是大都是字节拷贝自 `./vault/values.yaml`，改动很少。
+>测试 Vault 时可以忽略掉其中大多数的配置项。
+
 ```yaml
 global:
   # enabled is the master enabled switch. Setting this to true or false
@@ -244,22 +247,6 @@ server:
   # Enables a headless service to be used by the Vault Statefulset
   service:
     enabled: true
-    # clusterIP controls whether a Cluster IP address is attached to the
-    # Vault service within Kubernetes.  By default the Vault service will
-    # be given a Cluster IP address, set to None to disable.  When disabled
-    # Kubernetes will create a "headless" service.  Headless services can be
-    # used to communicate with pods directly through DNS instead of a round robin
-    # load balancer.
-    # clusterIP: None
-
-    # Configures the service type for the main Vault service.  Can be ClusterIP
-    # or NodePort.
-    #type: ClusterIP
-
-    # If type is set to "NodePort", a specific nodePort value can be configured,
-    # will be random if left blank.
-    #nodePort: 30000
-
     # Port on which Vault server is listening
     port: 8200
     # Target port to which the service should be mapped to
@@ -348,8 +335,6 @@ ui:
   publishNotReadyAddresses: true
   # The service should only contain selectors for active Vault pod
   activeVaultPodOnly: false
-  serviceType: "ClusterIP"
-  serviceNodePort: null
   externalPort: 8200
 ```
 
