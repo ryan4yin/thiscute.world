@@ -741,8 +741,18 @@ vautl-agent 的 template 说明：
 以 python 为例，直接 `yaml.safe_load()` 就能完美解析 vault 生成出的 json 内容。
 
 
+### 5. 拓展：在 kubernetes 中使用 vault 的其他姿势
+
+除了使用官方提供的 sidecar 模式进行 secrets 注入，社区也提供了一些别的方案，可以参考：
+
+- [vault-secrets-operator](https://github.com/ricoberger/vault-secrets-operator): 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets
+- [secrets-store-csi-driver-provider-vault](https://github.com/hashicorp/secrets-store-csi-driver-provider-vault): 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中
+
 ## 五、使用 vault 管理阿里云的 RAM 账号体系
 
 vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。
 
 具体配置方法，待续。。。
+
+
+
