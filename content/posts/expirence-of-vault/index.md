@@ -16,7 +16,7 @@ categories: ["技术"]
 1. secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)
 2. 认证方式：支持接入各大云厂商的账号权限体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。
 3. 权限管理：通过 policy，可以设定非常细致的 ACL 权限。
-4. 密钥引擎：也支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 APIKey/APISecret 的自动轮转。
+4. 密钥引擎：也支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。
 5. 支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。
 
 在使用 Vault 之前，我们是以携程开源的 [Apollo](https://github.com/ctripcorp/apollo) 作为微服务的分布式配置中心。
@@ -28,6 +28,7 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 
 ## 一、Vault 基础概念
 
+>「基本概念」这一节，基本都翻译自官方文档: <https://www.vaultproject.io/docs/internals/architecture>
 
 首先看一下 Vault 的架构图：
 
@@ -36,8 +37,10 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
 Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。
 
-「安全屏障(security barrier)」是 Vault(金库) 周围的加密「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过「屏障(barrier)」。
+「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。
+
 barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 的过程中被验证与解密。
+
 和银行金库(bank vault)非常类似，barrier 也必须先解封，才能允许读取内部的数据。
 
 ### 1. 数据存储及加密解密
@@ -47,8 +50,10 @@ Storage Backend(后端存储): Vault 自身不存储数据，因此需要为它�
 
 Initialaztion(初始化): vault 在首次启动时需要初始化，这一步生成一个「加密密钥(encryption key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.
 
-Unseal(解封): Vault 启动后，因为不知道「加密密钥(encryption key)」，它会进入「封印(sealed)」状态，在「Unseal」前无法进行任何操作。
+Unseal(解封): Vault 启动后，因为不知道「加密密钥(ncryption key)」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。
+
 「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。
+
 默认情况下，vault 使用[沙米尔密钥共享算法](https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664)
 将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.
 
@@ -77,11 +82,14 @@ ACL 的默认行为是拒绝，这意味着除非明确配置 Policy 允许某�
 
 在通过 auth methods 完成了身份认证，并且返回的「关联策略」也没毛病之后，「token store」将会生成并管理一个新的 token，
 这个 token 会被返回给客户端，用于进行后续请求。
+
 类似 web 网站的 cookie，token 也都存在一个 lease 租期或者说有效期，这加强了安全性。
 
-token 关联了相关的策略 policies，策略将被用于验证请求的权限。
+token 关联了相关的策略 policies，这些策略将被用于验证请求的权限。
+
 请求经过验证后，将被路由到 secret engine。如果 secret engine 返回了一个 secret（由 vault 自动生成的 secret），
 Core 会将其注册到 expiration manager，并给它附加一个 lease ID。lease ID 被客户端用于更新(renew)或吊销(revoke)它得到的 secret.
+
 如果客户端允许租约(lease)到期，expiration manager 将自动吊销这个 secret.
 
 Core 负责处理审核代理(audit brok)的请求及响应日志，将请求发送到所有已配置的审核设备(audit devices)。
@@ -93,6 +101,7 @@ Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。
 
 有的 Secret Engines 只是单纯地存储与读取数据，比如 kv 就可以看作一个加密的 Redis。
 而其他的 Secret Engines 则连接到其他的服务并按需生成动态凭证。
+
 还有些 Secret Engines 提供「加密即服务(encryption as a service)」 - transit、证书管理等。
 
 常用的 engine 举例：
@@ -202,15 +211,6 @@ injector:
 
   replicas: 1
 
-  # If multiple replicas are specified, by default a leader-elector side-car
-  # will be created so that only one injector attempts to create TLS certificates.
-  leaderElector:
-    enabled: true
-    image:
-      repository: "gcr.io/google_containers/leader-elector"
-      tag: "0.4"
-    ttl: 60s
-
   # If true, will enable a node exporter metrics endpoint at /metrics.
   metrics:
     enabled: false
@@ -240,12 +240,6 @@ server:
   # Resource requests, limits, etc. for the server cluster placement. This
   # should map directly to the value of the resources field for a PodSpec.
   # By default no direct resource request is made.
-
-  # authDelegator enables a cluster role binding to be attached to the service
-  # account.  This cluster role binding can be used to setup Kubernetes auth
-  # method.  https://www.vaultproject.io/docs/auth/kubernetes.html
-  authDelegator:
-    enabled: true
 
   # Enables a headless service to be used by the Vault Statefulset
   service:
@@ -455,11 +449,21 @@ path "auth/token/create" {
 不给这个权限，pulumi_vault 就会一直报错。。
 
 
-## 四、在 Kubernetes 中使用 vault 注入敏感配置
+## 四、在 Kubernetes 中使用 vault 注入 secrets
+
+前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。
+
+应用程序有两种方式去读取 vault 中的配置：
+
+1. 借助 Vault Sidecar，将 secrets 以文件的形式自动注入到 Pod 中，比如 `/app/secrets/vault.json`
+   - vault sidecar 在常驻模式下每 15 秒更新一次配置，应用程序可以使用 `watchdog` 实时监控 secrets 文件的变更。
+2. 应用程序自己使用 SDK 直接访问 vault api 获取 secrets
+
+上述两种方式，都可以借助 Kubernetes ServiceAccount 进行身份验证和权限分配。
+
+下面以 Sidecar 模式为例，介绍如何将 secrets 以文件形式注入到 Pod 中。
 
 ### 1. 部署并配置 vault agent
-
-前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount + Role 为每个 Pod 单独分配权限。
 
 首先启用 Vault 的 Kubernetes 身份验证:
 
