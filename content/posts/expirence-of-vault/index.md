@@ -197,7 +197,7 @@ helm pull hashicorp/vault --version  0.9.0 --untar
 参照下载下来的 `./vault/values.yaml` 编写 `custom-values.yaml`，
 部署一个以 `mysql` 为后端存储的 HA vault，配置示例如下:
 
->配置内容虽然多，但是大都是字节拷贝自 `./vault/values.yaml`，改动很少。
+>配置内容虽然多，但是大都是直接拷贝自 `./vault/values.yaml`，改动很少。
 >测试 Vault 时可以忽略掉其中大多数的配置项。
 
 ```yaml
