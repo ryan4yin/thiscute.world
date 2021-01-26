@@ -14,9 +14,9 @@ categories: ["技术"]
 [Vault](https://github.com/hashicorp/vault) 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：
 
 1. secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)
-2. 认证方式：支持接入各大云厂商的账号权限体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。
+2. 认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。
 3. 权限管理：通过 policy，可以设定非常细致的 ACL 权限。
-4. 密钥引擎：也支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。
+4. 密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。
 5. 支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。
 
 在使用 Vault 之前，我们是以携程开源的 [Apollo](https://github.com/ctripcorp/apollo) 作为微服务的分布式配置中心。
