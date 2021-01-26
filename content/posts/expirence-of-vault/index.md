@@ -615,10 +615,13 @@ vault write auth/kubernetes/config \
 比如创建一个名为 `my-app-policy` 的 vault policy，内容为:
 
 ```hcl
-# 命名规则："<engine-name>/data/<path>/*"
+# 允许读取数据
 path "my-app/data/*" {
-   # 只读权限
    capabilities = ["read", "list"]
+}
+// 允许列出 myapp 中的所有数据(kv v2)
+path "myapp/metadata/*" {
+    capabilities = ["read", "list"]
 }
 ```
 
@@ -716,7 +719,7 @@ vautl-agent 的 template 说明：
 >template 的详细语法参见: https://github.com/hashicorp/consul-template#secret
 
 >注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
-必须要写成 `range secrets "<engine-name>/metadata/<service-name>/"`，也就是中间要插入 `metadata`。
+必须要写成 `range secrets "<engine-name>/metadata/<service-name>/"`，也就是中间要插入 `metadata`，而且 policy 中必须开放 `<engine-name>/metadata/<service-name>/` 的 read/list 权限！
 官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 [KV Secrets Engine - Version 2 (API)](https://www.vaultproject.io/api-docs/secret/kv/kv-v2) 才搞明白这个。
 
 这样生成出来的内容将是 json 格式，不过有个不兼容的地方：最后一个 secrets 的末尾有逗号 `,`
