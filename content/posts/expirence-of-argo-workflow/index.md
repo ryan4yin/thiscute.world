@@ -53,8 +53,6 @@ Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，�
 
 而 Jenkins 可以很方便地看到同一个 Job 的所有构建历史。
 
-现在特别想要一个第三方 Web UI 来帮我们脱离苦海...
-
 ### 4. Workflow 的分类
 
 #### 为何需要对 Workflow 做细致的分类
