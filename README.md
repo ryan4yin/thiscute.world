@@ -28,3 +28,8 @@ you can view the live changes in the browser http://localhost:1313/
 Push updates to `main` branch will trigger a github action to deploy the updates automatically.
 
 see [.github/workflows/gh-pages.yaml](/.github/workflows/gh-pages.yaml) for details.
+
+
+## TODO
+
+- sync posts to cnblogs(markdown & image)
