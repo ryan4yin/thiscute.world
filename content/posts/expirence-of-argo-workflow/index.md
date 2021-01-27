@@ -53,6 +53,10 @@ Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言�
 
 **我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。**（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）
 
+一个复杂工作流的示例如下：
+
+![](/images/expirence-of-argo-workflow/complex-workflows.png "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
+
 ### 3. Web UI
 
 Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，但是它貌似不是面向「用户」的，功能比较底层。
@@ -89,8 +93,7 @@ Argo Workflow 的流水线有多种触发方式：
 
 - 手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 [workflowTemplateRef](https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec) 直接引用一个现成的流水线模板。
 - 定时触发：[CronWorkflow](https://argoproj.github.io/argo/cron-workflows/)
-- 通过 Git 仓库变更触发：[Argo Workflow - Webhooks](https://argoproj.github.io/argo/webhooks/) 支持通过 webhook 集成 github/gitlab.
-  - 不过感觉很难用，貌似也有人通过 [NATS](https://github.com/nats-io) 之类的消息系统来触发构建(比如 Knative)，可以参考.
+- 通过 Git 仓库变更触发：借助 [argo-events](https://github.com/argoproj/argo-events) 可以实现此功能，详见其文档。
   - 另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！
 
 
