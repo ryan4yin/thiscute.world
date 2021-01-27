@@ -39,7 +39,7 @@ Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言�
 
 而 Argo Workflow 能够将多个 Workflows 通过 Steps/DAG 编排起来，让流水线的各个步骤按依赖顺序分批地运行。
 
-再借助 `templateRef` 或者 `Workflow of Workflows`，就能实现 Workflows 的编排了。
+再借助 [templateRef](https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates) 或者 [Workflow of Workflows](https://argoproj.github.io/argo/workflow-of-workflows/)，就能实现 Workflows 的编排了。
 
 **我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。**（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）
 
@@ -79,8 +79,8 @@ Argo 是完全基于 Kubernetes 的，因此目前它也只能通过 namespace/l
 
 Argo Workflow 的流水线有多种触发方式：
 
-- 手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 `workflowTemplateRef` 直接引用一个现成的流水线模板。
-- 定时触发：CronWorkflow
+- 手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 [workflowTemplateRef](https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec) 直接引用一个现成的流水线模板。
+- 定时触发：[CronWorkflow](https://argoproj.github.io/argo/cron-workflows/)
 - 通过 Git 仓库变更触发：[Argo Workflow - Webhooks](https://argoproj.github.io/argo/webhooks/) 支持通过 webhook 集成 github/gitlab.
   - 不过感觉很难用，貌似也有人通过 [NATS](https://github.com/nats-io) 之类的消息系统来触发构建(比如 Knative)，可以参考.
   - 另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！
