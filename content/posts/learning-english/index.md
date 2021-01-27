@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "grimgargroup.jpg"
 
-tags: [“英语”, "语言学习"]
+tags: ["英语", "语言学习"]
 categories: ["随笔"]
 ---
 
