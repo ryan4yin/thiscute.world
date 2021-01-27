@@ -18,6 +18,8 @@ categories: ["技术"]
 3. 可以在短时间内轻松运行用于机器学习或数据处理的计算密集型作业。
 4. Argo Workflow 可以看作 Tekton 的加强版，因此显然也可以通过 Argo Workflow 运行 CI/CD 流水线(Pipielines)。
 
+阿里云是 Argo Workflow 的深度使用者和贡献者，另外 Kubeflow 底层的工作流引擎也是 Argo Workflow.
+
 ## 一、Argo Workflow 对比 Jenkins
 
 我们在切换到 Argo Workflow 之前，使用的 CI/CD 工具是 Jenkins，下面对 Argo Workflow 和 Jenkins 做一个比较详细的对比，
