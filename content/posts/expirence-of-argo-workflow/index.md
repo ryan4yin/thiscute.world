@@ -1,7 +1,7 @@
 ---
 title: "云原生流水线 Argo Workflow 的安装、使用以及个人体验"
 date: 2021-01-27T15:37:27+08:00
-draft: true
+draft: false
 
 resources:
 - name: "featured-image"
