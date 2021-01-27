@@ -61,7 +61,7 @@ Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言�
 
 Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，但是它貌似不是面向「用户」的，功能比较底层。
 
-它不像 Jenkins 一样，有很友好的使用界面。
+它不像 Jenkins 一样，有很友好的使用界面(虽然说 Jenkins 的 UI 也很显老...)
 
 另外它所有的 Workflow 都是相互独立的，没办法直观地找到一个 WorkflowTemplate 的所有构建记录，只能通过 label/namespace 进行分类，通过任务名称进行搜索。
 
