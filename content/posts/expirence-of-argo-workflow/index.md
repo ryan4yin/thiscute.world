@@ -11,9 +11,11 @@ tags: ["云原生", "CI","持续集成", "流水线"]
 categories: ["技术"]
 ---
 
->注意：这并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo/)
+>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo/)
 
 [Argo Workflow](https://github.com/argoproj/argo/) 是一个云原生工作流引擎，专注于**编排并行任务**。它的特点如下：
+
+<!--more-->
 
 1. 使用 Kubernetes 自定义资源(CR)定义工作流，其中工作流中的每个步骤都是一个容器。
 2. 将多步骤工作流建模为一系列任务，或者使用有向无环图（DAG）描述任务之间的依赖关系。
