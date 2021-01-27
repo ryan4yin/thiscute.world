@@ -29,11 +29,17 @@ categories: ["技术"]
 我们在切换到 Argo Workflow 之前，使用的 CI/CD 工具是 Jenkins，下面对 Argo Workflow 和 Jenkins 做一个比较详细的对比，
 以了解 Argo Workflow 的优缺点。
 
-### 1. Workflow 的重用 - WorkflowTemplate
+### 1. Workflow 的定义
 
-将 yaml 定义中的 `Kind` 从 `Workflow` 修改为 `WorkflowTemplate`，就能得到一个 WorkflowTemplate.
+`Workflow` 使用 kubernetes CR 进行定义，因此显然是一份 yaml 配置。
 
-WorkflowTemplate 可以被其他 Workflow 引用并触发，也可以正常传参。
+一个 Workflow，就是一个运行在 Kubernetes 上的流水线，对应 Jenkins 的一次 Build.
+
+而 WorkflowTemplate 则是一个可重用的 Workflow 模板，对应 Jenkins 的一个 Job.
+
+`WorkflowTemplate` 的 yaml 定义和 `Workflow` 完全一致，只有 `Kind` 不同！
+
+WorkflowTemplate 可以被其他 Workflow 引用并触发，也可以手动传参以生成一个 Workflow 工作流。
 
 ### 2. Workflow 的编排
 
