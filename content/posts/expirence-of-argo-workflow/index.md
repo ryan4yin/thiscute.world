@@ -47,7 +47,7 @@ Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言�
 
 其他流水线项目，对流水线之间的关联性考虑得很少，基本都假设流水线都是互相独立的。
 
-而 Argo Workflow 能够将多个 Workflows 通过 Steps/DAG 编排起来，让流水线的各个步骤按依赖顺序分批地运行。
+而 Argo Workflow 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG
 
 再借助 [templateRef](https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates) 或者 [Workflow of Workflows](https://argoproj.github.io/argo/workflow-of-workflows/)，就能实现 Workflows 的编排了。
 
