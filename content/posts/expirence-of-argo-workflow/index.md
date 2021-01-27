@@ -441,6 +441,14 @@ spec:
 待研究
 
 
+## 使用体验
+
+目前已经使用 Argo Workflow 一个月多了，总的来说，最难用的就是 Web UI。
+
+其他的都是小问题，只有 Web UI 是真的超难用，感觉根本就没有好好做过设计...
+
+急需一个第三方 Web UI...
+
 ## 参考文档
 
 - [Argo加入CNCF孵化器，一文解析Kubernetes原生工作流](https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH)
