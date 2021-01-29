@@ -57,7 +57,20 @@ Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言�
 
 ![](/images/expirence-of-argo-workflow/complex-workflows.png "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
 
-### 3. Web UI
+
+### 3. Workflow 的声明式配置
+
+Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes Yaml 的同学上手应该都很快。
+
+下面对 Workflow 定义文件和 Jenkinsfile 做个对比：
+
+1. argo 完全使用 yaml 来定义流水线，学习成本比 Jenkinsfile 的 groovy 低。对熟悉 Kubernetes 的同学尤其如此。
+2. 将 jenkinsfile 用 argo 重写后，代码量出现了明显的膨胀。一个 20 行的 Jenkinsfile，用 Argo 重写可能就变成了 60 行。
+
+配置出现了膨胀是个问题，但是考虑到它的可读性还算不错，
+而且 Argo 的 Workflow 编排功能，能替代掉我们目前维护的部分 Python 构建代码，以及一些其他优点，配置膨胀这个问题也就可以接受了。
+
+### 4. Web UI
 
 Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，但是它貌似不是面向「用户」的，功能比较底层。
 
@@ -67,7 +80,7 @@ Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，�
 
 而 Jenkins 可以很方便地看到同一个 Job 的所有构建历史。
 
-### 4. Workflow 的分类
+### 5. Workflow 的分类
 
 #### 为何需要对 Workflow 做细致的分类
 
@@ -87,7 +100,7 @@ Argo 是完全基于 Kubernetes 的，因此目前它也只能通过 namespace/l
 
 这样的分类结构和 Jenkins 的视图-文件夹体系大相径庭，目前感觉不是很好用（也可能纯粹是 Web UI 的锅）。
 
-### 5. 触发构建的方式
+### 6. 触发构建的方式
 
 Argo Workflow 的流水线有多种触发方式：
 
@@ -97,7 +110,7 @@ Argo Workflow 的流水线有多种触发方式：
   - 另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！
 
 
-### 6. secrets 管理
+### 7. secrets 管理
 
 Argo Workflow 的流水线，可以从 kubernetes secrets/configmap 中获取信息，将信息注入到环境变量中、或者以文件形式挂载到 Pod 中。
 
@@ -106,7 +119,7 @@ Git 私钥、Harbor 仓库凭据、CD 需要的 kubeconfig，都可以直接从 
 另外因为 Vault 很流行，也可以将 secrets 保存在 Vault 中，再通过 vault agent 将配置注入进 Pod。
 
 
-### 7. Artifacts
+### 8. Artifacts
 
 Argo 支持接入对象存储，做全局的 Artifact 仓库，本地可以使用 MinIO.
 
@@ -115,14 +128,14 @@ Argo 支持接入对象存储，做全局的 Artifact 仓库，本地可以使�
 另外也可以考虑借助 Artifact 仓库实现跨流水线的缓存复用（未测试），提升构建速度。
 
 
-### 8. 容器镜像的构建
+### 9. 容器镜像的构建
 
 借助 Kaniko 等容器镜像构建工具，可以实现容器镜像的分布式构建。
 
 Kaniko 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。
 
 
-### 9. 客户端/SDK
+### 10. 客户端/SDK
 
 Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。
 
