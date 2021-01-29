@@ -524,7 +524,9 @@ Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间�
 
 目前没有在社区找到类似的工具，我们目前是自己用 Python 去轮询 kube-apiserver 检查部署状态，实现了按顺序部署。
 
-可能更好的解决方案：
+---
+
+**更新**：可能更好的解决方案：
 
 - stackoverflow 的这篇问答 [How to start my deployments in a specific order](https://stackoverflow.com/questions/56935239/how-to-configure-pod-initialization-in-a-specific-order-in-kubernetes) 提到，直接一次性部署所有微服务就行，Pod 会失败自愈，最终进入正常的运行状态。这种方法去掉了依赖关系，简化了部署逻辑，还降低了不同微服务之间的耦合。
   - 但是这里有个问题是：Pod 的 Crash 会导致我们每次发布，都会触发「日志报警」「集群告警」，这可能会导致我们每次发布都提心吊胆。
@@ -532,7 +534,7 @@ Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间�
 - 让后端加个参数来控制客户端使用的 RPC 协议版本，或者搞一个协议协商。这样就不需要控制微服务发布顺序了。
 - 社区很多有状态应用的部署都涉及到部署顺序等复杂操作，目前流行的解决方案是编写一个 Kubernetes-Operator 来实现这类应用的部署。Operator 会自行处理好各个组件的部署顺序。
 
-这里看起来，最简单有效的方案，就是「Let it crash and self-healing」
+这里看起来，**最简单有效的方案，就是「Let it crash and self-healing」**
 
 ## 参考文档
 
