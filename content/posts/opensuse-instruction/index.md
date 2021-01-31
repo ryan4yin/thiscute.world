@@ -52,7 +52,7 @@ sudo zypper clean  # 清理本地的包缓存
 安装需要用到的各类软件: 
 
 ```shell
-# 启用 Packman 仓库，使用北交镜像源（注意单引号不能省略！）
+# 启用 Packman 仓库，使用北交镜像源
 sudo zypper ar -cfp 90 'https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Tumbleweed/' packman-bjtu
 
 # install video player and web browser
@@ -230,7 +230,6 @@ Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持�
 
 ```shell
 # see: https://build.openSUSE.org/repositories/home:zzndb
-# 注意单引号不能省略！
 sudo zypper addrepo 'https://download.opensuse.org/repositories/home:/zzndb/openSUSE_Tumbleweed' qv2ray
 sudo zypper refresh
 sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
