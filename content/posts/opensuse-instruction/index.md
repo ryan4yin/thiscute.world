@@ -56,7 +56,7 @@ sudo zypper clean  # 清理本地的包缓存
 sudo zypper ar -cfp 90 'https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Tumbleweed/' packman-bjtu
 
 # install video player and web browser
-sudo zypper install mpv ffmpeg chromium firefox
+sudo zypper install mpv ffmpeg-4 chromium firefox
 
 # install screenshot and other utils
 # 安装好后可以配个截图快捷键 alt+a => `flameshot gui`
