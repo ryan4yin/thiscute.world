@@ -231,7 +231,7 @@ Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持�
 ```shell
 # see: https://build.openSUSE.org/repositories/home:zzndb
 # 注意单引号不能省略！
-sudo zypper addrepo 'https://mirrors.bfsu.edu.cn/opensuse/repositories/home:/zzndb/openSUSE_Tumbleweed' qv2ray
+sudo zypper addrepo 'https://download.opensuse.org/repositories/home:/zzndb/openSUSE_Tumbleweed' qv2ray
 sudo zypper refresh
 sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
 ```
