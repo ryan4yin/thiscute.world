@@ -176,7 +176,6 @@ sudo rpm -ivh linux_qq.rpm
 
 ```shell
 # 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N
-# 源的 url，在「Repositories」页面找到自己的系统版本如「openSUSE_Leap_15.2」，下方「下载按钮」的链接，就是如下命令需要使用的链接
 sudo zypper addrepo 'https://mirrors.bfsu.edu.cn/opensuse/repositories/M17N/openSUSE_Tumbleweed' m17n
 sudo zypper refresh
 sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
