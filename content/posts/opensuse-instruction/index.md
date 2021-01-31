@@ -21,31 +21,28 @@ openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
 本文算是对迁移流程做的一个总结。
 
->本文以 openSUSE Leap 15.2 为基础编写，因此部分软件需要手动添加 OBS 源，才能获得到更新的版本。
->你也可以考虑使用 Tumbleweed，它是滚动更新的，软件要比 Leap 新很多。
+>本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。
+openSUSE 社区的大部分用户都是使用的 Tumbleweed.
+它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。
 
 ## 一、zypper 的基础命令
 
-zypper 的源在国内都比较慢，可以考虑配一下国内镜像源：
+zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择国内的镜像源下载软件包，所以其实不需要手动配置软件源。
 
-```shell
-# 禁用原有的四个官方软件源
-sudo zypper mr --disable repo-oss repo-non-oss repo-update repo-update-non-oss
-# 添加北外镜像源，注意单引号不能省略！
-sudo zypper ar -fcg 'https://mirrors.bfsu.edu.cn/openSUSE/distribution/leap/$releasever/repo/oss' BFSU:OSS
-sudo zypper ar -fcg 'https://mirrors.bfsu.edu.cn/openSUSE/distribution/leap/$releasever/repo/non-oss' BFSU:Non-OSS
-sudo zypper ar -fcg 'https://mirrors.bfsu.edu.cn/openSUSE/update/leap/$releasever/oss' BFSU:Update-OSS
-sudo zypper ar -fcg 'https://mirrors.bfsu.edu.cn/openSUSE/update/leap/$releasever/non-oss' BFSU:Update-Non-OSS
-```
-
-镜像源配置好后，首先更新下系统软件：
+常用命令：
 
 ```shell
 sudo zypper refresh  # refresh all repos
 sudo zypper update   # update all softwares
-```
 
-实测不设置镜像源时，平均速度大概 300kb/s，使用软件源速度能达到 10MB/s，我的带宽也就这么大。
+sudo zypper search --installed-only  <package-name>  # 查找本地安装的程序
+sudo zypper search <package-name>  # 查找本地和软件源中的程序
+
+sudo zypper install <package-name>  # 安装程序
+sudo zypper remove <package-name>  # 卸载程序
+
+sudo zypper clean  # 清理本地的包缓存
+```
 
 ## Install Softwares
 
@@ -56,7 +53,7 @@ sudo zypper update   # update all softwares
 
 ```shell
 # 启用 Packman 仓库，使用北交镜像源（注意单引号不能省略！）
-sudo zypper ar -cfp 90 'https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Leap_$releasever/' packman-bjtu
+sudo zypper ar -cfp 90 'https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Tumbleweed/' packman-bjtu
 
 # install video player and web browser
 sudo zypper install mpv ffmpeg chromium firefox
@@ -88,9 +85,7 @@ sudo zypper addrepo https://packages.microsoft.com/openSUSE/15/prod/ microsoft-p
 sudo zypper refresh
 sudo zypper install dotnet-sdk-5.0
 
-# 安装新版本的 go（注意单引号不能省略！）
-sudo zypper addrepo 'https://download.openSUSE.org/repositories/devel:/languages:/go/openSUSE_Leap_$releasever' devel-go
-sudo zypper refresh
+# 安装新版本的 go（源中的版本比较低，更建议从 go 官网下载安装）
 sudo zypper install go
 ```
 
@@ -103,7 +98,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # jetbrains toolbox app，用于安装和管理 pycharm/idea/goland/android studio 等 IDE
 # 参见：https://www.jetbrains.com/toolbox-app/
 
-# 系统自带的 python3 太老，用 miniconda 装 python3.8
+# 不使用系统 python，改用 miniconda 装 python3.8
 # 参考：https://github.com/ContinuumIO/docker-images/blob/master/miniconda3/debian/Dockerfile
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
 sudo /bin/bash /tmp/miniconda.sh -b -p /opt/conda
@@ -147,11 +142,9 @@ echo "export PATH=\$PATH:\$HOME/.local/bin" >> ~/.bashrc
 
 ```shell
 # 时髦的新容器套装: https://documentation.suse.com/sles/15-SP2/html/SLES-all/cha-podman-overview.html
-sudo zypper in podman skopeo buildah katacontainers
-# 安装 kubernetes 相关工具，使用 kubic 源，它里面的软件更新一些（注意单引号不能省略！）
-sudo zypper addrepo 'https://download.openSUSE.org/repositories/devel:/kubic/openSUSE_Leap_$releasever' kubic
-sudo zypper refresh
-sudo zypper in kubernetes1.18-client k9s helm kompose
+sudo zypper in podman kompose skopeo buildah katacontainers
+# 安装 kubernetes 相关工具，tumbleweed 官方仓库的包都非常新！很舒服
+sudo zypper in helm k9s kubernetes-client
 
 # 本地测试目前还是 docker-compose 最方便，docker 仍有必要安装
 sudo zypper in docker
@@ -167,10 +160,10 @@ sudo pip install docker-compose podman-compose
 ### 办公、音乐、聊天
 
 ```shell
-# 添加 openSUSE_zh 源（注意单引号不能省略！）
-sudo zypper addrepo 'https://download.openSUSE.org/repositories/home:/openSUSE_zh/openSUSE_Leap_$releasever' openSUSE_zh
+# 添加 openSUSE_zh 源：https://build.opensuse.org/project/show/home:opensuse_zh
+sudo zypper addrepo 'https://download.opensuse.org/repositories/home:/opensuse_zh/openSUSE_Tumbleweed' openSUSE_zh
 sudo zypper refresh
-sudo zypper install wps-office netease-cloud-music 
+sudo zypper install wps-office netease-cloud-music
 
 # linux qq: https://im.qq.com/linuxqq/download.html
 # 虽然简陋但也够用，发送文件比 KDE Connect 要方便一些。
@@ -184,7 +177,7 @@ sudo rpm -ivh linux_qq.rpm
 ```shell
 # 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N
 # 源的 url，在「Repositories」页面找到自己的系统版本如「openSUSE_Leap_15.2」，下方「下载按钮」的链接，就是如下命令需要使用的链接
-sudo zypper addrepo 'https://download.openSUSE.org/repositories/M17N/openSUSE_Leap_$releasever' m17n
+sudo zypper addrepo 'https://mirrors.bfsu.edu.cn/opensuse/repositories/M17N/openSUSE_Tumbleweed' m17n
 sudo zypper refresh
 sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
 ```
@@ -239,7 +232,7 @@ Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持�
 ```shell
 # see: https://build.openSUSE.org/repositories/home:zzndb
 # 注意单引号不能省略！
-sudo zypper addrepo 'https://download.openSUSE.org/repositories/home:/zzndb/openSUSE_Leap_$releasever' qv2ray
+sudo zypper addrepo 'https://mirrors.bfsu.edu.cn/opensuse/repositories/home:/zzndb/openSUSE_Tumbleweed' qv2ray
 sudo zypper refresh
 sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
 ```
