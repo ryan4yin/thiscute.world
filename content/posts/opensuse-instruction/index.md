@@ -176,7 +176,7 @@ sudo rpm -ivh linux_qq.rpm
 
 ```shell
 # 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N
-sudo zypper addrepo 'https://mirrors.bfsu.edu.cn/opensuse/repositories/M17N/openSUSE_Tumbleweed' m17n
+sudo zypper addrepo 'https://download.opensuse.org/repositories/M17N/openSUSE_Tumbleweed' m17n
 sudo zypper refresh
 sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
 ```
