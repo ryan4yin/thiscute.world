@@ -86,8 +86,8 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
    1. 使用 app.pulumi.com（默认）:免费版提供 stack 历史管理，可以看到所有的历史记录。另外还提供一个资源关系的可视化面板。总之很方便，但是多人合作就需要收费。
    2. 本地文件存储：`pulumi login file:///app/data`
    3. [云端对象存储](https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend)，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
-      - `pulumi login s3://<bucket-path>?endpoint=my.minio.local:8080&disableSSL=true&s3ForcePathStyle=true`
-      - s3 对象存储的 creadential 建议通过 `AWS_ACCESS_KEY_ID` 和 `AWS_SECRET_ACCESS_KEY` 两个环境变量设置。
+      - `pulumi login 's3://<bucket-path>?endpoint=my.minio.local:8080&disableSSL=true&s3ForcePathStyle=true'`
+      - minio/aws 的 creadential 可以通过 `AWS_ACCESS_KEY_ID` 和 `AWS_SECRET_ACCESS_KEY` 两个环境变量设置。另外即使是使用 MinIO，`AWS_REGION` 这个没啥用的环境变量也必须设置！否则会报错。
    4. [gitlab 13 支持 Terraform HTTP State 协议](https://github.com/pulumi/pulumi/issues/4727)，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。
    5. 使用 pulumi 企业版（自建服务）：比 app.pulumi.com 提供更多的特性，但是显然是收费的。。
 
