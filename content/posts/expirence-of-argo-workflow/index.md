@@ -484,7 +484,7 @@ spec:
 待研究
 
 
-### 6. 如何归档历史数据？
+### 5. 如何归档历史数据？
 
 Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。
 
@@ -516,7 +516,7 @@ data:
           strategy: OnPodCompletion
 ```
 
-### 7. Argo 的其他进阶配置
+### 6. Argo 的其他进阶配置
 
 Argo Workflow 的配置，都保存在 `workflow-controller-configmap` 这个 configmap 中，我们前面已经接触到了它的部分内容。
 
@@ -529,7 +529,7 @@ Argo Workflow 的配置，都保存在 `workflow-controller-configmap` 这个 co
   - 也支持配置过期时间
 - `sso`: 启用单点登录
 
-### 8. 是否应该尽量使用 CI/CD 工具提供的功能？ 
+### 7. 是否应该尽量使用 CI/CD 工具提供的功能？ 
 
 我从同事以及网络上，了解到部分 DevOps 人员主张尽量自己使用 Python/Go 来实现 CI/CD 流水线，CI/CD 工具提供的功能能不使用就不要使用。
 
