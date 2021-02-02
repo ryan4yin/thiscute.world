@@ -142,8 +142,11 @@ Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。
 如下项目值得试用：
 
 - [argo-client-python](https://github.com/argoproj-labs/argo-client-python): Argo Workflow 的 Python 客户端
-- [couler](https://github.com/couler-proj/couler): 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
+  - 说实话，感觉和 kubernetes-client/python 一样难用，毕竟都是 openapi-generator 生成出来的...
 - [argo-python-dsl](https://github.com/argoproj-labs/argo-python-dsl): 使用 Python DSL 编写 Argo Workflow
+  - 感觉使用难度比 yaml 高，也不太好用。
+- [couler](https://github.com/couler-proj/couler): 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
+  - 理念倒是很好，待研究
 
 感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。
 
