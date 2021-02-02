@@ -184,6 +184,7 @@ minio 部署好后，它会将默认的 `accesskey` 和 `secretkey` 保存在名
 
 ```shell
   artifactRepository: |
+    # 是否将 main 容器的日志保存为 artifact，这样 pod 被删除后，仍然可以在 artifact 中找到日志
     archiveLogs: true
     s3:
       bucket: argo-bucket   # bucket 名称，这个 bucket 需要先手动创建好！
@@ -259,7 +260,7 @@ kubectl create rolebinding default-argo-workflow --clusterrole=argo-workflow-rol
 
 Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等...
 
-Workflow Executor 有多种实现，可以通过前面提到的 configmap `workflow-controller-configmap` 的 `containerRuntimeExecutor` 这个参数来选择。
+Workflow Executor 有多种实现，可以通过前面提到的 configmap `workflow-controller-configmap` 来选择。
 
 可选项如下：
 
@@ -270,7 +271,22 @@ Workflow Executor 有多种实现，可以通过前面提到的 configmap `workf
 
 在 docker 被 kubernetes 抛弃的当下，如果你已经改用 containerd 做为 kubernetes 运行时，那 argo 将会无法工作，因为它默认使用 docker 作为运行时！
 
-我们建议将 workflow executore 改为 `pns`，兼顾安全性与性能。
+我们建议将 workflow executore 改为 `pns`，兼顾安全性与性能，`workflow-controller-configmap` 按照如下方式修改：
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workflow-controller-configmap
+data:
+  config: |
+    # ...省略若干配置...
+
+    # Specifies the container runtime interface to use (default: docker)
+    # must be one of: docker, kubelet, k8sapi, pns
+    containerRuntimeExecutor: pns
+    # ...
+```
 
 
 ## 三、使用 Argo Workflow 做 CI 工具
@@ -468,7 +484,52 @@ spec:
 待研究
 
 
-### 5. 是否应该尽量使用 CI/CD 工具提供的功能？
+### 6. 如何归档历史数据？
+
+Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。
+
+为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：[Limit The Total Number Of Workflows And Pods](https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods)
+
+这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 `workflow-controller-configmap` 这个 configmap:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workflow-controller-configmap
+data:
+  config: |
+    # Default values that will apply to all Workflows from this controller, unless overridden on the Workflow-level
+    # See more: docs/default-workflow-specs.md
+    workflowDefaults:
+      spec:
+        # must complete in 8h (28,800 seconds)
+        activeDeadlineSeconds: 28800
+        # keep workflows for 1d (86,400 seconds)
+        ttlStrategy:
+          secondsAfterCompletion: 86400
+          # secondsAfterSuccess: 5
+          # secondsAfterFailure: 500
+        # delete all pods as soon as they complete
+        podGC:
+          # 可选项："OnPodCompletion", "OnPodSuccess", "OnWorkflowCompletion", "OnWorkflowSuccess"
+          strategy: OnPodCompletion
+```
+
+### 7. Argo 的其他进阶配置
+
+Argo Workflow 的配置，都保存在 `workflow-controller-configmap` 这个 configmap 中，我们前面已经接触到了它的部分内容。
+
+这里给出此配置文件的完整 examples: <https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml>
+
+其中一些可能需要自定义的参数如下：
+
+- `parallelism`: workflow 的最大并行数量
+- `persistence`: 将完成的 workflows 保存到 postgresql/mysql 中，这样即使 k8s 中的 workflow 被删除了，还能查看 workflow 记录
+  - 也支持配置过期时间
+- `sso`: 启用单点登录
+
+### 8. 是否应该尽量使用 CI/CD 工具提供的功能？ 
 
 我从同事以及网络上，了解到部分 DevOps 人员主张尽量自己使用 Python/Go 来实现 CI/CD 流水线，CI/CD 工具提供的功能能不使用就不要使用。
 
