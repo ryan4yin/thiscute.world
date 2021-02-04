@@ -17,7 +17,7 @@ categories: ["随笔"]
 
 最普遍的方式：背单词，可我从初中背到现在，背单词的计划从没哪次坚持超过一个月的。
 
-后来听说看英文原版书有效，信信满满，结果也是看了一星期 Harry Potter，稍微看了点 Animal Farm，就没后续了。
+后来听说看英文原版书有效，信心满满，结果也是看了一星期 Harry Potter，稍微看了点 Animal Farm，就没后续了。
 
 又想练听力，开始听 ESLPod、EnglishPod，也就听了一个月的时间。。
 
@@ -35,11 +35,9 @@ categories: ["随笔"]
 再后来用 Github，Pycharm IDEA 也是英文的，Python doc 和 Java doc 也全是英文的，标准库里的注释是英文的，Error 信息是英文的...... 虽然学啥都半途而废，但英文水平的确是慢慢地提升着。
 
 
-虽然总是半途而废。。。
+慢慢地，能够不怎么吃力地看懂 Python 标准库了，有问题也可以看英文博客解决了。
 
-不过好歹，慢慢地，能够不怎么吃力地看懂 Python 标准库了，有问题也可以看英文博客解决了。
-
-最近看一个动漫看完不过瘾，转去看这部动漫的轻小说。轻小说中文翻译的太呆板，发现居然有英文的，直接啃起了英文。。
+最近看一个动漫看完不过瘾，转去看这部动漫的轻小说。轻小说中文翻译的太呆板，发现居然有英文的，直接啃起了英文。
 
 换了好几部小说，现在在看 [Grimgar of Fantasy and Ash](https://www.baka-tsuki.org/project/index.php?title=Hai_to_Gensou_no_Grimgar)、[Tasogare-iro no Uta Tsukai(黄昏色の詠使い)](https://www.baka-tsuki.org/project/index.php?title=Tasogare-iro_no_Uta_Tsukai)，还找了个英文动漫网站，颇有以后看动漫也只看英文字幕的打算。希望能持续下去吧。
 
