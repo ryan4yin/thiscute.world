@@ -40,7 +40,7 @@ lightgallery: true
 
 {{< admonition tip "博客时间线" true >}}
 - 2016-06-17：在博客园 - https://www.cnblogs.com/kirito-c/
-- 2021-01-16：从博客园迁移到 https://ryan4yin.space
+- 2021-01-16：开设独立博客 https://ryan4yin.space
 {{< /admonition >}}
 
 {{< admonition info "博客快照" false >}}
