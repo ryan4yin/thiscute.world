@@ -1,4 +1,2199 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/posts/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
 <p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreffer">Argo Documentation</a></p>
 </blockquote>
-<p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/posts/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/expirence-of-vault/</guid><description>Vault 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下： secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还</description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/posts/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/expirence-of-pulumi/</guid><description>&lt;p>&lt;a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi&lt;/a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：&lt;/p></description></item></channel></rss>
+<p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
+<ol>
+<li>使用 Kubernetes 自定义资源(CR)定义工作流，其中工作流中的每个步骤都是一个容器。</li>
+<li>将多步骤工作流建模为一系列任务，或者使用有向无环图（DAG）描述任务之间的依赖关系。</li>
+<li>可以在短时间内轻松运行用于机器学习或数据处理的计算密集型作业。</li>
+<li>Argo Workflow 可以看作 Tekton 的加强版，因此显然也可以通过 Argo Workflow 运行 CI/CD 流水线(Pipielines)。</li>
+</ol>
+<p>阿里云是 Argo Workflow 的深度使用者和贡献者，另外 Kubeflow 底层的工作流引擎也是 Argo Workflow.</p>
+<h2 id="一argo-workflow-对比-jenkins">一、Argo Workflow 对比 Jenkins</h2>
+<p>我们在切换到 Argo Workflow 之前，使用的 CI/CD 工具是 Jenkins，下面对 Argo Workflow 和 Jenkins 做一个比较详细的对比，
+以了解 Argo Workflow 的优缺点。</p>
+<h3 id="1-workflow-的定义">1. Workflow 的定义</h3>
+<p><code>Workflow</code> 使用 kubernetes CR 进行定义，因此显然是一份 yaml 配置。</p>
+<p>一个 Workflow，就是一个运行在 Kubernetes 上的流水线，对应 Jenkins 的一次 Build.</p>
+<p>而 WorkflowTemplate 则是一个可重用的 Workflow 模板，对应 Jenkins 的一个 Job.</p>
+<p><code>WorkflowTemplate</code> 的 yaml 定义和 <code>Workflow</code> 完全一致，只有 <code>Kind</code> 不同！</p>
+<p>WorkflowTemplate 可以被其他 Workflow 引用并触发，也可以手动传参以生成一个 Workflow 工作流。</p>
+<h3 id="2-workflow-的编排">2. Workflow 的编排</h3>
+<p>Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言，最大的特点，就是它强大的流水线编排能力。</p>
+<p>其他流水线项目，对流水线之间的关联性考虑得很少，基本都假设流水线都是互相独立的。</p>
+<p>而 Argo Workflow 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG</p>
+<p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreffer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreffer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
+<p><strong>我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
+<p>一个复杂工作流的示例如下：</p>
+<p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
+        
+    </a><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
+    </figure></p>
+<h3 id="3-workflow-的声明式配置">3. Workflow 的声明式配置</h3>
+<p>Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes Yaml 的同学上手应该都很快。</p>
+<p>下面对 Workflow 定义文件和 Jenkinsfile 做个对比：</p>
+<ol>
+<li>argo 完全使用 yaml 来定义流水线，学习成本比 Jenkinsfile 的 groovy 低。对熟悉 Kubernetes 的同学尤其如此。</li>
+<li>将 jenkinsfile 用 argo 重写后，代码量出现了明显的膨胀。一个 20 行的 Jenkinsfile，用 Argo 重写可能就变成了 60 行。</li>
+</ol>
+<p>配置出现了膨胀是个问题，但是考虑到它的可读性还算不错，
+而且 Argo 的 Workflow 编排功能，能替代掉我们目前维护的部分 Python 构建代码，以及一些其他优点，配置膨胀这个问题也就可以接受了。</p>
+<h3 id="4-web-ui">4. Web UI</h3>
+<p>Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，但是它貌似不是面向「用户」的，功能比较底层。</p>
+<p>它不像 Jenkins 一样，有很友好的使用界面(虽然说 Jenkins 的 UI 也很显老&hellip;)</p>
+<p>另外它所有的 Workflow 都是相互独立的，没办法直观地找到一个 WorkflowTemplate 的所有构建记录，只能通过 label/namespace 进行分类，通过任务名称进行搜索。</p>
+<p>而 Jenkins 可以很方便地看到同一个 Job 的所有构建历史。</p>
+<h3 id="5-workflow-的分类">5. Workflow 的分类</h3>
+<h4 id="为何需要对-workflow-做细致的分类">为何需要对 Workflow 做细致的分类</h4>
+<p>常见的微服务项目，往往会拆分成众多 Git 仓库（微服务）进行开发，众多的 Git 仓库会使我们创建众多的 CI/CD 流水线。
+如果没有任何的分类，这一大堆的流水线如何管理，就成了一个难题。</p>
+<p>最显见的需求：前端和后端的流水线最好能区分一下，往下细分，前端的 Web 端和客户端最好也能区分，后端的业务层和中台最好也区分开来。</p>
+<p>另外我们还希望将运维、自动化测试相关的任务也集成到这个系统中来（目前我们就是使用 Jenkins 完成运维、自动化测试任务的），
+如果没有任何分类，这一大堆流水线将混乱无比。</p>
+<h4 id="argo-workflow-的分类能力">Argo Workflow 的分类能力</h4>
+<p>当 Workflow 越来越多的时候，如果不做分类，一堆 WorkflowTemplate 堆在一起就会显得特别混乱。（没错，我觉得 Drone 就有这个问题&hellip;）</p>
+<p>Argo 是完全基于 Kubernetes 的，因此目前它也只能通过 namespace/labels 进行分类。</p>
+<p>这样的分类结构和 Jenkins 的视图-文件夹体系大相径庭，目前感觉不是很好用（也可能纯粹是 Web UI 的锅）。</p>
+<h3 id="6-触发构建的方式">6. 触发构建的方式</h3>
+<p>Argo Workflow 的流水线有多种触发方式：</p>
+<ul>
+<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href="https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec" target="_blank" rel="noopener noreffer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
+<li>定时触发：<a href="https://argoproj.github.io/argo/cron-workflows/" target="_blank" rel="noopener noreffer">CronWorkflow</a></li>
+<li>通过 Git 仓库变更触发：借助 <a href="https://github.com/argoproj/argo-events" target="_blank" rel="noopener noreffer">argo-events</a> 可以实现此功能，详见其文档。
+<ul>
+<li>另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-secrets-管理">7. secrets 管理</h3>
+<p>Argo Workflow 的流水线，可以从 kubernetes secrets/configmap 中获取信息，将信息注入到环境变量中、或者以文件形式挂载到 Pod 中。</p>
+<p>Git 私钥、Harbor 仓库凭据、CD 需要的 kubeconfig，都可以直接从 secrets/configmap 中获取到。</p>
+<p>另外因为 Vault 很流行，也可以将 secrets 保存在 Vault 中，再通过 vault agent 将配置注入进 Pod。</p>
+<h3 id="8-artifacts">8. Artifacts</h3>
+<p>Argo 支持接入对象存储，做全局的 Artifact 仓库，本地可以使用 MinIO.</p>
+<p>使用对象存储存储 Artifact，最大的好处就是可以在 Pod 之间随意传数据，Pod 可以完全分布式地运行在 Kubernetes 集群的任何节点上。</p>
+<p>另外也可以考虑借助 Artifact 仓库实现跨流水线的缓存复用（未测试），提升构建速度。</p>
+<h3 id="9-容器镜像的构建">9. 容器镜像的构建</h3>
+<p>借助 Kaniko 等容器镜像构建工具，可以实现容器镜像的分布式构建。</p>
+<p>Kaniko 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。</p>
+<h3 id="10-客户端sdk">10. 客户端/SDK</h3>
+<p>Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。</p>
+<p>如下项目值得试用：</p>
+<ul>
+<li><a href="https://github.com/argoproj-labs/argo-client-python" target="_blank" rel="noopener noreffer">argo-client-python</a>: Argo Workflow 的 Python 客户端
+<ul>
+<li>说实话，感觉和 kubernetes-client/python 一样难用，毕竟都是 openapi-generator 生成出来的&hellip;</li>
+</ul>
+</li>
+<li><a href="https://github.com/argoproj-labs/argo-python-dsl" target="_blank" rel="noopener noreffer">argo-python-dsl</a>: 使用 Python DSL 编写 Argo Workflow
+<ul>
+<li>感觉使用难度比 yaml 高，也不太好用。</li>
+</ul>
+</li>
+<li><a href="https://github.com/couler-proj/couler" target="_blank" rel="noopener noreffer">couler</a>: 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
+<ul>
+<li>理念倒是很好，待研究</li>
+</ul>
+</li>
+</ul>
+<p>感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。</p>
+<p>此外，因为 argo workflow 是 kubernetes 自定义资源 CR，也可以使用 helm/kustomize 来做 workflow 的生成。</p>
+<p>目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + <code>range</code> 循环来生成 workflow 配置。</p>
+<h2 id="二安装-argo-workflowhttpsargoprojgithubioargoinstallation">二、<a href="https://argoproj.github.io/argo/installation/" target="_blank" rel="noopener noreffer">安装 Argo Workflow</a></h2>
+<p>安装一个集群版(cluster wide)的 Argo Workflow，使用 MinIO 做 artifacts 存储：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
+</code></pre></td></tr></table>
+</div>
+</div><p>部署 MinIO:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
+<span class="c1"># 查看历史版本</span>
+helm search repo minio/minio -l <span class="p">|</span> head
+<span class="c1"># 下载并解压 chart</span>
+helm pull minio/minio --untar --version 8.0.9
+
+<span class="c1"># 编写 custom-values.yaml，然后部署 minio</span>
+kubectl create namespace minio
+helm install minio ./minio -n argo -f custom-values.yaml
+</code></pre></td></tr></table>
+</div>
+</div><p>minio 部署好后，它会将默认的 <code>accesskey</code> 和 <code>secretkey</code> 保存在名为 <code>minio</code> 的 secret 中。
+我们需要修改 argo 的配置，将 minio 作为它的默认 artifact 仓库。</p>
+<p>在 configmap <code>workflow-controller-configmap</code> 的 data 中添加如下字段：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
+    <span class="c1"># 是否将 main 容器的日志保存为 artifact，这样 pod 被删除后，仍然可以在 artifact 中找到日志</span>
+    archiveLogs: <span class="nb">true</span>
+    s3:
+      bucket: argo-bucket   <span class="c1"># bucket 名称，这个 bucket 需要先手动创建好！</span>
+      endpoint: minio:9000  <span class="c1"># minio 地址</span>
+      insecure: <span class="nb">true</span>
+      <span class="c1"># 从 minio 这个 secret 中获取 key/secret</span>
+      accessKeySecret:
+        name: minio
+        key: accesskey
+      secretKeySecret:
+        name: minio
+        key: secretkey
+</code></pre></td></tr></table>
+</div>
+</div><p>现在还差最后一步：手动进入 minio 的 Web UI，创建好 <code>argo-bucket</code> 这个 bucket.
+直接访问 minio 的 9000 端口（需要使用 nodeport/ingress 等方式暴露此端口）就能进入 Web UI，使用前面提到的 secret <code>minio</code> 中的 key/secret 登录，就能创建 bucket.</p>
+<h3 id="serviceaccount-配置httpsargoprojgithubioargoservice-accounts"><a href="https://argoproj.github.io/argo/service-accounts/" target="_blank" rel="noopener noreffer">ServiceAccount 配置</a></h3>
+<p>Argo Workflow 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 <code>default</code> ServiceAccount 运行 workflow.</p>
+<p>可 <code>default</code> 这个 ServiceAccount 默认根本没有任何权限！所以 Argo 的 artifacts, outputs, access to secrets 等功能全都会因为权限不足而无法使用！</p>
+<p>为此，Argo 的官方文档提供了两个解决方法。</p>
+<p>方法一，直接给 default 绑定 <code>cluster-admin</code> ClusterRole，给它集群管理员的权限，只要一行命令（但是显然安全性堪忧）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreffer">Argo Workflow 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">argo-workflow-role</span><span class="w">
+</span><span class="w"></span><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span><span class="w"></span><span class="c"># pod get/watch is used to identify the container IDs of the current pod</span><span class="w">
+</span><span class="w"></span><span class="c"># pod patch is used to annotate the step&#39;s outputs back to controller (e.g. artifact location)</span><span class="w">
+</span><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="l">pods</span><span class="w">
+</span><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="l">get</span><span class="w">
+</span><span class="w">  </span>- <span class="l">watch</span><span class="w">
+</span><span class="w">  </span>- <span class="l">patch</span><span class="w">
+</span><span class="w"></span><span class="c"># logs get/watch are used to get the pods logs for script outputs, and for log archival</span><span class="w">
+</span><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="l">pods/log</span><span class="w">
+</span><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="l">get</span><span class="w">
+</span><span class="w">  </span>- <span class="l">watch</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>创建好上面这个最小的 ClusterRole，然后为每个名字空间，跑一下如下命令，给 default 账号绑定这个 clusterrole:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
+<p>或者如果你希望使用别的 ServiceAccount 来运行 workflow，也可以自行创建 ServiceAccount，然后再走上面方法二的流程，但是最后，要记得在 workflow 的 <code>spec.serviceAccountName</code> 中设定好 ServiceAccount 名称。</p>
+<h3 id="workflow-executorshttpsargoprojgithubioargoworkflow-executors"><a href="https://argoproj.github.io/argo/workflow-executors/" target="_blank" rel="noopener noreffer">Workflow Executors</a></h3>
+<p>Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等&hellip;</p>
+<p>Workflow Executor 有多种实现，可以通过前面提到的 configmap <code>workflow-controller-configmap</code> 来选择。</p>
+<p>可选项如下：</p>
+<ol>
+<li>docker(默认): 目前使用范围最广，但是安全性最差。它要求一定要挂载访问 <code>docker.sock</code>，因此一定要 root 权限！</li>
+<li>kubelet: 应用非常少，目前功能也有些欠缺，目前也必须提供 root 权限</li>
+<li>Kubernetes API (k8sapi): 直接通过调用 k8sapi 实现日志监控、Artifacts 手机等功能，非常安全，但是性能欠佳。</li>
+<li>Process Namespace Sharing (pns): 安全性比 k8sapi 差一点，因为 Process 对其他所有容器都可见了。但是相对的性能好很多。</li>
+</ol>
+<p>在 docker 被 kubernetes 抛弃的当下，如果你已经改用 containerd 做为 kubernetes 运行时，那 argo 将会无法工作，因为它默认使用 docker 作为运行时！</p>
+<p>我们建议将 workflow executore 改为 <code>pns</code>，兼顾安全性与性能，<code>workflow-controller-configmap</code> 按照如下方式修改：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
+</span><span class="w"></span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">    # ...省略若干配置...
+</span><span class="sd">
+</span><span class="sd">    # Specifies the container runtime interface to use (default: docker)
+</span><span class="sd">    # must be one of: docker, kubelet, k8sapi, pns
+</span><span class="sd">    containerRuntimeExecutor: pns
+</span><span class="sd">    # ...</span><span class="w">    
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="三使用-argo-workflow-做-ci-工具">三、使用 Argo Workflow 做 CI 工具</h2>
+<p>官方的 Reference 还算详细，也有提供非常多的 examples 供我们参考，这里提供我们几个常用的 workflow 定义。</p>
+<p>使用 Kaniko 构建容器镜像:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># USAGE:</span><span class="w">
+</span><span class="w"></span><span class="c">#</span><span class="w">
+</span><span class="w"></span><span class="c"># push 镜像需要一个 config.json, 这个 json 需要被挂载到 `kaniko/.docker/config.json`.</span><span class="w">
+</span><span class="w"></span><span class="c"># 为此，你首先需要构建 config.json 文件，并使用它创建一个 kubernetes secret:</span><span class="w">
+</span><span class="w"></span><span class="c">#</span><span class="w">
+</span><span class="w"></span><span class="c">#    export DOCKER_REGISTRY=&#34;registry.svc.local&#34;</span><span class="w">
+</span><span class="w"></span><span class="c">#    export DOCKER_USERNAME=&lt;username&gt;</span><span class="w">
+</span><span class="w"></span><span class="c">#    export DOCKER_TOKEN=&#39;&lt;password&gt;&#39;   # 对于 harbor 仓库而言，token 就是账号的 password.</span><span class="w">
+</span><span class="w"></span><span class="c">#    kubectl create secret generic docker-config --from-literal=&#34;config.json={\&#34;auths\&#34;: {\&#34;$DOCKER_REGISTRY\&#34;: {\&#34;auth\&#34;: \&#34;$(echo -n $DOCKER_USERNAME:$DOCKER_TOKEN|base64)\&#34;}}}&#34;</span><span class="w">
+</span><span class="w"></span><span class="c">#</span><span class="w">
+</span><span class="w"></span><span class="c"># clone git 仓库也需要 git credentails，这可以通过如下命令创建：</span><span class="w">
+</span><span class="w"></span><span class="c"># </span><span class="w">
+</span><span class="w"></span><span class="c">#    kubectl create secret generic private-git-creds --from-literal=username=&lt;username&gt; --from-file=ssh-private-key=&lt;filename&gt;</span><span class="w">
+</span><span class="w"></span><span class="c"># </span><span class="w">
+</span><span class="w"></span><span class="c"># REFERENCES:</span><span class="w">
+</span><span class="w"></span><span class="c">#</span><span class="w">
+</span><span class="w"></span><span class="c"># * https://github.com/argoproj/argo/blob/master/examples/buildkit-template.yaml</span><span class="w">
+</span><span class="w"></span><span class="c">#</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">WorkflowTemplate</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">arguments</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">repo </span><span class="w"> </span><span class="c"># 源码仓库</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">git@gitlab.svc.local:ryan4yin/my-app.git</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">branch</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">main</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">context-path</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">.</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dockerfile</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">Dockerfile</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">image </span><span class="w"> </span><span class="c"># 构建出的镜像名称</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">registry.svc.local/ryan4yin/my-app:latest</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cache-image</span><span class="w">
+</span><span class="w">        </span><span class="c"># 注意，cache-image 不能带 tag! cache 是直接通过 hash 值来索引的！</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">registry.svc.local/build-cache/my-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">entrypoint</span><span class="p">:</span><span class="w"> </span><span class="l">main</span><span class="w">
+</span><span class="w">  </span><span class="nt">templates</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">main</span><span class="w">
+</span><span class="w">      </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- - <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
+</span><span class="w">          </span><span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
+</span><span class="w">          </span><span class="nt">arguments</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">artifacts</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">git-repo</span><span class="w">
+</span><span class="w">                </span><span class="nt">git</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.repo}}&#34;</span><span class="w">
+</span><span class="w">                  </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.branch}}&#34;</span><span class="w">
+</span><span class="w">                  </span><span class="nt">insecureIgnoreHostKey</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">                  </span><span class="nt">usernameSecret</span><span class="p">:</span><span class="w">
+</span><span class="w">                    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">private-git-creds</span><span class="w">
+</span><span class="w">                    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">username</span><span class="w">
+</span><span class="w">                  </span><span class="nt">sshPrivateKeySecret</span><span class="p">:</span><span class="w">
+</span><span class="w">                    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">private-git-creds</span><span class="w">
+</span><span class="w">                    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">ssh-private-key</span><span class="w">
+</span><span class="w">            </span><span class="nt">parameters</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">context-path</span><span class="w">
+</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.context-path}}&#34;</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dockerfile</span><span class="w">
+</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.dockerfile}}&#34;</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">image</span><span class="w">
+</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.image}}&#34;</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cache-image</span><span class="w">
+</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.cache-image}}&#34;</span><span class="w">
+</span><span class="w">    </span><span class="c"># build-image 作为一个通用的 template，不应该直接去引用 workflow.xxx 中的 parameters/artifacts</span><span class="w">
+</span><span class="w">    </span><span class="c"># 这样做的好处是复用性强，这个 template 可以被其他 workflow 引用。</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
+</span><span class="w">      </span><span class="nt">inputs</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">artifacts</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">git-repo</span><span class="w">
+</span><span class="w">        </span><span class="nt">parameters</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">context-path</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dockerfile</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">image</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cache-image</span><span class="w">
+</span><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">docker-config</span><span class="w">
+</span><span class="w">          </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">docker-config</span><span class="w">
+</span><span class="w">      </span><span class="nt">container</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gcr.io/kaniko-project/executor:v1.3.0</span><span class="w">
+</span><span class="w">        </span><span class="c"># 挂载 docker credential</span><span class="w">
+</span><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">docker-config</span><span class="w">
+</span><span class="w">            </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/kaniko/.docker/</span><span class="w">
+</span><span class="w">        </span><span class="c"># 以 context 为工作目录</span><span class="w">
+</span><span class="w">        </span><span class="nt">workingDir</span><span class="p">:</span><span class="w"> </span><span class="l">/work/{{inputs.parameters.context-path}}</span><span class="w">
+</span><span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- --<span class="l">context=.</span><span class="w">
+</span><span class="w">          </span>- --<span class="l">dockerfile={{inputs.parameters.dockerfile}}</span><span class="w">
+</span><span class="w">          </span><span class="c"># destination 可以重复多次，表示推送多次</span><span class="w">
+</span><span class="w">          </span>- --<span class="l">destination={{inputs.parameters.image}}</span><span class="w">
+</span><span class="w">          </span><span class="c"># 私有镜像仓库，可以考虑不验证 tls 证书（有安全风险）</span><span class="w">
+</span><span class="w">          </span>- --<span class="l">skip-tls-verify</span><span class="w">
+</span><span class="w">          </span><span class="c"># - --skip-tls-verify-pull</span><span class="w">
+</span><span class="w">          </span><span class="c"># - --registry-mirror=&lt;xxx&gt;.mirror.aliyuncs.com</span><span class="w">
+</span><span class="w">          </span>- --<span class="l">reproducible</span><span class="w"> </span><span class="c">#  Strip timestamps out of the image to make it reproducible</span><span class="w">
+</span><span class="w">          </span><span class="c"># 使用镜像仓库做远程缓存仓库</span><span class="w">
+</span><span class="w">          </span>- --<span class="l">cache=true</span><span class="w">
+</span><span class="w">          </span>- --<span class="l">cache-repo={{inputs.parameters.cache-image}}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="四常见问题">四、常见问题</h2>
+<h3 id="1-workflow-默认使用-root-账号">1. workflow 默认使用 root 账号？</h3>
+<p>workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 root 账号，而且要修改文件，就很可能遇到 Permission Denined 的问题。</p>
+<p>解决方法：通过 Pod Security Context 手动设定容器的 user/group:</p>
+<ul>
+<li><a href="https://argoproj.github.io/argo/workflow-pod-security-context/" target="_blank" rel="noopener noreffer">Workflow Pod Security Context</a></li>
+</ul>
+<p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">WorkflowTemplate</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">runAsNonRoot</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="nt">runAsUser</span><span class="p">:</span><span class="w"> </span><span class="m">1000</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>或者也可以通过 <code>workflow-controller-configmap</code> 的 <code>workflowDefaults</code> 设定默认的 workflow 配置。</p>
+<h3 id="2-如何从-hashicorp-vault-中读取-secrets">2. 如何从 hashicorp vault 中读取 secrets?</h3>
+<blockquote>
+<p>参考 <a href="https://github.com/argoproj/argo/issues/3267#issuecomment-650119636" target="_blank" rel="noopener noreffer">Support to get secrets from Vault</a></p>
+</blockquote>
+<p>hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理工具。
+我们在生产环境用它做为分布式配置中心，同时在本地 CI/CD 中，也使用它存储相关的敏感信息。</p>
+<p>现在迁移到 argo，我们当然希望能够有一个好的方法从 vault 中读取配置。</p>
+<p>目前最推荐的方法，是使用 vault 的 vault-agent，将 secrets 以文件的形式注入到 pod 中。</p>
+<p>通过 valut-policy - vault-role - k8s-serviceaccount 一系列认证授权配置，可以制定非常细粒度的 secrets 权限规则，而且配置信息阅后即焚，安全性很高。</p>
+<h3 id="3-如何在多个名字空间中使用同一个-secrets">3. 如何在多个名字空间中使用同一个 secrets?</h3>
+<p>使用 Namespace 对 workflow 进行分类时，遇到的一个常见问题就是，如何在多个名字空间使用 <code>private-git-creds</code>/<code>docker-config</code>/<code>minio</code>/<code>vault</code> 等 workflow 必要的 secrets.</p>
+<p>常见的方法是把 secrets 在所有名字空间 create 一次。</p>
+<p>但是也有更方便的 secrets 同步工具：</p>
+<p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreffer">kyverno</a> 进行 secrets 同步的配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterPolicy</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sync-secrets</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">background</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 将 secret vault 从 argo Namespace 同步到其他所有 Namespace</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sync-vault-secret</span><span class="w">
+</span><span class="w">    </span><span class="nt">match</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">kinds</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="l">Namespace</span><span class="w">
+</span><span class="w">    </span><span class="nt">generate</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Secret</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">regcred</span><span class="w">
+</span><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{request.object.metadata.name}}&#34;</span><span class="w">
+</span><span class="w">      </span><span class="nt">synchronize</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="nt">clone</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">argo</span><span class="w">
+</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
+</span><span class="w">  </span><span class="c"># 可以配置多个 rules，每个 rules 同步一个 secret</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>上面提供的 kyverno 配置，会实时地监控所有 Namespace 变更，一但有新 Namespace 被创建，它就会立即将 <code>vault</code> secret 同步到该 Namespace.</p>
+<p>或者，使用专门的 secrets/configmap 复制工具：<a href="https://github.com/mittwald/kubernetes-replicator" target="_blank" rel="noopener noreffer">kubernetes-replicator</a></p>
+<h3 id="4-argo-对-cr-资源的验证不够严谨写错了-key-都不报错">4. Argo 对 CR 资源的验证不够严谨，写错了 key 都不报错</h3>
+<p>待研究</p>
+<h3 id="5-如何归档历史数据">5. 如何归档历史数据？</h3>
+<p>Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。</p>
+<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href="https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods" target="_blank" rel="noopener noreffer">Limit The Total Number Of Workflows And Pods</a></p>
+<p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
+</span><span class="w"></span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">    # Default values that will apply to all Workflows from this controller, unless overridden on the Workflow-level
+</span><span class="sd">    # See more: docs/default-workflow-specs.md
+</span><span class="sd">    workflowDefaults:
+</span><span class="sd">      spec:
+</span><span class="sd">        # must complete in 8h (28,800 seconds)
+</span><span class="sd">        activeDeadlineSeconds: 28800
+</span><span class="sd">        # keep workflows for 1d (86,400 seconds)
+</span><span class="sd">        ttlStrategy:
+</span><span class="sd">          secondsAfterCompletion: 86400
+</span><span class="sd">          # secondsAfterSuccess: 5
+</span><span class="sd">          # secondsAfterFailure: 500
+</span><span class="sd">        # delete all pods as soon as they complete
+</span><span class="sd">        podGC:
+</span><span class="sd">          # 可选项：&#34;OnPodCompletion&#34;, &#34;OnPodSuccess&#34;, &#34;OnWorkflowCompletion&#34;, &#34;OnWorkflowSuccess&#34;
+</span><span class="sd">          strategy: OnPodCompletion</span><span class="w">    
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="6-argo-的其他进阶配置">6. Argo 的其他进阶配置</h3>
+<p>Argo Workflow 的配置，都保存在 <code>workflow-controller-configmap</code> 这个 configmap 中，我们前面已经接触到了它的部分内容。</p>
+<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
+<p>其中一些可能需要自定义的参数如下：</p>
+<ul>
+<li><code>parallelism</code>: workflow 的最大并行数量</li>
+<li><code>persistence</code>: 将完成的 workflows 保存到 postgresql/mysql 中，这样即使 k8s 中的 workflow 被删除了，还能查看 workflow 记录
+<ul>
+<li>也支持配置过期时间</li>
+</ul>
+</li>
+<li><code>sso</code>: 启用单点登录</li>
+</ul>
+<h3 id="7-是否应该尽量使用-cicd-工具提供的功能">7. 是否应该尽量使用 CI/CD 工具提供的功能？</h3>
+<p>我从同事以及网络上，了解到部分 DevOps 人员主张尽量自己使用 Python/Go 来实现 CI/CD 流水线，CI/CD 工具提供的功能能不使用就不要使用。</p>
+<p>因此有此一问。下面做下详细的分析：</p>
+<p>尽量使用 CI/CD 工具提供的插件/功能，好处是不需要自己去实现，可以降低维护成本。
+但是相对的运维人员就需要深入学习这个 CI/CD 工具的使用，另外还会和 CI/CD 工具绑定，会增加迁移难度。</p>
+<p>而尽量自己用 Python 等代码去实现流水线，让 CI/CD 工具只负责调度与运行这些 Python 代码，
+那 CI/CD 就可以很方便地随便换，运维人员也不需要去深入学习 CI/CD 工具的使用。
+缺点是可能会增加 CI/CD 代码的复杂性。</p>
+<p>我观察到 argo/drone 的一些 examples，发现它们的特征是：</p>
+<ol>
+<li>所有 CI/CD 相关的逻辑，全都实现在流水线中，不需要其他构建代码</li>
+<li>每一个 step 都使用专用镜像：golang/nodejs/python
+<ol>
+<li>比如先使用 golang 镜像进行测试、构建，再使用 kaniko 将打包成容器镜像</li>
+</ol>
+</li>
+</ol>
+<p>那是否应该尽量使用 CI/CD 工具提供的功能呢？
+<strong>其实这就是有多种方法实现同一件事，该用哪种方法的问题。这个问题在各个领域都很常见。</strong></p>
+<p>以我目前的经验来看，需要具体问题具体分析，以 argo workflow 为例：</p>
+<ol>
+<li>流水线本身非常简单，那完全可以直接使用 argo 来实现，没必要自己再搞个 python 脚本
+<ol>
+<li>简单的流水线，迁移起来往往也非常简单。没必要为了可迁移性，非要用 argo 去调用 python 脚本。</li>
+</ol>
+</li>
+<li>流水线的步骤之间包含很多逻辑判断/数据传递，那很可能是你的流水线设计有问题！
+<ol>
+<li><strong>流水线的步骤之间传递的数据应该尽可能少！复杂的逻辑判断应该尽量封装在其中一个步骤中！</strong></li>
+<li>这种情况下，就应该使用 python 脚本来封装复杂的逻辑，而不应该将这些逻辑暴露到 argo workflow 中！</li>
+</ol>
+</li>
+<li>我需要批量运行很多的流水线，而且它们之间还有复杂的依赖关系：那显然应该利用上 argo wrokflow 的高级特性。
+<ol>
+<li>argo 的 dag/steps 和 workflow of workflows 这两个功能结合，可以简单地实现上述功能。</li>
+</ol>
+</li>
+</ol>
+<h2 id="使用体验">使用体验</h2>
+<p>目前已经使用 Argo Workflow 一个月多了，总的来说，最难用的就是 Web UI。</p>
+<p>其他的都是小问题，只有 Web UI 是真的超难用，感觉根本就没有好好做过设计&hellip;</p>
+<p>急需一个第三方 Web UI&hellip;</p>
+<h2 id="画外---如何处理其他-kubernetes-资源之间的依赖关系">画外 - 如何处理其他 Kubernetes 资源之间的依赖关系</h2>
+<p>Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间是有依赖关系的，因此它提供了多种协调编排「任务」的方法。</p>
+<p>但是貌似 Argo CD 并没有继承这个理念，Argo CD 部署时，并不能在 kubernetes 资源之间，通过 DAG 等方法定义依赖关系。</p>
+<p>微服务之间存在依赖关系，希望能按依赖关系进行部署，而 ArgoCD/FluxCD 部署 kubernetes yaml 时都是不考虑任何依赖关系的。这里就存在一些矛盾。</p>
+<p>解决这个矛盾的方法有很多，我查阅了很多资料，也自己做了一些思考，得到的最佳实践来自<a href="https://developer.aliyun.com/article/573791" target="_blank" rel="noopener noreffer">解决服务依赖 - 阿里云 ACK 容器服务</a>，它给出了两种方案：</p>
+<ol>
+<li><strong>应用端服务依赖检查</strong>: 即在微服务的入口添加依赖检查逻辑，确保所有依赖的微服务/数据库都可访问了，就续探针才能返回 200. 如果超时就直接 Crash</li>
+<li><strong>独立的服务依赖检查逻辑</strong>: 部分遗留代码使用方法一改造起来或许会很困难，这时可以考虑使用 <strong>pod initContainer</strong> 或者容器的启动脚本中，加入依赖检查逻辑。</li>
+</ol>
+<p>但是这两个方案也还是存在一些问题，在说明问题前，我先说明一下我们「<strong>按序部署</strong>」的应用场景。</p>
+<p>我们是一个很小的团队，后端做 RPC 接口升级时，通常是直接在开发环境做全量升级+测试。
+因此运维这边也是，每次都是做全量升级。</p>
+<p>因为没有协议协商机制，新的微服务的「RPC 服务端」将兼容 v1 v2 新旧两种协议，而新的「RPC 客户端」将直接使用 v2 协议去请求其他微服务。
+这就导致我们<strong>必须先升级「RPC 服务端」，然后才能升级「RPC 客户端」</strong>。</p>
+<p>为此，在进行微服务的全量升级时，就需要沿着 RPC 调用链路按序升级，这里就涉及到了 Kubernetes 资源之间的依赖关系。</p>
+<p>前面讲了，阿里云提供的「应用端服务依赖检查」和「独立的服务依赖检查逻辑」是最佳实践。它们的优点有：</p>
+<ol>
+<li>简化部署逻辑，每次直接做全量部署就 OK。</li>
+<li>提升部署速度，具体体现在：GitOps 部署流程只需要走一次（按序部署要很多次）、所有镜像都提前拉取好了、所有 Pod 也都提前启动了。</li>
+</ol>
+<p>但是这里有个问题是「灰度发布」或者「滚动更新」，这两种情况下都存在<strong>新旧版本共存</strong>的问题。</p>
+<p>如果出现了 RPC 接口升级，那就必须先完成「RPC 服务端」的「灰度发布」或者「滚动更新」，再去更新「RPC 客户端」。</p>
+<p>否则如果直接对所有微服务做灰度更新，只依靠「服务依赖检查」，就会出现这样的问题——「RPC 服务端」处于「薛定谔」状态，你调用到的服务端版本是新还是旧，取决于负载均衡的策略和概率。</p>
+<p>**因此在做 RPC 接口的全量升级时，只依靠「服务依赖检查」是行不通的。**我目前想到的方案，有如下几种：</p>
+<ul>
+<li>我们当前的使用方案：<strong>直接在 yaml 部署这一步实现按序部署</strong>，每次部署后就轮询 kube-apiserver，确认全部灰度完成，再进行下一阶段的 yaml 部署。</li>
+<li><strong>让后端加个参数来控制客户端使用的 RPC 协议版本，或者搞一个协议协商</strong>。这样就不需要控制微服务发布顺序了。</li>
+<li>社区很多有状态应用的部署都涉及到部署顺序等复杂操作，目前流行的解决方案是<strong>使用 Operator+CRD 来实现这类应用的部署</strong>。Operator 会自行处理好各个组件的部署顺序。</li>
+</ul>
+<h2 id="参考文档">参考文档</h2>
+<ul>
+<li><a href="https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH" target="_blank" rel="noopener noreffer">Argo加入CNCF孵化器，一文解析Kubernetes原生工作流</a></li>
+</ul>
+<p>视频:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreffer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
+</ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
+<ol>
+<li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
+<li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
+<li>权限管理：通过 policy，可以设定非常细致的 ACL 权限。</li>
+<li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</li>
+<li>支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。</li>
+</ol>
+<p>在使用 Vault 之前，我们是以携程开源的 <a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener noreffer">Apollo</a> 作为微服务的分布式配置中心。</p>
+<p>Apollo 在国内非常流行。它功能强大，支持配置的继承，也有提供 HTTP API 方便自动化。
+缺点是权限管理和 secrets 管理比较弱，也不支持信息加密，不适合直接存储敏感信息。因此我们现在切换到了 Vault.</p>
+<p>目前我们本地的 CI/CD 流水线和云上的微服务体系，都是使用的 Vault 做 secrets 管理.</p>
+<h2 id="一vault-基础概念">一、Vault 基础概念</h2>
+<blockquote>
+<p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture">https://www.vaultproject.io/docs/internals/architecture</a></p>
+</blockquote>
+<p>首先看一下 Vault 的架构图：</p>
+<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="/images/expirence-of-vault/vault-layers.png" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2>vault layers</h2>">
+        
+    </a><figcaption class="image-caption">vault layers</figcaption>
+    </figure></p>
+<p>可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
+Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。</p>
+<p>「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。</p>
+<p>barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 的过程中被验证与解密。</p>
+<p>和银行金库(bank vault)非常类似，barrier 也必须先解封，才能允许读取内部的数据。</p>
+<h3 id="1-数据存储及加密解密">1. 数据存储及加密解密</h3>
+<p>Storage Backend(后端存储): Vault 自身不存储数据，因此需要为它配置一个「Storage Backend」。
+「Storage Backend」是不受信任的，只用于存储加密数据。</p>
+<p>Initialaztion(初始化): vault 在首次启动时需要初始化，这一步生成一个「加密密钥(encryption key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.</p>
+<p>Unseal(解封): Vault 启动后，因为不知道「加密密钥(ncryption key)」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。</p>
+<p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。</p>
+<p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreffer">沙米尔密钥共享算法</a>
+将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.</p>
+<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
+        
+    </a><figcaption class="image-caption">vault-shamir-secret-sharing</figcaption>
+    </figure></p>
+<blockquote>
+<p>「Key Shares」的数量，以及重建「master key」最少需要的 key shares 数量，都是可以调整的。
+沙米尔密钥共享算法也可以关闭，这样 master key 将被直接用于 Unseal.</p>
+</blockquote>
+<h3 id="2-认证系统及权限系统">2. 认证系统及权限系统</h3>
+<p>在解封完成后，Vault 就可以开始处理请求了。</p>
+<p>HTTP 请求进入后的整个处理流程都由 vault core 管理，core 会强制进行 ACL 检查，并确保审计日志(audit logging)完成记录。</p>
+<p>客户端首次连接 vault 时，需要先完成身份认证，vault 的「auth methods」模块有很多身份认证方法可选：</p>
+<ol>
+<li>用户友好的认证方法，适合管理员使用：username/password、云服务商、ldap
+<ol>
+<li>在创建 user 的时候，需要为 user 绑定 policy，给予合适的权限。</li>
+</ol>
+</li>
+<li>应用友好的方法：public/private keys、tokens、kubernetes、jwt</li>
+</ol>
+<p>身份验证请求流经 Core 并进入 auth methods，auth methods 确定请求是否有效并返回「关联策略(policies)」的列表。</p>
+<p>ACL Policies 由 policy store 负责管理与存储，由 core 进行 ACL 检查。
+ACL 的默认行为是拒绝，这意味着除非明确配置 Policy 允许某项操作，否则该操作将被拒绝。</p>
+<p>在通过 auth methods 完成了身份认证，并且返回的「关联策略」也没毛病之后，「token store」将会生成并管理一个新的 token，
+这个 token 会被返回给客户端，用于进行后续请求。</p>
+<p>类似 web 网站的 cookie，token 也都存在一个 lease 租期或者说有效期，这加强了安全性。</p>
+<p>token 关联了相关的策略 policies，这些策略将被用于验证请求的权限。</p>
+<p>请求经过验证后，将被路由到 secret engine。如果 secret engine 返回了一个 secret（由 vault 自动生成的 secret），
+Core 会将其注册到 expiration manager，并给它附加一个 lease ID。lease ID 被客户端用于更新(renew)或吊销(revoke)它得到的 secret.</p>
+<p>如果客户端允许租约(lease)到期，expiration manager 将自动吊销这个 secret.</p>
+<p>Core 负责处理审核代理(audit brok)的请求及响应日志，将请求发送到所有已配置的审核设备(audit devices)。</p>
+<h3 id="3-secret-engine">3. Secret Engine</h3>
+<p>Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。</p>
+<p>有的 Secret Engines 只是单纯地存储与读取数据，比如 kv 就可以看作一个加密的 Redis。
+而其他的 Secret Engines 则连接到其他的服务并按需生成动态凭证。</p>
+<p>还有些 Secret Engines 提供「加密即服务(encryption as a service)」 - transit、证书管理等。</p>
+<p>常用的 engine 举例：</p>
+<ol>
+<li>AliCloud Secrets Engine: 基于 RAM 策略动态生成 AliCloud Access Token，或基于 RAM 角色动态生成 AliCloud STS 凭据
+<ul>
+<li>Access Token 会自动更新(Renew)，而 STS 凭据是临时使用的，过期后就失效了。</li>
+</ul>
+</li>
+<li>kv: 键值存储，可用于存储一些静态的配置。它一定程度上能替代掉携程的 Apollo 配置中心。</li>
+<li>Transit Secrets Engine: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。</li>
+</ol>
+<h2 id="二部署-vault">二、部署 Vault</h2>
+<p>官方建议<a href="https://www.vaultproject.io/docs/platform/k8s/helm/run" target="_blank" rel="noopener noreffer">通过 Helm 部署 vault</a>，大概流程：</p>
+<ol>
+<li>使用 helm/docker 部署运行 vault.</li>
+<li>初始化/解封 vault: vault 安全措施，每次重启必须解封(可设置自动解封).</li>
+</ol>
+<h3 id="1-docker-compose-部署">1. docker-compose 部署</h3>
+<blockquote>
+<p>推荐用于本地开发测试环境，或者其他不需要高可用的环境。</p>
+</blockquote>
+<p><code>docker-compose.yml</code> 示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.3&#39;</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">vault</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># 文档：https://hub.docker.com/_/vault</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">vault:1.6.0</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># rootless 容器，内部不能使用标准端口 443</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;443:8200&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># 审计日志存储目录，默认不写审计日志，启用 `file` audit backend 时必须提供一个此文件夹下的路径</span><span class="w">
+</span><span class="w">      </span>- <span class="l">./logs:/vault/logs</span><span class="w">
+</span><span class="w">      </span><span class="c"># 当使用 file data storage 插件时，数据被存储在这里。默认不往这写任何数据。</span><span class="w">
+</span><span class="w">      </span>- <span class="l">./file:/vault/file</span><span class="w">
+</span><span class="w">      </span><span class="c"># 配置目录，vault 默认 `/valut/config/` 中所有以 .hcl/.json 结尾的文件</span><span class="w">
+</span><span class="w">      </span><span class="c"># config.hcl 文件内容，参考 cutom-vaules.yaml</span><span class="w">
+</span><span class="w">      </span>- <span class="l">./config.hcl:/vault/config/config.hcl</span><span class="w">
+</span><span class="w">      </span><span class="c"># TLS 证书</span><span class="w">
+</span><span class="w">      </span>- <span class="l">./certs:/certs</span><span class="w">
+</span><span class="w">    </span><span class="c"># vault 需要锁定内存以防止敏感值信息被交换(swapped)到磁盘中</span><span class="w">
+</span><span class="w">    </span><span class="c"># 为此需要添加如下能力</span><span class="w">
+</span><span class="w">    </span><span class="nt">cap_add</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">IPC_LOCK</span><span class="w">
+</span><span class="w">    </span><span class="c"># 必须手动设置 entrypoint，否则 vault 将以 development 模式运行</span><span class="w">
+</span><span class="w">    </span><span class="nt">entrypoint</span><span class="p">:</span><span class="w"> </span><span class="l">vault server -config /vault/config/config.hcl</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><code>config.hcl</code> 内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="n">ui</span> <span class="o">=</span> <span class="kt">true</span>
+
+<span class="err">//</span> <span class="k">使用文件做数据存储</span><span class="err">（</span><span class="k">单节点</span><span class="err">）</span>
+<span class="k">storage</span> <span class="s2">&#34;file&#34;</span> {
+<span class="n">  path</span>    <span class="o">=</span> <span class="s2">&#34;/vault/file&#34;</span>
+}
+
+<span class="k">listener</span> <span class="s2">&#34;tcp&#34;</span> {
+<span class="n">  address</span> <span class="o">=</span> <span class="s2">&#34;[::]:8200&#34;</span>
+
+<span class="n">  tls_disable</span> <span class="o">=</span> <span class="kt">false</span>
+<span class="n">  tls_cert_file</span> <span class="o">=</span> <span class="s2">&#34;/certs/server.crt&#34;</span>
+<span class="n">  tls_key_file</span>  <span class="o">=</span> <span class="s2">&#34;/certs/server.key&#34;</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>将如上两份配置保存在同一非文件夹内，同时在 <code>./certs</code> 中提供 TLS 证书 <code>server.crt</code> 和私钥 <code>server.key</code>。</p>
+<p>然后 <code>docker-compose up -d</code> 就能启动运行一个 vault 实例。</p>
+<h3 id="install-by-helm">2. 通过 helm 部署 vault</h3>
+<blockquote>
+<p>推荐用于生产环境</p>
+</blockquote>
+<p>通过 helm 部署：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 valut 仓库</span>
+helm repo add hashicorp https://helm.releases.hashicorp.com
+<span class="c1"># 查看 vault 版本号</span>
+helm search repo hashicorp/vault -l <span class="p">|</span> head
+<span class="c1"># 下载某个版本号的 vault</span>
+helm pull hashicorp/vault --version  0.9.0 --untar
+</code></pre></td></tr></table>
+</div>
+</div><p>参照下载下来的 <code>./vault/values.yaml</code> 编写 <code>custom-values.yaml</code>，
+部署一个以 <code>mysql</code> 为后端存储的 HA vault，配置示例如下:</p>
+<blockquote>
+<p>配置内容虽然多，但是大都是直接拷贝自 <code>./vault/values.yaml</code>，改动很少。
+测试 Vault 时可以忽略掉其中大多数的配置项。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># enabled is the master enabled switch. Setting this to true or false</span><span class="w">
+</span><span class="w">  </span><span class="c"># will enable or disable all the components within this chart by default.</span><span class="w">
+</span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="c"># TLS for end-to-end encrypted transport</span><span class="w">
+</span><span class="w">  </span><span class="nt">tlsDisable</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">injector</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># True if you want to enable vault agent injection.</span><span class="w">
+</span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># If true, will enable a node exporter metrics endpoint at /metrics.</span><span class="w">
+</span><span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># Mount Path of the Vault Kubernetes Auth Method.</span><span class="w">
+</span><span class="w">  </span><span class="nt">authPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;auth/kubernetes&#34;</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="nt">certs</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># secretName is the name of the secret that has the TLS certificate and</span><span class="w">
+</span><span class="w">    </span><span class="c"># private key to serve the injector webhook. If this is null, then the</span><span class="w">
+</span><span class="w">    </span><span class="c"># injector will default to its automatic management mode that will assign</span><span class="w">
+</span><span class="w">    </span><span class="c"># a service account to the injector to generate its own certificates.</span><span class="w">
+</span><span class="w">    </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c"># caBundle is a base64-encoded PEM-encoded certificate bundle for the</span><span class="w">
+</span><span class="w">    </span><span class="c"># CA that signed the TLS certificate that the webhook serves. This must</span><span class="w">
+</span><span class="w">    </span><span class="c"># be set if secretName is non-null.</span><span class="w">
+</span><span class="w">    </span><span class="nt">caBundle</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c"># certName and keyName are the names of the files within the secret for</span><span class="w">
+</span><span class="w">    </span><span class="c"># the TLS cert and private key, respectively. These have reasonable</span><span class="w">
+</span><span class="w">    </span><span class="c"># defaults but can be customized if necessary.</span><span class="w">
+</span><span class="w">    </span><span class="nt">certName</span><span class="p">:</span><span class="w"> </span><span class="l">tls.crt</span><span class="w">
+</span><span class="w">    </span><span class="nt">keyName</span><span class="p">:</span><span class="w"> </span><span class="l">tls.key</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">server</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># Resource requests, limits, etc. for the server cluster placement. This</span><span class="w">
+</span><span class="w">  </span><span class="c"># should map directly to the value of the resources field for a PodSpec.</span><span class="w">
+</span><span class="w">  </span><span class="c"># By default no direct resource request is made.</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># Enables a headless service to be used by the Vault Statefulset</span><span class="w">
+</span><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="c"># Port on which Vault server is listening</span><span class="w">
+</span><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8200</span><span class="w">
+</span><span class="w">    </span><span class="c"># Target port to which the service should be mapped to</span><span class="w">
+</span><span class="w">    </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8200</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># This configures the Vault Statefulset to create a PVC for audit</span><span class="w">
+</span><span class="w">  </span><span class="c"># logs.  Once Vault is deployed, initialized and unseal, Vault must</span><span class="w">
+</span><span class="w">  </span><span class="c"># be configured to use this for audit logs.  This will be mounted to</span><span class="w">
+</span><span class="w">  </span><span class="c"># /vault/audit</span><span class="w">
+</span><span class="w">  </span><span class="c"># See https://www.vaultproject.io/docs/audit/index.html to know more</span><span class="w">
+</span><span class="w">  </span><span class="nt">auditStorage</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">    </span><span class="c"># Size of the PVC created</span><span class="w">
+</span><span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">10Gi</span><span class="w">
+</span><span class="w">    </span><span class="c"># Name of the storage class to use.  If null it will use the</span><span class="w">
+</span><span class="w">    </span><span class="c"># configured default Storage Class.</span><span class="w">
+</span><span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">    </span><span class="c"># Access Mode of the storage device being used for the PVC</span><span class="w">
+</span><span class="w">    </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span><span class="w">    </span><span class="c"># Annotations to apply to the PVC</span><span class="w">
+</span><span class="w">    </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># Run Vault in &#34;HA&#34; mode. There are no storage requirements unless audit log</span><span class="w">
+</span><span class="w">  </span><span class="c"># persistence is required.  In HA mode Vault will configure itself to use Consul</span><span class="w">
+</span><span class="w">  </span><span class="c"># for its storage backend.  The default configuration provided will work the Consul</span><span class="w">
+</span><span class="w">  </span><span class="c"># Helm project by default.  It is possible to manually configure Vault to use a</span><span class="w">
+</span><span class="w">  </span><span class="c"># different HA backend.</span><span class="w">
+</span><span class="w">  </span><span class="nt">ha</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c"># Set the api_addr configuration for Vault HA</span><span class="w">
+</span><span class="w">    </span><span class="c"># See https://www.vaultproject.io/docs/configuration#api_addr</span><span class="w">
+</span><span class="w">    </span><span class="c"># If set to null, this will be set to the Pod IP Address</span><span class="w">
+</span><span class="w">    </span><span class="nt">apiAddr</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c"># config is a raw string of default configuration when using a Stateful</span><span class="w">
+</span><span class="w">    </span><span class="c"># deployment. Default is to use a Consul for its HA storage backend.</span><span class="w">
+</span><span class="w">    </span><span class="c"># This should be HCL.</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="c"># Note: Configuration files are stored in ConfigMaps so sensitive data </span><span class="w">
+</span><span class="w">    </span><span class="c"># such as passwords should be either mounted through extraSecretEnvironmentVars</span><span class="w">
+</span><span class="w">    </span><span class="c"># or through a Kube secret.  For more information see: </span><span class="w">
+</span><span class="w">    </span><span class="c"># https://www.vaultproject.io/docs/platform/k8s/helm/run#protecting-sensitive-vault-configurations</span><span class="w">
+</span><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">      ui = true
+</span><span class="sd">
+</span><span class="sd">      listener &#34;tcp&#34; {
+</span><span class="sd">        address = &#34;[::]:8200&#34;
+</span><span class="sd">        cluster_address = &#34;[::]:8201&#34;
+</span><span class="sd">
+</span><span class="sd">        tls_disable = false
+</span><span class="sd">        tls_cert_file = &#34;/etc/certs/vault.crt&#34;
+</span><span class="sd">        tls_key_file  = &#34;/etc/certs/vault.key&#34;
+</span><span class="sd">      }
+</span><span class="sd">
+</span><span class="sd">      storage &#34;mysql&#34; {
+</span><span class="sd">        address = &#34;&lt;host&gt;:3306&#34;
+</span><span class="sd">        username = &#34;&lt;username&gt;&#34;
+</span><span class="sd">        password = &#34;&lt;password&gt;&#34;
+</span><span class="sd">        database = &#34;vault&#34;
+</span><span class="sd">        ha_enabled = &#34;true&#34;
+</span><span class="sd">      }
+</span><span class="sd">
+</span><span class="sd">      service_registration &#34;kubernetes&#34; {}
+</span><span class="sd">
+</span><span class="sd">      # Example configuration for using auto-unseal, using Google Cloud KMS. The
+</span><span class="sd">      # GKMS keys must already exist, and the cluster must have a service account
+</span><span class="sd">      # that is authorized to access GCP KMS.
+</span><span class="sd">      #seal &#34;gcpckms&#34; {
+</span><span class="sd">      #   project     = &#34;vault-helm-dev-246514&#34;
+</span><span class="sd">      #   region      = &#34;global&#34;
+</span><span class="sd">      #   key_ring    = &#34;vault-helm-unseal-kr&#34;
+</span><span class="sd">      #   crypto_key  = &#34;vault-helm-unseal-key&#34;
+</span><span class="sd">      #}</span><span class="w">      
+</span><span class="w">
+</span><span class="w"></span><span class="c"># Vault UI</span><span class="w">
+</span><span class="w"></span><span class="nt">ui</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># True if you want to create a Service entry for the Vault UI.</span><span class="w">
+</span><span class="w">  </span><span class="c">#</span><span class="w">
+</span><span class="w">  </span><span class="c"># serviceType can be used to control the type of service created. For</span><span class="w">
+</span><span class="w">  </span><span class="c"># example, setting this to &#34;LoadBalancer&#34; will create an external load</span><span class="w">
+</span><span class="w">  </span><span class="c"># balancer (for supported K8S installations) to access the UI.</span><span class="w">
+</span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="nt">publishNotReadyAddresses</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="c"># The service should only contain selectors for active Vault pod</span><span class="w">
+</span><span class="w">  </span><span class="nt">activeVaultPodOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">  </span><span class="nt">externalPort</span><span class="p">:</span><span class="w"> </span><span class="m">8200</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>现在使用自定义的 <code>custom-values.yaml</code> 部署 vautl:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create namespace vault
+<span class="c1"># 安装/升级 valut</span>
+helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-初始化initalize并解封unseal-vault">3. 初始化(initalize)并解封(unseal) vault</h3>
+<blockquote>
+<p>官方文档：<a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault" target="_blank" rel="noopener noreffer">Initialize and unseal Vault - Vault on Kubernetes Deployment Guide</a></p>
+</blockquote>
+<p>通过 helm 部署 vault，默认会部署一个三副本的 StatefulSet，但是这三个副本都会处于 NotReady 状态（docker 方式部署的也一样）。
+接下来还需要手动初始化(initalize)并解封(unseal) vault，才能 <code>Ready</code>:</p>
+<ol>
+<li>第一步：从三个副本中随便选择一个，运行 vault 的初始化命令：<code>kubectl exec -ti vault-0 -- vault operator init</code>
+<ol>
+<li>初始化操作会返回 5 个 unseal keys，以及一个 Initial Root Token，这些数据非常敏感非常重要，一定要保存到安全的地方！</li>
+</ol>
+</li>
+<li>第二步：在每个副本上，使用任意三个 unseal keys 进行解封操作。
+<ol>
+<li>一共有三个副本，也就是说要解封 3*3 次，才能完成 vault 的完整解封！</li>
+</ol>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 每个实例都需要解封三次！</span>
+<span class="c1">## Unseal the first vault server until it reaches the key threshold</span>
+$ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <span class="c1"># ... Unseal Key 1</span>
+$ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <span class="c1"># ... Unseal Key 2</span>
+$ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <span class="c1"># ... Unseal Key 3</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这样就完成了部署，但是要注意，<strong>vault 实例每次重启后，都需要重新解封！也就是重新进行第二步操作！</strong></p>
+<h3 id="4-设置自动解封">4. 设置自动解封</h3>
+<p>每次重启都要手动解封所有 vault 实例，实在是很麻烦，在云上自动扩缩容的情况下，vault 实例会被自动调度，这种情况就更麻烦了。</p>
+<p>为了简化这个流程，可以考虑配置 auto unseal 让 vault 自动解封。</p>
+<p>自动解封目前有两种方法：</p>
+<ol>
+<li>使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key，阿里云的相关配置方法：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreffer">alicloudkms Seal</a></li>
+<li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreffer">autounseal-transit</a></li>
+</ol>
+<p>简单起见，也可以考虑直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过要注意别泄漏了解封密钥！</p>
+<h2 id="三vault-自身的配置管理">三、Vault 自身的配置管理</h2>
+<p>Vault 本身是一个复杂的 secrets 工具，它提供了 <strong>Web UI</strong> 和 <strong>CLI</strong> 用于手动管理与查看 Vault 的内容。</p>
+<p>但是作为一名 DevOps，我们当然更喜欢自动化的方法，这有两种选择:</p>
+<ul>
+<li>使用 vault 的 sdk: python-<a href="https://github.com/hvac/hvac" target="_blank" rel="noopener noreffer">hvac</a></li>
+<li>使用 <a href="https://github.com/hashicorp/terraform-provider-vault" target="_blank" rel="noopener noreffer">terraform-provider-vault</a> 或者 <a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreffer">pulumi-vault</a> 实现 vault 配置的自动化管理。</li>
+</ul>
+<p>Web UI 适合手工操作，而 sdk/<code>terraform-provider-vault</code> 则适合用于自动化管理 vault.</p>
+<p>我们的测试环境就是使用 <code>pulumi-vault</code> 完成的自动化配置 vault policy 和 kubernetes role，然后自动化注入所有测试用的 secrets.</p>
+<h3 id="1-使用-pulumi-自动化配置-vault">1. 使用 pulumi 自动化配置 vault</h3>
+<p>使用 pulumi 管理 vault 配置的优势是很大的，因为云上资源的敏感信息（数据库账号密码、资源 ID、RAM子账号）都是 pulumi 创建的。</p>
+<p>再结合使用 pulumi_valut，就能实现敏感信息自动生成后，立即保存到 vault 中，实现完全自动化。</p>
+<p>后续微服务就可以通过 kubernetes 认证，直接从 vault 读取敏感信息。</p>
+<p>或者是写入到本地的 vault 中留做备份，在需要的时候，管理员能登入进去查看相关敏感信息。</p>
+<h4 id="11-token-的生成">1.1 Token 的生成</h4>
+<p>pulumi_vault 本身挺简单的，声明式的配置嘛，直接用就是了。</p>
+<p>但是它一定要求提供 <code>VAULT_TOKEN</code> 作为身份认证的凭证（实测 userpass/approle 都不能直接使用，会报错 <code>no vault token found</code>），而且 pulumi 还会先生成临时用的 child token，然后用这个 child token
+进行后续的操作。</p>
+<p>首先安全起见，肯定不应该直接提供 root token！root token 应该封存，除了紧急情况不应该启用。</p>
+<p>那么应该如何生成一个权限有限的 token 给 vault 使用呢？
+我的方法是创建一个 userpass 账号，通过 policy 给予它有限的权限。
+然后先手动(或者自动)登录获取到 token，再将 token 提供给 pulumi_vault 使用。</p>
+<p>这里面有个坑，就是必须给 userpass 账号创建 child token 的权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="k">path</span> <span class="s2">&#34;local/*&#34;</span> {
+<span class="n">  capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;, &#34;list&#34;</span><span class="p">]</span>
+}
+
+<span class="err">//</span> <span class="k">允许创建</span> <span class="k">child</span> <span class="k">token</span>
+<span class="k">path</span> <span class="s2">&#34;auth/token/create&#34;</span> {
+<span class="n">  capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;create&#34;, &#34;read&#34;, &#34;update&#34;, &#34;delete&#34;, &#34;list&#34;</span><span class="p">]</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>不给这个权限，pulumi_vault 就会一直报错。。</p>
+<h2 id="四在-kubernetes-中使用-vault-注入-secrets">四、在 Kubernetes 中使用 vault 注入 secrets</h2>
+<p>前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。</p>
+<p>应用程序有两种方式去读取 vault 中的配置：</p>
+<ol>
+<li>借助 Vault Sidecar，将 secrets 以文件的形式自动注入到 Pod 中，比如 <code>/app/secrets/vault.json</code>
+<ul>
+<li>vault sidecar 在常驻模式下每 15 秒更新一次配置，应用程序可以使用 <code>watchdog</code> 实时监控 secrets 文件的变更。</li>
+</ul>
+</li>
+<li>应用程序自己使用 SDK 直接访问 vault api 获取 secrets</li>
+</ol>
+<p>上述两种方式，都可以借助 Kubernetes ServiceAccount 进行身份验证和权限分配。</p>
+<p>下面以 Sidecar 模式为例，介绍如何将 secrets 以文件形式注入到 Pod 中。</p>
+<h3 id="1-部署并配置-vault-agent">1. 部署并配置 vault agent</h3>
+<p>首先启用 Vault 的 Kubernetes 身份验证:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 配置身份认证需要在 vault pod 中执行，启动 vault-0 的交互式会话</span>
+kubectl <span class="nb">exec</span> -n vault -it vault-0 -- /bin/sh
+<span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
+<span class="nb">export</span> <span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://localhost:8200&#39;</span>
+ 
+<span class="c1"># 启用 Kubernetes 身份验证</span>
+vault auth <span class="nb">enable</span> kubernetes
+
+<span class="c1"># kube-apiserver API 配置，vault 需要通过 kube-apiserver 完成对 serviceAccount 的身份验证</span>
+vault write auth/kubernetes/config <span class="se">\
+</span><span class="se"></span>    <span class="nv">token_reviewer_jwt</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>cat /var/run/secrets/kubernetes.io/serviceaccount/token<span class="k">)</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>    <span class="nv">kubernetes_host</span><span class="o">=</span><span class="s2">&#34;https://</span><span class="nv">$KUBERNETES_PORT_443_TCP_ADDR</span><span class="s2">:443&#34;</span> <span class="se">\
+</span><span class="se"></span>    <span class="nv">kubernetes_ca_cert</span><span class="o">=</span>@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="11-使用集群外部的-valut-实例">1.1 使用集群外部的 valut 实例</h4>
+<blockquote>
+<p>如果你没这个需求，请跳过这一节。</p>
+</blockquote>
+<blockquote>
+<p>详见 <a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault" target="_blank" rel="noopener noreffer">Install the Vault Helm chart configured to address an external Vault</a></p>
+</blockquote>
+<p>kubernetes 也可以和外部的 vault 实例集成，集群中只部署 vault-agent.</p>
+<p>这适用于多个 kubernetes 集群以及其他 APP 共用一个 vault 实例的情况，比如我们本地的多个开发测试集群，就都共用着同一个 vault 实例，方便统一管理应用的 secrets.</p>
+<p>首先，使用 helm chart 部署 vault-agent，接入外部的 vault 实例。使用的 <code>custom-values.yaml</code> 示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># enabled is the master enabled switch. Setting this to true or false</span><span class="w">
+</span><span class="w">  </span><span class="c"># will enable or disable all the components within this chart by default.</span><span class="w">
+</span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="c"># TLS for end-to-end encrypted transport</span><span class="w">
+</span><span class="w">  </span><span class="nt">tlsDisable</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">injector</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># True if you want to enable vault agent injection.</span><span class="w">
+</span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># If multiple replicas are specified, by default a leader-elector side-car</span><span class="w">
+</span><span class="w">  </span><span class="c"># will be created so that only one injector attempts to create TLS certificates.</span><span class="w">
+</span><span class="w">  </span><span class="nt">leaderElector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;gcr.io/google_containers/leader-elector&#34;</span><span class="w">
+</span><span class="w">      </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;0.4&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l">60s</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># If true, will enable a node exporter metrics endpoint at /metrics.</span><span class="w">
+</span><span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># External vault server address for the injector to use. Setting this will</span><span class="w">
+</span><span class="w">  </span><span class="c"># disable deployment of a  vault server along with the injector.</span><span class="w">
+</span><span class="w">  </span><span class="c"># TODO 这里的 https ca.crt 要怎么设置？mTLS 又该如何配置？</span><span class="w">
+</span><span class="w">  </span><span class="nt">externalVaultAddr</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;https://&lt;external-vault-url&gt;&#34;</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># Mount Path of the Vault Kubernetes Auth Method.</span><span class="w">
+</span><span class="w">  </span><span class="nt">authPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;auth/kubernetes&#34;</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="nt">certs</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># secretName is the name of the secret that has the TLS certificate and</span><span class="w">
+</span><span class="w">    </span><span class="c"># private key to serve the injector webhook. If this is null, then the</span><span class="w">
+</span><span class="w">    </span><span class="c"># injector will default to its automatic management mode that will assign</span><span class="w">
+</span><span class="w">    </span><span class="c"># a service account to the injector to generate its own certificates.</span><span class="w">
+</span><span class="w">    </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c"># caBundle is a base64-encoded PEM-encoded certificate bundle for the</span><span class="w">
+</span><span class="w">    </span><span class="c"># CA that signed the TLS certificate that the webhook serves. This must</span><span class="w">
+</span><span class="w">    </span><span class="c"># be set if secretName is non-null.</span><span class="w">
+</span><span class="w">    </span><span class="nt">caBundle</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span><span class="c"># certName and keyName are the names of the files within the secret for</span><span class="w">
+</span><span class="w">    </span><span class="c"># the TLS cert and private key, respectively. These have reasonable</span><span class="w">
+</span><span class="w">    </span><span class="c"># defaults but can be customized if necessary.</span><span class="w">
+</span><span class="w">    </span><span class="nt">certName</span><span class="p">:</span><span class="w"> </span><span class="l">tls.crt</span><span class="w">
+</span><span class="w">    </span><span class="nt">keyName</span><span class="p">:</span><span class="w"> </span><span class="l">tls.key</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>部署命令和 <a href="#install-by-helm" rel="">通过 helm 部署 vault</a> 一致，只要更换 <code>custom-values.yaml</code> 就行。</p>
+<p>vault-agent 部署完成后，第二步是为 vault 创建 serviceAccount、secret 和 ClusterRoleBinding，以允许 vault 审查 kubernetes 的 token, 完成对 pod 的身份验证. yaml 配置如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vault-auth</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Secret</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vault-auth</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
+</span><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">kubernetes.io/service-account.name</span><span class="p">:</span><span class="w"> </span><span class="l">vault-auth</span><span class="w">
+</span><span class="w"></span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">kubernetes.io/service-account-token</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1beta1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRoleBinding</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">role-tokenreview-binding</span><span class="w">
+</span><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">system:auth-delegator</span><span class="w">
+</span><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vault-auth</span><span class="w">
+</span><span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>现在在 vault 实例这边，启用 kubernetes 身份验证，在 vault 实例内，执行如下命令：</p>
+<blockquote>
+<p>vault 实例内显然没有 kubectl 和 kubeconfig，简便起见，下列的 vault 命令也可以通过 Web UI 完成。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
+<span class="nb">export</span> <span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://localhost:8200&#39;</span>
+ 
+<span class="c1"># 启用 Kubernetes 身份验证</span>
+vault auth <span class="nb">enable</span> kubernetes
+ 
+<span class="c1"># kube-apiserver API 配置，vault 需要通过 kube-apiserver 完成对 serviceAccount 的身份验证</span>
+<span class="c1"># TOKEN_REVIEW_JWT: 就是我们前面创建的 secret `vault-auth`</span>
+<span class="nv">TOKEN_REVIEW_JWT</span><span class="o">=</span><span class="k">$(</span>kubectl -n vault get secret vault-auth -o go-template<span class="o">=</span><span class="s1">&#39;{{ .data.token }}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span>
+<span class="c1"># kube-apiserver 的 ca 证书</span>
+<span class="nv">KUBE_CA_CERT</span><span class="o">=</span><span class="k">$(</span>kubectl -n vault config view --raw --minify --flatten -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.clusters[].cluster.certificate-authority-data}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span>
+<span class="c1"># kube-apiserver 的 url</span>
+<span class="nv">KUBE_HOST</span><span class="o">=</span><span class="k">$(</span>kubectl config view --raw --minify --flatten -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.clusters[].cluster.server}&#39;</span><span class="k">)</span>
+
+vault write auth/kubernetes/config <span class="se">\
+</span><span class="se"></span>        <span class="nv">token_reviewer_jwt</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$TOKEN_REVIEW_JWT</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>        <span class="nv">kubernetes_host</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$KUBE_HOST</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>        <span class="nv">kubernetes_ca_cert</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$KUBE_CA_CERT</span><span class="s2">&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这样，就完成了 kubernetes 与外部 vault 的集成！</p>
+<h3 id="2-关联-k8s-rbac-权限系统和-vault">2. 关联 k8s rbac 权限系统和 vault</h3>
+<p>接下来需要做的事：</p>
+<ol start="2">
+<li>通过 vault policy 定义好每个 role（微服务）能访问哪些资源。</li>
+<li>为每个微服务生成一个 role，这个 role 需要绑定对应的 vault policy 及 kubernetes serviceaccount
+<ol>
+<li>这个 role 是 vault 的 kubernetes 插件自身的属性，它和 kubernetes role 没有半毛钱关系。</li>
+</ol>
+</li>
+<li>创建一个 ServiceAccount，并使用这个 使用这个 ServiceAccount 部署微服务</li>
+</ol>
+<p>其中第一步和第二步都可以通过 vault api 自动化完成.
+第三步可以通过 kubectl 部署时完成。</p>
+<p>方便起见，vault policy / role / k8s serviceaccount 这三个配置，都建议和微服务使用相同的名称。</p>
+<blockquote>
+<p>上述配置中，role 起到一个承上启下的作用，它关联了 k8s serviceaccount 和 vault policy 两个配置。</p>
+</blockquote>
+<p>比如创建一个名为 <code>my-app-policy</code> 的 vault policy，内容为:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># 允许读取数据
+</span><span class="c1"></span><span class="k">path</span> <span class="s2">&#34;my-app/data/*&#34;</span> {
+<span class="n">   capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;, &#34;list&#34;</span><span class="p">]</span>
+}
+<span class="err">//</span> <span class="k">允许列出</span> <span class="k">myapp</span> <span class="k">中的所有数据</span><span class="p">(</span><span class="k">kv</span> <span class="k">v2</span><span class="p">)</span>
+<span class="k">path</span> <span class="s2">&#34;myapp/metadata/*&#34;</span> {
+<span class="n">    capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;, &#34;list&#34;</span><span class="p">]</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>然后在 vault 中创建 k8s role <code>my-app-role</code>:</p>
+<ol>
+<li>关联 k8s default 名字空间中的 serviceaccount <code>my-app-account</code>，并创建好这个 serviceaccount.</li>
+<li>关联 vault token policy，这就是前面创建的 <code>my-app-policy</code></li>
+<li>设置 token period（有效期）</li>
+</ol>
+<p>这之后，每个微服务就能通过 serviceaccount 从 vault 中读取 <code>my-app</code> 中的所有信息了。</p>
+<h3 id="3-部署-pod">3. 部署 Pod</h3>
+<blockquote>
+<p>参考文档：<a href="https://www.vaultproject.io/docs/platform/k8s/injector">https://www.vaultproject.io/docs/platform/k8s/injector</a></p>
+</blockquote>
+<p>下一步就是将配置注入到微服务容器中，这需要使用到 Agent Sidecar Injector。
+vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
+<p>具体而言就是在 Pod 上加上一堆 Agent Sidecar Injector 的注解，如果配置比较多，也可以使用 configmap 保存，在注解中引用。</p>
+<p>需要注意的是 vault-inject-agent 有两种运行模式：</p>
+<ol>
+<li>init 模式: 仅在 Pod 启动前初始化一次，跑完就退出（Completed）</li>
+<li>常驻模式: 容器不退出，持续监控 vault 的配置更新，维持 Pod 配置和 vualt 配置的同步。</li>
+</ol>
+<p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">minReadySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="nt">progressDeadlineSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">60</span><span class="w">
+</span><span class="w">  </span><span class="nt">revisionHistoryLimit</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">strategy</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">rollingUpdate</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RollingUpdate</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-configmap</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-vault-config </span><span class="w"> </span><span class="c"># vault 的 hcl 配置</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-init-first</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">  </span><span class="c"># 是否提前初始化</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-inject</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-limits-cpu</span><span class="p">:</span><span class="w"> </span><span class="l">250m</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-requests-cpu</span><span class="p">:</span><span class="w"> </span><span class="l">100m</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/secret-volume-path</span><span class="p">:</span><span class="w"> </span><span class="l">/app/secrets</span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.svc.local/xx/my-app:latest</span><span class="w">
+</span><span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
+</span><span class="w">        </span><span class="c"># 此处省略若干配置...</span><span class="w">
+</span><span class="w">      </span><span class="nt">serviceAccountName</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-account</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>常见错误：</p>
+<ul>
+<li>vault-agent(sidecar) 报错: <code>namespace not authorized</code>
+<ul>
+<li><code>auth/kubernetes/config</code> 中的 role 没有绑定 Pod 的 namespace</li>
+</ul>
+</li>
+<li>vault-agent(sidecar) 报错: <code>permission denied</code>
+<ul>
+<li>检查 <code>vault</code> 实例的日志，应该有对应的错误日志，很可能是 <code>auth/kubernetes/config</code> 没配对，vault 无法验证 kube-apiserver 的 tls 证书，或者使用的 kubernetes token 没有权限。</li>
+</ul>
+</li>
+<li>vault-agent(sidecar) 报错: <code>service account not authorized</code>
+<ul>
+<li><code>auth/kubernetes/config</code> 中的 role 没有绑定 Pod 使用的 serviceAccount</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-vault-agent-配置">4. vault agent 配置</h3>
+<p>vault-agent 的配置，需要注意的有：</p>
+<ol>
+<li>如果使用 configmap 提供完整的 <code>config.hcl</code> 配置，注意 <code>agent-init</code></li>
+</ol>
+<p>vautl-agent 的 template 说明：</p>
+<p>目前来说最流行的配置文件格式应该是 json/yaml，以 json 为例，
+对每个微服务的 kv 数据，可以考虑将它所有的个性化配置都保存在 <code>&lt;engine-name&gt;/&lt;service-name&gt;/</code> 下面，然后使用如下 template 注入配置(注意这里使用了自定义的左右分隔符 <code>[[</code> 和 <code>]]</code>)：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{
+    [[ range secrets &#34;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&#34; ]]
+        &#34;[[ printf &#34;%s&#34; . ]]&#34;: 
+        [[ with secret (printf &#34;&lt;engine-name&gt;/&lt;service-name&gt;/%s&#34; .) ]]
+        [[ .Data.data | toJSONPretty ]],
+        [[ end ]]
+    [[ end ]]
+}
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>template 的详细语法参见: <a href="https://github.com/hashicorp/consul-template#secret">https://github.com/hashicorp/consul-template#secret</a></p>
+</blockquote>
+<blockquote>
+<p>注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
+必须要写成 <code>range secrets &quot;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&quot;</code>，也就是中间要插入 <code>metadata</code>，而且 policy 中必须开放 <code>&lt;engine-name&gt;/metadata/&lt;service-name&gt;/</code> 的 read/list 权限！
+官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 <a href="https://www.vaultproject.io/api-docs/secret/kv/kv-v2" target="_blank" rel="noopener noreffer">KV Secrets Engine - Version 2 (API)</a> 才搞明白这个。</p>
+</blockquote>
+<p>这样生成出来的内容将是 json 格式，不过有个不兼容的地方：最后一个 secrets 的末尾有逗号 <code>,</code>
+渲染出的效果示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;secret-a&#34;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nt">&#34;a&#34;</span><span class="p">:</span> <span class="s2">&#34;b&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;c&#34;</span><span class="p">:</span> <span class="s2">&#34;d&#34;</span>
+<span class="p">},</span>
+    <span class="nt">&#34;secret-b&#34;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nt">&#34;v&#34;</span><span class="p">:</span> <span class="s2">&#34;g&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;r&#34;</span><span class="p">:</span> <span class="s2">&#34;c&#34;</span>
+<span class="p">},</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>因为存在尾部逗号(trailing comma)，直接使用 json 标准库解析它会报错。
+那该如何去解析它呢？我在万能的 stackoverflow 上找到了解决方案：<strong>yaml 完全兼容 json 语法，并且支持尾部逗号！</strong></p>
+<p>以 python 为例，直接 <code>yaml.safe_load()</code> 就能完美解析 vault 生成出的 json 内容。</p>
+<h3 id="5-拓展在-kubernetes-中使用-vault-的其他姿势">5. 拓展：在 kubernetes 中使用 vault 的其他姿势</h3>
+<p>除了使用官方提供的 sidecar 模式进行 secrets 注入，社区也提供了一些别的方案，可以参考：</p>
+<ul>
+<li><a href="https://github.com/ricoberger/vault-secrets-operator" target="_blank" rel="noopener noreffer">vault-secrets-operator</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
+<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreffer">kubernetes-external-secrets</a>: 和 vault-secrets-operator 的功能基本没区别</li>
+<li><a href="https://github.com/hashicorp/secrets-store-csi-driver-provider-vault" target="_blank" rel="noopener noreffer">secrets-store-csi-driver-provider-vault</a>: 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
+</ul>
+<p>不过官方的 sidecar 模式仍然是最推荐使用的。</p>
+<h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
+<p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
+<p>具体配置方法，待续。。。</p>
+]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
+<ul>
+<li>AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库&hellip;几乎所有的云上资源</li>
+<li>本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源</li>
+</ul>
+<p>相比直接调用 AWS/阿里云/Kubernetes 的 API，使用 pulumi 的好处有：</p>
+<ul>
+<li>声明式配置：你只需要声明你的资源属性就 OK，所有的状态管理、异常处理都由 pulumi 完成。</li>
+<li>统一的配置方式：提供统一的配置方法，来声明式的配置所有 AWS/阿里云/Kubernetes 资源。</li>
+<li>声明式配置的可读性更好，更便于维护</li>
+</ul>
+<p>试想一下，通过传统的手段去从零搭建一个云上测试环境、或者本地开发环境，需要手工做多少繁琐的工作。</p>
+<p>而依靠 Pulumi 这类「基础设施即代码」的工具，只需要一行命令就能搭建好一个可复现的云上测试环境或本地开发环境。</p>
+<p>比如我们的阿里云测试环境，包括两个 kubernetes 集群、负载均衡、VPC 网络、数据库、云监控告警/日志告警、RAM账号权限体系等等，是一个比较复杂的体系。</p>
+<p>人工去配置这么多东西，想要复现是很困难的，非常繁琐而且容易出错。</p>
+<p>但是使用 pulumi，只需要一行命令，就能创建并配置好这五花八门一大堆的玩意儿。
+销毁整个测试环境也只需要一行命令。</p>
+<p><strong>实际使用体验</strong>：我们使用 Pulumi 自动化了阿里云测试环境搭建 95%+ 的操作，这个比例随着阿里云的 pulumi provider 的完善，还可以进一步提高！</p>
+<h2 id="pulumi-vs-terraform">Pulumi vs Terraform</h2>
+<p>有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 <a href="https://www.terraform.io/" target="_blank" rel="noopener noreffer">Terraform</a>.</p>
+<p>实际上我们一开始使用的也是 Terraform，但是后来使用 Pulumi 完全重写了一遍。</p>
+<p>主要原因是，Pulumi 解决了 Terraform 配置的一个痛点：配置语法太过简单，导致配置繁琐。而且还要额外学习一门 DSL - HCL</p>
+<p>Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，表现力不够强。
+这就导致在一些场景下使用 Terraform，会出现大量的重复配置。</p>
+<p>一个典型的场景是「批量创建资源，动态生成资源参数」。比如批量创建一批名称类似的 ECS 服务器/VPC交换机。如果使用 terraform，就会出现大量的重复配置。</p>
+<p>改用 terraform 提供的 module 能在一定程度上实现配置的复用，但是它还是解决不了问题。
+要使用 module，你需要付出时间去学习 module 的概念，为了拼接参数，你还需要学习 HCL 的一些高级用法。</p>
+<p>但是付出了这么多，最后写出的 module 还是不够灵活——它被 HCL 局限住了。</p>
+<p>为了实现如此的参数化动态化，我们不得不引入 Python 等其他编程语言。于是构建流程就变成了：</p>
+<ol>
+<li>借助 Python 等其他语言先生成出 HCL 配置</li>
+<li>通过 <code>terraform</code> 命令行进行 plan 与 apply</li>
+<li>通过 Python 代码解析 <code>terraform.tfstat</code>，获取 apply 结果，再进行进一步操作。</li>
+</ol>
+<p>这显然非常繁琐，主要困难就在于 Python 和 Terraform 之间的交互。</p>
+<p>进一步思考，<strong>既然其他编程语言如 Python/Go 的引入不可避免，那是不是能使用它们彻底替代掉 HCL 呢？能不能直接使用 Python/Go 编写配置</strong>？如果 Terraform 原生就支持 Python/Go 来编写配置，那就不存在交互问题了。</p>
+<p>相比于使用领域特定语言 HCL，使用通用编程语言编写配置，好处有：</p>
+<ol>
+<li>Python/Go/TypeScript 等通用的编程语言，能满足你的一切需求。</li>
+<li>作为一个开发人员/DevOps，你应该对 Python/Go 等语言相当熟悉，可以直接利用上已有的经验。</li>
+<li>更方便测试：可以使用各编程语言中流行的测试框架来测试 pulumi 配置！</li>
+</ol>
+<p>于是 Pulumi 横空出世。</p>
+<blockquote>
+<p>另一个和 Pulumi 功能类似的工具，是刚出炉没多久的 terraform-cdk，但是目前它还很不成熟。</p>
+</blockquote>
+<h2 id="pulumi-特点介绍">Pulumi 特点介绍</h2>
+<ol start="4">
+<li>原生支持通过 Python/Go/TypeScript/Dotnet 等语言编写配置，也就完全解决了上述的 terraform 和 python 的交互问题。</li>
+<li>pulumi 是目前最流行的 真-IaaS 工具，对各语言的支持都很成熟。</li>
+<li>兼容 terraform 的所有 provider，只是需要自行使用 <a href="https://github.com/pulumi/pulumi-tf-provider-boilerplate" target="_blank" rel="noopener noreffer">pulumi-tf-provider-boilerplate</a> 重新打包，有些麻烦。
+<ol>
+<li>pulumi 官方的 provider 几乎全都是封装的 terraform provider，包括 aws/azure/alicloud，目前只发现 kubernetes 是原生的（独苗啊）。</li>
+</ol>
+</li>
+<li>状态管理和 secrets 管理有如下几种选择：
+<ol>
+<li>使用 app.pulumi.com（默认）:免费版提供 stack 历史管理，可以看到所有的历史记录。另外还提供一个资源关系的可视化面板。总之很方便，但是多人合作就需要收费。</li>
+<li>本地文件存储：<code>pulumi login file:///app/data</code></li>
+<li><a href="https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend" target="_blank" rel="noopener noreffer">云端对象存储</a>，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
+<ul>
+<li><code>pulumi login 's3://&lt;bucket-path&gt;?endpoint=my.minio.local:8080&amp;disableSSL=true&amp;s3ForcePathStyle=true'</code></li>
+<li>minio/aws 的 creadential 可以通过 <code>AWS_ACCESS_KEY_ID</code> 和 <code>AWS_SECRET_ACCESS_KEY</code> 两个环境变量设置。另外即使是使用 MinIO，<code>AWS_REGION</code> 这个没啥用的环境变量也必须设置！否则会报错。</li>
+</ul>
+</li>
+<li><a href="https://github.com/pulumi/pulumi/issues/4727" target="_blank" rel="noopener noreffer">gitlab 13 支持 Terraform HTTP State 协议</a>，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。</li>
+<li>使用 pulumi 企业版（自建服务）：比 app.pulumi.com 提供更多的特性，但是显然是收费的。。</li>
+</ol>
+</li>
+</ol>
+<p>总之，非常香，强烈推荐各位 DevOps 试用。</p>
+<hr>
+<blockquote>
+<p>以下内容是我对 pulumi 的一些思考，以及使用 pulumi 遇到的各种问题+解决方法，适合对 pulumi 有一定了解的同学阅读。</p>
+</blockquote>
+<blockquote>
+<p>如果你刚接触 Pulumi 而且有兴趣学习，建议先移步 <a href="https://www.pulumi.com/docs/get-started/install/" target="_blank" rel="noopener noreffer">pulumi get started</a> 入个门，再接着看下面的内容。</p>
+</blockquote>
+<h2 id="使用建议">使用建议</h2>
+<ol>
+<li><strong>建议查看对应的 terraform provider 文档：pulumi 的 provider 基本都是封装的 terraform 版本，而且文档是自动生成的，比（简）较（直）难（一）看（坨）懂（shi），examples 也少。</strong></li>
+<li>stack: pulumi 官方提供了两种 stack 用法：<a href="https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/" target="_blank" rel="noopener noreffer">「单体」和「微-stack」</a>
+<ol>
+<li>单体: one stack rule them all，通过 stack 参数来控制步骤。stack 用来区分环境 dev/pro 等。</li>
+<li>微-stack: 每一个 stack 是一个步骤，所有 stack 组成一个完整的项目。</li>
+<li>实际使用中，我发现「微-stack」模式需要使用到 pulumi 的 inter-stack dependencies，报一堆的错，而且不够灵活。因此目前更推荐「单体」模式。</li>
+</ol>
+</li>
+</ol>
+<p>我们最近使用 pulumi 完全重写了以前用 terraform 编写的云上配置，简化了很多繁琐的配置，也降低了我们 Python 运维代码和 terraform 之间的交互难度。
+另外我们还充分利用上了 Python 的类型检查和语法检查，很多错误 IDE 都能直接给出提示，强化了配置的一致性和可维护性。</p>
+<p>不过由于阿里云 provider 暂时还：</p>
+<ol>
+<li>不支持管理 ASM 服务网格、DTS 数据传输等资源</li>
+<li>OSS 等产品的部分参数也暂时不支持配置（比如 OSS 不支持配置图片样式、ElasticSearch 暂时不支持自动创建 7.x 版本）</li>
+<li>不支持创建 ElasticSearch 7.x</li>
+</ol>
+<p>这些问题，导致我们仍然有部分配置需要手动处理，另外一些耗时长的资源，需要单独去创建。
+因此还不能实现完全的「一键」。</p>
+<h2 id="常见问题">常见问题</h2>
+<h3 id="1-output-的用法">1. <code>Output</code> 的用法</h3>
+<ol>
+<li>pulumi 通过资源之间的属性引用（<code>Output[str]</code>）来确定依赖关系，如果你通过自定义的属性(<code>str</code>)解耦了资源依赖，会导致资源创建顺序错误而创建失败。</li>
+<li><code>Output[str]</code> 是一个异步属性，类似 Future，不能被用在 pulumi 参数之外的地方！</li>
+<li><code>Output[str]</code> 提供两种方法能直接对 <code>Output[str]</code> 进行一些操作：
+<ol>
+<li><code>Output.concat(&quot;http://&quot;, domain, &quot;/&quot;, path)</code>: 此方法将 str 与 <code>Output[str]</code> 拼接起来，返回一个新的 <code>Output[str]</code> 对象，可用做 pulumi 属性。</li>
+<li><code>domain.apply(lambda it: print(it))</code>: <code>Output[str]</code> 的 <code>apply</code> 方法接收一个函数。在异步获取到数据后，pulumi 会调用这个函数，把具体的数据作为参数传入。
+<ul>
+<li>另外 <code>apply</code> 也会将传入函数的返回值包装成 <code>Output</code> 类型返回出来。</li>
+<li>可用于：在获取到数据后，将数据打印出来/发送到邮箱/调用某个 API 上传数据等等。</li>
+</ul>
+</li>
+<li><code>Output.all(output1, output2, ...).apply(lambda it: print(it))</code> 可用于将多个 <code>output</code> 值，拼接成一个 <code>Output</code> 类型，其内部的 raw 值为一个 tuple 对象 <code>(str1, str2, ...)</code>.
+<ol>
+<li>官方举例：<code>connection_string = Output.all(sql_server.name, database.name).apply(lambda args: f&quot;Server=tcp:{args[0]}.database.windows.net;initial catalog={args[1]}...&quot;)</code></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-如何使用多个云账号多个-k8s-集群">2. 如何使用多个云账号/多个 k8s 集群？</h3>
+<p>默认情况下 pulumi 使用默认的 provider，但是 pulumi 所有的资源都有一个额外的 <code>opts</code> 参数，可用于设定其他 provider。</p>
+<p>通过这个 <code>opts</code>，我们可以实现在一个 pulumi 项目中，使用多个云账号，或者管理多个 k8s 集群。</p>
+<p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
+<span class="kn">from</span> <span class="nn">pulumi_alicloud</span> <span class="kn">import</span> <span class="n">Provider</span><span class="p">,</span> <span class="n">oss</span>
+
+<span class="c1"># 自定义 provider，key/secret 通过参数设定，而不是从默认的环境变量读取。</span>
+<span class="c1"># 可以自定义很多个 providers</span>
+<span class="n">provider</span> <span class="o">=</span> <span class="n">pulumi_alicloud</span><span class="o">.</span><span class="n">Provider</span><span class="p">(</span>
+   <span class="s2">&#34;custom-alicloud-provider&#34;</span><span class="p">,</span>
+   <span class="n">region</span><span class="o">=</span><span class="s2">&#34;cn-hangzhou&#34;</span><span class="p">,</span>
+   <span class="n">access_key</span><span class="o">=</span><span class="s2">&#34;xxx&#34;</span><span class="p">,</span>
+   <span class="n">secret_key</span><span class="o">=</span><span class="s2">&#34;jjj&#34;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># 通过 opts，让 pulumi 使用自定义的 provider（替换掉默认的）</span>
+<span class="n">bucket</span> <span class="o">=</span> <span class="n">oss</span><span class="o">.</span><span class="n">Bucket</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-inter-stack-属性传递">3. inter-stack 属性传递</h3>
+<blockquote>
+<p>这东西还没搞透，待研究。</p>
+</blockquote>
+<p>多个 stack 之间要互相传递参数，需要通过 <code>pulumi.export</code> 导出属性，通过 <code>stack.require_xxx</code> 获取属性。</p>
+<p>从另一个 stack 读取属性的示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">StackReference</span>
+
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">Config</span><span class="p">()</span>
+<span class="n">stack_name</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">get_stack</span><span class="p">()</span>  <span class="c1"># stack 名称</span>
+<span class="n">project</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">get_project</span><span class="p">()</span>
+<span class="n">infra</span> <span class="o">=</span> <span class="n">StackReference</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;ryan4yin/{project}/{stack_name}&#34;</span><span class="p">)</span>
+
+<span class="c1"># 这个属性在上一个 stack 中被 export 出来</span>
+<span class="n">vpc_id</span> <span class="o">=</span> <span class="n">infra</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s2">&#34;resources.vpc.id&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-pulumi-up-被中断或者对资源做了手动修改会发生什么">4. <code>pulumi up</code> 被中断，或者对资源做了手动修改，会发生什么？</h3>
+<ol>
+<li>强行中断 <code>pulumi up</code>，会导致资源进入 <code>pending</code> 状态，必须手动修复。
+<ol>
+<li>修复方法：<code>pulumi stack export</code>，删除 pending 资源，再 <code>pulumi stack import</code></li>
+</ol>
+</li>
+<li>手动删除了云上资源，或者修改了一些对资源管理无影响的参数，对 <code>pulumi</code> 没有影响，它能正确检测到这种情况。
+<ol>
+<li>可以通过 <code>pulumi refresh</code> 手动从云上拉取最新的资源状态。</li>
+</ol>
+</li>
+<li>手动更改了资源之间的依赖关系（比如绑定 EIP 之类的），很可能导致 pulumi 无法正确管理资源之间的依赖。
+<ul>
+<li>这种情况必须先手动还原依赖关系（或者把相关资源全部手动删除掉），然后才能继续使用 pulumi。</li>
+</ul>
+</li>
+</ol>
+<h3 id="5-pulumi-kubernetes">5. pulumi-kubernetes？</h3>
+<p>pulumi-kubernetes 是一条龙服务：</p>
+<ol>
+<li>在 yaml 配置生成这一步，它能结合/替代掉 helm/kustomize，或者你高度自定义的 Python 脚本。</li>
+<li>在 yaml 部署这一步，它能替代掉 argo-cd 这类 gitops 工具。</li>
+<li>强大的状态管理，argo-cd 也有状态管理，可以对比看看。</li>
+</ol>
+<p>也可以仅通过 kubernetes_pulumi 生成 yaml，再通过 argo-cd 部署，这样 pulumi_kubernetes 就仅用来简化 yaml 的编写，仍然通过 gitops 工具/kubectl 来部署。</p>
+<p>使用 pulumi-kubernetes 写配置，要警惕逻辑和数据的混合程度。
+因为 kubernetes 的配置复杂度比较高，如果动态配置比较多，很容易就会写出难以维护的 python 代码来。</p>
+<p>渲染 yaml 的示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
+<span class="kn">from</span> <span class="nn">pulumi_kubernetes</span> <span class="kn">import</span> <span class="n">Provider</span>
+<span class="kn">from</span> <span class="nn">pulumi_kubernetes.apps.v1</span> <span class="kn">import</span> <span class="n">Deployment</span><span class="p">,</span> <span class="n">DeploymentSpecArgs</span>
+<span class="kn">from</span> <span class="nn">pulumi_kubernetes.core.v1</span> <span class="kn">import</span> <span class="p">(</span>
+	<span class="n">ContainerArgs</span><span class="p">,</span>
+	<span class="n">ContainerPortArgs</span><span class="p">,</span>
+	<span class="n">EnvVarArgs</span><span class="p">,</span>
+	<span class="n">PodSpecArgs</span><span class="p">,</span>
+	<span class="n">PodTemplateSpecArgs</span><span class="p">,</span>
+	<span class="n">ResourceRequirementsArgs</span><span class="p">,</span>
+	<span class="n">Service</span><span class="p">,</span>
+	<span class="n">ServicePortArgs</span><span class="p">,</span>
+	<span class="n">ServiceSpecArgs</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pulumi_kubernetes.meta.v1</span> <span class="kn">import</span> <span class="n">LabelSelectorArgs</span><span class="p">,</span> <span class="n">ObjectMetaArgs</span>
+
+<span class="n">provider</span> <span class="o">=</span> <span class="n">Provider</span><span class="p">(</span>
+   <span class="s2">&#34;render-yaml&#34;</span><span class="p">,</span>
+   <span class="n">render_yaml_to_directory</span><span class="o">=</span><span class="s2">&#34;rendered&#34;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">deployment</span> <span class="o">=</span> <span class="n">Deployment</span><span class="p">(</span>
+	<span class="s2">&#34;redis&#34;</span><span class="p">,</span>
+	<span class="n">spec</span><span class="o">=</span><span class="n">DeploymentSpecArgs</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+   <span class="n">opts</span><span class="o">=</span><span class="n">ResourceOptions</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如示例所示，pulumi-kubernetes 的配置是完全结构化的，比 yaml/helm/kustomize 要灵活非常多。</p>
+<p>总之它非常灵活，既可以和 helm/kustomize 结合使用，替代掉 argocd/kubectl。
+也可以和 argocd/kubectl 使用，替代掉 helm/kustomize。</p>
+<p>具体怎么使用好？我也还在研究。</p>
+<h3 id="6-阿里云资源-replace-报错">6. 阿里云资源 replace 报错？</h3>
+<p>阿里云有部分资源，只能创建删除，不允许修改，比如「资源组」。
+对这类资源做变更时，pulumi 会直接报错：「Resources aleardy exists」，
+这类资源，通常都有一个「force」参数，指示是否强制修改——即先删除再重建。</p>
+<h3 id="7-有些资源属性无法使用-pulumi-配置">7. 有些资源属性无法使用 pulumi 配置？</h3>
+<p>这得看各云服务提供商的支持情况。</p>
+<p>比如阿里云很多资源的属性，pulumi 都无法完全配置，因为 alicloud provider 的功能还不够全面。</p>
+<p>目前我们生产环境，大概 95%+ 的东西，都可以使用 pulumi 实现自动化配置。
+而其他 OSS 的高级参数、新出的 ASM 服务网格、kubernetes 的授权管理、ElasticSearch7 等资源，还是需要手动配置。</p>
+<p>这个没办法，只能等阿里云提供支持。</p>
+<h3 id="8-cicd-中如何使-pulumi-将状态保存到文件">8. CI/CD 中如何使 pulumi 将状态保存到文件？</h3>
+<p>CI/CD 中我们可能会希望 pulumi 将状态保存到本地，避免连接 pulumi 中心服务器。
+这一方面能加快速度，另一方面一些临时状态我们可能根本不想存储，可以直接丢弃。</p>
+<p>方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 指定状态文件路径</span>
+pulumi login file://&lt;file-path&gt;
+<span class="c1"># 保存到默认位置: ~/.pulumi/credentials.json</span>
+pulumi login --local
+
+<span class="c1"># 保存到远程 S3 存储（minio/ceph 或者各类云对象存储服务，都兼容 aws 的 s3 协议）</span>
+pulumi login s3://&lt;bucket-path&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>登录完成后，再进行 <code>pulumi up</code> 操作，数据就会直接保存到你设定的路径下。</p>
+<h2 id="缺点">缺点</h2>
+<h3 id="1-报错信息不直观">1. 报错信息不直观</h3>
+<p>pulumi 和 terraform 都有一个缺点，就是封装层次太高了。</p>
+<p>封装的层次很高，优点是方便了我们使用，可以使用很统一很简洁的声明式语法编写配置。
+而缺点，则是出了 bug，报错信息往往不够直观，导致问题不好排查。</p>
+<h3 id="2-资源状态被破坏时修复起来非常麻烦">2. 资源状态被破坏时，修复起来非常麻烦</h3>
+<p>在很多情况下，都可能发生资源状态被破坏的问题：</p>
+<ol>
+<li>在创建资源 A，因为参数是已知的，你直接使用了常量而不是 <code>Output</code>。这会导致 pulumi 无法识别到依赖关系！从而创建失败，或者删除时资源状态被破坏！</li>
+<li>有一个 pulumi stack 一次在三台物理机上创建资源。你白天创建资源晚上删除资源，但是某一台物理机晚上会关机。这将导致 pulumi 无法查询到这台物理机上的资源状态，这个 pulumi stack 在晚上就无法使用，它会一直报错！</li>
+</ol>
+<h2 id="常用-provider">常用 Provider</h2>
+<ul>
+<li><a href="https://github.com/pulumi/pulumi-alicloud" target="_blank" rel="noopener noreffer">pulumi-alicloud</a>: 管理阿里云资源</li>
+<li><a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreffer">pulumi-vault</a>: 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。</li>
+</ul>
+<h2 id="我创建维护的-provider">我创建维护的 Provider</h2>
+<p>由于 Pulumi 生态还比较小，有些 provider 只有 terraform 才有。</p>
+<p>我为了造(方)福(便)大(自)众(己)，创建并维护了两个本地虚拟机相关的 Providers:</p>
+<ul>
+<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-proxmox</a>: 目前只用来自动创建 PVE 虚拟机
+<ul>
+<li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
+</ul>
+</li>
+<li><a href="https://github.com/ryan4yin/pulumi-libvirt" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-libvirt</a>: 快速创建 kvm 虚拟机
+<ul>
+<li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
+</ul>
+</li>
+</ul>]]></description></item></channel></rss>

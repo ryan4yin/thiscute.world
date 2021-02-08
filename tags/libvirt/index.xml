@@ -1,4 +1,510 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>libvirt - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/libvirt/</link><description>libvirt - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 17 Jan 2021 21:34:04 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/libvirt/" rel="self" type="application/rss+xml"/><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/posts/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>libvirt - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/libvirt/</link><description>libvirt - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 17 Jan 2021 21:34:04 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/libvirt/" rel="self" type="application/rss+xml"/><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
 <p>QEMU/KVM 是目前最流行的虚拟化技术，它基于 Linux 内核提供的 kvm 模块，结构精简，性能损失小，而且开源免费（对比收费的 vmware），因此成了大部分企业的首选虚拟化方案。</p>
 <p>目前各大云厂商的虚拟化方案，底层都是 KVM。</p>
-<p>但是 KVM 作为一个企业级的底层虚拟化技术，却没有对桌面使用做深入的优化，因此如果想把它当成桌面虚拟化软件来使用，替代掉 VirtualBox/VMware，有一定难度。</p>]]></description></item></channel></rss>
+<p>但是 KVM 作为一个企业级的底层虚拟化技术，却没有对桌面使用做深入的优化，因此如果想把它当成桌面虚拟化软件来使用，替代掉 VirtualBox/VMware，有一定难度。</p>
+<p>本文是我个人学习 KVM 的一个总结性文档，其目标是使用 KVM 作为桌面虚拟化软件。</p>
+<h2 id="一安装-queukvm">一、安装 QUEU/KVM</h2>
+<p>QEMU/KVM 环境需要安装很多的组件，它们各司其职：</p>
+<ol>
+<li>qemu: 模拟各类输入输出设备（网卡、磁盘、USB端口等）
+<ul>
+<li>qemu 底层使用 kvm 模拟 CPU 和 RAM，比软件模拟的方式快很多。</li>
+</ul>
+</li>
+<li>libvirt: 提供简单且统一的工具和 API，用于管理虚拟机，屏蔽了底层的复杂结构。（支持 qemu-kvm/virtualbox/vmware）</li>
+<li>ovmf: 为虚拟机启用 UEFI 支持</li>
+<li>virt-manager: 用于管理虚拟机的 GUI 界面（可以管理远程 kvm 主机）。</li>
+<li>virt-viewer: 通过 GUI 界面直接与虚拟机交互（可以管理远程 kvm 主机）。</li>
+<li>dnsmasq vde2 bridge-utils openbsd-netcat: 网络相关组件，提供了以太网虚拟化、网络桥接、NAT网络等虚拟网络功能。
+<ul>
+<li>dnsmasq 提供了 NAT 虚拟网络的 DHCP 及 DNS 解析功能。</li>
+<li>vde2: 以太网虚拟化</li>
+<li>bridge-utils: 顾名思义，提供网络桥接相关的工具。</li>
+<li>openbsd-netcat: TCP/IP 的瑞士军刀，详见 <a href="/network/network-tools/socat%20%e5%92%8c%20netcat.md" rel="">/network/network-tools/socat 和 netcat</a>，这里不清楚是哪个网络组件会用到它。</li>
+</ul>
+</li>
+</ol>
+<p>安装命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># archlinux/manjaro</span>
+sudo pacman -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat
+
+<span class="c1"># ubuntu,参考了官方文档，但未测试</span>
+sudo apt install qemu-kvm libvirt-daemon-system virt-manager virt-viewer virtinst bridge-utils
+
+<span class="c1"># centos,参考了官方文档，但未测试</span>
+sudo yum groupinstall <span class="s2">&#34;Virtualization Host&#34;</span>
+sudo yum install virt-manager virt-viewer virt-install
+
+<span class="c1"># opensuse</span>
+<span class="c1"># see: https://doc.opensuse.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
+sudo yast2 virtualization
+<span class="c1"># enter to terminal ui, select kvm + kvm tools, and then install it.</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>安装完成后，还不能直接使用，需要做些额外的工作。请继续往下走。</p>
+<h3 id="1-libguestfs---虚拟机磁盘映像处理工具">1. libguestfs - 虚拟机磁盘映像处理工具</h3>
+<p><a href="https://libguestfs.org/" target="_blank" rel="noopener noreffer">libguestfs</a> 是一个虚拟机磁盘映像处理工具，可用于直接修改/查看/虚拟机映像、转换映像格式等。</p>
+<p>它提供的命令列表如下：</p>
+<ol>
+<li><code>virt-df centos.img</code>: 查看硬盘使用情况</li>
+<li><code>virt-ls centos.img /</code>: 列出目录文件</li>
+<li><code>virt-copy-out -d domain /etc/passwd /tmp</code>：在虚拟映像中执行文件复制</li>
+<li><code>virt-list-filesystems /file/xx.img</code>：查看文件系统信息</li>
+<li><code>virt-list-partitions /file/xx.img</code>：查看分区信息</li>
+<li><code>guestmount -a /file/xx.qcow2(raw/qcow2都支持) -m /dev/VolGroup/lv_root --rw /mnt</code>：直接将分区挂载到宿主机</li>
+<li><code>guestfish</code>: 交互式 shell，可运行上述所有命令。</li>
+<li><code>virt-v2v</code>: 将其他格式的虚拟机(比如 ova) 转换成 kvm 虚拟机。</li>
+<li><code>virt-p2v</code>: 将一台物理机转换成虚拟机。</li>
+</ol>
+<p>学习过程中可能会使用到上述命令，提前安装好总不会有错，安装命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># opensuse</span>
+sudo zypper install libguestfs
+
+<span class="c1"># archlinux/manjaro，目前缺少 virt-v2v/virt-p2v 组件</span>
+sudo pacman -S libguestfs
+
+<span class="c1"># ubuntu</span>
+sudo apt install libguestfs-tools
+
+<span class="c1"># centos</span>
+sudo yum install libguestfs-tools
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-启动-qemukvm">2. 启动 QEMU/KVM</h3>
+<p>通过 systemd 启动 libvirtd 后台服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl <span class="nb">enable</span> libvirtd.service
+sudo systemctl start libvirtd.service
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-让非-root-用户能正常使用-kvm">3. 让非 root 用户能正常使用 kvm</h3>
+<p>qumu/kvm 装好后，默认情况下需要 root 权限才能正常使用它。
+为了方便使用，首先编辑文件 <code>/etc/libvirt/libvirtd.conf</code>:</p>
+<ol>
+<li><code>unix_sock_group = &quot;libvirt&quot;</code>，取消这一行的注释，使 <code>libvirt</code> 用户组能使用 unix 套接字。</li>
+<li><code>unix_sock_rw_perms = &quot;0770&quot;</code>，取消这一行的注释，使用户能读写 unix 套接字。</li>
+</ol>
+<p>然后新建 libvirt 用户组，将当前用户加入该组：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">newgrp libvirt
+sudo usermod -aG libvirt <span class="nv">$USER</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>最后重启 libvirtd 服务，应该就能正常使用了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl restart libvirtd.service
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-启用嵌套虚拟化">3. 启用嵌套虚拟化</h3>
+<p>如果你需要在虚拟机中运行虚拟机，那就需要启用内核模块 kvm_intel 实现嵌套虚拟化。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 临时启用 kvm_intel 嵌套虚拟化</span>
+sudo modprobe -r kvm_intel
+sudo modprobe kvm_intel <span class="nv">nested</span><span class="o">=</span><span class="m">1</span>
+<span class="c1"># 修改配置，永久启用嵌套虚拟化</span>
+<span class="nb">echo</span> <span class="s2">&#34;options kvm-intel nested=1&#34;</span> <span class="p">|</span> sudo tee /etc/modprobe.d/kvm-intel.conf
+</code></pre></td></tr></table>
+</div>
+</div><p>验证嵌套虚拟化已经启用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ cat /sys/module/kvm_intel/parameters/nested 
+Y
+</code></pre></td></tr></table>
+</div>
+</div><p>至此，KVM 的安装就大功告成啦，现在应该可以在系统中找到 virt-manager 的图标，进去就可以使用了。
+virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这里就不详细介绍了，自己摸索摸索应该就会了。</p>
+<hr>
+<blockquote>
+<p>如下内容是进阶篇，主要介绍如何通过命令行来管理虚拟机磁盘，以及 KVM。
+如果你还是 kvm 新手，建议先通过图形界面 virt-manager 熟悉熟悉，再往下继续读。</p>
+</blockquote>
+<h2 id="二虚拟机磁盘映像管理">二、虚拟机磁盘映像管理</h2>
+<p>这需要用到两个工具：</p>
+<ol>
+<li>libguestfs: 虚拟机磁盘映像管理工具，前面介绍过了</li>
+<li>qemu-img: qemu 的磁盘映像管理工具，用于创建磁盘、扩缩容磁盘、生成磁盘快照、查看磁盘信息、转换磁盘格式等等。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建磁盘</span>
+qemu-img create -f qcow2 -o <span class="nv">cluster_size</span><span class="o">=</span>128K virt_disk.qcow2 20G
+
+<span class="c1"># 扩容磁盘</span>
+qemu-img resize ubuntu-server-cloudimg-amd64.img 30G
+
+<span class="c1"># 查看磁盘信息</span>
+qemu-img info ubuntu-server-cloudimg-amd64.img
+
+<span class="c1"># 转换磁盘格式</span>
+qemu-img convert -f raw -O qcow2 vm01.img vm01.qcow2  <span class="c1"># raw =&gt; qcow2</span>
+qemu-img convert -f qcow2 -O raw vm01.qcow2 vm01.img  <span class="c1"># qcow2 =&gt; raw</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="1-导入-vmware-镜像">1. 导入 vmware 镜像</h3>
+<p>直接从 vmware ova 文件导入 kvm，这种方式转换得到的镜像应该能直接用（网卡需要重新配置）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">virt-v2v -i ova centos7-test01.ova -o <span class="nb">local</span> -os /vmhost/centos7-01  -of qcow2
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以先从 ova 中解压出 vmdk 磁盘映像，将 vmware 的  vmdk 文件转换成 qcow2 格式，然后再导入 kvm（网卡需要重新配置）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 转换映像格式</span>
+qemu-img convert -p -f vmdk -O qcow2 centos7-test01-disk1.vmdk centos7-test01.qcow2
+<span class="c1"># 查看转换后的映像信息</span>
+qemu-img info centos7-test01.qcow2
+</code></pre></td></tr></table>
+</div>
+</div><p>直接转换 vmdk 文件得到的 qcow2 镜像，启会报错，比如「磁盘无法挂载」。
+根据 <a href="https://pve.proxmox.com/pve-docs/chapter-qm.html#_importing_virtual_machines_and_disk_images" target="_blank" rel="noopener noreffer">Importing Virtual Machines and disk images - ProxmoxVE Docs</a> 文档所言，需要在网上下载安装 MergeIDE.zip 组件，
+另外启动虚拟机前，需要将硬盘类型改为 IDE，才能解决这个问题。</p>
+<h3 id="2-导入-img-镜像">2. 导入 img 镜像</h3>
+<p>img 镜像文件，就是所谓的 raw 格式镜像，也被称为裸镜像，IO 速度比 qcow2 快，但是体积大，而且不支持快照等高级特性。
+如果不追求 IO 性能的话，建议将它转换成 qcow2 再使用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">qemu-img convert -f raw -O qcow2 vm01.img vm01.qcow2
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="三虚拟机管理">三、虚拟机管理</h2>
+<p>虚拟机管理可以使用命令行工具 <code>virsh</code>/<code>virt-install</code>，也可以使用 GUI 工具 <code>virt-manager</code>.</p>
+<p>GUI 很傻瓜式，就不介绍了，这里主要介绍命令行工具 <code>virsh</code>/<code>virt-install</code></p>
+<p>先介绍下 libvirt 中的几个概念：</p>
+<ol>
+<li>Domain: 指代运行在虚拟机器上的操作系统的实例 - 一个虚拟机，或者用于启动虚拟机的配置。</li>
+<li>Guest OS: 运行在 domain 中的虚拟操作系统。</li>
+</ol>
+<p>大部分情况下，你都可以把下面命令中涉及到的 <code>domain</code> 理解成虚拟机。</p>
+<h3 id="0-设置默认-uri">0. 设置默认 URI</h3>
+<p><code>virsh</code>/<code>virt-install</code>/<code>virt-viewer</code> 等一系列 libvirt 命令，
+默认情况下会使用 <code>qemu:///session</code> 作为 URI 去连接 QEMU/KVM，只有 root 账号才会默认使用 <code>qemu:///system</code>.</p>
+<p>另一方面 <code>virt-manager</code> 这个 GUI 工具，默认也会使用 <code>qemu:///system</code> 去连接 QEMU/KVM（和 root 账号一致）</p>
+<p><code>qemu:///system</code> 是系统全局的 qemu 环境，而 <code>qemu:///session</code> 的环境是按用户隔离的。
+另外 <code>qemu:///session</code> 没有默认的 <code>network</code>，创建虚拟机时会出毛病。。。</p>
+<p>因此，你需要将默认的 URI 改为 <code>qemu:///system</code>，否则绝对会被坑:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">echo</span> <span class="s1">&#39;export LIBVIRT_DEFAULT_URI=&#34;qemu:///system&#34;&#39;</span> &gt;&gt; ~/.bashrc
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="1-创建虚拟机---virt-intall">1. 创建虚拟机 - virt-intall</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 iso 镜像创建全新的 proxmox 虚拟机，自动创建一个 60G 的磁盘。</span>
+virt-install --virt-type kvm <span class="se">\
+</span><span class="se"></span>--name pve-1 <span class="se">\
+</span><span class="se"></span>--vcpus <span class="m">4</span> --memory <span class="m">8096</span> <span class="se">\
+</span><span class="se"></span>--disk <span class="nv">size</span><span class="o">=</span><span class="m">60</span> <span class="se">\
+</span><span class="se"></span>--network <span class="nv">network</span><span class="o">=</span>default,model<span class="o">=</span>virtio <span class="se">\
+</span><span class="se"></span>--os-type linux <span class="se">\
+</span><span class="se"></span>--os-variant generic <span class="se">\
+</span><span class="se"></span>--graphics vnc <span class="se">\
+</span><span class="se"></span>--cdrom proxmox-ve_6.3-1.iso
+
+<span class="c1"># 使用已存在的 opensuse cloud 磁盘创建虚拟机</span>
+virt-install --virt-type kvm <span class="se">\
+</span><span class="se"></span>  --name opensuse15-2 <span class="se">\
+</span><span class="se"></span>  --vcpus <span class="m">2</span> --memory <span class="m">2048</span> <span class="se">\
+</span><span class="se"></span>  --disk opensuse15.2-openstack.qcow2,device<span class="o">=</span>disk,bus<span class="o">=</span>virtio <span class="se">\
+</span><span class="se"></span>  --disk seed.iso,device<span class="o">=</span>cdrom <span class="se">\
+</span><span class="se"></span>  --os-type linux <span class="se">\
+</span><span class="se"></span>  --os-variant opensuse15.2 <span class="se">\
+</span><span class="se"></span>  --network <span class="nv">network</span><span class="o">=</span>default,model<span class="o">=</span>virtio <span class="se">\
+</span><span class="se"></span>  --graphics vnc <span class="se">\
+</span><span class="se"></span>  --import
+</code></pre></td></tr></table>
+</div>
+</div><p>其中的 <code>--os-variant</code> 用于设定 OS 相关的优化配置，官方文档<strong>强烈推荐</strong>设定，其可选参数可以通过 <code>osinfo-query os</code> 查看。</p>
+<h3 id="3-虚拟机管理---virsh">3. 虚拟机管理 - virsh</h3>
+<p>虚拟机创建好后，可使用 virsh 管理虚拟机：</p>
+<p>查看虚拟机列表：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 查看正在运行的虚拟机
+virsh list
+
+# 查看所有虚拟机，包括 inactive 的虚拟机
+virsh list --all
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>virt-viewer</code> 以 vnc 协议登入虚拟机终端：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用虚拟机 ID 连接</span>
+virt-viewer <span class="m">8</span>
+<span class="c1"># 使用虚拟机名称连接，并且等待虚拟机启动</span>
+virt-viewer --wait opensuse15
+</code></pre></td></tr></table>
+</div>
+</div><p>启动、关闭、暂停(休眠)、重启虚拟机：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">virsh start opensuse15
+virsh suuspend opensuse15
+virsh resume opensuse15
+virsh reboot opensuse15
+<span class="c1"># 优雅关机</span>
+virsh shutdown opensuse15
+<span class="c1"># 强制关机</span>
+virsh destroy opensuse15
+
+<span class="c1"># 启用自动开机</span>
+virsh autostart opensuse15
+<span class="c1"># 禁用自动开机</span>
+virsh autostart --disable opensuse15
+</code></pre></td></tr></table>
+</div>
+</div><p>虚拟机快照管理：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出一个虚拟机的所有快照</span>
+virsh snapshot-list --domain opensuse15
+<span class="c1"># 给某个虚拟机生成一个新快照</span>
+virsh snapshot-create &lt;domain&gt;
+<span class="c1"># 使用快照将虚拟机还原</span>
+virsh snapshot-restore &lt;domain&gt; &lt;snapshotname&gt;
+<span class="c1"># 删除快照</span>
+virsh snapshot-delete &lt;domain&gt; &lt;snapshotname&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>删除虚拟机：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">virsh undefine opensuse15
+</code></pre></td></tr></table>
+</div>
+</div><p>迁移虚拟机：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用默认参数进行离线迁移，将已关机的服务器迁移到另一个 qemu 实例</span>
+virsh migrate <span class="m">37</span> qemu+ssh://tux@jupiter.example.com/system
+<span class="c1"># 还支持在线实时迁移，待续</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>cpu/内存修改：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 改成 4 核</span>
+virsh setvcpus opensuse15 <span class="m">4</span>
+<span class="c1"># 改成 4G</span>
+virsh setmem opensuse15 <span class="m">4096</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>虚拟机监控：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 待续</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>修改磁盘、网络及其他设备：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加新设备</span>
+virsh attach-device
+virsh attach-disk
+virsh attach-interface
+<span class="c1"># 删除设备</span>
+virsh detach-disk
+virsh detach-device
+virsh detach-interface
+</code></pre></td></tr></table>
+</div>
+</div><p>虚拟机网络管理：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出所有虚拟机网络</span>
+virsh net-list
+<span class="c1"># 待续</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://doc.opensuse.org/documentation/leap/virtualization/html/book-virt/index.html" target="_blank" rel="noopener noreffer">Virtualization Guide - OpenSUSE</a></li>
+<li><a href="https://computingforgeeks.com/complete-installation-of-kvmqemu-and-virt-manager-on-arch-linux-and-manjaro/" target="_blank" rel="noopener noreffer">Complete Installation of KVM, QEMU and Virt Manager on Arch Linux and Manjaro</a></li>
+<li><a href="https://ubuntu.com/server/docs/virtualization-libvirt" target="_blank" rel="noopener noreffer">virtualization-libvirt - ubuntu docs</a></li>
+<li><a href="https://developers.redhat.com/products/rhel/hello-world#fndtn-kvm" target="_blank" rel="noopener noreffer">RedHat Docs - KVM</a></li>
+</ul>]]></description></item></channel></rss>

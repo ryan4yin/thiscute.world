@@ -1,3 +1,367 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>openSUSE - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/opensuse/</link><description>openSUSE - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 04 Jan 2021 08:42:21 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/opensuse/" rel="self" type="application/rss+xml"/><item><title>openSUSE 使用指南</title><link>https://ryan4yin.space/posts/opensuse-instruction/</link><pubDate>Mon, 04 Jan 2021 08:42:21 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/opensuse-instruction/</guid><description><![CDATA[<p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>openSUSE - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/opensuse/</link><description>openSUSE - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 04 Jan 2021 08:42:21 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/opensuse/" rel="self" type="application/rss+xml"/><item><title>openSUSE 使用指南</title><link>https://ryan4yin.space/opensuse-instruction/</link><pubDate>Mon, 04 Jan 2021 08:42:21 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/opensuse-instruction/</guid><description><![CDATA[<p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。</p>
-<p>我最近从 <a href="https://ryan4yin.space/posts/manjaro-instruction/" rel="">Manjaro</a> 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。</p>]]></description></item></channel></rss>
+<p>我最近从 <a href="https://ryan4yin.space/manjaro-instruction/" rel="">Manjaro</a> 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。</p>
+<p>尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
+本文算是对迁移流程做的一个总结。</p>
+<blockquote>
+<p>本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。
+openSUSE 社区的大部分用户都是使用的 Tumbleweed.
+它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。</p>
+</blockquote>
+<h2 id="一zypper-的基础命令">一、zypper 的基础命令</h2>
+<p>zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择国内的镜像源下载软件包，所以其实不需要手动配置软件源。</p>
+<p>常用命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper refresh  <span class="c1"># refresh all repos</span>
+sudo zypper update   <span class="c1"># update all softwares</span>
+
+sudo zypper search --installed-only  &lt;package-name&gt;  <span class="c1"># 查找本地安装的程序</span>
+sudo zypper search &lt;package-name&gt;  <span class="c1"># 查找本地和软件源中的程序</span>
+
+sudo zypper install &lt;package-name&gt;  <span class="c1"># 安装程序</span>
+sudo zypper remove &lt;package-name&gt;  <span class="c1"># 卸载程序</span>
+
+sudo zypper clean  <span class="c1"># 清理本地的包缓存</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="install-softwares">Install Softwares</h2>
+<blockquote>
+<p>这里需要用到 <a href="https://mirrors.openSUSE.org/list/bs.html" target="_blank" rel="noopener noreffer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
+建议有条件可以在路由器上加智能代理提速。</p>
+</blockquote>
+<p>安装需要用到的各类软件:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启用 Packman 仓库，使用北交镜像源</span>
+sudo zypper ar -cfp <span class="m">90</span> <span class="s1">&#39;https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Tumbleweed/&#39;</span> packman-bjtu
+
+<span class="c1"># install video player and web browser</span>
+sudo zypper install mpv ffmpeg-4 chromium firefox
+
+<span class="c1"># install screenshot and other utils</span>
+<span class="c1"># 安装好后可以配个截图快捷键 alt+a =&gt; `flameshot gui`</span>
+sudo zypper install flameshot peek nomacs
+
+<span class="c1"># install git clang/make/cmake</span>
+sudo zypper install git gcc clang make cmake
+
+<span class="c1"># install wireshark</span>
+sudo zypper install wireshark
+sudo gpasswd --add <span class="nv">$USER</span> wireshark  <span class="c1">#  将你添加到 wireshark 用户组中</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="ide--编程语言">IDE + 编程语言</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># install vscode: https://en.openSUSE.org/Visual_Studio_Code</span>
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo zypper addrepo https://packages.microsoft.com/yumrepos/vscode vscode
+sudo zypper refresh
+sudo zypper install code
+
+<span class="c1"># 安装 dotnet 5: https://docs.microsoft.com/en-us/dotnet/core/install/linux-openSUSE#openSUSE-15-</span>
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo zypper addrepo https://packages.microsoft.com/openSUSE/15/prod/ microsoft-prod
+sudo zypper refresh
+sudo zypper install dotnet-sdk-5.0
+
+<span class="c1"># 安装新版本的 go（源中的版本比较低，更建议从 go 官网下载安装）</span>
+sudo zypper install go
+</code></pre></td></tr></table>
+</div>
+</div><p>通过 tarball/script 安装：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># rustup，rust 环境管理器</span>
+curl --proto <span class="s1">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs <span class="p">|</span> sh
+
+<span class="c1"># jetbrains toolbox app，用于安装和管理 pycharm/idea/goland/android studio 等 IDE</span>
+<span class="c1"># 参见：https://www.jetbrains.com/toolbox-app/</span>
+
+<span class="c1"># 不使用系统 python，改用 miniconda 装 python3.8</span>
+<span class="c1"># 参考：https://github.com/ContinuumIO/docker-images/blob/master/miniconda3/debian/Dockerfile</span>
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
+sudo /bin/bash /tmp/miniconda.sh -b -p /opt/conda
+rm /tmp/miniconda.sh
+sudo /opt/conda/bin/conda clean -tipsy
+sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+<span class="nb">echo</span> <span class="s2">&#34;. /opt/conda/etc/profile.d/conda.sh&#34;</span> &gt;&gt; ~/.bashrc
+<span class="nb">echo</span> <span class="s2">&#34;conda activate base&#34;</span> &gt;&gt; ~/.bashrc
+<span class="c1"># miniconda 的 entrypoint 默认安装在如下目录，添加到 PATH 中</span>
+<span class="nb">echo</span> <span class="s2">&#34;export PATH=\$PATH:\$HOME/.local/bin&#34;</span> &gt;&gt; ~/.bashrc
+</code></pre></td></tr></table>
+</div>
+</div><p>接下来安装 VSCode 插件，下列是我的插件列表：</p>
+<ol>
+<li>语言：
+<ol>
+<li>python/go/rust/c#/julia/flutter</li>
+<li>xml/yaml/toml</li>
+<li>vscode proto3</li>
+</ol>
+</li>
+<li>ansible/terraform</li>
+<li>markdown all in one + Markdown Preview Enhanced</li>
+<li>美化：
+<ol>
+<li>community material theme</li>
+<li>vscode icons</li>
+<li>glasslt-vsc</li>
+</ol>
+</li>
+<li>docker/kubernetes</li>
+<li>IntelliJ IDEA Keybindings</li>
+<li>gitlens</li>
+<li>prettier</li>
+<li>utils
+<ol>
+<li>comment translate</li>
+<li>path intellisense</li>
+<li>svg</li>
+<li>visual studio intellicode</li>
+</ol>
+</li>
+<li>antlr4</li>
+<li>remote ssh + remote containers</li>
+<li>rest client</li>
+<li>vscode databases</li>
+</ol>
+<h3 id="容器--kubernetes">容器 + Kubernetes</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 时髦的新容器套装: https://documentation.suse.com/sles/15-SP2/html/SLES-all/cha-podman-overview.html</span>
+sudo zypper in podman kompose skopeo buildah katacontainers
+<span class="c1"># 安装 kubernetes 相关工具，tumbleweed 官方仓库的包都非常新！很舒服</span>
+sudo zypper in helm k9s kubernetes-client
+
+<span class="c1"># 本地测试目前还是 docker-compose 最方便，docker 仍有必要安装</span>
+sudo zypper in docker
+sudo gpasswd --add <span class="nv">$USER</span> docker
+sudo systemctl <span class="nb">enable</span> docker
+sudo systemctl start docker
+
+<span class="c1"># 简单起见，直接用 pip 安装 docker-compose 和 podman-compose</span>
+sudo pip install docker-compose podman-compose
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="办公音乐聊天">办公、音乐、聊天</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 openSUSE_zh 源：https://build.opensuse.org/project/show/home:opensuse_zh</span>
+sudo zypper addrepo <span class="s1">&#39;https://download.opensuse.org/repositories/home:/opensuse_zh/openSUSE_Tumbleweed&#39;</span> openSUSE_zh
+sudo zypper refresh
+sudo zypper install wps-office netease-cloud-music
+
+<span class="c1"># linux qq: https://im.qq.com/linuxqq/download.html</span>
+<span class="c1"># 虽然简陋但也够用，发送文件比 KDE Connect 要方便一些。</span>
+sudo rpm -ivh linux_qq.rpm
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="安装输入法">安装输入法</h3>
+<p>我用的输入法是小鹤音形，首先安装 fcitx-rime:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N</span>
+sudo zypper addrepo <span class="s1">&#39;https://download.opensuse.org/repositories/M17N/openSUSE_Tumbleweed&#39;</span> m17n
+sudo zypper refresh
+sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
+</code></pre></td></tr></table>
+</div>
+</div><p>然后，从 <a href="http://flypy.ys168.com/">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">mv rime ~/.local/share/fcitx5/
+</code></pre></td></tr></table>
+</div>
+</div><p>现在重启系统，在 fcitx5 配置里面添加 rime「中州韵」，就可以正常使用小鹤音形了。</p>
+<h3 id="qemukvm">QEMU/KVM</h3>
+<p>不得不说，openSUSE 安装 KVM 真的超方便，纯 GUI 操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://doc.openSUSE.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
+sudo yast2 virtualization
+<span class="c1"># enter to terminal ui, select kvm + kvm tools, and then install it.</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>KVM 的详细文档参见 <a href="../../virutal%20machine/KVM/README.md" rel="">KVM/README.md</a></p>
+<h3 id="kde-connect">KDE Connect</h3>
+<p>KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共享文件夹、通知同步等等。
+总而言之非常好用，只要手机和 PC 处于同一个局域网就行，不需要什么数据线。</p>
+<p>如果安装系统时选择了打开防火墙，KDE Connect 是连不上的，需要手动开放端口号：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://userbase.kde.org/KDEConnect#firewalld</span>
+sudo firewall-cmd --zone<span class="o">=</span>public --permanent --add-port<span class="o">=</span>1714-1764/tcp
+sudo firewall-cmd --zone<span class="o">=</span>public --permanent --add-port<span class="o">=</span>1714-1764/udp
+sudo systemctl restart firewalld.service
+</code></pre></td></tr></table>
+</div>
+</div><p>然后手机（Android）安装好 KDE Connect，就能开始享受了。</p>
+<p>目前存在的 Bug:</p>
+<ul>
+<li><i class="far fa-square fa-fw"></i> Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。
+<ul>
+<li>如果你有 ROOT 权限，可以参考 <a href="https://szclsya.me/posts/android/fix-clipboard-android-10/" target="_blank" rel="noopener noreffer">Fix clipboard permission on Android 10</a> 的方法，安装 ClipboardWhitelist 来打开权限。</li>
+<li>否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。</li>
+</ul>
+</li>
+</ul>
+<h3 id="qv2ray-代理">Qv2ray 代理</h3>
+<p>Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持常见的所有代理协议。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://build.openSUSE.org/repositories/home:zzndb</span>
+sudo zypper addrepo <span class="s1">&#39;https://download.opensuse.org/repositories/home:/zzndb/openSUSE_Tumbleweed&#39;</span> qv2ray
+sudo zypper refresh
+sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="vpn-连接与防火墙">VPN 连接与防火墙</h3>
+<p>防火墙默认会禁用 pptp 等 vpn 协议的端口，需要手动打开.</p>
+<p>允许使用 PPTP 协议：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 允许 gre 数据包流入网络</span>
+sudo firewall-cmd --permanent --zone<span class="o">=</span>public --direct --add-rule ipv4 filter INPUT <span class="m">0</span> -p gre -j ACCEPT
+sudo firewall-cmd --permanent --zone<span class="o">=</span>public --direct --add-rule ipv6 filter INPUT <span class="m">0</span> -p gre -j ACCEPT
+
+<span class="c1"># masquerade: 自动使用 interface 地址伪装所有流量（将主机当作路由器使用，vpn 是虚拟网络，需要这个功能）</span>
+sudo firewall-cmd --permanent --zone<span class="o">=</span>public --add-masquerade
+<span class="c1"># pptp 客户端使用固定端口 1723/tcp 通信</span>
+firewall-cmd --add-port<span class="o">=</span>1723/tcp --permanent
+
+sudo firewall-cmd --reload
+</code></pre></td></tr></table>
+</div>
+</div><p>允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 <code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p>
+<h2 id="其他设置">其他设置</h2>
+<p>从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。</p>]]></description></item></channel></rss>

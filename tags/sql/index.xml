@@ -1,1 +1,390 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SQL - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/sql/</link><description>SQL - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Fri, 15 Jun 2018 16:27:46 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/sql/" rel="self" type="application/rss+xml"/><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/posts/sql-basic/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/sql-basic/</guid><description>本笔记整理自《SQL 基础教程》、《MySQL 必知必会》和网上资料。个人笔记不保证正确。 一、基础 SQL，即结构化查询语言，是为访问与操作关系数</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>SQL - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/sql/</link><description>SQL - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Fri, 15 Jun 2018 16:27:46 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/sql/" rel="self" type="application/rss+xml"/><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/sql-basic/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/sql-basic/</guid><description><![CDATA[<blockquote>
+<p>本笔记整理自<a href="https://book.douban.com/subject/24841239/" target="_blank" rel="noopener noreffer">《SQL 基础教程》</a>、<a href="https://book.douban.com/subject/3354490/" target="_blank" rel="noopener noreffer">《MySQL 必知必会》</a>和网上资料。个人笔记不保证正确。</p>
+</blockquote>
+<h2 id="一基础">一、基础</h2>
+<p>SQL，即结构化查询语言，是为访问与操作关系数据库中的数据而设计的语言。</p>
+<ol>
+<li>关系数据库以行(row)为单位读写数据</li>
+<li>SQL 根据功能的不同，可分为三类（其中DML用得最多，增删查改嘛）
+<ol>
+<li>DDL(Data Definition Language, 数据定义语言): CREATE/DROP/ALTER</li>
+<li>DML(Data Manipulation Language, 数据操作语言): SELECT/INSERT/UPDATE/DELETE</li>
+<li>DCL(Data Control Language, 数据控制语言): COMMIT/ROLLBACK/GRANT/REVOKE</li>
+</ol>
+</li>
+<li>SQL 语句要以分号结尾。换行在 SQL 中不表示结束，而等同于空格。</li>
+<li>SQL 不区分**关键字(Keyword)**的大小写，但是描述符就不一定了。
+<ul>
+<li>这里有个坑：MySQL 中，数据库和表其实就是数据目录下的目录和文件，因而，<strong>操作系统的敏感性决定数据库名和表名 是否大小写敏感</strong>。这就意味着<strong>数据库名</strong>和<strong>表名</strong>在 Windows 中是大小写不敏感的，而在大多数类型的 Unix/Linux 系统中是大小写敏感的。（注意仅指数据库名和表名）可通过修改配置文件的<code>lower_case_table_names</code>属性来统一这一行为。</li>
+<li>而<strong>字段名</strong>、<strong>字段内容</strong>都是内部数据，是操作系统无关的。它们的大小写敏感性，由 MySQL 的的校对（COLLATE）规则来控制。该规则体现在 MySQL 的 校对字符集（COLLATION）的后缀上：比如 utf8字符集，<code>utf8_general_ci</code>表示不区分大小写，这个是 utf8 字符集默认的校对规则；<code>utf8_general_cs</code> 表示区分大小写，<code>utf8_bin</code> 表示二进制比较，同样也区分大小写 。</li>
+</ul>
+</li>
+<li>SQL 中的字符串和日期需要用单引号引用起来，日期有特定格式<code>年-月-日</code></li>
+</ol>
+<p>修改字符集：<code>set names &lt;字符集名&gt;</code>
+记住在 MySQL 中，utf-8mb4 才是完全的 utf-8字符集。</p>
+<h2 id="二ddl">二、DDL</h2>
+<h3 id="1-数据库的创建和删除">1. 数据库的创建和删除</h3>
+<ol>
+<li>创建数据库</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">DATABASE</span> <span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-创建表">2. 创建表：</h3>
+<h4 id="关系表的设计">关系表的设计</h4>
+<p>关系表的设计，要确保把信息分解成多个表，一类信息一个表，各表通过某些常用的，基本不会改变的值（即关系表设计中的关系，也常称为外键）互相关联。尽量不要有冗余数据。</p>
+<h4 id="语句">语句：</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+<span class="p">(</span>
+    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">3</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="p">...</span>
+    <span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">persons</span><span class="o">`</span>
+<span class="p">(</span>
+    <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">INT</span> <span class="n">UNSIGNED</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+    <span class="o">`</span><span class="n">name</span><span class="o">`</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>后面的是设置引擎和默认字符集。工作上，表的设计一定要深思熟虑，因为改起来很困难。</p>
+<h4 id="字段类型mysql">字段类型（MySQL）</h4>
+<p>有四类数据类型：字符串、数字、日期、二进制。它们又根据数据长度的区别，下分为多个类型。</p>
+<ol>
+<li>字符串：
+</li>
+<li>数字
+</li>
+<li>日期
+</li>
+<li>二进制
+</li>
+</ol>
+<h4 id="约束">约束</h4>
+<p>SQL 约束是除了数据类型之外，对列中数据追加的限定条件。</p>
+<ol>
+<li>类型约束：<code>NOT NULL</code>、<code>AUTO_INCREMENT</code>、<code>UNSIGNED</code>（这个只 MySQL 支持）</li>
+<li>默认值：<code>DEFAULT</code>，举例 <code>&lt;列名3&gt; VARCHAR(32) NOT NULL DEFAULT &quot;los angeles&quot;</code></li>
+<li>表约束：<code>PRIMARY KEY</code> 主键约束（主键默认 UNIQUE 且 NOT NULL）</li>
+</ol>
+<p>此外还有 <code>FOREIGN KEY</code> 和 <code>CHECK</code> 两个约束语句，在<a href="https://www.cnblogs.com/kirito-c/p/10295693.html" target="_blank" rel="noopener noreffer">进阶笔记</a>中介绍。</p>
+<blockquote>
+<p>P.S. 字段约束也可以写成表约束（比如主键约束），而反过来很可能不行。</p>
+</blockquote>
+<h3 id="3-删除表和更新表定义">3. 删除表和更新表定义</h3>
+<ol>
+<li>删除表（危险操作）
+<ul>
+<li>删除整个表：</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>- 只清空表内数据，但留下表：
+</code></pre>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">TRUNCATE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>  <span class="c1">-- 非标准SQL语句，但是大部分DB都支持。（可能不能ROLLBACK）
+</span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>更新表定义（麻烦的操作）
+所以所创建表前要仔细想好格式了，更新表定义是不得已才能为之。
+添加列定义：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列的约束</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>删除列定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="三dml">三、DML</h2>
+<blockquote>
+<p>万恶之源 NULL</p>
+</blockquote>
+<h3 id="1-查询重点">1. 查询（重点）</h3>
+<ol>
+<li>基本语句：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">SELECT &lt;字段1&gt; AS &lt;别名1&gt;,
+     &lt;字段2&gt; AS &lt;别名2&gt;,
+     ...
+FROM &lt;表名&gt;
+WHERE &lt;过滤条件&gt;;
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>可<strong>用 <code>DISTINCT</code> 修饰列名</strong>，使查询结果无重。例：<code>SELECT DISTINCT &lt;列名&gt; FROM &lt;表名&gt;</code></li>
+<li>过滤条件可使用比较运算(&lt;&gt;、=等)和逻辑运算(AND OR NOT).</li>
+<li>过滤条件中，<strong>比较运算会永远忽略 NULL 值</strong>，如果需要对 NULL 值做操作，需要使用 <strong>IS NULL</strong> 或 <strong>IS NOT NULL</strong>（说忽略也许不太准确，NULL 既不为真也不为假，反正少用NULL。。）</li>
+<li>包含NULL的四则运算，得到的结果总为NULL</li>
+</ol>
+<h3 id="2-聚合与排序重点">2. 聚合与排序（重点）</h3>
+<h4 id="聚合函数">聚合函数</h4>
+<p>即对列进行统计分析的函数，主要有五个：</p>
+<ol>
+<li>COUNT：计算列的行数。（只有<code>COUNT(*)</code>会计算NULL行）</li>
+<li>SUM：求该列之和。</li>
+<li>AVG：求该列的平均值。</li>
+<li>MAX/MIN：求该列的 最大/最小 值</li>
+</ol>
+<p>NOTE：</p>
+<ol>
+<li><strong>聚合函数计算时会排除所有NULL行。只有COUNT(*)例外，NULL行也会被它计数。</strong></li>
+<li>MAX/MIN 几乎适用于所有数据类型的列（对非数值型，以其二进制值来排序），而SUM/AVG只能用于数值类型的列。</li>
+<li>聚合函数操作的列，也能用DISTINCT修饰。例：<code>SELECT COUNT(DISTINCT &lt;列名&gt;) FROM &lt;表名&gt;</code></li>
+<li>聚合函数只能用于SELECT子句和还没讲的HAVING子句（以及 ORDER BY 子句）中。</li>
+</ol>
+<h4 id="分组group-by">分组(GROUP BY)</h4>
+<p>分组以聚合键为分类标准，将数据分为多个逻辑组，从而能分别对每个组进行聚合运算。（分组是为了分类聚合）</p>
+<ol>
+<li>若出现了 GROUP BY 子句，查询结果一定是每一组一行。</li>
+<li>GROUP BY 会将 NULL 作为一组特定数据，显示为空。</li>
+</ol>
+<h4 id="聚合对select子句的限制">聚合对SELECT子句的限制</h4>
+<p>首先要理解的是：</p>
+<ol>
+<li>聚合函数的操作对象为某一列，而产生的结果只有一个值。</li>
+<li>GROUP BY 的操作对象为一列或者多列，产生的结果呢，是每一组一个值。</li>
+</ol>
+<p>因此为了避免歧义，只要使用了聚合函数或 GROUP BY 二者之一，SELECT 子句就只能包含：</p>
+<ol>
+<li>常数</li>
+<li>其他聚合函数（该聚合函数的操作对象可以为其他列）</li>
+<li>如果使用了 GROUP BY 子句，还能包括该子句所指定的列名。（也就是聚合键）但是<strong>绝不能包含其他的列名</strong>，因为这会有歧义。</li>
+</ol>
+<p>此外，还有一个问题是由 SQL 的执行顺序引起的。应该能很容易猜到，<strong>SELECT 语句的执行顺序和书写顺序是不一致的</strong>。
+查询应该是从表开始，所以 FROM 语句一定先执行。然后应该要过滤(WHERE)，再是分组(GROUP BY)，最后才是 SELECT 语句。（就已经学到的子句而言，顺序是这样）
+因此按理说，<strong>SELECT 语句 定义的别名，是不能在 GROUP BY 里使用的</strong>。（也有些DB支持该用法，但不通用）</p>
+<h4 id="对聚合结果进行过滤having">对聚合结果进行过滤(HAVING)</h4>
+<p>从刚刚说过的SQL执行顺序可见，WHERE要比GROUP BY先执行，因此如果想过滤分组后的结果，不能用它。而应该使用 HAVING 子句。
+HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同也就决定了它们的用途不同。</p>
+<p>NOTE：</p>
+<ol>
+<li>有时候，会发现某个过滤条件，不论是先执行（就是写在WHERE子句中）还是后执行（写在HAVING中）都没问题，这时候应该将它写在WHERE子句中，这样GROUP BY操作的数据会更少，处理更快。</li>
+<li>HAVING 子句的元素，也存在和 SELECT 子句同样的限制。不能使用聚合键以外的列名。</li>
+</ol>
+<h4 id="排序order-by">排序(ORDER BY)</h4>
+<p><strong>ORDER BY 子句在 SELECT 子句之后执行</strong>，因此它能使用 SELECT 子句中定义的别名。（而 GROUP BY 之前已经说过不能用别名了）
+格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">&lt;</span><span class="err">字段</span><span class="mi">1</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="o">&lt;</span><span class="err">字段</span><span class="mi">2</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="p">...</span>
+<span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+<span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">1</span><span class="o">&gt;</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>
+<span class="k">HAVING</span> <span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">2</span><span class="o">&gt;</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>  <span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>多排序键/列：指定多排序键时的排序规则为：<strong>优先使用左侧的列，如果该列存在相同值，再接着参考右侧的键，依此类推。</strong>（如果左侧键值不同，右侧的键就不会被使用了）</li>
+<li>NULL 值的顺序：<strong>排序键中出现了 NULL 值时，这类值会在结果的开头或结尾汇总</strong>，究竟是排在开头还是结尾，并没有特殊规定。</li>
+<li>ORDER BY 子句只影响结果的先后顺序，因此排序键可以是结果集以外的东西，比如其他的列，或者使用了 GROUP BY 时，还能用聚合函数。</li>
+</ol>
+<h3 id="3-数据的增删改">3. 数据的增、删、改</h3>
+<h4 id="插入insert-into-也算用的多了">插入(INSERT INTO) 也算用的多了</h4>
+<p>语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+    <span class="p">(</span><span class="err">列名</span><span class="mi">1</span><span class="p">,</span> <span class="err">列名</span><span class="mi">2</span><span class="p">...)</span>
+    <span class="k">VALUES</span> <span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span> <span class="err">值</span><span class="mi">2</span><span class="p">...);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>或者也可以使用 SELECT 语句来替代 VALUES 子句，达到将 SELECT 到的结果集插入某表的效果。（但是不要用ORDER BY，因为结果是<strong>集</strong>，没有顺序，排序是徒劳无功的）
+插入时主键不能重复，否则会报错。（因此如果需要包含重复数据，一般都会定义一个自增的id字段）</p>
+<h4 id="删除delete">删除(DELETE)</h4>
+<p>清空表（危险操作，而且效率不如 TRUNCATE）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>条件删除：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+    <span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span> 
+</code></pre></td></tr></table>
+</div>
+</div><p>因此使用DELETE时，一定要记得带WHERE，不然就好玩了。。</p>
+<h4 id="更新update">更新(UPDATE)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+    <span class="k">SET</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">算术表达式</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="p">...</span>
+    <span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>同 DELETE 一样，不带 WHERE 子句的 UPDATE 是很危险的。</p>
+<h2 id="四dcl---事务处理mysql">四、DCL - 事务处理(MySQL)</h2>
+<p><strong>事务是一系列不可分割的数据库操作</strong>，也就是说，这一系列操作要么全部执行，要么全部不执行。如果执行过程中发生了问题（检查执行状态），可以通过执行 ROLLBACK 回滚到该事务执行前的状态。（<strong>注意并不会自动回滚</strong>）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+    <span class="c1">-- do somthing
+</span><span class="c1"></span><span class="n">COMMIT</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>START TRANSACTION</code>: 标识事务的开始</li>
+<li><code>COMMIT</code>：提交事务。一旦提交，所执行过的操作就已成定论，恢复不了了。</li>
+<li><code>ROLLBACK</code>：事务回滚，**只能回滚未 COMMIT 的 DML 操作！**也就是说只能用在 <code>START TRANSACTION</code> 和 <code>COMMIT</code> 之间，并且只能回滚 <code>INSERT/UPDATE/DELETE</code>。（回滚 SELECT 没啥意义）</li>
+<li><code>SAVEPOINT &lt;保留点&gt;</code> 和 <code>ROLLBACK TO &lt;保留点&gt;</code>：同样只能用在 <code>START TRANSACTION</code> 和 <code>COMMIT</code> 之间，其优势在于，<code>ROLLBACK TO</code> 可以指定回滚到某特定保留点，更灵活，而 <code>ROLLBACK</code> 只能回滚到事务开始前。</li>
+</ul>
+<p>需要注意的有：</p>
+<ol>
+<li><code>COMMIT</code> 和 <code>ROLLBACK</code> 语句也是事务的结束，因此如果执行了 <code>ROLLBACK</code>，那它与 <code>COMMIT</code> 之间的内容会被跳过。（在这一点上，它相当于大多数 PL 的 return）</li>
+<li><strong>如果事务执行出现问题，问题行后面的所有语句都不会被执行！包括 <code>COMMIT</code> 和 <code>ROLLBACK</code>！</strong> 如果想用纯 SQL 实现事务原子性，必须使用存储过程检查执行状态！举例如下：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CREATE PROCEDURE my_test()
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK  -- 检测到 SQLEXCEPTION 则 rollback，然后 exit
+        START TRANSACTION
+            INSERT INTO table_test VALUES(1, &#39;A&#39;)
+            INSERT INTO table_test VALUES(1, &#39;B&#39;)  -- 这里主键冲突，会触发 SQLEXCEPTION
+
+            COMMIT
+    END
+
+CALL my_test()
+</code></pre></td></tr></table>
+</div>
+</div><p>或者<strong>在 PL 中通过异常处理执行 <code>ROLLBACK</code></strong>。（事务虽然中止了，但并未结束！所以仍然可以 <code>ROLLBACK</code> 或者 <code>COMMIT</code>）</p>
+<h3 id="数据何时被提交到数据库">数据何时被提交到数据库</h3>
+<ol>
+<li>显式提交：在事务中使用 <code>COMMIT</code> 提交数据操作被称为显式提交</li>
+<li>隐式提交：非 DML 操作会被立即提交，也就是说这些语句本身就隐含了提交语义</li>
+<li>自动提交： 如果 <code>AUTOCOMMIT</code> 被设置为 <code>ON</code>，当前 session 中的 DML 语句会在执行后被自动提交（<code>START TRANSACTION</code> 内部的 DML 除外，在它内部必须显式 <code>COMMIT</code>）</li>
+</ol>
+<p>所有的 DML 语句都是要显式提交的，MySQL session 的 <code>AUTOCOMMIT</code> 默认为 <code>ON</code>，所以 DML 会被自动提交。</p>
+<blockquote>
+<p>P.S. 许多语言的数据库 API 会定义自己的事务操作，不一定与这里一致。</p>
+</blockquote>
+]]></description></item></channel></rss>
