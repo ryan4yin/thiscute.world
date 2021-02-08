@@ -1,4 +1,5 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Kubernetes - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/kubernetes/</link><description>Kubernetes - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 06 Apr 2020 21:48:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/kubernetes/" rel="self" type="application/rss+xml"/><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Kubernetes - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/kubernetes/</link><description>Kubernetes - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 06 Apr 2020 21:48:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/kubernetes/" rel="self" type="application/rss+xml"/><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
 <p>本文基于 Istio1.5 编写测试</p>
 </blockquote>
 <p>Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。</p>
@@ -357,7 +358,8 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <li><a href="https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication" target="_blank" rel="noopener noreffer">End User Authentication - Istio</a></li>
 <li><a href="https://istio.io/docs/reference/config/security/jwt/" target="_blank" rel="noopener noreffer">JWTRule - Istio</a></li>
 <li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt.io - 动态生成 jwt</a></li>
-</ul>]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</guid><description><![CDATA[<ol>
+</ul>]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</guid><description><![CDATA[<ol>
 <li>OOMKilled: Pod 的内存使用超出了 resources.limits 中的限制，被强制杀死。</li>
 <li>CrashLoopBackoff: Pod 进入 <strong>崩溃-重启</strong>循环，重启间隔时间从 10 20 40 80 一直翻倍到上限 300 秒，然后以 300 秒为间隔无限重启。</li>
 <li>Pod 一直 Pending: 这说明没有任何节点能满足 Pod 的要求，容器无法被调度。比如端口被别的容器用 hostPort 占用，节点有污点等。</li>
