@@ -65,10 +65,29 @@ theme = "LoveIt"
       # LoveIt 新增 | 0.2.5 是否为标题显示打字机动画
       typeit = true
 
+
+  # LoveIt 新增 | 0.2.0 Section (所有文章) 页面配置
+  [params.section]
+    # section 页面每页显示文章数量
+    paginate = 20
+    # 日期格式 (月和日)
+    dateFormat = "01-02"
+    # RSS 文章数目
+    rss = 20
+
+  # LoveIt 新增 | 0.2.0 List (目录或标签) 页面配置
+  [params.list]
+    # list 页面每页显示文章数量
+    paginate = 20
+    # 日期格式 (月和日)
+    dateFormat = "01-02"
+    # RSS 文章数目
+    rss = 20
+
   # 主页配置
   [params.home]
     # LoveIt 新增 | 0.2.0 RSS 文章数目
-    rss = 15
+    rss = 20
     # 主页个人信息
     [params.home.profile]
       enable = true
@@ -120,7 +139,7 @@ theme = "LoveIt"
     # 是否在文章页面显示原始 Markdown 文档链接
     linkToMarkdown = true
     # LoveIt 新增 | 0.2.4 是否在 RSS 中显示全文内容
-    rssFullText = false
+    rssFullText = true
     # LoveIt 新增 | 0.2.0 目录配置
     [params.page.toc]
       # 是否使用目录
@@ -228,10 +247,6 @@ theme = "LoveIt"
     data = "jsdelivr.yml"
 
 
-[outputs]
-  # 为了支持搜索，需要在这里设定，输出 json 索引文件
-  home = ["HTML", "RSS", "JSON"]
-
 [menu]
   [[menu.main]]
     identifier = "posts"
@@ -319,5 +334,37 @@ theme = "LoveIt"
 [author]
   name = "ryan4yin"
   email = "xiaoyin_c@qq.com"
-  link = ""
+  link = "https://ryan4yin.space"
 
+
+# 网站地图配置
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+# Permalinks 配置
+[Permalinks]
+  # posts = ":year/:month/:filename"
+  posts = ":filename"
+
+# 隐私信息配置
+[privacy]
+  # LoveIt 删除 | 0.2.0 Google Analytics 相关隐私 (被 params.analytics.google 替代)
+  [privacy.googleAnalytics]
+    # ...
+  [privacy.twitter]
+    enableDNT = true
+  [privacy.youtube]
+    privacyEnhanced = true
+
+
+# 用于 Hugo 输出文档的设置
+[outputs]
+  # LoveIt 更改 | 0.2.0
+  # 为了支持搜索，需要在这里设定，输出 json 索引文件
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  taxonomyTerm = ["HTML"]
