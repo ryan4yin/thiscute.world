@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>服务网格 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/</link><description>服务网格 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 06 Apr 2020 21:48:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/" rel="self" type="application/rss+xml"/><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>服务网格 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/</link><description>服务网格 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 06 Apr 2020 21:48:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/" rel="self" type="application/rss+xml"/><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
 <p>本文基于 Istio1.5 编写测试</p>
 </blockquote>
 <p>Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。</p>
@@ -209,9 +209,7 @@ xwIDAQAB
 </div>
 </div><h3 id="4-测试密钥可用性">4. 测试密钥可用性</h3>
 <p>接下来在 <a href="https://jwt.io" target="_blank" rel="noopener noreffer">jwt.io</a> 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。
-
-
-<div style="text-align: center"></div></p>
+</p>
 <p>可以看到左下角显示「Signature Verified」，成功地生成出了 JWT。后续可以使用这个 JWT 访问 Istio 网关，测试 Istio JWT 验证功能。</p>
 <h3 id="5-启用-istio-的身份验证">5. 启用 Istio 的身份验证</h3>
 <p>编写 istio 配置：</p>

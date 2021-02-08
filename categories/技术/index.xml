@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>技术 - 分类 - Ryan4Yin's Space</title><link>https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/</link><description>技术 - 分类 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>技术 - 分类 - Ryan4Yin's Space</title><link>https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/</link><description>技术 - 分类 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
 <p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreffer">Argo Documentation</a></p>
 </blockquote>
 <p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
@@ -25,12 +25,10 @@
 <p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreffer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreffer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
 <p><strong>我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
 <p>一个复杂工作流的示例如下：</p>
-<p>
-
-<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="https://github.com/argoproj/argo/issues/1088#issuecomment-445884543" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2> </h2><p>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</p>">
+<p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
         
-    </a></div><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
-</figure></p>
+    </a><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
+    </figure></p>
 <h3 id="3-workflow-的声明式配置">3. Workflow 的声明式配置</h3>
 <p>Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes Yaml 的同学上手应该都很快。</p>
 <p>下面对 Workflow 定义文件和 Jenkinsfile 做个对比：</p>
@@ -749,7 +747,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>视频:</p>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreffer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
-</ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
+</ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
 <ol>
 <li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
@@ -766,12 +764,10 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture">https://www.vaultproject.io/docs/internals/architecture</a></p>
 </blockquote>
 <p>首先看一下 Vault 的架构图：</p>
-<p>
-
-<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="vault layers" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2> </h2><p>vault layers</p>">
+<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="/images/expirence-of-vault/vault-layers.png" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2>vault layers</h2>">
         
-    </a></div><figcaption class="image-caption">vault layers</figcaption>
-</figure></p>
+    </a><figcaption class="image-caption">vault layers</figcaption>
+    </figure></p>
 <p>可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
 Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。</p>
 <p>「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。</p>
@@ -785,12 +781,10 @@ Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrie
 <p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。</p>
 <p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreffer">沙米尔密钥共享算法</a>
 将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.</p>
-<p>
-
-<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="vault-shamir-secret-sharing" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2> </h2><p>vault-shamir-secret-sharing</p>">
+<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
         
-    </a></div><figcaption class="image-caption">vault-shamir-secret-sharing</figcaption>
-</figure></p>
+    </a><figcaption class="image-caption">vault-shamir-secret-sharing</figcaption>
+    </figure></p>
 <blockquote>
 <p>「Key Shares」的数量，以及重建「master key」最少需要的 key shares 数量，都是可以调整的。
 沙米尔密钥共享算法也可以关闭，这样 master key 将被直接用于 Unseal.</p>
@@ -1857,7 +1851,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
 <p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
 <p>具体配置方法，待续。。。</p>
-]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description><![CDATA[<h2 id="一tls-协议">一、TLS 协议</h2>
+]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description><![CDATA[<h2 id="一tls-协议">一、TLS 协议</h2>
 <p>我们需要加密网络数据以实现安全通信，但是有一个现实的问题：</p>
 <ol>
 <li>非对称加密算法（RSA/ECC 等）可以方便地对数据进行签名/验证，但是计算速度慢。</li>
@@ -1865,9 +1859,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </ol>
 <p>于是 TLS 协议在握手阶段使用非对称算法验证服务端，并使用 ECDHE 密钥交换算法（Elliptic Curve Diffie-Hellman key exchange）安全地生成一个临时的对称密钥，然后使用对称算法进行加密通信。</p>
 <p>然后在后续的每次数据交换过程中，都使用 ECDHE 算法生成新的对称密钥，然后使用新密钥加密解密数据。</p>
-<p>
-
-<div style="text-align: center"></div></p>
+<p></p>
 <p>上述的 TLS 协议流程，提供了「完美前向保密（Perfect Forward Secrecy）」特性，前向保密能够保护过去进行的通讯不受密码或密钥在未来暴露的威胁。
 即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，黑客必须破解出整个 TLS 连接中所有事务的对称密钥，才能得到完整的数据。</p>
 <blockquote>
@@ -1889,9 +1881,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>而 TLS 证书，则包含公钥+申请者信息(你)，颁发者(CA)的信息+签名(使用 CA 私钥加密)，以及一些其他信息。</p>
 <p>CA 证书中的公钥，能用于验证 TLS 证书中签名的正确性，也就能用于判断证书是否可信。</p>
 <p>你可以尝试使用浏览器查看 Google 的证书详情，我使用 Firefox 查看到的内容如下：</p>
-<p>
-
-<div style="text-align: center"></div></p>
+<p></p>
 <h3 id="2-tls-证书支持保护的域名类型">2. TLS 证书支持保护的域名类型</h3>
 <p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
 但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
@@ -1985,9 +1975,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </ol>
 <p>收费证书可以在各 TLS 提供商处购买，比如国内的阿里云腾讯云等。</p>
 <p>完整的证书申请流程如下：</p>
-<p>
-
-<div style="text-align: center"></div></p>
+<p></p>
 <p>为了方便用户，图中的申请人(Applicant)自行处理的部分，目前很多证书申请网站也可以自动处理，用户只需要提供相关信息即可。</p>
 <h3 id="3-生成本地签名证书或者自签名证书">3. 生成「本地签名证书」或者「自签名证书」</h3>
 <p>除了被第三方信任的「受信 TLS 证书」，在内网环境，我们需要也使用 TLS 证书保障通信安全，这时我们可能会选择自己生成证书，而不是向权威机构申请证书。</p>
@@ -2516,7 +2504,7 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 <li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreffer">OpenSSL ManPage</a></li>
 <li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreffer">openssl 查看证书</a></li>
 </ul>
-]]></description></item><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
+]]></description></item><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
 <p>QEMU/KVM 是目前最流行的虚拟化技术，它基于 Linux 内核提供的 kvm 模块，结构精简，性能损失小，而且开源免费（对比收费的 vmware），因此成了大部分企业的首选虚拟化方案。</p>
 <p>目前各大云厂商的虚拟化方案，底层都是 KVM。</p>
 <p>但是 KVM 作为一个企业级的底层虚拟化技术，却没有对桌面使用做深入的优化，因此如果想把它当成桌面虚拟化软件来使用，替代掉 VirtualBox/VMware，有一定难度。</p>
@@ -3025,7 +3013,7 @@ virsh net-list
 <li><a href="https://computingforgeeks.com/complete-installation-of-kvmqemu-and-virt-manager-on-arch-linux-and-manjaro/" target="_blank" rel="noopener noreffer">Complete Installation of KVM, QEMU and Virt Manager on Arch Linux and Manjaro</a></li>
 <li><a href="https://ubuntu.com/server/docs/virtualization-libvirt" target="_blank" rel="noopener noreffer">virtualization-libvirt - ubuntu docs</a></li>
 <li><a href="https://developers.redhat.com/products/rhel/hello-world#fndtn-kvm" target="_blank" rel="noopener noreffer">RedHat Docs - KVM</a></li>
-</ul>]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
+</ul>]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
 <ul>
 <li>AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库&hellip;几乎所有的云上资源</li>
 <li>本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源</li>
@@ -3370,7 +3358,7 @@ pulumi login s3://&lt;bucket-path&gt;
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>
 </li>
-</ul>]]></description></item><item><title>openSUSE 使用指南</title><link>https://ryan4yin.space/opensuse-instruction/</link><pubDate>Mon, 04 Jan 2021 08:42:21 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/opensuse-instruction/</guid><description><![CDATA[<p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
+</ul>]]></description></item><item><title>openSUSE 使用指南</title><link>https://ryan4yin.space/opensuse-instruction/</link><pubDate>Mon, 04 Jan 2021 08:42:21 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/opensuse-instruction/</guid><description><![CDATA[<p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。</p>
 <p>我最近从 <a href="https://ryan4yin.space/manjaro-instruction/" rel="">Manjaro</a> 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。</p>
 <p>尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
@@ -3736,7 +3724,7 @@ sudo firewall-cmd --reload
 </div>
 </div><p>允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 <code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p>
 <h2 id="其他设置">其他设置</h2>
-<p>从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。</p>]]></description></item><item><title>2020 年年终总结</title><link>https://ryan4yin.space/2020-summary/</link><pubDate>Sat, 12 Dec 2020 23:45:00 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/2020-summary/</guid><description><![CDATA[<h2 id="闲言碎语">闲言碎语</h2>
+<p>从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。</p>]]></description></item><item><title>2020 年年终总结</title><link>https://ryan4yin.space/2020-summary/</link><pubDate>Sat, 12 Dec 2020 23:45:00 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/2020-summary/</guid><description><![CDATA[<h2 id="闲言碎语">闲言碎语</h2>
 <p>一晃一年又过去了，今年可真是魔幻的一年，口罩带了一年没能摘下来，美国疫情感染人数 1500 万。</p>
 <p>上面这段话要是让去年的我看到了，没准都以为今年真的生化危机了hhh&hellip;</p>
 <p>言归正传，从去年 6 月底入职，到现在有一年半了，这一年半学到的东西真的非常多，完全重塑了我的技术栈。现在我的整个技术栈，基本都是围绕着云原生这一块发展了。</p>
@@ -3818,7 +3806,7 @@ sudo firewall-cmd --reload
 <p>回看了下去年的总结，发现我 go/c# 都没学多少，设计模式也没动，python 还在原地踏步hhh&hellip; 去年的展望很多都没实现。</p>
 <p>不过云原生这一块倒是进步很快，总体很满意今年的成果哈哈~</p>
 <p>明年加油！</p>
-]]></description></item><item><title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析</title><link>https://ryan4yin.space/tcpdump-and-wireshark/</link><pubDate>Thu, 28 May 2020 16:20:26 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
+]]></description></item><item><title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析</title><link>https://ryan4yin.space/tcpdump-and-wireshark/</link><pubDate>Thu, 28 May 2020 16:20:26 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
 <p>抓包分析工具主要有两种：</p>
 <ol>
 <li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreffer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
@@ -4017,7 +4005,7 @@ sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark
 <li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreffer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
 <li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreffer">聊聊tcpdump与Wireshark抓包分析</a></li>
 </ul>
-]]></description></item><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
+]]></description></item><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
 <p>本文基于 Istio1.5 编写测试</p>
 </blockquote>
 <p>Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。</p>
@@ -4228,9 +4216,7 @@ xwIDAQAB
 </div>
 </div><h3 id="4-测试密钥可用性">4. 测试密钥可用性</h3>
 <p>接下来在 <a href="https://jwt.io" target="_blank" rel="noopener noreffer">jwt.io</a> 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。
-
-
-<div style="text-align: center"></div></p>
+</p>
 <p>可以看到左下角显示「Signature Verified」，成功地生成出了 JWT。后续可以使用这个 JWT 访问 Istio 网关，测试 Istio JWT 验证功能。</p>
 <h3 id="5-启用-istio-的身份验证">5. 启用 Istio 的身份验证</h3>
 <p>编写 istio 配置：</p>
@@ -4378,7 +4364,7 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <li><a href="https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication" target="_blank" rel="noopener noreffer">End User Authentication - Istio</a></li>
 <li><a href="https://istio.io/docs/reference/config/security/jwt/" target="_blank" rel="noopener noreffer">JWTRule - Istio</a></li>
 <li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt.io - 动态生成 jwt</a></li>
-</ul>]]></description></item><item><title>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</title><link>https://ryan4yin.space/about-dns-protocol/</link><pubDate>Sun, 29 Mar 2020 15:49:23 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><description><![CDATA[<blockquote>
+</ul>]]></description></item><item><title>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</title><link>https://ryan4yin.space/about-dns-protocol/</link><pubDate>Sun, 29 Mar 2020 15:49:23 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><description><![CDATA[<blockquote>
 <p>个人笔记，观点不一定正确. 适合对 Kubernetes 有一定了解的同学。</p>
 </blockquote>
 <h2 id="前言">前言</h2>
@@ -4424,9 +4410,7 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 而且因为域名是从右往左读的（最右侧是根, <code>www.baidu.com.</code>），而 IP 的网段（如 <code>192.168.0.0/16</code>）刚好相反，是左边优先。
 因此 PTR 记录的“域名”必须将 IP 地址反着写，末尾再加上 <code>.in-addr.arpa.</code> 表示这是一个反向解析的域名。（ipv6 使用 <code>ip6.arpa.</code>）
 拿 baidu.com 的邮件服务器测试一下：
-
-
-<div style="text-align: center"></div></p>
+</p>
 <p>其他还有些 <code>TXT</code>、<code>CAA</code> 等奇奇怪怪的记录，就用到的时候自己再查了。</p>
 <h2 id="二域名的分层结构">二、域名的分层结构</h2>
 <p>国际域名系统被分成四层：</p>
@@ -4473,22 +4457,16 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <p>上述流程中忽略了我大天朝的特殊国情——备案，勿介意。</p>
 <h2 id="三dns-递归解析器在浏览器中输入域名后发生了什么">三、DNS 递归解析器：在浏览器中输入域名后发生了什么？</h2>
 <p>下面的图片拷贝自 Amazon Aws 文档，它展示了在不考虑任何 DNS 缓存的情况下，一次 Web 请求的经过，详细描绘了 DNS 解析的部分。</p>
-<p>
-
-<div style="text-align: center"></div></p>
+<p></p>
 <p>其中的第 3 4 5 步按顺序向前面讲过的根域名服务器、顶级域名服务器、权威域名服务器发起请求，以获得下一个 DNS 服务器的信息。这很清晰。</p>
 <p>图中当前还没介绍的部分，是紫色的 <code>DNS Resolver</code>(域名解析器)，也叫 <code>Recursive DNS resolver</code>（<strong>DNS 递归解析器</strong>）。
 它本身只负责递归地请求 3 4 5 步中的上游服务器，然后把获取的最终结果返回给客户端，同时将记录缓存到本地以加快解析速度。</p>
 <p>这个 DNS 解析器，其实就是所谓的<strong>公共 DNS 服务器</strong>：Google 的 <code>8.8.8.8</code>，国内著名的 <code>114.114.114.114</code>。</p>
 <p>这些公共 DNS 用户量大，缓存了大量的 DNS 记录，有效地降低了上游 DNS 服务器的压力，也加快了网络上的 DNS 查询速度。</p>
 <p>接下来使用 <code>dig +trace baidu.com</code> 复现一下上述的查询流程（这种情况下 dig 自己就是一个 DNS 递归解析器）：</p>
-<p>
-
-<div style="text-align: center"></div></p>
+<p></p>
 <p>另外前面有讲过 DNS 的反向解析，也是同样的层级结构，是从根服务器开始往下查询的，下面拿 baidu 的一个邮件服务器进行测试：</p>
-<p>
-
-<div style="text-align: center"></div></p>
+<p></p>
 <blockquote>
 <p>dig 工具未来可能会被 drill 取代。</p>
 </blockquote>
@@ -4801,9 +4779,7 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </code></pre></td></tr></table>
 </div>
 </div><p>然后通过 <code>./coredns</code> 启动 coredns。通过 dig 检验：
-
-
-<div style="text-align: center"></div></p>
+</p>
 <p>可以看到 <code>ftp.dev-env.local</code> 已经被成功解析了。</p>
 <h3 id="3-可选插件external-pluginshttpscorednsioexplugins">3. <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">可选插件（External Plugins）</a></h3>
 <p>CoreDNS 提供的预编译版本，不包含 <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">External Plugins</a> 中列出的部分，如果你需要，可以自行修改 <code>plugin.cfg</code>，然后手动编译。</p>
@@ -4823,4 +4799,1297 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 <li><a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener noreffer">Kubernetes - DNS for Services and Pods</a></li>
 <li><a href="https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/" target="_blank" rel="noopener noreffer">Kubernetes - Customizing DNS Service</a></li>
 </ul>
+]]></description></item><item><title>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</title><link>https://ryan4yin.space/jwt-algorithm-key-generation/</link><pubDate>Tue, 03 Mar 2020 14:09:46 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/jwt-algorithm-key-generation/</guid><description><![CDATA[<h1 id="签名算法">签名算法</h1>
+<p>介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义：</p>
+<ol>
+<li>数字签名(Digital Signature):就和我们日常办理各种手续时需要在文件上签上自己的名字一样，数字签名的主要用途也是防止伪造签名。</li>
+<li>数字摘要(digest)/数字指纹(fingerprint): 指的都是数据的 Hash 值。</li>
+<li>加密算法：这个应该不需要解释，就是对数据进行加密。。</li>
+</ol>
+<p>数字签名的具体实现，通常是先对数据进行一次 Hash 摘要(SHA1/SHA256/SHA512 等)，然后再使用非对称加密算法(RSA/ECDSA 等)对这个摘要进行加密，这样得到的结果就是原始数据的一个签名。</p>
+<p>用户在验证数据时，只需要使用公钥解密出 Hash 摘要，然后自己再对数据进行一次同样的摘要，对比两个摘要是否相同即可。</p>
+<p>因为数字签名多了非对称加密这一步，就能保证只有拥有私钥的人才能生成出正确的数字签名，达到了防止伪造签名的目的。
+而数字摘要（Hash）则谁都可以计算出来，通常<strong>由可信方公布数据的 Hash 值</strong>，用户下载数据后，可通过 Hash 值对比来判断数据是否损坏，或者被人调包。</p>
+<p>重点在于，Hash 摘要必须由可信方公布出来，否则不能保证安全性。而数字签名可以随数据一起提供，不需要担心被伪造。</p>
+<p>JWT 是签名和数据一起提供的，因此必须使用签名才能保证安全性。</p>
+<blockquote>
+<p>P.S. 在 Android/IOS 开发中，经常会遇到各类 API 或者 APP 商店要求提供 APP 的签名，还指明需要的是 MD5/SHA1 值。
+这个地方需要填的 MD5/SHA1 值，实际上只是你「签名证书(=公钥+证书拥有者信息)」的「数字指纹/摘要」，和 JWT 的签名不是一回事。</p>
+</blockquote>
+<h1 id="前言">前言</h1>
+<p>JWT 规范的详细说明请见「参考」部分的链接。这里主要说明一下 JWT 最常见的几种签名算法(JWA)：HS256(HMAC-SHA256) 、RS256(RSA-SHA256) 还有 ES256(ECDSA-SHA256)。</p>
+<p>这三种算法都是一种消息签名算法，得到的都只是一段无法还原的签名。区别在于<strong>消息签名</strong>与<strong>签名验证</strong>需要的 「key」不同。</p>
+<ol>
+<li>HS256 使用同一个「secret_key」进行签名与验证（对称加密）。一旦 secret_key 泄漏，就毫无安全性可言了。
+<ul>
+<li>因此 HS256 只适合集中式认证，签名和验证都必须由可信方进行。</li>
+<li>传统的单体应用广泛使用这种算法，但是请不要在任何分布式的架构中使用它！</li>
+</ul>
+</li>
+<li>RS256 是使用 RSA 私钥进行签名，使用 RSA 公钥进行验证。公钥即使泄漏也毫无影响，只要确保私钥安全就行。
+<ul>
+<li>RS256 可以将验证委托给其他应用，只要将公钥给他们就行。</li>
+</ul>
+</li>
+<li>ES256 和 RS256 一样，都使用私钥签名，公钥验证。算法速度上差距也不大，但是它的签名长度相对短很多（省流量），并且算法强度和 RS256 差不多。</li>
+</ol>
+<p>对于单体应用而言，HS256 和 RS256 的安全性没有多大差别。
+而对于需要进行多方验证的微服务架构而言，显然只有 RS256/ES256 才能提供足够的安全性。
+在使用 RS256 时，只有「身份认证的微服务(auth)」需要用 RSA 私钥生成 JWT，其他微服务使用公开的公钥即可进行签名验证，私钥得到了更好的保护。</p>
+<p>更进一步，「JWT 生成」和「JWT 公钥分发」都可以直接委托给第三方的通用工具，比如 <a href="https://github.com/ory/hydra" target="_blank" rel="noopener noreffer">hydra</a>。
+甚至「JWT 验证」也可以委托给「API 网关」来处理，应用自身可以把认证鉴权完全委托给外部的平台，而应用自身只需要专注于业务。这也是目前的发展趋势。</p>
+<p><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreffer">RFC 7518 - JSON Web Algorithms (JWA)</a> 中给出的 JWT 算法列表如下：</p>
+<pre><code>+--------------+-------------------------------+--------------------+
+| &quot;alg&quot; Param  | Digital Signature or MAC      | Implementation     |
+| Value        | Algorithm                     | Requirements       |
++--------------+-------------------------------+--------------------+
+| HS256        | HMAC using SHA-256            | Required           |
+| HS384        | HMAC using SHA-384            | Optional           |
+| HS512        | HMAC using SHA-512            | Optional           |
+| RS256        | RSASSA-PKCS1-v1_5 using       | Recommended        |
+|              | SHA-256                       |                    |
+| RS384        | RSASSA-PKCS1-v1_5 using       | Optional           |
+|              | SHA-384                       |                    |
+| RS512        | RSASSA-PKCS1-v1_5 using       | Optional           |
+|              | SHA-512                       |                    |
+| ES256        | ECDSA using P-256 and SHA-256 | Recommended+       |
+| ES384        | ECDSA using P-384 and SHA-384 | Optional           |
+| ES512        | ECDSA using P-521 and SHA-512 | Optional           |
+| PS256        | RSASSA-PSS using SHA-256 and  | Optional           |
+|              | MGF1 with SHA-256             |                    |
+| PS384        | RSASSA-PSS using SHA-384 and  | Optional           |
+|              | MGF1 with SHA-384             |                    |
+| PS512        | RSASSA-PSS using SHA-512 and  | Optional           |
+|              | MGF1 with SHA-512             |                    |
+| none         | No digital signature or MAC   | Optional           |
+|              | performed                     |                    |
++--------------+-------------------------------+--------------------+
+
+The use of &quot;+&quot; in the Implementation Requirements column indicates
+that the requirement strength is likely to be increased in a future
+version of the specification.
+</code></pre>
+<p>可以看到被标记为 <code>Recommended</code> 的只有 RS256 和 ES256。</p>
+<p>ES256 使用 ECDSA 进行签名，它的安全性和运算速度目前和 RS256 差距不大，但是拥有更短的签名长度。
+对于需要频繁发送的 JWT 而言，更短的长度长期下来可以节约大量流量。</p>
+<p>因此更推荐使用 ES256 算法。</p>
+<h2 id="使用-openssl-生成-rsaecc-公私钥">使用 OpenSSL 生成 RSA/ECC 公私钥</h2>
+<p>RS256 使用 RSA 算法进行签名，可通过如下命令生成 RSA 密钥：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
+openssl genrsa -out rsa-private-key.pem <span class="m">2048</span>
+
+<span class="c1"># 2. 通过密钥生成公钥</span>
+openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem
+</code></pre></td></tr></table>
+</div>
+</div><p>ES256 使用 ECDSA 算法进行签名，该算法使用 ECC 密钥，生成命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
+openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
+<span class="c1"># 2. 通过密钥生成公钥</span>
+openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
+</code></pre></td></tr></table>
+</div>
+</div><p>密钥的使用应该就不需要介绍了，各类语言都有对应 JWT 库处理这些，请自行查看文档。</p>
+<p>如果是调试/学习 JWT，需要手动签名与验证的话，推荐使用 <a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt 工具网站 - jwt.io</a></p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreffer">RFC 7518 - JSON Web Algorithms (JWA)</a></li>
+<li><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener noreffer">什么是 JWT &ndash; JSON WEB TOKEN</a></li>
+<li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt 工具网站 - jwt.io</a></li>
+<li><a href="https://www.cnblogs.com/langshiquan/p/10701198.html" target="_blank" rel="noopener noreffer">JWT 算法比较</a></li>
+</ul>
+]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</guid><description><![CDATA[<ol>
+<li>OOMKilled: Pod 的内存使用超出了 resources.limits 中的限制，被强制杀死。</li>
+<li>CrashLoopBackoff: Pod 进入 <strong>崩溃-重启</strong>循环，重启间隔时间从 10 20 40 80 一直翻倍到上限 300 秒，然后以 300 秒为间隔无限重启。</li>
+<li>Pod 一直 Pending: 这说明没有任何节点能满足 Pod 的要求，容器无法被调度。比如端口被别的容器用 hostPort 占用，节点有污点等。</li>
+<li><a href="" rel="">FailedCreateSandBox: Failed create pod sandbox: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>：很可能是 CNI 网络插件的问题（比如 ip 地址溢出），</li>
+<li><a href="https://cloud.tencent.com/developer/article/1411527" target="_blank" rel="noopener noreffer">SandboxChanged: Pod sandbox changed, it will be killed and re-created</a>: 很可能是由于内存限制导致容器被 OOMKilled，或者其他资源不足</li>
+<li><a href="https://github.com/kubernetes/kubernetes/issues/55094" target="_blank" rel="noopener noreffer">FailedSync: error determining status: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>: 常和前两个错误先后出现，很可能是 CNI 网络插件的问题。</li>
+<li>开发集群，一次性部署所有服务时，各 Pod 互相争抢资源，导致 Pod 生存探针失败，不断重启，重启进一步加重资源使用。恶性循环。
+<ul>
+<li><strong>需要给每个 Pod 加上 resources.requests，这样资源不足时，后续 Pod 会停止调度，直到资源恢复正常。</strong></li>
+</ul>
+</li>
+<li>Pod 出现大量的 Failed 记录，Deployment 一直重复建立 Pod: 通过 <code>kubectl describe/edit pod &lt;pod-name&gt;</code> 查看 pod <code>Events</code> 和 <code>Status</code>，一般会看到失败信息，如节点异常导致 Pod 被驱逐。</li>
+<li><a href="https://zhuanlan.zhihu.com/p/70031676" target="_blank" rel="noopener noreffer">Kubernetes 问题排查：Pod 状态一直 Terminating</a></li>
+<li>创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的 ServiceAccount 不存在。</li>
+<li>Pod 运行失败，状态为 MatchNodeSelector: 对主节点进行关机、迁移等操作，导致主调度器下线时，会在一段时间内导致 Pod 调度失败，调度失败会报这个错。</li>
+<li>Pod 仍然存在，但是 <code>Service</code> 的 Endpoints 却为空，找不到对应的 Pod IPs: 遇到过一次，是因为时间跳变（从未来的时间改回了当前时间）导致的问题。</li>
+</ol>
+<h3 id="pod-无法删除">Pod 无法删除</h3>
+<p>可能是某些资源无法被GC，这会导致容器已经 Exited 了，但是 Pod 一直处于 Terminating 状态。</p>
+<p>这个问题在网上能搜到很多案例,但大都只是提供了如下的强制清理命令，未分析具体原因：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete pods &lt;pod&gt; --grace-period<span class="o">=</span><span class="m">0</span> --force
+</code></pre></td></tr></table>
+</div>
+</div><p>最近找到几篇详细的原因分析文章，值得一看：</p>
+<ul>
+<li><a href="https://cloud.tencent.com/developer/article/1680612" target="_blank" rel="noopener noreffer">腾讯云原生 -【Pod Terminating原因追踪系列】之 containerd 中被漏掉的 runc 错误信息</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1680613" target="_blank" rel="noopener noreffer">腾讯云原生 -【Pod Terminating原因追踪系列之二】exec连接未关闭导致的事件阻塞</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1689486" target="_blank" rel="noopener noreffer">腾讯云原生 -【Pod Terminating原因追踪系列之三】让docker事件处理罢工的cancel状态码</a></li>
+<li><a href="https://www.likakuli.com/posts/docker-pod-terminating/" target="_blank" rel="noopener noreffer">Pod terminating - 问题排查 - KaKu Li</a></li>
+</ul>
+<p>大致总结一下，主要原因来自 docker 18.06 以及 kubernetes 的 docker-shim 运行时的底层逻辑，已经在新版本被修复了。</p>
+<h2 id="节点常见错误">节点常见错误</h2>
+<ol>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#node-conditions" target="_blank" rel="noopener noreffer">DiskPressure</a>：节点的可用空间不足。（通过<code>df -h</code> 查看，保证可用空间不小于 15%）</li>
+<li>The node was low on resource: ephemeral-storage: 同上，节点的存储空间不够了。</li>
+</ol>
+<h2 id="网络常见错误">网络常见错误</h2>
+<h3 id="1-ingressistio-gateway-返回值">1. Ingress/Istio Gateway 返回值</h3>
+<ol>
+<li>404：不存在该 Service/Istio Gateway</li>
+<li>503：服务不可用。原因基本都是 Service 对应的 Pods NotReady</li>
+<li>504：网关请求下游超时。主要有两种可能
+<ol>
+<li>考虑是不是 Ingress Controller 的 IP 表未更新，将请求代理到了不存在的 Pod ip，导致得不到响应。</li>
+<li>Pod 响应太慢，代码问题。</li>
+</ol>
+</li>
+</ol>
+<p>Ingress 相关网络问题的排查流程：</p>
+<ol>
+<li>Which ingress controller?</li>
+<li>Timeout between client and ingress controller, or between ingress controller and backend service/pod?</li>
+<li>HTTP/504 generated by the ingress controller, proven by logs from the ingress controller?</li>
+<li>If you port-forward to skip the internet between client and ingress controller, does the timeout still happen?</li>
+</ol>
+<h2 id="名字空间常见错误">名字空间常见错误</h2>
+<h3 id="名字空间无法删除">名字空间无法删除</h3>
+<p>这通常是某些资源如 CR(custom resources)/存储等资源无法释放导致的。
+比如常见的 monitoring 名字空间无法删除，应该就是 CR 无法 GC 导致的。</p>
+<p>可手动删除 namespace 配置中的析构器（spec.finalizer，在名字空间生命周期结束前会生成的配置项），这样名字空间就会直接跳过 GC 步骤：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 编辑名字空间的配置</span>
+kubectl edit namespace &lt;ns-name&gt;
+<span class="c1"># 将 spec.finalizers 改成空列表 []</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果上述方法也无法删除名字空间，也找不到具体的问题，就只能直接从 etcd 中删除掉它了(有风险，谨慎操作！)。方法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 登录到 etcd 容器中，执行如下命令：</span>
+<span class="nb">export</span> <span class="nv">ETCDCTL_API</span><span class="o">=</span><span class="m">3</span>
+<span class="nb">cd</span> /etc/kubernetes/pki/etcd/
+<span class="c1"># 列出所有名字空间</span>
+etcdctl --cacert ca.crt --cert peer.crt --key peer.key get /registry/namespaces --prefix --keys-only
+
+<span class="c1"># （谨慎操作！！！）强制删除名字空间 `monitoring`。这可能导致相关资源无法被 GC！</span>
+etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/monitoring
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="kubectlistioctl-等客户端工具异常">kubectl/istioctl 等客户端工具异常</h2>
+<ol>
+<li><code>socat not found</code>: kubectl 使用 <code>socat</code> 进行端口转发，集群的所有节点，以及本机都必须安装有 <code>socat</code> 工具。</li>
+</ol>
+<h2 id="批量清理-evicted-记录">批量清理 Evicted 记录</h2>
+<p>有时候 Pod 因为节点选择器的问题，被不断调度到有问题的 Node 上，就会不断被 Evicted，导致出现大量的 Evicted Pods。
+排查完问题后，需要手动清理掉这些 Evicted Pods.</p>
+<p>批量删除 Evicted 记录:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get pods <span class="p">|</span> grep Evicted <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> xargs kubectl delete pod
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="容器镜像gcpod驱逐以及节点压力">容器镜像GC、Pod驱逐以及节点压力</h2>
+<p>节点压力 DiskPressure 会导致 Pod 被驱逐，也会触发容器镜像的 GC。</p>
+<p>根据官方文档 <a href="https://kubernetes.io/zh/docs/tasks/administer-cluster/out-of-resource" target="_blank" rel="noopener noreffer">配置资源不足时的处理方式</a>，Kubelet 提供如下用于配置容器 GC 及 Evicetion 的阈值：</p>
+<ol>
+<li><code>--eviction-hard</code> 和 <code>eviction-soft</code>: 对应旧参数 <code>--image-gc-high-threshold</code>，这两个参数配置镜像 GC 及驱逐的触发阈值。磁盘使用率的阈值默认为 85%
+<ol>
+<li>区别在于 <code>eviction-hard</code> 是立即驱逐，而 <code>eviction-soft</code> 在超过 <code>eviction-soft-grace-period</code> 之后才驱逐。</li>
+</ol>
+</li>
+<li><code>--eviction-minimum-reclaim</code>: 对应旧参数 <code>--image-gc-low-threshold</code>。这是进行资源回收（镜像GC、Pod驱逐等）后期望达到的磁盘使用率百分比。磁盘使用率的阈值默认值为 80%。</li>
+</ol>
+<p>问：能否为 ImageGC 设置一个比 DiskPressure 更低的阈值？因为我们希望能自动进行镜像 GC，但是不想立即触发 Pod 驱逐。</p>
+<p>答：这应该可以通过设置 <code>eviction-soft</code> 和长一点的 <code>eviction-soft-grace-period</code> 来实现。
+另外 <code>--eviction-minimum-reclaim</code> 也可以设小一点，清理得更干净。示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">--eviction-soft<span class="o">=</span>memory.available&lt;1Gi,nodefs.available&lt;2Gi,imagefs.available&lt;200Gi
+--eviction-soft-grace-period<span class="o">=</span>3m
+--eviction-minimum-reclaim<span class="o">=</span>memory.available<span class="o">=</span>0Mi,nodefs.available<span class="o">=</span>1Gi,imagefs.available<span class="o">=</span>2Gi
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="其他问题">其他问题</h2>
+<h3 id="如何重新运行一个-job">如何重新运行一个 Job？</h3>
+<p>我们有一个 Job 因为外部原因运行失败了，修复好后就需要重新运行它。</p>
+<p>方法是：删除旧的 Job，再使用同一份配置重建 Job.</p>
+<p>如果你使用的是 fluxcd 这类 GitOps 工具，就只需要手工删除旧 Pod，fluxcd 会定时自动 apply 所有配置，这就完成了 Job 的重建。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://yq.aliyun.com/articles/703971?type=2" target="_blank" rel="noopener noreffer">Kubernetes管理经验</a></li>
+<li><a href="https://www.reddit.com/r/kubernetes/comments/ced0py/504_gateway_timeout_when_accessing_workload_via/" target="_blank" rel="noopener noreffer">504 Gateway Timeout when accessing workload via ingress</a></li>
+<li><a href="https://k8s.af/" target="_blank" rel="noopener noreffer">Kubernetes Failure Stories</a></li>
+</ul>
+]]></description></item><item><title>Manjaro 使用指南</title><link>https://ryan4yin.space/manjaro-instruction/</link><pubDate>Sat, 13 Jul 2019 20:38:24 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/manjaro-instruction/</guid><description><![CDATA[<p>Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。
+最大的特点，是包仓库很丰富，而且都很新。代价是偶尔会出些小毛病。</p>
+<p>我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两个月，升级了两个大版本才恢复。
+另一个就是 <a href="https://github.com/microsoft/vscode/issues/110322" target="_blank" rel="noopener noreffer">VSCode - Incorrect locale &lsquo;en-US&rsquo; used everywhere</a></p>
+<p>还遇到过 <code>libguestfs</code> 的一个问题：<code>vrit-v2v</code>/<code>virt-p2v</code> 两个工具被拆分出去，导致 manjaro 只能通过源码安装这俩货。这貌似目前仍旧没有解决。</p>
+<p>总的来说体验很不错，能很及时地用上各种新版本的软件。</p>
+<h2 id="一pacmanyay-的基础命令">一、pacman/yay 的基础命令</h2>
+<p>Manjaro 装好后，需要运行的第一条命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -Syy <span class="c1">## 强制更新 package 目录</span>
+sudo pacman-mirrors --interactive --country China  <span class="c1"># 列出所有国内的镜像源，并提供交互式的界面手动选择镜像源</span>
+sudo pacman -Syyu  <span class="c1"># 强制更新 package 目录，并尝试更新已安装的所有 packages.</span>
+sudo pacman -S yay  <span class="c1"># 安装 yay</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>pacman 是 arch/manjaro 的官方包管理器，而刚刚安装的 yay，则是一个能查询 arch linux 的 aur 仓库的第三方包管理器，非常流行。</p>
+<p>pacman 的常用命令语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">pacman -S package_name        <span class="c1"># 安装软件  </span>
+pacman -S extra/package_name  <span class="c1"># 安装不同仓库中的版本</span>
+pacman -Syu                   <span class="c1"># 升级整个系统，y是更新数据库，yy是强制更新，u是升级软件</span>
+pacman -Ss string             <span class="c1"># 在包数据库中查询软件</span>
+pacman -Si package_name       <span class="c1"># 显示软件的详细信息</span>
+pacman -Sc                    <span class="c1"># 清除软件缓存，即/var/cache/pacman/pkg目录下的文件</span>
+pacman -R package_name        <span class="c1"># 删除单个软件</span>
+pacman -Rs package_name       <span class="c1"># 删除指定软件及其没有被其他已安装软件使用的依赖关系</span>
+pacman -Qs string             <span class="c1"># 查询已安装的软件包</span>
+pacman -Qi package_name       <span class="c1"># 查询本地安装包的详细信息</span>
+pacman -Ql package_name       <span class="c1"># 获取已安装软件所包含的文件的列表</span>
+pacman -U package.tar.zx      <span class="c1"># 从本地文件安装</span>
+pactree package_name          <span class="c1"># 显示软件的依赖树</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>yay 的用法和 pacman 完全类似，上述所有 <code>pacman xxx</code> 命令，均可替换成 <code>yay xxx</code> 执行。</p>
+<p>此外，还有一条 <code>yay</code> 命令值得记一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">yay -c  <span class="c1"># 卸载所有无用的依赖。类比 apt-get autoremove</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="常用软件与配置">常用软件与配置</h2>
+<h3 id="1-添加-archlinux-中文社区仓库">1. 添加 archlinux 中文社区仓库</h3>
+<p><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreffer">Arch Linux 中文社区仓库</a> 是由 Arch Linux 中文社区驱动的非官方用户仓库，包含一些额外的软件包以及已有软件的 git 版本等变种。部分软件包的打包脚本来源于 AUR。</p>
+<p>一些国内软件，如果直接从 aur 安装，那就会有一个编译过程，有点慢。而 archlinuxcn 有已经编译好的包，可以直接安装。更新速度也很快，推荐使用。</p>
+<p>配置方法见 <a href="https://github.com/archlinuxcn/repo" target="_blank" rel="noopener noreffer">Arch Linux Chinese Community Repository</a>。</p>
+<h3 id="2-安装常用软件">2. 安装常用软件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S google-chrome  firefox         <span class="c1"># 浏览器</span>
+sudo pacman -S netease-cloud-music     <span class="c1"># 网易云音乐</span>
+sudo pacman -S noto-fonts-cjk wqy-bitmapfont wqy-microhei wqy-zenhei   <span class="c1"># 中文字体：思源系列、文泉系列</span>
+sudo pacman -S wps-office ttf-wps-fonts
+
+sudo pacman -S vim                     <span class="c1"># 命令行编辑器</span>
+sudo pacman -S git                     <span class="c1"># 版本管理工具</span>
+sudo pacman -S clang make cmake gdb    <span class="c1"># 编译调试环境</span>
+sudo pacman -S visual-studio-code-bin  <span class="c1"># 代码编辑器</span>
+
+sudo pacman -S wireshark-qt  mitmproxy         <span class="c1"># 抓包工具</span>
+sudo pacman -S docker  <span class="c1"># docker 容器</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 docker 和 wireshark 需要额外配置，否则会要求管理员权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo groupadd wireshark
+sudo gpasswd --add <span class="nv">$USER</span> wireshark  <span class="c1">#  将你添加到 wireshark 用户组中</span>
+
+sudo groupadd docker
+sudo gpasswd --add <span class="nv">$USER</span> docker  <span class="c1"># 同上</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-中文输入法">3. 中文输入法</h3>
+<p>有两个选择：<a href="https://rime.im/" target="_blank" rel="noopener noreffer">中州韵（rime）</a>和<a href="https://aur.archlinux.org/packages/fcitx-sogoupinyin/" target="_blank" rel="noopener noreffer">搜狗拼音（sogoupinyin）</a>。</p>
+<p>简单省事用搜狗，要用特殊的输入方案（五笔、音形、二笔等等）就只有 rime 可选了。</p>
+<h4 id="31-fcitx5-rime-配置小鹤音形">3.1 fcitx5-rime 配置小鹤音形</h4>
+<p>首先安装 fcitx5-rime, 注意这些组件一个都不能省略：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo pacman -S fcitx5  fcitx5-chinese-addons fcitx5-gtk  fcitx5-qt  kcm-fcitx5 fcitx5-rime
+</code></pre></td></tr></table>
+</div>
+</div><p>第二步是修改环境变量，将 fcitx5-rime 设为默认输入法并自动启动。</p>
+<p>添加 <code>~/.pam_environment</code> 文件，内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">INPUT_METHOD  DEFAULT=fcitx5
+GTK_IM_MODULE DEFAULT=fcitx5
+QT_IM_MODULE  DEFAULT=fcitx5
+XMODIFIERS    DEFAULT=@im=fcitx5
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://wiki.archlinux.org/index.php/PAM_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">pam-env</a> 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。</p>
+<p>添加自动启动：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ~/.xprofile 是 x11 GUI 的环境变量配置文件</span>
+<span class="nb">echo</span> <span class="s1">&#39;fcitx5 &amp;&#39;</span> &gt;&gt; ~/.xprofile
+</code></pre></td></tr></table>
+</div>
+</div><p>然后，从 <a href="http://flypy.ys168.com/">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">mv rime ~/.local/share/fcitx5/
+</code></pre></td></tr></table>
+</div>
+</div><p>现在重启系统，在 fcitx5 配置里面添加 rime，就可以正常使用小鹤音形了。</p>
+<h2 id="坑">坑</h2>
+<p>使用过程中，我也遇到了一些坑：</p>
+<ol>
+<li>安装软件包时，无法在线安装旧版本！除非你本地有旧版本的安装包没清除，才可以通过缓存安装旧版本。
+<ul>
+<li>这种问题没遇到时好说，但有时候新版本有问题，旧安装包也清理掉了无法回退，就非常麻烦。</li>
+<li>而且就算你回退了版本，一升级它就又更新了。。</li>
+</ul>
+</li>
+</ol>
+<h2 id="彻底删除-manjaro-及其引导项">彻底删除 Manjaro 及其引导项</h2>
+<p>最近(2021-01)切换到了 OpenSUSE，体验很好，于是决定删除掉 Manjaro。</p>
+<p>一番操作，总结出的删除流程如下（以下命令均需要 root 权限）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 删除 EFI 引导项</span>
+<span class="c1">## 查看 efi 的所有启动项，找到 Manjaro 的编号</span>
+efibootmgr
+<span class="c1">## 删除掉 Manjaro 启动项</span>
+sudo efibootmgr --delete-bootnum -b <span class="m">2</span>
+
+<span class="c1"># 2. 删除 manjaro 的 bootloader</span>
+<span class="c1">## 我使用了 manjaro 默认的安装策略，bootloader 被安装在了和 windows 相同的 EFI 分区下</span>
+<span class="c1">## 首先通过 opnsuse 的分区工具，找到 EFI 分区的设备号，然后挂载它</span>
+mkdir efi
+mount /dev/nvme0n1p1 efi
+<span class="c1"># 删除 Manjaro bootloader</span>
+rm -r EFI/Manjaro
+
+<span class="c1"># 3. 重建 grub2 引导项</span>
+grub2-mkconfig &gt;  /boot/grub2/grub.cfg
+
+<span class="c1"># 4. 最后，通过分区工具删除 Manjaro 的所有分区，我是 SSD，只有一个分区</span>
+
+<span class="c1"># 5. 重启系统，所有东西就全删除干净了。</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Main_page_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">Arch Linux Wiki - 中文</a></li>
+<li><a href="https://aur.archlinux.org/packages" target="_blank" rel="noopener noreffer">AUR 仓库</a></li>
+<li><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreffer">Arch Linux 中文社区仓库</a></li>
+<li><a href="https://github.com/Jguer/yay" target="_blank" rel="noopener noreffer">yay - Yet another Yogurt - An AUR Helper written in Go </a></li>
+<li><a href="https://panqiincs.me/2019/06/05/after-installing-manjaro/" target="_blank" rel="noopener noreffer">安装Manjaro之后的配置 </a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Fcitx5_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">Arch Linux Wiki - Fcitx5</a></li>
+</ul>]]></description></item><item><title>WebSocket、HTTP/2 与 gRPC</title><link>https://ryan4yin.space/websocket-http2-and-grpc/</link><pubDate>Mon, 11 Feb 2019 18:26:36 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/websocket-http2-and-grpc/</guid><description><![CDATA[<h2 id="一websocket">一、WebSocket</h2>
+<p>WebSocket 是一个双向通信协议，它在握手阶段采用 HTTP/1.1 协议（暂时不支持 HTTP/2）。</p>
+<p>握手过程如下：</p>
+<ol>
+<li>首先客户端向服务端发起一个特殊的 HTTP 请求，其消息头如下：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">GET /chat HTTP/1.1  // 请求行
+Host: server.example.com
+Upgrade: websocket  // required
+Connection: Upgrade // required
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ== // required，一个 16bits 编码得到的 base64 串
+Origin: http://example.com  // 用于防止未认证的跨域脚本使用浏览器 websocket api 与服务端进行通信
+Sec-WebSocket-Protocol: chat, superchat  // optional, 子协议协商字段
+Sec-WebSocket-Version: 13
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>如果服务端支持该版本的 WebSocket，会返回 101 响应，响应标头如下：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">HTTP/1.1 101 Switching Protocols  // 状态行
+Upgrade: websocket   // required
+Connection: Upgrade  // required
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo= // required，加密后的 Sec-WebSocket-Key
+Sec-WebSocket-Protocol: chat // 表明选择的子协议
+</code></pre></td></tr></table>
+</div>
+</div><p>握手完成后，接下来的 TCP 数据包就都是 WebSocket 协议的帧了。</p>
+<p>可以看到，这里的握手不是 TCP 的握手，而是在 TCP 连接内部，从 HTTP/1.1 upgrade 到 WebSocket 的握手。</p>
+<p>WebSocket 提供两种协议：不加密的 <code>ws://</code> 和 加密的 <code>wss://</code>. 因为是用 HTTP 握手，它和 HTTP 使用同样的端口：ws 是 80（HTTP），wss 是 443（HTTPS）</p>
+<p>在 Python 编程中，可使用 <a href="https://github.com/aaugustin/websockets" target="_blank" rel="noopener noreffer">websockets</a> 实现的异步 WebSocket 客户端与服务端。此外 aiohttp 也提供了 WebSocket 支持。</p>
+<p><strong>Note</strong>：如果你搜索 Flask 的 WebScoket 插件，得到的第一个结果很可能是 <a href="https://github.com/miguelgrinberg/python-socketio" target="_blank" rel="noopener noreffer">Flask-SocketIO</a>。但是 <strong>Flask-ScoektIO</strong> 使用的是它独有的 SocketIO 协议，并不是标准的 WebSocket。只是它刚好提供与 WebSocket 相同的功能而已。</p>
+<p>SocketIO 的优势在于只要 Web 端使用了 SocketIO.js，就能支持该协议。而纯 WS 协议，只有较新的浏览器才支持。对于客户端非 Web 的情况，更好的选择可能是使用 Flask-Sockets。</p>
+<h3 id="js-api">JS API</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// WebSocket API
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="s1">&#39;ws://websocket.example.com&#39;</span><span class="p">);</span>
+
+<span class="c1">// Show a connected message when the WebSocket is opened.
+</span><span class="c1"></span><span class="nx">socket</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;WebSocket is connected.&#39;</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Handle messages sent by the server.
+</span><span class="c1"></span><span class="nx">socket</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// Handle any error that occurs.
+</span><span class="c1"></span><span class="nx">socket</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;WebSocket Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="二http2">二、HTTP/2</h2>
+<p>HTTP/2 于 2015 年标准化，主要目的是优化性能。其特性如下：</p>
+<ol>
+<li>二进制协议：HTTP/2 的消息头使用二进制格式，而非文本格式。并且使用专门设计的 HPack 算法压缩。</li>
+<li>多路复用（Multiplexing）：就是说 HTTP/2 可以重复使用同一个 TCP 连接，并且连接是多路的，多个请求或响应可以同时传输。
+<ul>
+<li>对比之下，HTTP/1.1 的长连接也能复用 TCP 连接，但是只能串行，不能“多路”。</li>
+</ul>
+</li>
+<li>服务器推送：服务端能够直接把资源推送给客户端，当客户端需要这些文件的时候，它已经在客户端了。（该推送对 Web App 是隐藏的，由浏览器处理）</li>
+<li>HTTP/2 允许取消某个正在传输的数据流（通过发送 RST_STREAM 帧），而不关闭 TCP 连接。
+<ul>
+<li>这正是二进制协议的好处之一，可以定义多种功能的数据帧。</li>
+</ul>
+</li>
+</ol>
+<p>它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 <code>from disk cache</code> 或者 <code>from memroy cache</code>.</p>
+<p>Chrome 可以通过如下方式查看请求使用的协议：
+</p>
+<blockquote>
+<p>2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知乎、bilibili、GIthub 使用了 <code>wss</code> 协议，也有很多网站使用了 SSE（格式如 <code>data:image/png;base64,&lt;base64 string&gt;</code>）
+而且很多网站都有使用 HTTP/2 + QUIC，该协议的新名称是 HTTP/3，它是基于 UDP 的 HTTP 协议。</p>
+</blockquote>
+<h3 id="sse">SSE</h3>
+<p>服务端推送事件，是通过 HTTP 长连接进行信息推送的一个功能。
+它首先由浏览器向服务端建立一个 HTTP 长连接，然后服务端不断地通过这个长连接将消息推送给浏览器。JS API 如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// create SSE connection
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventSource</span><span class="p">(</span><span class="s1">&#39;/dates&#39;</span><span class="p">);</span>
+
+<span class="c1">// 连接建立时，这些 API 和 WebSocket 的很相似
+</span><span class="c1"></span><span class="nx">source</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// handle open event
+</span><span class="c1"></span><span class="p">};</span>
+
+<span class="c1">// 收到消息时（它只捕获未命名 event）
+</span><span class="c1"></span><span class="nx">source</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>  <span class="c1">// 发送过来的实际数据（string）
+</span><span class="c1"></span>  <span class="kd">var</span> <span class="nx">origin</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">origin</span><span class="p">;</span>  <span class="c1">// 服务器端URL的域名部分，即协议、域名和端口。
+</span><span class="c1"></span>  <span class="kd">var</span> <span class="nx">lastEventId</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">lastEventId</span><span class="p">;</span>  <span class="c1">// 数据的编号，由服务器端发送。如果没有编号，这个属性为空。
+</span><span class="c1"></span>  <span class="c1">// handle message
+</span><span class="c1"></span><span class="p">};</span>
+
+<span class="nx">source</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// handle error event
+</span><span class="c1"></span><span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="具体的实现">具体的实现</h3>
+<p>在收到客户端的 SSE 请求（HTTP 协议）时，服务端返回的响应首部如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Content-Type: text/event-stream
+Cache-Control: no-cache
+Connection: keep-alive
+</code></pre></td></tr></table>
+</div>
+</div><p>而 body 部分，SSE 定义了四种信息：</p>
+<ol>
+<li><code>data</code>：数据栏</li>
+<li><code>event</code>：自定义数据类型</li>
+<li><code>id</code> ：数据 id</li>
+<li><code>retry</code>：最大间隔时间，超时则重新连接</li>
+</ol>
+<p>body 举例说明：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">: 这种格式的消息是注释，会被忽略\n\n
+: 通常服务器每隔一段时间就会发送一个注释，防止超时 retry\n\n
+
+: 下面这个是一个单行数据\n\n
+data: some text\n\n
+
+: 下面这个是多行数据，在客户端会重组成一个 data\n\n
+data: {\n
+data: &#34;foo&#34;: &#34;bar&#34;,\n
+data: &#34;baz&#34;, 555\n
+data: }\n\n
+
+: 这是一个命名 event，只会被事件名与之相同的 listener 捕获\n\n
+event: foo\n
+data: a foo event\n\n
+
+: 未命名事件，会被 onmessage 捕获\n\n
+data: an unnamed event\n\n
+
+event: bar\n
+data: a bar event\n\n
+
+: 这个 id 对应 event.lastEventId\n\n
+id: msg1\n
+data: message\n\n
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="websockethttp2-与-sse-的比较">WebSocket、HTTP/2 与 SSE 的比较</h3>
+<ol>
+<li>
+<p>加密与否：</p>
+<ul>
+<li>WebSocket 支持明文通信 <code>ws://</code> 和加密 <code>wss://</code>，</li>
+<li>而 HTTP/2 协议虽然没有规定必须加密，但是<a href="https://en.wikipedia.org/wiki/HTTP/2#Encryption" target="_blank" rel="noopener noreffer">主流浏览器都只支持 HTTP/2 over TLS</a>.</li>
+<li>SSE 是使用的 HTTP 协议通信，支持 http/https</li>
+</ul>
+</li>
+<li>
+<p>消息推送：</p>
+<ul>
+<li>WebSocket是全双工通道，可以双向通信。而且消息是直接推送给 Web App.</li>
+<li>SSE 只能<strong>单向串行地</strong>从服务端将数据推送给 Web App.</li>
+<li>HTTP/2 虽然也支持 Server Push，但是服务器只能主动将资源推送到客户端缓存！并不允许将数据推送到客户端里跑的 Web App 本身。服务器推送只能由浏览器处理，不会在应用程序代码中弹出服务器数据，这意味着应用程序没有 API 来获取这些事件的通知。
+<ul>
+<li>为了接近实时地将数据推送给 Web App， HTTP/2 可以结合 SSE（Server-Sent Event）使用。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>WebSocket 在需要接近实时双向通信的领域，很有用武之地。而 HTTP/2 + SSE 适合用于展示实时数据。</p>
+<p>另外在客户端非浏览器的情况下，使用不加密的 HTTP/2 也是可能的。</p>
+<h3 id="requests-查看-http-协议版本号">requests 查看 HTTP 协议版本号</h3>
+<p>可以通过 <code>resp.raw.version</code> 得到响应的 HTTP 版本号：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; <span class="nv">resp</span> <span class="o">=</span> requests.get<span class="o">(</span><span class="s2">&#34;https://zhihu.com&#34;</span><span class="o">)</span>      
+&gt;&gt;&gt; resp.raw.version
+<span class="m">11</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>但是 requests 默认使用 HTTP/1.1，并且不支持 HTTP/2.（不过这也不是什么大问题，HTTP/2 只是做了性能优化，用 HTTP/1.1 也就是慢一点而已。）</p>
+<h2 id="三grpc-协议">三、gRPC 协议</h2>
+<p>gRPC 是一个远程过程调用框架，默认使用 protobuf3 进行数据的高效序列化与 service 定义，使用 HTTP/2 进行数据传输。
+这里讨论的是 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreffer">gRPC over HTTP/2</a> 协议。</p>
+<p>目前 gRPC 主要被用在微服务通信中，但是因为其优越的性能，它也很契合游戏、loT 等需要高性能低延迟的场景。</p>
+<p>其实光从协议先进程度上讲，gRPC 基本全面超越 REST:</p>
+<ol>
+<li>使用二进制进行数据序列化，比 json 更节约流量、序列化与反序列化也更快。</li>
+<li>protobuf3 要求 api 被完全清晰的定义好，而 REST api 只能靠程序员自觉定义。</li>
+<li>gRPC 官方就支持从 api 定义生成代码，而 REST api 需要借助 openapi-codegen 等第三方工具。</li>
+<li>支持 4 种通信模式：一对一(unary)、客户端流、服务端流、双端流。更灵活</li>
+</ol>
+<p>只是目前 gRPC 对 broswer 的支持仍然不是很好，如果你需要通过浏览器访问 api，那 gRPC 可能不是你的菜。
+如果你的产品只打算面向 App 等可控的客户端，可以考虑上 gRPC。</p>
+<p>对同时需要为浏览器和 APP 提供服务应用而言，也可以考虑 APP 使用 gRPC 协议，而浏览器使用 API 网关提供的 HTTP 接口，在 API 网关上进行 HTTP - gRPC 协议转换。</p>
+<h3 id="grpc-over-http2-定义">gRPC over HTTP/2 定义</h3>
+<p>详细的定义参见官方文档 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreffer">gRPC over HTTP/2</a>.</p>
+<p>这里是简要说明几点：</p>
+<ol>
+<li>gRPC 完全隐藏了 HTTP/2 本身的 method、headers、path 等语义，这些信息对用户而言完全不可见了。
+<ol>
+<li>请求统一使用 POST，响应状态统一为 200。只要响应是标准的 gRPC 格式，响应中的 HTTP 状态码将被完全忽略。</li>
+</ol>
+</li>
+<li>gRPC 定义了自己的 status 状态码、格式固定的 path、还有它自己的 headers。</li>
+</ol>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.oschina.net/translate/how-does-javascript-actually-work-part-5" target="_blank" rel="noopener noreffer">深入探索 WebSockets 和 HTTP/2</a></li>
+<li><a href="https://www.cnblogs.com/etoah/p/5891285.html" target="_blank" rel="noopener noreffer">HTTP/2 特性与抓包分析</a></li>
+<li><a href="http://www.cnblogs.com/goody9807/p/4257192.html" target="_blank" rel="noopener noreffer">SSE：服务器发送事件,使用长链接进行通讯</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank" rel="noopener noreffer">Using server-sent events - MDN</a></li>
+<li><a href="https://caniuse.com/#search=http2" target="_blank" rel="noopener noreffer">Can I Use HTTP/2 on Browsers</a></li>
+<li><a href="https://stackoverflow.com/questions/37012486/python-3-x-how-to-get-http-version-using-requests-library" target="_blank" rel="noopener noreffer">Python 3.x how to get http version (using requests library)</a></li>
+<li><a href="https://www.zhihu.com/question/20215561/answer/40316953" target="_blank" rel="noopener noreffer">WebSocket 是什么原理？</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/26407649" target="_blank" rel="noopener noreffer">原生模块打造一个简单的 WebSocket 服务器</a></li>
+<li><a href="https://cloud.google.com/blog/products/api-management/understanding-grpc-openapi-and-rest-and-when-to-use-them" target="_blank" rel="noopener noreffer">Google Cloud - API design: Understanding gRPC, OpenAPI and REST and when to use them</a></li>
+</ul>
+]]></description></item><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/sql-basic/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/sql-basic/</guid><description><![CDATA[<blockquote>
+<p>本笔记整理自<a href="https://book.douban.com/subject/24841239/" target="_blank" rel="noopener noreffer">《SQL 基础教程》</a>、<a href="https://book.douban.com/subject/3354490/" target="_blank" rel="noopener noreffer">《MySQL 必知必会》</a>和网上资料。个人笔记不保证正确。</p>
+</blockquote>
+<h2 id="一基础">一、基础</h2>
+<p>SQL，即结构化查询语言，是为访问与操作关系数据库中的数据而设计的语言。</p>
+<ol>
+<li>关系数据库以行(row)为单位读写数据</li>
+<li>SQL 根据功能的不同，可分为三类（其中DML用得最多，增删查改嘛）
+<ol>
+<li>DDL(Data Definition Language, 数据定义语言): CREATE/DROP/ALTER</li>
+<li>DML(Data Manipulation Language, 数据操作语言): SELECT/INSERT/UPDATE/DELETE</li>
+<li>DCL(Data Control Language, 数据控制语言): COMMIT/ROLLBACK/GRANT/REVOKE</li>
+</ol>
+</li>
+<li>SQL 语句要以分号结尾。换行在 SQL 中不表示结束，而等同于空格。</li>
+<li>SQL 不区分**关键字(Keyword)**的大小写，但是描述符就不一定了。
+<ul>
+<li>这里有个坑：MySQL 中，数据库和表其实就是数据目录下的目录和文件，因而，<strong>操作系统的敏感性决定数据库名和表名 是否大小写敏感</strong>。这就意味着<strong>数据库名</strong>和<strong>表名</strong>在 Windows 中是大小写不敏感的，而在大多数类型的 Unix/Linux 系统中是大小写敏感的。（注意仅指数据库名和表名）可通过修改配置文件的<code>lower_case_table_names</code>属性来统一这一行为。</li>
+<li>而<strong>字段名</strong>、<strong>字段内容</strong>都是内部数据，是操作系统无关的。它们的大小写敏感性，由 MySQL 的的校对（COLLATE）规则来控制。该规则体现在 MySQL 的 校对字符集（COLLATION）的后缀上：比如 utf8字符集，<code>utf8_general_ci</code>表示不区分大小写，这个是 utf8 字符集默认的校对规则；<code>utf8_general_cs</code> 表示区分大小写，<code>utf8_bin</code> 表示二进制比较，同样也区分大小写 。</li>
+</ul>
+</li>
+<li>SQL 中的字符串和日期需要用单引号引用起来，日期有特定格式<code>年-月-日</code></li>
+</ol>
+<p>修改字符集：<code>set names &lt;字符集名&gt;</code>
+记住在 MySQL 中，utf-8mb4 才是完全的 utf-8字符集。</p>
+<h2 id="二ddl">二、DDL</h2>
+<h3 id="1-数据库的创建和删除">1. 数据库的创建和删除</h3>
+<ol>
+<li>创建数据库</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">DATABASE</span> <span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-创建表">2. 创建表：</h3>
+<h4 id="关系表的设计">关系表的设计</h4>
+<p>关系表的设计，要确保把信息分解成多个表，一类信息一个表，各表通过某些常用的，基本不会改变的值（即关系表设计中的关系，也常称为外键）互相关联。尽量不要有冗余数据。</p>
+<h4 id="语句">语句：</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+<span class="p">(</span>
+    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">3</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="p">...</span>
+    <span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">persons</span><span class="o">`</span>
+<span class="p">(</span>
+    <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">INT</span> <span class="n">UNSIGNED</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+    <span class="o">`</span><span class="n">name</span><span class="o">`</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>后面的是设置引擎和默认字符集。工作上，表的设计一定要深思熟虑，因为改起来很困难。</p>
+<h4 id="字段类型mysql">字段类型（MySQL）</h4>
+<p>有四类数据类型：字符串、数字、日期、二进制。它们又根据数据长度的区别，下分为多个类型。</p>
+<ol>
+<li>字符串：
+</li>
+<li>数字
+</li>
+<li>日期
+</li>
+<li>二进制
+</li>
+</ol>
+<h4 id="约束">约束</h4>
+<p>SQL 约束是除了数据类型之外，对列中数据追加的限定条件。</p>
+<ol>
+<li>类型约束：<code>NOT NULL</code>、<code>AUTO_INCREMENT</code>、<code>UNSIGNED</code>（这个只 MySQL 支持）</li>
+<li>默认值：<code>DEFAULT</code>，举例 <code>&lt;列名3&gt; VARCHAR(32) NOT NULL DEFAULT &quot;los angeles&quot;</code></li>
+<li>表约束：<code>PRIMARY KEY</code> 主键约束（主键默认 UNIQUE 且 NOT NULL）</li>
+</ol>
+<p>此外还有 <code>FOREIGN KEY</code> 和 <code>CHECK</code> 两个约束语句，在<a href="https://www.cnblogs.com/kirito-c/p/10295693.html" target="_blank" rel="noopener noreffer">进阶笔记</a>中介绍。</p>
+<blockquote>
+<p>P.S. 字段约束也可以写成表约束（比如主键约束），而反过来很可能不行。</p>
+</blockquote>
+<h3 id="3-删除表和更新表定义">3. 删除表和更新表定义</h3>
+<ol>
+<li>删除表（危险操作）
+<ul>
+<li>删除整个表：</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>- 只清空表内数据，但留下表：
+</code></pre>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">TRUNCATE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>  <span class="c1">-- 非标准SQL语句，但是大部分DB都支持。（可能不能ROLLBACK）
+</span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>更新表定义（麻烦的操作）
+所以所创建表前要仔细想好格式了，更新表定义是不得已才能为之。
+添加列定义：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列的约束</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>删除列定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="三dml">三、DML</h2>
+<blockquote>
+<p>万恶之源 NULL</p>
+</blockquote>
+<h3 id="1-查询重点">1. 查询（重点）</h3>
+<ol>
+<li>基本语句：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">SELECT &lt;字段1&gt; AS &lt;别名1&gt;,
+     &lt;字段2&gt; AS &lt;别名2&gt;,
+     ...
+FROM &lt;表名&gt;
+WHERE &lt;过滤条件&gt;;
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>可<strong>用 <code>DISTINCT</code> 修饰列名</strong>，使查询结果无重。例：<code>SELECT DISTINCT &lt;列名&gt; FROM &lt;表名&gt;</code></li>
+<li>过滤条件可使用比较运算(&lt;&gt;、=等)和逻辑运算(AND OR NOT).</li>
+<li>过滤条件中，<strong>比较运算会永远忽略 NULL 值</strong>，如果需要对 NULL 值做操作，需要使用 <strong>IS NULL</strong> 或 <strong>IS NOT NULL</strong>（说忽略也许不太准确，NULL 既不为真也不为假，反正少用NULL。。）</li>
+<li>包含NULL的四则运算，得到的结果总为NULL</li>
+</ol>
+<h3 id="2-聚合与排序重点">2. 聚合与排序（重点）</h3>
+<h4 id="聚合函数">聚合函数</h4>
+<p>即对列进行统计分析的函数，主要有五个：</p>
+<ol>
+<li>COUNT：计算列的行数。（只有<code>COUNT(*)</code>会计算NULL行）</li>
+<li>SUM：求该列之和。</li>
+<li>AVG：求该列的平均值。</li>
+<li>MAX/MIN：求该列的 最大/最小 值</li>
+</ol>
+<p>NOTE：</p>
+<ol>
+<li><strong>聚合函数计算时会排除所有NULL行。只有COUNT(*)例外，NULL行也会被它计数。</strong></li>
+<li>MAX/MIN 几乎适用于所有数据类型的列（对非数值型，以其二进制值来排序），而SUM/AVG只能用于数值类型的列。</li>
+<li>聚合函数操作的列，也能用DISTINCT修饰。例：<code>SELECT COUNT(DISTINCT &lt;列名&gt;) FROM &lt;表名&gt;</code></li>
+<li>聚合函数只能用于SELECT子句和还没讲的HAVING子句（以及 ORDER BY 子句）中。</li>
+</ol>
+<h4 id="分组group-by">分组(GROUP BY)</h4>
+<p>分组以聚合键为分类标准，将数据分为多个逻辑组，从而能分别对每个组进行聚合运算。（分组是为了分类聚合）</p>
+<ol>
+<li>若出现了 GROUP BY 子句，查询结果一定是每一组一行。</li>
+<li>GROUP BY 会将 NULL 作为一组特定数据，显示为空。</li>
+</ol>
+<h4 id="聚合对select子句的限制">聚合对SELECT子句的限制</h4>
+<p>首先要理解的是：</p>
+<ol>
+<li>聚合函数的操作对象为某一列，而产生的结果只有一个值。</li>
+<li>GROUP BY 的操作对象为一列或者多列，产生的结果呢，是每一组一个值。</li>
+</ol>
+<p>因此为了避免歧义，只要使用了聚合函数或 GROUP BY 二者之一，SELECT 子句就只能包含：</p>
+<ol>
+<li>常数</li>
+<li>其他聚合函数（该聚合函数的操作对象可以为其他列）</li>
+<li>如果使用了 GROUP BY 子句，还能包括该子句所指定的列名。（也就是聚合键）但是<strong>绝不能包含其他的列名</strong>，因为这会有歧义。</li>
+</ol>
+<p>此外，还有一个问题是由 SQL 的执行顺序引起的。应该能很容易猜到，<strong>SELECT 语句的执行顺序和书写顺序是不一致的</strong>。
+查询应该是从表开始，所以 FROM 语句一定先执行。然后应该要过滤(WHERE)，再是分组(GROUP BY)，最后才是 SELECT 语句。（就已经学到的子句而言，顺序是这样）
+因此按理说，<strong>SELECT 语句 定义的别名，是不能在 GROUP BY 里使用的</strong>。（也有些DB支持该用法，但不通用）</p>
+<h4 id="对聚合结果进行过滤having">对聚合结果进行过滤(HAVING)</h4>
+<p>从刚刚说过的SQL执行顺序可见，WHERE要比GROUP BY先执行，因此如果想过滤分组后的结果，不能用它。而应该使用 HAVING 子句。
+HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同也就决定了它们的用途不同。</p>
+<p>NOTE：</p>
+<ol>
+<li>有时候，会发现某个过滤条件，不论是先执行（就是写在WHERE子句中）还是后执行（写在HAVING中）都没问题，这时候应该将它写在WHERE子句中，这样GROUP BY操作的数据会更少，处理更快。</li>
+<li>HAVING 子句的元素，也存在和 SELECT 子句同样的限制。不能使用聚合键以外的列名。</li>
+</ol>
+<h4 id="排序order-by">排序(ORDER BY)</h4>
+<p><strong>ORDER BY 子句在 SELECT 子句之后执行</strong>，因此它能使用 SELECT 子句中定义的别名。（而 GROUP BY 之前已经说过不能用别名了）
+格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">&lt;</span><span class="err">字段</span><span class="mi">1</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="o">&lt;</span><span class="err">字段</span><span class="mi">2</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="p">...</span>
+<span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+<span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">1</span><span class="o">&gt;</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>
+<span class="k">HAVING</span> <span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">2</span><span class="o">&gt;</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>  <span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>多排序键/列：指定多排序键时的排序规则为：<strong>优先使用左侧的列，如果该列存在相同值，再接着参考右侧的键，依此类推。</strong>（如果左侧键值不同，右侧的键就不会被使用了）</li>
+<li>NULL 值的顺序：<strong>排序键中出现了 NULL 值时，这类值会在结果的开头或结尾汇总</strong>，究竟是排在开头还是结尾，并没有特殊规定。</li>
+<li>ORDER BY 子句只影响结果的先后顺序，因此排序键可以是结果集以外的东西，比如其他的列，或者使用了 GROUP BY 时，还能用聚合函数。</li>
+</ol>
+<h3 id="3-数据的增删改">3. 数据的增、删、改</h3>
+<h4 id="插入insert-into-也算用的多了">插入(INSERT INTO) 也算用的多了</h4>
+<p>语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+    <span class="p">(</span><span class="err">列名</span><span class="mi">1</span><span class="p">,</span> <span class="err">列名</span><span class="mi">2</span><span class="p">...)</span>
+    <span class="k">VALUES</span> <span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span> <span class="err">值</span><span class="mi">2</span><span class="p">...);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>或者也可以使用 SELECT 语句来替代 VALUES 子句，达到将 SELECT 到的结果集插入某表的效果。（但是不要用ORDER BY，因为结果是<strong>集</strong>，没有顺序，排序是徒劳无功的）
+插入时主键不能重复，否则会报错。（因此如果需要包含重复数据，一般都会定义一个自增的id字段）</p>
+<h4 id="删除delete">删除(DELETE)</h4>
+<p>清空表（危险操作，而且效率不如 TRUNCATE）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>条件删除：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+    <span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span> 
+</code></pre></td></tr></table>
+</div>
+</div><p>因此使用DELETE时，一定要记得带WHERE，不然就好玩了。。</p>
+<h4 id="更新update">更新(UPDATE)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
+    <span class="k">SET</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">算术表达式</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="p">...</span>
+    <span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>同 DELETE 一样，不带 WHERE 子句的 UPDATE 是很危险的。</p>
+<h2 id="四dcl---事务处理mysql">四、DCL - 事务处理(MySQL)</h2>
+<p><strong>事务是一系列不可分割的数据库操作</strong>，也就是说，这一系列操作要么全部执行，要么全部不执行。如果执行过程中发生了问题（检查执行状态），可以通过执行 ROLLBACK 回滚到该事务执行前的状态。（<strong>注意并不会自动回滚</strong>）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+    <span class="c1">-- do somthing
+</span><span class="c1"></span><span class="n">COMMIT</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>START TRANSACTION</code>: 标识事务的开始</li>
+<li><code>COMMIT</code>：提交事务。一旦提交，所执行过的操作就已成定论，恢复不了了。</li>
+<li><code>ROLLBACK</code>：事务回滚，**只能回滚未 COMMIT 的 DML 操作！**也就是说只能用在 <code>START TRANSACTION</code> 和 <code>COMMIT</code> 之间，并且只能回滚 <code>INSERT/UPDATE/DELETE</code>。（回滚 SELECT 没啥意义）</li>
+<li><code>SAVEPOINT &lt;保留点&gt;</code> 和 <code>ROLLBACK TO &lt;保留点&gt;</code>：同样只能用在 <code>START TRANSACTION</code> 和 <code>COMMIT</code> 之间，其优势在于，<code>ROLLBACK TO</code> 可以指定回滚到某特定保留点，更灵活，而 <code>ROLLBACK</code> 只能回滚到事务开始前。</li>
+</ul>
+<p>需要注意的有：</p>
+<ol>
+<li><code>COMMIT</code> 和 <code>ROLLBACK</code> 语句也是事务的结束，因此如果执行了 <code>ROLLBACK</code>，那它与 <code>COMMIT</code> 之间的内容会被跳过。（在这一点上，它相当于大多数 PL 的 return）</li>
+<li><strong>如果事务执行出现问题，问题行后面的所有语句都不会被执行！包括 <code>COMMIT</code> 和 <code>ROLLBACK</code>！</strong> 如果想用纯 SQL 实现事务原子性，必须使用存储过程检查执行状态！举例如下：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CREATE PROCEDURE my_test()
+    BEGIN
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK  -- 检测到 SQLEXCEPTION 则 rollback，然后 exit
+        START TRANSACTION
+            INSERT INTO table_test VALUES(1, &#39;A&#39;)
+            INSERT INTO table_test VALUES(1, &#39;B&#39;)  -- 这里主键冲突，会触发 SQLEXCEPTION
+
+            COMMIT
+    END
+
+CALL my_test()
+</code></pre></td></tr></table>
+</div>
+</div><p>或者<strong>在 PL 中通过异常处理执行 <code>ROLLBACK</code></strong>。（事务虽然中止了，但并未结束！所以仍然可以 <code>ROLLBACK</code> 或者 <code>COMMIT</code>）</p>
+<h3 id="数据何时被提交到数据库">数据何时被提交到数据库</h3>
+<ol>
+<li>显式提交：在事务中使用 <code>COMMIT</code> 提交数据操作被称为显式提交</li>
+<li>隐式提交：非 DML 操作会被立即提交，也就是说这些语句本身就隐含了提交语义</li>
+<li>自动提交： 如果 <code>AUTOCOMMIT</code> 被设置为 <code>ON</code>，当前 session 中的 DML 语句会在执行后被自动提交（<code>START TRANSACTION</code> 内部的 DML 除外，在它内部必须显式 <code>COMMIT</code>）</li>
+</ol>
+<p>所有的 DML 语句都是要显式提交的，MySQL session 的 <code>AUTOCOMMIT</code> 默认为 <code>ON</code>，所以 DML 会被自动提交。</p>
+<blockquote>
+<p>P.S. 许多语言的数据库 API 会定义自己的事务操作，不一定与这里一致。</p>
+</blockquote>
+]]></description></item><item><title>欧几里得算法求最大公约数(GCD)的数学原理</title><link>https://ryan4yin.space/mathematics-in-euclidean-gcd/</link><pubDate>Fri, 26 May 2017 23:58:53 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/mathematics-in-euclidean-gcd/</guid><description><![CDATA[<p>很早就学过欧几里得算法，但是一直不知道它的原理。几乎每本算法书都会提到它，但是貌似只有数学书上才会见到它的原理。。。</p>
+<p>前段时间粗粗看了点数论（《什么是数学》），惊讶于这个原理的奇妙。现在把它通俗地写下来，以免自己忘记。</p>
+<p>欧几里得算法是求两个数的最大公约数(Greatest Common Divisor (GCD))的算法，我们首先假设<strong>有两个数 $a$ 和 $b$，其中 $a$ 是不小于 $b$ 的数</strong>，</p>
+<p>记 $a$ 被 $b$ 除的余数为 $r$，那么 $a$ 可以写成这样的形式：</p>
+<p>$$a = bq + r$$</p>
+<p>其中 $q$ 是整数（我们不需要去管 $q$ 到底是多少，这和我们的目标无关）。</p>
+<p>现在假设 $a$ 和 $b$ 的一个约数为 $u$，那么 $a$ 和 $b$ 都能被 $u$ 整除，即</p>
+<p>$$a = su$$
+$$b = tu$$</p>
+<p>$s$ 和 $t$ 都是整数（同样的，我们只需要知道存在这样的整数 $s$ 和 $t$ 就行）。</p>
+<p>这样可以得出</p>
+<p>$$r = a - bq = su - (tu)q = (s - tq)u$$</p>
+<p>所以 $r$ 也能被 $u$ 整除，一般规律如下</p>
+<blockquote>
+<p>$a$ 和 $b$ 的约数也整除它们的余数 $r$，所以 $a$ 和 $b$ 的任一约数同时也是 $b$ 和 $r$ 的约数。  —— 条件一</p>
+</blockquote>
+<p>反过来可以得出</p>
+<blockquote>
+<p>$b$ 和 $r$ 的任一约数同时也是 $a$ 和 $b$ 的约数。  ——条件二</p>
+</blockquote>
+<p>这是因为对 $b$ 和 $r$ 每一个约数 $v$，有</p>
+<p>$$b = kv$$</p>
+<p>$$r = cv$$</p>
+<p>于是有</p>
+<p>$$a = bq + r = (kv)q + cv = (kq + c)v$$</p>
+<p>由条件一和条件二可知</p>
+<blockquote>
+<p>$a$ 和 $b$ 的约数的集合，全等于 $b$ 和 $r$ 的约数的集合。</p>
+</blockquote>
+<p>于是</p>
+<blockquote>
+<p>$a$ 和 $b$ 的最大公约数，就是 $b$ 和 $r$ 的最大公约数。</p>
+</blockquote>
+<p>接下来用递推法，</p>
+<p>$a \div b$ 余 $r$，现在设</p>
+<p>$b \div r$ 余 $r_1$</p>
+<p>$r \div r_1$ 余 $r_2$</p>
+<p>……</p>
+<p>$r_{n-3} \div r_{n-2}$ 余 $r_{n-1}$</p>
+<p>$r_{n-2} \div r_{n-1}$ 余 $r_n=0$</p>
+</br>
+<p>因为 $a \ge b$，可以看出余数 $r_n$ 会越来越小，最终变成 $0$.</p>
+<p>当 $r_{n-1} \neq 0$ 且 $r_n = 0$ 时，可知 $r_{n-2}$ 可被 $r_{n-1}$ 整除（余数为 $0$ 嘛）</p>
+<p>此时 $r_{n-2}$ 和 $r_{n-1}$ 的约数就只有：$r_{n-1}$ 和 $r_{n-1}$ 的因数，所以他们的最大公约数就是 $r_{n-1}$！</p>
+<p>所以 $r_{n-1}$ 就是 $a$ 和 $b$ 的最大公约数。（若 $r = 0$，则 $b$ 为最大公约数）</p>
+<p>这个递推法写成c语言函数是这样的（比推导更简洁&hellip;）:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">Gcd</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">M</span><span class="p">,</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">N</span><span class="p">){</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">Rem</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">N</span><span class="p">){</span>
+        <span class="n">Rem</span> <span class="o">=</span> <span class="n">M</span> <span class="o">%</span> <span class="n">N</span><span class="p">;</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">N</span><span class="p">;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">Rem</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">Rem</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以发现这里没有要求 <code>M&gt;=N</code>，这是因为如果那样，循环会自动交换它们的值。</p>
+<blockquote>
+<p>P.S. 此外，还有最小公倍数(Least Common Multiple (LCM))算法，详见 <a href="https://www.mathportal.org/calculators/numbers-calculators/gcd-lcm-calculator.php" target="_blank" rel="noopener noreffer">GCD and LCM calculator</a></p>
+</blockquote>
 ]]></description></item></channel></rss>

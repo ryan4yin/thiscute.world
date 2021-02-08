@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>HTTP/2 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/http/2/</link><description>HTTP/2 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><atom:link href="https://ryan4yin.space/tags/http/2/" rel="self" type="application/rss+xml"/><item><title>WebSocket、HTTP/2 与 gRPC</title><link>https://ryan4yin.space/websocket-http2-and-grpc/</link><pubDate>Mon, 11 Feb 2019 18:26:36 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/websocket-http2-and-grpc/</guid><description><![CDATA[<h2 id="一websocket">一、WebSocket</h2>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>HTTP/2 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/http/2/</link><description>HTTP/2 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><atom:link href="https://ryan4yin.space/tags/http/2/" rel="self" type="application/rss+xml"/><item><title>WebSocket、HTTP/2 与 gRPC</title><link>https://ryan4yin.space/websocket-http2-and-grpc/</link><pubDate>Mon, 11 Feb 2019 18:26:36 +0800</pubDate><author>ryan4yin</author><guid>https://ryan4yin.space/websocket-http2-and-grpc/</guid><description><![CDATA[<h2 id="一websocket">一、WebSocket</h2>
 <p>WebSocket 是一个双向通信协议，它在握手阶段采用 HTTP/1.1 协议（暂时不支持 HTTP/2）。</p>
 <p>握手过程如下：</p>
 <ol>
@@ -112,9 +112,7 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 </ol>
 <p>它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 <code>from disk cache</code> 或者 <code>from memroy cache</code>.</p>
 <p>Chrome 可以通过如下方式查看请求使用的协议：
-
-
-<div style="text-align: center"></div></p>
+</p>
 <blockquote>
 <p>2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知乎、bilibili、GIthub 使用了 <code>wss</code> 协议，也有很多网站使用了 SSE（格式如 <code>data:image/png;base64,&lt;base64 string&gt;</code>）
 而且很多网站都有使用 HTTP/2 + QUIC，该协议的新名称是 HTTP/3，它是基于 UDP 的 HTTP 协议。</p>
