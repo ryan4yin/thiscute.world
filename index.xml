@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Ryan4Yin's Space</title><link>https://ryan4yin.space/</link><description>Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sat, 06 Feb 2021 08:46:46 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/index.xml" rel="self" type="application/rss+xml"/><item><title>我在创业公司做技术一年多的一点体会</title><link>https://ryan4yin.space/end-of-the-first-round/</link><pubDate>Sat, 06 Feb 2021 08:46:46 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/end-of-the-first-round/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Ryan4Yin's Space</title><link>https://ryan4yin.space/</link><description>Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 06 Feb 2021 08:46:46 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/index.xml" rel="self" type="application/rss+xml"/><item><title>我在创业公司做技术一年多的一点体会</title><link>https://ryan4yin.space/end-of-the-first-round/</link><pubDate>Sat, 06 Feb 2021 08:46:46 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/end-of-the-first-round/</guid><description><![CDATA[<blockquote>
 <p>本文可能充斥着学生型思维，请见谅。</p>
 </blockquote>
 <h2 id="人有悲欢离合月有阴晴圆缺">人有悲欢离合，月有阴晴圆缺</h2>
@@ -90,7 +90,7 @@
 <blockquote>
 <p>拆破玉笼飞彩凤，顿开金锁走蛟龙。</p>
 </blockquote>
-]]></description></item><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
+]]></description></item><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
 <p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreffer">Argo Documentation</a></p>
 </blockquote>
 <p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
@@ -117,10 +117,12 @@
 <p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreffer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreffer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
 <p><strong>我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
 <p>一个复杂工作流的示例如下：</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="https://github.com/argoproj/argo/issues/1088#issuecomment-445884543" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2> </h2><p>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</p>">
         
-    </a><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
+</figure></p>
 <h3 id="3-workflow-的声明式配置">3. Workflow 的声明式配置</h3>
 <p>Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes Yaml 的同学上手应该都很快。</p>
 <p>下面对 Workflow 定义文件和 Jenkinsfile 做个对比：</p>
@@ -839,7 +841,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>视频:</p>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreffer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
-</ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
+</ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
 <ol>
 <li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
@@ -856,10 +858,12 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture">https://www.vaultproject.io/docs/internals/architecture</a></p>
 </blockquote>
 <p>首先看一下 Vault 的架构图：</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="/images/expirence-of-vault/vault-layers.png" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2>vault layers</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="vault layers" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2> </h2><p>vault layers</p>">
         
-    </a><figcaption class="image-caption">vault layers</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">vault layers</figcaption>
+</figure></p>
 <p>可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
 Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。</p>
 <p>「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。</p>
@@ -873,10 +877,12 @@ Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrie
 <p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。</p>
 <p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreffer">沙米尔密钥共享算法</a>
 将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="vault-shamir-secret-sharing" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2> </h2><p>vault-shamir-secret-sharing</p>">
         
-    </a><figcaption class="image-caption">vault-shamir-secret-sharing</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">vault-shamir-secret-sharing</figcaption>
+</figure></p>
 <blockquote>
 <p>「Key Shares」的数量，以及重建「master key」最少需要的 key shares 数量，都是可以调整的。
 沙米尔密钥共享算法也可以关闭，这样 master key 将被直接用于 Unseal.</p>
@@ -1943,7 +1949,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
 <p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
 <p>具体配置方法，待续。。。</p>
-]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description><![CDATA[<h2 id="一tls-协议">一、TLS 协议</h2>
+]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description><![CDATA[<h2 id="一tls-协议">一、TLS 协议</h2>
 <p>我们需要加密网络数据以实现安全通信，但是有一个现实的问题：</p>
 <ol>
 <li>非对称加密算法（RSA/ECC 等）可以方便地对数据进行签名/验证，但是计算速度慢。</li>
@@ -1951,7 +1957,9 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </ol>
 <p>于是 TLS 协议在握手阶段使用非对称算法验证服务端，并使用 ECDHE 密钥交换算法（Elliptic Curve Diffie-Hellman key exchange）安全地生成一个临时的对称密钥，然后使用对称算法进行加密通信。</p>
 <p>然后在后续的每次数据交换过程中，都使用 ECDHE 算法生成新的对称密钥，然后使用新密钥加密解密数据。</p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <p>上述的 TLS 协议流程，提供了「完美前向保密（Perfect Forward Secrecy）」特性，前向保密能够保护过去进行的通讯不受密码或密钥在未来暴露的威胁。
 即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，黑客必须破解出整个 TLS 连接中所有事务的对称密钥，才能得到完整的数据。</p>
 <blockquote>
@@ -1973,7 +1981,9 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>而 TLS 证书，则包含公钥+申请者信息(你)，颁发者(CA)的信息+签名(使用 CA 私钥加密)，以及一些其他信息。</p>
 <p>CA 证书中的公钥，能用于验证 TLS 证书中签名的正确性，也就能用于判断证书是否可信。</p>
 <p>你可以尝试使用浏览器查看 Google 的证书详情，我使用 Firefox 查看到的内容如下：</p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <h3 id="2-tls-证书支持保护的域名类型">2. TLS 证书支持保护的域名类型</h3>
 <p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
 但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
@@ -2067,7 +2077,9 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </ol>
 <p>收费证书可以在各 TLS 提供商处购买，比如国内的阿里云腾讯云等。</p>
 <p>完整的证书申请流程如下：</p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <p>为了方便用户，图中的申请人(Applicant)自行处理的部分，目前很多证书申请网站也可以自动处理，用户只需要提供相关信息即可。</p>
 <h3 id="3-生成本地签名证书或者自签名证书">3. 生成「本地签名证书」或者「自签名证书」</h3>
 <p>除了被第三方信任的「受信 TLS 证书」，在内网环境，我们需要也使用 TLS 证书保障通信安全，这时我们可能会选择自己生成证书，而不是向权威机构申请证书。</p>
@@ -2596,7 +2608,7 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 <li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreffer">OpenSSL ManPage</a></li>
 <li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreffer">openssl 查看证书</a></li>
 </ul>
-]]></description></item><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
+]]></description></item><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
 <p>QEMU/KVM 是目前最流行的虚拟化技术，它基于 Linux 内核提供的 kvm 模块，结构精简，性能损失小，而且开源免费（对比收费的 vmware），因此成了大部分企业的首选虚拟化方案。</p>
 <p>目前各大云厂商的虚拟化方案，底层都是 KVM。</p>
 <p>但是 KVM 作为一个企业级的底层虚拟化技术，却没有对桌面使用做深入的优化，因此如果想把它当成桌面虚拟化软件来使用，替代掉 VirtualBox/VMware，有一定难度。</p>
@@ -3105,7 +3117,7 @@ virsh net-list
 <li><a href="https://computingforgeeks.com/complete-installation-of-kvmqemu-and-virt-manager-on-arch-linux-and-manjaro/" target="_blank" rel="noopener noreffer">Complete Installation of KVM, QEMU and Virt Manager on Arch Linux and Manjaro</a></li>
 <li><a href="https://ubuntu.com/server/docs/virtualization-libvirt" target="_blank" rel="noopener noreffer">virtualization-libvirt - ubuntu docs</a></li>
 <li><a href="https://developers.redhat.com/products/rhel/hello-world#fndtn-kvm" target="_blank" rel="noopener noreffer">RedHat Docs - KVM</a></li>
-</ul>]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
+</ul>]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
 <ul>
 <li>AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库&hellip;几乎所有的云上资源</li>
 <li>本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源</li>
@@ -3450,7 +3462,7 @@ pulumi login s3://&lt;bucket-path&gt;
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>
 </li>
-</ul>]]></description></item><item><title>openSUSE 使用指南</title><link>https://ryan4yin.space/opensuse-instruction/</link><pubDate>Mon, 04 Jan 2021 08:42:21 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/opensuse-instruction/</guid><description><![CDATA[<p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
+</ul>]]></description></item><item><title>openSUSE 使用指南</title><link>https://ryan4yin.space/opensuse-instruction/</link><pubDate>Mon, 04 Jan 2021 08:42:21 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/opensuse-instruction/</guid><description><![CDATA[<p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。</p>
 <p>我最近从 <a href="https://ryan4yin.space/manjaro-instruction/" rel="">Manjaro</a> 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。</p>
 <p>尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
@@ -3816,7 +3828,7 @@ sudo firewall-cmd --reload
 </div>
 </div><p>允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 <code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p>
 <h2 id="其他设置">其他设置</h2>
-<p>从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。</p>]]></description></item><item><title>2020 年年终总结</title><link>https://ryan4yin.space/2020-summary/</link><pubDate>Sat, 12 Dec 2020 23:45:00 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/2020-summary/</guid><description><![CDATA[<h2 id="闲言碎语">闲言碎语</h2>
+<p>从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。</p>]]></description></item><item><title>2020 年年终总结</title><link>https://ryan4yin.space/2020-summary/</link><pubDate>Sat, 12 Dec 2020 23:45:00 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/2020-summary/</guid><description><![CDATA[<h2 id="闲言碎语">闲言碎语</h2>
 <p>一晃一年又过去了，今年可真是魔幻的一年，口罩带了一年没能摘下来，美国疫情感染人数 1500 万。</p>
 <p>上面这段话要是让去年的我看到了，没准都以为今年真的生化危机了hhh&hellip;</p>
 <p>言归正传，从去年 6 月底入职，到现在有一年半了，这一年半学到的东西真的非常多，完全重塑了我的技术栈。现在我的整个技术栈，基本都是围绕着云原生这一块发展了。</p>
@@ -3898,7 +3910,7 @@ sudo firewall-cmd --reload
 <p>回看了下去年的总结，发现我 go/c# 都没学多少，设计模式也没动，python 还在原地踏步hhh&hellip; 去年的展望很多都没实现。</p>
 <p>不过云原生这一块倒是进步很快，总体很满意今年的成果哈哈~</p>
 <p>明年加油！</p>
-]]></description></item><item><title>「小歌行」-景德镇文艺复兴-2020巡演-深圳</title><link>https://ryan4yin.space/jingdezhen-renaissance-band-2020-shenzhen/</link><pubDate>Sat, 28 Nov 2020 11:49:00 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/jingdezhen-renaissance-band-2020-shenzhen/</guid><description><![CDATA[<h2 id="前言">前言</h2>
+]]></description></item><item><title>「小歌行」-景德镇文艺复兴-2020巡演-深圳</title><link>https://ryan4yin.space/jingdezhen-renaissance-band-2020-shenzhen/</link><pubDate>Sat, 28 Nov 2020 11:49:00 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/jingdezhen-renaissance-band-2020-shenzhen/</guid><description><![CDATA[<h2 id="前言">前言</h2>
 <p>2020 年 11 月 28 日，我第一次参加 Live House，演出乐队是「景德镇文艺复兴」。</p>
 <p>「景德镇文艺复兴」是我很喜欢的一支后摇乐队，我喜欢上这支乐队，还得从我的昵称「於清樂」说起。</p>
 <p>17 年的时候，听了许多后摇，网易云就给我推荐「景德镇文艺复兴」的歌，如此结缘。</p>
@@ -3922,88 +3934,128 @@ sudo firewall-cmd --reload
 
 <p>录到最后手机没电了，为了留点电量刷公交车卡和门禁卡，最后一首《水码头》没有录完。（到家时真的差点刷不了门禁hhh）</p>
 <p>好了，下面是演出的照片集锦：</p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" data-sub-html="<h2>Live House 入口的宣传海报</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" title="Live House 入口的宣传海报" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" data-sub-html="<h2> </h2><p>Live House 入口的宣传海报</p>">
         
-    </a><figcaption class="image-caption">Live House 入口的宣传海报</figcaption>
-    </figure></p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" data-sub-html="<h2>老村长1</h2>">
+    </a></div><figcaption class="image-caption">Live House 入口的宣传海报</figcaption>
+</figure></p>
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" title="老村长1" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" data-sub-html="<h2> </h2><p>老村长1</p>">
         
-    </a><figcaption class="image-caption">老村长1</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" data-sub-html="<h2>老村长2</h2>">
+    </a></div><figcaption class="image-caption">老村长1</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" title="老村长2" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" data-sub-html="<h2> </h2><p>老村长2</p>">
         
-    </a><figcaption class="image-caption">老村长2</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" data-sub-html="<h2>老村长3</h2>">
+    </a></div><figcaption class="image-caption">老村长2</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" title="老村长3" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" data-sub-html="<h2> </h2><p>老村长3</p>">
         
-    </a><figcaption class="image-caption">老村长3</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" data-sub-html="<h2>拉小提琴的小哥哥</h2>">
+    </a></div><figcaption class="image-caption">老村长3</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" title="拉小提琴的小哥哥" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" data-sub-html="<h2> </h2><p>拉小提琴的小哥哥</p>">
         
-    </a><figcaption class="image-caption">拉小提琴的小哥哥</figcaption>
-    </figure></p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" data-sub-html="<h2>九三舞蹈</h2>">
+    </a></div><figcaption class="image-caption">拉小提琴的小哥哥</figcaption>
+</figure></p>
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" title="九三舞蹈" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" data-sub-html="<h2> </h2><p>九三舞蹈</p>">
         
-    </a><figcaption class="image-caption">九三舞蹈</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" data-sub-html="<h2>小提琴伴奏</h2>">
+    </a></div><figcaption class="image-caption">九三舞蹈</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" title="小提琴伴奏" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" data-sub-html="<h2> </h2><p>小提琴伴奏</p>">
         
-    </a><figcaption class="image-caption">小提琴伴奏</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" data-sub-html="<h2>九三是朝廷命官</h2>">
+    </a></div><figcaption class="image-caption">小提琴伴奏</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" title="九三是朝廷命官" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" data-sub-html="<h2> </h2><p>九三是朝廷命官</p>">
         
-    </a><figcaption class="image-caption">九三是朝廷命官</figcaption>
-    </figure></p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" data-sub-html="<h2>阿弥陀佛</h2>">
+    </a></div><figcaption class="image-caption">九三是朝廷命官</figcaption>
+</figure></p>
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" title="阿弥陀佛" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" data-sub-html="<h2> </h2><p>阿弥陀佛</p>">
         
-    </a><figcaption class="image-caption">阿弥陀佛</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" data-sub-html="<h2>唱</h2>">
+    </a></div><figcaption class="image-caption">阿弥陀佛</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" title="唱" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" data-sub-html="<h2> </h2><p>唱</p>">
         
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" data-sub-html="<h2>唱</h2>">
+    </a></div><figcaption class="image-caption">唱</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" title="唱" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" data-sub-html="<h2> </h2><p>唱</p>">
         
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" data-sub-html="<h2>唱</h2>">
+    </a></div><figcaption class="image-caption">唱</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" title="唱" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" data-sub-html="<h2> </h2><p>唱</p>">
         
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" data-sub-html="<h2>唱</h2>">
+    </a></div><figcaption class="image-caption">唱</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" title="唱" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" data-sub-html="<h2> </h2><p>唱</p>">
         
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" data-sub-html="<h2>唱</h2>">
+    </a></div><figcaption class="image-caption">唱</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" title="唱" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" data-sub-html="<h2> </h2><p>唱</p>">
         
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" data-sub-html="<h2>九三最漂亮的一瞬间</h2>">
+    </a></div><figcaption class="image-caption">唱</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" title="九三最漂亮的一瞬间" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" data-sub-html="<h2> </h2><p>九三最漂亮的一瞬间</p>">
         
-    </a><figcaption class="image-caption">九三最漂亮的一瞬间</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" data-sub-html="<h2>九三超帅气</h2>">
+    </a></div><figcaption class="image-caption">九三最漂亮的一瞬间</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" title="九三超帅气" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" data-sub-html="<h2> </h2><p>九三超帅气</p>">
         
-    </a><figcaption class="image-caption">九三超帅气</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">九三超帅气</figcaption>
+</figure></p>
 <p>结束：</p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" data-sub-html="<h2>Live House 后台</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" title="Live House 后台" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" data-sub-html="<h2> </h2><p>Live House 后台</p>">
         
-    </a><figcaption class="image-caption">Live House 后台</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" data-sub-html="<h2>结束鞠躬</h2>">
+    </a></div><figcaption class="image-caption">Live House 后台</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" title="结束鞠躬" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" data-sub-html="<h2> </h2><p>结束鞠躬</p>">
         
-    </a><figcaption class="image-caption">结束鞠躬</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" data-sub-html="<h2>大合照</h2>">
+    </a></div><figcaption class="image-caption">结束鞠躬</figcaption>
+</figure>
+
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" title="大合照" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" data-sub-html="<h2> </h2><p>大合照</p>">
         
-    </a><figcaption class="image-caption">大合照</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">大合照</figcaption>
+</figure></p>
 <p>签售：</p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" data-sub-html="<h2>签售</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" title="签售" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" data-sub-html="<h2> </h2><p>签售</p>">
         
-    </a><figcaption class="image-caption">签售</figcaption>
-    </figure></p>]]></description></item><item><title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析</title><link>https://ryan4yin.space/tcpdump-and-wireshark/</link><pubDate>Thu, 28 May 2020 16:20:26 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
+    </a></div><figcaption class="image-caption">签售</figcaption>
+</figure></p>]]></description></item><item><title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析</title><link>https://ryan4yin.space/tcpdump-and-wireshark/</link><pubDate>Thu, 28 May 2020 16:20:26 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
 <p>抓包分析工具主要有两种：</p>
 <ol>
 <li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreffer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
@@ -4202,7 +4254,7 @@ sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark
 <li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreffer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
 <li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreffer">聊聊tcpdump与Wireshark抓包分析</a></li>
 </ul>
-]]></description></item><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
+]]></description></item><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
 <p>本文基于 Istio1.5 编写测试</p>
 </blockquote>
 <p>Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。</p>
@@ -4413,7 +4465,9 @@ xwIDAQAB
 </div>
 </div><h3 id="4-测试密钥可用性">4. 测试密钥可用性</h3>
 <p>接下来在 <a href="https://jwt.io" target="_blank" rel="noopener noreffer">jwt.io</a> 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。
-</p>
+
+
+<div style="text-align: center"></div></p>
 <p>可以看到左下角显示「Signature Verified」，成功地生成出了 JWT。后续可以使用这个 JWT 访问 Istio 网关，测试 Istio JWT 验证功能。</p>
 <h3 id="5-启用-istio-的身份验证">5. 启用 Istio 的身份验证</h3>
 <p>编写 istio 配置：</p>
@@ -4561,7 +4615,7 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <li><a href="https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication" target="_blank" rel="noopener noreffer">End User Authentication - Istio</a></li>
 <li><a href="https://istio.io/docs/reference/config/security/jwt/" target="_blank" rel="noopener noreffer">JWTRule - Istio</a></li>
 <li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt.io - 动态生成 jwt</a></li>
-</ul>]]></description></item><item><title>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</title><link>https://ryan4yin.space/about-dns-protocol/</link><pubDate>Sun, 29 Mar 2020 15:49:23 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><description><![CDATA[<blockquote>
+</ul>]]></description></item><item><title>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</title><link>https://ryan4yin.space/about-dns-protocol/</link><pubDate>Sun, 29 Mar 2020 15:49:23 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><description><![CDATA[<blockquote>
 <p>个人笔记，观点不一定正确. 适合对 Kubernetes 有一定了解的同学。</p>
 </blockquote>
 <h2 id="前言">前言</h2>
@@ -4607,7 +4661,9 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 而且因为域名是从右往左读的（最右侧是根, <code>www.baidu.com.</code>），而 IP 的网段（如 <code>192.168.0.0/16</code>）刚好相反，是左边优先。
 因此 PTR 记录的“域名”必须将 IP 地址反着写，末尾再加上 <code>.in-addr.arpa.</code> 表示这是一个反向解析的域名。（ipv6 使用 <code>ip6.arpa.</code>）
 拿 baidu.com 的邮件服务器测试一下：
-</p>
+
+
+<div style="text-align: center"></div></p>
 <p>其他还有些 <code>TXT</code>、<code>CAA</code> 等奇奇怪怪的记录，就用到的时候自己再查了。</p>
 <h2 id="二域名的分层结构">二、域名的分层结构</h2>
 <p>国际域名系统被分成四层：</p>
@@ -4654,16 +4710,22 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <p>上述流程中忽略了我大天朝的特殊国情——备案，勿介意。</p>
 <h2 id="三dns-递归解析器在浏览器中输入域名后发生了什么">三、DNS 递归解析器：在浏览器中输入域名后发生了什么？</h2>
 <p>下面的图片拷贝自 Amazon Aws 文档，它展示了在不考虑任何 DNS 缓存的情况下，一次 Web 请求的经过，详细描绘了 DNS 解析的部分。</p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <p>其中的第 3 4 5 步按顺序向前面讲过的根域名服务器、顶级域名服务器、权威域名服务器发起请求，以获得下一个 DNS 服务器的信息。这很清晰。</p>
 <p>图中当前还没介绍的部分，是紫色的 <code>DNS Resolver</code>(域名解析器)，也叫 <code>Recursive DNS resolver</code>（<strong>DNS 递归解析器</strong>）。
 它本身只负责递归地请求 3 4 5 步中的上游服务器，然后把获取的最终结果返回给客户端，同时将记录缓存到本地以加快解析速度。</p>
 <p>这个 DNS 解析器，其实就是所谓的<strong>公共 DNS 服务器</strong>：Google 的 <code>8.8.8.8</code>，国内著名的 <code>114.114.114.114</code>。</p>
 <p>这些公共 DNS 用户量大，缓存了大量的 DNS 记录，有效地降低了上游 DNS 服务器的压力，也加快了网络上的 DNS 查询速度。</p>
 <p>接下来使用 <code>dig +trace baidu.com</code> 复现一下上述的查询流程（这种情况下 dig 自己就是一个 DNS 递归解析器）：</p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <p>另外前面有讲过 DNS 的反向解析，也是同样的层级结构，是从根服务器开始往下查询的，下面拿 baidu 的一个邮件服务器进行测试：</p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <blockquote>
 <p>dig 工具未来可能会被 drill 取代。</p>
 </blockquote>
@@ -4976,7 +5038,9 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </code></pre></td></tr></table>
 </div>
 </div><p>然后通过 <code>./coredns</code> 启动 coredns。通过 dig 检验：
-</p>
+
+
+<div style="text-align: center"></div></p>
 <p>可以看到 <code>ftp.dev-env.local</code> 已经被成功解析了。</p>
 <h3 id="3-可选插件external-pluginshttpscorednsioexplugins">3. <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">可选插件（External Plugins）</a></h3>
 <p>CoreDNS 提供的预编译版本，不包含 <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">External Plugins</a> 中列出的部分，如果你需要，可以自行修改 <code>plugin.cfg</code>，然后手动编译。</p>
@@ -4996,7 +5060,7 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 <li><a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener noreffer">Kubernetes - DNS for Services and Pods</a></li>
 <li><a href="https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/" target="_blank" rel="noopener noreffer">Kubernetes - Customizing DNS Service</a></li>
 </ul>
-]]></description></item><item><title>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</title><link>https://ryan4yin.space/jwt-algorithm-key-generation/</link><pubDate>Tue, 03 Mar 2020 14:09:46 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/jwt-algorithm-key-generation/</guid><description><![CDATA[<h1 id="签名算法">签名算法</h1>
+]]></description></item><item><title>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</title><link>https://ryan4yin.space/jwt-algorithm-key-generation/</link><pubDate>Tue, 03 Mar 2020 14:09:46 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/jwt-algorithm-key-generation/</guid><description><![CDATA[<h1 id="签名算法">签名算法</h1>
 <p>介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义：</p>
 <ol>
 <li>数字签名(Digital Signature):就和我们日常办理各种手续时需要在文件上签上自己的名字一样，数字签名的主要用途也是防止伪造签名。</li>
@@ -5112,7 +5176,7 @@ openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
 <li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt 工具网站 - jwt.io</a></li>
 <li><a href="https://www.cnblogs.com/langshiquan/p/10701198.html" target="_blank" rel="noopener noreffer">JWT 算法比较</a></li>
 </ul>
-]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</guid><description><![CDATA[<ol>
+]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</guid><description><![CDATA[<ol>
 <li>OOMKilled: Pod 的内存使用超出了 resources.limits 中的限制，被强制杀死。</li>
 <li>CrashLoopBackoff: Pod 进入 <strong>崩溃-重启</strong>循环，重启间隔时间从 10 20 40 80 一直翻倍到上限 300 秒，然后以 300 秒为间隔无限重启。</li>
 <li>Pod 一直 Pending: 这说明没有任何节点能满足 Pod 的要求，容器无法被调度。比如端口被别的容器用 hostPort 占用，节点有污点等。</li>
@@ -5266,7 +5330,7 @@ etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/
 <li><a href="https://www.reddit.com/r/kubernetes/comments/ced0py/504_gateway_timeout_when_accessing_workload_via/" target="_blank" rel="noopener noreffer">504 Gateway Timeout when accessing workload via ingress</a></li>
 <li><a href="https://k8s.af/" target="_blank" rel="noopener noreffer">Kubernetes Failure Stories</a></li>
 </ul>
-]]></description></item><item><title>Manjaro 使用指南</title><link>https://ryan4yin.space/manjaro-instruction/</link><pubDate>Sat, 13 Jul 2019 20:38:24 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/manjaro-instruction/</guid><description><![CDATA[<p>Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。
+]]></description></item><item><title>Manjaro 使用指南</title><link>https://ryan4yin.space/manjaro-instruction/</link><pubDate>Sat, 13 Jul 2019 20:38:24 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/manjaro-instruction/</guid><description><![CDATA[<p>Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。
 最大的特点，是包仓库很丰富，而且都很新。代价是偶尔会出些小毛病。</p>
 <p>我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两个月，升级了两个大版本才恢复。
 另一个就是 <a href="https://github.com/microsoft/vscode/issues/110322" target="_blank" rel="noopener noreffer">VSCode - Incorrect locale &lsquo;en-US&rsquo; used everywhere</a></p>
@@ -5503,7 +5567,7 @@ grub2-mkconfig &gt;  /boot/grub2/grub.cfg
 <li><a href="https://github.com/Jguer/yay" target="_blank" rel="noopener noreffer">yay - Yet another Yogurt - An AUR Helper written in Go </a></li>
 <li><a href="https://panqiincs.me/2019/06/05/after-installing-manjaro/" target="_blank" rel="noopener noreffer">安装Manjaro之后的配置 </a></li>
 <li><a href="https://wiki.archlinux.org/index.php/Fcitx5_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">Arch Linux Wiki - Fcitx5</a></li>
-</ul>]]></description></item><item><title>WebSocket、HTTP/2 与 gRPC</title><link>https://ryan4yin.space/websocket-http2-and-grpc/</link><pubDate>Mon, 11 Feb 2019 18:26:36 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/websocket-http2-and-grpc/</guid><description><![CDATA[<h2 id="一websocket">一、WebSocket</h2>
+</ul>]]></description></item><item><title>WebSocket、HTTP/2 与 gRPC</title><link>https://ryan4yin.space/websocket-http2-and-grpc/</link><pubDate>Mon, 11 Feb 2019 18:26:36 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/websocket-http2-and-grpc/</guid><description><![CDATA[<h2 id="一websocket">一、WebSocket</h2>
 <p>WebSocket 是一个双向通信协议，它在握手阶段采用 HTTP/1.1 协议（暂时不支持 HTTP/2）。</p>
 <p>握手过程如下：</p>
 <ol>
@@ -5617,7 +5681,9 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 </ol>
 <p>它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 <code>from disk cache</code> 或者 <code>from memroy cache</code>.</p>
 <p>Chrome 可以通过如下方式查看请求使用的协议：
-</p>
+
+
+<div style="text-align: center"></div></p>
 <blockquote>
 <p>2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知乎、bilibili、GIthub 使用了 <code>wss</code> 协议，也有很多网站使用了 SSE（格式如 <code>data:image/png;base64,&lt;base64 string&gt;</code>）
 而且很多网站都有使用 HTTP/2 + QUIC，该协议的新名称是 HTTP/3，它是基于 UDP 的 HTTP 协议。</p>
@@ -5826,7 +5892,7 @@ data: message\n\n
 <li><a href="https://zhuanlan.zhihu.com/p/26407649" target="_blank" rel="noopener noreffer">原生模块打造一个简单的 WebSocket 服务器</a></li>
 <li><a href="https://cloud.google.com/blog/products/api-management/understanding-grpc-openapi-and-rest-and-when-to-use-them" target="_blank" rel="noopener noreffer">Google Cloud - API design: Understanding gRPC, OpenAPI and REST and when to use them</a></li>
 </ul>
-]]></description></item><item><title>在回声中重历</title><link>https://ryan4yin.space/relive-in-the-echo/</link><pubDate>Tue, 08 Jan 2019 17:55:45 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/relive-in-the-echo/</guid><description><![CDATA[<meting-js server="netease" type="song" id="35032582" theme="#448aff"></meting-js>
+]]></description></item><item><title>在回声中重历</title><link>https://ryan4yin.space/relive-in-the-echo/</link><pubDate>Tue, 08 Jan 2019 17:55:45 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/relive-in-the-echo/</guid><description><![CDATA[<meting-js server="netease" type="song" id="35032582" theme="#448aff"></meting-js>
 <p>高中考虑志向的时候，我最开始想选择电子信息工程，因为小时候就喜欢摆弄各种电子器件，这个方向硬件软件都能玩，就感觉很有趣，只是担心自己高三太放浪形骸考不上。
 偶然想起在学校阅览室读杂志时，曾被<a href="https://read.douban.com/ebook/3088216/" target="_blank" rel="noopener noreffer"><strong>科幻世界2013年12期</strong></a>里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵“看见”世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
 <p>这样我开始考虑选择声学。</p>
@@ -5861,7 +5927,7 @@ data: message\n\n
 <p>我仔细想了想，我不需要太在意自己“不能兼顾”、“自控力太弱”。如果真考虑清楚了得失，我只需要“拥有解决问题的能力”，然后去做我想做的就行了。</p>
 <p>我自控力很弱，而且这么多年了一直改不了，即使再延期一年，也有可能还是拿不到毕业证，折磨自己而已。
 而上班的话，就暑假实习的经验来看，工作都有进度条催着，反而活的更有朝气。</p>
-]]></description></item><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/sql-basic/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/sql-basic/</guid><description><![CDATA[<blockquote>
+]]></description></item><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/sql-basic/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/sql-basic/</guid><description><![CDATA[<blockquote>
 <p>本笔记整理自<a href="https://book.douban.com/subject/24841239/" target="_blank" rel="noopener noreffer">《SQL 基础教程》</a>、<a href="https://book.douban.com/subject/3354490/" target="_blank" rel="noopener noreffer">《MySQL 必知必会》</a>和网上资料。个人笔记不保证正确。</p>
 </blockquote>
 <h2 id="一基础">一、基础</h2>
@@ -5957,13 +6023,21 @@ data: message\n\n
 <p>有四类数据类型：字符串、数字、日期、二进制。它们又根据数据长度的区别，下分为多个类型。</p>
 <ol>
 <li>字符串：
-</li>
+
+
+<div style="text-align: center"></div></li>
 <li>数字
-</li>
+
+
+<div style="text-align: center"></div></li>
 <li>日期
-</li>
+
+
+<div style="text-align: center"></div></li>
 <li>二进制
-</li>
+
+
+<div style="text-align: center"></div></li>
 </ol>
 <h4 id="约束">约束</h4>
 <p>SQL 约束是除了数据类型之外，对列中数据追加的限定条件。</p>
@@ -6250,7 +6324,7 @@ CALL my_test()
 <blockquote>
 <p>P.S. 许多语言的数据库 API 会定义自己的事务操作，不一定与这里一致。</p>
 </blockquote>
-]]></description></item><item><title>学英语啊学英语</title><link>https://ryan4yin.space/learning-english/</link><pubDate>Wed, 16 May 2018 20:00:02 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/learning-english/</guid><description><![CDATA[<p>对我而言，学英语是一件挺痛苦的事。从初中开始学英文，可从来不觉得它有趣，主动性也就不强。</p>
+]]></description></item><item><title>学英语啊学英语</title><link>https://ryan4yin.space/learning-english/</link><pubDate>Wed, 16 May 2018 20:00:02 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/learning-english/</guid><description><![CDATA[<p>对我而言，学英语是一件挺痛苦的事。从初中开始学英文，可从来不觉得它有趣，主动性也就不强。</p>
 <p>直到我开始学计算机，我开始认识到英文是不可避免的。于是尝试了很多方法。</p>
 <p>最普遍的方式：背单词，可我从初中背到现在，背单词的计划从没哪次坚持超过一个月的。</p>
 <p>后来听说看英文原版书有效，信心满满，结果也是看了一星期 Harry Potter，稍微看了点 Animal Farm，就没后续了。</p>
@@ -6265,12 +6339,18 @@ CALL my_test()
 <p>最近看一个动漫看完不过瘾，转去看这部动漫的轻小说。轻小说中文翻译的太呆板，发现居然有英文的，直接啃起了英文。</p>
 <p>换了好几部小说，现在在看 <a href="https://www.baka-tsuki.org/project/index.php?title=Hai_to_Gensou_no_Grimgar" target="_blank" rel="noopener noreffer">Grimgar of Fantasy and Ash</a>、<a href="https://www.baka-tsuki.org/project/index.php?title=Tasogare-iro_no_Uta_Tsukai" target="_blank" rel="noopener noreffer">Tasogare-iro no Uta Tsukai(黄昏色の詠使い)</a>，还找了个英文动漫网站，颇有以后看动漫也只看英文字幕的打算。希望能持续下去吧。</p>
 <p>不过也有点苦恼，因为暑假就要找工作，现在却沉迷看英文小说。。本来这个月该学算法的，可半个月都过了，我的进度大概才认真的时候的五天的样子。。真不知道未来会是啥样。</p>
-]]></description></item><item><title>《十二国记》</title><link>https://ryan4yin.space/the-twelve-kingdoms/</link><pubDate>Fri, 27 Apr 2018 10:49:14 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/the-twelve-kingdoms/</guid><description><![CDATA[<p>看完了动画，也看了点小说。最敬佩、最喜欢、最向往的人物是珠晶，也就是供王。能感觉得到她是所有角色中，最自信、方向最明确的，而且她思考一直比较理性。身为富商之女，年仅十二，却能拥有超出所有国民的觉悟，“既然大人们没有勇气，那就由我去当王！”，并最终称王，不得不敬佩。她有句让人难以忘却的台词，“我之所以能过着比别人更好的生活，是因为我担负了相比更沉重的责任。如果没能完成相应的使命，我就会像峰王一样被砍掉脑袋。而祥琼没有认识到这一点，她不想担负责任，却觉得自己应该享受荣华富贵。”</p>
+]]></description></item><item><title>《十二国记》</title><link>https://ryan4yin.space/the-twelve-kingdoms/</link><pubDate>Fri, 27 Apr 2018 10:49:14 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/the-twelve-kingdoms/</guid><description><![CDATA[<p>看完了动画，也看了点小说。最敬佩、最喜欢、最向往的人物是珠晶，也就是供王。能感觉得到她是所有角色中，最自信、方向最明确的，而且她思考一直比较理性。身为富商之女，年仅十二，却能拥有超出所有国民的觉悟，“既然大人们没有勇气，那就由我去当王！”，并最终称王，不得不敬佩。她有句让人难以忘却的台词，“我之所以能过着比别人更好的生活，是因为我担负了相比更沉重的责任。如果没能完成相应的使命，我就会像峰王一样被砍掉脑袋。而祥琼没有认识到这一点，她不想担负责任，却觉得自己应该享受荣华富贵。”</p>
 <p>其次就是“专职心理治疗”的乐俊小老鼠了，我简直有点怀疑存不存在这样可敬的老鼠(废话)。乐俊成熟得不适合当主角，几乎无可挑剔，大概也因此而戏份不多。</p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <p>而花了大篇幅描写的庆东国的景王，还有一路走来的祥琼和铃、更夜还有泰麒，他们一度迷失掉了自我，虽然作为结果的他们实现了自我救赎，但是这个过程我喜欢不起来。大概因为我也是个偏激的人吧&hellip;&hellip;</p>
-<p></p>
-<p></p>
+<p>
+
+<div style="text-align: center"></div></p>
+<p>
+
+<div style="text-align: center"></div></p>
 <p>珠晶遇到了顽丘，景王和祥琼被乐俊救赎，铃也有自己的贵人，更夜在斡由被杀时终于承认了自己的错误，泰麒也是被麒麟们合力救回来的。</p>
 <p>谁都不可能只活在自己的世界，就能得到救赎。(这样就又得到了一个和刺猬的优雅类似的结论&hellip;)</p>
 ]]></description></item></channel></rss>

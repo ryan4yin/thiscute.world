@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>持续集成 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/</link><description>持续集成 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>持续集成 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/</link><description>持续集成 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
 <p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreffer">Argo Documentation</a></p>
 </blockquote>
 <p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
@@ -25,10 +25,12 @@
 <p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreffer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreffer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
 <p><strong>我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
 <p>一个复杂工作流的示例如下：</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="https://github.com/argoproj/argo/issues/1088#issuecomment-445884543" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2> </h2><p>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</p>">
         
-    </a><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
+</figure></p>
 <h3 id="3-workflow-的声明式配置">3. Workflow 的声明式配置</h3>
 <p>Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes Yaml 的同学上手应该都很快。</p>
 <p>下面对 Workflow 定义文件和 Jenkinsfile 做个对比：</p>

@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
 <p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreffer">Argo Documentation</a></p>
 </blockquote>
 <p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
@@ -25,10 +25,12 @@
 <p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreffer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreffer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
 <p><strong>我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
 <p>一个复杂工作流的示例如下：</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="https://github.com/argoproj/argo/issues/1088#issuecomment-445884543" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2> </h2><p>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</p>">
         
-    </a><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
+</figure></p>
 <h3 id="3-workflow-的声明式配置">3. Workflow 的声明式配置</h3>
 <p>Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes Yaml 的同学上手应该都很快。</p>
 <p>下面对 Workflow 定义文件和 Jenkinsfile 做个对比：</p>
@@ -747,7 +749,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>视频:</p>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreffer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
-</ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
+</ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
 <ol>
 <li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
@@ -764,10 +766,12 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture">https://www.vaultproject.io/docs/internals/architecture</a></p>
 </blockquote>
 <p>首先看一下 Vault 的架构图：</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="/images/expirence-of-vault/vault-layers.png" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2>vault layers</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="vault layers" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2> </h2><p>vault layers</p>">
         
-    </a><figcaption class="image-caption">vault layers</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">vault layers</figcaption>
+</figure></p>
 <p>可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
 Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。</p>
 <p>「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。</p>
@@ -781,10 +785,12 @@ Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrie
 <p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。</p>
 <p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreffer">沙米尔密钥共享算法</a>
 将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
+<p>
+
+<figure><div style="text-align: center"><a target="_blank" class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="vault-shamir-secret-sharing" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2> </h2><p>vault-shamir-secret-sharing</p>">
         
-    </a><figcaption class="image-caption">vault-shamir-secret-sharing</figcaption>
-    </figure></p>
+    </a></div><figcaption class="image-caption">vault-shamir-secret-sharing</figcaption>
+</figure></p>
 <blockquote>
 <p>「Key Shares」的数量，以及重建「master key」最少需要的 key shares 数量，都是可以调整的。
 沙米尔密钥共享算法也可以关闭，这样 master key 将被直接用于 Unseal.</p>
@@ -1851,7 +1857,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
 <p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
 <p>具体配置方法，待续。。。</p>
-]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
+]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>ryan4yin.zh-cn</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
 <ul>
 <li>AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库&hellip;几乎所有的云上资源</li>
 <li>本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源</li>
