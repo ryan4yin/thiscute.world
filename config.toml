@@ -19,7 +19,7 @@ theme = "LoveIt"
   description = "Ryan4Yin's Space"
 
   # 网站关键词
-  keywords = ["Blog", "Ryan4yin"]
+  keywords = ["Blog", "Ryan4yin", "部落格"]
   # 网站默认主题样式 ("light", "dark", "auto")
   defaultTheme = "auto"
 
@@ -54,7 +54,7 @@ theme = "LoveIt"
     mobileMode = "auto"
     # LoveIt 新增 | 0.2.0 页面头部导航栏标题配置
     [params.header.title]
-      # LOGO 的 URL
+      # LOGO 的 URL（不要设置这个！）
       logo = ""
       # 标题名称
       name = "Ryan4Yin's Space"
@@ -65,24 +65,31 @@ theme = "LoveIt"
       # LoveIt 新增 | 0.2.5 是否为标题显示打字机动画
       typeit = true
 
-
-  # LoveIt 新增 | 0.2.0 Section (所有文章) 页面配置
-  [params.section]
-    # section 页面每页显示文章数量
-    paginate = 20
-    # 日期格式 (月和日)
-    dateFormat = "01-02"
-    # RSS 文章数目
-    rss = 20
-
-  # LoveIt 新增 | 0.2.0 List (目录或标签) 页面配置
-  [params.list]
-    # list 页面每页显示文章数量
-    paginate = 20
-    # 日期格式 (月和日)
-    dateFormat = "01-02"
-    # RSS 文章数目
-    rss = 20
+  # Footer config
+  # 页面底部信息配置
+  [params.footer]
+    enable = true
+    # Custom content (HTML format is supported)
+    # 自定义内容 (支持 HTML 格式)
+    custom = ''
+    # whether to show Hugo and theme info
+    # 是否显示 Hugo 和主题信息
+    hugo = true
+    # whether to show copyright info
+    # 是否显示版权信息
+    copyright = true
+    # whether to show the author
+    # 是否显示作者
+    author = true
+    # site creation time
+    # 网站创立年份
+    since = 2021
+    # ICP info only in China (HTML format is supported)
+    # ICP 备案信息，仅在中国使用 (支持 HTML 格式)
+    icp = ""
+    # license info (HTML format is supported)
+    # 许可协议信息 (支持 HTML 格式)
+    license= '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
 
   # 主页配置
   [params.home]
@@ -114,6 +121,7 @@ theme = "LoveIt"
   # 社交信息设置
   [params.social]
     GitHub = "ryan4yin"
+    Twitter = "ryan4yin"
     Zhihu = "yuansuye"
     Douban = "kirito_c"
     Bilibili = "12278805"
@@ -185,7 +193,13 @@ theme = "LoveIt"
       fullscreen = true
     # LoveIt 更改 | 0.2.0 文章页面的分享信息设置
     [params.page.share]
-      enable = false
+      enable = true
+      Twitter = true
+      Facebook = true
+      Reddit = true
+      HackerNews = false
+      Pocket = false
+      Tumblr = false
     # LoveIt 更改 | 0.2.0 评论系统设置
     [params.page.comment]
       enable = true
@@ -204,14 +218,18 @@ theme = "LoveIt"
         label = ""
         lightTheme = "github-light"
         darkTheme = "github-dark"
-    # LoveIt 更改 | 0.2.10 页面 SEO 配置
+        
+    # Page SEO config
+    # 页面 SEO 配置
     [params.page.seo]
+      # image URL
       # 图片 URL
       images = []
+      # Publisher info
       # 出版者信息
       [params.page.seo.publisher]
-        name = ""
-        logoUrl = ""
+        name = "ryan4yin"
+        logoUrl = "/avatar/myself.png"
 
   # 网站验证代码，用于 Google/Bing/Yandex/Pinterest/Baidu
   [params.verification]
@@ -352,7 +370,6 @@ theme = "LoveIt"
 [privacy]
   # LoveIt 删除 | 0.2.0 Google Analytics 相关隐私 (被 params.analytics.google 替代)
   [privacy.googleAnalytics]
-    # ...
   [privacy.twitter]
     enableDNT = true
   [privacy.youtube]
