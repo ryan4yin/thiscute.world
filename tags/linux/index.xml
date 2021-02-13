@@ -40,7 +40,7 @@ sudo zypper clean  <span class="c1"># 清理本地的包缓存</span>
 </div>
 </div><h2 id="install-softwares">Install Softwares</h2>
 <blockquote>
-<p>这里需要用到 <a href="https://mirrors.openSUSE.org/list/bs.html" target="_blank" rel="noopener noreffer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
+<p>这里需要用到 <a href="https://mirrors.openSUSE.org/list/bs.html" target="_blank" rel="noopener noreferrer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
 建议有条件可以在路由器上加智能代理提速。</p>
 </blockquote>
 <p>安装需要用到的各类软件:</p>
@@ -313,7 +313,7 @@ sudo systemctl restart firewalld.service
 <ul>
 <li><i class="far fa-square fa-fw"></i> Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。
 <ul>
-<li>如果你有 ROOT 权限，可以参考 <a href="https://szclsya.me/posts/android/fix-clipboard-android-10/" target="_blank" rel="noopener noreffer">Fix clipboard permission on Android 10</a> 的方法，安装 ClipboardWhitelist 来打开权限。</li>
+<li>如果你有 ROOT 权限，可以参考 <a href="https://szclsya.me/posts/android/fix-clipboard-android-10/" target="_blank" rel="noopener noreferrer">Fix clipboard permission on Android 10</a> 的方法，安装 ClipboardWhitelist 来打开权限。</li>
 <li>否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。</li>
 </ul>
 </li>
@@ -369,7 +369,7 @@ sudo firewall-cmd --reload
 ryan4yin</author><guid>https://ryan4yin.space/manjaro-instruction/</guid><description><![CDATA[<p>Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。
 最大的特点，是包仓库很丰富，而且都很新。代价是偶尔会出些小毛病。</p>
 <p>我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两个月，升级了两个大版本才恢复。
-另一个就是 <a href="https://github.com/microsoft/vscode/issues/110322" target="_blank" rel="noopener noreffer">VSCode - Incorrect locale &lsquo;en-US&rsquo; used everywhere</a></p>
+另一个就是 <a href="https://github.com/microsoft/vscode/issues/110322" target="_blank" rel="noopener noreferrer">VSCode - Incorrect locale &lsquo;en-US&rsquo; used everywhere</a></p>
 <p>还遇到过 <code>libguestfs</code> 的一个问题：<code>vrit-v2v</code>/<code>virt-p2v</code> 两个工具被拆分出去，导致 manjaro 只能通过源码安装这俩货。这貌似目前仍旧没有解决。</p>
 <p>总的来说体验很不错，能很及时地用上各种新版本的软件。</p>
 <h2 id="一pacmanyay-的基础命令">一、pacman/yay 的基础命令</h2>
@@ -434,9 +434,9 @@ pactree package_name          <span class="c1"># 显示软件的依赖树</span>
 </div>
 </div><h2 id="常用软件与配置">常用软件与配置</h2>
 <h3 id="1-添加-archlinux-中文社区仓库">1. 添加 archlinux 中文社区仓库</h3>
-<p><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreffer">Arch Linux 中文社区仓库</a> 是由 Arch Linux 中文社区驱动的非官方用户仓库，包含一些额外的软件包以及已有软件的 git 版本等变种。部分软件包的打包脚本来源于 AUR。</p>
+<p><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreferrer">Arch Linux 中文社区仓库</a> 是由 Arch Linux 中文社区驱动的非官方用户仓库，包含一些额外的软件包以及已有软件的 git 版本等变种。部分软件包的打包脚本来源于 AUR。</p>
 <p>一些国内软件，如果直接从 aur 安装，那就会有一个编译过程，有点慢。而 archlinuxcn 有已经编译好的包，可以直接安装。更新速度也很快，推荐使用。</p>
-<p>配置方法见 <a href="https://github.com/archlinuxcn/repo" target="_blank" rel="noopener noreffer">Arch Linux Chinese Community Repository</a>。</p>
+<p>配置方法见 <a href="https://github.com/archlinuxcn/repo" target="_blank" rel="noopener noreferrer">Arch Linux Chinese Community Repository</a>。</p>
 <h3 id="2-安装常用软件">2. 安装常用软件</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -486,7 +486,7 @@ sudo gpasswd --add <span class="nv">$USER</span> docker  <span class="c1"># 同�
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="3-中文输入法">3. 中文输入法</h3>
-<p>有两个选择：<a href="https://rime.im/" target="_blank" rel="noopener noreffer">中州韵（rime）</a>和<a href="https://aur.archlinux.org/packages/fcitx-sogoupinyin/" target="_blank" rel="noopener noreffer">搜狗拼音（sogoupinyin）</a>。</p>
+<p>有两个选择：<a href="https://rime.im/" target="_blank" rel="noopener noreferrer">中州韵（rime）</a>和<a href="https://aur.archlinux.org/packages/fcitx-sogoupinyin/" target="_blank" rel="noopener noreferrer">搜狗拼音（sogoupinyin）</a>。</p>
 <p>简单省事用搜狗，要用特殊的输入方案（五笔、音形、二笔等等）就只有 rime 可选了。</p>
 <h4 id="31-fcitx5-rime-配置小鹤音形">3.1 fcitx5-rime 配置小鹤音形</h4>
 <p>首先安装 fcitx5-rime, 注意这些组件一个都不能省略：</p>
@@ -514,7 +514,7 @@ QT_IM_MODULE  DEFAULT=fcitx5
 XMODIFIERS    DEFAULT=@im=fcitx5
 </code></pre></td></tr></table>
 </div>
-</div><p><a href="https://wiki.archlinux.org/index.php/PAM_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">pam-env</a> 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。</p>
+</div><p><a href="https://wiki.archlinux.org/index.php/PAM_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreferrer">pam-env</a> 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。</p>
 <p>添加自动启动：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -597,10 +597,10 @@ grub2-mkconfig &gt;  /boot/grub2/grub.cfg
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://wiki.archlinux.org/index.php/Main_page_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">Arch Linux Wiki - 中文</a></li>
-<li><a href="https://aur.archlinux.org/packages" target="_blank" rel="noopener noreffer">AUR 仓库</a></li>
-<li><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreffer">Arch Linux 中文社区仓库</a></li>
-<li><a href="https://github.com/Jguer/yay" target="_blank" rel="noopener noreffer">yay - Yet another Yogurt - An AUR Helper written in Go </a></li>
-<li><a href="https://panqiincs.me/2019/06/05/after-installing-manjaro/" target="_blank" rel="noopener noreffer">安装Manjaro之后的配置 </a></li>
-<li><a href="https://wiki.archlinux.org/index.php/Fcitx5_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">Arch Linux Wiki - Fcitx5</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Main_page_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreferrer">Arch Linux Wiki - 中文</a></li>
+<li><a href="https://aur.archlinux.org/packages" target="_blank" rel="noopener noreferrer">AUR 仓库</a></li>
+<li><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreferrer">Arch Linux 中文社区仓库</a></li>
+<li><a href="https://github.com/Jguer/yay" target="_blank" rel="noopener noreferrer">yay - Yet another Yogurt - An AUR Helper written in Go </a></li>
+<li><a href="https://panqiincs.me/2019/06/05/after-installing-manjaro/" target="_blank" rel="noopener noreferrer">安装Manjaro之后的配置 </a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Fcitx5_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreferrer">Arch Linux Wiki - Fcitx5</a></li>
 </ul>]]></description></item></channel></rss>

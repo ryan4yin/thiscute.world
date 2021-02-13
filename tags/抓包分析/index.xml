@@ -2,7 +2,7 @@
 ryan4yin</author><guid>https://ryan4yin.space/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
 <p>抓包分析工具主要有两种：</p>
 <ol>
-<li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreffer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
+<li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreferrer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
 <li>tcp/udp/icmp 等网络嗅探工具：tcpdump/tshark 都属于这一类，网络故障分析等场景常用。</li>
 </ol>
 <p>这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。
@@ -167,7 +167,7 @@ nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k 
 <span class="c1"># 如果你只需要简单地抓 http/https 包，请使用 fiddler/mitmproxy</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreffer">ksniff</a>!</p>
+</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>!</p>
 <h3 id="windows-系统">Windows 系统</h3>
 <p>另外如果你本机是 Windows 系统，要分 shell 讨论：</p>
 <ol>
@@ -185,17 +185,17 @@ nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k 
 sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark.exe<span class="k">)</span><span class="s2">&#34;</span> /usr/local/bin/wireshark
 </code></pre></td></tr></table>
 </div>
-</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreffer">ksniff</a>）。
+</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>）。
 它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。</p>
-<h2 id="2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析">2. <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreffer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
+<h2 id="2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析">2. <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
 <p>有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
-这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreffer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
-<p><a href="https://github.com/aylei/kubectl-debug" target="_blank" rel="noopener noreffer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
+这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
+<p><a href="https://github.com/aylei/kubectl-debug" target="_blank" rel="noopener noreferrer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/92993778" target="_blank" rel="noopener noreffer">WireShark使用教程</a></li>
-<li><a href="https://techzone.ergon.ch/tcpdump" target="_blank" rel="noopener noreffer">Tracing network traffic using tcpdump and tshark</a></li>
-<li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreffer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
-<li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreffer">聊聊tcpdump与Wireshark抓包分析</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/92993778" target="_blank" rel="noopener noreferrer">WireShark使用教程</a></li>
+<li><a href="https://techzone.ergon.ch/tcpdump" target="_blank" rel="noopener noreferrer">Tracing network traffic using tcpdump and tshark</a></li>
+<li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreferrer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
+<li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreferrer">聊聊tcpdump与Wireshark抓包分析</a></li>
 </ul>
 ]]></description></item></channel></rss>

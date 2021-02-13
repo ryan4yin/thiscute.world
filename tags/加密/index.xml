@@ -33,7 +33,7 @@ ryan4yin</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description
 <h3 id="2-tls-证书支持保护的域名类型">2. TLS 证书支持保护的域名类型</h3>
 <p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
 但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
-<p>根据<a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreffer">证书选型和购买 - 阿里云文档</a> 的解释，<strong>通配符证书只支持同级匹配</strong>，详细说明如下：</p>
+<p>根据<a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreferrer">证书选型和购买 - 阿里云文档</a> 的解释，<strong>通配符证书只支持同级匹配</strong>，详细说明如下：</p>
 <ol>
 <li>一级通配符域名：可保护该通配符域名（主域名）自身和该域名所有的一级子域名。
 <ul>
@@ -55,8 +55,8 @@ ryan4yin</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description
 </ol>
 <h2 id="三tls-证书的生成">三、TLS 证书的生成</h2>
 <blockquote>
-<p><a href="https://github.com/openssl/openssl" target="_blank" rel="noopener noreffer">OpenSSL</a> 是目前使用最广泛的网络加密算法库，这里以它为例介绍证书的生成。
-另外也可以考虑使用 <a href="https://github.com/cloudflare/cfssl" target="_blank" rel="noopener noreffer">cfssl</a>.</p>
+<p><a href="https://github.com/openssl/openssl" target="_blank" rel="noopener noreferrer">OpenSSL</a> 是目前使用最广泛的网络加密算法库，这里以它为例介绍证书的生成。
+另外也可以考虑使用 <a href="https://github.com/cloudflare/cfssl" target="_blank" rel="noopener noreferrer">cfssl</a>.</p>
 </blockquote>
 <p>前面讲到了 TLS 协议的握手需要使用到两个证书：</p>
 <ol>
@@ -103,21 +103,21 @@ ryan4yin</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description
 <p>免费的 TLS 证书有两种方式获取：</p>
 <ol>
 <li>部分 TLS 提供商有提供免费证书的申请，有效期为一年，但是不支持泛域名。</li>
-<li>申请 <a href="https://letsencrypt.org" target="_blank" rel="noopener noreffer">Let&rsquo;s Encrypt 免费证书</a>
+<li>申请 <a href="https://letsencrypt.org" target="_blank" rel="noopener noreferrer">Let&rsquo;s Encrypt 免费证书</a>
 <ul>
 <li>很多代理工具都有提供 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如:
 <ul>
 <li><a href="/network-proxy&#43;web-server/traefik/README.md" rel="">Traefik</a></li>
-<li><a href="https://github.com/caddyserver/caddy" target="_blank" rel="noopener noreffer">Caddy</a></li>
-<li><a href="https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion" target="_blank" rel="noopener noreffer">docker-letsencrypt-nginx-proxy-companion</a></li>
+<li><a href="https://github.com/caddyserver/caddy" target="_blank" rel="noopener noreferrer">Caddy</a></li>
+<li><a href="https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion" target="_blank" rel="noopener noreferrer">docker-letsencrypt-nginx-proxy-companion</a></li>
 </ul>
 </li>
-<li>网上也有一些 <a href="https://github.com/certbot/certbot" target="_blank" rel="noopener noreffer">certbot</a> 插件，可以通过 DNS 提供商的 API 进行 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如：
+<li>网上也有一些 <a href="https://github.com/certbot/certbot" target="_blank" rel="noopener noreferrer">certbot</a> 插件，可以通过 DNS 提供商的 API 进行 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如：
 <ul>
-<li><a href="https://github.com/tengattack/certbot-dns-aliyun" target="_blank" rel="noopener noreffer">certbot-dns-aliyun</a></li>
+<li><a href="https://github.com/tengattack/certbot-dns-aliyun" target="_blank" rel="noopener noreferrer">certbot-dns-aliyun</a></li>
 </ul>
 </li>
-<li>terraform 也有相关 provider: <a href="https://github.com/vancluever/terraform-provider-acme" target="_blank" rel="noopener noreffer">terraform-provider-acme</a></li>
+<li>terraform 也有相关 provider: <a href="https://github.com/vancluever/terraform-provider-acme" target="_blank" rel="noopener noreferrer">terraform-provider-acme</a></li>
 </ul>
 </li>
 </ol>
@@ -231,7 +231,7 @@ extendedKeyUsage=serverAuth,clientAuth
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>此文件的详细文档：<a href="https://www.openssl.org/docs/man1.1.1/man5/" target="_blank" rel="noopener noreffer">OpenSSL file formats and conventions</a></li>
+<li>此文件的详细文档：<a href="https://www.openssl.org/docs/man1.1.1/man5/" target="_blank" rel="noopener noreferrer">OpenSSL file formats and conventions</a></li>
 </ul>
 </li>
 <li>生成证书：
@@ -275,12 +275,12 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class="se">\
 </div>
 </div></li>
 </ol>
-<p>上述流程生成一个 x509 证书链，详细的参数说明，参见 <a href="https://tools.ietf.org/html/rfc5280" target="_blank" rel="noopener noreffer">RFC5280 - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a></p>
+<p>上述流程生成一个 x509 证书链，详细的参数说明，参见 <a href="https://tools.ietf.org/html/rfc5280" target="_blank" rel="noopener noreferrer">RFC5280 - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a></p>
 <h3 id="4-关于证书寿命">4. 关于证书寿命</h3>
 <p>对于公开服务，服务端证书的有效期不要超过 825 天（27 个月）！而 2020 年 11 月起，新申请的服务端证书有效期缩短到了 398 天（13 个月）。目前 Apple/Mozilla/Chrome 都发表了相应声明，证书有效期超过上述限制的，将被浏览器/Apple设备禁止使用。</p>
 <p>对于其他用途的证书，如果更换起来很麻烦，可以考虑放宽条件。
 比如 kubernetes 集群的加密证书，可以考虑有效期设长一些，比如 10 年。</p>
-<p>据<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreffer">云原生安全破局｜如何管理周期越来越短的数字证书？</a>所述，大量知名企业如 特斯拉/微软/领英/爱立信 都曾因未及时更换 TLS 证书导致服务暂时不可用。</p>
+<p>据<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreferrer">云原生安全破局｜如何管理周期越来越短的数字证书？</a>所述，大量知名企业如 特斯拉/微软/领英/爱立信 都曾因未及时更换 TLS 证书导致服务暂时不可用。</p>
 <p>因此 TLS 证书最好是设置自动轮转！人工维护不可靠！
 目前很多 Web 服务器/代理，都支持自动轮转 Let&rsquo;s Encrypt 证书。
 另外 Vault 等安全工具，也支持自动轮转私有证书。</p>
@@ -385,7 +385,7 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 <p>签名与验证：私钥用于对数据进行签名，公钥用于对签名进行验证</p>
 </li>
 <li>
-<p><a href="https://www.zhihu.com/question/25912483/answer/31653639" target="_blank" rel="noopener noreffer">加密与签名的公私钥，用途刚好相反！</a></p>
+<p><a href="https://www.zhihu.com/question/25912483/answer/31653639" target="_blank" rel="noopener noreferrer">加密与签名的公私钥，用途刚好相反！</a></p>
 </li>
 </ul>
 <h2 id="四服务端与客户端的证书配置">四、服务端与客户端的证书配置</h2>
@@ -398,7 +398,7 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 <p>一般如 Nginx 等服务端应用，都可以通过配置文件指定这两个文件的位置。修改配置后重新启动，就有 TLS 了，可以通过 https 协议访问测试。</p>
 <h4 id="11-完美前向保密">1.1 完美前向保密</h4>
 <p>旧版本的 TLS 协议并不一定能保证前向保密，为了保证前向安全，需要在服务端配置中进行一定设置。
-具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target="_blank" rel="noopener noreffer">ssl-config - mozilla</a>，该网站提供三个安全等级的配置：</p>
+具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target="_blank" rel="noopener noreferrer">ssl-config - mozilla</a>，该网站提供三个安全等级的配置：</p>
 <ol>
 <li>「Intermediate」：查看生成出的 <code>ssl-cipher</code> 属性，发现它只支持 <code>ECDHE</code>/<code>DHE</code> 开头的算法。因此它保证前向保密。
 <ul>
@@ -412,7 +412,7 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 </li>
 <li>「Old」：除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
 </ol>
-<p>另外阿里云负载均衡器配置前向保密的方法参见：<a href="https://help.aliyun.com/document_detail/90740.html" target="_blank" rel="noopener noreffer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
+<p>另外阿里云负载均衡器配置前向保密的方法参见：<a href="https://help.aliyun.com/document_detail/90740.html" target="_blank" rel="noopener noreferrer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
 <h3 id="2-客户端的-tls-证书配置针对本地签名的证书">2. 客户端的 TLS 证书配置（针对本地签名的证书）</h3>
 <p>如果你在证书不是权威 CA 机构颁发的（比如是一个自签名证书），那就需要在客户端将这个 TLS 证书添加到受信证书列表中。
 这个步骤可以在 OS 层面进行——添加到 OS 的默认证书列表中，也可以在代码层面完成——指定使用某个证书进行 TLS 验证。</p>
@@ -431,7 +431,7 @@ sudo update-ca-certificates
 </div></li>
 <li>Windows: 通过证书管理器 <code>certmgr.msc</code> 将证书安装到 <code>受信任的根证书颁发机构</code>，Chrome 的小锁就能变绿了。</li>
 <li>编程：使用 HTTPS 客户端的 api 指定使用的 TLS 证书</li>
-<li>Docker-Client: 参见 <a href="https://docs.docker.com/registry/insecure/#use-self-signed-certificates" target="_blank" rel="noopener noreffer">Use self-signed certificates - Docker Docs</a></li>
+<li>Docker-Client: 参见 <a href="https://docs.docker.com/registry/insecure/#use-self-signed-certificates" target="_blank" rel="noopener noreferrer">Use self-signed certificates - Docker Docs</a></li>
 </ol>
 <h4 id="21-证书锁定certifacte-pining技术">2.1 证书锁定(Certifacte Pining)技术</h4>
 <p>即使使用了 TLS 协议对流量进行加密，并且保证了前向保密，也无法保证流量不被代理！</p>
@@ -460,7 +460,7 @@ sudo update-ca-certificates
 <p>「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
 <p><strong>如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。</strong></p>
 <h2 id="五tls-双向认证mutual-tls-authentication-mtls">五、TLS 双向认证(Mutual TLS authentication, mTLS)</h2>
-<p>TLS 协议（tls1.0+，RFC: <a href="https://tools.ietf.org/html/rfc5246#section-7.4.4" target="_blank" rel="noopener noreffer">TLS1.2 - RFC5246</a>）中，定义了服务端请求验证客户端证书的方法。这
+<p>TLS 协议（tls1.0+，RFC: <a href="https://tools.ietf.org/html/rfc5246#section-7.4.4" target="_blank" rel="noopener noreferrer">TLS1.2 - RFC5246</a>）中，定义了服务端请求验证客户端证书的方法。这
 个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。</p>
 <p>传统的「TLS 单向认证」技术，只在客户端去验证服务端是否可信。
 而「TLS 双向认证（mTLS）」，则添加了服务端验证客户端是否可信的步骤（第三步）：</p>
@@ -507,8 +507,8 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class="se">\
 这样就能保证每个 RPC 调用的客户端，都是其他微服务（或者别的可信方），防止黑客入侵后为所欲为。</p>
 <p>目前查到如下几个Web服务器/代理支持 mTLS:</p>
 <ol>
-<li>Traefik: <a href="https://docs.traefik.io/v2.0/https/tls/#client-authentication-mtls" target="_blank" rel="noopener noreffer">Docs - Client Authentication (mTLS)</a></li>
-<li>Nginx: <a href="https://community.openhab.org/t/using-nginx-reverse-proxy-for-client-certificate-authentication-start-discussion/43064" target="_blank" rel="noopener noreffer">Using NGINX Reverse Proxy for client certificate authentication</a>
+<li>Traefik: <a href="https://docs.traefik.io/v2.0/https/tls/#client-authentication-mtls" target="_blank" rel="noopener noreferrer">Docs - Client Authentication (mTLS)</a></li>
+<li>Nginx: <a href="https://community.openhab.org/t/using-nginx-reverse-proxy-for-client-certificate-authentication-start-discussion/43064" target="_blank" rel="noopener noreferrer">Using NGINX Reverse Proxy for client certificate authentication</a>
 <ol>
 <li>主要参数是两个：<code>ssl_client_certificate /etc/nginx/client-ca.pem</code> 和 <code>ssl_verify_client on</code></li>
 </ol>
@@ -612,44 +612,44 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 <h2 id="参考">参考</h2>
 <ul>
 <li>
-<p><a href="https://kubernetes.io/docs/concepts/cluster-administration/certificates/" target="_blank" rel="noopener noreffer">Certificates - Kubernetes Docs</a></p>
+<p><a href="https://kubernetes.io/docs/concepts/cluster-administration/certificates/" target="_blank" rel="noopener noreferrer">Certificates - Kubernetes Docs</a></p>
 </li>
 <li>
-<p><a href="https://www.cnblogs.com/kyrios/p/tls-and-certificates.html" target="_blank" rel="noopener noreffer">TLS/HTTPS 证书生成与验证</a></p>
+<p><a href="https://www.cnblogs.com/kyrios/p/tls-and-certificates.html" target="_blank" rel="noopener noreferrer">TLS/HTTPS 证书生成与验证</a></p>
 </li>
 <li>
-<p><a href="https://zhuanlan.zhihu.com/p/57710573" target="_blank" rel="noopener noreffer">ECC作为SSL/TLS证书加密算法的优势</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/57710573" target="_blank" rel="noopener noreferrer">ECC作为SSL/TLS证书加密算法的优势</a></p>
 </li>
 <li>
-<p><a href="https://cloud.tencent.com/developer/article/1407305" target="_blank" rel="noopener noreffer">ECC证书的生成和验签</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1407305" target="_blank" rel="noopener noreferrer">ECC证书的生成和验签</a></p>
 </li>
 <li>
-<p><a href="https://zh.wikipedia.org/wiki/%E5%89%8D%E5%90%91%E4%BF%9D%E5%AF%86" target="_blank" rel="noopener noreffer">前向保密(Forward Secrecy) - WikiPedia</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%89%8D%E5%90%91%E4%BF%9D%E5%AF%86" target="_blank" rel="noopener noreferrer">前向保密(Forward Secrecy) - WikiPedia</a></p>
 </li>
 <li>
-<p><a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreffer">证书选型和购买 - 阿里云文档</a></p>
+<p><a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreferrer">证书选型和购买 - 阿里云文档</a></p>
 </li>
 <li>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreffer">云原生安全破局｜如何管理周期越来越短的数字证书？</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreferrer">云原生安全破局｜如何管理周期越来越短的数字证书？</a></p>
 </li>
 </ul>
 <p>另外两个关于 CN(Common Name) 和 SAN(Subject Altnative Name) 的问答：</p>
 <ul>
-<li><a href="https://serverfault.com/questions/880804/can-not-get-rid-of-neterr-cert-common-name-invalid-error-in-chrome-with-self" target="_blank" rel="noopener noreffer">Can not get rid of <code>net::ERR_CERT_COMMON_NAME_INVALID</code> error in chrome with self-signed certificates</a></li>
-<li><a href="https://stackoverflow.com/questions/5935369/ssl-how-do-common-names-cn-and-subject-alternative-names-san-work-together" target="_blank" rel="noopener noreffer">SSL - How do Common Names (CN) and Subject Alternative Names (SAN) work together?</a></li>
+<li><a href="https://serverfault.com/questions/880804/can-not-get-rid-of-neterr-cert-common-name-invalid-error-in-chrome-with-self" target="_blank" rel="noopener noreferrer">Can not get rid of <code>net::ERR_CERT_COMMON_NAME_INVALID</code> error in chrome with self-signed certificates</a></li>
+<li><a href="https://stackoverflow.com/questions/5935369/ssl-how-do-common-names-cn-and-subject-alternative-names-san-work-together" target="_blank" rel="noopener noreferrer">SSL - How do Common Names (CN) and Subject Alternative Names (SAN) work together?</a></li>
 </ul>
 <p>关于证书锁定/公钥锁定技术：</p>
 <ul>
-<li><a href="https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning" target="_blank" rel="noopener noreffer">Certificate and Public Key Pinning - OWASP</a></li>
-<li><a href="https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning" target="_blank" rel="noopener noreffer">Difference between certificate pinning and public key pinning</a></li>
+<li><a href="https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning" target="_blank" rel="noopener noreferrer">Certificate and Public Key Pinning - OWASP</a></li>
+<li><a href="https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning" target="_blank" rel="noopener noreferrer">Difference between certificate pinning and public key pinning</a></li>
 </ul>
 <p>加密/签名算法相关：</p>
 <ul>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html" target="_blank" rel="noopener noreffer">RSA算法原理（二）</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html" target="_blank" rel="noopener noreferrer">RSA算法原理（二）</a></li>
 </ul>
 <p>其他：</p>
 <ul>
-<li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreffer">OpenSSL ManPage</a></li>
-<li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreffer">openssl 查看证书</a></li>
+<li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreferrer">OpenSSL ManPage</a></li>
+<li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreferrer">openssl 查看证书</a></li>
 </ul>
 ]]></description></item></channel></rss>

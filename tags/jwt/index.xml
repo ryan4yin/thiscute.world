@@ -36,9 +36,9 @@ ryan4yin</author><guid>https://ryan4yin.space/jwt-algorithm-key-generation/</gui
 <p>对于单体应用而言，HS256 和 RS256 的安全性没有多大差别。
 而对于需要进行多方验证的微服务架构而言，显然只有 RS256/ES256 才能提供足够的安全性。
 在使用 RS256 时，只有「身份认证的微服务(auth)」需要用 RSA 私钥生成 JWT，其他微服务使用公开的公钥即可进行签名验证，私钥得到了更好的保护。</p>
-<p>更进一步，「JWT 生成」和「JWT 公钥分发」都可以直接委托给第三方的通用工具，比如 <a href="https://github.com/ory/hydra" target="_blank" rel="noopener noreffer">hydra</a>。
+<p>更进一步，「JWT 生成」和「JWT 公钥分发」都可以直接委托给第三方的通用工具，比如 <a href="https://github.com/ory/hydra" target="_blank" rel="noopener noreferrer">hydra</a>。
 甚至「JWT 验证」也可以委托给「API 网关」来处理，应用自身可以把认证鉴权完全委托给外部的平台，而应用自身只需要专注于业务。这也是目前的发展趋势。</p>
-<p><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreffer">RFC 7518 - JSON Web Algorithms (JWA)</a> 中给出的 JWT 算法列表如下：</p>
+<p><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreferrer">RFC 7518 - JSON Web Algorithms (JWA)</a> 中给出的 JWT 算法列表如下：</p>
 <pre><code>+--------------+-------------------------------+--------------------+
 | &quot;alg&quot; Param  | Digital Signature or MAC      | Implementation     |
 | Value        | Algorithm                     | Requirements       |
@@ -107,12 +107,12 @@ openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
 </code></pre></td></tr></table>
 </div>
 </div><p>密钥的使用应该就不需要介绍了，各类语言都有对应 JWT 库处理这些，请自行查看文档。</p>
-<p>如果是调试/学习 JWT，需要手动签名与验证的话，推荐使用 <a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt 工具网站 - jwt.io</a></p>
+<p>如果是调试/学习 JWT，需要手动签名与验证的话，推荐使用 <a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">jwt 工具网站 - jwt.io</a></p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreffer">RFC 7518 - JSON Web Algorithms (JWA)</a></li>
-<li><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener noreffer">什么是 JWT &ndash; JSON WEB TOKEN</a></li>
-<li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt 工具网站 - jwt.io</a></li>
-<li><a href="https://www.cnblogs.com/langshiquan/p/10701198.html" target="_blank" rel="noopener noreffer">JWT 算法比较</a></li>
+<li><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreferrer">RFC 7518 - JSON Web Algorithms (JWA)</a></li>
+<li><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener noreferrer">什么是 JWT &ndash; JSON WEB TOKEN</a></li>
+<li><a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">jwt 工具网站 - jwt.io</a></li>
+<li><a href="https://www.cnblogs.com/langshiquan/p/10701198.html" target="_blank" rel="noopener noreferrer">JWT 算法比较</a></li>
 </ul>
 ]]></description></item></channel></rss>

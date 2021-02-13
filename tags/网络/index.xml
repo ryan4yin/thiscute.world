@@ -2,7 +2,7 @@
 ryan4yin</author><guid>https://ryan4yin.space/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
 <p>抓包分析工具主要有两种：</p>
 <ol>
-<li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreffer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
+<li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreferrer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
 <li>tcp/udp/icmp 等网络嗅探工具：tcpdump/tshark 都属于这一类，网络故障分析等场景常用。</li>
 </ol>
 <p>这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。
@@ -167,7 +167,7 @@ nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k 
 <span class="c1"># 如果你只需要简单地抓 http/https 包，请使用 fiddler/mitmproxy</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreffer">ksniff</a>!</p>
+</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>!</p>
 <h3 id="windows-系统">Windows 系统</h3>
 <p>另外如果你本机是 Windows 系统，要分 shell 讨论：</p>
 <ol>
@@ -185,18 +185,18 @@ nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k 
 sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark.exe<span class="k">)</span><span class="s2">&#34;</span> /usr/local/bin/wireshark
 </code></pre></td></tr></table>
 </div>
-</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreffer">ksniff</a>）。
+</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>）。
 它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。</p>
-<h2 id="2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析">2. <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreffer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
+<h2 id="2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析">2. <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
 <p>有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
-这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreffer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
-<p><a href="https://github.com/aylei/kubectl-debug" target="_blank" rel="noopener noreffer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
+这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
+<p><a href="https://github.com/aylei/kubectl-debug" target="_blank" rel="noopener noreferrer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/92993778" target="_blank" rel="noopener noreffer">WireShark使用教程</a></li>
-<li><a href="https://techzone.ergon.ch/tcpdump" target="_blank" rel="noopener noreffer">Tracing network traffic using tcpdump and tshark</a></li>
-<li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreffer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
-<li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreffer">聊聊tcpdump与Wireshark抓包分析</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/92993778" target="_blank" rel="noopener noreferrer">WireShark使用教程</a></li>
+<li><a href="https://techzone.ergon.ch/tcpdump" target="_blank" rel="noopener noreferrer">Tracing network traffic using tcpdump and tshark</a></li>
+<li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreferrer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
+<li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreferrer">聊聊tcpdump与Wireshark抓包分析</a></li>
 </ul>
 ]]></description></item><item><title>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</title><link>https://ryan4yin.space/about-dns-protocol/</link><pubDate>Sun, 29 Mar 2020 15:49:23 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><description><![CDATA[<blockquote>
@@ -261,7 +261,7 @@ ryan4yin</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><descrip
 <ul>
 <li>顶级域名服务器负责解析<code>次级域名</code>，给出次级域名的 DNS 服务器地址。</li>
 <li>每个顶级域名都对应各自的服务器，它们之间是完全独立的。<code>.cn</code> 的域名解析仅由 <code>.cn</code> 顶级域名服务器提供。</li>
-<li>目前国际 DNS 系统中已有上千个 TLD，包括中文「.我爱你」甚至藏文域名，详细列表参见 <a href="http://www.iana.org/domains/root/db" target="_blank" rel="noopener noreffer">IANA TLD 数据库</a></li>
+<li>目前国际 DNS 系统中已有上千个 TLD，包括中文「.我爱你」甚至藏文域名，详细列表参见 <a href="http://www.iana.org/domains/root/db" target="_blank" rel="noopener noreferrer">IANA TLD 数据库</a></li>
 <li>除了国际可用的 TLD，还有一类类似「内网 IP 地址」的“私有 TLD”，最常见的比如  xxx.local xxx.lan，被广泛用在集群通信中。后面详细介绍</li>
 </ul>
 </li>
@@ -316,7 +316,7 @@ ryan4yin</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><descrip
 <p>这类服务器只在当前局域网内有效，是一个私有的 DNS 服务器，企业常用。一般通过 DHCP 或者手动配置的方式，使内网的服务器都默认使用局域网 DNS 服务器进行解析。该服务器可以只解析自己的私有 DNS 域，而将其他 DNS 域的解析 forward 到公网 DNS 解析器去。</p>
 <p>这个私有 DNS 域，会覆盖掉公网的同名域(如果公网上有这个域的话)。
 私有 dns 域也可使用公网不存在的 TLD，比如 xxx.local xxx.lan 等。vmware vcenter 就默认使用 vsphere.local 作为它的 sso (单点登录)系统的域名。kubernetes 默认使用 <code>svc.cluster.local</code> 作为集群内部域名。</p>
-<p>私有 DNS 域的选择，参见 <a href="https://www.cnblogs.com/kirito-c/p/12624815.html" target="_blank" rel="noopener noreffer">DNS 私有域的选择：internal.xxx.com xxx.local 还是 xxx.zone？</a></p>
+<p>私有 DNS 域的选择，参见 <a href="https://www.cnblogs.com/kirito-c/p/12624815.html" target="_blank" rel="noopener noreferrer">DNS 私有域的选择：internal.xxx.com xxx.local 还是 xxx.zone？</a></p>
 <p>局域网 DNS 服务器的规模与层级，视局域网的大小而定。一般小公司一个就行，要容灾设三个副本也够了。</p>
 <p>以 CoreDNS 为例，局域网 DNS 服务器也可以被设置成一个 DNS Resolver，可以设置只转发特定域名的 DNS 解析。这叫将某个域设为「转发区域」。</p>
 <h2 id="五操作系统的-dns-解析器">五、操作系统的 DNS 解析器</h2>
@@ -400,7 +400,7 @@ options ndots:5
 </div>
 </div><p>可以看到 k8s 设置了一系列的搜索域，并且将 <code>.</code> 的临界值设为了 5。
 也就是少于 5 个 dots 的域名，都首先当作非 FQDN 看待，优先在搜索域里面查找。</p>
-<p>该配置文件的详细描述参见 <a href="http://man7.org/linux/man-pages/man5/resolv.conf.5.html" target="_blank" rel="noopener noreffer">manpage - resolv.conf</a>，或者在 Linux 中使用 <code>man resolv.conf</code> 命令查看。</p>
+<p>该配置文件的详细描述参见 <a href="http://man7.org/linux/man-pages/man5/resolv.conf.5.html" target="_blank" rel="noopener noreferrer">manpage - resolv.conf</a>，或者在 Linux 中使用 <code>man resolv.conf</code> 命令查看。</p>
 <h2 id="六dns-诊断的命令行工具">六、DNS 诊断的命令行工具</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -554,7 +554,7 @@ test-env.local:53 {
 </code></pre></td></tr></table>
 </div>
 </div><p>上面的 Corefile 定义了两个本地域名 <code>dev-env.local</code> 和 <code>test-env.local</code>，它们的 DNS 数据分别保存在 <code>file</code> 指定的文件中。</p>
-<p>这个 <code>file</code> 指定的文件和 <code>bind9</code> 一样，都是使用在 <a href="https://tools.ietf.org/html/rfc1035#section-5.3" target="_blank" rel="noopener noreffer">rfc1035</a> 中定义的 Master File 格式，<code>dig</code> 命令输出的就是这种格式的内容。示例如下：</p>
+<p>这个 <code>file</code> 指定的文件和 <code>bind9</code> 一样，都是使用在 <a href="https://tools.ietf.org/html/rfc1035#section-5.3" target="_blank" rel="noopener noreferrer">rfc1035</a> 中定义的 Master File 格式，<code>dig</code> 命令输出的就是这种格式的内容。示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -593,7 +593,7 @@ elasticsearch.dev-env.local. IN A     192.168.23.23
 ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </code></pre></td></tr></table>
 </div>
-</div><p>详细的格式说明参见 <a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_master_name" target="_blank" rel="noopener noreffer">鳥哥的 Linux 私房菜 - DNS 正解資料庫檔案的設定</a>
+</div><p>详细的格式说明参见 <a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_master_name" target="_blank" rel="noopener noreferrer">鳥哥的 Linux 私房菜 - DNS 正解資料庫檔案的設定</a>
 <code>test-env.local</code> 也是一样的格式，根据上面的模板修改就行。这两个配置文件和 Corefile 放在同一个目录下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -616,9 +616,9 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </div><p>然后通过 <code>./coredns</code> 启动 coredns。通过 dig 检验：
 </p>
 <p>可以看到 <code>ftp.dev-env.local</code> 已经被成功解析了。</p>
-<h3 id="3-可选插件external-pluginshttpscorednsioexplugins">3. <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">可选插件（External Plugins）</a></h3>
-<p>CoreDNS 提供的预编译版本，不包含 <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">External Plugins</a> 中列出的部分，如果你需要，可以自行修改 <code>plugin.cfg</code>，然后手动编译。</p>
-<p>不得不说 Go 语言的编译，比 C 语言是方便太多了。自动拉取依赖，一行命令编译！只要配好 <a href="https://github.com/goproxy/goproxy.cn" target="_blank" rel="noopener noreffer">GOPROXY</a>，启用可选插件其实相当简单。</p>
+<h3 id="3-可选插件external-pluginshttpscorednsioexplugins">3. <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreferrer">可选插件（External Plugins）</a></h3>
+<p>CoreDNS 提供的预编译版本，不包含 <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreferrer">External Plugins</a> 中列出的部分，如果你需要，可以自行修改 <code>plugin.cfg</code>，然后手动编译。</p>
+<p>不得不说 Go 语言的编译，比 C 语言是方便太多了。自动拉取依赖，一行命令编译！只要配好 <a href="https://github.com/goproxy/goproxy.cn" target="_blank" rel="noopener noreferrer">GOPROXY</a>，启用可选插件其实相当简单。</p>
 <h3 id="4-设置-dns-集群">4. 设置 DNS 集群</h3>
 <p>单台 DNS 服务器的性能是有限的，而且存在单点故障问题。因此在要求高可用或者高性能的情况下，就需要设置 DNS 集群。</p>
 <p>虽然说 CoreDNS 本身也支持各种 DNS Zone 传输，主从 DNS 服务器等功能，不过我想最简单的，可能还是直接用 K8s。</p>
@@ -626,12 +626,12 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 <p>要修改起来更方便，还可以启用可选插件：redis，直接把配置以 json 的形式存在 redis 里，通过 redis-desktop-manager 进行查看与修改。</p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="http://www.ruanyifeng.com/blog/2016/06/dns.html" target="_blank" rel="noopener noreffer">DNS 原理入门</a></li>
-<li><a href="https://www.cloudflare.com/learning/dns/what-is-dns/" target="_blank" rel="noopener noreffer">What Is DNS? | How DNS Works - Cloudflare</a></li>
-<li><a href="https://aws.amazon.com/cn/route53/what-is-dns/?nc1=h_ls" target="_blank" rel="noopener noreffer">What is DNS? - Amazon AWS</a></li>
-<li><a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_resolver_whois" target="_blank" rel="noopener noreffer">鸟哥的 Linux 私房菜——主機名稱控制者： DNS 伺服器</a></li>
-<li><a href="https://coredns.io/manual/toc/" target="_blank" rel="noopener noreffer">CoreDNS - Manual</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener noreffer">Kubernetes - DNS for Services and Pods</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/" target="_blank" rel="noopener noreffer">Kubernetes - Customizing DNS Service</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/06/dns.html" target="_blank" rel="noopener noreferrer">DNS 原理入门</a></li>
+<li><a href="https://www.cloudflare.com/learning/dns/what-is-dns/" target="_blank" rel="noopener noreferrer">What Is DNS? | How DNS Works - Cloudflare</a></li>
+<li><a href="https://aws.amazon.com/cn/route53/what-is-dns/?nc1=h_ls" target="_blank" rel="noopener noreferrer">What is DNS? - Amazon AWS</a></li>
+<li><a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_resolver_whois" target="_blank" rel="noopener noreferrer">鸟哥的 Linux 私房菜——主機名稱控制者： DNS 伺服器</a></li>
+<li><a href="https://coredns.io/manual/toc/" target="_blank" rel="noopener noreferrer">CoreDNS - Manual</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener noreferrer">Kubernetes - DNS for Services and Pods</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/" target="_blank" rel="noopener noreferrer">Kubernetes - Customizing DNS Service</a></li>
 </ul>
 ]]></description></item></channel></rss>

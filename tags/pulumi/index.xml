@@ -1,5 +1,5 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Pulumi - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/pulumi/</link><description>Pulumi - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Fri, 08 Jan 2021 18:51:30 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/pulumi/" rel="self" type="application/rss+xml"/><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
+ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreferrer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
 <ul>
 <li>AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库&hellip;几乎所有的云上资源</li>
 <li>本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源</li>
@@ -18,7 +18,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 销毁整个测试环境也只需要一行命令。</p>
 <p><strong>实际使用体验</strong>：我们使用 Pulumi 自动化了阿里云测试环境搭建 95%+ 的操作，这个比例随着阿里云的 pulumi provider 的完善，还可以进一步提高！</p>
 <h2 id="pulumi-vs-terraform">Pulumi vs Terraform</h2>
-<p>有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 <a href="https://www.terraform.io/" target="_blank" rel="noopener noreffer">Terraform</a>.</p>
+<p>有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 <a href="https://www.terraform.io/" target="_blank" rel="noopener noreferrer">Terraform</a>.</p>
 <p>实际上我们一开始使用的也是 Terraform，但是后来使用 Pulumi 完全重写了一遍。</p>
 <p>主要原因是，Pulumi 解决了 Terraform 配置的一个痛点：配置语法太过简单，导致配置繁琐。而且还要额外学习一门 DSL - HCL</p>
 <p>Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，表现力不够强。
@@ -49,7 +49,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <ol start="4">
 <li>原生支持通过 Python/Go/TypeScript/Dotnet 等语言编写配置，也就完全解决了上述的 terraform 和 python 的交互问题。</li>
 <li>pulumi 是目前最流行的 真-IaaS 工具，对各语言的支持都很成熟。</li>
-<li>兼容 terraform 的所有 provider，只是需要自行使用 <a href="https://github.com/pulumi/pulumi-tf-provider-boilerplate" target="_blank" rel="noopener noreffer">pulumi-tf-provider-boilerplate</a> 重新打包，有些麻烦。
+<li>兼容 terraform 的所有 provider，只是需要自行使用 <a href="https://github.com/pulumi/pulumi-tf-provider-boilerplate" target="_blank" rel="noopener noreferrer">pulumi-tf-provider-boilerplate</a> 重新打包，有些麻烦。
 <ol>
 <li>pulumi 官方的 provider 几乎全都是封装的 terraform provider，包括 aws/azure/alicloud，目前只发现 kubernetes 是原生的（独苗啊）。</li>
 </ol>
@@ -58,13 +58,13 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <ol>
 <li>使用 app.pulumi.com（默认）:免费版提供 stack 历史管理，可以看到所有的历史记录。另外还提供一个资源关系的可视化面板。总之很方便，但是多人合作就需要收费。</li>
 <li>本地文件存储：<code>pulumi login file:///app/data</code></li>
-<li><a href="https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend" target="_blank" rel="noopener noreffer">云端对象存储</a>，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
+<li><a href="https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend" target="_blank" rel="noopener noreferrer">云端对象存储</a>，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
 <ul>
 <li><code>pulumi login 's3://&lt;bucket-path&gt;?endpoint=my.minio.local:8080&amp;disableSSL=true&amp;s3ForcePathStyle=true'</code></li>
 <li>minio/aws 的 creadential 可以通过 <code>AWS_ACCESS_KEY_ID</code> 和 <code>AWS_SECRET_ACCESS_KEY</code> 两个环境变量设置。另外即使是使用 MinIO，<code>AWS_REGION</code> 这个没啥用的环境变量也必须设置！否则会报错。</li>
 </ul>
 </li>
-<li><a href="https://github.com/pulumi/pulumi/issues/4727" target="_blank" rel="noopener noreffer">gitlab 13 支持 Terraform HTTP State 协议</a>，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。</li>
+<li><a href="https://github.com/pulumi/pulumi/issues/4727" target="_blank" rel="noopener noreferrer">gitlab 13 支持 Terraform HTTP State 协议</a>，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。</li>
 <li>使用 pulumi 企业版（自建服务）：比 app.pulumi.com 提供更多的特性，但是显然是收费的。。</li>
 </ol>
 </li>
@@ -75,12 +75,12 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <p>以下内容是我对 pulumi 的一些思考，以及使用 pulumi 遇到的各种问题+解决方法，适合对 pulumi 有一定了解的同学阅读。</p>
 </blockquote>
 <blockquote>
-<p>如果你刚接触 Pulumi 而且有兴趣学习，建议先移步 <a href="https://www.pulumi.com/docs/get-started/install/" target="_blank" rel="noopener noreffer">pulumi get started</a> 入个门，再接着看下面的内容。</p>
+<p>如果你刚接触 Pulumi 而且有兴趣学习，建议先移步 <a href="https://www.pulumi.com/docs/get-started/install/" target="_blank" rel="noopener noreferrer">pulumi get started</a> 入个门，再接着看下面的内容。</p>
 </blockquote>
 <h2 id="使用建议">使用建议</h2>
 <ol>
 <li><strong>建议查看对应的 terraform provider 文档：pulumi 的 provider 基本都是封装的 terraform 版本，而且文档是自动生成的，比（简）较（直）难（一）看（坨）懂（shi），examples 也少。</strong></li>
-<li>stack: pulumi 官方提供了两种 stack 用法：<a href="https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/" target="_blank" rel="noopener noreffer">「单体」和「微-stack」</a>
+<li>stack: pulumi 官方提供了两种 stack 用法：<a href="https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/" target="_blank" rel="noopener noreferrer">「单体」和「微-stack」</a>
 <ol>
 <li>单体: one stack rule them all，通过 stack 参数来控制步骤。stack 用来区分环境 dev/pro 等。</li>
 <li>微-stack: 每一个 stack 是一个步骤，所有 stack 组成一个完整的项目。</li>
@@ -327,19 +327,19 @@ pulumi login s3://&lt;bucket-path&gt;
 </ol>
 <h2 id="常用-provider">常用 Provider</h2>
 <ul>
-<li><a href="https://github.com/pulumi/pulumi-alicloud" target="_blank" rel="noopener noreffer">pulumi-alicloud</a>: 管理阿里云资源</li>
-<li><a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreffer">pulumi-vault</a>: 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。</li>
+<li><a href="https://github.com/pulumi/pulumi-alicloud" target="_blank" rel="noopener noreferrer">pulumi-alicloud</a>: 管理阿里云资源</li>
+<li><a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreferrer">pulumi-vault</a>: 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。</li>
 </ul>
 <h2 id="我创建维护的-provider">我创建维护的 Provider</h2>
 <p>由于 Pulumi 生态还比较小，有些 provider 只有 terraform 才有。</p>
 <p>我为了造(方)福(便)大(自)众(己)，创建并维护了两个本地虚拟机相关的 Providers:</p>
 <ul>
-<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-proxmox</a>: 目前只用来自动创建 PVE 虚拟机
+<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-proxmox</a>: 目前只用来自动创建 PVE 虚拟机
 <ul>
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>
 </li>
-<li><a href="https://github.com/ryan4yin/pulumi-libvirt" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-libvirt</a>: 快速创建 kvm 虚拟机
+<li><a href="https://github.com/ryan4yin/pulumi-libvirt" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-libvirt</a>: 快速创建 kvm 虚拟机
 <ul>
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>

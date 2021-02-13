@@ -1,8 +1,8 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>云原生 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link><description>云原生 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Wed, 27 Jan 2021 15:37:27 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/" rel="self" type="application/rss+xml"/><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
-<p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreffer">Argo Documentation</a></p>
+<p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreferrer">Argo Documentation</a></p>
 </blockquote>
-<p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
+<p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreferrer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
 <ol>
 <li>使用 Kubernetes 自定义资源(CR)定义工作流，其中工作流中的每个步骤都是一个容器。</li>
 <li>将多步骤工作流建模为一系列任务，或者使用有向无环图（DAG）描述任务之间的依赖关系。</li>
@@ -23,7 +23,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <p>Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言，最大的特点，就是它强大的流水线编排能力。</p>
 <p>其他流水线项目，对流水线之间的关联性考虑得很少，基本都假设流水线都是互相独立的。</p>
 <p>而 Argo Workflow 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG</p>
-<p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreffer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreffer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
+<p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreferrer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreferrer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
 <p><strong>我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
 <p>一个复杂工作流的示例如下：</p>
 <p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
@@ -58,9 +58,9 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <h3 id="6-触发构建的方式">6. 触发构建的方式</h3>
 <p>Argo Workflow 的流水线有多种触发方式：</p>
 <ul>
-<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href="https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec" target="_blank" rel="noopener noreffer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
-<li>定时触发：<a href="https://argoproj.github.io/argo/cron-workflows/" target="_blank" rel="noopener noreffer">CronWorkflow</a></li>
-<li>通过 Git 仓库变更触发：借助 <a href="https://github.com/argoproj/argo-events" target="_blank" rel="noopener noreffer">argo-events</a> 可以实现此功能，详见其文档。
+<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href="https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec" target="_blank" rel="noopener noreferrer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
+<li>定时触发：<a href="https://argoproj.github.io/argo/cron-workflows/" target="_blank" rel="noopener noreferrer">CronWorkflow</a></li>
+<li>通过 Git 仓库变更触发：借助 <a href="https://github.com/argoproj/argo-events" target="_blank" rel="noopener noreferrer">argo-events</a> 可以实现此功能，详见其文档。
 <ul>
 <li>另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！</li>
 </ul>
@@ -81,17 +81,17 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <p>Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。</p>
 <p>如下项目值得试用：</p>
 <ul>
-<li><a href="https://github.com/argoproj-labs/argo-client-python" target="_blank" rel="noopener noreffer">argo-client-python</a>: Argo Workflow 的 Python 客户端
+<li><a href="https://github.com/argoproj-labs/argo-client-python" target="_blank" rel="noopener noreferrer">argo-client-python</a>: Argo Workflow 的 Python 客户端
 <ul>
 <li>说实话，感觉和 kubernetes-client/python 一样难用，毕竟都是 openapi-generator 生成出来的&hellip;</li>
 </ul>
 </li>
-<li><a href="https://github.com/argoproj-labs/argo-python-dsl" target="_blank" rel="noopener noreffer">argo-python-dsl</a>: 使用 Python DSL 编写 Argo Workflow
+<li><a href="https://github.com/argoproj-labs/argo-python-dsl" target="_blank" rel="noopener noreferrer">argo-python-dsl</a>: 使用 Python DSL 编写 Argo Workflow
 <ul>
 <li>感觉使用难度比 yaml 高，也不太好用。</li>
 </ul>
 </li>
-<li><a href="https://github.com/couler-proj/couler" target="_blank" rel="noopener noreffer">couler</a>: 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
+<li><a href="https://github.com/couler-proj/couler" target="_blank" rel="noopener noreferrer">couler</a>: 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
 <ul>
 <li>理念倒是很好，待研究</li>
 </ul>
@@ -100,7 +100,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <p>感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。</p>
 <p>此外，因为 argo workflow 是 kubernetes 自定义资源 CR，也可以使用 helm/kustomize 来做 workflow 的生成。</p>
 <p>目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + <code>range</code> 循环来生成 workflow 配置。</p>
-<h2 id="二安装-argo-workflowhttpsargoprojgithubioargoinstallation">二、<a href="https://argoproj.github.io/argo/installation/" target="_blank" rel="noopener noreffer">安装 Argo Workflow</a></h2>
+<h2 id="二安装-argo-workflowhttpsargoprojgithubioargoinstallation">二、<a href="https://argoproj.github.io/argo/installation/" target="_blank" rel="noopener noreferrer">安装 Argo Workflow</a></h2>
 <p>安装一个集群版(cluster wide)的 Argo Workflow，使用 MinIO 做 artifacts 存储：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -174,7 +174,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><p>现在还差最后一步：手动进入 minio 的 Web UI，创建好 <code>argo-bucket</code> 这个 bucket.
 直接访问 minio 的 9000 端口（需要使用 nodeport/ingress 等方式暴露此端口）就能进入 Web UI，使用前面提到的 secret <code>minio</code> 中的 key/secret 登录，就能创建 bucket.</p>
-<h3 id="serviceaccount-配置httpsargoprojgithubioargoservice-accounts"><a href="https://argoproj.github.io/argo/service-accounts/" target="_blank" rel="noopener noreffer">ServiceAccount 配置</a></h3>
+<h3 id="serviceaccount-配置httpsargoprojgithubioargoservice-accounts"><a href="https://argoproj.github.io/argo/service-accounts/" target="_blank" rel="noopener noreferrer">ServiceAccount 配置</a></h3>
 <p>Argo Workflow 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 <code>default</code> ServiceAccount 运行 workflow.</p>
 <p>可 <code>default</code> 这个 ServiceAccount 默认根本没有任何权限！所以 Argo 的 artifacts, outputs, access to secrets 等功能全都会因为权限不足而无法使用！</p>
 <p>为此，Argo 的官方文档提供了两个解决方法。</p>
@@ -187,7 +187,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
-</div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreffer">Argo Workflow 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
+</div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreferrer">Argo Workflow 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -251,7 +251,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
 <p>或者如果你希望使用别的 ServiceAccount 来运行 workflow，也可以自行创建 ServiceAccount，然后再走上面方法二的流程，但是最后，要记得在 workflow 的 <code>spec.serviceAccountName</code> 中设定好 ServiceAccount 名称。</p>
-<h3 id="workflow-executorshttpsargoprojgithubioargoworkflow-executors"><a href="https://argoproj.github.io/argo/workflow-executors/" target="_blank" rel="noopener noreffer">Workflow Executors</a></h3>
+<h3 id="workflow-executorshttpsargoprojgithubioargoworkflow-executors"><a href="https://argoproj.github.io/argo/workflow-executors/" target="_blank" rel="noopener noreferrer">Workflow Executors</a></h3>
 <p>Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等&hellip;</p>
 <p>Workflow Executor 有多种实现，可以通过前面提到的 configmap <code>workflow-controller-configmap</code> 来选择。</p>
 <p>可选项如下：</p>
@@ -511,7 +511,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 root 账号，而且要修改文件，就很可能遇到 Permission Denined 的问题。</p>
 <p>解决方法：通过 Pod Security Context 手动设定容器的 user/group:</p>
 <ul>
-<li><a href="https://argoproj.github.io/argo/workflow-pod-security-context/" target="_blank" rel="noopener noreffer">Workflow Pod Security Context</a></li>
+<li><a href="https://argoproj.github.io/argo/workflow-pod-security-context/" target="_blank" rel="noopener noreferrer">Workflow Pod Security Context</a></li>
 </ul>
 <p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
 <div class="highlight"><div class="chroma">
@@ -539,7 +539,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div><p>或者也可以通过 <code>workflow-controller-configmap</code> 的 <code>workflowDefaults</code> 设定默认的 workflow 配置。</p>
 <h3 id="2-如何从-hashicorp-vault-中读取-secrets">2. 如何从 hashicorp vault 中读取 secrets?</h3>
 <blockquote>
-<p>参考 <a href="https://github.com/argoproj/argo/issues/3267#issuecomment-650119636" target="_blank" rel="noopener noreffer">Support to get secrets from Vault</a></p>
+<p>参考 <a href="https://github.com/argoproj/argo/issues/3267#issuecomment-650119636" target="_blank" rel="noopener noreferrer">Support to get secrets from Vault</a></p>
 </blockquote>
 <p>hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理工具。
 我们在生产环境用它做为分布式配置中心，同时在本地 CI/CD 中，也使用它存储相关的敏感信息。</p>
@@ -550,7 +550,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>使用 Namespace 对 workflow 进行分类时，遇到的一个常见问题就是，如何在多个名字空间使用 <code>private-git-creds</code>/<code>docker-config</code>/<code>minio</code>/<code>vault</code> 等 workflow 必要的 secrets.</p>
 <p>常见的方法是把 secrets 在所有名字空间 create 一次。</p>
 <p>但是也有更方便的 secrets 同步工具：</p>
-<p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreffer">kyverno</a> 进行 secrets 同步的配置：</p>
+<p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreferrer">kyverno</a> 进行 secrets 同步的配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -602,12 +602,12 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span></code></pre></td></tr></table>
 </div>
 </div><p>上面提供的 kyverno 配置，会实时地监控所有 Namespace 变更，一但有新 Namespace 被创建，它就会立即将 <code>vault</code> secret 同步到该 Namespace.</p>
-<p>或者，使用专门的 secrets/configmap 复制工具：<a href="https://github.com/mittwald/kubernetes-replicator" target="_blank" rel="noopener noreffer">kubernetes-replicator</a></p>
+<p>或者，使用专门的 secrets/configmap 复制工具：<a href="https://github.com/mittwald/kubernetes-replicator" target="_blank" rel="noopener noreferrer">kubernetes-replicator</a></p>
 <h3 id="4-argo-对-cr-资源的验证不够严谨写错了-key-都不报错">4. Argo 对 CR 资源的验证不够严谨，写错了 key 都不报错</h3>
 <p>待研究</p>
 <h3 id="5-如何归档历史数据">5. 如何归档历史数据？</h3>
 <p>Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。</p>
-<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href="https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods" target="_blank" rel="noopener noreffer">Limit The Total Number Of Workflows And Pods</a></p>
+<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href="https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods" target="_blank" rel="noopener noreferrer">Limit The Total Number Of Workflows And Pods</a></p>
 <p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -716,7 +716,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间是有依赖关系的，因此它提供了多种协调编排「任务」的方法。</p>
 <p>但是貌似 Argo CD 并没有继承这个理念，Argo CD 部署时，并不能在 kubernetes 资源之间，通过 DAG 等方法定义依赖关系。</p>
 <p>微服务之间存在依赖关系，希望能按依赖关系进行部署，而 ArgoCD/FluxCD 部署 kubernetes yaml 时都是不考虑任何依赖关系的。这里就存在一些矛盾。</p>
-<p>解决这个矛盾的方法有很多，我查阅了很多资料，也自己做了一些思考，得到的最佳实践来自<a href="https://developer.aliyun.com/article/573791" target="_blank" rel="noopener noreffer">解决服务依赖 - 阿里云 ACK 容器服务</a>，它给出了两种方案：</p>
+<p>解决这个矛盾的方法有很多，我查阅了很多资料，也自己做了一些思考，得到的最佳实践来自<a href="https://developer.aliyun.com/article/573791" target="_blank" rel="noopener noreferrer">解决服务依赖 - 阿里云 ACK 容器服务</a>，它给出了两种方案：</p>
 <ol>
 <li><strong>应用端服务依赖检查</strong>: 即在微服务的入口添加依赖检查逻辑，确保所有依赖的微服务/数据库都可访问了，就续探针才能返回 200. 如果超时就直接 Crash</li>
 <li><strong>独立的服务依赖检查逻辑</strong>: 部分遗留代码使用方法一改造起来或许会很困难，这时可以考虑使用 <strong>pod initContainer</strong> 或者容器的启动脚本中，加入依赖检查逻辑。</li>
@@ -743,13 +743,13 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </ul>
 <h2 id="参考文档">参考文档</h2>
 <ul>
-<li><a href="https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH" target="_blank" rel="noopener noreffer">Argo加入CNCF孵化器，一文解析Kubernetes原生工作流</a></li>
+<li><a href="https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH" target="_blank" rel="noopener noreferrer">Argo加入CNCF孵化器，一文解析Kubernetes原生工作流</a></li>
 </ul>
 <p>视频:</p>
 <ul>
-<li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreffer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
+<li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreferrer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
 </ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
+ryan4yin</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreferrer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
 <ol>
 <li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
@@ -757,7 +757,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><descrip
 <li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</li>
 <li>支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。</li>
 </ol>
-<p>在使用 Vault 之前，我们是以携程开源的 <a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener noreffer">Apollo</a> 作为微服务的分布式配置中心。</p>
+<p>在使用 Vault 之前，我们是以携程开源的 <a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener noreferrer">Apollo</a> 作为微服务的分布式配置中心。</p>
 <p>Apollo 在国内非常流行。它功能强大，支持配置的继承，也有提供 HTTP API 方便自动化。
 缺点是权限管理和 secrets 管理比较弱，也不支持信息加密，不适合直接存储敏感信息。因此我们现在切换到了 Vault.</p>
 <p>目前我们本地的 CI/CD 流水线和云上的微服务体系，都是使用的 Vault 做 secrets 管理.</p>
@@ -781,7 +781,7 @@ Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrie
 <p>Initialaztion(初始化): vault 在首次启动时需要初始化，这一步生成一个「加密密钥(encryption key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.</p>
 <p>Unseal(解封): Vault 启动后，因为不知道「加密密钥(ncryption key)」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。</p>
 <p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。</p>
-<p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreffer">沙米尔密钥共享算法</a>
+<p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreferrer">沙米尔密钥共享算法</a>
 将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.</p>
 <p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
         
@@ -830,7 +830,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <li>Transit Secrets Engine: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。</li>
 </ol>
 <h2 id="二部署-vault">二、部署 Vault</h2>
-<p>官方建议<a href="https://www.vaultproject.io/docs/platform/k8s/helm/run" target="_blank" rel="noopener noreffer">通过 Helm 部署 vault</a>，大概流程：</p>
+<p>官方建议<a href="https://www.vaultproject.io/docs/platform/k8s/helm/run" target="_blank" rel="noopener noreferrer">通过 Helm 部署 vault</a>，大概流程：</p>
 <ol>
 <li>使用 helm/docker 部署运行 vault.</li>
 <li>初始化/解封 vault: vault 安全措施，每次重启必须解封(可设置自动解封).</li>
@@ -1255,7 +1255,7 @@ helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 </div>
 </div><h3 id="3-初始化initalize并解封unseal-vault">3. 初始化(initalize)并解封(unseal) vault</h3>
 <blockquote>
-<p>官方文档：<a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault" target="_blank" rel="noopener noreffer">Initialize and unseal Vault - Vault on Kubernetes Deployment Guide</a></p>
+<p>官方文档：<a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault" target="_blank" rel="noopener noreferrer">Initialize and unseal Vault - Vault on Kubernetes Deployment Guide</a></p>
 </blockquote>
 <p>通过 helm 部署 vault，默认会部署一个三副本的 StatefulSet，但是这三个副本都会处于 NotReady 状态（docker 方式部署的也一样）。
 接下来还需要手动初始化(initalize)并解封(unseal) vault，才能 <code>Ready</code>:</p>
@@ -1293,16 +1293,16 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>为了简化这个流程，可以考虑配置 auto unseal 让 vault 自动解封。</p>
 <p>自动解封目前有两种方法：</p>
 <ol>
-<li>使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key，阿里云的相关配置方法：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreffer">alicloudkms Seal</a></li>
-<li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreffer">autounseal-transit</a></li>
+<li>使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key，阿里云的相关配置方法：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreferrer">alicloudkms Seal</a></li>
+<li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreferrer">autounseal-transit</a></li>
 </ol>
 <p>简单起见，也可以考虑直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过要注意别泄漏了解封密钥！</p>
 <h2 id="三vault-自身的配置管理">三、Vault 自身的配置管理</h2>
 <p>Vault 本身是一个复杂的 secrets 工具，它提供了 <strong>Web UI</strong> 和 <strong>CLI</strong> 用于手动管理与查看 Vault 的内容。</p>
 <p>但是作为一名 DevOps，我们当然更喜欢自动化的方法，这有两种选择:</p>
 <ul>
-<li>使用 vault 的 sdk: python-<a href="https://github.com/hvac/hvac" target="_blank" rel="noopener noreffer">hvac</a></li>
-<li>使用 <a href="https://github.com/hashicorp/terraform-provider-vault" target="_blank" rel="noopener noreffer">terraform-provider-vault</a> 或者 <a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreffer">pulumi-vault</a> 实现 vault 配置的自动化管理。</li>
+<li>使用 vault 的 sdk: python-<a href="https://github.com/hvac/hvac" target="_blank" rel="noopener noreferrer">hvac</a></li>
+<li>使用 <a href="https://github.com/hashicorp/terraform-provider-vault" target="_blank" rel="noopener noreferrer">terraform-provider-vault</a> 或者 <a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreferrer">pulumi-vault</a> 实现 vault 配置的自动化管理。</li>
 </ul>
 <p>Web UI 适合手工操作，而 sdk/<code>terraform-provider-vault</code> 则适合用于自动化管理 vault.</p>
 <p>我们的测试环境就是使用 <code>pulumi-vault</code> 完成的自动化配置 vault policy 和 kubernetes role，然后自动化注入所有测试用的 secrets.</p>
@@ -1395,7 +1395,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>如果你没这个需求，请跳过这一节。</p>
 </blockquote>
 <blockquote>
-<p>详见 <a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault" target="_blank" rel="noopener noreffer">Install the Vault Helm chart configured to address an external Vault</a></p>
+<p>详见 <a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault" target="_blank" rel="noopener noreferrer">Install the Vault Helm chart configured to address an external Vault</a></p>
 </blockquote>
 <p>kubernetes 也可以和外部的 vault 实例集成，集群中只部署 vault-agent.</p>
 <p>这适用于多个 kubernetes 集群以及其他 APP 共用一个 vault 实例的情况，比如我们本地的多个开发测试集群，就都共用着同一个 vault 实例，方便统一管理应用的 secrets.</p>
@@ -1809,7 +1809,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <blockquote>
 <p>注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
 必须要写成 <code>range secrets &quot;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&quot;</code>，也就是中间要插入 <code>metadata</code>，而且 policy 中必须开放 <code>&lt;engine-name&gt;/metadata/&lt;service-name&gt;/</code> 的 read/list 权限！
-官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 <a href="https://www.vaultproject.io/api-docs/secret/kv/kv-v2" target="_blank" rel="noopener noreffer">KV Secrets Engine - Version 2 (API)</a> 才搞明白这个。</p>
+官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 <a href="https://www.vaultproject.io/api-docs/secret/kv/kv-v2" target="_blank" rel="noopener noreferrer">KV Secrets Engine - Version 2 (API)</a> 才搞明白这个。</p>
 </blockquote>
 <p>这样生成出来的内容将是 json 格式，不过有个不兼容的地方：最后一个 secrets 的末尾有逗号 <code>,</code>
 渲染出的效果示例：</p>
@@ -1845,16 +1845,16 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h3 id="5-拓展在-kubernetes-中使用-vault-的其他姿势">5. 拓展：在 kubernetes 中使用 vault 的其他姿势</h3>
 <p>除了使用官方提供的 sidecar 模式进行 secrets 注入，社区也提供了一些别的方案，可以参考：</p>
 <ul>
-<li><a href="https://github.com/ricoberger/vault-secrets-operator" target="_blank" rel="noopener noreffer">vault-secrets-operator</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
-<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreffer">kubernetes-external-secrets</a>: 和 vault-secrets-operator 的功能基本没区别</li>
-<li><a href="https://github.com/hashicorp/secrets-store-csi-driver-provider-vault" target="_blank" rel="noopener noreffer">secrets-store-csi-driver-provider-vault</a>: 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
+<li><a href="https://github.com/ricoberger/vault-secrets-operator" target="_blank" rel="noopener noreferrer">vault-secrets-operator</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
+<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreferrer">kubernetes-external-secrets</a>: 和 vault-secrets-operator 的功能基本没区别</li>
+<li><a href="https://github.com/hashicorp/secrets-store-csi-driver-provider-vault" target="_blank" rel="noopener noreferrer">secrets-store-csi-driver-provider-vault</a>: 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
 </ul>
 <p>不过官方的 sidecar 模式仍然是最推荐使用的。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
 <p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
 <p>具体配置方法，待续。。。</p>
 ]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
+ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreferrer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
 <ul>
 <li>AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库&hellip;几乎所有的云上资源</li>
 <li>本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源</li>
@@ -1873,7 +1873,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 销毁整个测试环境也只需要一行命令。</p>
 <p><strong>实际使用体验</strong>：我们使用 Pulumi 自动化了阿里云测试环境搭建 95%+ 的操作，这个比例随着阿里云的 pulumi provider 的完善，还可以进一步提高！</p>
 <h2 id="pulumi-vs-terraform">Pulumi vs Terraform</h2>
-<p>有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 <a href="https://www.terraform.io/" target="_blank" rel="noopener noreffer">Terraform</a>.</p>
+<p>有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 <a href="https://www.terraform.io/" target="_blank" rel="noopener noreferrer">Terraform</a>.</p>
 <p>实际上我们一开始使用的也是 Terraform，但是后来使用 Pulumi 完全重写了一遍。</p>
 <p>主要原因是，Pulumi 解决了 Terraform 配置的一个痛点：配置语法太过简单，导致配置繁琐。而且还要额外学习一门 DSL - HCL</p>
 <p>Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，表现力不够强。
@@ -1904,7 +1904,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <ol start="4">
 <li>原生支持通过 Python/Go/TypeScript/Dotnet 等语言编写配置，也就完全解决了上述的 terraform 和 python 的交互问题。</li>
 <li>pulumi 是目前最流行的 真-IaaS 工具，对各语言的支持都很成熟。</li>
-<li>兼容 terraform 的所有 provider，只是需要自行使用 <a href="https://github.com/pulumi/pulumi-tf-provider-boilerplate" target="_blank" rel="noopener noreffer">pulumi-tf-provider-boilerplate</a> 重新打包，有些麻烦。
+<li>兼容 terraform 的所有 provider，只是需要自行使用 <a href="https://github.com/pulumi/pulumi-tf-provider-boilerplate" target="_blank" rel="noopener noreferrer">pulumi-tf-provider-boilerplate</a> 重新打包，有些麻烦。
 <ol>
 <li>pulumi 官方的 provider 几乎全都是封装的 terraform provider，包括 aws/azure/alicloud，目前只发现 kubernetes 是原生的（独苗啊）。</li>
 </ol>
@@ -1913,13 +1913,13 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <ol>
 <li>使用 app.pulumi.com（默认）:免费版提供 stack 历史管理，可以看到所有的历史记录。另外还提供一个资源关系的可视化面板。总之很方便，但是多人合作就需要收费。</li>
 <li>本地文件存储：<code>pulumi login file:///app/data</code></li>
-<li><a href="https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend" target="_blank" rel="noopener noreffer">云端对象存储</a>，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
+<li><a href="https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend" target="_blank" rel="noopener noreferrer">云端对象存储</a>，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
 <ul>
 <li><code>pulumi login 's3://&lt;bucket-path&gt;?endpoint=my.minio.local:8080&amp;disableSSL=true&amp;s3ForcePathStyle=true'</code></li>
 <li>minio/aws 的 creadential 可以通过 <code>AWS_ACCESS_KEY_ID</code> 和 <code>AWS_SECRET_ACCESS_KEY</code> 两个环境变量设置。另外即使是使用 MinIO，<code>AWS_REGION</code> 这个没啥用的环境变量也必须设置！否则会报错。</li>
 </ul>
 </li>
-<li><a href="https://github.com/pulumi/pulumi/issues/4727" target="_blank" rel="noopener noreffer">gitlab 13 支持 Terraform HTTP State 协议</a>，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。</li>
+<li><a href="https://github.com/pulumi/pulumi/issues/4727" target="_blank" rel="noopener noreferrer">gitlab 13 支持 Terraform HTTP State 协议</a>，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。</li>
 <li>使用 pulumi 企业版（自建服务）：比 app.pulumi.com 提供更多的特性，但是显然是收费的。。</li>
 </ol>
 </li>
@@ -1930,12 +1930,12 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <p>以下内容是我对 pulumi 的一些思考，以及使用 pulumi 遇到的各种问题+解决方法，适合对 pulumi 有一定了解的同学阅读。</p>
 </blockquote>
 <blockquote>
-<p>如果你刚接触 Pulumi 而且有兴趣学习，建议先移步 <a href="https://www.pulumi.com/docs/get-started/install/" target="_blank" rel="noopener noreffer">pulumi get started</a> 入个门，再接着看下面的内容。</p>
+<p>如果你刚接触 Pulumi 而且有兴趣学习，建议先移步 <a href="https://www.pulumi.com/docs/get-started/install/" target="_blank" rel="noopener noreferrer">pulumi get started</a> 入个门，再接着看下面的内容。</p>
 </blockquote>
 <h2 id="使用建议">使用建议</h2>
 <ol>
 <li><strong>建议查看对应的 terraform provider 文档：pulumi 的 provider 基本都是封装的 terraform 版本，而且文档是自动生成的，比（简）较（直）难（一）看（坨）懂（shi），examples 也少。</strong></li>
-<li>stack: pulumi 官方提供了两种 stack 用法：<a href="https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/" target="_blank" rel="noopener noreffer">「单体」和「微-stack」</a>
+<li>stack: pulumi 官方提供了两种 stack 用法：<a href="https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/" target="_blank" rel="noopener noreferrer">「单体」和「微-stack」</a>
 <ol>
 <li>单体: one stack rule them all，通过 stack 参数来控制步骤。stack 用来区分环境 dev/pro 等。</li>
 <li>微-stack: 每一个 stack 是一个步骤，所有 stack 组成一个完整的项目。</li>
@@ -2182,19 +2182,19 @@ pulumi login s3://&lt;bucket-path&gt;
 </ol>
 <h2 id="常用-provider">常用 Provider</h2>
 <ul>
-<li><a href="https://github.com/pulumi/pulumi-alicloud" target="_blank" rel="noopener noreffer">pulumi-alicloud</a>: 管理阿里云资源</li>
-<li><a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreffer">pulumi-vault</a>: 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。</li>
+<li><a href="https://github.com/pulumi/pulumi-alicloud" target="_blank" rel="noopener noreferrer">pulumi-alicloud</a>: 管理阿里云资源</li>
+<li><a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreferrer">pulumi-vault</a>: 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。</li>
 </ul>
 <h2 id="我创建维护的-provider">我创建维护的 Provider</h2>
 <p>由于 Pulumi 生态还比较小，有些 provider 只有 terraform 才有。</p>
 <p>我为了造(方)福(便)大(自)众(己)，创建并维护了两个本地虚拟机相关的 Providers:</p>
 <ul>
-<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-proxmox</a>: 目前只用来自动创建 PVE 虚拟机
+<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-proxmox</a>: 目前只用来自动创建 PVE 虚拟机
 <ul>
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>
 </li>
-<li><a href="https://github.com/ryan4yin/pulumi-libvirt" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-libvirt</a>: 快速创建 kvm 虚拟机
+<li><a href="https://github.com/ryan4yin/pulumi-libvirt" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-libvirt</a>: 快速创建 kvm 虚拟机
 <ul>
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>

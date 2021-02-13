@@ -19,7 +19,7 @@ ryan4yin</author><guid>https://ryan4yin.space/no-more-dreams/</guid><description
 <p>所以即使说「年轻就是最大的资本」，也不是能随意挥霍的！人生这条道路上我们踽踽独行，道阻且长，眼光要放长远一点、多看一点，不要把自己限制住了，更不应该原地踏步！</p>
 <h2 id="许嵩我没有梦想">许嵩——我没有梦想</h2>
 <p>这两天看多了前辈们的博客，就想找点非虚构的书藉看看，补充点阅历。</p>
-<p>昨天向朋友们讨书看，@rea.ink 就给我推荐许嵩的《海上灵光》。意外地发现了<a href="http://blog.sina.com.cn/vae" target="_blank" rel="noopener noreffer">许嵩的新浪博客</a>。</p>
+<p>昨天向朋友们讨书看，@rea.ink 就给我推荐许嵩的《海上灵光》。意外地发现了<a href="http://blog.sina.com.cn/vae" target="_blank" rel="noopener noreferrer">许嵩的新浪博客</a>。</p>
 <p>博客的内容都很老了，最新的一篇是 2013 年。但是这并不妨碍其中见解的价值</p>
 <div class="details admonition reference open">
         <div class="details-summary admonition-title">
@@ -48,7 +48,7 @@ ryan4yin</author><guid>https://ryan4yin.space/no-more-dreams/</guid><description
         </div>
     </div>
 <h2 id="池建强你老了">池建强——你老了</h2>
-<p>这两天读到了一篇池建强写的<a href="http://macshuo.com/?p=1491" target="_blank" rel="noopener noreffer">《你老了》</a>，作者是极客时间创始人，真的是年过半百的技术人了。</p>
+<p>这两天读到了一篇池建强写的<a href="http://macshuo.com/?p=1491" target="_blank" rel="noopener noreferrer">《你老了》</a>，作者是极客时间创始人，真的是年过半百的技术人了。</p>
 <div class="details admonition reference open">
         <div class="details-summary admonition-title">
             <i class="icon fas fa-pencil-alt fa-fw"></i>你老了 - 池建强的随想录<i class="details-icon fas fa-angle-right fa-fw"></i>
@@ -170,9 +170,9 @@ ryan4yin</author><guid>https://ryan4yin.space/end-of-the-first-round/</guid><des
 </blockquote>
 ]]></description></item><item><title>云原生流水线 Argo Workflow 的安装、使用以及个人体验</title><link>https://ryan4yin.space/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
-<p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreffer">Argo Documentation</a></p>
+<p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 <a href="https://argoproj.github.io/argo/" target="_blank" rel="noopener noreferrer">Argo Documentation</a></p>
 </blockquote>
-<p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreffer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
+<p><a href="https://github.com/argoproj/argo/" target="_blank" rel="noopener noreferrer">Argo Workflow</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
 <ol>
 <li>使用 Kubernetes 自定义资源(CR)定义工作流，其中工作流中的每个步骤都是一个容器。</li>
 <li>将多步骤工作流建模为一系列任务，或者使用有向无环图（DAG）描述任务之间的依赖关系。</li>
@@ -193,7 +193,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <p>Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言，最大的特点，就是它强大的流水线编排能力。</p>
 <p>其他流水线项目，对流水线之间的关联性考虑得很少，基本都假设流水线都是互相独立的。</p>
 <p>而 Argo Workflow 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG</p>
-<p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreffer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreffer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
+<p>再借助 <a href="https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreferrer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo/workflow-of-workflows/" target="_blank" rel="noopener noreferrer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
 <p><strong>我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
 <p>一个复杂工作流的示例如下：</p>
 <p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
@@ -228,9 +228,9 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <h3 id="6-触发构建的方式">6. 触发构建的方式</h3>
 <p>Argo Workflow 的流水线有多种触发方式：</p>
 <ul>
-<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href="https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec" target="_blank" rel="noopener noreffer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
-<li>定时触发：<a href="https://argoproj.github.io/argo/cron-workflows/" target="_blank" rel="noopener noreffer">CronWorkflow</a></li>
-<li>通过 Git 仓库变更触发：借助 <a href="https://github.com/argoproj/argo-events" target="_blank" rel="noopener noreffer">argo-events</a> 可以实现此功能，详见其文档。
+<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href="https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec" target="_blank" rel="noopener noreferrer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
+<li>定时触发：<a href="https://argoproj.github.io/argo/cron-workflows/" target="_blank" rel="noopener noreferrer">CronWorkflow</a></li>
+<li>通过 Git 仓库变更触发：借助 <a href="https://github.com/argoproj/argo-events" target="_blank" rel="noopener noreferrer">argo-events</a> 可以实现此功能，详见其文档。
 <ul>
 <li>另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！</li>
 </ul>
@@ -251,17 +251,17 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <p>Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。</p>
 <p>如下项目值得试用：</p>
 <ul>
-<li><a href="https://github.com/argoproj-labs/argo-client-python" target="_blank" rel="noopener noreffer">argo-client-python</a>: Argo Workflow 的 Python 客户端
+<li><a href="https://github.com/argoproj-labs/argo-client-python" target="_blank" rel="noopener noreferrer">argo-client-python</a>: Argo Workflow 的 Python 客户端
 <ul>
 <li>说实话，感觉和 kubernetes-client/python 一样难用，毕竟都是 openapi-generator 生成出来的&hellip;</li>
 </ul>
 </li>
-<li><a href="https://github.com/argoproj-labs/argo-python-dsl" target="_blank" rel="noopener noreffer">argo-python-dsl</a>: 使用 Python DSL 编写 Argo Workflow
+<li><a href="https://github.com/argoproj-labs/argo-python-dsl" target="_blank" rel="noopener noreferrer">argo-python-dsl</a>: 使用 Python DSL 编写 Argo Workflow
 <ul>
 <li>感觉使用难度比 yaml 高，也不太好用。</li>
 </ul>
 </li>
-<li><a href="https://github.com/couler-proj/couler" target="_blank" rel="noopener noreffer">couler</a>: 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
+<li><a href="https://github.com/couler-proj/couler" target="_blank" rel="noopener noreferrer">couler</a>: 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
 <ul>
 <li>理念倒是很好，待研究</li>
 </ul>
@@ -270,7 +270,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-argo-workflow/</guid>
 <p>感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。</p>
 <p>此外，因为 argo workflow 是 kubernetes 自定义资源 CR，也可以使用 helm/kustomize 来做 workflow 的生成。</p>
 <p>目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + <code>range</code> 循环来生成 workflow 配置。</p>
-<h2 id="二安装-argo-workflowhttpsargoprojgithubioargoinstallation">二、<a href="https://argoproj.github.io/argo/installation/" target="_blank" rel="noopener noreffer">安装 Argo Workflow</a></h2>
+<h2 id="二安装-argo-workflowhttpsargoprojgithubioargoinstallation">二、<a href="https://argoproj.github.io/argo/installation/" target="_blank" rel="noopener noreferrer">安装 Argo Workflow</a></h2>
 <p>安装一个集群版(cluster wide)的 Argo Workflow，使用 MinIO 做 artifacts 存储：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -344,7 +344,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><p>现在还差最后一步：手动进入 minio 的 Web UI，创建好 <code>argo-bucket</code> 这个 bucket.
 直接访问 minio 的 9000 端口（需要使用 nodeport/ingress 等方式暴露此端口）就能进入 Web UI，使用前面提到的 secret <code>minio</code> 中的 key/secret 登录，就能创建 bucket.</p>
-<h3 id="serviceaccount-配置httpsargoprojgithubioargoservice-accounts"><a href="https://argoproj.github.io/argo/service-accounts/" target="_blank" rel="noopener noreffer">ServiceAccount 配置</a></h3>
+<h3 id="serviceaccount-配置httpsargoprojgithubioargoservice-accounts"><a href="https://argoproj.github.io/argo/service-accounts/" target="_blank" rel="noopener noreferrer">ServiceAccount 配置</a></h3>
 <p>Argo Workflow 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 <code>default</code> ServiceAccount 运行 workflow.</p>
 <p>可 <code>default</code> 这个 ServiceAccount 默认根本没有任何权限！所以 Argo 的 artifacts, outputs, access to secrets 等功能全都会因为权限不足而无法使用！</p>
 <p>为此，Argo 的官方文档提供了两个解决方法。</p>
@@ -357,7 +357,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
-</div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreffer">Argo Workflow 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
+</div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreferrer">Argo Workflow 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -421,7 +421,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
 <p>或者如果你希望使用别的 ServiceAccount 来运行 workflow，也可以自行创建 ServiceAccount，然后再走上面方法二的流程，但是最后，要记得在 workflow 的 <code>spec.serviceAccountName</code> 中设定好 ServiceAccount 名称。</p>
-<h3 id="workflow-executorshttpsargoprojgithubioargoworkflow-executors"><a href="https://argoproj.github.io/argo/workflow-executors/" target="_blank" rel="noopener noreffer">Workflow Executors</a></h3>
+<h3 id="workflow-executorshttpsargoprojgithubioargoworkflow-executors"><a href="https://argoproj.github.io/argo/workflow-executors/" target="_blank" rel="noopener noreferrer">Workflow Executors</a></h3>
 <p>Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等&hellip;</p>
 <p>Workflow Executor 有多种实现，可以通过前面提到的 configmap <code>workflow-controller-configmap</code> 来选择。</p>
 <p>可选项如下：</p>
@@ -681,7 +681,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 root 账号，而且要修改文件，就很可能遇到 Permission Denined 的问题。</p>
 <p>解决方法：通过 Pod Security Context 手动设定容器的 user/group:</p>
 <ul>
-<li><a href="https://argoproj.github.io/argo/workflow-pod-security-context/" target="_blank" rel="noopener noreffer">Workflow Pod Security Context</a></li>
+<li><a href="https://argoproj.github.io/argo/workflow-pod-security-context/" target="_blank" rel="noopener noreferrer">Workflow Pod Security Context</a></li>
 </ul>
 <p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
 <div class="highlight"><div class="chroma">
@@ -709,7 +709,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div><p>或者也可以通过 <code>workflow-controller-configmap</code> 的 <code>workflowDefaults</code> 设定默认的 workflow 配置。</p>
 <h3 id="2-如何从-hashicorp-vault-中读取-secrets">2. 如何从 hashicorp vault 中读取 secrets?</h3>
 <blockquote>
-<p>参考 <a href="https://github.com/argoproj/argo/issues/3267#issuecomment-650119636" target="_blank" rel="noopener noreffer">Support to get secrets from Vault</a></p>
+<p>参考 <a href="https://github.com/argoproj/argo/issues/3267#issuecomment-650119636" target="_blank" rel="noopener noreferrer">Support to get secrets from Vault</a></p>
 </blockquote>
 <p>hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理工具。
 我们在生产环境用它做为分布式配置中心，同时在本地 CI/CD 中，也使用它存储相关的敏感信息。</p>
@@ -720,7 +720,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>使用 Namespace 对 workflow 进行分类时，遇到的一个常见问题就是，如何在多个名字空间使用 <code>private-git-creds</code>/<code>docker-config</code>/<code>minio</code>/<code>vault</code> 等 workflow 必要的 secrets.</p>
 <p>常见的方法是把 secrets 在所有名字空间 create 一次。</p>
 <p>但是也有更方便的 secrets 同步工具：</p>
-<p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreffer">kyverno</a> 进行 secrets 同步的配置：</p>
+<p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreferrer">kyverno</a> 进行 secrets 同步的配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -772,12 +772,12 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span></code></pre></td></tr></table>
 </div>
 </div><p>上面提供的 kyverno 配置，会实时地监控所有 Namespace 变更，一但有新 Namespace 被创建，它就会立即将 <code>vault</code> secret 同步到该 Namespace.</p>
-<p>或者，使用专门的 secrets/configmap 复制工具：<a href="https://github.com/mittwald/kubernetes-replicator" target="_blank" rel="noopener noreffer">kubernetes-replicator</a></p>
+<p>或者，使用专门的 secrets/configmap 复制工具：<a href="https://github.com/mittwald/kubernetes-replicator" target="_blank" rel="noopener noreferrer">kubernetes-replicator</a></p>
 <h3 id="4-argo-对-cr-资源的验证不够严谨写错了-key-都不报错">4. Argo 对 CR 资源的验证不够严谨，写错了 key 都不报错</h3>
 <p>待研究</p>
 <h3 id="5-如何归档历史数据">5. 如何归档历史数据？</h3>
 <p>Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。</p>
-<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href="https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods" target="_blank" rel="noopener noreffer">Limit The Total Number Of Workflows And Pods</a></p>
+<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href="https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods" target="_blank" rel="noopener noreferrer">Limit The Total Number Of Workflows And Pods</a></p>
 <p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -886,7 +886,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间是有依赖关系的，因此它提供了多种协调编排「任务」的方法。</p>
 <p>但是貌似 Argo CD 并没有继承这个理念，Argo CD 部署时，并不能在 kubernetes 资源之间，通过 DAG 等方法定义依赖关系。</p>
 <p>微服务之间存在依赖关系，希望能按依赖关系进行部署，而 ArgoCD/FluxCD 部署 kubernetes yaml 时都是不考虑任何依赖关系的。这里就存在一些矛盾。</p>
-<p>解决这个矛盾的方法有很多，我查阅了很多资料，也自己做了一些思考，得到的最佳实践来自<a href="https://developer.aliyun.com/article/573791" target="_blank" rel="noopener noreffer">解决服务依赖 - 阿里云 ACK 容器服务</a>，它给出了两种方案：</p>
+<p>解决这个矛盾的方法有很多，我查阅了很多资料，也自己做了一些思考，得到的最佳实践来自<a href="https://developer.aliyun.com/article/573791" target="_blank" rel="noopener noreferrer">解决服务依赖 - 阿里云 ACK 容器服务</a>，它给出了两种方案：</p>
 <ol>
 <li><strong>应用端服务依赖检查</strong>: 即在微服务的入口添加依赖检查逻辑，确保所有依赖的微服务/数据库都可访问了，就续探针才能返回 200. 如果超时就直接 Crash</li>
 <li><strong>独立的服务依赖检查逻辑</strong>: 部分遗留代码使用方法一改造起来或许会很困难，这时可以考虑使用 <strong>pod initContainer</strong> 或者容器的启动脚本中，加入依赖检查逻辑。</li>
@@ -913,13 +913,13 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </ul>
 <h2 id="参考文档">参考文档</h2>
 <ul>
-<li><a href="https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH" target="_blank" rel="noopener noreffer">Argo加入CNCF孵化器，一文解析Kubernetes原生工作流</a></li>
+<li><a href="https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH" target="_blank" rel="noopener noreferrer">Argo加入CNCF孵化器，一文解析Kubernetes原生工作流</a></li>
 </ul>
 <p>视频:</p>
 <ul>
-<li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreffer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
+<li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreferrer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
 </ul>]]></description></item><item><title>secrets 管理工具 Vault 的介绍、安装及使用</title><link>https://ryan4yin.space/expirence-of-vault/</link><pubDate>Sun, 24 Jan 2021 09:31:41 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreffer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
+ryan4yin</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><description><![CDATA[<p><a href="https://github.com/hashicorp/vault" target="_blank" rel="noopener noreferrer">Vault</a> 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：</p>
 <ol>
 <li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
@@ -927,7 +927,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-vault/</guid><descrip
 <li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</li>
 <li>支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。</li>
 </ol>
-<p>在使用 Vault 之前，我们是以携程开源的 <a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener noreffer">Apollo</a> 作为微服务的分布式配置中心。</p>
+<p>在使用 Vault 之前，我们是以携程开源的 <a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener noreferrer">Apollo</a> 作为微服务的分布式配置中心。</p>
 <p>Apollo 在国内非常流行。它功能强大，支持配置的继承，也有提供 HTTP API 方便自动化。
 缺点是权限管理和 secrets 管理比较弱，也不支持信息加密，不适合直接存储敏感信息。因此我们现在切换到了 Vault.</p>
 <p>目前我们本地的 CI/CD 流水线和云上的微服务体系，都是使用的 Vault 做 secrets 管理.</p>
@@ -951,7 +951,7 @@ Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrie
 <p>Initialaztion(初始化): vault 在首次启动时需要初始化，这一步生成一个「加密密钥(encryption key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.</p>
 <p>Unseal(解封): Vault 启动后，因为不知道「加密密钥(ncryption key)」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。</p>
 <p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。</p>
-<p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreffer">沙米尔密钥共享算法</a>
+<p>默认情况下，vault 使用<a href="https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664" target="_blank" rel="noopener noreferrer">沙米尔密钥共享算法</a>
 将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.</p>
 <p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" title="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-thumbnail="/images/expirence-of-vault/vault-shamir-secret-sharing.svg" data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
         
@@ -1000,7 +1000,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <li>Transit Secrets Engine: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。</li>
 </ol>
 <h2 id="二部署-vault">二、部署 Vault</h2>
-<p>官方建议<a href="https://www.vaultproject.io/docs/platform/k8s/helm/run" target="_blank" rel="noopener noreffer">通过 Helm 部署 vault</a>，大概流程：</p>
+<p>官方建议<a href="https://www.vaultproject.io/docs/platform/k8s/helm/run" target="_blank" rel="noopener noreferrer">通过 Helm 部署 vault</a>，大概流程：</p>
 <ol>
 <li>使用 helm/docker 部署运行 vault.</li>
 <li>初始化/解封 vault: vault 安全措施，每次重启必须解封(可设置自动解封).</li>
@@ -1425,7 +1425,7 @@ helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 </div>
 </div><h3 id="3-初始化initalize并解封unseal-vault">3. 初始化(initalize)并解封(unseal) vault</h3>
 <blockquote>
-<p>官方文档：<a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault" target="_blank" rel="noopener noreffer">Initialize and unseal Vault - Vault on Kubernetes Deployment Guide</a></p>
+<p>官方文档：<a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault" target="_blank" rel="noopener noreferrer">Initialize and unseal Vault - Vault on Kubernetes Deployment Guide</a></p>
 </blockquote>
 <p>通过 helm 部署 vault，默认会部署一个三副本的 StatefulSet，但是这三个副本都会处于 NotReady 状态（docker 方式部署的也一样）。
 接下来还需要手动初始化(initalize)并解封(unseal) vault，才能 <code>Ready</code>:</p>
@@ -1463,16 +1463,16 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>为了简化这个流程，可以考虑配置 auto unseal 让 vault 自动解封。</p>
 <p>自动解封目前有两种方法：</p>
 <ol>
-<li>使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key，阿里云的相关配置方法：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreffer">alicloudkms Seal</a></li>
-<li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreffer">autounseal-transit</a></li>
+<li>使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key，阿里云的相关配置方法：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreferrer">alicloudkms Seal</a></li>
+<li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreferrer">autounseal-transit</a></li>
 </ol>
 <p>简单起见，也可以考虑直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过要注意别泄漏了解封密钥！</p>
 <h2 id="三vault-自身的配置管理">三、Vault 自身的配置管理</h2>
 <p>Vault 本身是一个复杂的 secrets 工具，它提供了 <strong>Web UI</strong> 和 <strong>CLI</strong> 用于手动管理与查看 Vault 的内容。</p>
 <p>但是作为一名 DevOps，我们当然更喜欢自动化的方法，这有两种选择:</p>
 <ul>
-<li>使用 vault 的 sdk: python-<a href="https://github.com/hvac/hvac" target="_blank" rel="noopener noreffer">hvac</a></li>
-<li>使用 <a href="https://github.com/hashicorp/terraform-provider-vault" target="_blank" rel="noopener noreffer">terraform-provider-vault</a> 或者 <a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreffer">pulumi-vault</a> 实现 vault 配置的自动化管理。</li>
+<li>使用 vault 的 sdk: python-<a href="https://github.com/hvac/hvac" target="_blank" rel="noopener noreferrer">hvac</a></li>
+<li>使用 <a href="https://github.com/hashicorp/terraform-provider-vault" target="_blank" rel="noopener noreferrer">terraform-provider-vault</a> 或者 <a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreferrer">pulumi-vault</a> 实现 vault 配置的自动化管理。</li>
 </ul>
 <p>Web UI 适合手工操作，而 sdk/<code>terraform-provider-vault</code> 则适合用于自动化管理 vault.</p>
 <p>我们的测试环境就是使用 <code>pulumi-vault</code> 完成的自动化配置 vault policy 和 kubernetes role，然后自动化注入所有测试用的 secrets.</p>
@@ -1565,7 +1565,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>如果你没这个需求，请跳过这一节。</p>
 </blockquote>
 <blockquote>
-<p>详见 <a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault" target="_blank" rel="noopener noreffer">Install the Vault Helm chart configured to address an external Vault</a></p>
+<p>详见 <a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault" target="_blank" rel="noopener noreferrer">Install the Vault Helm chart configured to address an external Vault</a></p>
 </blockquote>
 <p>kubernetes 也可以和外部的 vault 实例集成，集群中只部署 vault-agent.</p>
 <p>这适用于多个 kubernetes 集群以及其他 APP 共用一个 vault 实例的情况，比如我们本地的多个开发测试集群，就都共用着同一个 vault 实例，方便统一管理应用的 secrets.</p>
@@ -1979,7 +1979,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <blockquote>
 <p>注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
 必须要写成 <code>range secrets &quot;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&quot;</code>，也就是中间要插入 <code>metadata</code>，而且 policy 中必须开放 <code>&lt;engine-name&gt;/metadata/&lt;service-name&gt;/</code> 的 read/list 权限！
-官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 <a href="https://www.vaultproject.io/api-docs/secret/kv/kv-v2" target="_blank" rel="noopener noreffer">KV Secrets Engine - Version 2 (API)</a> 才搞明白这个。</p>
+官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 <a href="https://www.vaultproject.io/api-docs/secret/kv/kv-v2" target="_blank" rel="noopener noreferrer">KV Secrets Engine - Version 2 (API)</a> 才搞明白这个。</p>
 </blockquote>
 <p>这样生成出来的内容将是 json 格式，不过有个不兼容的地方：最后一个 secrets 的末尾有逗号 <code>,</code>
 渲染出的效果示例：</p>
@@ -2015,9 +2015,9 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h3 id="5-拓展在-kubernetes-中使用-vault-的其他姿势">5. 拓展：在 kubernetes 中使用 vault 的其他姿势</h3>
 <p>除了使用官方提供的 sidecar 模式进行 secrets 注入，社区也提供了一些别的方案，可以参考：</p>
 <ul>
-<li><a href="https://github.com/ricoberger/vault-secrets-operator" target="_blank" rel="noopener noreffer">vault-secrets-operator</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
-<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreffer">kubernetes-external-secrets</a>: 和 vault-secrets-operator 的功能基本没区别</li>
-<li><a href="https://github.com/hashicorp/secrets-store-csi-driver-provider-vault" target="_blank" rel="noopener noreffer">secrets-store-csi-driver-provider-vault</a>: 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
+<li><a href="https://github.com/ricoberger/vault-secrets-operator" target="_blank" rel="noopener noreferrer">vault-secrets-operator</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
+<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreferrer">kubernetes-external-secrets</a>: 和 vault-secrets-operator 的功能基本没区别</li>
+<li><a href="https://github.com/hashicorp/secrets-store-csi-driver-provider-vault" target="_blank" rel="noopener noreferrer">secrets-store-csi-driver-provider-vault</a>: 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
 </ul>
 <p>不过官方的 sidecar 模式仍然是最推荐使用的。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
@@ -2058,7 +2058,7 @@ ryan4yin</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description
 <h3 id="2-tls-证书支持保护的域名类型">2. TLS 证书支持保护的域名类型</h3>
 <p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
 但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
-<p>根据<a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreffer">证书选型和购买 - 阿里云文档</a> 的解释，<strong>通配符证书只支持同级匹配</strong>，详细说明如下：</p>
+<p>根据<a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreferrer">证书选型和购买 - 阿里云文档</a> 的解释，<strong>通配符证书只支持同级匹配</strong>，详细说明如下：</p>
 <ol>
 <li>一级通配符域名：可保护该通配符域名（主域名）自身和该域名所有的一级子域名。
 <ul>
@@ -2080,8 +2080,8 @@ ryan4yin</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description
 </ol>
 <h2 id="三tls-证书的生成">三、TLS 证书的生成</h2>
 <blockquote>
-<p><a href="https://github.com/openssl/openssl" target="_blank" rel="noopener noreffer">OpenSSL</a> 是目前使用最广泛的网络加密算法库，这里以它为例介绍证书的生成。
-另外也可以考虑使用 <a href="https://github.com/cloudflare/cfssl" target="_blank" rel="noopener noreffer">cfssl</a>.</p>
+<p><a href="https://github.com/openssl/openssl" target="_blank" rel="noopener noreferrer">OpenSSL</a> 是目前使用最广泛的网络加密算法库，这里以它为例介绍证书的生成。
+另外也可以考虑使用 <a href="https://github.com/cloudflare/cfssl" target="_blank" rel="noopener noreferrer">cfssl</a>.</p>
 </blockquote>
 <p>前面讲到了 TLS 协议的握手需要使用到两个证书：</p>
 <ol>
@@ -2128,21 +2128,21 @@ ryan4yin</author><guid>https://ryan4yin.space/about-tls-cert/</guid><description
 <p>免费的 TLS 证书有两种方式获取：</p>
 <ol>
 <li>部分 TLS 提供商有提供免费证书的申请，有效期为一年，但是不支持泛域名。</li>
-<li>申请 <a href="https://letsencrypt.org" target="_blank" rel="noopener noreffer">Let&rsquo;s Encrypt 免费证书</a>
+<li>申请 <a href="https://letsencrypt.org" target="_blank" rel="noopener noreferrer">Let&rsquo;s Encrypt 免费证书</a>
 <ul>
 <li>很多代理工具都有提供 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如:
 <ul>
 <li><a href="/network-proxy&#43;web-server/traefik/README.md" rel="">Traefik</a></li>
-<li><a href="https://github.com/caddyserver/caddy" target="_blank" rel="noopener noreffer">Caddy</a></li>
-<li><a href="https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion" target="_blank" rel="noopener noreffer">docker-letsencrypt-nginx-proxy-companion</a></li>
+<li><a href="https://github.com/caddyserver/caddy" target="_blank" rel="noopener noreferrer">Caddy</a></li>
+<li><a href="https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion" target="_blank" rel="noopener noreferrer">docker-letsencrypt-nginx-proxy-companion</a></li>
 </ul>
 </li>
-<li>网上也有一些 <a href="https://github.com/certbot/certbot" target="_blank" rel="noopener noreffer">certbot</a> 插件，可以通过 DNS 提供商的 API 进行 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如：
+<li>网上也有一些 <a href="https://github.com/certbot/certbot" target="_blank" rel="noopener noreferrer">certbot</a> 插件，可以通过 DNS 提供商的 API 进行 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如：
 <ul>
-<li><a href="https://github.com/tengattack/certbot-dns-aliyun" target="_blank" rel="noopener noreffer">certbot-dns-aliyun</a></li>
+<li><a href="https://github.com/tengattack/certbot-dns-aliyun" target="_blank" rel="noopener noreferrer">certbot-dns-aliyun</a></li>
 </ul>
 </li>
-<li>terraform 也有相关 provider: <a href="https://github.com/vancluever/terraform-provider-acme" target="_blank" rel="noopener noreffer">terraform-provider-acme</a></li>
+<li>terraform 也有相关 provider: <a href="https://github.com/vancluever/terraform-provider-acme" target="_blank" rel="noopener noreferrer">terraform-provider-acme</a></li>
 </ul>
 </li>
 </ol>
@@ -2256,7 +2256,7 @@ extendedKeyUsage=serverAuth,clientAuth
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>此文件的详细文档：<a href="https://www.openssl.org/docs/man1.1.1/man5/" target="_blank" rel="noopener noreffer">OpenSSL file formats and conventions</a></li>
+<li>此文件的详细文档：<a href="https://www.openssl.org/docs/man1.1.1/man5/" target="_blank" rel="noopener noreferrer">OpenSSL file formats and conventions</a></li>
 </ul>
 </li>
 <li>生成证书：
@@ -2300,12 +2300,12 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class="se">\
 </div>
 </div></li>
 </ol>
-<p>上述流程生成一个 x509 证书链，详细的参数说明，参见 <a href="https://tools.ietf.org/html/rfc5280" target="_blank" rel="noopener noreffer">RFC5280 - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a></p>
+<p>上述流程生成一个 x509 证书链，详细的参数说明，参见 <a href="https://tools.ietf.org/html/rfc5280" target="_blank" rel="noopener noreferrer">RFC5280 - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a></p>
 <h3 id="4-关于证书寿命">4. 关于证书寿命</h3>
 <p>对于公开服务，服务端证书的有效期不要超过 825 天（27 个月）！而 2020 年 11 月起，新申请的服务端证书有效期缩短到了 398 天（13 个月）。目前 Apple/Mozilla/Chrome 都发表了相应声明，证书有效期超过上述限制的，将被浏览器/Apple设备禁止使用。</p>
 <p>对于其他用途的证书，如果更换起来很麻烦，可以考虑放宽条件。
 比如 kubernetes 集群的加密证书，可以考虑有效期设长一些，比如 10 年。</p>
-<p>据<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreffer">云原生安全破局｜如何管理周期越来越短的数字证书？</a>所述，大量知名企业如 特斯拉/微软/领英/爱立信 都曾因未及时更换 TLS 证书导致服务暂时不可用。</p>
+<p>据<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreferrer">云原生安全破局｜如何管理周期越来越短的数字证书？</a>所述，大量知名企业如 特斯拉/微软/领英/爱立信 都曾因未及时更换 TLS 证书导致服务暂时不可用。</p>
 <p>因此 TLS 证书最好是设置自动轮转！人工维护不可靠！
 目前很多 Web 服务器/代理，都支持自动轮转 Let&rsquo;s Encrypt 证书。
 另外 Vault 等安全工具，也支持自动轮转私有证书。</p>
@@ -2410,7 +2410,7 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 <p>签名与验证：私钥用于对数据进行签名，公钥用于对签名进行验证</p>
 </li>
 <li>
-<p><a href="https://www.zhihu.com/question/25912483/answer/31653639" target="_blank" rel="noopener noreffer">加密与签名的公私钥，用途刚好相反！</a></p>
+<p><a href="https://www.zhihu.com/question/25912483/answer/31653639" target="_blank" rel="noopener noreferrer">加密与签名的公私钥，用途刚好相反！</a></p>
 </li>
 </ul>
 <h2 id="四服务端与客户端的证书配置">四、服务端与客户端的证书配置</h2>
@@ -2423,7 +2423,7 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 <p>一般如 Nginx 等服务端应用，都可以通过配置文件指定这两个文件的位置。修改配置后重新启动，就有 TLS 了，可以通过 https 协议访问测试。</p>
 <h4 id="11-完美前向保密">1.1 完美前向保密</h4>
 <p>旧版本的 TLS 协议并不一定能保证前向保密，为了保证前向安全，需要在服务端配置中进行一定设置。
-具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target="_blank" rel="noopener noreffer">ssl-config - mozilla</a>，该网站提供三个安全等级的配置：</p>
+具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target="_blank" rel="noopener noreferrer">ssl-config - mozilla</a>，该网站提供三个安全等级的配置：</p>
 <ol>
 <li>「Intermediate」：查看生成出的 <code>ssl-cipher</code> 属性，发现它只支持 <code>ECDHE</code>/<code>DHE</code> 开头的算法。因此它保证前向保密。
 <ul>
@@ -2437,7 +2437,7 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 </li>
 <li>「Old」：除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
 </ol>
-<p>另外阿里云负载均衡器配置前向保密的方法参见：<a href="https://help.aliyun.com/document_detail/90740.html" target="_blank" rel="noopener noreffer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
+<p>另外阿里云负载均衡器配置前向保密的方法参见：<a href="https://help.aliyun.com/document_detail/90740.html" target="_blank" rel="noopener noreferrer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
 <h3 id="2-客户端的-tls-证书配置针对本地签名的证书">2. 客户端的 TLS 证书配置（针对本地签名的证书）</h3>
 <p>如果你在证书不是权威 CA 机构颁发的（比如是一个自签名证书），那就需要在客户端将这个 TLS 证书添加到受信证书列表中。
 这个步骤可以在 OS 层面进行——添加到 OS 的默认证书列表中，也可以在代码层面完成——指定使用某个证书进行 TLS 验证。</p>
@@ -2456,7 +2456,7 @@ sudo update-ca-certificates
 </div></li>
 <li>Windows: 通过证书管理器 <code>certmgr.msc</code> 将证书安装到 <code>受信任的根证书颁发机构</code>，Chrome 的小锁就能变绿了。</li>
 <li>编程：使用 HTTPS 客户端的 api 指定使用的 TLS 证书</li>
-<li>Docker-Client: 参见 <a href="https://docs.docker.com/registry/insecure/#use-self-signed-certificates" target="_blank" rel="noopener noreffer">Use self-signed certificates - Docker Docs</a></li>
+<li>Docker-Client: 参见 <a href="https://docs.docker.com/registry/insecure/#use-self-signed-certificates" target="_blank" rel="noopener noreferrer">Use self-signed certificates - Docker Docs</a></li>
 </ol>
 <h4 id="21-证书锁定certifacte-pining技术">2.1 证书锁定(Certifacte Pining)技术</h4>
 <p>即使使用了 TLS 协议对流量进行加密，并且保证了前向保密，也无法保证流量不被代理！</p>
@@ -2485,7 +2485,7 @@ sudo update-ca-certificates
 <p>「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
 <p><strong>如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。</strong></p>
 <h2 id="五tls-双向认证mutual-tls-authentication-mtls">五、TLS 双向认证(Mutual TLS authentication, mTLS)</h2>
-<p>TLS 协议（tls1.0+，RFC: <a href="https://tools.ietf.org/html/rfc5246#section-7.4.4" target="_blank" rel="noopener noreffer">TLS1.2 - RFC5246</a>）中，定义了服务端请求验证客户端证书的方法。这
+<p>TLS 协议（tls1.0+，RFC: <a href="https://tools.ietf.org/html/rfc5246#section-7.4.4" target="_blank" rel="noopener noreferrer">TLS1.2 - RFC5246</a>）中，定义了服务端请求验证客户端证书的方法。这
 个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。</p>
 <p>传统的「TLS 单向认证」技术，只在客户端去验证服务端是否可信。
 而「TLS 双向认证（mTLS）」，则添加了服务端验证客户端是否可信的步骤（第三步）：</p>
@@ -2532,8 +2532,8 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class="se">\
 这样就能保证每个 RPC 调用的客户端，都是其他微服务（或者别的可信方），防止黑客入侵后为所欲为。</p>
 <p>目前查到如下几个Web服务器/代理支持 mTLS:</p>
 <ol>
-<li>Traefik: <a href="https://docs.traefik.io/v2.0/https/tls/#client-authentication-mtls" target="_blank" rel="noopener noreffer">Docs - Client Authentication (mTLS)</a></li>
-<li>Nginx: <a href="https://community.openhab.org/t/using-nginx-reverse-proxy-for-client-certificate-authentication-start-discussion/43064" target="_blank" rel="noopener noreffer">Using NGINX Reverse Proxy for client certificate authentication</a>
+<li>Traefik: <a href="https://docs.traefik.io/v2.0/https/tls/#client-authentication-mtls" target="_blank" rel="noopener noreferrer">Docs - Client Authentication (mTLS)</a></li>
+<li>Nginx: <a href="https://community.openhab.org/t/using-nginx-reverse-proxy-for-client-certificate-authentication-start-discussion/43064" target="_blank" rel="noopener noreferrer">Using NGINX Reverse Proxy for client certificate authentication</a>
 <ol>
 <li>主要参数是两个：<code>ssl_client_certificate /etc/nginx/client-ca.pem</code> 和 <code>ssl_verify_client on</code></li>
 </ol>
@@ -2637,45 +2637,45 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 <h2 id="参考">参考</h2>
 <ul>
 <li>
-<p><a href="https://kubernetes.io/docs/concepts/cluster-administration/certificates/" target="_blank" rel="noopener noreffer">Certificates - Kubernetes Docs</a></p>
+<p><a href="https://kubernetes.io/docs/concepts/cluster-administration/certificates/" target="_blank" rel="noopener noreferrer">Certificates - Kubernetes Docs</a></p>
 </li>
 <li>
-<p><a href="https://www.cnblogs.com/kyrios/p/tls-and-certificates.html" target="_blank" rel="noopener noreffer">TLS/HTTPS 证书生成与验证</a></p>
+<p><a href="https://www.cnblogs.com/kyrios/p/tls-and-certificates.html" target="_blank" rel="noopener noreferrer">TLS/HTTPS 证书生成与验证</a></p>
 </li>
 <li>
-<p><a href="https://zhuanlan.zhihu.com/p/57710573" target="_blank" rel="noopener noreffer">ECC作为SSL/TLS证书加密算法的优势</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/57710573" target="_blank" rel="noopener noreferrer">ECC作为SSL/TLS证书加密算法的优势</a></p>
 </li>
 <li>
-<p><a href="https://cloud.tencent.com/developer/article/1407305" target="_blank" rel="noopener noreffer">ECC证书的生成和验签</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1407305" target="_blank" rel="noopener noreferrer">ECC证书的生成和验签</a></p>
 </li>
 <li>
-<p><a href="https://zh.wikipedia.org/wiki/%E5%89%8D%E5%90%91%E4%BF%9D%E5%AF%86" target="_blank" rel="noopener noreffer">前向保密(Forward Secrecy) - WikiPedia</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%89%8D%E5%90%91%E4%BF%9D%E5%AF%86" target="_blank" rel="noopener noreferrer">前向保密(Forward Secrecy) - WikiPedia</a></p>
 </li>
 <li>
-<p><a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreffer">证书选型和购买 - 阿里云文档</a></p>
+<p><a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreferrer">证书选型和购买 - 阿里云文档</a></p>
 </li>
 <li>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreffer">云原生安全破局｜如何管理周期越来越短的数字证书？</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreferrer">云原生安全破局｜如何管理周期越来越短的数字证书？</a></p>
 </li>
 </ul>
 <p>另外两个关于 CN(Common Name) 和 SAN(Subject Altnative Name) 的问答：</p>
 <ul>
-<li><a href="https://serverfault.com/questions/880804/can-not-get-rid-of-neterr-cert-common-name-invalid-error-in-chrome-with-self" target="_blank" rel="noopener noreffer">Can not get rid of <code>net::ERR_CERT_COMMON_NAME_INVALID</code> error in chrome with self-signed certificates</a></li>
-<li><a href="https://stackoverflow.com/questions/5935369/ssl-how-do-common-names-cn-and-subject-alternative-names-san-work-together" target="_blank" rel="noopener noreffer">SSL - How do Common Names (CN) and Subject Alternative Names (SAN) work together?</a></li>
+<li><a href="https://serverfault.com/questions/880804/can-not-get-rid-of-neterr-cert-common-name-invalid-error-in-chrome-with-self" target="_blank" rel="noopener noreferrer">Can not get rid of <code>net::ERR_CERT_COMMON_NAME_INVALID</code> error in chrome with self-signed certificates</a></li>
+<li><a href="https://stackoverflow.com/questions/5935369/ssl-how-do-common-names-cn-and-subject-alternative-names-san-work-together" target="_blank" rel="noopener noreferrer">SSL - How do Common Names (CN) and Subject Alternative Names (SAN) work together?</a></li>
 </ul>
 <p>关于证书锁定/公钥锁定技术：</p>
 <ul>
-<li><a href="https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning" target="_blank" rel="noopener noreffer">Certificate and Public Key Pinning - OWASP</a></li>
-<li><a href="https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning" target="_blank" rel="noopener noreffer">Difference between certificate pinning and public key pinning</a></li>
+<li><a href="https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning" target="_blank" rel="noopener noreferrer">Certificate and Public Key Pinning - OWASP</a></li>
+<li><a href="https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning" target="_blank" rel="noopener noreferrer">Difference between certificate pinning and public key pinning</a></li>
 </ul>
 <p>加密/签名算法相关：</p>
 <ul>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html" target="_blank" rel="noopener noreffer">RSA算法原理（二）</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html" target="_blank" rel="noopener noreferrer">RSA算法原理（二）</a></li>
 </ul>
 <p>其他：</p>
 <ul>
-<li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreffer">OpenSSL ManPage</a></li>
-<li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreffer">openssl 查看证书</a></li>
+<li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreferrer">OpenSSL ManPage</a></li>
+<li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreferrer">openssl 查看证书</a></li>
 </ul>
 ]]></description></item><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
@@ -2741,7 +2741,7 @@ sudo yast2 virtualization
 </div>
 </div><p>安装完成后，还不能直接使用，需要做些额外的工作。请继续往下走。</p>
 <h3 id="1-libguestfs---虚拟机磁盘映像处理工具">1. libguestfs - 虚拟机磁盘映像处理工具</h3>
-<p><a href="https://libguestfs.org/" target="_blank" rel="noopener noreffer">libguestfs</a> 是一个虚拟机磁盘映像处理工具，可用于直接修改/查看/虚拟机映像、转换映像格式等。</p>
+<p><a href="https://libguestfs.org/" target="_blank" rel="noopener noreferrer">libguestfs</a> 是一个虚拟机磁盘映像处理工具，可用于直接修改/查看/虚拟机映像、转换映像格式等。</p>
 <p>它提供的命令列表如下：</p>
 <ol>
 <li><code>virt-df centos.img</code>: 查看硬盘使用情况</li>
@@ -2920,7 +2920,7 @@ qemu-img info centos7-test01.qcow2
 </code></pre></td></tr></table>
 </div>
 </div><p>直接转换 vmdk 文件得到的 qcow2 镜像，启会报错，比如「磁盘无法挂载」。
-根据 <a href="https://pve.proxmox.com/pve-docs/chapter-qm.html#_importing_virtual_machines_and_disk_images" target="_blank" rel="noopener noreffer">Importing Virtual Machines and disk images - ProxmoxVE Docs</a> 文档所言，需要在网上下载安装 MergeIDE.zip 组件，
+根据 <a href="https://pve.proxmox.com/pve-docs/chapter-qm.html#_importing_virtual_machines_and_disk_images" target="_blank" rel="noopener noreferrer">Importing Virtual Machines and disk images - ProxmoxVE Docs</a> 文档所言，需要在网上下载安装 MergeIDE.zip 组件，
 另外启动虚拟机前，需要将硬盘类型改为 IDE，才能解决这个问题。</p>
 <h3 id="2-导入-img-镜像">2. 导入 img 镜像</h3>
 <p>img 镜像文件，就是所谓的 raw 格式镜像，也被称为裸镜像，IO 速度比 qcow2 快，但是体积大，而且不支持快照等高级特性。
@@ -3183,12 +3183,12 @@ virsh net-list
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://doc.opensuse.org/documentation/leap/virtualization/html/book-virt/index.html" target="_blank" rel="noopener noreffer">Virtualization Guide - OpenSUSE</a></li>
-<li><a href="https://computingforgeeks.com/complete-installation-of-kvmqemu-and-virt-manager-on-arch-linux-and-manjaro/" target="_blank" rel="noopener noreffer">Complete Installation of KVM, QEMU and Virt Manager on Arch Linux and Manjaro</a></li>
-<li><a href="https://ubuntu.com/server/docs/virtualization-libvirt" target="_blank" rel="noopener noreffer">virtualization-libvirt - ubuntu docs</a></li>
-<li><a href="https://developers.redhat.com/products/rhel/hello-world#fndtn-kvm" target="_blank" rel="noopener noreffer">RedHat Docs - KVM</a></li>
+<li><a href="https://doc.opensuse.org/documentation/leap/virtualization/html/book-virt/index.html" target="_blank" rel="noopener noreferrer">Virtualization Guide - OpenSUSE</a></li>
+<li><a href="https://computingforgeeks.com/complete-installation-of-kvmqemu-and-virt-manager-on-arch-linux-and-manjaro/" target="_blank" rel="noopener noreferrer">Complete Installation of KVM, QEMU and Virt Manager on Arch Linux and Manjaro</a></li>
+<li><a href="https://ubuntu.com/server/docs/virtualization-libvirt" target="_blank" rel="noopener noreferrer">virtualization-libvirt - ubuntu docs</a></li>
+<li><a href="https://developers.redhat.com/products/rhel/hello-world#fndtn-kvm" target="_blank" rel="noopener noreferrer">RedHat Docs - KVM</a></li>
 </ul>]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreffer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
+ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreferrer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
 <ul>
 <li>AWS/阿里云等云上的负载均衡、云服务器、TLS 证书、DNS、CDN、OSS、数据库&hellip;几乎所有的云上资源</li>
 <li>本地自建的 vSphere/Kubernetes/ProxmoxVE/libvirt 环境中的虚拟机、容器等资源</li>
@@ -3207,7 +3207,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 销毁整个测试环境也只需要一行命令。</p>
 <p><strong>实际使用体验</strong>：我们使用 Pulumi 自动化了阿里云测试环境搭建 95%+ 的操作，这个比例随着阿里云的 pulumi provider 的完善，还可以进一步提高！</p>
 <h2 id="pulumi-vs-terraform">Pulumi vs Terraform</h2>
-<p>有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 <a href="https://www.terraform.io/" target="_blank" rel="noopener noreffer">Terraform</a>.</p>
+<p>有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 <a href="https://www.terraform.io/" target="_blank" rel="noopener noreferrer">Terraform</a>.</p>
 <p>实际上我们一开始使用的也是 Terraform，但是后来使用 Pulumi 完全重写了一遍。</p>
 <p>主要原因是，Pulumi 解决了 Terraform 配置的一个痛点：配置语法太过简单，导致配置繁琐。而且还要额外学习一门 DSL - HCL</p>
 <p>Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，表现力不够强。
@@ -3238,7 +3238,7 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <ol start="4">
 <li>原生支持通过 Python/Go/TypeScript/Dotnet 等语言编写配置，也就完全解决了上述的 terraform 和 python 的交互问题。</li>
 <li>pulumi 是目前最流行的 真-IaaS 工具，对各语言的支持都很成熟。</li>
-<li>兼容 terraform 的所有 provider，只是需要自行使用 <a href="https://github.com/pulumi/pulumi-tf-provider-boilerplate" target="_blank" rel="noopener noreffer">pulumi-tf-provider-boilerplate</a> 重新打包，有些麻烦。
+<li>兼容 terraform 的所有 provider，只是需要自行使用 <a href="https://github.com/pulumi/pulumi-tf-provider-boilerplate" target="_blank" rel="noopener noreferrer">pulumi-tf-provider-boilerplate</a> 重新打包，有些麻烦。
 <ol>
 <li>pulumi 官方的 provider 几乎全都是封装的 terraform provider，包括 aws/azure/alicloud，目前只发现 kubernetes 是原生的（独苗啊）。</li>
 </ol>
@@ -3247,13 +3247,13 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <ol>
 <li>使用 app.pulumi.com（默认）:免费版提供 stack 历史管理，可以看到所有的历史记录。另外还提供一个资源关系的可视化面板。总之很方便，但是多人合作就需要收费。</li>
 <li>本地文件存储：<code>pulumi login file:///app/data</code></li>
-<li><a href="https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend" target="_blank" rel="noopener noreffer">云端对象存储</a>，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
+<li><a href="https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-aws-s3-backend" target="_blank" rel="noopener noreferrer">云端对象存储</a>，支持 s3 等对象存储协议，因此可以使用 AWS 或者本地的 MinIO 来做 Backend.
 <ul>
 <li><code>pulumi login 's3://&lt;bucket-path&gt;?endpoint=my.minio.local:8080&amp;disableSSL=true&amp;s3ForcePathStyle=true'</code></li>
 <li>minio/aws 的 creadential 可以通过 <code>AWS_ACCESS_KEY_ID</code> 和 <code>AWS_SECRET_ACCESS_KEY</code> 两个环境变量设置。另外即使是使用 MinIO，<code>AWS_REGION</code> 这个没啥用的环境变量也必须设置！否则会报错。</li>
 </ul>
 </li>
-<li><a href="https://github.com/pulumi/pulumi/issues/4727" target="_blank" rel="noopener noreffer">gitlab 13 支持 Terraform HTTP State 协议</a>，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。</li>
+<li><a href="https://github.com/pulumi/pulumi/issues/4727" target="_blank" rel="noopener noreferrer">gitlab 13 支持 Terraform HTTP State 协议</a>，等这个 pr 合并，pulumi 也能以 gitlab 为 backend 了。</li>
 <li>使用 pulumi 企业版（自建服务）：比 app.pulumi.com 提供更多的特性，但是显然是收费的。。</li>
 </ol>
 </li>
@@ -3264,12 +3264,12 @@ ryan4yin</author><guid>https://ryan4yin.space/expirence-of-pulumi/</guid><descri
 <p>以下内容是我对 pulumi 的一些思考，以及使用 pulumi 遇到的各种问题+解决方法，适合对 pulumi 有一定了解的同学阅读。</p>
 </blockquote>
 <blockquote>
-<p>如果你刚接触 Pulumi 而且有兴趣学习，建议先移步 <a href="https://www.pulumi.com/docs/get-started/install/" target="_blank" rel="noopener noreffer">pulumi get started</a> 入个门，再接着看下面的内容。</p>
+<p>如果你刚接触 Pulumi 而且有兴趣学习，建议先移步 <a href="https://www.pulumi.com/docs/get-started/install/" target="_blank" rel="noopener noreferrer">pulumi get started</a> 入个门，再接着看下面的内容。</p>
 </blockquote>
 <h2 id="使用建议">使用建议</h2>
 <ol>
 <li><strong>建议查看对应的 terraform provider 文档：pulumi 的 provider 基本都是封装的 terraform 版本，而且文档是自动生成的，比（简）较（直）难（一）看（坨）懂（shi），examples 也少。</strong></li>
-<li>stack: pulumi 官方提供了两种 stack 用法：<a href="https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/" target="_blank" rel="noopener noreffer">「单体」和「微-stack」</a>
+<li>stack: pulumi 官方提供了两种 stack 用法：<a href="https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/" target="_blank" rel="noopener noreferrer">「单体」和「微-stack」</a>
 <ol>
 <li>单体: one stack rule them all，通过 stack 参数来控制步骤。stack 用来区分环境 dev/pro 等。</li>
 <li>微-stack: 每一个 stack 是一个步骤，所有 stack 组成一个完整的项目。</li>
@@ -3516,19 +3516,19 @@ pulumi login s3://&lt;bucket-path&gt;
 </ol>
 <h2 id="常用-provider">常用 Provider</h2>
 <ul>
-<li><a href="https://github.com/pulumi/pulumi-alicloud" target="_blank" rel="noopener noreffer">pulumi-alicloud</a>: 管理阿里云资源</li>
-<li><a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreffer">pulumi-vault</a>: 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。</li>
+<li><a href="https://github.com/pulumi/pulumi-alicloud" target="_blank" rel="noopener noreferrer">pulumi-alicloud</a>: 管理阿里云资源</li>
+<li><a href="https://github.com/pulumi/pulumi-vault" target="_blank" rel="noopener noreferrer">pulumi-vault</a>: 我这边用它来快速初始化 vault，创建与管理 vault 的所有配置。</li>
 </ul>
 <h2 id="我创建维护的-provider">我创建维护的 Provider</h2>
 <p>由于 Pulumi 生态还比较小，有些 provider 只有 terraform 才有。</p>
 <p>我为了造(方)福(便)大(自)众(己)，创建并维护了两个本地虚拟机相关的 Providers:</p>
 <ul>
-<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-proxmox</a>: 目前只用来自动创建 PVE 虚拟机
+<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-proxmox</a>: 目前只用来自动创建 PVE 虚拟机
 <ul>
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>
 </li>
-<li><a href="https://github.com/ryan4yin/pulumi-libvirt" target="_blank" rel="noopener noreffer">ryan4yin/pulumi-libvirt</a>: 快速创建 kvm 虚拟机
+<li><a href="https://github.com/ryan4yin/pulumi-libvirt" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-libvirt</a>: 快速创建 kvm 虚拟机
 <ul>
 <li>可以考虑结合 kubespray/kubeadm 快速创建 k8s 集群</li>
 </ul>
@@ -3575,7 +3575,7 @@ sudo zypper clean  <span class="c1"># 清理本地的包缓存</span>
 </div>
 </div><h2 id="install-softwares">Install Softwares</h2>
 <blockquote>
-<p>这里需要用到 <a href="https://mirrors.openSUSE.org/list/bs.html" target="_blank" rel="noopener noreffer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
+<p>这里需要用到 <a href="https://mirrors.openSUSE.org/list/bs.html" target="_blank" rel="noopener noreferrer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
 建议有条件可以在路由器上加智能代理提速。</p>
 </blockquote>
 <p>安装需要用到的各类软件:</p>
@@ -3848,7 +3848,7 @@ sudo systemctl restart firewalld.service
 <ul>
 <li><i class="far fa-square fa-fw"></i> Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。
 <ul>
-<li>如果你有 ROOT 权限，可以参考 <a href="https://szclsya.me/posts/android/fix-clipboard-android-10/" target="_blank" rel="noopener noreffer">Fix clipboard permission on Android 10</a> 的方法，安装 ClipboardWhitelist 来打开权限。</li>
+<li>如果你有 ROOT 权限，可以参考 <a href="https://szclsya.me/posts/android/fix-clipboard-android-10/" target="_blank" rel="noopener noreferrer">Fix clipboard permission on Android 10</a> 的方法，安装 ClipboardWhitelist 来打开权限。</li>
 <li>否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。</li>
 </ul>
 </li>
@@ -4093,7 +4093,7 @@ ryan4yin</author><guid>https://ryan4yin.space/jingdezhen-renaissance-band-2020-s
 ryan4yin</author><guid>https://ryan4yin.space/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
 <p>抓包分析工具主要有两种：</p>
 <ol>
-<li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreffer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
+<li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreferrer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
 <li>tcp/udp/icmp 等网络嗅探工具：tcpdump/tshark 都属于这一类，网络故障分析等场景常用。</li>
 </ol>
 <p>这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。
@@ -4258,7 +4258,7 @@ nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k 
 <span class="c1"># 如果你只需要简单地抓 http/https 包，请使用 fiddler/mitmproxy</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreffer">ksniff</a>!</p>
+</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>!</p>
 <h3 id="windows-系统">Windows 系统</h3>
 <p>另外如果你本机是 Windows 系统，要分 shell 讨论：</p>
 <ol>
@@ -4276,18 +4276,18 @@ nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k 
 sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark.exe<span class="k">)</span><span class="s2">&#34;</span> /usr/local/bin/wireshark
 </code></pre></td></tr></table>
 </div>
-</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreffer">ksniff</a>）。
+</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>）。
 它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。</p>
-<h2 id="2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析">2. <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreffer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
+<h2 id="2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析">2. <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
 <p>有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
-这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreffer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
-<p><a href="https://github.com/aylei/kubectl-debug" target="_blank" rel="noopener noreffer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
+这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
+<p><a href="https://github.com/aylei/kubectl-debug" target="_blank" rel="noopener noreferrer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/92993778" target="_blank" rel="noopener noreffer">WireShark使用教程</a></li>
-<li><a href="https://techzone.ergon.ch/tcpdump" target="_blank" rel="noopener noreffer">Tracing network traffic using tcpdump and tshark</a></li>
-<li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreffer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
-<li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreffer">聊聊tcpdump与Wireshark抓包分析</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/92993778" target="_blank" rel="noopener noreferrer">WireShark使用教程</a></li>
+<li><a href="https://techzone.ergon.ch/tcpdump" target="_blank" rel="noopener noreferrer">Tracing network traffic using tcpdump and tshark</a></li>
+<li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreferrer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
+<li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreferrer">聊聊tcpdump与Wireshark抓包分析</a></li>
 </ul>
 ]]></description></item><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
@@ -4344,7 +4344,7 @@ ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><des
 </code></pre></td></tr></table>
 </div>
 </div><p>RSA 是基于大数分解的加密/签名算法，上述参数中，<code>e</code> 是公钥的模数(modulus)，<code>n</code> 是公钥的指数(exponent)，两个参数都是 base64 字符串。</p>
-<p>JWK 中 RSA 公钥的具体定义参见 <a href="https://tools.ietf.org/html/rfc7518#page-30" target="_blank" rel="noopener noreffer">RSA Keys - JSON Web Algorithms (JWA)</a></p>
+<p>JWK 中 RSA 公钥的具体定义参见 <a href="https://tools.ietf.org/html/rfc7518#page-30" target="_blank" rel="noopener noreferrer">RSA Keys - JSON Web Algorithms (JWA)</a></p>
 <h3 id="2-jwk-的生成">2. JWK 的生成</h3>
 <p>要生成 JWK 公钥，需要先生成私钥，生成方法参见 <a href="/jwt-algorithm-key-generation/#使用-openssl-生成-rsaecc-公私钥" rel="">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a>。</p>
 <blockquote>
@@ -4500,7 +4500,7 @@ xwIDAQAB
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="4-测试密钥可用性">4. 测试密钥可用性</h3>
-<p>接下来在 <a href="https://jwt.io" target="_blank" rel="noopener noreffer">jwt.io</a> 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。
+<p>接下来在 <a href="https://jwt.io" target="_blank" rel="noopener noreferrer">jwt.io</a> 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。
 </p>
 <p>可以看到左下角显示「Signature Verified」，成功地生成出了 JWT。后续可以使用这个 JWT 访问 Istio 网关，测试 Istio JWT 验证功能。</p>
 <h3 id="5-启用-istio-的身份验证">5. 启用 Istio 的身份验证</h3>
@@ -4643,12 +4643,12 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <p>这可能需要通过 EnvoyFilter 自定义响应头，添加跨域信息。</p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://auth0.com/docs/tokens/references/jwks-properties" target="_blank" rel="noopener noreffer">JSON Web Key Set Properties - Auth0</a></li>
-<li><a href="https://tools.ietf.org/html/rfc7517" target="_blank" rel="noopener noreffer">JWK - RFC7517</a></li>
-<li><a href="https://github.com/istio/istio/tree/master/security/tools/jwt/samples" target="_blank" rel="noopener noreffer">Sample JWT and JWKS data for demo - Istio Security</a></li>
-<li><a href="https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication" target="_blank" rel="noopener noreffer">End User Authentication - Istio</a></li>
-<li><a href="https://istio.io/docs/reference/config/security/jwt/" target="_blank" rel="noopener noreffer">JWTRule - Istio</a></li>
-<li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt.io - 动态生成 jwt</a></li>
+<li><a href="https://auth0.com/docs/tokens/references/jwks-properties" target="_blank" rel="noopener noreferrer">JSON Web Key Set Properties - Auth0</a></li>
+<li><a href="https://tools.ietf.org/html/rfc7517" target="_blank" rel="noopener noreferrer">JWK - RFC7517</a></li>
+<li><a href="https://github.com/istio/istio/tree/master/security/tools/jwt/samples" target="_blank" rel="noopener noreferrer">Sample JWT and JWKS data for demo - Istio Security</a></li>
+<li><a href="https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication" target="_blank" rel="noopener noreferrer">End User Authentication - Istio</a></li>
+<li><a href="https://istio.io/docs/reference/config/security/jwt/" target="_blank" rel="noopener noreferrer">JWTRule - Istio</a></li>
+<li><a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">jwt.io - 动态生成 jwt</a></li>
 </ul>]]></description></item><item><title>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</title><link>https://ryan4yin.space/about-dns-protocol/</link><pubDate>Sun, 29 Mar 2020 15:49:23 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><description><![CDATA[<blockquote>
 <p>个人笔记，观点不一定正确. 适合对 Kubernetes 有一定了解的同学。</p>
@@ -4712,7 +4712,7 @@ ryan4yin</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><descrip
 <ul>
 <li>顶级域名服务器负责解析<code>次级域名</code>，给出次级域名的 DNS 服务器地址。</li>
 <li>每个顶级域名都对应各自的服务器，它们之间是完全独立的。<code>.cn</code> 的域名解析仅由 <code>.cn</code> 顶级域名服务器提供。</li>
-<li>目前国际 DNS 系统中已有上千个 TLD，包括中文「.我爱你」甚至藏文域名，详细列表参见 <a href="http://www.iana.org/domains/root/db" target="_blank" rel="noopener noreffer">IANA TLD 数据库</a></li>
+<li>目前国际 DNS 系统中已有上千个 TLD，包括中文「.我爱你」甚至藏文域名，详细列表参见 <a href="http://www.iana.org/domains/root/db" target="_blank" rel="noopener noreferrer">IANA TLD 数据库</a></li>
 <li>除了国际可用的 TLD，还有一类类似「内网 IP 地址」的“私有 TLD”，最常见的比如  xxx.local xxx.lan，被广泛用在集群通信中。后面详细介绍</li>
 </ul>
 </li>
@@ -4767,7 +4767,7 @@ ryan4yin</author><guid>https://ryan4yin.space/about-dns-protocol/</guid><descrip
 <p>这类服务器只在当前局域网内有效，是一个私有的 DNS 服务器，企业常用。一般通过 DHCP 或者手动配置的方式，使内网的服务器都默认使用局域网 DNS 服务器进行解析。该服务器可以只解析自己的私有 DNS 域，而将其他 DNS 域的解析 forward 到公网 DNS 解析器去。</p>
 <p>这个私有 DNS 域，会覆盖掉公网的同名域(如果公网上有这个域的话)。
 私有 dns 域也可使用公网不存在的 TLD，比如 xxx.local xxx.lan 等。vmware vcenter 就默认使用 vsphere.local 作为它的 sso (单点登录)系统的域名。kubernetes 默认使用 <code>svc.cluster.local</code> 作为集群内部域名。</p>
-<p>私有 DNS 域的选择，参见 <a href="https://www.cnblogs.com/kirito-c/p/12624815.html" target="_blank" rel="noopener noreffer">DNS 私有域的选择：internal.xxx.com xxx.local 还是 xxx.zone？</a></p>
+<p>私有 DNS 域的选择，参见 <a href="https://www.cnblogs.com/kirito-c/p/12624815.html" target="_blank" rel="noopener noreferrer">DNS 私有域的选择：internal.xxx.com xxx.local 还是 xxx.zone？</a></p>
 <p>局域网 DNS 服务器的规模与层级，视局域网的大小而定。一般小公司一个就行，要容灾设三个副本也够了。</p>
 <p>以 CoreDNS 为例，局域网 DNS 服务器也可以被设置成一个 DNS Resolver，可以设置只转发特定域名的 DNS 解析。这叫将某个域设为「转发区域」。</p>
 <h2 id="五操作系统的-dns-解析器">五、操作系统的 DNS 解析器</h2>
@@ -4851,7 +4851,7 @@ options ndots:5
 </div>
 </div><p>可以看到 k8s 设置了一系列的搜索域，并且将 <code>.</code> 的临界值设为了 5。
 也就是少于 5 个 dots 的域名，都首先当作非 FQDN 看待，优先在搜索域里面查找。</p>
-<p>该配置文件的详细描述参见 <a href="http://man7.org/linux/man-pages/man5/resolv.conf.5.html" target="_blank" rel="noopener noreffer">manpage - resolv.conf</a>，或者在 Linux 中使用 <code>man resolv.conf</code> 命令查看。</p>
+<p>该配置文件的详细描述参见 <a href="http://man7.org/linux/man-pages/man5/resolv.conf.5.html" target="_blank" rel="noopener noreferrer">manpage - resolv.conf</a>，或者在 Linux 中使用 <code>man resolv.conf</code> 命令查看。</p>
 <h2 id="六dns-诊断的命令行工具">六、DNS 诊断的命令行工具</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -5005,7 +5005,7 @@ test-env.local:53 {
 </code></pre></td></tr></table>
 </div>
 </div><p>上面的 Corefile 定义了两个本地域名 <code>dev-env.local</code> 和 <code>test-env.local</code>，它们的 DNS 数据分别保存在 <code>file</code> 指定的文件中。</p>
-<p>这个 <code>file</code> 指定的文件和 <code>bind9</code> 一样，都是使用在 <a href="https://tools.ietf.org/html/rfc1035#section-5.3" target="_blank" rel="noopener noreffer">rfc1035</a> 中定义的 Master File 格式，<code>dig</code> 命令输出的就是这种格式的内容。示例如下：</p>
+<p>这个 <code>file</code> 指定的文件和 <code>bind9</code> 一样，都是使用在 <a href="https://tools.ietf.org/html/rfc1035#section-5.3" target="_blank" rel="noopener noreferrer">rfc1035</a> 中定义的 Master File 格式，<code>dig</code> 命令输出的就是这种格式的内容。示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -5044,7 +5044,7 @@ elasticsearch.dev-env.local. IN A     192.168.23.23
 ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </code></pre></td></tr></table>
 </div>
-</div><p>详细的格式说明参见 <a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_master_name" target="_blank" rel="noopener noreffer">鳥哥的 Linux 私房菜 - DNS 正解資料庫檔案的設定</a>
+</div><p>详细的格式说明参见 <a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_master_name" target="_blank" rel="noopener noreferrer">鳥哥的 Linux 私房菜 - DNS 正解資料庫檔案的設定</a>
 <code>test-env.local</code> 也是一样的格式，根据上面的模板修改就行。这两个配置文件和 Corefile 放在同一个目录下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -5067,9 +5067,9 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </div><p>然后通过 <code>./coredns</code> 启动 coredns。通过 dig 检验：
 </p>
 <p>可以看到 <code>ftp.dev-env.local</code> 已经被成功解析了。</p>
-<h3 id="3-可选插件external-pluginshttpscorednsioexplugins">3. <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">可选插件（External Plugins）</a></h3>
-<p>CoreDNS 提供的预编译版本，不包含 <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreffer">External Plugins</a> 中列出的部分，如果你需要，可以自行修改 <code>plugin.cfg</code>，然后手动编译。</p>
-<p>不得不说 Go 语言的编译，比 C 语言是方便太多了。自动拉取依赖，一行命令编译！只要配好 <a href="https://github.com/goproxy/goproxy.cn" target="_blank" rel="noopener noreffer">GOPROXY</a>，启用可选插件其实相当简单。</p>
+<h3 id="3-可选插件external-pluginshttpscorednsioexplugins">3. <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreferrer">可选插件（External Plugins）</a></h3>
+<p>CoreDNS 提供的预编译版本，不包含 <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreferrer">External Plugins</a> 中列出的部分，如果你需要，可以自行修改 <code>plugin.cfg</code>，然后手动编译。</p>
+<p>不得不说 Go 语言的编译，比 C 语言是方便太多了。自动拉取依赖，一行命令编译！只要配好 <a href="https://github.com/goproxy/goproxy.cn" target="_blank" rel="noopener noreferrer">GOPROXY</a>，启用可选插件其实相当简单。</p>
 <h3 id="4-设置-dns-集群">4. 设置 DNS 集群</h3>
 <p>单台 DNS 服务器的性能是有限的，而且存在单点故障问题。因此在要求高可用或者高性能的情况下，就需要设置 DNS 集群。</p>
 <p>虽然说 CoreDNS 本身也支持各种 DNS Zone 传输，主从 DNS 服务器等功能，不过我想最简单的，可能还是直接用 K8s。</p>
@@ -5077,13 +5077,13 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 <p>要修改起来更方便，还可以启用可选插件：redis，直接把配置以 json 的形式存在 redis 里，通过 redis-desktop-manager 进行查看与修改。</p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="http://www.ruanyifeng.com/blog/2016/06/dns.html" target="_blank" rel="noopener noreffer">DNS 原理入门</a></li>
-<li><a href="https://www.cloudflare.com/learning/dns/what-is-dns/" target="_blank" rel="noopener noreffer">What Is DNS? | How DNS Works - Cloudflare</a></li>
-<li><a href="https://aws.amazon.com/cn/route53/what-is-dns/?nc1=h_ls" target="_blank" rel="noopener noreffer">What is DNS? - Amazon AWS</a></li>
-<li><a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_resolver_whois" target="_blank" rel="noopener noreffer">鸟哥的 Linux 私房菜——主機名稱控制者： DNS 伺服器</a></li>
-<li><a href="https://coredns.io/manual/toc/" target="_blank" rel="noopener noreffer">CoreDNS - Manual</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener noreffer">Kubernetes - DNS for Services and Pods</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/" target="_blank" rel="noopener noreffer">Kubernetes - Customizing DNS Service</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/06/dns.html" target="_blank" rel="noopener noreferrer">DNS 原理入门</a></li>
+<li><a href="https://www.cloudflare.com/learning/dns/what-is-dns/" target="_blank" rel="noopener noreferrer">What Is DNS? | How DNS Works - Cloudflare</a></li>
+<li><a href="https://aws.amazon.com/cn/route53/what-is-dns/?nc1=h_ls" target="_blank" rel="noopener noreferrer">What is DNS? - Amazon AWS</a></li>
+<li><a href="http://linux.vbird.org/linux_server/0350dns.php#DNS_resolver_whois" target="_blank" rel="noopener noreferrer">鸟哥的 Linux 私房菜——主機名稱控制者： DNS 伺服器</a></li>
+<li><a href="https://coredns.io/manual/toc/" target="_blank" rel="noopener noreferrer">CoreDNS - Manual</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener noreferrer">Kubernetes - DNS for Services and Pods</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/" target="_blank" rel="noopener noreferrer">Kubernetes - Customizing DNS Service</a></li>
 </ul>
 ]]></description></item><item><title>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</title><link>https://ryan4yin.space/jwt-algorithm-key-generation/</link><pubDate>Tue, 03 Mar 2020 14:09:46 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/jwt-algorithm-key-generation/</guid><description><![CDATA[<h1 id="签名算法">签名算法</h1>
@@ -5123,9 +5123,9 @@ ryan4yin</author><guid>https://ryan4yin.space/jwt-algorithm-key-generation/</gui
 <p>对于单体应用而言，HS256 和 RS256 的安全性没有多大差别。
 而对于需要进行多方验证的微服务架构而言，显然只有 RS256/ES256 才能提供足够的安全性。
 在使用 RS256 时，只有「身份认证的微服务(auth)」需要用 RSA 私钥生成 JWT，其他微服务使用公开的公钥即可进行签名验证，私钥得到了更好的保护。</p>
-<p>更进一步，「JWT 生成」和「JWT 公钥分发」都可以直接委托给第三方的通用工具，比如 <a href="https://github.com/ory/hydra" target="_blank" rel="noopener noreffer">hydra</a>。
+<p>更进一步，「JWT 生成」和「JWT 公钥分发」都可以直接委托给第三方的通用工具，比如 <a href="https://github.com/ory/hydra" target="_blank" rel="noopener noreferrer">hydra</a>。
 甚至「JWT 验证」也可以委托给「API 网关」来处理，应用自身可以把认证鉴权完全委托给外部的平台，而应用自身只需要专注于业务。这也是目前的发展趋势。</p>
-<p><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreffer">RFC 7518 - JSON Web Algorithms (JWA)</a> 中给出的 JWT 算法列表如下：</p>
+<p><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreferrer">RFC 7518 - JSON Web Algorithms (JWA)</a> 中给出的 JWT 算法列表如下：</p>
 <pre><code>+--------------+-------------------------------+--------------------+
 | &quot;alg&quot; Param  | Digital Signature or MAC      | Implementation     |
 | Value        | Algorithm                     | Requirements       |
@@ -5194,13 +5194,13 @@ openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
 </code></pre></td></tr></table>
 </div>
 </div><p>密钥的使用应该就不需要介绍了，各类语言都有对应 JWT 库处理这些，请自行查看文档。</p>
-<p>如果是调试/学习 JWT，需要手动签名与验证的话，推荐使用 <a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt 工具网站 - jwt.io</a></p>
+<p>如果是调试/学习 JWT，需要手动签名与验证的话，推荐使用 <a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">jwt 工具网站 - jwt.io</a></p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreffer">RFC 7518 - JSON Web Algorithms (JWA)</a></li>
-<li><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener noreffer">什么是 JWT &ndash; JSON WEB TOKEN</a></li>
-<li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt 工具网站 - jwt.io</a></li>
-<li><a href="https://www.cnblogs.com/langshiquan/p/10701198.html" target="_blank" rel="noopener noreffer">JWT 算法比较</a></li>
+<li><a href="https://tools.ietf.org/html/rfc7518" target="_blank" rel="noopener noreferrer">RFC 7518 - JSON Web Algorithms (JWA)</a></li>
+<li><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener noreferrer">什么是 JWT &ndash; JSON WEB TOKEN</a></li>
+<li><a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">jwt 工具网站 - jwt.io</a></li>
+<li><a href="https://www.cnblogs.com/langshiquan/p/10701198.html" target="_blank" rel="noopener noreferrer">JWT 算法比较</a></li>
 </ul>
 ]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-and-solutions/</guid><description><![CDATA[<ol>
@@ -5208,15 +5208,15 @@ ryan4yin</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-an
 <li>CrashLoopBackoff: Pod 进入 <strong>崩溃-重启</strong>循环，重启间隔时间从 10 20 40 80 一直翻倍到上限 300 秒，然后以 300 秒为间隔无限重启。</li>
 <li>Pod 一直 Pending: 这说明没有任何节点能满足 Pod 的要求，容器无法被调度。比如端口被别的容器用 hostPort 占用，节点有污点等。</li>
 <li><a href="" rel="">FailedCreateSandBox: Failed create pod sandbox: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>：很可能是 CNI 网络插件的问题（比如 ip 地址溢出），</li>
-<li><a href="https://cloud.tencent.com/developer/article/1411527" target="_blank" rel="noopener noreffer">SandboxChanged: Pod sandbox changed, it will be killed and re-created</a>: 很可能是由于内存限制导致容器被 OOMKilled，或者其他资源不足</li>
-<li><a href="https://github.com/kubernetes/kubernetes/issues/55094" target="_blank" rel="noopener noreffer">FailedSync: error determining status: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>: 常和前两个错误先后出现，很可能是 CNI 网络插件的问题。</li>
+<li><a href="https://cloud.tencent.com/developer/article/1411527" target="_blank" rel="noopener noreferrer">SandboxChanged: Pod sandbox changed, it will be killed and re-created</a>: 很可能是由于内存限制导致容器被 OOMKilled，或者其他资源不足</li>
+<li><a href="https://github.com/kubernetes/kubernetes/issues/55094" target="_blank" rel="noopener noreferrer">FailedSync: error determining status: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>: 常和前两个错误先后出现，很可能是 CNI 网络插件的问题。</li>
 <li>开发集群，一次性部署所有服务时，各 Pod 互相争抢资源，导致 Pod 生存探针失败，不断重启，重启进一步加重资源使用。恶性循环。
 <ul>
 <li><strong>需要给每个 Pod 加上 resources.requests，这样资源不足时，后续 Pod 会停止调度，直到资源恢复正常。</strong></li>
 </ul>
 </li>
 <li>Pod 出现大量的 Failed 记录，Deployment 一直重复建立 Pod: 通过 <code>kubectl describe/edit pod &lt;pod-name&gt;</code> 查看 pod <code>Events</code> 和 <code>Status</code>，一般会看到失败信息，如节点异常导致 Pod 被驱逐。</li>
-<li><a href="https://zhuanlan.zhihu.com/p/70031676" target="_blank" rel="noopener noreffer">Kubernetes 问题排查：Pod 状态一直 Terminating</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/70031676" target="_blank" rel="noopener noreferrer">Kubernetes 问题排查：Pod 状态一直 Terminating</a></li>
 <li>创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的 ServiceAccount 不存在。</li>
 <li>Pod 运行失败，状态为 MatchNodeSelector: 对主节点进行关机、迁移等操作，导致主调度器下线时，会在一段时间内导致 Pod 调度失败，调度失败会报这个错。</li>
 <li>Pod 仍然存在，但是 <code>Service</code> 的 Endpoints 却为空，找不到对应的 Pod IPs: 遇到过一次，是因为时间跳变（从未来的时间改回了当前时间）导致的问题。</li>
@@ -5234,15 +5234,15 @@ ryan4yin</author><guid>https://ryan4yin.space/common-kubernetes-errors-causes-an
 </div>
 </div><p>最近找到几篇详细的原因分析文章，值得一看：</p>
 <ul>
-<li><a href="https://cloud.tencent.com/developer/article/1680612" target="_blank" rel="noopener noreffer">腾讯云原生 -【Pod Terminating原因追踪系列】之 containerd 中被漏掉的 runc 错误信息</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/1680613" target="_blank" rel="noopener noreffer">腾讯云原生 -【Pod Terminating原因追踪系列之二】exec连接未关闭导致的事件阻塞</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/1689486" target="_blank" rel="noopener noreffer">腾讯云原生 -【Pod Terminating原因追踪系列之三】让docker事件处理罢工的cancel状态码</a></li>
-<li><a href="https://www.likakuli.com/posts/docker-pod-terminating/" target="_blank" rel="noopener noreffer">Pod terminating - 问题排查 - KaKu Li</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1680612" target="_blank" rel="noopener noreferrer">腾讯云原生 -【Pod Terminating原因追踪系列】之 containerd 中被漏掉的 runc 错误信息</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1680613" target="_blank" rel="noopener noreferrer">腾讯云原生 -【Pod Terminating原因追踪系列之二】exec连接未关闭导致的事件阻塞</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1689486" target="_blank" rel="noopener noreferrer">腾讯云原生 -【Pod Terminating原因追踪系列之三】让docker事件处理罢工的cancel状态码</a></li>
+<li><a href="https://www.likakuli.com/posts/docker-pod-terminating/" target="_blank" rel="noopener noreferrer">Pod terminating - 问题排查 - KaKu Li</a></li>
 </ul>
 <p>大致总结一下，主要原因来自 docker 18.06 以及 kubernetes 的 docker-shim 运行时的底层逻辑，已经在新版本被修复了。</p>
 <h2 id="节点常见错误">节点常见错误</h2>
 <ol>
-<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#node-conditions" target="_blank" rel="noopener noreffer">DiskPressure</a>：节点的可用空间不足。（通过<code>df -h</code> 查看，保证可用空间不小于 15%）</li>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#node-conditions" target="_blank" rel="noopener noreferrer">DiskPressure</a>：节点的可用空间不足。（通过<code>df -h</code> 查看，保证可用空间不小于 15%）</li>
 <li>The node was low on resource: ephemeral-storage: 同上，节点的存储空间不够了。</li>
 </ol>
 <h2 id="网络常见错误">网络常见错误</h2>
@@ -5322,7 +5322,7 @@ etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/
 </div>
 </div><h2 id="容器镜像gcpod驱逐以及节点压力">容器镜像GC、Pod驱逐以及节点压力</h2>
 <p>节点压力 DiskPressure 会导致 Pod 被驱逐，也会触发容器镜像的 GC。</p>
-<p>根据官方文档 <a href="https://kubernetes.io/zh/docs/tasks/administer-cluster/out-of-resource" target="_blank" rel="noopener noreffer">配置资源不足时的处理方式</a>，Kubelet 提供如下用于配置容器 GC 及 Evicetion 的阈值：</p>
+<p>根据官方文档 <a href="https://kubernetes.io/zh/docs/tasks/administer-cluster/out-of-resource" target="_blank" rel="noopener noreferrer">配置资源不足时的处理方式</a>，Kubelet 提供如下用于配置容器 GC 及 Evicetion 的阈值：</p>
 <ol>
 <li><code>--eviction-hard</code> 和 <code>eviction-soft</code>: 对应旧参数 <code>--image-gc-high-threshold</code>，这两个参数配置镜像 GC 及驱逐的触发阈值。磁盘使用率的阈值默认为 85%
 <ol>
@@ -5353,15 +5353,15 @@ etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/
 <p>如果你使用的是 fluxcd 这类 GitOps 工具，就只需要手工删除旧 Pod，fluxcd 会定时自动 apply 所有配置，这就完成了 Job 的重建。</p>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://yq.aliyun.com/articles/703971?type=2" target="_blank" rel="noopener noreffer">Kubernetes管理经验</a></li>
-<li><a href="https://www.reddit.com/r/kubernetes/comments/ced0py/504_gateway_timeout_when_accessing_workload_via/" target="_blank" rel="noopener noreffer">504 Gateway Timeout when accessing workload via ingress</a></li>
-<li><a href="https://k8s.af/" target="_blank" rel="noopener noreffer">Kubernetes Failure Stories</a></li>
+<li><a href="https://yq.aliyun.com/articles/703971?type=2" target="_blank" rel="noopener noreferrer">Kubernetes管理经验</a></li>
+<li><a href="https://www.reddit.com/r/kubernetes/comments/ced0py/504_gateway_timeout_when_accessing_workload_via/" target="_blank" rel="noopener noreferrer">504 Gateway Timeout when accessing workload via ingress</a></li>
+<li><a href="https://k8s.af/" target="_blank" rel="noopener noreferrer">Kubernetes Failure Stories</a></li>
 </ul>
 ]]></description></item><item><title>Manjaro 使用指南</title><link>https://ryan4yin.space/manjaro-instruction/</link><pubDate>Sat, 13 Jul 2019 20:38:24 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/manjaro-instruction/</guid><description><![CDATA[<p>Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。
 最大的特点，是包仓库很丰富，而且都很新。代价是偶尔会出些小毛病。</p>
 <p>我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两个月，升级了两个大版本才恢复。
-另一个就是 <a href="https://github.com/microsoft/vscode/issues/110322" target="_blank" rel="noopener noreffer">VSCode - Incorrect locale &lsquo;en-US&rsquo; used everywhere</a></p>
+另一个就是 <a href="https://github.com/microsoft/vscode/issues/110322" target="_blank" rel="noopener noreferrer">VSCode - Incorrect locale &lsquo;en-US&rsquo; used everywhere</a></p>
 <p>还遇到过 <code>libguestfs</code> 的一个问题：<code>vrit-v2v</code>/<code>virt-p2v</code> 两个工具被拆分出去，导致 manjaro 只能通过源码安装这俩货。这貌似目前仍旧没有解决。</p>
 <p>总的来说体验很不错，能很及时地用上各种新版本的软件。</p>
 <h2 id="一pacmanyay-的基础命令">一、pacman/yay 的基础命令</h2>
@@ -5426,9 +5426,9 @@ pactree package_name          <span class="c1"># 显示软件的依赖树</span>
 </div>
 </div><h2 id="常用软件与配置">常用软件与配置</h2>
 <h3 id="1-添加-archlinux-中文社区仓库">1. 添加 archlinux 中文社区仓库</h3>
-<p><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreffer">Arch Linux 中文社区仓库</a> 是由 Arch Linux 中文社区驱动的非官方用户仓库，包含一些额外的软件包以及已有软件的 git 版本等变种。部分软件包的打包脚本来源于 AUR。</p>
+<p><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreferrer">Arch Linux 中文社区仓库</a> 是由 Arch Linux 中文社区驱动的非官方用户仓库，包含一些额外的软件包以及已有软件的 git 版本等变种。部分软件包的打包脚本来源于 AUR。</p>
 <p>一些国内软件，如果直接从 aur 安装，那就会有一个编译过程，有点慢。而 archlinuxcn 有已经编译好的包，可以直接安装。更新速度也很快，推荐使用。</p>
-<p>配置方法见 <a href="https://github.com/archlinuxcn/repo" target="_blank" rel="noopener noreffer">Arch Linux Chinese Community Repository</a>。</p>
+<p>配置方法见 <a href="https://github.com/archlinuxcn/repo" target="_blank" rel="noopener noreferrer">Arch Linux Chinese Community Repository</a>。</p>
 <h3 id="2-安装常用软件">2. 安装常用软件</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -5478,7 +5478,7 @@ sudo gpasswd --add <span class="nv">$USER</span> docker  <span class="c1"># 同�
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="3-中文输入法">3. 中文输入法</h3>
-<p>有两个选择：<a href="https://rime.im/" target="_blank" rel="noopener noreffer">中州韵（rime）</a>和<a href="https://aur.archlinux.org/packages/fcitx-sogoupinyin/" target="_blank" rel="noopener noreffer">搜狗拼音（sogoupinyin）</a>。</p>
+<p>有两个选择：<a href="https://rime.im/" target="_blank" rel="noopener noreferrer">中州韵（rime）</a>和<a href="https://aur.archlinux.org/packages/fcitx-sogoupinyin/" target="_blank" rel="noopener noreferrer">搜狗拼音（sogoupinyin）</a>。</p>
 <p>简单省事用搜狗，要用特殊的输入方案（五笔、音形、二笔等等）就只有 rime 可选了。</p>
 <h4 id="31-fcitx5-rime-配置小鹤音形">3.1 fcitx5-rime 配置小鹤音形</h4>
 <p>首先安装 fcitx5-rime, 注意这些组件一个都不能省略：</p>
@@ -5506,7 +5506,7 @@ QT_IM_MODULE  DEFAULT=fcitx5
 XMODIFIERS    DEFAULT=@im=fcitx5
 </code></pre></td></tr></table>
 </div>
-</div><p><a href="https://wiki.archlinux.org/index.php/PAM_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">pam-env</a> 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。</p>
+</div><p><a href="https://wiki.archlinux.org/index.php/PAM_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreferrer">pam-env</a> 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。</p>
 <p>添加自动启动：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -5589,12 +5589,12 @@ grub2-mkconfig &gt;  /boot/grub2/grub.cfg
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://wiki.archlinux.org/index.php/Main_page_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">Arch Linux Wiki - 中文</a></li>
-<li><a href="https://aur.archlinux.org/packages" target="_blank" rel="noopener noreffer">AUR 仓库</a></li>
-<li><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreffer">Arch Linux 中文社区仓库</a></li>
-<li><a href="https://github.com/Jguer/yay" target="_blank" rel="noopener noreffer">yay - Yet another Yogurt - An AUR Helper written in Go </a></li>
-<li><a href="https://panqiincs.me/2019/06/05/after-installing-manjaro/" target="_blank" rel="noopener noreffer">安装Manjaro之后的配置 </a></li>
-<li><a href="https://wiki.archlinux.org/index.php/Fcitx5_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreffer">Arch Linux Wiki - Fcitx5</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Main_page_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreferrer">Arch Linux Wiki - 中文</a></li>
+<li><a href="https://aur.archlinux.org/packages" target="_blank" rel="noopener noreferrer">AUR 仓库</a></li>
+<li><a href="https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/" target="_blank" rel="noopener noreferrer">Arch Linux 中文社区仓库</a></li>
+<li><a href="https://github.com/Jguer/yay" target="_blank" rel="noopener noreferrer">yay - Yet another Yogurt - An AUR Helper written in Go </a></li>
+<li><a href="https://panqiincs.me/2019/06/05/after-installing-manjaro/" target="_blank" rel="noopener noreferrer">安装Manjaro之后的配置 </a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Fcitx5_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreferrer">Arch Linux Wiki - Fcitx5</a></li>
 </ul>]]></description></item><item><title>WebSocket、HTTP/2 与 gRPC</title><link>https://ryan4yin.space/websocket-http2-and-grpc/</link><pubDate>Mon, 11 Feb 2019 18:26:36 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/websocket-http2-and-grpc/</guid><description><![CDATA[<h2 id="一websocket">一、WebSocket</h2>
 <p>WebSocket 是一个双向通信协议，它在握手阶段采用 HTTP/1.1 协议（暂时不支持 HTTP/2）。</p>
@@ -5646,8 +5646,8 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 </div><p>握手完成后，接下来的 TCP 数据包就都是 WebSocket 协议的帧了。</p>
 <p>可以看到，这里的握手不是 TCP 的握手，而是在 TCP 连接内部，从 HTTP/1.1 upgrade 到 WebSocket 的握手。</p>
 <p>WebSocket 提供两种协议：不加密的 <code>ws://</code> 和 加密的 <code>wss://</code>. 因为是用 HTTP 握手，它和 HTTP 使用同样的端口：ws 是 80（HTTP），wss 是 443（HTTPS）</p>
-<p>在 Python 编程中，可使用 <a href="https://github.com/aaugustin/websockets" target="_blank" rel="noopener noreffer">websockets</a> 实现的异步 WebSocket 客户端与服务端。此外 aiohttp 也提供了 WebSocket 支持。</p>
-<p><strong>Note</strong>：如果你搜索 Flask 的 WebScoket 插件，得到的第一个结果很可能是 <a href="https://github.com/miguelgrinberg/python-socketio" target="_blank" rel="noopener noreffer">Flask-SocketIO</a>。但是 <strong>Flask-ScoektIO</strong> 使用的是它独有的 SocketIO 协议，并不是标准的 WebSocket。只是它刚好提供与 WebSocket 相同的功能而已。</p>
+<p>在 Python 编程中，可使用 <a href="https://github.com/aaugustin/websockets" target="_blank" rel="noopener noreferrer">websockets</a> 实现的异步 WebSocket 客户端与服务端。此外 aiohttp 也提供了 WebSocket 支持。</p>
+<p><strong>Note</strong>：如果你搜索 Flask 的 WebScoket 插件，得到的第一个结果很可能是 <a href="https://github.com/miguelgrinberg/python-socketio" target="_blank" rel="noopener noreferrer">Flask-SocketIO</a>。但是 <strong>Flask-ScoektIO</strong> 使用的是它独有的 SocketIO 协议，并不是标准的 WebSocket。只是它刚好提供与 WebSocket 相同的功能而已。</p>
 <p>SocketIO 的优势在于只要 Web 端使用了 SocketIO.js，就能支持该协议。而纯 WS 协议，只有较新的浏览器才支持。对于客户端非 Web 的情况，更好的选择可能是使用 Flask-Sockets。</p>
 <h3 id="js-api">JS API</h3>
 <div class="highlight"><div class="chroma">
@@ -5846,7 +5846,7 @@ data: message\n\n
 <p>加密与否：</p>
 <ul>
 <li>WebSocket 支持明文通信 <code>ws://</code> 和加密 <code>wss://</code>，</li>
-<li>而 HTTP/2 协议虽然没有规定必须加密，但是<a href="https://en.wikipedia.org/wiki/HTTP/2#Encryption" target="_blank" rel="noopener noreffer">主流浏览器都只支持 HTTP/2 over TLS</a>.</li>
+<li>而 HTTP/2 协议虽然没有规定必须加密，但是<a href="https://en.wikipedia.org/wiki/HTTP/2#Encryption" target="_blank" rel="noopener noreferrer">主流浏览器都只支持 HTTP/2 over TLS</a>.</li>
 <li>SSE 是使用的 HTTP 协议通信，支持 http/https</li>
 </ul>
 </li>
@@ -5884,7 +5884,7 @@ data: message\n\n
 </div><p>但是 requests 默认使用 HTTP/1.1，并且不支持 HTTP/2.（不过这也不是什么大问题，HTTP/2 只是做了性能优化，用 HTTP/1.1 也就是慢一点而已。）</p>
 <h2 id="三grpc-协议">三、gRPC 协议</h2>
 <p>gRPC 是一个远程过程调用框架，默认使用 protobuf3 进行数据的高效序列化与 service 定义，使用 HTTP/2 进行数据传输。
-这里讨论的是 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreffer">gRPC over HTTP/2</a> 协议。</p>
+这里讨论的是 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreferrer">gRPC over HTTP/2</a> 协议。</p>
 <p>目前 gRPC 主要被用在微服务通信中，但是因为其优越的性能，它也很契合游戏、loT 等需要高性能低延迟的场景。</p>
 <p>其实光从协议先进程度上讲，gRPC 基本全面超越 REST:</p>
 <ol>
@@ -5897,7 +5897,7 @@ data: message\n\n
 如果你的产品只打算面向 App 等可控的客户端，可以考虑上 gRPC。</p>
 <p>对同时需要为浏览器和 APP 提供服务应用而言，也可以考虑 APP 使用 gRPC 协议，而浏览器使用 API 网关提供的 HTTP 接口，在 API 网关上进行 HTTP - gRPC 协议转换。</p>
 <h3 id="grpc-over-http2-定义">gRPC over HTTP/2 定义</h3>
-<p>详细的定义参见官方文档 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreffer">gRPC over HTTP/2</a>.</p>
+<p>详细的定义参见官方文档 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreferrer">gRPC over HTTP/2</a>.</p>
 <p>这里是简要说明几点：</p>
 <ol>
 <li>gRPC 完全隐藏了 HTTP/2 本身的 method、headers、path 等语义，这些信息对用户而言完全不可见了。
@@ -5909,28 +5909,28 @@ data: message\n\n
 </ol>
 <h2 id="参考">参考</h2>
 <ul>
-<li><a href="https://www.oschina.net/translate/how-does-javascript-actually-work-part-5" target="_blank" rel="noopener noreffer">深入探索 WebSockets 和 HTTP/2</a></li>
-<li><a href="https://www.cnblogs.com/etoah/p/5891285.html" target="_blank" rel="noopener noreffer">HTTP/2 特性与抓包分析</a></li>
-<li><a href="http://www.cnblogs.com/goody9807/p/4257192.html" target="_blank" rel="noopener noreffer">SSE：服务器发送事件,使用长链接进行通讯</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank" rel="noopener noreffer">Using server-sent events - MDN</a></li>
-<li><a href="https://caniuse.com/#search=http2" target="_blank" rel="noopener noreffer">Can I Use HTTP/2 on Browsers</a></li>
-<li><a href="https://stackoverflow.com/questions/37012486/python-3-x-how-to-get-http-version-using-requests-library" target="_blank" rel="noopener noreffer">Python 3.x how to get http version (using requests library)</a></li>
-<li><a href="https://www.zhihu.com/question/20215561/answer/40316953" target="_blank" rel="noopener noreffer">WebSocket 是什么原理？</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/26407649" target="_blank" rel="noopener noreffer">原生模块打造一个简单的 WebSocket 服务器</a></li>
-<li><a href="https://cloud.google.com/blog/products/api-management/understanding-grpc-openapi-and-rest-and-when-to-use-them" target="_blank" rel="noopener noreffer">Google Cloud - API design: Understanding gRPC, OpenAPI and REST and when to use them</a></li>
+<li><a href="https://www.oschina.net/translate/how-does-javascript-actually-work-part-5" target="_blank" rel="noopener noreferrer">深入探索 WebSockets 和 HTTP/2</a></li>
+<li><a href="https://www.cnblogs.com/etoah/p/5891285.html" target="_blank" rel="noopener noreferrer">HTTP/2 特性与抓包分析</a></li>
+<li><a href="http://www.cnblogs.com/goody9807/p/4257192.html" target="_blank" rel="noopener noreferrer">SSE：服务器发送事件,使用长链接进行通讯</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank" rel="noopener noreferrer">Using server-sent events - MDN</a></li>
+<li><a href="https://caniuse.com/#search=http2" target="_blank" rel="noopener noreferrer">Can I Use HTTP/2 on Browsers</a></li>
+<li><a href="https://stackoverflow.com/questions/37012486/python-3-x-how-to-get-http-version-using-requests-library" target="_blank" rel="noopener noreferrer">Python 3.x how to get http version (using requests library)</a></li>
+<li><a href="https://www.zhihu.com/question/20215561/answer/40316953" target="_blank" rel="noopener noreferrer">WebSocket 是什么原理？</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/26407649" target="_blank" rel="noopener noreferrer">原生模块打造一个简单的 WebSocket 服务器</a></li>
+<li><a href="https://cloud.google.com/blog/products/api-management/understanding-grpc-openapi-and-rest-and-when-to-use-them" target="_blank" rel="noopener noreferrer">Google Cloud - API design: Understanding gRPC, OpenAPI and REST and when to use them</a></li>
 </ul>
 ]]></description></item><item><title>在回声中重历</title><link>https://ryan4yin.space/relive-in-the-echo/</link><pubDate>Tue, 08 Jan 2019 17:55:45 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/relive-in-the-echo/</guid><description><![CDATA[<meting-js server="netease" type="song" id="35032582" theme="#448aff"></meting-js>
 <p>高中考虑志向的时候，我最开始想选择电子信息工程，因为小时候就喜欢摆弄各种电子器件，这个方向硬件软件都能玩，就感觉很有趣，只是担心自己高三太放浪形骸考不上。
-偶然想起在学校阅览室读杂志时，曾被<a href="https://read.douban.com/ebook/3088216/" target="_blank" rel="noopener noreffer"><strong>科幻世界2013年12期</strong></a>里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵“看见”世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
+偶然想起在学校阅览室读杂志时，曾被<a href="https://read.douban.com/ebook/3088216/" target="_blank" rel="noopener noreferrer"><strong>科幻世界2013年12期</strong></a>里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵“看见”世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
 <p>这样我开始考虑选择声学。</p>
 <p>我从同桌推荐的《刀剑神域》开始接触日本的 ACG 文化，后来接触到初音未来和洛天依，就对<strong>歌声合成</strong>(singing synthesis)产生了很大的兴趣，仔细一想发现这也应该是声学的范畴，这使我坚定了我选择声学的想法。</p>
 <p>从那时到现在的各种破事，实在不想多说，就略过不提了。总之我选择了声学，然后干得很失败。。。</p>
 <p>为啥想写这篇文章呢？
-话还得从去年十一月份说起，当时要学 Matlab，就在 bilibili 上找了个教程：<a href="https://www.bilibili.com/video/av2558198/" target="_blank" rel="noopener noreffer">自制合成器演奏鸟之诗</a>，讲用 Matlab 做吉他音合成，讲得特别棒，我跟着做出了 <a href="https://github.com/ryan4yin/guitar-synthesizer" target="_blank" rel="noopener noreffer">guitar-synthesizer</a> 这个小玩意儿。</p>
-<p>然后今天发现那个教程的作者就是做歌声合成的，而且从 2011 年 13 岁开始，因为想让初音唱中文，就开始写代码，一写就写到现在，从初中写到留学美国常春藤，从简单的时域拼接到现在的深度神经网络、隐马尔可夫模型。他在上个暑假到雅马哈（vocaloid 的制作公司）实习，并推出了自己第五次重制的歌声合成引擎 <a href="https://synthesizerv.com/zh-cn/" target="_blank" rel="noopener noreffer">Synthesizer V</a>。
+话还得从去年十一月份说起，当时要学 Matlab，就在 bilibili 上找了个教程：<a href="https://www.bilibili.com/video/av2558198/" target="_blank" rel="noopener noreferrer">自制合成器演奏鸟之诗</a>，讲用 Matlab 做吉他音合成，讲得特别棒，我跟着做出了 <a href="https://github.com/ryan4yin/guitar-synthesizer" target="_blank" rel="noopener noreferrer">guitar-synthesizer</a> 这个小玩意儿。</p>
+<p>然后今天发现那个教程的作者就是做歌声合成的，而且从 2011 年 13 岁开始，因为想让初音唱中文，就开始写代码，一写就写到现在，从初中写到留学美国常春藤，从简单的时域拼接到现在的深度神经网络、隐马尔可夫模型。他在上个暑假到雅马哈（vocaloid 的制作公司）实习，并推出了自己第五次重制的歌声合成引擎 <a href="https://synthesizerv.com/zh-cn/" target="_blank" rel="noopener noreferrer">Synthesizer V</a>。
 这一系列的事迹，七年五次重制，从初中生到现在双修计算机科学和数学，简直让人叹为观止。
-这位作者的名字叫<a href="https://github.com/Sleepwalking" target="_blank" rel="noopener noreffer">华侃如（Kanru Hua）</a>，网络常用昵称 sleepwalking，他的个人网站 <a href="https://webhost.engr.illinois.edu/~khua5/index.php/about-me/" target="_blank" rel="noopener noreffer">Kanru Hua&rsquo;s Website - About Me</a>.</p>
+这位作者的名字叫<a href="https://github.com/Sleepwalking" target="_blank" rel="noopener noreferrer">华侃如（Kanru Hua）</a>，网络常用昵称 sleepwalking，他的个人网站 <a href="https://webhost.engr.illinois.edu/~khua5/index.php/about-me/" target="_blank" rel="noopener noreferrer">Kanru Hua&rsquo;s Website - About Me</a>.</p>
 <p>通过他的博客，我了解到歌声合成需要两个方向的知识：信号处理和机器学习。</p>
 <p>于是我想起了我的初心。</p>
 <p>我小的时候特别喜欢拆各种电子设备，曾经用手机电池和坏手电做过手电筒，再加上个手机振动器用来吓人，还喜欢在家做各种实验。
@@ -5944,20 +5944,20 @@ ryan4yin</author><guid>https://ryan4yin.space/relive-in-the-echo/</guid><descrip
 <p>“希望明年年底的总结中，我不要再这么丧”，这样大声说出来的话，言就能“灵”吧？我记得我运气一直挺好的（又窝囊到要靠运气。。）</p>
 <hr>
 <p><strong>更新：</strong></p>
-<p>今天二书介绍给我一篇文章<a href="https://lutaonan.com/blog/my-coding-road/" target="_blank" rel="noopener noreffer">我的编程经历</a>，作者和我一样“不能兼顾兴趣与学业”，大一结束就退学了，现在在阿里巴巴工作。
+<p>今天二书介绍给我一篇文章<a href="https://lutaonan.com/blog/my-coding-road/" target="_blank" rel="noopener noreferrer">我的编程经历</a>，作者和我一样“不能兼顾兴趣与学业”，大一结束就退学了，现在在阿里巴巴工作。
 他博客的观点很中肯：</p>
 <blockquote>
-<p>我家人都是很传统的一代，不理解我学习编程最终能做出什么，他们主张先完成学业，再做这件事。但是我很清楚我自己的智商，不足以多线程处理不同的大领域，所以我顶着压力，努力地做出来他们能看出来的「成绩」，才能换来他们的理解。所以，如果你通过你的理性分析，坚持认为某件事情是对的，就努力的去做，不要放弃了以后看到另一个人做了你曾经想做的东西然后感慨当初应该怎么样怎么样。    &ndash;<a href="https://lutaonan.com/blog/my-coding-road/" target="_blank" rel="noopener noreffer">我的编程经历</a></p>
+<p>我家人都是很传统的一代，不理解我学习编程最终能做出什么，他们主张先完成学业，再做这件事。但是我很清楚我自己的智商，不足以多线程处理不同的大领域，所以我顶着压力，努力地做出来他们能看出来的「成绩」，才能换来他们的理解。所以，如果你通过你的理性分析，坚持认为某件事情是对的，就努力的去做，不要放弃了以后看到另一个人做了你曾经想做的东西然后感慨当初应该怎么样怎么样。    &ndash;<a href="https://lutaonan.com/blog/my-coding-road/" target="_blank" rel="noopener noreferrer">我的编程经历</a></p>
 </blockquote>
 <blockquote>
-<p>只有在已经拥有解决问题的能力的时候，才有资格考虑退学这件事。   &ndash;<a href="https://lutaonan.com/blog/you-dont-need-to-drop-out/" target="_blank" rel="noopener noreffer">你根本用不着退学</a></p>
+<p>只有在已经拥有解决问题的能力的时候，才有资格考虑退学这件事。   &ndash;<a href="https://lutaonan.com/blog/you-dont-need-to-drop-out/" target="_blank" rel="noopener noreferrer">你根本用不着退学</a></p>
 </blockquote>
 <p>我仔细想了想，我不需要太在意自己“不能兼顾”、“自控力太弱”。如果真考虑清楚了得失，我只需要“拥有解决问题的能力”，然后去做我想做的就行了。</p>
 <p>我自控力很弱，而且这么多年了一直改不了，即使再延期一年，也有可能还是拿不到毕业证，折磨自己而已。
 而上班的话，就暑假实习的经验来看，工作都有进度条催着，反而活的更有朝气。</p>
 ]]></description></item><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/sql-basic/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/sql-basic/</guid><description><![CDATA[<blockquote>
-<p>本笔记整理自<a href="https://book.douban.com/subject/24841239/" target="_blank" rel="noopener noreffer">《SQL 基础教程》</a>、<a href="https://book.douban.com/subject/3354490/" target="_blank" rel="noopener noreffer">《MySQL 必知必会》</a>和网上资料。个人笔记不保证正确。</p>
+<p>本笔记整理自<a href="https://book.douban.com/subject/24841239/" target="_blank" rel="noopener noreferrer">《SQL 基础教程》</a>、<a href="https://book.douban.com/subject/3354490/" target="_blank" rel="noopener noreferrer">《MySQL 必知必会》</a>和网上资料。个人笔记不保证正确。</p>
 </blockquote>
 <h2 id="一基础">一、基础</h2>
 <p>SQL，即结构化查询语言，是为访问与操作关系数据库中的数据而设计的语言。</p>
@@ -6067,7 +6067,7 @@ ryan4yin</author><guid>https://ryan4yin.space/sql-basic/</guid><description><![C
 <li>默认值：<code>DEFAULT</code>，举例 <code>&lt;列名3&gt; VARCHAR(32) NOT NULL DEFAULT &quot;los angeles&quot;</code></li>
 <li>表约束：<code>PRIMARY KEY</code> 主键约束（主键默认 UNIQUE 且 NOT NULL）</li>
 </ol>
-<p>此外还有 <code>FOREIGN KEY</code> 和 <code>CHECK</code> 两个约束语句，在<a href="https://www.cnblogs.com/kirito-c/p/10295693.html" target="_blank" rel="noopener noreffer">进阶笔记</a>中介绍。</p>
+<p>此外还有 <code>FOREIGN KEY</code> 和 <code>CHECK</code> 两个约束语句，在<a href="https://www.cnblogs.com/kirito-c/p/10295693.html" target="_blank" rel="noopener noreferrer">进阶笔记</a>中介绍。</p>
 <blockquote>
 <p>P.S. 字段约束也可以写成表约束（比如主键约束），而反过来很可能不行。</p>
 </blockquote>
@@ -6359,6 +6359,6 @@ ryan4yin</author><guid>https://ryan4yin.space/learning-english/</guid><descripti
 <p>再后来用 Github，Pycharm IDEA 也是英文的，Python doc 和 Java doc 也全是英文的，标准库里的注释是英文的，Error 信息是英文的&hellip;&hellip; 虽然学啥都半途而废，但英文水平的确是慢慢地提升着。</p>
 <p>慢慢地，能够不怎么吃力地看懂 Python 标准库了，有问题也可以看英文博客解决了。</p>
 <p>最近看一个动漫看完不过瘾，转去看这部动漫的轻小说。轻小说中文翻译的太呆板，发现居然有英文的，直接啃起了英文。</p>
-<p>换了好几部小说，现在在看 <a href="https://www.baka-tsuki.org/project/index.php?title=Hai_to_Gensou_no_Grimgar" target="_blank" rel="noopener noreffer">Grimgar of Fantasy and Ash</a>、<a href="https://www.baka-tsuki.org/project/index.php?title=Tasogare-iro_no_Uta_Tsukai" target="_blank" rel="noopener noreffer">Tasogare-iro no Uta Tsukai(黄昏色の詠使い)</a>，还找了个英文动漫网站，颇有以后看动漫也只看英文字幕的打算。希望能持续下去吧。</p>
+<p>换了好几部小说，现在在看 <a href="https://www.baka-tsuki.org/project/index.php?title=Hai_to_Gensou_no_Grimgar" target="_blank" rel="noopener noreferrer">Grimgar of Fantasy and Ash</a>、<a href="https://www.baka-tsuki.org/project/index.php?title=Tasogare-iro_no_Uta_Tsukai" target="_blank" rel="noopener noreferrer">Tasogare-iro no Uta Tsukai(黄昏色の詠使い)</a>，还找了个英文动漫网站，颇有以后看动漫也只看英文字幕的打算。希望能持续下去吧。</p>
 <p>不过也有点苦恼，因为暑假就要找工作，现在却沉迷看英文小说。。本来这个月该学算法的，可半个月都过了，我的进度大概才认真的时候的五天的样子。。真不知道未来会是啥样。</p>
 ]]></description></item></channel></rss>
