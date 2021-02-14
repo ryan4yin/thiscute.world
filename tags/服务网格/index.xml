@@ -1,5 +1,5 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>服务网格 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/</link><description>服务网格 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 06 Apr 2020 21:48:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/" rel="self" type="application/rss+xml"/><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>服务网格 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/</link><description>服务网格 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 06 Apr 2020 21:48:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/" rel="self" type="application/rss+xml"/><item><title>使用 Istio 进行 JWT 身份验证（充当 API 网关）</title><link>https://ryan4yin.space/posts/use-istio-for-jwt-auth/</link><pubDate>Mon, 06 Apr 2020 21:48:26 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/posts/use-istio-for-jwt-auth/</guid><description><![CDATA[<blockquote>
 <p>本文基于 Istio1.5 编写测试</p>
 </blockquote>
 <p>Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。</p>
@@ -55,7 +55,7 @@ ryan4yin</author><guid>https://ryan4yin.space/use-istio-for-jwt-auth/</guid><des
 </div><p>RSA 是基于大数分解的加密/签名算法，上述参数中，<code>e</code> 是公钥的模数(modulus)，<code>n</code> 是公钥的指数(exponent)，两个参数都是 base64 字符串。</p>
 <p>JWK 中 RSA 公钥的具体定义参见 <a href="https://tools.ietf.org/html/rfc7518#page-30" target="_blank" rel="noopener noreferrer">RSA Keys - JSON Web Algorithms (JWA)</a></p>
 <h3 id="2-jwk-的生成">2. JWK 的生成</h3>
-<p>要生成 JWK 公钥，需要先生成私钥，生成方法参见 <a href="/jwt-algorithm-key-generation/#使用-openssl-生成-rsaecc-公私钥" rel="">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a>。</p>
+<p>要生成 JWK 公钥，需要先生成私钥，生成方法参见 <a href="/posts/jwt-algorithm-key-generation/#使用-openssl-生成-rsaecc-公私钥" rel="">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a>。</p>
 <blockquote>
 <p>公钥不需要用上述方法生成，因为我们需要的是 JWK 格式的公钥。后面会通过 python 生成出 JWK 公钥。</p>
 </blockquote>
