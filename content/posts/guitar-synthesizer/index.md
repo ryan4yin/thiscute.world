@@ -2,6 +2,13 @@
 title: "使用 Python 合成吉他音色"
 date: 2021-02-04T11:23:00+08:00
 draft: true
+
+resources:
+- name: "featured-image"
+  src: "guitar.jpg"
+
+tags: ["乐理", "吉他", "synthesizer"]
+categories: ["技术", "音乐"]
 ---
 
 >在博客园草稿箱里翻到这篇 2018-05-07 的陈年旧稿，把它鸽完吧...
@@ -11,7 +18,7 @@ draft: true
 要想合成声音，自然首先需要知道声音到底是由啥组成的。
 **音调的三要素：音高、音色、音强。**看下面的图：
 
-![波形](https://images2018.cnblogs.com/blog/968138/201805/968138-20180507213043627-1481688349.gif)
+![波形](/images/guitar-synthesizer/968138-20180507213043627-1481688349.gif)
 
 若将这三要素和上面的图一一对应一下的话：
 
