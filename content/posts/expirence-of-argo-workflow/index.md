@@ -562,6 +562,11 @@ Argo Workflow 的配置，都保存在 `workflow-controller-configmap` 这个 co
    1.  argo 的 dag/steps 和 workflow of workflows 这两个功能结合，可以简单地实现上述功能。
 
 
+## 8. 如何提升 argo workflow 的创建和销毁速度？
+
+我们发现 workflow 的 pod，创建和销毁消耗了大量时间，尤其是销毁。
+这导致我们单个流水线在 argo 上跑，还没在 jenkins 上跑更快。
+
 ## 使用体验
 
 目前已经使用 Argo Workflow 一个月多了，总的来说，最难用的就是 Web UI。
