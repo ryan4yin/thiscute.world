@@ -376,7 +376,16 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/common-kubernetes-errors-cau
 <li>创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的 ServiceAccount 不存在。</li>
 <li>Pod 运行失败，状态为 MatchNodeSelector: 对主节点进行关机、迁移等操作，导致主调度器下线时，会在一段时间内导致 Pod 调度失败，调度失败会报这个错。</li>
 <li>Pod 仍然存在，但是 <code>Service</code> 的 Endpoints 却为空，找不到对应的 Pod IPs: 遇到过一次，是因为时间跳变（从未来的时间改回了当前时间）导致的问题。</li>
+<li>Pod 状态一直 ContainerCreating，Error syncing pod: 可能是节点的内存碎片化严重，导致无法创建pod。临时解决：<code>echo 3 &gt; /proc/sys/vm/drop_caches</code>
+<ul>
+<li>详细分析参见 <a href="https://zhuanlan.zhihu.com/p/227728280" target="_blank" rel="noopener noreferrer">容器创建失败(runc_page allocation failure)排查</a></li>
+</ul>
+</li>
 </ol>
+<p>收集的其他故障解决文章：</p>
+<ul>
+<li><a href="https://cloud.tencent.com/developer/article/1487051" target="_blank" rel="noopener noreferrer">TKE操作指南 - TKE K8S问题排查（十八）</a></li>
+</ul>
 <h3 id="pod-无法删除">Pod 无法删除</h3>
 <p>可能是某些资源无法被GC，这会导致容器已经 Exited 了，但是 Pod 一直处于 Terminating 状态。</p>
 <p>这个问题在网上能搜到很多案例,但大都只是提供了如下的强制清理命令，未分析具体原因：</p>
