@@ -24,6 +24,13 @@ categories: ["技术"]
 1. 创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的 ServiceAccount 不存在。
 1. Pod 运行失败，状态为 MatchNodeSelector: 对主节点进行关机、迁移等操作，导致主调度器下线时，会在一段时间内导致 Pod 调度失败，调度失败会报这个错。
 2. Pod 仍然存在，但是 `Service` 的 Endpoints 却为空，找不到对应的 Pod IPs: 遇到过一次，是因为时间跳变（从未来的时间改回了当前时间）导致的问题。
+3. Pod 状态一直 ContainerCreating，Error syncing pod: 可能是节点的内存碎片化严重，导致无法创建pod。临时解决：`echo 3 > /proc/sys/vm/drop_caches`
+   - 详细分析参见 [容器创建失败(runc_page allocation failure)排查](https://zhuanlan.zhihu.com/p/227728280)
+
+收集的其他故障解决文章：
+
+- [TKE操作指南 - TKE K8S问题排查（十八）](https://cloud.tencent.com/developer/article/1487051)
+
 
 ### Pod 无法删除
 
