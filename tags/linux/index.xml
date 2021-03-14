@@ -10,8 +10,25 @@ openSUSE 社区的大部分用户都是使用的 Tumbleweed.
 它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。</p>
 </blockquote>
 <h2 id="一zypper-的基础命令">一、zypper 的基础命令</h2>
-<p>zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择国内的镜像源下载软件包，所以其实不需要手动配置软件源。</p>
-<p>常用命令：</p>
+<p>zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如国内的清华源等。</p>
+<p>但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 禁用原有的官方软件源</span>
+sudo zypper mr --disable repo-oss repo-non-oss repo-update repo-update-non-oss repo-debug
+<span class="c1"># 添加北外镜像源，注意单引号不能省略！</span>
+sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/oss/ bfsu-oss
+sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss/ bfsu-non-oss
+</code></pre></td></tr></table>
+</div>
+</div><p>然后就是 zypper 的常用命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
