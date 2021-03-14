@@ -27,9 +27,19 @@ openSUSE 社区的大部分用户都是使用的 Tumbleweed.
 
 ## 一、zypper 的基础命令
 
-zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择国内的镜像源下载软件包，所以其实不需要手动配置软件源。
+zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如国内的清华源等。
 
-常用命令：
+但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：
+
+```shell
+# 禁用原有的官方软件源
+sudo zypper mr --disable repo-oss repo-non-oss repo-update repo-update-non-oss repo-debug
+# 添加北外镜像源，注意单引号不能省略！
+sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/oss/ bfsu-oss
+sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss/ bfsu-non-oss
+```
+
+然后就是 zypper 的常用命令：
 
 ```shell
 sudo zypper refresh  # refresh all repos
