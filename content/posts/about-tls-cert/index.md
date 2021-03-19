@@ -54,6 +54,7 @@ CA 证书中的公钥，能用于验证 TLS 证书中签名的正确性，也就
 
 ![](/images/about-tls-cert/cert-content.png)
 
+证书文件的格式叫做 X.509，由 [RFC5280](https://tools.ietf.org/html/rfc5280) 规范详细定义。
 
 ### 2. TLS 证书支持保护的域名类型
 
