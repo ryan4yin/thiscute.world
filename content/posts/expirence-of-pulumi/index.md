@@ -187,6 +187,13 @@ vpc_id = infra.require("resources.vpc.id")
 3. 手动更改了资源之间的依赖关系（比如绑定 EIP 之类的），很可能导致 pulumi 无法正确管理资源之间的依赖。
    - 这种情况必须先手动还原依赖关系（或者把相关资源全部手动删除掉），然后才能继续使用 pulumi。
 
+
+### 5. 如何手动声明资源间的依赖关系？
+
+有时候因为一些问题（比如 pulumi provider 功能缺失，使用了 restful api 实现部分功能），pulumi 可能无法识别到某些资源之间的依赖关系。
+
+这时可以为资源添加 `dependsOn` 属性，这个属性能显式地声明依赖关系。
+
 ### 5. pulumi-kubernetes？
 
 pulumi-kubernetes 是一条龙服务：
