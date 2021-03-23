@@ -194,6 +194,19 @@ vpc_id = infra.require("resources.vpc.id")
 
 这时可以为资源添加 `dependsOn` 属性，这个属性能显式地声明依赖关系。
 
+
+### 6. 如何导入已经存在的资源？
+
+由于历史原因，我们可能有部分资源是手动创建或者由其他 IaC 工具管理的，该如何将它们纳入 pulumi 管辖呢？
+
+官方有提供一篇相关文档 [Importing Infrastructure](https://www.pulumi.com/docs/guides/adopting/import/).
+
+文档有提到三种资源导入的方法：
+
+1. 使用 `pulumi import` 命令，这个命令能导入资源同时自动生成对应的代码。
+   - 感觉这个命令也很适合用来做**资源的配置备份**，不需要对照资源手写 pulumi 代码了，好评。
+1. 批量导入资源：文档的 `Bulk Import Operations` 这一节介绍了如何通过 json 列出资源清单，然后使用 `pulumi import -f resources.json` 自动生成所有导入资源的 pulumi 代码。
+
 ### 5. pulumi-kubernetes？
 
 pulumi-kubernetes 是一条龙服务：
