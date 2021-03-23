@@ -206,6 +206,9 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/expirence-of-pulumi/</guid><
 </ul>
 </li>
 </ol>
+<h3 id="5-如何手动声明资源间的依赖关系">5. 如何手动声明资源间的依赖关系？</h3>
+<p>有时候因为一些问题（比如 pulumi provider 功能缺失，使用了 restful api 实现部分功能），pulumi 可能无法识别到某些资源之间的依赖关系。</p>
+<p>这时可以为资源添加 <code>dependsOn</code> 属性，这个属性能显式地声明依赖关系。</p>
 <h3 id="5-pulumi-kubernetes">5. pulumi-kubernetes？</h3>
 <p>pulumi-kubernetes 是一条龙服务：</p>
 <ol>
