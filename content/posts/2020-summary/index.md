@@ -47,7 +47,7 @@ categories: ["随笔", "技术"]
    - PVE+pulumi/terraform+cloudinit 能实现自动化部署虚拟机，自动配置网络、账号及SSH密钥、自动扩缩容硬盘，非常方便！
    - 而且 PVE 不收费，去中心化，一套用下来舒服太多了。只是 pve+cloud-init 门槛稍微高一点，需要一定时间去熟悉。
 1. CI/CD 系统：基于 Jenkins 的 CI/CD 在我司各种水土不服，小毛病不断。Jenkins 本身就存在单点故障，不适合云原生，加上 Jenkinsfile 有学习成本，而且不方便复用，我就想把 Jenkins 换掉。我在这一年里调研了大量的开源 CI/CD 工具，都各有不足。主要还是因为我们当下的 Jenkins 承载了太多的功能，已经是一个CI/CD、自动化测试、自动化运维平台了，另一方面公司后端的流水线还存在依赖关系，需要进行复杂的编排。
-   - 目前我就找到 Argo Workflow 的功能很符合我们的需求，目前正在尝试迁移一部分功能到 Argo Workflow 试用。
+   - 目前我就找到 Argo Workflows 的功能很符合我们的需求，目前正在尝试迁移一部分功能到 Argo Workflows 试用。
    - 因为 argo 的 UI 和 jenkins 差别过大，暂定仍以 jenkins 为前端，通过 python 将任务分派给 argo 运行。这样 argo 对使用者而言是隐形的，用户体验基本上没区别。
 1. 杂事：修水电、修服务器、组装办公电脑、搬机房...
 
@@ -70,7 +70,7 @@ categories: ["随笔", "技术"]
 1. 深入学习计算机网络 + Linux 网络 + Kubernetes 网络！这非常重要。
 1. 学习 Podman/Docker 的底层原理，学习 katacontainers 等安全容器技术。
 1. 为 kubevela/dapr/knative 等云原生项目做一些贡献，要参与到开源中去。
-1. 掌握 argo workflow/tekton，将 CI/CD 搬到 k8s 上去。
+1. 掌握 Argo Workflows/tekton，将 CI/CD 搬到 k8s 上去。
 1. 学习设计模式
 1. 有机会的话，熟悉下分布式存储、分布式数据库。这方面我目前还相当欠缺。
 1. 学习 KVM 虚拟化
