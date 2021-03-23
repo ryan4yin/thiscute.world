@@ -2067,6 +2067,18 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/expirence-of-pulumi/</guid><
 <h3 id="5-如何手动声明资源间的依赖关系">5. 如何手动声明资源间的依赖关系？</h3>
 <p>有时候因为一些问题（比如 pulumi provider 功能缺失，使用了 restful api 实现部分功能），pulumi 可能无法识别到某些资源之间的依赖关系。</p>
 <p>这时可以为资源添加 <code>dependsOn</code> 属性，这个属性能显式地声明依赖关系。</p>
+<h3 id="6-如何导入已经存在的资源">6. 如何导入已经存在的资源？</h3>
+<p>由于历史原因，我们可能有部分资源是手动创建或者由其他 IaC 工具管理的，该如何将它们纳入 pulumi 管辖呢？</p>
+<p>官方有提供一篇相关文档 <a href="https://www.pulumi.com/docs/guides/adopting/import/" target="_blank" rel="noopener noreferrer">Importing Infrastructure</a>.</p>
+<p>文档有提到三种资源导入的方法：</p>
+<ol>
+<li>使用 <code>pulumi import</code> 命令，这个命令能导入资源同时自动生成对应的代码。
+<ul>
+<li>感觉这个命令也很适合用来做<strong>资源的配置备份</strong>，不需要对照资源手写 pulumi 代码了，好评。</li>
+</ul>
+</li>
+<li>批量导入资源：文档的 <code>Bulk Import Operations</code> 这一节介绍了如何通过 json 列出资源清单，然后使用 <code>pulumi import -f resources.json</code> 自动生成所有导入资源的 pulumi 代码。</li>
+</ol>
 <h3 id="5-pulumi-kubernetes">5. pulumi-kubernetes？</h3>
 <p>pulumi-kubernetes 是一条龙服务：</p>
 <ol>
