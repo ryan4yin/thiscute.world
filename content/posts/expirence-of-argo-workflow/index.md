@@ -1,5 +1,5 @@
 ---
-title: "云原生流水线 Argo Workflow 的安装、使用以及个人体验"
+title: "云原生流水线 Argo Workflows 的安装、使用以及个人体验"
 date: 2021-01-27T15:37:27+08:00
 draft: false
 
@@ -11,23 +11,23 @@ tags: ["云原生", "CI","持续集成", "流水线"]
 categories: ["技术"]
 ---
 
->注意：这篇文章并不是一篇入门教程，学习 Argo Workflow 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo/)
+>注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo/)
 
-[Argo Workflow](https://github.com/argoproj/argo/) 是一个云原生工作流引擎，专注于**编排并行任务**。它的特点如下：
+[Argo Workflows](https://github.com/argoproj/argo/) 是一个云原生工作流引擎，专注于**编排并行任务**。它的特点如下：
 
 <!--more-->
 
 1. 使用 Kubernetes 自定义资源(CR)定义工作流，其中工作流中的每个步骤都是一个容器。
 2. 将多步骤工作流建模为一系列任务，或者使用有向无环图（DAG）描述任务之间的依赖关系。
 3. 可以在短时间内轻松运行用于机器学习或数据处理的计算密集型作业。
-4. Argo Workflow 可以看作 Tekton 的加强版，因此显然也可以通过 Argo Workflow 运行 CI/CD 流水线(Pipielines)。
+4. Argo Workflows 可以看作 Tekton 的加强版，因此显然也可以通过 Argo Workflows 运行 CI/CD 流水线(Pipielines)。
 
-阿里云是 Argo Workflow 的深度使用者和贡献者，另外 Kubeflow 底层的工作流引擎也是 Argo Workflow.
+阿里云是 Argo Workflows 的深度使用者和贡献者，另外 Kubeflow 底层的工作流引擎也是 Argo Workflows.
 
-## 一、Argo Workflow 对比 Jenkins
+## 一、Argo Workflows 对比 Jenkins
 
-我们在切换到 Argo Workflow 之前，使用的 CI/CD 工具是 Jenkins，下面对 Argo Workflow 和 Jenkins 做一个比较详细的对比，
-以了解 Argo Workflow 的优缺点。
+我们在切换到 Argo Workflows 之前，使用的 CI/CD 工具是 Jenkins，下面对 Argo Workflows 和 Jenkins 做一个比较详细的对比，
+以了解 Argo Workflows 的优缺点。
 
 ### 1. Workflow 的定义
 
@@ -43,15 +43,15 @@ WorkflowTemplate 可以被其他 Workflow 引用并触发，也可以手动传�
 
 ### 2. Workflow 的编排
 
-Argo Workflow 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言，最大的特点，就是它强大的流水线编排能力。
+Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言，最大的特点，就是它强大的流水线编排能力。
 
 其他流水线项目，对流水线之间的关联性考虑得很少，基本都假设流水线都是互相独立的。
 
-而 Argo Workflow 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG
+而 Argo Workflows 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG
 
 再借助 [templateRef](https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates) 或者 [Workflow of Workflows](https://argoproj.github.io/argo/workflow-of-workflows/)，就能实现 Workflows 的编排了。
 
-**我们之所以选择 Argo Workflow 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。**（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）
+**我们之所以选择 Argo Workflows 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。**（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）
 
 一个复杂工作流的示例如下：
 
@@ -72,7 +72,7 @@ Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes
 
 ### 4. Web UI
 
-Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，但是它貌似不是面向「用户」的，功能比较底层。
+Argo Workflows 的 Web UI 感觉还很原始。确实该支持的功能都有，但是它貌似不是面向「用户」的，功能比较底层。
 
 它不像 Jenkins 一样，有很友好的使用界面(虽然说 Jenkins 的 UI 也很显老...)
 
@@ -92,7 +92,7 @@ Argo Workflow 的 Web UI 感觉还很原始。确实该支持的功能都有，�
 另外我们还希望将运维、自动化测试相关的任务也集成到这个系统中来（目前我们就是使用 Jenkins 完成运维、自动化测试任务的），
 如果没有任何分类，这一大堆流水线将混乱无比。
 
-#### Argo Workflow 的分类能力
+#### Argo Workflows 的分类能力
 
 当 Workflow 越来越多的时候，如果不做分类，一堆 WorkflowTemplate 堆在一起就会显得特别混乱。（没错，我觉得 Drone 就有这个问题...）
 
@@ -102,7 +102,7 @@ Argo 是完全基于 Kubernetes 的，因此目前它也只能通过 namespace/l
 
 ### 6. 触发构建的方式
 
-Argo Workflow 的流水线有多种触发方式：
+Argo Workflows 的流水线有多种触发方式：
 
 - 手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 [workflowTemplateRef](https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec) 直接引用一个现成的流水线模板。
 - 定时触发：[CronWorkflow](https://argoproj.github.io/argo/cron-workflows/)
@@ -112,7 +112,7 @@ Argo Workflow 的流水线有多种触发方式：
 
 ### 7. secrets 管理
 
-Argo Workflow 的流水线，可以从 kubernetes secrets/configmap 中获取信息，将信息注入到环境变量中、或者以文件形式挂载到 Pod 中。
+Argo Workflows 的流水线，可以从 kubernetes secrets/configmap 中获取信息，将信息注入到环境变量中、或者以文件形式挂载到 Pod 中。
 
 Git 私钥、Harbor 仓库凭据、CD 需要的 kubeconfig，都可以直接从 secrets/configmap 中获取到。
 
@@ -141,23 +141,23 @@ Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。
 
 如下项目值得试用：
 
-- [argo-client-python](https://github.com/argoproj-labs/argo-client-python): Argo Workflow 的 Python 客户端
+- [argo-client-python](https://github.com/argoproj-labs/argo-client-python): Argo Workflows 的 Python 客户端
   - 说实话，感觉和 kubernetes-client/python 一样难用，毕竟都是 openapi-generator 生成出来的...
-- [argo-python-dsl](https://github.com/argoproj-labs/argo-python-dsl): 使用 Python DSL 编写 Argo Workflow
+- [argo-python-dsl](https://github.com/argoproj-labs/argo-python-dsl): 使用 Python DSL 编写 Argo Workflows
   - 感觉使用难度比 yaml 高，也不太好用。
 - [couler](https://github.com/couler-proj/couler): 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
   - 理念倒是很好，待研究
 
 感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。
 
-此外，因为 argo workflow 是 kubernetes 自定义资源 CR，也可以使用 helm/kustomize 来做 workflow 的生成。
+此外，因为 Argo Workflows 是 kubernetes 自定义资源 CR，也可以使用 helm/kustomize 来做 workflow 的生成。
 
 目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + `range` 循环来生成 workflow 配置。
 
 
-## 二、[安装 Argo Workflow](https://argoproj.github.io/argo/installation/)
+## 二、[安装 Argo Workflows](https://argoproj.github.io/argo/installation/)
 
-安装一个集群版(cluster wide)的 Argo Workflow，使用 MinIO 做 artifacts 存储：
+安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：
 
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
@@ -205,7 +205,7 @@ minio 部署好后，它会将默认的 `accesskey` 和 `secretkey` 保存在名
 
 ### [ServiceAccount 配置](https://argoproj.github.io/argo/service-accounts/)
 
-Argo Workflow 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 `default` ServiceAccount 运行 workflow.
+Argo Workflows 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 `default` ServiceAccount 运行 workflow.
 
 可 `default` 这个 ServiceAccount 默认根本没有任何权限！所以 Argo 的 artifacts, outputs, access to secrets 等功能全都会因为权限不足而无法使用！
 
@@ -217,7 +217,7 @@ Argo Workflow 依赖于 ServiceAccount 进行验证与授权，而且默认情�
 kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=<namespace>:default -n <namespace>
 ```
 
-方法二，官方给出了[Argo Workflow 需要的最小权限的 Role 定义](https://argoproj.github.io/argo/workflow-rbac/)，方便起见我将它改成一个 ClusterRole:
+方法二，官方给出了[Argo Workflows 需要的最小权限的 Role 定义](https://argoproj.github.io/argo/workflow-rbac/)，方便起见我将它改成一个 ClusterRole:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -289,7 +289,7 @@ data:
 ```
 
 
-## 三、使用 Argo Workflow 做 CI 工具
+## 三、使用 Argo Workflows 做 CI 工具
 
 官方的 Reference 还算详细，也有提供非常多的 examples 供我们参考，这里提供我们几个常用的 workflow 定义。
 
@@ -518,7 +518,7 @@ data:
 
 ### 6. Argo 的其他进阶配置
 
-Argo Workflow 的配置，都保存在 `workflow-controller-configmap` 这个 configmap 中，我们前面已经接触到了它的部分内容。
+Argo Workflows 的配置，都保存在 `workflow-controller-configmap` 这个 configmap 中，我们前面已经接触到了它的部分内容。
 
 这里给出此配置文件的完整 examples: <https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml>
 
@@ -551,25 +551,25 @@ Argo Workflow 的配置，都保存在 `workflow-controller-configmap` 这个 co
 那是否应该尽量使用 CI/CD 工具提供的功能呢？
 **其实这就是有多种方法实现同一件事，该用哪种方法的问题。这个问题在各个领域都很常见。**
 
-以我目前的经验来看，需要具体问题具体分析，以 argo workflow 为例：
+以我目前的经验来看，需要具体问题具体分析，以 Argo Workflows 为例：
 
 1. 流水线本身非常简单，那完全可以直接使用 argo 来实现，没必要自己再搞个 python 脚本
    1. 简单的流水线，迁移起来往往也非常简单。没必要为了可迁移性，非要用 argo 去调用 python 脚本。
 2. 流水线的步骤之间包含很多逻辑判断/数据传递，那很可能是你的流水线设计有问题！
    1. **流水线的步骤之间传递的数据应该尽可能少！复杂的逻辑判断应该尽量封装在其中一个步骤中！**
-   2. 这种情况下，就应该使用 python 脚本来封装复杂的逻辑，而不应该将这些逻辑暴露到 argo workflow 中！
+   2. 这种情况下，就应该使用 python 脚本来封装复杂的逻辑，而不应该将这些逻辑暴露到 Argo Workflows 中！
 3. 我需要批量运行很多的流水线，而且它们之间还有复杂的依赖关系：那显然应该利用上 argo wrokflow 的高级特性。
    1.  argo 的 dag/steps 和 workflow of workflows 这两个功能结合，可以简单地实现上述功能。
 
 
-## 8. 如何提升 argo workflow 的创建和销毁速度？
+## 8. 如何提升 Argo Workflows 的创建和销毁速度？
 
 我们发现 workflow 的 pod，创建和销毁消耗了大量时间，尤其是销毁。
 这导致我们单个流水线在 argo 上跑，还没在 jenkins 上跑更快。
 
 ## 使用体验
 
-目前已经使用 Argo Workflow 一个月多了，总的来说，最难用的就是 Web UI。
+目前已经使用 Argo Workflows 一个月多了，总的来说，最难用的就是 Web UI。
 
 其他的都是小问题，只有 Web UI 是真的超难用，感觉根本就没有好好做过设计...
 
