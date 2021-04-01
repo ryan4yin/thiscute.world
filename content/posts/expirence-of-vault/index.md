@@ -41,7 +41,7 @@ Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrie
 
 barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 的过程中被验证与解密。
 
-和银行金库(bank vault)非常类似，barrier 也必须先解封，才能允许读取内部的数据。
+和银行金库(bank vault)非常类似，barrier 也必须先解封，才能解密 storage backend 中的数据。
 
 ### 1. 数据存储及加密解密
 
