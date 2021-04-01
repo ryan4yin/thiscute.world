@@ -11,9 +11,9 @@ tags: ["云原生", "CI","持续集成", "流水线"]
 categories: ["技术"]
 ---
 
->注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo/)
+>注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo-workflows/)
 
-[Argo Workflows](https://github.com/argoproj/argo/) 是一个云原生工作流引擎，专注于**编排并行任务**。它的特点如下：
+[Argo Workflows](https://github.com/argoproj/argo-workflows/) 是一个云原生工作流引擎，专注于**编排并行任务**。它的特点如下：
 
 <!--more-->
 
