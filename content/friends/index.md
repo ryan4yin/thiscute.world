@@ -46,6 +46,7 @@ var myFriends = [
     ["https://blog.yidajiabei.xyz/", "https://blog.yidajiabei.xyz/images/android-chrome-512x512.png", "@一大加贝", "学习技术，热爱生活"], 
     ["https://guanqr.com/", "https://cdn.jsdelivr.net/gh/guanqr/blog/static/icons/android-chrome-512x512.png", "@荷戟独彷徨", "爱光学，爱生活，爱创造"], 
     ["https://exploro.one", "https://avatars.githubusercontent.com/u/4038871?s=460&u=d2f1c2eea96acb15578f2e513ba5fa673aa3d250&v=4", "@探索子", "Learn by doing."], 
+    ["https://panqiincs.me/", "https://panqiincs.me/images/avatar.jpg", "@辛未羊", "人生如逆旅，我亦是行人"], 
 ];
 
 
