@@ -16,8 +16,10 @@ categories: ["技术"]
 1. secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)
 2. 认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。
 3. 权限管理：通过 policy，可以设定非常细致的 ACL 权限。
-4. 密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。
+4. 密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 API Key 的自动轮转。
 5. 支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。
+  - 支持通过 sidecar/init-container 将 secrets 注入到 pod 中，或者通过 k8s operator 将 vault 数据同步到 k8s secrets 中
+
 
 在使用 Vault 之前，我们是以携程开源的 [Apollo](https://github.com/ctripcorp/apollo) 作为微服务的分布式配置中心。
 
@@ -39,7 +41,7 @@ Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrie
 
 「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。
 
-barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 的过程中被验证与解密。
+barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 被读出的过程中被验证与解密。
 
 和银行金库(bank vault)非常类似，barrier 也必须先解封，才能解密 storage backend 中的数据。
 
