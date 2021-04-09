@@ -438,6 +438,8 @@ path "auth/token/create" {
 
 ## 四、在 Kubernetes 中使用 vault 注入 secrets
 
+![](/images/expirence-of-vault/vault-k8s-auth-workflow.png "vault-k8s-auth-workflow")
+
 前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。
 
 应用程序有两种方式去读取 vault 中的配置：
@@ -750,11 +752,10 @@ vautl-agent 的 template 说明：
 
 除了使用官方提供的 sidecar 模式进行 secrets 注入，社区也提供了一些别的方案，可以参考：
 
-- [vault-secrets-operator](https://github.com/ricoberger/vault-secrets-operator): 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets
-- [kubernetes-external-secrets](https://github.com/external-secrets/kubernetes-external-secrets): 和 vault-secrets-operator 的功能基本没区别
-- [secrets-store-csi-driver-provider-vault](https://github.com/hashicorp/secrets-store-csi-driver-provider-vault): 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中
+- [hashicorp/vault-csi-provider](https://github.com/hashicorp/vault-csi-provider): 官方的 Beta 项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中
+- [kubernetes-external-secrets](https://github.com/external-secrets/kubernetes-external-secrets): 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets
 
-不过官方的 sidecar 模式仍然是最推荐使用的。
+官方的 sidecar/init-container 模式仍然是最推荐使用的。
 
 ## 五、使用 vault 管理阿里云的 RAM 账号体系
 
