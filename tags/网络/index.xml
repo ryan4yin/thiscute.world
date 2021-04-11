@@ -177,8 +177,36 @@ socat - openssl-connect:192.168.31.123:4433,cert<span class="o">=</span>client.p
 curl -v --cacert ca.crt --cert client.crt --key client.key --tls-max 1.2 https://192.168.31.123:4433
 </code></pre></td></tr></table>
 </div>
-</div><p>上面的命令使用了 mTLS 双向认证的协议，你也可以把客户端证书去掉，这样就是普通的 TLS 协议服务器了。</p>
-<h2 id="2-数据传输">2. 数据传输</h2>
+</div><p>上面的命令使用了 mTLS 双向认证的协议，可通过设定 <code>verify=0</code> 来关掉客户端认证，示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">
+<span class="c1"># socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下</span>
+cat server.key server.crt &gt; server.pem
+
+<span class="c1"># 服务端启动命令</span>
+socat openssl-listen:4433,reuseaddr,cert<span class="o">=</span>server.pem,verify<span class="o">=</span><span class="m">0</span> -
+
+<span class="c1"># 客户端连接命令，如果 ip/域名不受证书保护，就也需要添加 verify=0</span>
+socat - openssl-connect:192.168.31.123:4433,cafile<span class="o">=</span>server.crt
+<span class="c1"># 或者使用 curl 连接，证书无效请添加 -k 跳过证书验证</span>
+curl -v --cacert server.crt https://192.168.31.123:4433
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="2-数据传输">2. 数据传输</h2>
 <p>通常传输文件时，我都习惯使用 scp/ssh/rsync，但是 socat 其实也可以传输文件。</p>
 <p>以将 demo.tar.gz 从主机 A 发送到主机 B 为例，
 首先在数据发送方 A 执行如下命令：</p>
@@ -230,7 +258,7 @@ nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>假设 <code>web.py</code> 的内容为：</p>
