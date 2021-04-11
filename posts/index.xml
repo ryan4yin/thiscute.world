@@ -2179,11 +2179,17 @@ socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="3-担当临时的-web-服务器">3. 担当临时的 web 服务器</h2>
-<p>使用 <code>fork</code> <code>reuseaddr</code> <code>EXEC</code> 三个命令，再用 <code>systemd</code>/<code>supervisor</code> 管理一下，就可以用几行命令实现一个简单的后台服务器。</p>
-<p>待续</p>
-<h2 id="4-透明代理">4. 透明代理</h2>
-<p>待续</p>
-<h2 id="5-端口转发">5. 端口转发</h2>
+<p>使用 <code>fork</code> <code>reuseaddr</code> <code>SYSTEM</code> 三个命令，再用 <code>systemd</code>/<code>supervisor</code> 管理一下，就可以用几行命令实现一个简单的后台服务器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问 <code>http://&lt;ip&gt;:8080</code> 来查看效果。</p>
+<h2 id="4-端口转发">4. 端口转发</h2>
 <p>监听 8080 端口，建立该端口与 <code>baidu.com:80</code> 之间的双向管道:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
