@@ -4,9 +4,12 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/expirence-of-vault/</guid><d
 <li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
 <li>权限管理：通过 policy，可以设定非常细致的 ACL 权限。</li>
-<li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</li>
+<li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 API Key 的自动轮转。</li>
 <li>支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。</li>
 </ol>
+<ul>
+<li>支持通过 sidecar/init-container 将 secrets 注入到 pod 中，或者通过 k8s operator 将 vault 数据同步到 k8s secrets 中</li>
+</ul>
 <p>在使用 Vault 之前，我们是以携程开源的 <a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener noreferrer">Apollo</a> 作为微服务的分布式配置中心。</p>
 <p>Apollo 在国内非常流行。它功能强大，支持配置的继承，也有提供 HTTP API 方便自动化。
 缺点是权限管理和 secrets 管理比较弱，也不支持信息加密，不适合直接存储敏感信息。因此我们现在切换到了 Vault.</p>
@@ -23,7 +26,7 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/expirence-of-vault/</guid><d
 <p>可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
 Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。</p>
 <p>「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。</p>
-<p>barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 的过程中被验证与解密。</p>
+<p>barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 被读出的过程中被验证与解密。</p>
 <p>和银行金库(bank vault)非常类似，barrier 也必须先解封，才能解密 storage backend 中的数据。</p>
 <h3 id="1-数据存储及加密解密">1. 数据存储及加密解密</h3>
 <p>Storage Backend(后端存储): Vault 自身不存储数据，因此需要为它配置一个「Storage Backend」。
@@ -594,6 +597,10 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 </div>
 </div><p>不给这个权限，pulumi_vault 就会一直报错。。</p>
 <h2 id="四在-kubernetes-中使用-vault-注入-secrets">四、在 Kubernetes 中使用 vault 注入 secrets</h2>
+<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-k8s-auth-workflow.png" title="/images/expirence-of-vault/vault-k8s-auth-workflow.png" data-thumbnail="/images/expirence-of-vault/vault-k8s-auth-workflow.png" data-sub-html="<h2>vault-k8s-auth-workflow</h2>">
+        
+    </a><figcaption class="image-caption">vault-k8s-auth-workflow</figcaption>
+    </figure></p>
 <p>前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。</p>
 <p>应用程序有两种方式去读取 vault 中的配置：</p>
 <ol>
@@ -1095,11 +1102,10 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h3 id="5-拓展在-kubernetes-中使用-vault-的其他姿势">5. 拓展：在 kubernetes 中使用 vault 的其他姿势</h3>
 <p>除了使用官方提供的 sidecar 模式进行 secrets 注入，社区也提供了一些别的方案，可以参考：</p>
 <ul>
-<li><a href="https://github.com/ricoberger/vault-secrets-operator" target="_blank" rel="noopener noreferrer">vault-secrets-operator</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
-<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreferrer">kubernetes-external-secrets</a>: 和 vault-secrets-operator 的功能基本没区别</li>
-<li><a href="https://github.com/hashicorp/secrets-store-csi-driver-provider-vault" target="_blank" rel="noopener noreferrer">secrets-store-csi-driver-provider-vault</a>: 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
+<li><a href="https://github.com/hashicorp/vault-csi-provider" target="_blank" rel="noopener noreferrer">hashicorp/vault-csi-provider</a>: 官方的 Beta 项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
+<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreferrer">kubernetes-external-secrets</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
 </ul>
-<p>不过官方的 sidecar 模式仍然是最推荐使用的。</p>
+<p>官方的 sidecar/init-container 模式仍然是最推荐使用的。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
 <p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
 <p>具体配置方法，待续。。。</p>

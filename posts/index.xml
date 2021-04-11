@@ -927,9 +927,12 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/expirence-of-vault/</guid><d
 <li>secrets 管理：支持保存各种自定义信息、自动生成各类密钥，vault 自动生成的密钥还能自动轮转(rotate)</li>
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
 <li>权限管理：通过 policy，可以设定非常细致的 ACL 权限。</li>
-<li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</li>
+<li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 API Key 的自动轮转。</li>
 <li>支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。</li>
 </ol>
+<ul>
+<li>支持通过 sidecar/init-container 将 secrets 注入到 pod 中，或者通过 k8s operator 将 vault 数据同步到 k8s secrets 中</li>
+</ul>
 <p>在使用 Vault 之前，我们是以携程开源的 <a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener noreferrer">Apollo</a> 作为微服务的分布式配置中心。</p>
 <p>Apollo 在国内非常流行。它功能强大，支持配置的继承，也有提供 HTTP API 方便自动化。
 缺点是权限管理和 secrets 管理比较弱，也不支持信息加密，不适合直接存储敏感信息。因此我们现在切换到了 Vault.</p>
@@ -946,7 +949,7 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/expirence-of-vault/</guid><d
 <p>可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
 Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。</p>
 <p>「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。</p>
-<p>barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 的过程中被验证与解密。</p>
+<p>barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 被读出的过程中被验证与解密。</p>
 <p>和银行金库(bank vault)非常类似，barrier 也必须先解封，才能解密 storage backend 中的数据。</p>
 <h3 id="1-数据存储及加密解密">1. 数据存储及加密解密</h3>
 <p>Storage Backend(后端存储): Vault 自身不存储数据，因此需要为它配置一个「Storage Backend」。
@@ -1517,6 +1520,10 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 </div>
 </div><p>不给这个权限，pulumi_vault 就会一直报错。。</p>
 <h2 id="四在-kubernetes-中使用-vault-注入-secrets">四、在 Kubernetes 中使用 vault 注入 secrets</h2>
+<p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-k8s-auth-workflow.png" title="/images/expirence-of-vault/vault-k8s-auth-workflow.png" data-thumbnail="/images/expirence-of-vault/vault-k8s-auth-workflow.png" data-sub-html="<h2>vault-k8s-auth-workflow</h2>">
+        
+    </a><figcaption class="image-caption">vault-k8s-auth-workflow</figcaption>
+    </figure></p>
 <p>前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。</p>
 <p>应用程序有两种方式去读取 vault 中的配置：</p>
 <ol>
@@ -2018,14 +2025,97 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h3 id="5-拓展在-kubernetes-中使用-vault-的其他姿势">5. 拓展：在 kubernetes 中使用 vault 的其他姿势</h3>
 <p>除了使用官方提供的 sidecar 模式进行 secrets 注入，社区也提供了一些别的方案，可以参考：</p>
 <ul>
-<li><a href="https://github.com/ricoberger/vault-secrets-operator" target="_blank" rel="noopener noreferrer">vault-secrets-operator</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
-<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreferrer">kubernetes-external-secrets</a>: 和 vault-secrets-operator 的功能基本没区别</li>
-<li><a href="https://github.com/hashicorp/secrets-store-csi-driver-provider-vault" target="_blank" rel="noopener noreferrer">secrets-store-csi-driver-provider-vault</a>: 实验性项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
+<li><a href="https://github.com/hashicorp/vault-csi-provider" target="_blank" rel="noopener noreferrer">hashicorp/vault-csi-provider</a>: 官方的 Beta 项目，通过 Secrets Store CSI 驱动将 vault secrets 以数据卷的形式挂载到 pod 中</li>
+<li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreferrer">kubernetes-external-secrets</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
 </ul>
-<p>不过官方的 sidecar 模式仍然是最推荐使用的。</p>
+<p>官方的 sidecar/init-container 模式仍然是最推荐使用的。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
 <p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
 <p>具体配置方法，待续。。。</p>
+]]></description></item><item><title>Linux 网络工具中的瑞士军刀 - socat</title><link>https://ryan4yin.space/posts/socat-netcat/</link><pubDate>Sat, 23 Jan 2021 16:30:13 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/posts/socat-netcat/</guid><description><![CDATA[<blockquote>
+<p>待完善</p>
+</blockquote>
+<h2 id="socat-vs-netcat">socat vs netcat</h2>
+<p>netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版中都被默认安装。但是已经很久没更新了。(最新的是 2004 年。。)</p>
+<p>而 socat(socket cat)，官方文档描述它是 <code>&quot;netcat++&quot; (extended design, new implementation)</code>，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。</p>
+<h2 id="安装方法">安装方法</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Debian/Ubuntu</span>
+sudo apt install socat
+
+<span class="c1"># CentOS/RedHat</span>
+sudo yum install socat
+
+<span class="c1"># 其他发行版基本也都可以使用包管理器安装 socat</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="常用命令">常用命令</h2>
+<h3 id="1-网络调试">1. 网络调试</h3>
+<p>连接远程端口，常用于检测远程端口是否打开：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat - TCP:192.168.1.252:3306
+</code></pre></td></tr></table>
+</div>
+</div><p>监听一个 TCP 端口，常用于测试本机的端口是否能正常被外部访问：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:7000 -
+</code></pre></td></tr></table>
+</div>
+</div><p>模拟一个 TLS 服务器，监听 443 端口：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat OPENSSL-LISTEN:443,cert<span class="o">=</span>/cert.pem -
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="2-数据传输">2. 数据传输</h2>
+<p>通常传输文件时，我都习惯使用 scp/ssh/rsync，但是 socat 其实也能被用于传输文件。</p>
+<p>以将 demo.tar.gz 从主机 A 发送到主机 B 为例，
+首先在数据发送方 A 执行如下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
+</code></pre></td></tr></table>
+</div>
+</div><p>然后在数据接收方 B 执行如下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-端口转发">3. 端口转发</h2>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/83959309" target="_blank" rel="noopener noreferrer">用好你的瑞士军刀/netcat - 韦易笑 - 知乎</a></li>
+<li><a href="http://www.dest-unreach.org/socat/" target="_blank" rel="noopener noreferrer">socat - Multipurpose relay</a></li>
+</ul>
 ]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/posts/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/posts/about-tls-cert/</guid><description><![CDATA[<h2 id="一tls-协议">一、TLS 协议</h2>
 <p>我们需要加密网络数据以实现安全通信，但是有一个现实的问题：</p>
@@ -2704,7 +2794,7 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/qemu-kvm-usage/</guid><descr
 <li>dnsmasq 提供了 NAT 虚拟网络的 DHCP 及 DNS 解析功能。</li>
 <li>vde2: 以太网虚拟化</li>
 <li>bridge-utils: 顾名思义，提供网络桥接相关的工具。</li>
-<li>openbsd-netcat: TCP/IP 的瑞士军刀，详见 <a href="/network/network-tools/socat%20%e5%92%8c%20netcat.md" rel="">/network/network-tools/socat 和 netcat</a>，这里不清楚是哪个网络组件会用到它。</li>
+<li>openbsd-netcat: TCP/IP 的瑞士军刀，详见 <a href="https://ryan4yin.space/posts/socat-netcat/" rel="">socat vs netcat</a>，这里不清楚是哪个网络组件会用到它。</li>
 </ul>
 </li>
 </ol>
@@ -4019,110 +4109,4 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/2020-summary/</guid><descrip
 <p>回看了下去年的总结，发现我 go/c# 都没学多少，设计模式也没动，python 还在原地踏步hhh&hellip; 去年的展望很多都没实现。</p>
 <p>不过云原生这一块倒是进步很快，总体很满意今年的成果哈哈~</p>
 <p>明年加油！</p>
-]]></description></item><item><title>「小歌行」-景德镇文艺复兴-2020巡演-深圳</title><link>https://ryan4yin.space/posts/jingdezhen-renaissance-band-2020-shenzhen/</link><pubDate>Sat, 28 Nov 2020 11:49:00 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/posts/jingdezhen-renaissance-band-2020-shenzhen/</guid><description><![CDATA[<h2 id="前言">前言</h2>
-<p>2020 年 11 月 28 日，我第一次参加 Live House，演出乐队是「景德镇文艺复兴」。</p>
-<p>「景德镇文艺复兴」是我很喜欢的一支后摇乐队，我喜欢上这支乐队，还得从我的昵称「於清樂」说起。</p>
-<p>17 年的时候，听了许多后摇，网易云就给我推荐「景德镇文艺复兴」的歌，如此结缘。</p>
-<p>其中有一首歌是「满世」，后摇嘛，歌词只有四句：</p>
-<pre><code>月下灵鸟吟
-花香无处寻
-再看破土人
-一满又一世
-</code></pre>
-<p>听这首歌的时候，我想起看过韩寒的《长安乱》，里面女主名叫「喜乐」，这名字里寄托着家人对她的期许——平安喜乐。
-我心里也升起一个不可能实现的愿望：</p>
-<pre><code>希冀能于这尘世之中，享得半世清闲，一生喜乐
-</code></pre>
-<p>这愿望已然不可能实现，过往的岁月里，我有过太多苦恼，做过了太多错事；可遇见的未来，也还没到清闲享乐的时候。
-那至少把昵称改成「於清樂」，提醒着自己，你有过这样一个愿望。</p>
-<h2 id="演出">演出</h2>
-<p>演出的内容是《小歌行》这张专辑，乐队通过一个自创的神话故事，将整张专辑串成了一个类似音乐剧的形式，进行演出，效果很棒！</p>
-<p>我用手机录下了几乎全程，因为第一次参加 Live House，又是自己这么喜欢的乐队，想要录下来，留做纪念。</p>
-<p>视频已经上传到了 Bilibili:</p>
-<div class="bilibili"><iframe src="//player.bilibili.com/player.html?bvid=BV1mv411t76G&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe></div>
-
-<p>录到最后手机没电了，为了留点电量刷公交车卡和门禁卡，最后一首《水码头》没有录完。（到家时真的差点刷不了门禁hhh）</p>
-<p>好了，下面是演出的照片集锦：</p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.jpg" data-sub-html="<h2>Live House 入口的宣传海报</h2>">
-        
-    </a><figcaption class="image-caption">Live House 入口的宣传海报</figcaption>
-    </figure></p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.jpg" data-sub-html="<h2>老村长1</h2>">
-        
-    </a><figcaption class="image-caption">老村长1</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.jpg" data-sub-html="<h2>老村长2</h2>">
-        
-    </a><figcaption class="image-caption">老村长2</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128113638014-1594750779.jpg" data-sub-html="<h2>老村长3</h2>">
-        
-    </a><figcaption class="image-caption">老村长3</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114120474-1364776540.jpg" data-sub-html="<h2>拉小提琴的小哥哥</h2>">
-        
-    </a><figcaption class="image-caption">拉小提琴的小哥哥</figcaption>
-    </figure></p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114814888-740961187.jpg" data-sub-html="<h2>九三舞蹈</h2>">
-        
-    </a><figcaption class="image-caption">九三舞蹈</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114128067-1544370442.jpg" data-sub-html="<h2>小提琴伴奏</h2>">
-        
-    </a><figcaption class="image-caption">小提琴伴奏</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114139889-1898640004.jpg" data-sub-html="<h2>九三是朝廷命官</h2>">
-        
-    </a><figcaption class="image-caption">九三是朝廷命官</figcaption>
-    </figure></p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114147861-2104586359.jpg" data-sub-html="<h2>阿弥陀佛</h2>">
-        
-    </a><figcaption class="image-caption">阿弥陀佛</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114155271-1084407368.jpg" data-sub-html="<h2>唱</h2>">
-        
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114227530-1597188845.jpg" data-sub-html="<h2>唱</h2>">
-        
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114241120-99677935.jpg" data-sub-html="<h2>唱</h2>">
-        
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114247824-172194041.jpg" data-sub-html="<h2>唱</h2>">
-        
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114253686-145509147.jpg" data-sub-html="<h2>唱</h2>">
-        
-    </a><figcaption class="image-caption">唱</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114300937-1249145761.jpg" data-sub-html="<h2>九三最漂亮的一瞬间</h2>">
-        
-    </a><figcaption class="image-caption">九三最漂亮的一瞬间</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114309169-866899330.jpg" data-sub-html="<h2>九三超帅气</h2>">
-        
-    </a><figcaption class="image-caption">九三超帅气</figcaption>
-    </figure></p>
-<p>结束：</p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114357231-542104843.jpg" data-sub-html="<h2>Live House 后台</h2>">
-        
-    </a><figcaption class="image-caption">Live House 后台</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114431651-1177933036.jpg" data-sub-html="<h2>结束鞠躬</h2>">
-        
-    </a><figcaption class="image-caption">结束鞠躬</figcaption>
-    </figure>
-<figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114503863-1307895977.jpg" data-sub-html="<h2>大合照</h2>">
-        
-    </a><figcaption class="image-caption">大合照</figcaption>
-    </figure></p>
-<p>签售：</p>
-<p><figure><a class="lightgallery" href="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" title="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" data-thumbnail="https://cdn.jsdelivr.net/gh/ryan4yin/ryan4yin.space@gh-pages/images/jingdezhen-renaissance-band/968138-20201128114723297-452926719.jpg" data-sub-html="<h2>签售</h2>">
-        
-    </a><figcaption class="image-caption">签售</figcaption>
-    </figure></p>]]></description></item></channel></rss>
+]]></description></item></channel></rss>
