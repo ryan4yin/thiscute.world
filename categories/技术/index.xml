@@ -1862,10 +1862,12 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
 <p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
 <p>具体配置方法，待续。。。</p>
-]]></description></item><item><title>Linux 网络工具中的瑞士军刀 - socat</title><link>https://ryan4yin.space/posts/socat-netcat/</link><pubDate>Sat, 23 Jan 2021 16:30:13 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/posts/socat-netcat/</guid><description><![CDATA[<h2 id="socat-vs-netcat">socat vs netcat</h2>
+]]></description></item><item><title>Linux 网络工具中的瑞士军刀 - socat &amp; netcat</title><link>https://ryan4yin.space/posts/socat-netcat/</link><pubDate>Sat, 23 Jan 2021 16:30:13 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/posts/socat-netcat/</guid><description><![CDATA[<h2 id="socat--netcat">socat &amp; netcat</h2>
 <p>netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 <code>nc</code>.</p>
 <p>而 socat(socket cat)，官方文档描述它是 <code>&quot;netcat++&quot; (extended design, new implementation)</code>，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。</p>
+<p>在不方便安装 socat 的环境中，我们可以使用系统自带的 netcat.
+而在其他环境，可以考虑优先使用 socat.</p>
 <h2 id="一简介">一、简介</h2>
 <p>socat 的基本命令格式：</p>
 <div class="highlight"><div class="chroma">
