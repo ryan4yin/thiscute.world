@@ -1,6 +1,6 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E7%BD%91%E7%BB%9C/</link><description>网络 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 11 Apr 2021 16:38:13 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>Linux 网络工具中的瑞士军刀 - socat &amp; netcat</title><link>https://ryan4yin.space/posts/socat-netcat/</link><pubDate>Sun, 11 Apr 2021 16:38:13 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/posts/socat-netcat/</guid><description><![CDATA[<blockquote>
-<p>本文前面部分的命令在 macOS Big Sur 和 Opensuse Tumbleweed 上测试通过，靠后的命令暂时还没测试过</p>
+<p>文中的命令均在 macOS Big Sur 和 Opensuse Tumbleweed 上测试通过</p>
 </blockquote>
 <h2 id="socat--netcat">socat &amp; netcat</h2>
 <p>netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 <code>nc</code>.</p>
@@ -180,9 +180,13 @@ socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell">socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
+<span class="c1"># 如果觉得太繁琐，也可以直接通过 stdout 重定向</span>
+socat -u tcp:192.168.1.252:2000 - &gt; demo.tar.gz
 </code></pre></td></tr></table>
 </div>
 </div><p>使用 netcat 也可以实现数据传输：</p>
