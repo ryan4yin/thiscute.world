@@ -1,8 +1,10 @@
 ---
 title: "Linux 网络工具中的瑞士军刀 - socat"
 date: 2021-01-23T16:30:13+08:00
-draft: true
+draft: false
 ---
+
+>待完善
 
 ## socat vs netcat
 
@@ -61,8 +63,6 @@ socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
 ```shell
 socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
 ```
-
-
 
 ## 3. 端口转发
 
