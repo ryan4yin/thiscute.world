@@ -2114,7 +2114,7 @@ socat TCP:192.168.31.123:7000 -
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="13-调试-tls-协议">1.3 调试 TLS 协议</h4>
-<p>模拟一个 TLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：</p>
+<p>模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -2131,7 +2131,8 @@ socat openssl-listen:4433,reuseaddr,cert<span class="o">=</span><span class="nv"
 socat - openssl-connect:192.168.31.123:4433,cert<span class="o">=</span><span class="nv">$HOME</span>/cert/client.pem,cafile<span class="o">=</span><span class="nv">$HOME</span>/cert/server.crt 
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="2-数据传输">2. 数据传输</h2>
+</div><p>上面的命令使用了 mTLS 双向认证的协议，你也可以把客户端证书去掉，这样就是普通的 TLS 协议服务器了。</p>
+<h2 id="2-数据传输">2. 数据传输</h2>
 <p>通常传输文件时，我都习惯使用 scp/ssh/rsync，但是 socat 其实也可以传输文件。</p>
 <p>以将 demo.tar.gz 从主机 A 发送到主机 B 为例，
 首先在数据发送方 A 执行如下命令：</p>
