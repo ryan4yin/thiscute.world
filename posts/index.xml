@@ -2104,13 +2104,17 @@ nc 192.168.1.252 <span class="m">3306</span>
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令</span>
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令，socat/nc 二选一</span>
 socat TCP-LISTEN:7000 -
+nc -l -p <span class="m">7000</span>
 
-<span class="c1"># 客户端连接命令</span>
+<span class="c1"># 客户端连接命令，socat/nc 二选一</span>
 socat TCP:192.168.31.123:7000 -
+nc 192.168.11.123 <span class="m">7000</span>
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="13-调试-tls-协议">1.3 调试 TLS 协议</h4>
