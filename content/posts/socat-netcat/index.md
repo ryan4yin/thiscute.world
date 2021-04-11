@@ -5,11 +5,13 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "yume_grimmar.jpg"
+  src: "yume_grimgar.jpg"
 
 tags: ["网络", "Linux", "网络调试"]
 categories: ["技术"]
 ---
+
+>文中的命令均在 macOS Big Sur 和 Opensuse Tumbleweed 上测试通过
 
 ## socat & netcat
 
@@ -65,19 +67,20 @@ brew install socat
 >以前你可能学过如何用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
 telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat
 
-使用 socat/netcat 将 stdin 发送给一个远程端口，检测远程端口的可连接性：
+使用 socat/netcat 检测远程端口的可连接性：
 
 ```shell
-socat - TCP:192.168.1.252:3306
+# -d[ddd] 增加日志详细程度，-dd  Prints fatal, error, warning, and notice messages.
+socat -dd - TCP:192.168.1.252:3306
 
 # -v 显示详细信息
-# -z 不发送数据
+# -z 不发送数据，效果为立即关闭连接，快速得出结果
 nc -vz 192.168.1.2 8080
 
 # -vv 显示更详细的内容
-# -w3 超时时间设为 3 秒
+# -w2 超时时间设为 2 秒
 # 使用 nc 做简单的端口扫描
-nc -vv -w3 -z 192.168.1.2 8080-8083
+nc -vv -w2 -z 192.168.1.2 20-500
 ```
 
 #### 1.2 测试本机端口是否能正常被外部访问（检测防火墙、路由）
@@ -87,36 +90,72 @@ nc -vv -w3 -z 192.168.1.2 8080-8083
 ```shell
 # 服务端启动命令，socat/nc 二选一
 socat TCP-LISTEN:7000 -
-nc -l -p 7000
+# -l --listening
+nc -l 7000
 
 # 客户端连接命令，socat/nc 二选一
 socat TCP:192.168.31.123:7000 -
 nc 192.168.11.123 7000
 ```
 
-UDP 协议的测试也非常类似：
+UDP 协议的测试也非常类似，使用 netcat 的示例如下：
 
 ```shell
-# 服务端
-nc -u -l -p 8080
+# 服务端，只监听 ipv4
+nc -u -l 8080
 
 # 客户端
 nc -u 192.168.31.123 8080
+# 客户端本机测试，注意 localhost 会被优先解析为 ipv6! 这会导致服务端(ipv4)的 nc 接收不到数据！
+nc -u localhost 8080
+```
+
+使用 socat 的 UDP 测试示例如下：
+
+```shell
+socat UDP-LISTEN:7000 -
+
+socat UDP:192.168.31.123:7000 -
 ```
 
 #### 1.3 调试 TLS 协议
 
+>参考 socat 官方文档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
+
+>测试证书及私钥的生成参见 [TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段]({{< ref "about-tls-cert/index.md" >}})
+
+
 模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：
 
 ```shell
+# socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下
+cat server.key server.crt > server.pem
+cat client.key client.crt > client.pem
+
 # 服务端启动命令
-socat openssl-listen:4433,reuseaddr,cert=$HOME/cert/server.pem,cafile=$HOME/cert/client.crt -
+socat openssl-listen:4433,reuseaddr,cert=server.pem,cafile=client.crt -
 
 # 客户端连接命令
-socat - openssl-connect:192.168.31.123:4433,cert=$HOME/cert/client.pem,cafile=$HOME/cert/server.crt 
+socat - openssl-connect:192.168.31.123:4433,cert=client.pem,cafile=server.crt
+# 或者使用 curl 连接(我们知道 ca.crt 和 server.crt 都能被用做 cacert/cafile)
+curl -v --cacert ca.crt --cert client.crt --key client.key --tls-max 1.2 https://192.168.31.123:4433
 ```
 
-上面的命令使用了 mTLS 双向认证的协议，你也可以把客户端证书去掉，这样就是普通的 TLS 协议服务器了。
+上面的命令使用了 mTLS 双向认证的协议，可通过设定 `verify=0` 来关掉客户端认证，示例如下：
+
+```shell
+
+# socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下
+cat server.key server.crt > server.pem
+
+# 服务端启动命令
+socat openssl-listen:4433,reuseaddr,cert=server.pem,verify=0 -
+
+# 客户端连接命令，如果 ip/域名不受证书保护，就也需要添加 verify=0
+socat - openssl-connect:192.168.31.123:4433,cafile=server.crt
+# 或者使用 curl 连接，证书无效请添加 -k 跳过证书验证
+curl -v --cacert server.crt https://192.168.31.123:4433
+```
 
 ## 2. 数据传输
 
@@ -129,13 +168,14 @@ socat - openssl-connect:192.168.31.123:4433,cert=$HOME/cert/client.pem,cafile=$H
 # -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）
 # -U 和 -u 相反，数据只从右边单向传输给左边
 socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
-
 ```
 
 然后在数据接收方 B 执行如下命令，就能把文件接收到：
 
 ```shell
 socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
+# 如果觉得太繁琐，也可以直接通过 stdout 重定向
+socat -u tcp:192.168.1.252:2000 - > demo.tar.gz
 ```
 
 使用 netcat 也可以实现数据传输：
@@ -151,11 +191,19 @@ nc 192.168.1.2 8080 < demo.tar.gz
 
 使用 `fork` `reuseaddr` `SYSTEM` 三个命令，再用 `systemd`/`supervisor` 管理一下，就可以用几行命令实现一个简单的后台服务器。
 
+下面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问 `http://<ip>:8080` 来查看效果。
+
 ```shell
-socat TCP-LISTEN:8080,fork,reuseaddr SYSTEM:"python3 web.py"
+socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:"python3 web.py"
 ```
 
-上面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问 `http://<ip>:8080` 来查看效果。
+假设 `web.py` 的内容为：
+
+```python
+print("hello world")
+```
+
+那 `curl localhost:8080` 就应该会输出 `hello world`
 
 ## 4. 端口转发
 
