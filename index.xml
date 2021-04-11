@@ -150,6 +150,8 @@ socat UDP:192.168.31.123:7000 -
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令</span>
@@ -157,6 +159,8 @@ socat openssl-listen:4433,reuseaddr,cert<span class="o">=</span><span class="nv"
 
 <span class="c1"># 客户端连接命令</span>
 socat - openssl-connect:192.168.31.123:4433,cert<span class="o">=</span><span class="nv">$HOME</span>/cert/client.pem,cafile<span class="o">=</span><span class="nv">$HOME</span>/cert/server.crt 
+<span class="c1"># 或者使用 curl 连接</span>
+curl -v --cacert ca.crt --cert ./client.crt --key client.key --tls-max 1.2 https://192.168.31.123:4433
 </code></pre></td></tr></table>
 </div>
 </div><p>上面的命令使用了 mTLS 双向认证的协议，你也可以把客户端证书去掉，这样就是普通的 TLS 协议服务器了。</p>
