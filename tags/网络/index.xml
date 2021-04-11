@@ -1,4 +1,220 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E7%BD%91%E7%BB%9C/</link><description>网络 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Thu, 28 May 2020 16:20:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析</title><link>https://ryan4yin.space/posts/tcpdump-and-wireshark/</link><pubDate>Thu, 28 May 2020 16:20:26 +0800</pubDate><author>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>网络 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E7%BD%91%E7%BB%9C/</link><description>网络 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sat, 23 Jan 2021 16:30:13 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E7%BD%91%E7%BB%9C/" rel="self" type="application/rss+xml"/><item><title>Linux 网络工具中的瑞士军刀 - socat</title><link>https://ryan4yin.space/posts/socat-netcat/</link><pubDate>Sat, 23 Jan 2021 16:30:13 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/posts/socat-netcat/</guid><description><![CDATA[<h2 id="socat-vs-netcat">socat vs netcat</h2>
+<p>netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 <code>nc</code>.</p>
+<p>而 socat(socket cat)，官方文档描述它是 <code>&quot;netcat++&quot; (extended design, new implementation)</code>，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。</p>
+<h2 id="一简介">一、简介</h2>
+<p>socat 的基本命令格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat <span class="o">[</span>参数<span class="o">]</span> 地址1 地址2
+</code></pre></td></tr></table>
+</div>
+</div><p>给 socat 提供两个地址，socat 干的活就是把两个地址的流对接起来。左边地址的输出传给右边，同时又把右边地址的输出传给左边，也就是一个<strong>双向的数据管道</strong>。</p>
+<p>听起来好像没啥特别的，但是实际上计算机网络干的活也就是数据传输而已，却影响了整个世界，不可小觑它的功能。</p>
+<p>socat 支持非常多的地址类型：<code>-</code>/stdio，TCP, TCP-LISTEN, UDP, UDP-LISTEN, OPEN, EXEC, SOCKS, PROXY 等等，可用于端口监听、链接，文件和进程读写，代理桥接等等。</p>
+<p>socat 的功能就是这么简单，命令行参数也很简洁，唯一需要花点精力学习的就是它各种地址的定义和搭配写法。</p>
+<p>而 netcat 定义貌似没这么严谨，可以简单的理解为网络版的 cat 命令 2333</p>
+<h2 id="二安装方法">二、安装方法</h2>
+<p>各发行版都自带 netcat，包名通常为 <code>nc-openbsd</code>，因此这里只介绍 socat 的安装方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Debian/Ubuntu</span>
+sudo apt install socat
+
+<span class="c1"># CentOS/RedHat</span>
+sudo yum install socat
+
+<span class="c1"># macOS</span>
+brew install socat
+</code></pre></td></tr></table>
+</div>
+</div><p>其他发行版基本也都可以使用包管理器安装 socat</p>
+<h2 id="三常用命令">三、常用命令</h2>
+<h3 id="1-网络调试">1. 网络调试</h3>
+<h4 id="11-检测远程端口的可连接性确认防火墙没问题">1.1 检测远程端口的可连接性（确认防火墙没问题）</h4>
+<blockquote>
+<p>以前你可能学过如何用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
+telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat</p>
+</blockquote>
+<p>使用 socat/netcat 将 stdin 发送给一个远程端口，检测远程端口的可连接性：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat - TCP:192.168.1.252:3306
+
+<span class="c1"># -v 显示详细信息</span>
+<span class="c1"># -z 不发送数据</span>
+nc -vz 192.168.1.2 <span class="m">8080</span>
+
+<span class="c1"># -vv 显示更详细的内容</span>
+<span class="c1"># -w3 超时时间设为 3 秒</span>
+<span class="c1"># 使用 nc 做简单的端口扫描</span>
+nc -vv -w3 -z 192.168.1.2 8080-8083
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-测试本机端口是否能正常被外部访问检测防火墙路由">1.2 测试本机端口是否能正常被外部访问（检测防火墙、路由）</h4>
+<p>在本机监听一个 TCP 端口，接收到的内容传到 stdout，同时将 stdin 的输入传给客户端：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令，socat/nc 二选一</span>
+socat TCP-LISTEN:7000 -
+nc -l -p <span class="m">7000</span>
+
+<span class="c1"># 客户端连接命令，socat/nc 二选一</span>
+socat TCP:192.168.31.123:7000 -
+nc 192.168.11.123 <span class="m">7000</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>UDP 协议的测试也非常类似：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端</span>
+nc -u -l -p <span class="m">8080</span>
+
+<span class="c1"># 客户端</span>
+nc -u 192.168.31.123 <span class="m">8080</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="13-调试-tls-协议">1.3 调试 TLS 协议</h4>
+<p>模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令</span>
+socat openssl-listen:4433,reuseaddr,cert<span class="o">=</span><span class="nv">$HOME</span>/cert/server.pem,cafile<span class="o">=</span><span class="nv">$HOME</span>/cert/client.crt -
+
+<span class="c1"># 客户端连接命令</span>
+socat - openssl-connect:192.168.31.123:4433,cert<span class="o">=</span><span class="nv">$HOME</span>/cert/client.pem,cafile<span class="o">=</span><span class="nv">$HOME</span>/cert/server.crt 
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的命令使用了 mTLS 双向认证的协议，你也可以把客户端证书去掉，这样就是普通的 TLS 协议服务器了。</p>
+<h2 id="2-数据传输">2. 数据传输</h2>
+<p>通常传输文件时，我都习惯使用 scp/ssh/rsync，但是 socat 其实也可以传输文件。</p>
+<p>以将 demo.tar.gz 从主机 A 发送到主机 B 为例，
+首先在数据发送方 A 执行如下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）</span>
+<span class="c1"># -U 和 -u 相反，数据只从右边单向传输给左边</span>
+socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
+
+</code></pre></td></tr></table>
+</div>
+</div><p>然后在数据接收方 B 执行如下命令，就能把文件接收到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 netcat 也可以实现数据传输：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 先在接收方启动服务端</span>
+nc -l -p <span class="m">8080</span> &gt; demo.tar.gz
+<span class="c1"># 再在发送方启动客户端发送数据</span>
+nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-担当临时的-web-服务器">3. 担当临时的 web 服务器</h2>
+<p>使用 <code>fork</code> <code>reuseaddr</code> <code>SYSTEM</code> 三个命令，再用 <code>systemd</code>/<code>supervisor</code> 管理一下，就可以用几行命令实现一个简单的后台服务器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问 <code>http://&lt;ip&gt;:8080</code> 来查看效果。</p>
+<h2 id="4-端口转发">4. 端口转发</h2>
+<p>监听 8080 端口，建立该端口与 <code>baidu.com:80</code> 之间的双向管道:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr  TCP:baidu.com:80
+</code></pre></td></tr></table>
+</div>
+</div><p>拿 curl 命令测试一下，应该能正常访问到百度：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 注意指定 Host</span>
+curl -v -H <span class="s1">&#39;Host: baidu.com&#39;</span> localhost:8080
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/347722248" target="_blank" rel="noopener noreferrer">新版瑞士军刀：socat - 韦易笑 - 知乎</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/83959309" target="_blank" rel="noopener noreferrer">用好你的瑞士军刀/netcat - 韦易笑 - 知乎</a></li>
+<li><a href="http://www.dest-unreach.org/socat/" target="_blank" rel="noopener noreferrer">socat - Multipurpose relay</a></li>
+</ul>
+]]></description></item><item><title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析</title><link>https://ryan4yin.space/posts/tcpdump-and-wireshark/</link><pubDate>Thu, 28 May 2020 16:20:26 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/posts/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
 <p>抓包分析工具主要有两种：</p>
 <ol>
