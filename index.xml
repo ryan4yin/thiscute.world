@@ -1,5 +1,8 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Ryan4Yin's Space</title><link>https://ryan4yin.space/</link><description>Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 11 Apr 2021 16:38:13 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 网络工具中的瑞士军刀 - socat &amp; netcat</title><link>https://ryan4yin.space/posts/socat-netcat/</link><pubDate>Sun, 11 Apr 2021 16:38:13 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/posts/socat-netcat/</guid><description><![CDATA[<h2 id="socat--netcat">socat &amp; netcat</h2>
+ryan4yin</author><guid>https://ryan4yin.space/posts/socat-netcat/</guid><description><![CDATA[<blockquote>
+<p>本文的命令在 macOS Big Sur 和 Opensuse Tumbleweed 上测试通过</p>
+</blockquote>
+<h2 id="socat--netcat">socat &amp; netcat</h2>
 <p>netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 <code>nc</code>.</p>
 <p>而 socat(socket cat)，官方文档描述它是 <code>&quot;netcat++&quot; (extended design, new implementation)</code>，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。</p>
 <p>在不方便安装 socat 的环境中，我们可以使用系统自带的 netcat.
@@ -64,18 +67,20 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
+</span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat - TCP:192.168.1.252:3306
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -d[ddd] 增加日志详细程度，-dd  Prints fatal, error, warning, and notice messages.</span>
+socat -dd - TCP:192.168.1.252:3306
 
 <span class="c1"># -v 显示详细信息</span>
-<span class="c1"># -z 不发送数据</span>
+<span class="c1"># -z 不发送数据，效果为立即关闭连接，快速得出结果</span>
 nc -vz 192.168.1.2 <span class="m">8080</span>
 
 <span class="c1"># -vv 显示更详细的内容</span>
-<span class="c1"># -w3 超时时间设为 3 秒</span>
+<span class="c1"># -w2 超时时间设为 2 秒</span>
 <span class="c1"># 使用 nc 做简单的端口扫描</span>
-nc -vv -w3 -z 192.168.1.2 8080-8083
+nc -vv -w2 -z 192.168.1.2 20-500
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="12-测试本机端口是否能正常被外部访问检测防火墙路由">1.2 测试本机端口是否能正常被外部访问（检测防火墙、路由）</h4>
@@ -89,18 +94,20 @@ nc -vv -w3 -z 192.168.1.2 8080-8083
 </span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
+</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令，socat/nc 二选一</span>
 socat TCP-LISTEN:7000 -
-nc -l -p <span class="m">7000</span>
+<span class="c1"># -l --listening</span>
+nc -l <span class="m">7000</span>
 
 <span class="c1"># 客户端连接命令，socat/nc 二选一</span>
 socat TCP:192.168.31.123:7000 -
 nc 192.168.11.123 <span class="m">7000</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>UDP 协议的测试也非常类似：</p>
+</div><p>UDP 协议的测试也非常类似，使用 netcat 的示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -108,13 +115,30 @@ nc 192.168.11.123 <span class="m">7000</span>
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端</span>
-nc -u -l -p <span class="m">8080</span>
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端，只监听 ipv4</span>
+nc -u -l <span class="m">8080</span>
 
 <span class="c1"># 客户端</span>
 nc -u 192.168.31.123 <span class="m">8080</span>
+<span class="c1"># 客户端本机测试，注意 localhost 会被优先解析为 ipv6! 这会导致服务端(ipv4)的 nc 接收不到数据！</span>
+nc -u localhost <span class="m">8080</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 socat 的 UDP 测试示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">socat UDP-LISTEN:7000 -
+
+socat UDP:192.168.31.123:7000 -
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="13-调试-tls-协议">1.3 调试 TLS 协议</h4>
@@ -145,13 +169,11 @@ socat - openssl-connect:192.168.31.123:4433,cert<span class="o">=</span><span cl
 <pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）</span>
 <span class="c1"># -U 和 -u 相反，数据只从右边单向传输给左边</span>
 socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
-
 </code></pre></td></tr></table>
 </div>
 </div><p>然后在数据接收方 B 执行如下命令，就能把文件接收到：</p>
