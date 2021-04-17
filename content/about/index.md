@@ -27,8 +27,8 @@ lightgallery: true
   - 曾经使用过但已经荒废的语言：C/Java/Julia/Mathematica
   - 感兴趣但尚未入门的语言: Rust/Elixir
 - **职业**：**云原生运维**
-  - 目前专注于以 Kubernetes 为核心的云原生技术圈以及 Openresty 等网络代理技术，思考如何更好地利用这些技术优化基础设施，使基础设施能**稳定高效**地支撑业务不断成长。
-- **工具或技术**：熟悉 Kubernetes/Istio/Flagger/Pulumi/QEMU-KVM 
+  - 目前专注于以 Kubernetes 为核心的云原生技术圈，思考如何更好地利用这些技术优化基础设施，使基础设施能**稳定高效**地支撑业务不断成长。
+- **工具或技术**：会用 Kubernetes/Istio/Flagger/Pulumi/QEMU-KVM，但是对底层欠缺了解。
 - **理论基础**：Linux 底层知识还很欠缺、计算机网络还有很多要补、CSAPP/SICP 没看完、Redis等数据库相关知识还知之甚少、算法也忘差不多了、微积分线代概率论复变函数也都忘了。是的还有太多需要补习的理论基础知识。
 
 
