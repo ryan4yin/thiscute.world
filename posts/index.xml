@@ -1769,8 +1769,13 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>为了简化这个流程，可以考虑配置 auto unseal 让 vault 自动解封。</p>
 <p>自动解封目前有两种方法：</p>
 <ol>
-<li>使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key，阿里云的相关配置方法：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreferrer">alicloudkms Seal</a></li>
-<li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreferrer">autounseal-transit</a></li>
+<li>使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key
+<ol>
+<li>AWS: <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-aws-kms" target="_blank" rel="noopener noreferrer">Auto-unseal using AWS KMS</a></li>
+<li>阿里云：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreferrer">alicloudkms Seal</a></li>
+</ol>
+</li>
+<li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreferrer">autounseal-transit</a>，这种方法使用另一个 vault 实例提供的 transit 引擎来实现 auto-unseal.</li>
 </ol>
 <p>简单起见，也可以考虑直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过要注意别泄漏了解封密钥！</p>
 <h2 id="三vault-自身的配置管理">三、Vault 自身的配置管理</h2>
