@@ -184,7 +184,6 @@ listener "tcp" {
 >推荐用于生产环境
 
 
-
 通过 helm 部署：
 
 ```shell
@@ -378,8 +377,11 @@ $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 3
 
 自动解封目前有两种方法：
 
-1. 使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key，阿里云的相关配置方法：[alicloudkms Seal](https://www.vaultproject.io/docs/configuration/seal/alicloudkms)
-2. 如果你不想用云服务，那可以考虑 [autounseal-transit](https://learn.hashicorp.com/tutorials/vault/autounseal-transit)
+1. 使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key
+   1. AWS: [awskms Seal](https://www.vaultproject.io/docs/configuration/seal/awskms)
+      1. 如果是 k8s 集群，vault 使用的 ServiceAccount 需要有权限使用 AWS KMS.
+   2. 阿里云：[alicloudkms Seal](https://www.vaultproject.io/docs/configuration/seal/alicloudkms)
+2. 如果你不想用云服务，那可以考虑 [autounseal-transit](https://learn.hashicorp.com/tutorials/vault/autounseal-transit)，这种方法使用另一个 vault 实例提供的 transit 引擎来实现 auto-unseal.
 
 简单起见，也可以考虑直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过要注意别泄漏了解封密钥！
 
