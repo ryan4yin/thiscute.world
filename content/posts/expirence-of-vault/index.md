@@ -121,6 +121,16 @@ Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。
 1. 使用 helm/docker 部署运行 vault.
 2. 初始化/解封 vault: vault 安全措施，每次重启必须解封(可设置自动解封).
 
+### 0. 如何选择存储后端？
+
+首先，我们肯定需要 HA，至少要保留能升级到 HA 的能力，所以不建议选择不支持 HA 的后端。
+
+而具体的选择，就因团队经验而异了，人们往往倾向于使用自己熟悉的、知根知底的后端，或者选用云服务。
+
+比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用 MySQL/PostgreSQL.
+
+而如果你们是本地自建，那你可能更倾向于使用 Etcd/Consul/Raft 做后端存储。
+
 ### 1. docker-compose 部署
 
 >推荐用于本地开发测试环境，或者其他不需要高可用的环境。
@@ -192,7 +202,7 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 # 查看 vault 版本号
 helm search repo hashicorp/vault -l | head
 # 下载某个版本号的 vault
-helm pull hashicorp/vault --version  0.9.0 --untar
+helm pull hashicorp/vault --version  0.11.0 --untar
 ```
 
 参照下载下来的 `./vault/values.yaml` 编写 `custom-values.yaml`，
@@ -261,15 +271,6 @@ server:
   # See https://www.vaultproject.io/docs/audit/index.html to know more
   auditStorage:
     enabled: false
-    # Size of the PVC created
-    size: 10Gi
-    # Name of the storage class to use.  If null it will use the
-    # configured default Storage Class.
-    storageClass: null
-    # Access Mode of the storage device being used for the PVC
-    accessMode: ReadWriteOnce
-    # Annotations to apply to the PVC
-    annotations: {}
 
   # Run Vault in "HA" mode. There are no storage requirements unless audit log
   # persistence is required.  In HA mode Vault will configure itself to use Consul
@@ -315,25 +316,33 @@ server:
 
       service_registration "kubernetes" {}
 
-      # Example configuration for using auto-unseal, using Google Cloud KMS. The
-      # GKMS keys must already exist, and the cluster must have a service account
-      # that is authorized to access GCP KMS.
-      #seal "gcpckms" {
-      #   project     = "vault-helm-dev-246514"
-      #   region      = "global"
-      #   key_ring    = "vault-helm-unseal-kr"
-      #   crypto_key  = "vault-helm-unseal-key"
-      #}
+      # Example configuration for using auto-unseal, using AWS KMS. 
+      # the cluster must have a service account that is authorized to access AWS KMS, throught an IAM Role.
+      # seal "awskms" {
+      #   region     = "us-east-1"
+      #   kms_key_id = "19ec80b0-dfdd-4d97-8164-c6examplekey"
+      #   endpoint   = "https://vpce-0e1bb1852241f8cc6-pzi0do8n.kms.us-east-1.vpce.amazonaws.com"
+      # }
+
+  # Definition of the serviceAccount used to run Vault.
+  # These options are also used when using an external Vault server to validate
+  # Kubernetes tokens.
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: "vault"
+    # Extra annotations for the serviceAccount definition. This can either be
+    # YAML or a YAML-formatted multi-line templated string map of the
+    # annotations to apply to the serviceAccount.
+    annotations: {}
 
 # Vault UI
 ui:
-  # True if you want to create a Service entry for the Vault UI.
-  #
-  # serviceType can be used to control the type of service created. For
-  # example, setting this to "LoadBalancer" will create an external load
-  # balancer (for supported K8S installations) to access the UI.
   enabled: true
   publishNotReadyAddresses: true
+  serviceType: ClusterIP
   # The service should only contain selectors for active Vault pod
   activeVaultPodOnly: false
   externalPort: 8200
@@ -379,7 +388,7 @@ $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 3
 
 1. 使用阿里云/AWS/Azure 等云服务提供的密钥库来管理 encryption key
    1. AWS: [awskms Seal](https://www.vaultproject.io/docs/configuration/seal/awskms)
-      1. 如果是 k8s 集群，vault 使用的 ServiceAccount 需要有权限使用 AWS KMS.
+      1. 如果是 k8s 集群，vault 使用的 ServiceAccount 需要有权限使用 AWS KMS，它可替代掉 config.hcl 中的 access_key/secret_key 两个属性
    2. 阿里云：[alicloudkms Seal](https://www.vaultproject.io/docs/configuration/seal/alicloudkms)
 2. 如果你不想用云服务，那可以考虑 [autounseal-transit](https://learn.hashicorp.com/tutorials/vault/autounseal-transit)，这种方法使用另一个 vault 实例提供的 transit 引擎来实现 auto-unseal.
 
