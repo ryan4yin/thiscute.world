@@ -841,6 +841,11 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <li>使用 helm/docker 部署运行 vault.</li>
 <li>初始化/解封 vault: vault 安全措施，每次重启必须解封(可设置自动解封).</li>
 </ol>
+<h3 id="0-如何选择存储后端">0. 如何选择存储后端？</h3>
+<p>首先，我们肯定需要 HA，至少要保留能升级到 HA 的能力，所以不建议选择不支持 HA 的后端。</p>
+<p>而具体的选择，就因团队经验而异了，人们往往倾向于使用自己熟悉的、知根知底的后端，或者选用云服务。</p>
+<p>比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用 MySQL/PostgreSQL.</p>
+<p>而如果你们是本地自建，那你可能更倾向于使用 Etcd/Consul/Raft 做后端存储。</p>
 <h3 id="1-docker-compose-部署">1. docker-compose 部署</h3>
 <blockquote>
 <p>推荐用于本地开发测试环境，或者其他不需要高可用的环境。</p>
@@ -961,7 +966,7 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 <span class="c1"># 查看 vault 版本号</span>
 helm search repo hashicorp/vault -l <span class="p">|</span> head
 <span class="c1"># 下载某个版本号的 vault</span>
-helm pull hashicorp/vault --version  0.9.0 --untar
+helm pull hashicorp/vault --version  0.11.0 --untar
 </code></pre></td></tr></table>
 </div>
 </div><p>参照下载下来的 <code>./vault/values.yaml</code> 编写 <code>custom-values.yaml</code>，
@@ -1106,7 +1111,6 @@ helm pull hashicorp/vault --version  0.9.0 --untar
 </span><span class="lnt">132
 </span><span class="lnt">133
 </span><span class="lnt">134
-</span><span class="lnt">135
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
@@ -1168,15 +1172,6 @@ helm pull hashicorp/vault --version  0.9.0 --untar
 </span><span class="w">  </span><span class="c"># See https://www.vaultproject.io/docs/audit/index.html to know more</span><span class="w">
 </span><span class="w">  </span><span class="nt">auditStorage</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-</span><span class="w">    </span><span class="c"># Size of the PVC created</span><span class="w">
-</span><span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">10Gi</span><span class="w">
-</span><span class="w">    </span><span class="c"># Name of the storage class to use.  If null it will use the</span><span class="w">
-</span><span class="w">    </span><span class="c"># configured default Storage Class.</span><span class="w">
-</span><span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
-</span><span class="w">    </span><span class="c"># Access Mode of the storage device being used for the PVC</span><span class="w">
-</span><span class="w">    </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
-</span><span class="w">    </span><span class="c"># Annotations to apply to the PVC</span><span class="w">
-</span><span class="w">    </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
 </span><span class="w">
 </span><span class="w">  </span><span class="c"># Run Vault in &#34;HA&#34; mode. There are no storage requirements unless audit log</span><span class="w">
 </span><span class="w">  </span><span class="c"># persistence is required.  In HA mode Vault will configure itself to use Consul</span><span class="w">
@@ -1222,25 +1217,33 @@ helm pull hashicorp/vault --version  0.9.0 --untar
 </span><span class="sd">
 </span><span class="sd">      service_registration &#34;kubernetes&#34; {}
 </span><span class="sd">
-</span><span class="sd">      # Example configuration for using auto-unseal, using Google Cloud KMS. The
-</span><span class="sd">      # GKMS keys must already exist, and the cluster must have a service account
-</span><span class="sd">      # that is authorized to access GCP KMS.
-</span><span class="sd">      #seal &#34;gcpckms&#34; {
-</span><span class="sd">      #   project     = &#34;vault-helm-dev-246514&#34;
-</span><span class="sd">      #   region      = &#34;global&#34;
-</span><span class="sd">      #   key_ring    = &#34;vault-helm-unseal-kr&#34;
-</span><span class="sd">      #   crypto_key  = &#34;vault-helm-unseal-key&#34;
-</span><span class="sd">      #}</span><span class="w">      
+</span><span class="sd">      # Example configuration for using auto-unseal, using AWS KMS. 
+</span><span class="sd">      # the cluster must have a service account that is authorized to access AWS KMS, throught an IAM Role.
+</span><span class="sd">      # seal &#34;awskms&#34; {
+</span><span class="sd">      #   region     = &#34;us-east-1&#34;
+</span><span class="sd">      #   kms_key_id = &#34;19ec80b0-dfdd-4d97-8164-c6examplekey&#34;
+</span><span class="sd">      #   endpoint   = &#34;https://vpce-0e1bb1852241f8cc6-pzi0do8n.kms.us-east-1.vpce.amazonaws.com&#34;
+</span><span class="sd">      # }</span><span class="w">      
+</span><span class="w">
+</span><span class="w">  </span><span class="c"># Definition of the serviceAccount used to run Vault.</span><span class="w">
+</span><span class="w">  </span><span class="c"># These options are also used when using an external Vault server to validate</span><span class="w">
+</span><span class="w">  </span><span class="c"># Kubernetes tokens.</span><span class="w">
+</span><span class="w">  </span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># Specifies whether a service account should be created</span><span class="w">
+</span><span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="c"># The name of the service account to use.</span><span class="w">
+</span><span class="w">    </span><span class="c"># If not set and create is true, a name is generated using the fullname template</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;vault&#34;</span><span class="w">
+</span><span class="w">    </span><span class="c"># Extra annotations for the serviceAccount definition. This can either be</span><span class="w">
+</span><span class="w">    </span><span class="c"># YAML or a YAML-formatted multi-line templated string map of the</span><span class="w">
+</span><span class="w">    </span><span class="c"># annotations to apply to the serviceAccount.</span><span class="w">
+</span><span class="w">    </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
 </span><span class="w">
 </span><span class="w"></span><span class="c"># Vault UI</span><span class="w">
 </span><span class="w"></span><span class="nt">ui</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="c"># True if you want to create a Service entry for the Vault UI.</span><span class="w">
-</span><span class="w">  </span><span class="c">#</span><span class="w">
-</span><span class="w">  </span><span class="c"># serviceType can be used to control the type of service created. For</span><span class="w">
-</span><span class="w">  </span><span class="c"># example, setting this to &#34;LoadBalancer&#34; will create an external load</span><span class="w">
-</span><span class="w">  </span><span class="c"># balancer (for supported K8S installations) to access the UI.</span><span class="w">
 </span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="w">  </span><span class="nt">publishNotReadyAddresses</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="nt">serviceType</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterIP</span><span class="w">
 </span><span class="w">  </span><span class="c"># The service should only contain selectors for active Vault pod</span><span class="w">
 </span><span class="w">  </span><span class="nt">activeVaultPodOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="w">  </span><span class="nt">externalPort</span><span class="p">:</span><span class="w"> </span><span class="m">8200</span><span class="w">
@@ -1303,7 +1306,7 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <ol>
 <li>AWS: <a href="https://www.vaultproject.io/docs/configuration/seal/awskms" target="_blank" rel="noopener noreferrer">awskms Seal</a>
 <ol>
-<li>如果是 k8s 集群，vault 使用的 ServiceAccount 需要有权限使用 AWS KMS.</li>
+<li>如果是 k8s 集群，vault 使用的 ServiceAccount 需要有权限使用 AWS KMS，它可替代掉 config.hcl 中的 access_key/secret_key 两个属性</li>
 </ol>
 </li>
 <li>阿里云：<a href="https://www.vaultproject.io/docs/configuration/seal/alicloudkms" target="_blank" rel="noopener noreferrer">alicloudkms Seal</a></li>
