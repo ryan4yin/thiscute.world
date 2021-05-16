@@ -131,7 +131,7 @@ Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。
 
 而如果你们是本地自建，那你可能更倾向于使用 Etcd/Consul/Raft 做后端存储。
 
-### 1. docker-compose 部署
+### 1. docker-compose 部署（非 HA）
 
 >推荐用于本地开发测试环境，或者其他不需要高可用的环境。
 
@@ -189,7 +189,7 @@ listener "tcp" {
 
 然后 `docker-compose up -d` 就能启动运行一个 vault 实例。
 
-### 2. 通过 helm 部署 vault {#install-by-helm}
+### 2. 通过 helm 部署高可用的 vault {#install-by-helm}
 
 >推荐用于生产环境
 
@@ -301,18 +301,16 @@ server:
         address = "[::]:8200"
         cluster_address = "[::]:8201"
 
+        # 注意，这个值要和 helm 的参数 global.tlsDisable 一致
         tls_disable = false
         tls_cert_file = "/etc/certs/vault.crt"
         tls_key_file  = "/etc/certs/vault.key"
       }
 
-      storage "mysql" {
-        address = "<host>:3306"
-        username = "<username>"
-        password = "<password>"
-        database = "vault"
-        ha_enabled = "true"
-      }
+      # storage "postgresql" {
+      #   connection_url = "postgres://username:password@<host>:5432/vault?sslmode=disable"
+      #   ha_enabled = true
+      # }
 
       service_registration "kubernetes" {}
 
@@ -320,31 +318,27 @@ server:
       # the cluster must have a service account that is authorized to access AWS KMS, throught an IAM Role.
       # seal "awskms" {
       #   region     = "us-east-1"
-      #   kms_key_id = "19ec80b0-dfdd-4d97-8164-c6examplekey"
-      #   endpoint   = "https://vpce-0e1bb1852241f8cc6-pzi0do8n.kms.us-east-1.vpce.amazonaws.com"
+      #   kms_key_id = "<some-key-id>"
+      #   默认情况下插件会使用 awskms 的公网 enpoint，但是也可以使用如下参数，改用自行创建的 vpc 内网 endpoint
+      #   endpoint   = "https://<vpc-endpoint-id>.kms.us-east-1.vpce.amazonaws.com"
       # }
 
   # Definition of the serviceAccount used to run Vault.
   # These options are also used when using an external Vault server to validate
   # Kubernetes tokens.
   serviceAccount:
-    # Specifies whether a service account should be created
     create: true
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
     name: "vault"
-    # Extra annotations for the serviceAccount definition. This can either be
-    # YAML or a YAML-formatted multi-line templated string map of the
-    # annotations to apply to the serviceAccount.
-    annotations: {}
+    annotations:
+      # 如果要使用 auto unseal 的话，这个填写拥有 awskms 权限的 AWS IAM Role
+      eks.amazonaws.com/role-arn: <role-arn>
 
 # Vault UI
 ui:
   enabled: true
   publishNotReadyAddresses: true
   serviceType: ClusterIP
-  # The service should only contain selectors for active Vault pod
-  activeVaultPodOnly: false
+  activeVaultPodOnly: true
   externalPort: 8200
 ```
 
@@ -378,9 +372,9 @@ $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 3
 
 这样就完成了部署，但是要注意，**vault 实例每次重启后，都需要重新解封！也就是重新进行第二步操作！**
 
-### 4. 设置自动解封
+### 4. 初始化并设置自动解封
 
-每次重启都要手动解封所有 vault 实例，实在是很麻烦，在云上自动扩缩容的情况下，vault 实例会被自动调度，这种情况就更麻烦了。
+在未设置 auto unseal 的情况下，vault 每次重启都要手动解封所有 vault 实例，实在是很麻烦，在云上自动扩缩容的情况下，vault 实例会被自动调度，这种情况就更麻烦了。
 
 为了简化这个流程，可以考虑配置 auto unseal 让 vault 自动解封。
 
@@ -391,8 +385,47 @@ $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 3
       1. 如果是 k8s 集群，vault 使用的 ServiceAccount 需要有权限使用 AWS KMS，它可替代掉 config.hcl 中的 access_key/secret_key 两个属性
    2. 阿里云：[alicloudkms Seal](https://www.vaultproject.io/docs/configuration/seal/alicloudkms)
 2. 如果你不想用云服务，那可以考虑 [autounseal-transit](https://learn.hashicorp.com/tutorials/vault/autounseal-transit)，这种方法使用另一个 vault 实例提供的 transit 引擎来实现 auto-unseal.
+3. 简单粗暴：直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过这样安全性就不好说了。
 
-简单起见，也可以考虑直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过要注意别泄漏了解封密钥！
+
+以使用 awskms 为例，首先创建 aws IAM 的 policy 内容如下:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VaultKMSUnseal",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:DescribeKey"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+然后创建 IAM Role 绑定上面的 policy，并为 vault 的 k8s serviceaccount 创建一个 IAM Role，绑定上这个 policy.
+
+这样 vault 使用的 serviceaccount 自身就拥有了访问 awskms 的权限，也就不需要额外通过 access_key/secret_key 来访问 awskms.
+
+关于 IAM Role 和 k8s serviceaccount 如何绑定，参见官方文档：[IAM roles for EKS service accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html)
+
+
+完事后再修改好前面提供的 helm 配置，部署它，最后使用如下命令初始化一下：
+
+```shell
+# 初始化命令和普通模式并无不同
+kubectl exec -ti vault-0 -- vault operator init
+# 会打印出一个 root token，以及五个 Recovery Key（而不是 Unseal Key）
+# Recover Key 不再用于解封，但是重新生成 root token 等操作仍然会需要用到它.
+```
+
+然后就大功告成了，可以尝试下删除 vault 的 pod，新建的 Pod 应该会自动解封。
+
 
 ## 三、Vault 自身的配置管理
 
