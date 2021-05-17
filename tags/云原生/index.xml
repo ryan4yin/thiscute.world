@@ -846,7 +846,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <p>而具体的选择，就因团队经验而异了，人们往往倾向于使用自己熟悉的、知根知底的后端，或者选用云服务。</p>
 <p>比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用 MySQL/PostgreSQL.</p>
 <p>而如果你们是本地自建，那你可能更倾向于使用 Etcd/Consul/Raft 做后端存储。</p>
-<h3 id="1-docker-compose-部署">1. docker-compose 部署</h3>
+<h3 id="1-docker-compose-部署非-ha">1. docker-compose 部署（非 HA）</h3>
 <blockquote>
 <p>推荐用于本地开发测试环境，或者其他不需要高可用的环境。</p>
 </blockquote>
@@ -946,7 +946,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </div>
 </div><p>将如上两份配置保存在同一非文件夹内，同时在 <code>./certs</code> 中提供 TLS 证书 <code>server.crt</code> 和私钥 <code>server.key</code>。</p>
 <p>然后 <code>docker-compose up -d</code> 就能启动运行一个 vault 实例。</p>
-<h3 id="install-by-helm">2. 通过 helm 部署 vault</h3>
+<h3 id="install-by-helm">2. 通过 helm 部署高可用的 vault</h3>
 <blockquote>
 <p>推荐用于生产环境</p>
 </blockquote>
@@ -1105,12 +1105,6 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </span><span class="lnt">126
 </span><span class="lnt">127
 </span><span class="lnt">128
-</span><span class="lnt">129
-</span><span class="lnt">130
-</span><span class="lnt">131
-</span><span class="lnt">132
-</span><span class="lnt">133
-</span><span class="lnt">134
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
@@ -1202,18 +1196,16 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </span><span class="sd">        address = &#34;[::]:8200&#34;
 </span><span class="sd">        cluster_address = &#34;[::]:8201&#34;
 </span><span class="sd">
+</span><span class="sd">        # 注意，这个值要和 helm 的参数 global.tlsDisable 一致
 </span><span class="sd">        tls_disable = false
 </span><span class="sd">        tls_cert_file = &#34;/etc/certs/vault.crt&#34;
 </span><span class="sd">        tls_key_file  = &#34;/etc/certs/vault.key&#34;
 </span><span class="sd">      }
 </span><span class="sd">
-</span><span class="sd">      storage &#34;mysql&#34; {
-</span><span class="sd">        address = &#34;&lt;host&gt;:3306&#34;
-</span><span class="sd">        username = &#34;&lt;username&gt;&#34;
-</span><span class="sd">        password = &#34;&lt;password&gt;&#34;
-</span><span class="sd">        database = &#34;vault&#34;
-</span><span class="sd">        ha_enabled = &#34;true&#34;
-</span><span class="sd">      }
+</span><span class="sd">      # storage &#34;postgresql&#34; {
+</span><span class="sd">      #   connection_url = &#34;postgres://username:password@&lt;host&gt;:5432/vault?sslmode=disable&#34;
+</span><span class="sd">      #   ha_enabled = true
+</span><span class="sd">      # }
 </span><span class="sd">
 </span><span class="sd">      service_registration &#34;kubernetes&#34; {}
 </span><span class="sd">
@@ -1221,31 +1213,27 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </span><span class="sd">      # the cluster must have a service account that is authorized to access AWS KMS, throught an IAM Role.
 </span><span class="sd">      # seal &#34;awskms&#34; {
 </span><span class="sd">      #   region     = &#34;us-east-1&#34;
-</span><span class="sd">      #   kms_key_id = &#34;19ec80b0-dfdd-4d97-8164-c6examplekey&#34;
-</span><span class="sd">      #   endpoint   = &#34;https://vpce-0e1bb1852241f8cc6-pzi0do8n.kms.us-east-1.vpce.amazonaws.com&#34;
+</span><span class="sd">      #   kms_key_id = &#34;&lt;some-key-id&gt;&#34;
+</span><span class="sd">      #   默认情况下插件会使用 awskms 的公网 enpoint，但是也可以使用如下参数，改用自行创建的 vpc 内网 endpoint
+</span><span class="sd">      #   endpoint   = &#34;https://&lt;vpc-endpoint-id&gt;.kms.us-east-1.vpce.amazonaws.com&#34;
 </span><span class="sd">      # }</span><span class="w">      
 </span><span class="w">
 </span><span class="w">  </span><span class="c"># Definition of the serviceAccount used to run Vault.</span><span class="w">
 </span><span class="w">  </span><span class="c"># These options are also used when using an external Vault server to validate</span><span class="w">
 </span><span class="w">  </span><span class="c"># Kubernetes tokens.</span><span class="w">
 </span><span class="w">  </span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="c"># Specifies whether a service account should be created</span><span class="w">
 </span><span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="c"># The name of the service account to use.</span><span class="w">
-</span><span class="w">    </span><span class="c"># If not set and create is true, a name is generated using the fullname template</span><span class="w">
 </span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;vault&#34;</span><span class="w">
-</span><span class="w">    </span><span class="c"># Extra annotations for the serviceAccount definition. This can either be</span><span class="w">
-</span><span class="w">    </span><span class="c"># YAML or a YAML-formatted multi-line templated string map of the</span><span class="w">
-</span><span class="w">    </span><span class="c"># annotations to apply to the serviceAccount.</span><span class="w">
-</span><span class="w">    </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">    </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># 如果要使用 auto unseal 的话，这个填写拥有 awskms 权限的 AWS IAM Role</span><span class="w">
+</span><span class="w">      </span><span class="nt">eks.amazonaws.com/role-arn</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;role-arn&gt;</span><span class="w">
 </span><span class="w">
 </span><span class="w"></span><span class="c"># Vault UI</span><span class="w">
 </span><span class="w"></span><span class="nt">ui</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="w">  </span><span class="nt">publishNotReadyAddresses</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="w">  </span><span class="nt">serviceType</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterIP</span><span class="w">
-</span><span class="w">  </span><span class="c"># The service should only contain selectors for active Vault pod</span><span class="w">
-</span><span class="w">  </span><span class="nt">activeVaultPodOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">  </span><span class="nt">activeVaultPodOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="w">  </span><span class="nt">externalPort</span><span class="p">:</span><span class="w"> </span><span class="m">8200</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
@@ -1297,8 +1285,8 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 </code></pre></td></tr></table>
 </div>
 </div><p>这样就完成了部署，但是要注意，<strong>vault 实例每次重启后，都需要重新解封！也就是重新进行第二步操作！</strong></p>
-<h3 id="4-设置自动解封">4. 设置自动解封</h3>
-<p>每次重启都要手动解封所有 vault 实例，实在是很麻烦，在云上自动扩缩容的情况下，vault 实例会被自动调度，这种情况就更麻烦了。</p>
+<h3 id="4-初始化并设置自动解封">4. 初始化并设置自动解封</h3>
+<p>在未设置 auto unseal 的情况下，vault 每次重启都要手动解封所有 vault 实例，实在是很麻烦，在云上自动扩缩容的情况下，vault 实例会被自动调度，这种情况就更麻烦了。</p>
 <p>为了简化这个流程，可以考虑配置 auto unseal 让 vault 自动解封。</p>
 <p>自动解封目前有两种方法：</p>
 <ol>
@@ -1313,8 +1301,64 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 </ol>
 </li>
 <li>如果你不想用云服务，那可以考虑 <a href="https://learn.hashicorp.com/tutorials/vault/autounseal-transit" target="_blank" rel="noopener noreferrer">autounseal-transit</a>，这种方法使用另一个 vault 实例提供的 transit 引擎来实现 auto-unseal.</li>
+<li>简单粗暴：直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过这样安全性就不好说了。</li>
 </ol>
-<p>简单起见，也可以考虑直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过要注意别泄漏了解封密钥！</p>
+<p>以使用 awskms 为例，首先创建 aws IAM 的 policy 内容如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&#34;Sid&#34;</span><span class="p">:</span> <span class="s2">&#34;VaultKMSUnseal&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&#34;kms:Decrypt&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;kms:Encrypt&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;kms:DescribeKey&#34;</span>
+            <span class="p">],</span>
+            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;*&#34;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后创建 IAM Role 绑定上面的 policy，并为 vault 的 k8s serviceaccount 创建一个 IAM Role，绑定上这个 policy.</p>
+<p>这样 vault 使用的 serviceaccount 自身就拥有了访问 awskms 的权限，也就不需要额外通过 access_key/secret_key 来访问 awskms.</p>
+<p>关于 IAM Role 和 k8s serviceaccount 如何绑定，参见官方文档：<a href="https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html" target="_blank" rel="noopener noreferrer">IAM roles for EKS service accounts</a></p>
+<p>完事后再修改好前面提供的 helm 配置，部署它，最后使用如下命令初始化一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 初始化命令和普通模式并无不同</span>
+kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
+<span class="c1"># 会打印出一个 root token，以及五个 Recovery Key（而不是 Unseal Key）</span>
+<span class="c1"># Recover Key 不再用于解封，但是重新生成 root token 等操作仍然会需要用到它.</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后就大功告成了，可以尝试下删除 vault 的 pod，新建的 Pod 应该会自动解封。</p>
 <h2 id="三vault-自身的配置管理">三、Vault 自身的配置管理</h2>
 <p>Vault 本身是一个复杂的 secrets 工具，它提供了 <strong>Web UI</strong> 和 <strong>CLI</strong> 用于手动管理与查看 Vault 的内容。</p>
 <p>但是作为一名 DevOps，我们当然更喜欢自动化的方法，这有两种选择:</p>
@@ -1369,7 +1413,7 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。</p>
 <p>应用程序有两种方式去读取 vault 中的配置：</p>
 <ol>
-<li>借助 Vault Sidecar，将 secrets 以文件的形式自动注入到 Pod 中，比如 <code>/app/secrets/vault.json</code>
+<li>借助 Vault Sidecar，将 secrets 以文件的形式自动注入到 Pod 中，比如 <code>/vault/secrets/config.json</code>
 <ul>
 <li>vault sidecar 在常驻模式下每 15 秒更新一次配置，应用程序可以使用 <code>watchdog</code> 实时监控 secrets 文件的变更。</li>
 </ul>
@@ -1681,7 +1725,7 @@ vault write auth/kubernetes/config <span class="se">\
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>然后在 vault 中创建 k8s role <code>my-app-role</code>:</p>
+</div><p>然后在 vault 的 kuberntes 插件配置中，创建 role <code>my-app-role</code>，配置如下:</p>
 <ol>
 <li>关联 k8s default 名字空间中的 serviceaccount <code>my-app-account</code>，并创建好这个 serviceaccount.</li>
 <li>关联 vault token policy，这就是前面创建的 <code>my-app-policy</code></li>
@@ -1738,6 +1782,9 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">33
 </span><span class="lnt">34
 </span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
@@ -1761,12 +1808,15 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-configmap</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-vault-config </span><span class="w"> </span><span class="c"># vault 的 hcl 配置</span><span class="w">
-</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-init-first</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">  </span><span class="c"># 是否提前初始化</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-init-first</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">  </span><span class="c"># 是否使用 initContainer 提前初始化配置文件</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-inject</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/secret-volume-path</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-configmap</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-vault-config </span><span class="w"> </span><span class="c"># 包含 vault 配置的 configmap</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/role</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;my-app-role&#34;</span><span class="w">  </span><span class="c"># vault kubernetes 插件的 role 名称</span><span class="w">
+</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-inject-template-config.json</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">          </span><span class="w">          </span><span class="c"># 渲染模板的语法在后面介绍</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-limits-cpu</span><span class="p">:</span><span class="w"> </span><span class="l">250m</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-requests-cpu</span><span class="p">:</span><span class="w"> </span><span class="l">100m</span><span class="w">
-</span><span class="w">        </span><span class="nt">vault.hashicorp.com/secret-volume-path</span><span class="p">:</span><span class="w"> </span><span class="l">/app/secrets</span><span class="w">
 </span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
 </span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
@@ -1802,7 +1852,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </ol>
 <p>vautl-agent 的 template 说明：</p>
 <p>目前来说最流行的配置文件格式应该是 json/yaml，以 json 为例，
-对每个微服务的 kv 数据，可以考虑将它所有的个性化配置都保存在 <code>&lt;engine-name&gt;/&lt;service-name&gt;/</code> 下面，然后使用如下 template 注入配置(注意这里使用了自定义的左右分隔符 <code>[[</code> 和 <code>]]</code>)：</p>
+对每个微服务的 kv 数据，可以考虑将它所有的个性化配置都保存在 <code>&lt;engine-name&gt;/&lt;service-name&gt;/</code> 下面，然后使用如下 template 注入配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -1816,12 +1866,12 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-fallback" data-lang="fallback">{
-    [[ range secrets &#34;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&#34; ]]
-        &#34;[[ printf &#34;%s&#34; . ]]&#34;: 
-        [[ with secret (printf &#34;&lt;engine-name&gt;/&lt;service-name&gt;/%s&#34; .) ]]
-        [[ .Data.data | toJSONPretty ]],
-        [[ end ]]
-    [[ end ]]
+    {{ range secrets &#34;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&#34; }}
+        &#34;{{ printf &#34;%s&#34; . }}&#34;: 
+        {{ with secret (printf &#34;&lt;engine-name&gt;/&lt;service-name&gt;/%s&#34; .) }}
+        {{ .Data.data | toJSONPretty }},
+        {{ end }}
+    {{ end }}
 }
 </code></pre></td></tr></table>
 </div>
@@ -1871,9 +1921,8 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <li><a href="https://github.com/external-secrets/kubernetes-external-secrets" target="_blank" rel="noopener noreferrer">kubernetes-external-secrets</a>: 提供 CRD 定义，根据定义将 secret 从 vault 中同步到 kubernetes secrets</li>
 </ul>
 <p>官方的 sidecar/init-container 模式仍然是最推荐使用的。</p>
-<h2 id="五使用-vault-管理阿里云的-ram-账号体系">五、使用 vault 管理阿里云的 RAM 账号体系</h2>
-<p>vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。</p>
-<p>具体配置方法，待续。。。</p>
+<h2 id="五使用-vault-实现-aws-iam-credentials-的自动轮转">五、使用 vault 实现 AWS IAM Credentials 的自动轮转</h2>
+<p>待续。。。</p>
 ]]></description></item><item><title>Pulumi 使用体验 - 基础设施代码化</title><link>https://ryan4yin.space/posts/expirence-of-pulumi/</link><pubDate>Fri, 08 Jan 2021 18:51:30 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/posts/expirence-of-pulumi/</guid><description><![CDATA[<p><a href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener noreferrer">Pulumi</a> 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：</p>
 <ul>
