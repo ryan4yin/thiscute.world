@@ -488,7 +488,7 @@ path "auth/token/create" {
 
 应用程序有两种方式去读取 vault 中的配置：
 
-1. 借助 Vault Sidecar，将 secrets 以文件的形式自动注入到 Pod 中，比如 `/app/secrets/vault.json`
+1. 借助 Vault Sidecar，将 secrets 以文件的形式自动注入到 Pod 中，比如 `/vault/secrets/config.json`
    - vault sidecar 在常驻模式下每 15 秒更新一次配置，应用程序可以使用 `watchdog` 实时监控 secrets 文件的变更。
 2. 应用程序自己使用 SDK 直接访问 vault api 获取 secrets
 
@@ -673,7 +673,7 @@ path "myapp/metadata/*" {
 }
 ```
 
-然后在 vault 中创建 k8s role `my-app-role`:
+然后在 vault 的 kuberntes 插件配置中，创建 role `my-app-role`，配置如下:
 1. 关联 k8s default 名字空间中的 serviceaccount `my-app-account`，并创建好这个 serviceaccount.
 2. 关联 vault token policy，这就是前面创建的 `my-app-policy`
 3. 设置 token period（有效期）
@@ -718,12 +718,16 @@ spec:
   template:
     metadata:
       annotations:
-        vault.hashicorp.com/agent-configmap: my-app-vault-config  # vault 的 hcl 配置
-        vault.hashicorp.com/agent-init-first: 'true'  # 是否提前初始化
+        vault.hashicorp.com/agent-init-first: 'true'  # 是否使用 initContainer 提前初始化配置文件
         vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/secret-volume-path: vault
+        vault.hashicorp.com/role: "my-app-role"  # vault kubernetes 插件的 role 名称
+        vault.hashicorp.com/agent-inject-template-config.json: |
+          # 渲染模板的语法在后面介绍
         vault.hashicorp.com/agent-limits-cpu: 250m
         vault.hashicorp.com/agent-requests-cpu: 100m
-        vault.hashicorp.com/secret-volume-path: /app/secrets
+        # 包含 vault 配置的 configmap，可以做更精细的控制
+        # vault.hashicorp.com/agent-configmap: my-app-vault-config
       labels:
         app: my-app
     spec:
@@ -752,18 +756,19 @@ vault-agent 的配置，需要注意的有：
 vautl-agent 的 template 说明：
 
 目前来说最流行的配置文件格式应该是 json/yaml，以 json 为例，
-对每个微服务的 kv 数据，可以考虑将它所有的个性化配置都保存在 `<engine-name>/<service-name>/` 下面，然后使用如下 template 注入配置(注意这里使用了自定义的左右分隔符 `[[` 和 `]]`)：
+对每个微服务的 kv 数据，可以考虑将它所有的个性化配置都保存在 `<engine-name>/<service-name>/` 下面，然后使用如下 template 注入配置：
 
 ```consul-template
 {
-    [[ range secrets "<engine-name>/metadata/<service-name>/" ]]
-        "[[ printf "%s" . ]]": 
-        [[ with secret (printf "<engine-name>/<service-name>/%s" .) ]]
-        [[ .Data.data | toJSONPretty ]],
-        [[ end ]]
-    [[ end ]]
+    {{ range secrets "<engine-name>/metadata/<service-name>/" }}
+        "{{ printf "%s" . }}": 
+        {{ with secret (printf "<engine-name>/<service-name>/%s" .) }}
+        {{ .Data.data | toJSONPretty }},
+        {{ end }}
+    {{ end }}
 }
 ```
+
 >template 的详细语法参见: https://github.com/hashicorp/consul-template#secret
 
 >注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
@@ -801,11 +806,9 @@ vautl-agent 的 template 说明：
 
 官方的 sidecar/init-container 模式仍然是最推荐使用的。
 
-## 五、使用 vault 管理阿里云的 RAM 账号体系
+## 五、使用 vault 实现 AWS IAM Credentials 的自动轮转
 
-vault 可以接入各大云厂商的账号体系，显然可以用于管理阿里云的， 实现 ACCESS_KEY/SECRET_KEY 的自动轮转。
-
-具体配置方法，待续。。。
+待续。。。
 
 
 
