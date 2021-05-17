@@ -617,9 +617,11 @@ sudo yast2 virtualization
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
+</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://userbase.kde.org/KDEConnect#firewalld</span>
+<span class="c1"># 还可以使用 --add-source=xx.xx.xx.xx/xx 设置 ip 白名单</span>
 sudo firewall-cmd --zone<span class="o">=</span>public --permanent --add-port<span class="o">=</span>1714-1764/tcp
 sudo firewall-cmd --zone<span class="o">=</span>public --permanent --add-port<span class="o">=</span>1714-1764/udp
 sudo systemctl restart firewalld.service
