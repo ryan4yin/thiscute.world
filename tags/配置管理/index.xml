@@ -1032,6 +1032,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">36
 </span><span class="lnt">37
 </span><span class="lnt">38
+</span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
@@ -1058,12 +1059,13 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-init-first</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">  </span><span class="c"># 是否使用 initContainer 提前初始化配置文件</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-inject</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/secret-volume-path</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
-</span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-configmap</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-vault-config </span><span class="w"> </span><span class="c"># 包含 vault 配置的 configmap</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/role</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;my-app-role&#34;</span><span class="w">  </span><span class="c"># vault kubernetes 插件的 role 名称</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-inject-template-config.json</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span><span class="sd">          </span><span class="w">          </span><span class="c"># 渲染模板的语法在后面介绍</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-limits-cpu</span><span class="p">:</span><span class="w"> </span><span class="l">250m</span><span class="w">
 </span><span class="w">        </span><span class="nt">vault.hashicorp.com/agent-requests-cpu</span><span class="p">:</span><span class="w"> </span><span class="l">100m</span><span class="w">
+</span><span class="w">        </span><span class="c"># 包含 vault 配置的 configmap，可以做更精细的控制</span><span class="w">
+</span><span class="w">        </span><span class="c"># vault.hashicorp.com/agent-configmap: my-app-vault-config</span><span class="w">
 </span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
 </span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
