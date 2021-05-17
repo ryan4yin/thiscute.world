@@ -221,6 +221,7 @@ KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共�
 
 ```shell
 # see: https://userbase.kde.org/KDEConnect#firewalld
+# 还可以使用 --add-source=xx.xx.xx.xx/xx 设置 ip 白名单
 sudo firewall-cmd --zone=public --permanent --add-port=1714-1764/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=1714-1764/udp
 sudo systemctl restart firewalld.service
