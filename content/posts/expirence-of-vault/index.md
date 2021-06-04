@@ -480,6 +480,34 @@ path "auth/token/create" {
 不给这个权限，pulumi_vault 就会一直报错。。
 
 
+然后还得给它「自动化配置」需要的权限，比如自动创建/更新 policy/secrets/kubernetes 等等，示例如下:
+
+```hcl
+# To list policies - Step 3
+path "sys/policy"
+{
+  capabilities = ["read"]
+}
+
+# Create and manage ACL policies broadly across Vault
+path "sys/policy/*"
+{
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+
+# List, create, update, and delete key/value secrets
+path "secret/*"
+{
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+
+path "auth/kubernetes/role/*"
+{
+  capabilities = ["create", "read", "update", "list"]
+}
+```
+
+
 ## 四、在 Kubernetes 中使用 vault 注入 secrets
 
 ![](/images/expirence-of-vault/vault-k8s-auth-workflow.png "vault-k8s-auth-workflow")
