@@ -4,7 +4,7 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/linux-virtual-network-interf
 </blockquote>
 <p>Linux 具有强大的虚拟网络能力，这也是虚拟机和容器的虚拟网络基础。</p>
 <p>这里介绍 Linux 常用的虚拟网络接口类型：TUN/TAP、bridge 以及 veth。</p>
-<h3 id="1-tuntap-虚拟网络接口">1. tun/tap 虚拟网络接口</h3>
+<h2 id="一tuntap-虚拟网络接口">一、tun/tap 虚拟网络接口</h2>
 <p>tun/tap 是操作系统内核中的虚拟网络设备，他们为用户层程序提供数据的接收与传输。</p>
 <p>普通的物理网络接口如 eth0，它的两端分别是内核协议栈和外面的物理网络。</p>
 <p>而对于 TUN/TAP 虚拟接口如 tun0，它的一端一定是连接的用户层程序，另一端则视配置方式的不同而变化，可以直连内核协议栈，也可以是某个 bridge（后面会介绍）。
@@ -105,7 +105,7 @@ description:    Universal TUN/TAP device driver
 </div><p>因为 TUN/TAP 设备的一端是内核协议栈，显然流入 tun0 的数据包是先经过本地的路由规则匹配的。</p>
 <p>路由匹配成功，数据包被发送到 tun0 后，tun0 发现另一端是通过 <code>/dev/net/tun</code> 连接到应用程序 B，就会将数据丢给应用程序 B。</p>
 <p>应用程序对数据包进行处理后，可能会构造新的数据包，通过物理网卡发送出去。比如常见的 VPN 程序就是把原来的数据包封装/加密一遍，再发送给 VPN 服务器。</p>
-<h4 id="c-语言编程测试-tun-设备">C 语言编程测试 TUN 设备</h4>
+<h3 id="c-语言编程测试-tun-设备">C 语言编程测试 TUN 设备</h3>
 <p>为了使用 tun/tap 设备，用户层程序需要通过系统调用打开 <code>/dev/net/tun</code> 获得一个读写该设备的文件描述符(FD)，并且调用 <code>ioctl()</code> 向内核注册一个 TUN 或 TAP 类型的虚拟网卡(实例化一个 tun/tap 设备)，其名称可能是 <code>tun0/tap0</code> 等。</p>
 <p>此后，用户程序可以通过该 TUN/TAP 虚拟网卡与主机内核协议栈（或者其他网络设备）交互。当用户层程序关闭后，其注册的 TUN/TAP 虚拟网卡以及路由表相关条目(使用 tun 可能需要手动添加路由表条目)都会被内核释放。</p>
 <p>可以把用户层程序看做是网络上另一台主机，他们通过 tun/tap 虚拟网卡相连。</p>
@@ -438,7 +438,7 @@ Read 84 bytes from tun/tap device
 <li><a href="https://github.com/marywangran/simpletun" target="_blank" rel="noopener noreferrer">marywangran/simpletun</a></li>
 <li><a href="https://github.com/marywangran/gotun-tunnel/blob/main/tun/tun.go" target="_blank" rel="noopener noreferrer">tun go 语言版</a></li>
 </ul>
-<h4 id="tun-与-tap-的区别">TUN 与 TAP 的区别</h4>
+<h3 id="tun-与-tap-的区别">TUN 与 TAP 的区别</h3>
 <p>TUN 和 TAP 的区别在于工作的网络层次不同，用户程序通过 TUN 设备只能读写网络层的 IP 数据包，而 TAP 设备则支持读写链路层的数据包（通常是以太网数据包，带有 Ethernet headers）。</p>
 <p>TUN 与 TAP 的关系，就类似于 socket 和 raw socket.</p>
 <p>TUN/TAP 应用最多的场景是 VPN 代理，比如:</p>
@@ -446,11 +446,13 @@ Read 84 bytes from tun/tap device
 <li><a href="https://github.com/ryan4yin/clash" target="_blank" rel="noopener noreferrer">clash</a>: 一个支持各种规则的隧道，也支持 TUN 模式</li>
 <li><a href="https://github.com/xjasonlyu/tun2socks/wiki" target="_blank" rel="noopener noreferrer">tun2socks</a>: 一个全局透明代理，和 VPN 的工作模式一样，它通过创建虚拟网卡+修改路由表，在第三层网络层代理系统流量。</li>
 </ol>
-<h3 id="2-veth">2. veth</h3>
+<h2 id="二veth">二、veth</h2>
 <p>veth 接口总是成对出现，一对 veth 接口就类似一根网线，从一端进来的数据会从另一端出去。</p>
-<p>其主要作用就是连接不同的网络接口，比如在容器网络中，用于将容器的 namespace 与 root namespace 的 br0 相连。（后面会介绍这种连接场景）</p>
 <p>同时 veth 又是一个虚拟网络接口，因此它和 TUN/TAP 或者其他物理网络接口一样，也都能配置 mac/ip 地址（但是并不是一定得配 mac/ip 地址）。</p>
-<h3 id="3-bridge">3. bridge</h3>
+<p>其主要作用就是连接不同的网络，比如在容器网络中，用于将容器的 namespace 与 root namespace 的网桥 br0 相连。
+容器网络中，容器侧的 veth 自身设置了 ip/mac 地址并被重命名为 eth0，作为容器的网络接口使用，而主机侧的 veth 则直接连接在 docker0/br0 上面。</p>
+<p>使用 veth 的容器网络的详细示例图，在下一节有提供。</p>
+<h3 id="三bridge">三、bridge</h3>
 <p>Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 <code>brige</code> 提供，它负责在所有连接到它的接口之间转发链路层数据包。</p>
 <p>添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。
 在 Bridge 中会进行一个类似物理交换机的查MAC端口映射表、转发、更新MAC端口映射表这样的处理逻辑，从而数据包可以被转发到另一个接口/丢弃/广播/发往上层协议栈，由此 Bridge 实现了数据转发的功能。</p>
@@ -458,7 +460,7 @@ Read 84 bytes from tun/tap device
 <p>与物理交换机不同的是，Bridge 本身可以设置 IP 地址，可以认为当使用 <code>brctl addbr br0</code> 新建一个 br0 网桥时，系统自动创建了一个同名的隐藏 <code>br0</code> 网络接口。<code>br0</code> 一旦设置 IP 地址，就意味着这个隐藏的 br0 接口可以作为路由接口设备，参与 IP 层的路由选择(可以使用 <code>route -n</code> 查看最后一列 <code>Iface</code>)。因此只有当 <code>br0</code> 设置 <code>IP</code> 地址时，Bridge 才有可能将数据包发往上层协议栈。</p>
 <p>但被添加到 Bridge 上的网卡是不能配置 IP 地址的，他们工作在数据链路层，对路由系统不可见。</p>
 <p>它常被用于在虚拟机、主机上不同的 namepsaces 之间转发数据。</p>
-<h4 id="虚拟机场景桥接模式">虚拟机场景（桥接模式）</h4>
+<h3 id="虚拟机场景桥接模式">虚拟机场景（桥接模式）</h3>
 <p>以 qemu-kvm 为例，在虚拟机的桥接模式下，qemu-kvm 会为每个虚拟机创建一个 tun/tap 虚拟网卡并连接到 br0 网桥。
 虚拟机内部的网络接口 <code>eth0</code> 是 qemu-kvm 软件模拟的，实际上虚拟机内网络数据的收发都会被 qemu-kvm 转换成对 <code>/dev/net/tun</code> 的读写。</p>
 <p>以发送数据为例，整个流程如下：</p>
@@ -527,7 +529,7 @@ Read 84 bytes from tun/tap device
      Physical Network  (192.168.3.0/24)
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="跨-namespace-通信场景容器网络nat-模式">跨 namespace 通信场景（容器网络，NAT 模式）</h4>
+</div><h3 id="跨-namespace-通信场景容器网络nat-模式">跨 namespace 通信场景（容器网络，NAT 模式）</h3>
 <p>由于容器运行在自己单独的 network namespace 里面，所以和虚拟机一样，它们也都有自己单独的协议栈。</p>
 <p>容器网络的结构和虚拟机差不多，但是它改用了 NAT 网络，并把 tun/tap 换成了 veth，导致 br0 过来的数据，要先经过宿主机协议栈，然后才进入 veth 接口。</p>
 <p>多了一层 NAT，以及多走了一层宿主机协议栈，都会导致性能下降。</p>
