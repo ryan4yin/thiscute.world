@@ -3,7 +3,7 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/linux-virtual-network-interf
 <p>本文部分文字或者代码示例均来自参考文章，通俗的说我就是复制粘贴了一遍&hellip;并且自己实际作了些实验。</p>
 </blockquote>
 <p>Linux 具有强大的虚拟网络能力，这也是虚拟机和容器的虚拟网络基础。</p>
-<p>这里介绍 Linux 常用的虚拟网络接口类型，网络接口类型的列表可以通过 <code>ip link help</code> 查看。</p>
+<p>这里介绍 Linux 常用的虚拟网络接口类型：TUN/TAP、bridge 以及 veth。</p>
 <h3 id="1-tuntap-虚拟网络接口">1. tun/tap 虚拟网络接口</h3>
 <p>tun/tap 是操作系统内核中的虚拟网络设备，他们为用户层程序提供数据的接收与传输。</p>
 <p>普通的物理网络接口如 eth0，它的两端分别是内核协议栈和外面的物理网络。</p>
