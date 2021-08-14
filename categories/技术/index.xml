@@ -793,11 +793,11 @@ Swap:           2048           0        2048
 </span><span class="lnt">63
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端</span>
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动服务端</span>
 iperf3 -s
 
 -------------
-<span class="c1"># 客户端通过 loopback 接口访问 iperf3-server，大概 49Gbits/s</span>
+<span class="c1"># 新窗口启动客户端，通过 loopback 接口访问 iperf3-server，大概 49Gbits/s</span>
 ❯ iperf3 -c 127.0.0.1
 Connecting to host 127.0.0.1, port <span class="m">5201</span>
 <span class="o">[</span>  5<span class="o">]</span> <span class="nb">local</span> 127.0.0.1 port <span class="m">48656</span> connected to 127.0.0.1 port <span class="m">5201</span>
