@@ -452,7 +452,7 @@ Read 84 bytes from tun/tap device
 <p>其主要作用就是连接不同的网络，比如在容器网络中，用于将容器的 namespace 与 root namespace 的网桥 br0 相连。
 容器网络中，容器侧的 veth 自身设置了 ip/mac 地址并被重命名为 eth0，作为容器的网络接口使用，而主机侧的 veth 则直接连接在 docker0/br0 上面。</p>
 <p>使用 veth 的容器网络的详细示例图，在下一节有提供。</p>
-<h3 id="三bridge">三、bridge</h3>
+<h2 id="三bridge">三、bridge</h2>
 <p>Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 <code>brige</code> 提供，它负责在所有连接到它的接口之间转发链路层数据包。</p>
 <p>添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。
 在 Bridge 中会进行一个类似物理交换机的查MAC端口映射表、转发、更新MAC端口映射表这样的处理逻辑，从而数据包可以被转发到另一个接口/丢弃/广播/发往上层协议栈，由此 Bridge 实现了数据转发的功能。</p>
@@ -637,9 +637,9 @@ bridge name     bridge id               STP enabled     interfaces
 docker0         8000.0242fce99ef5       no              vethea4171a
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="其他虚拟网络接口的类型">其他虚拟网络接口的类型</h2>
-<p>除了上面介绍的这些，Linux 还支持 VLAN、VXLAN 等类型的虚拟网络接口，可通过 <code>ip link help</code> 查看，因为用的不多，这里就不介绍了。</p>
-<h2 id="虚拟网络接口的速率">虚拟网络接口的速率</h2>
+</div><h2 id="四其他虚拟网络接口的类型">四、其他虚拟网络接口的类型</h2>
+<p>除了上面介绍的这些，Linux 还支持 VLAN、VXLAN 等类型的虚拟网络接口，可通过 <code>ip link help</code> 查看，因为我接触的少，这里就不介绍了。</p>
+<h2 id="五虚拟网络接口的速率">五、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
 <p>比如目前很多老旧的网络设备，都是只支持到百兆以太网，这就决定了它的带宽上限。
