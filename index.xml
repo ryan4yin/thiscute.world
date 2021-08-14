@@ -442,10 +442,10 @@ Read 84 bytes from tun/tap device
 <p>TUN 和 TAP 的区别在于工作的网络层次不同，用户程序通过 TUN 设备只能读写网络层的 IP 数据包，而 TAP 设备则支持读写链路层的数据包（通常是以太网数据包，带有 Ethernet headers）。</p>
 <p>TUN 与 TAP 的关系，就类似于 socket 和 raw socket.</p>
 <p>TUN/TAP 应用最多的场景是 VPN 代理，比如:</p>
-<ul>
-<li><a href="https://github.com/Dreamacro/clash" target="_blank" rel="noopener noreferrer">clash</a></li>
-<li><a href="https://github.com/mellow-io/mellow" target="_blank" rel="noopener noreferrer">mellow</a></li>
-</ul>
+<ol>
+<li><a href="https://github.com/ryan4yin/clash" target="_blank" rel="noopener noreferrer">clash</a>: 一个支持各种规则的隧道，也支持 TUN 模式</li>
+<li><a href="https://github.com/xjasonlyu/tun2socks/wiki" target="_blank" rel="noopener noreferrer">tun2socks</a>: 一个全局透明代理，和 VPN 的工作模式一样，它通过创建虚拟网卡+修改路由表，在第三层网络层代理系统流量。</li>
+</ol>
 <h3 id="2-veth">2. veth</h3>
 <p>veth 接口总是成对出现，一对 veth 接口就类似一根网线，从一端进来的数据会从另一端出去。</p>
 <p>其主要作用就是连接不同的网络接口，比如在容器网络中，用于将容器的 namespace 与 root namespace 的 br0 相连。（后面会介绍这种连接场景）</p>
