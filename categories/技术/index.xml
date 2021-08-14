@@ -643,7 +643,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
 <p>比如目前很多老旧的网络设备，都是只支持到百兆以太网，这就决定了它的带宽上限。
-即使是较新的设备，目前基本也都只支持到千兆，也就是 1GbE，那本文提到的虚拟网络接口单纯在本机内部通信，是否也存在这样的制约呢？是否也只能跑到 1GbE?</p>
+即使是较新的设备，目前基本也都只支持到千兆，也就是 1GbE 以太网标准，那本文提到的虚拟网络接口单纯在本机内部通信，是否也存在这样的制约呢？是否也只能跑到 1GbE?</p>
 <p>使用 ethtool 检查：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -670,7 +670,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 &gt; ethtool docker0 | grep Speed
         Speed: Unknown!
 
-# tun0 设备的默认速率貌似是 10MB/s ?
+# tun0 设备的默认速率貌似是 10Mb/s ?
 &gt; ethtool tun0 | grep Speed
         Speed: 10Mb/s
 
@@ -701,9 +701,6 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 </span><span class="lnt">18
 </span><span class="lnt">19
 </span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-fallback" data-lang="fallback">❯ cat /etc/os-release 
@@ -721,14 +718,11 @@ CPU(s):                          16
 Model name:                      AMD Ryzen 7 5800H with Radeon Graphics
 ...
 
-❯ lsmem
-RANGE                                  SIZE  STATE REMOVABLE  BLOCK
-0x0000000000000000-0x00000000cfffffff  3.3G online       yes   0-25
-0x0000000100000000-0x000000072fffffff 24.8G online       yes 32-229
-
-Memory block size:       128M
-Total online memory:      28G
-Total offline memory:      0B
+# 内存，单位 MB
+❯ free -m
+               total        used        free      shared  buff/cache   available
+Mem:           27929        4482       17324         249        6122       22797
+Swap:           2048           0        2048
 </code></pre></td></tr></table>
 </div>
 </div><p>使用 iperf3 测试：</p>
