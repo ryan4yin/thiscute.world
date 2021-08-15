@@ -1,4 +1,857 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>技术 - 分类 - Ryan4Yin's Space</title><link>https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/</link><description>技术 - 分类 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sat, 14 Aug 2021 11:13:03 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml"/><item><title>Linux 中的虚拟网络接口</title><link>https://ryan4yin.space/posts/linux-virtual-network-interfaces/</link><pubDate>Sat, 14 Aug 2021 11:13:03 +0800</pubDate><author>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>技术 - 分类 - Ryan4Yin's Space</title><link>https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/</link><description>技术 - 分类 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 15 Aug 2021 19:11:29 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/categories/%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml"/><item><title>iptables 及 docker 容器网络分析</title><link>https://ryan4yin.space/posts/iptables-and-container-networks/</link><pubDate>Sun, 15 Aug 2021 19:11:29 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/posts/iptables-and-container-networks/</guid><description><![CDATA[<blockquote>
+<p>本文仅针对 ipv4 网络</p>
+</blockquote>
+<p><a href="https://www.netfilter.org/projects/iptables/index.html" target="_blank" rel="noopener noreferrer">iptables</a> 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT</p>
+<p>iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的子项目。</p>
+<p>但是 eBPF 社区目前正在开发旨在取代 netfilter 的新项目 bpfilter，他们的目标之一是兼容 iptables/nftables 规则，让我们拭目以待吧。</p>
+<h2 id="概念---四表五链">概念 - 四表五链</h2>
+<p>详细的说明参见 <a href="https://www.zsythink.net/archives/1199" target="_blank" rel="noopener noreferrer">iptables详解（1）：iptables概念</a>，这篇文章写得非常棒！</p>
+<p>默认情况下，iptables 提供了四张表和五条链，数据在这四表五链中的处理流程如下图所示：</p>
+<p></p>
+<p>对照上图，对于发送到某个用户层程序的数据而言，流量顺序如下：</p>
+<ul>
+<li>首先进入 PREROUTING 链，依次经过这三个表： raw -&gt; mangle -&gt; nat</li>
+<li>然后进入 INPUT 链，这个链上也有三个表，处理顺序是：mangle -&gt; nat -&gt; filter</li>
+<li>过了 INPUT 链后，数据才会进入内核协议栈，最终到达用户层程序。</li>
+</ul>
+<p>用户层程序发出的报文，则依次经过这几个表：OUTPUT -&gt; POSTROUTING</p>
+<p>从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次是：PREROUTEING -&gt; FORWARD -&gt; POSTROUTING</p>
+<p>五链的功能和名称完全一致，应该很容易理解。下面按优先级分别介绍下链中的四个表：</p>
+<ul>
+<li>raw: 对收到的数据包在连接跟踪前进行处理。一般用不到，可以忽略
+<ul>
+<li>一旦用户使用了 RAW 表，RAW 表处理完后，将跳过 NAT 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了</li>
+</ul>
+</li>
+<li>mangle: 用于修改报文、给报文打标签</li>
+<li>nat: 主要用于做网络地址转换，SNAT 或者 DNAT</li>
+<li>filter: 主要用于过滤数据包</li>
+</ul>
+<p>数据在按优先级经过四个表的处理时，一旦在某个表中匹配到一条规则 A,下一条处理规则就由规则 A 的 target 参数指定，<strong>后续的所有表</strong>都会被忽略。target 有如下几种类型：</p>
+<ul>
+<li>ACCEPT: 直接允许数据包通过</li>
+<li>DROP: 直接丢弃数据包，对程序而言就是 100% 丢包</li>
+<li>REJECT: 丢弃数据包，但是会给程序返回  RESET。这个对程序更友好，但是存在安全隐患，通常不使用。</li>
+<li>MASQUERADE: （伪装）将 src ip 改写为网卡 ip，和 SNAT 的区别是它会自动读取网卡 ip。路由设备必备。</li>
+<li>SNAT/DNAT: 顾名思义，做网络地址转换</li>
+<li>REDIRECT: 在本机做端口映射</li>
+<li>LOG: 在/var/log/messages文件中记录日志信息，然后将数据包传递给下一条规则，也就是说除了记录以外不对数据包做任何其他操作，仍然让下一条规则去匹配。
+<ul>
+<li>只有这个 target 特殊一些，匹配它的数据仍然可以匹配后续规则，不会直接跳过。</li>
+</ul>
+</li>
+<li>其他类型，可以用到的时候再查</li>
+</ul>
+<p>理解了上面这张图，以及四个表的用途，就很容易理解 iptables 的命令了。</p>
+<h2 id="常用命令">常用命令</h2>
+<blockquote>
+<p><strong>注意</strong>: 下面提供的 iptables 命令做的修改是未持久化的，重启就会丢失！在下一节会简单介绍持久化配置的方法。</p>
+</blockquote>
+<p>命令格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 table 默认为 <code>filter</code> 表，但是感觉系统管理员实际使用最多的是 INPUT 表，用于设置防火墙。</p>
+<p>以下简单介绍在 INPUT 表上添加、修改规则，来设置防火墙：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --add 允许 80 端口通过</span>
+iptables -A INPUT -p tcp --dport <span class="m">80</span> -j ACCEPT
+
+<span class="c1"># --list-rules 查看所有规则</span>
+iptables -S
+
+<span class="c1"># --list-rules 查看 INPUT 表中的所有规则</span>
+iptables -S INPUT
+<span class="c1"># 查看 iptables 中的所有规则（比 -L 更详细）</span>
+
+<span class="c1"># ---delete 通过编号删除规则</span>
+iptables -D <span class="m">1</span>
+<span class="c1"># 或者通过完整的规则参数来删除规则</span>
+iptables -D INPUT -p tcp --dport <span class="m">80</span> -j ACCEPT
+
+<span class="c1"># --replace 通过编号来替换规则内容</span>
+iptables -R INPUT <span class="m">1</span> -s 192.168.0.1 -j DROP
+
+<span class="c1"># --insert 在指定的位置插入规则，可类比链表的插入</span>
+iptables -I INPUT <span class="m">1</span> -p tcp --dport <span class="m">80</span> -j ACCEPT
+
+<span class="c1"># 在匹配条件前面使用感叹号表示取反</span>
+<span class="c1"># 如下规则表示接受所有来自 docker0，但是目标接口不是 docker0 的流量</span>
+iptables -A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+
+<span class="c1"># --policy 设置某个链的默认规则</span>
+<span class="c1"># 很多系统管理员会习惯将连接公网的服务器，默认规则设为 DROP，提升安全性，避免错误地开放了端口。</span>
+<span class="c1"># 但是也要注意，默认规则设为 DROP 前，一定要先把允许 ssh 端口的规则加上，否则就尴尬了。</span>
+iptables -P INPUT DROP
+
+<span class="c1"># --flush 清空 INPUT 表上的所有规则</span>
+iptables -F INPUT
+</code></pre></td></tr></table>
+</div>
+</div><hr>
+<blockquote>
+<p>本文后续分析时，假设用户已经清楚 linux bridge、veth 等虚拟网络接口相关知识。
+如果你还缺少这些前置知识，请先阅读文章 <a href="https://ryan4yin.space/posts/linux-virtual-network-interfaces/" target="_blank" rel="noopener noreferrer">Linux 中的虚拟网络接口</a>。</p>
+</blockquote>
+<h2 id="conntrack-连接跟踪与-nat">conntrack 连接跟踪与 NAT</h2>
+<p>netfilter 的 conntrack 连接跟踪功能是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件。</p>
+<p>下面以 docker 默认的 bridge 网络为例进行介绍。</p>
+<p>首先，这是我在「Linux 的虚拟网络接口」文中给出过的 docker0 网络架构图:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
+|                      Host                     |           Container A             |           Container B             |
+|                                               |                                   |                                   |
+|   +---------------------------------------+   |    +-------------------------+    |    +-------------------------+    |
+|   |       Network Protocol Stack          |   |    |  Network Protocol Stack |    |    |  Network Protocol Stack |    |
+|   +----+-------------+--------------------+   |    +-----------+-------------+    |    +------------+------------+    |
+|        ^             ^                        |                ^                  |                 ^                 |
+|........|.............|........................|................|..................|.................|.................|
+|        v             v  ↓                     |                v                  |                 v                 |
+|   +----+----+  +-----+------+                 |          +-----+-------+          |           +-----+-------+         |
+|   | .31.101 |  | 172.17.0.1 |      +------+   |          | 172.17.0.2  |          |           |  172.17.0.3 |         |
+|   +---------+  +-------------&lt;----&gt;+ veth |   |          +-------------+          |           +-------------+         |
+|   |  eth0   |  |   docker0  |      +--+---+   |          | eth0(veth)  |          |           | eth0(veth)  |         |
+|   +----+----+  +-----+------+         ^       |          +-----+-------+          |           +-----+-------+         |
+|        ^             ^                |       |                ^                  |                 ^                 |
+|        |             |                +------------------------+                  |                 |                 |
+|        |             v                        |                                   |                 |                 |
+|        |          +--+---+                    |                                   |                 |                 |
+|        |          | veth |                    |                                   |                 |                 |
+|        |          +--+---+                    |                                   |                 |                 |
+|        |             ^                        |                                   |                 |                 |
+|        |             +------------------------------------------------------------------------------+                 |
+|        |                                      |                                   |                                   |
+|        |                                      |                                   |                                   |
++-----------------------------------------------+-----------------------------------+-----------------------------------+
+         v
+    Physical Network  (192.168.31.0/24)
+</code></pre></td></tr></table>
+</div>
+</div><p>docker 会在 iptables 中为 docker0 网桥添加如下规则：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">-t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+
+-t filter -P DROP
+-t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+</code></pre></td></tr></table>
+</div>
+</div><p>这几行规则使 docker 容器能正常访问外部网络。<code>MASQUERADE</code> 在请求出网时，会自动做 <code>SNAT</code>，将 src ip 替换成出口网卡的 ip.
+这样数据包能正常出网，而且对端返回的数据包现在也能正常回到出口网卡。</p>
+<p>现在问题就来了：<strong>出口网卡收到返回的数据包后，还能否将数据包转发到数据的初始来源端——某个 docker 容器</strong>？难道 docker 还额外添加了与 MASQUERADE 对应的 dst ip 反向转换规则？</p>
+<p>实际上这一步依赖的是本节的主角——iptables 提供的 conntrack 连接跟踪功能（在「参考」中有一篇文章详细介绍了此功能）。</p>
+<p>连接跟踪对 NAT 的贡献是：在做 NAT 转换时，无需手动添加额外的规则来执行<strong>反向转换</strong>以实现数据的双向传输。netfilter/conntrack 系统会记录 NAT 的连接状态，NAT 地址的反向转换是根据这个状态自动完成的。</p>
+<p>比如上图中的 <code>Container A</code> 通过 bridge 网络向 baidu.com 发起了 N 个连接，这时数据的处理流程如下：</p>
+<ul>
+<li>首先 <code>Container A</code> 发出的数据包被 MASQUERADE 规则处理，将 src ip 替换成 eth0 的 ip，然后发送到物理网络 <code>192..168.31.0/24</code>。
+<ul>
+<li>conntrack 系统记录此连接被 NAT 处理前后的状态信息，并将其状态设置为 NEW，表示这是新发起的一个连接</li>
+</ul>
+</li>
+<li>对端 baidu.com 返回数据包后，会首先到达 eth0 网卡</li>
+<li>conntrack 查表，发现返回数据包的连接已经记录在表中并且状态为 NEW，于是它将连接的状态修改为 ESTABLISHED，并且将 dst_ip 改为 <code>172.17.0.2</code> 然后发送出去
+<ul>
+<li>注意，这个和 tcp 的 ESTABLISHED 没任何关系</li>
+</ul>
+</li>
+<li>经过路由匹配，数据包会进入到 docker0，然后匹配上 iptables 规则：<code>-t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</code>，数据直接被放行</li>
+<li>数据经过 veth 后，最终进入到 <code>Container A</code> 中，交由容器的内核协议栈处理。</li>
+<li>数据被 <code>Container A</code> 的内核协议栈发送到「发起连接的应用程序」。</li>
+</ul>
+<h3 id="实际测试-conntrack">实际测试 conntrack</h3>
+<p>现在我们来实际测试一下，看看是不是这么回事：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 tcpdump 分别在出口网卡 wlp4s0 （相当于 eth0）和 dcoker0 网桥上抓包，后面会用来分析</span>
+❯ sudo tcpdump -i wlp4s0 -n &gt; wlp4s0.dump   <span class="c1"># 窗口一，抓 wlp4s0 的包</span>
+❯ sudo tcpdump -i docker0 -n &gt; docker0.dump  <span class="c1"># 窗口二，抓 docker0 的包</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>现在新建窗口三，启动一个容器，通过 curl 命令低速下载一个视频文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">❯ docker run --rm --name curl -it curlimages/curl &#34;https://media.w3.org/2010/05/sintel/trailer.mp4&#34; -o /tmp/video.mp4 --limit-rate 100k
+</code></pre></td></tr></table>
+</div>
+</div><p>然后新建窗口四，在宿主机查看 conntrack 状态</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">❯ sudo zypper in conntrack-tools  <span class="c1"># 这个记得先提前安装好</span>
+❯ sudo conntrack -L <span class="p">|</span> grep 172.17
+<span class="c1"># curl 通过 NAT 网络发起了一个 dns 查询请求，DNS 服务器是网关上的 192.168.31.1</span>
+udp      <span class="m">17</span> <span class="m">22</span> <span class="nv">src</span><span class="o">=</span>172.17.0.4 <span class="nv">dst</span><span class="o">=</span>192.168.31.1 <span class="nv">sport</span><span class="o">=</span><span class="m">59423</span> <span class="nv">dport</span><span class="o">=</span><span class="m">53</span> <span class="nv">src</span><span class="o">=</span>192.168.31.1 <span class="nv">dst</span><span class="o">=</span>192.168.31.228 <span class="nv">sport</span><span class="o">=</span><span class="m">53</span> <span class="nv">dport</span><span class="o">=</span><span class="m">59423</span> <span class="o">[</span>ASSURED<span class="o">]</span> <span class="nv">mark</span><span class="o">=</span><span class="m">0</span> <span class="nv">use</span><span class="o">=</span><span class="m">1</span>
+<span class="c1"># curl 通过 NAT 网络向 media.w3.org 发起了 tcp 连接</span>
+tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span class="nv">src</span><span class="o">=</span>172.17.0.4 <span class="nv">dst</span><span class="o">=</span>198.18.5.130 <span class="nv">sport</span><span class="o">=</span><span class="m">54636</span> <span class="nv">dport</span><span class="o">=</span><span class="m">443</span> <span class="nv">src</span><span class="o">=</span>198.18.5.130 <span class="nv">dst</span><span class="o">=</span>192.168.31.228 <span class="nv">sport</span><span class="o">=</span><span class="m">443</span> <span class="nv">dport</span><span class="o">=</span><span class="m">54636</span> <span class="o">[</span>ASSURED<span class="o">]</span> <span class="nv">mark</span><span class="o">=</span><span class="m">0</span> <span class="nv">use</span><span class="o">=</span><span class="m">1</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>等 curl 命令跑个十来秒，然后关闭所有窗口及应用程序，接下来进行数据分析：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 前面查到的，本地发起请求的端口是 54636，下面以此为过滤条件查询数据</span>
+
+<span class="c1"># 首先查询 wlp4s0/eth0 进来的数据，可以看到本机的 dst_ip 为 192.168.31.228.54636</span>
+❯ cat wlp4s0.dump <span class="p">|</span> grep <span class="m">54636</span> <span class="p">|</span> head -n <span class="m">15</span>
+18:28:28.349321 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>S<span class="o">]</span>, seq 750859357, win 64240, options <span class="o">[</span>mss 1460,sackOK,TS val <span class="m">3365688110</span> ecr 0,nop,wscale 7<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.350757 IP 198.18.5.130.443 &gt; 192.168.31.228.54636: Flags <span class="o">[</span>S.<span class="o">]</span>, seq 2381759932, ack 750859358, win 28960, options <span class="o">[</span>mss 1460,sackOK,TS val <span class="m">22099541</span> ecr 3365688110,nop,wscale 5<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.350814 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>.<span class="o">]</span>, ack 1, win 502, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688111</span> ecr 22099541<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.357345 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 1:518, ack 1, win 502, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688118</span> ecr 22099541<span class="o">]</span>, length <span class="m">517</span>
+18:28:28.359253 IP 198.18.5.130.443 &gt; 192.168.31.228.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 518, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099542</span> ecr 3365688118<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.726544 IP 198.18.5.130.443 &gt; 192.168.31.228.54636: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 1:2622, ack 518, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688118<span class="o">]</span>, length <span class="m">2621</span>
+18:28:28.726616 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>.<span class="o">]</span>, ack 2622, win 482, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688487</span> ecr 22099579<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.727652 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 518:598, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">80</span>
+18:28:28.727803 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 598:644, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">46</span>
+18:28:28.727828 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 644:693, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">49</span>
+18:28:28.727850 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 693:728, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">35</span>
+18:28:28.727875 IP 192.168.31.228.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 728:812, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">84</span>
+18:28:28.729241 IP 198.18.5.130.443 &gt; 192.168.31.228.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 598, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688488<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.729245 IP 198.18.5.130.443 &gt; 192.168.31.228.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 644, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688488<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.729247 IP 198.18.5.130.443 &gt; 192.168.31.228.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 693, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688488<span class="o">]</span>, length <span class="m">0</span>
+
+
+<span class="c1"># 然后再查询 docker0 上的数据，能发现本地的地址为 172.17.0.4.54636</span>
+❯ cat docker0.dump <span class="p">|</span> grep <span class="m">54636</span> <span class="p">|</span> head -n <span class="m">20</span>
+18:28:28.349299 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>S<span class="o">]</span>, seq 750859357, win 64240, options <span class="o">[</span>mss 1460,sackOK,TS val <span class="m">3365688110</span> ecr 0,nop,wscale 7<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.350780 IP 198.18.5.130.443 &gt; 172.17.0.4.54636: Flags <span class="o">[</span>S.<span class="o">]</span>, seq 2381759932, ack 750859358, win 28960, options <span class="o">[</span>mss 1460,sackOK,TS val <span class="m">22099541</span> ecr 3365688110,nop,wscale 5<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.350812 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>.<span class="o">]</span>, ack 1, win 502, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688111</span> ecr 22099541<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.357328 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 1:518, ack 1, win 502, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688118</span> ecr 22099541<span class="o">]</span>, length <span class="m">517</span>
+18:28:28.359281 IP 198.18.5.130.443 &gt; 172.17.0.4.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 518, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099542</span> ecr 3365688118<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.726578 IP 198.18.5.130.443 &gt; 172.17.0.4.54636: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 1:2622, ack 518, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688118<span class="o">]</span>, length <span class="m">2621</span>
+18:28:28.726610 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>.<span class="o">]</span>, ack 2622, win 482, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688487</span> ecr 22099579<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.727633 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 518:598, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">80</span>
+18:28:28.727798 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 598:644, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">46</span>
+18:28:28.727825 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 644:693, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">49</span>
+18:28:28.727847 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 693:728, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">35</span>
+18:28:28.727871 IP 172.17.0.4.54636 &gt; 198.18.5.130.443: Flags <span class="o">[</span>P.<span class="o">]</span>, seq 728:812, ack 2622, win 501, options <span class="o">[</span>nop,nop,TS val <span class="m">3365688488</span> ecr 22099579<span class="o">]</span>, length <span class="m">84</span>
+18:28:28.729308 IP 198.18.5.130.443 &gt; 172.17.0.4.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 598, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688488<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.729324 IP 198.18.5.130.443 &gt; 172.17.0.4.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 644, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688488<span class="o">]</span>, length <span class="m">0</span>
+18:28:28.729328 IP 198.18.5.130.443 &gt; 172.17.0.4.54636: Flags <span class="o">[</span>.<span class="o">]</span>, ack 693, win 939, options <span class="o">[</span>nop,nop,TS val <span class="m">22099579</span> ecr 3365688488<span class="o">]</span>, length <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>能看到数据确实在进入 docker0 网桥前，dst_ip 确实被从 <code>192.168.31.228</code>（wlp4s0 的 ip）被修改为了 <code>172.17.0.4</code>（<code>Container A</code> 的 ip）.</p>
+<h2 id="如何持久化-iptables-配置">如何持久化 iptables 配置</h2>
+<p>首先需要注意的是，centos7/opensuse 15 都已经切换到了 firewalld 作为防火墙配置软件，
+而 ubuntu18.04 lts 也换成了 ufw 来配置防火墙。</p>
+<p>包括 docker 应该也是在启动的时候动态添加 iptables 配置。</p>
+<p>对于上述新系统，还是建议直接使用 firewalld/ufw 配置防火墙吧，或者网上搜下关闭 ufw/firewalld、启用 iptables 持久化的解决方案。</p>
+<p>本文主要目的在于理解 docker 容器网络的原理，以及为后面理解 kubernetes 网络插件 calico/flannel 打好基础，因此就不多介绍持久化了。</p>
+<h2 id="docker-如何使用-iptables--虚拟网络接口实现容器网络">Docker 如何使用 iptables + 虚拟网络接口实现容器网络</h2>
+<h3 id="通过-docker-run-运行容器">通过 docker run 运行容器</h3>
+<p>首先，使用 <code>docker run</code> 运行几个容器，检查下网络状况：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 运行一个 debian 容器和一个 nginx</span>
+❯ docker run -dit --name debian --rm debian:buster sleep <span class="m">1000000</span>
+❯ docker run -dit --name nginx --rm nginx:1.19-alpine 
+
+<span class="c1">#　查看网络接口，有两个 veth 接口（而且都没设 ip 地址），分别连接到两个容器的 eth0（dcoker0 网络架构图前面给过了，可以往前面翻翻对照下）</span>
+❯ ip addr ls
+...
+5: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default 
+    link/ether 02:42:42:c7:12:ba brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:42ff:fec7:12ba/64 scope link 
+       valid_lft forever preferred_lft forever
+100: veth16b37ea@if99: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state UP group default 
+    link/ether 42:af:34:ae:74:ae brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
+    inet6 fe80::40af:34ff:feae:74ae/64 scope link 
+       valid_lft forever preferred_lft forever
+102: veth4b4dada@if101: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state UP group default 
+    link/ether 9e:f1:58:1a:cf:ae brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">1</span>
+    inet6 fe80::9cf1:58ff:fe1a:cfae/64 scope link 
+       valid_lft forever preferred_lft forever
+
+<span class="c1"># 两个 veth 接口都连接到了 docker0 上面，说明两个容器都使用了 docker 默认的 bridge 网络</span>
+❯ sudo brctl show
+bridge name     bridge id               STP enabled     interfaces
+docker0         8000.024242c712ba       no              veth16b37ea
+                                                        veth4b4dada
+
+<span class="c1"># 查看路由规则</span>
+❯ ip route ls
+default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
+<span class="c1">#下列路由规则将 `172.17.0.0/16` 网段的所有流量转发到 docker0</span>
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric <span class="m">600</span> 
+
+<span class="c1"># 查看　iptables 规则</span>
+<span class="c1"># NAT 表</span>
+❯ sudo iptables -t nat -S
+-P PREROUTING ACCEPT
+-P INPUT ACCEPT
+-P OUTPUT ACCEPT
+-P POSTROUTING ACCEPT
+-N DOCKER
+<span class="c1"># 所有目的地址在本机的，都先交给 DOCKER 链处理一波</span>
+-A PREROUTING -m addrtype --dst-type LOCAL -j DOCKER
+-A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j DOCKER
+<span class="c1"># （容器访问外部网络）所有出口不为 docker0 的流量，都做下 SNAT，把 src ip 换成出口接口的 ip 地址</span>
+-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+-A DOCKER -i docker0 -j RETURN
+
+<span class="c1"># filter 表</span>
+❯ sudo iptables -t filter -S
+-P INPUT ACCEPT
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N DOCKER
+-N DOCKER-ISOLATION-STAGE-1
+-N DOCKER-ISOLATION-STAGE-2
+-N DOCKER-USER
+<span class="c1"># 所有流量都必须先经过如下两个表处理，没问题才能继续往下走</span>
+-A FORWARD -j DOCKER-ISOLATION-STAGE-1
+-A FORWARD -j DOCKER-USER
+<span class="c1"># （容器访问外部网络）出去的流量走了 MASQUERADE，回来的流量会被 conntrack 识别并转发回来，这里允许返回的数据包通过。</span>
+<span class="c1"># 这里直接 ACCEPT 被 conntrack 识别到的流量</span>
+-A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+<span class="c1"># 将所有访问 docker0 的流量都转给自定义链 DOCKER 处理</span>
+-A FORWARD -o docker0 -j DOCKER
+<span class="c1"># 允许所有来自 docker0 的流量通过，不论下一跳是否是 docker0</span>
+-A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+-A FORWARD -i docker0 -o docker0 -j ACCEPT
+<span class="c1"># 下面三个表目前啥规则也没有，就是简单的 RETURN，交给后面的表继续处理</span>
+-A DOCKER-ISOLATION-STAGE-1 -j RETURN
+-A DOCKER-ISOLATION-STAGE-2 -j RETURN
+-A DOCKER-USER -j RETURN
+</code></pre></td></tr></table>
+</div>
+</div><p>接下来使用如下 docker-compose 配置启动一个 caddy　容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。</p>
+<p><code>docker-compose.yml</code> 内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.3&#34;</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">caddy</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;caddy:2.2.1-alpine&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;caddy&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">caddy file-server --browse --root /data/static</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;8081:80&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;/home/ryan/Downloads:/data/static&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="l">caddy-1</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">caddy-1</span><span class="p">:</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>现在先用上面的配置启动 caddy 容器，然后再查看网络状况：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
+❯ docker-compose up -d
+<span class="c1"># 查下 caddy 容器的 ip</span>
+&gt; docker inspect caddy <span class="p">|</span> grep IPAddress
+...
+    <span class="s2">&#34;IPAddress&#34;</span>: <span class="s2">&#34;172.18.0.2&#34;</span>,
+
+<span class="c1"># 查看网络接口，可以看到多了一个网桥，它就是上一行命令创建的 caddy-1 网络</span>
+<span class="c1"># 还多了一个 veth，它连接到了 caddy 容器的 eth0(veth) 接口</span>
+❯ ip addr ls
+...
+5: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default 
+    link/ether 02:42:42:c7:12:ba brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:42ff:fec7:12ba/64 scope link 
+       valid_lft forever preferred_lft forever
+100: veth16b37ea@if99: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state UP group default 
+    link/ether 42:af:34:ae:74:ae brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
+    inet6 fe80::40af:34ff:feae:74ae/64 scope link 
+       valid_lft forever preferred_lft forever
+102: veth4b4dada@if101: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state UP group default 
+    link/ether 9e:f1:58:1a:cf:ae brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">1</span>
+    inet6 fe80::9cf1:58ff:fe1a:cfae/64 scope link 
+       valid_lft forever preferred_lft forever
+103: br-ac3e0514d837: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default 
+    link/ether 02:42:7d:95:ba:7e brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-ac3e0514d837
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:7dff:fe95:ba7e/64 scope link 
+       valid_lft forever preferred_lft forever
+105: veth0c25c6f@if104: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue master br-ac3e0514d837 state UP group default 
+    link/ether 9a:03:e1:f0:26:ea brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">2</span>
+    inet6 fe80::9803:e1ff:fef0:26ea/64 scope link 
+       valid_lft forever preferred_lft forever
+
+
+<span class="c1"># 查看网桥，能看到 caddy 容器的 veth 接口连在了 caddy-1 这个网桥上，没有加入到 docker0 网络</span>
+❯ sudo brctl show
+bridge name     bridge id               STP enabled     interfaces
+br-ac3e0514d837         8000.02427d95ba7e       no              veth0c25c6f
+docker0         8000.024242c712ba       no              veth16b37ea
+                                                        veth4b4dada
+
+<span class="c1"># 查看路由，能看到新网桥使用的地址段是 172.18.0.0/16，是 docker0 递增上来的 </span>
+❯ ip route ls
+default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span> 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 
+<span class="c1"># 多了一个网桥的</span>
+172.18.0.0/16 dev br-ac3e0514d837 proto kernel scope link src 172.18.0.1 
+192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric <span class="m">600</span> 
+
+<span class="c1"># iptables 中也多了 caddy-1 网桥的 MASQUERADE 规则，以及端口映射的规则</span>
+❯ sudo iptables -t nat -S
+-P PREROUTING ACCEPT
+-P INPUT ACCEPT
+-P OUTPUT ACCEPT
+-P POSTROUTING ACCEPT
+-N DOCKER
+-A PREROUTING -m addrtype --dst-type LOCAL -j DOCKER
+-A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j DOCKER
+-A POSTROUTING -s 172.18.0.0/16 ! -o br-ac3e0514d837 -j MASQUERADE
+-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+<span class="c1"># 端口映射过来的入网流量，都做下 SNAT，把 src ip 换成出口 docker0 的 ip 地址</span>
+-A POSTROUTING -s 172.18.0.2/32 -d 172.18.0.2/32 -p tcp -m tcp --dport <span class="m">80</span> -j MASQUERADE
+-A DOCKER -i br-ac3e0514d837 -j RETURN
+-A DOCKER -i docker0 -j RETURN
+<span class="c1"># 主机上所有其他接口进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去（端口映射）</span>
+-A DOCKER ! -i br-ac3e0514d837 -p tcp -m tcp --dport <span class="m">8081</span> -j DNAT --to-destination 172.18.0.2:80
+
+❯ sudo iptables -t filter -S
+-P INPUT ACCEPT
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N DOCKER
+-N DOCKER-ISOLATION-STAGE-1
+-N DOCKER-ISOLATION-STAGE-2
+-N DOCKER-USER
+-A FORWARD -j DOCKER-USER
+-A FORWARD -j DOCKER-ISOLATION-STAGE-1
+<span class="c1"># 给 caddy-1 bridge 网络添加的转发规则，与 docker0 的规则完全一一对应，就不多介绍了。</span>
+-A FORWARD -o br-ac3e0514d837 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -o br-ac3e0514d837 -j DOCKER
+-A FORWARD -i br-ac3e0514d837 ! -o br-ac3e0514d837 -j ACCEPT
+-A FORWARD -i br-ac3e0514d837 -o br-ac3e0514d837 -j ACCEPT
+-A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -o docker0 -j DOCKER
+-A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+-A FORWARD -i docker0 -o docker0 -j ACCEPT
+<span class="c1"># 这一条仍然是端口映射相关的规则，接受所有从其他接口过来的，请求 80 端口且出口是 caddy-1 网桥的流量</span>
+-A DOCKER -d 172.18.0.2/32 ! -i br-ac3e0514d837 -o br-ac3e0514d837 -p tcp -m tcp --dport <span class="m">80</span> -j ACCEPT
+<span class="c1"># 当存在多个 bridge 网络的时候，docker 就会在下面两个 STAGE 链中处理将它们隔离开，禁止互相访问</span>
+-A DOCKER-ISOLATION-STAGE-1 -i br-ac3e0514d837 ! -o br-ac3e0514d837 -j DOCKER-ISOLATION-STAGE-2
+-A DOCKER-ISOLATION-STAGE-1 -i docker0 ! -o docker0 -j DOCKER-ISOLATION-STAGE-2
+-A DOCKER-ISOLATION-STAGE-1 -j RETURN
+<span class="c1"># 这里延续上面 STAGE-1 的处理，彻底隔离两个网桥的流量</span>
+-A DOCKER-ISOLATION-STAGE-2 -o br-ac3e0514d837 -j DROP
+-A DOCKER-ISOLATION-STAGE-2 -o docker0 -j DROP
+-A DOCKER-ISOLATION-STAGE-2 -j RETURN
+-A DOCKER-USER -j RETURN
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="nftables">nftables</h2>
+<p>前面介绍了 iptables 以及其在 docker 和防火墙上的应用。但是实际上目前各大 Linux 发行版都已经不建议使用 iptables 了，甚至把 iptables 重命名为了 <code>iptables-leagacy</code>.</p>
+<p>目前 opensuse/debian/opensuse 都已经预装了并且推荐使用 nftables，<strong>而且 firewalld 已经默认使用 nftables 作为它的后端了</strong>。</p>
+<p>我在 opensuse tumbleweed 上实测，firewalld 添加的是 nftables 配置，而 docker 仍然在用旧的 iptables，也就是说我现在的机器上有两套 netfilter 工具并存：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 查看 iptables 数据
+&gt; iptables -S
+-P INPUT ACCEPT
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N DOCKER
+-N DOCKER-ISOLATION-STAGE-1
+-N DOCKER-ISOLATION-STAGE-2
+-N DOCKER-USER
+-A FORWARD -j DOCKER-ISOLATION-STAGE-1
+-A FORWARD -o br-e3fbbb7a1b3a -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -o br-e3fbbb7a1b3a -j DOCKER
+...
+
+# 确认下是否使用了 nftables 的兼容层，结果提示请我使用 iptables-legacy
+&gt; iptables-nft -S
+# Warning: iptables-legacy tables present, use iptables-legacy to see them
+-P INPUT ACCEPT
+-P FORWARD ACCEPT
+-P OUTPUT ACCEPT
+
+# 查看 nftables 规则，能看到三张 firewalld 生成的 table
+&gt; nft list ruleset
+table inet firewalld {
+    ...
+}
+table ip firewalld {
+    ...
+}
+table ip6 firewalld {
+    ...
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>但是现在 kubernetes/docker 都还是用的 iptables，nftables 我学了用处不大，以后有空再补充。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.zsythink.net/archives/1199" target="_blank" rel="noopener noreferrer">iptables详解（1）：iptables概念</a></li>
+<li><a href="https://linux.cn/article-13364-1.html" target="_blank" rel="noopener noreferrer">网络地址转换（NAT）之报文跟踪</a></li>
+</ul>
+]]></description></item><item><title>Linux 中的虚拟网络接口</title><link>https://ryan4yin.space/posts/linux-virtual-network-interfaces/</link><pubDate>Sat, 14 Aug 2021 11:13:03 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/posts/linux-virtual-network-interfaces/</guid><description><![CDATA[<blockquote>
 <p>本文部分文字、图标以及代码示例来自参考文章，通俗的说我就是复制粘贴了一遍，并且稍微改了改，然后做了些实验&hellip;</p>
 </blockquote>
@@ -5331,204 +6184,4 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/2020-summary/</guid><descrip
 <p>回看了下去年的总结，发现我 go/c# 都没学多少，设计模式也没动，python 还在原地踏步hhh&hellip; 去年的展望很多都没实现。</p>
 <p>不过云原生这一块倒是进步很快，总体很满意今年的成果哈哈~</p>
 <p>明年加油！</p>
-]]></description></item><item><title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析</title><link>https://ryan4yin.space/posts/tcpdump-and-wireshark/</link><pubDate>Thu, 28 May 2020 16:20:26 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/posts/tcpdump-and-wireshark/</guid><description><![CDATA[<h1 id="抓包分析">抓包分析</h1>
-<p>抓包分析工具主要有两种：</p>
-<ol>
-<li>http/https 网络代理工具：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener noreferrer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
-<li>tcp/udp/icmp 等网络嗅探工具：tcpdump/tshark 都属于这一类，网络故障分析等场景常用。</li>
-</ol>
-<p>这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。
-而 mitmproxy 抓包和 wireshark 本地抓包都相当简单，就不介绍了。</p>
-<blockquote>
-<p>P.S. tshark 是 wireshark 的命令行版本，用法 tcpdump 非常相似。</p>
-</blockquote>
-<h2 id="一wireshark-的基本用法">一、wireshark 的基本用法</h2>
-<p>WireShark 的 UI 界面如何使用，网上能搜得到各种类型的 wireshark 演示，多看几篇博客就会了。
-搜索 [xxx 协议 wireshark 抓包分析] 就能找到各种各样的演示，比如</p>
-<ol>
-<li>「gRPC 协议 wireshark 抓包分析」</li>
-<li>「WebSocket 协议 wireshark 抓包分析」</li>
-<li>「TCP 协议 wireshark 抓包分析」</li>
-<li>等等</li>
-</ol>
-<p>主要需要介绍的，应该是 wireshark 的数据包过滤器。
-wireshark 中有两种包过滤器：</p>
-<ol>
-<li>捕获过滤器：在抓包的时候使用它对数据包进行过滤。</li>
-<li>显示过滤器：对抓到的所有数据包进行过滤。</li>
-</ol>
-<p>显示过滤器是最有用的，下面简要介绍下显示过滤器的语法。</p>
-<p>可以直接通过「<strong>协议名称</strong>」进行过滤：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 只看 tcp 流量
-tcp
-# 只看 http 流量
-http
-
-# 使用感叹号（或 not）进行反向过滤
-!arp  # 过滤掉所有 arp 数据包
-</code></pre></td></tr></table>
-</div>
-</div><p>也可以通过「<strong>协议名称.协议属性</strong>」和「比较操作符（比如 <code>==</code>）」进行更精确的过滤：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 通过 ip 的源地址 src 或 dst 进行过滤
-ip.src==192.168.1.33
-
-# 通过 IP 地址（ip.addr）进行过滤（匹配 ip.src 或 ip.dst）
-ip.addr==192.168.0.5
-# 上一条过滤表达式等价于：
-ip.src==192.168.0.5 or ip.dst==192.168.0.5
-
-# 通过 tcp 端口号进行过滤
-tcp.port==80
-tcp.port&gt;4000
-
-# 通过 http 的 host 属性进行过滤
-http.host != &#34;xxx.baidu.com&#34;
-# 通过 http.referer 属性进行过滤
-http.referer == &#34;xxx.baidu.com&#34;
-
-# 多个过滤器之间用 and、or 进行组合
-http.host != &#34;xxx.baidu.com&#34; and http.referer == &#34;xxx.baidu.com&#34;
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="二tcpdump--ssh--wireshark-远程实时抓包">二、tcpdump + ssh + wireshark 远程实时抓包</h2>
-<p>在进行远程网络抓包分析时，我们通常的做法是：</p>
-<ol>
-<li>使用 <code>tcpdump</code> 在远程主机上抓包，保存为 pcap 文件。</li>
-<li>将 pcap 文件拷贝到本地，使用 wireshark 对其进行分析。</li>
-</ol>
-<p>但是这样做没有时效性，而且数据拷贝来去也比较麻烦。</p>
-<p>考虑使用流的方式，在远程主机上使用 <code>tcpdump</code> 抓包，本地使用 <code>wireshark</code> 进行实时分析。</p>
-<p>使用 ssh 协议进行流式传输的示例如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># eth0 更换成你的机器 interface 名称，虚拟机可能是 ens33</span>
-ssh root@some.host <span class="s2">&#34;tcpdump -i eth0 -l -w -&#34;</span> <span class="p">|</span> wireshark -k -i -
-</code></pre></td></tr></table>
-</div>
-</div><p>在不方便使用 ssh 协议的情况下（比如容器抓包、Android 抓包），可以考虑使用 <code>nc</code>(netcat) 进行数据流的转发：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 远程主机抓包：将数据流通过 11111 端口暴露出去</span>
-tcpdump -i wlan0 -s0 -w - <span class="p">|</span> nc -l -p <span class="m">11111</span>
-
-<span class="c1"># 2. 本地主机从远程主机的 11111 端口读取数据，提供给 wireshark</span>
-nc &lt;remote-host&gt; <span class="m">11111</span> <span class="p">|</span> wireshark -k -S -i -
-</code></pre></td></tr></table>
-</div>
-</div><p>如果是抓取 Android 手机的数据，方便起见，可以通过 adb 多进行一次数据转发：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 方案一：root 手机后，将 arm 版的 tcpdump 拷贝到手机内进行抓包</span>
-<span class="c1"># 1. 在 adb shell 里使用 tcpdump 抓 WiFi 的数据包，转发到 11111 端口</span>
-<span class="c1">## 需要先获取到 root 权限，将 tcpdump 拷贝到 /system/bin/ 目录下</span>
-tcpdump -i wlan0 -s0 -w - <span class="p">|</span> nc -l -p <span class="m">11111</span>
-
-<span class="c1"># 2. 在本机使用 adb forward 将手机的 11111 端口绑定到本机(PC)的 11111 端口</span>
-adb forward tcp:11111 tcp:11111
-
-<span class="c1"># 3. 直接从本机(PC)的 11111 端口读取数据，提供给 wireshark</span>
-nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k -S -i -
-<span class="c1">## 通过数据转发，本机 11111 端口的数据，就是安卓手机内 tcmpdump 的 stdout 内容。</span>
-
-<span class="c1"># 方案二：</span>
-<span class="c1"># 如果手机不方便 root，推荐 PC 开启 WiFi 热点，手机连上这个热点访问网络。</span>
-<span class="c1"># 这样手机的数据就一定会走 PC，直接在 PC 上通过 wireshark 抓包就行。</span>
-<span class="c1"># 如果你只需要简单地抓 http/https 包，请使用 fiddler/mitmproxy</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>!</p>
-<h3 id="windows-系统">Windows 系统</h3>
-<p>另外如果你本机是 Windows 系统，要分 shell 讨论：</p>
-<ol>
-<li><code>cmd</code>: 可以直接使用上述命令。</li>
-<li><code>powershell</code>: **PowerShell 管道对 <code>native commands</code> 的支持不是很好，管道两边的命令貌似是串行执行的，这会导致 wireshark 无法启动！**目前没有找到好的解决方法。。</li>
-</ol>
-<p>另外如果你使用 <code>wsl</code>，那么可以通过如下命令使 <code>wsl</code> 调用 windows 中的 wireshark 进行抓包分析：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加软链接</span>
-sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark.exe<span class="k">)</span><span class="s2">&#34;</span> /usr/local/bin/wireshark
-</code></pre></td></tr></table>
-</div>
-</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href="https://github.com/eldadru/ksniff" target="_blank" rel="noopener noreferrer">ksniff</a>）。
-它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。</p>
-<h2 id="2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析">2. <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
-<p>有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
-这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href="https://github.com/gcla/termshark" target="_blank" rel="noopener noreferrer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
-<p><a href="https://github.com/aylei/kubectl-debug" target="_blank" rel="noopener noreferrer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://zhuanlan.zhihu.com/p/92993778" target="_blank" rel="noopener noreferrer">WireShark使用教程</a></li>
-<li><a href="https://techzone.ergon.ch/tcpdump" target="_blank" rel="noopener noreferrer">Tracing network traffic using tcpdump and tshark</a></li>
-<li><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" target="_blank" rel="noopener noreferrer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
-<li><a href="https://www.jianshu.com/p/a62ed1bb5b20" target="_blank" rel="noopener noreferrer">聊聊tcpdump与Wireshark抓包分析</a></li>
-</ul>
 ]]></description></item></channel></rss>
