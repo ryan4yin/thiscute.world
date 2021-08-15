@@ -504,6 +504,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">24
 </span><span class="lnt">25
 </span><span class="lnt">26
+</span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-fallback" data-lang="fallback">+------------------------------------------------+-----------------------------------+-----------------------------------+
@@ -531,7 +532,8 @@ Read 84 bytes from tun/tap device
 |         |                                      |            +--------+             |                                   |
 |         |                                      |                                   |                                   |
 +---------|--------------------------------------+-----------------------------------+-----------------------------------+
-     Physical Network  (192.168.3.0/24)
+          ↓
+    Physical Network  (192.168.3.0/24)
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="跨-namespace-通信场景容器网络nat-模式">跨 namespace 通信场景（容器网络，NAT 模式）</h3>
@@ -595,8 +597,8 @@ Read 84 bytes from tun/tap device
 |        |                                      |                                   |                                   |
 |        |                                      |                                   |                                   |
 +--------|--------------------------------------+-----------------------------------+-----------------------------------+
-             ↓
-     Physical Network  (192.168.3.0/24)
+         ↓
+    Physical Network  (192.168.3.0/24)
 </code></pre></td></tr></table>
 </div>
 </div><p>每创建一个新容器，都会在容器的 namespace 里新建一个 veth 接口并命令为 eth0，同时在主 namespace 创建一个 veth，将容器的 eth0 与 br0 连接。</p>
