@@ -794,6 +794,7 @@ ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <
 </div>
 </div><p>但是我看半天文档，只看到怎么使用 <code>rootlesskit</code>/<code>slirp4netns</code> 创建新的名字空间，没看到有介绍如何进入一个已存在的 <code>slirp4netns</code> 名字空间&hellip;</p>
 <p>使用 <code>nsenter -a -t 11644</code> 也一直报错，任何程序都是 <code>no such binary</code>&hellip;</p>
+<p>以后有空再重新研究一波&hellip;</p>
 <p>总之能确定的是，它通过在虚拟的名字空间中创建了一个 <code>tap</code> 虚拟接口来实现容器网络，性能相比前面介绍的网络多少是要差一点的。</p>
 <h2 id="nftables">nftables</h2>
 <p>前面介绍了 iptables 以及其在 docker 和防火墙上的应用。但是实际上目前各大 Linux 发行版都已经不建议使用 iptables 了，甚至把 iptables 重命名为了 <code>iptables-leagacy</code>.</p>
