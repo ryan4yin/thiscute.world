@@ -667,6 +667,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt"> 98
 </span><span class="lnt"> 99
 </span><span class="lnt">100
+</span><span class="lnt">101
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
@@ -737,6 +738,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 -A DOCKER -i br-ac3e0514d837 -j RETURN
 -A DOCKER -i docker0 -j RETURN
 <span class="c1"># 主机上所有其他接口进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去（端口映射）</span>
+<span class="c1"># DOCKER 是被 PREROUTEING 链的 target，因此这会导致流量直接走了 FORWARD 链，直接绕过了通常设置在 INPUT 链的主机防火墙规则！</span>
 -A DOCKER ! -i br-ac3e0514d837 -p tcp -m tcp --dport <span class="m">8081</span> -j DNAT --to-destination 172.18.0.2:80
 
 ❯ sudo iptables -t filter -S
