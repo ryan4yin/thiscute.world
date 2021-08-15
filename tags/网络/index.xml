@@ -771,7 +771,9 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 -A DOCKER-USER -j RETURN
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="nftables">nftables</h2>
+</div><p>到这里，我们简单地分析了下 docker 如何通过 iptables 实现 bridge 网络和端口映射。
+有了这个基础，后面就可以尝试深入分析 kubernetes 网络插件 flannel/calico/cilium 了哈哈。</p>
+<h2 id="nftables">nftables</h2>
 <p>前面介绍了 iptables 以及其在 docker 和防火墙上的应用。但是实际上目前各大 Linux 发行版都已经不建议使用 iptables 了，甚至把 iptables 重命名为了 <code>iptables-leagacy</code>.</p>
 <p>目前 opensuse/debian/opensuse 都已经预装了并且推荐使用 nftables，<strong>而且 firewalld 已经默认使用 nftables 作为它的后端了</strong>。</p>
 <p>我在 opensuse tumbleweed 上实测，firewalld 添加的是 nftables 配置，而 docker 仍然在用旧的 iptables，也就是说我现在的机器上有两套 netfilter 工具并存：</p>
