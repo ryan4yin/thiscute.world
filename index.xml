@@ -5845,7 +5845,7 @@ sudo zypper search --installed-only  &lt;package-name&gt;  <span class="c1"># �
 sudo zypper search &lt;package-name&gt;  <span class="c1"># 查找本地和软件源中的程序</span>
 
 sudo zypper install &lt;package-name&gt;  <span class="c1"># 安装程序</span>
-sudo zypper remove &lt;package-name&gt;  <span class="c1"># 卸载程序</span>
+sudo zypper remove --clean-deps &lt;package-name&gt;  <span class="c1"># 卸载程序，注意添加 --clean-deps 或者 -u，否则不会卸载依赖项！</span>
 
 sudo zypper clean  <span class="c1"># 清理本地的包缓存</span>
 </code></pre></td></tr></table>
