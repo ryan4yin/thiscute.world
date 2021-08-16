@@ -14,7 +14,10 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/iptables-and-container-netwo
 <blockquote>
 <p>在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外 <code>conntrack</code> 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。</p>
 </blockquote>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/iptables/iptables-packet-flow-ng.png" title="/images/iptables/iptables-packet-flow-ng.png" data-thumbnail="/images/iptables/iptables-packet-flow-ng.png" data-sub-html="<h2>iptables-packet-flow</h2>">
+        
+    </a><figcaption class="image-caption">iptables-packet-flow</figcaption>
+    </figure></p>
 <p>对照上图，对于发送到某个用户层程序的数据而言，流量顺序如下：</p>
 <ul>
 <li>首先进入 PREROUTING 链，依次经过这三个表： raw -&gt; mangle -&gt; nat</li>
@@ -142,7 +145,10 @@ iptables -F INPUT
 </blockquote>
 <h2 id="conntrack-连接跟踪与-nat">conntrack 连接跟踪与 NAT</h2>
 <p>在讲 conntrack 之间，我们再回顾下前面给出过的 netfilter 数据处理流程图：</p>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/iptables/iptables-packet-flow-ng.png" title="/images/iptables/iptables-packet-flow-ng.png" data-thumbnail="/images/iptables/iptables-packet-flow-ng.png" data-sub-html="<h2>iptables-packet-flow</h2>">
+        
+    </a><figcaption class="image-caption">iptables-packet-flow</figcaption>
+    </figure></p>
 <p>上一节中我们忽略了图中的 conntrack，它就是本节的主角——netfilter 的连接跟踪（connection tracking）模块。</p>
 <p>netfilter/conntrack 是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件，上面的流程图显示， conntrack 在 PREROUTEING 和 OUTPUT 表的 raw 链之后生效。</p>
 <p>下面以 docker 默认的 bridge 网络为例详细介绍下 conntrack 的功能。</p>
