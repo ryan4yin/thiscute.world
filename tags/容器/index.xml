@@ -1,4 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>容器 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E5%AE%B9%E5%99%A8/</link><description>容器 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 15 Aug 2021 19:11:29 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E5%AE%B9%E5%99%A8/" rel="self" type="application/rss+xml"/><item><title>iptables 及 docker 容器网络分析</title><link>https://ryan4yin.space/posts/iptables-and-container-networks/</link><pubDate>Sun, 15 Aug 2021 19:11:29 +0800</pubDate><author>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>容器 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E5%AE%B9%E5%99%A8/</link><description>容器 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 15 Aug 2021 19:11:29 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E5%AE%B9%E5%99%A8/" rel="self" type="application/rss+xml"/><item><title>iptables 及 docker 容器网络分析</title><link>https://ryan4yin.space/posts/iptables-and-container-networks/</link><pubDate>Sun, 15 Aug 2021 19:11:29 +0800</pubDate><author>
 ryan4yin</author><guid>https://ryan4yin.space/posts/iptables-and-container-networks/</guid><description><![CDATA[<blockquote>
 <p>本文仅针对 ipv4 网络</p>
 </blockquote>
@@ -141,7 +141,10 @@ iptables -F INPUT
 如果你还缺少这些前置知识，请先阅读文章 <a href="https://ryan4yin.space/posts/linux-virtual-network-interfaces/" target="_blank" rel="noopener noreferrer">Linux 中的虚拟网络接口</a>。</p>
 </blockquote>
 <h2 id="conntrack-连接跟踪与-nat">conntrack 连接跟踪与 NAT</h2>
-<p>netfilter 的 conntrack 连接跟踪功能是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件，在上一节给出的数据包处理流程图中，就有给出 conntrack 生效的位置——在 PREROUTEING 和 OUTPUT 表的 raw 链之后生效。</p>
+<p>在讲 conntrack 之间，我们再回顾下前面给出过的 netfilter 数据处理流程图：</p>
+<p></p>
+<p>上一节中我们忽略了图中的 conntrack，它就是本节的主角——netfilter 的连接跟踪（connection tracking）模块。</p>
+<p>netfilter/conntrack 是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件，上面的流程图显示， conntrack 在 PREROUTEING 和 OUTPUT 表的 raw 链之后生效。</p>
 <p>下面以 docker 默认的 bridge 网络为例详细介绍下 conntrack 的功能。</p>
 <p>首先，这是我在「Linux 的虚拟网络接口」文中给出过的 docker0 网络架构图:</p>
 <div class="highlight"><div class="chroma">
