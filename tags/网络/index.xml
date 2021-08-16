@@ -11,10 +11,10 @@ ryan4yin</author><guid>https://ryan4yin.space/posts/iptables-and-container-netwo
 </blockquote>
 <p>详细的说明参见 <a href="https://www.zsythink.net/archives/1199" target="_blank" rel="noopener noreferrer">iptables详解（1）：iptables概念 - 朱双印</a>，这篇文章写得非常棒！把 iptables 讲清楚了。</p>
 <p>默认情况下，iptables 提供了四张表（不考虑 security 的话）和五条链，数据在这四表五链中的处理流程如下图所示：</p>
-<p></p>
 <blockquote>
-<p>在这里的介绍中，可以先忽略掉 link layer 层的链路，它属于 ebtables 的范畴。另外 <code>conntrack</code> 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。</p>
+<p>在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外 <code>conntrack</code> 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。</p>
 </blockquote>
+<p></p>
 <p>对照上图，对于发送到某个用户层程序的数据而言，流量顺序如下：</p>
 <ul>
 <li>首先进入 PREROUTING 链，依次经过这三个表： raw -&gt; mangle -&gt; nat</li>
