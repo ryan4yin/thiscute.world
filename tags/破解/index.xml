@@ -1,5 +1,11 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>破解 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E7%A0%B4%E8%A7%A3/</link><description>破解 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 17 Jan 2021 21:53:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E7%A0%B4%E8%A7%A3/" rel="self" type="application/rss+xml"/><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/posts/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>
-ryan4yin</author><guid>https://ryan4yin.space/posts/about-tls-cert/</guid><description><![CDATA[<h2 id="一tls-协议">一、TLS 协议</h2>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>破解 - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/%E7%A0%B4%E8%A7%A3/</link><description>破解 - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 17 Jan 2021 21:53:26 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/%E7%A0%B4%E8%A7%A3/" rel="self" type="application/rss+xml"/><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/posts/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>
+ryan4yin</author><guid>https://ryan4yin.space/posts/about-tls-cert/</guid><description><![CDATA[<h2 id="更新记录">更新记录</h2>
+<ul>
+<li><i class="far fa-square fa-fw"></i> 补充 TLS 协议的详细流程</li>
+<li><i class="far fa-check-square fa-fw"></i> 完成 TLS 证书的详细介绍</li>
+</ul>
+<hr>
+<h2 id="一tls-协议">一、TLS 协议</h2>
 <p>我们需要加密网络数据以实现安全通信，但是有一个现实的问题：</p>
 <ol>
 <li>非对称加密算法（RSA/ECC 等）可以方便地对数据进行签名/验证，但是计算速度慢。</li>
@@ -611,6 +617,12 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 </div>
 </div><p>微信/支付宝等支付相关的数字证书，通常就使用 pkcs12 格式，使用商户号做加密密码，然后编码为 base64 再提供给用户。</p>
 <h2 id="参考">参考</h2>
+<h3 id="tls-协议">TLS 协议</h3>
+<ul>
+<li><a href="https://halfrost.com/https_tls1-2_handshake/" target="_blank" rel="noopener noreferrer">HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)</a></li>
+<li><a href="https://halfrost.com/https-key-cipher/" target="_blank" rel="noopener noreferrer">HTTPS 温故知新（五） —— TLS 中的密钥计算</a></li>
+</ul>
+<h3 id="tls-证书">TLS 证书</h3>
 <ul>
 <li>
 <p><a href="https://kubernetes.io/docs/concepts/cluster-administration/certificates/" target="_blank" rel="noopener noreferrer">Certificates - Kubernetes Docs</a></p>
