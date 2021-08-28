@@ -1579,7 +1579,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <p>vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性问题。被隔离的广播域之间需要上升到第三层才能完成通讯。</p>
 <p>常用的企业路由器如 ER-X 基本都可以设置 vlan，Linux 也直接支持了 vlan.</p>
 <p>以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。</p>
-<h2 id="七xvlangeneve">七、xvlan/geneve</h2>
+<h2 id="七vxlangeneve">七、vxlan/geneve</h2>
 <blockquote>
 <p><a href="https://datatracker.ietf.org/doc/html/rfc8926" target="_blank" rel="noopener noreferrer">rfc8926 - Geneve: Generic Network Virtualization Encapsulation</a>
 <a href="https://datatracker.ietf.org/doc/html/rfc7348" target="_blank" rel="noopener noreferrer">rfc7348 - Virtual eXtensible Local Area Network (VXLAN)</a></p>
@@ -1600,7 +1600,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <blockquote>
 <p>我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如 flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。</p>
 </blockquote>
-<h2 id="五虚拟网络接口的速率">五、虚拟网络接口的速率</h2>
+<h2 id="八虚拟网络接口的速率">八、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
 <p>比如目前很多老旧的网络设备，都是只支持到百兆以太网，这就决定了它的带宽上限。
