@@ -1355,7 +1355,7 @@ Read 84 bytes from tun/tap device
 <p>同时 veth 又是一个虚拟网络接口，因此它和 TUN/TAP 或者其他物理网络接口一样，也都能配置 mac/ip 地址（但是并不是一定得配 mac/ip 地址）。</p>
 <p>其主要作用就是连接不同的网络，比如在容器网络中，用于将容器的 namespace 与 root namespace 的网桥 br0 相连。
 容器网络中，容器侧的 veth 自身设置了 ip/mac 地址并被重命名为 eth0，作为容器的网络接口使用，而主机侧的 veth 则直接连接在 docker0/br0 上面。</p>
-<p>使用 veth 的容器网络的详细示例图，在下一节有提供。</p>
+<p>使用 veth 实现容器网络，需要结合下一小节介绍的 bridge，在下一小节将给出容器网络结构图。</p>
 <h2 id="三bridge">三、bridge</h2>
 <p>Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 <code>brige</code> 提供，它负责在所有连接到它的接口之间转发链路层数据包。</p>
 <p>添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。
