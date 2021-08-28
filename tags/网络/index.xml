@@ -1702,7 +1702,7 @@ ip addr add 10.20.1.2/24 dev vxlan0
 ip link <span class="nb">set</span> vxlan0 up
 </code></pre></td></tr></table>
 </div>
-</div><p>可以看到，只需要简单地把 local_ip/remote_ip 替换成一个组播地址就行。组播功能会将收到的数据包发送给组里的所有 vtep 接口，但是只有 VNID 能对上的 vtep 会处理该数据。</p>
+</div><p>可以看到，只需要简单地把 local_ip/remote_ip 替换成一个组播地址就行。组播功能会将收到的数据包发送给组里的所有 vtep 接口，但是只有 VNID 能对上的 vtep 会处理该报文，其他 vtep 会直接丢弃数据。</p>
 <h2 id="八虚拟网络接口的速率">八、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
