@@ -1610,9 +1610,9 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <li>VNID: 每个 VXLAN 网络接口都会被分配一个独立的 VNID</li>
 </ul>
 <p>一个点对点的 vxlan 网络架构图如下:</p>
-<p><figure><a class="lightgallery" href="/images/linux-virtual-interfaces/vxlan-architecture.gif" title="/images/linux-virtual-interfaces/vxlan-architecture.gif" data-thumbnail="/images/linux-virtual-interfaces/vxlan-architecture.gif" data-sub-html="<h2>VXLAN 网络架构</h2>">
+<p><figure><a class="lightgallery" href="/images/linux-virtual-interfaces/vxlan-architecture.gif" title="/images/linux-virtual-interfaces/vxlan-architecture.gif" data-thumbnail="/images/linux-virtual-interfaces/vxlan-architecture.gif" data-sub-html="<h2>VXLAN 点对点网络架构</h2>">
         
-    </a><figcaption class="image-caption">VXLAN 网络架构</figcaption>
+    </a><figcaption class="image-caption">VXLAN 点对点网络架构</figcaption>
     </figure></p>
 <p>可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。</p>
 <p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个点对点的 VXLAN 隧道：</p>
@@ -1703,6 +1703,11 @@ ip link <span class="nb">set</span> vxlan0 up
 </code></pre></td></tr></table>
 </div>
 </div><p>可以看到，只需要简单地把 local_ip/remote_ip 替换成一个组播地址就行。组播功能会将收到的数据包发送给组里的所有 vtep 接口，但是只有 VNID 能对上的 vtep 会处理该报文，其他 vtep 会直接丢弃数据。</p>
+<p>接下来，为了能让所有的虚拟机/容器，都通过 vtep 通信，我们再添加一个 bridge 网络，充当 vtep 与容器间的交换机。架构如下：</p>
+<p><figure><a class="lightgallery" href="/images/linux-virtual-interfaces/linux-vxlan-with-bridge.jpg" title="/images/linux-virtual-interfaces/linux-vxlan-with-bridge.jpg" data-thumbnail="/images/linux-virtual-interfaces/linux-vxlan-with-bridge.jpg" data-sub-html="<h2>VXLAN 多播网络架构</h2>">
+        
+    </a><figcaption class="image-caption">VXLAN 多播网络架构</figcaption>
+    </figure></p>
 <h2 id="八虚拟网络接口的速率">八、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
