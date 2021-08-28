@@ -1585,8 +1585,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <a href="https://datatracker.ietf.org/doc/html/rfc7348" target="_blank" rel="noopener noreferrer">rfc7348 - Virtual eXtensible Local Area Network (VXLAN)</a></p>
 </blockquote>
 <blockquote>
-<p><a href="https://cizixs.com/2017/09/25/vxlan-protocol-introduction/" target="_blank" rel="noopener noreferrer">vxlan 协议原理简介</a>
-<a href="https://cizixs.com/2017/09/28/linux-vxlan/" target="_blank" rel="noopener noreferrer">linux 上实现 vxlan 网络</a></p>
+<p><a href="https://cizixs.com/2017/09/28/linux-vxlan/" target="_blank" rel="noopener noreferrer">linux 上实现 vxlan 网络</a></p>
 </blockquote>
 <p>在介绍 vxlan 前，先说明下两个名词的含义：</p>
 <ul>
@@ -1600,6 +1599,110 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <blockquote>
 <p>我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如 flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。</p>
 </blockquote>
+<p>先介绍下 vxlan 的数据包结构：</p>
+<p><figure><a class="lightgallery" href="/images/linux-virtual-interfaces/vxlan-frame.png" title="/images/linux-virtual-interfaces/vxlan-frame.png" data-thumbnail="/images/linux-virtual-interfaces/vxlan-frame.png" data-sub-html="<h2>VXLAN 栈帧结构</h2>">
+        
+    </a><figcaption class="image-caption">VXLAN 栈帧结构</figcaption>
+    </figure></p>
+<p>在创建 vxlan 的 vtep 虚拟设备时，我们需要手动设置图中的如下属性：</p>
+<ul>
+<li>VXLAN 目标端口：即接收方 vtep 使用的端口，这里 IANA 定义的端口是 4789，但是只有 calico 的 vxlan 模式默认使用该端口 calico，而 cilium/flannel 的默认端口都是 Linux 默认的 8472.</li>
+<li>VNID: 每个 VXLAN 网络接口都会被分配一个独立的 VNID</li>
+</ul>
+<p>一个点对点的 vxlan 网络架构图如下:</p>
+<p><figure><a class="lightgallery" href="/images/linux-virtual-interfaces/vxlan-architecture.gif" title="/images/linux-virtual-interfaces/vxlan-architecture.gif" data-thumbnail="/images/linux-virtual-interfaces/vxlan-architecture.gif" data-sub-html="<h2>VXLAN 网络架构</h2>">
+        
+    </a><figcaption class="image-caption">VXLAN 网络架构</figcaption>
+    </figure></p>
+<p>可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。</p>
+<p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个点对点的 VXLAN 隧道：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在主机 A 上创建 VTEP 设备 vxlan0</span>
+<span class="c1"># 与另一个 vtep 接口 B（192.168.8.101）建立隧道</span>
+<span class="c1"># 将 vxlan0 自身的 IP 地址设为 192.168.8.100</span>
+<span class="c1"># 使用的 VXLAN 目标端口为 4789(IANA 标准)</span>
+ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
+</span><span class="se"></span>    id <span class="m">42</span> <span class="se">\
+</span><span class="se"></span>    dstport <span class="m">4789</span> <span class="se">\
+</span><span class="se"></span>    remote 192.168.8.101 <span class="se">\
+</span><span class="se"></span>    <span class="nb">local</span> 192.168.8.100 <span class="se">\
+</span><span class="se"></span>    dev enp0s8
+<span class="c1"># 为我们的 VXLAN 网络设置虚拟网段，vxlan0 就是默认网关</span>
+ip addr add 10.20.1.2/24 dev vxlan0
+<span class="c1"># 启用我们的 vxlan0 设备，这会自动生成路由规则</span>
+ip link <span class="nb">set</span> vxlan0 up
+
+<span class="c1"># 现在在主机 B 上运行如下命令，同样创建一个 VTEP 设备 vxlan0，remote 和 local 的 ip 与前面用的命令刚好相反。</span>
+<span class="c1"># 注意 VNID 和 dstport 必须和前面完全一致</span>
+ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
+</span><span class="se"></span>    id <span class="m">42</span> <span class="se">\
+</span><span class="se"></span>    dstport <span class="m">4789</span> <span class="se">\
+</span><span class="se"></span>    remote 192.168.8.100 <span class="se">\
+</span><span class="se"></span>    <span class="nb">local</span> 192.168.8.101 <span class="se">\
+</span><span class="se"></span>    dev enp0s8
+<span class="c1"># 为我们的 VXLAN 网络设置虚拟网段，vxlan0 就是默认网关</span>
+ip addr add 10.20.1.3/24 dev vxlan0
+ip link <span class="nb">set</span> vxlan0 up
+
+<span class="c1"># 到这里，两台机器就完成连接，可以通信了。可以在主机 B 上 ping 10.20.1.2 试试，应该能收到主机 A 的回应。</span>
+ping 10.20.1.2
+</code></pre></td></tr></table>
+</div>
+</div><p>实际使用中，我们几乎不会使用点对点的 vxlan 隧道，而是使用「组播模式」的 vxlan，这种模式下一个 vtep 可以一次与组内的所有 vtep 建立隧道。
+示例命令如下（这里略过了如何设置组播地址 <code>239.1.1.1</code> 的信息）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
+</span><span class="se"></span>    id <span class="m">42</span> <span class="se">\
+</span><span class="se"></span>    dstport <span class="m">4789</span> <span class="se">\
+</span><span class="se"></span>    group 239.1.1.1 <span class="se">\
+</span><span class="se"></span>    dev enp0s8 
+ip addr add 10.20.1.2/24 dev vxlan0
+ip link <span class="nb">set</span> vxlan0 up
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到，只需要简单地把 local_ip/remote_ip 替换成一个组播地址就行。组播功能会将收到的数据包发送给组里的所有 vtep 接口，但是只有 VNID 能对上的 vtep 会处理该数据。</p>
 <h2 id="八虚拟网络接口的速率">八、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
