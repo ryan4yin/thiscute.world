@@ -1615,7 +1615,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
     </a><figcaption class="image-caption">VXLAN 点对点网络架构</figcaption>
     </figure></p>
 <p>可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。</p>
-<p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个点对点的 VXLAN 隧道：</p>
+<p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个<strong>点对点的 VXLAN 隧道</strong>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -1680,7 +1680,8 @@ ip link <span class="nb">set</span> vxlan0 up
 ping 10.20.1.2
 </code></pre></td></tr></table>
 </div>
-</div><p>实际使用中，我们几乎不会使用点对点的 vxlan 隧道，而是使用「组播模式」的 vxlan，这种模式下一个 vtep 可以一次与组内的所有 vtep 建立隧道。
+</div><p>点对点的 vxlan 隧道实际用处不大，如果集群中的每个节点都互相建 vxlan 隧道，代价太高了。</p>
+<p>一种更好的方式，是使用 <strong>「组播模式」的 vxlan 隧道</strong>，这种模式下一个 vtep 可以一次与组内的所有 vtep 建立隧道。
 示例命令如下（这里略过了如何设置组播地址 <code>239.1.1.1</code> 的信息）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1708,6 +1709,60 @@ ip link <span class="nb">set</span> vxlan0 up
         
     </a><figcaption class="image-caption">VXLAN 多播网络架构</figcaption>
     </figure></p>
+<p>使用 ip 命令创建网桥、网络名字空间、veth pairs 组成上图中的容器网络：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 br0 并将 vxlan0 绑定上去</span>
+ip link add br0 <span class="nb">type</span> bridge
+ip link <span class="nb">set</span> vxlan0 master bridge
+ip link <span class="nb">set</span> vxlan0 up
+ip link <span class="nb">set</span> br0 up
+
+<span class="c1"># 模拟将容器加入到网桥中的操作</span>
+ip netns add container1
+
+<span class="c1">## 创建 veth pair，并把一端加到网桥上</span>
+ip link add veth0 <span class="nb">type</span> veth peer name veth1
+ip link <span class="nb">set</span> dev veth0 master br0
+ip link <span class="nb">set</span> dev veth0 up
+
+<span class="c1">## 配置容器内部的网络和 IP</span>
+ip link <span class="nb">set</span> dev veth1 netns container1
+ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</span> lo up
+
+ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</span> veth1 name eth0
+ip netns <span class="nb">exec</span> container1 ip addr add 10.20.1.11/24 dev eth0
+ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</span> eth0 up
+</code></pre></td></tr></table>
+</div>
+</div><p>然后在另一台机器上做同样的操作，并创建新容器，两个容器就能通过 vxlan 通信啦~</p>
+<h3 id="比组播更高效的-vxlan-实现">比组播更高效的 vxlan 实现</h3>
+<p>组播最大的问题在于，因为它不知道数据的目的地，所以每个 vtep 都发了一份。如果每次发数据时，如果能够精确到对应的 vtep，就能节约大量资源。</p>
+<p>另一个问题是 ARP 查询也会被组播，要知道 vxlan 本身就是个 overlay 网络，ARP 的成本也很高。</p>
+<p>上述问题都可以通过一个中心化的注册中心（如 etcd）来解决，所有容器、网络的注册与变更，都写入到这个注册中心，然后由程序自动维护 vtep 之间的隧道、fdb 表及 ARP 表.</p>
 <h2 id="八虚拟网络接口的速率">八、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
