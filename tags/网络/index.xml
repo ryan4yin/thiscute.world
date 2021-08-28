@@ -1579,25 +1579,14 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <p>vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性问题。被隔离的广播域之间需要上升到第三层才能完成通讯。</p>
 <p>常用的企业路由器如 ER-X 基本都可以设置 vlan，Linux 也直接支持了 vlan.</p>
 <p>以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在主机的 eth0 接口上创建一个虚拟 vlan 接口 eth0.100</span>
-ip link add link eth0 name eth0.100 <span class="nb">type</span> vlan id <span class="m">100</span>
-
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="七xvlangeneve">七、xvlan/geneve</h2>
-<blockquote>
-<p><a href="https://zhuanlan.zhihu.com/p/36165475" target="_blank" rel="noopener noreferrer">VXLAN vs VLAN</a></p>
-</blockquote>
+<h2 id="七xvlangeneve">七、xvlan/geneve</h2>
 <blockquote>
 <p><a href="https://datatracker.ietf.org/doc/html/rfc8926" target="_blank" rel="noopener noreferrer">rfc8926 - Geneve: Generic Network Virtualization Encapsulation</a>
 <a href="https://datatracker.ietf.org/doc/html/rfc7348" target="_blank" rel="noopener noreferrer">rfc7348 - Virtual eXtensible Local Area Network (VXLAN)</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://cizixs.com/2017/09/25/vxlan-protocol-introduction/" target="_blank" rel="noopener noreferrer">vxlan 协议原理简介</a>
+<a href="https://cizixs.com/2017/09/28/linux-vxlan/" target="_blank" rel="noopener noreferrer">linux 上实现 vxlan 网络</a></p>
 </blockquote>
 <p>在介绍 vxlan 前，先说明下两个名词的含义：</p>
 <ul>
@@ -1607,7 +1596,28 @@ ip link add link eth0 name eth0.100 <span class="nb">type</span> vlan id <span c
 <p>vxlan 与 geneve 都是 overlay 网络协议，它俩都是使用 UDP 包来封装链路层的以太网帧。</p>
 <p>vxlan 在 2014 年标准化，而 geneve 在 2020 年底才通过草案阶段，目前尚未形成最终标准。但是目前 linux/cilium 都已经支持了 geneve.</p>
 <p>geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度是可变的。</p>
-<h2 id="五虚拟网络接口的速率">五、虚拟网络接口的速率</h2>
+<p>下面介绍下如何在 Linux 上搭建一个 vxlan 网络：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建一个名为 vxlan0 的 vxlan 网络接口，id 设为 42，</span>
+$ ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
+</span><span class="se"></span>    id <span class="m">42</span> <span class="se">\
+</span><span class="se"></span>    dstport <span class="m">4789</span> <span class="se">\
+</span><span class="se"></span>    remote 192.168.8.101 <span class="se">\
+</span><span class="se"></span>    <span class="nb">local</span> 192.168.8.100 <span class="se">\
+</span><span class="se"></span>    dev enp0s8 
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="五虚拟网络接口的速率">五、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
 <p>比如目前很多老旧的网络设备，都是只支持到百兆以太网，这就决定了它的带宽上限。
