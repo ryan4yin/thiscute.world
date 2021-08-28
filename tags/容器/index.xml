@@ -901,8 +901,11 @@ table ip6 firewalld {
 ]]></description></item><item><title>Linux 中的虚拟网络接口</title><link>https://ryan4yin.space/posts/linux-virtual-network-interfaces/</link><pubDate>Sat, 14 Aug 2021 11:13:03 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/linux-virtual-network-interfaces/</guid><description><![CDATA[<blockquote>
 <p>本文用到的字符画工具：<a href="https://github.com/zenghongtu/vscode-asciiflow2" target="_blank" rel="noopener noreferrer">vscode-asciiflow2</a></p>
 </blockquote>
+<blockquote>
+<p>注意: 本文中使用 <code>ip</code> 命令创建或修改的任何网络配置，都是未持久化的，主机重启即消失。</p>
+</blockquote>
 <p>Linux 具有强大的虚拟网络能力，这也是 openstack 网络、docker 容器网络以及 kubernetes 网络等虚拟网络的基础。</p>
-<p>这里介绍 Linux 常用的虚拟网络接口类型：TUN/TAP、bridge 以及 veth。</p>
+<p>这里介绍 Linux 常用的虚拟网络接口类型：TUN/TAP、bridge、veth、ipvlan/macvlan、vlan 以及 vxlan/geneve.</p>
 <h2 id="一tuntap-虚拟网络接口">一、tun/tap 虚拟网络接口</h2>
 <p>tun/tap 是操作系统内核中的虚拟网络设备，他们为用户层程序提供数据的接收与传输。</p>
 <p>普通的物理网络接口如 eth0，它的两端分别是内核协议栈和外面的物理网络。</p>
@@ -1433,6 +1436,9 @@ Read 84 bytes from tun/tap device
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="跨-namespace-通信场景容器网络nat-模式">跨 namespace 通信场景（容器网络，NAT 模式）</h3>
+<blockquote>
+<p>docker/podman 提供的 bridge 网络模式，就是使用 veth+bridge+iptalbes 实现的。我会在下一篇文章详细介绍「容器网络」。</p>
+</blockquote>
 <p>由于容器运行在自己单独的 network namespace 里面，所以和虚拟机一样，它们也都有自己单独的协议栈。</p>
 <p>容器网络的结构和虚拟机差不多，但是它改用了 NAT 网络，并把 tun/tap 换成了 veth，导致 docker0 过来的数据，要先经过宿主机协议栈，然后才进入 veth 接口。</p>
 <p>多了一层 NAT，以及多走了一层宿主机协议栈，都会导致性能下降。</p>
@@ -1540,8 +1546,67 @@ bridge name     bridge id               STP enabled     interfaces
 docker0         8000.0242fce99ef5       no              vethea4171a
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="四其他虚拟网络接口的类型">四、其他虚拟网络接口的类型</h2>
-<p>除了上面介绍的这些，Linux 还支持 VLAN、VXLAN 等类型的虚拟网络接口，可通过 <code>ip link help</code> 查看，因为我接触的少，这里就不介绍了。</p>
+</div><h2 id="四macvlan">四、macvlan</h2>
+<blockquote>
+<p>目前 docker/podman 都支持使用 <code>--driver macvlan</code> 来使用 <code>macvlan</code> 创建容器网络。</p>
+</blockquote>
+<blockquote>
+<p><a href="https://docs.docker.com/network/macvlan/" target="_blank" rel="noopener noreferrer">Use macvlan networks - Docker Docs</a></p>
+</blockquote>
+<blockquote>
+<p>参考文档：<a href="https://cizixs.com/2017/02/14/network-virtualization-macvlan/" target="_blank" rel="noopener noreferrer">linux 网络虚拟化： macvlan</a></p>
+</blockquote>
+<p>macvlan 是比较新的 Linux 特性，需要内核版本 &gt;= 3.9，它被用于在主机的网络接口（父接口）上配置多个虚拟子接口，这些子接口都拥有各自独立的 mac 地址，也可以配上 ip 地址进行通讯。</p>
+<p>macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享同一个广播域。macvlan 和 bridge 比较相似，但因为它省去了 bridge 的存在，所以配置和调试起来比较简单，而且效率也相对高。除此之外，macvlan 自身也完美支持 VLAN。</p>
+<p>如果希望容器或者虚拟机放在主机相同的网络中，享受已经存在网络栈的各种优势，可以考虑 macvlan。</p>
+<h2 id="五ipvlan">五、ipvlan</h2>
+<blockquote>
+<p>目前 docker 已支持使用 <code>--driver ipvlan</code> 来使用 <code>ipvlan</code> 创建容器网络，<a href="https://github.com/containers/podman/issues/10478" target="_blank" rel="noopener noreferrer">podman 正计划支持</a>.
+<a href="https://docs.docker.com/network/ipvlan/" target="_blank" rel="noopener noreferrer">Use ipvlan networks - Docker Docs</a>
+<a href="https://cizixs.com/2017/02/17/network-virtualization-ipvlan/" target="_blank" rel="noopener noreferrer">linux 网络虚拟化： ipvlan</a></p>
+</blockquote>
+<p>ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（父接口）上配置出多个虚拟的子接口。但不同的是，ipvlan 的各子接口没有独立的 mac 地址，它们和主机的父接口共享 mac 地址。</p>
+<blockquote>
+<p>因为 mac 地址共享，所以如果使用 DHCP，就要注意不能使用 mac 地址做 DHCP，需要额外配置唯一的 clientID.</p>
+</blockquote>
+<p>如果你遇到以下的情况，请考虑使用 ipvlan：</p>
+<ul>
+<li>父接口对 mac 地址数目有限制，或者在 mac 地址过多的情况下会造成严重的性能损失</li>
+<li>工作在 802.11(wireless)无线网络中（macvlan 无法和无线网络共同工作）</li>
+<li>希望搭建比较复杂的网络拓扑（不是简单的二层网络和 VLAN），比如要和 BGP 网络一起工作</li>
+</ul>
+<h2 id="六vlan">六、vlan</h2>
+<p>vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性问题。被隔离的广播域之间需要上升到第三层才能完成通讯。</p>
+<p>常用的企业路由器如 ER-X 基本都可以设置 vlan，Linux 也直接支持了 vlan.</p>
+<p>以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在主机的 eth0 接口上创建一个虚拟 vlan 接口 eth0.100</span>
+ip link add link eth0 name eth0.100 <span class="nb">type</span> vlan id <span class="m">100</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="七xvlangeneve">七、xvlan/geneve</h2>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/36165475" target="_blank" rel="noopener noreferrer">VXLAN vs VLAN</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc8926" target="_blank" rel="noopener noreferrer">rfc8926 - Geneve: Generic Network Virtualization Encapsulation</a>
+<a href="https://datatracker.ietf.org/doc/html/rfc7348" target="_blank" rel="noopener noreferrer">rfc7348 - Virtual eXtensible Local Area Network (VXLAN)</a></p>
+</blockquote>
+<p>在介绍 vxlan 前，先说明下两个名词的含义：</p>
+<ul>
+<li><strong>underlay 网络</strong>：即物理网络</li>
+<li><strong>overlay 网络</strong>：指在现有的物理网络之上构建的虚拟网络。其实就是一种隧道技术，将原生态的二层数据帧报文进行封装后通过隧道进行传输。</li>
+</ul>
+<p>vxlan 与 geneve 都是 overlay 网络协议，它俩都是使用 UDP 包来封装链路层的以太网帧。</p>
+<p>vxlan 在 2014 年标准化，而 geneve 在 2020 年底才通过草案阶段，目前尚未形成最终标准。但是目前 linux/cilium 都已经支持了 geneve.</p>
+<p>geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度是可变的。</p>
 <h2 id="五虚拟网络接口的速率">五、虚拟网络接口的速率</h2>
 <p>Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
 他们的速率是不是也像物理链路一样，存在链路层（比如以太网）的带宽限制呢？</p>
