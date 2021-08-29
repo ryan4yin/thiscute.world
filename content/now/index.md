@@ -10,7 +10,14 @@ draft: false
 - k8s 网络插件 - calico/flannel
 - 容器底层原理：
   - 容器镜像的构建与使用
+
+---
+
+## 2021-08-28 => 2021-08-29
+
+- 容器底层原理：
   - linux namespace 与 cgroups
+  - linux 虚拟网络接口 macvlan/ipvlan、vlan、vxlan
 
 ---
 
