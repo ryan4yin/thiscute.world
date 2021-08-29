@@ -15,6 +15,10 @@ lightgallery: true
 
 >本文仅针对 ipv4 网络
 
+本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。
+
+# 一、iptables
+
 [iptables](https://www.netfilter.org/projects/iptables/index.html) 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT
 
 iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的子项目。
@@ -286,7 +290,9 @@ tcp      6 298 ESTABLISHED src=172.17.0.4 dst=198.18.5.130 sport=54636 dport=443
 
 本文主要目的在于理解 docker 容器网络的原理，以及为后面理解 kubernetes 网络插件 calico/flannel 打好基础，因此就不多介绍持久化了。
 
-## Docker 如何使用 iptables + 虚拟网络接口实现容器网络
+## 如何使用 iptables + bridge + veth 实现容器网络
+
+Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全类似。下面以 docker 为例进行分析（Podman 的分析流程也基本一样）。
 
 ### 通过 docker run 运行容器
 
@@ -502,6 +508,94 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 到这里，我们简单地分析了下 docker 如何通过 iptables 实现 bridge 网络和端口映射。
 有了这个基础，后面就可以尝试深入分析 kubernetes 网络插件 flannel/calico/cilium 了哈哈。
 
+
+## Docker/Podman 的 macvlan/ipvlan 模式
+
+>注意：macvlan 和 wifi 好像不兼容，测试时不要使用无线网络的接口！
+
+我在前面介绍 Linux 虚拟网络接口的文章中，有介绍过 macvlan 和 ipvlan 两种新的虚拟接口。
+
+目前 Podman/Docker 都支持使用 macvlan 来构建容器网络，这种模式下创建的容器直连外部网络，容器可以拥有独立的外部 IP，不需要端口映射，也不需要借助 iptables.
+
+这和虚拟机的 Bridge 模式就很类似，主要适用于希望容器拥有独立外部 IP 的情况。
+
+下面详细分析下 Docker 的 macvlan 网络（Podman 应该也完全类似）。
+
+```shell
+# 首先创建一个 macvlan 网络
+# subnet/gateway 的参数需要和物理网络一致
+# 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1
+$ docker network create -d macvlan \
+  --subnet=192.168.31.0/24 \
+  --gateway=192.168.31.1 \
+  -o parent=eno1 \
+  macnet0
+
+# 现在使用 macvlan 启动一个容器试试
+# 建议和我一样，通过 --ip 手动配置静态 ip 地址，当然不配也可以，DHCP 会自动分配 IP
+$ docker run --network macnet0 --ip=192.168.31.233 --rm -it buildpack-deps:buster-curl /bin/bash
+# 在容器中查看网络接口状况，能看到 eth0 是一个 macvlan 接口
+root@4319488cb5e7:/# ip -d addr ls
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+8: eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:c0:a8:1f:e9 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 9194 
+    macvlan mode bridge numtxqueues 1 numrxqueues 1 gso_max_size 64000 gso_max_segs 64 
+    inet 192.168.31.233/24 brd 192.168.31.255 scope global eth0
+       valid_lft forever preferred_lft forever
+# 路由表，默认 gateway 被自动配置进来了
+root@4319488cb5e7:/# ip route ls
+default via 192.168.31.1 dev eth0 
+192.168.31.0/24 dev eth0 proto kernel scope link src 192.168.31.233 
+
+# 可以正常访问 baidu
+root@4319488cb5e7:/# curl baidu.com
+<html>
+<meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+</html>
+```
+
+Docker 支持的另一种网络模式是 ipvlan（ipvlan 和 macvlan 的区别我在前一篇文章中已经介绍过，不再赘言），创建命令和 macvlan 几乎一样：
+
+```shell
+# 首先创建一个 macvlan 网络
+# subnet/gateway 的参数需要和物理网络一致
+# 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1
+# ipvlan_mode 默认为 l2，表示工作在数据链路层。
+$ docker network create -d ipvlan \
+  --subnet=192.168.31.0/24 \
+  --gateway=192.168.31.1 \
+  -o parent=eno1 \
+  -o ipvlan_mode=l2 \
+  ipvnet0
+
+# 现在使用 macvlan 启动一个容器试试
+# 建议和我一样，通过 --ip 手动配置静态 ip 地址，当然不配也可以，DHCP 会自动分配 IP
+$ docker run --network ipvnet0 --ip=192.168.31.234 --rm -it buildpack-deps:buster-curl /bin/bash
+# 在容器中查看网络接口状况，能看到 eth0 是一个 ipvlan 接口
+root@d0764ebbbf42:/# ip -d addr ls
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+12: eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default 
+    link/ether 38:f3:ab:a3:e6:71 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 65535 
+    ipvlan  mode l2 bridge numtxqueues 1 numrxqueues 1 gso_max_size 64000 gso_max_segs 64 
+    inet 192.168.31.234/24 brd 192.168.31.255 scope global eth0
+       valid_lft forever preferred_lft forever
+# 路由表，默认 gateway 被自动配置进来了
+root@d0764ebbbf42:/# ip route ls
+default via 192.168.31.1 dev eth0 
+192.168.31.0/24 dev eth0 proto kernel scope link src 192.168.31.234 
+
+# 可以正常访问 baidu
+root@d0764ebbbf42:/# curl baidu.com
+<html>
+<meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+</html>
+```
 
 ## Rootless 容器的网络实现
 
