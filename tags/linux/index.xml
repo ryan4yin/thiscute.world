@@ -845,7 +845,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
 <span class="c1"># ip-range </span>
-<span class="c1"># 通过 -o parent 设定父接口</span>
+<span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 $ docker network create -d macvlan <span class="se">\
 </span><span class="se"></span>  --subnet<span class="o">=</span>192.168.31.0/24 <span class="se">\
 </span><span class="se"></span>  --gateway<span class="o">=</span>192.168.31.1 <span class="se">\
