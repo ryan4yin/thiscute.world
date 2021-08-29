@@ -1737,7 +1737,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <li>工作在 802.11(wireless)无线网络中（macvlan 无法和无线网络共同工作）</li>
 <li>希望搭建比较复杂的网络拓扑（不是简单的二层网络和 VLAN），比如要和 BGP 网络一起工作</li>
 </ul>
-<p>基于 ipvlan/macvlan 的容器网络，比 veth+bridge+iptables 的性能要更高，未来有可能成为主流。</p>
+<p>基于 ipvlan/macvlan 的容器网络，比 veth+bridge+iptables 的性能要更高。</p>
 <p>我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了&hellip;</p>
 <h2 id="六vlan">六、vlan</h2>
 <p>vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性问题。被隔离的广播域之间需要上升到第三层才能完成通讯。</p>
