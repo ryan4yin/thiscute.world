@@ -841,12 +841,10 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">31
 </span><span class="lnt">32
 </span><span class="lnt">33
-</span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
-<span class="c1"># ip-range </span>
 <span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 $ docker network create -d macvlan <span class="se">\
 </span><span class="se"></span>  --subnet<span class="o">=</span>192.168.31.0/24 <span class="se">\
@@ -856,7 +854,7 @@ $ docker network create -d macvlan <span class="se">\
 
 <span class="c1"># 现在使用 macvlan 启动一个容器试试</span>
 <span class="c1"># 建议和我一样，通过 --ip 手动配置静态 ip 地址，当然不配也可以，DHCP 会自动分配 IP</span>
-$ docker run --network macnet0 --ip<span class="o">=</span>192.168.31.233 --rm -it debian:buster /bin/bash
+$ docker run --network macnet0 --ip<span class="o">=</span>192.168.31.233 --rm -it buildpack-deps:buster-curl /bin/bash
 <span class="c1"># 在容器中查看网络接口状况，能看到 eth0 是一个 macvlan 接口</span>
 root@4319488cb5e7:/# ip -d addr ls
 1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
@@ -875,6 +873,83 @@ default via 192.168.31.1 dev eth0
 
 <span class="c1"># 可以正常访问 baidu</span>
 root@4319488cb5e7:/# curl baidu.com
+&lt;html&gt;
+&lt;meta http-equiv<span class="o">=</span><span class="s2">&#34;refresh&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;0;url=http://www.baidu.com/&#34;</span>&gt;
+&lt;/html&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>Docker 支持的另一种网络模式是 ipvlan（ipvlan 和 macvlan 的区别我在前一篇文章中已经介绍过，不再赘言），创建命令和 macvlan 几乎一样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
+<span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
+<span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
+<span class="c1"># ipvlan_mode 默认为 l2，表示工作在数据链路层。</span>
+$ docker network create -d ipvlan <span class="se">\
+</span><span class="se"></span>  --subnet<span class="o">=</span>192.168.31.0/24 <span class="se">\
+</span><span class="se"></span>  --gateway<span class="o">=</span>192.168.31.1 <span class="se">\
+</span><span class="se"></span>  -o <span class="nv">parent</span><span class="o">=</span>eno1 <span class="se">\
+</span><span class="se"></span>  -o <span class="nv">ipvlan_mode</span><span class="o">=</span>l2 <span class="se">\
+</span><span class="se"></span>  ipvnet0
+
+<span class="c1"># 现在使用 macvlan 启动一个容器试试</span>
+<span class="c1"># 建议和我一样，通过 --ip 手动配置静态 ip 地址，当然不配也可以，DHCP 会自动分配 IP</span>
+$ docker run --network ipvnet0 --ip<span class="o">=</span>192.168.31.234 --rm -it buildpack-deps:buster-curl /bin/bash
+<span class="c1"># 在容器中查看网络接口状况，能看到 eth0 是一个 ipvlan 接口</span>
+root@d0764ebbbf42:/# ip -d addr ls
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity <span class="m">0</span> minmtu <span class="m">0</span> maxmtu <span class="m">0</span> numtxqueues <span class="m">1</span> numrxqueues <span class="m">1</span> gso_max_size <span class="m">65536</span> gso_max_segs <span class="m">65535</span> 
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+12: eth0@if2: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UNKNOWN group default 
+    link/ether 38:f3:ab:a3:e6:71 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span> promiscuity <span class="m">0</span> minmtu <span class="m">68</span> maxmtu <span class="m">65535</span> 
+    ipvlan  mode l2 bridge numtxqueues <span class="m">1</span> numrxqueues <span class="m">1</span> gso_max_size <span class="m">64000</span> gso_max_segs <span class="m">64</span> 
+    inet 192.168.31.234/24 brd 192.168.31.255 scope global eth0
+       valid_lft forever preferred_lft forever
+<span class="c1"># 路由表，默认 gateway 被自动配置进来了</span>
+root@d0764ebbbf42:/# ip route ls
+default via 192.168.31.1 dev eth0 
+192.168.31.0/24 dev eth0 proto kernel scope link src 192.168.31.234 
+
+<span class="c1"># 可以正常访问 baidu</span>
+root@d0764ebbbf42:/# curl baidu.com
 &lt;html&gt;
 &lt;meta http-equiv<span class="o">=</span><span class="s2">&#34;refresh&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;0;url=http://www.baidu.com/&#34;</span>&gt;
 &lt;/html&gt;
