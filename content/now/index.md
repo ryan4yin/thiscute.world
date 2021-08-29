@@ -10,7 +10,9 @@ draft: false
 - k8s 网络插件 - calico/flannel
   - BGP
 - 容器底层原理：
-  - 容器镜像的文件系统：overlayfs，以及
+  - 容器镜像的文件系统：overlayfs
+  - 镜像的结构分析
+  - 镜像的构建流程
 
 ---
 
