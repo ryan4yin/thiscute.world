@@ -8,8 +8,9 @@ draft: false
 ## now
 
 - k8s 网络插件 - calico/flannel
+  - BGP
 - 容器底层原理：
-  - 容器镜像的构建与使用
+  - 容器镜像的文件系统：overlayfs，以及
 
 ---
 

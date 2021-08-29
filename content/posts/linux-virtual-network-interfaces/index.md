@@ -422,9 +422,9 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 
 ## 四、macvlan
 
->目前 docker/podman 都支持使用 `--driver macvlan` 来使用 `macvlan` 创建容器网络。
+>目前 docker/podman 都支持创建基于 macvlan 的 Linux 容器网络。
 
->[Use macvlan networks - Docker Docs](https://docs.docker.com/network/macvlan/)
+>注意 macvlan 和 WiFi 存在兼容问题，如果使用笔记本测试，可能会遇到麻烦。
 
 >参考文档：[linux 网络虚拟化： macvlan](https://cizixs.com/2017/02/14/network-virtualization-macvlan/)
 
@@ -434,12 +434,13 @@ macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享
 
 如果希望容器或者虚拟机放在主机相同的网络中，享受已经存在网络栈的各种优势，可以考虑 macvlan。
 
+我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了...
 
 ## 五、ipvlan
 
->目前 docker 已支持使用 `--driver ipvlan` 来使用 `ipvlan` 创建容器网络，[podman 正计划支持](https://github.com/containers/podman/issues/10478).
->[Use ipvlan networks - Docker Docs](https://docs.docker.com/network/ipvlan/)
 >[linux 网络虚拟化： ipvlan](https://cizixs.com/2017/02/17/network-virtualization-ipvlan/)
+
+>cilium 1.9 已经提供了基于 ipvlan 的网络（beta 特性），用于替换传统的 veth+bridge 容器网络。详见 [IPVLAN based Networking (beta) - Cilium 1.9 Docs](https://docs.cilium.io/en/v1.9/gettingstarted/ipvlan/)
 
 ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（父接口）上配置出多个虚拟的子接口。但不同的是，ipvlan 的各子接口没有独立的 mac 地址，它们和主机的父接口共享 mac 地址。
 
@@ -451,6 +452,9 @@ ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（�
 - 工作在 802.11(wireless)无线网络中（macvlan 无法和无线网络共同工作）
 - 希望搭建比较复杂的网络拓扑（不是简单的二层网络和 VLAN），比如要和 BGP 网络一起工作
 
+基于 ipvlan/macvlan 的容器网络，比 veth+bridge+iptables 的性能要更高。
+
+我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了...
 
 ## 六、vlan
 
