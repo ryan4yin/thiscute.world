@@ -5545,7 +5545,7 @@ qemu-img info centos7-test01.qcow2
 </ol>
 <p>大部分情况下，你都可以把下面命令中涉及到的 <code>domain</code> 理解成虚拟机。</p>
 <h3 id="0-设置默认-uri">0. 设置默认 URI</h3>
-<p><code>virsh</code>/<code>virt-install</code>/<code>virt-viewer</code> 等一系列 libvirt 命令，
+<p><code>virsh</code>/<code>virt-install</code>/<code>virt-viewer</code> 等一系列 libvirt 命令，sudo virsh net-list &ndash;all
 默认情况下会使用 <code>qemu:///session</code> 作为 URI 去连接 QEMU/KVM，只有 root 账号才会默认使用 <code>qemu:///system</code>.</p>
 <p>另一方面 <code>virt-manager</code> 这个 GUI 工具，默认也会使用 <code>qemu:///system</code> 去连接 QEMU/KVM（和 root 账号一致）</p>
 <p><code>qemu:///system</code> 是系统全局的 qemu 环境，而 <code>qemu:///session</code> 的环境是按用户隔离的。
@@ -5559,7 +5559,55 @@ qemu-img info centos7-test01.qcow2
 <pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">echo</span> <span class="s1">&#39;export LIBVIRT_DEFAULT_URI=&#34;qemu:///system&#34;&#39;</span> &gt;&gt; ~/.bashrc
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="1-创建虚拟机---virt-intall">1. 创建虚拟机 - virt-intall</h3>
+</div><h3 id="1-虚拟机网络">1. 虚拟机网络</h3>
+<p>qemu-kvm 安装完成后，<code>qemu:///system</code> 环境中默认会创建一个 <code>default</code> 网络，而 <code>qemu:///session</code> 不提供默认的网络，需要手动创建。</p>
+<p>我们通常使用 <code>qemu:///system</code> 环境就好，可以使用如下方法查看并启动 default 网络，这样后面创建虚拟机时才有网络可用。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出所有虚拟机网络</span>
+$ sudo virsh net-list --all
+ Name      State      Autostart   Persistent
+----------------------------------------------
+ default   inactive   no          yes
+
+<span class="c1"># 启动默认网络</span>
+$ virsh net-start default
+Network default started
+
+<span class="c1"># 将 default 网络设为自启动</span>
+$ virsh net-autostart --network default
+Network default marked as autostarted
+
+<span class="c1"># 再次检查网络状况，已经是 active 了</span>
+$ sudo virsh net-list --all
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以创建新的虚拟机网络，这需要手动编写网络的 xml 配置，然后通过 <code>virsh net-define --file my-network.xml</code> 创建，这里就不详细介绍了，因为暂时用不到&hellip;</p>
+<h3 id="2-创建虚拟机---virt-intall">2. 创建虚拟机 - virt-intall</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -5768,19 +5816,6 @@ virsh attach-interface
 virsh detach-disk
 virsh detach-device
 virsh detach-interface
-</code></pre></td></tr></table>
-</div>
-</div><p>虚拟机网络管理：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出所有虚拟机网络</span>
-virsh net-list
-<span class="c1"># 待续</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
