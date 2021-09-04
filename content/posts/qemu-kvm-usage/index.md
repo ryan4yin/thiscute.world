@@ -222,7 +222,7 @@ GUI 很傻瓜式，就不介绍了，这里主要介绍命令行工具 `virsh`/`
 
 ### 0. 设置默认 URI
 
-`virsh`/`virt-install`/`virt-viewer` 等一系列 libvirt 命令，
+`virsh`/`virt-install`/`virt-viewer` 等一系列 libvirt 命令，sudo virsh net-list --all
 默认情况下会使用 `qemu:///session` 作为 URI 去连接 QEMU/KVM，只有 root 账号才会默认使用 `qemu:///system`.
 
 另一方面 `virt-manager` 这个 GUI 工具，默认也会使用 `qemu:///system` 去连接 QEMU/KVM（和 root 账号一致）
@@ -236,7 +236,38 @@ GUI 很傻瓜式，就不介绍了，这里主要介绍命令行工具 `virsh`/`
 echo 'export LIBVIRT_DEFAULT_URI="qemu:///system"' >> ~/.bashrc
 ```
 
-### 1. 创建虚拟机 - virt-intall
+### 1. 虚拟机网络
+
+qemu-kvm 安装完成后，`qemu:///system` 环境中默认会创建一个 `default` 网络，而 `qemu:///session` 不提供默认的网络，需要手动创建。
+
+我们通常使用 `qemu:///system` 环境就好，可以使用如下方法查看并启动 default 网络，这样后面创建虚拟机时才有网络可用。
+
+```shell
+# 列出所有虚拟机网络
+$ sudo virsh net-list --all
+ Name      State      Autostart   Persistent
+----------------------------------------------
+ default   inactive   no          yes
+
+# 启动默认网络
+$ virsh net-start default
+Network default started
+
+# 将 default 网络设为自启动
+$ virsh net-autostart --network default
+Network default marked as autostarted
+
+# 再次检查网络状况，已经是 active 了
+$ sudo virsh net-list --all
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+```
+
+
+也可以创建新的虚拟机网络，这需要手动编写网络的 xml 配置，然后通过 `virsh net-define --file my-network.xml` 创建，这里就不详细介绍了，因为暂时用不到...
+
+### 2. 创建虚拟机 - virt-intall
 
 ```shell
 # 使用 iso 镜像创建全新的 proxmox 虚拟机，自动创建一个 60G 的磁盘。
@@ -360,14 +391,6 @@ virsh detach-device
 virsh detach-interface
 ```
 
-
-虚拟机网络管理：
-
-```shell
-# 列出所有虚拟机网络
-virsh net-list
-# 待续
-```
 
 ## 参考
 
