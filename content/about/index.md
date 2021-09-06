@@ -25,11 +25,12 @@ lightgallery: true
   - Python: 目前的主力，也是我最熟悉的语言。
   - Go: 学习中，云原生圈子里最流行的语言。
   - Rust: 学习中，大量函数式的语法糖，贴心的编译器提示，感觉很好用。
-  - 曾经使用过但已经荒废的语言：C/Java/Julia/Mathematica
+  - Lua: 为了搞 Openresty，也在学习中
+  - C: 勉强能看懂代码，荒废比较久了。在学习 Nginx/Linux 的过程中慢慢补吧...
+  - 曾经使用过但已经荒废的语言：Java/Julia/Mathematica
 - **职业**：**SRE**
   - 维护与优化计算平台及流量链路，**稳定高效**地支撑快速成长的业务。
-- **工具或技术**：Kubernetes/Istio/APISIX
-  - 正在深入学习相关的底层技术如 Linux Namespace/Cgroups，BGP/vxlan，eBPF，Nginx 等。
+- **工具或技术**：Linux/Kubernetes/Istio/Openresty
 
 ## 关于此博客
 
