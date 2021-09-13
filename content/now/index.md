@@ -80,8 +80,6 @@ draft: false
 - openresty
   - 阅读 Lua 程序设计
   - 阅读 APISIX 源码
-- 手工搭建 Kuberntes 集群，并对集群执行原地升级，了解集群的底层结构与升级相关的知识点
-  - 涉及到的组件：Kuberntes 控制面、网络插件 Calico、kube-proxy、coredns、containerd
 - 思考我遇到的一些非技术问题（工作、生活都有吧），寻找解法
   - 工作：
     - 效率：如何在没人 push 的情况下，维持住高效率的工作状态。
@@ -89,12 +87,18 @@ draft: false
     - 目前的关键目标是啥？存在哪些关键问题（实现关键目标最大的阻碍）？我最近做的主要工作，是不是在为关键目标服务？
 
 
-### 2021-09-02 - 2021-09-06
+### 2021-09-13 - now
+
+- 分析 cilium 集群网络的结构，以及它如何替代 kube-proxy
+- 对 kubeadm 搭建的 k8s 集群执行原地升级，了解集群的底层结构与升级相关的知识点
+
+### 2021-09-02 - 2021-09-11
 
 - EKS 集群升级
   - 了解 EKS 集群的原地升级的细节
   - 输出 EKS 集群原地升级的测试方案，以及生产环境的 EKS 集群升级方案
-- 学习使用 kubeadm+containerd 部署 k8s 测试集群，了解 kubernetes 集群的结构
+- 学习使用 kubeadm+containerd 部署 k8s 测试集群
+  - 涉及到的组件：Kuberntes 控制面、网络插件 Cilium、kube-proxy、coredns、containerd
 
 ---
 
