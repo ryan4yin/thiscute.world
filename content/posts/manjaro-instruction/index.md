@@ -17,6 +17,8 @@ Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服�
 
 <!--more-->
 
+>2021-09-22 更新：今天被群友科普，可能我下面列举的几个滚挂事件，可能都和我使用了 archlinuxcn 这个源有关...
+
 我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两个月，升级了两个大版本才恢复。
 另一个就是 [VSCode - Incorrect locale 'en-US' used everywhere](https://github.com/microsoft/vscode/issues/110322)
 
