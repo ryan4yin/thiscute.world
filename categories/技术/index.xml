@@ -4614,7 +4614,10 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>官方的 sidecar/init-container 模式仍然是最推荐使用的。</p>
 <h2 id="五使用-vault-实现-aws-iam-credentials-的自动轮转">五、使用 vault 实现 AWS IAM Credentials 的自动轮转</h2>
 <p>待续。。。</p>
-]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/posts/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/about-tls-cert/</guid><description><![CDATA[<h2 id="更新记录">更新记录</h2>
+]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/posts/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/about-tls-cert/</guid><description><![CDATA[<blockquote>
+<p>个人笔记，不保证正确性。本人在密码学方面完全是个外行，如果希望深入学习，建议阅读 <a href="https://github.com/nakov/practical-cryptography-for-developers-book" target="_blank" rel="noopener noreferrer">Practical Cryptography for Developers</a></p>
+</blockquote>
+<h2 id="更新记录">更新记录</h2>
 <ul>
 <li><i class="far fa-square fa-fw"></i> 补充 TLS 协议的详细流程</li>
 <li><i class="far fa-check-square fa-fw"></i> 完成 TLS 证书的详细介绍</li>
@@ -4948,7 +4951,7 @@ openssl req -x509 -sha256 -days <span class="m">3650</span> -key key.pem -in csr
 <p>RSA/ECC 这两类非对称加密算法被广泛的应用在各类加密通讯中。
 SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加密算法，因此使用 OpenSSL 生成的密钥对，也应该能用于 SSH 协议加密、JWT 签名等场景。</p>
 <blockquote>
-<p>ECDSA 是一种基于 ECC 和 DSA 的加密算法</p>
+<p>目前有两种基于 ECC 和 DSA 的椭圆曲线签名算法：ECDSA 和 EdDSA(ed25519)，其中 ECDSA 的文档在曲线选择方面语焉不详，被认为可能存在安全隐患（政治和技术两方面带来的）。</p>
 </blockquote>
 <p>既然 SSH/TLS/JWT 使用的是相同的密钥对，那理所当然地，SSH/JWT 密钥对应该也可以通过 OpenSSL 生成出来。</p>
 <p>生成 RSA 密钥对的命令如下：</p>
