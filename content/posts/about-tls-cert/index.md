@@ -11,6 +11,7 @@ tags: ["HTTPS", "TLS", "OpenSSL", "加密", "破解"]
 categories: ["技术"]
 ---
 
+>个人笔记，不保证正确性。本人在密码学方面完全是个外行，如果希望深入学习，建议阅读 [Practical Cryptography for Developers](https://github.com/nakov/practical-cryptography-for-developers-book)
 
 ## 更新记录
 
@@ -274,7 +275,7 @@ openssl req -x509 -sha256 -days 3650 -key key.pem -in csr.csr -out certificate.p
 RSA/ECC 这两类非对称加密算法被广泛的应用在各类加密通讯中。
 SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加密算法，因此使用 OpenSSL 生成的密钥对，也应该能用于 SSH 协议加密、JWT 签名等场景。
 
->ECDSA 是一种基于 ECC 和 DSA 的加密算法
+>目前有两种基于 ECC 和 DSA 的椭圆曲线签名算法：ECDSA 和 EdDSA(ed25519)，其中 ECDSA 的文档在曲线选择方面语焉不详，被认为可能存在安全隐患（政治和技术两方面带来的）。
 
 既然 SSH/TLS/JWT 使用的是相同的密钥对，那理所当然地，SSH/JWT 密钥对应该也可以通过 OpenSSL 生成出来。
 
