@@ -501,7 +501,7 @@ helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 <p>官方文档：<a href="https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault" target="_blank" rel="noopener noreferrer">Initialize and unseal Vault - Vault on Kubernetes Deployment Guide</a></p>
 </blockquote>
 <p>通过 helm 部署 vault，默认会部署一个三副本的 StatefulSet，但是这三个副本都会处于 NotReady 状态（docker 方式部署的也一样）。
-接下来还需要手动初始化(initalize)并解封(unseal) vault，才能 <code>Ready</code>:</p>
+接下来还需要手动初始化并解封 vault，才能 <code>Ready</code>:</p>
 <ol>
 <li>第一步：从三个副本中随便选择一个，运行 vault 的初始化命令：<code>kubectl exec -ti vault-0 -- vault operator init</code>
 <ol>
