@@ -36,27 +36,27 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 
 ![](/images/expirence-of-vault/vault-layers.png "vault layers")
 
-可以看到，几乎所有的组件都从属于「安全屏障(security barrier)」，
-Vault 可以简单地被划分为 Storage Backend、安全屏障(security barrier) 和 HTTP API 三个部分。
+可以看到，几乎所有的 Vault 组件都被统称为「屏障(Barrier)」，
+Vault 可以简单地被划分为 Storage Backend、Barrier 和 HTTP/S API 三个部分。
 
-「安全屏障(security barrier)」是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和 Vault 之间的所有数据流动都需要经过这个「屏障(barrier)」。
+类比银行金库，「屏障」就是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和客户端之间的所有数据流动都需要经过它。
 
-barrier 确保只有加密数据会被写入 Storage Backend，加密数据在经过 barrier 被读出的过程中被验证与解密。
+「屏障」确保只有加密数据会被写入 Storage Backend，加密数据在经过「屏障」被读出的过程中被验证与解密。
 
-和银行金库(bank vault)非常类似，barrier 也必须先解封，才能解密 storage backend 中的数据。
+和银行金库的大门非常类似，Barrier 也必须先解封，才能解密 Storage Backend 中的数据。
 
 ### 1. 数据存储及加密解密
 
 Storage Backend(后端存储): Vault 自身不存储数据，因此需要为它配置一个「Storage Backend」。
 「Storage Backend」是不受信任的，只用于存储加密数据。
 
-Initialaztion(初始化): vault 在首次启动时需要初始化，这一步生成一个「加密密钥(encryption key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.
+Initialization(初始化): Vault 在首次启动时需要初始化，这一步生成一个「加密密钥(Encryption Key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.
 
-Unseal(解封): Vault 启动后，因为不知道「加密密钥(ncryption key)」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。
+Unseal(解封): Vault 启动后，因为不知道「加密密钥」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。
 
 「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。
 
-默认情况下，vault 使用[沙米尔密钥共享算法](https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664)
+默认情况下，Vault 使用[沙米尔密钥共享算法](https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664)
 将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.
 
 ![](/images/expirence-of-vault/vault-shamir-secret-sharing.svg "vault-shamir-secret-sharing")
@@ -75,7 +75,7 @@ HTTP 请求进入后的整个处理流程都由 vault core 管理，core 会强�
 
 1. 用户友好的认证方法，适合管理员使用：username/password、云服务商、ldap
    1. 在创建 user 的时候，需要为 user 绑定 policy，给予合适的权限。
-2. 应用友好的方法：public/private keys、tokens、kubernetes、jwt
+2. 应用友好的方法，适合应用程序使用：public/private keys、tokens、kubernetes、jwt
 
 身份验证请求流经 Core 并进入 auth methods，auth methods 确定请求是否有效并返回「关联策略(policies)」的列表。
 
@@ -94,7 +94,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 
 如果客户端允许租约(lease)到期，expiration manager 将自动吊销这个 secret.
 
-Core 负责处理审核代理(audit brok)的请求及响应日志，将请求发送到所有已配置的审核设备(audit devices)。
+Core 负责处理审核代理(audit broker)的请求及响应日志，将请求发送到所有已配置的审核设备(audit devices)。
 
 
 ### 3. Secret Engine
@@ -104,7 +104,7 @@ Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。
 有的 Secret Engines 只是单纯地存储与读取数据，比如 kv 就可以看作一个加密的 Redis。
 而其他的 Secret Engines 则连接到其他的服务并按需生成动态凭证。
 
-还有些 Secret Engines 提供「加密即服务(encryption as a service)」 - transit、证书管理等。
+还有些 Secret Engines 提供「加密即服务(encryption as a service)」的能力，如 transit、证书管理等。
 
 常用的 engine 举例：
 
@@ -350,12 +350,12 @@ kubectl create namespace vault
 helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 ```
 
-### 3. 初始化(initalize)并解封(unseal) vault
+### 3. 初始化并解封 vault
 
 >官方文档：[Initialize and unseal Vault - Vault on Kubernetes Deployment Guide](https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault)
 
 通过 helm 部署 vault，默认会部署一个三副本的 StatefulSet，但是这三个副本都会处于 NotReady 状态（docker 方式部署的也一样）。
-接下来还需要手动初始化(initalize)并解封(unseal) vault，才能 `Ready`:
+接下来还需要手动初始化并解封 vault，才能 `Ready`:
 
 1. 第一步：从三个副本中随便选择一个，运行 vault 的初始化命令：`kubectl exec -ti vault-0 -- vault operator init`
    1. 初始化操作会返回 5 个 unseal keys，以及一个 Initial Root Token，这些数据非常敏感非常重要，一定要保存到安全的地方！
