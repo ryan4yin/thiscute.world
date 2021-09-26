@@ -62,6 +62,13 @@ draft: false
 - 英语词汇量
 - 学习简单的 Parser 原理：《编程语言实现模式》
 
+
+### 其他比较感兴趣的东西
+
+- 微积分、线代、概率论、数学物理方法
+- 信号与系统：音视频处理
+- 机器学习、深度学习
+
 ## 二、我想读的书
 
 - [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/)
