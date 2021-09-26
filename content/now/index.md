@@ -47,13 +47,20 @@ draft: false
 
 ### 低优先级
 
-- MIT 6.824：《数据密集型应用系统设计》raft
 - linux 性能测试、优化及相关工具
   - eBPF
+
+- 深入理解计算机网络：数据包的构造、 raw socket，Linux TCP/IP 协议栈
+
+- MIT 6.824：《数据密集型应用系统设计》raft
+
 - redis 底层
 - mysql/postgresql 底层
-- 英语词汇量
 
+- 算法与数据结构：这个就在学 Linux/Redis/SQL 的过程中穿插着学吧。
+
+- 英语词汇量
+- 学习简单的 Parser 原理：《编程语言实现模式》
 
 ## 二、我想读的书
 
