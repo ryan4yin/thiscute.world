@@ -25,12 +25,12 @@ lightgallery: true
   - Python: 目前的主力，也是我最熟悉的语言。
   - Go: 学习中，云原生圈子里最流行的语言。
   - Rust: 学习中，大量函数式的语法糖，贴心的编译器提示，感觉很好用。
-  - Lua: 为了搞 Openresty，也在学习中
+  - Openresty+Lua: 为了搞 APISIX 网关，也在学习中
   - C: 勉强能看懂代码，荒废比较久了。在学习 Nginx/Linux 的过程中慢慢补吧...
   - 曾经使用过但已经荒废的语言：Java/Julia/Mathematica
 - **职业**：**SRE**
   - 维护与优化计算平台及流量链路，**稳定高效**地支撑快速成长的业务。
-- **工具或技术**：Linux/Kubernetes/Istio/Openresty
+- **工具或技术**：Linux/Kubernetes/Istio/APISIX
 
 ## 关于此博客
 
@@ -70,7 +70,7 @@ lightgallery: true
 我以前用博客园的时候，习惯将它当作笔记本使用，各色各样的笔记都直接往「博客园」里放，方便自己查阅。
 偶尔有一两篇自觉写得还不错，对别人可能有帮助的，我会发布到「博客园首页」。
 
-但是这种做法其实不好，笔记主要是给自己看的，写得不一定清楚明白，不适合直接分享出来。
+但是这种做法其实不好，笔记主要是给自己看的，写得不一定清楚明白，不适合直接分享出来（网络垃圾制造者...）
 应该有专门的地方来放这些东西，所以我现在将所有的个人笔记，都保存在了 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge) 里面。
 
 而这个独立博客的内容，和 `ryan4yin/knowledge` 应该是相辅相成的。
