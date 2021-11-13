@@ -12,14 +12,16 @@ draft: false
 ### 最高优先级
 
 技术：
-- Kubernetes：最近需要执行集群升级，先通过 kubeadm 熟悉下集群安装、升级的细节，做些关键测试
-- openresty 技术栈：我在推进使用 APISIX 做为集群网关，有必要深入了解它的底层细节
-  - 阅读 Lua 程序设计
-  - 阅读 APISIX 源码 + Openresty
-  - 深入学习 Nginx 及 epoll
+- rust 语言/go 语言及 web 编程
+- Istio: 熟悉 Istio 及 Envoy，了解新版本的功能
+- Kubernetes Operator
 
-非技术：
-- 每周单独抽出一部分时间（1h+），思考工作中遇到的一些非技术问题，寻找解法
+### 高优先级
+
+- k8s 网络插件 - calico/cilium
+  - BGP 路由协议
+  - vxlan
+- Kubernetes：阅读源码，熟悉底层细节
 
 生活：
 - 娱乐+运动：
@@ -27,15 +29,12 @@ draft: false
   - 玩玩轮滑、游泳
   - midi键盘吃灰超久了，练一练吧
 
-### 高优先级
-
-- Kubernetes Operator
-- k8s 网络插件 - calico/cilium
-  - BGP 路由协议
-  - vxlan
-
-
 ### 中优先级
+
+- Openresty 技术栈：
+  - 阅读 Lua 程序设计
+  - 阅读 APISIX 源码 + Openresty
+  - 深入学习 Nginx 及 epoll
 
 - 容器底层原理
   - 容器镜像的文件系统：overlayfs
@@ -100,12 +99,21 @@ draft: false
 ### now
 
 目前想做的：
+- 了解下 kubernetes/istio 的新功能
+- 搞一搞 rust 编程，go web 编程
 - 玩一玩 taichi，顺便补一补数学知识
+
+### 2021-11-08 - 2021-11-12
+
+- 将上次 EKS 升级过程中，有问题的服务迁移到 1.21 的 EKS 集群，直接切线上流量测试。
+  - 复现了问题，通过 JFR + pods 数量监控，确认到是服务链路上的个别服务频繁扩缩容导致的，这些服务比较重，对扩缩容比较敏感。
+  - 测试在 HPA 中添加 behavior 降低缩容速率，同时添加上 PodDisruptionBudget 以避免节点回收导致大量 Pod 被回收，经测试问题基本解决。
+- 遭遇 AWS EKS 托管的控制平面故障，controller-manager 挂了一整天。现象非常奇怪，又是第一次遇到，导致长时间未排查到问题。
 
 ### 2021-10/11 - 2021-10-19
 
-- 为 EKS 集群从 1.17 切量到 1.21 做准备
-- 升级结果：部分服务在新集群跑着不稳定，回滚了 Nginx 切量配置，升级失败
+- 将 EKS 集群从 1.17 升级到 1.21（新建集群切量的方式），但是遇到部分服务迁移后可用率抖动。
+  - 未定位到原因，升级失败，回滚了流量。
 
 ### 2021-09-13 - 2021-09-17
 
