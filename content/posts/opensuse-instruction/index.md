@@ -34,7 +34,7 @@ zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能
 ```shell
 # 禁用原有的官方软件源
 sudo zypper mr --disable repo-oss repo-non-oss repo-update repo-update-non-oss repo-debug
-# 添加北外镜像源，注意单引号不能省略！
+# 添加北外镜像源
 sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/oss/ bfsu-oss
 sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss/ bfsu-non-oss
 ```
