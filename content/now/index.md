@@ -16,16 +16,16 @@ draft: false
 - Istio: 熟悉 Istio 及 Envoy，了解新版本的功能
 - Kubernetes Operator
 
+生活：
+- 娱乐+运动：
+  - 轮滑：学习侧压步、倒滑后压步
+
 ### 高优先级
 
 - k8s 网络插件 - calico/cilium
   - BGP 路由协议
   - vxlan
 - Kubernetes：阅读源码，熟悉底层细节
-
-生活：
-- 娱乐+运动：
-  - 轮滑：学习侧压步、倒滑后压步
 
 ### 中优先级
 
