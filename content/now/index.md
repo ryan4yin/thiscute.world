@@ -13,8 +13,7 @@ draft: false
 
 技术：
 - rust 语言/go 语言及 web 编程
-- Istio: 熟悉 Istio 及 Envoy，了解新版本的功能
-- Kubernetes Operator
+- Istio/Envoy/APISIX-ingress-controller: 了解它们的负载均衡逻辑，考虑如何实现新实例的 warm up.
 
 生活：
 - 娱乐+运动：
@@ -28,6 +27,8 @@ draft: false
 - Kubernetes：阅读源码，熟悉底层细节
 
 ### 中优先级
+
+- Kubernetes Operator
 
 - Openresty 技术栈：
   - 阅读 Lua 程序设计
