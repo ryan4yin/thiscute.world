@@ -13,11 +13,18 @@ draft: false
 
 技术：
 - rust 语言/go 语言及 web 编程
-- Istio/Envoy/APISIX-ingress-controller: 了解它们的负载均衡逻辑，考虑如何实现新实例的 warm up.
+- Istio/Envoy/APISIX-ingress-controller:
+  - 了解它们的负载均衡逻辑
+  - 考虑如何实现新实例的 warm up
+  - 哪些因素会影响它们的负载均衡效果，如何解决？
+  - 如何调优数据面，降低 CPU 使用率及延迟
+- Service Mesh 的新进展，以及替代品
+  - Proxyless Service Mesh
+  - Node 模式的 Service Mesh
 
 生活：
 - 娱乐+运动：
-  - 轮滑：学习侧压步、倒滑后压步
+  - 轮滑：倒滑后压步
 
 ### 高优先级
 
@@ -100,6 +107,13 @@ draft: false
 目前想做的：
 - Envoy、Cilium
 - 搞一搞 rust 编程，go web 编程
+
+### 2021-12-12
+
+- 练习二个半小时，学会了压步转弯技术
+- 无聊，但是又啥都不想干，耽于网络小说...
+- 感觉有点现充了，感觉需要找个更明确的、能给人动力的目标
+  - 做个三年的职业规划以及生活规划？
 
 ### 2021-11-21
 
