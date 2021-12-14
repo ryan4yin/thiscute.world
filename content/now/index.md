@@ -21,6 +21,7 @@ draft: false
 - Service Mesh 的新进展，以及替代品
   - Proxyless Service Mesh
   - Node 模式的 Service Mesh
+  - 基于 eBPF 的 Sidecarless Service Mesh
 
 生活：
 - 娱乐+运动：
