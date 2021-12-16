@@ -37,12 +37,17 @@ categories: ["随笔", "技术"]
 ## 今年在技术方面的感受
 
 - Istio 服务网格：体会到了它有点重，而且它的发展跟我们的需求不一定匹配
+  - Sidecar 模式的成本太高了，在未调优的情况下，它会给服务带来 1/3 到 1/4 的成本提升，以及延迟上升
   - 比如切量权重固定为 100，不支持 pod 的 warm up，而它重点发展的虚拟机支持我们却完全不需要
   - 一直在思考是持续往 Istio 投入，还是换其他的方案
-- 成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处，也发现了跨区成本的潜在优化空间。
+- 直接使用中心化网关替代 Istio Service Mesh 的方法不可取，会带来大量的跨区流量成本
+  - 这其实是在模仿 Per-Node Proxy 的 Service Mesh 模式，但是目前几乎没有采用这个模式的 Service Mesh.
+- 感觉 Cilium 推出的基于 eBPF 的 Service Mesh 才是未来的趋势（使用高级特性时会退化成 Per Node Proxy 模式），成本、延迟方面都吊打 Sidecar 模式的其他服务网格.
 - K8s 集群管理这方面，发现了 K8s 集群升级的诸多不便
 - WASM 与 Rust 蓬勃发展，未来可期
-
+- 成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处
+- 跨区流量成本有很大的潜在优化空间
+  1. Topology Aware Load-Balancing
 
 ## 明年的展望
 
@@ -52,23 +57,25 @@ categories: ["随笔", "技术"]
 1. 熟练掌握 Go/Rust 语言，并用于至少一个项目中
 2. 深入学习如下技术
    1. Kubernetes 源码
-   2. 服务网格 Istio
-   3. 代理工具 Envoy/APISIX
-   4. 网络插件 Cilium
-3. 探索新技术与可能性（可随意探索）
-   1. AWS K8s 成本与服务稳定性优化
-      1. Topology Aware Load-Balancing - 节约跨可用区/跨域的流量成本
-      2. 实例类型优化：使用更合适的实例类型、CPU 架构
-      3. 推广 GRPC 协议
-   1. 打通本地开发环境与云上的运行环境：
-      1. [nocalhost](https://github.com/nocalhost/nocalhost)
-      2. [che](https://github.com/eclipse/che)
-   1. 基于 Kubernetes 的服务平台，应该如何抽象？
+3. 网络技术
+   1. 服务网格 Istio
+   2. 代理工具 Envoy/APISIX
+   3. 网络插件 Cilium + eBPF
+4. AWS K8s 成本与服务稳定性优化
+   4. Topology Aware Load-Balancing - 节约跨可用区/跨域的流量成本
+   5. 实例类型优化：使用更合适的实例类型、CPU 架构（ARM/adm64）
+   6. 推广 GRPC 协议
+5. 打通本地开发环境与云上的运行环境：
+   1. [nocalhost](https://github.com/nocalhost/nocalhost)
+   2. [che](https://github.com/eclipse/che)
+6. 探索新技术与可能性（优先级低）
+   1. 基于 Kubernetes 的服务平台，未来的发展方向
       1. kubevela
-   1. Serverless 平台的进展
+      2. buildpack
+      3. 是否应该推进 gitops
+      4. openkruise
+   2. Serverless 平台的进展
       1. Knative
-      2. KEDA
-      3. Dapr
-      4. OpenFunction
+      2. OpenFunction
 
 
