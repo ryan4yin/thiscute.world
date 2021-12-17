@@ -301,7 +301,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <li>使用 buildkit 构建镜像：https://github.com/argoproj/argo-workflows/blob/master/examples/buildkit-template.yaml
 <ol>
 <li>buildkit 支持缓存，可以在这个 example 的基础上自定义参数</li>
-<li>注意使用 PVC 来跨 step 共享存储空间这种手段</li>
+<li>注意使用 PVC 来跨 step 共享存储空间这种手段，速度会比通过 artifacts 高很多。</li>
 </ol>
 </li>
 </ol>
