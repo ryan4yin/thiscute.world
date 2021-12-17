@@ -2890,8 +2890,11 @@ curl -v -H <span class="s1">&#39;Host: baidu.com&#39;</span> localhost:8080
 <p>使用对象存储存储 Artifact，最大的好处就是可以在 Pod 之间随意传数据，Pod 可以完全分布式地运行在 Kubernetes 集群的任何节点上。</p>
 <p>另外也可以考虑借助 Artifact 仓库实现跨流水线的缓存复用（未测试），提升构建速度。</p>
 <h3 id="9-容器镜像的构建">9. 容器镜像的构建</h3>
-<p>借助 Kaniko 等容器镜像构建工具，可以实现容器镜像的分布式构建。</p>
-<p>Kaniko 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。</p>
+<p>借助 Buildkit 等容器镜像构建工具，可以实现容器镜像的分布式构建。</p>
+<p>Buildkit 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。</p>
+<blockquote>
+<p>不建议使用 Google 的 Kaniko，它对缓存复用的支持不咋地，社区也不活跃。</p>
+</blockquote>
 <h3 id="10-客户端sdk">10. 客户端/SDK</h3>
 <p>Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。</p>
 <p>如下项目值得试用：</p>
@@ -3110,218 +3113,14 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><h2 id="三使用-argo-workflows-做-ci-工具">三、使用 Argo Workflows 做 CI 工具</h2>
 <p>官方的 Reference 还算详细，也有提供非常多的 examples 供我们参考，这里提供我们几个常用的 workflow 定义。</p>
-<p>使用 Kaniko 构建容器镜像:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># USAGE:</span><span class="w">
-</span><span class="w"></span><span class="c">#</span><span class="w">
-</span><span class="w"></span><span class="c"># push 镜像需要一个 config.json, 这个 json 需要被挂载到 `kaniko/.docker/config.json`.</span><span class="w">
-</span><span class="w"></span><span class="c"># 为此，你首先需要构建 config.json 文件，并使用它创建一个 kubernetes secret:</span><span class="w">
-</span><span class="w"></span><span class="c">#</span><span class="w">
-</span><span class="w"></span><span class="c">#    export DOCKER_REGISTRY=&#34;registry.svc.local&#34;</span><span class="w">
-</span><span class="w"></span><span class="c">#    export DOCKER_USERNAME=&lt;username&gt;</span><span class="w">
-</span><span class="w"></span><span class="c">#    export DOCKER_TOKEN=&#39;&lt;password&gt;&#39;   # 对于 harbor 仓库而言，token 就是账号的 password.</span><span class="w">
-</span><span class="w"></span><span class="c">#    kubectl create secret generic docker-config --from-literal=&#34;config.json={\&#34;auths\&#34;: {\&#34;$DOCKER_REGISTRY\&#34;: {\&#34;auth\&#34;: \&#34;$(echo -n $DOCKER_USERNAME:$DOCKER_TOKEN|base64)\&#34;}}}&#34;</span><span class="w">
-</span><span class="w"></span><span class="c">#</span><span class="w">
-</span><span class="w"></span><span class="c"># clone git 仓库也需要 git credentails，这可以通过如下命令创建：</span><span class="w">
-</span><span class="w"></span><span class="c"># </span><span class="w">
-</span><span class="w"></span><span class="c">#    kubectl create secret generic private-git-creds --from-literal=username=&lt;username&gt; --from-file=ssh-private-key=&lt;filename&gt;</span><span class="w">
-</span><span class="w"></span><span class="c"># </span><span class="w">
-</span><span class="w"></span><span class="c"># REFERENCES:</span><span class="w">
-</span><span class="w"></span><span class="c">#</span><span class="w">
-</span><span class="w"></span><span class="c"># * https://github.com/argoproj/argo/blob/master/examples/buildkit-template.yaml</span><span class="w">
-</span><span class="w"></span><span class="c">#</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">WorkflowTemplate</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">arguments</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">repo </span><span class="w"> </span><span class="c"># 源码仓库</span><span class="w">
-</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">git@gitlab.svc.local:ryan4yin/my-app.git</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">branch</span><span class="w">
-</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">main</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">context-path</span><span class="w">
-</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">.</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dockerfile</span><span class="w">
-</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">Dockerfile</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">image </span><span class="w"> </span><span class="c"># 构建出的镜像名称</span><span class="w">
-</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">registry.svc.local/ryan4yin/my-app:latest</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cache-image</span><span class="w">
-</span><span class="w">        </span><span class="c"># 注意，cache-image 不能带 tag! cache 是直接通过 hash 值来索引的！</span><span class="w">
-</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">registry.svc.local/build-cache/my-app</span><span class="w">
-</span><span class="w">  </span><span class="nt">entrypoint</span><span class="p">:</span><span class="w"> </span><span class="l">main</span><span class="w">
-</span><span class="w">  </span><span class="nt">templates</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">main</span><span class="w">
-</span><span class="w">      </span><span class="nt">steps</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- - <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
-</span><span class="w">          </span><span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
-</span><span class="w">          </span><span class="nt">arguments</span><span class="p">:</span><span class="w">
-</span><span class="w">            </span><span class="nt">artifacts</span><span class="p">:</span><span class="w">
-</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">git-repo</span><span class="w">
-</span><span class="w">                </span><span class="nt">git</span><span class="p">:</span><span class="w">
-</span><span class="w">                  </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.repo}}&#34;</span><span class="w">
-</span><span class="w">                  </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.branch}}&#34;</span><span class="w">
-</span><span class="w">                  </span><span class="nt">insecureIgnoreHostKey</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">                  </span><span class="nt">usernameSecret</span><span class="p">:</span><span class="w">
-</span><span class="w">                    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">private-git-creds</span><span class="w">
-</span><span class="w">                    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">username</span><span class="w">
-</span><span class="w">                  </span><span class="nt">sshPrivateKeySecret</span><span class="p">:</span><span class="w">
-</span><span class="w">                    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">private-git-creds</span><span class="w">
-</span><span class="w">                    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">ssh-private-key</span><span class="w">
-</span><span class="w">            </span><span class="nt">parameters</span><span class="p">:</span><span class="w">
-</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">context-path</span><span class="w">
-</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.context-path}}&#34;</span><span class="w">
-</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dockerfile</span><span class="w">
-</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.dockerfile}}&#34;</span><span class="w">
-</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">image</span><span class="w">
-</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.image}}&#34;</span><span class="w">
-</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cache-image</span><span class="w">
-</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{workflow.parameters.cache-image}}&#34;</span><span class="w">
-</span><span class="w">    </span><span class="c"># build-image 作为一个通用的 template，不应该直接去引用 workflow.xxx 中的 parameters/artifacts</span><span class="w">
-</span><span class="w">    </span><span class="c"># 这样做的好处是复用性强，这个 template 可以被其他 workflow 引用。</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">build-image</span><span class="w">
-</span><span class="w">      </span><span class="nt">inputs</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">artifacts</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">git-repo</span><span class="w">
-</span><span class="w">        </span><span class="nt">parameters</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">context-path</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dockerfile</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">image</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cache-image</span><span class="w">
-</span><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">docker-config</span><span class="w">
-</span><span class="w">          </span><span class="nt">secret</span><span class="p">:</span><span class="w">
-</span><span class="w">            </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">docker-config</span><span class="w">
-</span><span class="w">      </span><span class="nt">container</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gcr.io/kaniko-project/executor:v1.3.0</span><span class="w">
-</span><span class="w">        </span><span class="c"># 挂载 docker credential</span><span class="w">
-</span><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">docker-config</span><span class="w">
-</span><span class="w">            </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/kaniko/.docker/</span><span class="w">
-</span><span class="w">        </span><span class="c"># 以 context 为工作目录</span><span class="w">
-</span><span class="w">        </span><span class="nt">workingDir</span><span class="p">:</span><span class="w"> </span><span class="l">/work/{{inputs.parameters.context-path}}</span><span class="w">
-</span><span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- --<span class="l">context=.</span><span class="w">
-</span><span class="w">          </span>- --<span class="l">dockerfile={{inputs.parameters.dockerfile}}</span><span class="w">
-</span><span class="w">          </span><span class="c"># destination 可以重复多次，表示推送多次</span><span class="w">
-</span><span class="w">          </span>- --<span class="l">destination={{inputs.parameters.image}}</span><span class="w">
-</span><span class="w">          </span><span class="c"># 私有镜像仓库，可以考虑不验证 tls 证书（有安全风险）</span><span class="w">
-</span><span class="w">          </span>- --<span class="l">skip-tls-verify</span><span class="w">
-</span><span class="w">          </span><span class="c"># - --skip-tls-verify-pull</span><span class="w">
-</span><span class="w">          </span><span class="c"># - --registry-mirror=&lt;xxx&gt;.mirror.aliyuncs.com</span><span class="w">
-</span><span class="w">          </span>- --<span class="l">reproducible</span><span class="w"> </span><span class="c">#  Strip timestamps out of the image to make it reproducible</span><span class="w">
-</span><span class="w">          </span><span class="c"># 使用镜像仓库做远程缓存仓库</span><span class="w">
-</span><span class="w">          </span>- --<span class="l">cache=true</span><span class="w">
-</span><span class="w">          </span>- --<span class="l">cache-repo={{inputs.parameters.cache-image}}</span><span class="w">
-</span></code></pre></td></tr></table>
-</div>
-</div><h2 id="四常见问题">四、常见问题</h2>
+<ol>
+<li>使用 buildkit 构建镜像：https://github.com/argoproj/argo-workflows/blob/master/examples/buildkit-template.yaml
+<ol>
+<li>buildkit 支持缓存，可以在这个 example 的基础上自定义参数</li>
+</ol>
+</li>
+</ol>
+<h2 id="四常见问题">四、常见问题</h2>
 <h3 id="1-workflow-默认使用-root-账号">1. workflow 默认使用 root 账号？</h3>
 <p>workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 root 账号，而且要修改文件，就很可能遇到 Permission Denined 的问题。</p>
 <p>解决方法：通过 Pod Security Context 手动设定容器的 user/group:</p>
