@@ -13,15 +13,11 @@ draft: false
 
 技术：
 - rust 语言/go 语言及 web 编程
-- Istio/Envoy/APISIX-ingress-controller:
-  - 了解它们的负载均衡逻辑
+- Istio/Envoy + Cilium Service Mesh:
+  - 了解它们的负载均衡逻辑以及优缺点
+    - 哪些因素会影响它们的负载均衡效果，如何解决？
   - 考虑如何实现新实例的 warm up
-  - 哪些因素会影响它们的负载均衡效果，如何解决？
   - 如何调优数据面，降低 CPU 使用率及延迟
-- Service Mesh 的新进展，以及替代品
-  - Proxyless Service Mesh
-  - Node 模式的 Service Mesh
-  - 基于 eBPF 的 Sidecarless Service Mesh
 
 生活：
 - 娱乐+运动：
@@ -29,19 +25,19 @@ draft: false
 
 ### 高优先级
 
-- k8s 网络插件 - calico/cilium
+- k8s 网络插件 - Cilium
+  - eBPF
+- 深入理解计算机网络：数据包的构造、 raw socket，Linux TCP/IP 协议栈
   - BGP 路由协议
   - vxlan
 - Kubernetes：阅读源码，熟悉底层细节
 
+- linux 性能测试、优化及相关工具
+
+
 ### 中优先级
 
 - Kubernetes Operator
-
-- Openresty 技术栈：
-  - 阅读 Lua 程序设计
-  - 阅读 APISIX 源码 + Openresty
-  - 深入学习 Nginx 及 epoll
 
 - 容器底层原理
   - 容器镜像的文件系统：overlayfs
@@ -60,17 +56,15 @@ draft: false
 
 ### 低优先级
 
-- linux 性能测试、优化及相关工具
-  - eBPF
+- Openresty 技术栈：（暂时感觉兴趣不大）
+  - 阅读 Lua 程序设计
+  - 阅读 APISIX 源码 + Openresty
+  - 深入学习 Nginx 及 epoll
 
-- 深入理解计算机网络：数据包的构造、 raw socket，Linux TCP/IP 协议栈
-
-- MIT 6.824：《数据密集型应用系统设计》raft
-
-- redis 底层
-- mysql/postgresql 底层
-
-- 算法与数据结构：这个就在学 Linux/Redis/SQL 的过程中穿插着学吧。
+- [进阶]数据库、数据结构与算法
+  - MIT 6.824：《数据密集型应用系统设计》raft
+  - redis 底层
+  - mysql/postgresql 底层
 
 - 英语词汇量
 - 学习简单的 Parser 原理：《编程语言实现模式》
@@ -82,8 +76,7 @@ draft: false
 - 信号与系统、数字信号处理、音视频处理
 - 机器学习、深度学习
 - 《声学基础》、《理论声学》、《空间声学》：虽然大学学的一塌糊涂，现在居然又有些兴趣想学来玩玩，写些声学仿真工具试试。
-- 语音合成、歌声合成
-- 高难度的研究课题
+  - 语音合成、歌声合成
   - 声学模拟：[揉搓声模拟](http://www.cs.columbia.edu/cg/crumpling/)
 
 
@@ -106,7 +99,7 @@ draft: false
 ### now
 
 目前想做的：
-- Envoy、Cilium
+- Istio/Envoy、Cilium
 - 搞一搞 rust 编程，go web 编程
 
 ### 2021-12-12
@@ -126,6 +119,12 @@ draft: false
   - 复现了问题，通过 JFR + pods 数量监控，确认到是服务链路上的个别服务频繁扩缩容导致的，这些服务比较重，对扩缩容比较敏感。
   - 测试在 HPA 中添加 behavior 降低缩容速率，同时添加上 PodDisruptionBudget 以避免节点回收导致大量 Pod 被回收，经测试问题基本解决。
 - 遭遇 AWS EKS 托管的控制平面故障，controller-manager 挂了一整天。现象非常奇怪，又是第一次遇到，导致长时间未排查到问题。
+  - 确认问题来自 HPA behavior 的 Bug
+    1. 储存于 etcd 中的 object 仅会有一个版本，透过 apiserver 读取时会转换成请求的 autoscaling API 版本。
+    2. autoscaling/v2beta2 scaleUp 及 scaleDown 对象不能为 null，并在[其 Kubernetse 代码](https://github.com/kubernetes/kubernetes/blob/6ac2d8edc8606ab387924b8b865b4a69630080e0/pkg/apis/autoscaling/v2/defaults.go#L104)可以查看到相应的检查机制。
+    3. 当使用 autoscaling/v1 时，v2beta2 版本中的相关对象字段将作为 annotation 保留，apiserver 不会检查 ScaleUp/ScaleDown 的 annotation是否为 non-null，而导致 kube-controller-manager panic 问题。
+    4. v1 和 v2beta2 中有两个 API 版本的 HPA 资源。请注意，我们可以使用 v1 或 v2beta2 创建一个 HPA 对象，然后使用 v1 或 v2beta2 读取、更新或删除该对象。 etcd 中存储的对象只有一个版本，每当您使用 v1 或 v2beta 获取 HPA 对象时，apiserver 从 etcd 读取它，然后将其转换为您请求的版本。在使用 kubectl 时，客户端将默认使用 v1，因此我们必须明确请求 v2beta2 才能使用这些功能。
+    5. 如果在更新 v1 版本的 HPA 时（kubectl 默认用 v1），手动修改了 v2beta2 功能相关的 annotation 将 scaleUp/scaleDown 设为 null，会导致 controller-manager 挂掉.
 
 
 ### 2021-10-23
@@ -151,8 +150,6 @@ draft: false
   - 输出 EKS 集群原地升级的测试方案，以及生产环境的 EKS 集群升级方案
 - 学习使用 kubeadm+containerd 部署 k8s 测试集群
   - 涉及到的组件：Kuberntes 控制面、网络插件 Cilium、kube-proxy、coredns、containerd
-
----
 
 ### 2021-08-31 - 2021-09-01
 
