@@ -130,10 +130,11 @@ Argo 支持接入对象存储，做全局的 Artifact 仓库，本地可以使�
 
 ### 9. 容器镜像的构建
 
-借助 Kaniko 等容器镜像构建工具，可以实现容器镜像的分布式构建。
+借助 Buildkit 等容器镜像构建工具，可以实现容器镜像的分布式构建。
 
-Kaniko 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。
+Buildkit 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。
 
+>不建议使用 Google 的 Kaniko，它对缓存复用的支持不咋地，社区也不活跃。
 
 ### 10. 客户端/SDK
 
@@ -293,112 +294,10 @@ data:
 
 官方的 Reference 还算详细，也有提供非常多的 examples 供我们参考，这里提供我们几个常用的 workflow 定义。
 
-使用 Kaniko 构建容器镜像:
+1. 使用 buildkit 构建镜像：https://github.com/argoproj/argo-workflows/blob/master/examples/buildkit-template.yaml
+   1. buildkit 支持缓存，可以在这个 example 的基础上自定义参数
+   2. 注意使用 PVC 来跨 step 共享存储空间这种手段，速度会比通过 artifacts 高很多。
 
-```yaml
-# USAGE:
-#
-# push 镜像需要一个 config.json, 这个 json 需要被挂载到 `kaniko/.docker/config.json`.
-# 为此，你首先需要构建 config.json 文件，并使用它创建一个 kubernetes secret:
-#
-#    export DOCKER_REGISTRY="registry.svc.local"
-#    export DOCKER_USERNAME=<username>
-#    export DOCKER_TOKEN='<password>'   # 对于 harbor 仓库而言，token 就是账号的 password.
-#    kubectl create secret generic docker-config --from-literal="config.json={\"auths\": {\"$DOCKER_REGISTRY\": {\"auth\": \"$(echo -n $DOCKER_USERNAME:$DOCKER_TOKEN|base64)\"}}}"
-#
-# clone git 仓库也需要 git credentails，这可以通过如下命令创建：
-# 
-#    kubectl create secret generic private-git-creds --from-literal=username=<username> --from-file=ssh-private-key=<filename>
-# 
-# REFERENCES:
-#
-# * https://github.com/argoproj/argo/blob/master/examples/buildkit-template.yaml
-#
-apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
-metadata:
-  name: build-image
-spec:
-  arguments:
-    parameters:
-      - name: repo  # 源码仓库
-        value: git@gitlab.svc.local:ryan4yin/my-app.git
-      - name: branch
-        value: main
-      - name: context-path
-        value: .
-      - name: dockerfile
-        value: Dockerfile
-      - name: image  # 构建出的镜像名称
-        value: registry.svc.local/ryan4yin/my-app:latest
-      - name: cache-image
-        # 注意，cache-image 不能带 tag! cache 是直接通过 hash 值来索引的！
-        value: registry.svc.local/build-cache/my-app
-  entrypoint: main
-  templates:
-    - name: main
-      steps:
-      - - name: build-image
-          template: build-image
-          arguments:
-            artifacts:
-              - name: git-repo
-                git:
-                  repo: "{{workflow.parameters.repo}}"
-                  revision: "{{workflow.parameters.branch}}"
-                  insecureIgnoreHostKey: true
-                  usernameSecret:
-                    name: private-git-creds
-                    key: username
-                  sshPrivateKeySecret:
-                    name: private-git-creds
-                    key: ssh-private-key
-            parameters:
-              - name: context-path
-                value: "{{workflow.parameters.context-path}}"
-              - name: dockerfile
-                value: "{{workflow.parameters.dockerfile}}"
-              - name: image
-                value: "{{workflow.parameters.image}}"
-              - name: cache-image
-                value: "{{workflow.parameters.cache-image}}"
-    # build-image 作为一个通用的 template，不应该直接去引用 workflow.xxx 中的 parameters/artifacts
-    # 这样做的好处是复用性强，这个 template 可以被其他 workflow 引用。
-    - name: build-image
-      inputs:
-        artifacts:
-          - name: git-repo
-        parameters:
-          - name: context-path
-          - name: dockerfile
-          - name: image
-          - name: cache-image
-      volumes:
-        - name: docker-config
-          secret:
-            secretName: docker-config
-      container:
-        image: gcr.io/kaniko-project/executor:v1.3.0
-        # 挂载 docker credential
-        volumeMounts:
-          - name: docker-config
-            mountPath: /kaniko/.docker/
-        # 以 context 为工作目录
-        workingDir: /work/{{inputs.parameters.context-path}}
-        args:
-          - --context=.
-          - --dockerfile={{inputs.parameters.dockerfile}}
-          # destination 可以重复多次，表示推送多次
-          - --destination={{inputs.parameters.image}}
-          # 私有镜像仓库，可以考虑不验证 tls 证书（有安全风险）
-          - --skip-tls-verify
-          # - --skip-tls-verify-pull
-          # - --registry-mirror=<xxx>.mirror.aliyuncs.com
-          - --reproducible #  Strip timestamps out of the image to make it reproducible
-          # 使用镜像仓库做远程缓存仓库
-          - --cache=true
-          - --cache-repo={{inputs.parameters.cache-image}}
-```
 
 ## 四、常见问题
 
