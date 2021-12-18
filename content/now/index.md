@@ -17,6 +17,7 @@ draft: false
   - 了解它们的负载均衡逻辑以及优缺点
     - 哪些因素会影响它们的负载均衡效果，如何解决？
   - 考虑如何实现新实例的 warm up
+  - Zone Aware Load Balancing
   - 如何调优数据面，降低 CPU 使用率及延迟
 
 生活：
