@@ -16,7 +16,7 @@ categories: ["随笔", "技术"]
 一晃一年又是过去了，大局上，今年我较好地实现了年初对自己的期许：「**拆破玉笼飞彩凤，顿开金锁走蛟龙。**」
 
 从 W 公司离职后，我非常幸运地进了现在的公司，在融入新公司的过程中也是五味杂陈。
-不过总体结果我自己还是挺满意的，目前已经步入正轨。
+不过总体结果我自己还是挺满意的，目前工作已经步入正轨，也在新公司发现了非常多的机会。
 
 ## 生活
 
@@ -30,7 +30,7 @@ categories: ["随笔", "技术"]
 - 接触并且熟悉了新公司的 AWS 线上环境，负责基于 K8s 的服务管理平台的开发及运维
   - 迭代这个服务管理平台时，用 Python 写了几个服务
 - 参与 AWS 成本的分析与管控，有了一些不错的成果
-- 学会了使用 nginx，业余学习了下 Linux 网络接口、Iptables、容器网络
+- 学会了使用 Nginx，业余学习了下 Linux 网络接口、Iptables、容器网络
 - 简单入门了 Go 以及 Rust，但是没怎么用上，又忘差不多了...
 
 
@@ -47,7 +47,8 @@ categories: ["随笔", "技术"]
 - WASM 与 Rust 蓬勃发展，未来可期
 - 成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处
 - 跨区流量成本有很大的潜在优化空间
-  1. Topology Aware Load-Balancing
+  1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
+  2. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
 
 ## 明年的展望
 
