@@ -13,7 +13,9 @@ categories: ["随笔", "技术"]
 
 ## 闲言碎语
 
-一晃一年又是过去了，大局上，今年我较好地实现了年初对自己的期许：「**拆破玉笼飞彩凤，顿开金锁走蛟龙。**」
+一晃一年又是过去了，虽然仍然是菜鸡一只，但是宏观上，今年我确实实现了年初的期许：
+
+>**拆破玉笼飞彩凤，顿开金锁走蛟龙。**
 
 从 W 公司离职后，我非常幸运地进了现在的公司，在融入新公司的过程中也是五味杂陈。
 不过总体结果我自己还是挺满意的，目前工作已经步入正轨，也在新公司发现了非常多的机会。
@@ -23,6 +25,19 @@ categories: ["随笔", "技术"]
 - 加入了我司的冲浪小分队，第一次冲浪、海边烧烤
 - 定期团建，跟 SRE 小伙伴公款吃喝，今年下馆子次数估计是我去年的七八倍。
 - 又买了双轮滑鞋，学会了倒滑、压步转向，复习了大学时学过的若干基础技巧。
+
+## 读书
+
+- 年初辞职后游山玩水，心思稍微安定了些，看了大半本《走出荒野》。
+- 6 月份社区组织打新冠疫苗时，在等候室看了本《青春驿站——深圳打工妹写真》，讲述八九十年代打工妹的生活。很真实，感情很细腻。
+- 年末二爷爷去世，参加完葬礼后，心态有些变化，看完了大一时买下的《月宫 Moon Palace》，讲述主角的悲剧人生。
+- 其余大部分业余时间，无聊，又不想学点东西，也不想运动，于是看了非常多的网络小说打发时间。
+
+## 音乐
+
+年初辞职后，练了一段时间的竹笛跟蓝调口琴，但后来找到工作后就基本沉寂了。
+
+总的来说还是原地踏步吧。
 
 ## 技术
 
@@ -47,13 +62,11 @@ categories: ["随笔", "技术"]
 - WASM 与 Rust 蓬勃发展，未来可期
 - 成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处
 - 跨区流量成本有很大的潜在优化空间
-  1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
-  2. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
 
 ## 明年的展望
 
 我看了下 2020 年总结中写的「展望」，大概只实现了 20% 不到。
-今年感觉应该写得更聚焦一些，争取能实现 80%.
+今年感觉应该写得更聚焦一些，争取能实现 60%.
 
 1. 熟练掌握 Go/Rust 语言，并用于至少一个项目中
 2. 深入学习如下技术
@@ -63,12 +76,15 @@ categories: ["随笔", "技术"]
    2. 代理工具 Envoy/APISIX
    3. 网络插件 Cilium + eBPF
 4. AWS K8s 成本与服务稳定性优化
-   4. Topology Aware Load-Balancing - 节约跨可用区/跨域的流量成本
-   5. 实例类型优化：使用更合适的实例类型、CPU 架构（ARM/adm64）
-   6. 推广 GRPC 协议
+   1. 节约跨可用区/跨域的流量成本
+     1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
+     2. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
+   2. 实例类型优化：
+      1. 使用更合适的实例类型
+      2. 使用 ARM 架构机型，降本增效
+   3. 推广 GRPC 协议
 5. 打通本地开发环境与云上的运行环境：
    1. [nocalhost](https://github.com/nocalhost/nocalhost)
-   2. [che](https://github.com/eclipse/che)
 6. 探索新技术与可能性（优先级低）
    1. 基于 Kubernetes 的服务平台，未来的发展方向
       1. kubevela
