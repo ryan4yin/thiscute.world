@@ -124,8 +124,9 @@ draft: false
     1. 储存于 etcd 中的 object 仅会有一个版本，透过 apiserver 读取时会转换成请求的 autoscaling API 版本。
     2. autoscaling/v2beta2 scaleUp 及 scaleDown 对象不能为 null，并在[其 Kubernetse 代码](https://github.com/kubernetes/kubernetes/blob/6ac2d8edc8606ab387924b8b865b4a69630080e0/pkg/apis/autoscaling/v2/defaults.go#L104)可以查看到相应的检查机制。
     3. 当使用 autoscaling/v1 时，v2beta2 版本中的相关对象字段将作为 annotation 保留，apiserver 不会检查 ScaleUp/ScaleDown 的 annotation是否为 non-null，而导致 kube-controller-manager panic 问题。
-    4. v1 和 v2beta2 中有两个 API 版本的 HPA 资源。请注意，我们可以使用 v1 或 v2beta2 创建一个 HPA 对象，然后使用 v1 或 v2beta2 读取、更新或删除该对象。 etcd 中存储的对象只有一个版本，每当您使用 v1 或 v2beta 获取 HPA 对象时，apiserver 从 etcd 读取它，然后将其转换为您请求的版本。在使用 kubectl 时，客户端将默认使用 v1，因此我们必须明确请求 v2beta2 才能使用这些功能。
-    5. 如果在更新 v1 版本的 HPA 时（kubectl 默认用 v1），手动修改了 v2beta2 功能相关的 annotation 将 scaleUp/scaleDown 设为 null，会导致 controller-manager 挂掉.
+    4. 我们可以使用 v1 或 v2beta2 创建一个 HPA 对象，然后使用 v1 或 v2beta2 读取、更新或删除该对象。 etcd 中存储的对象只有一个版本，每当您使用 v1 或 v2beta2 获取 HPA 对象时，apiserver 从 etcd 读取它，然后将其转换为您请求的版本。
+    5. 在使用 kubectl 时，客户端将默认使用 v1(`kubectl get hpa`)，因此我们必须明确请求 v2beta2 才能使用这些功能(`kubectl get hpa.v2beta2.autoscaling`)
+    6. 如果在更新 v1 版本的 HPA 时（kubectl 默认用 v1），手动修改了 v2beta2 功能相关的 annotation 将 scaleUp/scaleDown 设为 null，会导致 controller-manager 挂掉.
 
 
 ### 2021-10-23
