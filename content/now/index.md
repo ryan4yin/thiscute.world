@@ -103,6 +103,10 @@ draft: false
 - Istio/Envoy、Cilium
 - 搞一搞 rust 编程，go web 编程
 
+### 2022-01-01
+
+- 了解 APISIX/Nginx/Envoy 中的各种负载均衡算法，及其适用场景、局限性。
+
 ### 2021-12-12
 
 - 练习二个半小时，学会了压步转弯技术
