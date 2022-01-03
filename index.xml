@@ -6635,6 +6635,134 @@ sudo firewall-cmd --reload
 <p>回看了下去年的总结，发现我 go/c# 都没学多少，设计模式也没动，python 还在原地踏步hhh&hellip; 去年的展望很多都没实现。</p>
 <p>不过云原生这一块倒是进步很快，总体很满意今年的成果哈哈~</p>
 <p>明年加油！</p>
+]]></description></item><item><title>2021 年 - 渐入佳境</title><link>https://ryan4yin.space/posts/2021-summary/</link><pubDate>Sat, 12 Dec 2020 23:45:00 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/2021-summary/</guid><description><![CDATA[<h2 id="闲言碎语">闲言碎语</h2>
+<p>一晃一年又是过去了。今年年初从 W 公司离职后，我非常幸运地进了现在的公司，在融入新公司的过程中也是五味杂陈。
+不过总体结果我自己还是挺满意的，目前工作已经步入正轨，也在新公司发现了非常多的机会。</p>
+<p>一些重要事情还是没怎么想通，不过毕竟风口上的猪都能飞，今年小小努力一把，大部分时间仍然随波逐流，却也渐入佳境。</p>
+<h2 id="生活">生活</h2>
+<ul>
+<li>加入了我司的冲浪小分队，第一次冲浪、海边烧烤</li>
+<li>跟两个堂弟一起穿越深圳东西冲海岸线，风景非常棒，不过路上也是又热又渴</li>
+<li>定期团建，跟 SRE 小伙伴公款吃喝，今年下馆子次数估计是我去年的七八倍</li>
+<li>又买了双轮滑鞋，学会了倒滑、压步转向，复习了大学时学过的若干基础技巧</li>
+</ul>
+<h2 id="读书">读书</h2>
+<ul>
+<li>年初辞职后游山玩水，心思稍微安定了些，看了大半本《走出荒野》。</li>
+<li>6 月份社区组织打新冠疫苗时，在等候室看了本《青春驿站——深圳打工妹写真》，讲述八九十年代打工妹的生活。很真实，感情很细腻。</li>
+<li>年末二爷爷去世，参加完葬礼后，心态有些变化，看完了大一时买下的《月宫 Moon Palace》，讲述主角的悲剧人生。</li>
+<li>其余大部分业余时间，无聊，又不想学点东西，也不想运动，于是看了非常多的网络小说打发时间。</li>
+</ul>
+<h2 id="音乐">音乐</h2>
+<p>年初辞职后，练了一段时间的竹笛跟蓝调口琴，但后来找到工作后就基本沉寂了。</p>
+<p>总的来说还是原地踏步吧。</p>
+<h2 id="工作与技术">工作与技术</h2>
+<p>回看下了 2020 年的总结与展望，今年实际的进步，跟去年期望的差别很大。最初的目标大概只实现了 10%，但是接触到了许多意料之外的东西，总体还是满意的：</p>
+<ul>
+<li>熟悉了新公司的文化与工作方式，这感觉是个很大的收获，我的工作方式有了很大的改善</li>
+<li>接触并且熟悉了新公司的 AWS 线上环境
+<ul>
+<li>负责管理维护线上 Kubernetes 管理平台，第一次接触到的线上集群峰值 QPS 就有好几万。从一开始的小心翼翼，到现在也转变成了老手，这算是意义重大吧</li>
+<li>使用 python 写了几个 Kubernetes 管理平台的服务，这也是我第一次写线上服务，很有些成就感</li>
+<li>参与 AWS 成本的分析与管控，有了一些不错的成果</li>
+<li>学会了 Nginx 的简单使用，刚好够用于维护公司先有的 Nginx 代理配置。</li>
+</ul>
+</li>
+<li>随便写了几个 go 的 demo，基本没啥进步</li>
+<li>学了一个星期的 rust 语言，快速看完了 the book，用 rust 重写了个 video2chars</li>
+<li>学习了 Linux 容器的底层原理：cgroups/namespace 技术，并且用 go/rust 实现了个 demo</li>
+<li>学习了 Linux 的各种网络接口、Iptables</li>
+<li>熟悉了 PromQL/Grafana，现在也能拷贝些 PromQL 查各种数据了</li>
+</ul>
+<p>如果要给自己打分的话，那就是「良好」吧。因为并没有很强的进取心，所以出来的结果也并不能称之为「优秀」。</p>
+<h2 id="今年在技术方面的感受">今年在技术方面的感受</h2>
+<ul>
+<li>Istio 服务网格：体会到了它有点重，而且它的发展跟我们的需求不一定匹配
+<ul>
+<li>Sidecar 模式的成本太高了，在未调优的情况下，它会给服务带来 1/3 到 1/4 的成本提升，以及延迟上升</li>
+<li>比如切量权重固定为 100，不支持 pod 的 warm up，而它重点发展的虚拟机支持我们却完全不需要</li>
+<li>一直在思考是持续往 Istio 投入，还是换其他的方案</li>
+</ul>
+</li>
+<li>服务网格到底该做成什么样子，我还并不很确定
+<ul>
+<li>Cilium 推出的基于 eBPF 的 Service Mesh 是一个新趋势（它使用高级特性时会退化成 Per Node Proxy 模式），成本、延迟方面都吊打 Sidecar 模式的其他服务网格，是今年服务网格领域的大新闻。</li>
+<li>我们曾尝试使用中心化网关来替代 Sidecar 以降低成本。但是跨区流量成本、HTTP/GRPC 多协议共存，这些都是挑战。而且这也并不是社区的最佳实践，现在我觉得维持 Sidecar 其实反而能提升资源利用率，我们的集群资源利用率目前很低。如果能把控好，这部分成本或许是可以接受的。</li>
+</ul>
+</li>
+<li>K8s 集群管理这方面，发现了 K8s 集群升级的诸多不便</li>
+<li>WASM 与 Rust 蓬勃发展，未来可期</li>
+<li>成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处</li>
+<li>跨区流量成本有很大的潜在优化空间</li>
+<li>今年各云厂商故障频发，没有<strong>跨 region 的服务迁移</strong>就会很难受，需要持续关注下 <a href="https://github.com/karmada-io/karmada" target="_blank" rel="noopener noreferrer">karmada</a> 这类多集群管理方案。
+<ul>
+<li>Google 账号系统宕机</li>
+<li>Fastly CDN 故障</li>
+<li>Facebook 故障</li>
+<li>AWS 更是各种可用区故障，12/7 的故障导致 AWS 大部分服务都崩了。因此我们 SRE 今年经常是救各种大火小火&hellip;</li>
+</ul>
+</li>
+</ul>
+<h2 id="明年的展望">明年的展望</h2>
+<p>我看了下 2020 年总结中写的「展望」，大概只实现了 20% 不到。
+今年感觉应该写得更聚焦一些，争取能实现 60%.</p>
+<ol>
+<li>熟练掌握 Go/Rust 语言，并用于至少一个项目中</li>
+<li>深入学习如下技术
+<ol>
+<li>Kubernetes 源码</li>
+</ol>
+</li>
+<li>网络技术
+<ol>
+<li>服务网格 Istio</li>
+<li>代理工具 Envoy/APISIX</li>
+<li>网络插件 Cilium + eBPF</li>
+</ol>
+</li>
+<li>AWS K8s 成本与服务稳定性优化
+<ol>
+<li>节约跨可用区/跨域的流量成本</li>
+<li>K8s 新特性：<a href="https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/" target="_blank" rel="noopener noreferrer">Topology Aware Hints</a></li>
+<li>Istio: <a href="https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/" target="_blank" rel="noopener noreferrer">Locality Load Balancing</a></li>
+<li>实例类型优化：
+<ol>
+<li>使用更合适的实例类型</li>
+<li>使用 ARM 架构机型，降本增效</li>
+</ol>
+</li>
+<li>推广 GRPC 协议</li>
+</ol>
+</li>
+<li>打通本地开发环境与云上的运行环境：
+<ol>
+<li><a href="https://github.com/nocalhost/nocalhost" target="_blank" rel="noopener noreferrer">nocalhost</a></li>
+</ol>
+</li>
+<li>探索新技术与可能性（优先级低）
+<ol>
+<li>基于 Kubernetes 的服务平台，未来的发展方向
+<ol>
+<li>kubevela</li>
+<li>buildpack</li>
+<li>是否应该推进 gitops</li>
+<li>openkruise</li>
+</ol>
+</li>
+<li>Serverless 平台的进展
+<ol>
+<li>Knative</li>
+<li>OpenFunction</li>
+</ol>
+</li>
+<li>跨集群的应用部署、容灾
+<ol>
+<li>karmada</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
 ]]></description></item><item><title>「小歌行」-景德镇文艺复兴-2020巡演-深圳</title><link>https://ryan4yin.space/posts/jingdezhen-renaissance-band-2020-shenzhen/</link><pubDate>Sat, 28 Nov 2020 11:49:00 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/jingdezhen-renaissance-band-2020-shenzhen/</guid><description><![CDATA[<h2 id="前言">前言</h2>
 <p>2020 年 11 月 28 日，我第一次参加 Live House，演出乐队是「景德镇文艺复兴」。</p>
 <p>「景德镇文艺复兴」是我很喜欢的一支后摇乐队，我喜欢上这支乐队，还得从我的昵称「於清樂」说起。</p>
@@ -8255,327 +8383,4 @@ grub2-mkconfig &gt;  /boot/grub2/grub.cfg
 <li><a href="https://github.com/Jguer/yay" target="_blank" rel="noopener noreferrer">yay - Yet another Yogurt - An AUR Helper written in Go </a></li>
 <li><a href="https://panqiincs.me/2019/06/05/after-installing-manjaro/" target="_blank" rel="noopener noreferrer">安装Manjaro之后的配置 </a></li>
 <li><a href="https://wiki.archlinux.org/index.php/Fcitx5_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener noreferrer">Arch Linux Wiki - Fcitx5</a></li>
-</ul>]]></description></item><item><title>WebSocket、HTTP/2 与 gRPC</title><link>https://ryan4yin.space/posts/websocket-http2-and-grpc/</link><pubDate>Mon, 11 Feb 2019 18:26:36 +0800</pubDate><author>作者</author><guid>https://ryan4yin.space/posts/websocket-http2-and-grpc/</guid><description><![CDATA[<h2 id="一websocket">一、WebSocket</h2>
-<p>WebSocket 是一个双向通信协议，它在握手阶段采用 HTTP/1.1 协议（暂时不支持 HTTP/2）。</p>
-<p>握手过程如下：</p>
-<ol>
-<li>首先客户端向服务端发起一个特殊的 HTTP 请求，其消息头如下：</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">GET /chat HTTP/1.1  // 请求行
-Host: server.example.com
-Upgrade: websocket  // required
-Connection: Upgrade // required
-Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ== // required，一个 16bits 编码得到的 base64 串
-Origin: http://example.com  // 用于防止未认证的跨域脚本使用浏览器 websocket api 与服务端进行通信
-Sec-WebSocket-Protocol: chat, superchat  // optional, 子协议协商字段
-Sec-WebSocket-Version: 13
-</code></pre></td></tr></table>
-</div>
-</div><ol start="2">
-<li>如果服务端支持该版本的 WebSocket，会返回 101 响应，响应标头如下：</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">HTTP/1.1 101 Switching Protocols  // 状态行
-Upgrade: websocket   // required
-Connection: Upgrade  // required
-Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo= // required，加密后的 Sec-WebSocket-Key
-Sec-WebSocket-Protocol: chat // 表明选择的子协议
-</code></pre></td></tr></table>
-</div>
-</div><p>握手完成后，接下来的 TCP 数据包就都是 WebSocket 协议的帧了。</p>
-<p>可以看到，这里的握手不是 TCP 的握手，而是在 TCP 连接内部，从 HTTP/1.1 upgrade 到 WebSocket 的握手。</p>
-<p>WebSocket 提供两种协议：不加密的 <code>ws://</code> 和 加密的 <code>wss://</code>. 因为是用 HTTP 握手，它和 HTTP 使用同样的端口：ws 是 80（HTTP），wss 是 443（HTTPS）</p>
-<p>在 Python 编程中，可使用 <a href="https://github.com/aaugustin/websockets" target="_blank" rel="noopener noreferrer">websockets</a> 实现的异步 WebSocket 客户端与服务端。此外 aiohttp 也提供了 WebSocket 支持。</p>
-<p><strong>Note</strong>：如果你搜索 Flask 的 WebScoket 插件，得到的第一个结果很可能是 <a href="https://github.com/miguelgrinberg/python-socketio" target="_blank" rel="noopener noreferrer">Flask-SocketIO</a>。但是 <strong>Flask-ScoektIO</strong> 使用的是它独有的 SocketIO 协议，并不是标准的 WebSocket。只是它刚好提供与 WebSocket 相同的功能而已。</p>
-<p>SocketIO 的优势在于只要 Web 端使用了 SocketIO.js，就能支持该协议。而纯 WS 协议，只有较新的浏览器才支持。对于客户端非 Web 的情况，更好的选择可能是使用 Flask-Sockets。</p>
-<h3 id="js-api">JS API</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// WebSocket API
-</span><span class="c1"></span><span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="s1">&#39;ws://websocket.example.com&#39;</span><span class="p">);</span>
-
-<span class="c1">// Show a connected message when the WebSocket is opened.
-</span><span class="c1"></span><span class="nx">socket</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;WebSocket is connected.&#39;</span><span class="p">);</span>
-<span class="p">};</span>
-
-<span class="c1">// Handle messages sent by the server.
-</span><span class="c1"></span><span class="nx">socket</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
-<span class="p">};</span>
-
-<span class="c1">// Handle any error that occurs.
-</span><span class="c1"></span><span class="nx">socket</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;WebSocket Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
-<span class="p">};</span>
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="二http2">二、HTTP/2</h2>
-<p>HTTP/2 于 2015 年标准化，主要目的是优化性能。其特性如下：</p>
-<ol>
-<li>二进制协议：HTTP/2 的消息头使用二进制格式，而非文本格式。并且使用专门设计的 HPack 算法压缩。</li>
-<li>多路复用（Multiplexing）：就是说 HTTP/2 可以重复使用同一个 TCP 连接，并且连接是多路的，多个请求或响应可以同时传输。
-<ul>
-<li>对比之下，HTTP/1.1 的长连接也能复用 TCP 连接，但是只能串行，不能“多路”。</li>
-</ul>
-</li>
-<li>服务器推送：服务端能够直接把资源推送给客户端，当客户端需要这些文件的时候，它已经在客户端了。（该推送对 Web App 是隐藏的，由浏览器处理）</li>
-<li>HTTP/2 允许取消某个正在传输的数据流（通过发送 RST_STREAM 帧），而不关闭 TCP 连接。
-<ul>
-<li>这正是二进制协议的好处之一，可以定义多种功能的数据帧。</li>
-</ul>
-</li>
-</ol>
-<p>它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 <code>from disk cache</code> 或者 <code>from memroy cache</code>.</p>
-<p>Chrome 可以通过如下方式查看请求使用的协议：
-</p>
-<blockquote>
-<p>2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知乎、bilibili、GIthub 使用了 <code>wss</code> 协议，也有很多网站使用了 SSE（格式如 <code>data:image/png;base64,&lt;base64 string&gt;</code>）
-而且很多网站都有使用 HTTP/2 + QUIC，该协议的新名称是 HTTP/3，它是基于 UDP 的 HTTP 协议。</p>
-</blockquote>
-<h3 id="sse">SSE</h3>
-<p>服务端推送事件，是通过 HTTP 长连接进行信息推送的一个功能。
-它首先由浏览器向服务端建立一个 HTTP 长连接，然后服务端不断地通过这个长连接将消息推送给浏览器。JS API 如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// create SSE connection
-</span><span class="c1"></span><span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventSource</span><span class="p">(</span><span class="s1">&#39;/dates&#39;</span><span class="p">);</span>
-
-<span class="c1">// 连接建立时，这些 API 和 WebSocket 的很相似
-</span><span class="c1"></span><span class="nx">source</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// handle open event
-</span><span class="c1"></span><span class="p">};</span>
-
-<span class="c1">// 收到消息时（它只捕获未命名 event）
-</span><span class="c1"></span><span class="nx">source</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>  <span class="c1">// 发送过来的实际数据（string）
-</span><span class="c1"></span>  <span class="kd">var</span> <span class="nx">origin</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">origin</span><span class="p">;</span>  <span class="c1">// 服务器端URL的域名部分，即协议、域名和端口。
-</span><span class="c1"></span>  <span class="kd">var</span> <span class="nx">lastEventId</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">lastEventId</span><span class="p">;</span>  <span class="c1">// 数据的编号，由服务器端发送。如果没有编号，这个属性为空。
-</span><span class="c1"></span>  <span class="c1">// handle message
-</span><span class="c1"></span><span class="p">};</span>
-
-<span class="nx">source</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// handle error event
-</span><span class="c1"></span><span class="p">};</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="具体的实现">具体的实现</h3>
-<p>在收到客户端的 SSE 请求（HTTP 协议）时，服务端返回的响应首部如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">Content-Type: text/event-stream
-Cache-Control: no-cache
-Connection: keep-alive
-</code></pre></td></tr></table>
-</div>
-</div><p>而 body 部分，SSE 定义了四种信息：</p>
-<ol>
-<li><code>data</code>：数据栏</li>
-<li><code>event</code>：自定义数据类型</li>
-<li><code>id</code> ：数据 id</li>
-<li><code>retry</code>：最大间隔时间，超时则重新连接</li>
-</ol>
-<p>body 举例说明：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">: 这种格式的消息是注释，会被忽略\n\n
-: 通常服务器每隔一段时间就会发送一个注释，防止超时 retry\n\n
-
-: 下面这个是一个单行数据\n\n
-data: some text\n\n
-
-: 下面这个是多行数据，在客户端会重组成一个 data\n\n
-data: {\n
-data: &#34;foo&#34;: &#34;bar&#34;,\n
-data: &#34;baz&#34;, 555\n
-data: }\n\n
-
-: 这是一个命名 event，只会被事件名与之相同的 listener 捕获\n\n
-event: foo\n
-data: a foo event\n\n
-
-: 未命名事件，会被 onmessage 捕获\n\n
-data: an unnamed event\n\n
-
-event: bar\n
-data: a bar event\n\n
-
-: 这个 id 对应 event.lastEventId\n\n
-id: msg1\n
-data: message\n\n
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="websockethttp2-与-sse-的比较">WebSocket、HTTP/2 与 SSE 的比较</h3>
-<ol>
-<li>
-<p>加密与否：</p>
-<ul>
-<li>WebSocket 支持明文通信 <code>ws://</code> 和加密 <code>wss://</code>，</li>
-<li>而 HTTP/2 协议虽然没有规定必须加密，但是<a href="https://en.wikipedia.org/wiki/HTTP/2#Encryption" target="_blank" rel="noopener noreferrer">主流浏览器都只支持 HTTP/2 over TLS</a>.</li>
-<li>SSE 是使用的 HTTP 协议通信，支持 http/https</li>
-</ul>
-</li>
-<li>
-<p>消息推送：</p>
-<ul>
-<li>WebSocket是全双工通道，可以双向通信。而且消息是直接推送给 Web App.</li>
-<li>SSE 只能<strong>单向串行地</strong>从服务端将数据推送给 Web App.</li>
-<li>HTTP/2 虽然也支持 Server Push，但是服务器只能主动将资源推送到客户端缓存！并不允许将数据推送到客户端里跑的 Web App 本身。服务器推送只能由浏览器处理，不会在应用程序代码中弹出服务器数据，这意味着应用程序没有 API 来获取这些事件的通知。
-<ul>
-<li>为了接近实时地将数据推送给 Web App， HTTP/2 可以结合 SSE（Server-Sent Event）使用。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<p>WebSocket 在需要接近实时双向通信的领域，很有用武之地。而 HTTP/2 + SSE 适合用于展示实时数据。</p>
-<p>另外在客户端非浏览器的情况下，使用不加密的 HTTP/2 也是可能的。</p>
-<h3 id="requests-查看-http-协议版本号">requests 查看 HTTP 协议版本号</h3>
-<p>可以通过 <code>resp.raw.version</code> 得到响应的 HTTP 版本号：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; import requests
-&gt;&gt;&gt; <span class="nv">resp</span> <span class="o">=</span> requests.get<span class="o">(</span><span class="s2">&#34;https://zhihu.com&#34;</span><span class="o">)</span>      
-&gt;&gt;&gt; resp.raw.version
-<span class="m">11</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>但是 requests 默认使用 HTTP/1.1，并且不支持 HTTP/2.（不过这也不是什么大问题，HTTP/2 只是做了性能优化，用 HTTP/1.1 也就是慢一点而已。）</p>
-<h2 id="三grpc-协议">三、gRPC 协议</h2>
-<p>gRPC 是一个远程过程调用框架，默认使用 protobuf3 进行数据的高效序列化与 service 定义，使用 HTTP/2 进行数据传输。
-这里讨论的是 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreferrer">gRPC over HTTP/2</a> 协议。</p>
-<p>目前 gRPC 主要被用在微服务通信中，但是因为其优越的性能，它也很契合游戏、loT 等需要高性能低延迟的场景。</p>
-<p>其实光从协议先进程度上讲，gRPC 基本全面超越 REST:</p>
-<ol>
-<li>使用二进制进行数据序列化，比 json 更节约流量、序列化与反序列化也更快。</li>
-<li>protobuf3 要求 api 被完全清晰的定义好，而 REST api 只能靠程序员自觉定义。</li>
-<li>gRPC 官方就支持从 api 定义生成代码，而 REST api 需要借助 openapi-codegen 等第三方工具。</li>
-<li>支持 4 种通信模式：一对一(unary)、客户端流、服务端流、双端流。更灵活</li>
-</ol>
-<p>只是目前 gRPC 对 broswer 的支持仍然不是很好，如果你需要通过浏览器访问 api，那 gRPC 可能不是你的菜。
-如果你的产品只打算面向 App 等可控的客户端，可以考虑上 gRPC。</p>
-<p>对同时需要为浏览器和 APP 提供服务应用而言，也可以考虑 APP 使用 gRPC 协议，而浏览器使用 API 网关提供的 HTTP 接口，在 API 网关上进行 HTTP - gRPC 协议转换。</p>
-<h3 id="grpc-over-http2-定义">gRPC over HTTP/2 定义</h3>
-<p>详细的定义参见官方文档 <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md" target="_blank" rel="noopener noreferrer">gRPC over HTTP/2</a>.</p>
-<p>这里是简要说明几点：</p>
-<ol>
-<li>gRPC 完全隐藏了 HTTP/2 本身的 method、headers、path 等语义，这些信息对用户而言完全不可见了。
-<ol>
-<li>请求统一使用 POST，响应状态统一为 200。只要响应是标准的 gRPC 格式，响应中的 HTTP 状态码将被完全忽略。</li>
-</ol>
-</li>
-<li>gRPC 定义了自己的 status 状态码、格式固定的 path、还有它自己的 headers。</li>
-</ol>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://www.oschina.net/translate/how-does-javascript-actually-work-part-5" target="_blank" rel="noopener noreferrer">深入探索 WebSockets 和 HTTP/2</a></li>
-<li><a href="https://www.cnblogs.com/etoah/p/5891285.html" target="_blank" rel="noopener noreferrer">HTTP/2 特性与抓包分析</a></li>
-<li><a href="http://www.cnblogs.com/goody9807/p/4257192.html" target="_blank" rel="noopener noreferrer">SSE：服务器发送事件,使用长链接进行通讯</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank" rel="noopener noreferrer">Using server-sent events - MDN</a></li>
-<li><a href="https://caniuse.com/#search=http2" target="_blank" rel="noopener noreferrer">Can I Use HTTP/2 on Browsers</a></li>
-<li><a href="https://stackoverflow.com/questions/37012486/python-3-x-how-to-get-http-version-using-requests-library" target="_blank" rel="noopener noreferrer">Python 3.x how to get http version (using requests library)</a></li>
-<li><a href="https://www.zhihu.com/question/20215561/answer/40316953" target="_blank" rel="noopener noreferrer">WebSocket 是什么原理？</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/26407649" target="_blank" rel="noopener noreferrer">原生模块打造一个简单的 WebSocket 服务器</a></li>
-<li><a href="https://cloud.google.com/blog/products/api-management/understanding-grpc-openapi-and-rest-and-when-to-use-them" target="_blank" rel="noopener noreferrer">Google Cloud - API design: Understanding gRPC, OpenAPI and REST and when to use them</a></li>
-</ul>
-]]></description></item></channel></rss>
+</ul>]]></description></item></channel></rss>
