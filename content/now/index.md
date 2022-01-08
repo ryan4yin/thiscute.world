@@ -12,33 +12,49 @@ draft: false
 ### 最高优先级
 
 技术：
-- rust 语言/go 语言及 web 编程
-- Istio/Envoy + Cilium Service Mesh:
-  - 了解它们的负载均衡逻辑以及优缺点
-    - 哪些因素会影响它们的负载均衡效果，如何解决？
-  - 考虑如何实现新实例的 warm up
-  - Zone Aware Load Balancing
-  - 如何调优数据面，降低 CPU 使用率及延迟
+- go 语言、web 编程、kubebuilder
+- 服务网格
+  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档
+  - 研究 istio 的 gRPC 支持
+  - 考虑如何通过 istio envoyfilter 实现 pod 的 warm_up/slow_start
+  - 研究 istio 的指标与 access_log（添加 host/uri 等自定义指标），以支持 HTTP host/path 级别的监控与请求分析能力。
+  - 详细研究 istio 的限流限并发能力
 
 生活：
 - 娱乐+运动：
   - 轮滑：倒滑后压步
+- 音乐：Synthesizer V, 练习键盘
+
+阅读（一二月份，就读这两本吧）：
+
+- 《人间失格》
+- 《在生命的尽头拥抱你-临终关怀医生手记》
 
 ### 高优先级
 
+- 服务网格
+  - Cilium Service Mesh - 使用 eBPF + per-node proxy 实现 的服务网格，很有前景。
+  - Zone Aware Load Balancing - 减少跨区流量
+  - 如何调优数据面，降低 CPU 使用率及延迟
+
+- 日志方案调研：grafana loki
+- 配置管理：研究如何使用 vault 实现跨集群的动态配置支持，如何落地此项能力
+
+阅读（三四月份的书单）：
+
+- 《房思琪的初恋乐园》
+- 《圆圈正义-作为自由前提的信念》
+- 《网络是怎样连接的》
+
 - k8s 网络插件 - Cilium
-  - eBPF
-- 深入理解计算机网络：数据包的构造、 raw socket，Linux TCP/IP 协议栈
+- Kubernetes：阅读源码，熟悉底层细节
+- 计算机网络：
   - BGP 路由协议
   - vxlan
-- Kubernetes：阅读源码，熟悉底层细节
-
-- linux 性能测试、优化及相关工具
-
 
 ### 中优先级
 
-- Kubernetes Operator
+- rust 语言
 
 - 容器底层原理
   - 容器镜像的文件系统：overlayfs
