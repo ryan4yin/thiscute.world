@@ -54,20 +54,24 @@
 </li>
 <li>服务网格仍然在快速发展，未来的趋势应该是 eBPF + Envoy + WASM
 <ul>
-<li>Cilium 推出的基于 eBPF 的 Service Mesh 是一个新趋势（它使用高级特性时会退化成 Per Node Proxy 模式），成本、延迟方面都吊打 Sidecar 模式的其他服务网格，是今年服务网格领域的大新闻。</li>
+<li>Cilium 推出的基于 eBPF 的 Service Mesh 是一个新趋势（它使用高级特性时会退化成 Per Node Proxy 模式），成本、延迟方面都有望吊打 Sidecar 模式的其他服务网格，是今年服务网格领域的大新闻。</li>
 <li>我们曾尝试使用中心化网关来替代 Sidecar 以降低成本。但是跨区流量成本、HTTP/gRPC 多协议共存，这些都是挑战。而且这也并不是社区的最佳实践，现在我觉得维持 Sidecar 其实反而能提升资源利用率，我们的集群资源利用率目前很低。如果能把控好，这部分成本或许是可以接受的。</li>
 </ul>
 </li>
-<li>K8s 集群的日志方面，我们目前是使用自研的基于 gelf 协议的系统，但是开源的 loki 会更好呢？
+<li>K8s 集群的日志方面，我们目前是使用自研的基于 gelf 协议的系统，但是问题挺多的
 <ul>
 <li>从提升系统的可维护性、易用性等角度来说，loki 是值得探索下的</li>
 </ul>
 </li>
-<li>K8s 集群管理方面，觉得集群的升级迭代，可以做得更自动化、更可靠。明年可以往这个方向靠拢。</li>
+<li>K8s 集群管理方面，觉得集群的升级迭代，可以做得更自动化、更可靠。明年可以在多集群管理这个方向上多探索下。</li>
 <li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/" target="_blank" rel="noopener noreferrer">Pod 服务质量</a>：对非核心服务，可以适当调低 requests 的资源量，而不是完全预留(<code>Guaranteed</code>)，以提升资源利用率。</li>
 <li>官方的 HPA 能力是不够用的，业务侧可能会需要基于 QPS/Queue 或者业务侧的其他参数来进行扩缩容，需要持续关注 <a href="https://github.com/kedacore/keda" target="_blank" rel="noopener noreferrer">KEDA</a> 这个项目。</li>
 <li>成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处</li>
-<li>跨区流量成本有很大的潜在优化空间</li>
+<li>跨区流量成本有很大的潜在优化空间
+<ul>
+<li>跨区流量成本是在两边都会收费，而且不仅涉及 Kubernetes 集群内服务间的调用，还会涉及对 RDS/ES/ElastiCache/EC2 等其他资源的调用。</li>
+</ul>
+</li>
 <li>今年各云厂商故障频发，没有<strong>跨 region 的服务迁移</strong>就会很难受，需要持续关注下 <a href="https://github.com/karmada-io/karmada" target="_blank" rel="noopener noreferrer">karmada</a> 这类多集群管理方案。
 <ul>
 <li>Google 账号系统宕机</li>
