@@ -2,10 +2,7 @@ baseURL = "https://ryan4yin.space/"
 
 # [en, zh-cn, fr, ...] 设置默认的语言
 defaultContentLanguage = "zh-cn"
-# 网站语言, 仅在这里 CN 大写
-languageCode = "zh-CN"
-# 是否包括中日韩文字
-hasCJKLanguage = true
+
 # 网站标题
 title = "Ryan4Yin's Space"
 
@@ -19,7 +16,7 @@ theme = "CodeIT"
   description = "Ryan4Yin's Space"
 
   # 网站关键词
-  keywords = ["Blog", "Ryan4yin", "部落格"]
+  keywords = ["Blog", "部落格", "博客", "Ryan4Yin", "於清樂"]
   # 网站默认主题样式 ("light", "dark", "auto")
   defaultTheme = "auto"
 
@@ -95,23 +92,23 @@ theme = "CodeIT"
   [params.home]
     # CodeIT 新增 | 0.2.0 RSS 文章数目
     rss = 20
-    # 主页个人信息
-    [params.home.profile]
-      enable = true
-      # Gravatar 邮箱，用于优先在主页显示的头像
-      # gravatarEmail = "xiaoyin_c@qq.com"
-      # 主页显示头像的 URL
-      avatarURL = "/avatar/myself.jpg"
-      # CodeIT 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
-      title = ""
-      # 主页显示的网站副标题
-      subtitle = "双手合十 闭上眼睛 心里什么也不去想 嘴角就高高扬起 笑出声来 赞美快乐~"
-      # 是否为副标题显示打字机动画
-      typeit = false
-      # 是否显示社交账号
-      social = true
-      # CodeIT 新增 | 0.2.0 免责声明 (支持 HTML 格式)
-      disclaimer = ""
+    # 主页个人信息，这个在每个语言中单独配
+    # [params.home.profile]
+    #   enable = true
+    #   # Gravatar 邮箱，用于优先在主页显示的头像
+    #   # gravatarEmail = "xiaoyin_c@qq.com"
+    #   # 主页显示头像的 URL
+    #   avatarURL = "/avatar/myself.jpg"
+    #   # CodeIT 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
+    #   title = ""
+    #   # 主页显示的网站副标题
+    #   subtitle = "双手合十 闭上眼睛 心里什么也不去想 嘴角就高高扬起 笑出声来 赞美快乐~"
+    #   # 是否为副标题显示打字机动画
+    #   typeit = false
+    #   # 是否显示社交账号
+    #   social = true
+    #   # CodeIT 新增 | 0.2.0 免责声明 (支持 HTML 格式)
+    #   disclaimer = ""
     # 主页文章列表
     [params.home.posts]
       enable = true
@@ -268,58 +265,135 @@ theme = "CodeIT"
     data = "jsdelivr.yml"
 
 
-[menu]
-  [[menu.main]]
-    identifier = "posts"
-    # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
-    pre = ""
-    # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
-    post = ""
-    name = "文章"
-    url = "/posts/"
-    # 当你将鼠标悬停在此菜单链接上时, 将显示的标题
-    title = ""
+[languages]
+  [languages.zh-cn]
     weight = 1
-  [[menu.main]]
-    identifier = "tags"
-    pre = ""
-    post = ""
-    name = "标签"
-    url = "/tags/"
-    title = ""
+    # language code, CN only here
+    languageCode = "zh-CN"
+    languageName = "Simplified Chinese"
+    # whether to include Chinese/Japanese/Korean
+    hasCJKLanguage = true
+    [languages.zh-cn.params.home.profile]
+      enable = true
+      # Gravatar 邮箱，用于优先在主页显示的头像
+      # gravatarEmail = "xiaoyin_c@qq.com"
+      # 主页显示头像的 URL
+      avatarURL = "/avatar/myself.jpg"
+      # CodeIT 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
+      title = ""
+      # 主页显示的网站副标题
+      subtitle = "双手合十 闭上眼睛 心里什么也不去想 嘴角就高高扬起 笑出声来 赞美快乐~"
+      # 是否为副标题显示打字机动画
+      typeit = false
+      # 是否显示社交账号
+      social = true
+      # CodeIT 新增 | 0.2.0 免责声明 (支持 HTML 格式)
+      disclaimer = ""
+
+    [[languages.zh-cn.menu.main]]
+      identifier = "posts"
+      pre = ""
+      post = ""
+      name = "文章"
+      url = "/posts/"
+      title = ""
+      weight = 1
+    [[languages.zh-cn.menu.main]]
+      identifier = "tags"
+      pre = ""
+      post = ""
+      name = "标签"
+      url = "/tags/"
+      title = ""
+      weight = 2
+    [[languages.zh-cn.menu.main]]
+      identifier = "categories"
+      pre = ""
+      post = ""
+      name = "分类"
+      url = "/categories/"
+      title = ""
+      weight = 3
+    [[languages.zh-cn.menu.main]]
+      identifier = "now"
+      pre = ""
+      post = ""
+      name = "此刻"
+      url = "/now/"
+      title = ""
+      weight = 4
+    [[languages.zh-cn.menu.main]]
+      identifier = "friends"
+      pre = ""
+      post = ""
+      name = "伙伴们"
+      url = "/friends/"
+      title = ""
+      weight = 5
+    [[languages.zh-cn.menu.main]]
+      identifier = "about"
+      pre = ""
+      post = ""
+      name = "关于"
+      url = "/about/"
+      title = ""
+      weight = 6
+
+  [languages.en]
     weight = 2
-  [[menu.main]]
-    identifier = "categories"
-    pre = ""
-    post = ""
-    name = "分类"
-    url = "/categories/"
-    title = ""
-    weight = 3
-  [[menu.main]]
-    identifier = "now"
-    pre = ""
-    post = ""
-    name = "此刻"
-    url = "/now/"
-    title = ""
-    weight = 4
-  [[menu.main]]
-    identifier = "friends"
-    pre = ""
-    post = ""
-    name = "伙伴们"
-    url = "/friends/"
-    title = ""
-    weight = 4
-  [[menu.main]]
-    identifier = "about"
-    pre = ""
-    post = ""
-    name = "关于"
-    url = "/about/"
-    title = ""
-    weight = 5
+    languageCode = "en"
+    languageName = "English"
+    [languages.en.params.home.profile]
+      enable = true
+      # Gravatar 邮箱，用于优先在主页显示的头像
+      # gravatarEmail = "xiaoyin_c@qq.com"
+      # 主页显示头像的 URL
+      avatarURL = "/avatar/myself.jpg"
+      # CodeIT 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
+      title = ""
+      # 主页显示的网站副标题
+      subtitle = """
+      Put hands together, close eyes, think nothing, laugh out loud, praise and be happy~
+      """
+      # 是否为副标题显示打字机动画
+      typeit = false
+      # 是否显示社交账号
+      social = true
+      # CodeIT 新增 | 0.2.0 免责声明 (支持 HTML 格式)
+      disclaimer = ""
+
+    [[languages.en.menu.main]]
+      identifier = "posts"
+      pre = ""
+      post = ""
+      name = "Posts"
+      url = "/posts/"
+      title = ""
+      weight = 1
+    [[languages.en.menu.main]]
+      identifier = "tags"
+      pre = ""
+      post = ""
+      name = "Tags"
+      url = "/tags/"
+      title = ""
+      weight = 2
+    [[languages.en.menu.main]]
+      identifier = "categories"
+      pre = ""
+      post = ""
+      name = "Categories"
+      url = "/categories/"
+      title = ""
+      weight = 3
+    [[languages.en.menu.main]]
+      identifier = "about"
+      pre = ""
+      post = ""
+      name = "About"
+      url = "/about/"
+      title = ""
+      weight = 4
 
 # Hugo 解析文档的配置
 [markup]
