@@ -17,8 +17,8 @@ lightgallery: true
   - I like listening to Post-rock, Bluegrass, Folk and Instrumental Music.
   - I'm learning Bamboo Flute, Harmonica, [Synthesizer V](https://dreamtonics.com/en/synthesizerv/) & [Reaper](https://www.reaper.fm) on and off.
 - **Other Hobbies**：
-  - Sports: I like **Roller Skating** and **Swimming**, VR games "**Beat Saber**" and "**Pistol Whip**"
-  - Tea: At present, I prefer to drink **Black Tea**, such as Dianhong - Yunnan Gold, Redsunion Keemun. 
+  - **Sports**: I like **Roller Skating** and **Swimming**, VR games "**Beat Saber**" and "**Pistol Whip**"
+  - **Tea**: At present, I prefer to drink **Black Tea**, such as Dianhong - Yunnan Gold, Redsunion Keemun. 
 - **Books**：The serious books I read most are IT technical books. In addition, I also like to read science fiction and web novels / light novels that I can't quit.
 - **Movies/TV**：What I watch most are anime, and in addition, science fiction films and tender films.
 - **Major**: I used to major in Acoustics, but I didn't learn it very well.
