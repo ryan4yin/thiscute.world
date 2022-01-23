@@ -48,6 +48,7 @@ var myFriends = [
     ["https://exploro.one", "https://avatars.githubusercontent.com/u/4038871?s=460&u=d2f1c2eea96acb15578f2e513ba5fa673aa3d250&v=4", "@探索子", "Learn by doing. <= 硬核数学博客"], 
     ["https://panqiincs.me/", "https://panqiincs.me/images/avatar.jpg", "@辛未羊", "人生如逆旅，我亦是行人 <= 是熟悉 CS 跟信号系统的高中教师哦"], 
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
+    ["https://www.foreverblog.cn/", "https://www.foreverblog.cn/favicon.ico", "@十年之约", "我们的博客十年不关闭，保持活力"], 
 ];
 
 
