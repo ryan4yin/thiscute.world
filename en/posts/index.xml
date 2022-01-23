@@ -99,44 +99,29 @@ After getting familiar with the contents and methods of the work, leader tried h
 <blockquote class="twitter-tweet"><p lang="zh" dir="ltr">新办公区真好呐～<br><br>值此良辰美景，好想整个榻榻米坐垫，坐在角落的落地窗边工作🤣<br>那种使用公共设施工（mo）作（yu）的乐趣，以及平常工位见不到的景色交相辉映，是不太好表述的奇妙体验 <a href="https://t.co/FASffzw8N3">pic.twitter.com/FASffzw8N3</a></p>&mdash; ryan4yin | 於清樂 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1482891448731070466?ref_src=twsrc%5Etfw">January 17, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
 <h2 id="a-sense-of-technology">A Sense of Technology</h2>
 <ul>
-<li>Istio 服务网格：体会到了它有点重，而且它的发展跟我们的需求不一定匹配
+<li>Istio Service Mesh: Realize that it is a bit heavy, and its development does not necessarily match our needs
 <ul>
-<li>Sidecar 模式的成本比较高，在未调优的情况下，它会给服务带来 1/3 到 1/4 的成本提升，以及延迟上升</li>
-<li>比如切量权重固定为 100（新版本将会放宽限制），不支持 pod 的 warm up（社区已经有 PR，持续观望吧）</li>
-<li>而它重点发展的虚拟机支持我们却完全不需要</li>
-<li>一直在思考是持续往 Istio 投入，还是换其他的方案</li>
+<li>The cost of the Sidecar model is relatively high, and without tuning, it will bring a 1/3 to 1/4 increase in the cost of the service, as well as a increase of delay.</li>
+<li>Thinking about whether to continue to invest in Istio or to switch to other options.</li>
 </ul>
 </li>
-<li>服务网格仍然在快速发展，未来的趋势应该是 eBPF + Envoy + WASM
+<li>Service Mesh is still evolving rapidly, and the future trend should be eBPF + Envoy + WASM.
 <ul>
-<li>Cilium 推出的基于 eBPF 的 Service Mesh 是一个新趋势（它使用高级特性时会退化成 Per Node Proxy 模式），成本、延迟方面都有望吊打 Sidecar 模式的其他服务网格，是今年服务网格领域的大新闻。</li>
-<li>我们曾尝试使用中心化网关来替代 Sidecar 以降低成本。但是跨区流量成本、HTTP/gRPC 多协议共存，这些都是挑战。而且这也并不是社区的最佳实践，现在我觉得维持 Sidecar 其实反而能提升资源利用率，我们的集群资源利用率目前很低。如果能把控好，这部分成本或许是可以接受的。</li>
+<li>Cilium&rsquo;s eBPF-based Service Mesh is a new trend (it falls back to Per-Node Proxy mode when using advanced features). It&rsquo;s expected to hit other Service Mesh of Sidecar mode in terms of cost and delay.</li>
 </ul>
 </li>
-<li>K8s 集群的日志方面，我们目前是使用自研的基于 gelf 协议的系统，但是问题挺多的
+<li>As for the log of K8s cluster, we currently use a self-developed system based on gelf protocol, but there are a lot of problems.
 <ul>
-<li>从提升系统的可维护性、易用性等角度来说，loki 是值得探索下的</li>
+<li>From the point of view of improving the maintainability and ease of use of the log system, loki is worth exploring.</li>
 </ul>
 </li>
-<li>K8s 集群管理方面，觉得集群的升级迭代，可以做得更自动化、更可靠。明年可以在多集群管理这个方向上多探索下。</li>
-<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/" target="_blank" rel="noopener noreferrer">Pod 服务质量</a>：对非核心服务，可以适当调低 requests 的资源量，而不是完全预留(<code>Guaranteed</code>)，以提升资源利用率。</li>
-<li>官方的 HPA 能力是不够用的，业务侧可能会需要基于 QPS/Queue 或者业务侧的其他参数来进行扩缩容，需要持续关注 <a href="https://github.com/kedacore/keda" target="_blank" rel="noopener noreferrer">KEDA</a> 这个项目。</li>
-<li>成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处</li>
-<li>跨区流量成本有很大的潜在优化空间
-<ul>
-<li>跨区流量成本是在两边都会收费，而且不仅涉及 Kubernetes 集群内服务间的调用，还会涉及对 RDS/ES/ElastiCache/EC2 等其他资源的调用。</li>
-</ul>
-</li>
-<li>今年各云厂商故障频发，没有<strong>跨 region 的服务迁移</strong>就会很难受，需要持续关注下 <a href="https://github.com/karmada-io/karmada" target="_blank" rel="noopener noreferrer">karmada</a> 这类多集群管理方案。
-<ul>
-<li>Google 账号系统宕机</li>
-<li>Fastly CDN 故障</li>
-<li>Facebook 故障</li>
-<li>AWS 更是各种可用区故障，12/7 的故障导致 AWS 大部分服务都崩了。因此我们 SRE 今年经常是救各种大火小火&hellip;</li>
-</ul>
-</li>
-<li>Rust/Go/WASM 蓬勃发展，未来可期。</li>
-<li>AI 落地到各个领域，影响到了我们日常使用的语音导航、歌声合成、语音合成等多个领域，当然也包括与 SRE 工作相关的场景：AIOps</li>
+<li>In terms of K8s cluster management, I think the upgrade iteration of the cluster can be done more automatically and reliably. Next year, we can explore more in the direction of multi-cluster management.</li>
+<li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/" target="_blank" rel="noopener noreferrer">Pod Service Quality</a>:
+For non-core services, the amount of requests resources can be appropriately reduced instead of fully reserved (<code>Guaranteed</code>) to improve resource utilization.</li>
+<li>The official HPA capability is not enough. Our developers needs to scale the services based on QPS/Queue or other parameters. We should continue to promote the landing of <a href="https://github.com/kedacore/keda" target="_blank" rel="noopener noreferrer">KEDA</a>.</li>
+<li>In terms of cost control, I realized the benefits of ARM architecture and AWS Spot EC2.</li>
+<li>There is a lot of potential room for optimization of cross-area traffic cost.</li>
+<li>AI has landed in various fields, affecting our daily use of voice navigation, song synthesis, speech synthesis and many other fields, including, of course, scenarios related to SRE work: AIOps</li>
 </ul>
 <h2 id="prospects-of-2022">Prospects of 2022</h2>
 <h3 id="on-the-side-of-technology">On the Side of Technology</h3>
