@@ -63,37 +63,36 @@ After all, Mobiuspace, whether it is the level of colleagues or the working atmo
 <p><figure><a class="lightgallery" href="./workstation-1.jpg" title="./workstation-1.jpg" data-thumbnail="./workstation-1.jpg" data-sub-html="<h2>My first station in Mobiuspace</h2>">
         
     </a><figcaption class="image-caption">My first station in Mobiuspace</figcaption>
-    </figure></p>
-<p>之后慢慢熟悉工作的内容与方法，leader 尽力把最匹配我兴趣的工作安排给我，帮我排疑解难，同时又给我极大的自主性，真的是棒极了。</p>
-<p>然而自主性高带来的也是更高的工作难度，遇到困难时也曾手忙脚乱、迷茫、甚至自我怀疑，很担心是不是隔天就得跑路了&hellip;（是的我抗压能力有点弱）
-但好在我终究还是能调节好心态，负起责任，一步步把工作完成。
-中间有几次工作有延误时，leader 还陪我加班，事情干完后又带我去吃大餐犒劳自己，真的超级感谢他的帮助与支持。</p>
-<p><figure><a class="lightgallery" href="./workstation-2.jpg" title="./workstation-2.jpg" data-thumbnail="./workstation-2.jpg" data-sub-html="<h2>换座位后的新工位，落地窗风景很棒</h2>">
+    </figure>
+After getting familiar with the contents and methods of the work, leader tried his best to give me the work that best matched my interests, helping me solve problems, and at the same time giving me great autonomy, which was really great.</p>
+<p>However, a high degree of autonomy also brings higher difficulty in work. I have been in a hurry, confused, and even self-doubted when I encounter difficulties. I am worried about whether I will run away the next day.</p>
+<p>But fortunately, I still have the ability to adjust my mindset, take responsibility and finish the work step by step.</p>
+<p>When there were several delays in my work, leader accompanied me to work overtime. After the work was done, he took me to a big dinner to reward myself. I really thanked him for his help and support.</p>
+<p><figure><a class="lightgallery" href="./workstation-2.jpg" title="./workstation-2.jpg" data-thumbnail="./workstation-2.jpg" data-sub-html="<h2>My new station, near the floor-to-ceiling window, the view is great.</h2>">
         
-    </a><figcaption class="image-caption">换座位后的新工位，落地窗风景很棒</figcaption>
+    </a><figcaption class="image-caption">My new station, near the floor-to-ceiling window, the view is great.</figcaption>
     </figure></p>
-<p>这样经历了几个项目的洗礼后，现在我终于能说自己是脚踏实地了，心态从「明天是不是得提桶跑路」转变成了「哇还有这个可以搞，那个 ROI 也很高，有好多有趣的事可以做啊」，我终于能说自己真正融入了大宇无限这家公司，成为了它的一员。</p>
-<p>回看下了 2020 年的总结与展望，今年实际的进步，跟去年期望的差别很大。最初的目标大概只实现了 10%，但是接触到了许多意料之外的东西，总体还是满意的：</p>
+<p>Looking back at the summary and outlook for 2020, I find that the actual progress this year is very different from what I expected last year. The initial goal was only about 10% achieved, but because I was exposed to a lot of unexpected things, I was generally satisfied:</p>
 <ul>
-<li>熟悉了新公司的文化与工作方式，这感觉是个很大的收获，我的工作方式有了很大的改善</li>
-<li>接触并且熟悉了新公司的 AWS 线上环境
+<li>It is a great gain to be familiar with the culture and working style of the new company - Mobiuspace, and my working style has been greatly improved.</li>
+<li>Contact and be familiar with Mobiuspace&rsquo;s AWS online environment
 <ul>
-<li>负责维护线上 Kubernetes 管理平台，第一次接触到的线上集群峰值 QPS 就有好几万。从一开始的小心翼翼，到现在也转变成了老手，这算是意义重大吧</li>
-<li>使用 python 写了几个 Kubernetes 管理平台的服务，这也是我第一次写线上服务，很有些成就感</li>
-<li>下半年在 AWS 成本的分析与管控上花了很多精力，也有了一些不错的成果，受益匪浅</li>
-<li>学会了 Nginx 的简单使用，刚好够用于维护公司先有的 Nginx 代理配置</li>
+<li>Responsible for maintaining the online Kubernetes management platform, the first time I came into contact with the online cluster peak QPS was tens of thousands. It is of great significance that I have changed from being careful at the beginning to becoming a veteran now.</li>
+<li>Using python to write several Kubernetes management platform services, this is also my first time to write online services, quite a sense of achievement</li>
+<li>In the second half of the year, I spent a lot of energy on the analysis and control of AWS cost, and got some good results, which benefited a lot.</li>
+<li>Learned the simple use of Nginx, just enough to maintain the company&rsquo;s pre-existing Nginx proxy configuration.</li>
 </ul>
 </li>
-<li>主导完成了「新建 K8s 集群，将服务迁移到新集群」。虽然并不是一件很难的事，但这应该算是我 2021 年最大的成就了。
+<li>Lead the completion of &ldquo;create a new K8s cluster and migrate the services to the new cluster&rdquo;. Although it is not a very difficult thing, but this should be my greatest achievement in 2021.
 <ul>
-<li>升级过程中也是遇到了各种问题，第一次升级迁移时我准备了好久，慌的不行，结果升级时部分服务还是出了问题，当时脑子真的是个懵的，跟 leader 搞到 1 点多后还是没解决，回退到了旧集群，升级失败。之后通过测试确认到是某个服务扩缩容震荡导致可用率无法恢复，尝试通过 HPA 的 behavior 来控制扩缩容速率，又意外触发了 K8s HPA 的 bug 把集群控制面搞崩了&hellip; 再之后把问题都确认了，第二次尝试升级，又是有个别服务可用率抖动，调试了好几天。那几天神经一直紧绷，每天早上都是被服务可用率的告警吵醒的。跨年的那天晚上业务量上涨，我就在观察服务可用率的过程中跨年了。这样才终于完成了 K8s 集群的升级，期间各位同事也有参与帮忙分析排查各种问题，非常感谢他们，还有努力的我自己。</li>
+<li>I also encountered all kinds of problems in the process of upgrading. When I first upgraded and migrated, I prepared for a long time and panicked. As a result, there was still something wrong with some of the services during the upgrade. I was really confused at that time.</li>
 </ul>
 </li>
-<li>随便写了几个 go 的 demo，基本没啥进步</li>
-<li>学了一个星期的 rust 语言，快速看完了 the book，用 rust 重写了个 video2chars</li>
-<li>学习了 Linux 容器的底层原理：cgroups/namespace 技术，并且用 go/rust 实现了个 demo</li>
-<li>学习了 Linux 的各种网络接口、Iptables</li>
-<li>熟悉了 PromQL/Grafana，现在也能拷贝些 PromQL 查各种数据了</li>
+<li>Casually wrote a few demo of Go, and made little progress.</li>
+<li>Learning the rust language for a week, quickly finished reading The Book, and rewrote a <code>video2chars</code> in rust</li>
+<li>Learned the underlying principle of Linux container: cgroups/namespace technology, and implemented a demo with go/rust</li>
+<li>Learned various network interfaces and <code>iptables</code> of Linux</li>
+<li>Be familiar with PromQL/Grafana</li>
 </ul>
 <p>If I give myself a score, it&rsquo;s &ldquo;good&rdquo;. Because I am not very enterprising, so the result can not be called &ldquo;excellent&rdquo;.</p>
 <p>By the way, the new office of Mobiuspace is really great. See my twitter for details：</p>
