@@ -11,9 +11,9 @@ tags: ["Kubernetes", "最佳实践", "云原生"]
 categories: ["技术"]
 ---
 
->个人笔记，不保证正确
+>本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来
 
-本文主要介绍下我个人在使用 Kubernetes 的过程中，总结出的一套「Kubernetes 配置」，是我个人的「最佳实践」。
+本文主要介绍我个人在使用 Kubernetes 的过程中，总结出的一套「Kubernetes 配置」，是我个人的「最佳实践」。
 其中大部分内容都经历过线上环境的考验，但是也有少部分还只在我脑子里模拟过，请谨慎参考。
 
 阅读前的几个注意事项：
@@ -318,7 +318,7 @@ spec:
 
 Kubernetes 官方主要支持基于 Pod CPU 的伸缩，这是应用最为广泛的伸缩指标，需要部署 [metrics-server](https://github.com/kubernetes-sigs/metrics-server) 才可使用。
 
-先回顾下前面给出的示例：
+先回顾下前面给出的，基于 Pod CPU 使用率进行伸缩的示例：
 
 ```yaml
 apiVersion: autoscaling/v2beta2  # k8s 1.23+ 此 API 已经 GA
@@ -346,10 +346,12 @@ spec:
 
 ### 1. 当前指标值的计算方式
 
-HPA 默认使用 Pod 的当前指标进行计算，以 CPU 为例，其计算公式为：
+提前总结：每个 **Pod 的指标是其中所有容器指标之和**，如果计算百分比，就再除以 Pod 的 requests.
+
+HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其计算公式为：
 
 ```
-「Pod 的 CPU 利用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
+「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
 ```
 
 注意分母是总的 requests 量，而不是 limits.
@@ -362,8 +364,11 @@ HPA 默认使用 Pod 的当前指标进行计算，以 CPU 为例，其计算公
 在未 tuning 的情况下，服务负载一高，sidecar 的实际用量很容易就能涨到 0.2-0.4 核。
 把这两个值代入前面的公式，会发现 **对于 QPS 较高的服务，添加 Sidecar 后，「Pod 的 CPU 利用率」可能会高于「应用容器的 CPU 利用率」**，造成不必要的扩容。
 
+即使改用「Pod 的 CPU 用量」而非百分比来进行扩缩容，也解决不了这个问题。
+
 解决方法：
-- 方法一：针对每个服务的 CPU 使用情况，为 sidecar 设置不同的 requests/limits
+- 方法一：针对每个服务的 CPU 使用情况，为每个服务的 sidecar 设置不同的 requests/limits.
+  - 感觉这个方案太麻烦了
 - 方法二：使用 KEDA 等第三方组件，获取到应用程序的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容
 - 方法三：使用 k8s 1.20 提供的 alpha 特性：[Container Resourse Metrics](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics). 
 
@@ -373,9 +378,9 @@ HPA 默认使用 Pod 的当前指标进行计算，以 CPU 为例，其计算公
 HPA 什么时候会扩容，这一点是很好理解的。但是 HPA 的缩容策略，会有些迷惑，下面简单分析下。
 
 1. HPA 的「目标指标」可以使用两种形式：绝对度量指标和资源利用率。
-    - 绝对度量指标：比如 CPU，就是设定绝对核数。
-    - 资源利用率（资源使用量/资源请求 * 100%）：在 Pod 设置了资源请求时，可以使用资源利用率进行 Pod 伸缩。
-2. HPA 的「当前指标」是一段时间内所有 Pods 的平均值，不是峰值。Pod 的指标是其中所有容器指标之和。
+    - 绝对度量指标：比如 CPU，就是指 CPU 的使用量
+    - 资源利用率（资源使用量/资源请求 * 100%）：在 Pod 设置了资源请求时，可以使用资源利用率进行 Pod 伸缩
+2. HPA 的「当前指标」是一段时间内所有 Pods 的平均值，不是峰值。
 
 
 HPA 的扩缩容算法为：
@@ -417,7 +422,7 @@ HPA 的扩缩容算法为：
 - 非核心服务
   - requests/limits 值: 建议 requests 设为 limits 的 0.6 - 0.9 倍（仅供参考），对应的服务质量等级为 Burstable
     - 也就是超卖了资源，这样做主要的考量点是，很多非核心服务负载都很低，根本跑不到 limits 这么高，降低 requests 可以提高集群资源利用率，也不会损害服务稳定性。
-  - HPA: 因为 requests 降低了，我们可以提高 HPA 到期望值，比如 80% ~ 90%，最小副本数建议设为 1 - 3. （仅供参考）
+  - HPA: 因为 requests 降低了，而 HPA 是以 requests 为 100% 计算使用率的，我们可以提高 HPA 的期望值（如果使用百分比为期望值的话），比如 80% ~ 90%，最小副本数建议设为 1 - 3. （仅供参考）
   - PodDisruptionBudget: 非核心服务嘛，保证最少副本数为 1 就行了。
 
 
