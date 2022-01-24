@@ -1784,12 +1784,23 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <li><a href="https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication" target="_blank" rel="noopener noreferrer">End User Authentication - Istio</a></li>
 <li><a href="https://istio.io/docs/reference/config/security/jwt/" target="_blank" rel="noopener noreferrer">JWTRule - Istio</a></li>
 <li><a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">jwt.io - 动态生成 jwt</a></li>
-</ul>]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/posts/common-kubernetes-errors-causes-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/common-kubernetes-errors-causes-and-solutions/</guid><description><![CDATA[<ol>
+</ul>]]></description></item><item><title>Kubernetes 常见错误、原因及处理方法</title><link>https://ryan4yin.space/posts/kubernetes-common-errors-and-solutions/</link><pubDate>Sun, 24 Nov 2019 19:26:54 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/kubernetes-common-errors-and-solutions/</guid><description><![CDATA[<h2 id="pod-常见错误">Pod 常见错误</h2>
+<ol>
 <li>OOMKilled: Pod 的内存使用超出了 resources.limits 中的限制，被强制杀死。</li>
+<li><a href="https://cloud.tencent.com/developer/article/1411527" target="_blank" rel="noopener noreferrer">SandboxChanged: Pod sandbox changed, it will be killed and re-created</a>: 很可能是由于内存限制导致容器被 OOMKilled，或者其他资源不足
+<ol>
+<li>如果是 OOM，容器通常会被重启，<code>kubectl describe</code> 能看到容器上次被重启的原因 <code>State.Last State.Reason = OOMKilled, Exit Code=137</code>.</li>
+</ol>
+</li>
+<li>Pod 不断被重启，<code>kubectl describe</code> 显示重启原因 <code>State.Last State.Reason = Error, Exit Code=137</code>，137 对应 SIGKILL(<code>kill -9</code>) 信号，说明容器被强制重启。可能的原因：
+<ol>
+<li>最有可能的原因是，存活探针（livenessProbe）检查失败</li>
+<li>节点资源不足，内核强制关闭了进程以释放资源，这种情况可以通过 <code>journalctl -k</code> 查看详细的系统日志。</li>
+</ol>
+</li>
 <li>CrashLoopBackoff: Pod 进入 <strong>崩溃-重启</strong>循环，重启间隔时间从 10 20 40 80 一直翻倍到上限 300 秒，然后以 300 秒为间隔无限重启。</li>
 <li>Pod 一直 Pending: 这说明没有任何节点能满足 Pod 的要求，容器无法被调度。比如端口被别的容器用 hostPort 占用，节点有污点等。</li>
 <li><a href="" rel="">FailedCreateSandBox: Failed create pod sandbox: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>：很可能是 CNI 网络插件的问题（比如 ip 地址溢出），</li>
-<li><a href="https://cloud.tencent.com/developer/article/1411527" target="_blank" rel="noopener noreferrer">SandboxChanged: Pod sandbox changed, it will be killed and re-created</a>: 很可能是由于内存限制导致容器被 OOMKilled，或者其他资源不足</li>
 <li><a href="https://github.com/kubernetes/kubernetes/issues/55094" target="_blank" rel="noopener noreferrer">FailedSync: error determining status: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>: 常和前两个错误先后出现，很可能是 CNI 网络插件的问题。</li>
 <li>开发集群，一次性部署所有服务时，各 Pod 互相争抢资源，导致 Pod 生存探针失败，不断重启，重启进一步加重资源使用。恶性循环。
 <ul>
@@ -1801,16 +1812,19 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <li>创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的 ServiceAccount 不存在。</li>
 <li>Pod 运行失败，状态为 MatchNodeSelector: 对主节点进行关机、迁移等操作，导致主调度器下线时，会在一段时间内导致 Pod 调度失败，调度失败会报这个错。</li>
 <li>Pod 仍然存在，但是 <code>Service</code> 的 Endpoints 却为空，找不到对应的 Pod IPs: 遇到过一次，是因为时间跳变（从未来的时间改回了当前时间）导致的问题。</li>
-<li>Pod 状态一直 ContainerCreating，Error syncing pod: 可能是节点的内存碎片化严重，导致无法创建pod。临时解决：<code>echo 3 &gt; /proc/sys/vm/drop_caches</code>
-<ul>
-<li>详细分析参见 <a href="https://zhuanlan.zhihu.com/p/227728280" target="_blank" rel="noopener noreferrer">容器创建失败(runc_page allocation failure)排查</a></li>
-</ul>
-</li>
 </ol>
-<p>收集的其他故障解决文章：</p>
-<ul>
-<li><a href="https://cloud.tencent.com/developer/article/1487051" target="_blank" rel="noopener noreferrer">TKE操作指南 - TKE K8S问题排查（十八）</a></li>
-</ul>
+<h3 id="控制面故障可能会导致各类奇怪的异常现象">控制面故障可能会导致各类奇怪的异常现象</h3>
+<p>对于生产环境的集群，因为有高可用，通常我们比较少遇到控制面故障问题。但是一旦控制面发生故障，就可能会导致各类奇怪的异常现象。
+如果能在排查问题时，把控制面异常考虑进来，在这种情况下，就能节约大量的排查时间，快速定位到问题。</p>
+<p>其中比较隐晦的就是 controller-manager 故障导致的异常：</p>
+<ol>
+<li>节点的服务器已经被终止，但是 Kuberntes 里还显示 node 为 Ready 状态，不会更新为 NotReady.</li>
+<li>被删除的 Pods 可能会卡在 Terminating 状态，只有强制删除才能删除掉它们。并且确认 Pod 没有 <code>metadata.finalizers</code> 属性</li>
+<li>HPA 的动态伸缩功能失效</li>
+<li>&hellip;</li>
+</ol>
+<p>如果这些现象同时发生，就要怀疑是否是 kube-controller-manager 出问题了.</p>
+<p>其他控制面异常的详细分析，参见 <a href="./kubernetes%20%e6%8e%a7%e5%88%b6%e9%9d%a2%e6%95%85%e9%9a%9c%e7%8e%b0%e8%b1%a1%e5%8f%8a%e5%88%86%e6%9e%90.md" rel="">kubernetes 控制面故障现象及分析</a></p>
 <h3 id="pod-无法删除">Pod 无法删除</h3>
 <p>可能是某些资源无法被GC，这会导致容器已经 Exited 了，但是 Pod 一直处于 Terminating 状态。</p>
 <p>这个问题在网上能搜到很多案例,但大都只是提供了如下的强制清理命令，未分析具体原因：</p>
@@ -1830,29 +1844,144 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <li><a href="https://www.likakuli.com/posts/docker-pod-terminating/" target="_blank" rel="noopener noreferrer">Pod terminating - 问题排查 - KaKu Li</a></li>
 </ul>
 <p>大致总结一下，主要原因来自 docker 18.06 以及 kubernetes 的 docker-shim 运行时的底层逻辑，已经在新版本被修复了。</p>
+<h3 id="initcontainers-不断-restart但是-containers-却都显示已-ready">initContainers 不断 restart，但是 Containers 却都显示已 ready</h3>
+<p>Kubernetes 应该确保所有 initContainers 都 Completed，然后才能启动 Containers.</p>
+<p>但是我们发现有一个节点上，所有包含 initContainers 的 Pod，状态全都是 <code>Init:CrashLoopBackOff</code> 或者 <code>Init:Error</code>.</p>
+<p>而且进一步 <code>kubectl describe po</code> 查看细节，发现 initContainer 的状态为:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">...
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    2
+      Started:      Tue, 03 Aug 2021 06:02:42 +0000
+      Finished:     Tue, 03 Aug 2021 06:02:42 +0000
+    Ready:          False
+    Restart Count:  67
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>而 Containers 的状态居然是 ready:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">...
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Tue, 03 Aug 2021 00:35:30 +0000
+    Ready:          True
+    Restart Count:  0
+...
+</code></pre></td></tr></table>
+</div>
+</div><p>initContainers 还未运行成功，而 Containers 却 Ready 了，非常疑惑。</p>
+<p>仔细想了下，早上因为磁盘余量告警，有手动运行过 <code>docker system prune</code> 命令，那么问题可能就是这条命令清理掉了已经 exited 的 initContainers 容器，导致 k8s 故障，不断尝试重启该容器。</p>
+<p>网上一搜确实有相关的信息：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/62333064/cant-delete-exited-init-container">https://stackoverflow.com/questions/62333064/cant-delete-exited-init-container</a></li>
+<li><a href="https://github.com/kubernetes/kubernetes/issues/62362">https://github.com/kubernetes/kubernetes/issues/62362</a></li>
+</ul>
+<p>结论：使用外部的垃圾清理命令可能导致 k8s 行为异常。</p>
 <h2 id="节点常见错误">节点常见错误</h2>
 <ol>
 <li><a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/#node-conditions" target="_blank" rel="noopener noreferrer">DiskPressure</a>：节点的可用空间不足。（通过<code>df -h</code> 查看，保证可用空间不小于 15%）</li>
 <li>The node was low on resource: ephemeral-storage: 同上，节点的存储空间不够了。</li>
 </ol>
-<h2 id="网络常见错误">网络常见错误</h2>
-<h3 id="1-ingressistio-gateway-返回值">1. Ingress/Istio Gateway 返回值</h3>
+<p>节点存储告警可能的原因：</p>
 <ol>
-<li>404：不存在该 Service/Istio Gateway</li>
-<li>503：服务不可用。原因基本都是 Service 对应的 Pods NotReady</li>
-<li>504：网关请求下游超时。主要有两种可能
+<li>kubelet 的资源 GC 设置有问题，遗留的镜像等资源未及时 GC 导致告警</li>
+<li>存在运行的 pod 使用了大量存储空间，在节点上通过 <code>docker ps -a --size | grep G</code> 可以查看到</li>
+<li>如果使用的是 EKS，并且磁盘告警的挂载点为 <code>/var/lib/kubelet/plugins/kubernetes.io/aws-ebs/mounts/aws/us-east-1b/vol-xxxxx</code>
 <ol>
-<li>考虑是不是 Ingress Controller 的 IP 表未更新，将请求代理到了不存在的 Pod ip，导致得不到响应。</li>
-<li>Pod 响应太慢，代码问题。</li>
+<li>显然是 EBS 存储卷快满了导致的</li>
+<li>可通过 <code> kubectl get pv -A -o yaml | grep -C 30 vol-xxxxx</code> 来定位到具体的存储卷</li>
 </ol>
 </li>
 </ol>
+<h2 id="网络常见错误">网络常见错误</h2>
+<h3 id="1-ingressistio-gateway-返回值">1. Ingress/Istio Gateway 返回值</h3>
+<ol>
+<li>404：不存在该 Service/Istio Gateway，或者是服务自身返回 404</li>
+<li>500：大概率是服务自身的错误导致 500，小概率是代理（Sidecar/Ingress 等）的错误</li>
+<li>503：服务不可用，有如下几种可能的原因：
+<ol>
+<li>Service 对应的 Pods 不存在，endpoints 为空</li>
+<li>Service 对应的 Pods 全部都 NotReady，导致 endpoints 为空</li>
+<li>也有可能是服务自身出错返回的 503</li>
+<li>如果你使用了 envoy sidecar， 503 可能的原因就多了。基本上 sidecar 与主容器通信过程中的任何问题都会使 envoy 返回 503，使客户端重试。
+<ol>
+<li>详见 <a href="https://blog.fleeto.us/post/istio-503-uc-debug/" target="_blank" rel="noopener noreferrer">Istio：503、UC 和 TCP</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>502：Bad Gateway，通常是由于上游未返回正确的响应导致的，可能的根本原因：
+<ol>
+<li>应用程序未正确处理 SIGTERM 信号，在请求未处理完毕时直接终止了进程。详见 <a href="./%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5.md" rel="">优雅停止（Gracful Shutdown）与 502/504 报错 - K8s 最佳实践</a></li>
+<li>网络插件 bug</li>
+</ol>
+</li>
+<li>504：网关请求 upstream 超时，主要有两种可能
+<ol>
+<li>考虑是不是 Ingress Controller 的 IP 列表未更新，将请求代理到了不存在的 ip，导致得不到响应</li>
+<li>Service Endpoints 移除不够及时，在 Pod 已经被终止后，仍然有个别请求被路由到了该 Pod，得不到响应导致 504。详见 <a href="./%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5.md" rel="">优雅停止（Gracful Shutdown）与 502/504 报错 - K8s 最佳实践</a></li>
+<li>Pod 响应太慢，代码问题</li>
+</ol>
+</li>
+</ol>
+<p>再总结一下常见的几种错误：</p>
+<ul>
+<li>未设置优雅停止，导致 Pod 被重新终止时，有概率出现 502/504</li>
+<li>服务的所有 Pods 的状态在「就绪」和「未就绪」之间摆动，导致间歇性地出现大量 503 错误</li>
+<li>服务返回 5xx 错误导致客户端不断重试，请求流量被放大，导致服务一直起不来
+<ul>
+<li>解决办法：限流、熔断（网关层直接返回固定的相应内容）</li>
+</ul>
+</li>
+</ul>
 <p>Ingress 相关网络问题的排查流程：</p>
 <ol>
 <li>Which ingress controller?</li>
 <li>Timeout between client and ingress controller, or between ingress controller and backend service/pod?</li>
 <li>HTTP/504 generated by the ingress controller, proven by logs from the ingress controller?</li>
 <li>If you port-forward to skip the internet between client and ingress controller, does the timeout still happen?</li>
+</ol>
+<h3 id="2-上了-istio-sidecar-后应用程序偶尔间隔几天半个月会-redis-连接相关的错误">2. 上了 istio sidecar 后，应用程序偶尔（间隔几天半个月）会 redis 连接相关的错误</h3>
+<p>考虑是否和 tcp 长时间使用有关，比如连接长时间空闲的话，可能会被 istio sidecar 断开。
+如果程序自身的重连机制有问题，就会导致这种现象。</p>
+<p>确认方法：</p>
+<ol>
+<li>检查 istio 的 <code>idleTimeout</code> 时长（默认 1h）</li>
+<li>创建三五个没流量的 Pod 放置 1h（与 istio idleTimeout 时长一致），看看是否会准时开始报 redis 的错。</li>
+<li>对照组：创建三五个同样没流量的 Pod，但是不注入 istio sidecar，应该一直很正常</li>
+</ol>
+<p>这样就能确认问题，后续处理：</p>
+<ol>
+<li>抓包观察程序在出错后的 tcp 层行为</li>
+<li>查阅 redis sdk 的相关 issue、代码，通过升级 SDK 应该能解决问题。</li>
 </ol>
 <h2 id="名字空间常见错误">名字空间常见错误</h2>
 <h3 id="名字空间无法删除">名字空间无法删除</h3>
@@ -1937,6 +2066,8 @@ etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="其他问题">其他问题</h2>
+<h2 id="隔天-istio-等工具的-sidecar-自动注入莫名其妙失效了">隔天 Istio 等工具的 sidecar 自动注入莫名其妙失效了</h2>
+<p>如果服务器晚上会关机，可能导致第二天网络插件出问题，导致 sidecar 注入器无法观察到 pod 的创建，也就无法完成 sidecar 注入。</p>
 <h3 id="如何重新运行一个-job">如何重新运行一个 Job？</h3>
 <p>我们有一个 Job 因为外部原因运行失败了，修复好后就需要重新运行它。</p>
 <p>方法是：删除旧的 Job，再使用同一份配置重建 Job.</p>
@@ -1946,5 +2077,6 @@ etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/
 <li><a href="https://yq.aliyun.com/articles/703971?type=2" target="_blank" rel="noopener noreferrer">Kubernetes管理经验</a></li>
 <li><a href="https://www.reddit.com/r/kubernetes/comments/ced0py/504_gateway_timeout_when_accessing_workload_via/" target="_blank" rel="noopener noreferrer">504 Gateway Timeout when accessing workload via ingress</a></li>
 <li><a href="https://k8s.af/" target="_blank" rel="noopener noreferrer">Kubernetes Failure Stories</a></li>
+<li><a href="https://blog.fleeto.us/post/istio-503-uc-debug/" target="_blank" rel="noopener noreferrer">Istio：503、UC 和 TCP</a></li>
 </ul>
 ]]></description></item></channel></rss>
