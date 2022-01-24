@@ -1,5 +1,1037 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>所有文章 - Ryan4Yin's Space</title><link>https://ryan4yin.space/posts/</link><description>所有文章 | Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Tue, 25 Jan 2022 00:13:00 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/posts/" rel="self" type="application/rss+xml"/><item><title>Kubernetes 微服务最佳实践</title><link>https://ryan4yin.space/posts/kubernetes-best-practices/</link><pubDate>Tue, 25 Jan 2022 00:13:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/kubernetes-best-practices/</guid><description><![CDATA[<blockquote>
-<p>个人笔记，不保证正确</p>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>所有文章 - Ryan4Yin's Space</title><link>https://ryan4yin.space/posts/</link><description>所有文章 | Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Tue, 25 Jan 2022 01:37:00 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/posts/" rel="self" type="application/rss+xml"/><item><title>部署一个 Kubernetes 集群</title><link>https://ryan4yin.space/posts/kubernetes-deployemnt-using-kubeadm/</link><pubDate>Tue, 25 Jan 2022 01:37:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/kubernetes-deployemnt-using-kubeadm/</guid><description><![CDATA[<blockquote>
+<p>本文由个人笔记 <a href="https://github.com/ryan4yin/knowledge/tree/master/kubernetes" target="_blank" rel="noopener noreferrer">ryan4yin/knowledge</a> 整理而来，不保证正确</p>
+</blockquote>
+<h2 id="本地-kubernetes-集群安装工具">本地 Kubernetes 集群安装工具</h2>
+<blockquote>
+<p>云上的 Kubernetes 集群，基本上各云厂商都支持一键部署。这里主要关注本地部署，或者叫做裸机(baremetal)部署</p>
+</blockquote>
+<p>kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很多组件都有多种实现，这些实现各有特点，让初学者眼花缭乱。</p>
+<p>而且要把这些组件一个个安装配置好并且能协同工作，也是很不容易的。</p>
+<p>因此社区出现了各种各样的安装方案，下面介绍下几种支持裸机（Baremetal）部署的工具：</p>
+<ol>
+<li><a href="https://kuboard.cn/install/install-k8s.html" target="_blank" rel="noopener noreferrer">kubeadm</a>: 社区的集群安装工具，目前已经很成熟了。
+<ol>
+<li>使用难度：简单</li>
+</ol>
+</li>
+<li><a href="https://github.com/k3s-io/k3s" target="_blank" rel="noopener noreferrer">k3s</a>: 轻量级 kubernetes，资源需求小，部署非常简单，适合开发测试用或者边缘环境
+<ol>
+<li>支持 airgap 离线部署</li>
+<li>使用难度：超级简单</li>
+</ol>
+</li>
+<li><a href="https://github.com/alibaba/sealer" target="_blank" rel="noopener noreferrer">alibaba/sealer</a>: 支持将整个 kubernetes 打包成一个镜像进行交付，而且部署也非常简单。
+<ol>
+<li>使用难度：超级简单</li>
+<li>这个项目目前还在发展中，不过貌似已经有很多 toB 的公司在使用它进行 k8s 应用的交付了。</li>
+</ol>
+</li>
+<li><a href="https://github.com/kubernetes-sigs/kubespray" target="_blank" rel="noopener noreferrer">kubespray</a>: 适合自建生产级别的集群，是一个大而全的 kubernetes 安装方案，自动安装容器运行时、k8s、网络插件等组件，而且各组件都有很多方案可选，但是感觉有点复杂。
+<ol>
+<li>使用难度：中等</li>
+<li>支持 airgap 离线部署，但是以前我试用过是有坑，现在不知道咋样了</li>
+<li>底层使用了 kubeadm 部署集群</li>
+</ol>
+</li>
+</ol>
+<p>笔者为了学习 Kuberntes，下面采用官方的 kubeadm 进行部署（不要问为啥不二进制部署，问就是懒），容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.</p>
+<h2 id="一使用-kubeadmcontainerd-部署一个集群">一、使用 kubeadm+containerd 部署一个集群</h2>
+<blockquote>
+<p>适合开发测试使用，安全性、稳定性、长期可用性等方案都可能还有问题。</p>
+</blockquote>
+<blockquote>
+<p>本文未考虑国内网络环境，建议在路由器上整个科学代理，或者自行调整文中的部分命令。</p>
+</blockquote>
+<blockquote>
+<p>kubernetes 官方介绍了两种高可用集群的拓扑结构：「Stacked etcd topology」和「External etcd topology」，简单起见，本文使用第一种「堆叠 Etcd 拓扑」结构，创建一个三 master 的高可用集群。</p>
+</blockquote>
+<p>参考：</p>
+<ul>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/" target="_blank" rel="noopener noreferrer">Kubernetes Docs - Installing kubeadm</a></li>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/" target="_blank" rel="noopener noreferrer">Kubernetes Docs - Creating Highly Available clusters with kubeadm</a></li>
+</ul>
+<h3 id="1-节点的环境准备">1. 节点的环境准备</h3>
+<p>首先准备三台 Linux 虚拟机，系统按需选择，然后调整这三台机器的设置：</p>
+<ul>
+<li>节点配置：
+<ul>
+<li>master：不低于 2c/3g，硬盘 20G
+<ul>
+<li>主节点性能也受集群 Pods 个数的影响，上述配置应该可以支撑到每个 Worker 节点跑 100 个 Pod.</li>
+</ul>
+</li>
+<li>worker：看需求，建议不低于 2c/4g，硬盘不小于 20G，资源充分的话建议 40G.</li>
+</ul>
+</li>
+<li>处于同一网络内并可互通（通常是同一局域网）</li>
+<li>各主机的 hostname 和 mac/ip 地址以及 <code>/sys/class/dmi/id/product_uuid</code>，都必须唯一
+<ul>
+<li>这里最容易出问题的，通常是 hostname 冲突！</li>
+</ul>
+</li>
+<li><strong>必须</strong>关闭 swap，kubelet 才能正常工作！</li>
+</ul>
+<p>方便起见，我直接使用 <a href="https://github.com/ryan4yin/pulumi-libvirt#examples" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-libvirt</a> 自动创建了五个虚拟机，并设置好了 ip/hostname.</p>
+<p>本文使用了 opensuse leap 15.3 的 KVM cloud image 进行安装测试。</p>
+<h4 id="11-iptables-设置">1.1 iptables 设置</h4>
+<p>目前 kubernetes 的容器网络，默认使用的是 bridge 模式，这种模式下，需要使 <code>iptables</code> 能够接管 bridge 上的流量。</p>
+<p>配置如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo modprobe br_netfilter
+cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+</span><span class="s">br_netfilter
+</span><span class="s">EOF</span>
+
+cat <span class="s">&lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+</span><span class="s">net.bridge.bridge-nf-call-ip6tables = 1
+</span><span class="s">net.bridge.bridge-nf-call-iptables = 1
+</span><span class="s">EOF</span>
+sudo sysctl --system
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-开放节点端口">1.2 开放节点端口</h4>
+<blockquote>
+<p>局域网环境的话，建议直接关闭防火墙。这样所有端口都可用，方便快捷。</p>
+</blockquote>
+<blockquote>
+<p>通常我们的云上集群，也是关闭防火墙的，只是会通过云服务提供的「安全组」来限制客户端 ip</p>
+</blockquote>
+<p>Control-plane 节点，也就是 master，需要开放如下端口：</p>
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>Direction</th>
+<th>Port Range</th>
+<th>Purpose</th>
+<th>Used By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td>Inbound</td>
+<td>6443*</td>
+<td>Kubernetes API server</td>
+<td>All</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>Inbound</td>
+<td>2379-2380</td>
+<td>etcd server client API</td>
+<td>kube-apiserver, etcd</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>Inbound</td>
+<td>10250</td>
+<td>kubelet API</td>
+<td>Self, Control plane</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>Inbound</td>
+<td>10251</td>
+<td>kube-scheduler</td>
+<td>Self</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>Inbound</td>
+<td>10252</td>
+<td>kube-controller-manager</td>
+<td>Self</td>
+</tr>
+</tbody>
+</table>
+<p>Worker 节点需要开发如下端口：</p>
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>Direction</th>
+<th>Port Range</th>
+<th>Purpose</th>
+<th>Used By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td>Inbound</td>
+<td>10250</td>
+<td>kubelet API</td>
+<td>Self, Control plane</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>Inbound</td>
+<td>30000-32767</td>
+<td>NodePort Services†</td>
+<td>All</td>
+</tr>
+</tbody>
+</table>
+<p>另外通常我们本地测试的时候，可能更想直接在 <code>80</code> <code>443</code> <code>8080</code> 等端口上使用 <code>NodePort</code>，
+就需要修改 kube-apiserver 的 <code>--service-node-port-range</code> 参数来自定义 NodePort 的端口范围，相应的 Worker 节点也得开放这些端口。</p>
+<h3 id="2-安装-containerd">2. 安装 containerd</h3>
+<p>首先是环境配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+</span><span class="s">overlay
+</span><span class="s">br_netfilter
+</span><span class="s">nf_conntrack
+</span><span class="s">EOF</span>
+
+sudo modprobe overlay
+sudo modprobe br_netfilter
+sudo modprobe nf_conntrack
+
+<span class="c1"># Setup required sysctl params, these persist across reboots.</span>
+cat <span class="s">&lt;&lt;EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+</span><span class="s">net.bridge.bridge-nf-call-iptables  = 1
+</span><span class="s">net.ipv4.ip_forward                 = 1
+</span><span class="s">net.bridge.bridge-nf-call-ip6tables = 1
+</span><span class="s">EOF</span>
+
+<span class="c1"># Apply sysctl params without reboot</span>
+sudo sysctl --system
+</code></pre></td></tr></table>
+</div>
+</div><p>安装 containerd+nerdctl:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">wget https://github.com/containerd/nerdctl/releases/download/v0.11.1/nerdctl-full-0.11.1-linux-amd64.tar.gz
+tar -axvf nerdctl-full-0.11.1-linux-amd64.tar.gz
+<span class="c1"># 这里简单起见，rootless 相关的东西也一起装进去了，测试嘛就无所谓了...</span>
+mv bin/* /usr/local/bin/
+mv lib/systemd/system/containerd.service /usr/lib/systemd/system/
+
+systemctl <span class="nb">enable</span> containerd
+systemctl start containerd
+</code></pre></td></tr></table>
+</div>
+</div><p><code>nerdctl</code> 是一个 containerd 的命令行工具，但是它的容器、镜像与 Kubernetes 的容器、镜像是完全隔离的，不能互通！</p>
+<p>目前只能通过 <code>crictl</code> 来查看、拉取 Kubernetes 的容器、镜像，下一节会介绍 crictl 的安装。</p>
+<h3 id="3-安装-kubeletkubeadmkubectl">3. 安装 kubelet/kubeadm/kubectl</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一些全局都需要用的变量</span>
+<span class="nv">CNI_VERSION</span><span class="o">=</span><span class="s2">&#34;v0.8.2&#34;</span>
+<span class="nv">CRICTL_VERSION</span><span class="o">=</span><span class="s2">&#34;v1.17.0&#34;</span>
+<span class="c1"># kubernetes 的版本号</span>
+<span class="c1"># RELEASE=&#34;$(curl -sSL https://dl.k8s.io/release/stable.txt)&#34;</span>
+<span class="nv">RELEASE</span><span class="o">=</span><span class="s2">&#34;1.22.1&#34;</span>
+<span class="c1"># kubelet 配置文件的版本号</span>
+<span class="nv">RELEASE_VERSION</span><span class="o">=</span><span class="s2">&#34;v0.4.0&#34;</span>
+<span class="c1"># 架构</span>
+<span class="nv">ARCH</span><span class="o">=</span><span class="s2">&#34;amd64&#34;</span>
+<span class="c1">#　安装目录</span>
+<span class="nv">DOWNLOAD_DIR</span><span class="o">=</span>/usr/local/bin
+
+
+<span class="c1"># CNI 插件</span>
+sudo mkdir -p /opt/cni/bin
+curl -L <span class="s2">&#34;https://github.com/containernetworking/plugins/releases/download/</span><span class="si">${</span><span class="nv">CNI_VERSION</span><span class="si">}</span><span class="s2">/cni-plugins-linux-</span><span class="si">${</span><span class="nv">ARCH</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">CNI_VERSION</span><span class="si">}</span><span class="s2">.tgz&#34;</span> <span class="p">|</span> sudo tar -C /opt/cni/bin -xz
+
+<span class="c1"># crictl 相关工具</span>
+curl -L <span class="s2">&#34;https://github.com/kubernetes-sigs/cri-tools/releases/download/</span><span class="si">${</span><span class="nv">CRICTL_VERSION</span><span class="si">}</span><span class="s2">/crictl-</span><span class="si">${</span><span class="nv">CRICTL_VERSION</span><span class="si">}</span><span class="s2">-linux-</span><span class="si">${</span><span class="nv">ARCH</span><span class="si">}</span><span class="s2">.tar.gz&#34;</span> <span class="p">|</span> sudo tar -C <span class="nv">$DOWNLOAD_DIR</span> -xz
+
+<span class="c1"># kubelet/kubeadm/kubectl</span>
+<span class="nb">cd</span> <span class="nv">$DOWNLOAD_DIR</span>
+sudo curl -L --remote-name-all https://storage.googleapis.com/kubernetes-release/release/<span class="si">${</span><span class="nv">RELEASE</span><span class="si">}</span>/bin/linux/<span class="si">${</span><span class="nv">ARCH</span><span class="si">}</span>/<span class="o">{</span>kubeadm,kubelet,kubectl<span class="o">}</span>
+sudo chmod +x <span class="o">{</span>kubeadm,kubelet,kubectl<span class="o">}</span>
+
+<span class="c1"># kubelet/kubeadm 配置</span>
+curl -sSL <span class="s2">&#34;https://raw.githubusercontent.com/kubernetes/release/</span><span class="si">${</span><span class="nv">RELEASE_VERSION</span><span class="si">}</span><span class="s2">/cmd/kubepkg/templates/latest/deb/kubelet/lib/systemd/system/kubelet.service&#34;</span> <span class="p">|</span> sed <span class="s2">&#34;s:/usr/bin:</span><span class="si">${</span><span class="nv">DOWNLOAD_DIR</span><span class="si">}</span><span class="s2">:g&#34;</span> <span class="p">|</span> sudo tee /etc/systemd/system/kubelet.service
+sudo mkdir -p /etc/systemd/system/kubelet.service.d
+curl -sSL <span class="s2">&#34;https://raw.githubusercontent.com/kubernetes/release/</span><span class="si">${</span><span class="nv">RELEASE_VERSION</span><span class="si">}</span><span class="s2">/cmd/kubepkg/templates/latest/deb/kubeadm/10-kubeadm.conf&#34;</span> <span class="p">|</span> sed <span class="s2">&#34;s:/usr/bin:</span><span class="si">${</span><span class="nv">DOWNLOAD_DIR</span><span class="si">}</span><span class="s2">:g&#34;</span> <span class="p">|</span> sudo tee /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+systemctl <span class="nb">enable</span> --now kubelet
+<span class="c1"># 验证 kubelet 启动起来了，但是目前还没有初始化配置，过一阵就会重启一次</span>
+systemctl status kubelet
+</code></pre></td></tr></table>
+</div>
+</div><p>试用 crictl:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CONTAINER_RUNTIME_ENDPOINT</span><span class="o">=</span><span class="s1">&#39;unix:///var/run/containerd/containerd.sock&#39;</span>
+<span class="c1"># 列出所有 pods，现在应该啥也没</span>
+crictl  pods
+
+<span class="c1"># 列出所有镜像</span>
+crictl images
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-为-master-的-kube-apiserver-创建负载均衡实现高可用">4. 为 master 的 kube-apiserver 创建负载均衡实现高可用</h3>
+<p>根据 kubeadm 官方文档 <a href="https://github.com/kubernetes/kubeadm/blob/master/docs/ha-considerations.md#kube-vip" target="_blank" rel="noopener noreferrer">Kubeadm Docs - High Availability Considerations</a> 介绍，要实现 kube-apiserver 的高可用，目前最知名的负载均衡方式是 keepalived+haproxy，另外也可以考虑使用 kube-vip 等更简单的工具。</p>
+<p>简单起见，我们直接用 kube-vip 吧，参考了 kube-vip 的官方文档：<a href="https://kube-vip.io/install_static/" target="_blank" rel="noopener noreferrer">Kube-vip as a Static Pod with Kubelet</a>.</p>
+<blockquote>
+<p>P.S. 我也见过有的安装工具会直接抛弃 keepalived，直接在每个节点上跑一个 nginx 做负载均衡，配置里写死了所有 master 的地址&hellip;</p>
+</blockquote>
+<p>首先使用如下命令生成 kube-vip 的配置文件，以 ARP 为例（生产环境建议换成 BGP）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee add-kube-vip.sh
+</span><span class="s"># 你的虚拟机网卡，opensuse/centos 等都是 eth0，但是 ubuntu 可能是 ens3
+</span><span class="s">export INTERFACE=eth0
+</span><span class="s">
+</span><span class="s"># 用于实现高可用的 vip，需要和前面的网络接口在同一网段内，否则就无法路由了。
+</span><span class="s">export VIP=192.168.122.200
+</span><span class="s">
+</span><span class="s"># 生成 static-pod 的配置文件
+</span><span class="s">mkdir -p /etc/kubernetes/manifests
+</span><span class="s">nerdctl run --rm --network=host --entrypoint=/kube-vip ghcr.io/kube-vip/kube-vip:v0.3.8 \
+</span><span class="s">  manifest pod \
+</span><span class="s">  --interface $INTERFACE \
+</span><span class="s">  --vip $VIP \
+</span><span class="s">  --controlplane \
+</span><span class="s">  --services \
+</span><span class="s">  --arp \
+</span><span class="s">  --leaderElection | tee  /etc/kubernetes/manifests/kube-vip.yaml
+</span><span class="s">EOF</span>
+
+bash add-kube-vip.sh
+</code></pre></td></tr></table>
+</div>
+</div><p>三个 master 节点都需要跑下上面的命令（worker 不需要），创建好 kube-vip 的 static-pod 配置文件。
+在完成 kubeadm 初始化后，kubelet 会自动把它们拉起为 static pod.</p>
+<h3 id="5-使用-kubeadm-创建集群">5. 使用 kubeadm 创建集群</h3>
+<p>其实需要运行的就是这条命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 极简配置：</span>
+cat <span class="s">&lt;&lt;EOF | sudo tee kubeadm-config.yaml
+</span><span class="s">apiVersion: kubeadm.k8s.io/v1beta3
+</span><span class="s">kind: InitConfiguration
+</span><span class="s">nodeRegistration:
+</span><span class="s">  criSocket: &#34;/var/run/containerd/containerd.sock&#34;
+</span><span class="s">  imagePullPolicy: IfNotPresent
+</span><span class="s">---
+</span><span class="s">kind: ClusterConfiguration
+</span><span class="s">apiVersion: kubeadm.k8s.io/v1beta3
+</span><span class="s">kubernetesVersion: v1.22.1
+</span><span class="s">clusterName: kubernetes
+</span><span class="s">certificatesDir: /etc/kubernetes/pki
+</span><span class="s">imageRepository: k8s.gcr.io
+</span><span class="s">controlPlaneEndpoint: &#34;192.168.122.200:6443&#34;  # 填 apiserver 的 vip 地址，或者整个域名也行，但是就得加 /etc/hosts 或者内网 DNS 解析
+</span><span class="s">networking:
+</span><span class="s">  serviceSubnet: &#34;10.96.0.0/16&#34;
+</span><span class="s">  podSubnet: &#34;10.244.0.0/16&#34;
+</span><span class="s">etcd:
+</span><span class="s">  local:
+</span><span class="s">    dataDir: /var/lib/etcd
+</span><span class="s">---
+</span><span class="s">apiVersion: kubelet.config.k8s.io/v1beta1
+</span><span class="s">kind: KubeletConfiguration
+</span><span class="s">cgroupDriver: systemd
+</span><span class="s"># 让 kubelet 从 certificates.k8s.io 申请由集群 CA Root 签名的 tls 证书，而非直接使用自签名证书
+</span><span class="s"># 如果不启用这个， 安装 metrics-server 时就会遇到证书报错，后面会详细介绍。
+</span><span class="s">serverTLSBootstrap: true
+</span><span class="s">EOF</span>
+
+<span class="c1"># 查看 kubeadm 默认的完整配置，供参考</span>
+kubeadm config print init-defaults &gt; init.default.yaml
+
+<span class="c1"># 执行集群的初始化，这会直接将当前节点创建为 master</span>
+<span class="c1"># 成功运行的前提：前面该装的东西都装好了，而且 kubelet 已经在后台运行了</span>
+<span class="c1"># `--upload-certs` 会将生成的集群证书上传到 kubeadm 服务器，在两小时内加入集群的 master 节点会自动拉证书，主要是方便集群创建。</span>
+kubeadm init --config kubeadm-config.yaml --upload-certs
+</code></pre></td></tr></table>
+</div>
+</div><p>kubeadm 应该会报错，提示你有些依赖不存在，下面先安装好依赖项。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in -y socat ebtables conntrack-tools
+</code></pre></td></tr></table>
+</div>
+</div><p>再重新运行前面的 kubeadm 命令，应该就能正常执行了，它做的操作有：</p>
+<ul>
+<li>拉取控制面的容器镜像</li>
+<li>生成 ca 根证书</li>
+<li>使用根证书为 etcd/apiserver 等一票工具生成 tls 证书</li>
+<li>为控制面的各个组件生成 kubeconfig 配置</li>
+<li>生成 static pod 配置，kubelet 会根据这些配置自动拉起 kube-proxy 以及其他所有的 k8s master 组件</li>
+</ul>
+<p>运行完会给出三部分命令：</p>
+<ul>
+<li>将 <code>kubeconfig</code> 放到 <code>$HOME/.kube/config</code> 下，<code>kubectl</code> 需要使用该配置文件连接 kube-apiserver</li>
+<li>control-plane 节点加入集群的命令:
+<ul>
+<li>这里由于我们提前添加了 kube-vip 的 static-pod 配置，这里的 preflight-check 会报错，需要添加此参数忽略该报错 - <code>--ignore-preflight-errors=DirAvailable--etc-kubernetes-manifests</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+</span><span class="se"></span>  --discovery-token-ca-cert-hash sha256:&lt;hash&gt; <span class="se">\
+</span><span class="se"></span>  --control-plane --certificate-key &lt;key&gt; <span class="se">\
+</span><span class="se"></span>  --ignore-preflight-errors<span class="o">=</span>DirAvailable--etc-kubernetes-manifests
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>worker 节点加入集群的命令:
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+</span><span class="se"></span>      --discovery-token-ca-cert-hash sha256:&lt;hash&gt; 
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>跑完第一部分 <code>kubeconfig</code> 的处理命令后，就可以使用 kubectl 查看集群状况了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get no</span>
+NAME           STATUS     ROLES                  AGE   VERSION
+k8s-master-0   NotReady   control-plane,master   79s   v1.22.1
+k8s-master-0:~/kubeadm <span class="c1"># kubectl get po --all-namespaces</span>
+NAMESPACE     NAME                                   READY   STATUS    RESTARTS   AGE
+kube-system   coredns-78fcd69978-6tlnw               0/1     Pending   <span class="m">0</span>          83s
+kube-system   coredns-78fcd69978-hxtvs               0/1     Pending   <span class="m">0</span>          83s
+kube-system   etcd-k8s-master-0                      1/1     Running   <span class="m">6</span>          90s
+kube-system   kube-apiserver-k8s-master-0            1/1     Running   <span class="m">4</span>          90s
+kube-system   kube-controller-manager-k8s-master-0   1/1     Running   <span class="m">4</span>          90s
+kube-system   kube-proxy-6w2bx                       1/1     Running   <span class="m">0</span>          83s
+kube-system   kube-scheduler-k8s-master-0            1/1     Running   <span class="m">7</span>          97s
+</code></pre></td></tr></table>
+</div>
+</div><p>现在在其他节点运行前面打印出的加入集群的命令，就可以搭建好一个高可用的集群了。</p>
+<p>所有节点都加入集群后，通过 kubectl 查看，应该是三个控制面 master，两个 worker：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get node</span>
+NAME           STATUS     ROLES                  AGE     VERSION
+k8s-master-0   NotReady   control-plane,master   26m     v1.22.1
+k8s-master-1   NotReady   control-plane,master   7m2s    v1.22.1
+k8s-master-2   NotReady   control-plane,master   2m10s   v1.22.1
+k8s-worker-0   NotReady   &lt;none&gt;                 97s     v1.22.1
+k8s-worker-1   NotReady   &lt;none&gt;                 86s     v1.22.1
+</code></pre></td></tr></table>
+</div>
+</div><p>现在它们都还处于 NotReady 状态，需要等到我们把网络插件安装好，才会 Ready.</p>
+<p>现在再看下集群的证书签发状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl get csr --sort-by<span class="o">=</span><span class="s1">&#39;{.spec.username}&#39;</span>
+NAME        AGE     SIGNERNAME                                    REQUESTOR                  REQUESTEDDURATION   CONDITION
+csr-95hll   6m58s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
+csr-tklnr   7m5s    kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
+csr-w92jv   9m15s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
+csr-rv7sj   8m11s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
+csr-nxkgx   10m     kubernetes.io/kube-apiserver-client-kubelet   system:node:k8s-master-0   &lt;none&gt;              Approved,Issued
+csr-cd22c   10m     kubernetes.io/kubelet-serving                 system:node:k8s-master-0   &lt;none&gt;              Pending
+csr-wjrnr   9m53s   kubernetes.io/kubelet-serving                 system:node:k8s-master-0   &lt;none&gt;              Pending
+csr-sjq42   9m8s    kubernetes.io/kubelet-serving                 system:node:k8s-master-1   &lt;none&gt;              Pending
+csr-xtv8f   8m56s   kubernetes.io/kubelet-serving                 system:node:k8s-master-1   &lt;none&gt;              Pending
+csr-f2dsf   8m3s    kubernetes.io/kubelet-serving                 system:node:k8s-master-2   &lt;none&gt;              Pending
+csr-xl8dg   6m58s   kubernetes.io/kubelet-serving                 system:node:k8s-worker-0   &lt;none&gt;              Pending
+csr-p9g24   6m52s   kubernetes.io/kubelet-serving                 system:node:k8s-worker-1   &lt;none&gt;              Pending
+</code></pre></td></tr></table>
+</div>
+</div><p>能看到有好几个 <code>kubernetes.io/kubelet-serving</code> 的证书还处于 pending 状态，
+这是因为我们在 kubeadm 配置文件中，设置了 <code>serverTLSBootstrap: true</code>，让 Kubelet 从集群中申请 CA 签名证书，而不是自签名导致的。</p>
+<p>设置这个参数的主要目的，是为了让 metrics-server 等组件能使用 https 协议与 kubelet 通信，避免为 metrics-server 添加参数 <code>--kubelet-insecure-tls</code>.</p>
+<p>目前 kubeadm 不支持自动批准 kubelet 申请的证书，需要我们手动批准一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 批准 Kubelet 申请的所有证书</span>
+kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf csr-xl8dg csr-p9g24
+</code></pre></td></tr></table>
+</div>
+</div><p>在未批准这些证书之前，所有需要调用 kubelet api 的功能都将无法使用，比如：</p>
+<ul>
+<li>查看 pod 日志</li>
+<li>获取节点 metrics</li>
+<li>等等</li>
+</ul>
+<h4 id="51-常见问题">5.1 常见问题</h4>
+<h5 id="511-使用国内镜像源">5.1.1 使用国内镜像源</h5>
+<p>如果你没有科学环境，kubeadm 默认的镜像仓库在国内是拉不了的。
+如果对可靠性要求高，最好是自建私有镜像仓库，把镜像推送到私有仓库。</p>
+<p>可以通过如下命令列出所有需要用到的镜像地址：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubeadm config images list --kubernetes-version v1.22.1
+k8s.gcr.io/kube-apiserver:v1.22.1
+k8s.gcr.io/kube-controller-manager:v1.22.1
+k8s.gcr.io/kube-scheduler:v1.22.1
+k8s.gcr.io/kube-proxy:v1.22.1
+k8s.gcr.io/pause:3.5
+k8s.gcr.io/etcd:3.5.0-0
+k8s.gcr.io/coredns/coredns:v1.8.4
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>skopeo</code> 等工具或脚本将上述镜像拷贝到你的私有仓库，或者图方便（测试环境）也可以考虑网上找找别人同步好的镜像地址。将镜像地址添加到 <code>kubeadm-config.yaml</code> 中再部署。</p>
+<h5 id="512-重置集群配置">5.1.2 重置集群配置</h5>
+<p>创建集群的过程中出现任何问题，都可以通过在所有节点上运行 <code>kubeadm reset</code> 来还原配置，然后重新走 kubeadm 的集群创建流程。</p>
+<p>但是要注意几点：</p>
+<ul>
+<li><code>kubeadm reset</code> 会清除包含 kube-vip 配置在内的所有 static-pod 配置文件，所以 master 节点需要重新跑下前面给的 kube-vip 命令，生成下 kube-vip 配置。</li>
+<li><code>kubeadm reset</code> 不会重置网络接口的配置，master 节点需要手动清理下 kube-vip 添加的 vip: <code>ip addr del 192.168.122.200/32 dev eth0</code>.</li>
+<li>如果你在安装了网络插件之后希望重装集群，顺序如下：
+<ul>
+<li>通过 <code>kubectl delete -f xxx.yaml</code>/<code>helm uninstall</code> 删除所有除网络之外的其他应用配置</li>
+<li>删除网络插件</li>
+<li>先重启一遍所有节点，或者手动重置所有节点的网络配置
+<ul>
+<li>建议重启，因为我不知道该怎么手动重置&hellip; 试了 <code>systemctl restart network</code> 并不会清理所有虚拟网络接口。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>如此操作后，再重新执行集群安装，应该就没啥毛病了。</p>
+<h3 id="6-验证集群的高可用性">6. 验证集群的高可用性</h3>
+<p>虽然网络插件还没装导致集群所有节点都还没 ready，但是我们已经可以通过 kubectl 命令来简单验证集群的高可用性了。</p>
+<p>首先，我们将前面放置在 k8s-master-0 的认证文件 <code>$HOME/.kube/config</code> 以及 kunbectl 安装在另一台机器上，比如我直接放我的宿主机。</p>
+<p>然后在宿主机上跑 <code>kubectl get node</code> 命令验证集群的高可用性：</p>
+<ul>
+<li>三个主节点都正常运行时，kubectl 命令也正常</li>
+<li>pause 或者 stop 其中一个 master，kubectl 命令仍然能正常运行</li>
+<li>再 pause 第二个 master，kubectl 命令应该就会卡住，并且超时，无法使用了</li>
+<li>resume 恢复停掉的两个 master 之一，会发现 kubectl 命令又能正常运行了</li>
+</ul>
+<p>到这里 kubeadm 的工作就完成了，接下来再安装网络插件，集群就可用了。</p>
+<h3 id="7-安装网络插件">7. 安装网络插件</h3>
+<p>社区有很多种网络插件可选，比较知名且性能也不错的，应该是 Calico 和 Cilium，其中 Cilium 主打基于 eBPF 的高性能与高可观测性。</p>
+<p>下面分别介绍这两个插件的安装方法。（注意只能安装其中一个网络插件，不能重复安装。）</p>
+<p>需要提前在本机安装好 helm，我这里使用宿主机，因此只需要在宿主机安装:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一行命令安装，也可以自己手动下载安装包，都行</span>
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="p">|</span> bash
+
+<span class="c1"># 或者 opensuse 直接用包管理器安装</span>
+sudo zypper in helm
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="71-安装-cilium">7.1 安装 Cilium</h4>
+<blockquote>
+<p>官方文档：https://docs.cilium.io/en/v1.10/gettingstarted/k8s-install-kubeadm/</p>
+</blockquote>
+<p>cilium 通过 eBPF 提供了高性能与高可观测的 k8s 集群网络，
+另外 cilium 还提供了比 kube-proxy 更高效的实现，可以完全替代 kube-proxy.</p>
+<p>这里我们还是先使用 kube-proxy 模式，先熟悉下 cilium 的使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add cilium https://helm.cilium.io/
+helm search repo cilium/cilium -l <span class="p">|</span> head
+
+helm install cilium cilium/cilium --version 1.10.4 --namespace kube-system
+</code></pre></td></tr></table>
+</div>
+</div><p>可以通过 <code>kubectl get pod -A</code> 查看 cilium 的安装进度，当所有 pod 都 ready 后，集群就 ready 了~</p>
+<p>cilium 也提供了专用的客户端：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
+sha256sum --check cilium-linux-amd64.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
+rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后使用 cilium 客户端检查网络插件的状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"> $ cilium status --wait
+    /¯¯<span class="se">\
+</span><span class="se"></span> /¯¯<span class="se">\_</span>_/¯¯<span class="se">\ </span>   Cilium:         OK
+ <span class="se">\_</span>_/¯¯<span class="se">\_</span>_/    Operator:       OK
+ /¯¯<span class="se">\_</span>_/¯¯<span class="se">\ </span>   Hubble:         disabled
+ <span class="se">\_</span>_/¯¯<span class="se">\_</span>_/    ClusterMesh:    disabled
+    <span class="se">\_</span>_/
+
+DaemonSet         cilium             Desired: 5, Ready: 5/5, Available: 5/5
+Deployment        cilium-operator    Desired: 2, Ready: 2/2, Available: 2/2
+Containers:       cilium             Running: <span class="m">5</span>
+                  cilium-operator    Running: <span class="m">2</span>
+Cluster Pods:     2/2 managed by Cilium
+Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d354052ccf2a7445101d78cebd14444c7c40129ce7889f2f04b89374dbf8a1d: <span class="m">5</span>
+                  cilium-operator    quay.io/cilium/operator-generic:v1.10.4@sha256:c49a14e34634ff1a494c84b718641f27267fb3a0291ce3d74352b44f8a8d2f93: <span class="m">2</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>cilium 还提供了命令，自动创建 pod 进行集群网络的连接性测试：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">❯ cilium connectivity <span class="nb">test</span>
+ℹ️  Monitor aggregation detected, will skip some flow validation steps
+✨ <span class="o">[</span>kubernetes<span class="o">]</span> Creating namespace <span class="k">for</span> connectivity check...
+✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying echo-same-node service...
+✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying same-node deployment...
+✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying client deployment...
+✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying client2 deployment...
+✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying echo-other-node service...
+✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying other-node deployment...
+...
+ℹ️  Expose Relay locally with:
+   cilium hubble <span class="nb">enable</span>
+   cilium status --wait
+   cilium hubble port-forward<span class="p">&amp;</span>
+🏃 Running tests...
+...
+---------------------------------------------------------------------------------------------------------------------
+✅ All <span class="m">11</span> tests <span class="o">(</span><span class="m">134</span> actions<span class="o">)</span> successful, <span class="m">0</span> tests skipped, <span class="m">0</span> scenarios skipped.
+</code></pre></td></tr></table>
+</div>
+</div><p>通过 <code>kubectl get po -A</code> 能观察到，这个测试命令会自动创建一个 <code>cilium-test</code> 名字空间，并在启动创建若干 pod 进行详细的测试。</p>
+<p>整个测试流程大概会持续 5 分多钟，测试完成后，相关 Pod 不会自动删除，使用如下命令手动删除：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete namespace cilium-test
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="71-安装-calico">7.1 安装 Calico</h4>
+<blockquote>
+<p>官方文档：https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises</p>
+</blockquote>
+<p>也就两三行命令。安装确实特别简单，懒得介绍了，看官方文档吧。</p>
+<p>但是实际上 calico 的细节还蛮多的，建议通读下它的官方文档，了解下 calico 的架构。</p>
+<h4 id="8-查看集群状态">8. 查看集群状态</h4>
+<p>官方的 dashboard 个人感觉不太好用，建议直接在本地装个 k9s 用，特别爽。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in k9s
+</code></pre></td></tr></table>
+</div>
+</div><p>然后就可以愉快地玩耍了。</p>
+<h4 id="9-安装-metrics-server">9. 安装 metrics-server</h4>
+<blockquote>
+<p>这一步可能遇到的问题：<a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#kubelet-serving-certs" target="_blank" rel="noopener noreferrer">Enabling signed kubelet serving certificates</a></p>
+</blockquote>
+<p>如果需要使用 HPA 以及简单的集群监控，那么 metrics-server 是必须安装的，现在我们安装一下它。</p>
+<p>首先，跑 kubectl 的监控命令应该会报错：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+error: Metrics API not available
+</code></pre></td></tr></table>
+</div>
+</div><p>k9s 里面应该也看不到任何监控指标。</p>
+<p>现在通过 helm 安装它：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+helm search repo metrics-server/metrics-server -l <span class="p">|</span> head
+
+helm upgrade --install metrics-server metrics-server/metrics-server --version 3.5.0 --namespace kube-system
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>metrics-server 默认只会部署一个实例，如果希望高可用，请参考官方配置：<a href="https://github.com/kubernetes-sigs/metrics-server/tree/master/manifests/high-availability" target="_blank" rel="noopener noreferrer">metrics-server - high-availability manifests</a></p>
+</blockquote>
+<p>等 metrics-server 启动好后，就可以使用 <code>kubectl top</code> 命令啦：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+NAME           CPU<span class="o">(</span>cores<span class="o">)</span>   CPU%   MEMORY<span class="o">(</span>bytes<span class="o">)</span>   MEMORY%   
+k8s-master-0   327m         16%    1465Mi          50%       
+k8s-master-1   263m         13%    1279Mi          44%       
+k8s-master-2   289m         14%    1282Mi          44%       
+k8s-worker-0   62m          3%     518Mi           13%       
+k8s-worker-1   115m         2%     659Mi           8%        
+
+❯ kubectl top pod
+No resources found in default namespace.
+
+❯ kubectl top pod -A
+NAMESPACE     NAME                                   CPU<span class="o">(</span>cores<span class="o">)</span>   MEMORY<span class="o">(</span>bytes<span class="o">)</span>   
+kube-system   cilium-45nw4                           9m           135Mi           
+kube-system   cilium-5x7jf                           6m           154Mi           
+kube-system   cilium-84sr2                           7m           160Mi           
+kube-system   cilium-operator-78f45675-dp4b6         2m           30Mi            
+kube-system   cilium-operator-78f45675-fpm5g         1m           30Mi            
+kube-system   cilium-tkhl4                           6m           141Mi           
+kube-system   cilium-zxbvm                           5m           138Mi           
+kube-system   coredns-78fcd69978-dpxxk               3m           16Mi            
+kube-system   coredns-78fcd69978-ptd9p               1m           18Mi            
+kube-system   etcd-k8s-master-0                      61m          88Mi            
+kube-system   etcd-k8s-master-1                      50m          85Mi            
+kube-system   etcd-k8s-master-2                      55m          83Mi            
+kube-system   kube-apiserver-k8s-master-0            98m          462Mi           
+kube-system   kube-apiserver-k8s-master-1            85m          468Mi           
+kube-system   kube-apiserver-k8s-master-2            85m          423Mi           
+kube-system   kube-controller-manager-k8s-master-0   22m          57Mi            
+kube-system   kube-controller-manager-k8s-master-1   2m           23Mi            
+kube-system   kube-controller-manager-k8s-master-2   2m           23Mi            
+kube-system   kube-proxy-j2s76                       1m           24Mi            
+kube-system   kube-proxy-k6d6z                       1m           18Mi            
+kube-system   kube-proxy-k85rx                       1m           23Mi            
+kube-system   kube-proxy-pknsc                       1m           20Mi            
+kube-system   kube-proxy-xsq4m                       1m           15Mi            
+kube-system   kube-scheduler-k8s-master-0            3m           25Mi            
+kube-system   kube-scheduler-k8s-master-1            4m           21Mi            
+kube-system   kube-scheduler-k8s-master-2            5m           21Mi            
+kube-system   kube-vip-k8s-master-0                  4m           17Mi            
+kube-system   kube-vip-k8s-master-1                  2m           16Mi            
+kube-system   kube-vip-k8s-master-2                  2m           17Mi            
+kube-system   metrics-server-559f85484-5b6xf         7m           27Mi    
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="10-为-etcd-添加定期备份能力">10. 为 etcd 添加定期备份能力</h4>
+<p>请移步 <a href="https://github.com/ryan4yin/knowledge/blob/master/datastore/etcd/etcd%20%E7%9A%84%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D.md" target="_blank" rel="noopener noreferrer">etcd 的备份与恢复</a></p>
+<h4 id="11-安装-volume-provisioner">11. 安装 Volume Provisioner</h4>
+<p>在我们学习使用 Prometheus/MinIO/Tekton 等有状态应用时，它们默认情况下会通过 PVC 声明需要的数据卷。</p>
+<p>为了支持这个能力，我们需要在集群中部署一个 Volume Provisioner.</p>
+<p>对于云上环境，直接接入云服务商提供的 Volume Provisioner 就 OK 了，方便省事而且足够可靠。</p>
+<p>而对于 bare-metal 环境，比较有名的应该是 rook-ceph，但是这个玩意部署复杂，维护难度又高，不适合用来测试学习，也不适合生产环境。</p>
+<p>对于开发、测试环境，或者个人集群，建议使用：</p>
+<ul>
+<li>local 数据卷，适合数据可丢失，且不要求分布式的场景，如开发测试环境
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner">https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner</a></li>
+<li><a href="https://github.com/rancher/local-path-provisioner">https://github.com/rancher/local-path-provisioner</a></li>
+</ul>
+</li>
+<li>NFS 数据卷，适合数据可丢失，对性能要求不高，并且要求分布式的场景。比如开发测试环境、或者线上没啥压力的应用
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner">https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner</a></li>
+<li><a href="https://github.com/kubernetes-csi/csi-driver-nfs">https://github.com/kubernetes-csi/csi-driver-nfs</a></li>
+<li>NFS 数据的可靠性依赖于外部 NFS 服务器，企业通常使用群晖等 NAS 来做 NFS 服务器</li>
+<li>如果外部 NFS 服务器出问题，应用就会崩。</li>
+</ul>
+</li>
+<li>直接使用云上的对象存储，适合希望数据不丢失、对性能要求不高的场景。
+<ul>
+<li>直接使用 <a href="https://github.com/rclone/rclone">https://github.com/rclone/rclone</a> mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。</li>
+</ul>
+</li>
+</ul>
+]]></description></item><item><title>Kubernetes 微服务最佳实践</title><link>https://ryan4yin.space/posts/kubernetes-best-practices/</link><pubDate>Tue, 25 Jan 2022 00:13:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/kubernetes-best-practices/</guid><description><![CDATA[<blockquote>
+<p>本文由个人笔记 <a href="https://github.com/ryan4yin/knowledge/tree/master/kubernetes" target="_blank" rel="noopener noreferrer">ryan4yin/knowledge</a> 整理而来，不保证正确</p>
 </blockquote>
 <p>本文主要介绍下我个人在使用 Kubernetes 的过程中，总结出的一套「Kubernetes 配置」，是我个人的「最佳实践」。
 其中大部分内容都经历过线上环境的考验，但是也有少部分还只在我脑子里模拟过，请谨慎参考。</p>
@@ -6266,673 +7298,4 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>官方的 sidecar/init-container 模式仍然是最推荐使用的。</p>
 <h2 id="五使用-vault-实现-aws-iam-credentials-的自动轮转">五、使用 vault 实现 AWS IAM Credentials 的自动轮转</h2>
 <p>待续。。。</p>
-]]></description></item><item><title>TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</title><link>https://ryan4yin.space/posts/about-tls-cert/</link><pubDate>Sun, 17 Jan 2021 21:53:26 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/about-tls-cert/</guid><description><![CDATA[<blockquote>
-<p>个人笔记，不保证正确性。本人在密码学方面完全是个外行，如果希望深入学习，建议阅读 <a href="https://github.com/nakov/practical-cryptography-for-developers-book" target="_blank" rel="noopener noreferrer">Practical Cryptography for Developers</a></p>
-</blockquote>
-<h2 id="更新记录">更新记录</h2>
-<ul>
-<li><i class="far fa-square fa-fw"></i> 补充 TLS 协议的详细流程</li>
-<li><i class="far fa-check-square fa-fw"></i> 完成 TLS 证书的详细介绍</li>
-</ul>
-<hr>
-<h2 id="一tls-协议">一、TLS 协议</h2>
-<p>我们需要加密网络数据以实现安全通信，但是有一个现实的问题：</p>
-<ol>
-<li>非对称加密算法（RSA/ECC 等）可以方便地对数据进行签名/验证，但是计算速度慢。</li>
-<li>对称加密算法（ChaCha20/AES 等）计算速度快，强度高，但是无法安全地生成与保管密钥。</li>
-</ol>
-<p>于是 TLS 协议在握手阶段使用非对称算法验证服务端，并使用 ECDHE 密钥交换算法（Elliptic Curve Diffie-Hellman key exchange）安全地生成一个临时的对称密钥，然后使用对称算法进行加密通信。</p>
-<p>然后在后续的每次数据交换过程中，都使用 ECDHE 算法生成新的对称密钥，然后使用新密钥加密解密数据。</p>
-<p></p>
-<p>上述的 TLS 协议流程，提供了「完美前向保密（Perfect Forward Secrecy）」特性，前向保密能够保护过去进行的通讯不受密码或密钥在未来暴露的威胁。
-即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，黑客必须破解出整个 TLS 连接中所有事务的对称密钥，才能得到完整的数据。</p>
-<blockquote>
-<p>tls1.1/tls1.2 也可以使用非前向安全的算法！要注意！</p>
-</blockquote>
-<blockquote>
-<p>本文的主要介绍 TLS 协议在使用方面的内容，ECDHE 等算法及 TLS 握手流程的详细内容，请查阅其他文档。</p>
-</blockquote>
-<p>TLS 通过两个证书来实现服务端身份验证，以及对称密钥的安全生成：</p>
-<ol>
-<li>CA 证书：浏览器/操作系统自带，用于验证服务端的 TLS 证书的签名。保证服务端证书可信。</li>
-<li>TLS 证书：使用 CA 证书验证了 TLS 证书可信后，将使用这个 TLS 证书进行协商，以安全地生成一个对称密钥。</li>
-</ol>
-<p>CA 证书和 TLS 证书，都只在 TLS 握手阶段有用到，之后的通信就与它们无关了。</p>
-<h2 id="二tls-证书介绍">二、TLS 证书介绍</h2>
-<h3 id="1-证书是什么">1. 证书是什么？</h3>
-<p>证书，其实就是非对称加密中的公钥，加上一些别的信息组成的一个文件。</p>
-<p>比如 CA 证书，就是 CA 公钥+CA机构相关信息构成的一个文件。</p>
-<p>而 TLS 证书，则包含公钥+申请者信息(你)，颁发者(CA)的信息+签名(使用 CA 私钥加密的证书 Hash)，以及一些其他信息。</p>
-<p>CA 证书中的公钥，能用于验证 TLS 证书中签名的正确性，也就能用于判断证书是否可信。</p>
-<p>你可以尝试使用浏览器查看 Google 的证书详情，我使用 Firefox 查看到的内容如下：</p>
-<p></p>
-<p>证书文件的格式叫做 X.509，由 <a href="https://tools.ietf.org/html/rfc5280" target="_blank" rel="noopener noreferrer">RFC5280</a> 规范详细定义。</p>
-<h3 id="2-tls-证书支持保护的域名类型">2. TLS 证书支持保护的域名类型</h3>
-<p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
-但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
-<p>根据<a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreferrer">证书选型和购买 - 阿里云文档</a> 的解释，<strong>通配符证书只支持同级匹配</strong>，详细说明如下：</p>
-<ol>
-<li>一级通配符域名：可保护该通配符域名（主域名）自身和该域名所有的一级子域名。
-<ul>
-<li>例如：一级通配符域名 <code>*.aliyun.com</code> 可以用于保护 <code>aliyun.com</code>、<code>www.aliyun.com</code> 以及其他所有一级子域名。
-但是不能用于保护任何二级子域名，如 <code>xx.aa.aliyun.com</code></li>
-</ul>
-</li>
-<li>二级或二级以上通配符域名：只能保护该域名同级的所有通配域名，不支持保护该通配符域名本身。
-<ul>
-<li>例如：<code>*.a.aliyun.com</code> 只支持保护它的所有同级域名，不能用于保护三级子域名。</li>
-</ul>
-</li>
-</ol>
-<p>要想保护多个二三级子域，只能在生成 TLS 证书时，添加多个通配符域名。
-因此设计域名规则时，要考虑到这点，尽量不要使用层级太深的域名！有些信息可以通过 <code>-</code> 来拼接以减少域名层级，比如阿里云的 oss 域名：</p>
-<ol>
-<li>公网：<code>oss-cn-shenzhen.aliyuncs.com</code></li>
-<li>内网：<code>oss-cn-shenzhen-internal.aliyuncs.com</code></li>
-</ol>
-<h2 id="三tls-证书的生成">三、TLS 证书的生成</h2>
-<blockquote>
-<p><a href="https://github.com/openssl/openssl" target="_blank" rel="noopener noreferrer">OpenSSL</a> 是目前使用最广泛的网络加密算法库，这里以它为例介绍证书的生成。
-另外也可以考虑使用 <a href="https://github.com/cloudflare/cfssl" target="_blank" rel="noopener noreferrer">cfssl</a>.</p>
-</blockquote>
-<p>前面讲到了 TLS 协议的握手需要使用到两个证书：</p>
-<ol>
-<li>TLS 证书（服务端证书）：这个是服务端需要配置的数据加密证书。
-<ul>
-<li>服务端需要持有这个 TLS 证书本身，以及证书的私钥。</li>
-<li>握手时服务端需要将 TLS 证书发送给客户端。</li>
-</ul>
-</li>
-<li>CA 证书：这是受信的根证书，客户端可用于验证所有使用它进行签名的 TLS 证书。
-<ul>
-<li>CA 证书的私钥由权威机构持有，客户端（比如浏览器）则保有 CA 证书自身。</li>
-</ul>
-</li>
-</ol>
-<p>在 TLS 连接的建立阶段，客户端（如浏览器）会使用 CA 证书的公钥对服务端的证书签名进行验证，验证成功则说明该证书是受信任的。</p>
-<h3 id="1-tls-证书的类型">1. TLS 证书的类型</h3>
-<p>按照证书的生成方式进行分类，证书有三种类型：</p>
-<ol>
-<li>由权威 CA 机构签名的 TLS 证书：这类证书会被浏览器、小程序等第三方应用/服务商信任。申请证书时需要验证你的所有权，也就使证书无法伪造。
-<ul>
-<li>如果你的 API 需要提供给第三方应用/服务商/浏览器访问，那就必须向权威 CA 机构申请此类证书。</li>
-</ul>
-</li>
-<li>本地签名证书 - <code>tls_locally_signed_cert</code>：即由本地 CA 证书签名的 TLS 证书
-<ul>
-<li>本地 CA 证书，就是自己使用 <code>openssl</code> 等工具生成的 CA 证书。</li>
-<li>这类证书不会被浏览器/小程序等第三方应用/服务商信任，证书就可以被伪造。</li>
-<li>这类证书的缺点是无法与第三方应用/服务商建立安全的连接。</li>
-<li>如果客户端是完全可控的（比如是自家的 APP），那可以自行验证证书的可靠性（公钥锁定、双向 TLS 验证）。这种场景下使用此类证书是安全可靠的。可以不使用权威CA机构颁发的证书。</li>
-</ul>
-</li>
-<li>自签名证书 - <code>tls_self_signed_cert</code>: 和 <code>tls_locally_signed_cert</code> 类似，但使用 TLS 证书自己充当 CA 证书（我签我自己），生成出的证书就叫自签名证书。
-<ul>
-<li>注意:<strong>更广义地讲，自签名证书，就是「并非由权威 CA 机构签名的 TLS 证书」</strong>，也就是同时指代了 <code>tls_self_signed_cert</code> 和 <code>tls_locally_signed_cert</code>。这也是「自签名证书」应用最广泛的一种含义。</li>
-</ul>
-</li>
-</ol>
-<p>总的来说，权威CA机构颁发的证书，可以被第三方的应用信任，但是自己生成的不行。
-而越贵的权威证书，安全性与可信度就越高，或者可以保护更多的域名。</p>
-<p>在客户端可控的情况下，可以考虑使用「本地签名证书」（方便、省钱），将这个证书预先埋入客户端中用于验证。</p>
-<p>而「自签名证书」主要是方便，能不用还是尽量不要使用。</p>
-<h3 id="2-向权威ca机构申请受信-tls-证书">2. 向权威CA机构申请「受信 TLS 证书」</h3>
-<p>免费的 TLS 证书有两种方式获取：</p>
-<ol>
-<li>部分 TLS 提供商有提供免费证书的申请，有效期为一年，但是不支持泛域名。</li>
-<li>申请 <a href="https://letsencrypt.org" target="_blank" rel="noopener noreferrer">Let&rsquo;s Encrypt 免费证书</a>
-<ul>
-<li>很多代理工具都有提供 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如:
-<ul>
-<li><a href="/network-proxy&#43;web-server/traefik/README.md" rel="">Traefik</a></li>
-<li><a href="https://github.com/caddyserver/caddy" target="_blank" rel="noopener noreferrer">Caddy</a></li>
-<li><a href="https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion" target="_blank" rel="noopener noreferrer">docker-letsencrypt-nginx-proxy-companion</a></li>
-</ul>
-</li>
-<li>网上也有一些 <a href="https://github.com/certbot/certbot" target="_blank" rel="noopener noreferrer">certbot</a> 插件，可以通过 DNS 提供商的 API 进行 Let&rsquo;s Encrypt 证书的 Auto Renewal，比如：
-<ul>
-<li><a href="https://github.com/tengattack/certbot-dns-aliyun" target="_blank" rel="noopener noreferrer">certbot-dns-aliyun</a></li>
-</ul>
-</li>
-<li>terraform 也有相关 provider: <a href="https://github.com/vancluever/terraform-provider-acme" target="_blank" rel="noopener noreferrer">terraform-provider-acme</a></li>
-</ul>
-</li>
-</ol>
-<p>收费证书可以在各 TLS 提供商处购买，比如国内的阿里云腾讯云等。</p>
-<p>完整的证书申请流程如下：</p>
-<p></p>
-<p>为了方便用户，图中的申请人(Applicant)自行处理的部分，目前很多证书申请网站也可以自动处理，用户只需要提供相关信息即可。</p>
-<h3 id="3-生成本地签名证书或者自签名证书">3. 生成「本地签名证书」或者「自签名证书」</h3>
-<p>除了被第三方信任的「受信 TLS 证书」，在内网环境，我们需要也使用 TLS 证书保障通信安全，这时我们可能会选择自己生成证书，而不是向权威机构申请证书。</p>
-<p>可能的原因如下：</p>
-<ol>
-<li>要向权威机构申请证书，那是要给钱的。而在内网环境下，并无必要使用权威证书。</li>
-<li>内网环境使用的可能是非公网域名（<code>xxx.local</code>/<code>xxx.lan</code>/<code>xxx.srv</code> 等），权威机构不签发这种域名的证书。（因为没有人唯一地拥有这个域名）</li>
-</ol>
-<p>前面介绍过，自己生成的证书有两种方类型：</p>
-<ol>
-<li>本地签名证书：生成两个独立的密钥对，一个用于 CA 证书，另一个用于 TLS 证书。使用 CA 证书对 TLS 证书进行签名。</li>
-<li>自签名证书（我签我自己）：TLS 证书和 CA 证书都使用同一个密钥对，使用 TLS 证书对它自己进行签名。
-<ul>
-<li>测试发现这种方式得到的证书貌似不包含 SAN 属性！因此不支持多域名。</li>
-</ul>
-</li>
-</ol>
-<p>一般来说，直接生成一个泛域名的「自签名证书」就够了，但是它不方便拓展——客户端对每个「自签名证书」，都需要单独添加一次信任。
-而「本地签名证书」就没这个问题，one <code>ca.crt</code> rules them all.</p>
-<p>总的来说，使用「自签名证书」不方便进行拓展，未来可能会遇到麻烦。因此建议使用「本地签名证书」。</p>
-<p>另外介绍下这里涉及到的几种文件类型：</p>
-<ol>
-<li><code>xxx.key</code>: 就是一个私钥，一般是一个 RSA 私钥，长度通常指定为 2048 位。
-<ul>
-<li>CA 证书和 TLS 证书的私钥都是通过这种方式生成的。</li>
-</ul>
-</li>
-<li><code>xxx.csr</code>: 即 Certificate Sign Request，证书签名请求。使用 openssl 等工具，通过 TLS 密钥+TLS 证书的相关信息，可生成出一个 CSR 文件。
-<ul>
-<li>域名（Common Name, CN）就是在这里指定的，可以使用泛域名。</li>
-<li>用户将 csr 文件发送给 CA 机构，进行进一步处理。</li>
-</ul>
-</li>
-<li><code>xxx.crt</code>: 这就是我们所说的 TLS 证书，CA 证书和服务端 TLS 证书都是这个格式。
-<ul>
-<li>使用 CA 证书、CA 密钥对 <code>csr</code> 文件进行签名，就能得到最终的服务端 TLS 证书——一个 <code>crt</code> 文件。</li>
-</ul>
-</li>
-</ol>
-<p>生成一个「自签名证书」或者「本地签名证书」（RSA256 算法），有两个步骤：</p>
-<ol>
-<li>编写证书签名请求的配置文件 <code>csr.conf</code>:
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">[ req ]
-default_bits = 2048
-prompt = no
-default_md = sha256
-req_extensions = req_ext
-distinguished_name = dn
-
-[ dn ]
-C = CN  # Contountry
-ST = &lt;state&gt;
-L = &lt;city&gt;
-O = &lt;organization&gt;
-OU = &lt;organization unit&gt;
-CN = *.svc.local  # 泛域名，这个字段已经被 chrome/apple 弃用了。
-
-[ alt_names ]  # 备用名称，chrome/apple 目前只信任这里面的域名。
-DNS.1 = *.svc.local  # 一级泛域名
-DNS.2 = *.aaa.svc.local  # 二级泛域名
-DNS.3 = *.bbb.svc.local  # 二级泛域名
-
-[ req_ext ]
-subjectAltName = @alt_names
-
-[ v3_ext ]
-subjectAltName=@alt_names  # Chrome 要求必须要有 subjectAltName(SAN)
-authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment,digitalSignature
-extendedKeyUsage=serverAuth,clientAuth
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>此文件的详细文档：<a href="https://www.openssl.org/docs/man1.1.1/man5/" target="_blank" rel="noopener noreferrer">OpenSSL file formats and conventions</a></li>
-</ul>
-</li>
-<li>生成证书：
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
-openssl genrsa -out server.key <span class="m">2048</span>
-<span class="c1"># 2. 通过第一步编写的配置文件，生成证书签名请求（公钥+申请者信息）</span>
-openssl req -new -key server.key -out server.csr -config csr.conf
-<span class="c1"># 3. 生成最终的证书，这里指定证书有效期 3650 天</span>
-<span class="c1">## 3.1 方法一（自签名）：使用 server.key 进行自签名。这种方式得到的证书不包含 SAN！不支持多域名！</span>
-openssl req -x509 -sha256 -days <span class="m">3650</span> -key server.key -in server.csr -out server.crt
-<span class="c1">## 3.2 方法二（本地签名）：生成 ca 证书，并且使用 CA 证书、CA 密钥对 `csr` 文件进行签名</span>
-<span class="c1">### 3.2.1 ca 私钥</span>
-openssl genrsa -out ca.key <span class="m">2048</span>
-<span class="c1">### 3.2.2 ca 证书，ca 证书的有效期尽量设长一点，因为不方便更新换代。</span>
-openssl req -x509 -new -nodes -key ca.key -subj <span class="s2">&#34;/CN=MyLocalRootCA&#34;</span> -days <span class="m">10000</span> -out ca.crt
-<span class="c1">### 3.2.3 签名，得到最终的 TLS 证书，它包含四部分内容：公钥+申请者信息 + 颁发者(CA)的信息+签名(使用 CA 私钥加密)</span>
-openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class="se">\
-</span><span class="se"></span>  -CAcreateserial -out server.crt -days <span class="m">3650</span> <span class="se">\
-</span><span class="se"></span>  -extensions v3_ext -extfile csr.conf
-</code></pre></td></tr></table>
-</div>
-</div></li>
-</ol>
-<p>上述流程生成一个 x509 证书链，详细的参数说明，参见 <a href="https://tools.ietf.org/html/rfc5280" target="_blank" rel="noopener noreferrer">RFC5280 - Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a></p>
-<h3 id="4-关于证书寿命">4. 关于证书寿命</h3>
-<p>对于公开服务，服务端证书的有效期不要超过 825 天（27 个月）！而 2020 年 11 月起，新申请的服务端证书有效期缩短到了 398 天（13 个月）。目前 Apple/Mozilla/Chrome 都发表了相应声明，证书有效期超过上述限制的，将被浏览器/Apple设备禁止使用。</p>
-<p>对于其他用途的证书，如果更换起来很麻烦，可以考虑放宽条件。
-比如 kubernetes 集群的加密证书，可以考虑有效期设长一些，比如 10 年。</p>
-<p>据<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreferrer">云原生安全破局｜如何管理周期越来越短的数字证书？</a>所述，大量知名企业如 特斯拉/微软/领英/爱立信 都曾因未及时更换 TLS 证书导致服务暂时不可用。</p>
-<p>因此 TLS 证书最好是设置自动轮转！人工维护不可靠！
-目前很多 Web 服务器/代理，都支持自动轮转 Let&rsquo;s Encrypt 证书。
-另外 Vault 等安全工具，也支持自动轮转私有证书。</p>
-<h3 id="5-拓展1基于-ecc-算法的-tls-证书">5. 拓展1：基于 ECC 算法的 TLS 证书</h3>
-<blockquote>
-<p>Let&rsquo;s Encrypt 目前也已经支持了 ECC 证书。</p>
-</blockquote>
-<p>ECC(Elliptic Curve Cryptography) 算法被认为是比 RSA 更优秀的算法。与 RSA 算法相比，ECC 算法使用更小的密钥大小，但可提供同样的安全性，这使计算更快，降低了能耗，并节省了内存和带宽。</p>
-<p>对于 RSA 密钥，可以提供不同的密钥大小（密钥大小越大，加密效果越好）。
-而对于 ECC 密钥，您应选择要用哪种曲线生成密钥对。各个组织（ANSI X9.62、NIST、SECG）命名了多种曲线，可通过如下命名查看 openssl 支持的所有椭圆曲线名称：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">openssl ecparam -list_curves
-</code></pre></td></tr></table>
-</div>
-</div><p>生成一个自签名的 ECC 证书的命令示例如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
-openssl ecparam -genkey -name prime256v1 -out key.pem
-<span class="c1"># 生成证书签名请求，需要输入域名(Common Name, CN)等相关信息</span>
-openssl req -new -sha256 -key key.pem -out csr.csr -config csr.conf
-<span class="c1"># 生成最终的证书，这里指定证书有效期 10 年</span>
-<span class="c1">## 方法一：自签名证书</span>
-openssl req -x509 -sha256 -days <span class="m">3650</span> -key key.pem -in csr.csr -out certificate.pem
-<span class="c1">## 方法二：使用 ca 进行签名，方法参考前面</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="6-拓展2使用-openssl-生成-sshjwt-密钥对">6. 拓展2：使用 OpenSSL 生成 SSH/JWT 密钥对</h3>
-<p>RSA/ECC 这两类非对称加密算法被广泛的应用在各类加密通讯中。
-SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加密算法，因此使用 OpenSSL 生成的密钥对，也应该能用于 SSH 协议加密、JWT 签名等场景。</p>
-<blockquote>
-<p>目前有两种基于 ECC 和 DSA 的椭圆曲线签名算法：ECDSA 和 EdDSA(ed25519)，其中 ECDSA 的文档在曲线选择方面语焉不详，被认为可能存在安全隐患（政治和技术两方面带来的）。</p>
-</blockquote>
-<p>既然 SSH/TLS/JWT 使用的是相同的密钥对，那理所当然地，SSH/JWT 密钥对应该也可以通过 OpenSSL 生成出来。</p>
-<p>生成 RSA 密钥对的命令如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
-openssl genrsa -out rsa-private-key.pem <span class="m">2048</span>
-
-<span class="c1"># 2. 通过密钥生成公钥，JWT 使用此公钥验证签名</span>
-openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem
-
-<span class="c1"># 3. SSH 使用专用的公钥格式，需要使用 ssh-keygen 转换下格式</span>
-ssh-keygen -i -mPKCS8 -f rsa-public-key.pem -y &gt; rsa-public.pub
-</code></pre></td></tr></table>
-</div>
-</div><p>生成 ECC 密钥对的命令如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
-openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
-<span class="c1"># 2. 通过密钥生成公钥</span>
-openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
-
-<span class="c1"># 3. SSH 使用专用的公钥格式，需要使用 ssh-keygen 转换下格式</span>
-ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
-</code></pre></td></tr></table>
-</div>
-</div><p>JWT 签名及验证只需要使用标准的私钥-公钥对，即 <code>ecc-private-key.pem</code>/<code>ecc-public-key.pem</code>.</p>
-<p>而 SSH 需要使用专用的公钥格式，因此它的使用的密钥对应该是 <code>ecc-private-key.pem</code>/<code>ecc-public.pub</code></p>
-<p>注：SSH 目前推荐使用 ed25519 算法，而 JWT 目前推荐使用 ECDSA 算法。</p>
-<h4 id="61-加密与签名">6.1 加密与签名</h4>
-<ul>
-<li>
-<p>加密与解密：公钥用于对数据进行加密，私钥用于对数据进行解密</p>
-</li>
-<li>
-<p>签名与验证：私钥用于对数据进行签名，公钥用于对签名进行验证</p>
-</li>
-<li>
-<p><a href="https://www.zhihu.com/question/25912483/answer/31653639" target="_blank" rel="noopener noreferrer">加密与签名的公私钥，用途刚好相反！</a></p>
-</li>
-</ul>
-<h2 id="四服务端与客户端的证书配置">四、服务端与客户端的证书配置</h2>
-<h3 id="1-服务端的-tls-证书配置">1. 服务端的 TLS 证书配置</h3>
-<p>要支持 HTTPS 协议，服务端需要两个文件：</p>
-<ol>
-<li>TLS 证书私钥(RSA 私钥或 EC 私钥)：<code>server.key</code></li>
-<li>TLS 证书（包含公钥）：<code>server.crt</code></li>
-</ol>
-<p>一般如 Nginx 等服务端应用，都可以通过配置文件指定这两个文件的位置。修改配置后重新启动，就有 TLS 了，可以通过 https 协议访问测试。</p>
-<h4 id="11-完美前向保密">1.1 完美前向保密</h4>
-<p>旧版本的 TLS 协议并不一定能保证前向保密，为了保证前向安全，需要在服务端配置中进行一定设置。
-具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target="_blank" rel="noopener noreferrer">ssl-config - mozilla</a>，该网站提供三个安全等级的配置：</p>
-<ol>
-<li>「Intermediate」：查看生成出的 <code>ssl-cipher</code> 属性，发现它只支持 <code>ECDHE</code>/<code>DHE</code> 开头的算法。因此它保证前向保密。
-<ul>
-<li>对于需要通过浏览器访问的 API，推荐选择这个等级。</li>
-</ul>
-</li>
-<li>「Mordern」：只支持 <code>TLSv1.3</code>，该协议废弃掉了过往所有不安全的算法，保证前向保密，安全性极高，性能也更好。
-<ul>
-<li>对于不需要通过浏览器等旧终端访问的 API，请直接选择这个等级。</li>
-</ul>
-</li>
-<li>「Old」：除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
-</ol>
-<p>另外阿里云负载均衡器配置前向保密的方法参见：<a href="https://help.aliyun.com/document_detail/90740.html" target="_blank" rel="noopener noreferrer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
-<h3 id="2-客户端的-tls-证书配置针对本地签名的证书">2. 客户端的 TLS 证书配置（针对本地签名的证书）</h3>
-<p>如果你在证书不是权威 CA 机构颁发的（比如是一个自签名证书），那就需要在客户端将这个 TLS 证书添加到受信证书列表中。
-这个步骤可以在 OS 层面进行——添加到 OS 的默认证书列表中，也可以在代码层面完成——指定使用某个证书进行 TLS 验证。</p>
-<ol>
-<li>Linux: 使用如下命令安装证书
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo cp ca.crt /usr/local/share/ca-certificates/server.crt
-sudo update-ca-certificates
-</code></pre></td></tr></table>
-</div>
-</div></li>
-<li>Windows: 通过证书管理器 <code>certmgr.msc</code> 将证书安装到 <code>受信任的根证书颁发机构</code>，Chrome 的小锁就能变绿了。</li>
-<li>编程：使用 HTTPS 客户端的 api 指定使用的 TLS 证书</li>
-<li>Docker-Client: 参见 <a href="https://docs.docker.com/registry/insecure/#use-self-signed-certificates" target="_blank" rel="noopener noreferrer">Use self-signed certificates - Docker Docs</a></li>
-</ol>
-<h4 id="21-证书锁定certifacte-pining技术">2.1 证书锁定(Certifacte Pining)技术</h4>
-<p>即使使用了 TLS 协议对流量进行加密，并且保证了前向保密，也无法保证流量不被代理！</p>
-<p>这是因为客户端大多是直接依靠了操作系统内置的证书链进行 TLS 证书验证，而 Fiddler 等代理工具可以将自己的 TLS 证书添加到该证书链中。</p>
-<p>为了防止流量被 Fiddler 等工具使用上述方式监听流量，出现了「证书锁定」技术。
-方法是在客户端中硬编码证书的指纹（Hash值，或者直接保存整个证书的内容也行），在建立 TLS 连接前，先计算使用的证书的指纹是否匹配，否则就中断连接。</p>
-<p>这种锁定方式需要以下几个前提才能确保流量不被监听：</p>
-<ol>
-<li>客户端中硬编码的证书指纹不会被篡改。</li>
-<li>指纹验证不能被绕过。
-<ol>
-<li>目前有公开技术（XPosed+JustTrustMe）能破解 Android 上常见的 HTTPS 请求库，直接绕过证书检查。</li>
-<li>针对上述问题，可以考虑加大绕过的难度。或者 App 检测自己是否运行在 Xposed 等虚拟环境下。</li>
-</ol>
-</li>
-<li>用于 TLS 协议的证书不会频繁更换。（如果更换了，指纹就对不上了。）</li>
-</ol>
-<p>而对于第三方的 API，因为我们不知道它们会不会更换 TLS 证书，就不能直接将证书指纹硬编码在客户端中。
-这时可以考虑从服务端获取这些 API 的证书指纹（附带私钥签名用于防伪造）。</p>
-<p>为了实现证书的轮转(rotation)，可以在新版本的客户端中包含多个证书指纹，这样能保证同时有多个可信证书，达成证书的轮转。（类比 JWT 的公钥轮转机制）</p>
-<blockquote>
-<p>证书锁定技术几乎等同于 SSH 协议的 <code>StrictHostKeyChecking</code> 选项，客户端会验证服务端的公钥指纹（key fingerprint），验证不通过则断开连接。</p>
-</blockquote>
-<h4 id="22-公钥锁定public-key-pining">2.2 公钥锁定(Public Key Pining)</h4>
-<p>前面提到过，TLS 证书其实就是公钥+申请者(你)和颁发者(CA)的信息+签名(使用 CA 私钥加密)，因此我们也可以考虑只锁定其中的公钥。</p>
-<p>「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
-<p><strong>如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。</strong></p>
-<h2 id="五tls-双向认证mutual-tls-authentication-mtls">五、TLS 双向认证(Mutual TLS authentication, mTLS)</h2>
-<p>TLS 协议（tls1.0+，RFC: <a href="https://tools.ietf.org/html/rfc5246#section-7.4.4" target="_blank" rel="noopener noreferrer">TLS1.2 - RFC5246</a>）中，定义了服务端请求验证客户端证书的方法。这
-个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。</p>
-<p>传统的「TLS 单向认证」技术，只在客户端去验证服务端是否可信。
-而「TLS 双向认证（mTLS）」，则添加了服务端验证客户端是否可信的步骤（第三步）：</p>
-<ol>
-<li>客户端发起请求</li>
-<li>「验证服务端是否可信」：服务端将自己的 TLS 证书发送给客户端，客户端通过自己的 CA 证书链验证这个服务端证书。</li>
-<li>「验证客户端是否可信」：客户端将自己的 TLS 证书发送给服务端，服务端使用它的 CA 证书链验证该客户端证书。</li>
-<li>协商对称加密算法及密钥</li>
-<li>使用对称加密进行后续通信。</li>
-</ol>
-<p>因为相比传统的 TLS，mTLS 只是添加了「验证客户端」这样一个步骤，所以这项技术也被称为「Client Authetication」.</p>
-<p>mTLS 需要用到两套 TLS 证书：</p>
-<ol>
-<li>服务端证书：这个证书签名已经介绍过了。</li>
-<li>客户端证书：客户端证书貌似对证书信息（如 CN/SAN 域名）没有任何要求，只要证书能通过 CA 签名验证就行。</li>
-</ol>
-<p>使用 openssl 生成 TLS 客户端证书（ca 和 csr.conf 可以直接使用前面生成服务端证书用到的，也可以另外生成）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
-openssl genrsa -out client.key <span class="m">2048</span>
-<span class="c1"># 2. 通过第一步编写的配置文件，生成证书签名请求</span>
-openssl req -new -key client.key -out client.csr -config csr.conf
-<span class="c1"># 3. 生成最终的证书，这里指定证书有效期 3650 天</span>
-<span class="c1">### 使用前面生成的 ca 证书对客户端证书进行签名（客户端和服务端共用 ca 证书）</span>
-openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class="se">\
-</span><span class="se"></span>   -CAcreateserial -out client.crt -days <span class="m">3650</span> <span class="se">\
-</span><span class="se"></span>   -extensions v3_ext -extfile csr.conf
-</code></pre></td></tr></table>
-</div>
-</div><p>mTLS 的应用场景主要在「零信任网络架构」，或者叫「无边界网络」中。
-比如微服务之间的互相访问，就可以使用 mTLS。
-这样就能保证每个 RPC 调用的客户端，都是其他微服务（或者别的可信方），防止黑客入侵后为所欲为。</p>
-<p>目前查到如下几个Web服务器/代理支持 mTLS:</p>
-<ol>
-<li>Traefik: <a href="https://docs.traefik.io/v2.0/https/tls/#client-authentication-mtls" target="_blank" rel="noopener noreferrer">Docs - Client Authentication (mTLS)</a></li>
-<li>Nginx: <a href="https://community.openhab.org/t/using-nginx-reverse-proxy-for-client-certificate-authentication-start-discussion/43064" target="_blank" rel="noopener noreferrer">Using NGINX Reverse Proxy for client certificate authentication</a>
-<ol>
-<li>主要参数是两个：<code>ssl_client_certificate /etc/nginx/client-ca.pem</code> 和 <code>ssl_verify_client on</code></li>
-</ol>
-</li>
-</ol>
-<h3 id="mtls-的安全性">mTLS 的安全性</h3>
-<p>如果将 mTLS 用在 App 安全上，存在的风险是：</p>
-<ol>
-<li>客户端中隐藏的证书是否可以被提取出来，或者黑客能否 Hook 进 App 中，直接使用证书发送信息。</li>
-<li>如果客户端私钥设置了「密码（passphrase）」，那这个密码是否能很容易被逆向出来？</li>
-</ol>
-<p>mTLS 和「公钥锁定/证书锁定」对比：</p>
-<ol>
-<li>公钥锁定/证书锁定：只在客户端进行验证。
-<ol>
-<li>但是在服务端没有进行验证。这样就无法鉴别并拒绝第三方应用（爬虫）的请求。</li>
-<li>加强安全的方法，是通过某种算法生成动态的签名。爬虫生成不出来这个签名，请求就被拒绝。</li>
-</ol>
-</li>
-<li>mTLS: 服务端和客户端都要验证对方。
-<ol>
-<li>保证双边可信，在客户端证书不被破解的情况下，就能 Ban 掉所有的爬虫或代理技术。</li>
-</ol>
-</li>
-</ol>
-<h2 id="六-tls-协议的破解手段">六 TLS 协议的破解手段</h2>
-<h3 id="1-客户端逆向破解手段总结">1. 客户端逆向/破解手段总结</h3>
-<p>要获取一个应用的数据，有两个方向：</p>
-<ol>
-<li>服务端入侵：现代应用的服务端突破难度通常都比较客户端高，注入等漏洞底层框架就有处理。</li>
-<li>客户端逆向+爬虫：客户端是离用户最近的地方，也是最容易被突破的地方。
-<ol>
-<li>mTLS 常见的破解手段，是找到老版本的安装包，发现很容易就能提取出客户端证书。。</li>
-</ol>
-</li>
-</ol>
-<p>待续</p>
-<h2 id="七通过-openssl-对-tls-证书进行-curd增删查改">七、通过 OpenSSL 对 TLS 证书进行 CURD（增删查改）</h2>
-<h3 id="1-查询与验证">1. 查询与验证</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看证书(crt)信息</span>
-openssl x509 -noout -text -in server.crt
-
-<span class="c1"># 查看证书请求(csr)信息</span>
-openssl req -noout -text -in server.csr
-
-<span class="c1"># 查看 RSA 私钥(key)信息</span>
-openssl rsa -noout -text -in server.key
-
-<span class="c1"># 验证证书是否可信</span>
-<span class="c1">## 1. 使用系统的证书链进行验证。因为是自签名证书，会验证失败</span>
-openssl verify server.crt
-<span class="c1">## 2. 使用 ca.crt 进行验证。验证成功。</span>
-openssl verify -CAfile ca.crt server.crt
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="2-证书格式转换">2. 证书格式转换</h3>
-<p>openssl 模式使用 PEM 格式的证书，这个证书格式将证书编码为 base64 格式进行保存。
-另外一类使用广泛的证书，是 PKCS#12、PKCS#8，以及 Windows 上常用的 DER 格式。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pem 格式转 pkcs12，公钥和私钥都放里面</span>
-openssl pkcs12 -export -in client.crt -inkey client.key -out client.p12
-<span class="c1"># 按提示输入保护密码</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>或者 p12 转 pem:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">openssl pkcs12 -in xxx.p12 -out xxx.crt -clcerts -nokeys
-openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
-</code></pre></td></tr></table>
-</div>
-</div><p>微信/支付宝等支付相关的数字证书，通常就使用 pkcs12 格式，使用商户号做加密密码，然后编码为 base64 再提供给用户。</p>
-<h2 id="参考">参考</h2>
-<h3 id="tls-协议">TLS 协议</h3>
-<ul>
-<li><a href="https://halfrost.com/https_tls1-2_handshake/" target="_blank" rel="noopener noreferrer">HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)</a></li>
-<li><a href="https://halfrost.com/https-key-cipher/" target="_blank" rel="noopener noreferrer">HTTPS 温故知新（五） —— TLS 中的密钥计算</a></li>
-</ul>
-<h3 id="tls-证书">TLS 证书</h3>
-<ul>
-<li>
-<p><a href="https://kubernetes.io/docs/concepts/cluster-administration/certificates/" target="_blank" rel="noopener noreferrer">Certificates - Kubernetes Docs</a></p>
-</li>
-<li>
-<p><a href="https://www.cnblogs.com/kyrios/p/tls-and-certificates.html" target="_blank" rel="noopener noreferrer">TLS/HTTPS 证书生成与验证</a></p>
-</li>
-<li>
-<p><a href="https://zhuanlan.zhihu.com/p/57710573" target="_blank" rel="noopener noreferrer">ECC作为SSL/TLS证书加密算法的优势</a></p>
-</li>
-<li>
-<p><a href="https://cloud.tencent.com/developer/article/1407305" target="_blank" rel="noopener noreferrer">ECC证书的生成和验签</a></p>
-</li>
-<li>
-<p><a href="https://zh.wikipedia.org/wiki/%E5%89%8D%E5%90%91%E4%BF%9D%E5%AF%86" target="_blank" rel="noopener noreferrer">前向保密(Forward Secrecy) - WikiPedia</a></p>
-</li>
-<li>
-<p><a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreferrer">证书选型和购买 - 阿里云文档</a></p>
-</li>
-<li>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ2MjI5OA==&amp;mid=2664079008&amp;idx=1&amp;sn=dede1114d5705880ea757f8d9ae4c92d" target="_blank" rel="noopener noreferrer">云原生安全破局｜如何管理周期越来越短的数字证书？</a></p>
-</li>
-</ul>
-<p>另外两个关于 CN(Common Name) 和 SAN(Subject Altnative Name) 的问答：</p>
-<ul>
-<li><a href="https://serverfault.com/questions/880804/can-not-get-rid-of-neterr-cert-common-name-invalid-error-in-chrome-with-self" target="_blank" rel="noopener noreferrer">Can not get rid of <code>net::ERR_CERT_COMMON_NAME_INVALID</code> error in chrome with self-signed certificates</a></li>
-<li><a href="https://stackoverflow.com/questions/5935369/ssl-how-do-common-names-cn-and-subject-alternative-names-san-work-together" target="_blank" rel="noopener noreferrer">SSL - How do Common Names (CN) and Subject Alternative Names (SAN) work together?</a></li>
-</ul>
-<p>关于证书锁定/公钥锁定技术：</p>
-<ul>
-<li><a href="https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning" target="_blank" rel="noopener noreferrer">Certificate and Public Key Pinning - OWASP</a></li>
-<li><a href="https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning" target="_blank" rel="noopener noreferrer">Difference between certificate pinning and public key pinning</a></li>
-</ul>
-<p>加密/签名算法相关：</p>
-<ul>
-<li><a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html" target="_blank" rel="noopener noreferrer">RSA算法原理（二）</a></li>
-</ul>
-<p>其他：</p>
-<ul>
-<li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreferrer">OpenSSL ManPage</a></li>
-<li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreferrer">openssl 查看证书</a></li>
-</ul>
 ]]></description></item></channel></rss>
