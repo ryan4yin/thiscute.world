@@ -527,7 +527,7 @@
 </span><span class="w">        </span><span class="nt">averageUtilization</span><span class="p">:</span><span class="w"> </span><span class="m">70</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h2 id="1-当前指标值的计算方式">1. 当前指标值的计算方式</h2>
+</div><h3 id="1-当前指标值的计算方式">1. 当前指标值的计算方式</h3>
 <p>HPA 默认使用 Pod 的当前指标进行计算，以 CPU 为例，其计算公式为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -538,7 +538,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>注意分母是总的 requests 量，而不是 limits.</p>
-<h3 id="11-存在的问题与解决方法">1.1 存在的问题与解决方法</h3>
+<h4 id="11-存在的问题与解决方法">1.1 存在的问题与解决方法</h4>
 <p>在 Pod 只有一个容器时这没啥问题，但是当 Pod 注入了 envoy 等 sidecar 时，这就会有问题了。</p>
 <p>因为 Istio 的 Sidecar requests 默认为 <code>100m</code> 也就是 0.1 核。
 在未 tuning 的情况下，服务负载一高，sidecar 的实际用量很容易就能涨到 0.2-0.4 核。
@@ -549,7 +549,7 @@
 <li>方法二：使用 KEDA 等第三方组件，获取到应用程序的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容</li>
 <li>方法三：使用 k8s 1.20 提供的 alpha 特性：<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics" target="_blank" rel="noopener noreferrer">Container Resourse Metrics</a>.</li>
 </ul>
-<h3 id="2-hpa-的扩缩容算法">2. HPA 的扩缩容算法</h3>
+<h4 id="2-hpa-的扩缩容算法">2. HPA 的扩缩容算法</h4>
 <p>HPA 什么时候会扩容，这一点是很好理解的。但是 HPA 的缩容策略，会有些迷惑，下面简单分析下。</p>
 <ol>
 <li>HPA 的「目标指标」可以使用两种形式：绝对度量指标和资源利用率。
@@ -588,7 +588,7 @@
 <li><code>--horizontal-pod-autoscaler-cpu-initialization-period</code>:</li>
 <li>缩容冷却时间：默认 5 分钟。</li>
 </ol>
-<h2 id="3-hpa-的期望值设成多少合适">3. HPA 的期望值设成多少合适</h2>
+<h3 id="3-hpa-的期望值设成多少合适">3. HPA 的期望值设成多少合适</h3>
 <p>这个需要针对每个服务的具体情况，具体分析。</p>
 <p>以最常用的按 CPU 值伸缩为例，</p>
 <ul>
