@@ -471,6 +471,54 @@
 </span><span class="w">            </span>- <span class="s2">&#34;while [ $(netstat -plunt | grep tcp | wc -l | xargs) -ne 0 ]; do sleep 1; done&#34;</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
+</div><h3 id="k8s-istio-pod-prestop">如果我的服务还使用了 Sidecar 代理网络请求，该怎么处理？</h3>
+<p>以服务网格 Istio 为例，在 Envoy 代理了 Pod 流量的情况下，502/504 的问题会变得更复杂一点——还需要考虑 Sidecar 与主容器的关闭顺序：</p>
+<ul>
+<li>如果在 Envoy 已关闭后，有新的请求再进来，将会导致 504（没人响应这个请求了）
+<ul>
+<li>所以 Envoy 最好在 Terminating 至少 3s 后才能关，确保 Istio 网格配置已完全更新</li>
+</ul>
+</li>
+<li>如果在 Envoy 还没停止时，主容器先关闭，然后又有新的请求再进来，Envoy 将因为无法连接到 upstream 导致 503
+<ul>
+<li>所以主容器也最好在 Terminating 至少 3s 后，才能关闭。</li>
+</ul>
+</li>
+<li>如果主容器处理还未处理完遗留请求时，Envoy 或者主容器的其中一个停止了，会因为 tcp 连接直接断开连接导致 502
+<ul>
+<li>因此 Envoy 必须在主容器处理完遗留请求后（即没有 tcp 连接时），才能关闭</li>
+</ul>
+</li>
+</ul>
+<p>所以总结下：Envoy 及主容器的 <code>preStop</code> 都至少得设成 3s，并且在「没有 tcp 连接」时，才能关闭，避免出现 502/503/504.</p>
+<p>主容器的修改方法在前文中已经写过了，下面介绍下 Envoy 的修改方法。</p>
+<p>和主容器一样，Envoy 也能直接加 <code>preStop</code>，修改 <code>istio-sidecar-injector</code> 这个 <code>configmap</code>，在 sidecar 里添加 preStop sleep 命令:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">istio-proxy</span><span class="w">
+</span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
+</span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">preStop</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">exec</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="l">/bin/sh</span><span class="w">
+</span><span class="w">            </span>- -<span class="l">c</span><span class="w">
+</span><span class="w">            </span>- <span class="s2">&#34;while [ $(netstat -plunt | grep tcp | grep -v envoy | wc -l | xargs) -ne 0 ]; do sleep 1; done&#34;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
 </div><h3 id="参考">参考</h3>
 <ul>
 <li><a href="https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace" target="_blank" rel="noopener noreferrer">Kubernetes best practices: terminating with grace</a></li>
