@@ -1,4 +1,1431 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>Ryan4Yin's Space</title><link>https://ryan4yin.space/</link><description>Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Mon, 03 Jan 2022 14:50:00 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/index.xml" rel="self" type="application/rss+xml"/><item><title>2021 年年终总结</title><link>https://ryan4yin.space/posts/2021-summary/</link><pubDate>Mon, 03 Jan 2022 14:50:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/2021-summary/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>Ryan4Yin's Space</title><link>https://ryan4yin.space/</link><description>Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Tue, 25 Jan 2022 00:13:00 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/index.xml" rel="self" type="application/rss+xml"/><item><title>Kubernetes 微服务最佳实践</title><link>https://ryan4yin.space/posts/kubernetes-best-practices/</link><pubDate>Tue, 25 Jan 2022 00:13:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/kubernetes-best-practices/</guid><description><![CDATA[<blockquote>
+<p>个人笔记，不保证正确</p>
+</blockquote>
+<p>本文主要介绍下我个人在使用 Kubernetes 的过程中，总结出的一套「Kubernetes 配置」，是我个人的「最佳实践」。
+其中大部分内容都经历过线上环境的考验，但是也有少部分还只在我脑子里模拟过，请谨慎参考。</p>
+<p>阅读前的几个注意事项：</p>
+<ul>
+<li>这份文档比较长，囊括了很多内容，建议当成参考手册使用，先简单读一读，有需要再细读相关内容。</li>
+<li>这份文档需要一定的 Kubernetes 基础才能理解，而且如果没有过实践经验的话，看上去可能会比较枯燥。
+<ul>
+<li>而有过实践经验的大佬，可能会跟我有不同的见解，欢迎各路大佬评论~</li>
+</ul>
+</li>
+</ul>
+<p>我会视情况不定期更新这份文档。</p>
+<h2 id="零示例">零、示例</h2>
+<p>首先，这里给出一些本文遵守的前提，这些前提只是契合我遇到的场景，可灵活变通：</p>
+<ul>
+<li>这里只讨论无状态服务，有状态服务不在讨论范围内</li>
+<li>我们不使用 Deployment 的滚动更新能力，而是为每个服务的每个版本，都创建不同的 Deployment + HPA + PodDisruptionBudget，这是为了方便做金丝雀/灰度发布</li>
+<li>我们的服务可能会使用 IngressController / Service Mesh 来进行服务的负载均衡、流量切分</li>
+</ul>
+<p>下面先给出一个 Deployment + HPA + PodDisruptionBudget 的 demo，后面再拆开详细说下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="nt">strategy</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RollingUpdate</span><span class="w">
+</span><span class="w">    </span><span class="c"># 因为服务的每个版本都使用各自的 Deployment，服务更新时其实是用不上这里的滚动更新策略的</span><span class="w">
+</span><span class="w">    </span><span class="c"># 这个配置应该只在 SRE 手动修改 Deployment 配置时才会生效（通常不应该发生这种事）</span><span class="w">
+</span><span class="w">    </span><span class="nt">rollingUpdate</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">maxSurge</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="l">% </span><span class="w"> </span><span class="c"># 滚动更新时，每次最多更新 10% 的 Pods</span><span class="w">
+</span><span class="w">      </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="c"># 滚动更新时，不允许出现不可用的 Pods，也就是说始终要维持 3 个可用副本</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v3</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">        </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v3</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">affinity</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">podAffinity</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"> </span><span class="c"># 非强制性条件</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">100</span><span class="w">  </span><span class="c"># weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）</span><span class="w">
+</span><span class="w">            </span><span class="nt">podAffinityTerm</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">app</span><span class="w">
+</span><span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span>- <span class="l">my-app</span><span class="w">
+</span><span class="w">                </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">version</span><span class="w">
+</span><span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span>- <span class="l">v3</span><span class="w">
+</span><span class="w">              </span><span class="c"># pod 尽量使用同一种节点类型，也就是尽量保证节点的性能一致</span><span class="w">
+</span><span class="w">              </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l">node.kubernetes.io/instance-type</span><span class="w">
+</span><span class="w">        </span><span class="nt">podAntiAffinity</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"> </span><span class="c"># 非强制性条件</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">100</span><span class="w">  </span><span class="c"># weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）</span><span class="w">
+</span><span class="w">            </span><span class="nt">podAffinityTerm</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">app</span><span class="w">
+</span><span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span>- <span class="l">my-app</span><span class="w">
+</span><span class="w">                </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">version</span><span class="w">
+</span><span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span>- <span class="l">v3</span><span class="w">
+</span><span class="w">              </span><span class="c"># 将 pod 尽量打散在多个可用区</span><span class="w">
+</span><span class="w">              </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l">topology.kubernetes.io/zone</span><span class="w">
+</span><span class="w">          </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">  </span><span class="c"># 强制性要求（这个建议按需添加）</span><span class="w">
+</span><span class="w">          </span><span class="c"># 注意这个没有 weights，必须满足列表中的所有条件</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">labelSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">app</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="l">my-app</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">version</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="l">v3</span><span class="w">
+</span><span class="w">            </span><span class="c"># Pod 必须运行在不同的节点上</span><span class="w">
+</span><span class="w">            </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l">kubernetes.io/hostname</span><span class="w">
+</span><span class="w">      </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="c"># runAsUser: 1000  # 设定用户</span><span class="w">
+</span><span class="w">        </span><span class="c"># runAsGroup: 1000  # 设定用户组</span><span class="w">
+</span><span class="w">        </span><span class="nt">runAsNonRoot</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c"># Pod 必须以非 root 用户运行</span><span class="w">
+</span><span class="w">        </span><span class="nt">seccompProfile</span><span class="p">:</span><span class="w">  </span><span class="c"># security compute mode</span><span class="w">
+</span><span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RuntimeDefault</span><span class="w">
+</span><span class="w">      </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">eks.amazonaws.com/nodegroup</span><span class="p">:</span><span class="w"> </span><span class="l">common </span><span class="w"> </span><span class="c"># 使用专用节点组，如果希望使用多个节点组，可改用节点亲和性</span><span class="w">
+</span><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tmp-dir</span><span class="w">
+</span><span class="w">        </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">my-app:v3 </span><span class="w"> </span><span class="c"># 建议使用私有镜像仓库，规避 docker.io 的镜像拉取限制</span><span class="w">
+</span><span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
+</span><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/tmp</span><span class="w">
+</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tmp-dir</span><span class="w">
+</span><span class="w">        </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">preStop</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">exec</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="l">/bin/sh</span><span class="w">
+</span><span class="w">              </span>- -<span class="l">c</span><span class="w">
+</span><span class="w">              </span>- <span class="s2">&#34;while [ $(netstat -plunt | grep tcp | wc -l | xargs) -ne 0 ]; do sleep 1; done&#34;</span><span class="w">
+</span><span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w">  </span><span class="c"># 资源请求与限制</span><span class="w">
+</span><span class="w">          </span><span class="c"># 对于核心服务，建议设置 requests = limits，避免资源竞争</span><span class="w">
+</span><span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="c"># HPA 会使用 requests 计算资源利用率</span><span class="w">
+</span><span class="w">            </span><span class="c"># 建议将 requests 设为服务正常状态下的 CPU 使用率，HPA 的目前指标设为 80%</span><span class="w">
+</span><span class="w">            </span><span class="c"># 所有容器的 requests 总量不建议为 2c/4G 4c/8G 等常见值，因为节点通常也是这个配置，这会导致 Pod 只能调度到更大的节点上，适当调小 requests 等扩充可用的节点类型，从而扩充节点池。 </span><span class="w">
+</span><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l">1000m</span><span class="w">
+</span><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span><span class="w">          </span><span class="nt">limits</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="c"># limits - requests 为允许超卖的资源量，建议为 requests 的 1 到 2 倍，酌情配置。</span><span class="w">
+</span><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l">1000m</span><span class="w">
+</span><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span><span class="w">        </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="c"># 将容器层设为只读，防止容器文件被篡改</span><span class="w">
+</span><span class="w">          </span><span class="c">## 如果需要写入临时文件，建议额外挂载 emptyDir 来提供可读写的数据卷</span><span class="w">
+</span><span class="w">          </span><span class="nt">readOnlyRootFilesystem</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">          </span><span class="c"># 禁止 Pod 做任何权限提升</span><span class="w">
+</span><span class="w">          </span><span class="nt">allowPrivilegeEscalation</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">          </span><span class="nt">capabilities</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="c"># drop ALL 的权限比较严格，可按需修改</span><span class="w">
+</span><span class="w">            </span><span class="nt">drop</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="l">ALL</span><span class="w">
+</span><span class="w">        </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w">  </span><span class="c"># 要求 kubernetes 1.18+</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health </span><span class="w"> </span><span class="c"># 直接使用健康检查接口即可</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">  </span><span class="c"># 最多提供给服务 5s * 20 的启动时间</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">        </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health </span><span class="w"> </span><span class="c"># spring 的通用健康检查路径</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">        </span><span class="c"># Readiness probes are very important for a RollingUpdate to work properly,</span><span class="w">
+</span><span class="w">        </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health </span><span class="w"> </span><span class="c"># 简单起见可直接使用 livenessProbe 相同的接口，当然也可额外定义</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">scaleTargetRef</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">
+</span><span class="w">  </span><span class="nt">minReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Resource</span><span class="w">
+</span><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cpu</span><span class="w">
+</span><span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Utilization</span><span class="w">
+</span><span class="w">        </span><span class="nt">averageUtilization</span><span class="p">:</span><span class="w"> </span><span class="m">70</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">PodDisruptionBudget</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">minAvailable</span><span class="p">:</span><span class="w"> </span><span class="m">75</span><span class="l">%</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v3</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="一优雅停止gracful-shutdown与-502504-报错">一、优雅停止（Gracful Shutdown）与 502/504 报错</h2>
+<p>如果 Pod 正在处理大量请求（比如 1000 QPS+）时，因为节点故障或「竞价节点」被回收等原因被重新调度，
+你可能会观察到在容器被 terminate 的一段时间内出现少量 502/504。</p>
+<p>为了搞清楚这个问题，需要先理解清楚 terminate 一个 Pod 的流程：</p>
+<ol>
+<li>Pod 的状态被设为「Terminating」，（几乎）同时该 Pod 被从所有关联的 Service Endpoints 中移除</li>
+<li><code>preStop</code> 钩子被执行，它可以是一个命令，或者一个对 Pod 中容器的 http 调用
+<ol>
+<li>如果你的程序在收到 SIGTERM 信号时，无法优雅退出，就可以考虑使用 <code>preStop</code></li>
+<li>如果让程序本身支持优雅退出比较麻烦的话，用 <code>preStop</code> 实现优雅退出是一个非常好的方式</li>
+</ol>
+</li>
+<li>将 SIGTERM 发送给 Pod 中的所有容器</li>
+<li>继续等待，直到超过 <code>spec.terminationGracePeriodSeconds</code> 设定好的时间，这个值默认为 30s
+<ol>
+<li>需要注意的是，这个优雅退出的等待计时是与 <code>preStop</code> 同步开始的！而且它也不会等待 <code>preStop</code> 结束！</li>
+</ol>
+</li>
+<li>如果超过了 <code>spec.terminationGracePeriodSeconds</code> 容器仍然没有停止，k8s 将会发送 SIGKILL 信号给容器</li>
+<li>进程全部终止后，整个 Pod 完全被清理掉</li>
+</ol>
+<p><strong>注意</strong>：1 和 2 两个工作是异步发生的，所以可能会出现「Pod 还在 Service Endpoints 中，但是 <code>preStop</code> 已经执行了」的情况，我们需要考虑到这种状况的发生。</p>
+<p>了解了上面的流程后，我们就能分析出两种错误码出现的原因：</p>
+<ul>
+<li>502：应用程序在收到 SIGTERM 信号后直接终止了运行，导致部分还没有被处理完的请求直接中断，代理层返回 502 表示这种情况</li>
+<li>504：Service Endpoints 移除不够及时，在 Pod 已经被终止后，仍然有个别请求被路由到了该 Pod，得不到响应导致 504</li>
+</ul>
+<p>通常的解决方案是，在 Pod 的 <code>preStop</code> 步骤加一个 15s 的等待时间。
+其原理是：在 Pod 处理 terminating 状态的时候，就会被从 Service Endpoints 中移除，也就不会再有新的请求过来了。
+在 <code>preStop</code> 等待 15s，基本就能保证所有的请求都在容器死掉之前被处理完成（一般来说，绝大部分请求的处理时间都在 300ms 以内吧）。</p>
+<p>一个简单的示例如下，它使 Pod 被终止时，总是先等待 15s，再发送 SIGTERM 信号给容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
+</span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">preStop</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">exec</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="l">/bin/sleep</span><span class="w">
+</span><span class="w">            </span>- <span class="s2">&#34;15&#34;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>更好的解决办法，是直接等待所有 tcp 连接都关闭（需要镜像中有 netstat）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
+</span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">preStop</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">exec</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="l">/bin/sh</span><span class="w">
+</span><span class="w">            </span>- -<span class="l">c</span><span class="w">
+</span><span class="w">            </span>- <span class="s2">&#34;while [ $(netstat -plunt | grep tcp | wc -l | xargs) -ne 0 ]; do sleep 1; done&#34;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="参考">参考</h3>
+<ul>
+<li><a href="https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace" target="_blank" rel="noopener noreferrer">Kubernetes best practices: terminating with grace</a></li>
+<li><a href="https://medium.com/flant-com/kubernetes-graceful-shutdown-nginx-php-fpm-d5ab266963c2" target="_blank" rel="noopener noreferrer">Graceful shutdown in Kubernetes is not always trivial</a></li>
+</ul>
+<h2 id="二服务的伸缩配置---hpa">二、服务的伸缩配置 - HPA</h2>
+<p>Kubernetes 官方主要支持基于 Pod CPU 的伸缩，这是应用最为广泛的伸缩指标，需要部署 <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">metrics-server</a> 才可使用。</p>
+<p>先回顾下前面给出的示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2 </span><span class="w"> </span><span class="c"># k8s 1.23+ 此 API 已经 GA</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">scaleTargetRef</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">
+</span><span class="w">  </span><span class="nt">minReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Resource</span><span class="w">
+</span><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cpu</span><span class="w">
+</span><span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Utilization</span><span class="w">
+</span><span class="w">        </span><span class="nt">averageUtilization</span><span class="p">:</span><span class="w"> </span><span class="m">70</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="1-当前指标值的计算方式">1. 当前指标值的计算方式</h2>
+<p>HPA 默认使用 Pod 的当前指标进行计算，以 CPU 为例，其计算公式为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 利用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
+</code></pre></td></tr></table>
+</div>
+</div><p>注意分母是总的 requests 量，而不是 limits.</p>
+<h3 id="11-存在的问题与解决方法">1.1 存在的问题与解决方法</h3>
+<p>在 Pod 只有一个容器时这没啥问题，但是当 Pod 注入了 envoy 等 sidecar 时，这就会有问题了。</p>
+<p>因为 Istio 的 Sidecar requests 默认为 <code>100m</code> 也就是 0.1 核。
+在未 tuning 的情况下，服务负载一高，sidecar 的实际用量很容易就能涨到 0.2-0.4 核。
+把这两个值代入前面的公式，会发现 <strong>对于 QPS 较高的服务，添加 Sidecar 后，「Pod 的 CPU 利用率」可能会高于「应用容器的 CPU 利用率」</strong>，造成不必要的扩容。</p>
+<p>解决方法：</p>
+<ul>
+<li>方法一：针对每个服务的 CPU 使用情况，为 sidecar 设置不同的 requests/limits</li>
+<li>方法二：使用 KEDA 等第三方组件，获取到应用程序的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容</li>
+<li>方法三：使用 k8s 1.20 提供的 alpha 特性：<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics" target="_blank" rel="noopener noreferrer">Container Resourse Metrics</a>.</li>
+</ul>
+<h3 id="2-hpa-的扩缩容算法">2. HPA 的扩缩容算法</h3>
+<p>HPA 什么时候会扩容，这一点是很好理解的。但是 HPA 的缩容策略，会有些迷惑，下面简单分析下。</p>
+<ol>
+<li>HPA 的「目标指标」可以使用两种形式：绝对度量指标和资源利用率。
+<ul>
+<li>绝对度量指标：比如 CPU，就是设定绝对核数。</li>
+<li>资源利用率（资源使用量/资源请求 * 100%）：在 Pod 设置了资源请求时，可以使用资源利用率进行 Pod 伸缩。</li>
+</ul>
+</li>
+<li>HPA 的「当前指标」是一段时间内所有 Pods 的平均值，不是峰值。Pod 的指标是其中所有容器指标之和。</li>
+</ol>
+<p>HPA 的扩缩容算法为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">期望副本数 = ceil[当前副本数 * ( 当前指标 / 目标指标 )]
+</code></pre></td></tr></table>
+</div>
+</div><p>从上面的参数可以看到：</p>
+<ol>
+<li>只要「当前指标」超过了目标指标，就一定会发生扩容。</li>
+<li><code>当前指标 / 目标指标</code>要小到一定的程度，才会触发缩容。
+<ol>
+<li>比如双副本的情况下，上述比值要小于等于 1/2，才会缩容到单副本。</li>
+<li>三副本的情况下，上述比值的临界点是 2/3。</li>
+<li>五副本时临界值是 4/5，100副本时临界值是 99/100，依此类推。</li>
+<li>如果 <code>当前指标 / 目标指标</code> 从 1 降到 0.5，副本的数量将会减半。（虽然说副本数越多，发生这么大变化的可能性就越小。）</li>
+</ol>
+</li>
+<li><code>当前副本数 / 目标指标</code>的值越大，「当前指标」的波动对「期望副本数」的影响就越大。</li>
+</ol>
+<p>为了防止扩缩容过于敏感，它还有几个延时相关的参数：</p>
+<ol>
+<li>HPA Loop 延时：默认 15 秒，每 15 秒钟进行一次 HPA 扫描。</li>
+<li><code>--horizontal-pod-autoscaler-cpu-initialization-period</code>:</li>
+<li>缩容冷却时间：默认 5 分钟。</li>
+</ol>
+<h2 id="3-hpa-的期望值设成多少合适">3. HPA 的期望值设成多少合适</h2>
+<p>这个需要针对每个服务的具体情况，具体分析。</p>
+<p>以最常用的按 CPU 值伸缩为例，</p>
+<ul>
+<li>核心服务
+<ul>
+<li>requests/limits 值: 建议设成相等的，保证<a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/" target="_blank" rel="noopener noreferrer">服务质量等级</a>为 Guaranteed
+<ul>
+<li>需要注意 CPU 跟 Memory 的 limits 限制策略是不同的，CPU 是真正地限制了上限，而 Memory 是用超了就干掉容器（OOMKilled）</li>
+<li>k8s 一直使用 cgroups v1 (<code>cpu_shares</code>/<code>memory.limit_in_bytes</code>)来限制 cpu/memory，但是对于 <code>Guaranteed</code> 的 Pods 而言，内存并不能完全预留，资源竞争总是有可能发生的。1.22 有 alpha 特性改用 cgroups v2，可以关注下。</li>
+</ul>
+</li>
+<li>HPA: 一般来说，期望值设为 60% 到 70% 可能是比较合适的，最小副本数建议设为 2 - 5. （仅供参考）</li>
+<li>PodDisruptionBudget: 建议按服务的健壮性与 HPA 期望值，来设置 PDB，后面会详细介绍，这里就先略过了</li>
+</ul>
+</li>
+<li>非核心服务
+<ul>
+<li>requests/limits 值: 建议 requests 设为 limits 的 0.6 - 0.9 倍（仅供参考），对应的服务质量等级为 Burstable
+<ul>
+<li>也就是超卖了资源，这样做主要的考量点是，很多非核心服务负载都很低，根本跑不到 limits 这么高，降低 requests 可以提高集群资源利用率，也不会损害服务稳定性。</li>
+</ul>
+</li>
+<li>HPA: 因为 requests 降低了，我们可以提高 HPA 到期望值，比如 80% ~ 90%，最小副本数建议设为 1 - 3. （仅供参考）</li>
+<li>PodDisruptionBudget: 非核心服务嘛，保证最少副本数为 1 就行了。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-hpa-的常见问题">4. HPA 的常见问题</h3>
+<h4 id="41-pod-扩容---预热陷阱">4.1. Pod 扩容 - 预热陷阱</h4>
+<blockquote>
+<p>预热：Java/C# 这类运行在虚拟机上的语言，第一次使用到某些功能时，往往需要初始化一些资源，例如「JIT 即时编译」。
+如果代码里还应用了动态类加载之类的功能，就很可能导致微服务某些 API 第一次被调用时，响应特别慢（要动态编译 class）。
+因此 Pod 在提供服务前，需要提前「预热（slow_start）」一次这些接口，将需要用到的资源提前初始化好。</p>
+</blockquote>
+<p>在负载很高的情况下，HPA 会自动扩容。
+但是如果扩容的 Pod 需要预热，就可能会遇到「预热陷阱」。</p>
+<p>在有大量用户访问的时候，不论使用何种负载均衡策略，只要请求被转发到新建的 Pod 上，这个请求就会「卡住」。
+如果请求速度太快，Pod 启动的瞬间「卡住」的请求就越多，这将会导致新建 Pod 因为压力过大而垮掉。
+然后 Pod 一重启就被压垮，进入 CrashLoopBackoff 循环。</p>
+<p>如果是在使用多线程做负载测试时，效果更明显：50 个线程在不间断地请求，
+别的 Pod 响应时间是「毫秒级」，而新建的 Pod 的首次响应是「秒级」。几乎是一瞬间，50 个线程就会全部陷在新建的 Pod 这里。
+而新建的 Pod 在启动的瞬间可能特别脆弱，瞬间的 50 个并发请求就可以将它压垮。
+然后 Pod 一重启就被压垮，进入 CrashLoopBackoff 循环。</p>
+<p><strong>解决方法</strong>：</p>
+<p>可以在「应用层面」解决：</p>
+<ol>
+<li>在启动探针 API 的后端控制器里面，依次调用所有需要预热的接口或者其他方式，提前初始化好所有资源。
+<ol>
+<li>启动探针的控制器中，可以通过 <code>localhost</code> 回环地址调用它自身的接口。</li>
+</ol>
+</li>
+<li>使用「AOT 预编译」技术：预热，通常都是因为「JIT 即时编译」导致的问题，在需要用到时它才编译。而 AOT 是预先编译，在使用前完成编译，因此 AOT 能解决预热的问题。</li>
+</ol>
+<p>也可以在「基础设施层面」解决：</p>
+<ol>
+<li>像 AWS ALB TargetGroup 以及其他云服务商的 ALB 服务，通常都可以设置 <code>slow_start</code> 时长，即对新加入的实例，使用一定时间慢慢地把流量切过去，最终达到预期的负载均衡状态。这个可以解决服务预热问题。</li>
+<li>Envoy 也已经支持 <code>slow_start</code> 模式，支持在一个设置好的时间窗口内，把流量慢慢负载到新加入的实例上，达成预热效果。</li>
+</ol>
+<h4 id="42-hpa-扩缩容过于敏感导致-pod-数量震荡">4.2. HPA 扩缩容过于敏感，导致 Pod 数量震荡</h4>
+<p>通常来讲，EKS 上绝大部分负载都应该选择使用 CPU 进行扩缩容。因为 CPU 通常能很好的反映服务的负载情况</p>
+<p>但是有些服务会存在其他影响 CPU 使用率的因素，导致使用 CPU 扩缩容变得不那么可靠，比如：</p>
+<ul>
+<li>有些 Java 服务堆内存设得很大，GC pause 也设得比较长，因此内存 GC 会造成 CPU 间歇性飙升，CPU 监控会有大量的尖峰。</li>
+<li>有些服务有定时任务，定时任务一运行 CPU 就涨，但是这跟服务的 QPS 是无关的</li>
+<li>有些服务可能一运行 CPU 就会立即处于一个高位状态，它可能希望使用别的业务侧指标来进行扩容，而不是 CPU.</li>
+</ul>
+<p>因为上述问题存在，使用 CPU 扩缩容，就可能会造成服务频繁的扩容然后缩容，或者无限扩容。
+而有些服务（如我们的「推荐服务」），对「扩容」和「缩容」都是比较敏感的，每次扩缩都会造成服务可用率抖动。</p>
+<p>对这类服务而言，HPA 有这几种调整策略：</p>
+<ul>
+<li>选择使用 <strong>QPS</strong> 等相对比较平滑，没有 GC 这类干扰的指标来进行扩缩容，这需要借助 KEDA 等社区组件。</li>
+<li>对 kubernetes 1.18+，可以直接使用 HPA 的 <code>behavior.scaleDown</code> 和 <code>behavior.scaleUp</code> 两个参数，控制每次扩缩容的最多 pod 数量或者比例。 示例如下：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">podinfo</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">scaleTargetRef</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">podinfo</span><span class="w">
+</span><span class="w">  </span><span class="nt">minReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="nt">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">
+</span><span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Resource</span><span class="w">
+</span><span class="w">    </span><span class="nt">resource</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cpu</span><span class="w">
+</span><span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Utilization</span><span class="w">
+</span><span class="w">        </span><span class="nt">averageUtilization</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">  </span><span class="c"># 期望的 CPU 平均值</span><span class="w">
+</span><span class="w">  </span><span class="nt">behavior</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">scaleUp</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">stabilizationWindowSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="c"># 默认为 0，只使用当前值进行扩缩容</span><span class="w">
+</span><span class="w">      </span><span class="nt">policies</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">180</span><span class="w">  </span><span class="c"># 每 3 分钟最多扩容 5% 的 Pods</span><span class="w">
+</span><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Percent</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">60</span><span class="w">  </span><span class="c"># 每分钟最多扩容 1 个 Pod，扩的慢一点主要是为了一个个地预热，避免一次扩容太多未预热的 Pods 导致服务可用率剧烈抖动</span><span class="w">
+</span><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Pods</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">      </span><span class="nt">selectPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Min </span><span class="w"> </span><span class="c"># 选择最小的策略</span><span class="w">
+</span><span class="w">    </span><span class="c"># 以下的一切配置，都是为了更平滑地缩容</span><span class="w">
+</span><span class="w">    </span><span class="nt">scaleDown</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">stabilizationWindowSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">600</span><span class="w">  </span><span class="c"># 使用过去 10 mins 的最大 cpu 值进行缩容计算，避免过快缩容</span><span class="w">
+</span><span class="w">      </span><span class="nt">policies</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Percent </span><span class="w"> </span><span class="c"># 每 3 mins 最多缩容 `ceil[当前副本数 * 5%]` 个 pod（20 个 pod 以内，一次只缩容 1 个 pod）</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">        </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">180</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Pods </span><span class="w"> </span><span class="c"># 每 1 mins 最多缩容 1 个 pod</span><span class="w">
+</span><span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">        </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">60</span><span class="w">
+</span><span class="w">      </span><span class="nt">selectPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Min </span><span class="w"> </span><span class="c"># 上面的 policies 列表，只生效其中最小的值作为缩容限制（保证平滑缩容）</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>而对于扩容不够平滑这个问题，可以考虑提供类似 AWS ALB TargetGroup <code>slow_start</code> 的功能，在扩容时缓慢将流量切到新 Pod 上，以实现预热服务（JVM 预热以及本地缓存预热），这样就能达到比较好的平滑扩容效果。</p>
+<h3 id="5-hpa-注意事项">5. HPA 注意事项</h3>
+<p>注意 kubectl 1.23 以下的版本，默认使用 <code>hpa.v1.autoscaling</code> 来查询 HPA 配置，<code>v2beta2</code> 相关的参数会被编码到 <code>metadata.annotations</code> 中。</p>
+<p>比如 <code>behavior</code> 就会被编码到 <code>autoscaling.alpha.kubernetes.io/behavior</code> 这个 key 所对应的值中。</p>
+<p>因此如果使用了 v2beta2 的 HPA，一定要明确指定使用 <code>v2beta2</code> 版本的 HPA：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get hpa.v2beta2.autoscaling
+</code></pre></td></tr></table>
+</div>
+</div><p>否则不小心动到 <code>annotations</code> 中编码的某些参数，可能会产生意料之外的效果，甚至直接把控制面搞崩&hellip;
+比如这个 issue: <a href="https://github.com/kubernetes/kubernetes/issues/107038" target="_blank" rel="noopener noreferrer">Nil pointer dereference in KCM after v1 HPA patch request</a></p>
+<h3 id="6-参考">6. 参考</h3>
+<ul>
+<li><a href="https://kubernetes.io/zh/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank" rel="noopener noreferrer">Pod 水平自动伸缩 - Kubernetes Docs</a></li>
+<li><a href="https://kubernetes.io/zh/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/" target="_blank" rel="noopener noreferrer">Horizontal Pod Autoscaler演练 - Kubernetes Docs</a></li>
+</ul>
+<h2 id="三节点维护与pod干扰预算httpskubernetesiozhdocstasksrun-applicationconfigure-pdb">三、<a href="https://kubernetes.io/zh/docs/tasks/run-application/configure-pdb/" target="_blank" rel="noopener noreferrer">节点维护与Pod干扰预算</a></h2>
+<p>在我们通过 <code>kubectl drain</code> 将某个节点上的容器驱逐走的时候，
+kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。</p>
+<p>如果不设置任何明确的 PodDistruptionBuget，Pod 将会被直接杀死，然后在别的节点重新调度，<strong>这可能导致服务中断！</strong></p>
+<p>PDB 是一个单独的 CR 自定义资源，示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1beta1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">PodDisruptionBudget</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">podinfo-pdb</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 如果不满足 PDB，Pod 驱逐将会失败！</span><span class="w">
+</span><span class="w">  </span><span class="nt">minAvailable</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">      </span><span class="c"># 最少也要维持一个 Pod 可用</span><span class="w">
+</span><span class="w"></span><span class="c">#   maxUnavailable: 1  # 最大不可用的 Pod 数，与 minAvailable 不能同时配置！二选一</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">podinfo</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>如果在进行节点维护时(kubectl drain)，Pod 不满足 PDB，drain 将会失败，示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">&gt; kubectl drain node-205 --ignore-daemonsets --delete-local-data
+node/node-205 cordoned
+WARNING: ignoring DaemonSet-managed Pods: kube-system/calico-node-nfhj7, kube-system/kube-proxy-94dz5
+evicting pod default/podinfo-7c84d8c94d-h9brq
+evicting pod default/podinfo-7c84d8c94d-gw6qf
+error when evicting pod <span class="s2">&#34;podinfo-7c84d8c94d-h9brq&#34;</span> <span class="o">(</span>will retry after 5s<span class="o">)</span>: Cannot evict pod as it would violate the pod<span class="s1">&#39;s disruption budget.
+</span><span class="s1">evicting pod default/podinfo-7c84d8c94d-h9brq
+</span><span class="s1">error when evicting pod &#34;podinfo-7c84d8c94d-h9brq&#34; (will retry after 5s): Cannot evict pod as it would violate the pod&#39;</span>s disruption budget.
+evicting pod default/podinfo-7c84d8c94d-h9brq
+error when evicting pod <span class="s2">&#34;podinfo-7c84d8c94d-h9brq&#34;</span> <span class="o">(</span>will retry after 5s<span class="o">)</span>: Cannot evict pod as it would violate the pod<span class="err">&#39;</span>s disruption budget.
+evicting pod default/podinfo-7c84d8c94d-h9brq
+pod/podinfo-7c84d8c94d-gw6qf evicted
+pod/podinfo-7c84d8c94d-h9brq evicted
+node/node-205 evicted
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的示例中，podinfo 一共有两个副本，都运行在 node-205 上面。我给它设置了干扰预算 PDB <code>minAvailable: 1</code>。</p>
+<p>然后使用 <code>kubectl drain</code> 驱逐 Pod 时，其中一个 Pod 被立即驱逐走了，而另一个 Pod 大概在 15 秒内一直驱逐失败。
+因为第一个 Pod 还没有在新的节点上启动完成，它不满足干扰预算 PDB <code>minAvailable: 1</code> 这个条件。</p>
+<p>大约 15 秒后，最先被驱逐走的 Pod 在新节点上启动完成了，另一个 Pod 满足了 PDB 所以终于也被驱逐了。这才完成了一个节点的 drain 操作。</p>
+<blockquote>
+<p>ClusterAutoscaler 等集群节点伸缩组件，在缩容节点时也会考虑 PodDisruptionBudget. 如果你的集群使用了 ClusterAutoscaler 等动态扩缩容节点的组件，强烈建议设置为所有服务设置 PodDisruptionBudget.</p>
+</blockquote>
+<h4 id="在-pdb-中使用百分比的注意事项">在 PDB 中使用百分比的注意事项</h4>
+<p>在使用百分比时，计算出的实例数都会被向上取整，这会造成两个现象：</p>
+<ul>
+<li>如果使用 <code>minAvailable</code>，实例数较少的情况下，可能会导致 ALLOWED DISRUPTIONS 为 0</li>
+<li>如果使用 <code>maxUnavailable</code>，因为是向上取整，ALLOWED DISRUPTIONS 的值一定不会低于 1</li>
+</ul>
+<p>因此从便于驱逐的角度看，如果你的服务至少有 2-3 个实例，建议在 PDB 中使用百分比配置 <code>maxUnavailable</code>，而不是 <code>minAvailable</code>.</p>
+<h3 id="最佳实践-deployment--hpa--poddisruptionbudget">最佳实践 Deployment + HPA + PodDisruptionBudget</h3>
+<p>一般而言，一个服务的每个版本，都应该包含如下三个资源：</p>
+<ul>
+<li>Deployment: 管理服务自身的 Pods 嘛</li>
+<li>HPA: 负责 Pods 的扩缩容，通常使用 CPU 指标进行扩缩容</li>
+<li>PodDisruptionBudget(PDB): 建议按照 HPA 的目标值，来设置 PDB.
+<ul>
+<li>比如 HPA CPU 目标值为 60%，就可以考虑设置 PDB <code>minAvailable=65%</code>，保证至少有 65% 的 Pod 可用。这样理论上极限情况下 QPS 均摊到剩下 65% 的 Pods 上也不会造成雪崩（这里假设 QPS 和 CPU 是完全的线性关系）</li>
+</ul>
+</li>
+</ul>
+<h2 id="四节点亲和性与节点组">四、节点亲和性与节点组</h2>
+<p>我们一个集群，通常会使用不同的标签为节点组进行分类，比如 kubernetes 自动生成的一些节点标签：</p>
+<ul>
+<li><code>kubernetes.io/os</code>: 通常都用 <code>linux</code></li>
+<li><code>kubernetes.io/arch</code>: <code>amd64</code>, <code>arm64</code></li>
+<li><code>topology.kubernetes.io/region</code> 和 <code>topology.kubernetes.io/zone</code>: 云服务的区域及可用区</li>
+</ul>
+<p>我们使用得比较多的，是「节点亲和性」以及「Pod 反亲和性」，另外两个策略视情况使用。</p>
+<h3 id="1-节点亲和性">1. 节点亲和性</h3>
+<p>如果你使用的是 aws，那 aws 有一些自定义的节点标签：</p>
+<ul>
+<li><code>eks.amazonaws.com/nodegroup</code>: aws eks 节点组的名称，同一个节点组使用同样的 aws ec2 实例模板
+<ul>
+<li>比如 arm64 节点组、amd64/x64 节点组</li>
+<li>内存比例高的节点组如 m 系实例，计算性能高的节点组如 c 系列</li>
+<li>竞价实例节点组：这个省钱啊，但是动态性很高，随时可能被回收</li>
+<li>按量付费节点组：这类实例贵，但是稳定。</li>
+</ul>
+</li>
+</ul>
+<p>假设你希望优先选择竞价实例跑你的 Pod，如果竞价实例暂时跑满了，就选择按量付费实例。
+那 <code>nodeSelector</code> 就满足不了你的需求了，你需要使用 <code>nodeAffinity</code>，示例如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># ...</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># ...</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">affinity</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">nodeAffinity</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="c"># 优先选择 spot-group-c 的节点</span><span class="w">
+</span><span class="w">          </span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">preference</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">eks.amazonaws.com/nodegroup</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="l">spot-group-c</span><span class="w">
+</span><span class="w">            </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">  </span><span class="c"># weight 用于为节点评分，会优先选择评分最高的节点</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">preference</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="c"># 优先选择 aws c6i 的机器</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node.kubernetes.io/instance-type</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c6i.xlarge&#34;</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c6i.2xlarge&#34;</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c6i.4xlarge&#34;</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c6i.8xlarge&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">70</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">preference</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="c"># 其次选择 aws c5 的机器</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node.kubernetes.io/instance-type</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c5.xlarge&#34;</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c5.2xlarge&#34;</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c5.4xlarge&#34;</span><span class="w">
+</span><span class="w">                </span>- <span class="s2">&#34;c5.9xlarge&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">60</span><span class="w">
+</span><span class="w">         </span><span class="c"># 如果没 spot-group-c 可用，也可选择 ondemand-group-c 的节点跑</span><span class="w">
+</span><span class="w">          </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">nodeSelectorTerms</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">eks.amazonaws.com/nodegroup</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="l">spot-group-c</span><span class="w">
+</span><span class="w">                </span>- <span class="l">ondemand-group-c</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="c"># ...</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-pod-反亲和性">2. Pod 反亲和性</h3>
+<p>通常建议为每个 Deployment 的 template 配置 Pod 反亲和性，把 Pods 打散在所有节点上：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># ...</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># ...</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">      </span><span class="nt">affinity</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">podAntiAffinity</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"> </span><span class="c"># 非强制性条件</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">100</span><span class="w">  </span><span class="c"># weight 用于为节点评分，会优先选择评分最高的节点</span><span class="w">
+</span><span class="w">            </span><span class="nt">podAffinityTerm</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">app</span><span class="w">
+</span><span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span>- <span class="l">xxx</span><span class="w">
+</span><span class="w">                </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">version</span><span class="w">
+</span><span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span>- <span class="l">v12</span><span class="w">
+</span><span class="w">              </span><span class="c"># 将 pod 尽量打散在多个可用区</span><span class="w">
+</span><span class="w">              </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l">topology.kubernetes.io/zone</span><span class="w">
+</span><span class="w">          </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">  </span><span class="c"># 强制性要求</span><span class="w">
+</span><span class="w">          </span><span class="c"># 注意这个没有 weights，必须满足列表中的所有条件</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">labelSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">app</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="l">xxx</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">version</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
+</span><span class="w">                </span><span class="nt">values</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="l">v12</span><span class="w">
+</span><span class="w">            </span><span class="c"># Pod 必须运行在不同的节点上</span><span class="w">
+</span><span class="w">            </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l">kubernetes.io/hostname</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="五pod-的就绪探针存活探针与启动探针">五、Pod 的就绪探针、存活探针与启动探针</h2>
+<p>Pod 提供如下三种探针，均支持使用 Command、HTTP API、TCP Socket 这三种手段来进行服务可用性探测。</p>
+<ul>
+<li><code>startupProbe</code> 启动探针（Kubernetes v1.18 [beta]）: 此探针通过后，「就绪探针」与「存活探针」才会进行存活性与就绪检查
+<ul>
+<li>用于对慢启动容器进行存活性检测，避免它们在启动运行之前就被杀掉
+<ul>
+<li>startupProbe 显然比 livenessProbe 的 initialDelaySeconds 参数更灵活。</li>
+<li>同时它也能延迟 readinessProbe 的生效时间，这主要是为了避免无意义的探测。容器都还没 startUp，显然是不可能就绪的。</li>
+</ul>
+</li>
+<li>程序将最多有 <code>failureThreshold * periodSeconds</code> 的时间用于启动，比如设置 <code>failureThreshold=20</code>、<code>periodSeconds=5</code>，程序启动时间最长就为 100s，如果超过 100s 仍然未通过「启动探测」，容器会被杀死。</li>
+</ul>
+</li>
+<li><code>readinessProbe</code> 就绪探针:
+<ul>
+<li>就绪探针失败次数超过 <code>failureThreshold</code> 限制（默认三次），服务将被暂时从 Service 的 Endpoints 中踢出，直到服务再次满足 <code>successThreshold</code>.</li>
+</ul>
+</li>
+<li><code>livenessProbe</code> 存活探针: 检测服务是否存活，它可以捕捉到死锁等情况，及时杀死这种容器。
+<ul>
+<li>存活探针失败可能的原因：
+<ul>
+<li>服务发生死锁，对所有请求均无响应</li>
+<li>服务线程全部卡在对外部 redis/mysql 等外部依赖的等待中，导致请求无响应</li>
+</ul>
+</li>
+<li>存活探针失败次数超过 <code>failureThreshold</code> 限制（默认三次），容器将被杀死，随后根据重启策略执行重启。
+<ul>
+<li><code>kubectl describe pod</code> 会显示重启原因为 <code>State.Last State.Reason = Error, Exit Code=137</code>，同时 Events 中会有 <code>Liveness probe failed: ...</code> 这样的描述。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>上述三类探测器的参数都是通用的，五个时间相关的参数列举如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 下面的值就是 k8s 的默认值</span><span class="w">
+</span><span class="w"></span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="c"># 默认没有 delay 时间</span><span class="w">
+</span><span class="w"></span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w"></span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w"></span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w"></span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># ...</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c">#  ...</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">xxx.com/app/my-app:v3</span><span class="w">
+</span><span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent </span><span class="w">
+</span><span class="w">        </span><span class="c"># ... 省略若干配置</span><span class="w">
+</span><span class="w">        </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health </span><span class="w"> </span><span class="c"># 直接使用健康检查接口即可</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">  </span><span class="c"># 最多提供给服务 5s * 20 的启动时间</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">        </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health </span><span class="w"> </span><span class="c"># spring 的通用健康检查路径</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">        </span><span class="c"># Readiness probes are very important for a RollingUpdate to work properly,</span><span class="w">
+</span><span class="w">        </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health </span><span class="w"> </span><span class="c"># 简单起见可直接使用 livenessProbe 相同的接口，当然也可额外定义</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>在 Kubernetes 1.18 之前，通用的手段是为「就绪探针」添加较长的 <code>initialDelaySeconds</code> 来实现类似「启动探针」的功能动，避免容器因为启动太慢，存活探针失败导致容器被重启。示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># ...</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c">#  ...</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">xxx.com/app/my-app:v3</span><span class="w">
+</span><span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent </span><span class="w">
+</span><span class="w">        </span><span class="c"># ... 省略若干配置</span><span class="w">
+</span><span class="w">        </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health </span><span class="w"> </span><span class="c"># spring 的通用健康检查路径</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">120</span><span class="w">  </span><span class="c"># 前两分钟，都假设服务健康，避免 livenessProbe 失败导致服务重启</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">        </span><span class="c"># 容器一启动，Readiness probes 就会不断进行检测</span><span class="w">
+</span><span class="w">        </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/actuator/health</span><span class="w">
+</span><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">  </span><span class="c"># readiness probe 不需要设太长时间，使 Pod 尽快加入到 Endpoints.</span><span class="w">
+</span><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">          </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="security">六、Pod 安全</h2>
+<p>这里只介绍 Pod 中安全相关的参数，其他诸如集群全局的安全策略，不在这里讨论。</p>
+<h3 id="1-pod-securitycontexthttpskubernetesiodocstasksconfigure-pod-containersecurity-context">1. <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/" target="_blank" rel="noopener noreferrer">Pod SecurityContext</a></h3>
+<p>通过设置 Pod 的 SecurityContext，可以为每个 Pod 设置特定的安全策略。</p>
+<p>SecurityContext 有两种类型：</p>
+<ol>
+<li><code>spec.securityContext</code>: 这是一个 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core" target="_blank" rel="noopener noreferrer">PodSecurityContext</a> 对象
+<ul>
+<li>顾名思义，它对 Pod 中的所有 contaienrs 都有效。</li>
+</ul>
+</li>
+<li><code>spec.containers[*].securityContext</code>: 这是一个 <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#securitycontext-v1-core" target="_blank" rel="noopener noreferrer">SecurityContext</a> 对象
+<ul>
+<li>container 私有的 SecurityContext</li>
+</ul>
+</li>
+</ol>
+<p>这两个 SecurityContext 的参数只有部分重叠，重叠的部分 <code>spec.containers[*].securityContext</code> 优先级更高。</p>
+<p>我们比较常遇到的一些<strong>提升权限</strong>的安全策略：</p>
+<ol>
+<li>特权容器：<code>spec.containers[*].securityContext.privileged</code></li>
+<li>添加（Capabilities）可选的系统级能力: <code>spec.containers[*].securityContext.capabilities.add</code>
+<ol>
+<li>只有 ntp 同步服务等少数容器，可以开启这项功能。请注意这非常危险。</li>
+</ol>
+</li>
+<li>Sysctls: 系统参数: <code>spec.securityContext.sysctls</code></li>
+</ol>
+<p><strong>权限限制</strong>相关的安全策略有（<strong>强烈建议在所有 Pod 上按需配置如下安全策略！</strong>）：</p>
+<ol>
+<li><code>spec.volumes</code>: 所有的数据卷都可以设定读写权限</li>
+<li><code>spec.securityContext.runAsNonRoot: true</code> Pod 必须以非 root 用户运行</li>
+<li><code>spec.containers[*].securityContext.readOnlyRootFileSystem:true</code> <strong>将容器层设为只读，防止容器文件被篡改。</strong>
+<ol>
+<li>如果微服务需要读写文件，建议额外挂载 <code>emptydir</code> 类型的数据卷。</li>
+</ol>
+</li>
+<li><code>spec.containers[*].securityContext.allowPrivilegeEscalation: false</code> 不允许 Pod 做任何权限提升！</li>
+<li><code>spec.containers[*].securityContext.capabilities.drop</code>: 移除（Capabilities）可选的系统级能力</li>
+</ol>
+<p>还有其他诸如指定容器的运行用户(user)/用户组(group)等功能未列出，请自行查阅 Kubernetes 相关文档。</p>
+<p>一个无状态的微服务 Pod 配置举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;Pod name&gt;</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">- name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;container name&gt;</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;image&gt;</span><span class="w">
+</span><span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent </span><span class="w">
+</span><span class="w">    </span><span class="c"># ......此处省略 500 字</span><span class="w">
+</span><span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">readOnlyRootFilesystem</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c"># 将容器层设为只读，防止容器文件被篡改。</span><span class="w">
+</span><span class="w">      </span><span class="nt">allowPrivilegeEscalation</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">  </span><span class="c"># 禁止 Pod 做任何权限提升</span><span class="w">
+</span><span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">drop</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="c"># 禁止容器使用 raw 套接字，通常只有 hacker 才会用到 raw 套接字。</span><span class="w">
+</span><span class="w">        </span><span class="c"># raw_socket 可自定义网络层数据，避开 tcp/udp 协议栈，直接操作底层的 ip/icmp 数据包。可实现 ip 伪装、自定义协议等功能。</span><span class="w">
+</span><span class="w">        </span><span class="c"># 去掉 net_raw 会导致 tcpdump 无法使用，无法进行容器内抓包。需要抓包时可临时去除这项配置</span><span class="w">
+</span><span class="w">        </span>- <span class="l">NET_RAW</span><span class="w">
+</span><span class="w">        </span><span class="c"># 更好的选择：直接禁用所有 capabilities</span><span class="w">
+</span><span class="w">        </span><span class="c"># - ALL</span><span class="w">
+</span><span class="w">  </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># runAsUser: 1000  # 设定用户</span><span class="w">
+</span><span class="w">    </span><span class="c"># runAsGroup: 1000  # 设定用户组</span><span class="w">
+</span><span class="w">    </span><span class="nt">runAsNonRoot</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c"># Pod 必须以非 root 用户运行</span><span class="w">
+</span><span class="w">    </span><span class="nt">seccompProfile</span><span class="p">:</span><span class="w">  </span><span class="c"># security compute mode</span><span class="w">
+</span><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RuntimeDefault</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-seccomp-security-compute-mode">2. seccomp: security compute mode</h3>
+<p>seccomp 和 seccomp-bpf 允许对系统调用进行过滤，可以防止用户的二进制文对主机操作系统件执行通常情况下并不需要的危险操作。它和 Falco 有些类似，不过 Seccomp 没有为容器提供特别的支持。</p>
+<p>视频:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Ro4QRx7VPsY&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut$index=22" target="_blank" rel="noopener noreferrer">Seccomp: What Can It Do For You? - Justin Cormack, Docker</a></li>
+</ul>
+<h2 id="其他问题">其他问题</h2>
+<ul>
+<li>不同节点类型的性能有差距，导致 QPS 均衡的情况下，CPU 负载不均衡
+<ul>
+<li>解决办法（未验证）：
+<ul>
+<li>尽量使用性能相同的实例类型：通过 <code>podAffinity</code> 及 <code>nodeAffinity</code> 添加节点类型的亲和性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+]]></description></item><item><title>2021 年年终总结</title><link>https://ryan4yin.space/posts/2021-summary/</link><pubDate>Mon, 03 Jan 2022 14:50:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/2021-summary/</guid><description><![CDATA[<blockquote>
 <p>更新：2022/1/22</p>
 </blockquote>
 <h2 id="闲言碎语">闲言碎语</h2>
@@ -5460,548 +6887,4 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 <li><a href="https://www.openssl.org/docs/man1.1.1/" target="_blank" rel="noopener noreferrer">OpenSSL ManPage</a></li>
 <li><a href="https://www.jianshu.com/p/f5f93c89155e" target="_blank" rel="noopener noreferrer">openssl 查看证书</a></li>
 </ul>
-]]></description></item><item><title>QEMU-KVM 虚拟化环境的搭建与使用</title><link>https://ryan4yin.space/posts/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/qemu-kvm-usage/</guid><description><![CDATA[<h2 id="qemukvm-虚拟化">QEMU/KVM 虚拟化</h2>
-<p>QEMU/KVM 是目前最流行的虚拟化技术，它基于 Linux 内核提供的 kvm 模块，结构精简，性能损失小，而且开源免费（对比收费的 vmware），因此成了大部分企业的首选虚拟化方案。</p>
-<p>目前各大云厂商的虚拟化方案，新的服务器实例基本都是用的 KVM 技术。即使是起步最早，一直重度使用 Xen 的 AWS，从 EC2 C5 开始就改用了基于 KVM 定制的 Nitro 虚拟化技术。</p>
-<p>但是 KVM 作为一个企业级的底层虚拟化技术，却没有对桌面使用做深入的优化，因此如果想把它当成桌面虚拟化软件来使用，替代掉 VirtualBox/VMware，有一定难度。</p>
-<p>本文是我个人学习 KVM 的一个总结性文档，其目标是使用 KVM 作为桌面虚拟化软件。</p>
-<h2 id="一安装-queukvm">一、安装 QUEU/KVM</h2>
-<p>QEMU/KVM 环境需要安装很多的组件，它们各司其职：</p>
-<ol>
-<li>qemu: 模拟各类输入输出设备（网卡、磁盘、USB端口等）
-<ul>
-<li>qemu 底层使用 kvm 模拟 CPU 和 RAM，比软件模拟的方式快很多。</li>
-</ul>
-</li>
-<li>libvirt: 提供简单且统一的工具和 API，用于管理虚拟机，屏蔽了底层的复杂结构。（支持 qemu-kvm/virtualbox/vmware）</li>
-<li>ovmf: 为虚拟机启用 UEFI 支持</li>
-<li>virt-manager: 用于管理虚拟机的 GUI 界面（可以管理远程 kvm 主机）。</li>
-<li>virt-viewer: 通过 GUI 界面直接与虚拟机交互（可以管理远程 kvm 主机）。</li>
-<li>dnsmasq vde2 bridge-utils openbsd-netcat: 网络相关组件，提供了以太网虚拟化、网络桥接、NAT网络等虚拟网络功能。
-<ul>
-<li>dnsmasq 提供了 NAT 虚拟网络的 DHCP 及 DNS 解析功能。</li>
-<li>vde2: 以太网虚拟化</li>
-<li>bridge-utils: 顾名思义，提供网络桥接相关的工具。</li>
-<li>openbsd-netcat: TCP/IP 的瑞士军刀，详见 <a href="https://ryan4yin.space/posts/socat-netcat/" rel="">socat &amp; netcat</a>，这里不清楚是哪个网络组件会用到它。</li>
-</ul>
-</li>
-</ol>
-<p>安装命令：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># archlinux/manjaro</span>
-sudo pacman -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat
-
-<span class="c1"># ubuntu,参考了官方文档，但未测试</span>
-sudo apt install qemu-kvm libvirt-daemon-system virt-manager virt-viewer virtinst bridge-utils
-
-<span class="c1"># centos,参考了官方文档，但未测试</span>
-sudo yum groupinstall <span class="s2">&#34;Virtualization Host&#34;</span>
-sudo yum install virt-manager virt-viewer virt-install
-
-<span class="c1"># opensuse</span>
-<span class="c1"># see: https://doc.opensuse.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
-sudo yast2 virtualization
-<span class="c1"># enter to terminal ui, select kvm + kvm tools, and then install it.</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>安装完成后，还不能直接使用，需要做些额外的工作。请继续往下走。</p>
-<h3 id="1-libguestfs---虚拟机磁盘映像处理工具">1. libguestfs - 虚拟机磁盘映像处理工具</h3>
-<p><a href="https://libguestfs.org/" target="_blank" rel="noopener noreferrer">libguestfs</a> 是一个虚拟机磁盘映像处理工具，可用于直接修改/查看/虚拟机映像、转换映像格式等。</p>
-<p>它提供的命令列表如下：</p>
-<ol>
-<li><code>virt-df centos.img</code>: 查看硬盘使用情况</li>
-<li><code>virt-ls centos.img /</code>: 列出目录文件</li>
-<li><code>virt-copy-out -d domain /etc/passwd /tmp</code>：在虚拟映像中执行文件复制</li>
-<li><code>virt-list-filesystems /file/xx.img</code>：查看文件系统信息</li>
-<li><code>virt-list-partitions /file/xx.img</code>：查看分区信息</li>
-<li><code>guestmount -a /file/xx.qcow2(raw/qcow2都支持) -m /dev/VolGroup/lv_root --rw /mnt</code>：直接将分区挂载到宿主机</li>
-<li><code>guestfish</code>: 交互式 shell，可运行上述所有命令。</li>
-<li><code>virt-v2v</code>: 将其他格式的虚拟机(比如 ova) 转换成 kvm 虚拟机。</li>
-<li><code>virt-p2v</code>: 将一台物理机转换成虚拟机。</li>
-</ol>
-<p>学习过程中可能会使用到上述命令，提前安装好总不会有错，安装命令如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># opensuse</span>
-sudo zypper install libguestfs
-
-<span class="c1"># archlinux/manjaro，目前缺少 virt-v2v/virt-p2v 组件</span>
-sudo pacman -S libguestfs
-
-<span class="c1"># ubuntu</span>
-sudo apt install libguestfs-tools
-
-<span class="c1"># centos</span>
-sudo yum install libguestfs-tools
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="2-启动-qemukvm">2. 启动 QEMU/KVM</h3>
-<p>通过 systemd 启动 libvirtd 后台服务：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl <span class="nb">enable</span> libvirtd.service
-sudo systemctl start libvirtd.service
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="3-让非-root-用户能正常使用-kvm">3. 让非 root 用户能正常使用 kvm</h3>
-<p>qumu/kvm 装好后，默认情况下需要 root 权限才能正常使用它。
-为了方便使用，首先编辑文件 <code>/etc/libvirt/libvirtd.conf</code>:</p>
-<ol>
-<li><code>unix_sock_group = &quot;libvirt&quot;</code>，取消这一行的注释，使 <code>libvirt</code> 用户组能使用 unix 套接字。</li>
-<li><code>unix_sock_rw_perms = &quot;0770&quot;</code>，取消这一行的注释，使用户能读写 unix 套接字。</li>
-</ol>
-<p>然后新建 libvirt 用户组，将当前用户加入该组：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">newgrp libvirt
-sudo usermod -aG libvirt <span class="nv">$USER</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>最后重启 libvirtd 服务，应该就能正常使用了：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl restart libvirtd.service
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="3-启用嵌套虚拟化">3. 启用嵌套虚拟化</h3>
-<p>如果你需要<strong>在虚拟机中运行虚拟机</strong>（比如在虚拟机里测试 katacontainers 等安全容器技术），那就需要启用内核模块 kvm_intel 实现嵌套虚拟化。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 临时启用 kvm_intel 嵌套虚拟化</span>
-sudo modprobe -r kvm_intel
-sudo modprobe kvm_intel <span class="nv">nested</span><span class="o">=</span><span class="m">1</span>
-<span class="c1"># 修改配置，永久启用嵌套虚拟化</span>
-<span class="nb">echo</span> <span class="s2">&#34;options kvm-intel nested=1&#34;</span> <span class="p">|</span> sudo tee /etc/modprobe.d/kvm-intel.conf
-</code></pre></td></tr></table>
-</div>
-</div><p>验证嵌套虚拟化已经启用：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">$ cat /sys/module/kvm_intel/parameters/nested 
-Y
-</code></pre></td></tr></table>
-</div>
-</div><p>至此，KVM 的安装就大功告成啦，现在应该可以在系统中找到 virt-manager 的图标，进去就可以使用了。
-virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这里就不详细介绍了，自己摸索摸索应该就会了。</p>
-<hr>
-<blockquote>
-<p>如下内容是进阶篇，主要介绍如何通过命令行来管理虚拟机磁盘，以及 KVM。
-如果你还是 kvm 新手，建议先通过图形界面 virt-manager 熟悉熟悉，再往下继续读。</p>
-</blockquote>
-<h2 id="二虚拟机磁盘映像管理">二、虚拟机磁盘映像管理</h2>
-<p>这需要用到两个工具：</p>
-<ol>
-<li>libguestfs: 虚拟机磁盘映像管理工具，前面介绍过了</li>
-<li>qemu-img: qemu 的磁盘映像管理工具，用于创建磁盘、扩缩容磁盘、生成磁盘快照、查看磁盘信息、转换磁盘格式等等。</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建磁盘</span>
-qemu-img create -f qcow2 -o <span class="nv">cluster_size</span><span class="o">=</span>128K virt_disk.qcow2 20G
-
-<span class="c1"># 扩容磁盘</span>
-qemu-img resize ubuntu-server-cloudimg-amd64.img 30G
-
-<span class="c1"># 查看磁盘信息</span>
-qemu-img info ubuntu-server-cloudimg-amd64.img
-
-<span class="c1"># 转换磁盘格式</span>
-qemu-img convert -f raw -O qcow2 vm01.img vm01.qcow2  <span class="c1"># raw =&gt; qcow2</span>
-qemu-img convert -f qcow2 -O raw vm01.qcow2 vm01.img  <span class="c1"># qcow2 =&gt; raw</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="1-导入-vmware-镜像">1. 导入 vmware 镜像</h3>
-<p>直接从 vmware ova 文件导入 kvm，这种方式转换得到的镜像应该能直接用（网卡需要重新配置）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">virt-v2v -i ova centos7-test01.ova -o <span class="nb">local</span> -os /vmhost/centos7-01  -of qcow2
-</code></pre></td></tr></table>
-</div>
-</div><p>也可以先从 ova 中解压出 vmdk 磁盘映像，将 vmware 的  vmdk 文件转换成 qcow2 格式，然后再导入 kvm（网卡需要重新配置）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 转换映像格式</span>
-qemu-img convert -p -f vmdk -O qcow2 centos7-test01-disk1.vmdk centos7-test01.qcow2
-<span class="c1"># 查看转换后的映像信息</span>
-qemu-img info centos7-test01.qcow2
-</code></pre></td></tr></table>
-</div>
-</div><p>直接转换 vmdk 文件得到的 qcow2 镜像，启会报错，比如「磁盘无法挂载」。
-根据 <a href="https://pve.proxmox.com/pve-docs/chapter-qm.html#_importing_virtual_machines_and_disk_images" target="_blank" rel="noopener noreferrer">Importing Virtual Machines and disk images - ProxmoxVE Docs</a> 文档所言，需要在网上下载安装 MergeIDE.zip 组件，
-另外启动虚拟机前，需要将硬盘类型改为 IDE，才能解决这个问题。</p>
-<h3 id="2-导入-img-镜像">2. 导入 img 镜像</h3>
-<p>img 镜像文件，就是所谓的 raw 格式镜像，也被称为裸镜像，IO 速度比 qcow2 快，但是体积大，而且不支持快照等高级特性。
-如果不追求 IO 性能的话，建议将它转换成 qcow2 再使用。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">qemu-img convert -f raw -O qcow2 vm01.img vm01.qcow2
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="三虚拟机管理">三、虚拟机管理</h2>
-<p>虚拟机管理可以使用命令行工具 <code>virsh</code>/<code>virt-install</code>，也可以使用 GUI 工具 <code>virt-manager</code>.</p>
-<p>GUI 很傻瓜式，就不介绍了，这里主要介绍命令行工具 <code>virsh</code>/<code>virt-install</code></p>
-<p>先介绍下 libvirt 中的几个概念：</p>
-<ol>
-<li>Domain: 指代运行在虚拟机器上的操作系统的实例 - 一个虚拟机，或者用于启动虚拟机的配置。</li>
-<li>Guest OS: 运行在 domain 中的虚拟操作系统。</li>
-</ol>
-<p>大部分情况下，你都可以把下面命令中涉及到的 <code>domain</code> 理解成虚拟机。</p>
-<h3 id="0-设置默认-uri">0. 设置默认 URI</h3>
-<p><code>virsh</code>/<code>virt-install</code>/<code>virt-viewer</code> 等一系列 libvirt 命令，sudo virsh net-list &ndash;all
-默认情况下会使用 <code>qemu:///session</code> 作为 URI 去连接 QEMU/KVM，只有 root 账号才会默认使用 <code>qemu:///system</code>.</p>
-<p>另一方面 <code>virt-manager</code> 这个 GUI 工具，默认也会使用 <code>qemu:///system</code> 去连接 QEMU/KVM（和 root 账号一致）</p>
-<p><code>qemu:///system</code> 是系统全局的 qemu 环境，而 <code>qemu:///session</code> 的环境是按用户隔离的。
-另外 <code>qemu:///session</code> 没有默认的 <code>network</code>，创建虚拟机时会出毛病。。。</p>
-<p>因此，你需要将默认的 URI 改为 <code>qemu:///system</code>，否则绝对会被坑:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">echo</span> <span class="s1">&#39;export LIBVIRT_DEFAULT_URI=&#34;qemu:///system&#34;&#39;</span> &gt;&gt; ~/.bashrc
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="1-虚拟机网络">1. 虚拟机网络</h3>
-<p>qemu-kvm 安装完成后，<code>qemu:///system</code> 环境中默认会创建一个 <code>default</code> 网络，而 <code>qemu:///session</code> 不提供默认的网络，需要手动创建。</p>
-<p>我们通常使用 <code>qemu:///system</code> 环境就好，可以使用如下方法查看并启动 default 网络，这样后面创建虚拟机时才有网络可用。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出所有虚拟机网络</span>
-$ sudo virsh net-list --all
- Name      State      Autostart   Persistent
-----------------------------------------------
- default   inactive   no          yes
-
-<span class="c1"># 启动默认网络</span>
-$ virsh net-start default
-Network default started
-
-<span class="c1"># 将 default 网络设为自启动</span>
-$ virsh net-autostart --network default
-Network default marked as autostarted
-
-<span class="c1"># 再次检查网络状况，已经是 active 了</span>
-$ sudo virsh net-list --all
- Name      State    Autostart   Persistent
---------------------------------------------
- default   active   yes         yes
-</code></pre></td></tr></table>
-</div>
-</div><p>也可以创建新的虚拟机网络，这需要手动编写网络的 xml 配置，然后通过 <code>virsh net-define --file my-network.xml</code> 创建，这里就不详细介绍了，因为暂时用不到&hellip;</p>
-<h3 id="2-创建虚拟机---virt-intall">2. 创建虚拟机 - virt-intall</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 iso 镜像创建全新的 proxmox 虚拟机，自动创建一个 60G 的磁盘。</span>
-virt-install --virt-type kvm <span class="se">\
-</span><span class="se"></span>--name pve-1 <span class="se">\
-</span><span class="se"></span>--vcpus <span class="m">4</span> --memory <span class="m">8096</span> <span class="se">\
-</span><span class="se"></span>--disk <span class="nv">size</span><span class="o">=</span><span class="m">60</span> <span class="se">\
-</span><span class="se"></span>--network <span class="nv">network</span><span class="o">=</span>default,model<span class="o">=</span>virtio <span class="se">\
-</span><span class="se"></span>--os-type linux <span class="se">\
-</span><span class="se"></span>--os-variant generic <span class="se">\
-</span><span class="se"></span>--graphics vnc <span class="se">\
-</span><span class="se"></span>--cdrom proxmox-ve_6.3-1.iso
-
-<span class="c1"># 使用已存在的 opensuse cloud 磁盘创建虚拟机</span>
-virt-install --virt-type kvm <span class="se">\
-</span><span class="se"></span>  --name opensuse15-2 <span class="se">\
-</span><span class="se"></span>  --vcpus <span class="m">2</span> --memory <span class="m">2048</span> <span class="se">\
-</span><span class="se"></span>  --disk opensuse15.2-openstack.qcow2,device<span class="o">=</span>disk,bus<span class="o">=</span>virtio <span class="se">\
-</span><span class="se"></span>  --disk seed.iso,device<span class="o">=</span>cdrom <span class="se">\
-</span><span class="se"></span>  --os-type linux <span class="se">\
-</span><span class="se"></span>  --os-variant opensuse15.2 <span class="se">\
-</span><span class="se"></span>  --network <span class="nv">network</span><span class="o">=</span>default,model<span class="o">=</span>virtio <span class="se">\
-</span><span class="se"></span>  --graphics vnc <span class="se">\
-</span><span class="se"></span>  --import
-</code></pre></td></tr></table>
-</div>
-</div><p>其中的 <code>--os-variant</code> 用于设定 OS 相关的优化配置，官方文档<strong>强烈推荐</strong>设定，其可选参数可以通过 <code>osinfo-query os</code> 查看。</p>
-<h3 id="3-虚拟机管理---virsh">3. 虚拟机管理 - virsh</h3>
-<p>虚拟机创建好后，可使用 virsh 管理虚拟机：</p>
-<p>查看虚拟机列表：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 查看正在运行的虚拟机
-virsh list
-
-# 查看所有虚拟机，包括 inactive 的虚拟机
-virsh list --all
-</code></pre></td></tr></table>
-</div>
-</div><p>使用 <code>virt-viewer</code> 以 vnc 协议登入虚拟机终端：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用虚拟机 ID 连接</span>
-virt-viewer <span class="m">8</span>
-<span class="c1"># 使用虚拟机名称连接，并且等待虚拟机启动</span>
-virt-viewer --wait opensuse15
-</code></pre></td></tr></table>
-</div>
-</div><p>启动、关闭、暂停(休眠)、重启虚拟机：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">virsh start opensuse15
-virsh suuspend opensuse15
-virsh resume opensuse15
-virsh reboot opensuse15
-<span class="c1"># 优雅关机</span>
-virsh shutdown opensuse15
-<span class="c1"># 强制关机</span>
-virsh destroy opensuse15
-
-<span class="c1"># 启用自动开机</span>
-virsh autostart opensuse15
-<span class="c1"># 禁用自动开机</span>
-virsh autostart --disable opensuse15
-</code></pre></td></tr></table>
-</div>
-</div><p>虚拟机快照管理：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出一个虚拟机的所有快照</span>
-virsh snapshot-list --domain opensuse15
-<span class="c1"># 给某个虚拟机生成一个新快照</span>
-virsh snapshot-create &lt;domain&gt;
-<span class="c1"># 使用快照将虚拟机还原</span>
-virsh snapshot-restore &lt;domain&gt; &lt;snapshotname&gt;
-<span class="c1"># 删除快照</span>
-virsh snapshot-delete &lt;domain&gt; &lt;snapshotname&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>删除虚拟机：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">virsh undefine opensuse15
-</code></pre></td></tr></table>
-</div>
-</div><p>迁移虚拟机：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用默认参数进行离线迁移，将已关机的服务器迁移到另一个 qemu 实例</span>
-virsh migrate <span class="m">37</span> qemu+ssh://tux@jupiter.example.com/system
-<span class="c1"># 还支持在线实时迁移，待续</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>cpu/内存修改：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 改成 4 核</span>
-virsh setvcpus opensuse15 <span class="m">4</span>
-<span class="c1"># 改成 4G</span>
-virsh setmem opensuse15 <span class="m">4096</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>虚拟机监控：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 待续</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>修改磁盘、网络及其他设备：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加新设备</span>
-virsh attach-device
-virsh attach-disk
-virsh attach-interface
-<span class="c1"># 删除设备</span>
-virsh detach-disk
-virsh detach-device
-virsh detach-interface
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://doc.opensuse.org/documentation/leap/virtualization/html/book-virt/index.html" target="_blank" rel="noopener noreferrer">Virtualization Guide - OpenSUSE</a></li>
-<li><a href="https://computingforgeeks.com/complete-installation-of-kvmqemu-and-virt-manager-on-arch-linux-and-manjaro/" target="_blank" rel="noopener noreferrer">Complete Installation of KVM, QEMU and Virt Manager on Arch Linux and Manjaro</a></li>
-<li><a href="https://ubuntu.com/server/docs/virtualization-libvirt" target="_blank" rel="noopener noreferrer">virtualization-libvirt - ubuntu docs</a></li>
-<li><a href="https://developers.redhat.com/products/rhel/hello-world#fndtn-kvm" target="_blank" rel="noopener noreferrer">RedHat Docs - KVM</a></li>
-</ul>]]></description></item></channel></rss>
+]]></description></item></channel></rss>
