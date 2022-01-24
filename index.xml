@@ -476,7 +476,7 @@
 <li><a href="https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace" target="_blank" rel="noopener noreferrer">Kubernetes best practices: terminating with grace</a></li>
 <li><a href="https://medium.com/flant-com/kubernetes-graceful-shutdown-nginx-php-fpm-d5ab266963c2" target="_blank" rel="noopener noreferrer">Graceful shutdown in Kubernetes is not always trivial</a></li>
 </ul>
-<h2 id="二服务的伸缩配置---hpa">二、服务的伸缩配置 - HPA</h2>
+<h2 id="k8s-hpa">二、服务的伸缩配置 - HPA</h2>
 <p>Kubernetes 官方主要支持基于 Pod CPU 的伸缩，这是应用最为广泛的伸缩指标，需要部署 <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">metrics-server</a> 才可使用。</p>
 <p>先回顾下前面给出的示例：</p>
 <div class="highlight"><div class="chroma">
@@ -772,7 +772,7 @@
 <li><a href="https://kubernetes.io/zh/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank" rel="noopener noreferrer">Pod 水平自动伸缩 - Kubernetes Docs</a></li>
 <li><a href="https://kubernetes.io/zh/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/" target="_blank" rel="noopener noreferrer">Horizontal Pod Autoscaler演练 - Kubernetes Docs</a></li>
 </ul>
-<h2 id="三节点维护与pod干扰预算httpskubernetesiozhdocstasksrun-applicationconfigure-pdb">三、<a href="https://kubernetes.io/zh/docs/tasks/run-application/configure-pdb/" target="_blank" rel="noopener noreferrer">节点维护与Pod干扰预算</a></h2>
+<h2 id="k8s-PodDistruptionBuget">三、<a href="https://kubernetes.io/zh/docs/tasks/run-application/configure-pdb/" target="_blank" rel="noopener noreferrer">节点维护与Pod干扰预算</a></h2>
 <p>在我们通过 <code>kubectl drain</code> 将某个节点上的容器驱逐走的时候，
 kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。</p>
 <p>如果不设置任何明确的 PodDistruptionBuget，Pod 将会被直接杀死，然后在别的节点重新调度，<strong>这可能导致服务中断！</strong></p>
@@ -865,7 +865,7 @@ node/node-205 evicted
 </ul>
 </li>
 </ul>
-<h2 id="四节点亲和性与节点组">四、节点亲和性与节点组</h2>
+<h2 id="k8s-affinity">四、节点亲和性与节点组</h2>
 <p>我们一个集群，通常会使用不同的标签为节点组进行分类，比如 kubernetes 自动生成的一些节点标签：</p>
 <ul>
 <li><code>kubernetes.io/os</code>: 通常都用 <code>linux</code></li>
@@ -1093,7 +1093,7 @@ node/node-205 evicted
 </span><span class="w">            </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l">kubernetes.io/hostname</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h2 id="五pod-的就绪探针存活探针与启动探针">五、Pod 的就绪探针、存活探针与启动探针</h2>
+</div><h2 id="k8s-container-probe">五、Pod 的就绪探针、存活探针与启动探针</h2>
 <p>Pod 提供如下三种探针，均支持使用 Command、HTTP API、TCP Socket 这三种手段来进行服务可用性探测。</p>
 <ul>
 <li><code>startupProbe</code> 启动探针（Kubernetes v1.18 [beta]）: 此探针通过后，「就绪探针」与「存活探针」才会进行存活性与就绪检查
@@ -1305,7 +1305,7 @@ node/node-205 evicted
 </span><span class="w">          </span><span class="nt">successThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h2 id="security">六、Pod 安全</h2>
+</div><h2 id="k8s-pod-security">六、Pod 安全</h2>
 <p>这里只介绍 Pod 中安全相关的参数，其他诸如集群全局的安全策略，不在这里讨论。</p>
 <h3 id="1-pod-securitycontexthttpskubernetesiodocstasksconfigure-pod-containersecurity-context">1. <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/" target="_blank" rel="noopener noreferrer">Pod SecurityContext</a></h3>
 <p>通过设置 Pod 的 SecurityContext，可以为每个 Pod 设置特定的安全策略。</p>
