@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "adopt-kubernetes.png"
 
-tags: ["Kubernetes", "最佳实践", "云原生"]
+tags: ["Kubernetes", "云原生"]
 categories: ["技术"]
 ---
 
