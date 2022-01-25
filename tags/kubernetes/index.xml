@@ -1555,7 +1555,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </ul>
 <h2 id="k8s-hpa">二、服务的伸缩配置 - HPA</h2>
 <p>Kubernetes 官方主要支持基于 Pod CPU 的伸缩，这是应用最为广泛的伸缩指标，需要部署 <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">metrics-server</a> 才可使用。</p>
-<p>先回顾下前面给出的示例：</p>
+<p>先回顾下前面给出的，基于 Pod CPU 使用率进行伸缩的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -1605,13 +1605,14 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span></code></pre></td></tr></table>
 </div>
 </div><h3 id="1-当前指标值的计算方式">1. 当前指标值的计算方式</h3>
-<p>HPA 默认使用 Pod 的当前指标进行计算，以 CPU 为例，其计算公式为：</p>
+<p>提前总结：每个 <strong>Pod 的指标是其中所有容器指标之和</strong>，如果计算百分比，就再除以 Pod 的 requests.</p>
+<p>HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其计算公式为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 利用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
 </code></pre></td></tr></table>
 </div>
 </div><p>注意分母是总的 requests 量，而不是 limits.</p>
@@ -1620,9 +1621,14 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>因为 Istio 的 Sidecar requests 默认为 <code>100m</code> 也就是 0.1 核。
 在未 tuning 的情况下，服务负载一高，sidecar 的实际用量很容易就能涨到 0.2-0.4 核。
 把这两个值代入前面的公式，会发现 <strong>对于 QPS 较高的服务，添加 Sidecar 后，「Pod 的 CPU 利用率」可能会高于「应用容器的 CPU 利用率」</strong>，造成不必要的扩容。</p>
+<p>即使改用「Pod 的 CPU 用量」而非百分比来进行扩缩容，也解决不了这个问题。</p>
 <p>解决方法：</p>
 <ul>
-<li>方法一：针对每个服务的 CPU 使用情况，为 sidecar 设置不同的 requests/limits</li>
+<li>方法一：针对每个服务的 CPU 使用情况，为每个服务的 sidecar 设置不同的 requests/limits.
+<ul>
+<li>感觉这个方案太麻烦了</li>
+</ul>
+</li>
 <li>方法二：使用 KEDA 等第三方组件，获取到应用程序的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容</li>
 <li>方法三：使用 k8s 1.20 提供的 alpha 特性：<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics" target="_blank" rel="noopener noreferrer">Container Resourse Metrics</a>.</li>
 </ul>
@@ -1631,11 +1637,11 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <ol>
 <li>HPA 的「目标指标」可以使用两种形式：绝对度量指标和资源利用率。
 <ul>
-<li>绝对度量指标：比如 CPU，就是设定绝对核数。</li>
-<li>资源利用率（资源使用量/资源请求 * 100%）：在 Pod 设置了资源请求时，可以使用资源利用率进行 Pod 伸缩。</li>
+<li>绝对度量指标：比如 CPU，就是指 CPU 的使用量</li>
+<li>资源利用率（资源使用量/资源请求 * 100%）：在 Pod 设置了资源请求时，可以使用资源利用率进行 Pod 伸缩</li>
 </ul>
 </li>
-<li>HPA 的「当前指标」是一段时间内所有 Pods 的平均值，不是峰值。Pod 的指标是其中所有容器指标之和。</li>
+<li>HPA 的「当前指标」是一段时间内所有 Pods 的平均值，不是峰值。</li>
 </ol>
 <p>HPA 的扩缩容算法为：</p>
 <div class="highlight"><div class="chroma">
