@@ -1,0 +1,206 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>SQLAlchemy 学习笔记（二）：ORM 基础 - Ryan4Yin's Space</title><meta name=description content="Ryan4Yin's Space"><meta property="og:title" content="SQLAlchemy 学习笔记（二）：ORM 基础"><meta property="og:description" content="照例先看层次图 SQLAlchemy 层次结构&#34; SQLAlchemy 层次结构 一、声明映射关系 使用 ORM 时，我们首先需要定义要操作的表（通过 Table），然后再定义该表对应的 Python class"><meta property="og:type" content="article"><meta property="og:url" content="https://ryan4yin.space/posts/sqlalchemy-notes-2-orm-basics/"><meta property="og:image" content="https://ryan4yin.space/posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg"><meta property="article:published_time" content="2019-02-11T19:52:00+08:00"><meta property="article:modified_time" content="2019-02-11T19:52:00+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://ryan4yin.space/posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg"><meta name=twitter:title content="SQLAlchemy 学习笔记（二）：ORM 基础"><meta name=twitter:description content="照例先看层次图 SQLAlchemy 层次结构&#34; SQLAlchemy 层次结构 一、声明映射关系 使用 ORM 时，我们首先需要定义要操作的表（通过 Table），然后再定义该表对应的 Python class"><meta name=application-name content="Ryan4Yin's Space"><meta name=apple-mobile-web-app-title content="Ryan4Yin's Space"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ryan4yin.space/posts/sqlalchemy-notes-2-orm-basics/><link rel=prev href=https://ryan4yin.space/posts/websocket-http2-and-grpc/><link rel=next href=https://ryan4yin.space/posts/sqlalchemy-notes-3-relationship-and-foreignkey/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"SQLAlchemy 学习笔记（二）：ORM 基础","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ryan4yin.space\/posts\/sqlalchemy-notes-2-orm-basics\/"},"image":[{"@type":"ImageObject","url":"https:\/\/ryan4yin.space\/posts\/sqlalchemy-notes-2-orm-basics\/sqlalchemy-models.jpg","width":1500,"height":864}],"genre":"posts","keywords":"SQLAlchemy, Python, ORM, 后端","wordcount":1650,"url":"https:\/\/ryan4yin.space\/posts\/sqlalchemy-notes-2-orm-basics\/","datePublished":"2019-02-11T19:52:00+08:00","dateModified":"2019-02-11T19:52:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/ryan4yin.space\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="Ryan4Yin's Space"><span id=id-1 class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/friends/>伙伴们 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/posts/sqlalchemy-notes-2-orm-basics/ selected>Simplified Chinese</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="Ryan4Yin's Space"><span id=id-2 class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/now/>此刻</a><a class=menu-item href=/friends/>伙伴们</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/posts/sqlalchemy-notes-2-orm-basics/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">SQLAlchemy 学习笔记（二）：ORM 基础</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://ryan4yin.space title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2019-02-11>2019-02-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1650 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg data-srcset="/posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg, /posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg 1.5x, /posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg 2x" data-sizes=auto alt=/posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg title=/posts/sqlalchemy-notes-2-orm-basics/sqlalchemy-models.jpg></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#一声明映射关系>一、声明映射关系</a><ul><li><a href=#约束条件>约束条件</a></li></ul></li><li><a href=#二获取-session>二、获取 session</a></li><li><a href=#三增删改查>三、增删改查</a></li><li><a href=#四进阶查询>四、进阶查询</a><ul><li><a href=#执行查询获取数据>执行查询，获取数据</a></li></ul></li><li><a href=#参考>参考</a></li></ul></li></ul></nav></div></div><div class=content id=content><p>照例先看层次图</p><p><figure><a class=lightgallery href=/images/sqlalchemy-notes/sqlalchemy-arch.png title=/images/sqlalchemy-notes/sqlalchemy-arch.png data-thumbnail=/images/sqlalchemy-notes/sqlalchemy-arch.png data-sub-html="<h2>SQLAlchemy 层次结构</h2>"><img class=lazyload src=/svg/loading.min.svg data-src=/images/sqlalchemy-notes/sqlalchemy-arch.png data-srcset="/images/sqlalchemy-notes/sqlalchemy-arch.png, /images/sqlalchemy-notes/sqlalchemy-arch.png 1.5x, /images/sqlalchemy-notes/sqlalchemy-arch.png 2x" data-sizes=auto alt=/images/sqlalchemy-notes/sqlalchemy-arch.png></a><figcaption class=image-caption>SQLAlchemy 层次结构</figcaption></figure></p><h3 id=一声明映射关系>一、声明映射关系</h3><p>使用 ORM 时，我们首先需要定义要操作的表（通过 <code>Table</code>），然后再定义该表对应的 Python class，并声明两者之间的映射关系（通过 <code>Mapper</code>）。</p><p>方便起见，SQLAlchemy 提供了 Declarative 系统来一次完成上述三个步骤，Declarative 系统提供 base class，这个 base class 会为继承了它的 Python class（可称作 model）创建 Table，并维护两者的映射关系。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=kn>from</span> <span class=nn>sqlalchemy.ext.declarative</span> <span class=kn>import</span> <span class=n>declarative_base</span>
+<span class=kn>from</span> <span class=nn>SQLAlchemy</span> <span class=kn>import</span> <span class=n>Column</span><span class=p>,</span> <span class=n>Integer</span><span class=p>,</span> <span class=n>String</span>
+
+<span class=n>Base</span> <span class=o>=</span> <span class=n>declarative_base</span><span class=p>()</span>  <span class=c1># 拿到 Base 类</span>
+
+
+<span class=k>class</span> <span class=nc>User</span><span class=p>(</span><span class=n>Base</span><span class=p>):</span>
+    <span class=nb>id</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>Integer</span><span class=p>,</span> <span class=n>primary_key</span><span class=o>=</span><span class=bp>True</span><span class=p>)</span>
+    <span class=n>username</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>String</span><span class=p>(</span><span class=mi>32</span><span class=p>),</span> <span class=n>nullable</span><span class=o>=</span><span class=bp>False</span><span class=p>,</span> <span class=n>index</span><span class=o>=</span><span class=bp>True</span><span class=p>)</span>  <span class=c1># 添加 index 提升搜索效率</span>
+    <span class=n>fullname</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>String</span><span class=p>(</span><span class=mi>64</span><span class=p>))</span>
+    <span class=n>password</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>String</span><span class=p>(</span><span class=mi>32</span><span class=p>))</span>  <span class=c1># 真实情况下一般只存 hash</span>
+
+    <span class=k>def</span> <span class=fm>__repr__</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+        <span class=k>return</span> <span class=n>f</span><span class=s2>&#34;&lt;User {self.username}&gt;&#34;</span>
+</code></pre></td></tr></table></div></div><p>这样就声明好了一个对象-关系映射，上一篇文章说过所有的 Table 都在某个 MetaData 中，可以通过 <code>Base.metadata</code> 获取它。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>Base</span><span class=o>.</span><span class=n>metadata</span><span class=o>.</span><span class=n>create_all</span><span class=p>(</span><span class=n>engine</span><span class=p>)</span>  <span class=c1># 通过 metadata 创建表（或者说生成模式 schema）</span>
+</code></pre></td></tr></table></div></div><p>engine 的创建请见上篇文档 <a href=https://www.cnblogs.com/kirito-c/p/10269485.html target=_blank rel="noopener noreferrer">SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言</a></p><h4 id=约束条件>约束条件</h4><blockquote><p>可参考 <a href=https://www.cnblogs.com/kirito-c/p/10295693.html target=_blank rel="noopener noreferrer">SQL 基础笔记（三）：约束</a> 与 <a href=https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F target=_blank rel="noopener noreferrer">SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言 - 表定义中的约束</a></p></blockquote><p>使用 ORM 来定义约束条件，与直接使用 SQL 表达式语言定义很类似，也有两种方法：</p><ol><li>直接将约束条件作为 <code>Column</code>、<code>ForeignKey</code> 的参数传入。这种方式最简洁，也最常用。</li><li>使用 <code>UniqueConstraint</code>、<code>CheckConstraint</code> 等类构造约束，然后放入 <code>__table_args__</code> 属性中。举例：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python3 data-lang=python3><span class=k>class</span> <span class=nc>User</span><span class=p>(</span><span class=n>Base</span><span class=p>):</span>
+    <span class=nb>id</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>Integer</span><span class=p>,</span> <span class=n>primary_key</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>
+    <span class=n>username</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>String</span><span class=p>(</span><span class=mi>32</span><span class=p>),</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>,</span> <span class=n>index</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>  <span class=c1># 添加 index 提升搜索效率</span>
+    <span class=n>fullname</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>String</span><span class=p>(</span><span class=mi>64</span><span class=p>))</span>
+    <span class=n>password</span> <span class=o>=</span> <span class=n>Column</span><span class=p>(</span><span class=n>String</span><span class=p>(</span><span class=mi>32</span><span class=p>))</span>  <span class=c1># 真实情况下一般只存 hash</span>
+
+    <span class=c1># 顾名思义，这是 `Table` 类的参数的序列。里面的约束条件会被用于构建 __table__</span>
+    <span class=n>__table_args__</span> <span class=o>=</span> <span class=p>(</span><span class=n>UniqueConstraint</span><span class=p>(</span><span class=s1>&#39;username&#39;</span><span class=p>,</span> <span class=n>name</span><span class=o>=</span><span class=s1>&#39;c_user&#39;</span><span class=p>),)</span>  <span class=c1># username 的唯一性约束</span>
+
+    <span class=k>def</span> <span class=nf>__repr__</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+        <span class=k>return</span> <span class=n>f</span><span class=s2>&#34;&lt;User </span><span class=si>{self.username}</span><span class=s2>&gt;&#34;</span>
+</code></pre></td></tr></table></div></div><h3 id=二获取-session>二、获取 session</h3><p>上一节讲 engine 时，我们是通过 connection 来与数据库交互，而在 ORM 中我们使用 Session 访问数据库。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=kn>from</span> <span class=nn>sqlalchemy.orm</span> <span class=kn>import</span> <span class=n>sessionmaker</span>
+
+<span class=n>Session</span> <span class=o>=</span> <span class=n>sessionmaker</span><span class=p>(</span><span class=n>bind</span><span class=o>=</span><span class=n>engine</span><span class=p>)</span>  <span class=c1># 获取 session</span>
+</code></pre></td></tr></table></div></div><h3 id=三增删改查>三、增删改查</h3><p>直接使用 SQL 表达式语言时，我们使用 insert()、select()、update()、delete() 四个函数构造 SQL，使用 where() 添加条件，使用 model.join(another_model) 进行 join 操作。
+而使用 ORM 时，数据库操作不再与 SQL 直接对应。我们现在是通过操作 Python 对象来操作数据库了。</p><p>现在，我们通过 db.session.add()、db.session.delete() 进行添加与删除，使用 db.session.query(Model) 进行查询，通过 filter 和 filter_by 添加过滤条件。
+而修改，则是先查询出对应的 row 对象，直接修改这个对象，然后 commit 就行。</p><ol><li>增添：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>ed_user</span> <span class=o>=</span> <span class=n>User</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=s1>&#39;ed&#39;</span><span class=p>,</span> <span class=n>fullname</span><span class=o>=</span><span class=s1>&#39;Ed Jones&#39;</span><span class=p>,</span> <span class=n>password</span><span class=o>=</span><span class=s1>&#39;edspassword&#39;</span><span class=p>)</span>  <span class=c1># 用构造器构造对象</span>
+<span class=n>session</span><span class=o>.</span><span class=n>add</span><span class=p>(</span><span class=n>ed_user</span><span class=p>)</span>  <span class=c1># 添加，此外还有批量添加 add_all([user1, user2...])</span>
+<span class=n>session</span><span class=o>.</span><span class=n>commit</span><span class=p>()</span>  <span class=c1># 必须手动 commit</span>
+</code></pre></td></tr></table></div></div><ol><li>修改：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>ed_user</span> <span class=o>=</span> <span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>)</span><span class=o>.</span><span class=n>filter_by</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=s1>&#39;ed&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>first</span><span class=p>()</span>  <span class=c1># 先获取到 User 对象</span>
+<span class=n>ed_user</span><span class=o>.</span><span class=n>password</span> <span class=o>=</span> <span class=s1>&#39;f8s7ccs&#39;</span>  <span class=c1># 改了密码</span>
+<span class=n>session</span><span class=o>.</span><span class=n>commit</span><span class=p>()</span>  <span class=c1># 提交</span>
+
+<span class=c1># 批量修改</span>
+<span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>)</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>home</span><span class=o>==</span><span class=s1>&#39;shanghai&#39;</span><span class=p>)</span> \
+    <span class=o>.</span><span class=n>update</span><span class=p>({</span><span class=n>User</span><span class=o>.</span><span class=n>login_num</span><span class=p>:</span><span class=mi>0</span><span class=p>})</span>  <span class=c1># 将所有上海的用户的 login_num 设为 0</span>
+<span class=n>session</span><span class=o>.</span><span class=n>commit</span><span class=p>()</span>
+</code></pre></td></tr></table></div></div><ol><li>删除：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>ed_user</span> <span class=o>=</span> <span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>)</span><span class=o>.</span><span class=n>filter_by</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=s1>&#39;ed&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>first</span><span class=p>()</span>  <span class=c1># 先获取到 User 对象</span>
+<span class=n>session</span><span class=o>.</span><span class=n>delete</span><span class=p>(</span><span class=n>ed_user</span><span class=p>)</span>  <span class=c1># 直接删除（session 知道 ed_user 属于哪个表）</span>
+<span class=n>session</span><span class=o>.</span><span class=n>commit</span><span class=p>()</span>  <span class=c1># 提交</span>
+
+<span class=c1># 批量删除</span>
+<span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>)</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>home</span><span class=o>==</span><span class=s1>&#39;shanghai&#39;</span><span class=p>)</span> \
+    <span class=o>.</span><span class=n>delete</span><span class=p>()</span>  <span class=c1># 删除所有上海的用户</span>
+
+<span class=n>session</span><span class=o>.</span><span class=n>commit</span><span class=p>()</span>
+</code></pre></td></tr></table></div></div><p>同样的，也可以在外面检查异常，然后调用 <code>session.rollback()</code> 实现失败回滚。</p><h3 id=四进阶查询>四、进阶查询</h3><ol><li>filter_by：使用关键字参数进行过滤，前面的演示中已经用过多次了。</li><li>filter：它对应 SQL 表达式语言中的 where，支持各种复杂的 SQL 语法。</li><li>group_by: 通过指定 column 分组</li><li>distinct(): 去重</li><li>join(): 关联</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=s1>&#39;ed&#39;</span><span class=p>)</span>  <span class=c1># 这个等同于 filter_by，但是更繁琐</span>
+<span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span> <span class=o>!=</span> <span class=s1>&#39;ed&#39;</span><span class=p>)</span>  <span class=c1># 不等于，这个就是 filter_by 无法做到的了</span>
+<span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=o>.</span><span class=n>like</span><span class=p>(</span><span class=s1>&#39;</span><span class=si>%e</span><span class=s1>d%&#39;</span><span class=p>))</span>  <span class=c1># SQL like 的 like 语法</span>
+<span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=o>.</span><span class=n>in_</span><span class=p>([</span><span class=s1>&#39;ed&#39;</span><span class=p>,</span> <span class=s1>&#39;wendy&#39;</span><span class=p>,</span> <span class=s1>&#39;jack&#39;</span><span class=p>]))</span>  <span class=c1># 包含</span>
+
+<span class=c1># 查询还可以嵌套</span>
+<span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=o>.</span><span class=n>in_</span><span class=p>(</span>
+    <span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=p>)</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=o>.</span><span class=n>like</span><span class=p>(</span><span class=s1>&#39;</span><span class=si>%e</span><span class=s1>d%&#39;</span><span class=p>))</span>
+<span class=p>))</span>
+
+<span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=o>~</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=o>.</span><span class=n>in_</span><span class=p>([</span><span class=s1>&#39;ed&#39;</span><span class=p>,</span> <span class=s1>&#39;wendy&#39;</span><span class=p>,</span> <span class=s1>&#39;jack&#39;</span><span class=p>]))</span>  <span class=c1># 不包含</span>
+<span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=bp>None</span><span class=p>)</span>  <span class=c1># NULL 对应 Python 的 None</span>
+
+<span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>or_</span><span class=p>,</span> <span class=n>and_</span><span class=p>,</span> <span class=n>in_</span>
+<span class=n>query</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>or_</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=s1>&#39;ed&#39;</span><span class=p>,</span> <span class=n>User</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=s1>&#39;wendy&#39;</span><span class=p>))</span>  <span class=c1># OR 语法</span>
+
+<span class=n>query</span><span class=o>.</span><span class=n>group_by</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=p>)</span>  <span class=c1># 分组</span>
+<span class=n>query</span><span class=o>.</span><span class=n>distinct</span><span class=p>()</span>  <span class=c1># 去重</span>
+
+<span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>func</span>  <span class=c1># SQL 函数包</span>
+<span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>func</span><span class=o>.</span><span class=n>count</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=p>))</span><span class=o>.</span><span class=n>filter_by</span><span class=p>(</span><span class=n>xxx</span><span class=o>=</span><span class=n>xxx</span><span class=p>)</span>  <span class=c1># 使用 count 函数</span>
+
+<span class=c1># join 关联</span>
+<span class=c1># 默认使用内联（inner），即只取两表的交集</span>
+<span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>,</span> <span class=n>Address</span><span class=p>)</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>id</span><span class=o>==</span><span class=n>Address</span><span class=o>.</span><span class=n>user_id</span><span class=p>)</span>  <span class=c1># 方法一</span>
+
+<span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>)</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>Address</span><span class=p>)</span><span class=o>.</span>\  <span class=c1># 方法二</span>
+    <span class=nb>filter</span><span class=p>(</span><span class=n>Address</span><span class=o>.</span><span class=n>email_address</span><span class=o>==</span><span class=s1>&#39;jack@google.com&#39;</span><span class=p>)</span>
+
+<span class=c1># 外联 outer join，将另一表的列联结到主表，没有的行为 NULL</span>
+<span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>)</span><span class=o>.</span><span class=n>outerjoin</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>addresses</span><span class=p>)</span> \
+    <span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>Address</span><span class=o>.</span><span class=n>email_address</span><span class=o>==</span><span class=s1>&#39;jack@google.com&#39;</span><span class=p>)</span>
+</code></pre></td></tr></table></div></div><h4 id=执行查询获取数据>执行查询，获取数据</h4><p>查询返回 query 对象，但 SQL 还没有被执行，直到你调用下列几个方法：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=c1># 构造 query 对象</span>
+<span class=n>query</span> <span class=o>=</span> <span class=n>session</span><span class=o>.</span><span class=n>query</span><span class=p>(</span><span class=n>User</span><span class=p>)</span><span class=o>.</span><span class=n>filter</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>name</span><span class=o>.</span><span class=n>like</span><span class=p>(</span><span class=s1>&#39;</span><span class=si>%e</span><span class=s1>d&#39;</span><span class=p>))</span><span class=o>.</span><span class=n>order_by</span><span class=p>(</span><span class=n>User</span><span class=o>.</span><span class=n>id</span><span class=p>)</span>
+
+<span class=c1># 1. all 返回所有结果的列表</span>
+<span class=n>res_list</span> <span class=o>=</span> <span class=n>query</span><span class=o>.</span><span class=n>all</span><span class=p>()</span>
+
+<span class=c1># 2. first 先在 SQL 中加入限制 `limit 1`，然后执行。</span>
+<span class=n>res</span> <span class=o>=</span> <span class=n>query</span><span class=o>.</span><span class=n>first</span><span class=p>()</span>
+
+<span class=c1># 3. one 执行 sql 并获取所有结果</span>
+<span class=c1># 如果结果不止一行，抛出 MultipleResultsFound Error！！！</span>
+<span class=c1># 如果结果为空，抛出 NoResultFound Error ！！！</span>
+<span class=n>res</span> <span class=o>=</span> <span class=n>query</span><span class=o>.</span><span class=n>one</span><span class=p>()</span>
+
+<span class=mf>4.</span> <span class=n>one_or_none</span> <span class=err>差别在于结果为空，它不抛出异常，而是返回</span> <span class=bp>None</span>
+<span class=n>res</span> <span class=o>=</span> <span class=n>query</span><span class=o>.</span><span class=n>one_or_none</span><span class=p>()</span>
+</code></pre></td></tr></table></div></div><h3 id=参考>参考</h3><ul><li><a href=https://docs.sqlalchemy.org/en/latest/orm/tutorial.html target=_blank rel="noopener noreferrer">SQLAlchemy 对象关系入门</a></li><li><a href=https://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html target=_blank rel="noopener noreferrer">SQLAlchemy ORM 的关联映射定义：一对多、多对多</a></li><li><a href=https://github.com/hackersandslackers/sqlalchemy-tutorial target=_blank rel="noopener noreferrer">hackersandslackers/sqlalchemy-tutorial</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2019-02-11</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ryan4yin.space/posts/sqlalchemy-notes-2-orm-basics/ data-title="SQLAlchemy 学习笔记（二）：ORM 基础" data-via=ryan4yin data-hashtags=SQLAlchemy,Python,ORM,后端><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ryan4yin.space/posts/sqlalchemy-notes-2-orm-basics/ data-hashtag=SQLAlchemy><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://ryan4yin.space/posts/sqlalchemy-notes-2-orm-basics/><i class="fab fa-reddit fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/sqlalchemy/>SQLAlchemy</a>,&nbsp;<a href=/tags/python/>Python</a>,&nbsp;<a href=/tags/orm/>ORM</a>,&nbsp;<a href=/tags/%E5%90%8E%E7%AB%AF/>后端</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/websocket-http2-and-grpc/ class=prev rel=prev title="WebSocket、HTTP/2 与 gRPC"><i class="fas fa-angle-left fa-fw"></i>WebSocket、HTTP/2 与 gRPC</a>
+<a href=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/ class=next rel=next title="SQLAlchemy 学习笔记（三）：ORM 中的关系构建">SQLAlchemy 学习笔记（三）：ORM 中的关系构建<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.79.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/sunt-programator/CodeIT target=_blank rel="noopener noreferrer" title="CodeIT 0.2.10"><i class="fas fa-laptop-code fa-fw"></i>CodeIT</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://ryan4yin.space target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/copy-tex.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/copy-tex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/mhchem.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":30},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"ryan4yin/ryan4yin.space"}},"data":{"id-1":"Ryan4Yin's Space","id-2":"Ryan4Yin's Space"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"747LJ10EI7","algoliaIndex":"ryan-space","algoliaSearchKey":"658db5f2bf056f83458cacf5dd58ec80","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"typeit":{"cursorChar":null,"cursorSpeed":null,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":null,"speed":null}};</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-4V93QVSNFW',{'anonymize_ip':true});</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></body></html>
