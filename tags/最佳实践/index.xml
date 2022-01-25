@@ -1688,7 +1688,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <li>也就是超卖了资源，这样做主要的考量点是，很多非核心服务负载都很低，根本跑不到 limits 这么高，降低 requests 可以提高集群资源利用率，也不会损害服务稳定性。</li>
 </ul>
 </li>
-<li>HPA: 因为 requests 降低了，我们可以提高 HPA 到期望值，比如 80% ~ 90%，最小副本数建议设为 1 - 3. （仅供参考）</li>
+<li>HPA: 因为 requests 降低了，而 HPA 是以 requests 为 100% 计算使用率的，我们可以提高 HPA 的期望值（如果使用百分比为期望值的话），比如 80% ~ 90%，最小副本数建议设为 1 - 3. （仅供参考）</li>
 <li>PodDisruptionBudget: 非核心服务嘛，保证最少副本数为 1 就行了。</li>
 </ul>
 </li>
