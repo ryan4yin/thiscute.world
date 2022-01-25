@@ -1,4 +1,546 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>SQL - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/sql/</link><description>SQL - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Fri, 15 Jun 2018 16:27:46 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/sql/" rel="self" type="application/rss+xml"/><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/posts/sql-basic/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/sql-basic/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>SQL - 标签 - Ryan4Yin's Space</title><link>https://ryan4yin.space/tags/sql/</link><description>SQL - 标签 - Ryan4Yin's Space</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 20 Jan 2019 21:08:46 +0800</lastBuildDate><atom:link href="https://ryan4yin.space/tags/sql/" rel="self" type="application/rss+xml"/><item><title>SQL 基础笔记（三）约束</title><link>https://ryan4yin.space/posts/sql-basics-3-restrict/</link><pubDate>Sun, 20 Jan 2019 21:08:46 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/sql-basics-3-restrict/</guid><description><![CDATA[<blockquote>
+<p>个人笔记不保证正确。</p>
+</blockquote>
+<p>数据类型是限制我们可以在表里存储什么数据的一种方法。不过，对于许多应用来说， 这种限制实在是太粗糙了。比如，一个包含产品价格的字段应该只接受正数。 但是没有哪种标准数据类型只接受正数。 另外一个问题是你可能需要根据其它字段或者其它行的数据来约束字段数据。比如， 在一个包含产品信息的表中，每个产品编号都应该只有一行。</p>
+<p>对于这些问题，SQL 允许你在字段和表上定义约束。约束允许你对数据施加任意控制。 如果用户企图在字段里存储违反约束的数据，那么就会抛出一个错误。 这种情况同时也适用于数值来自默认值的情况。</p>
+<h3 id="1-外键-foreign-key">1. 外键 <code>FOREIGN KEY</code></h3>
+<p>外键约束声明一个字段(或者一组字段)的数值必须匹配另外一个表中出现的数值。
+创建外键约束的前提是，该外键所在的表已经存在，并且外键必须是 UNIQUE 的。（主键默认 UNIQUE 且 NOT NULL）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">类型</span><span class="o">&gt;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">类型</span><span class="o">&gt;</span> <span class="k">REFERENCES</span> <span class="o">&lt;</span><span class="err">外键所在的表名</span><span class="o">&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span><span class="p">),</span>  <span class="c1">-- 这创建了一个外键
+</span><span class="c1"></span>    <span class="p">...</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>还有另一种语法，它支持以多个字段为外键（<strong>字段约束也可以写成表约束，也就是放在一个独立的行中。而反过来很可能不行</strong>）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CREATE TABLE &lt;表名&gt; (
+    &lt;字段名1&gt; &lt;类型&gt; PRIMARY KEY,
+    &lt;字段名2&gt; &lt;类型&gt;
+    &lt;字段名3&gt; &lt;类型&gt;
+    ...
+    FOREIGN KEY (&lt;字段名2&gt;,  &lt;字段名3&gt;) REFERENCES &lt;外键所在的表名&gt; (&lt;字段名4&gt;, &lt;字段名5&gt;)
+);
+</code></pre></td></tr></table>
+</div>
+</div><p>一个表也可以包含多个外键约束。这个特性用于实现表之间的多对多关系。 比如你有关于产品和订单的表，但现在你想允许一个订单可以包含多种产品 (上面那个结构是不允许这么做的)，你可以使用这样的结构：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">price</span> <span class="nb">numeric</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">orders</span> <span class="p">(</span>
+    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">shipping_address</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">order_items</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">products</span><span class="p">,</span>
+    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">orders</span><span class="p">,</span>
+    <span class="n">quantity</span> <span class="nb">integer</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">product_no</span><span class="p">,</span> <span class="n">order_id</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>外键能通过 <code>ALTER</code> 语句添加或删除</p>
+<h3 id="2-级联操作-on-delete-与-on-update">2. 级联操作 <code>ON DELETE</code> 与 <code>ON UPDATE</code></h3>
+<p>上面说过：外键约束声明一个字段(或者一组字段)的数值必须匹配另外一个表中出现的数值。</p>
+<p>但是以 1. 中最后一个 sql 为例，如果一个订单（order）在创建之后，该订单包含的某个产品（product）被删除了，会发生什么？</p>
+<p>这个例子中，订单包含的产品通过外键被记录在 order_items 表中。现在如果你要删除 product 中某个被 order_items 引用了的行，默认情况为 <code>NO ACTION</code>，就是直接报错。</p>
+<p>这个行为也可以手动指定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">price</span> <span class="nb">numeric</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">orders</span> <span class="p">(</span>
+    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">shipping_address</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">order_items</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">products</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span><span class="p">,</span>  <span class="c1">-- 限制，也就是禁止删除被它引用的行
+</span><span class="c1"></span>    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">orders</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">CASCADE</span><span class="p">,</span>    <span class="c1">-- 级联，在删除被它引用的行的时候，这一行本身也会被自动删除掉
+</span><span class="c1"></span>    <span class="n">quantity</span> <span class="nb">integer</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">product_no</span><span class="p">,</span> <span class="n">order_id</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>除了 <code>RESTRICT</code> 和 <code>CASCADE</code> 外，在外键上的动作还有两个选项：<code>SET NULL</code> 和 <code>SET DEFAULT</code>，顾名思义，就是在被引用的行删除后将外键设置为 <code>NULL</code> 或默认值。</p>
+<p><code>ON UPDATE</code> 与 <code>ON DELETE</code> 的动作是一样的，只是 <code>CASCADE</code> 表示同步更新。</p>
+<h3 id="3-check-约束">3. <code>CHECK</code> 约束</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">price</span> <span class="nb">numeric</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>你还可以给这个约束取一个独立的名字。这样就可以令错误消息更清晰， 并且在你需要修改它的时候引用这个名字。语法是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">price</span> <span class="nb">numeric</span> <span class="k">CONSTRAINT</span> <span class="n">positive_price</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>稍微复杂一点的例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">price</span> <span class="nb">numeric</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">discounted_price</span> <span class="nb">numeric</span><span class="p">,</span>
+    <span class="k">CHECK</span> <span class="p">(</span><span class="n">discounted_price</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">AND</span> <span class="n">price</span> <span class="o">&gt;</span> <span class="n">discounted_price</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>同样的，可以为 CHECK 命名，令错误信息更清晰：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
+    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
+    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">price</span> <span class="nb">numeric</span><span class="p">,</span>
+    <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">discounted_price</span> <span class="nb">numeric</span><span class="p">,</span>
+    <span class="k">CHECK</span> <span class="p">(</span><span class="n">discounted_price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="k">CONSTRAINT</span> <span class="n">valid_discount</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="n">discounted_price</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>要注意的是，<strong>当约束表达式计算结果为真或 NULL 的时候，检查约束会被认为是满足条件的</strong>。 因为大多数表达式在含有 NULL 操作数的时候结果都是 NULL ，所以这些约束不能阻止字段值为 NULL 。要排除掉 NULL，只能使用 <code>NOT NULL</code> 约束。（所以就说 NULL 是万恶之源hhh）</p>
+<h3 id="参考">参考</h3>
+<ul>
+<li><a href="http://www.postgres.cn/docs/9.4/ddl-constraints.html" target="_blank" rel="noopener noreferrer">约束</a></li>
+</ul>
+]]></description></item><item><title>SQL 基础笔记（二）进阶查询</title><link>https://ryan4yin.space/posts/sql-basics-2-queries/</link><pubDate>Sun, 17 Jun 2018 14:17:46 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/sql-basics-2-queries/</guid><description><![CDATA[<blockquote>
+<p>本笔记整理自<a href="https://book.douban.com/subject/24841239/" target="_blank" rel="noopener noreferrer">《SQL 基础教程》</a>、<a href="https://book.douban.com/subject/3354490/" target="_blank" rel="noopener noreferrer">《MySQL 必知必会》</a>和网上资料。个人笔记不保证正确。</p>
+</blockquote>
+<h2 id="一复杂查询">一、复杂查询</h2>
+<h3 id="视图">视图</h3>
+<p>将 SELECT 查询包装成一个虚拟表，该虚拟表就被称为视图。（因为只是一个包装，因此视图的数据也会随着原表的更新而更新）</p>
+<ol>
+<li>用途：
+<ol>
+<li>简化复杂的SQL查询，用它替换子查询，能降低查询的嵌套深度。</li>
+<li>SELECT 查询的重用，减少重复查询。</li>
+<li>&hellip;</li>
+</ol>
+</li>
+<li>创建视图：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">VIEW</span> <span class="o">&lt;</span><span class="err">视图名称</span><span class="o">&gt;</span>
+    <span class="p">(</span><span class="o">&lt;</span><span class="err">视图列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">视图列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span> <span class="p">)</span>
+    <span class="k">AS</span>
+    <span class="o">&lt;</span><span class="k">SELECT</span> <span class="err">语句</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 SELECT 的结果列和视图列名一一对应。
+3. 视图的限制
+1. 视图的 SELECT 子句，不能包含 ORDER BY 子句。因为视图也是表，而表是集合，它没有顺序。（也有些DB支持该用法，但不通用）
+1. 视图的更新：只在很有限的条件下，才能在视图上使用 INSERT/DELETE/UPDATE 这样的变更数据的语句。（<strong>视图应该只用于检索，能不更新就不要更新它</strong>）
+4. 删除视图：<code>DROP VIEW &lt;视图名称&gt;;</code></p>
+<h3 id="子查询">子查询</h3>
+<p>子查询，其实就是一次性的视图:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
+    <span class="k">FROM</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="p">...</span>  <span class="c1">-- 这就是一个子查询：嵌套的 select 语句
+</span><span class="c1"></span>    <span class="p">)</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="o">&gt;</span>
+    <span class="p">...</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的查询的 FROM 子句中，给另一 SELECT 子句定义了一个别名，并将它作为了查询对象。这就是一个子查询。</p>
+<p>子查询不仅能用于 FROM，还能用在 WHERE 子句等很多地方。</p>
+<h4 id="关联子查询">关联子查询</h4>
+<p>即用到了外部数据的子查询语句：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
+    <span class="k">FROM</span> <span class="n">product</span> <span class="k">AS</span> <span class="n">p1</span>
+    <span class="k">WHERE</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="p">...</span>
+            <span class="k">FROM</span> <span class="n">duck</span> <span class="k">AS</span> <span class="n">p2</span>
+            <span class="k">WHERE</span> <span class="n">p1</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="n">p2</span><span class="p">.</span><span class="n">price</span>   <span class="c1">-- 这里，内部子查询访问了外部查询的表p1，因此是一个关联子查询。
+</span><span class="c1"></span>    <span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="二函数谓词case-表达式">二、函数、谓词、CASE 表达式</h2>
+<h3 id="函数httpsdevmysqlcomdocrefman57enfunctionshtml"><a href="https://dev.mysql.com/doc/refman/5.7/en/functions.html" target="_blank" rel="noopener noreferrer"><strong>函数</strong></a></h3>
+<blockquote>
+<p>给出的链接都是 MySQL 的</p>
+</blockquote>
+<ol>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/numeric-functions.html" target="_blank" rel="noopener noreferrer">算术函数</a>
+<ul>
+<li>加减乘除：+ - * /</li>
+<li>ABS 绝对值</li>
+<li>MOD 求余</li>
+<li>ROUND 四舍五入</li>
+</ul>
+</li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/string-functions.html" target="_blank" rel="noopener noreferrer">字符串函数</a>
+<ul>
+<li>CONCAT(str1,str2,&hellip;)   拼接</li>
+<li>LENGTH(str)  字符串的 <strong>bytes</strong> 长度</li>
+<li>CHAR_LENGTH(str)</li>
+<li>LOWER/UPPER  大小写转换</li>
+<li>REPLACE(str,from_str,to_str) 替换</li>
+<li>SUBSTRING(str FROM pos FOR len) 截取</li>
+</ul>
+</li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html" target="_blank" rel="noopener noreferrer">时间和日期函数</a>
+<ul>
+<li>CURRENT_DATE  当前日期</li>
+<li>CURRENT_TIME 当前时间</li>
+<li>CURRENT_TIMESTAMP  当前的日期和时间</li>
+<li>EXTRACT(unit FROM date) 截取日期元素，unit 可为 <code>YEAR</code> <code>MONTH</code> <code>HOUR</code> 等等</li>
+</ul>
+</li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/cast-functions.html" target="_blank" rel="noopener noreferrer">转换函数</a>
+<ul>
+<li>CAST(expr AS type) 将 expr 的结果转换成 type 类型</li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/comparison-operators.html#function_coalesce" target="_blank" rel="noopener noreferrer">COALESCE(value,&hellip;)</a>  从左往右扫描，返回第一个非 NULL 的值。常用于将 NULL 转换为其他值。eg. COALESCE(sth, 1) 如果 sth 为 NULL 就会返回1.</li>
+</ul>
+</li>
+<li>聚合函数：基本就五个，已经学过了。</li>
+</ol>
+<h3 id="谓词">谓词</h3>
+<p>即返回布尔值的表达式</p>
+<h4 id="like谓词简单字符串匹配慢">LIKE谓词——简单字符串匹配（慢）</h4>
+<blockquote>
+<p>匹配整个列</p>
+</blockquote>
+<ul>
+<li><code>%</code>：任意字符出现任意次</li>
+<li><code>_</code>：匹配任意一个字符</li>
+</ul>
+<p>举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">name</span>
+    <span class="k">FROM</span> <span class="n">list</span>
+    <span class="k">WHERE</span> <span class="n">name</span> <span class="k">LIKE</span> <span class="s1">&#39;%Ryan%&#39;</span><span class="p">;</span>  <span class="c1">-- 匹配任意包含 &#39;Ryan&#39; 的字符串
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="regexp谓词正则字符串匹配">REGEXP谓词——正则字符串匹配</h4>
+<blockquote>
+<p>MySQL 只实现了通用正则的一个子集，而且是search模式。（非match）</p>
+</blockquote>
+<h4 id="其他">其他</h4>
+<ul>
+<li>BETWEEN：范围匹配，eg. <code>BETWEEN 1 AND 10</code></li>
+<li>IS NULL、IS NOT NULL</li>
+<li>IN、NOT IN：是否在某集合内</li>
+<li>EXISTS、NOT EXISTS（比较难的一个，入门阶段不要求）：该谓词比较特殊，只需要右侧一个参数，**而且该参数绝大多数情况下，都是一个关联子查询。**而且该子查询的SELECT子句的参数基本可以随意，通常使用<code>SELECT *</code>. 对于子查询有返回值的列，它返回True，否则返回False. 但要注意为 NULL 时返回 UNKNOW.（而 WHERE 只认 True）</li>
+</ul>
+<h3 id="case-表达式">CASE 表达式</h3>
+<ol>
+<li>if - else if - else 形式：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CASE</span> <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+    <span class="p">...</span>
+    
+    <span class="k">ELSE</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+<span class="k">END</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>switch 模式（但不需要break）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CASE</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+    <span class="p">...</span>
+    
+    <span class="k">ELSE</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
+<span class="k">END</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这是对 CASE 后的元素做switch比较。</p>
+<h2 id="三集合运算">三、集合运算</h2>
+<h3 id="注意事项">注意事项</h3>
+<ol>
+<li>作为运算对象的结果集，<strong>列字段必须一一对应</strong>，而且对应列的类型必须相同。</li>
+</ol>
+<h3 id="结果集的交并差">结果集的交并差</h3>
+<ol>
+<li><code>&lt;查询1&gt; UNION &lt;查询2&gt;</code>：对两个结果集求并</li>
+<li><code>UNION ALL</code>：添加 ALL 能使结果集包含重复行。</li>
+<li><code>&lt;查询1&gt; INTERSECT &lt;查询2&gt;</code>：两结果集的交集</li>
+<li><code>&lt;查询1&gt; EXCEPT &lt;查询2&gt;</code>：两结果集的差集</li>
+</ol>
+<h3 id="以列为单位对表进行联结join">以列为单位，对表进行联结(JOIN)</h3>
+<blockquote>
+<p>最强大的功能之一</p>
+</blockquote>
+<p>交并差是以行为单位的操作，是竖向的运算。而联结是以列为单位的操作，是横向的拼接。</p>
+<h4 id="内联inner-join">内联(INNER JOIN)</h4>
+<blockquote>
+<p><strong>内联结果只包含两表的交集</strong></p>
+</blockquote>
+<p>语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
+    <span class="k">FROM</span> <span class="p">(</span><span class="n">product</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">shop</span>
+        <span class="k">ON</span> <span class="n">product</span><span class="p">.</span><span class="n">p_id</span> <span class="o">=</span> <span class="n">shop</span><span class="p">.</span><span class="n">p_id</span><span class="p">)</span>
+    <span class="k">WHERE</span> <span class="n">filter_condition</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 跟在 INNER JOIN 子句后的 ON 子句指定联结条件。（这里我特意用了括号，表示 JOIN 和 ON 两个子句是配套的）</p>
+<p>也有另一个很常用的语法（但是现在已经不推荐使用）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
+    <span class="k">FROM</span> <span class="n">product</span><span class="p">,</span> <span class="n">shop</span>
+    <span class="k">WHERE</span> <span class="n">product</span><span class="p">.</span><span class="n">p_id</span> <span class="o">=</span> <span class="n">shop</span><span class="p">.</span><span class="n">p_id</span>
+        <span class="k">AND</span> <span class="n">filter_condition</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>对于 shop 表中有多行对应同一个 product 的情况（有多人购买了同一款商品），结果中该 product 会被复制给 shop 中的多个购买记录。（也就是说该 product 会变成多行）</p>
+<blockquote>
+<p>INNER 可以省略，也就是说只写 JOIN，就默认是 INNER JOIN</p>
+</blockquote>
+<h4 id="外联outer-join">外联(OUTER JOIN)</h4>
+<blockquote>
+<p>**外联以某表为主表，将另一表的列联结到该表。**另一表没有值的列，就用 NULL 代替。使用<code>LEFT</code> 或 <code>RIGHT</code>指定主表。（两个关键字都能实现同样的效果，不过用 LEFT 的多一些）</p>
+</blockquote>
+<p>语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
+    <span class="k">FROM</span> <span class="n">product</span> <span class="k">LEFT</span> <span class="k">OUTER</span> <span class="k">JOIN</span> <span class="n">shop</span>
+        <span class="k">ON</span> <span class="n">product</span><span class="p">.</span><span class="n">p_id</span> <span class="o">=</span> <span class="n">shop</span><span class="p">.</span><span class="n">p_id</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这和内联很相似，差别只是联结关键词改成了<code>LEFT OUTER JOIN</code>。这表示以左边的表为主表，把右边的表的内容联结上去。因此左表的所有列都会出现在结果集中。</p>
+<p>多表联查举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 登录异常的账号及密码
+</span><span class="c1"></span><span class="k">select</span> <span class="k">distinct</span> <span class="n">batches</span><span class="p">.</span><span class="n">identity_number</span> <span class="k">as</span> <span class="s1">&#39;登录失败账号&#39;</span><span class="p">,</span> <span class="n">accounts</span><span class="p">.</span><span class="n">password</span>
+	<span class="k">from</span> <span class="p">((</span><span class="n">batches</span> <span class="k">left</span> <span class="k">outer</span> <span class="k">join</span> <span class="n">tasks</span>
+			<span class="k">on</span> <span class="n">batches</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">tasks</span><span class="p">.</span><span class="n">batch_id</span><span class="p">)</span>   <span class="c1">-- 批次表联结具体的任务表
+</span><span class="c1"></span>		<span class="k">left</span> <span class="k">outer</span> <span class="k">join</span> <span class="o">`</span><span class="n">status</span><span class="o">`</span>
+			<span class="k">on</span> <span class="n">tasks</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">status</span><span class="p">.</span><span class="n">task_id</span><span class="p">)</span>  <span class="c1">-- 再联结上状态表
+</span><span class="c1"></span>        <span class="k">left</span> <span class="k">outer</span> <span class="k">join</span> <span class="n">accounts</span>
+			<span class="k">on</span> <span class="n">batches</span><span class="p">.</span><span class="n">identity_number</span> <span class="o">=</span> <span class="n">accounts</span><span class="p">.</span><span class="n">identity_number</span>  <span class="c1">-- 再联结上账号表
+</span><span class="c1"></span>	<span class="k">where</span> <span class="o">`</span><span class="n">status</span><span class="o">`</span><span class="p">.</span><span class="n">step_type</span> <span class="o">=</span> <span class="s1">&#39;check_login&#39;</span>     <span class="c1">-- 只提取 &#34;check_login&#34; 步骤的记录
+</span><span class="c1"></span>		<span class="k">and</span> <span class="n">status</span><span class="p">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s1">&#39;info&#39;</span>  <span class="c1">-- 状态不为 info，说明登录异常
+</span></code></pre></td></tr></table>
+</div>
+</div><p>此外还有 FULL OUTER JOIN 表示返回左右两表的所有行！所有没有匹配的行都给出 NULL</p>
+<blockquote>
+<p>P.S. 其中的关键字 OUTER 通常可省略。但是 LEFT、RIGHT、FULL 不可以省略。</p>
+</blockquote>
+<h2 id="画外字段引用符号">画外：字段引用符号</h2>
+<p>如果数据库的字段名/数据库名/表名可能和数据库关键字重复，就需要用引用符号将他们引用起来，消除歧义。</p>
+<p>MySQL 中经常用反引号干这个事。
+而 SQL Server 则使用方括号。
+标准 SQL 使用双引号。在看到这些符号时要知道这些差别。</p>
+<h2 id="查询语句分析">查询语句分析</h2>
+<ul>
+<li><a href="https://www.cnblogs.com/xuanzhi201111/p/4175635.html" target="_blank" rel="noopener noreferrer">MySQL Explain详解</a></li>
+</ul>
+<h2 id="常见问题">常见问题</h2>
+<h3 id="隐式类型转换">隐式类型转换</h3>
+<p>在MySQL中，当操作符与不同类型的操作数一起使用时，会发生类型转换以使操作数兼容。则会发生隐式类型转换。</p>
+<p>隐式类型转换会导致查询不会走索引！！！可能会严重拖累性能。另外还可能会导致各种奇怪的问题。</p>
+<p>详见 <a href="https://www.cnblogs.com/BOHB-yunying/p/12458589.html" target="_blank" rel="noopener noreferrer">MYSQL隐式类型转换</a></p>
+<p>完。（接下来就是用 Python/Java 连接 MySQL 了）</p>
+]]></description></item><item><title>SQL 基础笔记（一）</title><link>https://ryan4yin.space/posts/sql-basics-1/</link><pubDate>Fri, 15 Jun 2018 16:27:46 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/sql-basics-1/</guid><description><![CDATA[<blockquote>
 <p>本笔记整理自<a href="https://book.douban.com/subject/24841239/" target="_blank" rel="noopener noreferrer">《SQL 基础教程》</a>、<a href="https://book.douban.com/subject/3354490/" target="_blank" rel="noopener noreferrer">《MySQL 必知必会》</a>和网上资料。个人笔记不保证正确。</p>
 </blockquote>
 <h2 id="一基础">一、基础</h2>
