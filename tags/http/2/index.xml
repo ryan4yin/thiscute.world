@@ -6,7 +6,7 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -16,7 +16,7 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">GET /chat HTTP/1.1  // 请求行
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">GET /chat HTTP/1.1  // 请求行
 Host: server.example.com
 Upgrade: websocket  // required
 Connection: Upgrade // required
@@ -31,14 +31,14 @@ Sec-WebSocket-Version: 13
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">HTTP/1.1 101 Switching Protocols  // 状态行
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">HTTP/1.1 101 Switching Protocols  // 状态行
 Upgrade: websocket   // required
 Connection: Upgrade  // required
 Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo= // required，加密后的 Sec-WebSocket-Key
@@ -54,7 +54,7 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 <h3 id="js-api">JS API</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -74,7 +74,7 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// WebSocket API
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// WebSocket API
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="s1">&#39;ws://websocket.example.com&#39;</span><span class="p">);</span>
 
 <span class="c1">// Show a connected message when the WebSocket is opened.
@@ -122,7 +122,7 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 它首先由浏览器向服务端建立一个 HTTP 长连接，然后服务端不断地通过这个长连接将消息推送给浏览器。JS API 如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -143,7 +143,7 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// create SSE connection
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// create SSE connection
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventSource</span><span class="p">(</span><span class="s1">&#39;/dates&#39;</span><span class="p">);</span>
 
 <span class="c1">// 连接建立时，这些 API 和 WebSocket 的很相似
@@ -168,12 +168,12 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 <p>在收到客户端的 SSE 请求（HTTP 协议）时，服务端返回的响应首部如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">Content-Type: text/event-stream
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Content-Type: text/event-stream
 Cache-Control: no-cache
 Connection: keep-alive
 </code></pre></td></tr></table>
@@ -188,7 +188,7 @@ Connection: keep-alive
 <p>body 举例说明：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -215,7 +215,7 @@ Connection: keep-alive
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">: 这种格式的消息是注释，会被忽略\n\n
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">: 这种格式的消息是注释，会被忽略\n\n
 : 通常服务器每隔一段时间就会发送一个注释，防止超时 retry\n\n
 
 : 下面这个是一个单行数据\n\n
@@ -271,13 +271,13 @@ data: message\n\n
 <p>可以通过 <code>resp.raw.version</code> 得到响应的 HTTP 版本号：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; import requests
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; import requests
 &gt;&gt;&gt; <span class="nv">resp</span> <span class="o">=</span> requests.get<span class="o">(</span><span class="s2">&#34;https://zhihu.com&#34;</span><span class="o">)</span>      
 &gt;&gt;&gt; resp.raw.version
 <span class="m">11</span>

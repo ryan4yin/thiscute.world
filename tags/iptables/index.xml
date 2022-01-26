@@ -61,17 +61,17 @@
 <p>命令格式：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>其中 table 默认为 <code>filter</code> 表，其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。</p>
 <p>以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -105,7 +105,7 @@
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --add 允许 80 端口通过</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --add 允许 80 端口通过</span>
 iptables -A INPUT -p tcp --dport <span class="m">80</span> -j ACCEPT
 
 <span class="c1"># --list-rules 查看所有规则</span>
@@ -156,7 +156,7 @@ iptables -F INPUT
 <p>首先，这是我在「Linux 的虚拟网络接口」文中给出过的 docker0 网络架构图:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -185,7 +185,7 @@ iptables -F INPUT
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
 |                      Host                     |           Container A             |           Container B             |
 |                                               |                                   |                                   |
 |   +---------------------------------------+   |    +-------------------------+    |    +-------------------------+    |
@@ -217,13 +217,13 @@ iptables -F INPUT
 </div><p>docker 会在 iptables 中为 docker0 网桥添加如下规则：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">-t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">-t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
 
 -t filter -P DROP
 -t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
@@ -255,12 +255,12 @@ iptables -F INPUT
 <p>现在我们来实际测试一下，看看是不是这么回事：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 tcpdump 分别在出口网卡 wlp4s0 （相当于 eth0）和 dcoker0 网桥上抓包，后面会用来分析</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 tcpdump 分别在出口网卡 wlp4s0 （相当于 eth0）和 dcoker0 网桥上抓包，后面会用来分析</span>
 ❯ sudo tcpdump -i wlp4s0 -n &gt; wlp4s0.dump   <span class="c1"># 窗口一，抓 wlp4s0 的包</span>
 ❯ sudo tcpdump -i docker0 -n &gt; docker0.dump  <span class="c1"># 窗口二，抓 docker0 的包</span>
 </code></pre></td></tr></table>
@@ -268,16 +268,16 @@ iptables -F INPUT
 </div><p>现在新建窗口三，启动一个容器，通过 curl 命令低速下载一个视频文件：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">❯ docker run --rm --name curl -it curlimages/curl &#34;https://media.w3.org/2010/05/sintel/trailer.mp4&#34; -o /tmp/video.mp4 --limit-rate 100k
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">❯ docker run --rm --name curl -it curlimages/curl &#34;https://media.w3.org/2010/05/sintel/trailer.mp4&#34; -o /tmp/video.mp4 --limit-rate 100k
 </code></pre></td></tr></table>
 </div>
 </div><p>然后新建窗口四，在宿主机查看 conntrack 状态</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -285,7 +285,7 @@ iptables -F INPUT
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ sudo zypper in conntrack-tools  <span class="c1"># 这个记得先提前安装好</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ sudo zypper in conntrack-tools  <span class="c1"># 这个记得先提前安装好</span>
 ❯ sudo conntrack -L <span class="p">|</span> grep 172.17
 <span class="c1"># curl 通过 NAT 网络发起了一个 dns 查询请求，DNS 服务器是网关上的 192.168.31.1</span>
 udp      <span class="m">17</span> <span class="m">22</span> <span class="nv">src</span><span class="o">=</span>172.17.0.4 <span class="nv">dst</span><span class="o">=</span>192.168.31.1 <span class="nv">sport</span><span class="o">=</span><span class="m">59423</span> <span class="nv">dport</span><span class="o">=</span><span class="m">53</span> <span class="nv">src</span><span class="o">=</span>192.168.31.1 <span class="nv">dst</span><span class="o">=</span>192.168.31.228 <span class="nv">sport</span><span class="o">=</span><span class="m">53</span> <span class="nv">dport</span><span class="o">=</span><span class="m">59423</span> <span class="o">[</span>ASSURED<span class="o">]</span> <span class="nv">mark</span><span class="o">=</span><span class="m">0</span> <span class="nv">use</span><span class="o">=</span><span class="m">1</span>
@@ -296,7 +296,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </div><p>等 curl 命令跑个十来秒，然后关闭所有窗口及应用程序，接下来进行数据分析：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -336,7 +336,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </span><span class="lnt">38
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 前面查到的，本地发起请求的端口是 54636，下面以此为过滤条件查询数据</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 前面查到的，本地发起请求的端口是 54636，下面以此为过滤条件查询数据</span>
 
 <span class="c1"># 首先查询 wlp4s0/eth0 进来的数据，可以看到本机的 dst_ip 为 192.168.31.228.54636</span>
 ❯ cat wlp4s0.dump <span class="p">|</span> grep <span class="m">54636</span> <span class="p">|</span> head -n <span class="m">15</span>
@@ -395,7 +395,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 <p>首先，使用 <code>docker run</code> 运行几个容器，检查下网络状况：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -471,7 +471,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </span><span class="lnt">74
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 运行一个 debian 容器和一个 nginx</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 运行一个 debian 容器和一个 nginx</span>
 ❯ docker run -dit --name debian --rm debian:buster sleep <span class="m">1000000</span>
 ❯ docker run -dit --name nginx --rm nginx:1.19-alpine 
 
@@ -551,7 +551,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 <p><code>docker-compose.yml</code> 内容：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -569,7 +569,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.3&#34;</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.3&#34;</span><span class="w">
 </span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">caddy</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;caddy:2.2.1-alpine&#34;</span><span class="w">
@@ -590,7 +590,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </div><p>现在先用上面的配置启动 caddy 容器，然后再查看网络状况：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -693,7 +693,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">101
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
 ❯ docker-compose up -d
 <span class="c1"># 查下 caddy 容器的 ip</span>
 &gt; docker inspect caddy <span class="p">|</span> grep IPAddress
@@ -808,7 +808,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 <p>下面详细分析下 Docker 的 macvlan 网络（Podman 应该也完全类似）。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -843,7 +843,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
 <span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 $ docker network create -d macvlan <span class="se">\
@@ -881,7 +881,7 @@ root@4319488cb5e7:/# curl baidu.com
 </div><p>Docker 支持的另一种网络模式是 ipvlan（ipvlan 和 macvlan 的区别我在前一篇文章中已经介绍过，不再赘言），创建命令和 macvlan 几乎一样：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -918,7 +918,7 @@ root@4319488cb5e7:/# curl baidu.com
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
 <span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 <span class="c1"># ipvlan_mode 默认为 l2，表示工作在数据链路层。</span>
@@ -964,11 +964,11 @@ root@d0764ebbbf42:/# curl baidu.com
 这显然是因为 rootless 模式下 containerd 改不了宿主机的 iptables 配置和虚拟网络接口。但是可以查看到宿主机 slirp4netns 在后台运行：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ ps aux <span class="p">|</span> grep tap
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ ps aux <span class="p">|</span> grep tap
 ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <span class="m">3312</span> ?        S    00:01   0:02 slirp4netns --mtu <span class="m">65520</span> -r <span class="m">3</span> --disable-host-loopback --enable-sandbox --enable-seccomp <span class="m">11625</span> tap0
 </code></pre></td></tr></table>
 </div>
@@ -982,7 +982,7 @@ ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <
 <p>我在 opensuse tumbleweed 上实测，firewalld 添加的是 nftables 配置，而 docker 仍然在用旧的 iptables，也就是说我现在的机器上有两套 netfilter 工具并存：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1016,7 +1016,7 @@ ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 查看 iptables 数据
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 查看 iptables 数据
 &gt; iptables -S
 -P INPUT ACCEPT
 -P FORWARD DROP

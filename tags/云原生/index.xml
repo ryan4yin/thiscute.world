@@ -75,7 +75,7 @@
 <p>配置如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -87,7 +87,7 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo modprobe br_netfilter
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo modprobe br_netfilter
 cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
 </span><span class="s">br_netfilter
 </span><span class="s">EOF</span>
@@ -189,7 +189,7 @@ sudo sysctl --system
 <p>首先是环境配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -210,7 +210,7 @@ sudo sysctl --system
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
 </span><span class="s">overlay
 </span><span class="s">br_netfilter
 </span><span class="s">nf_conntrack
@@ -234,7 +234,7 @@ sudo sysctl --system
 </div><p>安装 containerd+nerdctl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -244,7 +244,7 @@ sudo sysctl --system
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">wget https://github.com/containerd/nerdctl/releases/download/v0.11.1/nerdctl-full-0.11.1-linux-amd64.tar.gz
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">wget https://github.com/containerd/nerdctl/releases/download/v0.11.1/nerdctl-full-0.11.1-linux-amd64.tar.gz
 tar -axvf nerdctl-full-0.11.1-linux-amd64.tar.gz
 <span class="c1"># 这里简单起见，rootless 相关的东西也一起装进去了，测试嘛就无所谓了...</span>
 mv bin/* /usr/local/bin/
@@ -259,7 +259,7 @@ systemctl start containerd
 <h2 id="3-安装-kubeletkubeadmkubectl">3. 安装 kubelet/kubeadm/kubectl</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -295,7 +295,7 @@ systemctl start containerd
 </span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一些全局都需要用的变量</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一些全局都需要用的变量</span>
 <span class="nv">CNI_VERSION</span><span class="o">=</span><span class="s2">&#34;v0.8.2&#34;</span>
 <span class="nv">CRICTL_VERSION</span><span class="o">=</span><span class="s2">&#34;v1.17.0&#34;</span>
 <span class="c1"># kubernetes 的版本号</span>
@@ -334,7 +334,7 @@ systemctl status kubelet
 </div><p>试用 crictl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -342,7 +342,7 @@ systemctl status kubelet
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CONTAINER_RUNTIME_ENDPOINT</span><span class="o">=</span><span class="s1">&#39;unix:///var/run/containerd/containerd.sock&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CONTAINER_RUNTIME_ENDPOINT</span><span class="o">=</span><span class="s1">&#39;unix:///var/run/containerd/containerd.sock&#39;</span>
 <span class="c1"># 列出所有 pods，现在应该啥也没</span>
 crictl  pods
 
@@ -359,7 +359,7 @@ crictl images
 <p>首先使用如下命令生成 kube-vip 的配置文件，以 ARP 为例（生产环境建议换成 BGP）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -381,7 +381,7 @@ crictl images
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee add-kube-vip.sh
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee add-kube-vip.sh
 </span><span class="s"># 你的虚拟机网卡，opensuse/centos 等都是 eth0，但是 ubuntu 可能是 ens3
 </span><span class="s">export INTERFACE=eth0
 </span><span class="s">
@@ -409,7 +409,7 @@ bash add-kube-vip.sh
 <p>其实需要运行的就是这条命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -448,7 +448,7 @@ bash add-kube-vip.sh
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 极简配置：</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 极简配置：</span>
 cat <span class="s">&lt;&lt;EOF | sudo tee kubeadm-config.yaml
 </span><span class="s">apiVersion: kubeadm.k8s.io/v1beta3
 </span><span class="s">kind: InitConfiguration
@@ -490,10 +490,10 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </div><p>kubeadm 应该会报错，提示你有些依赖不存在，下面先安装好依赖项。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in -y socat ebtables conntrack-tools
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in -y socat ebtables conntrack-tools
 </code></pre></td></tr></table>
 </div>
 </div><p>再重新运行前面的 kubeadm 命令，应该就能正常执行了，它做的操作有：</p>
@@ -513,13 +513,13 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
 </span><span class="se"></span>  --discovery-token-ca-cert-hash sha256:&lt;hash&gt; <span class="se">\
 </span><span class="se"></span>  --control-plane --certificate-key &lt;key&gt; <span class="se">\
 </span><span class="se"></span>  --ignore-preflight-errors<span class="o">=</span>DirAvailable--etc-kubernetes-manifests
@@ -529,11 +529,11 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 <li>worker 节点加入集群的命令:
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
 </span><span class="se"></span>      --discovery-token-ca-cert-hash sha256:&lt;hash&gt; 
 </code></pre></td></tr></table>
 </div>
@@ -542,7 +542,7 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 <p>跑完第一部分 <code>kubeconfig</code> 的处理命令后，就可以使用 kubectl 查看集群状况了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -556,7 +556,7 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get no</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get no</span>
 NAME           STATUS     ROLES                  AGE   VERSION
 k8s-master-0   NotReady   control-plane,master   79s   v1.22.1
 k8s-master-0:~/kubeadm <span class="c1"># kubectl get po --all-namespaces</span>
@@ -574,7 +574,7 @@ kube-system   kube-scheduler-k8s-master-0            1/1     Running   <span cla
 <p>所有节点都加入集群后，通过 kubectl 查看，应该是三个控制面 master，两个 worker：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -583,7 +583,7 @@ kube-system   kube-scheduler-k8s-master-0            1/1     Running   <span cla
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get node</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get node</span>
 NAME           STATUS     ROLES                  AGE     VERSION
 k8s-master-0   NotReady   control-plane,master   26m     v1.22.1
 k8s-master-1   NotReady   control-plane,master   7m2s    v1.22.1
@@ -596,7 +596,7 @@ k8s-worker-1   NotReady   &lt;none&gt;                 86s     v1.22.1
 <p>现在再看下集群的证书签发状态：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -612,7 +612,7 @@ k8s-worker-1   NotReady   &lt;none&gt;                 86s     v1.22.1
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl get csr --sort-by<span class="o">=</span><span class="s1">&#39;{.spec.username}&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl get csr --sort-by<span class="o">=</span><span class="s1">&#39;{.spec.username}&#39;</span>
 NAME        AGE     SIGNERNAME                                    REQUESTOR                  REQUESTEDDURATION   CONDITION
 csr-95hll   6m58s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
 csr-tklnr   7m5s    kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
@@ -634,11 +634,11 @@ csr-p9g24   6m52s   kubernetes.io/kubelet-serving                 system:node:k8
 <p>目前 kubeadm 不支持自动批准 kubelet 申请的证书，需要我们手动批准一下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 批准 Kubelet 申请的所有证书</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 批准 Kubelet 申请的所有证书</span>
 kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf csr-xl8dg csr-p9g24
 </code></pre></td></tr></table>
 </div>
@@ -655,7 +655,7 @@ kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf cs
 <p>可以通过如下命令列出所有需要用到的镜像地址：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -665,7 +665,7 @@ kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf cs
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubeadm config images list --kubernetes-version v1.22.1
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubeadm config images list --kubernetes-version v1.22.1
 k8s.gcr.io/kube-apiserver:v1.22.1
 k8s.gcr.io/kube-controller-manager:v1.22.1
 k8s.gcr.io/kube-scheduler:v1.22.1
@@ -712,14 +712,14 @@ k8s.gcr.io/coredns/coredns:v1.8.4
 <p>需要提前在本机安装好 helm，我这里使用宿主机，因此只需要在宿主机安装:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一行命令安装，也可以自己手动下载安装包，都行</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一行命令安装，也可以自己手动下载安装包，都行</span>
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="p">|</span> bash
 
 <span class="c1"># 或者 opensuse 直接用包管理器安装</span>
@@ -735,13 +735,13 @@ sudo zypper in helm
 <p>这里我们还是先使用 kube-proxy 模式，先熟悉下 cilium 的使用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add cilium https://helm.cilium.io/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add cilium https://helm.cilium.io/
 helm search repo cilium/cilium -l <span class="p">|</span> head
 
 helm install cilium cilium/cilium --version 1.10.4 --namespace kube-system
@@ -751,13 +751,13 @@ helm install cilium cilium/cilium --version 1.10.4 --namespace kube-system
 <p>cilium 也提供了专用的客户端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
 sha256sum --check cilium-linux-amd64.tar.gz.sha256sum
 sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
 rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
@@ -766,7 +766,7 @@ rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}
 </div><p>然后使用 cilium 客户端检查网络插件的状态：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -783,7 +783,7 @@ rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"> $ cilium status --wait
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"> $ cilium status --wait
     /¯¯<span class="se">\
 </span><span class="se"></span> /¯¯<span class="se">\_</span>_/¯¯<span class="se">\ </span>   Cilium:         OK
  <span class="se">\_</span>_/¯¯<span class="se">\_</span>_/    Operator:       OK
@@ -803,7 +803,7 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 </div><p>cilium 还提供了命令，自动创建 pod 进行集群网络的连接性测试：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -823,7 +823,7 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ cilium connectivity <span class="nb">test</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ cilium connectivity <span class="nb">test</span>
 ℹ️  Monitor aggregation detected, will skip some flow validation steps
 ✨ <span class="o">[</span>kubernetes<span class="o">]</span> Creating namespace <span class="k">for</span> connectivity check...
 ✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying echo-same-node service...
@@ -847,10 +847,10 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>整个测试流程大概会持续 5 分多钟，测试完成后，相关 Pod 不会自动删除，使用如下命令手动删除：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete namespace cilium-test
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl delete namespace cilium-test
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="72-安装-calico">7.2 安装 Calico</h3>
@@ -863,10 +863,10 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>官方的 dashboard 个人感觉不太好用，建议直接在本地装个 k9s 用，特别爽。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in k9s
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in k9s
 </code></pre></td></tr></table>
 </div>
 </div><p>然后就可以愉快地玩耍了。</p>
@@ -878,11 +878,11 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>首先，跑 kubectl 的监控命令应该会报错：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
 error: Metrics API not available
 </code></pre></td></tr></table>
 </div>
@@ -890,13 +890,13 @@ error: Metrics API not available
 <p>现在通过 helm 安装它：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm search repo metrics-server/metrics-server -l <span class="p">|</span> head
 
 helm upgrade --install metrics-server metrics-server/metrics-server --version 3.5.0 --namespace kube-system
@@ -908,7 +908,7 @@ helm upgrade --install metrics-server metrics-server/metrics-server --version 3.
 <p>等 metrics-server 启动好后，就可以使用 <code>kubectl top</code> 命令啦：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -953,7 +953,7 @@ helm upgrade --install metrics-server metrics-server/metrics-server --version 3.
 </span><span class="lnt">43
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
 NAME           CPU<span class="o">(</span>cores<span class="o">)</span>   CPU%   MEMORY<span class="o">(</span>bytes<span class="o">)</span>   MEMORY%   
 k8s-master-0   327m         16%    1465Mi          50%       
 k8s-master-1   263m         13%    1279Mi          44%       
@@ -1009,21 +1009,21 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <ul>
 <li>local 数据卷，适合数据可丢失，且不要求分布式的场景，如开发测试环境
 <ul>
-<li><a href="https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner">https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner</a></li>
-<li><a href="https://github.com/rancher/local-path-provisioner">https://github.com/rancher/local-path-provisioner</a></li>
+<li><a href="https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner</a></li>
+<li><a href="https://github.com/rancher/local-path-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/rancher/local-path-provisioner</a></li>
 </ul>
 </li>
 <li>NFS 数据卷，适合数据可丢失，对性能要求不高，并且要求分布式的场景。比如开发测试环境、或者线上没啥压力的应用
 <ul>
-<li><a href="https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner">https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner</a></li>
-<li><a href="https://github.com/kubernetes-csi/csi-driver-nfs">https://github.com/kubernetes-csi/csi-driver-nfs</a></li>
+<li><a href="https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner</a></li>
+<li><a href="https://github.com/kubernetes-csi/csi-driver-nfs" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-csi/csi-driver-nfs</a></li>
 <li>NFS 数据的可靠性依赖于外部 NFS 服务器，企业通常使用群晖等 NAS 来做 NFS 服务器</li>
 <li>如果外部 NFS 服务器出问题，应用就会崩。</li>
 </ul>
 </li>
 <li>直接使用云上的对象存储，适合希望数据不丢失、对性能要求不高的场景。
 <ul>
-<li>直接使用 <a href="https://github.com/rclone/rclone">https://github.com/rclone/rclone</a> mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。</li>
+<li>直接使用 <a href="https://github.com/rclone/rclone" target="_blank" rel="noopener noreferrer">https://github.com/rclone/rclone</a> mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。</li>
 </ul>
 </li>
 </ul>
@@ -1052,7 +1052,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>下面先给出一个 Deployment + HPA + PodDisruptionBudget 的 demo，后面再拆开详细说下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -1235,7 +1235,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">181
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -1451,7 +1451,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>一个简单的示例如下，它使 Pod 被终止时，总是先等待 15s，再发送 SIGTERM 信号给容器：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1462,7 +1462,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1476,7 +1476,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </div><p>更好的解决办法，是直接等待所有 tcp 连接都关闭（需要镜像中有 netstat）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1488,7 +1488,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1524,7 +1524,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>和主容器一样，Envoy 也能直接加 <code>preStop</code>，修改 <code>istio-sidecar-injector</code> 这个 <code>configmap</code>，在 sidecar 里添加 preStop sleep 命令:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1536,7 +1536,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">istio-proxy</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1558,7 +1558,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>先回顾下前面给出的，基于 Pod CPU 使用率进行伸缩的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1581,7 +1581,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2 </span><span class="w"> </span><span class="c"># k8s 1.23+ 此 API 已经 GA</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2 </span><span class="w"> </span><span class="c"># k8s 1.23+ 此 API 已经 GA</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
@@ -1609,10 +1609,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其计算公式为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
 </code></pre></td></tr></table>
 </div>
 </div><p>注意分母是总的 requests 量，而不是 limits.</p>
@@ -1646,10 +1646,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>HPA 的扩缩容算法为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">期望副本数 = ceil[当前副本数 * ( 当前指标 / 目标指标 )]
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">期望副本数 = ceil[当前副本数 * ( 当前指标 / 目标指标 )]
 </code></pre></td></tr></table>
 </div>
 </div><p>从上面的参数可以看到：</p>
@@ -1747,7 +1747,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1791,7 +1791,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
 </span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
@@ -1842,10 +1842,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>因此如果使用了 v2beta2 的 HPA，一定要明确指定使用 <code>v2beta2</code> 版本的 HPA：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get hpa.v2beta2.autoscaling
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl get hpa.v2beta2.autoscaling
 </code></pre></td></tr></table>
 </div>
 </div><p>否则不小心动到 <code>annotations</code> 中编码的某些参数，可能会产生意料之外的效果，甚至直接把控制面搞崩&hellip;
@@ -1862,7 +1862,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 <p>PDB 是一个单独的 CR 自定义资源，示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1875,7 +1875,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1beta1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1beta1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">PodDisruptionBudget</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">podinfo-pdb</span><span class="w">
@@ -1891,7 +1891,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </div><p>如果在进行节点维护时(kubectl drain)，Pod 不满足 PDB，drain 将会失败，示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1907,7 +1907,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">&gt; kubectl drain node-205 --ignore-daemonsets --delete-local-data
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">&gt; kubectl drain node-205 --ignore-daemonsets --delete-local-data
 node/node-205 cordoned
 WARNING: ignoring DaemonSet-managed Pods: kube-system/calico-node-nfhj7, kube-system/kube-proxy-94dz5
 evicting pod default/podinfo-7c84d8c94d-h9brq
@@ -1972,7 +1972,7 @@ node/node-205 evicted
 那 <code>nodeSelector</code> 就满足不了你的需求了，你需要使用 <code>nodeAffinity</code>，示例如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2028,7 +2028,7 @@ node/node-205 evicted
 </span><span class="lnt">54
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -2088,7 +2088,7 @@ node/node-205 evicted
 <p>通常建议为每个 Deployment 的 template 配置 Pod 反亲和性，把 Pods 打散在所有节点上：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2132,7 +2132,7 @@ node/node-205 evicted
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -2214,7 +2214,7 @@ node/node-205 evicted
 <p>上述三类探测器的参数都是通用的，五个时间相关的参数列举如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2222,7 +2222,7 @@ node/node-205 evicted
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 下面的值就是 k8s 的默认值</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 下面的值就是 k8s 的默认值</span><span class="w">
 </span><span class="w"></span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="c"># 默认没有 delay 时间</span><span class="w">
 </span><span class="w"></span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
 </span><span class="w"></span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
@@ -2233,7 +2233,7 @@ node/node-205 evicted
 </div><p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2274,7 +2274,7 @@ node/node-205 evicted
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -2318,7 +2318,7 @@ node/node-205 evicted
 </div><p>在 Kubernetes 1.18 之前，通用的手段是为「就绪探针」添加较长的 <code>initialDelaySeconds</code> 来实现类似「启动探针」的功能动，避免容器因为启动太慢，存活探针失败导致容器被重启。示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2353,7 +2353,7 @@ node/node-205 evicted
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -2432,7 +2432,7 @@ node/node-205 evicted
 <p>一个无状态的微服务 Pod 配置举例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2461,7 +2461,7 @@ node/node-205 evicted
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;Pod name&gt;</span><span class="w">
@@ -2616,16 +2616,16 @@ node/node-205 evicted
 <p>安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
 </code></pre></td></tr></table>
 </div>
 </div><p>部署 MinIO:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2636,7 +2636,7 @@ node/node-205 evicted
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
 <span class="c1"># 查看历史版本</span>
 helm search repo minio/minio -l <span class="p">|</span> head
 <span class="c1"># 下载并解压 chart</span>
@@ -2652,7 +2652,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>在 configmap <code>workflow-controller-configmap</code> 的 data 中添加如下字段：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2668,7 +2668,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
     <span class="c1"># 是否将 main 容器的日志保存为 artifact，这样 pod 被删除后，仍然可以在 artifact 中找到日志</span>
     archiveLogs: <span class="nb">true</span>
     s3:
@@ -2693,16 +2693,16 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>方法一，直接给 default 绑定 <code>cluster-admin</code> ClusterRole，给它集群管理员的权限，只要一行命令（但是显然安全性堪忧）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
 </div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreferrer">Argo Workflows 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2727,7 +2727,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">argo-workflow-role</span><span class="w">
@@ -2755,10 +2755,10 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div><p>创建好上面这个最小的 ClusterRole，然后为每个名字空间，跑一下如下命令，给 default 账号绑定这个 clusterrole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
 </div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
@@ -2777,7 +2777,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>我们建议将 workflow executore 改为 <code>pns</code>，兼顾安全性与性能，<code>workflow-controller-configmap</code> 按照如下方式修改：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2791,7 +2791,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
@@ -2825,7 +2825,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2835,7 +2835,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">WorkflowTemplate</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -2862,7 +2862,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreferrer">kyverno</a> 进行 secrets 同步的配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2886,7 +2886,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterPolicy</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sync-secrets</span><span class="w">
@@ -2920,7 +2920,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2943,7 +2943,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
@@ -2968,7 +2968,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><h3 id="6-argo-的其他进阶配置">6. Argo 的其他进阶配置</h3>
 <p>Argo Workflows 的配置，都保存在 <code>workflow-controller-configmap</code> 这个 configmap 中，我们前面已经接触到了它的部分内容。</p>
-<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
+<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml" target="_blank" rel="noopener noreferrer">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
 <p>其中一些可能需要自定义的参数如下：</p>
 <ul>
 <li><code>parallelism</code>: workflow 的最大并行数量</li>
@@ -3082,7 +3082,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>目前我们本地的 CI/CD 流水线和云上的微服务体系，都是使用的 Vault 做 secrets 管理.</p>
 <h2 id="一vault-基础概念">一、Vault 基础概念</h2>
 <blockquote>
-<p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture">https://www.vaultproject.io/docs/internals/architecture</a></p>
+<p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture" target="_blank" rel="noopener noreferrer">https://www.vaultproject.io/docs/internals/architecture</a></p>
 </blockquote>
 <p>首先看一下 Vault 的架构图：</p>
 <p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="/images/expirence-of-vault/vault-layers.png" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2>vault layers</h2>">
@@ -3166,7 +3166,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <p><code>docker-compose.yml</code> 示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3194,7 +3194,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.3&#39;</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.3&#39;</span><span class="w">
 </span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">vault</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="c"># 文档：https://hub.docker.com/_/vault</span><span class="w">
@@ -3225,7 +3225,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </div><p><code>config.hcl</code> 内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3241,7 +3241,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="n">ui</span> <span class="o">=</span> <span class="kt">true</span>
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="n">ui</span> <span class="o">=</span> <span class="kt">true</span>
 
 <span class="err">//</span> <span class="k">使用文件做数据存储</span><span class="err">（</span><span class="k">单节点</span><span class="err">）</span>
 <span class="k">storage</span> <span class="s2">&#34;file&#34;</span> {
@@ -3266,7 +3266,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <p>通过 helm 部署：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -3274,7 +3274,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 valut 仓库</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 valut 仓库</span>
 helm repo add hashicorp https://helm.releases.hashicorp.com
 <span class="c1"># 查看 vault 版本号</span>
 helm search repo hashicorp/vault -l <span class="p">|</span> head
@@ -3290,7 +3290,7 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -3420,7 +3420,7 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </span><span class="lnt">128
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="c"># enabled is the master enabled switch. Setting this to true or false</span><span class="w">
 </span><span class="w">  </span><span class="c"># will enable or disable all the components within this chart by default.</span><span class="w">
 </span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
@@ -3553,12 +3553,12 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </div><p>现在使用自定义的 <code>custom-values.yaml</code> 部署 vautl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create namespace vault
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create namespace vault
 <span class="c1"># 安装/升级 valut</span>
 helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 </code></pre></td></tr></table>
@@ -3583,14 +3583,14 @@ helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 每个实例都需要解封三次！</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 每个实例都需要解封三次！</span>
 <span class="c1">## Unseal the first vault server until it reaches the key threshold</span>
 $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <span class="c1"># ... Unseal Key 1</span>
 $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <span class="c1"># ... Unseal Key 2</span>
@@ -3619,7 +3619,7 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>以使用 awskms 为例，首先创建 aws IAM 的 policy 内容如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3636,7 +3636,7 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
     <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
     <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
@@ -3659,13 +3659,13 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>完事后再修改好前面提供的 helm 配置，部署它，最后使用如下命令初始化一下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 初始化命令和普通模式并无不同</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 初始化命令和普通模式并无不同</span>
 kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <span class="c1"># 会打印出一个 root token，以及五个 Recovery Key（而不是 Unseal Key）</span>
 <span class="c1"># Recover Key 不再用于解封，但是重新生成 root token 等操作仍然会需要用到它.</span>
@@ -3697,7 +3697,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <p>这里面有个坑，就是必须给 userpass 账号创建 child token 的权限：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -3707,7 +3707,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="k">path</span> <span class="s2">&#34;local/*&#34;</span> {
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="k">path</span> <span class="s2">&#34;local/*&#34;</span> {
 <span class="n">  capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;, &#34;list&#34;</span><span class="p">]</span>
 }
 
@@ -3721,7 +3721,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <p>然后还得给它「自动化配置」需要的权限，比如自动创建/更新 policy/secrets/kubernetes 等等，示例如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3745,7 +3745,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># To list policies - Step 3
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># To list policies - Step 3
 </span><span class="c1"></span><span class="k">path</span> <span class="s2">&#34;sys/policy&#34;</span>
 {
 <span class="n">  capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;</span><span class="p">]</span>
@@ -3790,7 +3790,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <p>首先启用 Vault 的 Kubernetes 身份验证:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3805,7 +3805,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 配置身份认证需要在 vault pod 中执行，启动 vault-0 的交互式会话</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 配置身份认证需要在 vault pod 中执行，启动 vault-0 的交互式会话</span>
 kubectl <span class="nb">exec</span> -n vault -it vault-0 -- /bin/sh
 <span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
 <span class="nb">export</span> <span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://localhost:8200&#39;</span>
@@ -3832,7 +3832,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>首先，使用 helm chart 部署 vault-agent，接入外部的 vault 实例。使用的 <code>custom-values.yaml</code> 示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3885,7 +3885,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">51
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="c"># enabled is the master enabled switch. Setting this to true or false</span><span class="w">
 </span><span class="w">  </span><span class="c"># will enable or disable all the components within this chart by default.</span><span class="w">
 </span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
@@ -3942,7 +3942,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>vault-agent 部署完成后，第二步是为 vault 创建 serviceAccount、secret 和 ClusterRoleBinding，以允许 vault 审查 kubernetes 的 token, 完成对 pod 的身份验证. yaml 配置如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3972,7 +3972,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
 </span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
@@ -4008,7 +4008,7 @@ vault write auth/kubernetes/config <span class="se">\
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4028,7 +4028,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
 <span class="nb">export</span> <span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://localhost:8200&#39;</span>
  
 <span class="c1"># 启用 Kubernetes 身份验证</span>
@@ -4069,7 +4069,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>比如创建一个名为 <code>my-app-policy</code> 的 vault policy，内容为:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -4079,7 +4079,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># 允许读取数据
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># 允许读取数据
 </span><span class="c1"></span><span class="k">path</span> <span class="s2">&#34;my-app/data/*&#34;</span> {
 <span class="n">   capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;, &#34;list&#34;</span><span class="p">]</span>
 }
@@ -4098,7 +4098,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>这之后，每个微服务就能通过 serviceaccount 从 vault 中读取 <code>my-app</code> 中的所有信息了。</p>
 <h3 id="3-部署-pod">3. 部署 Pod</h3>
 <blockquote>
-<p>参考文档：<a href="https://www.vaultproject.io/docs/platform/k8s/injector">https://www.vaultproject.io/docs/platform/k8s/injector</a></p>
+<p>参考文档：<a href="https://www.vaultproject.io/docs/platform/k8s/injector" target="_blank" rel="noopener noreferrer">https://www.vaultproject.io/docs/platform/k8s/injector</a></p>
 </blockquote>
 <p>下一步就是将配置注入到微服务容器中，这需要使用到 Agent Sidecar Injector。
 vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
@@ -4111,7 +4111,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4152,7 +4152,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
@@ -4221,7 +4221,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 对每个微服务的 kv 数据，可以考虑将它所有的个性化配置都保存在 <code>&lt;engine-name&gt;/&lt;service-name&gt;/</code> 下面，然后使用如下 template 注入配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -4231,7 +4231,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">{
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{
     {{ range secrets &#34;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&#34; }}
         &#34;{{ printf &#34;%s&#34; . }}&#34;: 
         {{ with secret (printf &#34;&lt;engine-name&gt;/&lt;service-name&gt;/%s&#34; .) }}
@@ -4242,7 +4242,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </code></pre></td></tr></table>
 </div>
 </div><blockquote>
-<p>template 的详细语法参见: <a href="https://github.com/hashicorp/consul-template#secret">https://github.com/hashicorp/consul-template#secret</a></p>
+<p>template 的详细语法参见: <a href="https://github.com/hashicorp/consul-template#secret" target="_blank" rel="noopener noreferrer">https://github.com/hashicorp/consul-template#secret</a></p>
 </blockquote>
 <blockquote>
 <p>注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
@@ -4253,7 +4253,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 渲染出的效果示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4265,7 +4265,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
     <span class="nt">&#34;secret-a&#34;</span><span class="p">:</span> <span class="p">{</span>
   <span class="nt">&#34;a&#34;</span><span class="p">:</span> <span class="s2">&#34;b&#34;</span><span class="p">,</span>
   <span class="nt">&#34;c&#34;</span><span class="p">:</span> <span class="s2">&#34;d&#34;</span>
@@ -4416,7 +4416,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4432,7 +4432,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
 <span class="kn">from</span> <span class="nn">pulumi_alicloud</span> <span class="kn">import</span> <span class="n">Provider</span><span class="p">,</span> <span class="n">oss</span>
 
 <span class="c1"># 自定义 provider，key/secret 通过参数设定，而不是从默认的环境变量读取。</span>
@@ -4456,7 +4456,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>从另一个 stack 读取属性的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -4467,12 +4467,12 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">StackReference</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">StackReference</span>
 
 <span class="n">cfg</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">Config</span><span class="p">()</span>
 <span class="n">stack_name</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">get_stack</span><span class="p">()</span>  <span class="c1"># stack 名称</span>
 <span class="n">project</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">get_project</span><span class="p">()</span>
-<span class="n">infra</span> <span class="o">=</span> <span class="n">StackReference</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;ryan4yin/{project}/{stack_name}&#34;</span><span class="p">)</span>
+<span class="n">infra</span> <span class="o">=</span> <span class="n">StackReference</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;ryan4yin/</span><span class="si">{</span><span class="n">project</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">stack_name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
 
 <span class="c1"># 这个属性在上一个 stack 中被 export 出来</span>
 <span class="n">vpc_id</span> <span class="o">=</span> <span class="n">infra</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s2">&#34;resources.vpc.id&#34;</span><span class="p">)</span>
@@ -4524,7 +4524,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>渲染 yaml 的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4552,7 +4552,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
 <span class="kn">from</span> <span class="nn">pulumi_kubernetes</span> <span class="kn">import</span> <span class="n">Provider</span>
 <span class="kn">from</span> <span class="nn">pulumi_kubernetes.apps.v1</span> <span class="kn">import</span> <span class="n">Deployment</span><span class="p">,</span> <span class="n">DeploymentSpecArgs</span>
 <span class="kn">from</span> <span class="nn">pulumi_kubernetes.core.v1</span> <span class="kn">import</span> <span class="p">(</span>
@@ -4600,7 +4600,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>方法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -4609,7 +4609,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 指定状态文件路径</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 指定状态文件路径</span>
 pulumi login file://&lt;file-path&gt;
 <span class="c1"># 保存到默认位置: ~/.pulumi/credentials.json</span>
 pulumi login --local

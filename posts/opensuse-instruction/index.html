@@ -1,30 +1,156 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>openSUSE 使用指南 - Ryan4Yin's Space</title><meta name=description content="Ryan4Yin's Space"><meta property="og:title" content="openSUSE 使用指南"><meta property="og:description" content="openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>openSUSE 使用指南 - Ryan4Yin's Space</title><meta name=description content="Ryan4Yin's Space"><meta property="og:title" content="openSUSE 使用指南">
+<meta property="og:description" content="openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。
-我最近从 Manjaro 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。"><meta property="og:type" content="article"><meta property="og:url" content="https://ryan4yin.space/posts/opensuse-instruction/"><meta property="og:image" content="https://ryan4yin.space/posts/opensuse-instruction/linux-opensuse.jpg"><meta property="article:published_time" content="2021-01-04T08:42:21+08:00"><meta property="article:modified_time" content="2021-01-04T08:42:21+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://ryan4yin.space/posts/opensuse-instruction/linux-opensuse.jpg"><meta name=twitter:title content="openSUSE 使用指南"><meta name=twitter:description content="openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
+我最近从 Manjaro 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ryan4yin.space/posts/opensuse-instruction/"><meta property="og:image" content="https://ryan4yin.space/posts/opensuse-instruction/linux-opensuse.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-01-04T08:42:21+08:00">
+<meta property="article:modified_time" content="2021-01-04T08:42:21+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://ryan4yin.space/posts/opensuse-instruction/linux-opensuse.jpg">
+<meta name=twitter:title content="openSUSE 使用指南">
+<meta name=twitter:description content="openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。
-我最近从 Manjaro 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。"><meta name=application-name content="Ryan4Yin's Space"><meta name=apple-mobile-web-app-title content="Ryan4Yin's Space"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ryan4yin.space/posts/opensuse-instruction/><link rel=prev href=https://ryan4yin.space/posts/2020-summary/><link rel=next href=https://ryan4yin.space/posts/expirence-of-pulumi/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"openSUSE 使用指南","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ryan4yin.space\/posts\/opensuse-instruction\/"},"image":[{"@type":"ImageObject","url":"https:\/\/ryan4yin.space\/posts\/opensuse-instruction\/linux-opensuse.jpg","width":850,"height":314}],"genre":"posts","keywords":"openSUSE, Linux","wordcount":2302,"url":"https:\/\/ryan4yin.space\/posts\/opensuse-instruction\/","datePublished":"2021-01-04T08:42:21+08:00","dateModified":"2021-01-04T08:42:21+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/ryan4yin.space\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="Ryan4Yin's Space"><span id=id-1 class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/friends/>伙伴们 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/posts/opensuse-instruction/ selected>Simplified Chinese</option></select>
-</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="Ryan4Yin's Space"><span id=id-2 class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/now/>此刻</a><a class=menu-item href=/friends/>伙伴们</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select onchange="location=this.value;"><option value=/posts/opensuse-instruction/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">openSUSE 使用指南</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://ryan4yin.space title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-04>2021-01-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2302 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/opensuse-instruction/linux-opensuse.jpg data-srcset="/posts/opensuse-instruction/linux-opensuse.jpg, /posts/opensuse-instruction/linux-opensuse.jpg 1.5x, /posts/opensuse-instruction/linux-opensuse.jpg 2x" data-sizes=auto alt=/posts/opensuse-instruction/linux-opensuse.jpg title=/posts/opensuse-instruction/linux-opensuse.jpg></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一zypper-的基础命令>一、zypper 的基础命令</a></li><li><a href=#install-softwares>Install Softwares</a><ul><li><a href=#ide--编程语言>IDE + 编程语言</a></li><li><a href=#容器--kubernetes>容器 + Kubernetes</a></li><li><a href=#办公音乐聊天>办公、音乐、聊天</a></li><li><a href=#安装输入法>安装输入法</a></li><li><a href=#qemukvm>QEMU/KVM</a></li><li><a href=#kde-connect>KDE Connect</a></li><li><a href=#qv2ray-代理>Qv2ray 代理</a></li><li><a href=#vpn-连接与防火墙>VPN 连接与防火墙</a></li></ul></li><li><a href=#其他设置>其他设置</a></li></ul></nav></div></div><div class=content id=content><p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
-但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。</p><p>我最近从 <a href=https://ryan4yin.space/posts/manjaro-instruction/ rel>Manjaro</a> 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。</p><p>尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
-本文算是对迁移流程做的一个总结。</p><blockquote><p>本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。
+我最近从 Manjaro 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。">
+<meta name=application-name content="Ryan4Yin's Space">
+<meta name=apple-mobile-web-app-title content="Ryan4Yin's Space"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ryan4yin.space/posts/opensuse-instruction/><link rel=prev href=https://ryan4yin.space/posts/2020-summary/><link rel=next href=https://ryan4yin.space/posts/expirence-of-pulumi/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"openSUSE 使用指南","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ryan4yin.space\/posts\/opensuse-instruction\/"},"image":[{"@type":"ImageObject","url":"https:\/\/ryan4yin.space\/posts\/opensuse-instruction\/linux-opensuse.jpg","width":850,"height":314}],"genre":"posts","keywords":"openSUSE, Linux","wordcount":2302,"url":"https:\/\/ryan4yin.space\/posts\/opensuse-instruction\/","datePublished":"2021-01-04T08:42:21+08:00","dateModified":"2021-01-04T08:42:21+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/ryan4yin.space\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Ryan4Yin's Space"><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/categories/> 分类 </a><a class=menu-item href=/posts/> 文章 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/now/> 此刻 </a><a class=menu-item href=/friends/> 伙伴们 </a><a class=menu-item href=/about/> 关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/posts/opensuse-instruction/ selected>Simplified Chinese</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Ryan4Yin's Space"><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/friends/ title>伙伴们</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/posts/opensuse-instruction/ selected>Simplified Chinese</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">openSUSE 使用指南</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=https://ryan4yin.space title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-04>2021-01-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2302 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/opensuse-instruction/linux-opensuse.jpg data-srcset="/posts/opensuse-instruction/linux-opensuse.jpg, /posts/opensuse-instruction/linux-opensuse.jpg 1.5x, /posts/opensuse-instruction/linux-opensuse.jpg 2x" data-sizes=auto alt=/posts/opensuse-instruction/linux-opensuse.jpg title=/posts/opensuse-instruction/linux-opensuse.jpg></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#一zypper-的基础命令>一、zypper 的基础命令</a></li>
+<li><a href=#install-softwares>Install Softwares</a>
+<ul>
+<li><a href=#ide--编程语言>IDE + 编程语言</a></li>
+<li><a href=#容器--kubernetes>容器 + Kubernetes</a></li>
+<li><a href=#办公音乐聊天>办公、音乐、聊天</a></li>
+<li><a href=#安装输入法>安装输入法</a></li>
+<li><a href=#qemukvm>QEMU/KVM</a></li>
+<li><a href=#kde-connect>KDE Connect</a></li>
+<li><a href=#qv2ray-代理>Qv2ray 代理</a></li>
+<li><a href=#vpn-连接与防火墙>VPN 连接与防火墙</a></li>
+</ul>
+</li>
+<li><a href=#其他设置>其他设置</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
+但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。</p>
+<p>我最近从 <a href=https://ryan4yin.space/posts/manjaro-instruction/ rel>Manjaro</a> 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。</p>
+<p>尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
+本文算是对迁移流程做的一个总结。</p>
+<blockquote>
+<p>本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。
 openSUSE 社区的大部分用户都是使用的 Tumbleweed.
-它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。</p></blockquote><h2 id=一zypper-的基础命令>一、zypper 的基础命令</h2><p>zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如国内的清华源等。</p><p>但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。</p>
+</blockquote>
+<h2 id=一zypper-的基础命令>一、zypper 的基础命令</h2>
+<p>zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如国内的清华源等。</p>
+<p>但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 禁用原有的官方软件源</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 禁用原有的官方软件源</span>
 sudo zypper mr --disable repo-oss repo-non-oss repo-update repo-update-non-oss repo-debug
 <span class=c1># 添加北外镜像源</span>
 sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/oss/ bfsu-oss
 sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss/ bfsu-non-oss
-</code></pre></td></tr></table></div></div><p>然后就是 zypper 的常用命令：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table>
+</div>
+</div><p>然后就是 zypper 的常用命令：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -34,7 +160,9 @@ sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss
 </span><span class=lnt> 8
 </span><span class=lnt> 9
 </span><span class=lnt>10
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>sudo zypper refresh  <span class=c1># refresh all repos</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>sudo zypper refresh  <span class=c1># refresh all repos</span>
 sudo zypper update   <span class=c1># update all softwares</span>
 
 sudo zypper search --installed-only  &lt;package-name&gt;  <span class=c1># 查找本地安装的程序</span>
@@ -44,8 +172,17 @@ sudo zypper install &lt;package-name&gt;  <span class=c1># 安装程序</span>
 sudo zypper remove --clean-deps &lt;package-name&gt;  <span class=c1># 卸载程序，注意添加 --clean-deps 或者 -u，否则不会卸载依赖项！</span>
 
 sudo zypper clean  <span class=c1># 清理本地的包缓存</span>
-</code></pre></td></tr></table></div></div><h2 id=install-softwares>Install Softwares</h2><blockquote><p>这里需要用到 <a href=https://mirrors.openSUSE.org/list/bs.html target=_blank rel="noopener noreferrer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
-建议有条件可以在路由器上加智能代理提速。</p></blockquote><p>安装需要用到的各类软件:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=install-softwares>Install Softwares</h2>
+<blockquote>
+<p>这里需要用到 <a href=https://mirrors.openSUSE.org/list/bs.html target=_blank rel="noopener noreferrer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
+建议有条件可以在路由器上加智能代理提速。</p>
+</blockquote>
+<p>安装需要用到的各类软件:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -61,7 +198,9 @@ sudo zypper clean  <span class=c1># 清理本地的包缓存</span>
 </span><span class=lnt>14
 </span><span class=lnt>15
 </span><span class=lnt>16
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 启用 Packman 仓库，使用北交镜像源</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 启用 Packman 仓库，使用北交镜像源</span>
 sudo zypper ar -cfp <span class=m>90</span> <span class=s1>&#39;https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Tumbleweed/&#39;</span> packman-bjtu
 
 <span class=c1># install video player and web browser</span>
@@ -77,7 +216,12 @@ sudo zypper install git gcc clang make cmake
 <span class=c1># install wireshark</span>
 sudo zypper install wireshark
 sudo gpasswd --add <span class=nv>$USER</span> wireshark  <span class=c1>#  将你添加到 wireshark 用户组中</span>
-</code></pre></td></tr></table></div></div><h3 id=ide--编程语言>IDE + 编程语言</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=ide--编程语言>IDE + 编程语言</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -91,7 +235,9 @@ sudo gpasswd --add <span class=nv>$USER</span> wireshark  <span class=c1>#  将�
 </span><span class=lnt>12
 </span><span class=lnt>13
 </span><span class=lnt>14
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># install vscode: https://en.openSUSE.org/Visual_Studio_Code</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># install vscode: https://en.openSUSE.org/Visual_Studio_Code</span>
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo zypper addrepo https://packages.microsoft.com/yumrepos/vscode vscode
 sudo zypper refresh
@@ -105,7 +251,12 @@ sudo zypper install dotnet-sdk-5.0
 
 <span class=c1># 安装新版本的 go（源中的版本比较低，更建议从 go 官网下载安装）</span>
 sudo zypper install go
-</code></pre></td></tr></table></div></div><p>通过 tarball/script 安装：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table>
+</div>
+</div><p>通过 tarball/script 安装：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -122,7 +273,9 @@ sudo zypper install go
 </span><span class=lnt>15
 </span><span class=lnt>16
 </span><span class=lnt>17
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># rustup，rust 环境管理器</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># rustup，rust 环境管理器</span>
 curl --proto <span class=s1>&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs <span class=p>|</span> sh
 
 <span class=c1># jetbrains toolbox app，用于安装和管理 pycharm/idea/goland/android studio 等 IDE</span>
@@ -139,7 +292,47 @@ sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 <span class=nb>echo</span> <span class=s2>&#34;conda activate base&#34;</span> &gt;&gt; ~/.bashrc
 <span class=c1># miniconda 的 entrypoint 默认安装在如下目录，添加到 PATH 中</span>
 <span class=nb>echo</span> <span class=s2>&#34;export PATH=\$PATH:\$HOME/.local/bin&#34;</span> &gt;&gt; ~/.bashrc
-</code></pre></td></tr></table></div></div><p>接下来安装 VSCode 插件，下列是我的插件列表：</p><ol><li>语言：<ol><li>python/go/rust/c#/julia/flutter</li><li>xml/yaml/toml</li><li>vscode proto3</li></ol></li><li>ansible/terraform</li><li>markdown all in one + Markdown Preview Enhanced</li><li>美化：<ol><li>community material theme</li><li>vscode icons</li><li>glasslt-vsc</li></ol></li><li>docker/kubernetes</li><li>IntelliJ IDEA Keybindings</li><li>gitlens</li><li>prettier</li><li>utils<ol><li>comment translate</li><li>path intellisense</li><li>svg</li><li>visual studio intellicode</li></ol></li><li>antlr4</li><li>remote ssh + remote containers</li><li>rest client</li><li>vscode databases</li></ol><h3 id=容器--kubernetes>容器 + Kubernetes</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table>
+</div>
+</div><p>接下来安装 VSCode 插件，下列是我的插件列表：</p>
+<ol>
+<li>语言：
+<ol>
+<li>python/go/rust/c#/julia/flutter</li>
+<li>xml/yaml/toml</li>
+<li>vscode proto3</li>
+</ol>
+</li>
+<li>ansible/terraform</li>
+<li>markdown all in one + Markdown Preview Enhanced</li>
+<li>美化：
+<ol>
+<li>community material theme</li>
+<li>vscode icons</li>
+<li>glasslt-vsc</li>
+</ol>
+</li>
+<li>docker/kubernetes</li>
+<li>IntelliJ IDEA Keybindings</li>
+<li>gitlens</li>
+<li>prettier</li>
+<li>utils
+<ol>
+<li>comment translate</li>
+<li>path intellisense</li>
+<li>svg</li>
+<li>visual studio intellicode</li>
+</ol>
+</li>
+<li>antlr4</li>
+<li>remote ssh + remote containers</li>
+<li>rest client</li>
+<li>vscode databases</li>
+</ol>
+<h3 id=容器--kubernetes>容器 + Kubernetes</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -152,7 +345,9 @@ sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 </span><span class=lnt>11
 </span><span class=lnt>12
 </span><span class=lnt>13
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 时髦的新容器套装: https://documentation.suse.com/sles/15-SP2/html/SLES-all/cha-podman-overview.html</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 时髦的新容器套装: https://documentation.suse.com/sles/15-SP2/html/SLES-all/cha-podman-overview.html</span>
 sudo zypper in podman kompose skopeo buildah katacontainers
 <span class=c1># 安装 kubernetes 相关工具，tumbleweed 官方仓库的包都非常新！很舒服</span>
 sudo zypper in helm k9s kubernetes-client
@@ -165,7 +360,12 @@ sudo systemctl start docker
 
 <span class=c1># 简单起见，直接用 pip 安装 docker-compose 和 podman-compose</span>
 sudo pip install docker-compose podman-compose
-</code></pre></td></tr></table></div></div><h3 id=办公音乐聊天>办公、音乐、聊天</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=办公音乐聊天>办公、音乐、聊天</h3>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -173,7 +373,9 @@ sudo pip install docker-compose podman-compose
 </span><span class=lnt>6
 </span><span class=lnt>7
 </span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 添加 openSUSE_zh 源：https://build.opensuse.org/project/show/home:opensuse_zh</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 添加 openSUSE_zh 源：https://build.opensuse.org/project/show/home:opensuse_zh</span>
 sudo zypper addrepo <span class=s1>&#39;https://download.opensuse.org/repositories/home:/opensuse_zh/openSUSE_Tumbleweed&#39;</span> openSUSE_zh
 sudo zypper refresh
 sudo zypper install wps-office netease-cloud-music
@@ -181,42 +383,101 @@ sudo zypper install wps-office netease-cloud-music
 <span class=c1># linux qq: https://im.qq.com/linuxqq/download.html</span>
 <span class=c1># 虽然简陋但也够用，发送文件比 KDE Connect 要方便一些。</span>
 sudo rpm -ivh linux_qq.rpm
-</code></pre></td></tr></table></div></div><h3 id=安装输入法>安装输入法</h3><p>我用的输入法是小鹤音形，首先安装 fcitx-rime:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=安装输入法>安装输入法</h3>
+<p>我用的输入法是小鹤音形，首先安装 fcitx-rime:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N</span>
 sudo zypper addrepo <span class=s1>&#39;https://download.opensuse.org/repositories/M17N/openSUSE_Tumbleweed&#39;</span> m17n
 sudo zypper refresh
 sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
-</code></pre></td></tr></table></div></div><p>然后，从 <a href=http://flypy.ys168.com/>http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>mv rime ~/.local/share/fcitx5/
-</code></pre></td></tr></table></div></div><p>现在重启系统，在 fcitx5 配置里面添加 rime「中州韵」，就可以正常使用小鹤音形了。</p><h3 id=qemukvm>QEMU/KVM</h3><p>不得不说，openSUSE 安装 KVM 真的超方便，纯 GUI 操作：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table>
+</div>
+</div><p>然后，从 <a href=http://flypy.ys168.com/ target=_blank rel="noopener noreferrer">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>mv rime ~/.local/share/fcitx5/
+</code></pre></td></tr></table>
+</div>
+</div><p>现在重启系统，在 fcitx5 配置里面添加 rime「中州韵」，就可以正常使用小鹤音形了。</p>
+<h3 id=qemukvm>QEMU/KVM</h3>
+<p>不得不说，openSUSE 安装 KVM 真的超方便，纯 GUI 操作：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># see: https://doc.openSUSE.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># see: https://doc.openSUSE.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
 sudo yast2 virtualization
 <span class=c1># enter to terminal ui, select kvm + kvm tools, and then install it.</span>
-</code></pre></td></tr></table></div></div><p>KVM 的详细文档参见 <a href=../../virutal%20machine/KVM/README.md rel>KVM/README.md</a></p><h3 id=kde-connect>KDE Connect</h3><p>KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共享文件夹、通知同步等等。
-总而言之非常好用，只要手机和 PC 处于同一个局域网就行，不需要什么数据线。</p><p>如果安装系统时选择了打开防火墙，KDE Connect 是连不上的，需要手动开放端口号：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table>
+</div>
+</div><p>KVM 的详细文档参见 <a href=../../virutal%20machine/KVM/README.md rel>KVM/README.md</a></p>
+<h3 id=kde-connect>KDE Connect</h3>
+<p>KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共享文件夹、通知同步等等。
+总而言之非常好用，只要手机和 PC 处于同一个局域网就行，不需要什么数据线。</p>
+<p>如果安装系统时选择了打开防火墙，KDE Connect 是连不上的，需要手动开放端口号：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># see: https://userbase.kde.org/KDEConnect#firewalld</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># see: https://userbase.kde.org/KDEConnect#firewalld</span>
 <span class=c1># 还可以使用 --add-source=xx.xx.xx.xx/xx 设置 ip 白名单</span>
 sudo firewall-cmd --zone<span class=o>=</span>public --permanent --add-port<span class=o>=</span>1714-1764/tcp
 sudo firewall-cmd --zone<span class=o>=</span>public --permanent --add-port<span class=o>=</span>1714-1764/udp
 sudo systemctl restart firewalld.service
-</code></pre></td></tr></table></div></div><p>然后手机（Android）安装好 KDE Connect，就能开始享受了。</p><p>目前存在的 Bug:</p><ul><li><i class="far fa-square fa-fw"></i>Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。<ul><li>如果你有 ROOT 权限，可以参考 <a href=https://szclsya.me/posts/android/fix-clipboard-android-10/ target=_blank rel="noopener noreferrer">Fix clipboard permission on Android 10</a> 的方法，安装 ClipboardWhitelist 来打开权限。</li><li>否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。</li></ul></li></ul><h3 id=qv2ray-代理>Qv2ray 代理</h3><p>Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持常见的所有代理协议。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table>
+</div>
+</div><p>然后手机（Android）安装好 KDE Connect，就能开始享受了。</p>
+<p>目前存在的 Bug:</p>
+<ul>
+<li><i class="far fa-square fa-fw"></i> Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。
+<ul>
+<li>如果你有 ROOT 权限，可以参考 <a href=https://szclsya.me/posts/android/fix-clipboard-android-10/ target=_blank rel="noopener noreferrer">Fix clipboard permission on Android 10</a> 的方法，安装 ClipboardWhitelist 来打开权限。</li>
+<li>否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。</li>
+</ul>
+</li>
+</ul>
+<h3 id=qv2ray-代理>Qv2ray 代理</h3>
+<p>Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持常见的所有代理协议。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># see: https://build.openSUSE.org/repositories/home:zzndb</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># see: https://build.openSUSE.org/repositories/home:zzndb</span>
 sudo zypper addrepo <span class=s1>&#39;https://download.opensuse.org/repositories/home:/zzndb/openSUSE_Tumbleweed&#39;</span> qv2ray
 sudo zypper refresh
 sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
-</code></pre></td></tr></table></div></div><h3 id=vpn-连接与防火墙>VPN 连接与防火墙</h3><p>防火墙默认会禁用 pptp 等 vpn 协议的端口，需要手动打开.</p><p>允许使用 PPTP 协议：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=vpn-连接与防火墙>VPN 连接与防火墙</h3>
+<p>防火墙默认会禁用 pptp 等 vpn 协议的端口，需要手动打开.</p>
+<p>允许使用 PPTP 协议：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -226,7 +487,9 @@ sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
 </span><span class=lnt> 8
 </span><span class=lnt> 9
 </span><span class=lnt>10
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 允许 gre 数据包流入网络</span>
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 允许 gre 数据包流入网络</span>
 sudo firewall-cmd --permanent --zone<span class=o>=</span>public --direct --add-rule ipv4 filter INPUT <span class=m>0</span> -p gre -j ACCEPT
 sudo firewall-cmd --permanent --zone<span class=o>=</span>public --direct --add-rule ipv6 filter INPUT <span class=m>0</span> -p gre -j ACCEPT
 
@@ -236,5 +499,46 @@ sudo firewall-cmd --permanent --zone<span class=o>=</span>public --add-masquerad
 firewall-cmd --add-port<span class=o>=</span>1723/tcp --permanent
 
 sudo firewall-cmd --reload
-</code></pre></td></tr></table></div></div><p>允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 <code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p><h2 id=其他设置>其他设置</h2><p>从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-01-04</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ryan4yin.space/posts/opensuse-instruction/ data-title="openSUSE 使用指南" data-via=ryan4yin data-hashtags=openSUSE,Linux><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ryan4yin.space/posts/opensuse-instruction/ data-hashtag=openSUSE><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://ryan4yin.space/posts/opensuse-instruction/><i class="fab fa-reddit fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/opensuse/>openSUSE</a>,&nbsp;<a href=/tags/linux/>Linux</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/2020-summary/ class=prev rel=prev title="2020 年年终总结"><i class="fas fa-angle-left fa-fw"></i>2020 年年终总结</a>
-<a href=/posts/expirence-of-pulumi/ class=next rel=next title="Pulumi 使用体验 - 基础设施代码化">Pulumi 使用体验 - 基础设施代码化<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.79.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/sunt-programator/CodeIT target=_blank rel="noopener noreferrer" title="CodeIT 0.2.10"><i class="fas fa-laptop-code fa-fw"></i>CodeIT</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://ryan4yin.space target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/copy-tex.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/copy-tex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/mhchem.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":30},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"ryan4yin/ryan4yin.space"}},"data":{"id-1":"Ryan4Yin's Space","id-2":"Ryan4Yin's Space"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"747LJ10EI7","algoliaIndex":"ryan-space","algoliaSearchKey":"658db5f2bf056f83458cacf5dd58ec80","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"typeit":{"cursorChar":null,"cursorSpeed":null,"data":{"id-1":["id-1"],"id-2":["id-2"]},"duration":null,"speed":null}};</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-4V93QVSNFW',{'anonymize_ip':true});</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></body></html>
+</code></pre></td></tr></table>
+</div>
+</div><p>允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 <code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p>
+<h2 id=其他设置>其他设置</h2>
+<p>从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。</p></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2021-01-04</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ryan4yin.space/posts/opensuse-instruction/ data-title="openSUSE 使用指南" data-via=ryan4yin data-hashtags=openSUSE,Linux><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ryan4yin.space/posts/opensuse-instruction/ data-hashtag=openSUSE><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://ryan4yin.space/posts/opensuse-instruction/><i class="fab fa-reddit fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/opensuse/>openSUSE</a>,&nbsp;<a href=/tags/linux/>Linux</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/2020-summary/ class=prev rel=prev title="2020 年年终总结"><i class="fas fa-angle-left fa-fw"></i>2020 年年终总结</a>
+<a href=/posts/expirence-of-pulumi/ class=next rel=next title="Pulumi 使用体验 - 基础设施代码化">Pulumi 使用体验 - 基础设施代码化<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.91.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/sunt-programator/CodeIT target=_blank rel="noopener noreferrer" title="CodeIT 0.2.10"><i class="fas fa-laptop-code fa-fw"></i> CodeIT</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://ryan4yin.space target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/copy-tex.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/copy-tex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/ryan4yin.space"}},data:{"id-1":"Ryan4Yin's Space","id-2":"Ryan4Yin's Space"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},typeit:{cursorChar:null,cursorSpeed:null,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-4V93QVSNFW',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></body>
+</html>

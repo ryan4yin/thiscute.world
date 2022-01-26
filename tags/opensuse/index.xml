@@ -13,14 +13,14 @@ openSUSE 社区的大部分用户都是使用的 Tumbleweed.
 <p>但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 禁用原有的官方软件源</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 禁用原有的官方软件源</span>
 sudo zypper mr --disable repo-oss repo-non-oss repo-update repo-update-non-oss repo-debug
 <span class="c1"># 添加北外镜像源</span>
 sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/oss/ bfsu-oss
@@ -30,7 +30,7 @@ sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss
 </div><p>然后就是 zypper 的常用命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -42,7 +42,7 @@ sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper refresh  <span class="c1"># refresh all repos</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo zypper refresh  <span class="c1"># refresh all repos</span>
 sudo zypper update   <span class="c1"># update all softwares</span>
 
 sudo zypper search --installed-only  &lt;package-name&gt;  <span class="c1"># 查找本地安装的程序</span>
@@ -62,7 +62,7 @@ sudo zypper clean  <span class="c1"># 清理本地的包缓存</span>
 <p>安装需要用到的各类软件:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -80,7 +80,7 @@ sudo zypper clean  <span class="c1"># 清理本地的包缓存</span>
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启用 Packman 仓库，使用北交镜像源</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启用 Packman 仓库，使用北交镜像源</span>
 sudo zypper ar -cfp <span class="m">90</span> <span class="s1">&#39;https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Tumbleweed/&#39;</span> packman-bjtu
 
 <span class="c1"># install video player and web browser</span>
@@ -101,7 +101,7 @@ sudo gpasswd --add <span class="nv">$USER</span> wireshark  <span class="c1">#  
 </div><h3 id="ide--编程语言">IDE + 编程语言</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -117,7 +117,7 @@ sudo gpasswd --add <span class="nv">$USER</span> wireshark  <span class="c1">#  
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># install vscode: https://en.openSUSE.org/Visual_Studio_Code</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># install vscode: https://en.openSUSE.org/Visual_Studio_Code</span>
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo zypper addrepo https://packages.microsoft.com/yumrepos/vscode vscode
 sudo zypper refresh
@@ -136,7 +136,7 @@ sudo zypper install go
 </div><p>通过 tarball/script 安装：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -155,7 +155,7 @@ sudo zypper install go
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># rustup，rust 环境管理器</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># rustup，rust 环境管理器</span>
 curl --proto <span class="s1">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs <span class="p">|</span> sh
 
 <span class="c1"># jetbrains toolbox app，用于安装和管理 pycharm/idea/goland/android studio 等 IDE</span>
@@ -212,7 +212,7 @@ sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 <h3 id="容器--kubernetes">容器 + Kubernetes</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -227,7 +227,7 @@ sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 时髦的新容器套装: https://documentation.suse.com/sles/15-SP2/html/SLES-all/cha-podman-overview.html</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 时髦的新容器套装: https://documentation.suse.com/sles/15-SP2/html/SLES-all/cha-podman-overview.html</span>
 sudo zypper in podman kompose skopeo buildah katacontainers
 <span class="c1"># 安装 kubernetes 相关工具，tumbleweed 官方仓库的包都非常新！很舒服</span>
 sudo zypper in helm k9s kubernetes-client
@@ -245,7 +245,7 @@ sudo pip install docker-compose podman-compose
 </div><h3 id="办公音乐聊天">办公、音乐、聊天</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -255,7 +255,7 @@ sudo pip install docker-compose podman-compose
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 openSUSE_zh 源：https://build.opensuse.org/project/show/home:opensuse_zh</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 openSUSE_zh 源：https://build.opensuse.org/project/show/home:opensuse_zh</span>
 sudo zypper addrepo <span class="s1">&#39;https://download.opensuse.org/repositories/home:/opensuse_zh/openSUSE_Tumbleweed&#39;</span> openSUSE_zh
 sudo zypper refresh
 sudo zypper install wps-office netease-cloud-music
@@ -269,25 +269,25 @@ sudo rpm -ivh linux_qq.rpm
 <p>我用的输入法是小鹤音形，首先安装 fcitx-rime:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N</span>
 sudo zypper addrepo <span class="s1">&#39;https://download.opensuse.org/repositories/M17N/openSUSE_Tumbleweed&#39;</span> m17n
 sudo zypper refresh
 sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
 </code></pre></td></tr></table>
 </div>
-</div><p>然后，从 <a href="http://flypy.ys168.com/">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p>
+</div><p>然后，从 <a href="http://flypy.ys168.com/" target="_blank" rel="noopener noreferrer">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">mv rime ~/.local/share/fcitx5/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">mv rime ~/.local/share/fcitx5/
 </code></pre></td></tr></table>
 </div>
 </div><p>现在重启系统，在 fcitx5 配置里面添加 rime「中州韵」，就可以正常使用小鹤音形了。</p>
@@ -295,12 +295,12 @@ sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
 <p>不得不说，openSUSE 安装 KVM 真的超方便，纯 GUI 操作：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://doc.openSUSE.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://doc.openSUSE.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
 sudo yast2 virtualization
 <span class="c1"># enter to terminal ui, select kvm + kvm tools, and then install it.</span>
 </code></pre></td></tr></table>
@@ -312,14 +312,14 @@ sudo yast2 virtualization
 <p>如果安装系统时选择了打开防火墙，KDE Connect 是连不上的，需要手动开放端口号：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://userbase.kde.org/KDEConnect#firewalld</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://userbase.kde.org/KDEConnect#firewalld</span>
 <span class="c1"># 还可以使用 --add-source=xx.xx.xx.xx/xx 设置 ip 白名单</span>
 sudo firewall-cmd --zone<span class="o">=</span>public --permanent --add-port<span class="o">=</span>1714-1764/tcp
 sudo firewall-cmd --zone<span class="o">=</span>public --permanent --add-port<span class="o">=</span>1714-1764/udp
@@ -340,13 +340,13 @@ sudo systemctl restart firewalld.service
 <p>Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持常见的所有代理协议。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://build.openSUSE.org/repositories/home:zzndb</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># see: https://build.openSUSE.org/repositories/home:zzndb</span>
 sudo zypper addrepo <span class="s1">&#39;https://download.opensuse.org/repositories/home:/zzndb/openSUSE_Tumbleweed&#39;</span> qv2ray
 sudo zypper refresh
 sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
@@ -357,7 +357,7 @@ sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
 <p>允许使用 PPTP 协议：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -369,7 +369,7 @@ sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 允许 gre 数据包流入网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 允许 gre 数据包流入网络</span>
 sudo firewall-cmd --permanent --zone<span class="o">=</span>public --direct --add-rule ipv4 filter INPUT <span class="m">0</span> -p gre -j ACCEPT
 sudo firewall-cmd --permanent --zone<span class="o">=</span>public --direct --add-rule ipv6 filter INPUT <span class="m">0</span> -p gre -j ACCEPT
 

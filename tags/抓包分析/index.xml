@@ -28,7 +28,7 @@ wireshark 中有两种包过滤器：</p>
 <p>可以直接通过「<strong>协议名称</strong>」进行过滤：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -37,7 +37,7 @@ wireshark 中有两种包过滤器：</p>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 只看 tcp 流量
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 只看 tcp 流量
 tcp
 # 只看 http 流量
 http
@@ -49,7 +49,7 @@ http
 </div><p>也可以通过「<strong>协议名称.协议属性</strong>」和「比较操作符（比如 <code>==</code>）」进行更精确的过滤：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -70,7 +70,7 @@ http
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 通过 ip 的源地址 src 或 dst 进行过滤
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 通过 ip 的源地址 src 或 dst 进行过滤
 ip.src==192.168.1.33
 
 # 通过 IP 地址（ip.addr）进行过滤（匹配 ip.src 或 ip.dst）
@@ -102,25 +102,25 @@ http.host != &#34;xxx.baidu.com&#34; and http.referer == &#34;xxx.baidu.com&#34;
 <p>使用 ssh 协议进行流式传输的示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># eth0 更换成你的机器 interface 名称，虚拟机可能是 ens33</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># eth0 更换成你的机器 interface 名称，虚拟机可能是 ens33</span>
 ssh root@some.host <span class="s2">&#34;tcpdump -i eth0 -l -w -&#34;</span> <span class="p">|</span> wireshark -k -i -
 </code></pre></td></tr></table>
 </div>
 </div><p>在不方便使用 ssh 协议的情况下（比如容器抓包、Android 抓包），可以考虑使用 <code>nc</code>(netcat) 进行数据流的转发：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 远程主机抓包：将数据流通过 11111 端口暴露出去</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 远程主机抓包：将数据流通过 11111 端口暴露出去</span>
 tcpdump -i wlan0 -s0 -w - <span class="p">|</span> nc -l -p <span class="m">11111</span>
 
 <span class="c1"># 2. 本地主机从远程主机的 11111 端口读取数据，提供给 wireshark</span>
@@ -130,7 +130,7 @@ nc &lt;remote-host&gt; <span class="m">11111</span> <span class="p">|</span> wir
 </div><p>如果是抓取 Android 手机的数据，方便起见，可以通过 adb 多进行一次数据转发：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -148,7 +148,7 @@ nc &lt;remote-host&gt; <span class="m">11111</span> <span class="p">|</span> wir
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 方案一：root 手机后，将 arm 版的 tcpdump 拷贝到手机内进行抓包</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 方案一：root 手机后，将 arm 版的 tcpdump 拷贝到手机内进行抓包</span>
 <span class="c1"># 1. 在 adb shell 里使用 tcpdump 抓 WiFi 的数据包，转发到 11111 端口</span>
 <span class="c1">## 需要先获取到 root 权限，将 tcpdump 拷贝到 /system/bin/ 目录下</span>
 tcpdump -i wlan0 -s0 -w - <span class="p">|</span> nc -l -p <span class="m">11111</span>
@@ -176,11 +176,11 @@ nc localhost <span class="m">11111</span> <span class="p">|</span> wireshark -k 
 <p>另外如果你使用 <code>wsl</code>，那么可以通过如下命令使 <code>wsl</code> 调用 windows 中的 wireshark 进行抓包分析：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加软链接</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加软链接</span>
 sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark.exe<span class="k">)</span><span class="s2">&#34;</span> /usr/local/bin/wireshark
 </code></pre></td></tr></table>
 </div>

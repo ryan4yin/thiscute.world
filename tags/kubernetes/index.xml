@@ -75,7 +75,7 @@
 <p>配置如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -87,7 +87,7 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo modprobe br_netfilter
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo modprobe br_netfilter
 cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
 </span><span class="s">br_netfilter
 </span><span class="s">EOF</span>
@@ -189,7 +189,7 @@ sudo sysctl --system
 <p>首先是环境配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -210,7 +210,7 @@ sudo sysctl --system
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
 </span><span class="s">overlay
 </span><span class="s">br_netfilter
 </span><span class="s">nf_conntrack
@@ -234,7 +234,7 @@ sudo sysctl --system
 </div><p>安装 containerd+nerdctl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -244,7 +244,7 @@ sudo sysctl --system
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">wget https://github.com/containerd/nerdctl/releases/download/v0.11.1/nerdctl-full-0.11.1-linux-amd64.tar.gz
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">wget https://github.com/containerd/nerdctl/releases/download/v0.11.1/nerdctl-full-0.11.1-linux-amd64.tar.gz
 tar -axvf nerdctl-full-0.11.1-linux-amd64.tar.gz
 <span class="c1"># 这里简单起见，rootless 相关的东西也一起装进去了，测试嘛就无所谓了...</span>
 mv bin/* /usr/local/bin/
@@ -259,7 +259,7 @@ systemctl start containerd
 <h2 id="3-安装-kubeletkubeadmkubectl">3. 安装 kubelet/kubeadm/kubectl</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -295,7 +295,7 @@ systemctl start containerd
 </span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一些全局都需要用的变量</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一些全局都需要用的变量</span>
 <span class="nv">CNI_VERSION</span><span class="o">=</span><span class="s2">&#34;v0.8.2&#34;</span>
 <span class="nv">CRICTL_VERSION</span><span class="o">=</span><span class="s2">&#34;v1.17.0&#34;</span>
 <span class="c1"># kubernetes 的版本号</span>
@@ -334,7 +334,7 @@ systemctl status kubelet
 </div><p>试用 crictl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -342,7 +342,7 @@ systemctl status kubelet
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CONTAINER_RUNTIME_ENDPOINT</span><span class="o">=</span><span class="s1">&#39;unix:///var/run/containerd/containerd.sock&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CONTAINER_RUNTIME_ENDPOINT</span><span class="o">=</span><span class="s1">&#39;unix:///var/run/containerd/containerd.sock&#39;</span>
 <span class="c1"># 列出所有 pods，现在应该啥也没</span>
 crictl  pods
 
@@ -359,7 +359,7 @@ crictl images
 <p>首先使用如下命令生成 kube-vip 的配置文件，以 ARP 为例（生产环境建议换成 BGP）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -381,7 +381,7 @@ crictl images
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee add-kube-vip.sh
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee add-kube-vip.sh
 </span><span class="s"># 你的虚拟机网卡，opensuse/centos 等都是 eth0，但是 ubuntu 可能是 ens3
 </span><span class="s">export INTERFACE=eth0
 </span><span class="s">
@@ -409,7 +409,7 @@ bash add-kube-vip.sh
 <p>其实需要运行的就是这条命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -448,7 +448,7 @@ bash add-kube-vip.sh
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 极简配置：</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 极简配置：</span>
 cat <span class="s">&lt;&lt;EOF | sudo tee kubeadm-config.yaml
 </span><span class="s">apiVersion: kubeadm.k8s.io/v1beta3
 </span><span class="s">kind: InitConfiguration
@@ -490,10 +490,10 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </div><p>kubeadm 应该会报错，提示你有些依赖不存在，下面先安装好依赖项。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in -y socat ebtables conntrack-tools
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in -y socat ebtables conntrack-tools
 </code></pre></td></tr></table>
 </div>
 </div><p>再重新运行前面的 kubeadm 命令，应该就能正常执行了，它做的操作有：</p>
@@ -513,13 +513,13 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
 </span><span class="se"></span>  --discovery-token-ca-cert-hash sha256:&lt;hash&gt; <span class="se">\
 </span><span class="se"></span>  --control-plane --certificate-key &lt;key&gt; <span class="se">\
 </span><span class="se"></span>  --ignore-preflight-errors<span class="o">=</span>DirAvailable--etc-kubernetes-manifests
@@ -529,11 +529,11 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 <li>worker 节点加入集群的命令:
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
 </span><span class="se"></span>      --discovery-token-ca-cert-hash sha256:&lt;hash&gt; 
 </code></pre></td></tr></table>
 </div>
@@ -542,7 +542,7 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 <p>跑完第一部分 <code>kubeconfig</code> 的处理命令后，就可以使用 kubectl 查看集群状况了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -556,7 +556,7 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get no</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get no</span>
 NAME           STATUS     ROLES                  AGE   VERSION
 k8s-master-0   NotReady   control-plane,master   79s   v1.22.1
 k8s-master-0:~/kubeadm <span class="c1"># kubectl get po --all-namespaces</span>
@@ -574,7 +574,7 @@ kube-system   kube-scheduler-k8s-master-0            1/1     Running   <span cla
 <p>所有节点都加入集群后，通过 kubectl 查看，应该是三个控制面 master，两个 worker：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -583,7 +583,7 @@ kube-system   kube-scheduler-k8s-master-0            1/1     Running   <span cla
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get node</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get node</span>
 NAME           STATUS     ROLES                  AGE     VERSION
 k8s-master-0   NotReady   control-plane,master   26m     v1.22.1
 k8s-master-1   NotReady   control-plane,master   7m2s    v1.22.1
@@ -596,7 +596,7 @@ k8s-worker-1   NotReady   &lt;none&gt;                 86s     v1.22.1
 <p>现在再看下集群的证书签发状态：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -612,7 +612,7 @@ k8s-worker-1   NotReady   &lt;none&gt;                 86s     v1.22.1
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl get csr --sort-by<span class="o">=</span><span class="s1">&#39;{.spec.username}&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl get csr --sort-by<span class="o">=</span><span class="s1">&#39;{.spec.username}&#39;</span>
 NAME        AGE     SIGNERNAME                                    REQUESTOR                  REQUESTEDDURATION   CONDITION
 csr-95hll   6m58s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
 csr-tklnr   7m5s    kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
@@ -634,11 +634,11 @@ csr-p9g24   6m52s   kubernetes.io/kubelet-serving                 system:node:k8
 <p>目前 kubeadm 不支持自动批准 kubelet 申请的证书，需要我们手动批准一下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 批准 Kubelet 申请的所有证书</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 批准 Kubelet 申请的所有证书</span>
 kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf csr-xl8dg csr-p9g24
 </code></pre></td></tr></table>
 </div>
@@ -655,7 +655,7 @@ kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf cs
 <p>可以通过如下命令列出所有需要用到的镜像地址：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -665,7 +665,7 @@ kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf cs
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubeadm config images list --kubernetes-version v1.22.1
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubeadm config images list --kubernetes-version v1.22.1
 k8s.gcr.io/kube-apiserver:v1.22.1
 k8s.gcr.io/kube-controller-manager:v1.22.1
 k8s.gcr.io/kube-scheduler:v1.22.1
@@ -712,14 +712,14 @@ k8s.gcr.io/coredns/coredns:v1.8.4
 <p>需要提前在本机安装好 helm，我这里使用宿主机，因此只需要在宿主机安装:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一行命令安装，也可以自己手动下载安装包，都行</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一行命令安装，也可以自己手动下载安装包，都行</span>
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="p">|</span> bash
 
 <span class="c1"># 或者 opensuse 直接用包管理器安装</span>
@@ -735,13 +735,13 @@ sudo zypper in helm
 <p>这里我们还是先使用 kube-proxy 模式，先熟悉下 cilium 的使用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add cilium https://helm.cilium.io/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add cilium https://helm.cilium.io/
 helm search repo cilium/cilium -l <span class="p">|</span> head
 
 helm install cilium cilium/cilium --version 1.10.4 --namespace kube-system
@@ -751,13 +751,13 @@ helm install cilium cilium/cilium --version 1.10.4 --namespace kube-system
 <p>cilium 也提供了专用的客户端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
 sha256sum --check cilium-linux-amd64.tar.gz.sha256sum
 sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
 rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
@@ -766,7 +766,7 @@ rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}
 </div><p>然后使用 cilium 客户端检查网络插件的状态：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -783,7 +783,7 @@ rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"> $ cilium status --wait
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"> $ cilium status --wait
     /¯¯<span class="se">\
 </span><span class="se"></span> /¯¯<span class="se">\_</span>_/¯¯<span class="se">\ </span>   Cilium:         OK
  <span class="se">\_</span>_/¯¯<span class="se">\_</span>_/    Operator:       OK
@@ -803,7 +803,7 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 </div><p>cilium 还提供了命令，自动创建 pod 进行集群网络的连接性测试：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -823,7 +823,7 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ cilium connectivity <span class="nb">test</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ cilium connectivity <span class="nb">test</span>
 ℹ️  Monitor aggregation detected, will skip some flow validation steps
 ✨ <span class="o">[</span>kubernetes<span class="o">]</span> Creating namespace <span class="k">for</span> connectivity check...
 ✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying echo-same-node service...
@@ -847,10 +847,10 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>整个测试流程大概会持续 5 分多钟，测试完成后，相关 Pod 不会自动删除，使用如下命令手动删除：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete namespace cilium-test
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl delete namespace cilium-test
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="72-安装-calico">7.2 安装 Calico</h3>
@@ -863,10 +863,10 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>官方的 dashboard 个人感觉不太好用，建议直接在本地装个 k9s 用，特别爽。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in k9s
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in k9s
 </code></pre></td></tr></table>
 </div>
 </div><p>然后就可以愉快地玩耍了。</p>
@@ -878,11 +878,11 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>首先，跑 kubectl 的监控命令应该会报错：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
 error: Metrics API not available
 </code></pre></td></tr></table>
 </div>
@@ -890,13 +890,13 @@ error: Metrics API not available
 <p>现在通过 helm 安装它：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm search repo metrics-server/metrics-server -l <span class="p">|</span> head
 
 helm upgrade --install metrics-server metrics-server/metrics-server --version 3.5.0 --namespace kube-system
@@ -908,7 +908,7 @@ helm upgrade --install metrics-server metrics-server/metrics-server --version 3.
 <p>等 metrics-server 启动好后，就可以使用 <code>kubectl top</code> 命令啦：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -953,7 +953,7 @@ helm upgrade --install metrics-server metrics-server/metrics-server --version 3.
 </span><span class="lnt">43
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
 NAME           CPU<span class="o">(</span>cores<span class="o">)</span>   CPU%   MEMORY<span class="o">(</span>bytes<span class="o">)</span>   MEMORY%   
 k8s-master-0   327m         16%    1465Mi          50%       
 k8s-master-1   263m         13%    1279Mi          44%       
@@ -1009,21 +1009,21 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <ul>
 <li>local 数据卷，适合数据可丢失，且不要求分布式的场景，如开发测试环境
 <ul>
-<li><a href="https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner">https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner</a></li>
-<li><a href="https://github.com/rancher/local-path-provisioner">https://github.com/rancher/local-path-provisioner</a></li>
+<li><a href="https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner</a></li>
+<li><a href="https://github.com/rancher/local-path-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/rancher/local-path-provisioner</a></li>
 </ul>
 </li>
 <li>NFS 数据卷，适合数据可丢失，对性能要求不高，并且要求分布式的场景。比如开发测试环境、或者线上没啥压力的应用
 <ul>
-<li><a href="https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner">https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner</a></li>
-<li><a href="https://github.com/kubernetes-csi/csi-driver-nfs">https://github.com/kubernetes-csi/csi-driver-nfs</a></li>
+<li><a href="https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner</a></li>
+<li><a href="https://github.com/kubernetes-csi/csi-driver-nfs" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-csi/csi-driver-nfs</a></li>
 <li>NFS 数据的可靠性依赖于外部 NFS 服务器，企业通常使用群晖等 NAS 来做 NFS 服务器</li>
 <li>如果外部 NFS 服务器出问题，应用就会崩。</li>
 </ul>
 </li>
 <li>直接使用云上的对象存储，适合希望数据不丢失、对性能要求不高的场景。
 <ul>
-<li>直接使用 <a href="https://github.com/rclone/rclone">https://github.com/rclone/rclone</a> mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。</li>
+<li>直接使用 <a href="https://github.com/rclone/rclone" target="_blank" rel="noopener noreferrer">https://github.com/rclone/rclone</a> mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。</li>
 </ul>
 </li>
 </ul>
@@ -1052,7 +1052,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>下面先给出一个 Deployment + HPA + PodDisruptionBudget 的 demo，后面再拆开详细说下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -1235,7 +1235,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">181
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -1451,7 +1451,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>一个简单的示例如下，它使 Pod 被终止时，总是先等待 15s，再发送 SIGTERM 信号给容器：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1462,7 +1462,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1476,7 +1476,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </div><p>更好的解决办法，是直接等待所有 tcp 连接都关闭（需要镜像中有 netstat）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1488,7 +1488,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1524,7 +1524,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>和主容器一样，Envoy 也能直接加 <code>preStop</code>，修改 <code>istio-sidecar-injector</code> 这个 <code>configmap</code>，在 sidecar 里添加 preStop sleep 命令:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1536,7 +1536,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">istio-proxy</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1558,7 +1558,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>先回顾下前面给出的，基于 Pod CPU 使用率进行伸缩的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1581,7 +1581,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2 </span><span class="w"> </span><span class="c"># k8s 1.23+ 此 API 已经 GA</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2 </span><span class="w"> </span><span class="c"># k8s 1.23+ 此 API 已经 GA</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
@@ -1609,10 +1609,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其计算公式为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
 </code></pre></td></tr></table>
 </div>
 </div><p>注意分母是总的 requests 量，而不是 limits.</p>
@@ -1646,10 +1646,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>HPA 的扩缩容算法为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">期望副本数 = ceil[当前副本数 * ( 当前指标 / 目标指标 )]
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">期望副本数 = ceil[当前副本数 * ( 当前指标 / 目标指标 )]
 </code></pre></td></tr></table>
 </div>
 </div><p>从上面的参数可以看到：</p>
@@ -1747,7 +1747,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1791,7 +1791,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
 </span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
@@ -1842,10 +1842,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>因此如果使用了 v2beta2 的 HPA，一定要明确指定使用 <code>v2beta2</code> 版本的 HPA：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get hpa.v2beta2.autoscaling
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl get hpa.v2beta2.autoscaling
 </code></pre></td></tr></table>
 </div>
 </div><p>否则不小心动到 <code>annotations</code> 中编码的某些参数，可能会产生意料之外的效果，甚至直接把控制面搞崩&hellip;
@@ -1862,7 +1862,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 <p>PDB 是一个单独的 CR 自定义资源，示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1875,7 +1875,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1beta1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1beta1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">PodDisruptionBudget</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">podinfo-pdb</span><span class="w">
@@ -1891,7 +1891,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </div><p>如果在进行节点维护时(kubectl drain)，Pod 不满足 PDB，drain 将会失败，示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1907,7 +1907,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">&gt; kubectl drain node-205 --ignore-daemonsets --delete-local-data
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">&gt; kubectl drain node-205 --ignore-daemonsets --delete-local-data
 node/node-205 cordoned
 WARNING: ignoring DaemonSet-managed Pods: kube-system/calico-node-nfhj7, kube-system/kube-proxy-94dz5
 evicting pod default/podinfo-7c84d8c94d-h9brq
@@ -1972,7 +1972,7 @@ node/node-205 evicted
 那 <code>nodeSelector</code> 就满足不了你的需求了，你需要使用 <code>nodeAffinity</code>，示例如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2028,7 +2028,7 @@ node/node-205 evicted
 </span><span class="lnt">54
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -2088,7 +2088,7 @@ node/node-205 evicted
 <p>通常建议为每个 Deployment 的 template 配置 Pod 反亲和性，把 Pods 打散在所有节点上：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2132,7 +2132,7 @@ node/node-205 evicted
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -2214,7 +2214,7 @@ node/node-205 evicted
 <p>上述三类探测器的参数都是通用的，五个时间相关的参数列举如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2222,7 +2222,7 @@ node/node-205 evicted
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 下面的值就是 k8s 的默认值</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 下面的值就是 k8s 的默认值</span><span class="w">
 </span><span class="w"></span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="c"># 默认没有 delay 时间</span><span class="w">
 </span><span class="w"></span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
 </span><span class="w"></span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
@@ -2233,7 +2233,7 @@ node/node-205 evicted
 </div><p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2274,7 +2274,7 @@ node/node-205 evicted
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -2318,7 +2318,7 @@ node/node-205 evicted
 </div><p>在 Kubernetes 1.18 之前，通用的手段是为「就绪探针」添加较长的 <code>initialDelaySeconds</code> 来实现类似「启动探针」的功能动，避免容器因为启动太慢，存活探针失败导致容器被重启。示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2353,7 +2353,7 @@ node/node-205 evicted
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -2432,7 +2432,7 @@ node/node-205 evicted
 <p>一个无状态的微服务 Pod 配置举例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2461,7 +2461,7 @@ node/node-205 evicted
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;Pod name&gt;</span><span class="w">
@@ -2519,7 +2519,7 @@ node/node-205 evicted
 <p>JWKS ，也就是 JWK Set，json 结构如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2527,7 +2527,7 @@ node/node-205 evicted
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">{
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{
 &#34;keys&#34;: [
   &lt;jwk-1&gt;,
   &lt;jwk-2&gt;,
@@ -2541,7 +2541,7 @@ node/node-205 evicted
 <p>一个 RSA 公钥的 JWK 描述如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2551,7 +2551,7 @@ node/node-205 evicted
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">{
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{
     &#34;alg&#34;: &#34;RS256&#34;,  # 算法「可选参数」
     &#34;kty&#34;: &#34;RSA&#34;,    # 密钥类型
     &#34;use&#34;: &#34;sig&#34;,    # 被用于签名「可选参数」
@@ -2571,7 +2571,7 @@ node/node-205 evicted
 <p>上面的命令会将生成出的 RSA 私钥写入 key.pem 中，查看一下私钥内容。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2601,7 +2601,7 @@ node/node-205 evicted
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">ryan@RYAN-MI-DESKTOP:~/istio$ cat key.pem
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ryan@RYAN-MI-DESKTOP:~/istio$ cat key.pem
 -----BEGIN RSA PRIVATE KEY-----
 MIIEpAIBAAKCAQEAt1cKkQqPh8iOv5BhKh7Rx6A2+1ldpO/jczML/0GBKu4X+lHr
 Y8YbJrt29jyAXlWM8vHC7tXsqgUG+WziRD0D8nhnh10XC14SeH+3mVuBqph+TqhX
@@ -2634,7 +2634,7 @@ x8whrOnMMODCAqu4W/Rx1Lgf2vXIx0pZmlt8Df9i2AVg/ePR6jO3Nw==
 </div><p>接下来通过 Python 编程生成 RSA Public Key 和 JWK（jwk 其实就是公钥的另一个表述形式而已）:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2652,7 +2652,7 @@ x8whrOnMMODCAqu4W/Rx1Lgf2vXIx0pZmlt8Df9i2AVg/ePR6jO3Nw==
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 需要先安装依赖: pip install jwcrypto
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 需要先安装依赖: pip install jwcrypto
 from jwcrypto.jwk import JWK
 from pathlib import Path
 
@@ -2673,7 +2673,7 @@ print(jwk_bytes)
 </div><p>Istio 需要 JWK 进行 JWT 验证，而我们手动验证 JWT 时一般需要用到 Public Key. 方便起见，上述代码把这两个都打印了出来。内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2685,7 +2685,7 @@ print(jwk_bytes)
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># Public Key 内容，不包含这行注释
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># Public Key 内容，不包含这行注释
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt1cKkQqPh8iOv5BhKh7R
 x6A2+1ldpO/jczML/0GBKu4X+lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG+WziRD0D
@@ -2699,7 +2699,7 @@ xwIDAQAB
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2708,7 +2708,7 @@ xwIDAQAB
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># jwk 内容
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># jwk 内容
 {
  &#39;e&#39;: &#39;AQAB&#39;,
  &#39;kid&#39;: &#39;oyYwZSLCLVVPHdVp0jXIcLNpGn6dMCumlY-6wSenmFo&#39;,
@@ -2725,7 +2725,7 @@ xwIDAQAB
 <p>编写 istio 配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2752,7 +2752,7 @@ xwIDAQAB
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;security.istio.io/v1beta1&#34;</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;security.istio.io/v1beta1&#34;</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;RequestAuthentication&#34;</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;jwt-example&#34;</span><span class="w">
@@ -2794,7 +2794,7 @@ JWT 的验证规则是：</p>
 因此我们需要启用 Istio 的 Authorization 请求头的转发功能，在前述的 <code>RequestAuthentication</code> yaml 配置中添加一个参数就行：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2820,7 +2820,7 @@ JWT 的验证规则是：</p>
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;security.istio.io/v1beta1&#34;</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;security.istio.io/v1beta1&#34;</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;RequestAuthentication&#34;</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;jwt-example&#34;</span><span class="w">
@@ -2913,10 +2913,10 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <p>这个问题在网上能搜到很多案例,但大都只是提供了如下的强制清理命令，未分析具体原因：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete pods &lt;pod&gt; --grace-period<span class="o">=</span><span class="m">0</span> --force
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl delete pods &lt;pod&gt; --grace-period<span class="o">=</span><span class="m">0</span> --force
 </code></pre></td></tr></table>
 </div>
 </div><p>最近找到几篇详细的原因分析文章，值得一看：</p>
@@ -2933,7 +2933,7 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <p>而且进一步 <code>kubectl describe po</code> 查看细节，发现 initContainer 的状态为:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2946,7 +2946,7 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">...
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">...
     State:          Waiting
       Reason:       CrashLoopBackOff
     Last State:     Terminated
@@ -2962,7 +2962,7 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 </div><p>而 Containers 的状态居然是 ready:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2971,7 +2971,7 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">...
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">...
     Host Port:      0/TCP
     State:          Running
       Started:      Tue, 03 Aug 2021 00:35:30 +0000
@@ -2984,8 +2984,8 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <p>仔细想了下，早上因为磁盘余量告警，有手动运行过 <code>docker system prune</code> 命令，那么问题可能就是这条命令清理掉了已经 exited 的 initContainers 容器，导致 k8s 故障，不断尝试重启该容器。</p>
 <p>网上一搜确实有相关的信息：</p>
 <ul>
-<li><a href="https://stackoverflow.com/questions/62333064/cant-delete-exited-init-container">https://stackoverflow.com/questions/62333064/cant-delete-exited-init-container</a></li>
-<li><a href="https://github.com/kubernetes/kubernetes/issues/62362">https://github.com/kubernetes/kubernetes/issues/62362</a></li>
+<li><a href="https://stackoverflow.com/questions/62333064/cant-delete-exited-init-container" target="_blank" rel="noopener noreferrer">https://stackoverflow.com/questions/62333064/cant-delete-exited-init-container</a></li>
+<li><a href="https://github.com/kubernetes/kubernetes/issues/62362" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes/kubernetes/issues/62362</a></li>
 </ul>
 <p>结论：使用外部的垃圾清理命令可能导致 k8s 行为异常。</p>
 <h2 id="节点常见错误">节点常见错误</h2>
@@ -3073,12 +3073,12 @@ AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。</p>
 <p>可手动删除 namespace 配置中的析构器（spec.finalizer，在名字空间生命周期结束前会生成的配置项），这样名字空间就会直接跳过 GC 步骤：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 编辑名字空间的配置</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 编辑名字空间的配置</span>
 kubectl edit namespace &lt;ns-name&gt;
 <span class="c1"># 将 spec.finalizers 改成空列表 []</span>
 </code></pre></td></tr></table>
@@ -3086,7 +3086,7 @@ kubectl edit namespace &lt;ns-name&gt;
 </div><p>如果上述方法也无法删除名字空间，也找不到具体的问题，就只能直接从 etcd 中删除掉它了(有风险，谨慎操作！)。方法如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -3096,7 +3096,7 @@ kubectl edit namespace &lt;ns-name&gt;
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 登录到 etcd 容器中，执行如下命令：</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 登录到 etcd 容器中，执行如下命令：</span>
 <span class="nb">export</span> <span class="nv">ETCDCTL_API</span><span class="o">=</span><span class="m">3</span>
 <span class="nb">cd</span> /etc/kubernetes/pki/etcd/
 <span class="c1"># 列出所有名字空间</span>
@@ -3116,10 +3116,10 @@ etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/
 <p>批量删除 Evicted 记录:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get pods <span class="p">|</span> grep Evicted <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> xargs kubectl delete pod
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl get pods <span class="p">|</span> grep Evicted <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> xargs kubectl delete pod
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="容器镜像gcpod驱逐以及节点压力">容器镜像GC、Pod驱逐以及节点压力</h2>
@@ -3138,12 +3138,12 @@ etcdctl --cacert ca.crt --cert peer.crt --key peer.key del /registry/namespaces/
 另外 <code>--eviction-minimum-reclaim</code> 也可以设小一点，清理得更干净。示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">--eviction-soft<span class="o">=</span>memory.available&lt;1Gi,nodefs.available&lt;2Gi,imagefs.available&lt;200Gi
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">--eviction-soft<span class="o">=</span>memory.available&lt;1Gi,nodefs.available&lt;2Gi,imagefs.available&lt;200Gi
 --eviction-soft-grace-period<span class="o">=</span>3m
 --eviction-minimum-reclaim<span class="o">=</span>memory.available<span class="o">=</span>0Mi,nodefs.available<span class="o">=</span>1Gi,imagefs.available<span class="o">=</span>2Gi
 </code></pre></td></tr></table>

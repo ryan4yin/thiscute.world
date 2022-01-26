@@ -10,10 +10,10 @@
 <p>socat 的基本命令格式：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat <span class="o">[</span>参数<span class="o">]</span> 地址1 地址2
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat <span class="o">[</span>参数<span class="o">]</span> 地址1 地址2
 </code></pre></td></tr></table>
 </div>
 </div><p>给 socat 提供两个地址，socat 干的活就是把两个地址的流对接起来。左边地址的输出传给右边，同时又把右边地址的输出传给左边，也就是一个<strong>双向的数据管道</strong>。</p>
@@ -25,7 +25,7 @@
 <p>各发行版都自带 netcat，包名通常为 <code>nc-openbsd</code>，因此这里只介绍 socat 的安装方法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -35,7 +35,7 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Debian/Ubuntu</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Debian/Ubuntu</span>
 sudo apt install socat
 
 <span class="c1"># CentOS/RedHat</span>
@@ -56,7 +56,7 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 <p>使用 socat/netcat 检测远程端口的可连接性：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -69,7 +69,7 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -d[ddd] 增加日志详细程度，-dd  Prints fatal, error, warning, and notice messages.</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -d[ddd] 增加日志详细程度，-dd  Prints fatal, error, warning, and notice messages.</span>
 socat -dd - TCP:192.168.1.252:3306
 
 <span class="c1"># -v 显示详细信息</span>
@@ -86,7 +86,7 @@ nc -vv -w2 -z 192.168.1.2 20-500
 <p>在本机监听一个 TCP 端口，接收到的内容传到 stdout，同时将 stdin 的输入传给客户端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -96,7 +96,7 @@ nc -vv -w2 -z 192.168.1.2 20-500
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令，socat/nc 二选一</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令，socat/nc 二选一</span>
 socat TCP-LISTEN:7000 -
 <span class="c1"># -l --listening</span>
 nc -l <span class="m">7000</span>
@@ -109,7 +109,7 @@ nc 192.168.11.123 <span class="m">7000</span>
 </div><p>UDP 协议的测试也非常类似，使用 netcat 的示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -118,7 +118,7 @@ nc 192.168.11.123 <span class="m">7000</span>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端，只监听 ipv4</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端，只监听 ipv4</span>
 nc -u -l <span class="m">8080</span>
 
 <span class="c1"># 客户端</span>
@@ -130,12 +130,12 @@ nc -u localhost <span class="m">8080</span>
 </div><p>使用 socat 的 UDP 测试示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat UDP-LISTEN:7000 -
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat UDP-LISTEN:7000 -
 
 socat UDP:192.168.31.123:7000 -
 </code></pre></td></tr></table>
@@ -150,7 +150,7 @@ socat UDP:192.168.31.123:7000 -
 <p>模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -163,7 +163,7 @@ socat UDP:192.168.31.123:7000 -
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下</span>
 cat server.key server.crt &gt; server.pem
 cat client.key client.crt &gt; client.pem
 
@@ -179,7 +179,7 @@ curl -v --cacert ca.crt --cert client.crt --key client.key --tls-max 1.2 https:/
 </div><p>上面的命令使用了 mTLS 双向认证的协议，可通过设定 <code>verify=0</code> 来关掉客户端认证，示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -192,7 +192,7 @@ curl -v --cacert ca.crt --cert client.crt --key client.key --tls-max 1.2 https:/
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">
 <span class="c1"># socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下</span>
 cat server.key server.crt &gt; server.pem
 
@@ -211,12 +211,12 @@ curl -v --cacert server.crt https://192.168.31.123:4433
 首先在数据发送方 A 执行如下命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）</span>
 <span class="c1"># -U 和 -u 相反，数据只从右边单向传输给左边</span>
 socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
 </code></pre></td></tr></table>
@@ -224,12 +224,12 @@ socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
 </div><p>然后在数据接收方 B 执行如下命令，就能把文件接收到：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
 <span class="c1"># 如果觉得太繁琐，也可以直接通过 stdout 重定向</span>
 socat -u tcp:192.168.1.252:2000 - &gt; demo.tar.gz
 </code></pre></td></tr></table>
@@ -237,13 +237,13 @@ socat -u tcp:192.168.1.252:2000 - &gt; demo.tar.gz
 </div><p>使用 netcat 也可以实现数据传输：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 先在接收方启动服务端</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 先在接收方启动服务端</span>
 nc -l -p <span class="m">8080</span> &gt; demo.tar.gz
 <span class="c1"># 再在发送方启动客户端发送数据</span>
 nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
@@ -254,19 +254,19 @@ nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
 <p>下面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问 <code>http://&lt;ip&gt;:8080</code> 来查看效果。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>假设 <code>web.py</code> 的内容为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s2">&#34;hello world&#34;</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;hello world&#34;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>那 <code>curl localhost:8080</code> 就应该会输出 <code>hello world</code></p>
@@ -274,20 +274,20 @@ nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
 <p>监听 8080 端口，建立该端口与 <code>baidu.com:80</code> 之间的双向管道:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr  TCP:baidu.com:80
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr  TCP:baidu.com:80
 </code></pre></td></tr></table>
 </div>
 </div><p>拿 curl 命令测试一下，应该能正常访问到百度：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 注意指定 Host</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 注意指定 Host</span>
 curl -v -H <span class="s1">&#39;Host: baidu.com&#39;</span> localhost:8080
 </code></pre></td></tr></table>
 </div>

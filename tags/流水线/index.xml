@@ -106,16 +106,16 @@
 <p>安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
 </code></pre></td></tr></table>
 </div>
 </div><p>部署 MinIO:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -126,7 +126,7 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
 <span class="c1"># 查看历史版本</span>
 helm search repo minio/minio -l <span class="p">|</span> head
 <span class="c1"># 下载并解压 chart</span>
@@ -142,7 +142,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>在 configmap <code>workflow-controller-configmap</code> 的 data 中添加如下字段：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -158,7 +158,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
     <span class="c1"># 是否将 main 容器的日志保存为 artifact，这样 pod 被删除后，仍然可以在 artifact 中找到日志</span>
     archiveLogs: <span class="nb">true</span>
     s3:
@@ -183,16 +183,16 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>方法一，直接给 default 绑定 <code>cluster-admin</code> ClusterRole，给它集群管理员的权限，只要一行命令（但是显然安全性堪忧）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
 </div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreferrer">Argo Workflows 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -217,7 +217,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">argo-workflow-role</span><span class="w">
@@ -245,10 +245,10 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div><p>创建好上面这个最小的 ClusterRole，然后为每个名字空间，跑一下如下命令，给 default 账号绑定这个 clusterrole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
 </div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
@@ -267,7 +267,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>我们建议将 workflow executore 改为 <code>pns</code>，兼顾安全性与性能，<code>workflow-controller-configmap</code> 按照如下方式修改：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -281,7 +281,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
@@ -315,7 +315,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -325,7 +325,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">WorkflowTemplate</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -352,7 +352,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreferrer">kyverno</a> 进行 secrets 同步的配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -376,7 +376,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterPolicy</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sync-secrets</span><span class="w">
@@ -410,7 +410,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -433,7 +433,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
@@ -458,7 +458,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><h3 id="6-argo-的其他进阶配置">6. Argo 的其他进阶配置</h3>
 <p>Argo Workflows 的配置，都保存在 <code>workflow-controller-configmap</code> 这个 configmap 中，我们前面已经接触到了它的部分内容。</p>
-<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
+<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml" target="_blank" rel="noopener noreferrer">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
 <p>其中一些可能需要自定义的参数如下：</p>
 <ul>
 <li><code>parallelism</code>: workflow 的最大并行数量</li>

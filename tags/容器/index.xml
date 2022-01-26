@@ -61,17 +61,17 @@
 <p>命令格式：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>其中 table 默认为 <code>filter</code> 表，其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。</p>
 <p>以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -105,7 +105,7 @@
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --add 允许 80 端口通过</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --add 允许 80 端口通过</span>
 iptables -A INPUT -p tcp --dport <span class="m">80</span> -j ACCEPT
 
 <span class="c1"># --list-rules 查看所有规则</span>
@@ -156,7 +156,7 @@ iptables -F INPUT
 <p>首先，这是我在「Linux 的虚拟网络接口」文中给出过的 docker0 网络架构图:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -185,7 +185,7 @@ iptables -F INPUT
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
 |                      Host                     |           Container A             |           Container B             |
 |                                               |                                   |                                   |
 |   +---------------------------------------+   |    +-------------------------+    |    +-------------------------+    |
@@ -217,13 +217,13 @@ iptables -F INPUT
 </div><p>docker 会在 iptables 中为 docker0 网桥添加如下规则：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">-t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">-t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
 
 -t filter -P DROP
 -t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
@@ -255,12 +255,12 @@ iptables -F INPUT
 <p>现在我们来实际测试一下，看看是不是这么回事：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 tcpdump 分别在出口网卡 wlp4s0 （相当于 eth0）和 dcoker0 网桥上抓包，后面会用来分析</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 tcpdump 分别在出口网卡 wlp4s0 （相当于 eth0）和 dcoker0 网桥上抓包，后面会用来分析</span>
 ❯ sudo tcpdump -i wlp4s0 -n &gt; wlp4s0.dump   <span class="c1"># 窗口一，抓 wlp4s0 的包</span>
 ❯ sudo tcpdump -i docker0 -n &gt; docker0.dump  <span class="c1"># 窗口二，抓 docker0 的包</span>
 </code></pre></td></tr></table>
@@ -268,16 +268,16 @@ iptables -F INPUT
 </div><p>现在新建窗口三，启动一个容器，通过 curl 命令低速下载一个视频文件：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">❯ docker run --rm --name curl -it curlimages/curl &#34;https://media.w3.org/2010/05/sintel/trailer.mp4&#34; -o /tmp/video.mp4 --limit-rate 100k
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">❯ docker run --rm --name curl -it curlimages/curl &#34;https://media.w3.org/2010/05/sintel/trailer.mp4&#34; -o /tmp/video.mp4 --limit-rate 100k
 </code></pre></td></tr></table>
 </div>
 </div><p>然后新建窗口四，在宿主机查看 conntrack 状态</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -285,7 +285,7 @@ iptables -F INPUT
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ sudo zypper in conntrack-tools  <span class="c1"># 这个记得先提前安装好</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ sudo zypper in conntrack-tools  <span class="c1"># 这个记得先提前安装好</span>
 ❯ sudo conntrack -L <span class="p">|</span> grep 172.17
 <span class="c1"># curl 通过 NAT 网络发起了一个 dns 查询请求，DNS 服务器是网关上的 192.168.31.1</span>
 udp      <span class="m">17</span> <span class="m">22</span> <span class="nv">src</span><span class="o">=</span>172.17.0.4 <span class="nv">dst</span><span class="o">=</span>192.168.31.1 <span class="nv">sport</span><span class="o">=</span><span class="m">59423</span> <span class="nv">dport</span><span class="o">=</span><span class="m">53</span> <span class="nv">src</span><span class="o">=</span>192.168.31.1 <span class="nv">dst</span><span class="o">=</span>192.168.31.228 <span class="nv">sport</span><span class="o">=</span><span class="m">53</span> <span class="nv">dport</span><span class="o">=</span><span class="m">59423</span> <span class="o">[</span>ASSURED<span class="o">]</span> <span class="nv">mark</span><span class="o">=</span><span class="m">0</span> <span class="nv">use</span><span class="o">=</span><span class="m">1</span>
@@ -296,7 +296,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </div><p>等 curl 命令跑个十来秒，然后关闭所有窗口及应用程序，接下来进行数据分析：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -336,7 +336,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </span><span class="lnt">38
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 前面查到的，本地发起请求的端口是 54636，下面以此为过滤条件查询数据</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 前面查到的，本地发起请求的端口是 54636，下面以此为过滤条件查询数据</span>
 
 <span class="c1"># 首先查询 wlp4s0/eth0 进来的数据，可以看到本机的 dst_ip 为 192.168.31.228.54636</span>
 ❯ cat wlp4s0.dump <span class="p">|</span> grep <span class="m">54636</span> <span class="p">|</span> head -n <span class="m">15</span>
@@ -395,7 +395,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 <p>首先，使用 <code>docker run</code> 运行几个容器，检查下网络状况：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -471,7 +471,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </span><span class="lnt">74
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 运行一个 debian 容器和一个 nginx</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 运行一个 debian 容器和一个 nginx</span>
 ❯ docker run -dit --name debian --rm debian:buster sleep <span class="m">1000000</span>
 ❯ docker run -dit --name nginx --rm nginx:1.19-alpine 
 
@@ -551,7 +551,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 <p><code>docker-compose.yml</code> 内容：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -569,7 +569,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.3&#34;</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.3&#34;</span><span class="w">
 </span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">caddy</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;caddy:2.2.1-alpine&#34;</span><span class="w">
@@ -590,7 +590,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </div><p>现在先用上面的配置启动 caddy 容器，然后再查看网络状况：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -693,7 +693,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">101
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
 ❯ docker-compose up -d
 <span class="c1"># 查下 caddy 容器的 ip</span>
 &gt; docker inspect caddy <span class="p">|</span> grep IPAddress
@@ -808,7 +808,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 <p>下面详细分析下 Docker 的 macvlan 网络（Podman 应该也完全类似）。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -843,7 +843,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
 <span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 $ docker network create -d macvlan <span class="se">\
@@ -881,7 +881,7 @@ root@4319488cb5e7:/# curl baidu.com
 </div><p>Docker 支持的另一种网络模式是 ipvlan（ipvlan 和 macvlan 的区别我在前一篇文章中已经介绍过，不再赘言），创建命令和 macvlan 几乎一样：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -918,7 +918,7 @@ root@4319488cb5e7:/# curl baidu.com
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
 <span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 <span class="c1"># ipvlan_mode 默认为 l2，表示工作在数据链路层。</span>
@@ -964,11 +964,11 @@ root@d0764ebbbf42:/# curl baidu.com
 这显然是因为 rootless 模式下 containerd 改不了宿主机的 iptables 配置和虚拟网络接口。但是可以查看到宿主机 slirp4netns 在后台运行：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ ps aux <span class="p">|</span> grep tap
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ ps aux <span class="p">|</span> grep tap
 ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <span class="m">3312</span> ?        S    00:01   0:02 slirp4netns --mtu <span class="m">65520</span> -r <span class="m">3</span> --disable-host-loopback --enable-sandbox --enable-seccomp <span class="m">11625</span> tap0
 </code></pre></td></tr></table>
 </div>
@@ -982,7 +982,7 @@ ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <
 <p>我在 opensuse tumbleweed 上实测，firewalld 添加的是 nftables 配置，而 docker 仍然在用旧的 iptables，也就是说我现在的机器上有两套 netfilter 工具并存：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1016,7 +1016,7 @@ ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 查看 iptables 数据
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 查看 iptables 数据
 &gt; iptables -S
 -P INPUT ACCEPT
 -P FORWARD DROP
@@ -1073,7 +1073,7 @@ table ip6 firewalld {
 Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设备接口 <code>/dev/net/tun</code> 供用户层程序读写，用户层程序通过 <code>/dev/net/tun</code> 读写主机内核协议栈的数据。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1086,7 +1086,7 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; modinfo tun
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&gt; modinfo tun
 filename:       /lib/modules/5.13.6-1-default/kernel/drivers/net/tun.ko.xz
 alias:          devname:net/tun
 alias:          char-major-10-200
@@ -1102,7 +1102,7 @@ description:    Universal TUN/TAP device driver
 </div><p>一个 TUN 设备的示例图如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1134,7 +1134,7 @@ description:    Universal TUN/TAP device driver
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">             
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">             
 +----------------------------------------------------------------------+
 |                                                                      |
 |  +--------------------+      +--------------------+                  |
@@ -1176,7 +1176,7 @@ description:    Universal TUN/TAP device driver
 <p>一个简单的 C 程序示例如下，它每次收到数据后，都只单纯地打印一下收到的字节数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1246,7 +1246,7 @@ description:    Universal TUN/TAP device driver
 </span><span class="lnt">68
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;linux/if.h&gt;</span><span class="cp">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;linux/if.h&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;linux/if_tun.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;sys/ioctl.h&gt;</span><span class="cp">
@@ -1320,7 +1320,7 @@ description:    Universal TUN/TAP device driver
 <p>首先通过编译运行上述 c 程序，程序会阻塞住，等待数据到达：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1328,7 +1328,7 @@ description:    Universal TUN/TAP device driver
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 编译，请忽略部分 warning
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 编译，请忽略部分 warning
 &gt; gcc mytun.c -o mytun
 
 # 创建并监听 tun 设备需要 root 权限
@@ -1339,7 +1339,7 @@ Open tun/tap device: tun0 for reading...
 </div><p>现在使用 iproute2 查看下链路层设备：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1376,7 +1376,7 @@ Open tun/tap device: tun0 for reading...
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 能发现最后面有列出名为 tun0 的接口，但是状态为 down
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 能发现最后面有列出名为 tun0 的接口，但是状态为 down
 ❯ ip addr ls
 ......
 3: wlp4s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
@@ -1416,7 +1416,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 </div><p>现在再启动第三个窗口发点数据给 tun0，持续观察前面 <code>tcpdump</code> 和 <code>mytun</code> 的日志:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1437,7 +1437,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 直接 ping tun0 的地址，貌似有问题，数据没进 mytun 程序，而且还有响应
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 直接 ping tun0 的地址，貌似有问题，数据没进 mytun 程序，而且还有响应
 ❯ ping -c 4 172.21.22.23
 PING 172.21.22.23 (172.21.22.23) 56(84) bytes of data.
 64 bytes from 172.21.22.23: icmp_seq=1 ttl=64 time=0.167 ms
@@ -1461,13 +1461,13 @@ PING 172.21.22.26 (172.21.22.26) 56(84) bytes of data.
 </div><p>下面给出 mytun 的输出：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">Read 84 bytes from tun/tap device
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Read 84 bytes from tun/tap device
 Read 84 bytes from tun/tap device
 Read 84 bytes from tun/tap device
 Read 84 bytes from tun/tap device
@@ -1476,7 +1476,7 @@ Read 84 bytes from tun/tap device
 </div><p>以及 tcpdump 的输出：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1486,7 +1486,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">00:22:03.622684 IP (tos 0x0, ttl 64, id 37341, offset 0, flags [DF], proto ICMP (1), length 84)
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">00:22:03.622684 IP (tos 0x0, ttl 64, id 37341, offset 0, flags [DF], proto ICMP (1), length 84)
     172.21.22.23 &gt; 172.21.22.26: ICMP echo request, id 11, seq 1, length 64
 00:22:04.633394 IP (tos 0x0, ttl 64, id 37522, offset 0, flags [DF], proto ICMP (1), length 84)
     172.21.22.23 &gt; 172.21.22.26: ICMP echo request, id 11, seq 2, length 64
@@ -1537,7 +1537,7 @@ Read 84 bytes from tun/tap device
 <p>整个流程跑完，数据包都不需要经过宿主机的协议栈，效率高。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1566,7 +1566,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">+------------------------------------------------+-----------------------------------+-----------------------------------+
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+------------------------------------------------+-----------------------------------+-----------------------------------+
 |                       Host                     |           VirtualMachine1         |           VirtualMachine2         |
 |                                                |                                   |                                   |
 |    +--------------------------------------+    |    +-------------------------+    |    +-------------------------+    |
@@ -1605,7 +1605,7 @@ Read 84 bytes from tun/tap device
 <p>示意图如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1634,7 +1634,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
 |                      Host                     |           Container 1             |           Container 2             |
 |                                               |                                   |                                   |
 |   +---------------------------------------+   |    +-------------------------+    |    +-------------------------+    |
@@ -1667,7 +1667,7 @@ Read 84 bytes from tun/tap device
 <p>可以在容器中通过 iproute2 查看到， eth0 的接口类型为 <code>veth</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1680,7 +1680,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ docker run -it --rm debian:buster bash
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ docker run -it --rm debian:buster bash
 root@5facbe4ddc1e:/# ip --details addr ls
 1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity <span class="m">0</span> minmtu <span class="m">0</span> maxmtu <span class="m">0</span> numtxqueues <span class="m">1</span> numrxqueues <span class="m">1</span> gso_max_size <span class="m">65536</span> gso_max_segs <span class="m">65535</span> 
@@ -1696,12 +1696,12 @@ root@5facbe4ddc1e:/# ip --details addr ls
 </div><p>同时在宿主机中能看到对应的 veth 设备是绑定到了 docker0 网桥的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ sudo brctl show
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ sudo brctl show
 bridge name     bridge id               STP enabled     interfaces
 docker0         8000.0242fce99ef5       no              vethea4171a
 </code></pre></td></tr></table>
@@ -1782,7 +1782,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个<strong>点对点的 VXLAN 隧道</strong>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1813,7 +1813,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在主机 A 上创建 VTEP 设备 vxlan0</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在主机 A 上创建 VTEP 设备 vxlan0</span>
 <span class="c1"># 与另一个 vtep 接口 B（192.168.8.101）建立隧道</span>
 <span class="c1"># 将 vxlan0 自身的 IP 地址设为 192.168.8.100</span>
 <span class="c1"># 使用的 VXLAN 目标端口为 4789(IANA 标准)</span>
@@ -1849,7 +1849,7 @@ ping 10.20.1.2
 示例命令如下（这里略过了如何设置组播地址 <code>239.1.1.1</code> 的信息）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1858,7 +1858,7 @@ ping 10.20.1.2
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
 </span><span class="se"></span>    id <span class="m">42</span> <span class="se">\
 </span><span class="se"></span>    dstport <span class="m">4789</span> <span class="se">\
 </span><span class="se"></span>    group 239.1.1.1 <span class="se">\
@@ -1876,7 +1876,7 @@ ip link <span class="nb">set</span> vxlan0 up
 <p>使用 ip 命令创建网桥、网络名字空间、veth pairs 组成上图中的容器网络：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1899,7 +1899,7 @@ ip link <span class="nb">set</span> vxlan0 up
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 br0 并将 vxlan0 绑定上去</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 br0 并将 vxlan0 绑定上去</span>
 ip link add br0 <span class="nb">type</span> bridge
 ip link <span class="nb">set</span> vxlan0 master bridge
 ip link <span class="nb">set</span> vxlan0 up
@@ -1935,7 +1935,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 <p>使用 ethtool 检查：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1950,7 +1950,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># docker 容器的 veth 接口速率
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># docker 容器的 veth 接口速率
 &gt; ethtool vethe899841 | grep Speed
         Speed: 10000Mb/s
 
@@ -1969,7 +1969,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 <p>接下来实际测试一下，先给出机器参数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1991,7 +1991,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">❯ cat /etc/os-release 
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">❯ cat /etc/os-release 
 NAME=&#34;openSUSE Tumbleweed&#34;
 # VERSION=&#34;20210810&#34;
 ...
@@ -2016,7 +2016,7 @@ Swap:           2048           0        2048
 </div><p>使用 iperf3 测试：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2081,7 +2081,7 @@ Swap:           2048           0        2048
 </span><span class="lnt">63
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动服务端</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动服务端</span>
 iperf3 -s
 
 -------------
@@ -2149,7 +2149,7 @@ Connecting to host 192.168.31.228, port <span class="m">5201</span>
 </div><p>把 iperf3-server 跑在容器里再测一遍：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2237,7 +2237,7 @@ Connecting to host 192.168.31.228, port <span class="m">5201</span>
 </span><span class="lnt">86
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在容器中启动 iperf3-server，并映射到宿主机端口 6201</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在容器中启动 iperf3-server，并映射到宿主机端口 6201</span>
 &gt; docker run  -it --rm --name<span class="o">=</span>iperf3-server -p 6201:5201 networkstatic/iperf3 -s
 &gt; docker inspect --format <span class="s2">&#34;{{ .NetworkSettings.IPAddress }}&#34;</span> iperf3-server
 172.17.0.2

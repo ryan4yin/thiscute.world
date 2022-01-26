@@ -177,7 +177,7 @@
 <li>编写证书签名请求的配置文件 <code>csr.conf</code>:
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -208,7 +208,7 @@
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">[ req ]
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[ req ]
 default_bits = 2048
 prompt = no
 default_md = sha256
@@ -246,7 +246,7 @@ extendedKeyUsage=serverAuth,clientAuth
 <li>生成证书：
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -264,7 +264,7 @@ extendedKeyUsage=serverAuth,clientAuth
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
 openssl genrsa -out server.key <span class="m">2048</span>
 <span class="c1"># 2. 通过第一步编写的配置文件，生成证书签名请求（公钥+申请者信息）</span>
 openssl req -new -key server.key -out server.csr -config csr.conf
@@ -302,16 +302,16 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class="se">\
 而对于 ECC 密钥，您应选择要用哪种曲线生成密钥对。各个组织（ANSI X9.62、NIST、SECG）命名了多种曲线，可通过如下命名查看 openssl 支持的所有椭圆曲线名称：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">openssl ecparam -list_curves
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">openssl ecparam -list_curves
 </code></pre></td></tr></table>
 </div>
 </div><p>生成一个自签名的 ECC 证书的命令示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -321,7 +321,7 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class="se">\
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
 openssl ecparam -genkey -name prime256v1 -out key.pem
 <span class="c1"># 生成证书签名请求，需要输入域名(Common Name, CN)等相关信息</span>
 openssl req -new -sha256 -key key.pem -out csr.csr -config csr.conf
@@ -341,7 +341,7 @@ SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加�
 <p>生成 RSA 密钥对的命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -351,7 +351,7 @@ SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加�
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
 openssl genrsa -out rsa-private-key.pem <span class="m">2048</span>
 
 <span class="c1"># 2. 通过密钥生成公钥，JWT 使用此公钥验证签名</span>
@@ -364,7 +364,7 @@ ssh-keygen -i -mPKCS8 -f rsa-public-key.pem -y &gt; rsa-public.pub
 </div><p>生成 ECC 密钥对的命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -373,7 +373,7 @@ ssh-keygen -i -mPKCS8 -f rsa-public-key.pem -y &gt; rsa-public.pub
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
 openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
 <span class="c1"># 2. 通过密钥生成公钥</span>
 openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
@@ -429,11 +429,11 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 <li>Linux: 使用如下命令安装证书
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo cp ca.crt /usr/local/share/ca-certificates/server.crt
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo cp ca.crt /usr/local/share/ca-certificates/server.crt
 sudo update-ca-certificates
 </code></pre></td></tr></table>
 </div>
@@ -489,7 +489,7 @@ sudo update-ca-certificates
 <p>使用 openssl 生成 TLS 客户端证书（ca 和 csr.conf 可以直接使用前面生成服务端证书用到的，也可以另外生成）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -500,7 +500,7 @@ sudo update-ca-certificates
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
 openssl genrsa -out client.key <span class="m">2048</span>
 <span class="c1"># 2. 通过第一步编写的配置文件，生成证书签名请求</span>
 openssl req -new -key client.key -out client.csr -config csr.conf
@@ -559,7 +559,7 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class="se">\
 <h3 id="1-查询与验证">1. 查询与验证</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -575,7 +575,7 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class="se">\
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看证书(crt)信息</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看证书(crt)信息</span>
 openssl x509 -noout -text -in server.crt
 
 <span class="c1"># 查看证书请求(csr)信息</span>
@@ -596,12 +596,12 @@ openssl verify -CAfile ca.crt server.crt
 另外一类使用广泛的证书，是 PKCS#12、PKCS#8，以及 Windows 上常用的 DER 格式。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pem 格式转 pkcs12，公钥和私钥都放里面</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pem 格式转 pkcs12，公钥和私钥都放里面</span>
 openssl pkcs12 -export -in client.crt -inkey client.key -out client.p12
 <span class="c1"># 按提示输入保护密码</span>
 </code></pre></td></tr></table>
@@ -609,11 +609,11 @@ openssl pkcs12 -export -in client.crt -inkey client.key -out client.p12
 </div><p>或者 p12 转 pem:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">openssl pkcs12 -in xxx.p12 -out xxx.crt -clcerts -nokeys
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">openssl pkcs12 -in xxx.p12 -out xxx.crt -clcerts -nokeys
 openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 </code></pre></td></tr></table>
 </div>
@@ -748,14 +748,14 @@ version of the specification.
 <p>RS256 使用 RSA 算法进行签名，可通过如下命令生成 RSA 密钥：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
 openssl genrsa -out rsa-private-key.pem <span class="m">2048</span>
 
 <span class="c1"># 2. 通过密钥生成公钥</span>
@@ -765,13 +765,13 @@ openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem
 </div><p>ES256 使用 ECDSA 算法进行签名，该算法使用 ECC 密钥，生成命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
 openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
 <span class="c1"># 2. 通过密钥生成公钥</span>
 openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem

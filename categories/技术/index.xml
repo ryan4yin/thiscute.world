@@ -75,7 +75,7 @@
 <p>配置如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -87,7 +87,7 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo modprobe br_netfilter
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo modprobe br_netfilter
 cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
 </span><span class="s">br_netfilter
 </span><span class="s">EOF</span>
@@ -189,7 +189,7 @@ sudo sysctl --system
 <p>首先是环境配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -210,7 +210,7 @@ sudo sysctl --system
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
 </span><span class="s">overlay
 </span><span class="s">br_netfilter
 </span><span class="s">nf_conntrack
@@ -234,7 +234,7 @@ sudo sysctl --system
 </div><p>安装 containerd+nerdctl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -244,7 +244,7 @@ sudo sysctl --system
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">wget https://github.com/containerd/nerdctl/releases/download/v0.11.1/nerdctl-full-0.11.1-linux-amd64.tar.gz
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">wget https://github.com/containerd/nerdctl/releases/download/v0.11.1/nerdctl-full-0.11.1-linux-amd64.tar.gz
 tar -axvf nerdctl-full-0.11.1-linux-amd64.tar.gz
 <span class="c1"># 这里简单起见，rootless 相关的东西也一起装进去了，测试嘛就无所谓了...</span>
 mv bin/* /usr/local/bin/
@@ -259,7 +259,7 @@ systemctl start containerd
 <h2 id="3-安装-kubeletkubeadmkubectl">3. 安装 kubelet/kubeadm/kubectl</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -295,7 +295,7 @@ systemctl start containerd
 </span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一些全局都需要用的变量</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一些全局都需要用的变量</span>
 <span class="nv">CNI_VERSION</span><span class="o">=</span><span class="s2">&#34;v0.8.2&#34;</span>
 <span class="nv">CRICTL_VERSION</span><span class="o">=</span><span class="s2">&#34;v1.17.0&#34;</span>
 <span class="c1"># kubernetes 的版本号</span>
@@ -334,7 +334,7 @@ systemctl status kubelet
 </div><p>试用 crictl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -342,7 +342,7 @@ systemctl status kubelet
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CONTAINER_RUNTIME_ENDPOINT</span><span class="o">=</span><span class="s1">&#39;unix:///var/run/containerd/containerd.sock&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">CONTAINER_RUNTIME_ENDPOINT</span><span class="o">=</span><span class="s1">&#39;unix:///var/run/containerd/containerd.sock&#39;</span>
 <span class="c1"># 列出所有 pods，现在应该啥也没</span>
 crictl  pods
 
@@ -359,7 +359,7 @@ crictl images
 <p>首先使用如下命令生成 kube-vip 的配置文件，以 ARP 为例（生产环境建议换成 BGP）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -381,7 +381,7 @@ crictl images
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee add-kube-vip.sh
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | sudo tee add-kube-vip.sh
 </span><span class="s"># 你的虚拟机网卡，opensuse/centos 等都是 eth0，但是 ubuntu 可能是 ens3
 </span><span class="s">export INTERFACE=eth0
 </span><span class="s">
@@ -409,7 +409,7 @@ bash add-kube-vip.sh
 <p>其实需要运行的就是这条命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -448,7 +448,7 @@ bash add-kube-vip.sh
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 极简配置：</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 极简配置：</span>
 cat <span class="s">&lt;&lt;EOF | sudo tee kubeadm-config.yaml
 </span><span class="s">apiVersion: kubeadm.k8s.io/v1beta3
 </span><span class="s">kind: InitConfiguration
@@ -490,10 +490,10 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </div><p>kubeadm 应该会报错，提示你有些依赖不存在，下面先安装好依赖项。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in -y socat ebtables conntrack-tools
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in -y socat ebtables conntrack-tools
 </code></pre></td></tr></table>
 </div>
 </div><p>再重新运行前面的 kubeadm 命令，应该就能正常执行了，它做的操作有：</p>
@@ -513,13 +513,13 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
 </span><span class="se"></span>  --discovery-token-ca-cert-hash sha256:&lt;hash&gt; <span class="se">\
 </span><span class="se"></span>  --control-plane --certificate-key &lt;key&gt; <span class="se">\
 </span><span class="se"></span>  --ignore-preflight-errors<span class="o">=</span>DirAvailable--etc-kubernetes-manifests
@@ -529,11 +529,11 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 <li>worker 节点加入集群的命令:
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubeadm join 192.168.122.200:6443 --token &lt;token&gt; <span class="se">\
 </span><span class="se"></span>      --discovery-token-ca-cert-hash sha256:&lt;hash&gt; 
 </code></pre></td></tr></table>
 </div>
@@ -542,7 +542,7 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 <p>跑完第一部分 <code>kubeconfig</code> 的处理命令后，就可以使用 kubectl 查看集群状况了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -556,7 +556,7 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get no</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get no</span>
 NAME           STATUS     ROLES                  AGE   VERSION
 k8s-master-0   NotReady   control-plane,master   79s   v1.22.1
 k8s-master-0:~/kubeadm <span class="c1"># kubectl get po --all-namespaces</span>
@@ -574,7 +574,7 @@ kube-system   kube-scheduler-k8s-master-0            1/1     Running   <span cla
 <p>所有节点都加入集群后，通过 kubectl 查看，应该是三个控制面 master，两个 worker：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -583,7 +583,7 @@ kube-system   kube-scheduler-k8s-master-0            1/1     Running   <span cla
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get node</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">k8s-master-0:~/kubeadm <span class="c1"># kubectl get node</span>
 NAME           STATUS     ROLES                  AGE     VERSION
 k8s-master-0   NotReady   control-plane,master   26m     v1.22.1
 k8s-master-1   NotReady   control-plane,master   7m2s    v1.22.1
@@ -596,7 +596,7 @@ k8s-worker-1   NotReady   &lt;none&gt;                 86s     v1.22.1
 <p>现在再看下集群的证书签发状态：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -612,7 +612,7 @@ k8s-worker-1   NotReady   &lt;none&gt;                 86s     v1.22.1
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl get csr --sort-by<span class="o">=</span><span class="s1">&#39;{.spec.username}&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl get csr --sort-by<span class="o">=</span><span class="s1">&#39;{.spec.username}&#39;</span>
 NAME        AGE     SIGNERNAME                                    REQUESTOR                  REQUESTEDDURATION   CONDITION
 csr-95hll   6m58s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
 csr-tklnr   7m5s    kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    &lt;none&gt;              Approved,Issued
@@ -634,11 +634,11 @@ csr-p9g24   6m52s   kubernetes.io/kubelet-serving                 system:node:k8
 <p>目前 kubeadm 不支持自动批准 kubelet 申请的证书，需要我们手动批准一下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 批准 Kubelet 申请的所有证书</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 批准 Kubelet 申请的所有证书</span>
 kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf csr-xl8dg csr-p9g24
 </code></pre></td></tr></table>
 </div>
@@ -655,7 +655,7 @@ kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf cs
 <p>可以通过如下命令列出所有需要用到的镜像地址：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -665,7 +665,7 @@ kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf cs
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubeadm config images list --kubernetes-version v1.22.1
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubeadm config images list --kubernetes-version v1.22.1
 k8s.gcr.io/kube-apiserver:v1.22.1
 k8s.gcr.io/kube-controller-manager:v1.22.1
 k8s.gcr.io/kube-scheduler:v1.22.1
@@ -712,14 +712,14 @@ k8s.gcr.io/coredns/coredns:v1.8.4
 <p>需要提前在本机安装好 helm，我这里使用宿主机，因此只需要在宿主机安装:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一行命令安装，也可以自己手动下载安装包，都行</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 一行命令安装，也可以自己手动下载安装包，都行</span>
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="p">|</span> bash
 
 <span class="c1"># 或者 opensuse 直接用包管理器安装</span>
@@ -735,13 +735,13 @@ sudo zypper in helm
 <p>这里我们还是先使用 kube-proxy 模式，先熟悉下 cilium 的使用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add cilium https://helm.cilium.io/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add cilium https://helm.cilium.io/
 helm search repo cilium/cilium -l <span class="p">|</span> head
 
 helm install cilium cilium/cilium --version 1.10.4 --namespace kube-system
@@ -751,13 +751,13 @@ helm install cilium cilium/cilium --version 1.10.4 --namespace kube-system
 <p>cilium 也提供了专用的客户端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
 sha256sum --check cilium-linux-amd64.tar.gz.sha256sum
 sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
 rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}</span>
@@ -766,7 +766,7 @@ rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}
 </div><p>然后使用 cilium 客户端检查网络插件的状态：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -783,7 +783,7 @@ rm cilium-linux-amd64.tar.gz<span class="o">{</span>,.sha256sum<span class="o">}
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"> $ cilium status --wait
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"> $ cilium status --wait
     /¯¯<span class="se">\
 </span><span class="se"></span> /¯¯<span class="se">\_</span>_/¯¯<span class="se">\ </span>   Cilium:         OK
  <span class="se">\_</span>_/¯¯<span class="se">\_</span>_/    Operator:       OK
@@ -803,7 +803,7 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 </div><p>cilium 还提供了命令，自动创建 pod 进行集群网络的连接性测试：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -823,7 +823,7 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ cilium connectivity <span class="nb">test</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ cilium connectivity <span class="nb">test</span>
 ℹ️  Monitor aggregation detected, will skip some flow validation steps
 ✨ <span class="o">[</span>kubernetes<span class="o">]</span> Creating namespace <span class="k">for</span> connectivity check...
 ✨ <span class="o">[</span>kubernetes<span class="o">]</span> Deploying echo-same-node service...
@@ -847,10 +847,10 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>整个测试流程大概会持续 5 分多钟，测试完成后，相关 Pod 不会自动删除，使用如下命令手动删除：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete namespace cilium-test
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl delete namespace cilium-test
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="72-安装-calico">7.2 安装 Calico</h3>
@@ -863,10 +863,10 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>官方的 dashboard 个人感觉不太好用，建议直接在本地装个 k9s 用，特别爽。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in k9s
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo zypper in k9s
 </code></pre></td></tr></table>
 </div>
 </div><p>然后就可以愉快地玩耍了。</p>
@@ -878,11 +878,11 @@ Image versions    cilium             quay.io/cilium/cilium:v1.10.4@sha256:7d3540
 <p>首先，跑 kubectl 的监控命令应该会报错：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
 error: Metrics API not available
 </code></pre></td></tr></table>
 </div>
@@ -890,13 +890,13 @@ error: Metrics API not available
 <p>现在通过 helm 安装它：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm search repo metrics-server/metrics-server -l <span class="p">|</span> head
 
 helm upgrade --install metrics-server metrics-server/metrics-server --version 3.5.0 --namespace kube-system
@@ -908,7 +908,7 @@ helm upgrade --install metrics-server metrics-server/metrics-server --version 3.
 <p>等 metrics-server 启动好后，就可以使用 <code>kubectl top</code> 命令啦：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -953,7 +953,7 @@ helm upgrade --install metrics-server metrics-server/metrics-server --version 3.
 </span><span class="lnt">43
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ kubectl top node
 NAME           CPU<span class="o">(</span>cores<span class="o">)</span>   CPU%   MEMORY<span class="o">(</span>bytes<span class="o">)</span>   MEMORY%   
 k8s-master-0   327m         16%    1465Mi          50%       
 k8s-master-1   263m         13%    1279Mi          44%       
@@ -1009,21 +1009,21 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <ul>
 <li>local 数据卷，适合数据可丢失，且不要求分布式的场景，如开发测试环境
 <ul>
-<li><a href="https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner">https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner</a></li>
-<li><a href="https://github.com/rancher/local-path-provisioner">https://github.com/rancher/local-path-provisioner</a></li>
+<li><a href="https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner</a></li>
+<li><a href="https://github.com/rancher/local-path-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/rancher/local-path-provisioner</a></li>
 </ul>
 </li>
 <li>NFS 数据卷，适合数据可丢失，对性能要求不高，并且要求分布式的场景。比如开发测试环境、或者线上没啥压力的应用
 <ul>
-<li><a href="https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner">https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner</a></li>
-<li><a href="https://github.com/kubernetes-csi/csi-driver-nfs">https://github.com/kubernetes-csi/csi-driver-nfs</a></li>
+<li><a href="https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner</a></li>
+<li><a href="https://github.com/kubernetes-csi/csi-driver-nfs" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-csi/csi-driver-nfs</a></li>
 <li>NFS 数据的可靠性依赖于外部 NFS 服务器，企业通常使用群晖等 NAS 来做 NFS 服务器</li>
 <li>如果外部 NFS 服务器出问题，应用就会崩。</li>
 </ul>
 </li>
 <li>直接使用云上的对象存储，适合希望数据不丢失、对性能要求不高的场景。
 <ul>
-<li>直接使用 <a href="https://github.com/rclone/rclone">https://github.com/rclone/rclone</a> mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。</li>
+<li>直接使用 <a href="https://github.com/rclone/rclone" target="_blank" rel="noopener noreferrer">https://github.com/rclone/rclone</a> mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。</li>
 </ul>
 </li>
 </ul>
@@ -1052,7 +1052,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>下面先给出一个 Deployment + HPA + PodDisruptionBudget 的 demo，后面再拆开详细说下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -1235,7 +1235,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">181
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -1451,7 +1451,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>一个简单的示例如下，它使 Pod 被终止时，总是先等待 15s，再发送 SIGTERM 信号给容器：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1462,7 +1462,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1476,7 +1476,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </div><p>更好的解决办法，是直接等待所有 tcp 连接都关闭（需要镜像中有 netstat）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1488,7 +1488,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1524,7 +1524,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>和主容器一样，Envoy 也能直接加 <code>preStop</code>，修改 <code>istio-sidecar-injector</code> 这个 <code>configmap</code>，在 sidecar 里添加 preStop sleep 命令:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1536,7 +1536,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">istio-proxy</span><span class="w">
 </span><span class="w">      </span><span class="c"># 添加下面这部分</span><span class="w">
 </span><span class="w">      </span><span class="nt">lifecycle</span><span class="p">:</span><span class="w">
@@ -1558,7 +1558,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>先回顾下前面给出的，基于 Pod CPU 使用率进行伸缩的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1581,7 +1581,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2 </span><span class="w"> </span><span class="c"># k8s 1.23+ 此 API 已经 GA</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2 </span><span class="w"> </span><span class="c"># k8s 1.23+ 此 API 已经 GA</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
@@ -1609,10 +1609,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其计算公式为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">「Pod 的 CPU 使用率」= 100% * 「所有 Container 的 CPU 用量之和」/「所有 Container 的 CPU requests 之和」
 </code></pre></td></tr></table>
 </div>
 </div><p>注意分母是总的 requests 量，而不是 limits.</p>
@@ -1646,10 +1646,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>HPA 的扩缩容算法为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">期望副本数 = ceil[当前副本数 * ( 当前指标 / 目标指标 )]
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">期望副本数 = ceil[当前副本数 * ( 当前指标 / 目标指标 )]
 </code></pre></td></tr></table>
 </div>
 </div><p>从上面的参数可以看到：</p>
@@ -1747,7 +1747,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1791,7 +1791,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
 </span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">autoscaling/v2beta2</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">HorizontalPodAutoscaler</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
@@ -1842,10 +1842,10 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <p>因此如果使用了 v2beta2 的 HPA，一定要明确指定使用 <code>v2beta2</code> 版本的 HPA：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get hpa.v2beta2.autoscaling
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl get hpa.v2beta2.autoscaling
 </code></pre></td></tr></table>
 </div>
 </div><p>否则不小心动到 <code>annotations</code> 中编码的某些参数，可能会产生意料之外的效果，甚至直接把控制面搞崩&hellip;
@@ -1862,7 +1862,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 <p>PDB 是一个单独的 CR 自定义资源，示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1875,7 +1875,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1beta1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">policy/v1beta1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">PodDisruptionBudget</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">podinfo-pdb</span><span class="w">
@@ -1891,7 +1891,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </div><p>如果在进行节点维护时(kubectl drain)，Pod 不满足 PDB，drain 将会失败，示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1907,7 +1907,7 @@ kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。<
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">&gt; kubectl drain node-205 --ignore-daemonsets --delete-local-data
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">&gt; kubectl drain node-205 --ignore-daemonsets --delete-local-data
 node/node-205 cordoned
 WARNING: ignoring DaemonSet-managed Pods: kube-system/calico-node-nfhj7, kube-system/kube-proxy-94dz5
 evicting pod default/podinfo-7c84d8c94d-h9brq
@@ -1972,7 +1972,7 @@ node/node-205 evicted
 那 <code>nodeSelector</code> 就满足不了你的需求了，你需要使用 <code>nodeAffinity</code>，示例如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2028,7 +2028,7 @@ node/node-205 evicted
 </span><span class="lnt">54
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -2088,7 +2088,7 @@ node/node-205 evicted
 <p>通常建议为每个 Deployment 的 template 配置 Pod 反亲和性，把 Pods 打散在所有节点上：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2132,7 +2132,7 @@ node/node-205 evicted
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -2214,7 +2214,7 @@ node/node-205 evicted
 <p>上述三类探测器的参数都是通用的，五个时间相关的参数列举如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2222,7 +2222,7 @@ node/node-205 evicted
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 下面的值就是 k8s 的默认值</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 下面的值就是 k8s 的默认值</span><span class="w">
 </span><span class="w"></span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="c"># 默认没有 delay 时间</span><span class="w">
 </span><span class="w"></span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
 </span><span class="w"></span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
@@ -2233,7 +2233,7 @@ node/node-205 evicted
 </div><p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2274,7 +2274,7 @@ node/node-205 evicted
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -2318,7 +2318,7 @@ node/node-205 evicted
 </div><p>在 Kubernetes 1.18 之前，通用的手段是为「就绪探针」添加较长的 <code>initialDelaySeconds</code> 来实现类似「启动探针」的功能动，避免容器因为启动太慢，存活探针失败导致容器被重启。示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2353,7 +2353,7 @@ node/node-205 evicted
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my-app-v3</span><span class="w">
@@ -2432,7 +2432,7 @@ node/node-205 evicted
 <p>一个无状态的微服务 Pod 配置举例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2461,7 +2461,7 @@ node/node-205 evicted
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;Pod name&gt;</span><span class="w">
@@ -2792,7 +2792,7 @@ node/node-205 evicted
 <p>2021 年初朋友与我给自己的期许是「拆破玉笼飞彩凤，顿开金锁走蛟龙」，感觉确实应验了。</p>
 <p>今年我希望不论是在生活上还是在工作上，都能「更上层楼」~</p>
 <blockquote>
-<p>更多有趣的、有深度的 2021 年度总结：<a href="https://github.com/saveweb/review-2021">https://github.com/saveweb/review-2021</a></p>
+<p>更多有趣的、有深度的 2021 年度总结：<a href="https://github.com/saveweb/review-2021" target="_blank" rel="noopener noreferrer">https://github.com/saveweb/review-2021</a></p>
 </blockquote>
 ]]></description></item><item><title>iptables 及 docker 容器网络分析</title><link>https://ryan4yin.space/posts/iptables-and-container-networks/</link><pubDate>Sun, 15 Aug 2021 19:11:29 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://ryan4yin.space/posts/iptables-and-container-networks/</guid><description><![CDATA[<blockquote>
 <p>本文仅针对 ipv4 网络</p>
@@ -2857,17 +2857,17 @@ node/node-205 evicted
 <p>命令格式：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>其中 table 默认为 <code>filter</code> 表，其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。</p>
 <p>以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2901,7 +2901,7 @@ node/node-205 evicted
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --add 允许 80 端口通过</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># --add 允许 80 端口通过</span>
 iptables -A INPUT -p tcp --dport <span class="m">80</span> -j ACCEPT
 
 <span class="c1"># --list-rules 查看所有规则</span>
@@ -2952,7 +2952,7 @@ iptables -F INPUT
 <p>首先，这是我在「Linux 的虚拟网络接口」文中给出过的 docker0 网络架构图:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2981,7 +2981,7 @@ iptables -F INPUT
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
 |                      Host                     |           Container A             |           Container B             |
 |                                               |                                   |                                   |
 |   +---------------------------------------+   |    +-------------------------+    |    +-------------------------+    |
@@ -3013,13 +3013,13 @@ iptables -F INPUT
 </div><p>docker 会在 iptables 中为 docker0 网桥添加如下规则：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">-t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">-t nat -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
 
 -t filter -P DROP
 -t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
@@ -3051,12 +3051,12 @@ iptables -F INPUT
 <p>现在我们来实际测试一下，看看是不是这么回事：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 tcpdump 分别在出口网卡 wlp4s0 （相当于 eth0）和 dcoker0 网桥上抓包，后面会用来分析</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 tcpdump 分别在出口网卡 wlp4s0 （相当于 eth0）和 dcoker0 网桥上抓包，后面会用来分析</span>
 ❯ sudo tcpdump -i wlp4s0 -n &gt; wlp4s0.dump   <span class="c1"># 窗口一，抓 wlp4s0 的包</span>
 ❯ sudo tcpdump -i docker0 -n &gt; docker0.dump  <span class="c1"># 窗口二，抓 docker0 的包</span>
 </code></pre></td></tr></table>
@@ -3064,16 +3064,16 @@ iptables -F INPUT
 </div><p>现在新建窗口三，启动一个容器，通过 curl 命令低速下载一个视频文件：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">❯ docker run --rm --name curl -it curlimages/curl &#34;https://media.w3.org/2010/05/sintel/trailer.mp4&#34; -o /tmp/video.mp4 --limit-rate 100k
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">❯ docker run --rm --name curl -it curlimages/curl &#34;https://media.w3.org/2010/05/sintel/trailer.mp4&#34; -o /tmp/video.mp4 --limit-rate 100k
 </code></pre></td></tr></table>
 </div>
 </div><p>然后新建窗口四，在宿主机查看 conntrack 状态</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -3081,7 +3081,7 @@ iptables -F INPUT
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ sudo zypper in conntrack-tools  <span class="c1"># 这个记得先提前安装好</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ sudo zypper in conntrack-tools  <span class="c1"># 这个记得先提前安装好</span>
 ❯ sudo conntrack -L <span class="p">|</span> grep 172.17
 <span class="c1"># curl 通过 NAT 网络发起了一个 dns 查询请求，DNS 服务器是网关上的 192.168.31.1</span>
 udp      <span class="m">17</span> <span class="m">22</span> <span class="nv">src</span><span class="o">=</span>172.17.0.4 <span class="nv">dst</span><span class="o">=</span>192.168.31.1 <span class="nv">sport</span><span class="o">=</span><span class="m">59423</span> <span class="nv">dport</span><span class="o">=</span><span class="m">53</span> <span class="nv">src</span><span class="o">=</span>192.168.31.1 <span class="nv">dst</span><span class="o">=</span>192.168.31.228 <span class="nv">sport</span><span class="o">=</span><span class="m">53</span> <span class="nv">dport</span><span class="o">=</span><span class="m">59423</span> <span class="o">[</span>ASSURED<span class="o">]</span> <span class="nv">mark</span><span class="o">=</span><span class="m">0</span> <span class="nv">use</span><span class="o">=</span><span class="m">1</span>
@@ -3092,7 +3092,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </div><p>等 curl 命令跑个十来秒，然后关闭所有窗口及应用程序，接下来进行数据分析：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3132,7 +3132,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </span><span class="lnt">38
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 前面查到的，本地发起请求的端口是 54636，下面以此为过滤条件查询数据</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 前面查到的，本地发起请求的端口是 54636，下面以此为过滤条件查询数据</span>
 
 <span class="c1"># 首先查询 wlp4s0/eth0 进来的数据，可以看到本机的 dst_ip 为 192.168.31.228.54636</span>
 ❯ cat wlp4s0.dump <span class="p">|</span> grep <span class="m">54636</span> <span class="p">|</span> head -n <span class="m">15</span>
@@ -3191,7 +3191,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 <p>首先，使用 <code>docker run</code> 运行几个容器，检查下网络状况：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3267,7 +3267,7 @@ tcp      <span class="m">6</span> <span class="m">298</span> ESTABLISHED <span c
 </span><span class="lnt">74
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 运行一个 debian 容器和一个 nginx</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 运行一个 debian 容器和一个 nginx</span>
 ❯ docker run -dit --name debian --rm debian:buster sleep <span class="m">1000000</span>
 ❯ docker run -dit --name nginx --rm nginx:1.19-alpine 
 
@@ -3347,7 +3347,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 <p><code>docker-compose.yml</code> 内容：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3365,7 +3365,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.3&#34;</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.3&#34;</span><span class="w">
 </span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">caddy</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;caddy:2.2.1-alpine&#34;</span><span class="w">
@@ -3386,7 +3386,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </div><p>现在先用上面的配置启动 caddy 容器，然后再查看网络状况：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -3489,7 +3489,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">101
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动 caddy</span>
 ❯ docker-compose up -d
 <span class="c1"># 查下 caddy 容器的 ip</span>
 &gt; docker inspect caddy <span class="p">|</span> grep IPAddress
@@ -3604,7 +3604,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 <p>下面详细分析下 Docker 的 macvlan 网络（Podman 应该也完全类似）。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3639,7 +3639,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric <span class="m">600</span>
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
 <span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 $ docker network create -d macvlan <span class="se">\
@@ -3677,7 +3677,7 @@ root@4319488cb5e7:/# curl baidu.com
 </div><p>Docker 支持的另一种网络模式是 ipvlan（ipvlan 和 macvlan 的区别我在前一篇文章中已经介绍过，不再赘言），创建命令和 macvlan 几乎一样：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3714,7 +3714,7 @@ root@4319488cb5e7:/# curl baidu.com
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 首先创建一个 macvlan 网络</span>
 <span class="c1"># subnet/gateway 的参数需要和物理网络一致</span>
 <span class="c1"># 通过 -o parent 设定父接口，我本机的以太网口名称为 eno1</span>
 <span class="c1"># ipvlan_mode 默认为 l2，表示工作在数据链路层。</span>
@@ -3760,11 +3760,11 @@ root@d0764ebbbf42:/# curl baidu.com
 这显然是因为 rootless 模式下 containerd 改不了宿主机的 iptables 配置和虚拟网络接口。但是可以查看到宿主机 slirp4netns 在后台运行：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ ps aux <span class="p">|</span> grep tap
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ ps aux <span class="p">|</span> grep tap
 ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <span class="m">3312</span> ?        S    00:01   0:02 slirp4netns --mtu <span class="m">65520</span> -r <span class="m">3</span> --disable-host-loopback --enable-sandbox --enable-seccomp <span class="m">11625</span> tap0
 </code></pre></td></tr></table>
 </div>
@@ -3778,7 +3778,7 @@ ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <
 <p>我在 opensuse tumbleweed 上实测，firewalld 添加的是 nftables 配置，而 docker 仍然在用旧的 iptables，也就是说我现在的机器上有两套 netfilter 工具并存：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3812,7 +3812,7 @@ ryan     <span class="m">11644</span>  0.0  0.0   <span class="m">5288</span>  <
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 查看 iptables 数据
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 查看 iptables 数据
 &gt; iptables -S
 -P INPUT ACCEPT
 -P FORWARD DROP
@@ -3869,7 +3869,7 @@ table ip6 firewalld {
 Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设备接口 <code>/dev/net/tun</code> 供用户层程序读写，用户层程序通过 <code>/dev/net/tun</code> 读写主机内核协议栈的数据。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3882,7 +3882,7 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt; modinfo tun
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&gt; modinfo tun
 filename:       /lib/modules/5.13.6-1-default/kernel/drivers/net/tun.ko.xz
 alias:          devname:net/tun
 alias:          char-major-10-200
@@ -3898,7 +3898,7 @@ description:    Universal TUN/TAP device driver
 </div><p>一个 TUN 设备的示例图如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -3930,7 +3930,7 @@ description:    Universal TUN/TAP device driver
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">             
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">             
 +----------------------------------------------------------------------+
 |                                                                      |
 |  +--------------------+      +--------------------+                  |
@@ -3972,7 +3972,7 @@ description:    Universal TUN/TAP device driver
 <p>一个简单的 C 程序示例如下，它每次收到数据后，都只单纯地打印一下收到的字节数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4042,7 +4042,7 @@ description:    Universal TUN/TAP device driver
 </span><span class="lnt">68
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;linux/if.h&gt;</span><span class="cp">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;linux/if.h&gt;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&lt;linux/if_tun.h&gt;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;sys/ioctl.h&gt;</span><span class="cp">
@@ -4116,7 +4116,7 @@ description:    Universal TUN/TAP device driver
 <p>首先通过编译运行上述 c 程序，程序会阻塞住，等待数据到达：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -4124,7 +4124,7 @@ description:    Universal TUN/TAP device driver
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 编译，请忽略部分 warning
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 编译，请忽略部分 warning
 &gt; gcc mytun.c -o mytun
 
 # 创建并监听 tun 设备需要 root 权限
@@ -4135,7 +4135,7 @@ Open tun/tap device: tun0 for reading...
 </div><p>现在使用 iproute2 查看下链路层设备：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4172,7 +4172,7 @@ Open tun/tap device: tun0 for reading...
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 能发现最后面有列出名为 tun0 的接口，但是状态为 down
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 能发现最后面有列出名为 tun0 的接口，但是状态为 down
 ❯ ip addr ls
 ......
 3: wlp4s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
@@ -4212,7 +4212,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 </div><p>现在再启动第三个窗口发点数据给 tun0，持续观察前面 <code>tcpdump</code> 和 <code>mytun</code> 的日志:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4233,7 +4233,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 直接 ping tun0 的地址，貌似有问题，数据没进 mytun 程序，而且还有响应
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 直接 ping tun0 的地址，貌似有问题，数据没进 mytun 程序，而且还有响应
 ❯ ping -c 4 172.21.22.23
 PING 172.21.22.23 (172.21.22.23) 56(84) bytes of data.
 64 bytes from 172.21.22.23: icmp_seq=1 ttl=64 time=0.167 ms
@@ -4257,13 +4257,13 @@ PING 172.21.22.26 (172.21.22.26) 56(84) bytes of data.
 </div><p>下面给出 mytun 的输出：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">Read 84 bytes from tun/tap device
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Read 84 bytes from tun/tap device
 Read 84 bytes from tun/tap device
 Read 84 bytes from tun/tap device
 Read 84 bytes from tun/tap device
@@ -4272,7 +4272,7 @@ Read 84 bytes from tun/tap device
 </div><p>以及 tcpdump 的输出：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -4282,7 +4282,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">00:22:03.622684 IP (tos 0x0, ttl 64, id 37341, offset 0, flags [DF], proto ICMP (1), length 84)
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">00:22:03.622684 IP (tos 0x0, ttl 64, id 37341, offset 0, flags [DF], proto ICMP (1), length 84)
     172.21.22.23 &gt; 172.21.22.26: ICMP echo request, id 11, seq 1, length 64
 00:22:04.633394 IP (tos 0x0, ttl 64, id 37522, offset 0, flags [DF], proto ICMP (1), length 84)
     172.21.22.23 &gt; 172.21.22.26: ICMP echo request, id 11, seq 2, length 64
@@ -4333,7 +4333,7 @@ Read 84 bytes from tun/tap device
 <p>整个流程跑完，数据包都不需要经过宿主机的协议栈，效率高。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4362,7 +4362,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">+------------------------------------------------+-----------------------------------+-----------------------------------+
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+------------------------------------------------+-----------------------------------+-----------------------------------+
 |                       Host                     |           VirtualMachine1         |           VirtualMachine2         |
 |                                                |                                   |                                   |
 |    +--------------------------------------+    |    +-------------------------+    |    +-------------------------+    |
@@ -4401,7 +4401,7 @@ Read 84 bytes from tun/tap device
 <p>示意图如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4430,7 +4430,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+-----------------------------------------------+-----------------------------------+-----------------------------------+
 |                      Host                     |           Container 1             |           Container 2             |
 |                                               |                                   |                                   |
 |   +---------------------------------------+   |    +-------------------------+    |    +-------------------------+    |
@@ -4463,7 +4463,7 @@ Read 84 bytes from tun/tap device
 <p>可以在容器中通过 iproute2 查看到， eth0 的接口类型为 <code>veth</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4476,7 +4476,7 @@ Read 84 bytes from tun/tap device
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ docker run -it --rm debian:buster bash
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ docker run -it --rm debian:buster bash
 root@5facbe4ddc1e:/# ip --details addr ls
 1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity <span class="m">0</span> minmtu <span class="m">0</span> maxmtu <span class="m">0</span> numtxqueues <span class="m">1</span> numrxqueues <span class="m">1</span> gso_max_size <span class="m">65536</span> gso_max_segs <span class="m">65535</span> 
@@ -4492,12 +4492,12 @@ root@5facbe4ddc1e:/# ip --details addr ls
 </div><p>同时在宿主机中能看到对应的 veth 设备是绑定到了 docker0 网桥的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">❯ sudo brctl show
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">❯ sudo brctl show
 bridge name     bridge id               STP enabled     interfaces
 docker0         8000.0242fce99ef5       no              vethea4171a
 </code></pre></td></tr></table>
@@ -4578,7 +4578,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 <p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个<strong>点对点的 VXLAN 隧道</strong>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4609,7 +4609,7 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在主机 A 上创建 VTEP 设备 vxlan0</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在主机 A 上创建 VTEP 设备 vxlan0</span>
 <span class="c1"># 与另一个 vtep 接口 B（192.168.8.101）建立隧道</span>
 <span class="c1"># 将 vxlan0 自身的 IP 地址设为 192.168.8.100</span>
 <span class="c1"># 使用的 VXLAN 目标端口为 4789(IANA 标准)</span>
@@ -4645,7 +4645,7 @@ ping 10.20.1.2
 示例命令如下（这里略过了如何设置组播地址 <code>239.1.1.1</code> 的信息）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -4654,7 +4654,7 @@ ping 10.20.1.2
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ip link add vxlan0 <span class="nb">type</span> vxlan <span class="se">\
 </span><span class="se"></span>    id <span class="m">42</span> <span class="se">\
 </span><span class="se"></span>    dstport <span class="m">4789</span> <span class="se">\
 </span><span class="se"></span>    group 239.1.1.1 <span class="se">\
@@ -4672,7 +4672,7 @@ ip link <span class="nb">set</span> vxlan0 up
 <p>使用 ip 命令创建网桥、网络名字空间、veth pairs 组成上图中的容器网络：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4695,7 +4695,7 @@ ip link <span class="nb">set</span> vxlan0 up
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 br0 并将 vxlan0 绑定上去</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 br0 并将 vxlan0 绑定上去</span>
 ip link add br0 <span class="nb">type</span> bridge
 ip link <span class="nb">set</span> vxlan0 master bridge
 ip link <span class="nb">set</span> vxlan0 up
@@ -4731,7 +4731,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 <p>使用 ethtool 检查：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4746,7 +4746,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># docker 容器的 veth 接口速率
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># docker 容器的 veth 接口速率
 &gt; ethtool vethe899841 | grep Speed
         Speed: 10000Mb/s
 
@@ -4765,7 +4765,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 <p>接下来实际测试一下，先给出机器参数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4787,7 +4787,7 @@ ip netns <span class="nb">exec</span> container1 ip link <span class="nb">set</s
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">❯ cat /etc/os-release 
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">❯ cat /etc/os-release 
 NAME=&#34;openSUSE Tumbleweed&#34;
 # VERSION=&#34;20210810&#34;
 ...
@@ -4812,7 +4812,7 @@ Swap:           2048           0        2048
 </div><p>使用 iperf3 测试：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -4877,7 +4877,7 @@ Swap:           2048           0        2048
 </span><span class="lnt">63
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动服务端</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 启动服务端</span>
 iperf3 -s
 
 -------------
@@ -4945,7 +4945,7 @@ Connecting to host 192.168.31.228, port <span class="m">5201</span>
 </div><p>把 iperf3-server 跑在容器里再测一遍：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5033,7 +5033,7 @@ Connecting to host 192.168.31.228, port <span class="m">5201</span>
 </span><span class="lnt">86
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在容器中启动 iperf3-server，并映射到宿主机端口 6201</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 在容器中启动 iperf3-server，并映射到宿主机端口 6201</span>
 &gt; docker run  -it --rm --name<span class="o">=</span>iperf3-server -p 6201:5201 networkstatic/iperf3 -s
 &gt; docker inspect --format <span class="s2">&#34;{{ .NetworkSettings.IPAddress }}&#34;</span> iperf3-server
 172.17.0.2
@@ -5147,10 +5147,10 @@ Connecting to host 192.168.31.228, port <span class="m">6201</span>
 <p>socat 的基本命令格式：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat <span class="o">[</span>参数<span class="o">]</span> 地址1 地址2
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat <span class="o">[</span>参数<span class="o">]</span> 地址1 地址2
 </code></pre></td></tr></table>
 </div>
 </div><p>给 socat 提供两个地址，socat 干的活就是把两个地址的流对接起来。左边地址的输出传给右边，同时又把右边地址的输出传给左边，也就是一个<strong>双向的数据管道</strong>。</p>
@@ -5162,7 +5162,7 @@ Connecting to host 192.168.31.228, port <span class="m">6201</span>
 <p>各发行版都自带 netcat，包名通常为 <code>nc-openbsd</code>，因此这里只介绍 socat 的安装方法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -5172,7 +5172,7 @@ Connecting to host 192.168.31.228, port <span class="m">6201</span>
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Debian/Ubuntu</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># Debian/Ubuntu</span>
 sudo apt install socat
 
 <span class="c1"># CentOS/RedHat</span>
@@ -5193,7 +5193,7 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 <p>使用 socat/netcat 检测远程端口的可连接性：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5206,7 +5206,7 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -d[ddd] 增加日志详细程度，-dd  Prints fatal, error, warning, and notice messages.</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -d[ddd] 增加日志详细程度，-dd  Prints fatal, error, warning, and notice messages.</span>
 socat -dd - TCP:192.168.1.252:3306
 
 <span class="c1"># -v 显示详细信息</span>
@@ -5223,7 +5223,7 @@ nc -vv -w2 -z 192.168.1.2 20-500
 <p>在本机监听一个 TCP 端口，接收到的内容传到 stdout，同时将 stdin 的输入传给客户端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -5233,7 +5233,7 @@ nc -vv -w2 -z 192.168.1.2 20-500
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令，socat/nc 二选一</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端启动命令，socat/nc 二选一</span>
 socat TCP-LISTEN:7000 -
 <span class="c1"># -l --listening</span>
 nc -l <span class="m">7000</span>
@@ -5246,7 +5246,7 @@ nc 192.168.11.123 <span class="m">7000</span>
 </div><p>UDP 协议的测试也非常类似，使用 netcat 的示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -5255,7 +5255,7 @@ nc 192.168.11.123 <span class="m">7000</span>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端，只监听 ipv4</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 服务端，只监听 ipv4</span>
 nc -u -l <span class="m">8080</span>
 
 <span class="c1"># 客户端</span>
@@ -5267,12 +5267,12 @@ nc -u localhost <span class="m">8080</span>
 </div><p>使用 socat 的 UDP 测试示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat UDP-LISTEN:7000 -
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat UDP-LISTEN:7000 -
 
 socat UDP:192.168.31.123:7000 -
 </code></pre></td></tr></table>
@@ -5287,7 +5287,7 @@ socat UDP:192.168.31.123:7000 -
 <p>模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5300,7 +5300,7 @@ socat UDP:192.168.31.123:7000 -
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下</span>
 cat server.key server.crt &gt; server.pem
 cat client.key client.crt &gt; client.pem
 
@@ -5316,7 +5316,7 @@ curl -v --cacert ca.crt --cert client.crt --key client.key --tls-max 1.2 https:/
 </div><p>上面的命令使用了 mTLS 双向认证的协议，可通过设定 <code>verify=0</code> 来关掉客户端认证，示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5329,7 +5329,7 @@ curl -v --cacert ca.crt --cert client.crt --key client.key --tls-max 1.2 https:/
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">
 <span class="c1"># socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下</span>
 cat server.key server.crt &gt; server.pem
 
@@ -5348,12 +5348,12 @@ curl -v --cacert server.crt https://192.168.31.123:4433
 首先在数据发送方 A 执行如下命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）</span>
 <span class="c1"># -U 和 -u 相反，数据只从右边单向传输给左边</span>
 socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
 </code></pre></td></tr></table>
@@ -5361,12 +5361,12 @@ socat -u open:demo.tar.gz tcp-listen:2000,reuseaddr
 </div><p>然后在数据接收方 B 执行如下命令，就能把文件接收到：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat -u tcp:192.168.1.252:2000 open:demo.tar.gz,create
 <span class="c1"># 如果觉得太繁琐，也可以直接通过 stdout 重定向</span>
 socat -u tcp:192.168.1.252:2000 - &gt; demo.tar.gz
 </code></pre></td></tr></table>
@@ -5374,13 +5374,13 @@ socat -u tcp:192.168.1.252:2000 - &gt; demo.tar.gz
 </div><p>使用 netcat 也可以实现数据传输：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 先在接收方启动服务端</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 先在接收方启动服务端</span>
 nc -l -p <span class="m">8080</span> &gt; demo.tar.gz
 <span class="c1"># 再在发送方启动客户端发送数据</span>
 nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
@@ -5391,19 +5391,19 @@ nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
 <p>下面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问 <code>http://&lt;ip&gt;:8080</code> 来查看效果。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:<span class="s2">&#34;python3 web.py&#34;</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>假设 <code>web.py</code> 的内容为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="s2">&#34;hello world&#34;</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;hello world&#34;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>那 <code>curl localhost:8080</code> 就应该会输出 <code>hello world</code></p>
@@ -5411,20 +5411,20 @@ nc 192.168.1.2 <span class="m">8080</span> &lt; demo.tar.gz
 <p>监听 8080 端口，建立该端口与 <code>baidu.com:80</code> 之间的双向管道:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr  TCP:baidu.com:80
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">socat TCP-LISTEN:8080,fork,reuseaddr  TCP:baidu.com:80
 </code></pre></td></tr></table>
 </div>
 </div><p>拿 curl 命令测试一下，应该能正常访问到百度：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 注意指定 Host</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 注意指定 Host</span>
 curl -v -H <span class="s1">&#39;Host: baidu.com&#39;</span> localhost:8080
 </code></pre></td></tr></table>
 </div>
@@ -5542,16 +5542,16 @@ curl -v -H <span class="s1">&#39;Host: baidu.com&#39;</span> localhost:8080
 <p>安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
 </code></pre></td></tr></table>
 </div>
 </div><p>部署 MinIO:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -5562,7 +5562,7 @@ curl -v -H <span class="s1">&#39;Host: baidu.com&#39;</span> localhost:8080
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
 <span class="c1"># 查看历史版本</span>
 helm search repo minio/minio -l <span class="p">|</span> head
 <span class="c1"># 下载并解压 chart</span>
@@ -5578,7 +5578,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>在 configmap <code>workflow-controller-configmap</code> 的 data 中添加如下字段：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5594,7 +5594,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
     <span class="c1"># 是否将 main 容器的日志保存为 artifact，这样 pod 被删除后，仍然可以在 artifact 中找到日志</span>
     archiveLogs: <span class="nb">true</span>
     s3:
@@ -5619,16 +5619,16 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>方法一，直接给 default 绑定 <code>cluster-admin</code> ClusterRole，给它集群管理员的权限，只要一行命令（但是显然安全性堪忧）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
 </div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo/workflow-rbac/" target="_blank" rel="noopener noreferrer">Argo Workflows 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5653,7 +5653,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">argo-workflow-role</span><span class="w">
@@ -5681,10 +5681,10 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div><p>创建好上面这个最小的 ClusterRole，然后为每个名字空间，跑一下如下命令，给 default 账号绑定这个 clusterrole:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
 </div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
@@ -5703,7 +5703,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>我们建议将 workflow executore 改为 <code>pns</code>，兼顾安全性与性能，<code>workflow-controller-configmap</code> 按照如下方式修改：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5717,7 +5717,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
@@ -5751,7 +5751,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -5761,7 +5761,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">WorkflowTemplate</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
@@ -5788,7 +5788,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreferrer">kyverno</a> 进行 secrets 同步的配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5812,7 +5812,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterPolicy</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sync-secrets</span><span class="w">
@@ -5846,7 +5846,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -5869,7 +5869,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
@@ -5894,7 +5894,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><h3 id="6-argo-的其他进阶配置">6. Argo 的其他进阶配置</h3>
 <p>Argo Workflows 的配置，都保存在 <code>workflow-controller-configmap</code> 这个 configmap 中，我们前面已经接触到了它的部分内容。</p>
-<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
+<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml" target="_blank" rel="noopener noreferrer">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
 <p>其中一些可能需要自定义的参数如下：</p>
 <ul>
 <li><code>parallelism</code>: workflow 的最大并行数量</li>
@@ -6008,7 +6008,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>目前我们本地的 CI/CD 流水线和云上的微服务体系，都是使用的 Vault 做 secrets 管理.</p>
 <h2 id="一vault-基础概念">一、Vault 基础概念</h2>
 <blockquote>
-<p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture">https://www.vaultproject.io/docs/internals/architecture</a></p>
+<p>「基本概念」这一节，基本都翻译自官方文档: <a href="https://www.vaultproject.io/docs/internals/architecture" target="_blank" rel="noopener noreferrer">https://www.vaultproject.io/docs/internals/architecture</a></p>
 </blockquote>
 <p>首先看一下 Vault 的架构图：</p>
 <p><figure><a class="lightgallery" href="/images/expirence-of-vault/vault-layers.png" title="/images/expirence-of-vault/vault-layers.png" data-thumbnail="/images/expirence-of-vault/vault-layers.png" data-sub-html="<h2>vault layers</h2>">
@@ -6092,7 +6092,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <p><code>docker-compose.yml</code> 示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6120,7 +6120,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.3&#39;</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.3&#39;</span><span class="w">
 </span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">vault</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="c"># 文档：https://hub.docker.com/_/vault</span><span class="w">
@@ -6151,7 +6151,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </div><p><code>config.hcl</code> 内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6167,7 +6167,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="n">ui</span> <span class="o">=</span> <span class="kt">true</span>
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="n">ui</span> <span class="o">=</span> <span class="kt">true</span>
 
 <span class="err">//</span> <span class="k">使用文件做数据存储</span><span class="err">（</span><span class="k">单节点</span><span class="err">）</span>
 <span class="k">storage</span> <span class="s2">&#34;file&#34;</span> {
@@ -6192,7 +6192,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <p>通过 helm 部署：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -6200,7 +6200,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 valut 仓库</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加 valut 仓库</span>
 helm repo add hashicorp https://helm.releases.hashicorp.com
 <span class="c1"># 查看 vault 版本号</span>
 helm search repo hashicorp/vault -l <span class="p">|</span> head
@@ -6216,7 +6216,7 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -6346,7 +6346,7 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </span><span class="lnt">128
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="c"># enabled is the master enabled switch. Setting this to true or false</span><span class="w">
 </span><span class="w">  </span><span class="c"># will enable or disable all the components within this chart by default.</span><span class="w">
 </span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
@@ -6479,12 +6479,12 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 </div><p>现在使用自定义的 <code>custom-values.yaml</code> 部署 vautl:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create namespace vault
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create namespace vault
 <span class="c1"># 安装/升级 valut</span>
 helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 </code></pre></td></tr></table>
@@ -6509,14 +6509,14 @@ helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 每个实例都需要解封三次！</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 每个实例都需要解封三次！</span>
 <span class="c1">## Unseal the first vault server until it reaches the key threshold</span>
 $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <span class="c1"># ... Unseal Key 1</span>
 $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <span class="c1"># ... Unseal Key 2</span>
@@ -6545,7 +6545,7 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>以使用 awskms 为例，首先创建 aws IAM 的 policy 内容如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6562,7 +6562,7 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
     <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
     <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
@@ -6585,13 +6585,13 @@ $ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator unseal <spa
 <p>完事后再修改好前面提供的 helm 配置，部署它，最后使用如下命令初始化一下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 初始化命令和普通模式并无不同</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 初始化命令和普通模式并无不同</span>
 kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <span class="c1"># 会打印出一个 root token，以及五个 Recovery Key（而不是 Unseal Key）</span>
 <span class="c1"># Recover Key 不再用于解封，但是重新生成 root token 等操作仍然会需要用到它.</span>
@@ -6623,7 +6623,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <p>这里面有个坑，就是必须给 userpass 账号创建 child token 的权限：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -6633,7 +6633,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="k">path</span> <span class="s2">&#34;local/*&#34;</span> {
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="k">path</span> <span class="s2">&#34;local/*&#34;</span> {
 <span class="n">  capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;, &#34;list&#34;</span><span class="p">]</span>
 }
 
@@ -6647,7 +6647,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <p>然后还得给它「自动化配置」需要的权限，比如自动创建/更新 policy/secrets/kubernetes 等等，示例如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6671,7 +6671,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># To list policies - Step 3
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># To list policies - Step 3
 </span><span class="c1"></span><span class="k">path</span> <span class="s2">&#34;sys/policy&#34;</span>
 {
 <span class="n">  capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;</span><span class="p">]</span>
@@ -6716,7 +6716,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 <p>首先启用 Vault 的 Kubernetes 身份验证:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6731,7 +6731,7 @@ kubectl <span class="nb">exec</span> -ti vault-0 -- vault operator init
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 配置身份认证需要在 vault pod 中执行，启动 vault-0 的交互式会话</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 配置身份认证需要在 vault pod 中执行，启动 vault-0 的交互式会话</span>
 kubectl <span class="nb">exec</span> -n vault -it vault-0 -- /bin/sh
 <span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
 <span class="nb">export</span> <span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://localhost:8200&#39;</span>
@@ -6758,7 +6758,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>首先，使用 helm chart 部署 vault-agent，接入外部的 vault 实例。使用的 <code>custom-values.yaml</code> 示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6811,7 +6811,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">51
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">global</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="c"># enabled is the master enabled switch. Setting this to true or false</span><span class="w">
 </span><span class="w">  </span><span class="c"># will enable or disable all the components within this chart by default.</span><span class="w">
 </span><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
@@ -6868,7 +6868,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>vault-agent 部署完成后，第二步是为 vault 创建 serviceAccount、secret 和 ClusterRoleBinding，以允许 vault 审查 kubernetes 的 token, 完成对 pod 的身份验证. yaml 配置如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6898,7 +6898,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
 </span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
@@ -6934,7 +6934,7 @@ vault write auth/kubernetes/config <span class="se">\
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -6954,7 +6954,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">VAULT_TOKEN</span><span class="o">=</span><span class="s1">&#39;&lt;your-root-token&gt;&#39;</span>
 <span class="nb">export</span> <span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://localhost:8200&#39;</span>
  
 <span class="c1"># 启用 Kubernetes 身份验证</span>
@@ -6995,7 +6995,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>比如创建一个名为 <code>my-app-policy</code> 的 vault policy，内容为:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -7005,7 +7005,7 @@ vault write auth/kubernetes/config <span class="se">\
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># 允许读取数据
+<pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># 允许读取数据
 </span><span class="c1"></span><span class="k">path</span> <span class="s2">&#34;my-app/data/*&#34;</span> {
 <span class="n">   capabilities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;read&#34;, &#34;list&#34;</span><span class="p">]</span>
 }
@@ -7024,7 +7024,7 @@ vault write auth/kubernetes/config <span class="se">\
 <p>这之后，每个微服务就能通过 serviceaccount 从 vault 中读取 <code>my-app</code> 中的所有信息了。</p>
 <h3 id="3-部署-pod">3. 部署 Pod</h3>
 <blockquote>
-<p>参考文档：<a href="https://www.vaultproject.io/docs/platform/k8s/injector">https://www.vaultproject.io/docs/platform/k8s/injector</a></p>
+<p>参考文档：<a href="https://www.vaultproject.io/docs/platform/k8s/injector" target="_blank" rel="noopener noreferrer">https://www.vaultproject.io/docs/platform/k8s/injector</a></p>
 </blockquote>
 <p>下一步就是将配置注入到微服务容器中，这需要使用到 Agent Sidecar Injector。
 vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
@@ -7037,7 +7037,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -7078,7 +7078,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
@@ -7147,7 +7147,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 对每个微服务的 kv 数据，可以考虑将它所有的个性化配置都保存在 <code>&lt;engine-name&gt;/&lt;service-name&gt;/</code> 下面，然后使用如下 template 注入配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -7157,7 +7157,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">{
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{
     {{ range secrets &#34;&lt;engine-name&gt;/metadata/&lt;service-name&gt;/&#34; }}
         &#34;{{ printf &#34;%s&#34; . }}&#34;: 
         {{ with secret (printf &#34;&lt;engine-name&gt;/&lt;service-name&gt;/%s&#34; .) }}
@@ -7168,7 +7168,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </code></pre></td></tr></table>
 </div>
 </div><blockquote>
-<p>template 的详细语法参见: <a href="https://github.com/hashicorp/consul-template#secret">https://github.com/hashicorp/consul-template#secret</a></p>
+<p>template 的详细语法参见: <a href="https://github.com/hashicorp/consul-template#secret" target="_blank" rel="noopener noreferrer">https://github.com/hashicorp/consul-template#secret</a></p>
 </blockquote>
 <blockquote>
 <p>注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
@@ -7179,7 +7179,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 渲染出的效果示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -7191,7 +7191,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
     <span class="nt">&#34;secret-a&#34;</span><span class="p">:</span> <span class="p">{</span>
   <span class="nt">&#34;a&#34;</span><span class="p">:</span> <span class="s2">&#34;b&#34;</span><span class="p">,</span>
   <span class="nt">&#34;c&#34;</span><span class="p">:</span> <span class="s2">&#34;d&#34;</span>
@@ -7394,7 +7394,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 <li>编写证书签名请求的配置文件 <code>csr.conf</code>:
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -7425,7 +7425,7 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">[ req ]
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[ req ]
 default_bits = 2048
 prompt = no
 default_md = sha256
@@ -7463,7 +7463,7 @@ extendedKeyUsage=serverAuth,clientAuth
 <li>生成证书：
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -7481,7 +7481,7 @@ extendedKeyUsage=serverAuth,clientAuth
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
 openssl genrsa -out server.key <span class="m">2048</span>
 <span class="c1"># 2. 通过第一步编写的配置文件，生成证书签名请求（公钥+申请者信息）</span>
 openssl req -new -key server.key -out server.csr -config csr.conf
@@ -7519,16 +7519,16 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class="se">\
 而对于 ECC 密钥，您应选择要用哪种曲线生成密钥对。各个组织（ANSI X9.62、NIST、SECG）命名了多种曲线，可通过如下命名查看 openssl 支持的所有椭圆曲线名称：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">openssl ecparam -list_curves
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">openssl ecparam -list_curves
 </code></pre></td></tr></table>
 </div>
 </div><p>生成一个自签名的 ECC 证书的命令示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -7538,7 +7538,7 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class="se">\
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
 openssl ecparam -genkey -name prime256v1 -out key.pem
 <span class="c1"># 生成证书签名请求，需要输入域名(Common Name, CN)等相关信息</span>
 openssl req -new -sha256 -key key.pem -out csr.csr -config csr.conf
@@ -7558,7 +7558,7 @@ SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加�
 <p>生成 RSA 密钥对的命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -7568,7 +7568,7 @@ SSH/JWT 都支持 RSA-SHA256 及 ECDSA-SHA256 等基于 RSA/ECDSA 的签名/加�
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
 openssl genrsa -out rsa-private-key.pem <span class="m">2048</span>
 
 <span class="c1"># 2. 通过密钥生成公钥，JWT 使用此公钥验证签名</span>
@@ -7581,7 +7581,7 @@ ssh-keygen -i -mPKCS8 -f rsa-public-key.pem -y &gt; rsa-public.pub
 </div><p>生成 ECC 密钥对的命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -7590,7 +7590,7 @@ ssh-keygen -i -mPKCS8 -f rsa-public-key.pem -y &gt; rsa-public.pub
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
 openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
 <span class="c1"># 2. 通过密钥生成公钥</span>
 openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
@@ -7646,11 +7646,11 @@ ssh-keygen -i -mPKCS8 -f ecc-public-key.pem -y &gt; ecc-public.pub
 <li>Linux: 使用如下命令安装证书
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo cp ca.crt /usr/local/share/ca-certificates/server.crt
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo cp ca.crt /usr/local/share/ca-certificates/server.crt
 sudo update-ca-certificates
 </code></pre></td></tr></table>
 </div>
@@ -7706,7 +7706,7 @@ sudo update-ca-certificates
 <p>使用 openssl 生成 TLS 客户端证书（ca 和 csr.conf 可以直接使用前面生成服务端证书用到的，也可以另外生成）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -7717,7 +7717,7 @@ sudo update-ca-certificates
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位 的 RSA 密钥</span>
 openssl genrsa -out client.key <span class="m">2048</span>
 <span class="c1"># 2. 通过第一步编写的配置文件，生成证书签名请求</span>
 openssl req -new -key client.key -out client.csr -config csr.conf
@@ -7776,7 +7776,7 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class="se">\
 <h3 id="1-查询与验证">1. 查询与验证</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -7792,7 +7792,7 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class="se">\
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看证书(crt)信息</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看证书(crt)信息</span>
 openssl x509 -noout -text -in server.crt
 
 <span class="c1"># 查看证书请求(csr)信息</span>
@@ -7813,12 +7813,12 @@ openssl verify -CAfile ca.crt server.crt
 另外一类使用广泛的证书，是 PKCS#12、PKCS#8，以及 Windows 上常用的 DER 格式。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pem 格式转 pkcs12，公钥和私钥都放里面</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pem 格式转 pkcs12，公钥和私钥都放里面</span>
 openssl pkcs12 -export -in client.crt -inkey client.key -out client.p12
 <span class="c1"># 按提示输入保护密码</span>
 </code></pre></td></tr></table>
@@ -7826,11 +7826,11 @@ openssl pkcs12 -export -in client.crt -inkey client.key -out client.p12
 </div><p>或者 p12 转 pem:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">openssl pkcs12 -in xxx.p12 -out xxx.crt -clcerts -nokeys
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">openssl pkcs12 -in xxx.p12 -out xxx.crt -clcerts -nokeys
 openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 </code></pre></td></tr></table>
 </div>
@@ -7913,7 +7913,7 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 <p>安装命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -7929,7 +7929,7 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># archlinux/manjaro</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># archlinux/manjaro</span>
 sudo pacman -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat
 
 <span class="c1"># ubuntu,参考了官方文档，但未测试</span>
@@ -7963,7 +7963,7 @@ sudo yast2 virtualization
 <p>学习过程中可能会使用到上述命令，提前安装好总不会有错，安装命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -7976,7 +7976,7 @@ sudo yast2 virtualization
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># opensuse</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># opensuse</span>
 sudo zypper install libguestfs
 
 <span class="c1"># archlinux/manjaro，目前缺少 virt-v2v/virt-p2v 组件</span>
@@ -7993,11 +7993,11 @@ sudo yum install libguestfs-tools
 <p>通过 systemd 启动 libvirtd 后台服务：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl <span class="nb">enable</span> libvirtd.service
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl <span class="nb">enable</span> libvirtd.service
 sudo systemctl start libvirtd.service
 </code></pre></td></tr></table>
 </div>
@@ -8011,35 +8011,35 @@ sudo systemctl start libvirtd.service
 <p>然后新建 libvirt 用户组，将当前用户加入该组：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">newgrp libvirt
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">newgrp libvirt
 sudo usermod -aG libvirt <span class="nv">$USER</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>最后重启 libvirtd 服务，应该就能正常使用了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl restart libvirtd.service
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl restart libvirtd.service
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="3-启用嵌套虚拟化">3. 启用嵌套虚拟化</h3>
 <p>如果你需要<strong>在虚拟机中运行虚拟机</strong>（比如在虚拟机里测试 katacontainers 等安全容器技术），那就需要启用内核模块 kvm_intel 实现嵌套虚拟化。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 临时启用 kvm_intel 嵌套虚拟化</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 临时启用 kvm_intel 嵌套虚拟化</span>
 sudo modprobe -r kvm_intel
 sudo modprobe kvm_intel <span class="nv">nested</span><span class="o">=</span><span class="m">1</span>
 <span class="c1"># 修改配置，永久启用嵌套虚拟化</span>
@@ -8049,11 +8049,11 @@ sudo modprobe kvm_intel <span class="nv">nested</span><span class="o">=</span><s
 </div><p>验证嵌套虚拟化已经启用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">$ cat /sys/module/kvm_intel/parameters/nested 
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ cat /sys/module/kvm_intel/parameters/nested 
 Y
 </code></pre></td></tr></table>
 </div>
@@ -8072,7 +8072,7 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -8086,7 +8086,7 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建磁盘</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建磁盘</span>
 qemu-img create -f qcow2 -o <span class="nv">cluster_size</span><span class="o">=</span>128K virt_disk.qcow2 20G
 
 <span class="c1"># 扩容磁盘</span>
@@ -8104,22 +8104,22 @@ qemu-img convert -f qcow2 -O raw vm01.qcow2 vm01.img  <span class="c1"># qcow2 =
 <p>直接从 vmware ova 文件导入 kvm，这种方式转换得到的镜像应该能直接用（网卡需要重新配置）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">virt-v2v -i ova centos7-test01.ova -o <span class="nb">local</span> -os /vmhost/centos7-01  -of qcow2
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">virt-v2v -i ova centos7-test01.ova -o <span class="nb">local</span> -os /vmhost/centos7-01  -of qcow2
 </code></pre></td></tr></table>
 </div>
 </div><p>也可以先从 ova 中解压出 vmdk 磁盘映像，将 vmware 的  vmdk 文件转换成 qcow2 格式，然后再导入 kvm（网卡需要重新配置）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 转换映像格式</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 转换映像格式</span>
 qemu-img convert -p -f vmdk -O qcow2 centos7-test01-disk1.vmdk centos7-test01.qcow2
 <span class="c1"># 查看转换后的映像信息</span>
 qemu-img info centos7-test01.qcow2
@@ -8133,10 +8133,10 @@ qemu-img info centos7-test01.qcow2
 如果不追求 IO 性能的话，建议将它转换成 qcow2 再使用。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">qemu-img convert -f raw -O qcow2 vm01.img vm01.qcow2
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">qemu-img convert -f raw -O qcow2 vm01.img vm01.qcow2
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="三虚拟机管理">三、虚拟机管理</h2>
@@ -8157,10 +8157,10 @@ qemu-img info centos7-test01.qcow2
 <p>因此，你需要将默认的 URI 改为 <code>qemu:///system</code>，否则绝对会被坑:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">echo</span> <span class="s1">&#39;export LIBVIRT_DEFAULT_URI=&#34;qemu:///system&#34;&#39;</span> &gt;&gt; ~/.bashrc
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">echo</span> <span class="s1">&#39;export LIBVIRT_DEFAULT_URI=&#34;qemu:///system&#34;&#39;</span> &gt;&gt; ~/.bashrc
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="1-虚拟机网络">1. 虚拟机网络</h3>
@@ -8168,7 +8168,7 @@ qemu-img info centos7-test01.qcow2
 <p>我们通常使用 <code>qemu:///system</code> 环境就好，可以使用如下方法查看并启动 default 网络，这样后面创建虚拟机时才有网络可用。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -8189,7 +8189,7 @@ qemu-img info centos7-test01.qcow2
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出所有虚拟机网络</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出所有虚拟机网络</span>
 $ sudo virsh net-list --all
  Name      State      Autostart   Persistent
 ----------------------------------------------
@@ -8214,7 +8214,7 @@ $ sudo virsh net-list --all
 <h3 id="2-创建虚拟机---virt-intall">2. 创建虚拟机 - virt-intall</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -8238,7 +8238,7 @@ $ sudo virsh net-list --all
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 iso 镜像创建全新的 proxmox 虚拟机，自动创建一个 60G 的磁盘。</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用 iso 镜像创建全新的 proxmox 虚拟机，自动创建一个 60G 的磁盘。</span>
 virt-install --virt-type kvm <span class="se">\
 </span><span class="se"></span>--name pve-1 <span class="se">\
 </span><span class="se"></span>--vcpus <span class="m">4</span> --memory <span class="m">8096</span> <span class="se">\
@@ -8268,14 +8268,14 @@ virt-install --virt-type kvm <span class="se">\
 <p>查看虚拟机列表：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 查看正在运行的虚拟机
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 查看正在运行的虚拟机
 virsh list
 
 # 查看所有虚拟机，包括 inactive 的虚拟机
@@ -8285,13 +8285,13 @@ virsh list --all
 </div><p>使用 <code>virt-viewer</code> 以 vnc 协议登入虚拟机终端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用虚拟机 ID 连接</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用虚拟机 ID 连接</span>
 virt-viewer <span class="m">8</span>
 <span class="c1"># 使用虚拟机名称连接，并且等待虚拟机启动</span>
 virt-viewer --wait opensuse15
@@ -8300,7 +8300,7 @@ virt-viewer --wait opensuse15
 </div><p>启动、关闭、暂停(休眠)、重启虚拟机：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -8315,7 +8315,7 @@ virt-viewer --wait opensuse15
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">virsh start opensuse15
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">virsh start opensuse15
 virsh suuspend opensuse15
 virsh resume opensuse15
 virsh reboot opensuse15
@@ -8333,7 +8333,7 @@ virsh autostart --disable opensuse15
 </div><p>虚拟机快照管理：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -8343,7 +8343,7 @@ virsh autostart --disable opensuse15
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出一个虚拟机的所有快照</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 列出一个虚拟机的所有快照</span>
 virsh snapshot-list --domain opensuse15
 <span class="c1"># 给某个虚拟机生成一个新快照</span>
 virsh snapshot-create &lt;domain&gt;
@@ -8356,21 +8356,21 @@ virsh snapshot-delete &lt;domain&gt; &lt;snapshotname&gt;
 </div><p>删除虚拟机：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">virsh undefine opensuse15
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">virsh undefine opensuse15
 </code></pre></td></tr></table>
 </div>
 </div><p>迁移虚拟机：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用默认参数进行离线迁移，将已关机的服务器迁移到另一个 qemu 实例</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 使用默认参数进行离线迁移，将已关机的服务器迁移到另一个 qemu 实例</span>
 virsh migrate <span class="m">37</span> qemu+ssh://tux@jupiter.example.com/system
 <span class="c1"># 还支持在线实时迁移，待续</span>
 </code></pre></td></tr></table>
@@ -8378,13 +8378,13 @@ virsh migrate <span class="m">37</span> qemu+ssh://tux@jupiter.example.com/syste
 </div><p>cpu/内存修改：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 改成 4 核</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 改成 4 核</span>
 virsh setvcpus opensuse15 <span class="m">4</span>
 <span class="c1"># 改成 4G</span>
 virsh setmem opensuse15 <span class="m">4096</span>
@@ -8393,16 +8393,16 @@ virsh setmem opensuse15 <span class="m">4096</span>
 </div><p>虚拟机监控：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 待续</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 待续</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>修改磁盘、网络及其他设备：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -8412,7 +8412,7 @@ virsh setmem opensuse15 <span class="m">4096</span>
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加新设备</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 添加新设备</span>
 virsh attach-device
 virsh attach-disk
 virsh attach-interface

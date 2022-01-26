@@ -39,7 +39,7 @@
 </li>
 </ol>
 <p>上述的所有 DNS 记录，都是属于将域名解析为 IP 地址，或者另一个域名，这被称做** DNS 正向解析**。
-除了这个正向解析外，还有个非常冷门的**反向解析**，基本上只在设置邮件服务器时才会用到。（Kubernetes 可能也有用到）</p>
+除了这个正向解析外，还有个非常冷门的<strong>反向解析</strong>，基本上只在设置邮件服务器时才会用到。（Kubernetes 可能也有用到）</p>
 <p>反向解析主要的记录类型是：<strong><code>PTR</code> 记录</strong>，它提供将 IP 地址反向解析为域名的功能。
 而且因为域名是从右往左读的（最右侧是根, <code>www.baidu.com.</code>），而 IP 的网段（如 <code>192.168.0.0/16</code>）刚好相反，是左边优先。
 因此 PTR 记录的“域名”必须将 IP 地址反着写，末尾再加上 <code>.in-addr.arpa.</code> 表示这是一个反向解析的域名。（ipv6 使用 <code>ip6.arpa.</code>）
@@ -141,13 +141,13 @@
 <p>操作系统的 DNS 解析器通常会允许我们配置多个上游 Name Servers，比如 Linux 就是通过 <code>/etc/resolv.conf</code> 配置 DNS 服务器的。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">$ cat /etc/resolv.conf 
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">$ cat /etc/resolv.conf 
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 search lan
@@ -187,12 +187,12 @@ search lan
 <p>Kubernetes 中 <code>/etc/resolv.conf</code> 的示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">nameserver 10.43.0.10
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nameserver 10.43.0.10
 search default.svc.cluster.local svc.cluster.local cluster.local
 options ndots:5
 </code></pre></td></tr></table>
@@ -203,7 +203,7 @@ options ndots:5
 <h2 id="六dns-诊断的命令行工具">六、DNS 诊断的命令行工具</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -211,7 +211,7 @@ options ndots:5
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">dig +trace baidu.com  <span class="c1"># 诊断 dns 的主要工具，非常强大</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">dig +trace baidu.com  <span class="c1"># 诊断 dns 的主要工具，非常强大</span>
 host -a baidu.com  <span class="c1"># host 基本就是 dig 的弱化版，不过 host 有个有点就是能打印出它测试过的所有 FQDN</span>
 
 
@@ -230,7 +230,7 @@ whois baidu.com <span class="c1"># 查询域名注册信息，内网诊断用不
 <p>CoreDNS 因为是 Go 语言写的，编译结果是单个可执行文件，它默认以当前文件夹下的 Corefile 为配置文件。以 kubernetes 中的 Corefile 为例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -255,7 +255,7 @@ whois baidu.com <span class="c1"># 查询域名注册信息，内网诊断用不
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">.:53 {
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">.:53 {
     errors  # 启用错误日志
     health  # 启用健康检查 api
     ready  # 启用 readiness 就绪 api
@@ -286,7 +286,7 @@ whois baidu.com <span class="c1"># 查询域名注册信息，内网诊断用不
 <p>现在清楚了 Corefile 的结构，让我们来设计一个通过文件配置 DNS 条目的 Corefile 配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -319,7 +319,7 @@ whois baidu.com <span class="c1"># 查询域名注册信息，内网诊断用不
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 定义可复用 Block
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 定义可复用 Block
 (common) {
     log
     errors
@@ -356,7 +356,7 @@ test-env.local:53 {
 <p>这个 <code>file</code> 指定的文件和 <code>bind9</code> 一样，都是使用在 <a href="https://tools.ietf.org/html/rfc1035#section-5.3" target="_blank" rel="noopener noreferrer">rfc1035</a> 中定义的 Master File 格式，<code>dig</code> 命令输出的就是这种格式的内容。示例如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -374,7 +374,7 @@ test-env.local:53 {
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">;; 與整個領域相關性較高的設定包括 NS, A, MX, SOA 等標誌的設定處！
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">;; 與整個領域相關性較高的設定包括 NS, A, MX, SOA 等標誌的設定處！
 $TTL    30
 @                       IN SOA   dev-env.local. devops.dev-env.local. (
                                      20200202 ; SERIAL，每次修改此文件，都应该同步修改这个“版本号”，可将它设为修改时间。
@@ -396,7 +396,7 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 <code>test-env.local</code> 也是一样的格式，根据上面的模板修改就行。这两个配置文件和 Corefile 放在同一个目录下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -404,7 +404,7 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">root@test-ubuntu:~/dns-server# tree
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@test-ubuntu:~/dns-server# tree
 .
 ├── coredns  # coredns binary
 ├── Corefile

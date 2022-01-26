@@ -125,7 +125,7 @@
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -141,7 +141,7 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
 <span class="kn">from</span> <span class="nn">pulumi_alicloud</span> <span class="kn">import</span> <span class="n">Provider</span><span class="p">,</span> <span class="n">oss</span>
 
 <span class="c1"># 自定义 provider，key/secret 通过参数设定，而不是从默认的环境变量读取。</span>
@@ -165,7 +165,7 @@
 <p>从另一个 stack 读取属性的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -176,12 +176,12 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">StackReference</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">StackReference</span>
 
 <span class="n">cfg</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">Config</span><span class="p">()</span>
 <span class="n">stack_name</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">get_stack</span><span class="p">()</span>  <span class="c1"># stack 名称</span>
 <span class="n">project</span> <span class="o">=</span> <span class="n">pulumi</span><span class="o">.</span><span class="n">get_project</span><span class="p">()</span>
-<span class="n">infra</span> <span class="o">=</span> <span class="n">StackReference</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;ryan4yin/{project}/{stack_name}&#34;</span><span class="p">)</span>
+<span class="n">infra</span> <span class="o">=</span> <span class="n">StackReference</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;ryan4yin/</span><span class="si">{</span><span class="n">project</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">stack_name</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
 
 <span class="c1"># 这个属性在上一个 stack 中被 export 出来</span>
 <span class="n">vpc_id</span> <span class="o">=</span> <span class="n">infra</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s2">&#34;resources.vpc.id&#34;</span><span class="p">)</span>
@@ -233,7 +233,7 @@
 <p>渲染 yaml 的示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -261,7 +261,7 @@
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pulumi</span> <span class="kn">import</span> <span class="n">get_stack</span><span class="p">,</span> <span class="n">ResourceOptions</span><span class="p">,</span> <span class="n">StackReference</span>
 <span class="kn">from</span> <span class="nn">pulumi_kubernetes</span> <span class="kn">import</span> <span class="n">Provider</span>
 <span class="kn">from</span> <span class="nn">pulumi_kubernetes.apps.v1</span> <span class="kn">import</span> <span class="n">Deployment</span><span class="p">,</span> <span class="n">DeploymentSpecArgs</span>
 <span class="kn">from</span> <span class="nn">pulumi_kubernetes.core.v1</span> <span class="kn">import</span> <span class="p">(</span>
@@ -309,7 +309,7 @@
 <p>方法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -318,7 +318,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 指定状态文件路径</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 指定状态文件路径</span>
 pulumi login file://&lt;file-path&gt;
 <span class="c1"># 保存到默认位置: ~/.pulumi/credentials.json</span>
 pulumi login --local

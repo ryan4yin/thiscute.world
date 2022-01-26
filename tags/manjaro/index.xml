@@ -11,13 +11,13 @@
 <p>Manjaro 装好后，需要运行的第一条命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -Syy <span class="c1">## 强制更新 package 目录</span>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -Syy <span class="c1">## 强制更新 package 目录</span>
 sudo pacman-mirrors --interactive --country China  <span class="c1"># 列出所有国内的镜像源，并提供交互式的界面手动选择镜像源</span>
 sudo pacman -Syyu  <span class="c1"># 强制更新 package 目录，并尝试更新已安装的所有 packages.</span>
 sudo pacman -S yay  <span class="c1"># 安装 yay</span>
@@ -27,7 +27,7 @@ sudo pacman -S yay  <span class="c1"># 安装 yay</span>
 <p>pacman 的常用命令语法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -42,7 +42,7 @@ sudo pacman -S yay  <span class="c1"># 安装 yay</span>
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">pacman -S package_name        <span class="c1"># 安装软件  </span>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pacman -S package_name        <span class="c1"># 安装软件  </span>
 pacman -S extra/package_name  <span class="c1"># 安装不同仓库中的版本</span>
 pacman -Syu                   <span class="c1"># 升级整个系统，y是更新数据库，yy是强制更新，u是升级软件</span>
 pacman -Ss string             <span class="c1"># 在包数据库中查询软件</span>
@@ -61,10 +61,10 @@ pactree package_name          <span class="c1"># 显示软件的依赖树</span>
 <p>此外，还有一条 <code>yay</code> 命令值得记一下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">yay -c  <span class="c1"># 卸载所有无用的依赖。类比 apt-get autoremove</span>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">yay -c  <span class="c1"># 卸载所有无用的依赖。类比 apt-get autoremove</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="常用软件与配置">常用软件与配置</h2>
@@ -75,7 +75,7 @@ pactree package_name          <span class="c1"># 显示软件的依赖树</span>
 <h3 id="2-安装常用软件">2. 安装常用软件</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -89,7 +89,7 @@ pactree package_name          <span class="c1"># 显示软件的依赖树</span>
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S google-chrome  firefox         <span class="c1"># 浏览器</span>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S google-chrome  firefox         <span class="c1"># 浏览器</span>
 sudo pacman -S netease-cloud-music     <span class="c1"># 网易云音乐</span>
 sudo pacman -S noto-fonts-cjk wqy-bitmapfont wqy-microhei wqy-zenhei   <span class="c1"># 中文字体：思源系列、文泉系列</span>
 sudo pacman -S wps-office ttf-wps-fonts
@@ -106,14 +106,14 @@ sudo pacman -S docker  <span class="c1"># docker 容器</span>
 </div><p>其中 docker 和 wireshark 需要额外配置，否则会要求管理员权限：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo groupadd wireshark
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo groupadd wireshark
 sudo gpasswd --add <span class="nv">$USER</span> wireshark  <span class="c1">#  将你添加到 wireshark 用户组中</span>
 
 sudo groupadd docker
@@ -127,23 +127,23 @@ sudo gpasswd --add <span class="nv">$USER</span> docker  <span class="c1"># 同�
 <p>首先安装 fcitx5-rime, 注意这些组件一个都不能省略：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">sudo pacman -S fcitx5  fcitx5-chinese-addons fcitx5-gtk  fcitx5-qt  kcm-fcitx5 fcitx5-rime
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo pacman -S fcitx5  fcitx5-chinese-addons fcitx5-gtk  fcitx5-qt  kcm-fcitx5 fcitx5-rime
 </code></pre></td></tr></table>
 </div>
 </div><p>第二步是修改环境变量，将 fcitx5-rime 设为默认输入法并自动启动。</p>
 <p>添加 <code>~/.pam_environment</code> 文件，内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">INPUT_METHOD  DEFAULT=fcitx5
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">INPUT_METHOD  DEFAULT=fcitx5
 GTK_IM_MODULE DEFAULT=fcitx5
 QT_IM_MODULE  DEFAULT=fcitx5
 XMODIFIERS    DEFAULT=@im=fcitx5
@@ -153,21 +153,21 @@ XMODIFIERS    DEFAULT=@im=fcitx5
 <p>添加自动启动：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ~/.xprofile 是 x11 GUI 的环境变量配置文件</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ~/.xprofile 是 x11 GUI 的环境变量配置文件</span>
 <span class="nb">echo</span> <span class="s1">&#39;fcitx5 &amp;&#39;</span> &gt;&gt; ~/.xprofile
 </code></pre></td></tr></table>
 </div>
-</div><p>然后，从 <a href="http://flypy.ys168.com/">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p>
+</div><p>然后，从 <a href="http://flypy.ys168.com/" target="_blank" rel="noopener noreferrer">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">mv rime ~/.local/share/fcitx5/
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">mv rime ~/.local/share/fcitx5/
 </code></pre></td></tr></table>
 </div>
 </div><p>现在重启系统，在 fcitx5 配置里面添加 rime，就可以正常使用小鹤音形了。</p>
@@ -186,7 +186,7 @@ XMODIFIERS    DEFAULT=@im=fcitx5
 <p>一番操作，总结出的删除流程如下（以下命令均需要 root 权限）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -208,7 +208,7 @@ XMODIFIERS    DEFAULT=@im=fcitx5
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 删除 EFI 引导项</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 删除 EFI 引导项</span>
 <span class="c1">## 查看 efi 的所有启动项，找到 Manjaro 的编号</span>
 efibootmgr
 <span class="c1">## 删除掉 Manjaro 启动项</span>

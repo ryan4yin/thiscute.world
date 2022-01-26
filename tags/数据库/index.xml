@@ -8,24 +8,24 @@
 创建外键约束的前提是，该外键所在的表已经存在，并且外键必须是 UNIQUE 的。（主键默认 UNIQUE 且 NOT NULL）</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="p">(</span>
-    <span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">类型</span><span class="o">&gt;</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">类型</span><span class="o">&gt;</span> <span class="k">REFERENCES</span> <span class="o">&lt;</span><span class="err">外键所在的表名</span><span class="o">&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span><span class="p">),</span>  <span class="c1">-- 这创建了一个外键
-</span><span class="c1"></span>    <span class="p">...</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">类型</span><span class="o">&gt;</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">类型</span><span class="o">&gt;</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="o">&lt;</span><span class="err">外键所在的表名</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;</span><span class="err">字段名</span><span class="o">&gt;</span><span class="p">),</span><span class="w">  </span><span class="c1">-- 这创建了一个外键
+</span><span class="c1"></span><span class="w">    </span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>还有另一种语法，它支持以多个字段为外键（<strong>字段约束也可以写成表约束，也就是放在一个独立的行中。而反过来很可能不行</strong>）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -34,7 +34,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">CREATE TABLE &lt;表名&gt; (
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">CREATE TABLE &lt;表名&gt; (
     &lt;字段名1&gt; &lt;类型&gt; PRIMARY KEY,
     &lt;字段名2&gt; &lt;类型&gt;
     &lt;字段名3&gt; &lt;类型&gt;
@@ -46,7 +46,7 @@
 </div><p>一个表也可以包含多个外键约束。这个特性用于实现表之间的多对多关系。 比如你有关于产品和订单的表，但现在你想允许一个订单可以包含多种产品 (上面那个结构是不允许这么做的)，你可以使用这样的结构：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -66,25 +66,25 @@
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="n">price</span> <span class="nb">numeric</span>
-<span class="p">);</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">orders</span> <span class="p">(</span>
-    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="n">shipping_address</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="p">...</span>
-<span class="p">);</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">order_items</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">products</span><span class="p">,</span>
-    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">orders</span><span class="p">,</span>
-    <span class="n">quantity</span> <span class="nb">integer</span><span class="p">,</span>
-    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">product_no</span><span class="p">,</span> <span class="n">order_id</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">numeric</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">order_id</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">shipping_address</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">order_items</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">products</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">order_id</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">orders</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">quantity</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">product_no</span><span class="p">,</span><span class="w"> </span><span class="n">order_id</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>外键能通过 <code>ALTER</code> 语句添加或删除</p>
 <h3 id="2-级联操作-on-delete-与-on-update">2. 级联操作 <code>ON DELETE</code> 与 <code>ON UPDATE</code></h3>
@@ -94,7 +94,7 @@
 <p>这个行为也可以手动指定：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -114,66 +114,66 @@
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="n">price</span> <span class="nb">numeric</span>
-<span class="p">);</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">orders</span> <span class="p">(</span>
-    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
-    <span class="n">shipping_address</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="p">...</span>
-<span class="p">);</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">order_items</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">products</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span><span class="p">,</span>  <span class="c1">-- 限制，也就是禁止删除被它引用的行
-</span><span class="c1"></span>    <span class="n">order_id</span> <span class="nb">integer</span> <span class="k">REFERENCES</span> <span class="n">orders</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">CASCADE</span><span class="p">,</span>    <span class="c1">-- 级联，在删除被它引用的行的时候，这一行本身也会被自动删除掉
-</span><span class="c1"></span>    <span class="n">quantity</span> <span class="nb">integer</span><span class="p">,</span>
-    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">product_no</span><span class="p">,</span> <span class="n">order_id</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">numeric</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">order_id</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">shipping_address</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">order_items</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">RESTRICT</span><span class="p">,</span><span class="w">  </span><span class="c1">-- 限制，也就是禁止删除被它引用的行
+</span><span class="c1"></span><span class="w">    </span><span class="n">order_id</span><span class="w"> </span><span class="nb">integer</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span><span class="w">    </span><span class="c1">-- 级联，在删除被它引用的行的时候，这一行本身也会被自动删除掉
+</span><span class="c1"></span><span class="w">    </span><span class="n">quantity</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">product_no</span><span class="p">,</span><span class="w"> </span><span class="n">order_id</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>除了 <code>RESTRICT</code> 和 <code>CASCADE</code> 外，在外键上的动作还有两个选项：<code>SET NULL</code> 和 <code>SET DEFAULT</code>，顾名思义，就是在被引用的行删除后将外键设置为 <code>NULL</code> 或默认值。</p>
 <p><code>ON UPDATE</code> 与 <code>ON DELETE</code> 的动作是一样的，只是 <code>CASCADE</code> 表示同步更新。</p>
 <h3 id="3-check-约束">3. <code>CHECK</code> 约束</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
-    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="n">price</span> <span class="nb">numeric</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">numeric</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>你还可以给这个约束取一个独立的名字。这样就可以令错误消息更清晰， 并且在你需要修改它的时候引用这个名字。语法是：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
-    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="n">price</span> <span class="nb">numeric</span> <span class="k">CONSTRAINT</span> <span class="n">positive_price</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">numeric</span><span class="w"> </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">positive_price</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>稍微复杂一点的例子：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -182,19 +182,19 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
-    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="n">price</span> <span class="nb">numeric</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="n">discounted_price</span> <span class="nb">numeric</span><span class="p">,</span>
-    <span class="k">CHECK</span> <span class="p">(</span><span class="n">discounted_price</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">AND</span> <span class="n">price</span> <span class="o">&gt;</span> <span class="n">discounted_price</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">numeric</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="n">discounted_price</span><span class="w"> </span><span class="nb">numeric</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">discounted_price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">discounted_price</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>同样的，可以为 CHECK 命名，令错误信息更清晰：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -205,16 +205,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
-    <span class="n">product_no</span> <span class="nb">integer</span><span class="p">,</span>
-    <span class="n">name</span> <span class="nb">text</span><span class="p">,</span>
-    <span class="n">price</span> <span class="nb">numeric</span><span class="p">,</span>
-    <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="n">discounted_price</span> <span class="nb">numeric</span><span class="p">,</span>
-    <span class="k">CHECK</span> <span class="p">(</span><span class="n">discounted_price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
-    <span class="k">CONSTRAINT</span> <span class="n">valid_discount</span> <span class="k">CHECK</span> <span class="p">(</span><span class="n">price</span> <span class="o">&gt;</span> <span class="n">discounted_price</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">product_no</span><span class="w"> </span><span class="nb">integer</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">numeric</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="n">discounted_price</span><span class="w"> </span><span class="nb">numeric</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">discounted_price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">valid_discount</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">discounted_price</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>要注意的是，<strong>当约束表达式计算结果为真或 NULL 的时候，检查约束会被认为是满足条件的</strong>。 因为大多数表达式在含有 NULL 操作数的时候结果都是 NULL ，所以这些约束不能阻止字段值为 NULL 。要排除掉 NULL，只能使用 <code>NOT NULL</code> 约束。（所以就说 NULL 是万恶之源hhh）</p>
 <h3 id="参考">参考</h3>
@@ -239,17 +239,17 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">VIEW</span> <span class="o">&lt;</span><span class="err">视图名称</span><span class="o">&gt;</span>
-    <span class="p">(</span><span class="o">&lt;</span><span class="err">视图列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">视图列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span> <span class="p">)</span>
-    <span class="k">AS</span>
-    <span class="o">&lt;</span><span class="k">SELECT</span> <span class="err">语句</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="o">&lt;</span><span class="err">视图名称</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="p">(</span><span class="o">&lt;</span><span class="err">视图列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="err">视图列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span><span class="w"> </span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="k">AS</span><span class="w">
+</span><span class="w">    </span><span class="o">&lt;</span><span class="k">SELECT</span><span class="w"> </span><span class="err">语句</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>其中 SELECT 的结果列和视图列名一一对应。
 3. 视图的限制
@@ -260,19 +260,19 @@
 <p>子查询，其实就是一次性的视图:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
-    <span class="k">FROM</span> <span class="p">(</span>
-        <span class="k">SELECT</span> <span class="p">...</span>  <span class="c1">-- 这就是一个子查询：嵌套的 select 语句
-</span><span class="c1"></span>    <span class="p">)</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="o">&gt;</span>
-    <span class="p">...</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w">
+</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w">  </span><span class="c1">-- 这就是一个子查询：嵌套的 select 语句
+</span><span class="c1"></span><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">&lt;</span><span class="err">别名</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="p">...</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>上面的查询的 FROM 子句中，给另一 SELECT 子句定义了一个别名，并将它作为了查询对象。这就是一个子查询。</p>
 <p>子查询不仅能用于 FROM，还能用在 WHERE 子句等很多地方。</p>
@@ -280,7 +280,7 @@
 <p>即用到了外部数据的子查询语句：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -289,14 +289,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
-    <span class="k">FROM</span> <span class="n">product</span> <span class="k">AS</span> <span class="n">p1</span>
-    <span class="k">WHERE</span> <span class="p">(</span>
-        <span class="k">SELECT</span> <span class="p">...</span>
-            <span class="k">FROM</span> <span class="n">duck</span> <span class="k">AS</span> <span class="n">p2</span>
-            <span class="k">WHERE</span> <span class="n">p1</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="n">p2</span><span class="p">.</span><span class="n">price</span>   <span class="c1">-- 这里，内部子查询访问了外部查询的表p1，因此是一个关联子查询。
-</span><span class="c1"></span>    <span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w">
+</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">p1</span><span class="w">
+</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w">
+</span><span class="w">            </span><span class="k">FROM</span><span class="w"> </span><span class="n">duck</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">p2</span><span class="w">
+</span><span class="w">            </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p1</span><span class="p">.</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">price</span><span class="w">   </span><span class="c1">-- 这里，内部子查询访问了外部查询的表p1，因此是一个关联子查询。
+</span><span class="c1"></span><span class="w">    </span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="二函数谓词case-表达式">二、函数、谓词、CASE 表达式</h2>
 <h3 id="函数httpsdevmysqlcomdocrefman57enfunctionshtml"><a href="https://dev.mysql.com/doc/refman/5.7/en/functions.html" target="_blank" rel="noopener noreferrer"><strong>函数</strong></a></h3>
@@ -351,14 +351,14 @@
 <p>举例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">name</span>
-    <span class="k">FROM</span> <span class="n">list</span>
-    <span class="k">WHERE</span> <span class="n">name</span> <span class="k">LIKE</span> <span class="s1">&#39;%Ryan%&#39;</span><span class="p">;</span>  <span class="c1">-- 匹配任意包含 &#39;Ryan&#39; 的字符串
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w">
+</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">list</span><span class="w">
+</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%Ryan%&#39;</span><span class="p">;</span><span class="w">  </span><span class="c1">-- 匹配任意包含 &#39;Ryan&#39; 的字符串
 </span></code></pre></td></tr></table>
 </div>
 </div><h4 id="regexp谓词正则字符串匹配">REGEXP谓词——正则字符串匹配</h4>
@@ -378,7 +378,7 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -387,21 +387,21 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CASE</span> <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-    <span class="p">...</span>
-    
-    <span class="k">ELSE</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-<span class="k">END</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">求值表达式</span><span class="o">&gt;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="p">...</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="k">ELSE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="k">END</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
 <li>switch 模式（但不需要break）</li>
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -410,14 +410,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CASE</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-    <span class="k">WHEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span> <span class="k">THEN</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-    <span class="p">...</span>
-    
-    <span class="k">ELSE</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span>
-<span class="k">END</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CASE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="p">...</span><span class="w">
+</span><span class="w">    
+</span><span class="w">    </span><span class="k">ELSE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="k">END</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>这是对 CASE 后的元素做switch比较。</p>
 <h2 id="三集合运算">三、集合运算</h2>
@@ -444,33 +444,33 @@
 <p>语法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
-    <span class="k">FROM</span> <span class="p">(</span><span class="n">product</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">shop</span>
-        <span class="k">ON</span> <span class="n">product</span><span class="p">.</span><span class="n">p_id</span> <span class="o">=</span> <span class="n">shop</span><span class="p">.</span><span class="n">p_id</span><span class="p">)</span>
-    <span class="k">WHERE</span> <span class="n">filter_condition</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w">
+</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="n">product</span><span class="w"> </span><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">shop</span><span class="w">
+</span><span class="w">        </span><span class="k">ON</span><span class="w"> </span><span class="n">product</span><span class="p">.</span><span class="n">p_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">p_id</span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">filter_condition</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>使用 跟在 INNER JOIN 子句后的 ON 子句指定联结条件。（这里我特意用了括号，表示 JOIN 和 ON 两个子句是配套的）</p>
 <p>也有另一个很常用的语法（但是现在已经不推荐使用）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
-    <span class="k">FROM</span> <span class="n">product</span><span class="p">,</span> <span class="n">shop</span>
-    <span class="k">WHERE</span> <span class="n">product</span><span class="p">.</span><span class="n">p_id</span> <span class="o">=</span> <span class="n">shop</span><span class="p">.</span><span class="n">p_id</span>
-        <span class="k">AND</span> <span class="n">filter_condition</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w">
+</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">product</span><span class="p">,</span><span class="w"> </span><span class="n">shop</span><span class="w">
+</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">product</span><span class="p">.</span><span class="n">p_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">p_id</span><span class="w">
+</span><span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">filter_condition</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>对于 shop 表中有多行对应同一个 product 的情况（有多人购买了同一款商品），结果中该 product 会被复制给 shop 中的多个购买记录。（也就是说该 product 会变成多行）</p>
 <blockquote>
@@ -483,21 +483,21 @@
 <p>语法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">...</span>
-    <span class="k">FROM</span> <span class="n">product</span> <span class="k">LEFT</span> <span class="k">OUTER</span> <span class="k">JOIN</span> <span class="n">shop</span>
-        <span class="k">ON</span> <span class="n">product</span><span class="p">.</span><span class="n">p_id</span> <span class="o">=</span> <span class="n">shop</span><span class="p">.</span><span class="n">p_id</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span><span class="w">
+</span><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">shop</span><span class="w">
+</span><span class="w">        </span><span class="k">ON</span><span class="w"> </span><span class="n">product</span><span class="p">.</span><span class="n">p_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">p_id</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>这和内联很相似，差别只是联结关键词改成了<code>LEFT OUTER JOIN</code>。这表示以左边的表为主表，把右边的表的内容联结上去。因此左表的所有列都会出现在结果集中。</p>
 <p>多表联查举例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -509,16 +509,16 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 登录异常的账号及密码
-</span><span class="c1"></span><span class="k">select</span> <span class="k">distinct</span> <span class="n">batches</span><span class="p">.</span><span class="n">identity_number</span> <span class="k">as</span> <span class="s1">&#39;登录失败账号&#39;</span><span class="p">,</span> <span class="n">accounts</span><span class="p">.</span><span class="n">password</span>
-	<span class="k">from</span> <span class="p">((</span><span class="n">batches</span> <span class="k">left</span> <span class="k">outer</span> <span class="k">join</span> <span class="n">tasks</span>
-			<span class="k">on</span> <span class="n">batches</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">tasks</span><span class="p">.</span><span class="n">batch_id</span><span class="p">)</span>   <span class="c1">-- 批次表联结具体的任务表
-</span><span class="c1"></span>		<span class="k">left</span> <span class="k">outer</span> <span class="k">join</span> <span class="o">`</span><span class="n">status</span><span class="o">`</span>
-			<span class="k">on</span> <span class="n">tasks</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">status</span><span class="p">.</span><span class="n">task_id</span><span class="p">)</span>  <span class="c1">-- 再联结上状态表
-</span><span class="c1"></span>        <span class="k">left</span> <span class="k">outer</span> <span class="k">join</span> <span class="n">accounts</span>
-			<span class="k">on</span> <span class="n">batches</span><span class="p">.</span><span class="n">identity_number</span> <span class="o">=</span> <span class="n">accounts</span><span class="p">.</span><span class="n">identity_number</span>  <span class="c1">-- 再联结上账号表
-</span><span class="c1"></span>	<span class="k">where</span> <span class="o">`</span><span class="n">status</span><span class="o">`</span><span class="p">.</span><span class="n">step_type</span> <span class="o">=</span> <span class="s1">&#39;check_login&#39;</span>     <span class="c1">-- 只提取 &#34;check_login&#34; 步骤的记录
-</span><span class="c1"></span>		<span class="k">and</span> <span class="n">status</span><span class="p">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s1">&#39;info&#39;</span>  <span class="c1">-- 状态不为 info，说明登录异常
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 登录异常的账号及密码
+</span><span class="c1"></span><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w"> </span><span class="n">batches</span><span class="p">.</span><span class="n">identity_number</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s1">&#39;登录失败账号&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">accounts</span><span class="p">.</span><span class="n">password</span><span class="w">
+</span><span class="w">	</span><span class="k">from</span><span class="w"> </span><span class="p">((</span><span class="n">batches</span><span class="w"> </span><span class="k">left</span><span class="w"> </span><span class="k">outer</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">tasks</span><span class="w">
+</span><span class="w">			</span><span class="k">on</span><span class="w"> </span><span class="n">batches</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tasks</span><span class="p">.</span><span class="n">batch_id</span><span class="p">)</span><span class="w">   </span><span class="c1">-- 批次表联结具体的任务表
+</span><span class="c1"></span><span class="w">		</span><span class="k">left</span><span class="w"> </span><span class="k">outer</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="o">`</span><span class="n">status</span><span class="o">`</span><span class="w">
+</span><span class="w">			</span><span class="k">on</span><span class="w"> </span><span class="n">tasks</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">task_id</span><span class="p">)</span><span class="w">  </span><span class="c1">-- 再联结上状态表
+</span><span class="c1"></span><span class="w">        </span><span class="k">left</span><span class="w"> </span><span class="k">outer</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">accounts</span><span class="w">
+</span><span class="w">			</span><span class="k">on</span><span class="w"> </span><span class="n">batches</span><span class="p">.</span><span class="n">identity_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accounts</span><span class="p">.</span><span class="n">identity_number</span><span class="w">  </span><span class="c1">-- 再联结上账号表
+</span><span class="c1"></span><span class="w">	</span><span class="k">where</span><span class="w"> </span><span class="o">`</span><span class="n">status</span><span class="o">`</span><span class="p">.</span><span class="n">step_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;check_login&#39;</span><span class="w">     </span><span class="c1">-- 只提取 &#34;check_login&#34; 步骤的记录
+</span><span class="c1"></span><span class="w">		</span><span class="k">and</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">&#39;info&#39;</span><span class="w">  </span><span class="c1">-- 状态不为 info，说明登录异常
 </span></code></pre></td></tr></table>
 </div>
 </div><p>此外还有 FULL OUTER JOIN 表示返回左右两表的所有行！所有没有匹配的行都给出 NULL</p>
@@ -572,19 +572,19 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">DATABASE</span> <span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">数据库名称</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h3 id="2-创建表">2. 创建表：</h3>
 <h4 id="关系表的设计">关系表的设计</h4>
@@ -592,7 +592,7 @@
 <h4 id="语句">语句：</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -602,20 +602,20 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
-<span class="p">(</span>
-    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="o">&lt;</span><span class="err">列名</span><span class="mi">3</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="p">...</span>
-    <span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="o">&lt;</span><span class="err">列名</span><span class="mi">3</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">该列所需约束</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">...</span><span class="w">
+</span><span class="w">    </span><span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="err">该表的约束</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>举例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -623,13 +623,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">persons</span><span class="o">`</span>
-<span class="p">(</span>
-    <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">INT</span> <span class="n">UNSIGNED</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
-    <span class="o">`</span><span class="n">name</span><span class="o">`</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span> 
-    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span>
-<span class="p">)</span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">persons</span><span class="o">`</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="o">`</span><span class="n">name</span><span class="o">`</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> 
+</span><span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>后面的是设置引擎和默认字符集。工作上，表的设计一定要深思熟虑，因为改起来很困难。</p>
 <h4 id="字段类型mysql">字段类型（MySQL）</h4>
@@ -665,20 +665,20 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><pre><code>- 只清空表内数据，但留下表：
 </code></pre>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">TRUNCATE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>  <span class="c1">-- 非标准SQL语句，但是大部分DB都支持。（可能不能ROLLBACK）
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">TRUNCATE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span><span class="w">  </span><span class="c1">-- 非标准SQL语句，但是大部分DB都支持。（可能不能ROLLBACK）
 </span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
@@ -688,20 +688,20 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">该列的约束</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">数据类型</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="err">该列的约束</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>删除列定义：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w"> </span><span class="k">DROP</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="o">&lt;</span><span class="err">列名</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="三dml">三、DML</h2>
 <blockquote>
@@ -713,14 +713,14 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">SELECT &lt;字段1&gt; AS &lt;别名1&gt;,
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">SELECT &lt;字段1&gt; AS &lt;别名1&gt;,
      &lt;字段2&gt; AS &lt;别名2&gt;,
      ...
 FROM &lt;表名&gt;
@@ -783,7 +783,7 @@ HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同
 格式：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -793,15 +793,15 @@ HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">&lt;</span><span class="err">字段</span><span class="mi">1</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
-     <span class="o">&lt;</span><span class="err">字段</span><span class="mi">2</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="o">&lt;</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
-     <span class="p">...</span>
-<span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
-<span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">1</span><span class="o">&gt;</span>
-<span class="k">GROUP</span> <span class="k">BY</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>
-<span class="k">HAVING</span> <span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">2</span><span class="o">&gt;</span>
-<span class="k">ORDER</span> <span class="k">BY</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span>  <span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="o">&lt;</span><span class="err">字段</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">&lt;</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w">     </span><span class="o">&lt;</span><span class="err">字段</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="o">&lt;</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w">     </span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="k">FROM</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="k">WHERE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">1</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span><span class="w">
+</span><span class="w"></span><span class="k">HAVING</span><span class="w"> </span><span class="o">&lt;</span><span class="err">过滤条件</span><span class="mi">2</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="err">列名</span><span class="o">/</span><span class="err">别名</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">...</span><span class="w">  </span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><ol>
 <li>多排序键/列：指定多排序键时的排序规则为：<strong>优先使用左侧的列，如果该列存在相同值，再接着参考右侧的键，依此类推。</strong>（如果左侧键值不同，右侧的键就不会被使用了）</li>
@@ -813,15 +813,15 @@ HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同
 <p>语法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
-    <span class="p">(</span><span class="err">列名</span><span class="mi">1</span><span class="p">,</span> <span class="err">列名</span><span class="mi">2</span><span class="p">...)</span>
-    <span class="k">VALUES</span> <span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span> <span class="err">值</span><span class="mi">2</span><span class="p">...);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="p">(</span><span class="err">列名</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列名</span><span class="mi">2</span><span class="p">...)</span><span class="w">
+</span><span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">...);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>或者也可以使用 SELECT 语句来替代 VALUES 子句，达到将 SELECT 到的结果集插入某表的效果。（但是不要用ORDER BY，因为结果是<strong>集</strong>，没有顺序，排序是徒劳无功的）
 插入时主键不能重复，否则会报错。（因此如果需要包含重复数据，一般都会定义一个自增的id字段）</p>
@@ -829,55 +829,55 @@ HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同
 <p>清空表（危险操作，而且效率不如 TRUNCATE）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>条件删除：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
-    <span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span> 
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> 
+</span></code></pre></td></tr></table>
 </div>
 </div><p>因此使用DELETE时，一定要记得带WHERE，不然就好玩了。。</p>
 <h4 id="更新update">更新(UPDATE)</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span>
-    <span class="k">SET</span> <span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">算术表达式</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
-        <span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">表达式</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
-        <span class="p">...</span>
-    <span class="k">WHERE</span> <span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">UPDATE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表名</span><span class="o">&gt;</span><span class="w">
+</span><span class="w">    </span><span class="k">SET</span><span class="w"> </span><span class="o">&lt;</span><span class="err">列名</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="err">算术表达式</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="o">&lt;</span><span class="err">列名</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="err">表达式</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="p">...</span><span class="w">
+</span><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="o">&lt;</span><span class="err">条件</span><span class="o">&gt;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>同 DELETE 一样，不带 WHERE 子句的 UPDATE 是很危险的。</p>
 <h2 id="四dcl---事务处理mysql">四、DCL - 事务处理(MySQL)</h2>
 <p><strong>事务是一系列不可分割的数据库操作</strong>，也就是说，这一系列操作要么全部执行，要么全部不执行。如果执行过程中发生了问题（检查执行状态），可以通过执行 ROLLBACK 回滚到该事务执行前的状态。（<strong>注意并不会自动回滚</strong>）</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>
-    <span class="c1">-- do somthing
-</span><span class="c1"></span><span class="n">COMMIT</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">START</span><span class="w"> </span><span class="n">TRANSACTION</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="c1">-- do somthing
+</span><span class="c1"></span><span class="n">COMMIT</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>START TRANSACTION</code>: 标识事务的开始</li>
@@ -892,7 +892,7 @@ HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -905,7 +905,7 @@ HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">CREATE PROCEDURE my_test()
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">CREATE PROCEDURE my_test()
     BEGIN
         DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK  -- 检测到 SQLEXCEPTION 则 rollback，然后 exit
         START TRANSACTION

@@ -79,14 +79,14 @@ version of the specification.
 <p>RS256 使用 RSA 算法进行签名，可通过如下命令生成 RSA 密钥：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 2048 位（不是 256 位）的 RSA 密钥</span>
 openssl genrsa -out rsa-private-key.pem <span class="m">2048</span>
 
 <span class="c1"># 2. 通过密钥生成公钥</span>
@@ -96,13 +96,13 @@ openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem
 </div><p>ES256 使用 ECDSA 算法进行签名，该算法使用 ECC 密钥，生成命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）</span>
 openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
 <span class="c1"># 2. 通过密钥生成公钥</span>
 openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
@@ -165,7 +165,7 @@ $$b = tu$$</p>
 <p>这个递推法写成c语言函数是这样的（比推导更简洁&hellip;）:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -176,7 +176,7 @@ $$b = tu$$</p>
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">Gcd</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">M</span><span class="p">,</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">N</span><span class="p">){</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">Gcd</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">M</span><span class="p">,</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">N</span><span class="p">){</span>
     <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">Rem</span><span class="p">;</span>
     <span class="k">while</span><span class="p">(</span><span class="n">N</span><span class="p">){</span>
         <span class="n">Rem</span> <span class="o">=</span> <span class="n">M</span> <span class="o">%</span> <span class="n">N</span><span class="p">;</span>
