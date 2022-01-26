@@ -50,7 +50,7 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 五链的功能和名称完全一致，应该很容易理解。下面按优先级分别介绍下链中的四个表：
 
 - raw: 对收到的数据包在连接跟踪前进行处理。一般用不到，可以忽略
-  - 一旦用户使用了 RAW 表，RAW 表处理完后，将跳过 NAT 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了
+  - 一旦用户使用了 raw raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了
 - mangle: 用于修改报文、给报文打标签
 - nat: 主要用于做网络地址转换，SNAT 或者 DNAT
 - filter: 主要用于过滤数据包
@@ -78,9 +78,9 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 iptables [-t table] {-A|-C|-D} chain [-m matchname [per-match-options]] -j targetname [per-target-options]
 ```
 
-其中 table 默认为 `filter` 表，但是感觉系统管理员实际使用最多的是 INPUT 表，用于设置防火墙。
+其中 table 默认为 `filter` 表，其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。
 
-以下简单介绍在 INPUT 表上添加、修改规则，来设置防火墙：
+以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙：
 
 ```shell
 # --add 允许 80 端口通过
@@ -130,7 +130,7 @@ iptables -F INPUT
 
 上一节中我们忽略了图中的 conntrack，它就是本节的主角——netfilter 的连接跟踪（connection tracking）模块。
 
-netfilter/conntrack 是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件，上面的流程图显示， conntrack 在 PREROUTEING 和 OUTPUT 表的 raw 链之后生效。
+netfilter/conntrack 是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件，上面的流程图显示， conntrack 在 PREROUTEING 和 OUTPUT 链的 raw 表之后生效。
 
 下面以 docker 默认的 bridge 网络为例详细介绍下 conntrack 的功能。
 
@@ -358,7 +358,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -N DOCKER-ISOLATION-STAGE-1
 -N DOCKER-ISOLATION-STAGE-2
 -N DOCKER-USER
-# 所有流量都必须先经过如下两个表处理，没问题才能继续往下走
+# 所有流量都必须先经过如下两个链的处理，没问题才能继续往下走
 -A FORWARD -j DOCKER-ISOLATION-STAGE-1
 -A FORWARD -j DOCKER-USER
 # （容器访问外部网络）出去的流量走了 MASQUERADE，回来的流量会被 conntrack 识别并转发回来，这里允许返回的数据包通过。
@@ -369,7 +369,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 # 允许所有来自 docker0 的流量通过，不论下一跳是否是 docker0
 -A FORWARD -i docker0 ! -o docker0 -j ACCEPT
 -A FORWARD -i docker0 -o docker0 -j ACCEPT
-# 下面三个表目前啥规则也没有，就是简单的 RETURN，交给后面的表继续处理
+# 下面三个链目前啥规则也没有，就是简单的 RETURN，交给后面的表继续处理
 -A DOCKER-ISOLATION-STAGE-1 -j RETURN
 -A DOCKER-ISOLATION-STAGE-2 -j RETURN
 -A DOCKER-USER -j RETURN
