@@ -42,7 +42,7 @@ kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很
    2. 支持 airgap 离线部署，但是以前我试用过是有坑，现在不知道咋样了
    3. 底层使用了 kubeadm 部署集群
 
-笔者为了学习 Kuberntes，下面采用官方的 kubeadm 进行部署（不要问为啥不二进制部署，问就是懒），容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.
+笔者为了学习 Kubernetes，下面采用官方的 kubeadm 进行部署（不要问为啥不二进制部署，问就是懒），容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.
 
 kubernetes 官方介绍了两种高可用集群的拓扑结构：「Stacked etcd topology」和「External etcd topology」，简单起见，本文使用第一种「堆叠 Etcd 拓扑」结构，创建一个三 master 的高可用集群。
 
