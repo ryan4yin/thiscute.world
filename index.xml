@@ -2873,8 +2873,8 @@ node/node-205 evicted
 <pre class="chroma"><code class="language-shell" data-lang="shell">iptables <span class="o">[</span>-t table<span class="o">]</span> <span class="o">{</span>-A<span class="p">|</span>-C<span class="p">|</span>-D<span class="o">}</span> chain <span class="o">[</span>-m matchname <span class="o">[</span>per-match-options<span class="o">]]</span> -j targetname <span class="o">[</span>per-target-options<span class="o">]</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>其中 table 默认为 <code>filter</code> 表，但是感觉系统管理员实际使用最多的是 INPUT 表，用于设置防火墙。</p>
-<p>以下简单介绍在 INPUT 表上添加、修改规则，来设置防火墙：</p>
+</div><p>其中 table 默认为 <code>filter</code> 表，其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。</p>
+<p>以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
