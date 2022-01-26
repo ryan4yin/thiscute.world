@@ -1,1 +1,0 @@
-Are you still going to continue traversing?
