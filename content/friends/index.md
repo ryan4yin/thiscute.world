@@ -37,18 +37,19 @@ var myFriends = [
     ["https://jdragon.club/", "/avatar/jdragon.jpg", "@谭宇", "Hello world! <= Java"], 
     ["https://www.jianshu.com/u/af3a36ae8d16", "/avatar/li2niu.png", "@李二牛", "深耕Web服务端 马拉松爱好者(PB330) <= Java"], 
     // ["https://www.i-lab.top/", "https://www.i-lab.top/favicon.ico", "@震邦的算法日常", "南北传"], 
-    ["https://xingaqr.com/", "https://xingaqr.com/avatar.png", "@单单", "但知行好事，莫要问前程"], 
+    ["https://cxcn.xyz/", "https://cxcn.xyz/avatar.png", "@单单", "但知行好事，莫要问前程"], 
     ["https://farer.org/", "/avatar/farer.jpg", "@Stray Episode", "Scientific Evocation"], 
     ["https://wasteland.touko.moe", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
     ["https://blog.k8s.li/", "/avatar/muzi.png", "@木子", "垃圾佬、搬砖社畜、运维工程师 <= 莫得感情的读书机器"], 
     ["https://www.addesp.com", "https://www.addesp.com/avatar", "@ADD-SP", "记录 & 分享 & 感受 <= 硬核网络协议分析"], 
     ["https://thautwarm.github.io/Site-32/", "/avatar/thautwarm.jpg", "@thautwarm", "Driven by the desire of making a difference. <= PLT 专家"], 
-    ["https://blog.yidajiabei.xyz/", "https://blog.yidajiabei.xyz/images/android-chrome-512x512.png", "@一大加贝", "学习技术，热爱生活"], 
+    ["https://yidajiabei.xyz/", "/avatar/tianheg.png", "@一大加贝", "学习技术，热爱生活"], 
     ["https://guanqr.com/", "https://cdn.jsdelivr.net/gh/guanqr/blog/static/icons/android-chrome-512x512.png", "@荷戟独彷徨", "爱光学，爱生活，爱创造"], 
     ["https://exploro.one", "https://avatars.githubusercontent.com/u/4038871?s=460&u=d2f1c2eea96acb15578f2e513ba5fa673aa3d250&v=4", "@探索子", "Learn by doing. <= 硬核数学博客"], 
     ["https://panqiincs.me/", "https://panqiincs.me/images/avatar.jpg", "@辛未羊", "人生如逆旅，我亦是行人 <= 是熟悉 CS 跟信号系统的高中教师哦"], 
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
     ["https://www.foreverblog.cn/", "https://www.foreverblog.cn/favicon.ico", "@十年之约", "我们的博客十年不关闭，保持活力"], 
+    ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.jpg", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。 <= Java+DevOps"], 
 ];
 
 
