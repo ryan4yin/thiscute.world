@@ -601,10 +601,11 @@ node/node-205 evicted
 
 在使用百分比时，计算出的实例数都会被向上取整，这会造成两个现象：
 
-- 如果使用 `minAvailable`，实例数较少的情况下，可能会导致 ALLOWED DISRUPTIONS 为 0
-- 如果使用 `maxUnavailable`，因为是向上取整，ALLOWED DISRUPTIONS 的值一定不会低于 1
+- 如果使用 `minAvailable`，实例数较少的情况下，可能会导致 ALLOWED DISRUPTIONS 为 0，所有实例都无法被驱逐了。
+- 如果使用 `maxUnavailable`，因为是向上取整，ALLOWED DISRUPTIONS 的值一定不会低于 1，至少有 1 个实例可以被驱逐。
 
-因此从便于驱逐的角度看，如果你的服务至少有 2-3 个实例，建议在 PDB 中使用百分比配置 `maxUnavailable`，而不是 `minAvailable`.
+因此从「便于驱逐」的角度看，如果你的服务至少有 2-3 个实例，建议在 PDB 中使用百分比配置 `maxUnavailable`，而不是 `minAvailable`.
+相对的从「确保服务稳定性」的角度看，我们则应该使用 `minAvailable`，确保至少有 1 个实例可用。
 
 ### 最佳实践 Deployment + HPA + PodDisruptionBudget
 
