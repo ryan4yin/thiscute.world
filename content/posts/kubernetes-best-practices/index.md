@@ -373,7 +373,7 @@ HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其
 - 方法三：使用 k8s 1.20 提供的 alpha 特性：[Container Resourse Metrics](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics). 
 
 
-#### 2. HPA 的扩缩容算法
+### 2. HPA 的扩缩容算法
 
 HPA 什么时候会扩容，这一点是很好理解的。但是 HPA 的缩容策略，会有些迷惑，下面简单分析下。
 
@@ -400,11 +400,12 @@ HPA 的扩缩容算法为：
 3. `当前副本数 / 目标指标`的值越大，「当前指标」的波动对「期望副本数」的影响就越大。
 
 
-为了防止扩缩容过于敏感，它还有几个延时相关的参数：
+为了防止扩缩容过于敏感，HPA 有几个相关参数：
 
-1. HPA Loop 延时：默认 15 秒，每 15 秒钟进行一次 HPA 扫描。
-2. `--horizontal-pod-autoscaler-cpu-initialization-period`: 
-3. 缩容冷却时间：默认 5 分钟。
+1. Hardcoded 参数
+   1. HPA Loop 延时：默认 15 秒，每 15 秒钟进行一次 HPA 扫描。
+   2. 缩容冷却时间：默认 5 分钟。
+2. 对于 K8s 1.18+，HPA 通过 `spec.behavior` 提供了多种控制扩缩容行为的参数，后面会具体介绍。
 
 
 ### 3. HPA 的期望值设成多少合适
