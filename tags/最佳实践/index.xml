@@ -908,8 +908,8 @@ node/node-205 evicted
 <h4 id="在-pdb-中使用百分比的注意事项">在 PDB 中使用百分比的注意事项</h4>
 <p>在使用百分比时，计算出的实例数都会被向上取整，这会造成两个现象：</p>
 <ul>
-<li>如果使用 <code>minAvailable</code>，实例数较少的情况下，可能会导致 ALLOWED DISRUPTIONS 为 0</li>
-<li>如果使用 <code>maxUnavailable</code>，因为是向上取整，ALLOWED DISRUPTIONS 的值一定不会低于 1</li>
+<li>如果使用 <code>minAvailable</code>，实例数较少的情况下，可能会导致 ALLOWED DISRUPTIONS 为 0，所有实例都无法被驱逐了。</li>
+<li>如果使用 <code>maxUnavailable</code>，因为是向上取整，ALLOWED DISRUPTIONS 的值一定不会低于 1，至少有 1 个实例可以被驱逐。</li>
 </ul>
 <p>因此从便于驱逐的角度看，如果你的服务至少有 2-3 个实例，建议在 PDB 中使用百分比配置 <code>maxUnavailable</code>，而不是 <code>minAvailable</code>.</p>
 <h3 id="最佳实践-deployment--hpa--poddisruptionbudget">最佳实践 Deployment + HPA + PodDisruptionBudget</h3>
