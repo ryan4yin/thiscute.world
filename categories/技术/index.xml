@@ -1632,7 +1632,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 <li>方法二：使用 KEDA 等第三方组件，获取到应用程序的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容</li>
 <li>方法三：使用 k8s 1.20 提供的 alpha 特性：<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics" target="_blank" rel="noopener noreferrer">Container Resourse Metrics</a>.</li>
 </ul>
-<h4 id="2-hpa-的扩缩容算法">2. HPA 的扩缩容算法</h4>
+<h3 id="2-hpa-的扩缩容算法">2. HPA 的扩缩容算法</h3>
 <p>HPA 什么时候会扩容，这一点是很好理解的。但是 HPA 的缩容策略，会有些迷惑，下面简单分析下。</p>
 <ol>
 <li>HPA 的「目标指标」可以使用两种形式：绝对度量指标和资源利用率。
@@ -1665,11 +1665,15 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 </li>
 <li><code>当前副本数 / 目标指标</code>的值越大，「当前指标」的波动对「期望副本数」的影响就越大。</li>
 </ol>
-<p>为了防止扩缩容过于敏感，它还有几个延时相关的参数：</p>
+<p>为了防止扩缩容过于敏感，HPA 有几个相关参数：</p>
+<ol>
+<li>Hardcoded 参数
 <ol>
 <li>HPA Loop 延时：默认 15 秒，每 15 秒钟进行一次 HPA 扫描。</li>
-<li><code>--horizontal-pod-autoscaler-cpu-initialization-period</code>:</li>
 <li>缩容冷却时间：默认 5 分钟。</li>
+</ol>
+</li>
+<li>对于 K8s 1.18+，HPA 通过 <code>spec.behavior</code> 提供了多种控制扩缩容行为的参数，后面会具体介绍。</li>
 </ol>
 <h3 id="3-hpa-的期望值设成多少合适">3. HPA 的期望值设成多少合适</h3>
 <p>这个需要针对每个服务的具体情况，具体分析。</p>
