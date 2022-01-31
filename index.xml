@@ -1940,7 +1940,8 @@ node/node-205 evicted
 <li>如果使用 <code>minAvailable</code>，实例数较少的情况下，可能会导致 ALLOWED DISRUPTIONS 为 0，所有实例都无法被驱逐了。</li>
 <li>如果使用 <code>maxUnavailable</code>，因为是向上取整，ALLOWED DISRUPTIONS 的值一定不会低于 1，至少有 1 个实例可以被驱逐。</li>
 </ul>
-<p>因此从便于驱逐的角度看，如果你的服务至少有 2-3 个实例，建议在 PDB 中使用百分比配置 <code>maxUnavailable</code>，而不是 <code>minAvailable</code>.</p>
+<p>因此从「便于驱逐」的角度看，如果你的服务至少有 2-3 个实例，建议在 PDB 中使用百分比配置 <code>maxUnavailable</code>，而不是 <code>minAvailable</code>.
+相对的从「确保服务稳定性」的角度看，我们则应该使用 <code>minAvailable</code>，确保至少有 1 个实例可用。</p>
 <h3 id="最佳实践-deployment--hpa--poddisruptionbudget">最佳实践 Deployment + HPA + PodDisruptionBudget</h3>
 <p>一般而言，一个服务的每个版本，都应该包含如下三个资源：</p>
 <ul>
