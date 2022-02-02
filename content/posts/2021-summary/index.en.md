@@ -117,10 +117,9 @@ For non-core services, the amount of requests resources can be appropriately red
 
 The outlook for this year is more focused. I strive to achieve 50%, which will be a big breakthrough.
 
-1. Proficient in Go/Rust and use in at least two projects
+1. Proficient in Go and use in at least two projects
    1. To forge iron, one must be strong. Coding is the foundation of IT.
-2. Learn the following techniques in depth
-   1. Kubernetes Source Code.
+2. Learn kubebuilder, k8s source code.
 3. Network Technologies
    1. Service Mesh - Istio
    2. Network Proxy - Envoy/APISIX
@@ -135,6 +134,8 @@ The outlook for this year is more focused. I strive to achieve 50%, which will b
    3. Popularize gRPC protocol
 5. Get through the local development environment and the running environment on the cloud
    1. [nocalhost](https://github.com/nocalhost/nocalhost)
+5. Multicluster Application Deployment and Disaster Recovery
+      1. karmada
 6. Explore new technologies and other possibilities（Low priority）
    1. Kubernetes-based Service platform, Future Development Direction
       1. kubevela
@@ -144,8 +145,6 @@ The outlook for this year is more focused. I strive to achieve 50%, which will b
    2. Development of Serverless platform
       1. Knative
       2. OpenFunction
-   3. Multicluster Application Deployment and Disaster Recovery
-      1. karmada
    4. Machine learning / Deep learning: I would like to try to apply AI to music, voice, SRE and other areas I am interested in...
 
 It can be expected that there will be so many opportunities for the SRE team in 2022. I really look forward to which parts I can be responsible for and what results I can achieve.
