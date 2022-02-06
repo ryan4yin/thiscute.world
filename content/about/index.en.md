@@ -41,8 +41,8 @@ lightgallery: true
 
 
 {{< admonition tip "Blog Timeline" true >}}
-- 2021-01-16: Set up the blog https://ryan4yin.space
-- 2022-01-23: Add English Version https://ryan4yin.space/en
+- 2021-01-16: Set up the blog https://thiscute.world/
+- 2022-01-23: Add English Version https://thiscute.world/en
 {{< /admonition >}}
 
 

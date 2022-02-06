@@ -120,7 +120,7 @@ iptables -F INPUT
 ---
 
 >本文后续分析时，假设用户已经清楚 linux bridge、veth 等虚拟网络接口相关知识。
-如果你还缺少这些前置知识，请先阅读文章 [Linux 中的虚拟网络接口](https://ryan4yin.space/posts/linux-virtual-network-interfaces/)。
+如果你还缺少这些前置知识，请先阅读文章 [Linux 中的虚拟网络接口](https://thiscute.world/posts/linux-virtual-network-interfaces/)。
 
 ## conntrack 连接跟踪与 NAT
 

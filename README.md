@@ -2,7 +2,7 @@
 
 Ryan4Yin's Space, built using [Hugo](https://github.com/gohugoio/hugo) and hosted on [GitHub Pages](https://pages.github.com/).
 
-Address: https://ryan4yin.space
+Address: https://thiscute.world/
 
 ## Editing
 
