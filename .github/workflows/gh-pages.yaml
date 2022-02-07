@@ -25,10 +25,10 @@ jobs:
       - name: Update Posts Trending
         run: |
           # decrypt service-account.json
-          gpg --quiet --batch --yes --decrypt --passphrase='$SERVICE_ACCOUNT_DECRYPT_KEY' --output google-service-account.json google-service-account.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$SERVICE_ACCOUNT_DECRYPT_KEY" --output google-service-account.json google-service-account.json.gpg
           pip3 install "google-api-python-client==2.36.0" "google-auth==2.4.0"
           # generate website_statistics.json
-          python3 update_trending_posts.py
+          python3 update_statistics.py
           # commit changes
         env:
           SERVICE_ACCOUNT_DECRYPT_KEY: ${{ secrets.SERVICE_ACCOUNT_DECRYPT_KEY }}
