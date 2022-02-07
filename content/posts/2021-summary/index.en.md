@@ -161,43 +161,43 @@ It can be expected that there will be so many opportunities for the SRE team in 
 - Reading: The list is as follows. Read at least one of them in a month.
   - Literature
     - [x] No Longer Human,  Osamu Dazai
-    - The End of Your Life Book club,  Will Schwalbe
-    - One Hundred Years of Solitude, Gabriel Garcia Marquez
-    - Love in the Time of Cholera, Gabriel Garcia Marquez
-    - Sophie's World
-    - Stories of Your Life and Others, Ted Chiang
-    - 《沈从文的后半生》
-    - 《我与地坛》
-    - 《将饮茶》
-    - 《My Country and My People - 林语堂》
-    - 《房思琪的初恋乐园》
+    - [ ] The End of Your Life Book club,  Will Schwalbe
+    - [ ] One Hundred Years of Solitude, Gabriel Garcia Marquez
+    - [ ] Love in the Time of Cholera, Gabriel Garcia Marquez
+    - [ ] Sophie's World
+    - [ ] Stories of Your Life and Others, Ted Chiang
+    - [ ] 《沈从文的后半生》
+    - [ ] 《我与地坛》
+    - [ ] 《将饮茶》
+    - [ ] 《My Country and My People - 林语堂》
+    - [ ] 《房思琪的初恋乐园》
   - social & sciences
-    - Death Is But a Dream: I want to know more about "death" this year.
-    - 《怎样征服美丽少女》：哈哈
-    - Harper Perennial Modern Classics
-    - Social Psychology
-    - The Courage to Be Disliked
-    - The Body: A Guide for Occupants
-    - The Structure of Scientific Revolutions
-    - Deng Xiaoping and the Transformation of China
-    - On China
-    - 《刘擎西方现代思想讲义》
-    - The Order of Time
-    - The Universe in Your Hand
-    - 《圆圈正义-作为自由前提的信念》
-    - What Do You Say After You Say Hello?
+    - [ ] Death Is But a Dream: I want to know more about "death" this year.
+    - [ ] 《怎样征服美丽少女》：哈哈
+    - [ ] Harper Perennial Modern Classics
+    - [ ] Social Psychology
+    - [ ] The Courage to Be Disliked
+    - [ ] The Body: A Guide for Occupants
+    - [ ] The Structure of Scientific Revolutions
+    - [ ] Deng Xiaoping and the Transformation of China
+    - [ ] On China
+    - [ ] 《刘擎西方现代思想讲义》
+    - [ ] The Order of Time
+    - [ ] The Universe in Your Hand
+    - [ ] 《圆圈正义-作为自由前提的信念》
+    - [ ] What Do You Say After You Say Hello?
   - Technology
-    - Complexity: A Guided Tour
-    - Site Reliability Engineering: How Google Runs Production Systems
-    - The Phoenix Project - A Novel About IT, DevOps, and Helping Your Business Win
-    - The Mythical Man Month and Other Essays on Software Engineering
-    - 《绩效使能：超越 OKR》
-    -  Powerful: Building a Culture of Freedom and Responsibility
-    - 《幕后产品-打造突破式思维》
-    - Professional Linux Kernel Architecture
-    - [The Linux Programming Interface: A Linux and UNIX System Programming Handbook](https://man7.org/tlpi/)
-    - Refactoring - Improving the Design of Existing Code
-    - How Networks Work
+    - [ ] Complexity: A Guided Tour
+    - [ ] Site Reliability Engineering: How Google Runs Production Systems
+    - [ ] The Phoenix Project - A Novel About IT, DevOps, and Helping Your Business Win
+    - [ ] The Mythical Man Month and Other Essays on Software Engineering
+    - [ ] 《绩效使能：超越 OKR》
+    - [ ]  Powerful: Building a Culture of Freedom and Responsibility
+    - [ ] 《幕后产品-打造突破式思维》
+    - [ ] Professional Linux Kernel Architecture
+    - [ ] [The Linux Programming Interface: A Linux and UNIX System Programming Handbook](https://man7.org/tlpi/)
+    - [ ] Refactoring - Improving the Design of Existing Code
+    - [ ] How Networks Work
 
 
 ## In Summary
