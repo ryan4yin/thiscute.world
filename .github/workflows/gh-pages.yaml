@@ -4,7 +4,9 @@ name: github pages
 on:
   push:
     branches:
-      - main  # Set a branch to deploy
+      - main
+  schedule:
+    - cron: "0 */6 * * *"  # 分 时 日 月 周，每六小时更新一次
 
 jobs:
   deploy:
@@ -15,6 +17,28 @@ jobs:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
+      - name: Use Python3
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
+      - name: Update Posts Trending
+        run: |
+          # decrypt service-account.json
+          gpg --quiet --batch --yes --decrypt --passphrase='$SERVICE_ACCOUNT_DECRYPT_KEY' --output google-service-account.json google-service-account.json.gpg
+          pip3 install "google-api-python-client==2.36.0" "google-auth==2.4.0"
+          # generate website_statistics.json
+          python3 update_trending_posts.py
+          # commit changes
+        env:
+          SERVICE_ACCOUNT_DECRYPT_KEY: ${{ secrets.SERVICE_ACCOUNT_DECRYPT_KEY }}
+      - name: Commit changes of website_statistics.json
+        run: |
+          git config --local user.email "ryan4yin[bot]@users.noreply.github.com"
+          git config --local user.name "ryan4yin[bot]"
+          git add data/website_statistics.json
+          git commit -m "feat: update website_statistics.json every 6 hours."
+          git push
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -37,7 +61,7 @@ jobs:
           node-version: '15.x'
       - name: Push Argolia Index
         run: |
-          npm install algoliasearch
+          npm install algoliasearch@4.12.1
           node push_argolia_index.js
         env:
           ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
