@@ -19,7 +19,7 @@ from googleapiclient.discovery import build
 from google.oauth2.service_account import Credentials
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
-PROPERTY = 'properties/259164768'
+PROPERTY = 'properties/259164768'  # my site's google analytics property
 
 SERVICE_ACCOUNT_FILE = './google-service-account.json'
 OUTPUT_PATH = "./data/website_statistics.json"
@@ -42,6 +42,9 @@ def initialize_analyticsreporting():
 
 
 def process_data(data):
+    """
+    转换下数据格式，以方便使用
+    """
     result = dict()
     empty = tuple()
     for it in data.get('rows', empty):
