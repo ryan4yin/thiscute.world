@@ -112,11 +112,11 @@
             <ul>
                 <li><strong>Unique Visitors</strong>:  {{ .activeUsers }}</li>
                 <li><strong>Page Views</strong>: {{ .screenPageViews }}</li>
-                <li><strong>Reading Duration</strong>: {{ .userEngagementDuration }}s</li>
+                <li><strong>Reading Duration</strong>: {{ .readingDuration }}</li>
             </ul>
             {{ end }}
 
-            <h2 id="trending-posts" class="headerLink"><a href="#trending-posts" class="header-mark"></a>二、阅读排行榜</h2>
+            <h2 id="trending-posts-30days" class="headerLink"><a href="#trending-posts-30days" class="header-mark"></a>二、近 30 天的阅读排行</h2>
             <table>
                 <thead>
                 <tr>
@@ -133,7 +133,7 @@
                     <td><a href="{{ .pagePath }}">{{ .pageTitle }}</a></td>
                     <td>{{ .activeUsers }}</td>
                     <td>{{ .screenPageViews }}</td>
-                    <td>{{ .userEngagementDuration }}s</td>
+                    <td>{{ .readingDuration }}</td>
                     </tr>
                 {{ end }}
 

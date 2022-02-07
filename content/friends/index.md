@@ -50,6 +50,7 @@ var myFriends = [
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
     ["https://www.foreverblog.cn/", "https://www.foreverblog.cn/favicon.ico", "@十年之约", "我们的博客十年不关闭，保持活力"], 
     ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.jpg", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。 <= Java+DevOps"], 
+    ["https://stdrc.cc/", "/avatar/richardchien.png", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot 作者，OS 大佬"], 
 ];
 
 

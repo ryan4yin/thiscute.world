@@ -1,5 +1,5 @@
 """
-参考：https://pakstech.com/blog/hugo-popular-content/
+参考: https://pakstech.com/blog/hugo-popular-content/
 
 Update Website Statistics, fetch data from Google Analytics Data API
 
@@ -9,11 +9,13 @@ service_account file:
 - decrypt command: `gpg --quiet --batch --yes --decrypt --passphrase='$SERVICE_ACCOUNT_DECRYPT_KEY' --output google-service-account.json google-service-account.json.gpg`
 """
 
+import json
+import re
+import datetime as dt
+from pathlib import Path
+
 from googleapiclient.discovery import build
 from google.oauth2.service_account import Credentials
-import json
-from pathlib import Path
-import datetime as dt
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 PROPERTY = 'properties/259164768'
@@ -76,6 +78,17 @@ def process_data(data):
         # 没有 pageTitle，这里应该是处理的 totalTrendingPosts
         result[""] = page
   
+    for p in result.values():
+      if "userEngagementDuration" not in p:
+        continue
+      duration_int = int(p['userEngagementDuration'])
+      duration = str(dt.timedelta(seconds=duration_int))
+      duration = re.sub(r"(\d+):(\d+):(\d+)", r"\1h\2m\3s", duration)  # 1:22:33 => 1h22m33s
+      duration = duration\
+        .replace("0h", "")\
+        .replace("00m", "")  # 0h00m17s => 17s
+      p['readingDuration'] = duration
+
     return list(result.values())
 
 
