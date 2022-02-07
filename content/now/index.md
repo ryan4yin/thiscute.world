@@ -12,7 +12,8 @@ draft: false
 ### 最高优先级
 
 技术：
-- go 语言、web 编程、kubebuilder
+- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - 服务网格
   - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档
   - 研究 istio 的 gRPC 支持
@@ -27,8 +28,9 @@ draft: false
 
 阅读（一二月份，就读这两本吧）：
 
-- 《人间失格》
-- 《在生命的尽头拥抱你-临终关怀医生手记》
+- [x] 《人间失格》
+- [ ] 《生命最后的读书会》
+- [ ] 《在生命的尽头拥抱你-临终关怀医生手记》
 
 ### 高优先级
 
@@ -118,7 +120,6 @@ draft: false
 目前想做的：
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
-- Istio/Envoy: 深入学习下 Envoy 的使用
 
 ### 2022-02-07
 
