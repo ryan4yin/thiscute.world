@@ -5,5 +5,5 @@ type: statistics
 draft: false
 ---
 
->此页面的数据由 Github Action 自动从 Google Analytics 获取，更新间隔为 6 小时。
+>此页面的数据由 [Github Action](https://github.com/ryan4yin/ryan4yin.space/blob/main/.github/workflows/gh-pages.yaml) 自动从 Google Analytics 获取，更新间隔为 6 小时。
 
