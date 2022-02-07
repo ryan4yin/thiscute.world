@@ -109,23 +109,35 @@
             {{- /* Statistics */ -}}
             <h2 id="total-statistics" class="headerLink"><a href="#total-statistics" class="header-mark"></a>一、全站统计</h2>
             {{ with index $.Site.Data.website_statistics "total" }}
-            <ul>
-                <li><strong>Unique Visitors</strong>:  {{ .activeUsers }}</li>
-                <li><strong>Page Views</strong>: {{ .screenPageViews }}</li>
-                <li><strong>Reading Duration</strong>: {{ .readingDuration }}</li>
-                <li><strong>Reading Duration Per User</strong>: {{ .readingDurationPerUser }}</li>
-            </ul>
+            <table class="center">
+                <thead>
+                <tr>
+                <th>总访客数 UV</th>
+                <th>总访问量 PV</th>
+                <th>总阅读时长</th>
+                <th>人均阅读时长</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="text-align:center">
+                    <td style="color:tomato;"><strong>{{ .activeUsers }}</strong></td>
+                    <td>{{ .screenPageViews }}</td>
+                    <td>{{ .readingDuration }}</td>
+                    <td style="color:dodgerblue;"><strong>{{ .readingDurationPerUser }}</strong></td>
+                    </tr>
+                </tbody>
+                </table>
             {{ end }}
 
             <h2 id="trending-posts-30days" class="headerLink"><a href="#trending-posts-30days" class="header-mark"></a>二、近 30 天阅读排行</h2>
             <table>
-                <thead>
+                <thead style="white-space: nowrap;">
                 <tr>
                 <th></th>
-                <th>Page Title</th>
-                <th>Unique Visitors</th>
-                <th>Page Views</th>
-                <th>Reading Duration Per User</th>
+                <th>标题</th>
+                <th>访客数</th>
+                <th>访问量</th>
+                <th>人均阅读时长</th>
                 </tr>
                 </thead>
                 <tbody>
