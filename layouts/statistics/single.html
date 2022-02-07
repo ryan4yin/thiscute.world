@@ -113,6 +113,7 @@
                 <li><strong>Unique Visitors</strong>:  {{ .activeUsers }}</li>
                 <li><strong>Page Views</strong>: {{ .screenPageViews }}</li>
                 <li><strong>Reading Duration</strong>: {{ .readingDuration }}</li>
+                <li><strong>Reading Duration Per User</strong>: {{ .readingDurationPerUser }}</li>
             </ul>
             {{ end }}
 
@@ -124,7 +125,7 @@
                 <th>Page Title</th>
                 <th>Unique Visitors</th>
                 <th>Page Views</th>
-                <th>Reading Duration</th>
+                <th>Reading Duration Per User</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -135,7 +136,7 @@
                     <td><a href="{{ .pagePath }}">{{ $page.pageTitle }}</a></td>
                     <td>{{ $page.activeUsers }}</td>
                     <td>{{ $page.screenPageViews }}</td>
-                    <td>{{ $page.readingDuration }}</td>
+                    <td>{{ $page.readingDurationPerUser }}</td>
                     </tr>
                 {{ end }}
 

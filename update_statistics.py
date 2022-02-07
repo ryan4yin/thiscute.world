@@ -40,6 +40,14 @@ def initialize_analyticsreporting():
 
     return analytics
 
+def humanize_duration(seconds: int):
+    duration = str(dt.timedelta(seconds=seconds))
+    duration = re.sub(r"(\d+):(\d+):(\d+)", r"\1h\2m\3s", duration)  # 1:22:33 => 1h22m33s
+    duration = duration\
+      .replace("0h", "")\
+      .replace("00m", "")  # 0h00m17s => 17s
+    
+    return duration
 
 def process_data(data):
     """
@@ -85,13 +93,11 @@ def process_data(data):
     for p in result.values():
       if "userEngagementDuration" not in p:
         continue
-      duration_int = int(p['userEngagementDuration'])
-      duration = str(dt.timedelta(seconds=duration_int))
-      duration = re.sub(r"(\d+):(\d+):(\d+)", r"\1h\2m\3s", duration)  # 1:22:33 => 1h22m33s
-      duration = duration\
-        .replace("0h", "")\
-        .replace("00m", "")  # 0h00m17s => 17s
-      p['readingDuration'] = duration
+      reading_duration = int(p['userEngagementDuration'])
+      p['readingDuration'] = humanize_duration(reading_duration)
+      # 人均阅读时长
+      reading_duration_per_user = reading_duration // int(p['activeUsers'])
+      p['readingDurationPerUser'] = humanize_duration(reading_duration_per_user)
 
     return list(result.values())
 
