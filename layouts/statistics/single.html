@@ -120,6 +120,7 @@
             <table>
                 <thead>
                 <tr>
+                <th></th>
                 <th>Page Title</th>
                 <th>Unique Visitors</th>
                 <th>Page Views</th>
@@ -128,12 +129,13 @@
                 </thead>
                 <tbody>
                 
-                {{ range index $.Site.Data.website_statistics "trendingThisMonth" }}
+                {{ range $index, $page := index $.Site.Data.website_statistics "trendingThisMonth" }}
                 <tr>
-                    <td><a href="{{ .pagePath }}">{{ .pageTitle }}</a></td>
-                    <td>{{ .activeUsers }}</td>
-                    <td>{{ .screenPageViews }}</td>
-                    <td>{{ .readingDuration }}</td>
+                    <td>{{ add $index 1 }}</td>
+                    <td><a href="{{ .pagePath }}">{{ $page.pageTitle }}</a></td>
+                    <td>{{ $page.activeUsers }}</td>
+                    <td>{{ $page.screenPageViews }}</td>
+                    <td>{{ $page.readingDuration }}</td>
                     </tr>
                 {{ end }}
 
