@@ -147,7 +147,7 @@ categories: ["随笔", "技术"]
    2. 实例类型优化：
       1. 使用更合适的实例类型
       2. 使用 ARM 架构机型，降本增效
-   3. 推广 GRPC 协议
+   3. 推广 gRPC 协议
 5. 提升本地开发效率：
    1. [nocalhost](https://github.com/nocalhost/nocalhost)
 6. 多集群的应用部署、容灾

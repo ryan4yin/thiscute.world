@@ -116,8 +116,13 @@ draft: false
 ### now
 
 目前想做的：
-- Istio/Envoy、Cilium
-- 搞一搞 rust 编程，go web 编程
+- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
+- Istio/Envoy: 深入学习下 Envoy 的使用
+
+### 2022-02-07
+
+- 迭代个人博客 <https://thiscute.world>，添加「阅读排行」页，定期从 Google Analytics 同步数据。
 
 ### 2022-01-01
 
