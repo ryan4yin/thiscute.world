@@ -11,7 +11,9 @@ tags: ["HTTPS", "TLS", "OpenSSL", "加密", "破解"]
 categories: ["技术"]
 ---
 
->个人笔记，并非教程！如果希望深入学习，建议阅读 [Practical Cryptography for Developers](https://github.com/nakov/practical-cryptography-for-developers-book)
+>个人笔记，并非教程！只适合当成参考手册，按目录选读。
+
+>如果希望深入学习，建议阅读 [Practical Cryptography for Developers](https://github.com/nakov/practical-cryptography-for-developers-book)
 
 ## 更新记录
 
