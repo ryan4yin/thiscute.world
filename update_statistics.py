@@ -73,7 +73,10 @@ def process_data(data):
 
         for i, metric in enumerate(it.get('metricValues', empty)):
             key = data['metricHeaders'][i]['name']
-            page[key] = metric['value']
+            value = metric['value']
+            if isinstance(value, str) and value.isdecimal():
+                value = int(value)  # 转下整数
+            page[key] = value
 
         if 'pageTitle' in page:
             page['pageTitle'] = page['pageTitle']\
@@ -95,8 +98,7 @@ def process_data(data):
                 result[page_path] = page
             else:
                 for k, v in page.items():
-                    if isinstance(v, int) \
-                        or (isinstance(v, str) and v.isdecimal()):  # 只有数据才需要合并，跳过字符串
+                    if isinstance(v, int):  # 只有数据才需要合并，跳过字符串
                         result[page_path][k] += v
         else:
             # 没有 pageTitle，这里应该是处理的 totalTrendingPosts
