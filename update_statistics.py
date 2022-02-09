@@ -11,6 +11,7 @@ service_account file:
 """
 
 import json
+from operator import itemgetter
 import re
 import datetime as dt
 from pathlib import Path
@@ -40,14 +41,17 @@ def initialize_analyticsreporting():
 
     return analytics
 
+
 def humanize_duration(seconds: int):
     duration = str(dt.timedelta(seconds=seconds))
-    duration = re.sub(r"(\d+):(\d+):(\d+)", r"\1h\2m\3s", duration)  # 1:22:33 => 1h22m33s
+    duration = re.sub(r"(\d+):(\d+):(\d+)", r"\1h \2m \3s",
+                      duration)  # 1:22:33 => 1h22m33s
     duration = duration\
-      .replace("0h", "")\
-      .replace("00m", "")  # 0h00m17s => 17s
-    
+        .replace("0h ", "")\
+        .replace("00m ", "")  # 0h00m17s => 17s
+
     return duration
+
 
 def process_data(data):
     """
@@ -56,50 +60,51 @@ def process_data(data):
     result = dict()
     empty = tuple()
     for it in data.get('rows', empty):
-      page = dict()
-      for i, dimension in enumerate(it.get('dimensionValues', empty)):
-        key = data['dimensionHeaders'][i]['name']
-        page[key] = dimension['value']
-      
-      for i, metric in enumerate(it.get('metricValues', empty)):
-        key = data['metricHeaders'][i]['name']
-        page[key] = metric['value']
-      
+        page = dict()
+        for i, dimension in enumerate(it.get('dimensionValues', empty)):
+            key = data['dimensionHeaders'][i]['name']
+            page[key] = dimension['value']
 
-      if 'pageTitle' in page:
-        page['pageTitle'] = page['pageTitle']\
-          .replace(" - Ryan4Yin's Space", "")\
-          .replace(" - This Cute World", "")
+        for i, metric in enumerate(it.get('metricValues', empty)):
+            key = data['metricHeaders'][i]['name']
+            page[key] = metric['value']
 
-        page_path = page['pagePath']
-        if not page_path.startswith("/posts/") \
-          or page_path == "/posts/"\
-          or page_path.startswith("/posts/page/"):
-          # 只记录 /posts/ 博文的访问数据
-          continue
+        if 'pageTitle' in page:
+            page['pageTitle'] = page['pageTitle']\
+                .replace(" - Ryan4Yin's Space", "")\
+                .replace(" - This Cute World", "")
 
-        # 对统计数据按 path 合并下
-        if page_path not in result:
-          result[page_path] = page
+            page_path = page['pagePath']
+            if not page_path.startswith("/posts/") \
+                    or page_path == "/posts/"\
+                    or page_path.startswith("/posts/page/"):
+                # 只记录 /posts/ 博文的访问数据
+                continue
+
+            # 对统计数据按 path 合并下
+            if page_path not in result:
+                result[page_path] = page
+            else:
+                for k, v in page.items():
+                    if not isinstance(v, int):  # 只有数据才需要合并，跳过字符串
+                        continue
+                    result['page_path'][k] += v
         else:
-          for k, v in page.items():
-            if not isinstance(v, int):  # 只有数据才需要合并，跳过字符串
-              continue
-            result['page_path'][k] += v
-      else:
-        # 没有 pageTitle，这里应该是处理的 totalTrendingPosts
-        result[""] = page
-  
-    for p in result.values():
-      if "userEngagementDuration" not in p:
-        continue
-      reading_duration = int(p['userEngagementDuration'])
-      p['readingDuration'] = humanize_duration(reading_duration)
-      # 人均阅读时长
-      reading_duration_per_user = reading_duration // int(p['activeUsers'])
-      p['readingDurationPerUser'] = humanize_duration(reading_duration_per_user)
+            # 没有 pageTitle，这里应该是处理的 totalTrendingPosts
+            result[""] = page
 
-    return list(result.values())
+    for p in result.values():
+        if "userEngagementDuration" not in p:
+            continue
+        reading_duration = int(p['userEngagementDuration'])
+        p['readingDuration'] = reading_duration
+        p['humanizedReadingDuration'] = humanize_duration(reading_duration)
+        # 人均阅读时长
+        reading_duration_per_user = reading_duration // int(p['activeUsers'])
+        p['readingDurationPerUser'] = reading_duration_per_user
+        p['humanizedReadingDurationPerUser'] = humanize_duration(reading_duration_per_user)
+
+    return sorted(result.values(), key=itemgetter("readingDurationPerUser"), reverse=True)
 
 
 def get_report_this_month(analytics):
@@ -131,7 +136,9 @@ def get_report_this_month(analytics):
                 },
             }
         },
-        "orderBys": [{"desc": True, "metric": {"metricName": "userEngagementDuration"}}],
+        "orderBys": [  # 按本月总阅读时长降序排列
+            {"desc": True, "metric": {"metricName": "userEngagementDuration"}}
+        ],
         # "limit": "15",
     }
     data = analytics.properties().runReport(property=PROPERTY, body=body).execute()
@@ -161,12 +168,12 @@ def main():
     trendingThisMonth = get_report_this_month(analytics)
     total = get_report_from_start(analytics)
     website_statistics = {
-      "updateDate": dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00"),
-      "total": total,
-      "trendingThisMonth": trendingThisMonth,
+        "updateDate": dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00"),
+        "total": total,
+        "trendingThisMonth": trendingThisMonth,
     }
     Path("./data/website_statistics.json").write_text(
-      json.dumps(website_statistics, ensure_ascii=False, indent=2)
+        json.dumps(website_statistics, ensure_ascii=False, indent=2)
     )
 
 

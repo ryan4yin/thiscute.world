@@ -112,18 +112,18 @@
             <table class="center">
                 <thead>
                 <tr>
+                <th>人均阅读时长</th>
                 <th>总访客数 UV</th>
                 <th>总访问量 PV</th>
                 <th>总阅读时长</th>
-                <th>人均阅读时长</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr style="text-align:center">
+                    <td style="color:dodgerblue;"><strong>{{ .humanizedReadingDurationPerUser }}</strong></td>
                     <td style="color:tomato;"><strong>{{ .activeUsers }}</strong></td>
                     <td>{{ .screenPageViews }}</td>
-                    <td>{{ .readingDuration }}</td>
-                    <td style="color:dodgerblue;"><strong>{{ .readingDurationPerUser }}</strong></td>
+                    <td>{{ .humanizedReadingDuration }}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -135,9 +135,9 @@
                 <tr>
                 <th></th>
                 <th>标题</th>
+                <th>人均阅读时长</th>
                 <th>访客数</th>
                 <th>访问量</th>
-                <th>人均阅读时长</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -146,9 +146,9 @@
                 <tr>
                     <td>{{ add $index 1 }}</td>
                     <td><a href="{{ .pagePath }}">{{ $page.pageTitle }}</a></td>
+                    <td>{{ $page.humanizedReadingDurationPerUser }}</td>
                     <td>{{ $page.activeUsers }}</td>
                     <td>{{ $page.screenPageViews }}</td>
-                    <td>{{ $page.readingDurationPerUser }}</td>
                     </tr>
                 {{ end }}
 
