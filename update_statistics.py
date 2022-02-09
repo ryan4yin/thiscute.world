@@ -174,12 +174,18 @@ def get_report_from_start(analytics):
     return process_data(data)[0]
 
 
+def get_shanghai_datetime_str():
+    tz_shanghai = dt.timezone(dt.timedelta(hours=8))
+    now_shanghai = dt.datetime.now(tz=tz_shanghai)
+    return now_shanghai.strftime('%Y-%m-%dT%H:%M:%S%Z')  # 2022-02-10T00:48:52UTC+08:00
+
 def main():
     analytics = initialize_analyticsreporting()
     trendingThisMonth = get_report_this_month(analytics)
     total = get_report_from_start(analytics)
+    
     website_statistics = {
-        "updateDate": dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00"),
+        "updateDate": get_shanghai_datetime_str(),
         "total": total,
         "trendingThisMonth": trendingThisMonth,
     }
