@@ -25,6 +25,12 @@ PROPERTY = 'properties/259164768'  # my site's google analytics property
 SERVICE_ACCOUNT_FILE = './google-service-account.json'
 OUTPUT_PATH = "./data/website_statistics.json"
 
+# 有些文章的 path 被修改过，这里使用新路径进行统计
+modified_page_paths = {
+    # 旧路径 => 新路径
+    "/posts/common-kubernetes-errors-causes-and-solutions/": "/posts/kubernetes-common-errors-and-solutions/",
+}
+
 
 def initialize_analyticsreporting():
     """Initializes an Analytics Data API service object.
@@ -80,6 +86,9 @@ def process_data(data):
                     or page_path.startswith("/posts/page/"):
                 # 只记录 /posts/ 博文的访问数据
                 continue
+
+            if page_path in modified_page_paths:
+                page_path = modified_page_paths[page_path]  # 替换成新的 pagePath
 
             # 对统计数据按 path 合并下
             if page_path not in result:
