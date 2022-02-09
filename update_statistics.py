@@ -95,9 +95,9 @@ def process_data(data):
                 result[page_path] = page
             else:
                 for k, v in page.items():
-                    if not isinstance(v, int):  # 只有数据才需要合并，跳过字符串
-                        continue
-                    result['page_path'][k] += v
+                    if isinstance(v, int) \
+                        or (isinstance(v, str) and v.isdecimal()):  # 只有数据才需要合并，跳过字符串
+                        result[page_path][k] += v
         else:
             # 没有 pageTitle，这里应该是处理的 totalTrendingPosts
             result[""] = page
