@@ -83,15 +83,16 @@ def process_data(data):
                 .replace(" - Ryan4Yin's Space", "")\
                 .replace(" - This Cute World", "")
 
+            # 处理被修改过的文章 pagePath
+            if page['pagePath'] in modified_page_paths:
+                page['pagePath'] = modified_page_paths[page_path]  # 替换成新的 pagePath
+
             page_path = page['pagePath']
             if not page_path.startswith("/posts/") \
                     or page_path == "/posts/"\
                     or page_path.startswith("/posts/page/"):
                 # 只记录 /posts/ 博文的访问数据
                 continue
-
-            if page_path in modified_page_paths:
-                page_path = modified_page_paths[page_path]  # 替换成新的 pagePath
 
             # 对统计数据按 path 合并下
             if page_path not in result:
