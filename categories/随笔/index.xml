@@ -478,6 +478,81 @@
 <p>回看了下去年的总结，发现我 go/c# 都没学多少，设计模式也没动，python 还在原地踏步hhh&hellip; 去年的展望很多都没实现。</p>
 <p>不过云原生这一块倒是进步很快，总体很满意今年的成果哈哈~</p>
 <p>明年加油！</p>
+]]></description></item><item><title>2019 年年终总结</title><link>https://thiscute.world/posts/2019-summary/</link><pubDate>Fri, 31 Jan 2020 19:19:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/2019-summary/</guid><description><![CDATA[<blockquote>
+<p>迟到的年终总结</p>
+</blockquote>
+<h2 id="闲言碎语">闲言碎语</h2>
+<p>我是今年六月底到的深圳，运气很好，第一面就面上了现在所在的公司，以下就叫它 W 公司吧。
+公司的技术栈也很适合我，在入职到现在的这半年里，我学到了不少知识。</p>
+<p>但是运气也差，只有这么一家公司约了我面试，投的其他简历都石沉大海&hellip;</p>
+<p>总之，今年尝试参加过两次技术分享，Rancher 的技术沙龙，前几天又去听了 OSChina 的源创会。</p>
+<h2 id="技术能力总结">技术能力总结</h2>
+<p>我入职后做的是运维开发，主要负责通过 Jenkins Pipeline + Python 进行自动化的测试、构建和部署：</p>
+<ol>
+<li>测试：指 UI 测试、API 测试、压力测试。单元测试算在构建流程中。</li>
+<li>构建：更新依赖-&gt;单元测试-&gt;构建 Library 或镜像
+<ul>
+<li>公司的内部代码使用分层结构，底层封装了各种第三方包，并实现了一些通用的功能，形成了所谓的<strong>中台</strong>。目前是通过批量任务逐级自下向上构建。</li>
+</ul>
+</li>
+<li>部署：扫描镜像仓库中各镜像，生成最新的 k8s 部署文件，然后进行部署。</li>
+</ol>
+<p>所以这半年中，我差不多熟悉了自动化运维的工作。主要包括</p>
+<ol>
+<li>Jenkins Pipeline 的编写，我们基本都是使用 Jenkins 调用 Python 代码来进行具体的构建。
+<ul>
+<li>公司的构建有很多自己特殊的需求，Jenkins 自带的插件无法满足。</li>
+</ul>
+</li>
+<li>熟悉了 Python 的 subprocess 库，为了远程调用，又熟悉了 fabric（当作 library 用）。</li>
+<li>做压测时，熟悉了 locust</li>
+<li>因为基本都是通过命令行进行测试、构建，我现在比前后端组还熟悉 csharp/flutter/golang 的 cli&hellip;</li>
+<li>学会了 Dockerfile 语法。我们的后端全部都是以容器方式部署的，这个是基本技能。</li>
+<li>熟悉并且用上了 Kubernetes. 这东西基本上就是未来了，也将是我的主攻方向。</li>
+</ol>
+<p>但是，也存在一些问题：</p>
+<ol>
+<li>对 Linux/网络/vSphere 不够了解，导致每次处理这类问题只会排除法。</li>
+<li>对监控/日志/告警不够了解，监控面板一堆参数却看不出问题，日志不知道怎么用 kibana 进行搜索，告警还没配过。。</li>
+<li>解决问题的能力还有待提升，考虑总是不够全面，老是出问题。（不能让人放心）</li>
+<li>总是想得太多，拖慢了解决问题的速度。（这倒也不能完全算是缺点。）</li>
+</ol>
+<h2 id="今年在技术上的感受">今年在技术上的感受</h2>
+<ol>
+<li>Kubernetes 和云原生正在席卷整个互联网/物联网行业。</li>
+<li>Kubernetes 目前主要用于 Stateless 应用，那后端的 数据库/缓存/消息服务 要如何做分布式呢？这也是大家关注的重点。</li>
+<li>分布式、微服务模式下的<strong>监控(prometheus)、日志分析(elk)、安全、链路追踪(jaeger)</strong>，是运维关注的重点。</li>
+<li>服务网格正在走向成熟，Istio 很值得学习和试用。</li>
+<li>开源的分布式数据库/云数据库成为越来越多企业的选择，开源的 TiDB（HTAP）和阿里云的 PolarDB（计算存储分离）都应该了解了解。
+<ul>
+<li>Transaction Processing: <strong>面向交易</strong>，数据的变动(增删改)多，涉及的数据量和计算量(查)少，实时性要求高。</li>
+<li>Analytical Processing：<strong>面向分析</strong>，数据的变动少，但涉及的数据量和计算量很多！</li>
+<li>HTAP（Hybrid transaction/analytical processing）：混合型数据库，可同时被用于上述两种场景。</li>
+</ul>
+</li>
+<li>Knative/Jenkins-X 这类 Serverless 的 CI/CD 也正在快速发展，需要深入调研。</li>
+</ol>
+<h2 id="明年的展望">明年的展望</h2>
+<p>作为一名萌新运维开发，明年显然还要继续在这条路上继续向前。</p>
+<p>我明年的任务，第一件，就是优化掉部分自己目前存在的问题（前面有提到），第二呢，就是紧跟技术潮流。重点有下面几项：</p>
+<ol>
+<li>充实自己网络部分欠缺的知识，尤其是 DNS 解析(CoreDNS)和 NAT(iptables)这俩玩意儿。</li>
+<li>学习数据库组件的使用和性能调优：MySQL/Redis/ElasticSearch/MongoDB，另外熟悉 PostgreSQL 和分布式数据库 TiDB/Vitess</li>
+<li>Kubernetes/Istio</li>
+<li>Kubernetes 上的 CI/CD：Knative, <a href="https://github.com/stefanprodan/gitops-istio" target="_blank" rel="noopener noreferrer">Istio-GitOps</a></li>
+<li>监控告警：Prometheus/Grafana</li>
+<li>总结一套故障排除的方法论：网络故障、CPU/RAM/Disk 性能异常等、应用故障等。</li>
+</ol>
+<p>最重要的任务，是维护公司这一套微服务在阿里云上的正常运行，积累经验。</p>
+<p>关注 <a href="https://landscape.cncf.io/" target="_blank" rel="noopener noreferrer">CNCF 蓝图</a> 上的各项新技术。</p>
+<p>另外呢，就是开发方面的任务：</p>
+<ol>
+<li>设计模式应该要学学了！</li>
+<li>Python 不能止步于此，要制定源码学习计划。</li>
+<li>学习 C# 语言，阅读公司的源码，熟悉企业级的业务代码。</li>
+<li>学习 go 语言，用于 DevOps。（其实还想学 rust，不过明年可能没时间）</li>
+<li>要把 xhup 那个项目完成，也不知道能不能抽出时间。。</li>
+</ol>
 ]]></description></item><item><title>在回声中重历</title><link>https://thiscute.world/posts/relive-in-the-echo/</link><pubDate>Tue, 08 Jan 2019 17:55:45 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/relive-in-the-echo/</guid><description><![CDATA[<meting-js server="netease" type="song" id="35032582" theme="#448aff"></meting-js>
 <p>高中考虑志向的时候，我最开始想选择电子信息工程，因为小时候就喜欢摆弄各种电子器件，这个方向硬件软件都能玩，就感觉很有趣，只是担心自己高三太放浪形骸考不上。
 偶然想起在学校阅览室读杂志时，曾被<a href="https://read.douban.com/ebook/3088216/" target="_blank" rel="noopener noreferrer"><strong>科幻世界2013年12期</strong></a>里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵“看见”世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
@@ -556,17 +631,4 @@
 <p>易海仍是风平浪静。</p>
 <p>我背着书包，拖着皮箱，耳边最清晰的声音便是皮箱轮胎与地面的摩擦声。</p>
 <p>手机随便放起一首歌，恰好是《遥远的歌》。这首歌真是应景呢，逝去的时光遥远得无法触及，自己也离家千里，未来更是难以捉摸。</p>
-<p>我还会记得吗？记得这个我印象中，最宁静安详的，安徽建筑大学。</p>]]></description></item><item><title>忽而假末</title><link>https://thiscute.world/posts/the-holiday-is-coming-to-an-end/</link><pubDate>Mon, 06 Feb 2017 20:17:55 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/the-holiday-is-coming-to-an-end/</guid><description><![CDATA[<meting-js server="netease" type="song" id="415086030" theme="#448aff"></meting-js>
-<p>上个暑假，刚刚从低谷爬出来，那时候整个人散发着一股子向上的气息，豪情万丈，甚至感染了周围的亲朋好友。那个时候，满以为以后的挫折都不能阻挡我的脚步。</p>
-<p>可是，到底为什么，现在又变成了这个样子了呢？人生这样的东西，总是出人意料，以至于怎么也猜不透。</p>
-<p>十二月十四，我度过了我的十九岁生日，现在应该正是那所谓的青春将逝未逝之时。而我的青春应该最辉煌的时候，我在干什么呢？</p>
-<p>我在翻山越岭。</p>
-<p>上山时一路坎坷，累的要死不活的。陡然间萌生退意，心就在不断挣扎。就在却意战胜壮志之时，忽然间天地开阔，才发觉自己已然站在了大山之巅，于是一切痛苦尽皆远去，心也变得如这天地一般开阔。这个时候自然豪情万丈，看山山美，看水水秀。想当然的就觉得后面的山岭有再多的阻碍，也不能阻挡这个见过如此美景的登山人了。</p>
-<p>可是事与愿违，山岭就像时间一样看不到边，翻过了一座又是一座，这又是一种更大的痛苦。这个登山人身心俱疲，只好万事随缘，继续一脚深，一脚浅的往那无尽山岭行去。</p>
-<p>最近看了是枝裕和的电影《比海更深》，“我的人生到底出了什么差错？” 这样一个问句，道出了多少辛酸苦辣……想起了以前写过一篇文章，标题是《对不起，我没有成为你想成为的那个人》。</p>
-<p>理想与现实之间仿佛总隔着一道鸿沟。</p>
-<p>现在没有了万丈豪情，不再敢说“未来将是一片坦途”；也没有绝望到要写“我的人生到底出了什么差错？”这样的句子，那还是用我最喜欢的那个模棱两可的四字词作结吧。</p>
-<blockquote>
-<p>且行且寻</p>
-</blockquote>
-]]></description></item></channel></rss>
+<p>我还会记得吗？记得这个我印象中，最宁静安详的，安徽建筑大学。</p>]]></description></item></channel></rss>
