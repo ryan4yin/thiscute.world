@@ -35,7 +35,7 @@ TLS 协议巧妙地解决了这个问题：它在握手阶段使用「**非对�
 
 在后续的每次数据交换过程中，TLS 协议都会使用 ECDHE 算法生成新的对称密钥，再使用新密钥加密解密数据。
 
-![perfect-forward-secrecy-diagram](/images/about-tls-cert/perfect-forward-secrecy-diagram.webp)
+![](/images/about-tls-cert/perfect-forward-secrecy-diagram.webp "perfect-forward-secrecy-diagram")
 
 TLS 协议通过上述的流程，提供了「完美前向保密（Perfect Forward Secrecy）」特性，也就是说它能够保护过去进行的通讯不受密钥在未来暴露的威胁。
 即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，黑客必须破解出整个 TLS 连接中所有事务的对称密钥，才能得到完整的数据。
@@ -70,7 +70,7 @@ CA 证书和 TLS 证书，都只在 TLS 握手阶段有用到，之后的通信�
 
 你可以尝试使用浏览器查看 Google 的证书详情，我使用 Firefox 查看到的内容如下：
 
-![](/images/about-tls-cert/cert-content.png)
+![](/images/about-tls-cert/cert-content.png "cert-content")
 
 ### 2. TLS 证书支持保护的域名类型
 
@@ -145,7 +145,7 @@ TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域�
 
 完整的证书申请流程如下：
 
-![](/images/about-tls-cert/ca-sign-sechdule.png)
+![](/images/about-tls-cert/ca-sign-sechdule.png "证书申请流程")
 
 为了方便用户，图中的申请人(Applicant)自行处理的部分，目前很多证书申请网站也可以自动处理，用户只需要提供相关信息即可。
 
