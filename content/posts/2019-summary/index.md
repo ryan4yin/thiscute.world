@@ -4,7 +4,7 @@ date: 2020-01-31T19:19:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "beginning-the-devops-journey"
+  src: "beginning-the-devops-journey.png"
 
 tags: ["总结"]
 categories: ["随笔", "技术"]
