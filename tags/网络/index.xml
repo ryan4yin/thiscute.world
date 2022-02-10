@@ -2883,7 +2883,10 @@ sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark
 而且因为域名是从右往左读的（最右侧是根, <code>www.baidu.com.</code>），而 IP 的网段（如 <code>192.168.0.0/16</code>）刚好相反，是左边优先。
 因此 PTR 记录的“域名”必须将 IP 地址反着写，末尾再加上 <code>.in-addr.arpa.</code> 表示这是一个反向解析的域名。（ipv6 使用 <code>ip6.arpa.</code>）
 拿 baidu.com 的邮件服务器测试一下：
-</p>
+<figure><a class="lightgallery" href="/images/about-dns-protocol/968138-20200207101308247-1165339332.png" title="/images/about-dns-protocol/968138-20200207101308247-1165339332.png" data-thumbnail="/images/about-dns-protocol/968138-20200207101308247-1165339332.png" data-sub-html="<h2>PTR 记录查询</h2>">
+        
+    </a><figcaption class="image-caption">PTR 记录查询</figcaption>
+    </figure></p>
 <p>其他还有些 <code>TXT</code>、<code>CAA</code> 等奇奇怪怪的记录，就用到的时候自己再查了。</p>
 <h2 id="二域名的分层结构">二、域名的分层结构</h2>
 <p>国际域名系统被分成四层：</p>
@@ -2930,16 +2933,25 @@ sudo ln -s <span class="s2">&#34;</span><span class="k">$(</span>which wireshark
 <p>上述流程中忽略了我大天朝的特殊国情——备案，勿介意。</p>
 <h2 id="三dns-递归解析器在浏览器中输入域名后发生了什么">三、DNS 递归解析器：在浏览器中输入域名后发生了什么？</h2>
 <p>下面的图片拷贝自 Amazon Aws 文档，它展示了在不考虑任何 DNS 缓存的情况下，一次 Web 请求的经过，详细描绘了 DNS 解析的部分。</p>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/about-dns-protocol/968138-20200205165225054-57338322.png" title="/images/about-dns-protocol/968138-20200205165225054-57338322.png" data-thumbnail="/images/about-dns-protocol/968138-20200205165225054-57338322.png" data-sub-html="<h2>DNS 解析流程</h2>">
+        
+    </a><figcaption class="image-caption">DNS 解析流程</figcaption>
+    </figure></p>
 <p>其中的第 3 4 5 步按顺序向前面讲过的根域名服务器、顶级域名服务器、权威域名服务器发起请求，以获得下一个 DNS 服务器的信息。这很清晰。</p>
 <p>图中当前还没介绍的部分，是紫色的 <code>DNS Resolver</code>(域名解析器)，也叫 <code>Recursive DNS resolver</code>（<strong>DNS 递归解析器</strong>）。
 它本身只负责递归地请求 3 4 5 步中的上游服务器，然后把获取的最终结果返回给客户端，同时将记录缓存到本地以加快解析速度。</p>
 <p>这个 DNS 解析器，其实就是所谓的<strong>公共 DNS 服务器</strong>：Google 的 <code>8.8.8.8</code>，国内著名的 <code>114.114.114.114</code>。</p>
 <p>这些公共 DNS 用户量大，缓存了大量的 DNS 记录，有效地降低了上游 DNS 服务器的压力，也加快了网络上的 DNS 查询速度。</p>
 <p>接下来使用 <code>dig +trace baidu.com</code> 复现一下上述的查询流程（这种情况下 dig 自己就是一个 DNS 递归解析器）：</p>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/about-dns-protocol/968138-20200207101817456-1276700345.png" title="/images/about-dns-protocol/968138-20200207101817456-1276700345.png" data-thumbnail="/images/about-dns-protocol/968138-20200207101817456-1276700345.png" data-sub-html="<h2>dig &#43;trace baidu.com</h2>">
+        
+    </a><figcaption class="image-caption">dig +trace baidu.com</figcaption>
+    </figure></p>
 <p>另外前面有讲过 DNS 的反向解析，也是同样的层级结构，是从根服务器开始往下查询的，下面拿 baidu 的一个邮件服务器进行测试：</p>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/about-dns-protocol/968138-20200207102331250-71048478.png" title="/images/about-dns-protocol/968138-20200207102331250-71048478.png" data-thumbnail="/images/about-dns-protocol/968138-20200207102331250-71048478.png" data-sub-html="<h2>反向解析</h2>">
+        
+    </a><figcaption class="image-caption">反向解析</figcaption>
+    </figure></p>
 <blockquote>
 <p>dig 工具未来可能会被 drill 取代。</p>
 </blockquote>
@@ -3252,7 +3264,10 @@ ftp                          IN A     192.168.23.25  ; 這是簡化的寫法！
 </code></pre></td></tr></table>
 </div>
 </div><p>然后通过 <code>./coredns</code> 启动 coredns。通过 dig 检验：
-</p>
+<figure><a class="lightgallery" href="/images/about-dns-protocol/968138-20200211182339141-1135337933.png" title="/images/about-dns-protocol/968138-20200211182339141-1135337933.png" data-thumbnail="/images/about-dns-protocol/968138-20200211182339141-1135337933.png" data-sub-html="<h2>DNS 测试</h2>">
+        
+    </a><figcaption class="image-caption">DNS 测试</figcaption>
+    </figure></p>
 <p>可以看到 <code>ftp.dev-env.local</code> 已经被成功解析了。</p>
 <h3 id="3-可选插件external-pluginshttpscorednsioexplugins">3. <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreferrer">可选插件（External Plugins）</a></h3>
 <p>CoreDNS 提供的预编译版本，不包含 <a href="https://coredns.io/explugins/" target="_blank" rel="noopener noreferrer">External Plugins</a> 中列出的部分，如果你需要，可以自行修改 <code>plugin.cfg</code>，然后手动编译。</p>

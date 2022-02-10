@@ -7250,7 +7250,10 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </ol>
 <p>TLS 协议巧妙地解决了这个问题：它在握手阶段使用「<strong>非对称算法</strong>」验证服务端，并使用 ECDHE 密钥交换算法（Elliptic Curve Diffie-Hellman key exchange）安全地生成一个临时的对称密钥，然后使用「<strong>对称算法</strong>」进行加密通信。</p>
 <p>在后续的每次数据交换过程中，TLS 协议都会使用 ECDHE 算法生成新的对称密钥，再使用新密钥加密解密数据。</p>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/about-tls-cert/perfect-forward-secrecy-diagram.webp" title="/images/about-tls-cert/perfect-forward-secrecy-diagram.webp" data-thumbnail="/images/about-tls-cert/perfect-forward-secrecy-diagram.webp" data-sub-html="<h2>perfect-forward-secrecy-diagram</h2>">
+        
+    </a><figcaption class="image-caption">perfect-forward-secrecy-diagram</figcaption>
+    </figure></p>
 <p>TLS 协议通过上述的流程，提供了「完美前向保密（Perfect Forward Secrecy）」特性，也就是说它能够保护过去进行的通讯不受密钥在未来暴露的威胁。
 即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，黑客必须破解出整个 TLS 连接中所有事务的对称密钥，才能得到完整的数据。</p>
 <blockquote>
@@ -7277,7 +7280,10 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 另外还有复杂的证书吊销机制，这里就不详细介绍了。</p>
 </blockquote>
 <p>你可以尝试使用浏览器查看 Google 的证书详情，我使用 Firefox 查看到的内容如下：</p>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/about-tls-cert/cert-content.png" title="/images/about-tls-cert/cert-content.png" data-thumbnail="/images/about-tls-cert/cert-content.png" data-sub-html="<h2>cert-content</h2>">
+        
+    </a><figcaption class="image-caption">cert-content</figcaption>
+    </figure></p>
 <h3 id="2-tls-证书支持保护的域名类型">2. TLS 证书支持保护的域名类型</h3>
 <p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
 但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
@@ -7371,7 +7377,10 @@ vault 通过 sidecar 实现配置的自动注入与动态更新。</p>
 </ol>
 <p>收费证书可以在各 TLS 提供商处购买，比如国内的阿里云腾讯云等。</p>
 <p>完整的证书申请流程如下：</p>
-<p></p>
+<p><figure><a class="lightgallery" href="/images/about-tls-cert/ca-sign-sechdule.png" title="/images/about-tls-cert/ca-sign-sechdule.png" data-thumbnail="/images/about-tls-cert/ca-sign-sechdule.png" data-sub-html="<h2>证书申请流程</h2>">
+        
+    </a><figcaption class="image-caption">证书申请流程</figcaption>
+    </figure></p>
 <p>为了方便用户，图中的申请人(Applicant)自行处理的部分，目前很多证书申请网站也可以自动处理，用户只需要提供相关信息即可。</p>
 <h3 id="3-生成本地签名证书或者自签名证书">3. 生成「本地签名证书」或者「自签名证书」</h3>
 <p>除了被第三方信任的「受信 TLS 证书」，在内网环境，我们需要也使用 TLS 证书保障通信安全，这时我们可能会选择自己生成证书，而不是向权威机构申请证书。</p>

@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/qemu-kvm-usage/><link rel=next href=https://thiscute.world/posts/expirence-of-vault/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"HTTPS, TLS, OpenSSL, 加密, 破解","wordcount":8688,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2021-01-17T21:53:26+08:00","dateModified":"2021-01-17T21:53:26+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/qemu-kvm-usage/><link rel=next href=https://thiscute.world/posts/expirence-of-vault/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"HTTPS, TLS, OpenSSL, 加密, 破解","wordcount":8705,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2021-01-17T21:53:26+08:00","dateModified":"2021-01-17T21:53:26+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-17>2021-01-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8688 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-17>2021-01-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8705 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 18 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/about-tls-cert/https-secure.png data-srcset="/posts/about-tls-cert/https-secure.png, /posts/about-tls-cert/https-secure.png 1.5x, /posts/about-tls-cert/https-secure.png 2x" data-sizes=auto alt=/posts/about-tls-cert/https-secure.png title=/posts/about-tls-cert/https-secure.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -179,7 +179,10 @@
 </ol>
 <p>TLS 协议巧妙地解决了这个问题：它在握手阶段使用「<strong>非对称算法</strong>」验证服务端，并使用 ECDHE 密钥交换算法（Elliptic Curve Diffie-Hellman key exchange）安全地生成一个临时的对称密钥，然后使用「<strong>对称算法</strong>」进行加密通信。</p>
 <p>在后续的每次数据交换过程中，TLS 协议都会使用 ECDHE 算法生成新的对称密钥，再使用新密钥加密解密数据。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/about-tls-cert/perfect-forward-secrecy-diagram.webp data-srcset="/images/about-tls-cert/perfect-forward-secrecy-diagram.webp, /images/about-tls-cert/perfect-forward-secrecy-diagram.webp 1.5x, /images/about-tls-cert/perfect-forward-secrecy-diagram.webp 2x" data-sizes=auto alt=/images/about-tls-cert/perfect-forward-secrecy-diagram.webp title=perfect-forward-secrecy-diagram></p>
+<p><figure><a class=lightgallery href=/images/about-tls-cert/perfect-forward-secrecy-diagram.webp title=/images/about-tls-cert/perfect-forward-secrecy-diagram.webp data-thumbnail=/images/about-tls-cert/perfect-forward-secrecy-diagram.webp data-sub-html="<h2>perfect-forward-secrecy-diagram</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=/images/about-tls-cert/perfect-forward-secrecy-diagram.webp data-srcset="/images/about-tls-cert/perfect-forward-secrecy-diagram.webp, /images/about-tls-cert/perfect-forward-secrecy-diagram.webp 1.5x, /images/about-tls-cert/perfect-forward-secrecy-diagram.webp 2x" data-sizes=auto alt=/images/about-tls-cert/perfect-forward-secrecy-diagram.webp>
+</a><figcaption class=image-caption>perfect-forward-secrecy-diagram</figcaption>
+</figure></p>
 <p>TLS 协议通过上述的流程，提供了「完美前向保密（Perfect Forward Secrecy）」特性，也就是说它能够保护过去进行的通讯不受密钥在未来暴露的威胁。
 即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，黑客必须破解出整个 TLS 连接中所有事务的对称密钥，才能得到完整的数据。</p>
 <blockquote>
@@ -206,7 +209,10 @@
 另外还有复杂的证书吊销机制，这里就不详细介绍了。</p>
 </blockquote>
 <p>你可以尝试使用浏览器查看 Google 的证书详情，我使用 Firefox 查看到的内容如下：</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/about-tls-cert/cert-content.png data-srcset="/images/about-tls-cert/cert-content.png, /images/about-tls-cert/cert-content.png 1.5x, /images/about-tls-cert/cert-content.png 2x" data-sizes=auto alt=/images/about-tls-cert/cert-content.png title=/images/about-tls-cert/cert-content.png></p>
+<p><figure><a class=lightgallery href=/images/about-tls-cert/cert-content.png title=/images/about-tls-cert/cert-content.png data-thumbnail=/images/about-tls-cert/cert-content.png data-sub-html="<h2>cert-content</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=/images/about-tls-cert/cert-content.png data-srcset="/images/about-tls-cert/cert-content.png, /images/about-tls-cert/cert-content.png 1.5x, /images/about-tls-cert/cert-content.png 2x" data-sizes=auto alt=/images/about-tls-cert/cert-content.png>
+</a><figcaption class=image-caption>cert-content</figcaption>
+</figure></p>
 <h3 id=2-tls-证书支持保护的域名类型>2. TLS 证书支持保护的域名类型</h3>
 <p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
 但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
@@ -300,7 +306,10 @@
 </ol>
 <p>收费证书可以在各 TLS 提供商处购买，比如国内的阿里云腾讯云等。</p>
 <p>完整的证书申请流程如下：</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/about-tls-cert/ca-sign-sechdule.png data-srcset="/images/about-tls-cert/ca-sign-sechdule.png, /images/about-tls-cert/ca-sign-sechdule.png 1.5x, /images/about-tls-cert/ca-sign-sechdule.png 2x" data-sizes=auto alt=/images/about-tls-cert/ca-sign-sechdule.png title=/images/about-tls-cert/ca-sign-sechdule.png></p>
+<p><figure><a class=lightgallery href=/images/about-tls-cert/ca-sign-sechdule.png title=/images/about-tls-cert/ca-sign-sechdule.png data-thumbnail=/images/about-tls-cert/ca-sign-sechdule.png data-sub-html="<h2>证书申请流程</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=/images/about-tls-cert/ca-sign-sechdule.png data-srcset="/images/about-tls-cert/ca-sign-sechdule.png, /images/about-tls-cert/ca-sign-sechdule.png 1.5x, /images/about-tls-cert/ca-sign-sechdule.png 2x" data-sizes=auto alt=/images/about-tls-cert/ca-sign-sechdule.png>
+</a><figcaption class=image-caption>证书申请流程</figcaption>
+</figure></p>
 <p>为了方便用户，图中的申请人(Applicant)自行处理的部分，目前很多证书申请网站也可以自动处理，用户只需要提供相关信息即可。</p>
 <h3 id=3-生成本地签名证书或者自签名证书>3. 生成「本地签名证书」或者「自签名证书」</h3>
 <p>除了被第三方信任的「受信 TLS 证书」，在内网环境，我们需要也使用 TLS 证书保障通信安全，这时我们可能会选择自己生成证书，而不是向权威机构申请证书。</p>
