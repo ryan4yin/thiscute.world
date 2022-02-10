@@ -29,6 +29,7 @@ OUTPUT_PATH = "./data/website_statistics.json"
 modified_page_paths = {
     # 旧路径 => 新路径
     "/posts/common-kubernetes-errors-causes-and-solutions/": "/posts/kubernetes-common-errors-and-solutions/",
+    "/posts/sql-basic/": "/posts/sql-basics-1/",
 }
 
 
@@ -61,7 +62,60 @@ def humanize_duration(seconds: int):
 
 def process_data(data):
     """
-    转换下数据格式，以方便使用
+    转换下数据格式，补充些额外的属性
+
+    Args: 示例 {
+      "dimensionHeaders": [{ "name": "pageTitle" }, { "name": "pagePath" }],
+      "metricHeaders": [
+          { "name": "activeUsers", "type": "TYPE_INTEGER" },
+          { "name": "screenPageViews", "type": "TYPE_INTEGER" },
+          { "name": "userEngagementDuration", "type": "TYPE_SECONDS" }
+      ],
+      "rows": [
+          {
+          "dimensionValues": [
+              {
+              "value": "欧几里得算法求最大公约数(GCD)的数学原理 - Ryan4Yin's Space"
+              },
+              { "value": "/posts/mathematics-in-euclidean-gcd/" }
+          ],
+          "metricValues": [{ "value": "4" }, { "value": "4" }, { "value": "11" }]
+          },
+          {
+          "dimensionValues": [
+              { "value": "SQL 基础笔记（一） - Ryan4Yin's Space" },
+              { "value": "/posts/sql-basic/" }
+          ],
+          "metricValues": [{ "value": "1" }, { "value": "1" }, { "value": "10" }]
+          }
+      ]
+    }
+
+
+    Return: 示例 [
+      {
+        "pageTitle": "使用 Istio 进行 JWT 身份验证（充当 API 网关）",
+        "pagePath": "/posts/use-istio-for-jwt-auth/",
+        "activeUsers": 14,
+        "screenPageViews": 19,
+        "userEngagementDuration": 2402,
+        "readingDuration": 2402,
+        "humanizedReadingDuration": "40m 02s",
+        "readingDurationPerUser": 171,
+        "humanizedReadingDurationPerUser": "02m 51s"
+      },
+      {
+        "pageTitle": "Linux 中的虚拟网络接口",
+        "pagePath": "/posts/linux-virtual-network-interfaces/",
+        "activeUsers": 38,
+        "screenPageViews": 42,
+        "userEngagementDuration": 6381,
+        "readingDuration": 6381,
+        "humanizedReadingDuration": "1h 46m 21s",
+        "readingDurationPerUser": 167,
+        "humanizedReadingDurationPerUser": "02m 47s"
+      }
+    ]
     """
     result = dict()
     empty = tuple()
@@ -125,6 +179,8 @@ def get_report_this_month(analytics):
     """
     Args:
       analytics: An authorized Analytics Data API service object.
+
+    Return: 与 process_data 一致
     """
     body = {
         'dateRanges': [{'startDate': "30daysAgo", 'endDate': "today"}],
@@ -163,6 +219,16 @@ def get_report_from_start(analytics):
     """
     Args:
       analytics: An authorized Analytics Data API service object.
+    Return: {
+        "activeUsers": 8292,
+        "screenPageViews": 18145,
+        "userEngagementDuration": 839453,
+        "readingDuration": 839453,
+        "humanizedReadingDuration": "9 days, 17h 10m 53s",
+        "readingDurationPerUser": 101,
+        "humanizedReadingDurationPerUser": "01m 41s"
+      }
+
     """
     body = {
         'dateRanges': [{'startDate': "2021-01-01", 'endDate': "today"}],
@@ -178,6 +244,11 @@ def get_report_from_start(analytics):
 
 
 def get_shanghai_datetime_str():
+    """
+    获取到东八区的时间字符串
+
+    Return:  2022-02-10T00:48:52UTC+08:00
+    """
     tz_shanghai = dt.timezone(dt.timedelta(hours=8))
     now_shanghai = dt.datetime.now(tz=tz_shanghai)
     return now_shanghai.strftime('%Y-%m-%dT%H:%M:%S%Z')  # 2022-02-10T00:48:52UTC+08:00
