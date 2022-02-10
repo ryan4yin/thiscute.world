@@ -156,7 +156,7 @@ Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。
 目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + `range` 循环来生成 workflow 配置。
 
 
-## 二、[安装 Argo Workflows](https://argoproj.github.io/argo/installation/)
+## 二、[安装 Argo Workflows](https://argoproj.github.io/argo-workflows/)
 
 安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：
 
