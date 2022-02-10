@@ -49,7 +49,7 @@ Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言
 
 而 Argo Workflows 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG
 
-再借助 [templateRef](https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates) 或者 [Workflow of Workflows](https://argoproj.github.io/argo/workflow-of-workflows/)，就能实现 Workflows 的编排了。
+再借助 [templateRef](https://argoproj.github.io/argo-workflows/workflow-templates/#referencing-other-workflowtemplates) 或者 [Workflow of Workflows](https://argoproj.github.io/argo-workflows/workflow-of-workflows/)，就能实现 Workflows 的编排了。
 
 **我们之所以选择 Argo Workflows 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。**（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）
 
@@ -104,8 +104,8 @@ Argo 是完全基于 Kubernetes 的，因此目前它也只能通过 namespace/l
 
 Argo Workflows 的流水线有多种触发方式：
 
-- 手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 [workflowTemplateRef](https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec) 直接引用一个现成的流水线模板。
-- 定时触发：[CronWorkflow](https://argoproj.github.io/argo/cron-workflows/)
+- 手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 [workflowTemplateRef](https://argoproj.github.io/argo-workflows/workflow-templates/#create-workflow-from-workflowtemplate-spec) 直接引用一个现成的流水线模板。
+- 定时触发：[CronWorkflow](https://argoproj.github.io/argo-workflows/cron-workflows/)
 - 通过 Git 仓库变更触发：借助 [argo-events](https://github.com/argoproj/argo-events) 可以实现此功能，详见其文档。
   - 另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！
 
@@ -156,7 +156,9 @@ Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。
 目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + `range` 循环来生成 workflow 配置。
 
 
-## 二、[安装 Argo Workflows](https://argoproj.github.io/argo-workflows/)
+## 二、安装 Argo Workflows
+
+>参考官方文档：https://argoproj.github.io/argo-workflows/installation/
 
 安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：
 
@@ -204,7 +206,9 @@ minio 部署好后，它会将默认的 `accesskey` 和 `secretkey` 保存在名
 直接访问 minio 的 9000 端口（需要使用 nodeport/ingress 等方式暴露此端口）就能进入 Web UI，使用前面提到的 secret `minio` 中的 key/secret 登录，就能创建 bucket.
 
 
-### [ServiceAccount 配置](https://argoproj.github.io/argo/service-accounts/)
+### ServiceAccount 配置
+
+>https://argoproj.github.io/argo-workflows/service-accounts/
 
 Argo Workflows 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 `default` ServiceAccount 运行 workflow.
 
@@ -218,7 +222,7 @@ Argo Workflows 依赖于 ServiceAccount 进行验证与授权，而且默认情�
 kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=<namespace>:default -n <namespace>
 ```
 
-方法二，官方给出了[Argo Workflows 需要的最小权限的 Role 定义](https://argoproj.github.io/argo/workflow-rbac/)，方便起见我将它改成一个 ClusterRole:
+方法二，官方给出了[Argo Workflows 需要的最小权限的 Role 定义](https://argoproj.github.io/argo-workflows/workflow-rbac/)，方便起见我将它改成一个 ClusterRole:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -257,7 +261,9 @@ kubectl create rolebinding default-argo-workflow --clusterrole=argo-workflow-rol
 或者如果你希望使用别的 ServiceAccount 来运行 workflow，也可以自行创建 ServiceAccount，然后再走上面方法二的流程，但是最后，要记得在 workflow 的 `spec.serviceAccountName` 中设定好 ServiceAccount 名称。
 
 
-### [Workflow Executors](https://argoproj.github.io/argo/workflow-executors/)
+### Workflow Executors
+
+>https://argoproj.github.io/argo-workflows/workflow-executors/
 
 Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等...
 
@@ -307,7 +313,7 @@ workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 r
 
 解决方法：通过 Pod Security Context 手动设定容器的 user/group:
 
-- [Workflow Pod Security Context](https://argoproj.github.io/argo/workflow-pod-security-context/)
+- [Workflow Pod Security Context](https://argoproj.github.io/argo-workflows/workflow-pod-security-context/)
 
 
 安全起见，我建议所有的 workflow 都手动设定 `securityContext`，示例：
@@ -327,7 +333,7 @@ spec:
 
 ### 2. 如何从 hashicorp vault 中读取 secrets?
 
->参考 [Support to get secrets from Vault](https://github.com/argoproj/argo/issues/3267#issuecomment-650119636)
+>参考 [Support to get secrets from Vault](https://github.com/argoproj/argo-workflows/issues/3267#issuecomment-650119636)
 
 hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理工具。
 我们在生产环境用它做为分布式配置中心，同时在本地 CI/CD 中，也使用它存储相关的敏感信息。
@@ -387,7 +393,7 @@ spec:
 
 Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。
 
-为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：[Limit The Total Number Of Workflows And Pods](https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods)
+为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：[Limit The Total Number Of Workflows And Pods](https://argoproj.github.io/argo-workflows/cost-optimisation/#limit-the-total-number-of-workflows-and-pods)
 
 这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 `workflow-controller-configmap` 这个 configmap:
 
@@ -419,7 +425,7 @@ data:
 
 Argo Workflows 的配置，都保存在 `workflow-controller-configmap` 这个 configmap 中，我们前面已经接触到了它的部分内容。
 
-这里给出此配置文件的完整 examples: <https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml>
+这里给出此配置文件的完整 examples: <https://github.com/argoproj/argo-workflows/blob/master/docs/workflow-controller-configmap.yaml>
 
 其中一些可能需要自定义的参数如下：
 
