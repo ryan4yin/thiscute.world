@@ -2,6 +2,9 @@
 title: "本站统计数据"
 date: 2022-02-07T18:56:35+08:00
 draft: false
+
+toc:
+  enable: false
 ---
 
 >此页面受 [极客兔兔 - 博客折腾记(七) - Gitalk Plus ](https://geektutu.com/post/blog-experience-7.html) 的启发而创建，其核心诉求是「**帮助访客发现本站的优质文章，也帮助我自己寻找出有问题的文章，做针对性调整以提升全站内容质量~**」。
