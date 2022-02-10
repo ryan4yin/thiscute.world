@@ -23,7 +23,7 @@ Argo Workflows 是一个云原生工作流引擎，专注于编排并行任务�
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/expirence-of-argo-workflow/><link rel=prev href=https://thiscute.world/posts/expirence-of-vault/><link rel=next href=https://thiscute.world/posts/end-of-the-first-round/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"云原生流水线 Argo Workflows 的安装、使用以及个人体验","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/expirence-of-argo-workflow\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/expirence-of-argo-workflow\/argo-workflow.png","width":1544,"height":546}],"genre":"posts","keywords":"云原生, CI, 持续集成, 流水线","wordcount":7104,"url":"https:\/\/thiscute.world\/posts\/expirence-of-argo-workflow\/","datePublished":"2021-01-27T15:37:27+08:00","dateModified":"2021-01-27T15:37:27+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/expirence-of-argo-workflow/><link rel=prev href=https://thiscute.world/posts/expirence-of-vault/><link rel=next href=https://thiscute.world/posts/end-of-the-first-round/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"云原生流水线 Argo Workflows 的安装、使用以及个人体验","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/expirence-of-argo-workflow\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/expirence-of-argo-workflow\/argo-workflow.png","width":1544,"height":546}],"genre":"posts","keywords":"云原生, CI, 持续集成, 流水线","wordcount":7168,"url":"https:\/\/thiscute.world\/posts\/expirence-of-argo-workflow\/","datePublished":"2021-01-27T15:37:27+08:00","dateModified":"2021-01-27T15:37:27+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -95,7 +95,7 @@ Argo Workflows 是一个云原生工作流引擎，专注于编排并行任务�
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">云原生流水线 Argo Workflows 的安装、使用以及个人体验</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-27>2021-01-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7104 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-27>2021-01-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7168 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 15 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/expirence-of-argo-workflow/argo-workflow.png data-srcset="/posts/expirence-of-argo-workflow/argo-workflow.png, /posts/expirence-of-argo-workflow/argo-workflow.png 1.5x, /posts/expirence-of-argo-workflow/argo-workflow.png 2x" data-sizes=auto alt=/posts/expirence-of-argo-workflow/argo-workflow.png title=/posts/expirence-of-argo-workflow/argo-workflow.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -123,10 +123,10 @@ Argo Workflows 是一个云原生工作流引擎，专注于编排并行任务�
 <li><a href=#10-客户端sdk>10. 客户端/SDK</a></li>
 </ul>
 </li>
-<li><a href=#二安装-argo-workflowshttpsargoprojgithubioargo-workflows>二、<a href=https://argoproj.github.io/argo-workflows/>安装 Argo Workflows</a></a>
+<li><a href=#二安装-argo-workflows>二、安装 Argo Workflows</a>
 <ul>
-<li><a href=#serviceaccount-配置httpsargoprojgithubioargoservice-accounts><a href=https://argoproj.github.io/argo/service-accounts/>ServiceAccount 配置</a></a></li>
-<li><a href=#workflow-executorshttpsargoprojgithubioargoworkflow-executors><a href=https://argoproj.github.io/argo/workflow-executors/>Workflow Executors</a></a></li>
+<li><a href=#serviceaccount-配置>ServiceAccount 配置</a></li>
+<li><a href=#workflow-executors>Workflow Executors</a></li>
 </ul>
 </li>
 <li><a href=#三使用-argo-workflows-做-ci-工具>三、使用 Argo Workflows 做 CI 工具</a></li>
@@ -171,7 +171,7 @@ Argo Workflows 是一个云原生工作流引擎，专注于编排并行任务�
 <p>Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言，最大的特点，就是它强大的流水线编排能力。</p>
 <p>其他流水线项目，对流水线之间的关联性考虑得很少，基本都假设流水线都是互相独立的。</p>
 <p>而 Argo Workflows 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG</p>
-<p>再借助 <a href=https://argoproj.github.io/argo/workflow-templates/#referencing-other-workflowtemplates target=_blank rel="noopener noreferrer">templateRef</a> 或者 <a href=https://argoproj.github.io/argo/workflow-of-workflows/ target=_blank rel="noopener noreferrer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
+<p>再借助 <a href=https://argoproj.github.io/argo-workflows/workflow-templates/#referencing-other-workflowtemplates target=_blank rel="noopener noreferrer">templateRef</a> 或者 <a href=https://argoproj.github.io/argo-workflows/workflow-of-workflows/ target=_blank rel="noopener noreferrer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
 <p><strong>我们之所以选择 Argo Workflows 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
 <p>一个复杂工作流的示例如下：</p>
 <p><figure><a class=lightgallery href=/images/expirence-of-argo-workflow/complex-workflows.png title=/images/expirence-of-argo-workflow/complex-workflows.png data-thumbnail=/images/expirence-of-argo-workflow/complex-workflows.png data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
@@ -206,8 +206,8 @@ Argo Workflows 是一个云原生工作流引擎，专注于编排并行任务�
 <h3 id=6-触发构建的方式>6. 触发构建的方式</h3>
 <p>Argo Workflows 的流水线有多种触发方式：</p>
 <ul>
-<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href=https://argoproj.github.io/argo/workflow-templates/#create-workflow-from-workflowtemplate-spec target=_blank rel="noopener noreferrer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
-<li>定时触发：<a href=https://argoproj.github.io/argo/cron-workflows/ target=_blank rel="noopener noreferrer">CronWorkflow</a></li>
+<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href=https://argoproj.github.io/argo-workflows/workflow-templates/#create-workflow-from-workflowtemplate-spec target=_blank rel="noopener noreferrer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
+<li>定时触发：<a href=https://argoproj.github.io/argo-workflows/cron-workflows/ target=_blank rel="noopener noreferrer">CronWorkflow</a></li>
 <li>通过 Git 仓库变更触发：借助 <a href=https://github.com/argoproj/argo-events target=_blank rel="noopener noreferrer">argo-events</a> 可以实现此功能，详见其文档。
 <ul>
 <li>另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！</li>
@@ -251,7 +251,10 @@ Argo Workflows 是一个云原生工作流引擎，专注于编排并行任务�
 <p>感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。</p>
 <p>此外，因为 Argo Workflows 是 kubernetes 自定义资源 CR，也可以使用 helm/kustomize 来做 workflow 的生成。</p>
 <p>目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + <code>range</code> 循环来生成 workflow 配置。</p>
-<h2 id=二安装-argo-workflowshttpsargoprojgithubioargo-workflows>二、<a href=https://argoproj.github.io/argo-workflows/ target=_blank rel="noopener noreferrer">安装 Argo Workflows</a></h2>
+<h2 id=二安装-argo-workflows>二、安装 Argo Workflows</h2>
+<blockquote>
+<p>参考官方文档：https://argoproj.github.io/argo-workflows/installation/</p>
+</blockquote>
 <p>安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -325,7 +328,10 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><p>现在还差最后一步：手动进入 minio 的 Web UI，创建好 <code>argo-bucket</code> 这个 bucket.
 直接访问 minio 的 9000 端口（需要使用 nodeport/ingress 等方式暴露此端口）就能进入 Web UI，使用前面提到的 secret <code>minio</code> 中的 key/secret 登录，就能创建 bucket.</p>
-<h3 id=serviceaccount-配置httpsargoprojgithubioargoservice-accounts><a href=https://argoproj.github.io/argo/service-accounts/ target=_blank rel="noopener noreferrer">ServiceAccount 配置</a></h3>
+<h3 id=serviceaccount-配置>ServiceAccount 配置</h3>
+<blockquote>
+<p><a href=https://argoproj.github.io/argo-workflows/service-accounts/ target=_blank rel="noopener noreferrer">https://argoproj.github.io/argo-workflows/service-accounts/</a></p>
+</blockquote>
 <p>Argo Workflows 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 <code>default</code> ServiceAccount 运行 workflow.</p>
 <p>可 <code>default</code> 这个 ServiceAccount 默认根本没有任何权限！所以 Argo 的 artifacts, outputs, access to secrets 等功能全都会因为权限不足而无法使用！</p>
 <p>为此，Argo 的官方文档提供了两个解决方法。</p>
@@ -338,7 +344,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>kubectl create rolebinding default-admin --clusterrole<span class=o>=</span>admin --serviceaccount<span class=o>=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
 </code></pre></td></tr></table>
 </div>
-</div><p>方法二，官方给出了<a href=https://argoproj.github.io/argo/workflow-rbac/ target=_blank rel="noopener noreferrer">Argo Workflows 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
+</div><p>方法二，官方给出了<a href=https://argoproj.github.io/argo-workflows/workflow-rbac/ target=_blank rel="noopener noreferrer">Argo Workflows 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
 <pre tabindex=0 class=chroma><code><span class=lnt> 1
@@ -402,7 +408,10 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
 <p>或者如果你希望使用别的 ServiceAccount 来运行 workflow，也可以自行创建 ServiceAccount，然后再走上面方法二的流程，但是最后，要记得在 workflow 的 <code>spec.serviceAccountName</code> 中设定好 ServiceAccount 名称。</p>
-<h3 id=workflow-executorshttpsargoprojgithubioargoworkflow-executors><a href=https://argoproj.github.io/argo/workflow-executors/ target=_blank rel="noopener noreferrer">Workflow Executors</a></h3>
+<h3 id=workflow-executors>Workflow Executors</h3>
+<blockquote>
+<p><a href=https://argoproj.github.io/argo-workflows/workflow-executors/ target=_blank rel="noopener noreferrer">https://argoproj.github.io/argo-workflows/workflow-executors/</a></p>
+</blockquote>
 <p>Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等&mldr;</p>
 <p>Workflow Executor 有多种实现，可以通过前面提到的 configmap <code>workflow-controller-configmap</code> 来选择。</p>
 <p>可选项如下：</p>
@@ -459,7 +468,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 root 账号，而且要修改文件，就很可能遇到 Permission Denined 的问题。</p>
 <p>解决方法：通过 Pod Security Context 手动设定容器的 user/group:</p>
 <ul>
-<li><a href=https://argoproj.github.io/argo/workflow-pod-security-context/ target=_blank rel="noopener noreferrer">Workflow Pod Security Context</a></li>
+<li><a href=https://argoproj.github.io/argo-workflows/workflow-pod-security-context/ target=_blank rel="noopener noreferrer">Workflow Pod Security Context</a></li>
 </ul>
 <p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
 <div class=highlight><div class=chroma>
@@ -487,7 +496,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div><p>或者也可以通过 <code>workflow-controller-configmap</code> 的 <code>workflowDefaults</code> 设定默认的 workflow 配置。</p>
 <h3 id=2-如何从-hashicorp-vault-中读取-secrets>2. 如何从 hashicorp vault 中读取 secrets?</h3>
 <blockquote>
-<p>参考 <a href=https://github.com/argoproj/argo/issues/3267#issuecomment-650119636 target=_blank rel="noopener noreferrer">Support to get secrets from Vault</a></p>
+<p>参考 <a href=https://github.com/argoproj/argo-workflows/issues/3267#issuecomment-650119636 target=_blank rel="noopener noreferrer">Support to get secrets from Vault</a></p>
 </blockquote>
 <p>hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理工具。
 我们在生产环境用它做为分布式配置中心，同时在本地 CI/CD 中，也使用它存储相关的敏感信息。</p>
@@ -555,7 +564,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 <p>待研究</p>
 <h3 id=5-如何归档历史数据>5. 如何归档历史数据？</h3>
 <p>Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。</p>
-<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href=https://argoproj.github.io/argo/cost-optimisation/#limit-the-total-number-of-workflows-and-pods target=_blank rel="noopener noreferrer">Limit The Total Number Of Workflows And Pods</a></p>
+<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href=https://argoproj.github.io/argo-workflows/cost-optimisation/#limit-the-total-number-of-workflows-and-pods target=_blank rel="noopener noreferrer">Limit The Total Number Of Workflows And Pods</a></p>
 <p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -607,7 +616,7 @@ helm install minio ./minio -n argo -f custom-values.yaml
 </div>
 </div><h3 id=6-argo-的其他进阶配置>6. Argo 的其他进阶配置</h3>
 <p>Argo Workflows 的配置，都保存在 <code>workflow-controller-configmap</code> 这个 configmap 中，我们前面已经接触到了它的部分内容。</p>
-<p>这里给出此配置文件的完整 examples: <a href=https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml target=_blank rel="noopener noreferrer">https://github.com/argoproj/argo/blob/master/docs/workflow-controller-configmap.yaml</a></p>
+<p>这里给出此配置文件的完整 examples: <a href=https://github.com/argoproj/argo-workflows/blob/master/docs/workflow-controller-configmap.yaml target=_blank rel="noopener noreferrer">https://github.com/argoproj/argo-workflows/blob/master/docs/workflow-controller-configmap.yaml</a></p>
 <p>其中一些可能需要自定义的参数如下：</p>
 <ul>
 <li><code>parallelism</code>: workflow 的最大并行数量</li>
