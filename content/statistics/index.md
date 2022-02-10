@@ -22,3 +22,5 @@ draft: false
 
 {{< statistics_trendingposts  >}}
 
+
+{{< particles_effects  >}}
