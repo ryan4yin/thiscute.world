@@ -6,6 +6,8 @@ draft: false
 
 ![一封纸笺](letter-from-friend.jpg)
 
+{{< particles_effect_scatter  >}}
+
 >感谢 @芝士部落格 提供了友链页面模板~
 
 在友链形成的网络中漫游，是一件很有意思的事情。

@@ -26,4 +26,4 @@ toc:
 {{< statistics_trendingposts  >}}
 
 
-{{< particles_effects  >}}
+{{< particles_effect_up  >}}
