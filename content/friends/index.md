@@ -6,7 +6,7 @@ draft: false
 
 ![一封纸笺](letter-from-friend.jpg)
 
-{{< particles_effect_scatter  >}}
+{{< particles_effect_up  >}}
 
 >感谢 @芝士部落格 提供了友链页面模板~
 
