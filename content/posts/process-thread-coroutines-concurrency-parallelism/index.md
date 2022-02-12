@@ -22,7 +22,8 @@ categories: ["技术"]
 ### 二、线程 Thread：（并发执行） 
 
 属于同一个进程的线程之间，是共享一套工作内容的。这使得线程的创建和移除开销很小，但同时也使编程变得复杂。
-{{< figure src="/images/process-thread-coroutines-concurrency-parallelism/cthreads-vs-processes.png" >}}
+
+{{< figure src="/images/process-thread-coroutines-concurrency-parallelism/threads-vs-processes.png" >}}
 
 关于线程，分用户级线程和内核级线程。不同的语言中，这两种线程的对应关系也不尽相同。
 
@@ -64,6 +65,7 @@ categories: ["技术"]
 1. 并行（Parallel）：多个任务同时进行。 
 
 一张图说明两者的差别
+
 {{< figure src="/images/process-thread-coroutines-concurrency-parallelism/concurrency-vs-parallelism.png" >}}
 
 **Note**：进程 和 线程 都可能是 并发 或 并行 的。关键看你程序的运行状态。多核是并行的前提。并发则只要求交替执行，因此单核也没问题。
