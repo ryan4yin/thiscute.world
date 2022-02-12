@@ -9,6 +9,12 @@ resources:
 
 tags: ["Python", "Tips", "Tricks", "常见错误"]
 categories: ["技术"]
+
+code:
+  # whether to show the copy button of the code block
+  copy: false
+  # the maximum number of lines of displayed code by default
+  maxShownLines: 100
 ---
 
 >个人笔记，不保证正确。
@@ -94,7 +100,132 @@ for py_file in data_folder.glob("**/*.py"):  # 匹配当前路径下的所有 py
 
 glob 中的 * 表示任意字符，而 ** 则表示任意层目录。（在大型文件树上使用 ** 速度会很慢！）
 
-### 2. 排序常用库 - operator
+### 2. 时间日期处理
+
+python3 在时间日期处理方面，有标准库 `datetime` 跟 `calender`，也有流行的第三方库 `arrow` 跟 `maya`.
+
+标准库 datetime 有时候不太方便，比如没有提供解析 iso 格式的函数。
+另外就是用标准库时，经常需要自定义格式化串。
+相比之下，`maya` 和 `arrow` 这两个第三方库会方便很多。
+
+不过第三方库并不是任何时候都可用，这里只介绍标准库 `datetime` 的用法，`maya`/`arrow` 请自行查找官方文档学习。
+
+#### 1. 获取当前时间
+
+
+```python3
+import time
+import datetime as dt
+
+# 1. 获取当前时间的时间戳
+time.time()  # 直接调用 c api，因此速度很快:  1582315203.537061
+utcnow = dt.datetime.utcnow()  # 当前的世界标准时间: datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)
+utcnow.timestamp()   # 将标准时转换成时间戳：datetime =>  1582315203.537061
+
+# 2. UTC 世界标准时间
+time.gmtime()
+#输出为： time.struct_time(tm_year=2019, tm_mon=6, tm_mday=23, 
+#                         tm_hour=3, tm_min=49, tm_sec=17,
+#                         tm_wday=6, tm_yday=174, tm_isdst=0)
+# 这实际上是一个命名元组
+
+# 3. 构建一个指定的 datetime 实例
+time_1997 = dt.datetime(year=1997, month=1, day=1)  # => datetime.datetime(1997, 1, 1, 0, 0)
+dt.datetime(year=1997, month=1, day=1, minute=11)  # => datetime.datetime(1997, 1, 1, 0, 11)
+```
+
+#### 2. 时间日期的修改与运算
+
+```python3
+# 0. 日期的修改（修改年月时分秒）
+utcnow.replace(day=11)  # =>  datetime.datetime(2020, 2, 11, 4, 0, 3, 537061)  修改 day
+utcnow.replace(hour=11)  # => datetime.datetime(2020, 2, 22, 11, 0, 3, 537061)  修改 hour
+
+# 1. 日期与时间
+date_utcnow = utcnow.date()  # => datetime.date(2020, 2, 22)  年月日
+time_utcnow = utcnow.time()  # => datetime.time(4, 0, 3, 537061)  时分秒
+
+# 2. 联结时间和日期（date 和 time 不能用加法联结）
+dt.datetime.combine(date_utcnow, time_utcnow)  # =>  datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)
+
+# 3. 日期的运算
+
+# 3.1 datetime 之间只能计算时间差（减法），不能进行其他运算
+utcnow - time_1997  # => datetime.timedelta(days=8452, seconds=14403, microseconds=537061)
+
+# 3.2 使用 timedelta 进行时间的增减
+days_step = dt.timedelta(days=1)  # 注意参数是复数形式
+time_1997 + days_step  # => datetime.datetime(1997, 1, 2, 0, 0)
+time_1997 - days_step  # => datetime.datetime(1996, 12, 31, 0, 0)
+
+# 3.3 timedelta 之间也可以进行加减法
+hours_step = dt.timedelta(hours=1)  # => datetime.timedelta(seconds=3600)
+days_step + hours_step  # => datetime.timedelta(days=1, seconds=3600)
+days_step - hours_step  # => datetime.timedelta(seconds=82800)
+hours_step - days_step  # => datetime.timedelta(days=-1, seconds=3600)
+
+# 3.4 timedelta 还可以按比例增减（与数字进行乘除法）
+hours_step * 2  # => datetime.timedelta(seconds=7200)
+days_step * -2  # => datetime.timedelta(days=-2)
+hours_step * 1.1  # =>  datetime.timedelta(seconds=3960)
+```
+
+
+#### 3. 时间日期的格式化与解析
+
+
+先介绍下常用的格式化字符串：
+
+1. 普通格式 - '%Y-%m-%d %H:%M:%S' => '2020-02-22 04:00:03'
+2. ISO 格式 - '%Y-%m-%dT%H:%M:%S.%fZ' => '2020-02-22T04:00:03.537061Z'
+3. 带时区的格式 - '%Y-%m-%dT%H:%M:%S%Z' => 2022-02-10T00:48:52UTC+08:00
+    - 需要时间对象自身有时区属性才行！否则格式化时会忽略 `%Z`
+
+另外再介绍下 Python 两个时间格式化与解析函数的命名：
+
+- `strftime`: 即 `string formate time`
+- `strptime`: 即 `string parse time`
+
+```python3
+# 1. 将时间格式化成字符串
+
+# 1.1 将 datetime 格式化为 iso 标准格式
+utcnow.isoformat()  # =>  '2020-02-22T04:00:03.537061'
+utcnow.strftime('%Y-%m-%dT%H:%M:%S.%fZ')   # => '2020-02-22T04:00:03.537061Z'
+utcnow.date().strftime('%Y-%m-%dT%H:%M:%S.%fZ')  # => '2020-02-22T00:00:00.000000Z'
+
+# 1.2 将 time.struct_time 格式化为日期字符串（貌似不支持 iso，可能是精度不够）
+time.strftime('%Y-%m-%dT%H:%M:%S', gm)  # => '2020-02-22T04:00:03'
+
+# 1.3 将 datetime 格式化成指定格式
+utcnow.strftime('%Y-%m-%d %H:%M:%S')  # => '2020-02-22 04:00:03'
+
+# 2. 解析时间字符串
+
+# 2.1 解析 iso 格式的时间字符串，手动指定格式（注意 %f 只对应六位小数，对9位小数它无能为力。。）
+dt.datetime.strptime('2020-02-22T04:00:03.537061Z', '%Y-%m-%dT%H:%M:%S.%fZ')  # => datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)
+
+# 2.2 解析 iso 格式的时间字符串(需要 python 3.7+)
+dt.datetime.fromisoformat('2020-02-22T04:00:03.537061')  # => datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)
+dt.date.fromisoformat('2020-02-22')  # => datetime.date(2020, 2, 22)
+dt.time.fromisoformat("04:00:03.537061")  # =>  datetime.time(4, 0, 3, 537061)
+
+# 2.3 解析指定格式的字符串
+dt.datetime.strptime('2020-02-22 04:00:03', '%Y-%m-%d %H:%M:%S')  # => datetime.datetime(2020, 2, 22, 4, 0, 3)
+```
+
+#### 4. 时区转换与日期格式化
+
+```python3
+# 上海时区：东八区 utc+8
+tz_shanghai = dt.timezone(dt.timedelta(hours=8))
+
+now_shanghai = dt.datetime.now(tz=tz_shanghai)
+
+now_shanghai.strftime('%Y-%m-%dT%H:%M:%S%Z')  # => 2022-02-10T00:48:52UTC+08:00
+```
+
+### 3. 排序常用库 - operator
 
 operator 模块包含四种类型的方法：
 #### 1. **operator.itemgetter**
@@ -170,7 +301,7 @@ f(b)  # returns b.name('foo', bar=1)
 operator.add、operator.sub、operator.mul、operator.div 等等，函数式编程有时需要用到。
 
 
-### 3. itertools
+### 4. itertools
 
 [itertools](https://docs.python.org/3/library/itertools.html) 提供了许多针对可迭代对象的实用函数
 
@@ -220,7 +351,7 @@ operator.add、operator.sub、operator.mul、operator.div 等等，函数式编�
 
 等等等，用得到的时候再查了。。。
 
-### 4. collections
+### 5. collections
 
 提供了一些实用的高级数据结构（容器）
 
@@ -232,7 +363,7 @@ operator.add、operator.sub、operator.mul、operator.div 等等，函数式编�
 1. `ChainMap`：将多个 map 连接（chain）在一起，提供一个统一的视图。因为是视图，所以原来的 map 不会被影响。
 
 
-### 5. 常用函数装饰器 functools
+### 6. 常用函数装饰器 functools
 
 functools 提供了几个有时很有用的函数和装饰器
 
@@ -321,7 +452,7 @@ Julia 语言根本没有类这个定义，类型的所有方法都是通过多�
 
 
 
-### 6. 上下文管理 - contextlib
+### 7. 上下文管理 - contextlib
 
 即实现使用 `with` 语句进行自定义的上下文管理。
 
