@@ -1,9 +1,9 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>后端 - 标签 - This Cute World</title><link>https://thiscute.world/tags/%E5%90%8E%E7%AB%AF/</link><description>后端 - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Tue, 21 May 2019 22:19:00 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/%E5%90%8E%E7%AB%AF/" rel="self" type="application/rss+xml"/><item><title>SQLAlchemy 学习笔记（三）：ORM 中的关系构建</title><link>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</link><pubDate>Tue, 21 May 2019 22:19:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</guid><description><![CDATA[<blockquote>
 <p>个人笔记，不保证正确。</p>
 </blockquote>
-<h2 id="关系构建foreignkey-与-relationship">关系构建：<code>ForeignKey</code> 与 <code>relationship</code></h2>
+<h2 id="一关系构建foreignkey-与-relationship">一、关系构建：<code>ForeignKey</code> 与 <code>relationship</code></h2>
 <p>关系构建的重点，在于搞清楚这两个函数的用法。<code>ForeignKey</code> 的用法已经在 <a href="https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F" target="_blank" rel="noopener noreferrer">SQL表达式语言 - 表定义中的约束</a> 讲过了。主要是 <code>ondelete</code> 和 <code>onupdate</code> 两个参数的用法。</p>
-<h2 id="relationship"><code>relationship</code></h2>
+<h2 id="二relationship">二、<code>relationship</code></h2>
 <p><code>relationship</code> 函数在 ORM 中用于构建表之间的关联关系。与 <code>ForeignKey</code> 不同的是，它定义的关系不属于表定义，而是动态计算的。
 用它定义出来的属性，相当于 SQL 中的视图。</p>
 <p>这个函数有点难用，一是因为它的有几个参数不太好理解，二是因为它的参数非常丰富，让人望而却步。下面通过<strong>一对多</strong>、<strong>多对一</strong>、<strong>多对多</strong>几个场景下 <code>relationship</code> 的使用，来一步步熟悉它的用法。</p>
@@ -24,7 +24,7 @@
 <span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="一对多">一对多</h3>
+</div><h3 id="1-一对多">1. 一对多</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -54,8 +54,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>一个 <code>Parent</code> 可以有多个 <code>Children</code>，通过 <code>relationship</code>，我们就能直接通过 <code>parent.children</code> 得到结果，免去繁琐的 query 语句。</p>
-<h4 id="反向引用">反向引用</h4>
-<h4 id="1-backref-与-back_populates">1. <code>backref</code> 与 <code>back_populates</code></h4>
+<h4 id="11-反向引用">1.1 反向引用</h4>
+<h5 id="111-backref-与-back_populates">1.1.1 <code>backref</code> 与 <code>back_populates</code></h5>
 <p>那如果我们需要得知 <code>child</code> 的 <code>parent</code> 对象呢？能不能直接访问 <code>child.parent</code>？</p>
 <p>为了实现这个功能，SQLAlchemy 提供了 <code>backref</code> 和 <code>back_populates</code> 两个参数。</p>
 <p>两个参数的效果完全一致，区别在于，<code>backref</code> 只需要在 <code>Parent</code> 类中声明 <code>children</code>，<code>Child.parent</code> 会被动态创建。</p>
@@ -113,7 +113,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><strong>NOTE：声明的两个 <code>relationship</code> 不需要多余的说明，SQLAlchemy 能自动识别到 <code>parent.children</code> 是 collection，<code>child.parent</code> 是 attribute.</strong></p>
-<h4 id="2-反向引用的参数sqlalchemyormbackrefname-kwargs">2. 反向引用的参数：<code>sqlalchemy.orm.backref(name, **kwargs)</code></h4>
+<h4 id="112-反向引用的参数sqlalchemyormbackrefname-kwargs">1.1.2. 反向引用的参数：<code>sqlalchemy.orm.backref(name, **kwargs)</code></h4>
 <p>使用 <code>back_populates</code> 时，我们可以很方便地在两个 <code>relationship</code> 函数中指定各种参数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -172,9 +172,9 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><code>backref()</code> 的参数会被传递给 <code>relationship()</code>，因此它俩的参数也完全一致。</p>
-<h3 id="多对一">多对一</h3>
+<h3 id="2-多对一">2. 多对一</h3>
 <p>A many-to-one is similar to a one-to-many relationship. The difference is that this relationship is looked at from the &ldquo;many&rdquo; side.</p>
-<h3 id="一对一">一对一</h3>
+<h3 id="3-一对一">3. 一对一</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -209,7 +209,7 @@
     <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Parent&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;child&#34;</span><span class="p">)</span> 
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="多对多">多对多</h3>
+</div><h3 id="4-多对多">4. 多对多</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -247,7 +247,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>要添加反向引用时，同样可以使用 <code>backref</code> 或 <code>back_populates</code>.</p>
-<h4 id="user2user">user2user</h4>
+<h4 id="41-user2user">4.1 user2user</h4>
 <p>如果多对多关系中的两边都是 user，即都是同一个表时，该怎么声明？</p>
 <p>例如用户的「关注」与「粉丝」，你是 user，你的粉丝是 user，你关注的账号也是 user。</p>
 <p>这个时候，关联表 <code>association_table</code> 的两个键都是 <code>user</code>，<strong>SQLAlchemy 无法区分主次，需要手动指定</strong>，为此需要使用 <code>primaryjoin</code> 和 <code>secondaryjoin</code> 两个参数。</p>
@@ -302,7 +302,7 @@ class User(UserMixin, db.Model):
 <li>primaryjoin：（多对多中）用于从子对象查询其父对象的 condition（child.parents），默认只考虑外键。</li>
 <li>secondaryjoin：（多对多中）用于从父对象查询其所有子对象的 condition（parent.children），同样的，默认情况下只考虑外键。</li>
 </ol>
-<h2 id="orm-层-的-delete-cascade-vs-foreign-key-层的-on-delete-cascade">ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade</h2>
+<h2 id="三orm-层-的-delete-cascade-vs-foreign-key-层的-on-delete-cascade">三、ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade</h2>
 <p>之前有讲过 Table 定义中的级联操作：<code>ON DELETE</code> 和 <code>ON UPDATE</code>，可以通过 <code>ForeignKey</code> 的参数指定为 <code>CASCADE</code>.</p>
 <p>可 SQLAlchemy 还有一个 <code>relationship</code> 生成 SQL 语句时的配置参数 <code>cascade</code>，另外 <code>passive_deletes</code> 也可以指定为 <code>cascade</code>。</p>
 <p>有这么多的 cascade，我真的是很懵。这三个 cascade 到底有何差别呢？</p>
