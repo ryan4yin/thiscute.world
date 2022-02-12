@@ -9,7 +9,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/web-browser-dev-tools/"><meta property="og:image" content="https://thiscute.world/posts/web-browser-dev-tools/featured-image.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2019-02-11T16:53:26+08:00">
-<meta property="article:modified_time" content="2022-02-11T13:19:10+08:00">
+<meta property="article:modified_time" content="2022-02-13T01:46:36+08:00">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/web-browser-dev-tools/featured-image.png">
 <meta name=twitter:title content="Chrome 与 Firefox-Dev 的 DevTools">
@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/web-browser-dev-tools/><link rel=prev href=https://thiscute.world/posts/systemd-basics/><link rel=next href=https://thiscute.world/posts/websocket-http2-and-grpc/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Chrome 与 Firefox-Dev 的 DevTools","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/web-browser-dev-tools\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/web-browser-dev-tools\/featured-image.png","width":960,"height":440}],"genre":"posts","keywords":"Chrome, Firefox, DevTools, Browser","wordcount":2489,"url":"https:\/\/thiscute.world\/posts\/web-browser-dev-tools\/","datePublished":"2019-02-11T16:53:26+08:00","dateModified":"2022-02-11T13:19:10+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/web-browser-dev-tools/><link rel=prev href=https://thiscute.world/posts/systemd-basics/><link rel=next href=https://thiscute.world/posts/websocket-http2-and-grpc/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Chrome 与 Firefox-Dev 的 DevTools","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/web-browser-dev-tools\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/web-browser-dev-tools\/featured-image.png","width":960,"height":440}],"genre":"posts","keywords":"Chrome, Firefox, DevTools, Browser","wordcount":2489,"url":"https:\/\/thiscute.world\/posts\/web-browser-dev-tools\/","datePublished":"2019-02-11T16:53:26+08:00","dateModified":"2022-02-13T01:46:36+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -168,44 +168,58 @@
 <h3 id=network>Network</h3>
 <h4 id=1-属性列>1. 属性列</h4>
 <p>Chrome 可以右键属性列名来增减属性列，Firefox-Dev 也是一样：</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211093455289-773908727.png data-srcset="/images/web-browser-dev-tools/968138-20190211093455289-773908727.png, /images/web-browser-dev-tools/968138-20190211093455289-773908727.png 1.5x, /images/web-browser-dev-tools/968138-20190211093455289-773908727.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211093455289-773908727.png title=/images/web-browser-dev-tools/968138-20190211093455289-773908727.png></p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211150559673-23181676.png data-srcset="/images/web-browser-dev-tools/968138-20190211150559673-23181676.png, /images/web-browser-dev-tools/968138-20190211150559673-23181676.png 1.5x, /images/web-browser-dev-tools/968138-20190211150559673-23181676.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211150559673-23181676.png title=/images/web-browser-dev-tools/968138-20190211150559673-23181676.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211093455289-773908727.png>
+</figure>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211150559673-23181676.png>
+</figure>
 <h4 id=2-copy>2. copy</h4>
 <p>在 Chrome 中右键某个请求，选中 copy，会给出几个 options：</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211134155594-369771298.png data-srcset="/images/web-browser-dev-tools/968138-20190211134155594-369771298.png, /images/web-browser-dev-tools/968138-20190211134155594-369771298.png 1.5x, /images/web-browser-dev-tools/968138-20190211134155594-369771298.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211134155594-369771298.png title=/images/web-browser-dev-tools/968138-20190211134155594-369771298.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211134155594-369771298.png>
+</figure>
 <p>而 Firefox-Dev 的更强一点，可以复制消息头（请求头和响应头）：</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211134845686-1048423446.png data-srcset="/images/web-browser-dev-tools/968138-20190211134845686-1048423446.png, /images/web-browser-dev-tools/968138-20190211134845686-1048423446.png 1.5x, /images/web-browser-dev-tools/968138-20190211134845686-1048423446.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211134845686-1048423446.png title=/images/web-browser-dev-tools/968138-20190211134845686-1048423446.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211134845686-1048423446.png>
+</figure>
 <h4 id=3-response-的-pretty-print>3. response 的 pretty print</h4>
 <p>Chrome 的 Response 页面左下角，有<code>{}</code>按钮，可以 beautify 响应。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211145915794-1971618603.png data-srcset="/images/web-browser-dev-tools/968138-20190211145915794-1971618603.png, /images/web-browser-dev-tools/968138-20190211145915794-1971618603.png 1.5x, /images/web-browser-dev-tools/968138-20190211145915794-1971618603.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211145915794-1971618603.png title=/images/web-browser-dev-tools/968138-20190211145915794-1971618603.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211145915794-1971618603.png>
+</figure>
 <p>而 Firefox-Dev 只在 Debugger 页面提供该按钮，Response 中不支持。</p>
 <p>Firefox 响应的 preview 和 payload 是放在 Response 页面下。而 Chrome 是分成了两个标签页</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211150146579-1141462696.png data-srcset="/images/web-browser-dev-tools/968138-20190211150146579-1141462696.png, /images/web-browser-dev-tools/968138-20190211150146579-1141462696.png 1.5x, /images/web-browser-dev-tools/968138-20190211150146579-1141462696.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211150146579-1141462696.png title=/images/web-browser-dev-tools/968138-20190211150146579-1141462696.png></p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211150217505-933154713.png data-srcset="/images/web-browser-dev-tools/968138-20190211150217505-933154713.png, /images/web-browser-dev-tools/968138-20190211150217505-933154713.png 1.5x, /images/web-browser-dev-tools/968138-20190211150217505-933154713.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211150217505-933154713.png title=/images/web-browser-dev-tools/968138-20190211150217505-933154713.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211150146579-1141462696.png>
+</figure>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211150217505-933154713.png>
+</figure>
 <h4 id=4-导出-har>4. 导出 HAR</h4>
 <p>右键任意一个请求，选择 <code>save all as HAR</code>，就可以导出 HAR 文件。（Chrome 有 with content，导出的 HAR 文件会含有所有请求与响应的 body）</p>
 <p>该文件可用于存储当前监听到的所有浏览器请求信息。在以后需要分析这些请求时，将 HAR 文件拖到 Network 页面即可恢复所有请求。</p>
 <h4 id=5-raw-headers原始消息头>5. Raw Headers（原始消息头）</h4>
 <p>Chrome 只支持查看 HTTP/1.x 的 Raw Headers，对这种请求，会给出 <code>view source</code> 选项。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211142152309-1418680644.png data-srcset="/images/web-browser-dev-tools/968138-20190211142152309-1418680644.png, /images/web-browser-dev-tools/968138-20190211142152309-1418680644.png 1.5x, /images/web-browser-dev-tools/968138-20190211142152309-1418680644.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211142152309-1418680644.png title=/images/web-browser-dev-tools/968138-20190211142152309-1418680644.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211142152309-1418680644.png>
+</figure>
 <p>Chrome 不能查看 HTTP/2 的 Raw Headers。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211142301777-1440991898.png data-srcset="/images/web-browser-dev-tools/968138-20190211142301777-1440991898.png, /images/web-browser-dev-tools/968138-20190211142301777-1440991898.png 1.5x, /images/web-browser-dev-tools/968138-20190211142301777-1440991898.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211142301777-1440991898.png title=/images/web-browser-dev-tools/968138-20190211142301777-1440991898.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211142301777-1440991898.png>
+</figure>
 <p>而 Firefox 则支持查看 HTTP/2 的 Raw Headers。（是恢复后的，HTTP/2 的原始消息头是二进制压缩形式）</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211142424361-986461531.png data-srcset="/images/web-browser-dev-tools/968138-20190211142424361-986461531.png, /images/web-browser-dev-tools/968138-20190211142424361-986461531.png 1.5x, /images/web-browser-dev-tools/968138-20190211142424361-986461531.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211142424361-986461531.png title=/images/web-browser-dev-tools/968138-20190211142424361-986461531.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211142424361-986461531.png>
+</figure>
 <p>它还提供 Edit and Resend 请求的功能，这点要给个赞～</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211172845339-1004306694.png data-srcset="/images/web-browser-dev-tools/968138-20190211172845339-1004306694.png, /images/web-browser-dev-tools/968138-20190211172845339-1004306694.png 1.5x, /images/web-browser-dev-tools/968138-20190211172845339-1004306694.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211172845339-1004306694.png title=/images/web-browser-dev-tools/968138-20190211172845339-1004306694.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211172845339-1004306694.png>
+</figure>
 <h4 id=6-审查-websocketchrome-only>6. 审查 WebSocket（Chrome only）</h4>
 <p>在 NetWork 中点击对应的 WebScoket 请求，在右侧选择 Frames 标签，就可以看到所有的消息了</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211161734224-864236086.png data-srcset="/images/web-browser-dev-tools/968138-20190211161734224-864236086.png, /images/web-browser-dev-tools/968138-20190211161734224-864236086.png 1.5x, /images/web-browser-dev-tools/968138-20190211161734224-864236086.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211161734224-864236086.png title=/images/web-browser-dev-tools/968138-20190211161734224-864236086.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211161734224-864236086.png>
+</figure>
 <h4 id=7-跨页面加载时保留网络请求记录>7. 跨页面加载时，保留网络请求记录</h4>
 <p>当页面重载或者页面跳转时，默认情况下，Network面板下的网络请求记录表也是刷新的。如果想保留之前页面的网络请求数据，可以勾选Preserve log.</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211191616024-1591891666.png data-srcset="/images/web-browser-dev-tools/968138-20190211191616024-1591891666.png, /images/web-browser-dev-tools/968138-20190211191616024-1591891666.png 1.5x, /images/web-browser-dev-tools/968138-20190211191616024-1591891666.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211191616024-1591891666.png title=/images/web-browser-dev-tools/968138-20190211191616024-1591891666.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211191616024-1591891666.png>
+</figure>
 <p>常用的一个应用场景：登录/注册时会调用登录/注册API，开发者想查看这个接口返回的情况，但是登录/注册成功后一般会跳转到新的页面，导致了Network面板的请求记录被刷新从而看不到登录/注册接口返回的情况。此时勾选上Preserve log，无论跳转到那个页面，都能在Network网络请求记录表中查看到之前接口返回的情况。</p>
 <h3 id=javascript-控制台>JavaScript 控制台</h3>
 <ol>
 <li>可以通过 <code>$x(&lt;xpath>, &lt;DOM-element>)</code>，用 xpath 查询 DOM 元素。</li>
 </ol>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211151856683-1227556897.png data-srcset="/images/web-browser-dev-tools/968138-20190211151856683-1227556897.png, /images/web-browser-dev-tools/968138-20190211151856683-1227556897.png 1.5x, /images/web-browser-dev-tools/968138-20190211151856683-1227556897.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211151856683-1227556897.png title=/images/web-browser-dev-tools/968138-20190211151856683-1227556897.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211151856683-1227556897.png>
+</figure>
 <ol>
 <li>通过控制台左上方的选单，可以切换 JS 的环境，它默认是当前页面（top）。</li>
 </ol>
@@ -215,14 +229,17 @@
 - subtree modification: 子节点被修改
 - attribute modification：当前节点的属性被修改。（inline style 被修改也会触发此事件）
 - node removal：节点被移除</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211152916189-42263251.png data-srcset="/images/web-browser-dev-tools/968138-20190211152916189-42263251.png, /images/web-browser-dev-tools/968138-20190211152916189-42263251.png 1.5x, /images/web-browser-dev-tools/968138-20190211152916189-42263251.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211152916189-42263251.png title=/images/web-browser-dev-tools/968138-20190211152916189-42263251.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211152916189-42263251.png>
+</figure>
 <h4 id=2-检索元素上注册的事件chrome-only>2. 检索元素上注册的事件（Chrome only）</h4>
 <p>在 Elements 页面选中一个元素（或者直接右键检查该元素），然后在右侧窗口，选择 Event Listeners 标签，就可以看到该元素上注册的所有事件。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211154036983-2040723318.png data-srcset="/images/web-browser-dev-tools/968138-20190211154036983-2040723318.png, /images/web-browser-dev-tools/968138-20190211154036983-2040723318.png 1.5x, /images/web-browser-dev-tools/968138-20190211154036983-2040723318.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211154036983-2040723318.png title=/images/web-browser-dev-tools/968138-20190211154036983-2040723318.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211154036983-2040723318.png>
+</figure>
 <h4 id=3-颜色选择器>3. 颜色选择器</h4>
 <p>选中任一元素，在右侧选择 Styles 选单，会显示当前元素的 css 属性。</p>
 <p>其中所有的颜色小方块都是可以点击的，点击颜色方块后</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211160511912-2063790850.png data-srcset="/images/web-browser-dev-tools/968138-20190211160511912-2063790850.png, /images/web-browser-dev-tools/968138-20190211160511912-2063790850.png 1.5x, /images/web-browser-dev-tools/968138-20190211160511912-2063790850.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211160511912-2063790850.png title=/images/web-browser-dev-tools/968138-20190211160511912-2063790850.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211160511912-2063790850.png>
+</figure>
 <ol>
 <li>可以将颜色属性转换成多个格式（Chrome only）
 <ul>
@@ -242,7 +259,9 @@
 <ol>
 <li>条件断点
 Sources 中，在任意 JS 代码的行号上单击鼠标左键，就能在该行设置一个普通断点（在 Response 中可不行）。在行号上右键，能直接设置条件断点。
-<img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211154841386-1840257581.png data-srcset="/images/web-browser-dev-tools/968138-20190211154841386-1840257581.png, /images/web-browser-dev-tools/968138-20190211154841386-1840257581.png 1.5x, /images/web-browser-dev-tools/968138-20190211154841386-1840257581.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211154841386-1840257581.png title=/images/web-browser-dev-tools/968138-20190211154841386-1840257581.png></li>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211154841386-1840257581.png>
+</figure>
+</li>
 <li>XHR 断点：在右侧 Debugger 中，可以添加 XHR 断点。
 <ul>
 <li>如果条件留空，一旦有 XHR 发起，就会无条件进入调试。</li>
@@ -261,34 +280,44 @@ Sources 中，在任意 JS 代码的行号上单击鼠标左键，就能在该�
 <h3 id=screenshot>Screenshot</h3>
 <h4 id=1-for-chrome>1. For Chrome</h4>
 <p>方法一：在 DevTools 界面，按快捷键 <code>Ctrl + Shift + P</code> 打开 Command 窗口，然后输入 <code>screenshot</code>，在下拉栏里选择你需要的截图命令就行。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190212163124375-995667384.png data-srcset="/images/web-browser-dev-tools/968138-20190212163124375-995667384.png, /images/web-browser-dev-tools/968138-20190212163124375-995667384.png 1.5x, /images/web-browser-dev-tools/968138-20190212163124375-995667384.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190212163124375-995667384.png title=/images/web-browser-dev-tools/968138-20190212163124375-995667384.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190212163124375-995667384.png>
+</figure>
 <p>方法二：
 先进 dev tools，点击 左上角的设备图标（toggle device toolbar），然后页面顶部就会出现一个导航栏，在这里好选择设备或者自定义图像尺寸，然后点击该导航栏右侧（不是 dev tools 右侧）的 options 图标，会有两个选项：“截图（capture screenshot）”和“截网页全图（capture full size screenshot）”，如下：</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211102530072-2093584274.png data-srcset="/images/web-browser-dev-tools/968138-20190211102530072-2093584274.png, /images/web-browser-dev-tools/968138-20190211102530072-2093584274.png 1.5x, /images/web-browser-dev-tools/968138-20190211102530072-2093584274.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211102530072-2093584274.png title=/images/web-browser-dev-tools/968138-20190211102530072-2093584274.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211102530072-2093584274.png>
+</figure>
 <h4 id=2-for-firefox>2. For Firefox</h4>
 <ol>
 <li>只截显示出来的部分：和 Chrome 一样点击设备图标，然后在页面上面的 toolbar 就有截图按钮</li>
-<li><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211163703764-1641229843.png data-srcset="/images/web-browser-dev-tools/968138-20190211163703764-1641229843.png, /images/web-browser-dev-tools/968138-20190211163703764-1641229843.png 1.5x, /images/web-browser-dev-tools/968138-20190211163703764-1641229843.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211163703764-1641229843.png title=/images/web-browser-dev-tools/968138-20190211163703764-1641229843.png></li>
+<li><figure><img src=/images/web-browser-dev-tools/968138-20190211163703764-1641229843.png>
+</figure>
+</li>
 <li>截网页全图：在 DevTools 右边的 options 中进入 Settings，勾选 <code>take a screenshot of the entire page</code>，DevTools 右上角就会出现截图按钮了。</li>
 </ol>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211163941562-1320561581.png data-srcset="/images/web-browser-dev-tools/968138-20190211163941562-1320561581.png, /images/web-browser-dev-tools/968138-20190211163941562-1320561581.png 1.5x, /images/web-browser-dev-tools/968138-20190211163941562-1320561581.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211163941562-1320561581.png title=/images/web-browser-dev-tools/968138-20190211163941562-1320561581.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211163941562-1320561581.png>
+</figure>
 <h3 id=其他>其他</h3>
 <h4 id=1-fake-geolocationchrome-only>1. Fake Geolocation（Chrome only）</h4>
 <p>在 Chrome 中进入 DevTools，点击右上角的 options 按钮，选择 More tools -> Sensors，在 Geolocation 处选择 Custom location，就可以修改地理位置了。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211161131091-420638637.png data-srcset="/images/web-browser-dev-tools/968138-20190211161131091-420638637.png, /images/web-browser-dev-tools/968138-20190211161131091-420638637.png 1.5x, /images/web-browser-dev-tools/968138-20190211161131091-420638637.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211161131091-420638637.png title=/images/web-browser-dev-tools/968138-20190211161131091-420638637.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211161131091-420638637.png>
+</figure>
 <h4 id=2-自定义请求头>2. 自定义请求头</h4>
 <h4 id=for-chrome>For Chrome</h4>
 <p>和 上一小节一样，先进 More tools，选择 Network conditions，取消勾选 Select atuomatically，就可以修改请求头了。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211170346973-560763838.png data-srcset="/images/web-browser-dev-tools/968138-20190211170346973-560763838.png, /images/web-browser-dev-tools/968138-20190211170346973-560763838.png 1.5x, /images/web-browser-dev-tools/968138-20190211170346973-560763838.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211170346973-560763838.png title=/images/web-browser-dev-tools/968138-20190211170346973-560763838.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211170346973-560763838.png>
+</figure>
 <p>上面的演示中，使用 <code>python-requests/2.21.0</code> 做 user agent，知乎返回 404.</p>
 <h4 id=for-firefox>For Firefox</h4>
 <p>打开设备模拟，在 toolbar 的右上角勾选 <code>show user agent</code>，然后就可以在 toolbar 修改 user agent 了：</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211170804371-405922156.png data-srcset="/images/web-browser-dev-tools/968138-20190211170804371-405922156.png, /images/web-browser-dev-tools/968138-20190211170804371-405922156.png 1.5x, /images/web-browser-dev-tools/968138-20190211170804371-405922156.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211170804371-405922156.png title=/images/web-browser-dev-tools/968138-20190211170804371-405922156.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211170804371-405922156.png>
+</figure>
 <h3 id=3-request-blockingchrome-only>3. Request Blocking（Chrome only）</h3>
 <p>在 Network 的任意请求上右键，菜单中就有 Block request URL（阻塞该 URL）和 Block request domain（阻塞请求所在的整个域）</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211171736248-156227886.png data-srcset="/images/web-browser-dev-tools/968138-20190211171736248-156227886.png, /images/web-browser-dev-tools/968138-20190211171736248-156227886.png 1.5x, /images/web-browser-dev-tools/968138-20190211171736248-156227886.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211171736248-156227886.png title=/images/web-browser-dev-tools/968138-20190211171736248-156227886.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211171736248-156227886.png>
+</figure>
 <p>然后就可以在 More tools -> Request blocking 中看到你设置的阻塞条件。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/web-browser-dev-tools/968138-20190211172032733-566193435.png data-srcset="/images/web-browser-dev-tools/968138-20190211172032733-566193435.png, /images/web-browser-dev-tools/968138-20190211172032733-566193435.png 1.5x, /images/web-browser-dev-tools/968138-20190211172032733-566193435.png 2x" data-sizes=auto alt=/images/web-browser-dev-tools/968138-20190211172032733-566193435.png title=/images/web-browser-dev-tools/968138-20190211172032733-566193435.png></p>
+<figure><img src=/images/web-browser-dev-tools/968138-20190211172032733-566193435.png>
+</figure>
 <h3 id=参考>参考</h3>
 <ul>
 <li><a href=https://juejin.im/book/5c526902e51d4543805ef35e/section/5c526998e51d4506953e5574 target=_blank rel="noopener noreferrer">你不知道的 Chrome 调试技巧</a></li>
@@ -301,7 +330,7 @@ Sources 中，在任意 JS 代码的行号上单击鼠标左键，就能在该�
 <div class=post-info>
 <div class=post-info-line>
 <div class=post-info-mod>
-<span>更新于 2022-02-11</span>
+<span>更新于 2022-02-13</span>
 </div>
 <div class=post-info-license></div>
 </div>

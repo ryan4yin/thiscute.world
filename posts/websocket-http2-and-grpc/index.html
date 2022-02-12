@@ -9,7 +9,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/websocket-http2-and-grpc/"><meta property="og:image" content="https://thiscute.world/posts/websocket-http2-and-grpc/protocols-banner.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2019-02-11T18:26:36+08:00">
-<meta property="article:modified_time" content="2021-01-17T12:07:12+08:00">
+<meta property="article:modified_time" content="2022-02-13T01:46:36+08:00">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/websocket-http2-and-grpc/protocols-banner.png">
 <meta name=twitter:title content="WebSocket、HTTP/2 与 gRPC">
@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/websocket-http2-and-grpc/><link rel=prev href=https://thiscute.world/posts/web-browser-dev-tools/><link rel=next href=https://thiscute.world/posts/sqlalchemy-notes-2-orm-basics/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"WebSocket、HTTP/2 与 gRPC","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/websocket-http2-and-grpc\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/websocket-http2-and-grpc\/protocols-banner.png","width":800,"height":264}],"genre":"posts","keywords":"WebSocket, gRPC, HTTP\/2","wordcount":2934,"url":"https:\/\/thiscute.world\/posts\/websocket-http2-and-grpc\/","datePublished":"2019-02-11T18:26:36+08:00","dateModified":"2021-01-17T12:07:12+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/websocket-http2-and-grpc/><link rel=prev href=https://thiscute.world/posts/web-browser-dev-tools/><link rel=next href=https://thiscute.world/posts/sqlalchemy-notes-2-orm-basics/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"WebSocket、HTTP/2 与 gRPC","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/websocket-http2-and-grpc\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/websocket-http2-and-grpc\/protocols-banner.png","width":800,"height":264}],"genre":"posts","keywords":"WebSocket, gRPC, HTTP\/2","wordcount":2934,"url":"https:\/\/thiscute.world\/posts\/websocket-http2-and-grpc\/","datePublished":"2019-02-11T18:26:36+08:00","dateModified":"2022-02-13T01:46:36+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -233,7 +233,9 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 </ol>
 <p>它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 <code>from disk cache</code> 或者 <code>from memroy cache</code>.</p>
 <p>Chrome 可以通过如下方式查看请求使用的协议：
-<img class=lazyload src=/svg/loading.min.svg data-src=/images/websocket-http2-and-grpc/chrome-protocol.png data-srcset="/images/websocket-http2-and-grpc/chrome-protocol.png, /images/websocket-http2-and-grpc/chrome-protocol.png 1.5x, /images/websocket-http2-and-grpc/chrome-protocol.png 2x" data-sizes=auto alt=/images/websocket-http2-and-grpc/chrome-protocol.png title=/images/websocket-http2-and-grpc/chrome-protocol.png></p>
+<figure><img src=/images/websocket-http2-and-grpc/chrome-protocol.png>
+</figure>
+</p>
 <blockquote>
 <p>2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知乎、bilibili、GIthub 使用了 <code>wss</code> 协议，也有很多网站使用了 SSE（格式如 <code>data:image/png;base64,&lt;base64 string></code>）
 而且很多网站都有使用 HTTP/2 + QUIC，该协议的新名称是 HTTP/3，它是基于 UDP 的 HTTP 协议。</p>
@@ -446,7 +448,7 @@ data: message\n\n
 <div class=post-info>
 <div class=post-info-line>
 <div class=post-info-mod>
-<span>更新于 2021-01-17</span>
+<span>更新于 2022-02-13</span>
 </div>
 <div class=post-info-license></div>
 </div>
