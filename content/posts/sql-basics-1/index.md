@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "sql.jpeg"
 
-tags: ["SQL", "数据库"]
+tags: ["SQL", "数据库", "Database"]
 categories: ["技术"]
 ---
 

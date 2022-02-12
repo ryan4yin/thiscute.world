@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: "sqlalchemy-models.jpg"
 
-tags: ["SQLAlchemy", "Python", "ORM", "后端"]
+tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["技术"]
 ---
 
