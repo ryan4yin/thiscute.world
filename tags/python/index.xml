@@ -1,507 +1,8 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>Python - 标签 - This Cute World</title><link>https://thiscute.world/tags/python/</link><description>Python - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Tue, 21 May 2019 22:19:00 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/python/" rel="self" type="application/rss+xml"/><item><title>SQLAlchemy 学习笔记（三）：ORM 中的关系构建</title><link>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</link><pubDate>Tue, 21 May 2019 22:19:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</guid><description><![CDATA[<blockquote>
-<p>个人笔记，不保证正确。</p>
-</blockquote>
-<h2 id="一关系构建foreignkey-与-relationship">一、关系构建：<code>ForeignKey</code> 与 <code>relationship</code></h2>
-<p>关系构建的重点，在于搞清楚这两个函数的用法。<code>ForeignKey</code> 的用法已经在 <a href="https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F" target="_blank" rel="noopener noreferrer">SQL表达式语言 - 表定义中的约束</a> 讲过了。主要是 <code>ondelete</code> 和 <code>onupdate</code> 两个参数的用法。</p>
-<h2 id="二relationship">二、<code>relationship</code></h2>
-<p><code>relationship</code> 函数在 ORM 中用于构建表之间的关联关系。与 <code>ForeignKey</code> 不同的是，它定义的关系不属于表定义，而是动态计算的。
-用它定义出来的属性，相当于 SQL 中的视图。</p>
-<p>这个函数有点难用，一是因为它的有几个参数不太好理解，二是因为它的参数非常丰富，让人望而却步。下面通过<strong>一对多</strong>、<strong>多对一</strong>、<strong>多对多</strong>几个场景下 <code>relationship</code> 的使用，来一步步熟悉它的用法。</p>
-<p>首先初始化：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Table</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">relationship</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
-
-<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="1-一对多">1. 一对多</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># 因为 Child 中有 Parent 的 ForeignKey，这边的声明不需要再额外指定什么。</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">)</span>  <span class="c1"># children 的集合，相当于一个视图。</span>
-
-<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>一个 <code>Parent</code> 可以有多个 <code>Children</code>，通过 <code>relationship</code>，我们就能直接通过 <code>parent.children</code> 得到结果，免去繁琐的 query 语句。</p>
-<h4 id="11-反向引用">1.1 反向引用</h4>
-<h5 id="111-backref-与-back_populates">1.1.1 <code>backref</code> 与 <code>back_populates</code></h5>
-<p>那如果我们需要得知 <code>child</code> 的 <code>parent</code> 对象呢？能不能直接访问 <code>child.parent</code>？</p>
-<p>为了实现这个功能，SQLAlchemy 提供了 <code>backref</code> 和 <code>back_populates</code> 两个参数。</p>
-<p>两个参数的效果完全一致，区别在于，<code>backref</code> 只需要在 <code>Parent</code> 类中声明 <code>children</code>，<code>Child.parent</code> 会被动态创建。</p>
-<p>而 <code>back_populates</code> 必须在两个类中显式地使用 <code>back_populates</code>，更显繁琐。（但是也更清晰？）</p>
-<p>先看 <code>backref</code> 版：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span>
-                            <span class="n">backref</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">)</span>  <span class="c1"># backref 表示，在 Child 类中动态创建 parent 属性，指向当前类。</span>
-
-<span class="c1"># Child 类不需要修改</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>再看 <code>back_populates</code> 版：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">)</span>  <span class="c1"># back_populates </span>
-
-<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
-
-    <span class="c1"># 这边也必须声明，不能省略！</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Parent&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;children&#34;</span><span class="p">)</span>  <span class="c1"># parent 不是集合，是属性！</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><strong>NOTE：声明的两个 <code>relationship</code> 不需要多余的说明，SQLAlchemy 能自动识别到 <code>parent.children</code> 是 collection，<code>child.parent</code> 是 attribute.</strong></p>
-<h4 id="112-反向引用的参数sqlalchemyormbackrefname-kwargs">1.1.2. 反向引用的参数：<code>sqlalchemy.orm.backref(name, **kwargs)</code></h4>
-<p>使用 <code>back_populates</code> 时，我们可以很方便地在两个 <code>relationship</code> 函数中指定各种参数：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">,</span> 
-                                        <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">)</span>  <span class="c1"># 指定 lazy 的值</span>
-
-<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Parent&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;children&#34;</span><span class="p">,</span> 
-                                      <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">)</span>  <span class="c1"># 指定 lazy 的值</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>但是如果使用 <code>backref</code>，因为我们只有一个 <code>relationship</code> 函数，<code>Child.parent</code> 是被隐式创建的，我们该如何指定这个属性的参数呢？</p>
-<p>答案就是 <code>backref()</code> 函数，使用它替代 <code>backref</code> 参数的值：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">backref</span>
-
-<span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span>
-                            <span class="n">backref</span><span class="o">=</span><span class="n">backref</span><span class="p">(</span><span class="s2">&#34;parent&#34;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">))</span>  <span class="c1"># 使用 backref() 函数，指定 Child.parent 属性的参数</span>
-
-<span class="c1"># Child 类不需要修改</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><code>backref()</code> 的参数会被传递给 <code>relationship()</code>，因此它俩的参数也完全一致。</p>
-<h3 id="2-多对一">2. 多对一</h3>
-<p>A many-to-one is similar to a one-to-many relationship. The difference is that this relationship is looked at from the &ldquo;many&rdquo; side.</p>
-<h3 id="3-一对一">3. 一对一</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">child</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span> 
-                                    <span class="n">uselist</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>   <span class="c1"># 不使用 collection！这是关键</span>
-                                    <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
-
-     <span class="c1"># 包含 ForeignKey 的类，此属性默认为 attribute，因此不需要 uselist=False</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Parent&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;child&#34;</span><span class="p">)</span> 
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="4-多对多">4. 多对多</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 多对多，必须要使用一个关联表！</span>
-<span class="n">association_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s1">&#39;association&#39;</span><span class="p">,</span> <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
-    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;left_id&#39;</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;left.id&#39;</span><span class="p">)),</span>  <span class="c1"># 约定俗成的规矩，左边是 parent</span>
-    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;right_id&#39;</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;right.id&#39;</span><span class="p">))</span>  <span class="c1"># 右边是 child</span>
-<span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span>
-                    <span class="n">secondary</span><span class="o">=</span><span class="n">association_table</span><span class="p">)</span>  <span class="c1"># 专用参数 secondary，用于指定使用的关联表</span>
-
-<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>要添加反向引用时，同样可以使用 <code>backref</code> 或 <code>back_populates</code>.</p>
-<h4 id="41-user2user">4.1 user2user</h4>
-<p>如果多对多关系中的两边都是 user，即都是同一个表时，该怎么声明？</p>
-<p>例如用户的「关注」与「粉丝」，你是 user，你的粉丝是 user，你关注的账号也是 user。</p>
-<p>这个时候，关联表 <code>association_table</code> 的两个键都是 <code>user</code>，<strong>SQLAlchemy 无法区分主次，需要手动指定</strong>，为此需要使用 <code>primaryjoin</code> 和 <code>secondaryjoin</code> 两个参数。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 关联表，左侧的 user 正在关注右侧的 user</span>
-<span class="n">followers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s1">&#39;followers&#39;</span><span class="p">,</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;follower_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;user.id&#39;</span><span class="p">)),</span>  <span class="c1"># 左侧</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;followed_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;user.id&#39;</span><span class="p">))</span>  <span class="c1"># 右侧，被关注的 user</span>
-<span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">UserMixin</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">email</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># 我关注的 users</span>
-    <span class="n">followed</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
-        <span class="s1">&#39;User&#39;</span><span class="p">,</span>
-        <span class="n">secondary</span><span class="o">=</span><span class="n">followers</span><span class="p">,</span>  <span class="c1"># 指定多对多关联表</span>
-        <span class="n">primaryjoin</span><span class="o">=</span><span class="p">(</span><span class="n">followers</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">follower_id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">),</span>  <span class="c1"># 左侧，用于获取「我关注的 users」的 join 条件</span>
-        <span class="n">secondaryjoin</span><span class="o">=</span><span class="p">(</span><span class="n">followers</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">followed_id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">),</span>  <span class="c1"># 右侧，用于获取「我的粉丝」的 join 条件</span>
-        <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">,</span>  <span class="c1"># 延迟求值，这样才能用 filter_by 等过滤函数</span>
-        <span class="n">backref</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">backref</span><span class="p">(</span><span class="s1">&#39;followers&#39;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">))</span>  <span class="c1"># followers 也要延迟求值</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>这里比较绕的，就是容易搞混 <code>primaryjoin</code> 和 <code>secondaryjoin</code> 两个参数。</p>
-<ol>
-<li>primaryjoin：（多对多中）用于从子对象查询其父对象的 condition（child.parents），默认只考虑外键。</li>
-<li>secondaryjoin：（多对多中）用于从父对象查询其所有子对象的 condition（parent.children），同样的，默认情况下只考虑外键。</li>
-</ol>
-<h2 id="三orm-层-的-delete-cascade-vs-foreign-key-层的-on-delete-cascade">三、ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade</h2>
-<p>之前有讲过 Table 定义中的级联操作：<code>ON DELETE</code> 和 <code>ON UPDATE</code>，可以通过 <code>ForeignKey</code> 的参数指定为 <code>CASCADE</code>.</p>
-<p>可 SQLAlchemy 还有一个 <code>relationship</code> 生成 SQL 语句时的配置参数 <code>cascade</code>，另外 <code>passive_deletes</code> 也可以指定为 <code>cascade</code>。</p>
-<p>有这么多的 cascade，我真的是很懵。这三个 cascade 到底有何差别呢？</p>
-<p>外键约束中的 <code>ON DELETE</code> 和 <code>ON UPDATE</code>，与 ORM 层的 <code>CASCADE</code> 在功能上，确实有很多重叠的地方。
-但是也有很多不同：</p>
-<ol>
-<li>数据库层面的 <code>ON DELETE</code> 级联能高效地处理 <strong>many-to-one</strong> 的关联；我们在 <code>many</code> 方定义外键，也在这里添加 <code>ON DELETE</code> 约束。而在 ORM 层，就<strong>刚好相反</strong>。SQLAlchemy 在 <code>one</code> 方处理 <code>many</code> 方的删除操作，这意味着它更适合处理 <strong>one-to-many</strong> 的关联。</li>
-<li>数据库层面上，不带 <code>ON DELETE</code> 的外键常用于防止父数据被删除，而导致子数据成为无法被索引到的垃圾数据。如果要在一个 one-to-many 映射上实现这个行为，SQLAlchemy 将外键设置为 NULL 的默认行为可以通过以下两种方式之一捕获：
-<ol>
-<li>最简单也最常用的方法，当然是将外键定义为 <strong>NOT NULL</strong>. 尝试将该列设为 NULL 会触发 NOT NULL constraint exception.</li>
-<li>另一种更特殊的方法，是将 <code>passive_deletes</code> 标志设置为字 <code>all</code>. 这会完全禁用 SQLAlchemy 将外键列设置为 NULL 的行为，并且 DELETE 父数据而不会对子数据产生任何影响。这样才能触发数据库层面的 <code>ON DELETE</code> 约束，或者其他的触发器。</li>
-<li>数据库层面的 <code>ON DELETE</code> 级联 比 ORM 层面的级联更高效。数据库可以同时在多个 relationship 中链接一系列级联操作。</li>
-<li>SQLAlchemy 不需要这么复杂，因为我们通过将 passive_deletes 选项与正确配置的外键约束结合使用，提供与数据库的 <code>ON DELETE</code> 功能的平滑集成。</li>
-</ol>
-</li>
-</ol>
-<h3 id="方法一orm-层的-cascade-实现">方法一：ORM 层的 cascade 实现</h3>
-<p><code>relationship</code> 的 <code>cascade</code> 参数决定了修改父表时，什么时候子表要进行级联操作。它的可选项有（str，选项之间用逗号分隔）：</p>
-<ol>
-<li><code>save-update</code>：默认选项之一。在 add（对应 SQL 的 insert 或 update）一个对象的时候，会 add 所有它相关联的对象。</li>
-<li><code>merge</code>：默认选项之一。在 merge（相当字典的update操作，有就替换掉，没有就合并）一个对象的时候，会 merge 所有和它相关联的对象。</li>
-<li><code>expunge</code> ：移除操作的时候，会将相关联的对象也进行移除。这个操作只是从session中移除，并不会真正的从数据库中删除。</li>
-<li><code>delete</code>：删除父表数据时，同时删除与它关联的数据。</li>
-<li><code>delete-orphan</code>：当子对象与父对象解除关系时，删除掉此子对象（孤儿）。（其实还是没懂。。）</li>
-<li><code>refresh-expire</code>：不常用。</li>
-<li><code>all</code>：表示选中除 <code>delete-orphan</code> 之外的所有选项。（因此 <code>all, delete-orphan</code> 很常用，它才是真正的 <code>all</code>）</li>
-</ol>
-<p>默认属性是 &ldquo;save-update, merge&rdquo;.</p>
-<p>这只是简略的说明，上述几个参数的详细文档见 <a href="https://docs.sqlalchemy.org/en/13/orm/cascades.html#unitofwork-cascades" target="_blank" rel="noopener noreferrer">SQLAlchemy - Cascades</a></p>
-<h3 id="方法二数据库层的-cascade-实现">方法二：数据库层的 cascade 实现</h3>
-<ol>
-<li>将 <code>ForeignKey</code> 的 <code>ondelete</code> 和 <code>onupdate</code> 参数指定为 <code>CASCADE</code>，实现数据库层面的级联。</li>
-<li>为 <code>relationship</code> 添加关键字参数 <code>passive_deletes=&quot;all&quot;</code>，这样就完全禁用 SQLAlchemy 将外键列设置为 NULL 的行为，并且 DELETE 父数据不会对子数据产生任何影响。</li>
-</ol>
-<p>这样 DELETE 操作时，就会触发数据库的 <code>ON DELETE</code> 约束，从而级联删除子数据。</p>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://docs.sqlalchemy.org/en/13/orm/relationships.html" target="_blank" rel="noopener noreferrer">SQLAlchemy - Relationship Configuration</a></li>
-<li><a href="https://docs.sqlalchemy.org/en/13/orm/cascades.html#unitofwork-cascades" target="_blank" rel="noopener noreferrer">SQLAlchemy - Cascades</a></li>
-<li><a href="https://ia.jifangcheng.com/p/46" target="_blank" rel="noopener noreferrer">SQLAlchemy 中的 backref 和 back_populates</a></li>
-<li><a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-viii-followers" target="_blank" rel="noopener noreferrer">The Flask Mega-Tutorial Part VIII: Followers</a></li>
-<li><a href="https://github.com/hackersandslackers/sqlalchemy-tutorial" target="_blank" rel="noopener noreferrer">hackersandslackers/sqlalchemy-tutorial</a></li>
-</ul>
-]]></description></item><item><title>Python 并发编程：PoolExecutor 篇</title><link>https://thiscute.world/posts/python-concurrency-pool-executor/</link><pubDate>Fri, 15 Mar 2019 22:34:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-concurrency-pool-executor/</guid><description><![CDATA[<blockquote>
-<p>个人笔记，如有疏漏，还请指正。</p>
-</blockquote>
-<p>使用多线程（threading）和多进程（multiprocessing）完成常规的并发需求，在启动的时候 start、join 等步骤不能省，复杂的需要还要用 1-2 个队列。
-随着需求越来越复杂，如果没有良好的设计和抽象这部分的功能层次，代码量越多调试的难度就越大。</p>
-<p>对于需要并发执行、但是对实时性要求不高的任务，我们可以使用 concurrent.futures 包中的 PoolExecutor 类来实现。</p>
-<p>这个包提供了两个执行器：线程池执行器 ThreadPoolExecutor 和进程池执行器 ProcessPoolExecutor，两个执行器提供同样的 API。</p>
-<blockquote>
-<p>池的概念主要目的是为了重用：让线程或进程在生命周期内可以多次使用。它减少了创建创建线程和进程的开销，提高了程序性能。重用不是必须的规则，但它是程序员在应用中使用池的主要原因。</p>
-</blockquote>
-<p>池，只有固定个数的线程/进程，通过 max_workers 指定。</p>
-<ol>
-<li>任务通过 executor.submit 提交到 executor 的任务队列，返回一个 future 对象。
-<ul>
-<li>Future 是常见的一种并发设计模式。一个Future对象代表了一些尚未就绪（完成）的结果，在「将来」的某个时间就绪了之后就可以获取到这个结果。</li>
-</ul>
-</li>
-<li>任务被调度到各个 workers 中执行。但是要注意，<strong>一个任务一旦被执行，在执行完毕前，会一直占用该 worker！</strong>
-<ul>
-<li>**如果 workers 不够用，其他的任务会一直等待！**因此 PoolExecutor 不适合实时任务。</li>
-</ul>
-</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">concurrent.futures</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
-
-<span class="n">number_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
-
-<span class="k">def</span> <span class="nf">evaluate_item</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>  <span class="c1"># count 是无限迭代器，会一直递增。</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
-        <span class="c1"># 进程池</span>
-        <span class="n">start_time_2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="c1"># 使用 with 在离开此代码块时，自动调用 executor.shutdown(wait=true) 释放 executor 资源</span>
-        <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-                <span class="c1"># 将 10 个任务提交给 executor，并收集 futures</span>
-                <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">evaluate_item</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">number_list</span><span class="p">]</span>
-
-                <span class="c1"># as_completed 方法等待 futures 中的 future 完成</span>
-                <span class="c1"># 一旦某个 future 完成，as_completed 就立即返回该 future</span>
-                <span class="c1"># 这个方法，使每次返回的 future，总是最先完成的 future</span>
-                <span class="c1"># 而不是先等待任务 1，再等待任务 2...</span>
-                <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
-        <span class="nb">print</span> <span class="p">(</span><span class="s2">&#34;Thread pool execution in &#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time_2</span><span class="p">),</span> <span class="s2">&#34;seconds&#34;</span><span class="p">)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>上面的代码中，item 为 1 2 3 4 5 的五个任务会一直占用所有的 workers，而 6 7 8 9 10 这五个任务会永远等待！！！</p>
-<h2 id="api-详细说明">API 详细说明</h2>
-<p>concurrent.futures 包含三个部分的 API：</p>
-<ol>
-<li>PoolExecutor：也就是两个执行器的 API
-<ul>
-<li>构造器：主要的参数是 max_workers，用于指定线程池大小（或者说 workers 个数）</li>
-<li><code>submit(fn, *args, **kwargs)</code>：将任务函数 fn 提交到执行器，args 和 kwargs 就是 fn 需要的参数。
-<ul>
-<li>返回一个 future，用于获取结果</li>
-</ul>
-</li>
-<li><code>map(func, *iterables, timeout=None, chunksize=1)</code>：当任务是同一个，只有参数不同时，可以用这个方法代替 submit。iterables 的每个元素对应 func 的一组参数。
-<ul>
-<li>返回一个 futures 的迭代器</li>
-</ul>
-</li>
-<li><code>shutdown(wait=True)</code>：关闭执行器，一般都使用 with 管理器自动关闭。</li>
-</ul>
-</li>
-<li>Future：任务被提交给执行器后，会返回一个 future
-<ul>
-<li><code>future.result(timout=None)</code>：<strong>最常用的方法</strong>，返回任务的结果。如果任务尚未结束，这个方法会一直等待！
-<ul>
-<li>timeout 指定超时时间，为 None 时没有超时限制。</li>
-</ul>
-</li>
-<li><code>exception(timeout=None)</code>：给出任务抛出的异常。和 result() 一样，也会等待任务结束。</li>
-<li><code>cancel()</code>：取消此任务</li>
-<li><code>add_done_callback(fn)</code>：future 完成后，会执行 <code>fn(future)</code>。</li>
-<li><code>running()</code>：是否正在运行</li>
-<li><code>done()</code>：future 是否已经结束了，boolean</li>
-<li>&hellip;详见官方文档</li>
-</ul>
-</li>
-<li>模块带有的实用函数
-<ul>
-<li><code>concurrent.futures.as_completed(fs, timeout=None)</code>：等待 fs （futures iterable）中的 future 完成
-<ul>
-<li>一旦 fs 中的某 future 完成了，这个函数就立即返回该 future。</li>
-<li>这个方法，使每次返回的 future，总是最先完成的 future。而不是先等待任务 1，再等待任务 2&hellip;</li>
-<li>常通过 <code>for future in as_completed(fs):</code> 使用此函数。</li>
-</ul>
-</li>
-<li><code>concurrent.futures.wait(fs, timeout=None, return_when=ALL_COMPLETED)</code>：一直等待，直到 return_when 所指定的事发生，或者 timeout
-<ul>
-<li>return_when 有三个选项：ALL_COMPLETED（fs 中的 futures 全部完成），FIRST__COMPLETED（fs 中任意一个 future 完成）还有 FIRST_EXCEPTION（某任务抛出异常）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="future-设计模式">Future 设计模式</h2>
-<p>这里的 PoolExecutor 的特点，在于它使用了 Future 设计模式，使任务的执行，与结果的获取，变成一个异步的流程。
-**我们先通过 submit/map 将任务放入任务队列，这时任务就已经开始执行了！**然后我们在需要的时候，通过 future 获取结果，或者直接 <code>add_done_callback(fn)</code>。</p>
-<p>这里任务的执行是在新的 workers 中的，主进程/线程不会阻塞，因此主线程可以干其他的事。这种方式被称作异步编程。</p>
-<h2 id="画外">画外</h2>
-<p>concurrent.futures 基于 multiprocessing.pool 实现，因此实际上它比直接使用 线程/进程 的 Pool 要慢一点。但是它提供了更方便简洁的 API。</p>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="http://www.dongwm.com/post/78/" target="_blank" rel="noopener noreferrer">使用Python进行并发编程-PoolExecutor篇</a></li>
-<li><a href="https://github.com/laixintao/python-parallel-programming-cookbook-cn" target="_blank" rel="noopener noreferrer">Python Parallel Programming Cookbook</a></li>
-<li><a href="https://docs.python.org/3/library/concurrent.futures.html" target="_blank" rel="noopener noreferrer">concurrent.futures — Launching parallel tasks</a></li>
-<li><a href="https://www.cnblogs.com/kirito-c/p/10306133.html" target="_blank" rel="noopener noreferrer">进程线程协程与并发并行</a></li>
-<li><a href="https://www.jianshu.com/p/fea4584d2890" target="_blank" rel="noopener noreferrer">并行设计模式（一）&ndash; Future模式</a></li>
-</ul>
-]]></description></item><item><title>Python 实用技巧与常见错误集锦</title><link>https://thiscute.world/posts/python-tips-and-tricks/</link><pubDate>Sun, 10 Mar 2019 00:59:21 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-tips-and-tricks/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>Python - 标签 - This Cute World</title><link>https://thiscute.world/tags/python/</link><description>Python - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 13 Feb 2022 01:17:00 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/python/" rel="self" type="application/rss+xml"/><item><title>Python 实用技巧与常见错误集锦</title><link>https://thiscute.world/posts/python-tips-and-tricks/</link><pubDate>Sun, 13 Feb 2022 01:17:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-tips-and-tricks/</guid><description><![CDATA[<blockquote>
 <p>个人笔记，不保证正确。</p>
 </blockquote>
 <blockquote>
-<p>适合有一定基础的童鞋阅读</p>
+<p>内容比较多，建议参照目录浏览。</p>
 </blockquote>
 <h2 id="一标准库">一、标准库</h2>
 <h3 id="1-文件路径---pathlib">1. 文件路径 - pathlib</h3>
@@ -1811,6 +1312,505 @@ python的类方法、静态方法，与java的静态方法：</p>
 <ul>
 <li><a href="https://www.jb51.net/article/140443.htm" target="_blank" rel="noopener noreferrer">Python中一些不为人知的基础技巧总结</a></li>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreferrer">Python3 官方文档</a></li>
+</ul>
+]]></description></item><item><title>SQLAlchemy 学习笔记（三）：ORM 中的关系构建</title><link>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</link><pubDate>Tue, 21 May 2019 22:19:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</guid><description><![CDATA[<blockquote>
+<p>个人笔记，不保证正确。</p>
+</blockquote>
+<h2 id="一关系构建foreignkey-与-relationship">一、关系构建：<code>ForeignKey</code> 与 <code>relationship</code></h2>
+<p>关系构建的重点，在于搞清楚这两个函数的用法。<code>ForeignKey</code> 的用法已经在 <a href="https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F" target="_blank" rel="noopener noreferrer">SQL表达式语言 - 表定义中的约束</a> 讲过了。主要是 <code>ondelete</code> 和 <code>onupdate</code> 两个参数的用法。</p>
+<h2 id="二relationship">二、<code>relationship</code></h2>
+<p><code>relationship</code> 函数在 ORM 中用于构建表之间的关联关系。与 <code>ForeignKey</code> 不同的是，它定义的关系不属于表定义，而是动态计算的。
+用它定义出来的属性，相当于 SQL 中的视图。</p>
+<p>这个函数有点难用，一是因为它的有几个参数不太好理解，二是因为它的参数非常丰富，让人望而却步。下面通过<strong>一对多</strong>、<strong>多对一</strong>、<strong>多对多</strong>几个场景下 <code>relationship</code> 的使用，来一步步熟悉它的用法。</p>
+<p>首先初始化：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Table</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">relationship</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="1-一对多">1. 一对多</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># 因为 Child 中有 Parent 的 ForeignKey，这边的声明不需要再额外指定什么。</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">)</span>  <span class="c1"># children 的集合，相当于一个视图。</span>
+
+<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>一个 <code>Parent</code> 可以有多个 <code>Children</code>，通过 <code>relationship</code>，我们就能直接通过 <code>parent.children</code> 得到结果，免去繁琐的 query 语句。</p>
+<h4 id="11-反向引用">1.1 反向引用</h4>
+<h5 id="111-backref-与-back_populates">1.1.1 <code>backref</code> 与 <code>back_populates</code></h5>
+<p>那如果我们需要得知 <code>child</code> 的 <code>parent</code> 对象呢？能不能直接访问 <code>child.parent</code>？</p>
+<p>为了实现这个功能，SQLAlchemy 提供了 <code>backref</code> 和 <code>back_populates</code> 两个参数。</p>
+<p>两个参数的效果完全一致，区别在于，<code>backref</code> 只需要在 <code>Parent</code> 类中声明 <code>children</code>，<code>Child.parent</code> 会被动态创建。</p>
+<p>而 <code>back_populates</code> 必须在两个类中显式地使用 <code>back_populates</code>，更显繁琐。（但是也更清晰？）</p>
+<p>先看 <code>backref</code> 版：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span>
+                            <span class="n">backref</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">)</span>  <span class="c1"># backref 表示，在 Child 类中动态创建 parent 属性，指向当前类。</span>
+
+<span class="c1"># Child 类不需要修改</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>再看 <code>back_populates</code> 版：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">)</span>  <span class="c1"># back_populates </span>
+
+<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
+
+    <span class="c1"># 这边也必须声明，不能省略！</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Parent&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;children&#34;</span><span class="p">)</span>  <span class="c1"># parent 不是集合，是属性！</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>NOTE：声明的两个 <code>relationship</code> 不需要多余的说明，SQLAlchemy 能自动识别到 <code>parent.children</code> 是 collection，<code>child.parent</code> 是 attribute.</strong></p>
+<h4 id="112-反向引用的参数sqlalchemyormbackrefname-kwargs">1.1.2. 反向引用的参数：<code>sqlalchemy.orm.backref(name, **kwargs)</code></h4>
+<p>使用 <code>back_populates</code> 时，我们可以很方便地在两个 <code>relationship</code> 函数中指定各种参数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">,</span> 
+                                        <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">)</span>  <span class="c1"># 指定 lazy 的值</span>
+
+<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Parent&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;children&#34;</span><span class="p">,</span> 
+                                      <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">)</span>  <span class="c1"># 指定 lazy 的值</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>但是如果使用 <code>backref</code>，因为我们只有一个 <code>relationship</code> 函数，<code>Child.parent</code> 是被隐式创建的，我们该如何指定这个属性的参数呢？</p>
+<p>答案就是 <code>backref()</code> 函数，使用它替代 <code>backref</code> 参数的值：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">backref</span>
+
+<span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span>
+                            <span class="n">backref</span><span class="o">=</span><span class="n">backref</span><span class="p">(</span><span class="s2">&#34;parent&#34;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">))</span>  <span class="c1"># 使用 backref() 函数，指定 Child.parent 属性的参数</span>
+
+<span class="c1"># Child 类不需要修改</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>backref()</code> 的参数会被传递给 <code>relationship()</code>，因此它俩的参数也完全一致。</p>
+<h3 id="2-多对一">2. 多对一</h3>
+<p>A many-to-one is similar to a one-to-many relationship. The difference is that this relationship is looked at from the &ldquo;many&rdquo; side.</p>
+<h3 id="3-一对一">3. 一对一</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;parent&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">child</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span> 
+                                    <span class="n">uselist</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>   <span class="c1"># 不使用 collection！这是关键</span>
+                                    <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;parent&#34;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;child&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;parent.id&#39;</span><span class="p">))</span>
+
+     <span class="c1"># 包含 ForeignKey 的类，此属性默认为 attribute，因此不需要 uselist=False</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Parent&#34;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&#34;child&#34;</span><span class="p">)</span> 
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-多对多">4. 多对多</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 多对多，必须要使用一个关联表！</span>
+<span class="n">association_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s1">&#39;association&#39;</span><span class="p">,</span> <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;left_id&#39;</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;left.id&#39;</span><span class="p">)),</span>  <span class="c1"># 约定俗成的规矩，左边是 parent</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s1">&#39;right_id&#39;</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;right.id&#39;</span><span class="p">))</span>  <span class="c1"># 右边是 child</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&#34;Child&#34;</span><span class="p">,</span>
+                    <span class="n">secondary</span><span class="o">=</span><span class="n">association_table</span><span class="p">)</span>  <span class="c1"># 专用参数 secondary，用于指定使用的关联表</span>
+
+<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>要添加反向引用时，同样可以使用 <code>backref</code> 或 <code>back_populates</code>.</p>
+<h4 id="41-user2user">4.1 user2user</h4>
+<p>如果多对多关系中的两边都是 user，即都是同一个表时，该怎么声明？</p>
+<p>例如用户的「关注」与「粉丝」，你是 user，你的粉丝是 user，你关注的账号也是 user。</p>
+<p>这个时候，关联表 <code>association_table</code> 的两个键都是 <code>user</code>，<strong>SQLAlchemy 无法区分主次，需要手动指定</strong>，为此需要使用 <code>primaryjoin</code> 和 <code>secondaryjoin</code> 两个参数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 关联表，左侧的 user 正在关注右侧的 user</span>
+<span class="n">followers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s1">&#39;followers&#39;</span><span class="p">,</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;follower_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;user.id&#39;</span><span class="p">)),</span>  <span class="c1"># 左侧</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;followed_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;user.id&#39;</span><span class="p">))</span>  <span class="c1"># 右侧，被关注的 user</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">UserMixin</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># 我关注的 users</span>
+    <span class="n">followed</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s1">&#39;User&#39;</span><span class="p">,</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="n">followers</span><span class="p">,</span>  <span class="c1"># 指定多对多关联表</span>
+        <span class="n">primaryjoin</span><span class="o">=</span><span class="p">(</span><span class="n">followers</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">follower_id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">),</span>  <span class="c1"># 左侧，用于获取「我关注的 users」的 join 条件</span>
+        <span class="n">secondaryjoin</span><span class="o">=</span><span class="p">(</span><span class="n">followers</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">followed_id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">),</span>  <span class="c1"># 右侧，用于获取「我的粉丝」的 join 条件</span>
+        <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">,</span>  <span class="c1"># 延迟求值，这样才能用 filter_by 等过滤函数</span>
+        <span class="n">backref</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">backref</span><span class="p">(</span><span class="s1">&#39;followers&#39;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">))</span>  <span class="c1"># followers 也要延迟求值</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里比较绕的，就是容易搞混 <code>primaryjoin</code> 和 <code>secondaryjoin</code> 两个参数。</p>
+<ol>
+<li>primaryjoin：（多对多中）用于从子对象查询其父对象的 condition（child.parents），默认只考虑外键。</li>
+<li>secondaryjoin：（多对多中）用于从父对象查询其所有子对象的 condition（parent.children），同样的，默认情况下只考虑外键。</li>
+</ol>
+<h2 id="三orm-层-的-delete-cascade-vs-foreign-key-层的-on-delete-cascade">三、ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade</h2>
+<p>之前有讲过 Table 定义中的级联操作：<code>ON DELETE</code> 和 <code>ON UPDATE</code>，可以通过 <code>ForeignKey</code> 的参数指定为 <code>CASCADE</code>.</p>
+<p>可 SQLAlchemy 还有一个 <code>relationship</code> 生成 SQL 语句时的配置参数 <code>cascade</code>，另外 <code>passive_deletes</code> 也可以指定为 <code>cascade</code>。</p>
+<p>有这么多的 cascade，我真的是很懵。这三个 cascade 到底有何差别呢？</p>
+<p>外键约束中的 <code>ON DELETE</code> 和 <code>ON UPDATE</code>，与 ORM 层的 <code>CASCADE</code> 在功能上，确实有很多重叠的地方。
+但是也有很多不同：</p>
+<ol>
+<li>数据库层面的 <code>ON DELETE</code> 级联能高效地处理 <strong>many-to-one</strong> 的关联；我们在 <code>many</code> 方定义外键，也在这里添加 <code>ON DELETE</code> 约束。而在 ORM 层，就<strong>刚好相反</strong>。SQLAlchemy 在 <code>one</code> 方处理 <code>many</code> 方的删除操作，这意味着它更适合处理 <strong>one-to-many</strong> 的关联。</li>
+<li>数据库层面上，不带 <code>ON DELETE</code> 的外键常用于防止父数据被删除，而导致子数据成为无法被索引到的垃圾数据。如果要在一个 one-to-many 映射上实现这个行为，SQLAlchemy 将外键设置为 NULL 的默认行为可以通过以下两种方式之一捕获：
+<ol>
+<li>最简单也最常用的方法，当然是将外键定义为 <strong>NOT NULL</strong>. 尝试将该列设为 NULL 会触发 NOT NULL constraint exception.</li>
+<li>另一种更特殊的方法，是将 <code>passive_deletes</code> 标志设置为字 <code>all</code>. 这会完全禁用 SQLAlchemy 将外键列设置为 NULL 的行为，并且 DELETE 父数据而不会对子数据产生任何影响。这样才能触发数据库层面的 <code>ON DELETE</code> 约束，或者其他的触发器。</li>
+<li>数据库层面的 <code>ON DELETE</code> 级联 比 ORM 层面的级联更高效。数据库可以同时在多个 relationship 中链接一系列级联操作。</li>
+<li>SQLAlchemy 不需要这么复杂，因为我们通过将 passive_deletes 选项与正确配置的外键约束结合使用，提供与数据库的 <code>ON DELETE</code> 功能的平滑集成。</li>
+</ol>
+</li>
+</ol>
+<h3 id="方法一orm-层的-cascade-实现">方法一：ORM 层的 cascade 实现</h3>
+<p><code>relationship</code> 的 <code>cascade</code> 参数决定了修改父表时，什么时候子表要进行级联操作。它的可选项有（str，选项之间用逗号分隔）：</p>
+<ol>
+<li><code>save-update</code>：默认选项之一。在 add（对应 SQL 的 insert 或 update）一个对象的时候，会 add 所有它相关联的对象。</li>
+<li><code>merge</code>：默认选项之一。在 merge（相当字典的update操作，有就替换掉，没有就合并）一个对象的时候，会 merge 所有和它相关联的对象。</li>
+<li><code>expunge</code> ：移除操作的时候，会将相关联的对象也进行移除。这个操作只是从session中移除，并不会真正的从数据库中删除。</li>
+<li><code>delete</code>：删除父表数据时，同时删除与它关联的数据。</li>
+<li><code>delete-orphan</code>：当子对象与父对象解除关系时，删除掉此子对象（孤儿）。（其实还是没懂。。）</li>
+<li><code>refresh-expire</code>：不常用。</li>
+<li><code>all</code>：表示选中除 <code>delete-orphan</code> 之外的所有选项。（因此 <code>all, delete-orphan</code> 很常用，它才是真正的 <code>all</code>）</li>
+</ol>
+<p>默认属性是 &ldquo;save-update, merge&rdquo;.</p>
+<p>这只是简略的说明，上述几个参数的详细文档见 <a href="https://docs.sqlalchemy.org/en/13/orm/cascades.html#unitofwork-cascades" target="_blank" rel="noopener noreferrer">SQLAlchemy - Cascades</a></p>
+<h3 id="方法二数据库层的-cascade-实现">方法二：数据库层的 cascade 实现</h3>
+<ol>
+<li>将 <code>ForeignKey</code> 的 <code>ondelete</code> 和 <code>onupdate</code> 参数指定为 <code>CASCADE</code>，实现数据库层面的级联。</li>
+<li>为 <code>relationship</code> 添加关键字参数 <code>passive_deletes=&quot;all&quot;</code>，这样就完全禁用 SQLAlchemy 将外键列设置为 NULL 的行为，并且 DELETE 父数据不会对子数据产生任何影响。</li>
+</ol>
+<p>这样 DELETE 操作时，就会触发数据库的 <code>ON DELETE</code> 约束，从而级联删除子数据。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://docs.sqlalchemy.org/en/13/orm/relationships.html" target="_blank" rel="noopener noreferrer">SQLAlchemy - Relationship Configuration</a></li>
+<li><a href="https://docs.sqlalchemy.org/en/13/orm/cascades.html#unitofwork-cascades" target="_blank" rel="noopener noreferrer">SQLAlchemy - Cascades</a></li>
+<li><a href="https://ia.jifangcheng.com/p/46" target="_blank" rel="noopener noreferrer">SQLAlchemy 中的 backref 和 back_populates</a></li>
+<li><a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-viii-followers" target="_blank" rel="noopener noreferrer">The Flask Mega-Tutorial Part VIII: Followers</a></li>
+<li><a href="https://github.com/hackersandslackers/sqlalchemy-tutorial" target="_blank" rel="noopener noreferrer">hackersandslackers/sqlalchemy-tutorial</a></li>
+</ul>
+]]></description></item><item><title>Python 并发编程：PoolExecutor 篇</title><link>https://thiscute.world/posts/python-concurrency-pool-executor/</link><pubDate>Fri, 15 Mar 2019 22:34:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-concurrency-pool-executor/</guid><description><![CDATA[<blockquote>
+<p>个人笔记，如有疏漏，还请指正。</p>
+</blockquote>
+<p>使用多线程（threading）和多进程（multiprocessing）完成常规的并发需求，在启动的时候 start、join 等步骤不能省，复杂的需要还要用 1-2 个队列。
+随着需求越来越复杂，如果没有良好的设计和抽象这部分的功能层次，代码量越多调试的难度就越大。</p>
+<p>对于需要并发执行、但是对实时性要求不高的任务，我们可以使用 concurrent.futures 包中的 PoolExecutor 类来实现。</p>
+<p>这个包提供了两个执行器：线程池执行器 ThreadPoolExecutor 和进程池执行器 ProcessPoolExecutor，两个执行器提供同样的 API。</p>
+<blockquote>
+<p>池的概念主要目的是为了重用：让线程或进程在生命周期内可以多次使用。它减少了创建创建线程和进程的开销，提高了程序性能。重用不是必须的规则，但它是程序员在应用中使用池的主要原因。</p>
+</blockquote>
+<p>池，只有固定个数的线程/进程，通过 max_workers 指定。</p>
+<ol>
+<li>任务通过 executor.submit 提交到 executor 的任务队列，返回一个 future 对象。
+<ul>
+<li>Future 是常见的一种并发设计模式。一个Future对象代表了一些尚未就绪（完成）的结果，在「将来」的某个时间就绪了之后就可以获取到这个结果。</li>
+</ul>
+</li>
+<li>任务被调度到各个 workers 中执行。但是要注意，<strong>一个任务一旦被执行，在执行完毕前，会一直占用该 worker！</strong>
+<ul>
+<li>**如果 workers 不够用，其他的任务会一直等待！**因此 PoolExecutor 不适合实时任务。</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+
+<span class="n">number_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">evaluate_item</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>  <span class="c1"># count 是无限迭代器，会一直递增。</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+        <span class="c1"># 进程池</span>
+        <span class="n">start_time_2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># 使用 with 在离开此代码块时，自动调用 executor.shutdown(wait=true) 释放 executor 资源</span>
+        <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+                <span class="c1"># 将 10 个任务提交给 executor，并收集 futures</span>
+                <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">evaluate_item</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">number_list</span><span class="p">]</span>
+
+                <span class="c1"># as_completed 方法等待 futures 中的 future 完成</span>
+                <span class="c1"># 一旦某个 future 完成，as_completed 就立即返回该 future</span>
+                <span class="c1"># 这个方法，使每次返回的 future，总是最先完成的 future</span>
+                <span class="c1"># 而不是先等待任务 1，再等待任务 2...</span>
+                <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&#34;Thread pool execution in &#34;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time_2</span><span class="p">),</span> <span class="s2">&#34;seconds&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的代码中，item 为 1 2 3 4 5 的五个任务会一直占用所有的 workers，而 6 7 8 9 10 这五个任务会永远等待！！！</p>
+<h2 id="api-详细说明">API 详细说明</h2>
+<p>concurrent.futures 包含三个部分的 API：</p>
+<ol>
+<li>PoolExecutor：也就是两个执行器的 API
+<ul>
+<li>构造器：主要的参数是 max_workers，用于指定线程池大小（或者说 workers 个数）</li>
+<li><code>submit(fn, *args, **kwargs)</code>：将任务函数 fn 提交到执行器，args 和 kwargs 就是 fn 需要的参数。
+<ul>
+<li>返回一个 future，用于获取结果</li>
+</ul>
+</li>
+<li><code>map(func, *iterables, timeout=None, chunksize=1)</code>：当任务是同一个，只有参数不同时，可以用这个方法代替 submit。iterables 的每个元素对应 func 的一组参数。
+<ul>
+<li>返回一个 futures 的迭代器</li>
+</ul>
+</li>
+<li><code>shutdown(wait=True)</code>：关闭执行器，一般都使用 with 管理器自动关闭。</li>
+</ul>
+</li>
+<li>Future：任务被提交给执行器后，会返回一个 future
+<ul>
+<li><code>future.result(timout=None)</code>：<strong>最常用的方法</strong>，返回任务的结果。如果任务尚未结束，这个方法会一直等待！
+<ul>
+<li>timeout 指定超时时间，为 None 时没有超时限制。</li>
+</ul>
+</li>
+<li><code>exception(timeout=None)</code>：给出任务抛出的异常。和 result() 一样，也会等待任务结束。</li>
+<li><code>cancel()</code>：取消此任务</li>
+<li><code>add_done_callback(fn)</code>：future 完成后，会执行 <code>fn(future)</code>。</li>
+<li><code>running()</code>：是否正在运行</li>
+<li><code>done()</code>：future 是否已经结束了，boolean</li>
+<li>&hellip;详见官方文档</li>
+</ul>
+</li>
+<li>模块带有的实用函数
+<ul>
+<li><code>concurrent.futures.as_completed(fs, timeout=None)</code>：等待 fs （futures iterable）中的 future 完成
+<ul>
+<li>一旦 fs 中的某 future 完成了，这个函数就立即返回该 future。</li>
+<li>这个方法，使每次返回的 future，总是最先完成的 future。而不是先等待任务 1，再等待任务 2&hellip;</li>
+<li>常通过 <code>for future in as_completed(fs):</code> 使用此函数。</li>
+</ul>
+</li>
+<li><code>concurrent.futures.wait(fs, timeout=None, return_when=ALL_COMPLETED)</code>：一直等待，直到 return_when 所指定的事发生，或者 timeout
+<ul>
+<li>return_when 有三个选项：ALL_COMPLETED（fs 中的 futures 全部完成），FIRST__COMPLETED（fs 中任意一个 future 完成）还有 FIRST_EXCEPTION（某任务抛出异常）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="future-设计模式">Future 设计模式</h2>
+<p>这里的 PoolExecutor 的特点，在于它使用了 Future 设计模式，使任务的执行，与结果的获取，变成一个异步的流程。
+**我们先通过 submit/map 将任务放入任务队列，这时任务就已经开始执行了！**然后我们在需要的时候，通过 future 获取结果，或者直接 <code>add_done_callback(fn)</code>。</p>
+<p>这里任务的执行是在新的 workers 中的，主进程/线程不会阻塞，因此主线程可以干其他的事。这种方式被称作异步编程。</p>
+<h2 id="画外">画外</h2>
+<p>concurrent.futures 基于 multiprocessing.pool 实现，因此实际上它比直接使用 线程/进程 的 Pool 要慢一点。但是它提供了更方便简洁的 API。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="http://www.dongwm.com/post/78/" target="_blank" rel="noopener noreferrer">使用Python进行并发编程-PoolExecutor篇</a></li>
+<li><a href="https://github.com/laixintao/python-parallel-programming-cookbook-cn" target="_blank" rel="noopener noreferrer">Python Parallel Programming Cookbook</a></li>
+<li><a href="https://docs.python.org/3/library/concurrent.futures.html" target="_blank" rel="noopener noreferrer">concurrent.futures — Launching parallel tasks</a></li>
+<li><a href="https://www.cnblogs.com/kirito-c/p/10306133.html" target="_blank" rel="noopener noreferrer">进程线程协程与并发并行</a></li>
+<li><a href="https://www.jianshu.com/p/fea4584d2890" target="_blank" rel="noopener noreferrer">并行设计模式（一）&ndash; Future模式</a></li>
 </ul>
 ]]></description></item><item><title>Python 异步编程笔记：asyncio</title><link>https://thiscute.world/posts/python-asyncio/</link><pubDate>Thu, 14 Feb 2019 13:11:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-asyncio/</guid><description><![CDATA[<blockquote>
 <p>个人笔记，不保证正确。</p>
