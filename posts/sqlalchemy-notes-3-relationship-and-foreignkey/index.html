@@ -9,7 +9,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/"><meta property="og:image" content="https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.jpg"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2019-05-21T22:19:00+08:00">
-<meta property="article:modified_time" content="2022-02-12T22:07:20+08:00">
+<meta property="article:modified_time" content="2022-02-12T22:08:40+08:00">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.jpg">
 <meta name=twitter:title content="SQLAlchemy 学习笔记（三）：ORM 中的关系构建">
@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/><link rel=prev href=https://thiscute.world/posts/python-concurrency-pool-executor/><link rel=next href=https://thiscute.world/posts/manjaro-instruction/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"SQLAlchemy 学习笔记（三）：ORM 中的关系构建","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/sqlalchemy-notes-3-relationship-and-foreignkey\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/sqlalchemy-notes-3-relationship-and-foreignkey\/sqlalchemy-relationships.jpg","width":1500,"height":864}],"genre":"posts","keywords":"SQLAlchemy, Python, ORM, 后端","wordcount":3006,"url":"https:\/\/thiscute.world\/posts\/sqlalchemy-notes-3-relationship-and-foreignkey\/","datePublished":"2019-05-21T22:19:00+08:00","dateModified":"2022-02-12T22:07:20+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/><link rel=prev href=https://thiscute.world/posts/python-concurrency-pool-executor/><link rel=next href=https://thiscute.world/posts/manjaro-instruction/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"SQLAlchemy 学习笔记（三）：ORM 中的关系构建","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/sqlalchemy-notes-3-relationship-and-foreignkey\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/sqlalchemy-notes-3-relationship-and-foreignkey\/sqlalchemy-relationships.jpg","width":1500,"height":864}],"genre":"posts","keywords":"SQLAlchemy, Python, ORM, 后端","wordcount":3006,"url":"https:\/\/thiscute.world\/posts\/sqlalchemy-notes-3-relationship-and-foreignkey\/","datePublished":"2019-05-21T22:19:00+08:00","dateModified":"2022-02-12T22:08:40+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -406,26 +406,26 @@
 </span><span class=lnt>20
 </span></code></pre></td>
 <td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># 关联表，左侧的 user 正在关注右侧的 user
-followers = db.Table(&#39;followers&#39;,
-    db.Column(&#39;follower_id&#39;, db.Integer, db.ForeignKey(&#39;user.id&#39;)),  # 左侧
-    db.Column(&#39;followed_id&#39;, db.Integer, db.ForeignKey(&#39;user.id&#39;))  # 右侧，被关注的 user
-)
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=c1># 关联表，左侧的 user 正在关注右侧的 user</span>
+<span class=n>followers</span> <span class=o>=</span> <span class=n>db</span><span class=o>.</span><span class=n>Table</span><span class=p>(</span><span class=s1>&#39;followers&#39;</span><span class=p>,</span>
+    <span class=n>db</span><span class=o>.</span><span class=n>Column</span><span class=p>(</span><span class=s1>&#39;follower_id&#39;</span><span class=p>,</span> <span class=n>db</span><span class=o>.</span><span class=n>Integer</span><span class=p>,</span> <span class=n>db</span><span class=o>.</span><span class=n>ForeignKey</span><span class=p>(</span><span class=s1>&#39;user.id&#39;</span><span class=p>)),</span>  <span class=c1># 左侧</span>
+    <span class=n>db</span><span class=o>.</span><span class=n>Column</span><span class=p>(</span><span class=s1>&#39;followed_id&#39;</span><span class=p>,</span> <span class=n>db</span><span class=o>.</span><span class=n>Integer</span><span class=p>,</span> <span class=n>db</span><span class=o>.</span><span class=n>ForeignKey</span><span class=p>(</span><span class=s1>&#39;user.id&#39;</span><span class=p>))</span>  <span class=c1># 右侧，被关注的 user</span>
+<span class=p>)</span>
 
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
-    email = db.Column(db.String(120), index=True, unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+<span class=k>class</span> <span class=nc>User</span><span class=p>(</span><span class=n>UserMixin</span><span class=p>,</span> <span class=n>db</span><span class=o>.</span><span class=n>Model</span><span class=p>):</span>
+    <span class=nb>id</span> <span class=o>=</span> <span class=n>db</span><span class=o>.</span><span class=n>Column</span><span class=p>(</span><span class=n>db</span><span class=o>.</span><span class=n>Integer</span><span class=p>,</span> <span class=n>primary_key</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>
+    <span class=n>username</span> <span class=o>=</span> <span class=n>db</span><span class=o>.</span><span class=n>Column</span><span class=p>(</span><span class=n>db</span><span class=o>.</span><span class=n>String</span><span class=p>(</span><span class=mi>64</span><span class=p>),</span> <span class=n>index</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=n>unique</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+    <span class=n>email</span> <span class=o>=</span> <span class=n>db</span><span class=o>.</span><span class=n>Column</span><span class=p>(</span><span class=n>db</span><span class=o>.</span><span class=n>String</span><span class=p>(</span><span class=mi>120</span><span class=p>),</span> <span class=n>index</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=n>unique</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+    <span class=n>password_hash</span> <span class=o>=</span> <span class=n>db</span><span class=o>.</span><span class=n>Column</span><span class=p>(</span><span class=n>db</span><span class=o>.</span><span class=n>String</span><span class=p>(</span><span class=mi>128</span><span class=p>),</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
 
-    # 我关注的 users
-    followed = db.relationship(
-        &#39;User&#39;,
-        secondary=followers,  # 指定多对多关联表
-        primaryjoin=(followers.c.follower_id == id),  # 左侧，用于获取「我关注的 users」的 join 条件
-        secondaryjoin=(followers.c.followed_id == id),  # 右侧，用于获取「我的粉丝」的 join 条件
-        lazy=&#39;dynamic&#39;,  # 延迟求值，这样才能用 filter_by 等过滤函数
-        backref=db.backref(&#39;followers&#39;, lazy=&#39;dynamic&#39;))  # followers 也要延迟求值
+    <span class=c1># 我关注的 users</span>
+    <span class=n>followed</span> <span class=o>=</span> <span class=n>db</span><span class=o>.</span><span class=n>relationship</span><span class=p>(</span>
+        <span class=s1>&#39;User&#39;</span><span class=p>,</span>
+        <span class=n>secondary</span><span class=o>=</span><span class=n>followers</span><span class=p>,</span>  <span class=c1># 指定多对多关联表</span>
+        <span class=n>primaryjoin</span><span class=o>=</span><span class=p>(</span><span class=n>followers</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>follower_id</span> <span class=o>==</span> <span class=nb>id</span><span class=p>),</span>  <span class=c1># 左侧，用于获取「我关注的 users」的 join 条件</span>
+        <span class=n>secondaryjoin</span><span class=o>=</span><span class=p>(</span><span class=n>followers</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>followed_id</span> <span class=o>==</span> <span class=nb>id</span><span class=p>),</span>  <span class=c1># 右侧，用于获取「我的粉丝」的 join 条件</span>
+        <span class=n>lazy</span><span class=o>=</span><span class=s1>&#39;dynamic&#39;</span><span class=p>,</span>  <span class=c1># 延迟求值，这样才能用 filter_by 等过滤函数</span>
+        <span class=n>backref</span><span class=o>=</span><span class=n>db</span><span class=o>.</span><span class=n>backref</span><span class=p>(</span><span class=s1>&#39;followers&#39;</span><span class=p>,</span> <span class=n>lazy</span><span class=o>=</span><span class=s1>&#39;dynamic&#39;</span><span class=p>))</span>  <span class=c1># followers 也要延迟求值</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>这里比较绕的，就是容易搞混 <code>primaryjoin</code> 和 <code>secondaryjoin</code> 两个参数。</p>

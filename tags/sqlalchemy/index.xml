@@ -275,26 +275,26 @@
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 关联表，左侧的 user 正在关注右侧的 user
-followers = db.Table(&#39;followers&#39;,
-    db.Column(&#39;follower_id&#39;, db.Integer, db.ForeignKey(&#39;user.id&#39;)),  # 左侧
-    db.Column(&#39;followed_id&#39;, db.Integer, db.ForeignKey(&#39;user.id&#39;))  # 右侧，被关注的 user
-)
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 关联表，左侧的 user 正在关注右侧的 user</span>
+<span class="n">followers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s1">&#39;followers&#39;</span><span class="p">,</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;follower_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;user.id&#39;</span><span class="p">)),</span>  <span class="c1"># 左侧</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;followed_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;user.id&#39;</span><span class="p">))</span>  <span class="c1"># 右侧，被关注的 user</span>
+<span class="p">)</span>
 
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True, nullable=False)
-    email = db.Column(db.String(120), index=True, unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">UserMixin</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    # 我关注的 users
-    followed = db.relationship(
-        &#39;User&#39;,
-        secondary=followers,  # 指定多对多关联表
-        primaryjoin=(followers.c.follower_id == id),  # 左侧，用于获取「我关注的 users」的 join 条件
-        secondaryjoin=(followers.c.followed_id == id),  # 右侧，用于获取「我的粉丝」的 join 条件
-        lazy=&#39;dynamic&#39;,  # 延迟求值，这样才能用 filter_by 等过滤函数
-        backref=db.backref(&#39;followers&#39;, lazy=&#39;dynamic&#39;))  # followers 也要延迟求值
+    <span class="c1"># 我关注的 users</span>
+    <span class="n">followed</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span>
+        <span class="s1">&#39;User&#39;</span><span class="p">,</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="n">followers</span><span class="p">,</span>  <span class="c1"># 指定多对多关联表</span>
+        <span class="n">primaryjoin</span><span class="o">=</span><span class="p">(</span><span class="n">followers</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">follower_id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">),</span>  <span class="c1"># 左侧，用于获取「我关注的 users」的 join 条件</span>
+        <span class="n">secondaryjoin</span><span class="o">=</span><span class="p">(</span><span class="n">followers</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">followed_id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">),</span>  <span class="c1"># 右侧，用于获取「我的粉丝」的 join 条件</span>
+        <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">,</span>  <span class="c1"># 延迟求值，这样才能用 filter_by 等过滤函数</span>
+        <span class="n">backref</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">backref</span><span class="p">(</span><span class="s1">&#39;followers&#39;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">&#39;dynamic&#39;</span><span class="p">))</span>  <span class="c1"># followers 也要延迟求值</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>这里比较绕的，就是容易搞混 <code>primaryjoin</code> 和 <code>secondaryjoin</code> 两个参数。</p>
