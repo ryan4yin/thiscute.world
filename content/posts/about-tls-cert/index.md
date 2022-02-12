@@ -9,8 +9,6 @@ resources:
 
 tags: ["HTTPS", "TLS", "OpenSSL", "加密", "破解"]
 categories: ["技术"]
-
-lightgallery: true
 ---
 
 >个人笔记，并非教程！只适合当成参考手册，按目录选读。

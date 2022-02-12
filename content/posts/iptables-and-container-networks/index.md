@@ -9,8 +9,6 @@ resources:
 
 tags: ["Linux", "网络", "虚拟化", "容器", "iptables", "conntrack"]
 categories: ["技术"]
-
-lightgallery: true
 ---
 
 >本文仅针对 ipv4 网络

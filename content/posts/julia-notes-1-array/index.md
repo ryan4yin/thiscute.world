@@ -8,8 +8,6 @@ resources:
 
 tags: ["JuliaLang"]
 categories: ["技术"]
-
-lightgallery: true
 ---
 
 

@@ -715,7 +715,7 @@ class A:
 
 在做爬虫工作时，有时会遇到这样的 table 元素：
 
-![](/images/python-tips-and-tricks/html-table.png)
+{{< figure src="/images/python-tips-and-tricks/html-table.png" >}}
 
 对这种 html 元素，我一般会直接把它转换成 list，结果如下：
 ```python3

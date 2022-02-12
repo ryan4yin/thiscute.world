@@ -3,7 +3,6 @@ title: "容器镜像是如何工作的？"
 date: 2021-08-16T11:38:08+08:00
 draft: true
 
-# lightgallery: true
 # resources:
 # - name: "featured-image"
 #   src: "docker-turtles-networking.jpg"

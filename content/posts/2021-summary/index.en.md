@@ -25,7 +25,7 @@ However, I am quite satisfied with the overall results, the current work has bee
 - In January, I set up this Blog, and I met [@Cheese](https://chee5e.space/)，@Cheese helped me adjust the style of the "Friends" page, thanks him very much~
 - In February, I fired my boss, and then what to say? I suddenly felt open-minded and changed my mindset 180 degrees. It was great, but I was actually very worried about my shortcomings in all aspects. Anyway, I'm in a complicated mood. I talked a lot with [@是格子啊](https://sanshiliuxiao.top/), [@Cheese](https://chee5e.space/) and former colleagues). Thank you very much for helping me sort out my thoughts and giving me an affirmation. At the same time, I was recommended by [@Cheese](https://chee5e.space/) and started using twitter.
 - I climbed the mountain every day to see the scenery, bought a hammock to take a nap in the park, practiced the harmonica and bamboo flute, and played like this for a month.
-  - ![](./hammock.jpg)
+  - {{< figure src="./hammock.jpg" >}}
 - In March, I started looking for a job. After meeting with several companies, I was very lucky to enter Mobiuspace and became a new SRE. The experience of a year in Mobiuspace is written in the "work" section, which is skipped here.
 - At the end of March, I watched the movie "Raya and The Last Dragon" (the only movie I watched in 2021), and the ending song was very good.
 - In April, by various coincidences, I unexpectedly found that my junior high school classmate's residence was less than one kilometer away from me. I had a meal of hometown food and bayberry wine at his house. It tasted very good! 
@@ -53,7 +53,7 @@ After resigning at the beginning of the year, I practiced the bamboo flute and t
 
 On the whole, I have made little progress this year.
 
-![](./midi-keyboard-flute-harmonica.jpg)
+{{< figure src="./midi-keyboard-flute-harmonica.jpg" >}}
 
 ## Working - The year I work in Mobiuspace
 

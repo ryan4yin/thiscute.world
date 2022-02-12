@@ -9,8 +9,6 @@ resources:
 
 tags: ["DNS", "CoreDNS", "网络"]
 categories: ["技术"]
-
-lightgallery: true
 ---
 
 >个人笔记，观点不一定正确. 适合对 Kubernetes 有一定了解的同学。

@@ -147,7 +147,7 @@ xwIDAQAB
 ### 4. 测试密钥可用性
 
 接下来在 [jwt.io](https://jwt.io) 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。
-![](/images/use-istio-for-jwt-auth/jwt.io.png)
+{{< figure src="/images/use-istio-for-jwt-auth/jwt.io.png" >}}
 
 可以看到左下角显示「Signature Verified」，成功地生成出了 JWT。后续可以使用这个 JWT 访问 Istio 网关，测试 Istio JWT 验证功能。
 
