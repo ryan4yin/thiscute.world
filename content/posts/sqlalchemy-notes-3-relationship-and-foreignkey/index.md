@@ -182,7 +182,7 @@ class Child(Base):
 
 这个时候，关联表 `association_table` 的两个键都是 `user`，**SQLAlchemy 无法区分主次，需要手动指定**，为此需要使用 `primaryjoin` 和 `secondaryjoin` 两个参数。
 
-```
+```python
 # 关联表，左侧的 user 正在关注右侧的 user
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),  # 左侧
