@@ -13,11 +13,11 @@ categories: ["技术"]
 
 >个人笔记，不保证正确。
 
-## 关系构建：`ForeignKey` 与 `relationship`
+## 一、关系构建：`ForeignKey` 与 `relationship`
 
 关系构建的重点，在于搞清楚这两个函数的用法。`ForeignKey` 的用法已经在 [SQL表达式语言 - 表定义中的约束](https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F) 讲过了。主要是 `ondelete` 和 `onupdate` 两个参数的用法。
 
-## `relationship`
+## 二、`relationship`
 
 `relationship` 函数在 ORM 中用于构建表之间的关联关系。与 `ForeignKey` 不同的是，它定义的关系不属于表定义，而是动态计算的。
 用它定义出来的属性，相当于 SQL 中的视图。
@@ -33,7 +33,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 ```
 
-### 一对多
+### 1. 一对多
 
 ```python3
 class Parent(Base):
@@ -51,9 +51,9 @@ class Child(Base):
 
 一个 `Parent` 可以有多个 `Children`，通过 `relationship`，我们就能直接通过 `parent.children` 得到结果，免去繁琐的 query 语句。
 
-#### 反向引用
+#### 1.1 反向引用
 
-#### 1. `backref` 与 `back_populates`
+##### 1.1.1 `backref` 与 `back_populates`
 
 那如果我们需要得知 `child` 的 `parent` 对象呢？能不能直接访问 `child.parent`？
 
@@ -92,7 +92,7 @@ class Child(Base):
 
 **NOTE：声明的两个 `relationship` 不需要多余的说明，SQLAlchemy 能自动识别到 `parent.children` 是 collection，`child.parent` 是 attribute.**
 
-#### 2. 反向引用的参数：`sqlalchemy.orm.backref(name, **kwargs)`
+#### 1.1.2. 反向引用的参数：`sqlalchemy.orm.backref(name, **kwargs)`
 
 使用 `back_populates` 时，我们可以很方便地在两个 `relationship` 函数中指定各种参数：
 ```python3
@@ -129,11 +129,11 @@ class Parent(Base):
 `backref()` 的参数会被传递给 `relationship()`，因此它俩的参数也完全一致。
 
 
-### 多对一
+### 2. 多对一
 
 A many-to-one is similar to a one-to-many relationship. The difference is that this relationship is looked at from the "many" side.
 
-### 一对一
+### 3. 一对一
 
 ```python3
 class Parent(Base):
@@ -152,7 +152,7 @@ class Child(Base):
     parent = relationship("Parent", back_populates="child") 
 ```
 
-### 多对多
+### 4. 多对多
 
 ```python
 # 多对多，必须要使用一个关联表！
@@ -174,7 +174,7 @@ class Child(Base):
 
 要添加反向引用时，同样可以使用 `backref` 或 `back_populates`.
 
-#### user2user
+#### 4.1 user2user
 
 如果多对多关系中的两边都是 user，即都是同一个表时，该怎么声明？
 
@@ -209,7 +209,7 @@ class User(UserMixin, db.Model):
 2. secondaryjoin：（多对多中）用于从父对象查询其所有子对象的 condition（parent.children），同样的，默认情况下只考虑外键。
 
 
-## ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade
+## 三、ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade
 
 之前有讲过 Table 定义中的级联操作：`ON DELETE` 和 `ON UPDATE`，可以通过 `ForeignKey` 的参数指定为 `CASCADE`.
 
