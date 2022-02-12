@@ -1,0 +1,1315 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>常见错误 - 标签 - This Cute World</title><link>https://thiscute.world/tags/%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/</link><description>常见错误 - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 10 Mar 2019 00:59:21 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/" rel="self" type="application/rss+xml"/><item><title>Python 实用技巧与常见错误集锦</title><link>https://thiscute.world/posts/python-tips-and-tricks/</link><pubDate>Sun, 10 Mar 2019 00:59:21 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-tips-and-tricks/</guid><description><![CDATA[<blockquote>
+<p>个人笔记，不保证正确。</p>
+</blockquote>
+<blockquote>
+<p>适合有一定基础的童鞋阅读</p>
+</blockquote>
+<h2 id="一标准库">一、标准库</h2>
+<h3 id="1-文件路径---pathlib">1. 文件路径 - pathlib</h3>
+<p>提供了 OS 无关的文件路径抽象，可以完全替代旧的 <code>os.path</code> 和 <code>glob</code>.</p>
+<p>学会了 <code>pathlib.Path</code>，你就会了 Python 处理文件路径的所有功能。</p>
+<h4 id="1-路径解析与拼接">1. 路径解析与拼接</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">data_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&#34;./source_data/text_files/&#34;</span><span class="p">)</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="n">data_folder</span> <span class="o">/</span> <span class="s2">&#34;raw_data.txt&#34;</span>  <span class="c1"># Path 重载了 / 操作符，路径拼接超级方便</span>
+
+<span class="c1"># 路径的解析</span>
+<span class="n">data_file</span><span class="o">.</span><span class="n">parent</span>  <span class="c1"># 获取父路径，这里的结果就是 data_folder</span>
+<span class="n">data_foler</span><span class="o">.</span><span class="n">parent</span> <span class="c1"># 会返回 Path(&#34;source_data&#34;)</span>
+<span class="n">data_file</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># 即获取到 data_file 的上上层目录，结果和上面一样是 Path(&#34;source_data&#34;)</span>
+<span class="n">data_file</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># 上上上层目录，Path(&#34;.&#34;)</span>
+
+<span class="n">dara_file</span><span class="o">.</span><span class="n">name</span> <span class="c1"># 文件名 &#34;raw_data.txt&#34;</span>
+<span class="n">dara_file</span><span class="o">.</span><span class="n">suffix</span>  <span class="c1"># 文件的后缀（最末尾的）&#34;.txt&#34;，还可用 suffixes 获取所有后缀</span>
+
+<span class="n">data_file</span><span class="o">.</span><span class="n">stem</span>  <span class="c1"># 去除掉最末尾的后缀后（只去除一个），剩下的文件名：raw_data</span>
+
+<span class="c1"># 替换文件名或者文件后缀</span>
+<span class="n">data_file</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">&#34;test.txt&#34;</span><span class="p">)</span>  <span class="c1"># 变成 .../test.txt</span>
+<span class="n">data_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&#34;.pdf&#34;</span><span class="p">)</span>  <span class="c1"># 变成 .../raw_data.pdf</span>
+
+<span class="c1"># 当前路径与另一路径 的相对路径</span>
+<span class="n">data_file</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">data_folder</span><span class="p">)</span>  <span class="c1"># PosixPath(&#39;raw_data.txt&#39;)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-pathlib-常用函数">2. pathlib 常用函数</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">if</span> <span class="ow">not</span> <span class="n">data_folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="n">data_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># 直接创建文件夹，如果父文件夹不存在，也自动创建</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>  <span class="c1"># 文件是否存在</span>
+    <span class="n">filename</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>  <span class="c1"># 直接创建空文件，或者用 filename.open() 直接获取文件句柄</span>
+
+<span class="c1"># 路径类型判断</span>
+<span class="k">if</span> <span class="n">data_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>  <span class="c1"># 是文件</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="s2">&#34;is a file&#34;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">data_file</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>  <span class="c1"># 是文件夹</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>  <span class="c1"># 通过 Path.iterdir() 迭代文件夹中的内容</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+<span class="c1"># 路径解析</span>
+<span class="c1"># 获取文件的绝对路径（符号链接也会被解析到真正的文件）</span>
+<span class="n">filename</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>  <span class="c1"># 在不区分大小写的系统上（Windows），这个函数也会将大小写转换成实际的形式。</span>
+
+<span class="c1"># 可以直接获取 Home 路径或者当前路径</span>
+<span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&#34;file.txt&#34;</span> <span class="c1"># 有时需要以 home 为 base path 来构建文件路径</span>
+<span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>  <span class="o">/</span> <span class="s2">&#34;file.txt&#34;</span> <span class="c1"># 或者基于当前路径构建</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>还有很多其它的实用函数，可在使用中慢慢探索。</p>
+<h4 id="3-glob-通配符">3. glob 通配符</h4>
+<p>pathlib 也提供了 glob 支持，也就是广泛用在路径匹配上的一种简化正则表达式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">data_file</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">glob_pattern</span><span class="p">)</span>  <span class="c1"># 返回 True 或 False，表示文件路径与给出的 glob pattern 是否匹配</span>
+
+<span class="k">for</span> <span class="n">py_file</span> <span class="ow">in</span> <span class="n">data_folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&#34;*/*.py&#34;</span><span class="p">):</span>  <span class="c1"># 匹配当前路径下的子文件夹中的 py 文件，会返回一个可迭代对象</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">py_file</span><span class="p">)</span>
+
+<span class="c1"># 反向匹配，相当于 glob 模式开头添加 &#34;**/&#34;</span>
+<span class="k">for</span> <span class="n">py_file</span> <span class="ow">in</span> <span class="n">data_folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&#34;**/*.py&#34;</span><span class="p">):</span>  <span class="c1"># 匹配当前路径下的所有 py 文件（所有子文件夹也会被搜索），返回一个可迭代对象</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">py_file</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>glob 中的 * 表示任意字符，而 ** 则表示任意层目录。（在大型文件树上使用 ** 速度会很慢！）</p>
+<h3 id="2-排序常用库---operator">2. 排序常用库 - operator</h3>
+<p>operator 模块包含四种类型的方法：</p>
+<h4 id="1-operatoritemgetter">1. <strong>operator.itemgetter</strong></h4>
+<p>经常被用于 sorted/max/mix/itertools.groupby 等</p>
+<p>使用方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="c1"># itemgetter</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">f</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>  <span class="c1"># return r[2]</span>
+
+<span class="c1"># 还能一次获取多个值，像 numpy 那样索引</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">f2</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>  <span class="c1"># return (r[2], r[4], r[5])</span>
+
+<span class="c1"># 或者使用 slice 切片</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="n">s</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>  <span class="c1"># return r[2:]</span>
+
+<span class="c1"># dict 索引也能用</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="s1">&#39;rank&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+<span class="n">d</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>  <span class="c1"># return d[&#39;rank&#39;], d[&#39;name&#39;]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>用途：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="c1"># 用于指定用于比较大小的属性</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># 使用 iterable[1] 对 iterable 进行排序</span>
+<span class="nb">max</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># 找出最大的元素，使用 iterable[1] 做比较</span>
+
+<span class="c1"># 用于高级切片（比如像 numpy 那样的，指定只获取某几列）</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]]</span>
+<span class="nb">map</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>  <span class="c1"># list 后得到 [(1, 3, 4), (2,4,5)]</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-operatorattrgetter">2. <code>operator.attrgetter</code></h4>
+<p>可用于动态获取对象的属性，与直接用 <code>getattr()</code> 不同的是，它可以嵌套访问属性。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python3" data-lang="Python3"><span class="c1"># 嵌套访问属性</span>
+<span class="n">att</span> <span class="o">=</span> <span class="n">attrgetter</span><span class="p">(</span><span class="s2">&#34;a.b.c&#34;</span><span class="p">)</span>
+<span class="n">att</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>  <span class="c1"># return obj.a.b.c</span>
+
+<span class="c1"># 和 itemgetter 一样，也可以一次获取多个属性</span>
+<span class="n">att</span> <span class="o">=</span> <span class="n">attrgetter</span><span class="p">(</span><span class="s2">&#34;a.b.c&#34;</span><span class="p">,</span> <span class="s2">&#34;x.y&#34;</span><span class="p">)</span>
+<span class="n">att</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>  <span class="c1"># return (obj.a.b.c, obj.x.y)</span>
+
+<span class="c1"># 不嵌套的话，用 getattr 就行</span>
+<span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&#34;a&#34;</span><span class="p">)</span>  <span class="c1"># return obj.a</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里可以回顾一下类的两个魔法函数：</p>
+<ol>
+<li><code>__getattr__</code>: 当被访问的属性不存在时，这个方法会被调用，它的返回值会成为对象的该属性。
+<ul>
+<li>用于动态生成实例的属性/函数</li>
+</ul>
+</li>
+<li><code>__getattribute__</code>: 与 <code>__getattr__</code> 唯一的差别在于，访问对象的任何属性，都会直接调用这个方法，<strong>不管属性存不存在</strong>。</li>
+</ol>
+<h4 id="3-operatormethodcaller">3. operator.methodcaller</h4>
+<p>可用于调用函数，它和 attrgetter 很像，差别在于 attrgetter 只是返回指定的属性，而 methodcaller 会直接把指定的属性当成函数调用，然后返回结果。</p>
+<p>举例</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="n">f</span> <span class="o">=</span> <span class="n">methodcaller</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>  <span class="c1"># returns b.name(&#39;foo&#39;, bar=1)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="4-各种操作符对应的函数">4. 各种操作符对应的函数</h4>
+<p>operator.add、operator.sub、operator.mul、operator.div 等等，函数式编程有时需要用到。</p>
+<h3 id="3-itertools">3. itertools</h3>
+<p><a href="https://docs.python.org/3/library/itertools.html" target="_blank" rel="noopener noreferrer">itertools</a> 提供了许多针对可迭代对象的实用函数</p>
+<p>方法很多，基本不可能一次全记住。还是要用到时多查吧。大致记住有提供哪些功能，需要用到时能想起可以查这个模块就行。</p>
+<h4 id="1-无限迭代器">1. 无限迭代器</h4>
+<ol>
+<li>count(start=0, step=1): 从 start 开始，每次迭代时，返回值都加一个 step
+<ul>
+<li>默认返回序列为 0 1 2 3&hellip;</li>
+</ul>
+</li>
+<li>cycle(iterable): 不断循环迭代 iterable</li>
+<li>repeat(element, times=None): 默认永远返回 element。（如果 times 不为 None，就迭代 times 后结束）</li>
+</ol>
+<h4 id="2-排列组合迭代器">2. 排列组合迭代器</h4>
+<ol>
+<li>product(p1, p2, &hellip;, repeat=1)：p1, p2&hellip; 的元素的笛卡尔积，相当于多层 for 循环
+<ul>
+<li>repeat 指参数重复次数，比如</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; from itertools import product
+&gt;&gt;&gt; <span class="nv">r</span> <span class="o">=</span> product<span class="o">([</span>1, 2<span class="o">]</span>, <span class="o">[</span>3, 4<span class="o">]</span>, <span class="o">[</span>5, 6<span class="o">])</span>  <span class="c1"># 重复一次，也就是 (p1, p2, p3) 的笛卡尔积</span>
+&gt;&gt;&gt; pprint<span class="o">(</span>list<span class="o">(</span>r<span class="o">))</span>       
+<span class="o">[(</span>1, 3, 5<span class="o">)</span>,
+ <span class="o">(</span>1, 3, 6<span class="o">)</span>,
+ <span class="o">(</span>1, 4, 5<span class="o">)</span>,
+ <span class="o">(</span>1, 4, 6<span class="o">)</span>,
+ <span class="o">(</span>2, 3, 5<span class="o">)</span>,
+ <span class="o">(</span>2, 3, 6<span class="o">)</span>,
+ <span class="o">(</span>2, 4, 5<span class="o">)</span>,
+ <span class="o">(</span>2, 4, 6<span class="o">)]</span>
+&gt;&gt;&gt; <span class="nv">r2</span> <span class="o">=</span> product<span class="o">([</span>1, 2<span class="o">]</span>, <span class="o">[</span>3, 4<span class="o">]</span>, <span class="o">[</span>5, 6<span class="o">]</span>, <span class="nv">repeat</span><span class="o">=</span>2<span class="o">)</span>  <span class="c1"># 重复两次，即 (p1, p2, p3, p1, p2, p3) 的笛卡尔积</span>
+&gt;&gt;&gt; pprint<span class="o">(</span>list<span class="o">(</span>r2<span class="o">))</span>
+<span class="o">[(</span>1, 3, 5, 1, 3, 5<span class="o">)</span>,
+ <span class="o">(</span>1, 3, 5, 1, 3, 6<span class="o">)</span>,
+ <span class="o">(</span>1, 3, 5, 1, 4, 5<span class="o">)</span>,
+ <span class="o">(</span>1, 3, 5, 1, 4, 6<span class="o">)</span>,
+ <span class="o">(</span>1, 3, 5, 2, 3, 5<span class="o">)</span>,
+...
+</code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>permutations(p[, r])：p 中元素，长度为 r 的所有可能的排列。相当于 product 去重后的结果。</li>
+<li>combinations(p, r)：既然有排列，当然就有组合了。</li>
+</ol>
+<h4 id="3-其他">3. 其他</h4>
+<ol>
+<li><code>zip_longest(*iterables, fillvalue=None)</code>：和 zip 的差别在于，缺失的元素它会用 fillvalue 补全，而不是直接结束。</li>
+<li><code>takewhile()</code></li>
+<li><code>dropwhile()</code></li>
+<li><code>groupby()</code></li>
+</ol>
+<p>等等等，用得到的时候再查了。。。</p>
+<h3 id="4-collections">4. collections</h3>
+<p>提供了一些实用的高级数据结构（容器）</p>
+<ol>
+<li><strong><code>defaultdict</code></strong>：这个感觉是最常用的，可以给定 key 的默认值</li>
+<li><strong><code>Counter</code></strong>：方便、快速的计数器。常用于分类统计</li>
+<li><code>deque</code>：一个线程安全的双端队列</li>
+<li><code>OrderedDict</code>：有时候会需要有序字典</li>
+<li><code>namedtuple</code>：命名元组，有时用于参数传递。与 tuple 的差别是它提供了关键字参数和通过名字访问属性的功能</li>
+<li><code>ChainMap</code>：将多个 map 连接（chain）在一起，提供一个统一的视图。因为是视图，所以原来的 map 不会被影响。</li>
+</ol>
+<h3 id="5-常用函数装饰器-functools">5. 常用函数装饰器 functools</h3>
+<p>functools 提供了几个有时很有用的函数和装饰器</p>
+<h4 id="1-functoolswraps">1. @functools.wraps</h4>
+<p>这个装饰器用于使装饰器 copy 被装饰的对象的 <code>__module__</code>, <code>__name__</code>, <code>__qualname__</code>, <code>__annotations__</code> and <code>__doc__</code> 属性，这样装饰器就显得更加透明。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+     <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calling decorated function&#39;</span><span class="p">)</span>
+         <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+     <span class="k">return</span> <span class="n">wrapper</span>  <span class="c1"># 用了 wraps，wrapper 会复制 f 的各种文档属性</span>
+
+<span class="nd">@my_decorator</span>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">xx</span><span class="p">):</span>
+    <span class="s2">&#34;&#34;&#34; this is func&#39;s docstring&#34;&#34;&#34;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;this is func~&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果不用 wraps 的话，因为实际上返回的是 wrapper，被装饰对象的这些文档属性都会丢失。（比如 docstring）
+<strong>因此在使用 wrapper 装饰器时，添加 @wraps() 装饰器是个好习惯。</strong></p>
+<h4 id="2-functoolspartial">2. functools.partial</h4>
+<p>这个感觉和高等数学的偏函数很像：比如函数 z = f(x, y) 有 x 和 y 两个变量，现在把 x 看作常数，就可以对 y 进行求导运算。
+而 python 的 partial 也差不多，不过它不是把 x 看作常数，而是先给定 x 的值。用法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="n">basetwo</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># 先给定 int 函数的 base 参数为 2</span>
+<span class="n">basetwo</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s1">&#39;Convert base 2 string to an int.&#39;</span>  <span class="c1"># 如果需要文档，可以添加 __doc__ 属性</span>
+<span class="n">basetwo</span><span class="p">(</span><span class="s1">&#39;10010&#39;</span><span class="p">)</span>  <span class="c1"># return 18</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>此外，还有个 partialmethod 函数，待了解</p>
+<h4 id="3-functoolslru_cachemaxsize128-typedfalse">3. @functools.lru_cache(maxsize=128, typed=False)</h4>
+<p>如果某方法可能被频繁调用（使用相同的参数），而且它的结果在一定时间内不会改变。可以用 lru_cache 装饰它，减少运算量或 IO 操作。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="c1"># 缓存最近的（least recently used，lru） 64 次参数不同的调用结果。</span>
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_sum</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>  <span class="c1"># 后续的调用中，如果参数能匹配到缓存，就直接返回缓存结果</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>比如用递归计算斐波那契数列，数值较低的参数会被频繁使用，于是可以用 lru_cache 来缓存它们。
+或者爬取网页，可能会需要频繁爬取一个变化不快的网页，这时完全可以用 cache 缓存。</p>
+<p>但是它不能控制缓存失效时间，因此不能用于 Web 系统的缓存。还是得自己写个简单的装饰器，把缓存存到 redis 里并设置 expires。或者直接用 Flask 或 Django 的 caching 插件。</p>
+<h4 id="4-functoolssingledispatch">4. @functools.singledispatch</h4>
+<p>单重派发，即根据函数的第一个参数的类型，来决定调用哪一个同名函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="nd">@singledispatch</span>
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>  <span class="c1"># 首先定义一个默认函数</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;没有合适的类型被调用&#39;</span><span class="p">)</span>  <span class="c1"># 如果参数类型没有匹配上，就调用这个默认函数</span>
+
+<span class="nd">@parse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>  <span class="c1"># 第一个参数为 None</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;出现 None 了&#39;</span><span class="p">)</span>
+
+<span class="nd">@parse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># 第一个参数为整数</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;这次输入的是整数&#39;</span><span class="p">)</span>
+
+<span class="nd">@parse</span><span class="o">.</span><span class="n">register</span>
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>  <span class="c1"># python3.7 开始，可以直接用类型注解来标注第一个参数的类型</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;这次输入的是列表&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>画外：有单重派发，自然就有多重派发，Julia 语言就支持多重派发，即根据函数所有参数的类型，来决定调用哪一个同名函数。
+Julia 语言根本没有类这个定义，类型的所有方法都是通过多重派发来定义的。</p>
+<h4 id="其他">其他</h4>
+<ol>
+<li>@functools.total_ordering：用于自动生成比较函数。</li>
+<li>functools.cmp_to_key(func)：用于将老式的比较函数，转换成新式的 key 函数。</li>
+</ol>
+<h3 id="6-上下文管理---contextlib">6. 上下文管理 - contextlib</h3>
+<p>即实现使用 <code>with</code> 语句进行自定义的上下文管理。</p>
+<h4 id="1-使用-__enter__-和-__exit__">1. 使用 <code>__enter__</code> 和 <code>__exit__</code></h4>
+<p>Java 使用 try 来自动管理资源，只要实现了 AutoCloseable 接口，就可以部分摆脱手动 colse 的地狱了。</p>
+<p>而 Python，则是定义了两个 Protocol：<code>__enter__</code> 和 <code>__exit__</code>. 下面是一个 open 的模拟实现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">OpenContext</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>  <span class="c1"># 调用 open(filename, mode) 返回一个实例</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># 用 with 管理 __init__ 返回的实例时，with 会自动调用这个方法</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fp</span>
+
+    <span class="c1"># 退出 with 代码块时，会自动调用这个方法。</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># 这里先构造了 OpenContext 实例，然后用 with 管理该实例</span>
+<span class="k">with</span> <span class="n">OpenContext</span><span class="p">(</span><span class="s1">&#39;/tmp/a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hello world&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里唯一有点复杂的，就是 <code>__exit__</code> 方法。和 Java 一样，<code>__exit__</code> 相当于 <code>try - catch - finally</code> 的 <code>finally</code> 代码块，在发生异常时，它也会被调用。</p>
+<p>当没有异常发生时，<code>__exit__</code> 的三个参数 <code>exc_type, exc_value, traceback</code> 都为 None，而当发生异常时，它们就对应异常的详细信息。
+发生异常时， <code>__exit__</code> <strong>的返回值将被用于决定是否向外层抛出该异常</strong>，返回 True 则抛出，返回 False 则抑制（swallow it）。</p>
+<p>Note 1：Python 3.6 提供了 async with 异步上下文管理器，它的 Protocol 和同步的 with 完全类似，是 <code>__aenter__</code> 和 <code>__aexit__</code> 两个方法。
+Note 2：与 Java 相同，with 支持同时管理多个资源，因此可以直接写 <code>with open(x) as a, open(y) as b:</code> 这样的形式。</p>
+<h4 id="2-推荐contextlib">2. 推荐：contextlib</h4>
+<h5 id="21-contextlibcontextmanager">2.1 @contextlib.contextmanager</h5>
+<p>对于简单的 with 资源管理，编写一个类可能会显得比较繁琐，为此 contextlib 提供了一个方便的装饰器 <code>@contextlib.contextmanager</code> 用来简化代码。</p>
+<p>使用它，上面的 OpenContext 可以改写成这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">make_open_context</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">fp</span>  <span class="c1"># 没错，这是一个生成器函数</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">with</span> <span class="n">make_open_context</span><span class="p">(</span><span class="s1">&#39;/tmp/a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hello world&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>contextmanager</code> 装饰一个生成器函数，yield 之前的代码对应 <code>__enter__</code>，finally 代码块就对应 <code>__exit__</code>.</p>
+<p>Note：同样，也有异步版本的装饰器 <code>@contextlib.asynccontextmanager</code></p>
+<h5 id="22-contextlibclosingthing">2.2 contextlib.closing(thing)</h5>
+<p>用于将原本不支持 with 管理的资源，包装成一个 Context 对象。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+
+<span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.python.org&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">page</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">page</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+<span class="c1"># closing 等同于</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">closing</span><span class="p">(</span><span class="n">thing</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">thing</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">thing</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># 就是添加了一个自动 close 的功能</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="23-contextlibsuppressexceptions">2.3 contextlib.suppress(*exceptions)</h5>
+<p>使 with 管理器抑制代码块内任何被指定的异常：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
+
+<span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;somefile.tmp&#39;</span><span class="p">)</span>
+
+<span class="c1"># 等同于</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;somefile.tmp&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="24-contextlibredirect_stdoutnew_target">2.4 contextlib.redirect_stdout(new_target)</h5>
+<p>将 with 代码块内的 stdout 重定向到指定的 target（可用于收集 stdout 的输出）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="n">f</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">redirect_stdout</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>  <span class="c1"># 将输出直接写入到 StringIO</span>
+    <span class="n">help</span><span class="p">(</span><span class="nb">pow</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+<span class="c1"># 或者直接写入到文件</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;help.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">redirect_stdout</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="n">help</span><span class="p">(</span><span class="nb">pow</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>redirect_stdout 函数返回的 Context 是可重入的（ reentrant），可以重复使用。</p>
+<h2 id="二实用代码片段">二、实用代码片段</h2>
+<h3 id="group_size">1. 元素分组/group</h3>
+<p>数据处理中一个常见的操作，是将列表中的元素，依次每 k 个分作一组。</p>
+<p>下面的函数使用非常简洁的代码实现了元素分组的功能：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">zip_longest</span>
+
+<span class="k">def</span> <span class="nf">group_each</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">longest</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">        将一个可迭代对象 a 内的元素, 每 size 个分为一组
+</span><span class="s2">        group_each([1,2,3,4], 2) -&gt; [(1,2), (3,4)]
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">iterators</span> <span class="o">=</span> <span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">a</span><span class="p">)]</span> <span class="o">*</span> <span class="n">size</span>  <span class="c1"># 将新构造的 iterator 复制 size 次（浅复制）</span>
+
+    <span class="n">func_zip</span> <span class="o">=</span> <span class="n">zip_longest</span> <span class="k">if</span> <span class="n">longest</span> <span class="k">else</span> <span class="nb">zip</span>
+    <span class="k">return</span> <span class="n">func_zip</span><span class="p">(</span><span class="o">*</span><span class="n">iterators</span><span class="p">)</span>  <span class="c1"># 然后 zip</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="s2">&#34;abcdefghijk&#34;</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">group_each</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="c1"># =&gt; [(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;), (&#39;d&#39;, &#39;e&#39;, &#39;f&#39;), (&#39;g&#39;, &#39;h&#39;, &#39;i&#39;)]</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">group_each</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">longest</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># =&gt; [(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;), (&#39;d&#39;, &#39;e&#39;, &#39;f&#39;), (&#39;g&#39;, &#39;h&#39;, &#39;i&#39;), (&#39;j&#39;, &#39;k&#39;, None)]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这个函数还可以进一步简化为 <code>zip(*[iter(a)] * 3)</code>，如果没想到浅复制（Shallow Copy）特性的话，会很难理解它的逻辑。</p>
+<p>此外，如果某个 size 比较常用（比如 2），还可以用 <code>partial</code> 封装一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+ <span class="c1"># 每两个分一组</span>
+<span class="n">group_each_2</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">group_each</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># 等同于 group_each_2 = lambda a: group_each(a, 2)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="s2">&#34;abcde&#34;</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">group_each_2</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+<span class="c1"># =&gt; [(&#39;a&#39;, &#39;b&#39;), (&#39;c&#39;, &#39;d&#39;)]</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">group_each_2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">longest</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># =&gt; [(&#39;a&#39;, &#39;b&#39;), (&#39;c&#39;, &#39;d&#39;), (&#39;e&#39;, None)]</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-扁平版本的-map">2. 扁平版本的 map</h3>
+<p>稍微接触过函数式应该都知道 flat_map，可 Python 标准库却没有提供。下面是我在 stackoverflow 上找到的实现，其实很简单</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="k">def</span> <span class="nf">flat_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">items</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>它和 map 的差别在于是不是扁平(flat) 的（废话。。），举个例子</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&gt;&gt;&gt; list(map(list, [&#39;123&#39;, &#39;456&#39;]))
+[[&#39;1&#39;, &#39;2&#39;, &#39;3&#39;], [&#39;4&#39;, &#39;5&#39;, &#39;6&#39;]]
+&gt;&gt;&gt; list(flat_map(list, [&#39;123&#39;, &#39;456&#39;]))
+[&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;]
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-轮流迭代多个迭代器">3. 轮流迭代多个迭代器</h3>
+<p>假设我有多个可迭代对象（迭代器、列表等），现在我需要每次从每个对象中取一个值，直到某个对象为空。如果用循环写会比较繁琐，但是用 itertools 可以这样写：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="k">def</span> <span class="nf">iter_one_by_one</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">items</span><span class="p">))</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">iter_one_by_one</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]))</span>  <span class="c1"># =&gt;  [1, 4, 7, 2, 5, 8, 3, 6, 9]</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-多-dict-的去重">4. 多 dict 的去重</h3>
+<p>假设我们有一个 dict 的列表，里面可能有内容一模一样的 dict，我们需要对它做去重。
+容易想到的方法就是使用 set，可是 set 中的元素必须是 hashable 的，而 dict 是 unhashable 的，因此不能直接放进 set 里。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&gt;&gt;&gt; a = [{&#39;a&#39;: 1}, {&#39;a&#39;: 1}, {&#39;b&#39;: 2}]
+&gt;&gt;&gt; set(a)
+Traceback (most recent call last):
+  File &#34;/usr/local/lib/python3.7/site-packages/IPython/core/interactiveshell.py&#34;, line 2961, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File &#34;&lt;ipython-input-5-5b4c643a6feb&gt;&#34;, line 1, in &lt;module&gt;
+    set(a)
+TypeError: unhashable type: &#39;dict&#39;
+</code></pre></td></tr></table>
+</div>
+</div><p>难道就必须手写递归了么？未必，我在 stackoverflow 看到这样一个小技巧</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="k">def</span> <span class="nf">unique_dicts</span><span class="p">(</span><span class="n">data_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+    <span class="s2">&#34;&#34;&#34;unique a list of dict
+</span><span class="s2">        dict 是 unhashable 的，不能放入 set 中，所以先转换成 str
+</span><span class="s2">        
+</span><span class="s2">        unique_dicts([{&#39;a&#39;: 1}, {&#39;a&#39;: 1}, {&#39;b&#39;: 2}])  -&gt;  [{&#39;a&#39;: 1}, {&#39;b&#39;: 2}]
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">data_json_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data_json_set</span><span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5-str-的-startswith-和-endswith-的参数可以是元组">5. str 的 startswith 和 endswith 的参数可以是元组</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">In[7]: a = &#34;bb.gif&#34;
+In[8]: b = &#39;a.jpg&#39;
+In[9]: a.endswith((&#39;.jpg&#39;, &#39;.gif&#39;))
+Out[9]: True
+In[10]: b.startswith((&#39;bb&#39;, &#39;a&#39;))
+Out[10]: True
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6-判断两个对象的所有属性都相同">6. 判断两个对象的所有属性都相同</h3>
+<p>python 和 java 一样，直接用 == 做判断，默认是比较的引用，相当于 is。对自定义的类，你需要重写 <code>__eq__</code> 函数。
+判断值相等的方法很简单，一行代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">==</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span>  <span class="c1"># 转成 __dict__ 再比较</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="7-案例">7. 案例</h3>
+<h4 id="71-html-table-元素的处理">7.1 html table 元素的处理</h4>
+<p>在做爬虫工作时，有时会遇到这样的 table 元素：</p>
+<p></p>
+<p>对这种 html 元素，我一般会直接把它转换成 list，结果如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="n">table</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;label1&#39;</span><span class="p">,</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span> <span class="s1">&#39;label2&#39;</span><span class="p">,</span> <span class="s1">&#39;value2&#39;</span><span class="p">],</span>
+         <span class="p">[</span><span class="s1">&#39;label3&#39;</span><span class="p">,</span> <span class="s1">&#39;value3&#39;</span><span class="p">],</span>
+         <span class="p">[</span><span class="s1">&#39;label4&#39;</span><span class="p">,</span> <span class="s1">&#39;value4&#39;</span><span class="p">,</span> <span class="s1">&#39;label5&#39;</span><span class="p">,</span> <span class="s1">&#39;value5&#39;</span><span class="p">],</span>
+         <span class="o">...</span>
+         <span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>为了方便索引，现在我需要把上面的数据转换成下面这个样子的 dict</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="p">{</span>
+    <span class="s1">&#39;label1&#39;</span><span class="p">:</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;label2&#39;</span><span class="p">:</span> <span class="s1">&#39;value2&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;label3&#39;</span><span class="p">:</span> <span class="s1">&#39;value3&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;label4&#39;</span><span class="p">:</span> <span class="s1">&#39;value4&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;label5&#39;</span><span class="p">:</span> <span class="s1">&#39;value5&#39;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果是平常，大概需要写循环了。不过如果用刚刚说到的几个函数的话，会变得异常简单</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"> # 1. 分组
+groups = flat_map(group_each_2, table)
+
+# 1.1 flat_map 返回的是迭代器，list 后内容如下：
+# [(&#39;label1&#39;, &#39;value1&#39;),
+#  (&#39;label2&#39;, &#39;value2&#39;),
+#  (&#39;label3&#39;, &#39;value3&#39;),
+#  (&#39;label4&#39;, &#39;value4&#39;),
+#  (&#39;label5&#39;, &#39;value5&#39;)]
+
+# 2. 转换成 dict
+key_values = dict(groups)   # 得到的 key_values 与上面需要的 dict 别无二致。
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="三常见错误">三、常见错误</h2>
+<h3 id="1-浅复制导致错误">1. 浅复制导致错误</h3>
+<p>利用好浅复制，可以非常简洁的实现前面提到的<a href="##group_size" rel="">元素分组/group</a>功能，但是如果不注意，也会导致非常隐晦的错误！</p>
+<p>比如在使用 * 作为重复运算符时，如果目标是一个嵌套的可变对象，就会产生令人费解的问题：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># nested</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+<span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>因为 * 并不是深拷贝，它只是简单地复制了 [a] 这个列表，里面的 [1,2,3] 都是同一个对象，所以改了一个，所有的都会改变。
+<strong>解决方法是不要使用 * 号，改用<code>[a.copy() for i in range(3)]</code> 执行深拷贝。如果不需要修改，请直接使用不可变对象。</strong></p>
+<h3 id="2-变量作用域">2. 变量作用域</h3>
+<ol>
+<li>Python 中<strong>只有模块，类以及函数才会引入新的作用域</strong>，其它的代码块是不会引入新的作用域的。（而在 C/Java 中，任何一个 <code>{}</code> 块就构成一个局部作用域。另外 Julia 中 for/while/try-catch 都是局部作用域，但 if-else 又不是局部作用域。总之这些小差别要注意。）</li>
+<li>局部变量可以与外部变量同名，并且在其作用域中，局部变量会覆盖掉外部变量。
+不知是出于实现简单或是性能，还是其他的原因，好像所有的语言都是这样的。其实我更希望变量的作用域覆盖会报错。</li>
+<li>如果有函数与其他函数或变量（甚至某些保留字）同名，后定义的会覆盖掉先定义的。（这是因为 Python 中函数也是对象。而在 C/Java 中这是会报错的）</li>
+</ol>
+<p>此外，还有一个小问题，先看一个例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">f</span><span class="p">():</span>     <span class="c1"># 单纯的从函数作用域访问外部作用域是没问题的</span>
+<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="o">...</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="p">()</span>
+<span class="mi">4</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>再看一个问题举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>  <span class="c1"># 这里应该是访问外部作用域</span>
+<span class="o">...</span>     <span class="n">i</span> <span class="o">=</span> <span class="mi">5</span>     <span class="c1"># 可这里又定义了一个同名局部变量 i</span>
+<span class="o">...</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="p">()</span>   <span class="c1"># 于是就出错了</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+  <span class="n">File</span> <span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">2</span><span class="p">,</span> <span class="ow">in</span> <span class="n">f</span>
+<span class="ne">UnboundLocalError</span><span class="p">:</span> <span class="n">local</span> <span class="n">variable</span> <span class="s1">&#39;i&#39;</span> <span class="n">referenced</span> <span class="n">before</span> <span class="n">assignment</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果在内部作用域先访问外部作用域，再定义一个同名的局部变量，解释器就懵逼了。
+如果你其实想做的是改变全局变量 i 的值，就应该在开头声明 <code>global i</code>. 而如果 外部变量 i 不是存在于全局作用域，而是在某个闭合作用域内的话，就该用 <code>nonlocal i</code></p>
+<h2 id="四自定义装饰器">四、自定义装饰器</h2>
+<p>装饰器有两种：用函数定义的装饰器，还有用类定义的装饰器。函数装饰器最常用。</p>
+<p>装饰器可用于装饰函数，修改函数/类的某些行为，或者将函数注册到别的地方。</p>
+<h3 id="1-函数定义装饰器">1. 函数定义装饰器</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@decc</span>
+<span class="k">def</span> <span class="nf">gg</span><span class="p">(</span><span class="n">xx</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="c1"># 等同于</span>
+<span class="k">def</span> <span class="nf">gg</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<span class="n">gg</span> <span class="o">=</span> <span class="n">decc</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="带参的装饰器">带参的装饰器</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@decorator</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="n">F</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+
+<span class="c1"># 等同于</span>
+<span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="n">F</span> <span class="o">=</span> <span class="n">decorator</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)(</span><span class="n">F</span><span class="p">)</span>      <span class="c1"># Rebind F to result of decorator&#39;s return value</span>
+<span class="n">F</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                                <span class="c1"># Essentially calls decorator(A, B)(F)(99)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面演示的是用函数定义的装饰器，也是最常用的装饰器。
+装饰器接收的参数可以是各种各样的，下面是一个带参的装饰器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@on_command</span><span class="p">(</span><span class="s2">&#34;info&#34;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_info</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&#34;这就是你需要的 info&#34;</span>
+
+<span class="k">def</span> <span class="nf">on_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># 调用此函数获得装饰器，这样就实现了带参装饰器</span>
+    <span class="k">def</span> <span class="nf">deco</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>  <span class="c1"># 这个才是真正的装饰器</span>
+        <span class="c1"># 将命令处理器注册到命令列表内</span>
+        <span class="k">return</span> <span class="n">func</span>  <span class="c1"># 直接返回原函数，这样的话，多个装饰器就不会相互影响了。</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+<span class="c1"># 上面的等同于：</span>
+<span class="n">get_info</span> <span class="o">=</span> <span class="n">on_command</span><span class="p">(</span><span class="s2">&#34;info&#34;</span><span class="p">)(</span><span class="n">get_info</span><span class="p">)</span>  <span class="c1"># on_command(&#34;info&#34;) 返回真正的装饰器</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果你的 <code>on_command</code> 有通用的部分，还可以将通用的部分抽离出来复用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_deco_maker</span><span class="p">(</span><span class="n">event_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>  <span class="c1"># 调用这个，获取 on_xxx 的 deco_deco，</span>
+    <span class="k">def</span> <span class="nf">deco_deco</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>   <span class="c1"># 这个对应 on_xxx</span>
+        <span class="k">def</span> <span class="nf">deco</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span> <span class="c1"># 这个才是真正的装饰器</span>
+            <span class="c1"># do something </span>
+            <span class="k">return</span> <span class="n">func</span>  <span class="c1"># 返回原函数</span>
+
+        <span class="k">return</span> <span class="n">deco</span>
+
+    <span class="k">return</span> <span class="n">deco_deco</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们知道 Python 的类实际上是可以很方便的修改的，因此函数装饰器也能用于装饰类，修改类的某些行为。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">log_getattribute</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="c1"># Get the original implementation</span>
+    <span class="n">orig_getattribute</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__getattribute__</span>
+
+    <span class="c1"># Make a new definition</span>
+    <span class="k">def</span> <span class="nf">new_getattribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;getting:&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">orig_getattribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># Attach to the class and return</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="fm">__getattribute__</span> <span class="o">=</span> <span class="n">new_getattribute</span>  <span class="c1"># 修改了被装饰类 cls 的 __getattribute__</span>
+    <span class="k">return</span> <span class="bp">cls</span>
+
+<span class="c1"># Example use</span>
+<span class="nd">@log_getattribute</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="k">def</span> <span class="nf">spam</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-类定义装饰器">2. 类定义装饰器</h3>
+<p>类定义装饰器和函数定义装饰器的使用方式完全一致。它也可以用于装饰函数或者类。</p>
+<p>那么为啥还需要类定义装饰器呢？它的优势在于类是可以继承的，这样的话，就能用继承的方式定义装饰器，将通用部分定义成超类。</p>
+<p>类定义装饰器的定义方法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># PythonDecorators/entry_exit_class.py</span>
+<span class="k">class</span> <span class="nc">entry_exit</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1">#关键在于这个函数，它使此类的对象变成 Callable</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Entering&#34;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Exited&#34;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@entry_exit</span>
+<span class="k">def</span> <span class="nf">func1</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;inside func1()&#34;</span><span class="p">)</span>
+
+<span class="c1"># 上面的装饰器相当于</span>
+<span class="n">func1</span> <span class="o">=</span> <span class="n">entry_exit</span><span class="p">(</span><span class="n">func1</span><span class="p">)</span>  <span class="c1"># 从这里看的话，装饰器的行为完全一致</span>
+
+<span class="c1"># 接下来调用该函数（实际上是调用了 entry_exit 对象的 call 函数）</span>
+<span class="n">func1</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>输出结果如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Entering func1
+inside func1()
+Exited func1
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="五oop">五、OOP</h2>
+<ol>
+<li>
+<p>调用超类方法：</p>
+<ul>
+<li>直接通过<code>超类名.__init__(self,xx)</code>调用</li>
+<li>通过<code>super(__class__, self).__init__()</code>调用。
+（Python3 可直接用 <code>super().__init__()</code>
+但是要搞清楚，<strong><a href="https://docs.python.org/3/library/functions.html#super" target="_blank" rel="noopener noreferrer">super() 方法</a>返回的是一个代理类。另外被代理的类也不一定是其超类。如果不清楚这些差别，最好还是显式用方法一最好。</strong>）</li>
+</ul>
+</li>
+<li>
+<p>抽象超类：@abstractmethod</p>
+</li>
+<li>
+<p><code>@staticmethod</code> <code>@classmethod</code> 与 Java 的 static 方法对比
+python的类方法、静态方法，与java的静态方法：</p>
+<ol>
+<li>
+<p>java 中 constants、utils 这样的静态类，对应的是python的一个模块（文件），类属性对应模块的全局属性，静态方法对应模块的函数</p>
+</li>
+<li>
+<p>对于 java 中需要访问类属性的静态方法，如果它不属于第一类，应该用 <code>@classmethod</code> 实现它。classmethod最大的特点就是一定有一个 cls 传入。这种方法的主要用途是实现工厂函数。</p>
+</li>
+<li>
+<p>对于不需要访问任何类属性，也不属于第一类的方法，应该用 <code>@staticmathod</code> 实现。这种方法其实完全不需要放到类里面，它就是一个独立的函数。（仍然放里面，是为了把功能类似的函数组织到一起而已。）</p>
+</li>
+</ol>
+</li>
+<li>
+<p><code>__slots__</code>: 属性导出，不在该列表内的属性，若存在则为只读。不存在的话，就不存在。。
+6.<code> __getattr__</code>: 拦截对不存在的属性的访问，可用于实现动态分配属性。</p>
+</li>
+<li>
+<p><code>__getattribute__</code>: 和上面相同，但是它拦截对所有属性的访问，包括对已存在的属性的访问。</p>
+</li>
+<li>
+<p>@property: 提供对属性访问的安全检查</p>
+</li>
+<li>
+<p>descriptor: <strong>get</strong> <strong>set</strong> <strong>delete</strong> 控制对类的访问。（上面的 <strong>getattr</strong> 等是控制对类的属性的访问）</p>
+</li>
+<li>
+<p>类构造器 <code>__new__</code>：在 <code>__init__</code> 之前运行，它接收一个 <code>cls</code> 参数，然后使用它构造并返回类实例 <code>self</code>。</p>
+</li>
+<li>
+<p>类方法的 <code>cls</code> 即是当前类，是 type 的实例，<code>cls.xxx</code> 和 <code>&lt;类名&gt;.xxx</code> 调用结果是一致的。而 self 由 <code>__new__</code> 构造，是 cls 的实例。</p>
+</li>
+</ol>
+<h3 id="元类-metaclasses">元类 metaclasses</h3>
+<p>元类，也就是用于创建class 的 class，算是很高级的话题了（If you wonder whether you need metaclasses, you don’t ）
+元类的工作流程：</p>
+<ol>
+<li>拦截类的创建</li>
+<li>修改类</li>
+<li>返回修改之后的类</li>
+</ol>
+<p>详细直接看 <a href="http://blog.jobbole.com/21351/" target="_blank" rel="noopener noreferrer">http://blog.jobbole.com/21351/</a> 吧。</p>
+<h2 id="六查看-python-源码">六、查看 Python 源码</h2>
+<p>对一般的标准库的模块，要查看其具体的 Python 实现是很简单的：直接通过 <code>__file__</code> 属性就能看到 <code>.py</code> 文件的位置。</p>
+<p>但是 Python 很多功能是 C 写的，对于这类函数/类，<code>__file__</code> 就没啥用了。</p>
+<p>如果是需要查看 <a href="https://stackoverflow.com/questions/8608587/finding-the-source-code-for-built-in-python-functions" target="_blank" rel="noopener noreferrer">builtins 模块</a> 的具体实现，直接查看 <a href="https://github.com/python/cpython/blob/master/Python/bltinmodule.c" target="_blank" rel="noopener noreferrer">Python/bltinmodule.c</a> 就行。</p>
+<p>其他 C 模块的源码，待补充具体的查看方法。</p>
+<h2 id="七参考文档">七、参考文档</h2>
+<ul>
+<li><a href="https://www.jb51.net/article/140443.htm" target="_blank" rel="noopener noreferrer">Python中一些不为人知的基础技巧总结</a></li>
+</ul>
+]]></description></item></channel></rss>
