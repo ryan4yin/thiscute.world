@@ -132,7 +132,216 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>glob 中的 * 表示任意字符，而 ** 则表示任意层目录。（在大型文件树上使用 ** 速度会很慢！）</p>
-<h3 id="2-排序常用库---operator">2. 排序常用库 - operator</h3>
+<h3 id="2-时间日期处理">2. 时间日期处理</h3>
+<p>python3 在时间日期处理方面，有标准库 <code>datetime</code> 跟 <code>calender</code>，也有流行的第三方库 <code>arrow</code> 跟 <code>maya</code>.</p>
+<p>标准库 datetime 有时候不太方便，比如没有提供解析 iso 格式的函数。
+另外就是用标准库时，经常需要自定义格式化串。
+相比之下，<code>maya</code> 和 <code>arrow</code> 这两个第三方库会方便很多。</p>
+<p>不过第三方库并不是任何时候都可用，这里只介绍标准库 <code>datetime</code> 的用法，<code>maya</code>/<code>arrow</code> 请自行查找官方文档学习。</p>
+<h4 id="1-获取当前时间">1. 获取当前时间</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
+
+<span class="c1"># 1. 获取当前时间的时间戳</span>
+<span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>  <span class="c1"># 直接调用 c api，因此速度很快:  1582315203.537061</span>
+<span class="n">utcnow</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>  <span class="c1"># 当前的世界标准时间: datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)</span>
+<span class="n">utcnow</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>   <span class="c1"># 将标准时转换成时间戳：datetime =&gt;  1582315203.537061</span>
+
+<span class="c1"># 2. UTC 世界标准时间</span>
+<span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">()</span>
+<span class="c1">#输出为： time.struct_time(tm_year=2019, tm_mon=6, tm_mday=23, </span>
+<span class="c1">#                         tm_hour=3, tm_min=49, tm_sec=17,</span>
+<span class="c1">#                         tm_wday=6, tm_yday=174, tm_isdst=0)</span>
+<span class="c1"># 这实际上是一个命名元组</span>
+
+<span class="c1"># 3. 构建一个指定的 datetime 实例</span>
+<span class="n">time_1997</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1997</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.datetime(1997, 1, 1, 0, 0)</span>
+<span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1997</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.datetime(1997, 1, 1, 0, 11)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-时间日期的修改与运算">2. 时间日期的修改与运算</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="c1"># 0. 日期的修改（修改年月时分秒）</span>
+<span class="n">utcnow</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>  <span class="c1"># =&gt;  datetime.datetime(2020, 2, 11, 4, 0, 3, 537061)  修改 day</span>
+<span class="n">utcnow</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.datetime(2020, 2, 22, 11, 0, 3, 537061)  修改 hour</span>
+
+<span class="c1"># 1. 日期与时间</span>
+<span class="n">date_utcnow</span> <span class="o">=</span> <span class="n">utcnow</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>  <span class="c1"># =&gt; datetime.date(2020, 2, 22)  年月日</span>
+<span class="n">time_utcnow</span> <span class="o">=</span> <span class="n">utcnow</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>  <span class="c1"># =&gt; datetime.time(4, 0, 3, 537061)  时分秒</span>
+
+<span class="c1"># 2. 联结时间和日期（date 和 time 不能用加法联结）</span>
+<span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">date_utcnow</span><span class="p">,</span> <span class="n">time_utcnow</span><span class="p">)</span>  <span class="c1"># =&gt;  datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)</span>
+
+<span class="c1"># 3. 日期的运算</span>
+
+<span class="c1"># 3.1 datetime 之间只能计算时间差（减法），不能进行其他运算</span>
+<span class="n">utcnow</span> <span class="o">-</span> <span class="n">time_1997</span>  <span class="c1"># =&gt; datetime.timedelta(days=8452, seconds=14403, microseconds=537061)</span>
+
+<span class="c1"># 3.2 使用 timedelta 进行时间的增减</span>
+<span class="n">days_step</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 注意参数是复数形式</span>
+<span class="n">time_1997</span> <span class="o">+</span> <span class="n">days_step</span>  <span class="c1"># =&gt; datetime.datetime(1997, 1, 2, 0, 0)</span>
+<span class="n">time_1997</span> <span class="o">-</span> <span class="n">days_step</span>  <span class="c1"># =&gt; datetime.datetime(1996, 12, 31, 0, 0)</span>
+
+<span class="c1"># 3.3 timedelta 之间也可以进行加减法</span>
+<span class="n">hours_step</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.timedelta(seconds=3600)</span>
+<span class="n">days_step</span> <span class="o">+</span> <span class="n">hours_step</span>  <span class="c1"># =&gt; datetime.timedelta(days=1, seconds=3600)</span>
+<span class="n">days_step</span> <span class="o">-</span> <span class="n">hours_step</span>  <span class="c1"># =&gt; datetime.timedelta(seconds=82800)</span>
+<span class="n">hours_step</span> <span class="o">-</span> <span class="n">days_step</span>  <span class="c1"># =&gt; datetime.timedelta(days=-1, seconds=3600)</span>
+
+<span class="c1"># 3.4 timedelta 还可以按比例增减（与数字进行乘除法）</span>
+<span class="n">hours_step</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># =&gt; datetime.timedelta(seconds=7200)</span>
+<span class="n">days_step</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2</span>  <span class="c1"># =&gt; datetime.timedelta(days=-2)</span>
+<span class="n">hours_step</span> <span class="o">*</span> <span class="mf">1.1</span>  <span class="c1"># =&gt;  datetime.timedelta(seconds=3960)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3-时间日期的格式化与解析">3. 时间日期的格式化与解析</h4>
+<p>先介绍下常用的格式化字符串：</p>
+<ol>
+<li>普通格式 - &lsquo;%Y-%m-%d %H:%M:%S&rsquo; =&gt; &lsquo;2020-02-22 04:00:03&rsquo;</li>
+<li>ISO 格式 - &lsquo;%Y-%m-%dT%H:%M:%S.%fZ&rsquo; =&gt; &lsquo;2020-02-22T04:00:03.537061Z&rsquo;</li>
+<li>带时区的格式 - &lsquo;%Y-%m-%dT%H:%M:%S%Z&rsquo; =&gt; 2022-02-10T00:48:52UTC+08:00
+<ul>
+<li>需要时间对象自身有时区属性才行！否则格式化时会忽略 <code>%Z</code></li>
+</ul>
+</li>
+</ol>
+<p>另外再介绍下 Python 两个时间格式化与解析函数的命名：</p>
+<ul>
+<li><code>strftime</code>: 即 <code>string formate time</code></li>
+<li><code>strptime</code>: 即 <code>string parse time</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="c1"># 1. 将时间格式化成字符串</span>
+
+<span class="c1"># 1.1 将 datetime 格式化为 iso 标准格式</span>
+<span class="n">utcnow</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>  <span class="c1"># =&gt;  &#39;2020-02-22T04:00:03.537061&#39;</span>
+<span class="n">utcnow</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">Z&#39;</span><span class="p">)</span>   <span class="c1"># =&gt; &#39;2020-02-22T04:00:03.537061Z&#39;</span>
+<span class="n">utcnow</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">Z&#39;</span><span class="p">)</span>  <span class="c1"># =&gt; &#39;2020-02-22T00:00:00.000000Z&#39;</span>
+
+<span class="c1"># 1.2 将 time.struct_time 格式化为日期字符串（貌似不支持 iso，可能是精度不够）</span>
+<span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S&#39;</span><span class="p">,</span> <span class="n">gm</span><span class="p">)</span>  <span class="c1"># =&gt; &#39;2020-02-22T04:00:03&#39;</span>
+
+<span class="c1"># 1.3 将 datetime 格式化成指定格式</span>
+<span class="n">utcnow</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>  <span class="c1"># =&gt; &#39;2020-02-22 04:00:03&#39;</span>
+
+<span class="c1"># 2. 解析时间字符串</span>
+
+<span class="c1"># 2.1 解析 iso 格式的时间字符串，手动指定格式（注意 %f 只对应六位小数，对9位小数它无能为力。。）</span>
+<span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">&#39;2020-02-22T04:00:03.537061Z&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">Z&#39;</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)</span>
+
+<span class="c1"># 2.2 解析 iso 格式的时间字符串(需要 python 3.7+)</span>
+<span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="s1">&#39;2020-02-22T04:00:03.537061&#39;</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.datetime(2020, 2, 22, 4, 0, 3, 537061)</span>
+<span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="s1">&#39;2020-02-22&#39;</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.date(2020, 2, 22)</span>
+<span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="s2">&#34;04:00:03.537061&#34;</span><span class="p">)</span>  <span class="c1"># =&gt;  datetime.time(4, 0, 3, 537061)</span>
+
+<span class="c1"># 2.3 解析指定格式的字符串</span>
+<span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">&#39;2020-02-22 04:00:03&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>  <span class="c1"># =&gt; datetime.datetime(2020, 2, 22, 4, 0, 3)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="4-时区转换与日期格式化">4. 时区转换与日期格式化</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="c1"># 上海时区：东八区 utc+8</span>
+<span class="n">tz_shanghai</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
+
+<span class="n">now_shanghai</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">tz_shanghai</span><span class="p">)</span>
+
+<span class="n">now_shanghai</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%Z&#39;</span><span class="p">)</span>  <span class="c1"># =&gt; 2022-02-10T00:48:52UTC+08:00</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-排序常用库---operator">3. 排序常用库 - operator</h3>
 <p>operator 模块包含四种类型的方法：</p>
 <h4 id="1-operatoritemgetter">1. <strong>operator.itemgetter</strong></h4>
 <p>经常被用于 sorted/max/mix/itertools.groupby 等</p>
@@ -250,7 +459,7 @@
 </div>
 </div><h4 id="4-各种操作符对应的函数">4. 各种操作符对应的函数</h4>
 <p>operator.add、operator.sub、operator.mul、operator.div 等等，函数式编程有时需要用到。</p>
-<h3 id="3-itertools">3. itertools</h3>
+<h3 id="4-itertools">4. itertools</h3>
 <p><a href="https://docs.python.org/3/library/itertools.html" target="_blank" rel="noopener noreferrer">itertools</a> 提供了许多针对可迭代对象的实用函数</p>
 <p>方法很多，基本不可能一次全记住。还是要用到时多查吧。大致记住有提供哪些功能，需要用到时能想起可以查这个模块就行。</p>
 <h4 id="1-无限迭代器">1. 无限迭代器</h4>
@@ -327,7 +536,7 @@
 <li><code>groupby()</code></li>
 </ol>
 <p>等等等，用得到的时候再查了。。。</p>
-<h3 id="4-collections">4. collections</h3>
+<h3 id="5-collections">5. collections</h3>
 <p>提供了一些实用的高级数据结构（容器）</p>
 <ol>
 <li><strong><code>defaultdict</code></strong>：这个感觉是最常用的，可以给定 key 的默认值</li>
@@ -337,7 +546,7 @@
 <li><code>namedtuple</code>：命名元组，有时用于参数传递。与 tuple 的差别是它提供了关键字参数和通过名字访问属性的功能</li>
 <li><code>ChainMap</code>：将多个 map 连接（chain）在一起，提供一个统一的视图。因为是视图，所以原来的 map 不会被影响。</li>
 </ol>
-<h3 id="5-常用函数装饰器-functools">5. 常用函数装饰器 functools</h3>
+<h3 id="6-常用函数装饰器-functools">6. 常用函数装饰器 functools</h3>
 <p>functools 提供了几个有时很有用的函数和装饰器</p>
 <h4 id="1-functoolswraps">1. @functools.wraps</h4>
 <p>这个装饰器用于使装饰器 copy 被装饰的对象的 <code>__module__</code>, <code>__name__</code>, <code>__qualname__</code>, <code>__annotations__</code> and <code>__doc__</code> 属性，这样装饰器就显得更加透明。</p>
@@ -459,7 +668,7 @@ Julia 语言根本没有类这个定义，类型的所有方法都是通过多�
 <li>@functools.total_ordering：用于自动生成比较函数。</li>
 <li>functools.cmp_to_key(func)：用于将老式的比较函数，转换成新式的 key 函数。</li>
 </ol>
-<h3 id="6-上下文管理---contextlib">6. 上下文管理 - contextlib</h3>
+<h3 id="7-上下文管理---contextlib">7. 上下文管理 - contextlib</h3>
 <p>即实现使用 <code>with</code> 语句进行自定义的上下文管理。</p>
 <h4 id="1-使用-__enter__-和-__exit__">1. 使用 <code>__enter__</code> 和 <code>__exit__</code></h4>
 <p>Java 使用 try 来自动管理资源，只要实现了 AutoCloseable 接口，就可以部分摆脱手动 colse 的地狱了。</p>
