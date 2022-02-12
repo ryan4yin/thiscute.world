@@ -1,0 +1,489 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>Julia 学习笔记（一）：数组 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="Julia 学习笔记（一）：数组">
+<meta property="og:description" content="个人向，只会记录一些需要注意的点。 前言 学习 Julia 已经有一段时间了，但是进步缓慢。这一方面是最近代码写得少，一方面是 Julia 学习资料少、中文资料更少，但">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://thiscute.world/posts/julia-notes-1-array/"><meta property="og:image" content="https://thiscute.world/posts/julia-notes-1-array/julialang.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2019-01-14T19:51:00+08:00">
+<meta property="article:modified_time" content="2019-01-14T19:51:00+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://thiscute.world/posts/julia-notes-1-array/julialang.png">
+<meta name=twitter:title content="Julia 学习笔记（一）：数组">
+<meta name=twitter:description content="个人向，只会记录一些需要注意的点。 前言 学习 Julia 已经有一段时间了，但是进步缓慢。这一方面是最近代码写得少，一方面是 Julia 学习资料少、中文资料更少，但">
+<meta name=application-name content="This Cute World">
+<meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/julia-notes-1-array/><link rel=prev href=https://thiscute.world/posts/compression-related-instructions-under-linux/><link rel=next href=https://thiscute.world/posts/sql-basics-3-restrict/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Julia 学习笔记（一）：数组","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/julia-notes-1-array\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/julia-notes-1-array\/julialang.png","width":1280,"height":640}],"genre":"posts","keywords":"JuliaLang","wordcount":1629,"url":"https:\/\/thiscute.world\/posts\/julia-notes-1-array\/","datePublished":"2019-01-14T19:51:00+08:00","dateModified":"2019-01-14T19:51:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="This Cute World"><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/statistics/> 阅读排行 </a><a class=menu-item href=/categories/> 分类 </a><a class=menu-item href=/posts/> 文章 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/now/> 此刻 </a><a class=menu-item href=/friends/> 伙伴们 </a><a class=menu-item href=/about/> 关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/posts/julia-notes-1-array/ selected>Simplified Chinese</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="This Cute World"><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/friends/ title>伙伴们</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/posts/julia-notes-1-array/ selected>Simplified Chinese</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">Julia 学习笔记（一）：数组</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2019-01-14>2019-01-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1629 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/julia-notes-1-array/julialang.png data-srcset="/posts/julia-notes-1-array/julialang.png, /posts/julia-notes-1-array/julialang.png 1.5x, /posts/julia-notes-1-array/julialang.png 2x" data-sizes=auto alt=/posts/julia-notes-1-array/julialang.png title=/posts/julia-notes-1-array/julialang.png></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#一数组>一、数组</a>
+<ul>
+<li><a href=#1-数组的创建>1. 数组的创建</a>
+<ul>
+<li><a href=#11-一维数组vectorlist>1.1 一维数组（vector/list）</a></li>
+<li><a href=#12-二维数组tablematrix>1.2. 二维数组（table/matrix）</a></li>
+</ul>
+</li>
+<li><a href=#2-数组的索引>2. 数组的索引</a></li>
+<li><a href=#3-推导式comprehensionhttpsdocsjulialangorgenv1manualarrayscomprehensions-1与生成器表达式generator-expressionhttpsdocsjulialangorgenv1manualarraysgenerator-expressions-1>3. 推导式（<a href=https://docs.julialang.org/en/v1/manual/arrays/#Comprehensions-1>comprehension</a>）与生成器表达式（<a href=https://docs.julialang.org/en/v1/manual/arrays/#Generator-Expressions-1>generator expression</a>）</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div><div class=content id=content><blockquote>
+<p>个人向，只会记录一些需要注意的点。</p>
+</blockquote>
+<h2 id=前言>前言</h2>
+<p>学习 Julia 已经有一段时间了，但是进步缓慢。这一方面是最近代码写得少，一方面是 Julia 学习资料少、中文资料更少，但也有我没做笔记的缘故导致学习效率不佳。</p>
+<p>最近发现一份很不错的入门教程：<a href=https://zh.wikibooks.org/wiki/Introducing_Julia target=_blank rel="noopener noreferrer">Introducing_Julia</a>，但是它的中文版本仍然有很多不足，就打算给它添加翻译和润色（<a href=https://github.com/zxj5470 target=_blank rel="noopener noreferrer">zxj5470</a> 完成了绝大部分翻译工作），顺便总结一份自己的笔记。</p>
+<p><strong>NOTE</strong>：Julia 的主要语言特征在于<strong>类型系统</strong>和<strong>多重派发</strong>，而主要的科学计算特征则是<strong>矩阵</strong>和整个标准库及生态圈。</p>
+<h2 id=一数组>一、数组</h2>
+<p>在 Julia 中，数组被用作列表（lists）、向量（vectors）、表（tables）和矩阵（matrices）。</p>
+<h3 id=1-数组的创建>1. 数组的创建</h3>
+<p>这里尤其需要注意的是数组构造的几种方法，以及它们的区别。</p>
+<h4 id=11-一维数组vectorlist>1.1 一维数组（vector/list）</h4>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=n>v</span> <span class=o>=</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span>  <span class=c># 逗号分隔的语法用于创建一维数组</span>
+<span class=mi>4</span><span class=o>-</span><span class=n>element</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>1</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>
+ <span class=mi>2</span>
+ <span class=mi>3</span>
+ <span class=mi>4</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>向量，指列向量，Julia 使用的是 Fortran Order，各种操作都是<strong>列优先于行</strong>的。（和 numpy 相反，numpy 是 C Order 的，行优先于列）</p>
+<h4 id=12-二维数组tablematrix>1.2. 二维数组（table/matrix）</h4>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=n>mat</span> <span class=o>=</span> <span class=p>[</span><span class=mi>1</span> <span class=mi>2</span> <span class=mi>3</span> <span class=mi>4</span><span class=p>]</span>  <span class=c># 空格分隔的语法，用于创建二维数组（或称行向量）</span>
+<span class=mi>1</span><span class=o>×</span><span class=mi>4</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>  <span class=mi>2</span>  <span class=mi>3</span>  <span class=mi>4</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=p>[</span><span class=mi>1</span> <span class=mi>2</span><span class=p>;</span> <span class=mi>3</span> <span class=mi>4</span><span class=p>]</span>  <span class=c># 分号和换行符(\n)，用于分隔数组中不同的行</span>
+<span class=mi>2</span><span class=o>×</span><span class=mi>2</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>  <span class=mi>2</span>
+ <span class=mi>3</span>  <span class=mi>4</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>空格对应函数 <code>hcat</code>，表示横向拼接各个矩阵/元素。
+分号和换行对应函数 <code>vcat</code>，表示垂直拼接各个矩阵/元素。</p>
+<p>下面的例子演示了拼接（空格）和单纯分隔各个元素（逗号）的区别：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=p>[</span><span class=mi>1</span> <span class=mi>2</span> <span class=p>[</span><span class=mi>3</span> <span class=mi>4</span><span class=p>]</span> <span class=mi>5</span><span class=p>]</span> <span class=c># 用空格做横向拼接（或称水平拼接）</span>
+<span class=mi>1</span><span class=o>×</span><span class=mi>5</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>  <span class=mi>2</span>  <span class=mi>3</span>  <span class=mi>4</span>  <span class=mi>5</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=p>[</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>],</span> <span class=mi>5</span><span class=p>]</span> <span class=c># 用逗号分隔</span>
+<span class=mi>4</span><span class=o>-</span><span class=n>element</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Any</span><span class=p>,</span><span class=mi>1</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>      
+ <span class=mi>2</span>      
+  <span class=p>[</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span>
+ <span class=mi>5</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>能看到在拼接操作中，<code>[3 4]</code> 被“解开”了，而用逗号时，它的行为和 Python 的 <code>list</code> 一样（区别只是 Julia 的 list 列优先）。</p>
+<p>使用拼接需要注意的情况举例：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=p>[</span><span class=mi>1</span> <span class=mi>2</span> <span class=p>[</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span> <span class=mi>5</span><span class=p>]</span>  <span class=c># 横向拼接要求 items 的行数相同！</span>
+<span class=n>ERROR</span><span class=o>:</span> <span class=kt>DimensionMismatch</span><span class=p>(</span><span class=s>&#34;mismatch in dimension 1 (expected 1 got 2)&#34;</span><span class=p>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>因为 <code>[3, 4]</code> 有两行，而 数组中的其他项是数值，显然行数不同，所以抛出了 Error.</p>
+<p>可以想见，垂直拼接则要求 items 的列数相同。</p>
+<p>另外当垂直拼接用于基本元素时，效果等同于逗号。（结果都是单列数组）</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=n>v</span> <span class=o>=</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span>
+<span class=mi>4</span><span class=o>-</span><span class=n>element</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>1</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>
+ <span class=mi>2</span>
+ <span class=mi>3</span>
+ <span class=mi>4</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=n>h</span> <span class=o>=</span> <span class=p>[</span><span class=mi>1</span><span class=p>;</span> <span class=mi>2</span><span class=p>;</span> <span class=mi>3</span><span class=p>;</span> <span class=mi>4</span><span class=p>]</span>
+<span class=mi>4</span><span class=o>-</span><span class=n>element</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>1</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>
+ <span class=mi>2</span>
+ <span class=mi>3</span>
+ <span class=mi>4</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=p>[[</span><span class=mi>1</span><span class=p>;</span> <span class=mi>2</span><span class=p>];</span> <span class=p>[</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]]</span>  <span class=c># 等价于 [[1, 2]; [3, 4]]</span>
+<span class=mi>4</span><span class=o>-</span><span class=n>element</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>1</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>
+ <span class=mi>2</span>
+ <span class=mi>3</span>
+ <span class=mi>4</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=2-数组的索引>2. 数组的索引</h3>
+<p>数组的索引方式和 numpy 很类似。有很多高级索引方式。</p>
+<p>这里我想说的是类似“齐次坐标”的索引特性。</p>
+<p>首先，单个元素可以看作是零维的向量，数学上零维也可以看作是任意维，因此可以这样玩：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=mi>2</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span>
+<span class=mi>2</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=mi>2</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>]</span>  <span class=c># 被当成二维</span>
+<span class=mi>2</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=mi>2</span><span class=p>[</span><span class=mi>1</span><span class=p>][</span><span class=mi>1</span><span class=p>]</span>  <span class=c># 2[1] 仍然是整数 2</span>
+<span class=mi>2</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=mi>2</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>]</span>  <span class=c># 三维</span>
+<span class=mi>2</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=mf>3.14</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span>
+<span class=mf>3.14</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=nb>π</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>]</span>
+<span class=nb>π</span> <span class=o>=</span> <span class=mf>3.1415926535897</span><span class=o>...</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=sc>&#39;1&#39;</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span>
+<span class=sc>&#39;1&#39;</span><span class=o>:</span> <span class=n>ASCII</span><span class=o>/</span><span class=n>Unicode</span> <span class=n>U</span><span class=o>+</span><span class=mi>0031</span> <span class=p>(</span><span class=n>category</span> <span class=n>Nd</span><span class=o>:</span> <span class=kt>Number</span><span class=p>,</span> <span class=n>decimal</span> <span class=n>digit</span><span class=p>)</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=sc>&#39;1&#39;</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>]</span>
+<span class=sc>&#39;1&#39;</span><span class=o>:</span> <span class=n>ASCII</span><span class=o>/</span><span class=n>Unicode</span> <span class=n>U</span><span class=o>+</span><span class=mi>0031</span> <span class=p>(</span><span class=n>category</span> <span class=n>Nd</span><span class=o>:</span> <span class=kt>Number</span><span class=p>,</span> <span class=n>decimal</span> <span class=n>digit</span><span class=p>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>多维数组也能使用类似“齐次坐标”的索引方式：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=n>m</span> <span class=o>=</span> <span class=p>[</span><span class=mi>1</span> <span class=mi>2</span><span class=p>;</span> <span class=mi>3</span> <span class=mi>4</span><span class=p>]</span>
+<span class=mi>2</span><span class=o>×</span><span class=mi>2</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>  <span class=mi>2</span>
+ <span class=mi>3</span>  <span class=mi>4</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=n>m</span><span class=p>[</span><span class=mi>1</span><span class=p>][</span><span class=mi>1</span><span class=p>]</span>  <span class=c># m[1] 是整数 1，这相当于 1[1]</span>
+<span class=mi>1</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=n>m</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>]</span>
+<span class=mi>1</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=n>m</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>]</span>
+<span class=mi>1</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>多维矩阵，在更高的维度上，也能被当成“零维”来看待，前面说过了“零维”也相当于“无限维”，所以多维数组也能用这么索引。</p>
+<p>但是拓展的维度索引只能是 1！既然被看作“零维”，就只相当于一个点，自然不可能有更高的索引：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=mi>1</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>]</span>
+<span class=n>ERROR</span><span class=o>:</span> <span class=kt>BoundsError</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=n>m</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>]</span>
+<span class=n>ERROR</span><span class=o>:</span> <span class=kt>BoundsError</span><span class=o>:</span> <span class=n>attempt</span> <span class=n>to</span> <span class=n>access</span> <span class=mi>2</span><span class=o>×</span><span class=mi>2</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span> <span class=n>at</span> <span class=n>index</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>]</span>
+<span class=o>...</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=n>m</span><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>]</span>
+<span class=n>ERROR</span><span class=o>:</span> <span class=kt>BoundsError</span><span class=o>:</span> <span class=n>attempt</span> <span class=n>to</span> <span class=n>access</span> <span class=mi>2</span><span class=o>×</span><span class=mi>2</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span> <span class=n>at</span> <span class=n>index</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>]</span>
+<span class=o>...</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=3-推导式comprehensionhttpsdocsjulialangorgenv1manualarrayscomprehensions-1与生成器表达式generator-expressionhttpsdocsjulialangorgenv1manualarraysgenerator-expressions-1>3. 推导式（<a href=https://docs.julialang.org/en/v1/manual/arrays/#Comprehensions-1 target=_blank rel="noopener noreferrer">comprehension</a>）与生成器表达式（<a href=https://docs.julialang.org/en/v1/manual/arrays/#Generator-Expressions-1 target=_blank rel="noopener noreferrer">generator expression</a>）</h3>
+<p>和 Python 的列表推导式与生成器表达式很像，但是更强大——Julia 是面向矩阵的。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-julia data-lang=julia><span class=n>julia</span><span class=o>&gt;</span> <span class=p>[</span><span class=n>i</span><span class=o>+</span><span class=n>j</span> <span class=k>for</span> <span class=n>i</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span> <span class=k>for</span> <span class=n>j</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span><span class=p>]</span>  <span class=c># 这个语法和 Python 一致</span>
+<span class=mi>9</span><span class=o>-</span><span class=n>element</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>1</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>2</span>
+ <span class=mi>3</span>
+ <span class=mi>4</span>
+ <span class=mi>3</span>
+ <span class=mi>4</span>
+ <span class=mi>5</span>
+ <span class=mi>4</span>
+ <span class=mi>5</span>
+ <span class=mi>6</span>
+
+<span class=n>julia</span><span class=o>&gt;</span> <span class=p>[</span><span class=n>i</span><span class=o>+</span><span class=n>j</span> <span class=k>for</span> <span class=n>i</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span><span class=p>,</span> <span class=n>j</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span><span class=p>]</span>  <span class=c># 这个是多维的语法</span>
+<span class=mi>3</span><span class=o>×</span><span class=mi>3</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>2</span>  <span class=mi>3</span>  <span class=mi>4</span>
+ <span class=mi>3</span>  <span class=mi>4</span>  <span class=mi>5</span>
+ <span class=mi>4</span>  <span class=mi>5</span>  <span class=mi>6</span>
+
+<span class=c># 在后面加 guard 的情况下，结果坍缩成一维（这时两种语法结果没有差别）</span>
+<span class=n>julia</span><span class=o>&gt;</span> <span class=p>[</span><span class=n>i</span><span class=o>+</span><span class=n>j</span> <span class=k>for</span> <span class=n>i</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span><span class=p>,</span> <span class=n>j</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span> <span class=k>if</span> <span class=n>iseven</span><span class=p>(</span><span class=n>i</span><span class=o>+</span><span class=n>j</span><span class=p>)]</span>
+<span class=mi>5</span><span class=o>-</span><span class=n>element</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>1</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>2</span>
+ <span class=mi>4</span>
+ <span class=mi>4</span>
+ <span class=mi>4</span>
+ <span class=mi>6</span>
+
+<span class=c># 在前面做判断，因为没有过滤元素，所以仍然保持了原有结构。</span>
+<span class=n>julia</span><span class=o>&gt;</span> <span class=p>[(</span><span class=n>iseven</span><span class=p>(</span><span class=n>i</span><span class=o>+</span><span class=n>j</span><span class=p>)</span> <span class=o>?</span> <span class=mi>1</span> <span class=o>:</span> <span class=mi>2</span><span class=p>)</span> <span class=k>for</span> <span class=n>i</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span><span class=p>,</span> <span class=n>j</span> <span class=k>in</span> <span class=mi>1</span><span class=o>:</span><span class=mi>3</span><span class=p>]</span>
+<span class=mi>3</span><span class=o>×</span><span class=mi>3</span> <span class=kt>Array</span><span class=p>{</span><span class=kt>Int64</span><span class=p>,</span><span class=mi>2</span><span class=p>}</span><span class=o>:</span>
+ <span class=mi>1</span>  <span class=mi>2</span>  <span class=mi>1</span>
+ <span class=mi>2</span>  <span class=mi>1</span>  <span class=mi>2</span>
+ <span class=mi>1</span>  <span class=mi>2</span>  <span class=mi>1</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2019-01-14</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/julia-notes-1-array/ data-title="Julia 学习笔记（一）：数组" data-via=ryan4yin data-hashtags=JuliaLang><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/julia-notes-1-array/ data-hashtag=JuliaLang><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/julia-notes-1-array/><i class="fab fa-reddit fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/julialang/>JuliaLang</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/compression-related-instructions-under-linux/ class=prev rel=prev title="常见压缩格式的区别，及 Linux 下的压缩相关指令"><i class="fas fa-angle-left fa-fw"></i>常见压缩格式的区别，及 Linux 下的压缩相关指令</a>
+<a href=/posts/sql-basics-3-restrict/ class=next rel=next title="SQL 基础笔记（三）约束">SQL 基础笔记（三）约束<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line><a href=https://github.com/ryan4yin/uptime.ryan4yin.space/blob/master/README.md target=_blank>站点状态页 - Status Page</a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.91.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/sunt-programator/CodeIT target=_blank rel="noopener noreferrer" title="CodeIT 0.2.10"><i class="fas fa-laptop-code fa-fw"></i> CodeIT</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/lightgallery/lightgallery.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/lightgallery/lightgallery.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-thumbnail.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-zoom.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/ryan4yin.space"}},data:{"id-1":"This Cute World","id-2":"This Cute World"},lightGallery:{actualSize:!1,exThumbImage:"data-thumbnail",hideBarsDelay:2e3,selector:".lightgallery",speed:400,thumbContHeight:80,thumbWidth:80,thumbnail:!0},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},typeit:{cursorChar:null,cursorSpeed:null,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-4V93QVSNFW',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></body>
+</html>

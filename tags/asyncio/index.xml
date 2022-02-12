@@ -1,0 +1,254 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>asyncio - 标签 - This Cute World</title><link>https://thiscute.world/tags/asyncio/</link><description>asyncio - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Thu, 14 Feb 2019 13:11:00 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/asyncio/" rel="self" type="application/rss+xml"/><item><title>Python 异步编程笔记：asyncio</title><link>https://thiscute.world/posts/python-asyncio/</link><pubDate>Thu, 14 Feb 2019 13:11:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-asyncio/</guid><description><![CDATA[<blockquote>
+<p>个人笔记，不保证正确。</p>
+</blockquote>
+<p>虽然说看到很多人不看好 asyncio，但是这个东西还是必须学的。。
+基于协程的异步，在很多语言中都有，学会了 Python 的，就一通百通。</p>
+<h2 id="一生成器-generator">一、生成器 generator</h2>
+<p>Python 的 asyncio 是通过 generator 实现的，要学习 async，先得复习下 generator.</p>
+<h3 id="1-yield">1. yield</h3>
+<p>众所周知，yield 是用于定义 generator 函数的关键字，调用该函数，会返回一个 generator</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+<span class="o">...</span>     <span class="k">yield</span> <span class="mi">1</span>
+<span class="o">...</span>     <span class="k">yield</span> <span class="mi">2</span>
+<span class="o">...</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="p">()</span>  <span class="c1"># 返回的是 generator</span>
+<span class="o">&lt;</span><span class="n">generator</span> <span class="nb">object</span> <span class="n">f</span> <span class="n">at</span> <span class="mh">0x7f672c460570</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">f</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>  <span class="c1"># 通过 next 方法从 generator 获取值</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span>  <span class="c1"># next 方法实际是调用了 generator 的 __next__ 方法</span>
+<span class="mi">2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>  <span class="c1"># 生成器运行结束，产生一个 StopIteration 的 exception</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">StopIteration</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>每次调用 next，generator 都只会运行到下一个 yield 关键字所在行，返回 yield 右侧的对象，然后暂停在该处，等待下一次 next 调用。</p>
+<p>从上面的例子看，yield 就是延迟求值而已。**但是 yield 还有一个特性，就是它是一个 expression，有返回值！**看例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+<span class="o">...</span>     <span class="n">r</span> <span class="o">=</span> <span class="k">yield</span> <span class="mi">1</span>
+<span class="o">...</span>     <span class="k">yield</span> <span class="n">r</span>
+<span class="o">...</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>  <span class="c1"># 通过 next 调用，yield 的返回值为 None</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>  <span class="c1"># 首先需要通过 next 调用，运行到 yield 语句处</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">g2</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="mi">419</span><span class="p">)</span>  <span class="c1"># 现在用 send 方法，这会将当前所在的 yield 语句的值设置为你 send 的值，也就是 419</span>
+<span class="mi">419</span>  <span class="c1"># 然后 generator 运行到下一个 yield，返回右边的值并暂停</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>generator 有四个实例函数：<strong>next</strong>、send 是刚刚已经介绍了的，此外还有 throw 用于从 yield 所在处抛出 Exception，和 close 用于关闭 Generator。详见 <a href="https://docs.python.org/3/reference/expressions.html#generator-iterator-methods" target="_blank" rel="noopener noreferrer">Generator-iterator methods</a></p>
+<h3 id="2-yield-from-iterable">2. yield from <iterable></h3>
+<p>可以理解成是 <code>yield &lt;value&gt; from &lt;iterable&gt;</code>，每次调用时它都会从 &lt;iterable&gt; 中取值，直到遇到 StopIteration。才会从下一个 yield 取值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+<span class="o">...</span>     <span class="k">yield from</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># iterable</span>
+<span class="o">...</span>     <span class="k">yield</span> <span class="mi">5</span>
+<span class="o">...</span>     <span class="k">yield from</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># iterable</span>
+<span class="o">...</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">())</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当然，<code>yield from &lt;iterable&gt;</code> 也是一个 expression，也有值。它的值就是 StopIteration 异常的第一个参数，内置类型的这个值都是 None.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+<span class="o">...</span>     <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="o">...</span>     <span class="k">yield</span> <span class="sa">f</span><span class="s2">&#34;value of yield from is </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">&#34;</span>
+<span class="o">...</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">())</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;value of yield from is None&#39;</span><span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当 &lt;iterable&gt; 是 generator 时，<code>yield from</code> 会直接将函数调用委托给这个子 generator，这里的调用包括了前面说过的 next、send、throw、close 四个函数。
+并直接将 sub generator yield 的值 yield 给 caller.</p>
+<h3 id="3-yield-和-return-混用会发生什么">3. yield 和 return 混用会发生什么？</h3>
+<p>generator 中的 <code>return value</code>，语义上等同于 <code>rasie StopIteration(value)</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; def f<span class="o">()</span>:
+...     yield <span class="m">1</span>
+...     <span class="k">return</span> <span class="m">2</span>
+...     yield <span class="m">3</span>  <span class="c1"># 永远不会被执行</span>
+... 
+&gt;&gt;&gt; <span class="nv">g</span> <span class="o">=</span> f<span class="o">()</span>
+&gt;&gt;&gt; next<span class="o">(</span>g<span class="o">)</span>
+<span class="m">1</span>
+&gt;&gt;&gt; next<span class="o">(</span>g<span class="o">)</span>  <span class="c1"># return 引发 StopIteration</span>
+Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+  File <span class="s2">&#34;&lt;input&gt;&#34;</span>, line 1, in &lt;module&gt;
+StopIteration: <span class="m">2</span>
+&gt;&gt;&gt; next<span class="o">(</span>g<span class="o">)</span>  <span class="c1"># 再次调用，StopIteration 变成无参了。</span>
+Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+  File <span class="s2">&#34;&lt;input&gt;&#34;</span>, line 1, in &lt;module&gt;
+StopIteration
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到 return 引发了 StopIteration 异常，而 return 的值则成了该异常的第一个参数。</p>
+<p>之前说过 <code>yield from &lt;sub generator&gt;</code> 表达式的值，就是该 &lt;sub generator&gt; 的 StopIteration 异常的第一个参数，因此：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; def f2<span class="o">()</span>:
+...     <span class="nv">a</span> <span class="o">=</span> yield from f<span class="o">()</span>
+...     yield a  <span class="c1"># a 是 f() 中 return 的值</span>
+...     
+&gt;&gt;&gt; list<span class="o">(</span>f2<span class="o">())</span>
+<span class="o">[</span>1, 2<span class="o">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><a href="https://www.python.org/dev/peps/pep-0479/#background-information" target="_blank" rel="noopener noreferrer">PEP 479 &ndash; Change StopIteration handling inside generators</a> 修改了StopIteration 的行为，该 PEP 使人为 raise 的 StopIteration 引发一个 RuntimeError。
+该 PEP 在 Python 3.5 版本添加到 <strong>future</strong> 中，并在 Python 3.7 成为默认行为。
+因此除非你确实想要引发异常，否则应该使用 return 来结束一个 generator 并返回值。</p>
+</blockquote>
+<h2 id="二异步io协程与非阻塞-io">二、异步IO、协程与非阻塞 IO</h2>
+<p>先了解一下 <a href="https://www.cnblogs.com/kirito-c/p/10306133.html" target="_blank" rel="noopener noreferrer">进程线程协程与并发并行</a> 和 <a href="https://www.cnblogs.com/kirito-c/p/10306234.html" target="_blank" rel="noopener noreferrer">各种 IO 模型</a></p>
+<h2 id="三asyncio-的简单使用">三、asyncio 的简单使用</h2>
+<p>asyncio 引入了两个新关键字：async 和 await，其中 async 能放在三个地方：</p>
+<ol>
+<li>async def：用于定义异步函数和异步生成器
+<ul>
+<li>不含有 yield 的是 async def 定义的是协程函数（coroutine function），调用该函数返回协程对象（coroutine object），协程对象需要通过 EventLoop 运行。</li>
+<li>内部含有 yield 的 async def 定义的是异步生成器函数（asynchronous generator function），调用该函数返回异步生成器（async_generator）
+<ul>
+<li>异步生成器只能用在 Coroutine 中</li>
+</ul>
+</li>
+<li>async def 中不允许使用 yield from</li>
+</ul>
+</li>
+<li>async for：表示 for 迭代的是一个异步生成器，该 for 循环的每一次迭代，都是异步的。
+<ul>
+<li>只能用在 async def 的内部</li>
+</ul>
+</li>
+<li>async with：表示 with 管理的是一个异步上下文管理器（asynchronous context manager）
+<ul>
+<li>该 context manager 的 enter 和 exit 两个步骤是异步的</li>
+<li>只能用在 async def 的内部</li>
+</ul>
+</li>
+</ol>
+<p>注意异步 generator、context manager，它的 protocol 都和同步的不同，不能混为一谈。
+具体而言，对同步 protocol <strong>xxx</strong> 函数，它的异步版本为 <strong>axxx</strong>，就是加个 a。</p>
+<p>而 await，就相当于 yield from，差别在于 await 是异步的。还有我们关心的是 await 表达式的值，而 yield from 中我们更关心它向上层 yield 的值。</p>
+<p>在 yield from 中，当前生成器调用另一个生成器，当前生成器会挂起，直到另一个生成器返回。</p>
+<p>但是在 await 中，当前 Coroutine 挂起时， eventloop 会寻找其他 task 来跑，这就利用上了 IO 漫长的等待时间。</p>
+<p>async for 是每次迭代都会 await 一次，如果迭代对象是 IO 操作，这个 IO 等待时间就会被利用上。</p>
+<p>async with 也是同样，如果 context 的 enter 和 exit 是 IO 操作，这个 IO 时间就会被 eventloop 用于运行其他 task.</p>
+<p>使用 asyncio 时，我们要用 async def 将所有的 IO 操作都定义成异步操作。然后在调用时，都使用 await/async for/async with 来调用。</p>
+<h2 id="四coroutinetask-和-future">四、Coroutine、Task 和 Future</h2>
+<p>首先，每个协程对象，都是一个独立的协程单元，协程对象之间可以异步运行。</p>
+<p>协程需要放到 EventLoop 内运行，要运行一个协程 a，有三种方法：</p>
+<ol>
+<li>通过 asyncio.run(coro) 运行一个协程。
+<ul>
+<li>该方法会新建一个 EventLoop</li>
+</ul>
+</li>
+<li>在另一个协程 b 中通过 await 调用 a。当 b 运行时， a 也会被 task 运行。</li>
+<li>通过 asyncio.create_task(coro)，将需要运行的协程包装成 task，然后通过 task 相关的方法来异步运行它们。
+<ul>
+<li>asyncio.gather(*awaitable_objects): 并发执行所有的 task，阻塞到所有 task 结束。返回一个 result 列表。result 的列表顺序和 future 的顺序一致</li>
+<li>asyncio.as_completed(aws, *, loop=None, timeout=None)，和 gather 的区别在于，它返回一个异步迭代器，每次迭代都返回最先完成的一个 future.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>concurrent.futures 是进程线程的异步执行，而 asyncio 是基于协程的单线程异步执行</p>
+</blockquote>
+<h2 id="五参考">五、参考</h2>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/25228075" target="_blank" rel="noopener noreferrer">从0到1，Python异步编程的演进之路</a></li>
+<li><a href="https://www.zhihu.com/question/294188439/answer/555273313" target="_blank" rel="noopener noreferrer">怎么掌握 asyncio</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/27258289" target="_blank" rel="noopener noreferrer">Python Async/Await入门指南</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/30275154" target="_blank" rel="noopener noreferrer">谈谈Python协程技术的演进</a></li>
+<li><a href="https://docs.python.org/3/reference/compound_stmts.html#coroutines" target="_blank" rel="noopener noreferrer">Python Doc - Coroutines</a></li>
+<li><a href="https://docs.python.org/3/library/asyncio.html" target="_blank" rel="noopener noreferrer">Python Doc - asyncio</a></li>
+</ul>
+]]></description></item></channel></rss>
