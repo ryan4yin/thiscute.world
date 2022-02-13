@@ -1,4 +1,1099 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>所有文章 - This Cute World</title><link>https://thiscute.world/posts/</link><description>所有文章 | This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 13 Feb 2022 01:17:00 +0800</lastBuildDate><atom:link href="https://thiscute.world/posts/" rel="self" type="application/rss+xml"/><item><title>Python 实用技巧与常见错误集锦</title><link>https://thiscute.world/posts/python-tips-and-tricks/</link><pubDate>Sun, 13 Feb 2022 01:17:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-tips-and-tricks/</guid><description><![CDATA[<blockquote>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>所有文章 - This Cute World</title><link>https://thiscute.world/posts/</link><description>所有文章 | This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>xiaoyin_c@qq.com (ryan4yin)</managingEditor><webMaster>xiaoyin_c@qq.com (ryan4yin)</webMaster><lastBuildDate>Sun, 13 Feb 2022 16:09:00 +0800</lastBuildDate><atom:link href="https://thiscute.world/posts/" rel="self" type="application/rss+xml"/><item><title>Linux/Windows/MacOSX 系统常用命令集锦</title><link>https://thiscute.world/posts/common-commands-for-various-operating-systems/</link><pubDate>Sun, 13 Feb 2022 16:09:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/common-commands-for-various-operating-systems/</guid><description><![CDATA[<blockquote>
+<p>个人笔记，只会列出我自己容易忘掉的命令，方便查阅。</p>
+</blockquote>
+<blockquote>
+<p>内容比较多，适合当参考手册用。可能不太适合从头读到尾&hellip;</p>
+</blockquote>
+<h2 id="一linux">一、Linux</h2>
+<h3 id="1-后台运行">1. 后台运行</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 1. 后台运行命令</span>
+nohup python xxx.py <span class="p">&amp;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以使用 tmux，tmux 提供的 session 功能比 nohup 更好用，后面会介绍 tmux</p>
+<h3 id="2-查找替换-sedawk">2. 查找替换 sed/awk</h3>
+<p>sed 常用命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1">## 只在目录中所有的 .py 和 .dart 文件中递归搜索字符&#34;main()&#34;</span>
+grep <span class="s2">&#34;main()&#34;</span> . -r --include *.<span class="o">{</span>py, dart<span class="o">}</span>
+
+<span class="c1">## 1） 全文搜索并替换</span>
+<span class="c1">### -i --in-place 原地替换（修改原文件）</span>
+<span class="c1">### -i=SUFFIX  替换后的文件添加 SUFFIX 这个后缀</span>
+<span class="c1">### -r  使用拓展的正则表达式，注意此正则不支持 \d\w\s 等语法，必须使用 [0-9] [a-zA-Z] 等来替换！！！</span>
+sed -ri <span class="s2">&#34;s/pattern_str/replace_str/g&#34;</span> <span class="sb">`</span>grep <span class="s2">&#34;key_pattern&#34;</span> <span class="s1">&#39;path_pattern&#39;</span> -rl<span class="sb">`</span>
+
+<span class="c1">## 2）文件名搜索，替换文件内容</span>
+sed -ri <span class="s2">&#34;s/pattern_str/replace_str/g&#34;</span> <span class="sb">`</span>find . -name <span class="s2">&#34;pattern&#34;</span><span class="sb">`</span>
+
+<span class="c1">## 3）批量转换大小写</span>
+<span class="c1"># 将当前文件夹内，所有的 gitlab URL 都转换成小写</span>
+<span class="c1"># \L 转小写  \U 转大写</span>
+sed -ri <span class="s1">&#39;s@http://GITLAB.*.git@\L&amp;@g&#39;</span> <span class="sb">`</span>find . -name pubspec*<span class="sb">`</span>
+
+
+<span class="c1">## 4) 拷贝文件，并且保持文件夹结构（--parents 表示保持文件夹结构）</span>
+cp --parents <span class="sb">`</span>find &lt;src-dir&gt; -name *.py<span class="sb">`</span> &lt;dst-dir&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>awk 用于按列处理文本，它比 sed 更强大更复杂，常用命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1">## 1. 单独选出第 1 列的文本</span>
+cat xxx.txt <span class="p">|</span> awk -F <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> head
+
+<span class="c1">## 2. 可以使用 -F 指定分隔符，打印出多列</span>
+awk -F <span class="s1">&#39;,&#39;</span> <span class="s1">&#39;{print $1,$2}&#39;</span><span class="p">|</span> head 
+
+<span class="c1">## 3. 打印出行数</span>
+cat log_test <span class="p">|</span> awk <span class="s1">&#39;{print NR,$1}&#39;</span> <span class="p">|</span> more
+
+<span class="c1">## 4. if 判断语句</span>
+cat log_test <span class="p">|</span> awk <span class="s1">&#39;{if($11&gt;300) print($1,$11)}&#39;</span>
+
+cat log_test <span class="p">|</span> awk <span class="s1">&#39;{print $11}&#39;</span> <span class="p">|</span> sort -n <span class="p">|</span> uniq -c  
+
+<span class="c1"># 求和</span>
+cat data<span class="p">|</span>awk <span class="s1">&#39;{sum+=$1} END {print &#34;Sum = &#34;, sum}&#39;</span>
+
+<span class="c1"># 求平均</span>
+cat data<span class="p">|</span>awk <span class="s1">&#39;{sum+=$1} END {print &#34;Average = &#34;, sum/NR}&#39;</span>
+
+<span class="c1"># 求最大值</span>
+cat data<span class="p">|</span>awk <span class="s1">&#39;BEGIN {max = 0} {if ($1&gt;max) max=$1 fi} END {print &#34;Max=&#34;, max}&#39;</span>
+
+<span class="c1"># 求最小值（min的初始值设置一个超大数即可）</span>
+awk <span class="s1">&#39;BEGIN {min = 1999999} {if ($1&lt;min) min=$1 fi} END {print &#34;Min=&#34;, min}&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-压缩相关">3. 压缩相关</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 直接 cat 压缩文件的内容
+zcat xxx.gz | more  # gzip
+xzcat xxx.xz | more  # xz
+
+tar -axvf xxx.tar.*  # 通过后缀识别压缩格式，智能解压
+</code></pre></td></tr></table>
+</div>
+</div><p>更多命令参见 <a href="https://thiscute.world/posts/compression-related-instructions-under-linux/" target="_blank" rel="noopener noreferrer">常见压缩格式的区别，及 Linux 下的压缩相关指令</a></p>
+<h3 id="4-文件拷贝与同步">4. 文件拷贝与同步</h3>
+<p>各种 Linux 发行版都自带 scp/ssh，这两个工具功能简单，一般够用。</p>
+<p>另外就是更强大也更复杂的 rsync，部分发行版会自带 rsync。</p>
+<p>下面分别介绍下。</p>
+<h4 id="1-sshscp">1. ssh/scp</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 如果使用 ssh 命令进行文件传输，可安装 pv 命令查看传输速度（pipeviewer）</span>
+<span class="c1">## ubuntu</span>
+sudo apt-get install pv
+<span class="c1">##  centos</span>
+sudo yum install epel-release
+sudo yum install pv
+
+<span class="c1">## 1)从本地上传到服务器</span>
+
+<span class="c1">### 使用 ssh 的好处是流式传输不会占用目标机器的存储空间，适合传输可能引起空间不足的大文件，并在目标机器上实时处理该文件。</span>
+cat &lt;filename&gt; <span class="p">|</span> pv <span class="p">|</span> ssh &lt;user&gt;@&lt;host&gt; -p <span class="m">22</span> <span class="s2">&#34;cat - &gt; &lt;new-filename&gt;&#34;</span>
+tar cz &lt;filename or foldername or glob&gt; <span class="p">|</span> pv <span class="p">|</span> ssh &lt;user&gt;@&lt;host&gt; -p <span class="m">22</span> <span class="s2">&#34;tar xz&#34;</span>  <span class="c1"># 压缩传输</span>
+
+<span class="c1">## scp 命令比 ssh 命令更简洁（但是不适合用于传文件夹，它会破坏文件的权限设置，把文件夹弄得一团糟）</span>
+scp -P <span class="m">22</span> &lt;filename&gt; &lt;user&gt;@&lt;host&gt;:&lt;folder-name or filename&gt;  <span class="c1"># 通过 scp 传输，传文件夹时记得添加 -r 参数（recursive）</span>
+
+<span class="c1">## 2) 从服务器下载到本地</span>
+ssh &lt;user&gt;@&lt;host&gt; -p <span class="m">22</span> <span class="s2">&#34;tar cz &lt;filename or foldername or glob&gt;&#34;</span> <span class="p">|</span> pv <span class="p">|</span> tar xz  <span class="c1"># 压缩传输</span>
+scp -P <span class="m">22</span> &lt;user&gt;@&lt;host&gt;:&lt;folder-name or filename&gt; &lt;filename&gt;  <span class="c1"># 通过 scp 传输，传文件夹时记得添加 -r 参数（recursive）</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-rsync">2. rsync</h4>
+<p>rsync 的功能其实和前面的 scp/(tar+ssh) 是一样的，将文件从一个地方拷贝到另一个地方。
+区别在于它只做增量同步，在多次拷贝文件时，只拷贝（同步）修改过的部分，很多场景下可以大大加快拷贝/备份速度。</p>
+<p>rsync 的常用命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 将一个文件夹归档、压缩，并通过 ssh 协议（默认）同步到另一个地方</span>
+<span class="c1"># -a, --archive   # 归档模式，保留文件的所有元信息，等同于 `-rlptgoD`</span>
+<span class="c1"># -r, --recursive # 递归复制文件夹，`-a` 隐含了这个参数，通常都用 -a。</span>
+<span class="c1"># -v, --verbose   # 输出详细信息</span>
+<span class="c1"># --progress      # 显示传输进度</span>
+<span class="c1"># -z, --compress  # 传输文件时进行压缩</span>
+rsync -avz --progress src host:dest
+rsync -avz --progress -e <span class="s2">&#34;ssh -p225&#34;</span> /path/src user@host:dest  <span class="c1"># 使用非默认的 ssh 端口进行传输</span>
+rsync -avz --progress -e <span class="s2">&#34;ssh -i id_xxx&#34;</span> /path/src user@host:dest  <span class="c1"># 使用指定的私钥连接 ssh 服务端，其他各种 ssh 参数都可以在这里指定</span>
+
+<span class="c1"># --exclude 排除掉某些不需要的文件(夹)</span>
+rsync -avz --progress --exclude <span class="s2">&#34;foor/bar&#34;</span> src user@host:dest
+
+<span class="c1"># 有时我们希望在同步数据时修改文件的 user/group</span>
+<span class="c1"># --chown    # 设置文件的 user:group，必须与 `-og`/`--owner --group` 同时使用！（`-a` 隐含了 `-og`） </span>
+rsync -avz --progress --chown<span class="o">=</span>root:root src user@host:dest  <span class="c1"># 传输时修改 user/group 为 root</span>
+
+<span class="c1"># 详细说明 src 和 dest 的位置</span>
+rsync -avz --progress path/src user@host:/tmp  <span class="c1"># 将 src 拷贝到远程主机的 /tmp 中（得到 /tmp/src）</span>
+<span class="c1">## 注意 src 结尾有 /</span>
+rsync -avz --progress path/src/ user@host:/tmp/src  <span class="c1"># 将 src 目录中的文件拷贝到远程主机的 /tmp/src 目录中（同样得到 /tmp/src）</span>
+
+<span class="c1"># 有时候我们在传输文件时不希望保留文件的元信息</span>
+
+<span class="c1"># rsync 默认不会删除 dest 中多余的文件，使用 --delete 可让 rsync 删除这部分无关的文件</span>
+<span class="c1"># 对 src 文件夹进行完全镜像，保证两个文件夹的内容一模一样，不多不少</span>
+rsync -avz --progress --delete src user@host:dest
+
+<span class="c1"># 也可以使用 --ignore-existing 让 rsync 忽略掉 dest 已经存在的文件。就是只同步新增的文件。</span>
+rsync -avz --progress --ignore-existing src user@host:dest
+
+<span class="c1"># 另有使用双冒号 :: 分隔的传输命令，这种命令使用 rsync 协议进行传输，要求目标主机启用 rsync-daemon</span>
+<span class="c1"># 暂时不做介绍</span>
+
+详见 https://rsync.samba.org/documentation.html
+
+<span class="c1"># 用户与群组</span>
+<span class="c1">## 查看用户属于哪些群组</span>
+groups &lt;user-name&gt;  <span class="c1"># 方法一</span>
+id &lt;username&gt;       <span class="c1"># 方法二，它会额外列出 gid/uid</span>
+cat /etc/group <span class="p">|</span> grep &lt;user-name&gt;  <span class="c1"># 方法三，直接查看配置</span>
+<span class="c1">## 查看群组中有哪些用户，第一列是群组，最后一列是用户名</span>
+cat /etc/group <span class="p">|</span> grep &lt;group-name&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5-tmux">5. Tmux</h3>
+<blockquote>
+<p>参考文档：https://github.com/tmux/tmux/wiki/Getting-Started
+参考文档：https://www.ruanyifeng.com/blog/2019/10/tmux.html</p>
+</blockquote>
+<ol>
+<li>输入 <code>tmux</code> 启动一个 tmux 会话。（或者用 <code>tmux new -s &lt;session-name&gt;</code> 启动一个命名会话）</li>
+<li>输入 <code>python xxx.py</code>，python 进程开始运行。</li>
+<li>按快捷键 <code>ctrl+b</code>，然后再按一下 <code>d</code> 脱离(detatch)当前会话。此时 python 进程进入后台运行，关闭当前终端对 python 进程没有影响。</li>
+<li>输入 <code>tmux ls</code> 可以查看当前正在后台运行的会话。（命名会话会显示名称，否则只显示 id）</li>
+<li>通过 <code>tmux attach -t &lt;session-name/id&gt;</code> 重新接入后台会话。
+<ol>
+<li>缩写 <code>tmux a -t &lt;session&gt;</code></li>
+</ol>
+</li>
+<li>或者通过 <code>tmux kill-session -t &lt;session-name/id&gt;</code> 杀死一个后台会话。</li>
+</ol>
+<p>常用快捷键：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="c1"># prefix 表示 `ctrl`+`b`
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="c1"># pane 的切分与选择
+</span><span class="c1"></span><span class="n">prefix</span><span class="w"> </span><span class="s2">&#34;  # 在下方新建一个 pane
+</span><span class="s2">prefix %  # 在右侧新建一个 pane
+</span><span class="s2">prefix `方向键`  # 光标移动到指定方向的 pane 中
+</span><span class="s2">
+</span><span class="s2"># 使用方向键滚动窗口内容
+</span><span class="s2">prefix [  # 进入翻页模式，可使用 page up/down，或者方向键来浏览 pane 的内容
+</span><span class="s2"># 使用鼠标滚轮来滚动窗口内容（也可以把此命令添加到 `~/.tmux.conf` 中使它永久生效）
+</span><span class="s2">prefix `:` 然后输入 `set-window-option -g mode-mouse on`
+</span><span class="s2">
+</span><span class="s2"># （调整 pane 大小）将当前的 pane 向给定的方向扩容 5 行或者 5 列
+</span><span class="s2"># 按住 ALT 时快速重复敲击「方向键」，能快速调整，否则就得从 prefix 开始重新输入
+</span><span class="s2">prefix `Alt` + `方向键`
+</span><span class="s2"># 将当前窗格全屏显示，第二次使用此命令，会将窗格还原
+</span><span class="s2">prefix z
+</span><span class="s2">
+</span><span class="s2"># 交换 pane 的位置
+</span><span class="s2">prefix {  # 当前窗格与上一个窗格交换位置
+</span><span class="s2">prefix }  # 当前窗格与下一个窗格交换位置
+</span><span class="s2">
+</span><span class="s2"># session 相关操作
+</span><span class="s2">prefix s  # 查看 session 列表，并通过方向键选择 session
+</span><span class="s2">prefix `number`  # 通过数字标签选择 session
+</span><span class="s2">
+</span><span class="s2"># window 相关操作（关系：每个 session 可以包含多个 window，每个 window 里面又可以有多个 pane）
+</span><span class="s2">prefix c # 新建 window
+</span><span class="s2">prefix w # 通过数字标签选择 window
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="6-bash-shell-基础">6. Bash Shell 基础</h3>
+<p>目标：能使用 shell 编写 10 行以内的脚本。更长的脚本可以使用 Python 编写，就没必要折腾 Shell 了。</p>
+<h4 id="1-for-循环">1. For 循环</h4>
+<p>单行 for 循环，有时候很有用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 数字枚举</span>
+<span class="k">for</span> i in <span class="k">$(</span>seq <span class="m">1</span> 5<span class="k">)</span><span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span>  <span class="c1"># sh/bash 都支持</span>
+<span class="k">for</span> i in <span class="o">{</span>1..5<span class="o">}</span><span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span>  <span class="c1"># sh 不支持此语法</span>
+
+
+<span class="c1"># 文件枚举，可使用 glob 语法进行文件匹配</span>
+<span class="k">for</span> f in *<span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$f</span><span class="p">;</span> <span class="k">done</span>
+<span class="k">for</span> f in /etc/*.py<span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$f</span><span class="p">;</span> <span class="k">done</span>
+
+<span class="c1"># 使用 find 进行文件枚举</span>
+<span class="k">for</span> f in <span class="k">$(</span>find . -name *.py<span class="k">)</span><span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$f</span><span class="p">;</span> <span class="k">done</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>单行 for 循环加几个换行就得到多行 for 循环，格式如下：写脚本用得到，不过更建议用 python:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="k">for</span> i in <span class="k">$(</span>seq <span class="m">1</span> 5<span class="k">)</span>
+<span class="k">do</span> 
+  <span class="nb">echo</span> <span class="nv">$i</span>
+<span class="k">done</span>  <span class="c1"># sh/bash 都支持</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-if-语句">2. if 语句</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 单行 if 语句</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nb">true</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> &lt;command&gt;<span class="p">;</span> <span class="k">fi</span>
+
+<span class="c1">#  if else</span>
+<span class="k">if</span> <span class="o">[</span> expression <span class="o">]</span>
+<span class="k">then</span>
+   Statement<span class="o">(</span>s<span class="o">)</span> to be executed <span class="k">if</span> expression is <span class="nb">true</span>
+<span class="k">else</span>
+   Statement<span class="o">(</span>s<span class="o">)</span> to be executed <span class="k">if</span> expression is not <span class="nb">true</span>
+<span class="k">fi</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3-shell脚本中的set指令比如set--x-和-set--e">3. Shell脚本中的set指令，比如set -x 和 set -e</h4>
+<p>参见：<a href="https://www.cnblogs.com/robinunix/p/11635560.html" target="_blank" rel="noopener noreferrer">Shell脚本中的set指令，比如set -x 和 set -e</a></p>
+<h4 id="4-其他资料">4. 其他资料</h4>
+<ul>
+<li><a href="https://github.com/mritd/shell_scripts" target="_blank" rel="noopener noreferrer">shell_scripts</a>: 实用 shell 小脚本</li>
+</ul>
+<h3 id="7-socket-连接查询---ssnetcatlsof">7. socket 连接查询 - ss/netcat/lsof</h3>
+<p>查看 socket 信息可以帮我们回答下列问题：</p>
+<ol>
+<li>我的程序是不是真的在监听我指定的端口？</li>
+<li>我的程序是在监听 127.0.0.1（本机），还是在监听 0.0.0.0（整个网络）</li>
+<li>进程们分别在使用哪些端口？</li>
+<li>我的连接数是否达到了上限？</li>
+</ol>
+<blockquote>
+<p>现在较新版本的 Ubuntu 和 CentOS 都已经使用 <code>iproute2</code> 替换掉了 <code>net-tools</code>，
+如果你还需要使用陈旧的 <code>route</code> <code>netstat</code> 等命令，需要手动安装 <code>net-tools</code>。</p>
+</blockquote>
+<p>我们可以使用 ss(socket statistics) 或者 netstat 命令来查看 socket 信息:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看 socket 连接的统计信息</span>
+<span class="c1"># 主要统计处于各种状态的 tcp sockets 数量，以及其他 sockets 的统计信息</span>
+ss --summary
+ss -s  <span class="c1"># 缩写</span>
+
+<span class="c1"># 查看哪个进程在监听 80 端口</span>
+<span class="c1"># --listening 列出所有正在被监听的 socket</span>
+<span class="c1"># --processes 显示出每个 socket 对应的 process 名称和 pid</span>
+<span class="c1"># --numeric 直接打印数字端口号（不解析协议名称）</span>
+ss --listening --processes --numeric <span class="p">|</span> grep <span class="m">80</span>
+ss -nlp <span class="p">|</span> grep <span class="m">80</span>  <span class="c1"># 缩写</span>
+ss -lp <span class="p">|</span> grep http  <span class="c1"># 解析协议名称，然后通过协议名搜索监听</span>
+
+<span class="c1">## 使用过时的 netstat</span>
+<span class="c1">### -t tcp</span>
+<span class="c1">### -u udp</span>
+netstat -tunlp <span class="p">|</span> grep <span class="s2">&#34;:80&#34;</span>
+
+<span class="c1"># 查看 sshd 当前使用的端口号</span>
+ss --listening --processes <span class="p">|</span> grep sshd
+<span class="c1">## 使用过时的 netstat</span>
+netstat -tunlp <span class="p">|</span> grep &lt;pid&gt;  <span class="c1"># pid 通过 ps 命令获得</span>
+
+<span class="c1"># 列出所有的 tcp sockets，包括所有的 socket 状态</span>
+ss --tcp --all
+
+<span class="c1"># 只列出正在 listen 的 socket</span>
+ss --listening
+
+<span class="c1"># 列出所有 ESTABLISHED 的 socket（默认行为）</span>
+ss
+
+<span class="c1"># 统计 TCP 连接数</span>
+ss <span class="p">|</span> grep ESTAB <span class="p">|</span> wc -l
+
+<span class="c1"># 列出所有 ESTABLISHED 的 socket，并且给出连接的计时器</span>
+ss --options
+
+<span class="c1"># 查看所有来自 192.168.5 的 sockets</span>
+ss dst 192.168.1.5
+
+<span class="c1"># 查看本机与服务器 192.168.1.100 建立的 sockets</span>
+ss src 192.168.1.5
+</code></pre></td></tr></table>
+</div>
+</div><p>TCP 连接数受 Linux 文件描述符上限控制，可以通过如下方法查看已用文件句柄的数量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 已用文件描述符数量</span>
+lsof <span class="p">|</span> wc -l
+<span class="c1"># 文件描述符上限</span>
+<span class="nb">ulimit</span> -n 
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="8-其他网络相关命令">8. 其他网络相关命令</h3>
+<p>主要是 iproute2 dhclient lsof 等</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看路由表</span>
+routel       <span class="c1"># 旧的 net-tools 包中的命令</span>
+ip route ls  <span class="c1"># iproute2 提供的新命令</span>
+
+dhclient 
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="9-容器网络诊断---nsenter">9. 容器网络诊断 - nsenter</h3>
+<p>Docker 容器有自己的 namespace，直接通过宿主机的 ss 命令是查看不到容器的 socket 信息的。</p>
+<p>比较直观的方法是直接通过 <code>docker exec</code> 在容器中通过 ss 命令。但是这要求容器中必须自带 ss 等程序，有的精简镜像可能不会自带它。</p>
+<p>通过 <code>nsenter</code> 可以直接进入到容器的指定 namespace 中，这样就能直接查询容器网络相关的信息了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">docker ps | grep xxx
+
+echo CONTAINER=xxx  # 容器名称或 ID
+
+# 1. 查询到容器对应的 pid
+PID=$(docker inspect --format {{.State.Pid}} $CONTAINER)
+
+# 2. nsenter 通过 pid 进入容器的 network namespace，执行 ss 查看 socket 信息
+nsenter --target $PID --net ss -s
+</code></pre></td></tr></table>
+</div>
+</div><p><code>nsenter</code> 这个工具貌似是 docker 自带的或者是系统内置命令，只要装了 docker，ubuntu/centos 都可以直接使用这个命令。</p>
+<blockquote>
+<p>nsenter 是一个进入名字空间的工具，功能不仅仅局限在「网络诊断」，还有更多用法。</p>
+</blockquote>
+<h2 id="二powershell">二、Powershell</h2>
+<p>Powershell 是微软推出的一款新一代 shell，它的特点之一是，命令都有一致的命名规则：<strong>谓词-名词</strong>，
+谓词表示动作：Get/Set/Stop/Start 等，名词指示操作对象：Service/Member/ChildItem/Command 等。</p>
+<p>这样的命名格式使我们可以很容易地猜测到自己需要的命令的名称。</p>
+<p>为了使用方便，powershell 还提供了一些常用命令的缩写，并且添加了大量类似 Linux 命令的别名。</p>
+<p>还有就是，Windows 默认不区分字母大小写，日常使用可以全部小写。</p>
+<h3 id="1-实用命令">1. 实用命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># 删除文件/文件夹</span>
+<span class="nb">remove-item</span> <span class="n">xxx</span>  <span class="n">-confirm</span>
+<span class="nb">ri </span><span class="n">xxx</span>  <span class="c"># 别名1</span>
+<span class="nb">rm </span><span class="n">xxx</span>  <span class="c"># 别名2</span>
+<span class="nb">rmdir </span><span class="n">xxx</span>  <span class="c"># etc...</span>
+
+<span class="c"># 复制</span>
+<span class="nb">copy-item</span> <span class="n">xxx</span> <span class="n">xx</span> <span class="n">-r</span>
+<span class="nb">cp </span><span class="n">-r</span> <span class="n">xxx</span> <span class="n">xx</span>
+
+<span class="c"># 显示工作目录</span>
+<span class="nb">get-location</span>
+<span class="nb">gl
+</span><span class="nb">pwd
+</span><span class="nb"></span>
+<span class="c"># 切换工作目录</span>
+<span class="nb">set-location</span> <span class="n">xxx</span>
+<span class="nb">sl </span><span class="n">xxx</span>
+<span class="nb">cd </span><span class="n">xxx</span>
+
+<span class="c"># 查看环境变量</span>
+<span class="nb">get-childitem</span> <span class="n">env</span><span class="err">:</span>
+<span class="nb">gci </span><span class="n">env</span><span class="err">:</span>
+<span class="nb">gci </span><span class="n">env</span><span class="err">:</span><span class="n">PATH</span>  <span class="c"># 查看 PATH 变量</span>
+
+<span class="nv">$env:XXX</span><span class="p">=</span><span class="s2">&#34;value&#34;</span>   <span class="c"># 临时设置环境变量</span>
+<span class="nv">$env:Path</span> <span class="p">+=</span> <span class="s2">&#34;;SomeRandomPath&#34;</span>  <span class="c"># 临时在 Path 末尾添加新路径</span>
+<span class="c">## 以下三行命令只对 windows 有效，linux 下无效</span>
+<span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">&#34;XXX&#34;</span><span class="p">,</span> <span class="nv">$env:XXX</span> <span class="p">+</span> <span class="s2">&#34;;value&#34;</span><span class="p">,</span> <span class="no">[EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>  <span class="c"># 修改当前用户的环境变量（永久），只对新进程有效</span>
+<span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">&#34;XXX&#34;</span><span class="p">,</span> <span class="s2">&#34;value&#34;</span><span class="p">,</span> <span class="no">[EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">Machine</span><span class="p">)</span>  <span class="c"># 给这台电脑设置环境变量（永久），只对新进程有效，需要管理员权限</span>
+<span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">&#34;XXX&#34;</span><span class="p">,</span> <span class="nv">$env:XXX</span> <span class="p">+</span> <span class="s2">&#34;;value&#34;</span><span class="p">,</span> <span class="s2">&#34;User&#34;</span><span class="p">)</span>  <span class="c"># target 也可用字符串指定</span>
+
+<span class="c"># 删除文件/文件夹</span>
+<span class="nb">rm </span><span class="n">xxx</span>  <span class="c"># 删除文件夹时会进入交互界面，按提示输入就行。</span>
+
+<span class="c"># 查看命名位置（类似 Linux Shell 的 which）</span>
+<span class="nb">get-command</span> <span class="n">xxx</span>
+<span class="nb">gcm </span><span class="n">xxx</span>
+
+<span class="c"># 通过关键字查找 powershell 命令</span>
+<span class="nb">gcm </span><span class="p">|</span> <span class="nb">select-string</span> <span class="p">&lt;</span><span class="n">keyword</span><span class="p">&gt;</span>
+
+<span class="c"># 通过关键字查找 powershell 命令和环境变量中的程序，比较慢</span>
+<span class="nb">gcm </span><span class="p">*</span> <span class="p">|</span> <span class="nb">select-string</span> <span class="p">&lt;</span><span class="n">keyword</span><span class="p">&gt;</span>
+
+<span class="c"># 查看别名对应的真实命令</span>
+<span class="nb">get-alias</span>
+
+<span class="c"># 类似 linux 的 find/ls 命令</span>
+<span class="nb">get-childitem</span> <span class="n">-Recurse</span> <span class="n">-Include</span> <span class="p">*.</span><span class="n">py</span>
+<span class="nb">gci </span><span class="n">-r</span> <span class="n">-i</span> <span class="p">*.</span><span class="n">py</span>
+
+<span class="c"># 清空终端的输出</span>
+<span class="nb">clear-host</span>
+<span class="nb">clear
+</span><span class="nb"></span>
+<span class="c"># 查看文件内容</span>
+<span class="nb">get-content</span> <span class="n">xx</span><span class="p">.</span><span class="n">py</span> <span class="p">|</span> <span class="n">more</span>
+<span class="nb">get-content</span> <span class="n">xx</span><span class="p">.</span><span class="n">py</span> <span class="p">|</span> <span class="nb">out-host</span> <span class="n">-paging</span>
+<span class="nb">cat </span><span class="n">xx</span><span class="p">.</span><span class="n">py</span>
+<span class="nb">gc </span><span class="n">xx</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># 字符串搜索，不能对对象使用</span>
+<span class="c"># 类似 linux 的 grep 命令</span>
+<span class="nb">cat </span><span class="n">xxx</span><span class="p">.</span><span class="n">log</span> <span class="p">|</span> <span class="nb">select-string</span> <span class="p">&lt;</span><span class="n">pattern</span><span class="p">&gt;</span>
+<span class="nb">gci </span><span class="n">env</span><span class="err">:</span> <span class="p">|</span> <span class="nb">out-string</span>  <span class="n">-stream</span> <span class="p">|</span> <span class="nb">select-string</span> <span class="p">&lt;</span><span class="n">pattern</span><span class="p">&gt;</span>  <span class="c"># 需要先使用 out-string 将对象转换成 string</span>
+<span class="nb">gci </span><span class="n">env</span><span class="err">:</span> <span class="p">|</span> <span class="nb">where-object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">Name</span> <span class="o">-like</span> <span class="p">&lt;</span><span class="n">pattern</span><span class="p">&gt;}</span>
+
+<span class="c"># 计算输出的行数/对象个数</span>
+<span class="nb">gci </span><span class="n">env</span><span class="err">:</span> <span class="p">|</span> <span class="nb">measure-object</span>
+<span class="nb">gci </span><span class="n">env</span><span class="err">:</span> <span class="p">|</span> <span class="nb">measure </span> <span class="c"># 这是缩写</span>
+
+<span class="c"># 关机/重启</span>
+<span class="nb">stop-computer</span>
+<span class="nb">restart-computer</span>
+
+<span class="c"># windows 计算 hash 值</span>
+<span class="c"># 功能等同于 linux 下的 sha256sum/sha1sum/sha512sum/md5sum</span>
+<span class="nb">Get-FileHash</span> <span class="n">-Path</span> <span class="p">/</span><span class="n">path</span><span class="p">/</span><span class="n">to</span><span class="p">/</span><span class="n">file</span> <span class="n">-Algorithm</span> <span class="n">SHA256</span>
+<span class="nb">Get-FileHash</span> <span class="n">-Path</span> <span class="p">/</span><span class="n">path</span><span class="p">/</span><span class="n">to</span><span class="p">/</span><span class="n">file</span> <span class="n">-Algorithm</span> <span class="n">SHA256</span>  <span class="p">|</span> <span class="nb">Format-List</span>  <span class="c"># 用 format 修改格式化效果</span>
+
+<span class="c"># base64 编解码</span>
+<span class="no">[Convert]</span><span class="p">::</span><span class="n">ToBase64String</span><span class="p">(</span><span class="no">[Text.Encoding]</span><span class="p">::</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s2">&#34;xxx&#34;</span><span class="p">))</span>  <span class="c"># base64 编码</span>
+<span class="no">[Text.Encoding]</span><span class="p">::</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="no">[Convert]</span><span class="p">::</span><span class="n">FromBase64String</span><span class="p">(</span><span class="s2">&#34;eHh4&#34;</span><span class="p">))</span>  <span class="c"># 解码</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>另外 windows 同样自带 ssh/scp 命令，参数也和 linux 一致</p>
+<h3 id="2-进程相关命令">2. 进程相关命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">
+# 查看所有进程
+get-process | more
+ps | more  # 别名
+
+# 查找某进程（替代掉 tasklist）
+get-process -name exp*,power*  # 使用正则查找进程
+get-process | select-string &lt;pattern&gt;  # 效果同上
+
+# 通过 id 杀掉某进程（替代掉 taskkill）
+# 也可以通过 -Name 用正则匹配进程
+stop-process &lt;pid&gt;
+kill &lt;pid&gt;  # 别名
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-网络相关命令">3. 网络相关命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c">## 1. dns 相关(dns-client)</span>
+<span class="nb">Clear-DnsClientCache</span>  <span class="c"># 清除 dns 缓存（替换掉 `ipconfig /flushdns`）</span>
+<span class="nb">Get-DnsClientCache</span>  <span class="c"># 查看 dns 缓存</span>
+<span class="nb">Resolve-DnsName</span> <span class="n">baidu</span><span class="p">.</span><span class="n">com</span>  <span class="c"># 解析域名</span>
+
+<span class="c">## 2. TCP/IP 相关命令</span>
+<span class="nb">Get-Command</span> <span class="nb">Get-Net</span><span class="p">*</span>  <span class="c"># 查看所有 TCP/IP 相关的命令</span>
+
+<span class="nb">Get-NetIPAddress</span>  <span class="c"># 查看 IP 地址</span>
+<span class="nb">Get-NetIPInterface</span>  <span class="c"># 查看 IP 接口</span>
+<span class="nb">Get-NetRoute</span>        <span class="c"># 查看路由表</span>
+<span class="nb">Get-NetNeighbor</span>     <span class="c"># 获取链路层 MAC 地址缓存</span>
+<span class="nb">Get-NetTCPConnection</span>   <span class="c"># 查看 TCP 连接</span>
+<span class="c">### 也可以对 TCP/IP 的 IP 地址、接口、路由表进行增删改</span>
+<span class="nb">New-NetRoute</span>
+<span class="nb">Remove-NetNeighbor</span>  <span class="c"># 清除 MAC 地址缓存</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-socket-信息查询---netstat">4. socket 信息查询 - netstat</h3>
+<p>Windows 系统和 macOS 一样，也没有 <code>ss</code>，但是自带 <code>netstat</code>，该命令和 Linux 下的 <code>netstat</code> 有一定差别，具体使用方法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">netstat -?  <span class="c1"># 查看使用帮助，很清晰易懂</span>
+
+<span class="c1"># 查看那个进程在监听 80 端口，最后一列是进程的 Pid</span>
+netstat -ano <span class="p">|</span> findstr <span class="m">80</span>        <span class="c1"># windows 命令</span>
+netstat -ano <span class="p">|</span> <span class="k">select</span>-string <span class="m">80</span>  <span class="c1"># powershell 命令，就是把 findstr 替换成 select-string</span>
+
+<span class="c1"># 不仅列出 Pid，还给出 Pid 对应的可执行文件名称（需要管理员权限）</span>
+netstat -ano -b <span class="p">|</span> <span class="k">select</span>-string <span class="m">80</span>  <span class="c1"># powershell 命令</span>
+
+<span class="c1"># 列出所有 ESTABLISHED 的 socket（默认行为）</span>
+netstat
+
+<span class="c1"># 列出所有正在监听的端口</span>
+netstat -ano <span class="p">|</span> findstr LISTENING
+
+<span class="c1"># 只列出 TCP 连接</span>
+netstat -ano -p TCP
+
+
+<span class="c1"># 查看路由表</span>
+route -?  <span class="c1"># 查看使用帮助，很清晰易懂</span>
+route print    <span class="c1"># 查看所有路由信息</span>
+route print -4  <span class="c1"># 仅 ipv4</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>比如我们遇到端口占用问题时，就可以通过上述命令查找到端口对应的 Pid，然后使用 <code>kill &lt;Pid&gt;</code> 命令（powershell <code>stop-process</code> 的别名）杀死对应的进程。</p>
+<h2 id="三mac-os-x">三、Mac OS X</h2>
+<p>Mac OS X 系统也是 unix-like 系统，也使用 zsh/bash，因此大部分命令基本都跟 Linux 没啥区别，可以直接参考前面 Linux 一节的内容。</p>
+<p>但是要注意一些坑：</p>
+<ul>
+<li>macos 自带的 tar 并不是 gnutar，命令使用方式不一样！
+<ul>
+<li>解决：<code>brew install gnu-tar</code>，安装好后通过 <code>gtar</code> 调用，参数就跟 linux 一致了。</li>
+</ul>
+</li>
+<li>网络相关的命令区别较大，后面会详细介绍。</li>
+<li>MacOSX 使用 launchpad 作为系统服务管理器，跟 systemd 区别很大。</li>
+</ul>
+<h3 id="1-查看-socket-信息">1. 查看 socket 信息</h3>
+<p>Mac OS X 系统目前没有 <code>ss</code>，但是自带 <code>netstat</code>，该命令和 Linux 下的 <code>netstat</code> 有一定差别，而且还很慢，还不能显示 pid.</p>
+<p>所以 stackoverflow 上更推荐使用 <code>lsof</code>，几条常用命令记录如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># -n 表示不显示主机名</span>
+<span class="c1"># -P 表示不显示端口俗称</span>
+<span class="c1"># 不加 sudo 只能查看以当前用户运行的程序</span>
+<span class="c1"># 通用格式：</span>
+sudo lsof -nP -iTCP:端口号 -sTCP:LISTEN
+
+<span class="c1"># 查看所有 tcp 连接</span>
+lsof -nP -iTCP
+
+<span class="c1"># 查看所有监听端口相关的信息（command/pid）</span>
+lsof -nP -iTCP -sTCP:LISTEN
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-其他网络相关命令">2. 其他网络相关命令</h3>
+<p>清理 DNS 缓存：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># macos 10.10+</span>
+sudo dscacheutil -flushcache
+sudo killall -HUP mDNSResponder
+
+<span class="c1"># 其他版本请自己网上搜...</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看所有网络接口及相关参数（ip/mac/type...）</span>
+ifconfig
+
+<span class="c1"># 查看路由表</span>
+netstat -nr
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="四跨平台程序">四、跨平台程序</h2>
+<h3 id="1-vim">1. vim</h3>
+<h4 id="常用技巧">常用技巧</h4>
+<p>移动：</p>
+<ul>
+<li><code>0</code>/<code>^</code> 回到行首，<code>$</code> 去到行末</li>
+<li>w 跳到下个单词的首部，e 跳到下个单词末尾
+<ul>
+<li>也能使用 2w 2e 这种命令按单词数量跳转</li>
+</ul>
+</li>
+</ul>
+<p>删除 <code>d</code> 或修改 <code>c</code>:</p>
+<ul>
+<li>dw 删除单词，d2w 删除两个单词</li>
+<li>d$ 删除到行末，<code>d0</code>/<code>d^</code> 删除到行首</li>
+<li><code>d(</code>/<code>d{</code>/<code>d[[</code> 删除到文件首部，<code>d)</code>/<code>d}</code>/<code>d]]</code> 删除到文件末尾</li>
+<li><code>r</code> 替换一个字符，<code>R</code> 持续往后替换</li>
+</ul>
+<h4 id="多行修改">多行修改</h4>
+<p>多行插入，主要用于加注释之类的：</p>
+<ul>
+<li>光标停留在你需要插入文本的地方</li>
+<li><code>ctrl</code>+<code>v</code> 进入 visual block 模式，选中多行</li>
+<li>输入 <code>I</code>，进入编辑模式</li>
+<li>输入 <code>#</code> 注释或者其他字符，但是注意不能输入换行符！也不能删除？</li>
+<li>按两下 <code>Esc</code>，依次退出 Insert 和 visual block 模式，就插入成功了</li>
+</ul>
+<p>多行删除：</p>
+<ul>
+<li><code>v</code> 进入 visual 模式，在第一行，选中你想要删除的文本块
+<ul>
+<li>或者也可以先进入 visual block 模式，再通过左右方向键选择文本。</li>
+</ul>
+</li>
+<li><code>ctrl</code>+<code>v</code> 进入 visual block 模式，选中多行
+<ul>
+<li>visual block 的特点是它是垂直选择，而 visual 模式是段落选择</li>
+</ul>
+</li>
+<li>按 <code>d</code> 键就能删除被选中的所有内容。</li>
+</ul>
+<h4 id="多行替换基本和-sed-一致">多行替换（基本和 sed 一致）</h4>
+<p>多行行首插入注释符号 <code>#</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">:1,6 s/^/#/g
+:2,$ s/^/#/g   注：此为2行至尾行
+:% s/^/#/g     注：此为所有行
+</code></pre></td></tr></table>
+</div>
+</div><p>这里使用了正则表达式 <code>^</code> 匹配行首，改成 <code>$</code> 就可在行尾进行批量修改。</p>
+<p>此外，它的分隔符也不仅限于 <code>\</code>，也可以用 <code>@</code> 等符号，方便阅读。比如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">:1,6 s@^@#@g
+:2,$ s@^@#@g   注：此为2行至尾行
+:% s@^@#@g     注：此为所有行
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 vim 的这个正则匹配功能，不仅能进行插入，也能完成删除、替换的功能。</p>
+<h4 id="将选中部分写入到文件">将选中部分写入到文件</h4>
+<ul>
+<li>首先按 <code>v</code> 进入 visual 模式，选中需要的内容</li>
+<li>按 <code>:</code>，应该会显示 <code>:'&lt;,'&gt;</code>，表示对选中部分进行操作</li>
+<li>输入内容 <code>w new.txt</code>，此时显示效果应该是 <code>:'&lt;,'&gt;w new.txt</code></li>
+<li>回车就能完成文件写入</li>
+</ul>
+<h4 id="问题在-vim-中粘贴-yaml-时缩进会变得一团糟">问题：在 vim 中粘贴 yaml 时缩进会变得一团糟</h4>
+<p>解决方法：在命令模式下输入 <code>:set paste</code> 进入粘贴模式，然后再粘贴 yaml 内容。</p>
+<p>注意行首可能会丢失几个字符，需要手动补上。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/45920111" target="_blank" rel="noopener noreferrer">如何在 Linux 中查看进程占用的端口号</a></li>
+<li><a href="https://github.com/jpetazzo/nsenter#how-do-i-use-nsenter" target="_blank" rel="noopener noreferrer">github - nsenter</a></li>
+<li><a href="https://tonydeng.github.io/2016/07/07/use-lsof-to-replace-netstat/" target="_blank" rel="noopener noreferrer">使用 lsof 代替 Mac OS X 中的 netstat 查看占用端口的程序</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/81123584" target="_blank" rel="noopener noreferrer">aws 常用命令</a></li>
+</ul>
+]]></description></item><item><title>Python 实用技巧与常见错误集锦</title><link>https://thiscute.world/posts/python-tips-and-tricks/</link><pubDate>Sun, 13 Feb 2022 01:17:00 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/python-tips-and-tricks/</guid><description><![CDATA[<blockquote>
 <p>个人笔记，不保证正确。</p>
 </blockquote>
 <blockquote>
@@ -7081,570 +8176,4 @@ curl -v -H <span class="s1">&#39;Host: baidu.com&#39;</span> localhost:8080
 <blockquote>
 <p>拆破玉笼飞彩凤，顿开金锁走蛟龙。</p>
 </blockquote>
-]]></description></item><item><title>云原生流水线 Argo Workflows 的安装、使用以及个人体验</title><link>https://thiscute.world/posts/expirence-of-argo-workflow/</link><pubDate>Wed, 27 Jan 2021 15:37:27 +0800</pubDate><author>xiaoyin_c@qq.com</author><dc:creator>ryan4yin</dc:creator><guid>https://thiscute.world/posts/expirence-of-argo-workflow/</guid><description><![CDATA[<blockquote>
-<p>注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 <a href="https://argoproj.github.io/argo-workflows/" target="_blank" rel="noopener noreferrer">Argo Documentation</a></p>
-</blockquote>
-<p><a href="https://github.com/argoproj/argo-workflows/" target="_blank" rel="noopener noreferrer">Argo Workflows</a> 是一个云原生工作流引擎，专注于<strong>编排并行任务</strong>。它的特点如下：</p>
-<ol>
-<li>使用 Kubernetes 自定义资源(CR)定义工作流，其中工作流中的每个步骤都是一个容器。</li>
-<li>将多步骤工作流建模为一系列任务，或者使用有向无环图（DAG）描述任务之间的依赖关系。</li>
-<li>可以在短时间内轻松运行用于机器学习或数据处理的计算密集型作业。</li>
-<li>Argo Workflows 可以看作 Tekton 的加强版，因此显然也可以通过 Argo Workflows 运行 CI/CD 流水线(Pipielines)。</li>
-</ol>
-<p>阿里云是 Argo Workflows 的深度使用者和贡献者，另外 Kubeflow 底层的工作流引擎也是 Argo Workflows.</p>
-<h2 id="一argo-workflows-对比-jenkins">一、Argo Workflows 对比 Jenkins</h2>
-<p>我们在切换到 Argo Workflows 之前，使用的 CI/CD 工具是 Jenkins，下面对 Argo Workflows 和 Jenkins 做一个比较详细的对比，
-以了解 Argo Workflows 的优缺点。</p>
-<h3 id="1-workflow-的定义">1. Workflow 的定义</h3>
-<p><code>Workflow</code> 使用 kubernetes CR 进行定义，因此显然是一份 yaml 配置。</p>
-<p>一个 Workflow，就是一个运行在 Kubernetes 上的流水线，对应 Jenkins 的一次 Build.</p>
-<p>而 WorkflowTemplate 则是一个可重用的 Workflow 模板，对应 Jenkins 的一个 Job.</p>
-<p><code>WorkflowTemplate</code> 的 yaml 定义和 <code>Workflow</code> 完全一致，只有 <code>Kind</code> 不同！</p>
-<p>WorkflowTemplate 可以被其他 Workflow 引用并触发，也可以手动传参以生成一个 Workflow 工作流。</p>
-<h3 id="2-workflow-的编排">2. Workflow 的编排</h3>
-<p>Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言，最大的特点，就是它强大的流水线编排能力。</p>
-<p>其他流水线项目，对流水线之间的关联性考虑得很少，基本都假设流水线都是互相独立的。</p>
-<p>而 Argo Workflows 则假设「任务」之间是有依赖关系的，针对这个依赖关系，它提供了两种协调编排「任务」的方法：Steps 和 DAG</p>
-<p>再借助 <a href="https://argoproj.github.io/argo-workflows/workflow-templates/#referencing-other-workflowtemplates" target="_blank" rel="noopener noreferrer">templateRef</a> 或者 <a href="https://argoproj.github.io/argo-workflows/workflow-of-workflows/" target="_blank" rel="noopener noreferrer">Workflow of Workflows</a>，就能实现 Workflows 的编排了。</p>
-<p><strong>我们之所以选择 Argo Workflows 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。</strong>（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）</p>
-<p>一个复杂工作流的示例如下：</p>
-<p><figure><a class="lightgallery" href="/images/expirence-of-argo-workflow/complex-workflows.png" title="/images/expirence-of-argo-workflow/complex-workflows.png" data-thumbnail="/images/expirence-of-argo-workflow/complex-workflows.png" data-sub-html="<h2>https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</h2>">
-        
-    </a><figcaption class="image-caption">https://github.com/argoproj/argo/issues/1088#issuecomment-445884543</figcaption>
-    </figure></p>
-<h3 id="3-workflow-的声明式配置">3. Workflow 的声明式配置</h3>
-<p>Argo 使用 Kubernetes 自定义资源(CR)来定义 Workflow，熟悉 Kubernetes Yaml 的同学上手应该都很快。</p>
-<p>下面对 Workflow 定义文件和 Jenkinsfile 做个对比：</p>
-<ol>
-<li>argo 完全使用 yaml 来定义流水线，学习成本比 Jenkinsfile 的 groovy 低。对熟悉 Kubernetes 的同学尤其如此。</li>
-<li>将 jenkinsfile 用 argo 重写后，代码量出现了明显的膨胀。一个 20 行的 Jenkinsfile，用 Argo 重写可能就变成了 60 行。</li>
-</ol>
-<p>配置出现了膨胀是个问题，但是考虑到它的可读性还算不错，
-而且 Argo 的 Workflow 编排功能，能替代掉我们目前维护的部分 Python 构建代码，以及一些其他优点，配置膨胀这个问题也就可以接受了。</p>
-<h3 id="4-web-ui">4. Web UI</h3>
-<p>Argo Workflows 的 Web UI 感觉还很原始。确实该支持的功能都有，但是它貌似不是面向「用户」的，功能比较底层。</p>
-<p>它不像 Jenkins 一样，有很友好的使用界面(虽然说 Jenkins 的 UI 也很显老&hellip;)</p>
-<p>另外它所有的 Workflow 都是相互独立的，没办法直观地找到一个 WorkflowTemplate 的所有构建记录，只能通过 label/namespace 进行分类，通过任务名称进行搜索。</p>
-<p>而 Jenkins 可以很方便地看到同一个 Job 的所有构建历史。</p>
-<h3 id="5-workflow-的分类">5. Workflow 的分类</h3>
-<h4 id="为何需要对-workflow-做细致的分类">为何需要对 Workflow 做细致的分类</h4>
-<p>常见的微服务项目，往往会拆分成众多 Git 仓库（微服务）进行开发，众多的 Git 仓库会使我们创建众多的 CI/CD 流水线。
-如果没有任何的分类，这一大堆的流水线如何管理，就成了一个难题。</p>
-<p>最显见的需求：前端和后端的流水线最好能区分一下，往下细分，前端的 Web 端和客户端最好也能区分，后端的业务层和中台最好也区分开来。</p>
-<p>另外我们还希望将运维、自动化测试相关的任务也集成到这个系统中来（目前我们就是使用 Jenkins 完成运维、自动化测试任务的），
-如果没有任何分类，这一大堆流水线将混乱无比。</p>
-<h4 id="argo-workflows-的分类能力">Argo Workflows 的分类能力</h4>
-<p>当 Workflow 越来越多的时候，如果不做分类，一堆 WorkflowTemplate 堆在一起就会显得特别混乱。（没错，我觉得 Drone 就有这个问题&hellip;）</p>
-<p>Argo 是完全基于 Kubernetes 的，因此目前它也只能通过 namespace/labels 进行分类。</p>
-<p>这样的分类结构和 Jenkins 的视图-文件夹体系大相径庭，目前感觉不是很好用（也可能纯粹是 Web UI 的锅）。</p>
-<h3 id="6-触发构建的方式">6. 触发构建的方式</h3>
-<p>Argo Workflows 的流水线有多种触发方式：</p>
-<ul>
-<li>手动触发：手动提交一个 Workflow，就能触发一次构建。可以通过 <a href="https://argoproj.github.io/argo-workflows/workflow-templates/#create-workflow-from-workflowtemplate-spec" target="_blank" rel="noopener noreferrer">workflowTemplateRef</a> 直接引用一个现成的流水线模板。</li>
-<li>定时触发：<a href="https://argoproj.github.io/argo-workflows/cron-workflows/" target="_blank" rel="noopener noreferrer">CronWorkflow</a></li>
-<li>通过 Git 仓库变更触发：借助 <a href="https://github.com/argoproj/argo-events" target="_blank" rel="noopener noreferrer">argo-events</a> 可以实现此功能，详见其文档。
-<ul>
-<li>另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！</li>
-</ul>
-</li>
-</ul>
-<h3 id="7-secrets-管理">7. secrets 管理</h3>
-<p>Argo Workflows 的流水线，可以从 kubernetes secrets/configmap 中获取信息，将信息注入到环境变量中、或者以文件形式挂载到 Pod 中。</p>
-<p>Git 私钥、Harbor 仓库凭据、CD 需要的 kubeconfig，都可以直接从 secrets/configmap 中获取到。</p>
-<p>另外因为 Vault 很流行，也可以将 secrets 保存在 Vault 中，再通过 vault agent 将配置注入进 Pod。</p>
-<h3 id="8-artifacts">8. Artifacts</h3>
-<p>Argo 支持接入对象存储，做全局的 Artifact 仓库，本地可以使用 MinIO.</p>
-<p>使用对象存储存储 Artifact，最大的好处就是可以在 Pod 之间随意传数据，Pod 可以完全分布式地运行在 Kubernetes 集群的任何节点上。</p>
-<p>另外也可以考虑借助 Artifact 仓库实现跨流水线的缓存复用（未测试），提升构建速度。</p>
-<h3 id="9-容器镜像的构建">9. 容器镜像的构建</h3>
-<p>借助 Buildkit 等容器镜像构建工具，可以实现容器镜像的分布式构建。</p>
-<p>Buildkit 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。</p>
-<blockquote>
-<p>不建议使用 Google 的 Kaniko，它对缓存复用的支持不咋地，社区也不活跃。</p>
-</blockquote>
-<h3 id="10-客户端sdk">10. 客户端/SDK</h3>
-<p>Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。</p>
-<p>如下项目值得试用：</p>
-<ul>
-<li><a href="https://github.com/argoproj-labs/argo-client-python" target="_blank" rel="noopener noreferrer">argo-client-python</a>: Argo Workflows 的 Python 客户端
-<ul>
-<li>说实话，感觉和 kubernetes-client/python 一样难用，毕竟都是 openapi-generator 生成出来的&hellip;</li>
-</ul>
-</li>
-<li><a href="https://github.com/argoproj-labs/argo-python-dsl" target="_blank" rel="noopener noreferrer">argo-python-dsl</a>: 使用 Python DSL 编写 Argo Workflows
-<ul>
-<li>感觉使用难度比 yaml 高，也不太好用。</li>
-</ul>
-</li>
-<li><a href="https://github.com/couler-proj/couler" target="_blank" rel="noopener noreferrer">couler</a>: 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
-<ul>
-<li>理念倒是很好，待研究</li>
-</ul>
-</li>
-</ul>
-<p>感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。</p>
-<p>此外，因为 Argo Workflows 是 kubernetes 自定义资源 CR，也可以使用 helm/kustomize 来做 workflow 的生成。</p>
-<p>目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + <code>range</code> 循环来生成 workflow 配置。</p>
-<h2 id="二安装-argo-workflows">二、安装 Argo Workflows</h2>
-<blockquote>
-<p>参考官方文档：https://argoproj.github.io/argo-workflows/installation/</p>
-</blockquote>
-<p>安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
-</code></pre></td></tr></table>
-</div>
-</div><p>部署 MinIO:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">helm repo add minio https://helm.min.io/ <span class="c1"># official minio Helm charts</span>
-<span class="c1"># 查看历史版本</span>
-helm search repo minio/minio -l <span class="p">|</span> head
-<span class="c1"># 下载并解压 chart</span>
-helm pull minio/minio --untar --version 8.0.9
-
-<span class="c1"># 编写 custom-values.yaml，然后部署 minio</span>
-kubectl create namespace minio
-helm install minio ./minio -n argo -f custom-values.yaml
-</code></pre></td></tr></table>
-</div>
-</div><p>minio 部署好后，它会将默认的 <code>accesskey</code> 和 <code>secretkey</code> 保存在名为 <code>minio</code> 的 secret 中。
-我们需要修改 argo 的配置，将 minio 作为它的默认 artifact 仓库。</p>
-<p>在 configmap <code>workflow-controller-configmap</code> 的 data 中添加如下字段：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">  artifactRepository: <span class="p">|</span>
-    <span class="c1"># 是否将 main 容器的日志保存为 artifact，这样 pod 被删除后，仍然可以在 artifact 中找到日志</span>
-    archiveLogs: <span class="nb">true</span>
-    s3:
-      bucket: argo-bucket   <span class="c1"># bucket 名称，这个 bucket 需要先手动创建好！</span>
-      endpoint: minio:9000  <span class="c1"># minio 地址</span>
-      insecure: <span class="nb">true</span>
-      <span class="c1"># 从 minio 这个 secret 中获取 key/secret</span>
-      accessKeySecret:
-        name: minio
-        key: accesskey
-      secretKeySecret:
-        name: minio
-        key: secretkey
-</code></pre></td></tr></table>
-</div>
-</div><p>现在还差最后一步：手动进入 minio 的 Web UI，创建好 <code>argo-bucket</code> 这个 bucket.
-直接访问 minio 的 9000 端口（需要使用 nodeport/ingress 等方式暴露此端口）就能进入 Web UI，使用前面提到的 secret <code>minio</code> 中的 key/secret 登录，就能创建 bucket.</p>
-<h3 id="serviceaccount-配置">ServiceAccount 配置</h3>
-<blockquote>
-<p><a href="https://argoproj.github.io/argo-workflows/service-accounts/" target="_blank" rel="noopener noreferrer">https://argoproj.github.io/argo-workflows/service-accounts/</a></p>
-</blockquote>
-<p>Argo Workflows 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 <code>default</code> ServiceAccount 运行 workflow.</p>
-<p>可 <code>default</code> 这个 ServiceAccount 默认根本没有任何权限！所以 Argo 的 artifacts, outputs, access to secrets 等功能全都会因为权限不足而无法使用！</p>
-<p>为此，Argo 的官方文档提供了两个解决方法。</p>
-<p>方法一，直接给 default 绑定 <code>cluster-admin</code> ClusterRole，给它集群管理员的权限，只要一行命令（但是显然安全性堪忧）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-admin --clusterrole<span class="o">=</span>admin --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>方法二，官方给出了<a href="https://argoproj.github.io/argo-workflows/workflow-rbac/" target="_blank" rel="noopener noreferrer">Argo Workflows 需要的最小权限的 Role 定义</a>，方便起见我将它改成一个 ClusterRole:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">argo-workflow-role</span><span class="w">
-</span><span class="w"></span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span><span class="w"></span><span class="c"># pod get/watch is used to identify the container IDs of the current pod</span><span class="w">
-</span><span class="w"></span><span class="c"># pod patch is used to annotate the step&#39;s outputs back to controller (e.g. artifact location)</span><span class="w">
-</span><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">pods</span><span class="w">
-</span><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">get</span><span class="w">
-</span><span class="w">  </span>- <span class="l">watch</span><span class="w">
-</span><span class="w">  </span>- <span class="l">patch</span><span class="w">
-</span><span class="w"></span><span class="c"># logs get/watch are used to get the pods logs for script outputs, and for log archival</span><span class="w">
-</span><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">pods/log</span><span class="w">
-</span><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">get</span><span class="w">
-</span><span class="w">  </span>- <span class="l">watch</span><span class="w">
-</span></code></pre></td></tr></table>
-</div>
-</div><p>创建好上面这个最小的 ClusterRole，然后为每个名字空间，跑一下如下命令，给 default 账号绑定这个 clusterrole:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">kubectl create rolebinding default-argo-workflow --clusterrole<span class="o">=</span>argo-workflow-role  --serviceaccount<span class="o">=</span>&lt;namespace&gt;:default -n &lt;namespace&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>这样就能给 default 账号提供最小的 workflow 运行权限。</p>
-<p>或者如果你希望使用别的 ServiceAccount 来运行 workflow，也可以自行创建 ServiceAccount，然后再走上面方法二的流程，但是最后，要记得在 workflow 的 <code>spec.serviceAccountName</code> 中设定好 ServiceAccount 名称。</p>
-<h3 id="workflow-executors">Workflow Executors</h3>
-<blockquote>
-<p><a href="https://argoproj.github.io/argo-workflows/workflow-executors/" target="_blank" rel="noopener noreferrer">https://argoproj.github.io/argo-workflows/workflow-executors/</a></p>
-</blockquote>
-<p>Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等&hellip;</p>
-<p>Workflow Executor 有多种实现，可以通过前面提到的 configmap <code>workflow-controller-configmap</code> 来选择。</p>
-<p>可选项如下：</p>
-<ol>
-<li>docker(默认): 目前使用范围最广，但是安全性最差。它要求一定要挂载访问 <code>docker.sock</code>，因此一定要 root 权限！</li>
-<li>kubelet: 应用非常少，目前功能也有些欠缺，目前也必须提供 root 权限</li>
-<li>Kubernetes API (k8sapi): 直接通过调用 k8sapi 实现日志监控、Artifacts 手机等功能，非常安全，但是性能欠佳。</li>
-<li>Process Namespace Sharing (pns): 安全性比 k8sapi 差一点，因为 Process 对其他所有容器都可见了。但是相对的性能好很多。</li>
-</ol>
-<p>在 docker 被 kubernetes 抛弃的当下，如果你已经改用 containerd 做为 kubernetes 运行时，那 argo 将会无法工作，因为它默认使用 docker 作为运行时！</p>
-<p>我们建议将 workflow executore 改为 <code>pns</code>，兼顾安全性与性能，<code>workflow-controller-configmap</code> 按照如下方式修改：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
-</span><span class="w"></span><span class="nt">data</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span><span class="sd">    # ...省略若干配置...
-</span><span class="sd">
-</span><span class="sd">    # Specifies the container runtime interface to use (default: docker)
-</span><span class="sd">    # must be one of: docker, kubelet, k8sapi, pns
-</span><span class="sd">    containerRuntimeExecutor: pns
-</span><span class="sd">    # ...</span><span class="w">    
-</span></code></pre></td></tr></table>
-</div>
-</div><h2 id="三使用-argo-workflows-做-ci-工具">三、使用 Argo Workflows 做 CI 工具</h2>
-<p>官方的 Reference 还算详细，也有提供非常多的 examples 供我们参考，这里提供我们几个常用的 workflow 定义。</p>
-<ol>
-<li>使用 buildkit 构建镜像：https://github.com/argoproj/argo-workflows/blob/master/examples/buildkit-template.yaml
-<ol>
-<li>buildkit 支持缓存，可以在这个 example 的基础上自定义参数</li>
-<li>注意使用 PVC 来跨 step 共享存储空间这种手段，速度会比通过 artifacts 高很多。</li>
-</ol>
-</li>
-</ol>
-<h2 id="四常见问题">四、常见问题</h2>
-<h3 id="1-workflow-默认使用-root-账号">1. workflow 默认使用 root 账号？</h3>
-<p>workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 root 账号，而且要修改文件，就很可能遇到 Permission Denined 的问题。</p>
-<p>解决方法：通过 Pod Security Context 手动设定容器的 user/group:</p>
-<ul>
-<li><a href="https://argoproj.github.io/argo-workflows/workflow-pod-security-context/" target="_blank" rel="noopener noreferrer">Workflow Pod Security Context</a></li>
-</ul>
-<p>安全起见，我建议所有的 workflow 都手动设定 <code>securityContext</code>，示例：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">argoproj.io/v1alpha1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">WorkflowTemplate</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">runAsNonRoot</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="nt">runAsUser</span><span class="p">:</span><span class="w"> </span><span class="m">1000</span><span class="w">
-</span></code></pre></td></tr></table>
-</div>
-</div><p>或者也可以通过 <code>workflow-controller-configmap</code> 的 <code>workflowDefaults</code> 设定默认的 workflow 配置。</p>
-<h3 id="2-如何从-hashicorp-vault-中读取-secrets">2. 如何从 hashicorp vault 中读取 secrets?</h3>
-<blockquote>
-<p>参考 <a href="https://github.com/argoproj/argo-workflows/issues/3267#issuecomment-650119636" target="_blank" rel="noopener noreferrer">Support to get secrets from Vault</a></p>
-</blockquote>
-<p>hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理工具。
-我们在生产环境用它做为分布式配置中心，同时在本地 CI/CD 中，也使用它存储相关的敏感信息。</p>
-<p>现在迁移到 argo，我们当然希望能够有一个好的方法从 vault 中读取配置。</p>
-<p>目前最推荐的方法，是使用 vault 的 vault-agent，将 secrets 以文件的形式注入到 pod 中。</p>
-<p>通过 valut-policy - vault-role - k8s-serviceaccount 一系列认证授权配置，可以制定非常细粒度的 secrets 权限规则，而且配置信息阅后即焚，安全性很高。</p>
-<h3 id="3-如何在多个名字空间中使用同一个-secrets">3. 如何在多个名字空间中使用同一个 secrets?</h3>
-<p>使用 Namespace 对 workflow 进行分类时，遇到的一个常见问题就是，如何在多个名字空间使用 <code>private-git-creds</code>/<code>docker-config</code>/<code>minio</code>/<code>vault</code> 等 workflow 必要的 secrets.</p>
-<p>常见的方法是把 secrets 在所有名字空间 create 一次。</p>
-<p>但是也有更方便的 secrets 同步工具：</p>
-<p>比如，使用 <a href="https://github.com/kyverno/kyverno" target="_blank" rel="noopener noreferrer">kyverno</a> 进行 secrets 同步的配置：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kyverno.io/v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterPolicy</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sync-secrets</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">background</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-</span><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="c"># 将 secret vault 从 argo Namespace 同步到其他所有 Namespace</span><span class="w">
-</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sync-vault-secret</span><span class="w">
-</span><span class="w">    </span><span class="nt">match</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">kinds</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="l">Namespace</span><span class="w">
-</span><span class="w">    </span><span class="nt">generate</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Secret</span><span class="w">
-</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">regcred</span><span class="w">
-</span><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{request.object.metadata.name}}&#34;</span><span class="w">
-</span><span class="w">      </span><span class="nt">synchronize</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">      </span><span class="nt">clone</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">argo</span><span class="w">
-</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
-</span><span class="w">  </span><span class="c"># 可以配置多个 rules，每个 rules 同步一个 secret</span><span class="w">
-</span></code></pre></td></tr></table>
-</div>
-</div><p>上面提供的 kyverno 配置，会实时地监控所有 Namespace 变更，一但有新 Namespace 被创建，它就会立即将 <code>vault</code> secret 同步到该 Namespace.</p>
-<p>或者，使用专门的 secrets/configmap 复制工具：<a href="https://github.com/mittwald/kubernetes-replicator" target="_blank" rel="noopener noreferrer">kubernetes-replicator</a></p>
-<h3 id="4-argo-对-cr-资源的验证不够严谨写错了-key-都不报错">4. Argo 对 CR 资源的验证不够严谨，写错了 key 都不报错</h3>
-<p>待研究</p>
-<h3 id="5-如何归档历史数据">5. 如何归档历史数据？</h3>
-<p>Argo 用的时间长了，跑过的 Workflows/Pods 全都保存在 Kubernetes/Argo Server 中，导致 Argo 越用越慢。</p>
-<p>为了解决这个问题，Argo 提供了一些配置来限制 Workflows 和 Pods 的数量，详见：<a href="https://argoproj.github.io/argo-workflows/cost-optimisation/#limit-the-total-number-of-workflows-and-pods" target="_blank" rel="noopener noreferrer">Limit The Total Number Of Workflows And Pods</a></p>
-<p>这些限制都是 Workflow 的参数，如果希望设置一个全局默认的限制，可以按照如下示例修改 argo 的 <code>workflow-controller-configmap</code> 这个 configmap:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">workflow-controller-configmap</span><span class="w">
-</span><span class="w"></span><span class="nt">data</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span><span class="sd">    # Default values that will apply to all Workflows from this controller, unless overridden on the Workflow-level
-</span><span class="sd">    # See more: docs/default-workflow-specs.md
-</span><span class="sd">    workflowDefaults:
-</span><span class="sd">      spec:
-</span><span class="sd">        # must complete in 8h (28,800 seconds)
-</span><span class="sd">        activeDeadlineSeconds: 28800
-</span><span class="sd">        # keep workflows for 1d (86,400 seconds)
-</span><span class="sd">        ttlStrategy:
-</span><span class="sd">          secondsAfterCompletion: 86400
-</span><span class="sd">          # secondsAfterSuccess: 5
-</span><span class="sd">          # secondsAfterFailure: 500
-</span><span class="sd">        # delete all pods as soon as they complete
-</span><span class="sd">        podGC:
-</span><span class="sd">          # 可选项：&#34;OnPodCompletion&#34;, &#34;OnPodSuccess&#34;, &#34;OnWorkflowCompletion&#34;, &#34;OnWorkflowSuccess&#34;
-</span><span class="sd">          strategy: OnPodCompletion</span><span class="w">    
-</span></code></pre></td></tr></table>
-</div>
-</div><h3 id="6-argo-的其他进阶配置">6. Argo 的其他进阶配置</h3>
-<p>Argo Workflows 的配置，都保存在 <code>workflow-controller-configmap</code> 这个 configmap 中，我们前面已经接触到了它的部分内容。</p>
-<p>这里给出此配置文件的完整 examples: <a href="https://github.com/argoproj/argo-workflows/blob/master/docs/workflow-controller-configmap.yaml" target="_blank" rel="noopener noreferrer">https://github.com/argoproj/argo-workflows/blob/master/docs/workflow-controller-configmap.yaml</a></p>
-<p>其中一些可能需要自定义的参数如下：</p>
-<ul>
-<li><code>parallelism</code>: workflow 的最大并行数量</li>
-<li><code>persistence</code>: 将完成的 workflows 保存到 postgresql/mysql 中，这样即使 k8s 中的 workflow 被删除了，还能查看 workflow 记录
-<ul>
-<li>也支持配置过期时间</li>
-</ul>
-</li>
-<li><code>sso</code>: 启用单点登录</li>
-</ul>
-<h3 id="7-是否应该尽量使用-cicd-工具提供的功能">7. 是否应该尽量使用 CI/CD 工具提供的功能？</h3>
-<p>我从同事以及网络上，了解到部分 DevOps 人员主张尽量自己使用 Python/Go 来实现 CI/CD 流水线，CI/CD 工具提供的功能能不使用就不要使用。</p>
-<p>因此有此一问。下面做下详细的分析：</p>
-<p>尽量使用 CI/CD 工具提供的插件/功能，好处是不需要自己去实现，可以降低维护成本。
-但是相对的运维人员就需要深入学习这个 CI/CD 工具的使用，另外还会和 CI/CD 工具绑定，会增加迁移难度。</p>
-<p>而尽量自己用 Python 等代码去实现流水线，让 CI/CD 工具只负责调度与运行这些 Python 代码，
-那 CI/CD 就可以很方便地随便换，运维人员也不需要去深入学习 CI/CD 工具的使用。
-缺点是可能会增加 CI/CD 代码的复杂性。</p>
-<p>我观察到 argo/drone 的一些 examples，发现它们的特征是：</p>
-<ol>
-<li>所有 CI/CD 相关的逻辑，全都实现在流水线中，不需要其他构建代码</li>
-<li>每一个 step 都使用专用镜像：golang/nodejs/python
-<ol>
-<li>比如先使用 golang 镜像进行测试、构建，再使用 kaniko 将打包成容器镜像</li>
-</ol>
-</li>
-</ol>
-<p>那是否应该尽量使用 CI/CD 工具提供的功能呢？
-<strong>其实这就是有多种方法实现同一件事，该用哪种方法的问题。这个问题在各个领域都很常见。</strong></p>
-<p>以我目前的经验来看，需要具体问题具体分析，以 Argo Workflows 为例：</p>
-<ol>
-<li>流水线本身非常简单，那完全可以直接使用 argo 来实现，没必要自己再搞个 python 脚本
-<ol>
-<li>简单的流水线，迁移起来往往也非常简单。没必要为了可迁移性，非要用 argo 去调用 python 脚本。</li>
-</ol>
-</li>
-<li>流水线的步骤之间包含很多逻辑判断/数据传递，那很可能是你的流水线设计有问题！
-<ol>
-<li><strong>流水线的步骤之间传递的数据应该尽可能少！复杂的逻辑判断应该尽量封装在其中一个步骤中！</strong></li>
-<li>这种情况下，就应该使用 python 脚本来封装复杂的逻辑，而不应该将这些逻辑暴露到 Argo Workflows 中！</li>
-</ol>
-</li>
-<li>我需要批量运行很多的流水线，而且它们之间还有复杂的依赖关系：那显然应该利用上 argo wrokflow 的高级特性。
-<ol>
-<li>argo 的 dag/steps 和 workflow of workflows 这两个功能结合，可以简单地实现上述功能。</li>
-</ol>
-</li>
-</ol>
-<h2 id="8-如何提升-argo-workflows-的创建和销毁速度">8. 如何提升 Argo Workflows 的创建和销毁速度？</h2>
-<p>我们发现 workflow 的 pod，创建和销毁消耗了大量时间，尤其是销毁。
-这导致我们单个流水线在 argo 上跑，还没在 jenkins 上跑更快。</p>
-<h2 id="使用体验">使用体验</h2>
-<p>目前已经使用 Argo Workflows 一个月多了，总的来说，最难用的就是 Web UI。</p>
-<p>其他的都是小问题，只有 Web UI 是真的超难用，感觉根本就没有好好做过设计&hellip;</p>
-<p>急需一个第三方 Web UI&hellip;</p>
-<h2 id="画外---如何处理其他-kubernetes-资源之间的依赖关系">画外 - 如何处理其他 Kubernetes 资源之间的依赖关系</h2>
-<p>Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间是有依赖关系的，因此它提供了多种协调编排「任务」的方法。</p>
-<p>但是貌似 Argo CD 并没有继承这个理念，Argo CD 部署时，并不能在 kubernetes 资源之间，通过 DAG 等方法定义依赖关系。</p>
-<p>微服务之间存在依赖关系，希望能按依赖关系进行部署，而 ArgoCD/FluxCD 部署 kubernetes yaml 时都是不考虑任何依赖关系的。这里就存在一些矛盾。</p>
-<p>解决这个矛盾的方法有很多，我查阅了很多资料，也自己做了一些思考，得到的最佳实践来自<a href="https://developer.aliyun.com/article/573791" target="_blank" rel="noopener noreferrer">解决服务依赖 - 阿里云 ACK 容器服务</a>，它给出了两种方案：</p>
-<ol>
-<li><strong>应用端服务依赖检查</strong>: 即在微服务的入口添加依赖检查逻辑，确保所有依赖的微服务/数据库都可访问了，就续探针才能返回 200. 如果超时就直接 Crash</li>
-<li><strong>独立的服务依赖检查逻辑</strong>: 部分遗留代码使用方法一改造起来或许会很困难，这时可以考虑使用 <strong>pod initContainer</strong> 或者容器的启动脚本中，加入依赖检查逻辑。</li>
-</ol>
-<p>但是这两个方案也还是存在一些问题，在说明问题前，我先说明一下我们「<strong>按序部署</strong>」的应用场景。</p>
-<p>我们是一个很小的团队，后端做 RPC 接口升级时，通常是直接在开发环境做全量升级+测试。
-因此运维这边也是，每次都是做全量升级。</p>
-<p>因为没有协议协商机制，新的微服务的「RPC 服务端」将兼容 v1 v2 新旧两种协议，而新的「RPC 客户端」将直接使用 v2 协议去请求其他微服务。
-这就导致我们<strong>必须先升级「RPC 服务端」，然后才能升级「RPC 客户端」</strong>。</p>
-<p>为此，在进行微服务的全量升级时，就需要沿着 RPC 调用链路按序升级，这里就涉及到了 Kubernetes 资源之间的依赖关系。</p>
-<blockquote>
-<p>我目前获知的关键问题在于：我们使用的并不是真正的微服务开发模式，而是在把整个微服务系统当成一个「单体服务」在看待，所以引申出了这样的依赖关键的问题。
-我进入的新公司完全没有这样的问题，所有的服务之间在 CI/CD 这个阶段都是解耦的，CI/CD 不需要考虑服务之间的依赖关系，也没有自动按照依赖关系进行微服务批量发布的功能，这些都由开发人员自行维护。
-或许这才是正确的使用姿势，如果动不动就要批量更新一大批服务，那微服务体系的设计、拆分肯定是有问题了，生产环境也不会允许这么轻率的更新。</p>
-</blockquote>
-<p>前面讲了，阿里云提供的「应用端服务依赖检查」和「独立的服务依赖检查逻辑」是最佳实践。它们的优点有：</p>
-<ol>
-<li>简化部署逻辑，每次直接做全量部署就 OK。</li>
-<li>提升部署速度，具体体现在：GitOps 部署流程只需要走一次（按序部署要很多次）、所有镜像都提前拉取好了、所有 Pod 也都提前启动了。</li>
-</ol>
-<p>但是这里有个问题是「灰度发布」或者「滚动更新」，这两种情况下都存在<strong>新旧版本共存</strong>的问题。</p>
-<p>如果出现了 RPC 接口升级，那就必须先完成「RPC 服务端」的「灰度发布」或者「滚动更新」，再去更新「RPC 客户端」。</p>
-<p>否则如果直接对所有微服务做灰度更新，只依靠「服务依赖检查」，就会出现这样的问题——「RPC 服务端」处于「薛定谔」状态，你调用到的服务端版本是新还是旧，取决于负载均衡的策略和概率。</p>
-<p>**因此在做 RPC 接口的全量升级时，只依靠「服务依赖检查」是行不通的。**我目前想到的方案，有如下几种：</p>
-<ul>
-<li>我们当前的使用方案：<strong>直接在 yaml 部署这一步实现按序部署</strong>，每次部署后就轮询 kube-apiserver，确认全部灰度完成，再进行下一阶段的 yaml 部署。</li>
-<li><strong>让后端加个参数来控制客户端使用的 RPC 协议版本，或者搞一个协议协商</strong>。这样就不需要控制微服务发布顺序了。</li>
-<li>社区很多有状态应用的部署都涉及到部署顺序等复杂操作，目前流行的解决方案是<strong>使用 Operator+CRD 来实现这类应用的部署</strong>。Operator 会自行处理好各个组件的部署顺序。</li>
-</ul>
-<h2 id="参考文档">参考文档</h2>
-<ul>
-<li><a href="https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH" target="_blank" rel="noopener noreferrer">Argo加入CNCF孵化器，一文解析Kubernetes原生工作流</a></li>
-</ul>
-<p>视频:</p>
-<ul>
-<li><a href="https://www.youtube.com/watch?v=fKiU7txd4RI&amp;list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&amp;index=149" target="_blank" rel="noopener noreferrer">How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang</a></li>
-</ul>]]></description></item></channel></rss>
+]]></description></item></channel></rss>
