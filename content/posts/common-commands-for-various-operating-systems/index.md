@@ -292,7 +292,7 @@ fi
 - [shell_scripts](https://github.com/mritd/shell_scripts): 实用 shell 小脚本
 
 
-### 7. socket 连接查询 - ss/netcat/lsof
+### 7. socket 连接查询 - ss/netcat/lsof {#socket-commands}
 
 查看 socket 信息可以帮我们回答下列问题：
 
