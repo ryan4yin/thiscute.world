@@ -105,7 +105,7 @@ draft: false
   - [编程语言实现模式](https://book.douban.com/subject/10482195/)
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
-  - 阅读 Lua 程序设计
+  - 阅读《Lua 程序设计》
   - 阅读 APISIX 源码 + Openresty
   - 深入学习 Nginx 及 epoll
 
@@ -114,6 +114,8 @@ draft: false
   - redis 底层
   - mysql/postgresql 底层
   - [Readings in Database Systems](https://book.douban.com/subject/2256069/)
+
+- 机器学习、深度学习
 
 ### 其他暂时排不上号的兴趣点
 
@@ -125,9 +127,7 @@ draft: false
   - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
   - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
 
-- 机器学习、深度学习
 - 微积分、线代、概率论、数学物理方法
-
 
 - 信号与系统、数字信号处理、音视频处理
 - 《声学基础》、《理论声学》、《空间声学》：虽然大学学的一塌糊涂，现在居然又有些兴趣想学来玩玩，写些声学仿真工具试试。
