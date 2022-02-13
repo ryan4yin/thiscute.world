@@ -94,7 +94,7 @@ awk 'BEGIN {min = 1999999} {if ($1<min) min=$1 fi} END {print "Min=", min}'
 
 ### 3. 压缩相关
 
-```
+```shell
 # 直接 cat 压缩文件的内容
 zcat xxx.gz | more  # gzip
 xzcat xxx.xz | more  # xz
@@ -206,37 +206,35 @@ cat /etc/group | grep <group-name>
 
 常用快捷键：
 
-```
-# prefix 表示 `ctrl`+`b`
+      # prefix 表示 `ctrl`+`b`
 
-# pane 的切分与选择
-prefix "  # 在下方新建一个 pane
-prefix %  # 在右侧新建一个 pane
-prefix `方向键`  # 光标移动到指定方向的 pane 中
+      # pane 的切分与选择
+      prefix "  # 在下方新建一个 pane
+      prefix %  # 在右侧新建一个 pane
+      prefix `方向键`  # 光标移动到指定方向的 pane 中
 
-# 使用方向键滚动窗口内容
-prefix [  # 进入翻页模式，可使用 page up/down，或者方向键来浏览 pane 的内容
-# 使用鼠标滚轮来滚动窗口内容（也可以把此命令添加到 `~/.tmux.conf` 中使它永久生效）
-prefix `:` 然后输入 `set-window-option -g mode-mouse on`
+      # 使用方向键滚动窗口内容
+      prefix [  # 进入翻页模式，可使用 page up/down，或者方向键来浏览 pane 的内容
+      # 使用鼠标滚轮来滚动窗口内容（也可以把此命令添加到 `~/.tmux.conf` 中使它永久生效）
+      prefix `:` 然后输入 `set-window-option -g mode-mouse on`
 
-# （调整 pane 大小）将当前的 pane 向给定的方向扩容 5 行或者 5 列
-# 按住 ALT 时快速重复敲击「方向键」，能快速调整，否则就得从 prefix 开始重新输入
-prefix `Alt` + `方向键`
-# 将当前窗格全屏显示，第二次使用此命令，会将窗格还原
-prefix z
+      # （调整 pane 大小）将当前的 pane 向给定的方向扩容 5 行或者 5 列
+      # 按住 ALT 时快速重复敲击「方向键」，能快速调整，否则就得从 prefix 开始重新输入
+      prefix `Alt` + `方向键`
+      # 将当前窗格全屏显示，第二次使用此命令，会将窗格还原
+      prefix z
 
-# 交换 pane 的位置
-prefix {  # 当前窗格与上一个窗格交换位置
-prefix }  # 当前窗格与下一个窗格交换位置
+      # 交换 pane 的位置
+      prefix {  # 当前窗格与上一个窗格交换位置
+      prefix }  # 当前窗格与下一个窗格交换位置
 
-# session 相关操作
-prefix s  # 查看 session 列表，并通过方向键选择 session
-prefix `number`  # 通过数字标签选择 session
+      # session 相关操作
+      prefix s  # 查看 session 列表，并通过方向键选择 session
+      prefix `number`  # 通过数字标签选择 session
 
-# window 相关操作（关系：每个 session 可以包含多个 window，每个 window 里面又可以有多个 pane）
-prefix c # 新建 window
-prefix w # 通过数字标签选择 window
-```
+      # window 相关操作（关系：每个 session 可以包含多个 window，每个 window 里面又可以有多个 pane）
+      prefix c # 新建 window
+      prefix w # 通过数字标签选择 window
 
 ### 6. Bash Shell 基础
 
@@ -373,7 +371,16 @@ ulimit -n
 routel       # 旧的 net-tools 包中的命令
 ip route ls  # iproute2 提供的新命令
 
-dhclient 
+# 清理 DHCP release
+dhclient -r
+
+# 清理 DNS 缓存
+## 1. 如果你使用的是 systemd-resolve，使用此命令
+sudo systemd-resolve --flush-caches
+sudo systemd-resolve --statistics  # 查看缓存状态
+## 2. 如果使用的是 dnsmasq，使用此命令
+sudo systemctl restart dnsmasq
+sudo killall -HUP dnsmasq  # 直接发送 HUP 信号也可以
 ```
 
 ### 9. 容器网络诊断 - nsenter
@@ -384,7 +391,7 @@ Docker 容器有自己的 namespace，直接通过宿主机的 ss 命令是查�
 
 通过 `nsenter` 可以直接进入到容器的指定 namespace 中，这样就能直接查询容器网络相关的信息了。
 
-```
+```shell
 docker ps | grep xxx
 
 echo CONTAINER=xxx  # 容器名称或 ID
@@ -505,8 +512,7 @@ Get-FileHash -Path /path/to/file -Algorithm SHA256  | Format-List  # 用 format 
 
 ### 2. 进程相关命令
 
-```
-
+```powershell
 # 查看所有进程
 get-process | more
 ps | more  # 别名
@@ -546,7 +552,7 @@ Remove-NetNeighbor  # 清除 MAC 地址缓存
 
 Windows 系统和 macOS 一样，也没有 `ss`，但是自带 `netstat`，该命令和 Linux 下的 `netstat` 有一定差别，具体使用方法如下：
 
-```shell
+```powershell
 netstat -?  # 查看使用帮助，很清晰易懂
 
 # 查看那个进程在监听 80 端口，最后一列是进程的 Pid
@@ -670,21 +676,19 @@ netstat -nr
 
 多行行首插入注释符号 `#`
 
-```
-:1,6 s/^/#/g
-:2,$ s/^/#/g   注：此为2行至尾行
-:% s/^/#/g     注：此为所有行
-```
+
+      :1,6 s/^/#/g
+      :2,$ s/^/#/g   注：此为2行至尾行
+      :% s/^/#/g     注：此为所有行
+
 
 这里使用了正则表达式 `^` 匹配行首，改成 `$` 就可在行尾进行批量修改。
 
 此外，它的分隔符也不仅限于 `\`，也可以用 `@` 等符号，方便阅读。比如：
 
-```
-:1,6 s@^@#@g
-:2,$ s@^@#@g   注：此为2行至尾行
-:% s@^@#@g     注：此为所有行
-```
+      :1,6 s@^@#@g
+      :2,$ s@^@#@g   注：此为2行至尾行
+      :% s@^@#@g     注：此为所有行
 
 使用 vim 的这个正则匹配功能，不仅能进行插入，也能完成删除、替换的功能。
 
