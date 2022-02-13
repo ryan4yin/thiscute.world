@@ -175,20 +175,13 @@ rsync -avz --progress --delete src user@host:dest
 
 # 也可以使用 --ignore-existing 让 rsync 忽略掉 dest 已经存在的文件。就是只同步新增的文件。
 rsync -avz --progress --ignore-existing src user@host:dest
-
-# 另有使用双冒号 :: 分隔的传输命令，这种命令使用 rsync 协议进行传输，要求目标主机启用 rsync-daemon
-# 暂时不做介绍
-
-详见 https://rsync.samba.org/documentation.html
-
-# 用户与群组
-## 查看用户属于哪些群组
-groups <user-name>  # 方法一
-id <username>       # 方法二，它会额外列出 gid/uid
-cat /etc/group | grep <user-name>  # 方法三，直接查看配置
-## 查看群组中有哪些用户，第一列是群组，最后一列是用户名
-cat /etc/group | grep <group-name>
 ```
+
+另外也有使用双冒号 `::` 分隔的传输命令，这种命令使用 `rsync` 协议进行传输，要求目标主机启用 rsync-daemon。用得会比 ssh 少一些，暂时不做介绍。
+
+
+rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `man rsync`.
+
 
 ### 5. Tmux
 
@@ -408,6 +401,17 @@ nsenter --target $PID --net ss -s
 `nsenter` 这个工具貌似是 docker 自带的或者是系统内置命令，只要装了 docker，ubuntu/centos 都可以直接使用这个命令。
 
 >nsenter 是一个进入名字空间的工具，功能不仅仅局限在「网络诊断」，还有更多用法。
+
+### 10. 用户与群组
+
+```shell
+## 查看用户属于哪些群组
+groups <user-name>  # 方法一
+id <username>       # 方法二，它会额外列出 gid/uid
+cat /etc/group | grep <user-name>  # 方法三，直接查看配置
+## 查看群组中有哪些用户，第一列是群组，最后一列是用户名
+cat /etc/group | grep <group-name>
+```
 
 ## 二、Powershell
 
