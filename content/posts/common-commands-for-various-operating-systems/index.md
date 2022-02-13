@@ -9,6 +9,12 @@ resources:
 
 tags: ["Linux", "MacOSX", "Windows", "CLI", "Powershell", "Shell", "tmux", "rsync", "vim", "awk", ]
 categories: ["技术"]
+
+code:
+  # whether to show the copy button of the code block
+  copy: false
+  # the maximum number of lines of displayed code by default
+  maxShownLines: 100
 ---
 
 >个人笔记，只会列出我自己容易忘掉的命令，方便查阅。

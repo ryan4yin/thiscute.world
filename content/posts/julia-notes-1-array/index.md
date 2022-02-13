@@ -8,6 +8,12 @@ resources:
 
 tags: ["JuliaLang"]
 categories: ["技术"]
+
+code:
+  # whether to show the copy button of the code block
+  copy: false
+  # the maximum number of lines of displayed code by default
+  maxShownLines: 100
 ---
 
 
