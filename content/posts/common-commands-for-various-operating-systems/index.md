@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "terminal.webp"
 
-tags: ["Linux", "MacOSX", "Windows", "CLI", "Powershell", "Shell", "tmux", "rsync", "vim", "awk", ]
+tags: ["Linux", "MacOSX", "Windows", "CLI", "Powershell", "Shell", "tmux", "rsync", "vim", "awk"]
 categories: ["技术"]
 
 code:
