@@ -371,8 +371,10 @@ ulimit -n
 routel       # 旧的 net-tools 包中的命令
 ip route ls  # iproute2 提供的新命令
 
-# 清理 DHCP release
-dhclient -r
+# DHCP，先释放旧租约，再建立新租约
+sudo dhclient -r eth0 && sudo dhclient eth0
+# 查看 DHCP 租期
+cat /var/lib/dhcp/dhcpd.leases
 
 # 清理 DNS 缓存
 ## 1. 如果你使用的是 systemd-resolve，使用此命令
@@ -534,6 +536,9 @@ kill <pid>  # 别名
 Clear-DnsClientCache  # 清除 dns 缓存（替换掉 `ipconfig /flushdns`）
 Get-DnsClientCache  # 查看 dns 缓存
 Resolve-DnsName baidu.com  # 解析域名
+
+# 更新 DHCP 租约
+ipconfig /renew
 
 ## 2. TCP/IP 相关命令
 Get-Command Get-Net*  # 查看所有 TCP/IP 相关的命令
