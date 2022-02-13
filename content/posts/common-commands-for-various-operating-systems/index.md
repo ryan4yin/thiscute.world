@@ -185,9 +185,6 @@ rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `ma
 
 ### 5. Tmux
 
->参考文档：https://github.com/tmux/tmux/wiki/Getting-Started
->参考文档：https://www.ruanyifeng.com/blog/2019/10/tmux.html
-
 1. 输入 `tmux` 启动一个 tmux 会话。（或者用 `tmux new -s <session-name>` 启动一个命名会话）
 2. 输入 `python xxx.py`，python 进程开始运行。
 3. 按快捷键 `ctrl+b`，然后再按一下 `d` 脱离(detatch)当前会话。此时 python 进程进入后台运行，关闭当前终端对 python 进程没有影响。
@@ -228,6 +225,10 @@ rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `ma
       # window 相关操作（关系：每个 session 可以包含多个 window，每个 window 里面又可以有多个 pane）
       prefix c # 新建 window
       prefix w # 通过数字标签选择 window
+
+参考文档：
+- https://github.com/tmux/tmux/wiki/Getting-Started
+- https://www.ruanyifeng.com/blog/2019/10/tmux.html
 
 ### 6. Bash Shell 基础
 
