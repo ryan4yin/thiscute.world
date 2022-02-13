@@ -50,8 +50,10 @@ draft: false
 - k8s 网络插件 - Cilium
 - Kubernetes：阅读源码，熟悉底层细节
 - 计算机网络：
+  - Computer Networking: A Top-Down Approach, 7th Edition
   - BGP 路由协议
   - vxlan
+- 数据库: [SQL进阶教程](https://book.douban.com/subject/27194738/)
 
 ### 中优先级
 
@@ -69,10 +71,38 @@ draft: false
     - https://blog.lizzie.io/linux-containers-in-500-loc.html
   - 网络代理（不到 2000 行的 TUN 库）
     - https://github.com/songgao/water
-  - 实现简单的数据库：tinysql/tinykv  
+  - 实现简单的键值数据库：
+    - https://github.com/tidb-incubator/tinykv
+  - 实现简单的关系数据库：
+    - https://github.com/tidb-incubator/tinysql
+  - 学习搜索引擎技术：
+    - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
+    - https://github.com/huichen/wukong
 
+
+- 操作系统：
+  - [The Linux Programming Interface](https://www.man7.org/tlpi/index.html)
+  - [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/)
+
+- 编译原理
+  - [自制编译器](https://book.douban.com/subject/26806041/)
+  - [Programming Language Pragmatics, Fourth Edition](https://book.douban.com/subject/26424018/)
+
+- 学习英语，目标是能流利地读写交流。
+  - 主要是可以扩宽工作的选择面，外企很多职位会要求英文读写流利。
+
+- 区块链技术 Web3.0
+  - 了解 NFT、智能合约、DAO 啥的
+  - https://github.com/ethereum/solidity
 
 ### 低优先级
+
+- 操作系统：
+  - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html)
+
+- 编译原理（如何实现一个编程语言）
+  - [编译器设计（第2版）](https://book.douban.com/subject/20436488/)
+  - [编程语言实现模式](https://book.douban.com/subject/10482195/)
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
   - 阅读 Lua 程序设计
@@ -80,32 +110,29 @@ draft: false
   - 深入学习 Nginx 及 epoll
 
 - [进阶]数据库、数据结构与算法
-  - MIT 6.824：《数据密集型应用系统设计》raft
+  - MIT 6.824：[Designing Data-Intensive Applications](https://dataintensive.net/)
   - redis 底层
   - mysql/postgresql 底层
+  - [Readings in Database Systems](https://book.douban.com/subject/2256069/)
 
-- 英语词汇量
-- 学习简单的 Parser 原理：《编程语言实现模式》
+### 其他暂时排不上号的兴趣点
 
+- 编程语言
+  - Elixir
+  - Kotlin
 
-### 其他比较感兴趣的东西
+- 编程语言理论（如何设计一个编程语言）
+  - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
+  - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
 
-- 微积分、线代、概率论、数学物理方法
-- 信号与系统、数字信号处理、音视频处理
 - 机器学习、深度学习
+- 微积分、线代、概率论、数学物理方法
+
+
+- 信号与系统、数字信号处理、音视频处理
 - 《声学基础》、《理论声学》、《空间声学》：虽然大学学的一塌糊涂，现在居然又有些兴趣想学来玩玩，写些声学仿真工具试试。
   - 语音合成、歌声合成
   - 声学模拟：[揉搓声模拟](http://www.cs.columbia.edu/cg/crumpling/)
-
-
-## 二、我想读的书
-
-- [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/)
-- [Designing Data-Intensive Applications](https://dataintensive.net/)
-- [The Linux Programming Interface](https://www.man7.org/tlpi/index.html)
-- Computer Networking: A Top-Down Approach, 7th Edition
-- [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html)
-
 
 
 ---
