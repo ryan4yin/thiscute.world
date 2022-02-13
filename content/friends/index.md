@@ -53,6 +53,7 @@ var myFriends = [
     ["https://www.foreverblog.cn/", "https://www.foreverblog.cn/favicon.ico", "@十年之约", "我们的博客十年不关闭，保持活力"], 
     ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.jpg", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。 <= Java+DevOps"], 
     ["https://stdrc.cc/", "/avatar/richardchien.png", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot 作者，OS 大佬"], 
+    ["https://www.symbk.cn/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@幸吾有志", "幸于吾志尚存 <= 是个文学家~"], 
 ];
 
 
