@@ -554,14 +554,18 @@ lsof <span class="p">|</span> wc -l
 </span><span class="lnt">12
 </span><span class="lnt">13
 </span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看路由表</span>
 routel       <span class="c1"># 旧的 net-tools 包中的命令</span>
 ip route ls  <span class="c1"># iproute2 提供的新命令</span>
 
-<span class="c1"># 清理 DHCP release</span>
-dhclient -r
+<span class="c1"># DHCP，先释放旧租约，再建立新租约</span>
+sudo dhclient -r eth0 <span class="o">&amp;&amp;</span> sudo dhclient eth0
+<span class="c1"># 查看 DHCP 租期</span>
+cat /var/lib/dhcp/dhcpd.leases
 
 <span class="c1"># 清理 DNS 缓存</span>
 <span class="c1">## 1. 如果你使用的是 systemd-resolve，使用此命令</span>
@@ -838,12 +842,18 @@ nsenter --target <span class="nv">$PID</span> --net ss -s
 </span><span class="lnt">14
 </span><span class="lnt">15
 </span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c">## 1. dns 相关(dns-client)</span>
 <span class="nb">Clear-DnsClientCache</span>  <span class="c"># 清除 dns 缓存（替换掉 `ipconfig /flushdns`）</span>
 <span class="nb">Get-DnsClientCache</span>  <span class="c"># 查看 dns 缓存</span>
 <span class="nb">Resolve-DnsName</span> <span class="n">baidu</span><span class="p">.</span><span class="n">com</span>  <span class="c"># 解析域名</span>
+
+<span class="c"># 更新 DHCP 租约</span>
+<span class="n">ipconfig</span> <span class="p">/</span><span class="n">renew</span>
 
 <span class="c">## 2. TCP/IP 相关命令</span>
 <span class="nb">Get-Command</span> <span class="nb">Get-Net</span><span class="p">*</span>  <span class="c"># 查看所有 TCP/IP 相关的命令</span>
