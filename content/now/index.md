@@ -92,8 +92,9 @@ draft: false
   - 主要是可以扩宽工作的选择面，外企很多职位会要求英文读写流利。
 
 - 区块链技术 Web3.0
-  - 了解 NFT、智能合约、DAO 啥的
-  - https://github.com/ethereum/solidity
+  - [非同质化代币 (NFT)](https://ethereum.org/zh/nft/)、[去中心化自治组织 (DAO)](https://ethereum.org/zh/dao/)
+  - [智能合约](https://ethereum.org/en/developers/docs/smart-contracts/)
+  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/)
 
 ### 低优先级
 
