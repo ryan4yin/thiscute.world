@@ -34,6 +34,9 @@ lightgallery: true
 - **Position**：**Site Reliability Engineer**
   - Maintain and optimize container computing platform and traffic links, analyze and control cloud computing costs, and support fast-growing business stably and efficiently.
 - **Tools & Technologies**：Linux/Kubernetes/Istio
+- Contact Me
+  - Publicly: https://github.com/ryan4yin/ryan4yin.space/issues
+  - Privately(Email): `eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
 
 ## About This Blog
 
