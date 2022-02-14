@@ -24,7 +24,7 @@ draft: false
 
 可通过 [Issues](https://github.com/ryan4yin/ryan4yin.space/issues) 或者评论区提交友链申请，格式如下：
 
-    站点名称：Ryan4Yin's Space
+    站点名称：This Cute World
     站点地址：https://thiscute.world/
     个人形象：https://www.gravatar.com/avatar/2362ce7bdf2845a92240cc2f6609e001?s=240
     站点描述：赞美快乐~

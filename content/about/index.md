@@ -35,6 +35,9 @@ lightgallery: true
 - **职业**：**SRE**
   - 维护与优化容器计算平台及流量链路，分析与管控云计算成本，**稳定高效**地支撑快速成长的业务
 - **工具或技术**：Linux/Kubernetes/Istio
+- 联系方式
+  - 公网聊天：https://github.com/ryan4yin/ryan4yin.space/issues
+  - 邮件私聊：`eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
 
 ## 关于此博客
 
