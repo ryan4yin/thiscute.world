@@ -10,12 +10,12 @@ resources:
 tags: ["阅读", "焦虑"]
 categories: ["随笔"]
 
-comment:
-  enble: true
-  disqus:
-    enable: true
-  # utterances:
-  #   enable: true
+# comment:
+#   enble: true
+#   disqus:
+#     enable: true
+#   # utterances:
+#   #   enable: true
 ---
 
 
