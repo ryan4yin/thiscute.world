@@ -93,32 +93,15 @@ staticDir = ["static", "static-surprises"]
     # 许可协议信息 (支持 HTML 格式)
     license= '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
 
-  # 主页配置
-  [params.home]
-    # CodeIT 新增 | 0.2.0 RSS 文章数目
-    rss = 20
-    # 主页个人信息，这个在每个语言中单独配
-    # [params.home.profile]
-    #   enable = true
-    #   # Gravatar 邮箱，用于优先在主页显示的头像
-    #   # gravatarEmail = "xiaoyin_c@qq.com"
-    #   # 主页显示头像的 URL
-    #   avatarURL = "/avatar/myself.jpg"
-    #   # CodeIT 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
-    #   title = ""
-    #   # 主页显示的网站副标题
-    #   subtitle = "双手合十 闭上眼睛 心里什么也不去想 嘴角就高高扬起 笑出声来 赞美快乐~"
-    #   # 是否为副标题显示打字机动画
-    #   typeit = false
-    #   # 是否显示社交账号
-    #   social = true
-    #   # CodeIT 新增 | 0.2.0 免责声明 (支持 HTML 格式)
-    #   disclaimer = ""
-    # 主页文章列表
-    [params.home.posts]
-      enable = true
-      # 主页每页显示文章数量
-      paginate = 15
+  #  Section (所有文章) 页面配置
+  [params.section]
+    # section 页面每页显示文章数量
+    paginate = 100  # 尽量一页列出所有文章
+
+  #  List (目录或标签) 页面配置
+  [params.list]
+    # list 页面每页显示文章数量
+    paginate = 100  # 尽量一页列出所有文章
 
   # 社交信息设置
   [params.social]
@@ -278,6 +261,7 @@ staticDir = ["static", "static-surprises"]
     languageName = "Simplified Chinese"
     # whether to include Chinese/Japanese/Korean
     hasCJKLanguage = true
+
     [languages.zh-cn.params.home.profile]
       enable = true
       # Gravatar 邮箱，用于优先在主页显示的头像
@@ -294,6 +278,11 @@ staticDir = ["static", "static-surprises"]
       social = true
       # CodeIT 新增 | 0.2.0 免责声明 (支持 HTML 格式)
       disclaimer = ""
+
+    [languages.zh-cn.params.home.posts]
+      enable = true
+      # special amount of posts in each home posts page
+      paginate = 15
 
     [[languages.zh-cn.menu.main]]
       identifier = "statistics"
@@ -374,6 +363,11 @@ staticDir = ["static", "static-surprises"]
       social = true
       # CodeIT 新增 | 0.2.0 免责声明 (支持 HTML 格式)
       disclaimer = ""
+
+    [languages.en.params.home.posts]
+      enable = false
+      # special amount of posts in each home posts page
+      paginate = 15
 
     [[languages.en.menu.main]]
       identifier = "posts"
