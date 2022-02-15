@@ -54,7 +54,8 @@ var myFriends = [
     ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.jpg", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。"], 
     ["https://stdrc.cc/", "/avatar/richardchien.png", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot 作者，OS 大佬"], 
     ["https://fmcf.cc/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@幸吾有志", "他戴着花冠，踏于风雪，探寻迷途的救赎，绽放生命的曙光"], 
-    ["https://www.lionad.art/", "/avatar/lionad-morotar.jpg", "@仿生狮子 ", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
+    ["https://www.lionad.art/", "/avatar/lionad-morotar.jpg", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
+    ["https://ryanyang.cn/", "/avatar/ryanyang.png", "@ryanyang", "一位智慧的阿拉伯诗人 <= Java 后端大佬"], 
 ];
 
 
