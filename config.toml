@@ -14,6 +14,8 @@ staticDir = ["static", "static-surprises"]
 # 自动根据 git 提交信息，生成文章的更新时间。这个好像不能识别到每篇文章的修改时间，先关掉
 # enableGitInfo = true
 
+enableRobotsTXT = true
+
 [params]
   # CodeIT 主题版本
   version = "0.2.X"
@@ -135,7 +137,7 @@ staticDir = ["static", "static-surprises"]
     # 是否在文章页面显示原始 Markdown 文档链接
     linkToMarkdown = true
     # CodeIT 新增 | 0.2.4 是否在 RSS 中显示全文内容
-    rssFullText = true
+    rssFullText = false
     # CodeIT 新增 | 0.2.0 目录配置
     [params.page.toc]
       # 是否使用目录
@@ -452,8 +454,6 @@ staticDir = ["static", "static-surprises"]
 
 # 隐私信息配置
 [privacy]
-  # CodeIT 删除 | 0.2.0 Google Analytics 相关隐私 (被 params.analytics.google 替代)
-  [privacy.googleAnalytics]
   [privacy.twitter]
     enableDNT = true
   [privacy.youtube]
