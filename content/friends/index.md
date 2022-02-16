@@ -57,6 +57,7 @@ var myFriends = [
     ["https://www.lionad.art/", "/avatar/lionad-morotar.jpg", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
     ["https://ryanyang.cn/", "/avatar/ryanyang.png", "@ryanyang", "一位智慧的阿拉伯诗人 <= Java 后端大佬"], 
     ["https://bohecat.com/", "https://tc.bohecat.com/image/WX20220210-123651%402x.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
+    ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
 ];
 
 
