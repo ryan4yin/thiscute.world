@@ -9,6 +9,12 @@ resources:
 
 tags: ["Linux", "网络", "虚拟化", "容器", "iptables", "conntrack"]
 categories: ["技术"]
+
+code:
+  # whether to show the copy button of the code block
+  copy: false
+  # the maximum number of lines of displayed code by default
+  maxShownLines: 100
 ---
 
 >本文仅针对 ipv4 网络
@@ -48,7 +54,7 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 五链的功能和名称完全一致，应该很容易理解。下面按优先级分别介绍下链中的四个表：
 
 - raw: 对收到的数据包在连接跟踪前进行处理。一般用不到，可以忽略
-  - 一旦用户使用了 raw raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了
+  - 一旦用户使用了 raw 表，raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了
 - mangle: 用于修改报文、给报文打标签
 - nat: 主要用于做网络地址转换，SNAT 或者 DNAT
 - filter: 主要用于过滤数据包
@@ -61,7 +67,7 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 - MASQUERADE: （伪装）将 src ip 改写为网卡 ip，和 SNAT 的区别是它会自动读取网卡 ip。路由设备必备。
 - SNAT/DNAT: 顾名思义，做网络地址转换
 - REDIRECT: 在本机做端口映射
-- LOG: 在/var/log/messages文件中记录日志信息，然后将数据包传递给下一条规则，也就是说除了记录以外不对数据包做任何其他操作，仍然让下一条规则去匹配。
+- LOG: 在 `/var/log/messages` 文件中记录日志信息，然后将数据包传递给下一条规则，也就是说除了记录以外不对数据包做任何其他操作，仍然让下一条规则去匹配。
   - 只有这个 target 特殊一些，匹配它的数据仍然可以匹配后续规则，不会直接跳过。
 - 其他类型，可以用到的时候再查
 
@@ -184,7 +190,7 @@ docker 会在 iptables 中为 docker0 网桥添加如下规则：
 
 比如上图中的 `Container A` 通过 bridge 网络向 baidu.com 发起了 N 个连接，这时数据的处理流程如下：
 
-- 首先 `Container A` 发出的数据包被 MASQUERADE 规则处理，将 src ip 替换成 eth0 的 ip，然后发送到物理网络 `192..168.31.0/24`。
+- 首先 `Container A` 发出的数据包被 MASQUERADE 规则处理，将 src ip 替换成 eth0 的 ip，然后发送到物理网络 `192.168.31.0/24`。
   - conntrack 系统记录此连接被 NAT 处理前后的状态信息，并将其状态设置为 NEW，表示这是新发起的一个连接
 - 对端 baidu.com 返回数据包后，会首先到达 eth0 网卡
 - conntrack 查表，发现返回数据包的连接已经记录在表中并且状态为 NEW，于是它将连接的状态修改为 ESTABLISHED，并且将 dst_ip 改为 `172.17.0.2` 然后发送出去
@@ -192,6 +198,13 @@ docker 会在 iptables 中为 docker0 网桥添加如下规则：
 - 经过路由匹配，数据包会进入到 docker0，然后匹配上 iptables 规则：`-t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT`，数据直接被放行
 - 数据经过 veth 后，最终进入到 `Container A` 中，交由容器的内核协议栈处理。
 - 数据被 `Container A` 的内核协议栈发送到「发起连接的应用程序」。
+
+### 支持哪些协议
+
+conntrack 连接跟踪模块目前只支持以下六种协议：`TCP`、`UDP`、`ICMP`、`DCCP`、`SCTP`、`GRE`
+
+要注意的一点是，conntrack 跟踪的「连接」，跟「TCP 连接」不是一个层面的概念，可以看到 conntrack 也支持 UDP 这种无连接通讯协议。
+
 
 ### 实际测试 conntrack
 
@@ -670,6 +683,7 @@ table ip6 firewalld {
 ## 参考
 
 - [iptables详解（1）：iptables概念](https://www.zsythink.net/archives/1199)
+- [连接跟踪（conntrack）：原理、应用及 Linux 内核实现](https://arthurchiao.art/blog/conntrack-design-and-implementation-zh/)
 - [网络地址转换（NAT）之报文跟踪](https://linux.cn/article-13364-1.html)
 - [容器安全拾遗 - Rootless Container初探](https://developer.aliyun.com/article/700923)
 - [netfilter - wikipedia](https://en.wikipedia.org/wiki/Netfilter)
