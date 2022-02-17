@@ -8,6 +8,8 @@ draft: false
 
 根据个人兴趣，以及工作需求划分优先级。
 
+目前的重点仍然是网络技术与 Kubernetes 技术，Redis/Search/Database 等技术还得靠后排，或许明年吧哈哈。
+
 ### 最高优先级
 
 技术：
