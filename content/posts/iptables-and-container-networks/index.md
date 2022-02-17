@@ -14,14 +14,14 @@ code:
   # whether to show the copy button of the code block
   copy: false
   # the maximum number of lines of displayed code by default
-  maxShownLines: 100
+  maxShownLines: 150
 ---
 
 >本文仅针对 ipv4 网络
 
 本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。
 
-# 一、iptables
+## 一、iptables
 
 [iptables](https://www.netfilter.org/projects/iptables/index.html) 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT
 
@@ -29,7 +29,7 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 
 但是 eBPF 社区目前正在开发旨在取代 netfilter 的新项目 bpfilter，他们的目标之一是兼容 iptables/nftables 规则，让我们拭目以待吧。
 
-## iptables 基础概念 - 四表五链
+### 1. iptables 基础概念 - 四表五链
 
 >实际上还有张 SELinux 相关的 security 表（应该是较新的内核新增的，但是不清楚是哪个版本加的），但是我基本没接触过，就略过了。
 
@@ -73,7 +73,7 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 
 理解了上面这张图，以及四个表的用途，就很容易理解 iptables 的命令了。
 
-## 常用命令
+### 2. 常用命令
 
 >**注意**: 下面提供的 iptables 命令做的修改是未持久化的，重启就会丢失！在下一节会简单介绍持久化配置的方法。
 
@@ -126,7 +126,7 @@ iptables -F INPUT
 >本文后续分析时，假设用户已经清楚 linux bridge、veth 等虚拟网络接口相关知识。
 如果你还缺少这些前置知识，请先阅读文章 [Linux 中的虚拟网络接口](https://thiscute.world/posts/linux-virtual-network-interfaces/)。
 
-## conntrack 连接跟踪与 NAT
+### 3. conntrack 连接跟踪与 NAT
 
 在讲 conntrack 之间，我们再回顾下前面给出过的 netfilter 数据处理流程图：
 
@@ -199,14 +199,14 @@ docker 会在 iptables 中为 docker0 网桥添加如下规则：
 - 数据经过 veth 后，最终进入到 `Container A` 中，交由容器的内核协议栈处理。
 - 数据被 `Container A` 的内核协议栈发送到「发起连接的应用程序」。
 
-### 支持哪些协议
+#### 1. 支持哪些协议
 
 conntrack 连接跟踪模块目前只支持以下六种协议：`TCP`、`UDP`、`ICMP`、`DCCP`、`SCTP`、`GRE`
 
 要注意的一点是，conntrack 跟踪的「连接」，跟「TCP 连接」不是一个层面的概念，可以看到 conntrack 也支持 UDP 这种无连接通讯协议。
 
 
-### 实际测试 conntrack
+#### 2. 实际测试 conntrack
 
 现在我们来实际测试一下，看看是不是这么回事：
 
@@ -279,7 +279,7 @@ tcp      6 298 ESTABLISHED src=172.17.0.4 dst=198.18.5.130 sport=54636 dport=443
 能看到数据确实在进入 docker0 网桥前，dst_ip 确实被从 `192.168.31.228`（wlp4s0 的 ip）被修改为了 `172.17.0.4`（`Container A` 的 ip）.
 
 
-### NAT 如何分配端口？
+#### 3. NAT 如何分配端口？
 
 上一节我们实际测试发现，docker 容器的流量在经过 iptables 的 MASQUERADE 规则处理后，只有 src ip 被修改了，而 port 仍然是一致的。
 
@@ -290,7 +290,7 @@ tcp      6 298 ESTABLISHED src=172.17.0.4 dst=198.18.5.130 sport=54636 dport=443
 
 有空可以翻一波源码看看这个，待续...
 
-## 如何持久化 iptables 配置
+### 4. 如何持久化 iptables 配置
 
 首先需要注意的是，centos7/opensuse 15 都已经切换到了 firewalld 作为防火墙配置软件，
 而 ubuntu18.04 lts 也换成了 ufw 来配置防火墙。
@@ -301,11 +301,9 @@ tcp      6 298 ESTABLISHED src=172.17.0.4 dst=198.18.5.130 sport=54636 dport=443
 
 本文主要目的在于理解 docker 容器网络的原理，以及为后面理解 kubernetes 网络插件 calico/flannel 打好基础，因此就不多介绍持久化了。
 
-## 如何使用 iptables + bridge + veth 实现容器网络
+## 二、容器网络实现原理 - iptables + bridge + veth
 
 Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全类似。下面以 docker 为例进行分析（Podman 的分析流程也基本一样）。
-
-### 通过 docker run 运行容器
 
 首先，使用 `docker run` 运行几个容器，检查下网络状况：
 
@@ -520,7 +518,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 有了这个基础，后面就可以尝试深入分析 kubernetes 网络插件 flannel/calico/cilium 了哈哈。
 
 
-## Docker/Podman 的 macvlan/ipvlan 模式
+## 三、Docker/Podman 的 macvlan/ipvlan 模式
 
 >注意：macvlan 和 wifi 好像不兼容，测试时不要使用无线网络的接口！
 
@@ -608,7 +606,7 @@ root@d0764ebbbf42:/# curl baidu.com
 </html>
 ```
 
-## Rootless 容器的网络实现
+## 四、Rootless 容器的网络实现
 
 如果容器运行时也在 Rootless 模式下运行，那它就没有权限在宿主机添加 bridge/veth 等虚拟网络接口，这种情况下，我们前面描述的容器网络就无法设置了。
 
@@ -634,7 +632,7 @@ ryan     11644  0.0  0.0   5288  3312 ?        S    00:01   0:02 slirp4netns --m
 
 总之能确定的是，它通过在虚拟的名字空间中创建了一个 `tap` 虚拟接口来实现容器网络，性能相比前面介绍的网络多少是要差一点的。
 
-## nftables
+## 五、nftables
 
 前面介绍了 iptables 以及其在 docker 和防火墙上的应用。但是实际上目前各大 Linux 发行版都已经不建议使用 iptables 了，甚至把 iptables 重命名为了 `iptables-leagacy`.
 
