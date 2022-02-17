@@ -7,8 +7,8 @@ resources:
 - name: "featured-image"
   src: "IMG_20180404_160133.jpg"
 
-tags: ["音乐"]
-categories: ["音乐"]
+tags: ["后摇"]
+categories: ["音乐", "随笔"]
 ---
 
 >「此岸弃草，彼岸繁花。」取自前永动机主唱「河津樱/白金」的个人简介
