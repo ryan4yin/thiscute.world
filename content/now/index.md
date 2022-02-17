@@ -6,9 +6,9 @@ draft: false
 
 ## 一、我的学习清单
 
-根据个人兴趣，以及工作需求划分优先级。
+技术上，目前的重点仍然是网络技术与 Kubernetes 技术，Redis/Search/Database 等技术还得靠后排，或许明年吧哈哈。
 
-目前的重点仍然是网络技术与 Kubernetes 技术，Redis/Search/Database 等技术还得靠后排，或许明年吧哈哈。
+生活上呢，就完全看个人兴趣安排了。
 
 ### 最高优先级
 
