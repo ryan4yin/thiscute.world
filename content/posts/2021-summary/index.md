@@ -113,8 +113,11 @@ categories: ["随笔", "技术"]
   - 从提升系统的可维护性、易用性等角度来说，loki 是值得探索下的
 - K8s 集群管理方面，觉得集群的升级迭代，可以做得更自动化、更可靠。明年可以在多集群管理这个方向上多探索下。
 - [Pod 服务质量](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/)：对非核心服务，可以适当调低 requests 的资源量，而不是完全预留(`Guaranteed`)，以提升资源利用率。
-- 官方的 HPA 能力是不够用的，业务侧可能会需要基于 QPS/Queue 或者业务侧的其他参数来进行扩缩容，需要持续关注 [KEDA](https://github.com/kedacore/keda) 这个项目。
-- 成本控制方面，体会到了 ARM 架构以及 Spot 竞价实例的好处
+- 官方的 HPA 能力是不够用的，业务侧可能会需要基于 QPS/Queue 或者业务侧的其他参数来进行扩缩容
+  - 推广基于 [KEDA](https://github.com/kedacore/keda) 的扩缩容能力
+  - 关注 [Container resource metrics](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics) 的进展
+- 成本控制方面，体会到了 ~~ARM 架构~~以及 Spot 竞价实例的好处
+  - 2022-02-17 更新：数据库等中间件可以切换到 ARM。EKS 服务目前都是 Spot 实例，它的 ARM 化 ROI 并不高。
 - 跨区流量成本有很大的潜在优化空间
   - 跨区流量成本是在两边都会收费，而且不仅涉及 Kubernetes 集群内服务间的调用，还会涉及对 RDS/ES/ElastiCache/EC2 等其他资源的调用。
 - 今年各云厂商故障频发，没有**跨 region 的服务迁移**就会很难受，需要持续关注下 [karmada](https://github.com/karmada-io/karmada) 这类多集群管理方案。
@@ -144,10 +147,8 @@ categories: ["随笔", "技术"]
    1. 节约跨可用区/跨域的流量成本
      1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
      2. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
-   2. 实例类型优化：
-      1. 使用更合适的实例类型
-      2. 使用 ARM 架构机型，降本增效
-   3. 推广 gRPC 协议
+   2. 推广 gRPC 协议
+   3. 为微服务添加亲和性，合理调度 Pods 减少跨域流量~
 5. 提升本地开发效率：
    1. [nocalhost](https://github.com/nocalhost/nocalhost)
 6. 多集群的应用部署、容灾

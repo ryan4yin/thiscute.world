@@ -148,6 +148,11 @@ draft: false
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 
+### 2022-02-17
+
+- 发现我们的 EKS 集群主使用的是 AWS Spot 实例，这类实例的 c6i/c6g 性能与价格差距并不高，做 ARM 化的 ROI 貌似并不高
+- 发现对 aws 的 RDS/EC2-Volume/Redis 等资源进行全面评估，删掉闲置资源、缩小实例/集群规格，可以轻易节省大量成本（说明以前申请资源时风格比较豪放 2333）
+
 ### 2022-02-07
 
 - 迭代个人博客 <https://thiscute.world>，添加「阅读排行」页，定期从 Google Analytics 同步数据。
@@ -158,7 +163,7 @@ draft: false
 
 ### 2021-12-12
 
-- 练习二个半小时，学会了压步转弯技术
+- 练习二个半小时轮滑，学会了压步转弯技术
 - 无聊，但是又啥都不想干，耽于网络小说...
 - 感觉有点现充了，感觉需要找个更明确的、能给人动力的目标
   - 做个三年的职业规划以及生活规划？
