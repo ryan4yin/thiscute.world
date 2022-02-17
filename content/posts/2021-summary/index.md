@@ -146,11 +146,11 @@ categories: ["随笔", "技术"]
    2. 代理工具 Envoy/APISIX
    3. 网络插件 Cilium + eBPF
 4. AWS K8s 成本与服务稳定性优化
-   1. 节约跨可用区/跨域的流量成本
+   1. 通过拓扑感知的请求转发，节约跨可用区/跨域的流量成本
      1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
      2. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
    2. 推广 gRPC 协议
-   3. 为微服务添加亲和性，合理调度 Pods 减少跨域流量~
+   3. 通过亲和性与反亲和性，实现合理调度 Pods 减少跨域流量、也提升服务容灾能力
 5. 提升本地开发效率：
    1. [nocalhost](https://github.com/nocalhost/nocalhost)
 6. 多集群的应用部署、容灾
