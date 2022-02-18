@@ -19,9 +19,6 @@ categories: ["技术"]
 
 >本文介绍的方法适合开发测试使用，安全性、稳定性、长期可用性等方案都可能还有问题。
 
->本文未考虑国内网络环境，建议在路由器上整个科学代理，或者自行调整文中的部分命令。
-
-
 kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很多组件都有多种实现，这些实现各有特点，让初学者眼花缭乱。
 
 而且要把这些组件一个个安装配置好并且能协同工作，也是很不容易的。
@@ -44,11 +41,23 @@ kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很
 
 笔者为了学习 Kubernetes，下面采用官方的 kubeadm 进行部署（不要问为啥不二进制部署，问就是懒），容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.
 
-kubernetes 官方介绍了两种高可用集群的拓扑结构：「Stacked etcd topology」和「External etcd topology」，简单起见，本文使用第一种「堆叠 Etcd 拓扑」结构，创建一个三 master 的高可用集群。
+kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 拓扑（Stacked Etcd Topology）」和「外部 Etcd 拓扑（External Etcd Topology）」，简单起见，本文使用第一种「堆叠 Etcd 拓扑」结构，创建一个三 master 的高可用集群。
 
 参考：
 - [Kubernetes Docs - Installing kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 - [Kubernetes Docs - Creating Highly Available clusters with kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/)
+
+
+## 0. 网络环境的准备
+
+本文行文未考虑国内网络环境，但是 Kubernetes 用到的很多镜像都在 gcr.io 上，在国内访问会有困难。
+
+这里提供两个手段：
+
+- 在家庭路由器上整个科学代理，实现全局科学上网。（我就是这么干的）
+- 使用 [liangyuanpeng](https://github.com/liangyuanpeng) 大佬在评论区提供的 gcr 国内镜像地址，这需要进行如下替换：
+  - k8s.gcr.io---> lank8s.cn
+  - gcr.io---> gcr.lank8s.cn
 
 
 ## 1. 节点的环境准备
@@ -58,15 +67,13 @@ kubernetes 官方介绍了两种高可用集群的拓扑结构：「Stacked etcd
 - 节点配置：
   - master：不低于 2c/3g，硬盘 20G
     - 主节点性能也受集群 Pods 个数的影响，上述配置应该可以支撑到每个 Worker 节点跑 100 个 Pod.
-  - worker：看需求，建议不低于 2c/4g，硬盘不小于 20G，资源充分的话建议 40G.
+  - worker：看需求，建议不低于 2c/4g，硬盘不小于 20G，资源充分的话建议 40G 以上。
 - 处于同一网络内并可互通（通常是同一局域网）
 - 各主机的 hostname 和 mac/ip 地址以及 `/sys/class/dmi/id/product_uuid`，都必须唯一
-  - 这里最容易出问题的，通常是 hostname 冲突！
-- **必须**关闭 swap，kubelet 才能正常工作！
+  - 这里新手最容易遇到的问题，是 hostname 冲突
+- **必须**关闭 swap 交换内存，kubelet 才能正常工作
 
-方便起见，我直接使用 [ryan4yin/pulumi-libvirt](https://github.com/ryan4yin/pulumi-libvirt#examples) 自动创建了五个虚拟机，并设置好了 ip/hostname.
-
-本文使用了 opensuse leap 15.3 的 KVM cloud image 进行安装测试。
+方便起见，我直接使用 [ryan4yin/pulumi-libvirt](https://github.com/ryan4yin/pulumi-libvirt#examples) 自动创建了五个 opensuse leap 15.3 虚拟机，并设置好了 ip/hostname.
 
 ### 1.1 iptables 设置
 
