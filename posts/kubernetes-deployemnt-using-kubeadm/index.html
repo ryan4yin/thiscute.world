@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/kubernetes-deployemnt-using-kubeadm/><link rel=prev href=https://thiscute.world/posts/kubernetes-best-practices/><link rel=next href=https://thiscute.world/posts/python-tips-and-tricks/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"部署一个 Kubernetes 集群","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/kubernetes-deployemnt-using-kubeadm\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/kubernetes-deployemnt-using-kubeadm\/adopt-kubernetes.png","width":1920,"height":960}],"genre":"posts","keywords":"Kubernetes, 云原生","wordcount":6073,"url":"https:\/\/thiscute.world\/posts\/kubernetes-deployemnt-using-kubeadm\/","datePublished":"2022-01-25T01:37:00+08:00","dateModified":"2022-01-25T01:37:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/kubernetes-deployemnt-using-kubeadm/><link rel=prev href=https://thiscute.world/posts/kubernetes-best-practices/><link rel=next href=https://thiscute.world/posts/python-tips-and-tricks/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"部署一个 Kubernetes 集群","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/kubernetes-deployemnt-using-kubeadm\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/kubernetes-deployemnt-using-kubeadm\/adopt-kubernetes.png","width":1920,"height":960}],"genre":"posts","keywords":"Kubernetes, 云原生","wordcount":6156,"url":"https:\/\/thiscute.world\/posts\/kubernetes-deployemnt-using-kubeadm\/","datePublished":"2022-01-25T01:37:00+08:00","dateModified":"2022-01-25T01:37:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">部署一个 Kubernetes 集群</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-01-25>2022-01-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6073 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-01-25>2022-01-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6156 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 13 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/kubernetes-deployemnt-using-kubeadm/adopt-kubernetes.png data-srcset="/posts/kubernetes-deployemnt-using-kubeadm/adopt-kubernetes.png, /posts/kubernetes-deployemnt-using-kubeadm/adopt-kubernetes.png 1.5x, /posts/kubernetes-deployemnt-using-kubeadm/adopt-kubernetes.png 2x" data-sizes=auto alt=/posts/kubernetes-deployemnt-using-kubeadm/adopt-kubernetes.png title=/posts/kubernetes-deployemnt-using-kubeadm/adopt-kubernetes.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -99,6 +99,7 @@
 <div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
 <ul>
 <li><a href=#本地-kubernetes-集群安装工具>本地 Kubernetes 集群安装工具</a></li>
+<li><a href=#0-网络环境的准备>0. 网络环境的准备</a></li>
 <li><a href=#1-节点的环境准备>1. 节点的环境准备</a>
 <ul>
 <li><a href=#11-iptables-设置>1.1 iptables 设置</a></li>
@@ -141,9 +142,6 @@
 <blockquote>
 <p>本文介绍的方法适合开发测试使用，安全性、稳定性、长期可用性等方案都可能还有问题。</p>
 </blockquote>
-<blockquote>
-<p>本文未考虑国内网络环境，建议在路由器上整个科学代理，或者自行调整文中的部分命令。</p>
-</blockquote>
 <p>kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很多组件都有多种实现，这些实现各有特点，让初学者眼花缭乱。</p>
 <p>而且要把这些组件一个个安装配置好并且能协同工作，也是很不容易的。</p>
 <p>因此社区出现了各种各样的安装方案，下面介绍下几种支持裸机（Baremetal）部署的工具：</p>
@@ -174,11 +172,23 @@
 </li>
 </ol>
 <p>笔者为了学习 Kubernetes，下面采用官方的 kubeadm 进行部署（不要问为啥不二进制部署，问就是懒），容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.</p>
-<p>kubernetes 官方介绍了两种高可用集群的拓扑结构：「Stacked etcd topology」和「External etcd topology」，简单起见，本文使用第一种「堆叠 Etcd 拓扑」结构，创建一个三 master 的高可用集群。</p>
+<p>kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 拓扑（Stacked Etcd Topology）」和「外部 Etcd 拓扑（External Etcd Topology）」，简单起见，本文使用第一种「堆叠 Etcd 拓扑」结构，创建一个三 master 的高可用集群。</p>
 <p>参考：</p>
 <ul>
 <li><a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ target=_blank rel="noopener noreferrer">Kubernetes Docs - Installing kubeadm</a></li>
 <li><a href=https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/ target=_blank rel="noopener noreferrer">Kubernetes Docs - Creating Highly Available clusters with kubeadm</a></li>
+</ul>
+<h2 id=0-网络环境的准备>0. 网络环境的准备</h2>
+<p>本文行文未考虑国内网络环境，但是 Kubernetes 用到的很多镜像都在 gcr.io 上，在国内访问会有困难。</p>
+<p>这里提供两个手段：</p>
+<ul>
+<li>在家庭路由器上整个科学代理，实现全局科学上网。（我就是这么干的）</li>
+<li>使用 <a href=https://github.com/liangyuanpeng target=_blank rel="noopener noreferrer">liangyuanpeng</a> 大佬在评论区提供的 gcr 国内镜像地址，这需要进行如下替换：
+<ul>
+<li>k8s.gcr.io&mdash;> lank8s.cn</li>
+<li>gcr.io&mdash;> gcr.lank8s.cn</li>
+</ul>
+</li>
 </ul>
 <h2 id=1-节点的环境准备>1. 节点的环境准备</h2>
 <p>首先准备三台 Linux 虚拟机，系统按需选择，然后调整这三台机器的设置：</p>
@@ -190,19 +200,18 @@
 <li>主节点性能也受集群 Pods 个数的影响，上述配置应该可以支撑到每个 Worker 节点跑 100 个 Pod.</li>
 </ul>
 </li>
-<li>worker：看需求，建议不低于 2c/4g，硬盘不小于 20G，资源充分的话建议 40G.</li>
+<li>worker：看需求，建议不低于 2c/4g，硬盘不小于 20G，资源充分的话建议 40G 以上。</li>
 </ul>
 </li>
 <li>处于同一网络内并可互通（通常是同一局域网）</li>
 <li>各主机的 hostname 和 mac/ip 地址以及 <code>/sys/class/dmi/id/product_uuid</code>，都必须唯一
 <ul>
-<li>这里最容易出问题的，通常是 hostname 冲突！</li>
+<li>这里新手最容易遇到的问题，是 hostname 冲突</li>
 </ul>
 </li>
-<li><strong>必须</strong>关闭 swap，kubelet 才能正常工作！</li>
+<li><strong>必须</strong>关闭 swap 交换内存，kubelet 才能正常工作</li>
 </ul>
-<p>方便起见，我直接使用 <a href=https://github.com/ryan4yin/pulumi-libvirt#examples target=_blank rel="noopener noreferrer">ryan4yin/pulumi-libvirt</a> 自动创建了五个虚拟机，并设置好了 ip/hostname.</p>
-<p>本文使用了 opensuse leap 15.3 的 KVM cloud image 进行安装测试。</p>
+<p>方便起见，我直接使用 <a href=https://github.com/ryan4yin/pulumi-libvirt#examples target=_blank rel="noopener noreferrer">ryan4yin/pulumi-libvirt</a> 自动创建了五个 opensuse leap 15.3 虚拟机，并设置好了 ip/hostname.</p>
 <h3 id=11-iptables-设置>1.1 iptables 设置</h3>
 <p>目前 kubernetes 的容器网络，默认使用的是 bridge 模式，这种模式下，需要使 <code>iptables</code> 能够接管 bridge 上的流量。</p>
 <p>配置如下：</p>
