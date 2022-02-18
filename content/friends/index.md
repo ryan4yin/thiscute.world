@@ -26,7 +26,7 @@ draft: false
 
     站点名称：This Cute World
     站点地址：https://thiscute.world/
-    个人形象：https://www.gravatar.com/avatar/2362ce7bdf2845a92240cc2f6609e001?s=240
+    个人形象：https://thiscute.world/avatar/myself.jpg
     站点描述：赞美快乐~
 
 
@@ -58,6 +58,7 @@ var myFriends = [
     ["https://ryanyang.cn/", "/avatar/ryanyang.png", "@ryanyang", "一位智慧的阿拉伯诗人 <= Java 后端大佬"], 
     ["https://bohecat.com/", "https://tc.bohecat.com/image/WX20220210-123651%402x.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
+    ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
 ];
 
 
