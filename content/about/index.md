@@ -57,6 +57,7 @@ lightgallery: true
 - 2016-06-17：在博客园 - <https://www.cnblogs.com/kirito-c/>
 - 2021-01-16：开设独立博客 <https://ryan4yin.space/>
 - 2022-02-07：博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
+- 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
 {{< /admonition >}}
 
 {{< admonition info "博客快照" false >}}
