@@ -27,15 +27,18 @@
             {{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
             <script src='{{ $source }}'></script>
             <script>
-            Waline({
-              el: '#waline',
-              serverURL: '{{ $waline.serverURL }}',
-              visitor: '{{ $waline.visitor }}',
-              dark: '{{ $waline.dark }}',
-              avatar: '{{ $waline.defaultAvatar }}',
-              requiredMeta: {{ $waline.requiredMeta }},  // 这里插入的是列表，不能加引号
-              wordLimit: {{ $waline.wordLimit}},
-            });
+                const config = {
+                    el: '#waline',
+                    serverURL: '{{ $waline.serverURL }}',
+                    visitor: '{{ $waline.visitor }}',
+                    dark: '{{ $waline.dark }}',
+                    avatar: '{{ $waline.defaultAvatar }}',
+                    requiredMeta: {{ $waline.requiredMeta }},  // 这里插入的是列表，不能加引号
+                    wordLimit: {{ $waline.wordLimit}},
+                };
+                setTimeout(function() {
+                    Waline(config);
+                }, 160);
             </script>
             <noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://waline.js.org/">Waline</a>.
