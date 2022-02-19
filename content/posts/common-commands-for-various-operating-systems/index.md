@@ -196,35 +196,37 @@ rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `ma
 
 常用快捷键：
 
-      # prefix 表示 `ctrl`+`b`
+```yaml
+# prefix 表示 `ctrl`+`b`
 
-      # pane 的切分与选择
-      prefix "  # 在下方新建一个 pane
-      prefix %  # 在右侧新建一个 pane
-      prefix `方向键`  # 光标移动到指定方向的 pane 中
+# pane 的切分与选择
+prefix "  # 在下方新建一个 pane
+prefix %  # 在右侧新建一个 pane
+prefix `方向键`  # 光标移动到指定方向的 pane 中
 
-      # 使用方向键滚动窗口内容
-      prefix [  # 进入翻页模式，可使用 page up/down，或者方向键来浏览 pane 的内容
-      # 使用鼠标滚轮来滚动窗口内容（也可以把此命令添加到 `~/.tmux.conf` 中使它永久生效）
-      prefix `:` 然后输入 `set-window-option -g mode-mouse on`
+# 使用方向键滚动窗口内容
+prefix [  # 进入翻页模式，可使用 page up/down，或者方向键来浏览 pane 的内容
+# 使用鼠标滚轮来滚动窗口内容（也可以把此命令添加到 `~/.tmux.conf` 中使它永久生效）
+prefix `:` 然后输入 `set-window-option -g mode-mouse on`
 
-      # （调整 pane 大小）将当前的 pane 向给定的方向扩容 5 行或者 5 列
-      # 按住 ALT 时快速重复敲击「方向键」，能快速调整，否则就得从 prefix 开始重新输入
-      prefix `Alt` + `方向键`
-      # 将当前窗格全屏显示，第二次使用此命令，会将窗格还原
-      prefix z
+# （调整 pane 大小）将当前的 pane 向给定的方向扩容 5 行或者 5 列
+# 按住 ALT 时快速重复敲击「方向键」，能快速调整，否则就得从 prefix 开始重新输入
+prefix `Alt` + `方向键`
+# 将当前窗格全屏显示，第二次使用此命令，会将窗格还原
+prefix z
 
-      # 交换 pane 的位置
-      prefix {  # 当前窗格与上一个窗格交换位置
-      prefix }  # 当前窗格与下一个窗格交换位置
+# 交换 pane 的位置
+prefix {  # 当前窗格与上一个窗格交换位置
+prefix }  # 当前窗格与下一个窗格交换位置
 
-      # session 相关操作
-      prefix s  # 查看 session 列表，并通过方向键选择 session
-      prefix `number`  # 通过数字标签选择 session
+# session 相关操作
+prefix s  # 查看 session 列表，并通过方向键选择 session
+prefix `number`  # 通过数字标签选择 session
 
-      # window 相关操作（关系：每个 session 可以包含多个 window，每个 window 里面又可以有多个 pane）
-      prefix c # 新建 window
-      prefix w # 通过数字标签选择 window
+# window 相关操作（关系：每个 session 可以包含多个 window，每个 window 里面又可以有多个 pane）
+prefix c # 新建 window
+prefix w # 通过数字标签选择 window
+```
 
 参考文档：
 - https://github.com/tmux/tmux/wiki/Getting-Started
