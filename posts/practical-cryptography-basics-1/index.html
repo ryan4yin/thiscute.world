@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-1/><link rel=prev href=https://thiscute.world/posts/common-commands-for-various-operating-systems/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（一）—— 概览","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/cryptography.png","width":1080,"height":445}],"genre":"posts","keywords":"Cryptography, Hash, KDF, 密码学, 哈希, 加解密, 签名","wordcount":2432,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/","datePublished":"2022-02-19T18:51:00+08:00","dateModified":"2022-02-19T18:51:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-1/><link rel=prev href=https://thiscute.world/posts/common-commands-for-various-operating-systems/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（一）—— 概览","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/cryptography.png","width":1080,"height":445}],"genre":"posts","keywords":"Cryptography, Hash, KDF, 密码学, 哈希, 加解密, 签名","wordcount":2466,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/","datePublished":"2022-02-19T18:51:00+08:00","dateModified":"2022-02-19T18:51:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（一）—— 概览</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-19>2022-02-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2432 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-19>2022-02-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2466 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id=/posts/practical-cryptography-basics-1/ class=leancloud_visitors data-flag-title="「译」写给开发人员的实用密码学（一）—— 概览">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;
@@ -178,9 +178,9 @@
 <p>这两个原则被包含在大多数散列函数、MAC 算法、随机数生成器、对称和非对称密码中。</p>
 <h3 id=6-密码库>6. 密码库</h3>
 <p>开发人员应该了解他们的编程语言和平台的现代密码库以及如何使用它们。</p>
-<p>盲目地从 Internet 复制/粘贴代码或遵循博客中的示例可能会导致不安全的设计和弱安全性，曾经安全的代码随着时间的推移也可能变得不再安全。</p>
+<p>盲目地从 Internet 复制/粘贴代码或遵循博客中的示例可能会导致不安全的设计和弱安全性，曾经安全的代码随着时间的推移也可能变得不再安全，涉及到密码学的代码，一定要谨慎处理！</p>
 <p>密码库非常有用，但您应该先了解相关概念，然后选择适当的算法组合并仔细调整其参数。</p>
-<p>本系列文章的后续部分，会分别介绍相关概念，并使用 Python 演示其用法。</p>
+<p>本系列文章的后续部分，会分别介绍相关概念，并使用 Python 演示其用法，其他语言的写法网上也很容易找到。</p>
 </div><div class=post-footer id=post-footer>
 <div class=post-info>
 <div class=post-info-line>
