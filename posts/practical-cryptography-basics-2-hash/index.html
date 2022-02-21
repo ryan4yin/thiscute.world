@@ -5,7 +5,7 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>「译」写给开发人员的实用密码学（二）—— 哈希函数 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="「译」写给开发人员的实用密码学（二）—— 哈希函数">
-<meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 一、简介 哈希函数，或者叫散列函数，是一种从任何一种数据中创建一个**数字指纹（摘要）**的方法，散列函数把数据压缩压缩（或者">
+<meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 一、简介 哈希函数，或者叫散列函数，是一种从任何一种数据中创建一个**数字指纹(摘要)**的方法，散列函数把数据压缩压缩（或者">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/practical-cryptography-basics-2-hash/"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-2-hash/cryptographic_hash_function.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-02-22T01:14:00+08:00">
@@ -13,7 +13,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-2-hash/cryptographic_hash_function.png">
 <meta name=twitter:title content="「译」写给开发人员的实用密码学（二）—— 哈希函数">
-<meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 一、简介 哈希函数，或者叫散列函数，是一种从任何一种数据中创建一个**数字指纹（摘要）**的方法，散列函数把数据压缩压缩（或者">
+<meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 一、简介 哈希函数，或者叫散列函数，是一种从任何一种数据中创建一个**数字指纹(摘要)**的方法，散列函数把数据压缩压缩（或者">
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
@@ -143,9 +143,9 @@
 <p>本文主要翻译自 <a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></p>
 </blockquote>
 <h2 id=一简介>一、简介</h2>
-<p><strong>哈希函数</strong>，或者叫<strong>散列函数</strong>，是一种从任何一种数据中创建一个**数字指纹（摘要）**的方法，散列函数把数据压缩压缩（或者放大）成一个长度固定的摘要。</p>
-<p>哈希函数的输入空间（文本或者二进制数据）是可以无限大的，但是输出空间（一个固定长度的摘要）却是有限的。将「无限」映射到「有限」，不可避免的会有概率不同的输入得到相同的输出，这种情况我们称为<strong>碰撞（collision）</strong>。</p>
-<p>一个好的哈希函数必须满足**抗碰撞（collision-resistant）<strong>和</strong>不可逆（irreversible）**这两个条件。
+<p><strong>哈希函数</strong>，或者叫<strong>散列函数</strong>，是一种从任何一种数据中创建一个**数字指纹(摘要)**的方法，散列函数把数据压缩压缩（或者放大）成一个长度固定的摘要。</p>
+<p>哈希函数的输入空间(文本或者二进制数据）是可以无限大的，但是输出空间（一个固定长度的摘要）却是有限的。将「无限」映射到「有限」，不可避免的会有概率不同的输入得到相同的输出，这种情况我们称为<strong>碰撞(collision)</strong>。</p>
+<p>一个好的哈希函数必须满足**抗碰撞(collision-resistant)<strong>和</strong>不可逆(irreversible)**这两个条件。
 抗碰撞是通过统计学方法很难猜出哈希摘要对应的原始数据，而不可逆则是说攻击者很难逆向演算出原始数据。
 只要找到碰撞以及逆向演算的难度足够大（比如用超级计算机需要花 10 年），我们就能认为原始数据是安全的。</p>
 <p>但是也要注意，不同的场景对「难度足够大」的定义是不一样的。对普通人而言，用超级计算机需要花 10 年才能破解已经是「难度足够大」了，但是对国家机密而言，可能就还远远不够。
