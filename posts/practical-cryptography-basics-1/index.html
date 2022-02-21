@@ -5,7 +5,7 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>「译」写给开发人员的实用密码学（一）—— 概览 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="「译」写给开发人员的实用密码学（一）—— 概览">
-<meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 零、前言 你是软件开发人员吗？有时你会需要在日常工作中使用密码学，例如哈希、加密或数字签名吗？ 你认为密码学很复杂，充满了数学知">
+<meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 零、前言 你是软件开发人员吗？有时你会需要在日常工作中使用哈希、加密或数字签名等密码学工具吗？ 你认为密码学很复杂，充满了数学知">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/practical-cryptography-basics-1/"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-1/cryptography.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-02-19T18:51:00+08:00">
@@ -13,11 +13,11 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-1/cryptography.png">
 <meta name=twitter:title content="「译」写给开发人员的实用密码学（一）—— 概览">
-<meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 零、前言 你是软件开发人员吗？有时你会需要在日常工作中使用密码学，例如哈希、加密或数字签名吗？ 你认为密码学很复杂，充满了数学知">
+<meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 零、前言 你是软件开发人员吗？有时你会需要在日常工作中使用哈希、加密或数字签名等密码学工具吗？ 你认为密码学很复杂，充满了数学知">
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-1/><link rel=prev href=https://thiscute.world/posts/common-commands-for-various-operating-systems/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（一）—— 概览","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/cryptography.png","width":1080,"height":445}],"genre":"posts","keywords":"Cryptography, Hash, KDF, 密码学, 哈希, 加解密, 签名","wordcount":2480,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/","datePublished":"2022-02-19T18:51:00+08:00","dateModified":"2022-02-19T18:51:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-1/><link rel=prev href=https://thiscute.world/posts/common-commands-for-various-operating-systems/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（一）—— 概览","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/cryptography.png","width":1080,"height":445}],"genre":"posts","keywords":"Cryptography, Hash, KDF, 密码学, 哈希, 加解密, 签名","wordcount":2491,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-1\/","datePublished":"2022-02-19T18:51:00+08:00","dateModified":"2022-02-19T18:51:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（一）—— 概览</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-19>2022-02-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2480 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-19>2022-02-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2491 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id=/posts/practical-cryptography-basics-1/ class=leancloud_visitors data-flag-title="「译」写给开发人员的实用密码学（一）—— 概览">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;
@@ -121,14 +121,13 @@
 <p>本文主要翻译自 <a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></p>
 </blockquote>
 <h2 id=零前言>零、前言</h2>
-<p>你是软件开发人员吗？有时你会需要在日常工作中使用密码学，例如哈希、加密或数字签名吗？
+<p>你是软件开发人员吗？有时你会需要在日常工作中使用哈希、加密或数字签名等密码学工具吗？
 你认为密码学很复杂，充满了数学知识，而且只适合书呆子吗？
 不，不是这样滴，每个开发人员都可以学习如何使用加密算法。</p>
-<p>本系列文章将通过代码示例和实践练习帮你掌握密码学，少用数学，多加练习。</p>
 <p><strong>从开发人员的角度理解密码学概念</strong>不需要你是一个牛逼的数学家。
-这本书将以<strong>几乎没有数学内容</strong>的方式教你<strong>应用密码学</strong>的基础知识，而且包含大量循序渐进的代码示例和实践练习，就像你学习 Web 开发、数据库或 APP 一样。</p>
-<p>没错，如果你有能力学习 Web 开发或 RESTful 服务，那么你也完全可以学会实用密码学。这就像学习一个新的 API 或一个新的 Web 开发框架：掌握了概念 + API（在加密库中实现的加密算法）+ 工具 + 最佳实践，你就学会了实用密码学~</p>
-<p>从这本书中，你将学习如何使用密码算法和密码系统，如哈希、MAC 码和密钥派生函数 (KDF)、随机生成器、密钥交换协议、对称密码、加密方案、非对称密码系统、公钥密码学、椭圆曲线、数字签名和量子安全加密算法，以及现代加密工具和库。</p>
+本书将以<strong>几乎没有数学内容</strong>的方式教你<strong>应用密码学</strong>的基础知识，而且包含大量循序渐进的代码示例和实践练习——就像你学习 Web 开发、数据库或 APP 一样。</p>
+<p>没错，如果你能够学会 Web 开发或 RESTful 服务，那么你也完全可以学会实用密码学。这就像学习一个新的 API 或一个新的 Web 开发框架，只要掌握了概念 + API（在加密库中实现的加密算法）+ 工具 + 最佳实践，你就学会了实用密码学~</p>
+<p>从本书中，你将学习如何使用密码算法和密码系统，如哈希、MAC 码和密钥派生函数 (KDF)、随机生成器、密钥交换协议、对称密码算法、加密方案、非对称密码系统、公钥密码学、椭圆曲线、数字签名和量子安全加密算法，以及现代加密工具和库。</p>
 <h2 id=一现代密码学概览>一、现代密码学概览</h2>
 <p>密码学已经从第一代广泛应用的密码学算法（比如已经退役的 MD5 跟 DES），发展到现代密码学算法（如 SHA-3, Argon2 以及 ChaCha20）。</p>
 <p>让我们首先跟一些基本的密码学概念混个脸熟：</p>
@@ -144,25 +143,25 @@
 <li><strong>量子安全</strong>（quantum-safe）密码学</li>
 </ul>
 <p>上述这些概念涉及到技术被广泛应用在 IT 领域，如果你有过一些开发经验，可能会很熟悉其中部分名词。
-如果不熟也没任何关系，这个系列文章的目的，就是搞清楚这些概念。</p>
+如果不熟也没任何关系，本书的目的就是帮你搞清楚这些概念。</p>
 <h2 id=二什么是密码学>二、什么是密码学</h2>
 <p><strong>密码学（Cryptography）<strong>是提供信息</strong>安全</strong>和<strong>保护</strong>的科学。
-它在我们的数字世界中无处不在：当你打开网站、发送电子邮件或连接到 WiFi 网络时。这就是为什么开发人员至少应该<strong>对密码学有基本的了解</strong>，知道如何使用密码算法和密码库，了解散列、对称和非对称密码和加密方案，知晓以及数字签名及其背后的密码系统和算法。</p>
+它在我们的数字世界中无处不在：当你打开网站、发送电子邮件或连接到 WiFi 网络时。这就是为什么开发人员至少应该<strong>对密码学有基本的了解</strong>，知道如何使用密码算法和密码库，了解散列、对称和非对称的密码算法（cipher）与加密方案，知晓数字签名及其背后的密码系统和算法。</p>
 <h3 id=1-加密与密钥---encryption-and-keys>1. 加密与密钥 - Encryption and Keys</h3>
-<p>密码学以安全的方式处理数据的存储和传输，这样只有那些预期的人才能读取和处理它。
+<p>密码学以安全的方式进行数据的存储和传输，这样只有那些预期的人才能读取和处理它。
 这可能涉及使用对称或非对称加密方案<strong>加密</strong>和<strong>解密</strong>数据，其中一个或多个<strong>密钥</strong>用于将数据从明文转换为加密形式或者相反。</p>
 <p>对称加密（如 AES、Twofish 和 ChaCha20）使用相同的密钥来加密和解密消息，
 而非对称加密使用公钥密码系统（如 RSA 或 ECC）和密钥对来进行这两项操作：公钥（加密密钥）和相应的私钥密钥（解密密钥）。
 加密算法通常结合在加密方案中，如 AES-256-CTR-HMAC-SHA-256、ChaCha20-Poly1305 或 ECIES-secp256k1-AES-128-GCM。</p>
-<p>密码学处理密钥（一个非常大的、保密的数字），在许多情况下，这些密钥是使用密钥派生算法（如 PBKDF2 和 Scrypt）从数字、密码（passwords）或密码词组（passphrases）中派生的。</p>
+<p>密码学也涉及密钥的生成（一个非常大的、保密的数字），在许多情况下，这些密钥是使用密钥派生算法（如 PBKDF2 和 Scrypt）从数字、密码（passwords）或密码词组（passphrases）中派生的。</p>
 <h3 id=2-数字签名与消息认证---digital-signatures-and-message-authentication>2. 数字签名与消息认证 - Digital Signatures and Message Authentication</h3>
 <p>密码学提供了保证消息真实性（authenticity）、完整性（integrity）和不可否认性（non-repudiation）的消息数字签名方法。
-大多数数字签名算法（如 DSA、ECDSA 和 EdDSA）使用非对称密钥对（私钥和公钥）：消息由私钥<strong>签名</strong>，签名由相应的公钥<strong>验证</strong>。
+大多数数字签名算法（如 DSA、ECDSA 和 EdDSA）使用非对称密钥对（私钥和公钥）干这个活：消息由私钥<strong>签名</strong>，签名由相应的公钥<strong>验证</strong>。
 在银行系统中，数字签名用于签署和批准付款。
-在区块链签名交易中，用户可以将区块链资产从一个地址转移到另一个地址。</p>
-<p>密码学处理消息认证算法（如 HMAC）和消息认证码（MAC 码），以证明消息的真实性（authenticity）、完整性（integrity）和作者身份（authorship）。<strong>身份验证</strong>与<strong>加密</strong>同时使用，以确保安全通信。</p>
+在区块链签名交易中，用户可以将区块链资产从一个地址转移到另一个地址，确保转移操作的真实、完整、不可否认。</p>
+<p>消息认证算法（如 HMAC）和消息认证码（MAC 码）也是密码学的一部分，它们被用于证明消息的真实性（authenticity）、完整性（integrity）和作者身份（authorship）。MAC 同时使用了<strong>身份验证</strong>与<strong>加密</strong>，以确保安全通信。</p>
 <h3 id=3-安全随机数---secure-random-numbers>3. 安全随机数 - Secure Random Numbers</h3>
-<p>密码学使用随机数并处理<strong>熵</strong>（entropy，不可预测的随机性）和<strong>随机数的安全生成</strong>（例如使用 CSPRNG）。
+<p>密码学的另一个部分，是<strong>熵</strong>（entropy，不可预测的随机性）和<strong>随机数的安全生成</strong>（例如使用 CSPRNG）。
 安全随机数理论上是<strong>不可预测的</strong>，但是开发人员也应该关心它们，因为有问题的随机生成器的输出可能会被预测到，导致系统或者 APP 被黑客入侵。</p>
 <h3 id=4-密钥交换---key-exchange>4. 密钥交换 - Key Exchange</h3>
 <p>密码学定义了<strong>密钥交换算法</strong>（如 Diffie-Hellman 密钥交换和 ECDH）和密钥构建方案，用于在需要安全传输消息的两方之间安全地构建加密密钥。
