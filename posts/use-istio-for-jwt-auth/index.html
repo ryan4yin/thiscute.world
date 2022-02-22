@@ -275,22 +275,22 @@ x8whrOnMMODCAqu4W/Rx1Lgf2vXIx0pZmlt8Df9i2AVg/ePR6jO3Nw==
 </span><span class=lnt>16
 </span></code></pre></td>
 <td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># 需要先安装依赖: pip install jwcrypto
-from jwcrypto.jwk import JWK
-from pathlib import Path
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=c1># 需要先安装依赖: pip install jwcrypto</span>
+<span class=kn>from</span> <span class=nn>jwcrypto.jwk</span> <span class=kn>import</span> <span class=n>JWK</span>
+<span class=kn>from</span> <span class=nn>pathlib</span> <span class=kn>import</span> <span class=n>Path</span>
 
-private_key = Path(&#34;key.pem&#34;).read_bytes()
-jwk = JWK.from_pem(private_key)
+<span class=n>private_key</span> <span class=o>=</span> <span class=n>Path</span><span class=p>(</span><span class=s2>&#34;key.pem&#34;</span><span class=p>)</span><span class=o>.</span><span class=n>read_bytes</span><span class=p>()</span>
+<span class=n>jwk</span> <span class=o>=</span> <span class=n>JWK</span><span class=o>.</span><span class=n>from_pem</span><span class=p>(</span><span class=n>private_key</span><span class=p>)</span>
 
-# 导出公钥 RSA Public Key
-public_key = jwk.public().export_to_pem()
-print(public_key)
+<span class=c1># 导出公钥 RSA Public Key</span>
+<span class=n>public_key</span> <span class=o>=</span> <span class=n>jwk</span><span class=o>.</span><span class=n>public</span><span class=p>()</span><span class=o>.</span><span class=n>export_to_pem</span><span class=p>()</span>
+<span class=nb>print</span><span class=p>(</span><span class=n>public_key</span><span class=p>)</span>
 
-print(&#34;=&#34;*30)
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;=&#34;</span><span class=o>*</span><span class=mi>30</span><span class=p>)</span>
 
-# 导出 JWK
-jwk_bytes = jwk.public().export()
-print(jwk_bytes)
+<span class=c1># 导出 JWK</span>
+<span class=n>jwk_bytes</span> <span class=o>=</span> <span class=n>jwk</span><span class=o>.</span><span class=n>public</span><span class=p>()</span><span class=o>.</span><span class=n>export</span><span class=p>()</span>
+<span class=nb>print</span><span class=p>(</span><span class=n>jwk_bytes</span><span class=p>)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>Istio 需要 JWK 进行 JWT 验证，而我们手动验证 JWT 时一般需要用到 Public Key. 方便起见，上述代码把这两个都打印了出来。内容如下：</p>
