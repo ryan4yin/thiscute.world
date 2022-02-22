@@ -115,11 +115,4 @@ code:
 本系列文章的后续部分，会分别介绍相关概念，并使用 Python 演示其用法，其他语言的写法网上也很容易找到。
 
 
-
-## 参考
-
-- [Practical-Cryptography-for-Developers-Book][cryptobook]
-- [漫谈非加密哈希算法](https://segmentfault.com/a/1190000010990136)
-- [开发中常见的一些Hash函数（一）](http://thomaslau.xyz/2020/05/20/2020-05-20-on_hash_1/)
-
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
