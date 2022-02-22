@@ -73,11 +73,12 @@ code:
 ### 2. 数字签名与消息认证 - Digital Signatures and Message Authentication
 
 密码学提供了保证消息真实性（authenticity）、完整性（integrity）和不可否认性（non-repudiation）的消息数字签名方法。
+
 大多数数字签名算法（如 DSA、ECDSA 和 EdDSA）使用非对称密钥对（私钥和公钥）干这个活：消息由私钥**签名**，签名由相应的公钥**验证**。
 在银行系统中，数字签名用于签署和批准付款。
 在区块链签名交易中，用户可以将区块链资产从一个地址转移到另一个地址，确保转移操作的真实、完整、不可否认。
 
-消息认证算法（如 HMAC）和消息认证码（MAC 码）也是密码学的一部分，它们被用于证明消息的真实性（authenticity）、完整性（integrity）和作者身份（authorship）。MAC 同时使用了**身份验证**与**加密**，以确保安全通信。
+消息认证算法（如 HMAC）和消息认证码（MAC 码）也是密码学的一部分，它们被用于证明消息的真实性（authenticity）、完整性（integrity）和作者身份（authorship）。MAC 跟数字签名的功能实际上是一致的，区别在于 MAC 使用哈希算法或者对称加密系统。
 
 ### 3. 安全随机数 - Secure Random Numbers
 
