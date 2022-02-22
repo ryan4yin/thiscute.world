@@ -16,6 +16,8 @@ code:
   maxShownLines: 100
 ---
 
+>2022-02-22 本文仍然在完善中，仍然在优化翻译质量、补充原文缺失的细节
+
 >本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
 
 ## 零、前言
