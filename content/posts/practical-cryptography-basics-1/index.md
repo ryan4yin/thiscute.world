@@ -118,6 +118,6 @@ code:
 
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
 - [漫谈非加密哈希算法](https://segmentfault.com/a/1190000010990136)
-
+- [开发中常见的一些Hash函数（一）](http://thomaslau.xyz/2020/05/20/2020-05-20-on_hash_1/)
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
