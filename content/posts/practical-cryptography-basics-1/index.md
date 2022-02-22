@@ -112,4 +112,12 @@ code:
 
 本系列文章的后续部分，会分别介绍相关概念，并使用 Python 演示其用法，其他语言的写法网上也很容易找到。
 
+
+
+## 参考
+
+- [Practical-Cryptography-for-Developers-Book][cryptobook]
+- [漫谈非加密哈希算法](https://segmentfault.com/a/1190000010990136)
+
+
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
