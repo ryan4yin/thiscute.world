@@ -1,7 +1,7 @@
 ---
 title: "「译」写给开发人员的实用密码学（二）—— 哈希函数"
 date: 2022-02-22T01:14:00+08:00
-draft: false
+draft: true
 resources:
 - name: "featured-image"
   src: "cryptographic_hash_function.png"
