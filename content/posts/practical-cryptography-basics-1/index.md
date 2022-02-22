@@ -37,12 +37,12 @@ code:
 
 让我们首先跟一些基本的密码学概念混个脸熟：
 
-- **哈希函数**，如 SHA-256, SHA3, RIPEMD and others
-- **散列消息认证码 HMAC** (hashed message authentication code)
-- **密钥派生函数 KDF**（key derivation functions），如 Scrypt
+- **哈希函数**，如 SHA-256, SHA3, RIPEMD 等
+- **散列消息认证码 HMAC**
+- **密钥派生函数 KDF**，如 Scrypt
 - **密钥交换算法**，Diffie-Hellman 密钥交换协议
-- **对称密钥加密方案**（symmetric key encryption schemes），如「具有 CBC 和 CTR 块模式的 AES 密码」
-- 使用公私钥的**非对称密钥加密方案**（asymmetric key encryption schemes），如 RSA 和 ECC, secp256k1 曲线 跟 Ed25519 密码系统
+- **对称密钥加密方案**，如 AES-256-CTR-HMAC-SHA-256
+- 使用公私钥的**非对称密钥加密方案**，如 RSA 和 ECC, secp256k1 曲线跟 Ed25519 密码系统
 - **数字签名算法**，如 ECDSA
 - **熵**（entropy）与**安全随机数生成**
 - **量子安全**（quantum-safe）密码学
@@ -57,14 +57,15 @@ code:
 
 ### 1. 加密与密钥 - Encryption and Keys
 
-密码学以安全的方式进行数据的存储和传输，这样只有那些预期的人才能读取和处理它。
+密码学以安全的方式进行数据的存储和传输，这样只有那些预期内的人才能读取和处理它。
 这可能涉及使用对称或非对称加密方案**加密**和**解密**数据，其中一个或多个**密钥**用于将数据从明文转换为加密形式或者相反。
 
 对称加密（如 AES、Twofish 和 ChaCha20）使用相同的密钥来加密和解密消息，
-而非对称加密使用公钥密码系统（如 RSA 或 ECC）和密钥对来进行这两项操作：公钥（加密密钥）和相应的私钥密钥（解密密钥）。
+而非对称加密使用公钥密码系统（如 RSA 或 ECC）和密钥对来进行这两项操作。
+
 加密算法通常结合在加密方案中，如 AES-256-CTR-HMAC-SHA-256、ChaCha20-Poly1305 或 ECIES-secp256k1-AES-128-GCM。
 
-密码学也涉及密钥的生成（一个非常大的、保密的数字），在许多情况下，这些密钥是使用密钥派生算法（如 PBKDF2 和 Scrypt）从数字、密码（passwords）或密码词组（passphrases）中派生的。
+密码学也涉及密钥（一个非常大的、保密的数字）的生成，在许多情况下，这些密钥是使用密钥派生算法（如 PBKDF2 和 Scrypt）从数字、密码（passwords）或密码词组（passphrases）中派生的。
 
 
 ### 2. 数字签名与消息认证 - Digital Signatures and Message Authentication
@@ -112,4 +113,3 @@ code:
 本系列文章的后续部分，会分别介绍相关概念，并使用 Python 演示其用法，其他语言的写法网上也很容易找到。
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
-
