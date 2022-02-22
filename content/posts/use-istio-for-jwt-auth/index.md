@@ -100,7 +100,7 @@ x8whrOnMMODCAqu4W/Rx1Lgf2vXIx0pZmlt8Df9i2AVg/ePR6jO3Nw==
 
 接下来通过 Python 编程生成 RSA Public Key 和 JWK（jwk 其实就是公钥的另一个表述形式而已）:
 
-```
+```python
 # 需要先安装依赖: pip install jwcrypto
 from jwcrypto.jwk import JWK
 from pathlib import Path
