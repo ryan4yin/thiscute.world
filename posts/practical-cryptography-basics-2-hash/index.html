@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-2-hash/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（二）—— 哈希函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-2-hash\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-2-hash\/cryptographic_hash_function.png","width":3060,"height":1908}],"genre":"posts","keywords":"Cryptography, Hash, 密码学, 哈希, 散列","wordcount":4947,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-2-hash\/","datePublished":"2022-02-22T01:14:00+08:00","dateModified":"2022-02-22T01:14:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-2-hash/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-1/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（二）—— 哈希函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-2-hash\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-2-hash\/cryptographic_hash_function.png","width":3060,"height":1908}],"genre":"posts","keywords":"Cryptography, Hash, 密码学, 哈希, 散列","wordcount":5075,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-2-hash\/","datePublished":"2022-02-22T01:14:00+08:00","dateModified":"2022-02-22T01:14:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,8 +89,8 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（二）—— 哈希函数</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-22>2022-02-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4947 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;<span id=/posts/practical-cryptography-basics-2-hash/ class=leancloud_visitors data-flag-title="「译」写给开发人员的实用密码学（二）—— 哈希函数">
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-02-22>2022-02-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 5075 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 11 分钟&nbsp;<span id=/posts/practical-cryptography-basics-2-hash/ class=leancloud_visitors data-flag-title="「译」写给开发人员的实用密码学（二）—— 哈希函数">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;
 <a href=#comments id=post-meta-vcount title=查看评论>
@@ -145,7 +145,8 @@
 <h2 id=一简介>一、简介</h2>
 <p><strong>哈希函数</strong>，或者叫<strong>散列函数</strong>，是一种从任何一种数据中创建一个<strong>数字指纹</strong>（摘要）的方法，散列函数把数据压缩压缩（或者放大）成一个长度固定的摘要。</p>
 <p>哈希函数的输入空间（文本或者二进制数据）是可以无限大的，但是输出空间（一个固定长度的摘要）却是有限的。将「无限」映射到「有限」，不可避免的会有概率不同的输入得到相同的输出，这种情况我们称为<strong>碰撞</strong>（collision）。</p>
-<p>一个好的哈希函数必须满足<strong>抗碰撞</strong>（collision-resistant）和<strong>不可逆</strong>（irreversible）这两个条件。
+<p>而<strong>加密哈希函数</strong>，因为带了个<strong>加密</strong>前缀，它对函数有更高的要求。
+一个好的加密哈希函数必须满足<strong>抗碰撞</strong>（collision-resistant）和<strong>不可逆</strong>（irreversible）这两个条件。
 抗碰撞是通过统计学方法很难猜出哈希摘要对应的原始数据，而不可逆则是说攻击者很难逆向演算出原始数据。
 只要找到碰撞以及逆向演算的难度足够大（比如用超级计算机需要花 10 年），我们就能认为原始数据是安全的。</p>
 <p>但是也要注意，不同的场景对「难度足够大」的定义是不一样的。对普通人而言，用超级计算机需要花 10 年才能破解已经是「难度足够大」了，但是对国家机密而言，可能就还远远不够。
@@ -154,7 +155,7 @@
 它会导致大量的碰撞，例如 hello 和 ehllo 将具有相同的哈希值。
 更好的哈希函数可以使用这样的方案，它将第一个字节作为状态，然后转换状态（例如，将它乘以像 31 这样的素数），然后将下一个字节添加到状态，然后再次转换状态并添加下一个字节等。
 这样的操作可以显着降低碰撞概率并产生更均匀的分布。</p>
-<p>一个理想的密码学哈希函数，应当具有如下属性：</p>
+<p>一个理想的<strong>加密哈希函数</strong>，应当具有如下属性：</p>
 <ul>
 <li><strong>快速</strong>：计算速度要足够快</li>
 <li><strong>确定性</strong>：同样的输入应该总是产生同样的输出</li>
@@ -162,7 +163,7 @@
 <li><strong>不可逆</strong>：从其哈希值逆向演算出输入值应该是不可行的。这意味着没有比爆破更好的破解方法</li>
 <li><strong>无碰撞</strong>：找到具有相同哈希的两条不同消息应该非常困难（或几乎不可能）</li>
 </ul>
-<p>现代哈希函数（如 SHA2 和 SHA3）都具有上述几个属性，并被广泛应用在多个领域，各种现代编程语言和平台的标准库中基本都包含这些常用的哈希函数。</p>
+<p>现代加密哈希函数（如 SHA2 和 SHA3）都具有上述几个属性，并被广泛应用在多个领域，各种现代编程语言和平台的标准库中基本都包含这些常用的哈希函数。</p>
 <h2 id=二示例>二、示例</h2>
 <p>下面是一个 SHA3-256 哈希转换的示例：</p>
 <div class=highlight><div class=chroma>
@@ -210,6 +211,8 @@
 <h3 id=2-哈希表>2. 哈希表</h3>
 <p>在编程领域，有一个使用哈希函数实现的数据结构被广泛使用——哈希表（Hash Table），或者称字典（Map, Dict）。</p>
 <p>哈希表被用于存储键值对，它通过使用哈希函数，使得绝大多数的索引与插入的操作都可以非常快速地完成。</p>
+<p>在哈希表这种场景下，我们通常侧重于选择计算足够快、哈希值分布足够均匀或者随机的哈希函数，比如前面提到的「求和，乘一个素数 31」这样的简单算法。
+这样的算法不要求安全性，称为「<strong>非加密哈希函数</strong>」</p>
 <h3 id=3-保存密码>3. 保存密码</h3>
 <p>哈希函数还被用于密码的安全存储，现代系统使用专门设计的安全哈希算法计算用户密码的哈希摘要，保存到数据库中，这样能确保密码的安全性。除了用户自己，没有人清楚该密码的原始数据，即使数据库管理员也只能看到一个哈希摘要。</p>
 <p><img class=lazyload src=/svg/loading.min.svg data-src=/images/practical-cryptography-basics-2-hash/sha512-password-hash.png data-srcset="/images/practical-cryptography-basics-2-hash/sha512-password-hash.png, /images/practical-cryptography-basics-2-hash/sha512-password-hash.png 1.5x, /images/practical-cryptography-basics-2-hash/sha512-password-hash.png 2x" data-sizes=auto alt=/images/practical-cryptography-basics-2-hash/sha512-password-hash.png title=/images/practical-cryptography-basics-2-hash/sha512-password-hash.png></p>
@@ -420,7 +423,7 @@ BLAKE2b(&#39;hello&#39;) = e4cfa39a3d37be31c59609e807970799caa68a19bfaa15135f165
 </div><h3 id=不安全的哈希算法>不安全的哈希算法</h3>
 <p>一些老一代的哈希算法，如 MD5, SHA-0 和 SHA-1 被认为是不安全的，并且由于加密漏洞（发现碰撞）而被撤回。<strong>不要使用 MD5、SHA-0 和 SHA-1</strong>！这些哈希函数都被证明在密码学上是不安全的。</p>
 <p>使用这些不安全的哈希算法，可能会导致数字签名被伪造、密码泄漏等严重问题！</p>
-<p>另外也请避免使用以下被认为不安全或安全性有争议的哈希算法： MD2, MD4, MD5, SHA-0, SHA-1, Panama, HAVAL（有争议的安全性，在 HAVAL-128 上发现了碰撞），Tiger（有争议，已发现其弱点），SipHash（假的加密哈希函数）。</p>
+<p>另外也请避免使用以下被认为不安全或安全性有争议的哈希算法： MD2, MD4, MD5, SHA-0, SHA-1, Panama, HAVAL（有争议的安全性，在 HAVAL-128 上发现了碰撞），Tiger（有争议，已发现其弱点），SipHash（它属于非加密哈希函数）。</p>
 <h3 id=其他安全哈希算法>其他安全哈希算法</h3>
 <p>以下是目前流行的强加密哈希函数，它们都可被用于替代 SHA-2、SHA-3 和 BLAKE2：</p>
 <ul>
