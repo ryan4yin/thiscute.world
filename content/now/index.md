@@ -16,11 +16,11 @@ draft: false
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - 服务网格
-  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档
-  - 研究 istio 的 gRPC 支持
-  - 考虑如何通过 istio envoyfilter 实现 pod 的 warm_up/slow_start
-  - 研究 istio 的指标与 access_log（添加 host/uri 等自定义指标），以支持 HTTP host/path 级别的监控与请求分析能力。
-  - 详细研究 istio 的限流限并发能力
+  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
+  - [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md) - 80%
+  - [研究 istio 的限流限并发能力](https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/)
+  - 跟进 istio 的 warm_up/slow_start PR 进展 - 目前已 Merge，有望在下个版本见到
+
 
 生活：
 - 娱乐+运动：
@@ -30,8 +30,9 @@ draft: false
 阅读（一二月份，就读这两本吧）：
 
 - [x] 《人间失格》
-- [ ] 《生命最后的读书会》
+- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book) - 20%
 - [ ] 《在生命的尽头拥抱你-临终关怀医生手记》
+
 
 ### 高优先级
 
@@ -45,9 +46,10 @@ draft: false
 
 阅读（三四月份的书单）：
 
-- 《房思琪的初恋乐园》
-- 《圆圈正义-作为自由前提的信念》
-- 《网络是怎样连接的》
+- [ ] 《生命最后的读书会》
+- [ ] 《房思琪的初恋乐园》
+- [ ] 《圆圈正义-作为自由前提的信念》
+- [ ] 《网络是怎样连接的》
 
 - k8s 网络插件 - Cilium
 - Kubernetes：阅读源码，熟悉底层细节
@@ -150,14 +152,23 @@ draft: false
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 
+### 2022-02-19 - 2022-02-23
+
+- 阅读 [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)，同时完成我的密码学笔记
+- [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md)
+
 ### 2022-02-17
 
 - 发现我们的 EKS 集群主使用的是 AWS Spot 实例，这类实例的 c6i/c6g 性能与价格差距并不高，做 ARM 化的 ROI 貌似并不高
 - 发现对 aws 的 RDS/EC2-Volume/Redis 等资源进行全面评估，删掉闲置资源、缩小实例/集群规格，可以轻易节省大量成本（说明以前申请资源时风格比较豪放 2333）
+- 继续迭代个人博客
 
-### 2022-02-07
+### 2022-02-07 - 2022-02-16
 
-- 迭代个人博客 <https://thiscute.world>，添加「阅读排行」页，定期从 Google Analytics 同步数据。
+- 迭代我的独立博客 <https://thiscute.world>
+  - 添加「阅读排行」页，定期从 Google Analytics 同步数据
+  - 从博客园迁移部分有价值的文章到独立博客
+
 
 ### 2022-01-01
 
