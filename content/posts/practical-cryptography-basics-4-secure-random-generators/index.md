@@ -88,17 +88,38 @@ Cryptography Secure Random Number Generators(CSPRNG) 是一种适用于密码学
 - 能通过「下一比特测试 next-bit test」：即使有人获知了该 PRNG 的 k 位，他也无法使用合理的资源预测第 k+1 位的值
 - 如果攻击者猜出了 PRNG 的内部状态或该状态因某种原因而泄漏，攻击者也无法重建出内部状态泄漏之前生成的所有随机数
 
-因为熵的收集很缓慢，等待收集到足够多的熵再进行运算是不切实际的，因此很多的加密程序都使用 CSPRNG 来从系统的初始熵生成出足够多的伪随机熵。
-
 有许多的设计都被证明可以用于构造一个 CSPRNG:
 
-- 
+- 基于计数器(CTR)模式下的**安全[分组密码](https://zh.wikipedia.org/wiki/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81)**、**[流密码](https://zh.wikipedia.org/wiki/%E6%B5%81%E5%AF%86%E7%A0%81)**或**安全散列函数**的 CSPRNG
+- 基于数论设计的 CSPRNG，它依靠整数分解问题（IFP）、离散对数问题（DLP）或椭圆曲线离散对数问题（ECDLP）的高难度来确保安全性
+- CSPRNG 基于加密安全随机性的特殊设计，例如 Yarrow algorithm 和 Fortuna，用于 MacOS 和 FreeBSD。
 
+大多数的 CSPRNG 结合使用来自 OS 的熵与高质量的 PRNG，并且一旦系统生成了新的熵（这可能来自用户输入、磁盘  IO、系统中断、或者硬件 RNG），CSPRNG 会立即使用新的熵来作为 PRNG 新的种子。
+这种不断重置 PRNG 种子的行为，使随机数变得非常难以预测。
+
+### CSPRNG 的用途
+
+- 加密程序：因为 OS 中熵的收集很缓慢，等待收集到足够多的熵再进行运算是不切实际的，因此很多的加密程序都使用 CSPRNG 来从系统的初始熵生成出足够多的伪随机熵。
+- 其他需要安全随机数的场景 emmmm
+
+## 如何在代码中使用 CSPRNG
+
+
+多数系统都内置了 CSPRNG 算法并提供了内核 API，Unix-like 系统都通过如下两个虚拟设备提供 CSPRNG:
+
+- `/dev/random`（受限阻塞随机生成器）: 从这个设备中读取到的是内核熵池中已经收集好的熵，如果熵池空了，此设备会一直阻塞，直到收集到新的环境噪声。
+- `/dev/urandom`（不受限非阻塞随机生成器）: 它可能会返回内核熵池中的熵，也可能返回使用「之前收集的熵 + CSPRNG」计算出的安全伪随机数。它不会阻塞。
+
+编程语言的 CSPRNG 接口或库如下：
+
+- Java: `java.security.SecureRandom`
+- Python: `secrets` 库或者 `os.urandom()`
+- C#: `System.Security.Cryptography.RandomNumberGenerator.Create()`
+- JavaScript: 客户端可使用 `window.crypto.getRandomValues(Uint8Array)`，服务端可使用 `crypto.randomBytes()`
 
 ## 参考
 
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
-- [A complete overview of SSL/TLS and its cryptographic system](https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd)
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
 
