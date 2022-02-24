@@ -5,7 +5,7 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>Base64 编码并不唯一 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="Base64 编码并不唯一">
-<meta property="og:description" content="个人笔记，不保证正确 问题 我以前只知道 Base64 这个编码算法很常用，自己也在 JWT 等机房经常使用，但是从来没了解过它的原理，一直先入为主地认为它的编码应该">
+<meta property="og:description" content="个人笔记，不保证正确 问题 我以前只知道 Base64 这个编码算法很常用，自己也经常在 JWT 等场景下使用，但是从来没了解过它的原理，一直先入为主地认为它的编码应">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/base64-encoding-is-not-unique/"><meta property="og:image" content="https://thiscute.world/posts/base64-encoding-is-not-unique/base64-encoding.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2020-05-31T00:13:00+08:00">
@@ -13,11 +13,11 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/base64-encoding-is-not-unique/base64-encoding.png">
 <meta name=twitter:title content="Base64 编码并不唯一">
-<meta name=twitter:description content="个人笔记，不保证正确 问题 我以前只知道 Base64 这个编码算法很常用，自己也在 JWT 等机房经常使用，但是从来没了解过它的原理，一直先入为主地认为它的编码应该">
+<meta name=twitter:description content="个人笔记，不保证正确 问题 我以前只知道 Base64 这个编码算法很常用，自己也经常在 JWT 等场景下使用，但是从来没了解过它的原理，一直先入为主地认为它的编码应">
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/base64-encoding-is-not-unique/><link rel=prev href=https://thiscute.world/posts/tcpdump-and-wireshark/><link rel=next href=https://thiscute.world/posts/jingdezhen-renaissance-band-2020-shenzhen/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Base64 编码并不唯一","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/base64-encoding-is-not-unique\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/base64-encoding-is-not-unique\/base64-encoding.png","width":837,"height":470}],"genre":"posts","keywords":"Base64, 编码","wordcount":1982,"url":"https:\/\/thiscute.world\/posts\/base64-encoding-is-not-unique\/","datePublished":"2020-05-31T00:13:00+08:00","dateModified":"2020-05-31T00:13:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/base64-encoding-is-not-unique/><link rel=prev href=https://thiscute.world/posts/tcpdump-and-wireshark/><link rel=next href=https://thiscute.world/posts/jingdezhen-renaissance-band-2020-shenzhen/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Base64 编码并不唯一","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/base64-encoding-is-not-unique\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/base64-encoding-is-not-unique\/base64-encoding.png","width":837,"height":470}],"genre":"posts","keywords":"Base64, 编码","wordcount":1983,"url":"https:\/\/thiscute.world\/posts\/base64-encoding-is-not-unique\/","datePublished":"2020-05-31T00:13:00+08:00","dateModified":"2020-05-31T00:13:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Base64 编码并不唯一</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-05-31>2020-05-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1982 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-05-31>2020-05-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1983 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;<span id=/posts/base64-encoding-is-not-unique/ class=leancloud_visitors data-flag-title="Base64 编码并不唯一">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;
@@ -113,7 +113,7 @@
 <p>个人笔记，不保证正确</p>
 </blockquote>
 <h1 id=问题>问题</h1>
-<p>我以前只知道 Base64 这个编码算法很常用，自己也在 JWT 等机房经常使用，但是从来没了解过它的原理，一直先入为主地认为它的编码应该是唯一的。</p>
+<p>我以前只知道 Base64 这个编码算法很常用，自己也经常在 JWT 等场景下使用，但是从来没了解过它的原理，一直先入为主地认为它的编码应该是唯一的。</p>
 <p>但是今天测试 JWT 时，发现修改 JWT 的最后一个字符（其实不是我发现的。。），居然有可能不影响 JWT 的正确性。比如下这个使用 HS256 算法的 JWT:</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
