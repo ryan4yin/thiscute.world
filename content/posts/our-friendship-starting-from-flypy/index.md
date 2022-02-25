@@ -9,6 +9,12 @@ resources:
 
 tags: ["友谊", "成长", "青春", "中文输入方案", "音乐", "编程"]
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 偶然发觉，我们的交流群，已经 4 年多了~

@@ -9,6 +9,12 @@ resources:
 
 tags: []
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 <!-- 每个人的一生都是一次远行 -->

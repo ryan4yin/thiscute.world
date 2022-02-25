@@ -10,6 +10,12 @@ resources:
 
 tags: ["生死"]
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 大雪，沙雪。

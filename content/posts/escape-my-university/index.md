@@ -9,6 +9,12 @@ resources:
 
 tags: []
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 四年大学惨淡收场，坐在火车硬座上，心里有些忐忑。

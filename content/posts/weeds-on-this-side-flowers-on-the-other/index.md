@@ -9,6 +9,12 @@ resources:
 
 tags: ["后摇"]
 categories: ["音乐", "随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 >「此岸弃草，彼岸繁花。」取自前永动机主唱「河津樱/白金」的个人简介

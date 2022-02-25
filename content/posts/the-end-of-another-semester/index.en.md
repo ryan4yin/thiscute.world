@@ -9,6 +9,12 @@ resources:
 
 tags: []
 categories: ["Essays"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 <!-- Love Story - The Piano Guys -->

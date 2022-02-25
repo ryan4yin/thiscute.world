@@ -9,6 +9,12 @@ resources:
 
 tags: ["英语", "语言学习"]
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 对我而言，学英语是一件挺痛苦的事。从初中开始学英文，可从来不觉得它有趣，主动性也就不强。

@@ -9,6 +9,12 @@ resources:
 
 tags: ["闲言碎语", "初心", "歌声合成"]
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 {{< music server="netease" type="song" id="35032582" >}}

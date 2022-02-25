@@ -9,6 +9,12 @@ resources:
 
 tags: ["Webnovel", "网络小说"]
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 这网络小说一起头，就停不下来。
