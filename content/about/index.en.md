@@ -61,4 +61,5 @@ The content in this blog is only my opinion, I can only try to reduce errors and
 
 So please look at anything in this blog critically.
 
+In addition, many of the pictures/banners used on this site are from the Internet. If there is any infringement, please contact me to delete it.
 
