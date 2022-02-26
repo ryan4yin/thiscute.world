@@ -8,6 +8,12 @@ resources:
 
 tags: ["长跑", "马拉松", "运动"]
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 >本文转载自朋友写的 [写给优秀程序员看的马拉松指南🏃 - Chuanyi](https://github.com/Likenttt/a-coder-learns-to-run-faster)，读下来感觉写得超棒超正能量，征得他同意后转载过来分享下嘿嘿~
