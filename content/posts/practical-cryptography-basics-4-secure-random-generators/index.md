@@ -1,7 +1,7 @@
 ---
 title: "「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器"
 date: 2022-03-01T17:15:04+08:00
-draft: true
+draft: false
 resources:
 - name: "featured-image"
   src: "random-numbers.jpg"
