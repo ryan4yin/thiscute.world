@@ -16,7 +16,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
+>本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是也补充了一些我的代码示例及思考。
 
 
 《写给开发人员的实用密码学》系列文章目录：
