@@ -33,14 +33,35 @@ code:
 - 待续
 
 
+
+## 零、术语介绍
+
+两个常用动词：
+
+- 加密：cipher 或者 encrypt
+- 解密：decipher 或者 decrypt
+
+另外有几个名词有必要解释：
+
+- cipher: 指用于加解密的「密码算法」
+- cryptographic algorithm: 密码学算法，泛指密码学相关的各类算法
+- ciphertext: 密文，即加密后的信息。对应的词是明文 plaintext
+- password: 这个应该不需要解释，就是我们日常用的各种字符或者数字密码，也可称作口令。
+- [passphrase](https://en.wikipedia.org/wiki/Passphrase): 翻译成「密码词组」或者「密碼片語」，通常指用于保护密钥或者其他敏感数据的一个 password.
+  - 如果你用 ssh/gpg/openssl 等工具生成或使用过密钥，应该对它不陌生。
+
 ## 一、什么是对称加密
 
 在密码学中，有两种加密方案被广泛使用：「对称加密」与「非对称加密」。
 
-对称加密是指，加密与解密均是使用相同的密钥，因为这个特性，我们也称这个密钥为「共享密钥（Shared Secret Key）」。
-
+对称加密是指，加密与解密均是使用相同的密钥，因为这个特性，我们也称这个密钥为「共享密钥（Shared Secret Key）」，示意图如下：
 
 {{< figure src="/images/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-cryptography.png" >}}
+
+我们在第一章「概览」里介绍过，单纯使用对称加密算法并不能满足我们对消息真实性、完整性，因此通常我们会将对称加密算法跟其他算法组合成一个对称加密方案来使用。
+加密方案可以包括：密钥派生函数（带有某些参数）+对称密码算法（带有某些参数）+密码块模式算法+消息认证（MAC）算法，如 AES-256-CTR-HMAC-SHA256 就表示一个使用 AES-256 与 Counter 块模式进行加密，使用 HMAC-SHA256 进行消息认证的加密方案。
+
+现代密码学中广泛使用的对称加密算法（ciphers）有：AES（AES-128、AES-192、AES-256）、ChaCha20、Twofish、IDEA、Serpent、Camelia等。其中大多数是块密码（通过固定大小的块加密数据，例如 128 位），而其他是流密码（将数据逐字节加密为流）。通过使用称为“密码块模式”的技术，可以将块密码转换为流密码。
 
 
 ## 参考

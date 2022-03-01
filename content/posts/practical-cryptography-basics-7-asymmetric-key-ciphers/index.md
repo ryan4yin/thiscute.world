@@ -40,6 +40,16 @@ code:
 {{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/asymmetric-cryptography.png" >}}
 
 
+## 二、公钥密码学
+
+在介绍非对称密钥加密方案和算法之前，我们首先要了解公钥密码学的概念。
+
+公钥密码术使用不同的密钥来加密和解密数据（或签名和验证消息）。
+密钥始终以公钥 + 私钥对的形式出现。
+非对称密码学处理使用公钥/私钥加密和解密消息、签署消息、验证签名和安全地交换密钥。
+
+流行的公钥密码系统（非对称密码算法），如 RSA（Rivest–Shamir–Adleman）、ECC（椭圆曲线密码学）、Diffie-Hellman、ECDH、ECDSA 和 EdDSA，广泛用于现代密码学中，我们将演示大部分他们在实践中使用代码示例。
+
 ## 参考
 
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
