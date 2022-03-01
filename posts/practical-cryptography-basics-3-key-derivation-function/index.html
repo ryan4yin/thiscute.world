@@ -1,0 +1,370 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF">
+<meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 《写给开发人员的实用密码学》系列文章目录： 「译」写给开发人员的实用密码学（一）—— 概览 「译」写给开发人员的实用密码学（二）—">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-03-01T17:15:03+08:00">
+<meta property="article:modified_time" content="2022-03-01T17:15:03+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png">
+<meta name=twitter:title content="「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF">
+<meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book 《写给开发人员的实用密码学》系列文章目录： 「译」写给开发人员的实用密码学（一）—— 概览 「译」写给开发人员的实用密码学（二）—">
+<meta name=application-name content="This Cute World">
+<meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-2-hash/><link rel=next href=https://thiscute.world/posts/practical-cryptography-basics-4-secure-random-generators/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-3-key-derivation-function\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-3-key-derivation-function\/key-derivation-function.png","width":880,"height":495}],"genre":"posts","keywords":"Cryptography, Hash, 密码学, 哈希, 散列","wordcount":2181,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-3-key-derivation-function\/","datePublished":"2022-03-01T17:15:03+08:00","dateModified":"2022-03-01T17:15:03+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="This Cute World"><span id=id-1 class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/statistics/> 阅读排行 </a><a class=menu-item href=/categories/%E6%8A%80%E6%9C%AF/> 技术 </a><a class=menu-item href=/categories/%E9%9A%8F%E7%AC%94/> 随笔 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/friends/> 朋友们 </a><a class=menu-item href=/now/> 此刻 </a><a class=menu-item href=/about/> 关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/posts/practical-cryptography-basics-3-key-derivation-function/ selected>Simplified Chinese</option></select>
+</a><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="This Cute World"><span id=id-2 class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/categories/%E6%8A%80%E6%9C%AF/ title>技术</a><a class=menu-item href=/categories/%E9%9A%8F%E7%AC%94/ title>随笔</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value"><option value=/posts/practical-cryptography-basics-3-key-derivation-function/ selected>Simplified Chinese</option></select>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-01>2022-03-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2181 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png data-srcset="/posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png, /posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png 1.5x, /posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png title=/posts/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#一mac-消息认证码>一、MAC 消息认证码</a>
+<ul>
+<li><a href=#mac-与哈希函数数字签名的区别>MAC 与哈希函数、数字签名的区别</a></li>
+<li><a href=#mac-的应用>MAC 的应用</a>
+<ul>
+<li><a href=#1-验证消息的真实性完整性>1. 验证消息的真实性、完整性</a></li>
+<li><a href=#2-ae-认证加密---authenticated-encryption>2. AE 认证加密 - Authenticated encryption</a></li>
+<li><a href=#3-基于-mac-的伪随机数生成器>3. 基于 MAC 的伪随机数生成器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href=#二kdf-密钥派生函数>二、KDF 密钥派生函数</a></li>
+<li><a href=#参考>参考</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><blockquote>
+<p>本文主要翻译自 <a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></p>
+</blockquote>
+<p>《写给开发人员的实用密码学》系列文章目录：</p>
+<ul>
+<li><a href=/posts/practical-cryptography-basics-1/ rel>「译」写给开发人员的实用密码学（一）—— 概览</a></li>
+<li><a href=/posts/practical-cryptography-basics-2-hash/ rel>「译」写给开发人员的实用密码学（二）—— 哈希函数</a></li>
+<li><a href=/posts/practical-cryptography-basics-3-key-derivation-function/ rel>「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li>
+<li><a href=/posts/practical-cryptography-basics-4-secure-random-generators/ rel>「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器</a></li>
+<li><a href=/posts/practical-cryptography-basics-5-key-exchange/ rel>「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE</a></li>
+<li>待续</li>
+</ul>
+<h2 id=一mac-消息认证码>一、MAC 消息认证码</h2>
+<p>MAC 消息认证码，即 Message Authentication Code，是用于验证消息的一小段信息。
+换句话说，能用它确认消息的真实性——消息来自指定的发件人并且没有被篡改。</p>
+<p>MAC 值通过允许验证者（也拥有密钥）检测消息内容的任何更改来保护消息的数据完整性及其真实性。</p>
+<p>一个安全的 MAC 函数，跟加密哈希函数非常类似，也拥有如下特性：</p>
+<ul>
+<li><strong>快速</strong>：计算速度要足够快</li>
+<li><strong>确定性</strong>：对同样的消息跟密钥，应该总是产生同样的输出</li>
+<li><strong>难以分析</strong>：对消息或密钥的任何微小改动，都应该使输出完全发生变化</li>
+<li><strong>不可逆</strong>：从 MAC 值逆向演算出消息跟密钥应该是不可行的。</li>
+<li><strong>无碰撞</strong>：找到具有相同哈希的两条不同消息应该非常困难（或几乎不可能）</li>
+</ul>
+<p>但是 MAC 算法比加密哈希函数多一个输入值：密钥，因此也被称为 keyed hash functions，即「加密钥的哈希函数」。</p>
+<p>如下 Python 代码使用 key 跟 消息计算出对应的 HMAC-SHA256 值：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>hashlib</span><span class=o>,</span> <span class=nn>hmac</span><span class=o>,</span> <span class=nn>binascii</span>
+
+<span class=n>key</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;key&#34;</span>
+<span class=n>msg</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;some msg&#34;</span>
+
+<span class=n>mac</span> <span class=o>=</span> <span class=n>hmac</span><span class=o>.</span><span class=n>new</span><span class=p>(</span><span class=n>key</span><span class=p>,</span> <span class=n>msg</span><span class=p>,</span> <span class=n>hashlib</span><span class=o>.</span><span class=n>sha256</span><span class=p>)</span><span class=o>.</span><span class=n>digest</span><span class=p>()</span>
+
+<span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;HMAC-SHA256(</span><span class=si>{</span><span class=n>key</span><span class=si>}</span><span class=s2>, </span><span class=si>{</span><span class=n>msg</span><span class=si>}</span><span class=s2>)&#34;</span><span class=p>,</span> <span class=n>binascii</span><span class=o>.</span><span class=n>hexlify</span><span class=p>(</span><span class=n>mac</span><span class=p>)</span><span class=o>.</span><span class=n>decode</span><span class=p>(</span><span class=s1>&#39;utf8&#39;</span><span class=p>))</span>
+
+<span class=c1># =&gt; HMAC-SHA256(b&#39;key&#39;, b&#39;some msg&#39;) = 32885b49c8a1009e6d66662f8462e7dd5df769a7b725d1d546574e6d5d6e76ad</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>HMAC 的算法实际上非常简单，我参考 <a href=https://en.wikipedia.org/wiki/HMAC target=_blank rel="noopener noreferrer">wiki/HMAC</a> 给出的伪码，编写了下面这个 Python 实现，没几行代码，但是完全 work：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>hashlib</span><span class=o>,</span> <span class=nn>binascii</span>
+
+<span class=k>def</span> <span class=nf>xor_bytes</span><span class=p>(</span><span class=n>b1</span><span class=p>,</span> <span class=n>b2</span><span class=p>):</span>
+  <span class=k>return</span> <span class=nb>bytes</span><span class=p>(</span><span class=n>a</span> <span class=o>^</span> <span class=n>c</span> <span class=k>for</span> <span class=n>a</span><span class=p>,</span> <span class=n>c</span> <span class=ow>in</span> <span class=nb>zip</span><span class=p>(</span><span class=n>b1</span><span class=p>,</span> <span class=n>b2</span><span class=p>))</span>
+
+<span class=k>def</span> <span class=nf>my_hmac</span><span class=p>(</span><span class=n>key</span><span class=p>,</span> <span class=n>msg</span><span class=p>,</span> <span class=n>hash_name</span><span class=p>):</span>
+  <span class=c1># hash =&gt; (block_size, output_size)</span>
+  <span class=c1># 单位是 bytes，数据来源于 https://en.wikipedia.org/wiki/HMAC</span>
+  <span class=n>hash_size_dict</span> <span class=o>=</span> <span class=p>{</span>
+    <span class=s2>&#34;md5&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>64</span><span class=p>,</span> <span class=mi>16</span><span class=p>),</span>
+    <span class=s2>&#34;sha1&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>64</span><span class=p>,</span> <span class=mi>20</span><span class=p>),</span>
+    <span class=s2>&#34;sha224&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>64</span><span class=p>,</span> <span class=mi>28</span><span class=p>),</span>
+    <span class=s2>&#34;sha256&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>64</span><span class=p>,</span> <span class=mi>32</span><span class=p>),</span>
+    <span class=c1># &#34;sha512/224&#34;: (128, 28),  # 这俩算法暂时不清楚在 hashlib 里叫啥名</span>
+    <span class=c1># &#34;sha512/256&#34;: (128, 32),</span>
+    <span class=s2>&#34;sha_384&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>128</span><span class=p>,</span> <span class=mi>48</span><span class=p>),</span>
+    <span class=s2>&#34;sha_512&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>128</span><span class=p>,</span> <span class=mi>64</span><span class=p>),</span>
+    <span class=s2>&#34;sha3_224&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>144</span><span class=p>,</span> <span class=mi>28</span><span class=p>),</span>
+    <span class=s2>&#34;sha3_256&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>136</span><span class=p>,</span> <span class=mi>32</span><span class=p>),</span>
+    <span class=s2>&#34;sha3_384&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>104</span><span class=p>,</span> <span class=mi>48</span><span class=p>),</span>
+    <span class=s2>&#34;sha3_512&#34;</span><span class=p>:</span> <span class=p>(</span><span class=mi>72</span><span class=p>,</span> <span class=mi>64</span><span class=p>),</span>
+  <span class=p>}</span>
+  <span class=k>if</span> <span class=n>hash_name</span> <span class=ow>not</span> <span class=ow>in</span> <span class=n>hash_size_dict</span><span class=p>:</span>
+    <span class=k>raise</span> <span class=ne>ValueError</span><span class=p>(</span><span class=s2>&#34;unknown hash_name&#34;</span><span class=p>)</span>
+
+  <span class=n>block_size</span><span class=p>,</span> <span class=n>output_size</span> <span class=o>=</span> <span class=n>hash_size_dict</span><span class=p>[</span><span class=n>hash_name</span><span class=p>]</span>
+  <span class=n>hash_</span> <span class=o>=</span> <span class=nb>getattr</span><span class=p>(</span><span class=n>hashlib</span><span class=p>,</span> <span class=n>hash_name</span><span class=p>)</span>
+
+  <span class=c1># 确保 key 的长度为 block_size</span>
+  <span class=n>block_sized_key</span> <span class=o>=</span> <span class=n>key</span>
+  <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>key</span><span class=p>)</span> <span class=o>&gt;</span> <span class=n>block_size</span><span class=p>:</span>
+    <span class=n>block_sized_key</span> <span class=o>=</span> <span class=n>hash_</span><span class=p>(</span><span class=n>key</span><span class=p>)</span><span class=o>.</span><span class=n>digest</span><span class=p>()</span>  <span class=c1># 用 hash 函数进行压缩</span>
+  <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>key</span><span class=p>)</span> <span class=o>&lt;</span> <span class=n>block_size</span><span class=p>:</span>
+    <span class=n>block_sized_key</span> <span class=o>+=</span> <span class=sa>b</span><span class=s1>&#39;</span><span class=se>\x00</span><span class=s1>&#39;</span> <span class=o>*</span> <span class=p>(</span><span class=n>block_size</span> <span class=o>-</span> <span class=nb>len</span><span class=p>(</span><span class=n>key</span><span class=p>))</span>  <span class=c1># 末尾补 0</span>
+  
+  <span class=n>o_key_pad</span> <span class=o>=</span> <span class=n>xor_bytes</span><span class=p>(</span><span class=n>block_sized_key</span><span class=p>,</span> <span class=p>(</span><span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x5c</span><span class=s2>&#34;</span> <span class=o>*</span> <span class=n>block_size</span><span class=p>))</span>  <span class=c1># Outer padded key</span>
+  <span class=n>i_key_pad</span> <span class=o>=</span> <span class=n>xor_bytes</span><span class=p>(</span><span class=n>block_sized_key</span><span class=p>,</span> <span class=p>(</span><span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x36</span><span class=s2>&#34;</span> <span class=o>*</span> <span class=n>block_size</span><span class=p>))</span>  <span class=c1># Inner padded key</span>
+
+  <span class=k>return</span> <span class=n>hash_</span><span class=p>(</span><span class=n>o_key_pad</span> <span class=o>+</span> <span class=n>hash_</span><span class=p>(</span><span class=n>i_key_pad</span> <span class=o>+</span> <span class=n>msg</span><span class=p>)</span><span class=o>.</span><span class=n>digest</span><span class=p>())</span><span class=o>.</span><span class=n>digest</span><span class=p>()</span>
+
+
+<span class=c1># 下面验证下</span>
+<span class=n>key</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;key&#34;</span>
+<span class=n>msg</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;some msg&#34;</span>
+
+<span class=n>mac_</span> <span class=o>=</span> <span class=n>my_hmac</span><span class=p>(</span><span class=n>key</span><span class=p>,</span> <span class=n>msg</span><span class=p>,</span> <span class=s2>&#34;sha256&#34;</span><span class=p>)</span>
+<span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;HMAC-SHA256(</span><span class=si>{</span><span class=n>key</span><span class=si>}</span><span class=s2>, </span><span class=si>{</span><span class=n>msg</span><span class=si>}</span><span class=s2>)&#34;</span><span class=p>,</span> <span class=n>binascii</span><span class=o>.</span><span class=n>hexlify</span><span class=p>(</span><span class=n>mac_</span><span class=p>)</span><span class=o>.</span><span class=n>decode</span><span class=p>(</span><span class=s1>&#39;utf8&#39;</span><span class=p>))</span>
+
+<span class=c1># 输出跟标准库完全一致：</span>
+<span class=c1># =&gt; HMAC-SHA256(b&#39;key&#39;, b&#39;some msg&#39;) = 32885b49c8a1009e6d66662f8462e7dd5df769a7b725d1d546574e6d5d6e76ad</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=mac-与哈希函数数字签名的区别>MAC 与哈希函数、数字签名的区别</h3>
+<p>上一篇文章提到过，哈希函数只负责生成哈希值，不负责哈希值的可靠传递。</p>
+<p>而数字签名呢，跟 MAC 非常相似，但是数字签名使用的是非对称加密系统，更复杂，计算速度也更慢。</p>
+<p>MAC 的功能跟数字签名一致，都是验证消息的真实性（authenticity）、完整性（integrity）、不可否认性（non-repudiation），但是 MAC 使用哈希函数或者对称密码系统来做这件事情，速度要更快，算法也更简单。</p>
+<h3 id=mac-的应用>MAC 的应用</h3>
+<h4 id=1-验证消息的真实性完整性>1. 验证消息的真实性、完整性</h4>
+<p>这是最简单的一个应用场景，在通信双向都持有一个预共享密钥的前提下，通信时都附带上消息的 MAC 码。
+接收方也使用「收到的消息+预共享密钥」计算出 MAC 码，如果跟收到的一致，就说明消息真实无误。</p>
+<p>注意这种应用场景中，消息是不保密的！</p>
+<figure><img src=/images/practical-cryptography-basics-3-key-derivation-function/mac-message-is-authentic.png>
+</figure>
+<h4 id=2-ae-认证加密---authenticated-encryption>2. AE 认证加密 - Authenticated encryption</h4>
+<p>常用的加密方法只能保证数据的保密性，并不能保证数据的完整性。</p>
+<p>而这里介绍的 MAC 算法，或者还未介绍的基于非对称加密的数字签名，都只能保证数据的真实性、完整性，不能保证数据被安全传输。</p>
+<p>而认证加密，就是结合加密算法与 MAC 算法的一种加密传输方式。
+在确保 MAC 码「强不可伪造」的前提下，首先对数据进行加密，然后计算密文的 MAC 码，再同时传输密文与 MAC 码，就能同时保证数据的保密性、完整性、真实性，这种方法叫 Encrypt-then-MAC, 缩写做 EtM.
+接收方在解密前先计算密文的 MAC 码与收到的对比，就能验证密文的完整性与真实性。</p>
+<h4 id=3-基于-mac-的伪随机数生成器>3. 基于 MAC 的伪随机数生成器</h4>
+<p>MAC 码的另一个用途就是伪随机数生成函数，相比直接使用熵+哈希函数的进行伪随机数计算，MAC 码因为多引入了一个变量 key，理论上它会更安全。</p>
+<p>这种场景下，我们称 MAC 使用的密钥为 <code>salt</code>，即盐。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>next_seed = MAC(salt, seed)
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=二kdf-密钥派生函数>二、KDF 密钥派生函数</h2>
+<p>我们都更喜欢使用密码来保护自己的数据而不是二进制的密钥，因为相比之下二进制密钥太难记忆了，字符形式的密码才是符合人类思维习惯的东西。</p>
+<p>可对计算机而言就刚好相反了，现代密码学的很多算法都要求输入是一个大的数字，二进制的密钥就是这样一个大的数字。
+因此显然我们需要一个将字符密码（Password）转换成密钥（Key）的函数，这就是密钥派生函数 Key Derivation Function.</p>
+<p>直接使用 SHA256 之类的加密哈希函数来生成密钥是不安全的，因为为了方便记忆，通常密码并不会很长，绝大多数人的密码长度估计都不超过 15 位。
+甚至很多人都在使用非常常见的弱密码，如 123456 admin 生日等等。
+这就导致如果直接使用 SHA256 之类的算法，许多密码将很容易被暴力破解、字典攻击、彩虹表攻击等手段猜测出来！</p>
+<p>KDF 目前主要从如下三个维度提升 hash 碰撞难度：</p>
+<ol>
+<li>时间复杂度：对应 CPU/GPU 计算资源</li>
+<li>空间复杂度：对应 Memory 内存资源</li>
+<li>并行维度：使用无法分解的算法，锁定只允许单线程运算</li>
+</ol>
+<p>主要手段是加盐，以及多次迭代。这种设计方法被称为「密钥拉伸 Key stretching」。</p>
+<p>因为它的独特属性，KDF 也被称作慢哈希算法。</p>
+<p>目前比较著名的 KDF 算法主要有如下几个：</p>
+<ol>
+<li>PBKDF2：这是一个非常简单的加密 KDF 算法，目前已经不推荐使用。</li>
+<li>Bcrypt：安全性在下降，用得越来越少了。不建议使用。</li>
+<li>Scrypt：可以灵活地设定使用的内存大小，在 argon2 不可用时，可使用它。</li>
+<li>Argon2：目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。</li>
+</ol>
+<p>如果你正在开发一个新的程序，需要使用到 KDF，建议选用 argon2/scrypt.</p>
+<h2 id=参考>参考</h2>
+<ul>
+<li><a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></li>
+<li><a href=https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd target=_blank rel="noopener noreferrer">A complete overview of SSL/TLS and its cryptographic system</a></li>
+</ul>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2022-03-01</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/ data-title="「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF" data-via=ryan4yin data-hashtags=Cryptography,Hash,密码学,哈希,散列><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/ data-hashtag=Cryptography><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/><i class="fab fa-reddit fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/cryptography/>Cryptography</a>,&nbsp;<a href=/tags/hash/>Hash</a>,&nbsp;<a href=/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/>密码学</a>,&nbsp;<a href=/tags/%E5%93%88%E5%B8%8C/>哈希</a>,&nbsp;<a href=/tags/%E6%95%A3%E5%88%97/>散列</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/practical-cryptography-basics-2-hash/ class=prev rel=prev title="「译」写给开发人员的实用密码学（二）—— 哈希函数"><i class="fas fa-angle-left fa-fw"></i>「译」写给开发人员的实用密码学（二）—— 哈希函数</a>
+<a href=/posts/practical-cryptography-basics-4-secure-random-generators/ class=next rel=next title="「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器">「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.92.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/sunt-programator/CodeIT target=_blank rel="noopener noreferrer" title="CodeIT 0.2.10"><i class="fas fa-laptop-code fa-fw"></i> CodeIT</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{maxShownLines:100},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/ryan4yin.space"}},data:{"id-1":"This Cute World","id-2":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},typeit:{cursorChar:null,cursorSpeed:null,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-4V93QVSNFW',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></body>
+</html>
