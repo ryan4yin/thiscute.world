@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/expirence-of-vault/><link rel=prev href=https://thiscute.world/posts/about-tls-cert/><link rel=next href=https://thiscute.world/posts/expirence-of-argo-workflow/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"secrets 管理工具 Vault 的介绍、安装及使用","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/bankvault.jpg","width":1500,"height":729}],"genre":"posts","keywords":"Vault, 云原生, Secrets, 配置, 配置管理","wordcount":8782,"url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/","datePublished":"2021-01-24T09:31:41+08:00","dateModified":"2021-01-24T09:31:41+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/expirence-of-vault/><link rel=prev href=https://thiscute.world/posts/about-tls-cert/><link rel=next href=https://thiscute.world/posts/expirence-of-argo-workflow/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"secrets 管理工具 Vault 的介绍、安装及使用","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/bankvault.jpg","width":1500,"height":729}],"genre":"posts","keywords":"Vault, 云原生, Secrets, 配置, 配置管理","wordcount":8739,"url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/","datePublished":"2021-01-24T09:31:41+08:00","dateModified":"2021-01-24T09:31:41+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">secrets 管理工具 Vault 的介绍、安装及使用</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-24>2021-01-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8782 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-24>2021-01-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8739 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 18 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/expirence-of-vault/bankvault.jpg data-srcset="/posts/expirence-of-vault/bankvault.jpg, /posts/expirence-of-vault/bankvault.jpg 1.5x, /posts/expirence-of-vault/bankvault.jpg 2x" data-sizes=auto alt=/posts/expirence-of-vault/bankvault.jpg title=/posts/expirence-of-vault/bankvault.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -163,19 +163,19 @@
 <img class=lazyload src=/svg/loading.min.svg data-src=/images/expirence-of-vault/vault-layers.png data-srcset="/images/expirence-of-vault/vault-layers.png, /images/expirence-of-vault/vault-layers.png 1.5x, /images/expirence-of-vault/vault-layers.png 2x" data-sizes=auto alt=/images/expirence-of-vault/vault-layers.png>
 </a><figcaption class=image-caption>vault layers</figcaption>
 </figure></p>
-<p>可以看到，几乎所有的 Vault 组件都被统称为「屏障(Barrier)」，
-Vault 可以简单地被划分为 Storage Backend、Barrier 和 HTTP/S API 三个部分。</p>
-<p>类比银行金库，「屏障」就是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和客户端之间的所有数据流动都需要经过它。</p>
-<p>「屏障」确保只有加密数据会被写入 Storage Backend，加密数据在经过「屏障」被读出的过程中被验证与解密。</p>
-<p>和银行金库的大门非常类似，Barrier 也必须先解封，才能解密 Storage Backend 中的数据。</p>
+<p>可以看到，几乎所有的 Vault 组件都被统称为「屏障（Barrier）」，
+Vault 可以简单地被划分为存储后端（Storage Backend）、屏障（Barrier 和 HTTP/S API 三个部分。</p>
+<p>类比银行金库，「屏障」就是 Vault(金库) 周围的「钢铁」和「混凝土」，存储后端和客户端之间的所有数据流动都需要经过它。</p>
+<p>「屏障」确保只有加密数据会被写入存储后端，加密数据在经过「屏障」被读出的过程中被验证与解密。</p>
+<p>和银行金库的大门非常类似，Barrier 也必须先解封，才能解密存储后端中的数据。</p>
 <h3 id=1-数据存储及加密解密>1. 数据存储及加密解密</h3>
-<p>Storage Backend(后端存储): Vault 自身不存储数据，因此需要为它配置一个「Storage Backend」。
-「Storage Backend」是不受信任的，只用于存储加密数据。</p>
-<p>Initialization(初始化): Vault 在首次启动时需要初始化，这一步生成一个「加密密钥(Encryption Key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.</p>
-<p>Unseal(解封): Vault 启动后，因为不知道「加密密钥」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。</p>
-<p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。</p>
+<p>存储后端（Storage Backend）: Vault 自身不存储数据，因此需要为它配置一个「存储后端」。
+「存储后端」是不受信任的，只用于存储加密数据。</p>
+<p>Initialization(初始化): Vault 在首次启动时需要初始化，这一步生成一个「加密密钥(Encryption Key)」用于加密数据，加密完成的数据才能被保存到「存储后端」。</p>
+<p>Unseal(解封): Vault 启动后，因为不知道「加密密钥」，它会进入「封印（Sealed）」状态，在「解封」前无法进行任何操作。</p>
+<p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成解封操作。</p>
 <p>默认情况下，Vault 使用<a href=https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664 target=_blank rel="noopener noreferrer">沙米尔密钥共享算法</a>
-将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.</p>
+将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成解封。</p>
 <p><figure><a class=lightgallery href=/images/expirence-of-vault/vault-shamir-secret-sharing.svg title=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-thumbnail=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
 <img class=lazyload src=/svg/loading.min.svg data-src=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-srcset="/images/expirence-of-vault/vault-shamir-secret-sharing.svg, /images/expirence-of-vault/vault-shamir-secret-sharing.svg 1.5x, /images/expirence-of-vault/vault-shamir-secret-sharing.svg 2x" data-sizes=auto alt=/images/expirence-of-vault/vault-shamir-secret-sharing.svg>
 </a><figcaption class=image-caption>vault-shamir-secret-sharing</figcaption>
@@ -231,7 +231,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <h3 id=0-如何选择存储后端>0. 如何选择存储后端？</h3>
 <p>首先，我们肯定需要 HA，至少要保留能升级到 HA 的能力，所以不建议选择不支持 HA 的后端。</p>
 <p>而具体的选择，就因团队经验而异了，人们往往倾向于使用自己熟悉的、知根知底的后端，或者选用云服务。</p>
-<p>比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用 MySQL/PostgreSQL.</p>
+<p>比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL/PostgreSQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用这两者之一。</p>
 <p>而如果你们是本地自建，那你可能更倾向于使用 Etcd/Consul/Raft 做后端存储。</p>
 <h3 id=1-docker-compose-部署非-ha>1. docker-compose 部署（非 HA）</h3>
 <blockquote>
@@ -265,7 +265,6 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class=lnt>23
 </span><span class=lnt>24
 </span><span class=lnt>25
-</span><span class=lnt>26
 </span></code></pre></td>
 <td class=lntd>
 <pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;3.3&#39;</span><span class=w>
@@ -279,20 +278,19 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 </span><span class=w>      </span>- <span class=s2>&#34;443:8200&#34;</span><span class=w>
 </span><span class=w>    </span><span class=nt>restart</span><span class=p>:</span><span class=w> </span><span class=l>always</span><span class=w>
 </span><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=c># 审计日志存储目录，默认不写审计日志，启用 `file` audit backend 时必须提供一个此文件夹下的路径</span><span class=w>
+</span><span class=w>      </span><span class=c># 审计日志存储目录（`file` audit backend）</span><span class=w>
 </span><span class=w>      </span>- <span class=l>./logs:/vault/logs</span><span class=w>
 </span><span class=w>      </span><span class=c># 当使用 file data storage 插件时，数据被存储在这里。默认不往这写任何数据。</span><span class=w>
 </span><span class=w>      </span>- <span class=l>./file:/vault/file</span><span class=w>
-</span><span class=w>      </span><span class=c># 配置目录，vault 默认 `/valut/config/` 中所有以 .hcl/.json 结尾的文件</span><span class=w>
-</span><span class=w>      </span><span class=c># config.hcl 文件内容，参考 cutom-vaules.yaml</span><span class=w>
+</span><span class=w>      </span><span class=c># vault 配置</span><span class=w>
 </span><span class=w>      </span>- <span class=l>./config.hcl:/vault/config/config.hcl</span><span class=w>
 </span><span class=w>      </span><span class=c># TLS 证书</span><span class=w>
 </span><span class=w>      </span>- <span class=l>./certs:/certs</span><span class=w>
 </span><span class=w>    </span><span class=c># vault 需要锁定内存以防止敏感值信息被交换(swapped)到磁盘中</span><span class=w>
-</span><span class=w>    </span><span class=c># 为此需要添加如下能力</span><span class=w>
+</span><span class=w>    </span><span class=c># 为此需要添加如下 capability</span><span class=w>
 </span><span class=w>    </span><span class=nt>cap_add</span><span class=p>:</span><span class=w>
 </span><span class=w>      </span>- <span class=l>IPC_LOCK</span><span class=w>
-</span><span class=w>    </span><span class=c># 必须手动设置 entrypoint，否则 vault 将以 development 模式运行</span><span class=w>
+</span><span class=w>    </span><span class=c># 必须设定 entrypoint，否则 vault 容器默认以 development 模式运行</span><span class=w>
 </span><span class=w>    </span><span class=nt>entrypoint</span><span class=p>:</span><span class=w> </span><span class=l>vault server -config /vault/config/config.hcl</span><span class=w>
 </span></code></pre></td></tr></table>
 </div>
@@ -331,7 +329,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>将如上两份配置保存在同一非文件夹内，同时在 <code>./certs</code> 中提供 TLS 证书 <code>server.crt</code> 和私钥 <code>server.key</code>。</p>
+</div><p>将如上两份配置保存在同一文件夹内，同时在 <code>./certs</code> 中提供 TLS 证书 <code>server.crt</code> 和私钥 <code>server.key</code>。</p>
 <p>然后 <code>docker-compose up -d</code> 就能启动运行一个 vault 实例。</p>
 <h3 id=install-by-helm>2. 通过 helm 部署高可用的 vault</h3>
 <blockquote>
