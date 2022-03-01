@@ -1,7 +1,7 @@
 ---
 title: "「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法"
-date: 2022-03-01T17:15:05+08:00
-draft: false
+date: 2022-03-01T21:34:00+08:00
+draft: true
 resources:
 - name: "featured-image"
   src: "symmetric-cryptography.png"
