@@ -1,6 +1,6 @@
 ---
 title: "「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE"
-date: 2022-02-25T00:14:00+08:00
+date: 2022-03-01T17:15:05+08:00
 draft: true
 resources:
 - name: "featured-image"
@@ -16,9 +16,19 @@ code:
   maxShownLines: 100
 ---
 
->本文仍然在优化翻译质量、补充原文缺失的细节，不建议阅读！
+>本文仍然在优化翻译质量、补充原文缺失的细节、代码示例。
 
 >本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
+
+
+《写给开发人员的实用密码学》系列文章目录：
+
+- [「译」写给开发人员的实用密码学（一）—— 概览](/posts/practical-cryptography-basics-1/)
+- [「译」写给开发人员的实用密码学（二）—— 哈希函数](/posts/practical-cryptography-basics-2-hash/)
+- [「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
+- [「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器](/posts/practical-cryptography-basics-4-secure-random-generators/)
+- [「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)
+- 待续
 
 
 ## 一、前言

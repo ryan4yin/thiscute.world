@@ -152,9 +152,16 @@ draft: false
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 
-### 2022-02-19 - 2022-02-23
+
+### 2022-03-01
+
+- 深圳疫情形式严峻，开始居家办公
+- 整理润色后，发布《「译」写给开发人员的实用密码学》前五篇的内容
+
+### 2022-02-19 - 2022-02-25
 
 - 阅读 [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)，同时完成我的密码学笔记
+- 完成了《「译」写给开发人员的实用密码学》前五篇的草稿。
 - [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md)
 
 ### 2022-02-17

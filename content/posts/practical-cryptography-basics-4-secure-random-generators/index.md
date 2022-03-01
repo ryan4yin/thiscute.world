@@ -1,6 +1,6 @@
 ---
 title: "「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器"
-date: 2022-02-24T01:28:00+08:00
+date: 2022-03-01T17:15:04+08:00
 draft: true
 resources:
 - name: "featured-image"
@@ -16,9 +16,18 @@ code:
   maxShownLines: 100
 ---
 
->本文仍然在优化翻译质量、补充原文缺失的细节，不建议阅读！
-
 >本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
+
+
+
+《写给开发人员的实用密码学》系列文章目录：
+
+- [「译」写给开发人员的实用密码学（一）—— 概览](/posts/practical-cryptography-basics-1/)
+- [「译」写给开发人员的实用密码学（二）—— 哈希函数](/posts/practical-cryptography-basics-2-hash/)
+- [「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
+- [「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器](/posts/practical-cryptography-basics-4-secure-random-generators/)
+- [「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)
+- 待续
 
 
 ## 一、前言
@@ -75,11 +84,11 @@ print([next(gen) for _ in range(20)])
 
 因此在 PRNG 中，生成出一个足够随机的种子，就变得非常重要了。
 
-一个最简单的方法，就是收集随机性。对于用户电脑，随机性可以从鼠标的移动点击、按键事件、网络状况等随机输入来收集。这个事情是由操作系统在内核中处理的，内核会直接为应用程序提供随机数获取的 API，比如 Linux/MacOSX 的 `/dev/random` 虚拟设备。
+一个最简单的方法，就是收集随机性。对于桌面电脑，随机性可以从鼠标的移动点击、按键事件、网络状况等随机输入来收集。这个事情是由操作系统在内核中处理的，内核会直接为应用程序提供随机数获取的 API，比如 Linux/MacOSX 的 `/dev/random` 虚拟设备。
 
 如果这个熵的生成有漏洞，就很可能造成严重的问题，一个现实事件就是[安卓的 `java.security.SecureRandom` 漏洞导致安卓用户的比特币钱包失窃](https://bitcoinmagazine.com/technical/critical-vulnerability-found-in-android-wallets-1376273924)。
 
-Python 默认使用的是当前时间作为 `random` 库的初始 seed，这显然是不够安全的——黑客如果知道你运行程序的大概时间，就能通过遍历的方式暴力破解出你的随机数来！
+Python 的 `random` 库的默认会使用当前时间作为初始 seed，这显然是不够安全的——黑客如果知道你运行程序的大概时间，就能通过遍历的方式暴力破解出你的随机数来！
 
 ## 四、CSPRNG 密码学安全随机数生成器
 
@@ -92,7 +101,7 @@ Cryptography Secure Random Number Generators(CSPRNG) 是一种适用于密码学
 
 - 基于计数器(CTR)模式下的**安全[分组密码](https://zh.wikipedia.org/wiki/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81)**、**[流密码](https://zh.wikipedia.org/wiki/%E6%B5%81%E5%AF%86%E7%A0%81)**或**安全散列函数**的 CSPRNG
 - 基于数论设计的 CSPRNG，它依靠整数分解问题（IFP）、离散对数问题（DLP）或椭圆曲线离散对数问题（ECDLP）的高难度来确保安全性
-- CSPRNG 基于加密安全随机性的特殊设计，例如 Yarrow algorithm 和 Fortuna，用于 MacOS 和 FreeBSD。
+- CSPRNG 基于加密安全随机性的特殊设计，例如 Yarrow algorithm 和 Fortuna，这俩分别被用于 MacOS 和 FreeBSD.
 
 大多数的 CSPRNG 结合使用来自 OS 的熵与高质量的 PRNG，并且一旦系统生成了新的熵（这可能来自用户输入、磁盘  IO、系统中断、或者硬件 RNG），CSPRNG 会立即使用新的熵来作为 PRNG 新的种子。
 这种不断重置 PRNG 种子的行为，使随机数变得非常难以预测。

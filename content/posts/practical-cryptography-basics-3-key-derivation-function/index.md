@@ -1,6 +1,6 @@
 ---
 title: "「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF"
-date: 2022-02-22T22:12:00+08:00
+date: 2022-03-01T17:15:03+08:00
 draft: true
 resources:
 - name: "featured-image"
@@ -16,15 +16,24 @@ code:
   maxShownLines: 100
 ---
 
->本文仍然在优化翻译质量、补充原文缺失的细节，不建议阅读！
-
 >本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
+
+
+《写给开发人员的实用密码学》系列文章目录：
+
+- [「译」写给开发人员的实用密码学（一）—— 概览](/posts/practical-cryptography-basics-1/)
+- [「译」写给开发人员的实用密码学（二）—— 哈希函数](/posts/practical-cryptography-basics-2-hash/)
+- [「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
+- [「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器](/posts/practical-cryptography-basics-4-secure-random-generators/)
+- [「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)
+- 待续
 
 
 ## 一、MAC 消息认证码
 
 MAC 消息认证码，即 Message Authentication Code，是用于验证消息的一小段信息。
-换句话说，能用它确认消息来自指定的发件人并且没有被更改，也就是真实性。
+换句话说，能用它确认消息的真实性——消息来自指定的发件人并且没有被篡改。
+
 MAC 值通过允许验证者（也拥有密钥）检测消息内容的任何更改来保护消息的数据完整性及其真实性。
 
 一个安全的 MAC 函数，跟加密哈希函数非常类似，也拥有如下特性：
@@ -168,21 +177,14 @@ KDF 目前主要从如下三个维度提升 hash 碰撞难度：
 
 因为它的独特属性，KDF 也被称作慢哈希算法。
 
-### 1. PBKDF2
+目前比较著名的 KDF 算法主要有如下几个：
 
-这是一个非常简单的加密 KDF 算法，目前已经不推荐使用。
+1. PBKDF2：这是一个非常简单的加密 KDF 算法，目前已经不推荐使用。
+2. Bcrypt：安全性在下降，用得越来越少了。不建议使用。
+3. Scrypt：可以灵活地设定使用的内存大小，在 argon2 不可用时，可使用它。
+4. Argon2：目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。
 
-### 2. Bcrypt
-
-安全性在下降，用得越来越少了。不建议使用。
-
-### 3. Scrypt
-
-可以灵活地设定使用的内存大小，在 argon2 不可用时，可使用它。
-
-### 4. Argon2
-
-目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。
+如果你正在开发一个新的程序，需要使用到 KDF，建议选用 argon2/scrypt.
 
 ## 参考
 
