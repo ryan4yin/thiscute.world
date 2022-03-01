@@ -4,7 +4,7 @@ date: 2022-03-01T17:15:05+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "key-exchange.png"
+  src: "dhke.png"
 
 tags: ["Cryptography", "密码学", "密钥交换", "安全"]
 categories: ["技术"]

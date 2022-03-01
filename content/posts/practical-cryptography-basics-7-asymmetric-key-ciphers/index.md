@@ -1,12 +1,12 @@
 ---
-title: "「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法"
+title: "「译」写给开发人员的实用密码学（七）—— 非对称密钥加密算法"
 date: 2022-03-01T21:34:00+08:00
 draft: true
 resources:
 - name: "featured-image"
   src: "symmetric-vs-asymmetric.jpg"
 
-tags: ["Cryptography", "密码学", "对称加密", "安全"]
+tags: ["Cryptography", "密码学", "非对称加密", "安全"]
 categories: ["技术"]
 
 code:
@@ -33,14 +33,11 @@ code:
 - 待续
 
 
-## 一、什么是对称加密
+## 一、什么是非对称加密
 
-在密码学中，有两种加密方案被广泛使用：「对称加密」与「非对称加密」。
+待续
 
-对称加密是指，加密与解密均是使用相同的密钥，因为这个特性，我们也称这个密钥为「共享密钥（Shared Secret Key）」。
-
-
-{{< figure src="/images/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-cryptography.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/asymmetric-cryptography.png" >}}
 
 
 ## 参考

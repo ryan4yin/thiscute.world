@@ -4,7 +4,7 @@ date: 2022-03-01T17:15:03+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "key-derivation-function.png"
+  src: "key.png"
 
 tags: ["Cryptography", "Hash", "密码学", "哈希", "散列"]
 categories: ["技术"]
@@ -174,6 +174,9 @@ KDF 目前主要从如下三个维度提升 hash 碰撞难度：
 3. 并行维度：使用无法分解的算法，锁定只允许单线程运算
 
 主要手段是加盐，以及多次迭代。这种设计方法被称为「密钥拉伸 Key stretching」。
+
+{{< figure src="/images/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png" >}}
+
 
 因为它的独特属性，KDF 也被称作慢哈希算法。
 
