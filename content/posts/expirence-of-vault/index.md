@@ -36,28 +36,28 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 
 ![](/images/expirence-of-vault/vault-layers.png "vault layers")
 
-可以看到，几乎所有的 Vault 组件都被统称为「屏障(Barrier)」，
-Vault 可以简单地被划分为 Storage Backend、Barrier 和 HTTP/S API 三个部分。
+可以看到，几乎所有的 Vault 组件都被统称为「屏障（Barrier）」，
+Vault 可以简单地被划分为存储后端（Storage Backend）、屏障（Barrier 和 HTTP/S API 三个部分。
 
-类比银行金库，「屏障」就是 Vault(金库) 周围的「钢铁」和「混凝土」，Storage Backend 和客户端之间的所有数据流动都需要经过它。
+类比银行金库，「屏障」就是 Vault(金库) 周围的「钢铁」和「混凝土」，存储后端和客户端之间的所有数据流动都需要经过它。
 
-「屏障」确保只有加密数据会被写入 Storage Backend，加密数据在经过「屏障」被读出的过程中被验证与解密。
+「屏障」确保只有加密数据会被写入存储后端，加密数据在经过「屏障」被读出的过程中被验证与解密。
 
-和银行金库的大门非常类似，Barrier 也必须先解封，才能解密 Storage Backend 中的数据。
+和银行金库的大门非常类似，Barrier 也必须先解封，才能解密存储后端中的数据。
 
 ### 1. 数据存储及加密解密
 
-Storage Backend(后端存储): Vault 自身不存储数据，因此需要为它配置一个「Storage Backend」。
-「Storage Backend」是不受信任的，只用于存储加密数据。
+存储后端（Storage Backend）: Vault 自身不存储数据，因此需要为它配置一个「存储后端」。
+「存储后端」是不受信任的，只用于存储加密数据。
 
-Initialization(初始化): Vault 在首次启动时需要初始化，这一步生成一个「加密密钥(Encryption Key)」用于加密数据，加密完成的数据才能被保存到 Storage Backend.
+Initialization(初始化): Vault 在首次启动时需要初始化，这一步生成一个「加密密钥(Encryption Key)」用于加密数据，加密完成的数据才能被保存到「存储后端」。
 
-Unseal(解封): Vault 启动后，因为不知道「加密密钥」，它会进入「封印(Sealed)」状态，在「解封(Unseal)」前无法进行任何操作。
+Unseal(解封): Vault 启动后，因为不知道「加密密钥」，它会进入「封印（Sealed）」状态，在「解封」前无法进行任何操作。
 
-「加密密钥」被「master key」保护，我们必须提供「master key」才能完成 Unseal 操作。
+「加密密钥」被「master key」保护，我们必须提供「master key」才能完成解封操作。
 
 默认情况下，Vault 使用[沙米尔密钥共享算法](https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664)
-将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成 Unseal.
+将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成解封。
 
 ![](/images/expirence-of-vault/vault-shamir-secret-sharing.svg "vault-shamir-secret-sharing")
 
@@ -127,7 +127,7 @@ Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。
 
 而具体的选择，就因团队经验而异了，人们往往倾向于使用自己熟悉的、知根知底的后端，或者选用云服务。
 
-比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用 MySQL/PostgreSQL.
+比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL/PostgreSQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用这两者之一。
 
 而如果你们是本地自建，那你可能更倾向于使用 Etcd/Consul/Raft 做后端存储。
 
@@ -149,20 +149,19 @@ services:
       - "443:8200"
     restart: always
     volumes:
-      # 审计日志存储目录，默认不写审计日志，启用 `file` audit backend 时必须提供一个此文件夹下的路径
+      # 审计日志存储目录（`file` audit backend）
       - ./logs:/vault/logs
       # 当使用 file data storage 插件时，数据被存储在这里。默认不往这写任何数据。
       - ./file:/vault/file
-      # 配置目录，vault 默认 `/valut/config/` 中所有以 .hcl/.json 结尾的文件
-      # config.hcl 文件内容，参考 cutom-vaules.yaml
+      # vault 配置
       - ./config.hcl:/vault/config/config.hcl
       # TLS 证书
       - ./certs:/certs
     # vault 需要锁定内存以防止敏感值信息被交换(swapped)到磁盘中
-    # 为此需要添加如下能力
+    # 为此需要添加如下 capability
     cap_add:
       - IPC_LOCK
-    # 必须手动设置 entrypoint，否则 vault 将以 development 模式运行
+    # 必须设定 entrypoint，否则 vault 容器默认以 development 模式运行
     entrypoint: vault server -config /vault/config/config.hcl
 ```
 
@@ -185,7 +184,7 @@ listener "tcp" {
 }
 ```
 
-将如上两份配置保存在同一非文件夹内，同时在 `./certs` 中提供 TLS 证书 `server.crt` 和私钥 `server.key`。
+将如上两份配置保存在同一文件夹内，同时在 `./certs` 中提供 TLS 证书 `server.crt` 和私钥 `server.key`。
 
 然后 `docker-compose up -d` 就能启动运行一个 vault 实例。
 
