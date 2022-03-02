@@ -2,6 +2,12 @@
 title: "我的小伙伴们"
 date: 2021-01-16T00:24:31+08:00
 draft: false
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 ![一封纸笺](letter-from-friend.jpg)
