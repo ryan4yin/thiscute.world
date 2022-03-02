@@ -50,6 +50,11 @@ code:
 
 流行的公钥密码系统（非对称密码算法），如 RSA（Rivest–Shamir–Adleman）、ECC（椭圆曲线密码学）、Diffie-Hellman、ECDH、ECDSA 和 EdDSA，广泛用于现代密码学中，我们将演示大部分他们在实践中使用代码示例。
 
+
+公钥密码系统提供数学框架和算法来生成公钥+私钥对，以加密安全的方式对消息进行签名、验证、加密和解密以及交换密钥。
+
+比较著名的公钥密码系统有：RSA、ECC 和 ElGamal。许多密码算法都基于这些密码系统的原语，例如 RSA 签名、RSA 加密/解密、ECDH 密钥交换以及 ECDSA 和 EdDSA 签名。
+
 ## 参考
 
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
