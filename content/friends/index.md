@@ -65,6 +65,7 @@ var myFriends = [
     ["https://bohecat.com/", "https://tc.bohecat.com/image/WX20220210-123651%402x.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
+    ["https://eatrice.cn", "https://eatrice.cn/img/avatar.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
 ];
 
 
