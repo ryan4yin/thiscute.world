@@ -27,10 +27,10 @@ draft: false
   - 轮滑：倒滑后压步
 - 音乐：Synthesizer V, 练习键盘
 
-阅读（一二月份，就读这两本吧）：
+阅读（一二三月份，就读这两本吧）：
 
 - [x] 《人间失格》
-- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book) - 20%
+- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book) - 50%
 - [ ] 《在生命的尽头拥抱你-临终关怀医生手记》
 
 
@@ -44,7 +44,7 @@ draft: false
 - 日志方案调研：grafana loki
 - 配置管理：研究如何使用 vault 实现跨集群的动态配置支持，如何落地此项能力
 
-阅读（三四月份的书单）：
+阅读（四五六月份的书单）：
 
 - [ ] 《生命最后的读书会》
 - [ ] 《房思琪的初恋乐园》
