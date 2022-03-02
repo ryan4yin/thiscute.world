@@ -120,9 +120,33 @@ draft: false
   - mysql/postgresql 底层
   - [Readings in Database Systems](https://book.douban.com/subject/2256069/)
 
-- 机器学习、深度学习
 
 ### 其他暂时排不上号的兴趣点
+
+
+- 值得了解的数据库
+  - OLAP
+    - ClickHouse
+    - Snowflake
+    - Druid
+    - ElasticSearch
+  - HTAP
+    - TiDB
+    - PostgreSQL
+  - 键值数据库
+    - Redis
+    - Etcd
+    - 底层数据库：boltdb/rocksdb/leveldb
+  - 文档数据库
+    - MongoDB
+  - 时序数据库
+    - VictoriaMetrics
+    - Prometheus
+  - 特征向量搜索 / 相似度搜索 / 视频搜索 / 语义搜索
+  - 图数据库
+    - https://github.com/dgraph-io/dgraph
+
+- 机器学习、深度学习
 
 - 编程语言
   - Elixir
