@@ -43,12 +43,14 @@ code:
 
 另外有几个名词有必要解释：
 
-- cipher: 指用于加解密的「密码算法」
+- cipher: 指用于加解密的「密码算法」，有时也被直接翻译成「密码」
 - cryptographic algorithm: 密码学算法，泛指密码学相关的各类算法
 - ciphertext: 密文，即加密后的信息。对应的词是明文 plaintext
 - password: 这个应该不需要解释，就是我们日常用的各种字符或者数字密码，也可称作口令。
-- [passphrase](https://en.wikipedia.org/wiki/Passphrase): 翻译成「密码词组」或者「密碼片語」，通常指用于保护密钥或者其他敏感数据的一个 password.
+- [passphrase](https://en.wikipedia.org/wiki/Passphrase): 翻译成「密码词组」或者「密碼片語」，通常指用于保护密钥或者其他敏感数据的一个 password
   - 如果你用 ssh/gpg/openssl 等工具生成或使用过密钥，应该对它不陌生。
+
+在密码学里面，最容易搞混的词估计就是「密码」了，cipher/password/passphrase 都可以被翻译成「密码」，需要注意下其中区别。
 
 ## 一、什么是对称加密
 
