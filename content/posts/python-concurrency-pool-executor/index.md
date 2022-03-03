@@ -47,21 +47,24 @@ def evaluate_item(x):
 
 
 if __name__ == "__main__":
-        # 进程池
-        start_time_2 = time.time()
+    # 进程池
+    start_time_2 = time.time()
 
-        # 使用 with 在离开此代码块时，自动调用 executor.shutdown(wait=true) 释放 executor 资源
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-                # 将 10 个任务提交给 executor，并收集 futures
-                futures = [executor.submit(evaluate_item, item) for item in number_list]
+    # 使用 with 在离开此代码块时，自动调用 executor.shutdown(wait=true) 释放 executor 资源
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        # 将 10 个任务提交给 executor，并收集 futures
+        futures = [executor.submit(evaluate_item, item) for item in number_list]
 
-                # as_completed 方法等待 futures 中的 future 完成
-                # 一旦某个 future 完成，as_completed 就立即返回该 future
-                # 这个方法，使每次返回的 future，总是最先完成的 future
-                # 而不是先等待任务 1，再等待任务 2...
-                for future in concurrent.futures.as_completed(futures):
-                        print(future.result())
-        print ("Thread pool execution in " + str(time.time() - start_time_2), "seconds")
+        # as_completed 方法等待 futures 中的 future 完成
+        # 一旦某个 future 完成，as_completed 就立即返回该 future
+        # 这个方法，使每次返回的 future，总是最先完成的 future
+        # 而不是先等待任务 1，再等待任务 2...
+        for future in concurrent.futures.as_completed(futures):
+            # result 返回被调用函数的返回值
+            # 如果调用抛出了异常，result 会抛出同样的异常
+            # 如果调用被取消，result 抛出 CancelledError 异常
+            print(future.result())
+    print ("Thread pool execution in " + str(time.time() - start_time_2), "seconds")
 ```
 
 上面的代码中，item 为 1 2 3 4 5 的五个任务会一直占用所有的 workers，而 6 7 8 9 10 这五个任务会永远等待！！！
@@ -78,8 +81,13 @@ concurrent.futures 包含三个部分的 API：
     - `shutdown(wait=True)`：关闭执行器，一般都使用 with 管理器自动关闭。
 1. Future：任务被提交给执行器后，会返回一个 future
     - `future.result(timout=None)`：**最常用的方法**，返回任务的结果。如果任务尚未结束，这个方法会一直等待！
-        - timeout 指定超时时间，为 None 时没有超时限制。
-    - `exception(timeout=None)`：给出任务抛出的异常。和 result() 一样，也会等待任务结束。
+        - timeout 指定超时时间，为 None 时没有超时限制。超时会抛出 concurrent.futures.TimeoutError 异常。
+        - 如果调用抛出了异常，result 会抛出同样的异常
+        - 如果调用被取消，result 抛出 CancelledError 异常
+    - `exception(timeout=None)`：返回任务抛出的异常。和 result() 一样，也会等待任务结束。
+      - timeout 参数跟 result 一致，超时会抛出 concurrent.futures.TimeoutError 异常。
+        - 如果调用抛出了异常，exception 会返回同样的异常，否则返回 None
+        - 如果调用被取消，result 抛出 CancelledError 异常
     - `cancel()`：取消此任务
     - `add_done_callback(fn)`：future 完成后，会执行 `fn(future)`。
     - `running()`：是否正在运行
