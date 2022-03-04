@@ -55,6 +55,18 @@ If it is lucky enough to be found by you, and its content are also helpful to yo
 
 Thank you for reading~
 
+### Motto I used
+
+
+{{< admonition type=note title="happy" open=true >}}
+Put hands together, close eyes, think nothing, laugh out loud, praise and be happy~
+{{< /admonition >}}
+
+{{< admonition type=note title="miss" open=true >}}
+I miss flowers, but see the sea.
+{{< /admonition >}}
+
+
 ###  NOTICE
 
 The content in this blog is only my opinion, I can only try to reduce errors and omissions, but can not guarantee the correctness of the content!

@@ -57,6 +57,20 @@ comment:
 
 而另一部分生活类的随笔，则是我的闲言碎语，一般来自我的印象笔记。
 
+### 我曾用过的标语
+
+{{< admonition quote "何来枷锁" true >}}
+拆破玉笼飞彩凤，顿开金锁走蛟龙。
+{{< /admonition >}}
+
+{{< admonition quote "赞美快乐" true >}}
+双手合十 闭上眼睛 心里什么也不去想 嘴角就高高扬起 笑出声来 赞美快乐~
+{{< /admonition >}}
+
+{{< admonition quote "错过" true >}}
+我错过花，却看见海
+{{< /admonition >}}
+
 ### 博客时间线
 
 {{< admonition tip "博客时间线" true >}}
