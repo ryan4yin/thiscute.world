@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/python-concurrency-pool-executor/><link rel=prev href=https://thiscute.world/posts/python-asyncio/><link rel=next href=https://thiscute.world/posts/webnovel-addiction-recovery/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Python 并发编程：PoolExecutor 篇","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/python-concurrency-pool-executor\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/python-concurrency-pool-executor\/python-concurrency.png","width":2796,"height":1292}],"genre":"posts","keywords":"Python, Concurrency, 并发","wordcount":1916,"url":"https:\/\/thiscute.world\/posts\/python-concurrency-pool-executor\/","datePublished":"2019-03-15T22:34:00+08:00","dateModified":"2019-03-15T22:34:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/python-concurrency-pool-executor/><link rel=prev href=https://thiscute.world/posts/python-asyncio/><link rel=next href=https://thiscute.world/posts/webnovel-addiction-recovery/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Python 并发编程：PoolExecutor 篇","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/python-concurrency-pool-executor\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/python-concurrency-pool-executor\/python-concurrency.png","width":2796,"height":1292}],"genre":"posts","keywords":"Python, Concurrency, 并发","wordcount":2098,"url":"https:\/\/thiscute.world\/posts\/python-concurrency-pool-executor\/","datePublished":"2019-03-15T22:34:00+08:00","dateModified":"2019-03-15T22:34:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,8 +89,8 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Python 并发编程：PoolExecutor 篇</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2019-03-15>2019-03-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1916 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2019-03-15>2019-03-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2098 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/python-concurrency-pool-executor/python-concurrency.png data-srcset="/posts/python-concurrency-pool-executor/python-concurrency.png, /posts/python-concurrency-pool-executor/python-concurrency.png 1.5x, /posts/python-concurrency-pool-executor/python-concurrency.png 2x" data-sizes=auto alt=/posts/python-concurrency-pool-executor/python-concurrency.png title=/posts/python-concurrency-pool-executor/python-concurrency.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>目录</span>
@@ -157,6 +157,9 @@
 </span><span class=lnt>26
 </span><span class=lnt>27
 </span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
 </span></code></pre></td>
 <td class=lntd>
 <pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>concurrent.futures</span>
@@ -172,21 +175,24 @@
 
 
 <span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
-        <span class=c1># 进程池</span>
-        <span class=n>start_time_2</span> <span class=o>=</span> <span class=n>time</span><span class=o>.</span><span class=n>time</span><span class=p>()</span>
+    <span class=c1># 进程池</span>
+    <span class=n>start_time_2</span> <span class=o>=</span> <span class=n>time</span><span class=o>.</span><span class=n>time</span><span class=p>()</span>
 
-        <span class=c1># 使用 with 在离开此代码块时，自动调用 executor.shutdown(wait=true) 释放 executor 资源</span>
-        <span class=k>with</span> <span class=n>concurrent</span><span class=o>.</span><span class=n>futures</span><span class=o>.</span><span class=n>ThreadPoolExecutor</span><span class=p>(</span><span class=n>max_workers</span><span class=o>=</span><span class=mi>5</span><span class=p>)</span> <span class=k>as</span> <span class=n>executor</span><span class=p>:</span>
-                <span class=c1># 将 10 个任务提交给 executor，并收集 futures</span>
-                <span class=n>futures</span> <span class=o>=</span> <span class=p>[</span><span class=n>executor</span><span class=o>.</span><span class=n>submit</span><span class=p>(</span><span class=n>evaluate_item</span><span class=p>,</span> <span class=n>item</span><span class=p>)</span> <span class=k>for</span> <span class=n>item</span> <span class=ow>in</span> <span class=n>number_list</span><span class=p>]</span>
+    <span class=c1># 使用 with 在离开此代码块时，自动调用 executor.shutdown(wait=true) 释放 executor 资源</span>
+    <span class=k>with</span> <span class=n>concurrent</span><span class=o>.</span><span class=n>futures</span><span class=o>.</span><span class=n>ThreadPoolExecutor</span><span class=p>(</span><span class=n>max_workers</span><span class=o>=</span><span class=mi>5</span><span class=p>)</span> <span class=k>as</span> <span class=n>executor</span><span class=p>:</span>
+        <span class=c1># 将 10 个任务提交给 executor，并收集 futures</span>
+        <span class=n>futures</span> <span class=o>=</span> <span class=p>[</span><span class=n>executor</span><span class=o>.</span><span class=n>submit</span><span class=p>(</span><span class=n>evaluate_item</span><span class=p>,</span> <span class=n>item</span><span class=p>)</span> <span class=k>for</span> <span class=n>item</span> <span class=ow>in</span> <span class=n>number_list</span><span class=p>]</span>
 
-                <span class=c1># as_completed 方法等待 futures 中的 future 完成</span>
-                <span class=c1># 一旦某个 future 完成，as_completed 就立即返回该 future</span>
-                <span class=c1># 这个方法，使每次返回的 future，总是最先完成的 future</span>
-                <span class=c1># 而不是先等待任务 1，再等待任务 2...</span>
-                <span class=k>for</span> <span class=n>future</span> <span class=ow>in</span> <span class=n>concurrent</span><span class=o>.</span><span class=n>futures</span><span class=o>.</span><span class=n>as_completed</span><span class=p>(</span><span class=n>futures</span><span class=p>):</span>
-                        <span class=nb>print</span><span class=p>(</span><span class=n>future</span><span class=o>.</span><span class=n>result</span><span class=p>())</span>
-        <span class=nb>print</span> <span class=p>(</span><span class=s2>&#34;Thread pool execution in &#34;</span> <span class=o>+</span> <span class=nb>str</span><span class=p>(</span><span class=n>time</span><span class=o>.</span><span class=n>time</span><span class=p>()</span> <span class=o>-</span> <span class=n>start_time_2</span><span class=p>),</span> <span class=s2>&#34;seconds&#34;</span><span class=p>)</span>
+        <span class=c1># as_completed 方法等待 futures 中的 future 完成</span>
+        <span class=c1># 一旦某个 future 完成，as_completed 就立即返回该 future</span>
+        <span class=c1># 这个方法，使每次返回的 future，总是最先完成的 future</span>
+        <span class=c1># 而不是先等待任务 1，再等待任务 2...</span>
+        <span class=k>for</span> <span class=n>future</span> <span class=ow>in</span> <span class=n>concurrent</span><span class=o>.</span><span class=n>futures</span><span class=o>.</span><span class=n>as_completed</span><span class=p>(</span><span class=n>futures</span><span class=p>):</span>
+            <span class=c1># result 返回被调用函数的返回值</span>
+            <span class=c1># 如果调用抛出了异常，result 会抛出同样的异常</span>
+            <span class=c1># 如果调用被取消，result 抛出 CancelledError 异常</span>
+            <span class=nb>print</span><span class=p>(</span><span class=n>future</span><span class=o>.</span><span class=n>result</span><span class=p>())</span>
+    <span class=nb>print</span> <span class=p>(</span><span class=s2>&#34;Thread pool execution in &#34;</span> <span class=o>+</span> <span class=nb>str</span><span class=p>(</span><span class=n>time</span><span class=o>.</span><span class=n>time</span><span class=p>()</span> <span class=o>-</span> <span class=n>start_time_2</span><span class=p>),</span> <span class=s2>&#34;seconds&#34;</span><span class=p>)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>上面的代码中，item 为 1 2 3 4 5 的五个任务会一直占用所有的 workers，而 6 7 8 9 10 这五个任务会永远等待！！！</p>
@@ -213,10 +219,21 @@
 <ul>
 <li><code>future.result(timout=None)</code>：<strong>最常用的方法</strong>，返回任务的结果。如果任务尚未结束，这个方法会一直等待！
 <ul>
-<li>timeout 指定超时时间，为 None 时没有超时限制。</li>
+<li>timeout 指定超时时间，为 None 时没有超时限制。超时会抛出 concurrent.futures.TimeoutError 异常。</li>
+<li>如果调用抛出了异常，result 会抛出同样的异常</li>
+<li>如果调用被取消，result 抛出 CancelledError 异常</li>
 </ul>
 </li>
-<li><code>exception(timeout=None)</code>：给出任务抛出的异常。和 result() 一样，也会等待任务结束。</li>
+<li><code>exception(timeout=None)</code>：返回任务抛出的异常。和 result() 一样，也会等待任务结束。
+<ul>
+<li>timeout 参数跟 result 一致，超时会抛出 concurrent.futures.TimeoutError 异常。
+<ul>
+<li>如果调用抛出了异常，exception 会返回同样的异常，否则返回 None</li>
+<li>如果调用被取消，result 抛出 CancelledError 异常</li>
+</ul>
+</li>
+</ul>
+</li>
 <li><code>cancel()</code>：取消此任务</li>
 <li><code>add_done_callback(fn)</code>：future 完成后，会执行 <code>fn(future)</code>。</li>
 <li><code>running()</code>：是否正在运行</li>
