@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "featured-image.jpg"
 
 tags: []
 categories: ["随笔"]
