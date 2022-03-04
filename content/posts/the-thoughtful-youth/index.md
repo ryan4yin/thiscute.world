@@ -8,6 +8,12 @@ resources:
 
 tags: []
 categories: ["随笔"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: true
 ---
 
 >原文：[哪一刻你发现年轻人正在悄悄改变社会？ - 赦己](https://www.zhihu.com/question/447184915/answer/1768006207)
