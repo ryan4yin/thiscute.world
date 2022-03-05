@@ -26,6 +26,7 @@ code:
 - [「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
 - [「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器](/posts/practical-cryptography-basics-4-secure-random-generators/)
 - [「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)
+- [「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
 - 待续
 
 
@@ -141,9 +142,13 @@ MAC 的功能跟数字签名一致，都是验证消息的真实性（authentici
 
 而这里介绍的 MAC 算法，或者还未介绍的基于非对称加密的数字签名，都只能保证数据的真实性、完整性，不能保证数据被安全传输。
 
-而认证加密，就是结合加密算法与 MAC 算法的一种加密传输方式。
-在确保 MAC 码「强不可伪造」的前提下，首先对数据进行加密，然后计算密文的 MAC 码，再同时传输密文与 MAC 码，就能同时保证数据的保密性、完整性、真实性，这种方法叫 Encrypt-then-MAC, 缩写做 EtM.
-接收方在解密前先计算密文的 MAC 码与收到的对比，就能验证密文的完整性与真实性。
+而认证加密，就是将加密算法与 MAC 算法结合使用的一种加密方案。
+
+在确保 MAC 码「强不可伪造」的前提下，首先对数据进行加密，然后计算密文的 MAC 码，再同时传输密文与 MAC 码，就能同时保证数据的保密性、完整性、真实性，这种方法叫 Encrypt-then-MAC, 缩写做 EtM. 接收方在解密前先计算密文的 MAC 码与收到的对比，就能验证密文的完整性与真实性。
+
+AE 有一种更安全的变体——**带有关联数据的认证加密** (authenticated encryption with associated data，**AEAD**)。
+AEAD 将「关联数据(Associated Data, AD)」——也称为「附加验证数据（Additional Authenticated Data, AAD）」——绑定到密文和它应该出现的上下文，以便可以检测和拒绝将有效密文“剪切并粘贴”到不同上下文的尝试。 AEAD 用于加密和未加密数据一起使用的场景（例如，在加密的网络协议中），并确保整个数据流经过身份验证和完整性保护。
+换句话说，AEAD 增加了检查某些内容的完整性和真实性的能力。
 
 
 #### 3. 基于 MAC 的伪随机数生成器
@@ -188,6 +193,37 @@ KDF 目前主要从如下三个维度提升 hash 碰撞难度：
 4. Argon2：目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。
 
 如果你正在开发一个新的程序，需要使用到 KDF，建议选用 argon2/scrypt.
+
+一个 scrypt 的 Python 示例：
+
+```python
+# 首先安装 Python 中最流行的加密库 [cryptography](https://github.com/pyca/cryptography)
+# pip install cryptography==36.0.1
+import os
+from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
+
+salt = os.urandom(16)
+
+# derive
+kdf = Scrypt(
+    salt=salt,
+    length=32,
+    n=2**14,
+    r=8,
+    p=1,
+)
+key = kdf.derive(b"my great password")
+
+# verify
+kdf = Scrypt(
+    salt=salt,
+    length=32,
+    n=2**14,
+    r=8,
+    p=1,
+)
+kdf.verify(b"my great password", key)
+```
 
 ## 参考
 
