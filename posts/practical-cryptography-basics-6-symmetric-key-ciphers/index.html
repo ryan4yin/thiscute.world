@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":8042,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":7814,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,8 +89,8 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8042 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 17 分钟&nbsp;</div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7814 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 16 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg data-srcset="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 1.5x, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg title=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>目录</span>
@@ -107,11 +107,11 @@
 <li><a href=#counter_mode>1. CTR (Counter) 分组模式</a></li>
 <li><a href=#2-gcm-galoiscounter-分组模式>2. GCM (Galois/Counter) 分组模式</a></li>
 <li><a href=#3-如何选用块模式>3. 如何选用块模式</a></li>
-<li><a href=#4-对称加密方案与-ae-认证加密>4. 对称加密方案与 AE 认证加密</a></li>
 </ul>
 </li>
-<li><a href=#四对称加密算法>四、对称加密算法</a>
+<li><a href=#四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</a>
 <ul>
+<li><a href=#0-对称认证加密算法-ae--aead>0. 对称认证加密算法 AE / AEAD</a></li>
 <li><a href=#1-安全的对称加密算法>1. 安全的对称加密算法</a>
 <ul>
 <li><a href=#1-aes-rijndael>1. AES (Rijndael)</a></li>
@@ -195,7 +195,7 @@
 <li>消息认证算法（如HMAC）：用于验证消息的真实性、完整性、不可否认性。</li>
 </ul>
 <h2 id=三分组密码工作模式---block-cipher-mode-of-operation>三、分组密码工作模式 - Block cipher mode of operation</h2>
-<p>前面简单介绍了「<a href=https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation target=_blank rel="noopener noreferrer"><strong>分组密码工作模式</strong>（<strong>块密码工作模式</strong>）</a>」可以将「分组密码算法」转换为「流密码算法」，从而实现加密任意长度的数据，这里主要就具体介绍下这个分组密码工作模式。</p>
+<p>前面简单介绍了「<a href=https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation target=_blank rel="noopener noreferrer"><strong>分组密码工作模式</strong></a>」可以将「分组密码算法」转换为「流密码算法」，从而实现加密任意长度的数据，这里主要就具体介绍下这个分组密码工作模式。</p>
 <p>加密方案的名称中就带有具体的「分组模式」名称，如：</p>
 <ul>
 <li>AES-256-GCM - 具有 256 位加密密钥和 GCM 分组模式的 AES 密码</li>
@@ -209,7 +209,7 @@
 <ul>
 <li>初始化加密算法状态（使用加密密钥 + 随机盐）</li>
 <li>加密数据的第一部分（例如块或块的一部分）</li>
-<li>加密状态被转换（使用加密密钥和其他参数）</li>
+<li>使用加密密钥和其他参数转换加密状态</li>
 <li>加密下一部分</li>
 <li>再次转换加密状态</li>
 <li>再加密下一部分</li>
@@ -467,7 +467,6 @@ $$</p>
 </code></pre></td></tr></table>
 </div>
 </div><h3 id=2-gcm-galoiscounter-分组模式>2. GCM (Galois/Counter) 分组模式</h3>
-<p>GCM 模式使用一个计数器，每处理一个块，计数器就加个一，并计算一个消息认证标签（MAC 码）。最终的身份验证标签是从最后一个块计算的。与所有计数器模式一样，GCM 用作流密码，因此必须在开始时为每个加密的流使用不同的 IV</p>
 <p>GCM (Galois/Counter) 模式在 CTR 模式的基础上，添加了消息认证的功能，而且同时还具有与 CTR 模式相同的并行计算能力。因此相比 CTR 模式，GCM 不仅速度一样快，还能额外提供对消息完整性、真实性的验证能力。</p>
 <p>下图直观地解释了 GCM 块模式（Galois/Counter 模式）的工作原理：</p>
 <figure><img src=/images/practical-cryptography-basics-6-symmetric-key-ciphers/gcm-galois_counter_mode.png>
@@ -490,7 +489,9 @@ $$</p>
 GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。</p>
 <p>请注意，GCM、CTR 和其他分组模式会泄漏原始消息的长度，因为它们生成的密文长度与明文消息的长度相同。
 如果您想避免泄露原始明文长度，可以在加密前向明文添加一些随机字节（额外的填充数据），并在解密后将其删除。</p>
-<h3 id=4-对称加密方案与-ae-认证加密>4. 对称加密方案与 AE 认证加密</h3>
+<h2 id=四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</h2>
+<p>前面啰嗦了这么多，下面进入正题：对称加密算法</p>
+<h3 id=0-对称认证加密算法-ae--aead>0. 对称认证加密算法 AE / AEAD</h3>
 <p>我们在前面第三篇文章「MAC 与密钥派生函数 KDF」中介绍过 AE 认证加密及其变体 AEAD.</p>
 <p>一些对称加密方案提供集成身份验证加密（AEAD），比如使用了 GCM 分组模式的加密方案 AES-GCM，而其他加密方案（如 AES-CBC 和 AES-CTR）自身不提供身份验证能力，需要额外添加。</p>
 <p>最流行的认证加密（AEAD）方案：</p>
@@ -514,9 +515,6 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 上述方案是高度安全的、经过验证的、经过良好测试的，并且大多数加密库都已经提供了高效的实现，可以说是开箱即用。</p>
 <p>通常更建议使用 ChaCha20-Poly1305，因为它的性能要强劲很多，在移动设备上比 AES-128-GCM 快 3 倍。</p>
 <p>下一节会简要介绍下 AES-256-GCM 跟 ChaCha20-Poly1305 这两个加密方案。</p>
-<h2 id=四对称加密算法>四、对称加密算法</h2>
-<p>对称密钥加密算法（如 AES）是由数学家和密码学家设计的，它需要满足一个条件：在没有加密密钥的情况下解密密文应该是不可行的。
-现代安全对称加密算法（如 AES 和 ChaCha20）都满足这个条件，而其他一些被认为是不安全的对称加密算法（如 DES 和 RC4）的算法可能不能满足这个条件，或者已经存在一些争议。</p>
 <h3 id=1-安全的对称加密算法>1. 安全的对称加密算法</h3>
 <p>这里仅简单介绍下流行的对称加密算法，后面会单独列两小节介绍下 AES 跟 ChaCha20 的算法细节。</p>
 <h4 id=1-aes-rijndael>1. AES (Rijndael)</h4>
@@ -651,7 +649,7 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 <span class=n>key</span> <span class=o>=</span> <span class=sa>b</span><span class=s1>&#39;</span><span class=se>\x96\xec</span><span class=s1>.</span><span class=se>\xc7\xd5\x1b</span><span class=s1>/5</span><span class=se>\xa1\x10</span><span class=s1>s</span><span class=se>\x9d\xd5\x10</span><span class=s1>z</span><span class=se>\xdc\x90\xb5\x1c</span><span class=s1>m&#34;&gt;x</span><span class=se>\xfd</span><span class=s1> </span><span class=se>\xd5\xc5\xaf\x19\xd1</span><span class=s1>Z</span><span class=se>\xbb</span><span class=s1>&#39;</span>
 <span class=n>associated_data</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;authenticated but not encrypted payload&#34;</span>  <span class=c1># 被用于消息认证的关联数据</span>
 
-<span class=c1># 1. 加密</span>
+<span class=c1># 1. 发送方加密消息</span>
 <span class=n>iv</span><span class=p>,</span> <span class=n>ciphertext</span><span class=p>,</span> <span class=n>tag</span> <span class=o>=</span> <span class=n>encrypt</span><span class=p>(</span>
     <span class=n>key</span><span class=p>,</span>
     <span class=n>plaintext</span><span class=p>,</span>
