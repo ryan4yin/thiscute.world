@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":7814,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":7848,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7814 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7848 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 16 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg data-srcset="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 1.5x, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg title=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -215,8 +215,8 @@
 </ul>
 <p>解密的工作方式跟加密完全类似。</p>
 <h3 id=0-初始向量-iv>0. 初始向量 IV</h3>
-<p>密码学中的初始向量 IV（Initialization Vector），通常是一个随机数。主要作用是往密文中添加随机性，使同样的明文被多次加密也会产生不同的密文，从而确保密文的不可预测性。
-IV 的大小应与密码块大小相同，例如 AES、Serpent 和 Camellia 的 128 位。</p>
+<p>密码学中的初始向量 IV（Initialization Vector, 有时也被称作 Salt/Nonce），通常是一个随机数。主要作用是往密文中添加随机性，使同样的明文被多次加密也会产生不同的密文，从而确保密文的不可预测性。</p>
+<p>IV 的大小应与密码块大小相同，例如 AES、Serpent 和 Camellia 都只支持 128 位密码块，那么它们需要的 IV 也必须也 128 位。</p>
 <p>IV 通常无需保密，但是应当足够随机（无法预测），而且不允许重用，应该对每条加密消息使用随机且不可预测的 IV。</p>
 <p>一个常见错误是使用相同的对称密钥和<strong>相同的 IV</strong> 加密多条消息，这使得针对大多数分组模式的各种加密攻击成为可能。</p>
 <h3 id=counter_mode>1. CTR (Counter) 分组模式</h3>
@@ -527,7 +527,7 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 <p>wiki: <a href=https://en.wikipedia.org/wiki/Advanced_Encryption_Standard target=_blank rel="noopener noreferrer">https://en.wikipedia.org/wiki/Advanced_Encryption_Standard</a></p>
 </blockquote>
 <p>AES（高级加密标准，也称为 Rijndael）是现代 IT 行业中最流行和广泛使用的对称加密算法。AES 被证明是高度安全、快速且标准化的，到目前为止没有发现任何明显的弱点或攻击手段，而且几乎在所有平台上都得到了很好的支持。 AES 是 128 位分组密码，使用 128、192 或 256 位密钥。它通常与分组模式组合成分组加密方案（如 AES-CTR 或 AES-GCM）以处理流数据。
-在大多数分组模式中，AES 还需要一个随机的 128 位初始向量。</p>
+在大多数分组模式中，AES 还需要一个随机的 128 位初始向量 IV。</p>
 <p>Rijndael (AES) 算法可免费用于任何用途，而且非常流行。很多站点都选择 AES 作为 TLS 协议的一部分，以实现安全通信。
 现代 CPU 硬件基本都在微处理器级别实现了 AES 指令以加速 AES 加密解密操作。</p>
 <p>这里有一个纯 Python 的 AES 实现可供参考: <a href=https://github.com/boppreh/aes/blob/master/aes.py target=_blank rel="noopener noreferrer">AES encryption in pure Python - boppreh</a></p>
