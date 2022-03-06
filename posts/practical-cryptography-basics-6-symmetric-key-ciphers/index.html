@@ -5,7 +5,7 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法">
-<meta property="og:description" content="本文仍然在优化翻译质量、补充原文缺失的细节、代码示例。 本文主要翻译自 Practical-Cryptography-for-Developer">
+<meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，但是笔者也补充了许多代码示例及算法细节。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-03-06T18:44:00+08:00">
@@ -13,11 +13,11 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg">
 <meta name=twitter:title content="「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法">
-<meta name=twitter:description content="本文仍然在优化翻译质量、补充原文缺失的细节、代码示例。 本文主要翻译自 Practical-Cryptography-for-Developer">
+<meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，但是笔者也补充了许多代码示例及算法细节。">
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":7848,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":7792,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7848 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7792 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 16 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg data-srcset="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 1.5x, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg title=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -135,10 +135,7 @@
 </ul>
 </nav></div>
 </div><div class=content id=content><blockquote>
-<p>本文仍然在优化翻译质量、补充原文缺失的细节、代码示例。</p>
-</blockquote>
-<blockquote>
-<p>本文主要翻译自 <a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a>，但是也补充了一些我的代码示例及思考。</p>
+<p>本文主要翻译自 <a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a>，但是笔者也补充了许多代码示例及算法细节。</p>
 </blockquote>
 <p>《写给开发人员的实用密码学》系列文章目录：</p>
 <ul>
@@ -171,19 +168,17 @@
 <p>在密码学里面，最容易搞混的词估计就是「密码」了，cipher/password/passphrase 都可以被翻译成「密码」，需要注意下其中区别。</p>
 <h2 id=一什么是对称加密>一、什么是对称加密</h2>
 <p>在密码学中，有两种加密方案被广泛使用：「对称加密」与「非对称加密」。</p>
-<p>对称加密是指，加密与解密均是使用相同的密钥，因为这个特性，我们也称这个密钥为「共享密钥（Shared Secret Key）」，示意图如下：</p>
+<p>对称加密是指，使用相同的密钥进行消息的加密与解密。因为这个特性，我们也称这个密钥为「共享密钥（Shared Secret Key）」，示意图如下：</p>
 <figure><img src=/images/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-cryptography.png>
 </figure>
-<p>我们在第一章「概览」里介绍过，单纯使用对称加密算法只能保证数据的安全性，并不能满足我们对消息真实性、完整性与不可否认性的需求，因此通常我们会将对称加密算法跟其他算法组合成一个「对称加密方案」来使用，这种多个密码学算法组成的「加密方案」能同时保证数据的安全性、真实性、完整性与不可否认性。</p>
-<p>加密方案可以包括：密钥派生函数（带有某些参数）、对称密码算法（带有某些参数）、密码分组模式算法、消息认证（MAC）算法。
-如 AES-256-CTR-HMAC-SHA256 就表示一个使用 AES-256 与 Counter 分组模式进行加密，使用 HMAC-SHA256 进行消息认证的加密方案。
-其他流行的对称加密方案还有 ChaCha20-Poly1305 和 AES-128-GCM 等。</p>
-<p>现代密码学中广泛使用的对称加密算法（ciphers）有：AES（AES-128、AES-192、AES-256）、ChaCha20、Twofish、IDEA、Serpent、Camelia、RC6、CAST 等。其中绝大多数都是「<strong>块密码算法</strong>（Block Cipher）」或者叫「<strong>分组密码算法</strong>」，这种算法一次只能加密固定大小的块（例如 128 位）；少部分是「<strong>流密码算法</strong>（Stream Cipher）」，流密码算法将数据逐字节地加密为密文流。
-通过使用称为「分组密码工作模式」的技术，可以将「分组密码算法」转换为「流密码算法」。</p>
-<p>即使计算机进入量子时代，仍然可以沿用当前的对称密码算法。因为对称密钥密码算法是<strong>抗量子的</strong>（<strong>quantum-resistant</strong>），这意味当使用 bits 数足够大的密钥时，强大的量子计算机无法破坏其安全性。</p>
+<p>现代密码学中广泛使用的对称加密算法（ciphers）有：AES（AES-128、AES-192、AES-256）、ChaCha20、Twofish、IDEA、Serpent、Camelia、RC6、CAST 等。
+其中绝大多数都是「<strong>块密码算法</strong>（Block Cipher）」或者叫「<strong>分组密码算法</strong>」，这种算法一次只能加密固定大小的块（例如 128 位）；
+少部分是「<strong>流密码算法</strong>（Stream Cipher）」，流密码算法将数据逐字节地加密为密文流。</p>
+<p>通过使用称为「分组密码工作模式」的技术，可以将「分组密码算法」转换为「流密码算法」。</p>
+<p>即使计算机进入量子时代，仍然可以沿用当前的对称密码算法。因为对称密钥密码算法是<strong>抗量子的</strong>（<strong>quantum-resistant</strong>），这意味当使用长度足够的密钥时，强大的量子计算机无法破坏其安全性。</p>
 <h2 id=二对称加密方案的结构>二、对称加密方案的结构</h2>
-<p>前面介绍了对称加密方案常由多种不同功能的密码学算法组成，以确保消息的安全性、真实性、完整性与不可否认性。</p>
-<p>一个对称加密方案通常会包含如下几种算法：</p>
+<p>我们在第一章「概览」里介绍过，单纯使用对称加密算法只能保证数据的安全性，并不能满足我们对消息真实性、完整性与不可否认性的需求，因此通常我们会将对称加密算法跟其他算法组合成一个「对称加密方案」来使用，这种多个密码学算法组成的「加密方案」能同时保证数据的安全性、真实性、完整性与不可否认性。</p>
+<p>一个分组加密方案通常会包含如下几种算法：</p>
 <ul>
 <li>将密码转换为密钥的密钥派生算法 KDF（如 Scrypt 或 Argon2）：通过使用 KDF，加密方案可以允许用户使用字符密码作为「Shared Secret Key」，并使密码的破解变得困难和缓慢。</li>
 <li>分组密码到流密码的转换算法（即分组密码模式，如 CBC 或 CTR）+ 消息填充算法（如 PKCS7）：分组密码算法（如 AES）需要借助这两种算法，才能加密任意大小的数据。</li>
@@ -194,6 +189,9 @@
 </li>
 <li>消息认证算法（如HMAC）：用于验证消息的真实性、完整性、不可否认性。</li>
 </ul>
+<p>而一个流密码加密方案本身就能加密任意长度的数据，因此不需要「分组密码模式」与「消息填充算法」。</p>
+<p>如 AES-256-CTR-HMAC-SHA256 就表示一个使用 AES-256 与 Counter 分组模式进行加密，使用 HMAC-SHA256 进行消息认证的加密方案。
+其他流行的对称加密方案还有 ChaCha20-Poly1305 和 AES-128-GCM 等，其中 ChaCha20-Poly130 是一个流密码加密方案。我们会在后面单独介绍这两种加密方案。</p>
 <h2 id=三分组密码工作模式---block-cipher-mode-of-operation>三、分组密码工作模式 - Block cipher mode of operation</h2>
 <p>前面简单介绍了「<a href=https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation target=_blank rel="noopener noreferrer"><strong>分组密码工作模式</strong></a>」可以将「分组密码算法」转换为「流密码算法」，从而实现加密任意长度的数据，这里主要就具体介绍下这个分组密码工作模式。</p>
 <p>加密方案的名称中就带有具体的「分组模式」名称，如：</p>
