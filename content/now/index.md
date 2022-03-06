@@ -17,7 +17,7 @@ draft: false
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - 服务网格
   - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
-  - [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md) - 80%
+  - [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md) - 90%
   - [研究 istio 的限流限并发能力](https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/)
   - 跟进 istio 的 warm_up/slow_start PR 进展 - 目前已 Merge，有望在下个版本见到
 
@@ -30,8 +30,8 @@ draft: false
 阅读（一二三月份，就读这两本吧）：
 
 - [x] 《人间失格》
-- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book) - 50%
-- [ ] 《在生命的尽头拥抱你-临终关怀医生手记》
+- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book) - 70%
+- [ ] 《在生命的尽头拥抱你-临终关怀医生手记》 - 10%
 
 
 ### 高优先级
@@ -177,15 +177,19 @@ draft: false
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 
 
+### 2022-03-05 - 2022-03-06
+
+- 发布《写给开发人员的实用密码学》系列的第六篇：对称加密算法
+
 ### 2022-03-01
 
 - 深圳疫情形式严峻，开始居家办公
-- 整理润色后，发布《「译」写给开发人员的实用密码学》前五篇的内容
+- 整理润色后，发布《写给开发人员的实用密码学》前五篇的内容
 
 ### 2022-02-19 - 2022-02-25
 
 - 阅读 [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)，同时完成我的密码学笔记
-- 完成了《「译」写给开发人员的实用密码学》前五篇的草稿。
+- 完成了《写给开发人员的实用密码学》前五篇的草稿。
 - [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md)
 
 ### 2022-02-17
