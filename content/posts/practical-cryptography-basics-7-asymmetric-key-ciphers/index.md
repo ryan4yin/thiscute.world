@@ -18,7 +18,7 @@ code:
 
 >本文仍然在优化翻译质量、补充原文缺失的细节、代码示例。
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是也补充了一些我的代码示例及思考。
+>本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是笔者也补充了许多代码示例及算法细节。
 
 
 《写给开发人员的实用密码学》系列文章目录：
