@@ -31,8 +31,7 @@ code:
 - [「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
 - [「译」写给开发人员的实用密码学（七）—— 非对称密钥加密算法](/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/)
 - [「译」写给开发人员的实用密码学（八）—— 数字签名](/posts/practical-cryptography-basics-8-digital-signature/)
-- [「译」写给开发人员的实用密码学（九）—— 量子安全密码学](/posts/practical-cryptography-basics-9-quantum-safe-cryptography/)
-
+- 待续
 
 
 ## 参考
