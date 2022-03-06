@@ -122,7 +122,7 @@ IV 通常无需保密，但是应当足够随机（无法预测），而且不�
 
 ### 1. CTR (Counter) 分组模式 {#counter_mode}
 
->https://csrc.nist.gov/publications/detail/sp/800-38a/final
+>参考文档: https://csrc.nist.gov/publications/detail/sp/800-38a/final
 
 下图说明了明文的分组（块）如何在 CTR 分组工作模式下使用分组密码算法一个接一个地加密与解密：
 
