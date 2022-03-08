@@ -150,7 +150,7 @@ categories: ["随笔", "技术"]
      1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
      2. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
    2. 推广 gRPC 协议
-   3. 通过亲和性与反亲和性，实现合理调度 Pods 减少跨域流量、也提升服务容灾能力
+   3. 通过亲和性与反亲和性 + [descheduler](https://github.com/kubernetes-sigs/descheduler)，实现合理调度 Pods 减少跨域流量、也提升服务容灾能力
 5. 提升本地开发效率：
    1. [nocalhost](https://github.com/nocalhost/nocalhost)
 6. 多集群的应用部署、容灾
