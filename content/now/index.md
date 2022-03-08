@@ -16,16 +16,12 @@ draft: false
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - 服务网格
-  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
-  - [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md) - 90%
-  - [研究 istio 的限流限并发能力](https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/)
   - 跟进 istio 的 warm_up/slow_start PR 进展 - 目前已 Merge，有望在下个版本见到
 
 
 生活：
 - 娱乐+运动：
   - 轮滑：倒滑后压步
-- 音乐：Synthesizer V, 练习键盘
 
 阅读（一二三月份，就读这两本吧）：
 
@@ -40,6 +36,8 @@ draft: false
   - Cilium Service Mesh - 使用 eBPF + per-node proxy 实现 的服务网格，很有前景。
   - Zone Aware Load Balancing - 减少跨区流量
   - 如何调优数据面，降低 CPU 使用率及延迟
+  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
+  - [研究 istio 的限流限并发能力](https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/)
 
 - 日志方案调研：grafana loki
 - 配置管理：研究如何使用 vault 实现跨集群的动态配置支持，如何落地此项能力
@@ -50,6 +48,9 @@ draft: false
 - [ ] 《房思琪的初恋乐园》
 - [ ] 《圆圈正义-作为自由前提的信念》
 - [ ] 《网络是怎样连接的》
+
+生活：
+- 音乐：Synthesizer V, 练习键盘
 
 - k8s 网络插件 - Cilium
 - Kubernetes：阅读源码，熟悉底层细节
@@ -173,9 +174,15 @@ draft: false
 ### now
 
 目前想做的：
-- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
+- 继续学习与翻译《写给开发人员的实用密码学》系列文章
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
+- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 
+### 2022-03-07 - 2022-03-08
+
+- 跟推荐系统大佬一起将服务从 HTTP 切换到 gRPC，效果立竿见影，服务流量下降 50% ~ 60%，延迟下降 30% ~ 50%
+  - 提升了服务性能，降低了 AWS 跨区流量成本
 
 ### 2022-03-05 - 2022-03-06
 
