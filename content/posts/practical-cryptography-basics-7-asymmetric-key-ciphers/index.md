@@ -115,11 +115,11 @@ code:
 
 密钥封装机制 KEM 的加密流程（使用公钥加密传输对称密钥）：
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/asymmetric-cryptography.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/hybrid-encryption.png" >}}
 
 密钥封装机制 KEM 的解密流程（使用私钥解密出对称密钥，然后再使用这个对称密钥解密数据）：
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/asymmetric-cryptography.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/hybrid-decryption.png" >}}
 
 RSA-OAEP, RSA-KEM, ECIES-KEM 和 PSEC-KEM. 都是 KEM 加密方案。
 
