@@ -13,12 +13,13 @@ categories: ["技术"]
 
 >个人笔记，并非教程！只适合当成参考手册，按目录选读。
 
->如果希望深入学习，建议阅读 [Practical Cryptography for Developers](https://github.com/nakov/practical-cryptography-for-developers-book)
+>如果希望更深入地学习 TLS 相关的各种密码算法，建议阅读 [写给开发人员的实用密码学](https://thiscute.world/posts/practical-cryptography-basics-1/) 系列文章。
 
 ## 更新记录
 
 - [ ] 补充 TLS 协议的详细流程
 - [x] 完成 TLS 证书的详细介绍
+- [ ] PKI X509 介绍
 
 ---
 
@@ -514,11 +515,11 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 
 ## 参考
 
-
 ### TLS 协议
 
 - [HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)](https://halfrost.com/https_tls1-2_handshake/)
 - [HTTPS 温故知新（五） —— TLS 中的密钥计算](https://halfrost.com/https-key-cipher/)
+- [A complete overview of SSL/TLS and its cryptographic system](https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd)
 
 ### TLS 证书
 
@@ -543,11 +544,6 @@ openssl pkcs12 -in xxx.p12 -out xxx.key -nocerts -nodes
 - [Difference between certificate pinning and public key pinning](https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning)
 
 
-加密/签名算法相关：
-
-- [RSA算法原理（二）](http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html)
-
 其他：
-
+- [写给开发人员的实用密码学](https://thiscute.world/posts/practical-cryptography-basics-1/)
 - [OpenSSL ManPage](https://www.openssl.org/docs/man1.1.1/)
-- [openssl 查看证书](https://www.jianshu.com/p/f5f93c89155e)

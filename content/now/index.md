@@ -175,9 +175,13 @@ draft: false
 
 目前想做的：
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
-- 继续学习与翻译《写给开发人员的实用密码学》系列文章
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+- 迭代文章 <https://thiscute.world/posts/about-tls-cert/>，补充 TLS 协议的算法细节（tls1.1 tls1.2 tls1.3）、PKI X509 等内容，及其在 K8s 中的应用
+
+### 2022-03-09
+
+- 发布《写给开发人员的实用密码学》系列第七篇：非对称加密算法，但是暂时只完成了 RSA 部分
 
 ### 2022-03-07 - 2022-03-08
 
