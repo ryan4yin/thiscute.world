@@ -13,11 +13,8 @@ draft: false
 ### 最高优先级
 
 技术：
+- 学习使用 envoy
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
-- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
-- 服务网格
-  - 跟进 istio 的 warm_up/slow_start PR 进展 - 目前已 Merge，有望在下个版本见到
-
 
 生活：
 - 娱乐+运动：
@@ -32,6 +29,7 @@ draft: false
 
 ### 高优先级
 
+- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - 服务网格
   - Cilium Service Mesh - 使用 eBPF + per-node proxy 实现 的服务网格，很有前景。
   - Zone Aware Load Balancing - 减少跨区流量
@@ -95,11 +93,6 @@ draft: false
 
 - 学习英语，目标是能流利地读写交流。
   - 主要是可以扩宽工作的选择面，外企很多职位会要求英文读写流利。
-
-- 区块链技术 Web3.0
-  - [非同质化代币 (NFT)](https://ethereum.org/zh/nft/)、[去中心化自治组织 (DAO)](https://ethereum.org/zh/dao/)
-  - [智能合约](https://ethereum.org/en/developers/docs/smart-contracts/)
-  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/)
 
 ### 低优先级
 
@@ -173,11 +166,18 @@ draft: false
 
 ### now
 
-目前想做的：
-- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
-- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
-- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+目前想做的（按优先级排序）：
+
 - 迭代文章 <https://thiscute.world/posts/about-tls-cert/>，补充 TLS 协议的算法细节（tls1.1 tls1.2 tls1.3）、PKI X509 等内容，及其在 K8s 中的应用
+- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
+- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+- Envoy 基础：
+  - 官方文档：https://www.envoyproxy.io/docs/envoy/v1.21.1/about_docs
+  - Envoy 入门手册：https://github.com/rootsongjc/envoy-handbook
+- 区块链技术 Web3.0
+  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门
+  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
+
 
 ### 2022-03-09
 
