@@ -1,7 +1,8 @@
 ---
 title: "「译」写给开发人员的实用密码学（七）—— 非对称密钥加密算法"
-date: 2022-03-01T21:34:00+08:00
-draft: true
+date: 2022-03-09T20:50:00+08:00
+lastmod: 2022-03-09T20:50:00+08:00
+draft: false
 resources:
 - name: "featured-image"
   src: "symmetric-vs-asymmetric.jpg"
@@ -16,7 +17,7 @@ code:
   maxShownLines: 100
 ---
 
->本文仍然在优化翻译质量、补充原文缺失的细节、代码示例。
+>本文仍然在优化翻译质量、补充原文缺失的细节、代码示例。另外 ECC/DHKE 部分还未完成翻译。
 
 >本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是笔者也补充了许多代码示例及算法细节。
 
@@ -174,6 +175,10 @@ Generating RSA private key, 2048 bit long modulus
 .....+++
 e is 65537 (0x10001)
 
+# 使用私钥生成对应的公钥文件
+❯ openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem
+writing RSA key
+
 # 查看私钥内容
 ❯ cat rsa-private-key.pem
 -----BEGIN RSA PRIVATE KEY-----
@@ -297,10 +302,6 @@ coefficient:
     9a:6a:7b:7f:bb:cc:51:fb:cf:3e:7e:16:39:6b:e9:
     a5:c2:dc:17:0f:5c:a3:a4
 
-# 使用私钥生成对应的公钥文件
-❯ openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem
-writing RSA key
-
 # 查看私钥内容
 ❯ cat rsa-public-key.pem 
 -----BEGIN PUBLIC KEY-----
@@ -356,7 +357,9 @@ RSA 描述的私钥的结构如下：
 
 可以看到私钥文件中就已经包含了公钥的所有参数，实际上我们也是使用 `openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem` 命令通过私钥生成出的对应的公钥文件。
 
-下面就介绍下具体的密钥对生成流程，搞清楚 openssl 生成出的这个私钥，各项参数分别是什么含义。
+下面就介绍下具体的密钥对生成流程，搞清楚 openssl 生成出的这个私钥，各项参数分别是什么含义：
+
+>这里不会详细介绍其中的各种数学证明，具体的请参考维基百科。
 
 - 随机选择两个不相等的质数 $p$ 与 $q$
   - p 跟 q 应该非常大，但是长度相差几个整数，这样会使得破解更加困难
@@ -465,6 +468,102 @@ $$
 - 首先计算原始数据的 Hash 值，比如 SHA256
 - 使用私钥对计算出的 Hash 值进行加密，得到数字签名
 - 其他人使用公开的公钥进行解密出 Hash 值，再对原始数据计算 Hash 值对比，如果一致，就说明数据未被篡改
+
+
+## 四、ECC 密码系统
+
+ECC 是 RSA 的继任者，新一代的非对称加密算法。
+
+### RSA 密钥对生成
+
+
+首先，跟 RSA 一样，让我们先看下怎么使用 openssl 生成一个使用 prime256v1 曲线的 ECC 密钥对：
+
+```shell
+# 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）
+openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
+# 通过密钥生成公钥
+openssl ec -in ecc-private-key.pem -pubout -out ecc-public-key.pem
+
+# 查看私钥内容
+❯ cat ecc-private-key.pem
+-----BEGIN EC PARAMETERS-----
+BggqhkjOPQMBBw==
+-----END EC PARAMETERS-----
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIGm3wT/m4gDaoJGKfAHDXV2BVtdyb/aPTITJR5B6KVEtoAoGCCqGSM49
+AwEHoUQDQgAE5IEIorw0WU5+om/UgfyYSKosiGO6Hpe8hxkqL5GUVPyu4LJkfw/e
+99zhNJatliZ1Az/yCKww5KrXC8bQ9wGQvw==
+-----END EC PRIVATE KEY-----
+
+# 查看私钥的详细参数
+❯ openssl ec -noout -text -in ecc-private-key.pem
+read EC key
+Private-Key: (256 bit)
+priv:
+    69:b7:c1:3f:e6:e2:00:da:a0:91:8a:7c:01:c3:5d:
+    5d:81:56:d7:72:6f:f6:8f:4c:84:c9:47:90:7a:29:
+    51:2d
+pub: 
+    04:e4:81:08:a2:bc:34:59:4e:7e:a2:6f:d4:81:fc:
+    98:48:aa:2c:88:63:ba:1e:97:bc:87:19:2a:2f:91:
+    94:54:fc:ae:e0:b2:64:7f:0f:de:f7:dc:e1:34:96:
+    ad:96:26:75:03:3f:f2:08:ac:30:e4:aa:d7:0b:c6:
+    d0:f7:01:90:bf
+ASN1 OID: prime256v1
+NIST CURVE: P-256
+
+# 查看公钥内容
+❯ cat ecc-public-key.pem 
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE5IEIorw0WU5+om/UgfyYSKosiGO6
+Hpe8hxkqL5GUVPyu4LJkfw/e99zhNJatliZ1Az/yCKww5KrXC8bQ9wGQvw==
+-----END PUBLIC KEY-----
+
+# 查看公钥的参数
+❯ openssl ec -noout -text -pubin -in ecc-public-key.pem
+read EC key
+Private-Key: (256 bit)
+pub: 
+    04:e4:81:08:a2:bc:34:59:4e:7e:a2:6f:d4:81:fc:
+    98:48:aa:2c:88:63:ba:1e:97:bc:87:19:2a:2f:91:
+    94:54:fc:ae:e0:b2:64:7f:0f:de:f7:dc:e1:34:96:
+    ad:96:26:75:03:3f:f2:08:ac:30:e4:aa:d7:0b:c6:
+    d0:f7:01:90:bf
+ASN1 OID: prime256v1
+NIST CURVE: P-256
+```
+
+可以看到 ECC 算法的公钥私钥都比 RSA 小了非常多，数据量小，却能带来同等的安全强度，这是 ECC 相比 RSA 最大的优势。
+
+### ECC 加密与解密
+
+TODO
+
+### ECC 数字签名
+
+前面已经介绍了 RSA 签名，这里介绍下 ECDSA 跟 EdDSA Ed25519 签名算法。
+
+TODO
+
+### ECDLP 椭圆曲线离散对数问题与 ECC 安全强度
+
+TODO
+
+### 密码学常用椭圆曲线介绍
+
+TODO
+
+secp256k1
+Edwards Curves
+Curve25519, X25519 and Ed25519
+Curve448, X448 and Ed448
+
+
+## 五、DHKE 密钥交换
+
+TODO
+
 
 
 ## 参考

@@ -1,5 +1,5 @@
 ---
-title: "「译」写给开发人员的实用密码学（九）—— 数字证书与 TLS 协议"
+title: "「译」写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议"
 date: 2022-03-01T21:34:02+08:00
 draft: true
 resources:
@@ -30,8 +30,7 @@ code:
 - [「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)
 - [「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
 - [「译」写给开发人员的实用密码学（七）—— 非对称密钥加密算法](/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/)
-- [「译」写给开发人员的实用密码学（八）—— 数字签名](/posts/practical-cryptography-basics-8-digital-signature/)
-- [「译」写给开发人员的实用密码学（九）—— 数字证书与 TLS 协议](/posts/practical-cryptography-basics-9-quantum-safe-cryptography/)
+- [「译」写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/practical-cryptography-basics-9-quantum-safe-cryptography/)
 
 
 PKI X509
