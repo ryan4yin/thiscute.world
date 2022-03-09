@@ -4,7 +4,7 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
-<title>「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法">
+<title>写给开发人员的实用密码学（六）—— 对称密钥加密算法 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="写给开发人员的实用密码学（六）—— 对称密钥加密算法">
 <meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，但是笔者也补充了许多代码示例及算法细节。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg"><meta property="article:section" content="posts">
@@ -12,12 +12,12 @@
 <meta property="article:modified_time" content="2022-03-06T18:44:00+08:00">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg">
-<meta name=twitter:title content="「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法">
+<meta name=twitter:title content="写给开发人员的实用密码学（六）—— 对称密钥加密算法">
 <meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，但是笔者也补充了许多代码示例及算法细节。">
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=next href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":8045,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=next href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全","wordcount":8024,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -87,9 +87,9 @@
 <div class=container><div class=toc id=toc-auto>
 <h2 class=toc-title>目录</h2>
 <div class=toc-content id=toc-content-auto></div>
-</div><article class="page single"><h1 class="single-title animated flipInX">「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta>
+</div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8045 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8024 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 17 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg data-srcset="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 1.5x, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg title=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -143,13 +143,13 @@
 </blockquote>
 <p>《写给开发人员的实用密码学》系列文章目录：</p>
 <ul>
-<li><a href=/posts/practical-cryptography-basics-1/ rel>「译」写给开发人员的实用密码学（一）—— 概览</a></li>
-<li><a href=/posts/practical-cryptography-basics-2-hash/ rel>「译」写给开发人员的实用密码学（二）—— 哈希函数</a></li>
-<li><a href=/posts/practical-cryptography-basics-3-key-derivation-function/ rel>「译」写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li>
-<li><a href=/posts/practical-cryptography-basics-4-secure-random-generators/ rel>「译」写给开发人员的实用密码学（四）—— 安全的随机数生成器</a></li>
-<li><a href=/posts/practical-cryptography-basics-5-key-exchange/ rel>「译」写给开发人员的实用密码学（五）—— 密钥交换与 DHKE</a></li>
-<li><a href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ rel>「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></li>
-<li><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/ rel>「译」写给开发人员的实用密码学（七）—— 非对称密钥加密算法</a></li>
+<li><a href=/posts/practical-cryptography-basics-1/ rel>写给开发人员的实用密码学（一）—— 概览</a></li>
+<li><a href=/posts/practical-cryptography-basics-2-hash/ rel>写给开发人员的实用密码学（二）—— 哈希函数</a></li>
+<li><a href=/posts/practical-cryptography-basics-3-key-derivation-function/ rel>写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li>
+<li><a href=/posts/practical-cryptography-basics-4-secure-random-generators/ rel>写给开发人员的实用密码学（四）—— 安全的随机数生成器</a></li>
+<li><a href=/posts/practical-cryptography-basics-5-key-exchange/ rel>写给开发人员的实用密码学（五）—— 密钥交换与 DHKE</a></li>
+<li><a href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ rel>写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></li>
+<li><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/ rel>写给开发人员的实用密码学（七）—— 非对称密钥加密算法</a></li>
 <li>待续</li>
 </ul>
 <h2 id=零术语介绍>零、术语介绍</h2>
@@ -860,7 +860,7 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 <div class=post-info-line>
 <div class=post-info-md></div>
 <div class=post-info-share>
-<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-title="「译」写给开发人员的实用密码学（六）—— 对称密钥加密算法" data-via=ryan4yin data-hashtags=Cryptography,密码学,对称加密,安全><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-hashtag=Cryptography><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><i class="fab fa-reddit fa-fw"></i></a></span>
+<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-title="写给开发人员的实用密码学（六）—— 对称密钥加密算法" data-via=ryan4yin data-hashtags=Cryptography,密码学,对称加密,安全><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-hashtag=Cryptography><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><i class="fab fa-reddit fa-fw"></i></a></span>
 </div>
 </div>
 </div>
@@ -871,7 +871,7 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 </section>
 </div>
 <div class=post-nav><a href=/posts/the-thoughtful-youth/ class=prev rel=prev title=「转」且看有思想的年轻人><i class="fas fa-angle-left fa-fw"></i>「转」且看有思想的年轻人</a>
-<a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/ class=next rel=next title="「译」写给开发人员的实用密码学（七）—— 非对称密钥加密算法">「译」写给开发人员的实用密码学（七）—— 非对称密钥加密算法<i class="fas fa-angle-right fa-fw"></i></a></div>
+<a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/ class=next rel=next title="写给开发人员的实用密码学（七）—— 非对称密钥加密算法">写给开发人员的实用密码学（七）—— 非对称密钥加密算法<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id=comments><div id=utterances></div><noscript>
 Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
