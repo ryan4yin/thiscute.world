@@ -123,10 +123,11 @@ DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学�
 
 ### 2. 基于椭圆曲线的 ECDH 协议
 
-Elliptic-Curve Diffie-Hellman (ECDH) 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。
+[Elliptic-Curve Diffie-Hellman (ECDH)](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman) 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。
 
 ECDH 是经典 DHKE 协议的变体，其中模幂计算被椭圆曲线计算取代，以提高安全性。
-我会在后面非对称密码系统的 ECC 部分详细介绍它。
+
+TODO
 
 ## 参考
 

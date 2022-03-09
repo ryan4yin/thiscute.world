@@ -472,9 +472,9 @@ $$
 
 ## 四、ECC 密码系统
 
-ECC 是 RSA 的继任者，新一代的非对称加密算法。
+ECC 椭圆曲线密码学，是 RSA 的继任者，新一代的非对称加密算法。
 
-### RSA 密钥对生成
+### ECC 密钥对生成
 
 
 首先，跟 RSA 一样，让我们先看下怎么使用 openssl 生成一个使用 prime256v1 曲线的 ECC 密钥对：
@@ -558,11 +558,6 @@ secp256k1
 Edwards Curves
 Curve25519, X25519 and Ed25519
 Curve448, X448 and Ed448
-
-
-## 五、DHKE 密钥交换
-
-TODO
 
 
 
