@@ -64,6 +64,8 @@ spec:
         version: v3
     spec:
       affinity:
+        # 注意，podAffinity/podAntiAffinity 可能不是最佳方案，这部分配置待更新
+        # topologySpreadConstraints 可能是更好的选择
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution: # 非强制性条件
           - weight: 100  # weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）
@@ -698,6 +700,12 @@ spec:
 
 
 ### 2. Pod 反亲和性
+
+>Pod 亲和性与反亲和性可能不是最佳的实现手段，这部分内容待更新
+
+>相关 Issue: <https://github.com/kubernetes/kubernetes/issues/72479>
+
+>相关替代方案：<https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/>
 
 通常建议为每个 Deployment 的 template 配置 Pod 反亲和性，把 Pods 打散在所有节点上：
 
