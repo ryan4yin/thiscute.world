@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/kubernetes-best-practices/><link rel=prev href=https://thiscute.world/posts/2021-summary/><link rel=next href=https://thiscute.world/posts/kubernetes-deployemnt-using-kubeadm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes 微服务最佳实践","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/kubernetes-best-practices\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/kubernetes-best-practices\/kubernetes-best-practices.png","width":824,"height":402}],"genre":"posts","keywords":"Kubernetes, 最佳实践, 云原生","wordcount":12243,"url":"https:\/\/thiscute.world\/posts\/kubernetes-best-practices\/","datePublished":"2022-01-25T00:13:00+08:00","dateModified":"2022-01-25T00:13:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/kubernetes-best-practices/><link rel=prev href=https://thiscute.world/posts/2021-summary/><link rel=next href=https://thiscute.world/posts/kubernetes-deployemnt-using-kubeadm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes 微服务最佳实践","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/kubernetes-best-practices\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/kubernetes-best-practices\/kubernetes-best-practices.png","width":824,"height":402}],"genre":"posts","keywords":"Kubernetes, 最佳实践, 云原生","wordcount":12426,"url":"https:\/\/thiscute.world\/posts\/kubernetes-best-practices\/","datePublished":"2022-01-25T00:13:00+08:00","dateModified":"2022-01-25T00:13:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">Kubernetes 微服务最佳实践</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-01-25>2022-01-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12243 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-01-25>2022-01-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12426 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 25 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/kubernetes-best-practices/kubernetes-best-practices.png data-srcset="/posts/kubernetes-best-practices/kubernetes-best-practices.png, /posts/kubernetes-best-practices/kubernetes-best-practices.png 1.5x, /posts/kubernetes-best-practices/kubernetes-best-practices.png 2x" data-sizes=auto alt=/posts/kubernetes-best-practices/kubernetes-best-practices.png title=/posts/kubernetes-best-practices/kubernetes-best-practices.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -356,6 +356,8 @@
 </span><span class=lnt>179
 </span><span class=lnt>180
 </span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
 </span></code></pre></td>
 <td class=lntd>
 <pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
@@ -385,6 +387,8 @@
 </span><span class=w>        </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=l>v3</span><span class=w>
 </span><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
 </span><span class=w>      </span><span class=nt>affinity</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 注意，podAffinity/podAntiAffinity 可能不是最佳方案，这部分配置待更新</span><span class=w>
+</span><span class=w>        </span><span class=c># topologySpreadConstraints 可能是更好的选择</span><span class=w>
 </span><span class=w>        </span><span class=nt>podAffinity</span><span class=p>:</span><span class=w>
 </span><span class=w>          </span><span class=nt>preferredDuringSchedulingIgnoredDuringExecution</span><span class=p>:</span><span class=w> </span><span class=c># 非强制性条件</span><span class=w>
 </span><span class=w>          </span>- <span class=nt>weight</span><span class=p>:</span><span class=w> </span><span class=m>100</span><span class=w>  </span><span class=c># weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）</span><span class=w>
@@ -1213,6 +1217,15 @@ node/node-205 evicted
 </span></code></pre></td></tr></table>
 </div>
 </div><h3 id=2-pod-反亲和性>2. Pod 反亲和性</h3>
+<blockquote>
+<p>Pod 亲和性与反亲和性可能不是最佳的实现手段，这部分内容待更新</p>
+</blockquote>
+<blockquote>
+<p>相关 Issue: <a href=https://github.com/kubernetes/kubernetes/issues/72479 target=_blank rel="noopener noreferrer">https://github.com/kubernetes/kubernetes/issues/72479</a></p>
+</blockquote>
+<blockquote>
+<p>相关替代方案：<a href=https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ target=_blank rel="noopener noreferrer">https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/</a></p>
+</blockquote>
 <p>通常建议为每个 Deployment 的 template 配置 Pod 反亲和性，把 Pods 打散在所有节点上：</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
