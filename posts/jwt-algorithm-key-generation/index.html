@@ -5,7 +5,7 @@
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
 <title>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="JWT 签名算法 HS256、RS256 及 ES256 及密钥生成">
-<meta property="og:description" content="签名算法 介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义： 数字签名(Digital Signature):就和我们日常">
+<meta property="og:description" content="签名算法 介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义： 数字签名(Digital Signature): 就和我们日常办理各种手续时需要在">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/jwt-algorithm-key-generation/"><meta property="og:image" content="https://thiscute.world/posts/jwt-algorithm-key-generation/jwt.jpg"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2020-03-03T14:09:46+08:00">
@@ -13,11 +13,11 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/jwt-algorithm-key-generation/jwt.jpg">
 <meta name=twitter:title content="JWT 签名算法 HS256、RS256 及 ES256 及密钥生成">
-<meta name=twitter:description content="签名算法 介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义： 数字签名(Digital Signature):就和我们日常">
+<meta name=twitter:description content="签名算法 介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义： 数字签名(Digital Signature): 就和我们日常办理各种手续时需要在">
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/jwt-algorithm-key-generation/><link rel=prev href=https://thiscute.world/posts/2019-summary/><link rel=next href=https://thiscute.world/posts/about-dns-protocol/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"JWT 签名算法 HS256、RS256 及 ES256 及密钥生成","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/jwt-algorithm-key-generation\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/jwt-algorithm-key-generation\/jwt.jpg","width":1e3,"height":300}],"genre":"posts","keywords":"JWT, 算法, OpenSSL","wordcount":1959,"url":"https:\/\/thiscute.world\/posts\/jwt-algorithm-key-generation\/","datePublished":"2020-03-03T14:09:46+08:00","dateModified":"2020-03-03T14:09:46+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/jwt-algorithm-key-generation/><link rel=prev href=https://thiscute.world/posts/2019-summary/><link rel=next href=https://thiscute.world/posts/about-dns-protocol/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"JWT 签名算法 HS256、RS256 及 ES256 及密钥生成","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/jwt-algorithm-key-generation\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/jwt-algorithm-key-generation\/jwt.jpg","width":1e3,"height":300}],"genre":"posts","keywords":"JWT, 算法, OpenSSL","wordcount":1983,"url":"https:\/\/thiscute.world\/posts\/jwt-algorithm-key-generation\/","datePublished":"2020-03-03T14:09:46+08:00","dateModified":"2020-03-03T14:09:46+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-03-03>2020-03-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1959 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-03-03>2020-03-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1983 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/jwt-algorithm-key-generation/jwt.jpg data-srcset="/posts/jwt-algorithm-key-generation/jwt.jpg, /posts/jwt-algorithm-key-generation/jwt.jpg 1.5x, /posts/jwt-algorithm-key-generation/jwt.jpg 2x" data-sizes=auto alt=/posts/jwt-algorithm-key-generation/jwt.jpg title=/posts/jwt-algorithm-key-generation/jwt.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -105,14 +105,14 @@
 </div><div class=content id=content><h1 id=签名算法>签名算法</h1>
 <p>介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义：</p>
 <ol>
-<li>数字签名(Digital Signature):就和我们日常办理各种手续时需要在文件上签上自己的名字一样，数字签名的主要用途也是防止伪造签名。</li>
-<li>数字摘要(digest)/数字指纹(fingerprint): 指的都是数据的 Hash 值。</li>
+<li>数字签名(Digital Signature): 就和我们日常办理各种手续时需要在文件上签上自己的名字一样，数字签名的主要用途也是防止伪造签名。</li>
+<li>数字摘要(digest)/数字指纹(fingerprint): 指的是数据的 Hash 值。</li>
 <li>加密算法：这个应该不需要解释，就是对数据进行加密。。</li>
 </ol>
 <p>数字签名的具体实现，通常是先对数据进行一次 Hash 摘要(SHA1/SHA256/SHA512 等)，然后再使用非对称加密算法(RSA/ECDSA 等)的私钥对这个摘要进行加密，这样得到的结果就是原始数据的一个签名。</p>
 <p>用户在验证数据时，只需要使用公钥解密出 Hash 摘要，然后自己再对数据进行一次同样的摘要，对比两个摘要是否相同即可。</p>
 <blockquote>
-<p>注意：签名算法是使用私钥加密，确保得到的签名无法被伪造，同时所有人都可以使用公钥解密来验证签名。这和正常的数据加密算法是相反的。</p>
+<p>注意：签名算法是使用私钥加密，确保得到的签名无法被伪造，同时所有人都可以使用公钥解密来验证签名。这和正常的数据加密算法是相反的。（非对称加密算法支持使用密钥对的任何一个加密数据，再用另一个密钥解密）</p>
 </blockquote>
 <p>因为数字签名多了非对称加密这一步，就能保证只有拥有私钥的人才能生成出正确的数字签名，达到了防止伪造签名的目的。
 而数字摘要（Hash）则谁都可以计算出来，通常<strong>由可信方公布数据的 Hash 值</strong>，用户下载数据后，可通过 Hash 值对比来判断数据是否损坏，或者被人调包。</p>
