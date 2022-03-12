@@ -134,7 +134,7 @@ RSA-OAEP, RSA-KEM, ECIES-KEM 和 PSEC-KEM. 都是 KEM 加密方案。
 
 ### 2. 集成加密方案 IES
 
-集成加密方案 (IES) 在 密钥封装机制（KEM）的基础上，添加了密钥派生算法 KDF、消息认证算法 MAC 等其他密码学算法以达成更高的安全性。
+集成加密方案 (IES) 在密钥封装机制（KEM）的基础上，添加了密钥派生算法 KDF、消息认证算法 MAC 等其他密码学算法以达成更高的安全性。
 
 在 IES 方案中，非对称算法（如 RSA 或 ECC）跟 KEM 一样，都是用于加密或封装对称密钥，然后通过对称密钥（如 AES 或 Chacha20）来加密输入消息。
 
@@ -595,7 +595,7 @@ $$
 有限域 $\mathbb {F} _{p}$ 上的 EC 椭圆曲线方程为：
 
 $$
-y^2 = (x^3 + ax + b) \mod p, 0 \le x \le p
+y^2 = x^3 + ax + b (\mod p), 0 \le x \le p
 $$
 
 目前主要有两种有限域在 ECC 中被广泛应用：
@@ -610,6 +610,7 @@ $$
 
 - 无穷远点 $O_{\infty}$ 是零元，$O_{\infty} + O_{\infty} = O_{\infty}$，$O_{\infty} + P = P$
 - $P_{x, y}$ 的负元为 $P_{x, -y}$,，并且有 $P + (-P) = O_{\infty}$
+- $P * 0 = O_{\infty}$
 - 如果 $P_{x1, y1} + Q_{x2, y2} = R_{x3, y3}$，则其坐标有如下关系
   - $x3 = (k^2 - x1 - x2) \mod p$
   - $y3 = (k(x1 - x3) - y1) \mod p$
@@ -795,25 +796,187 @@ public_key.verify(signature, b"my authenticated message")
 
 ### 密码学常用椭圆曲线介绍
 
-TODO
+在介绍密码学中的常用椭圆曲线前，需要先介绍一下椭圆曲线的**阶**（order）以及**辅助因子**（cofactor）这两个概念。
 
-secp256k1
-Edwards Curves
-Curve25519, X25519 and Ed25519
-Curve448, X448 and Ed448
+首先还得介绍下数学中「循环群」的概念，它是指能由单个元素所生成的群，在 ECC 中这就是预先定义好的基点 $G$.
+
+一个有限域上的椭圆曲线可以形成一个有限「循环代数群」，它由曲线上的所有点组成。椭圆曲线的**阶**被定义为该曲线上所有点的个数（包括无穷远点）。
+
+「有些曲线 + G」形成一个单一循环群，这一个群包含了曲线上的所有点。而其他的曲线加上 G 点则形成多个不相交的循环子群，每个子群包含了曲线的一个子集。
+对于上述第二种情况，曲线上的点将被拆分到 **h** 个循环子群中，每个子群的**阶**都是 **r**，这时整个群的阶 $n = h * r$. 子群的个数 **h** 被称为**辅助因子**。
+
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve-subgroups.png" >}}
+
+有限域上的椭圆曲线的阶都是有限的，也就是说对于曲线上任意一点 $G$，我们计算它的数乘 $kG$，随着整数 $k$ 的增大，一定会存在某个 $k$ 使 $kG = O_{\infty}$ 成立，然后 $k$ 继续增大时，因为 $O_{\infty} * P = $O_{\infty}$，$kG$ 的值就固定为 $$O_{\infty}$ 了，更大的 $k$ 值已经失去了意义。
+
+因此 ECC 中要求 $kG$ 中的私钥 $k$ 符合条件 $0 \le k \le r$，也就是说总的私钥数量是受 $r$ 限制的。
+
+辅助因子通过用如下公式表示：
+
+$$
+h = n / r
+$$
+
+其中 $n$ 是曲线的阶，$r$ 是每个子群的阶，$h$ 是辅助因子。
+如果曲线形成了一个单一循环群，那显然 $h = 1$，否则 $h > 1$
+
+举例如下：
+
+- `secp256k1` 的辅助因子为 1
+- `Curve25519` 的辅助因子为 8
+- `Curve448` 的辅助因子为 4
+
+#### 生成点 G
+
+生成点 G 的选择是很有讲究的，虽然每个循环子群都包含有很多个生成点，但是 ECC 只会谨慎的选择其中一个。
+首先 G 点必须要能生成出整个循环子群，其次还需要有尽可能高的计算性能。
+
+数学上已知某些椭圆曲线上，不同的生成点生成出的循环子群，阶也是不同的。如果 G 点选得不好，可能会导致生成出的子群的阶较小。
+前面我们已经提过子群的阶 $r$ 会限制总的私钥数量，导致算法强度变弱！因此不恰当的 $G$ 点可能会导致我们遭受「[小子群攻击](https://datatracker.ietf.org/doc/html/rfc2785)」。
+为了避免这种风险，建议尽量使用被广泛使用的加密库，而不是自己撸一个。
+
+
+#### 椭圆曲线的域参数
+
+ECC椭圆曲线由一组椭圆曲线域参数描述，如曲线方程参数、场参数和生成点坐标。这些参数在各种密码学标准中指定，你可以网上搜到相应的 RFC 或 NIST 文档。
+
+这些标准定义了一组命名曲线的参数，例如 secp256k1、P-521、brainpoolP512t1 和 SM2. 这些加密标准中描述的有限域上的椭圆曲线得到了密码学家的充分研究和分析，并被认为具有一定的安全强度。
+
+也有一些密码学家（如 Daniel Bernstein）认为，官方密码标准中描述的大多数曲线都是「不安全的」，并定义了他们自己的密码标准，这些标准在更广泛的层面上考虑了 ECC 安全性。
+
+开发人员应该仅使用各项标准文档给出的、经过密码学家充分研究的命名曲线。
+
+
+##### secp256k1
+
+此曲线被应用在比特币中，它的域参数如下：
+
+
+* _**p**_ \(modulus\) = `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F`
+* _**n**_ \(order; size; the count of all possible EC points\) = `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141`
+* _**a**_ \(方程 $y^2 ≡ x^3 + a\*x + b \(\mod p\)$ 中的常数\) = `0x0000000000000000000000000000000000000000000000000000000000000000`
+* _**b**_ \(方程 $y^2 ≡ x^3 + a\*x + b \(\mod p\)$ 中的常数\)= `0x0000000000000000000000000000000000000000000000000000000000000007`
+* _**g**_ \(the curve generator point G {x, y}\) = \(`0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798`, `0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8`\)
+* _**h**_ \(cofactor, typically 1\) = 01
+
+
+##### Edwards 曲线
+
+椭圆曲线方程除了我们前面使用的 Weierstrass 形式 $$y^2 = (x^3 + ax + b) \mod p$$ 外，还可以被写成其他多种形式，这些不同的形式是[双有理等价](https://zh.wikipedia.org/zh-hans/%E6%9C%89%E7%90%86%E6%98%A0%E5%B0%84)的（表示笔着也不懂什么叫「双有理等价」...）。
+不同的方式形式在计算机的数值计算上可能会存在区别。
+
+为了性能考虑，ECC 在部分场景下会考虑使用 Edwards 曲线形式进行计算，该方程形式如下：
+
+$$
+x^{2}+y^{2}=1+dx^{2}y^{2}
+$$
+
+画个图长这样：
+
+![](/images/practical-cryptography-basics-7-asymmetric-key-ciphers/edwards-curve.png)
+
+知名的 Edwards 曲线有：
+- Curve1174 (251-bit)
+- Curve25519 (255-bit)
+- Curve383187 (383-bit)
+- Curve41417 (414-bit)
+- Curve448 (448-bit)
+- E-521 (521-bit)
+- ...
+
+
+##### Curve25519, X25519 和 Ed25519
+
+>https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ed25519/
+
+只要域参数选得好，Edwards 就可以以非常高的性能实现 ECC 密钥交换、数字签名、混合加密方案。
+
+一个例子就是 [Curve25519](https://en.wikipedia.org/wiki/Curve25519)，它是 Edwards 曲线，其 Montgomery 形式的定义如下：
+
+$$
+y^{2}=x^{3}+486662x^{2}+x
+$$
+
+其被定义在有限域 $\mathbb {F} _{p}$ 上，$p = 2255 - 19$, 其他域参数如下：
+
+- 阶 `n = 2252 + 0x14def9dea2f79cd65812631a5cf5d3ed`
+- 辅因子 `h = 8`
+
+虽然此曲线并未以 Edwards 形式定义，但是它已被证明与如下扭曲 Edwards 曲线（`edwards25519`）双有理等价：
+
+$$
+-x^2 + y^2 = 1 + 37095705934669439343138083508754565189542113879843219016388785533085940283555 x^2 y^2
+$$
+
+上面给出的这种 Edwards 形式与前文给出的 Weierstrass 形式完全等价，是专为计算速度优化而设计成这样的。
+
+Curve25519 由 Daniel Bernstein 领导的密码学家团队精心设计，在多个设计和实现层面上达成了非常高的性能，同时不影响安全性。
+
+Curve25519 的构造使其避免了许多潜在的实现缺陷。根据设计，它不受定时攻击的影响，并且它接受任何 32 字节的字符串作为有效的公钥，并且不需要验证。
+它能提供 125.8bits 的安全强度（有时称为 ~ 128bits 安全性）
+
+Curve25519 的私钥为 251 位，通常编码为 256 位整数（32 个字节，64 个十六进制数字）。
+公钥通常也编码为 256 位整数（255 位 y 坐标 + 1 位 x 坐标），这对开发人员来说非常方便。
+
+基于 Curve25519 派生出了名为 [X25519](https://en.wikipedia.org/wiki/Curve25519) 的 ECDH 算法，以及基于 EdDSA 的高速数字签名算法 [Ed25519](https://en.wikipedia.org/wiki/EdDSA#Ed25519).
+
+##### Curve448, X448 和 Ed448
+
+>https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ed448/
+
+[Curve448](https://en.wikipedia.org/wiki/Curve448)（Curve448-Goldilocks）是一种非扭曲 Edwards 曲线，它的方程定义如下：
+
+$$
+x^2 + y^2 = 1 - 39081 x^2 y^2
+$$
+
+其被定义在有限域 $\mathbb {F} _{p}$ 上，$p = 2448 - 2224 - 1$，其他域参数：
+
+- 阶 `n = 2446 - 0x8335dc163bb124b65129c96fde933d8d723a70aadc873d6d54a7bb0d`
+- 辅助因子 `h = 4`
+
+与 Curve25519 一样，Curve448 也等价于前面给出的 Weierstrass 形式，选择 Edwards 形式主要是因为它能显著提升性能。
+
+Curve448 提供 222.8 位的安全强度。
+Curve448 的私钥为 446 位，通常编码为 448 位整数（56 个字节，112 个十六进制数字）。
+公钥也被编码为 448 位整数。
+
+基于 Curve448 派生出了名为 [X448](https://tools.ietf.org/html/rfc7748#section-5) 的 ECDH 算法，以及基于 EdDSA 的高速数字签名算法 [Ed448](https://tools.ietf.org/html/rfc8032#section-5.2).
+
+##### 该选择哪种椭圆曲线
+
+首先，Bernstein 的 SafeCurves 标准列出了符合一组 ECC 安全要求的安全曲线，可访问 <https://safecurves.cr.yp.to> 了解此标准。
+
+此外对于我们前面介绍的 Curve448 与 Curve25519，可以从性能跟安全性方面考量：
+
+- 要更好的性能，可以接受弱一点的安全性：选择 Curve25519
+- 要更好的安全性，可以接受比 Curve25519 慢 3 倍的计算速度：选择 Curve448
+
+对于 openssl，我们可以使用如下命令列出 openssl 支持的所有曲线：
+
+```shell
+openssl ecparam -list_curves
+```
+
+目前已知 OpenSSL 1.0 中没有任何安全曲线，OpenSSL 1.1 添加了对 Ed25519/Ed448 的支持。
 
 ### ECIES - 集成加密方案
 
-TODO
+在文章开头我们已经介绍了集成加密方案 (IES)，它在密钥封装机制（KEM）的基础上，添加了密钥派生算法 KDF、消息认证算法 MAC 等其他密码学算法以达成我们对消息的安全性、真实性、完全性的需求。
 
+而 ECIES 也完全类似，是在 ECC + 对称加密算法的基础上，添加了许多其他的密码学算法实现的。
 
+ECIES 是一个加密框架，而不是某种固定的算法。它可以通过插拔不同的算法，形成不同的实现。
+比如「secp256k1 + Scrypt + AES-GCM + HMAC-SHA512」。
+
+大概就介绍到这里吧，后续就请在需要用到时自行探索相关的细节咯。
 
 ## 参考
 
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
 - [A complete overview of SSL/TLS and its cryptographic system](https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd)
 - [密码发展史之近现代密码 - 中国国家密码管理局][cryptography_history]
-- [ECC 加密算法 - 知乎](https://zhuanlan.zhihu.com/p/38200434)
+- [RFC6090 - Fundamental Elliptic Curve Cryptography Algorithms](https://datatracker.ietf.org/doc/html/rfc6090)
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
 [cryptography_history]: https://www.oscca.gov.cn/sca/zxfw/2017-04/24/content_1011711.shtml
