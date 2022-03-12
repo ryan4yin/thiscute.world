@@ -954,13 +954,27 @@ Curve448 的私钥为 446 位，通常编码为 448 位整数（56 个字节，1
 - 要更好的性能，可以接受弱一点的安全性：选择 Curve25519
 - 要更好的安全性，可以接受比 Curve25519 慢 3 倍的计算速度：选择 Curve448
 
-对于 openssl，我们可以使用如下命令列出 openssl 支持的所有曲线：
+如果你的应用场景中暂时还很难用上 Curve448/Curve25519，你可以考虑一些应用更广泛的其他曲线，但是一定要遵守如下安全规范：
+
+- 模数 p 应该至少有 256 位
+  - 比如 `secp224k1` `secp192k1` 啥的就可以扫进历史尘埃里了
+- 暂时没有想补充的，可以参考 <https://safecurves.cr.yp.to>
+
+
+目前在 TLS 协议以及 JWT 签名算法中，只考虑 ECC 的话，目前应该最广泛的椭圆曲线仍然是 NIST 系列：
+
+- `NIST P-256`
+  - 在 openssl 中对应的名称为 `prime256v1`
+- `NIST P-384`
+  - 在 openssl 中对应的名称为 `secp384r1`
+
+但是我们也看到 Curve25519 正在越来越流行，因为美国政府有前科，NIST 标准被怀疑可能有后门，目前很多人都在推动使用 Curve25519 等社区方案取代掉 NIST 标准曲线。
+
+对于 openssl，如下命令会列出 openssl 支持的所有曲线：
 
 ```shell
 openssl ecparam -list_curves
 ```
-
-目前已知 OpenSSL 1.0 中没有任何安全曲线，OpenSSL 1.1 添加了对 Ed25519/Ed448 的支持。
 
 ### ECIES - 集成加密方案
 
@@ -979,6 +993,7 @@ ECIES 是一个加密框架，而不是某种固定的算法。它可以通过�
 - [A complete overview of SSL/TLS and its cryptographic system](https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd)
 - [密码发展史之近现代密码 - 中国国家密码管理局][cryptography_history]
 - [RFC6090 - Fundamental Elliptic Curve Cryptography Algorithms](https://datatracker.ietf.org/doc/html/rfc6090)
+- [Which elliptic curve should I use?](https://security.stackexchange.com/questions/78621/which-elliptic-curve-should-i-use)
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
 [cryptography_history]: https://www.oscca.gov.cn/sca/zxfw/2017-04/24/content_1011711.shtml
