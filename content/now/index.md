@@ -2,13 +2,38 @@
 title: "此时此刻的我"
 date: 2021-02-01T14:14:35+08:00
 draft: false
+
+toc:
+  enable: false
 ---
 
-## 一、我的学习清单
+## 我正在研究这些
 
-技术上，目前的重点仍然是网络技术与 Kubernetes 技术，Redis/Search/Database 等技术还得靠后排，或许明年吧哈哈。
+- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
+  - 进度 20%
+- 阅读 [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)，同时完成我的密码学笔记
+  - 进度 85%
+- 《在生命的尽头拥抱你-临终关怀医生手记》
+  - 进度 10%
 
-生活上呢，就完全看个人兴趣安排了。
+
+## 我最近还想搞搞这些
+
+- 迭代文章 <https://thiscute.world/posts/about-tls-cert/>，补充 TLS 协议的算法细节（tls1.1 tls1.2 tls1.3）、PKI X509 等内容，及其在 K8s 中的应用
+- Envoy 基础：
+  - 官方文档：https://www.envoyproxy.io/docs/envoy/v1.21.1/about_docs
+  - Envoy 入门手册：https://github.com/rootsongjc/envoy-handbook
+- 区块链技术 Web3.0
+  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门
+  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
+- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+
+
+## 我的学习清单
+
+技术上，目前的重点仍然是网络技术与 Kubernetes 技术，缓存/搜索/数据库等技术还得靠后排，或许明年吧哈哈。
+
+生活上，就完全看个人兴趣安排了，目前对音乐、轮滑、阅读比较感兴趣。
 
 ### 最高优先级
 
@@ -23,11 +48,16 @@ draft: false
 阅读（一二三月份，就读这两本吧）：
 
 - [x] 《人间失格》
-- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book) - 70%
-- [ ] 《在生命的尽头拥抱你-临终关怀医生手记》 - 10%
+- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)
+- [ ] 《在生命的尽头拥抱你-临终关怀医生手记》
 
 
 ### 高优先级
+
+- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
+  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
+  - [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler)
+  - [aws/karpenter](https://github.com/aws/karpenter)
 
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - 服务网格
@@ -59,6 +89,10 @@ draft: false
 - 数据库: [SQL进阶教程](https://book.douban.com/subject/27194738/)
 
 ### 中优先级
+
+- 研究 K8s 集群的 Pod 拓扑优化
+  - Pod/Node 亲和性与反亲和性
+  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
 
 - rust 语言
 
@@ -157,175 +191,5 @@ draft: false
   - 语音合成、歌声合成
   - 声学模拟：[揉搓声模拟](http://www.cs.columbia.edu/cg/crumpling/)
 
-
----
-
-## 三、此时此刻的我
-
-主要记录下业余时间我都在干些啥。
-
-### now
-
-目前想做的（按优先级排序）：
-
-- 迭代文章 <https://thiscute.world/posts/about-tls-cert/>，补充 TLS 协议的算法细节（tls1.1 tls1.2 tls1.3）、PKI X509 等内容，及其在 K8s 中的应用
-- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
-- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
-- Envoy 基础：
-  - 官方文档：https://www.envoyproxy.io/docs/envoy/v1.21.1/about_docs
-  - Envoy 入门手册：https://github.com/rootsongjc/envoy-handbook
-- 区块链技术 Web3.0
-  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门
-  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
-
-
-### 2022-03-09
-
-- 发布《写给开发人员的实用密码学》系列第七篇：非对称加密算法，但是暂时只完成了 RSA 部分
-
-### 2022-03-07 - 2022-03-08
-
-- 跟推荐系统大佬一起将服务从 HTTP 切换到 gRPC，效果立竿见影，服务流量下降 50% ~ 60%，延迟下降 30% ~ 50%
-  - 提升了服务性能，降低了 AWS 跨区流量成本
-
-### 2022-03-05 - 2022-03-06
-
-- 发布《写给开发人员的实用密码学》系列的第六篇：对称加密算法
-
-### 2022-03-01
-
-- 深圳疫情形式严峻，开始居家办公
-- 整理润色后，发布《写给开发人员的实用密码学》前五篇的内容
-
-### 2022-02-19 - 2022-02-25
-
-- 阅读 [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)，同时完成我的密码学笔记
-- 完成了《写给开发人员的实用密码学》前五篇的草稿。
-- [研究 istio 的 gRPC 支持与监控指标](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/Istio%20%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87.md)
-
-### 2022-02-17
-
-- 发现我们的 EKS 集群主使用的是 AWS Spot 实例，这类实例的 c6i/c6g 性能与价格差距并不高，做 ARM 化的 ROI 貌似并不高
-- 发现对 aws 的 RDS/EC2-Volume/Redis 等资源进行全面评估，删掉闲置资源、缩小实例/集群规格，可以轻易节省大量成本（说明以前申请资源时风格比较豪放 2333）
-- 继续迭代个人博客
-
-### 2022-02-07 - 2022-02-16
-
-- 迭代我的独立博客 <https://thiscute.world>
-  - 添加「阅读排行」页，定期从 Google Analytics 同步数据
-  - 从博客园迁移部分有价值的文章到独立博客
-
-
-### 2022-01-01
-
-- 了解 APISIX/Nginx/Envoy 中的各种负载均衡算法，及其适用场景、局限性。
-
-### 2021-12-12
-
-- 练习二个半小时轮滑，学会了压步转弯技术
-- 无聊，但是又啥都不想干，耽于网络小说...
-- 感觉有点现充了，感觉需要找个更明确的、能给人动力的目标
-  - 做个三年的职业规划以及生活规划？
-
-### 2021-11-21
-
-- 轮滑：复习前双鱼、前剪、前蛇，尝试侧压步、倒滑
-
-### 2021-11-08 - 2021-11-12
-
-- 将上次 EKS 升级过程中，有问题的服务迁移到 1.21 的 EKS 集群，直接切线上流量测试。
-  - 复现了问题，通过 JFR + pods 数量监控，确认到是服务链路上的个别服务频繁扩缩容导致的，这些服务比较重，对扩缩容比较敏感。
-  - 测试在 HPA 中添加 behavior 降低缩容速率，同时添加上 PodDisruptionBudget 以避免节点回收导致大量 Pod 被回收，经测试问题基本解决。
-- 遭遇 AWS EKS 托管的控制平面故障，controller-manager 挂了一整天。现象非常奇怪，又是第一次遇到，导致长时间未排查到问题。
-  - 确认问题来自 HPA behavior 的 Bug
-    1. 储存于 etcd 中的 object 仅会有一个版本，透过 apiserver 读取时会转换成请求的 autoscaling API 版本。
-    2. autoscaling/v2beta2 scaleUp 及 scaleDown 对象不能为 null，并在[其 Kubernetse 代码](https://github.com/kubernetes/kubernetes/blob/6ac2d8edc8606ab387924b8b865b4a69630080e0/pkg/apis/autoscaling/v2/defaults.go#L104)可以查看到相应的检查机制。
-    3. 当使用 autoscaling/v1 时，v2beta2 版本中的相关对象字段将作为 annotation 保留，apiserver 不会检查 ScaleUp/ScaleDown 的 annotation是否为 non-null，而导致 kube-controller-manager panic 问题。
-    4. 我们可以使用 v1 或 v2beta2 创建一个 HPA 对象，然后使用 v1 或 v2beta2 读取、更新或删除该对象。 etcd 中存储的对象只有一个版本，每当您使用 v1 或 v2beta2 获取 HPA 对象时，apiserver 从 etcd 读取它，然后将其转换为您请求的版本。
-    5. 在使用 kubectl 时，客户端将默认使用 v1(`kubectl get hpa`)，因此我们必须明确请求 v2beta2 才能使用这些功能(`kubectl get hpa.v2beta2.autoscaling`)
-    6. 如果在更新 v1 版本的 HPA 时（kubectl 默认用 v1），手动修改了 v2beta2 功能相关的 annotation 将 scaleUp/scaleDown 设为 null，会导致 controller-manager 挂掉.
-
-
-### 2021-10-23
-
-- 跟公司冲浪小分队，第一次玩冲浪，最佳成绩是在板上站了大概 6s...
-
-### 2021-10/11 - 2021-10-19
-
-- 将 EKS 集群从 1.17 升级到 1.21（新建集群切量的方式），但是遇到部分服务迁移后可用率抖动。
-  - 未定位到原因，升级失败，回滚了流量。
-
-### 2021-09-13 - 2021-09-17
-
-- 学习极客时间《10X程序员工作法》
-  - 以终推始
-  - 识别关键问题
-  - ownership
-
-### 2021-09-02 - 2021-09-11
-
-- EKS 集群升级
-  - 了解 EKS 集群的原地升级的细节
-  - 输出 EKS 集群原地升级的测试方案，以及生产环境的 EKS 集群升级方案
-- 学习使用 kubeadm+containerd 部署 k8s 测试集群
-  - 涉及到的组件：Kuberntes 控制面、网络插件 Cilium、kube-proxy、coredns、containerd
-
-### 2021-08-31 - 2021-09-01
-
-- 思考我在工作中遇到的一些非技术问题，寻找解法
-    - 效率：如何在没人 push 的情况下（没有外部压力），维持住高效率的工作状态（早早干完活下班它不香么？）。
-      - 建立有效的「自检」与「纠错」机制
-        - 自检：
-          - 列出目前已知的「异常」和「健康」两类工作状态，每日做一个对比。
-          - 每日都列一下详细的工作计划，精确到小时（预留 1 小时 buffer 应对临时需求）。
-    - 沟通：遇到问题（各种意义上的问题）时，及时沟通清楚再继续推进，是一件 ROI 非常高的事。否则几乎肯定会在后面的某个节点，被这个问题坑一把。
-    - 目前的关键目标是啥？存在哪些关键问题（实现关键目标最大的阻碍）？我最近做的主要工作，是不是在为关键目标服务？
-  - 如何把安排到手上的事情做好？
-    - 思考这件事情真正的目标的什么？
-      - 比如任务是排查下某服务状态码有无问题，真正的目的应该是想知道服务有没有异常
-    - 达成真正的目标，需要做哪些事？
-      - 不仅仅状态码需要排查，还有服务负载、内存、延迟的分位值，或许都可以看看。
-    - 跟需求方沟通，询问是否真正需要做的，是前面分析得出的事情。
-
-这些问题都是有解法的，关键是思路的转换。
-
----
-
-### 2021-08-28 => 2021-08-29
-
-- 容器底层原理：
-  - linux namespace 与 cgroups
-  - linux 虚拟网络接口 macvlan/ipvlan、vlan、vxlan
-
----
-
-### 2021-08-19 => 2021-08-23
-
-- 阅读 rust 语言的官方文档：the book
-- 边读文档边做 rustlings 的小习题
-  - 目前完成了除 macros 之外的所有题
-  - 遇到的最难的题：conversions/{try_from_into, from_str}
-- 使用 rust 重写了一版 video2chars
-
----
-
-### 2021-08-12 => 2021-08-16
-
-- Linux 的虚拟网络接口
-- Linux 的 netfilter 网络处理框架，以及其子项目 iptables/conntrack
-
----
-
-### 2021-03-11 => 2021-08-09
-
-- 学习 nginx - openresty - apisix
-- 工作中，在自己负责的领域，建立起 ownership
-- 学习新公司的工作模式：OKR 工作法
-- 学习新公司的思维模式（识别关键问题）
-  - 如何从公司的角度去思考问题，找到我们目前最应该做的事情
-  - 从以下角度去评价一件事情的重要性
-    - 这件事情对我们目前的目标有多大帮助？
-    - 需要投入多少资源和人力？
-    - 在推进过程中，有哪些阶段性成果或者 check point？
 
 ---
