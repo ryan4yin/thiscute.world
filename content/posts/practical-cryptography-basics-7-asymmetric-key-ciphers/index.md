@@ -640,6 +640,9 @@ $$
 首先，跟 RSA 一样，让我们先看下怎么使用 openssl 生成一个使用 prime256v1 曲线的 ECC 密钥对：
 
 ```shell
+# 列出 openssl 支持的所有曲线名称
+openssl ecparam -list_curves
+
 # 生成 ec 算法的私钥，使用 prime256v1 算法，密钥长度 256 位。（强度大于 2048 位的 RSA 密钥）
 openssl ecparam -genkey -name prime256v1 -out ecc-private-key.pem
 # 通过密钥生成公钥
