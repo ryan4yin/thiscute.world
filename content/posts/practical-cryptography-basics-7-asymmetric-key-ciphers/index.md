@@ -1,7 +1,7 @@
 ---
 title: "写给开发人员的实用密码学（七）—— 非对称密钥加密算法"
 date: 2022-03-09T20:50:00+08:00
-lastmod: 2022-03-09T20:50:00+08:00
+lastmod: 2022-03-13T01:17:00+08:00
 draft: false
 resources:
 - name: "featured-image"
@@ -17,7 +17,6 @@ code:
   maxShownLines: 100
 ---
 
->本文仍然在优化文章质量、补充原文缺失的细节、代码示例。另外 ECC/DHKE 部分还未完成翻译。
 
 >本文大部分内容翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是笔者也补充了许多文字内容、代码示例及算法细节。
 
