@@ -126,9 +126,64 @@ DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学�
 
 [Elliptic-Curve Diffie-Hellman (ECDH)](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman) 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。
 
-ECDH 是经典 DHKE 协议的变体，其中模幂计算被椭圆曲线计算取代，以提高安全性。
+ECDH 是经典 DHKE 协议的变体，其中模幂计算被椭圆曲线的乘法计算取代，以提高安全性。
 
-TODO
+ECDH 跟前面介绍的 DHKE 非常相似，只要你理解了椭圆曲线的数学原理，结合前面已经介绍了的 DHKE，基本上可以秒懂。
+我**会在后面「非对称算法」一文中简单介绍椭圆曲线的数学原理**，不过这里也可以先提一下 ECDH 依赖的公式（其中 $a, b$ 为常数，$G$ 为椭圆曲线上的某一点的坐标 ${x, y}$）：
+
+$$
+(a * G) * b = (b * G) * a
+$$
+
+这个公式还是挺直观的吧，感觉小学生也能理解个大概。
+下面简单介绍下 ECDH 的流程：
+
+- Alice 跟 Bob 协商好椭圆曲线的各项参数，以及基点 G，这些参数都是公开的。
+- Alice 生成一个随机的 ECC 密钥对（公钥：$alicePrivate * G$, 私钥: $alicePrivate$）
+- Bob 生成一个随机的 ECC 密钥对（公钥：$bobPrivate * G$, 私钥: $bobPrivate$）
+- 两人通过不安全的信道交换公钥
+- Alice 将 Bob 的公钥乘上自己的私钥，得到共享密钥 $sharedKey = (bobPrivate * G) * alicePrivate$
+- Bob 将 Alice 的公钥乘上自己的私钥，得到共享密钥 $sharedKey = (alicePrivate * G) * bobPrivate$
+- 因为前面提到的公式，Alice 与 Bob 计算出的共享密钥应该是相等的
+
+这样两方就通过 ECDH 完成了密钥交换。
+
+而 ECDH 的安全性，则由 ECDLP 问题提供保证。
+这个问题是说，「通过公开的 $kG$ 以及 $G$ 这两个参数，目前没有有效的手段能快速求解出 $k$ 的值。」
+
+从上面的流程中能看到，公钥就是 ECDLP 中的 $kG$，另外 $G$ 也是公开的，而私钥就是 ECDLP 中的 $k$。
+因为 ECDLP 问题的存在，攻击者破解不出 Alice 跟 Bob 的私钥。
+
+代码示例：
+
+```python
+# pip install tinyec  # ECC 曲线库
+from tinyec import registry
+import secrets
+
+def compress(pubKey):
+    return hex(pubKey.x) + hex(pubKey.y % 2)[2:]
+
+curve = registry.get_curve('brainpoolP256r1')
+
+alicePrivKey = secrets.randbelow(curve.field.n)
+alicePubKey = alicePrivKey * curve.g
+print("Alice public key:", compress(alicePubKey))
+
+bobPrivKey = secrets.randbelow(curve.field.n)
+bobPubKey = bobPrivKey * curve.g
+print("Bob public key:", compress(bobPubKey))
+
+print("Now exchange the public keys (e.g. through Internet)")
+
+aliceSharedKey = alicePrivKey * bobPubKey
+print("Alice shared key:", compress(aliceSharedKey))
+
+bobSharedKey = bobPrivKey * alicePubKey
+print("Bob shared key:", compress(bobSharedKey))
+
+print("Equal shared keys:", aliceSharedKey == bobSharedKey)
+```
 
 ## 参考
 

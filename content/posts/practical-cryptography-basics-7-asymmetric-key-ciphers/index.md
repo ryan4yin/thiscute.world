@@ -43,9 +43,13 @@ code:
 在近代密码阶段，所有的密码系统都使用对称密码算法——使用相同的密钥进行加解密。
 当时使用的密码算法在拥有海量计算资源的现代人看来都是非常简单的，我们经常看到各种讲述一二战的谍战片，基本都包含破译电报的片段。
 
-1943 年，美国从破译的日本电报中得知山本五十六将于 4 月 18 日乘中型轰炸机，由 6 架战斗机护航，到中途岛视察时，美国总统罗斯福亲自做出决定截击山本，山本乘坐的飞机在去往中途岛的路上被美军击毁，日本的战争天才山本五十六机毁人亡，日本海军从此一蹶不振。可见密码学的发展甚至直接影响了二战的战局。
+第一二次世界大战期间，无线电被广泛应用于军事通讯，围绕无线电通讯的加密破解攻防战极大地影响了战局。
 
-在二次世界大战中，印第安纳瓦霍土著语言被美军用作密码，美国二战时候特别征摹使用印第安纳瓦霍通信兵。在二次世界大战日美的太平洋战场上，美国海军军部让北墨西哥和亚历桑那印第安纳瓦霍族人使用纳瓦霍语进行情报传递。纳瓦霍语的语法、音调及词汇都极为独特，不为世人所知道，当时纳瓦霍族以外的美国人中，能听懂这种语言的也就一二十人。这是**密码学**和**语言学**的成功结合，纳瓦霍语密码成为历史上从未被破译的密码。
+公元20世纪初，第一次世界大战进行到关键时刻，英国破译密码的专门机构「40号房间」利用缴获的德国密码本破译了著名的「齐默尔曼电报」，其内容显示德国打算联合墨西哥对抗可能会参战的美国，这促使美国放弃中立对德宣战，从而彻底改变了一战的走势。
+
+1943 年，美国从破译的日本电报中得知山本五十六将于 4 月 18 日乘中型轰炸机，由 6 架战斗机护航，到中途岛视察时，美国总统罗斯福亲自做出决定截击山本，山本乘坐的飞机在去往中途岛的路上被美军击毁，战争天才山本五十六机毁人亡，日本海军从此一蹶不振。
+
+此外在二次世界大战中，美军将印第安纳瓦霍土著语言作为密码使用，并特别征摹使用印第安纳瓦霍通信兵。在二次世界大战日美的太平洋战场上，美国海军军部让北墨西哥和亚历桑那印第安纳瓦霍族人使用纳瓦霍语进行情报传递。纳瓦霍语的语法、音调及词汇都极为独特，不为世人所知道，当时纳瓦霍族以外的美国人中，能听懂这种语言的也就一二十人。这是**密码学**和**语言学**的成功结合，纳瓦霍语密码成为历史上从未被破译的密码。
 
 在 1976 年 Malcolm J. Williamson 公开发表了现在被称为「Diffie–Hellman 密钥交换, DHKE」的算法，并提出了「公钥密码学」的概念，这宣告了「近代密码阶段」的终结。
 
@@ -337,7 +341,7 @@ Modulus:
 Exponent: 65537 (0x10001)
 ```
 
-RSA 描述的私钥的结构如下：
+RSA 描述的私钥的结构如下（其中除 $n, d$ 之外的都是冗余信息）：
 
 - `modulus`: 模数 $n$
 - `publicExponent`: 公指数 $e$，固定为 65537 (0x10001)
@@ -371,7 +375,7 @@ RSA 描述的私钥的结构如下：
   - 等式可转换为 $ed = 1 + \phi(n) \cdot k$，其中 $k$ 为整数。
   - 移项得 $e d + \phi(n) \cdot y = 1 = \gcd(e, \phi(n))$，其中 $y=-k$
   - 上面的等式可使用[拓展欧几里得算法](https://zh.wikipedia.org/wiki/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95)求解，wiki 有给出此算法的 Python 实现，非常简洁。
-- 使用 $(n, e)$ 组成公钥，使用 $n, d$ 组成私钥。其他参数可以保存在私钥中，也可丢弃。
+- 使用 $(n, e)$ 组成公钥，使用 $(n, d)$ 组成私钥。其他参数可以保存在私钥中，也可丢弃。
   - $p, q, \phi(n), d$ 四个参数都必须保密，绝不能泄漏！
 - 在现有算力下，想要通过公钥的 $(n, e)$ 推算出 $d$ 是非常困难的，这保证了 RSA 算法的安全性。
 
@@ -387,11 +391,11 @@ private_key = serialization.load_pem_private_key(
     key_path.read_bytes(),
     password=None,
 )
-private_numbers = private_key.private_numbers()
-private_numbers = private_key.private_numbers()
-p = private_numbers.p
-q = private_numbers.q
-e = 65537
+private = private_key.private_numbers()
+public = private_key..public_key().public_numbers()
+p = private.p
+q = private.q
+e = public.e
 phi_n = (p-1) * (q-1)
 
 def extended_euclidean(a, b):
@@ -467,10 +471,168 @@ $$
 - 使用私钥对计算出的 Hash 值进行加密，得到数字签名
 - 其他人使用公开的公钥进行解密出 Hash 值，再对原始数据计算 Hash 值对比，如果一致，就说明数据未被篡改
 
+Python 演示：
+
+```python
+# pip install cryptography==36.0.1
+from hashlib import sha512
+from pathlib import Path
+from cryptography.hazmat.primitives import serialization
+
+key_path = Path("./rsa-private-key.pem")
+private_key = serialization.load_pem_private_key(
+    key_path.read_bytes(),
+    password=None,
+)
+private = private_key.private_numbers()
+public = private_key.public_key().public_numbers()
+d = private.d
+n = public.n
+e = public.e
+
+# RSA sign the message
+msg = b'A message for signing'
+hash = int.from_bytes(sha512(msg).digest(), byteorder='big')
+signature = pow(hash, d, n)
+print("Signature:", hex(signature))
+
+# RSA verify signature
+msg = b'A message for signing'
+hash = int.from_bytes(sha512(msg).digest(), byteorder='big')
+hashFromSignature = pow(signature, e, n)
+print("Signature valid:", hash == hashFromSignature)
+```
+
 
 ## 四、ECC 密码系统
 
-ECC 椭圆曲线密码学，是 RSA 的继任者，新一代的非对称加密算法。
+ECC 椭圆曲线密码学，于 1985 年被首次提出，并于 2004 年开始被广泛应用。
+ECC 被认为是 RSA 的继任者，新一代的非对称加密算法。
+
+其最大的特点在于相同密码强度下，ECC 的密钥和签名的大小都要显著低于 RSA. 256bits 的 ECC 密钥，安全性与 3072bits 的 RSA 密钥安全性相当。
+
+其次 ECC 的密钥对生成、密钥交换与签名算法的速度都要比 RSA 稍快一些。
+
+### 椭圆曲线的数学原理简介
+
+在数学中，椭圆曲线（Elliptic Curves）是一种平面曲线，由如下方程定义的点的集合组成（$A-J$ 均为常数）：
+
+$$
+Ax^3 + Bx^2y + Cxy^2 + Dy^3 + Ex^2 + Fxy + Gy^2 + Hx + Iy + J = 0
+$$
+
+而 ECC 只使用了其中很简单的一个子集（$a, b$ 均为常数）：
+
+$$
+y^2 = x^3 + ax + b
+$$
+
+比如著名的 NIST 曲线 secp256k1 就是基于如下椭圆曲线方程：
+
+$$
+y^2 = x^3 + 7
+$$
+
+
+椭圆曲线大概长这么个形状：
+
+>椭圆曲线跟椭圆的关系，就犹如雷锋跟雷峰塔、Java 跟 JavaScript...
+
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve.png" >}}
+
+你可以通过如下网站手动调整 $a$ 与 $b$ 的值，拖动曲线的交点：
+<https://www.desmos.com/calculator/ialhd71we3?lang=zh-CN>
+
+#### 椭圆曲线上的运算
+
+数学家在椭圆曲线上定义了一些运算规则，ECC 就依赖于这些规则，下面简单介绍下我们用得到的部分。
+
+##### 1. 加法与负元
+
+对于曲线上的任意两点 $A$ 与 $B$，我们定义过 $A, B$ 的直线与曲线的交点为 $-(A+B)$，而 $-(A+B)$ 相对于 x 轴的对称点即为 $A+B$:
+
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-add-operation.png" >}}
+
+上述描述一是定义了椭圆曲线的加法规则，二是定义了椭圆曲线上的负元运算。
+
+##### 2. 二倍运算
+
+在加法规则中，如果 $A=B$，我们定义曲线在 $A$ 点的切线与曲线的交点为 $-2A$，于是得到二倍运算的规则：
+
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-2-times.png" >}}
+
+##### 3. 无穷远点
+
+对于 $(-A) + A$ 这种一个值与其负元本身相加的情况，我们会发现过这两点的直线没有交点，前面定义的加法规则在这种情况下失效。
+为了解决这个问题，我们假设这直线与椭圆曲线相交于无穷远点 $O_{\infty}$.
+
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-ifinite-point.png" >}}
+
+##### 4. k 倍运算
+
+我们在前面已经定义了椭圆曲线上的**加法运算**、**二倍运算**以及**无穷远点**，有了这三个概念，我们就能定义**k 倍运算** 了。
+
+K 倍运算最简单的计算方法，就是不断地进行加法运算，但是也有许多更高效的算法。
+其中最简单的算法是「Double-and-add」，它要求首先 $k$ 拆分成如下形式
+
+$$
+k = k_{0}+2k_{1}+2^{2}k_{2}+\cdots +2^{m}k_{m} \\\\
+\text{其中} k_{0}~..~k_{m}\in \{0,1\},m=\lfloor \log _{2}{k}\rfloor
+$$
+
+然后再迭代计算其中各项的值，它的运算复杂度为 $log_{2}(k)$.
+
+因 Double 和 add 的执行时间不同，根据执行时间就可以知道是执行 Double 还是 add，间接可以推算出 k. 因此这个算法会有计时攻击的风险。
+基于「Double-and-add」修改的蒙哥马利阶梯（Montgomery Ladder）是可以避免计时分析的作法，这里就不详细介绍了。
+
+#### 5. 有限域上的椭圆曲线
+
+椭圆曲线是连续且无限的，而计算机却更擅长处理离散的、存在上限的整数，因此 ECC 使用「有限域上的椭圆曲线」进行计算。
+
+「有限域（也被称作 Galois Filed, 缩写为 GF）」顾名思义，就是指只有有限个数值的域。
+
+有限域上的椭圆曲线方程，通过取模的方式将曲线上的所有值都映射到同一个有限域内。
+有限域 $\mathbb {F} _{p}$ 上的 EC 椭圆曲线方程为：
+
+$$
+y^2 = (x^3 + ax + b) \mod p, 0 \le x \le p
+$$
+
+目前主要有两种有限域在 ECC 中被广泛应用：
+
+- 以素数为模的整数域: $\mathbb {F} _{p}$
+  - 在通用处理器上计算很快
+- 以 2 的幂为模的整数域: $\mathbb {F} _{2^{m}}$
+  - 当使用专用硬件时，计算速度很快
+
+通过限制 x 为整数，并使用取模进行了映射后，椭圆曲线的形状已经面目全非了，它的加减法也不再具有几何意义。
+但是它的一些特性仍然跟椭圆曲线很类似，各种公式基本加个 $\mod p$ 就变成了它的有限域版本：
+
+- 无穷远点 $O_{\infty}$ 是零元，$O_{\infty} + O_{\infty} = O_{\infty}$，$O_{\infty} + P = P$
+- $P_{x, y}$ 的负元为 $P_{x, -y}$,，并且有 $P + (-P) = O_{\infty}$
+- 如果 $P_{x1, y1} + Q_{x2, y2} = R_{x3, y3}$，则其坐标有如下关系
+  - $x3 = (k^2 - x1 - x2) \mod p$
+  - $y3 = (k(x1 - x3) - y1) \mod p$
+  - 斜率 $k$ 的计算
+    - 如果 $P=Q$，则 $k=\dfrac {3x^{2}+a} {2y_{1}}$
+    - 否则 $k=\dfrac {y_{2}-y_{1}} {x_{2}-x_{1}} $
+
+#### ECDLP 椭圆曲线离散对数问题
+
+前面已经介绍了椭圆曲线上的 **k 倍运算** 及相关的高效算法，但是我们还没有涉及到除法。
+
+椭圆曲线上的除法是一个尚未被解决的难题——「ECDLP 椭圆曲线离散对数问题」：
+
+>已知 $kG$ 与基点 $G$，求整数 $k$ 的值。
+
+目前并没有有效的手段可以快速计算出 $k$ 的值。
+比较直观的方法应该是从基点 $G$ 开始不断进行加法运算，直到结果与 $kG$ 相等。
+
+目前已知的 ECDLP 最快的解法所需步骤为 $\sqrt{k}$，而 **k 倍运算**高效算法前面已经介绍过了，所需步骤为 $log_2(k)$。
+在 $k$ 非常大的情况下，它们的计算用时将会有指数级的差距。
+
+>椭圆曲线上的 **k 倍运算**与素数上的幂运算很类似，因此 ECC 底层的数学难题 ECDLP 与 RSA 的离散对数问题 DLP 也有很大相似性。
+
 
 ### ECC 密钥对生成
 
@@ -534,19 +696,102 @@ NIST CURVE: P-256
 
 可以看到 ECC 算法的公钥私钥都比 RSA 小了非常多，数据量小，却能带来同等的安全强度，这是 ECC 相比 RSA 最大的优势。
 
+私钥的参数：
+
+- `priv`: 私钥，一个 256bits 的大整数，对应我们前面介绍的 $k 倍运算$中的 $k$
+- `pub`: 公钥，是一个椭圆曲线（EC）上的坐标 ${x, y}$，也就是我们 well-known 的基点 $G$
+- `ASN1 OID`: prime256v1, 椭圆曲线的名称
+- `NIST CURVE`: P-256
+
+使用安全随机数生成器即可直接生成出 ECC 的私钥 `priv`，因此 ECC 的密钥对生成速度非常快。
+
+### ECDH 密钥交换
+
+这个在前面[写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)已经介绍过了，不过这里再复述一遍：
+
+- Alice 跟 Bob 协商好椭圆曲线的各项参数，以及基点 G，这些参数都是公开的。
+- Alice 生成一个随机的 ECC 密钥对（公钥：$alicePrivate * G$, 私钥: $alicePrivate$）
+- Bob 生成一个随机的 ECC 密钥对（公钥：$bobPrivate * G$, 私钥: $bobPrivate$）
+- 两人通过不安全的信道交换公钥
+- Alice 将 Bob 的公钥乘上自己的私钥，得到共享密钥 $sharedKey = (bobPrivate * G) * alicePrivate$
+- Bob 将 Alice 的公钥乘上自己的私钥，得到共享密钥 $sharedKey = (alicePrivate * G) * bobPrivate$
+- 因为 $(a * G) * b = (b * G) * a$，Alice 与 Bob 计算出的共享密钥应该是相等的
+
+这样两方就通过 ECDH 完成了密钥交换。
+而 ECDH 的安全性，则由 ECDLP 问题提供保证。
+
 ### ECC 加密与解密
 
-TODO
+ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECDH 迂回实现加解密。流程如下：
+
+- Bob 想要将消息 `M` 安全地发送给 Alice，他手上已经拥有了 Alice 的 ECC 公钥 `alicePubKey`
+- Bob 首先使用如下算法生成出「共享密钥」+「密文公钥」
+  - 随机生成一个 ECC 密钥对
+    - 私钥：安全随机数 `ciphertextPrivKey`
+    - 公钥：`ciphertextPubKey = ciphertextPrivKey * G`
+  - 使用 ECDH 计算出共享密钥：$sharedECCKey = alicePubKey * ciphertextPrivKey$
+- Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 `C`
+  - 比如使用 AES-256-GCM 或者 ChaCha20-Poly1305 进行对称加密
+- Bob 将 `C` + `ciphertextPubKey` 打包传输给 Alice
+- Alice 使用 `ciphertextPubKey` 与自己的私钥计算出共享密钥 `sharedECCKey = ciphertextPubKey * alicePrivKey`
+- Alice 使用计算出的共享密钥解密 `C` 得到消息 `M`
+
 
 ### ECC 数字签名
 
-前面已经介绍了 RSA 签名，这里介绍下 ECDSA 跟 EdDSA Ed25519 签名算法。
+前面已经介绍了 RSA 签名，这里介绍下基于 ECC 的签名算法。
 
-TODO
+基于 ECC 的签名算法主要有两种：ECDSA 与 EdDSA，以及 EdDSA 的变体。
+其中 ECDSA 算法稍微有点复杂，而安全强度跟它基本一致的 EdDSA 的算法更简洁更易于理解，在使用特定曲线的情况下 EdDSA 还要比 ECDSA 更快一点，因此现在通常更推荐使用 **EdDSA** 算法。
 
-### ECDLP 椭圆曲线离散对数问题与 ECC 安全强度
+#### EdDSA 与 Ed25519 签名算法
 
-TODO
+EdDSA（Edwards-curve Digital Signature Algorithm）是一种现代的安全数字签名算法，它使用专为性能优化的椭圆曲线，如 255bits 曲线 edwards25519 和 448bits 曲线 edwards448.
+
+EdDSA 签名算法及其变体 Ed25519 和 Ed448 在技术上在 [RFC8032](https://tools.ietf.org/html/rfc8032) 中进行了描述。
+
+首先，用户需要基于 edwards25519 或者 edwards448 曲线，生成一个 ECC 密钥对。
+生成私钥的时候，算法首先生成一个随机数，然后会对随机数做一些变换以确保安全性，防范计时攻击等攻击手段。
+对于 edwards25519 公私钥都是 32 字节，而对于 edwards448 公私钥都是 57 字节。
+
+对于 edwards25519 输出的签名长度为 64 字节，而对于 Ed448 输出为 114 字节。
+
+具体的算法虽然比 ECDSA 简单，但还是有点难度的，这里就直接略过了。
+
+
+下面给出个 ed25519 的计算示例：
+
+```python
+# pip install cryptography==36.0.1
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+# 也可用 openssl 生成，都没啥毛病
+private_key = Ed25519PrivateKey.generate()
+
+# 签名
+signature = private_key.sign(b"my authenticated message")
+
+# 显然 ECC 的公钥 kG 也能直接从私钥 k 生成
+public_key = private_key.public_key()
+# 验证
+# Raises InvalidSignature if verification fails
+public_key.verify(signature, b"my authenticated message")
+```
+
+ed448 的代码也完全类似：
+
+```python
+# pip install cryptography==36.0.1
+from cryptography.hazmat.primitives.asymmetric.ed448 import Ed448PrivateKey
+
+private_key = Ed448PrivateKey.generate()
+signature = private_key.sign(b"my authenticated message")
+public_key = private_key.public_key()
+# Raises InvalidSignature if verification fails
+public_key.verify(signature, b"my authenticated message")
+```
+
+
 
 ### 密码学常用椭圆曲线介绍
 
@@ -568,7 +813,7 @@ TODO
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
 - [A complete overview of SSL/TLS and its cryptographic system](https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd)
 - [密码发展史之近现代密码 - 中国国家密码管理局][cryptography_history]
-
+- [ECC 加密算法 - 知乎](https://zhuanlan.zhihu.com/p/38200434)
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
 [cryptography_history]: https://www.oscca.gov.cn/sca/zxfw/2017-04/24/content_1011711.shtml
