@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-4-secure-random-generators/><link rel=next href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（五）—— 密钥交换与 DHKE","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/dhke.png","width":1249,"height":381}],"genre":"posts","keywords":"Cryptography, 密码学, 密钥交换, 安全","wordcount":2399,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/","datePublished":"2022-03-01T17:15:05+08:00","dateModified":"2022-03-01T17:15:05+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-4-secure-random-generators/><link rel=next href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（五）—— 密钥交换与 DHKE","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/dhke.png","width":1249,"height":381}],"genre":"posts","keywords":"Cryptography, 密码学, 密钥交换, 安全","wordcount":3061,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/","datePublished":"2022-03-01T17:15:05+08:00","dateModified":"2022-03-01T17:15:05+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,8 +89,8 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（五）—— 密钥交换与 DHKE</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-01>2022-03-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2399 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-01>2022-03-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3061 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-5-key-exchange/dhke.png data-srcset="/posts/practical-cryptography-basics-5-key-exchange/dhke.png, /posts/practical-cryptography-basics-5-key-exchange/dhke.png 1.5x, /posts/practical-cryptography-basics-5-key-exchange/dhke.png 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-5-key-exchange/dhke.png title=/posts/practical-cryptography-basics-5-key-exchange/dhke.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>目录</span>
@@ -217,9 +217,88 @@ $$</p>
 <p>DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学中众所周知的离散对数问题（DLP）的变体，目前还不存在有效的算法。</p>
 <h3 id=2-基于椭圆曲线的-ecdh-协议>2. 基于椭圆曲线的 ECDH 协议</h3>
 <p><a href=https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman target=_blank rel="noopener noreferrer">Elliptic-Curve Diffie-Hellman (ECDH)</a> 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。</p>
-<p>ECDH 是经典 DHKE 协议的变体，其中模幂计算被椭圆曲线计算取代，以提高安全性。</p>
-<p>TODO</p>
-<h2 id=参考>参考</h2>
+<p>ECDH 是经典 DHKE 协议的变体，其中模幂计算被椭圆曲线的乘法计算取代，以提高安全性。</p>
+<p>ECDH 跟前面介绍的 DHKE 非常相似，只要你理解了椭圆曲线的数学原理，结合前面已经介绍了的 DHKE，基本上可以秒懂。
+我<strong>会在后面「非对称算法」一文中简单介绍椭圆曲线的数学原理</strong>，不过这里也可以先提一下 ECDH 依赖的公式（其中 $a, b$ 为常数，$G$ 为椭圆曲线上的某一点的坐标 ${x, y}$）：</p>
+<p>$$
+(a * G) * b = (b * G) * a
+$$</p>
+<p>这个公式还是挺直观的吧，感觉小学生也能理解个大概。
+下面简单介绍下 ECDH 的流程：</p>
+<ul>
+<li>Alice 跟 Bob 协商好椭圆曲线的各项参数，以及基点 G，这些参数都是公开的。</li>
+<li>Alice 生成一个随机的 ECC 密钥对（公钥：$alicePrivate * G$, 私钥: $alicePrivate$）</li>
+<li>Bob 生成一个随机的 ECC 密钥对（公钥：$bobPrivate * G$, 私钥: $bobPrivate$）</li>
+<li>两人通过不安全的信道交换公钥</li>
+<li>Alice 将 Bob 的公钥乘上自己的私钥，得到共享密钥 $sharedKey = (bobPrivate * G) * alicePrivate$</li>
+<li>Bob 将 Alice 的公钥乘上自己的私钥，得到共享密钥 $sharedKey = (alicePrivate * G) * bobPrivate$</li>
+<li>因为前面提到的公式，Alice 与 Bob 计算出的共享密钥应该是相等的</li>
+</ul>
+<p>这样两方就通过 ECDH 完成了密钥交换。</p>
+<p>而 ECDH 的安全性，则由 ECDLP 问题提供保证。
+这个问题是说，「通过公开的 $kG$ 以及 $G$ 这两个参数，目前没有有效的手段能快速求解出 $k$ 的值。」</p>
+<p>从上面的流程中能看到，公钥就是 ECDLP 中的 $kG$，另外 $G$ 也是公开的，而私钥就是 ECDLP 中的 $k$。
+因为 ECDLP 问题的存在，攻击者破解不出 Alice 跟 Bob 的私钥。</p>
+<p>代码示例：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=c1># pip install tinyec  # ECC 曲线库</span>
+<span class=kn>from</span> <span class=nn>tinyec</span> <span class=kn>import</span> <span class=n>registry</span>
+<span class=kn>import</span> <span class=nn>secrets</span>
+
+<span class=k>def</span> <span class=nf>compress</span><span class=p>(</span><span class=n>pubKey</span><span class=p>):</span>
+    <span class=k>return</span> <span class=nb>hex</span><span class=p>(</span><span class=n>pubKey</span><span class=o>.</span><span class=n>x</span><span class=p>)</span> <span class=o>+</span> <span class=nb>hex</span><span class=p>(</span><span class=n>pubKey</span><span class=o>.</span><span class=n>y</span> <span class=o>%</span> <span class=mi>2</span><span class=p>)[</span><span class=mi>2</span><span class=p>:]</span>
+
+<span class=n>curve</span> <span class=o>=</span> <span class=n>registry</span><span class=o>.</span><span class=n>get_curve</span><span class=p>(</span><span class=s1>&#39;brainpoolP256r1&#39;</span><span class=p>)</span>
+
+<span class=n>alicePrivKey</span> <span class=o>=</span> <span class=n>secrets</span><span class=o>.</span><span class=n>randbelow</span><span class=p>(</span><span class=n>curve</span><span class=o>.</span><span class=n>field</span><span class=o>.</span><span class=n>n</span><span class=p>)</span>
+<span class=n>alicePubKey</span> <span class=o>=</span> <span class=n>alicePrivKey</span> <span class=o>*</span> <span class=n>curve</span><span class=o>.</span><span class=n>g</span>
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Alice public key:&#34;</span><span class=p>,</span> <span class=n>compress</span><span class=p>(</span><span class=n>alicePubKey</span><span class=p>))</span>
+
+<span class=n>bobPrivKey</span> <span class=o>=</span> <span class=n>secrets</span><span class=o>.</span><span class=n>randbelow</span><span class=p>(</span><span class=n>curve</span><span class=o>.</span><span class=n>field</span><span class=o>.</span><span class=n>n</span><span class=p>)</span>
+<span class=n>bobPubKey</span> <span class=o>=</span> <span class=n>bobPrivKey</span> <span class=o>*</span> <span class=n>curve</span><span class=o>.</span><span class=n>g</span>
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Bob public key:&#34;</span><span class=p>,</span> <span class=n>compress</span><span class=p>(</span><span class=n>bobPubKey</span><span class=p>))</span>
+
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Now exchange the public keys (e.g. through Internet)&#34;</span><span class=p>)</span>
+
+<span class=n>aliceSharedKey</span> <span class=o>=</span> <span class=n>alicePrivKey</span> <span class=o>*</span> <span class=n>bobPubKey</span>
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Alice shared key:&#34;</span><span class=p>,</span> <span class=n>compress</span><span class=p>(</span><span class=n>aliceSharedKey</span><span class=p>))</span>
+
+<span class=n>bobSharedKey</span> <span class=o>=</span> <span class=n>bobPrivKey</span> <span class=o>*</span> <span class=n>alicePubKey</span>
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Bob shared key:&#34;</span><span class=p>,</span> <span class=n>compress</span><span class=p>(</span><span class=n>bobSharedKey</span><span class=p>))</span>
+
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Equal shared keys:&#34;</span><span class=p>,</span> <span class=n>aliceSharedKey</span> <span class=o>==</span> <span class=n>bobSharedKey</span><span class=p>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=参考>参考</h2>
 <ul>
 <li><a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></li>
 <li><a href=https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd target=_blank rel="noopener noreferrer">A complete overview of SSL/TLS and its cryptographic system</a></li>
