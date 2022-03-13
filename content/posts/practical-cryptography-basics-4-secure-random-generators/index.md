@@ -29,6 +29,7 @@ code:
 - [写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS](/posts/practical-cryptography-basics-5-key-exchange/)
 - [写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
 - [写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC](/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/)
+- [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/about-tls-cert)
 - 待续
 
 
