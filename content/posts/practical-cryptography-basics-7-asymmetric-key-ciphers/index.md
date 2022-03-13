@@ -729,7 +729,7 @@ ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECD
 
 - Bob 想要将消息 `M` 安全地发送给 Alice，他手上已经拥有了 Alice 的 ECC 公钥 `alicePubKey`
 - Bob 首先使用如下算法生成出「共享密钥」+「密文公钥」
-  - 随机生成一个 ECC 密钥对
+  - 随机生成一个临时 ECC 密钥对
     - 私钥：安全随机数 `ciphertextPrivKey`
     - 公钥：`ciphertextPubKey = ciphertextPrivKey * G`
   - 使用 ECDH 计算出共享密钥：$sharedECCKey = alicePubKey * ciphertextPrivKey$
@@ -738,6 +738,56 @@ ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECD
 - Bob 将 `C` + `ciphertextPubKey` 打包传输给 Alice
 - Alice 使用 `ciphertextPubKey` 与自己的私钥计算出共享密钥 `sharedECCKey = ciphertextPubKey * alicePrivKey`
 - Alice 使用计算出的共享密钥解密 `C` 得到消息 `M`
+
+实际上就是消息的发送方先生成一个临时的 ECC 密钥对，然后借助 ECDH 协议计算出共享密钥用于加密。
+消息的接收方同样通过 ECDH 协议计算出共享密钥再解密数据。
+
+使用 Python 演示如下：
+
+```python
+from tinyec import registry
+import secrets
+
+curve = registry.get_curve('brainpoolP256r1')
+
+def compress_point(point):
+    return hex(point.x) + hex(point.y % 2)[2:]
+
+def ecc_calc_encryption_keys(pubKey):
+    """
+    安全地生成一个随机 ECC 密钥对，然后按 ECDH 流程计算出共享密钥 sharedECCKey
+    最后返回（共享密钥, 临时 ECC 公钥 ciphertextPubKey）
+    """
+    ciphertextPrivKey = secrets.randbelow(curve.field.n)
+    ciphertextPubKey = ciphertextPrivKey * curve.g
+    sharedECCKey = pubKey * ciphertextPrivKey
+    return (sharedECCKey, ciphertextPubKey)
+
+def ecc_calc_decryption_key(privKey, ciphertextPubKey):
+    sharedECCKey = ciphertextPubKey * privKey
+    return sharedECCKey
+
+# 1. 首先生成出 Alice 的 ECC 密钥对
+privKey = secrets.randbelow(curve.field.n)
+pubKey = privKey * curve.g
+print("private key:", hex(privKey))
+print("public key:", compress_point(pubKey))
+
+# 2. Alice 将公钥发送给 Bob
+
+# 3. Bob 使用 Alice 的公钥生成出（共享密钥, 临时 ECC 公钥 ciphertextPubKey）
+(encryptKey, ciphertextPubKey) = ecc_calc_encryption_keys(pubKey)
+print("ciphertext pubKey:", compress_point(ciphertextPubKey))
+print("encryption key:", compress_point(encryptKey))
+
+# 4. Bob 使用共享密钥 encryptKey 加密数据，然后将密文与 ciphertextPubKey 一起发送给 Alice
+
+# 5. Alice 使用自己的私钥 + ciphertextPubKey 计算出共享密钥 decryptKey
+decryptKey = ecc_calc_decryption_key(privKey, ciphertextPubKey)
+print("decryption key:", compress_point(decryptKey))
+
+# 6. Alice 使用 decryptKey 解密密文得到原始消息
+```
 
 
 ### ECC 数字签名
