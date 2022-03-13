@@ -122,7 +122,7 @@ socat UDP:192.168.31.123:7000 -
 
 >参考 socat 官方文档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
 
->测试证书及私钥的生成参见 [TLS 协议、TLS 证书、TLS 证书的配置方法、TLS 加密的破解手段]({{< ref "about-tls-cert/index.md" >}})
+>测试证书及私钥的生成参见 [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议]({{< ref "about-tls-cert/index.md" >}})
 
 
 模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：
