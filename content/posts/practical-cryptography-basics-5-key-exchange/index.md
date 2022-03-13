@@ -1,5 +1,5 @@
 ---
-title: "写给开发人员的实用密码学（五）—— 密钥交换与 DHKE"
+title: "写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH"
 date: 2022-03-01T17:15:05+08:00
 draft: false
 resources:
@@ -25,7 +25,7 @@ code:
 - [写给开发人员的实用密码学（二）—— 哈希函数](/posts/practical-cryptography-basics-2-hash/)
 - [写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
 - [写给开发人员的实用密码学（四）—— 安全的随机数生成器](/posts/practical-cryptography-basics-4-secure-random-generators/)
-- [写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)
+- [写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH](/posts/practical-cryptography-basics-5-key-exchange/)
 - [写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
 - [写给开发人员的实用密码学（七）—— 非对称密钥加密算法](/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/)
 - 待续
@@ -86,7 +86,7 @@ DHKE 有两种实现方案：
 
 DHKE 协议也是基于类似的原理，但是使用的是离散对数（discrete logarithms）跟模幂（modular exponentiations ）而不是色彩混合。
 
-### 1. 基于离散对数的 DHKE 协议
+## 三、基于离散对数的 DHKE 协议
 
 首先介绍下「模幂」，它是指求 $g$ 的 $a$ 次幂模 $p$ 的值 $c$ 的过程，其中 $g$ $a$ $c$ 均为整数，公式如下：
 
@@ -120,7 +120,7 @@ $$
 
 DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学中众所周知的离散对数问题（DLP）的变体，目前还不存在有效的算法。
 
-### 2. 基于椭圆曲线的 ECDH 协议
+### 四、基于椭圆曲线的 ECDH 协议
 
 [Elliptic-Curve Diffie-Hellman (ECDH)](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman) 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。
 

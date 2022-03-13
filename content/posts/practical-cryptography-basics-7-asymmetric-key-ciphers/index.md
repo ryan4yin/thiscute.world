@@ -27,7 +27,7 @@ code:
 - [写给开发人员的实用密码学（二）—— 哈希函数](/posts/practical-cryptography-basics-2-hash/)
 - [写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
 - [写给开发人员的实用密码学（四）—— 安全的随机数生成器](/posts/practical-cryptography-basics-4-secure-random-generators/)
-- [写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)
+- [写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH](/posts/practical-cryptography-basics-5-key-exchange/)
 - [写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
 - [写给开发人员的实用密码学（七）—— 非对称密钥加密算法](/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/)
 - 待续
@@ -710,7 +710,7 @@ NIST CURVE: P-256
 
 ### ECDH 密钥交换
 
-这个在前面[写给开发人员的实用密码学（五）—— 密钥交换与 DHKE](/posts/practical-cryptography-basics-5-key-exchange/)已经介绍过了，不过这里再复述一遍：
+这个在前面[写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH](/posts/practical-cryptography-basics-5-key-exchange/)已经介绍过了，不过这里再复述一遍：
 
 - Alice 跟 Bob 协商好椭圆曲线的各项参数，以及基点 G，这些参数都是公开的。
 - Alice 生成一个随机的 ECC 密钥对（公钥：$alicePrivate * G$, 私钥: $alicePrivate$）
