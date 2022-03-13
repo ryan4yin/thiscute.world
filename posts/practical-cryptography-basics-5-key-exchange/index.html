@@ -4,7 +4,7 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=robots content="noodp">
 <meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
-<title>写给开发人员的实用密码学（五）—— 密钥交换与 DHKE - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="写给开发人员的实用密码学（五）—— 密钥交换与 DHKE">
+<title>写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH">
 <meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，但是笔者也补充了许多代码示例及算法细节。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/dhke.png"><meta property="article:section" content="posts">
@@ -12,12 +12,12 @@
 <meta property="article:modified_time" content="2022-03-01T17:15:05+08:00">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/dhke.png">
-<meta name=twitter:title content="写给开发人员的实用密码学（五）—— 密钥交换与 DHKE">
+<meta name=twitter:title content="写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH">
 <meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，但是笔者也补充了许多代码示例及算法细节。">
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-4-secure-random-generators/><link rel=next href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（五）—— 密钥交换与 DHKE","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/dhke.png","width":1249,"height":381}],"genre":"posts","keywords":"Cryptography, 密码学, 密钥交换, 安全","wordcount":3034,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/","datePublished":"2022-03-01T17:15:05+08:00","dateModified":"2022-03-01T17:15:05+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-4-secure-random-generators/><link rel=next href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/dhke.png","width":1249,"height":381}],"genre":"posts","keywords":"Cryptography, 密码学, 密钥交换, 安全","wordcount":3036,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-5-key-exchange\/","datePublished":"2022-03-01T17:15:05+08:00","dateModified":"2022-03-01T17:15:05+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -87,9 +87,9 @@
 <div class=container><div class=toc id=toc-auto>
 <h2 class=toc-title>目录</h2>
 <div class=toc-content id=toc-content-auto></div>
-</div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（五）—— 密钥交换与 DHKE</h1><div class=post-meta>
+</div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-01>2022-03-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3034 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-01>2022-03-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3036 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-5-key-exchange/dhke.png data-srcset="/posts/practical-cryptography-basics-5-key-exchange/dhke.png, /posts/practical-cryptography-basics-5-key-exchange/dhke.png 1.5x, /posts/practical-cryptography-basics-5-key-exchange/dhke.png 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-5-key-exchange/dhke.png title=/posts/practical-cryptography-basics-5-key-exchange/dhke.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -99,10 +99,10 @@
 <div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
 <ul>
 <li><a href=#一前言>一、前言</a></li>
-<li><a href=#二diffiehellman-密钥交换>二、Diffie–Hellman 密钥交换</a>
+<li><a href=#二diffiehellman-密钥交换>二、Diffie–Hellman 密钥交换</a></li>
+<li><a href=#三基于离散对数的-dhke-协议>三、基于离散对数的 DHKE 协议</a>
 <ul>
-<li><a href=#1-基于离散对数的-dhke-协议>1. 基于离散对数的 DHKE 协议</a></li>
-<li><a href=#2-基于椭圆曲线的-ecdh-协议>2. 基于椭圆曲线的 ECDH 协议</a></li>
+<li><a href=#四基于椭圆曲线的-ecdh-协议>四、基于椭圆曲线的 ECDH 协议</a></li>
 </ul>
 </li>
 <li><a href=#参考>参考</a></li>
@@ -117,7 +117,7 @@
 <li><a href=/posts/practical-cryptography-basics-2-hash/ rel>写给开发人员的实用密码学（二）—— 哈希函数</a></li>
 <li><a href=/posts/practical-cryptography-basics-3-key-derivation-function/ rel>写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li>
 <li><a href=/posts/practical-cryptography-basics-4-secure-random-generators/ rel>写给开发人员的实用密码学（四）—— 安全的随机数生成器</a></li>
-<li><a href=/posts/practical-cryptography-basics-5-key-exchange/ rel>写给开发人员的实用密码学（五）—— 密钥交换与 DHKE</a></li>
+<li><a href=/posts/practical-cryptography-basics-5-key-exchange/ rel>写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH</a></li>
 <li><a href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ rel>写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></li>
 <li><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/ rel>写给开发人员的实用密码学（七）—— 非对称密钥加密算法</a></li>
 <li>待续</li>
@@ -170,7 +170,7 @@
 <li>最后 Alice 跟 Bob 再分别将<strong>自己的秘密色彩</strong>，跟<strong>对方的混合色彩</strong>混合，就得到了最终的<strong>秘密色彩</strong>。这个最终色彩只有 Alice 跟 Bob 知道，信道上的任何人都无法猜出来。</li>
 </ul>
 <p>DHKE 协议也是基于类似的原理，但是使用的是离散对数（discrete logarithms）跟模幂（modular exponentiations ）而不是色彩混合。</p>
-<h3 id=1-基于离散对数的-dhke-协议>1. 基于离散对数的 DHKE 协议</h3>
+<h2 id=三基于离散对数的-dhke-协议>三、基于离散对数的 DHKE 协议</h2>
 <p>首先介绍下「模幂」，它是指求 $g$ 的 $a$ 次幂模 $p$ 的值 $c$ 的过程，其中 $g$ $a$ $c$ 均为整数，公式如下：</p>
 <p>$$
 g^a \mod p = c
@@ -212,7 +212,7 @@ $$</p>
 <p>在最常见的 DHKE 实现中（<a href=https://tools.ietf.org/html/rfc3526 target=_blank rel="noopener noreferrer">RFC3526</a>），基数是 $g = 2$，模数 $$ 是一个 1536 到 8192 比特的大素数。
 而整数 <span style=color:green>$p$ $g$ $A$ $B$</span> 通常会使用非常大的数字（1024、2048 或 4096 比特甚至更大）以防范暴力破解。</p>
 <p>DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学中众所周知的离散对数问题（DLP）的变体，目前还不存在有效的算法。</p>
-<h3 id=2-基于椭圆曲线的-ecdh-协议>2. 基于椭圆曲线的 ECDH 协议</h3>
+<h3 id=四基于椭圆曲线的-ecdh-协议>四、基于椭圆曲线的 ECDH 协议</h3>
 <p><a href=https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman target=_blank rel="noopener noreferrer">Elliptic-Curve Diffie-Hellman (ECDH)</a> 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。</p>
 <p>ECDH 是经典 DHKE 协议的变体，其中模幂计算被椭圆曲线的乘法计算取代，以提高安全性。</p>
 <p>ECDH 跟前面介绍的 DHKE 非常相似，只要你理解了椭圆曲线的数学原理，结合前面已经介绍了的 DHKE，基本上可以秒懂。
@@ -311,7 +311,7 @@ $$</p>
 <div class=post-info-line>
 <div class=post-info-md></div>
 <div class=post-info-share>
-<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/ data-title="写给开发人员的实用密码学（五）—— 密钥交换与 DHKE" data-via=ryan4yin data-hashtags=Cryptography,密码学,密钥交换,安全><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/ data-hashtag=Cryptography><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/><i class="fab fa-reddit fa-fw"></i></a></span>
+<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/ data-title="写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH" data-via=ryan4yin data-hashtags=Cryptography,密码学,密钥交换,安全><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/ data-hashtag=Cryptography><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/><i class="fab fa-reddit fa-fw"></i></a></span>
 </div>
 </div>
 </div>
