@@ -110,12 +110,10 @@ code:
 
 #### 1. SHA-2, SHA-256, SHA-512
 
-[SHA-2](https://zh.wikipedia.org/wiki/SHA-2)，即 Secure Hash Algorithm 2，是一组强密码哈希函数：SHA-256（256位哈希）、SHA-384（384位哈希）、SHA-512（512位哈希）等。基于密码概念「Merkle–Damgård construction」，目前被认为是高度安全。 SHA-2 是 SHA-1 的继任者，于 2001 年在美国作为官方加密标准发布。
+[SHA-2](https://zh.wikipedia.org/wiki/SHA-2)，即 Secure Hash Algorithm 2，是一组强密码哈希函数，其成本包括：SHA-256（256位哈希）、SHA-384（384位哈希）、SHA-512（512位哈希）等。基于密码概念「Merkle–Damgård 构造」，目前被认为高度安全。 SHA-2 是 SHA-1 的继任者，于 2001 年在美国作为官方加密标准发布。
 
-SHA-2 在软件开发和密码学中被广泛使用，它被认为在密码学上足够强大，可用于现代商业应用。
-
-SHA-256 被广泛用于比特币区块链，例如用于识别交易哈希和矿工执行的工作证明挖掘。
-
+SHA-2 在软件开发和密码学中被广泛使用，可用于现代商业应用。
+其中 SHA-256 被广泛用于 HTTPS 协议、文件完整性校验、比特币区块链等各种场景。
 
 Python 代码示例：
 
@@ -155,7 +153,7 @@ SHA-512('hello') = 9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673
 在输出的哈希长度相同时，[SHA-3](https://zh.wikipedia.org/wiki/SHA-3)（及其变体 SHA3-224、SHA3-256、SHA3-384、SHA3-512）被认为拥有比 SHA-2（SHA-224、SHA-256、SHA-384、SHA-512）更高的加密强度。
 例如，对于相同的哈希长度（256 位），SHA3-256 提供比 SHA-256 更高的加密强度。
 
-SHA-3 系列函数是 Keccak 哈希家族的代表，它基于密码学概念[海绵函数](https://zh.wikipedia.org/wiki/%E6%B5%B7%E7%B6%BF%E5%87%BD%E6%95%B8)。Keccak 是[SHA3 NIST 比赛](https://en.wikipedia.org/wiki/NIST_hash_function_competition#Finalists)的冠军。
+SHA-3 系列函数是 Keccak 哈希家族的代表，它基于密码学概念[海绵函数](https://zh.wikipedia.org/wiki/%E6%B5%B7%E7%B6%BF%E5%87%BD%E6%95%B8)。而 Keccak 是[SHA3 NIST 比赛](https://en.wikipedia.org/wiki/NIST_hash_function_competition#Finalists)的冠军。
 
 与 SHA-2 不同，SHA-3 系列加密哈希函数不易受到[长度拓展攻击 Length extension attack](https://en.wikipedia.org/wiki/Length_extension_attack).
 
@@ -249,21 +247,21 @@ print("RIPEMD-160({text}) = ", binascii.hexlify(ripemd160).decode("utf-8"))
 
 以下是目前流行的强加密哈希函数，它们都可被用于替代 SHA-2、SHA-3 和 BLAKE2：
 
-- Whirlpool 发布于 2000 年，此算法输出固定的 512 位哈希值。该算法使用512位的密钥，参考了分组密码的思路，使用轮函数加迭代，算法结构与 AES 相似。
+- **Whirlpool** 发布于 2000 年，此算法输出固定的 512 位哈希值。该算法使用512位的密钥，参考了分组密码的思路，使用轮函数加迭代，算法结构与 AES 相似。
 
-- SM3 是中国国密密码杂凑算法标准，由国家密码管理局于 2010 年 12 月公布。它类似于 SHA-256（基于 Merkle-Damgård 结构），输出为 256 位哈希值。
+- **SM3** 是中国国密密码杂凑算法标准，由国家密码管理局于 2010 年 12 月公布。它类似于 SHA-256（基于 Merkle-Damgård 结构），输出为 256 位哈希值。
 
-- GOST（GOST R 34.11-94）哈希函数是俄罗斯的国家标准，它的输出也是 256 位哈希值。
+- **GOST**（GOST R 34.11-94）哈希函数是俄罗斯的国家标准，它的输出也是 256 位哈希值。
 
 以下函数是 SHA-2、SHA-3 和 BLAKE 的不太受欢迎的替代品，它们是[SHA3 NIST 比赛](https://en.wikipedia.org/wiki/NIST_hash_function_competition#Finalists)的决赛入围者
 
-- Skein 能够计算出 128、160、224、256、384、512 和 1024 位哈希值。
-- Grøstl 能够计算出 224、256、384 和 512 位哈希值。
-- JH 能够计算出 224、256、384 和 512 位哈希值。
+- **Skein** 能够计算出 128、160、224、256、384、512 和 1024 位哈希值。
+- **Grøstl** 能够计算出 224、256、384 和 512 位哈希值。
+- **JH** 能够计算出 224、256、384 和 512 位哈希值。
 
 ### 不安全的加密哈希算法
 
-一些老一代的加密哈希算法，如 MD5, SHA-0 和 SHA-1 被认为是不安全的，并且由于加密漏洞（发现碰撞）而被撤回。**不要使用 MD5、SHA-0 和 SHA-1**！这些哈希函数都被证明在密码学上是不安全的。
+一些老一代的加密哈希算法，如 MD5, SHA-0 和 SHA-1 被认为是不安全的，并且都存在已被发现的加密漏洞（碰撞）。**不要使用 MD5、SHA-0 和 SHA-1**！这些哈希函数都已被证明不够安全。
 
 使用这些不安全的哈希算法，可能会导致数字签名被伪造、密码泄漏等严重问题！
 
@@ -272,7 +270,7 @@ print("RIPEMD-160({text}) = ", binascii.hexlify(ripemd160).decode("utf-8"))
 ### PoW 工作量证明哈希函数
 
 区块链中的 Proof-of-Work 工作量证明挖矿算法使用了一类特殊的哈希函数，这些函数是计算密集型和内存密集型的。
-这些哈希函数被设计成需要消耗大量计算资源和大量内存，并且很难在硬件设备（例如集成电路或矿机）中实现，也就难以设计专用硬件来加速计算。这种哈希函数被称为**抗 ASIC**，英文是 ASIC-resistant.
+这些哈希函数被设计成需要消耗大量计算资源和大量内存，并且很难在硬件设备（例如集成电路或矿机）中实现，也就难以设计专用硬件来加速计算。这种哈希函数被称为**抗 ASIC**（ASIC-resistant）。
 
 大部分工作量证明（Proof-of-Work）算法，都是要求计算出一个比特定值（称为挖掘难度）更大的哈希值。
 因为哈希值是不可预测的，为了找出符合条件的哈希值，矿工需要计算数十亿个不同的哈希值，再从中找出最大的那个。
@@ -331,7 +329,7 @@ Equihash 的工作流程：
 有时我们甚至可能不太在意哈希碰撞的概率。
 也有的场景输入是有限的，这时我们可能会希望哈希函数具有可逆性。
 
-总之非加密哈希函数也有非常多的应用，但是不是本文的主题。
+总之非加密哈希函数也有非常多的应用，但不是本文的主题。
 这里就不详细介绍了，有兴趣的朋友们可以自行寻找其他资源。
 
 ## 参考
@@ -342,4 +340,3 @@ Equihash 的工作流程：
 
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
-
