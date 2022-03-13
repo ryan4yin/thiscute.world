@@ -172,14 +172,16 @@
 <h4 id=1-数据完整性校验>1. 数据完整性校验</h4>
 <p>加密哈希函数被广泛用于文件完整性校验。如果你从网上下载的文件计算出的 SHA256 校验和（checksum）跟官方公布的一致，那就说明文件没有损坏。</p>
 <p>但是哈希函数自身不能保证文件的真实性，目前来讲，真实性通常是 TLS 协议要保证的，它确保你在 openssl 网站上看到的「SHA256 校验和」真实无误（未被篡改）。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png data-srcset="/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png, /images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png 1.5x, /images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png 2x" data-sizes=auto alt=/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png title=/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png></p>
+<figure><img src=/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png>
+</figure>
 <blockquote>
 <p>现代网络基本都很难遇到文件损坏的情况了，但是在古早的低速网络中，即使 TCP 跟底层协议已经有多种数据纠错手段，下载完成的文件仍然是有可能损坏的。
 这也是以前 rar 压缩格式很流行的原因之一—— rar 压缩文件拥有一定程度上的自我修复能力，传输过程中损坏少量数据，仍然能正常解压。</p>
 </blockquote>
 <h4 id=2-保存密码>2. 保存密码</h4>
 <p>加密哈希函数还被用于密码的安全存储，现代系统使用专门设计的安全哈希算法计算用户密码的哈希摘要，保存到数据库中，这样能确保密码的安全性。除了用户自己，没有人清楚该密码的原始数据，即使数据库管理员也只能看到一个哈希摘要。</p>
-<p><img class=lazyload src=/svg/loading.min.svg data-src=/images/practical-cryptography-basics-2-hash/sha512-password-hash.png data-srcset="/images/practical-cryptography-basics-2-hash/sha512-password-hash.png, /images/practical-cryptography-basics-2-hash/sha512-password-hash.png 1.5x, /images/practical-cryptography-basics-2-hash/sha512-password-hash.png 2x" data-sizes=auto alt=/images/practical-cryptography-basics-2-hash/sha512-password-hash.png title=/images/practical-cryptography-basics-2-hash/sha512-password-hash.png></p>
+<figure><img src=/images/practical-cryptography-basics-2-hash/sha512-password-hash.png>
+</figure>
 <h4 id=3-生成唯一-id>3. 生成唯一 ID</h4>
 <p>加密哈希函数也被用于为文档或消息生成（绝大多数情况下）唯一的 ID，因此哈希值也被称为<strong>数字指纹</strong>。</p>
 <blockquote>
