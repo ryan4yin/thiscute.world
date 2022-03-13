@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=next href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全, AES, ChaCha20","wordcount":8034,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=next href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全, AES, ChaCha20","wordcount":8283,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-6-symmetric-key-ciphers\/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8034 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8283 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 17 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg data-srcset="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 1.5x, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg title=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -115,15 +115,19 @@
 </li>
 <li><a href=#四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</a>
 <ul>
-<li><a href=#0-对称认证加密算法-ae--aead>0. 对称认证加密算法 AE / AEAD</a></li>
 <li><a href=#1-安全的对称加密算法>1. 安全的对称加密算法</a>
 <ul>
 <li><a href=#1-aes-rijndael>1. AES (Rijndael)</a></li>
-<li><a href=#2-salsa20--chacha20>2. Salsa20 / ChaCha20</a></li>
+<li><a href=#2-salsa20--chacha20>2. Salsa20 / ChaCha20</a>
+<ul>
+<li><a href=#chacha20-poly1305>ChaCha20-Poly1305</a></li>
+</ul>
+</li>
 <li><a href=#3-其他流行的对称加密算法>3. 其他流行的对称加密算法</a></li>
 </ul>
 </li>
-<li><a href=#不安全的对称加密算法>不安全的对称加密算法</a></li>
+<li><a href=#2-不安全的对称加密算法>2. 不安全的对称加密算法</a></li>
+<li><a href=#对称认证加密算法-ae--aead>对称认证加密算法 AE / AEAD</a></li>
 </ul>
 </li>
 <li><a href=#五aes-算法案例以太坊钱包加密>五、AES 算法案例：以太坊钱包加密</a>
@@ -505,32 +509,8 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 如果您想避免泄露原始明文长度，可以在加密前向明文添加一些随机字节（额外的填充数据），并在解密后将其删除。</p>
 <h2 id=四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</h2>
 <p>前面啰嗦了这么多，下面进入正题：对称加密算法</p>
-<h3 id=0-对称认证加密算法-ae--aead>0. 对称认证加密算法 AE / AEAD</h3>
-<p>我们在前面第三篇文章「MAC 与密钥派生函数 KDF」中介绍过 AE 认证加密及其变体 AEAD.</p>
-<p>一些对称加密方案提供集成身份验证加密（AEAD），比如使用了 GCM 分组模式的加密方案 AES-GCM，而其他加密方案（如 AES-CBC 和 AES-CTR）自身不提供身份验证能力，需要额外添加。</p>
-<p>最流行的认证加密（AEAD）方案：</p>
-<ul>
-<li>ChaCha20-Poly1305
-<ul>
-<li>具有集成 Poly1305 身份验证器的 ChaCha20 流密码（集成身份验证 AEAD 加密）</li>
-<li>使用 256 位密钥和 96 位随机数</li>
-<li>极高的性能</li>
-</ul>
-</li>
-<li>AES-256-GCM
-<ul>
-<li>我们在前面的 GCM 模式一节，使用 Python 实现并验证了这个 AES-256-GCM 加密方案</li>
-<li>使用 256 位密钥和 128 位随机数（初始向量）</li>
-<li>较高的性能</li>
-</ul>
-</li>
-</ul>
-<p>今天的大多数应用程序应该优先选用上面这些加密方案进行对称加密，而不是自己造轮子。
-上述方案是高度安全的、经过验证的、经过良好测试的，并且大多数加密库都已经提供了高效的实现，可以说是开箱即用。</p>
-<p>通常更建议使用 ChaCha20-Poly1305，因为它的性能要强劲很多，在移动设备上比 AES-128-GCM 快 3 倍。</p>
-<p>下一节会简要介绍下 AES-256-GCM 跟 ChaCha20-Poly1305 这两个加密方案。</p>
 <h3 id=1-安全的对称加密算法>1. 安全的对称加密算法</h3>
-<p>这里仅简单介绍下流行的对称加密算法，后面会单独列两小节介绍下 AES 跟 ChaCha20 的算法细节。</p>
+<p>目前应用最广泛的对称加密算法，是 AES 跟 Salsa20 / ChaCha20 这两个系列。</p>
 <h4 id=1-aes-rijndael>1. AES (Rijndael)</h4>
 <blockquote>
 <p>wiki: <a href=https://en.wikipedia.org/wiki/Advanced_Encryption_Standard target=_blank rel="noopener noreferrer">https://en.wikipedia.org/wiki/Advanced_Encryption_Standard</a></p>
@@ -688,7 +668,10 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 </blockquote>
 <p>Salsa20 及其改进的变体 ChaCha（ChaCha8、ChaCha12、ChaCha20）和 XSalsa20 是由密码学家 Daniel Bernstein 设计的现代、快速的对称流密码家族。 Salsa20 密码是对称流密码设计竞赛 eSTREAM（2004-2008）的决赛选手之一，它随后与相关的 BLAKE 哈希函数一起被广泛采用。 Salsa20 及其变体是免版税的，没有专利。</p>
 <p>Salsa20 密码将 128 位或 256 位对称密钥 + 随机生成的 64 位随机数（初始向量）和无限长度的数据流作为输入，并生成长度相同的加密数据流作为输出输入流。</p>
-<p>Salsa20 应用最为广泛的是认证加密方案：ChaCha20-Poly1305，即组合使用 ChaCha20 与消息认证算法 Poly1305. 顺带一提，ChaCha20 与 Poly1305 都是密码学家 Bernstein 设计的。</p>
+<h5 id=chacha20-poly1305>ChaCha20-Poly1305</h5>
+<p>Salsa20 应用最为广泛的是认证加密方案：<a href=https://en.wikipedia.org/wiki/ChaCha20-Poly1305 target=_blank rel="noopener noreferrer">ChaCha20-Poly1305</a>，即组合使用 ChaCha20 与消息认证算法 Poly1305，它们都由密码学家 Bernstein 设计。</p>
+<p>ChaCha20-Poly1305 已被证明足够安全，不过跟 GCM 一样它的安全性也依赖于足够随机的初始向量 IV，另外 ChaCha20-Poly1305 也不容易遭受计时攻击。</p>
+<p>在没有硬件加速的情况下，ChaCha20 通常比 AES 要快得多（比如在旧的没有硬件加速的移动设备上），这是它最大的优势。</p>
 <p>以下是一个 ChaCha20 的 Python 示例：</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -756,7 +739,7 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 </li>
 </ul>
 <p>具体的算法内容这里就不介绍了，有兴趣或者用得到的时候，可以再去仔细了解。</p>
-<h3 id=不安全的对称加密算法>不安全的对称加密算法</h3>
+<h3 id=2-不安全的对称加密算法>2. 不安全的对称加密算法</h3>
 <p>如下这些对称加密算法曾经很流行，但现在被认为是不安全的或有争议的安全性，<strong>不建议再使用</strong>：</p>
 <ul>
 <li>DES - 56 位密钥大小，可以被暴力破解</li>
@@ -770,6 +753,38 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 </li>
 <li>GOST - 俄罗斯 64 位分组密码，有争议的安全性，被认为有风险</li>
 </ul>
+<h3 id=对称认证加密算法-ae--aead>对称认证加密算法 AE / AEAD</h3>
+<p>我们在前面第三篇文章「MAC 与密钥派生函数 KDF」中介绍过 AE 认证加密及其变体 AEAD.</p>
+<p>一些对称加密方案提供集成身份验证加密（AEAD），比如使用了 GCM 分组模式的加密方案 AES-GCM，而其他加密方案（如 AES-CBC 和 AES-CTR）自身不提供身份验证能力，需要额外添加。</p>
+<p>最流行的认证加密（AEAD）方案有如下几个，我们在之前已经简单介绍过它们：</p>
+<ul>
+<li>ChaCha20-Poly1305
+<ul>
+<li>具有集成 Poly1305 身份验证器的 ChaCha20 流密码（集成身份验证 AEAD 加密）</li>
+<li>使用 256 位密钥和 96 位随机数（初始向量）</li>
+<li>极高的性能</li>
+<li>在硬件不支持 AES 加速指令时（如路由器、旧手机等硬件上），推荐使用此算法</li>
+</ul>
+</li>
+<li>AES-256-GCM
+<ul>
+<li>我们在前面的 GCM 模式一节，使用 Python 实现并验证了这个 AES-256-GCM 加密方案</li>
+<li>使用 256 位密钥和 128 位随机数（初始向量）</li>
+<li>较高的性能</li>
+<li>在硬件支持 AES 加速时（如桌面、服务器等场景），更推荐使用此算法</li>
+</ul>
+</li>
+<li>AES-128-GCM
+<ul>
+<li>跟 AES-256-GCM 一样，区别在于它使用 128 位密钥，安全性弱于 ChaCha20-Poly1305 与 AES-256-GCM.</li>
+<li>目前被广泛应用在 HTTPS 等多种加密场景下。</li>
+</ul>
+</li>
+</ul>
+<p>今天的大多数应用程序应该优先选用上面这些加密方案进行对称加密，而不是自己造轮子。
+上述方案是高度安全的、经过验证的、经过良好测试的，并且大多数加密库都已经提供了高效的实现，可以说是开箱即用。</p>
+<p>目前应用最广泛的对称加密方案应该是 AES-128-GCM，
+而 ChaCha20-Poly1305 因为其极高的性能，也越来越多地被应用在 TLS1.2、TLS1.3、QUIC/HTTP3、Wireguard、SSH 等协议中。</p>
 <h2 id=五aes-算法案例以太坊钱包加密>五、AES 算法案例：以太坊钱包加密</h2>
 <p>在这一小节我们研究一个现实中的 AES 应用场景：以太坊区块链的标准加密钱包文件格式。
 我们将看到 AES-128-CTR 密码方案如何与 Scrypt 和 MAC 相结合，通过字符密码安全地实现经过身份验证的对称密钥加密。</p>
