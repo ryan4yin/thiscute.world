@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"密码学, HTTPS, TLS, OpenSSL, PKI, 数字证书, 证书","wordcount":12569,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"密码学, HTTPS, TLS, OpenSSL, PKI, 数字证书, 证书","wordcount":12098,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,8 +89,8 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12569 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 26 分钟&nbsp;</div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12098 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 25 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/about-tls-cert/https-secure.png data-srcset="/posts/about-tls-cert/https-secure.png, /posts/about-tls-cert/https-secure.png 1.5x, /posts/about-tls-cert/https-secure.png 2x" data-sizes=auto alt=/posts/about-tls-cert/https-secure.png title=/posts/about-tls-cert/https-secure.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>目录</span>
@@ -130,39 +130,24 @@
 <li><a href=#9-使用-openssl-验证证书查看证书信息>9. 使用 OpenSSL 验证证书、查看证书信息</a></li>
 </ul>
 </li>
-<li><a href=#二tls-协议>二、TLS 协议</a></li>
-<li><a href=#三服务端与客户端的证书配置>三、服务端与客户端的证书配置</a>
+<li><a href=#二tls-协议>二、TLS 协议</a>
 <ul>
-<li><a href=#1-服务端的证书配置>1. 服务端的证书配置</a>
-<ul>
-<li><a href=#11-完美前向保密>1.1 完美前向保密</a></li>
-</ul>
-</li>
-<li><a href=#2-客户端的-tls-证书配置针对本地签名的证书>2. 客户端的 TLS 证书配置（针对本地签名的证书）</a>
-<ul>
-<li><a href=#21-证书锁定certifacte-pining技术>2.1 证书锁定(Certifacte Pining)技术</a></li>
-<li><a href=#22-公钥锁定public-key-pining>2.2 公钥锁定(Public Key Pining)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href=#五tls-双向认证mutual-tls-authentication-mtls>五、TLS 双向认证(Mutual TLS authentication, mTLS)</a>
+<li><a href=#1-tls-双向认证mutual-tls-authentication-mtls>1. TLS 双向认证(Mutual TLS authentication, mTLS)</a>
 <ul>
 <li><a href=#mtls-的安全性>mTLS 的安全性</a></li>
 </ul>
 </li>
-<li><a href=#六-tls-协议的破解手段>六 TLS 协议的破解手段</a>
+<li><a href=#2-tls-协议攻防战>2. TLS 协议攻防战</a>
 <ul>
-<li><a href=#1-客户端逆向破解手段总结>1. 客户端逆向/破解手段总结</a></li>
+<li><a href=#pfs-完美前向保密>PFS 完美前向保密</a></li>
+<li><a href=#证书锁定certifacte-pining技术>证书锁定（Certifacte Pining）技术</a></li>
+<li><a href=#公钥锁定public-key-pining技术>公钥锁定（Public Key Pining）技术</a></li>
+<li><a href=#tls-协议的逆向手段>TLS 协议的逆向手段</a></li>
 </ul>
 </li>
-<li><a href=#参考>参考</a>
-<ul>
-<li><a href=#密码学算法>密码学算法</a></li>
-<li><a href=#tls-协议>TLS 协议</a></li>
-<li><a href=#tls-证书>TLS 证书</a></li>
 </ul>
 </li>
+<li><a href=#参考>参考</a></li>
 </ul>
 </nav></div>
 </div><div class=content id=content><p>《写给开发人员的实用密码学》系列文章目录:</p>
@@ -301,10 +286,11 @@ X.509 v3 格式被广泛应用在 TLS/SSL 等众多加密通讯协议中，它�
 </li>
 <li>CA 机构使用这些中间证书的私钥，为用户提交的所有 CSR 请求签名</li>
 </ul>
+<p>画个图来表示大概是这么个样子：</p>
+<figure><img src=/images/about-tls-cert/chain-of-trust.png>
+</figure>
 <p>CA 机构也可能会在经过严格审核后，为其他机构签发中间证书，这样就能赋予其他机构签发证书的权利，而且根证书的安全性不受影响。</p>
 <p>如果你访问某个 HTTPS 站点发现浏览器显示小绿锁，那就说明这个证书是由某个权威<strong>认证机构</strong>签发的，其信息是经过这些机构认证的。</p>
-<p>证书链通常只有三层，即「根证书」-「中间证书」-「终端用户证书」。
-著名的证书认证机构有 Let&rsquo;s Encrypt、DigiCert 等。</p>
 <p>部分个人、企业或其他机构（比如金融机构），可能会因为各种原因，生成自己的根证书与中间证书，然后自行签发证书。
 但是这种自己生成的根证书是未内置在操作系统与浏览器中的，为了确保安全性，用户就需要先手动在设备上安装好这个数字证书。
 自行签发证书的案例有：</p>
@@ -904,79 +890,7 @@ openssl verify -CAfile ca.crt server.crt
 <p>TLS 协议通过应用 ECDHE 密钥交换协议，提供了「完美前向保密（Perfect Forward Secrecy）」特性，也就是说它能够保护过去进行的通讯不受密钥在未来暴露的威胁。
 即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，其他事务的数据安全性完全不受影响。</p>
 <p>另外注意一点是，CA 证书和服务端证书都只在 TLS 协议握手的前三个步骤中有用到，之后的通信就与它们无关了。</p>
-<h2 id=三服务端与客户端的证书配置>三、服务端与客户端的证书配置</h2>
-<h3 id=1-服务端的证书配置>1. 服务端的证书配置</h3>
-<p>要支持 HTTPS 协议，服务端需要如下几个文件:</p>
-<ol>
-<li>证书私钥(RSA 私钥或 EC 私钥): <code>server.key</code></li>
-<li>公钥证书: <code>server.crt</code></li>
-<li>中间证书: 这是可选的</li>
-</ol>
-<p>一般如 Nginx 等服务端应用，都可以通过配置文件指定上述文件的位置。修改好参数后重载配置，就支持 HTTPS 协议了。</p>
-<h4 id=11-完美前向保密>1.1 完美前向保密</h4>
-<p>旧版本的 TLS 协议并不一定能保证前向保密，为了保证前向安全，需要在服务端配置中进行一定设置。
-具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target=_blank rel="noopener noreferrer">ssl-config - **mozilla</a>，该网站提供三个安全等级的配置**:</p>
-<ol>
-<li>「Intermediate」: 查看生成出的 <code>ssl-cipher</code> 属性，发现它只支持 <code>ECDHE</code>/<code>DHE</code> 开头的算法。因此它保证前向保密。
-<ul>
-<li>对于需要通过浏览器访问的 API，推荐选择这个等级。</li>
-</ul>
-</li>
-<li>「Mordern」: 只支持 <code>TLSv1.3</code>，该协议废弃掉了过往所有不安全的算法，保证前向保密，安全性极高，性能也更好。
-<ul>
-<li>对于不需要通过浏览器等旧终端访问的 API，请直接选择这个等级。</li>
-</ul>
-</li>
-<li>「Old」: 除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
-</ol>
-<p>另外阿里云负载均衡器配置前向保密的方法参见: <a href=https://help.aliyun.com/document_detail/90740.html target=_blank rel="noopener noreferrer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
-<h3 id=2-客户端的-tls-证书配置针对本地签名的证书>2. 客户端的 TLS 证书配置（针对本地签名的证书）</h3>
-<p>如果你在证书不是权威 CA 机构颁发的，那就需要在客户端将该证书的 CA 证书添加到根证书列表中。
-这个步骤可以在 OS 层面进行——添加到 OS 的默认证书列表中，也可以在代码层面完成——指定使用某个 CA 证书进行证书验证。</p>
-<ol>
-<li>Linux: 使用如下命令安装证书
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>sudo cp ca.crt /usr/local/share/ca-certificates/server.crt
-sudo update-ca-certificates
-</code></pre></td></tr></table>
-</div>
-</div></li>
-<li>Windows: 通过证书管理器 <code>certmgr.msc</code> 将证书安装到 <code>受信任的根证书颁发机构</code>，Chrome 的小锁就能变绿了。</li>
-<li>编程: 使用 HTTPS 客户端的 api 指定使用的 TLS 证书</li>
-<li>Docker-Client: 参见 <a href=https://docs.docker.com/registry/insecure/#use-self-signed-certificates target=_blank rel="noopener noreferrer">Use self-signed certificates - Docker Docs</a></li>
-</ol>
-<h4 id=21-证书锁定certifacte-pining技术>2.1 证书锁定(Certifacte Pining)技术</h4>
-<p>即使使用了 TLS 协议对流量进行加密，并且保证了前向保密，也无法保证流量不被代理！</p>
-<p>这是因为客户端大多是直接依靠了操作系统内置的证书链进行 TLS 证书验证，而 Fiddler 等代理工具可以将自己的 TLS 证书添加到该证书链中。</p>
-<p>为了防止流量被 Fiddler 等工具使用上述方式监听流量，出现了「证书锁定」技术。
-方法是在客户端中硬编码证书的指纹（Hash值，或者直接保存整个证书的内容也行），在建立 TLS 连接前，先计算使用的证书的指纹是否匹配，否则就中断连接。</p>
-<p>这种锁定方式需要以下几个前提才能确保流量不被监听:</p>
-<ol>
-<li>客户端中硬编码的证书指纹不会被篡改。</li>
-<li>指纹验证不能被绕过。
-<ol>
-<li>目前有公开技术（XPosed+JustTrustMe）能破解 Android 上常见的 HTTPS 请求库，直接绕过证书检查。</li>
-<li>针对上述问题，可以考虑加大绕过的难度。或者 App 检测自己是否运行在 Xposed 等虚拟环境下。</li>
-</ol>
-</li>
-<li>用于 TLS 协议的证书不会频繁更换。（如果更换了，指纹就对不上了。）</li>
-</ol>
-<p>而对于第三方的 API，因为我们不知道它们会不会更换 TLS 证书，就不能直接将证书指纹硬编码在客户端中。
-这时可以考虑从服务端获取这些 API 的证书指纹（附带私钥签名用于防伪造）。</p>
-<p>为了实现证书的轮转(rotation)，可以在新版本的客户端中包含多个证书指纹，这样能保证同时有多个可信证书，达成证书的轮转。（类比 JWT 的公钥轮转机制）</p>
-<blockquote>
-<p>证书锁定技术几乎等同于 SSH 协议的 <code>StrictHostKeyChecking</code> 选项，客户端会验证服务端的公钥指纹（key fingerprint），验证不通过则断开连接。</p>
-</blockquote>
-<h4 id=22-公钥锁定public-key-pining>2.2 公钥锁定(Public Key Pining)</h4>
-<p>前面提到过，TLS 证书其实就是公钥+申请者(你)和颁发者(CA)的信息+签名(使用 CA 私钥加密)，因此我们也可以考虑只锁定其中的公钥。</p>
-<p>「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
-<p><strong>如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。</strong></p>
-<h2 id=五tls-双向认证mutual-tls-authentication-mtls>五、TLS 双向认证(Mutual TLS authentication, mTLS)</h2>
+<h3 id=1-tls-双向认证mutual-tls-authentication-mtls>1. TLS 双向认证(Mutual TLS authentication, mTLS)</h3>
 <p>TLS 协议（tls1.0+，RFC: <a href=https://tools.ietf.org/html/rfc5246#section-7.4.4 target=_blank rel="noopener noreferrer">TLS1.2 - RFC5246</a>）中，定义了服务端请求验证客户端证书的方法。这
 个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。</p>
 <p>传统的「TLS 单向认证」技术，只在客户端去验证服务端是否可信。
@@ -1031,7 +945,7 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class=se>\
 </ol>
 </li>
 </ol>
-<h3 id=mtls-的安全性>mTLS 的安全性</h3>
+<h4 id=mtls-的安全性>mTLS 的安全性</h4>
 <p>如果将 mTLS 用在 App 安全上，存在的风险是:</p>
 <ol>
 <li>客户端中隐藏的证书是否可以被提取出来，或者黑客能否 Hook 进 App 中，直接使用证书发送信息。</li>
@@ -1051,8 +965,51 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class=se>\
 </ol>
 </li>
 </ol>
-<h2 id=六-tls-协议的破解手段>六 TLS 协议的破解手段</h2>
-<h3 id=1-客户端逆向破解手段总结>1. 客户端逆向/破解手段总结</h3>
+<h3 id=2-tls-协议攻防战>2. TLS 协议攻防战</h3>
+<h4 id=pfs-完美前向保密>PFS 完美前向保密</h4>
+<p>旧版本的 TLS 协议并不一定能保证前向保密，为了保证前向安全，需要在服务端配置中进行一定设置。
+具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target=_blank rel="noopener noreferrer">ssl-config - **mozilla</a>，该网站提供三个安全等级的配置**:</p>
+<ol>
+<li>「Intermediate」: 查看生成出的 <code>ssl-cipher</code> 属性，发现它只支持 <code>ECDHE</code>/<code>DHE</code> 开头的算法。因此它保证前向保密。
+<ul>
+<li>对于需要通过浏览器访问的 API，推荐选择这个等级。</li>
+</ul>
+</li>
+<li>「Mordern」: 只支持 <code>TLSv1.3</code>，该协议废弃掉了过往所有不安全的算法，保证前向保密，安全性极高，性能也更好。
+<ul>
+<li>对于不需要通过浏览器等旧终端访问的 API，请直接选择这个等级。</li>
+</ul>
+</li>
+<li>「Old」: 除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
+</ol>
+<p>另外阿里云负载均衡器配置前向保密的方法参见: <a href=https://help.aliyun.com/document_detail/90740.html target=_blank rel="noopener noreferrer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
+<h4 id=证书锁定certifacte-pining技术>证书锁定（Certifacte Pining）技术</h4>
+<p>即使使用了 TLS 协议对流量进行加密，并且保证了前向保密，也无法保证流量不被代理！</p>
+<p>这是因为客户端大多是直接依靠了操作系统内置的证书链进行 TLS 证书验证，而 Fiddler 等代理工具可以将自己的 TLS 证书添加到该证书链中。</p>
+<p>为了防止流量被 Fiddler 等工具使用上述方式监听流量，出现了「证书锁定」技术。
+方法是在客户端中硬编码证书的指纹（Hash值，或者直接保存整个证书的内容也行），在建立 TLS 连接前，先计算使用的证书的指纹是否匹配，否则就中断连接。</p>
+<p>这种锁定方式需要以下几个前提才能确保流量不被监听:</p>
+<ol>
+<li>客户端中硬编码的证书指纹不会被篡改。</li>
+<li>指纹验证不能被绕过。
+<ol>
+<li>目前有公开技术（XPosed+JustTrustMe）能破解 Android 上常见的 HTTPS 请求库，直接绕过证书检查。</li>
+<li>针对上述问题，可以考虑加大绕过的难度。或者 App 检测自己是否运行在 Xposed 等虚拟环境下。</li>
+</ol>
+</li>
+<li>用于 TLS 协议的证书不会频繁更换。（如果更换了，指纹就对不上了。）</li>
+</ol>
+<p>而对于第三方的 API，因为我们不知道它们会不会更换 TLS 证书，就不能直接将证书指纹硬编码在客户端中。
+这时可以考虑从服务端获取这些 API 的证书指纹（附带私钥签名用于防伪造）。</p>
+<p>为了实现证书的轮转(rotation)，可以在新版本的客户端中包含多个证书指纹，这样能保证同时有多个可信证书，达成证书的轮转。（类比 JWT 的公钥轮转机制）</p>
+<blockquote>
+<p>证书锁定技术几乎等同于 SSH 协议的 <code>StrictHostKeyChecking</code> 选项，客户端会验证服务端的公钥指纹（key fingerprint），验证不通过则断开连接。</p>
+</blockquote>
+<h4 id=公钥锁定public-key-pining技术>公钥锁定（Public Key Pining）技术</h4>
+<p>前面提到过，TLS 证书其实就是公钥+申请者(你)和颁发者(CA)的信息+签名(使用 CA 私钥加密)，因此我们也可以考虑只锁定其中的公钥。</p>
+<p>「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
+<p><strong>如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。</strong></p>
+<h4 id=tls-协议的逆向手段>TLS 协议的逆向手段</h4>
 <p>要获取一个应用的数据，有两个方向:</p>
 <ol>
 <li>服务端入侵: 现代应用的服务端突破难度通常都比较客户端高，注入等漏洞底层框架就有处理。</li>
@@ -1064,31 +1021,18 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class=se>\
 </ol>
 <p>待续</p>
 <h2 id=参考>参考</h2>
-<h3 id=密码学算法>密码学算法</h3>
-<p>哈希函数、MAC 与数字签名、密钥交换、加解密:</p>
 <ul>
-<li><a href=https://thiscute.world/posts/practical-cryptography-basics-1/ target=_blank rel="noopener noreferrer">写给开发人员的实用密码学</a></li>
-<li><a href=https://www.openssl.org/docs/man1.1.1/ target=_blank rel="noopener noreferrer">OpenSSL ManPage</a></li>
-</ul>
-<h3 id=tls-协议>TLS 协议</h3>
-<ul>
-<li><a href=https://halfrost.com/https_tls1-2_handshake/ target=_blank rel="noopener noreferrer">HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)</a></li>
-<li><a href=https://halfrost.com/https-key-cipher/ target=_blank rel="noopener noreferrer">HTTPS 温故知新（五） —— TLS 中的密钥计算</a></li>
-<li><a href=https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd target=_blank rel="noopener noreferrer">A complete overview of SSL/TLS and its cryptographic system</a></li>
-</ul>
-<h3 id=tls-证书>TLS 证书</h3>
-<ul>
+<li>
+<p><a href=https://halfrost.com/https_tls1-2_handshake/ target=_blank rel="noopener noreferrer">HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)</a></p>
+</li>
+<li>
+<p><a href=https://halfrost.com/https-key-cipher/ target=_blank rel="noopener noreferrer">HTTPS 温故知新（五） —— TLS 中的密钥计算</a></p>
+</li>
+<li>
+<p><a href=https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd target=_blank rel="noopener noreferrer">A complete overview of SSL/TLS and its cryptographic system</a></p>
+</li>
 <li>
 <p><a href=https://kubernetes.io/docs/concepts/cluster-administration/certificates/ target=_blank rel="noopener noreferrer">Certificates - Kubernetes Docs</a></p>
-</li>
-<li>
-<p><a href=https://www.cnblogs.com/kyrios/p/tls-and-certificates.html target=_blank rel="noopener noreferrer">TLS/HTTPS 证书生成与验证</a></p>
-</li>
-<li>
-<p><a href=https://zhuanlan.zhihu.com/p/57710573 target=_blank rel="noopener noreferrer">ECC作为SSL/TLS证书加密算法的优势</a></p>
-</li>
-<li>
-<p><a href=https://cloud.tencent.com/developer/article/1407305 target=_blank rel="noopener noreferrer">ECC证书的生成和验签</a></p>
 </li>
 <li>
 <p><a href=https://help.aliyun.com/document_detail/28542.html target=_blank rel="noopener noreferrer">证书选型和购买 - 阿里云文档</a></p>
