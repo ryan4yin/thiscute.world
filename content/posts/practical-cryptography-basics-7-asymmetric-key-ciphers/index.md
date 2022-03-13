@@ -505,6 +505,8 @@ print("Signature valid:", hash == hashFromSignature)
 
 ## 四、ECC 密码系统
 
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc.png" >}}
+
 ECC 椭圆曲线密码学，于 1985 年被首次提出，并于 2004 年开始被广泛应用。
 ECC 被认为是 RSA 的继任者，新一代的非对称加密算法。
 
