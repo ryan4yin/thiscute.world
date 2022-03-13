@@ -100,11 +100,8 @@
 <ul>
 <li><a href=#一前言>一、前言</a></li>
 <li><a href=#二diffiehellman-密钥交换>二、Diffie–Hellman 密钥交换</a></li>
-<li><a href=#三基于离散对数的-dhke-协议>三、基于离散对数的 DHKE 协议</a>
-<ul>
+<li><a href=#三基于离散对数的-dhke-协议>三、基于离散对数的 DHKE 协议</a></li>
 <li><a href=#四基于椭圆曲线的-ecdh-协议>四、基于椭圆曲线的 ECDH 协议</a></li>
-</ul>
-</li>
 <li><a href=#参考>参考</a></li>
 </ul>
 </nav></div>
@@ -212,7 +209,7 @@ $$</p>
 <p>在最常见的 DHKE 实现中（<a href=https://tools.ietf.org/html/rfc3526 target=_blank rel="noopener noreferrer">RFC3526</a>），基数是 $g = 2$，模数 $$ 是一个 1536 到 8192 比特的大素数。
 而整数 <span style=color:green>$p$ $g$ $A$ $B$</span> 通常会使用非常大的数字（1024、2048 或 4096 比特甚至更大）以防范暴力破解。</p>
 <p>DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学中众所周知的离散对数问题（DLP）的变体，目前还不存在有效的算法。</p>
-<h3 id=四基于椭圆曲线的-ecdh-协议>四、基于椭圆曲线的 ECDH 协议</h3>
+<h2 id=四基于椭圆曲线的-ecdh-协议>四、基于椭圆曲线的 ECDH 协议</h2>
 <p><a href=https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman target=_blank rel="noopener noreferrer">Elliptic-Curve Diffie-Hellman (ECDH)</a> 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。</p>
 <p>ECDH 是经典 DHKE 协议的变体，其中模幂计算被椭圆曲线的乘法计算取代，以提高安全性。</p>
 <p>ECDH 跟前面介绍的 DHKE 非常相似，只要你理解了椭圆曲线的数学原理，结合前面已经介绍了的 DHKE，基本上可以秒懂。
