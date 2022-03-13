@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-7-asymmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-7-asymmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 非对称加密, 安全, RSA, ECC","wordcount":12593,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-7-asymmetric-key-ciphers\/","datePublished":"2022-03-09T20:50:00+08:00","dateModified":"2022-03-13T15:26:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=next href=https://thiscute.world/posts/about-tls-cert/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-7-asymmetric-key-ciphers\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-7-asymmetric-key-ciphers\/symmetric-vs-asymmetric.jpg","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 非对称加密, 安全, RSA, ECC","wordcount":12614,"url":"https:\/\/thiscute.world\/posts\/practical-cryptography-basics-7-asymmetric-key-ciphers\/","datePublished":"2022-03-09T20:50:00+08:00","dateModified":"2022-03-13T15:26:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-09>2022-03-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12593 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-09>2022-03-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12614 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 26 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.jpg data-srcset="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.jpg, /posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.jpg 1.5x, /posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.jpg 2x" data-sizes=auto alt=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.jpg title=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -190,7 +190,7 @@
 <p>公元20世纪初，第一次世界大战进行到关键时刻，英国破译密码的专门机构「40号房间」利用缴获的德国密码本破译了著名的「齐默尔曼电报」，其内容显示德国打算联合墨西哥对抗可能会参战的美国，这促使美国放弃中立对德宣战，从而彻底改变了一战的走势。</p>
 <p>1943 年，美国从破译的日本电报中得知山本五十六将于 4 月 18 日乘中型轰炸机，由 6 架战斗机护航，到中途岛视察时，美国总统罗斯福亲自做出决定截击山本，山本乘坐的飞机在去往中途岛的路上被美军击毁，战争天才山本五十六机毁人亡，日本海军从此一蹶不振。</p>
 <p>此外在二次世界大战中，美军将印第安纳瓦霍土著语言作为密码使用，并特别征摹使用印第安纳瓦霍通信兵。在二次世界大战日美的太平洋战场上，美国海军军部让北墨西哥和亚历桑那印第安纳瓦霍族人使用纳瓦霍语进行情报传递。纳瓦霍语的语法、音调及词汇都极为独特，不为世人所知道，当时纳瓦霍族以外的美国人中，能听懂这种语言的也就一二十人。这是<strong>密码学</strong>和<strong>语言学</strong>的成功结合，纳瓦霍语密码成为历史上从未被破译的密码。</p>
-<p>在 1976 年 Malcolm J. Williamson 公开发表了现在被称为「Diffie–Hellman 密钥交换, DHKE」的算法，并提出了「公钥密码学」的概念，这宣告了「近代密码阶段」的终结。</p>
+<p>在 1976 年 Malcolm J. Williamson 公开发表了现在被称为「Diffie–Hellman 密钥交换, DHKE」的算法，并提出了「公钥密码学」的概念，这是密码学领域一项划时代的发明，它宣告了「近代密码阶段」的终结，是「现代密码学」的起点。</p>
 <p>言归正传，对称密码算法的问题有两点：</p>
 <ul>
 <li>「<strong>需要安全的通道进行密钥交换</strong>」，早期最常见的是面对面交换密钥</li>
@@ -218,7 +218,7 @@
 <p>公钥密码系统主要有三大用途：<strong>加密与解密、签名与验证、密钥交换</strong>。
 每种算法都需要使用到公钥和私钥，比如由公钥加密的消息只能由私钥解密，由私钥签名消息需要用公钥验证。</p>
 <p>由于加密解密、签名验证均需要两个不同的密钥，故「公钥密码学」也被称为「<strong>非对称密码学</strong>」。</p>
-<p>比较著名的公钥密码系统有：RSA、ECC（椭圆曲线密码学）、ElGamal、Diffie-Hellman、ECDH、ECDSA 和 EdDSA。许多密码算法都基于这些密码系统的原语，例如 RSA 签名、RSA 加密/解密、ECDH 密钥交换以及 ECDSA 和 EdDSA 签名。</p>
+<p>比较著名的公钥密码系统有：RSA、ECC（椭圆曲线密码学）、ElGamal、Diffie-Hellman、ECDH、ECDSA 和 EdDSA。许多密码算法都是以这些密码系统为基础实现的，例如 RSA 签名、RSA 加密/解密、ECDH 密钥交换以及 ECDSA 和 EdDSA 签名。</p>
 <p>一张图列出所有流行的公钥密码学算法：</p>
 <figure><img src=/images/practical-cryptography-basics-7-asymmetric-key-ciphers/asymmetric-cryptography.png>
 </figure>
@@ -239,7 +239,7 @@
 <li>在 RSA 系统中，输入消息应该被转换为大整数（例如使用 OAEP 填充），然后才能进行加密。</li>
 </ul>
 </li>
-<li>一些非对称密码系统（如 ECC）不直接提供加密原语，需要结合使用更复杂的方案才能实现加解密</li>
+<li>一些非对称密码系统（如 ECC）不直接提供加密能力，需要结合使用更复杂的方案才能实现加解密</li>
 </ul>
 <p>此外，非对称密码比对称密码慢非常多。比如 RSA 加密比 AES 慢 1000 倍，跟 ChaCha20 就更没法比了。</p>
 <p>为了解决上面提到的这些困难并支持加密任意长度的消息，现代密码学使用「<strong>非对称加密方案</strong>」来实现消息加解密。
@@ -868,7 +868,7 @@ $$</p>
 <p>ECC 椭圆曲线密码学，于 1985 年被首次提出，并于 2004 年开始被广泛应用。
 ECC 被认为是 RSA 的继任者，新一代的非对称加密算法。</p>
 <p>其最大的特点在于相同密码强度下，ECC 的密钥和签名的大小都要显著低于 RSA. 256bits 的 ECC 密钥，安全性与 3072bits 的 RSA 密钥安全性相当。</p>
-<p>其次 ECC 的密钥对生成、密钥交换与签名算法的速度都要比 RSA 稍快一些。</p>
+<p>其次 ECC 的密钥对生成、密钥交换与签名算法的速度都要比 RSA 快。</p>
 <h3 id=椭圆曲线的数学原理简介>椭圆曲线的数学原理简介</h3>
 <p>在数学中，椭圆曲线（Elliptic Curves）是一种平面曲线，由如下方程定义的点的集合组成（$A-J$ 均为常数）：</p>
 <p>$$
@@ -1422,7 +1422,7 @@ Curve448 的私钥为 446 位，通常编码为 448 位整数（56 个字节，1
 </li>
 <li>暂时没有想补充的，可以参考 <a href=https://safecurves.cr.yp.to target=_blank rel="noopener noreferrer">https://safecurves.cr.yp.to</a></li>
 </ul>
-<p>目前在 TLS 协议以及 JWT 签名算法中，只考虑 ECC 的话，目前应该最广泛的椭圆曲线仍然是 NIST 系列：</p>
+<p>目前在 TLS 协议以及 JWT 签名算法中，目前应该最广泛的椭圆曲线仍然是 NIST 系列：</p>
 <ul>
 <li><code>P-256</code>: 到目前为止 P-256 应该仍然是应用最为广泛的椭圆曲线
 <ul>
@@ -1485,7 +1485,8 @@ Curve448 的私钥为 446 位，通常编码为 448 位整数（56 个字节，1
 <span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
 </section>
 </div>
-<div class=post-nav><a href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ class=prev rel=prev title="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><i class="fas fa-angle-left fa-fw"></i>写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></div>
+<div class=post-nav><a href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ class=prev rel=prev title="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><i class="fas fa-angle-left fa-fw"></i>写给开发人员的实用密码学（六）—— 对称密钥加密算法</a>
+<a href=/posts/about-tls-cert/ class=next rel=next title="写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id=comments><div id=utterances></div><noscript>
 Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
