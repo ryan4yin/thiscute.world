@@ -86,7 +86,7 @@ DHKE 有两种实现方案：
 
 DHKE 协议也是基于类似的原理，但是使用的是离散对数（discrete logarithms）跟模幂（modular exponentiations ）而不是色彩混合。
 
-## 三、基于离散对数的 DHKE 协议
+## 三、经典 DHKE 协议
 
 首先介绍下「模幂」，它是指求 $g$ 的 $a$ 次幂模 $p$ 的值 $c$ 的过程，其中 $g$ $a$ $c$ 均为整数，公式如下：
 
@@ -114,13 +114,65 @@ $$
 - 这样 Alice 跟 Bob 就协商出了密钥 <span style="color:red">$S$</span>
 - 因为离散对数的计算非常难，任何窃听者都几乎不可能通过公开的 <span style="color:green">$p$ $g$ $A$ $B$</span> 逆推出 <span style="color:red">$S$</span> 的值
 
-在最常见的 DHKE 实现中（[RFC3526](https://tools.ietf.org/html/rfc3526)），基数是 $g = 2$，模数 $$ 是一个 1536 到 8192 比特的大素数。
-而整数 <span style="color:green">$p$ $g$ $A$ $B$</span> 通常会使用非常大的数字（1024、2048 或 4096 比特甚至更大）以防范暴力破解。
+在最常见的 DHKE 实现中（[RFC3526](https://tools.ietf.org/html/rfc3526)），基数是 $g = 2$，模数 $p$ 是一个 1536 到 8192 比特的大素数。
+而整数 <span style="color:green">$A$ $B$</span> 通常会使用非常大的数字（1024、2048 或 4096 比特甚至更大）以防范暴力破解。
 
 
 DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学中众所周知的离散对数问题（DLP）的变体，目前还不存在有效的算法。
 
-## 四、基于椭圆曲线的 ECDH 协议
+使用 Python 演示下大概是这样：
+
+```python
+# pip install cryptography==36.0.1
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import dh
+
+# 1. 双方协商使用两个独特的正整数 g 与 p
+## generator => 即基数 g，通常使用 2, 有时也使用 5
+## key_size => 模数 p 的长度，通常使用 2048-3096 位（2048 位的安全性正在减弱）
+params = dh.generate_parameters(generator=2, key_size=2048)
+param_numbers = params.parameter_numbers()
+g = param_numbers.g  # => 肯定是 2
+p = param_numbers.p  # => 一个 2048 位的整数
+print(f"{g=}, {p=}")
+
+# 2. Alice 生成自己的秘密整数 a 与公开整数 A
+alice_priv_key = params.generate_private_key()
+a = alice_priv_key.private_numbers().x
+A = alice_priv_key.private_numbers().public_numbers.y
+print(f"{a=}")
+print(f"{A=}")
+
+# 3. Bob 生成自己的秘密整数 b 与公开整数 B
+bob_priv_key = params.generate_private_key()
+b = bob_priv_key.private_numbers().x
+B = bob_priv_key.private_numbers().public_numbers.y
+print(f"{b=}")
+print(f"{B=}")
+
+# 4. Alice 与 Bob 公开交换整数 A 跟 B（即各自的公钥）
+
+# 5. Alice 使用 a B 与 p 计算出共享密钥
+## 首先使用 B p g 构造出 bob 的公钥对象（实际上 g 不参与计算）
+bob_pub_numbers = dh.DHPublicNumbers(B, param_numbers)
+bob_pub_key = bob_pub_numbers.public_key()
+## 计算共享密钥
+alice_shared_key = alice_priv_key.exchange(bob_pub_key)
+
+# 6. Bob 使用 b A 与 p 计算出共享密钥
+## 首先使用 A p g 构造出 alice 的公钥对象（实际上 g 不参与计算）
+alice_pub_numbers = dh.DHPublicNumbers(A, param_numbers)
+alice_pub_key = alice_pub_numbers.public_key()
+## 计算共享密钥
+bob_shared_key = bob_priv_key.exchange(alice_pub_key)
+
+# 两者应该完全相等， Alice 与 Bob 完成第一次密钥交换
+alice_shared_key == bob_shared_key
+
+# 7. Alice 与 Bob 使用 shared_key 进行对称加密通讯
+```
+
+## 四、新一代 ECDH 协议
 
 [Elliptic-Curve Diffie-Hellman (ECDH)](https://en.wikipedia.org/wiki/Elliptic-curve_Diffie%E2%80%93Hellman) 是一种匿名密钥协商协议，它允许两方，每方都有一个椭圆曲线公钥-私钥对，它的功能也是让双方在完全没有对方任何预先信息的条件下通过不安全信道安全地协商出一个安全密钥。
 
@@ -182,6 +234,101 @@ print("Bob shared key:", compress(bobSharedKey))
 
 print("Equal shared keys:", aliceSharedKey == bobSharedKey)
 ```
+
+## 五、PFS 完美前向保密协议 DHE/ECDHE
+
+前面介绍的经典 DHKE 与 ECDH 协议流程，都是在最开始时交换一次密钥，之后就一直使用该密钥通讯。
+因此如果密钥被破解，整个会话的所有信息对攻击者而言就完全透明了。
+
+为了进一步提高安全性，密码学家提出了「[**完全前向保密**（Perfect Forward Secrecy，PFS）](https://en.wikipedia.org/wiki/Forward_secrecy)」的概念，并在 DHKE 与 ECDH 的基础上提出了支持 PFS 的 DHE/ECDHE 协议（末尾的 `E` 是 `ephemeral` 的缩写，即指所有的共享密钥都是临时的）。
+
+完全前向保密是指长期使用的主密钥泄漏不会导致过去的会话密钥泄漏，从而保护过去进行的通讯不受密码或密钥在未来暴露的威胁。
+
+下面使用 Python 演示下 DHE 协议的流程（ECDHE 的流程也完全类似）：
+
+```python
+# pip install cryptography==36.0.1
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import dh
+
+# 1. 双方协商使用两个独特的正整数 g 与 p
+## generator => 即基数 g，通常使用 2, 有时也使用 5
+## key_size => 模数 p 的长度，通常使用 2048-3096 位（2048 位的安全性正在减弱）
+params = dh.generate_parameters(generator=2, key_size=2048)
+param_numbers = params.parameter_numbers()
+g = param_numbers.g  # => 肯定是 2
+p = param_numbers.p  # => 一个 2048 位的整数
+print(f"{g=}, {p=}")
+
+# 2. Alice 生成自己的秘密整数 a 与公开整数 A
+alice_priv_key = params.generate_private_key()
+a = alice_priv_key.private_numbers().x
+A = alice_priv_key.private_numbers().public_numbers.y
+print(f"{a=}")
+print(f"{A=}")
+
+# 3. Bob 生成自己的秘密整数 b 与公开整数 B
+bob_priv_key = params.generate_private_key()
+b = bob_priv_key.private_numbers().x
+B = bob_priv_key.private_numbers().public_numbers.y
+print(f"{b=}")
+print(f"{B=}")
+
+# 4. Alice 与 Bob 公开交换整数 A 跟 B（即各自的公钥）
+
+# 5. Alice 使用 a B 与 p 计算出共享密钥
+## 首先使用 B p g 构造出 bob 的公钥对象（实际上 g 不参与计算）
+bob_pub_numbers = dh.DHPublicNumbers(B, param_numbers)
+bob_pub_key = bob_pub_numbers.public_key()
+## 计算共享密钥
+alice_shared_key = alice_priv_key.exchange(bob_pub_key)
+
+# 6. Bob 使用 b A 与 p 计算出共享密钥
+## 首先使用 A p g 构造出 alice 的公钥对象（实际上 g 不参与计算）
+alice_pub_numbers = dh.DHPublicNumbers(A, param_numbers)
+alice_pub_key = alice_pub_numbers.public_key()
+## 计算共享密钥
+bob_shared_key = bob_priv_key.exchange(alice_pub_key)
+
+# 上面的流程跟经典 DHKE 完全一致，代码也是从前面 Copy 下来的
+# 但是从这里开始，进入 DHE 协议补充的部分
+
+shared_key_1 = bob_shared_key # 第一个共享密钥
+
+# 7. 假设 Bob 现在要发送消息 M_b_1 给 Alice
+## 首先 Bob 使用对称加密算法加密消息 M_b
+M_b_1 = "Hello Alice, I'm bob~"
+C_b_1 = Encrypt(M_b_1, shared_key_1)  # Encrypt 是某种对称加密方案的加密算法，如 AES-256-CTR-HMAC-SHA-256
+## 然后 Bob 需要生成一个新的公私钥 b_2 与 B_2（注意 g 与 p 两个参数是不变的）
+bob_priv_key_2 = parameters.generate_private_key()
+b_2 = bob_priv_key.private_numbers().x
+B_2 = bob_priv_key.private_numbers().public_numbers.y
+print(f"{b_2=}")
+print(f"{B_2=}")
+
+# 8. Bob 将 C_b_1 与 B_2 一起发送给 Alice
+
+# 9. Alice 首先解密数据 C_b_1 得到原始消息 M_b_1
+assert M_b_1 == Decrypt(C_b_1, shared_key_1)  # Dncrypt 是某种对称加密方案的解密算法，如 AES-256-CTR-HMAC-SHA-256
+## 然后 Alice 也生成新的公私钥 a_2 与 A_2
+alice_priv_key_2 = parameters.generate_private_key()
+## Alice 使用 a_2 B_2 与 p 计算出新的共享密钥 shared_key_2
+bob_pub_numbers_2 = dh.DHPublicNumbers(B_2, param_numbers)
+bob_pub_key_2 = bob_pub_numbers_2.public_key()
+shared_key_2 = alice_priv_key_2.exchange(bob_pub_key_2)
+
+# 10. Alice 回复 Bob 消息时，使用新共享密钥 shared_key_2 加密消息得到 C_a_1
+# 然后将密文 C_a_1 与 A_2 一起发送给 Bob
+
+# 11. Bob 使用 b_2 A_2 与 p 计算出共享密钥 shared_key_2
+# 然后再使用 shared_key_2 解密数据
+# Bob 在下次发送消息时，会生成新的 b_3 与 B_3，将 B_3 随密文一起发送
+
+## 依次类推
+```
+
+通过上面的代码描述我们应该能理解到，**Alice 与 Bob 每次交换数据，实际上都会生成新的临时共享密钥**，公钥密钥在每次数据交换时都会更新。
+即使攻击者破解了花费了很大的代价破解了其中某一个临时共享密钥 **shared_key_k**（或者该密钥因为某种原因泄漏了），它也只能解密出其中某一次数据交换的信息 **M_b_k**，其他所有的消息仍然是保密的，不受此次攻击（或泄漏）的影响。
 
 ## 参考
 
