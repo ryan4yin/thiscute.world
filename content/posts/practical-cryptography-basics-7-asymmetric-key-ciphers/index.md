@@ -745,9 +745,11 @@ ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECD
 使用 Python 演示如下：
 
 ```python
+# pip install tinyec  # <= ECC 曲线库
 from tinyec import registry
 import secrets
 
+# 使用这条曲线进行演示
 curve = registry.get_curve('brainpoolP256r1')
 
 def compress_point(point):
