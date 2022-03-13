@@ -16,7 +16,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是笔者也补充了许多代码示例及算法细节。
+>本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者额外补充了「非加密哈希函数」的简单介绍。
 
 
 《写给开发人员的实用密码学》系列文章目录：

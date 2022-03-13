@@ -18,7 +18,7 @@ code:
 ---
 
 
->本文大部分内容翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是笔者也补充了许多文字内容、代码示例及算法细节。
+>本文部分内容翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了密码学历史以及 openssl 命令示例，并重写了 RSA/ECC 算法原理、代码示例等内容。
 
 
 《写给开发人员的实用密码学》系列文章目录：
