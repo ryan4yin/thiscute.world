@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: "random-numbers.jpg"
 
-tags: ["Cryptography", "密码学", "伪随机数", "安全"]
+tags: ["Cryptography", "密码学", "伪随机数", "安全", "PRNG", "CSPRNG"]
 categories: ["技术"]
 
 code:

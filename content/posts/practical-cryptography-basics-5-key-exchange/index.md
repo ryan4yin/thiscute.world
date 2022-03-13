@@ -1,12 +1,13 @@
 ---
 title: "写给开发人员的实用密码学（五）—— 密钥交换与 DHKE/ECDH"
 date: 2022-03-01T17:15:05+08:00
+lastmod: 2022-03-13T15:26:00+08:00
 draft: false
 resources:
 - name: "featured-image"
   src: "dhke.png"
 
-tags: ["Cryptography", "密码学", "密钥交换", "安全"]
+tags: ["Cryptography", "密码学", "密钥交换", "安全", "DHE", "ECDH", "ECDHE"]
 categories: ["技术"]
 
 code:

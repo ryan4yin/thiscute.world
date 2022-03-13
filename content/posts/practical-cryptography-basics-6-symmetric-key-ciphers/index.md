@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: "symmetric-vs-asymmetric.jpg"
 
-tags: ["Cryptography", "密码学", "对称加密", "安全"]
+tags: ["Cryptography", "密码学", "对称加密", "安全", "AES", "ChaCha20"]
 categories: ["技术"]
 
 math:

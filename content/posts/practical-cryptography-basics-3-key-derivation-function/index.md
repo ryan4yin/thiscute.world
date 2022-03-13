@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: "key.png"
 
-tags: ["Cryptography", "Hash", "密码学", "哈希", "散列"]
+tags: ["Cryptography", "Hash", "密码学", "MAC", "KDF", "Scrypt"]
 categories: ["技术"]
 
 code:
