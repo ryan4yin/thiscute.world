@@ -18,7 +18,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，但是笔者也补充了 CTR 的 Python 实现以及部分代码示例。
+>本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了部分代码示例。
 
 
 《写给开发人员的实用密码学》系列文章目录：
