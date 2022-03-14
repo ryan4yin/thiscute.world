@@ -9,7 +9,9 @@ toc:
 
 ## 我正在研究这些
 
-- 迭代文章 <https://thiscute.world/posts/about-tls-cert/>，补充 TLS 协议的算法细节（tls1.1 tls1.2 tls1.3）、PKI X509 等内容，及其在 K8s 中的应用
+- Envoy 基础：
+  - 官方文档：https://www.envoyproxy.io/docs/envoy/v1.21.1/about_docs
+  - Envoy 入门手册：https://github.com/rootsongjc/envoy-handbook
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
   - 进度 20%
 - 《在生命的尽头拥抱你-临终关怀医生手记》
@@ -18,9 +20,7 @@ toc:
 
 ## 我最近还想搞搞这些
 
-- Envoy 基础：
-  - 官方文档：https://www.envoyproxy.io/docs/envoy/v1.21.1/about_docs
-  - Envoy 入门手册：https://github.com/rootsongjc/envoy-handbook
+
 - 区块链技术 Web3.0
   - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门
   - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
