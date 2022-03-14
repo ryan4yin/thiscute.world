@@ -563,6 +563,10 @@ openssl verify -CAfile ca.crt server.crt
 
 ## 二、TLS 协议
 
+TLS 协议，中文名为「传输层安全协议」，是一个安全通信协议，被用于在网络上进行安全通信。
+
+TLS 协议通常与 HTTP / FTP / SMTP 等协议一起使用以实现加密通讯，这种组合协议通常被缩写为 HTTPS / SFTP / SMTPS.
+
 在讲 [TLS 协议](https://zh.wikipedia.org/wiki/%E5%82%B3%E8%BC%B8%E5%B1%A4%E5%AE%89%E5%85%A8%E6%80%A7%E5%8D%94%E5%AE%9A)前，还是先复习下「对称密码算法」与「非对称密码算法」两个密码体系的特点。
 
 - **对称密码算法（如 AES/ChaCha20）**: 计算速度快、安全强度高，但是缺乏安全交换密钥的手段、密钥的保存和管理也很困难
@@ -583,10 +587,98 @@ TLS 协议通过应用 ECDHE 密钥交换协议，提供了「完美前向保密
 
 另外注意一点是，CA 证书和服务端证书都只在 TLS 协议握手的前三个步骤中有用到，之后的通信就与它们无关了。
 
+### 1. 密码套件与 TLS 历史版本
 
-### 1. TLS 双向认证(Mutual TLS authentication, mTLS)
 
-TLS 协议（tls1.0+，RFC: [TLS1.2 - RFC5246](https://tools.ietf.org/html/rfc5246#section-7.4.4)）中，定义了服务端请求验证客户端证书的方法。这
+[密码套件（Cipher_suite）](https://en.wikipedia.org/wiki/Cipher_suite)是 TLS 协议中一组用于实现安全通讯的密码学算法，类似于我们前面学习过的加密方案。
+不同密码学算法的组合形成不同的密码套件，算法组合的差异使这些密码套件具有不同的性能与安全性，另外 TLS 协议的更新迭代也导致各密码套件拥有不同的兼容性。
+通常越新推出的密码套件的安全性越高，但是兼容性就越差（旧设备不支持）。
+
+密码套件的名称由它使用的各种密码学算法名称组成，而且有固定的格式，以 `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256` 为例介绍下：
+
+- `TLS`: 定义了此套件适用的协议，通常固定为 `TLS`
+- `ECDHE`: 密钥交换算法
+- `RSA`: 数字证书认证算法
+- `AES_128_GCM`: 使用的对称加密方案，这是一个基于 AES 与 GCM 模式的对称认证加密方案，使用 128 位密钥
+- `SHA256`: 哈希函数，用于 HMAC 算法实现消息认证
+  - TLS 固定使用 HMAC 算法进行消息认证
+
+TLS 协议的前身是 SSL 协议，TLS/SSL 的发展历程展示如下：
+
+{{< figure src="/images/about-tls-cert/history-of-ssl-tls.png" title="SSL/TLS 的历史版本" >}}
+
+SSL 协议早在 2015 年就被各大主流浏览器废除了，TLS1.0 感觉也基本没站点在用了，这俩就直接跳过了。
+
+下面分别介绍下 TLS1.1 TLS1.2 与 TLS1.3.
+
+#### TLS 1.1
+
+TLS 1.1 在 RFC4346 中定义，于 2006 年 4 月发布。
+
+TLS 1.1 是 TLS 1.0 的一个补丁，主要更新包括：
+
+- 添加对CBC攻击的保护
+  - 隐式初始向量 IV 被替换成一个显式的 IV
+  - 修复分组密码模式中填充算法的 bug
+- 支持 IANA 登记的参数
+
+**TLS 1.1**及其之前的算法曾经被广泛应用，它目前已知的缺陷如下：
+
+- 不支持 PFS 完全前向保密
+- 不支持 AEAD 认证加密算法
+- 为了兼容性，保留了很多不安全的算法
+
+TLS 1.1 已经不够安全了，不过一些陈年老站点或许还在使用它。
+
+#### TLS 1.2
+
+TLS 1.2 在 RFC5246 中定义，于 2008 年 8 月发发布。
+
+- 可选支持 PFS 完全前向保密
+- 移除对 MD5 与 SHA-1 签名算法的支持
+- 添加对 HMAC-SHA-256 及 HMAC-SHA-384 消息认证算法的支持
+- 添加对 AEAD 加密认证方案的支持
+- 去除 forback 回到 SSL 协议的能力，提升安全性
+- 为了兼容性，保留了很多不安全的算法
+
+如果你使用 TLS 1.2，需要小心地选择密码套件，避开不安全的套件，就能实现足够高的安全性。
+
+#### TLS 1.3
+
+TLS 1.3 是一次大刀阔斧的更新，总结如下：
+
+- 移除对如下算法的支持
+  - 哈希函数 SHA1/MD5
+  - 所有非 AEAD 加密认证的密码方案（CBC 模式）
+  - 移除对 RC4 与 3DES 加密算法的支持
+  - 移除了静态 RSA 与 DH 密钥交换算法
+- 支持高性能的 Ed25519/Ed448 签名认证算法、X25519 密钥协商算法
+- 支持高性能的 ChaCha20-Poly1305 对称认证加密方案
+- 将密钥交换算法与公钥认证算法从密码套件中分离出来
+  - 比如原来的 `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256` 密码套件将被拆分为 `ECDHE` 算法、`RSA` 身份认证算法、以及 `TLS_AES_128_GCM_SHA256` 密码套件
+  - 这样密码套件就只包含一个 AEAD 认证加密方案，以及一个哈希函数了
+- 仅支持前向安全的密钥交换算法 DHE 或 ECDHE
+- 支持最短 0-RTT 的 TLS 握手（会话恢复）
+
+TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要你的通讯用了 TLS 1.3，那你的数据就安全了（当然前提是你的私钥没泄漏）。
+
+#### 如何设置 TLS 协议的版本、密码套件参数
+
+以前在配置 Nginx 时，我最头疼的就是其中密码套件参数 `ssl_ciphers`，为了安全性，需要配置超长的一大堆选用的密码套件名称，我一个都看不懂，但是为了把网站搞好还是得硬着头皮搜索复制粘贴，实际上也不清楚安全性导致咋样。
+
+为了解决这个问题，Mozilla/DigitalOcean 都搞过流行 Web 服务器的 TLS 配置生成工具，比如 [ssl-config - **mozilla](https://ssl-config.mozilla.org/#server=nginx)，这个网站提供三个安全等级的配置**: 
+
+1. 「Intermediate」: 查看生成出的 `ssl-cipher` 属性，发现它只支持 `ECDHE`/`DHE` 开头的算法。因此它保证前向保密。
+   - 对于需要通过浏览器访问的 API，推荐选择这个等级。
+2. 「Mordern」: 只支持 `TLSv1.3`，该协议废弃掉了过往所有不安全的算法，保证前向保密，安全性极高，性能也更好。
+   - 对于不需要通过浏览器等旧终端访问的 API，请直接选择这个等级。
+3. 「Old」: 除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！
+
+另外阿里云负载均衡器配置前向保密的方法参见: [管理TLS安全策略 - 负载均衡 - 阿里云文档](https://help.aliyun.com/document_detail/90740.html)
+
+### 2. mTLS 双向认证
+
+TLS 协议（tls1.0+，RFC: [TLS1.2 - RFC5246](https://tools.ietf.org/html/rfc5246#section-7.4.4)）也定义了可选的服务端请求验证客户端证书的方法。这
 个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。
 
 传统的「TLS 单向认证」技术，只在客户端去验证服务端是否可信。
@@ -646,23 +738,72 @@ mTLS 和「公钥锁定/证书锁定」对比:
 2. mTLS: 服务端和客户端都要验证对方。
    1. 保证双边可信，在客户端证书不被破解的情况下，就能 Ban 掉所有的爬虫或代理技术。
 
-### 2. TLS 协议攻防战
 
-#### PFS 完美前向保密
+### 3. 其他加密通讯协议
 
-旧版本的 TLS 协议并不一定能保证前向保密，为了保证前向安全，需要在服务端配置中进行一定设置。
-具体的设置方法参见 [ssl-config - **mozilla](https://ssl-config.mozilla.org/#server=nginx)，该网站提供三个安全等级的配置**: 
+#### SSH 协议
 
-1. 「Intermediate」: 查看生成出的 `ssl-cipher` 属性，发现它只支持 `ECDHE`/`DHE` 开头的算法。因此它保证前向保密。
-   - 对于需要通过浏览器访问的 API，推荐选择这个等级。
-2. 「Mordern」: 只支持 `TLSv1.3`，该协议废弃掉了过往所有不安全的算法，保证前向保密，安全性极高，性能也更好。
-   - 对于不需要通过浏览器等旧终端访问的 API，请直接选择这个等级。
-3. 「Old」: 除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！
+首先最容易想到的应该就是是 SSH 协议（Secure SHell protocol）。SSH 与 TLS 一样都能提供加密通讯，是 PKI 公钥基础设施的早期先驱者之一。
 
-另外阿里云负载均衡器配置前向保密的方法参见: [管理TLS安全策略 - 负载均衡 - 阿里云文档](https://help.aliyun.com/document_detail/90740.html)
+OpenSSH 应用最广泛的 SSH 实现，它使用 SSH Key 而非数字证书进行身份认证，这主要是因为 OpenSSH 仅用于用户与主机之间的安全通信，不需要记录 X.509 这么繁多的信息。
+
+我们来手动生成个 OpenSSH ed25519 密钥对试试（RSA 的生成命令完全类似）：
+
+```shell
+❯ ssh-keygen -t ed25519
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/Users/admin/.ssh/id_ed25519): ed25519-key
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in ed25519-key.
+Your public key has been saved in ed25519-key.pub.
+The key fingerprint is:
+SHA256:jgeuWVflhNXXrDDzUtW6ZV1lpBWNAj0Rstizh9Lbyg0 admin@ryan-MacBook-Pro.local
+The key's randomart image is:
++--[ED25519 256]--+
+|          oo++ *%|
+|         o =B ++B|
+|        . = oO.+o|
+|         . B. + +|
+|      . S = o. + |
+|     . + o +  .  |
+|      + + E .    |
+|     + o . +     |
+|    o     o .    |
++----[SHA256]-----+
+
+❯ cat ed25519-key    
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACDux4KnrKXVs4iR9mPZnSpur5207ceyMiZP+CDnXdooMQAAAKDnHOSY5xzk
+mAAAAAtzc2gtZWQyNTUxOQAAACDux4KnrKXVs4iR9mPZnSpur5207ceyMiZP+CDnXdooMQ
+AAAEADkVL1gZHAvBx4M5+UjVVL7ltVOC4r9tdR23CoI9iV1O7HgqespdWziJH2Y9mdKm6v
+nbTtx7IyJk/4IOdd2igxAAAAHGFkbWluQHJ5YW4tTWFjQm9vay1Qcm8ubG9jYWwB
+-----END OPENSSH PRIVATE KEY-----
+
+❯ cat ed25519-key.pub 
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO7HgqespdWziJH2Y9mdKm6vnbTtx7IyJk/4IOdd2igx admin@ryan-MacBook-Pro.local
+```
+
+可以看到 SSH Key 的结构非常简单，仅包含如下三个部分：
+
+- 密钥对类型: 最常见的是 `ssh-rsa`，另外由于安全性目前更推荐使用 `ssh-ed25519`
+- 公钥的 Base64 字符串
+- 一个 Comment，通常包含这个 Key 的用途，或者 Key 所有者的邮箱地址
+
+#### QUIC 协议
+
+QUIC 协议，也称做 HTTP/3 协议，是 Google 研发并推动标准化的新一代 HTTP 协议，它做了很多大刀阔斧的改革：
+
+- 传输层协议从 TCP 改成了 UDP，QUIC 自己实现的数据的可靠传输、按序到达
+- 实现了自己的加密方案以取代 TLS 协议，同时兼容现有的数字证书体系
+
+TO BE DONE...
+
+### 4. TLS 协议攻防战
 
 
-#### 证书锁定（Certifacte Pining）技术
+#### 1. 证书锁定（Certifacte Pining）技术
 
 即使使用了 TLS 协议对流量进行加密，并且保证了前向保密，也无法保证流量不被代理！
 
@@ -687,7 +828,7 @@ mTLS 和「公钥锁定/证书锁定」对比:
 >证书锁定技术几乎等同于 SSH 协议的 `StrictHostKeyChecking` 选项，客户端会验证服务端的公钥指纹（key fingerprint），验证不通过则断开连接。
 
 
-#### 公钥锁定（Public Key Pining）技术
+#### 2. 公钥锁定（Public Key Pining）技术
 
 前面提到过，TLS 证书其实就是公钥+申请者(你)和颁发者(CA)的信息+签名(使用 CA 私钥加密)，因此我们也可以考虑只锁定其中的公钥。
 
@@ -695,7 +836,7 @@ mTLS 和「公钥锁定/证书锁定」对比:
 
 **如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。**
 
-#### TLS 协议的逆向手段
+#### 3. TLS 协议的逆向手段
 
 要获取一个应用的数据，有两个方向: 
 
@@ -703,10 +844,10 @@ mTLS 和「公钥锁定/证书锁定」对比:
 2. 客户端逆向+爬虫: 客户端是离用户最近的地方，也是最容易被突破的地方。
    1. mTLS 常见的破解手段，是找到老版本的安装包，发现很容易就能提取出客户端证书。。
 
-待续
+TO BE DONE...
 
 
-## 参考
+## 三、参考
 
 - [HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)](https://halfrost.com/https_tls1-2_handshake/)
 - [HTTPS 温故知新（五） —— TLS 中的密钥计算](https://halfrost.com/https-key-cipher/)
