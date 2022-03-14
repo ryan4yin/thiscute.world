@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"密码学, HTTPS, TLS, OpenSSL, PKI, 数字证书, 证书","wordcount":12098,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"密码学, HTTPS, TLS, OpenSSL, PKI, 数字证书, 证书","wordcount":13886,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,8 +89,8 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 12098 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 25 分钟&nbsp;</div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 13886 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 28 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/about-tls-cert/https-secure.png data-srcset="/posts/about-tls-cert/https-secure.png, /posts/about-tls-cert/https-secure.png 1.5x, /posts/about-tls-cert/https-secure.png 2x" data-sizes=auto alt=/posts/about-tls-cert/https-secure.png title=/posts/about-tls-cert/https-secure.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>目录</span>
@@ -132,22 +132,35 @@
 </li>
 <li><a href=#二tls-协议>二、TLS 协议</a>
 <ul>
-<li><a href=#1-tls-双向认证mutual-tls-authentication-mtls>1. TLS 双向认证(Mutual TLS authentication, mTLS)</a>
+<li><a href=#1-密码套件与-tls-历史版本>1. 密码套件与 TLS 历史版本</a>
+<ul>
+<li><a href=#tls-11>TLS 1.1</a></li>
+<li><a href=#tls-12>TLS 1.2</a></li>
+<li><a href=#tls-13>TLS 1.3</a></li>
+<li><a href=#如何设置-tls-协议的版本密码套件参数>如何设置 TLS 协议的版本、密码套件参数</a></li>
+</ul>
+</li>
+<li><a href=#2-mtls-双向认证>2. mTLS 双向认证</a>
 <ul>
 <li><a href=#mtls-的安全性>mTLS 的安全性</a></li>
 </ul>
 </li>
-<li><a href=#2-tls-协议攻防战>2. TLS 协议攻防战</a>
+<li><a href=#3-其他加密通讯协议>3. 其他加密通讯协议</a>
 <ul>
-<li><a href=#pfs-完美前向保密>PFS 完美前向保密</a></li>
-<li><a href=#证书锁定certifacte-pining技术>证书锁定（Certifacte Pining）技术</a></li>
-<li><a href=#公钥锁定public-key-pining技术>公钥锁定（Public Key Pining）技术</a></li>
-<li><a href=#tls-协议的逆向手段>TLS 协议的逆向手段</a></li>
+<li><a href=#ssh-协议>SSH 协议</a></li>
+<li><a href=#quic-协议>QUIC 协议</a></li>
+</ul>
+</li>
+<li><a href=#4-tls-协议攻防战>4. TLS 协议攻防战</a>
+<ul>
+<li><a href=#1-证书锁定certifacte-pining技术>1. 证书锁定（Certifacte Pining）技术</a></li>
+<li><a href=#2-公钥锁定public-key-pining技术>2. 公钥锁定（Public Key Pining）技术</a></li>
+<li><a href=#3-tls-协议的逆向手段>3. TLS 协议的逆向手段</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href=#参考>参考</a></li>
+<li><a href=#三参考>三、参考</a></li>
 </ul>
 </nav></div>
 </div><div class=content id=content><p>《写给开发人员的实用密码学》系列文章目录:</p>
@@ -873,6 +886,8 @@ openssl verify -CAfile ca.crt server.crt
 </code></pre></td></tr></table>
 </div>
 </div><h2 id=二tls-协议>二、TLS 协议</h2>
+<p>TLS 协议，中文名为「传输层安全协议」，是一个安全通信协议，被用于在网络上进行安全通信。</p>
+<p>TLS 协议通常与 HTTP / FTP / SMTP 等协议一起使用以实现加密通讯，这种组合协议通常被缩写为 HTTPS / SFTP / SMTPS.</p>
 <p>在讲 <a href=https://zh.wikipedia.org/wiki/%E5%82%B3%E8%BC%B8%E5%B1%A4%E5%AE%89%E5%85%A8%E6%80%A7%E5%8D%94%E5%AE%9A target=_blank rel="noopener noreferrer">TLS 协议</a>前，还是先复习下「对称密码算法」与「非对称密码算法」两个密码体系的特点。</p>
 <ul>
 <li><strong>对称密码算法（如 AES/ChaCha20）</strong>: 计算速度快、安全强度高，但是缺乏安全交换密钥的手段、密钥的保存和管理也很困难</li>
@@ -890,8 +905,101 @@ openssl verify -CAfile ca.crt server.crt
 <p>TLS 协议通过应用 ECDHE 密钥交换协议，提供了「完美前向保密（Perfect Forward Secrecy）」特性，也就是说它能够保护过去进行的通讯不受密钥在未来暴露的威胁。
 即使攻击者破解出了一个「对称密钥」，也只能获取到一次事务中的数据，其他事务的数据安全性完全不受影响。</p>
 <p>另外注意一点是，CA 证书和服务端证书都只在 TLS 协议握手的前三个步骤中有用到，之后的通信就与它们无关了。</p>
-<h3 id=1-tls-双向认证mutual-tls-authentication-mtls>1. TLS 双向认证(Mutual TLS authentication, mTLS)</h3>
-<p>TLS 协议（tls1.0+，RFC: <a href=https://tools.ietf.org/html/rfc5246#section-7.4.4 target=_blank rel="noopener noreferrer">TLS1.2 - RFC5246</a>）中，定义了服务端请求验证客户端证书的方法。这
+<h3 id=1-密码套件与-tls-历史版本>1. 密码套件与 TLS 历史版本</h3>
+<p><a href=https://en.wikipedia.org/wiki/Cipher_suite target=_blank rel="noopener noreferrer">密码套件（Cipher_suite）</a>是 TLS 协议中一组用于实现安全通讯的密码学算法，类似于我们前面学习过的加密方案。
+不同密码学算法的组合形成不同的密码套件，算法组合的差异使这些密码套件具有不同的性能与安全性，另外 TLS 协议的更新迭代也导致各密码套件拥有不同的兼容性。
+通常越新推出的密码套件的安全性越高，但是兼容性就越差（旧设备不支持）。</p>
+<p>密码套件的名称由它使用的各种密码学算法名称组成，而且有固定的格式，以 <code>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</code> 为例介绍下：</p>
+<ul>
+<li><code>TLS</code>: 定义了此套件适用的协议，通常固定为 <code>TLS</code></li>
+<li><code>ECDHE</code>: 密钥交换算法</li>
+<li><code>RSA</code>: 数字证书认证算法</li>
+<li><code>AES_128_GCM</code>: 使用的对称加密方案，这是一个基于 AES 与 GCM 模式的对称认证加密方案，使用 128 位密钥</li>
+<li><code>SHA256</code>: 哈希函数，用于 HMAC 算法实现消息认证
+<ul>
+<li>TLS 固定使用 HMAC 算法进行消息认证</li>
+</ul>
+</li>
+</ul>
+<p>TLS 协议的前身是 SSL 协议，TLS/SSL 的发展历程展示如下：</p>
+<figure><img src=/images/about-tls-cert/history-of-ssl-tls.png><figcaption>
+<h4>SSL/TLS 的历史版本</h4>
+</figcaption>
+</figure>
+<p>SSL 协议早在 2015 年就被各大主流浏览器废除了，TLS1.0 感觉也基本没站点在用了，这俩就直接跳过了。</p>
+<p>下面分别介绍下 TLS1.1 TLS1.2 与 TLS1.3.</p>
+<h4 id=tls-11>TLS 1.1</h4>
+<p>TLS 1.1 在 RFC4346 中定义，于 2006 年 4 月发布。</p>
+<p>TLS 1.1 是 TLS 1.0 的一个补丁，主要更新包括：</p>
+<ul>
+<li>添加对CBC攻击的保护
+<ul>
+<li>隐式初始向量 IV 被替换成一个显式的 IV</li>
+<li>修复分组密码模式中填充算法的 bug</li>
+</ul>
+</li>
+<li>支持 IANA 登记的参数</li>
+</ul>
+<p><strong>TLS 1.1</strong>及其之前的算法曾经被广泛应用，它目前已知的缺陷如下：</p>
+<ul>
+<li>不支持 PFS 完全前向保密</li>
+<li>不支持 AEAD 认证加密算法</li>
+<li>为了兼容性，保留了很多不安全的算法</li>
+</ul>
+<p>TLS 1.1 已经不够安全了，不过一些陈年老站点或许还在使用它。</p>
+<h4 id=tls-12>TLS 1.2</h4>
+<p>TLS 1.2 在 RFC5246 中定义，于 2008 年 8 月发发布。</p>
+<ul>
+<li>可选支持 PFS 完全前向保密</li>
+<li>移除对 MD5 与 SHA-1 签名算法的支持</li>
+<li>添加对 HMAC-SHA-256 及 HMAC-SHA-384 消息认证算法的支持</li>
+<li>添加对 AEAD 加密认证方案的支持</li>
+<li>去除 forback 回到 SSL 协议的能力，提升安全性</li>
+<li>为了兼容性，保留了很多不安全的算法</li>
+</ul>
+<p>如果你使用 TLS 1.2，需要小心地选择密码套件，避开不安全的套件，就能实现足够高的安全性。</p>
+<h4 id=tls-13>TLS 1.3</h4>
+<p>TLS 1.3 是一次大刀阔斧的更新，总结如下：</p>
+<ul>
+<li>移除对如下算法的支持
+<ul>
+<li>哈希函数 SHA1/MD5</li>
+<li>所有非 AEAD 加密认证的密码方案（CBC 模式）</li>
+<li>移除对 RC4 与 3DES 加密算法的支持</li>
+<li>移除了静态 RSA 与 DH 密钥交换算法</li>
+</ul>
+</li>
+<li>支持高性能的 Ed25519/Ed448 签名认证算法、X25519 密钥协商算法</li>
+<li>支持高性能的 ChaCha20-Poly1305 对称认证加密方案</li>
+<li>将密钥交换算法与公钥认证算法从密码套件中分离出来
+<ul>
+<li>比如原来的 <code>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</code> 密码套件将被拆分为 <code>ECDHE</code> 算法、<code>RSA</code> 身份认证算法、以及 <code>TLS_AES_128_GCM_SHA256</code> 密码套件</li>
+<li>这样密码套件就只包含一个 AEAD 认证加密方案，以及一个哈希函数了</li>
+</ul>
+</li>
+<li>仅支持前向安全的密钥交换算法 DHE 或 ECDHE</li>
+<li>支持最短 0-RTT 的 TLS 握手（会话恢复）</li>
+</ul>
+<p>TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要你的通讯用了 TLS 1.3，那你的数据就安全了（当然前提是你的私钥没泄漏）。</p>
+<h4 id=如何设置-tls-协议的版本密码套件参数>如何设置 TLS 协议的版本、密码套件参数</h4>
+<p>以前在配置 Nginx 时，我最头疼的就是其中密码套件参数 <code>ssl_ciphers</code>，为了安全性，需要配置超长的一大堆选用的密码套件名称，我一个都看不懂，但是为了把网站搞好还是得硬着头皮搜索复制粘贴，实际上也不清楚安全性导致咋样。</p>
+<p>为了解决这个问题，Mozilla/DigitalOcean 都搞过流行 Web 服务器的 TLS 配置生成工具，比如 <a href="https://ssl-config.mozilla.org/#server=nginx" target=_blank rel="noopener noreferrer">ssl-config - **mozilla</a>，这个网站提供三个安全等级的配置**:</p>
+<ol>
+<li>「Intermediate」: 查看生成出的 <code>ssl-cipher</code> 属性，发现它只支持 <code>ECDHE</code>/<code>DHE</code> 开头的算法。因此它保证前向保密。
+<ul>
+<li>对于需要通过浏览器访问的 API，推荐选择这个等级。</li>
+</ul>
+</li>
+<li>「Mordern」: 只支持 <code>TLSv1.3</code>，该协议废弃掉了过往所有不安全的算法，保证前向保密，安全性极高，性能也更好。
+<ul>
+<li>对于不需要通过浏览器等旧终端访问的 API，请直接选择这个等级。</li>
+</ul>
+</li>
+<li>「Old」: 除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
+</ol>
+<p>另外阿里云负载均衡器配置前向保密的方法参见: <a href=https://help.aliyun.com/document_detail/90740.html target=_blank rel="noopener noreferrer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
+<h3 id=2-mtls-双向认证>2. mTLS 双向认证</h3>
+<p>TLS 协议（tls1.0+，RFC: <a href=https://tools.ietf.org/html/rfc5246#section-7.4.4 target=_blank rel="noopener noreferrer">TLS1.2 - RFC5246</a>）也定义了可选的服务端请求验证客户端证书的方法。这
 个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。</p>
 <p>传统的「TLS 单向认证」技术，只在客户端去验证服务端是否可信。
 而「TLS 双向认证（mTLS）」，则添加了服务端验证客户端是否可信的步骤（第三步）:</p>
@@ -965,25 +1073,98 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class=se>\
 </ol>
 </li>
 </ol>
-<h3 id=2-tls-协议攻防战>2. TLS 协议攻防战</h3>
-<h4 id=pfs-完美前向保密>PFS 完美前向保密</h4>
-<p>旧版本的 TLS 协议并不一定能保证前向保密，为了保证前向安全，需要在服务端配置中进行一定设置。
-具体的设置方法参见 <a href="https://ssl-config.mozilla.org/#server=nginx" target=_blank rel="noopener noreferrer">ssl-config - **mozilla</a>，该网站提供三个安全等级的配置**:</p>
-<ol>
-<li>「Intermediate」: 查看生成出的 <code>ssl-cipher</code> 属性，发现它只支持 <code>ECDHE</code>/<code>DHE</code> 开头的算法。因此它保证前向保密。
+<h3 id=3-其他加密通讯协议>3. 其他加密通讯协议</h3>
+<h4 id=ssh-协议>SSH 协议</h4>
+<p>首先最容易想到的应该就是是 SSH 协议（Secure SHell protocol）。SSH 与 TLS 一样都能提供加密通讯，是 PKI 公钥基础设施的早期先驱者之一。</p>
+<p>OpenSSH 应用最广泛的 SSH 实现，它使用 SSH Key 而非数字证书进行身份认证，这主要是因为 OpenSSH 仅用于用户与主机之间的安全通信，不需要记录 X.509 这么繁多的信息。</p>
+<p>我们来手动生成个 OpenSSH ed25519 密钥对试试（RSA 的生成命令完全类似）：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>❯ ssh-keygen -t ed25519
+Generating public/private ed25519 key pair.
+Enter file in which to save the key <span class=o>(</span>/Users/admin/.ssh/id_ed25519<span class=o>)</span>: ed25519-key
+Enter passphrase <span class=o>(</span>empty <span class=k>for</span> no passphrase<span class=o>)</span>: 
+Enter same passphrase again: 
+Your identification has been saved in ed25519-key.
+Your public key has been saved in ed25519-key.pub.
+The key fingerprint is:
+SHA256:jgeuWVflhNXXrDDzUtW6ZV1lpBWNAj0Rstizh9Lbyg0 admin@ryan-MacBook-Pro.local
+The key<span class=err>&#39;</span>s randomart image is:
++--<span class=o>[</span>ED25519 256<span class=o>]</span>--+
+<span class=p>|</span>          oo++ *%<span class=p>|</span>
+<span class=p>|</span>         <span class=nv>o</span> <span class=o>=</span>B ++B<span class=p>|</span>
+<span class=p>|</span>        . <span class=o>=</span> oO.+o<span class=p>|</span>
+<span class=p>|</span>         . B. + +<span class=p>|</span>
+<span class=p>|</span>      . <span class=nv>S</span> <span class=o>=</span> o. + <span class=p>|</span>
+<span class=p>|</span>     . + o +  .  <span class=p>|</span>
+<span class=p>|</span>      + + E .    <span class=p>|</span>
+<span class=p>|</span>     + o . +     <span class=p>|</span>
+<span class=p>|</span>    o     o .    <span class=p>|</span>
++----<span class=o>[</span>SHA256<span class=o>]</span>-----+
+
+❯ cat ed25519-key    
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACDux4KnrKXVs4iR9mPZnSpur5207ceyMiZP+CDnXdooMQAAAKDnHOSY5xzk
+mAAAAAtzc2gtZWQyNTUxOQAAACDux4KnrKXVs4iR9mPZnSpur5207ceyMiZP+CDnXdooMQ
+AAAEADkVL1gZHAvBx4M5+UjVVL7ltVOC4r9tdR23CoI9iV1O7HgqespdWziJH2Y9mdKm6v
+nbTtx7IyJk/4IOdd2igxAAAAHGFkbWluQHJ5YW4tTWFjQm9vay1Qcm8ubG9jYWwB
+-----END OPENSSH PRIVATE KEY-----
+
+❯ cat ed25519-key.pub 
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO7HgqespdWziJH2Y9mdKm6vnbTtx7IyJk/4IOdd2igx admin@ryan-MacBook-Pro.local
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到 SSH Key 的结构非常简单，仅包含如下三个部分：</p>
 <ul>
-<li>对于需要通过浏览器访问的 API，推荐选择这个等级。</li>
+<li>密钥对类型: 最常见的是 <code>ssh-rsa</code>，另外由于安全性目前更推荐使用 <code>ssh-ed25519</code></li>
+<li>公钥的 Base64 字符串</li>
+<li>一个 Comment，通常包含这个 Key 的用途，或者 Key 所有者的邮箱地址</li>
 </ul>
-</li>
-<li>「Mordern」: 只支持 <code>TLSv1.3</code>，该协议废弃掉了过往所有不安全的算法，保证前向保密，安全性极高，性能也更好。
+<h4 id=quic-协议>QUIC 协议</h4>
+<p>QUIC 协议，也称做 HTTP/3 协议，是 Google 研发并推动标准化的新一代 HTTP 协议，它做了很多大刀阔斧的改革：</p>
 <ul>
-<li>对于不需要通过浏览器等旧终端访问的 API，请直接选择这个等级。</li>
+<li>传输层协议从 TCP 改成了 UDP，QUIC 自己实现的数据的可靠传输、按序到达</li>
+<li>实现了自己的加密方案以取代 TLS 协议，同时兼容现有的数字证书体系</li>
 </ul>
-</li>
-<li>「Old」: 除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
-</ol>
-<p>另外阿里云负载均衡器配置前向保密的方法参见: <a href=https://help.aliyun.com/document_detail/90740.html target=_blank rel="noopener noreferrer">管理TLS安全策略 - 负载均衡 - 阿里云文档</a></p>
-<h4 id=证书锁定certifacte-pining技术>证书锁定（Certifacte Pining）技术</h4>
+<p>TO BE DONE&mldr;</p>
+<h3 id=4-tls-协议攻防战>4. TLS 协议攻防战</h3>
+<h4 id=1-证书锁定certifacte-pining技术>1. 证书锁定（Certifacte Pining）技术</h4>
 <p>即使使用了 TLS 协议对流量进行加密，并且保证了前向保密，也无法保证流量不被代理！</p>
 <p>这是因为客户端大多是直接依靠了操作系统内置的证书链进行 TLS 证书验证，而 Fiddler 等代理工具可以将自己的 TLS 证书添加到该证书链中。</p>
 <p>为了防止流量被 Fiddler 等工具使用上述方式监听流量，出现了「证书锁定」技术。
@@ -1005,11 +1186,11 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class=se>\
 <blockquote>
 <p>证书锁定技术几乎等同于 SSH 协议的 <code>StrictHostKeyChecking</code> 选项，客户端会验证服务端的公钥指纹（key fingerprint），验证不通过则断开连接。</p>
 </blockquote>
-<h4 id=公钥锁定public-key-pining技术>公钥锁定（Public Key Pining）技术</h4>
+<h4 id=2-公钥锁定public-key-pining技术>2. 公钥锁定（Public Key Pining）技术</h4>
 <p>前面提到过，TLS 证书其实就是公钥+申请者(你)和颁发者(CA)的信息+签名(使用 CA 私钥加密)，因此我们也可以考虑只锁定其中的公钥。</p>
 <p>「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
 <p><strong>如果不考虑实现难度的话，「公钥锁定」是更推荐的技术。</strong></p>
-<h4 id=tls-协议的逆向手段>TLS 协议的逆向手段</h4>
+<h4 id=3-tls-协议的逆向手段>3. TLS 协议的逆向手段</h4>
 <p>要获取一个应用的数据，有两个方向:</p>
 <ol>
 <li>服务端入侵: 现代应用的服务端突破难度通常都比较客户端高，注入等漏洞底层框架就有处理。</li>
@@ -1019,8 +1200,8 @@ openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key <span class=se>\
 </ol>
 </li>
 </ol>
-<p>待续</p>
-<h2 id=参考>参考</h2>
+<p>TO BE DONE&mldr;</p>
+<h2 id=三参考>三、参考</h2>
 <ul>
 <li>
 <p><a href=https://halfrost.com/https_tls1-2_handshake/ target=_blank rel="noopener noreferrer">HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)</a></p>
