@@ -852,6 +852,8 @@ QUIC 的 0RTT 握手是一个非常妙的想法，可以显著降低握手时延
 2. 客户端逆向+爬虫: 客户端是离用户最近的地方，也是最容易被突破的地方。
    1. mTLS 常见的破解手段，是找到老版本的安装包，发现很容易就能提取出客户端证书。。
 
+>wiki 列出了一些 TLS 协议的安全问题：https://en.wikipedia.org/wiki/Transport_Layer_Security#Security
+
 TO BE DONE...
 
 
