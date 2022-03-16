@@ -1,10 +1,10 @@
     <table>
         <thead style="white-space: nowrap;">
         <tr>
-        <th></th>
+        <th>序号</th>
         <th>标题</th>
         <th>人均阅读时长</th>
-        <th>访客数</th>
+        <th class="users">访客数</th>
         <th>访问量</th>
         </tr>
         </thead>
@@ -12,13 +12,32 @@
         
         {{ range $index, $page := index $.Site.Data.website_statistics "trendingThisMonth" }}
         <tr>
-            <td>{{ add $index 1 }}</td>
-            <td><a href="{{ .pagePath }}">{{ $page.pageTitle }}</a></td>
-            <td>{{ $page.humanizedReadingDurationPerUser }}</td>
-            <td>{{ $page.activeUsers }}</td>
-            <td>{{ $page.screenPageViews }}</td>
+            <td sort_key="{{ add $index 1 }}">{{ add $index 1 }}</td>
+            <td sort_key="{{ $page.pagePath }}"><a href="{{ $page.pagePath }}">{{ $page.pageTitle }}</a></td>
+            <td sort_key="{{ $page.readingDurationPerUser }}">{{ $page.humanizedReadingDurationPerUser }}</td>
+            <td sort_key="{{ $page.activeUsers }}">{{ $page.activeUsers }}</td>
+            <td sort_key="{{ $page.screenPageViews }}">{{ $page.screenPageViews }}</td>
             </tr>
         {{ end }}
 
         </tbody>
     </table>
+    <script type="text/javascript">
+        const getCellValue = (tr, idx) => {
+            const td = tr.children[idx];
+            return Number(td.attributes.sort_key.value) || td.attributes.sort_key.value;
+        };
+
+        const comparer = (idx, desc) => (a, b) => ((v1, v2) => 
+            v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+            )(getCellValue(desc ? b : a, idx), getCellValue(desc ? a : b, idx));
+
+        // 为 table 添加点击自动排序功能
+        document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+            const table = th.closest('table');
+            const tbody = table.querySelector('tbody');
+            Array.from(tbody.querySelectorAll('tr'))
+                .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.desc = !this.desc))
+                .forEach(tr => tbody.appendChild(tr));
+        })));
+    </script>

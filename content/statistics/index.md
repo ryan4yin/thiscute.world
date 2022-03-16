@@ -15,8 +15,6 @@ toc:
 
 ## 二、近 30 天阅读排行
 
->按「人均阅读时长」降序排列
-
 {{< statistics_trendingposts  >}}
 
 ## 三、说明
