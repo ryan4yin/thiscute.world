@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"密码学, HTTPS, TLS, OpenSSL, PKI, 数字证书, 证书, SSH, QUIC, HTTP\/3","wordcount":14427,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"密码学, HTTPS, TLS, OpenSSL, PKI, 数字证书, 证书, SSH, QUIC, HTTP\/3","wordcount":14423,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 14427 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 14423 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 29 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/about-tls-cert/https-secure.png data-srcset="/posts/about-tls-cert/https-secure.png, /posts/about-tls-cert/https-secure.png 1.5x, /posts/about-tls-cert/https-secure.png 2x" data-sizes=auto alt=/posts/about-tls-cert/https-secure.png title=/posts/about-tls-cert/https-secure.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -196,18 +196,17 @@
 <h2 id=一数字证书与-pki-公钥基础架构>一、数字证书与 PKI 公钥基础架构</h2>
 <p>我们在前面已经学习了「对称密码算法」与「非对称密码算法」两个密码学体系，这里做个简单的总结。</p>
 <ul>
-<li><strong>对称密码算法（如 AES/ChaCha20）</strong>: 计算速度快、安全强度高，但是缺乏安全交换密钥的手段、密钥的保存和管理也很困难。</li>
-<li><strong>非对称密码算法（如 RSA/ECC）</strong>: 解决了上述对称密码算法的两个缺陷——给出了安全的密钥交换手段 DHE/ECDHE，降低了密钥的保存与管理难度。</li>
+<li><strong>对称密码算法（如 AES/ChaCha20）</strong>: <strong>计算速度快、安全强度高，但是缺乏安全交换密钥的手段、密钥的保存和管理也很困难</strong>。</li>
+<li><strong>非对称密码算法（如 RSA/ECC）: 解决了上述对称密码算法最大的两个缺陷，一是给出了安全的密钥交换算法 DH/ECDH，二呢它的公钥是可公开的，这降低了密钥的保存与管理难度</strong>。</li>
 </ul>
 <p>但是非对称密码算法仍然存在一些问题:</p>
 <ul>
-<li>公钥该如何分发？比如 Alice 跟 Bob 交换公钥时，如何确定收到的确实是对方的公钥，也就是说如何确认公钥的真实性、完整性、认证其来源身份？
+<li><strong>公钥该如何分发</strong>？比如 Alice 跟 Bob 交换公钥时，如何确定收到的确实是对方的公钥，也就是说如何确认公钥的真实性、完整性、认证其来源身份？
 <ul>
 <li>前面我们已经学习过，DH/ECDH 密钥交换协议可以防范嗅探攻击（窃听），但是<strong>无法抵挡中间人攻击</strong>（中继）。</li>
 </ul>
 </li>
-<li>如果 Alice 的私钥泄漏了，她该如何作废自己旧的公钥？</li>
-<li>公钥与私钥该以何格式进行存储、传输？</li>
+<li>如果 Alice 的私钥泄漏了，她该<strong>如何作废自己旧的公钥</strong>？</li>
 </ul>
 <p>数字证书与公钥基础架构就是为了解决上述问题而设计的。</p>
 <p>首先简单介绍下公钥基础架构（Public Key Infrastructure），它是一组由硬件、软件、参与者、管理政策与流程组成的基础架构，其目的在于创造、管理、分配、使用、存储以及撤销数字证书。
