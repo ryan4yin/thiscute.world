@@ -10,6 +10,7 @@ toc:
 ## 我正在研究这些
 
 - 学习使用 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)
+  - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
   - 进度 20%
 - 《在生命的尽头拥抱你-临终关怀医生手记》
@@ -34,7 +35,7 @@ toc:
 ### 最高优先级
 
 技术：
-- 学习使用 envoy
+- 学习使用 Istio EnvoyFilter
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 
 生活：
@@ -61,7 +62,6 @@ toc:
   - Zone Aware Load Balancing - 减少跨区流量
   - 如何调优数据面，降低 CPU 使用率及延迟
   - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
-  - [研究 istio 的限流限并发能力](https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/)
 
 - 日志方案调研：grafana loki
 - 配置管理：研究如何使用 vault 实现跨集群的动态配置支持，如何落地此项能力
