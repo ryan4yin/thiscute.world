@@ -421,10 +421,10 @@ def int_from_bytes(xbytes: bytes) -> int:
 
 def fast_power_modular(b: int, p: int, m: int):
     """
-    快速模幂运算 b^p % m
-    Complexity O(log p)
+    快速模幂运算：b^p % m
+    复杂度： O(log p)
     因为 RSA 的底数跟指数都非常大，如果先进行幂运算，最后再取模，计算结果会越来越大，导致速度非常非常慢
-    边进行幂运算，边取模，可以极大地提升计算速度
+    根据公式  b^(ab) % m = (b^a % m)^b % m, 可以通过边进行幂运算边取模，极大地提升计算速度
     """
     res = 1
     while p:
