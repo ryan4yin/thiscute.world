@@ -10,7 +10,7 @@ toc:
 ## 我正在研究这些
 
 - 学习使用 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)
-  - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing
+  - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing、基于 iptables/tproxy 的 outbound 流量代理
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
   - 进度 20%
 - 《在生命的尽头拥抱你-临终关怀医生手记》
