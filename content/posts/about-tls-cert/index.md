@@ -795,6 +795,12 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO7HgqespdWziJH2Y9mdKm6vnbTtx7IyJk/4IOdd2igx
 - 公钥的 Base64 字符串
 - 一个 Comment，通常包含这个 Key 的用途，或者 Key 所有者的邮箱地址
 
+通过我们前面学的非对称密码学知识可以知道，公钥能直接从私钥生成，假设你的 ssh 公钥丢失，可以通过如下命令重新生成出公钥：
+
+```shell
+ssh-keygen -y -f xxx_rsa > xxx_rsa.pub
+```
+
 #### QUIC 协议
 
 [QUIC 协议](https://zhuanlan.zhihu.com/p/405387352)，已被标准化为 HTTP/3 协议，是 Google 研发并推动标准化的新一代 HTTP 协议，它做了很多大刀阔斧的改革：
