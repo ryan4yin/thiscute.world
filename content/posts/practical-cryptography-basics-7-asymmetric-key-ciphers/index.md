@@ -428,8 +428,7 @@ def fast_power_modular(b: int, p: int, m: int):
     """
     res = 1
     while p:
-        if p & 0x1:
-          if p & 0x1: res *= b
+        if p & 0x1: res *= b
         b = b ** 2 % m
         p >>= 1
     return res % m
