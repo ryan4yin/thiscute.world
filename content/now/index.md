@@ -9,9 +9,7 @@ toc:
 
 ## 我正在研究这些
 
-- Envoy 基础：
-  - 官方文档：https://www.envoyproxy.io/docs/envoy/v1.21.1/about_docs
-  - Envoy 入门手册：https://github.com/rootsongjc/envoy-handbook
+- 学习使用 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
   - 进度 20%
 - 《在生命的尽头拥抱你-临终关怀医生手记》
