@@ -32,6 +32,10 @@ modified_page_paths = {
     "/posts/sql-basic/": "/posts/sql-basics-1/",
 }
 
+modified_page_titles = {
+    # 路径 => 标题
+    "/posts/about-tls-cert/": "写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议",
+}
 
 def initialize_analyticsreporting():
     """Initializes an Analytics Data API service object.
@@ -137,9 +141,9 @@ def process_data(data):
                 .replace(" - Ryan4Yin's Space", "")\
                 .replace(" - This Cute World", "")
 
-            # 处理被修改过的文章 pagePath
+            # 处理被修改过 pagePath 的文章，使用指定的 Path
             page_path = page['pagePath']
-            if not page_path.enswith("/"):
+            if not page_path.endswith("/"):
                 # path 统一以 / 结尾
                 page_path += "/"
             if page_path in modified_page_paths:
@@ -160,6 +164,12 @@ def process_data(data):
                 for k, v in page.items():
                     if isinstance(v, int):  # 只有数据才需要合并，跳过字符串
                         result[page_path][k] += v
+            
+            # 处理被修改过 pageTitle 的文章，使用指定的 Title
+            for path, title in modified_page_titles.items():
+                if path not in result:
+                    continue
+                result[path]['pageTitle'] = title
         else:
             # 没有 pageTitle，这里应该是处理的 totalTrendingPosts
             result[""] = page
@@ -178,15 +188,16 @@ def process_data(data):
     return sorted(result.values(), key=itemgetter("readingDurationPerUser"), reverse=True)
 
 
-def get_report_this_month(analytics):
+def get_report_last_n_days(analytics, n: int = 30):
     """
     Args:
       analytics: An authorized Analytics Data API service object.
+      n: queyr data in last n days
 
     Return: 与 process_data 一致
     """
     body = {
-        'dateRanges': [{'startDate': "30daysAgo", 'endDate': "today"}],
+        'dateRanges': [{'startDate': f"{n}daysAgo", 'endDate': "today"}],
         # dimensions and metrics list: https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema
         'metrics': [
             {'name': 'activeUsers'},
@@ -204,7 +215,7 @@ def get_report_this_month(analytics):
                 "numericFilter": {
                     "operation": "GREATER_THAN_OR_EQUAL",
                     "value": {
-                        "int64Value": "10",  # 阅读时间超过 10s
+                        "int64Value": "30",  # 文档的总阅读时长超过 30s
                     },
                 },
             }
@@ -258,7 +269,7 @@ def get_shanghai_datetime_str():
 
 def main():
     analytics = initialize_analyticsreporting()
-    trendingThisMonth = get_report_this_month(analytics)
+    trendingThisMonth = get_report_last_n_days(analytics, n=30)
     total = get_report_from_start(analytics)
     
     website_statistics = {

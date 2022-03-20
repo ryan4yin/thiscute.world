@@ -13,7 +13,7 @@ toc:
 
 {{< statistics_summary  >}}
 
-## 二、近 30 天阅读排行
+## 二、30 天阅读排行
 
 {{< statistics_trendingposts  >}}
 
