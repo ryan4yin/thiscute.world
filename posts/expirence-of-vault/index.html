@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/expirence-of-vault/><link rel=prev href=https://thiscute.world/posts/qemu-kvm-usage/><link rel=next href=https://thiscute.world/posts/expirence-of-argo-workflow/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"secrets 管理工具 Vault 的介绍、安装及使用","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/bankvault.jpg","width":1500,"height":729}],"genre":"posts","keywords":"Vault, 云原生, Secrets, 配置, 配置管理","wordcount":8739,"url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/","datePublished":"2021-01-24T09:31:41+08:00","dateModified":"2021-01-24T09:31:41+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/expirence-of-vault/><link rel=prev href=https://thiscute.world/posts/qemu-kvm-usage/><link rel=next href=https://thiscute.world/posts/expirence-of-argo-workflow/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"secrets 管理工具 Vault 的介绍、安装及使用","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/bankvault.jpg","width":1500,"height":729}],"genre":"posts","keywords":"Vault, 云原生, Secrets, 配置, 配置管理","wordcount":8734,"url":"https:\/\/thiscute.world\/posts\/expirence-of-vault\/","datePublished":"2021-01-24T09:31:41+08:00","dateModified":"2021-01-24T09:31:41+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,7 +89,7 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">secrets 管理工具 Vault 的介绍、安装及使用</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-24>2021-01-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8739 字&nbsp;
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-24>2021-01-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8734 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 18 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/expirence-of-vault/bankvault.jpg data-srcset="/posts/expirence-of-vault/bankvault.jpg, /posts/expirence-of-vault/bankvault.jpg 1.5x, /posts/expirence-of-vault/bankvault.jpg 2x" data-sizes=auto alt=/posts/expirence-of-vault/bankvault.jpg title=/posts/expirence-of-vault/bankvault.jpg></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
@@ -145,7 +145,7 @@
 <li>认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。</li>
 <li>权限管理：通过 policy，可以设定非常细致的 ACL 权限。</li>
 <li>密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 API Key 的自动轮转。</li>
-<li>支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。</li>
+<li>支持接入 kubernetes rbac 认证体系，通过 serviceaccount+role 为每个 Pod 单独配置认证角色。</li>
 </ol>
 <ul>
 <li>支持通过 sidecar/init-container 将 secrets 注入到 pod 中，或者通过 k8s operator 将 vault 数据同步到 k8s secrets 中</li>
@@ -163,64 +163,64 @@
 <img class=lazyload src=/svg/loading.min.svg data-src=/images/expirence-of-vault/vault-layers.png data-srcset="/images/expirence-of-vault/vault-layers.png, /images/expirence-of-vault/vault-layers.png 1.5x, /images/expirence-of-vault/vault-layers.png 2x" data-sizes=auto alt=/images/expirence-of-vault/vault-layers.png>
 </a><figcaption class=image-caption>vault layers</figcaption>
 </figure></p>
-<p>可以看到，几乎所有的 Vault 组件都被统称为「屏障（Barrier）」，
-Vault 可以简单地被划分为存储后端（Storage Backend）、屏障（Barrier 和 HTTP/S API 三个部分。</p>
-<p>类比银行金库，「屏障」就是 Vault(金库) 周围的「钢铁」和「混凝土」，存储后端和客户端之间的所有数据流动都需要经过它。</p>
+<p>可以看到，几乎所有的 Vault 组件都被统称为「<strong>屏障</strong>（Barrier）」。</p>
+<p>Vault 可以简单地被划分为<strong>存储后端</strong>（Storage Backend）、<strong>屏障</strong>（Barrier）和 <strong>HTTP/S API</strong> 三个部分。</p>
+<p>Vault，翻译成中文就是<strong>金库</strong>。类比银行金库，「屏障」就是用于保护金库的<strong>合金大门</strong>和<strong>钢筋混凝土</strong>，存储后端和客户端之间的<strong>所有数据流动都需要经过它</strong>。</p>
 <p>「屏障」确保只有加密数据会被写入存储后端，加密数据在经过「屏障」被读出的过程中被验证与解密。</p>
-<p>和银行金库的大门非常类似，Barrier 也必须先解封，才能解密存储后端中的数据。</p>
+<p>和银行金库的大门非常类似，「屏障」也必须先<strong>解封</strong>，才能解密存储后端中的数据。</p>
 <h3 id=1-数据存储及加密解密>1. 数据存储及加密解密</h3>
-<p>存储后端（Storage Backend）: Vault 自身不存储数据，因此需要为它配置一个「存储后端」。
-「存储后端」是不受信任的，只用于存储加密数据。</p>
-<p>Initialization(初始化): Vault 在首次启动时需要初始化，这一步生成一个「加密密钥(Encryption Key)」用于加密数据，加密完成的数据才能被保存到「存储后端」。</p>
-<p>Unseal(解封): Vault 启动后，因为不知道「加密密钥」，它会进入「封印（Sealed）」状态，在「解封」前无法进行任何操作。</p>
-<p>「加密密钥」被「master key」保护，我们必须提供「master key」才能完成解封操作。</p>
-<p>默认情况下，Vault 使用<a href=https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664 target=_blank rel="noopener noreferrer">沙米尔密钥共享算法</a>
-将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成解封。</p>
+<p><strong>存储后端</strong>（Storage Backend）: Vault 自身不存储数据，因此需要为它配置一个存储后端。
+存储后端是不受信任的，只用于存储加密数据。</p>
+<p><strong>初始化</strong>（Initialization）: Vault 在首次启动时需要初始化，这一步生成一个<strong>加密密钥</strong>（Encryption Key）用于加密数据，加密完成的数据才能被保存到<strong>存储后端</strong>。</p>
+<p><strong>解封</strong>（Unseal）: Vault 启动后，因为不知道<strong>加密密钥</strong>所以无法解密数据，这种状态被形象得称作<strong>已封印</strong>（Sealed）。在<strong>解封</strong>前 Vault 无法进行任何操作。</p>
+<p><strong>加密密钥</strong>被<strong>主密钥</strong>（Master Key）保护，我们必须提供<strong>主密钥</strong>才能完成<strong>解封</strong>操作。</p>
+<p>默认情况下，Vault 使用<a href=https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing target=_blank rel="noopener noreferrer">沙米尔密钥分割算法</a>
+将<strong>主密钥</strong>分割成五个<strong>分割密钥</strong>（Key Shares），必须要提供其中任意三个<strong>分割密钥</strong>才能重建出主密钥，从而解密出 Vault 的<strong>加密密钥</strong>，完成<strong>解封</strong>操作。</p>
 <p><figure><a class=lightgallery href=/images/expirence-of-vault/vault-shamir-secret-sharing.svg title=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-thumbnail=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
 <img class=lazyload src=/svg/loading.min.svg data-src=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-srcset="/images/expirence-of-vault/vault-shamir-secret-sharing.svg, /images/expirence-of-vault/vault-shamir-secret-sharing.svg 1.5x, /images/expirence-of-vault/vault-shamir-secret-sharing.svg 2x" data-sizes=auto alt=/images/expirence-of-vault/vault-shamir-secret-sharing.svg>
 </a><figcaption class=image-caption>vault-shamir-secret-sharing</figcaption>
 </figure></p>
 <blockquote>
-<p>「Key Shares」的数量，以及重建「master key」最少需要的 key shares 数量，都是可以调整的。
-沙米尔密钥共享算法也可以关闭，这样 master key 将被直接用于 Unseal.</p>
+<p><strong>分割密钥</strong>的总数，以及重建主密钥最少需要的<strong>分割密钥</strong>数量，都是可以调整的。
+沙米尔密钥分割算法也可以关闭，这样主密钥将被直接提供给管理员，管理员可直接使用它进行解封操作。</p>
 </blockquote>
 <h3 id=2-认证系统及权限系统>2. 认证系统及权限系统</h3>
 <p>在解封完成后，Vault 就可以开始处理请求了。</p>
-<p>HTTP 请求进入后的整个处理流程都由 vault core 管理，core 会强制进行 ACL 检查，并确保审计日志(audit logging)完成记录。</p>
-<p>客户端首次连接 vault 时，需要先完成身份认证，vault 的「auth methods」模块有很多身份认证方法可选：</p>
+<p>HTTP 请求进入后的整个处理流程都由 vault core 管理，<strong>core</strong> 会强制进行 ACL 检查，并确保审计日志(audit logging)完成记录。</p>
+<p>客户端首次连接 vault 时，需要先完成身份认证，vault 的 <strong>auth methods</strong> 模块有很多身份认证方法可选：</p>
 <ol>
-<li>用户友好的认证方法，适合管理员使用：username/password、云服务商、ldap
+<li>用户友好的认证方法，适合管理员使用：<strong>username/password</strong>、云服务商、<strong>ldap</strong>
 <ol>
 <li>在创建 user 的时候，需要为 user 绑定 policy，给予合适的权限。</li>
 </ol>
 </li>
-<li>应用友好的方法，适合应用程序使用：public/private keys、tokens、kubernetes、jwt</li>
+<li>应用友好的方法，适合应用程序使用：<strong>public/private keys、tokens、kubernetes、jwt</strong></li>
 </ol>
-<p>身份验证请求流经 Core 并进入 auth methods，auth methods 确定请求是否有效并返回「关联策略(policies)」的列表。</p>
-<p>ACL Policies 由 policy store 负责管理与存储，由 core 进行 ACL 检查。
-ACL 的默认行为是拒绝，这意味着除非明确配置 Policy 允许某项操作，否则该操作将被拒绝。</p>
-<p>在通过 auth methods 完成了身份认证，并且返回的「关联策略」也没毛病之后，「token store」将会生成并管理一个新的 token，
+<p>身份验证请求流经 <strong>core</strong> 并进入 <strong>auth methods</strong>，<strong>auth methods</strong> 确定请求是否有效并返回「<strong>关联策略</strong>(policies)」的列表。</p>
+<p><strong>ACL 策略</strong>由 <strong>policy store</strong> 负责管理与存储，由 <strong>core</strong> 进行 ACL 检查。
+ACL 的默认行为是拒绝，这意味着除非明确配置 <strong>policy</strong> 允许某项操作，否则该操作将被拒绝。</p>
+<p>在通过 <strong>auth methods</strong> 完成了身份认证，并且返回的<strong>关联策略</strong>也没毛病之后，<strong>token store</strong> 将会生成并管理一个新的<strong>凭证</strong>（token），
 这个 token 会被返回给客户端，用于进行后续请求。</p>
-<p>类似 web 网站的 cookie，token 也都存在一个 lease 租期或者说有效期，这加强了安全性。</p>
+<p>类似 web 网站的 cookie，token 也都存在一个<strong>租期</strong>（lease）或者说有效期，这加强了安全性。</p>
 <p>token 关联了相关的策略 policies，这些策略将被用于验证请求的权限。</p>
-<p>请求经过验证后，将被路由到 secret engine。如果 secret engine 返回了一个 secret（由 vault 自动生成的 secret），
-Core 会将其注册到 expiration manager，并给它附加一个 lease ID。lease ID 被客户端用于更新(renew)或吊销(revoke)它得到的 secret.</p>
-<p>如果客户端允许租约(lease)到期，expiration manager 将自动吊销这个 secret.</p>
-<p>Core 负责处理审核代理(audit broker)的请求及响应日志，将请求发送到所有已配置的审核设备(audit devices)。</p>
+<p>请求经过验证后，将被路由到 <strong>secret engine</strong>。如果 <strong>secret engine</strong> 返回了一个 <strong>secret</strong>（由 vault 自动生成的 secret），
+core 会将其注册到 <strong>expiration manager</strong>，并给它附加一个 lease ID。lease ID 被客户端用于<strong>更新</strong>(renew)或<strong>吊销</strong>(revoke)它得到的 secret.</p>
+<p>如果客户端允许租约(lease)到期，<strong>expiration manager</strong> 将自动吊销这个 <strong>secret</strong>.</p>
+<p>core 还负责处理<strong>审核代理 audit broker</strong>的请求及响应日志，将请求发送到所有已配置的<strong>审核设备 audit devices</strong>. 不过默认情况下这个功能貌似是关闭的。</p>
 <h3 id=3-secret-engine>3. Secret Engine</h3>
-<p>Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。</p>
+<p><strong>Secret Engine</strong> 是保存、生成或者加密数据的组件，它非常灵活。</p>
 <p>有的 Secret Engines 只是单纯地存储与读取数据，比如 kv 就可以看作一个加密的 Redis。
 而其他的 Secret Engines 则连接到其他的服务并按需生成动态凭证。</p>
-<p>还有些 Secret Engines 提供「加密即服务(encryption as a service)」的能力，如 transit、证书管理等。</p>
+<p>还有些 Secret Engines 提供「<strong>加密即服务</strong>(encryption as a service)」的能力，如 transit、证书管理等。</p>
 <p>常用的 engine 举例：</p>
 <ol>
-<li>AliCloud Secrets Engine: 基于 RAM 策略动态生成 AliCloud Access Token，或基于 RAM 角色动态生成 AliCloud STS 凭据
+<li><strong>AliCloud Secrets Engine</strong>: 基于 RAM 策略动态生成 AliCloud Access Token，或基于 RAM 角色动态生成 AliCloud STS 凭据
 <ul>
 <li>Access Token 会自动更新(Renew)，而 STS 凭据是临时使用的，过期后就失效了。</li>
 </ul>
 </li>
-<li>kv: 键值存储，可用于存储一些静态的配置。它一定程度上能替代掉携程的 Apollo 配置中心。</li>
-<li>Transit Secrets Engine: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。</li>
+<li><strong>kv</strong>: 键值存储，可用于存储一些静态的配置。它一定程度上能替代掉携程的 Apollo 配置中心。</li>
+<li><strong>Transit Secrets Engine</strong>: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。</li>
 </ol>
 <h2 id=二部署-vault>二、部署 Vault</h2>
 <p>官方建议<a href=https://www.vaultproject.io/docs/platform/k8s/helm/run target=_blank rel="noopener noreferrer">通过 Helm 部署 vault</a>，大概流程：</p>
@@ -229,7 +229,7 @@ Core 会将其注册到 expiration manager，并给它附加一个 lease ID。le
 <li>初始化/解封 vault: vault 安全措施，每次重启必须解封(可设置自动解封).</li>
 </ol>
 <h3 id=0-如何选择存储后端>0. 如何选择存储后端？</h3>
-<p>首先，我们肯定需要 HA，至少要保留能升级到 HA 的能力，所以不建议选择不支持 HA 的后端。</p>
+<p>首先，我们肯定需要高可用 HA，至少要保留能升级到 HA 的能力，所以不建议选择不支持 HA 的后端。</p>
 <p>而具体的选择，就因团队经验而异了，人们往往倾向于使用自己熟悉的、知根知底的后端，或者选用云服务。</p>
 <p>比如我们对 MySQL/PostgreSQL 比较熟悉，而且使用云服务提供的数据库不需要考虑太多的维护问题，MySQL/PostgreSQL 作为一个通用协议也不会被云厂商绑架，那我们就倾向于使用这两者之一。</p>
 <p>而如果你们是本地自建，那你可能更倾向于使用 Etcd/Consul/Raft 做后端存储。</p>
@@ -746,7 +746,7 @@ kubectl <span class=nb>exec</span> -ti vault-0 -- vault operator init
 </div><p>然后就大功告成了，可以尝试下删除 vault 的 pod，新建的 Pod 应该会自动解封。</p>
 <h2 id=三vault-自身的配置管理>三、Vault 自身的配置管理</h2>
 <p>Vault 本身是一个复杂的 secrets 工具，它提供了 <strong>Web UI</strong> 和 <strong>CLI</strong> 用于手动管理与查看 Vault 的内容。</p>
-<p>但是作为一名 DevOps，我们当然更喜欢自动化的方法，这有两种选择:</p>
+<p>但是作为一名 DevOps，我们当然更喜欢更自治的方法，这有两种选择:</p>
 <ul>
 <li>使用 vault 的 sdk: python-<a href=https://github.com/hvac/hvac target=_blank rel="noopener noreferrer">hvac</a></li>
 <li>使用 <a href=https://github.com/hashicorp/terraform-provider-vault target=_blank rel="noopener noreferrer">terraform-provider-vault</a> 或者 <a href=https://github.com/pulumi/pulumi-vault target=_blank rel="noopener noreferrer">pulumi-vault</a> 实现 vault 配置的自动化管理。</li>
