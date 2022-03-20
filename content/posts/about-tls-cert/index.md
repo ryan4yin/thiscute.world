@@ -93,6 +93,9 @@ X.509 v3 格式被广泛应用在 TLS/SSL 等众多加密通讯协议中，它�
   - 此数字签名由「证书签发者（Issuer）」使用其私钥+证书内容计算得出
 - **数字签名算法**（Signature Algorithm）: 证书所使用的签名算法，常用的有 `RSA-SHA-256` 与 `ECDSA-SHA-256`
 
+每个证书都有唯一的 ID，这样在私钥泄漏的情况下，我们可以通过公钥基础设施的 OCSP（Online Certificate Status Protocol）协议吊销某个证书。
+吊销证书的操作还是比较罕见的，毕竟私钥泄漏并不容易遇到，因此这里就略过不提了，有需要的可以自行搜索。
+
 使用 Firefox 查看网站 `https://www.google.com` 的证书信息如下：
 
 {{< figure src="/images/about-tls-cert/cert-content.png" title="Google 证书内容" >}}
