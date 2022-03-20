@@ -55,10 +55,10 @@ Vault，翻译成中文就是**金库**。类比银行金库，「屏障」就�
 
 **解封**（Unseal）: Vault 启动后，因为不知道**加密密钥**所以无法解密数据，这种状态被形象得称作**已封印**（Sealed）。在**解封**前 Vault 无法进行任何操作。
 
-**加密密钥**被**主密钥**（Master Key）保护，我们必须提供**主密钥**才能完成**解封**操作。
+**加密密钥**被**主密钥**（Master Key）保护，我们必须提供**主密钥**才能解密出 Vault 的**加密密钥**，从而完成**解封**操作。
 
 默认情况下，Vault 使用[沙米尔密钥分割算法](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing)
-将**主密钥**分割成五个**分割密钥**（Key Shares），必须要提供其中任意三个**分割密钥**才能重建出主密钥，从而解密出 Vault 的**加密密钥**，完成**解封**操作。
+将**主密钥**分割成五个**分割密钥**（Key Shares），必须要提供其中任意三个**分割密钥**才能重建出主密钥，完成**解封**操作。
 
 ![](/images/expirence-of-vault/vault-shamir-secret-sharing.svg "vault-shamir-secret-sharing")
 
