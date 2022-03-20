@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: "cryptographic_hash_function.png"
 
-tags: ["Cryptography", "Hash", "密码学", "哈希", "散列", "SHA-2", "SHA-3"]
+tags: ["Cryptography", "Hash", "密码学", "哈希", "散列", "安全", "SHA-2", "SHA-3"]
 categories: ["技术"]
 
 code:

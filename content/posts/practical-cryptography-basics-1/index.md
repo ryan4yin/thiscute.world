@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: "data-security.jpg"
 
-tags: ["Cryptography", "Hash", "KDF", "密码学", "哈希", "加解密", "签名"]
+tags: ["Cryptography", "Hash", "KDF", "密码学", "安全", "哈希", "加解密", "签名"]
 categories: ["技术"]
 
 code:

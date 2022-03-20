@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "dhke.png"
 
-tags: ["Cryptography", "密码学", "密钥交换", "安全", "DHE", "ECDH", "ECDHE"]
+tags: ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
 categories: ["技术"]
 
 code:

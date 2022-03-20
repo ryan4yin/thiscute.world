@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "https-secure.png"
 
-tags: ["密码学", "HTTPS", "TLS", "OpenSSL", "PKI", "数字证书", "证书", "SSH", "QUIC", "HTTP/3"]
+tags: ["Cryptography", "密码学", "HTTPS", "TLS", "SSL", "OpenSSL", "PKI", "数字证书", "证书", "SSH", "QUIC", "HTTP/3",  "安全"]
 categories: ["技术"]
 ---
 
