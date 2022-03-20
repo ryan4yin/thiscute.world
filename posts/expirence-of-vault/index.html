@@ -173,9 +173,9 @@
 存储后端是不受信任的，只用于存储加密数据。</p>
 <p><strong>初始化</strong>（Initialization）: Vault 在首次启动时需要初始化，这一步生成一个<strong>加密密钥</strong>（Encryption Key）用于加密数据，加密完成的数据才能被保存到<strong>存储后端</strong>。</p>
 <p><strong>解封</strong>（Unseal）: Vault 启动后，因为不知道<strong>加密密钥</strong>所以无法解密数据，这种状态被形象得称作<strong>已封印</strong>（Sealed）。在<strong>解封</strong>前 Vault 无法进行任何操作。</p>
-<p><strong>加密密钥</strong>被<strong>主密钥</strong>（Master Key）保护，我们必须提供<strong>主密钥</strong>才能完成<strong>解封</strong>操作。</p>
+<p><strong>加密密钥</strong>被<strong>主密钥</strong>（Master Key）保护，我们必须提供<strong>主密钥</strong>才能解密出 Vault 的<strong>加密密钥</strong>，从而完成<strong>解封</strong>操作。</p>
 <p>默认情况下，Vault 使用<a href=https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing target=_blank rel="noopener noreferrer">沙米尔密钥分割算法</a>
-将<strong>主密钥</strong>分割成五个<strong>分割密钥</strong>（Key Shares），必须要提供其中任意三个<strong>分割密钥</strong>才能重建出主密钥，从而解密出 Vault 的<strong>加密密钥</strong>，完成<strong>解封</strong>操作。</p>
+将<strong>主密钥</strong>分割成五个<strong>分割密钥</strong>（Key Shares），必须要提供其中任意三个<strong>分割密钥</strong>才能重建出主密钥，完成<strong>解封</strong>操作。</p>
 <p><figure><a class=lightgallery href=/images/expirence-of-vault/vault-shamir-secret-sharing.svg title=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-thumbnail=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-sub-html="<h2>vault-shamir-secret-sharing</h2>">
 <img class=lazyload src=/svg/loading.min.svg data-src=/images/expirence-of-vault/vault-shamir-secret-sharing.svg data-srcset="/images/expirence-of-vault/vault-shamir-secret-sharing.svg, /images/expirence-of-vault/vault-shamir-secret-sharing.svg 1.5x, /images/expirence-of-vault/vault-shamir-secret-sharing.svg 2x" data-sizes=auto alt=/images/expirence-of-vault/vault-shamir-secret-sharing.svg>
 </a><figcaption class=image-caption>vault-shamir-secret-sharing</figcaption>
