@@ -139,6 +139,9 @@ def process_data(data):
 
             # 处理被修改过的文章 pagePath
             page_path = page['pagePath']
+            if not page_path.enswith("/"):
+                # path 统一以 / 结尾
+                page_path += "/"
             if page_path in modified_page_paths:
                 page_path = modified_page_paths[page_path]  # 替换成新的 pagePath
                 page['pagePath'] = page_path
