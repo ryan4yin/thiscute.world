@@ -17,7 +17,7 @@ categories: ["技术"]
 2. 认证方式：支持接入各大云厂商的账号体系（比如阿里云RAM子账号体系）或者 LDAP 等进行身份验证，不需要创建额外的账号体系。
 3. 权限管理：通过 policy，可以设定非常细致的 ACL 权限。
 4. 密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 API Key 的自动轮转。
-5. 支持接入 kubernetes rbac 权限体系，通过 serviceaccount+role 为每个 Pod 单独配置权限。
+5. 支持接入 kubernetes rbac 认证体系，通过 serviceaccount+role 为每个 Pod 单独配置认证角色。
   - 支持通过 sidecar/init-container 将 secrets 注入到 pod 中，或者通过 k8s operator 将 vault 数据同步到 k8s secrets 中
 
 
@@ -36,82 +36,83 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 
 ![](/images/expirence-of-vault/vault-layers.png "vault layers")
 
-可以看到，几乎所有的 Vault 组件都被统称为「屏障（Barrier）」，
-Vault 可以简单地被划分为存储后端（Storage Backend）、屏障（Barrier 和 HTTP/S API 三个部分。
+可以看到，几乎所有的 Vault 组件都被统称为「**屏障**（Barrier）」。
 
-类比银行金库，「屏障」就是 Vault(金库) 周围的「钢铁」和「混凝土」，存储后端和客户端之间的所有数据流动都需要经过它。
+Vault 可以简单地被划分为**存储后端**（Storage Backend）、**屏障**（Barrier）和 **HTTP/S API** 三个部分。
+
+Vault，翻译成中文就是**金库**。类比银行金库，「屏障」就是用于保护金库的**合金大门**和**钢筋混凝土**，存储后端和客户端之间的**所有数据流动都需要经过它**。
 
 「屏障」确保只有加密数据会被写入存储后端，加密数据在经过「屏障」被读出的过程中被验证与解密。
 
-和银行金库的大门非常类似，Barrier 也必须先解封，才能解密存储后端中的数据。
+和银行金库的大门非常类似，「屏障」也必须先**解封**，才能解密存储后端中的数据。
 
 ### 1. 数据存储及加密解密
 
-存储后端（Storage Backend）: Vault 自身不存储数据，因此需要为它配置一个「存储后端」。
-「存储后端」是不受信任的，只用于存储加密数据。
+**存储后端**（Storage Backend）: Vault 自身不存储数据，因此需要为它配置一个存储后端。
+存储后端是不受信任的，只用于存储加密数据。
 
-Initialization(初始化): Vault 在首次启动时需要初始化，这一步生成一个「加密密钥(Encryption Key)」用于加密数据，加密完成的数据才能被保存到「存储后端」。
+**初始化**（Initialization）: Vault 在首次启动时需要初始化，这一步生成一个**加密密钥**（Encryption Key）用于加密数据，加密完成的数据才能被保存到**存储后端**。
 
-Unseal(解封): Vault 启动后，因为不知道「加密密钥」，它会进入「封印（Sealed）」状态，在「解封」前无法进行任何操作。
+**解封**（Unseal）: Vault 启动后，因为不知道**加密密钥**所以无法解密数据，这种状态被形象得称作**已封印**（Sealed）。在**解封**前 Vault 无法进行任何操作。
 
-「加密密钥」被「master key」保护，我们必须提供「master key」才能完成解封操作。
+**加密密钥**被**主密钥**（Master Key）保护，我们必须提供**主密钥**才能完成**解封**操作。
 
-默认情况下，Vault 使用[沙米尔密钥共享算法](https://medium.com/taipei-ethereum-meetup/%E7%A7%81%E9%91%B0%E5%88%86%E5%89%B2-shamirs-secret-sharing-7a70c8abf664)
-将「master key」分割成五个「Key Shares(分享密钥)」，必须要提供其中任意三个「Key Shares」才能重建出「master key」从而完成解封。
+默认情况下，Vault 使用[沙米尔密钥分割算法](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing)
+将**主密钥**分割成五个**分割密钥**（Key Shares），必须要提供其中任意三个**分割密钥**才能重建出主密钥，从而解密出 Vault 的**加密密钥**，完成**解封**操作。
 
 ![](/images/expirence-of-vault/vault-shamir-secret-sharing.svg "vault-shamir-secret-sharing")
 
->「Key Shares」的数量，以及重建「master key」最少需要的 key shares 数量，都是可以调整的。
-沙米尔密钥共享算法也可以关闭，这样 master key 将被直接用于 Unseal.
+>**分割密钥**的总数，以及重建主密钥最少需要的**分割密钥**数量，都是可以调整的。
+沙米尔密钥分割算法也可以关闭，这样主密钥将被直接提供给管理员，管理员可直接使用它进行解封操作。
 
 
 ### 2. 认证系统及权限系统
 
 在解封完成后，Vault 就可以开始处理请求了。
 
-HTTP 请求进入后的整个处理流程都由 vault core 管理，core 会强制进行 ACL 检查，并确保审计日志(audit logging)完成记录。
+HTTP 请求进入后的整个处理流程都由 vault core 管理，**core** 会强制进行 ACL 检查，并确保审计日志(audit logging)完成记录。
 
-客户端首次连接 vault 时，需要先完成身份认证，vault 的「auth methods」模块有很多身份认证方法可选：
+客户端首次连接 vault 时，需要先完成身份认证，vault 的 **auth methods** 模块有很多身份认证方法可选：
 
-1. 用户友好的认证方法，适合管理员使用：username/password、云服务商、ldap
+1. 用户友好的认证方法，适合管理员使用：**username/password**、云服务商、**ldap**
    1. 在创建 user 的时候，需要为 user 绑定 policy，给予合适的权限。
-2. 应用友好的方法，适合应用程序使用：public/private keys、tokens、kubernetes、jwt
+2. 应用友好的方法，适合应用程序使用：**public/private keys、tokens、kubernetes、jwt**
 
-身份验证请求流经 Core 并进入 auth methods，auth methods 确定请求是否有效并返回「关联策略(policies)」的列表。
+身份验证请求流经 **core** 并进入 **auth methods**，**auth methods** 确定请求是否有效并返回「**关联策略**(policies)」的列表。
 
-ACL Policies 由 policy store 负责管理与存储，由 core 进行 ACL 检查。
-ACL 的默认行为是拒绝，这意味着除非明确配置 Policy 允许某项操作，否则该操作将被拒绝。
+**ACL 策略**由 **policy store** 负责管理与存储，由 **core** 进行 ACL 检查。
+ACL 的默认行为是拒绝，这意味着除非明确配置 **policy** 允许某项操作，否则该操作将被拒绝。
 
-在通过 auth methods 完成了身份认证，并且返回的「关联策略」也没毛病之后，「token store」将会生成并管理一个新的 token，
+在通过 **auth methods** 完成了身份认证，并且返回的**关联策略**也没毛病之后，**token store** 将会生成并管理一个新的**凭证**（token），
 这个 token 会被返回给客户端，用于进行后续请求。
 
-类似 web 网站的 cookie，token 也都存在一个 lease 租期或者说有效期，这加强了安全性。
+类似 web 网站的 cookie，token 也都存在一个**租期**（lease）或者说有效期，这加强了安全性。
 
 token 关联了相关的策略 policies，这些策略将被用于验证请求的权限。
 
-请求经过验证后，将被路由到 secret engine。如果 secret engine 返回了一个 secret（由 vault 自动生成的 secret），
-Core 会将其注册到 expiration manager，并给它附加一个 lease ID。lease ID 被客户端用于更新(renew)或吊销(revoke)它得到的 secret.
+请求经过验证后，将被路由到 **secret engine**。如果 **secret engine** 返回了一个 **secret**（由 vault 自动生成的 secret），
+core 会将其注册到 **expiration manager**，并给它附加一个 lease ID。lease ID 被客户端用于**更新**(renew)或**吊销**(revoke)它得到的 secret.
 
-如果客户端允许租约(lease)到期，expiration manager 将自动吊销这个 secret.
+如果客户端允许租约(lease)到期，**expiration manager** 将自动吊销这个 **secret**.
 
-Core 负责处理审核代理(audit broker)的请求及响应日志，将请求发送到所有已配置的审核设备(audit devices)。
+core 还负责处理**审核代理 audit broker**的请求及响应日志，将请求发送到所有已配置的**审核设备 audit devices**. 不过默认情况下这个功能貌似是关闭的。
 
 
 ### 3. Secret Engine
 
-Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。
+**Secret Engine** 是保存、生成或者加密数据的组件，它非常灵活。
 
 有的 Secret Engines 只是单纯地存储与读取数据，比如 kv 就可以看作一个加密的 Redis。
 而其他的 Secret Engines 则连接到其他的服务并按需生成动态凭证。
 
-还有些 Secret Engines 提供「加密即服务(encryption as a service)」的能力，如 transit、证书管理等。
+还有些 Secret Engines 提供「**加密即服务**(encryption as a service)」的能力，如 transit、证书管理等。
 
 常用的 engine 举例：
 
-1. AliCloud Secrets Engine: 基于 RAM 策略动态生成 AliCloud Access Token，或基于 RAM 角色动态生成 AliCloud STS 凭据
+1. **AliCloud Secrets Engine**: 基于 RAM 策略动态生成 AliCloud Access Token，或基于 RAM 角色动态生成 AliCloud STS 凭据
     - Access Token 会自动更新(Renew)，而 STS 凭据是临时使用的，过期后就失效了。
-1. kv: 键值存储，可用于存储一些静态的配置。它一定程度上能替代掉携程的 Apollo 配置中心。
-1. Transit Secrets Engine: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。
+1. **kv**: 键值存储，可用于存储一些静态的配置。它一定程度上能替代掉携程的 Apollo 配置中心。
+1. **Transit Secrets Engine**: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。
 
 
 ## 二、部署 Vault
@@ -123,7 +124,7 @@ Secret Engine 是保存、生成或者加密数据的组件，它非常灵活。
 
 ### 0. 如何选择存储后端？
 
-首先，我们肯定需要 HA，至少要保留能升级到 HA 的能力，所以不建议选择不支持 HA 的后端。
+首先，我们肯定需要高可用 HA，至少要保留能升级到 HA 的能力，所以不建议选择不支持 HA 的后端。
 
 而具体的选择，就因团队经验而异了，人们往往倾向于使用自己熟悉的、知根知底的后端，或者选用云服务。
 
@@ -430,7 +431,7 @@ kubectl exec -ti vault-0 -- vault operator init
 
 Vault 本身是一个复杂的 secrets 工具，它提供了 **Web UI** 和 **CLI** 用于手动管理与查看 Vault 的内容。
 
-但是作为一名 DevOps，我们当然更喜欢自动化的方法，这有两种选择:
+但是作为一名 DevOps，我们当然更喜欢更自治的方法，这有两种选择:
 
 - 使用 vault 的 sdk: python-[hvac](https://github.com/hvac/hvac)
 - 使用 [terraform-provider-vault](https://github.com/hashicorp/terraform-provider-vault) 或者 [pulumi-vault](https://github.com/pulumi/pulumi-vault) 实现 vault 配置的自动化管理。
