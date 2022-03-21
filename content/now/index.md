@@ -45,7 +45,7 @@ toc:
 阅读（一二三月份，就读这两本吧）：
 
 - [x] 《人间失格》
-- [ ] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)
+- [x] [Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)
 - [ ] 《在生命的尽头拥抱你-临终关怀医生手记》
 
 
@@ -69,9 +69,9 @@ toc:
 阅读（四五六月份的书单）：
 
 - [ ] 《生命最后的读书会》
-- [ ] 《房思琪的初恋乐园》
-- [ ] 《圆圈正义-作为自由前提的信念》
-- [ ] 《网络是怎样连接的》
+- [ ] 《在峡江的转弯处 - 陈行甲人生笔记》
+- [ ] 《分析与思考 - 黄奇帆的复旦经济课》
+- [ ] 《经济学原理（第七版）》
 
 生活：
 - 音乐：Synthesizer V, 练习键盘
