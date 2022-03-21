@@ -17,7 +17,7 @@
 <meta name=application-name content="This Cute World">
 <meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"Cryptography, 密码学, HTTPS, TLS, SSL, OpenSSL, PKI, 数字证书, 证书, SSH, QUIC, HTTP\/3, 安全","wordcount":15377,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/about-tls-cert\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/https-secure.png","width":1500,"height":450}],"genre":"posts","keywords":"Cryptography, 密码学, HTTPS, TLS, SSL, OpenSSL, PKI, 数字证书, 证书, SSH, QUIC, HTTP\/3, 安全","wordcount":15823,"url":"https:\/\/thiscute.world\/posts\/about-tls-cert\/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
 <div class=header-wrapper>
@@ -89,8 +89,8 @@
 <div class=toc-content id=toc-content-auto></div>
 </div><article class="page single"><h1 class="single-title animated flipInX">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</h1><div class=post-meta>
 <div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 15377 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 31 分钟&nbsp;</div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 15823 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 32 分钟&nbsp;</div>
 </div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/about-tls-cert/https-secure.png data-srcset="/posts/about-tls-cert/https-secure.png, /posts/about-tls-cert/https-secure.png 1.5x, /posts/about-tls-cert/https-secure.png 2x" data-sizes=auto alt=/posts/about-tls-cert/https-secure.png title=/posts/about-tls-cert/https-secure.png></div><div class="details toc" id=toc-static kept>
 <div class="details-summary toc-title">
 <span>目录</span>
@@ -110,7 +110,7 @@
 </li>
 <li><a href=#3-证书的存储格式与编码标准>3. 证书的存储格式与编码标准</a>
 <ul>
-<li><a href=#存储格式-der-与-pem>存储格式 DER 与 PEM</a></li>
+<li><a href=#编码存储格式-der-与-pem>编码存储格式 DER 与 PEM</a></li>
 <li><a href=#pkcs1>PKCS#1</a></li>
 <li><a href=#pkcs7--cms>PKCS#7 / CMS</a></li>
 <li><a href=#pkcs8>PKCS#8</a></li>
@@ -311,7 +311,9 @@ X.509 v3 格式被广泛应用在 TLS/SSL 等众多加密通讯协议中，它�
 </figure>
 <p>CA 机构也可能会在经过严格审核后，为其他机构签发中间证书，这样就能赋予其他机构签发证书的权利，而且根证书的安全性不受影响。</p>
 <p>如果你访问某个 HTTPS 站点发现浏览器显示小绿锁，那就说明这个证书是由某个权威<strong>认证机构</strong>签发的，其信息是经过这些机构认证的。</p>
-<p>部分个人、企业或其他机构（比如金融机构），可能会因为各种原因，生成自己的根证书与中间证书，然后自行签发证书。
+<p>上述这个全球互联网上，由<strong>证书认证机构</strong>、操作系统与浏览器内置的根证书、TLS 加密认证协议、OCSP 证书吊销协议等等组成的架构，我们可以称它为 <strong>Web PKI</strong>.</p>
+<p><strong>Web PKI</strong> 通常是可信的，但是并不意味着它们可靠。历史上出现过许多由于审核机制漏洞，或者政府要求，证书认证机构颁发将假证书颁发给黑客或者证书机构的情况。获得假证书的人将可以随意伪造站点，而所有操作系统或浏览器都认为这些假站点是安全的，显示小绿锁。</p>
+<p>因为<strong>证书认证机构</strong>的可靠性问题以及一些其他的原因，部分个人、企业或其他机构（比如金融机构）会生成自己的根证书与中间证书，然后自行签发证书，构建出自己的 PKI 认证架构，我们可以将它称作<strong>内部 PKI</strong>。
 但是这种自己生成的根证书是未内置在操作系统与浏览器中的，为了确保安全性，用户就需要先手动在设备上安装好这个数字证书。
 自行签发证书的案例有：</p>
 <ul>
@@ -334,14 +336,36 @@ X.509 v3 格式被广泛应用在 TLS/SSL 等众多加密通讯协议中，它�
 交叉签名的主要目的是提升证书的兼容性——客户端只要安装有其中任何一个根证书，就能正常验证这个中间证书。
 从而使中间证书在较老的设备也能顺利通过证书验证。</p>
 <h3 id=3-证书的存储格式与编码标准>3. 证书的存储格式与编码标准</h3>
-<p>X509 证书可以以多种格式存储，一般拓展名来标识证书文件的格式。</p>
-<p>现代网络通讯中，常用的证书格式都在 <a href=https://datatracker.ietf.org/doc/html/rfc7468 target=_blank rel="noopener noreferrer">RFC7468</a> 中被标准化。
-主要有 PEM、PKCS#7、PKCS#12 三种格式。</p>
-<h4 id=存储格式-der-与-pem>存储格式 DER 与 PEM</h4>
+<blockquote>
+<p>证书的格式这一块，是真的五花八门&mldr;沉重的历史包袱&mldr;</p>
+</blockquote>
+<p>X509 只规定了证书应该包含哪些信息，但是未定义证书该如何存储。为了解决证书的描述与编码存储问题，又出现了如下标准：</p>
+<ul>
+<li>ASN.1 结构：是一种描述证书格式的方法。
+<ul>
+<li>它类似 protobuf 数据描述语言、SQL DDL</li>
+<li>ASN.1 只规定了该如何描述证书，未定义该如何编码。</li>
+</ul>
+</li>
+<li>将 ASN.1 结构编码存储的格式有
+<ul>
+<li>DER：一种二进制编码格式</li>
+<li>PEM：DER 是二进制格式，不便于复制粘贴，因此出现了 PEM，它是一个文本编码格式（其实就是把 DER 编码后的数据再 Base64 编码下&mldr;）</li>
+</ul>
+</li>
+<li>某些场景下，X.509 信息不够丰富，因此又设计了一些信息更丰富（例如可以包含证书 链、秘钥）的证书封装格式，包括 PKCS #7 和 PKCS #12
+<ul>
+<li>仍然用 ASN.1 格式描述</li>
+<li>基本都是用 DER 编码</li>
+</ul>
+</li>
+</ul>
+<p>下面详细介绍下这些相关的标准与格式。</p>
+<h4 id=编码存储格式-der-与-pem>编码存储格式 DER 与 PEM</h4>
 <p>DER 是由国际电信联盟（ITU）在 <a href="https://www.itu.int/ITU-T/recommendations/rec.aspx?rec=x.690" target=_blank rel="noopener noreferrer"> ITU-T X.690</a>标准中定义的一种数据编码规则，用于将 ASN.1 结构的信息编码为二进制数据。
 直接以 DER 格式存储的证书，大都使用 <code>.cer</code> <code>.crt</code> <code>.der</code> 拓展名，在 Windows 系统比较常见。</p>
 <p>而 PEM 格式，即 Privacy-Enhanced Mail，是 openssl 默认使用的证书格式。可用于编码公钥、私钥、公钥证书等多种密码学信息。
-PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编码出的二进制数据再处理一次，编码成字符串再存储。好处是存储、传输要方便很多。</p>
+PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编码出的二进制数据再处理一次，编码成字符串再存储。好处是存储、传输要方便很多，可以直接复制粘贴。</p>
 <p>一个 2048 位 RSA 公钥的 PEM 文件内容如下：</p>
 <div class=highlight><div class=chroma>
 <table class=lntable><tr><td class=lntd>
@@ -399,24 +423,14 @@ YwIDAQAB
 </code></pre></td></tr></table>
 </div>
 </div><h4 id=pkcs7--cms>PKCS#7 / CMS</h4>
-<p><a href=https://datatracker.ietf.org/doc/html/rfc2630 target=_blank rel="noopener noreferrer">PKCS#7</a>，也被称作 CMS（Cryptographic Message Syntax），是一个数据填充标准，常被用于需要数据填充的加密、数字签名等算法中。</p>
-<p>PKCS#7 通常并不用于存储，数据在被 PKCS#7 填充后，立即用于加密或签名，生成出对应的密文或签名，然后就可以丢弃了。</p>
-<p>PKCS#7 本身只定义了数据结构，如果需要存储的话，通常使用 DER 编码规则编码后直接存储，或者再继续编码为 PEM 格式。
-在 Windows 系统中， DER 与 PEM 格式的 PKCS#7 文件都使用 <code>.p7b</code> 拓展名。</p>
-<p>一个 PKCS#7 格式的文件内容如下：</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>‑‑‑‑BEGIN PKCS7‑‑‑‑‑
-...
-‑‑‑‑‑END PKCS7‑‑‑‑‑
-</code></pre></td></tr></table>
-</div>
-</div><h4 id=pkcs8>PKCS#8</h4>
+<blockquote>
+<p>头疼&mldr; PKCS#7 导致是个啥玩意儿？为什么这么多五花八门的格式&mldr;</p>
+</blockquote>
+<p><a href=https://datatracker.ietf.org/doc/html/rfc5652 target=_blank rel="noopener noreferrer">PKCS#7/CMS</a>，是一个多用途的证书描述格式。
+它包含一个数据填充规则，这个填充规则常被用在需要数据填充的分组加密、数字签名等算法中。</p>
+<p>另外据说 PKCS#7 也可以被用来描述证书，并以 DER/PEM 格式保存，后缀通常使用 <code>.p7b</code> 或者 <code>.p7c</code>,
+这个暂时存疑吧，有需要再研究了。</p>
+<h4 id=pkcs8>PKCS#8</h4>
 <p><a href=https://datatracker.ietf.org/doc/html/rfc5958 target=_blank rel="noopener noreferrer">PKCS#8</a> 是一个专门用于编码私钥的标准，可用于编码 DSA/RSA/ECC 私钥。它通常被编码成 PEM 格式存储。</p>
 <p>前面介绍了专门用于编码 RSA 的 PKCS#1 标准比较陈旧，而且<a href=https://web.archive.org/web/20081117042916/http://www.gemplus.com/smart/rd/publications/pdf/CJNP00pk.pdf target=_blank rel="noopener noreferrer">曾经出过漏洞</a>。因此通常建议使用更安全的 PKCS#8 来取代 PKCS#1.</p>
 <p>C# Java 等编程语言通常要求使用此格式的私钥，而 Python 的 <a href=https://github.com/pyca/cryptography target=_blank rel="noopener noreferrer">pyca/cryptography</a> 则支持多种编码格式。</p>
@@ -1309,6 +1323,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO7HgqespdWziJH2Y9mdKm6vnbTtx7IyJk/4IOdd2igx
 <p>其他推荐读物:</p>
 <ul>
 <li><a href=https://book.douban.com/subject/26822106/ target=_blank rel="noopener noreferrer">图解密码技术 - [日]结城浩</a></li>
+<li><a href=https://mp.weixin.qq.com/s/li3ZjfNgX5nh7AKjyyzt5A target=_blank rel="noopener noreferrer">给工程师：关于证书（certificate）和公钥基础设施（PKI）的一切</a></li>
 </ul>
 </div><div class=post-footer id=post-footer>
 <div class=post-info>
