@@ -9,6 +9,11 @@ toc:
 
 记录下我的学习轨迹。
 
+
+### 2021-03-22
+
+- 注册[模之屋](https://www.aplaybox.com)，简单学了下 MMD 跟 [Blender](https://www.blender.org/)
+
 ### 2021-03-15 - 2021-03-19
 
 - 学习 Envoy，完成 [Envoy 笔记](https://github.com/ryan4yin/knowledge/tree/master/network/proxy%26server/envoy)
@@ -62,6 +67,11 @@ toc:
   - 添加「阅读排行」页，定期从 Google Analytics 同步数据
   - 从博客园迁移部分有价值的文章到独立博客
 
+
+### 2022-01-08 - 2022-01-16
+
+- 购入 Synthesizer V + 青溯 AI 声库，简单调了几首歌试试，效果非常棒。
+- 也调研了下[歌声合成领域目前的进展](https://github.com/ryan4yin/knowledge/tree/master/music/vocal%20synthesizer)，试用了免费的移动端软件 [ACE 虚拟歌姬](https://www.taptap.com/app/189147?hreflang=zh_CN)，渲染效果真的媲美 CNY 999 的 SynthV AI 套装，不得不感叹 AI 的效果真的强啊。
 
 ### 2022-01-01
 
