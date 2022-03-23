@@ -30,6 +30,7 @@ modified_page_paths = {
     # 旧路径 => 新路径
     "/posts/common-kubernetes-errors-causes-and-solutions/": "/posts/kubernetes-common-errors-and-solutions/",
     "/posts/sql-basic/": "/posts/sql-basics-1/",
+    "/posts/likenttt-2020-12-13-guangzhou-marathon/": "/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/",
 }
 
 modified_page_titles = {
