@@ -29,7 +29,11 @@ categories: ["技术"]
 - **2021-01-17**: 完成 TLS 协议简介、数字证书介绍、数字证书的申请或生成方法、mTLS 介绍、TLS 协议的破解手段
 - **2022-03-13** ~ **2022-03-14**: 重新整理补充，改写为《写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议》，整合进我的实用密码学系列文章中
   - 补充 PKI 公钥基础架构及 X509 证书标准介绍
-- TODO: 补充 TLS 协议的逆向手段
+- TODO:
+  - 补充 TLS 协议的逆向手段
+  - 基于 [cfssl](https://shoujo.ink/2021/11/cfssl-%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E5%88%86%E6%9E%90/) 详细介绍 PKI 的各项组件
+  - 基于 PKI 的应用服务间身份识别技术：[SPIFF ID](https://github.com/spiffe/spiffe)
+    - SPIFF ID 是云原生领域的标准，[服务网格项目 Istio 就使用了 SPIFF ID 作为安全命名](https://shoujo.ink/2021/10/istio-%E5%AE%89%E5%85%A8%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8B-pki-%E4%B8%8E%E9%80%9A%E4%BF%A1%E5%AE%89%E5%85%A8/)
 
 ---
 
