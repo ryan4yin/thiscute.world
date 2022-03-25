@@ -14,7 +14,7 @@ toc:
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
   - 进度 20%
 - 《在生命的尽头拥抱你-临终关怀医生手记》
-  - 进度 10%
+  - 进度 54%
 
 
 ## 我最近还想搞搞这些
