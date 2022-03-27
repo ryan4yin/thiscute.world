@@ -14,7 +14,7 @@ toc:
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容 - 进度 20%
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 54%
 - 区块链技术 Web3.0
-  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门 - 30%
+  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门 - 36%
   - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
   - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
 
