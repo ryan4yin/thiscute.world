@@ -5,9 +5,9 @@ draft: false
 
 comment:
   utterances:
-    enable: false
-  waline:
     enable: true
+  waline:
+    enable: false
 ---
 
 ![一封纸笺](letter-from-friend.jpg)
