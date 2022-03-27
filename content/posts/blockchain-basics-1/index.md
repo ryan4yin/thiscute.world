@@ -1,12 +1,12 @@
 ---
-title: "区块链笔记（一）"
+title: "区块链学习笔记（一）"
 date: 2022-02-21T12:11:00+08:00
 draft: true
 resources:
 - name: "featured-image"
-  src: "cryptography.png"
+  src: "blockchain.png"
 
-tags: ["Blockchain", "密码学", "区块链"]
+tags: ["Blockchain", "区块链", "图灵完备"]
 categories: ["技术"]
 
 code:
@@ -17,3 +17,5 @@ code:
 ---
 
 TBD
+
+

@@ -11,18 +11,16 @@ toc:
 
 - 学习使用 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)，分析 Envoy Sidecar 的动态配置、流量代理、监控指标等实现细节。
   - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing、基于 iptables/tproxy 的 outbound 流量代理
-- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
-  - 进度 20%
-- 《在生命的尽头拥抱你-临终关怀医生手记》
-  - 进度 54%
-
+- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容 - 进度 20%
+- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 54%
+- 区块链技术 Web3.0
+  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门 - 30%
+  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
+  - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
 
 ## 我最近还想搞搞这些
 
 
-- 区块链技术 Web3.0
-  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门
-  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 
 
