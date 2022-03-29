@@ -489,7 +489,7 @@ geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度�
 
 先介绍下 vxlan 的数据包结构：
 
-![](/images/linux-virtual-interfaces/vxlan-frame.png "VXLAN 栈帧结构")
+{{< figure src="/images/linux-virtual-interfaces/vxlan-frame.png" title="VXLAN 栈帧结构" >}}
 
 在创建 vxlan 的 vtep 虚拟设备时，我们需要手动设置图中的如下属性：
 
@@ -498,7 +498,7 @@ geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度�
 
 一个点对点的 vxlan 网络架构图如下:
 
-![](/images/linux-virtual-interfaces/vxlan-architecture.gif "VXLAN 点对点网络架构")
+{{< figure src="/images/linux-virtual-interfaces/vxlan-architecture.gif" title="VXLAN 点对点网络架构" >}}
 
 可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。
 
@@ -555,8 +555,7 @@ ip link set vxlan0 up
 
 接下来，为了能让所有的虚拟机/容器，都通过 vtep 通信，我们再添加一个 bridge 网络，充当 vtep 与容器间的交换机。架构如下：
 
-![](/images/linux-virtual-interfaces/linux-vxlan-with-bridge.jpg "VXLAN 多播网络架构")
-
+{{< figure src="/images/linux-virtual-interfaces/linux-vxlan-with-bridge.jpg" title="VXLAN 多播网络架构" >}}
 
 使用 ip 命令创建网桥、网络名字空间、veth pairs 组成上图中的容器网络：
 
