@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: ".png"
 
-tags: ["NAT", "内网穿透", "网络"]
+tags: ["NAT", "内网穿透", "网络", "网络隧道"]
 categories: ["技术"]
 
 code:

@@ -1,13 +1,13 @@
 ---
 title: "源码分析系列 - APISIX Ingress Controller"
-date: 2022-03-23T22:08:00+08:00
+date: 2022-03-30T00:11:21+08:00
 draft: true
 
 resources:
 - name: "featured-image"
   src: "featured-image.jpg"
 
-tags: ["网络", "代理", "网关", "源码分析", "APISIX", "Ingress", "Kubernetes"]
+tags: ["网络代理", "网关", "源码分析", "APISIX", "Ingress", "Kubernetes"]
 categories: ["技术"]
 ---
 

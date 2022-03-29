@@ -1,6 +1,6 @@
 ---
 title: "Death Is But a Dream: Finding Hope and Meaning at Life's End"
-date: 2022-03-24T01:40:00+08:00
+date: 2022-03-30T00:11:21+08:00
 draft: true
 
 resources:
