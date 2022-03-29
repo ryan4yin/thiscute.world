@@ -197,7 +197,7 @@ KDF 目前主要从如下三个维度提升 hash 碰撞难度：
 
 如果你正在开发一个新的程序，需要使用到 KDF，建议选用 argon2/scrypt.
 
-Python 中最流行的加密库是 [cryptography](https://github.com/pyca/cryptography)，`requests`/`flask` 底层就使用了它，下面我们使用这个库来演示下 Scrypt 算法的使用：
+Python 中最流行的密码学库是 [cryptography](https://github.com/pyca/cryptography)，`requests` 的底层曾经就使用了它（新版本已经换成使用标准库 ssl 了），下面我们使用这个库来演示下 Scrypt 算法的使用：
 
 ```python
 # pip install cryptography==36.0.1

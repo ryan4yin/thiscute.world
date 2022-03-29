@@ -178,7 +178,7 @@ $$
 
 可以看到，因为异或 XOR 的对称性，加密跟解密的算法是完全相同的，直接 XOR $O_i$ 即可。
 
-Python 中最流行的加密库是 [cryptography](https://github.com/pyca/cryptography)，`requests`/`flask` 底层就使用了它，下面我们使用这个库来演示下 AES-256-CTR 算法：
+Python 中最流行的密码学库是 [cryptography](https://github.com/pyca/cryptography)，`requests` 的底层曾经就使用了它（新版本已经换成使用标准库 ssl 了），下面我们使用这个库来演示下 AES-256-CTR 算法：
 
 ```python
 # pip install cryptography==36.0.1
