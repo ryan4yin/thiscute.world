@@ -9,6 +9,11 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2021-03-30
+
+- 学习区块链技术
+  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)：进度 7/14
+
 ### 2021-03-26 - 2021-3-27
 
 - 学习区块链技术
