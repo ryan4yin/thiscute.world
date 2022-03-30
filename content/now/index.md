@@ -114,6 +114,7 @@ toc:
 - 操作系统：
   - [The Linux Programming Interface](https://www.man7.org/tlpi/index.html)
   - [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/)
+  - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
 
 - 编译原理
   - [自制编译器](https://book.douban.com/subject/26806041/)
