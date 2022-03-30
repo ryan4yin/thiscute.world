@@ -118,6 +118,7 @@ toc:
 - 编译原理
   - [自制编译器](https://book.douban.com/subject/26806041/)
   - [Programming Language Pragmatics, Fourth Edition](https://book.douban.com/subject/26424018/)
+  - [Crafting Interpreters](http://craftinginterpreters.com/contents.html)
 
 - 学习英语，目标是能流利地读写交流。
   - 主要是可以扩宽工作的选择面，外企很多职位会要求英文读写流利。
