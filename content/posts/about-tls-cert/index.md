@@ -838,7 +838,7 @@ ssh-keygen -y -f xxx_rsa > xxx_rsa.pub
 
 #### QUIC 协议
 
-[QUIC 协议](https://zhuanlan.zhihu.com/p/405387352)，已被标准化为 HTTP/3 协议，是 Google 研发并推动标准化的新一代 HTTP 协议，它做了很多大刀阔斧的改革：
+[QUIC 协议](https://github.com/quicwg)，是 Google 研发并推动标准化的 TCP 协议的替代品，基于它形成了当前的 HTTP/3 草案（HTTP over QUIC）并且已被 Bilibili/CloudFlare 等站点采用，它做了很多大刀阔斧的改革：
 
 - 传输层协议从 TCP 改成了 UDP，QUIC 自己实现的数据的可靠传输、按序到达、拥塞控制
   - 也就是说 QUIC 绕过了陈旧的内核 TCP 协议实现，直接在用户空间实现了这些功能
@@ -847,11 +847,11 @@ ssh-keygen -y -f xxx_rsa > xxx_rsa.pub
   - QUIC Crypto 的特点是它直接在应用层进行加密通讯的握手，并且恢复通信时可以通过缓存实现 0RTT 握手
   - 也就说 QUIC 通过另起炉灶，解决了 TLS 的安全问题，以及握手延迟高的问题
 
-总结一下就是，旧的实验性 QUIC 协议，重新实现了 HTTP+TLS+TCP 三种协议并将它们整合到一起，这带来了极佳的性能，但也使它变得非常复杂。
+总结一下就是，旧的实验性 HTTP-over-QUIC 协议，重新实现了 HTTP+TLS+TCP 三种协议并将它们整合到一起，这带来了极佳的性能，但也使它变得非常复杂。
 
 QUIC 的 0RTT 握手是一个非常妙的想法，可以显著降低握手时延，TLS1.3 的设计者们将它纳入了 TLS1.3 标准中。
 
-由于 TLS1.3 的良好特性，在 TLS1.3 协议发布后，新的 QUIC 标准 [RFC 9001](https://datatracker.ietf.org/doc/html/rfc9001) 已经使用 TLS1.3 取代了实验阶段使用的 QUIC Crypto 加密方案。
+由于 TLS1.3 的良好特性，在 TLS1.3 协议发布后，新的 QUIC 标准 [RFC 9001](https://datatracker.ietf.org/doc/html/rfc9001) 已经使用 TLS1.3 取代了实验阶段使用的 QUIC Crypto 加密方案，目前只有 Chromium/Chrome 仍然支持 QUIC Crypto，其他 QUIC 实现基本都只支持 TLS1.3, 详见 [QUIC Implementations](https://github.com/quicwg/base-drafts/wiki/Implementations).
 
 ### 4. TLS 协议攻防战
 
