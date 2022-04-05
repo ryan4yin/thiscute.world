@@ -9,15 +9,10 @@ toc:
 
 记录下我的学习轨迹。
 
-### 2021-03-30
+### 2021-03-26 - 2021-04-01
 
 - 学习区块链技术
   - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)：进度 7/14
-
-### 2021-03-26 - 2021-3-27
-
-- 学习区块链技术
-  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)：进度 5/14
   - [full-blockchain-solidity-course-py](https://github.com/smartcontractkit/full-blockchain-solidity-course-py)：进度 3/100
 
 ### 2021-03-23 - 2021-3-25
