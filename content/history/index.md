@@ -9,20 +9,15 @@ toc:
 
 记录下我的学习轨迹。
 
-### 2021-04-08
+### 2021-04-08 - 2021-04-09
 
 - 学习区块链技术 Web3.0
   - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门
-    - 进度：11/14
-    - 跳过了智能合约的编写（因为内容比较老了），提前学习了智能合约安全策略、代币、NFT
+    - 进度：100%
+    - 跳过了智能合约代码相关的内容，因为代码比较老了，新版本的 solidity 有了许多新变化。
   - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
     - 这个视频及相关的 Github 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论后，实战合约编写
-  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
-
-- 学习区块链技术
-  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)：进度 11/14
-
-  - [full-blockchain-solidity-course-py](https://github.com/smartcontractkit/full-blockchain-solidity-course-py)：进度 3/100
+  - [区块链技术指南](https://github.com/yeasy/blockchain_guide): 《Docker - 从入门到实践》作者的新书，内容同样简洁易懂，侧重介绍原理及知识面，非常棒。
 
 ### 2021-03-26 - 2021-04-01
 
@@ -32,7 +27,6 @@ toc:
     - 这书适合用于学习理论，solidity 开发相关的内容可以跳过，即 7/8 两章
   - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
     - 这个视频及相关的 Github 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论后，实战合约编写
-  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
 
 
 ### 2021-03-23 - 2021-3-25

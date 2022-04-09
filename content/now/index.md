@@ -14,11 +14,10 @@ toc:
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容 - 进度 20%
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 54%
 - 区块链技术 Web3.0
-  - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook) - 以太坊入门
-    - 进度：11/14
-    - 这书适合用于学习理论，solidity 开发相关的内容可以跳过，即 7/8 两章
   - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
     - 这个视频及相关的 Github 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论后，实战合约编写
+  - [以太坊开发者文档](https://ethereum.org/zh/developers/docs/intro-to-ethereum/) - 以太坊进阶
+  - [区块链技术指南](https://github.com/yeasy/blockchain_guide): 《Docker - 从入门到实践》作者的新书，内容同样简洁易懂，侧重介绍原理及知识面，非常棒。
 
 ## 我最近还想搞搞这些
 
