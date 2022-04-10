@@ -9,6 +9,15 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2021-04-10
+
+- 学习 3D 引擎的使用，简单试用了 unity3d 与 unreal engine 5.
+  - 确定学习方向：先学学 UE5 蓝图入个门，然后试试把 MMD 模型导入到 UE5 做做动画，中间也会简单接触下 Blender.
+  - 感受：UE5 挺不错的，尤其是它还提供 VR 编辑模式，手上的 Quest 2 又能派上用场了
+  - 输出文档：[3D 图形相关](https://github.com/ryan4yin/knowledge/tree/master/graphics)
+- 阅读《Go 程序设计语言》
+
+
 ### 2021-04-08 - 2021-04-09
 
 - 学习区块链技术 Web3.0
