@@ -229,17 +229,18 @@ spec:
 
 为了搞清楚这个问题，需要先理解清楚 terminate 一个 Pod 的流程：
 
-1. Pod 的状态被设为「Terminating」，（几乎）同时该 Pod 被从所有关联的 Service Endpoints 中移除
-2. `preStop` 钩子被执行，它可以是一个命令，或者一个对 Pod 中容器的 http 调用
-   1. 如果你的程序在收到 SIGTERM 信号时，无法优雅退出，就可以考虑使用 `preStop`
-   2. 如果让程序本身支持优雅退出比较麻烦的话，用 `preStop` 实现优雅退出是一个非常好的方式
-3. 将 SIGTERM 发送给 Pod 中的所有容器
-4. 继续等待，直到超过 `spec.terminationGracePeriodSeconds` 设定好的时间，这个值默认为 30s
+1. Pod 的状态被设为 `Terminating`，（几乎）同时该 Pod 被从所有关联的 Service Endpoints 中移除
+2. `preStop` 钩子被执行
+   1. 它可以是一个命令，或者一个对 Pod 中容器的 http 调用
+   2. 如果你的程序在收到 SIGTERM 信号时，无法优雅退出，就可以考虑使用 `preStop`
+   3. 如果让程序本身支持优雅退出比较麻烦的话，用 `preStop` 实现优雅退出是一个非常好的方式
+3. `preStop` 执行完毕后，SIGTERM 信号被发送给 Pod 中的所有容器
+4. 继续等待，直到容器停止，或者超时 `spec.terminationGracePeriodSeconds`，这个值默认为 30s
    1. 需要注意的是，这个优雅退出的等待计时是与 `preStop` 同步开始的！而且它也不会等待 `preStop` 结束！
 5. 如果超过了 `spec.terminationGracePeriodSeconds` 容器仍然没有停止，k8s 将会发送 SIGKILL 信号给容器
 6. 进程全部终止后，整个 Pod 完全被清理掉
 
-**注意**：1 和 2 两个工作是异步发生的，所以可能会出现「Pod 还在 Service Endpoints 中，但是 `preStop` 已经执行了」的情况，我们需要考虑到这种状况的发生。
+**注意**：1 跟 2 两个工作是异步发生的，所以在未设置 `preStop` 时，可能会出现「Pod 还在 Service Endpoints 中，但是 `SIGTERM` 已经被发送给 Pod 导致容器都挂掉」的情况，我们需要考虑到这种状况的发生。
 
 了解了上面的流程后，我们就能分析出两种错误码出现的原因：
 
