@@ -171,6 +171,11 @@ toc:
 
 - 机器学习、深度学习
 
+- 大数据技术
+  - ETL
+  - Spark
+  - 数据湖
+
 - 编程语言
   - Elixir
   - Kotlin
