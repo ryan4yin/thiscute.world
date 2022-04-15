@@ -6,7 +6,7 @@ resources:
 - name: "featured-image"
   src: "blockchain.png"
 
-tags: ["Blockchain", "区块链", "图灵完备"]
+tags: ["Blockchain", "区块链", "图灵完备", "分布式系统", "去中心化"]
 categories: ["技术"]
 
 code:
