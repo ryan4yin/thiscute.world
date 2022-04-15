@@ -14,8 +14,15 @@ toc:
 
 - 阅读《Go 程序设计语言（英文版）》 - 进度 4/13
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 或 [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler) 实现集群弹性扩缩容 - 进度 20%
+- 研究清楚 NAT 网关：
+  - NAT 的原理、结构
+  - Kubernetes/Docker 网络所使用的 NAT
+  - AWS NAT 网关
+  - P2P 内网穿透: zerotier/tailscales
+  - Kubernetes 跨 NAT 组网、将开发机器接入 Kubernetes 网络：适合用于本地/云上 K8s 调试
 - 学习使用 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)，分析 Envoy Sidecar 的动态配置、流量代理、监控指标等实现细节。
   - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing、基于 iptables/tproxy 的 outbound 流量代理
+
 
 ## 我最近还想搞搞这些
 
