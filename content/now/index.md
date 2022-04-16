@@ -12,7 +12,7 @@ toc:
 
 ## 我正在研究这些
 
-- 阅读《Go 程序设计语言（英文版）》 - 进度 4/13
+- 阅读《Go 程序设计语言（英文版）》 - 进度 5/13
 - 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 或 [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler) 实现集群弹性扩缩容 - 进度 20%
 - 研究清楚 NAT 网关：
   - NAT 的原理、结构
