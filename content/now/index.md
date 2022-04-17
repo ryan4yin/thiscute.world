@@ -30,7 +30,7 @@ toc:
   - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门
   - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
-- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 54%
+- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 61%
 
 
 ## 我的学习清单
