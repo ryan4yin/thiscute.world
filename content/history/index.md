@@ -9,6 +9,14 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-04-18
+
+- 阅读《Go 程序设计语言（英文版）》 - 进度 53%
+  - 第 7 章「接口」读了一半，大概 22 pages，预计明天能完成
+- [ ] 《[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)》
+  - 读到 Introduction 一章，行文真的很有趣，看 projects 也有深度，决定了要把这本书看完，把习题做好。
+  - 不知道这本 OSTEP 跟 CSAPP 区别多大，目前最大的感觉就是这本更有趣 emmmm
+
 ### 2022-04-17
 
 - 阅读《Go 程序设计语言（英文版）》 - 进度 7/13

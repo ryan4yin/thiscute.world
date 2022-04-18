@@ -48,11 +48,13 @@ toc:
 正在读：
 
 - [ ] 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 61%
-- [ ] 《Go 程序设计语言（英文版）》 - 进度 7/13
+- [ ] 《Go 程序设计语言（英文版）》 - 进度 53%
+- [ ] 《C 程序设计语言》
+  - 以前看过，为了学操作系统，有必要再看一遍
+- [ ] 《[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)》
 
 计划读：
 
-- [ ] 《Operating Systems - Three Easy Pieces》
 - [ ] 《Social Psychology, 13e, David Myers》
 - [ ] 《Principles Of Economics, 9e, N. Gregory Mankiw》
 - [ ] 《Computer Networking - A Top-Down Approach, 7e》
