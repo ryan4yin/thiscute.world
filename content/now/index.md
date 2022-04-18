@@ -31,6 +31,7 @@ toc:
   - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门
   - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
 
 ## 三、今年的阅读进展
@@ -66,7 +67,9 @@ toc:
   - 下卷是源码剖析，基于 Go 1.6, 打算在看完《Go 程序设计语言》后看看这本
 - [ ] 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - [ ] 《探路之役 - 1978-1922 年的中国经济改革》
+- [ ] 《筚路维艰 - 中国社会主义路径的五次选择》
 - [ ] 《手把手教你读财报》
+- [ ] 《原则 - 应对变化中的世界秩序》
 
 ## 四、我的备选书单
 
@@ -90,7 +93,6 @@ toc:
   - [ ] 《被讨厌的勇气》
   - [ ] 《邓小平时代》
   - [ ] 《论中国》
-  - [ ] 《筚路维艰 - 中国社会主义路径的五次选择》
   - [ ] 《人体简史》
   - [ ] 《科学革命的结构》
   - [ ] 《时间的秩序》
@@ -99,7 +101,6 @@ toc:
   - [ ] 《人生脚本》
   - [ ] 《投资中最简单的事》
   - [ ] 《债务危机 - 我的应对原则》
-  - [ ] 《Principles for Dealing with the Changing World Order》
 - 技术类
   - [ ] 《SRE - Google 运维解密》
   - [ ] 《凤凰项目：一个 IT 运维的传奇故事》
