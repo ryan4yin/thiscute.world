@@ -49,8 +49,8 @@ toc:
 
 - [ ] 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 61%
 - [ ] 《Go 程序设计语言（英文版）》 - 进度 53%
-- [ ] 《C 程序设计语言》
-  - 以前看过，为了学操作系统，有必要再看一遍
+- [ ] 《The ANSI C Programming Language (Brian W. Kernighan, Dennis M. Ritchie)》
+  - 上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
 - [ ] 《[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)》
 
 计划读：
