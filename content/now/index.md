@@ -162,6 +162,8 @@ toc:
 
 ### 3. 中优先级
 
+>附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
+
 - 研究 K8s 集群的 Pod 拓扑优化
   - TopologySpreadConstraint
   - [descheduler](https://github.com/kubernetes-sigs/descheduler)
