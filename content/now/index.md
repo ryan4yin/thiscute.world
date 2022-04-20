@@ -27,8 +27,10 @@ toc:
 ## 二、我最近还想搞搞这些
 
 - 机器学习
-  - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门
-  - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门
+  - [machine-learning - coursera](https://www.coursera.org/learn/machine-learning): 吴恩达教授的网红机器学习课程，火爆多年了，内容对小白很友好。
+  - [deep-learning - coursera](https://www.coursera.org/specializations/deep-learning): 仍然是吴恩达教授出品，圣经级别的机器学习课程，火爆多年了，内容对小白很友好。
+  - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门课程，做得比较有趣。
+  - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门资料
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
@@ -48,26 +50,28 @@ toc:
 
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 61%
 - 《Go 程序设计语言（英文版）》 - 进度 53%
-- 《The ANSI C Programming Language (Brian W. Kernighan, Dennis M. Ritchie)》
-  - 上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
 
 计划读：
 
+- 《The ANSI C Programming Language (Brian W. Kernighan, Dennis M. Ritchie)》
+  - 上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
 - Kubernete、云原生、Go 语言
   - Go 语言学习笔记 - 雨痕：下卷是源码剖析，基于 Go 1.6, 打算在看完《Go 程序设计语言》后看看这本
   - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
   - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 - 计算机网络
-  - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。这次可结合 [](https://gaia.cs.umass.edu/kurose_ross/index.php)
+  - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
+    - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
 - 操作系统（建议按顺序阅读）：
   - [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/)：可结合 [CMU-15-213](https://learncs.me/cmu/15213) 课程视频学习
-  - [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+  - [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
   - [The Linux Programming Interface](https://man7.org/tlpi/)
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
   - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html)
 - 分布式系统
   - [Designing Data-Intensive Applications](https://dataintensive.net/) - 可结合 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) 课程视频学习
+- 数据库系统：建议直接学习课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
 - 《Social Psychology, 13e, David Myers》
 - 《Principles Of Economics, 9e, N. Gregory Mankiw》
 - 《生命最后的读书会》
