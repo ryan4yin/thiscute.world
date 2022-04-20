@@ -34,7 +34,6 @@ toc:
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 - [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
-
 ## 三、今年的阅读进展
 
 >电子版都可以在 z-library 上很方便地下载到，实体书的话可以在多抓鱼等二手书平台碰碰运气。
@@ -84,7 +83,70 @@ toc:
 - 《原则 - 应对变化中的世界秩序》
 - 《凤凰项目：一个 IT 运维的传奇故事》
 
-## 四、我的备选书单
+## 四、我的知识清单
+
+### 1. 最高优先级
+
+技术：
+- 学习使用 Envoy 以及 Istio EnvoyFilter
+  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
+- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
+  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
+- 研究 K8s 集群的 Pod 拓扑优化
+  - TopologySpreadConstraint
+  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
+- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+
+生活：
+- 娱乐+运动：
+  - 轮滑：倒滑后压步
+
+### 2. 高优先级
+
+- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
+- Cilium 网络插件
+- Linux eBPF: 目前相当火热的技术
+
+生活：
+- 音乐：Synthesizer V, 练习键盘
+
+### 3. 中优先级
+
+>附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
+
+- 学习英语，目标是能流利地读写交流。
+  - 主要是可以扩宽工作的选择面，外企很多职位会要求英文读写流利。
+
+- 容器底层原理
+  - 容器镜像的文件系统：overlayfs
+  - 镜像的结构分析
+  - 镜像的构建流程
+
+- 写几个小项目（使用 rust/go）
+  - 实现一个文本编辑器
+    - https://viewsourcecode.org/snaptoken/kilo/
+  - 实现一个简单的 Linux 容器
+    - https://blog.lizzie.io/linux-containers-in-500-loc.html
+  - 网络代理（不到 2000 行的 TUN 库）
+    - https://github.com/songgao/water
+  - 实现简单的键值数据库：
+    - https://github.com/tidb-incubator/tinykv
+  - 实现简单的关系数据库：
+    - https://github.com/tidb-incubator/tinysql
+  - 学习搜索引擎技术：
+    - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
+    - https://github.com/huichen/wukong
+
+- Openresty 技术栈：（暂时感觉兴趣不大）
+  - 阅读《Lua 程序设计》
+  - 阅读 APISIX 源码 + Openresty
+  - 深入学习 Nginx 及 epoll
+
+- [进阶]数据库、数据结构与算法（同样暂时感觉兴趣不大）
+  - redis 底层
+  - mysql/postgresql 底层
+
+## 五、我的备选书单
 
 如下是我目前想读的书单，如果决定读，就把对应的书移到「计划读」中。
 
@@ -130,70 +192,5 @@ toc:
       - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
     - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
     - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
-
-
-## 五、我的知识清单
-
-### 1. 最高优先级
-
-技术：
-- 学习使用 Envoy 以及 Istio EnvoyFilter
-  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
-- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
-  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
-- 研究 K8s 集群的 Pod 拓扑优化
-  - TopologySpreadConstraint
-  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
-- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
-
-生活：
-- 娱乐+运动：
-  - 轮滑：倒滑后压步
-
-### 2. 高优先级
-
-- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
-- Cilium 网络插件
-- Linux eBPF: 目前相当火热的技术
-
-生活：
-- 音乐：Synthesizer V, 练习键盘
-
-### 3. 中优先级
-
->附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
-
-- 容器底层原理
-  - 容器镜像的文件系统：overlayfs
-  - 镜像的结构分析
-  - 镜像的构建流程
-
-- 写几个小项目（使用 rust/go）
-  - 实现一个文本编辑器
-    - https://viewsourcecode.org/snaptoken/kilo/
-  - 实现一个简单的 Linux 容器
-    - https://blog.lizzie.io/linux-containers-in-500-loc.html
-  - 网络代理（不到 2000 行的 TUN 库）
-    - https://github.com/songgao/water
-  - 实现简单的键值数据库：
-    - https://github.com/tidb-incubator/tinykv
-  - 实现简单的关系数据库：
-    - https://github.com/tidb-incubator/tinysql
-  - 学习搜索引擎技术：
-    - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
-    - https://github.com/huichen/wukong
-
-- 学习英语，目标是能流利地读写交流。
-  - 主要是可以扩宽工作的选择面，外企很多职位会要求英文读写流利。
-
-- Openresty 技术栈：（暂时感觉兴趣不大）
-  - 阅读《Lua 程序设计》
-  - 阅读 APISIX 源码 + Openresty
-  - 深入学习 Nginx 及 epoll
-
-- [进阶]数据库、数据结构与算法（同样暂时感觉兴趣不大）
-  - redis 底层
-  - mysql/postgresql 底层
-
 
 ---
