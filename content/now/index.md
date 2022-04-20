@@ -69,9 +69,6 @@ toc:
   - [The Linux Programming Interface](https://man7.org/tlpi/)
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
   - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html)
-- 分布式系统
-  - [Designing Data-Intensive Applications](https://dataintensive.net/) - 可结合 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) 课程视频学习
-- 数据库系统：建议直接学习课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
 - 《Social Psychology, 13e, David Myers》
 - 《Principles Of Economics, 9e, N. Gregory Mankiw》
 - 《生命最后的读书会》
@@ -123,14 +120,18 @@ toc:
   - 《奈飞文化手册》
   - 《幕后产品-打造突破式思维》
   - 《深入 Linux 内核架构》
-  - 《重构 - 改善既有代码的设计》
+  - 《重构 - 改善既有代码的设计》]
+  - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
   - [SQL进阶教程](https://book.douban.com/subject/27194738/)
   - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的顶级书藉，以后可以读下。
-- 编程语言理论（如何设计一个编程语言）
-  - [Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
-    - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
-  - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
-  - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
+  - 分布式系统：[Designing Data-Intensive Applications](https://dataintensive.net/) - 可结合 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) 课程视频学习
+  - 数据库系统：建议直接学习课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+  - 编程语言理论（如何设计一个编程语言）
+    - [Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
+      - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
+    - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
+    - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
+
 
 ## 五、我的知识清单
 
@@ -167,8 +168,6 @@ toc:
 - 研究 K8s 集群的 Pod 拓扑优化
   - TopologySpreadConstraint
   - [descheduler](https://github.com/kubernetes-sigs/descheduler)
-
-- rust 语言
 
 - 容器底层原理
   - 容器镜像的文件系统：overlayfs
