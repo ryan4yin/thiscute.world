@@ -26,13 +26,25 @@ toc:
 
 ## 二、我最近还想搞搞这些
 
-- 机器学习
+今年的技术侧学习计划：
+
+1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层
+   1. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
+   2. 看看 Kubernetes Programming
+   3. 学习极客时间的 Kuberntes 与容器的课程
+2. 杂项
+   1. 安全相关 [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
+3. 学习《The ANSI C Programming Language (Brian W. Kernighan, Dennis M. Ritchie)》，同样也写写代码练练手
+4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
+   1. 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
+5. 学习操作系统
+   1. 先学 CSAPP，同时跟课程
+   2. 再学 OSTEP，同时跟课程
+6. 机器学习
   - [machine-learning - coursera](https://www.coursera.org/learn/machine-learning): 吴恩达教授的网红机器学习课程，火爆多年了，内容对小白很友好。
   - [deep-learning - coursera](https://www.coursera.org/specializations/deep-learning): 仍然是吴恩达教授出品，圣经级别的机器学习课程，火爆多年了，内容对小白很友好。
   - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门课程，做得比较有趣。
   - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门资料
-- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
-- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
 ## 三、今年的阅读进展
 
