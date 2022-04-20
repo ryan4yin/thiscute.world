@@ -19,8 +19,17 @@ toc:
   - AWS NAT 网关
   - P2P 内网穿透: zerotier/tailscales
   - Kubernetes 跨 NAT 组网、将开发机器接入 Kubernetes 网络：适合用于本地/云上 K8s 调试
-- 学习使用 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)，分析 Envoy Sidecar 的动态配置、流量代理、监控指标等实现细节。
+- 学习使用 Envoy 以及 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)
+  - 分析 Envoy Sidecar 的动态配置、流量代理、监控指标等实现细节
   - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing、基于 iptables/tproxy 的 outbound 流量代理
+  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md)
+- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
+  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
+- 研究 K8s 集群的 Pod 拓扑优化
+  - TopologySpreadConstraint
+  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
+- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
+- 学习使用 
 - 《在生命的尽头拥抱你-临终关怀医生手记》
 
 
@@ -97,32 +106,18 @@ toc:
 
 ## 四、我的知识清单
 
-### 1. 最高优先级
-
-技术：
-- 学习使用 Envoy 以及 Istio EnvoyFilter
-  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
-- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
-  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
-- 研究 K8s 集群的 Pod 拓扑优化
-  - TopologySpreadConstraint
-  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
-- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
-
-生活：
-- 娱乐+运动：
-  - 轮滑：倒滑后压步
-
-### 2. 高优先级
+### 1. 高优先级
 
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
 - Cilium 网络插件
 - Linux eBPF: 目前相当火热的技术
 
 生活：
+- 娱乐+运动：
+  - 轮滑：倒滑后压步
 - 音乐：Synthesizer V, 练习键盘
 
-### 3. 中优先级
+### 2. 中优先级
 
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
 
