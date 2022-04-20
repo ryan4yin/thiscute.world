@@ -9,8 +9,15 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-04-20
+
+- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
+- 使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
+  - 已上线 prod 环境，目前给 EMR on EKS 集群专用。
+
 ### 2022-04-18
 
+- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 或 或 [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler)  实现集群弹性扩缩容
 - 阅读《Go 程序设计语言（英文版）》 - 进度 53%
   - 第 7 章「接口」读了一半，大概 22 pages，预计明天能完成
 - [ ] 《[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)》
