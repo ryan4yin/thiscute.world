@@ -137,7 +137,13 @@ toc:
 ### 1. 最高优先级
 
 技术：
-- 学习使用 Istio EnvoyFilter
+- 学习使用 Envoy 以及 Istio EnvoyFilter
+  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
+- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
+  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
+- 研究 K8s 集群的 Pod 拓扑优化
+  - TopologySpreadConstraint
+  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
 - go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
 
 生活：
@@ -146,27 +152,16 @@ toc:
 
 ### 2. 高优先级
 
-- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
-  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
-
 - kubebuilder: 使用 kubebuilder 完成一个实用 operator.
-- 服务网格
-  - Cilium Service Mesh - 使用 eBPF + per-node proxy 实现 的服务网格，很有前景。
-  - 如何调优数据面，降低 CPU 使用率及延迟
-  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md): 需要持续更新这份文档 - 50%
+- Cilium 网络插件
+- Linux eBPF: 目前相当火热的技术
 
 生活：
 - 音乐：Synthesizer V, 练习键盘
 
-- k8s 网络插件 - Cilium
-
 ### 3. 中优先级
 
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
-
-- 研究 K8s 集群的 Pod 拓扑优化
-  - TopologySpreadConstraint
-  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
 
 - 容器底层原理
   - 容器镜像的文件系统：overlayfs
