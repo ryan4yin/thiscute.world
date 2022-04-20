@@ -14,6 +14,7 @@ toc:
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 - 使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
   - 已上线 prod 环境，目前给 EMR on EKS 集群专用。
+- 更新 /now 页面以及 knowledge 的内容
 
 ### 2022-04-18
 
