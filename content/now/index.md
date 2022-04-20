@@ -34,7 +34,7 @@ toc:
    3. 学习极客时间的 Kuberntes 与容器的课程
 2. 杂项
    1. 安全相关 [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
-3. 学习《The ANSI C Programming Language (Brian W. Kernighan, Dennis M. Ritchie)》，同样也写写代码练练手
+3. 学习 K&R C 以及 rust 语言，同样也写写代码练练手
 4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
    1. 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
 5. 学习操作系统
