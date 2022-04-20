@@ -11,6 +11,8 @@ tags: ["Cryptography", "密码学", "HTTPS", "TLS", "SSL", "OpenSSL", "PKI", "�
 categories: ["技术"]
 ---
 
+>本文基本上是一篇原创文章，但是行文有点生硬，仍然在优化中，不太适合初学者阅读。
+
 《写给开发人员的实用密码学》系列文章目录: 
 
 - [写给开发人员的实用密码学（一）—— 概览](/posts/practical-cryptography-basics-1/)
