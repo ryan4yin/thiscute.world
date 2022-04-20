@@ -191,7 +191,7 @@ toc:
   - 阅读 APISIX 源码 + Openresty
   - 深入学习 Nginx 及 epoll
 
-- [进阶]数据库、数据结构与算法
+- [进阶]数据库、数据结构与算法（同样暂时感觉兴趣不大）
   - redis 底层
   - mysql/postgresql 底层
 
