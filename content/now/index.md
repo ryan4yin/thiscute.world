@@ -112,6 +112,21 @@ toc:
 - Cilium 网络插件
 - Linux eBPF: 目前相当火热的技术
 
+- 写几个小项目（使用 rust/go）
+  - 实现一个文本编辑器
+    - https://viewsourcecode.org/snaptoken/kilo/
+  - 实现一个简单的 Linux 容器
+    - https://blog.lizzie.io/linux-containers-in-500-loc.html
+  - 网络代理（不到 2000 行的 TUN 库）
+    - https://github.com/songgao/water
+  - 实现简单的键值数据库：
+    - https://github.com/tidb-incubator/tinykv
+  - 实现简单的关系数据库：
+    - https://github.com/tidb-incubator/tinysql
+  - 学习搜索引擎技术：
+    - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
+    - https://github.com/huichen/wukong
+
 生活：
 - 娱乐+运动：
   - 轮滑：倒滑后压步
@@ -128,21 +143,6 @@ toc:
   - 容器镜像的文件系统：overlayfs
   - 镜像的结构分析
   - 镜像的构建流程
-
-- 写几个小项目（使用 rust/go）
-  - 实现一个文本编辑器
-    - https://viewsourcecode.org/snaptoken/kilo/
-  - 实现一个简单的 Linux 容器
-    - https://blog.lizzie.io/linux-containers-in-500-loc.html
-  - 网络代理（不到 2000 行的 TUN 库）
-    - https://github.com/songgao/water
-  - 实现简单的键值数据库：
-    - https://github.com/tidb-incubator/tinykv
-  - 实现简单的关系数据库：
-    - https://github.com/tidb-incubator/tinysql
-  - 学习搜索引擎技术：
-    - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
-    - https://github.com/huichen/wukong
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
   - 阅读《Lua 程序设计》
