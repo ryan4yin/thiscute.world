@@ -138,7 +138,7 @@ DLIES（离散对数集成加密方案）和 ECIES（椭圆曲线集成加密方
 
 ## 三、RSA 密码系统
 
-RSA 密码系统是最早的公钥密码系统之一，它基于 RSA 问题和整数分解问题 （IFP）的计算难度。
+RSA 密码系统是最早的公钥密码系统之一，它基于 [RSA 问题](https://en.wikipedia.org/wiki/RSA_problem)和[整数分解问题 （IFP）](https://en.wikipedia.org/wiki/Integer_factorization)的计算难度。
 RSA 算法以其作者（Rivest–Shamir–Adleman）的首字母命名。
 
 RSA 算法在计算机密码学的早期被广泛使用，至今仍然是数字世界应用最广泛的密码算法。
