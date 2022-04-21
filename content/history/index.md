@@ -11,6 +11,16 @@ toc:
 
 ### 2022-04-20
 
+- 多抓鱼买的一批新书到手了，大致读了下几本书的前几页。
+  - 目前比较感兴趣的有：《复杂》、《陈行甲人生笔记》、《原则 - 应对变化中的世界秩序》、《这才是心理学》
+  - 打算首先读《复杂》
+- 使用 [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler) 实现集群弹性扩缩容
+  - 发现社区的这个工具（简称 CA），确实没 aws 出品的 karpenter 好用。
+  - CA 自身的实现很简单，主要是依靠 AWS ASG 实现扩缩容。
+  - 而 EKS 的 NodeGroup 说实话做得太垃圾了，底层 ASG 的很多功能它都不支持，一旦创建很多参数（VPC 参数、实例类型、等等）就无法通过 EKS NodeGroup 变更了。如果越过 EKS NodeGroup 直接修改底层的 ASG 配置，它还会提示「Degraded」说配置不一致，真的是无力吐槽。
+
+### 2022-04-20
+
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 - 使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
   - 已上线 prod 环境，目前给 EMR on EKS 集群专用。
@@ -18,12 +28,13 @@ toc:
 
 ### 2022-04-18
 
-- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 或 或 [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler)  实现集群弹性扩缩容
+- 研究使用 [aws/karpenter](https://github.com/aws/karpenter) 实现集群弹性扩缩容
 - 阅读《Go 程序设计语言（英文版）》 - 进度 53%
   - 第 7 章「接口」读了一半，大概 22 pages，预计明天能完成
 - [ ] 《[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)》
   - 读到 Introduction 一章，行文真的很有趣，看 projects 也有深度，决定了要把这本书看完，把习题做好。
-  - 不知道这本 OSTEP 跟 CSAPP 区别多大，目前最大的感觉就是这本更有趣 emmmm
+  - OSTEP 后面的部分会涉及 vx6 源码，这要求比较深的 C 语言知识以及 x86 汇编知识，不过这些可以在学到的时候，再做补充。
+  - 在需要用到的时候，学习 CSAPP 的 x86 汇编部分会是一个比较好的补充。
 
 ### 2022-04-17
 

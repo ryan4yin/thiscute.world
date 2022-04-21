@@ -70,6 +70,7 @@ toc:
 
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 61%
 - 《Go 程序设计语言（英文版）》 - 进度 53%
+- 《复杂 - 梅拉尼 米歇尔》
 
 计划读：
 
@@ -83,26 +84,26 @@ toc:
 - 计算机网络
   - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
     - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
-- 操作系统（建议按顺序阅读）：
-  - [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/)：可结合 [CMU-15-213](https://learncs.me/cmu/15213) 课程视频学习
-  - [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
-  - [The Linux Programming Interface](https://man7.org/tlpi/)
+- 操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
+  - 核心课程：[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
+  - 在遇到 x86 汇编相关知识的时候，可以使用 [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/) 补充学习相关知识。
+   -  如果打算学完整本 CSAPP，可结合 [CMU-15-213](https://learncs.me/cmu/15213) 课程视频学习
+  - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
+  - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的神书。学 OSTEP 遇到瓶颈时或可阅读。
+  - [The Linux Programming Interface](https://man7.org/tlpi/): 学习 Linux 的顶级书藉，比 APUE 可能会更亲民一些，可结合阅读。
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
   - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html)
 - 《Social Psychology, 13e, David Myers》
 - 《Principles Of Economics, 9e, N. Gregory Mankiw》
-- 《生命最后的读书会》
-- 《月光落在左手上》
-- 《分析与思考 - 黄奇帆的复旦经济课》
-- 《在峡江的转弯处 - 陈行甲人生笔记》
-- 《刘擎西方现代思想讲义》
-- 《复杂 - 梅拉尼 米歇尔》
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+- 《在峡江的转弯处 - 陈行甲人生笔记》
+- 《原则 - 应对变化中的世界秩序》
+- 《手把手教你读财报》
 - 《探路之役 - 1978-1922 年的中国经济改革》
 - 《筚路维艰 - 中国社会主义路径的五次选择》
-- 《手把手教你读财报》
-- 《原则 - 应对变化中的世界秩序》
 - 《凤凰项目：一个 IT 运维的传奇故事》
+- 《生命最后的读书会》
+- 《月光落在左手上》
 
 ## 四、我的知识清单
 
@@ -179,6 +180,7 @@ toc:
   - 《科学革命的结构》
   - 《时间的秩序》
   - 《极简宇宙史》
+  - 《刘擎西方现代思想讲义》
   - 《圆圈正义-作为自由前提的信念》
   - 《人生脚本》
   - 《投资中最简单的事》
@@ -188,10 +190,10 @@ toc:
   - 《绩效使能：超越 OKR》
   - 《奈飞文化手册》
   - 《幕后产品-打造突破式思维》
+  - 《分析与思考 - 黄奇帆的复旦经济课》：这本书会需要一定的经济学基础知识，打算在入门经济学后再看
   - 《重构 - 改善既有代码的设计》]
   - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
   - [SQL进阶教程](https://book.douban.com/subject/27194738/)
-  - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的顶级书藉，以后可以读下。
   - 分布式系统：[Designing Data-Intensive Applications](https://dataintensive.net/) - 可结合 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) 课程视频学习
   - 数据库系统：建议直接学习课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
   - 编程语言理论（如何设计一个编程语言）
