@@ -85,7 +85,7 @@ toc:
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 - 操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
   - 核心课程：[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
-  - OSTEP 学习指南：https://github.com/ossu/computer-science/pull/987
+  - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
   - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
   - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的神书。学 OSTEP 遇到瓶颈时或可阅读。
   - [The Linux Programming Interface](https://man7.org/tlpi/): 学习 Linux 的顶级书藉，比 APUE 可能会更亲民一些，可结合阅读。
