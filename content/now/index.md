@@ -74,25 +74,26 @@ toc:
 
 计划读：
 
-- 《The ANSI C Programming Language (Brian W. Kernighan, Dennis M. Ritchie)》
-  - 上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
+- 补充 C 语言
+  - 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
+  - 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
+  - 补充学习 gdb ld objdump objcopy
 - Kubernete、云原生、Go 语言
   - Go 语言学习笔记 - 雨痕：下卷是源码剖析，基于 Go 1.6, 打算在看完《Go 程序设计语言》后看看这本
   - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
   - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
-- 计算机网络
-  - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
-    - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
 - 操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
   - 核心课程：[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
-  - 在遇到 x86 汇编相关知识的时候，可以使用 [Computer Systems: A Programmer's Perspective, 3/E (CS:APP3e)](http://www.csapp.cs.cmu.edu/) 补充学习相关知识。
-   -  如果打算学完整本 CSAPP，可结合 [CMU-15-213](https://learncs.me/cmu/15213) 课程视频学习
+  - OSTEP 学习指南：https://github.com/ossu/computer-science/pull/987
   - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
   - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的神书。学 OSTEP 遇到瓶颈时或可阅读。
   - [The Linux Programming Interface](https://man7.org/tlpi/): 学习 Linux 的顶级书藉，比 APUE 可能会更亲民一些，可结合阅读。
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
-  - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html)
+  - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
+- 计算机网络
+  - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
+    - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
 - 《Social Psychology, 13e, David Myers》
 - 《Principles Of Economics, 9e, N. Gregory Mankiw》
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
