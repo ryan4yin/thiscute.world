@@ -7,6 +7,10 @@ toc:
   enable: false
 ---
 
+>「乱花渐欲迷人眼，浅草才能没马蹄。」——《钱塘湖春行》白居易
+
+>在这个信息爆炸的时代，更需要能够放慢脚步，沉下心，系统性的学习。
+>把握住自己的核心竞争力，再拓展学习其他感兴趣的知识。有趣又充实的工作与业余生活，真的非常棒~每天都有新发现
 
 >过去的我：[学习轨迹记录](/history)
 
@@ -38,13 +42,17 @@ toc:
 今年业余时间的技术侧学习计划（几个主题可以交替学习）：
 
 1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）
-   1. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
-   2. 看看 Kubernetes Programming 这本书
+   1. 极客时间《Go 语言核心 36 讲》，简单过一过，知识点查漏补缺。
+   2. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
+   3. 看看 Kubernetes Programming 这本书
       1. 使用 kubebuilder 完成一个实用 operator.
-   3. 学习极客时间的 Kuberntes 与容器的课程
-   4. Linux eBPF: 目前相当火热的技术
-2. （预计用时 3w）学习 K&R C 以及 rust 语言，同样也写写代码练练手
-3. （预计用时 16w）学习操作系统
+   4. 学习极客时间的《深入剖析 Kuberntes》 与《容器实战高手课》
+   5. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
+2. 极客时间《分布式协议与算法实战》
+3. （预计用时 3w）学习 K&R C 以及 rust 语言，同样也写写代码练练手
+   1. 极客时间《Rust 编程第一课》
+   2. 极客时间《深入 C 语言和程序运行原理》
+4. （预计用时 16w）学习操作系统
   - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
 4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
    1. 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
