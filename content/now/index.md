@@ -62,6 +62,8 @@ toc:
   - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门课程，做得比较有趣。
   - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门资料
 
+学习路径：实践类课程（比如极客时间专栏课）与系统化学习（CMU/MIT 公开课+教材）并重，可以同时或者交替进行。也并没有很严格的学习顺序要求，看兴趣吧。不过有一点是确定的，就是希望今年一年至少能系统化地学习完成 Go Rust 计算机网络 操作系统这四块知识。
+
 ## 三、今年的阅读进展
 
 >电子版都可以在 z-library 上很方便地下载到，实体书的话可以在多抓鱼等二手书平台碰碰运气。
