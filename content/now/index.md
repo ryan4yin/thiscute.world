@@ -35,16 +35,16 @@ toc:
 
 ## 二、我最近还想搞搞这些
 
-今年的技术侧学习计划：
+今年业余时间的技术侧学习计划（几个主题可以交替学习）：
 
-1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层
+1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）
    1. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
-   2. 看看 Kubernetes Programming
+   2. 看看 Kubernetes Programming 这本书
+      1. 使用 kubebuilder 完成一个实用 operator.
    3. 学习极客时间的 Kuberntes 与容器的课程
-2. 杂项
-   1. 安全相关 [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
-3. 学习 K&R C 以及 rust 语言，同样也写写代码练练手
-4. 学习操作系统
+   4. Linux eBPF: 目前相当火热的技术
+2. （预计用时 3w）学习 K&R C 以及 rust 语言，同样也写写代码练练手
+3. （预计用时 16w）学习操作系统
   - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
 4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
    1. 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
@@ -109,9 +109,7 @@ toc:
 
 ### 1. 高优先级
 
-- kubebuilder: 使用 kubebuilder 完成一个实用 operator.
-- Cilium 网络插件
-- Linux eBPF: 目前相当火热的技术
+- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
 - 写几个小项目（使用 rust/go）
   - 实现一个文本编辑器
