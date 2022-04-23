@@ -78,20 +78,19 @@ toc:
 正在读：
 
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
-- 《Go 程序设计语言（英文版）》 - 进度 70%
+- 《Go 程序设计语言（英文版）》 - 进度 72%
 - 《复杂 - 梅拉尼 米歇尔》
 
 计划读：
 
+- Kubernete、云原生、Go 语言
+  - 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
+  - [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
+  - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
 - 补充 C 语言
   - 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
   - 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
   - 补充学习 gdb ld objdump objcopy
-- Kubernete、云原生、Go 语言
-  - Go 语言学习笔记 - 雨痕：下卷是源码剖析，基于 Go 1.6, 打算在看完《Go 程序设计语言》后看看这本
-  - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
-  - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
-  - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 - 操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
   - 核心课程：[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
   - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
@@ -209,5 +208,7 @@ toc:
       - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
     - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
     - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
-
+  - Kubernetes 与容器
+    - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
+    - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 ---
