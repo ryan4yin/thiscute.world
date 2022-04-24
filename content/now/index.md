@@ -32,26 +32,27 @@ toc:
 - 研究 K8s 集群的 Pod 拓扑优化
   - TopologySpreadConstraint
   - [descheduler](https://github.com/kubernetes-sigs/descheduler)
-- go web 编程: 完成 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go) 这个项目
-- 学习使用 
 - 《在生命的尽头拥抱你-临终关怀医生手记》
 
 
-## 二、我最近还想搞搞这些
+## 二、我今年还想搞搞这些
 
 今年业余时间的技术侧学习计划（几个主题可以交替学习）：
 
-1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）
-   1. 极客时间《Go 语言核心 36 讲》，简单过一过，知识点查漏补缺。
-   2. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
-   3. 看看 Kubernetes Programming 这本书
-      1. 使用 kubebuilder 完成一个实用 operator.
-   4. 学习极客时间的《深入剖析 Kuberntes》 与《容器实战高手课》
-   5. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
+1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）   
+   1. 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
+   2. [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
+   3. [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
+   4. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
+   5. 学习极客时间的《深入剖析 Kuberntes》 与《容器实战高手课》
+   6. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
 2. 极客时间《分布式协议与算法实战》
-3. （预计用时 3w）学习 K&R C 以及 rust 语言，同样也写写代码练练手
+3. （预计用时 3w）学习 C 语言以及 rust 语言，同样也写写代码练练手
    1. 极客时间《Rust 编程第一课》
    2. 极客时间《深入 C 语言和程序运行原理》
+   1. 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
+   1. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
+   1. 补充学习 gdb ld objdump objcopy
 4. （预计用时 16w）学习操作系统
   - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
 4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
@@ -78,7 +79,7 @@ toc:
 正在读：
 
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
-- 《Go 程序设计语言（英文版）》 - 进度 72%
+- 《Go 程序设计语言（英文版）》 - 进度 90%
 - 《复杂 - 梅拉尼 米歇尔》
 
 计划读：
