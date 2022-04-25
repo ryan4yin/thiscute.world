@@ -11,7 +11,7 @@ toc:
 
 ### 2022-04-25
 
-- 完成了 19 年创建的 go 项目：https://github.com/ryan4yin/Video2ascii
+- 完成了 19 年创建的 go 项目：https://github.com/ryan4yin/video2ascii
 
 ### 2022-04-24
 
