@@ -16,7 +16,8 @@ toc:
 
 ## 一、我正在研究这些
 
-- 阅读《Go 程序设计语言（英文版）》
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+- 学习极客时间的《深入剖析 Kuberntes》
 - 研究清楚 NAT 网关：
   - NAT 的原理、结构 - 50%
   - Kubernetes/Docker 网络所使用的 NAT
@@ -42,9 +43,8 @@ toc:
 1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）   
    1. 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
    2. [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
-   3. [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
    4. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
-   5. 学习极客时间的《深入剖析 Kuberntes》 与《容器实战高手课》
+   5. 学习极客时间的《容器实战高手课》
    6. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
 2. 极客时间《分布式协议与算法实战》
 3. （预计用时 3w）学习 C 语言以及 rust 语言，同样也写写代码练练手
@@ -75,19 +75,18 @@ toc:
 - [x] 《月宫》
 - [x] 《[Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)》
 - [x] 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》
+- [x] 《Go 程序设计语言（英文版）》
 
 正在读：
 
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
-- 《Go 程序设计语言（英文版）》 - 进度 90%
 - 《复杂 - 梅拉尼 米歇尔》
+- [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
 
 计划读：
 
 - Kubernete、云原生、Go 语言
   - 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
-  - [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
-  - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
 - 补充 C 语言
   - 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
   - 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称

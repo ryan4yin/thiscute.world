@@ -12,6 +12,9 @@ toc:
 ### 2022-04-25
 
 - 完成了 19 年创建的 go 项目：https://github.com/ryan4yin/video2ascii
+- 失眠，半夜随便翻了翻，把《Go 程序设计语言（英文版）》走马观花过了一遍
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
+  - 主要是通过案例讲解 CRD Operator Controller 等 Kubernetes 编程技术
 
 ### 2022-04-24
 
