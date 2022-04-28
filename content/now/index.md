@@ -15,41 +15,42 @@ toc:
 
 - 学习极客时间的《深入剖析 Kuberntes》
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+- 研究 FinOps 与 kubecost，完成一篇 Kubernetes 成本分析的文章
 - 研究清楚 NAT 网关：
   - NAT 的原理、结构 - 50%
   - Kubernetes/Docker 网络所使用的 NAT
   - AWS NAT 网关
   - P2P 内网穿透: zerotier/tailscales
   - Kubernetes 跨 NAT 组网、将开发机器接入 Kubernetes 网络：适合用于本地/云上 K8s 调试
+- 《在生命的尽头拥抱你-临终关怀医生手记》
+
+## 二、我今年还想搞搞这些
+
 - 学习使用 Envoy 以及 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)
   - 分析 Envoy Sidecar 的动态配置、流量代理、监控指标等实现细节
   - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing、基于 iptables/tproxy 的 outbound 流量代理
   - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md)
-- 研究 K8s 集群的节点伸缩优化、服务稳定性优化
-  - [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
+- 研究 K8s 集群的 Spot 实例风险规避手段：[AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
+- 研究 K8s 集群的节点利用率主动优化：在符合 PDB 等安全策略的情况下，合并利用率低的节点降低成本。
 - 研究 K8s 集群的 Pod 拓扑优化
   - TopologySpreadConstraint
   - [descheduler](https://github.com/kubernetes-sigs/descheduler)
-- 《在生命的尽头拥抱你-临终关怀医生手记》
-
-
-## 二、我今年还想搞搞这些
 
 今年业余时间的技术侧学习计划（几个主题可以交替学习）：
 
 1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）   
    1. 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
    2. [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
-   4. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
-   5. 学习极客时间的《容器实战高手课》
-   6. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
+   3. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
+   4. 学习极客时间的《容器实战高手课》
+   5. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
 2. 极客时间《分布式协议与算法实战》
 3. （预计用时 3w）学习 C 语言以及 rust 语言，同样也写写代码练练手
    1. 极客时间《Rust 编程第一课》
    2. 极客时间《深入 C 语言和程序运行原理》
-   1. 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
-   1. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
-   1. 补充学习 gdb ld objdump objcopy
+   3. 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
+   4. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
+   5. 补充学习 gdb ld objdump objcopy
 4. （预计用时 16w）学习操作系统
   - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
 4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
