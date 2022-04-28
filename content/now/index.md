@@ -7,17 +7,14 @@ toc:
   enable: false
 ---
 
->「乱花渐欲迷人眼，浅草才能没马蹄。」——《钱塘湖春行》白居易
-
 >在这个信息爆炸的时代，更需要能够放慢脚步，沉下心，系统性的学习。
->把握住自己的核心竞争力，再拓展学习其他感兴趣的知识。有趣又充实的工作与业余生活，真的非常棒~每天都有新发现
 
 >过去的我：[学习轨迹记录](/history)
 
 ## 一、我正在研究这些
 
-- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - 学习极客时间的《深入剖析 Kuberntes》
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - 研究清楚 NAT 网关：
   - NAT 的原理、结构 - 50%
   - Kubernetes/Docker 网络所使用的 NAT
