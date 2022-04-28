@@ -144,6 +144,9 @@ def process_data(data):
 
             # 处理被修改过 pagePath 的文章，使用指定的 Path
             page_path = page['pagePath']
+            if "#" in page_path:
+                # 统一去掉末尾的段落 id
+                page_path = page_path.split("#")[0]
             if not page_path.endswith("/"):
                 # path 统一以 / 结尾
                 page_path += "/"
