@@ -15,7 +15,8 @@ toc:
 
 - 学习极客时间的《深入剖析 Kuberntes》
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
-- 研究 FinOps 与 kubecost，完成一篇 Kubernetes 成本分析的文章
+- The ANSI C Programming Language
+- 研究 FinOps 与 kubecost，完成一篇 Kubernetes 成本分析的文章 - 50%
 - 研究清楚 NAT 网关：
   - NAT 的原理、结构 - 50%
   - Kubernetes/Docker 网络所使用的 NAT
@@ -48,7 +49,6 @@ toc:
 3. （预计用时 3w）学习 C 语言以及 rust 语言，同样也写写代码练练手
    1. 极客时间《Rust 编程第一课》
    2. 极客时间《深入 C 语言和程序运行原理》
-   3. 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
    4. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
    5. 补充学习 gdb ld objdump objcopy
 4. （预计用时 16w）学习操作系统

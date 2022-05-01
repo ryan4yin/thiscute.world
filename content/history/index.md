@@ -9,6 +9,10 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-01
+
+- 研究 FinOps 与 kubecost，完成一篇 Kubernetes 成本分析的文章 - 50%
+
 ### 2022-04-26 - 2022-04-28
 
 - 学习极客时间专栏《深入浅出 Kubernetes》，复习容器技术（Namespace/Cgroups/rootfs）
