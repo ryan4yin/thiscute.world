@@ -210,7 +210,7 @@ vpc_id = infra.require("resources.vpc.id")
 
 #### 6.1 通过 pulumi import 命令导入资源
 
-使用 `pulumi import` 命令导入资源的好处是，不需要为每个资源手写代码，此命令会自动生成资源的 stack state 与配置代码。
+使用 `pulumi import` 命令导入资源的好处是，不需要为每个资源手写代码，此命令会**自动生成资源的 stack state 与配置代码**。
 
 使用此命令导入的资源，默认会启用删除保护，你可通过参数 `--protect=false` 来关闭删除保护。
 
