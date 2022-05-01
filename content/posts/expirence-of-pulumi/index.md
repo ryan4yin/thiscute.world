@@ -258,7 +258,7 @@ p_test_sre = aws.s3.Bucket("p-test-sre",
 ```
 
 能看到它会自动导入对应资源的 state，并同时打印出对应的 python 代码，要求我们手动将代码复制粘贴到项目中。
-而且代码会自带 arn/hosted_zone_id/protect 等属性，说明这个资源实际上是无法像普通 pulumi 资源一样，自动创建销毁的，最佳实践是，**只通过 pulumi 来修改这类导入资源的部分配置**！
+而且代码会自带 arn/hosted_zone_id/protect 等属性，说明这个资源实际上是无法像普通 pulumi 资源一样，通过 `pulumi up`/`pulumi destroy` 自动创建销毁的。要通过 pulumi 删除该资源，需要首先解除删除保护，然后将对应的代码片段删除掉，最后执行 `pulumi up`。
 
 也可通过 json 来批量导入资源，首先编写一个 json 资源清单：
 
