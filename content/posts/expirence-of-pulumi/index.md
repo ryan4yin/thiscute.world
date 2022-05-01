@@ -26,7 +26,7 @@ categories: ["技术"]
 
 试想一下，通过传统的手段去从零搭建一个云上测试环境、或者本地开发环境，需要手工做多少繁琐的工作。
 
-而依靠 Pulumi 这类「基础设施即代码」的工具，只需要一行命令就能搭建好一个可复现的云上测试环境或本地开发环境。
+而依靠 Pulumi 这类「基础设施即代码（Infrastructure as Code, IaC）」的工具，只需要一行命令就能搭建好一个可复现的云上测试环境或本地开发环境。
 
 比如我们的阿里云测试环境，包括两个 kubernetes 集群、负载均衡、VPC 网络、数据库、云监控告警/日志告警、RAM账号权限体系等等，是一个比较复杂的体系。
 
@@ -38,9 +38,13 @@ categories: ["技术"]
 **实际使用体验**：我们使用 Pulumi 自动化了阿里云测试环境搭建 95%+ 的操作，这个比例随着阿里云的 pulumi provider 的完善，还可以进一步提高！
 
 
-## Pulumi vs Terraform
+## Pulumi vs Terraform vs CloudFormation
 
-有一个「基础设施即代码」的工具比 Pulumi 更流行，它就是 [Terraform](https://www.terraform.io/).
+先介绍下 CloudFormation，它是 AWS 提供的一个 IaC 工具， 它使用 json/yaml 编写声明式配置文件，然后完全在 AWS 云上进行资源的创建、管理、销毁。
+其所创建的资源跟 CloudFormation Task 同生命周期，因此删除该 CloudFormation Task 就会自动销毁所有相关资源。
+因此它的好处应该是可以完全在云上运行，本地客户端只是一个提交配置的工具。而缺点则是只能在 AWS 上使用。
+
+而在通用的「基础设施即代码」领域，有一个工具比 Pulumi 更流行，它就是 [Terraform](https://www.terraform.io/).
 
 实际上我们一开始使用的也是 Terraform，但是后来使用 Pulumi 完全重写了一遍。
 
@@ -197,15 +201,197 @@ vpc_id = infra.require("resources.vpc.id")
 
 ### 6. 如何导入已经存在的资源？
 
-由于历史原因，我们可能有部分资源是手动创建或者由其他 IaC 工具管理的，该如何将它们纳入 pulumi 管辖呢？
+如果你司不是一开始就使用了 pulumi 这类工具，那通常绝大部分云上资源都是手动管理、或者由其他工具自动化管理的，该如何将它们纳入 pulumi 管辖呢？
 
 官方有提供一篇相关文档 [Importing Infrastructure](https://www.pulumi.com/docs/guides/adopting/import/).
 
-文档有提到三种资源导入的方法：
+文档有提到两种资源导入的方法，导入成功后都会自动生成资源的状态，以及对应的 pulumi 代码。
+第一种是使用 `pulumi import` 命令，第二种是在代码中使用 `import` 参数。
 
-1. 使用 `pulumi import` 命令，这个命令能导入资源同时自动生成对应的代码。
-   - 感觉这个命令也很适合用来做**资源的配置备份**，不需要对照资源手写 pulumi 代码了，好评。
-1. 批量导入资源：文档的 `Bulk Import Operations` 这一节介绍了如何通过 json 列出资源清单，然后使用 `pulumi import -f resources.json` 自动生成所有导入资源的 pulumi 代码。
+#### 6.1 通过 pulumi import 命令导入资源
+
+使用 `pulumi import` 命令导入资源的好处是，不需要为每个资源手写代码，此命令会自动生成资源的 stack state 与配置代码。
+
+使用此命令导入的资源，默认会启用删除保护，你可通过参数 `--protect=false` 来关闭删除保护。
+
+资源名称可通过命令行参数，或者 Json 文件来指定。
+
+下面我们演示一个导入一个 s3 bucket 的流程：
+
+```shell
+# 导入一个名为 test-sre 的 s3 bucket，资源 ID 为 p-test-sre
+$ pulumi import aws:s3/bucket:Bucket p-test-sre test-sre
+......
+Do you want to perform this import? yes
+Importing (dev):
+     Type                 Name             Status
+ +   pulumi:pulumi:Stack  pulumi-test-dev  created
+ =   └─ aws:s3:Bucket     p-test-sre       imported
+
+Resources:
+    + 1 created
+    = 1 imported
+    2 changes
+
+Duration: 8s
+
+Please copy the following code into your Pulumi application. Not doing so
+will cause Pulumi to report that an update will happen on the next update command.
+
+Please note that the imported resources are marked as protected. To destroy them
+you will need to remove the `protect` option and run `pulumi update` *before*
+the destroy will take effect.
+
+import pulumi
+import pulumi_aws as aws
+
+p_test_sre = aws.s3.Bucket("p-test-sre",
+    arn="arn:aws:s3:::test-sre",
+    bucket="test-sre",
+    hosted_zone_id="ZZBBCC332211KK",
+    request_payer="BucketOwner",
+    tags={
+        "Name": "test-sre",
+        "Team": "Platform",
+    },
+    opts=pulumi.ResourceOptions(protect=True))
+```
+
+能看到它会自动导入对应资源的 state，并同时打印出对应的 python 代码，要求我们手动将代码复制粘贴到项目中。
+而且代码会自带 arn/hosted_zone_id/protect 等属性，说明这个资源实际上是无法像普通 pulumi 资源一样，自动创建销毁的，最佳实践是，**只通过 pulumi 来修改这类导入资源的部分配置**！
+
+也可通过 json 来批量导入资源，首先编写一个 json 资源清单：
+
+```
+{
+	"resources": [{
+			"type": "aws:s3/bucket:Bucket",
+			"name": "s3-bucket_xxx-debug",
+			"id": "xxx-debug"
+		},
+		{
+			"type": "aws:s3/accessPoint:AccessPoint",
+			"name": "s3-accesspoint_xxx-debug",
+			"id": "112233445566:xxx-debug"
+		}
+	]
+}
+```
+
+然后执行如下命令批量导入资源：
+
+```shell
+$ pulumi import -f test-resources.json
+......
+Do you want to perform this import? yes
+Importing (dev):
+     Type                   Name                             Status       
+     pulumi:pulumi:Stack    pulumi-test-dev                               
+ =   ├─ aws:s3:AccessPoint  s3-accesspoint_xxx-debug  imported     
+ =   └─ aws:s3:Bucket       s3-bucket_xxx-debug       imported     
+ 
+Resources:
+    = 2 imported
+    2 unchanged
+
+Duration: 8s
+
+Please copy the following code into your Pulumi application. Not doing so
+will cause Pulumi to report that an update will happen on the next update command.
+
+Please note that the imported resources are marked as protected. To destroy them
+you will need to remove the `protect` option and run `pulumi update` *before*
+the destroy will take effect.
+
+import pulumi
+import pulumi_aws as aws
+
+s3_bucket_snappea_dl_debug = aws.s3.Bucket("s3-bucket_xxx-debug",
+    arn="arn:aws:s3:::xxx-debug",
+    bucket="xxx-debug",
+    hosted_zone_id="ZZBBCC332211KK",
+    request_payer="BucketOwner",
+    tags={
+        "Name": "xxx-debug",
+        "Team": "Xxx",
+    },
+    opts=pulumi.ResourceOptions(protect=True))
+s3_accesspoint_snappea_dl_debug = aws.s3.AccessPoint("s3-accesspoint_xxx-debug",
+    account_id="112233445566",
+    bucket="xxx-debug",
+    name="xxx-debug",
+    public_access_block_configuration=aws.s3.AccessPointPublicAccessBlockConfigurationArgs(
+        block_public_acls=False,
+        block_public_policy=False,
+        ignore_public_acls=False,
+        restrict_public_buckets=False,
+    ),
+    opts=pulumi.ResourceOptions(protect=True))
+```
+
+能看到同样的生成出了两个资源的 stack 状态，以及对应的代码。
+
+#### 6.2 通过代码导入资源
+
+通过代码导入资源，需要你手工为每个资源编写代码，并且确保代码的所有参数与资源本身的状态完全一致。
+
+因此可以看到这种导入方式很不灵活，通常不推荐使用，`pulumi import` 自动生成代码它不香么 emmmm
+
+大概的流程如下，首先编写一个资源的配置代码，并将其标注为 `import`:
+
+```python
+p_test_sre = aws.s3.Bucket("p-test-sre",
+    bucket="test-sre",
+    tags={
+        "Name": "test-sre",
+        "Team": "xxx",  # 这里我故意写错了，pulumi 会检测到这里有问题，提示导入将失败
+    },
+    opts=pulumi.ResourceOptions(
+       protect=True,
+       import_="test-sre",  # 标记需要导入此资源，导入成功后需要手工删除此标记。
+))
+```
+
+然后执行 `pulumi up` 就会开始导入此资源，如果设定的参数与资源状态不匹配，会有对应的错误提示：
+
+```
+❯ pulumi up
+Previewing update (dev):
+     Type                 Name             Plan       Info
+     pulumi:pulumi:Stack  pulumi-test-dev             
+ =   └─ aws:s3:Bucket     p-test-sre       import     [diff: -tags]; 1 warning
+ 
+Diagnostics:
+  aws:s3:Bucket (p-test-sre):
+    warning: inputs to import do not match the existing resource; importing this resource will fail
+```
+
+在确保参数完全一致后，导入就会成功，导入成功后，需要手动删除代码中的 `import` 这个标记。
+
+### 6.3 如何从 pulumi 中移除被导入的资源
+
+格式如下：
+```shell
+pulumi state delete <resource URN> [flags]
+```
+
+比如要删除先前导入的 `arn:aws:s3:::test-sre`，首先删除对应的代码，然后执行 `pulumi preview`，就会报错并打印出对应的资源 urn:
+
+```
+$ pulumi preview
+...
+Diagnostics:
+  aws:s3:Bucket (p-test-sre):
+    error: Preview failed: unable to delete resource "urn:pulumi:dev::pulumi-test::aws:s3/bucket:Bucket::p-test-sre"
+    as it is currently marked for protection. To unprotect the resource, either remove the `protect` flag from the resource in your Pulumi program and run `pulumi up` or use the command:
+    `pulumi state unprotect 'urn:pulumi:dev::pulumi-test::aws:s3/bucket:Bucket::p-test-sre'`
+```
+
+接下来使用如下命令强制从 state 文件中移除此资源（仅修改配置，对实际资源无任何影响）：
+
+```shell
+pulumi state delete urn:pulumi:dev::pulumi-test::aws:s3/bucket:Bucket::p-test-sre --force
+```
 
 ### 5. pulumi-kubernetes？
 
