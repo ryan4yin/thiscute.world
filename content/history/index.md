@@ -9,6 +9,16 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-03
+
+- 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 100%
+
+
+### 2022-05-02
+
+- 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
+
+
 ### 2022-05-01
 
 - 研究 FinOps 与 kubecost，完成一篇 Kubernetes 成本分析的文章 - 50%

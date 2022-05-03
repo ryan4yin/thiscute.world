@@ -41,7 +41,10 @@ toc:
 
 1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）   
    1. 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
-   2. [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
+   2. [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
+   2. [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
+   2. [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
+   2. [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
    3. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
    4. 学习极客时间的《容器实战高手课》
    5. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
