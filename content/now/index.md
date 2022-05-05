@@ -14,15 +14,14 @@ toc:
 ## 一、我正在研究这些
 
 - 学习极客时间的《深入剖析 Kuberntes》 - 20%
-- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
-- The ANSI C Programming Language
-- 研究 FinOps 与 kubecost，完成一篇 Kubernetes 成本分析的文章 - 50%
 - 研究清楚 NAT 网关：
   - NAT 的原理、结构 - 50%
   - Kubernetes/Docker 网络所使用的 NAT
   - AWS NAT 网关
   - P2P 内网穿透: zerotier/tailscales
   - Kubernetes 跨 NAT 组网、将开发机器接入 Kubernetes 网络：适合用于本地/云上 K8s 调试
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+- The ANSI C Programming Language
 - 《在生命的尽头拥抱你-临终关怀医生手记》
 
 ## 二、我今年还想搞搞这些
