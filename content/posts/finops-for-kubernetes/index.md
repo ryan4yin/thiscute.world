@@ -1,14 +1,14 @@
 ---
 title: "FinOps for Kubernetes - 如何拆分 Kubernetes 成本"
-date: 2022-04-29T01:15:24+08:00
-lastmod: 2022-04-29T01:15:24+08:00
+date: 2022-05-04T23:15:00+08:00
+lastmod: 2022-05-05T19:31:00+08:00
 draft: true
 
 resources:
 - name: "featured-image"
   src: "featured-image.jpg"
 
-tags: ["云原生", "Kubernetes", "FinOps", "成本分析", "kubecost"]
+tags: ["云原生", "Kubernetes", "FinOps", "成本分析", "Kubecost"]
 categories: ["技术"]
 
 lightgallery: false
@@ -129,11 +129,11 @@ Kubernetes 提供了三种资源分配的方式，被成所服务质量 QoS：
   - 可使用 Grafana/Google DataStudio 等报表工具
 
 
-## 使用 kubecost 进行 Kubernetes 成本分析
+## 使用 Kubecost 进行 Kubernetes 成本分析
 
 目前据我所知，主要有如下两个相关开源工具：
 
-- [kubecost](https://github.com/kubecost/cost-model): kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，也提供收费的云上版本，值得研究。
+- [Kubecost](https://github.com/kubecost/cost-model): kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，支持按 deployment/service/label 等多个维度进行成本拆分，而且支持拆分网络成本。收费版提供更丰富的功能以及更长的数据存储时间。
 - [crane](https://github.com/gocrane/crane): 腾讯开源的一款 Kubernetes 成本优化工具，支持成本报表以及 EHPA 两个功能，才刚开源几个月，目前还比较简陋。
   - [腾讯推出国内首个云原生成本优化开源项目 Crane](https://cloud.tencent.com/developer/article/1960014)
 
@@ -141,24 +141,116 @@ Kubernetes 提供了三种资源分配的方式，被成所服务质量 QoS：
 
 ### 安装 kubecost
 
-TBD
+kubecost 有两种推荐的安装方法：
 
-### 使用 kubecost
+- 使用 helm 安装免费版
+  - 包含如下组件：
+    - frontend 前端 UI 面板
+    - cost-model 核心组件，提供基础的成本拆分能力
+    - postgres 长期存储，仅企业版支持
+    - kubecost-network-costs 一个 daemonset，提供网络指标用于计算网络成本（貌似未开源）
+    - cluster-controller 提供集群「大小调整（RightSizing）」以及「定时关闭集群」的能力
+  - 只保留 15 天的指标，无 SSO/SAML 登录支持，无 alerts/notification, 不可保存 reportes 报表
+  - 每个 kubecost 只可管理一个集群
+- 只安装 Apache License 开源的 cost-model，它仅提供基础的成本拆分功能以及 API，无 UI 面板、长期存储、网络成本拆分、SAML 接入及其他商业功能。
 
-TBD
+开源的 cost-model 直接使用此配置文件即可部署：https://github.com/kubecost/cost-model/blob/master/kubernetes/exporter/exporter.yaml
 
-## Kubernetes 网络成本的分析
+而如果要部署带 UI 的商业版，需要首先访问 <https://www.kubecost.com/install#show-instructions> 获取到 `kubecostToken`，然后使用 helm 进行部署。
 
-kubecost 只负责分析计算成本与存储成本，不能分析网络成本。
+首先下载并编辑 values.yaml 配置文件：https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml
 
-可现实是，对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。
+然后部署：
 
+```shell
+kubectl create namespace kubecost
+helm repo add kubecost https://kubecost.github.io/cost-analyzer/
+helm install kubecost kubecost/cost-analyzer -n kubecost -f kubecost-values.yaml
+```
+
+通过 port-forward 访问：
+
+```shell
+kubectl port-forward --namespace kubecost deployment/kubecost-cost-analyzer 9090
+```
+
+现在访问 <http://localhost:9090> 就能进入 Kubecost 的 UI 面板，可以简单研究下，其中最主要的就是 Allocation 成本拆分功能。
+
+### kubecost 的成本统计原理
+
+#### 1. CPU/RAM/GPU/Storage 成本分析
+
+Kubecost 通过 AWS/GCP 等云服务商 API 动态获取各 region/zone 的上述四项资源的每小时成本：CPU-hour, GPU-hour, Storage Gb-hour 与 RAM Gb-hour，或者通过 json 文件静态配置这几项资源的成本。
+OD 按需实例的资源价格通常比较固定，而 AWS Spot 实例的成本波动会比较大，可以通过 SpotCPU/SpotRAM 这两个参数来设置 spot 的默认价格，也可以为 kubecost 提供权限使它动态获取这两项资源的价格。
+
+
+kubecost 根据每个容器的资源请求 requests 以及资源用量监控进行成本分配，对于未配置 requests 的资源将仅按实际用量监控进行成本分配。
+
+kubecost 的成本统计粒度为 container，而 deployment/service/namespace/label 只是按不同的维度进行成本聚合而已。
+
+#### 2. 网络成本的分析
+
+>https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md
+
+对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。
 使用单个可用区风险比较高，资源池也可能不够用，因此我们通常会使用多个可用区，这就导致跨区流量成本激增。
 
-比较好的估算方法是，按 kubelet 暴露出的 Pod network 监控指标计算出每个服务每天平均的 TX/RX 流量速率，然后使用这个指标对整个集群的流量成本进行拆分。
+kubecost 也支持使用 Pod network 监控指标对整个集群的流量成本进行拆分，kubecost 会部署一个绑定 hostNetwork 的 daemonset 来采集需要的网络指标，提供给 prometheus 拉取，再进行进一步的分析。
 
+kubecost 将网络流量分成如下几类：
 
-## 参考
+- in-zone: 免费流量
+- in-region: 跨区流量，国外的云服务商基本都会对跨区流量收费
+- cross-region: 跨域流量
+
+TBD
+
+### kubecost API
+
+>https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/apis.md
+
+- 成本拆分文档：https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/cost-allocation.md
+- 成本拆分 API 文档：https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/allocation.md
+
+查询成本拆分结果的 API 示例：
+
+```python
+import requests
+resp = requests.get("http://localhost:9090/model/allocation", params={
+  "window": "2022-05-05T00:00:00Z,2022-05-06T00:00:00Z",
+  "aggregate": "namespace,label:app",  # 以这几个纬度进行成本聚合
+  "external": True,     # 拆分集群外部的成本（比如 s3/rds/es 等），需要通过其他手段提供外部资源的成本
+  "accumulate": True,   # 累加指定 window 的所有成本
+  "shareIdle": False,   # 将空闲成本拆分到所有资源上
+  "idleByNode": False,  # 基于节点进行空闲资源的统计
+  "shareTenancyCosts": True,  # 在集群的多个租户之间共享集群管理成本、节点数据卷成本。这部分成本将被添加到 `sharedCost` 字段中
+  "shareNamespaces": "kube-system,kubecost,istio-system,monitoring",  # 将这些名字空间的成本设为共享成本
+  "shareLabels": "",
+  "shareCost": None,
+  "shareSplit": "weighted",  # 共享成本的拆分方法，weight 加权拆分，even 均分
+})
+
+resp_json = resp.json()
+print(resp_json['code'])
+
+result = resp_json['data']
+print(result[0])
+```
+
+查询结果中有这几种特殊成本类别：
+
+- `__idle__`: 未被占用的空闲资源消耗的成本
+- `__unallocated_`: 不含有 `aggregate` 对应维度的成本，比如按 `label:app` 进行聚合，不含有 `app` 这个 label 的 pod 成本就会被分类到此标签
+- `__unmounted__`: 未挂载 PV 的成本
+
+此外如果使用 kubecost 可视化面板，可能还会看到一个 `other` 类别，这是为了方便可视化，把成本太低的一些指标聚合展示了。
+
+### 进阶用法
+
+- 集成 AWS CUR 账单：https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/aws-cloud-integrations.md
+- 其他文档：https://github.com/kubecost/docs
+
+### 参考
 
 - [kubecost](https://github.com/kubecost/cost-model): kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，也提供收费的云上版本，值得研究。
 - [crane](https://github.com/gocrane/crane): 腾讯开源的一款 Kubernetes 成本优化工具，支持成本报表以及 EHPA 两个功能，才刚开源几个月，目前还比较简陋。
