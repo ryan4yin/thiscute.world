@@ -29,6 +29,9 @@ categories: ["技术"]
 11. 创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的 ServiceAccount 不存在。
 12. Pod 运行失败，状态为 MatchNodeSelector: 对主节点进行关机、迁移等操作，导致主调度器下线时，会在一段时间内导致 Pod 调度失败，调度失败会报这个错。
 13. Pod 仍然存在，但是 `Service` 的 Endpoints 却为空，找不到对应的 Pod IPs: 遇到过一次，是因为时间跳变（从未来的时间改回了当前时间）导致的问题。
+14. Pod 无法调度，报错 `x node(s) had volume node affinity conflict`: 说明该 pod 所绑定的 PV 有 nodeAffinity 无法满足，可以 check 对应的 PV yaml. 通常原因是 PV 所在的可用区，没有可用的节点，导致 Pod 无法调度。
+    1.  最简单的解决方法是，在对应的可用区补充节点
+    2.  如果数据可以丢，也可以考虑直接删除重建 PV/PVC
 
 ### 控制面故障可能会导致各类奇怪的异常现象
 
