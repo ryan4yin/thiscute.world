@@ -6,7 +6,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "featured-image.jpg"
+  src: "finops-for-kubernetes.png"
 
 tags: ["云原生", "Kubernetes", "FinOps", "成本分析", "Kubecost"]
 categories: ["技术"]
