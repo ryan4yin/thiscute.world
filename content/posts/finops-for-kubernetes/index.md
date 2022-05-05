@@ -34,34 +34,34 @@ comment:
 目前的主流云服务商（AWS/GCP/Alicloud/...）基本都提供基于资源标签的成本查询方法，也支持将成本导出并使用 SQL 进行细致分析。
 因此其实要做到快速高效的**云成本分析与管控**，主要就涉及到如下几个点：
 
-- **契合需求的标签规范**: 从公司业务侧需求出发，制定出合理的标签规范，这样才能按业务侧需要进行成本分析。
+- **契合需求的标签规范**: 从公司业务侧需求出发，制定出合理的、多维度的（Department/Team/Product/...）、有扩展空间的标签规范，这样才能按业务侧需要进行成本分析。
 - **资源标签的准确率**: 随着公司业务的发展，标签规范的迭代，标签的准确率总是会上下波动。而标签准确率越高，我们对云计算成本的管控能力就越强。
 
 但是也存在许多特殊的云上资源，云服务商目前并未提供良好的成本分析手段，Kubernetes 集群成本就是其中之一。
 
 ## Kubernetes 成本分析的难点
 
-目前许多企业应该都面临着这样的场景：所有的服务都运行在一或多个 Kubernetes 集群上，其中包含多条业务线、多个产品、多个业务团队的服务实例，甚至除了业务服务，可能还包含 CICD、数据分析、机器学习等多种其他工作负载。而这些 Kubernetes 集群通常都由一个独立的 SRE 部门管理。
+目前许多企业应该都面临着这样的场景：所有的服务都运行在一或多个 Kubernetes 集群上，其中包含多条业务线、多个产品、多个业务团队的服务，甚至除了业务服务，可能还包含 CICD、数据分析、机器学习等多种其他工作负载。而这些 Kubernetes 集群通常都由一个独立的 SRE 部门管理。
 但是 Kubernetes 集群本身并不提供成本拆分的能力，我们只能看到整个集群的整体成本，或者集群每个节点或节点组的成本。
 此外，Kubernetes 集群是一个非常动态的运行环境，其节点的数量、节点规格、Pod 所在的节点/Zone/Region，都可能会随着时间动态变动，这为成本分析带来了更大的困难。
 
 这就导致我们很难回答这些问题：**每条业务线、每个产品、每个业务团队、或者每个服务分别花了多少钱？是否存在资源浪费？有何优化手段**？
 
-而我在成本方面的一部分工作，就是通过人工分析、工程化分析等手段，来回答这些成本问题，分析与管控 Kubernetes 的成本。
+而 Kubernetes 成本分析这项工作，就是通过人工分析、工程化分析等手段，来回答这些成本问题，分析与管控 Kubernetes 的成本。
 
-接下来我会从概念讲起，介绍我做云上 Kubernetes 成本分析的思路与手段，最后再介绍一个目前业界最优秀的 Kubernetes 成本分析工具 - kubecost.
+接下来我会从概念讲起，介绍我做云上 Kubernetes 成本分析的思路与手段，最后再介绍如何使用 Kubecost 分析 Kubernetes 集群的成本。
 
-主要包含如下三个核心问题：
+要做好 Kubernetes 成本工作，有如下三个要点：
 
-- 理解云服务商的 Kubernetes 服务是如何收费的，了解为什么在 Kubernetes 集群上进行准确的成本拆分很有挑战性。
+- 理解云服务商的 Kubernetes 服务是如何收费的，了解为什么在 Kubernetes 集群上进行准确的成本拆分很有挑战性
 - 寻找优化 Kubernetes 集群、业务服务的手段
-- 确定 Kubernetes 集群的成本拆分手段，建立能快速高效地分析与管控集群成本的流程。
+- 确定 Kubernetes 集群的成本拆分手段，建立能快速高效地分析与管控集群成本的流程
 
 ## Kubernetes 成本的构成
 
 以 AWS EKS 为例，我们首先看下 Kubernetes 的成本是如何构成的：
 
-- AWS EKS 本身不收费
+- AWS EKS 本身有 $0.1 per hour 的固定费用，这个很低
 - EKS 的所有节点会收对应的 EC2 实例运行费用、EBS 数据卷费用
 - EKS 中使用的 PV 会带来 EBS  数据卷的费用
 - 跨区流量传输费用
@@ -79,7 +79,7 @@ comment:
 
 ## Kubernetes 资源分配的方式
 
-Kubernetes 提供了三种资源分配的方式，被成所服务质量 QoS：
+Kubernetes 提供了三种资源分配的方式，即服务质量 QoS，不同的分配方式，成本的计算难度也有区别：
 
 - Guaranteed resource allocation(保证资源分配): 即将 requests 与 limits 设置为相等，确保预留所有所需资源
   - 最保守的策略，服务性能最可靠，但是成本也最高
@@ -89,9 +89,11 @@ Kubernetes 提供了三种资源分配的方式，被成所服务质量 QoS：
   - 这种资源，它 requests 的计算成本是静态的，Burstable 部分的计算成本是动态的
 - Best effort resource allocation(尽力而为): 只设置 limits，不设置 requests，让 Pod 可以调度到任何可调度的节点上
   - 下策，这个选项会导致服务的性能无法保证，通常只在开发测试等资源受限的环境使用
-  - 这种方式分配的资源，拆分起来是最麻烦的，因为它的成本是完全动态的。
+  - 这种方式分配的资源，完全依赖监控指标进行成本拆分
 
 ## 最佳实践
+
+要做到统一分析、拆分 Kubernetes 与其他云资源的成本，如下是一些最佳实践：
 
 - 按产品或者业务线来划分名字空间，不允许跨名字空间互相访问。
   - 如果存在多个产品或业务线共用的服务，可以在每个产品的名字空间分别部署一个副本，并把它们当成不同的服务来处理。
@@ -100,6 +102,7 @@ Kubernetes 提供了三种资源分配的方式，被成所服务质量 QoS：
   - 这是第二个维度，但是节点组划分得太细，可能会导致资源利用不够充分。
   - 这个方案仅供参考，不一定好用
 - 为 Kubernetes 服务设计与其他云资源一致的成本标签，添加到 Pod 的 label 中，通过 kubecost 等手段，基于 label 进行更细致的成本分析
+  - 标签一致的好处是可以统一分析 Kubernetes 与其他云资源的成本
 - 定期（比如每周一） check 云成本变化，定位并解决成本异常
 - 建立自动化的成本异常检测与告警机制（部分云服务有提供类似的服务，也可自建），收到告警即触发成本异常分析任务
 - 始终将资源标签准确率维持在较高数值，准确率低于一定数值即自动告警，触发标签修正任务
@@ -155,11 +158,11 @@ kubecost 有两种推荐的安装方法：
   - 每个 kubecost 只可管理一个集群
 - 只安装 Apache License 开源的 cost-model，它仅提供基础的成本拆分功能以及 API，无 UI 面板、长期存储、网络成本拆分、SAML 接入及其他商业功能。
 
-开源的 cost-model 直接使用此配置文件即可部署：https://github.com/kubecost/cost-model/blob/master/kubernetes/exporter/exporter.yaml
+开源的 cost-model 直接使用此配置文件即可部署：<https://github.com/kubecost/cost-model/blob/master/kubernetes/exporter/exporter.yaml>
 
 而如果要部署带 UI 的商业版，需要首先访问 <https://www.kubecost.com/install#show-instructions> 获取到 `kubecostToken`，然后使用 helm 进行部署。
 
-首先下载并编辑 values.yaml 配置文件：https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml
+首先下载并编辑 values.yaml 配置文件：<https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml>
 
 然后部署：
 
@@ -175,7 +178,10 @@ helm install kubecost kubecost/cost-analyzer -n kubecost -f kubecost-values.yaml
 kubectl port-forward --namespace kubecost deployment/kubecost-cost-analyzer 9090
 ```
 
-现在访问 <http://localhost:9090> 就能进入 Kubecost 的 UI 面板，可以简单研究下，其中最主要的就是 Allocation 成本拆分功能。
+现在访问 <http://localhost:9090> 就能进入 Kubecost 的 UI 面板，其中最主要的就是 Allocation 成本拆分功能。
+
+{{< figure src="/images/finops-for-kubernetes/kubecost-demo.webp" title="Kubecost 示例" >}}
+
 
 ### kubecost 的成本统计原理
 
@@ -191,7 +197,7 @@ kubecost 的成本统计粒度为 container，而 deployment/service/namespace/l
 
 #### 2. 网络成本的分析
 
->https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md
+><https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md>
 
 对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。
 使用单个可用区风险比较高，资源池也可能不够用，因此我们通常会使用多个可用区，这就导致跨区流量成本激增。
@@ -204,7 +210,9 @@ kubecost 将网络流量分成如下几类：
 - in-region: 跨区流量，国外的云服务商基本都会对跨区流量收费
 - cross-region: 跨域流量
 
-TBD
+更多的待研究，看 kubecost 官方文档吧。
+
+>另外还看到 kubecost 有忽略 s3 流量（因为不收费）的 issue: <https://github.com/kubecost/cost-model/issues/517>
 
 ### kubecost API
 
