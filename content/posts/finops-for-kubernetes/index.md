@@ -2,7 +2,7 @@
 title: "FinOps for Kubernetes - 如何拆分 Kubernetes 成本"
 date: 2022-05-04T23:15:00+08:00
 lastmod: 2022-05-05T19:31:00+08:00
-draft: true
+draft: false
 
 resources:
 - name: "featured-image"
