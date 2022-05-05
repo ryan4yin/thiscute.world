@@ -13,7 +13,7 @@ toc:
 
 ## 一、我正在研究这些
 
-- 学习极客时间的《深入剖析 Kuberntes》
+- 学习极客时间的《深入剖析 Kuberntes》 - 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - The ANSI C Programming Language
 - 研究 FinOps 与 kubecost，完成一篇 Kubernetes 成本分析的文章 - 50%
