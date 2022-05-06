@@ -138,9 +138,11 @@ Kubernetes 提供了三种资源分配的方式，即服务质量 QoS，不同�
   - 可使用 Grafana/Google DataStudio 等报表工具
 
 
-## 使用 Kubecost 进行 Kubernetes 成本分析
+## Kubernetes 成本分析
 
-目前据我所知，主要有如下两个相关开源工具：
+前面讨论的内容都很「虚」，下面来点更「务实」的：使用 Kubecost 进行 Kubernetes 成本分析。
+
+目前据我所知，主要有如下两个相关的开源工具：
 
 - [Kubecost](https://github.com/kubecost/cost-model): kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，支持按 deployment/service/label 等多个维度进行成本拆分，而且支持拆分网络成本。收费版提供更丰富的功能以及更长的数据存储时间。
 - [crane](https://github.com/gocrane/crane): 腾讯开源的一款 Kubernetes 成本优化工具，支持成本报表以及 EHPA 两个功能，才刚开源几个月，目前还比较简陋。
