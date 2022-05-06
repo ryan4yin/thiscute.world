@@ -13,7 +13,7 @@ toc:
 
 ## 一、我正在研究这些
 
-- 学习极客时间的《深入剖析 Kuberntes》 - 20%
+- 学习极客时间的《深入剖析 Kuberntes》 - 37%
 - 博客《Kubernetes 网络：Overlay、Underlay、NAT 以及内网穿透》- 10%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - The ANSI C Programming Language
