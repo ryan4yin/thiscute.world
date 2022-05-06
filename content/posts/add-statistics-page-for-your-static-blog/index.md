@@ -5,7 +5,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "website-statistics.png"
+  src: "website-statistics.webp"
 
 tags: ["博客", "Google Analytics", "阅读统计"]
 categories: ["技术"]

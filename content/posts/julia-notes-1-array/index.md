@@ -4,7 +4,7 @@ date: 2019-01-14T19:51:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "julialang.png"
+  src: "julialang.webp"
 
 tags: ["JuliaLang"]
 categories: ["技术"]

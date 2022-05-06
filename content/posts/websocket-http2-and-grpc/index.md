@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "protocols-banner.png"
+  src: "protocols-banner.webp"
 
 tags: ["WebSocket", "gRPC", "HTTP/2"]
 categories: ["技术"]
@@ -85,7 +85,7 @@ HTTP/2 于 2015 年标准化，主要目的是优化性能。其特性如下：
 它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 `from disk cache` 或者 `from memroy cache`.
 
 Chrome 可以通过如下方式查看请求使用的协议：
-{{< figure src="/images/websocket-http2-and-grpc/chrome-protocol.png" >}}
+{{< figure src="/images/websocket-http2-and-grpc/chrome-protocol.webp" >}}
 
 
 >2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知乎、bilibili、GIthub 使用了 `wss` 协议，也有很多网站使用了 SSE（格式如 `data:image/png;base64,<base64 string>`）

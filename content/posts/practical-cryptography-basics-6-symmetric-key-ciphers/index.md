@@ -59,7 +59,7 @@ code:
 
 对称加密是指，使用相同的密钥进行消息的加密与解密。因为这个特性，我们也称这个密钥为「共享密钥（Shared Secret Key）」，示意图如下：
 
-{{< figure src="/images/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-cryptography.png" >}}
+{{< figure src="/images/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-cryptography.webp" >}}
 
 现代密码学中广泛使用的对称加密算法（ciphers）有：AES（AES-128、AES-192、AES-256）、ChaCha20、Twofish、IDEA、Serpent、Camelia、RC6、CAST 等。
 其中绝大多数都是「**块密码算法**（Block Cipher）」或者叫「**分组密码算法**」，这种算法一次只能加密固定大小的块（例如 128 位）；
@@ -293,7 +293,7 @@ GCM (Galois/Counter) 模式在 CTR 模式的基础上，添加了消息认证的
 
 下图直观地解释了 GCM 块模式（Galois/Counter 模式）的工作原理：
 
-{{< figure src="/images/practical-cryptography-basics-6-symmetric-key-ciphers/gcm-galois_counter_mode.png" >}}
+{{< figure src="/images/practical-cryptography-basics-6-symmetric-key-ciphers/gcm-galois_counter_mode.webp" >}}
 
 GCM 模式新增的 Auth Tag，计算起来会有些复杂，我们就直接略过了，对原理感兴趣的可以看下 [Galois/Counter_Mode_wiki][Galois/Counter_Mode_wiki].
 

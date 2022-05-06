@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "manjaro.png"
+  src: "manjaro.webp"
 
 tags: ["Manjaro", "Linux", "Arch Linux"]
 categories: ["技术"]

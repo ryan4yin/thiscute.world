@@ -74,13 +74,13 @@ CREATE TABLE `persons`
 有四类数据类型：字符串、数字、日期、二进制。它们又根据数据长度的区别，下分为多个类型。
 
 1. 字符串：
-![string types](/images/sql-basic/968138-20180615170308408-1360197489.png)
+![string types](/images/sql-basic/968138-20180615170308408-1360197489.webp)
 2. 数字
-![numeric types](/images/sql-basic/968138-20180615170501735-1087517507.png)
+![numeric types](/images/sql-basic/968138-20180615170501735-1087517507.webp)
 3. 日期
-![date types](/images/sql-basic/968138-20180615170610668-439886214.png)
+![date types](/images/sql-basic/968138-20180615170610668-439886214.webp)
 4. 二进制
-![binary types](/images/sql-basic/968138-20180615170949680-176119067.png)
+![binary types](/images/sql-basic/968138-20180615170949680-176119067.webp)
 
 #### 约束
 

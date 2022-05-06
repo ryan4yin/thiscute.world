@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "pulumi.png"
+  src: "pulumi.webp"
 
 tags: ["基础设施即代码", "云原生", "Pulumi","Terraform"]
 categories: ["技术"]

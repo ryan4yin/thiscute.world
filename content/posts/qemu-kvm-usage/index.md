@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "qemu-kvm-libvirt-go.png"
+  src: "qemu-kvm-libvirt-go.webp"
 
 tags: ["虚拟化", "KVM", "libvirt", "QEMU"]
 categories: ["技术"]

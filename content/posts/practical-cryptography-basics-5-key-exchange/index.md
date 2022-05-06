@@ -5,7 +5,7 @@ lastmod: 2022-03-13T15:26:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "dhke.png"
+  src: "dhke.webp"
 
 tags: ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
 categories: ["技术"]
@@ -100,7 +100,7 @@ $$
 
 下面该轮到 Alice 跟 Bob 出场来介绍 DHKE 的过程了，先看图（下面<span style="color:green">绿色</span>表示非秘密信息，<span style="color:red">**红色**</span>表示秘密信息）：
 
-{{< figure src="/images/practical-cryptography-basics-5-key-exchange/diffle-hellman.png" >}}
+{{< figure src="/images/practical-cryptography-basics-5-key-exchange/diffle-hellman.webp" >}}
 
 - Alice 跟 Bob 协定使用两个比较独特的正整数 <span style="color:green">$p$</span> 跟 <span style="color:green">$g$</span>
   - 假设 <span style="color:green">$p=23$, $g=5$</span>

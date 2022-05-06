@@ -46,7 +46,7 @@ Pseudo-Random Number Generators(PRNG) 是一种数字序列的生成算法，它
 
 算法流程如下，算法的每次迭代都生成出一个新的伪随机数：
 
-{{< figure src="/images/practical-cryptography-basics-4-secure-random-generators/pseudorandom-number-generators.png" >}}
+{{< figure src="/images/practical-cryptography-basics-4-secure-random-generators/pseudorandom-number-generators.webp" >}}
 
 如果输入的初始种子是相同的，PRNG 总是会生成出相同的伪随机数序列，因此 PRNG 也被称为 Deterministic Random Bit Generator (DRBG)，即确定性随机比特生成器。
 

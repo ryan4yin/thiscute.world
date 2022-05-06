@@ -81,7 +81,7 @@ comment:
 {{< /admonition >}}
 
 {{< admonition info "博客快照" false >}}
-![](/images/about/cnblog-2020-01-21.png "博客园快照")
+![](/images/about/cnblog-2020-01-21.webp "博客园快照")
 {{< /admonition >}}
 
 ## 注意事项

@@ -4,7 +4,7 @@ date: 2022-01-03T14:50:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "wrapped_ryan4yin.png"
+  src: "wrapped_ryan4yin.webp"
 
 tags: ["总结"]
 categories: ["随笔", "技术"]

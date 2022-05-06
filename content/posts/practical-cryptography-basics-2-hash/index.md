@@ -4,7 +4,7 @@ date: 2022-03-01T17:15:01+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "cryptographic_hash_function.png"
+  src: "cryptographic_hash_function.webp"
 
 tags: ["Cryptography", "Hash", "密码学", "哈希", "散列", "安全", "SHA-2", "SHA-3"]
 categories: ["技术"]
@@ -73,7 +73,7 @@ code:
 
 但是哈希函数自身不能保证文件的真实性，目前来讲，真实性通常是 TLS 协议要保证的，它确保你在 openssl 网站上看到的「SHA256 校验和」真实无误（未被篡改）。
 
-{{< figure src="/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.png" >}}
+{{< figure src="/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.webp" >}}
 
 
 >现代网络基本都很难遇到文件损坏的情况了，但是在古早的低速网络中，即使 TCP 跟底层协议已经有多种数据纠错手段，下载完成的文件仍然是有可能损坏的。
@@ -83,7 +83,7 @@ code:
 
 加密哈希函数还被用于密码的安全存储，现代系统使用专门设计的安全哈希算法计算用户密码的哈希摘要，保存到数据库中，这样能确保密码的安全性。除了用户自己，没有人清楚该密码的原始数据，即使数据库管理员也只能看到一个哈希摘要。
 
-{{< figure src="/images/practical-cryptography-basics-2-hash/sha512-password-hash.png" >}}
+{{< figure src="/images/practical-cryptography-basics-2-hash/sha512-password-hash.webp" >}}
 
 
 #### 3. 生成唯一 ID

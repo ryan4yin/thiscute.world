@@ -489,7 +489,7 @@ geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度�
 
 先介绍下 vxlan 的数据包结构：
 
-{{< figure src="/images/linux-virtual-interfaces/vxlan-frame.png" title="VXLAN 栈帧结构" >}}
+{{< figure src="/images/linux-virtual-interfaces/vxlan-frame.webp" title="VXLAN 栈帧结构" >}}
 
 在创建 vxlan 的 vtep 虚拟设备时，我们需要手动设置图中的如下属性：
 

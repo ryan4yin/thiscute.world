@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "python-tips-and-tricks.png"
+  src: "python-tips-and-tricks.webp"
 
 tags: ["Python", "Tips", "Tricks", "常见错误"]
 categories: ["技术"]
@@ -715,7 +715,7 @@ class A:
 
 在做爬虫工作时，有时会遇到这样的 table 元素：
 
-{{< figure src="/images/python-tips-and-tricks/html-table.png" >}}
+{{< figure src="/images/python-tips-and-tricks/html-table.webp" >}}
 
 对这种 html 元素，我一般会直接把它转换成 list，结果如下：
 ```python3

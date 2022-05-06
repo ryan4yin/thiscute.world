@@ -6,7 +6,7 @@ draft: false
 math: true
 resources:
 - name: "featured-image"
-  src: "gcd.png"
+  src: "gcd.webp"
 
 tags: ["算法"]
 categories: ["数学", "技术"]

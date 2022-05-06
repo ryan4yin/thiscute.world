@@ -4,7 +4,7 @@ date: 2020-05-31T00:13:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "base64-encoding.png"
+  src: "base64-encoding.webp"
 
 tags: ["Base64", "编码"]
 categories: ["技术"]

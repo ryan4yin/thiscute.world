@@ -113,11 +113,11 @@ code:
 
 密钥封装机制 KEM 的加密流程（使用公钥加密传输对称密钥）：
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/hybrid-encryption.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/hybrid-encryption.webp" >}}
 
 密钥封装机制 KEM 的解密流程（使用私钥解密出对称密钥，然后再使用这个对称密钥解密数据）：
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/hybrid-decryption.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/hybrid-decryption.webp" >}}
 
 RSA-OAEP, RSA-KEM, ECIES-KEM 和 PSEC-KEM. 都是 KEM 加密方案。
 
@@ -497,7 +497,7 @@ print("Signature valid:", hash == hashFromSignature)
 
 ## 四、ECC 密码系统
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc.webp" >}}
 
 ECC 椭圆曲线密码学，于 1985 年被首次提出，并于 2004 年开始被广泛应用。
 ECC 被认为是 RSA 的继任者，新一代的非对称加密算法。
@@ -531,7 +531,7 @@ $$
 
 >椭圆曲线跟椭圆的关系，就犹如雷锋跟雷峰塔、Java 跟 JavaScript...
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve.webp" >}}
 
 你可以通过如下网站手动调整 $a$ 与 $b$ 的值，拖动曲线的交点：
 <https://www.desmos.com/calculator/ialhd71we3?lang=zh-CN>
@@ -544,7 +544,7 @@ $$
 
 对于曲线上的任意两点 $A$ 与 $B$，我们定义过 $A, B$ 的直线与曲线的交点为 $-(A+B)$，而 $-(A+B)$ 相对于 x 轴的对称点即为 $A+B$:
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-add-operation.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-add-operation.webp" >}}
 
 上述描述一是定义了椭圆曲线的加法规则，二是定义了椭圆曲线上的负元运算。
 
@@ -552,14 +552,14 @@ $$
 
 在加法规则中，如果 $A=B$，我们定义曲线在 $A$ 点的切线与曲线的交点为 $-2A$，于是得到二倍运算的规则：
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-2-times.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-2-times.webp" >}}
 
 ##### 3. 无穷远点
 
 对于 $(-A) + A$ 这种一个值与其负元本身相加的情况，我们会发现过这两点的直线没有交点，前面定义的加法规则在这种情况下失效。
 为了解决这个问题，我们假设这直线与椭圆曲线相交于无穷远点 $O_{\infty}$.
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-ifinite-point.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc-ifinite-point.webp" >}}
 
 ##### 4. k 倍运算
 
@@ -852,7 +852,7 @@ public_key.verify(signature, b"my authenticated message")
 「有些曲线 + G」形成一个单一循环群，这一个群包含了曲线上的所有点。而其他的曲线加上 G 点则形成多个不相交的循环子群，每个子群包含了曲线的一个子集。
 对于上述第二种情况，曲线上的点将被拆分到 **h** 个循环子群中，每个子群的**阶**都是 **r**，这时整个群的阶 $n = h * r$. 子群的个数 **h** 被称为**辅助因子**。
 
-{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve-subgroups.png" >}}
+{{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve-subgroups.webp" >}}
 
 有限域上的椭圆曲线的阶都是有限的，也就是说对于曲线上任意一点 $G$，我们计算它的数乘 $kG$，随着整数 $k$ 的增大，一定会存在某个 $k$ 使 $kG = O_{\infty}$ 成立，然后 $k$ 继续增大时，因为 $O_{\infty} * P = $O_{\infty}$，$kG$ 的值就固定为 $$O_{\infty}$ 了，更大的 $k$ 值已经失去了意义。
 
@@ -920,7 +920,7 @@ $$
 
 画个图长这样：
 
-![](/images/practical-cryptography-basics-7-asymmetric-key-ciphers/edwards-curve.png)
+![](/images/practical-cryptography-basics-7-asymmetric-key-ciphers/edwards-curve.webp)
 
 知名的 Edwards 曲线有：
 - Curve1174 (251-bit)

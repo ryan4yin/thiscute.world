@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "argo-workflow.png"
+  src: "argo-workflow.webp"
 
 tags: ["云原生", "CI","持续集成", "流水线"]
 categories: ["技术"]
@@ -55,7 +55,7 @@ Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言
 
 一个复杂工作流的示例如下：
 
-![](/images/expirence-of-argo-workflow/complex-workflows.png "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
+![](/images/expirence-of-argo-workflow/complex-workflows.webp "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
 
 
 ### 3. Workflow 的声明式配置

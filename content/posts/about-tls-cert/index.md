@@ -5,7 +5,7 @@ lastmod: 2022-03-14T00:00:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "https-secure.png"
+  src: "https-secure.webp"
 
 tags: ["Cryptography", "密码学", "HTTPS", "TLS", "SSL", "OpenSSL", "PKI", "数字证书", "证书", "SSH", "QUIC", "HTTP/3",  "安全"]
 categories: ["技术"]
@@ -104,7 +104,7 @@ X.509 v3 格式被广泛应用在 TLS/SSL 等众多加密通讯协议中，它�
 
 使用 Firefox 查看网站 `https://www.google.com` 的证书信息如下：
 
-{{< figure src="/images/about-tls-cert/cert-content.png" title="Google 证书内容" >}}
+{{< figure src="/images/about-tls-cert/cert-content.webp" title="Google 证书内容" >}}
 
 ### 2. 证书链
 
@@ -149,7 +149,7 @@ PKI 架构使用「**数字证书链**（也叫做**信任链**）」的机制�
 
 画个图来表示大概是这么个样子：
 
-{{< figure src="/images/about-tls-cert/chain-of-trust.png" >}}
+{{< figure src="/images/about-tls-cert/chain-of-trust.webp" >}}
 
 CA 机构也可能会在经过严格审核后，为其他机构签发中间证书，这样就能赋予其他机构签发证书的权利，而且根证书的安全性不受影响。
 
@@ -169,7 +169,7 @@ CA 机构也可能会在经过严格审核后，为其他机构签发中间证�
 
 现在再拿出前面 `https://www.google.com` 的证书截图看看，最上方有三个标签页，从左至右依次是「服务器证书」、「中间证书」、「根证书」，可以点进去分别查看这三个证书的各项参数，各位看官可以自行尝试：
 
-{{< figure src="/images/about-tls-cert/cert-content.png" title="Google 证书内容" >}}
+{{< figure src="/images/about-tls-cert/cert-content.webp" title="Google 证书内容" >}}
 
 #### 交叉签名
 
@@ -348,7 +348,7 @@ TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域�
 在自己生成的证书链中可以为局域网 IP 或局域网域名生成本地签名证书。
 此外在因特网中也有一些权威认证机构提供为公网 IP 签发证书的服务，一个例子是 Cloudflare 的 <https://1.1.1.1>, 使用 Firefox 查看其证书，可以看到是一个由 DigiCert 签发的 ECC 证书，使用了 P-256 曲线：
 
-{{< figure src="/images/about-tls-cert/1.1.1.1-cert.png" title=" Cloudflare 的 IP 证书" >}}
+{{< figure src="/images/about-tls-cert/1.1.1.1-cert.webp" title=" Cloudflare 的 IP 证书" >}}
 
 ### 5. 生成自己的证书链
 
@@ -541,7 +541,7 @@ openssl ecparam -list_curves
 
 完整的证书申请流程如下: 
 
-![](/images/about-tls-cert/ca-sign-sechdule.png "证书申请流程")
+![](/images/about-tls-cert/ca-sign-sechdule.webp "证书申请流程")
 
 为了方便用户，图中的申请人（Applicant）自行处理的部分，目前很多证书申请网站也可以自动处理，用户只需要提供相关信息即可。
 
@@ -628,7 +628,7 @@ TLS 协议通过应用 ECDHE 密钥交换协议，提供了「完美前向保密
 
 TLS 协议的前身是 SSL 协议，TLS/SSL 的发展历程展示如下：
 
-{{< figure src="/images/about-tls-cert/history-of-ssl-tls.png" title="SSL/TLS 的历史版本" >}}
+{{< figure src="/images/about-tls-cert/history-of-ssl-tls.webp" title="SSL/TLS 的历史版本" >}}
 
 SSL 协议早在 2015 年就被各大主流浏览器废除了，TLS1.0 感觉也基本没站点在用了，这俩就直接跳过了。
 
@@ -691,7 +691,7 @@ TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要
 
 一个非常好用的「站点 HTTPS 安全检测」网站是 <https://myssl.com/>，使用它测试知乎网的检测结果如下：
 
-{{< figure src="/images/about-tls-cert/tls-cipher.png" title="SSL/TLS 的历史版本" >}}
+{{< figure src="/images/about-tls-cert/tls-cipher.webp" title="SSL/TLS 的历史版本" >}}
 
 能看到知乎为了兼容性，目前仍然支持 TLS1.0 与 TLS1.1，另外目前还不支持 TLS1.3.
 
@@ -702,7 +702,7 @@ TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要
 
 此外 myssl.com 还列出了许多站点更详细的信息，包括 TLS1.3 的会话恢复，以及后面将会介绍的公钥固定、HTTP严格传输安全等信息：
 
-{{< figure src="/images/about-tls-cert/other-https-info.png" title="SSL/TLS 的历史版本" >}}
+{{< figure src="/images/about-tls-cert/other-https-info.webp" title="SSL/TLS 的历史版本" >}}
 
 
 ##### Nginx 的 TLS 协议配置

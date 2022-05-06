@@ -35,7 +35,7 @@ comment:
 
 青春仙林，大爱仙马。17 年首届，门外汉，门外看；18年入门，陈子豪（2016 年南京市大学生运动会 1500 米冠军[田径小霸王2016年南京市运会1500m一骑绝尘！](https://www.bilibili.com/video/BV1SW41137Ai)）带我们在仙林校区开始练，一圈刚好就是 5km 的绝佳跑场。19 年终于参加了我的第一次仙马，去年仙马因疫情停办一年，时隔一年后再次回归。故地重游，取得 PB，这段仙马记忆永远不会斑驳。
 
-{{< figure src="/images/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/2021-xianlin-half-marathon-report.png" title="仙马成绩证书" >}}
+{{< figure src="/images/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/2021-xianlin-half-marathon-report.webp" title="仙马成绩证书" >}}
 
 第七场半程了, 成绩一路提升，156 => 149 => 147 => null => 157 => 138 => 133，每次的进步都会令我无比激动。
 

@@ -4,7 +4,7 @@ date: 2019-03-15T22:34:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "python-concurrency.png"
+  src: "python-concurrency.webp"
 
 tags: ["Python", "Concurrency", "并发"]
 categories: ["技术"]

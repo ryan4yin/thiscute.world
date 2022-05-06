@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "featured-image.webp"
 
 tags: ["Chrome", "Firefox", "DevTools", "Browser"]
 categories: ["技术"]
@@ -40,33 +40,33 @@ lightgallary: true
 
 Chrome 可以右键属性列名来增减属性列，Firefox-Dev 也是一样：
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211093455289-773908727.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211093455289-773908727.webp" >}}
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211150559673-23181676.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211150559673-23181676.webp" >}}
 
 #### 2. copy
 
 在 Chrome 中右键某个请求，选中 copy，会给出几个 options：
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211134155594-369771298.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211134155594-369771298.webp" >}}
 
 而 Firefox-Dev 的更强一点，可以复制消息头（请求头和响应头）：
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211134845686-1048423446.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211134845686-1048423446.webp" >}}
 
 #### 3. response 的 pretty print
 
 Chrome 的 Response 页面左下角，有`{}`按钮，可以 beautify 响应。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211145915794-1971618603.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211145915794-1971618603.webp" >}}
  
 而 Firefox-Dev 只在 Debugger 页面提供该按钮，Response 中不支持。
 
 Firefox 响应的 preview 和 payload 是放在 Response 页面下。而 Chrome 是分成了两个标签页
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211150146579-1141462696.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211150146579-1141462696.webp" >}}
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211150217505-933154713.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211150217505-933154713.webp" >}}
 
 #### 4. 导出 HAR
 
@@ -78,32 +78,32 @@ Firefox 响应的 preview 和 payload 是放在 Response 页面下。而 Chrome 
 
 Chrome 只支持查看 HTTP/1.x 的 Raw Headers，对这种请求，会给出 `view source` 选项。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211142152309-1418680644.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211142152309-1418680644.webp" >}}
 
 Chrome 不能查看 HTTP/2 的 Raw Headers。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211142301777-1440991898.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211142301777-1440991898.webp" >}}
 
 而 Firefox 则支持查看 HTTP/2 的 Raw Headers。（是恢复后的，HTTP/2 的原始消息头是二进制压缩形式）
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211142424361-986461531.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211142424361-986461531.webp" >}}
 
 它还提供 Edit and Resend 请求的功能，这点要给个赞～
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211172845339-1004306694.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211172845339-1004306694.webp" >}}
 
 
 #### 6. 审查 WebSocket（Chrome only）
 
 在 NetWork 中点击对应的 WebScoket 请求，在右侧选择 Frames 标签，就可以看到所有的消息了
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211161734224-864236086.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211161734224-864236086.webp" >}}
 
 #### 7. 跨页面加载时，保留网络请求记录
 
 当页面重载或者页面跳转时，默认情况下，Network面板下的网络请求记录表也是刷新的。如果想保留之前页面的网络请求数据，可以勾选Preserve log.
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211191616024-1591891666.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211191616024-1591891666.webp" >}}
 
 常用的一个应用场景：登录/注册时会调用登录/注册API，开发者想查看这个接口返回的情况，但是登录/注册成功后一般会跳转到新的页面，导致了Network面板的请求记录被刷新从而看不到登录/注册接口返回的情况。此时勾选上Preserve log，无论跳转到那个页面，都能在Network网络请求记录表中查看到之前接口返回的情况。
 
@@ -111,7 +111,7 @@ Chrome 不能查看 HTTP/2 的 Raw Headers。
 
 1. 可以通过 `$x(<xpath>, <DOM-element>)`，用 xpath 查询 DOM 元素。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211151856683-1227556897.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211151856683-1227556897.webp" >}}
 
 1. 通过控制台左上方的选单，可以切换 JS 的环境，它默认是当前页面（top）。
 
@@ -124,13 +124,13 @@ Chrome 不能查看 HTTP/2 的 Raw Headers。
     - attribute modification：当前节点的属性被修改。（inline style 被修改也会触发此事件）
     - node removal：节点被移除
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211152916189-42263251.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211152916189-42263251.webp" >}}
 
 #### 2. 检索元素上注册的事件（Chrome only）
 
 在 Elements 页面选中一个元素（或者直接右键检查该元素），然后在右侧窗口，选择 Event Listeners 标签，就可以看到该元素上注册的所有事件。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211154036983-2040723318.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211154036983-2040723318.webp" >}}
 
 #### 3. 颜色选择器
 
@@ -138,7 +138,7 @@ Chrome 不能查看 HTTP/2 的 Raw Headers。
 
 其中所有的颜色小方块都是可以点击的，点击颜色方块后
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211160511912-2063790850.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211160511912-2063790850.webp" >}}
 
 1. 可以将颜色属性转换成多个格式（Chrome only）
     - 默认格式：`#207981`
@@ -159,7 +159,7 @@ Sources 右侧的 Debugger 支持各种断点调试。
 
 1. 条件断点
     Sources 中，在任意 JS 代码的行号上单击鼠标左键，就能在该行设置一个普通断点（在 Response 中可不行）。在行号上右键，能直接设置条件断点。
-    {{< figure src="/images/web-browser-dev-tools/968138-20190211154841386-1840257581.png" >}}
+    {{< figure src="/images/web-browser-dev-tools/968138-20190211154841386-1840257581.webp" >}}
 1. XHR 断点：在右侧 Debugger 中，可以添加 XHR 断点。
     - 如果条件留空，一旦有 XHR 发起，就会无条件进入调试。
     - 条件是 “Break When URL Contaions <your string>”
@@ -176,21 +176,21 @@ Chrome 的断点功能比 Firefox-Dev 的更丰富。
 
 方法一：在 DevTools 界面，按快捷键 `Ctrl + Shift + P` 打开 Command 窗口，然后输入 `screenshot`，在下拉栏里选择你需要的截图命令就行。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190212163124375-995667384.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190212163124375-995667384.webp" >}}
 
 
 方法二：
 先进 dev tools，点击 左上角的设备图标（toggle device toolbar），然后页面顶部就会出现一个导航栏，在这里好选择设备或者自定义图像尺寸，然后点击该导航栏右侧（不是 dev tools 右侧）的 options 图标，会有两个选项：“截图（capture screenshot）”和“截网页全图（capture full size screenshot）”，如下：
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211102530072-2093584274.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211102530072-2093584274.webp" >}}
 
 #### 2. For Firefox
 
 1. 只截显示出来的部分：和 Chrome 一样点击设备图标，然后在页面上面的 toolbar 就有截图按钮
-2. {{< figure src="/images/web-browser-dev-tools/968138-20190211163703764-1641229843.png" >}}
+2. {{< figure src="/images/web-browser-dev-tools/968138-20190211163703764-1641229843.webp" >}}
 3. 截网页全图：在 DevTools 右边的 options 中进入 Settings，勾选 `take a screenshot of the entire page`，DevTools 右上角就会出现截图按钮了。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211163941562-1320561581.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211163941562-1320561581.webp" >}}
 
 ### 其他
 
@@ -198,14 +198,14 @@ Chrome 的断点功能比 Firefox-Dev 的更丰富。
 
 在 Chrome 中进入 DevTools，点击右上角的 options 按钮，选择 More tools -> Sensors，在 Geolocation 处选择 Custom location，就可以修改地理位置了。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211161131091-420638637.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211161131091-420638637.webp" >}}
  
 #### 2. 自定义请求头
 
 #### For Chrome
 和 上一小节一样，先进 More tools，选择 Network conditions，取消勾选 Select atuomatically，就可以修改请求头了。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211170346973-560763838.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211170346973-560763838.webp" >}}
 
 上面的演示中，使用 `python-requests/2.21.0` 做 user agent，知乎返回 404.
 
@@ -213,17 +213,17 @@ Chrome 的断点功能比 Firefox-Dev 的更丰富。
 
 打开设备模拟，在 toolbar 的右上角勾选 `show user agent`，然后就可以在 toolbar 修改 user agent 了：
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211170804371-405922156.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211170804371-405922156.webp" >}}
 
 ### 3. Request Blocking（Chrome only）
 
 在 Network 的任意请求上右键，菜单中就有 Block request URL（阻塞该 URL）和 Block request domain（阻塞请求所在的整个域）
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211171736248-156227886.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211171736248-156227886.webp" >}}
 
 然后就可以在 More tools -> Request blocking 中看到你设置的阻塞条件。
 
-{{< figure src="/images/web-browser-dev-tools/968138-20190211172032733-566193435.png" >}}
+{{< figure src="/images/web-browser-dev-tools/968138-20190211172032733-566193435.webp" >}}
 
 
 ### 参考

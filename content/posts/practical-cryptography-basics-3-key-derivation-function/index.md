@@ -4,7 +4,7 @@ date: 2022-03-01T17:15:03+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "key.png"
+  src: "key.webp"
 
 tags: ["Cryptography", "Hash", "哈希", "散列", "密码学", "安全", "MAC", "HMAC", "KDF", "Scrypt"]
 categories: ["技术"]
@@ -136,7 +136,7 @@ MAC 的功能跟数字签名一致，都是验证消息的真实性（authentici
 
 注意这种应用场景中，消息是不保密的！
 
-{{< figure src="/images/practical-cryptography-basics-3-key-derivation-function/mac-message-is-authentic.png" >}}
+{{< figure src="/images/practical-cryptography-basics-3-key-derivation-function/mac-message-is-authentic.webp" >}}
 
 #### 2. AE 认证加密 - Authenticated encryption
 
@@ -183,7 +183,7 @@ KDF 目前主要从如下三个维度提升 hash 碰撞难度：
 
 主要手段是加盐，以及多次迭代。这种设计方法被称为「密钥拉伸 Key stretching」。
 
-{{< figure src="/images/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.png" >}}
+{{< figure src="/images/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.webp" >}}
 
 
 因为它的独特属性，KDF 也被称作慢哈希算法。

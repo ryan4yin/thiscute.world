@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "adopt-kubernetes.png"
+  src: "adopt-kubernetes.webp"
 
 tags: ["Kubernetes", "云原生"]
 categories: ["技术"]

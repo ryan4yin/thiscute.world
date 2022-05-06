@@ -34,7 +34,7 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 
 首先看一下 Vault 的架构图：
 
-![](/images/expirence-of-vault/vault-layers.png "vault layers")
+![](/images/expirence-of-vault/vault-layers.webp "vault layers")
 
 可以看到，几乎所有的 Vault 组件都被统称为「**屏障**（Barrier）」。
 
@@ -510,7 +510,7 @@ path "auth/kubernetes/role/*"
 
 ## 四、在 Kubernetes 中使用 vault 注入 secrets
 
-![](/images/expirence-of-vault/vault-k8s-auth-workflow.png "vault-k8s-auth-workflow")
+![](/images/expirence-of-vault/vault-k8s-auth-workflow.webp "vault-k8s-auth-workflow")
 
 前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。
 

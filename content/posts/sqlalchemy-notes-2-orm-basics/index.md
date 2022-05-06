@@ -13,7 +13,7 @@ categories: ["技术"]
 
 照例先看层次图
 
-![](/images/sqlalchemy-notes/sqlalchemy-arch.png "SQLAlchemy 层次结构")
+![](/images/sqlalchemy-notes/sqlalchemy-arch.webp "SQLAlchemy 层次结构")
 
 ### 一、声明映射关系
 

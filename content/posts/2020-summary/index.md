@@ -4,7 +4,7 @@ date: 2020-12-12T23:45:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "featured-image.png"
+  src: "featured-image.webp"
 
 tags: ["总结"]
 categories: ["随笔", "技术"]
