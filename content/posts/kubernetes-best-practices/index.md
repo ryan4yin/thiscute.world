@@ -235,6 +235,7 @@ spec:
    2. 它可以是一个命令，或者一个对 Pod 中容器的 http 调用
    3. 如果你的程序在收到 SIGTERM 信号时，无法优雅退出，就可以考虑使用 `preStop`
    4. 如果让程序本身支持优雅退出比较麻烦的话，用 `preStop` 实现优雅退出是一个非常好的方式
+   5. preStop 的定义位置：<https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2515>
 3. `preStop` 执行完毕后，SIGTERM 信号被发送给 Pod 中的所有容器
 4. 继续等待，直到容器停止，或者超时 `spec.terminationGracePeriodSeconds`，这个值默认为 30s
    1. 需要注意的是，这个优雅退出的等待计时是与 `preStop` 同步开始的！而且它也不会等待 `preStop` 结束！
