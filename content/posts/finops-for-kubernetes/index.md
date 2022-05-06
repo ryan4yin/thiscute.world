@@ -68,6 +68,7 @@ comment:
   - EKS 中的服务访问其他 AWS 服务如 RDS/ElastiCache，如果是跨可用区，会收取跨区流量费用
   - 如果使用了 Istio IngressGateway 或 traefik 等网关层代理 Pod，那这些 Pod 与服务实例之间，有可能会产生跨区流量
 - NAT 网关费用
+  - EKS 中的容器如果要访问因特网，就需要通过 NAT 网关，产生 NAT 费用
   - 如果 VPC 未配置 endpoints 使访问 AWS 服务（dynamodb/s3 等）时直接走 AWS 内部网络，这些流量会经过 VPC 的 NAT 网关，从而产生 NAT 网关费用
 - 服务如果要对外提供访问，最佳实践是通过 aws-load-balancer-controller 绑定 AWS ALB, 这里会产生 ALB 费用
 - 监控系统成本
@@ -140,7 +141,7 @@ Kubernetes 提供了三种资源分配的方式，即服务质量 QoS，不同�
 
 ## Kubernetes 成本分析
 
-前面讨论的内容都很「虚」，下面来点更「务实」的：使用 Kubecost 进行 Kubernetes 成本分析。
+前面讨论的内容都很「虚」，下面来点更「务实」的：Kubernetes 成本分析实战。
 
 目前据我所知，主要有如下两个相关的开源工具：
 
