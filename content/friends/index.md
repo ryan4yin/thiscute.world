@@ -52,7 +52,7 @@ var myFriends = [
     ["https://www.addesp.com", "https://www.addesp.com/avatar", "@ADD-SP", "记录 & 分享 & 感受 <= 硬核网络协议分析"], 
     ["https://thautwarm.github.io/Site-32/", "/avatar/thautwarm.webp", "@thautwarm", "Driven by the desire of making a difference. <= PLT 专家"], 
     ["https://yidajiabei.xyz/", "/avatar/tianheg.webp", "@一大加贝", "学习技术，热爱生活"], 
-    ["https://guanqr.com/", "https://cdn.jsdelivr.net/gh/guanqr/blog/static/icons/android-chrome-512x512.webp", "@荷戟独彷徨", "爱光学，爱生活，爱创造"], 
+    ["https://guanqr.com/", "https://cdn.jsdelivr.net/gh/guanqr/blog/static/icons/android-chrome-512x512.png", "@荷戟独彷徨", "爱光学，爱生活，爱创造"], 
     ["https://exploro.one", "https://avatars.githubusercontent.com/u/4038871?s=460&u=d2f1c2eea96acb15578f2e513ba5fa673aa3d250&v=4", "@探索子", "Learn by doing. <= 硬核数学博客"], 
     ["https://panqiincs.me/", "https://panqiincs.me/images/avatar.jpg", "@辛未羊", "人生如逆旅，我亦是行人 <= 懂信号系统的高中教师"], 
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
