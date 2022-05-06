@@ -17,6 +17,9 @@ categories: ["技术"]
 
 NAT 网关、Overlay 网络与 Underlay 网络、内网穿透技术介绍
 
+- [zerotier](https://github.com/zerotier/ZeroTierOne): 在 P2P 网络之上搭建的 SDN overlay 网络，使用自定义协议。
+- [tailscales](https://github.com/tailscale/tailscale): 基于 wireguard 协议快速搭建私有虚拟网络 VPN
+
 第二部分：
 
 以 Calico 为例介绍 Kubernetes 网络如何工作（Overlay）：
@@ -30,7 +33,13 @@ NAT 网关、Overlay 网络与 Underlay 网络、内网穿透技术介绍
 
 介绍 AWS EKS 与 VPC 整合的 Kubernetes 网络如何工作（Underlay）
 
+
 第四部分：
+
+- 多云 overlay 网络：[kilo](https://github.com/squat/kilo)
+- 穿透进 Kubernetes 内网：将本地开发机器接入 Kubernetes 网络，用于开发调试
+
+第五部分：
 
 Network Policy
 
