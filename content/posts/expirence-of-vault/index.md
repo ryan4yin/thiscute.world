@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "bankvault.jpg"
+  src: "bankvault.webp"
 
 tags: ["Vault", "云原生", "Secrets", "配置", "配置管理"]
 categories: ["技术"]

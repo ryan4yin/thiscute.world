@@ -74,7 +74,7 @@ DHKE 有两种实现方案：
 跟编程语言的 Hello World 一样，密钥交换的解释通常会使用 Alice 跟 Bob 来作为通信双方。
 现在他俩想要在公开的信道上，协商出一个**秘密色彩**出来，但是不希望其他任何人知道这个**秘密色彩**。他们可以这样做：
 
-{{< figure src="/images/practical-cryptography-basics-5-key-exchange/key-exchange-by-mixing-color.jpg" >}}
+{{< figure src="/images/practical-cryptography-basics-5-key-exchange/key-exchange-by-mixing-color.webp" >}}
 
 分步解释如下：
 

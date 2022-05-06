@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "yume_grimgar.jpg"
+  src: "yume_grimgar.webp"
 
 tags: ["网络", "Linux", "网络调试"]
 categories: ["技术"]

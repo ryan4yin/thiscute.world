@@ -5,7 +5,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "guitar.jpg"
+  src: "guitar.webp"
 
 tags: ["乐理", "吉他", "synthesizer"]
 categories: ["技术", "音乐"]

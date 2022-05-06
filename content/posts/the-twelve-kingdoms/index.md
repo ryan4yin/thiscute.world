@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "featured-image.jpg"
+  src: "featured-image.webp"
 
 tags: ["读后感", "观后感", "动漫"]
 categories: ["书藉", "影视", "随笔"]

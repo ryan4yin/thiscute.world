@@ -5,7 +5,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "featured-image.jpg"
+  src: "featured-image.webp"
 
 tags: ["网络代理", "网关", "源码分析", "APISIX", "Ingress", "Kubernetes"]
 categories: ["技术"]

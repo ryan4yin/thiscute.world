@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "linux-opensuse.jpg"
+  src: "linux-opensuse.webp"
 
 tags: ["openSUSE", "Linux"]
 categories: ["技术"]

@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "linux-network.jpg"
+  src: "linux-network.webp"
 
 tags: ["Linux", "网络", "虚拟化", "容器"]
 categories: ["技术"]
@@ -555,7 +555,7 @@ ip link set vxlan0 up
 
 接下来，为了能让所有的虚拟机/容器，都通过 vtep 通信，我们再添加一个 bridge 网络，充当 vtep 与容器间的交换机。架构如下：
 
-{{< figure src="/images/linux-virtual-interfaces/linux-vxlan-with-bridge.jpg" title="VXLAN 多播网络架构" >}}
+{{< figure src="/images/linux-virtual-interfaces/linux-vxlan-with-bridge.webp" title="VXLAN 多播网络架构" >}}
 
 使用 ip 命令创建网桥、网络名字空间、veth pairs 组成上图中的容器网络：
 

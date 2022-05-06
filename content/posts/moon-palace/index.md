@@ -6,7 +6,7 @@ draft: false
 math: true
 resources:
 - name: "featured-image"
-  src: "qudu-temple.jpg"
+  src: "qudu-temple.webp"
 
 tags: ["生死"]
 categories: ["随笔"]

@@ -4,7 +4,7 @@ date: 2019-01-21T14:02:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "sqlalchemy-intro.jpg"
+  src: "sqlalchemy-intro.webp"
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["技术"]

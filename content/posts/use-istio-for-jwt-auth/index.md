@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "istio.jpg"
+  src: "istio.webp"
 
 tags: ["Kubernetes", "Istio", "服务网格"]
 categories: ["技术"]

@@ -4,7 +4,7 @@ date: 2022-02-26T17:44:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "2021-0411-xianlin-half-marathon-route.jpeg"
+  src: "2021-0411-xianlin-half-marathon-route.webp"
 
 tags: ["长跑", "马拉松", "运动"]
 categories: ["随笔"]
@@ -25,7 +25,7 @@ comment:
 
 今年仙马的路线非常平稳，起伏不到三十米。正是农历草长莺飞二月天，沿途春意盎然，令人心情愉悦。只是十公里处的折返点非常恼人，拐弯后跑出几十米就立刻折返再次拐弯，减速到 0 并再次加速浪费了数秒。我知道此举是为了凑距离，但是完全可以取消这个折返点，延长终点。路线上的这个凸起，不禁让我联想到 Ph.D 的使命。
 
-{{< figure src="/images/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/the-illustrated-guide-to-a-phd1.jpeg" title="一名博士的使命" >}}
+{{< figure src="/images/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/the-illustrated-guide-to-a-phd1.webp" title="一名博士的使命" >}}
 
 仙马四年，声名鹊起，一路摘得铜牌、银牌、金牌，今年又被“世界田径“正式列为标牌赛事，这些年出圈的努力和成果都蕴含在这个尖尖上了，我如此解读，组委会应该没有意见吧。
 

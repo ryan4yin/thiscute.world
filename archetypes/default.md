@@ -6,7 +6,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "featured-image.jpg"
+  src: "featured-image.webp"
 
 tags: []
 categories: ["技术"]

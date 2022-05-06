@@ -5,7 +5,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "featured-image.jpg"
+  src: "featured-image.webp"
 
 tags: ["临终体验", "临终关怀", "死亡", "临终", "梦境"]
 categories: ["随笔"]

@@ -4,7 +4,7 @@ date: 2022-03-01T17:15:04+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "random-numbers.jpg"
+  src: "random-numbers.webp"
 
 tags: ["Cryptography", "密码学", "伪随机数", "安全", "PRNG", "CSPRNG"]
 categories: ["技术"]

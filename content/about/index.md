@@ -12,7 +12,7 @@ comment:
     enable: true
 ---
 
-![口琴](harmonica.jpg)
+![口琴](harmonica.webp)
 
 ## 关于我
 

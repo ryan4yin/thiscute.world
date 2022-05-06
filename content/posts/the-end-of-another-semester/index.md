@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "5-centimeters-per-second.jpeg"
+  src: "5-centimeters-per-second.webp"
 
 tags: []
 categories: ["随笔"]

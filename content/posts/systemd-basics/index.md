@@ -4,7 +4,7 @@ date: 2019-01-28T20:13:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "linux-systemd.jpg"
+  src: "linux-systemd.webp"
 
 tags: ["Linux", "Systemd", "Init System"]
 categories: ["技术"]

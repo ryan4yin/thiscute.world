@@ -10,7 +10,7 @@ comment:
     enable: false
 ---
 
-![一封纸笺](letter-from-friend.jpg)
+![一封纸笺](letter-from-friend.webp)
 
 {{< particles_effect_up  >}}
 
@@ -32,7 +32,7 @@ comment:
 
     站点名称：This Cute World
     站点地址：https://thiscute.world/
-    个人形象：https://thiscute.world/avatar/myself.jpg
+    个人形象：https://thiscute.world/avatar/myself.webp
     站点描述：赞美快乐~
 
 
@@ -42,25 +42,25 @@ var myFriends = [
     ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
     ["https://sanshiliuxiao.top/", "https://cdn.jsdelivr.net/gh/vensing/static@latest/avatar/sanshiliuxiao.jpg", "@三十六咲", "快走吧，趁风停止之前"], 
     ["https://rea.ink/", "https://rea.ink/head.png", "@倾书", "清风皓月，光景常新 <= 前端"], 
-    ["https://jdragon.club/", "/avatar/jdragon.jpg", "@谭宇", "Hello world! <= Java"], 
+    ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
     ["https://www.jianshu.com/u/af3a36ae8d16", "/avatar/li2niu.webp", "@李二牛", "深耕Web服务端 马拉松爱好者(PB330) <= Java"], 
     // ["https://www.i-lab.top/", "https://www.i-lab.top/favicon.ico", "@震邦的算法日常", "南北传"], 
     ["https://cxcn.xyz/", "https://cxcn.xyz/avatar.webp", "@单单", "但知行好事，莫要问前程"], 
-    ["https://farer.org/", "/avatar/farer.jpg", "@Stray Episode", "Scientific Evocation"], 
+    ["https://farer.org/", "/avatar/farer.webp", "@Stray Episode", "Scientific Evocation"], 
     ["https://wasteland.touko.moe", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
     ["https://blog.k8s.li/", "/avatar/muzi.webp", "@木子", "垃圾佬、搬砖社畜、运维工程师 <= 莫得感情的读书机器"], 
     ["https://www.addesp.com", "https://www.addesp.com/avatar", "@ADD-SP", "记录 & 分享 & 感受 <= 硬核网络协议分析"], 
-    ["https://thautwarm.github.io/Site-32/", "/avatar/thautwarm.jpg", "@thautwarm", "Driven by the desire of making a difference. <= PLT 专家"], 
+    ["https://thautwarm.github.io/Site-32/", "/avatar/thautwarm.webp", "@thautwarm", "Driven by the desire of making a difference. <= PLT 专家"], 
     ["https://yidajiabei.xyz/", "/avatar/tianheg.webp", "@一大加贝", "学习技术，热爱生活"], 
     ["https://guanqr.com/", "https://cdn.jsdelivr.net/gh/guanqr/blog/static/icons/android-chrome-512x512.webp", "@荷戟独彷徨", "爱光学，爱生活，爱创造"], 
     ["https://exploro.one", "https://avatars.githubusercontent.com/u/4038871?s=460&u=d2f1c2eea96acb15578f2e513ba5fa673aa3d250&v=4", "@探索子", "Learn by doing. <= 硬核数学博客"], 
     ["https://panqiincs.me/", "https://panqiincs.me/images/avatar.jpg", "@辛未羊", "人生如逆旅，我亦是行人 <= 懂信号系统的高中教师"], 
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
     // ["https://www.foreverblog.cn/", "https://www.foreverblog.cn/favicon.ico", "@十年之约", "我们的博客十年不关闭，保持活力"], 
-    ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.jpg", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。"], 
+    ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.webp", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。"], 
     ["https://stdrc.cc/", "/avatar/richardchien.webp", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot 作者，OS 大佬"], 
     ["https://fmcf.cc/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@幸吾有志", "他戴着花冠，踏于风雪，探寻迷途的救赎，绽放生命的曙光"], 
-    ["https://www.lionad.art/", "/avatar/lionad-morotar.jpg", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
+    ["https://www.lionad.art/", "/avatar/lionad-morotar.webp", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
     ["https://ryanyang.cn/", "/avatar/ryanyang.webp", "@ryanyang", "一位智慧的阿拉伯诗人 <= Java 后端大佬"], 
     ["https://bohecat.com/", "https://tc.bohecat.com/image/WX20220210-123651%402x.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 

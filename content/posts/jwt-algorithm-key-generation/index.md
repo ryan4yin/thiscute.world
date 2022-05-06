@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "jwt.jpg"
+  src: "jwt.webp"
 
 tags: ["JWT", "算法", "OpenSSL"]
 categories: ["技术"]

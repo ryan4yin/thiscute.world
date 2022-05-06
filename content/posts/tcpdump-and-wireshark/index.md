@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "wireshark.jpg"
+  src: "wireshark.webp"
 
 tags: ["网络", "Wireshark", "tcpdump", "抓包分析"]
 categories: ["技术"]

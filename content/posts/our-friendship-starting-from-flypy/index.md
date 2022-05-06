@@ -5,7 +5,7 @@ draft: true
 
 resources:
 - name: "featured-image"
-  src: "friendship-starting-from-flypy.jpg"
+  src: "friendship-starting-from-flypy.webp"
 
 tags: ["友谊", "成长", "青春", "中文输入方案", "音乐", "编程"]
 categories: ["随笔"]

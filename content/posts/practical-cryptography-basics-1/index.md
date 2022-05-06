@@ -4,7 +4,7 @@ date: 2022-03-01T17:15:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "data-security.jpg"
+  src: "data-security.webp"
 
 tags: ["Cryptography", "Hash", "KDF", "密码学", "安全", "哈希", "加解密", "签名"]
 categories: ["技术"]

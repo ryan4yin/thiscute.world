@@ -5,7 +5,7 @@ lastmod: 2022-03-13T15:26:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "symmetric-vs-asymmetric.jpg"
+  src: "symmetric-vs-asymmetric.webp"
 
 tags: ["Cryptography", "密码学", "非对称加密", "安全", "RSA", "ECC"]
 categories: ["技术"]

@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "chinese_new_year.jpg"
+  src: "chinese_new_year.webp"
 
 tags: ["Java", "字符集", "字符编码"]
 categories: ["技术"]

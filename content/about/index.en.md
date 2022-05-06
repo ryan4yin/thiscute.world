@@ -6,7 +6,7 @@ draft: false
 lightgallery: true
 ---
 
-![口琴](harmonica.jpg)
+![口琴](harmonica.webp)
 
 ## About Me
 

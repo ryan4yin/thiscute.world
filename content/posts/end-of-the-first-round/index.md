@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "first-round.jpg"
+  src: "first-round.webp"
 
 tags: ["总结", "心得"]
 categories: ["随笔"]

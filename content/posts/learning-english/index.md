@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "grimgargroup.jpg"
+  src: "grimgargroup.webp"
 
 tags: ["英语", "语言学习"]
 categories: ["随笔"]

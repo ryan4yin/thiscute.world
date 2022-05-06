@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "stars.jpg"
+  src: "stars.webp"
 
 tags: []
 categories: ["随笔"]

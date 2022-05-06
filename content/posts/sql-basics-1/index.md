@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "sql.jpeg"
+  src: "sql.webp"
 
 tags: ["SQL", "数据库", "Database"]
 categories: ["技术"]

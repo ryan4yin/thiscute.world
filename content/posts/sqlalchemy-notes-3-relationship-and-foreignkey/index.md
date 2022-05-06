@@ -4,7 +4,7 @@ date: 2019-05-21T22:19:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "sqlalchemy-relationships.jpg"
+  src: "sqlalchemy-relationships.webp"
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["技术"]

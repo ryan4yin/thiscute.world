@@ -25,7 +25,7 @@ However, I am quite satisfied with the overall results, the current work has bee
 - In January, I set up this Blog, and I met [@Cheese](https://chee5e.space/)，@Cheese helped me adjust the style of the "Friends" page, thanks him very much~
 - In February, I fired my boss, and then what to say? I suddenly felt open-minded and changed my mindset 180 degrees. It was great, but I was actually very worried about my shortcomings in all aspects. Anyway, I'm in a complicated mood. I talked a lot with [@是格子啊](https://sanshiliuxiao.top/), [@Cheese](https://chee5e.space/) and former colleagues). Thank you very much for helping me sort out my thoughts and giving me an affirmation. At the same time, I was recommended by [@Cheese](https://chee5e.space/) and started using twitter.
 - I climbed the mountain every day to see the scenery, bought a hammock to take a nap in the park, practiced the harmonica and bamboo flute, and played like this for a month.
-  - {{< figure src="/images/2021-summary/hammock.jpg" >}}
+  - {{< figure src="/images/2021-summary/hammock.webp" >}}
 - In March, I started looking for a job. After meeting with several companies, I was very lucky to enter Mobiuspace and became a new SRE. The experience of a year in Mobiuspace is written in the "work" section, which is skipped here.
 - At the end of March, I watched the movie "Raya and The Last Dragon" (the only movie I watched in 2021), and the ending song was very good.
 - In April, by various coincidences, I unexpectedly found that my junior high school classmate's residence was less than one kilometer away from me. I had a meal of hometown food and bayberry wine at his house. It tasted very good! 
@@ -34,10 +34,10 @@ However, I am quite satisfied with the overall results, the current work has bee
   - Joined Mobiuspace's surfing team, surfing and have a seaside barbecue for the first time. 
   - Bought roller skates, learned reverse skating and step steering, and reviewed some basic skills learned in college.
 - In December, Bought a YunMi RO Filterred Water Dispenser, and many kinds of tea. Currently I prefer to drink **Black Tea**, such as Dianhong - Yunnan Gold, Redsunion Keemun. 
-  - ![](/images/2021-summary/yunmi-ro-filterred-water-dispenser.jpg "YunMi RO Filterred Water Dispenser")
-  - ![](/images/2021-summary/my-tea.jpg "All kinds of tea")
+  - ![](/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp "YunMi RO Filterred Water Dispenser")
+  - ![](/images/2021-summary/my-tea.webp "All kinds of tea")
 - In January 2022, I bought Anime PVC Figures for the first time. After putting these figures, I felt that my room was more youthful and colorful.
-  - ![](/images/2021-summary/Posts-and-Garage-Kit.jpg "Anime PVC Figures and Anime Figure Painting in my room")
+  - ![](/images/2021-summary/Posts-and-Garage-Kit.webp "Anime PVC Figures and Anime Figure Painting in my room")
 
 
 ## Readings
@@ -53,14 +53,14 @@ After resigning at the beginning of the year, I practiced the bamboo flute and t
 
 On the whole, I have made little progress this year.
 
-{{< figure src="/images/2021-summary/midi-keyboard-flute-harmonica.jpg" >}}
+{{< figure src="/images/2021-summary/midi-keyboard-flute-harmonica.webp" >}}
 
 ## Working - The year I work in Mobiuspace
 
 When I first joined Mobiuspace in March, I was curious, but I was so cautious that I couldn't believe I could get into such a great company. I felt like I was out of luck.
 After all, Mobiuspace, whether it is the level of colleagues or the working atmosphere, or the number of customers, compared with my last company is qualitatively different.
 
-![](/images/2021-summary/workstation-1.jpg "My first station in Mobiuspace")
+![](/images/2021-summary/workstation-1.webp "My first station in Mobiuspace")
 After getting familiar with the contents and methods of the work, leader tried his best to give me the work that best matched my interests, helping me solve problems, and at the same time giving me great autonomy, which was really great. 
 
 However, a high degree of autonomy also brings higher difficulty in work. I have been in a hurry, confused, and even self-doubted when I encounter difficulties. I am worried about whether I will run away the next day.
@@ -69,7 +69,7 @@ But fortunately, I still have the ability to adjust my mindset, take responsibil
 
 When there were several delays in my work, leader accompanied me to work overtime. After the work was done, he took me to a big dinner to reward myself. I really thanked him for his help and support.
 
-![](/images/2021-summary/workstation-2.jpg "My new station, near the floor-to-ceiling window, the view is great.")
+![](/images/2021-summary/workstation-2.webp "My new station, near the floor-to-ceiling window, the view is great.")
 
 Looking back at the summary and outlook for 2020, I find that the actual progress this year is very different from what I expected last year. The initial goal was only about 10% achieved, but because I was exposed to a lot of unexpected things, I was generally satisfied:
 

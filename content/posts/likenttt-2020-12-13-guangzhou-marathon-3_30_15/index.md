@@ -4,7 +4,7 @@ date: 2022-02-26T16:59:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "guangzhou-marathon-before-race.jpg"
+  src: "guangzhou-marathon-before-race.webp"
 
 tags: ["长跑", "马拉松", "运动"]
 categories: ["随笔"]

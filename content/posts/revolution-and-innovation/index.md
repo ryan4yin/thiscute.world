@@ -4,7 +4,7 @@ date: 2022-03-28T00:40:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "rolling-girls.jpg"
+  src: "rolling-girls.webp"
 
 tags: ["创新", "变革"]
 categories: ["随笔", "技术"]

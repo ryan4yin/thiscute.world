@@ -5,7 +5,7 @@ draft: true
 
 # resources:
 # - name: "featured-image"
-#   src: "docker-turtles-networking.jpg"
+#   src: "docker-turtles-networking.webp"
 
 tags: ["Linux", "容器", "overlayfs", "chroot"]
 categories: ["技术"]

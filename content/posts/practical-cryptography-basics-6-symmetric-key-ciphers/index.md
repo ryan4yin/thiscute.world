@@ -4,7 +4,7 @@ date: 2022-03-06T18:44:00+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "symmetric-vs-asymmetric.jpg"
+  src: "symmetric-vs-asymmetric.webp"
 
 tags: ["Cryptography", "密码学", "对称加密", "安全", "AES", "ChaCha20"]
 categories: ["技术"]

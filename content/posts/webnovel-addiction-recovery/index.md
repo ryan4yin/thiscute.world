@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "addction-vs-life.jpeg"
+  src: "addction-vs-life.webp"
 
 tags: ["Webnovel", "网络小说"]
 categories: ["随笔"]
