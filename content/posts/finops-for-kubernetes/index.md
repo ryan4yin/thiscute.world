@@ -237,8 +237,8 @@ serviceAccount:
   annotations:
     # 如果是 aws 上的集群，可以通过 serviceAccount 授权访问 ec2 pricing API 及 cur 数据
     # 也可以直接为服务提供 AccessKeyID/Secret 进行授权
-    # 详见 https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/aws-cloud-integrations.md
-    eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/kubecost-role
+    # 与 AWS 的集成会在后面详细介绍
+    eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/KubecostRole
 
 # 如下配置也可通过 Kubecost product UI 调整
 # 但是此处的配置优先级更高，如果在这里配置了默认值，容器重启后就会使用此默认值，UI 上的修改将失效
@@ -335,12 +335,17 @@ print(result[0])
 
 此外如果使用 kubecost 可视化面板，可能还会看到一个 `other` 类别，这是为了方便可视化，把成本太低的一些指标聚合展示了。
 
-### 进阶用法
+### Kubecost 与 AWS 集成
 
-- 其他文档：https://github.com/kubecost/docs
+>https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/aws-cloud-integrations.md
 
-### 参考
+>https://github.com/kubecost/docs/blob/main/aws-node-price-reconcilitation-methodology.md
+
+TBD
+
+## 参考
 
 - [kubecost](https://github.com/kubecost/cost-model): kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，也提供收费的云上版本，值得研究。
+  - 文档：https://github.com/kubecost/docs
 - [crane](https://github.com/gocrane/crane): 腾讯开源的一款 Kubernetes 成本优化工具，支持成本报表以及 EHPA 两个功能，才刚开源几个月，目前还比较简陋。
 - [Calculating Container Costs - FinOps](https://www.finops.org/projects/calculating-container-costs/)
