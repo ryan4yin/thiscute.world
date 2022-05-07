@@ -236,7 +236,8 @@ serviceAccount:
   create: true
   annotations:
     # 如果是 aws 上的集群，可以通过 serviceAccount 授权访问 ec2 pricing API 及 cur 数据
-    # 也可以直接为服务提供 AccessKeyID/Secret 进行授权，权限相关会在后面详细介绍
+    # 也可以直接为服务提供 AccessKeyID/Secret 进行授权
+    # 详见 https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/aws-cloud-integrations.md
     eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/kubecost-role
 
 # 如下配置也可通过 Kubecost product UI 调整
@@ -336,7 +337,6 @@ print(result[0])
 
 ### 进阶用法
 
-- 集成 AWS CUR 账单：https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/aws-cloud-integrations.md
 - 其他文档：https://github.com/kubecost/docs
 
 ### 参考
