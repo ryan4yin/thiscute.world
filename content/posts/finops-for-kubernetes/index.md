@@ -170,7 +170,79 @@ kubecost 有两种推荐的安装方法：
 
 而如果要部署带 UI 的商业版，需要首先访问 <https://www.kubecost.com/install#show-instructions> 获取到 `kubecostToken`，然后使用 helm 进行部署。
 
-首先下载并编辑 values.yaml 配置文件：<https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml>
+首先下载并编辑 values.yaml 配置文件：<https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml>，示例如下：
+
+```yaml
+# kubecost-values.yaml
+global:
+  # 自动部署 prometheus + nodeExporter，也可以直接对接外部 prometheus
+  prometheus:
+    enabled: true
+    # 如果 enable=false，则使用如下地址连接外部 prometheus
+    fqdn: http://cost-analyzer-prometheus-server.default.svc
+
+  # 自动部署 grafana，也可对接外部 grafana 面板
+  grafana:
+    enabled: true
+    # 如果 enable=false，则使用如下地址连接外部 grafana
+    domainName: cost-analyzer-grafana.default.svc
+    scheme: "http" # http or https, for the domain name above.
+    proxy: true # If true, the kubecost frontend will route to your grafana through its service endpoint
+
+prometheus:
+  server:
+    persistentVolume:
+      enabled: true
+      size: 32Gi    # 这个大小得视情况调整，集群较大的话 32Gi 肯定不够
+    retention: 15d  # p8s 指标保留时长
+  nodeExporter:
+    resources:
+      
+# 通过 http://kubecost.com/install 获取 token，用于跟踪商业授权状态
+kubecostToken: "xxx"
+
+persistentVolume:
+  enabled: true
+  size: 32Gi  # 同前所述
+  # storageClass: "-" #
+
+# 配置 ingress 入口，供外部访问
+ingress:
+  enabled: false
+  # className: nginx
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  paths: ["/"] # There's no need to route specifically to the pods-- we have an nginx deployed that handles routing
+  pathType: ImplementationSpecific
+  hosts:
+    - cost-analyzer.local
+
+nodeSelector: {}
+
+# 提升网络安全性的配置
+networkPolicy:
+  enabled: false
+  denyEgress: true # create a network policy that denies egress from kubecost
+  sameNamespace: true # Set to true if cost analyser and prometheus are on the same namespace
+  # namespace: kubecost # Namespace where prometheus is installed
+
+# 分析网络成本，需要额外部署一个 daemonset
+networkCosts:
+  enabled: false
+  config: {}  # 详见 values.yaml 内容
+
+serviceAccount:
+  create: true
+  annotations:
+    # 如果是 aws 上的集群，可以通过 serviceAccount 授权访问 ec2 pricing API 及 cur 数据
+    # 也可以直接为服务提供 AccessKeyID/Secret 进行授权，权限相关会在后面详细介绍
+    eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/kubecost-role
+
+# 如下配置也可通过 Kubecost product UI 调整
+# 但是此处的配置优先级更高，如果在这里配置了默认值，容器重启后就会使用此默认值，UI 上的修改将失效
+kubecostProductConfigs: {}
+```
 
 然后部署：
 
