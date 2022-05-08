@@ -240,6 +240,12 @@ TBD 待完善
     - 尝试使用 STUN 协议进行 NAT 穿越
     - 走 TURN 中继服务器进行代理通讯
 
+TBD 待完善，有空用 Go 语言补充几个代码示例，可用的库有：
+
+- [go-stun](https://github.com/ccding/go-stun) 
+- [pion/turn](https://github.com/pion/turn)
+- [pion/ice](https://github.com/pion/ice)
+
 ## 虚拟网络、Overlay 与 Underlay
 
 虚拟网络就是在物理网络之上，构建的逻辑网络，也被称作 overlay 网络。
