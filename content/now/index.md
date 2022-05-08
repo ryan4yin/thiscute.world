@@ -14,14 +14,13 @@ toc:
 ## 一、我正在研究这些
 
 - 学习极客时间的《深入剖析 Kuberntes》 - 37%
-- 完成博客《关于 NAT 网关、NAT 类型提升、NAT 穿透以及虚拟网络》- 70%
+- 完成博客《Kubernetes 网络是如何工作的》
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - The ANSI C Programming Language
 - 《在生命的尽头拥抱你-临终关怀医生手记》
 
 ## 二、我今年还想搞搞这些
 
-- 完成博客《Kubernetes 网络是如何工作的》
 - 学习使用 Envoy 以及 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)
   - 分析 Envoy Sidecar 的动态配置、流量代理、监控指标等实现细节
   - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing、基于 iptables/tproxy 的 outbound 流量代理
