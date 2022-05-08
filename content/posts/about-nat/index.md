@@ -301,7 +301,7 @@ AWS VPC(virtual private cloud) 是一个逻辑隔离的虚拟私有网络，云�
 
 AWS VPC 提供两种网关类型：
 
-- [NAT 网关](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
+- [NAT 网关](https://docs.aws.amazon.com/zh_cn/vpc/latest/userguide/vpc-nat-gateway.html)
   - 支持三种协议：TCP, UDP, ICMP
   - 支持 IPv4 与 IPv6 两种 IP 协议
   - 支持 5 Gbps 带宽，可自动扩展到 45 Gbps
