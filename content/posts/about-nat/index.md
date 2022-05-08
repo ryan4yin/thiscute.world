@@ -318,7 +318,7 @@ AWS VPC 提供两种网关类型：
 - [IGW 因特网网关](https://docs.aws.amazon.com/zh_cn/vpc/latest/userguide/VPC_Internet_Gateway.html)
   - IGW 是一个高度可用的逻辑组件，不会限制 VPC 的总带宽、处理能力。
   - IGW 实例直接关联 VPC，不从属于任何可用区或子网
-  - IGW 实质上是一个 NAT 设备，为绑定了公网 IP 地址的 ENI 实例，执行「**一对一 NAT**」
+  - IGW 实质上是一个 NAT 设备，为绑定了公网 IP 地址的 ENI/EC2 实例，执行「**一对一 NAT**」
   - 默认路由到 IGW 的子网，被称为「公有子网」
 
 ## 参考
