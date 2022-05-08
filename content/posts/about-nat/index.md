@@ -301,12 +301,13 @@ AWS VPC(virtual private cloud) 是一个逻辑隔离的虚拟私有网络，云�
 
 AWS VPC 提供两种网关类型：
 
-- NAT 网关
-  - 最高支持与每个不同的地址建立 55000 个并发连接
+- [NAT 网关](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
   - 支持三种协议：TCP, UDP, ICMP
   - 支持 IPv4 与 IPv6 两种 IP 协议
   - 支持 5 Gbps 带宽，可自动扩展到 45 Gbps
     - 可通过划分子网并在多个子网中添加 NAT 网关的方式，获得超过 45Gbps 的带宽
+  - 最高支持与每个不同的地址建立 55000 个并发连接
+  - NAT 网关从属于 VPC 的子网
   - 每个 NAT 网关只能绑定一个 IP
     - 可通过划分子网并在多个子网中添加 NAT 网关的方式获得多个 IP
   - 可达到 100w packets 每秒的处理速度，并能自动扩展到 400w packets 每秒
@@ -314,9 +315,10 @@ AWS VPC 提供两种网关类型：
   - 按处理数据量收费
   - 默认路由到 NAT 子网，被称为「私有子网」（或者没默认路由，那就是无法访问公网的私有子网），连接只能由内网程序主动发起。
   - NAT 网关为流量执行「**Symmetric NAT**」
-- IGW 因特网网关
-  - IGW 是一个抽象概念，它不会限制 VPC 的总带宽、处理能力
-  - IGW 为绑定了公网 IP 地址的实例，执行「**一对一 NAT**」
+- [IGW 因特网网关](https://docs.aws.amazon.com/zh_cn/vpc/latest/userguide/VPC_Internet_Gateway.html)
+  - IGW 是一个高度可用的逻辑组件，不会限制 VPC 的总带宽、处理能力。
+  - IGW 实例直接关联 VPC，不从属于任何可用区或子网
+  - IGW 实质上是一个 NAT 设备，为绑定了公网 IP 地址的 ENI 实例，执行「**一对一 NAT**」
   - 默认路由到 IGW 的子网，被称为「公有子网」
 
 ## 参考
