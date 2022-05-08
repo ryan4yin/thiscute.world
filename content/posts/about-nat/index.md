@@ -256,6 +256,8 @@ geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度�
 
 目前所有 overlay 的跨主机容器网络方案，几乎都是基于 vxlan 实现的（例外：cilium 也支持 geneve）。
 
+vxlan/geneve 的详细介绍，参见 [Linux 中的虚拟网络接口 - vxlan/geneve](https://thiscute.world/posts/linux-virtual-network-interfaces/#vxlan-geneve)
+
 顺带再提一嘴，cilium/calico/kube-ovn 等 overlay 容器网络，都是 SDN 软件定义网络。
 
 ### 相关工具
