@@ -9,6 +9,16 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-09
+
+- 学习极客时间的《深入剖析 Kuberntes》 - 48%
+  - 复习了 Linux 虚拟网络接口以及容器网络原理、学习了 CNI 网络插件的原理
+  - 学习了两个非 overlay 网络的实现：flannel 的 host-gw 模式实现原理、calico 基于 BGP 的实现原理
+  - calico 在跨 vlan 时需要使用 IPIP，学习了相关原理
+- 完成博客《关于 NAT 网关、NAT 类型提升、NAT 穿透以及虚拟网络》
+  - 简单研究了 Go 的 STUN/TURN/ICE 库，以及 coturn server
+- 简单学习了零知识证明的应用，zk-SNARKs，区块链混币服务，以及拜占庭将军问题
+
 ### 2022-05-08
 
 - 完成博客《关于 NAT 网关、NAT 类型提升、NAT 穿透以及虚拟网络》
