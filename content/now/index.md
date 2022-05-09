@@ -13,11 +13,7 @@ toc:
 
 ## 一、我正在研究这些
 
-<<<<<<< HEAD
-- 学习极客时间的《深入剖析 Kuberntes》 - 37%
-=======
 - 学习极客时间的《深入剖析 Kuberntes》 - 48%
->>>>>>> ed446c1e (feat: about nat)
 - 完成博客《Kubernetes 网络是如何工作的》
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - The ANSI C Programming Language
