@@ -54,11 +54,11 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 五链的功能和名称完全一致，应该很容易理解。
 除了默认的五条链外，用户也可以创建自定义的链，自定义的链需要被默认链引用才能生效，我们后面要介绍的 Docker 实际上就定义了好几条自定义链。
 
-除了「链」外，iptables 还有「表」的概念，下面按优先级分别介绍下链中的四个表：
+除了「链」外，iptables 还有「表」的概念，四个表的优先级顺序如下：
 
 - raw: 对收到的数据包在连接跟踪前进行处理。一般用不到，可以忽略
   - 一旦用户使用了 raw 表，raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了
-- mangle: 用于修改报文、给报文打标签
+- mangle: 用于修改报文、给报文打标签，用得也较少。
 - nat: 主要用于做网络地址转换，SNAT 或者 DNAT
 - filter: 主要用于过滤数据包
 
@@ -72,6 +72,8 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 - REDIRECT: 在本机做端口映射
 - LOG: 在 `/var/log/messages` 文件中记录日志信息，然后将数据包传递给下一条规则，也就是说除了记录以外不对数据包做任何其他操作，仍然让下一条规则去匹配。
   - 只有这个 target 特殊一些，匹配它的数据仍然可以匹配后续规则，不会直接跳过。
+- 其他自定义链的名称：表示将数据包交给该链进行下一步处理。
+- RETURN: 如果是在子链（自定义链）遇到 RETURN，则返回父链的下一条规则继续进行条件的比较。如果是在默认链 RETURN 则直接使用默认的动作（ACCEPT/DROP）
 - 其他类型，可以用到的时候再查
 
 理解了上面这张图，以及四个表的用途，就很容易理解 iptables 的命令了。
@@ -362,6 +364,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j DOCKER
 # （容器访问外部网络）所有出口不为 docker0 的流量，都做下 SNAT，把 src ip 换成出口接口的 ip 地址
 -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+# DOCKER 链目前没任何内容，单纯直接返回父链进行进一步匹配
 -A DOCKER -i docker0 -j RETURN
 
 # filter 表
@@ -385,7 +388,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 # 允许所有来自 docker0 的流量通过，不论下一跳是否是 docker0
 -A FORWARD -i docker0 ! -o docker0 -j ACCEPT
 -A FORWARD -i docker0 -o docker0 -j ACCEPT
-# 下面三个链目前啥规则也没有，就是简单的 RETURN，交给后面的表继续处理
+# 下面三个链目前啥规则也没有，就是简单的 RETURN，直接返回父链进行进一步匹配
 -A DOCKER-ISOLATION-STAGE-1 -j RETURN
 -A DOCKER-ISOLATION-STAGE-2 -j RETURN
 -A DOCKER-USER -j RETURN
