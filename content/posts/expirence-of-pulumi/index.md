@@ -78,7 +78,7 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
 
 于是 Pulumi 横空出世。
 
->另一个和 Pulumi 功能类似的工具，是刚出炉没多久的 terraform-cdk，但是目前它还很不成熟。
+>另一个和 Pulumi 功能类似的工具，是刚出炉没多久的 [terraform-cdk](https://github.com/hashicorp/terraform-cdk)，但是目前它还很不成熟。
 
 ## Pulumi 特点介绍
 
@@ -207,6 +207,8 @@ vpc_id = infra.require("resources.vpc.id")
 
 文档有提到两种资源导入的方法，导入成功后都会自动生成资源的状态，以及对应的 pulumi 代码。
 第一种是使用 `pulumi import` 命令，第二种是在代码中使用 `import` 参数。
+
+>另外有一个 terraform 的资源导入工具也值得研究——[terraformer](https://github.com/GoogleCloudPlatform/terraformer)，它支持自动发现资源并批量导入。
 
 #### 6.1 通过 pulumi import 命令导入资源
 
@@ -479,6 +481,10 @@ pulumi login s3://<bucket-path>
 ```
 
 登录完成后，再进行 `pulumi up` 操作，数据就会直接保存到你设定的路径下。
+
+### 9. 如何估算资源变更导致的成本变化？
+
+目前 pulumi 貌似没有类似的工具，但是 terraform 有一个 [infracost](https://github.com/infracost/infracost) 可以干这个活，值得关注。
 
 ## 缺点
 
