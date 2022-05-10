@@ -199,7 +199,7 @@ toc:
   - 分布式系统：[Designing Data-Intensive Applications](https://dataintensive.net/) - 可结合 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) 课程视频学习
   - 数据库系统：建议直接学习课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
   - 编程语言理论（如何设计一个编程语言）
-    - [Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
+    - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
       - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
     - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
     - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
