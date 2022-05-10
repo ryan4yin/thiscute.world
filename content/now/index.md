@@ -52,11 +52,6 @@ toc:
   - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
 4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
    1. 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
-5. 机器学习
-  - [machine-learning - coursera](https://www.coursera.org/learn/machine-learning): 吴恩达教授的网红机器学习课程，火爆多年了，内容对小白很友好。
-  - [deep-learning - coursera](https://www.coursera.org/specializations/deep-learning): 仍然是吴恩达教授出品，圣经级别的机器学习课程，火爆多年了，内容对小白很友好。
-  - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门课程，做得比较有趣。
-  - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门资料
 
 学习路径：实践类课程（比如极客时间专栏课）与系统化学习（CMU/MIT 公开课+教材）并重，可以同时或者交替进行。也并没有很严格的学习顺序要求，看兴趣吧。不过有一点是确定的，就是希望今年一年至少能系统化地学习完成 Go Rust 计算机网络 操作系统这四块知识。
 
@@ -144,8 +139,7 @@ toc:
 
 - 容器底层原理
   - 容器镜像的文件系统：overlayfs
-  - 镜像的结构分析
-  - 镜像的构建流程
+  - 镜像的构建流程：研究 buildkit/buildah 的实现
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
   - 阅读《Lua 程序设计》
@@ -155,6 +149,13 @@ toc:
 - [进阶]数据库、数据结构与算法（同样暂时感觉兴趣不大）
   - redis 底层
   - mysql/postgresql 底层
+
+- 机器学习
+  - [machine-learning - coursera](https://www.coursera.org/learn/machine-learning): 吴恩达教授的网红机器学习课程，火爆多年了，内容对小白很友好。
+  - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门课程，做得比较有趣。
+  - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门资料
+- 深度学习（需要机器学习基础？）
+  - [deep-learning - coursera](https://www.coursera.org/specializations/deep-learning): 仍然是吴恩达教授出品，圣经级别的机器学习课程，火爆多年了，内容对小白很友好。
 
 ## 五、我的备选书单
 
@@ -206,4 +207,5 @@ toc:
   - Kubernetes 与容器
     - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
     - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
+
 ---
