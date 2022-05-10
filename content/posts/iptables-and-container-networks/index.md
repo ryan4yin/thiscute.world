@@ -51,7 +51,10 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 
 从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次是：PREROUTEING -> FORWARD -> POSTROUTING
 
-五链的功能和名称完全一致，应该很容易理解。下面按优先级分别介绍下链中的四个表：
+五链的功能和名称完全一致，应该很容易理解。
+除了默认的五条链外，用户也可以创建自定义的链，自定义的链需要被默认链引用才能生效，我们后面要介绍的 Docker 实际上就定义了好几条自定义链。
+
+除了「链」外，iptables 还有「表」的概念，下面按优先级分别介绍下链中的四个表：
 
 - raw: 对收到的数据包在连接跟踪前进行处理。一般用不到，可以忽略
   - 一旦用户使用了 raw 表，raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了
@@ -119,6 +122,8 @@ iptables -P INPUT DROP
 
 # --flush 清空 INPUT 表上的所有规则
 iptables -F INPUT
+
+
 ```
 
 ---
@@ -350,6 +355,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -P INPUT ACCEPT
 -P OUTPUT ACCEPT
 -P POSTROUTING ACCEPT
+# 在 nat 表中新建一条自定义链 DOCKER
 -N DOCKER
 # 所有目的地址在本机的，都先交给 DOCKER 链处理一波
 -A PREROUTING -m addrtype --dst-type LOCAL -j DOCKER
@@ -363,11 +369,12 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -P INPUT ACCEPT
 -P FORWARD DROP
 -P OUTPUT ACCEPT
+# 在 filter 表中新建四条自定义链
 -N DOCKER
 -N DOCKER-ISOLATION-STAGE-1
 -N DOCKER-ISOLATION-STAGE-2
 -N DOCKER-USER
-# 所有流量都必须先经过如下两个链的处理，没问题才能继续往下走
+# 所有流量都必须先经过如下两个自定义链的处理，没问题才能继续往下走
 -A FORWARD -j DOCKER-ISOLATION-STAGE-1
 -A FORWARD -j DOCKER-USER
 # （容器访问外部网络）出去的流量走了 MASQUERADE，回来的流量会被 conntrack 识别并转发回来，这里允许返回的数据包通过。
