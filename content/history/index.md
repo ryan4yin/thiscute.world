@@ -12,7 +12,11 @@ toc:
 ### 2022-05-11
 
 - 学习极客时间的《深入剖析 Kuberntes》 - 53%
+  - 学习了 NetoworkPolicy、kube-proxy 的实现原理，其实都是用 iptables 实现的，原理挺简单的。
+  - 不过 kube-proxy 很早就支持了 ipvs 模式，它在大规模场景下比 iptables 性能更好一些。但是 AWS EKS 目前官方仍然并不支持 ipvs 模式，打开可能会有坑。
 - 极客时间《分布式协议与算法实战》 - 4%
+  - 过了一遍常见共识算法的名字：两阶段提交、Try-Confirm-Cancel、Paxos、ZAB、Raft、Gossip、PBFT、PoW、PoS、dPoS
+  - 过了一遍上述共识算法的特性：是否支持拜占庭容错、支持哪种程度的一致性、性能、高可用性
 
 ### 2022-05-09
 
