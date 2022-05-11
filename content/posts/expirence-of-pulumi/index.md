@@ -208,7 +208,12 @@ vpc_id = infra.require("resources.vpc.id")
 文档有提到两种资源导入的方法，导入成功后都会自动生成资源的状态，以及对应的 pulumi 代码。
 第一种是使用 `pulumi import` 命令，第二种是在代码中使用 `import` 参数。
 
->另外有一个 terraform 的资源导入工具也值得研究——[terraformer](https://github.com/GoogleCloudPlatform/terraformer)，它支持自动发现资源并批量导入。
+除此之外，社区还有几个其他资源导入工具（reverse IaC）值得研究：
+
+- [former2](https://github.com/iann0036/former2): 为已有的 AWS 资源生成 terraform/pulumi/cloudformation 等配置，但是不支持生成 tfstate 状态
+- [terraformer](https://github.com/GoogleCloudPlatform/terraformer): 为已有的 AWS/GCP/Azure/Alicloud/DigitalOcean 等多种云资源生成 terraform 配置以及 tfstate 状态
+- [terracognita](https://github.com/cycloidio/terracognita): 功能跟 terraformer 一样，都支持生成 terraform 配置以及 tfstate 状态，但是它支持 AWS/GCP/Azure 三朵云
+- [pulumi-terraform](https://github.com/pulumi/pulumi-terraform): 这个 provider 使你可以在 pulumi 项目里使用 tfstate 状态文件
 
 #### 6.1 通过 pulumi import 命令导入资源
 
