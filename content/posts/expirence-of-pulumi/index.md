@@ -214,6 +214,7 @@ vpc_id = infra.require("resources.vpc.id")
 - [terraformer](https://github.com/GoogleCloudPlatform/terraformer): 为已有的 AWS/GCP/Azure/Alicloud/DigitalOcean 等多种云资源生成 terraform 配置以及 tfstate 状态
 - [terracognita](https://github.com/cycloidio/terracognita): 功能跟 terraformer 一样，都支持生成 terraform 配置以及 tfstate 状态，但是它支持 AWS/GCP/Azure 三朵云
 - [pulumi-terraform](https://github.com/pulumi/pulumi-terraform): 这个 provider 使你可以在 pulumi 项目里使用 tfstate 状态文件
+- [tf2pulumi](https://github.com/pulumi/tf2pulumi): 将 terraform 配置转换为 pulumi typescript 配置
 
 #### 6.1 通过 pulumi import 命令导入资源
 
