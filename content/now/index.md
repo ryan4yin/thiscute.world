@@ -13,11 +13,12 @@ toc:
 
 ## 一、我正在研究这些
 
-- 学习极客时间的《深入剖析 Kuberntes》 - 48%
+- 学习极客时间的《深入剖析 Kuberntes》 - 53%
+- 极客时间《分布式协议与算法实战》 - 4%
 - 完成博客《Kubernetes 网络是如何工作的》
-- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - The ANSI C Programming Language
-- 《在生命的尽头拥抱你-临终关怀医生手记》
 
 ## 二、我今年还想搞搞这些
 
@@ -42,13 +43,16 @@ toc:
    3. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
    4. 学习极客时间的《容器实战高手课》
    5. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
-2. 极客时间《分布式协议与算法实战》
-3. （预计用时 3w）学习 C 语言以及 rust 语言，同样也写写代码练练手
+2. 分布式协议与区块链
+   1. 极客时间《分布式协议与算法实战》
+   1. 《区块链核心算法解析》
+   1. 《Blockchain in Action》
+1. （预计用时 3w）学习 C 语言以及 rust 语言，同样也写写代码练练手
    1. 极客时间《Rust 编程第一课》
    2. 极客时间《深入 C 语言和程序运行原理》
-   4. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
-   5. 补充学习 gdb ld objdump objcopy
-4. （预计用时 16w）学习操作系统
+   3. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
+   4. 补充学习 gdb ld objdump objcopy
+2. （预计用时 16w）学习操作系统
   - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
 4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
    1. 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
@@ -69,7 +73,7 @@ toc:
 
 正在读：
 
-- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
+- 《在生命的尽头拥抱你-临终关怀医生手记》
 - 《复杂 - 梅拉尼 米歇尔》
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
 
@@ -209,3 +213,8 @@ toc:
     - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 
 ---
+
+## 其他 ideas
+
+- 我看到 github 上 [gopala-kr/10-weeks](https://github.com/gopala-kr/10-weeks) 这个项目，作者进行了一项挑战——每周学习一个新技术栈，目标是在一周内理解该技术栈各项热词的含义并列出大纲，使用该技术构建一个简单的程序，并写一篇博客。我觉得我也可以试试，不过可以把难度降低一些——**利用业余时间，每两个月学习一门新技术，并达成与 gopala-kr 的目标**。
+
