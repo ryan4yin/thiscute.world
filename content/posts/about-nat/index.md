@@ -1,5 +1,5 @@
 ---
-title: "关于 NAT 网关、NAT 类型提升、NAT 穿透以及虚拟网络"
+title: "关于 NAT 网关、NAT 类型提升、NAT 穿越以及虚拟网络"
 date: 2022-05-09T00:59:00+08:00
 draft: false
 
@@ -7,7 +7,7 @@ resources:
 - name: "featured-image"
   src: "nat.webp"
 
-tags: ["NAT", "网络", "内网穿透", "虚拟网络", "P2P"]
+tags: ["NAT", "网络", "NAT 穿越", "内网穿透", "虚拟网络", "P2P"]
 categories: ["技术"]
 ---
 
@@ -20,12 +20,10 @@ NAT，即 Network Address Translation，是 IPv4 网络中非常重要的一个�
 IPv4 的设计者没预料到因特网技术的发展会如此之快，在设计时只使用了 32bits 的地址空间，随着因特网的飞速发展，它很快就变得不够用了。
 后来虽然设计了新的 IPv6 协议，但是它与 IPv4 不兼容，需要新的硬件设备以及各种网络程序支持，无法快速普及。
 
-NAT 就是在 IPv6 普及前，临时解决 IPv4 地址空间不够用而开发的技术，有网友戏称 NAT 就是用来给 IPv4 续命的。它解决 IPv4 地址短缺问题的方法是：
+NAT 就是在 IPv6 普及前，临时解决 IPv4 地址空间不够用而开发的技术，通俗地讲 NAT 就是用来给 IPv4 续命的。它解决 IPv4 地址短缺问题的方法是：
 
-- 每个家庭、组织、企业，在内部都使用通用的私有 IP 地址进行通讯。不同的家庭、组织、企业，都可以使用相同的私有 IP 地址段，不会互相影响
-  - 路由器通过 DHCP 为局域网中的设备分配私有 IP 地址
-  - 在局域网内部，路由器使用适用于局域网的路由算法进行数据路由。比如 OSPF.
-- 在局域网与上层网络的交界处（路由器），使用 NAT 技术进行 IP/port 转换，使用户能正常访问上层网络。
+- 每个家庭、组织、企业，在内部都使用局域网通讯，不占用公网 IPv4 资源
+- 在局域网与上层网络的交界处（路由器），使用 NAT 技术进行 IP/port 转换，使用户能正常访问上层网络
 
 在曾经 IPv4 地址还不是特别短缺的时候，普通家庭的网络架构通常是：「家庭局域网」=>「NAT 网关（家庭路由器）」=>「因特网」。
 
@@ -33,7 +31,7 @@ NAT 就是在 IPv6 普及前，临时解决 IPv4 地址空间不够用而开发�
 因此相比欧美，中国的 IPv4 地址是非常短缺的，即使使用上述这样的网络架构——也就是给每个家庭（或组织）分配一个 IPv4 地址——都有点捉襟见肘了。
 于是中国电信等运营商不得不再加一层 NAT，让多个家庭共用同一个 IP 地址，这时网络架构会变成这样：「家庭局域网」=>「NAT 网关（家庭路由器）」=>「广域网（由 ISP 管理）」=>「NAT 网关」=>「因特网」。
 
-不过总的来说，NAT 仍然是一项非常成功的技术，它成功帮 IPv4 续命了几十年，甚至到如今 2022 年，全球网络仍然是 IPv4 的天下。
+总的来说，NAT 是一项非常成功的技术，它成功帮 IPv4 续命了几十年，甚至到如今 2022 年，全球网络仍然是 IPv4 的天下。
 
 ## NAT 如何工作
 
@@ -49,6 +47,8 @@ NAT 的工作方式，使用图例描述是这样的：
 
 ## NAT 的地址映射方式
 
+NAT 的具体实现有许多的变种，不存在统一的规范，但是大体上能分为两种模型：「一对一 NAT」与「一对多 NAT」，下面分别进行介绍。
+
 ### 1. 一对一 NAT
 
 一对一 NAT，这种类型的 NAT 在 [RFC2663](https://datatracker.ietf.org/doc/html/rfc2663) 中被称为  Basic NAT。
@@ -62,32 +62,42 @@ Basic NAT 有三种类型：「**静态 NAT**」、「**动态 NAT**」以及「
 
 现在的很多家庭路由器都自带一个被称为 DMZ 主机的功能，它是「Demilitarized Zone」的缩写，意为隔离区。
 它允许将某一台内网主机设置为 DMZ 主机（或者叫隔离区主机，仅此主机可供外网访问），所有从外部进来的流量，都会被通过 Basic NAT 修改为对应的内网 IP 地址，然后直接发送到该主机。
-路由器的这种 DMZ 技术就是「静态 NAT」，因为 DMZ 对应的内网 IP 需要手动配置，不会动态变化。
+路由器的这种 DMZ 技术就是「静态 NAT」，因为 DMZ 主机对应的内网 IP 需要手动配置，不会动态变化。
 
 {{< figure src="/images/about-nat/dmz-host-topology.webp" title="DMZ 主机拓扑结构" >}}
 
-另一个案例：云服务商提供的「**公网 IP**」实际上是通过「**NAT Server**」实现的，在云服务器中使用 `ip addr ls` 查看你会发现，该主机上实际只配了局域网 IP 地址，但是它却能正常使用公网 IP 通信，原因就是云服务商在「**NAT Server**」上为这些服务器配置了 IP 转发规则。
+而「**动态 NAT**」则需要一个公网 IP 地址池，每次用户需要访问公网时，动态 NAT 会给它分配一个动态公网 IP 并自动配置相应的 NAT 规则，使用完再回收。
+
+第三种是「**NAT Server**」，云服务商提供的「**公网 IP**」就是通过「**NAT Server**」实现的，在云服务器中使用 `ip addr ls` 查看你会发现，该主机上实际只配了局域网 IP 地址，但是它却能正常使用公网 IP 通信，原因就是云服务商在「**NAT Server**」上为这些服务器配置了 IP 转发规则。
 为一台云服务器绑定一个公网 IP，实际上就是请求「**NAT Server**」从公网 IP 地址池中取出一个，并配置对应的 NAT 规则到这台云服务器的局域网 IP。
 
 示例如下，其中的 Internet Gateway 实际上就是个一对一 NAT Server：
 
 {{< figure src="/images/about-nat/aws-vpc-nat-internet-gateway.webp" title="AWS VPC 中的 NAT 网关以及 Internet 网关">}}
 
+>云服务 VPC 中的公有子网，实际上就是一个 DMZ(Demilitarized Zone) 隔离区，是不安全的。而私有子网则是安全区，公网无法直接访问到其中的主机。
+
 而「动态 NAT」则需要路由器维护一个**公网 IP 地址池**，内网服务器需要访问公网时，动态 NAT 就从地址池中拿出一个公网 IP 给它使用，用完再回收。
 这种场景需要一个公网 IP 地址池，每当内部有服务需要请求外网时，就动态地为它分配一个公网 IP 地址，使用完再回收。
 
-Basic NAT 的好处是，它仅工作在 L3 网络层，网络层上的协议都可以正常使用（比如 P2P），不需要啥「内网穿透」技术。 
+Basic NAT 的好处是，它仅工作在 L3 网络层，网络层上的协议都可以正常使用（比如 P2P），不需要啥「内网穿越」技术。 
 
 ### 2. 一对多 NAT - NAPT
 
-一对多 NAT，也被称为 NAPT（network address and port translation），同样在 [RFC2663](https://datatracker.ietf.org/doc/html/rfc2663#section-4.0) 中被定义。
+一对多 NAT，也被称为 NAPT（network address and port translation），同样在 [RFC2663](https://datatracker.ietf.org/doc/html/rfc2663#section-4.0) 中被定义。Easy IP 是 NAPT 的一个特殊形式。
 
 **NAPT 的主要应用场景是，内网用户需要访问到公网主机**。绝大多数的家庭网络、办公网络都是 NAPT 类型的。
 原因应该很好理解——家庭网络或办公网络都包含许多联网设备，但是这类网络通常只有一个或数个公网 IP，使用一对一 NAT 的话公网 IP 显然是不够用的，所以需要使用一对多 NAT.
 
-NAPT 通过同时利用 L3 的 IP 信息，以及 L4 传输层的端口信息，来为局域网设备提供透明的、配置方便的、支持超高并发连接的外部网络通信。
+NAPT 通过同时利用 L3 的 IP 信息，以及 L4 传输层的端口信息，来为局域网设备提供透明的、配置方便的、支持超高并发连接的外部网络通信，示意图如下：
 
-NAPT 的端口分配与转换，以及对外来流量的处理，有四种不同的方法，被称作四种不同的 NAPT 类型，如下图：
+{{< figure src="/images/about-nat/napt.webp" >}}
+
+NAPT 的端口分配与转换规则（**Mapping Behavior**）以及对外来流量的过滤规则（**Filtering Behavior**）都存在许多不同的实现，没有统一的规范与标准。
+
+#### RFC3489 定义的 NAT 类型（四种）
+
+在 [RFC3489](https://datatracker.ietf.org/doc/html/rfc3489#section-5) 中将 NAPT 分为四种类型，这也是应用最为广泛的 NAT 分类方法，如下图：
 
 {{< figure src="/images/about-nat/nat-types-defined-in-stun.webp" >}}
 
@@ -95,7 +105,7 @@ NAPT 的端口分配与转换，以及对外来流量的处理，有四种不同
 
 >从这里开始，下文中的 NAT 特指 NAPT，如果涉及「一对一 NAT」会使用它的全名。
 
-#### 1. Full-cone NAT
+##### 1. Full-cone NAT
 
 Full-cone NAT 的特点如下：
 
@@ -107,19 +117,19 @@ Full-cone NAT 的特点如下：
 允许任意主机发送到 eAddr:ePort 的数据到达内部地址是很危险的行为，因为内部主机不一定配置了合适的安全策略。
 因此 **Full-cone NAT 比较少见**，就算路由器等 NAT 设备支持 Full-cone NAT，通常也不会是默认选项。我们会在后面更详细地介绍它。
 
-#### 2. Address-Restricted cone NAT
+##### 2. Restricted cone NAT
 
 - 数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送。
 - 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部主机（nAddr:any），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
-  - **跟 Full-cone NAT 的区别在于，它限制了外部主机的 IP 地址。只有主动连接过的主机，才能发送数据到 NAT 内部。这提升了一些安全性**。
+  - 跟 Full-cone NAT 的区别在于，它**限制了外部主机的 IP 地址**。只有主动连接过的主机，才能发送数据到 NAT 内部。这**提升了一些安全性**。
 
-#### 3. Port-Restricted cone NAT
+##### 3. Port-Restricted cone NAT
 
 - 数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送。
-- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部主机（nAddr），通过一个指定的端口 hPort 发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
-  - **与 Address-Restricted cone NAT 的区别在于，它同时限制了外部主机的 IP 与端口，可以说是更进一步地提升了安全性。**
+- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
+  - 与 Address-Restricted cone NAT 的区别在于，它**同时限制了外部主机的 IP 与端口**，可以说是更**进一步地提升了安全性。**
 
-#### 4. Symmetric NAT
+##### 4. Symmetric NAT
 
 - 数据包流出：每个内部地址（iAddr:iPort）都映射到一个唯一的外部地址（eAddr:ePort）。同一个内部地址与不同的外部地址的通信，会使用不同的 NAT 端口。
 - 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部地址（nAddr:nPort），可以给这个内部地址回消息。
@@ -127,6 +137,18 @@ Full-cone NAT 的特点如下：
 **对称 NAT 是最安全的一种 NAT 结构，限制最为严格，应该也是应用最广泛的 NAT 结构**。
 但是它导致所有的 TCP 连接都只能由从内部主动发起，外部发起的 TCP 连接请求会直接被 NAT 拒绝，因此它也是 P2P 玩家最头疼的一种 NAT 类型。
 解决方案是通过 UDP 迂回实现连接的建立，我们会在后面讨论这个问题。
+
+#### RFC5389 定义的 NAT 类型（九种）
+
+RFC3489 的归类过于笼统，这导致即使在你已经明确了自己的 NAT 类型后，仍然无法通过查表明确自己能否进行 NAT 穿越，NAT 穿越能否成功仍然是一个概率事件...
+
+于是后来，RFC3489 被废弃并由 [RFC5389](https://www.rfc-editor.org/rfc/rfc5389) 来替代，在 RFC5389 中，将 Mapping Behavior（映射规则）和 Filtering Behavior（过滤规则）分开来，定义了 3 种 Mapping Behavior（映射规则）和 3 种 Filtering Behavior（过滤规则），一共有 9 种组合。
+
+TBD 待续
+
+## NAT 的弊端
+
+TBD
 
 ## 各 NAT 类型的应用场景
 
@@ -136,19 +158,21 @@ Linux 的网络栈中，可通过 `iptables/netfilter` 的 `SNAT/MASQUERADE` 实
 
 只有一些有 Full-cone NAT 需求的网吧、ISP 的 LSN(Large Scale NAT) 网关等组织，会使用非 Linux 内核的企业级路由器提供 Full-cone NAT 能力，这些设备可能是基于 FPGA 等专用芯片设计的。
 
-## NAT 类型提升
+## NAT 穿越 - NAT Traversal
 
-天下苦 Symmetric NAT 久矣，尤其是各种 P2P 玩家，如 NAS 玩家、P2P 游戏玩家。
-那么到底有哪些技术手段可以用来提升 NAT 类型，将 Symmetric NAT 提升到「部分受限 NAT」或者「Full-cone NAT」呢？这里就来聊一聊。
+天下苦 NAT 久矣，尤其是各种 P2P 玩家，如 NAS 玩家、P2P 游戏玩家。
+在常见的联机游戏、BitTorrent 文件共享协议、P2P 聊天等点对点通讯场景中，通讯双方客户端通常都运行在家庭局域网中，也就是说中间隔着两层家庭路由器的 NAT，路由器的默认配置都是安全优先的，存在很多安全限制，直接进行 P2P 通讯大概率会失败。
+
+为了穿越这些 NAT 网关进行 P2P 通讯，就需要借助 NAT 穿越技术。
 
 >这里讨论的前提是，你的网络只有单层 NAT，如果外部还存在公寓 NAT、ISP 广域网 NAT，那下面介绍的 NAT 提升技术实际上就没啥意义了。
 
-#### 1. 「DMZ 主机」或者「定向 DNAT 转发」
+### 1. 「DMZ 主机」或者「定向 DNAT 转发」
 
 最简单的方法是 DMZ 主机功能，前面已经介绍过了，DMZ 可以直接给内网服务器绑定路由器的外部 IP，从该 IP 进来的所有流量都会直接被发送给这台内网服务器。
-被指定的 DMZ 主机的网络特征，将完全符合 Full-cone NAT 的定义，因此这项技术可以将 DMZ 主机的 NAT 类型从 Symmetric NAT 提升到 Full-cone NAT（实际上比 Full-cone NAT 还要宽松，因为 DMZ 完全不限制端口，仅工作在 L3 网络层）
+被指定的 DMZ 主机，其 NAT 类型将从 NAPT 变成一对一 NAT，而一对一 NAT 对 P2P 通讯而言是透明的，这样就可以愉快地玩耍了。
 
-在 Linux 上实现类似 DMZ 的功能，只需要两行 iptables 命令，这可以称作「定向 DNAT 转发」：
+在 Linux 路由器上实现类似 DMZ 的功能，只需要两行 iptables 命令，这可以称作「定向 DNAT 转发」：
 
 ```shell
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # 普通的SNAT
@@ -157,17 +181,16 @@ iptables -t nat -A PREROUTING -i eth0 -j DNAT --to-destination 192.168.1.3 # 将
 
 这两项技术的缺点是只能将一台主机提供给外网访问，而且将整台主机开放到公网实际上是很危险的，如果不懂网络**很容易被黑客入侵**。
 
-#### 2. 静态端口转发
+### 2. 静态端口转发
 
 退一步，可以直接用静态端口转发功能，就是在路由器上手动设置某个端口号的所有 TCP/UDP 流量，都直接 NAT 转发到到内网的指定地址。也就是往 NAT 的转发表中手动添加内容，示意图：
 
 {{< figure src="/images/about-nat/NAPT-en.svg" title="NAPT tables">}}
 
-「静态端口转发」设置好后，对应的主机地址也将符合 Full-cone NAT 的定义，缺点就是端口转发规则都得手动配置。
-
+设置好端口转发后，只要使用的是被设定的端口，NAT 对 P2P 通信而言将完全透明。
 绝大多数路由器都支持这项功能，NAS 发烧友们想玩 P2P 下载分享，基本都是这么搞的。
 
-#### 3. UPnP 动态端口转发
+### 3. UPnP 动态端口转发
 
 >最流行的 UPnP 实现是 <https://github.com/miniupnp/miniupnp>
 
@@ -177,22 +200,46 @@ iptables -t nat -A PREROUTING -i eth0 -j DNAT --to-destination 192.168.1.3 # 将
 
 UPnP 解决了「静态端口转发」需要手动配置的问题，在启用了 UPnP 后，对所有支持 UPnP 的内网程序而言，NAT 类型将提升到 Full-cone NAT.
 
-## NAT 穿透 - NAT Traversal
+### 4. NAT 穿越协议 - STUN/TURN/ICE
 
-在常见的联机游戏、BitTorrent 文件共享协议、P2P 聊天等点对点通讯场景中，客户端通常都运行在家庭网络中，隔着一层 Symmetric NAT（路由器），在不使用前面提到的 DMZ/UPnP 等 NAT 类型提升技术的前提下，客户端之间要建立 P2P 连接，就需要借助「NAT 穿越」技术。
+如果很不幸前面提到的 DMZ主机/静态端口转发/UPnP 三项技术，你的路由器都不支持，那你就只能借助 NAT 穿越协议了。
 
-NAT 穿透，也被称作「NAT 打洞」，需要突破几个关键的壁垒。一个完整的 NAT 穿透方案，需要包含如下功能：
+目前有如下几个 NAT 穿越协议标准：
+
+- [RFC5389 - Simple Traversal of UDP Through NATs (STUN)](https://datatracker.ietf.org/doc/html/rfc5389)
+  - STUN 是个轻量级的协议，是基于 UDP 的 NAT 穿越方案。它允许应用程序发现它们与公共互联网之间存在的 NAT 及防火墙类型。它也可以让应用程序确定 NAT 分配给它们的公网 IP 地址和端口号。
+  - RFC5389 优先使用 UDP 尝试穿越，在失败的情况下会继续使用 TCP 进行尝试
+  - STUN 支持除 Symmetric NAT 之外的另外三种 NAT 类型
+- [RFC5766 - Traversal Using Relays around NAT (TURN)](https://tools.ietf.org/html/rfc5766)
+  - TURN 在 STUN 协议之上添加了一个中继，以确保在无法实现 NAT 穿越的情况下，可以 fallback 到直接使用中继服务器进行通信。
+  - 这个中继的原理类似反向代理，单纯负责数据的转发
+  - 在美国有一项数据表示在进行 P2P 穿越的时候，穿越成功的概率为 70%，但是在国内这个成功率 50% 可能都到不了。因此就有必要使用 TURN 协议，这样才能保证在穿越失败的情况下，用户仍然能正常通信。
+- [RFC8445 - Interactive Connectivity Establishment (ICE)](https://datatracker.ietf.org/doc/html/rfc8445)
+  - 一个 NAT 穿越的协商协议，它统一了 STUN 与 TURN 两种协议，会尝试遍历所有可能的连接方案。
+  - ICE 的工作流程
+    - 首先收集终端双方所有的通路（因为终端可能包含多个网卡，必定包含多个通路）
+    - 按一定优先级，对所有通路进行连通性检测，连接建立则 ICE 结束工作
+  - 优先级顺序：
+    - 内网直接通讯，这肯定是优先级最高的嘛
+    - 尝试使用 STUN 协议进行 NAT 穿越
+    - 走 TURN 中继服务器进行代理通讯
+
+总的来说，标准的 NAT 穿越协议优先使用打洞（**NAT Hole Pounching**）技术，如果打洞失败，就使用中继服务器技术兜底，确保能成功穿越。
+
+### TURN 协议如何实现 NAT 打洞
+
+首先 P2P 双方如果只隔着 0-1 层 NAT，那是不需要使用 NAT 打洞技术的，可以直连或者反向连接。
+
+下面就讨论下 P2P 双方隔着 2 层及以上 NAT 的场景下，如何利用 UDP 协议实现 NAT 打洞。
+
+一个完整的 NAT 打洞方案，需要包含如下功能：
 
 - A 跟 B 需要知道对方的公网 IP 以及监听的端口号
-  - 解决方法：需要一个中介来介绍双方认识（交换 IP/port）
-- NAT 连通性测试，检测出双方中间网络的类型
-- 针对不同的 NAT 类型，存在哪些穿透手段？以何种顺序进行穿透尝试？
+  - 解决方法：需要一个公网**中介**来介绍双方认识（交换 IP/port）
+- NAT 连通性测试，需要借助公网主机，**检测双方中间网络的类型**
+- 针对不同的 NAT 类型，存在哪些穿越手段？以何种顺序进行**穿越尝试**？
 
-### NAT 穿透方案原理
-
-NAT 穿越可以使用 UDP/TCP 两种 L4 协议，但是 TCP 面向连接的特性使它在这个场景中限制性更大，因此各种 NAT 穿透协议通常都基于 UDP 实现。
-
-这里首先以 UDP 为例介绍如何穿透各种 NAT 类型，最后再介绍下为什么 TCP 面向连接的特性使它在 NAT 穿透场景中应用受限。
+NAT 打洞可以使用 UDP/TCP 两种 L4 协议，但是 TCP 面向连接的特性使它在这个场景中限制性更大（具体限制见参考文章，我有空再补充），因此各种 NAT 穿越协议通常都基于 UDP 实现。
 
 #### 1. A 与 B 在同一局域网中
 
@@ -203,7 +250,24 @@ NAT 穿越可以使用 UDP/TCP 两种 L4 协议，但是 TCP 面向连接的特�
 
 #### 2. A 与 B 分别在不同的局域网中
 
-这样实际上 A 与 B 中间就隔了两个 NAT 网关，这是最普遍的一种情况。连接建立流程如下：
+这样实际上 A 与 B 中间就隔了两个 NAT 网关，这是最普遍的一种情况。
+
+依据双方 NAT 网关的类型，有如下 NAT 穿越能否成功，可以使用下表来表示：
+
+|       NAT 类型      | Full Cone | Restricted | Port-Restricted | Symmetric |
+| ------------------ | --------- | ---------- | --------------- | --------- |
+| Full Cone          | ✅         | ✅          | ✅               | ✅         |
+| Restricted         | ✅         | ✅          | ✅               | ✅         |
+| Port-Restricted    | ✅         | ✅          | ✅               | ❌         |
+| Symmetric          | ✅         | ✅          | ❌               | ❌         |
+
+>因为 NAT 具体行为的变数太多，路由器的防火墙策略也存在很大变动空间，再有就是 RF3489 的这种 NAT 分类方法不够精确，这些因素导致 NAT 穿透能否成功通常都是谈概率。
+
+总的来说，只要不是 Symmetric NAT，穿越成功的概率就很大（前提是路由器上没啥特殊的防火墙规则）。
+而一旦中间存在 Symmetric NAT，由于 Symmetric NAT 为每个连接提供一个映射，使得转换后的公网地址和端口对不可预测，穿越就无法成功了。
+这种场景下 TURN 协议给出的解决方案是，fallback 到中继服务器策略作为兜底方案，保证连接能成功，但是这会给中继服务器带来很大压力，延迟等参数将不可避免地变差。
+
+STUN/TURN 的 NAT 穿透流程大致如下：
 
 - 首先，A 跟 B 两个程序启动时，需要把自己的内外网 IP 及端口信息上报到一台中介服务器 S
 - 现在假设 A 想要跟 B 建立一个 P2P 连接，首先他们需要从 S 获得对方的 ID
@@ -213,7 +277,7 @@ NAT 穿越可以使用 UDP/TCP 两种 L4 协议，但是 TCP 面向连接的特�
   - 这肯定会失败，但是会在 A 的 NAT 网关上留下记录：A 曾经请求过这个地址，那之后这个地址发到 A 的 NAT 网关的流量就可以进来了。
 - B 尝试请求 A 的公网地址 `A_public_ip:A_public_port`
   - 同样这肯定也会失败，但是会在 B 的 NAT 网关上流量记录：B 曾经请求过这个地址，那之后这个地址发到 B 的 NAT 网关的流量就可以进来了
-- 中间的两层 NAT 网关均形成 NAT 穿透记录，**穿透完成**。
+- 中间的两层 NAT 网关均形成 NAT 穿越记录，**穿越完成**。
 - 现在 A 尝试请求 B 的公网地址 `B_public_ip:B_public_port`，由于 B 的 NAT 已有记录，流量顺利通过 NAT 到达程序 B
 - B 发送给 A 的数据也同样，可以顺利到达 A
 
@@ -224,45 +288,26 @@ NAT 穿越可以使用 UDP/TCP 两种 L4 协议，但是 TCP 面向连接的特�
 - ISP 为了节约使用公网 IP，给用户分配了个广域网 IP，中间就多了个广域网 NAT
 - 大城市的各种租房公寓通常只会从 ISP 购买一两根宽带，二次分销给整栋楼的租客共用，这就造成中间多了一层公寓的 NAT
 
-这是最复杂的一种情况。
+这是最复杂的一种情况，基本上就没什么 NAT 穿透的希望了，只能走下面介绍的兜底策略——服务器中继。
 
-TBD 待完善
+TBD 待续
 
-#### 4. 特殊穿透方案 - 反向代理
+#### 4. 特殊穿越方案 - 服务器中继
 
-反向代理是兼容性最佳，但是性能最差的方案，因为这个方案下，所有的 P2P 连接都需要经过反向代理，在使用人数众多时这会给反向代理造成很大的压力。
+Relay 服务器中继是兼容性最佳，但是性能最差的方案，因为这个方案下，所有的 P2P 连接都需要经过中继服务器转发，在使用人数众多时这会给中继服务器造成很大的压力。
 
 因此这个方案通常是用于兜底的。
 
-### NAT 穿透协议标准 - STUN/TURN/ICE
+## 使用 Go 实验 NAT 穿透
 
-前面介绍了 NAT 穿透的原理，这里介绍下相关的协议标准。
-
-目前有如下几个 NAT 穿透协议标准：
-
-- [RFC5389 - Simple Traversal of UDP Through NATs (STUN)](https://datatracker.ietf.org/doc/html/rfc5389)
-  - STUN 是个轻量级的协议，是基于 UDP 的 NAT 穿透方案。它允许应用程序发现它们与公共互联网之间存在的 NAT 及防火墙类型。它也可以让应用程序确定 NAT 分配给它们的公网 IP 地址和端口号。
-  - RFC5389 优先使用 UDP 尝试穿透，在失败的情况下会继续使用 TCP 进行尝试
-- [RFC5766 - Traversal Using Relays around NAT (TURN)](https://tools.ietf.org/html/rfc5766)
-  - TURN 在 STUN 协议之上添加了一个中继，以确保在无法实现 NAT 穿透的情况下，可以 fallback 到直接使用中继服务器进行通信。
-  - 这个中继的原理类似反向代理，单纯负责数据的转发
-  - 在美国有一项数据表示在进行 P2P 穿越的时候，穿越成功的概率为 70%，但是在国内这个成功率 50% 可能都到不了。因此就有必要使用 TURN 协议，这样才能保证在穿越失败的情况下，用户仍然能正常通信。
-- [RFC8445 - Interactive Connectivity Establishment (ICE)](https://datatracker.ietf.org/doc/html/rfc8445)
-  - 一个 NAT 穿透的协商协议，它统一了 STUN 与 TURN 两种协议，会尝试遍历所有可能的连接方案。
-  - ICE 的工作流程
-    - 首先收集终端双方所有的通路（因为终端可能包含多个网卡，必定包含多个通路）
-    - 按一定优先级，对所有通路进行连通性检测，连接建立则 ICE 结束工作
-  - 优先级顺序：
-    - 内网直接通讯，这肯定是优先级最高的嘛
-    - 尝试使用 STUN 协议进行 NAT 穿越
-    - 走 TURN 中继服务器进行代理通讯
-
-TBD 待完善，有空用 Go 语言补充几个代码示例，可用的库有：
+Go 可用的 NAT 穿越库有：
 
 - [coturn](https://github.com/coturn/coturn): 貌似是最流行的 STUN/TURN/ICE server
 - [go-stun](https://github.com/ccding/go-stun): 一个简洁的 stun client 实现，大概适合用于学习？
 - [pion/turn](https://github.com/pion/turn): 一个 STUN/TURN/ICE client/client 实现
 - [pion/ice](https://github.com/pion/ice): 一个 ice 实现
+
+TBD 待完善
 
 ## 虚拟网络、Overlay 与 Underlay
 
@@ -286,8 +331,8 @@ vxlan/geneve 的详细介绍，参见 [Linux 中的虚拟网络接口 - vxlan/ge
 
 ### 相关工具
 
-有一些专门用于跨网搭建私有虚拟网络的工具，由于家庭网络设备前面通常都有至少一层 NAT（家庭路由器），因此这些工具都重度依赖 NAT 穿透技术。
-如果 NAT 层数太多无法穿透，它们会 fallback 到代理模式，也就是由一台公网服务器进行流量中继，但是这会对中继服务器造成很大压力，延迟跟带宽通常都会差很多。
+有一些专门用于跨网搭建私有虚拟网络的工具，由于家庭网络设备前面通常都有至少一层 NAT（家庭路由器），因此这些工具都重度依赖 NAT 穿越技术。
+如果 NAT 层数太多无法穿越，它们会 fallback 到代理模式，也就是由一台公网服务器进行流量中继，但是这会对中继服务器造成很大压力，延迟跟带宽通常都会差很多。
 
 如下是两个比较流行的 VPN 搭建工具：
 
@@ -341,11 +386,14 @@ AWS VPC 提供两种网关类型：
 
 ## 参考
 
+- [What Is Network Address Translation (NAT)? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/NAT.html)
+- [[What Is STUN? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/STUN.html)
+- [P2P技术详解(一)：NAT详解——详细原理、P2P简介](http://www.52im.net/thread-50-1-1.html)
+- [P2P技术详解(二)：P2P中的NAT穿越(打洞)方案详解](http://www.52im.net/thread-542-1-1.html)
+- [P2P技术详解(三)：P2P中的NAT穿越(打洞)方案详解(进阶分析篇)](http://www.52im.net/thread-2872-1-1.html)
+- [Connect to the internet using an internet gateway - AWS VPC Internet Gateway](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
 - [从DNAT到netfilter内核子系统，浅谈Linux的Full Cone NAT实现](https://blog.chionlab.moe/2018/02/09/full-cone-nat-with-linux/)
 - [Network address translation - wikipedia](https://en.wikipedia.org/wiki/Network_address_translation)
-- [P2P学习（一）NAT的四种类型以及类型探测](https://www.cnblogs.com/ssyfj/p/14791064.html)
-- [P2P学习（二）P2P中的NAT穿越(打洞)方案详解](https://www.cnblogs.com/ssyfj/p/14791980.html)
-- [TCP点对点穿透探索--失败](https://developer.aliyun.com/article/243173)
-- [What Is Network Address Translation (NAT)? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/NAT.html)
-- [Connect to the internet using an internet gateway - AWS VPC Internet Gateway](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
+
+
 
