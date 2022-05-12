@@ -39,31 +39,38 @@ NAT 就是在 IPv6 普及前，临时解决 IPv4 地址空间不够用而开发�
 
 NAT 的工作方式，使用图例描述是这样的：
 
-{{< figure src="/images/about-nat/NAT-demo.webp" >}}
+{{< figure src="/images/about-nat/NAT-demo.webp" title="NAT 示例">}}
 
 从外部网络看一个 NAT 网关（一个启用了 NAT 的路由器），它只是拥有一个 IPv4 地址的普通设备，所有从局域网发送到公网的流量，其 IP 地址都是这个路由器的 WAN IP 地址，在上图中，这个 IP 地址是 `138.76.29.7`.
 
 本质上，NAT 网关隐藏了家庭网络的细节，从外部网络上看，整个家庭网络就像一台普通的网络设备。
 
-NAT 网关会维护一个 NAT 翻译表，它负责记录 IP/port 的映射关系。
+下面我们会学习到，上述这个 NAT 工作方式实际上是 NAPT，它同时使用 L3/L4 的信息进行地址转换工作。
 
 ## NAT 的地址映射方式
 
 ### 1. 一对一 NAT
 
-一对一 NAT，也被称为 Basic NAT，在 [RFC2663](https://datatracker.ietf.org/doc/html/rfc2663#section-4.0) 中被定义，在技术上比较简单，只利用网络层的信息，对 IP 地址进行转换。
+一对一 NAT，也被称为 Basic NAT 或者 NAT no PAT，在 RFC2663 中被定义，在技术上比较简单，只利用网络层的信息，对 IP 地址进行转换。
 
 简单的说，Basic NAT 要求每个内网 IP 都需要绑定一个唯一的外网 IP，才能连通外部网络。
 通常路由器只有一个 IP，这种场景下 Basic NAT 只允许同时有一台内网主机访问外部网络。
 
-Basic NAT 有两种类型：「静态 NAT」与「动态 NAT」。
+Basic NAT 有两种类型：「**静态 NAT**」与「**动态 NAT**」。
 
 现在的很多家庭路由器都自带一个被称为 DMZ 主机的功能，它是「Demilitarized Zone」的缩写，意为隔离区。
 它允许将某一台内网主机设置为 DMZ 主机（或者叫隔离区主机，仅此主机可供外网访问），所有从外部进来的流量，都会被通过 Basic NAT 修改为对应的内网 IP 地址，然后直接发送到该主机。
 路由器的这种 DMZ 技术就是「静态 NAT」，因为 DMZ 对应的内网 IP 需要手动配置，不会动态变化。
 
-而「动态 NAT」则需要路由器维护一个公网 IP 地址池，内网服务器需要访问公网时，动态 NAT 就从地址池中拿出一个公网 IP 给它使用，用完再回收。
-这种场景需要一个公网 IP 地址池，我就没接触过了，应用场景或许主要是某些数据中心。
+{{< figure src="/images/about-nat/dmz-host-topology.webp" title="DMZ 主机拓扑结构" >}}
+
+而「动态 NAT」则需要路由器维护一个**公网 IP 地址池**，内网服务器需要访问公网时，动态 NAT 就从地址池中拿出一个公网 IP 给它使用，用完再回收。
+这种场景需要一个公网 IP 地址池，最典型的动态 NAT 就是云服务商提供的「**公网 IP**」，在云服务器中查看你会发现，该主机上实际只配了局域网 IP 地址，但是它却能正常使用公网 IP 通信，原因就是云服务商为这些服务器配置了「动态 NAT」。
+为一台云服务器绑定一个公网 IP，实际上就是请求云服务商从公网 IP 地址池中取出一个，并配置对应的动态 NAT 规则到这台云服务器的局域网 IP。
+
+示例如下，其中的 Internet Gateway 实际上就是一个一对一 NAT 设备：
+
+{{< figure src="/images/about-nat/aws-vpc-nat-internet-gateway.webp" title="AWS VPC 中的 NAT 网关以及 Internet 网关">}}
 
 Basic NAT 的好处是，它仅工作在 L3 网络层，网络层上的协议都可以正常使用（比如 P2P），不需要啥「内网穿透」技术。 
 
@@ -75,7 +82,11 @@ Basic NAT 的好处是，它仅工作在 L3 网络层，网络层上的协议都
 
 NAPT 通过同时利用 L3 的 IP 信息，以及 L4 传输层的端口信息，来为局域网设备提供透明的、配置方便的、支持超高并发连接的外部网络通信。
 
-NAPT 的端口分配与转换，以及对外来流量的处理，有四种不同的方法，被称作四种不同的 NAPT 类型，下面逐一介绍。
+NAPT 的端口分配与转换，以及对外来流量的处理，有四种不同的方法，被称作四种不同的 NAPT 类型，如下图：
+
+{{< figure src="/images/about-nat/nat-types-defined-in-stun.webp" >}}
+
+下面我们逐一介绍这四种不同的 NAPT 类型。
 
 >从这里开始，下文中的 NAT 特指 NAPT，如果涉及「一对一 NAT」会使用它的全名。
 
@@ -89,7 +100,7 @@ Full-cone NAT 的特点如下：
   - cone 圆锥，个人理解是一个比喻，任意发送进来的数据（多），都能通过 NAT 到达这个内部地址（一），就像一个圆锥。
 
 允许任意主机发送到 eAddr:ePort 的数据到达内部地址是很危险的行为，因为内部主机不一定配置了合适的安全策略。
-因此 **Full-cone NAT 比较少见**，就算路由器等 NAT 设备支持 Full-cone NAT，通常也不会是默认选项。我们会在会面更详细地介绍它。
+因此 **Full-cone NAT 比较少见**，就算路由器等 NAT 设备支持 Full-cone NAT，通常也不会是默认选项。我们会在后面更详细地介绍它。
 
 #### 2. Address-Restricted cone NAT
 
@@ -143,7 +154,9 @@ iptables -t nat -A PREROUTING -i eth0 -j DNAT --to-destination 192.168.1.3 # 将
 
 #### 2. 静态端口转发
 
-退一步，可以直接用静态端口转发功能，就是在路由器上手动设置某个端口号的所有 TCP/UDP 流量，都直接 NAT 转发到到内网的指定地址。
+退一步，可以直接用静态端口转发功能，就是在路由器上手动设置某个端口号的所有 TCP/UDP 流量，都直接 NAT 转发到到内网的指定地址。也就是往 NAT 的转发表中手动添加内容，示意图：
+
+{{< figure src="/images/about-nat/NAPT-en.svg" title="NAPT tables">}}
 
 「静态端口转发」设置好后，对应的主机地址也将符合 Full-cone NAT 的定义，缺点就是端口转发规则都得手动配置。
 
@@ -329,4 +342,6 @@ AWS VPC 提供两种网关类型：
 - [P2P学习（一）NAT的四种类型以及类型探测](https://www.cnblogs.com/ssyfj/p/14791064.html)
 - [P2P学习（二）P2P中的NAT穿越(打洞)方案详解](https://www.cnblogs.com/ssyfj/p/14791980.html)
 - [TCP点对点穿透探索--失败](https://developer.aliyun.com/article/243173)
+- [What Is Network Address Translation (NAT)? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/NAT.html)
+- [Connect to the internet using an internet gateway - AWS VPC Internet Gateway](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
 
