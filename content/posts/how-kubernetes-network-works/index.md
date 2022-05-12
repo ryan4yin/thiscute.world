@@ -43,3 +43,4 @@ Network Policy
 
 - [数据包在 Kubernetes 中的一生（2）](https://blog.fleeto.us/post/life-of-a-packet-in-k8s-2/)
 - [数据包在 Kubernetes 中的一生（3）](https://blog.fleeto.us/post/life-of-a-packet-in-k8s-3/)
+- [kube-proxy IPVS 模式的工作原理 - 米开朗基扬](https://www.cnblogs.com/ryanyangcs/p/14888443.html)
