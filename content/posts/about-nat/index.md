@@ -58,7 +58,7 @@ NAT 的工作方式，使用图例描述是这样的：
 
 其**主要应用场景是，公网用户需要访问到内网主机**。
 
-Basic NAT 有三种类型：「**静态 NAT**」与「**动态 NAT**」。
+Basic NAT 有三种类型：「**静态 NAT**」、「**动态 NAT**」以及「**NAT Server**」。
 
 现在的很多家庭路由器都自带一个被称为 DMZ 主机的功能，它是「Demilitarized Zone」的缩写，意为隔离区。
 它允许将某一台内网主机设置为 DMZ 主机（或者叫隔离区主机，仅此主机可供外网访问），所有从外部进来的流量，都会被通过 Basic NAT 修改为对应的内网 IP 地址，然后直接发送到该主机。
@@ -66,10 +66,10 @@ Basic NAT 有三种类型：「**静态 NAT**」与「**动态 NAT**」。
 
 {{< figure src="/images/about-nat/dmz-host-topology.webp" title="DMZ 主机拓扑结构" >}}
 
-另一个典型的静态 NAT 就是云服务商提供的「**公网 IP**」，在云服务器中查看你会发现，该主机上实际只配了局域网 IP 地址，但是它却能正常使用公网 IP 通信，原因就是云服务商为这些服务器配置了「动态 NAT」。
-为一台云服务器绑定一个公网 IP，实际上就是请求云服务商从公网 IP 地址池中取出一个，并配置对应的动态 NAT 规则到这台云服务器的局域网 IP。
+另一个案例：云服务商提供的「**公网 IP**」实际上是通过「**NAT Server**」实现的，在云服务器中使用 `ip addr ls` 查看你会发现，该主机上实际只配了局域网 IP 地址，但是它却能正常使用公网 IP 通信，原因就是云服务商在「**NAT Server**」上为这些服务器配置了 IP 转发规则。
+为一台云服务器绑定一个公网 IP，实际上就是请求「**NAT Server**」从公网 IP 地址池中取出一个，并配置对应的 NAT 规则到这台云服务器的局域网 IP。
 
-示例如下，其中的 Internet Gateway 实际上就是一个一对一 NAT 设备：
+示例如下，其中的 Internet Gateway 实际上就是个一对一 NAT Server：
 
 {{< figure src="/images/about-nat/aws-vpc-nat-internet-gateway.webp" title="AWS VPC 中的 NAT 网关以及 Internet 网关">}}
 
