@@ -258,7 +258,7 @@ UPnP 解决了「静态端口转发」需要手动配置的问题，在启用了
 
 总的来说，标准的 NAT 穿越协议优先使用打洞（**[NAT Hole Pounching](https://en.wikipedia.org/wiki/Hole_punching_(networking))**）技术，如果打洞失败，就使用中继服务器技术兜底，确保能成功穿越。
 
-#### STUN 的 NAT 类型检测
+#### STUN/TURN/ICE 的 NAT 类型检测
 
 RFC5389 定义了对 NAT 映射类型以及过滤类型的检测方法。
 
@@ -309,12 +309,20 @@ STUN/TURN 的 NAT 穿透流程大致如下：
 上述流程中的关键点在于，如何查出内网服务器被 NAT 分配的外部 IP 及端口，只要有了这两个信息，就可以通过 STUN 中介服务器交换这个信息，然后完成连接的建立了。
 家庭服务器通常都只有一个公网 IP，所以基本可以认为 IP 是固定的，因此最关键的问题就是「**如何知道 NAT 为会话分配的端口地址**」。
 
-对端口的限制严格程度跟 NAPT 的类型有关，**Full-cone 跟 Restricted cone 对端口都没有任何限制，所以上述流程肯定可以成功**；Port-Restricted Cone 问题也不大，被分配的端口
+对端口的限制严格程度跟 NAPT 的类型有关，**Full-cone 跟 Restricted cone 对端口都没有任何限制，所以上述流程肯定可以成功**；
+
+TBD
 
 一个穿越 Symmetric NATs 的 STUN 草案：[Symmetric NAT Traversal using STUN](https://tools.ietf.org/id/draft-takeda-symmetric-nat-traversal-00.txt)
 
-总的来说，只要两个 NAT 不都是 Symmetric NAT，穿越成功的概率就很大（）。
-而一旦中间存在 Symmetric NAT，由于 Symmetric NAT 为每个连接提供一个映射，使得转换后的公网地址和端口对不可预测，穿越基本就无法成功了。
+在使用 STUN/TURN 进行 NAT 穿越时，支持的的 NAT 类型如下表。行与列分别代表双方的 NAT 类型，✅ 表示支持 UDP 穿越，❌ 表示 TURN 无法进行 UDP 穿越：
+
+|       NAT 类型      | Full Cone | Restricted | Port-Restricted | Symmetric |
+| ------------------ | --------- | ---------- | --------------- | --------- |
+| Full Cone          | ✅         | ✅          | ✅               | ✅         |
+| Restricted         | ✅         | ✅          | ✅               | ✅         |
+| Port-Restricted    | ✅         | ✅          | ✅               | ❌         |
+| Symmetric          | ✅         | ✅          | ❌               | ❌         |
 
 这种场景下 TURN 协议给出的解决方案是，fallback 到中继服务器策略作为兜底方案，保证连接能成功，但是这会给中继服务器带来很大压力，延迟等参数将不可避免地变差。
 
@@ -394,6 +402,8 @@ vxlan/geneve 的详细介绍，参见 [Linux 中的虚拟网络接口 - vxlan/ge
 
 主流的 VPN 协议有：PPTP、L2TP、IPSec、OpenVPN、SSTP，以及最新潮的 Wireguard.
 
+TBD
+
 ## 拓展知识
 
 ### Symmetric NAT 允许的最大并发 TCP 连接数是多少？
@@ -449,6 +459,7 @@ AWS VPC 提供两种网关类型：
 - [Connect to the internet using an internet gateway - AWS VPC Internet Gateway](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
 - [从DNAT到netfilter内核子系统，浅谈Linux的Full Cone NAT实现](https://blog.chionlab.moe/2018/02/09/full-cone-nat-with-linux/)
 - [Network address translation - wikipedia](https://en.wikipedia.org/wiki/Network_address_translation)
+- [WebRTC NAT Traversal Methods: A Case for Embedded TURN](https://www.liveswitch.io/blog/webrtc-nat-traversal-methods-a-case-for-embedded-turn)
 
 
 
