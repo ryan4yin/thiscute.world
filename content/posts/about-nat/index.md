@@ -390,6 +390,9 @@ vxlan/geneve 的详细介绍，参见 [Linux 中的虚拟网络接口 - vxlan/ge
 - [zerotier](https://github.com/zerotier/ZeroTierOne): 在 P2P 网络之上搭建的 SDN overlay 网络，使用自定义协议。
 - [tailscales](https://github.com/tailscale/tailscale): 基于 wireguard 协议快速搭建私有虚拟网络 VPN
 
+### VPN 协议
+
+主流的 VPN 协议有：PPTP、L2TP、IPSec、OpenVPN、SSTP，以及最新潮的 Wireguard.
 
 ## 拓展知识
 
