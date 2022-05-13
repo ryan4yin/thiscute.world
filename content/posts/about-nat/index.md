@@ -158,7 +158,7 @@ RFC3489 这个早期 RFC 存在一些问题，问题之一就是它对 NAT 归�
 
 三种映射规则如图所示，假设一个内网主机 HostX 的内网 IP 地址为 X，端口号为 x，经 NAT 映射后的外网 IP 地址为 M，端口号为 m。为方便描述，将内网的 Endpoint 记为 `Endpoint(X,x)`，映射后外网的 Endpoint 记为 `Endpoint(M,m)`。内网 `Endpoint(X,x)` 发往外网 HostD1 的 IP 地址和端口号记为目的 `Endpoint(D1,d1)`；发往外网 HostD2 的 IP 地址和端口号记为目的 `Endpoint(D2,d2)`。
 
-{{< figure src="/images/about-nat/rfc5389-mapping-behavior.webp" >}}
+{{< figure src="/images/about-nat/rfc5389-mapping-behavior.webp" title="NAT 映射规则">}}
 
 - **EIM**(Endpoint-Independent Mapping) 外部地址无关映射
   - 对于一个内网 `Endpoint(X,x)`，其映射的外网 `Endpoint(M,m)` 是固定的。即从相同的 `Endpoint(X,x)` 发送到任何外部 IP 地址和任何外部端口的报文在 NAT 设备上使用相同的映射。
@@ -167,7 +167,7 @@ RFC3489 这个早期 RFC 存在一些问题，问题之一就是它对 NAT 归�
 
 ##### 2. 过滤规则
 
-{{< figure src="/images/about-nat/rfc5389-filtering-behavior.webp" >}}
+{{< figure src="/images/about-nat/rfc5389-filtering-behavior.webp" title="NAT 过滤规则">}}
 
 - **EIF**（Endpoint-Independent Filtering）外部地址无关过滤：对于一个内网 `Endpoint(X,x)`，只要它曾经向外网发送过数据，外网主机就可以获取到它经 NAT 映射后的外网 `Endpoint(M,m)` 。那么只要是发给 `Endpoint(M,m)` 的报文，不管来源于 D1 还是 D2，都能被转换并发往内网，其他报文被过滤掉。
 
@@ -185,11 +185,11 @@ RFC3489 这个早期 RFC 存在一些问题，问题之一就是它对 NAT 归�
 
 ## NAT 的弊端
 
-- NAT 使 IP 会话的保持时效变短：NAT 需要维护一个会话列表，如果会话静默时间超过一个阈值，将会被从列表中移除。
+- **IP 会话的保持时效变短**：NAT 需要维护一个会话列表，如果会话静默时间超过一个阈值，将会被从列表中移除。
   - 为了避免这种情况，就需要定期发送心跳包来维持 NAT 会话。俗称心跳保活
-- IP 跟踪机制失效：一对多 NAT 使得多个局域网主机共用一个公网 IP，这导致基于公网 IP 进行流量分析的逻辑失去意义。
+- **IP 跟踪机制失效**：一对多 NAT 使得多个局域网主机共用一个公网 IP，这导致基于公网 IP 进行流量分析的逻辑失去意义。
   - 比如很多站点都加了基于 IP 的访问频率限制，这会造成局域网内多个用户之间的服务抢占与排队。
-- NAT 的工作机制依赖于修改IP包头的信息，这会妨碍一些安全协议的工作。
+- **NAT 的工作机制依赖于修改IP包头的信息，这会妨碍一些安全协议的工作**。
   - 因为 NAT 篡改了 IP 地址、传输层端口号和校验和，这会导致 IP 层的认证协议彻底不能工作，因为认证目的就是要保证这些信息在传输过程中没有变化。
   - 对于一些隧道协议，NAT 的存在也导致了额外的问题，因为隧道协议通常用外层地址标识隧道实体，穿过 NAT 的隧道会有 IP 复用关系，在另一端需要小心处理。
   - ICMP 是一种网络控制协议，它的工作原理也是在两个主机之间传递差错和控制消息，因为IP的对应关系被重新映射，ICMP 也要进行复用和解复用处理，很多情况下因为 ICMP 报文载荷无法提供足够的信息，解复用会失败。
