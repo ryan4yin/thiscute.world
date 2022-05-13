@@ -1,6 +1,6 @@
 ---
 title: "NAT 网关、NAT 穿越以及虚拟网络"
-date: 2022-05-09T00:59:00+08:00
+date: 2022-05-13T11:46:00+08:00
 draft: false
 
 resources:
@@ -93,7 +93,7 @@ NAPT 通过同时利用 L3 的 IP 信息，以及 L4 传输层的端口信息，
 
 {{< figure src="/images/about-nat/napt.webp" >}}
 
-NAPT 的端口分配与转换规则（**Mapping Behavior**）以及对外来流量的过滤规则（**Filtering Behavior**）都存在许多不同的实现，没有统一的规范与标准。
+NAPT 的端口分配与转换规则（**Mapping Behavior**）以及对外来流量的过滤规则（**Filtering Behavior**）都存在许多不同的实现，没有统一的规范与标准，但是存在两种分类规范，这种分类方法主要用在 NAT 穿越技术中。
 
 #### RFC3489 定义的 NAT 类型（四种）
 
@@ -138,32 +138,69 @@ Full-cone NAT 的特点如下：
 但是它导致所有的 TCP 连接都只能由从内部主动发起，外部发起的 TCP 连接请求会直接被 NAT 拒绝，因此它也是 P2P 玩家最头疼的一种 NAT 类型。
 解决方案是通过 UDP 迂回实现连接的建立，我们会在后面讨论这个问题。
 
+##### 5. Linux 中的 NAPT
+
+Linux 的网络栈中，可通过 `iptables/netfilter` 的 `SNAT/MASQUERADE` 实现 NAPT 网关，这种方式只能实现一个 Symmetric NAT.
+
+也就是说绝大多数基于 Linux 实现的家庭局域网、Docker 虚拟网络、Kubernetes 虚拟网络、云服务的虚拟网络，都是 Symmetric NAT. 
+
+只有一些有 Full-cone NAT 需求的网吧、ISP 的 LSN(Large Scale NAT) 网关等组织，会使用非 Linux 内核的企业级路由器提供 Full-cone NAT 能力，这些设备可能是基于 FPGA 等专用芯片设计的。
+
+想要将 Symmetric NAT 内的主机提供给外部访问，只能通过端口映射、一对一 NAT 等方式实现，后面会详细介绍这些方法。
+
 #### RFC5389 定义的 NAT 类型（九种）
 
-RFC3489 的归类过于笼统，这导致即使在你已经明确了自己的 NAT 类型后，仍然无法通过查表明确自己能否进行 NAT 穿越，NAT 穿越能否成功仍然是一个概率事件...
+RFC3489 这个早期 RFC 存在一些问题，问题之一就是它对 NAT 归类过于笼统，很多 NAPT 网关都无法很好的匹配上其中某个类别。
 
 于是后来，RFC3489 被废弃并由 [RFC5389](https://www.rfc-editor.org/rfc/rfc5389) 来替代，在 RFC5389 中，将 Mapping Behavior（映射规则）和 Filtering Behavior（过滤规则）分开来，定义了 3 种 Mapping Behavior（映射规则）和 3 种 Filtering Behavior（过滤规则），一共有 9 种组合。
 
-TBD 待续
+##### 1. 映射规则
+
+三种映射规则如图所示，假设一个内网主机 HostX 的内网 IP 地址为 X，端口号为 x，经 NAT 映射后的外网 IP 地址为 M，端口号为 m。为方便描述，将内网的 Endpoint 记为 `Endpoint(X,x)`，映射后外网的 Endpoint 记为 `Endpoint(M,m)`。内网 `Endpoint(X,x)` 发往外网 HostD1 的 IP 地址和端口号记为目的 `Endpoint(D1,d1)`；发往外网 HostD2 的 IP 地址和端口号记为目的 `Endpoint(D2,d2)`。
+
+{{< figure src="/images/about-nat/rfc5389-mapping-behavior.webp" >}}
+
+- **EIM**(Endpoint-Independent Mapping) 外部地址无关映射
+  - 对于一个内网 `Endpoint(X,x)`，其映射的外网 `Endpoint(M,m)` 是固定的。即从相同的 `Endpoint(X,x)` 发送到任何外部 IP 地址和任何外部端口的报文在 NAT 设备上使用相同的映射。
+- **ADM**(Address-Dependent Mapping) 外部地址相关映射：对于一个内网 `Endpoint(X,x)`，发往目的 `Endpoint(D1,d1)` 的报文，`Endpoint(X,x)` 被映射成 `Endpoint(M1,m1)`；发往目的 `Endpoint(D2,d2)` 的报文，`Endpoint(X,x)` 被映射成 `Endpoint(M2,m2)`。只要D1=D2，不管d1和d2是多少，都有 `Endpoint(M1,m1)=Endpoint(M2,m2)`。即从相同的 `Endpoint(X,x)` 发送到相同外部 IP 地址和任何外部端口的报文在 NAT 设备上使用相同的映射。
+- **APDM**（Address and Port-Dependent Mapping）外部地址和端口相关映射：对于一个内网 `Endpoint(X,x)`，发往目的 `Endpoint(D1,d1)` 的报文，`Endpoint(X,x)` 被映射成 `Endpoint(M1,m1)`；发往目的 `Endpoint(D2,d2)` 的报文， `Endpoint(X,x)` 被映射成 `Endpoint(M2,m2)`。只有当D1=D2，且d1=d2，才有 `Endpoint(M1,m1)=Endpoint(M2,m2)`。即从相同的 Endpoint(X,x) 发送到相同外部IP地址和相同外部端口的报文在NAT设备上使用相同的映射。
+
+##### 2. 过滤规则
+
+{{< figure src="/images/about-nat/rfc5389-filtering-behavior.webp" >}}
+
+- **EIF**（Endpoint-Independent Filtering）外部地址无关过滤：对于一个内网 `Endpoint(X,x)`，只要它曾经向外网发送过数据，外网主机就可以获取到它经 NAT 映射后的外网 `Endpoint(M,m)` 。那么只要是发给 `Endpoint(M,m)` 的报文，不管来源于 D1 还是 D2，都能被转换并发往内网，其他报文被过滤掉。
+
+- **ADF**（Address-Dependent Filtering）外部地址相关过滤：对于一个内网 `Endpoint(X,x)` ，只有它曾经向 IP 地址为 D1 的外网主机发送过报文，那么来自外网 HostD1 返回的任何端口的报文，都能被转换并发往内网，其他报文被过滤掉。
+
+- **APDF**（Address and Port-Dependent Filtering）外部地址和端口相关过滤：对于一个内网 `Endpoint(X,x)` ，只有它曾经向 IP 地址为 D1，端口号为 d1 的外网目的 `Endpoint(D1,d1)` 发送过报文，那么也只有外网 HostD1 中来自`Endpoint(D1,d1)`返回的报文，才能被转换并发往内网，其他报文被过滤掉。
+
+
+##### 3. RFC3489 与 RFC5389 的 NAT 类型定义关系
+
+- Full Cone NAT 是 EIM 和 EIF 的组合。
+- Restricted Cone NAT 是 EIM 和 ADF 的组合。
+- Port Restricted Cone NAT 是 EIM 和 APDF 的组合。
+- Symmetric NAT 是 APDM 和 APDF 的组合。
 
 ## NAT 的弊端
 
-TBD
-
-## 各 NAT 类型的应用场景
-
-Linux 的网络栈中，可通过 `iptables/netfilter` 的 `SNAT/MASQUERADE` 实现 NAT 网关能力，这种方式实现的是一个 Symmetric NAT.
-
-也就是说绝大多数基于 Linux 实现的家庭局域网、Docker 虚拟网络、Kubernetes 虚拟网络、云服务的虚拟网络，都是 Symmetric NAT.
-
-只有一些有 Full-cone NAT 需求的网吧、ISP 的 LSN(Large Scale NAT) 网关等组织，会使用非 Linux 内核的企业级路由器提供 Full-cone NAT 能力，这些设备可能是基于 FPGA 等专用芯片设计的。
+- NAT 使 IP 会话的保持时效变短：NAT 需要维护一个会话列表，如果会话静默时间超过一个阈值，将会被从列表中移除。
+  - 为了避免这种情况，就需要定期发送心跳包来维持 NAT 会话。俗称心跳保活
+- IP 跟踪机制失效：一对多 NAT 使得多个局域网主机共用一个公网 IP，这导致基于公网 IP 进行流量分析的逻辑失去意义。
+  - 比如很多站点都加了基于 IP 的访问频率限制，这会造成局域网内多个用户之间的服务抢占与排队。
+- NAT 的工作机制依赖于修改IP包头的信息，这会妨碍一些安全协议的工作。
+  - 因为 NAT 篡改了 IP 地址、传输层端口号和校验和，这会导致 IP 层的认证协议彻底不能工作，因为认证目的就是要保证这些信息在传输过程中没有变化。
+  - 对于一些隧道协议，NAT 的存在也导致了额外的问题，因为隧道协议通常用外层地址标识隧道实体，穿过 NAT 的隧道会有 IP 复用关系，在另一端需要小心处理。
+  - ICMP 是一种网络控制协议，它的工作原理也是在两个主机之间传递差错和控制消息，因为IP的对应关系被重新映射，ICMP 也要进行复用和解复用处理，很多情况下因为 ICMP 报文载荷无法提供足够的信息，解复用会失败。
+  - IP 分片机制是在信息源端或网络路径上，需要发送的 IP 报文尺寸大于路径实际能承载最大尺寸时，IP 协议层会将一个报文分成多个片断发送，然后在接收端重组这些片断恢复原始报文。IP 这样的分片机制会导致传输层的信息只包括在第一个分片中，NAT难以识别后续分片与关联表的对应关系，因此需要特殊处理。
 
 ## NAT 穿越 - NAT Traversal
 
 天下苦 NAT 久矣，尤其是各种 P2P 玩家，如 NAS 玩家、P2P 游戏玩家。
 在常见的联机游戏、BitTorrent 文件共享协议、P2P 聊天等点对点通讯场景中，通讯双方客户端通常都运行在家庭局域网中，也就是说中间隔着两层家庭路由器的 NAT，路由器的默认配置都是安全优先的，存在很多安全限制，直接进行 P2P 通讯大概率会失败。
 
-为了穿越这些 NAT 网关进行 P2P 通讯，就需要借助 NAT 穿越技术。
+为了穿越这些 NAT 网关进行 P2P 通讯，就需要借助 [NAT 穿越技术](https://en.wikipedia.org/wiki/NAT_traversal)。
 
 >这里讨论的前提是，你的网络只有单层 NAT，如果外部还存在公寓 NAT、ISP 广域网 NAT，那下面介绍的 NAT 提升技术实际上就没啥意义了。
 
@@ -202,13 +239,15 @@ UPnP 解决了「静态端口转发」需要手动配置的问题，在启用了
 
 ### 4. NAT 穿越协议 - STUN/TURN/ICE
 
-如果很不幸前面提到的 DMZ主机/静态端口转发/UPnP 三项技术，你的路由器都不支持，那你就只能借助 NAT 穿越协议了。
+如果很不幸前面提到的「DMZ 主机」/「静态端口转发」/「UPnP」 三项技术，你的路由器都不支持，那你就只能借助 NAT 穿越协议了。
 
 目前有如下几个 NAT 穿越协议标准：
 
+- [RFC3489](https://datatracker.ietf.org/doc/html/rfc3489) Classic STUN
+  - Classic STUN 是一个早期的 STUN 规范，它定义了一整套完整的 NAT 穿越方案，但是因为存在许多问题，已经被废弃。
 - [RFC5389 - Simple Traversal of UDP Through NATs (STUN)](https://datatracker.ietf.org/doc/html/rfc5389)
-  - STUN 是个轻量级的协议，是基于 UDP 的 NAT 穿越方案。它允许应用程序发现它们与公共互联网之间存在的 NAT 及防火墙类型。它也可以让应用程序确定 NAT 分配给它们的公网 IP 地址和端口号。
-  - RFC5389 优先使用 UDP 尝试穿越，在失败的情况下会继续使用 TCP 进行尝试
+  - RFC5389 所定义的 STUN 协议是对 Classic STUN 的改进，它的定位不再是一个完整的 NAT 穿越解决方案，而是作为其他协议（例如SIP、FTP、DNS）处理 NAT 穿越问题的一个工具。
+  - 其可以用于检查网络中NAT设备的存在，并确定两个通信端点被NAT设备分配的IP地址和端口号。然后，通过ICE（Interactive Connectivity Establishment），自动创建一条能够进行NAT穿越的数据通道。
   - STUN 支持除 Symmetric NAT 之外的另外三种 NAT 类型
 - [RFC5766 - Traversal Using Relays around NAT (TURN)](https://tools.ietf.org/html/rfc5766)
   - TURN 在 STUN 协议之上添加了一个中继，以确保在无法实现 NAT 穿越的情况下，可以 fallback 到直接使用中继服务器进行通信。
@@ -216,17 +255,16 @@ UPnP 解决了「静态端口转发」需要手动配置的问题，在启用了
   - 在美国有一项数据表示在进行 P2P 穿越的时候，穿越成功的概率为 70%，但是在国内这个成功率 50% 可能都到不了。因此就有必要使用 TURN 协议，这样才能保证在穿越失败的情况下，用户仍然能正常通信。
 - [RFC8445 - Interactive Connectivity Establishment (ICE)](https://datatracker.ietf.org/doc/html/rfc8445)
   - 一个 NAT 穿越的协商协议，它统一了 STUN 与 TURN 两种协议，会尝试遍历所有可能的连接方案。
-  - ICE 的工作流程
-    - 首先收集终端双方所有的通路（因为终端可能包含多个网卡，必定包含多个通路）
-    - 按一定优先级，对所有通路进行连通性检测，连接建立则 ICE 结束工作
-  - 优先级顺序：
-    - 内网直接通讯，这肯定是优先级最高的嘛
-    - 尝试使用 STUN 协议进行 NAT 穿越
-    - 走 TURN 中继服务器进行代理通讯
 
-总的来说，标准的 NAT 穿越协议优先使用打洞（**NAT Hole Pounching**）技术，如果打洞失败，就使用中继服务器技术兜底，确保能成功穿越。
+总的来说，标准的 NAT 穿越协议优先使用打洞（**[NAT Hole Pounching](https://en.wikipedia.org/wiki/Hole_punching_(networking))**）技术，如果打洞失败，就使用中继服务器技术兜底，确保能成功穿越。
 
-### TURN 协议如何实现 NAT 打洞
+#### STUN 的 NAT 类型检测
+
+RFC5389 定义了对 NAT 映射类型以及过滤类型的检测方法。
+
+TBD
+
+#### STUN/TURN/ICE 协议如何实现 NAT 打洞
 
 首先 P2P 双方如果只隔着 0-1 层 NAT，那是不需要使用 NAT 打洞技术的，可以直连或者反向连接。
 
@@ -241,31 +279,18 @@ UPnP 解决了「静态端口转发」需要手动配置的问题，在启用了
 
 NAT 打洞可以使用 UDP/TCP 两种 L4 协议，但是 TCP 面向连接的特性使它在这个场景中限制性更大（具体限制见参考文章，我有空再补充），因此各种 NAT 穿越协议通常都基于 UDP 实现。
 
-#### 1. A 与 B 在同一局域网中
+此外，因为 NAT 的具体行为是非标准化的，路由器的防火墙策略也存在很大变动空间，再有就是 RF3489 的这种 NAT 分类方法不够精确，这些因素导致 NAT 穿透能否成功通常都是谈概率。
+
+##### 1. A 与 B 在同一局域网中
 
 这是最简单的情况，最佳方案是直接走内网通讯，不经过 NAT.
 
 第二个方案是，这两个同一局域网内的客户端不走内网，仍然通过 NAT 通讯。这种通讯方式被称作「回环 NAT(Loopback NAT)」或者「发夹 NAT(Hairpin NAT)」。
 对于不支持或未启用「Hairpin NAT」的网关设备而言，这样的通讯尝试将会失败！
 
-#### 2. A 与 B 分别在不同的局域网中
+##### 2. A 与 B 分别在不同的局域网中
 
 这样实际上 A 与 B 中间就隔了两个 NAT 网关，这是最普遍的一种情况。
-
-依据双方 NAT 网关的类型，有如下 NAT 穿越能否成功，可以使用下表来表示：
-
-|       NAT 类型      | Full Cone | Restricted | Port-Restricted | Symmetric |
-| ------------------ | --------- | ---------- | --------------- | --------- |
-| Full Cone          | ✅         | ✅          | ✅               | ✅         |
-| Restricted         | ✅         | ✅          | ✅               | ✅         |
-| Port-Restricted    | ✅         | ✅          | ✅               | ❌         |
-| Symmetric          | ✅         | ✅          | ❌               | ❌         |
-
->因为 NAT 具体行为的变数太多，路由器的防火墙策略也存在很大变动空间，再有就是 RF3489 的这种 NAT 分类方法不够精确，这些因素导致 NAT 穿透能否成功通常都是谈概率。
-
-总的来说，只要不是 Symmetric NAT，穿越成功的概率就很大（前提是路由器上没啥特殊的防火墙规则）。
-而一旦中间存在 Symmetric NAT，由于 Symmetric NAT 为每个连接提供一个映射，使得转换后的公网地址和端口对不可预测，穿越基本就无法成功了。
-这种场景下 TURN 协议给出的解决方案是，fallback 到中继服务器策略作为兜底方案，保证连接能成功，但是这会给中继服务器带来很大压力，延迟等参数将不可避免地变差。
 
 STUN/TURN 的 NAT 穿透流程大致如下：
 
@@ -281,7 +306,19 @@ STUN/TURN 的 NAT 穿透流程大致如下：
 - 现在 A 尝试请求 B 的公网地址 `B_public_ip:B_public_port`，由于 B 的 NAT 已有记录，流量顺利通过 NAT 到达程序 B
 - B 发送给 A 的数据也同样，可以顺利到达 A
 
-#### 3. A 与 B 之间隔着三层以上的 NAT
+上述流程中的关键点在于，如何查出内网服务器被 NAT 分配的外部 IP 及端口，只要有了这两个信息，就可以通过 STUN 中介服务器交换这个信息，然后完成连接的建立了。
+家庭服务器通常都只有一个公网 IP，所以基本可以认为 IP 是固定的，因此最关键的问题就是「**如何知道 NAT 为会话分配的端口地址**」。
+
+对端口的限制严格程度跟 NAPT 的类型有关，**Full-cone 跟 Restricted cone 对端口都没有任何限制，所以上述流程肯定可以成功**；Port-Restricted Cone 问题也不大，被分配的端口
+
+一个穿越 Symmetric NATs 的 STUN 草案：[Symmetric NAT Traversal using STUN](https://tools.ietf.org/id/draft-takeda-symmetric-nat-traversal-00.txt)
+
+总的来说，只要两个 NAT 不都是 Symmetric NAT，穿越成功的概率就很大（）。
+而一旦中间存在 Symmetric NAT，由于 Symmetric NAT 为每个连接提供一个映射，使得转换后的公网地址和端口对不可预测，穿越基本就无法成功了。
+
+这种场景下 TURN 协议给出的解决方案是，fallback 到中继服务器策略作为兜底方案，保证连接能成功，但是这会给中继服务器带来很大压力，延迟等参数将不可避免地变差。
+
+##### 3. A 与 B 之间隔着三层以上的 NAT
 
 这种情况较为常见的有：
 
@@ -292,17 +329,25 @@ STUN/TURN 的 NAT 穿透流程大致如下：
 
 TBD 待续
 
-#### 4. 特殊穿越方案 - 服务器中继
+##### 4. 特殊穿越方案 - 服务器中继
 
 Relay 服务器中继是兼容性最佳，但是性能最差的方案，因为这个方案下，所有的 P2P 连接都需要经过中继服务器转发，在使用人数众多时这会给中继服务器造成很大的压力。
 
 因此这个方案通常是用于兜底的。
 
-### 5. 特定协议的自穿越技术
+### 特定协议的自穿越技术
 
-在所有方法中最复杂也最可靠的就是自己解决自己的问题。比如IKE和IPsec技术，在设计时就考虑了到如何穿越NAT的问题。因为这个协议是一个自加密的协议并且具有报文防修改的鉴别能力，其他通用方法爱莫能助。因为实际应用的NAT网关基本都是NAPT方式，所有通过传输层协议承载的报文可以顺利通过NAT。IKE和IPsec采用的方案就是用UDP在报文外面再加一层封装，而内部的报文就不再受到影响。IKE中还专门增加了NAT网关是否存在的检查能力以及绕开NAT网关检测IKE协议的方法。
+在所有方法中最复杂也最可靠的就是自己解决自己的问题。比如 IKE 和 IPsec 技术，在设计时就考虑了到如何穿越 NAT 的问题。因为这个协议是一个自加密的协议并且具有报文防修改的鉴别能力，其他通用方法爱莫能助。因为实际应用的 NAT 网关基本都是 NAPT 方式，所有通过传输层协议承载的报文可以顺利通过 NAT。IKE 和 IPsec 采用的方案就是用 UDP 在报文外面再加一层封装，而内部的报文就不再受到影响。IKE 中还专门增加了 NAT 网关是否存在的检查能力以及绕开 NAT 网关检测 IKE 协议的方法。
 
-TBD...
+### NAT ALG(Application Level Gateway)
+
+NAT ALG 是一种解决应用层协议（例如DNS、FTP）报文穿越 NAT 的技术，已经被 NAT 设备产商广泛采用，是 NAT 设备的必备功能。
+
+TLDR 一句话介绍：NAT ALG 通过识别协议，直接修改报文数据部分（payload）的 IP 地址和端口信息，解决某些应用协议的报文穿越 NAT 问题。NAT ALG 工作在 L3-L7 层。
+
+NAT ALG 的原理是利用带有 ALG 功能的 NAT 设备对特定应用层协议的支持，当设备检测到新的连接请求时，先根据传输层端口信息判断是否为已知应用类型。如果判断为已知应用，则调用该应用协议的 ALG 功能对报文的深层内容进行检查。若发现任何形式表达的 IP 地址和端口信息，NAT 都会将这些信息同步进行转换，并为这个新的连接建立一个附加的转换表项。当报文到达外网侧的目的主机时，应用层协议中携带的信息就是 NAT 设备转换后的IP地址和端口号，这样，就可以解决某些应用协议的报文穿越 NAT 问题。
+
+目前支持NAT ALG功能的协议包括：DNS、FTP、SIP、PPTP和RTSP。NAT ALG 在对这些特定应用层协议进行 NAT 转换时，通过 NAT 的状态信息来改变封装在 IP 报文数据部分的特定数据，最终使应用层协议可以跨越不同范围运行。
 
 ## 使用 Go 实验 NAT 穿透
 
@@ -394,6 +439,7 @@ AWS VPC 提供两种网关类型：
 
 - [What Is Network Address Translation (NAT)? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/NAT.html)
 - [[What Is STUN? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/STUN.html)
+- [NetEngine AR V300R019 配置指南-IP业务 - NAT 穿越 - 华为文档](https://support.huawei.com/enterprise/zh/doc/EDOC1100112409/fd829977#ZH-CN_CONCEPT_0227014768)
 - [P2P技术详解(一)：NAT详解——详细原理、P2P简介](http://www.52im.net/thread-50-1-1.html)
 - [P2P技术详解(二)：P2P中的NAT穿越(打洞)方案详解](http://www.52im.net/thread-542-1-1.html)
 - [P2P技术详解(三)：P2P中的NAT穿越(打洞)方案详解(进阶分析篇)](http://www.52im.net/thread-2872-1-1.html)
