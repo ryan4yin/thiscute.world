@@ -14,50 +14,55 @@ toc:
 ## 一、我正在研究这些
 
 - 学习极客时间的《深入剖析 Kuberntes》 - 53%
-- 极客时间《分布式协议与算法实战》 - 4%
+- 分布式系统与区块链
+  - 极客时间《分布式协议与算法实战》 - 4%
+  - 《区块链核心算法解析》
+  - 《Design Data-Intensive Applications》
+    - 暂时主要是看第九章：一致性与共识
+  - 《Distributed Systems, 3rd Edition, 2017》
+    - 主要是第八章错误容忍
+  - 《Distributed Algorithms, 2nd Edition, 2018》
+    - 主要是第十二章与第十三章，共识算法
 - 完成博客《Kubernetes 网络是如何工作的》
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
-- The ANSI C Programming Language
 
 ## 二、我今年还想搞搞这些
 
-- 学习使用 Envoy 以及 [Istio EnvoyFilter](https://istio.io/latest/docs/reference/config/networking/envoy-filter/)
-  - 分析 Envoy Sidecar 的动态配置、流量代理、监控指标等实现细节
-  - 重点关注：负载均衡策略、prometheus 指标插件、slow_start 模式、gzip 压缩、gRPC 支持、Zone Aware Load Balancing、基于 iptables/tproxy 的 outbound 流量代理
-  - [学习与测试各种负载均衡策略](https://github.com/ryan4yin/knowledge/blob/master/network/proxy%26server/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95.md)
-- 研究 K8s 集群的 Spot 实例风险规避手段：[AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler)
-- 研究 K8s 集群的节点利用率主动优化：在符合 PDB 等安全策略的情况下，合并利用率低的节点降低成本。
-- 研究 K8s 集群的 Pod 拓扑优化
-  - TopologySpreadConstraint
-  - [descheduler](https://github.com/kubernetes-sigs/descheduler)
-
 今年业余时间的技术侧学习计划（几个主题可以交替学习）：
 
-1. 把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）   
+1. （2 month）把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）   
    1. 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
    2. [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
    2. [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
    2. [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
    2. [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
-   3. 一个小 Web 项目 [xhup-club-api-go](https://github.com/coding-and-typing/xhup-club-api-go)
+   3. [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
    4. 学习极客时间的《容器实战高手课》
-   5. Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
-2. 分布式协议与区块链
-   1. 极客时间《分布式协议与算法实战》
-   1. 《区块链核心算法解析》
+2. （2 month）分布式协议与区块链
    1. 《Blockchain in Action》
-1. （预计用时 3w）学习 C 语言以及 rust 语言，同样也写写代码练练手
-   1. 极客时间《Rust 编程第一课》
-   2. 极客时间《深入 C 语言和程序运行原理》
-   3. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
-   4. 补充学习 gdb ld objdump objcopy
-2. （预计用时 16w）学习操作系统
-  - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
-4. 学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
-   1. 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
+3. （预计用时 1 month）学习 C 语言，同样也写写代码练练手
+   1. The ANSI C Programming Language
+   1. 极客时间《深入 C 语言和程序运行原理》
+   2. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
+   3. 补充学习 gdb ld objdump objcopy
+4. （预计用时 3 month）学习操作系统
+  - [The Linux Programming Interface](https://man7.org/tlpi/): 学习 Linux 的顶级书藉，据说内容组织比 APUE 对新手更友好些。
+  - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
+5. （预计用时 2 month）学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
+  - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
+    - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
 
-学习路径：实践类课程（比如极客时间专栏课）与系统化学习（CMU/MIT 公开课+教材）并重，可以同时或者交替进行。也并没有很严格的学习顺序要求，看兴趣吧。不过有一点是确定的，就是希望今年一年至少能系统化地学习完成 Go Rust 计算机网络 操作系统这四块知识。
+学习路径：实践类课程（比如极客时间专栏课）与系统化学习（CMU/MIT 公开课+教材）并重，可以同时或者交替进行。也并没有很严格的学习顺序要求，看兴趣吧。
+
+不过有一点是确定的，就是希望今年一年至少能系统化地学习如下几个方面的知识：
+
+- Kubernetes 原理、kubernetes apiserver/operator 编程
+- 分布式与 etcd、区块链
+  - 智能合约编程
+- Go 语言、Web 编程
+- 计算机网络：主要是熟悉 L3 网络层与 L4 传输层，结合 K8s 网络进行学习
+- 操作系统：学完 TLPR
 
 ## 三、今年的阅读进展
 
@@ -85,28 +90,16 @@ toc:
   - 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
   - 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
   - 补充学习 gdb ld objdump objcopy
-- 操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
-  - 核心课程：[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
-  - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
-  - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
-  - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的神书。学 OSTEP 遇到瓶颈时或可阅读。
-  - [The Linux Programming Interface](https://man7.org/tlpi/): 学习 Linux 的顶级书藉，比 APUE 可能会更亲民一些，可结合阅读。
-  - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
-  - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
-- 计算机网络
-  - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
-    - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
+- Rust 语言
+  -  极客时间《Rust 编程第一课》
 - 《Social Psychology, 13e, David Myers》
 - 《Principles Of Economics, 9e, N. Gregory Mankiw》
-- 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 《在峡江的转弯处 - 陈行甲人生笔记》
-- 《原则 - 应对变化中的世界秩序》
 - 《手把手教你读财报》
-- 《探路之役 - 1978-1922 年的中国经济改革》
-- 《筚路维艰 - 中国社会主义路径的五次选择》
-- 《凤凰项目：一个 IT 运维的传奇故事》
+- 《原则 - 应对变化中的世界秩序》
 - 《生命最后的读书会》
-- 《月光落在左手上》
+- 《凤凰项目：一个 IT 运维的传奇故事》
+
 
 ## 四、我的知识清单
 
@@ -149,7 +142,19 @@ toc:
   - 阅读 APISIX 源码 + Openresty
   - 深入学习 Nginx 及 epoll
 
-- [进阶]数据库、数据结构与算法（同样暂时感觉兴趣不大）
+- [进阶]操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
+  - 核心课程：[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
+  - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
+  - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
+  - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的神书。学 OSTEP 遇到瓶颈时或可阅读。
+  - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
+  - Linux eBPF: 目前相当火热的技术，极客时间买了《eBPF 核心技术与实战》，很期待。
+
+- 计算机网络
+  - 如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
+
+
+- [进阶]数据库、数据结构与算法（暂时感觉兴趣不大）
   - redis 底层
   - mysql/postgresql 底层
 
@@ -175,6 +180,7 @@ toc:
   - 《吾国与吾民 - 林语堂》
   - 《房思琪的初恋乐园》
   - 《可是我偏偏不喜欢》
+  - 《月光落在左手上》
 - 人文社科
   - 《爱的艺术》
   - 《亲密关系》
@@ -182,6 +188,8 @@ toc:
   - 《被讨厌的勇气》
   - 《邓小平时代》
   - 《论中国》
+  - 《探路之役 - 1978-1922 年的中国经济改革》
+  - 《筚路维艰 - 中国社会主义路径的五次选择》
   - 《人体简史》
   - 《科学革命的结构》
   - 《时间的秩序》
@@ -191,6 +199,7 @@ toc:
   - 《人生脚本》
   - 《投资中最简单的事》
   - 《债务危机 - 我的应对原则》
+  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 技术类
   - 《人月神话》
   - 《绩效使能：超越 OKR》
