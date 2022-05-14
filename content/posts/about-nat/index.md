@@ -136,6 +136,7 @@ Full-cone NAT 的特点如下：
 ##### 4. Symmetric NAT
 
 - 数据包流出：每个内部地址（iAddr:iPort）都映射到一个唯一的外部地址（eAddr:ePort）。同一个内部地址与不同的外部地址的通信，会使用不同的 NAT 端口。
+  - Symmetric NAT 与 Port-Restricted cone NAT 的区别就在上面的加粗部分，**Symmetric NAT 同一内部地址与不同外部地址通信，都会使用不同的 NAT 端口。这是 NAT 穿越最大的难点，它导致 Symmetric NAT 的端口难以预测**！
 - 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部地址（nAddr:nPort），可以给这个内部地址回消息。
 
 **对称 NAT 是最安全的一种 NAT 结构，限制最为严格，应该也是应用最广泛的 NAT 结构**。
