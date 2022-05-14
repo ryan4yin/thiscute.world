@@ -456,7 +456,7 @@ AWS VPC 提供两种网关类型：
 ## 参考
 
 - [What Is Network Address Translation (NAT)? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/NAT.html)
-- [[What Is STUN? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/STUN.html)
+- [What Is STUN? - Huawei Docs](https://info.support.huawei.com/info-finder/encyclopedia/en/STUN.html)
 - [NetEngine AR V300R019 配置指南-IP业务 - NAT 穿越 - 华为文档](https://support.huawei.com/enterprise/zh/doc/EDOC1100112409/fd829977#ZH-CN_CONCEPT_0227014768)
 - [P2P技术详解(一)：NAT详解——详细原理、P2P简介](http://www.52im.net/thread-50-1-1.html)
 - [P2P技术详解(二)：P2P中的NAT穿越(打洞)方案详解](http://www.52im.net/thread-542-1-1.html)
