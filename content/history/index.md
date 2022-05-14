@@ -9,6 +9,14 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-14
+
+- 阅读 [Web 3.0：穿越十年的讨论 - 知乎](https://www.zhihu.com/special/1452635344142909440) 系列内容，了解 Web 3.0
+- 阅读 [dcbuild3r/blockchain-development-guide](https://github.com/dcbuild3r/blockchain-development-guide)，了解如何进行区块链开发
+  - 我把这个 guide 完整过了一遍（后面关于自我提升、社会影响力啥的仅走马观花看了看），真的好长的一篇文章啊。
+  - 很多干货，现在我对搞区块链开发要学的东西，认知更清晰了。
+
+
 ### 2022-05-12
 
 - 迭代博客内容《关于 NAT 网关、NAT 穿越以及虚拟网络》- 90%
