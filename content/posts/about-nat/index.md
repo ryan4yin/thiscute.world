@@ -465,6 +465,5 @@ AWS VPC 提供两种网关类型：
 - [从DNAT到netfilter内核子系统，浅谈Linux的Full Cone NAT实现](https://blog.chionlab.moe/2018/02/09/full-cone-nat-with-linux/)
 - [Network address translation - wikipedia](https://en.wikipedia.org/wiki/Network_address_translation)
 - [WebRTC NAT Traversal Methods: A Case for Embedded TURN](https://www.liveswitch.io/blog/webrtc-nat-traversal-methods-a-case-for-embedded-turn)
-
-
+- [WireGuard 教程：使用 DNS-SD 进行 NAT-to-NAT 穿透 - 云原生实验室](https://icloudnative.io/posts/wireguard-endpoint-discovery-nat-traversal/)
 

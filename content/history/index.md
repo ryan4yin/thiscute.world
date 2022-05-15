@@ -9,6 +9,26 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-15
+
+- 了解到 2021 年是区块链投资大涨的一年，总投资涨了 7 倍多到了 252 亿美元，NFT 更离谱直接从 2020 年的 $37m 涨到 $4802m，感觉确实非常有前景
+  - 数据来源 [State Of Blockchain 2021 Report - CB Insights Research](https://www.cbinsights.com/research/report/blockchain-trends-2021/)
+- 分两次从币安转了 0.01 ETH + 0.05 ETH 到 Ethereum，币安收了固定手续费 0.0016 ETH * 2
+  - 购买 ENS 域名 thiscute.eth 10 年并设为我的主域名，花了约 0.027 ETH，算上 gas 费一共花了 0.0321 ETH 也就是 $67 刀
+- 给自己再次整了一个 mirror.xyz 账号，有了 ENS 就是爽。
+- 但是发现我现有的几个域名如 thiscute.world，其实可以直接通过 DNSSEC 导入到 ENS，感觉血亏 0.027 ETH...
+- 阅读郭宇最近写的[《Web3 DApp 最佳编程实践指南》](https://guoyu.mirror.xyz/RD-xkpoxasAU7x5MIJmiCX4gll3Cs0pAd5iM258S1Ek)
+  - 晚上去测核酸的路上还参与了他开的一个 twitter space 聊 web3 开发，发言的很多大佬，很多干货。
+  - 也明确了，目前区块链还处于战国时代，百家争鸣
+- 再次确认今年学习路线，精简与调整之前年度的计划（之前的计划太多了搞不定，而且当时没排区块链）
+  - 先学好分布式原理与算法这块
+  - 然后是 Kubernetes 编程，同时结合极客兔兔的几个教程深入学习 Go
+  - 深入学下 Go 语言底层
+  - 搞一搞区块链
+  - 学习 C 语言
+  - 通过 TLPR 学习 Linux 系统
+  - 通过 CS144 系统学习计算机网络
+
 ### 2022-05-14
 
 - 阅读 [Web 3.0：穿越十年的讨论 - 知乎](https://www.zhihu.com/special/1452635344142909440) 系列内容，了解 Web 3.0
