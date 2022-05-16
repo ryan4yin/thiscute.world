@@ -562,7 +562,7 @@ ip link set vxlan0 up
 ```shell
 # 创建 br0 并将 vxlan0 绑定上去
 ip link add br0 type bridge
-ip link set vxlan0 master bridge
+ip link set vxlan0 master br0
 ip link set vxlan0 up
 ip link set br0 up
 
