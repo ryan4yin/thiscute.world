@@ -646,7 +646,7 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 
 对于云上环境，直接接入云服务商提供的 Volume Provisioner 就 OK 了，方便省事而且足够可靠。
 
-而对于 bare-metal 环境，比较有名的应该是 rook-ceph，但是这个玩意部署复杂，维护难度又高，不适合用来测试学习，也不适合生产环境。
+而对于 bare-metal 环境，比较有名的应该是 rook-ceph，但是这个玩意部署复杂，维护难度又高，不适合用来测试学习。
 
 对于开发、测试环境，或者个人集群，建议使用：
 
