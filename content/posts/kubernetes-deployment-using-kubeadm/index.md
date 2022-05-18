@@ -41,7 +41,10 @@ kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很
 
 笔者为了学习 Kubernetes，下面采用官方的 kubeadm 进行部署（不要问为啥不二进制部署，问就是懒），容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.
 
-kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 拓扑（Stacked Etcd Topology）」和「外部 Etcd 拓扑（External Etcd Topology）」，简单起见，本文使用第一种「堆叠 Etcd 拓扑」结构，创建一个三 master 的高可用集群。
+kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 拓扑（Stacked Etcd Topology）」和「外部 Etcd 拓扑（External Etcd Topology）」。
+「堆叠 Etcd 拓扑」是指 Etcd 跟 Kubernetes Master 的其他组件部署在同一节点上，而「外部 Etcd 拓扑（External Etcd Topology）」则是指 Etcd 单独部署，与 Kubernetes Master 分开。
+
+简单起见，本文使用「堆叠 Etcd 拓扑」结构，创建一个 3 master 的高可用集群。
 
 参考：
 - [Kubernetes Docs - Installing kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
@@ -52,13 +55,25 @@ kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 
 
 本文行文未考虑国内网络环境，但是 Kubernetes 用到的很多镜像都在 gcr.io 上，在国内访问会有困难。
 
-这里提供两个手段：
+如果对可靠性要求高，最好是自建私有镜像仓库，把镜像推送到私有仓库。可以通过如下命令列出所有 kubeadm 需要用到的镜像地址：
+
+```shell
+❯ kubeadm config images list --kubernetes-version v1.22.1
+k8s.gcr.io/kube-apiserver:v1.22.1
+k8s.gcr.io/kube-controller-manager:v1.22.1
+k8s.gcr.io/kube-scheduler:v1.22.1
+k8s.gcr.io/kube-proxy:v1.22.1
+k8s.gcr.io/pause:3.5
+k8s.gcr.io/etcd:3.5.0-0
+k8s.gcr.io/coredns/coredns:v1.8.4
+```
+
+这里提供三个解决办法：
 
 - 在家庭路由器上整个科学代理，实现全局科学上网。（我就是这么干的）
 - 使用 [liangyuanpeng](https://github.com/liangyuanpeng) 大佬在评论区提供的 gcr 国内镜像地址，这需要进行如下替换：
   - k8s.gcr.io---> lank8s.cn
-  - gcr.io---> gcr.lank8s.cn
-
+- 自己维护一个国内镜像仓库（或私有镜像仓库如 harbor），使用 `skopeo` 等工具或脚本将上述镜像列表拷贝到你的私有仓库
 
 ## 1. 节点的环境准备
 
@@ -396,28 +411,7 @@ kubectl certificate approve csr-cd22c csr-wjrnr csr-sjq42 csr-xtv8f csr-f2dsf cs
 
 ### 5.1 常见问题
 
-#### 5.1.1 使用国内镜像源
-
-如果你没有科学环境，kubeadm 默认的镜像仓库在国内是拉不了的。
-如果对可靠性要求高，最好是自建私有镜像仓库，把镜像推送到私有仓库。
-
-可以通过如下命令列出所有需要用到的镜像地址：
-
-```shell
-❯ kubeadm config images list --kubernetes-version v1.22.1
-k8s.gcr.io/kube-apiserver:v1.22.1
-k8s.gcr.io/kube-controller-manager:v1.22.1
-k8s.gcr.io/kube-scheduler:v1.22.1
-k8s.gcr.io/kube-proxy:v1.22.1
-k8s.gcr.io/pause:3.5
-k8s.gcr.io/etcd:3.5.0-0
-k8s.gcr.io/coredns/coredns:v1.8.4
-```
-
-使用 `skopeo` 等工具或脚本将上述镜像拷贝到你的私有仓库，或者图方便（测试环境）也可以考虑网上找找别人同步好的镜像地址。将镜像地址添加到 `kubeadm-config.yaml` 中再部署。
-
-
-#### 5.1.2 重置集群配置
+#### 5.1.1 重置集群配置
 
 创建集群的过程中出现任何问题，都可以通过在所有节点上运行 `kubeadm reset` 来还原配置，然后重新走 kubeadm 的集群创建流程。
 
