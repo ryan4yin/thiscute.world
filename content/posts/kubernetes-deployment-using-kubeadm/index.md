@@ -38,8 +38,11 @@ kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很
    1. 使用难度：中等
    2. 支持 airgap 离线部署，但是以前我试用过是有坑，现在不知道咋样了
    3. 底层使用了 kubeadm 部署集群
+5. [sealos](https://github.com/labring/sealos): 也很方便，一行命令部署
+6. 其他社区部署方案
+7. 自己写脚本，使用各组件的二进制文件进行部署。
 
-笔者为了学习 Kubernetes，下面采用官方的 kubeadm 进行部署（不要问为啥不二进制部署，问就是懒），容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.
+笔者为了学习 Kubernetes，下面采用官方的 kubeadm 进行部署，容器运行时使用 containerd，网络插件则使用目前最潮的基于 eBPF 的 Cilium.
 
 kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 拓扑（Stacked Etcd Topology）」和「外部 Etcd 拓扑（External Etcd Topology）」。
 「堆叠 Etcd 拓扑」是指 Etcd 跟 Kubernetes Master 的其他组件部署在同一节点上，而「外部 Etcd 拓扑（External Etcd Topology）」则是指 Etcd 单独部署，与 Kubernetes Master 分开。
