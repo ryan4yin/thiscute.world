@@ -45,7 +45,7 @@ toc:
    1. 极客时间《深入 C 语言和程序运行原理》
    2. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
    3. 补充学习 gdb ld objdump objcopy
-4. （预计用时 3 month）学习操作系统
+4. （预计用时 3 month）学习 Linux
   - 极客时间 《Linux 内核技术实战课》
   - 极客时间 《Linux 性能优化实战》
   - [The Linux Programming Interface](https://man7.org/tlpi/): 学习 Linux 的顶级书藉，据说内容组织比 APUE 对新手更友好些。
