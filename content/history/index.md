@@ -9,6 +9,51 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-19
+
+- 学习极客时间的《深入剖析 Kuberntes》 - 87%
+  - 简单学习了 CRD + Controller 的编写，包含 Informer 机制等。不过内容太老了，还是之后看 Programming Kubernetes 再详细学吧。
+  - K8s API 资源的组织方式为 `api/<apiGroup>/<GroupVersion>/<Resource>`，yaml 中的 `apiVersion` 为 `<apiGroup>/<GroupVersion>`，而 `Kind` 的值就是 `<Resouce>`
+    - Pod/Node/configmap 等几个核心资源的 `<apiGroup>` 为空，因此可以直接省略掉
+    - 其他核心资源都是以功能分类的，都有 `<apiGroup>` 属性
+  - RBAC 是以 Role 为授权的基本单位，`Role` 的规则会指定用户对不同 apiGroups/Resources/resourceNames 可以执行哪些动作 `verbs`
+    - apiGroups/Resources 属性跟前面介绍的 API 资源的组织方式是完全对应的，但是 Resources 需要使用复数形式，如 `pods`/`configmaps`/`nodes`
+    - 如果是核心资源如 Pod/Node，则 `apiGroups` 应该设为空字符串 `apiGroups: [""]`
+  - RoleBinding/ClusterRoleBinding 有两个部分：`subjects` 被作用者，以及 `roleRef`，用于声明这两者之间的绑定关系
+    - `subjects` 被作用者可以是集群内的 ServiceAccount，也可以是外部定义的对象如 `User`
+    - `User` 在集群中是一个不存在的对象，它的认证需要一台外部系统
+  - RBAC 中还存在 `Groups` 用户组的概念
+    - 比如任意名字空间中所有 serviceaccount 的用户组，名称为 `system:serviceaccounts:<Namespace名字>`
+    - 每个 serviceAccount 的全名为 `system:serviceaccount:<Namespace名字>:<ServiceAccount名字>`
+    - 我们可以在 subjects 中填写一个用户组，为整个用户组内所有的 ServiceAccount 授权
+  - Kubernetes 中默认已经内置了多个 clusterrole，可通过 `kubectl get clusterroles` 查看
+    - 开发测试时，我们可能会经常用的一个 clusterrole 就是 `cluster-admin`，这个 role 拥有整个集群的最高权限，相当于 root，非开发测试环境一定要谨慎使用它。
+    - `view`/`edit` 这两个 clusterrole 分别拥有整个集群的查看/编辑权限
+  - Kubernetes 存储
+    - 存储的两个绑定阶段：
+      - 第一阶段（AttachDetachController，运行在 kube-controller-manager 中），K8s 将 nodeName 传递给存储插件，插件将数据卷 attach 到该节点上
+      - 第二阶段（VolumeManagerReconciler，运行在 kubelet 中），K8s 将 dir 传递给存储插件，插件将数据卷挂载到该目录下（如果是新数据卷还会提前格式化该卷）。
+    - 云上 K8s 存储的一个缺陷：无法跨可用区调度。如果你通过 affinity 强制把一个 p8s 调度到别的可用区，因为它的数据卷不在目标可用区，这会导致它无法被调度，卡在 Pending 状态。
+    - 学习了已被废弃的 FlexVolume 的实现方式，以及它的替代者 CSI
+    - 以 [csi-digitalocean](https://github.com/digitalocean/csi-digitalocean) 为例，学习了一个 CSI 插件的实现原理
+  - Kubernetes 调度
+    - 根据容器的 requests/limits 参数，k8s 将 Pod 分为三种类型：BestEffort Burstable Guaranteed
+    - 在因为资源不足而触发驱逐 Evection 时，会按 BestEffort => Burstable => Guaranteed 的顺序进行驱逐
+    - 当 Pod 中所有容器的 requests/limits 都相等的时候，Pod 的 QoS 等级为 Guaranteed
+      - **如果这时容器的 cpu requests 为整数值，K8s 会自动为容器进行绑核操作，这可以大幅提升容器性能，常用在在线应用场景下**
+      - 疑问：如果 istio sidecar requests/limits 不相等，但是应用容器是设的相等的，这种情况下是否会执行绑核操作呢？
+    - Pod 的优先级与抢占机制
+      - 首先创建不同优先级的 PriorityClass，然后为 Pod 指定 priorityClassName
+      - 调度失败的 Pod 会被放到 unschedulableQ 中，这会触发调度器为这些调度失败的 Pod 寻找牺牲者的逻辑
+      - 基于优先级与抢占机制，创建一些优先级为 -1 的占位 Pod，可以实现为整个集群预留一部分资源。这种方法被称为[「Pod 空泡」资源预留法](https://aws.amazon.com/cn/blogs/china/improve-eks-elastic-scaling-efficiency-through-overprovisioning/)。
+    - Device Plugin: 负责管理集群中的所有硬件加速设备如 GPU/FPGA 等
+      - Device Plugin 只能基于「数量」进行调度，无法进行更复杂的异构调度策略，比如「运行在算力最强的节点上」
+    - 日志与监控：对我来讲，没什么新东西
+    - 容器运行时
+      - gVisor - 在用户态重新实现了一遍 Linux ABI 接口、网络协议栈，启动速度跟资源占用小。但是工程量大，维护难度大，对于系统调用密集的应用，性能会急剧下降。
+      - kata containers: 据说是性能比较差，运行了一个真正的 Linux 内核与 QEMU 虚拟设备实现强隔离
+      - aws firecrackers: 跟 kata containers 的思路一致，但是使用 rust 实现了自己的 vmm，性能更高
+
 ### 2022-05-15
 
 - 了解到 2021 年是区块链投资大涨的一年，总投资涨了 7 倍多到了 252 亿美元，NFT 更离谱直接从 2020 年的 $37m 涨到 $4802m，感觉确实非常有前景
