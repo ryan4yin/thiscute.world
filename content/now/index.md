@@ -38,7 +38,6 @@ toc:
    2. [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
    2. [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
    3. [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
-   4. 学习极客时间的《容器实战高手课》
 2. （2 month）分布式协议与区块链
    1. 《Blockchain in Action》
 3. （预计用时 1 month）学习 C 语言，同样也写写代码练练手
