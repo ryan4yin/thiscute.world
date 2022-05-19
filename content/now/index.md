@@ -51,6 +51,7 @@ toc:
   - [The Linux Programming Interface](https://man7.org/tlpi/): 学习 Linux 的顶级书藉，据说内容组织比 APUE 对新手更友好些。
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
   - 极客时间《容器实战高手课》
+  - 极客时间《eBPF 核心技术与实战》
 5. （预计用时 2 month）学习计算机网络，看书、学习 CS144 课程、手动实现 TCP/IP 协议栈
   - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
     - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
