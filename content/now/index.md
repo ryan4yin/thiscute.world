@@ -13,7 +13,6 @@ toc:
 
 ## 一、我正在研究这些
 
-- 学习极客时间的《深入剖析 Kuberntes》 - 87%
 - 分布式系统与区块链
   - 极客时间《分布式协议与算法实战》 - 4%
   - 《区块链核心算法解析》
@@ -23,9 +22,8 @@ toc:
     - 主要是第八章错误容忍
   - 《Distributed Algorithms, 2nd Edition, 2018》
     - 主要是第十二章与第十三章，共识算法
-- 完成博客《Kubernetes 网络是如何工作的》
-- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
+- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 
 ## 二、我今年还想搞搞这些
 
