@@ -32,7 +32,7 @@ toc:
    2. [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
    2. [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
    3. [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
-2. （2 month）分布式协议与区块链
+2. （1 month）分布式协议与区块链
    1. 《Blockchain in Action》
    2. 《Distributed Systems, 3rd Edition, 2017》
    3. 《Distributed Algorithms, 2nd Edition, 2018》
