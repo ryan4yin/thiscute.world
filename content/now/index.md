@@ -18,10 +18,6 @@ toc:
   - 《区块链核心算法解析》
   - 《Design Data-Intensive Applications》
     - 暂时主要是看第九章：一致性与共识
-  - 《Distributed Systems, 3rd Edition, 2017》
-    - 主要是第八章错误容忍
-  - 《Distributed Algorithms, 2nd Edition, 2018》
-    - 主要是第十二章与第十三章，共识算法
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 
@@ -38,11 +34,13 @@ toc:
    3. [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
 2. （2 month）分布式协议与区块链
    1. 《Blockchain in Action》
+   2. 《Distributed Systems, 3rd Edition, 2017》
+   3. 《Distributed Algorithms, 2nd Edition, 2018》
 3. （预计用时 1 month）学习 C 语言，同样也写写代码练练手
    1. The ANSI C Programming Language
-   1. 极客时间《深入 C 语言和程序运行原理》
-   2. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
-   3. 补充学习 gdb ld objdump objcopy
+   2. 极客时间《深入 C 语言和程序运行原理》
+   3. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
+   4. 补充学习 gdb ld objdump objcopy
 4. （预计用时 3 month）学习 Linux
   - 极客时间 《Linux 内核技术实战课》
   - 极客时间 《Linux 性能优化实战》
