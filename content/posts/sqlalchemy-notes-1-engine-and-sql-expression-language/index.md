@@ -15,7 +15,7 @@ categories: ["技术"]
 
 SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下：
 
-![](/images/sqlalchemy-notes/sqlalchemy-arch.webp "SQLAlchemy 层次结构")
+{{< figure src="/images/sqlalchemy-notes/sqlalchemy-arch.webp" title="SQLAlchemy 层次结构" >}}
 
 其中最常用的组件，应该是 **ORM** 和 **SQL 表达式语言**，这两者既可以独立使用，也能结合使用。
 
