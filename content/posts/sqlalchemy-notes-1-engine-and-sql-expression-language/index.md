@@ -123,7 +123,7 @@ connection.execute(t, {"alarm_time_param": date_param})
 ```
 
 1. 可以很方便地转换 Result 中列的类型
-```
+```python
 stmt = text("SELECT * FROM table",
             # 使用 typemap 指定将 id 列映射为 Integer 类型，name 映射为 String 类型
             typemap={'id': Integer, 'name': String},
@@ -286,6 +286,7 @@ res = conn.execute(s1)
 ```
 
 查询返回的是 ResultProxy 对象，这是 SQLAlchemy 对 Python DB-API 的 cursor 的一个封装类，要从中获取结果行，主要有下列几个方法：
+
 ```python
 row1 = result.fetchone()  # 对应 cursor.fetchone()
 row2 = result.fetchall()  # 对应 cursor.fetchall()
