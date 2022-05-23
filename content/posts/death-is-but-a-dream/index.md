@@ -66,3 +66,4 @@ comment:
 - [《在生命的尽头拥抱你-临终关怀医生手记》](https://book.douban.com/subject/35435120/)
 - [Death Is But A Dream (2021) Official trailer](https://www.youtube.com/watch?v=vh-nacCekR4)
 - [I See Dead People: Dreams and Visions of the Dying | Dr. Christopher Kerr | TEDxBuffalo](https://www.youtube.com/watch?v=rbnBe-vXGQM)
+- [End-of-Life Experiences - Dr. Christopher Kerr](https://www.drchristopherkerr.com/tools)
