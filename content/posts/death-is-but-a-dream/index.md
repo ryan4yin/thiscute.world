@@ -63,7 +63,7 @@ comment:
 
 高三时曾经看过一本超级喜欢的励志书，这么多年来我一直带在身边，名字叫《这一生再也不会有的奇遇》。书的扉页只有一句话：「当明天再也不是无限，你还会像今天一样度过你的人生吗？」
 
-{{< figure src="/images/death-is-but-a-dream/an-adventure-that-will-never-happen-again-in-this-life_cover.webp" title="《这一生再也不会有的奇遇》已陪我度过了数个春秋" >}}
+{{< figure src="/images/death-is-but-a-dream/an-adventure-that-will-never-happen-again-in-this-life_cover.webp" title="《这一生再也不会有的奇遇》已陪我度过了七八个春秋" >}}
 
 {{< figure src="/images/death-is-but-a-dream/an-adventure-that-will-never-happen-again-in-this-life_title-page.webp" title="当明天再也不是无限" >}}
 
