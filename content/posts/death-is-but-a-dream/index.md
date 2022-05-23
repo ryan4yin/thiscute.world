@@ -83,3 +83,4 @@ comment:
 - [I See Dead People: Dreams and Visions of the Dying | Dr. Christopher Kerr | TEDxBuffalo](https://www.youtube.com/watch?v=rbnBe-vXGQM)
 - [End-of-Life Experiences - Dr. Christopher Kerr](https://www.drchristopherkerr.com/tools)
 - [有谁看过《刺猬的优雅》这本书吗？如何？ - 於清樂](https://www.zhihu.com/question/21174281/answer/122969510)
+- [有什么人生中值得一读的小说或名著？（最好现代作家的书）？ - 於清樂](https://www.zhihu.com/question/52078970/answer/128900485)
