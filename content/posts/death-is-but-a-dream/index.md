@@ -66,9 +66,15 @@ comment:
 
 {{< figure src="/images/death-is-but-a-dream/an-adventure-that-will-never-happen-again-in-this-life_title-page.webp" title="当明天再也不是无限" >}}
 
-卡文了，总之先把书看完吧，未完待续...
+写到这儿，我又想起我高中时还看过一本书，忘记是不是同学推荐的了，书名叫《刺猬的优雅》，书中有几句话我印象深刻，放在这篇文章里也挺应景的：
 
->我想我如果死去，就化作一捧骨灰，但不要洒向大海，最好是遍洒家乡的山水之间，与我怀念的山山水水相伴。
+>话又说回来，不能因为有想死的心，往后就要像烂菜帮一样的过日子，甚至应该完全相反。
+
+>重要的不是死亡，而是在死亡的那一刻我们在做什么。我在做什么呢？我曾遇到一个人，而且我正准备爱上他。
+
+我对这本书的评价是「一本哲学教授写的谈论人生之意义的文学书，文笔优美，富于哲思，虽算不上完美，仍值得一读。」对了这本书还出了个电影，评价也很好。
+
+未完待续...
 
 ## 参考
 
@@ -76,3 +82,4 @@ comment:
 - [Death Is But A Dream (2021) Official trailer](https://www.youtube.com/watch?v=vh-nacCekR4)
 - [I See Dead People: Dreams and Visions of the Dying | Dr. Christopher Kerr | TEDxBuffalo](https://www.youtube.com/watch?v=rbnBe-vXGQM)
 - [End-of-Life Experiences - Dr. Christopher Kerr](https://www.drchristopherkerr.com/tools)
+- [有谁看过《刺猬的优雅》这本书吗？如何？ - 於清樂](https://www.zhihu.com/question/21174281/answer/122969510)
