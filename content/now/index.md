@@ -13,17 +13,14 @@ toc:
 
 ## 一、我正在研究这些
 
-- 分布式系统与区块链
-  - 极客时间《分布式协议与算法实战》 - 36%
-  - 《区块链核心算法解析》
-  - 《Design Data-Intensive Applications》
-    - 暂时主要是看第九章：一致性与共识
+- 极客时间《分布式协议与算法实战》 - 40%
+- [动手学深度学习（Dive into Deep Learning，D2L）](https://github.com/d2l-ai/d2l-zh)
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 
 ## 二、我今年还想搞搞这些
 
-今年业余时间的技术侧学习计划（几个主题可以交替学习）：
+今年业余时间的技术侧学习计划（不要求按顺序，几个主题可以交替学习）：
 
 1. （2 month）把 Go 的几本书都看了，同时做几个项目练练手，学学 Kubernetes 底层（预计用时 6w）   
    1. 《Go 学习笔记（第六版下卷）》：基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
@@ -33,10 +30,12 @@ toc:
    2. [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
    3. [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
 2. （1 month）分布式协议与区块链
-   1. 《Blockchain in Action》
-   2. 《Distributed Systems, 3rd Edition, 2017》
-   3. 《Distributed Algorithms, 2nd Edition, 2018》
-3. （预计用时 1 month）学习 C 语言，同样也写写代码练练手
+   1. 《区块链核心算法解析》
+   2. 《Design Data-Intensive Applications》
+   3. 《Blockchain in Action》
+   4. 《Distributed Systems, 3rd Edition, 2017》
+   5. 《Distributed Algorithms, 2nd Edition, 2018》
+3. （1 month）学习 C 语言，同样也写写代码练练手
    1. The ANSI C Programming Language
    2. 极客时间《深入 C 语言和程序运行原理》
    3. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
@@ -58,9 +57,11 @@ toc:
 不过有一点是确定的，就是希望今年一年至少能系统化地学习如下几个方面的知识：
 
 - Kubernetes 原理、kubernetes apiserver/operator 编程
-- 分布式与 etcd、区块链
-  - 智能合约编程
-- Go 语言、Web 编程
+- Go 语言 Web 编程
+- 分布式与 Etcd
+- 只要求入门，写点简单的小玩具
+  - 机器学习与深度学习
+  - 区块链与智能合约编程
 - 计算机网络：主要是熟悉 L3 网络层与 L4 传输层，结合 K8s 网络进行学习
 - Linux：学完 TLPR，能独立进行 Linux 性能调优与性能问题排查
 
@@ -158,13 +159,6 @@ toc:
   - redis 底层
   - mysql/postgresql 底层
 
-- 机器学习
-  - [machine-learning - coursera](https://www.coursera.org/learn/machine-learning): 吴恩达教授的网红机器学习课程，火爆多年了，内容对小白很友好。
-  - [Machine Learning for Beginners - MicroSoft](https://github.com/microsoft/ML-For-Beginners): ML 入门课程，做得比较有趣。
-  - [100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code): ML 入门资料
-- 深度学习（需要机器学习基础？）
-  - [deep-learning - coursera](https://www.coursera.org/specializations/deep-learning): 仍然是吴恩达教授出品，圣经级别的机器学习课程，火爆多年了，内容对小白很友好。
-
 ## 五、我的备选书单
 
 如下是我目前想读的书单，如果决定读，就把对应的书移到「计划读」中。
@@ -224,10 +218,11 @@ toc:
 
 ## 其他 ideas
 
-- 我看到 github 上 [gopala-kr/10-weeks](https://github.com/gopala-kr/10-weeks) 这个项目，作者进行了一项挑战——每周学习一个新技术栈，目标是在一周内理解该技术栈各项热词的含义并列出大纲，使用该技术构建一个简单的程序，并写一篇博客。我觉得我也可以试试，不过可以把难度降低一些——**利用业余时间，每两个月学习一门新技术，并达成与 gopala-kr 的目标**。
+- 我看到 github 上 [gopala-kr/10-weeks](https://github.com/gopala-kr/10-weeks) 这个项目，作者进行了一项挑战——每周学习一个新技术栈，目标是在一周内理解该技术栈各项热词的含义并列出大纲，使用该技术构建一个简单的程序，并写一篇博客。我觉得我也可以试试，不过可以把难度降低一些——**利用业余时间，每两个月学习一门新技术，并达成与 gopala-kr 类似的目标**。
 - 其他感兴趣的
   - 前端：Preact+Css
   - 3D 建模与渲染：Blender、Unreal Engine 5、C++、taichi
   - 音乐：乐理、Synthesizer V、Reaper、midi 键盘
+  - 其他：利用深度学习进行歌声合成、图片分辨率修复（超分辨率）、以及其他好玩的玩法
 
 
