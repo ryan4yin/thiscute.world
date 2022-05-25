@@ -14,7 +14,7 @@ toc:
 ## 一、我正在研究这些
 
 - 极客时间《分布式协议与算法实战》 - 40%
-- [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh)
+- [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 7.8%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
 
