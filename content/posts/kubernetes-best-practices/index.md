@@ -41,7 +41,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-app-v3
-  namespace: prod
+  namespace: prod  # 建议按业务逻辑划分名字空间，prod 仅为示例
   labels:
     app: my-app
 spec:
@@ -119,7 +119,7 @@ spec:
         seccompProfile:  # security compute mode
           type: RuntimeDefault
       nodeSelector:
-        eks.amazonaws.com/nodegroup: common  # 使用专用节点组，如果希望使用多个节点组，可改用节点亲和性
+        nodegroup: common  # 使用专用节点组，如果希望使用多个节点组，可改用节点亲和性
       volumes:
       - name: tmp-dir
         emptyDir: {}
@@ -233,8 +233,7 @@ spec:
 2. `preStop` 钩子被执行
    1. 它的执行阶段很好理解：在容器被 stop 之前执行
    2. 它可以是一个命令，或者一个对 Pod 中容器的 http 调用
-   3. 如果你的程序在收到 SIGTERM 信号时，无法优雅退出，就可以考虑使用 `preStop`
-   4. 如果让程序本身支持优雅退出比较麻烦的话，用 `preStop` 实现优雅退出是一个非常好的方式
+   4. 如果在收到 SIGTERM 信号时，无法优雅退出，要支持优雅退出比较麻烦的话，用 `preStop` 实现优雅退出是一个非常好的方式
    5. preStop 的定义位置：<https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2515>
 3. `preStop` 执行完毕后，SIGTERM 信号被发送给 Pod 中的所有容器
 4. 继续等待，直到容器停止，或者超时 `spec.terminationGracePeriodSeconds`，这个值默认为 30s
@@ -372,6 +371,7 @@ HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其
 即使改用「Pod 的 CPU 用量」而非百分比来进行扩缩容，也解决不了这个问题。
 
 解决方法：
+- 最佳解决方案：使用绝对度量指标，而非百分比。
 - 方法一：针对每个服务的 CPU 使用情况，为每个服务的 sidecar 设置不同的 requests/limits.
   - 感觉这个方案太麻烦了
 - 方法二：使用 KEDA 等第三方组件，获取到应用程序的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容
@@ -467,7 +467,7 @@ HPA 的扩缩容算法为：
 
 #### 4.2. HPA 扩缩容过于敏感，导致 Pod 数量震荡
 
-通常来讲，EKS 上绝大部分负载都应该选择使用 CPU 进行扩缩容。因为 CPU 通常能很好的反映服务的负载情况
+通常来讲，K8s 上绝大部分负载都应该选择使用 CPU 进行扩缩容。因为 CPU 通常能很好的反映服务的负载情况
 
 但是有些服务会存在其他影响 CPU 使用率的因素，导致使用 CPU 扩缩容变得不那么可靠，比如：
 - 有些 Java 服务堆内存设得很大，GC pause 也设得比较长，因此内存 GC 会造成 CPU 间歇性飙升，CPU 监控会有大量的尖峰。
@@ -946,6 +946,10 @@ seccomp 和 seccomp-bpf 允许对系统调用进行过滤，可以防止用户�
 
 - [Seccomp: What Can It Do For You? - Justin Cormack, Docker](https://www.youtube.com/watch?v=Ro4QRx7VPsY&list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut$index=22)
 
+## 六、隔离性
+
+- 推荐按业务线或者业务团队进行名字空间划分，方便对每个业务线/业务团队分别进行资源限制
+- 推荐使用 network policy 对服务实施强力的网络管控，避免长期发展过程中，业务服务之间出现混乱的跨业务线相互调用关系，也避免服务被黑后，往未知地址发送数据。
 
 ## 其他问题
 
