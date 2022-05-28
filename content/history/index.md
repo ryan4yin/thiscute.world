@@ -9,6 +9,14 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-28
+
+- [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 15%
+  - 学习第二章预备知识
+    - 通过搜索 cheat sheet + 《Python for Data Analysis》学了下 Numpy/Pandas/Matplotlib 的使用方法
+    - 复习线性代数、微积分、概率论
+
+
 ### 2022-05-24
 
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 7.8%
