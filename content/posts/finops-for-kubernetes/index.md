@@ -8,7 +8,7 @@ resources:
 - name: "featured-image"
   src: "finops-for-kubernetes.webp"
 
-tags: ["云原生", "Kubernetes", "FinOps", "成本分析", "Kubecost"]
+tags: ["云原生", "Kubernetes", "FinOps", "成本分析", "Kubecost", "MultiCloud", "多云", "多云财务管控"]
 categories: ["技术"]
 
 lightgallery: false
@@ -138,6 +138,11 @@ Kubernetes 提供了三种资源分配的方式，即服务质量 QoS，不同�
 - 成本报表：将最终的数据制作成符合各类人员需求的可视化图表，按需求还可以考虑添加交互式特征
   - 可使用 Grafana/Google DataStudio 等报表工具
 
+此外这样一个跨云的成本管控平台也不一定需要完全自己来做，已经有很多公司看到了这块的前景，做出了现成的方案，可以看看 Gartner 的如下报告：
+
+- [Cloud Management Tooling Reviews and Ratings - Gartner](https://www.gartner.com/reviews/market/cloud-management-tooling)
+
+多云场景下其实要考虑的还有很多，目前多云网络（multicloud networking）、多云财务（multicloud finops）、多云应用管理（multicloud application management）领域的需求越来越强劲，相关产品也越来越多，有需要可以自行研究。
 
 ## Kubernetes 成本分析
 
