@@ -23,3 +23,7 @@ comment:
 
 {{< music server="netease" type="playlist" id="901077788" >}}
 
+音乐插件出了点毛病，直接上链接了：
+
+<https://music.163.com/#/playlist?id=901077788>
+
