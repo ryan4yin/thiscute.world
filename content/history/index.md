@@ -9,6 +9,19 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-05-30
+
+- 研究云上 L4/L7 层网关的开源/商业方案
+  - 如 L4 的 dpvs/katran 与 L7 的 APISIX/Traefik/Contour，以及 AWS Gateway LoadBalancer
+- 研究多云 k8s 网络方案
+  - 以 karmada 为代表的 MultiClusterIngress/ClusterPropagationPolicy，通过 CRD 提供 7 层负载均衡。
+    - 但是猜测实际都要过一个中继服务器，可能会造成额外的流量成本。
+  - 以 Istio 为代表的跨集群服务网格
+  - 仅在网关层实现多集群之间的负载均衡，即仅实现 MultiClusterIngress，而且要考虑到跨区流量问题。
+    - 很多场景下我们可能并不需要打通多集群之间的网络，只需要方便地支持多集群应用的部署，与在网关层进行多集群间的负载均衡就行。
+- 研究各跨云网络方案，L4/L7 负载均衡、SD-WAN、WireGuard 等
+- 研究跨云应用部署方案，如 karmada/kubevela
+
 ### 2022-05-29
 
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
