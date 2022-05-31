@@ -1,165 +1,36 @@
-<!doctype html><html lang=zh-cn>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=robots content="noodp">
-<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
-<title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析 - This Cute World</title><meta name=description content="This Cute World"><meta property="og:title" content="使用 tcpdump 和 Wireshark 进行远程实时抓包分析">
-<meta property="og:description" content="抓包分析 抓包分析工具主要有两种： http/https 网络代理工具：mitmproxy/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/ht">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://thiscute.world/posts/tcpdump-and-wireshark/"><meta property="og:image" content="https://thiscute.world/posts/tcpdump-and-wireshark/wireshark.jpg"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2020-05-28T16:20:26+08:00">
-<meta property="article:modified_time" content="2020-05-28T16:20:26+08:00">
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://thiscute.world/posts/tcpdump-and-wireshark/wireshark.jpg">
-<meta name=twitter:title content="使用 tcpdump 和 Wireshark 进行远程实时抓包分析">
-<meta name=twitter:description content="抓包分析 抓包分析工具主要有两种： http/https 网络代理工具：mitmproxy/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/ht">
-<meta name=application-name content="This Cute World">
-<meta name=apple-mobile-web-app-title content="This Cute World"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://thiscute.world/posts/tcpdump-and-wireshark/><link rel=prev href=https://thiscute.world/posts/use-istio-for-jwt-auth/><link rel=next href=https://thiscute.world/posts/base64-encoding-is-not-unique/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"使用 tcpdump 和 Wireshark 进行远程实时抓包分析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/tcpdump-and-wireshark\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/tcpdump-and-wireshark\/wireshark.jpg","width":800,"height":240}],"genre":"posts","keywords":"网络, Wireshark, tcpdump, 抓包分析","wordcount":1698,"url":"https:\/\/thiscute.world\/posts\/tcpdump-and-wireshark\/","datePublished":"2020-05-28T16:20:26+08:00","dateModified":"2020-05-28T16:20:26+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head>
-<body header-desktop=fixed header-mobile=auto><script type=text/javascript>(''==='true'&&window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
-<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="This Cute World"><span id=id-1 class=typeit></span></a>
-</div>
-<div class=menu>
-<div class=menu-inner><a class=menu-item href=/statistics/> 阅读排行 </a><a class=menu-item href=/categories/%E6%8A%80%E6%9C%AF/> 技术 </a><a class=menu-item href=/categories/%E9%9A%8F%E7%AC%94/> 随笔 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/friends/> 朋友们 </a><a class=menu-item href=/now/> 此刻 </a><a class=menu-item href=/about/> 关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/posts/tcpdump-and-wireshark/ selected>Simplified Chinese</option></select>
-</a><span class="menu-item search" id=search-desktop>
-<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-desktop>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title class=pjax-title>使用 tcpdump 和 Wireshark 进行远程实时抓包分析 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="使用 tcpdump 和 Wireshark 进行远程实时抓包分析"><meta property="og:description" content="抓包分析抓包分析工具主要有两种： http/https 网络代理工具：mitmproxy/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/ht"><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/posts/tcpdump-and-wireshark/"><meta property="og:image" content="https://thiscute.world/posts/tcpdump-and-wireshark/wireshark.webp"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-05-28T16:20:26+08:00"><meta property="article:modified_time" content="2020-05-28T16:20:26+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/tcpdump-and-wireshark/wireshark.webp"><meta name=twitter:title content="使用 tcpdump 和 Wireshark 进行远程实时抓包分析"><meta name=twitter:description content="抓包分析抓包分析工具主要有两种： http/https 网络代理工具：mitmproxy/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/ht"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/tcpdump-and-wireshark/><link rel=prev href=https://thiscute.world/posts/use-istio-for-jwt-auth/><link rel=next href=https://thiscute.world/posts/base64-encoding-is-not-unique/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"使用 tcpdump 和 Wireshark 进行远程实时抓包分析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/tcpdump-and-wireshark\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/tcpdump-and-wireshark\/wireshark.webp","width":800,"height":240}],"genre":"posts","keywords":"网络, Wireshark, tcpdump, 抓包分析","wordcount":1706,"url":"https:\/\/thiscute.world\/posts\/tcpdump-and-wireshark\/","datePublished":"2020-05-28T16:20:26+08:00","dateModified":"2020-05-28T16:20:26+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute('theme',e),document.documentElement.style.setProperty('color-scheme',e==='light'?'light':'dark')}function saveTheme(e){window.localStorage&&localStorage.setItem('theme',e)}function getMeta(t){const e=document.getElementsByTagName('meta');for(let n=0;n<e.length;n++)if(e[n].getAttribute('name')===t)return e[n];return''}if(window.localStorage&&localStorage.getItem('theme')){let e=localStorage.getItem('theme');e==='light'||e==='dark'||e==='black'?setTheme(e):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light')}else'auto'==='light'||'auto'==='dark'||'auto'==='black'?(setTheme('auto'),saveTheme('auto')):(saveTheme('auto'),window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light'));let metaColors={light:'#f8f8f8',dark:'#252627',black:'#000000'};getMeta('theme-color').content=metaColors[document.body.getAttribute('theme')]</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/categories/%E6%8A%80%E6%9C%AF/>技术 </a><a class=menu-item href=/categories/%E9%9A%8F%E7%AC%94/>随笔 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=# onclick=return!1 class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" id=language-select-desktop onchange="location=this.value"><option value=/posts/tcpdump-and-wireshark/ selected>Simplified Chinese</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span>
+</span><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/categories/%E6%8A%80%E6%9C%AF/ title>技术</a><a class=menu-item href=/categories/%E9%9A%8F%E7%AC%94/ title>随笔</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
 <i class="fas fa-adjust fa-fw"></i>
-</a>
-</div>
-</div>
-</div>
-</header><header class=mobile id=header-mobile>
-<div class=header-container>
-<div class=header-wrapper>
-<div class=header-title>
-<a href=/ title="This Cute World"><span id=id-2 class=typeit></span></a>
-</div>
-<div class=menu-toggle id=menu-toggle-mobile>
-<span></span><span></span><span></span>
-</div>
-</div>
-<div class=menu id=menu-mobile><div class=search-wrapper>
-<div class="search mobile" id=search-mobile>
-<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
-<i class="fas fa-search fa-fw"></i>
-</a>
-<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
-<i class="fas fa-times-circle fa-fw"></i>
-</a>
-<span class="search-button search-loading" id=search-loading-mobile>
-<i class="fas fa-spinner fa-fw fa-spin"></i>
-</span>
-</div>
-<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
-取消
-</a>
-</div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/categories/%E6%8A%80%E6%9C%AF/ title>技术</a><a class=menu-item href=/categories/%E9%9A%8F%E7%AC%94/ title>随笔</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i>
-</a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select onchange="location=this.value"><option value=/posts/tcpdump-and-wireshark/ selected>Simplified Chinese</option></select>
-</a></div>
-</div>
-</header>
-<div class="search-dropdown desktop">
-<div id=search-dropdown-desktop></div>
-</div>
-<div class="search-dropdown mobile">
-<div id=search-dropdown-mobile></div>
-</div>
-<main class=main>
-<div class=container><div class=toc id=toc-auto>
-<h2 class=toc-title>目录</h2>
-<div class=toc-content id=toc-content-auto></div>
-</div><article class="page single"><h1 class="single-title animated flipInX">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</h1><div class=post-meta>
-<div class=post-meta-line><span class=post-author><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author><i class="fas fa-user-circle fa-fw"></i>ryan4yin</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div>
-<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-05-28>2020-05-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1698 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
-</div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/posts/tcpdump-and-wireshark/wireshark.jpg data-srcset="/posts/tcpdump-and-wireshark/wireshark.jpg, /posts/tcpdump-and-wireshark/wireshark.jpg 1.5x, /posts/tcpdump-and-wireshark/wireshark.jpg 2x" data-sizes=auto alt=/posts/tcpdump-and-wireshark/wireshark.jpg title=/posts/tcpdump-and-wireshark/wireshark.jpg></div><div class="details toc" id=toc-static kept>
-<div class="details-summary toc-title">
-<span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span>
-</div>
-<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
-<ul>
-<li><a href=#一wireshark-的基本用法>一、wireshark 的基本用法</a></li>
-<li><a href=#二tcpdump--ssh--wireshark-远程实时抓包>二、tcpdump + ssh + wireshark 远程实时抓包</a>
-<ul>
-<li><a href=#windows-系统>Windows 系统</a></li>
-</ul>
-</li>
-<li><a href=#2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析>2. <a href=https://github.com/gcla/termshark>termshark</a>: 直接通过命令行 UI 进行实时抓包分析</a></li>
-<li><a href=#参考>参考</a></li>
-</ul>
-</nav></div>
-</div><div class=content id=content><h1 id=抓包分析>抓包分析</h1>
-<p>抓包分析工具主要有两种：</p>
-<ol>
-<li>http/https 网络代理工具：<a href=https://github.com/mitmproxy/mitmproxy target=_blank rel="noopener noreferrer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li>
-<li>tcp/udp/icmp 等网络嗅探工具：tcpdump/tshark 都属于这一类，网络故障分析等场景常用。</li>
-</ol>
-<p>这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。
-而 mitmproxy 抓包和 wireshark 本地抓包都相当简单，就不介绍了。</p>
-<blockquote>
-<p>P.S. tshark 是 wireshark 的命令行版本，用法 tcpdump 非常相似。</p>
-</blockquote>
-<h2 id=一wireshark-的基本用法>一、wireshark 的基本用法</h2>
-<p>WireShark 的 UI 界面如何使用，网上能搜得到各种类型的 wireshark 演示，多看几篇博客就会了。
-搜索 [xxx 协议 wireshark 抓包分析] 就能找到各种各样的演示，比如</p>
-<ol>
-<li>「gRPC 协议 wireshark 抓包分析」</li>
-<li>「WebSocket 协议 wireshark 抓包分析」</li>
-<li>「TCP 协议 wireshark 抓包分析」</li>
-<li>等等</li>
-</ol>
-<p>主要需要介绍的，应该是 wireshark 的数据包过滤器。
-wireshark 中有两种包过滤器：</p>
-<ol>
-<li>捕获过滤器：在抓包的时候使用它对数据包进行过滤。</li>
-<li>显示过滤器：对抓到的所有数据包进行过滤。</li>
-</ol>
-<p>显示过滤器是最有用的，下面简要介绍下显示过滤器的语法。</p>
-<p>可以直接通过「<strong>协议名称</strong>」进行过滤：</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</a><a href=# onclick=return!1 class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" onchange="location=this.value"><option value=/posts/tcpdump-and-wireshark/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#一wireshark-的基本用法>一、wireshark 的基本用法</a></li><li><a href=#二tcpdump--ssh--wireshark-远程实时抓包>二、tcpdump + ssh + wireshark 远程实时抓包</a><ul><li><a href=#windows-系统>Windows 系统</a></li></ul></li><li><a href=#2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析>2. <a href=https://github.com/gcla/termshark>termshark</a>: 直接通过命令行 UI 进行实时抓包分析</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</h1><div class=post-meta><div class=post-meta-line><span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreffer author" class=author>ryan4yin</a>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/%E6%8A%80%E6%9C%AF/><i class="far fa-folder fa-fw"></i>技术</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-05-28>2020-05-28</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2020-05-28>2020-05-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1706 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload data-src=/posts/tcpdump-and-wireshark/wireshark.webp data-srcset="/posts/tcpdump-and-wireshark/wireshark.webp, /posts/tcpdump-and-wireshark/wireshark.webp 1.5x, /posts/tcpdump-and-wireshark/wireshark.webp 2x" data-sizes=auto alt=/posts/tcpdump-and-wireshark/wireshark.webp title=/posts/tcpdump-and-wireshark/wireshark.webp height=240 width=800></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一wireshark-的基本用法>一、wireshark 的基本用法</a></li><li><a href=#二tcpdump--ssh--wireshark-远程实时抓包>二、tcpdump + ssh + wireshark 远程实时抓包</a><ul><li><a href=#windows-系统>Windows 系统</a></li></ul></li><li><a href=#2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析>2. <a href=https://github.com/gcla/termshark>termshark</a>: 直接通过命令行 UI 进行实时抓包分析</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><h1 id=抓包分析 class=headerLink><a href=#%e6%8a%93%e5%8c%85%e5%88%86%e6%9e%90 class=header-mark></a>抓包分析</h1><p>抓包分析工具主要有两种：</p><ol><li>http/https 网络代理工具：<a href=https://github.com/mitmproxy/mitmproxy target=_blank rel="noopener noreffer">mitmproxy</a>/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。</li><li>tcp/udp/icmp 等网络嗅探工具：tcpdump/tshark 都属于这一类，网络故障分析等场景常用。</li></ol><p>这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。
+而 mitmproxy 抓包和 wireshark 本地抓包都相当简单，就不介绍了。</p><blockquote><p>P.S. tshark 是 wireshark 的命令行版本，用法 tcpdump 非常相似。</p></blockquote><h2 id=一wireshark-的基本用法 class=headerLink><a href=#%e4%b8%80wireshark-%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%94%a8%e6%b3%95 class=header-mark></a>一、wireshark 的基本用法</h2><p>WireShark 的 UI 界面如何使用，网上能搜得到各种类型的 wireshark 演示，多看几篇博客就会了。
+搜索 [xxx 协议 wireshark 抓包分析] 就能找到各种各样的演示，比如</p><ol><li>「gRPC 协议 wireshark 抓包分析」</li><li>「WebSocket 协议 wireshark 抓包分析」</li><li>「TCP 协议 wireshark 抓包分析」</li><li>等等</li></ol><p>主要需要介绍的，应该是 wireshark 的数据包过滤器。
+wireshark 中有两种包过滤器：</p><ol><li>捕获过滤器：在抓包的时候使用它对数据包进行过滤。</li><li>显示过滤器：对抓到的所有数据包进行过滤。</li></ol><p>显示过滤器是最有用的，下面简要介绍下显示过滤器的语法。</p><p>可以直接通过「<strong>协议名称</strong>」进行过滤：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
 </span><span class=lnt>6
 </span><span class=lnt>7
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># 只看 tcp 流量
-tcp
-# 只看 http 流量
-http
-
-# 使用感叹号（或 not）进行反向过滤
-!arp  # 过滤掉所有 arp 数据包
-</code></pre></td></tr></table>
-</div>
-</div><p>也可以通过「<strong>协议名称.协议属性</strong>」和「比较操作符（比如 <code>==</code>）」进行更精确的过滤：</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># 只看 tcp 流量
+</span></span><span class=line><span class=cl>tcp
+</span></span><span class=line><span class=cl># 只看 http 流量
+</span></span><span class=line><span class=cl>http
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># 使用感叹号（或 not）进行反向过滤
+</span></span><span class=line><span class=cl>!arp  # 过滤掉所有 arp 数据包
+</span></span></code></pre></td></tr></table></div></div><p>也可以通过「<strong>协议名称.协议属性</strong>」和「比较操作符（比如 <code>==</code>）」进行更精确的过滤：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -178,69 +49,40 @@ http
 </span><span class=lnt>17
 </span><span class=lnt>18
 </span><span class=lnt>19
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># 通过 ip 的源地址 src 或 dst 进行过滤
-ip.src==192.168.1.33
-
-# 通过 IP 地址（ip.addr）进行过滤（匹配 ip.src 或 ip.dst）
-ip.addr==192.168.0.5
-# 上一条过滤表达式等价于：
-ip.src==192.168.0.5 or ip.dst==192.168.0.5
-
-# 通过 tcp 端口号进行过滤
-tcp.port==80
-tcp.port&gt;4000
-
-# 通过 http 的 host 属性进行过滤
-http.host != &#34;xxx.baidu.com&#34;
-# 通过 http.referer 属性进行过滤
-http.referer == &#34;xxx.baidu.com&#34;
-
-# 多个过滤器之间用 and、or 进行组合
-http.host != &#34;xxx.baidu.com&#34; and http.referer == &#34;xxx.baidu.com&#34;
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=二tcpdump--ssh--wireshark-远程实时抓包>二、tcpdump + ssh + wireshark 远程实时抓包</h2>
-<p>在进行远程网络抓包分析时，我们通常的做法是：</p>
-<ol>
-<li>使用 <code>tcpdump</code> 在远程主机上抓包，保存为 pcap 文件。</li>
-<li>将 pcap 文件拷贝到本地，使用 wireshark 对其进行分析。</li>
-</ol>
-<p>但是这样做没有时效性，而且数据拷贝来去也比较麻烦。</p>
-<p>考虑使用流的方式，在远程主机上使用 <code>tcpdump</code> 抓包，本地使用 <code>wireshark</code> 进行实时分析。</p>
-<p>使用 ssh 协议进行流式传输的示例如下：</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># 通过 ip 的源地址 src 或 dst 进行过滤
+</span></span><span class=line><span class=cl>ip.src==192.168.1.33
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># 通过 IP 地址（ip.addr）进行过滤（匹配 ip.src 或 ip.dst）
+</span></span><span class=line><span class=cl>ip.addr==192.168.0.5
+</span></span><span class=line><span class=cl># 上一条过滤表达式等价于：
+</span></span><span class=line><span class=cl>ip.src==192.168.0.5 or ip.dst==192.168.0.5
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># 通过 tcp 端口号进行过滤
+</span></span><span class=line><span class=cl>tcp.port==80
+</span></span><span class=line><span class=cl>tcp.port&gt;4000
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># 通过 http 的 host 属性进行过滤
+</span></span><span class=line><span class=cl>http.host != &#34;xxx.baidu.com&#34;
+</span></span><span class=line><span class=cl># 通过 http.referer 属性进行过滤
+</span></span><span class=line><span class=cl>http.referer == &#34;xxx.baidu.com&#34;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># 多个过滤器之间用 and、or 进行组合
+</span></span><span class=line><span class=cl>http.host != &#34;xxx.baidu.com&#34; and http.referer == &#34;xxx.baidu.com&#34;
+</span></span></code></pre></td></tr></table></div></div><h2 id=二tcpdump--ssh--wireshark-远程实时抓包 class=headerLink><a href=#%e4%ba%8ctcpdump--ssh--wireshark-%e8%bf%9c%e7%a8%8b%e5%ae%9e%e6%97%b6%e6%8a%93%e5%8c%85 class=header-mark></a>二、tcpdump + ssh + wireshark 远程实时抓包</h2><p>在进行远程网络抓包分析时，我们通常的做法是：</p><ol><li>使用 <code>tcpdump</code> 在远程主机上抓包，保存为 pcap 文件。</li><li>将 pcap 文件拷贝到本地，使用 wireshark 对其进行分析。</li></ol><p>但是这样做没有时效性，而且数据拷贝来去也比较麻烦。</p><p>考虑使用流的方式，在远程主机上使用 <code>tcpdump</code> 抓包，本地使用 <code>wireshark</code> 进行实时分析。</p><p>使用 ssh 协议进行流式传输的示例如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># eth0 更换成你的机器 interface 名称，虚拟机可能是 ens33</span>
-ssh root@some.host <span class=s2>&#34;tcpdump -i eth0 -l -w -&#34;</span> <span class=p>|</span> wireshark -k -i -
-</code></pre></td></tr></table>
-</div>
-</div><p>在不方便使用 ssh 协议的情况下（比如容器抓包、Android 抓包），可以考虑使用 <code>nc</code>(netcat) 进行数据流的转发：</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># eth0 更换成你的机器 interface 名称，虚拟机可能是 ens33</span>
+</span></span><span class=line><span class=cl>ssh root@some.host <span class=s2>&#34;tcpdump -i eth0 -l -w -&#34;</span> <span class=p>|</span> wireshark -k -i -
+</span></span></code></pre></td></tr></table></div></div><p>在不方便使用 ssh 协议的情况下（比如容器抓包、Android 抓包），可以考虑使用 <code>nc</code>(netcat) 进行数据流的转发：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 1. 远程主机抓包：将数据流通过 11111 端口暴露出去</span>
-tcpdump -i wlan0 -s0 -w - <span class=p>|</span> nc -l -p <span class=m>11111</span>
-
-<span class=c1># 2. 本地主机从远程主机的 11111 端口读取数据，提供给 wireshark</span>
-nc &lt;remote-host&gt; <span class=m>11111</span> <span class=p>|</span> wireshark -k -S -i -
-</code></pre></td></tr></table>
-</div>
-</div><p>如果是抓取 Android 手机的数据，方便起见，可以通过 adb 多进行一次数据转发：</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 1. 远程主机抓包：将数据流通过 11111 端口暴露出去</span>
+</span></span><span class=line><span class=cl>tcpdump -i wlan0 -s0 -w - <span class=p>|</span> nc -l -p <span class=m>11111</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 本地主机从远程主机的 11111 端口读取数据，提供给 wireshark</span>
+</span></span><span class=line><span class=cl>nc &lt;remote-host&gt; <span class=m>11111</span> <span class=p>|</span> wireshark -k -S -i -
+</span></span></code></pre></td></tr></table></div></div><p>如果是抓取 Android 手机的数据，方便起见，可以通过 adb 多进行一次数据转发：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -256,93 +98,28 @@ nc &lt;remote-host&gt; <span class=m>11111</span> <span class=p>|</span> wiresha
 </span><span class=lnt>14
 </span><span class=lnt>15
 </span><span class=lnt>16
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 方案一：root 手机后，将 arm 版的 tcpdump 拷贝到手机内进行抓包</span>
-<span class=c1># 1. 在 adb shell 里使用 tcpdump 抓 WiFi 的数据包，转发到 11111 端口</span>
-<span class=c1>## 需要先获取到 root 权限，将 tcpdump 拷贝到 /system/bin/ 目录下</span>
-tcpdump -i wlan0 -s0 -w - <span class=p>|</span> nc -l -p <span class=m>11111</span>
-
-<span class=c1># 2. 在本机使用 adb forward 将手机的 11111 端口绑定到本机(PC)的 11111 端口</span>
-adb forward tcp:11111 tcp:11111
-
-<span class=c1># 3. 直接从本机(PC)的 11111 端口读取数据，提供给 wireshark</span>
-nc localhost <span class=m>11111</span> <span class=p>|</span> wireshark -k -S -i -
-<span class=c1>## 通过数据转发，本机 11111 端口的数据，就是安卓手机内 tcmpdump 的 stdout 内容。</span>
-
-<span class=c1># 方案二：</span>
-<span class=c1># 如果手机不方便 root，推荐 PC 开启 WiFi 热点，手机连上这个热点访问网络。</span>
-<span class=c1># 这样手机的数据就一定会走 PC，直接在 PC 上通过 wireshark 抓包就行。</span>
-<span class=c1># 如果你只需要简单地抓 http/https 包，请使用 fiddler/mitmproxy</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href=https://github.com/eldadru/ksniff target=_blank rel="noopener noreferrer">ksniff</a>!</p>
-<h3 id=windows-系统>Windows 系统</h3>
-<p>另外如果你本机是 Windows 系统，要分 shell 讨论：</p>
-<ol>
-<li><code>cmd</code>: 可以直接使用上述命令。</li>
-<li><code>powershell</code>: **PowerShell 管道对 <code>native commands</code> 的支持不是很好，管道两边的命令貌似是串行执行的，这会导致 wireshark 无法启动！**目前没有找到好的解决方法。。</li>
-</ol>
-<p>另外如果你使用 <code>wsl</code>，那么可以通过如下命令使 <code>wsl</code> 调用 windows 中的 wireshark 进行抓包分析：</p>
-<div class=highlight><div class=chroma>
-<table class=lntable><tr><td class=lntd>
-<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 方案一：root 手机后，将 arm 版的 tcpdump 拷贝到手机内进行抓包</span>
+</span></span><span class=line><span class=cl><span class=c1># 1. 在 adb shell 里使用 tcpdump 抓 WiFi 的数据包，转发到 11111 端口</span>
+</span></span><span class=line><span class=cl><span class=c1>## 需要先获取到 root 权限，将 tcpdump 拷贝到 /system/bin/ 目录下</span>
+</span></span><span class=line><span class=cl>tcpdump -i wlan0 -s0 -w - <span class=p>|</span> nc -l -p <span class=m>11111</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 在本机使用 adb forward 将手机的 11111 端口绑定到本机(PC)的 11111 端口</span>
+</span></span><span class=line><span class=cl>adb forward tcp:11111 tcp:11111
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 3. 直接从本机(PC)的 11111 端口读取数据，提供给 wireshark</span>
+</span></span><span class=line><span class=cl>nc localhost <span class=m>11111</span> <span class=p>|</span> wireshark -k -S -i -
+</span></span><span class=line><span class=cl><span class=c1>## 通过数据转发，本机 11111 端口的数据，就是安卓手机内 tcmpdump 的 stdout 内容。</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 方案二：</span>
+</span></span><span class=line><span class=cl><span class=c1># 如果手机不方便 root，推荐 PC 开启 WiFi 热点，手机连上这个热点访问网络。</span>
+</span></span><span class=line><span class=cl><span class=c1># 这样手机的数据就一定会走 PC，直接在 PC 上通过 wireshark 抓包就行。</span>
+</span></span><span class=line><span class=cl><span class=c1># 如果你只需要简单地抓 http/https 包，请使用 fiddler/mitmproxy</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 <a href=https://github.com/eldadru/ksniff target=_blank rel="noopener noreffer">ksniff</a>!</p><h3 id=windows-系统 class=headerLink><a href=#windows-%e7%b3%bb%e7%bb%9f class=header-mark></a>Windows 系统</h3><p>另外如果你本机是 Windows 系统，要分 shell 讨论：</p><ol><li><code>cmd</code>: 可以直接使用上述命令。</li><li><code>powershell</code>: **PowerShell 管道对 <code>native commands</code> 的支持不是很好，管道两边的命令貌似是串行执行的，这会导致 wireshark 无法启动！**目前没有找到好的解决方法。。</li></ol><p>另外如果你使用 <code>wsl</code>，那么可以通过如下命令使 <code>wsl</code> 调用 windows 中的 wireshark 进行抓包分析：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td>
-<td class=lntd>
-<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># 添加软链接</span>
-sudo ln -s <span class=s2>&#34;</span><span class=k>$(</span>which wireshark.exe<span class=k>)</span><span class=s2>&#34;</span> /usr/local/bin/wireshark
-</code></pre></td></tr></table>
-</div>
-</div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href=https://github.com/eldadru/ksniff target=_blank rel="noopener noreferrer">ksniff</a>）。
-它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。</p>
-<h2 id=2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析>2. <a href=https://github.com/gcla/termshark target=_blank rel="noopener noreferrer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2>
-<p>有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
-这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href=https://github.com/gcla/termshark target=_blank rel="noopener noreferrer">termshark</a>，直接在命令行进行实时的抓包分析。</p>
-<p><a href=https://github.com/aylei/kubectl-debug target=_blank rel="noopener noreferrer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p>
-<h2 id=参考>参考</h2>
-<ul>
-<li><a href=https://zhuanlan.zhihu.com/p/92993778 target=_blank rel="noopener noreferrer">WireShark使用教程</a></li>
-<li><a href=https://techzone.ergon.ch/tcpdump target=_blank rel="noopener noreferrer">Tracing network traffic using tcpdump and tshark</a></li>
-<li><a href=https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/ target=_blank rel="noopener noreferrer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li>
-<li><a href=https://www.jianshu.com/p/a62ed1bb5b20 target=_blank rel="noopener noreferrer">聊聊tcpdump与Wireshark抓包分析</a></li>
-</ul>
-</div><div class=post-footer id=post-footer>
-<div class=post-info>
-<div class=post-info-line>
-<div class=post-info-mod>
-<span>更新于 2020-05-28</span>
-</div>
-<div class=post-info-license></div>
-</div>
-<div class=post-info-line>
-<div class=post-info-md></div>
-<div class=post-info-share>
-<span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/tcpdump-and-wireshark/ data-title="使用 tcpdump 和 Wireshark 进行远程实时抓包分析" data-via=ryan4yin data-hashtags=网络,Wireshark,tcpdump,抓包分析><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/tcpdump-and-wireshark/ data-hashtag=网络><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/tcpdump-and-wireshark/><i class="fab fa-reddit fa-fw"></i></a></span>
-</div>
-</div>
-</div>
-<div class=post-info-more>
-<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/%E7%BD%91%E7%BB%9C/>网络</a>,&nbsp;<a href=/tags/wireshark/>Wireshark</a>,&nbsp;<a href=/tags/tcpdump/>tcpdump</a>,&nbsp;<a href=/tags/%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/>抓包分析</a></section>
-<section>
-<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
-</section>
-</div>
-<div class=post-nav><a href=/posts/use-istio-for-jwt-auth/ class=prev rel=prev title="使用 Istio 进行 JWT 身份验证（充当 API 网关）"><i class="fas fa-angle-left fa-fw"></i>使用 Istio 进行 JWT 身份验证（充当 API 网关）</a>
-<a href=/posts/base64-encoding-is-not-unique/ class=next rel=next title="Base64 编码并不唯一">Base64 编码并不唯一<i class="fas fa-angle-right fa-fw"></i></a></div>
-</div>
-<div id=comments><div id=utterances></div><noscript>
-Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
-</noscript></div></article></div>
-</main><footer class=footer>
-<div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank> <img src=https://img.foreverblog.cn/logo_en_default.png alt style=width:auto;height:15px;margin-bottom:5px> </a> <a href=https://www.foreverblog.cn/go.html target=_blank> <img src=https://img.foreverblog.cn/wormhole_3.gif alt style=width:auto;height:24px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.92.2">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/sunt-programator/CodeIT target=_blank rel="noopener noreferrer" title="CodeIT 0.2.10"><i class="fas fa-laptop-code fa-fw"></i> CodeIT</a>
-</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div>
-</div>
-</footer></div>
-<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
-<i class="fas fa-arrow-up fa-fw"></i>
-</a><a href=# id=view-comments class=fixed-button title=查看评论>
-<i class="fas fa-comment fa-fw"></i>
-</a>
-</div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/ryan4yin.space"}},data:{"id-1":"This Cute World","id-2":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},typeit:{cursorChar:null,cursorSpeed:null,data:{"id-1":["id-1"],"id-2":["id-2"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-4V93QVSNFW',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></body>
-</html>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 添加软链接</span>
+</span></span><span class=line><span class=cl>sudo ln -s <span class=s2>&#34;</span><span class=k>$(</span>which wireshark.exe<span class=k>)</span><span class=s2>&#34;</span> /usr/local/bin/wireshark
+</span></span></code></pre></td></tr></table></div></div><p>添加了上述软链接后，就可以正常地在 <code>wsl</code> 中使用前面介绍的所有抓包指令了（包括 <a href=https://github.com/eldadru/ksniff target=_blank rel="noopener noreffer">ksniff</a>）。
+它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。</p><h2 id=2-termsharkhttpsgithubcomgclatermshark-直接通过命令行-ui-进行实时抓包分析 class=headerLink><a href=#2-termsharkhttpsgithubcomgclatermshark-%e7%9b%b4%e6%8e%a5%e9%80%9a%e8%bf%87%e5%91%bd%e4%bb%a4%e8%a1%8c-ui-%e8%bf%9b%e8%a1%8c%e5%ae%9e%e6%97%b6%e6%8a%93%e5%8c%85%e5%88%86%e6%9e%90 class=header-mark></a>2. <a href=https://github.com/gcla/termshark target=_blank rel="noopener noreffer">termshark</a>: 直接通过命令行 UI 进行实时抓包分析</h2><p>有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
+这时你可以考虑直接使用命令行版本的 <code>wireshark</code> UI: <a href=https://github.com/gcla/termshark target=_blank rel="noopener noreffer">termshark</a>，直接在命令行进行实时的抓包分析。</p><p><a href=https://github.com/aylei/kubectl-debug target=_blank rel="noopener noreffer">kubectl-debug</a> 默认的调试镜像中，就自带 <code>termshark</code>.</p><h2 id=参考 class=headerLink><a href=#%e5%8f%82%e8%80%83 class=header-mark></a>参考</h2><ul><li><a href=https://zhuanlan.zhihu.com/p/92993778 target=_blank rel="noopener noreffer">WireShark使用教程</a></li><li><a href=https://techzone.ergon.ch/tcpdump target=_blank rel="noopener noreffer">Tracing network traffic using tcpdump and tshark</a></li><li><a href=https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/ target=_blank rel="noopener noreffer">Android remote sniffing using Tcpdump, nc and Wireshark</a></li><li><a href=https://www.jianshu.com/p/a62ed1bb5b20 target=_blank rel="noopener noreffer">聊聊tcpdump与Wireshark抓包分析</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-05-28</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=# onclick=return!1 title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/tcpdump-and-wireshark/ data-title="使用 tcpdump 和 Wireshark 进行远程实时抓包分析" data-via=ryan4yin data-hashtags=网络,Wireshark,tcpdump,抓包分析><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/tcpdump-and-wireshark/ data-hashtag=网络><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/tcpdump-and-wireshark/><i class="fab fa-reddit fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/%E7%BD%91%E7%BB%9C/>网络</a>,&nbsp;<a href=/tags/wireshark/>Wireshark</a>,&nbsp;<a href=/tags/tcpdump/>tcpdump</a>,&nbsp;<a href=/tags/%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/>抓包分析</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/use-istio-for-jwt-auth/ class=prev rel=prev title="使用 Istio 进行 JWT 身份验证（充当 API 网关）"><i class="fas fa-angle-left fa-fw"></i>使用 Istio 进行 JWT 身份验证（充当 API 网关）</a>
+<a href=/posts/base64-encoding-is-not-unique/ class=next rel=next title="Base64 编码并不唯一">Base64 编码并不唯一<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=width:auto;height:15px;margin-bottom:5px></a> <a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=width:auto;height:24px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.100.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><div class=assets><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/topbar/topbar.min.js></script><script type=text/javascript src=/lib/pjax/pjax.min.js></script><script type=text/javascript src=/js/theme.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-4V93QVSNFW',{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></div><div class=pjax-assets><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js defer></script><script type=text/javascript src=/lib/katex/auto-render.min.js defer></script><script type=text/javascript src=/lib/katex/copy-tex.min.js defer></script><script type=text/javascript src=/lib/katex/mhchem.min.js defer></script><script type=text/javascript src=/js/katex.min.js defer></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript></div></body></html>
