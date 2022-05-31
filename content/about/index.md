@@ -14,6 +14,10 @@ comment:
 
 ![口琴](harmonica.webp)
 
+>本站的文章可能以中文或[英文](https://thiscute.world/en/)两种语言书写，其中部分文章可能是双语，也有部分文章只有中文或者[英文版](https://thiscute.world/en/)本，请读者按需阅读。
+
+>The articles on this site may be written in [Chinese](https://thiscute.world/zh-cn/) or English, some of them may be bilingual, and some of them are only available in [Chinese](https://thiscute.world/zh-cn/) or English. Please read them as needed.
+
 ## 关于我
 
 >有很多的绝望，但也有美的时刻，只不过在美的时刻，时间是不同于以往的。 ──《刺猬的优雅》
