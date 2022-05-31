@@ -47,8 +47,11 @@ comment:
   - 维护与优化容器计算平台及流量链路，分析与管控云计算成本，**稳定高效**地支撑快速成长的业务
 - **工具或技术**：Linux/Kubernetes/Istio
 - 联系方式
-  - 公网聊天：https://github.com/ryan4yin/ryan4yin.space/issues
-  - 邮件私聊：`eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
+  - 邮件：`eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
+  - [豆瓣](https://www.douban.com/people/kirito_c)：本人是豆瓣书影音标记的重度使用者，从 2015 年以来一直使用豆瓣标记读过的书看过的电影。
+  - [Twitter](https://twitter.com/ryan4yin): 自 2021 年起在 Twitter 上发布一些生活动态与技术内容，同时也很喜欢看 Twitter 上各位画手大触的作品。是我日常消遣与接触碎片化信息的重要渠道之一。
+  - [Bilibili](https://space.bilibili.com/12278805): 日常用 Bilibili 消遣，日常喜欢看 MMD 舞蹈、虚拟歌姬、硬核技术相关内容。
+  - [Github Issues](https://github.com/ryan4yin/thiscute.world/issues): 也可以考虑直接在此仓库的 Issue 区联系我，我在 Github 上还挺活跃的，一般不会漏消息。
 
 ## 关于此博客
 
