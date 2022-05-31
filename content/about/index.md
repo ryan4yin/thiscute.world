@@ -25,7 +25,7 @@ comment:
 - **昵称**：中文昵称「**於清樂**」「**二花**」，英文 ID「**ryan4yin**」「**ryan_yin**」
 - **音乐**：
   - 喜欢听后摇、蓝草、民谣、器乐
-  - 有在断断续续地学习竹笛跟口琴，另外也有在学习使用 [Synthesizer V](https://dreamtonics.com/en/synthesizerv/) 跟 [Reaper](https://www.reaper.fm)
+  - 有在断断续续地学习竹笛跟口琴，另外也有在学习使用 [Synthesizer V](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) 跟 [Reaper](https://www.reaper.fm)
 - **其他爱好**：
   - **运动**：喜欢轮滑以及游泳，哦还有 VR 游戏《Beat Saber》《Pistol Whip》，但是目前都是半吊子哈哈~
   - **茶**：2021 年在朋友家喝过一次**青钱柳**后就一直念念不忘，年底就入坑了凤牌滇红、天之红祁门红茶、极白安吉白茶，目前比较喜欢喝红茶。
