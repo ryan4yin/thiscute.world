@@ -11,7 +11,7 @@ tags: ["NAT", "网络", "NAT 穿越", "内网穿透", "虚拟网络", "P2P"]
 categories: ["技术"]
 
 # 文章未完成，先不在首页显示
-hiddenFromHomePage: true
+# hiddenFromHomePage: true
 ---
 
 >个人笔记，不一定正确...
