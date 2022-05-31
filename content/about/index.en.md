@@ -21,7 +21,8 @@ lightgallery: true
   - **Tea**: At present, I prefer to drink **Black Tea**, such as Dianhong - Yunnan Gold, Redsunion Keemun. 
 - **Books**：The serious books I read most are IT technical books. In addition, I also like to read science fiction and web novels / light novels that I can't quit.
 - **Movies/TV**：What I watch most are anime, and in addition, science fiction films and tender films.
-- **Major**: I used to major in Acoustics, but I didn't learn it very well.
+- **Major**:
+  - 2015-2019: major in Acoustics, but I didn't learn it very well...
 - **Languages**
   - **English**: Good at reading technical articles, but weak in writing, listening and speaking.
   - **Chinese**: Chinese is my first language.
@@ -32,7 +33,7 @@ lightgallery: true
   - **C**: Can barely understand the code, abandoned for a long time.
   - The languages I have used but have been abandoned: Java/Julia/Mathematica/Lua
 - **Position**：**Site Reliability Engineer**
-  - Maintain and optimize container computing platform and traffic links, analyze and control cloud computing costs, and support fast-growing business stably and efficiently.
+  - Maintain and optimize cloud computing platform and cloud networking, analyze and control cloud computing costs, to support the fast-growing business stably and efficiently.
 - **Tools & Technologies**：Linux/Kubernetes/Istio
 - Contact Me
   - Publicly: https://github.com/ryan4yin/ryan4yin.space/issues
