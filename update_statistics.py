@@ -39,6 +39,7 @@ modified_page_titles = {
     "/posts/about-tls-cert/": "写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议",
 }
 
+
 def initialize_analyticsreporting():
     """Initializes an Analytics Data API service object.
 
@@ -155,11 +156,15 @@ def process_data(data):
                 page_path = modified_page_paths[page_path]  # 替换成新的 pagePath
                 page['pagePath'] = page_path
 
+            # 跳过 posts 列表页
+            if page_path in ("/posts/", "/en/posts/") \
+                    or page_path.startswith("/posts/page/") \
+                    or page_path.startswith("/en/posts/page/"):
+                continue
 
             if not page_path.startswith("/posts/") \
-                    or page_path == "/posts/"\
-                    or page_path.startswith("/posts/page/"):
-                # 只记录 /posts/ 博文的访问数据
+                    and not page_path.startswith("/en/posts/"):
+                # 只记录各文章页的访问数据
                 continue
 
             # 对统计数据按 path 合并下
@@ -169,7 +174,7 @@ def process_data(data):
                 for k, v in page.items():
                     if isinstance(v, int):  # 只有数据才需要合并，跳过字符串
                         result[page_path][k] += v
-            
+
             # 处理被修改过 pageTitle 的文章，使用指定的 Title
             for path, title in modified_page_titles.items():
                 if path not in result:
@@ -188,7 +193,8 @@ def process_data(data):
         # 人均阅读时长
         reading_duration_per_user = reading_duration // int(p['activeUsers'])
         p['readingDurationPerUser'] = reading_duration_per_user
-        p['humanizedReadingDurationPerUser'] = humanize_duration(reading_duration_per_user)
+        p['humanizedReadingDurationPerUser'] = humanize_duration(
+            reading_duration_per_user)
 
     return sorted(result.values(), key=itemgetter("readingDurationPerUser"), reverse=True)
 
@@ -270,13 +276,15 @@ def get_shanghai_datetime_str():
     """
     tz_shanghai = dt.timezone(dt.timedelta(hours=8))
     now_shanghai = dt.datetime.now(tz=tz_shanghai)
-    return now_shanghai.strftime('%Y-%m-%dT%H:%M:%S%Z')  # 2022-02-10T00:48:52UTC+08:00
+    # 2022-02-10T00:48:52UTC+08:00
+    return now_shanghai.strftime('%Y-%m-%dT%H:%M:%S%Z')
+
 
 def main():
     analytics = initialize_analyticsreporting()
     trendingThisMonth = get_report_last_n_days(analytics, n=30)
     total = get_report_from_start(analytics)
-    
+
     website_statistics = {
         "updateDate": get_shanghai_datetime_str(),
         "total": total,
