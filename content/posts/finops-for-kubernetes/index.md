@@ -113,6 +113,8 @@ Kubernetes 提供了三种资源分配的方式，即服务质量 QoS，不同�
 - 多种工作负载混合部署，提升资源利用率。但是需要合理规划避免资源竞争
 - 调节集群伸缩组件，在保障 SLA 的前提下提升资源利用率
   - 比如 aws 就可以考虑在一些场景下用 karpenter 来做扩缩容、引入 [AWS Node Termination Handler](https://github.com/aws/aws-node-termination-handler) 提升 Spot 实例的 SLA
+- 尽量使用竞价实例，AWS 的竞价实例单价平均优惠超过 50%
+- 合理地购买 Saving Plans 与 Reserved Instances，达成成本节约。
 
 ## 多云环境
 
