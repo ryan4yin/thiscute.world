@@ -76,6 +76,7 @@ toc:
 - [x] 《[Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)》
 - [x] 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》
 - [x] 《Go 程序设计语言（英文版）》
+- [x] 《深入浅出 Kubernetes - 张磊》
 
 正在读：
 
