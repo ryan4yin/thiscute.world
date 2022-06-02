@@ -155,6 +155,7 @@ Kubernetes 提供了三种资源分配的方式，即服务质量 QoS，不同�
 - [Kubecost](https://github.com/kubecost/cost-model): kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，支持按 deployment/service/label 等多个维度进行成本拆分，而且支持拆分网络成本。收费版提供更丰富的功能以及更长的数据存储时间。
 - [crane](https://github.com/gocrane/crane): 腾讯开源的一款 Kubernetes 成本优化工具，支持成本报表以及 EHPA 两个功能，才刚开源几个月，目前还比较简陋。
   - [腾讯推出国内首个云原生成本优化开源项目 Crane](https://cloud.tencent.com/developer/article/1960014)
+  - 腾讯云在国内上线了 crane 的闭源版本「[容器服务成本大师](https://cloud.tencent.com/document/product/457/64169)」，如果你使用的是腾讯云，可以体验看看
 
 其中 kubecost 是最成熟的一个，我们接下来以 kubecost 为例介绍下如何分析 Kubernetes 成本。
 
@@ -356,3 +357,5 @@ TBD
   - 文档：https://github.com/kubecost/docs
 - [crane](https://github.com/gocrane/crane): 腾讯开源的一款 Kubernetes 成本优化工具，支持成本报表以及 EHPA 两个功能，才刚开源几个月，目前还比较简陋。
 - [Calculating Container Costs - FinOps](https://www.finops.org/projects/calculating-container-costs/)
+- [CPU利用率从10%提升至60%：中型企业云原生成本优化实战指南 - 星汉未来(Galaxy-Future)](https://zhuanlan.zhihu.com/p/523045177)
+- [资源利用率分析和优化建议 - 腾讯云容器服务](https://cloud.tencent.com/document/product/457/57732)
