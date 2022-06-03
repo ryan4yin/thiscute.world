@@ -16,15 +16,15 @@ lightgallery: true
 
 >There’s a lot of despair, but also the odd moment of beauty, where time is no longer the same. -- The Elegance of the Hedgehog by Barbery, Muriel Anderson
 
-- **Nickname**：**ryan4yin**, **ryan_yin**
-- **Music**：
+- **Nickname**: **ryan4yin**, **ryan_yin**
+- **Music**:
   - I like listening to Post-rock, Bluegrass, Folk and Instrumental Music.
   - I'm learning Bamboo Flute, Harmonica, [Synthesizer V](https://dreamtonics.com/en/synthesizerv/) & [Reaper](https://www.reaper.fm) on and off.
-- **Other Hobbies**：
+- **Other Hobbies**: 
   - **Sports**: I like **Roller Skating** and **Swimming**, VR games "**Beat Saber**" and "**Pistol Whip**"
   - **Tea**: At present, I prefer to drink **Black Tea**, such as Dianhong - Yunnan Gold, Redsunion Keemun. 
-- **Books**：The serious books I read most are IT technical books. In addition, I also like to read science fiction and web novels / light novels that I can't quit.
-- **Movies/TV**：What I watch most are anime, and in addition, science fiction films and tender films.
+- **Books**: The serious books I read most are IT technical books. In addition, I also like to read science fiction and web novels / light novels that I can't quit.
+- **Movies/TV**: What I watch most are anime, and in addition, science fiction films and tender films.
 - **Major**:
   - 2015-2019: major in Acoustics, but I didn't learn it very well...
 - **Languages**
@@ -36,9 +36,9 @@ lightgallery: true
   - **Rust**: In learning, a large number of functional syntax candy, thoughtful compiler tips, feel very easy to use
   - **C**: Can barely understand the code, abandoned for a long time.
   - The languages I have used but have been abandoned: Java/Julia/Mathematica/Lua
-- **Position**：**Site Reliability Engineer**
+- **Expirence**: **Site Reliability Engineer**
   - Maintain and optimize cloud computing platform and cloud networking, analyze and control cloud computing costs, to support the fast-growing business stably and efficiently.
-- **Tools & Technologies**：Linux/Kubernetes/Istio
+- **Tools & Technologies**: Linux/Kubernetes/Istio
 - Contact Me
   - Publicly: https://github.com/ryan4yin/ryan4yin.space/issues
   - Privately(Email): `eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
