@@ -132,15 +132,19 @@ Full-cone NAT 的特点如下：
 
 ##### 3. Port-Restricted cone NAT
 
-- 数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送。
+- 数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），**所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送**。
 - 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
   - 与 Address-Restricted cone NAT 的区别在于，它**同时限制了外部主机的 IP 与端口**，可以说是更**进一步地提升了安全性。**
 
 ##### 4. Symmetric NAT
 
-- 数据包流出：每个内部地址（iAddr:iPort）都映射到一个唯一的外部地址（eAddr:ePort）。同一个内部地址与不同的外部地址的通信，会使用不同的 NAT 端口。
-  - Symmetric NAT 与 Port-Restricted cone NAT 的区别就在上面的加粗部分，**Symmetric NAT 同一内部地址与不同外部地址通信，都会使用不同的 NAT 端口。这是 NAT 穿越最大的难点，它导致 Symmetric NAT 的端口难以预测**！
-- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部地址（nAddr:nPort），可以给这个内部地址回消息。
+Port-Restricted cone NAT 的数据流入流出规则导致一个问题：**同一个内部地址只能映射到唯一的一个 NAT 外部地址，也就只能与唯一的一个外部程序通讯，不能并发请求多个外部地址**！这实际上限制了内部主机的最高并发连接数。
+而 Symmetric NAT 解决了这个问题，它的数据流入流出规则如下：
+
+- 数据包流出：同一个内部地址（iAddr:iPort）与不同外部主机（nAddr:nPort）的通信，会使用不同的 NAT 外部端口（eAddr:randomPort）。也就是说内部地址与 NAT 外部地址的关系也是**一对多**！
+  - 通过允许端口的**一对多映射**，实际上提升了每个内部地址（iAddr:iPort）的并发连接数上限（从 1 直接扩到了可用端口数上限）。**这也是 NAT 穿越最大的难点，它导致 Symmetric NAT 的端口难以预测**！
+- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
+  - 这个数据流入规则，与 Port-Restricted cone NAT 是完全一致的。
 
 **对称 NAT 是最安全的一种 NAT 结构，限制最为严格，应该也是应用最广泛的 NAT 结构**。
 但是它导致所有的 TCP 连接都只能由从内部主动发起，外部发起的 TCP 连接请求会直接被 NAT 拒绝，因此它也是 P2P 玩家最头疼的一种 NAT 类型。
