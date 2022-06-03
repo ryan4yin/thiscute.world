@@ -119,7 +119,7 @@ categories: ["随笔", "技术"]
 - 成本控制方面，体会到了 ~~ARM 架构~~以及 Spot 竞价实例的好处
   - 2022-02-17 更新：数据库等中间件可以切换到 ARM。EKS 服务目前都是 Spot 实例，它的 ARM 化 ROI 并不高。
 - 跨区流量成本有很大的潜在优化空间
-  - 跨区流量成本是在两边都会收费，而且不仅涉及 Kubernetes 集群内服务间的调用，还会涉及对 RDS/ES/ElastiCache/EC2 等其他资源的调用。
+  - 跨区流量成本是进出该可用区都会收费，而且不仅涉及 Kubernetes 集群内服务间的调用，还会涉及对 RDS/ES/ElastiCache/EC2 等其他资源的调用。
 - 今年各云厂商故障频发，没有**跨 region 的服务迁移**就会很难受，需要持续关注下 [karmada](https://github.com/karmada-io/karmada) 这类多集群管理方案。
   - Google 账号系统宕机
   - Fastly CDN 故障
