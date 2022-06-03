@@ -67,7 +67,7 @@ comment:
 
 而另一部分生活类的随笔，则是我的闲言碎语，许多都来自我的印象笔记。
 
-### 我曾用过的标语
+### 我曾用过的博客标语
 
 {{< admonition quote "何来枷锁" true >}}
 拆破玉笼飞彩凤，顿开金锁走蛟龙。
@@ -90,7 +90,7 @@ comment:
 - 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
 {{< /admonition >}}
 
-{{< admonition info "博客快照" false >}}
+{{< admonition info "博客快照" >}}
 ![](/images/about/cnblog-2020-01-21.webp "博客园快照")
 {{< /admonition >}}
 
