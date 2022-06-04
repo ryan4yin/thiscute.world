@@ -367,15 +367,18 @@ HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其
 因为 Istio 的 Sidecar requests 默认为 `100m` 也就是 0.1 核。
 在未 tuning 的情况下，服务负载一高，sidecar 的实际用量很容易就能涨到 0.2-0.4 核。
 把这两个值代入前面的公式，会发现 **对于 QPS 较高的服务，添加 Sidecar 后，「Pod 的 CPU 利用率」可能会高于「应用容器的 CPU 利用率」**，造成不必要的扩容。
+主容器的 requests 与 limits 差距越小，这样的扩容造成的资源浪费就越大。
 
-即使改用「Pod 的 CPU 用量」而非百分比来进行扩缩容，也解决不了这个问题。
+而且还有个问题是，不同应用的 Pod，数据流特征、应用负载特征等都有区别（请求/响应的数据量、处理时长等），这会造成 sidecar 与主容器的 cpu 利用率不一，加大了优化 HPA 机制的困难度。
 
 解决方法：
-- 最佳解决方案：使用绝对度量指标，而非百分比。
-- 方法一：针对每个服务的 CPU 使用情况，为每个服务的 sidecar 设置不同的 requests/limits.
-  - 感觉这个方案太麻烦了
-- 方法二：使用 KEDA 等第三方组件，获取到应用程序的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容
-- 方法三：使用 k8s 1.20 提供的 alpha 特性：[Container Resourse Metrics](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics). 
+
+- 方法一：HPA 改用绝对指标进行扩缩容，即 Pod 的总 CPU 用量。这使 HPA 不受任何容器 requests 设置的影响。
+  - 但是因为不同服务负载的区别，需要根据实际负载为每个服务调整 HPA 的期望指标。
+- 方法二：HPA 仍然使用 Pod 利用率进行扩缩容，但是针对每个服务的 CPU 使用情况，为每个服务的 sidecar 设置不同的 requests/limits，降低 sidecar 对扩缩容的影响。
+- 方法三：使用 KEDA 等第三方组件，获取到应用容器的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容
+- 方法四：使用 k8s 1.20 提供的 alpha 特性：[Container Resourse Metrics](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics).
+  - 这种方式可以将 Pod 的不同容器的指标区分看待，算是最佳的处理方法了，但是该特性仍未进入 beta 阶段，慎用。
 
 
 ### 2. HPA 的扩缩容算法
