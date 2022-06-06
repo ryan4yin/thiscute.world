@@ -18,7 +18,7 @@ toc:
 - 研究多云与多 Kubernetes 集群的网络架构、应用管理方案
   - 当前方向：Istio 多集群服务网格与多集群 API 网关 + Karmada 多集群应用部署 + cluster-api 多集群创建与更新
   - 也考虑是否统一使用开源的 k8s 网络插件，如 cilium
-  - 多云/多集群的其他模块如监控、日志、链路追踪、数据库中间件等，还未开始研究。
+  - 多云/多集群的其他模块如监控、日志、链路追踪、数据库中间件、消息队列等，还未开始研究。
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 88%
