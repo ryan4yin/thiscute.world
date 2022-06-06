@@ -230,8 +230,7 @@ spec:
 
 加了转发后，流程图如下（需要 mermaid 渲染）：
 
-{{< mermaid >}}
-sequenceDiagram
+{{< mermaid >}}sequenceDiagram;
 # autonumber
 participant User as 用户
 participant Auth as 授权服务
