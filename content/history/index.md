@@ -30,7 +30,7 @@ toc:
   - 如 L4 的 dpvs/katran 与 L7 的 APISIX/Traefik/Contour，以及 AWS Gateway LoadBalancer
   - 暂时认为云上 L4 还是直接使用云服务商的方案最合适，没必要自己搭
   - L7 为了支持多集群切量，同时尽量缩短链路，目前感觉使用 Istio 最合适
-- 研究各跨云网络方案（L4/L7 负载均衡、SD-WAN、WireGuard、服务网格等）：
+- 研究各跨云网络方案（L7 负载均衡（ADC）、SD-WAN、WireGuard、服务网格等）：
   - 一是多云之间相互隔离，但是长远看不太现实
   - 二是多云使用不冲突的 CIDRs 作为它们的 VPC 网段，然后使用 VPN 把多云网络直接串起来
   - 三是直接在多云上搭建一套 overlay 网络，完全屏蔽掉不同云之间的网络差异
