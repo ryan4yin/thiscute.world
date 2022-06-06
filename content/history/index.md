@@ -9,18 +9,34 @@ toc:
 
 记录下我的学习轨迹。
 
-### 2022-05-30
+### 2022-06-05 ~ 2022-06-06
 
+- 观看 [KubeCon + CloudNativeCon 2022](https://www.youtube.com/playlist?list=PLj6h78yzYM2MCEgkd8zH0vJWF7jdQ-GRR) 中我比较感兴趣的部分
+  - 主要关注与当前工作相关的点：多云管理、多集群（karmada）管理与应用部署、跨集群网络（Istio）、API 网关
+  - 有一些收获，但是都是比较浅的，只能提供个别方向的一些思路，主要还是得靠自己探索。
+- 研究了一波 dapr，理念很先进，但是发现很多功能都还处于 alpha 阶段，不太适合向业务侧推广，继续观望吧。
+
+### 2022-05-30 ~ 2022-06-02
+
+- 研究跨云应用部署方案，如 karmada/kubevela
+  - 以 karmada 为代表的多集群 Deployment/Service 管理，需要一个控制面集群+多个子集群
+    - 配置只往控制面集群部署，karmada 负责按配置在子集群中创建或更新对应的资源
+- 研究多云+多集群网络方案
+  - 以 Istio 为代表的多集群服务网格，部署模型之一也是控制面集群+多个子集群
+    - 配置只往控制面集群部署，istio 会将配置下发到数据面的 sidecar 与 gateway，完成相应的网络配置
+  - 其他的如 karmada 等也集成了一些集群间的网络打通方案，但是感觉都还不太成熟
+  - cilium 的 service mesh 也是一个潜在的多云 k8s 网络方案，但是还处于 beta 状态，有待观望
 - 研究云上 L4/L7 层网关的开源/商业方案
   - 如 L4 的 dpvs/katran 与 L7 的 APISIX/Traefik/Contour，以及 AWS Gateway LoadBalancer
-- 研究多云 k8s 网络方案
-  - 以 karmada 为代表的 MultiClusterIngress/ClusterPropagationPolicy，通过 CRD 提供 7 层负载均衡。
-    - 但是猜测实际都要过一个中继服务器，可能会造成额外的流量成本。
-  - 以 Istio 为代表的跨集群服务网格
-  - 仅在网关层实现多集群之间的负载均衡，即仅实现 MultiClusterIngress，而且要考虑到跨区流量问题。
-    - 很多场景下我们可能并不需要打通多集群之间的网络，只需要方便地支持多集群应用的部署，与在网关层进行多集群间的负载均衡就行。
-- 研究各跨云网络方案，L4/L7 负载均衡、SD-WAN、WireGuard、服务网格 等
-- 研究跨云应用部署方案，如 karmada/kubevela
+  - 暂时认为云上 L4 还是直接使用云服务商的方案最合适，没必要自己搭
+  - L7 为了支持多集群切量，同时尽量缩短链路，目前感觉使用 Istio 最合适
+- 研究各跨云网络方案（L4/L7 负载均衡、SD-WAN、WireGuard、服务网格等）：
+  - 一是多云之间相互隔离，但是长远看不太现实
+  - 二是多云使用不冲突的 CIDRs 作为它们的 VPC 网段，然后使用 VPN 把多云网络直接串起来
+  - 三是直接在多云上搭建一套 overlay 网络，完全屏蔽掉不同云之间的网络差异
+    - 仅针对 k8s 的方案主要是 kilo，基于 wireguard 直接通过公网实现 overlay 网络，但是感觉时延很可能难以接受，还是得用 VPN 才行。
+    - 整个云通用的方案目前只有部分供应商在做，而且不开源，有 vendor lock-in 的可能，而且不清楚封装出的具体效果如何
+
 
 ### 2022-05-29
 

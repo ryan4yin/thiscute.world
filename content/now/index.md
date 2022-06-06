@@ -17,7 +17,7 @@ toc:
 
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
-- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 73%
+- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 88%
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 极客时间《分布式协议与算法实战》 - 40%
 
