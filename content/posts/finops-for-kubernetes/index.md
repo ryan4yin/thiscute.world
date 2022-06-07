@@ -182,6 +182,10 @@ kubecost 有两种推荐的安装方法：
 
 ```yaml
 # kubecost-values.yaml
+
+# 通过 http://kubecost.com/install 获取 token，用于跟踪商业授权状态
+kubecostToken: "xxx"
+
 global:
   # 自动部署 prometheus + nodeExporter，也可以直接对接外部 prometheus
   prometheus:
@@ -197,17 +201,49 @@ global:
     scheme: "http" # http or https, for the domain name above.
     proxy: true # If true, the kubecost frontend will route to your grafana through its service endpoint
 
+# grafana 子 chart 的配置
+## 更好的选择是单独部署 grafana，不使用 kubecost 的 subchart
+grafana:
+  image:
+    repository: grafana/grafana  # 建议替换成私有镜像仓库地址
+    tag: 8.3.2
+
+# prometheus 子 chart 的配置
+## 更好的选择是单独部署 prometheus，不使用 kubecost 的 subchart
 prometheus:
   server:
     persistentVolume:
       enabled: true
-      size: 32Gi    # 这个大小得视情况调整，集群较大的话 32Gi 肯定不够
+      size:  32Gi # 这个大小得视情况调整，集群较大的话 32Gi 肯定不够
     retention: 15d  # p8s 指标保留时长
   nodeExporter:
-    resources:
-      
-# 通过 http://kubecost.com/install 获取 token，用于跟踪商业授权状态
-kubecostToken: "xxx"
+    enabled: true
+    ## If true, node-exporter pods share the host network namespace
+    hostNetwork: true
+    ## If true, node-exporter pods share the host PID namespace
+    hostPID: true
+    ## node-exporter container name
+    name: node-exporter
+    ## node-exporter container image
+    image:
+      repository: quay.io/prometheus/node-exporter  # 替换成 quay 仓库避免 docker 仓库拉取限制
+      tag: v0.18.1
+      pullPolicy: IfNotPresent
+
+  ## Monitors ConfigMap changes and POSTs to a URL
+  ## Ref: https://github.com/jimmidyson/configmap-reload
+  ##
+  configmapReload:
+    prometheus:
+      ## If false, the configmap-reload container will not be deployed
+      enabled: true
+      ## configmap-reload container name
+      name: configmap-reload
+
+      ## configmap-reload container image
+      image:
+        repository: jimmidyson/configmap-reload  # 建议替换成私有仓库避免 docker 仓库拉取限制
+        tag: v0.7.1
 
 persistentVolume:
   enabled: true
@@ -246,7 +282,7 @@ serviceAccount:
     # 如果是 aws 上的集群，可以通过 serviceAccount 授权访问 ec2 pricing API 及 cur 数据
     # 也可以直接为服务提供 AccessKeyID/Secret 进行授权
     # 与 AWS 的集成会在后面详细介绍
-    eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/KubecostRole
+    eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/KubecostRole  # 注意替换这个 role-arn
 
 # 如下配置也可通过 Kubecost product UI 调整
 # 但是此处的配置优先级更高，如果在这里配置了默认值，容器重启后就会使用此默认值，UI 上的修改将失效
@@ -256,9 +292,14 @@ kubecostProductConfigs: {}
 然后部署：
 
 ```shell
-kubectl create namespace kubecost
+# 添加 repo
 helm repo add kubecost https://kubecost.github.io/cost-analyzer/
-helm install kubecost kubecost/cost-analyzer -n kubecost -f kubecost-values.yaml
+# 查看版本号
+helm search repo kubecost/cost-analyzer -l | head
+# 下载并解压某个 chart
+helm pull kubecost/cost-analyzer --untar --version 1.92.0
+# 使用自定义 values 配置安装或更新本地的 chart
+helm upgrade --create-namespace --install kubecost ./cost-analyzer -n kubecost -f kubecost-values.yaml
 ```
 
 通过 port-forward 访问：
