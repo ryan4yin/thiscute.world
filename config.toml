@@ -117,7 +117,7 @@ enableEmoji = true
     Zhihu = "yuansuye"
     Douban = "kirito_c"
     Bilibili = "12278805"
-    RSS = true # DoIt 新增 | 0.2.0
+    RSS = false # RSS 格式太简陋，切换到自定义的 ATOM 格式
 
   # DoIt 更改 | 0.2.0 文章页面配置
   [params.page]
@@ -137,8 +137,6 @@ enableEmoji = true
     fontawesome = true
     # 是否在文章页面显示原始 Markdown 文档链接
     linkToMarkdown = true
-    # DoIt 新增 | 0.2.4 是否在 RSS 中显示全文内容
-    rssFullText = false
     # DoIt 新增 | 0.2.0 目录配置
     [params.page.toc]
       # 是否使用目录
@@ -465,13 +463,33 @@ enableEmoji = true
   [privacy.youtube]
     privacyEnhanced = true
 
+# Atom feed
+# Add "ATOM" to the Page Kinds under [outputs] (in your site config) for which
+# you want to enable Atom feeds.
+# Example:
+#   [outputs]
+#     home = ["HTML", "ATOM"]
+# https://gist.github.com/lpar/7ded35d8f52fef7490a5be92e6cd6937
+[mediaTypes."application/atom+xml"]
+  suffixes = ["xml"]
+[outputFormats.Atom]
+  # https://validator.w3.org/feed/docs/atom.html#whatIsAtom
+  name = "ATOM"
+  mediaType = "application/atom+xml"
+  baseName = "index" # generated file = <baseName>.<mediaType."application/atom+xml".suffixes[0]> = index.xml
+  isPlainText = false
+  rel = "alternate"
+  isHTML = false
+  noUgly = true
+  permalinkable = false
 
 # 用于 Hugo 输出文档的设置
 [outputs]
   # DoIt 更改 | 0.2.0
   # 为了支持搜索，需要在这里设定，输出 json 索引文件
-  home = ["HTML", "RSS", "JSON"]
+  # <domain>/atom.xml
+  home = ["HTML", "ATOM", "JSON"]
   page = ["HTML"]
-  section = ["HTML", "RSS"]
-  taxonomy = ["HTML", "RSS"]
+  section = ["HTML"]
+  taxonomy = ["HTML"]
   taxonomyTerm = ["HTML"]
