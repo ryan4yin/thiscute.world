@@ -10,15 +10,15 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
       - name: Use Python3
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: '3.10'
           architecture: 'x64'
@@ -44,6 +44,10 @@ jobs:
         with:
           hugo-version: '0.100.1'
           extended: true  #  need extended version to support SASS/SCSS
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
 
       - name: Build
         run: hugo --minify --ignoreCache --gc
@@ -55,10 +59,6 @@ jobs:
           publish_dir: ./public
           cname: thiscte.world
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '15.x'
       - name: Push Argolia Index
         run: |
           npm install algoliasearch@4.12.1
