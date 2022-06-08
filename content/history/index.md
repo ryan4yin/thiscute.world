@@ -9,6 +9,12 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-06-07
+
+- 折腾一晚上博客的 Hugo 跟 DoIt 主题
+  - 发现本地生成出的站点，mermaid 跟 music 两个插件的问题莫名其妙修复了，怀疑跟今天跑了一波 `brew upgrade` 有关
+  - 但是云上 github action 跟 vercel 都还有问题，同样的命令同样的 hugo 版本，本地生成的静态文件 mermaid 跟 aplay 正常加载，云上生成的就有问题，也是醉了...
+
 ### 2022-06-05 ~ 2022-06-06
 
 - 观看 [KubeCon + CloudNativeCon 2022](https://www.youtube.com/playlist?list=PLj6h78yzYM2MCEgkd8zH0vJWF7jdQ-GRR) 中我比较感兴趣的部分
