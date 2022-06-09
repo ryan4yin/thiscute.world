@@ -22,6 +22,7 @@ toc:
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 88%
+- 《Intimate Relationships》 - 进度 6/449
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 极客时间《分布式协议与算法实战》 - 40%
 
@@ -66,11 +67,11 @@ toc:
 - Kubernetes 原理、kubernetes apiserver/operator 编程
 - Go 语言 Web 编程
 - 分布式与 Etcd
+- 计算机网络：主要是熟悉 L3 网络层与 L4 传输层，结合 K8s 网络进行学习
+- Linux：学完 TLPR，能独立进行 Linux 性能调优与性能问题排查
 - 只要求入门，写点简单的小玩具
   - 机器学习与深度学习
   - 区块链与智能合约编程
-- 计算机网络：主要是熟悉 L3 网络层与 L4 传输层，结合 K8s 网络进行学习
-- Linux：学完 TLPR，能独立进行 Linux 性能调优与性能问题排查
 
 ## 三、今年的阅读进展
 
@@ -88,7 +89,7 @@ toc:
 正在读：
 
 - 《在生命的尽头拥抱你-临终关怀医生手记》
-- 《复杂 - 梅拉尼 米歇尔》
+- 《Intimate Relationships》
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
 
 计划读：
@@ -108,6 +109,7 @@ toc:
 - 《原则 - 应对变化中的世界秩序》
 - 《生命最后的读书会》
 - 《凤凰项目：一个 IT 运维的传奇故事》
+- 《复杂 - 梅拉尼 米歇尔》
 
 
 ## 四、我的知识清单
@@ -148,6 +150,7 @@ toc:
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
   - 阅读《Lua 程序设计》
+  - 阅读《自己动手实现 Lua》
   - 阅读 APISIX 源码 + Openresty
   - 深入学习 Nginx 及 epoll
 
@@ -177,42 +180,43 @@ toc:
   - 《苏菲的世界》：据说是哲学启蒙读物，曾经看过，但是对内容完全没印象了。
   - 《你一生的故事》：我也曾是个科幻迷
   - 《沈从文的后半生》
-  - 《我与地坛》
-  - 《将饮茶》
-  - 《吾国与吾民 - 林语堂》
   - 《房思琪的初恋乐园》
-  - 《可是我偏偏不喜欢》
   - 《月光落在左手上》
+  - 《了不起的盖茨比》
+  - 《The Windup Girl》：高中时读过中文版，刷新我三观，现在想再读一遍英文原版。
 - 人文社科
-  - 《爱的艺术》
-  - 《亲密关系》
-  - 《怎样征服美丽少女》：哈哈，之前在豆瓣还是哪看到的，听说很有用。
   - 《被讨厌的勇气》
-  - 《邓小平时代》
-  - 《论中国》
+  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+  - 《江城》
   - 《探路之役 - 1978-1922 年的中国经济改革》
   - 《筚路维艰 - 中国社会主义路径的五次选择》
-  - 《人体简史》
-  - 《科学革命的结构》
-  - 《时间的秩序》
-  - 《极简宇宙史》
   - 《刘擎西方现代思想讲义》
   - 《圆圈正义-作为自由前提的信念》
+  - 《科学革命的结构》
+  - 《人体简史》
+  - 《邓小平时代》
+  - 《论中国》
+  - 《时间的秩序》
+  - 《极简宇宙史》
   - 《人生脚本》
   - 《投资中最简单的事》
   - 《债务危机 - 我的应对原则》
-  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 技术类
+  - 《凤凰项目——一个 IT 运维的传奇故事》
   - 《人月神话》
   - 《绩效使能：超越 OKR》
   - 《奈飞文化手册》
   - 《幕后产品-打造突破式思维》
   - 《分析与思考 - 黄奇帆的复旦经济课》：这本书会需要一定的经济学基础知识，打算在入门经济学后再看
-  - 《重构 - 改善既有代码的设计》]
+  - 《重构 - 改善既有代码的设计》
   - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
   - [SQL进阶教程](https://book.douban.com/subject/27194738/)
   - 分布式系统：[Designing Data-Intensive Applications](https://dataintensive.net/) - 可结合 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) 课程视频学习
   - 数据库系统：建议直接学习课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+  - 《WebAssembly 核心原理》
+  - 用 Go 语言讲编程语言理论
+    - 《自己动手实现 Lua》
+    - 《自己动手实现 Java 虚拟机》
   - 编程语言理论（如何设计一个编程语言）
     - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
       - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
