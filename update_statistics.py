@@ -272,12 +272,12 @@ def get_shanghai_datetime_str():
     """
     获取到东八区的时间字符串
 
-    Return:  2022-02-10T00:48:52UTC+08:00
+    Return:  2022-02-10T00:48UTC+08:00
     """
     tz_shanghai = dt.timezone(dt.timedelta(hours=8))
     now_shanghai = dt.datetime.now(tz=tz_shanghai)
     # 2022-02-10T00:48:52UTC+08:00
-    return now_shanghai.strftime('%Y-%m-%dT%H:%M:%S%Z')
+    return now_shanghai.strftime('%Y-%m-%dT%H:%M%Z')
 
 
 def main():
