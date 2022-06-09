@@ -17,7 +17,8 @@ toc:
   - 了解了人类社会性动物的本质，这可以用进化论解释——越社会性的个体存活率越高，基因也越容易传续。
   - 亲密关系的建立是很容易的，「你是我的唯一」更多的是一种浪漫的说法，只是「因为刚好遇到你」而已。
   - 一旦建立了亲密关系，我们就会抗拒这份亲密关系的解离。当亲密关系遭遇危机时，我们会茶不思饭不想。
-
+  - 在 Youtube 上搜了下 Intimate Replationships，找了几个相关的 TED Talks 看了看。
+  - 还找到 UCLA 一个比较老的课程：[Intimate Relationships: Undergraduate Lectures at UCLA](https://www.youtube.com/playlist?list=PLexCQI5fHYIdeWyOSJBclmFL8i4bkBT4H)，可以跟书一起看看。
 
 ### 2022-06-08
 
