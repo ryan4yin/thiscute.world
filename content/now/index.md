@@ -22,6 +22,8 @@ toc:
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - 《Intimate Relationships》 - 进度 6/449
+- 《语言学的邀请》- 进度 0%
+  - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 极客时间《分布式协议与算法实战》 - 40%
 
@@ -89,9 +91,9 @@ toc:
 
 正在读：
 
-- 《在生命的尽头拥抱你-临终关怀医生手记》
 - 《Intimate Relationships》
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
+- 《语言学的邀请》：对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
 
 计划读：
 
