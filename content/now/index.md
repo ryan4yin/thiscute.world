@@ -21,7 +21,6 @@ toc:
   - 多云/多集群的其他模块如监控、日志、链路追踪、数据中间件、消息队列等，还未开始研究。
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
-- 《在生命的尽头拥抱你-临终关怀医生手记》 - 进度 88%
 - 《Intimate Relationships》 - 进度 6/449
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 极客时间《分布式协议与算法实战》 - 40%
@@ -85,6 +84,8 @@ toc:
 - [x] 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》
 - [x] 《Go 程序设计语言（英文版）》
 - [x] 《深入浅出 Kubernetes - 张磊》
+- [x] 《在生命的尽头拥抱你-临终关怀医生手记》
+
 
 正在读：
 
