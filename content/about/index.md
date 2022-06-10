@@ -90,7 +90,7 @@ comment:
 - 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
 {{< /admonition >}}
 
-{{< admonition info "博客快照" >}}
+{{< admonition info "博客快照-2020-01-21" >}}
 ![](/images/about/cnblog-2020-01-21.webp "博客园快照")
 {{< /admonition >}}
 
