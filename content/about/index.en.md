@@ -21,8 +21,7 @@ lightgallery: true
 - **Music**:
   - I like listening to Post-rock, Bluegrass, Folk and Instrumental Music.
   - I'm learning Bamboo Flute, Harmonica, [SynthesizerV](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) & [Reaper](https://www.reaper.fm) on and off.
-- **Other Hobbies**: 
-  - **Sports**: I like **Roller Skating** and **Swimming**, VR games "**Beat Saber**" and "**Pistol Whip**"
+- **Sports**: I like **Roller Skating** and **Swimming**, VR games "**Beat Saber**" and "**Pistol Whip**"
 - **Books**: The serious books I read most are IT technical books. In addition, I also like to read science fiction and web novels / light novels that I can't quit.
 - **Movies/TV**: What I watch most are anime, and in addition, science fiction films and tender films.
 - **Major**:
