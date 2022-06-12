@@ -17,19 +17,21 @@ lightgallery: true
 >There’s a lot of despair, but also the odd moment of beauty, where time is no longer the same. -- The Elegance of the Hedgehog by Barbery, Muriel Anderson
 
 - **Nickname**: **ryan4yin**, **ryan_yin**
+- **Gender**: Him/He, like girls.
 - **Music**:
   - I like listening to Post-rock, Bluegrass, Folk and Instrumental Music.
   - I'm learning Bamboo Flute, Harmonica, [Synthesizer V](https://dreamtonics.com/en/synthesizerv/) & [Reaper](https://www.reaper.fm) on and off.
 - **Other Hobbies**: 
   - **Sports**: I like **Roller Skating** and **Swimming**, VR games "**Beat Saber**" and "**Pistol Whip**"
-  - **Tea**: At present, I prefer to drink **Black Tea**, such as Dianhong - Yunnan Gold, Redsunion Keemun. 
 - **Books**: The serious books I read most are IT technical books. In addition, I also like to read science fiction and web novels / light novels that I can't quit.
 - **Movies/TV**: What I watch most are anime, and in addition, science fiction films and tender films.
 - **Major**:
-  - 2015-2019: major in Acoustics, but I didn't learn it very well...
+  - **2015-6 ~ 2019-6**: major in Acoustics, but I didn't learn it very well...
+  - **2019-6 ~ 2021-2**: worked in an unknown start-up company, as an DevOps engineer...
+  - **2021-3 ~ Now**: worked as a SRE engineer at Mobiuspace, mainly responsible for maintaining and optimizing K8s service platform and traffic links, analyzing and managing AWS/GCP/Tencent cloud computing costs.
 - **Languages**
   - **English**: Good at reading technical articles, but weak in writing, listening and speaking.
-  - **Chinese**: Chinese is my first language.
+  - **Chinese**: Chinese is my native language.
 - **Programming Languages**
   - **Python**: It's my current main language, and also the language I am most familiar with.
   - **Go**: I am learning it, it's widely used in cloud native ecology.
@@ -40,8 +42,10 @@ lightgallery: true
   - Maintain and optimize cloud computing platform and cloud networking, analyze and control cloud computing costs, to support the fast-growing business stably and efficiently.
 - **Tools & Technologies**: Linux/Kubernetes/Istio
 - Contact Me
-  - Publicly: https://github.com/ryan4yin/ryan4yin.space/issues
-  - Privately(Email): `eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
+  - Email: `eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
+  - Twitter: <https://twitter.com/ryan4yin>
+  - Github: <https://github.com/ryan4yin/thiscute.world/issues>
+
 
 ## About This Blog
 
