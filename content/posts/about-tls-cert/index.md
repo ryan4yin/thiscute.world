@@ -8,7 +8,7 @@ resources:
   src: "https-secure.webp"
 
 tags: ["Cryptography", "密码学", "HTTPS", "TLS", "SSL", "OpenSSL", "PKI", "数字证书", "证书", "SSH", "QUIC", "HTTP/3",  "安全"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >本文基本上是一篇原创文章，但是行文有点生硬，仍然在优化中，不太适合初学者阅读。

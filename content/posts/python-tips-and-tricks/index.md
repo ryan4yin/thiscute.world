@@ -8,7 +8,7 @@ resources:
   src: "python-tips-and-tricks.webp"
 
 tags: ["Python", "Tips", "Tricks", "常见错误"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

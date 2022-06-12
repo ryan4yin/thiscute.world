@@ -7,7 +7,7 @@ resources:
   src: "cryptographic_hash_function.webp"
 
 tags: ["Cryptography", "Hash", "密码学", "哈希", "散列", "安全", "SHA-2", "SHA-3"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

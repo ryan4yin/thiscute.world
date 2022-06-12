@@ -8,7 +8,7 @@ resources:
   src: "yume_grimgar.webp"
 
 tags: ["网络", "Linux", "网络调试"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >文中的命令均在 macOS Big Sur 和 Opensuse Tumbleweed 上测试通过

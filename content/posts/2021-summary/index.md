@@ -7,7 +7,7 @@ resources:
   src: "wrapped_ryan4yin.webp"
 
 tags: ["总结"]
-categories: ["随笔", "技术"]
+categories: ["life", "tech"]
 ---
 
 >更新：2022/1/22

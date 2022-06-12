@@ -7,7 +7,7 @@ resources:
   src: "base64-encoding.webp"
 
 tags: ["Base64", "编码"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

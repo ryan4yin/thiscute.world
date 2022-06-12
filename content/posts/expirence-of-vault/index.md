@@ -8,7 +8,7 @@ resources:
   src: "bankvault.webp"
 
 tags: ["Vault", "云原生", "Secrets", "配置", "配置管理"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 [Vault](https://github.com/hashicorp/vault) 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：

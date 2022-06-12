@@ -7,7 +7,7 @@ resources:
   src: "data-security.webp"
 
 tags: ["Cryptography", "Hash", "KDF", "密码学", "安全", "哈希", "加解密", "签名"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

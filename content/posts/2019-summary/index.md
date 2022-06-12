@@ -7,7 +7,7 @@ resources:
   src: "beginning-the-devops-journey.webp"
 
 tags: ["总结"]
-categories: ["随笔", "技术"]
+categories: ["life", "tech"]
 ---
 
 >迟到的年终总结

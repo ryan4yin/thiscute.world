@@ -8,7 +8,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["Kubernetes"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 ## Pod 常见错误
 

@@ -8,7 +8,7 @@ resources:
   src: "grimgargroup.webp"
 
 tags: ["英语", "语言学习"]
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

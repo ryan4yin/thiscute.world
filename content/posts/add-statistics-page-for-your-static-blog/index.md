@@ -8,7 +8,7 @@ resources:
   src: "website-statistics.webp"
 
 tags: ["博客", "Google Analytics", "阅读统计"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 

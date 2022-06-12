@@ -7,7 +7,7 @@ resources:
   src: "random-numbers.webp"
 
 tags: ["Cryptography", "密码学", "伪随机数", "安全", "PRNG", "CSPRNG"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

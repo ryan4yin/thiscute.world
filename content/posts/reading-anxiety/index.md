@@ -8,7 +8,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["阅读", "焦虑"]
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

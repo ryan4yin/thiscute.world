@@ -8,7 +8,7 @@ resources:
   src: "kubernetes-best-practices.webp"
 
 tags: ["Kubernetes", "最佳实践", "云原生"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来

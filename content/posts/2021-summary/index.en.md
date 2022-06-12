@@ -7,7 +7,7 @@ resources:
   src: "wrapped_ryan4yin.webp"
 
 tags: ["Summary"]
-categories: ["Essays", "Technology"]
+categories: ["life", "tech"]
 ---
 
 

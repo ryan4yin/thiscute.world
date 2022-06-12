@@ -7,7 +7,7 @@ resources:
   src: "linux-systemd.webp"
 
 tags: ["Linux", "Systemd", "Init System"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

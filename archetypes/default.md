@@ -9,7 +9,7 @@ resources:
   src: "featured-image.webp"
 
 tags: []
-categories: ["技术"]
+categories: ["tech"]
 
 lightgallery: false
 

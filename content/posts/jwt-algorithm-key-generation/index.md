@@ -8,7 +8,7 @@ resources:
   src: "jwt.webp"
 
 tags: ["JWT", "算法", "OpenSSL"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 

@@ -8,7 +8,7 @@ resources:
   src: "nat.webp"
 
 tags: ["NAT", "网络", "NAT 穿越", "内网穿透", "虚拟网络", "P2P", "WebRTC"]
-categories: ["技术"]
+categories: ["tech"]
 
 # 文章未完成，先不在首页显示
 # hiddenFromHomePage: true

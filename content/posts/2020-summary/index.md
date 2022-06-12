@@ -7,7 +7,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["总结"]
-categories: ["随笔", "技术"]
+categories: ["life", "tech"]
 ---
 
 

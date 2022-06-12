@@ -8,7 +8,7 @@ resources:
   src: "5-centimeters-per-second.webp"
 
 tags: []
-categories: ["Essays"]
+categories: ["life"]
 
 comment:
   utterances:

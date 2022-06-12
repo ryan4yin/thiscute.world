@@ -9,7 +9,7 @@ resources:
   src: "inifity-ryvius.webp"
 
 tags: ["观后感", "动漫"]
-categories: ["影视", "随笔"]
+categories: ["影视", "life"]
 
 lightgallery: false
 

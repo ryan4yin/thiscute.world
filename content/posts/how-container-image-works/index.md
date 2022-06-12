@@ -8,7 +8,7 @@ draft: true
 #   src: "docker-turtles-networking.webp"
 
 tags: ["Linux", "容器", "overlayfs", "chroot"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 待续

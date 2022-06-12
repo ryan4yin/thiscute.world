@@ -8,7 +8,7 @@ resources:
   src: "docker-turtles-networking.webp"
 
 tags: ["Linux", "网络", "虚拟化", "容器", "iptables", "conntrack"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

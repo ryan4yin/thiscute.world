@@ -8,7 +8,7 @@ resources:
   src: "terminal.webp"
 
 tags: ["Linux", "MacOSX", "Windows", "CLI", "Powershell", "Shell", "tmux", "rsync", "vim", "awk"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

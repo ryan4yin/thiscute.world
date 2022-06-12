@@ -8,7 +8,7 @@ resources:
   src: "first-round.webp"
 
 tags: ["总结", "心得"]
-categories: ["随笔"]
+categories: ["life"]
 ---
 
 >2022-02-09 更新：2022 年再回看这篇文章，明显感觉到我的进步很大很大，不论是工作文化与环境、薪资、吃喝玩乐、还是接触到的线上环境规模都有了质的变化，详情见 [2021 年总结](https://thiscute.world/posts/2021-summary/)。

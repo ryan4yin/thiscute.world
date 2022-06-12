@@ -8,7 +8,7 @@ resources:
   src: "IMG_20180404_160133.webp"
 
 tags: ["后摇"]
-categories: ["音乐", "随笔"]
+categories: ["音乐", "life"]
 
 comment:
   utterances:

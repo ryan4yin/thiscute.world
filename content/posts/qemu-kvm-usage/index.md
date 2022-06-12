@@ -8,7 +8,7 @@ resources:
   src: "qemu-kvm-libvirt-go.webp"
 
 tags: ["虚拟化", "KVM", "libvirt", "QEMU"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 QEMU/KVM 虚拟化

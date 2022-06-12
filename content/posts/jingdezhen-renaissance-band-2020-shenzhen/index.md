@@ -7,7 +7,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["景德镇文艺复兴", "后摇"]
-categories: ["音乐", "随笔"]
+categories: ["音乐", "life"]
 
 lightgallery: true
 ---

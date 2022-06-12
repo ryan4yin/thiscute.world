@@ -7,7 +7,7 @@ resources:
   src: ".png"
 
 tags: ["Istio", "Envoy", "Service Mesh", " 服务网格", "网络代理", "Kubernetes"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

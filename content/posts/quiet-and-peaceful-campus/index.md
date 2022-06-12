@@ -8,7 +8,7 @@ resources:
   src: "featured-image.webp"
 
 tags: []
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

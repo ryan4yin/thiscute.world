@@ -8,7 +8,7 @@ resources:
   src: "sql.webp"
 
 tags: ["SQL", "数据库", "Database"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 

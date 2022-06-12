@@ -8,7 +8,7 @@ resources:
   src: "chinese_new_year.webp"
 
 tags: ["Java", "字符集", "字符编码"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 

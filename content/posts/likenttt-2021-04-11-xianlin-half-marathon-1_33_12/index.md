@@ -7,7 +7,7 @@ resources:
   src: "2021-0411-xianlin-half-marathon-route.webp"
 
 tags: ["长跑", "马拉松", "运动"]
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

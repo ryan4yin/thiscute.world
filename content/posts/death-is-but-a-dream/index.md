@@ -9,7 +9,7 @@ resources:
   src: "death-is-but-a-dream.webp"
 
 tags: ["临终体验", "临终关怀", "死亡", "临终", "梦境", "哲学"]
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

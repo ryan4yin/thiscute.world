@@ -8,7 +8,7 @@ resources:
   src: "symmetric-vs-asymmetric.webp"
 
 tags: ["Cryptography", "密码学", "非对称加密", "安全", "RSA", "ECC"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

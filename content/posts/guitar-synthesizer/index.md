@@ -8,7 +8,7 @@ resources:
   src: "guitar.webp"
 
 tags: ["乐理", "吉他", "synthesizer"]
-categories: ["技术", "音乐"]
+categories: ["tech", "音乐"]
 ---
 
 >在博客园草稿箱里翻到这篇 2018-05-07 的陈年旧稿，把它鸽完吧...

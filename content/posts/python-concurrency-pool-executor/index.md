@@ -7,7 +7,7 @@ resources:
   src: "python-concurrency.webp"
 
 tags: ["Python", "Concurrency", "并发"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

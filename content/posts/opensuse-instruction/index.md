@@ -8,7 +8,7 @@ resources:
   src: "linux-opensuse.webp"
 
 tags: ["openSUSE", "Linux"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。

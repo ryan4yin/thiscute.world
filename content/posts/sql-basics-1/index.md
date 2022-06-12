@@ -8,7 +8,7 @@ resources:
   src: "sql.webp"
 
 tags: ["SQL", "数据库", "Database"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >本笔记整理自[《SQL 基础教程》](https://book.douban.com/subject/24841239/)、[《MySQL 必知必会》](https://book.douban.com/subject/3354490/)和网上资料。个人笔记不保证正确。

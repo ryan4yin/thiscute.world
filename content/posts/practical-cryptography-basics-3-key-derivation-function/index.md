@@ -7,7 +7,7 @@ resources:
   src: "key.webp"
 
 tags: ["Cryptography", "Hash", "哈希", "散列", "密码学", "安全", "MAC", "HMAC", "KDF", "Scrypt"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

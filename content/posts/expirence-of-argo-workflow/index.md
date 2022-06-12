@@ -8,7 +8,7 @@ resources:
   src: "argo-workflow.webp"
 
 tags: ["云原生", "CI","持续集成", "流水线"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo-workflows/)

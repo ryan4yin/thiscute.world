@@ -7,7 +7,7 @@ resources:
   src: "asyncio-banner.webp"
 
 tags: ["Python", "asyncio"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

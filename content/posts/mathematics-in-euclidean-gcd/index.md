@@ -9,7 +9,7 @@ resources:
   src: "gcd.webp"
 
 tags: ["算法"]
-categories: ["数学", "技术"]
+categories: ["数学", "tech"]
 ---
 
 

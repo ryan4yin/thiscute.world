@@ -7,7 +7,7 @@ resources:
   src: "sqlalchemy-intro.webp"
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 

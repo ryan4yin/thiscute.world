@@ -7,7 +7,7 @@ resources:
   src: "guangzhou-marathon-before-race.webp"
 
 tags: ["长跑", "马拉松", "运动"]
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

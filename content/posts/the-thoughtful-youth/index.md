@@ -7,7 +7,7 @@ resources:
   src: "魑魅魍魉.webp"
 
 tags: []
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

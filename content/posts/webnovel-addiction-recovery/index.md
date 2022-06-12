@@ -8,7 +8,7 @@ resources:
   src: "addction-vs-life.webp"
 
 tags: ["Webnovel", "网络小说"]
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

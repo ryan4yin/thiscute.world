@@ -8,7 +8,7 @@ resources:
   src: "linux-network.webp"
 
 tags: ["Linux", "网络", "虚拟化", "容器"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >本文用到的字符画工具：[vscode-asciiflow2](https://github.com/zenghongtu/vscode-asciiflow2)

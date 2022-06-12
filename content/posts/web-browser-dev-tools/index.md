@@ -8,7 +8,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["Chrome", "Firefox", "DevTools", "Browser"]
-categories: ["技术"]
+categories: ["tech"]
 
 lightgallary: true
 ---

@@ -8,7 +8,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["网络代理", "源码分析", "网络隧道", "Clash"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 

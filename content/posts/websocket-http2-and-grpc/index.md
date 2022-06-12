@@ -8,7 +8,7 @@ resources:
   src: "protocols-banner.webp"
 
 tags: ["WebSocket", "gRPC", "HTTP/2"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 ## 一、WebSocket

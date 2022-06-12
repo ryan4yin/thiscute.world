@@ -8,7 +8,7 @@ resources:
   src: "hefei-to-shenzhen.webp"
 
 tags: []
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

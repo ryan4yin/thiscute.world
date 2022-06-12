@@ -7,7 +7,7 @@ resources:
   src: "symmetric-vs-asymmetric.webp"
 
 tags: ["Cryptography", "密码学", "对称加密", "安全", "AES", "ChaCha20"]
-categories: ["技术"]
+categories: ["tech"]
 
 math:
   enable: true

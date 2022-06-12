@@ -9,7 +9,7 @@ resources:
   src: "qudu-temple.webp"
 
 tags: ["生死"]
-categories: ["随笔"]
+categories: ["life"]
 
 comment:
   utterances:

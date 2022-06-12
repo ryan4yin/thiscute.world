@@ -9,7 +9,7 @@ resources:
   src: "fate-of-mortals.webp"
 
 tags: ["读后感", "小说"]
-categories: ["书藉", "随笔"]
+categories: ["书藉", "life"]
 
 lightgallery: false
 

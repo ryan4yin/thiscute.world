@@ -8,7 +8,7 @@ resources:
   src: "manjaro.webp"
 
 tags: ["Manjaro", "Linux", "Arch Linux"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 

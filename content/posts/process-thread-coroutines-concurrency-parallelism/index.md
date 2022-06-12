@@ -8,7 +8,7 @@ resources:
   src: "concurrency-vs-parallelism.webp"
 
 tags: ["进程", "线程", "协程", "并发", "并行", "Coroutines", "Concurrency"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >个人笔记，不保证正确。

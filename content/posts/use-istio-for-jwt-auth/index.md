@@ -8,7 +8,7 @@ resources:
   src: "istio.webp"
 
 tags: ["Kubernetes", "Istio", "服务网格"]
-categories: ["技术"]
+categories: ["tech"]
 ---
 
 >本文基于 Istio1.5 编写测试

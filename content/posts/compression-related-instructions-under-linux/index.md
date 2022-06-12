@@ -7,7 +7,7 @@ resources:
   src: "tar-compression.webp"
 
 tags: ["Linux", "Compression", "压缩", "tar"]
-categories: ["技术"]
+categories: ["tech"]
 
 code:
   # whether to show the copy button of the code block

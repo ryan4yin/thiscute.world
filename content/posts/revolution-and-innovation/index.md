@@ -7,7 +7,7 @@ resources:
   src: "rolling-girls.webp"
 
 tags: ["创新", "变革"]
-categories: ["随笔", "技术"]
+categories: ["life", "tech"]
 
 comment:
   utterances:

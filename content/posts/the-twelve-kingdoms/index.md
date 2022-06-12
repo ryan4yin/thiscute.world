@@ -8,7 +8,7 @@ resources:
   src: "featured-image.webp"
 
 tags: ["读后感", "观后感", "动漫"]
-categories: ["书藉", "影视", "随笔"]
+categories: ["书藉", "影视", "life"]
 
 comment:
   utterances:
