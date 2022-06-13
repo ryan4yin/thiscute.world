@@ -21,6 +21,7 @@ toc:
   - 多云/多集群的其他模块如监控、日志、链路追踪、数据中间件、消息队列等，还未开始研究。
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 21/572
 - 《Intimate Relationships》 - 进度 14/449
 - 《语言学的邀请》- 进度 68/288
   - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~

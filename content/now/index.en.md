@@ -11,6 +11,7 @@ toc:
 
 - study multi-cloud & multi-cluster kuberntes network architecture, application management platform
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+- [The Linux Programming Interface](https://man7.org/tlpi/)
 - [AI] - [Dive into Deep Learning](https://github.com/d2l-ai/d2l-en)
 - [Psychology] - Intimate Relationships, 7e, Rowland S. Miller
 
