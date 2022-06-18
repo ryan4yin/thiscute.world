@@ -15651,6 +15651,23 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 <p>拆破玉笼飞彩凤，顿开金锁走蛟龙。</p>
 </blockquote>
 ]]></content></entry><entry><title type="html">曾经的我</title><link href="https://thiscute.world/history/"/><id>https://thiscute.world/history/</id><author><name>ryan4yin</name></author><published>2021-02-01T14:14:35+08:00</published><updated>2021-02-01T14:14:35+08:00</updated><content type="html"><![CDATA[<p>记录下我的学习轨迹。</p>
+<h3 id="2022-06-16--2022-06-17" class="headerLink">
+    <a href="#2022-06-16--2022-06-17" class="header-mark"></a>2022-06-16 ~ 2022-06-17</h3><ul>
+<li>研究云上网关及 Kubernetes 集群的网络架构优化方案
+<ul>
+<li>从之前的「多云+多集群网络方案」，先简化为各集群互相独立的网络方案，之后再往多集群、多云去迭代。
+<ul>
+<li>新方案：
+<ul>
+<li>将遗留的 Nginx 网关直接移到 K8s 集群内，并注入 Sidecar 以接入 Istio 服务网格，由 Sidecar 帮助 Nginx 实现集群内的服务发现、流量切分、多集群支持等能力。好处是遗留的一堆 Nginx 配置基本不需要什么改动，改造难度低，收益明显（动态扩缩容的 Nginx、更短的网关链路、更简洁的配置）。后续还可以逐渐切换到新的 API 网关提升可维护性。</li>
+<li>Nginx 可以通过云服务商提供的 L4 负载均衡（如 AWS NLB）暴露到公网，也可以自建 keepalived 高可用方案（自己整个 Pod 动态注册控制器，或者搞套静态的节点组都行），不过要注意跨区流量，网关最好是每个可用区单独部署一套，互相隔离。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h3 id="2022-06-13" class="headerLink">
     <a href="#2022-06-13" class="header-mark"></a>2022-06-13</h3><ul>
 <li><a href="https://man7.org/tlpi/" target="_blank" rel="noopener noreffer">Linux/Unix 系统编程手册（上册）</a> - 进度 21/572</li>
@@ -16498,13 +16515,6 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 <p>按优先级排序</p>
 </blockquote>
 <ul>
-<li>研究多云与多 Kubernetes 集群的网络架构、应用管理方案
-<ul>
-<li>当前方向：Istio 多集群服务网格与多集群 API 网关 + Karmada 多集群应用部署 + cluster-api 多集群创建与更新</li>
-<li>也考虑是否统一使用开源的 k8s 网络插件，如 cilium</li>
-<li>多云/多集群的其他模块如监控、日志、链路追踪、数据中间件、消息队列等，还未开始研究。</li>
-</ul>
-</li>
 <li>学习<a href="https://geektutu.com/post/gee.html" target="_blank" rel="noopener noreffer">Go语言动手写Web框架</a> - 进度 20%</li>
 <li>阅读 <a href="https://programming-kubernetes.info/" target="_blank" rel="noopener noreffer">Programming Kubernetes - Developing Cloud Native Applications</a>- 进度 7%</li>
 <li><a href="https://man7.org/tlpi/" target="_blank" rel="noopener noreffer">Linux/Unix 系统编程手册（上册）</a> - 进度 21/572</li>
