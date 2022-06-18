@@ -164,7 +164,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      istio: ingressgateway
+      istio: ingressgateway  # 在带有这些 labels 的 ingressgateway/sidecar 上生效
   jwtRules:
   # issuer 即签发者，需要和 JWT payload 中的 iss 属性完全一致。
   - issuer: "testing@secure.istio.io"
@@ -193,6 +193,8 @@ JWT 的验证规则是：
 1. JWT 的 payload 中有 issuer 属性，首先通过 issuer 匹配到对应的 istio 中配置的 jwks。
 2. JWT 的 header 中有 kid 属性，第二步在 jwks 的公钥列表中，中找到 kid 相同的公钥。
 3. 使用找到的公钥进行 JWT 签名验证。
+
+>配置中的 `spec.selector` 可以省略，这样会直接在整个 namespace 中生效，而如果是在 `istio-system` 名字空间，该配置将在全集群的所有 sidecar/ingressgateway 上生效！
 
 
 ### 6. 启用 Payload 转发/Authorization 转发
@@ -247,16 +249,61 @@ IG-->>User: 返回信息
 {{< /mermaid >}}
 
 
-## 其他问题
+### 7. 设定强制认证规则
 
-### 1. AuthorizationPolicy
+Istio 的 JWT 验证规则，默认情况下会直接忽略不带 Authorization 请求头（即 JWT）的流量，因此这类流量能直接进入网格内部。
+通常这是没问题的，因为没有 Authorization 的流量即使进入到内部，也会因为无法通过 payload 判别身份而被拒绝操作。
+如果需要禁止不带 JWT 的流量，就需要额外配置 AuthorizationPolicy 策略。
 
-Istio 的 JWT 验证规则，默认情况下会直接忽略不带 Authorization 请求头的流量，因此这类流量能直接进入网格内部。如果需要禁止不带 Authorization 头的流量，需要额外配置 AuthorizationPolicy 策略。
+比如拒绝任何 JWT 无效的请求（包括 Authorization 的情况）：
 
-RequestsAuthentication 验证失败的请求，Istio 会返回 401 状态码。
-AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码。
+```yaml
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "deny-requests-with-out-authorization"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  action: DENY # 拒绝
+  rules:
+  - from:
+    - source:
+        notRequestPrincipals: ["*"]  # 不存在任何请求身份（Principal）的 requests
+```
 
-这会导致在使用 AuthorizationPolicy 禁止了不带 Authorization 头的流量后，这类请求会直接被返回 403。。。在使用 RESTful API 时，这种情况可能会造成一定的问题。
+如果仅希望强制要求对部分 path 的请求必须带有 Authorization Header，可以这样设置：
+
+```yaml
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: "deny-requests-with-out-authorization"
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  action: DENY # 拒绝
+  rules:
+  - from:
+    - source:
+        notRequestPrincipals: ["*"]  # 不存在任何请求身份（Principal）的 requests
+    # 仅强制要求如下 host/path 相关的请求，必须带上 JWT token
+    to:
+    - operation:
+        hosts: ["another-host.com"]
+        paths: ["/headers"]
+```
+
+注意这两个 Istio CR 返回的错误码是不同的：
+
+- **RequestsAuthentication 验证失败的请求，Istio 会返回 401 状态码**。
+- **AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码**。
+
+这会导致在使用 AuthorizationPolicy 禁止了不带 Authorization 头的流量后，这类请求会直接被返回 403，在使用 RESTful API 时，这种情况可能会造成问题。
 
 ### 2. Response Headers
 
