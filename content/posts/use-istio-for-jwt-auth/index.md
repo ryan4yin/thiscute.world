@@ -305,7 +305,7 @@ spec:
 
 这会导致在使用 AuthorizationPolicy 禁止了不带 Authorization 头的流量后，这类请求会直接被返回 403，在使用 RESTful API 时，这种情况可能会造成问题。
 
-### 2. Response Headers
+### 8. Response Headers
 
 RequestsAuthentication 不支持自定义响应头信息，这导致对于前后端分离的 Web API 而言，
 一旦 JWT 失效，Istio 会直接将 401 返回给前端 Web 页面。
