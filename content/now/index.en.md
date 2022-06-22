@@ -9,7 +9,8 @@ toc:
 
 ## 🌱 I’m currently learning
 
-- study multi-cloud & multi-cluster kuberntes network architecture, application management platform
+- study multi-cloud & multi-cluster kuberntes network architecture(istio service mesh + api gateway), application management platform(karmada)
+- The ANSI C Programming Language
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - [The Linux Programming Interface](https://man7.org/tlpi/)
 - [AI] - [Dive into Deep Learning](https://github.com/d2l-ai/d2l-en)
@@ -18,7 +19,6 @@ toc:
 ## 🤤 I want to learn
 
 - Programming Languages: **Rust, C**
-  - The ANSI C Programming Language
 - OS: Linux
 - Network: L3/L4/L7
   - Computer Networking - A Top-Down Approach, 7e

@@ -15,16 +15,23 @@ toc:
 
 >按优先级排序
 
+- The ANSI C Programming Language - 83/236
+  - 快速过一遍语法
+- 极客时间《深入 C 语言和程序运行原理》
+
+## 二、我今年还想搞搞这些
+
+我今年学了一部分但是暂时失去兴趣的内容：
+
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 21/572
 - 《Intimate Relationships》 - 进度 14/449
 - 《语言学的邀请》- 进度 68/288
   - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
+- 《深入理解 Linux 网络 - 张彦飞》 - 14/320
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 极客时间《分布式协议与算法实战》 - 40%
-
-## 二、我今年还想搞搞这些
 
 今年业余时间的技术侧学习计划（不要求按顺序，几个主题可以交替学习）：
 
@@ -42,8 +49,6 @@ toc:
    4. 《Distributed Systems, 3rd Edition, 2017》
    5. 《Distributed Algorithms, 2nd Edition, 2018》
 3. （1 month）学习 C 语言，同样也写写代码练练手
-   1. The ANSI C Programming Language
-   2. 极客时间《深入 C 语言和程序运行原理》
    3. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
    4. 补充学习 gdb ld objdump objcopy
 4. （预计用时 3 month）学习 Linux
