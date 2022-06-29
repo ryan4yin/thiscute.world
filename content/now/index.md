@@ -15,6 +15,7 @@ toc:
 
 >按优先级排序
 
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - The ANSI C Programming Language - 83/236
   - 快速过一遍语法
 - 极客时间《深入 C 语言和程序运行原理》
@@ -24,7 +25,6 @@ toc:
 我今年学了一部分但是暂时失去兴趣的内容：
 
 - 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
-- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 21/572
 - 《Intimate Relationships》 - 进度 14/449
 - 《语言学的邀请》- 进度 68/288
