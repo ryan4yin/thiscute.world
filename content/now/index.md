@@ -16,9 +16,10 @@ toc:
 >按优先级排序
 
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)- 进度 7%
+- 《云原生服务网格 Istio：原理、实践、架构与源码解析》
+  - 比较老的书了，不过用来学下 Istio 的底层架构跟源码，感觉还是有价值的。
 - The ANSI C Programming Language - 83/236
   - 快速过一遍语法
-- 极客时间《深入 C 语言和程序运行原理》
 
 ## 二、我今年还想搞搞这些
 
@@ -51,6 +52,7 @@ toc:
 3. （1 month）学习 C 语言，同样也写写代码练练手
    3. 《Expert C Programming: Deep C Secrets》：我有个群就仿照了这书的名称
    4. 补充学习 gdb ld objdump objcopy
+   5. 极客时间《深入 C 语言和程序运行原理》
 4. （预计用时 3 month）学习 Linux
   - 极客时间 《Linux 内核技术实战课》
   - 极客时间 《Linux 性能优化实战》
@@ -115,6 +117,8 @@ toc:
 - 《生命最后的读书会》
 - 《凤凰项目：一个 IT 运维的传奇故事》
 - 《复杂 - 梅拉尼 米歇尔》
+- 《性能之巅（第二版）：企业与云可观测性》
+- 《BPF Performance Tools（英文版）》
 
 
 ## 四、我的知识清单
