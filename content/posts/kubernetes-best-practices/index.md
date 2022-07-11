@@ -959,3 +959,10 @@ seccomp 和 seccomp-bpf 允许对系统调用进行过滤，可以防止用户�
 - 不同节点类型的性能有差距，导致 QPS 均衡的情况下，CPU 负载不均衡
   - 解决办法（未验证）：
     - 尽量使用性能相同的实例类型：通过 `podAffinity` 及 `nodeAffinity` 添加节点类型的亲和性
+
+
+## 参考
+
+- [istio 实践指南 - imroc.cc](https://imroc.cc/istio/)
+- [Kubernetes 实践指南 - imroc.cc](https://imroc.cc/kubernetes/)
+
