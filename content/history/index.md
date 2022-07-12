@@ -9,15 +9,46 @@ toc:
 
 记录下我的学习轨迹。
 
-### 2022-06-29 - 2022-07-09
+### 2022-06-29 - Now
 
 - 开始实施网关优化方案，使用 Go 语言写了一个 Nginx Gateway 控制器
-  - 目标：将目前运行在虚拟机上的 Nginx 搬到 K8s 中运行，通过 Istio Sidecar 接入服务网格，并取代掉当前的 Istio IngressGateway 网关
-  - 功能：包含 Nginx 配置同步与 Reload、AccessLog 日志收集与上传
+  - 目标：
+    - 将目前运行在虚拟机上的 Nginx 搬到 K8s 中运行，通过 Istio Sidecar 接入服务网格，并取代掉当前的 Istio IngressGateway 网关
+    - 使用 AWS NLB 作为 Nginx 的前置负载均衡器
+  - 功能：包含 Nginx 配置同步与 Reload、AccessLog 日志文件的收集与上传
   - 使用 kubernetes/client-go 监控 configmap/pod 的变动
     - watch 接口不会处理网络问题，失败会直接断开连接，实践中不建议直接使用它！
     - 更建议使用 informer，这是一个带缓存的接口，底层是使用 watch 接口 + 队列实现，而且会自动处理网络问题（自动重连），也提供接口强制更新本地缓存
-  - 也是第一次用 Go 语言写项目，体验还不错，编译期检查跟语法提示比 Python 强多了
+  - 体验：
+    - 是第一次用 Go 语言写项目，体验还不错，编译期检查跟语法提示比 Python 强多了
+  - 遇到的问题与解决方法
+    - 客户端 Host 透传：改用 `X-Forwarded-Host`，而原 `Host` Header 仅供 Istio/Nginx 用于流量管理。
+    - http 重定向到 https:
+      - 在外部使用 L4 的 AWS NLB 但是仍然希望使用它处理 TLS 流量，这时后端的 Nginx 无法通过 `X-Forwarded-Proto` 来判断协议，也就无法直接实现 http 重定向到 https.
+      - 解决方法
+        - NLB 的 tcp(http)/tls(https) 流量，分别转发到 nginx 的不同端口，比如 8787 跟 8080，并且新增端口默认处理逻辑设为直接重定向。
+          ```conf
+            server {
+                # 对应客户端的 https 流量
+                listen 8080 default;
+
+                # 健康检查
+                location /health {
+                    return 200;
+                }
+            }
+
+            server {
+                # 专用于处理 https 重定向的新增端口，默认直接 301 永久重定向
+                # 注：如果客户端支持的话，建议换成 308 永久重定向
+                listen 8787 default;
+                return 301 https://$host$request_uri$args;
+            }
+          ```
+        - 然后对于每个域名的 nginx 配置，如果它需要将 http 重定向到 https，就只需要 `listen 8080`
+        - 如果它不想启用 http 重定向到 https 的功能，就同时监听两个端口 `listen 8080; listen 8787;`，这样它的配置优先级更高，默认的重定向逻辑就会失效。
+    - [从 Reponse Headers 中去掉 `x-envoy-` 相关信息](https://github.com/istio/istio/issues/17635)，提升安全性
+
 
 ### 2022-06-22
 
