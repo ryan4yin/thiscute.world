@@ -62,7 +62,9 @@ toc:
     - 使用 aws-load-balancer-controller 绑定 IP 模式的 NLB，发现 pod 被重新调度会导致请求超时！
       - 相关 issue: [pod termination might cause dropped connections](https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2366)
       - 解决方法：在 pod 上设置 180s - 240s 的 preStop 以及对应的 terminationGracePeriodSeconds，确保所有请求都能被正常处理！
-    - [从 Reponse Headers 中去掉 `x-envoy-` 相关信息](https://github.com/istio/istio/issues/17635)，提升安全性
+    - Nginx 注入 Istio Sidecar 后，响应头里带了些 `x-envoy-` 开头的不必要 headers
+      - 解决方法：参见 [Istio 去除响应 Headers](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5.md#%E5%85%ADistio-%E5%8E%BB%E9%99%A4%E5%93%8D%E5%BA%94-headers)
+      
 
 
 ### 2022-06-22
