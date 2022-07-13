@@ -148,12 +148,31 @@ sudo ln -s "$(which wireshark.exe)" /usr/local/bin/wireshark
 它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。
 
 
-## 2. [termshark](https://github.com/gcla/termshark): 直接通过命令行 UI 进行实时抓包分析
+## 三、直接在命令行抓包检查
+
+### termshark
+
+可以直接使用命令行 UI 工具 [termshark](https://github.com/gcla/termshark) 进行实时抓包分析
 
 有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
 这时你可以考虑直接使用命令行版本的 `wireshark` UI: [termshark](https://github.com/gcla/termshark)，直接在命令行进行实时的抓包分析。
 
 [kubectl-debug](https://github.com/aylei/kubectl-debug) 默认的调试镜像中，就自带 `termshark`.
+
+### tcpdump
+
+也可以直接使用 tcpdump 将抓到的数据打印到 stdout 查看，常用命令如下：
+
+```shell
+# 1. 嗅探所有接口，80 端口上所有 HTTP 协议请求与响应的 headers 以及 body
+tcpdump -A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+
+# 2. 嗅探 eth0 接口，80 端口上所有 HTTP GET 请求（'GET ' => 0x47455420）
+tcpdump -A -i eth0 -s 0 'tcp port 80 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420'
+
+# 2. 嗅探 eth0 接口，80 端口上所有 HTTP POST 请求（'POST' => 0x504F5354）
+tcpdump -A -i eth0 -s 0 'tcp port 80 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504F5354'
+```
 
 ## 参考
 
