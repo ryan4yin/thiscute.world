@@ -22,6 +22,8 @@ toc:
   - 体验：
     - 是第一次用 Go 语言写项目，体验还不错，编译期检查跟语法提示比 Python 强多了
   - 遇到的问题与解决方法
+    - Nginx 无法解析 K8s 内部域名
+      - 解决方法：在 `http` 配置块中添加 `resolver kube-dns.kube-system.svc.cluster.local valid=10s;` 即可，另外所有 k8s 域名都得使用 FQDN 形式，因为 Nginx 不会使用搜索域配置！
     - 客户端 Host 透传：改用 `X-Forwarded-Host`，而原 `Host` Header 仅供 Istio/Nginx 用于流量管理。
     - http 重定向到 https:
       - 在外部使用 L4 的 AWS NLB 但是仍然希望使用它处理 TLS 流量，这时后端的 Nginx 无法通过 `X-Forwarded-Proto` 来判断协议，也就无法直接实现 http 重定向到 https.
@@ -47,6 +49,19 @@ toc:
           ```
         - 然后对于每个域名的 nginx 配置，如果它需要将 http 重定向到 https，就只需要 `listen 8080`
         - 如果它不想启用 http 重定向到 https 的功能，就同时监听两个端口 `listen 8080; listen 8787;`，这样它的配置优先级更高，默认的重定向逻辑就会失效。
+    - 因为 TLS 终止加在 NLB 上了，Nginx 的`$scheme` 变量永远是 http，无法通过此参数获知客户端的协议了。 
+      - 解决方法：直接使用端口号自定义一个变量 `$client_scheme`，替换掉 `$scheme`
+        ```conf
+        map $server_port $client_scheme {
+            "8080"    "https";  # NLB 的 443 TLS 端口（HTTPS）转发到 Nginx 的 8080
+            "8787"    "http";   # NLB 的 80 TCP 端口（HTTP）转发到 Nginx 的 8787
+        }
+        ```
+    - 安全组问题：为了获取客户端 IP 需要在 NLB 上启用客户端 IP 透传，但是这样会导致流量被内网安全组拒绝！
+      - 解决方法：在 Nginx 所在的 EC2 上添加安全组，允许公网 IP 访问其 8080(https)/8787(http) 端口即可
+    - 使用 aws-load-balancer-controller 绑定 IP 模式的 NLB，发现 pod 被重新调度会导致请求超时！
+      - 相关 issue: [pod termination might cause dropped connections](https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2366)
+      - 解决方法：在 pod 上设置 180s - 240s 的 preStop 以及对应的 terminationGracePeriodSeconds，确保所有请求都能被正常处理！
     - [从 Reponse Headers 中去掉 `x-envoy-` 相关信息](https://github.com/istio/istio/issues/17635)，提升安全性
 
 
