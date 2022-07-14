@@ -40,7 +40,7 @@ comment:
 // 以下为样例内容，按照格式可以随意修改
 var myFriends = [
     ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
-    ["https://sanshiliuxiao.top/", "https://cdn.jsdelivr.net/gh/vensing/static@latest/avatar/sanshiliuxiao.jpg", "@三十六咲", "快走吧，趁风停止之前"], 
+    // ["https://sanshiliuxiao.top/", "https://cdn.jsdelivr.net/gh/vensing/static@latest/avatar/sanshiliuxiao.jpg", "@三十六咲", "快走吧，趁风停止之前"], 
     ["https://rea.ink/", "https://rea.ink/head.png", "@倾书", "清风皓月，光景常新 <= 前端"], 
     ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
     ["https://www.jianshu.com/u/af3a36ae8d16", "/avatar/li2niu.webp", "@李二牛", "深耕Web服务端 马拉松爱好者(PB330) <= Java"], 
