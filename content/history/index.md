@@ -24,7 +24,7 @@ toc:
   - 遇到的问题与解决方法
     - Nginx 无法解析 K8s 内部域名
       - 解决方法：在 `http` 配置块中添加 `resolver kube-dns.kube-system.svc.cluster.local valid=10s;` 即可，另外所有 k8s 域名都得使用 FQDN 形式，因为 Nginx 不会使用搜索域配置！
-    - 客户端 Host 透传：改用 `X-Forwarded-Host`，而原 `Host` Header 仅供 Istio/Nginx 用于流量管理。
+    - 客户端 Host 透传：改用 `X-Forwarded-Host`，而原 `Host` Header 仅供 Istio/Nginx 用于流量管理。同时通过 EnvoyFilter 在流量走到 SIDECAR_OUTBOUND 时，再将 Host rewrite 回来。
     - http 重定向到 https:
       - 在外部使用 L4 的 AWS NLB 但是仍然希望使用它处理 TLS 流量，这时后端的 Nginx 无法通过 `X-Forwarded-Proto` 来判断协议，也就无法直接实现 http 重定向到 https.
       - 解决方法
@@ -61,7 +61,7 @@ toc:
       - 解决方法：在 Nginx 所在的 EC2 上添加安全组，允许公网 IP 访问其 8080(https)/8787(http) 端口即可
     - 使用 aws-load-balancer-controller 绑定 IP 模式的 NLB，发现 pod 被重新调度会导致请求超时！
       - 相关 issue: [pod termination might cause dropped connections](https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2366)
-      - 解决方法：在 pod 上设置 180s - 240s 的 preStop 以及对应的 terminationGracePeriodSeconds，确保所有请求都能被正常处理！
+      - 解决方法：在 pod 上设置 350s 的 preStop 以及对应的 terminationGracePeriodSeconds，确保所有请求都能被正常处理！
     - Nginx 注入 Istio Sidecar 后，响应头里带了些 `x-envoy-` 开头的不必要 headers
       - 解决方法：参见 [Istio 去除响应 Headers](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5.md#%E5%85%ADistio-%E5%8E%BB%E9%99%A4%E5%93%8D%E5%BA%94-headers)
       
