@@ -882,7 +882,7 @@ ssh-keygen -y -f xxx_rsa > xxx_rsa.pub
 
 #### QUIC 协议
 
-[QUIC 协议](https://github.com/quicwg)，是 Google 研发并推动标准化的 TCP 协议的替代品，基于它形成了当前的 HTTP/3 草案（HTTP over QUIC）并且已被 Bilibili/CloudFlare 等站点采用，它做了很多大刀阔斧的改革：
+[QUIC 协议](https://github.com/quicwg)，是 Google 研发并推动标准化的 TCP 协议的替代品， QUIC 是基于 UDP 协议实现的。基于 QUIC 提出的 HTTP over QUIC 协议已被标准化为 [RFC 9114 - HTTP/3](https://www.rfc-editor.org/rfc/rfc9114.html)，它做了很多大刀阔斧的改革：
 
 - 传输层协议从 TCP 改成了 UDP，QUIC 自己实现的数据的可靠传输、按序到达、拥塞控制
   - 也就是说 QUIC 绕过了陈旧的内核 TCP 协议实现，直接在用户空间实现了这些功能
