@@ -880,7 +880,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO7HgqespdWziJH2Y9mdKm6vnbTtx7IyJk/4IOdd2igx
 ssh-keygen -y -f xxx_rsa > xxx_rsa.pub
 ```
 
-#### QUIC 协议
+#### HTTP/3 与 QUIC 协议
 
 [QUIC 协议](https://github.com/quicwg)，是 Google 研发并推动标准化的 TCP 协议的替代品， QUIC 是基于 UDP 协议实现的。基于 QUIC 提出的 HTTP over QUIC 协议已被标准化为 [RFC 9114 - HTTP/3](https://www.rfc-editor.org/rfc/rfc9114.html)，它做了很多大刀阔斧的改革：
 
