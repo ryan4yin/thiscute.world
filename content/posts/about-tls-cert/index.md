@@ -506,7 +506,7 @@ openssl ecparam -list_curves
 
 按照数字证书的生成方式进行分类，证书有三种类型: 
 
-1. 由权威 CA 机构签名的证书: 这类证书会被浏览器、小程序等第三方应用/服务商信任
+1. 由权威 CA 机构签名的「公网受信任证书」: 这类证书会被浏览器、小程序等第三方应用/服务商信任
    - 申请证书时需要验证你对域名/IP 的所有权，也就使证书无法伪造
    - 如果你的 API 需要提供给第三方应用/服务商/用户访问，那就需要向权威 CA 机构申请此类证书
 2. 本地签名证书 - **`tls_locally_signed_cert`**: 即由本地 CA 证书签名的 TLS 证书
@@ -516,28 +516,58 @@ openssl ecparam -list_curves
 3. 自签名证书 - **`tls_self_signed_cert`**: 前面介绍了根证书是一个自签名证书，它使用根证书的私钥为根证书签名
    - 这里的「自签名证书」是指**直接使用根证书进行网络通讯**，缺点是证书的更新迭代会很麻烦，而且安全性低。
 
-总的来说，权威CA机构颁发的证书，可以被第三方应用信任，但是自己生成的不行。
+总的来说，权威CA机构颁发的「公网受信任证书」，可以被第三方应用信任，但是自己生成的不行。
 而越贵的权威证书，安全性与可信度就越高，或者可以保护更多的域名。
 
 在客户端可控的情况下，可以考虑自己生成证书链并签发「本地签名证书」，将本地 CA 证书预先安装在客户端中用于验证。
 
 而「自签名证书」主要是方便，能不用还是尽量不要使用。
 
-### 7. 向权威 CA 机构申请「受信证书」
+### 7. 向权威 CA 机构申请「公网受信任证书」
 
-免费的「受信证书」有两种方式获取: 
+向权威机构申请的公网受信任证书，可以直接应用在边界网关上，用于给公网用户提供 TLS 加密访问服务，比如各种 HTTPS 站点、API。这是需求最广的一类数字证书服务。
 
-1. 申请 [Let's Encrypt 免费证书](https://letsencrypt.org)
-   - 很多代理工具都有提供 Let's Encrypt 证书的 Auto Renewal，比如:
-     - [Traefik](/network-proxy+web-server/traefik/README.md)
-     - [Caddy](https://github.com/caddyserver/caddy)
-     - [docker-letsencrypt-nginx-proxy-companion](https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion)
-   - **网上也有一些 [certbot](https://github.com/certbot/certbot) 插件，可以通过 DNS 提供商的 API 进行 Let's Encrypt 证书的 Auto Renewal，比如**: 
-     - [certbot-dns-aliyun](https://github.com/tengattack/certbot-dns-aliyun)
-   - **terraform 也有相关 provider**: [terraform-provider-acme](https://github.com/vancluever/terraform-provider-acme)
-1. 部分认证机构有提供免费证书的申请，有效期为一年，但是不支持泛域名
+而证书的申请与管理方式又分为两种：
 
-收费证书可以在各云服务商处购买，比如国内的阿里云、腾讯云等。
+- 通过 [ACMEv2（Automated Certificate Management Environment (ACME) ](https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment) 协议进行证书的自动化申请与管理。支持使用此开放协议申请证书的权威机构有：
+  - 免费服务
+    - Let's Encrypt: 众所周知，它提供三个月有效期的免费证书。
+    - [ZeroSSL](https://zerossl.com/documentation/acme/):  貌似也是一个比较有名的 SSL 证书服务
+      - 通过 ACME 协议支持不限数量的 90 天证书，也支持多域名证书与泛域名证书。
+      - 它相比 Let's Encrypt 的优势是，它提供一个证书控制台，可以查看与管理用户当前的所有证书，了解其状态。
+  - 付费服务
+    - DigiCert: 这个非常有名（但也是相当贵），官方文档 [Digicert - Third-party ACME client automation](https://docs.digicert.com/certificate-tools/Certificate-lifecycle-automation-index/acme-user-guide/)
+    - Google Trust Services: Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign。官方文档 [Automate Public Certificates Lifecycle Management via RFC 8555 (ACME)](https://cloud.google.com/blog/products/identity-security/automate-public-certificate-lifecycle-management-via--acme-client-api)
+    - Entrust: 官方文档 [Entrust's ACME implementation](https://www.entrust.com/knowledgebase/ssl/how-to-use-acme-to-install-ssl-tls-certificates-in-entrust-certificate-services-apache#step1)
+    - GlobalSign: 官方文档 [GlobalSign ACME Service](https://www.globalsign.com/en/acme-automated-certificate-management)
+  - 相关的自动化工具
+    - 很多代理工具都有提供基于 ACMEv2 协议的证书申请与自动更新，比如:
+      - [Traefik](/network-proxy+web-server/traefik/README.md)
+      - [Caddy](https://github.com/caddyserver/caddy)
+      - [docker-letsencrypt-nginx-proxy-companion](https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion)
+    - **网上也有一些 [certbot](https://github.com/certbot/certbot) 插件，可以通过 DNS 提供商的 API 进行 ACMEv2 证书的申请与自动更新，比如**: 
+      - [certbot-dns-aliyun](https://github.com/tengattack/certbot-dns-aliyun)
+    - **terraform 也有相关 provider**: [terraform-provider-acme](https://github.com/vancluever/terraform-provider-acme)
+    - [cert-manager](https://github.com/cert-manager/cert-manager): kubernetes 中的证书管理工具，支持 ACMEv2，也支持创建与管理私有证书。
+1. 通过一些权威 CA 机构或代理商提供的 Web 网站，手动填写信息来申请与更新证书。
+  - 这个流程相对会比较繁琐。
+
+这些权威机构提供的证书服务，提供的证书又有不同的分级，这里详细介绍下三种不同的证书级别，以及该如何选用：
+
+- Domain Validated（DV）证书
+  - **仅验证域名所有权**，验证步骤最少，价格最低，仅需要数分钟即可签发。
+  - 优点就是易于签发，很适合做自动化。
+  - 各云厂商（AWS/GCP/Cloudflare，以及 Vercel/Github 的站点服务）给自家服务提供的免费证书都是 DV 证书，Let's Encrypt 的证书也是这个类型。
+    - 很明显这些证书的签发都非常方便，而且仅验证域名所有权。
+    - 但是 AWS/GCP/Cloudflare/Vercel/Github 提供的 DV 证书都仅能在它们的云服务上使用，不提供私钥功能！
+- Organization Validated (OV) 证书
+  - 是企业 SSL 证书的首选，通过企业认证确保企业 SSL 证书的真实性。
+  - 除域名所有权外，CA 机构还会审核组织及企业的真实性，包括注册状况、联系方式、恶意软件等内容。
+  - 如果要做合规化，可能至少也得用 OV 这个级别的证书。
+- Extended Validation（EV）证书
+  - 最严格的认证方式，CA 机构会深度审核组织及企业各方面的信息。
+  - 被认为适合用于大型企业、金融机构等组织或企业。
+  - 而且仅支持签发单域名、多域名证书，不支持签发泛域名证书，安全性杠杠的。
 
 完整的证书申请流程如下: 
 
