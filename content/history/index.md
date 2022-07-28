@@ -13,7 +13,7 @@ toc:
 ### 2022-07-28
 
 - 研究了一波 Nginx 的配置调优
-  - 关键点：`reuseport` `aio`
+  - 关键点：`reuseport` `aio` `http2` `tls1.3`
   - 相关文章：
     - https://www.nginx.com/blog/performance-tuning-tips-tricks/
     - https://www.nginx.com/blog/tuning-nginx/
