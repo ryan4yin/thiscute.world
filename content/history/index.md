@@ -9,6 +9,11 @@ toc:
 
 记录下我的学习轨迹。
 
+### 2022-07-26
+
+- Misaka 大佬在 twitter 上回复说，ambassador 可能最后会发现都不如 Istio 一把梭
+  - 仔细想了下还真挺有道理...毕竟都是 Envoy，而研究一圈发现 ambassador 好像也没比 Istio 多很多功能。目前就看到个不太用得上的 OpenAPI 支持？
+
 ### 2022-07-25
 
 - 今天研究了下 CNCF 中的 API 网关
@@ -18,11 +23,15 @@ toc:
 
 ### 2022-07-23 - 2022-07-24
 
+- Nginx Gateway 进展
+  - 在 AWS NLB 上添加 TLS 终止，遇到 AWS NLB 的 TLS 流量费用高、而且 Nginx 无法通过 `X-Forwarded-Proto` 判断客户端协议的问题
+    - 解决方法：使用 cert-manager 在 Nginx 中进行 TLS 终止，AWS NLB 改为纯 HTTP
+    - 需要注意在 Nginx 上配置使用 OCSP stapling 等 TLS 性能优化手段，并淘汰掉旧的 TLS 协议与 ciphers.
 - 研究了一波 cert-manager 通过 ACME 申请权威证书，并绑定到 Istio IngressGateeway 或者其他网关上
 
-### 2022-06-29 - 2022-07-21
+### 2022-06-29 - 2022-07-22
 
-- 开始实施网关优化方案，使用 Go 语言写了一个 Nginx Gateway 控制器
+- 实施网关优化方案，使用 Go 语言写了一个 Nginx Gateway 控制器
   - 目标：
     - 将目前运行在虚拟机上的 Nginx 搬到 K8s 中运行，通过 Istio Sidecar 接入服务网格，并取代掉当前的 Istio IngressGateway 网关
     - 使用 AWS NLB 作为 Nginx 的前置负载均衡器
@@ -35,39 +44,7 @@ toc:
   - 遇到的问题与解决方法
     - Nginx 无法解析 K8s 内部域名
       - 解决方法：在 `http` 配置块中添加 `resolver kube-dns.kube-system.svc.cluster.local valid=10s;` 即可，另外所有 k8s 域名都得使用 FQDN 形式，因为 Nginx 不会使用搜索域配置！
-    - 客户端 Host 透传：改用 `X-Forwarded-Host`，而原 `Host` Header 仅供 Istio/Nginx 用于流量管理。同时通过 EnvoyFilter 在流量走到 SIDECAR_OUTBOUND 时，再将 Host rewrite 回来。
-    - http 重定向到 https:
-      - 在外部使用 L4 的 AWS NLB 但是仍然希望使用它处理 TLS 流量，这时后端的 Nginx 无法通过 `X-Forwarded-Proto` 来判断协议，也就无法直接实现 http 重定向到 https.
-      - 解决方法
-        - NLB 的 tcp(http)/tls(https) 流量，分别转发到 nginx 的不同端口，比如 8787 跟 8080，并且新增端口默认处理逻辑设为直接重定向。
-          ```conf
-            server {
-                # 对应客户端的 https 流量
-                listen 8080 default;
-
-                # 健康检查
-                location /health {
-                    return 200;
-                }
-            }
-
-            server {
-                # 专用于处理 https 重定向的新增端口，默认直接 301 永久重定向
-                # 注：如果客户端支持的话，建议换成 308 永久重定向
-                listen 8787 default;
-                return 301 https://$host$request_uri$args;
-            }
-          ```
-        - 然后对于每个域名的 nginx 配置，如果它需要将 http 重定向到 https，就只需要 `listen 8080`
-        - 如果它不想启用 http 重定向到 https 的功能，就同时监听两个端口 `listen 8080; listen 8787;`，这样它的配置优先级更高，默认的重定向逻辑就会失效。
-    - 因为 TLS 终止加在 NLB 上了，Nginx 的`$scheme` 变量永远是 http，无法通过此参数获知客户端的协议了。 
-      - 解决方法：直接使用端口号自定义一个变量 `$client_scheme`，替换掉 `$scheme`
-        ```conf
-        map $server_port $client_scheme {
-            "8080"    "https";  # NLB 的 443 TLS 端口（HTTPS）转发到 Nginx 的 8080
-            "8787"    "http";   # NLB 的 80 TCP 端口（HTTP）转发到 Nginx 的 8787
-        }
-        ```
+    - 客户端 Host 透传：改用 `X-Forwarded-Host`，而原 `Host` Header 仅供 Istio/Nginx 用于流量管理。同时在流量走到 Istio SIDECAR_OUTBOUND 时，再通过 Envoy 参数 `host_rewrite_header: X-Forwarded-Host` 将 Host rewrite 回来。
     - 安全组问题：为了获取客户端 IP 需要在 NLB 上启用客户端 IP 透传，但是这样会导致流量被内网安全组拒绝！
       - 解决方法：在 Nginx 所在的 EC2 上添加安全组，允许公网 IP 访问其 8080(https)/8787(http) 端口即可
     - 使用 aws-load-balancer-controller 绑定 IP 模式的 NLB，发现 pod 被重新调度会导致请求超时！
@@ -75,8 +52,14 @@ toc:
       - 解决方法：在 pod 上设置 350s 的 preStop 以及对应的 terminationGracePeriodSeconds，确保所有请求都能被正常处理！
     - Nginx 注入 Istio Sidecar 后，响应头里带了些 `x-envoy-` 开头的不必要 headers
       - 解决方法：参见 [Istio 去除响应 Headers](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/service_mesh/istio/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5.md#%E5%85%ADistio-%E5%8E%BB%E9%99%A4%E5%93%8D%E5%BA%94-headers)
-      
-
+    - Istio Sidecar 性能很差，Nginx 与 Sidecar 的 CPU 比值接近 1:2.3
+      - 解决方法：为 pod 添加 annotation `traffic.sidecar.istio.io/includeInboundPorts: ""`，即可禁用掉 Istio Sidecar 的 inbound 流量拦截。
+    - AWS NLB 跨可用区负载均衡会收跨区流量费
+      - 解决方法：关闭跨区负载均衡功能，不同可用区的 Nginx 使用不同的 Deployment+HPA+PDB，就是都独立进行扩缩容。
+- 2022/7/20，Leader 告诉我，我上半年的表现出乎他的意料，综合表现上看，得到的绩效评价是 S，第一次拿 S，还是挺开心的。
+  - 我的优点：
+    - 善于观察与思考，真正做到了目标驱动，积极挖掘各种可能性。
+    - 善于将优秀前沿技术落地并取得价值，能够不盲从、玩的转、有落地。
 
 ### 2022-06-22
 
