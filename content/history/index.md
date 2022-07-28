@@ -9,6 +9,20 @@ toc:
 
 记录下我的学习轨迹。
 
+
+### 2022-07-27
+
+- 研究了一波 Nginx 的配置调优
+  - 关键点：`reuseport` `aio`
+  - 相关文章：
+    - https://www.nginx.com/blog/performance-tuning-tips-tricks/
+    - https://www.nginx.com/blog/tuning-nginx/
+    - https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/
+    - [【优化】nginx启用reuseport](https://wfhu.gitbooks.io/life/content/chapter7/nginx-enable-reuseport.html)
+    - [digitalocean/nginxconfig.io](https://github.com/digitalocean/nginxconfig.io)
+    - [kubernetes/ingress-nginx/](https://github.com/kubernetes/ingress-nginx/)
+    - [nginx-admins-handbook](https://github.com/trimstray/nginx-admins-handbook)
+
 ### 2022-07-26
 
 - Misaka 大佬在 twitter 上回复说，ambassador 可能最后会发现都不如 Istio 一把梭
