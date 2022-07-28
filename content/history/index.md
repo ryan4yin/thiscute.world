@@ -20,7 +20,7 @@ toc:
     - https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/
     - [【优化】nginx启用reuseport](https://wfhu.gitbooks.io/life/content/chapter7/nginx-enable-reuseport.html)
     - [digitalocean/nginxconfig.io](https://github.com/digitalocean/nginxconfig.io)
-    - [kubernetes/ingress-nginx/](https://github.com/kubernetes/ingress-nginx/)
+    - [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx)
     - [nginx-admins-handbook](https://github.com/trimstray/nginx-admins-handbook)
 
 ### 2022-07-26
