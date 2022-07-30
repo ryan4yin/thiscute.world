@@ -728,7 +728,7 @@ ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECD
   - 随机生成一个临时 ECC 密钥对
     - 私钥：安全随机数 `ciphertextPrivKey`
     - 公钥：`ciphertextPubKey = ciphertextPrivKey * G`
-  - 使用 ECDH 计算出共享密钥：$sharedECCKey = alicePubKey * ciphertextPrivKey$
+  - 使用 ECDH 计算出共享密钥：`sharedECCKey = alicePubKey * ciphertextPrivKey`
 - Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 `C`
   - 比如使用 AES-256-GCM 或者 ChaCha20-Poly1305 进行对称加密
 - Bob 将 `C` + `ciphertextPubKey` 打包传输给 Alice
