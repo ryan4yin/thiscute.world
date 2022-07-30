@@ -856,7 +856,7 @@ public_key.verify(signature, b"my authenticated message")
 
 {{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve-subgroups.webp" >}}
 
-有限域上的椭圆曲线的阶都是有限的，也就是说对于曲线上任意一点 $G$，我们计算它的数乘 $kG$，随着整数 $k$ 的增大，一定会存在某个 $k$ 使 $kG = O_{\infty}$ 成立，然后 $k$ 继续增大时，因为 $O_{\infty} * P = $O_{\infty}$，$kG$ 的值就固定为 $$O_{\infty}$ 了，更大的 $k$ 值已经失去了意义。
+有限域上的椭圆曲线的阶都是有限的，也就是说对于曲线上任意一点 $G$，我们计算它的数乘 $kG$，随着整数 $k$ 的增大，一定会存在某个 $k$ 使 $kG = O_{\infty}$ 成立，然后 $k$ 继续增大时，因为 $O_{\infty} * P = O_{\infty}$，$kG$ 的值就固定为 $O_{\infty}$ 了，更大的 $k$ 值已经失去了意义。
 
 因此 ECC 中要求 $kG$ 中的私钥 $k$ 符合条件 $0 \le k \le r$，也就是说总的私钥数量是受 $r$ 限制的。
 
