@@ -2352,6 +2352,10 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 ]]></content></entry><entry><title type="html">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</title><link href="https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/"/><id>https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/</id><author><name>ryan4yin</name></author><published>2022-03-09T20:50:00+08:00</published><updated>2022-03-13T15:26:00+08:00</updated><content type="html"><![CDATA[<blockquote>
 <p>本文部分内容翻译自 <a href="https://github.com/nakov/Practical-Cryptography-for-Developers-Book" target="_blank" rel="noopener noreffer">Practical-Cryptography-for-Developers-Book</a>，笔者补充了密码学历史以及 openssl 命令示例，并重写了 RSA/ECC 算法原理、代码示例等内容。</p>
 </blockquote>
+<blockquote>
+<p>这篇文章中会涉及到一些大学高等数学以外的内容，难度并不高，但是需要一点数学基础，觉得难的可以考虑跳过。
+RSA 项相关的数学知识包括模幂运算、拓展欧几里得算法。ECC 相关的数学知识包括几何、有限域、椭圆曲线域、循环群。</p>
+</blockquote>
 <p>《写给开发人员的实用密码学》系列文章目录：</p>
 <ul>
 <li><a href="/posts/practical-cryptography-basics-1/" rel="">写给开发人员的实用密码学（一）—— 概览</a></li>
@@ -3302,7 +3306,7 @@ $$</p>
 <li>公钥：<code>ciphertextPubKey = ciphertextPrivKey * G</code></li>
 </ul>
 </li>
-<li>使用 ECDH 计算出共享密钥：$sharedECCKey = alicePubKey * ciphertextPrivKey$</li>
+<li>使用 ECDH 计算出共享密钥：<code>sharedECCKey = alicePubKey * ciphertextPrivKey</code></li>
 </ul>
 </li>
 <li>Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 <code>C</code>
@@ -3486,11 +3490,11 @@ $$</p>
 <p>首先还得介绍下数学中「循环群」的概念，它是指能由单个元素所生成的群，在 ECC 中这就是预先定义好的基点 $G$.</p>
 <p>一个有限域上的椭圆曲线可以形成一个有限「循环代数群」，它由曲线上的所有点组成。椭圆曲线的<strong>阶</strong>被定义为该曲线上所有点的个数（包括无穷远点）。</p>
 <p>有些曲线加上 G 点可以形成一个单一循环群，这一个群包含了曲线上的所有点。而其他的曲线加上 G 点则形成多个不相交的循环子群，每个子群包含了曲线的一个子集。
-对于上述第二种情况，曲线上的点将被拆分到 <strong>h</strong> 个循环子群中，每个子群的<strong>阶</strong>都是 <strong>r</strong>，这时整个群的阶 $n = h * r$. 子群的个数 <strong>h</strong> 被称为<strong>辅助因子</strong>。</p>
+对于上述第二种情况，假设曲线上的点被拆分到了 <strong>h</strong> 个循环子群中，每个子群的<strong>阶</strong>都是 <strong>r</strong>，那这时整个群的阶就是 $n = h * r$，其中子群的个数 <strong>h</strong> 被称为<strong>辅助因子</strong>。</p>
 <figure><img src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve-subgroups.webp"/>
 </figure>
 
-<p>有限域上的椭圆曲线的阶都是有限的，也就是说对于曲线上任意一点 $G$，我们计算它的数乘 $kG$，随着整数 $k$ 的增大，一定会存在某个 $k$ 使 $kG = O_{\infty}$ 成立，然后 $k$ 继续增大时，因为 $O_{\infty} * P = $O_{\infty}$，$kG$ 的值就固定为 $$O_{\infty}$ 了，更大的 $k$ 值已经失去了意义。</p>
+<p>有限域上的椭圆曲线的阶都是有限的，也就是说对于曲线上任意一点 $G$，我们计算它的数乘 $kG$，随着整数 $k$ 的增大，一定会存在某个 $k$ 使 $kG = O_{\infty}$ 成立，然后 $k$ 继续增大时，因为 $O_{\infty} * P = O_{\infty}$，$kG$ 的值就固定为 $O_{\infty}$ 了，更大的 $k$ 值已经失去了意义。</p>
 <p>因此 ECC 中要求 $kG$ 中的私钥 $k$ 符合条件 $0 \le k \le r$，也就是说总的私钥数量是受 $r$ 限制的。</p>
 <p>辅助因子通过用如下公式表示：</p>
 <p>$$
@@ -8420,7 +8424,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-07-31T02:06UTC&#43;08:00</p>
+    <p>更新时间: 2022-07-31T02:51UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -8577,7 +8581,7 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>244401</td>
+            <td>244513</td>
             <td style="color:tomato;"><strong>29520</strong></td>
             <td>75087</td>
             <td>26 days, 8h 26m 17s</td>
