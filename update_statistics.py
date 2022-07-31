@@ -184,6 +184,7 @@ def process_data(data):
             # 没有 pageTitle，这里应该是处理的 totalTrendingPosts
             result[""] = page
 
+    items = []
     for p in result.values():
         if "userEngagementDuration" not in p:
             continue
@@ -195,8 +196,14 @@ def process_data(data):
         p['readingDurationPerUser'] = reading_duration_per_user
         p['humanizedReadingDurationPerUser'] = humanize_duration(
             reading_duration_per_user)
+        
+        if reading_duration_per_user < 15:
+            # 跳过人均阅读时常低于 15s 的文章（文章的质量片低或者受众片小，没必要列出来）
+            continue
 
-    return sorted(result.values(), key=itemgetter("readingDurationPerUser"), reverse=True)
+        items.append(p)
+
+    return sorted(items, key=itemgetter("readingDurationPerUser"), reverse=True)
 
 
 def get_report_last_n_days(analytics, n: int):
@@ -226,7 +233,7 @@ def get_report_last_n_days(analytics, n: int):
                 "numericFilter": {
                     "operation": "GREATER_THAN_OR_EQUAL",
                     "value": {
-                        "int64Value": "900",  # 文档的总阅读时长超过 900s
+                        "int64Value": "180",  # 文档的总阅读时长超过 3 mins
                     },
                 },
             }
