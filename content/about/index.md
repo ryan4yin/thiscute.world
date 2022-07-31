@@ -51,13 +51,16 @@ comment:
   - Kubernetes
   - Istio
   - Linux
-- **想学的技术（按感兴趣程度降序排列）**
+- **想学的技术（按感兴趣程度降序排列，想学的太多，学会的太少）**
   - Linux 内核技术、eBPF
   - Kubernetes/Istio/Nginx 源码
   - 机器学习、深度学习
   - 区块链
   - 经济学、量化交易
+  - 3D 建模与渲染
   - 数据库技术与理论
+  - Reaper 编曲、ACE/SynthV 调教
+  - 蓝调口琴、竹笛、键盘
 - **联系方式**
   - 邮件：`eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
   - [豆瓣](https://www.douban.com/people/kirito_c)：本人是豆瓣书影音标记的重度使用者，从 2015 年以来一直使用豆瓣标记读过的书看过的电影。
