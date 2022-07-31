@@ -3107,7 +3107,7 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 </blockquote>
 <blockquote>
 <p>这篇文章中会涉及到一些大学高等数学以外的内容，难度并不高，但是需要一点数学基础，觉得难的可以考虑跳过。
-RSA 项相关的数学知识包括模幂运算、拓展欧几里得算法。ECC 相关的数学知识包括几何、有限域、椭圆曲线域、循环群。</p>
+本文不会详细介绍这些数学知识，可以在用有疑惑的时候自行搜索相关信息。</p>
 </blockquote>
 <p>《写给开发人员的实用密码学》系列文章目录：</p>
 <ul>
@@ -3467,7 +3467,8 @@ RSA 算法以其作者（Rivest–Shamir–Adleman）的首字母命名。</p>
 <p>可以看到私钥文件中就已经包含了公钥的所有参数，实际上我们也是使用 <code>openssl rsa -in rsa-private-key.pem -pubout -out rsa-public-key.pem</code> 命令通过私钥生成出的对应的公钥文件。</p>
 <p>下面就介绍下具体的密钥对生成流程，搞清楚 openssl 生成出的这个私钥，各项参数分别是什么含义：</p>
 <blockquote>
-<p>这里不会详细介绍其中的各种数学证明，具体的请参考维基百科。</p>
+<p>这里不会详细介绍其中的各种数学证明，具体的请参考维基百科。
+相关数学知识包括取模运算的性质、欧拉函数、模倒数（拓展欧几里得算法）</p>
 </blockquote>
 <ul>
 <li>随机选择两个不相等的质数 $p$ 与 $q$
@@ -3479,7 +3480,7 @@ RSA 算法以其作者（Rivest–Shamir–Adleman）的首字母命名。</p>
 <li>计算欧拉函数的值 $\phi(n) = \phi(pq) = (p-1)(q-1)$</li>
 <li>选择公指数 $e$，要求 $1 &lt; e &lt; \lambda (n)$，且 $e$ 与 $\phi(n)$ 互质，即 $\gcd(e, \phi(n)) = 1$。
 <ul>
-<li>目前 openssl 默认使用 65537 (0x10001)</li>
+<li>目前 openssl 固定使用 65537 (0x10001) 作为 e 的值</li>
 <li>曾经也有使用过 3 作为 e 的值，但是目前 3 已被证明不够安全</li>
 </ul>
 </li>
@@ -3600,16 +3601,59 @@ $$</p>
 <p>$$
 \text{decryptedMsg} = \text{encryptedMsg}^d \mod n
 $$</p>
-<p>解密运算的证明如下（证明需要用到 $0 \le msg \lt n$）：</p>
+<h4 id="rsa-解密运算的证明" class="headerLink">
+    <a href="#rsa-%e8%a7%a3%e5%af%86%e8%bf%90%e7%ae%97%e7%9a%84%e8%af%81%e6%98%8e" class="header-mark"></a>RSA 解密运算的证明</h4><p>证明流程如下：</p>
 <p>$$
 \begin{alignedat}{2}
 \text{decryptedMsg} &amp;= &amp;\text{encryptedMsg}^d &amp;\mod n \\
 &amp;= &amp;{(msg^e \mod n)}^d &amp;\mod n \\
-&amp;= &amp;{msg^e}^d &amp;\mod n \\
-&amp;= &amp;msg &amp;\mod n \\
+&amp;= &amp;{msg^{ed}} &amp;\mod n \\
+&amp;= &amp;{msg^{ed}} &amp;\mod {pq}
+\end{alignedat}
+$$</p>
+<p>接下来将下面两个等式代入上述计算中：</p>
+<ul>
+<li>我们在前面的「密钥对生成」一节中有给出等式：$ed = 1 + (p-1)(q-1) \cdot k$</li>
+<li>因为 $0 \le msg \lt n$ 以及 $n = pq$，有 $msg \mod pq = msg$</li>
+</ul>
+<p>这样就得到：</p>
+<p>$$
+\begin{alignedat}{2}
+\text{decryptedMsg} &amp;= &amp;{msg^{ed}} &amp;\mod {pq} \\
+&amp;= &amp;{(msg \mod pq) \cdot (msg^{ed-1} \mod pq)} &amp;\mod {pq} \\
+&amp;= &amp;{msg \cdot (msg^{(p-1)(q-1) \cdot k} \mod pq)} &amp;\mod {pq}
+\end{alignedat}
+$$</p>
+<p>又有<a href="https://zh.wikipedia.org/wiki/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86" target="_blank" rel="noopener noreffer">费马小定理</a>指出，在 $a$ 为整数，$p$ 为质数的情况下，有同余等式</p>
+<p>$$a^{p-1} \equiv 1 {\pmod  p}$$</p>
+<p>因为我们的模数 $n=pq$ 并不是质数，不能直接利用费马小定理给出的同余公式。
+但是 $p$, $q$ 两数都为质数，我们可以分别计算方程  对 $p$ 以及 $q$ 取模的结果，然后再根据<a href="https://zhuanlan.zhihu.com/p/44591114" target="_blank" rel="noopener noreffer">中国剩余定理</a>得出通解，也就得到我们需要的结果。</p>
+<p>对于模 $p$ 的情况，计算方法如下：</p>
+<ul>
+<li>当 $msg = 0 \mod p$ 时，${msg^{ed}} \mod p = 0 = m \mod p$</li>
+<li>当 $msg \ne 0 \mod p$ 时，利用费马小定理，有
+$$
+\begin{alignedat}{2}
+msg^{ed} &amp;= &amp;{msg \cdot (msg^{(p-1)(q-1) \cdot k} \mod p)} &amp;\pmod {p}  \\
+&amp;= &amp;msg \cdot (msg^{(p-1)} \mod p)^{(q-1) \cdot k} &amp;\pmod p \\
+&amp;= &amp;msg \cdot 1^{(q-1) \cdot k} &amp;\pmod p \\
+&amp;\equiv &amp;msg \pmod  p
+\end{alignedat}
+$$</li>
+</ul>
+<p>同理，对模 $q$ 的情况，也能得到等式</p>
+<p>$$msg^{ed} \equiv msg \pmod  q$$</p>
+<p>有了上面两个结果，根据中国剩余定理，就能得到</p>
+<p>$$msg^{ed} \equiv msg \pmod  {pq}$$</p>
+<p>现在再接续前面的计算：</p>
+<p>$$
+\begin{alignedat}{2}
+\text{decryptedMsg} &amp;= &amp;{msg^{ed}} &amp;\pmod {pq} \\
+&amp;= &amp;msg &amp;\pmod  {pq} \\
 &amp;= &amp;msg
 \end{alignedat}
 $$</p>
+<p>这样就证明了，解密操作得到的就是原始信息。</p>
 <p>因为非对称加解密非常慢，对于较大的文件，通常会分成两步加密来提升性能：首先用使用对称加密算法来加密数据，再使用 RSA 等非对称加密算法加密上一步用到的「对称密钥」。</p>
 <p>下面我们用 Python 来验证下 RSA 算法的加解密流程：</p>
 <div class="highlight"><div class="chroma">
@@ -3698,7 +3742,7 @@ $$</p>
 </span></span></span><span class="line"><span class="cl"><span class="s2">    快速模幂运算：b^p % m
 </span></span></span><span class="line"><span class="cl"><span class="s2">    复杂度： O(log p)
 </span></span></span><span class="line"><span class="cl"><span class="s2">    因为 RSA 的底数跟指数都非常大，如果先进行幂运算，最后再取模，计算结果会越来越大，导致速度非常非常慢
-</span></span></span><span class="line"><span class="cl"><span class="s2">    根据公式  b^(ab) % m = (b^a % m)^b % m, 可以通过边进行幂运算边取模，极大地提升计算速度
+</span></span></span><span class="line"><span class="cl"><span class="s2">    根据模幂运算的性质  b^(ab) % m = (b^a % m)^b % m, 可以通过边进行幂运算边取模，极大地提升计算速度
 </span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span>
 </span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">p</span><span class="p">:</span>
@@ -5213,14 +5257,26 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。<
 </li>
 <li>最后 Alice 跟 Bob 再分别将<strong>自己的秘密色彩</strong>，跟<strong>对方的混合色彩</strong>混合，就得到了最终的<strong>秘密色彩</strong>。这个最终色彩只有 Alice 跟 Bob 知道，信道上的任何人都无法猜出来。</li>
 </ul>
-<p>DHKE 协议也是基于类似的原理，但是使用的是离散对数（discrete logarithms）跟模幂（modular exponentiations ）而不是色彩混合。</p>
+<p>DHKE 协议也是基于类似的原理，但是使用的是离散对数（discrete logarithms）跟模幂（modular exponentiations）而不是色彩混合。</p>
 <h2 id="三经典-dhke-协议" class="headerLink">
-    <a href="#%e4%b8%89%e7%bb%8f%e5%85%b8-dhke-%e5%8d%8f%e8%ae%ae" class="header-mark"></a>三、经典 DHKE 协议</h2><p>首先介绍下「模幂」，它是指求 $g$ 的 $a$ 次幂模 $p$ 的值 $c$ 的过程，其中 $g$ $a$ $c$ 均为整数，公式如下：</p>
+    <a href="#%e4%b8%89%e7%bb%8f%e5%85%b8-dhke-%e5%8d%8f%e8%ae%ae" class="header-mark"></a>三、经典 DHKE 协议</h2><h3 id="基础数学知识" class="headerLink">
+    <a href="#%e5%9f%ba%e7%a1%80%e6%95%b0%e5%ad%a6%e7%9f%a5%e8%af%86" class="header-mark"></a>基础数学知识</h3><p>首先介绍下「模幂（modular exponentiations）」，它是指求 $g$ 的 $a$ 次幂模 $p$ 的值 $c$ 的过程，其中 $g$ $a$ $c$ 均为整数，公式如下：</p>
 <p>$$
 g^a \mod p = c
 $$</p>
-<p>已知使用计算机计算上述「模幂」是非常快速的，但是求它的逆运算——即离散对数，在已知 $g$ $p$ $c$ 的情况下，求幂指数 $a$——却是非常难的。</p>
-<p>下面该轮到 Alice 跟 Bob 出场来介绍 DHKE 的过程了，先看图（下面<span style="color:green">绿色</span>表示非秘密信息，<span style="color:red"><strong>红色</strong></span>表示秘密信息）：</p>
+<p>而「离散对数（discrete logarithms）」，其实就是指模幂的逆运算，它使用如下公式表示：</p>
+<p>$$
+Ind_{g}c \equiv a {\pmod {p}}
+$$</p>
+<p>上述公式，即指在已知整数 $g$，质数 $p$，以及余数（p 的一个原根） $c$ 的情况下，求使前面的模幂等式成立的幂指数 $a$。</p>
+<p>已知使用计算机计算上述「模幂」是非常快速的，但是在质数 $p$ 非常大的情况下，求「离散对数」却是非常难的，这就是「离散对数难题」。</p>
+<p>然后为了理解 HDKE 的原理，我们还需要了解下模幂运算的一个性质：</p>
+<p>$$
+g^{ab} \mod p = {g^a \mod p}^b \mod p
+$$</p>
+<p>懂了上面这些基础数学知识，下面就开始介绍 HDKE 算法。</p>
+<h3 id="dhke-密钥交换流程" class="headerLink">
+    <a href="#dhke-%e5%af%86%e9%92%a5%e4%ba%a4%e6%8d%a2%e6%b5%81%e7%a8%8b" class="header-mark"></a>DHKE 密钥交换流程</h3><p>下面该轮到 Alice 跟 Bob 出场来介绍 DHKE 的过程了，先看图（下面<span style="color:green">绿色</span>表示非秘密信息，<span style="color:red"><strong>红色</strong></span>表示秘密信息）：</p>
 <figure><img src="/images/practical-cryptography-basics-5-key-exchange/diffle-hellman.webp"/>
 </figure>
 
@@ -9177,7 +9233,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-07-31T18:01UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-01T01:56UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9336,10 +9392,10 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>249338</td>
-            <td style="color:tomato;"><strong>29575</strong></td>
-            <td>75209</td>
-            <td>26 days, 9h 46m 30s</td>
+            <td>250011</td>
+            <td style="color:tomato;"><strong>29604</strong></td>
+            <td>75230</td>
+            <td>26 days, 119m 23s</td>
             <td style="color:dodgerblue;"><strong>01m 17s</strong></td>
             </tr>
         </tbody>
@@ -9364,8 +9420,8 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="1">1</td>
             <td sort_key="/posts/expirence-of-vault/"><a href="/posts/expirence-of-vault/">secrets 管理工具 Vault 的介绍、安装及使用</a></td>
             <td sort_key="118">01m 58s</td>
-            <td sort_key="362">362</td>
-            <td sort_key="508">508</td>
+            <td sort_key="359">359</td>
+            <td sort_key="505">505</td>
             </tr>
         
         <tr>
@@ -9378,26 +9434,26 @@ python的类方法、静态方法，与java的静态方法：</p>
         
         <tr>
             <td sort_key="3">3</td>
-            <td sort_key="/posts/practical-cryptography-basics-3-key-derivation-function/"><a href="/posts/practical-cryptography-basics-3-key-derivation-function/">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></td>
-            <td sort_key="116">01m 56s</td>
-            <td sort_key="377">377</td>
-            <td sort_key="457">457</td>
+            <td sort_key="/posts/practical-cryptography-basics-5-key-exchange/"><a href="/posts/practical-cryptography-basics-5-key-exchange/">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></td>
+            <td sort_key="118">01m 58s</td>
+            <td sort_key="303">303</td>
+            <td sort_key="376">376</td>
             </tr>
         
         <tr>
             <td sort_key="4">4</td>
-            <td sort_key="/posts/practical-cryptography-basics-5-key-exchange/"><a href="/posts/practical-cryptography-basics-5-key-exchange/">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></td>
-            <td sort_key="116">01m 56s</td>
-            <td sort_key="304">304</td>
-            <td sort_key="378">378</td>
+            <td sort_key="/posts/practical-cryptography-basics-3-key-derivation-function/"><a href="/posts/practical-cryptography-basics-3-key-derivation-function/">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></td>
+            <td sort_key="114">01m 54s</td>
+            <td sort_key="375">375</td>
+            <td sort_key="453">453</td>
             </tr>
         
         <tr>
             <td sort_key="5">5</td>
             <td sort_key="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></td>
-            <td sort_key="110">01m 50s</td>
-            <td sort_key="601">601</td>
-            <td sort_key="845">845</td>
+            <td sort_key="112">01m 52s</td>
+            <td sort_key="596">596</td>
+            <td sort_key="838">838</td>
             </tr>
         
         <tr>
@@ -9412,32 +9468,32 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="7">7</td>
             <td sort_key="/posts/practical-cryptography-basics-2-hash/"><a href="/posts/practical-cryptography-basics-2-hash/">写给开发人员的实用密码学（二）—— 哈希函数</a></td>
             <td sort_key="107">01m 47s</td>
-            <td sort_key="556">556</td>
-            <td sort_key="706">706</td>
+            <td sort_key="552">552</td>
+            <td sort_key="703">703</td>
             </tr>
         
         <tr>
             <td sort_key="8">8</td>
             <td sort_key="/posts/about-tls-cert/"><a href="/posts/about-tls-cert/">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></td>
             <td sort_key="97">01m 37s</td>
-            <td sort_key="691">691</td>
-            <td sort_key="978">978</td>
+            <td sort_key="687">687</td>
+            <td sort_key="972">972</td>
             </tr>
         
         <tr>
             <td sort_key="9">9</td>
             <td sort_key="/posts/iptables-and-container-networks/"><a href="/posts/iptables-and-container-networks/">iptables 及 docker 容器网络分析</a></td>
-            <td sort_key="95">01m 35s</td>
-            <td sort_key="279">279</td>
-            <td sort_key="445">445</td>
+            <td sort_key="94">01m 34s</td>
+            <td sort_key="275">275</td>
+            <td sort_key="437">437</td>
             </tr>
         
         <tr>
             <td sort_key="10">10</td>
             <td sort_key="/posts/expirence-of-argo-workflow/"><a href="/posts/expirence-of-argo-workflow/">云原生流水线 Argo Workflows 的安装、使用以及个人体验</a></td>
-            <td sort_key="92">01m 32s</td>
-            <td sort_key="477">477</td>
-            <td sort_key="701">701</td>
+            <td sort_key="91">01m 31s</td>
+            <td sort_key="475">475</td>
+            <td sort_key="699">699</td>
             </tr>
         
         <tr>
@@ -9451,33 +9507,33 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="12">12</td>
             <td sort_key="/posts/linux-virtual-network-interfaces/"><a href="/posts/linux-virtual-network-interfaces/">Linux 中的虚拟网络接口</a></td>
-            <td sort_key="82">01m 22s</td>
-            <td sort_key="255">255</td>
-            <td sort_key="320">320</td>
+            <td sort_key="83">01m 23s</td>
+            <td sort_key="251">251</td>
+            <td sort_key="315">315</td>
             </tr>
         
         <tr>
             <td sort_key="13">13</td>
             <td sort_key="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/">写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></td>
-            <td sort_key="80">01m 20s</td>
-            <td sort_key="646">646</td>
-            <td sort_key="804">804</td>
+            <td sort_key="82">01m 22s</td>
+            <td sort_key="641">641</td>
+            <td sort_key="799">799</td>
             </tr>
         
         <tr>
             <td sort_key="14">14</td>
             <td sort_key="/posts/about-dns-protocol/"><a href="/posts/about-dns-protocol/">Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</a></td>
             <td sort_key="68">01m 08s</td>
-            <td sort_key="187">187</td>
-            <td sort_key="219">219</td>
+            <td sort_key="185">185</td>
+            <td sort_key="217">217</td>
             </tr>
         
         <tr>
             <td sort_key="15">15</td>
             <td sort_key="/posts/practical-cryptography-basics-1/"><a href="/posts/practical-cryptography-basics-1/">写给开发人员的实用密码学（一）—— 概览</a></td>
-            <td sort_key="65">01m 05s</td>
-            <td sort_key="564">564</td>
-            <td sort_key="850">850</td>
+            <td sort_key="66">01m 06s</td>
+            <td sort_key="563">563</td>
+            <td sort_key="848">848</td>
             </tr>
         
         <tr>
@@ -9491,25 +9547,25 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="17">17</td>
             <td sort_key="/posts/websocket-http2-and-grpc/"><a href="/posts/websocket-http2-and-grpc/">WebSocket、HTTP/2 与 gRPC</a></td>
-            <td sort_key="55">55s</td>
-            <td sort_key="217">217</td>
-            <td sort_key="228">228</td>
+            <td sort_key="56">56s</td>
+            <td sort_key="216">216</td>
+            <td sort_key="227">227</td>
             </tr>
         
         <tr>
             <td sort_key="18">18</td>
             <td sort_key="/posts/qemu-kvm-usage/"><a href="/posts/qemu-kvm-usage/">QEMU-KVM 虚拟化环境的搭建与使用</a></td>
-            <td sort_key="51">51s</td>
-            <td sort_key="683">683</td>
-            <td sort_key="847">847</td>
+            <td sort_key="52">52s</td>
+            <td sort_key="679">679</td>
+            <td sort_key="843">843</td>
             </tr>
         
         <tr>
             <td sort_key="19">19</td>
             <td sort_key="/posts/the-thoughtful-youth/"><a href="/posts/the-thoughtful-youth/">「转」且看有思想的年轻人</a></td>
-            <td sort_key="51">51s</td>
-            <td sort_key="81">81</td>
-            <td sort_key="89">89</td>
+            <td sort_key="52">52s</td>
+            <td sort_key="79">79</td>
+            <td sort_key="86">86</td>
             </tr>
         
         <tr>
@@ -9522,26 +9578,26 @@ python的类方法、静态方法，与java的静态方法：</p>
         
         <tr>
             <td sort_key="21">21</td>
-            <td sort_key="/posts/socat-netcat/"><a href="/posts/socat-netcat/">Linux 网络工具中的瑞士军刀 - socat &amp; netcat</a></td>
+            <td sort_key="/posts/expirence-of-pulumi/"><a href="/posts/expirence-of-pulumi/">Pulumi 使用体验 - 基础设施代码化</a></td>
             <td sort_key="42">42s</td>
-            <td sort_key="342">342</td>
-            <td sort_key="383">383</td>
+            <td sort_key="184">184</td>
+            <td sort_key="219">219</td>
             </tr>
         
         <tr>
             <td sort_key="22">22</td>
-            <td sort_key="/posts/expirence-of-pulumi/"><a href="/posts/expirence-of-pulumi/">Pulumi 使用体验 - 基础设施代码化</a></td>
-            <td sort_key="42">42s</td>
-            <td sort_key="185">185</td>
-            <td sort_key="223">223</td>
-            </tr>
-        
-        <tr>
-            <td sort_key="23">23</td>
             <td sort_key="/posts/python-tips-and-tricks/"><a href="/posts/python-tips-and-tricks/">Python 实用技巧与常见错误集锦</a></td>
             <td sort_key="42">42s</td>
             <td sort_key="31">31</td>
             <td sort_key="42">42</td>
+            </tr>
+        
+        <tr>
+            <td sort_key="23">23</td>
+            <td sort_key="/posts/socat-netcat/"><a href="/posts/socat-netcat/">Linux 网络工具中的瑞士军刀 - socat &amp; netcat</a></td>
+            <td sort_key="41">41s</td>
+            <td sort_key="342">342</td>
+            <td sort_key="382">382</td>
             </tr>
         
         <tr>
@@ -9555,9 +9611,9 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="25">25</td>
             <td sort_key="/posts/kubernetes-deployment-using-kubeadm/"><a href="/posts/kubernetes-deployment-using-kubeadm/">部署一个 Kubernetes 集群</a></td>
-            <td sort_key="38">38s</td>
-            <td sort_key="167">167</td>
-            <td sort_key="176">176</td>
+            <td sort_key="37">37s</td>
+            <td sort_key="164">164</td>
+            <td sort_key="173">173</td>
             </tr>
         
         <tr>
@@ -9572,7 +9628,7 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="27">27</td>
             <td sort_key="/posts/jwt-algorithm-key-generation/"><a href="/posts/jwt-algorithm-key-generation/">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a></td>
             <td sort_key="33">33s</td>
-            <td sort_key="375">375</td>
+            <td sort_key="374">374</td>
             <td sort_key="438">438</td>
             </tr>
         
@@ -9588,8 +9644,8 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="29">29</td>
             <td sort_key="/posts/tcpdump-and-wireshark/"><a href="/posts/tcpdump-and-wireshark/">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</a></td>
             <td sort_key="32">32s</td>
-            <td sort_key="293">293</td>
-            <td sort_key="324">324</td>
+            <td sort_key="294">294</td>
+            <td sort_key="323">323</td>
             </tr>
         
         <tr>
@@ -9619,9 +9675,9 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="33">33</td>
             <td sort_key="/posts/common-commands-for-various-operating-systems/"><a href="/posts/common-commands-for-various-operating-systems/">Linux/Windows/MacOSX 系统常用命令集锦</a></td>
-            <td sort_key="27">27s</td>
-            <td sort_key="64">64</td>
-            <td sort_key="68">68</td>
+            <td sort_key="26">26s</td>
+            <td sort_key="63">63</td>
+            <td sort_key="67">67</td>
             </tr>
         
         <tr>
@@ -9636,16 +9692,16 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="35">35</td>
             <td sort_key="/posts/manjaro-instruction/"><a href="/posts/manjaro-instruction/">Manjaro 使用指南</a></td>
             <td sort_key="22">22s</td>
-            <td sort_key="126">126</td>
-            <td sort_key="153">153</td>
+            <td sort_key="125">125</td>
+            <td sort_key="152">152</td>
             </tr>
         
         <tr>
             <td sort_key="36">36</td>
             <td sort_key="/posts/revolution-and-innovation/"><a href="/posts/revolution-and-innovation/">变革与创新</a></td>
-            <td sort_key="17">17s</td>
-            <td sort_key="218">218</td>
-            <td sort_key="319">319</td>
+            <td sort_key="18">18s</td>
+            <td sort_key="215">215</td>
+            <td sort_key="314">314</td>
             </tr>
         
 
@@ -20002,11 +20058,12 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
 <li><strong>音乐</strong>：
 <ul>
 <li>喜欢听后摇、蓝草、民谣、器乐</li>
-<li>有在断断续续地学习竹笛跟口琴，另外也有在学习使用 <a href="https://dreamtonics.com/en/synthesizerv/" target="_blank" rel="noopener noreffer">Synthesizer V</a>/<a href="https://space.bilibili.com/418030" target="_blank" rel="noopener noreffer">ACE</a> 跟 <a href="https://www.reaper.fm" target="_blank" rel="noopener noreffer">Reaper</a></li>
+<li>最喜欢的歌手是虚拟歌手洛天依</li>
+<li>有在断断续续地学习竹笛跟口琴（复音、蓝调都有在学），另外也有在学习使用 <a href="https://dreamtonics.com/en/synthesizerv/" target="_blank" rel="noopener noreffer">Synthesizer V</a>/<a href="https://space.bilibili.com/418030" target="_blank" rel="noopener noreffer">ACE</a> 跟 <a href="https://www.reaper.fm" target="_blank" rel="noopener noreffer">Reaper</a></li>
 </ul>
 </li>
 <li><strong>运动</strong>：喜欢轮滑以及游泳，哦还有 VR 游戏《Beat Saber》《Pistol Whip》，但是目前都是半吊子哈哈~</li>
-<li><strong>茶</strong>：2021 年在朋友家喝过一次<strong>青钱柳</strong>后就一直念念不忘，年底就入坑了凤牌滇红、天之红祁门红茶、极白安吉白茶，目前比较喜欢喝红茶。</li>
+<li><strong>茶</strong>：2021 年在朋友家喝过一次<strong>青钱柳</strong>后就一直念念不忘，年底就入坑了凤牌滇红、天之红祁门红茶、极白安吉白茶，目前比较喜欢喝红茶</li>
 <li><strong>书籍</strong>：读得最多的正经书是 IT 技术书籍，另外也喜欢看科幻，以及戒不掉的网文/轻小说</li>
 <li><strong>影视</strong>：看得最多的是动漫，另外就是欧美科幻片、温情片</li>
 <li><strong>中文输入方案</strong>：<a href="https://flypy.com/" target="_blank" rel="noopener noreffer">小鹤音形</a></li>
@@ -20025,7 +20082,26 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
 <li>曾经使用过但已经荒废的语言：Java/Julia/Mathematica/Lua</li>
 </ul>
 </li>
-<li><strong>工具或技术</strong>：Linux/Kubernetes/Istio</li>
+<li><strong>熟悉的技术</strong>：
+<ul>
+<li>Kubernetes</li>
+<li>Istio</li>
+<li>Linux</li>
+</ul>
+</li>
+<li><strong>想学的技术（按感兴趣程度降序排列，想学的太多，学会的太少）</strong>
+<ul>
+<li>Linux 内核技术、eBPF</li>
+<li>Kubernetes/Istio/Nginx 源码</li>
+<li>机器学习、深度学习</li>
+<li>区块链</li>
+<li>经济学、量化交易</li>
+<li>3D 建模与渲染</li>
+<li>数据库技术与理论</li>
+<li>Reaper 编曲、ACE/SynthV 调教</li>
+<li>蓝调口琴、竹笛、键盘</li>
+</ul>
+</li>
 <li><strong>联系方式</strong>
 <ul>
 <li>邮件：<code>eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K</code></li>
@@ -20045,25 +20121,25 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
 <p>2021 年开始的技术内容，大都来自我的个人笔记 <a href="https://github.com/ryan4yin/knowledge" target="_blank" rel="noopener noreffer">ryan4yin/knowledge</a>，我会不定期从这个笔记中找些有意思的内容，整理润色后，拿出来和大家分享，同时查漏补缺。</p>
 <p>而另一部分生活类的随笔，则是我的闲言碎语，许多都来自我的印象笔记。</p>
 <h3 id="我曾用过的博客标语" class="headerLink">
-    <a href="#%e6%88%91%e6%9b%be%e7%94%a8%e8%bf%87%e7%9a%84%e5%8d%9a%e5%ae%a2%e6%a0%87%e8%af%ad" class="header-mark"></a>我曾用过的博客标语</h3><div class="details admonition quote open">
+    <a href="#%e6%88%91%e6%9b%be%e7%94%a8%e8%bf%87%e7%9a%84%e5%8d%9a%e5%ae%a2%e6%a0%87%e8%af%ad" class="header-mark"></a>我曾用过的博客标语</h3><div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-quote-right fa-fw"></i>何来枷锁<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw"></i>何来枷锁<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content">拆破玉笼飞彩凤，顿开金锁走蛟龙。</div>
         </div>
     </div>
-<div class="details admonition quote open">
+<div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-quote-right fa-fw"></i>赞美快乐<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw"></i>赞美快乐<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content">双手合十 闭上眼睛 心里什么也不去想 嘴角就高高扬起 笑出声来 赞美快乐~</div>
         </div>
     </div>
-<div class="details admonition quote open">
+<div class="details admonition note open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-quote-right fa-fw"></i>错过<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-pencil-alt fa-fw"></i>错过<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content">我错过花，却看见海</div>
@@ -20097,6 +20173,22 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
             data-sizes="auto"
             alt="/images/about/cnblog-2020-01-21.webp">
     </a><figcaption class="image-caption">博客园快照</figcaption>
+    </figure></div>
+        </div>
+    </div>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>博客快照-2022-07-31<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><figure><a class="lightgallery" href="/images/about/thiscute.world-2022-07-31.webp" title="/images/about/thiscute.world-2022-07-31.webp" data-thumbnail="/images/about/thiscute.world-2022-07-31.webp" data-sub-html="<h2>ThisCute.World 快照</h2>">
+        <img
+            class="lazyload"
+            data-src="/images/about/thiscute.world-2022-07-31.webp"
+            data-srcset="/images/about/thiscute.world-2022-07-31.webp, /images/about/thiscute.world-2022-07-31.webp 1.5x, /images/about/thiscute.world-2022-07-31.webp 2x"
+            data-sizes="auto"
+            alt="/images/about/thiscute.world-2022-07-31.webp">
+    </a><figcaption class="image-caption">ThisCute.World 快照</figcaption>
     </figure></div>
         </div>
     </div>
@@ -20997,7 +21089,7 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
 var myFriends = [
     ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
     // ["https://sanshiliuxiao.top/", "https://cdn.jsdelivr.net/gh/vensing/static@latest/avatar/sanshiliuxiao.jpg", "@三十六咲", "快走吧，趁风停止之前"], 
-    ["https://rea.ink/", "https://rea.ink/head.png", "@倾书", "清风皓月，光景常新 <= 前端"], 
+    ["https://rea.ink/", "/avatar/rea.ink.webp", "@倾书", "清风皓月，光景常新 <= 前端"], 
     ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
     ["https://www.jianshu.com/u/af3a36ae8d16", "/avatar/li2niu.webp", "@李二牛", "深耕Web服务端 马拉松爱好者(PB330) <= Java"], 
     // ["https://www.i-lab.top/", "https://www.i-lab.top/favicon.ico", "@震邦的算法日常", "南北传"], 
@@ -21023,6 +21115,7 @@ var myFriends = [
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
     ["https://blog.010sec.cn/", "/avatar/c4rt1y.webp", "@c4rt1y", "<= 运维搬砖人"], 
+    ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "<= 密码学、Golang、逆向"], 
 ];
 
 
