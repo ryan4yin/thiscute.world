@@ -6,7 +6,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "featured-image.webp"
+  src: "cert-manager.webp"
 
 tags: ["数字证书", "证书", "TLS", "Kubernetes", "cert-manager"]
 categories: ["tech"]
