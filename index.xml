@@ -1,4 +1,757 @@
-<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2022-05-24T02:17:00+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">Death Is But a Dream</title><link href="https://thiscute.world/posts/death-is-but-a-dream/"/><id>https://thiscute.world/posts/death-is-but-a-dream/</id><author><name>ryan4yin</name></author><published>2022-05-24T02:17:00+08:00</published><updated>2022-05-24T02:17:00+08:00</updated><content type="html"><![CDATA[<blockquote>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2022-07-31T15:11:46+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">Kubernetes 中的证书管理工具 - cert-manager</title><link href="https://thiscute.world/posts/kubernetes-cert-management/"/><id>https://thiscute.world/posts/kubernetes-cert-management/</id><author><name>ryan4yin</name></author><published>2022-07-31T15:11:46+08:00</published><updated>2022-07-31T15:11:46+08:00</updated><content type="html"><![CDATA[<p>我在之前的文章 <a href="https://thiscute.world/posts/about-tls-cert/" target="_blank" rel="noopener noreffer">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a> 中，介绍了如何使用 openssl 生成与管理各种用途的数字证书，也简单介绍了如何通过 certbot 等工具与 ACME 证书申请与管理协议，进行数字证书的申请与自动更新（autorenew）。</p>
+<p>这篇文章要介绍的 cert-mangager，跟 certbot 这类工具有点类似，区别在于它是工作在 Kubernetes 中的。</p>
+<p>cert-manager 是一个证书的自动化管理工具，用于在 Kubernetes 集群中自动化地颁发与管理各种来源、各种用途的数字证书。它将确保证书有效，并在合适的时间自动更新证书。</p>
+<p>多的就不说了，证书相关的内容请参见我的 <a href="https://thiscute.world/posts/about-tls-cert/" target="_blank" rel="noopener noreffer">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a> 或者其他资料，现在直接进入正题。</p>
+<blockquote>
+<p>注：cert-manager 的管理对象是「证书」，如果你仅需要使用非对称加密的公私钥对进行 JWT 签名、数据加解密，可以考虑直接使用 <a href="https://thiscute.world/posts/expirence-of-vault/" target="_blank" rel="noopener noreffer">secrets 管理工具 Vault</a>.</p>
+</blockquote>
+<h2 id="一部署" class="headerLink">
+    <a href="#%e4%b8%80%e9%83%a8%e7%bd%b2" class="header-mark"></a>一、部署</h2><blockquote>
+<p><a href="https://cert-manager.io/docs/installation/helm/" target="_blank" rel="noopener noreffer">https://cert-manager.io/docs/installation/helm/</a></p>
+</blockquote>
+<p>官方提供了多种部署方式，使用 helm3 安装的方法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 查看版本号</span>
+</span></span><span class="line"><span class="cl">helm search repo jetstack/cert-manager -l <span class="p">|</span> head
+</span></span><span class="line"><span class="cl"><span class="c1"># 下载并解压 chart，目的是方便 gitops 版本管理</span>
+</span></span><span class="line"><span class="cl">helm pull jetstack/cert-manager --untar --version 1.8.2
+</span></span><span class="line"><span class="cl">helm install <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  cert-manager ./cert-manager <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --namespace cert-manager <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --create-namespace <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="c1"># 这会导致使用 helm 卸载的时候会删除所有 CRDs，可能导致所有 CRDs 资源全部丢失！要格外注意</span>
+</span></span><span class="line"><span class="cl">  --set <span class="nv">installCRDs</span><span class="o">=</span><span class="nb">true</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="二创建-issuer" class="headerLink">
+    <a href="#%e4%ba%8c%e5%88%9b%e5%bb%ba-issuer" class="header-mark"></a>二、创建 Issuer</h2><p>cert-manager 支持多种 issuer，你甚至可以通过它的标准 API 创建自己的 Issuer。</p>
+<p>但是总的来说不外乎三种：</p>
+<ul>
+<li>由权威 CA 机构签名的「公网受信任证书」: 这类证书会被浏览器、小程序等第三方应用/服务商信任</li>
+<li>本地签名证书: 即由本地 CA 证书签名的数字证书</li>
+<li>自签名证书: 即使用证书的私钥为证书自己签名</li>
+</ul>
+<p>下面介绍下如何申请公网证书以及本地签名证书。</p>
+<h3 id="1-通过权威机构创建公网受信证书" class="headerLink">
+    <a href="#1-%e9%80%9a%e8%bf%87%e6%9d%83%e5%a8%81%e6%9c%ba%e6%9e%84%e5%88%9b%e5%bb%ba%e5%85%ac%e7%bd%91%e5%8f%97%e4%bf%a1%e8%af%81%e4%b9%a6" class="header-mark"></a>1. 通过权威机构创建公网受信证书</h3><p>通过权威机构创建的公网受信证书，可以直接应用在边界网关上，用于给公网用户提供 TLS 加密访问服务，比如各种 HTTPS 站点、API。
+这是需求最广的一类数字证书服务。</p>
+<p>cert-manager 支持两种申请公网受信证书的方式：</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment" target="_blank" rel="noopener noreffer">ACME（Automated Certificate Management Environment (ACME) Certificate Authority server）</a>证书自动化申请与管理协议。</li>
+<li><a href="https://cert-manager.io/docs/configuration/venafi/#creating-a-venafi-as-a-service-issuer" target="_blank" rel="noopener noreffer">venafi-as-a-service</a>: venafi 是一个证书的集中化管理平台，它也提供了 cert-manager 插件，可用于自动化申请 DigiCert/Entrust/GlobalSign/Let&rsquo;s Encrypt 四种类型的公网受信证书。</li>
+</ul>
+<p>这里主要介绍使用 ACMEv2 协议申请公网证书，支持使用此开放协议申请证书的权威机构有：</p>
+<ul>
+<li>免费服务
+<ul>
+<li>Let&rsquo;s Encrypt: 众所周知，它提供三个月有效期的免费证书。</li>
+<li><a href="https://zerossl.com/documentation/acme/" target="_blank" rel="noopener noreffer">ZeroSSL</a>:  貌似也是一个比较有名的 SSL 证书服务
+<ul>
+<li>通过 ACME 协议支持不限数量的 90 天证书，也支持多域名证书与泛域名证书。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>付费服务
+<ul>
+<li>DigiCert: 这个非常有名（但也是相当贵），官方文档 <a href="https://docs.digicert.com/certificate-tools/Certificate-lifecycle-automation-index/acme-user-guide/" target="_blank" rel="noopener noreffer">Digicert - Third-party ACME client automation</a></li>
+<li>Google Trust Services: Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign。官方文档 <a href="https://cloud.google.com/blog/products/identity-security/automate-public-certificate-lifecycle-management-via--acme-client-api" target="_blank" rel="noopener noreffer">Automate Public Certificates Lifecycle Management via RFC 8555 (ACME)</a></li>
+<li>Entrust: 官方文档 <a href="https://www.entrust.com/knowledgebase/ssl/how-to-use-acme-to-install-ssl-tls-certificates-in-entrust-certificate-services-apache#step1" target="_blank" rel="noopener noreffer">Entrust&rsquo;s ACME implementation</a></li>
+<li>GlobalSign: 官方文档 <a href="https://www.globalsign.com/en/acme-automated-certificate-management" target="_blank" rel="noopener noreffer">GlobalSign ACME Service</a></li>
+</ul>
+</li>
+</ul>
+<p>这里也顺便介绍下收费证书服务对证书的分级，以及该如何选用：</p>
+<ul>
+<li>Domain Validated（DV）证书
+<ul>
+<li><strong>仅验证域名所有权</strong>，验证步骤最少，价格最低，仅需要数分钟即可签发。</li>
+<li>优点就是易于签发，很适合做自动化。</li>
+<li>各云厂商（AWS/GCP/Cloudflare，以及 Vercel/Github 的站点服务）给自家服务提供的免费证书都是 DV 证书，Let&rsquo;s Encrypt 的证书也是这个类型。
+<ul>
+<li>很明显这些证书的签发都非常方便，而且仅验证域名所有权。</li>
+<li>但是 AWS/GCP/Cloudflare/Vercel/Github 提供的 DV 证书都仅能在它们的云服务上使用，不提供私钥功能！</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Organization Validated (OV) 证书
+<ul>
+<li>是企业 SSL 证书的首选，通过企业认证确保企业 SSL 证书的真实性。</li>
+<li>除域名所有权外，CA 机构还会审核组织及企业的真实性，包括注册状况、联系方式、恶意软件等内容。</li>
+<li>如果要做合规化，可能至少也得用 OV 这个级别的证书。</li>
+</ul>
+</li>
+<li>Extended Validation（EV）证书
+<ul>
+<li>最严格的认证方式，CA 机构会深度审核组织及企业各方面的信息。</li>
+<li>被认为适合用于大型企业、金融机构等组织或企业。</li>
+<li>而且仅支持签发单域名、多域名证书，不支持签发泛域名证书，安全性杠杠的。</li>
+</ul>
+</li>
+</ul>
+<p>ACME 支持 HTTP01 跟 DNS01 两种域名验证方式，其中 DNS01 是最简便的方法。</p>
+<p>下面以 AWS Route53 为例介绍如何申请一个 Let&rsquo;s Encrypt 证书。（其他 DNS 提供商的配置方式请直接看官方文档）</p>
+<blockquote>
+<p><a href="https://cert-manager.io/docs/configuration/acme/dns01/route53/" target="_blank" rel="noopener noreffer">https://cert-manager.io/docs/configuration/acme/dns01/route53/</a></p>
+</blockquote>
+<h4 id="11-aws-iam-授权" class="headerLink">
+    <a href="#11-aws-iam-%e6%8e%88%e6%9d%83" class="header-mark"></a>1.1 AWS IAM 授权</h4><p>首先需要为 EKS 集群创建 OIDC provider，参见 <a href="https://github.com/ryan4yin/knowledge/blob/master/kubernetes/security/aws-iam-and-kubernetes.md" target="_blank" rel="noopener noreffer">aws-iam-and-kubernetes</a>，这里不再赘述。</p>
+<p>cert-manager 需要查询与更新 Route53 记录的权限，因此需要使用如下配置创建一个 IAM Policy，可以命名为 <code>&lt;ClusterName&gt;CertManagerRoute53Access</code>（注意替换掉 <code>&lt;ClusterName&gt;</code>）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;route53:GetChange&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;arn:aws:route53:::change/*&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl"> <span class="s2">&#34;route53:ChangeResourceRecordSets&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="s2">&#34;route53:ListResourceRecordSets&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">],</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;arn:aws:route53:::hostedzone/*&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;route53:ListHostedZonesByName&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;*&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>比如使用 awscli 创建此 policy：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">aws iam create-policy <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --policy-name XxxCertManagerRoute53Access <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --policy-document file://cert-manager-route53-access.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后通过上述配置创建一个 IAM Role 并自动给 cert-manager 所在的 EKS 集群添加信任关系：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CLUSTER_NAME</span><span class="o">=</span><span class="s2">&#34;xxx&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">AWS_ACCOUNT_ID</span><span class="o">=</span><span class="s2">&#34;112233445566&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用 eksctl 自动创建对应的 role 并添加信任关系</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 需要先安装好 eksctl</span>
+</span></span><span class="line"><span class="cl">eksctl create iamserviceaccount <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --cluster <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span><span class="s2">&#34;</span> --name cert-manager --namespace cert-manager <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --role-name <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span><span class="s2">-cert-manager-route53-role&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --attach-policy-arn <span class="s2">&#34;arn:aws:iam::</span><span class="si">${</span><span class="nv">AWS_ACCOUNT_ID</span><span class="si">}</span><span class="s2">:policy/&lt;ClusterName&gt;CertManagerRoute53Access&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --role-only <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --approve
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之后需要为 cert-manager 的 ServiceAccount 添加注解来绑定上面刚创建好的 IAM Role，首先创建如下 helm values 文件 <code>cert-manager-values.yaml</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 如果把这个改成 false，也会导致 cert-manager 的所有 CRDs 及相关资源被删除！</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">installCRDs</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 注意修改这里的 ${AWS_ACCOUNT_ID} 以及 ${CLUSTER_NAME}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">eks.amazonaws.com/role-arn</span><span class="p">:</span><span class="w"> </span><span class="p">&gt;-</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">      </span><span class="w">      </span><span class="l">arn:aws:iam::${AWS_ACCOUNT_ID}:role/${CLUSTER_NAME}-cert-manager-route53-role</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 根据官方文档，还得修改下这个，允许 cert-manager 读取 ServiceAccount Token，从而获得授权</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">fsGroup</span><span class="p">:</span><span class="w"> </span><span class="m">1001</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后重新部署 cert-manager:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">helm upgrade -i cert-manager ./cert-manager -n cert-manager -f cert-manager-values.yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样就完成了授权。</p>
+<h4 id="12-创建-acme-issuer" class="headerLink">
+    <a href="#12-%e5%88%9b%e5%bb%ba-acme-issuer" class="header-mark"></a>1.2 创建 ACME Issuer</h4><p>在 xxx 名字空间创建一个 Iusser：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">cert-manager.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Issuer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">letsencrypt-prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">acme</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 用于接受域名过期提醒的邮件地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="l">user@example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># ACME 服务器，比如 let&#39;s encrypt、Digicert 等</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># let&#39;s encrypt 的测试 URL，可用于测试配置正确性</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l">https://acme-staging-v02.api.letsencrypt.org/directory</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># let&#39;s encrypt 的正式 URL，有速率限制</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># server: https://acme-v02.api.letsencrypt.org/directory</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 用于存放 ACME 账号私钥的 Secret 名称，Issuer 创建时会自动生成此 secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">privateKeySecretRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">letsencrypt-staging</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># DNS 验证设置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">solvers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># 以 dnsZones 为例，越长的 Zone 优先级就越高</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># 比如在为 www.sys.exapmle.com 申请证书时，sys.example.org 的优先级就比 example.org 更高</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">dnsZones</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;example.org&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">dns01</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># 使用 route53 进行验证</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">route53</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l">us-east-1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="c"># cert-manager 已经通过 ServiceAccount 绑定了 IAM Role</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="c"># 这里不需要补充额外的 IAM 授权相关信息！</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="13-通过-acme-创建证书以及问题排查" class="headerLink">
+    <a href="#13-%e9%80%9a%e8%bf%87-acme-%e5%88%9b%e5%bb%ba%e8%af%81%e4%b9%a6%e4%bb%a5%e5%8f%8a%e9%97%ae%e9%a2%98%e6%8e%92%e6%9f%a5" class="header-mark"></a>1.3 通过 ACME 创建证书以及问题排查</h4><blockquote>
+<p><a href="https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources" target="_blank" rel="noopener noreffer">https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources</a></p>
+</blockquote>
+<p>使用如下配置创建证书，并将证书保存到指定的 Secret 中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">cert-manager.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Certificate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">example-com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">xxx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># Secret names are always required.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># Istio Gateway/Ingress/Gateway API 都可以通过直接引用这个 secret 来添加 TLS 加密。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">tls-example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># secretTemplate is optional. If set, these annotations and labels will be</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># copied to the Secret named tls-example.com. These labels and annotations will</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># be re-reconciled if the Certificate&#39;s secretTemplate changes. secretTemplate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># is also enforced, so relevant label and annotation changes on the Secret by a</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># third party will be overwriten by cert-manager to match the secretTemplate.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">secretTemplate</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">my-secret-annotation-1</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;foo&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">my-secret-annotation-2</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;bar&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">my-secret-label</span><span class="p">:</span><span class="w"> </span><span class="l">foo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">duration</span><span class="p">:</span><span class="w"> </span><span class="l">2160h</span><span class="w"> </span><span class="c"># 90d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">renewBefore</span><span class="p">:</span><span class="w"> </span><span class="l">360h</span><span class="w"> </span><span class="c"># 15d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># https://cert-manager.io/docs/reference/api-docs/#cert-manager.io/v1.CertificatePrivateKey</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">privateKey</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">algorithm</span><span class="p">:</span><span class="w"> </span><span class="l">ECDSA </span><span class="w"> </span><span class="c"># RSA/ECDSA/Ed25519，其中 RSA 应用最广泛，Ed25519 被认为最安全</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="l">PKCS1 </span><span class="w"> </span><span class="c"># 对于 TLS 加密，通常都用 PKCS1 格式</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="m">256</span><span class="w">  </span><span class="c"># RSA 默认为 2048，ECDSA 默认为 256，而 Ed25519 不使用此属性！</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">rotationPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Always </span><span class="w"> </span><span class="c"># renew 时总是重新创建新的私钥</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># The use of the common name field has been deprecated since 2000 and is</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># discouraged from being used.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">commonName</span><span class="p">:</span><span class="w"> </span><span class="l">example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># At least one of a DNS Name, URI, or IP address is required.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">dnsNames</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s1">&#39;*.example.com&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">isCA</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">usages</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">server auth</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">client auth</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># uris:  # 如果想在证书的 subjectAltNames 中添加 URI，就补充在这里</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c">#   - spiffe://cluster.local/ns/sandbox/sa/example</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># ipAddresses:  # 如果想在证书的 subjectAltNames 添加 ip 地址，就补充在这里</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c">#   - 192.168.0.5</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">subject</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 证书的补充信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 字段索引：https://cert-manager.io/docs/reference/api-docs/#cert-manager.io/v1.X509Subject</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">organizations</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">xxx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># Issuer references are always required.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">issuerRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">letsencrypt-prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># We can reference ClusterIssuers by changing the kind here.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># The default value is Issuer (i.e. a locally namespaced Issuer)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Issuer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># This is optional since cert-manager will default to this value however</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># if you are using an external issuer, change this to that issuer group.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l">cert-manager.io</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>部署好 Certificate 后，describe 它就能看到当前的进度：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Events: 
+</span></span><span class="line"><span class="cl">  Type    Reason     Age   From    Message 
+</span></span><span class="line"><span class="cl">  ----    ------     ----  ----    ------- 
+</span></span><span class="line"><span class="cl">  Normal  Issuing    117s  cert-manager-certificates-trigger   Issuing certificate as Secret does not exist      
+</span></span><span class="line"><span class="cl">  Normal  Generated  116s  cert-manager-certificates-key-manager      Stored new private key in temporary Secret resource &#34;example.com-f044j&#34;     
+</span></span><span class="line"><span class="cl">  Normal  Requested  116s  cert-manager-certificates-request-manager  Created new CertificateRequest resource &#34;example.com-unv3d&#34;   
+</span></span><span class="line"><span class="cl">  Normal  Issuing    20s   cert-manager-certificates-issuing   The certificate has been successfully issued
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果发现证书长时间未 Ready，可以参照<a href="https://cert-manager.io/docs/faq/acme/" target="_blank" rel="noopener noreffer">官方文档 - Troubleshooting Issuing ACME Certificates</a>，按证书申请流程进行逐层排查：</p>
+<ul>
+<li>首先 cert-manager 发现 Certificate 描述的 Secret 不存在，于是启动证书申请流程</li>
+<li>首先生成私钥，存放在一个临时 Secret 中</li>
+<li>然后通过私钥以及 Certificate 资源中的其他信息，生成 CSR 证书申请请求文件
+<ul>
+<li>这也是一个 CRD 资源，可以通过 <code>kubectl get csr -n xxx</code> 查看</li>
+</ul>
+</li>
+<li>接着将 CSR 文件提交给 ACME 服务器，申请权威机构签发证书
+<ul>
+<li>这对应 CRD 资源 <code>kubectl get order</code></li>
+</ul>
+</li>
+<li>对于上述 ACME 证书申请流程，Order 实际上会生成一个 DNS1 Challenge 资源
+<ul>
+<li>可以通过 <code>kubectl get challenge</code> 检查此资源</li>
+</ul>
+</li>
+<li>challenge 验证通过后会逐层往回走，前面的 Order CSR 状态都会立即变成 valid</li>
+<li>最终证书签发成功，Certificate 状态变成 Ready，所有 Order CSR challenge 资源都被自动清理掉。</li>
+</ul>
+<h4 id="14-通过-csi-driver-创建证书" class="headerLink">
+    <a href="#14-%e9%80%9a%e8%bf%87-csi-driver-%e5%88%9b%e5%bb%ba%e8%af%81%e4%b9%a6" class="header-mark"></a>1.4 通过 csi-driver 创建证书</h4><blockquote>
+<p><a href="https://cert-manager.io/docs/projects/csi-driver/" target="_blank" rel="noopener noreffer">https://cert-manager.io/docs/projects/csi-driver/</a></p>
+</blockquote>
+<p>直接使用 <code>Certificate</code> 资源创建的证书，会被存放在 Kubernetes Secrets 中，被认为并非足够安全。
+而 cert-manager csi-driver 则避免了这个缺陷，具体而言，它提升安全性的做法有：</p>
+<ul>
+<li>确保私钥仅保存在对应的节点上，并挂载到对应的 Pod，完全避免私钥被通过网络传输。</li>
+<li>应用的每个副本都使用自己生成的私钥，并且能确保在 Pod 的生命周期中证书跟私钥始终存在。</li>
+<li>自动 renew 证书</li>
+<li>副本被删除时，证书就会被销毁</li>
+</ul>
+<p>总的说 csi-driver 主要是用来提升安全性的，有需要可以自己看文档，就不多介绍了。</p>
+<h3 id="2-通过私有-ca-颁发证书" class="headerLink">
+    <a href="#2-%e9%80%9a%e8%bf%87%e7%a7%81%e6%9c%89-ca-%e9%a2%81%e5%8f%91%e8%af%81%e4%b9%a6" class="header-mark"></a>2. 通过私有 CA 颁发证书</h3><p>Private CA 是一种企业自己生成的 CA 证书，通常企业用它来构建自己的 PKI 基础设施。</p>
+<p>在 TLS 协议这个应用场景下，Private CA 颁发的证书仅适合在企业内部使用，必须在客户端安装上这个 CA 证书，才能正常访问由它签名的数字证书加密的 Web API 或者站点。<strong>Private CA 签名的数字证书在公网上是不被信任的</strong>！</p>
+<p>cert-manager 提供的 Private CA 服务有：</p>
+<ul>
+<li><a href="https://cert-manager.io/docs/configuration/vault/" target="_blank" rel="noopener noreffer">Vault</a>: 鼎鼎大名了，Vault 是一个密码即服务工具，可以部署在 K8s 集群中，提供许多密码、证书相关的功能。
+<ul>
+<li>开源免费</li>
+</ul>
+</li>
+<li><a href="https://github.com/cert-manager/aws-privateca-issuer" target="_blank" rel="noopener noreffer">AWS Certificate Manager Private CA</a>: 跟 Vault 的 CA 功能是一致的，区别是它是托管的，由 AWS 负责维护。
+<ul>
+<li>每个 Private CA 证书：$400/month</li>
+<li>每个签发的证书（仅读取了私钥及证书内容后才会收费）：按梯度一次性收费，0-1000 个以内是 $0.75 每个</li>
+</ul>
+</li>
+<li>其他的自己看文档&hellip;</li>
+</ul>
+<p>这个因为暂时用不上，所以还没研究，之后有研究再给补上。</p>
+<p>TO BE DONE.</p>
+<h2 id="三cert-manager-与-istioingress-等网关集成" class="headerLink">
+    <a href="#%e4%b8%89cert-manager-%e4%b8%8e-istioingress-%e7%ad%89%e7%bd%91%e5%85%b3%e9%9b%86%e6%88%90" class="header-mark"></a>三、cert-manager 与 istio/ingress 等网关集成</h2><p>cert-manager 提供的 <code>Certificate</code> 资源，会将生成好的公私钥存放在 Secret 中，而 Istio/Ingress 都支持这种格式的 Secret，所以使用还是挺简单的。</p>
+<p>以 Istio Gateway 为例，直接在 Gateway 资源上指定 Secret 名称即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">networking.istio.io/v1alpha3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Gateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">example-gateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">istio</span><span class="p">:</span><span class="w"> </span><span class="l">ingressgateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">servers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">port</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">http</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">HTTP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">product.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">httpsRedirect</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># sends 301 redirect for http requests</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">port</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="m">8443</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">https</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">HTTPS</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l">SIMPLE</span><span class="w"> </span><span class="c"># enables HTTPS on this port</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">credentialName</span><span class="p">:</span><span class="w"> </span><span class="l">tls-example.com</span><span class="w"> </span><span class="c"># This should match the Certificate secretName</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">product.example.com</span><span class="w"> </span><span class="c"># This should match a DNS name in the Certificate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">networking.istio.io/v1alpha3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">VirtualService</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">product.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">gateways</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">example-gateway</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">http</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">route</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">destination</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">grpc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">9090</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">9090</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">http</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">sessionAffinity</span><span class="p">:</span><span class="w"> </span><span class="l">None</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterIP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">networking.istio.io/v1alpha3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">DestinationRule</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 定义了两个 subset</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">subsets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 其他 deployment 等配置</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>之后再配合 VirtualService 等资源，就可以将 Istio 跟 cert-manager 结合起来啦。</p>
+<h2 id="四将-cert-manager-证书挂载到自定义网关中" class="headerLink">
+    <a href="#%e5%9b%9b%e5%b0%86-cert-manager-%e8%af%81%e4%b9%a6%e6%8c%82%e8%bd%bd%e5%88%b0%e8%87%aa%e5%ae%9a%e4%b9%89%e7%bd%91%e5%85%b3%e4%b8%ad" class="header-mark"></a>四、将 cert-manager 证书挂载到自定义网关中</h2><blockquote>
+<p>注意，千万别使用 <code>subPath</code> 挂载，根据<a href="https://kubernetes.io/docs/concepts/configuration/secret/#mounted-secrets-are-updated-automatically" target="_blank" rel="noopener noreffer">官方文档</a>，这种方式挂载的 Secret 文件不会自动更新！</p>
+</blockquote>
+<p>既然证书被存放在 Secret 中，自然可以直接当成数据卷挂载到 Pods 中，示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tls-example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/certs/example.com&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tls-example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">tls-example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">optional</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c"># default setting; &#34;mysecret&#34; must exist</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>对于 nginx 而言，可以简单地搞个 sidecar 监控下，有配置变更就 reload 下 nginx，实现证书自动更新。</p>
+<p>或者可以考虑直接写个 k8s informer 监控 secret 的变更，有变更就直接 reload 所有 nginx 实例，总之实现的方式有很多种。</p>
+<h2 id="五注意事项" class="headerLink">
+    <a href="#%e4%ba%94%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="header-mark"></a>五、注意事项</h2><p>服务端 TLS 协议的配置有许多的优化点，有些配置对性能的提升是很明显的，建议自行网上搜索相关资料，这里仅列出部分相关信息。</p>
+<h3 id="ocsp-证书验证协议会大幅拖慢-https-协议的响应速度" class="headerLink">
+    <a href="#ocsp-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%8d%8f%e8%ae%ae%e4%bc%9a%e5%a4%a7%e5%b9%85%e6%8b%96%e6%85%a2-https-%e5%8d%8f%e8%ae%ae%e7%9a%84%e5%93%8d%e5%ba%94%e9%80%9f%e5%ba%a6" class="header-mark"></a>OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度</h3><p>如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这会大幅拖慢 HTTPS 协议的响应速度，而且 CA 机构的 OCSP 站点本身的性能也会有很大的影响。</p>
+<p>解决方法：HTTPS 服务器一定要启用 OCSP stapling 功能，它使服务器提前访问 OCSP 获取证书状态信息并缓存到本地，
+在客户端使用 TLS 协议访问时，直接在握手阶段将缓存的 OCSP 信息发送给客户端，这样就完成了证书状态的校验。
+因为 OCSP 信息会带有 CA 证书的签名及有效期，服务端不可能伪造它，这样也能确保安全性。</p>
+]]></content></entry><entry><title type="html">Death Is But a Dream</title><link href="https://thiscute.world/posts/death-is-but-a-dream/"/><id>https://thiscute.world/posts/death-is-but-a-dream/</id><author><name>ryan4yin</name></author><published>2022-05-24T02:17:00+08:00</published><updated>2022-05-24T02:17:00+08:00</updated><content type="html"><![CDATA[<blockquote>
 <p>我并不知道何时才是死期，<br>
 却日日问自己，<br>
 会不会有幽灵来牵我的手，<br>
@@ -8424,10 +9177,12 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-07-31T02:51UTC&#43;08:00</p>
+    <p>更新时间: 2022-07-31T15:51UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
+
+
 
 
 
@@ -8581,10 +9336,10 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>244513</td>
-            <td style="color:tomato;"><strong>29520</strong></td>
-            <td>75087</td>
-            <td>26 days, 8h 26m 17s</td>
+            <td>249338</td>
+            <td style="color:tomato;"><strong>29575</strong></td>
+            <td>75209</td>
+            <td>26 days, 9h 46m 30s</td>
             <td style="color:dodgerblue;"><strong>01m 17s</strong></td>
             </tr>
         </tbody>
@@ -8624,9 +9379,9 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="3">3</td>
             <td sort_key="/posts/practical-cryptography-basics-5-key-exchange/"><a href="/posts/practical-cryptography-basics-5-key-exchange/">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></td>
-            <td sort_key="135">02m 15s</td>
-            <td sort_key="58">58</td>
-            <td sort_key="66">66</td>
+            <td sort_key="133">02m 13s</td>
+            <td sort_key="59">59</td>
+            <td sort_key="67">67</td>
             </tr>
         
         <tr>
@@ -8640,33 +9395,33 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="5">5</td>
             <td sort_key="/posts/practical-cryptography-basics-4-secure-random-generators/"><a href="/posts/practical-cryptography-basics-4-secure-random-generators/">写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></td>
-            <td sort_key="121">02m 01s</td>
-            <td sort_key="63">63</td>
-            <td sort_key="73">73</td>
+            <td sort_key="120">02m 00s</td>
+            <td sort_key="64">64</td>
+            <td sort_key="74">74</td>
             </tr>
         
         <tr>
             <td sort_key="6">6</td>
-            <td sort_key="/posts/practical-cryptography-basics-3-key-derivation-function/"><a href="/posts/practical-cryptography-basics-3-key-derivation-function/">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></td>
-            <td sort_key="108">01m 48s</td>
-            <td sort_key="104">104</td>
-            <td sort_key="138">138</td>
+            <td sort_key="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></td>
+            <td sort_key="116">01m 56s</td>
+            <td sort_key="114">114</td>
+            <td sort_key="153">153</td>
             </tr>
         
         <tr>
             <td sort_key="7">7</td>
-            <td sort_key="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></td>
-            <td sort_key="107">01m 47s</td>
-            <td sort_key="111">111</td>
-            <td sort_key="148">148</td>
+            <td sort_key="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/">写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></td>
+            <td sort_key="116">01m 56s</td>
+            <td sort_key="103">103</td>
+            <td sort_key="122">122</td>
             </tr>
         
         <tr>
             <td sort_key="8">8</td>
-            <td sort_key="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/">写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></td>
-            <td sort_key="103">01m 43s</td>
-            <td sort_key="102">102</td>
-            <td sort_key="118">118</td>
+            <td sort_key="/posts/practical-cryptography-basics-3-key-derivation-function/"><a href="/posts/practical-cryptography-basics-3-key-derivation-function/">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></td>
+            <td sort_key="108">01m 48s</td>
+            <td sort_key="105">105</td>
+            <td sort_key="139">139</td>
             </tr>
         
         <tr>
@@ -8695,30 +9450,22 @@ python的类方法、静态方法，与java的静态方法：</p>
         
         <tr>
             <td sort_key="12">12</td>
-            <td sort_key="/posts/kubernetes-best-practices/"><a href="/posts/kubernetes-best-practices/">Kubernetes 微服务最佳实践</a></td>
-            <td sort_key="88">01m 28s</td>
-            <td sort_key="79">79</td>
-            <td sort_key="125">125</td>
+            <td sort_key="/posts/practical-cryptography-basics-2-hash/"><a href="/posts/practical-cryptography-basics-2-hash/">写给开发人员的实用密码学（二）—— 哈希函数</a></td>
+            <td sort_key="87">01m 27s</td>
+            <td sort_key="134">134</td>
+            <td sort_key="148">148</td>
             </tr>
         
         <tr>
             <td sort_key="13">13</td>
-            <td sort_key="/posts/practical-cryptography-basics-2-hash/"><a href="/posts/practical-cryptography-basics-2-hash/">写给开发人员的实用密码学（二）—— 哈希函数</a></td>
+            <td sort_key="/posts/kubernetes-best-practices/"><a href="/posts/kubernetes-best-practices/">Kubernetes 微服务最佳实践</a></td>
             <td sort_key="87">01m 27s</td>
-            <td sort_key="133">133</td>
-            <td sort_key="147">147</td>
+            <td sort_key="80">80</td>
+            <td sort_key="126">126</td>
             </tr>
         
         <tr>
             <td sort_key="14">14</td>
-            <td sort_key="/posts/about-tls-cert/"><a href="/posts/about-tls-cert/">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></td>
-            <td sort_key="86">01m 26s</td>
-            <td sort_key="113">113</td>
-            <td sort_key="158">158</td>
-            </tr>
-        
-        <tr>
-            <td sort_key="15">15</td>
             <td sort_key="/posts/expirence-of-vault/"><a href="/posts/expirence-of-vault/">secrets 管理工具 Vault 的介绍、安装及使用</a></td>
             <td sort_key="84">01m 24s</td>
             <td sort_key="124">124</td>
@@ -8726,11 +9473,19 @@ python的类方法、静态方法，与java的静态方法：</p>
             </tr>
         
         <tr>
+            <td sort_key="15">15</td>
+            <td sort_key="/posts/about-tls-cert/"><a href="/posts/about-tls-cert/">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></td>
+            <td sort_key="84">01m 24s</td>
+            <td sort_key="115">115</td>
+            <td sort_key="161">161</td>
+            </tr>
+        
+        <tr>
             <td sort_key="16">16</td>
             <td sort_key="/posts/expirence-of-argo-workflow/"><a href="/posts/expirence-of-argo-workflow/">云原生流水线 Argo Workflows 的安装、使用以及个人体验</a></td>
-            <td sort_key="75">01m 15s</td>
-            <td sort_key="157">157</td>
-            <td sort_key="208">208</td>
+            <td sort_key="76">01m 16s</td>
+            <td sort_key="159">159</td>
+            <td sort_key="211">211</td>
             </tr>
         
         <tr>
@@ -8744,25 +9499,25 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="18">18</td>
             <td sort_key="/posts/practical-cryptography-basics-1/"><a href="/posts/practical-cryptography-basics-1/">写给开发人员的实用密码学（一）—— 概览</a></td>
-            <td sort_key="70">01m 10s</td>
-            <td sort_key="119">119</td>
-            <td sort_key="188">188</td>
+            <td sort_key="72">01m 12s</td>
+            <td sort_key="121">121</td>
+            <td sort_key="191">191</td>
             </tr>
         
         <tr>
             <td sort_key="19">19</td>
-            <td sort_key="/posts/finops-for-kubernetes/"><a href="/posts/finops-for-kubernetes/">FinOps for Kubernetes - 如何拆分 Kubernetes 成本</a></td>
-            <td sort_key="63">01m 03s</td>
-            <td sort_key="69">69</td>
-            <td sort_key="81">81</td>
-            </tr>
-        
-        <tr>
-            <td sort_key="20">20</td>
             <td sort_key="/posts/death-is-but-a-dream/"><a href="/posts/death-is-but-a-dream/">Death Is But a Dream</a></td>
             <td sort_key="63">01m 03s</td>
             <td sort_key="19">19</td>
             <td sort_key="22">22</td>
+            </tr>
+        
+        <tr>
+            <td sort_key="20">20</td>
+            <td sort_key="/posts/finops-for-kubernetes/"><a href="/posts/finops-for-kubernetes/">FinOps for Kubernetes - 如何拆分 Kubernetes 成本</a></td>
+            <td sort_key="62">01m 02s</td>
+            <td sort_key="72">72</td>
+            <td sort_key="84">84</td>
             </tr>
         
         <tr>
@@ -8793,16 +9548,16 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="24">24</td>
             <td sort_key="/posts/jwt-algorithm-key-generation/"><a href="/posts/jwt-algorithm-key-generation/">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a></td>
             <td sort_key="36">36s</td>
-            <td sort_key="135">135</td>
-            <td sort_key="154">154</td>
+            <td sort_key="136">136</td>
+            <td sort_key="155">155</td>
             </tr>
         
         <tr>
             <td sort_key="25">25</td>
             <td sort_key="/posts/qemu-kvm-usage/"><a href="/posts/qemu-kvm-usage/">QEMU-KVM 虚拟化环境的搭建与使用</a></td>
-            <td sort_key="32">32s</td>
-            <td sort_key="203">203</td>
-            <td sort_key="230">230</td>
+            <td sort_key="31">31s</td>
+            <td sort_key="206">206</td>
+            <td sort_key="233">233</td>
             </tr>
         
         <tr>
@@ -8824,105 +9579,105 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="28">28</td>
             <td sort_key="/posts/socat-netcat/"><a href="/posts/socat-netcat/">Linux 网络工具中的瑞士军刀 - socat &amp; netcat</a></td>
-            <td sort_key="23">23s</td>
-            <td sort_key="155">155</td>
-            <td sort_key="163">163</td>
+            <td sort_key="22">22s</td>
+            <td sort_key="159">159</td>
+            <td sort_key="167">167</td>
             </tr>
         
         <tr>
             <td sort_key="29">29</td>
             <td sort_key="/posts/websocket-http2-and-grpc/"><a href="/posts/websocket-http2-and-grpc/">WebSocket、HTTP/2 与 gRPC</a></td>
-            <td sort_key="22">22s</td>
-            <td sort_key="109">109</td>
-            <td sort_key="109">109</td>
+            <td sort_key="21">21s</td>
+            <td sort_key="112">112</td>
+            <td sort_key="112">112</td>
             </tr>
         
         <tr>
             <td sort_key="30">30</td>
-            <td sort_key="/posts/expirence-of-pulumi/"><a href="/posts/expirence-of-pulumi/">Pulumi 使用体验 - 基础设施代码化</a></td>
+            <td sort_key="/posts/opensuse-instruction/"><a href="/posts/opensuse-instruction/">openSUSE 使用指南</a></td>
             <td sort_key="21">21s</td>
-            <td sort_key="76">76</td>
-            <td sort_key="75">75</td>
+            <td sort_key="45">45</td>
+            <td sort_key="48">48</td>
             </tr>
         
         <tr>
             <td sort_key="31">31</td>
-            <td sort_key="/posts/opensuse-instruction/"><a href="/posts/opensuse-instruction/">openSUSE 使用指南</a></td>
-            <td sort_key="21">21s</td>
-            <td sort_key="42">42</td>
-            <td sort_key="45">45</td>
+            <td sort_key="/posts/expirence-of-pulumi/"><a href="/posts/expirence-of-pulumi/">Pulumi 使用体验 - 基础设施代码化</a></td>
+            <td sort_key="20">20s</td>
+            <td sort_key="79">79</td>
+            <td sort_key="78">78</td>
             </tr>
         
         <tr>
             <td sort_key="32">32</td>
-            <td sort_key="/posts/moon-palace/"><a href="/posts/moon-palace/">月宫</a></td>
+            <td sort_key="/posts/tcpdump-and-wireshark/"><a href="/posts/tcpdump-and-wireshark/">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</a></td>
             <td sort_key="15">15s</td>
-            <td sort_key="30">30</td>
-            <td sort_key="29">29</td>
+            <td sort_key="118">118</td>
+            <td sort_key="122">122</td>
             </tr>
         
         <tr>
             <td sort_key="33">33</td>
-            <td sort_key="/posts/tcpdump-and-wireshark/"><a href="/posts/tcpdump-and-wireshark/">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</a></td>
-            <td sort_key="14">14s</td>
-            <td sort_key="116">116</td>
-            <td sort_key="120">120</td>
+            <td sort_key="/posts/moon-palace/"><a href="/posts/moon-palace/">月宫</a></td>
+            <td sort_key="15">15s</td>
+            <td sort_key="31">31</td>
+            <td sort_key="30">30</td>
             </tr>
         
         <tr>
             <td sort_key="34">34</td>
             <td sort_key="/posts/mathematics-in-euclidean-gcd/"><a href="/posts/mathematics-in-euclidean-gcd/">欧几里得算法求最大公约数(GCD)的数学原理</a></td>
-            <td sort_key="13">13s</td>
-            <td sort_key="33">33</td>
-            <td sort_key="33">33</td>
+            <td sort_key="12">12s</td>
+            <td sort_key="34">34</td>
+            <td sort_key="34">34</td>
             </tr>
         
         <tr>
             <td sort_key="35">35</td>
             <td sort_key="/posts/use-istio-for-jwt-auth/"><a href="/posts/use-istio-for-jwt-auth/">使用 Istio 进行 JWT 身份验证（充当 API 网关）</a></td>
-            <td sort_key="12">12s</td>
-            <td sort_key="72">72</td>
-            <td sort_key="71">71</td>
+            <td sort_key="11">11s</td>
+            <td sort_key="74">74</td>
+            <td sort_key="73">73</td>
             </tr>
         
         <tr>
             <td sort_key="36">36</td>
             <td sort_key="/posts/end-of-the-first-round/"><a href="/posts/end-of-the-first-round/">我在创业公司做技术一年多的一点体会</a></td>
-            <td sort_key="12">12s</td>
-            <td sort_key="68">68</td>
-            <td sort_key="67">67</td>
+            <td sort_key="11">11s</td>
+            <td sort_key="70">70</td>
+            <td sort_key="69">69</td>
             </tr>
         
         <tr>
             <td sort_key="37">37</td>
             <td sort_key="/posts/learning-english/"><a href="/posts/learning-english/">学英语啊学英语</a></td>
             <td sort_key="10">10s</td>
-            <td sort_key="37">37</td>
-            <td sort_key="37">37</td>
+            <td sort_key="38">38</td>
+            <td sort_key="38">38</td>
             </tr>
         
         <tr>
             <td sort_key="38">38</td>
             <td sort_key="/posts/manjaro-instruction/"><a href="/posts/manjaro-instruction/">Manjaro 使用指南</a></td>
-            <td sort_key="10">10s</td>
-            <td sort_key="39">39</td>
-            <td sort_key="56">56</td>
+            <td sort_key="9">09s</td>
+            <td sort_key="40">40</td>
+            <td sort_key="59">59</td>
             </tr>
         
         <tr>
             <td sort_key="39">39</td>
             <td sort_key="/posts/kubernetes-deployment-using-kubeadm/"><a href="/posts/kubernetes-deployment-using-kubeadm/">部署一个 Kubernetes 集群</a></td>
             <td sort_key="8">08s</td>
-            <td sort_key="67">67</td>
-            <td sort_key="67">67</td>
+            <td sort_key="69">69</td>
+            <td sort_key="69">69</td>
             </tr>
         
         <tr>
             <td sort_key="40">40</td>
             <td sort_key="/posts/escape-my-university/"><a href="/posts/escape-my-university/">逃离我的大学</a></td>
             <td sort_key="8">08s</td>
-            <td sort_key="34">34</td>
-            <td sort_key="34">34</td>
+            <td sort_key="36">36</td>
+            <td sort_key="36">36</td>
             </tr>
         
         <tr>
@@ -8937,104 +9692,104 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="42">42</td>
             <td sort_key="/posts/the-holiday-is-coming-to-an-end/"><a href="/posts/the-holiday-is-coming-to-an-end/">忽而假末</a></td>
             <td sort_key="6">06s</td>
-            <td sort_key="84">84</td>
-            <td sort_key="85">85</td>
+            <td sort_key="87">87</td>
+            <td sort_key="88">88</td>
             </tr>
         
         <tr>
             <td sort_key="43">43</td>
             <td sort_key="/posts/reading-anxiety/"><a href="/posts/reading-anxiety/">我患上了阅读焦虑症</a></td>
             <td sort_key="6">06s</td>
-            <td sort_key="30">30</td>
-            <td sort_key="30">30</td>
+            <td sort_key="31">31</td>
+            <td sort_key="31">31</td>
             </tr>
         
         <tr>
             <td sort_key="44">44</td>
             <td sort_key="/posts/infinite-ryvius/"><a href="/posts/infinite-ryvius/">《无限的未知》</a></td>
             <td sort_key="5">05s</td>
-            <td sort_key="85">85</td>
-            <td sort_key="85">85</td>
+            <td sort_key="88">88</td>
+            <td sort_key="88">88</td>
             </tr>
         
         <tr>
             <td sort_key="45">45</td>
             <td sort_key="/posts/the-end-of-another-semester/"><a href="/posts/the-end-of-another-semester/">又一个期末</a></td>
             <td sort_key="5">05s</td>
-            <td sort_key="56">56</td>
-            <td sort_key="56">56</td>
+            <td sort_key="58">58</td>
+            <td sort_key="58">58</td>
             </tr>
         
         <tr>
             <td sort_key="46">46</td>
             <td sort_key="/posts/jingdezhen-renaissance-band-2020-shenzhen/"><a href="/posts/jingdezhen-renaissance-band-2020-shenzhen/">「小歌行」-景德镇文艺复兴-2020巡演-深圳</a></td>
             <td sort_key="5">05s</td>
-            <td sort_key="29">29</td>
-            <td sort_key="29">29</td>
+            <td sort_key="30">30</td>
+            <td sort_key="30">30</td>
             </tr>
         
         <tr>
             <td sort_key="47">47</td>
             <td sort_key="/posts/the-twelve-kingdoms/"><a href="/posts/the-twelve-kingdoms/">《十二国记》</a></td>
             <td sort_key="5">05s</td>
-            <td sort_key="28">28</td>
-            <td sort_key="28">28</td>
+            <td sort_key="29">29</td>
+            <td sort_key="29">29</td>
             </tr>
         
         <tr>
             <td sort_key="48">48</td>
-            <td sort_key="/posts/weeds-on-this-side-flowers-on-the-other/"><a href="/posts/weeds-on-this-side-flowers-on-the-other/">此岸弃草，彼岸繁花</a></td>
+            <td sort_key="/posts/fate-of-mortals/"><a href="/posts/fate-of-mortals/">《尘缘》</a></td>
             <td sort_key="5">05s</td>
-            <td sort_key="28">28</td>
-            <td sort_key="29">29</td>
+            <td sort_key="30">30</td>
+            <td sort_key="30">30</td>
             </tr>
         
         <tr>
             <td sort_key="49">49</td>
-            <td sort_key="/posts/fate-of-mortals/"><a href="/posts/fate-of-mortals/">《尘缘》</a></td>
+            <td sort_key="/posts/weeds-on-this-side-flowers-on-the-other/"><a href="/posts/weeds-on-this-side-flowers-on-the-other/">此岸弃草，彼岸繁花</a></td>
             <td sort_key="5">05s</td>
             <td sort_key="29">29</td>
-            <td sort_key="29">29</td>
+            <td sort_key="30">30</td>
             </tr>
         
         <tr>
             <td sort_key="50">50</td>
             <td sort_key="/posts/quiet-and-peaceful-campus/"><a href="/posts/quiet-and-peaceful-campus/">少有人迹的校园</a></td>
             <td sort_key="5">05s</td>
-            <td sort_key="25">25</td>
-            <td sort_key="25">25</td>
+            <td sort_key="26">26</td>
+            <td sort_key="26">26</td>
             </tr>
         
         <tr>
             <td sort_key="51">51</td>
             <td sort_key="/posts/process-thread-coroutines-concurrency-parallelism/"><a href="/posts/process-thread-coroutines-concurrency-parallelism/">进程线程协程与并发并行</a></td>
             <td sort_key="4">04s</td>
-            <td sort_key="58">58</td>
-            <td sort_key="58">58</td>
+            <td sort_key="60">60</td>
+            <td sort_key="60">60</td>
             </tr>
         
         <tr>
             <td sort_key="52">52</td>
             <td sort_key="/posts/relive-in-the-echo/"><a href="/posts/relive-in-the-echo/">在回声中重历</a></td>
             <td sort_key="4">04s</td>
-            <td sort_key="29">29</td>
-            <td sort_key="29">29</td>
+            <td sort_key="30">30</td>
+            <td sort_key="30">30</td>
             </tr>
         
         <tr>
             <td sort_key="53">53</td>
             <td sort_key="/posts/sqlalchemy-notes-2-orm-basics/"><a href="/posts/sqlalchemy-notes-2-orm-basics/">SQLAlchemy 学习笔记（二）：ORM 基础</a></td>
             <td sort_key="3">03s</td>
-            <td sort_key="113">113</td>
-            <td sort_key="113">113</td>
+            <td sort_key="117">117</td>
+            <td sort_key="117">117</td>
             </tr>
         
         <tr>
             <td sort_key="54">54</td>
             <td sort_key="/posts/web-browser-dev-tools/"><a href="/posts/web-browser-dev-tools/">Chrome 与 Firefox-Dev 的 DevTools</a></td>
             <td sort_key="3">03s</td>
+            <td sort_key="32">32</td>
             <td sort_key="31">31</td>
-            <td sort_key="30">30</td>
             </tr>
         
         <tr>
@@ -9049,16 +9804,16 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="56">56</td>
             <td sort_key="/posts/no-more-dreams/"><a href="/posts/no-more-dreams/">脚踏实地，仰望星空</a></td>
             <td sort_key="1">01s</td>
-            <td sort_key="198">198</td>
-            <td sort_key="198">198</td>
+            <td sort_key="205">205</td>
+            <td sort_key="205">205</td>
             </tr>
         
         <tr>
             <td sort_key="57">57</td>
             <td sort_key="/posts/sqlalchemy-notes-3-relationship-and-foreignkey/"><a href="/posts/sqlalchemy-notes-3-relationship-and-foreignkey/">SQLAlchemy 学习笔记（三）：ORM 中的关系构建</a></td>
             <td sort_key="1">01s</td>
-            <td sort_key="28">28</td>
-            <td sort_key="28">28</td>
+            <td sort_key="29">29</td>
+            <td sort_key="29">29</td>
             </tr>
         
 
