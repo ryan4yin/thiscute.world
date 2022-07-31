@@ -68,15 +68,15 @@ comment:
 
 ### 我曾用过的博客标语
 
-{{< admonition quote "何来枷锁" true >}}
+{{< admonition note "何来枷锁" true >}}
 拆破玉笼飞彩凤，顿开金锁走蛟龙。
 {{< /admonition >}}
 
-{{< admonition quote "赞美快乐" true >}}
+{{< admonition note "赞美快乐" true >}}
 双手合十 闭上眼睛 心里什么也不去想 嘴角就高高扬起 笑出声来 赞美快乐~
 {{< /admonition >}}
 
-{{< admonition quote "错过" true >}}
+{{< admonition note "错过" true >}}
 我错过花，却看见海
 {{< /admonition >}}
 
@@ -91,6 +91,10 @@ comment:
 
 {{< admonition info "博客快照-2020-01-21" >}}
 ![](/images/about/cnblog-2020-01-21.webp "博客园快照")
+{{< /admonition >}}
+
+{{< admonition info "博客快照-2022-07-31" >}}
+![](/images/about/thiscute.world-2022-07-31.webp "ThisCute.World 快照")
 {{< /admonition >}}
 
 ## 注意事项
