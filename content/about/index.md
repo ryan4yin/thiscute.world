@@ -31,9 +31,10 @@ comment:
   - **2021-3 ~ 至今**：在 Mobiuspace 担任 SRE 工程师，主要负责维护与优化 K8s 服务平台及流量链路，分析与管控 AWS/GCP/Tencent 云计算成本
 - **音乐**：
   - 喜欢听后摇、蓝草、民谣、器乐
-  - 有在断断续续地学习竹笛跟口琴，另外也有在学习使用 [Synthesizer V](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) 跟 [Reaper](https://www.reaper.fm)
+  - 最喜欢的歌手是虚拟歌手洛天依
+  - 有在断断续续地学习竹笛跟口琴（复音、蓝调都有在学），另外也有在学习使用 [Synthesizer V](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) 跟 [Reaper](https://www.reaper.fm)
 - **运动**：喜欢轮滑以及游泳，哦还有 VR 游戏《Beat Saber》《Pistol Whip》，但是目前都是半吊子哈哈~
-- **茶**：2021 年在朋友家喝过一次**青钱柳**后就一直念念不忘，年底就入坑了凤牌滇红、天之红祁门红茶、极白安吉白茶，目前比较喜欢喝红茶。
+- **茶**：2021 年在朋友家喝过一次**青钱柳**后就一直念念不忘，年底就入坑了凤牌滇红、天之红祁门红茶、极白安吉白茶，目前比较喜欢喝红茶
 - **书籍**：读得最多的正经书是 IT 技术书籍，另外也喜欢看科幻，以及戒不掉的网文/轻小说
 - **影视**：看得最多的是动漫，另外就是欧美科幻片、温情片
 - **中文输入方案**：[小鹤音形](https://flypy.com/)
@@ -46,7 +47,17 @@ comment:
   - **Rust**: 学习中，大量函数式的语法糖，贴心的编译器提示，感觉很好用
   - **C**: 勉强能看懂代码，荒废比较久了。在学习 Nginx/Linux 的过程中慢慢补吧...
   - 曾经使用过但已经荒废的语言：Java/Julia/Mathematica/Lua
-- **工具或技术**：Linux/Kubernetes/Istio
+- **熟悉的技术**：
+  - Kubernetes
+  - Istio
+  - Linux
+- **想学的技术（按感兴趣程度降序排列）**
+  - Linux 内核技术、eBPF
+  - Kubernetes/Istio/Nginx 源码
+  - 机器学习、深度学习
+  - 区块链
+  - 经济学、量化交易
+  - 数据库技术与理论
 - **联系方式**
   - 邮件：`eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
   - [豆瓣](https://www.douban.com/people/kirito_c)：本人是豆瓣书影音标记的重度使用者，从 2015 年以来一直使用豆瓣标记读过的书看过的电影。
