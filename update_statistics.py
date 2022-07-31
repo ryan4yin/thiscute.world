@@ -199,7 +199,7 @@ def process_data(data):
     return sorted(result.values(), key=itemgetter("readingDurationPerUser"), reverse=True)
 
 
-def get_report_last_n_days(analytics, n: int = 30):
+def get_report_last_n_days(analytics, n: int):
     """
     Args:
       analytics: An authorized Analytics Data API service object.
@@ -282,7 +282,7 @@ def get_shanghai_datetime_str():
 
 def main():
     analytics = initialize_analyticsreporting()
-    trendingThisMonth = get_report_last_n_days(analytics, n=30)
+    trendingThisMonth = get_report_last_n_days(analytics, n=90)
     total = get_report_from_start(analytics)
 
     website_statistics = {
