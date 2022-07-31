@@ -226,7 +226,7 @@ def get_report_last_n_days(analytics, n: int):
                 "numericFilter": {
                     "operation": "GREATER_THAN_OR_EQUAL",
                     "value": {
-                        "int64Value": "900",  # 文档的总阅读时长超过 30s
+                        "int64Value": "900",  # 文档的总阅读时长超过 900s
                     },
                 },
             }
