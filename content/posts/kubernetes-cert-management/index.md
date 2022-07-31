@@ -109,7 +109,7 @@ ACME 支持 HTTP01 跟 DNS01 两种域名验证方式，其中 DNS01 是最简�
 
 #### 1.1 AWS IAM 授权
 
-首先需要为 EKS 集群创建 OIDC provider，参见 [aws-iam-and-kubernetes](./aws-iam-and-kubernetes.md)，这里不再赘述。
+首先需要为 EKS 集群创建 OIDC provider，参见 [aws-iam-and-kubernetes](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/security/aws-iam-and-kubernetes.md)，这里不再赘述。
 
 cert-manager 需要查询与更新 Route53 记录的权限，因此需要使用如下配置创建一个 IAM Policy，可以命名为 `<ClusterName>CertManagerRoute53Access`（注意替换掉 `<ClusterName>`）：
 
