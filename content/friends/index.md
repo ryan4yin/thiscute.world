@@ -67,6 +67,7 @@ var myFriends = [
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
     ["https://blog.010sec.cn/", "/avatar/c4rt1y.webp", "@c4rt1y", "<= 运维搬砖人"], 
+    ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "<= 密码学、Golang、逆向"], 
 ];
 
 
