@@ -21,7 +21,7 @@ code:
 >本文部分内容翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了密码学历史以及 openssl 命令示例，并重写了 RSA/ECC 算法原理、代码示例等内容。
 
 >这篇文章中会涉及到一些大学高等数学以外的内容，难度并不高，但是需要一点数学基础，觉得难的可以考虑跳过。
->RSA 项相关的数学知识包括模幂运算、拓展欧几里得算法。ECC 相关的数学知识包括几何、有限域、椭圆曲线域、循环群。
+>本文不会详细介绍这些数学知识，可以在用有疑惑的时候自行搜索相关信息。
 
 《写给开发人员的实用密码学》系列文章目录：
 
@@ -300,13 +300,14 @@ RSA 描述的私钥的结构如下（其中除 $n, d$ 之外的都是冗余信�
 下面就介绍下具体的密钥对生成流程，搞清楚 openssl 生成出的这个私钥，各项参数分别是什么含义：
 
 >这里不会详细介绍其中的各种数学证明，具体的请参考维基百科。
+>相关数学知识包括取模运算的性质、欧拉函数、模倒数（拓展欧几里得算法）
 
 - 随机选择两个不相等的质数 $p$ 与 $q$
   - p 跟 q 应该非常大，但是长度相差几个整数，这样会使得破解更加困难
 - 计算出模数 $n = pq$
 - 计算欧拉函数的值 $\phi(n) = \phi(pq) = (p-1)(q-1)$
 - 选择公指数 $e$，要求 $1 < e < \lambda (n)$，且 $e$ 与 $\phi(n)$ 互质，即 $\gcd(e, \phi(n)) = 1$。
-  - 目前 openssl 默认使用 65537 (0x10001)
+  - 目前 openssl 固定使用 65537 (0x10001) 作为 e 的值
   - 曾经也有使用过 3 作为 e 的值，但是目前 3 已被证明不够安全
 - 计算出使等式 $ed \equiv 1 \bmod \phi(n)$ 成立的值 $d$，它就是我们的私钥指数
   - 上述等式的含义：$ed$ 被 $\phi(n)$ 的余数为 $1$
@@ -382,17 +383,42 @@ $$
 \text{decryptedMsg} = \text{encryptedMsg}^d \mod n
 $$
 
-解密运算的证明如下（证明需要用到 $0 \le msg \lt n$）：
+解密运算的证明如下：
 
 $$
 \begin{alignedat}{2}
 \text{decryptedMsg} &= &\text{encryptedMsg}^d &\mod n \\\\
         &= &{(msg^e \mod n)}^d &\mod n \\\\
-        &= &{msg^e}^d &\mod n \\\\
-        &= &msg &\mod n \\\\
+        &= &{msg^{ed}} &\mod n \\\\
+        &= &{msg^{1 + \phi(n) \cdot k}} &\mod n \\\\
+        &= &(msg \mod n) &((msg^{\phi(n)} \mod n)^{k} \mod n) \mod n
+\end{alignedat}
+$$
+
+又因为 $0 \le msg \lt n$，有：
+
+$$
+msg \mod n = msg
+$$
+
+又有[欧拉定理](https://zh.wikipedia.org/zh-my/%E6%AC%A7%E6%8B%89%E5%AE%9A%E7%90%86_(%E6%95%B0%E8%AE%BA))指出，在整数 $msg$ 与 $n$ 互质的情况下，下面的同余公式成立：
+
+$$
+msg^{{\varphi (n)}}\equiv 1{\pmod  n}
+$$
+
+现在利用上面两个等式，接续前面的计算：
+
+$$
+\begin{alignedat}{2}
+\text{decryptedMsg} &= &(msg \mod n) &((msg^{\phi(n)} \mod n)^{k} \mod n) \mod n \\\\
+        &= &(msg \mod n) &(1^{k} \mod n) \mod n \\\\
+        &= &(msg \mod n) &\mod n \\\\
         &= &msg
 \end{alignedat}
 $$
+
+这样就证明了，解密操作得到的就是原始信息。
 
 因为非对称加解密非常慢，对于较大的文件，通常会分成两步加密来提升性能：首先用使用对称加密算法来加密数据，再使用 RSA 等非对称加密算法加密上一步用到的「对称密钥」。
 
@@ -428,7 +454,7 @@ def fast_power_modular(b: int, p: int, m: int):
     快速模幂运算：b^p % m
     复杂度： O(log p)
     因为 RSA 的底数跟指数都非常大，如果先进行幂运算，最后再取模，计算结果会越来越大，导致速度非常非常慢
-    根据公式  b^(ab) % m = (b^a % m)^b % m, 可以通过边进行幂运算边取模，极大地提升计算速度
+    根据模幂运算的性质  b^(ab) % m = (b^a % m)^b % m, 可以通过边进行幂运算边取模，极大地提升计算速度
     """
     res = 1
     while p:
