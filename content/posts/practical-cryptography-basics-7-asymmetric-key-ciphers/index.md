@@ -383,37 +383,68 @@ $$
 \text{decryptedMsg} = \text{encryptedMsg}^d \mod n
 $$
 
-解密运算的证明如下：
+#### RSA 解密运算的证明
+
+证明流程如下：
 
 $$
 \begin{alignedat}{2}
 \text{decryptedMsg} &= &\text{encryptedMsg}^d &\mod n \\\\
         &= &{(msg^e \mod n)}^d &\mod n \\\\
         &= &{msg^{ed}} &\mod n \\\\
-        &= &{msg^{1 + \phi(n) \cdot k}} &\mod n \\\\
-        &= &(msg \mod n) &((msg^{\phi(n)} \mod n)^{k} \mod n) \mod n
+        &= &{msg^{ed}} &\mod {pq}
 \end{alignedat}
 $$
 
-又因为 $0 \le msg \lt n$，有：
+接下来将下面两个等式代入上述计算中：
 
-$$
-msg \mod n = msg
-$$
+- 我们在前面的「密钥对生成」一节中有给出等式：$ed = 1 + (p-1)(q-1) \cdot k$
+- 因为 $0 \le msg \lt n$ 以及 $n = pq$，有 $msg \mod pq = msg$
 
-又有[欧拉定理](https://zh.wikipedia.org/zh-my/%E6%AC%A7%E6%8B%89%E5%AE%9A%E7%90%86_(%E6%95%B0%E8%AE%BA))指出，在整数 $msg$ 与 $n$ 互质的情况下，下面的同余公式成立：
-
-$$
-msg^{{\varphi (n)}}\equiv 1{\pmod  n}
-$$
-
-现在利用上面两个等式，接续前面的计算：
+这样就得到：
 
 $$
 \begin{alignedat}{2}
-\text{decryptedMsg} &= &(msg \mod n) &((msg^{\phi(n)} \mod n)^{k} \mod n) \mod n \\\\
-        &= &(msg \mod n) &(1^{k} \mod n) \mod n \\\\
-        &= &(msg \mod n) &\mod n \\\\
+\text{decryptedMsg} &= &{msg^{ed}} &\mod {pq} \\\\
+        &= &{(msg \mod pq) \cdot (msg^{ed-1} \mod pq)} &\mod {pq} \\\\
+        &= &{msg \cdot (msg^{(p-1)(q-1) \cdot k} \mod pq)} &\mod {pq}
+\end{alignedat}
+$$
+
+又有[费马小定理](https://zh.wikipedia.org/wiki/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86)指出，在 $a$ 为整数，$p$ 为质数的情况下，有同余等式 
+
+$$a^{p-1} \equiv 1 {\pmod  p}$$
+
+因为我们的模数 $n=pq$ 并不是质数，不能直接利用费马小定理给出的同余公式。
+但是 $p$, $q$ 两数都为质数，我们可以分别计算方程  对 $p$ 以及 $q$ 取模的结果，然后再根据[中国剩余定理](https://zhuanlan.zhihu.com/p/44591114)得出通解，也就得到我们需要的结果。
+
+对于模 $p$ 的情况，计算方法如下：
+
+- 当 $msg = 0 \mod p$ 时，${msg^{ed}} \mod p = 0 = m \mod p$
+- 当 $msg \ne 0 \mod p$ 时，利用费马小定理，有
+  $$
+  \begin{alignedat}{2}
+  msg^{ed} &= &{msg \cdot (msg^{(p-1)(q-1) \cdot k} \mod p)} &\pmod {p}  \\\\
+                      &= &msg \cdot (msg^{(p-1)} \mod p)^{(q-1) \cdot k} &\pmod p \\\\
+                      &= &msg \cdot 1^{(q-1) \cdot k} &\pmod p \\\\
+                      &\equiv &msg \pmod  p
+  \end{alignedat}
+  $$
+
+同理，对模 $q$ 的情况，也能得到等式 
+
+$$msg^{ed} \equiv msg \pmod  q$$
+
+有了上面两个结果，根据中国剩余定理，就能得到 
+
+$$msg^{ed} \equiv msg \pmod  {pq}$$
+
+现在再接续前面的计算：
+
+$$
+\begin{alignedat}{2}
+\text{decryptedMsg} &= &{msg^{ed}} &\pmod {pq} \\\\
+        &= &msg &\pmod  {pq} \\\\
         &= &msg
 \end{alignedat}
 $$
