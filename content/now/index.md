@@ -16,10 +16,10 @@ toc:
 >按优先级排序
 
 - 极客时间《OpenResty 从入门到实战》
-- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
 - The ANSI C Programming Language - 83/236
   - 快速过一遍语法
-- 《Principles Of Economics, 9e, N. Gregory Mankiw》
+- [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
 
 
 ## 二、我今年还想搞搞这些
@@ -31,13 +31,10 @@ toc:
     - 阅读了《Go 程序设计语言》，学会了 Go 语言基础
     - 使用 Go+Gin 完成了一个 Nginx 网关控制器项目并上线，实现了一些简单的接口
   - 待完成
-    - 《Go 学习笔记（第六版下卷）》
-        - 基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
-    - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
+    - [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
     - [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
     - [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
     - [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
-    - [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
     - [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
 - Kubernetes 原理、Kubernetes APIServer/Operator 编程
   - 已完成
@@ -49,12 +46,12 @@ toc:
   - 待完成
     - C 语言基础复习
       - The ANSI C Programming Language - 用来快速复习下 C 的语法
-      - 极客时间《深入 C 语言和程序运行原理》
       - 通过其他资料补充学习 make gdb ld objdump objcopy 等命令
     - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 21/572
       - 学习 Linux 的顶级书藉，据说内容组织比 APUE 对新手更友好些。
     - 《深入理解 Linux 网络 - 张彦飞》 - 14/320
     - 极客时间《网络排查案例课》
+    - 极客时间 《Linux 性能优化实战》
 - 区块链与分布式系统
   - 已完成
     - 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》 - 100%
@@ -82,9 +79,9 @@ toc:
 
 正在读：
 
+- 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
 - 《Principles Of Economics, 9e, N. Gregory Mankiw》
-- 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
 - 《Intimate Relationships》 - 进度 14/449
 - 《语言学的邀请》- 进度 68/288
   - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
@@ -111,13 +108,6 @@ toc:
 
 ### 1. 高优先级
 
-- Linux 系统
-  - 极客时间 《Linux 内核技术实战课》
-  - 极客时间 《Linux 性能优化实战》
-  - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
-  - 极客时间《容器实战高手课》
-  - 极客时间《eBPF 核心技术与实战》
-
 - 写几个小项目（使用 rust/go）
   - 实现一个文本编辑器
     - https://viewsourcecode.org/snaptoken/kilo/
@@ -125,6 +115,20 @@ toc:
     - https://blog.lizzie.io/linux-containers-in-500-loc.html
   - 网络代理（不到 2000 行的 TUN 库）
     - https://github.com/songgao/water
+
+
+- Go 语言进阶
+  - 《Go 学习笔记（第六版下卷）》
+    - 基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
+
+- Linux 系统
+  - 极客时间 《Linux 内核技术实战课》
+  - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
+  - 极客时间《容器实战高手课》
+  - 极客时间《eBPF 核心技术与实战》
+
+- C 语言进阶
+  - 极客时间《深入 C 语言和程序运行原理》
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
   - 阅读《Lua 程序设计》
