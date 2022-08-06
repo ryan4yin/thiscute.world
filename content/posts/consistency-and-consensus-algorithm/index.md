@@ -258,7 +258,7 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 
 TO BE DONE
 
-### 非拜占庭错误算法 Paxos 与 Raft
+### 非拜占庭错误共识算法 Paxos 与 Raft
 
 TO BE DONE
 
