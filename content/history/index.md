@@ -10,6 +10,14 @@ toc:
 记录下我的学习轨迹。
 
 
+### 2022-08-06
+
+- 极客时间《OpenResty 从入门到实战》
+  - 目前市面的网关产品中，性能、可定制性、稳定性三者兼得的仍然只有 openresty
+  - 新兴的 envoy 等主推 wasm 插件的网关，性能仍然不如 openresty。另外 envoy 虽然也支持 lua，但是它的 lua 环境没有任何预置的 library，远不如 openresty 这样开箱即用
+  - 我目前判断，新兴的 envoy/traefik 等网关的优势在于配置语法简单、支持动态配置。但是如果需要写一些复杂的流量处理逻辑，openresty 仍然是最佳选择。
+  - openresty 仍然是最流行的 CDN/软 WAF/边缘网关，在绝大多数公司的网关/CDN 中，都有 openresty 的身影。
+
 ### 2022-07-28
 
 - 研究了一波 Nginx 的配置调优
