@@ -38,7 +38,7 @@
 <li><strong>脏写 Dirty writes</strong>：即事务 T1 跟事务 T2 同时在原数据的基础上更新同一个数据，导致结果不符合预期。
 <ul>
 <li>案例：两个事务同时尝试从账户中扣款 1000 元，但是它们读到的初始状态都是 5000 元，于是都尝试将账户修改为 4000 元，结果就是少扣了 1000 元。</li>
-<li>最简单的解决方法：针对 <code>UPDATE table SET field = field - 1000 WHERE id = 1</code> 这样的数据更新逻辑，需要对被更新的行加一把「行写锁」，使其他需要写此数据的事务等待。</li>
+<li>最简单的解决方法：针对 <code>UPDATE table SET field = field - 1000 WHERE id = 1</code> 这类数据增删改的逻辑，需要对被更新的行加一把「行写锁」，使其他需要写此数据的事务等待。</li>
 </ul>
 </li>
 <li><strong>脏读 Dirty reads</strong>：事务 T1 读取了事务 T2 未提交的数据。这个数据不一定准确，被称为脏数据，因为假如事务 T2 回滚了，T1 拿到的就是一个错误的数据
@@ -9624,7 +9624,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-07T04:43UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-07T13:56UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9787,10 +9787,10 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>259873</td>
-            <td style="color:tomato;"><strong>30481</strong></td>
-            <td>76596</td>
-            <td>26 days, 22h 43m 57s</td>
+            <td>259874</td>
+            <td style="color:tomato;"><strong>30564</strong></td>
+            <td>76685</td>
+            <td>26 days, 22h 53m 23s</td>
             <td style="color:dodgerblue;"><strong>01m 16s</strong></td>
             </tr>
         </tbody>
@@ -9824,7 +9824,7 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="/posts/expirence-of-vault/"><a href="/posts/expirence-of-vault/">secrets 管理工具 Vault 的介绍、安装及使用</a></td>
             <td sort_key="115">01m 55s</td>
             <td sort_key="354">354</td>
-            <td sort_key="490">490</td>
+            <td sort_key="491">491</td>
             </tr>
         
         <tr>
@@ -9879,8 +9879,8 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="9">9</td>
             <td sort_key="/posts/expirence-of-argo-workflow/"><a href="/posts/expirence-of-argo-workflow/">云原生流水线 Argo Workflows 的安装、使用以及个人体验</a></td>
             <td sort_key="90">01m 30s</td>
-            <td sort_key="487">487</td>
-            <td sort_key="723">723</td>
+            <td sort_key="488">488</td>
+            <td sort_key="724">724</td>
             </tr>
         
         <tr>
@@ -9934,17 +9934,17 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="16">16</td>
             <td sort_key="/posts/about-nat/"><a href="/posts/about-nat/">NAT 网关、NAT 穿越以及虚拟网络</a></td>
-            <td sort_key="60">01m 00s</td>
-            <td sort_key="471">471</td>
-            <td sort_key="673">673</td>
+            <td sort_key="61">01m 01s</td>
+            <td sort_key="473">473</td>
+            <td sort_key="675">675</td>
             </tr>
         
         <tr>
             <td sort_key="17">17</td>
             <td sort_key="/posts/websocket-http2-and-grpc/"><a href="/posts/websocket-http2-and-grpc/">WebSocket、HTTP/2 与 gRPC</a></td>
-            <td sort_key="54">54s</td>
-            <td sort_key="235">235</td>
-            <td sort_key="248">248</td>
+            <td sort_key="53">53s</td>
+            <td sort_key="238">238</td>
+            <td sort_key="251">251</td>
             </tr>
         
         <tr>
@@ -9967,32 +9967,32 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="20">20</td>
             <td sort_key="/posts/qemu-kvm-usage/"><a href="/posts/qemu-kvm-usage/">QEMU-KVM 虚拟化环境的搭建与使用</a></td>
             <td sort_key="47">47s</td>
-            <td sort_key="670">670</td>
-            <td sort_key="821">821</td>
+            <td sort_key="673">673</td>
+            <td sort_key="824">824</td>
             </tr>
         
         <tr>
             <td sort_key="21">21</td>
             <td sort_key="/posts/expirence-of-pulumi/"><a href="/posts/expirence-of-pulumi/">Pulumi 使用体验 - 基础设施代码化</a></td>
-            <td sort_key="43">43s</td>
-            <td sort_key="189">189</td>
-            <td sort_key="209">209</td>
+            <td sort_key="42">42s</td>
+            <td sort_key="191">191</td>
+            <td sort_key="211">211</td>
             </tr>
         
         <tr>
             <td sort_key="22">22</td>
             <td sort_key="/posts/opensuse-instruction/"><a href="/posts/opensuse-instruction/">openSUSE 使用指南</a></td>
             <td sort_key="39">39s</td>
-            <td sort_key="135">135</td>
-            <td sort_key="148">148</td>
+            <td sort_key="136">136</td>
+            <td sort_key="149">149</td>
             </tr>
         
         <tr>
             <td sort_key="23">23</td>
             <td sort_key="/posts/socat-netcat/"><a href="/posts/socat-netcat/">Linux 网络工具中的瑞士军刀 - socat &amp; netcat</a></td>
             <td sort_key="38">38s</td>
-            <td sort_key="365">365</td>
-            <td sort_key="406">406</td>
+            <td sort_key="368">368</td>
+            <td sort_key="409">409</td>
             </tr>
         
         <tr>
@@ -10031,8 +10031,8 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="28">28</td>
             <td sort_key="/posts/kubernetes-deployment-using-kubeadm/"><a href="/posts/kubernetes-deployment-using-kubeadm/">部署一个 Kubernetes 集群</a></td>
             <td sort_key="32">32s</td>
-            <td sort_key="168">168</td>
-            <td sort_key="178">178</td>
+            <td sort_key="170">170</td>
+            <td sort_key="180">180</td>
             </tr>
         
         <tr>
@@ -10047,8 +10047,8 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="30">30</td>
             <td sort_key="/posts/tcpdump-and-wireshark/"><a href="/posts/tcpdump-and-wireshark/">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</a></td>
             <td sort_key="31">31s</td>
-            <td sort_key="308">308</td>
-            <td sort_key="338">338</td>
+            <td sort_key="309">309</td>
+            <td sort_key="339">339</td>
             </tr>
         
         <tr>
@@ -10071,8 +10071,8 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="33">33</td>
             <td sort_key="/posts/mathematics-in-euclidean-gcd/"><a href="/posts/mathematics-in-euclidean-gcd/">欧几里得算法求最大公约数(GCD)的数学原理</a></td>
             <td sort_key="26">26s</td>
-            <td sort_key="87">87</td>
-            <td sort_key="89">89</td>
+            <td sort_key="88">88</td>
+            <td sort_key="90">90</td>
             </tr>
         
         <tr>
@@ -10095,8 +10095,8 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="36">36</td>
             <td sort_key="/posts/manjaro-instruction/"><a href="/posts/manjaro-instruction/">Manjaro 使用指南</a></td>
             <td sort_key="19">19s</td>
-            <td sort_key="130">130</td>
-            <td sort_key="156">156</td>
+            <td sort_key="131">131</td>
+            <td sort_key="158">158</td>
             </tr>
         
         <tr>
