@@ -66,7 +66,7 @@ var myFriends = [
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
     ["https://blog.010sec.cn/", "/avatar/c4rt1y.webp", "@c4rt1y", "<= 运维搬砖人"], 
     ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "<= 密码学、Golang、逆向"], 
-    ["https://ferryxie.cn/", "https://ferryxie.cn/wp-content/uploads/2022/03/avatar-1.jpg", "@Ferry", "金融科技与人文思考并存"], 
+    ["https://ferryxie.com/", "/avatar/ferryxie.webp", "@Ferry", "金融科技与人文思考并存"], 
 ];
 
 
