@@ -83,3 +83,5 @@ So please look at anything in this blog critically.
 
 In addition, many of the pictures/banners used on this site are from the Internet. If there is any infringement, please contact me to delete it.
 
+
+{{< particles_effect_up  >}}

@@ -26,3 +26,4 @@ toc:
 - Modeling & Design: Blender, Unreal Engine 5 & C++, Figma
 - Economics: Principles Of Economics, 9e, N. Gregory Mankiw
 
+{{< particles_effect_up  >}}
