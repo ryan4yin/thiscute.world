@@ -98,9 +98,10 @@ comment:
 ### 博客时间线
 
 {{< admonition tip "博客时间线" true >}}
-- 2016-06-17：在博客园 - <https://www.cnblogs.com/kirito-c/>
-- 2021-01-16：开设独立博客 <https://ryan4yin.space/>
-- 2022-02-07：博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
+- 2016-06-17：大一下学期，在博客园创建博客 <https://www.cnblogs.com/kirito-c/>
+  - 第一篇博文是[贪吃蛇—C—基于easyx图形库](https://www.cnblogs.com/kirito-c/p/5595355.html)，现在还能回忆起收到第一条评论时的兴奋之情。
+- 2021-01-16：工作一年多后，申请域名并开设独立博客 <https://ryan4yin.space/>
+- 2022-02-07：第一份工作结束后赋闲，将博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
 - 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
 {{< /admonition >}}
 
