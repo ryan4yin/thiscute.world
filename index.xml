@@ -388,6 +388,9 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p>注：这里虽然列出了 PoW/PoS/PoH 等应用在区块链中的一致性算法，但是它们跟 PBFT 等其他拜占庭容错算法存在很大的区别，后面会给出介绍。</p>
+</blockquote>
 <h3 id="不同共识算法的应用场景" class="headerLink">
     <a href="#%e4%b8%8d%e5%90%8c%e5%85%b1%e8%af%86%e7%ae%97%e6%b3%95%e7%9a%84%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af" class="header-mark"></a>不同共识算法的应用场景</h3><p>在不可信环境中，因为可能存在恶意行为，就需要使用支持拜占庭容错的共识算法如 PoW/PoS，使系统在存在部分节点作恶的情况下仍然能达成共识。这就是区块链使用 PoW/PoS 算法而不是 Paxos/Raft 算法的原因。</p>
 <p>而在企业内网等场景下，可以认为是可信环境，基本不会出现恶意节点或者可以通过 mTLS 等手段进行节点身份认证，这种场景下系统具有故障容错能力就够了，就没必要做到拜占庭容错，因此常用 Raft/Paxos 等算法。</p>
@@ -9868,7 +9871,7 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>262296</td>
+            <td>262353</td>
             <td style="color:tomato;"><strong>30572</strong></td>
             <td>76720</td>
             <td>26 days, 22h 58m 33s</td>
