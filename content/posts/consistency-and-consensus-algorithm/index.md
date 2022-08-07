@@ -304,6 +304,8 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 | PoS    | 是     | N/A   | 低  | 中   |
 | [PoH](https://medium.com/solana-labs/proof-of-history-explained-by-a-water-clock-e682183417b8)    | 是     | N/A   | 中  | 中   |
 
+>注：这里虽然列出了 PoW/PoS/PoH 等应用在区块链中的一致性算法，但是它们跟 PBFT 等其他拜占庭容错算法存在很大的区别，后面会给出介绍。
+
 ### 不同共识算法的应用场景
 
 在不可信环境中，因为可能存在恶意行为，就需要使用支持拜占庭容错的共识算法如 PoW/PoS，使系统在存在部分节点作恶的情况下仍然能达成共识。这就是区块链使用 PoW/PoS 算法而不是 Paxos/Raft 算法的原因。
