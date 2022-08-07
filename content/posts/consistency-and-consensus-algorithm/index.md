@@ -96,7 +96,7 @@ MySQL 默认的隔离级别为「可重复读 Repeatable Read」，PostgreSQL �
 - 「串行化」的性能太差，也直接排除
 - 只要 SQL 用得对，「不可重复读」问题对业务逻辑的正确性通常并无影响，所以是可以容忍的。
 - **因此一般「读已提交」是最佳的隔离级别**，这也是 PostgreSQL/Oracle 将其设为默认隔离级别的原因。
-- 那么为什么 MySQL 这么特立独行，将默认隔离级别提高到了「读已提交」呢？为啥阿里这种大的互联网公司又会把 MySQL 默认的隔离级别改成「读已提交」？
+- 那么为什么 MySQL 这么特立独行，将默认隔离级别提高到了「可重复读」呢？为啥阿里这种大的互联网公司又会把 MySQL 默认的隔离级别改成「读已提交」？
   - 根据网上查到的资料，这是 MySQL 的历史问题导致的。MySQL 5.0 之前只支持 statement 这种 binlog 格式，此格式在「读已提交」的隔离级别下会出现诸多问题，最明显的就是可能会导致主从数据库的数据不一致。
   - 除了设置默认的隔离级别外，MySQL 还禁止在使用 statement 格式的 binlog 时，使用 READ COMMITTED 作为事务隔离级别，尝试修改隔离级别会报错 `Transaction level 'READ-COMMITTED' in InnoDB is not safe for binlog mode 'STATEMENT'`
   - 而互联网公司将隔离级别改为「读已提交」的原因也很好理解，当然是为了提升性能啊，隔离级别越低并发性能越高嘛。
