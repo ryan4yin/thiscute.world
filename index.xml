@@ -92,17 +92,17 @@
 <ul>
 <li>根据网上查到的资料，这是 MySQL 的历史问题导致的。MySQL 5.0 之前只支持 statement 这种 binlog 格式，此格式在「读已提交」的隔离级别下会出现诸多问题，最明显的就是可能会导致主从数据库的数据不一致。</li>
 <li>除了设置默认的隔离级别外，MySQL 还禁止在使用 statement 格式的 binlog 时，使用 READ COMMITTED 作为事务隔离级别，尝试修改隔离级别会报错 <code>Transaction level 'READ-COMMITTED' in InnoDB is not safe for binlog mode 'STATEMENT'</code></li>
-<li>而互联网公司将隔离级别改为「读已提交」的原因也很好理解，当然是为了提升性能啊，隔离级别越低并发性能越高嘛。</li>
+<li>而互联网公司将隔离级别改为「读已提交」的原因也很好理解，正如前文所述「读已提交」是最佳的隔离级别，这样修改能够提升数据库的性能。</li>
 </ul>
 </li>
 </ul>
 <p>「隔离性」的本质其实就是<strong>事务的并发控制</strong>，不同的隔离级别代表了对并发事务的隔离程度，主要的实现手段是「<strong>多版本并发控制 MVCC</strong>」与「锁」。
-锁机制前面已经简单介绍过了，而 MVCC 其实就是为每个事务创建一个特定隔离级别的快照，这样读写不会互相阻塞，性能就提升了。</p>
-<p>ANSI SQL-92 对异常现象的分析仍然太过简单了，1995 年新发布的论文 <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-95-51.pdf" target="_blank" rel="noopener noreffer">A Critique of ANSI SQL Isolation Levels</a> 丰富和细化了 SQL-92 的内容，定义了六种隔离级别和八种异常现象，强烈建议通读此论文。其中，我们最关注的是快照隔离（Snapshot Isolation, SI）级别。</p>
+锁机制前面已经简单介绍过了，而 MVCC 其实就是为每个事务创建一个特定隔离级别的快照，这样读写不会互相阻塞，性能就提升了。（MVCC 暂时也是超纲知识，后面再研究吧 emmmm）</p>
+<p>ANSI SQL-92 对异常现象的分析仍然太过简单了，1995 年新发布的论文 <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-95-51.pdf" target="_blank" rel="noopener noreffer">A Critique of ANSI SQL Isolation Levels</a> 丰富和细化了 SQL-92 的内容，定义了六种隔离级别和八种异常现象（有大佬强烈建议通读此论文，重点是文中的快照隔离（Snapshot Isolation, SI）级别）。</p>
 <h3 id="2-数据一致性-data-consistency" class="headerLink">
     <a href="#2-%e6%95%b0%e6%8d%ae%e4%b8%80%e8%87%b4%e6%80%a7-data-consistency" class="header-mark"></a>2. 数据一致性 Data Consistency</h3><p>「数据一致性」是指对数据库的每一次读操作都应该读到最新写入的数据，或者直接报错。</p>
 <p>对单机数据库而言「数据一致性」往往不是问题，因为它通常只有一份保存在磁盘或内存中的数据。
-但是在分布式系统中，为了数据安全性，往往每一份数据都在多个节点上存有其副本，这就引出了数据副本们的一致性问题。
+但是在分布式系统中，为了数据安全性或者为了性能，往往每一份数据都在多个节点上存有其副本，这就引出了数据副本们的一致性问题。
 因此，我们通常谈论的「数据一致性」就是指分布式系统的「数据一致性」。</p>
 <p><strong>CAP 原则</strong>是分布式系统领域一个著名的理论，它告诉我们在分布式系统中如下三种属性不可能全部达成，因此也被称作「<strong>CAP 不可能三角</strong>」：</p>
 <ul>
@@ -141,7 +141,7 @@
 <h5 id="1-状态视角---强一致与弱一致" class="headerLink">
     <a href="#1-%e7%8a%b6%e6%80%81%e8%a7%86%e8%a7%92---%e5%bc%ba%e4%b8%80%e8%87%b4%e4%b8%8e%e5%bc%b1%e4%b8%80%e8%87%b4" class="header-mark"></a>1. 状态视角 - 强一致与弱一致</h5><p>我们首先把整个分布式系统看作一个<strong>白盒</strong>，从状态视角看，任何变更操作后，分布式系统的多个数据副本只有如下三种状态：</p>
 <ul>
-<li>在某些条件下，各副本不一致的状态是暂时，还会转换到一致的状态，这被称为「<strong>弱一致</strong>」；
+<li>在某些条件下，各副本状态不一致的现象只是暂时的，后续还会转换到一致的状态，这被称为「<strong>弱一致</strong>」；
 <ul>
 <li>这通常是使用<strong>异步复制</strong>来同步各副本的状态。</li>
 </ul>
@@ -9709,7 +9709,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-08T01:22UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-08T01:32UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9872,10 +9872,10 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>262461</td>
-            <td style="color:tomato;"><strong>30608</strong></td>
-            <td>76752</td>
-            <td>26 days, 23h 15m 08s</td>
+            <td>262510</td>
+            <td style="color:tomato;"><strong>30609</strong></td>
+            <td>76770</td>
+            <td>26 days, 23h 20m 30s</td>
             <td style="color:dodgerblue;"><strong>01m 16s</strong></td>
             </tr>
         </tbody>
@@ -9899,9 +9899,9 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="1">1</td>
             <td sort_key="/posts/practical-cryptography-basics-5-key-exchange/"><a href="/posts/practical-cryptography-basics-5-key-exchange/">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></td>
-            <td sort_key="125">02m 05s</td>
-            <td sort_key="300">300</td>
-            <td sort_key="370">370</td>
+            <td sort_key="124">02m 04s</td>
+            <td sort_key="302">302</td>
+            <td sort_key="371">371</td>
             </tr>
         
         <tr>
@@ -9971,9 +9971,9 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="10">10</td>
             <td sort_key="/posts/iptables-and-container-networks/"><a href="/posts/iptables-and-container-networks/">iptables 及 docker 容器网络分析</a></td>
-            <td sort_key="89">01m 29s</td>
-            <td sort_key="266">266</td>
-            <td sort_key="429">429</td>
+            <td sort_key="88">01m 28s</td>
+            <td sort_key="267">267</td>
+            <td sort_key="434">434</td>
             </tr>
         
         <tr>
@@ -10002,18 +10002,18 @@ python的类方法、静态方法，与java的静态方法：</p>
         
         <tr>
             <td sort_key="14">14</td>
-            <td sort_key="/posts/consistency-and-consensus-algorithm/"><a href="/posts/consistency-and-consensus-algorithm/">分布式数据库的一致性问题与共识算法</a></td>
-            <td sort_key="77">01m 17s</td>
-            <td sort_key="9">9</td>
-            <td sort_key="11">11</td>
-            </tr>
-        
-        <tr>
-            <td sort_key="15">15</td>
             <td sort_key="/posts/about-dns-protocol/"><a href="/posts/about-dns-protocol/">Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</a></td>
             <td sort_key="68">01m 08s</td>
             <td sort_key="185">185</td>
             <td sort_key="216">216</td>
+            </tr>
+        
+        <tr>
+            <td sort_key="15">15</td>
+            <td sort_key="/posts/consistency-and-consensus-algorithm/"><a href="/posts/consistency-and-consensus-algorithm/">分布式数据库的一致性问题与共识算法</a></td>
+            <td sort_key="66">01m 06s</td>
+            <td sort_key="13">13</td>
+            <td sort_key="15">15</td>
             </tr>
         
         <tr>
