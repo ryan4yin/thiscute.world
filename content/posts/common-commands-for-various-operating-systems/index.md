@@ -43,6 +43,9 @@ sed 常用命令：
 ## 只在目录中所有的 .py 和 .dart 文件中递归搜索字符"main()"
 grep "main()" . -r --include *.{py, dart}
 
+## 在 .js 文件中搜索关键字 xxxxx 并仅展示关键字前后 40 个字符（用在 .js 等被压缩过的文本文件上很有效）
+cat *.js | grep -o -P '.{0,40}xxxxx.{0,40}'
+
 ## 1） 全文搜索并替换
 ### -i --in-place 原地替换（修改原文件）
 ### -i=SUFFIX  替换后的文件添加 SUFFIX 这个后缀
