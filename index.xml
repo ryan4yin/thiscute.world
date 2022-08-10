@@ -541,7 +541,13 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 <li>付费服务
 <ul>
 <li>DigiCert: 这个非常有名（但也是相当贵），官方文档 <a href="https://docs.digicert.com/certificate-tools/Certificate-lifecycle-automation-index/acme-user-guide/" target="_blank" rel="noopener noreffer">Digicert - Third-party ACME client automation</a></li>
-<li>Google Trust Services: Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign。官方文档 <a href="https://cloud.google.com/blog/products/identity-security/automate-public-certificate-lifecycle-management-via--acme-client-api" target="_blank" rel="noopener noreffer">Automate Public Certificates Lifecycle Management via RFC 8555 (ACME)</a></li>
+<li>Google Public Authority(Google Trust Services): Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign，OCSP 服务器在国内速度也很快。
+<ul>
+<li>详见 <a href="https://github.com/acmesh-official/acme.sh/wiki/Google-Public-CA" target="_blank" rel="noopener noreffer">acme.sh/wiki/Google-Public-CA</a></li>
+<li>此功能目前（2022-08-10）仍处于 beta 状态，需要提表单申请才能获得使用</li>
+<li>官方地址：https://pki.goog/</li>
+</ul>
+</li>
 <li>Entrust: 官方文档 <a href="https://www.entrust.com/knowledgebase/ssl/how-to-use-acme-to-install-ssl-tls-certificates-in-entrust-certificate-services-apache#step1" target="_blank" rel="noopener noreffer">Entrust&rsquo;s ACME implementation</a></li>
 <li>GlobalSign: 官方文档 <a href="https://www.globalsign.com/en/acme-automated-certificate-management" target="_blank" rel="noopener noreffer">GlobalSign ACME Service</a></li>
 </ul>
@@ -1220,10 +1226,17 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 <h2 id="五注意事项" class="headerLink">
     <a href="#%e4%ba%94%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="header-mark"></a>五、注意事项</h2><p>服务端 TLS 协议的配置有许多的优化点，有些配置对性能的提升是很明显的，建议自行网上搜索相关资料，这里仅列出部分相关信息。</p>
 <h3 id="ocsp-证书验证协议会大幅拖慢-https-协议的响应速度" class="headerLink">
-    <a href="#ocsp-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%8d%8f%e8%ae%ae%e4%bc%9a%e5%a4%a7%e5%b9%85%e6%8b%96%e6%85%a2-https-%e5%8d%8f%e8%ae%ae%e7%9a%84%e5%93%8d%e5%ba%94%e9%80%9f%e5%ba%a6" class="header-mark"></a>OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度</h3><p>如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这会大幅拖慢 HTTPS 协议的响应速度，而且 CA 机构的 OCSP 站点本身的性能也会有很大的影响。</p>
-<p>解决方法：HTTPS 服务器一定要启用 OCSP stapling 功能，它使服务器提前访问 OCSP 获取证书状态信息并缓存到本地，
-在客户端使用 TLS 协议访问时，直接在握手阶段将缓存的 OCSP 信息发送给客户端，这样就完成了证书状态的校验。
-因为 OCSP 信息会带有 CA 证书的签名及有效期，服务端不可能伪造它，这样也能确保安全性。</p>
+    <a href="#ocsp-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%8d%8f%e8%ae%ae%e4%bc%9a%e5%a4%a7%e5%b9%85%e6%8b%96%e6%85%a2-https-%e5%8d%8f%e8%ae%ae%e7%9a%84%e5%93%8d%e5%ba%94%e9%80%9f%e5%ba%a6" class="header-mark"></a>OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度</h3><p>如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，那么 CA 机构的 OCSP 站点本身的性能就会对站点的 HTTPS 访问速度产生很大的影响。</p>
+<p>解决方法：</p>
+<ul>
+<li>HTTPS 服务器一定要启用 OCSP stapling 功能，它使服务器提前访问 OCSP 获取证书状态信息并缓存到本地，
+<ul>
+<li>在客户端使用 TLS 协议访问时，直接在握手阶段将缓存的 OCSP 信息发送给客户端，这样就完成了证书状态的校验。</li>
+<li>因为 OCSP 信息会带有 CA 证书的签名及有效期，服务端不可能伪造它，这样也能确保安全性。</li>
+</ul>
+</li>
+<li>选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。</li>
+</ul>
 ]]></content></entry><entry><title type="html">Death Is But a Dream</title><link href="https://thiscute.world/posts/death-is-but-a-dream/"/><id>https://thiscute.world/posts/death-is-but-a-dream/</id><author><name>ryan4yin</name></author><published>2022-05-24T02:17:00+08:00</published><updated>2022-05-24T02:17:00+08:00</updated><content type="html"><![CDATA[<blockquote>
 <p>我并不知道何时才是死期，<br>
 却日日问自己，<br>
@@ -9715,7 +9728,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-09T00:34UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-09T22:42UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9878,10 +9891,10 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>262572</td>
-            <td style="color:tomato;"><strong>30749</strong></td>
-            <td>77032</td>
-            <td>27 days, 1h 58m 59s</td>
+            <td>262655</td>
+            <td style="color:tomato;"><strong>30911</strong></td>
+            <td>77328</td>
+            <td>27 days, 4h 42m 03s</td>
             <td style="color:dodgerblue;"><strong>01m 16s</strong></td>
             </tr>
         </tbody>
@@ -9912,130 +9925,130 @@ python的类方法、静态方法，与java的静态方法：</p>
         
         <tr>
             <td sort_key="2">2</td>
-            <td sort_key="/posts/practical-cryptography-basics-5-key-exchange/"><a href="/posts/practical-cryptography-basics-5-key-exchange/">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></td>
-            <td sort_key="117">01m 57s</td>
-            <td sort_key="298">298</td>
-            <td sort_key="366">366</td>
+            <td sort_key="/posts/expirence-of-vault/"><a href="/posts/expirence-of-vault/">secrets 管理工具 Vault 的介绍、安装及使用</a></td>
+            <td sort_key="116">01m 56s</td>
+            <td sort_key="351">351</td>
+            <td sort_key="497">497</td>
             </tr>
         
         <tr>
             <td sort_key="3">3</td>
-            <td sort_key="/posts/expirence-of-vault/"><a href="/posts/expirence-of-vault/">secrets 管理工具 Vault 的介绍、安装及使用</a></td>
+            <td sort_key="/posts/practical-cryptography-basics-5-key-exchange/"><a href="/posts/practical-cryptography-basics-5-key-exchange/">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></td>
             <td sort_key="116">01m 56s</td>
-            <td sort_key="347">347</td>
-            <td sort_key="490">490</td>
+            <td sort_key="303">303</td>
+            <td sort_key="372">372</td>
             </tr>
         
         <tr>
             <td sort_key="4">4</td>
             <td sort_key="/posts/practical-cryptography-basics-3-key-derivation-function/"><a href="/posts/practical-cryptography-basics-3-key-derivation-function/">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></td>
-            <td sort_key="113">01m 53s</td>
-            <td sort_key="357">357</td>
-            <td sort_key="449">449</td>
+            <td sort_key="114">01m 54s</td>
+            <td sort_key="365">365</td>
+            <td sort_key="455">455</td>
             </tr>
         
         <tr>
             <td sort_key="5">5</td>
             <td sort_key="/posts/kubernetes-best-practices/"><a href="/posts/kubernetes-best-practices/">Kubernetes 微服务最佳实践</a></td>
             <td sort_key="112">01m 52s</td>
-            <td sort_key="291">291</td>
-            <td sort_key="447">447</td>
+            <td sort_key="293">293</td>
+            <td sort_key="453">453</td>
             </tr>
         
         <tr>
             <td sort_key="6">6</td>
             <td sort_key="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></td>
             <td sort_key="111">01m 51s</td>
-            <td sort_key="567">567</td>
-            <td sort_key="801">801</td>
+            <td sort_key="576">576</td>
+            <td sort_key="815">815</td>
             </tr>
         
         <tr>
             <td sort_key="7">7</td>
             <td sort_key="/posts/practical-cryptography-basics-2-hash/"><a href="/posts/practical-cryptography-basics-2-hash/">写给开发人员的实用密码学（二）—— 哈希函数</a></td>
-            <td sort_key="110">01m 50s</td>
-            <td sort_key="518">518</td>
-            <td sort_key="662">662</td>
+            <td sort_key="109">01m 49s</td>
+            <td sort_key="522">522</td>
+            <td sort_key="667">667</td>
             </tr>
         
         <tr>
             <td sort_key="8">8</td>
             <td sort_key="/posts/2021-summary/"><a href="/posts/2021-summary/">2021 年年终总结</a></td>
-            <td sort_key="110">01m 50s</td>
-            <td sort_key="92">92</td>
-            <td sort_key="134">134</td>
+            <td sort_key="108">01m 48s</td>
+            <td sort_key="94">94</td>
+            <td sort_key="136">136</td>
             </tr>
         
         <tr>
             <td sort_key="9">9</td>
             <td sort_key="/posts/iptables-and-container-networks/"><a href="/posts/iptables-and-container-networks/">iptables 及 docker 容器网络分析</a></td>
-            <td sort_key="94">01m 34s</td>
-            <td sort_key="245">245</td>
-            <td sort_key="386">386</td>
+            <td sort_key="93">01m 33s</td>
+            <td sort_key="247">247</td>
+            <td sort_key="390">390</td>
             </tr>
         
         <tr>
             <td sort_key="10">10</td>
             <td sort_key="/posts/expirence-of-argo-workflow/"><a href="/posts/expirence-of-argo-workflow/">云原生流水线 Argo Workflows 的安装、使用以及个人体验</a></td>
-            <td sort_key="91">01m 31s</td>
-            <td sort_key="480">480</td>
-            <td sort_key="712">712</td>
+            <td sort_key="90">01m 30s</td>
+            <td sort_key="487">487</td>
+            <td sort_key="720">720</td>
             </tr>
         
         <tr>
             <td sort_key="11">11</td>
             <td sort_key="/posts/about-tls-cert/"><a href="/posts/about-tls-cert/">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></td>
             <td sort_key="89">01m 29s</td>
-            <td sort_key="618">618</td>
-            <td sort_key="877">877</td>
+            <td sort_key="625">625</td>
+            <td sort_key="887">887</td>
             </tr>
         
         <tr>
             <td sort_key="12">12</td>
             <td sort_key="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/">写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></td>
-            <td sort_key="85">01m 25s</td>
-            <td sort_key="603">603</td>
-            <td sort_key="741">741</td>
+            <td sort_key="86">01m 26s</td>
+            <td sort_key="611">611</td>
+            <td sort_key="750">750</td>
             </tr>
         
         <tr>
             <td sort_key="13">13</td>
-            <td sort_key="/posts/practical-cryptography-basics-4-secure-random-generators/"><a href="/posts/practical-cryptography-basics-4-secure-random-generators/">写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></td>
-            <td sort_key="83">01m 23s</td>
-            <td sort_key="319">319</td>
-            <td sort_key="345">345</td>
+            <td sort_key="/posts/consistency-and-consensus-algorithm/"><a href="/posts/consistency-and-consensus-algorithm/">分布式数据库的一致性问题与共识算法</a></td>
+            <td sort_key="84">01m 24s</td>
+            <td sort_key="44">44</td>
+            <td sort_key="57">57</td>
             </tr>
         
         <tr>
             <td sort_key="14">14</td>
-            <td sort_key="/posts/consistency-and-consensus-algorithm/"><a href="/posts/consistency-and-consensus-algorithm/">分布式数据库的一致性问题与共识算法</a></td>
+            <td sort_key="/posts/practical-cryptography-basics-4-secure-random-generators/"><a href="/posts/practical-cryptography-basics-4-secure-random-generators/">写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></td>
             <td sort_key="83">01m 23s</td>
-            <td sort_key="33">33</td>
-            <td sort_key="44">44</td>
+            <td sort_key="321">321</td>
+            <td sort_key="350">350</td>
             </tr>
         
         <tr>
             <td sort_key="15">15</td>
             <td sort_key="/posts/linux-virtual-network-interfaces/"><a href="/posts/linux-virtual-network-interfaces/">Linux 中的虚拟网络接口</a></td>
-            <td sort_key="76">01m 16s</td>
-            <td sort_key="233">233</td>
-            <td sort_key="292">292</td>
+            <td sort_key="77">01m 17s</td>
+            <td sort_key="234">234</td>
+            <td sort_key="294">294</td>
             </tr>
         
         <tr>
             <td sort_key="16">16</td>
             <td sort_key="/posts/about-dns-protocol/"><a href="/posts/about-dns-protocol/">Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</a></td>
             <td sort_key="68">01m 08s</td>
-            <td sort_key="183">183</td>
-            <td sort_key="213">213</td>
+            <td sort_key="185">185</td>
+            <td sort_key="215">215</td>
             </tr>
         
         <tr>
             <td sort_key="17">17</td>
             <td sort_key="/posts/practical-cryptography-basics-1/"><a href="/posts/practical-cryptography-basics-1/">写给开发人员的实用密码学（一）—— 概览</a></td>
             <td sort_key="65">01m 05s</td>
-            <td sort_key="539">539</td>
-            <td sort_key="827">827</td>
+            <td sort_key="543">543</td>
+            <td sort_key="834">834</td>
             </tr>
         
         <tr>
@@ -10056,14 +10069,6 @@ python的类方法、静态方法，与java的静态方法：</p>
         
         <tr>
             <td sort_key="20">20</td>
-            <td sort_key="/posts/websocket-http2-and-grpc/"><a href="/posts/websocket-http2-and-grpc/">WebSocket、HTTP/2 与 gRPC</a></td>
-            <td sort_key="51">51s</td>
-            <td sort_key="235">235</td>
-            <td sort_key="248">248</td>
-            </tr>
-        
-        <tr>
-            <td sort_key="21">21</td>
             <td sort_key="/en/posts/2021-summary/"><a href="/en/posts/2021-summary/">Summary of My 2021</a></td>
             <td sort_key="51">51s</td>
             <td sort_key="5">5</td>
@@ -10071,27 +10076,35 @@ python的类方法、静态方法，与java的静态方法：</p>
             </tr>
         
         <tr>
+            <td sort_key="21">21</td>
+            <td sort_key="/posts/websocket-http2-and-grpc/"><a href="/posts/websocket-http2-and-grpc/">WebSocket、HTTP/2 与 gRPC</a></td>
+            <td sort_key="50">50s</td>
+            <td sort_key="239">239</td>
+            <td sort_key="257">257</td>
+            </tr>
+        
+        <tr>
             <td sort_key="22">22</td>
             <td sort_key="/posts/qemu-kvm-usage/"><a href="/posts/qemu-kvm-usage/">QEMU-KVM 虚拟化环境的搭建与使用</a></td>
-            <td sort_key="45">45s</td>
-            <td sort_key="668">668</td>
-            <td sort_key="813">813</td>
+            <td sort_key="44">44s</td>
+            <td sort_key="678">678</td>
+            <td sort_key="826">826</td>
             </tr>
         
         <tr>
             <td sort_key="23">23</td>
             <td sort_key="/posts/expirence-of-pulumi/"><a href="/posts/expirence-of-pulumi/">Pulumi 使用体验 - 基础设施代码化</a></td>
             <td sort_key="41">41s</td>
-            <td sort_key="191">191</td>
-            <td sort_key="210">210</td>
+            <td sort_key="194">194</td>
+            <td sort_key="213">213</td>
             </tr>
         
         <tr>
             <td sort_key="24">24</td>
             <td sort_key="/posts/opensuse-instruction/"><a href="/posts/opensuse-instruction/">openSUSE 使用指南</a></td>
             <td sort_key="38">38s</td>
-            <td sort_key="138">138</td>
-            <td sort_key="151">151</td>
+            <td sort_key="139">139</td>
+            <td sort_key="152">152</td>
             </tr>
         
         <tr>
@@ -10113,9 +10126,9 @@ python的类方法、静态方法，与java的静态方法：</p>
         <tr>
             <td sort_key="27">27</td>
             <td sort_key="/posts/socat-netcat/"><a href="/posts/socat-netcat/">Linux 网络工具中的瑞士军刀 - socat &amp; netcat</a></td>
-            <td sort_key="36">36s</td>
-            <td sort_key="371">371</td>
-            <td sort_key="410">410</td>
+            <td sort_key="35">35s</td>
+            <td sort_key="380">380</td>
+            <td sort_key="419">419</td>
             </tr>
         
         <tr>
@@ -10138,16 +10151,16 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="30">30</td>
             <td sort_key="/posts/jwt-algorithm-key-generation/"><a href="/posts/jwt-algorithm-key-generation/">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a></td>
             <td sort_key="32">32s</td>
-            <td sort_key="388">388</td>
-            <td sort_key="452">452</td>
+            <td sort_key="393">393</td>
+            <td sort_key="457">457</td>
             </tr>
         
         <tr>
             <td sort_key="31">31</td>
             <td sort_key="/posts/tcpdump-and-wireshark/"><a href="/posts/tcpdump-and-wireshark/">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</a></td>
             <td sort_key="30">30s</td>
-            <td sort_key="308">308</td>
-            <td sort_key="337">337</td>
+            <td sort_key="312">312</td>
+            <td sort_key="341">341</td>
             </tr>
         
         <tr>
@@ -10162,16 +10175,16 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="33">33</td>
             <td sort_key="/posts/use-istio-for-jwt-auth/"><a href="/posts/use-istio-for-jwt-auth/">使用 Istio 进行 JWT 身份验证（充当 API 网关）</a></td>
             <td sort_key="26">26s</td>
-            <td sort_key="155">155</td>
-            <td sort_key="196">196</td>
+            <td sort_key="157">157</td>
+            <td sort_key="198">198</td>
             </tr>
         
         <tr>
             <td sort_key="34">34</td>
             <td sort_key="/posts/mathematics-in-euclidean-gcd/"><a href="/posts/mathematics-in-euclidean-gcd/">欧几里得算法求最大公约数(GCD)的数学原理</a></td>
             <td sort_key="26">26s</td>
-            <td sort_key="89">89</td>
-            <td sort_key="91">91</td>
+            <td sort_key="90">90</td>
+            <td sort_key="92">92</td>
             </tr>
         
         <tr>
@@ -10179,47 +10192,47 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="/posts/common-commands-for-various-operating-systems/"><a href="/posts/common-commands-for-various-operating-systems/">Linux/Windows/MacOSX 系统常用命令集锦</a></td>
             <td sort_key="26">26s</td>
             <td sort_key="57">57</td>
-            <td sort_key="61">61</td>
+            <td sort_key="62">62</td>
             </tr>
         
         <tr>
             <td sort_key="36">36</td>
             <td sort_key="/posts/death-is-but-a-dream/"><a href="/posts/death-is-but-a-dream/">Death Is But a Dream</a></td>
             <td sort_key="25">25s</td>
-            <td sort_key="232">232</td>
-            <td sort_key="331">331</td>
+            <td sort_key="233">233</td>
+            <td sort_key="332">332</td>
             </tr>
         
         <tr>
             <td sort_key="37">37</td>
             <td sort_key="/posts/kubernetes-deployment-using-kubeadm/"><a href="/posts/kubernetes-deployment-using-kubeadm/">部署一个 Kubernetes 集群</a></td>
             <td sort_key="23">23s</td>
-            <td sort_key="164">164</td>
-            <td sort_key="170">170</td>
+            <td sort_key="168">168</td>
+            <td sort_key="174">174</td>
             </tr>
         
         <tr>
             <td sort_key="38">38</td>
-            <td sort_key="/posts/manjaro-instruction/"><a href="/posts/manjaro-instruction/">Manjaro 使用指南</a></td>
+            <td sort_key="/posts/revolution-and-innovation/"><a href="/posts/revolution-and-innovation/">变革与创新</a></td>
             <td sort_key="19">19s</td>
-            <td sort_key="132">132</td>
-            <td sort_key="159">159</td>
+            <td sort_key="186">186</td>
+            <td sort_key="271">271</td>
             </tr>
         
         <tr>
             <td sort_key="39">39</td>
-            <td sort_key="/posts/revolution-and-innovation/"><a href="/posts/revolution-and-innovation/">变革与创新</a></td>
-            <td sort_key="18">18s</td>
-            <td sort_key="185">185</td>
-            <td sort_key="270">270</td>
+            <td sort_key="/posts/manjaro-instruction/"><a href="/posts/manjaro-instruction/">Manjaro 使用指南</a></td>
+            <td sort_key="19">19s</td>
+            <td sort_key="133">133</td>
+            <td sort_key="160">160</td>
             </tr>
         
         <tr>
             <td sort_key="40">40</td>
             <td sort_key="/posts/kubernetes-common-errors-and-solutions/"><a href="/posts/kubernetes-common-errors-and-solutions/">Kubernetes 常见错误、原因及处理方法</a></td>
             <td sort_key="16">16s</td>
-            <td sort_key="165">165</td>
-            <td sort_key="174">174</td>
+            <td sort_key="170">170</td>
+            <td sort_key="180">180</td>
             </tr>
         
 
