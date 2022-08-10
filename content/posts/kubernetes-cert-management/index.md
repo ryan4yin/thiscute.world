@@ -80,7 +80,10 @@ cert-manager 支持两种申请公网受信证书的方式：
     - 通过 ACME 协议支持不限数量的 90 天证书，也支持多域名证书与泛域名证书。
 - 付费服务
   - DigiCert: 这个非常有名（但也是相当贵），官方文档 [Digicert - Third-party ACME client automation](https://docs.digicert.com/certificate-tools/Certificate-lifecycle-automation-index/acme-user-guide/)
-  - Google Trust Services: Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign。官方文档 [Automate Public Certificates Lifecycle Management via RFC 8555 (ACME)](https://cloud.google.com/blog/products/identity-security/automate-public-certificate-lifecycle-management-via--acme-client-api)
+  - Google Public Authority(Google Trust Services): Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign，OCSP 服务器在国内速度也很快。
+    - 详见 [acme.sh/wiki/Google-Public-CA](https://github.com/acmesh-official/acme.sh/wiki/Google-Public-CA)
+    - 此功能目前（2022-08-10）仍处于 beta 状态，需要提表单申请才能获得使用
+    - 官方地址：https://pki.goog/
   - Entrust: 官方文档 [Entrust's ACME implementation](https://www.entrust.com/knowledgebase/ssl/how-to-use-acme-to-install-ssl-tls-certificates-in-entrust-certificate-services-apache#step1)
   - GlobalSign: 官方文档 [GlobalSign ACME Service](https://www.globalsign.com/en/acme-automated-certificate-management)
 
@@ -483,10 +486,13 @@ spec:
 
 ### OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度
 
-如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这会大幅拖慢 HTTPS 协议的响应速度，而且 CA 机构的 OCSP 站点本身的性能也会有很大的影响。
+如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，那么 CA 机构的 OCSP 站点本身的性能就会对站点的 HTTPS 访问速度产生很大的影响。
 
-解决方法：HTTPS 服务器一定要启用 OCSP stapling 功能，它使服务器提前访问 OCSP 获取证书状态信息并缓存到本地，
-在客户端使用 TLS 协议访问时，直接在握手阶段将缓存的 OCSP 信息发送给客户端，这样就完成了证书状态的校验。
-因为 OCSP 信息会带有 CA 证书的签名及有效期，服务端不可能伪造它，这样也能确保安全性。
+解决方法：
+
+- HTTPS 服务器一定要启用 OCSP stapling 功能，它使服务器提前访问 OCSP 获取证书状态信息并缓存到本地，
+  - 在客户端使用 TLS 协议访问时，直接在握手阶段将缓存的 OCSP 信息发送给客户端，这样就完成了证书状态的校验。
+  - 因为 OCSP 信息会带有 CA 证书的签名及有效期，服务端不可能伪造它，这样也能确保安全性。
+- 选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。
 
 
