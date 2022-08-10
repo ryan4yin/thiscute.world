@@ -78,6 +78,7 @@ cert-manager 支持两种申请公网受信证书的方式：
   - Let's Encrypt: 众所周知，它提供三个月有效期的免费证书。
   - [ZeroSSL](https://zerossl.com/documentation/acme/):  貌似也是一个比较有名的 SSL 证书服务
     - 通过 ACME 协议支持不限数量的 90 天证书，也支持多域名证书与泛域名证书。
+    - 它提供了一个额外的 Dashboard 查看与管理所有申请的证书，这是比较方便的地方。
 - 付费服务
   - DigiCert: 这个非常有名（但也是相当贵），官方文档 [Digicert - Third-party ACME client automation](https://docs.digicert.com/certificate-tools/Certificate-lifecycle-automation-index/acme-user-guide/)
   - Google Public Authority(Google Trust Services): Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign，OCSP 服务器在国内速度也很快。
