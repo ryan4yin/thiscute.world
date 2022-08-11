@@ -760,7 +760,7 @@ TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要
 这导致了一些问题：
 
 - Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
-  - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间，或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
+  - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
 - 因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。
 
 为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，
