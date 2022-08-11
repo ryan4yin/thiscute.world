@@ -58,7 +58,7 @@ toc:
 
 - Nginx Gateway 进展
   - 在 AWS NLB 上添加 TLS 终止，遇到 AWS NLB 的 TLS 流量费用高、而且 Nginx 无法通过 `X-Forwarded-Proto` 判断客户端协议的问题
-    - 解决方法：使用 cert-manager 在 Nginx 中进行 TLS 终止，AWS NLB 改为纯 HTTP
+    - 解决方法：使用 cert-manager 在 Nginx 中进行 TLS 终止，AWS NLB 改为纯 TCP
     - 需要注意在 Nginx 上配置使用 OCSP stapling 等 TLS 性能优化手段，并淘汰掉旧的 TLS 协议与 ciphers.
 - 研究了一波 cert-manager 通过 ACME 申请权威证书，并绑定到 Istio IngressGateeway 或者其他网关上
 
@@ -79,7 +79,7 @@ toc:
       - 解决方法：在 `http` 配置块中添加 `resolver kube-dns.kube-system.svc.cluster.local valid=10s;` 即可，另外所有 k8s 域名都得使用 FQDN 形式，因为 Nginx 不会使用搜索域配置！
     - 客户端 Host 透传：改用 `X-Forwarded-Host`，而原 `Host` Header 仅供 Istio/Nginx 用于流量管理。同时在流量走到 Istio SIDECAR_OUTBOUND 时，再通过 Envoy 参数 `host_rewrite_header: X-Forwarded-Host` 将 Host rewrite 回来。
     - 安全组问题：为了获取客户端 IP 需要在 NLB 上启用客户端 IP 透传，但是这样会导致流量被内网安全组拒绝！
-      - 解决方法：在 Nginx 所在的 EC2 上添加安全组，允许公网 IP 访问其 8080(https)/8787(http) 端口即可
+      - 解决方法：在 Nginx 所在的 EC2 上添加安全组，允许公网 IP 访问其 http/https 端口即可
     - 使用 aws-load-balancer-controller 绑定 IP 模式的 NLB，发现 pod 被重新调度会导致请求超时！
       - 相关 issue: [pod termination might cause dropped connections](https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2366)
       - 解决方法：在 pod 上设置 350s 的 preStop 以及对应的 terminationGracePeriodSeconds，确保所有请求都能被正常处理！
@@ -132,11 +132,11 @@ toc:
 
 - 买了一千多块钱的书，最近陆续到货了，现在还差一本《我的青春恋爱物语果然有问题——原画集》
   - 多买了一本罗翔老师的《圆圈正义》，打算送给堂弟
-- 阅读了《Intimate Replationships》的第一小节
+- 阅读了《Intimate Relationships》的第一小节
   - 了解了人类社会性动物的本质，这可以用进化论解释——越社会性的个体存活率越高，基因也越容易传续。
   - 亲密关系的建立是很容易的，「你是我的唯一」更多的是一种浪漫的说法，只是「因为刚好遇到你」而已。
   - 一旦建立了亲密关系，我们就会抗拒这份亲密关系的解离。当亲密关系遭遇危机时，我们会茶不思饭不想。
-  - 在 Youtube 上搜了下 Intimate Replationships，找了几个相关的 TED Talks 看了看。
+  - 在 Youtube 上搜了下 Intimate Relationships，找了几个相关的 TED Talks 看了看。
   - 还找到 UCLA 一个比较老的课程：[Intimate Relationships: Undergraduate Lectures at UCLA](https://www.youtube.com/playlist?list=PLexCQI5fHYIdeWyOSJBclmFL8i4bkBT4H)，可以跟书一起看看。
 
 ### 2022-06-08
