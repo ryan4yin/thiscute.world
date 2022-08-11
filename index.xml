@@ -3305,7 +3305,24 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 <blockquote>
 <p><a href="https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html" target="_blank" rel="noopener noreffer">https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html</a></p>
 </blockquote>
+<blockquote>
+<p><a href="https://www.digicert.com/help/" target="_blank" rel="noopener noreffer">https://www.digicert.com/help/</a></p>
+</blockquote>
 <p>前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。</p>
+<p>可以使用如下命令测试，确认站点是否启用了 ocsp stapling:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -status -tlsextdebug &lt; /dev/null 2&gt;&amp;1 | grep -i &#34;OCSP response&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果输出包含 <code>OCSP Response Status: successful</code> 就说明站点支持 ocsp stapling，
+如果输出内容为 <code>OCSP response: no response sent</code> 则说明站点不支持ocsp stapling。</p>
+<blockquote>
+<p>实际上我测试发现只有 <a href="https://www.digicert.com/www.douban.com" target="_blank" rel="noopener noreffer">www.digicert.com/www.douban.com</a> 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.</p>
+</blockquote>
 <p>这导致了一些问题：</p>
 <ul>
 <li>Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
@@ -9751,7 +9768,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-11T19:23UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-11T19:30UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9914,7 +9931,7 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>262789</td>
+            <td>262967</td>
             <td style="color:tomato;"><strong>31214</strong></td>
             <td>77735</td>
             <td>27 days, 7h 54m 45s</td>
