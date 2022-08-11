@@ -105,7 +105,7 @@ comment:
 - 2022-02-07：第一份工作结束后赋闲，将博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
 - 2022-02-07：本站添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。
 - 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
-- 2022-08-12：本站架构升级为 Azure Front Door + Vercel，发现 Azure Front Door 的加速效果确实对得起它的价格（免费试用一个月，后面考虑换成更便宜的 Azure CDN）。
+- 2022-08-12：本站架构升级为 Azure Front Door + Vercel，发现 Azure Front Door 的加速效果确实对得起它的价格（免费试用一个月，后面考虑换成更便宜的 Azure CDN + Azure Blob Storage）。
 {{< /admonition >}}
 
 {{< admonition info "博客快照-2020-01-21" >}}

@@ -15,6 +15,7 @@ toc:
   - 给 <https://thiscute.world> 加了个 Azure 的 Front Door 作为 vercel 的前置 CDN，发现效果出奇的好！现在站点访问速度跟国内服务器基本没差了，即使缓存不命中，回源速度也特别得快！
     - 不过价格也比较感人，也只有试用阶段才舍得用。
   - 据说 Azure CDN (Microsoft Standard) 在国内虽然比 Front Door 差一点，但是速度也要强过 CloudFalre/CloudFront，试用期之后可以试试。
+    - 算了下 Azure CDN 一个月可能也就 $10 出头，数据即使丢在 Azure Blob Storage 对象存储里，以我不到 1G 的总数据量一个月才不到 $1，完全可以接受。
   - 堪称免备案站点加速方案中的战斗机！
 - 选 Azure 本来只是因为工作天天接触 AWS/GCP，想试用下全球排名第二的 Azure 是个啥感觉，结果意外发现它的国际 CDN 在国内这么快。
 
