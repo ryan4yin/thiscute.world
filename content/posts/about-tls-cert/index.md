@@ -755,7 +755,20 @@ TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要
 
 >https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html
 
+>https://www.digicert.com/help/
+
 前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。
+
+可以使用如下命令测试，确认站点是否启用了 ocsp stapling:
+
+```conf
+$ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -status -tlsextdebug < /dev/null 2>&1 | grep -i "OCSP response"
+```
+
+如果输出包含 `OCSP Response Status: successful` 就说明站点支持 ocsp stapling，
+如果输出内容为 `OCSP response: no response sent` 则说明站点不支持ocsp stapling。
+
+>实际上我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
 
 这导致了一些问题：
 
