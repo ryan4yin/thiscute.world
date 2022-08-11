@@ -772,6 +772,8 @@ TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要
 
 >https://en.wikipedia.org/wiki/Application-Layer_Protocol_Negotiation
 
+>https://imququ.com/post/enable-alpn-asap.html
+
 TODO
 
 ### 2. mTLS 双向认证
