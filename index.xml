@@ -3298,12 +3298,31 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 <li>「Old」: 除非你的用户使用非常老的终端进行访问，否则请不要考虑这个选项！</li>
 </ol>
 <p>可以点进去查看详细的 TLS 套件配置。</p>
-<h4 id="ocsp-证书验证协议会大幅拖慢-https-协议的响应速度" class="headerLink">
-    <a href="#ocsp-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%8d%8f%e8%ae%ae%e4%bc%9a%e5%a4%a7%e5%b9%85%e6%8b%96%e6%85%a2-https-%e5%8d%8f%e8%ae%ae%e7%9a%84%e5%93%8d%e5%ba%94%e9%80%9f%e5%ba%a6" class="header-mark"></a>OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度</h4><p>前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。</p>
-<p>但是如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这会大幅拖慢 HTTPS 协议的响应速度，而且 CA 机构的 OCSP 站点的性能对 HTTPS 的相应速度也会有很大的影响。</p>
-<p>为了解决这个问题，OCSP 协议提供了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，
-在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
+<h4 id="ocsp-证书验证协议" class="headerLink">
+    <a href="#ocsp-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%8d%8f%e8%ae%ae" class="header-mark"></a>OCSP 证书验证协议</h4><blockquote>
+<p><a href="https://www.ssl.com/blogs/how-do-browsers-handle-revoked-ssl-tls-certificates/" target="_blank" rel="noopener noreffer">https://www.ssl.com/blogs/how-do-browsers-handle-revoked-ssl-tls-certificates/</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html" target="_blank" rel="noopener noreffer">https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html</a></p>
+</blockquote>
+<p>前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。</p>
+<p>这导致了一些问题：</p>
+<ul>
+<li>Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
+<ul>
+<li>所谓的定期是指超过上一个 OCSP 响应的 <code>nextUpdate</code> 时间，或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。</li>
+</ul>
+</li>
+<li>因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。</li>
+</ul>
+<p>为了解决这两个问题，<a href="https://www.rfc-editor.org/rfc/rfc6066" target="_blank" rel="noopener noreffer">rfc6066</a> 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，</p>
+<p>在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
 因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。</p>
+<h4 id="alpn-应用层协议协商" class="headerLink">
+    <a href="#alpn-%e5%ba%94%e7%94%a8%e5%b1%82%e5%8d%8f%e8%ae%ae%e5%8d%8f%e5%95%86" class="header-mark"></a>ALPN 应用层协议协商</h4><blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Application-Layer_Protocol_Negotiation" target="_blank" rel="noopener noreffer">https://en.wikipedia.org/wiki/Application-Layer_Protocol_Negotiation</a></p>
+</blockquote>
+<p>TODO</p>
 <h3 id="2-mtls-双向认证" class="headerLink">
     <a href="#2-mtls-%e5%8f%8c%e5%90%91%e8%ae%a4%e8%af%81" class="header-mark"></a>2. mTLS 双向认证</h3><p>TLS 协议（tls1.0+，RFC: <a href="https://tools.ietf.org/html/rfc5246#section-7.4.4" target="_blank" rel="noopener noreffer">TLS1.2 - RFC5246</a>）也定义了可选的服务端请求验证客户端证书的方法。这
 个方法是可选的。如果使用上这个方法，那客户端和服务端就会在 TLS 协议的握手阶段进行互相认证。这种验证方式被称为双向 TLS 认证(mTLS, mutual TLS)。</p>
@@ -9729,7 +9748,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-10T11:17UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-10T11:23UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9892,7 +9911,7 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>262688</td>
+            <td>262781</td>
             <td style="color:tomato;"><strong>31017</strong></td>
             <td>77451</td>
             <td>27 days, 5h 34m 11s</td>
