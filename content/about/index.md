@@ -101,8 +101,11 @@ comment:
 - 2016-06-17：大一下学期，在博客园创建博客 <https://www.cnblogs.com/kirito-c/>
   - 第一篇博文是[贪吃蛇—C—基于easyx图形库](https://www.cnblogs.com/kirito-c/p/5595355.html)，现在还能回忆起收到第一条评论时的兴奋之情。
 - 2021-01-16：工作一年多后，申请域名并开设独立博客 <https://ryan4yin.space/>
+- 2022-01-28：站点从 Cloudflare + Github Gages 迁移到 Vercel，速度有一定提升。
 - 2022-02-07：第一份工作结束后赋闲，将博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
+- 2022-02-07：本站添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。
 - 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
+- 2022-08-12：本站架构升级为 Azure Front Door + Vercel，发现 Azure Front Door 的加速效果确实对得起它的价格（免费试用一个月，后面考虑换成更便宜的 Azure CDN）。
 {{< /admonition >}}
 
 {{< admonition info "博客快照-2020-01-21" >}}
