@@ -51,6 +51,14 @@ jobs:
 
       - name: Build
         run: hugo --minify --ignoreCache --gc
+      
+      - name: Upload to Azure Blob Storage(similar to aws S3 object storage)
+        uses: bacongobbler/azure-blob-storage-upload@main
+        with:
+          source_dir: 'public'
+          container_name: '$web'
+          connection_string: ${{ secrets.AZURE_CONNECTION_STRING }}
+          sync: 'true'
 
       # 自动构建出的 pages 目前有问题，mermaid 等 shortcodes 无法正常加载，先不 push
       # - name: Deploy
