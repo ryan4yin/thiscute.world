@@ -15,9 +15,9 @@ lightgallery: false
 
 comment:
   utterances:
-    enable: true
-  waline:
     enable: false
+  waline:
+    enable: true
 ---
 
 <!-- 遥远的歌 -->
