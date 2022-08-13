@@ -1,686 +1,362 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noodp" />
-    <title class="pjax-title">使用 Istio 进行 JWT 身份验证（充当 API 网关） - This Cute World</title><meta name="Description" content="This Cute World"><meta property="og:title" content="使用 Istio 进行 JWT 身份验证（充当 API 网关）" />
-<meta property="og:description" content="
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title class=pjax-title>使用 Istio 进行 JWT 身份验证（充当 API 网关） - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="使用 Istio 进行 JWT 身份验证（充当 API 网关）"><meta property="og:description" content="
 本文基于 Istio1.5 编写测试
 
 Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。
 目前主流的 JWT 算法是 RS256/ES256。（请忽略 HS256，该算法不适合分布式 JWT 验证）
-这里以 RSA256 算法为例进行介绍，ES256 的配置方式也是一样的。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://thiscute.world/posts/use-istio-for-jwt-auth/" /><meta property="og:image" content="https://thiscute.world/posts/use-istio-for-jwt-auth/istio.webp"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-04-06T21:48:26+08:00" />
-<meta property="article:modified_time" content="2020-04-06T21:48:26+08:00" />
-
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://thiscute.world/posts/use-istio-for-jwt-auth/istio.webp"/>
-<meta name="twitter:title" content="使用 Istio 进行 JWT 身份验证（充当 API 网关）"/>
-<meta name="twitter:description" content="
+这里以 RSA256 算法为例进行介绍，ES256 的配置方式也是一样的。"><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/posts/use-istio-for-jwt-auth/"><meta property="og:image" content="https://thiscute.world/posts/use-istio-for-jwt-auth/istio.webp"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-04-06T21:48:26+08:00"><meta property="article:modified_time" content="2020-04-06T21:48:26+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/use-istio-for-jwt-auth/istio.webp"><meta name=twitter:title content="使用 Istio 进行 JWT 身份验证（充当 API 网关）"><meta name=twitter:description content="
 本文基于 Istio1.5 编写测试
 
 Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。
 目前主流的 JWT 算法是 RS256/ES256。（请忽略 HS256，该算法不适合分布式 JWT 验证）
-这里以 RSA256 算法为例进行介绍，ES256 的配置方式也是一样的。"/>
-<meta name="application-name" content="This Cute World">
-<meta name="apple-mobile-web-app-title" content="This Cute World">
-
-<meta name="theme-color" content="#f8f8f8"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="canonical" href="https://thiscute.world/posts/use-istio-for-jwt-auth/" /><link rel="prev" href="https://thiscute.world/posts/about-dns-protocol/" /><link rel="next" href="https://thiscute.world/posts/tcpdump-and-wireshark/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><meta name="google-site-verification" content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ" /><meta name="baidu-site-verification" content="code-ZZtDruAnX1" /><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "使用 Istio 进行 JWT 身份验证（充当 API 网关）",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/thiscute.world\/posts\/use-istio-for-jwt-auth\/"
-        },"image": [{
-                            "@type": "ImageObject",
-                            "url": "https:\/\/thiscute.world\/posts\/use-istio-for-jwt-auth\/istio.webp",
-                            "width":  1280 ,
-                            "height":  596 
-                        }],"genre": "posts","keywords": "Kubernetes, Istio, 服务网格","wordcount":  2279 ,
-        "url": "https:\/\/thiscute.world\/posts\/use-istio-for-jwt-auth\/","datePublished": "2020-04-06T21:48:26+08:00","dateModified": "2020-04-06T21:48:26+08:00","publisher": {
-            "@type": "Organization",
-            "name": "ryan4yin","logo": "https:\/\/thiscute.world\/avatar\/myself.png"},"author": {
-                "@type": "Person",
-                "name": "ryan4yin"
-            },"description": ""
-    }
-    </script></head>
-
-<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
-        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
-        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
-        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
-        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
-        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
-        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
-    </script>
-    <div id="back-to-top"></div>
-    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
-    <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="This Cute World"><span id="desktop-header-typeit" class="typeit"></span></a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/statistics/"> 阅读排行 </a><a class="menu-item" href="/categories/tech/"> 技术 </a><a class="menu-item" href="/categories/life/"> 生活 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/friends/"> 朋友们 </a><a class="menu-item" href="/now/"> 此刻 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><a href="#" onclick="return false;" class="menu-item language" title="选择语言">Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-                        <select class="language-select" title="Select Language" id="language-select-desktop" onchange="location = this.value;"><option value="/posts/use-istio-for-jwt-auth/" selected>Simplified Chinese</option></select>
-                    </a><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
-                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
-                            <i class="fas fa-search fa-fw"></i>
-                        </a>
-                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
-                            <i class="fas fa-times-circle fa-fw"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
-                        </span>
-                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
-                    <i class="fas fa-adjust fa-fw"></i>
-                </a></div>
-        </div>
-    </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="This Cute World"><span id="mobile-header-typeit" class="typeit"></span></a>
-            </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
-                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
-                            <i class="fas fa-search fa-fw"></i>
-                        </a>
-                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                            <i class="fas fa-times-circle fa-fw"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
-                        </span>
-                    </div>
-                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
-                        取消
-                    </a>
-                </div><a class="menu-item" href="/statistics/" title="">阅读排行</a><a class="menu-item" href="/categories/tech/" title="">技术</a><a class="menu-item" href="/categories/life/" title="">生活</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/friends/" title="">朋友们</a><a class="menu-item" href="/now/" title="">此刻</a><a class="menu-item" href="/about/" title="">关于</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
-                <i class="fas fa-adjust fa-fw"></i>
-            </a><a href="#" onclick="return false;" class="menu-item" title="选择语言">Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-                    <select class="language-select" title="Select Language" onchange="location = this.value;"><option value="/posts/use-istio-for-jwt-auth/" selected>Simplified Chinese</option></select>
-                </a></div>
-    </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
-            <div class="container"><div class="toc" id="toc-auto">
-        <h2 class="toc-title">目录</h2>
-        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#1-介绍-jwk-与-jwks">1. 介绍 JWK 与 JWKS</a></li>
-        <li><a href="#2-jwk-的生成">2. JWK 的生成</a></li>
-        <li><a href="#4-测试密钥可用性">4. 测试密钥可用性</a></li>
-        <li><a href="#5-启用-istio-的身份验证">5. 启用 Istio 的身份验证</a></li>
-        <li><a href="#6-启用-payload-转发authorization-转发">6. 启用 Payload 转发/Authorization 转发</a></li>
-        <li><a href="#7-设定强制认证规则">7. 设定强制认证规则</a></li>
-        <li><a href="#8-response-headers">8. Response Headers</a></li>
-      </ul>
-    </li>
-    <li><a href="#参考">参考</a></li>
-  </ul>
-</nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">使用 Istio 进行 JWT 身份验证（充当 API 网关）</h1><div class="post-meta">
-            <div class="post-meta-line">
-                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://thiscute.world/" title="Author" target="_blank" rel="noopener noreffer author" class="author">ryan4yin</a>
-                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-04-06">2020-04-06</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2020-04-06">2020-04-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2279 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
-        </div><div class="featured-image"><img
-        class="lazyload"
-        data-src="/posts/use-istio-for-jwt-auth/istio.webp"
-        data-srcset="/posts/use-istio-for-jwt-auth/istio.webp, /posts/use-istio-for-jwt-auth/istio.webp 1.5x, /posts/use-istio-for-jwt-auth/istio.webp 2x"
-        data-sizes="auto"
-        alt="/posts/use-istio-for-jwt-auth/istio.webp"
-        title="/posts/use-istio-for-jwt-auth/istio.webp" height="596" width="1280"></div><div class="details toc" id="toc-static"  kept="">
-                <div class="details-summary toc-title">
-                    <span>目录</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#1-介绍-jwk-与-jwks">1. 介绍 JWK 与 JWKS</a></li>
-        <li><a href="#2-jwk-的生成">2. JWK 的生成</a></li>
-        <li><a href="#4-测试密钥可用性">4. 测试密钥可用性</a></li>
-        <li><a href="#5-启用-istio-的身份验证">5. 启用 Istio 的身份验证</a></li>
-        <li><a href="#6-启用-payload-转发authorization-转发">6. 启用 Payload 转发/Authorization 转发</a></li>
-        <li><a href="#7-设定强制认证规则">7. 设定强制认证规则</a></li>
-        <li><a href="#8-response-headers">8. Response Headers</a></li>
-      </ul>
-    </li>
-    <li><a href="#参考">参考</a></li>
-  </ul>
-</nav></div>
-            </div><div class="content" id="content"><blockquote>
-<p>本文基于 Istio1.5 编写测试</p>
-</blockquote>
-<p>Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。</p>
-<p>目前主流的 JWT 算法是 RS256/ES256。（请忽略 HS256，该算法不适合分布式 JWT 验证）</p>
-<p>这里以 RSA256 算法为例进行介绍，ES256 的配置方式也是一样的。</p>
-<h3 id="1-介绍-jwk-与-jwks" class="headerLink">
-    <a href="#1-%e4%bb%8b%e7%bb%8d-jwk-%e4%b8%8e-jwks" class="header-mark"></a>1. 介绍 JWK 与 JWKS</h3><p>Istio 要求提供 JWKS 格式的信息，用于 JWT 签名验证。因此这里得先介绍一下 JWK 和 JWKS.</p>
-<p>JWKS ，也就是 JWK Set，json 结构如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{
-</span></span><span class="line"><span class="cl">&#34;keys&#34;: [
-</span></span><span class="line"><span class="cl">  &lt;jwk-1&gt;,
-</span></span><span class="line"><span class="cl">  &lt;jwk-2&gt;,
-</span></span><span class="line"><span class="cl">  ...
-</span></span><span class="line"><span class="cl">]}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>JWKS 描述一组 JWK 密钥。它能同时描述多个可用的公钥，应用场景之一是密钥的 Rotate.</p>
-<p>而 JWK，全称是 Json Web Key，它描述了一个加密密钥（公钥或私钥）的各项属性，包括密钥的值。</p>
-<p>Istio 使用 JWK 描述验证 JWT 签名所需要的信息。在使用 RSA 签名算法时，JWK 描述的应该是用于验证的 RSA 公钥。</p>
-<p>一个 RSA 公钥的 JWK 描述如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{
-</span></span><span class="line"><span class="cl">    &#34;alg&#34;: &#34;RS256&#34;,  # 算法「可选参数」
-</span></span><span class="line"><span class="cl">    &#34;kty&#34;: &#34;RSA&#34;,    # 密钥类型
-</span></span><span class="line"><span class="cl">    &#34;use&#34;: &#34;sig&#34;,    # 被用于签名「可选参数」
-</span></span><span class="line"><span class="cl">    &#34;kid&#34;: &#34;NjVBRjY5MDlCMUIwNzU4RTA2QzZFMDQ4QzQ2MDAyQjVDNjk1RTM2Qg&#34;,  # key 的唯一 id
-</span></span><span class="line"><span class="cl">    &#34;n&#34;: &#34;yeNlzlub94YgerT030codqEztjfU_S6X4DbDA_iVKkjAWtYfPHDzz_sPCT1Axz6isZdf3lHpq_gYX4Sz-cbe4rjmigxUxr-FgKHQy3HeCdK6hNq9ASQvMK9LBOpXDNn7mei6RZWom4wo3CMvvsY1w8tjtfLb-yQwJPltHxShZq5-ihC9irpLI9xEBTgG12q5lGIFPhTl_7inA1PFK97LuSLnTJzW0bj096v_TMDg7pOWm_zHtF53qbVsI0e3v5nmdKXdFf9BjIARRfVrbxVxiZHjU6zL6jY5QJdh1QCmENoejj_ytspMmGW7yMRxzUqgxcAqOBpVm0b-_mW3HoBdjQ&#34;,
-</span></span><span class="line"><span class="cl">    &#34;e&#34;: &#34;AQAB&#34;
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>RSA 是基于大数分解的加密/签名算法，上述参数中，<code>e</code> 是公钥的模数(modulus)，<code>n</code> 是公钥的指数(exponent)，两个参数都是 base64 字符串。</p>
-<p>JWK 中 RSA 公钥的具体定义参见 <a href="https://tools.ietf.org/html/rfc7518#page-30" target="_blank" rel="noopener noreffer">RSA Keys - JSON Web Algorithms (JWA)</a></p>
-<h3 id="2-jwk-的生成" class="headerLink">
-    <a href="#2-jwk-%e7%9a%84%e7%94%9f%e6%88%90" class="header-mark"></a>2. JWK 的生成</h3><p>要生成 JWK 公钥，需要先生成私钥，生成方法参见 <a href="/posts/jwt-algorithm-key-generation/#使用-openssl-生成-rsaecc-公私钥" rel="">JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a>。</p>
-<blockquote>
-<p>公钥不需要用上述方法生成，因为我们需要的是 JWK 格式的公钥。后面会通过 python 生成出 JWK 公钥。</p>
-</blockquote>
-<p>上面的命令会将生成出的 RSA 私钥写入 key.pem 中，查看一下私钥内容。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ryan@RYAN-MI-DESKTOP:~/istio$ cat key.pem
-</span></span><span class="line"><span class="cl">-----BEGIN RSA PRIVATE KEY-----
-</span></span><span class="line"><span class="cl">MIIEpAIBAAKCAQEAt1cKkQqPh8iOv5BhKh7Rx6A2+1ldpO/jczML/0GBKu4X+lHr
-</span></span><span class="line"><span class="cl">Y8YbJrt29jyAXlWM8vHC7tXsqgUG+WziRD0D8nhnh10XC14SeH+3mVuBqph+TqhX
-</span></span><span class="line"><span class="cl">TWsh9gtAIbeUHJjEI4I79QK4/wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAy
-</span></span><span class="line"><span class="cl">Y35kJZgyJSbrxLsEExL2zujUD/OY+/In2bq/3rFtDGNlgHyC7Gu2zXSXvfOA4O5m
-</span></span><span class="line"><span class="cl">9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4+9q7sc3Dnkc5
-</span></span><span class="line"><span class="cl">EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxwIDAQABAoIBABIKhaaqJF+XM7zU
-</span></span><span class="line"><span class="cl">B0uuxrPfJynqrFVbqcUfQ9H1bzF7Rm7CeuhRiUBxeA5Y+8TMpFcPxT/dWzGL1xja
-</span></span><span class="line"><span class="cl">RxWx715/zKg8V9Uth6HF55o2r/bKlLtGw3iBz1C34LKwrul1eu+HlEDS6MNoGKco
-</span></span><span class="line"><span class="cl">BynE0qvFOedsCu/Pgv7xhQPLow60Ty1uM0AhbcPgi6yJ5ksRB1XjtEnW0t+c8yQS
-</span></span><span class="line"><span class="cl">nU3mU8k230SdMhf4Ifud/5TPLjmXdFpyPi9uYiVdJ5oWsmMWEvekXoBnHWDDF/eT
-</span></span><span class="line"><span class="cl">VkVMiTBorT4qn+Ax1VjHL2VOMO5ZbXEcpbIc3Uer7eZAaDQ0NPZK37IkIn9TiZ21
-</span></span><span class="line"><span class="cl">cqzgbCkCgYEA5enHZbD5JgfwSNWCaiNrcBhYjpCtvfbT82yGW+J4/Qe/H+bY/hmJ
-</span></span><span class="line"><span class="cl">RRTKf0kVPdRwZzq7GphVMWIuezbOk0aFGhk/SzIveW8QpLY0FV/5xFnGNjV9AuNc
-</span></span><span class="line"><span class="cl">xrmgVshUsyQvr1TFkbdkC6yuvNgQfXfnbEoaPsXYEMCii2zqdF5lWGUCgYEAzCR2
-</span></span><span class="line"><span class="cl">6g8vEQx0hdRS5d0zD2/9IRYNzfP5oK0+F3KHH2OuwlmQVIo7IhCiUgqserXNBDef
-</span></span><span class="line"><span class="cl">hj+GNcU8O/yXLomAXG7VG/cLWRrpY8d9bcRMrwb0/SkNr0yNrkqHiWQ/PvR+2MLk
-</span></span><span class="line"><span class="cl">viWFZTTp8YizPA+8pSC/oFd1jkZF0UhKVAREM7sCgYB5+mfxyczFopyW58ADM7uC
-</span></span><span class="line"><span class="cl">g0goixXCnTuiAEfgY+0wwXVjJYSme0HaxscQdOOyJA1ml0BBQeShCKgEcvVyKY3g
-</span></span><span class="line"><span class="cl">ZNixunR5hrVbzdcgKAVJaR/CDuq+J4ZHYKByqmJVkLND4EPZpWSM1Rb31eIZzw2W
-</span></span><span class="line"><span class="cl">5FG8UBbr/GfAdQ6GorY+CQKBgQCzWQHkBmz6VG/2t6AQ9LIMSP4hWEfOfh78q9dW
-</span></span><span class="line"><span class="cl">MDdIO4JomtkzfLIQ7n49B8WalShGITwUbLDTgrG1neeQahsMmg6+X99nbD5JfBTV
-</span></span><span class="line"><span class="cl">H9WjG8CWvb+ZF++NhUroSNtLyu+6LhdaeopkbQVvPwMArG62wDu6ebv8v/5MrG8o
-</span></span><span class="line"><span class="cl">uwrUSwKBgQCxV43ZqTRnEuDlF7jMN+2JZWhpbrucTG5INoMPOC0ZVatePszZjYm8
-</span></span><span class="line"><span class="cl">LrmqQZHer2nqtFpyslwgKMWgmVLJTH7sVf0hS9po0+iSYY/r8e/c85UdUreb0xyT
-</span></span><span class="line"><span class="cl">x8whrOnMMODCAqu4W/Rx1Lgf2vXIx0pZmlt8Df9i2AVg/ePR6jO3Nw==
-</span></span><span class="line"><span class="cl">-----END RSA PRIVATE KEY-----
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>接下来通过 Python 编程生成 RSA Public Key 和 JWK（jwk 其实就是公钥的另一个表述形式而已）:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 需要先安装依赖: pip install jwcrypto</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">jwcrypto.jwk</span> <span class="kn">import</span> <span class="n">JWK</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">private_key</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&#34;key.pem&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">jwk</span> <span class="o">=</span> <span class="n">JWK</span><span class="o">.</span><span class="n">from_pem</span><span class="p">(</span><span class="n">private_key</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 导出公钥 RSA Public Key</span>
-</span></span><span class="line"><span class="cl"><span class="n">public_key</span> <span class="o">=</span> <span class="n">jwk</span><span class="o">.</span><span class="n">public</span><span class="p">()</span><span class="o">.</span><span class="n">export_to_pem</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">public_key</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;=&#34;</span><span class="o">*</span><span class="mi">30</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 导出 JWK</span>
-</span></span><span class="line"><span class="cl"><span class="n">jwk_bytes</span> <span class="o">=</span> <span class="n">jwk</span><span class="o">.</span><span class="n">public</span><span class="p">()</span><span class="o">.</span><span class="n">export</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">jwk_bytes</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Istio 需要 JWK 进行 JWT 验证，而我们手动验证 JWT 时一般需要用到 Public Key. 方便起见，上述代码把这两个都打印了出来。内容如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Public Key 内容，不包含这行注释
-</span></span><span class="line"><span class="cl">-----BEGIN PUBLIC KEY-----
-</span></span><span class="line"><span class="cl">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt1cKkQqPh8iOv5BhKh7R
-</span></span><span class="line"><span class="cl">x6A2+1ldpO/jczML/0GBKu4X+lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG+WziRD0D
-</span></span><span class="line"><span class="cl">8nhnh10XC14SeH+3mVuBqph+TqhXTWsh9gtAIbeUHJjEI4I79QK4/wquPHHIGZBQ
-</span></span><span class="line"><span class="cl">DQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD/OY+/In2bq/
-</span></span><span class="line"><span class="cl">3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4
-</span></span><span class="line"><span class="cl">KLb6oyvIzoeiprt4+9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ew
-</span></span><span class="line"><span class="cl">xwIDAQAB
-</span></span><span class="line"><span class="cl">-----END PUBLIC KEY-----
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># jwk 内容
-</span></span><span class="line"><span class="cl">{
-</span></span><span class="line"><span class="cl"> &#39;e&#39;: &#39;AQAB&#39;,
-</span></span><span class="line"><span class="cl"> &#39;kid&#39;: &#39;oyYwZSLCLVVPHdVp0jXIcLNpGn6dMCumlY-6wSenmFo&#39;,
-</span></span><span class="line"><span class="cl"> &#39;kty&#39;: &#39;RSA&#39;,
-</span></span><span class="line"><span class="cl"> &#39;n&#39;: &#39;t1cKkQqPh8iOv5BhKh7Rx6A2-1ldpO_jczML_0GBKu4X-lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG-WziRD0D8nhnh10XC14SeH-3mVuBqph-TqhXTWsh9gtAIbeUHJjEI4I79QK4_wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD_OY-_In2bq_3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4-9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxw&#39;
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="4-测试密钥可用性" class="headerLink">
-    <a href="#4-%e6%b5%8b%e8%af%95%e5%af%86%e9%92%a5%e5%8f%af%e7%94%a8%e6%80%a7" class="header-mark"></a>4. 测试密钥可用性</h3><p>接下来在 <a href="https://jwt.io" target="_blank" rel="noopener noreffer">jwt.io</a> 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。
-<figure><img src="/images/use-istio-for-jwt-auth/jwt.io.webp"/>
-</figure>
-</p>
-<p>可以看到左下角显示「Signature Verified」，成功地生成出了 JWT。后续可以使用这个 JWT 访问 Istio 网关，测试 Istio JWT 验证功能。</p>
-<h3 id="5-启用-istio-的身份验证" class="headerLink">
-    <a href="#5-%e5%90%af%e7%94%a8-istio-%e7%9a%84%e8%ba%ab%e4%bb%bd%e9%aa%8c%e8%af%81" class="header-mark"></a>5. 启用 Istio 的身份验证</h3><p>编写 istio 配置：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;security.istio.io/v1beta1&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;RequestAuthentication&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;jwt-example&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">istio-system </span><span class="w"> </span><span class="c"># istio-system 名字空间中的配置，默认情况下会应用到所有名字空间</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">istio</span><span class="p">:</span><span class="w"> </span><span class="l">ingressgateway </span><span class="w"> </span><span class="c"># 在带有这些 labels 的 ingressgateway/sidecar 上生效</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">jwtRules</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># issuer 即签发者，需要和 JWT payload 中的 iss 属性完全一致。</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">issuer</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;testing@secure.istio.io&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">jwks</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">    {
-</span></span></span><span class="line"><span class="cl"><span class="sd">        &#34;keys&#34;: [
-</span></span></span><span class="line"><span class="cl"><span class="sd">            {
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;e&#34;: &#34;AQAB&#34;,
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;kid&#34;: &#34;oyYwZSLCLVVPHdVp0jXIcLNpGn6dMCumlY-6wSenmFo&#34;,  # kid 需要与 jwt header 中的 kid 完全一致。
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;kty&#34;: &#34;RSA&#34;,
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;n&#34;: &#34;t1cKkQqPh8iOv5BhKh7Rx6A2-1ldpO_jczML_0GBKu4X-lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG-WziRD0D8nhnh10XC14SeH-3mVuBqph-TqhXTWsh9gtAIbeUHJjEI4I79QK4_wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD_OY-_In2bq_3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4-9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxw&#34;
-</span></span></span><span class="line"><span class="cl"><span class="sd">            }
-</span></span></span><span class="line"><span class="cl"><span class="sd">        ]
-</span></span></span><span class="line"><span class="cl"><span class="sd">    }
-</span></span></span><span class="line"><span class="cl"><span class="sd">      # jwks 或 jwksUri 二选其一
-</span></span></span><span class="line"><span class="cl"><span class="sd">      # jwksUri: &#34;http://nginx.test.local/istio/jwks.json&#34;</span><span class="w">    
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>现在 <code>kubectl apply</code> 一下，JWT 验证就添加到全局了。</p>
-<p>可以看到 jwtRules 是一个列表，因此可以为每个 issuers 配置不同的 jwtRule.</p>
-<p>对同一个 issuers（jwt 签发者），可以通过 jwks 设置多个公钥，以实现JWT签名密钥的轮转。
-JWT 的验证规则是：</p>
-<ol>
-<li>JWT 的 payload 中有 issuer 属性，首先通过 issuer 匹配到对应的 istio 中配置的 jwks。</li>
-<li>JWT 的 header 中有 kid 属性，第二步在 jwks 的公钥列表中，中找到 kid 相同的公钥。</li>
-<li>使用找到的公钥进行 JWT 签名验证。</li>
-</ol>
-<blockquote>
-<p>配置中的 <code>spec.selector</code> 可以省略，这样会直接在整个 namespace 中生效，而如果是在 <code>istio-system</code> 名字空间，该配置将在全集群的所有 sidecar/ingressgateway 上生效！</p>
-</blockquote>
-<h3 id="6-启用-payload-转发authorization-转发" class="headerLink">
-    <a href="#6-%e5%90%af%e7%94%a8-payload-%e8%bd%ac%e5%8f%91authorization-%e8%bd%ac%e5%8f%91" class="header-mark"></a>6. 启用 Payload 转发/Authorization 转发</h3><p>默认情况下，Istio 在完成了身份验证之后，会去掉 Authorization 请求头再进行转发。
+这里以 RSA256 算法为例进行介绍，ES256 的配置方式也是一样的。"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/use-istio-for-jwt-auth/><link rel=prev href=https://thiscute.world/posts/about-dns-protocol/><link rel=next href=https://thiscute.world/posts/tcpdump-and-wireshark/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"使用 Istio 进行 JWT 身份验证（充当 API 网关）","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/use-istio-for-jwt-auth\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/use-istio-for-jwt-auth\/istio.webp","width":1280,"height":596}],"genre":"posts","keywords":"Kubernetes, Istio, 服务网格","wordcount":2279,"url":"https:\/\/thiscute.world\/posts\/use-istio-for-jwt-auth\/","datePublished":"2020-04-06T21:48:26+08:00","dateModified":"2020-04-06T21:48:26+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark")}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")]</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=# onclick=return!1 class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" id=language-select-desktop onchange="location=this.value"><option value=/posts/use-istio-for-jwt-auth/ selected>Simplified Chinese</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span>
+</span><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=# onclick=return!1 class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" onchange="location=this.value"><option value=/posts/use-istio-for-jwt-auth/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><ul><li><a href=#1-介绍-jwk-与-jwks>1. 介绍 JWK 与 JWKS</a></li><li><a href=#2-jwk-的生成>2. JWK 的生成</a></li><li><a href=#4-测试密钥可用性>4. 测试密钥可用性</a></li><li><a href=#5-启用-istio-的身份验证>5. 启用 Istio 的身份验证</a></li><li><a href=#6-启用-payload-转发authorization-转发>6. 启用 Payload 转发/Authorization 转发</a></li><li><a href=#7-设定强制认证规则>7. 设定强制认证规则</a></li><li><a href=#8-response-headers>8. Response Headers</a></li></ul></li><li><a href=#参考>参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">使用 Istio 进行 JWT 身份验证（充当 API 网关）</h1><div class=post-meta><div class=post-meta-line><span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreffer author" class=author>ryan4yin</a>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-04-06>2020-04-06</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2020-04-06>2020-04-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2279 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload data-src=/posts/use-istio-for-jwt-auth/istio.webp data-srcset="/posts/use-istio-for-jwt-auth/istio.webp, /posts/use-istio-for-jwt-auth/istio.webp 1.5x, /posts/use-istio-for-jwt-auth/istio.webp 2x" data-sizes=auto alt=/posts/use-istio-for-jwt-auth/istio.webp title=/posts/use-istio-for-jwt-auth/istio.webp height=596 width=1280></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#1-介绍-jwk-与-jwks>1. 介绍 JWK 与 JWKS</a></li><li><a href=#2-jwk-的生成>2. JWK 的生成</a></li><li><a href=#4-测试密钥可用性>4. 测试密钥可用性</a></li><li><a href=#5-启用-istio-的身份验证>5. 启用 Istio 的身份验证</a></li><li><a href=#6-启用-payload-转发authorization-转发>6. 启用 Payload 转发/Authorization 转发</a></li><li><a href=#7-设定强制认证规则>7. 设定强制认证规则</a></li><li><a href=#8-response-headers>8. Response Headers</a></li></ul></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><blockquote><p>本文基于 Istio1.5 编写测试</p></blockquote><p>Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。</p><p>目前主流的 JWT 算法是 RS256/ES256。（请忽略 HS256，该算法不适合分布式 JWT 验证）</p><p>这里以 RSA256 算法为例进行介绍，ES256 的配置方式也是一样的。</p><h3 id=1-介绍-jwk-与-jwks class=headerLink><a href=#1-%e4%bb%8b%e7%bb%8d-jwk-%e4%b8%8e-jwks class=header-mark></a>1. 介绍 JWK 与 JWKS</h3><p>Istio 要求提供 JWKS 格式的信息，用于 JWT 签名验证。因此这里得先介绍一下 JWK 和 JWKS.</p><p>JWKS ，也就是 JWK Set，json 结构如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>&#34;keys&#34;: [
+</span></span><span class=line><span class=cl>  &lt;jwk-1&gt;,
+</span></span><span class=line><span class=cl>  &lt;jwk-2&gt;,
+</span></span><span class=line><span class=cl>  ...
+</span></span><span class=line><span class=cl>]}
+</span></span></code></pre></td></tr></table></div></div><p>JWKS 描述一组 JWK 密钥。它能同时描述多个可用的公钥，应用场景之一是密钥的 Rotate.</p><p>而 JWK，全称是 Json Web Key，它描述了一个加密密钥（公钥或私钥）的各项属性，包括密钥的值。</p><p>Istio 使用 JWK 描述验证 JWT 签名所需要的信息。在使用 RSA 签名算法时，JWK 描述的应该是用于验证的 RSA 公钥。</p><p>一个 RSA 公钥的 JWK 描述如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>    &#34;alg&#34;: &#34;RS256&#34;,  # 算法「可选参数」
+</span></span><span class=line><span class=cl>    &#34;kty&#34;: &#34;RSA&#34;,    # 密钥类型
+</span></span><span class=line><span class=cl>    &#34;use&#34;: &#34;sig&#34;,    # 被用于签名「可选参数」
+</span></span><span class=line><span class=cl>    &#34;kid&#34;: &#34;NjVBRjY5MDlCMUIwNzU4RTA2QzZFMDQ4QzQ2MDAyQjVDNjk1RTM2Qg&#34;,  # key 的唯一 id
+</span></span><span class=line><span class=cl>    &#34;n&#34;: &#34;yeNlzlub94YgerT030codqEztjfU_S6X4DbDA_iVKkjAWtYfPHDzz_sPCT1Axz6isZdf3lHpq_gYX4Sz-cbe4rjmigxUxr-FgKHQy3HeCdK6hNq9ASQvMK9LBOpXDNn7mei6RZWom4wo3CMvvsY1w8tjtfLb-yQwJPltHxShZq5-ihC9irpLI9xEBTgG12q5lGIFPhTl_7inA1PFK97LuSLnTJzW0bj096v_TMDg7pOWm_zHtF53qbVsI0e3v5nmdKXdFf9BjIARRfVrbxVxiZHjU6zL6jY5QJdh1QCmENoejj_ytspMmGW7yMRxzUqgxcAqOBpVm0b-_mW3HoBdjQ&#34;,
+</span></span><span class=line><span class=cl>    &#34;e&#34;: &#34;AQAB&#34;
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></td></tr></table></div></div><p>RSA 是基于大数分解的加密/签名算法，上述参数中，<code>e</code> 是公钥的模数(modulus)，<code>n</code> 是公钥的指数(exponent)，两个参数都是 base64 字符串。</p><p>JWK 中 RSA 公钥的具体定义参见 <a href=https://tools.ietf.org/html/rfc7518#page-30 target=_blank rel="noopener noreffer">RSA Keys - JSON Web Algorithms (JWA)</a></p><h3 id=2-jwk-的生成 class=headerLink><a href=#2-jwk-%e7%9a%84%e7%94%9f%e6%88%90 class=header-mark></a>2. JWK 的生成</h3><p>要生成 JWK 公钥，需要先生成私钥，生成方法参见 <a href=/posts/jwt-algorithm-key-generation/#使用-openssl-生成-rsaecc-公私钥 rel>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</a>。</p><blockquote><p>公钥不需要用上述方法生成，因为我们需要的是 JWK 格式的公钥。后面会通过 python 生成出 JWK 公钥。</p></blockquote><p>上面的命令会将生成出的 RSA 私钥写入 key.pem 中，查看一下私钥内容。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>ryan@RYAN-MI-DESKTOP:~/istio$ cat key.pem
+</span></span><span class=line><span class=cl>-----BEGIN RSA PRIVATE KEY-----
+</span></span><span class=line><span class=cl>MIIEpAIBAAKCAQEAt1cKkQqPh8iOv5BhKh7Rx6A2+1ldpO/jczML/0GBKu4X+lHr
+</span></span><span class=line><span class=cl>Y8YbJrt29jyAXlWM8vHC7tXsqgUG+WziRD0D8nhnh10XC14SeH+3mVuBqph+TqhX
+</span></span><span class=line><span class=cl>TWsh9gtAIbeUHJjEI4I79QK4/wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAy
+</span></span><span class=line><span class=cl>Y35kJZgyJSbrxLsEExL2zujUD/OY+/In2bq/3rFtDGNlgHyC7Gu2zXSXvfOA4O5m
+</span></span><span class=line><span class=cl>9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4+9q7sc3Dnkc5
+</span></span><span class=line><span class=cl>EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxwIDAQABAoIBABIKhaaqJF+XM7zU
+</span></span><span class=line><span class=cl>B0uuxrPfJynqrFVbqcUfQ9H1bzF7Rm7CeuhRiUBxeA5Y+8TMpFcPxT/dWzGL1xja
+</span></span><span class=line><span class=cl>RxWx715/zKg8V9Uth6HF55o2r/bKlLtGw3iBz1C34LKwrul1eu+HlEDS6MNoGKco
+</span></span><span class=line><span class=cl>BynE0qvFOedsCu/Pgv7xhQPLow60Ty1uM0AhbcPgi6yJ5ksRB1XjtEnW0t+c8yQS
+</span></span><span class=line><span class=cl>nU3mU8k230SdMhf4Ifud/5TPLjmXdFpyPi9uYiVdJ5oWsmMWEvekXoBnHWDDF/eT
+</span></span><span class=line><span class=cl>VkVMiTBorT4qn+Ax1VjHL2VOMO5ZbXEcpbIc3Uer7eZAaDQ0NPZK37IkIn9TiZ21
+</span></span><span class=line><span class=cl>cqzgbCkCgYEA5enHZbD5JgfwSNWCaiNrcBhYjpCtvfbT82yGW+J4/Qe/H+bY/hmJ
+</span></span><span class=line><span class=cl>RRTKf0kVPdRwZzq7GphVMWIuezbOk0aFGhk/SzIveW8QpLY0FV/5xFnGNjV9AuNc
+</span></span><span class=line><span class=cl>xrmgVshUsyQvr1TFkbdkC6yuvNgQfXfnbEoaPsXYEMCii2zqdF5lWGUCgYEAzCR2
+</span></span><span class=line><span class=cl>6g8vEQx0hdRS5d0zD2/9IRYNzfP5oK0+F3KHH2OuwlmQVIo7IhCiUgqserXNBDef
+</span></span><span class=line><span class=cl>hj+GNcU8O/yXLomAXG7VG/cLWRrpY8d9bcRMrwb0/SkNr0yNrkqHiWQ/PvR+2MLk
+</span></span><span class=line><span class=cl>viWFZTTp8YizPA+8pSC/oFd1jkZF0UhKVAREM7sCgYB5+mfxyczFopyW58ADM7uC
+</span></span><span class=line><span class=cl>g0goixXCnTuiAEfgY+0wwXVjJYSme0HaxscQdOOyJA1ml0BBQeShCKgEcvVyKY3g
+</span></span><span class=line><span class=cl>ZNixunR5hrVbzdcgKAVJaR/CDuq+J4ZHYKByqmJVkLND4EPZpWSM1Rb31eIZzw2W
+</span></span><span class=line><span class=cl>5FG8UBbr/GfAdQ6GorY+CQKBgQCzWQHkBmz6VG/2t6AQ9LIMSP4hWEfOfh78q9dW
+</span></span><span class=line><span class=cl>MDdIO4JomtkzfLIQ7n49B8WalShGITwUbLDTgrG1neeQahsMmg6+X99nbD5JfBTV
+</span></span><span class=line><span class=cl>H9WjG8CWvb+ZF++NhUroSNtLyu+6LhdaeopkbQVvPwMArG62wDu6ebv8v/5MrG8o
+</span></span><span class=line><span class=cl>uwrUSwKBgQCxV43ZqTRnEuDlF7jMN+2JZWhpbrucTG5INoMPOC0ZVatePszZjYm8
+</span></span><span class=line><span class=cl>LrmqQZHer2nqtFpyslwgKMWgmVLJTH7sVf0hS9po0+iSYY/r8e/c85UdUreb0xyT
+</span></span><span class=line><span class=cl>x8whrOnMMODCAqu4W/Rx1Lgf2vXIx0pZmlt8Df9i2AVg/ePR6jO3Nw==
+</span></span><span class=line><span class=cl>-----END RSA PRIVATE KEY-----
+</span></span></code></pre></td></tr></table></div></div><p>接下来通过 Python 编程生成 RSA Public Key 和 JWK（jwk 其实就是公钥的另一个表述形式而已）:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 需要先安装依赖: pip install jwcrypto</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>jwcrypto.jwk</span> <span class=kn>import</span> <span class=n>JWK</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pathlib</span> <span class=kn>import</span> <span class=n>Path</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>private_key</span> <span class=o>=</span> <span class=n>Path</span><span class=p>(</span><span class=s2>&#34;key.pem&#34;</span><span class=p>)</span><span class=o>.</span><span class=n>read_bytes</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>jwk</span> <span class=o>=</span> <span class=n>JWK</span><span class=o>.</span><span class=n>from_pem</span><span class=p>(</span><span class=n>private_key</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 导出公钥 RSA Public Key</span>
+</span></span><span class=line><span class=cl><span class=n>public_key</span> <span class=o>=</span> <span class=n>jwk</span><span class=o>.</span><span class=n>public</span><span class=p>()</span><span class=o>.</span><span class=n>export_to_pem</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>public_key</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;=&#34;</span><span class=o>*</span><span class=mi>30</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 导出 JWK</span>
+</span></span><span class=line><span class=cl><span class=n>jwk_bytes</span> <span class=o>=</span> <span class=n>jwk</span><span class=o>.</span><span class=n>public</span><span class=p>()</span><span class=o>.</span><span class=n>export</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>jwk_bytes</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Istio 需要 JWK 进行 JWT 验证，而我们手动验证 JWT 时一般需要用到 Public Key. 方便起见，上述代码把这两个都打印了出来。内容如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># Public Key 内容，不包含这行注释
+</span></span><span class=line><span class=cl>-----BEGIN PUBLIC KEY-----
+</span></span><span class=line><span class=cl>MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt1cKkQqPh8iOv5BhKh7R
+</span></span><span class=line><span class=cl>x6A2+1ldpO/jczML/0GBKu4X+lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG+WziRD0D
+</span></span><span class=line><span class=cl>8nhnh10XC14SeH+3mVuBqph+TqhXTWsh9gtAIbeUHJjEI4I79QK4/wquPHHIGZBQ
+</span></span><span class=line><span class=cl>DQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD/OY+/In2bq/
+</span></span><span class=line><span class=cl>3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4
+</span></span><span class=line><span class=cl>KLb6oyvIzoeiprt4+9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ew
+</span></span><span class=line><span class=cl>xwIDAQAB
+</span></span><span class=line><span class=cl>-----END PUBLIC KEY-----
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># jwk 内容
+</span></span><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl> &#39;e&#39;: &#39;AQAB&#39;,
+</span></span><span class=line><span class=cl> &#39;kid&#39;: &#39;oyYwZSLCLVVPHdVp0jXIcLNpGn6dMCumlY-6wSenmFo&#39;,
+</span></span><span class=line><span class=cl> &#39;kty&#39;: &#39;RSA&#39;,
+</span></span><span class=line><span class=cl> &#39;n&#39;: &#39;t1cKkQqPh8iOv5BhKh7Rx6A2-1ldpO_jczML_0GBKu4X-lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG-WziRD0D8nhnh10XC14SeH-3mVuBqph-TqhXTWsh9gtAIbeUHJjEI4I79QK4_wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD_OY-_In2bq_3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4-9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxw&#39;
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></td></tr></table></div></div><h3 id=4-测试密钥可用性 class=headerLink><a href=#4-%e6%b5%8b%e8%af%95%e5%af%86%e9%92%a5%e5%8f%af%e7%94%a8%e6%80%a7 class=header-mark></a>4. 测试密钥可用性</h3><p>接下来在 <a href=https://jwt.io target=_blank rel="noopener noreffer">jwt.io</a> 中填入测试用的公钥私钥，还有 Header/Payload。一是测试公私钥的可用性，二是生成出 JWT 供后续测试 Istio JWT 验证功能的可用性。<figure><img src=/images/use-istio-for-jwt-auth/jwt.io.webp></figure></p><p>可以看到左下角显示「Signature Verified」，成功地生成出了 JWT。后续可以使用这个 JWT 访问 Istio 网关，测试 Istio JWT 验证功能。</p><h3 id=5-启用-istio-的身份验证 class=headerLink><a href=#5-%e5%90%af%e7%94%a8-istio-%e7%9a%84%e8%ba%ab%e4%bb%bd%e9%aa%8c%e8%af%81 class=header-mark></a>5. 启用 Istio 的身份验证</h3><p>编写 istio 配置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;security.istio.io/v1beta1&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;RequestAuthentication&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;jwt-example&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>istio-system </span><span class=w> </span><span class=c># istio-system 名字空间中的配置，默认情况下会应用到所有名字空间</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>istio</span><span class=p>:</span><span class=w> </span><span class=l>ingressgateway </span><span class=w> </span><span class=c># 在带有这些 labels 的 ingressgateway/sidecar 上生效</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>jwtRules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># issuer 即签发者，需要和 JWT payload 中的 iss 属性完全一致。</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>issuer</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;testing@secure.istio.io&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>jwks</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>    {
+</span></span></span><span class=line><span class=cl><span class=sd>        &#34;keys&#34;: [
+</span></span></span><span class=line><span class=cl><span class=sd>            {
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;e&#34;: &#34;AQAB&#34;,
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;kid&#34;: &#34;oyYwZSLCLVVPHdVp0jXIcLNpGn6dMCumlY-6wSenmFo&#34;,  # kid 需要与 jwt header 中的 kid 完全一致。
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;kty&#34;: &#34;RSA&#34;,
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;n&#34;: &#34;t1cKkQqPh8iOv5BhKh7Rx6A2-1ldpO_jczML_0GBKu4X-lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG-WziRD0D8nhnh10XC14SeH-3mVuBqph-TqhXTWsh9gtAIbeUHJjEI4I79QK4_wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD_OY-_In2bq_3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4-9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxw&#34;
+</span></span></span><span class=line><span class=cl><span class=sd>            }
+</span></span></span><span class=line><span class=cl><span class=sd>        ]
+</span></span></span><span class=line><span class=cl><span class=sd>    }
+</span></span></span><span class=line><span class=cl><span class=sd>      # jwks 或 jwksUri 二选其一
+</span></span></span><span class=line><span class=cl><span class=sd>      # jwksUri: &#34;http://nginx.test.local/istio/jwks.json&#34;</span><span class=w>    
+</span></span></span></code></pre></td></tr></table></div></div><p>现在 <code>kubectl apply</code> 一下，JWT 验证就添加到全局了。</p><p>可以看到 jwtRules 是一个列表，因此可以为每个 issuers 配置不同的 jwtRule.</p><p>对同一个 issuers（jwt 签发者），可以通过 jwks 设置多个公钥，以实现JWT签名密钥的轮转。
+JWT 的验证规则是：</p><ol><li>JWT 的 payload 中有 issuer 属性，首先通过 issuer 匹配到对应的 istio 中配置的 jwks。</li><li>JWT 的 header 中有 kid 属性，第二步在 jwks 的公钥列表中，中找到 kid 相同的公钥。</li><li>使用找到的公钥进行 JWT 签名验证。</li></ol><blockquote><p>配置中的 <code>spec.selector</code> 可以省略，这样会直接在整个 namespace 中生效，而如果是在 <code>istio-system</code> 名字空间，该配置将在全集群的所有 sidecar/ingressgateway 上生效！</p></blockquote><h3 id=6-启用-payload-转发authorization-转发 class=headerLink><a href=#6-%e5%90%af%e7%94%a8-payload-%e8%bd%ac%e5%8f%91authorization-%e8%bd%ac%e5%8f%91 class=header-mark></a>6. 启用 Payload 转发/Authorization 转发</h3><p>默认情况下，Istio 在完成了身份验证之后，会去掉 Authorization 请求头再进行转发。
 这将导致我们的后端服务获取不到对应的 Payload，无法判断 End User 的身份。
-因此我们需要启用 Istio 的 Authorization 请求头的转发功能，在前述的 <code>RequestAuthentication</code> yaml 配置中添加一个参数就行：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;security.istio.io/v1beta1&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;RequestAuthentication&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;jwt-example&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">istio-system</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">istio</span><span class="p">:</span><span class="w"> </span><span class="l">ingressgateway</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">jwtRules</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">issuer</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;testing@secure.istio.io&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">jwks</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">    {
-</span></span></span><span class="line"><span class="cl"><span class="sd">        &#34;keys&#34;: [
-</span></span></span><span class="line"><span class="cl"><span class="sd">            {
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;e&#34;: &#34;AQAB&#34;,
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;kid&#34;: &#34;oyYwZSLCLVVPHdVp0jXIcLNpGn6dMCumlY-6wSenmFo&#34;,
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;kty&#34;: &#34;RSA&#34;,
-</span></span></span><span class="line"><span class="cl"><span class="sd">                &#34;n&#34;: &#34;t1cKkQqPh8iOv5BhKh7Rx6A2-1ldpO_jczML_0GBKu4X-lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG-WziRD0D8nhnh10XC14SeH-3mVuBqph-TqhXTWsh9gtAIbeUHJjEI4I79QK4_wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD_OY-_In2bq_3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4-9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxw&#34;
-</span></span></span><span class="line"><span class="cl"><span class="sd">            }
-</span></span></span><span class="line"><span class="cl"><span class="sd">        ]
-</span></span></span><span class="line"><span class="cl"><span class="sd">    }</span><span class="w">    
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ===================== 添加如下参数===========================</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">forwardOriginalToken</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c"># 转发 Authorization 请求头</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>加了转发后，流程图如下（需要 mermaid 渲染）：</p>
-<div class="mermaid" id="id-1"></div>
-<h3 id="7-设定强制认证规则" class="headerLink">
-    <a href="#7-%e8%ae%be%e5%ae%9a%e5%bc%ba%e5%88%b6%e8%ae%a4%e8%af%81%e8%a7%84%e5%88%99" class="header-mark"></a>7. 设定强制认证规则</h3><p>Istio 的 JWT 验证规则，默认情况下会直接忽略不带 Authorization 请求头（即 JWT）的流量，因此这类流量能直接进入网格内部。
+因此我们需要启用 Istio 的 Authorization 请求头的转发功能，在前述的 <code>RequestAuthentication</code> yaml 配置中添加一个参数就行：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;security.istio.io/v1beta1&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;RequestAuthentication&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;jwt-example&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>istio-system</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>istio</span><span class=p>:</span><span class=w> </span><span class=l>ingressgateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>jwtRules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>issuer</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;testing@secure.istio.io&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>jwks</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>    {
+</span></span></span><span class=line><span class=cl><span class=sd>        &#34;keys&#34;: [
+</span></span></span><span class=line><span class=cl><span class=sd>            {
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;e&#34;: &#34;AQAB&#34;,
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;kid&#34;: &#34;oyYwZSLCLVVPHdVp0jXIcLNpGn6dMCumlY-6wSenmFo&#34;,
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;kty&#34;: &#34;RSA&#34;,
+</span></span></span><span class=line><span class=cl><span class=sd>                &#34;n&#34;: &#34;t1cKkQqPh8iOv5BhKh7Rx6A2-1ldpO_jczML_0GBKu4X-lHrY8YbJrt29jyAXlWM8vHC7tXsqgUG-WziRD0D8nhnh10XC14SeH-3mVuBqph-TqhXTWsh9gtAIbeUHJjEI4I79QK4_wquPHHIGZBQDQQnuMh6vAS3VaUYJdEIoKvUBnAyY35kJZgyJSbrxLsEExL2zujUD_OY-_In2bq_3rFtDGNlgHyC7Gu2zXSXvfOA4O5m9BBXOc7eEqj7PoOKNaTxLN3YcuRtgR6NIXL4KLb6oyvIzoeiprt4-9q7sc3Dnkc5EV9kwWlEW2DHzhP6VYca0WXIIXc53U1AM3ewxw&#34;
+</span></span></span><span class=line><span class=cl><span class=sd>            }
+</span></span></span><span class=line><span class=cl><span class=sd>        ]
+</span></span></span><span class=line><span class=cl><span class=sd>    }</span><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># ===================== 添加如下参数===========================</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>forwardOriginalToken</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>  </span><span class=c># 转发 Authorization 请求头</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>加了转发后，流程图如下（需要 mermaid 渲染）：</p><div class=mermaid id=id-1></div><h3 id=7-设定强制认证规则 class=headerLink><a href=#7-%e8%ae%be%e5%ae%9a%e5%bc%ba%e5%88%b6%e8%ae%a4%e8%af%81%e8%a7%84%e5%88%99 class=header-mark></a>7. 设定强制认证规则</h3><p>Istio 的 JWT 验证规则，默认情况下会直接忽略不带 Authorization 请求头（即 JWT）的流量，因此这类流量能直接进入网格内部。
 通常这是没问题的，因为没有 Authorization 的流量即使进入到内部，也会因为无法通过 payload 判别身份而被拒绝操作。
-如果需要禁止不带 JWT 的流量，就需要额外配置 AuthorizationPolicy 策略。</p>
-<p>比如拒绝任何 JWT 无效的请求（包括 Authorization 的情况）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">security.istio.io/v1beta1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">AuthorizationPolicy</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;deny-requests-with-out-authorization&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">istio-system</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">istio</span><span class="p">:</span><span class="w"> </span><span class="l">ingressgateway</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l">DENY</span><span class="w"> </span><span class="c"># 拒绝</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">from</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">source</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">notRequestPrincipals</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;*&#34;</span><span class="p">]</span><span class="w">  </span><span class="c"># 不存在任何请求身份（Principal）的 requests</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>如果仅希望强制要求对部分 path 的请求必须带有 Authorization Header，可以这样设置：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">security.istio.io/v1beta1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">AuthorizationPolicy</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;deny-requests-with-out-authorization&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">istio-system</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">istio</span><span class="p">:</span><span class="w"> </span><span class="l">ingressgateway</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l">DENY</span><span class="w"> </span><span class="c"># 拒绝</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">from</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">source</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">notRequestPrincipals</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;*&#34;</span><span class="p">]</span><span class="w">  </span><span class="c"># 不存在任何请求身份（Principal）的 requests</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 仅强制要求如下 host/path 相关的请求，必须带上 JWT token</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">to</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">operation</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;another-host.com&#34;</span><span class="p">]</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">paths</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;/headers&#34;</span><span class="p">]</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>注意这两个 Istio CR 返回的错误码是不同的：</p>
-<ul>
-<li><strong>RequestsAuthentication 验证失败的请求，Istio 会返回 401 状态码</strong>。</li>
-<li><strong>AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码</strong>。</li>
-</ul>
-<p>这会导致在使用 AuthorizationPolicy 禁止了不带 Authorization 头的流量后，这类请求会直接被返回 403，在使用 RESTful API 时，这种情况可能会造成问题。</p>
-<h3 id="8-response-headers" class="headerLink">
-    <a href="#8-response-headers" class="header-mark"></a>8. Response Headers</h3><p>RequestsAuthentication 不支持自定义响应头信息，这导致对于前后端分离的 Web API 而言，
+如果需要禁止不带 JWT 的流量，就需要额外配置 AuthorizationPolicy 策略。</p><p>比如拒绝任何 JWT 无效的请求（包括 Authorization 的情况）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>security.istio.io/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>AuthorizationPolicy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;deny-requests-with-out-authorization&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>istio-system</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>istio</span><span class=p>:</span><span class=w> </span><span class=l>ingressgateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>action</span><span class=p>:</span><span class=w> </span><span class=l>DENY</span><span class=w> </span><span class=c># 拒绝</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>from</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>source</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>notRequestPrincipals</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;*&#34;</span><span class=p>]</span><span class=w>  </span><span class=c># 不存在任何请求身份（Principal）的 requests</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果仅希望强制要求对部分 path 的请求必须带有 Authorization Header，可以这样设置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>security.istio.io/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>AuthorizationPolicy</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;deny-requests-with-out-authorization&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>istio-system</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>istio</span><span class=p>:</span><span class=w> </span><span class=l>ingressgateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>action</span><span class=p>:</span><span class=w> </span><span class=l>DENY</span><span class=w> </span><span class=c># 拒绝</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>from</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>source</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>notRequestPrincipals</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;*&#34;</span><span class=p>]</span><span class=w>  </span><span class=c># 不存在任何请求身份（Principal）的 requests</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c># 仅强制要求如下 host/path 相关的请求，必须带上 JWT token</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>to</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>operation</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>hosts</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;another-host.com&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>paths</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;/headers&#34;</span><span class=p>]</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>注意这两个 Istio CR 返回的错误码是不同的：</p><ul><li><strong>RequestsAuthentication 验证失败的请求，Istio 会返回 401 状态码</strong>。</li><li><strong>AuthorizationPolicy 验证失败的请求，Istio 会返回 403 状态码</strong>。</li></ul><p>这会导致在使用 AuthorizationPolicy 禁止了不带 Authorization 头的流量后，这类请求会直接被返回 403，在使用 RESTful API 时，这种情况可能会造成问题。</p><h3 id=8-response-headers class=headerLink><a href=#8-response-headers class=header-mark></a>8. Response Headers</h3><p>RequestsAuthentication 不支持自定义响应头信息，这导致对于前后端分离的 Web API 而言，
 一旦 JWT 失效，Istio 会直接将 401 返回给前端 Web 页面。
-因为响应头中不包含 <code>Access-Crontrol-Allow-Origin</code>，响应将被浏览器拦截！</p>
-<p>这可能需要通过 EnvoyFilter 自定义响应头，添加跨域信息。</p>
-<h2 id="参考" class="headerLink">
-    <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
-<li><a href="https://auth0.com/docs/tokens/references/jwks-properties" target="_blank" rel="noopener noreffer">JSON Web Key Set Properties - Auth0</a></li>
-<li><a href="https://tools.ietf.org/html/rfc7517" target="_blank" rel="noopener noreffer">JWK - RFC7517</a></li>
-<li><a href="https://github.com/istio/istio/tree/master/security/tools/jwt/samples" target="_blank" rel="noopener noreffer">Sample JWT and JWKS data for demo - Istio Security</a></li>
-<li><a href="https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication" target="_blank" rel="noopener noreffer">End User Authentication - Istio</a></li>
-<li><a href="https://istio.io/docs/reference/config/security/jwt/" target="_blank" rel="noopener noreffer">JWTRule - Istio</a></li>
-<li><a href="https://jwt.io/" target="_blank" rel="noopener noreffer">jwt.io - 动态生成 jwt</a></li>
-</ul></div>
-
-        <div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>更新于 2020-04-06</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
-        <div class="post-info-line">
-            <div class="post-info-md"></div>
-            <div class="post-info-share">
-                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://thiscute.world/posts/use-istio-for-jwt-auth/" data-title="使用 Istio 进行 JWT 身份验证（充当 API 网关）" data-via="ryan4yin" data-hashtags="Kubernetes,Istio,服务网格"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://thiscute.world/posts/use-istio-for-jwt-auth/" data-hashtag="Kubernetes"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Reddit" data-sharer="reddit" data-url="https://thiscute.world/posts/use-istio-for-jwt-auth/"><i class="fab fa-reddit fa-fw"></i></a></span>
-            </div>
-        </div>
-    </div>
-
-    <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/kubernetes/">Kubernetes</a>,&nbsp;<a href="/tags/istio/">Istio</a>,&nbsp;<a href="/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/">服务网格</a></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
-        </section>
-    </div>
-
-    <div class="post-nav"><a href="/posts/about-dns-protocol/" class="prev" rel="prev" title="Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例"><i class="fas fa-angle-left fa-fw"></i>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</a>
-            <a href="/posts/tcpdump-and-wireshark/" class="next" rel="next" title="使用 tcpdump 和 Wireshark 进行远程实时抓包分析">使用 tcpdump 和 Wireshark 进行远程实时抓包分析<i class="fas fa-angle-right fa-fw"></i></a></div>
-</div>
-<div id="comments"><div id="utterances"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
-            </noscript></div></article></div>
-        </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a href="https://www.foreverblog.cn/" target="_blank"> <img src="https://img.foreverblog.cn/logo_en_default.png" alt="" style="width:auto;height:15px;margin-bottom:5px;"> </a> <a href="https://www.foreverblog.cn/go.html" target="_blank"> <img src="https://img.foreverblog.cn/wormhole_3.gif" alt="" style="width:auto;height:24px;" title="穿梭虫洞-随机访问十年之约友链博客"></a></div><div class="footer-line">
-                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://thiscute.world/" target="_blank" rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-            <div class="footer-line"></div>
-            <div class="footer-line">
-            </div>
-        </div></footer></div>
-
-    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
-            <i class="fas fa-arrow-up fa-fw"></i>
-        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
-            <i class="fas fa-comment fa-fw"></i>
-        </a>
-    </div><div class="assets"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript">
-            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
-            gtag('config', 'G-4V93QVSNFW', { 'anonymize_ip': true });
-        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></div>
-
-<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":30},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"ryan4yin/thiscute.world"}},"data":{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"747LJ10EI7","algoliaIndex":"ryan-space","algoliaSearchKey":"658db5f2bf056f83458cacf5dd58ec80","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"typeit":{"cursorChar":null,"cursorSpeed":null,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":null,"speed":null}};</script><script type="text/javascript" src="/js/utterances.min.js" defer></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
-        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
-</body>
-
-</html>
+因为响应头中不包含 <code>Access-Crontrol-Allow-Origin</code>，响应将被浏览器拦截！</p><p>这可能需要通过 EnvoyFilter 自定义响应头，添加跨域信息。</p><h2 id=参考 class=headerLink><a href=#%e5%8f%82%e8%80%83 class=header-mark></a>参考</h2><ul><li><a href=https://auth0.com/docs/tokens/references/jwks-properties target=_blank rel="noopener noreffer">JSON Web Key Set Properties - Auth0</a></li><li><a href=https://tools.ietf.org/html/rfc7517 target=_blank rel="noopener noreffer">JWK - RFC7517</a></li><li><a href=https://github.com/istio/istio/tree/master/security/tools/jwt/samples target=_blank rel="noopener noreffer">Sample JWT and JWKS data for demo - Istio Security</a></li><li><a href=https://istio.io/docs/tasks/security/authentication/authn-policy/#end-user-authentication target=_blank rel="noopener noreffer">End User Authentication - Istio</a></li><li><a href=https://istio.io/docs/reference/config/security/jwt/ target=_blank rel="noopener noreffer">JWTRule - Istio</a></li><li><a href=https://jwt.io/ target=_blank rel="noopener noreffer">jwt.io - 动态生成 jwt</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-04-06</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=# onclick=return!1 title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/use-istio-for-jwt-auth/ data-title="使用 Istio 进行 JWT 身份验证（充当 API 网关）" data-via=ryan4yin data-hashtags=Kubernetes,Istio,服务网格><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/use-istio-for-jwt-auth/ data-hashtag=Kubernetes><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/use-istio-for-jwt-auth/><i class="fab fa-reddit fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/kubernetes/>Kubernetes</a>,&nbsp;<a href=/tags/istio/>Istio</a>,&nbsp;<a href=/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/>服务网格</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/about-dns-protocol/ class=prev rel=prev title="Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例"><i class="fas fa-angle-left fa-fw"></i>Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS 为例</a>
+<a href=/posts/tcpdump-and-wireshark/ class=next rel=next title="使用 tcpdump 和 Wireshark 进行远程实时抓包分析">使用 tcpdump 和 Wireshark 进行远程实时抓包分析<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=width:auto;height:15px;margin-bottom:5px></a> <a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=width:auto;height:24px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><div class=assets><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/topbar/topbar.min.js></script><script type=text/javascript src=/lib/pjax/pjax.min.js></script><script type=text/javascript src=/js/theme.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></div><div class=pjax-assets><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","id-1":`sequenceDiagram;
+# autonumber
+participant User as 用户
+participant Auth as 授权服务
+participant IG as IngressGateway
+participant SVC as 某服务
+User-\u003e\u003e+Auth: Login
+Auth-\u003e\u003eAuth: 用私钥生成 JWT 签名
+Auth--\u003e\u003e-User: 返回 JWT
+User-\u003e\u003e+IG: 请求信息（带 JWT）
+IG-\u003e\u003eIG: 用公钥验证 JWT 签名
+IG-\u003e\u003e-SVC: 请求信息（转发 JWT）
+SVC--\u003e\u003eIG: 返回信息
+IG--\u003e\u003eUser: 返回信息`,"mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},mermaid:!0,search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js defer></script><script type=text/javascript src=/lib/katex/auto-render.min.js defer></script><script type=text/javascript src=/lib/katex/copy-tex.min.js defer></script><script type=text/javascript src=/lib/katex/mhchem.min.js defer></script><script type=text/javascript src=/js/katex.min.js defer></script><script type=text/javascript src=/lib/mermaid/mermaid.min.js defer></script><script type=text/javascript src=/js/mermaid.min.js defer></script><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><link rel=stylesheet href=/lib/mermaid/mermaid.min.css></div></body></html>
