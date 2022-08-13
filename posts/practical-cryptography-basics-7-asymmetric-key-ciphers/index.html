@@ -340,7 +340,7 @@ $$</p><p>接下来将下面两个等式代入上述计算中：</p><ul><li>我�
 &= &{msg \cdot (msg^{(p-1)(q-1) \cdot k} \mod pq)} &\mod {pq}
 \end{alignedat}
 $$</p><p>又有<a href=https://zh.wikipedia.org/wiki/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86 target=_blank rel="noopener noreffer">费马小定理</a>指出，在 $a$ 为整数，$p$ 为质数的情况下，有同余等式</p><p>$$a^{p-1} \equiv 1 {\pmod p}$$</p><p>因为我们的模数 $n=pq$ 并不是质数，不能直接利用费马小定理给出的同余公式。
-但是 $p$, $q$ 两数都为质数，我们可以分别计算方程 对 $p$ 以及 $q$ 取模的结果，然后再根据<a href=https://zhuanlan.zhihu.com/p/44591114 target=_blank rel="noopener noreffer">中国剩余定理</a>得出通解，也就得到我们需要的结果。</p><p>对于模 $p$ 的情况，计算方法如下：</p><ul><li>当 $msg = 0 \mod p$ 时，${msg^{ed}} \mod p = 0 = m \mod p$</li><li>当 $msg \ne 0 \mod p$ 时，利用费马小定理，有
+但是 $p$, $q$ 两数都为质数，我们可以分别计算方程 对 $p$ 以及 $q$ 取模的结果，然后再根据<a href=https://zhuanlan.zhihu.com/p/44591114 target=_blank rel="noopener noreffer">中国剩余定理</a>得出通解，也就得到我们需要的结果。</p><p>对于模 $p$ 的情况，计算方法如下：</p><ul><li>当 $msg = 0 \mod p$ 时，${msg^{ed}} \mod p = 0 \equiv msg \pmod p$</li><li>当 $msg \ne 0 \mod p$ 时，利用费马小定理，有
 $$
 \begin{alignedat}{2}
 msg^{ed} &= &{msg \cdot (msg^{(p-1)(q-1) \cdot k} \mod p)} &\pmod {p} \\
