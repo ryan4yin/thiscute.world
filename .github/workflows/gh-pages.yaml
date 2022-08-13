@@ -39,15 +39,12 @@ jobs:
           git add data/website_statistics.json
           git commit -m "feat: update website_statistics.json"
           git push
+          git clean -fxd
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.100.1'
+          hugo-version: '0.101.0'
           extended: true  #  need extended version to support SASS/SCSS
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
 
       - name: Build
         run: hugo --minify --ignoreCache --gc
@@ -68,6 +65,10 @@ jobs:
           publish_dir: ./public
           cname: thiscte.world
 
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
       - name: Push Argolia Index
         run: |
           npm install algoliasearch@4.12.1
