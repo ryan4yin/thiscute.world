@@ -49,7 +49,7 @@ jobs:
           extended: true  #  need extended version to support SASS/SCSS
 
       - name: Build
-        run: hugo --printPathWarnings --debug --printUnusedTemplates --log
+        run: hugo --minify --debug --printUnusedTemplates
       
       # - name: Upload to Azure Blob Storage(similar to aws S3 object storage)
       #   uses: bacongobbler/azure-blob-storage-upload@v2.0.0
@@ -60,12 +60,12 @@ jobs:
       #     sync: 'true'
 
       # 自动构建出的 pages 目前有问题，mermaid 等 shortcodes 无法正常加载，先不 push
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          cname: thiscte.world
+      # - name: Deploy
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./public
+      #     cname: thiscte.world
 
       - name: Use Node.js
         uses: actions/setup-node@v3
