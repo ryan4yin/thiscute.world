@@ -61,12 +61,12 @@ jobs:
       #     sync: 'true'
 
       # 自动构建出的 pages 目前有问题，mermaid 等 shortcodes 无法正常加载，先不 push
-      # - name: Deploy
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./public
-      #     cname: thiscte.world
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          cname: thiscte.world
 
       - name: Push Argolia Index
         run: |
