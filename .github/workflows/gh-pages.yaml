@@ -49,7 +49,7 @@ jobs:
           extended: true  #  need extended version to support SASS/SCSS
 
       - name: Build
-        run: hugo --minify
+        run: hugo --printPathWarnings --debug --printUnusedTemplates --log
       
       # - name: Upload to Azure Blob Storage(similar to aws S3 object storage)
       #   uses: bacongobbler/azure-blob-storage-upload@v2.0.0
