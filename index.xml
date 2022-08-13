@@ -9768,10 +9768,14 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-13T14:05UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-13T14:10UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
+
+
+
+
 
 
 
@@ -9931,7 +9935,7 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>262968</td>
+            <td>267929</td>
             <td style="color:tomato;"><strong>31571</strong></td>
             <td>78272</td>
             <td>27 days, 12h 04m 09s</td>
@@ -31894,6 +31898,329 @@ HAVING 子句和 WHERE 子句都是用来过滤的，但是执行顺序的不同
 <blockquote>
 <p>P.S. 许多语言的数据库 API 会定义自己的事务操作，不一定与这里一致。</p>
 </blockquote>
+]]></content></entry><entry><title type="html">Python 视频转字符动画（二）进阶</title><link href="https://thiscute.world/posts/video2chars-2/"/><id>https://thiscute.world/posts/video2chars-2/</id><author><name>ryan4yin</name></author><published>2018-05-25T18:08:02+08:00</published><updated>2022-08-13T14:16:02+08:00</updated><content type="html"><![CDATA[<blockquote>
+<p>本文最初于 2018-05-25 发表在<a href="https://www.cnblogs.com/kirito-c/p/9089873.html" target="_blank" rel="noopener noreffer">博客园</a>，2022-08-13 搬迁至 <a href="https://thiscute.world" target="_blank" rel="noopener noreffer">https://thiscute.world</a></p>
+</blockquote>
+<h3 id="0-话说在前头" class="headerLink">
+    <a href="#0-%e8%af%9d%e8%af%b4%e5%9c%a8%e5%89%8d%e5%a4%b4" class="header-mark"></a>0. 话说在前头</h3><p>最新版使用了画布方式实现，和本文相比改动非常大，如果对旧版本的实现没啥兴趣，可以直接移步 <a href="https://github.com/ryan4yin/video2chars/blob/master/doc/README-zh-cn.md" target="_blank" rel="noopener noreffer">video2chars</a>，它的效果动画见 <a href="https://www.bilibili.com/video/av30469888/" target="_blank" rel="noopener noreffer">极乐净土</a>。新版本的核心代码不算注释70行不到，功能更强大。</p>
+<p>下面的效果动画是使用 html 实现的字符动画效果（上一篇的效果动画是 shell 版的）：</p>
+<div class="video-shortcode">
+  <video width="640" height="480" preload="auto" controls autoplay="true" loop="true">
+    <source src="/videos/video2chars-2/video2chars-html.webm" type="video/webm">
+    There should have been a video here but your browser does not seem
+    to support it.
+  </video>
+</div>
+
+<blockquote>
+<p>本文的优化仍然是针对 shell 版本的，html 版由于缺陷太大就不写文章介绍了。</p>
+</blockquote>
+<h3 id="1-速度优化" class="headerLink">
+    <a href="#1-%e9%80%9f%e5%ba%a6%e4%bc%98%e5%8c%96" class="header-mark"></a>1. 速度优化</h3><p>要是每次播放都要等个一分钟，也太痛苦了一点。
+所以可以用 pickle 模块把 video_chars 保存下来，下次播放时，如果发现当前目录下有这个保存下来的数据，就跳过转换，直接播放了。这样就快多了。
+只需要改一下测试代码，
+先在开头添加两个依赖</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">pickle</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后在文件结尾添加代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    将指定对象，以file_nam为名，保存到本地
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    从当前文件夹的指定文件中load对象
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_file_name</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    从文件路径中提取出不带拓展名的文件名
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 从文件路径获取文件名 _name</span>
+</span></span><span class="line"><span class="cl">    <span class="n">path</span><span class="p">,</span> <span class="n">file_name_with_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 拿到文件名前缀</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_name</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name_with_extension</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">file_name</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">has_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    判断指定目录下，是否存在某文件
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_video_chars</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    返回视频对应的字符视频
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_dump</span> <span class="o">=</span> <span class="n">get_file_name</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&#34;.pickle&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 如果 video_dump 已经存在于当前文件夹，就可以直接读取进来了</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">has_file</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">,</span> <span class="n">video_dump</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;发现该视频的转换缓存，直接读取&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">video_chars</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">video_dump</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;未发现缓存，开始字符视频转换&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;开始逐帧读取&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 视频转字符动画</span>
+</span></span><span class="line"><span class="cl">        <span class="n">imgs</span> <span class="o">=</span> <span class="n">video2imgs</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;视频已全部转换到图像， 开始逐帧转换为字符画&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">video_chars</span> <span class="o">=</span> <span class="n">imgs2chars</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;转换完成，开始缓存结果&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 把转换结果保存下来</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dump</span><span class="p">(</span><span class="n">video_chars</span><span class="p">,</span> <span class="n">video_dump</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;缓存完毕&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">video_chars</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 宽，高</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 视频路径，换成你自己的</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_path</span> <span class="o">=</span> <span class="s2">&#34;BadApple.mp4&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_chars</span> <span class="o">=</span> <span class="n">get_video_chars</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">play_video</span><span class="p">(</span><span class="n">video_chars</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>另一个优化方法就是边转换边播放，就是同时执行上述三个步骤。学会了的话，可以自己实现一下试试。</p>
+<h3 id="2-字符视频和音乐同时播放" class="headerLink">
+    <a href="#2-%e5%ad%97%e7%ac%a6%e8%a7%86%e9%a2%91%e5%92%8c%e9%9f%b3%e4%b9%90%e5%90%8c%e6%97%b6%e6%92%ad%e6%94%be" class="header-mark"></a>2. 字符视频和音乐同时播放</h3><p>没有配乐的动画，虽然做出来了是很有成就感，但是你可能看上两遍就厌倦了。
+所以让我们来给它加上配乐。（不要担心，其实就只需要添加几行代码而已）</p>
+<p>首先我们需要找个方法来播放视频的配乐，怎么做呢？
+先介绍一下一个跨平台视频播放器：<a href="https://mpv.io" target="_blank" rel="noopener noreffer"><strong>mpv</strong></a>，它有很棒的命令行支持，请先安装好它。
+要让 mpv 只播放视频的音乐部分，只需要命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mpv --no-video video_path
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>好了，现在有了音乐，可总不能还让人开俩shell，先放音乐，再放字符画吧。
+这时候，我们需要的功能是：<a href="https://www.cnblogs.com/kirito-c/p/9088276.html#python-invoke" target="_blank" rel="noopener noreffer">使用 Python 调用外部应用</a>.
+但是 mpv 使用了类似 curses 的功能，标准库的 os.system 不能隐藏掉这个部分，播放效果不尽如人意。
+因此我使用了 <a href="https://github.com/pyinvoke/invoke" target="_blank" rel="noopener noreffer">pyinvoke</a> 模块，只要给它指定参数<code>hide=True</code>，就可以完美隐藏掉被调用程序的输出（指 stdout，其实 subprocess 也可以的）。运行下面代码前，请先用pip安装好 invoke.（能够看到这里的，安装个模块还不是小菜一碟）</p>
+<p>好了废话说这么多，上代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">invoke</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">video_path</span> <span class="o">=</span> <span class="s2">&#34;BadApple.mp4&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">invoke</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;mpv --no-video </span><span class="si">{</span><span class="n">video_path</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行上面的测试代码，如果听到了音乐，而shell啥都没输出，但是能听到音乐的话，就正常了。我们继续。（这里使用了python3.6的f字符串）</p>
+<p>音乐已经有了，那就好办了。
+添加一个播放音乐的函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">invoke</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">play_audio</span><span class="p">(</span><span class="n">video_path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">invoke</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;mpv --no-video </span><span class="si">{</span><span class="n">video_path</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后修改main()方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 宽，高</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 视频路径，换成你自己的</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_path</span> <span class="o">=</span> <span class="s2">&#34;BadApple.mp4&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 只转换三十秒，这个属性是才添加的，但是上一篇的代码没有更新。你可能需要先上github看看最新的代码。其实就稍微改了一点。</span>
+</span></span><span class="line"><span class="cl">    <span class="n">seconds</span> <span class="o">=</span> <span class="mi">30</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># 这里的fps是帧率，也就是每秒钟播放的的字符画数。用于和音乐同步。这个更新也没写进上一篇，请上github看看新代码。</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_chars</span><span class="p">,</span> <span class="n">fps</span> <span class="o">=</span> <span class="n">get_video_chars</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 播放音轨</span>
+</span></span><span class="line"><span class="cl">    <span class="n">play_audio</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 播放视频</span>
+</span></span><span class="line"><span class="cl">    <span class="n">play_video</span><span class="p">(</span><span class="n">video_chars</span><span class="p">,</span> <span class="n">fps</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后运行。。并不是我坑你，你只听到了声音，却没看到字符画。。原因是： invoke.run()函数是阻塞的，音乐没放完，代码就到不了<code>play_video(video_chars, fps)</code>这一行。</p>
+<p>所以 <code>play_audio</code> 还要改一下，改成这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">invoke</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">play_audio</span><span class="p">(</span><span class="n">video_path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">call</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">        <span class="n">invoke</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;mpv --no-video </span><span class="si">{</span><span class="n">video_path</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 这里创建子线程来执行音乐播放指令，因为 invoke.run() 是一个阻塞的方法，要同时播放字符画和音乐的话，就要用多线程/进程。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># P.S. 更新：现在发现可以用 subprocess.Popen 实现异步调用 mpv，不需要开新线程。有兴趣的同学可以自己试试。</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">call</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里使用标准库的 threading.Thread 类来创建子线程，让音乐的播放在子线程里执行，然后字符动画还是主线程执行，Ok，这就可以看到最终效果了。实际上只添加了十多行代码而已。</p>
+<h3 id="3-彩色字符动画" class="headerLink">
+    <a href="#3-%e5%bd%a9%e8%89%b2%e5%ad%97%e7%ac%a6%e5%8a%a8%e7%94%bb" class="header-mark"></a>3. 彩色字符动画</h3><ol>
+<li>html+javascript 方式：核心都是一样的内容，只是需要点 html 和 javascript 的知识。代码见 <a href="https://github.com/ryan4yin/video2chars/blob/v0.3/src/video2html.py" target="_blank" rel="noopener noreffer">video2chars-html</a></li>
+<li>画布方式：直接把画在图片上，然后自动合成为 mp4 文件。这种方式要优于 html 方式，而且有个很方便的库能用，核心代码就 70 行的样子。代码见 <a href="https://github.com/ryan4yin/video2chars/" target="_blank" rel="noopener noreffer">video2chars</a></li>
+</ol>
+<h3 id="参考" class="headerLink">
+    <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h3><ul>
+<li><a href="https://blog.csdn.net/kongfu_cat/article/details/79681719" target="_blank" rel="noopener noreffer">Python将视频转换为全字符视频（含音频）</a></li>
+</ul>
 ]]></content></entry><entry><title type="html">学英语啊学英语</title><link href="https://thiscute.world/posts/learning-english/"/><id>https://thiscute.world/posts/learning-english/</id><author><name>ryan4yin</name></author><published>2018-05-16T20:00:02+08:00</published><updated>2018-05-16T20:00:02+08:00</updated><content type="html"><![CDATA[<p>对我而言，学英语是一件挺痛苦的事。从初中开始学英文，可从来不觉得它有趣，主动性也就不强。</p>
 <p>直到我开始学计算机，我开始认识到英文是不可避免的。于是尝试了很多方法。</p>
 <p>最普遍的方式：背单词，可我从初中背到现在，背单词的计划从没哪次坚持超过一个月的。</p>
@@ -32372,5 +32699,457 @@ $$b = tu$$</p>
 <p>现在没有了万丈豪情，不再敢说“未来将是一片坦途”；也没有绝望到要写“我的人生到底出了什么差错？”这样的句子，那还是用我最喜欢的那个模棱两可的四字词作结吧。</p>
 <blockquote>
 <p>且行且寻</p>
+</blockquote>
+]]></content></entry><entry><title type="html">Python 视频转字符动画（一）60 行代码</title><link href="https://thiscute.world/posts/video2chars-1-basics/"/><id>https://thiscute.world/posts/video2chars-1-basics/</id><author><name>ryan4yin</name></author><published>2016-10-18T08:37:02+08:00</published><updated>2022-08-13T14:16:02+08:00</updated><content type="html"><![CDATA[<blockquote>
+<p>本文最初于 2016-10-18 发表在<a href="http://www.cnblogs.com/kirito-c/p/5971988.html" target="_blank" rel="noopener noreffer">博客园</a>，2022-08-13 搬迁至 <a href="https://thiscute.world" target="_blank" rel="noopener noreffer">https://thiscute.world</a></p>
+</blockquote>
+<p>昨晚我朋友 @三十六咲 跟我说在网上看到了别人做的视频转字符动画，觉得很厉害，我于是也打算玩玩。今天中午花时间实现了这样一个小玩意。
+顺便把过程记录在这里。</p>
+<blockquote>
+<p>注：最新版使用了画布方式实现，和本文相比改动非常大，如果对旧版本的实现没啥兴趣，可以直接移步 <a href="https://github.com/ryan4yin/video2chars/blob/master/doc/README-zh-cn.md" target="_blank" rel="noopener noreffer">video2chars</a>，它的效果动画见 <a href="https://www.bilibili.com/video/av30469888/" target="_blank" rel="noopener noreffer">极乐净土</a>。新版本的核心代码不算注释70行不到，功能更强大。</p>
+</blockquote>
+<h3 id="效果" class="headerLink">
+    <a href="#%e6%95%88%e6%9e%9c" class="header-mark"></a>效果</h3><p>先上效果，来点动力。</p>
+<p>源视频 <a href="https://www.bilibili.com/video/av706/" target="_blank" rel="noopener noreffer">【東方】Bad Apple!! ＰＶ【影絵】</a> 转换后的效果如下：</p>
+<div class="video-shortcode">
+  <video width="640" height="480" preload="auto" controls autoplay="true" loop="true">
+    <source src="/videos/video2chars-1-basics/video2chars-cli-badapple.webm" type="video/webm">
+    There should have been a video here but your browser does not seem
+    to support it.
+  </video>
+</div>
+
+<h3 id="步骤" class="headerLink">
+    <a href="#%e6%ad%a5%e9%aa%a4" class="header-mark"></a>步骤</h3><ol>
+<li>将视频转化为一帧一帧的图片</li>
+<li>把图片转化为字符画</li>
+<li>按顺序播放字符画</li>
+</ol>
+<h3 id="一准备" class="headerLink">
+    <a href="#%e4%b8%80%e5%87%86%e5%a4%87" class="header-mark"></a>一、准备</h3><h4 id="1-模块" class="headerLink">
+    <a href="#1-%e6%a8%a1%e5%9d%97" class="header-mark"></a>1. 模块</h4><p>这个程序需要用到这样几个模块:</p>
+<ol>
+<li>opencv-python # 用来读取视频和图片</li>
+<li>numpy # opencv-python 依赖于它</li>
+</ol>
+<p>准备阶段，首先安装依赖：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">pip3 install numpy opencv-python
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后新建python代码文档，在开头添加上下面的导入语句</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#-*- coding:utf-8 -*-</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># numpy 是一个矩阵运算库，图像处理需要用到。</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="2-材料" class="headerLink">
+    <a href="#2-%e6%9d%90%e6%96%99" class="header-mark"></a>2. 材料</h4><p>材料就是需要转换的视频文件了，我这里用的是<a href="https://github.com/ryan4yin/video2chars/blob/v0.3/resources/BadApple.mp4" target="_blank" rel="noopener noreffer">BadApple.mp4</a>，下载下来和代码放到同一目录下
+你也可以换成自己的，建议是学习时尽量选个短一点的视频，几十秒就行了，不然调试起来很痛苦。（或者自己稍微修改一下函数，只转换一定范围、一定数量的帧。）
+此外，要选择对比度高的视频。否则的话，就需要彩色字符才能有足够好的表现，有时间我试试。</p>
+<h3 id="二按帧读取视频" class="headerLink">
+    <a href="#%e4%ba%8c%e6%8c%89%e5%b8%a7%e8%af%bb%e5%8f%96%e8%a7%86%e9%a2%91" class="header-mark"></a>二、按帧读取视频</h3><p>现在继续添加代码，实现第一步：按帧读取视频。
+下面这个函数，接受视频路径和字符视频的尺寸信息，返回一个img列表，其中的img是尺寸都为指定大小的灰度图。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1">#导入 opencv</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">cv2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">video2imgs</span><span class="p">(</span><span class="n">video_name</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param video_name: 字符串, 视频文件的路径
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param size: 二元组，(宽, 高)，用于指定生成的字符画的尺寸
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return: 一个 img 对象的列表，img对象实际上就是 numpy.ndarray 数组
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">img_list</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 从指定文件创建一个VideoCapture对象</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">video_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 如果cap对象已经初始化完成了，就返回true，换句话说这是一个 while true 循环</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># cap.read() 返回值介绍：</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#   ret 表示是否读取到图像</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#   frame 为图像矩阵，类型为 numpy.ndarry.</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ret</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 转换成灰度图，也可不做这一步，转换成彩色字符视频。</span>
+</span></span><span class="line"><span class="cl">            <span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># resize 图片，保证图片转换成字符画后，能完整地在命令行中显示。</span>
+</span></span><span class="line"><span class="cl">            <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_AREA</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># 分帧保存转换结果</span>
+</span></span><span class="line"><span class="cl">            <span class="n">img_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 结束时要释放空间</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">img_list</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>写完后可以写个main方法测试一下，像这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">imgs</span> <span class="o">=</span> <span class="n">video2imgs</span><span class="p">(</span><span class="s2">&#34;BadApple.mp4&#34;</span><span class="p">,</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果运行没报错，就没问题
+代码里的注释应该写得很清晰了，继续下一步。</p>
+<h3 id="三图像转化为字符画" class="headerLink">
+    <a href="#%e4%b8%89%e5%9b%be%e5%83%8f%e8%bd%ac%e5%8c%96%e4%b8%ba%e5%ad%97%e7%ac%a6%e7%94%bb" class="header-mark"></a>三、图像转化为字符画</h3><p>视频转换成了图像，这一步便是把图像转换成字符画
+下面这个函数，接受一个img对象为参数，返回对应的字符画。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 用于生成字符画的像素，越往后视觉上越明显。。这是我自己按感觉排的，你可以随意调整。</span>
+</span></span><span class="line"><span class="cl"><span class="n">pixels</span> <span class="o">=</span> <span class="s2">&#34; .,-&#39;`:!1+*abcdefghijklmnopqrstuvwxyz&lt;&gt;()\/</span><span class="si">{}</span><span class="s2">[]?234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ%&amp;@#$&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">img2chars</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param img: numpy.ndarray, 图像矩阵
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return: 字符串的列表：图像对应的字符画，其每一行对应图像的一行像素
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 灰度是用8位表示的，最大值为255。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 这里将灰度转换到0-1之间</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 使用 numpy 的逐元素除法加速，这里 numpy 会直接对 img 中的所有元素都除以 255</span>
+</span></span><span class="line"><span class="cl">    <span class="n">percents</span> <span class="o">=</span> <span class="n">img</span> <span class="o">/</span> <span class="mi">255</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 将灰度值进一步转换到 0 到 (len(pixels) - 1) 之间，这样就和 pixels 里的字符对应起来了</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 同样使用 numpy 的逐元素算法，然后使用 astype 将元素全部转换成 int 值。</span>
+</span></span><span class="line"><span class="cl">    <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span><span class="n">percents</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># 要注意这里的顺序和 之前的 size 刚好相反（numpy 的 shape 返回 (行数、列数)）</span>
+</span></span><span class="line"><span class="cl">    <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">line</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">index</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 添加字符像素（最后面加一个空格，是因为命令行有行距却没几乎有字符间距，用空格当间距）</span>
+</span></span><span class="line"><span class="cl">            <span class="n">line</span> <span class="o">+=</span> <span class="n">pixels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&#34; &#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面的函数只接受一帧为参数，一次只转换一帧，可我们需要的是转换所有的帧，所以就再把它包装一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">imgs2chars</span><span class="p">(</span><span class="n">imgs</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_chars</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">video_chars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img2chars</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">video_chars</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>好了，现在我们可以测试一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">imgs</span> <span class="o">=</span> <span class="n">video2imgs</span><span class="p">(</span><span class="s2">&#34;BadApple.mp4&#34;</span><span class="p">,</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_chars</span> <span class="o">=</span> <span class="n">imgs2chars</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">video_chars</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>没报错的话，就可以下一步了。(这一步比较慢，测试阶段建议用短一点的视频，或者稍微改一下，只处理前30秒之类的)</p>
+<h3 id="四播放字符视频" class="headerLink">
+    <a href="#%e5%9b%9b%e6%92%ad%e6%94%be%e5%ad%97%e7%ac%a6%e8%a7%86%e9%a2%91" class="header-mark"></a>四、播放字符视频</h3><p>写了这么多代码，现在终于要出成果了。现在就是最激动人心的一步：播放字符画了。
+同样的，我把它封装成了一个函数。下面这个函数接受一个字符画的列表并播放。</p>
+<ol>
+<li>通用版（<strong>使用 shell 的 clear 命令清屏，但是因为效率不高，可能会有一闪一闪的问题</strong>）
+这个版本适用于 linux/windows</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 导入需要的模块</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">subprocess</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">play_video</span><span class="p">(</span><span class="n">video_chars</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    播放字符视频
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param video_chars: 字符画的列表，每个元素为一帧
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return: None
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 获取字符画的尺寸</span>
+</span></span><span class="line"><span class="cl">    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">video_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">video_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">pic_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">video_chars</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 显示 pic_i，即第i帧字符画</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">line_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 将pic_i的第i行写入第i列。</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="n">video_chars</span><span class="p">[</span><span class="n">pic_i</span><span class="p">][</span><span class="n">line_i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span>  <span class="c1"># 粗略地控制播放速度。</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># 调用 shell 命令清屏</span>
+</span></span><span class="line"><span class="cl">        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&#34;clear&#34;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># linux 版</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># subrpocess.run(&#34;cls&#34;, shell=True)  # cmd 版，windows 系统请用这一行。</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>Unix系版本（<strong>使用了只支援 unix 系 的 curses 库，比 clear 更流畅</strong>）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 导入需要的模块</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">curses</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">play_video</span><span class="p">(</span><span class="n">video_chars</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    播放字符视频，
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param video_chars: 字符画的列表，每个元素为一帧
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return: None
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 获取字符画的尺寸</span>
+</span></span><span class="line"><span class="cl">    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">video_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">video_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 初始化curses，这个是必须的，直接抄就行</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stdscr</span> <span class="o">=</span> <span class="n">curses</span><span class="o">.</span><span class="n">initscr</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">curses</span><span class="o">.</span><span class="n">start_color</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 调整窗口大小，宽度最好略大于字符画宽度。另外注意curses的height和width的顺序</span>
+</span></span><span class="line"><span class="cl">        <span class="n">stdscr</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">pic_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">video_chars</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 显示 pic_i，即第i帧字符画</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">line_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 将pic_i的第i行写入第i列。(line_i, 0)表示从第i行的开头开始写入。最后一个参数设置字符为白色</span>
+</span></span><span class="line"><span class="cl">                <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="n">line_i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">video_chars</span><span class="p">[</span><span class="n">pic_i</span><span class="p">][</span><span class="n">line_i</span><span class="p">],</span> <span class="n">curses</span><span class="o">.</span><span class="n">COLOR_WHITE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">stdscr</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>  <span class="c1"># 写入后需要refresh才会立即更新界面</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">24</span><span class="p">)</span>  <span class="c1"># 粗略地控制播放速度(24帧/秒)。更精确的方式是使用游戏编程里，精灵的概念</span>
+</span></span><span class="line"><span class="cl">    <span class="k">finally</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># curses 使用前要初始化，用完后无论有没有异常，都要关闭</span>
+</span></span><span class="line"><span class="cl">        <span class="n">curses</span><span class="o">.</span><span class="n">endwin</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>好，接下来就是见证奇迹的时刻
+<strong>不过开始前要注意，字符画的播放必须在shell窗口下运行，在pycharm里运行会看到一堆无意义字符。另外播放前要先最大化shell窗口</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">imgs</span> <span class="o">=</span> <span class="n">video2imgs</span><span class="p">(</span><span class="s2">&#34;BadApple.mp4&#34;</span><span class="p">,</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video_chars</span> <span class="o">=</span> <span class="n">imgs2chars</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">input</span><span class="p">(</span><span class="s2">&#34;`转换完成！按enter键开始播放&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">play_video</span><span class="p">(</span><span class="n">video_chars</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>写完后，开个shell，最大化窗口，然后键入（文件名换成你的）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">python3 video2chars.py
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可能要等很久。我使用示例视频大概需要 12 秒左右。看到提示的时候，按回车，开始播放！</p>
+<p>**这样就完成了视频到字符动画的转换, 除去注释, 大概七十行代码的样子. 稍微超出了点预期, 不过效果真是挺棒的. **</p>
+<h3 id="五进一步优化" class="headerLink">
+    <a href="#%e4%ba%94%e8%bf%9b%e4%b8%80%e6%ad%a5%e4%bc%98%e5%8c%96" class="header-mark"></a>五、进一步优化</h3><p>到了这里，核心功能基本都完成了。
+不过仔细想想，其实还有很多可以做的：</p>
+<ul>
+<li>能不能手动指定要转换的区间、帧率？</li>
+<li>每次转换都要很久的时间，能不能边转换边播放？或者转换后把数据保存起来，下次播放时，就直接读缓存。</li>
+<li>为啥我的字符动画没有声音，看无声电影么？</li>
+<li>视频的播放速度能不能精确控制？</li>
+<li>能不能用彩色字符？</li>
+</ul>
+<p>这些东西，就不写这里了，再写下去，你们肯定要说我这标题是骗人了哈哈。
+所以如果有兴趣的，请移步这个系列的下一篇：<a href="https://thiscute.world/posts/video2chars-2/" target="_blank" rel="noopener noreffer">视频转字符动画（二）进阶</a></p>
+<h3 id="六总结" class="headerLink">
+    <a href="#%e5%85%ad%e6%80%bb%e7%bb%93" class="header-mark"></a>六、总结</h3><p>完整代码见 <a href="https://github.com/ryan4yin/video2chars/blob/v0.3/src/video2chars.py" target="_blank" rel="noopener noreffer">video2chars.py</a>，要注意的是代码库的代码，包含了第二篇文章的内容（音频、缓存、帧率控制等），而且相对这篇文章也有一些小改动（目的是方便使用，但是稍微增加了点代码量，所以改动没有写在这篇文章里了）
+想运行起来的话，还是建议跟着文章做。。</p>
+<h3 id="七参考" class="headerLink">
+    <a href="#%e4%b8%83%e5%8f%82%e8%80%83" class="header-mark"></a>七、参考</h3><ul>
+<li><a href="https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_video_display/py_video_display.html#display-video" target="_blank" rel="noopener noreffer">Opencv-Python Tutorials - Video Playing</a></li>
+<li><a href="https://www.shiyanlou.com/courses/370" target="_blank" rel="noopener noreffer">Python 图片转字符画</a></li>
+</ul>
+<blockquote>
+<p>允许转载, 但是要求附上来源链接: <a href="/posts/video2chars-1-basics/" rel="">Python 视频转字符动画（一）60 行代码</a></p>
 </blockquote>
 ]]></content></entry></feed>
