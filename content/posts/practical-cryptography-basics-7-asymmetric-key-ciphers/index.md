@@ -422,7 +422,7 @@ $$a^{p-1} \equiv 1 {\pmod  p}$$
 
 对于模 $p$ 的情况，计算方法如下：
 
-- 当 $msg = 0 \mod p$ 时，${msg^{ed}} \mod p = 0 = m \mod p$
+- 当 $msg = 0 \mod p$ 时，${msg^{ed}} \mod p = 0 \equiv msg \pmod  p$
 - 当 $msg \ne 0 \mod p$ 时，利用费马小定理，有
   $$
   \begin{alignedat}{2}
