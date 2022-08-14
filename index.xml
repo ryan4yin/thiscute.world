@@ -9768,7 +9768,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-14T12:30UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-14T12:34UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -16938,8 +16938,8 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 <p>拆破玉笼飞彩凤，顿开金锁走蛟龙。</p>
 </blockquote>
 ]]></content></entry><entry><title type="html">曾经的我</title><link href="https://thiscute.world/history/"/><id>https://thiscute.world/history/</id><author><name>ryan4yin</name></author><published>2021-02-01T14:14:35+08:00</published><updated>2021-02-01T14:14:35+08:00</updated><content type="html"><![CDATA[<p>记录下我的学习轨迹。</p>
-<h3 id="2022-08-11---2022-08-12" class="headerLink">
-    <a href="#2022-08-11---2022-08-12" class="header-mark"></a>2022-08-11 - 2022-08-12</h3><ul>
+<h3 id="2022-08-11---2022-08-14" class="headerLink">
+    <a href="#2022-08-11---2022-08-14" class="header-mark"></a>2022-08-11 - 2022-08-14</h3><ul>
 <li>拿 VISA 信用卡开了个 Azure 云的试用账户，研究了一波。
 <ul>
 <li>给 <a href="https://thiscute.world" target="_blank" rel="noopener noreffer">https://thiscute.world</a> 加了个 Azure 的 Front Door 作为 vercel 的前置 CDN，发现效果出奇的好！现在站点访问速度跟国内服务器基本没差了，即使缓存不命中，回源速度也特别得快！
@@ -16956,6 +16956,24 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 </ul>
 </li>
 <li>选 Azure 本来只是因为工作天天接触 AWS/GCP，想试用下全球排名第二的 Azure 是个啥感觉，结果意外发现它的国际 CDN 在国内这么快。</li>
+<li>当然 Azure 的坑也多，我遇到的有
+<ul>
+<li>资源的删除操作存在各种延迟。比如列表还显示该资源，点进去又提示 not available，提示删除失败，但是点进页面资源又已经没了&hellip;</li>
+<li>Azure CDN 的坑
+<ul>
+<li>不支持通过 CNAME 绑定根域名，这一点官方没有任何文档说明，但是根据<a href="https://arlanblogs.alvarnet.com/adding-a-root-domain-to-azure-cdn-endpoint/" target="_blank" rel="noopener noreffer">这个博客</a>，实际上可以通过添加值为 <code>cdnverify</code> 的 CNAME 记录到 <code>cdnverify.&lt;endpoint-name&gt;.azureedge.net</code>，就可以解决这个报错&hellip;但是即使这样解决了报错信息，仍然存在一个问题——Azure CDN 现在不再给根域名提供 TLS 证书服务，也就是说 HTTPS 没戏了&hellip;</li>
+<li>但是 Azure CDN 的上述这些毛病 Azure Front Door 都没有！Azure Front Door 唯一的缺点就是太贵（这或许是我自己的缺点&hellip;）</li>
+</ul>
+</li>
+<li>目录是用的 Active Directory，原生的多租户设计，但是感觉真的好难用啊，跟 AWS/Alicloud 的设计区别很大。</li>
+<li>所有资源都是 uuid 这一点，感觉不太友好。</li>
+</ul>
+</li>
+<li>收费：<a href="https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/#pricing" target="_blank" rel="noopener noreffer">Azure 的大部分资源价格</a>跟 <a href="https://aws.amazon.com/cn/ec2/pricing/on-demand/" target="_blank" rel="noopener noreffer">AWS</a> 相差无几，都是「平民止步」的定价策略。
+<ul>
+<li>而且 AWS/Azure/GCP 的出网流量、跨可用区流量都是额外计费的，不像国内云厂商，云服务器跟网络带宽可以绑在一起买。</li>
+</ul>
+</li>
 </ul>
 <h3 id="2022-08-06---2022-08-07" class="headerLink">
     <a href="#2022-08-06---2022-08-07" class="header-mark"></a>2022-08-06 - 2022-08-07</h3><ul>
