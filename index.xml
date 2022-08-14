@@ -9768,7 +9768,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-14T15:51UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-14T16:07UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -16962,6 +16962,7 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 <li>Azure CDN 的坑
 <ul>
 <li>不支持通过 CNAME 绑定根域名，这一点官方没有任何文档说明，但是根据<a href="https://arlanblogs.alvarnet.com/adding-a-root-domain-to-azure-cdn-endpoint/" target="_blank" rel="noopener noreffer">这个博客</a>，实际上可以通过添加值为 <code>cdnverify</code> 的 CNAME 记录到 <code>cdnverify.&lt;endpoint-name&gt;.azureedge.net</code>，就可以解决这个报错&hellip;但是即使这样解决了报错信息，仍然存在一个问题——Azure CDN 现在不再给根域名提供 TLS 证书服务，也就是说 HTTPS 没戏了&hellip;</li>
+<li>HTTPS 证书的申请与部署、配置的修改速度特别的慢。</li>
 <li>但是 Azure CDN 的上述这些毛病 Azure Front Door 都没有！Azure Front Door 唯一的缺点就是太贵（这或许是我自己的缺点&hellip;）</li>
 </ul>
 </li>
@@ -16977,6 +16978,7 @@ telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/
 </ul>
 </li>
 <li>InfoQ 翻译了一篇文章 <a href="https://www.infoq.cn/article/n5tefmdbuvdxkpf8f_hq" target="_blank" rel="noopener noreffer">为了追求速度，我们测试了全球所有的 CDN</a>，测试了全球的 CDN 速度，画出了一张全球速度最快的 CDN 厂商分布图。其中显示 Azure 的确是中国区域最快的 CDN（仅比较了国际 CDN 服务商，不包含国内）。</li>
+<li>试用了通过 Github Action azcopy 将站点上传到 Azure Blob Storage，发现上传太慢了，居然跑了 4mins+，权衡之下还是决定先使用 Vercel 作为 CDN 源站，免费而且部署比 Azure Blob Storage 快多了。</li>
 </ul>
 <h3 id="2022-08-06---2022-08-07" class="headerLink">
     <a href="#2022-08-06---2022-08-07" class="header-mark"></a>2022-08-06 - 2022-08-07</h3><ul>
@@ -22571,11 +22573,17 @@ virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这
 </ul>
 </li>
 <li>2021-01-16：工作一年多后，申请域名并开设独立博客 <a href="https://ryan4yin.space/" target="_blank" rel="noopener noreffer">https://ryan4yin.space/</a></li>
-<li>2022-01-28：站点从 Cloudflare + Github Gages 迁移到 Vercel，速度有一定提升。</li>
+<li>2022-01-28：站点从 Cloudflare + Github Gages 迁移到 Vercel，国内访问速度有一定提升。</li>
 <li>2022-02-07：第一份工作结束后赋闲，将博客主域名切换为 <a href="https://thiscute.world/" target="_blank" rel="noopener noreffer">https://thiscute.world/</a>，另外新增备用域名 <a href="https://writefor.fun" target="_blank" rel="noopener noreffer">https://writefor.fun</a></li>
 <li>2022-02-07：本站添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。</li>
 <li>2022-02-16：本站通过十年之约审核，正式加入<a href="https://foreverblog.cn/" target="_blank" rel="noopener noreffer">十年之约</a></li>
-<li>2022-08-12：本站架构升级为 Azure Front Door + Vercel，发现 Azure Front Door 的加速效果确实对得起它的价格（免费试用一个月，后面考虑换成更便宜的 Azure CDN + Azure Blob Storage）。</li>
+<li>2022-08-12：本站架构升级为 Azure Front Door + Vercel，国内访问速度显著提升。</li>
+<li>2022-08-14：站点切换到更便宜的 Azure Standard CDN from Microsoft (classic)，仍然使用 Vercel 作为源站。
+<ul>
+<li>但是因为 Azure Standard CDN 不支持为根域名签发 HTTPS 证书，将站点主域名切换到了 <a href="https://www.thiscute.world" target="_blank" rel="noopener noreffer">https://www.thiscute.world</a>。</li>
+<li>在 Vercel 上设置了将旧的主域名 <a href="https://thiscute.world" target="_blank" rel="noopener noreffer">https://thiscute.world</a> 重定向到 <a href="https://www.thiscute.world" target="_blank" rel="noopener noreffer">https://www.thiscute.world</a>，因此旧域名仍然可用。</li>
+</ul>
+</li>
 </ul>
 </div>
         </div>
