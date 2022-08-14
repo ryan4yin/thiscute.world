@@ -201,7 +201,6 @@ toc:
     </div>
   </div> 
 
-
   <div class="row">
     <div class="column">
       <img src="/images/now/book-shelf-2.webp" alt="Snow" style="width:100%">
