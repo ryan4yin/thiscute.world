@@ -1,79 +1,18 @@
-# based on https://github.com/peaceiris/actions-hugo
 name: github pages
 
 on:
   push:
     branches:
-      - main
-  # schedule:
-  #   - cron: "0 */6 * * *"  # 分 时 日 月 周
+      - gh-pages
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Upload to Azure Blob Storage(similar to aws S3 object storage)
+        uses: bacongobbler/azure-blob-storage-upload@v2.0.0
         with:
-          submodules: recursive  # Fetch Hugo themes recursively
-          fetch-depth: 0         # Fetch all history for .GitInfo and .Lastmod
-          lfs: true              # download Git-LFS files
-
-      - name: Use Python3
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.10'
-          architecture: 'x64'
-
-      - name: Update Posts Trending
-        run: |
-          # decrypt service-account.json
-          gpg --quiet --batch --yes --decrypt --passphrase="$SERVICE_ACCOUNT_DECRYPT_KEY" --output google-service-account.json google-service-account.json.gpg
-          pip3 install "google-api-python-client==2.36.0" "google-auth==2.4.0"
-          # generate website_statistics.json
-          python3 update_statistics.py
-          # commit changes
-        env:
-          SERVICE_ACCOUNT_DECRYPT_KEY: ${{ secrets.SERVICE_ACCOUNT_DECRYPT_KEY }}
-      - name: Commit changes of website_statistics.json
-        run: |
-          git config --local user.email "ryan4yin[bot]@users.noreply.github.com"
-          git config --local user.name "ryan4yin[bot]"
-          git add data/website_statistics.json
-          git commit -m "feat: update website_statistics.json"
-          git push
-          git clean -fxd
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.101.0'
-          extended: true  #  need extended version to support SASS/SCSS
-
-      - name: Build
-        run: hugo --minify --debug --printUnusedTemplates
-      
-      # - name: Upload to Azure Blob Storage(similar to aws S3 object storage)
-      #   uses: bacongobbler/azure-blob-storage-upload@v2.0.0
-      #   with:
-      #     source_dir: 'public'
-      #     container_name: '$web'
-      #     connection_string: ${{ secrets.AZURE_CONNECTION_STRING }}
-      #     sync: 'true'
-
-      # 自动构建出的 pages 目前有问题，mermaid 等 shortcodes 无法正常加载，先不 push
-      # - name: Deploy
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./public
-      #     cname: thiscte.world
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-      - name: Push Argolia Index
-        run: |
-          npm install algoliasearch@4.12.1
-          node push_argolia_index.js
-        env:
-          ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
+          source_dir: '.'
+          container_name: '$web'
+          connection_string: ${{ secrets.AZURE_CONNECTION_STRING }}
+          sync: 'true'
