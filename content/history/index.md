@@ -25,7 +25,7 @@ toc:
     - 但是 Azure CDN 的上述这些毛病 Azure Front Door 都没有！Azure Front Door 唯一的缺点就是太贵（这或许是我自己的缺点...）
   - 目录是用的 Active Directory，原生的多租户设计，但是感觉真的好难用啊，跟 AWS/Alicloud 的设计区别很大。
   - 所有资源都是 uuid 这一点，感觉不太友好。
-  - 删掉了一个旧 CDN endpoint 后，又建了一个跟之前名字一样的 endpoint，结果创建成功了，但是页面到处报错...
+  - 删掉了一个旧 CDN endpoint 后，又建了一个跟之前名字一样的 endpoint，结果创建成功了，但是页面到处报错 [s['@odata.type'] is not a function](https://docs.microsoft.com/en-us/answers/questions/964407/s34.html)
   - CDN 如果把源站改为 custom origin，会有五六分钟的时间疯狂报错 404，之后又莫名其妙地恢复...
 - 收费：[Azure 的大部分资源价格](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/#pricing)跟 [AWS](https://aws.amazon.com/cn/ec2/pricing/on-demand/) 相差无几，都是「平民止步」的定价策略。
   - 而且 AWS/Azure/GCP 的出网流量、跨可用区流量都是额外计费的，不像国内云厂商，云服务器跟网络带宽可以绑在一起买。
