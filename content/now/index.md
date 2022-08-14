@@ -11,6 +11,39 @@ toc:
 
 >过去的我：[学习轨迹记录](/history)
 
+<div class="book-shelf">
+  <div class="row">
+    <div class="column">
+      <img src="/images/now/book-shelf-1.webp" alt="Snow" style="width:100%">
+    </div>
+  </div> 
+
+  <div class="row">
+    <div class="column">
+      <img src="/images/now/book-shelf-2.webp" alt="Snow" style="width:100%">
+    </div>
+    <div class="column">
+      <img src="/images/now/book-shelf-3.webp" alt="Forest" style="width:100%">
+    </div>
+  </div> 
+
+  <style>
+  .row{
+    display: grid;
+    grid-template-columns: auto auto auto; 
+  }
+
+  .row{
+    box-sizing: border-box;
+  }
+
+  .row img{
+    width: 100%;
+  }
+  </style>
+</div>
+
+
 ## 一、我正在研究这些
 
 >按优先级排序
@@ -191,40 +224,6 @@ toc:
     - 极客时间《检索技术 25 讲》
 
 ## 五、我的备选书单
-
-先晒下书柜~
-
-<div class="book-shelf">
-  <div class="row">
-    <div class="column">
-      <img src="/images/now/book-shelf-1.webp" alt="Snow" style="width:100%">
-    </div>
-  </div> 
-
-  <div class="row">
-    <div class="column">
-      <img src="/images/now/book-shelf-2.webp" alt="Snow" style="width:100%">
-    </div>
-    <div class="column">
-      <img src="/images/now/book-shelf-3.webp" alt="Forest" style="width:100%">
-    </div>
-  </div> 
-
-  <style>
-  .row{
-    display: grid;
-    grid-template-columns: auto auto auto; 
-  }
-
-  .row{
-    box-sizing: border-box;
-  }
-
-  .row img{
-    width: 100%;
-  }
-  </style>
-</div>
 
 如下是我目前想读的书单，如果决定读，就把对应的书移到「计划读」中。
 
