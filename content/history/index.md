@@ -22,6 +22,7 @@ toc:
   - 资源的删除操作存在各种延迟。比如列表还显示该资源，点进去又提示 not available，提示删除失败，但是点进页面资源又已经没了...
   - Azure CDN 的坑
     - 不支持通过 CNAME 绑定根域名，这一点官方没有任何文档说明，但是根据[这个博客](https://arlanblogs.alvarnet.com/adding-a-root-domain-to-azure-cdn-endpoint/)，实际上可以通过添加值为 `cdnverify` 的 CNAME 记录到 `cdnverify.<endpoint-name>.azureedge.net`，就可以解决这个报错...但是即使这样解决了报错信息，仍然存在一个问题——Azure CDN 现在不再给根域名提供 TLS 证书服务，也就是说 HTTPS 没戏了...
+    - HTTPS 证书的申请与部署、配置的修改速度特别的慢。
     - 但是 Azure CDN 的上述这些毛病 Azure Front Door 都没有！Azure Front Door 唯一的缺点就是太贵（这或许是我自己的缺点...）
   - 目录是用的 Active Directory，原生的多租户设计，但是感觉真的好难用啊，跟 AWS/Alicloud 的设计区别很大。
   - 所有资源都是 uuid 这一点，感觉不太友好。
@@ -30,6 +31,7 @@ toc:
 - 收费：[Azure 的大部分资源价格](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/#pricing)跟 [AWS](https://aws.amazon.com/cn/ec2/pricing/on-demand/) 相差无几，都是「平民止步」的定价策略。
   - 而且 AWS/Azure/GCP 的出网流量、跨可用区流量都是额外计费的，不像国内云厂商，云服务器跟网络带宽可以绑在一起买。
 - InfoQ 翻译了一篇文章 [为了追求速度，我们测试了全球所有的 CDN](https://www.infoq.cn/article/n5tefmdbuvdxkpf8f_hq)，测试了全球的 CDN 速度，画出了一张全球速度最快的 CDN 厂商分布图。其中显示 Azure 的确是中国区域最快的 CDN（仅比较了国际 CDN 服务商，不包含国内）。
+- 试用了通过 Github Action azcopy 将站点上传到 Azure Blob Storage，发现上传太慢了，居然跑了 4mins+，权衡之下还是决定先使用 Vercel 作为 CDN 源站，免费而且部署比 Azure Blob Storage 快多了。
 
 ### 2022-08-06 - 2022-08-07
 
