@@ -9,7 +9,7 @@ toc:
 
 记录下我的学习轨迹。
 
-### 2022-08-11 - 2022-08-12
+### 2022-08-11 - 2022-08-14
 
 - 拿 VISA 信用卡开了个 Azure 云的试用账户，研究了一波。
   - 给 <https://thiscute.world> 加了个 Azure 的 Front Door 作为 vercel 的前置 CDN，发现效果出奇的好！现在站点访问速度跟国内服务器基本没差了，即使缓存不命中，回源速度也特别得快！
@@ -18,7 +18,15 @@ toc:
     - 算了下 Azure CDN 一个月可能也就 $10 出头，数据即使丢在 Azure Blob Storage 对象存储里，以我不到 1G 的总数据量一个月才不到 $1，完全可以接受。
   - 堪称免备案站点加速方案中的战斗机！
 - 选 Azure 本来只是因为工作天天接触 AWS/GCP，想试用下全球排名第二的 Azure 是个啥感觉，结果意外发现它的国际 CDN 在国内这么快。
-
+- 当然 Azure 的坑也多，我遇到的有
+  - 资源的删除操作存在各种延迟。比如列表还显示该资源，点进去又提示 not available，提示删除失败，但是点进页面资源又已经没了...
+  - Azure CDN 的坑
+    - 不支持通过 CNAME 绑定根域名，这一点官方没有任何文档说明，但是根据[这个博客](https://arlanblogs.alvarnet.com/adding-a-root-domain-to-azure-cdn-endpoint/)，实际上可以通过添加值为 `cdnverify` 的 CNAME 记录到 `cdnverify.<endpoint-name>.azureedge.net`，就可以解决这个报错...但是即使这样解决了报错信息，仍然存在一个问题——Azure CDN 现在不再给根域名提供 TLS 证书服务，也就是说 HTTPS 没戏了...
+    - 但是 Azure CDN 的上述这些毛病 Azure Front Door 都没有！Azure Front Door 唯一的缺点就是太贵（这或许是我自己的缺点...）
+  - 目录是用的 Active Directory，原生的多租户设计，但是感觉真的好难用啊，跟 AWS/Alicloud 的设计区别很大。
+  - 所有资源都是 uuid 这一点，感觉不太友好。
+- 收费：[Azure 的大部分资源价格](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/#pricing)跟 [AWS](https://aws.amazon.com/cn/ec2/pricing/on-demand/) 相差无几，都是「平民止步」的定价策略。
+  - 而且 AWS/Azure/GCP 的出网流量、跨可用区流量都是额外计费的，不像国内云厂商，云服务器跟网络带宽可以绑在一起买。
 
 ### 2022-08-06 - 2022-08-07
 
