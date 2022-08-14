@@ -26,6 +26,7 @@ toc:
   - 目录是用的 Active Directory，原生的多租户设计，但是感觉真的好难用啊，跟 AWS/Alicloud 的设计区别很大。
   - 所有资源都是 uuid 这一点，感觉不太友好。
   - 删掉了一个旧 CDN endpoint 后，又建了一个跟之前名字一样的 endpoint，结果创建成功了，但是页面到处报错...
+  - CDN 如果把源站改为 custom origin，会有五六分钟的时间疯狂报错 404，之后又莫名其妙地恢复...
 - 收费：[Azure 的大部分资源价格](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/#pricing)跟 [AWS](https://aws.amazon.com/cn/ec2/pricing/on-demand/) 相差无几，都是「平民止步」的定价策略。
   - 而且 AWS/Azure/GCP 的出网流量、跨可用区流量都是额外计费的，不像国内云厂商，云服务器跟网络带宽可以绑在一起买。
 - InfoQ 翻译了一篇文章 [为了追求速度，我们测试了全球所有的 CDN](https://www.infoq.cn/article/n5tefmdbuvdxkpf8f_hq)，测试了全球的 CDN 速度，画出了一张全球速度最快的 CDN 厂商分布图。其中显示 Azure 的确是中国区域最快的 CDN（仅比较了国际 CDN 服务商，不包含国内）。
