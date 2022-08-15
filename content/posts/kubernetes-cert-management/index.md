@@ -237,6 +237,19 @@ spec:
 
 >https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources
 
+证书的申请流程示意图如下：
+
+```
+(  +---------+  )
+  (  | Ingress |  ) Optional                                              ACME Only!
+  (  +---------+  )
+         |                                                     |
+         |   +-------------+      +--------------------+       |  +-------+       +-----------+
+         |-> | Certificate |----> | CertificateRequest | ----> |  | Order | ----> | Challenge | 
+             +-------------+      +--------------------+       |  +-------+       +-----------+
+                                                               |
+```
+
 使用如下配置创建证书，并将证书保存到指定的 Secret 中：
 
 ```yaml
@@ -487,13 +500,35 @@ spec:
 
 ### OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度
 
-如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，那么 CA 机构的 OCSP 站点本身的性能就会对站点的 HTTPS 访问速度产生很大的影响。
+>https://www.ssl.com/blogs/how-do-browsers-handle-revoked-ssl-tls-certificates/
 
-解决方法：
+>https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html
 
-- HTTPS 服务器一定要启用 OCSP stapling 功能，它使服务器提前访问 OCSP 获取证书状态信息并缓存到本地，
-  - 在客户端使用 TLS 协议访问时，直接在握手阶段将缓存的 OCSP 信息发送给客户端，这样就完成了证书状态的校验。
-  - 因为 OCSP 信息会带有 CA 证书的签名及有效期，服务端不可能伪造它，这样也能确保安全性。
-- 选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。
+>https://www.digicert.com/help/
+
+前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。
+
+可以使用如下命令测试，确认站点是否启用了 ocsp stapling:
+
+```conf
+$ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -status -tlsextdebug < /dev/null 2>&1 | grep -i "OCSP response"
+```
+
+如果输出包含 `OCSP Response Status: successful` 就说明站点支持 ocsp stapling，
+如果输出内容为 `OCSP response: no response sent` 则说明站点不支持ocsp stapling。
+
+>实际上我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
+
+这导致了一些问题：
+
+- Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
+  - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
+- 因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。
+
+为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，基本 Nginx/Caddy 等各大 Web 服务器或网关，都支持 OCSP stapling 协议。
 
 
+在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
+因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。
+
+而另一个方法，就是选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。
