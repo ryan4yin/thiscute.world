@@ -806,7 +806,30 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
     <a href="#13-%e9%80%9a%e8%bf%87-acme-%e5%88%9b%e5%bb%ba%e8%af%81%e4%b9%a6%e4%bb%a5%e5%8f%8a%e9%97%ae%e9%a2%98%e6%8e%92%e6%9f%a5" class="header-mark"></a>1.3 通过 ACME 创建证书以及问题排查</h4><blockquote>
 <p><a href="https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources" target="_blank" rel="noopener noreffer">https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources</a></p>
 </blockquote>
-<p>使用如下配置创建证书，并将证书保存到指定的 Secret 中：</p>
+<p>证书的申请流程示意图如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">(  +---------+  )
+</span></span><span class="line"><span class="cl">  (  | Ingress |  ) Optional                                              ACME Only!
+</span></span><span class="line"><span class="cl">  (  +---------+  )
+</span></span><span class="line"><span class="cl">         |                                                     |
+</span></span><span class="line"><span class="cl">         |   +-------------+      +--------------------+       |  +-------+       +-----------+
+</span></span><span class="line"><span class="cl">         |-&gt; | Certificate |----&gt; | CertificateRequest | ----&gt; |  | Order | ----&gt; | Challenge | 
+</span></span><span class="line"><span class="cl">             +-------------+      +--------------------+       |  +-------+       +-----------+
+</span></span><span class="line"><span class="cl">                                                               |
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用如下配置创建证书，并将证书保存到指定的 Secret 中：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1227,17 +1250,43 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 <h2 id="五注意事项" class="headerLink">
     <a href="#%e4%ba%94%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="header-mark"></a>五、注意事项</h2><p>服务端 TLS 协议的配置有许多的优化点，有些配置对性能的提升是很明显的，建议自行网上搜索相关资料，这里仅列出部分相关信息。</p>
 <h3 id="ocsp-证书验证协议会大幅拖慢-https-协议的响应速度" class="headerLink">
-    <a href="#ocsp-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%8d%8f%e8%ae%ae%e4%bc%9a%e5%a4%a7%e5%b9%85%e6%8b%96%e6%85%a2-https-%e5%8d%8f%e8%ae%ae%e7%9a%84%e5%93%8d%e5%ba%94%e9%80%9f%e5%ba%a6" class="header-mark"></a>OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度</h3><p>如果客户端直接通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，那么 CA 机构的 OCSP 站点本身的性能就会对站点的 HTTPS 访问速度产生很大的影响。</p>
-<p>解决方法：</p>
+    <a href="#ocsp-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%8d%8f%e8%ae%ae%e4%bc%9a%e5%a4%a7%e5%b9%85%e6%8b%96%e6%85%a2-https-%e5%8d%8f%e8%ae%ae%e7%9a%84%e5%93%8d%e5%ba%94%e9%80%9f%e5%ba%a6" class="header-mark"></a>OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度</h3><blockquote>
+<p><a href="https://www.ssl.com/blogs/how-do-browsers-handle-revoked-ssl-tls-certificates/" target="_blank" rel="noopener noreffer">https://www.ssl.com/blogs/how-do-browsers-handle-revoked-ssl-tls-certificates/</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html" target="_blank" rel="noopener noreffer">https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.digicert.com/help/" target="_blank" rel="noopener noreffer">https://www.digicert.com/help/</a></p>
+</blockquote>
+<p>前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。</p>
+<p>可以使用如下命令测试，确认站点是否启用了 ocsp stapling:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -status -tlsextdebug &lt; /dev/null 2&gt;&amp;1 | grep -i &#34;OCSP response&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果输出包含 <code>OCSP Response Status: successful</code> 就说明站点支持 ocsp stapling，
+如果输出内容为 <code>OCSP response: no response sent</code> 则说明站点不支持ocsp stapling。</p>
+<blockquote>
+<p>实际上我测试发现只有 <a href="https://www.digicert.com/www.douban.com" target="_blank" rel="noopener noreffer">www.digicert.com/www.douban.com</a> 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.</p>
+</blockquote>
+<p>这导致了一些问题：</p>
 <ul>
-<li>HTTPS 服务器一定要启用 OCSP stapling 功能，它使服务器提前访问 OCSP 获取证书状态信息并缓存到本地，
+<li>Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
 <ul>
-<li>在客户端使用 TLS 协议访问时，直接在握手阶段将缓存的 OCSP 信息发送给客户端，这样就完成了证书状态的校验。</li>
-<li>因为 OCSP 信息会带有 CA 证书的签名及有效期，服务端不可能伪造它，这样也能确保安全性。</li>
+<li>所谓的定期是指超过上一个 OCSP 响应的 <code>nextUpdate</code> 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。</li>
 </ul>
 </li>
-<li>选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。</li>
+<li>因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。</li>
 </ul>
+<p>为了解决这两个问题，<a href="https://www.rfc-editor.org/rfc/rfc6066" target="_blank" rel="noopener noreffer">rfc6066</a> 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，基本 Nginx/Caddy 等各大 Web 服务器或网关，都支持 OCSP stapling 协议。</p>
+<p>在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
+因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。</p>
+<p>而另一个方法，就是选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。</p>
 ]]></content></entry><entry><title type="html">Death Is But a Dream</title><link href="https://thiscute.world/posts/death-is-but-a-dream/"/><id>https://thiscute.world/posts/death-is-but-a-dream/</id><author><name>ryan4yin</name></author><published>2022-05-24T02:17:00+08:00</published><updated>2022-05-24T02:17:00+08:00</updated><content type="html"><![CDATA[<blockquote>
 <p>我并不知道何时才是死期，<br>
 却日日问自己，<br>
@@ -9768,7 +9817,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-15T11:51UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-15T12:37UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9935,7 +9984,7 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>267929</td>
+            <td>268427</td>
             <td style="color:tomato;"><strong>31804</strong></td>
             <td>78729</td>
             <td>27 days, 14h 56m 13s</td>
