@@ -15,6 +15,7 @@ toc:
   <div class="row">
     <div class="column">
       <img src="/images/now/book-shelf-1.webp" alt="book-shelf-1">
+    </div>
   </div>
   <div class="row">
     <div class="column">
