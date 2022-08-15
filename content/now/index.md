@@ -14,17 +14,17 @@ toc:
 <div class="book-shelf">
   <div class="row">
     <div class="column">
+      <img src="/images/now/book-shelf-1.webp" alt="book-shelf-1">
+  </div>
+  <div class="row">
+    <div class="column">
       <img src="/images/now/book-shelf-2.webp" alt="book-shelf-2">
     </div>
     <div class="column">
       <img src="/images/now/book-shelf-3.webp" alt="book-shelf-3">
     </div>
   </div> 
-  <div class="row">
-    <div class="column">
-      <img src="/images/now/book-shelf-1.webp" alt="book-shelf-1">
-    </div>
-  </div> 
+</div> 
 
   <style>
   .row{
