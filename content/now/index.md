@@ -14,16 +14,15 @@ toc:
 <div class="book-shelf">
   <div class="row">
     <div class="column">
-      <img src="/images/now/book-shelf-1.webp" alt="Snow" style="width:100%">
-    </div>
-  </div> 
-
-  <div class="row">
-    <div class="column">
       <img src="/images/now/book-shelf-2.webp" alt="Snow" style="width:100%">
     </div>
     <div class="column">
       <img src="/images/now/book-shelf-3.webp" alt="Forest" style="width:100%">
+    </div>
+  </div> 
+  <div class="row">
+    <div class="column">
+      <img src="/images/now/book-shelf-1.webp" alt="Snow" style="width:100%">
     </div>
   </div> 
 
