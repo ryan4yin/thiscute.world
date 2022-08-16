@@ -106,9 +106,6 @@ comment:
 - 2022-02-07：本站添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。
 - 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
 - 2022-08-12：本站架构升级为 Azure Front Door + Vercel，国内访问速度显著提升。
-- 2022-08-14：站点切换到更便宜的 Azure Standard CDN from Microsoft (classic)，仍然使用 Vercel 作为源站。
-  - 但是因为 Azure Standard CDN 不支持为根域名签发 HTTPS 证书，将站点主域名切换到了 <https://www.thiscute.world>。
-  - 在 Vercel 上设置了将旧的主域名 <https://thiscute.world> 重定向到 <https://www.thiscute.world>，因此旧域名仍然可用。
 {{< /admonition >}}
 
 {{< admonition info "博客快照-2020-01-21" >}}
