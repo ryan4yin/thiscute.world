@@ -98,14 +98,14 @@ comment:
 ### 博客时间线
 
 {{< admonition tip "博客时间线" true >}}
-- 2016-06-17：大一下学期，在博客园创建博客 <https://www.cnblogs.com/kirito-c/>
+- 2016-06-17：（大一下学期）在博客园创建博客 <https://www.cnblogs.com/kirito-c/>
   - 第一篇博文是[贪吃蛇—C—基于easyx图形库](https://www.cnblogs.com/kirito-c/p/5595355.html)，现在还能回忆起收到第一条评论时的兴奋之情。
-- 2021-01-16：工作一年多后，申请域名并开设独立博客 <https://ryan4yin.space/>
+- 2021-01-16：（工作一年多后）申请域名并开设独立博客 <https://ryan4yin.space/>
 - 2022-01-28：站点从 Cloudflare + Github Gages 迁移到 Vercel，国内访问速度有一定提升。
-- 2022-02-07：第一份工作结束后赋闲，将博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
-- 2022-02-07：本站添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。
-- 2022-02-16：本站通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
-- 2022-08-12：本站架构升级为 Azure Front Door + Vercel，国内访问速度显著提升。
+- 2022-02-07：（第一份工作结束后赋闲）将博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
+- 2022-02-07：站点添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。
+- 2022-02-16：站点通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
+- 2022-08-12：站点架构升级为 Azure Front Door + Vercel，国内访问速度显著提升。
 {{< /admonition >}}
 
 {{< admonition info "博客快照-2020-01-21" >}}
