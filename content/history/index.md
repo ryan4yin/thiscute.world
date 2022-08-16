@@ -15,7 +15,7 @@ toc:
   - 给 <https://thiscute.world> 加了个 Azure 的 Front Door 作为 vercel 的前置 CDN，发现效果出奇的好！现在站点访问速度跟国内服务器基本没差了，即使缓存不命中，回源速度也特别得快！
     - 不过价格也比较感人，也只有试用阶段才舍得用。
   - 据说 Azure CDN (Microsoft Standard) 在国内虽然比 Front Door 差一点，但是速度也要强过 CloudFalre/CloudFront，试用期之后可以试试。
-    - 算了下 Azure CDN 一个月可能也就 $10 出头，数据即使丢在 Azure Blob Storage 对象存储里，以我不到 1G 的总数据量一个月才不到 $1，完全可以接受。
+    - 算了下 Azure CDN 一个月可能也就 10 刀出头，数据即使丢在 Azure Blob Storage 对象存储里，以我不到 1G 的总数据量一个月才不到 1 刀，完全可以接受。
   - 堪称免备案站点加速方案中的战斗机！
 - 选 Azure 本来只是因为工作天天接触 AWS/GCP，想试用下全球排名第二的 Azure 是个啥感觉，结果意外发现它的国际 CDN 在国内这么快。
 - 当然 Azure 的坑也多，我遇到的有
@@ -27,6 +27,8 @@ toc:
   - 目录是用的 Active Directory，原生的多租户设计，但是感觉真的好难用啊，跟 AWS/Alicloud 的设计区别很大。
   - 所有资源都是 uuid 这一点，感觉不太友好。
   - 删掉了一个旧 CDN endpoint 后，又建了一个跟之前名字一样的 endpoint，结果创建成功了，但是页面到处报错 [s['@odata.type'] is not a function](https://docs.microsoft.com/en-us/answers/questions/964407/s34.html)
+    - 2022-08-16 更新：这个 bug 持续四天了，而且我测试站点的 http 端口目前仍然报错... 我怀疑是 rules engine 配置错了，但是这个页面也挂了，现在没办法修改，简直离谱。
+    - **不得不说 Azure CDN 是我用过的稳定性最差的 CDN，要不是国内速度确实快，我就直接弃坑了**...
   - CDN 如果把源站改为 custom origin，会有五六分钟的时间疯狂报错 404，之后又莫名其妙地恢复...
 - 收费：[Azure 的大部分资源价格](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/#pricing)跟 [AWS](https://aws.amazon.com/cn/ec2/pricing/on-demand/) 相差无几，都是「平民止步」的定价策略。
   - 而且 AWS/Azure/GCP 的出网流量、跨可用区流量都是额外计费的，不像国内云厂商，云服务器跟网络带宽可以绑在一起买。
