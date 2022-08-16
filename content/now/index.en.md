@@ -11,19 +11,22 @@ toc:
 
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - The ANSI C Programming Language
-- [The Linux Programming Interface](https://man7.org/tlpi/)
-- [AI] - [Dive into Deep Learning](https://github.com/d2l-ai/d2l-en)
-- [Psychology] - Intimate Relationships, 7e, Rowland S. Miller
 
 ## 🤤 I want to learn
 
 - Programming Languages: **Rust, C**
-- OS: Linux
+- Linux
+  - [The Linux Programming Interface](https://man7.org/tlpi/)
 - Network: L3/L4/L7
   - Computer Networking - A Top-Down Approach, 7e
 - Blockchain: **Web3 & Ethereum Development**
+- AI
+  - [Dive into Deep Learning](https://github.com/d2l-ai/d2l-en)
 - Music: [SynthesizerV](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) + [Reaper](https://www.reaper.fm)
 - Modeling & Design: Blender, Unreal Engine 5 & C++, Figma
-- Economics: Principles Of Economics, 9e, N. Gregory Mankiw
+- Economics: 
+  - Principles Of Economics, 9e, N. Gregory Mankiw
+- Psychology
+  - Intimate Relationships, 7e, Rowland S. Miller
 
 {{< particles_effect_up  >}}

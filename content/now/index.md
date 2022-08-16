@@ -52,7 +52,7 @@ toc:
 - The ANSI C Programming Language - 83/236
   - 快速过一遍语法
 - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
-- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
+- 《在峡江的转弯处 - 陈行甲人生笔记》 - 36/278
 
 
 ## 二、我今年还想搞搞这些
@@ -113,18 +113,17 @@ toc:
 正在读：
 
 - 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
-- [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/): Kubernetes 进阶
-- 《Principles Of Economics, 9e, N. Gregory Mankiw》
-- 《Intimate Relationships》 - 进度 14/449
-- 《语言学的邀请》- 进度 68/288
-  - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
+- 《在峡江的转弯处 - 陈行甲人生笔记》
+- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
 
 
 想读，但是没啥计划：
 
+- 《Intimate Relationships》 - 进度 14/449
+- 《语言学的邀请》- 进度 68/288
+  - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
 - 《云原生服务网格 Istio：原理、实践、架构与源码解析》
   - 比较老的书了，不过用来学下 Istio 的底层架构跟源码，感觉还是有价值的。
-- 《在峡江的转弯处 - 陈行甲人生笔记》
 - 《手把手教你读财报》
 - 《原则 - 应对变化中的世界秩序》
 - 《生命最后的读书会》
@@ -135,6 +134,7 @@ toc:
 - 《语言学的邀请》：对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
 - 《Intimate Relationships》
 - 《Social Psychology, 13e, David Myers》
+- 《Principles Of Economics, 9e, N. Gregory Mankiw》
 
 
 ## 四、我的知识清单
