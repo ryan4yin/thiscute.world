@@ -42,11 +42,11 @@ comment:
   - **English**: Good at reading technical articles, but weak in writing, listening and speaking
   - **中文**：母语，高中语文中等水准。希望能学会用中文写小说，就先从短篇开始吧
 - **编程语言**
-  - **Python**: 目前的主力，也是我最熟悉的语言
-  - **Go**: 学习中，云原生圈子里最流行的语言
-  - **Rust**: 学习中，大量函数式的语法糖，贴心的编译器提示，感觉很好用
-  - **C**: 勉强能看懂代码，荒废比较久了。在学习 Nginx/Linux 的过程中慢慢补吧...
-  - 曾经使用过但已经荒废的语言：Java/Julia/Mathematica/Lua
+  - **Go/Python**: 目前的主力，也是我最熟悉的语言
+  - **C**: 荒废比较久了，为了学习 Linux 正在重新学习
+  - **Rust**: 学习中，大量函数式的语法糖，贴心的编译器提示，感觉很好用（当然也比较折磨人...）
+  - **Java**: 大三学过，但是很久没用荒废地差不多了
+  - **Lua**: 谈不上感兴趣，只是为了搞 OpenResty/APISIX 必须得学，目前处于会复制粘贴的程度...
 - **熟悉的技术**：
   - Kubernetes
   - Istio
