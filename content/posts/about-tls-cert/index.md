@@ -778,10 +778,12 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 - 如果因为某些原因导致客户端无法访问 OCSP 服务器，会导致站点的初次访问时间用时变得很长。因为浏览器会每隔一阵时间就重新尝试去访问 OCSP 服务器！
   - 一个典型的例子就是 [提高https载入速度，记一次nginx升级优化](https://www.hawu.me/operation/2129)，因为 Let's Encrypt 的 OCSP 服务器被 GFW 屏蔽，导致国内使用该证书的站点首次访问速度非常慢。
 
-为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，
+为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地。
 
 在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
 因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。
+
+对于 Let's Encrypt 的 OCSP 服务器被 GFW 屏蔽这样的场景，开不开 OCSP Stapling 对站点访问速度的影响就会变得非常地大！
 
 #### ALPN 应用层协议协商
 
