@@ -775,6 +775,8 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 - Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
   - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
 - 因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。
+- 如果因为某些原因导致客户端无法访问 OCSP 服务器，会导致站点的初次访问时间用时变得很长。因为浏览器会每隔一阵时间就重新尝试去访问 OCSP 服务器！
+  - 一个典型的例子就是 [提高https载入速度，记一次nginx升级优化](https://www.hawu.me/operation/2129)，因为 Let's Encrypt 的 OCSP 服务器被 GFW 屏蔽，导致国内使用该证书的站点首次访问速度非常慢。
 
 为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，
 
