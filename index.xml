@@ -3380,6 +3380,11 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 </ul>
 </li>
 <li>因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。</li>
+<li>如果因为某些原因导致客户端无法访问 OCSP 服务器，会导致站点的初次访问时间用时变得很长。因为浏览器会每隔一阵时间就重新尝试去访问 OCSP 服务器！
+<ul>
+<li>一个典型的例子就是 <a href="https://www.hawu.me/operation/2129" target="_blank" rel="noopener noreffer">提高https载入速度，记一次nginx升级优化</a>，因为 Let&rsquo;s Encrypt 的 OCSP 服务器被 GFW 屏蔽，导致国内使用该证书的站点首次访问速度非常慢。</li>
+</ul>
+</li>
 </ul>
 <p>为了解决这两个问题，<a href="https://www.rfc-editor.org/rfc/rfc6066" target="_blank" rel="noopener noreffer">rfc6066</a> 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，</p>
 <p>在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
@@ -9817,7 +9822,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-17T00:12UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-17T00:14UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9984,7 +9989,7 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>268427</td>
+            <td>268563</td>
             <td style="color:tomato;"><strong>32007</strong></td>
             <td>79095</td>
             <td>27 days, 17h 53m 25s</td>
