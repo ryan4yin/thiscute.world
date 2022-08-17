@@ -48,9 +48,9 @@ toc:
 
 >按优先级排序
 
+- 《在峡江的转弯处 - 陈行甲人生笔记》 - 进度 153/278
 - The ANSI C Programming Language - 83/236
   - 快速过一遍语法
-- 《在峡江的转弯处 - 陈行甲人生笔记》 - 36/278
 - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 极客时间《OpenResty 从入门到实战》
 
