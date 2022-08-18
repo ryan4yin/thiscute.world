@@ -10,16 +10,16 @@ Launch a local Hugo server including live reload by running (append `-F` for inc
 
 ```shell
 # serve in debug mode, with all drafts
-hugo server -D --debug
+hugo server --debug --buildDrafts --disableFastRender
 
 # serve in production mode
-hugo serve -e production
+hugo serve -e production --disableFastRender
 ```
 
 You can manually create content files (for example as `content/<CATEGORY>/<FILE>.<FORMAT>`) and provide metadata in them, however you can use the `new` command to do a few things for you (like add title and date):
 
 ```shell
-hugo new posts/my-first-post.md
+hugo new posts/my-first-post/index.md
 ```
 
 Edit the newly created file under `content/posts`, update the header of the post to say `draft: false`,
