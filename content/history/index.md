@@ -9,6 +9,12 @@ toc:
 
 记录下我的学习轨迹（结果写着写着有点像是技术笔记跟日记的混合了 hhhh）
 
+### 2022-08-18
+
+- 尝试上线 Nginx Gateway 的 TLS 加密功能，使用了 Google Public CA 提供的三个月有效期 TLS 证书
+  - AWS NLB 上观察到大量连接被 Client Reset，tcpdump 抓包后通过 wireshark 分析，确认是大量的 TLS 握手在 `Change Cipher Spec` 这一步后，被客户端强制 RST。正在到处查 TLS 握手的资料...
+
+
 ### 2022-08-17
 
 - 阅读《在峡江的转弯处 - 陈行甲人生笔记》 - 进度 153/278

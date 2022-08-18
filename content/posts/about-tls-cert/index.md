@@ -768,7 +768,10 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 如果输出包含 `OCSP Response Status: successful` 就说明站点支持 ocsp stapling，
 如果输出内容为 `OCSP response: no response sent` 则说明站点不支持ocsp stapling。
 
->实际上我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
+>实际上 Google/AWS 等大多数站点都不会启用也不需要启用 ocsp stapling，一是因为它们自己就是证书颁发机构，OCSP 服务器也归它们自己管，不存在隐私的问题。二是它们的 OCSP 服务器遍布全球，也不存在性能问题。
+这种情况下开个 OCSP Stapling 反而是浪费流量，因为每次 TLS 握手都得发送一个 OCSP 状态信息。
+
+>我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
 
 这导致了一些问题：
 
