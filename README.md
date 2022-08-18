@@ -1,6 +1,6 @@
 # This Cute World / Ryan4Yin's Space
 
-My personal blog, built using [Hugo](https://github.com/gohugoio/hugo) and hosted on [Vercel](https://vercel.com/dashboard/usage), [Netlify](https://app.netlify.com/) or [GitHub Pages](https://pages.github.com/).
+My personal blog, built using [Hugo](https://github.com/gohugoio/hugo) and hosted on [Vercel](https://vercel.com/dashboard/usage) or [GitHub Pages](https://pages.github.com/).
 
 Address: https://thiscute.world/
 
