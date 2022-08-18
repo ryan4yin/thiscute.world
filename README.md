@@ -6,7 +6,17 @@ Address: https://thiscute.world/
 
 ## Editing
 
-Launch a local Hugo server including live reload by running (append `-F` for including future posts):
+Use the `new` command to create a new post:
+
+```shell
+# new posts
+hugo new posts/my-first-post/index.md
+
+# new posts with special category name as a prefix
+hugo new posts/category/my-first-post/index.md
+```
+
+Launch a local Hugo server including live reload by running:
 
 ```shell
 # serve in debug mode, with all drafts
@@ -16,25 +26,18 @@ hugo server --debug --buildDrafts --disableFastRender
 hugo serve -e production --disableFastRender
 ```
 
-You can manually create content files (for example as `content/<CATEGORY>/<FILE>.<FORMAT>`) and provide metadata in them, however you can use the `new` command to do a few things for you (like add title and date):
-
-```shell
-hugo new posts/my-first-post/index.md
-```
-
-Edit the newly created file under `content/posts`, update the header of the post to say `draft: false`,
-you can view the live changes in the browser http://localhost:1313/
+Now edit the newly created file under `content/posts`, and then you can view the live changes in the browser <http://localhost:1313/>
 
 
 ## Github Action
 
 Push updates to `main` branch will trigger a github action to deploy the updates automatically.
 
-the action workflow will:
+The action workflow will:
 
 - Fetch Posts Trending Data from Google Analytics([website_statistics.json](./data/website_statistics.json)).
 - Deploy to Github Pages(branch `gh-page`).
 - Push Argolia Index for Search.
 
-see [.github/workflows/gh-pages.yaml](/.github/workflows/gh-pages.yaml) for details.
+See [.github/workflows/gh-pages.yaml](/.github/workflows/gh-pages.yaml) for details.
 
