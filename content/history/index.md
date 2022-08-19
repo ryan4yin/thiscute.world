@@ -11,7 +11,13 @@ toc:
 
 ### 2022-08-19
 
-- 打算换一个思路，用 APISIX 搞个网关再测一波。
+- Nginx 网关的 TLS 加密：打算换一个思路，用 APISIX 搞个网关再测一波。下周搞搞看吧
+- 晚上读完了《在峡江的转弯处 - 陈行甲人生笔记》
+  - 这本书写得极好，作者分享的洞见非常契合我，感觉于我是很有益的。
+  - 同时文字中的感情相当丰富，有人在豆瓣上评论说为此感觉到不适，可我觉得这才是真性情，如此丰富的感觉其实正说明了作者的感性，以及对生活的态度！因为看到这样亮眼的光芒而难以直视的人，或许只是因为待在黑暗中太久了。
+  - 在这里，我也用书中一句话来回答一下 2017 年 2 月 6 日写下「[山岭就像时间一样看不到边，翻过了一座又是一座，这又是一种更大的痛苦](https://thiscute.world/posts/the-holiday-is-coming-to-an-end/)」的我，告诉他我现在的想法是「脚下虽有万水千山，但行者必至。」至于我是不是在说空话，事实胜于雄辩，就让时间来证明吧。
+
+![](/images/now/life-notes-of-chenxingjia.webp "陈行甲人生随笔")
 
 ### 2022-08-18
 
@@ -422,9 +428,12 @@ toc:
 ### 2022-04-25
 
 - 完成了 19 年创建的 go 项目：https://github.com/ryan4yin/video2ascii
-- 失眠，半夜随便翻了翻，把《Go 程序设计语言（英文版）》走马观花过了一遍
+- 失眠，半夜随便翻了翻，把《Go 程序设计语言（英文版）》走马观花过了剩下的一部分，算是完成了一周目
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
   - 主要是通过案例讲解 CRD Operator Controller 等 Kubernetes 编程技术
+
+![](/images/now/the-go-programming-language.webp "Go 程序设计语言（英文版） 2022-08-19 补图")
+
 
 ### 2022-04-24
 

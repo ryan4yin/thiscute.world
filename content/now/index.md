@@ -48,7 +48,6 @@ toc:
 
 >按优先级排序
 
-- 《在峡江的转弯处 - 陈行甲人生笔记》 - 进度 153/278
 - The ANSI C Programming Language - 83/236
   - 快速过一遍语法
 - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
@@ -108,12 +107,12 @@ toc:
 - [x] 《Go 程序设计语言（英文版）》
 - [x] 《深入浅出 Kubernetes - 张磊》
 - [x] 《在生命的尽头拥抱你-临终关怀医生手记》
+- [x] 《在峡江的转弯处 - 陈行甲人生笔记》
 
 
 正在读：
 
 - 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
-- 《在峡江的转弯处 - 陈行甲人生笔记》
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
 
 
