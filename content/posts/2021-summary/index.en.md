@@ -172,7 +172,7 @@ It can be expected that there will be so many opportunities for the SRE team in 
     - [ ] 《My Country and My People - 林语堂》
     - [ ] 《房思琪的初恋乐园》
   - social & sciences
-    - [ ] Death Is But a Dream: I want to know more about "death" this year.
+    - [x] Death Is But a Dream: I want to know more about "death" this year.
     - [ ] 《怎样征服美丽少女》：哈哈
     - [ ] Harper Perennial Modern Classics
     - [ ] Social Psychology
