@@ -113,6 +113,7 @@ toc:
 正在读：
 
 - 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
+- 《江城》
 - 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
 
 
@@ -120,7 +121,6 @@ toc:
 
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 - 《被讨厌的勇气》
-- 《江城》
 - 《科学革命的结构》
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 《语言学的邀请》- 进度 68/288
