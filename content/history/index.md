@@ -11,6 +11,11 @@ toc:
 
 这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
+### 2022-08-20
+
+- 读完 The ANSI C Programming Language
+  - 笔记：[C 语言笔记](https://github.com/ryan4yin/knowledge/tree/master/pl/c)
+
 ### 2022-08-19
 
 - Nginx 网关的 TLS 加密：打算换一个思路，用 APISIX 搞个网关再测一波。下周搞搞看吧

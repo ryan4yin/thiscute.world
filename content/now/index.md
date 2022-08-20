@@ -48,11 +48,9 @@ toc:
 
 >按优先级排序
 
-- The ANSI C Programming Language - 83/236
-  - 快速过一遍语法
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 21/572
 - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
-- 极客时间《OpenResty 从入门到实战》
-
+- 《江城》
 
 ## 二、我今年还想搞搞这些
 
@@ -75,12 +73,11 @@ toc:
   - 待完成
     - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - Linux 性能调优与 Linux 网络技术
+  - 已完成
+    - The ANSI C Programming Language - 用来快速复习下 C 的语法
   - 待完成
     - C 语言基础复习
-      - The ANSI C Programming Language - 用来快速复习下 C 的语法
       - 通过其他资料补充学习 make gdb ld objdump objcopy 等命令
-    - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 21/572
-      - 学习 Linux 的顶级书藉，据说内容组织比 APUE 对新手更友好些。
     - 《深入理解 Linux 网络 - 张彦飞》 - 14/320
     - 极客时间《网络排查案例课》
     - 极客时间 《Linux 性能优化实战》
@@ -108,18 +105,18 @@ toc:
 - [x] 《深入浅出 Kubernetes - 张磊》
 - [x] 《在生命的尽头拥抱你-临终关怀医生手记》
 - [x] 《在峡江的转弯处 - 陈行甲人生笔记》
+- [x] 《The ANSI C Programming Language》
 
 
 正在读：
 
-- 《The ANSI C Programming Language》：上大学时看过中文版。为了学操作系统，有必要再看一遍，这次就读原著英文版吧。
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 - 《江城》
-- 阅读 [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/) - 进度 7%
+- [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 
 
 想读，但是没啥计划：
 
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 - 《被讨厌的勇气》
 - 《科学革命的结构》
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
