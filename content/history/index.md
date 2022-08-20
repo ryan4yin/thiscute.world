@@ -16,7 +16,8 @@ toc:
 - 读完 The ANSI C Programming Language
   - 笔记：[C 语言笔记](https://github.com/ryan4yin/knowledge/tree/master/pl/c)
   - 明天写几个小程序练练手，比如 video2chars 哈哈
-- C 语言补完了，开始读 [Linux/Unix 系统编程手册](https://man7.org/tlpi/)
+- C 语言补完了，开始读 [Linux/Unix 系统编程手册](https://man7.org/tlpi/) - 进度 56/572
+  - 挺好读的，慢慢来感觉了~
 
 ![](/images/now/the-asni-c-programming-language.webp "The ANSI C Programming Language")
 

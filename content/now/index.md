@@ -48,7 +48,7 @@ toc:
 
 >按优先级排序
 
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 21/572
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 56/572
 - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
 - 《江城》
 
