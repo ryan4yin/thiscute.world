@@ -49,7 +49,7 @@ toc:
 >按优先级排序
 
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 56/572
-- [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
+- 学习研究 APISIX、Openresty、Lua
 - 《江城》
 
 ## 二、我今年还想搞搞这些
@@ -61,6 +61,7 @@ toc:
     - 阅读了《Go 程序设计语言》，学会了 Go 语言基础
     - 使用 Go+Gin 完成了一个 Nginx 网关控制器项目并上线，实现了一些简单的接口
   - 待完成
+    - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
     - [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
     - [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
     - [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)

@@ -11,6 +11,13 @@ toc:
 
 这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
+### 2022-08-21
+
+- 为了练习 C 语言，尝试使用 ffmpeg 实现一个 video2ascii 项目
+  - 项目地址 [video2ascii-c](https://github.com/ryan4yin/video2ascii-c)
+  - 花了较长时间研究 Makefile 语法跟 clang 的参数，然后又花了很长时间熟悉 ffmpeg 的 api
+
+
 ### 2022-08-20
 
 - 读完 The ANSI C Programming Language
