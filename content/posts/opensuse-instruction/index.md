@@ -62,8 +62,8 @@ sudo zypper clean  # 清理本地的包缓存
 安装需要用到的各类软件: 
 
 ```shell
-# 启用 Packman 仓库，使用北交镜像源
-sudo zypper ar -cfp 90 'https://mirror.bjtu.edu.cn/packman/suse/openSUSE_Tumbleweed/' packman-bjtu
+# 启用 Packman 仓库，使用阿里云镜像源
+sudo zypper ar "http://mirrors.aliyun.com/packman/suse/openSUSE_Tumbleweed/" Packman
 
 # install video player and web browser
 sudo zypper install mpv ffmpeg-4 chromium firefox
