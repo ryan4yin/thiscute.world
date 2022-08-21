@@ -13,9 +13,10 @@ toc:
 
 ### 2022-08-21
 
-- 为了练习 C 语言，尝试使用 ffmpeg 实现一个 video2ascii 项目
+- 为了练习 C 语言，使用 ffmpeg 完成了一个 video2ascii 项目
   - 项目地址 [video2ascii-c](https://github.com/ryan4yin/video2ascii-c)
   - 花了较长时间研究 Makefile 语法跟 clang 的参数，然后又花了很长时间熟悉 ffmpeg 的 api
+  - 目前已经集齐用五种不同语言实现的 video2ascii 工具，除了 C 语言是调用的原生 API 外，其他语言都是使用 ffmpeg/opencv 的 wrapper 实现的。
 
 
 ### 2022-08-20
