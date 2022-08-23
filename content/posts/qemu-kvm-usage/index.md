@@ -298,7 +298,15 @@ virt-install --virt-type kvm \
 
 ### 3. 虚拟机管理 - virsh
 
-虚拟机创建好后，可使用 virsh 管理虚拟机：
+虚拟机创建好后，可使用 virsh 管理虚拟机。
+
+首先介绍万能的帮助命令：
+
+```shell
+virsh help
+```
+
+除了官方的 help 之外，我也总结了下 virsh 的常用命令，如下。
 
 查看虚拟机列表：
 
@@ -323,7 +331,7 @@ virt-viewer --wait opensuse15
 
 ```shell
 virsh start opensuse15
-virsh suuspend opensuse15
+virsh suspend opensuse15
 virsh resume opensuse15
 virsh reboot opensuse15
 # 优雅关机
