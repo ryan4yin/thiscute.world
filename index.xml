@@ -2754,17 +2754,17 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 </div><h3 id="4-证书支持保护的域名类型" class="headerLink">
     <a href="#4-%e8%af%81%e4%b9%a6%e6%94%af%e6%8c%81%e4%bf%9d%e6%8a%a4%e7%9a%84%e5%9f%9f%e5%90%8d%e7%b1%bb%e5%9e%8b" class="header-mark"></a>4. 证书支持保护的域名类型</h3><p>TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域名。
 但是通配符域名证书的匹配规则，<strong>和 DNS 解析中的匹配规则并不一致</strong>！</p>
-<p>根据<a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreffer">证书选型和购买 - **阿里云文档</a> 的解释，<strong>通配符证书只支持同级匹配</strong>，详细说明如下:</p>
+<p>根据<a href="https://help.aliyun.com/document_detail/28542.html" target="_blank" rel="noopener noreffer">证书选型和购买 - 阿里云文档</a> 的解释，<strong>通配符证书只支持同级匹配</strong>，详细说明如下:</p>
 <ol>
-<li>一级通配符域名: 可保护该通配符域名（主域名）自身和该域名所有的一级子域名。
+<li><strong>一级通配符域名</strong>: 可保护该通配符域名（主域名）自身和该域名所有的一级子域名。
 <ul>
-<li><strong>例如</strong>: 一级通配符域名 <code>*.aliyun.com</code> 可以用于保护 <code>aliyun.com</code>、<code>www.aliyun.com</code> 以及其他所有一级子域名。
+<li>例如: 一级通配符域名 <code>*.aliyun.com</code> 可以用于保护 <code>aliyun.com</code>、<code>www.aliyun.com</code> 以及其他所有一级子域名。
 但是不能用于保护任何二级子域名，如 <code>xx.aa.aliyun.com</code></li>
 </ul>
 </li>
-<li>二级或二级以上通配符域名: 只能保护该域名同级的所有通配域名，不支持保护该通配符域名本身。
+<li><strong>二级或二级以上通配符域名</strong>: 只能保护该域名同级的所有通配域名，不支持保护该通配符域名本身。
 <ul>
-<li><strong>例如</strong>: <code>*.a.aliyun.com</code> 只支持保护它的所有同级域名，不能用于保护三级子域名。</li>
+<li>例如: <code>*.a.aliyun.com</code> 只支持保护它的所有同级域名，不能用于保护三级子域名。</li>
 </ul>
 </li>
 </ol>
@@ -2938,6 +2938,9 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 </ul>
 </li>
 </ul>
+<blockquote>
+<p>此外还有新兴的 x25519 系列，这里不多介绍了，有兴趣可自行了解。</p>
+</blockquote>
 <p>生成一个使用 <code>P-384</code> 曲线的 ECC 证书的示例如下:</p>
 <ol>
 <li>编写证书签名请求的配置文件 <code>ecc-csr.conf</code>:
@@ -3049,34 +3052,35 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 <h3 id="6-证书的类型" class="headerLink">
     <a href="#6-%e8%af%81%e4%b9%a6%e7%9a%84%e7%b1%bb%e5%9e%8b" class="header-mark"></a>6. 证书的类型</h3><p>按照数字证书的生成方式进行分类，证书有三种类型:</p>
 <ol>
-<li>由权威 CA 机构签名的「公网受信任证书」: 这类证书会被浏览器、小程序等第三方应用/服务商信任
+<li>由权威 CA 机构签名的「<strong>公网受信任证书</strong>」: 这类证书会被浏览器、小程序等第三方应用/服务商信任
 <ul>
 <li>申请证书时需要验证你对域名/IP 的所有权，也就使证书无法伪造</li>
 <li>如果你的 API 需要提供给第三方应用/服务商/用户访问，那就需要向权威 CA 机构申请此类证书</li>
 </ul>
 </li>
-<li>本地签名证书 - <strong><code>tls_locally_signed_cert</code></strong>: 即由本地 CA 证书签名的 TLS 证书
+<li><strong>本地签名证书</strong>: 即由本地 CA 证书签名的 TLS 证书
 <ul>
 <li>本地 CA 证书，就是自己使用 <code>openssl</code> 等工具生成的 CA 证书</li>
 <li>这类证书的缺点是无法与第三方应用/服务商建立安全的连接</li>
 <li>如果客户端是完全可控的（比如是自家的 APP，或者是接入了域控的企业局域网设备），完全可以在所有客户端都安装上自己生成的 CA 证书。这种场景下使用此类证书是安全可靠的，可以不向权威 CA 机构申请证书</li>
 </ul>
 </li>
-<li>自签名证书 - <strong><code>tls_self_signed_cert</code></strong>: 前面介绍了根证书是一个自签名证书，它使用根证书的私钥为根证书签名
+<li><strong>自签名证书</strong>: 前面介绍了根证书是一个自签名证书，它使用根证书的私钥为根证书签名
 <ul>
 <li>这里的「自签名证书」是指<strong>直接使用根证书进行网络通讯</strong>，缺点是证书的更新迭代会很麻烦，而且安全性低。</li>
 </ul>
 </li>
 </ol>
-<p>总的来说，权威CA机构颁发的「公网受信任证书」，可以被第三方应用信任，但是自己生成的不行。
+<p>总的来说，权威 CA 机构颁发的「公网受信任证书」，可以被第三方应用信任，但是自己生成的不行。
 而越贵的权威证书，安全性与可信度就越高，或者可以保护更多的域名。</p>
 <p>在客户端可控的情况下，可以考虑自己生成证书链并签发「本地签名证书」，将本地 CA 证书预先安装在客户端中用于验证。</p>
 <p>而「自签名证书」主要是方便，能不用还是尽量不要使用。</p>
 <h3 id="7-向权威-ca-机构申请公网受信任证书" class="headerLink">
     <a href="#7-%e5%90%91%e6%9d%83%e5%a8%81-ca-%e6%9c%ba%e6%9e%84%e7%94%b3%e8%af%b7%e5%85%ac%e7%bd%91%e5%8f%97%e4%bf%a1%e4%bb%bb%e8%af%81%e4%b9%a6" class="header-mark"></a>7. 向权威 CA 机构申请「公网受信任证书」</h3><p>向权威机构申请的公网受信任证书，可以直接应用在边界网关上，用于给公网用户提供 TLS 加密访问服务，比如各种 HTTPS 站点、API。这是需求最广的一类数字证书服务。</p>
 <p>而证书的申请与管理方式又分为两种：</p>
-<ul>
-<li>通过 <a href="https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment" target="_blank" rel="noopener noreffer">ACMEv2（Automated Certificate Management Environment (ACME) </a> 协议进行证书的自动化申请与管理。支持使用此开放协议申请证书的权威机构有：
+<ol>
+<li>通过 <a href="https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment" target="_blank" rel="noopener noreffer">ACMEv2（Automated Certificate Management Environment (ACME) </a> 协议进行证书的自动化申请与管理。支持使用此开放协议申请证书的权威机构有：</li>
+</ol>
 <ul>
 <li>免费服务
 <ul>
@@ -3113,8 +3117,6 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 </li>
 <li><strong>terraform 也有相关 provider</strong>: <a href="https://github.com/vancluever/terraform-provider-acme" target="_blank" rel="noopener noreffer">terraform-provider-acme</a></li>
 <li><a href="https://github.com/cert-manager/cert-manager" target="_blank" rel="noopener noreffer">cert-manager</a>: kubernetes 中的证书管理工具，支持 ACMEv2，也支持创建与管理私有证书。</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -3484,7 +3486,7 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 <h3 id="3-其他加密通讯协议" class="headerLink">
     <a href="#3-%e5%85%b6%e4%bb%96%e5%8a%a0%e5%af%86%e9%80%9a%e8%ae%af%e5%8d%8f%e8%ae%ae" class="header-mark"></a>3. 其他加密通讯协议</h3><h4 id="ssh-协议" class="headerLink">
     <a href="#ssh-%e5%8d%8f%e8%ae%ae" class="header-mark"></a>SSH 协议</h4><p>首先最容易想到的应该就是是 SSH 协议（Secure SHell protocol）。SSH 与 TLS 一样都能提供加密通讯，是 PKI 公钥基础设施的早期先驱者之一。</p>
-<p>OpenSSH 应用最广泛的 SSH 实现，它使用 SSH Key 而非数字证书进行身份认证，这主要是因为 OpenSSH 仅用于用户与主机之间的安全通信，不需要记录 X.509 这么繁多的信息。</p>
+<p>SSH 协议应用最广泛的实现是 OpenSSH，它使用 SSH Key 而非数字证书进行身份认证，这主要是因为 OpenSSH 仅用于用户与主机之间的安全通信，不需要记录 X.509 这么繁多的信息。</p>
 <p>我们来手动生成个 OpenSSH ed25519 密钥对试试（RSA 的生成命令完全类似）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -9831,7 +9833,7 @@ python的类方法、静态方法，与java的静态方法：</p>
 <li><a href="https://docs.python.org/3/" target="_blank" rel="noopener noreffer">Python3 官方文档</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">本站统计数据</title><link href="https://thiscute.world/statistics/"/><id>https://thiscute.world/statistics/</id><author><name>ryan4yin</name></author><published>2022-02-07T18:56:35+08:00</published><updated>2022-02-07T18:56:35+08:00</updated><content type="html"><![CDATA[<blockquote>
-    <p>更新时间: 2022-08-21T20:41UTC&#43;08:00</p>
+    <p>更新时间: 2022-08-21T22:50UTC&#43;08:00</p>
 </blockquote>
 <h2 id="一全站统计" class="headerLink">
     <a href="#%e4%b8%80%e5%85%a8%e7%ab%99%e7%bb%9f%e8%ae%a1" class="header-mark"></a>一、全站统计</h2>
@@ -9998,10 +10000,10 @@ python的类方法、静态方法，与java的静态方法：</p>
         </thead>
         <tbody>
         <tr style="text-align:center">
-            <td>268861</td>
-            <td style="color:tomato;"><strong>32971</strong></td>
-            <td>80497</td>
-            <td>28 days, 6h 41m 58s</td>
+            <td>268893</td>
+            <td style="color:tomato;"><strong>32988</strong></td>
+            <td>80517</td>
+            <td>28 days, 6h 45m 28s</td>
             <td style="color:dodgerblue;"><strong>01m 14s</strong></td>
             </tr>
         </tbody>
@@ -10107,7 +10109,7 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"><a href="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/">写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></td>
             <td sort_key="94">01m 34s</td>
             <td sort_key="510">510</td>
-            <td sort_key="626">626</td>
+            <td sort_key="627">627</td>
             </tr>
         
         <tr>
@@ -10123,7 +10125,7 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="/posts/linux-virtual-network-interfaces/"><a href="/posts/linux-virtual-network-interfaces/">Linux 中的虚拟网络接口</a></td>
             <td sort_key="86">01m 26s</td>
             <td sort_key="224">224</td>
-            <td sort_key="288">288</td>
+            <td sort_key="289">289</td>
             </tr>
         
         <tr>
@@ -10155,7 +10157,7 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="/posts/practical-cryptography-basics-1/"><a href="/posts/practical-cryptography-basics-1/">写给开发人员的实用密码学（一）—— 概览</a></td>
             <td sort_key="68">01m 08s</td>
             <td sort_key="505">505</td>
-            <td sort_key="800">800</td>
+            <td sort_key="802">802</td>
             </tr>
         
         <tr>
@@ -10290,16 +10292,16 @@ python的类方法、静态方法，与java的静态方法：</p>
             <td sort_key="34">34</td>
             <td sort_key="/posts/tcpdump-and-wireshark/"><a href="/posts/tcpdump-and-wireshark/">使用 tcpdump 和 Wireshark 进行远程实时抓包分析</a></td>
             <td sort_key="25">25s</td>
-            <td sort_key="339">339</td>
-            <td sort_key="365">365</td>
+            <td sort_key="341">341</td>
+            <td sort_key="367">367</td>
             </tr>
         
         <tr>
             <td sort_key="35">35</td>
             <td sort_key="/posts/use-istio-for-jwt-auth/"><a href="/posts/use-istio-for-jwt-auth/">使用 Istio 进行 JWT 身份验证（充当 API 网关）</a></td>
             <td sort_key="22">22s</td>
-            <td sort_key="181">181</td>
-            <td sort_key="218">218</td>
+            <td sort_key="182">182</td>
+            <td sort_key="219">219</td>
             </tr>
         
         <tr>
