@@ -13,8 +13,15 @@ toc:
 
 ### 2022-08-25
 
-- 有个 HTTP 请求失败后 fallback 到备份服务器的需求，想写个 lua 插件来支持它，在 Github 上咨询 APISIX，聊了两天官方一直建议我看看这个 nginx_next_retry，之前一直感觉不太合适，APISIX 的文档也语焉不详，但是今天研究了一波 Nginx/OpenResty 的官方文档，好像又有戏 hhhh
+- 根据 [APISIX 官方建议](https://github.com/apache/apisix/discussions/7773)，使用 `priority=-1` 跟 `proxy_next_upstream` 实现了请求的 fallback 功能，赞一个。
+  - 直接使用 k8s service FQDN 作为 node host 了，因此实质是通过 APISIX + kube-proxy 实现的功能，kube-proxy 负责在 pods 之间做四层负载均衡，负载测试也很正常。
+
+
+### 2022-08-25
+
+- 有个 HTTP 请求失败后 fallback 到备份服务器的需求，想写个 lua 插件来支持它，在 Github 上咨询 APISIX，聊了两天官方一直建议我看看这个 `nginx_next_retry`，之前一直感觉不太合适，APISIX 的文档也语焉不详，但是今天研究了一波 Nginx/OpenResty 的官方文档，好像又有戏 hhhh
   - https://github.com/apache/apisix/discussions/7773
+    - 重点有二，一是设置 `proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504 http_403 http_404 http_429 non_idempotent;`，二是设置 node 的 `priority=-1`
   - 也思考了一波，这类需求很特殊的专用网关，到底应该用 Envoy 还是 APISIX/OpenResty，还是说自己写一个...
 - 了解 zig 语言时，读到一篇写得很好的[现代化 C 使用体验](https://liujiacai.net/blog/2022/04/30/modern-c/)，写得很好
 
