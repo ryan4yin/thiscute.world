@@ -11,6 +11,13 @@ toc:
 
 这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
+### 2022-08-25
+
+- 有个 HTTP 请求失败后 fallback 到备份服务器的需求，想写个 lua 插件来支持它，在 Github 上咨询 APISIX，聊了两天官方一直建议我看看这个 nginx_next_retry，之前一直感觉不太合适，APISIX 的文档也语焉不详，但是今天研究了一波 Nginx/OpenResty 的官方文档，好像又有戏 hhhh
+  - https://github.com/apache/apisix/discussions/7773
+  - 也思考了一波，这类需求很特殊的专用网关，到底应该用 Envoy 还是 APISIX/OpenResty，还是说自己写一个...
+- 了解 zig 语言时，读到一篇写得很好的[现代化 C 使用体验](https://liujiacai.net/blog/2022/04/30/modern-c/)，写得很好
+
 ### 2022-08-21
 
 - 为了练习 C 语言，使用 ffmpeg 完成了一个 video2ascii 项目
