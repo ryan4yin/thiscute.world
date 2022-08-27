@@ -34,15 +34,18 @@
         {{- $image  := $featuredImage.RelPermalink -}}
         {{- $width  := $featuredImage.Width -}}
         {{- $height := $featuredImage.Height -}}
-        {{- with $image -}}
-          <figure>
-            {{- dict "Src" . "Title" $.Description "Resources" $.Resources "Width" $width "Height" $height | partial "plugin/image.html" -}}
-          </figure>
-        {{- end -}}
+        <figure>
+          <img class="lazyload" src="{{ $image }}" height="{{ $width }}" width="{{ $height }}"><figcaption></figcaption>
+        </figure>
 
         {{- /* Post Content */ -}}
         {{- .Content -}}
       ]]></content>
+    {{- else -}}
+    {{- `<content type="html"><![CDATA[` | safeHTML -}}
+      <p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。</p>
+      <p>This post is too old, please click the original URL to read it.</p>
+    ]]></content>
     {{- end -}}
   </entry>
   {{ end }}
