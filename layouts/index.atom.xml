@@ -35,9 +35,9 @@
         {{- $width  := $featuredImage.Width -}}
         {{- $height := $featuredImage.Height -}}
         {{- with $image -}}
-            <div class="featured-image">
-                {{- dict "Src" . "Title" $.Description "Resources" $.Resources "Width" $width "Height" $height | partial "plugin/image.html" -}}
-            </div>
+          <figure>
+            {{- dict "Src" . "Title" $.Description "Resources" $.Resources "Width" $width "Height" $height | partial "plugin/image.html" -}}
+          </figure>
         {{- end -}}
 
         {{- /* Post Content */ -}}
