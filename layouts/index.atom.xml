@@ -1,15 +1,3 @@
-{{- $pctx := . -}}
-{{- if .IsHome -}}{{ $pctx = .Site }}{{- end -}}
-{{- $pages := slice -}}
-{{- if or $.IsHome $.IsSection -}}
-{{- $pages = $pctx.RegularPages -}}
-{{- else -}}
-{{- $pages = $pctx.Pages -}}
-{{- end -}}
-{{- $limit := .Site.Config.Services.RSS.Limit -}}
-{{- if ge $limit 1 -}}
-{{- $pages = $pages | first $limit -}}
-{{- end -}}
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ if eq  .Title  .Site.Title }}{{ .Site.Title }}{{ else }}{{ with .Title }}{{.}} on {{ end }}{{ .Site.Title }}{{ end }}</title>
   <link href="{{ .Permalink }}index.xml" rel="self"/>
@@ -20,7 +8,16 @@
     <name>{{.}}</name>{{ with $.Site.Author.email }}
     <email>{{.}}</email>{{end}}
   </author>{{end}}
-  <generator>Hugo -- gohugo.io</generator>{{ range $pages }}
+  <generator>Hugo -- gohugo.io</generator>
+
+  {{- $first15 := false -}}
+  {{- range $i, $e := (where .Site.RegularPages "Type" "posts") | first (.Site.Params.home.rss | default 50) -}}
+    {{- if lt $i 15 -}}
+      <!-- only add content for the first 15 posts to reduce atom feed's size-->
+      {{- $first15 = true -}}
+    {{- else -}}
+      {{- $first15 = false -}}
+    {{- end -}}
   <entry>
     {{ `<title type="html"><![CDATA[` | safeHTML }}{{ .Title }}]]></title>
     <link href="{{ .Permalink }}"/>
@@ -30,8 +27,9 @@
     </author>{{end}}
     <published>{{ .Date.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</published>
     <updated>{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</updated>
-    {{ if .Content }}
-    {{ `<content type="html"><![CDATA[` | safeHTML }}{{ .Content }}]]></content>
-    {{ end }}
-  </entry>{{ end }}
+    {{- if and $first15 .Content -}}
+      {{- `<content type="html"><![CDATA[` | safeHTML -}}{{- replace .Content "\n" "" -}}]]></content>
+    {{- end -}}
+  </entry>
+  {{ end }}
 </feed>
