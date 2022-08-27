@@ -38,7 +38,7 @@ comment:
 
 后来慢慢的开始熟悉 Python，在图书馆借了 Head First Python 英文版，可能是被厚度吓到了，看了几页就不了了之了。。
 
-再后来用 Github，Pycharm IDEA 也是英文的，Python doc 和 Java doc 也全是英文的，标准库里的注释是英文的，Error 信息是英文的...... 虽然学啥都半途而废，但英文水平的确是慢慢地提升着。
+再后来用 Github，Pycharm IDEA 也是英文的，Python Docs 和 Java Docs 也全是英文的，标准库里的注释是英文的，Error 信息是英文的...... 虽然学啥都半途而废，但英文水平的确是慢慢地提升着。
 
 
 慢慢地，能够不怎么吃力地看懂 Python 标准库了，有问题也可以看英文博客解决了。
