@@ -52,7 +52,7 @@ DNS 虽然说一般只用来查个 ip 地址，但是它提供的记录类型还
     - SRV 记录的内容有固定格式：`优先级 权重 端口 目标地址`，例如 `0 5 5060 sipserver.example.com`
     - 主要用于企业域控(AD)、微服务发现（Kubernetes）
 
-上述的所有 DNS 记录，都是属于将域名解析为 IP 地址，或者另一个域名，这被称做** DNS 正向解析**。
+上述的所有 DNS 记录，都是属于将域名解析为 IP 地址，或者另一个域名，这被称做 **DNS 正向解析**。
 除了这个正向解析外，还有个非常冷门的**反向解析**，基本上只在设置邮件服务器时才会用到。（Kubernetes 可能也有用到）
 
 反向解析主要的记录类型是：**`PTR` 记录**，它提供将 IP 地址反向解析为域名的功能。
@@ -122,7 +122,7 @@ DNS 虽然说一般只用来查个 ip 地址，但是它提供的记录类型还
 
 ### DNS 泛解析通配符 `*`
 
-DNS 记录允许使用通配符 `*`，并且该通配符可匹配任意级数的子域！！！比如 `*.example.com` 就可以匹配所有的一二三四级域名等等，**但是无法匹配 `example.com` 本身！**
+DNS 记录允许使用通配符 `*`，并且该通配符可匹配任意级数的子域！！！比如 `*.example.com` 就可以匹配所有的一二三四级域名等等，**但是无法匹配 `example.com` 本身**！
 
 ### TTL（Time To Live）
 
@@ -193,7 +193,7 @@ search lan
 >Kubernetes 就是通过使用容器卷映射的功能，修改 /etc/resolv.conf，使集群的所有容器都使用集群 DNS 服务器（CoreDNS）进行 DNS 解析。
 
 通过重复使用 `nameserver` 字段，可以指定多个 DNS 服务器（Linux 最多三个）。DNS 查询会按配置中的顺序选用 DNS 服务器。
-**仅在靠前的 DNS 服务器没有响应（timeout）时，才会使用后续的 DNS 服务器！所以指定的服务器中的 DNS 记录最好完全一致！！！**不要把第一个配内网 DNS，第二个配外网！！！
+**仅在靠前的 DNS 服务器没有响应（timeout）时，才会使用后续的 DNS 服务器！所以指定的服务器中的 DNS 记录最好完全一致**！！！不要把第一个配内网 DNS，第二个配外网！！！
 
 ### 4. DNS 搜索域
 
@@ -286,7 +286,7 @@ CoreDNS 因为是 Go 语言写的，编译结果是单个可执行文件，它�
 }
 ```
 
-Corefile 首先定义 DNS 域，域后的代码块内定义需要使用的各种插件。**注意这里的插件顺序是没有任何意义的！**插件的调用链是在 CoreDNS 编译时就定义好的，不能在运行时更改。
+Corefile 首先定义 DNS 域，域后的代码块内定义需要使用的各种插件。**注意这里的插件顺序是没有任何意义的**！插件的调用链是在 CoreDNS 编译时就定义好的，不能在运行时更改。
 
 通过上述配置启动的 CoreDNS 是无状态的，它以 Kubernetes ApiServer 为数据源，CoreDNS 本身只相当于一个查询器/缓存，因此它可以很方便地扩缩容。
 
@@ -368,7 +368,7 @@ root@test-ubuntu:~/dns-server# tree
 
 可以看到 `ftp.dev-env.local` 已经被成功解析了。
 
-### 3. [可选插件（External Plugins）](https://coredns.io/explugins/)
+### 3. 可选插件（External Plugins）
 
 CoreDNS 提供的预编译版本，不包含 [External Plugins](https://coredns.io/explugins/) 中列出的部分，如果你需要，可以自行修改 `plugin.cfg`，然后手动编译。
 

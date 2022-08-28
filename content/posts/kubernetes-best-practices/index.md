@@ -553,7 +553,9 @@ kubectl get hpa.v2beta2.autoscaling
 - [Horizontal Pod Autoscaler演练 - Kubernetes Docs](https://kubernetes.io/zh/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/)
 
 
-## 三、[节点维护与Pod干扰预算](https://kubernetes.io/zh/docs/tasks/run-application/configure-pdb/) {#k8s-PodDistruptionBuget}
+## 三、节点维护与Pod干扰预算 {#k8s-PodDistruptionBuget}
+
+>https://kubernetes.io/zh/docs/tasks/run-application/configure-pdb/
 
 在我们通过 `kubectl drain` 将某个节点上的容器驱逐走的时候，
 kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。
@@ -877,7 +879,9 @@ spec:
 
 这里只介绍 Pod 中安全相关的参数，其他诸如集群全局的安全策略，不在这里讨论。
 
-### 1. [Pod SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+### 1. Pod SecurityContext
+
+>https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 
 通过设置 Pod 的 SecurityContext，可以为每个 Pod 设置特定的安全策略。
 
