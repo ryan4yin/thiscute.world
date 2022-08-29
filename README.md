@@ -39,5 +39,5 @@ The action workflow will:
 - Deploy to Github Pages(branch `gh-page`).
 - Push Argolia Index for Search.
 
-See [.github/workflows/gh-pages.yaml](/.github/workflows/gh-pages.yaml) for details.
+See [.github/workflows/](/.github/workflows/) for details.
 
