@@ -30,8 +30,8 @@ code:
 池，只有固定个数的线程/进程，通过 max_workers 指定。
 1. 任务通过 executor.submit 提交到 executor 的任务队列，返回一个 future 对象。
     - Future 是常见的一种并发设计模式。一个Future对象代表了一些尚未就绪（完成）的结果，在「将来」的某个时间就绪了之后就可以获取到这个结果。
-1. 任务被调度到各个 workers 中执行。但是要注意，**一个任务一旦被执行，在执行完毕前，会一直占用该 worker！**
-    - **如果 workers 不够用，其他的任务会一直等待！**因此 PoolExecutor 不适合实时任务。
+1. 任务被调度到各个 workers 中执行。但是要注意，**一个任务一旦被执行，在执行完毕前，会一直占用该 worker**！
+    - **如果 workers 不够用，其他的任务会一直等待**！因此 PoolExecutor 不适合实时任务。
 
 ```python
 import concurrent.futures
@@ -104,7 +104,7 @@ concurrent.futures 包含三个部分的 API：
 ## Future 设计模式
 
 这里的 PoolExecutor 的特点，在于它使用了 Future 设计模式，使任务的执行，与结果的获取，变成一个异步的流程。
-**我们先通过 submit/map 将任务放入任务队列，这时任务就已经开始执行了！**然后我们在需要的时候，通过 future 获取结果，或者直接 `add_done_callback(fn)`。
+**我们先通过 submit/map 将任务放入任务队列，这时任务就已经开始执行了**！然后我们在需要的时候，通过 future 获取结果，或者直接 `add_done_callback(fn)`。
 
 这里任务的执行是在新的 workers 中的，主进程/线程不会阻塞，因此主线程可以干其他的事。这种方式被称作异步编程。
 

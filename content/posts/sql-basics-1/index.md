@@ -243,12 +243,12 @@ COMMIT;
 ```
 - `START TRANSACTION`: 标识事务的开始
 - `COMMIT`：提交事务。一旦提交，所执行过的操作就已成定论，恢复不了了。
-- `ROLLBACK`：事务回滚，**只能回滚未 COMMIT 的 DML 操作！**也就是说只能用在 `START TRANSACTION` 和 `COMMIT` 之间，并且只能回滚 `INSERT/UPDATE/DELETE`。（回滚 SELECT 没啥意义）
+- `ROLLBACK`：事务回滚，**只能回滚未 COMMIT 的 DML 操作**！也就是说只能用在 `START TRANSACTION` 和 `COMMIT` 之间，并且只能回滚 `INSERT/UPDATE/DELETE`。（回滚 SELECT 没啥意义）
 - `SAVEPOINT <保留点>` 和 `ROLLBACK TO <保留点>`：同样只能用在 `START TRANSACTION` 和 `COMMIT` 之间，其优势在于，`ROLLBACK TO` 可以指定回滚到某特定保留点，更灵活，而 `ROLLBACK` 只能回滚到事务开始前。
 
 需要注意的有：
 1. `COMMIT` 和 `ROLLBACK` 语句也是事务的结束，因此如果执行了 `ROLLBACK`，那它与 `COMMIT` 之间的内容会被跳过。（在这一点上，它相当于大多数 PL 的 return）
-1. **如果事务执行出现问题，问题行后面的所有语句都不会被执行！包括 `COMMIT` 和 `ROLLBACK`！** 如果想用纯 SQL 实现事务原子性，必须使用存储过程检查执行状态！举例如下：
+1. **如果事务执行出现问题，问题行后面的所有语句都不会被执行！包括 `COMMIT` 和 `ROLLBACK`**！ 如果想用纯 SQL 实现事务原子性，必须使用存储过程检查执行状态！举例如下：
 
 ```
 CREATE PROCEDURE my_test()

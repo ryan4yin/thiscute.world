@@ -370,7 +370,7 @@ $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 2
 $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 3
 ```
 
-这样就完成了部署，但是要注意，**vault 实例每次重启后，都需要重新解封！也就是重新进行第二步操作！**
+这样就完成了部署，但是要注意，**vault 实例每次重启后，都需要重新解封！也就是重新进行第二步操作**！
 
 ### 4. 初始化并设置自动解封
 
@@ -820,7 +820,7 @@ vautl-agent 的 template 说明：
 ```
 
 因为存在尾部逗号(trailing comma)，直接使用 json 标准库解析它会报错。
-那该如何去解析它呢？我在万能的 stackoverflow 上找到了解决方案：**yaml 完全兼容 json 语法，并且支持尾部逗号！**
+那该如何去解析它呢？我在万能的 stackoverflow 上找到了解决方案：**yaml 完全兼容 json 语法，并且支持尾部逗号**！
 
 以 python 为例，直接 `yaml.safe_load()` 就能完美解析 vault 生成出的 json 内容。
 

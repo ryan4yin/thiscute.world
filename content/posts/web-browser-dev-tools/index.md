@@ -28,7 +28,7 @@ lightgallary: true
     - 在 Network 的 Response 页面，就是在 Response 中搜索
 
 1. `Ctrl + Shift + F`：全文搜索，在当前 Web App 的所有文件中搜索。
-    - **爬虫必备！！！**要寻找一些特殊字符串的来源，用它搜索屡试不爽。
+    - **爬虫必备**！！！要寻找一些特殊字符串的来源，用它搜索屡试不爽。
 
 ### Command
 

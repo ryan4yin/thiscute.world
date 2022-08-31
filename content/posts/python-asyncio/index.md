@@ -48,7 +48,7 @@ StopIteration
 ```
 每次调用 next，generator 都只会运行到下一个 yield 关键字所在行，返回 yield 右侧的对象，然后暂停在该处，等待下一次 next 调用。
 
-从上面的例子看，yield 就是延迟求值而已。**但是 yield 还有一个特性，就是它是一个 expression，有返回值！**看例子：
+从上面的例子看，yield 就是延迟求值而已。**但是 yield 还有一个特性，就是它是一个 expression，有返回值**！看例子：
 
 ```Python
 >>> def func():

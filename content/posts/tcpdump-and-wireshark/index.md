@@ -134,7 +134,7 @@ nc localhost 11111 | wireshark -k -S -i -
 另外如果你本机是 Windows 系统，要分 shell 讨论：
 
 1. `cmd`: 可以直接使用上述命令。
-2. `powershell`: **PowerShell 管道对 `native commands` 的支持不是很好，管道两边的命令貌似是串行执行的，这会导致 wireshark 无法启动！**目前没有找到好的解决方法。。
+2. `powershell`: **PowerShell 管道对 `native commands` 的支持不是很好，管道两边的命令貌似是串行执行的，这会导致 wireshark 无法启动**！目前没有找到好的解决方法。。
 
 
 另外如果你使用 `wsl`，那么可以通过如下命令使 `wsl` 调用 windows 中的 wireshark 进行抓包分析：
