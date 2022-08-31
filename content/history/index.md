@@ -11,6 +11,21 @@ toc:
 
 这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
+### 2022-08-31
+
+- 排查与解决了博客的一个隐藏 bug，记录下排查的思路与流程（省略了其中一些探索性的、方向不正确的步骤）
+  1. 朋友反馈站点评论系统登录异常，我着手排查
+  2. 通过 firefox devtools 定位到是点击登录后被重定向到了错误的页面
+  3. 进一步确认是 utterances 的登录按钮上的 redirect url 参数有问题
+  4. 在 DoIT 主题的 issues、代码中寻找 utterances 相关逻辑，未发现问题
+  5. 尝试在 utterances issues 中搜索关键字 redirect，找到 https://github.com/utterance/utterances/issues/474
+  6. 定位到是页面跳转时仅做了局部刷新，未更新 header 中的 canonical link 导致的问题。
+  7. 进一步排查到 DoIt 主题使用了 PaperStrike/Pjax 做页面局部刷新，目的是提升性能
+  8. 阅读 Pjax README 发现它的初始化代码格式为 `new Pjax({...})`，尝试在主题中搜索关键字 `new Pjax({` ，找到对应的代码块
+  9. 找前端的朋友给了个 canonical link 的 CSS 选择语法，使用该语法修改主题，测试发现问题解决
+  10. 提 PR 给这个 Hugo 主题的 github 仓库: https://github.com/HEIGE-PCloud/DoIt/pull/709
+  11. 总共用时大约 1h
+
 ### 2022-08-25
 
 - 根据 [APISIX 官方建议](https://github.com/apache/apisix/discussions/7773)，使用 `priority=-1` 跟 `proxy_next_upstream` 实现了请求的 fallback 功能，赞一个。
