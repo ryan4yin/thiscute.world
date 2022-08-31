@@ -25,7 +25,7 @@ toc:
   9. 找前端的朋友给了个 canonical link 的 CSS 选择语法，使用该语法修改主题，测试发现问题解决
   10. 提 PR 给这个 Hugo 主题的 github 仓库: https://github.com/HEIGE-PCloud/DoIt/pull/709
   11. 总共用时大约 1h
-- 逛 [@Bensz](https://blognas.hwb0307.com/me) 的友链时，发现 [APISIX高级路由之通过Body参数转发请求 - 张戈博客](https://zhangge.net/5157.html)这篇文章，它为我正在解决的一个问题提供了非常优雅的思路，真的是意外之喜~
+- 逛 [@Bensz](https://blognas.hwb0307.com/me) 的友链时，发现 [APISIX高级路由之通过Body参数转发请求 - 张戈博客](https://zhangge.net/5157.html)这篇文章，它为我正在解决的一个问题提供了非常优雅的思路——使用 apisix `route` 的 `filter_func` 功能，真的是意外之喜~
 
 ### 2022-08-25
 
