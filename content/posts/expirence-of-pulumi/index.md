@@ -105,7 +105,7 @@ Terraform 虽然应用广泛，但是它默认使用的 HCL 语言太简单，�
 
 ## 使用建议
 
-1. **建议查看对应的 terraform provider 文档：pulumi 的 provider 基本都是封装的 terraform 版本，而且文档是自动生成的，比（简）较（直）难（一）看（坨）懂（shi），examples 也少。**
+1. **建议查看对应的 terraform provider 文档：pulumi 的 provider 基本都是封装的 terraform 版本，而且文档是自动生成的，比（简）较（直）难（一）看（坨）懂（shi），examples 也少**。
 2. stack: pulumi 官方提供了两种 stack 用法：[「单体」和「微-stack」](https://www.pulumi.com/docs/intro/concepts/organizing-stacks-projects/)
    1. 单体: one stack rule them all，通过 stack 参数来控制步骤。stack 用来区分环境 dev/pro 等。
    2. 微-stack: 每一个 stack 是一个步骤，所有 stack 组成一个完整的项目。

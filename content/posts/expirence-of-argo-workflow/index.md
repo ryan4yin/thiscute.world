@@ -51,7 +51,7 @@ Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言
 
 再借助 [templateRef](https://argoproj.github.io/argo-workflows/workflow-templates/#referencing-other-workflowtemplates) 或者 [Workflow of Workflows](https://argoproj.github.io/argo-workflows/workflow-of-workflows/)，就能实现 Workflows 的编排了。
 
-**我们之所以选择 Argo Workflows 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多。**（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）
+**我们之所以选择 Argo Workflows 而不是 Tekton，主要就是因为 Argo 的流水线编排能力比 Tekton 强大得多**。（也许是因为我们的后端中台结构比较特殊，导致我们的 CI 流水线需要具备复杂的编排能力）
 
 一个复杂工作流的示例如下：
 
@@ -454,7 +454,7 @@ Argo Workflows 的配置，都保存在 `workflow-controller-configmap` 这个 c
    1. 比如先使用 golang 镜像进行测试、构建，再使用 kaniko 将打包成容器镜像
 
 那是否应该尽量使用 CI/CD 工具提供的功能呢？
-**其实这就是有多种方法实现同一件事，该用哪种方法的问题。这个问题在各个领域都很常见。**
+**其实这就是有多种方法实现同一件事，该用哪种方法的问题。这个问题在各个领域都很常见**。
 
 以我目前的经验来看，需要具体问题具体分析，以 Argo Workflows 为例：
 
@@ -518,7 +518,7 @@ Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间�
 
 否则如果直接对所有微服务做灰度更新，只依靠「服务依赖检查」，就会出现这样的问题——「RPC 服务端」处于「薛定谔」状态，你调用到的服务端版本是新还是旧，取决于负载均衡的策略和概率。
 
-**因此在做 RPC 接口的全量升级时，只依靠「服务依赖检查」是行不通的。**我目前想到的方案，有如下几种：
+**因此在做 RPC 接口的全量升级时，只依靠「服务依赖检查」是行不通的**。我目前想到的方案，有如下几种：
 
 - 我们当前的使用方案：**直接在 yaml 部署这一步实现按序部署**，每次部署后就轮询 kube-apiserver，确认全部灰度完成，再进行下一阶段的 yaml 部署。
 - **让后端加个参数来控制客户端使用的 RPC 协议版本，或者搞一个协议协商**。这样就不需要控制微服务发布顺序了。

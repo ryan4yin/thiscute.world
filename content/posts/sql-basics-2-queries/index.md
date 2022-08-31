@@ -117,7 +117,7 @@ SELECT name
 - BETWEEN：范围匹配，eg. `BETWEEN 1 AND 10`
 - IS NULL、IS NOT NULL
 - IN、NOT IN：是否在某集合内
-- EXISTS、NOT EXISTS（比较难的一个，入门阶段不要求）：该谓词比较特殊，只需要右侧一个参数，**而且该参数绝大多数情况下，都是一个关联子查询。**而且该子查询的SELECT子句的参数基本可以随意，通常使用`SELECT *`. 对于子查询有返回值的列，它返回True，否则返回False. 但要注意为 NULL 时返回 UNKNOW.（而 WHERE 只认 True）
+- EXISTS、NOT EXISTS（比较难的一个，入门阶段不要求）：该谓词比较特殊，只需要右侧一个参数，**而且该参数绝大多数情况下，都是一个关联子查询**。而且该子查询的SELECT子句的参数基本可以随意，通常使用`SELECT *`. 对于子查询有返回值的列，它返回True，否则返回False. 但要注意为 NULL 时返回 UNKNOW.（而 WHERE 只认 True）
 
 ### CASE 表达式
 
@@ -191,7 +191,7 @@ SELECT ...
 
 #### 外联(OUTER JOIN)
 
->**外联以某表为主表，将另一表的列联结到该表。**另一表没有值的列，就用 NULL 代替。使用`LEFT` 或 `RIGHT`指定主表。（两个关键字都能实现同样的效果，不过用 LEFT 的多一些）
+>**外联以某表为主表，将另一表的列联结到该表**。另一表没有值的列，就用 NULL 代替。使用`LEFT` 或 `RIGHT`指定主表。（两个关键字都能实现同样的效果，不过用 LEFT 的多一些）
 
 语法：
 ```sql

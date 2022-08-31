@@ -906,7 +906,7 @@ SecurityContext 有两种类型：
 
 1. `spec.volumes`: 所有的数据卷都可以设定读写权限
 3. `spec.securityContext.runAsNonRoot: true` Pod 必须以非 root 用户运行
-4. `spec.containers[*].securityContext.readOnlyRootFileSystem:true` **将容器层设为只读，防止容器文件被篡改。**
+4. `spec.containers[*].securityContext.readOnlyRootFileSystem:true` **将容器层设为只读，防止容器文件被篡改**。
    1. 如果微服务需要读写文件，建议额外挂载 `emptydir` 类型的数据卷。
 5. `spec.containers[*].securityContext.allowPrivilegeEscalation: false` 不允许 Pod 做任何权限提升！
 6. `spec.containers[*].securityContext.capabilities.drop`: 移除（Capabilities）可选的系统级能力

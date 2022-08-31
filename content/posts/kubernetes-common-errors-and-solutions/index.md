@@ -23,7 +23,7 @@ categories: ["tech"]
 6. [FailedCreateSandBox: Failed create pod sandbox: rpc error: code = DeadlineExceeded desc = context deadline exceeded]()：很可能是 CNI 网络插件的问题（比如 ip 地址溢出），
 7. [FailedSync: error determining status: rpc error: code = DeadlineExceeded desc = context deadline exceeded](https://github.com/kubernetes/kubernetes/issues/55094): 常和前两个错误先后出现，很可能是 CNI 网络插件的问题。
 8. 开发集群，一次性部署所有服务时，各 Pod 互相争抢资源，导致 Pod 生存探针失败，不断重启，重启进一步加重资源使用。恶性循环。
-    - **需要给每个 Pod 加上 resources.requests，这样资源不足时，后续 Pod 会停止调度，直到资源恢复正常。**
+    - **需要给每个 Pod 加上 resources.requests，这样资源不足时，后续 Pod 会停止调度，直到资源恢复正常**。
 9.  Pod 出现大量的 Failed 记录，Deployment 一直重复建立 Pod: 通过 `kubectl describe/edit pod <pod-name>` 查看 pod `Events` 和 `Status`，一般会看到失败信息，如节点异常导致 Pod 被驱逐。
 10. [Kubernetes 问题排查：Pod 状态一直 Terminating](https://zhuanlan.zhihu.com/p/70031676)
 11. 创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的 ServiceAccount 不存在。

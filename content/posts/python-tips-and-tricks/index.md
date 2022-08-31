@@ -387,7 +387,7 @@ def func(xx):
 ```
 
 如果不用 wraps 的话，因为实际上返回的是 wrapper，被装饰对象的这些文档属性都会丢失。（比如 docstring）
-**因此在使用 wrapper 装饰器时，添加 @wraps() 装饰器是个好习惯。**
+**因此在使用 wrapper 装饰器时，添加 @wraps() 装饰器是个好习惯**。
 
 #### 2. functools.partial
 
@@ -778,7 +778,7 @@ key_values = dict(groups)   # 得到的 key_values 与上面需要的 dict 别�
 ```
 
 因为 * 并不是深拷贝，它只是简单地复制了 [a] 这个列表，里面的 [1,2,3] 都是同一个对象，所以改了一个，所有的都会改变。
-**解决方法是不要使用 * 号，改用`[a.copy() for i in range(3)]` 执行深拷贝。如果不需要修改，请直接使用不可变对象。**
+**解决方法是不要使用 * 号，改用`[a.copy() for i in range(3)]` 执行深拷贝。如果不需要修改，请直接使用不可变对象**。
 
 ### 2. 变量作用域
 
@@ -951,7 +951,7 @@ Exited func1
     - 直接通过`超类名.__init__(self,xx)`调用
     - 通过`super(__class__, self).__init__()`调用。
 （Python3 可直接用 `super().__init__()`
-但是要搞清楚，**[super() 方法](https://docs.python.org/3/library/functions.html#super)返回的是一个代理类。另外被代理的类也不一定是其超类。如果不清楚这些差别，最好还是显式用方法一最好。**）
+但是要搞清楚，**[super() 方法](https://docs.python.org/3/library/functions.html#super)返回的是一个代理类。另外被代理的类也不一定是其超类。如果不清楚这些差别，最好还是显式用方法一最好**。）
 
 3. 抽象超类：@abstractmethod
 4. `@staticmethod` `@classmethod` 与 Java 的 static 方法对比
