@@ -1469,7 +1469,7 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 <li>数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），<strong>所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送</strong>。</li>
 <li>数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
 <ul>
-<li>与 Address-Restricted cone NAT 的区别在于，它<strong>同时限制了外部主机的 IP 与端口</strong>，可以说是更<strong>进一步地提升了安全性。</strong></li>
+<li>与 Address-Restricted cone NAT 的区别在于，它<strong>同时限制了外部主机的 IP 与端口</strong>，可以说是更<strong>进一步地提升了安全性</strong>。</li>
 </ul>
 </li>
 </ul>
@@ -3636,7 +3636,7 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 使用了证书锁定技术，会导致证书的有效期也被锁定，APK 内的证书指纹就必须随着证书一起更新。</p>
 <p>更好的做法是指锁定证书中的公钥，即「公钥锁定」技术。
 「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
-<p><strong>「公钥锁定」是更推荐的锁定技术。</strong></p>
+<p><strong>「公钥锁定」是更推荐的锁定技术</strong>。</p>
 <h4 id="3-https-严格传输安全---hsts" class="headerLink">
     <a href="#3-https-%e4%b8%a5%e6%a0%bc%e4%bc%a0%e8%be%93%e5%ae%89%e5%85%a8---hsts" class="header-mark"></a>3. HTTPS 严格传输安全 - HSTS</h4><p>HSTS，即 HTTP Strict Transport Security，是一项安全技术，它允许服务端在返回 HTTPS 响应时，通过 Headers 明确要求客户端，在之后的一段时间内必须使用安全的 HTTPS 协议访问服务端。</p>
 <p>比如 <code>https://example.com/</code> 的响应头中有 <code>Strict-Transport-Security: max-age=31536000; includeSubDomains</code>，表示服务端要求客户端（比如浏览器）：</p>
