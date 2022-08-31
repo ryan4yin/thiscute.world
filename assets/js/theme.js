@@ -884,9 +884,9 @@ new Pjax({
     '#fixed-buttons',
     '.search-dropdown',
     '.header-title',
-    link[rel="canonical"],
-    link[rel="prev"],
-    link[rel="next"],
+    'link[rel="canonical"]',
+    'link[rel="prev"]',
+    'link[rel="next"]',
   ]
 })
 
