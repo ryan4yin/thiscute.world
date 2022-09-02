@@ -11,37 +11,8 @@ toc:
 
 >过去的我：[学习轨迹记录](/history)
 
-<div class="book-shelf">
-  <div class="row">
-    <div class="column">
-      <img src="/images/now/book-shelf-1.webp" alt="book-shelf-1">
-    </div>
-  </div>
-  <div class="row">
-    <div class="column">
-      <img src="/images/now/book-shelf-2.webp" alt="book-shelf-2">
-    </div>
-    <div class="column">
-      <img src="/images/now/book-shelf-3.webp" alt="book-shelf-3">
-    </div>
-  </div> 
-</div> 
-
-  <style>
-  .row{
-    display: grid;
-    grid-template-columns: auto auto auto; 
-  }
-
-  .row{
-    box-sizing: border-box;
-  }
-
-  .row img{
-    width: 100%;
-  }
-  </style>
-</div>
+![](/images/now/book-shelf-1.webp)
+![](/images/now/book-shelf-2.webp)
 
 
 ## 一、我正在研究这些
@@ -51,6 +22,7 @@ toc:
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 56/572
 - 学习研究 APISIX、Openresty、Lua
 - 《江城》
+- 英语流利说「懂你英语 A+ 学习计划」34 课 - 进度 1/34
 
 ## 二、我今年还想搞搞这些
 
