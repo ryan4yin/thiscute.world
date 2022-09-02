@@ -11,7 +11,6 @@ toc:
 
 >过去的我：[学习轨迹记录](/history)
 
-![](/images/now/book-shelf-1.webp)
 ![](/images/now/book-shelf-2.webp)
 
 
