@@ -15,6 +15,10 @@ toc:
 
 ### 2022-09-03
 
+- 完成文章 [Learn English Again](https://thiscute.world/posts/learn-english-again/)
+
+### 2022-09-03
+
 - 试用了常见的各种英语学习软件，做了[一些笔记](https://github.com/ryan4yin/knowledge/tree/master/natural-language/english)
   - 为了提升阅读能力，购买了薄荷阅读 199 块钱 100 天会员，选的书是《一个人个朝圣》
   - 各个软件都做了一波能力测评，我目前的英语水平应该属于 CEFR 框架的 B1 到 B2 之间，其中最差的是语法跟口语交流能力，其次是词汇量。
