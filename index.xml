@@ -1,4 +1,99 @@
-<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2022-08-07T04:11:23+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">分布式数据库的一致性问题与共识算法</title><link href="https://thiscute.world/posts/consistency-and-consensus-algorithm/"/><id>https://thiscute.world/posts/consistency-and-consensus-algorithm/</id><author><name>ryan4yin</name></author><published>2022-08-07T04:11:23+08:00</published><updated>2022-08-07T04:11:23+08:00</updated><content type="html"><![CDATA[<figure>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2022-09-04T13:22:00+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">Learn English Again</title><link href="https://thiscute.world/posts/learn-english-again/"/><id>https://thiscute.world/posts/learn-english-again/</id><author><name>ryan4yin</name></author><published>2022-09-04T13:22:00+08:00</published><updated>2022-09-04T13:22:00+08:00</updated><content type="html"><![CDATA[<figure>
+          <img class="lazyload" src="/posts/learn-english-again/english-word.webp" height="626" width="313"><figcaption></figcaption>
+        </figure><h3 id="2022-09-02" class="headerLink">
+    <a href="#2022-09-02" class="header-mark"></a>2022-09-02</h3><p>我工作三年多，英语阅读水平大致一直处在能较流畅地阅读各类技术文档，但是阅读与理解速度不够快的程度。
+没有专门做过训练，不过会有意识地尽量去阅读官方英文文档、Youtube 上找英文视频学习，所以这三年多我的英语水平提升应该是有一个缓慢的提升。</p>
+<p>这周五的时候（是的就是 2022-09-02），偶然发现自己手机里还装了个英语流利说 APP，装了两年多一直没碰过它&hellip; 突然就来了兴趣试用一波。</p>
+<p>首先肯定是要测试一下自己的英文水平，确定英语学习的起点。流利说 APP 把英语分成 7 个 Level，它评价我属于 Lv.5。五个评级维度中我的发音是最好的，口语是最差的。而词汇量大概在 5000 这个档位（我觉得如果算上我懂的计算机名词可能会更高些 emmmm）。</p>
+<p>测出的结果跟我的自我感觉基本吻合。
+之前有跟 AWS 工程师做过几次英语沟通，发现我的口语勉强可以支撑日常技术沟通，但是感觉很费劲，原因显然是口语基本没怎么练过。
+而我的发音之所以还不错，主要是大三的时候专门跟着奶爸推荐的《赖世雄美语音标》、《American Spoken English》等资料练习过，我当时还写过篇文章讲这个——<a href="https://thiscute.world/posts/learning-english/" target="_blank" rel="noopener noreffer">学英语啊学英语</a>。</p>
+<p>先不提细节，总之我就是这么着，突然对学英语又来了兴趣~ 当天就深入探索了下英语流利说这个 APP，又花 49 元买了一个月的「懂你英语 A+ - 个性化学习计划」，这个计划还给分配微信学习社群跟班主任，每天坚持 30 到 60 分钟。第一天体验这个学习计划，感觉确实跟我比较契合，而且也不枯燥，打算坚持一个月试试。</p>
+<p>最后，为了更有目的性地提升自己的英语，我总结了下我此次再学英语的目的，以及当前的水平（按优先级排序）：</p>
+<ul>
+<li><strong>能流畅地用英语交流</strong>：流利说测试显示我这项技能很差，亟待提升。</li>
+<li><strong>流畅阅读各类英文资料</strong>：我目前可以无障碍阅读大多数编程相关的英文博客跟文档，但是阅读速度不够快，有些长句经常要读好几次才能理解大意。另外词汇量偏低，非技术类的资料我读起来非常吃力。</li>
+<li><strong>无障碍看美剧</strong>：我的听力水平跟词汇水平大概差不多，看美剧还是得有个英文字幕，还需要提升。</li>
+<li><strong>写英文博客</strong>：高中毕业后就没学过语法，也没怎么练过写作，词汇量又低，我的写作能力显然还有很大的提升空间。</li>
+</ul>
+<h3 id="2022-09-03" class="headerLink">
+    <a href="#2022-09-03" class="header-mark"></a>2022-09-03</h3><p>因为最近对英语来了电，就打算深入了解下市面上常见的英语学习路径，争取找到最佳学习路线。</p>
+<h4 id="1-不花钱的自学路线" class="headerLink">
+    <a href="#1-%e4%b8%8d%e8%8a%b1%e9%92%b1%e7%9a%84%e8%87%aa%e5%ad%a6%e8%b7%af%e7%ba%bf" class="header-mark"></a>1. 不花钱的自学路线</h4><p>首先是不花钱的自学路线，这个我在大三时有过实践，当时打算考研，专门练过一波英语，大致路线是这样的：</p>
+<ul>
+<li>恶魔奶爸总结的 <a href="https://zhuanlan.zhihu.com/p/20836532" target="_blank" rel="noopener noreffer"><strong>练习英语口语的办法</strong></a>，本人实测效果显著
+<ul>
+<li>其中介绍的 ESLPod、EnglishPod 等材料，不仅可以提升语感，也能帮助提升听力。</li>
+</ul>
+</li>
+<li>如果是进阶的话，可以<strong>去 Youtube 上看一些流行的 Talk Show</strong>，这类视频很有意思、语速快信息量又大，是很合适的进阶学习材料</li>
+<li>还有就是很多人推荐的<strong>阅读英文原版书</strong>。但我实践发现，如果看的不是自己感兴趣的书，或者难度过高，会比较难坚持。</li>
+<li>当然你也可以走传统的背单词、词组、例句这样的路线，这条路线的好处是能快速提升自己的英语能力，但是相对的也很难坚持。
+<ul>
+<li>常见的有新东方的词汇录播课（网上能找到免费的资料分享），以前听过新东方朱伟老师的《恋练有词》，感觉挺不错的。</li>
+<li>百词斩等背单词 APP 也可以试试，不过我个人体验是基本坚持不了多久&hellip;</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-花钱抄捷径" class="headerLink">
+    <a href="#2-%e8%8a%b1%e9%92%b1%e6%8a%84%e6%8d%b7%e5%be%84" class="header-mark"></a>2. 花钱抄捷径</h4><p>而对于我这种上班族或者其他有闲钱的学生，而且不求快速提升英语能力的人而言，如果愿意花点小钱，也是有捷径可以抄的。</p>
+<p>首先就是线下课程跟线上视频课程（比如新东方、山姆英语），这个没时间参加，时间安排也不够灵活，而且可能会比较枯燥，直接 Pass.</p>
+<p>其次就是英语学习类 APP 了，这个市面上还有挺多的，我试用了一波后感觉很适合我，并且筛选出了下面几个比较中意的 APP：<strong>薄荷英语</strong>、<strong>英语流利说 懂你英语 A+</strong>、 <strong>开言英语</strong>以及<strong>一点英语</strong>。</p>
+<p>并且使用上述几款软件提供的英语能力测试，完整评估了下我的英语水平。下图从左至右依次是一点英语、开言英语，以及英语流利说的整体英语水平跟口语水平两项测试结果：</p>
+<p><a class="lightgallery" href="/images/now/ryan4yin-english-level.webp" title="/images/now/ryan4yin-english-level.webp" data-thumbnail="/images/now/ryan4yin-english-level.webp">
+        <img
+            class="lazyload"
+            data-src="/images/now/ryan4yin-english-level.webp"
+            data-srcset="/images/now/ryan4yin-english-level.webp, /images/now/ryan4yin-english-level.webp 1.5x, /images/now/ryan4yin-english-level.webp 2x"
+            data-sizes="auto"
+            alt="/images/now/ryan4yin-english-level.webp">
+    </a></p>
+<p>因为三个 APP 的测试资料都不一样，所以得出的结果略有差异。其中一点英语测出的结果应该是偏高的。</p>
+<p>下面详细介绍下这四个 APP：</p>
+<blockquote>
+<p>先声明下，我仅体验了 CFER 框架等级 B1 - B2 的课程，因此如下评价也仅针对此等级。</p>
+</blockquote>
+<ul>
+<li><strong>薄荷英语</strong>：199 元 / 100 天
+<ul>
+<li><strong>阅读原版书学习英语</strong></li>
+<li>选择自己喜欢的书，跟班阅读</li>
+<li>大概需要一定基础，最好是词汇量 4500 词以上，才能读懂有意思一点的书，得到比较好的体验。</li>
+</ul>
+</li>
+<li><strong>英语流利说 懂你英语 A+</strong>：198 元每月
+<ul>
+<li>用于<strong>练习口语跟听力很不错</strong>，每天花 30 分钟</li>
+<li>难度不高，不过见效也慢，需要持之以恒</li>
+</ul>
+</li>
+<li><strong>开言英语</strong>：
+<ul>
+<li><strong>真人外教视频课程</strong>，通过程序实现了一定的互动性，跟流利说很类似，但是它是真人教学而不是 AI + 动画。</li>
+<li>价格
+<ul>
+<li>外教系统课是 2598 一年，提供海量外教视频互动课跟音频课</li>
+<li>还有个外教视频课，互动性会更高，价格是 1598 一年</li>
+</ul>
+</li>
+<li>《潘吉 Jenny 告诉你》这个口碑在，我觉得开言英语的外教课程是可以考虑的</li>
+<li>价格有点小贵，不过在知乎上搜评价都很不错，也不像阿卡索、久伴英语一样都是广告。</li>
+</ul>
+</li>
+<li><strong>一点英语</strong>：3998 元 / 180 天
+<ul>
+<li><strong>通过 演讲/动漫/喜剧/音乐现场 等各种视频资料学习英语</strong></li>
+<li>感觉非常棒！很有意思，不枯燥。难度偏高，不过能 Hold 得住。</li>
+<li>但也是几个产品里最贵的一个</li>
+</ul>
+</li>
+</ul>
+<p>上述这些软件最大的优势是「互动」，这会使它比单纯自学有趣很多，更容易坚持。</p>
+<p>除薄荷英语外，其他三个 APP 都有提升长短不一的会员体验时间，有兴趣的话可以自己试用下~</p>
+<p>我目前最中意的是一点英语，而薄荷英语我已经花了 199 元买了《一个人的朝圣》这个原版书，得等它开课才能体验，挺期待的~</p>
+<h2 id="总而言之" class="headerLink">
+    <a href="#%e6%80%bb%e8%80%8c%e8%a8%80%e4%b9%8b" class="header-mark"></a>总而言之</h2><p>嗯，毕竟是花了钱的，这次的大目标就是全面提升英语水平，起码达到 C1 级别吧，加油~</p>
+]]></content></entry><entry><title type="html">分布式数据库的一致性问题与共识算法</title><link href="https://thiscute.world/posts/consistency-and-consensus-algorithm/"/><id>https://thiscute.world/posts/consistency-and-consensus-algorithm/</id><author><name>ryan4yin</name></author><published>2022-08-07T04:11:23+08:00</published><updated>2022-08-07T04:11:23+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/consistency-and-consensus-algorithm/featured-image.webp" height="974" width="312"><figcaption></figcaption>
         </figure><blockquote>
 <p>个人笔记，不保证正确！</p>
@@ -7052,96 +7147,8 @@ AEAD 将「关联数据(Associated Data, AD)」——也称为「附加验证数
 <li><a href="https://segmentfault.com/a/1190000010990136" target="_blank" rel="noopener noreffer">漫谈非加密哈希算法</a></li>
 <li><a href="http://thomaslau.xyz/2020/05/20/2020-05-20-on_hash_1/" target="_blank" rel="noopener noreffer">开发中常见的一些Hash函数（一）</a></li>
 </ul>
-]]></content></entry><entry><title type="html">写给开发人员的实用密码学（一）—— 概览</title><link href="https://thiscute.world/posts/practical-cryptography-basics-1/"/><id>https://thiscute.world/posts/practical-cryptography-basics-1/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:00+08:00</published><updated>2022-03-01T17:15:00+08:00</updated><content type="html"><![CDATA[<figure>
-          <img class="lazyload" src="/posts/practical-cryptography-basics-1/data-security.webp" height="2880" width="600"><figcaption></figcaption>
-        </figure><blockquote>
-<p>本文主要翻译自 <a href="https://github.com/nakov/Practical-Cryptography-for-Developers-Book" target="_blank" rel="noopener noreffer">Practical-Cryptography-for-Developers-Book</a></p>
-</blockquote>
-<p>《写给开发人员的实用密码学》系列文章目录：</p>
-<ul>
-<li><a href="/posts/practical-cryptography-basics-1/" rel="">写给开发人员的实用密码学（一）—— 概览</a></li>
-<li><a href="/posts/practical-cryptography-basics-2-hash/" rel="">写给开发人员的实用密码学（二）—— 哈希函数</a></li>
-<li><a href="/posts/practical-cryptography-basics-3-key-derivation-function/" rel="">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li>
-<li><a href="/posts/practical-cryptography-basics-4-secure-random-generators/" rel="">写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></li>
-<li><a href="/posts/practical-cryptography-basics-5-key-exchange/" rel="">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></li>
-<li><a href="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/" rel="">写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></li>
-<li><a href="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/" rel="">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></li>
-<li><a href="/posts/about-tls-cert" rel="">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></li>
-<li>待续</li>
-</ul>
-<h2 id="零前言" class="headerLink">
-    <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>你是软件开发人员吗？有时你会需要在日常工作中使用哈希、加密或数字签名等密码学工具吗？
-你认为密码学很复杂，充满了数学知识，而且只适合书呆子吗？
-不，不是这样滴，每个开发人员都可以学习如何使用加密算法。</p>
-<p><strong>从开发人员的角度理解密码学概念</strong>不需要你是一个厉害的数学家。
-本书将尽量以最浅显的方式教你<strong>应用密码学</strong>的基础知识，而且包含大量循序渐进的代码示例和实践练习——就像你学习 Web 开发、数据库或 APP 一样。</p>
-<p>没错，如果你能够学会 Web 开发或 RESTful 服务，那么你也完全可以学会实用密码学。这就像学习一个新的 API 或一个新的 Web 开发框架，只要掌握了概念 + 加密库 API + 工具 + 最佳实践，你就学会了实用密码学~</p>
-<p>从本书中，你将学习如何使用密码算法和密码系统，如哈希、MAC 码和密钥派生函数 (KDF)、随机生成器、密钥交换协议、对称密码算法、加密方案、非对称密码系统、公钥密码学、椭圆曲线、数字签名和量子安全加密算法，以及现代加密工具和库。</p>
-<h2 id="一现代密码学概览" class="headerLink">
-    <a href="#%e4%b8%80%e7%8e%b0%e4%bb%a3%e5%af%86%e7%a0%81%e5%ad%a6%e6%a6%82%e8%a7%88" class="header-mark"></a>一、现代密码学概览</h2><p>密码学已经从第一代广泛应用的密码学算法（比如已经退役的 MD5 跟 DES），发展到现代密码学算法（如 SHA-3, Argon2 以及 ChaCha20）。</p>
-<p>让我们首先跟一些基本的密码学概念混个脸熟：</p>
-<ul>
-<li><strong>哈希函数</strong>，如 SHA-256, SHA3, RIPEMD 等</li>
-<li><strong>散列消息认证码 HMAC</strong></li>
-<li><strong>密钥派生函数 KDF</strong>，如 Scrypt</li>
-<li><strong>密钥交换算法</strong>，如 Diffie-Hellman 密钥交换协议</li>
-<li><strong>对称密钥加密方案</strong>，如 AES-256-CTR-HMAC-SHA-256</li>
-<li>使用公私钥的<strong>非对称密钥加密方案</strong>，如 RSA 和 ECC, secp256k1 曲线跟 Ed25519 密码系统</li>
-<li><strong>数字签名算法</strong>，如 ECDSA</li>
-<li><strong>熵</strong>（entropy）与<strong>安全随机数生成</strong></li>
-<li><strong>量子安全</strong>密码学</li>
-</ul>
-<p>上述这些概念涉及到技术被广泛应用在 IT 领域，如果你有过一些开发经验，可能会很熟悉其中部分名词。
-如果不熟也没任何关系，本书的目的就是帮你搞清楚这些概念。</p>
-<p>这个系列的文章会按上面给出的顺序，依次介绍这些密码学概念以及如何在日常开发中使用它们。</p>
-<p>不过在开始学习之前，我们先来了解一下什么是密码学，以及密码学的几大用途。</p>
-<h2 id="二什么是密码学" class="headerLink">
-    <a href="#%e4%ba%8c%e4%bb%80%e4%b9%88%e6%98%af%e5%af%86%e7%a0%81%e5%ad%a6" class="header-mark"></a>二、什么是密码学</h2><p><strong>密码学（Cryptography）<strong>是提供信息</strong>安全</strong>和<strong>保护</strong>的科学。
-它在我们的数字世界中无处不在，当你打开网站时、发送电子邮件时、连接到 WiFi 网络时，使用账号密码登录 APP 时、使用二步认证验证码认证身份时，都有涉及到密码学相关技术。
-因此开发人员应该<strong>对密码学有基本的了解</strong>，以避免写出不安全的代码。
-至少也得知道如何使用密码算法和密码库，了解哈希、对称密码算法、非对称密码算法（cipher）与加密方案这些概念，知晓数字签名及其背后的密码系统和算法。</p>
-<h2 id="三密码学的用途" class="headerLink">
-    <a href="#%e4%b8%89%e5%af%86%e7%a0%81%e5%ad%a6%e7%9a%84%e7%94%a8%e9%80%94" class="header-mark"></a>三、密码学的用途</h2><h3 id="1-加密与密钥" class="headerLink">
-    <a href="#1-%e5%8a%a0%e5%af%86%e4%b8%8e%e5%af%86%e9%92%a5" class="header-mark"></a>1. 加密与密钥</h3><p>密码学的一大用途，就是进行数据的安全存储和安全传输。
-这可能涉及使用对称或非对称加密方案<strong>加密</strong>和<strong>解密</strong>数据，其中一个或多个<strong>密钥</strong>用于将数据从明文转换为加密形式或者相反。</p>
-<p>对称加密（如 AES、Twofish 和 ChaCha20）使用相同的密钥（一个密钥）来加密和解密消息，
-而非对称加密使用公钥密码系统（如 RSA 或 ECC）和密钥对（两个密钥）来进行这两项操作。</p>
-<p>单纯使用加密算法是不够的，这是因为有的加密算法只能按块进行加密，而且很多加密算法并不能保证密文的真实性、完整性。
-因此现实中我们通常会使用加密方案进行数据的加密解密。加密方案是结合了加密算法、消息认证或数字签名算法、块密码模式等多种算法，能同时保证数据的安全性、真实性、完整性的一套加密方案，如 AES-256-CTR-HMAC-SHA-256、ChaCha20-Poly1305 或 ECIES-secp256k1-AES-128-GCM。
-后面我们会学到，加密方案的名称就是使用到的各种密码算法名称的组合。</p>
-<h3 id="2-数字签名与消息认证" class="headerLink">
-    <a href="#2-%e6%95%b0%e5%ad%97%e7%ad%be%e5%90%8d%e4%b8%8e%e6%b6%88%e6%81%af%e8%ae%a4%e8%af%81" class="header-mark"></a>2. 数字签名与消息认证</h3><p>密码学提供了保证消息真实性（authenticity）、完整性（integrity）和不可否认性（non-repudiation）的方法：数字签名算法与消息认证（MAC）算法。</p>
-<p>大多数数字签名算法（如 DSA、ECDSA 和 EdDSA）使用非对称密钥对（私钥和公钥）干这个活：消息由私钥<strong>签名</strong>，签名由相应的公钥<strong>验证</strong>。
-在银行系统中，数字签名用于签署和批准付款。
-在区块链签名交易中，用户可以将区块链资产从一个地址转移到另一个地址，确保转移操作的真实、完整、不可否认。</p>
-<p>消息认证算法（如 HMAC）和消息认证码（MAC 码）也是密码学的一部分。MAC 跟数字签名的功能实际上是一致的，区别在于 MAC 使用哈希算法或者对称加密系统。</p>
-<h3 id="3-安全随机数" class="headerLink">
-    <a href="#3-%e5%ae%89%e5%85%a8%e9%9a%8f%e6%9c%ba%e6%95%b0" class="header-mark"></a>3. 安全随机数</h3><p>密码学的另一个部分，是<strong>熵</strong>（entropy，不可预测的随机性）和<strong>随机数的安全生成</strong>（例如使用 CSPRNG）。</p>
-<p>安全随机数理论上是<strong>不可预测的</strong>，开发人员需要关心的是你使用的随机数生成器是否足够安全。
-很多编程语言中被广泛使用的随机数生成器都是不安全的（比如 Python 的 <code>random</code> 库），如果你在对安全有严格要求的场景下使用了这种不安全的随机生成器，可能会黑客被预测到它生成的随机数，导致系统或者 APP 被黑客入侵。</p>
-<h3 id="4-密钥交换" class="headerLink">
-    <a href="#4-%e5%af%86%e9%92%a5%e4%ba%a4%e6%8d%a2" class="header-mark"></a>4. 密钥交换</h3><p>密码学定义了<strong>密钥交换算法</strong>（如 Diffie-Hellman 密钥交换和 ECDH）和密钥构建方案，用于在需要安全传输消息的两方之间安全地构建加密密钥。
-这种算法通常在两方之间建立新的安全连接时执行，例如当你打开一个现代 HTTPS 网站或连接到 WiFi 网络时。</p>
-<h2 id="5-加密哈希与-password-哈希" class="headerLink">
-    <a href="#5-%e5%8a%a0%e5%af%86%e5%93%88%e5%b8%8c%e4%b8%8e-password-%e5%93%88%e5%b8%8c" class="header-mark"></a>5. 加密哈希与 Password 哈希</h2><p>密码学提供了加密哈希函数（如 SHA-3 和 BLAKE2）将消息转换为消息摘要/数字指纹（固定长度的散列），确保无法逆向出原始消息，并且几乎不可能找到具有相同哈希值的两条不同消息。</p>
-<p>例如，在区块链系统中，哈希用于生成区块链地址、交易 ID 以及许多其他算法和协议。在 Git 中，加密哈希用于为文件和提交生成唯一 ID。</p>
-<p>而密钥派生函数（如 Scrypt 和 Argon2）通过从基于文本的 Password 安全地派生出哈希值（或密钥），并且这种算法还通过注入随机参数（盐）和使用大量迭代和计算资源使密码破解速度变慢。</p>
-<p>密码学也被用于密钥（一个非常大的、保密的数字）的生成。
-因为人类只擅长记忆字符形式的 Password/Passphrases，而各种需要加密算法需要的密钥，都是一个非常大的、保密的数字。</p>
-<h2 id="四混淆与扩散" class="headerLink">
-    <a href="#%e5%9b%9b%e6%b7%b7%e6%b7%86%e4%b8%8e%e6%89%a9%e6%95%a3" class="header-mark"></a>四、混淆与扩散</h2><p>在密码学当中，香农提出的<a href="https://zh.wikipedia.org/wiki/%E6%B7%B7%E6%B7%86%E8%88%87%E6%93%B4%E6%95%A3" target="_blank" rel="noopener noreffer"><strong>混淆</strong>（confusion）与<strong>扩散</strong>（diffusion）</a>是设计安全密码学算法的两个原则。</p>
-<p><strong>混淆</strong>使<strong>密文</strong>和对称加密中<strong>密钥</strong>的映射关系变得尽可能的复杂，使之难以分析。
-如果使用了<strong>混淆</strong>，那么输出密文中的每个比特位都应该依赖于密钥和输入数据的多个部分，确保两者无法建立直接映射。
-<strong>混淆</strong>常用的方法是「替换」与「排列」。</p>
-<p>「<strong>扩散</strong>」将明文的统计结构扩散到大量密文中，隐藏明文与密文之间的统计学关系。
-使单个明文或密钥位的影响尽可能扩大到更多的密文中去，确保改变输入中的任意一位都应该导致输出中大约一半的位发生变化，反过来改变输出密文的任一位，明文中大约一半的位也必须发生变化。
-<strong>扩散</strong>常用的方法是「置换」。</p>
-<p>这两个原则被包含在大多数散列函数、MAC 算法、随机数生成器、对称和非对称密码算法中。</p>
-<h2 id="五密码库" class="headerLink">
-    <a href="#%e4%ba%94%e5%af%86%e7%a0%81%e5%ba%93" class="header-mark"></a>五、密码库</h2><p>说了这么多，作为一个程序员，我学习密码学的目的，只是了解如何在编程语言中使用现代密码库，并从中挑选合适的算法、使用合适的参数。</p>
-<p>程序员经常会自嘲日常复制粘贴，但是在编写涉及到密码学的代码时，一定要<strong>谨慎处理</strong>！盲目地从 Internet 复制/粘贴代码或遵循博客中的示例可能会导致安全问题；曾经安全的代码、算法或者最佳实践，随着时间的推移也可能变得不再安全。</p>
-<p>本系列文章的后续部分，会分别介绍上述密码学概念，并使用 Python 演示其用法，其他语言的写法网上也很容易找到。</p>
-]]></content></entry><entry><title type="html">「转」仙马赛记——我又 PB 了</title><link href="https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/"/><id>https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/</id><author><name>ryan4yin</name></author><published>2022-02-26T17:44:00+08:00</published><updated>2022-02-26T17:44:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
+]]></content></entry><entry><title type="html">写给开发人员的实用密码学（一）—— 概览</title><link href="https://thiscute.world/posts/practical-cryptography-basics-1/"/><id>https://thiscute.world/posts/practical-cryptography-basics-1/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:00+08:00</published><updated>2022-03-01T17:15:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
+&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">「转」仙马赛记——我又 PB 了</title><link href="https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/"/><id>https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/</id><author><name>ryan4yin</name></author><published>2022-02-26T17:44:00+08:00</published><updated>2022-02-26T17:44:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">「转」MIRT出征广马——首次摸到330的边儿</title><link href="https://thiscute.world/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/"/><id>https://thiscute.world/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/</id><author><name>ryan4yin</name></author><published>2022-02-26T16:59:00+08:00</published><updated>2022-02-26T16:59:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Linux/Windows/MacOSX 系统常用命令集锦</title><link href="https://thiscute.world/posts/common-commands-for-various-operating-systems/"/><id>https://thiscute.world/posts/common-commands-for-various-operating-systems/</id><author><name>ryan4yin</name></author><published>2022-02-13T16:09:00+08:00</published><updated>2022-02-13T16:09:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Python 实用技巧与常见错误集锦</title><link href="https://thiscute.world/posts/python-tips-and-tricks/"/><id>https://thiscute.world/posts/python-tips-and-tricks/</id><author><name>ryan4yin</name></author><published>2022-02-13T01:17:00+08:00</published><updated>2022-02-13T01:17:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
@@ -7175,5 +7182,4 @@ AEAD 将「关联数据(Associated Data, AD)」——也称为「附加验证数
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">SQLAlchemy 学习笔记（三）：ORM 中的关系构建</title><link href="https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/"/><id>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</id><author><name>ryan4yin</name></author><published>2019-05-21T22:19:00+08:00</published><updated>2019-05-21T22:19:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">瘾的退却</title><link href="https://thiscute.world/posts/webnovel-addiction-recovery/"/><id>https://thiscute.world/posts/webnovel-addiction-recovery/</id><author><name>ryan4yin</name></author><published>2019-04-14T21:27:32+08:00</published><updated>2019-04-14T21:27:32+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Python 并发编程：PoolExecutor 篇</title><link href="https://thiscute.world/posts/python-concurrency-pool-executor/"/><id>https://thiscute.world/posts/python-concurrency-pool-executor/</id><author><name>ryan4yin</name></author><published>2019-03-15T22:34:00+08:00</published><updated>2019-03-15T22:34:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
-&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Python 异步编程笔记：asyncio</title><link href="https://thiscute.world/posts/python-asyncio/"/><id>https://thiscute.world/posts/python-asyncio/</id><author><name>ryan4yin</name></author><published>2019-02-14T13:11:00+08:00</published><updated>2019-02-14T13:11:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry></feed>
