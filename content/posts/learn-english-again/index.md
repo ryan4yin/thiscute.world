@@ -130,4 +130,4 @@ comment:
 - [通过「听写」学习英语，效果怎么样？](https://www.zhihu.com/question/20189363/answer/29690361)
 - [英语学习过程中如何有效地提升词汇功底？](https://www.zhihu.com/question/25379922/answer/30602611)
   - 关键点总结：学习一门语言文字的最短最佳途径，是掌握它的词根（root），也就是那些其他单词借以形成的原生词
-
+- [知乎「英语学习」话题下的精华回答](https://www.zhihu.com/topic/19558435/top-answers)
