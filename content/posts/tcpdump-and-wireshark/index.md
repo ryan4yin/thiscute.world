@@ -170,8 +170,11 @@ tcpdump -A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0
 # 2. 嗅探 eth0 接口，80 端口上所有 HTTP GET 请求（'GET ' => 0x47455420）
 tcpdump -A -i eth0 -s 0 'tcp port 80 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420'
 
-# 2. 嗅探 eth0 接口，80 端口上所有 HTTP POST 请求（'POST' => 0x504F5354）
+# 3. 嗅探 eth0 接口，80 端口上所有 HTTP POST 请求（'POST' => 0x504F5354）
 tcpdump -A -i eth0 -s 0 'tcp port 80 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504F5354'
+
+# 4. 也可以使用 not 进行参数排除，比如排除掉 9091 跟 2379 端口
+tcpdump -A -s 0 'tcp and port not 9091 and port not 2379 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
 ```
 
 ## 参考
