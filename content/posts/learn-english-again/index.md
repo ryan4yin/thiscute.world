@@ -76,7 +76,7 @@ comment:
 
 ![](/images/learn-english-again/流利说-English-Level.webp)
 
->因为三个 APP 的测试资料都不一样，所以得出的结果略有差异。其中一点英语测出的结果应该是偏高的。
+>因为三个 APP 的测试资料都不一样，所以得出的结果略有差异。
 
 下面详细介绍下这四个 APP：
 
