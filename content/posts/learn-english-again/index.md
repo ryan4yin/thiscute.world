@@ -74,7 +74,7 @@ comment:
 
 ![](/images/now/ryan4yin-english-level.webp)
 
-![](/images/now/流利说-English-Level.webp)
+![](/images/learn-english-again/流利说-English-Level.webp)
 
 >因为三个 APP 的测试资料都不一样，所以得出的结果略有差异。其中一点英语测出的结果应该是偏高的。
 
