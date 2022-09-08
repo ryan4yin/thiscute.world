@@ -128,6 +128,8 @@ comment:
 
 英语学习 Discord Server 地址: <https://discord.gg/english>，加入后要往下翻很多页才能到 English Practice 部分，目前分别有 8 个「Beginner English」聊天室跟 8 个「Intermeidate/Advanced English」聊天室，赶快加入开聊吧~
 
+补充：还有一个中英交流的 Discord Server，也值得一逛：<https://discord.gg/c-e>
+
 ## 总而言之
 
 嗯，毕竟是花了钱的，这次的大目标就是全面提升英语水平，起码达到 B2+ 级别吧（大概对应雅思 6.0-6.5），加油~
