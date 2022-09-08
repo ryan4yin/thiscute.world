@@ -13,7 +13,7 @@ toc:
 
 >这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
-### 2022-09-03
+### 2022-09-04
 
 - 完成文章 [Learn English Again](https://thiscute.world/posts/learn-english-again/)
 
