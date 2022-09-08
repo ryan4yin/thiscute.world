@@ -229,19 +229,22 @@ spec:
 
 为了搞清楚这个问题，需要先理解清楚 terminate 一个 Pod 的流程：
 
-1. Pod 的状态被设为 `Terminating`，（几乎）同时该 Pod 被从所有关联的 Service Endpoints 中移除
-2. `preStop` 钩子被执行
-   1. 它的执行阶段很好理解：在容器被 stop 之前执行
-   2. 它可以是一个命令，或者一个对 Pod 中容器的 http 调用
-   4. 如果在收到 SIGTERM 信号时，无法优雅退出，要支持优雅退出比较麻烦的话，用 `preStop` 实现优雅退出是一个非常好的方式
-   5. preStop 的定义位置：<https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2515>
-3. `preStop` 执行完毕后，SIGTERM 信号被发送给 Pod 中的所有容器
-4. 继续等待，直到容器停止，或者超时 `spec.terminationGracePeriodSeconds`，这个值默认为 30s
-   1. 需要注意的是，这个优雅退出的等待计时是与 `preStop` 同步开始的！而且它也不会等待 `preStop` 结束！
+1. Pod 的状态被设为 `Terminating`（几乎）同时该 Pod 被从所有关联的 Service Endpoints 中移除
+2. 如果配置了 `preStop` 参数，开始执行如下步骤
+   1. 执行 `preStop` 钩子
+      1. 它的执行阶段很好理解：在容器被 stop 之前执行
+      2. 它可以是一个命令，或者一个对 Pod 中容器的 http 调用
+      3. 如果在收到 SIGTERM 信号时，无法优雅退出，要支持优雅退出比较麻烦的话，用 `preStop` 实现优雅退出是一个非常好的方式
+      4. preStop 的定义位置：<https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2515>
+   2. `preStop` 执行完毕后，SIGTERM 信号被发送给 Pod 中的所有容器
+3. 如果未配置 `preStop`，则 SIGTERM 信号将被立即发送给 Pod 中的所有容器
+4. 继续等待，直到容器停止或者超时。
+   1. `spec.terminationGracePeriodSeconds` 为超时时间，默认为 30s
+   2. 需要注意的是，这个优雅退出的等待计时是与 `preStop` 同步开始的！
 5. 如果超过了 `spec.terminationGracePeriodSeconds` 容器仍然没有停止，k8s 将会发送 SIGKILL 信号给容器
 6. 进程全部终止后，整个 Pod 完全被清理掉
 
-**注意**：1 跟 2 两个工作是异步发生的，所以在未设置 `preStop` 时，可能会出现「Pod 还在 Service Endpoints 中，但是 `SIGTERM` 已经被发送给 Pod 导致容器都挂掉」的情况，我们需要考虑到这种状况的发生。
+**注意**：「从 Service Endpoints 中移除 Pod IP」跟后续的步骤是异步发生的，所以在未设置 `preStop` 时，可能会出现「Pod 还在 Service Endpoints 中，但是 `SIGTERM` 已经被发送给 Pod 导致容器都挂掉」的情况，我们需要考虑到这种状况的发生。
 
 了解了上面的流程后，我们就能分析出两种错误码出现的原因：
 
@@ -416,7 +419,7 @@ HPA 的扩缩容算法为：
 2. 对于 K8s 1.18+，HPA 通过 `spec.behavior` 提供了多种控制扩缩容行为的参数，后面会具体介绍。
 
 
-### 3. HPA 的期望值设成多少合适
+### 3. HPA 的期望值设成多少合适？如何兼顾资源利用率与服务稳定性？
 
 这个需要针对每个服务的具体情况，具体分析。
 
@@ -434,7 +437,9 @@ HPA 的扩缩容算法为：
   - HPA: 因为 requests 降低了，而 HPA 是以 requests 为 100% 计算使用率的，我们可以提高 HPA 的期望值（如果使用百分比为期望值的话），比如 80% ~ 90%，最小副本数建议设为 1 - 3. （仅供参考）
   - PodDisruptionBudget: 非核心服务嘛，保证最少副本数为 1 就行了。
 
+相关资料：
 
+ - [最佳实践｜Kubernetes集群利用率提升的思路和实现方式 - 腾讯云原生](https://mp.weixin.qq.com/s/NRd7G1c_SkjHSZYBLFgncA)
 
 ### 4. HPA 的常见问题
 
@@ -954,6 +959,8 @@ seccomp 和 seccomp-bpf 允许对系统调用进行过滤，可以防止用户�
 - [Seccomp: What Can It Do For You? - Justin Cormack, Docker](https://www.youtube.com/watch?v=Ro4QRx7VPsY&list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut$index=22)
 
 ## 六、隔离性
+
+这个我的了解暂时有限，不过有几个建议应该是值得参考的：
 
 - 推荐按业务线或者业务团队进行名字空间划分，方便对每个业务线/业务团队分别进行资源限制
 - 推荐使用 network policy 对服务实施强力的网络管控，避免长期发展过程中，业务服务之间出现混乱的跨业务线相互调用关系，也避免服务被黑后，往未知地址发送数据。
