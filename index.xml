@@ -4884,7 +4884,7 @@ $$</p>
 </ul>
 </li>
 <li>使用 ECDH 算法计算出「共享密钥」：<code>sharedECCKey = alicePubKey * ciphertextPrivKey</code></li>
-<li>为了确保安全性，每份密文都应该使用不同的<strong>临时密钥对</strong>作为「密文密钥对」，不应该直接使用「Bob 的密钥对」！「Bob 的密钥对」在 Alice 回复密文消息给 Bob 时才应该被用到。</li>
+<li>为了确保安全性，每份密文都应该使用不同的「<strong>临时 ECC 密钥对</strong>」作为「密文密钥对」，不应该直接使用「Bob 的密钥对」！「Bob 的密钥对」只在 Alice 回复密文消息给 Bob 时才应该被用到。</li>
 </ol>
 </li>
 <li>Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 <code>C</code>
