@@ -107,7 +107,8 @@ toc:
 
 - 根据 [APISIX 官方建议](https://github.com/apache/apisix/discussions/7773)，使用 `priority=-1` 跟 `proxy_next_upstream` 实现了请求的 fallback 功能，赞一个。
   - 直接使用 k8s service FQDN 作为 node host 了，因此实质是通过 APISIX + kube-proxy 实现的功能，kube-proxy 负责在 pods 之间做四层负载均衡，负载测试也很正常。
-
+  - 在上游服务挂掉的情况下，所有请求都会首先尝试请求默认服务直到超时，这会导致延迟暴增，所以建议尽量调低 APISIX upstream 中的几个超时时间。
+  - 在使用 APISIX 的 proxy-mirror 插件时也遇到了超时的问题，mirror 服务器挂掉导致请求延迟暴增，原因是未调整 proxy-mirror 插件的超时时间，所有请求都会卡在 mirror 请求这里，一直等待完 60s... 将 proxy-mirror 插件的超时时间调整为 `300ms` 后解决了这个问题。
 
 ### 2022-08-25
 
