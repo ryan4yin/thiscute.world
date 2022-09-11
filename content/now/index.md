@@ -18,7 +18,7 @@ toc:
 
 >按优先级排序
 
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 56/572
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 72/572
 - 学习研究 APISIX、Openresty、Lua
 
 ## 二、我今年还想搞搞这些
