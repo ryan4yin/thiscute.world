@@ -596,7 +596,7 @@ $$
 
 {{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve.webp" >}}
 
-你可以通过如下网站手动调整 $a$ 与 $b$ 的值，拖动曲线的交点：
+你可以通过如下网站手动调整 $a$ 与 $b$ 的值，拖动曲线的交点查看图形的变化情况：
 <https://www.desmos.com/calculator/ialhd71we3?lang=zh-CN>
 
 #### 椭圆曲线上的运算
