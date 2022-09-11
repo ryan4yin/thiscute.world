@@ -264,7 +264,7 @@ print("Equal shared keys:", aliceSharedKey == bobSharedKey)
 
 为了进一步提高安全性，密码学家提出了「[**完全前向保密**（Perfect Forward Secrecy，PFS）](https://en.wikipedia.org/wiki/Forward_secrecy)」的概念，并在 DHKE 与 ECDH 的基础上提出了支持 PFS 的 DHE/ECDHE 协议（末尾的 `E` 是 `ephemeral` 的缩写，即指所有的共享密钥都是临时的）。
 
-完全前向保密是指长期使用的主密钥泄漏不会导致过去的会话密钥泄漏，从而保护过去进行的通讯不受密码或密钥在未来暴露的威胁。
+「完全前向保密 PFS」是指长期使用的主密钥泄漏不会导致过去的会话密钥泄漏，从而保护过去进行的通讯不受密码或密钥在未来暴露的威胁。
 
 下面使用 Python 演示下 DHE 协议的流程（ECDHE 的流程也完全类似）：
 
