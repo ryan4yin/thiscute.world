@@ -6460,7 +6460,7 @@ $$</p>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过上面的代码描述我们应该能理解到，<strong>Alice 与 Bob 每次交换数据，实际上都会生成新的临时共享密钥</strong>，公钥密钥在每次数据交换时都会更新。
-即使攻击者破解了花费了很大的代价破解了其中某一个临时共享密钥 <strong>shared_key_k</strong>（或者该密钥因为某种原因泄漏了），它也只能解密出其中某一次数据交换的信息 <strong>M_b_k</strong>，其他所有的消息仍然是保密的，不受此次攻击（或泄漏）的影响。</p>
+即使攻击者花了很大的代价破解了其中某一个临时共享密钥 <strong>shared_key_k</strong>（或者该密钥因为某种原因泄漏了），TA 也只能解密出其中某一次数据交换的信息 <strong>M_b_k</strong>，其他所有的消息仍然是保密的，不受此次攻击（或泄漏）的影响。</p>
 <h2 id="参考" class="headerLink">
     <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
 <li><a href="https://github.com/nakov/Practical-Cryptography-for-Developers-Book" target="_blank" rel="noopener noreffer">Practical-Cryptography-for-Developers-Book</a></li>
