@@ -4679,8 +4679,8 @@ k = k_{0}+2k_{1}+2^{2}k_{2}+\cdots +2^{m}k_{m} \\
 \text{其中} k_{0}~..~k_{m}\in {0,1},m=\lfloor \log _{2}{k}\rfloor
 $$</p>
 <p>然后再迭代计算其中各项的值，它的运算复杂度为 $log_{2}(k)$.</p>
-<p>因 Double 和 add 的执行时间不同，根据执行时间就可以知道是执行 Double 还是 add，间接可以推算出 k. 因此这个算法会有计时攻击的风险。
-基于「Double-and-add」修改的蒙哥马利阶梯（Montgomery Ladder）是可以避免计时分析的作法，这里就不详细介绍了。</p>
+<p>因 Double 和 Add 的执行时间不同，根据执行时间就可以知道是执行 Double 还是 Add，间接可以推算出 $k$. 因此这个算法会有计时攻击的风险。
+基于「double-and-add」修改的蒙哥马利阶梯（Montgomery Ladder）是可以避免计时分析的作法，这里就不详细介绍了。</p>
 <h4 id="5-有限域上的椭圆曲线" class="headerLink">
     <a href="#5-%e6%9c%89%e9%99%90%e5%9f%9f%e4%b8%8a%e7%9a%84%e6%a4%ad%e5%9c%86%e6%9b%b2%e7%ba%bf" class="header-mark"></a>5. 有限域上的椭圆曲线</h4><p>椭圆曲线是连续且无限的，而计算机却更擅长处理离散的、存在上限的整数，因此 ECC 使用「有限域上的椭圆曲线」进行计算。</p>
 <p>「有限域（也被称作 Galois Filed, 缩写为 GF）」顾名思义，就是指只有有限个数值的域。</p>
