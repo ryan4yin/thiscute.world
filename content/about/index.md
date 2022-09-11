@@ -37,8 +37,8 @@ comment:
 - **影视**：看得最多的是动漫，另外就是欧美科幻片、温情片
 - **中文输入方案**：[小鹤音形](https://flypy.com/)
 - **自然语言**
-  - **English**: Good at reading technical articles, but weak in writing, listening and speaking
-  - **中文**：母语，高中语文中等水准。希望能学会用中文写小说，就先从短篇开始吧
+  - **English**: Keep learning. Good at reading technical articles, but weak in writing, listening and speaking
+  - **中文**：母语，高中语文中上水准。希望能学会用中文写小说，就先从短篇开始吧
 - **编程语言**
   - **Go/Python**: 目前的主力，也是我最熟悉的语言
   - **C**: 入门水平，正在使用 C 语言学习 Linux 系统编程
