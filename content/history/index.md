@@ -39,7 +39,6 @@ toc:
 ### 2022-09-04
 
 - 完成文章 [Learn English Again](https://thiscute.world/posts/learn-english-again/)
-- 
 
 ### 2022-09-03
 
