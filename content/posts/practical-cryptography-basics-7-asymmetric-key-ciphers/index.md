@@ -784,17 +784,19 @@ NIST CURVE: P-256
 
 ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECDH 迂回实现加解密。流程如下：
 
-- Bob 想要将消息 `M` 安全地发送给 Alice，他手上已经拥有了 Alice 的 ECC 公钥 `alicePubKey`
-- Bob 首先使用如下算法生成出「共享密钥」+「密文公钥」
-  - 随机生成一个临时 ECC 密钥对
-    - 私钥：安全随机数 `ciphertextPrivKey`
-    - 公钥：`ciphertextPubKey = ciphertextPrivKey * G`
-  - 使用 ECDH 计算出共享密钥：`sharedECCKey = alicePubKey * ciphertextPrivKey`
-- Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 `C`
-  - 比如使用 AES-256-GCM 或者 ChaCha20-Poly1305 进行对称加密
-- Bob 将 `C` + `ciphertextPubKey` 打包传输给 Alice
-- Alice 使用 `ciphertextPubKey` 与自己的私钥计算出共享密钥 `sharedECCKey = ciphertextPubKey * alicePrivKey`
-- Alice 使用计算出的共享密钥解密 `C` 得到消息 `M`
+1. Bob 想要将消息 `M` 安全地发送给 Alice，他手上已经拥有了 Alice 的 ECC 公钥 `alicePubKey`
+1. Bob 首先使用如下算法生成出「共享密钥」+「密文公钥」
+   1. 随机生成一个临时用的密文 ECC 密钥对
+      - 密文私钥 `ciphertextPrivKey`：生成一个安全随机数作为私钥即可
+      - 密文公钥 `ciphertextPubKey`：使用此公式从私钥生成 `ciphertextPubKey =ciphertextPrivKey * G`
+   2. 使用 ECDH 算法计算出「共享密钥」：`sharedECCKey = alicePubKey * ciphertextPrivKey`
+   3. 为了确保安全性，每份密文都应该使用不同的**临时密钥对**作为「密文密钥对」，不应该直接使用「Bob 的密钥对」！「Bob 的密钥对」在 Alice 回复密文消息给 Bob 时才应该被用到。
+2. Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 `C`
+   - 比如使用 AES-256-GCM 或者 ChaCha20-Poly1305 进行对称加密
+3. Bob 将 `C` 与「密文公钥 $\text{ciphertextPubKey}$」打包传输给 Alice
+4. Alice 使用「密文公钥」与自己的私钥计算出「共享密钥」`sharedECCKey = ciphertextPubKey * alicePrivKey`
+   1. 根据 ECDH 算法可知，这里计算出的共享密钥 `sharedECCKey`，跟 Bob 加密数据使用的共享密钥是完全一致的
+5. Alice 使用计算出的共享密钥解密 `C` 得到消息 `M`
 
 实际上就是消息的发送方先生成一个临时的 ECC 密钥对，然后借助 ECDH 协议计算出共享密钥用于加密。
 消息的接收方同样通过 ECDH 协议计算出共享密钥再解密数据。
