@@ -4873,28 +4873,33 @@ $$</p>
 而 ECDH 的安全性，则由 ECDLP 问题提供保证。</p>
 <h3 id="ecc-加密与解密" class="headerLink">
     <a href="#ecc-%e5%8a%a0%e5%af%86%e4%b8%8e%e8%a7%a3%e5%af%86" class="header-mark"></a>ECC 加密与解密</h3><p>ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECDH 迂回实现加解密。流程如下：</p>
-<ul>
+<ol>
 <li>Bob 想要将消息 <code>M</code> 安全地发送给 Alice，他手上已经拥有了 Alice 的 ECC 公钥 <code>alicePubKey</code></li>
 <li>Bob 首先使用如下算法生成出「共享密钥」+「密文公钥」
+<ol>
+<li>随机生成一个临时用的密文 ECC 密钥对
 <ul>
-<li>随机生成一个临时 ECC 密钥对
-<ul>
-<li>私钥：安全随机数 <code>ciphertextPrivKey</code></li>
-<li>公钥：<code>ciphertextPubKey = ciphertextPrivKey * G</code></li>
+<li>密文私钥 <code>ciphertextPrivKey</code>：生成一个安全随机数作为私钥即可</li>
+<li>密文公钥 <code>ciphertextPubKey</code>：使用此公式从私钥生成 <code>ciphertextPubKey =ciphertextPrivKey * G</code></li>
 </ul>
 </li>
-<li>使用 ECDH 计算出共享密钥：<code>sharedECCKey = alicePubKey * ciphertextPrivKey</code></li>
-</ul>
+<li>使用 ECDH 算法计算出「共享密钥」：<code>sharedECCKey = alicePubKey * ciphertextPrivKey</code></li>
+<li>为了确保安全性，每份密文都应该使用不同的<strong>临时密钥对</strong>作为「密文密钥对」，不应该直接使用「Bob 的密钥对」！「Bob 的密钥对」在 Alice 回复密文消息给 Bob 时才应该被用到。</li>
+</ol>
 </li>
 <li>Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 <code>C</code>
 <ul>
 <li>比如使用 AES-256-GCM 或者 ChaCha20-Poly1305 进行对称加密</li>
 </ul>
 </li>
-<li>Bob 将 <code>C</code> + <code>ciphertextPubKey</code> 打包传输给 Alice</li>
-<li>Alice 使用 <code>ciphertextPubKey</code> 与自己的私钥计算出共享密钥 <code>sharedECCKey = ciphertextPubKey * alicePrivKey</code></li>
+<li>Bob 将 <code>C</code> 与「密文公钥 $\text{ciphertextPubKey}$」打包传输给 Alice</li>
+<li>Alice 使用「密文公钥」与自己的私钥计算出「共享密钥」<code>sharedECCKey = ciphertextPubKey * alicePrivKey</code>
+<ol>
+<li>根据 ECDH 算法可知，这里计算出的共享密钥 <code>sharedECCKey</code>，跟 Bob 加密数据使用的共享密钥是完全一致的</li>
+</ol>
+</li>
 <li>Alice 使用计算出的共享密钥解密 <code>C</code> 得到消息 <code>M</code></li>
-</ul>
+</ol>
 <p>实际上就是消息的发送方先生成一个临时的 ECC 密钥对，然后借助 ECDH 协议计算出共享密钥用于加密。
 消息的接收方同样通过 ECDH 协议计算出共享密钥再解密数据。</p>
 <p>使用 Python 演示如下：</p>
