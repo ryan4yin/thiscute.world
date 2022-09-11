@@ -18,7 +18,7 @@ toc:
 
 >按优先级排序
 
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 72/572
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 136/572
 - 学习研究 APISIX、Openresty、Lua
 
 ## 二、我今年还想搞搞这些
@@ -45,9 +45,10 @@ toc:
 - Linux 性能调优与 Linux 网络技术
   - 已完成
     - The ANSI C Programming Language - 用来快速复习下 C 的语法
+    - 完成了一个使用 libav + make 做的一个 [video2chars-c](https://github.com/ryan4yin/video2ascii-c) 小项目练手
   - 待完成
     - C 语言基础复习
-      - 通过其他资料补充学习 make gdb ld objdump objcopy 等命令
+      - 通过其他资料补充学习gdb ld objdump objcopy 等命令
     - 《深入理解 Linux 网络 - 张彦飞》 - 14/320
     - 极客时间《网络排查案例课》
     - 极客时间 《Linux 性能优化实战》
