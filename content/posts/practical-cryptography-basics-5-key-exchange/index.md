@@ -111,7 +111,7 @@ $$
 然后为了理解 HDKE 的原理，我们还需要了解下模幂运算的一个性质：
 
 $$
-g^{ab} \mod p = {g^a \mod p}^b \mod p
+g^{ab} \mod p = {(g^a \mod p)}^b \mod p
 $$
 
 懂了上面这些基础数学知识，下面就开始介绍 HDKE 算法。
