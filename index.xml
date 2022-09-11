@@ -6295,7 +6295,7 @@ $$</p>
     <a href="#%e4%ba%94pfs-%e5%ae%8c%e7%be%8e%e5%89%8d%e5%90%91%e4%bf%9d%e5%af%86%e5%8d%8f%e8%ae%ae-dheecdhe" class="header-mark"></a>五、PFS 完美前向保密协议 DHE/ECDHE</h2><p>前面介绍的经典 DHKE 与 ECDH 协议流程，都是在最开始时交换一次密钥，之后就一直使用该密钥通讯。
 因此如果密钥被破解，整个会话的所有信息对攻击者而言就完全透明了。</p>
 <p>为了进一步提高安全性，密码学家提出了「<a href="https://en.wikipedia.org/wiki/Forward_secrecy" target="_blank" rel="noopener noreffer"><strong>完全前向保密</strong>（Perfect Forward Secrecy，PFS）</a>」的概念，并在 DHKE 与 ECDH 的基础上提出了支持 PFS 的 DHE/ECDHE 协议（末尾的 <code>E</code> 是 <code>ephemeral</code> 的缩写，即指所有的共享密钥都是临时的）。</p>
-<p>完全前向保密是指长期使用的主密钥泄漏不会导致过去的会话密钥泄漏，从而保护过去进行的通讯不受密码或密钥在未来暴露的威胁。</p>
+<p>「完全前向保密 PFS」是指长期使用的主密钥泄漏不会导致过去的会话密钥泄漏，从而保护过去进行的通讯不受密码或密钥在未来暴露的威胁。</p>
 <p>下面使用 Python 演示下 DHE 协议的流程（ECDHE 的流程也完全类似）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
