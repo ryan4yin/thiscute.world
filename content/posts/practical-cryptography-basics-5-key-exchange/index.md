@@ -92,7 +92,7 @@ DHKE 协议也是基于类似的原理，但是使用的是离散对数（discre
 
 ### 基础数学知识
 
-首先介绍下「模幂（modular exponentiations）」，它是指求 $g$ 的 $a$ 次幂模 $p$ 的值 $c$ 的过程，其中 $g$ $a$ $c$ 均为整数，公式如下：
+首先介绍下「模幂（modular exponentiations）」，它是指求 $g$ 的 $a$ 次幂模 $p$ 的值 $c$ 的过程，其中 $g$ $a$ $p$ $c$ 均为整数，公式如下：
 
 $$
 g^a \mod p = c
