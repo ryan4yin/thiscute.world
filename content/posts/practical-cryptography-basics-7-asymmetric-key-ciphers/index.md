@@ -793,7 +793,7 @@ ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECD
    3. 为了确保安全性，每份密文都应该使用不同的**临时密钥对**作为「密文密钥对」，不应该直接使用「Bob 的密钥对」！「Bob 的密钥对」在 Alice 回复密文消息给 Bob 时才应该被用到。
 2. Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 `C`
    - 比如使用 AES-256-GCM 或者 ChaCha20-Poly1305 进行对称加密
-3. Bob 将 `C` 与「密文公钥 $\text{ciphertextPubKey}$」打包传输给 Alice
+3. Bob 将 `C` 与「密文公钥 `ciphertextPubKey`」打包传输给 Alice
 4. Alice 使用「密文公钥」与自己的私钥计算出「共享密钥」`sharedECCKey = ciphertextPubKey * alicePrivKey`
    1. 根据 ECDH 算法可知，这里计算出的共享密钥 `sharedECCKey`，跟 Bob 加密数据使用的共享密钥是完全一致的
 5. Alice 使用计算出的共享密钥解密 `C` 得到消息 `M`
