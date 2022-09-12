@@ -212,6 +212,85 @@ sudo yast2 virtualization
 
 KVM 的详细文档参见 [KVM/README.md](../../virutal%20machine/KVM/README.md)
 
+### VPN 连接与防火墙
+
+防火墙默认会禁用 pptp 等 vpn 协议的端口，需要手动打开.
+
+允许使用 PPTP 协议：
+
+```shell
+# 允许 gre 数据包流入网络
+sudo firewall-cmd --permanent --zone=public --direct --add-rule ipv4 filter INPUT 0 -p gre -j ACCEPT
+sudo firewall-cmd --permanent --zone=public --direct --add-rule ipv6 filter INPUT 0 -p gre -j ACCEPT
+
+# masquerade: 自动使用 interface 地址伪装所有流量（将主机当作路由器使用，vpn 是虚拟网络，需要这个功能）
+sudo firewall-cmd --permanent --zone=public --add-masquerade
+# pptp 客户端使用固定端口 1723/tcp 通信
+firewall-cmd --add-port=1723/tcp --permanent
+
+sudo firewall-cmd --reload
+```
+
+允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 `/etc/wireguard/xxx.conf` 就能配置 iptables 参数放行相关端口，这里就不赘述了。
+
+## 触摸板手势
+
+参考 [libinput-gestures](https://github.com/bulletmark/libinput-gestures)
+
+## 安装 Nvidia 闭源驱动
+
+>完全参考官方文档 <https://en.opensuse.org/SDB:NVIDIA_drivers>
+
+```shell
+# 添加 Nvidia 官方镜像源
+zypper addrepo --refresh https://download.nvidia.com/opensuse/tumbleweed NVIDIA
+
+# 搜索驱动以及对应的版本号
+# 在如下 Nvidia 官方站点根据提示检索出合适的最新驱动，然后使用其版本号在如下 zypper 命令输出中找到对应的驱动名称
+# https://www.nvidia.com/Download/index.aspx
+# 比如我的显卡是 RTX3070，通过版本号能找到其对应的驱动为  x11-video-nvidiaG06
+zypper se -s x11-video-nvidiaG0*
+
+# 安装驱动
+zypper in  x11-video-nvidiaG06 x11-video-nvidiaG06
+```
+
+如果你还需要安装 CUDA 来本地炼丹，CUDA 的安装有两种方法：
+
+- 直接将 CUDA 安装在本机，可参考 [NVIDIA CUDA Installation Guide for Linux](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
+- 使用 Docker 容器炼丹，可参考 [nvidia-docker](https://github.com/NVIDIA/nvidia-docker)
+
+## 设置代理工具
+
+为了加速网络或者访问一些国内不存在的网站，网络代理是必不可少的工具。
+
+我习惯使用 clash，极简安装方法如下：
+
+1. 首先 `sudo zypper in clash` 安装好 clash
+2. clash 环境配置（记不清是否得手动配置这个了...）
+   1. 下载好 [Country.mmdb](https://github.com/Dreamacro/maxmind-geoip/releases) 放到 `~/.config/clash` 中
+   2. 好像还需要下载下 clash-dashboard 到 `~/.config/clash/ui`
+3. 找到你自己的 clash 配置订阅地址（各种机场都会提供的），写个小脚本内容为 `curl "<订阅地址>" > ~/.config/clash/config.yaml`
+   1. 如果这个文件夹还没有就先创建一下
+   2. 如果代理是自己搭建的，那就自己写这个配置咯
+4. 把脚本放在 PATH 中的某个目录中，方便随时调用更新
+5. 使用 tmux 后台启动 clash，代理就设置完成了
+   1. 浏览器可以通过 swichomega 来设置细致的代理规则
+   2. 命令行可以直接使用 `export HTTP_PROXY=http://127.0.0.1; export HTTPS_PROXY=http://127.0.0.1` 来使用代理，大部分命令行程序都会使用这两个环境变量的配置。
+6. 一般机场给的 clash 配置都会直接开启 clash Web 配置页，可以通过 <http://localhost:9090/ui/#/proxies> 直接访问
+
+
+## 设置 zypper 使用 proxy 下载更新
+
+zypper 默认不会读取 `HTTP_PROXY` 跟 `HTTPS_PROXY` 等环境变量，对于一些无国内镜像的源而言，可以通过如下方式配置走代理提升下载速度（这需要你已经有本地代理才行，比如说 clash）：
+
+- 进入 YaST GUI
+- 在搜索框直接搜索 `proxy` 即可找到对应的配置项
+- 配置好 http 以及 https 协议的代理地址，如果是本地的 clash，可以直接填 `http://127.0.0.1:7890`
+- 在「No Proxy Domains」中添加国内镜像源地址，使它们不要走代理
+  - 如果是跟我的教程走的，应该需要将这个值改成 `localhost,127.0.0.1,mirrors.bfsu.edu.cn,mirrors.aliyun.com`
+
+
 ### KDE Connect
 
 KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共享文件夹、通知同步等等。
@@ -235,38 +314,7 @@ sudo systemctl restart firewalld.service
     - 如果你有 ROOT 权限，可以参考 [Fix clipboard permission on Android 10](https://szclsya.me/posts/android/fix-clipboard-android-10/) 的方法，安装 ClipboardWhitelist 来打开权限。
     - 否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。
 
-### Qv2ray 代理
-
-Qv2ray 是我用过的比较好用的 GUI 代理工具，通过插件可支持常见的所有代理协议。
-
-```shell
-# see: https://build.openSUSE.org/repositories/home:zzndb
-sudo zypper addrepo 'https://download.opensuse.org/repositories/home:/zzndb/openSUSE_Tumbleweed' qv2ray
-sudo zypper refresh
-sudo zypper install Qv2ray QvPlugin-Trojan QvPlugin-SS
-```
-
-### VPN 连接与防火墙
-
-防火墙默认会禁用 pptp 等 vpn 协议的端口，需要手动打开.
-
-允许使用 PPTP 协议：
-
-```shell
-# 允许 gre 数据包流入网络
-sudo firewall-cmd --permanent --zone=public --direct --add-rule ipv4 filter INPUT 0 -p gre -j ACCEPT
-sudo firewall-cmd --permanent --zone=public --direct --add-rule ipv6 filter INPUT 0 -p gre -j ACCEPT
-
-# masquerade: 自动使用 interface 地址伪装所有流量（将主机当作路由器使用，vpn 是虚拟网络，需要这个功能）
-sudo firewall-cmd --permanent --zone=public --add-masquerade
-# pptp 客户端使用固定端口 1723/tcp 通信
-firewall-cmd --add-port=1723/tcp --permanent
-
-sudo firewall-cmd --reload
-```
-
-允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 `/etc/wireguard/xxx.conf` 就能配置 iptables 参数放行相关端口，这里就不赘述了。
-
 ## 其他设置
 
 从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。
+
