@@ -13,6 +13,18 @@ toc:
 
 >这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
+### 2022-09-12
+
+- 看了 TLPI 作者的演讲 [Kernel Recipes 2022 - Once upon an API](https://www.youtube.com/watch?v=l-i1DVjlAyA&t=2047s)
+  - 以 prctl 为例介绍了 Linux 中一个 API 的错误设计如何影响到 Linux 的其他部分，而且因为缺少文档，也没人维护，其中部分问题直到十多年后才被发现。为了兼容性，这些错误的设计就成了永远不可能被修复的 bug
+  - socket api 中有一些错误设计已经在 Linux 中存在了近 40 年，这类错误设计给 Linux 系统编程造成了太多的痛苦。
+  - 还有 inotify api、cgroup v1，都是错误设计的典型，它们产生了很多作用，但是考虑的问题都过于片面，由此引发了许多问题。
+  - 介绍了可用于避免这些 API 错误设计的一些方法。
+- 看了 TLPI 作者的演讲 [An introduction to control groups (cgroups) version 2 - Michael Kerrisk - NDC TechTown 2021](https://www.youtube.com/watch?v=kcnFQgg9ToY&t=2162s)
+  - 主要介绍了 cgroup v2 的历史，演示了如何使用 cgroup v2 进行 cpu/pid 限制，以及如何使用嵌套 cgroup v2 进行更细粒度的资源限制。
+  - 发现 cgroup v2 跟目前内核领域最火的 eBPF 也有些交互，有点意思。
+- TLPI 作者做了很多 cgroup/namespaces/capability model/seccomp 的演讲，可以在 [Conference presentations - man7.org](https://man7.org/conf/index.html) 中找到，有时间再看看其他的。
+
 ### 2022-09-11
 
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 136/572
