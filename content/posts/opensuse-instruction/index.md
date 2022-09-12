@@ -125,9 +125,14 @@ echo "export PATH=\$PATH:\$HOME/.local/bin" >> ~/.bashrc
 接下来安装 VSCode 插件，下列是我的插件列表：
 
 1. 语言：
-    1. python/go/rust/c#/julia/flutter
-    2. xml/yaml/toml
-    3. vscode proto3
+    1. python/go/c#/julia/flutter
+    2. c/c++ extension pack
+    3. rust-analyzer
+    4. shellchecker
+    5. redhat xml & yaml
+    6. even-better-toml
+    7. edit-csv
+    8. vscode-proto3
 2. ansible/terraform
 3. markdown all in one + Markdown Preview Enhanced
 4. 美化：
@@ -143,10 +148,9 @@ echo "export PATH=\$PATH:\$HOME/.local/bin" >> ~/.bashrc
     2. path intellisense
     3. svg
     4. visual studio intellicode
-10. antlr4
-11. remote ssh + remote containers
-12. rest client
-13. vscode databases
+10. remote ssh + remote containers
+11. rest client
+12. vscode databases
 
 ### 容器 + Kubernetes
 
