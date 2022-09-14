@@ -9,14 +9,12 @@ toc:
 
 ## 🌱 I’m currently learning
 
+- [The Linux Programming Interface](https://man7.org/tlpi/)
 - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
-- The ANSI C Programming Language
 
 ## 🤤 I want to learn
 
 - Programming Languages: **Rust, C**
-- Linux
-  - [The Linux Programming Interface](https://man7.org/tlpi/)
 - Network: L3/L4/L7
   - Computer Networking - A Top-Down Approach, 7e
 - Blockchain: **Web3 & Ethereum Development**
