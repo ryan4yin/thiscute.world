@@ -69,6 +69,7 @@ var myFriends = [
     ["https://ferryxie.com/", "/avatar/ferryxie.webp", "@Ferry", "金融科技与人文思考并存"], 
     ["https://bbing.com.cn/", "https://fastly.jsdelivr.net/gh/caibingcheng/resources@main/images/2B2pd1.png", "@BBing", "自由 分享 合作 <= C/C++/Linux 高手"], 
     ["https://blognas.hwb0307.com/", "https://blognas.hwb0307.com/logo.jpg", "@Bensz", "浮云翩迁之间 <= Linux/Docker/R语言爱好者"], 
+    ["https://lisenhui.cn", "https://lisenhui.cn/imgs/avatar.png", "@凡梦星尘", "再平凡的人也有属于他的梦想！"], 
 ];
 
 
