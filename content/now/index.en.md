@@ -10,7 +10,9 @@ toc:
 ## 🌱 I’m currently learning
 
 - [The Linux Programming Interface](https://man7.org/tlpi/)
-- [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+- Study APISIX、Openresty & Lua
+- The Unlikely Pilgrimage of Harold Fry - 10/100
+- Moon Palace, by Pual Auster - 4.2%
 
 ## 🤤 I want to learn
 
