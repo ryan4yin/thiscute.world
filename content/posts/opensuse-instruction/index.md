@@ -307,7 +307,11 @@ KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共�
 # 还可以使用 --add-source=xx.xx.xx.xx/xx 设置 ip 白名单
 sudo firewall-cmd --zone=public --permanent --add-port=1714-1764/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=1714-1764/udp
-sudo systemctl restart firewalld.service
+
+sudo firewall-cmd --reload
+
+# 确认下已经开放这些端口
+sudo firewall-cmd --list-all
 ```
 
 然后手机（Android）安装好 KDE Connect，就能开始享受了。
@@ -317,6 +321,144 @@ sudo systemctl restart firewalld.service
 - [ ] Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。
     - 如果你有 ROOT 权限，可以参考 [Fix clipboard permission on Android 10](https://szclsya.me/posts/android/fix-clipboard-android-10/) 的方法，安装 ClipboardWhitelist 来打开权限。
     - 否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。
+
+### VPN 连接与其他防火墙相关配置
+
+防火墙默认会禁用所有对外端口，需要手动打开。
+
+允许使用 PPTP 协议：
+
+```shell
+# 允许 gre 数据包流入网络
+sudo firewall-cmd --permanent --zone=public --direct --add-rule ipv4 filter INPUT 0 -p gre -j ACCEPT
+sudo firewall-cmd --permanent --zone=public --direct --add-rule ipv6 filter INPUT 0 -p gre -j ACCEPT
+
+# masquerade: 自动使用 interface 地址伪装所有流量（将主机当作路由器使用，vpn 是虚拟网络，需要这个功能）
+sudo firewall-cmd --permanent --zone=public --add-masquerade
+# pptp 客户端使用固定端口 1723/tcp 通信
+firewall-cmd --add-port=1723/tcp --permanent
+
+sudo firewall-cmd --reload
+
+# 确认下已经开放这些端口
+sudo firewall-cmd --list-all
+```
+
+允许使用 wireguard 协议：
+
+此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 `/etc/wireguard/xxx.conf` 就能配置 iptables 参数放行相关端口，这里就不赘述了。
+
+### OpenSSH 服务
+
+为了局域网数据传输方便，以及远程使用 PC，我一般都会给自己的 Linux 机器打开 OpenSSH 服务。
+
+在 OpenSUSE 上启用 OpenSSH 服务的流程：
+
+```shell
+sudo systemctl enable sshd
+sudo systemctl start sshd
+sudo systemctl status sshd
+```
+
+#### 2. 设置使用密钥登录
+
+显然密钥登录才足够安全，这里介绍下我如何设置密钥登录。
+
+先生成密钥对（如果你常用 github，本地应该已经有密钥对了，可以考虑直接使用同一个密钥对，这样就能跳过这一步）：
+
+```shell
+# 或者直接命令行指定密钥算法类型(-t)、名称与路径(-f)、注释(-C)、密钥的保护密码(-P)。
+## 当密钥较多时，注释可用于区分密钥的用途。
+## 算法推荐使用 ed25519/ecdsa，默认的 rsa 算法目前已不推荐使用（需要很长的密钥和签名才能保证安全）。
+ssh-keygen -t ed25519 -f id_rsa_for_xxx -C "ssh key for xxx" -P ''
+```
+
+接下来需要把公钥追加到主机的 `$HOME/.ssh/authorized_keys` 文件的末尾（`$HOME` 是 user 的家目录，不是 root 的家目录，请看清楚了）：
+
+```shell
+# 方法一，手动将公钥添加到 ~/.ssh/authorized_keys 中
+# 然后手动将  ~/.ssh/authorized_keys 的权限设为 600
+chmod 600 ~/.ssh/authorized_keys
+
+# 方法二：如果你的密钥对在其他主机上，可以直接在该主机上执行如下命令将公钥添加到 openSUSE 机器上，会有提示输入密码
+#   -i 设定公钥位置，默认使用 ~/.ssh/id_rsa.pub
+ssh-copy-id  -i path/to/key_name.pub user@host
+```
+
+现在就完事了，可以使用密钥钥登录试试：
+
+```shell
+#   -i 设定私钥位置，默认使用 ~/.ssh/id_rsa
+ssh <username>@<server-ip> -i <rsa_private_key>
+
+# 举例
+ssh ubuntu@111.222.333.444 -i ~/.ssh/id_rsa_for_server
+```
+
+#### 2. 调整安全设置
+
+openSUSE 的 OpenSSH 服务默认是允许密码登录的，虽然也有登录速率限制，还是会有点危险。
+
+既然我们前面已经设置好了密钥登录，现在就可以把密码登录功能完全禁用掉，提升安全性。
+
+
+请取消注释并修改 `/usr/etc/ssh/sshd_config` 中如下参数的值：
+
+>注意 OpenSSH 的主配置文件是 `/usr/etc/ssh/sshd_config`，而不是大部分 Linux 发行版使用的 `/etc/ssh/sshd_config`。
+
+```conf
+# 安全相关配置
+LoginGraceTime 2m
+StrictModes yes
+MaxAuthTries 6
+MaxSessions 10
+
+# 禁止使用 root 用户登录
+PermitRootLogin no
+
+# 允许使用公钥认证
+PubkeyAuthentication yes
+
+# 禁用明文密码登录
+PasswordAuthentication no
+# 禁用掉基于 password 的交互式认证
+KbdInteractiveAuthentication no
+# 禁用 PAM 模块
+UsePAM no
+```
+
+改完后再重启下 sshd 服务并用 ssh 命令登录测试确认功能已生效：
+
+```shell
+# 尝试在使用「公钥验证」之外的其他方法登录
+# 如果 sshd 服务的设置正确，这行命令应该登录失败并报错「Permission Denied(publickey)」
+ssh -o PubkeyAuthentication=no user@host
+```
+
+### firewall 防火墙介绍
+
+firewall 是 SUSE/RedHat 等 RPM 发行版使用的防火墙程序，它底层使用的是 iptables/nftables，常用命令如下：
+
+```bash
+systemctl enable firewalld   # 启用 firewalld 服务，即打开「开机自启」功能
+systemctl disable firewalld  # 关闭 firewalld 服务，即关闭「开机自启」功能
+
+systemctl status firewalld   # 查看 firewalld 的状态
+systemctl start  firewalld   # 启动
+systemctl stop firewalld     # 停止
+
+# 打开 SSH 端口
+sudo firewall-cmd --zone=public --add-port=22/tcp --permanent
+
+# 关闭 SSH 端口
+firewall-cmd --zone=public --remove-port=22/tcp --permanent
+
+# 修改防火墙规则后需要重载配置
+sudo firewall-cmd --reload
+
+# 查看 firewall 的状态
+sudo firewall-cmd --list-all
+```
 
 ## 其他设置
 
