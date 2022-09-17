@@ -34,6 +34,7 @@ modified_page_paths = {
     "/posts/kubernetes-deployemnt-using-kubeadm/": "/posts/kubernetes-deployment-using-kubeadm/",
 }
 
+# 有些文章的标题有更新，这里使用最新的标题替换掉旧标题
 modified_page_titles = {
     # 路径 => 标题
     "/posts/about-tls-cert/": "写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议",
@@ -143,6 +144,13 @@ def process_data(data):
             page['pageTitle'] = page['pageTitle']\
                 .replace(" - Ryan4Yin's Space", "")\
                 .replace(" - This Cute World", "")
+
+            # 跳过 404 相关页面
+            if page['pageTitle'] in (
+                "404 页面没找到",
+                "404 Page not Found"
+            ):
+                continue
 
             # 处理被修改过 pagePath 的文章，使用指定的 Path
             page_path = page['pagePath']
