@@ -16,6 +16,9 @@ toc:
 ### 2022-09-15 - 2022-09-17
 
 - 沉迷学英语...
+  - 薄荷英语 100 天阅读一本英文书 - 10/100
+  - 一点英语 270 天英语学习      - 11/270
+  - Moon Palace, by Paul Auster - 4.2%
 - 最近一直在跟薄荷英语的原版书课程《The Unlikely Pilgrimage of Harold Fry》，就想再次挑战下自己直接去读英文原版书。结果发现 Paul Auster 的《Moon Palace》意外地好读，生词很少，读得很流畅。
   - 然后又陆续试了下《Sophie's World》、《Majo no Tabitabi（魔女之旅）》，难度都不高，只有《Tasogare-iro no Uta Tsukai（黄昏色的咏使）》生词偏多，读着费劲。
 - 阅读了几篇介绍向量数据库与相似度检索技术的文章，写得非常简洁直观
