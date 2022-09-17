@@ -20,6 +20,8 @@ toc:
 
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 136/572
 - 学习研究 APISIX、Openresty、Lua
+- The Unlikely Pilgrimage of Harold Fry - 
+- Moon Palace, by Pual Auster
 
 ## 二、我今年还想搞搞这些
 
@@ -81,13 +83,17 @@ toc:
 
 正在读：
 
+- The Unlikely Pilgrimage of Harold Fry
+- Moon Palace, by Pual Auster
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
-- 《江城》
-- [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 
 
 想读，但是没啥计划：
 
+- Sophie's World
+- Majo no Tabitabi（魔女之旅）Vol.1
+- Tasogare-iro no Uta Tsukai（黄昏色的咏使）Vol.1
+- 《江城》
 - 《被讨厌的勇气》
 - 《科学革命的结构》
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
