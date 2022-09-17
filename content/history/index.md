@@ -18,6 +18,10 @@ toc:
 - 沉迷学英语...
 - 最近一直在跟薄荷英语的原版书课程《一个人的朝圣》，就想再次挑战下自己直接去读英文原版书。结果发现 Paul Auster 的《Moon Palace》意外地好读，生词很少，读得很流畅。
   - 然后又陆续试了下《Sophie's World》、《Majo no Tabitabi（魔女之旅）》，难度都不高，只有《Tasogare-iro no Uta Tsukai（黄昏色的咏使）》生词偏多，读着费劲。
+- 阅读了几篇介绍向量数据库与相似度检索技术的文章，写得非常简洁直观
+  - 大概介绍了基于倒排索引的传统文本检索方式的缺点，以及基于向量的相似度检索如何对其形成降维打击，以及如何用简单的几行 Python 代码，实现基于向量的相似度检索功能。
+  - [向量数据库入坑指南：聊聊来自元宇宙大厂 Meta 的相似度检索技术 Faiss](https://soulteary.com/2022/09/03/vector-database-guide-talk-about-the-similarity-retrieval-technology-from-metaverse-big-company-faiss.html)
+  - [向量数据库入坑：传统文本检索方式的降维打击，使用 Faiss 实现向量语义检索](https://soulteary.com/2022/09/10/the-dimensionality-reduction-of-traditional-text-retrieval-methods-using-faiss-to-achieve-vector-semantic-retrieval.html)
 
 ### 2022-09-13 - 2022-09-14
 
