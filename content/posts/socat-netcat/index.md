@@ -135,16 +135,15 @@ cat client.key client.crt > client.pem
 # 服务端启动命令
 socat openssl-listen:4433,reuseaddr,cert=server.pem,cafile=client.crt -
 
-# 客户端连接命令
-socat - openssl-connect:192.168.31.123:4433,cert=client.pem,cafile=server.crt
-# 或者使用 curl 连接(我们知道 ca.crt 和 server.crt 都能被用做 cacert/cafile)
+# 客户端连接命令（使用系统的 ca.crt 或者你自己的私有 ca.cert 来验证服务端证书）
+socat - openssl-connect:192.168.31.123:4433,cert=client.pem,cafile=ca.crt
+# 或者使用 curl 连接（ca.crt 证书来源同上）
 curl -v --cacert ca.crt --cert client.crt --key client.key --tls-max 1.2 https://192.168.31.123:4433
 ```
 
 上面的命令使用了 mTLS 双向认证的协议，可通过设定 `verify=0` 来关掉客户端认证，示例如下：
 
 ```shell
-
 # socat 需要使用同时包含证书和私钥的 pem 文件，生成方法如下
 cat server.key server.crt > server.pem
 
@@ -152,9 +151,10 @@ cat server.key server.crt > server.pem
 socat openssl-listen:4433,reuseaddr,cert=server.pem,verify=0 -
 
 # 客户端连接命令，如果 ip/域名不受证书保护，就也需要添加 verify=0
-socat - openssl-connect:192.168.31.123:4433,cafile=server.crt
-# 或者使用 curl 连接，证书无效请添加 -k 跳过证书验证
-curl -v --cacert server.crt https://192.168.31.123:4433
+# （使用系统的 ca.crt 或者你自己的私有 ca.cert 来验证服务端证书）
+socat - openssl-connect:192.168.31.123:4433,cafile=ca.crt
+# 或者使用 curl 连接（ca.crt 证书来源同上）
+curl -v --cacert ca.crt https://192.168.31.123:4433
 ```
 
 ## 2. 数据传输
