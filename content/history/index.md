@@ -18,7 +18,7 @@ toc:
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 13/100
   - 一点英语 270 天英语学习                  - 14/270
-  - Moon Palace, by Pual Auster           - 8.6%
+  - Moon Palace, by Pual Auster           - 10.6%
 - [APISIX 504 问题](https://github.com/apache/apisix/issues/7934)
   - 上周给这个 case 提了个 issue 到 APISIX 社区，但是官方给出的思路并无参考价值。
   - 今天晚上左思右想，最可能还是 TCP/IP 协议栈有问题，网上搜了下「丢包 504 超时」，然后根据找到的流程排查了一下，第二个排查项直接命中，就是 nf_conntrack 满了导致的问题！

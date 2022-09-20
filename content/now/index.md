@@ -22,7 +22,7 @@ toc:
 - 学习研究 APISIX、Openresty、Lua
 - The Unlikely Pilgrimage of Harold Fry - 13/100
 - 一点英语 270 天英语学习                  - 14/270
-- Moon Palace, by Pual Auster           - 8.6%
+- Moon Palace, by Pual Auster           - 10.6%
 
 ## 二、我今年还想搞搞这些
 
