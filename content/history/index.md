@@ -16,8 +16,8 @@ toc:
 ### 2022-09-20
 
 - 英语
-  - The Unlikely Pilgrimage of Harold Fry - 12/100
-  - 一点英语 270 天英语学习                  - 13/270
+  - The Unlikely Pilgrimage of Harold Fry - 13/100
+  - 一点英语 270 天英语学习                  - 14/270
   - Moon Palace, by Pual Auster           - 8.6%
 - [APISIX 504 问题](https://github.com/apache/apisix/issues/7934)
   - 上周给这个 case 提了个 issue 到 APISIX 社区，但是官方给出的思路并无参考价值。
