@@ -23,7 +23,7 @@ toc:
   - 上周给这个 case 提了个 issue 到 APISIX 社区，但是官方给出的思路并无参考价值。
   - 今天晚上左思右想，最可能还是 TCP/IP 协议栈有问题，网上搜了下「丢包 504 超时」，然后根据找到的流程排查了一下，第二个排查项直接命中，就是 nf_conntrack 满了导致的问题！
     - 就好像是找到了正确的房门钥匙是「丢包 超时 排查」，困扰我好几天的问题，瞬间就找到了突破口。
-  - 此问题相关的笔记，我后续在 [Linux 504 超时丢包问题解决思路.md](https://github.com/ryan4yin/knowledge/blob/master/linux/Linux%20504%20%E8%B6%85%E6%97%B6%E4%B8%A2%E5%8C%85%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF.md) 更新
+  - 此问题相关的笔记，我后续会在 [Linux 504 超时丢包问题解决思路.md](https://github.com/ryan4yin/knowledge/blob/master/linux/Linux%20504%20%E8%B6%85%E6%97%B6%E4%B8%A2%E5%8C%85%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF.md) 更新
 
 ### 2022-09-19
 
