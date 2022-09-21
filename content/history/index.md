@@ -16,8 +16,12 @@ toc:
 ### 2022-09-21
 
 - [APISIX 504 问题](https://github.com/apache/apisix/issues/7934)
-  - 周会同步，同事提示我 node-exporter 的 network traffic 部分就有列出 nf_conntrack 表的监控。但是因为环境问题，我跑 APISIX 这批机器刚好没整这个监控...
-  - 再次确认了完善的监控功能的重要性
+  - 周会同步，同事提示我 node-exporter 的 network traffic 部分就有列出 nf_conntrack 表的监控。但是因为环境问题，我跑 APISIX 这批机器刚好没整这个监控...再次确认了完善的监控功能的重要性
+  - 调整 nf_conntrack 相关参数后，问题暂时解决了。但是接下来遇到 TCP 连接数无法超过 65535 的问题，导致 504 报错...
+    - 按理说我 nginx 有两个 worker，`worker_connections` 也设置到了 65535，至少应该也能撑住 65535 * 2 的连接数量？
+    - 发现 alloc :  : timewait 三类 TCP 连接数的比值大概为 66% : 13% : 21%，`dmesg` 命令能看到很多这样的错误：`TCP: too many orphaned sockets`
+    - 搜索一番确定 orphaned 连接太多一般有两种可能：一是 tcp 连接的内存用尽导致无法为新连接分配内存，二是 TIME_WAIT 导致的 orphaned 连接。所以解决方法是调整 tcp 内存相关参数，或者启用 TIME_WAIT recycle 与 reuse
+- 读了一点《深入理解 Linux 网络》这本书，因为这两天搞 APISIX 网关，深刻意识到自己对相关知识缺乏了解
 
 ### 2022-09-20
 
@@ -29,7 +33,7 @@ toc:
   - 上周给这个 case 提了个 issue 到 APISIX 社区，但是官方给出的思路并无参考价值。
   - 今天晚上左思右想，最可能还是 TCP/IP 协议栈有问题，网上搜了下「丢包 504 超时」，然后根据找到的流程排查了一下，第二个排查项直接命中，就是 nf_conntrack 满了导致的问题！
     - 就好像是找到了正确的房门钥匙是「丢包 超时 排查」，困扰我好几天的问题，瞬间就找到了突破口。
-  - 此问题相关的笔记，我后续会在 [Linux 504 超时丢包问题解决思路.md](https://github.com/ryan4yin/knowledge/blob/master/linux/Linux%20504%20%E8%B6%85%E6%97%B6%E4%B8%A2%E5%8C%85%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF.md) 更新
+  - 此问题相关的笔记，我后续会在 [Linux 504 超时丢包问题解决思路.md](https://github.com/ryan4yin/knowledge/blob/master/linux/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/Linux%20504%20%E8%B6%85%E6%97%B6%E4%B8%A2%E5%8C%85%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF.md) 更新
 
 ### 2022-09-19
 
