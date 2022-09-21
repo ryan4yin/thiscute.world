@@ -13,6 +13,12 @@ toc:
 
 >这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
+### 2022-09-21
+
+- [APISIX 504 问题](https://github.com/apache/apisix/issues/7934)
+  - 周会同步，同事提示我 node-exporter 的 network traffic 部分就有列出 nf_conntrack 表的监控。但是因为环境问题，我跑 APISIX 这批机器刚好没整这个监控...
+  - 再次确认了完善的监控功能的重要性
+
 ### 2022-09-20
 
 - 英语
