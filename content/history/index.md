@@ -13,6 +13,15 @@ toc:
 
 >这份记录并不是为了让谁记得我，而是为了让我自己记住我自己，去理解过去的自己，从而更好地「活在当下」。
 
+### 2022-09-23
+
+- 英语
+  - The Unlikely Pilgrimage of Harold Fry - 16/100
+  - 一点英语 270 天英语学习                  - 18/270
+  - [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程 - 一周目 1/16
+  - 多抓鱼上下单了《English Grammer In Use》跟《赖世雄经典英语语法》，语法几乎全忘光了，这次打算补一补语法
+  - z-library 上下载了《Key words for fluency》前两本书，因为发现自己口语经常不太会表达自己的想法，打算靠这个补补看
+
 ### 2022-09-21
 
 - [APISIX 504 问题](https://github.com/apache/apisix/issues/7934)

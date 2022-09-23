@@ -20,8 +20,8 @@ toc:
 
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 136/572
 - 学习研究 APISIX、Openresty、Lua
-- The Unlikely Pilgrimage of Harold Fry - 14/100
-- 一点英语 270 天英语学习                  - 15/270
+- The Unlikely Pilgrimage of Harold Fry - 16/100
+- 一点英语 270 天英语学习                  - 18/270
 - Moon Palace, by Pual Auster           - 10.6%
 
 ## 二、我今年还想搞搞这些
@@ -63,7 +63,12 @@ toc:
 - 机器学习与深度学习
   - 待完成
     - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
-
+- 英语
+  - 待完成
+    - [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
+    - [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
+    - 《English Grammer In Use》语法书
+    - 《Key words for fluency》口语表达
 
 ## 三、今年的阅读进展
 
