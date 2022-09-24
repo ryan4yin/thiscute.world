@@ -1,4 +1,5 @@
-
+from collections import defaultdict
+import json
 from math import ceil
 from pathlib import Path
 import datetime as dt
@@ -7,6 +8,11 @@ import datetime as dt
 import yaml
 
 POSTS_DIR = Path(__file__).parent / "content/posts/"
+
+POSTS_COUNT_JSON_PATH = Path(__file__).parent / "data/posts_count.json"
+
+TZ_UTC = dt.timezone(dt.timedelta(hours=0))
+
 
 def get_all_posts():
     """
@@ -39,7 +45,7 @@ def gen_folder_name(post: Path):
     3. 其他...
     """
     post_metadata = parse_post_metadata(post)
-    post_time: dt.datetime = post_metadata['date']
+    post_time: dt.datetime = post_metadata["date"]
 
     quater = ceil(post_time.month / 4)
 
@@ -67,10 +73,54 @@ def restructure_posts(posts):
 
             print(new_path)
             file.rename(new_path)
-        
+
         if not any(p.parent.iterdir()):
             # 删除 post 空的旧目录
             p.parent.rmdir()
+
+
+def yearmonth_range(start_year, start_month, end_year, end_month):
+    year, month = start_year, start_month
+    while (year, month) <= (end_year, end_month):
+        yield year, month
+
+        month += 1
+        if month > 12:
+            month = 1
+            year += 1
+
+
+def gen_posts_count_by_month(posts):
+    data = defaultdict(int)
+    utcnow = dt.datetime.utcnow().replace(tzinfo=TZ_UTC)
+    earliest = utcnow
+    for p in posts:
+        post_metadata = parse_post_metadata(p)
+        post_time: dt.datetime = post_metadata["date"]
+        post_time = post_time
+        date_str = f"{post_time.year}-{post_time.month:02}"
+        data[date_str] += 1
+
+        if post_time < earliest:
+            earliest = post_time
+
+    for year, month in yearmonth_range(earliest.year, earliest.month, utcnow.year, utcnow.month):
+        date_str = f"{year}-{month:02}"
+        if date_str not in data:
+            data[date_str] = 0
+
+    sorted_data = sorted(data.items())
+    date_list = [it[0] for it in sorted_data]
+    count_list = [it[1] for it in sorted_data]
+
+    with POSTS_COUNT_JSON_PATH.open("w+", encoding="utf-8") as f:
+        json.dump(
+            {"xAxis": date_list, "yAxis": count_list},
+            f,
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+        )
 
 
 def main():
@@ -78,7 +128,9 @@ def main():
     # 调整 posts 文件夹结构
     restructure_posts(posts)
 
-    # 更多新功能待开发
+    # 生成按月计数的文章统计数据，用于绘制图表
+    gen_posts_count_by_month(posts)
+
 
 if __name__ == "__main__":
     main()

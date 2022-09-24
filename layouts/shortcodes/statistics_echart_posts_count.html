@@ -1,0 +1,24 @@
+title:
+tooltip:
+    trigger: axis
+legend:
+    data: []
+grid:
+    left: 5%
+    right: 5%
+    bottom: 5%
+    top: 5%
+    containLabel: true
+toolbox:
+xAxis:
+    type: category
+    boundaryGap: false
+    data: {{ index $.Site.Data.posts_count "xAxis" | jsonify }}
+yAxis:
+    type: value
+series:
+    - name: 文章数量
+      type: bar
+      showBackground: true
+      stack: Total
+      data:  {{ index $.Site.Data.posts_count "yAxis" | jsonify }}
