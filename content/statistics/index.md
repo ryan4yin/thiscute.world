@@ -17,7 +17,7 @@ toc:
 
 {{< statistics_trendingposts  >}}
 
-## 四、文章发布周期与数量统计
+## 三、文章发布周期与数量统计
 
 
 {{< echarts >}}
@@ -26,7 +26,7 @@ toc:
 
 {{< /echarts >}}
 
-## 说明
+## 四、说明
 
 >此页面受 [极客兔兔 - 博客折腾记(七) - Gitalk Plus ](https://geektutu.com/post/blog-experience-7.html) 的启发而创建，其核心诉求是「**帮助访客发现本站的优质文章**」~
 
