@@ -9,6 +9,10 @@ resources:
 
 tags: ["Vault", "云原生", "Secrets", "配置", "配置管理"]
 categories: ["tech"]
+
+# 兼容旧的 Path（单词拼写错误）
+aliases:
+- /posts/expirence-of-vault/
 ---
 
 [Vault](https://github.com/hashicorp/vault) 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：
@@ -34,7 +38,7 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 
 首先看一下 Vault 的架构图：
 
-![](/images/expirence-of-vault/vault-layers.webp "vault layers")
+![](/images/experience-of-vault/vault-layers.webp "vault layers")
 
 可以看到，几乎所有的 Vault 组件都被统称为「**屏障**（Barrier）」。
 
@@ -60,7 +64,7 @@ Vault，翻译成中文就是**金库**。类比银行金库，「屏障」就�
 默认情况下，Vault 使用[沙米尔密钥分割算法](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing)
 将**主密钥**分割成五个**分割密钥**（Key Shares），必须要提供其中任意三个**分割密钥**才能重建出主密钥，完成**解封**操作。
 
-![](/images/expirence-of-vault/vault-shamir-secret-sharing.svg "vault-shamir-secret-sharing")
+![](/images/experience-of-vault/vault-shamir-secret-sharing.svg "vault-shamir-secret-sharing")
 
 >**分割密钥**的总数，以及重建主密钥最少需要的**分割密钥**数量，都是可以调整的。
 沙米尔密钥分割算法也可以关闭，这样主密钥将被直接提供给管理员，管理员可直接使用它进行解封操作。
@@ -510,7 +514,7 @@ path "auth/kubernetes/role/*"
 
 ## 四、在 Kubernetes 中使用 vault 注入 secrets
 
-![](/images/expirence-of-vault/vault-k8s-auth-workflow.webp "vault-k8s-auth-workflow")
+![](/images/experience-of-vault/vault-k8s-auth-workflow.webp "vault-k8s-auth-workflow")
 
 前面提到过 vault 支持通过 Kubernetes 的 ServiceAccount 为每个 Pod 单独分配权限。
 

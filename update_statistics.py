@@ -32,6 +32,11 @@ modified_page_paths = {
     "/posts/sql-basic/": "/posts/sql-basics-1/",
     "/posts/likenttt-2020-12-13-guangzhou-marathon/": "/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/",
     "/posts/kubernetes-deployemnt-using-kubeadm/": "/posts/kubernetes-deployment-using-kubeadm/",
+
+    # experience 拼写错误
+    "/posts/expirence-of-argo-workflow/": "/posts/experience-of-argo-workflow/",
+    "/posts/expirence-of-pulumi/": "/posts/experience-of-pulumi/",
+    "/posts/expirence-of-vault/": "/posts/experience-of-vault/",
 }
 
 # 有些文章的标题有更新，这里使用最新的标题替换掉旧标题

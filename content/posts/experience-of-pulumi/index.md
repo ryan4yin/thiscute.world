@@ -9,6 +9,10 @@ resources:
 
 tags: ["基础设施即代码", "云原生", "Pulumi","Terraform"]
 categories: ["tech"]
+
+# 兼容旧的 Path（单词拼写错误）
+aliases:
+- /posts/expirence-of-pulumi/
 ---
 
 [Pulumi](https://github.com/pulumi/pulumi) 是一个基础设施的自动管理工具，使用 Python/TypeScript/Go/Dotnet 编写好声明式的资源配置，就能实现一键创建/修改/销毁各类资源，这里的资源可以是：

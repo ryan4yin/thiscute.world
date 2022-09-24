@@ -9,6 +9,10 @@ resources:
 
 tags: ["云原生", "CI","持续集成", "流水线"]
 categories: ["tech"]
+
+# 兼容旧的 Path（单词拼写错误）
+aliases:
+- /posts/expirence-of-argo-workflow/
 ---
 
 >注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo-workflows/)
@@ -55,7 +59,7 @@ Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言
 
 一个复杂工作流的示例如下：
 
-![](/images/expirence-of-argo-workflow/complex-workflows.webp "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
+![](/images/experience-of-argo-workflow/complex-workflows.webp "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
 
 
 ### 3. Workflow 的声明式配置
