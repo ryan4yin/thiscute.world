@@ -96,6 +96,10 @@ def gen_posts_count_by_month(posts):
     earliest = utcnow
     for p in posts:
         post_metadata = parse_post_metadata(p)
+
+        if post_metadata['draft']:
+            continue
+
         post_time: dt.datetime = post_metadata["date"]
         post_time = post_time
         date_str = f"{post_time.year}-{post_time.month:02}"
