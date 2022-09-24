@@ -28,7 +28,7 @@ toc:
   - 周会同步，同事提示我 node-exporter 的 network traffic 部分就有列出 nf_conntrack 表的监控。但是因为环境问题，我跑 APISIX 这批机器刚好没整这个监控...再次确认了完善的监控功能的重要性
   - 调整 nf_conntrack 相关参数后，问题暂时解决了。但是接下来遇到 TCP 连接数无法超过 65535 的问题，导致 504 报错...
     - 按理说我 nginx 有两个 worker，`worker_connections` 也设置到了 65535，至少应该也能撑住 65535 * 2 的连接数量？
-    - 发现 alloc :  : timewait 三类 TCP 连接数的比值大概为 66% : 13% : 21%，`dmesg` 命令能看到很多这样的错误：`TCP: too many orphaned sockets`
+    - 发现 alloc : orphaned : timewait 三类 TCP 连接数的比值大概为 66% : 13% : 21%，`dmesg` 命令能看到很多这样的错误：`TCP: too many orphaned sockets`
     - 搜索一番确定 orphaned 连接太多一般有两种可能：一是 tcp 连接的内存用尽导致无法为新连接分配内存，二是 TIME_WAIT 导致的 orphaned 连接。所以解决方法是调整 tcp 内存相关参数，启用 TIME_WAIT reuse
 - 读了一点《深入理解 Linux 网络》这本书，因为这两天搞 APISIX 网关，深刻意识到自己对相关知识缺乏了解
 
