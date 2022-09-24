@@ -5,7 +5,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "argo-workflow.webp"
+  src: "argo-workflows.webp"
 
 tags: ["云原生", "CI","持续集成", "流水线"]
 categories: ["tech"]
@@ -59,7 +59,7 @@ Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言
 
 一个复杂工作流的示例如下：
 
-![](/images/experience-of-argo-workflow/complex-workflows.webp "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
+![](/images/experience-of-argo-workflows/complex-workflows.webp "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
 
 
 ### 3. Workflow 的声明式配置
@@ -232,7 +232,7 @@ kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=<n
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: argo-workflow-role
+  name: argo-workflows-role
 rules:
 # pod get/watch is used to identify the container IDs of the current pod
 # pod patch is used to annotate the step's outputs back to controller (e.g. artifact location)
@@ -257,7 +257,7 @@ rules:
 创建好上面这个最小的 ClusterRole，然后为每个名字空间，跑一下如下命令，给 default 账号绑定这个 clusterrole:
 
 ```shell
-kubectl create rolebinding default-argo-workflow --clusterrole=argo-workflow-role  --serviceaccount=<namespace>:default -n <namespace>
+kubectl create rolebinding default-argo-workflows --clusterrole=argo-workflows-role  --serviceaccount=<namespace>:default -n <namespace>
 ```
 
 这样就能给 default 账号提供最小的 workflow 运行权限。

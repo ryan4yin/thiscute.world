@@ -34,7 +34,7 @@ modified_page_paths = {
     "/posts/kubernetes-deployemnt-using-kubeadm/": "/posts/kubernetes-deployment-using-kubeadm/",
 
     # experience 拼写错误
-    "/posts/expirence-of-argo-workflow/": "/posts/experience-of-argo-workflow/",
+    "/posts/expirence-of-argo-workflow/": "/posts/experience-of-argo-workflows/",
     "/posts/expirence-of-pulumi/": "/posts/experience-of-pulumi/",
     "/posts/expirence-of-vault/": "/posts/experience-of-vault/",
 }
