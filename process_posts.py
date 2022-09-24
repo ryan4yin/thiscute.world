@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-from ast import main
-from importlib.resources import path
-from math import ceil
-from pathlib import Path
-import yaml
-import datetime as dt
 
-=======
 from math import ceil
 from pathlib import Path
 import datetime as dt
@@ -14,7 +6,6 @@ import datetime as dt
 # pip3 install pyyaml
 import yaml
 
->>>>>>> 1fd257f1 (feat: restructure posts's directory)
 POSTS_DIR = Path(__file__).parent / "content/posts/"
 
 def get_all_posts():
