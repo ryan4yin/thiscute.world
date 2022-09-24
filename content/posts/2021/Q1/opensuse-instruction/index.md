@@ -14,7 +14,7 @@ categories: ["tech"]
 openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。
 
-我最近从 [Manjaro]({{< ref "manjaro-instruction/index.md" >}}) 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。
+我最近从 [Manjaro](/posts/manjaro-instruction/) 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。
 
 <!--more-->
 
