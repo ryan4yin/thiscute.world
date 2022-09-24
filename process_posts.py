@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from ast import main
 from importlib.resources import path
 from math import ceil
@@ -5,6 +6,15 @@ from pathlib import Path
 import yaml
 import datetime as dt
 
+=======
+from math import ceil
+from pathlib import Path
+import datetime as dt
+
+# pip3 install pyyaml
+import yaml
+
+>>>>>>> 1fd257f1 (feat: restructure posts's directory)
 POSTS_DIR = Path(__file__).parent / "content/posts/"
 
 def get_all_posts():
@@ -70,6 +80,7 @@ def restructure_posts(posts):
         if not any(p.parent.iterdir()):
             # 删除 post 空的旧目录
             p.parent.rmdir()
+
 
 def main():
     posts = get_all_posts()
