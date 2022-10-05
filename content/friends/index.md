@@ -72,6 +72,7 @@ var myFriends = [
     ["https://lisenhui.cn", "https://lisenhui.cn/imgs/avatar.png", "@凡梦星尘", "再平凡的人也有属于他的梦想！"], 
     ["https://blog.li2niu.com/", "https://blog.li2niu.com/portrait.webp", "@李二牛", "Addicted to marathons <= Developer & Runner"], 
     ["https://wiki.eryajf.net/", "https://wiki.eryajf.net/img/logo.png", "@二丫讲梵", "💻学习📝记录🔗分享 <= 运维领域的前辈"], 
+    ["https://zhangshier.vip/", "https://zhangshier.vip/Hexo_img/avatar.jpg", "@张时贰", "环转码，爱敲代码的小张！<= 很有干劲的后辈"], 
 ];
 
 
