@@ -11,8 +11,6 @@ toc:
 
 - [The Linux Programming Interface](https://man7.org/tlpi/)
 - Study APISIX、Openresty & Lua
-- The Unlikely Pilgrimage of Harold Fry - 10/100
-- Moon Palace, by Pual Auster - 4.2%
 
 ## 🤤 I want to learn
 

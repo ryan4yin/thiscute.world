@@ -18,10 +18,10 @@ toc:
 
 >按优先级排序
 
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 190/572
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - 学习研究 APISIX、Openresty、Lua
-- The Unlikely Pilgrimage of Harold Fry - 23/100
-- 一点英语 270 天英语学习                  - 24/270
+- The Unlikely Pilgrimage of Harold Fry - 27/100
+- 一点英语 270 天英语学习                  - 28/270
 - Moon Palace, by Pual Auster           - 10.6%
 
 
