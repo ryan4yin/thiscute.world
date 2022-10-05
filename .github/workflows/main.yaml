@@ -31,6 +31,7 @@ jobs:
           pip3 install "google-api-python-client==2.36.0" "google-auth==2.4.0"
           # generate website_statistics.json
           python3 update_statistics.py
+          python3 process_posts.py
           # commit changes
         env:
           SERVICE_ACCOUNT_DECRYPT_KEY: ${{ secrets.SERVICE_ACCOUNT_DECRYPT_KEY }}
@@ -39,6 +40,7 @@ jobs:
           git config --local user.email "ryan4yin[bot]@users.noreply.github.com"
           git config --local user.name "ryan4yin[bot]"
           git add data/website_statistics.json
+          git add process_posts.py
           git commit -m "feat: update website_statistics.json"
           git push
           git clean -fxd
