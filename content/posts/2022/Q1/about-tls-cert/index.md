@@ -739,9 +739,9 @@ TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要
 
 ##### Nginx 的 TLS 协议配置
 
-以前为 Nginx 等程序配置 HTTPS 协议时，我最头疼的就是其中密码套件参数 `ssl_ciphers`，为了安全性，需要配置超长的一大堆选用的密码套件名称，我可以说一个都看不懂，但是为了把网站搞好还是得硬着头皮搜索复制粘贴，实际上也不清楚安全性导致咋样。
+以前为 Nginx 等程序配置 HTTPS 协议时，我最头疼的就是其中密码套件参数 `ssl_ciphers`，为了安全性，需要配置超长的一大堆选用的密码套件名称，我可以说一个都看不懂，但是为了把网站搞好还是得硬着头皮搜索复制粘贴，实际上也不清楚安全性到底如何。
 
-为了解决这个问题，Mozilla/DigitalOcean 都搞过流行 Web 服务器的 TLS 配置生成工具，比如 [ssl-config - **mozilla](https://ssl-config.mozilla.org/#server=nginx)，这个网站提供三个安全等级的配置**: 
+为了解决这个问题，Mozilla/DigitalOcean 都搞过流行 Web 服务器的 TLS 配置生成工具，比如 **[ssl-config - mozilla](https://ssl-config.mozilla.org/#server=nginx)，这个网站提供三个安全等级的配置**: 
 
 1. 「Intermediate」: 查看生成出的 `ssl-cipher` 属性，发现它只支持 `ECDHE`/`DHE` 开头的算法。因此它保证前向保密。
    - 对于需要通过浏览器访问的 API，推荐选择这个等级。
