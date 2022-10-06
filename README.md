@@ -44,6 +44,6 @@ See [.github/workflows/](/.github/workflows/) for details.
 ## Related Repositories
 
 - Serverless Comment System
-  - [ryan4yin/waline-comment-api](https://github.com/ryan4yin/waline-comments-api)
+  - [ryan4yin/waline-comment-api](https://github.com/ryan4yin/waline-comment-api)
   - [ryan4yin/waline-comments-backup](https://github.com/ryan4yin/waline-comments-backup)
 
