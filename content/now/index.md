@@ -161,38 +161,40 @@ toc:
 
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
 
+#### 操作系统
 
-- 操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
-  - 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-    - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
-    - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
-  - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
-  - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
-  - 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
-
-
-- 分布式数据库
-  - 学习路线
-    1. 极客时间《分布式协议与算法实战》 - 学习进度 50%
-    2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
-    3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
-    4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
-    5. 尝试餐区分布式领域的开源社区，做一些贡献。
-    6. 对于在读学生，还可以尝试参与一些相关的开源活动，比如谷歌开源之夏、中科院开源之夏、阿里巴巴开源之夏、腾讯犀牛鸟开源人才培训计划等等
-  - 其他参考书籍
-    - 《Distributed Systems, 3rd Edition, 2017》
-    - 《Distributed Algorithms, 2nd Edition, 2018》
-    - [SQL进阶教程](https://book.douban.com/subject/27194738/)
+- 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+  - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
+  - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
+- 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
+- [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
+- 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
 
 
-- 计算机网络
-  - 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) + 书《Computer Networking - A Top-Down Approach, 7e》
-    - 书我以前学过一次，但是主要只学了应用层到传输层的内容。
-    - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
-  - TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
+#### 计算机网络
+
+- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) + 书《Computer Networking - A Top-Down Approach, 7e》
+  - 书我以前学过一次，但是主要只学了应用层到传输层的内容。
+  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
+- TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
 
 
-- 编程语言理论
+#### 分布式数据库
+
+- 学习路线
+  1. 极客时间《分布式协议与算法实战》 - 学习进度 50%
+  2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
+  3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+  4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
+  5. 尝试餐区分布式领域的开源社区，做一些贡献。
+  6. 对于在读学生，还可以尝试参与一些相关的开源活动，比如谷歌开源之夏、中科院开源之夏、阿里巴巴开源之夏、腾讯犀牛鸟开源人才培训计划等等
+- 其他参考书籍
+  - 《Distributed Systems, 3rd Edition, 2017》
+  - 《Distributed Algorithms, 2nd Edition, 2018》
+  - [SQL进阶教程](https://book.douban.com/subject/27194738/)
+
+
+#### 编程语言理论
   - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
     - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
   - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
@@ -203,10 +205,11 @@ toc:
     - 《自己动手实现 Java 虚拟机》
 
 
-- Kubernetes 与容器
+#### 其他资料
+
+- 容器与 Kubernetes
   - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
-
 
 - 检索技术
   - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
