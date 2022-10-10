@@ -60,7 +60,7 @@ toc:
   - 已完成
     - 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》 - 100%
   - 待完成
-    - 极客时间《分布式协议与算法实战》 - 40%
+    - 极客时间《分布式协议与算法实战》 - 50%
 - 机器学习与深度学习
   - 待完成
     - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
@@ -113,7 +113,7 @@ toc:
 - 《复杂 - 梅拉尼 米歇尔》
 - 《Principles Of Economics, 9e, N. Gregory Mankiw》
 
-## 四、我的知识清单
+## 四、备选学习路线
 
 ### 1. 高优先级
 
@@ -162,22 +162,32 @@ toc:
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
 
 - 分布式协议与区块链
-   1. 《区块链核心算法解析》
-   2. 《Design Data-Intensive Applications》
-   3. 《Blockchain in Action》
-   4. 《Distributed Systems, 3rd Edition, 2017》
-   5. 《Distributed Algorithms, 2nd Edition, 2018》
+  - 学习路线
+    - 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
+    - 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+    - 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
+  - 相关参考书籍
+    1. 《区块链核心算法解析》
+    2. 《Design Data-Intensive Applications》
+    3. 《Blockchain in Action》
+    4. 《Distributed Systems, 3rd Edition, 2017》
+    5. 《Distributed Algorithms, 2nd Edition, 2018》
+    6. [SQL进阶教程](https://book.douban.com/subject/27194738/)
+
 
 - Rust 语言
-  -  极客时间《Rust 编程第一课》
+  - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
+  - 极客时间《Rust 编程第一课》
+
 
 - [进阶]操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
-  - 核心课程：[Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/): 建议结合 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) 课程一起学习
+  - 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
     - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
-  - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
+    - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
   - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
-  - Advanced Programming in the UNIX Environment, 3rd Edition: 同样是 Linux/Unix 系统的神书。学 OSTEP 遇到瓶颈时或可阅读。
   - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
+  - 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
+
 
 - 计算机网络
   - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
@@ -185,17 +195,25 @@ toc:
   - TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
 
 
-- [进阶]数据库、数据结构与算法（暂时感觉兴趣不大）
-  - kv 数据库
-    - kv 数据库的简单实现: https://github.com/tidb-incubator/tinykv
-    - redis 原理
-  - 关系数据库
-    - mysql/postgresql 底层原理
-    - 实现简单的关系数据库: https://github.com/tidb-incubator/tinysql
-  - 搜索技术
-    - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
-    - https://github.com/huichen/wukong
-    - 极客时间《检索技术 25 讲》
+- [进阶]编程语言理论（如何设计一个编程语言）
+  - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
+    - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
+  - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
+  - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
+  - 《WebAssembly 核心原理》
+  - 用 Go 语言讲编程语言理论
+    - 《自己动手实现 Lua》
+    - 《自己动手实现 Java 虚拟机》
+
+- Kubernetes 与容器
+  - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
+  - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
+
+
+- [进阶]检索技术
+  - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
+  - 极客时间《检索技术 25 讲》
+
 
 ## 五、我的备选书单
 
@@ -230,29 +248,12 @@ toc:
   - 《债务危机 - 我的应对原则》
   - 《分析与思考 - 黄奇帆的复旦经济课》：这本书会需要一定的经济学基础知识，打算在入门经济学后再看
 - 技术类
-  - 《性能之巅（第二版）：企业与云可观测性》
-  - 《BPF Performance Tools（英文版）》
   - 《人月神话》
   - 《绩效使能：超越 OKR》
   - 《奈飞文化手册》
   - 《幕后产品-打造突破式思维》
   - 《重构 - 改善既有代码的设计》
-  - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
-  - [SQL进阶教程](https://book.douban.com/subject/27194738/)
-  - 分布式系统：[Designing Data-Intensive Applications](https://dataintensive.net/) - 可结合 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) 课程视频学习
-  - 数据库系统：建议直接学习课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
-  - 《WebAssembly 核心原理》
-  - 用 Go 语言讲编程语言理论
-    - 《自己动手实现 Lua》
-    - 《自己动手实现 Java 虚拟机》
-  - 编程语言理论（如何设计一个编程语言）
-    - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
-      - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
-    - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
-    - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
-  - Kubernetes 与容器
-    - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
-    - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
+
 
 ---
 
@@ -260,7 +261,6 @@ toc:
 
 - 我看到 github 上 [gopala-kr/10-weeks](https://github.com/gopala-kr/10-weeks) 这个项目，作者进行了一项挑战——每周学习一个新技术栈，目标是在一周内理解该技术栈各项热词的含义并列出大纲，使用该技术构建一个简单的程序，并写一篇博客。我觉得我也可以试试，不过可以把难度降低一些——**利用业余时间，每两个月学习一门新技术，并达成与 gopala-kr 类似的目标**。
 - 其他感兴趣的
-  - 前端：Preact+Css
   - 3D 建模与渲染：Blender、Unreal Engine 5、C++、taichi
   - 音乐：乐理、Synthesizer V、Reaper、midi 键盘
   - 其他：利用深度学习进行歌声合成、图片分辨率修复（超分辨率）、以及其他好玩的玩法
