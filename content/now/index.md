@@ -162,7 +162,7 @@ toc:
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
 
 
-- [进阶]操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
+- 操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
   - 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
     - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
     - OSTEP 学习指南：https://github.com/ryan4yin/computer-science/blob/master/coursepages/coresystems/ostep/OSTEP.md
@@ -178,9 +178,9 @@ toc:
     - 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
     - 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
   - 其他参考书籍
-    3. 《Distributed Systems, 3rd Edition, 2017》
-    4. 《Distributed Algorithms, 2nd Edition, 2018》
-    5. [SQL进阶教程](https://book.douban.com/subject/27194738/)
+    1. 《Distributed Systems, 3rd Edition, 2017》
+    2. 《Distributed Algorithms, 2nd Edition, 2018》
+    3. [SQL进阶教程](https://book.douban.com/subject/27194738/)
 
 
 - Rust 语言
@@ -195,7 +195,7 @@ toc:
   - TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
 
 
-- [进阶]编程语言理论（如何设计一个编程语言）
+- 编程语言理论（如何设计一个编程语言）
   - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
     - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
   - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
@@ -211,7 +211,7 @@ toc:
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 
 
-- [进阶]检索技术
+- 检索技术
   - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
   - 极客时间《检索技术 25 讲》
 
