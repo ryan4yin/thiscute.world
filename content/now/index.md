@@ -161,24 +161,6 @@ toc:
 
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
 
-- 分布式协议与区块链
-  - 学习路线
-    - 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
-    - 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
-    - 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
-  - 相关参考书籍
-    1. 《区块链核心算法解析》
-    2. 《Design Data-Intensive Applications》
-    3. 《Blockchain in Action》
-    4. 《Distributed Systems, 3rd Edition, 2017》
-    5. 《Distributed Algorithms, 2nd Edition, 2018》
-    6. [SQL进阶教程](https://book.douban.com/subject/27194738/)
-
-
-- Rust 语言
-  - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
-  - 极客时间《Rust 编程第一课》
-
 
 - [进阶]操作系统（大概是以 OSTEP 为核心，学习时缺啥补啥吧）：
   - 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
@@ -189,9 +171,27 @@ toc:
   - 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
 
 
+- 分布式数据库
+  - 学习路线
+    - 极客时间《分布式协议与算法实战》 - 学习进度 50%
+    - 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
+    - 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+    - 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
+  - 其他参考书籍
+    3. 《Distributed Systems, 3rd Edition, 2017》
+    4. 《Distributed Algorithms, 2nd Edition, 2018》
+    5. [SQL进阶教程](https://book.douban.com/subject/27194738/)
+
+
+- Rust 语言
+  - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
+  - 极客时间《Rust 编程第一课》
+
+
 - 计算机网络
-  - 《Computer Networking - A Top-Down Approach, 7e》：这本书我以前学过一次，但是主要只学了应用层到传输层的内容。
-    - 可以结合 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) 课程一起学习，不过我 C++ 全忘了，或许可以考虑用 rust/go 实现下协议栈？
+  - 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) + 书《Computer Networking - A Top-Down Approach, 7e》
+    - 书我以前学过一次，但是主要只学了应用层到传输层的内容。
+    - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
   - TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
 
 
