@@ -177,6 +177,8 @@ toc:
     2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
     3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
     4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
+    5. 尝试餐区分布式领域的开源社区，做一些贡献。
+    6. 对于在读学生，还可以尝试参与一些相关的开源活动，比如谷歌开源之夏、中科院开源之夏、阿里巴巴开源之夏、腾讯犀牛鸟开源人才培训计划等等
   - 其他参考书籍
     - 《Distributed Systems, 3rd Edition, 2017》
     - 《Distributed Algorithms, 2nd Edition, 2018》
