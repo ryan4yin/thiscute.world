@@ -173,19 +173,14 @@ toc:
 
 - 分布式数据库
   - 学习路线
-    - 极客时间《分布式协议与算法实战》 - 学习进度 50%
-    - 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
-    - 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
-    - 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
+    1. 极客时间《分布式协议与算法实战》 - 学习进度 50%
+    2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
+    3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+    4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
   - 其他参考书籍
-    1. 《Distributed Systems, 3rd Edition, 2017》
-    2. 《Distributed Algorithms, 2nd Edition, 2018》
-    3. [SQL进阶教程](https://book.douban.com/subject/27194738/)
-
-
-- Rust 语言
-  - [The Rust Programming Language](https://doc.rust-lang.org/book/): 2021 年 8 月读过，2022 可以再搞一搞，主要用来写写网络、操作系统。
-  - 极客时间《Rust 编程第一课》
+    - 《Distributed Systems, 3rd Edition, 2017》
+    - 《Distributed Algorithms, 2nd Edition, 2018》
+    - [SQL进阶教程](https://book.douban.com/subject/27194738/)
 
 
 - 计算机网络
@@ -195,7 +190,7 @@ toc:
   - TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
 
 
-- 编程语言理论（如何设计一个编程语言）
+- 编程语言理论
   - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
     - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
   - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
