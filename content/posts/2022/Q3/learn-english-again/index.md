@@ -95,6 +95,7 @@ comment:
       - Collins COBUILD English Usage
       - WordNet 3.0
       - **USE THE RIGHT WORD**: 同义近义词用法解释，很详细
+      - Merriam-Webster's Vocabulary Builder: 通过词根词缀来关联起各种相关单词
       - 英语常用词疑难用法手册
 - **薄荷英语**：199 元 / 100 天
   - **阅读原版书学习英语**
