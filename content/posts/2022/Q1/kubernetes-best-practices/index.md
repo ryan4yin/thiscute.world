@@ -466,10 +466,10 @@ Java/C# 这类运行在 VM 上的语言，在启动阶段与第一次执行请�
 **解决方法**：
 
 可以在「应用层面」解决：
-1. 在启动探针 API 的后端控制器里面，依次调用所有需要预热的接口或者其他方式，提前初始化好所有资源。
-   1. 启动探针的控制器中，可以通过 `localhost` 回环地址调用它自身的接口。
-2. 使用「AOT 预编译」技术：预热通常都是因为「JIT 即时编译」导致的问题，在需要用到时它才编译。而 AOT 是预先编译，在使用前完成编译，因此 AOT 能解决预热的问题。比如说 Java 的 GraalVM.
-
+1. 使用「AOT 预编译」技术：预热通常都是因为「JIT 即时编译」导致的问题，在需要用到时它才编译。而 AOT 是预先编译，在使用前完成编译，因此 AOT 能解决预热的问题。比如说 Java 的 GraalVM.
+2. 其他资料
+   1. [steinsag/warm-me-up](https://github.com/steinsag/warm-me-up)
+   2. [How to Warm Up the JVM](https://www.baeldung.com/java-jvm-warmup)
 
 也可以在「基础设施层面」解决：
 1. 像 AWS ALB TargetGroup 以及其他云服务商的 ALB 服务，通常都可以设置 `slow_start` 时长，即对新加入的实例，使用一定时间慢慢地把流量切过去，最终达到预期的负载均衡状态。这个可以解决服务预热问题。
