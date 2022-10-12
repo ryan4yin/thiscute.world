@@ -449,8 +449,8 @@ Java/C# 这类运行在 VM 上的语言，在启动阶段与第一次执行请�
 
 相关文档：
 
->[How to Warm Up the JVM](https://www.baeldung.com/java-jvm-warmup)
->[How to cold start fast a java service on k8s (EKS)](https://itnext.io/how-to-cold-start-fast-a-java-service-on-k8s-eks-3a7b4450845d)
+- [How to Warm Up the JVM](https://www.baeldung.com/java-jvm-warmup)
+- [How to cold start fast a java service on k8s (EKS)](https://itnext.io/how-to-cold-start-fast-a-java-service-on-k8s-eks-3a7b4450845d)
 
 因为上述「预热」问题在使用 HPA 扩缩容 Java/C# 等运行在 VM 上的程序时，HPA 一扩容，服务可用率就会抖动，甚至引发雪崩。
 
