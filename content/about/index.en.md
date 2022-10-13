@@ -32,8 +32,7 @@ lightgallery: true
   - **English**: Good at reading technical articles, but weak in writing, listening and speaking.
   - **Chinese**: Chinese is my native language.
 - **Programming Languages**
-  - **Python**: It's my current main language, and also the language I am most familiar with.
-  - **Go**: I am learning it, it's widely used in cloud native ecology.
+  - **Python/Go**: It's my current main language, and also the language I am most familiar with.
   - **Rust**: In learning, a large number of functional syntax candy, thoughtful compiler tips, feel very easy to use
   - **C**: Can barely understand the code, abandoned for a long time.
   - The languages I have used but have been abandoned: Java/Julia/Mathematica/Lua
