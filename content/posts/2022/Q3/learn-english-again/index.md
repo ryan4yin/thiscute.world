@@ -58,7 +58,7 @@ comment:
 - 当然你也可以走传统的背单词、词组、例句这样的路线，这条路线的好处是能快速提升自己的英语能力，但是相对的也很难坚持。
   - 常见的有新东方的词汇录播课（网上能找到免费的资料分享），以前听过新东方朱伟老师的《恋练有词》，感觉挺不错的。
   - 不背单词、百词斩这类 APP 也可以试试，不过我个人体验是基本坚持不了多久...
-- 一些剧情、觉得场景设定较多的游戏也是学英语的好材料，比如《Genshin Imapct》、《DEEMO 2》，或者一些 Galgame 都可。娱乐跟英语两不误 emmm
+- 一些对话、角色设定、世界观设定较多的游戏也是学英语的好材料，比如《Genshin Imapct》、《DEEMO 2》，或者一些 Galgame 都可。娱乐跟英语两不误 emmm
 
 ![](/images/learn-english-again/genshin-impact-noelle.webp "Genshin Impact 里超飒的重剑女仆 Noelle")
 
