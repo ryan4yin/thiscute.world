@@ -19,6 +19,7 @@ toc:
 >按优先级排序
 
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
+- TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 学习研究 APISIX、Openresty、Lua
 - The Unlikely Pilgrimage of Harold Fry - 35/100
 - 一点英语 270 天英语学习                  - 36/270
@@ -176,8 +177,8 @@ toc:
 
 #### 计算机网络
 
-- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s) + 书《Computer Networking - A Top-Down Approach, 7e》
-  - 书我以前学过一次，但是主要只学了应用层到传输层的内容。
+- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
+  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
   - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
 - TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
 

@@ -15,6 +15,17 @@ toc:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2022-10-15 - 2022-10-16
+
+- TCP/IP Illustrated, Volume 1, 2nd Edition 读完第一章 - 进度 31/920
+  - 我以前听说这本书是 TCP/IP 圣经，一直望而却步，这次实际一读发现，第一卷还挺简单直观的
+- 跟 0xFFFF 社区的朋友交流，积累了一点有价值的讨论：[记 QQ 群里一次关于日常笔记、学习规划、学习节奏的讨论](https://0xffff.one/d/1352-ji-qq-qun-li-yi-ci-guan-yu-ri-chang)
+- 打游戏学英语，玩了玩 Genshin Impact 跟 Deemo 2，体验挺不错的。
+- The Unlikely Pilgrimage of Harold Fry - 39/100
+- 一点英语 270 天英语学习                  - 40/270
+
+![](/images/learn-english-again/genshin-impact-noelle.webp "超飒的重剑女仆 Noelle")
+
 ### 2022-10-13
 
 - 跟网友们分享自己做 [/history](/history) 跟 [/now](/now) 这两个页面的经验。
