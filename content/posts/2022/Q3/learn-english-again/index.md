@@ -60,6 +60,8 @@ comment:
   - 不背单词、百词斩这类 APP 也可以试试，不过我个人体验是基本坚持不了多久...
 - 一些剧情、觉得场景设定较多的游戏也是学英语的好材料，比如《Genshin Imapct》、《Deemo 2》，或者一些 Galgame 都可。娱乐跟英语两不误 emmm
 
+![](/images/learn-english-again/genshin-impact-noelle.webp "超飒的重剑女仆 Noelle")
+
 上面主要是针对 CET4 四级以上水平的英语学习者，如果基础比较差，可以考虑按照恶魔奶爸推荐的零基础英语学习路线进行自学：
 
 - [英语：壹章 - 恶魔奶爸](https://zhuanlan.zhihu.com/p/19768351)：针对零基础/基础超级不好的同学
