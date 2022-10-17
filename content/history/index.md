@@ -35,6 +35,10 @@ toc:
 
 ![](/images/learn-english-again/genshin-impact-noelle.webp "超飒的重剑女仆 Noelle")
 
+![](/images/learn-english-again/demo2-talk-1.webp "DEEMO 2 中丰富的对话内容")
+
+![](/images/learn-english-again/demo2-collections.webp "DEEMO 2 的一些设定")
+
 ### 2022-10-13
 
 - 跟网友们分享自己做 [/history](/history) 跟 [/now](/now) 这两个页面的经验。
