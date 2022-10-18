@@ -982,7 +982,7 @@ QUIC 的 0RTT 握手是一个非常妙的想法，可以显著降低握手时延
 
 HSTS，即 HTTP Strict Transport Security，是一项安全技术，它允许服务端在返回 HTTPS 响应时，通过 Headers 明确要求客户端，在之后的一段时间内必须使用安全的 HTTPS 协议访问服务端。
 
-比如 `https://example.com/` 的响应头中有 `Strict-Transport-Security: max-age=31536000; includeSubDomains`，表示服务端要求客户端（比如浏览器）：
+举个例子，假设站点 `https://example.com/` 的响应头中有 `Strict-Transport-Security: max-age=31536000; includeSubDomains`，这表示服务端要求客户端（比如浏览器）：
 
 - 在接下来的 31536000 秒（即一年）中，客户端向 example.com 或**其子域名**发送 HTTP 请求时，必须采用HTTPS来发起连接。
   - 比如用户在浏览器地址栏输入 `http://example.com/` 时，浏览器应自动将 http 改写为 https 再发起请求
