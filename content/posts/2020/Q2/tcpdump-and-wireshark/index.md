@@ -81,7 +81,7 @@ http.host != "xxx.baidu.com" and http.referer == "xxx.baidu.com"
 
 在进行远程网络抓包分析时，我们通常的做法是：
 
-1. 使用 `tcpdump` 在远程主机上抓包，保存为 pcap 文件。
+1. 使用 `tcpdump -i eth0 -l -w temp.pcap` 在远程主机上抓包，保存为 pcap 格式的文件。
 2. 将 pcap 文件拷贝到本地，使用 wireshark 对其进行分析。
 
 但是这样做没有时效性，而且数据拷贝来去也比较麻烦。
@@ -156,6 +156,18 @@ sudo ln -s "$(which wireshark.exe)" /usr/local/bin/wireshark
 
 有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
 这时你可以考虑直接使用命令行版本的 `wireshark` UI: [termshark](https://github.com/gcla/termshark)，直接在命令行进行实时的抓包分析。
+
+可以直接使用 termshark 抓包查看：
+
+```shell
+termshark -i eth0 icmp
+```
+
+也可以用 termshark 分析 pcap 文件：
+
+```shell
+termshark -r test.pcap
+```
 
 [kubectl-debug](https://github.com/aylei/kubectl-debug) 默认的调试镜像中，就自带 `termshark`.
 
