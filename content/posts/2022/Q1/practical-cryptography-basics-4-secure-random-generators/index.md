@@ -90,7 +90,7 @@ print([next(gen) for _ in range(20)])
 
 如果这个熵的生成有漏洞，就很可能造成严重的问题，一个现实事件就是[安卓的 `java.security.SecureRandom` 漏洞导致安卓用户的比特币钱包失窃](https://bitcoinmagazine.com/technical/critical-vulnerability-found-in-android-wallets-1376273924)。
 
-Python 的 `random` 库的默认会使用当前时间作为初始 seed，这显然是不够安全的——黑客如果知道你运行程序的大概时间，就能通过遍历的方式暴力破解出你的随机数来！
+Python 的 `random` 库默认会使用当前时间作为初始 seed，这显然是不够安全的——黑客如果知道你运行程序的大概时间，就能通过遍历的方式暴力破解出你的随机数来！
 
 ## 四、CSPRNG 密码学安全随机数生成器
 
