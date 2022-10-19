@@ -184,7 +184,7 @@ comment:
 
 加入 Server 后要往下翻很多页才能到 English Practice 部分，目前分别有 8 个「Beginner English」聊天室跟 8 个「Intermeidate/Advanced English」聊天室，赶快加入开聊吧~
 
-此外，如果你愿意花钱，那还有更好的办法——**线上真人上外教课程**，比较流行的平台有：
+此外，如果你想走高效的氪金路线，也有很多**线上真人上外教**平台供你选择，主要有如下几个：
 
 - [Lingoda](https://www.lingoda.com/en/): 被认为是最佳成人英语学习平台，它有部分课还支持跟完全程，返还学费。
 - [Cambly](https://www.cambly.com/english): twitter 上推友推荐的，最流行的英语学习平台之一，真人外教一对一教学
