@@ -175,11 +175,27 @@ comment:
 首先，上面已经提过了，「开言英语」的线上英语角 WeMeet 非常的棒。这个功能是免费的，但是需要交 5 块钱押金，我觉得这 5 块钱的押金大大提升了这个英语角的队友质量，能确保大家都是有强烈意愿去用英语聊天的。
 实际的体验也非常棒，不仅能练习口语，还能交到各行各业喜欢英语的朋友。
 
-其次，如果你的上网工具能使你用上 Discord，也有一些英语学习的 Discord Server 非常值得推荐，你能在上面跟各种母语、各个国家、各种口音的朋友一起用英语聊天，聊天室跟开言英语一样也会分等级，体验也很不错。
+其次，如果你的上网工具能使你用上 Discord，也有一些英语学习的 Discord Server 非常值得推荐，你能在上面跟各种母语、各个国家、各种口音的朋友一起用英语聊天，体验还不错，还能交到有意思的国外朋友。
 
-英语学习 Discord Server 地址: <https://discord.gg/english>，加入后要往下翻很多页才能到 English Practice 部分，目前分别有 8 个「Beginner English」聊天室跟 8 个「Intermeidate/Advanced English」聊天室，赶快加入开聊吧~
+英语学习 Discord Server 地址: 
 
-补充：还有一个中英交流的 Discord Server，也值得一逛：<https://discord.gg/c-e>
+- <https://discord.gg/english>
+- <https://discord.gg/c-e>
+
+加入 Server 后要往下翻很多页才能到 English Practice 部分，目前分别有 8 个「Beginner English」聊天室跟 8 个「Intermeidate/Advanced English」聊天室，赶快加入开聊吧~
+
+当然如果你有钱，那还有更好的办法：线上真人上外教课程，比较流行的平台有：
+
+- [Lingoda](https://www.lingoda.com/en/): 被认为是最佳成人英语学习平台，它有部分课还支持跟完全程，返还学费。
+- [Cambly](https://www.cambly.com/english): 最流行的英语学习平台之一，真人外教一对一教学
+  - 优惠价：人民币 30 元 30 分钟 
+- [Preply](https://preply.com/en/online/english-tutors): 我用的词汇测试站点，现在就属于这家公司的产品。据说是最专业的
+  - $15-20 per hour
+  - 你还可以在这个站点上面应聘汉语教学（有 20%-30% 的抽成，150 美刀才能提现）
+- [Verbling](https://www.verbling.com/zh): 一样也是一个老牌语言学习站点
+  - 据说价格比较优惠，还支持免费试课。
+  - 跟 Preply 一样你也可以在这个站点上面应聘汉语教学作为兼职。
+- [ITalk](https://www.italki.com/en): 国内创办的比较大的语言交换平台，据说是最 casual 的学习平台，所以不太适合自我驱动力不强的朋友。
 
 ## 四、总而言之
 
