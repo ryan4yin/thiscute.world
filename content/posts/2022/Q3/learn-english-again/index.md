@@ -90,9 +90,9 @@ comment:
 
 并且使用上述几款软件提供的英语能力测试，完整评估了下我的英语水平。下图从左至右依次是一点英语、开言英语，以及英语流利说的整体英语水平跟口语水平两项测试结果（结果偏高，仅供参考）：
 
-![](/images/now/ryan4yin-english-level.webp)
+![](/images/now/ryan4yin-english-level.webp "各 APP 的英语水平测评结果（一点英语的结果明显偏高）")
 
-![](/images/learn-english-again/流利说-English-Level.webp)
+![](/images/learn-english-again/流利说-English-Level.webp "流利说英语评级对照表")
 
 下面详细介绍下我比较推荐的英语学习类 APP 跟课程：
 
