@@ -190,7 +190,7 @@ comment:
 - [Cambly](https://www.cambly.com/english): 最流行的英语学习平台之一，真人外教一对一教学
   - 优惠价：人民币 30 元 30 分钟 
 - [Preply](https://preply.com/en/online/english-tutors): 我用的词汇测试站点，现在就属于这家公司的产品。据说是最专业的
-  - $15-20 per hour
+  - 比较贵：$15-20 per hour
   - 你还可以在这个站点上面应聘汉语教学（有 20%-30% 的抽成，150 美刀才能提现）
 - [Verbling](https://www.verbling.com/zh): 一样也是一个老牌语言学习站点
   - 据说价格比较优惠，还支持免费试课。
