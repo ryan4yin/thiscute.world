@@ -186,7 +186,7 @@ comment:
 
 此外，如果你想走高效的氪金路线，也有很多**线上真人上外教**平台供你选择，主要有如下几个：
 
-- [Lingoda](https://www.lingoda.com/en/): 被认为是最佳成人英语学习平台，它有部分课还支持跟完全程，返还学费。
+- [Lingoda](https://www.lingoda.com/en/): 被认为是最佳成人英语学习平台之一，它有部分课还提供了学费返还机制，可以了解下。
 - [Cambly](https://www.cambly.com/english): twitter 上推友推荐的，最流行的英语学习平台之一，真人外教一对一教学
   - 据说打折时很便宜，优惠价只要人民币 30 元 30 分钟 
 - [Preply](https://preply.com/en/online/english-tutors): 我用的词汇测试站点，现在就属于这家公司的产品。据说是最专业的
