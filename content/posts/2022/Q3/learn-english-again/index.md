@@ -64,7 +64,7 @@ comment:
 - [每日英语听写 Daily English Dictation 1-400](https://www.bilibili.com/video/BV1U7411a7xG/)
   - 这是 Youtube 上相当火的一个英语听写系列视频，做得非常棒，坚持听完 400 期，听力就神功大成了！
   - 个人感觉起码得有个 CET4 水平，才能比较舒服地跟这个课程。
-- 一些对话、角色设定、世界观设定较多的游戏也是学英语的好材料，比如《Genshin Imapct》、《DEEMO 2》，或者一些 Galgame 都可。娱乐跟英语两不误 emmm
+- 一些对话、角色设定、世界观设定较多的游戏也是学英语的好材料，比如「Genshin Imapct」、「DEEMO 2」，或者一些 Galgame 都可。娱乐跟英语两不误 emmm
 
 ![](/images/learn-english-again/genshin-impact-noelle.webp "Genshin Impact 里超飒的重剑女仆 Noelle")
 
