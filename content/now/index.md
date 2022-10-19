@@ -22,10 +22,11 @@ toc:
 - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 学习研究 APISIX、Openresty、Lua
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 40/100
+  - The Unlikely Pilgrimage of Harold Fry - 42/100
+  - Time Machine                          - 3/30
   - Moon Palace, by Pual Auster           - 10.6%
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 41/270
+  - 一点英语 270 天英语学习                  - 43/270
 - 英语语法
   - 《英语语法新思维——初级教程》              - 8/366
 
