@@ -286,7 +286,19 @@ fi
 
 参见：[Shell脚本中的set指令，比如set -x 和 set -e](https://www.cnblogs.com/robinunix/p/11635560.html)
 
-#### 4. 其他资料
+#### 4. 实用小工具
+
+```shell
+# URL 编解码
+alias urldecode='python3 -c "import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))"'
+alias urlencode='python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))"'
+
+# 使用方法
+echo "xxx" | urldecode
+cat file | urlencode
+```
+
+#### 5. 其他资料
 
 - [shell_scripts](https://github.com/mritd/shell_scripts): 实用 shell 小脚本
 

@@ -92,6 +92,10 @@ nc -vv -w2 -z 192.168.1.2 20-500
 socat TCP-LISTEN:7000 -
 # -l --listening
 nc -l 7000
+# 当然也可以使用 python3
+python3 -m http.server 7000
+# 或者在较老的机器上可以用 python2
+python -m SimpleHTTPServer 8000
 
 # 客户端连接命令，socat/nc 二选一
 socat TCP:192.168.31.123:7000 -
