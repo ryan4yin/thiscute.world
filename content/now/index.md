@@ -61,10 +61,10 @@ toc:
 - 机器学习与深度学习
   - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 英语
-    - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
-    - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
-    - [ ] 《English Grammer In Use》语法书
-    - [ ] 《Key words for fluency》口语表达
+  - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
+  - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
+  - [ ] 《English Grammer In Use》语法书
+  - [ ] 《Key words for fluency》口语表达
 
 ## 三、今年的阅读进展
 
