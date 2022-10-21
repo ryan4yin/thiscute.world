@@ -36,46 +36,35 @@ toc:
 今年的学习进展：
 
 - Go 语言 Web 编程
-  - 已完成
-    - 阅读了《Go 程序设计语言》，学会了 Go 语言基础
-    - 使用 Go+Gin 完成了一个 Nginx 网关控制器项目并上线，实现了一些简单的接口
-  - 待完成
-    - [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
-    - [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
-    - [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
-    - [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
-    - [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
-    - [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
+  - [x] 阅读了《Go 程序设计语言》，学会了 Go 语言基础
+  - [x] 使用 Go+Gin 完成了一个 Nginx 网关控制器项目并上线，实现了一些简单的接口
+  - [ ] [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
+  - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
+  - [ ] [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
+  - [ ] [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
+  - [ ] [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
+  - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
 - Kubernetes 原理、Kubernetes APIServer/Operator 编程
-  - 已完成
-    - 学习了极客时间《深入理解 Kubernetes》专栏
-    - 完成了一个 Nginx 网关项目，熟悉并应用了 client-go 的 informer
-  - 待完成
-    - [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+  - [x] 学习了极客时间《深入理解 Kubernetes》专栏
+  - [x] 完成了一个 Nginx 网关项目，熟悉并应用了 client-go 的 informer
+  - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - Linux 性能调优与 Linux 网络技术
-  - 已完成
-    - The ANSI C Programming Language - 用来快速复习下 C 的语法
-    - 完成了一个使用 libav + make 做的一个 [video2chars-c](https://github.com/ryan4yin/video2ascii-c) 小项目练手
-  - 待完成
-    - C 语言基础复习
-      - 通过其他资料补充学习gdb ld objdump objcopy 等命令
-    - 《深入理解 Linux 网络 - 张彦飞》 - 14/320
-    - 极客时间《网络排查案例课》
-    - 极客时间 《Linux 性能优化实战》
+  - [x] The ANSI C Programming Language - 用来快速复习下 C 的语法
+  - [x] 完成了一个使用 libav + make 做的一个 [video2chars-c](https://github.com/ryan4yin/video2ascii-c) 小项目练手
+  - [ ] 通过其他资料补充学习gdb ld objdump objcopy 等命令
+  - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
+  - [ ] 极客时间《网络排查案例课》
+  - [ ] 极客时间 《Linux 性能优化实战》
 - 区块链与分布式系统
-  - 已完成
-    - 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》 - 100%
-  - 待完成
-    - 极客时间《分布式协议与算法实战》 - 50%
+  - [x] 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》 - 100%
+  - [ ] 极客时间《分布式协议与算法实战》 - 50%
 - 机器学习与深度学习
-  - 待完成
-    - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
+  - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 英语
-  - 待完成
-    - [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
-    - [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
-    - 《English Grammer In Use》语法书
-    - 《Key words for fluency》口语表达
+    - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
+    - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
+    - [ ] 《English Grammer In Use》语法书
+    - [ ] 《Key words for fluency》口语表达
 
 ## 三、今年的阅读进展
 
