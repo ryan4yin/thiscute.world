@@ -51,7 +51,7 @@ toc:
 - Linux 性能调优与 Linux 网络技术
   - [x] The ANSI C Programming Language - 用来快速复习下 C 的语法
   - [x] 完成了一个使用 libav + make 做的一个 [video2chars-c](https://github.com/ryan4yin/video2ascii-c) 小项目练手
-  - [ ] 通过其他资料补充学习gdb ld objdump objcopy 等命令
+  - [ ] 通过其他资料补充学习 gdb ld objdump objcopy 等命令
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
@@ -63,6 +63,7 @@ toc:
 - 英语
   - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
   - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
+  - [ ] 《英语语法新思维——初级教程》
   - [ ] 《English Grammer In Use》语法书
   - [ ] 《Key words for fluency》口语表达
 
