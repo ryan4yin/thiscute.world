@@ -18,15 +18,13 @@ toc:
 
 >按优先级排序
 
+- 英语阅读
+  - The Unlikely Pilgrimage of Harold Fry - 46/100
+  - Time Machine                          - 9/30
+- 英语单词与听力练习
+  - 一点英语 270 天英语学习                  - 47/270
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
-- 学习研究 APISIX、Openresty、Lua
-- 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 43/100
-  - Time Machine                          - 4/30
-  - Moon Palace, by Pual Auster           - 10.6%
-- 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 44/270
 - 英语语法
   - 《英语语法新思维——初级教程》              - 8/366
 
@@ -142,14 +140,8 @@ toc:
   - 极客时间《Rust 编程第一课》
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
-  - 阅读《Lua 程序设计》
   - 阅读《自己动手实现 Lua》
-  - 阅读 APISIX 源码 + Openresty
   - 深入学习 Nginx 及 epoll
-
-- 容器底层原理
-  - 容器镜像的文件系统：overlayfs
-  - 镜像的构建流程：研究 buildkit/buildah 的实现
 
 - [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
