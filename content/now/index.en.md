@@ -9,8 +9,11 @@ toc:
 
 ## 🌱 I’m currently learning
 
+- Reading
+  - The Unlikely Pilgrimage of Harold Fry
+  - Time Machine
+- TCP/IP Illustrated, Volume 1, 2nd Edition
 - [The Linux Programming Interface](https://man7.org/tlpi/)
-- Study APISIX、Openresty & Lua
 
 ## 🤤 I want to learn
 
