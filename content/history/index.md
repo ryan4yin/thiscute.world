@@ -24,7 +24,8 @@ toc:
   - 一点英语 270 天英语学习                  - 58/270
 - 折腾硬件
   - 买的 mini 主机 MINISFORUM UM560 到货了，装好固态、内存条后，想到自己没有显示器...装机很麻烦
-    - 一番研究后京东下单一根 80 块的 1080p HDMI 转 USB/type-c 视频采集卡，输出 UVC 内容。
+    - 研究了一下 [Proxmox 网络装机](https://pve.proxmox.com/wiki/Unattended_installation_of_Proxmox)，感觉太麻烦，放弃该方案。
+    - 想着利用上手上的平板或者笔记本显示屏，一番研究后在京东下单一根 80 块的 1080p HDMI 转 USB/type-c 视频采集卡，输出 UVC 内容。
     - Windows/Linux/Mac 均可通过 [OBS Studio](https://github.com/obsproject/obs-studio) 播放或录制此卡输出，实现将笔记本作为显示器的功能。
     - Android 可安装 [USB OTG camera](https://play.google.com/store/apps/details?id=net.usb.usby6) 或者 [USB Camera](https://play.google.com/store/apps/details?id=com.shenyaocn.android.usbcamera)，同样能把手机或者平板当成显示器用，或者实现视频录制。
     - 如果再补充一根 type-c 转 HDMI 线，就能实现录制 Android 设备的输出了。
