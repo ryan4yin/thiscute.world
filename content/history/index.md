@@ -15,6 +15,24 @@ toc:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2022-11-04
+
+- 英语阅读
+  - The Unlikely Pilgrimage of Harold Fry - 57/100
+  - Time Machine                          - 21/30
+- 英语单词与听力练习
+  - 一点英语 270 天英语学习                  - 58/270
+- 折腾硬件
+  - 买的 mini 主机 MINISFORUM UM560 到货了，装好固态、内存条后，想到自己没有显示器...
+    - 一番研究后京东下单一根 80 块的 1080p HDMI 转 USB/type-c 视频采集卡，输出 UVC 内容。
+    - Windows/Linux/Mac 均可通过 [OBS Studio](https://github.com/obsproject/obs-studio) 播放或录制此卡输出，实现将笔记本作为显示器的功能。
+    - Android 可安装 [USB OTG camera](https://play.google.com/store/apps/details?id=net.usb.usby6) 或者 [USB Camera](https://play.google.com/store/apps/details?id=com.shenyaocn.android.usbcamera)，同样能把手机或者平板当成显示器用，或者实现视频录制。
+    - 如果再补充一根 type-c 转 HDMI 线，就能实现录制 Android 设备的输出了。
+    - 把采集卡插 PC 上，就能把平板或者另一台笔记本当成副屏使用，很期待解锁此项新玩法~
+  - 买的 WIFI6 双频路由器 中兴 ZTE AX5400Pro+ 到货了，简单体验了一把，感觉还行。
+    - 打算后续拿它当主路由，再在 UM560 上开个 openwrt 虚拟机当旁路由。
+  - 另外还有一台 Beelink GTR5 AMD Ryzen 9 5900H 没到货。
+
 ### 2022-10-29
 
 - 发现了老板的博客 [我的时光记忆](http://dingjichang.com/)，记录了 2013 年到 2021 年每一年的年度总结。

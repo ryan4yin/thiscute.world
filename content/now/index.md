@@ -17,12 +17,6 @@ toc:
 ## 一、我正在研究这些
 
 >按优先级排序
-
-- 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 53/100
-  - Time Machine                          - 19/30
-- 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 54/270
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 英语语法
