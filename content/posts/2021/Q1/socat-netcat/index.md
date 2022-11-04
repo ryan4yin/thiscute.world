@@ -214,7 +214,7 @@ print("hello world")
 
 ```shell
 # https://docs.python.org/3/library/http.server.html#http.server.SimpleHTTPRequestHandler.do_GET
-python3 -m http.server --directory /tmp/
+python3 -m http.server 8000 --directory /tmp/
 
 # 或者在旧机器上可以直接使用 python2 提供文件服务器，默认以当前文件夹为根目录
 python -m SimpleHTTPServer 8000
