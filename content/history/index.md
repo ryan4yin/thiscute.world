@@ -18,7 +18,7 @@ toc:
 ### 2022-11-04
 
 - Beelink GTR5 AMD Ryzen 9 5900H 跟 HDMI 视频采集卡均到货，开始搭建家庭服务器环境~
-
+- 家庭服务器规划：[ryan4yin/knowledge/homelab](https://github.com/ryan4yin/knowledge/tree/master/homelab)
 
 ### 2022-11-03
 
