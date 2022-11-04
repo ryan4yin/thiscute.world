@@ -18,7 +18,7 @@ toc:
 ### 2022-11-04
 
 - 家庭服务器规划：[ryan4yin/knowledge/homelab](https://github.com/ryan4yin/knowledge/tree/master/homelab)
-- HDMI 视频采集卡均到货，开始搭建家庭服务器环境~
+- HDMI 视频采集卡跟另一台主机均到货，开始搭建家庭服务器环境~
   - MINISFORUM UM560 踩坑记录：
     - 首先遇到的问题是， 主机无法启动，风扇啸叫，视频采集卡无输出。
       - 用电脑试了下确定采集卡无问题，挨个插拔后定位到是内存条的问题，重新插拔后解决。
