@@ -17,11 +17,20 @@ toc:
 
 ### 2022-11-04
 
+- Beelink GTR5 AMD Ryzen 9 5900H 跟 HDMI 视频采集卡均到货，开始搭建家庭服务器环境~
+
+
+### 2022-11-03
+
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 57/100
   - Time Machine                          - 21/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 58/270
+- 上班：大数据服务遭遇性能瓶颈，发送 kafka 延迟高涨。
+  - 因为节点没安装 node-exporter 没法看监控，手动跑了一堆 sysstat 相关的命令分析网络 IO、磁盘 IO，以及一堆其他命令分析 TCP 连接、CPU 利用率等等，都很正常...（再次确认 node-exporter 有多么方便...）
+  - 最后通过 **kubectl-flame 画火焰图**，定位到是启用了 gzip 压缩耗时很长。改成不压缩后估算发现 kafka 带宽顶不住全部流量，最后改成 lz4 压缩算法解决，平衡了客户端压缩性能与贷款消耗。
+  - 同时也了解到 alibaba 开源的 arthas 也能做同样的工作。
 - 折腾硬件
   - 买的 mini 主机 MINISFORUM UM560 到货了，装好固态、内存条后，想到自己没有显示器...装机很麻烦
     - 研究了一下 [Proxmox 网络装机](https://pve.proxmox.com/wiki/Unattended_installation_of_Proxmox)，感觉太麻烦，放弃该方案。
@@ -33,7 +42,6 @@ toc:
   - 买的 WIFI6 双频路由器 中兴 ZTE AX5400Pro+ 到货了，简单体验了一把，感觉还行。
     - 打算后续拿它当主路由，再在 UM560 上开个 openwrt 虚拟机当旁路由。
     - 实现很简单，改下主路由 DHCP 分配的默认网关 IP 即可。
-  - 另外还有一台 Beelink GTR5 AMD Ryzen 9 5900H 没到货。
 
 ### 2022-10-29
 
