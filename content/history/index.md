@@ -17,8 +17,27 @@ toc:
 
 ### 2022-11-04
 
-- Beelink GTR5 AMD Ryzen 9 5900H 跟 HDMI 视频采集卡均到货，开始搭建家庭服务器环境~
 - 家庭服务器规划：[ryan4yin/knowledge/homelab](https://github.com/ryan4yin/knowledge/tree/master/homelab)
+- HDMI 视频采集卡均到货，开始搭建家庭服务器环境~
+  - MINISFORUM UM560 踩坑记录：
+    - 首先遇到的问题是， 主机无法启动，风扇啸叫，视频采集卡无输出。
+      - 用电脑试了下确定采集卡无问题，挨个插拔后定位到是内存条的问题，重新插拔后解决。
+    - 然后遇到的是，家里没有键盘...打算拿 PC USB 接口模拟键盘输出，发现还挺麻烦。
+      - 一番研究确定使用 [debian preseed](https://github.com/philpagel/debian-headless) 模式自动化安装，然后再在 debian 上安装 Proxmox VE 虚拟化系统，曲线救国。
+    - 因为我的笔记本是 openSUSE，直接跑 debian-headless 的 Makefile 各种报错，手动用 zypper 安装各项依赖，遇到 genisoimage 报错 `option '-e' is ambiguous;`
+      - 换了好几个 OBS 源的 genisoimage 都没解决问题，最后在 stackoverflow 上找到[解决方法](https://stackoverflow.com/questions/31831268/genisoimage-and-uefi) - 写了一个 10 来行的 bash 脚本作为 wrapper，问题解决。
+    - 镜像终于打出来了，但是在写入之前我用 qemu 测试，又遇到坑：每次都卡在设置 Root 密码这一步
+      - 重新使用 debian 官方提供的 `example-pressed.cfg` 改了一份 `preseed.cfg`，发现就能正常提示我，接下来需要 ssh 进去进行后续设置了。
+      - 其中关键修改可能是添加了 `d-i netcfg/wireless_wep string` 这一行，因为 UM560 是带 WIFI 6E 网卡的...
+    - 又是一番折腾，还额外安装了 clash 进行安装加速，终于给 UM560 装上了 Debian 并进一步装上了 Proxmox VE
+  - Beelink GTR5 AMD Ryzen 9 5900H
+    - 使用同样的流程安装，每次都卡住...
+    - 猜测原因是 GTR5 是双 RJ45 接口，`preseed.cfg` 需要做针对性调整，但是又调了两个小时，还是没解决...
+    - 主要问题是主机没有串口，我也没串口连接线，显示器啥都不显示，根本看不到安装卡在了哪...
+    - 可能的解决方法：
+      - 直指本质：买一个键盘或者借一个键盘...
+      - 就要折腾：路由器上能看到 GTR5 的主机 IP 是 `0.0.0.0`，也能看到 MAC 地址，说明 ARP 协议已经通过了，但是卡在了 DHCP 协议这里。或许可以在 DHCP 服务器上做些文章，只要 IP 分配成功了，应该就能直接通过 ssh 协议连接上去试试了。
+      - The Hardest Way：再研究下 PXE 网络装机，但是感觉大概率遇到同样的问题...
 
 ### 2022-11-03
 
