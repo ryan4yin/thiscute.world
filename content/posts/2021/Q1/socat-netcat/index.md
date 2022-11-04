@@ -92,9 +92,10 @@ nc -vv -w2 -z 192.168.1.2 20-500
 socat TCP-LISTEN:7000 -
 # -l --listening
 nc -l 7000
-# 当然也可以使用 python3
+# 当然也可以使用 python3（注意文件安全性）
+# 此命令在 7000 端口启用一个文件服务器，绑定到 0.0.0.0，以当前目录为根目录
 python3 -m http.server 7000
-# 或者在较老的机器上可以用 python2
+# 或者在较老的机器上可以用 python2（注意文件安全性）
 python -m SimpleHTTPServer 8000
 
 # 客户端连接命令，socat/nc 二选一
@@ -209,6 +210,16 @@ print("hello world")
 
 那 `curl localhost:8080` 就应该会输出 `hello world`
 
+当然，如果你仅希望快速提供一个文件服务器，也可直接使用 python 命令：
+
+```shell
+# https://docs.python.org/3/library/http.server.html#http.server.SimpleHTTPRequestHandler.do_GET
+python3 -m http.server --directory /tmp/
+
+# 或者在旧机器上可以直接使用 python2 提供文件服务器，默认以当前文件夹为根目录
+python -m SimpleHTTPServer 8000
+```
+
 ## 4. 端口转发
 
 监听 8080 端口，建立该端口与 `baidu.com:80` 之间的双向管道:
@@ -222,6 +233,12 @@ socat TCP-LISTEN:8080,fork,reuseaddr  TCP:baidu.com:80
 ```shell
 # 注意指定 Host
 curl -v -H 'Host: baidu.com' localhost:8080
+```
+
+其他用法，比如为一个仅监听了 `127.0.0.1` loopback 网卡的服务，允许通过外部网络访问（注意安全性）：
+
+```shell
+socat TCP-LISTEN:5432,fork,reuseaddr  TCP:localhost:3658
 ```
 
 
