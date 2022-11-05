@@ -15,7 +15,7 @@ toc:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
-### 2022-11-04
+### 2022-11-04 - 2022-11-05
 
 - 家庭服务器规划：[ryan4yin/knowledge/homelab](https://github.com/ryan4yin/knowledge/tree/master/homelab)
 - HDMI 视频采集卡跟另一台主机均到货，开始搭建家庭服务器环境~
@@ -38,6 +38,7 @@ toc:
       - 直指本质：买一个键盘或者借一个键盘...
       - 就要折腾：路由器上能看到 GTR5 的主机 IP 是 `0.0.0.0`，也能看到 MAC 地址，说明 ARP 协议已经通过了，但是卡在了 DHCP 协议这里。或许可以在 DHCP 服务器上做些文章，只要 IP 分配成功了，应该就能直接通过 ssh 协议连接上去试试了。
       - The Hardest Way：再研究下 PXE 网络装机，但是感觉大概率遇到同样的问题...
+    - 折腾到第二天早上 7 点多还没解决，最后京东下单了一个键盘...
 - Proxmox VE 踩坑记录（一年多没用了，把以前踩过的坑又踩一遍...）
   - 详见官方文档 [Network Configuration -Proxmox VE](https://pve.proxmox.com/pve-docs/chapter-sysadmin.html#sysadmin_network_configuration)
   - Linux Bridge: 即网络桥接，虚拟机与外部主机共享网络
