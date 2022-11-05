@@ -30,7 +30,7 @@ toc:
       - 重新使用 debian 官方提供的 `example-pressed.cfg` 改了一份 `preseed.cfg`，发现就能正常提示我，接下来需要 ssh 进去进行后续设置了。
       - 其中关键修改可能是添加了 `d-i netcfg/wireless_wep string` 这一行，因为 UM560 是带 WIFI 6E 网卡的...
     - 又是一番折腾，还额外安装了 clash 进行安装加速，终于给 UM560 装上了 Debian 并进一步装上了 Proxmox VE
-  - Beelink GTR5 AMD Ryzen 9 5900H
+  - Beelink GTR5 AMD Ryzen 9 5900H 踩坑记录：
     - 使用同样的流程安装，每次都卡住...
     - 猜测原因是 GTR5 是双 RJ45 接口，`preseed.cfg` 需要做针对性调整，但是又调了两个小时，还是没解决...
     - 主要问题是主机没有串口，我也没串口连接线，显示器啥都不显示，根本看不到安装卡在了哪...
@@ -38,6 +38,22 @@ toc:
       - 直指本质：买一个键盘或者借一个键盘...
       - 就要折腾：路由器上能看到 GTR5 的主机 IP 是 `0.0.0.0`，也能看到 MAC 地址，说明 ARP 协议已经通过了，但是卡在了 DHCP 协议这里。或许可以在 DHCP 服务器上做些文章，只要 IP 分配成功了，应该就能直接通过 ssh 协议连接上去试试了。
       - The Hardest Way：再研究下 PXE 网络装机，但是感觉大概率遇到同样的问题...
+- Proxmox VE 踩坑记录（一年多没用了，把以前踩过的坑又踩一遍...）
+  - 详见官方文档 [Network Configuration -Proxmox VE](https://pve.proxmox.com/pve-docs/chapter-sysadmin.html#sysadmin_network_configuration)
+  - Linux Bridge: 即网络桥接，虚拟机与外部主机共享网络
+    - 默认情况下 PVE 会将 IP 地址、网关、掩码都配置在 eno1 物理网卡上
+    - 首先先记下 eno1 网卡的参数，并将其 IP 地址、网关、掩码三个参数清空掉
+    - 然后新建网桥 vmbr0，将之前记录的 eno1 网卡的 IP 地址、网关、掩码都配置在此网桥上，bridge-port 填 eno1
+    - 点击应用配置即完成创建
+    - 新手常见问题：
+      - 未清除 eno1 网卡参数，导致创建 vmbr0 时提示无法将 bridge-port 设为 eno1
+      - 未清除 eno1 网卡参数，导致用错误的参数创建好 vmbr0 后，由于底层 ARP 协议混乱，整个外部局域网都出现网络时好时坏的情况。
+  - 路由模式：其实仍然是创建一个 Linux Bridge，不过我们通过配置可以把它当成二级子路由器用，准确的说这种模式叫「**Proxy-ARP Transparent Router**」
+    - 此功能目前无法通过 UI 配置，必须命令行改配置才行。需要在 eno1 网卡上设置 ip_forward 跟 prox_arp 相关参数。
+    - 因为路由模式不修改内外网的 IP，这要求在外部网络的路由表中添加子路由器的网段配置。
+    - 详见官方文档，此模式的实际玩法待测试，上述均属我的猜测。
+  - NAT 网关模式：路由模式仅工作在 L3 网络层，而 NAT 更进一步，使用 Iptables 将 IP 与 L4 的端口一并做了修改。
+    - 好处是内部网络就跟外部网络完全隔离了，安全性啥的更高。而且不需要额外修改外部网络的路由规则。
 
 ### 2022-11-03
 
