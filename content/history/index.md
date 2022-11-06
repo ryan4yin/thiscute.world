@@ -15,7 +15,14 @@ toc:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
-### 2022-11-04 - 2022-11-05
+### 2022-11-07
+
+- 很久以前我编辑 `/histoy` 这个页面就很卡顿，而且 backspace 经常彻底失去作用，今天定位到了这个问题
+  - 一开始我以为是 vscode 的问题，试了 [vscode#28737](https://github.com/microsoft/vscode/issues/28737) 的揭发发现没任何作用。
+  - 今天想到好像只有编辑我的博客项目时才卡，进一步地，只有编辑 `/history` 时才卡，所以想到是 markdown 插件的问题，找到了这个 issue [vscode-markdown#969](https://github.com/yzhang-gh/vscode-markdown/issues/969)
+  - 一开始我以为是 markdown 这个插件的问题，但是根据 makrdown 插件的文档，我在 running extension 中开了下性能录制，发现时间全花在 httpyac 上了，把它 disabled 掉问题就解决了...
+
+### 2022-11-04 - 2022-11-06
 
 - 家庭服务器规划：[ryan4yin/knowledge/homelab](https://github.com/ryan4yin/knowledge/tree/master/homelab)
 - HDMI 视频采集卡跟另一台主机均到货，开始搭建家庭服务器环境~
@@ -46,7 +53,7 @@ toc:
     - 首先先记下 eno1 网卡的参数，并将其 IP 地址、网关、掩码三个参数清空掉
     - 然后新建网桥 vmbr0，将之前记录的 eno1 网卡的 IP 地址、网关、掩码都配置在此网桥上，bridge-port 填 eno1
     - 点击应用配置即完成创建
-    - 新手常见问题：
+    - 新手常见问题（仅在 debian 上装 PVE 时才会发生，测试发现直接使用 iso 安装无此问题）：
       - 未清除 eno1 网卡参数，导致创建 vmbr0 时提示无法将 bridge-port 设为 eno1
       - 未清除 eno1 网卡参数，导致用错误的参数创建好 vmbr0 后，由于底层 ARP 协议混乱，整个外部局域网都出现网络时好时坏的情况。
   - 路由模式：其实仍然是创建一个 Linux Bridge，不过我们通过配置可以把它当成二级子路由器用，准确的说这种模式叫「**Proxy-ARP Transparent Router**」
@@ -55,6 +62,11 @@ toc:
     - 详见官方文档，此模式的实际玩法待测试，上述均属我的猜测。
   - NAT 网关模式：路由模式仅工作在 L3 网络层，而 NAT 更进一步，使用 Iptables 将 IP 与 L4 的端口一并做了修改。
     - 好处是内部网络就跟外部网络完全隔离了，安全性啥的更高。而且不需要额外修改外部网络的路由规则。
+- K3s 问题
+  - 在 raspberrypi 上遇到 [Fail running on Raspberry Pi Ubuntu 21.10](https://github.com/k3s-io/k3s/issues/4234#issuecomment-947954002) 这个问题，跑了下 `sudo apt install linux-modules-extra-raspi` 再重启问题就解决了。
+  - 新版本 k8s 需要指定 ingressClassName，但是 k3s 默认没有创建 ingressClass : [Create by default traefik ingressClass when creating a cluster](https://github.com/k3s-io/k3s/issues/556
+  - 在 1.25 版的 k3s 集群上安装 victoria-metrics-k8s-stack 时，operator 一直报错，排查日志发现是 `policy/v1beta1` 被废弃导致的，顺手提了个 PR [fix: bump victoria-metrics-operator's version to 0.15.*](https://github.com/VictoriaMetrics/helm-charts/pull/401)
+
 
 ### 2022-11-03
 
