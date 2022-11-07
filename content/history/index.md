@@ -18,9 +18,9 @@ toc:
 ### 2022-11-07
 
 - 很久以前我编辑 `/histoy` 这个页面就很卡顿，而且 backspace/enter 经常彻底失去作用，今天定位到了这个问题
-  - 一开始我以为是 vscode 的问题，试了 [vscode#28737](https://github.com/microsoft/vscode/issues/28737) 的揭发发现没任何作用。
-  - 今天想到好像只有编辑我的博客项目时才卡，进一步地，只有编辑 `/history` 时才卡，所以想到是 markdown 插件的问题，找到了这个 issue [vscode-markdown#969](https://github.com/yzhang-gh/vscode-markdown/issues/969)
-  - 一开始我以为是 markdown 这个插件的问题，但是根据 makrdown 插件的文档，我在 running extension 中开了下性能录制，发现时间全花在 [httpyac](https://github.com/AnWeber/httpyac) 上了，把它 disabled 掉问题就解决了...
+  - 一开始我以为是 vscode 的问题，试了 [vscode#28737](https://github.com/microsoft/vscode/issues/28737) 中的参数发现没任何作用。
+  - 今天想到只有编辑我的博客项目时才卡，进一步地，只有编辑 `/history` 页时才卡，而这个页面有 1200 多行内容，所以猜测是 markdown 插件的性能问题。搜索找到了 [vscode-markdown#969](https://github.com/yzhang-gh/vscode-markdown/issues/969)
+  - 根据上述 issue 中的性能问题定位文档，我在 vscode running extension 中开了下性能录制，发现时间全花在 [httpyac](https://github.com/AnWeber/httpyac) 上了，把它 disabled 掉问题就解决了...
 
 ![](/images/now/vscode-markdown-performance-issue.webp)
 
