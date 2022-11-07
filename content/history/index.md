@@ -22,7 +22,7 @@ toc:
   - 今天想到好像只有编辑我的博客项目时才卡，进一步地，只有编辑 `/history` 时才卡，所以想到是 markdown 插件的问题，找到了这个 issue [vscode-markdown#969](https://github.com/yzhang-gh/vscode-markdown/issues/969)
   - 一开始我以为是 markdown 这个插件的问题，但是根据 makrdown 插件的文档，我在 running extension 中开了下性能录制，发现时间全花在 [httpyac](https://github.com/AnWeber/httpyac) 上了，把它 disabled 掉问题就解决了...
 
-![](/static/images/now/vscode-markdown-performance-issue.webp)
+![](/images/now/vscode-markdown-performance-issue.webp)
 
 ### 2022-11-04 - 2022-11-06
 
