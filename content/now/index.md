@@ -19,8 +19,8 @@ toc:
 >按优先级排序
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 57/100
-  - Time Machine                          - 21/30
+  - The Unlikely Pilgrimage of Harold Fry - 62/100
+  - Time Machine                          - 22/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 58/270
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
