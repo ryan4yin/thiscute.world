@@ -39,8 +39,10 @@ toc:
            - 仅配置了可用率告警，缺失 QPS 剧烈波动的告警
        - 2022-09-16 Post Mortem 2: 迁移旧 Nginx 配置时没仔细审查旧的 Nginx 配置，导致流量改成走 CloudFront 后服务获取到的客户端 IP 实际为 CloudFront IP。但是服务可用率正常，业务侧也未配置相关告警指标，所有人无感知。直到第二天运营发现此问题，并沟通快速修复。
          - 问题点：
-           - 旧配置使用了 `proxy_set_header X-Forwarded-For $remote_addr;`
-           - 业务侧服务缺乏客户端 IP 相关指标的指标与告警
+           - 根源是 SRE 未形成 Nginx 配置的 Check & Review 规范，导致很多事情全凭个人经验与发挥。
+             - 表面原因：旧配置使用了 `proxy_set_header X-Forwarded-For $remote_addr;`，而正确的配置应该是 `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`。
+           - 业务侧只关注了服务可用率，未关注核心业务指标
+             - 表面原因：业务服务缺乏客户端 IP 相关指标与监控告警
   - 2022Q5（三个月） - 继续推进网关优化，取得预定的成本收益
     - 识别到 AWS ALB/NLB 的流量成本中是包含 TLS 握手的流量的，而握手时为了最大兼容性，服务端通常需要将证书的整个证书链发送给客户端，造成大量的流量成本。
     - 使用单域名证书、ECC 公钥、证书层级短的证书、TLS1.3 session 复用，均对缩减 TLS 握手的流量成本有很大帮助。
