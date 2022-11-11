@@ -240,9 +240,19 @@ kubectl get pods | grep Evicted | awk '{print $1}' | xargs kubectl delete pod
 --eviction-minimum-reclaim=memory.available=0Mi,nodefs.available=1Gi,imagefs.available=2Gi
 ```
 
+## 监控/HPA 常见错误
+
+### 服务设置了 HPA 阈值为 50% CPU，所有业务容器在启动后不久就会 OOM，CPU 暴涨然后挂掉。但是无法触发 CPU 扩缩容，Prometheus 监控指标也不对劲。
+
+根据 [metrics-sever - how-often-metrics-are-scraped](https://github.com/kubernetes-sigs/metrics-server/blob/master/FAQ.md#how-often-metrics-are-scraped) 描述，metrics-sever 默认情况下每 60s 采集一次指标，而 Prometheus 的采集间隔通常会配置为 15s/30s。
+
+这说明如果业务容器每次重启后，都坚持不过 60s 就会挂掉，就很可能导致 metrics-sever 采集不到足够的指标，HPA 查询到的平均 CPU 将会是 0%，无法触发扩容操作。
+
+Prometheus 也是一样的逻辑，如果容器每次启动都坚持不过 30s，那就会导致 prometheus 经常抓不到指标，监控图表或者告警就会出问题。
+
 ## 其他问题
 
-## 隔天 Istio 等工具的 sidecar 自动注入莫名其妙失效了
+### 隔天 Istio 等工具的 sidecar 自动注入莫名其妙失效了
 
 如果服务器晚上会关机，可能导致第二天网络插件出问题，导致 sidecar 注入器无法观察到 pod 的创建，也就无法完成 sidecar 注入。
 
