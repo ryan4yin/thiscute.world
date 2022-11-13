@@ -110,7 +110,6 @@ comment:
 - 2021-02-07：（第一份工作结束后赋闲）将博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
 - 2022-02-07：站点添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。
 - 2022-02-16：站点通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
-- 2022-08-12：站点架构升级为 Azure Front Door + Vercel，国内访问速度显著提升。
 {{< /admonition >}}
 
 {{< admonition info "博客快照-2020-01-21" >}}
