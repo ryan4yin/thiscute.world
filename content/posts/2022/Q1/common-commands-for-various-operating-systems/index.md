@@ -298,7 +298,27 @@ echo "xxx" | urldecode
 cat file | urlencode
 ```
 
-#### 5. 其他资料
+#### 5. 查询历史记录
+
+临时版：
+
+```shell
+# 查询命令行历史记录，并带上时间
+HISTTIMEFORMAT="%F %T %z " history
+```
+
+一劳永逸版：
+
+```shell
+# 将环境变量加入 .bashrc
+echo 'HISTTIMEFORMAT="%F %T "' >> ~/.bashrc
+source ~/.bashrc
+
+# 查询历史记录
+history
+```
+
+#### 6. 其他资料
 
 - [shell_scripts](https://github.com/mritd/shell_scripts): 实用 shell 小脚本
 
