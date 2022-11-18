@@ -38,6 +38,8 @@ cert-manager 是一个证书的自动化管理工具，用于在 Kubernetes 集�
 
 
 ```shell
+# 添加 cert-manager 的 helm 仓库
+helm repo add jetstack https://charts.jetstack.io
 # 查看版本号
 helm search repo jetstack/cert-manager -l | head
 # 下载并解压 chart，目的是方便 gitops 版本管理
@@ -107,11 +109,15 @@ cert-manager 支持两种申请公网受信证书的方式：
 
 ACME 支持 HTTP01 跟 DNS01 两种域名验证方式，其中 DNS01 是最简便的方法。
 
-下面以 AWS Route53 为例介绍如何申请一个 Let's Encrypt 证书。（其他 DNS 提供商的配置方式请直接看官方文档）
+下面分别演示如何使用 AWS Route53 跟 AliDNS，通过 DNS 验证方式申请一个 Let's Encrypt 证书。（其他 DNS 提供商的配置方式请直接看官方文档）
+
+#### 1.1 使用 AWS Route53 创建一个证书签发者「Certificate Issuer」
 
 >https://cert-manager.io/docs/configuration/acme/dns01/route53/
 
-#### 1.1 AWS IAM 授权
+##### 1.1.1 通过 IAM 授权 cert-manager 调用 AWS Route53 API
+
+>这里介绍一种不需要创建 ACCESS_KEY_ID/ACCESS_SECRET，直接使用 AWS EKS 官方的免密认证的方法。会更复杂一点，但是更安全可维护。
 
 首先需要为 EKS 集群创建 OIDC provider，参见 [aws-iam-and-kubernetes](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/security/aws-iam-and-kubernetes.md)，这里不再赘述。
 
@@ -193,7 +199,7 @@ helm upgrade -i cert-manager ./cert-manager -n cert-manager -f cert-manager-valu
 
 这样就完成了授权。
 
-#### 1.2 创建 ACME Issuer
+##### 1.1.2 创建一个使用 AWS Route53 进行验证的 ACME Issuer
 
 在 xxx 名字空间创建一个 Iusser：
 
@@ -201,7 +207,7 @@ helm upgrade -i cert-manager ./cert-manager -n cert-manager -f cert-manager-valu
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: letsencrypt-prod
+  name: letsencrypt-prod-aws
   namespace: xxx
 spec:
   acme:
@@ -209,22 +215,22 @@ spec:
     email: user@example.com
     # ACME 服务器，比如 let's encrypt、Digicert 等
     # let's encrypt 的测试 URL，可用于测试配置正确性
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    # server: https://acme-staging-v02.api.letsencrypt.org/directory
     # let's encrypt 的正式 URL，有速率限制
-    # server: https://acme-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
 
     # 用于存放 ACME 账号私钥的 Secret 名称，Issuer 创建时会自动生成此 secret
     privateKeySecretRef:
-      name: letsencrypt-staging
+      name: letsencrypt-prod-aws
     
     # DNS 验证设置
     solvers:
     - selector:
         # 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件
         # 以 dnsZones 为例，越长的 Zone 优先级就越高
-        # 比如在为 www.sys.exapmle.com 申请证书时，sys.example.org 的优先级就比 example.org 更高
+        # 比如在为 www.sys.exapmle.com 申请证书时，sys.example.com 的优先级就比 example.com 更高
         dnsZones:
-        - "example.org"
+        - "example.com"
       dns01:
         # 使用 route53 进行验证
         route53:
@@ -233,11 +239,97 @@ spec:
           # 这里不需要补充额外的 IAM 授权相关信息！
 ```
 
-#### 1.3 通过 ACME 创建证书以及问题排查
+
+#### 1.2 使用 AliDNS 创建一个证书签发者「Certificate Issuer」
+
+>https://cert-manager.io/docs/configuration/acme/dns01/#webhook
+
+cert-manager 官方并未提供 alidns 相关的支持，而是提供了一种基于 WebHook 的拓展机制。社区有第三方创建了对 alidns 的支持插件：
+
+- [cert-manager-alidns-webhook](https://github.com/DEVmachine-fr/cert-manager-alidns-webhook)
+
+下面我们使用此插件演示下如何创建一个证书签发者。
+
+##### 1.1.1 通过 IAM 授权 cert-manager 调用 AWS Route53 API
+
+首先需要在阿里云上创建一个子账号，名字可以使用 `alidns-acme`，给它授权 DNS 修改权限，然后为该账号生成 ACCESS_KEY_ID/ACCESS_SECRET。
+
+完成后，使用如下命令将 key/secret 内容创建为 secret 供后续步骤使用：
+
+```shell
+# 注意替换如下命令中的 <xxx> 为你的 key/secret
+kubectl -n cert-manager create secret generic alidns-secrets \
+  --from-literal="access-token=<your-access-key-id>" \
+  --from-literal="secret-key=<your-access-secret-key>"
+```
+
+接下来需要部署 [cert-manager-alidns-webhook](https://github.com/DEVmachine-fr/cert-manager-alidns-webhook) 这个 cert-manager 插件：
+
+```shell
+# 添加 helm 仓库
+helm repo add cert-manager-alidns-webhook https://devmachine-fr.github.io/cert-manager-alidns-webhook
+helm repo update
+
+# 安装插件
+## 其中的 groupName 是一个全局唯一的标识符，用于标识创建此 webhook 的组织，建议使用公司域名
+## groupName 必须与后面创建的 Issuer 中的 groupName 一致，否则证书将无法通过验证！
+helm -n cert-manager install alidns-webhook \
+  cert-manager-alidns-webhook/alidns-webhook \
+  --set groupName=example.com
+```
+
+##### 1.1.2 创建一个使用 AliDNS 进行验证的 ACME Issuer
+
+在 xxx 名字空间创建一个 Iusser：
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod-alidns
+  namespace: xxx
+spec:
+  acme:
+    # 用于接受域名过期提醒的邮件地址
+    email: user@example.com
+    # ACME 服务器，比如 let's encrypt、Digicert 等
+    # let's encrypt 的测试 URL，可用于测试配置正确性
+    # server: https://acme-staging-v02.api.letsencrypt.org/directory
+    # let's encrypt 的正式 URL，有速率限制
+    server: https://acme-v02.api.letsencrypt.org/directory
+
+    # 用于存放 ACME 账号私钥的 Secret 名称，Issuer 创建时会自动生成此 secret
+    privateKeySecretRef:
+      name: letsencrypt-prod-alidns
+    
+    # DNS 验证设置
+    solvers:
+    - selector:
+        # 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件
+        # 以 dnsZones 为例，越长的 Zone 优先级就越高
+        # 比如在为 www.sys.exapmle.com 申请证书时，sys.example.com 的优先级就比 example.com 更高
+        dnsZones:
+        - "example.com"
+      dns01:
+        webhook:
+            config:
+              accessTokenSecretRef:
+                key: access-token
+                name: alidns-secrets
+              regionId: cn-beijing
+              secretKeySecretRef:
+                key: secret-key
+                name: alidns-secrets
+            # 这个 groupName 必须与之前部署插件时设置的一致！
+            groupName: example.com
+            solverName: alidns-solver
+```
+
+#### 1.3 通过 ACME 创建证书
 
 >https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources
 
-证书的申请流程示意图如下：
+在创建证书前，先简单过一下证书的申请流程，示意图如下（出问题时需要靠这个来排查）：
 
 ```
 (  +---------+  )
@@ -305,12 +397,9 @@ spec:
       - xxx
   # Issuer references are always required.
   issuerRef:
-    name: letsencrypt-prod
-    # We can reference ClusterIssuers by changing the kind here.
-    # The default value is Issuer (i.e. a locally namespaced Issuer)
-    kind: Issuer
-    # This is optional since cert-manager will default to this value however
-    # if you are using an external issuer, change this to that issuer group.
+    name: letsencrypt-prod-aws
+    # name: letsencrypt-prod-alidns  # 如果你前面创建的是 alidns 那就用这个
+    kind: Issuer  # 如果你创建的是 ClusterIssuer 就需要改下这个值
     group: cert-manager.io
 ```
 
