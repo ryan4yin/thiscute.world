@@ -1961,10 +1961,10 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 </ul>
 <p>允许任意主机发送到 eAddr:ePort 的数据到达内部地址是很危险的行为，因为内部主机不一定配置了合适的安全策略。
 因此 <strong>Full-cone NAT 比较少见</strong>，就算路由器等 NAT 设备支持 Full-cone NAT，通常也不会是默认选项。我们会在后面更详细地介绍它。</p>
-<h5 id="2-restricted-cone-nat" class="headerLink">
-    <a href="#2-restricted-cone-nat" class="header-mark"></a>2. Restricted cone NAT</h5><ul>
+<h5 id="2-address-restricted-cone-nat" class="headerLink">
+    <a href="#2-address-restricted-cone-nat" class="header-mark"></a>2. (Address-)Restricted cone NAT</h5><ul>
 <li>数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送。</li>
-<li>数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部主机（nAddr:any），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
+<li>数据包流入：只有内部地址（iAddr:iPort）主动连接过的<strong>外部主机</strong>（nAddr:<strong>any</strong>），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
 <ul>
 <li>跟 Full-cone NAT 的区别在于，它<strong>限制了外部主机的 IP 地址</strong>。只有主动连接过的主机，才能发送数据到 NAT 内部。这<strong>提升了一些安全性</strong>。</li>
 </ul>
@@ -1972,20 +1972,18 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 </ul>
 <h5 id="3-port-restricted-cone-nat" class="headerLink">
     <a href="#3-port-restricted-cone-nat" class="header-mark"></a>3. Port-Restricted cone NAT</h5><ul>
-<li>数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），<strong>所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送</strong>。</li>
-<li>数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
+<li>数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送。</li>
+<li>数据包流入：只有内部地址（iAddr:iPort）主动连接过的<strong>外部程序</strong>（nAddr:<strong>nPort</strong>），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
 <ul>
 <li>与 Address-Restricted cone NAT 的区别在于，它<strong>同时限制了外部主机的 IP 与端口</strong>，可以说是更<strong>进一步地提升了安全性</strong>。</li>
 </ul>
 </li>
 </ul>
 <h5 id="4-symmetric-nat" class="headerLink">
-    <a href="#4-symmetric-nat" class="header-mark"></a>4. Symmetric NAT</h5><p>Port-Restricted cone NAT 的数据流入流出规则导致一个问题：<strong>同一个内部地址只能映射到唯一的一个 NAT 外部地址，也就只能与唯一的一个外部程序通讯，不能并发请求多个外部地址</strong>！这实际上限制了内部主机的最高并发连接数。
-而 Symmetric NAT 解决了这个问题，它的数据流入流出规则如下：</p>
+    <a href="#4-symmetric-nat" class="header-mark"></a>4. Symmetric NAT</h5><ul>
+<li>数据包流出：同一个内部地址（iAddr:iPort）与不同外部主机（nAddr:nPort）的通信，会随机使用不同的 NAT 外部端口（eAddr:<strong>randomPort</strong>）。也就是说内部地址与 NAT 外部地址的关系也是<strong>一对多</strong>！
 <ul>
-<li>数据包流出：同一个内部地址（iAddr:iPort）与不同外部主机（nAddr:nPort）的通信，会使用不同的 NAT 外部端口（eAddr:randomPort）。也就是说内部地址与 NAT 外部地址的关系也是<strong>一对多</strong>！
-<ul>
-<li>通过允许端口的<strong>一对多映射</strong>，实际上提升了每个内部地址（iAddr:iPort）的并发连接数上限（从 1 直接扩到了可用端口数上限）。<strong>这也是 NAT 穿越最大的难点，它导致 Symmetric NAT 的端口难以预测</strong>！</li>
+<li>为每个连接都随机选择一个不同的 NAT 端口，这实际是进一步强化了 NAT 内网的安全性。<strong>但这也是 NAT 穿越最大的难点——它导致 Symmetric NAT 的端口难以预测</strong>！</li>
 </ul>
 </li>
 <li>数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
