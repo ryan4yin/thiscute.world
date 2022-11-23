@@ -127,25 +127,22 @@ Full-cone NAT 的特点如下：
 允许任意主机发送到 eAddr:ePort 的数据到达内部地址是很危险的行为，因为内部主机不一定配置了合适的安全策略。
 因此 **Full-cone NAT 比较少见**，就算路由器等 NAT 设备支持 Full-cone NAT，通常也不会是默认选项。我们会在后面更详细地介绍它。
 
-##### 2. Restricted cone NAT
+##### 2. (Address-)Restricted cone NAT
 
 - 数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送。
-- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部主机（nAddr:any），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
+- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的**外部主机**（nAddr:**any**），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
   - 跟 Full-cone NAT 的区别在于，它**限制了外部主机的 IP 地址**。只有主动连接过的主机，才能发送数据到 NAT 内部。这**提升了一些安全性**。
 
 ##### 3. Port-Restricted cone NAT
 
-- 数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），**所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送**。
-- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
+- 数据包流出：（跟 Full-cone NAT 完全一致）一旦内部地址（iAddr:iPort）映射到外部地址（eAddr:ePort），所有发自 iAddr:iPort 的数据包都经由 eAddr:ePort 向外发送。
+- 数据包流入：只有内部地址（iAddr:iPort）主动连接过的**外部程序**（nAddr:**nPort**），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
   - 与 Address-Restricted cone NAT 的区别在于，它**同时限制了外部主机的 IP 与端口**，可以说是更**进一步地提升了安全性**。
 
 ##### 4. Symmetric NAT
 
-Port-Restricted cone NAT 的数据流入流出规则导致一个问题：**同一个内部地址只能映射到唯一的一个 NAT 外部地址，也就只能与唯一的一个外部程序通讯，不能并发请求多个外部地址**！这实际上限制了内部主机的最高并发连接数。
-而 Symmetric NAT 解决了这个问题，它的数据流入流出规则如下：
-
-- 数据包流出：同一个内部地址（iAddr:iPort）与不同外部主机（nAddr:nPort）的通信，会使用不同的 NAT 外部端口（eAddr:randomPort）。也就是说内部地址与 NAT 外部地址的关系也是**一对多**！
-  - 通过允许端口的**一对多映射**，实际上提升了每个内部地址（iAddr:iPort）的并发连接数上限（从 1 直接扩到了可用端口数上限）。**这也是 NAT 穿越最大的难点，它导致 Symmetric NAT 的端口难以预测**！
+- 数据包流出：同一个内部地址（iAddr:iPort）与不同外部主机（nAddr:nPort）的通信，会随机使用不同的 NAT 外部端口（eAddr:**randomPort**）。也就是说内部地址与 NAT 外部地址的关系也是**一对多**！
+  - 为每个连接都随机选择一个不同的 NAT 端口，这实际是进一步强化了 NAT 内网的安全性。**但这也是 NAT 穿越最大的难点——它导致 Symmetric NAT 的端口难以预测**！
 - 数据包流入：只有内部地址（iAddr:iPort）主动连接过的外部程序（nAddr:nPort），发送到 eAddr:ePort 的数据包，才能通过 NAT 到达 iAddr:iPort.
   - 这个数据流入规则，与 Port-Restricted cone NAT 是完全一致的。
 
