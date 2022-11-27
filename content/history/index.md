@@ -15,10 +15,20 @@ toc:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2022-11-27
+
+- 英语阅读
+  - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡并事后补读 10 天)
+  - The Time Machine  - 30/30
+    - 读完了，内容想象力丰富，新奇有趣，也学到很多熟词生义、新词新表达。
+- 英语单词与听力练习
+  - 一点英语 270 天英语学习                  - 82/270 (漏打卡 12 天)
+  - 一点英语已经漏打卡 12 天，基本都是 2022/11 月漏的。主要原因一是搞 Homelab，二是搬家、跟亲戚朋友聚会...
+
 ### 2022-11-20
 
 - 英语阅读
-  - Time Machine                          - 27/30
+  - The Time Machine                          - 27/30
 - 在朋友的帮助下搬家，最重的书都是朋友帮我搬上楼了，结果我仍然累得不行...相当尴尬...
 - 新租房开通了电信 1000M 宽带，家庭网络体验感直线上升。
 
@@ -26,7 +36,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 73/100
-  - Time Machine                          - 25/30
+  - The Time Machine                          - 25/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 74/270
 - 11/19 下午找了一圈房子，定了个 2000 一月的（包管理费），离坪洲站 50 米
@@ -36,7 +46,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 71/100
-  - Time Machine                          - 24/30
+  - The Time Machine                          - 24/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 72/270
 - 跟 RC（NoneBot/CQHTTP 作者）聊了聊，互相加了个小社群。
@@ -62,7 +72,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 67/100
-  - Time Machine                          - 22/30
+  - The Time Machine                          - 22/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 68/270
 - 跟 0xFFFF 社区线下约饭，聊了到学英语、业务逻辑、搞 infra、国内国外等等，体验很好~
@@ -185,7 +195,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 57/100
-  - Time Machine                          - 21/30
+  - The Time Machine                          - 21/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 58/270
 - 上班：大数据服务遭遇性能瓶颈，发送 kafka 延迟高涨。
@@ -214,7 +224,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 51/100
-  - Time Machine                          - 17/30
+  - The Time Machine                          - 17/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 52/270
 - 跟朋友及同事聊了聊近况，网关技术、Web3，以及个人发展
@@ -241,7 +251,7 @@ toc:
   - 基于「动态规划」去优化「最短理论编码」算法，关键点在于它的「重叠子问题」是哪个？
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 46/100
-  - Time Machine                          - 9/30
+  - The Time Machine                          - 9/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 47/270
 
@@ -249,7 +259,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 43/100
-  - Time Machine                          - 4/30
+  - The Time Machine                          - 4/30
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 44/270
 - 在英语学习规划中补充了 Cambly/Lingoda 等口语练习站点
@@ -261,7 +271,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 41/100
-  - 感觉薄荷英语小程序做得不太行，一番查找发现了价格更亲民，小程序也做得更好的「知米阅读」，花 199 买了它的年费会员。并且开始在「知米阅读」上看《Time Machine》这本书。
+  - 感觉薄荷英语小程序做得不太行，一番查找发现了价格更亲民，小程序也做得更好的「知米阅读」，花 199 买了它的年费会员。并且开始在「知米阅读」上看《The Time Machine》这本书。
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 42/270
 - 使用 [Test Your Vocabulary](https://preply.com/en/learn/english/test-your-vocab) 做了一次词汇量评估，发现相比去年词汇量上升了大概 400 词（隐约记得去年测试大概是 4700 左右）。说明最近的单词跟阅读学习，效果显著，有点成就感~

@@ -19,10 +19,9 @@ toc:
 >按优先级排序
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 76/100
-  - Time Machine                          - 27/30
+  - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡并事后补读 10 天)
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 77/270
+  - 一点英语 270 天英语学习                  - 82/270 (漏打卡 12 天)
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 英语语法
@@ -80,11 +79,11 @@ toc:
 - [x] 《在生命的尽头拥抱你-临终关怀医生手记》
 - [x] 《在峡江的转弯处 - 陈行甲人生笔记》
 - [x] 《The ANSI C Programming Language》
+- [x] The Time Machine
 
 
 正在读：
 
-- Time Machine
 - The Unlikely Pilgrimage of Harold Fry
 - Moon Palace, by Pual Auster
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
