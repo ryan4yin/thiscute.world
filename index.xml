@@ -1,4 +1,485 @@
-<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2022-10-05T13:31:00+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">刻意练习</title><link href="https://thiscute.world/posts/deliberate-practice/"/><id>https://thiscute.world/posts/deliberate-practice/</id><author><name>ryan4yin</name></author><published>2022-10-05T13:31:00+08:00</published><updated>2022-10-05T13:31:00+08:00</updated><content type="html"><![CDATA[<figure>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2022-11-27T22:38:03+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">Proxmox Virtual Environment 使用指南</title><link href="https://thiscute.world/posts/proxmox-virtual-environment-instruction/"/><id>https://thiscute.world/posts/proxmox-virtual-environment-instruction/</id><author><name>ryan4yin</name></author><published>2022-11-27T22:38:03+08:00</published><updated>2022-11-27T22:38:03+08:00</updated><content type="html"><![CDATA[<figure>
+          <img class="lazyload" src="/posts/proxmox-virtual-environment-instruction/proxmox-logo.webp" height="2019" width="854"><figcaption></figcaption>
+        </figure><blockquote>
+<p>本文介绍我使用 PVE 的一些心得。</p>
+</blockquote>
+<h2 id="前言" class="headerLink">
+    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>我在去年的文章 <a href="https://thiscute.world/posts/QEMU/KVM-usage/" target="_blank" rel="noopener noreferrer">「QEMU/KVM 虚拟化环境的搭建与使用」</a> 中介绍了如何使用 QEMU/KVM 作为桌面虚拟化软件，其功能对标开源免费的 <a href="https://www.virtualbox.org/" target="_blank" rel="noopener noreferrer">Oracle VM VirtualBox</a> 以及收费但是用户众多的 <a href="https://www.vmware.com/products/workstation-pro.html" target="_blank" rel="noopener noreferrer">VMware Workstation Pro</a>.</p>
+<p>虽然我们也可以远程使用 QEMU/KVM，但是使用门槛比较高。而且如果要管理多台服务器，各种命令也比较繁琐。
+我们显然需要更易用的软件来管理服务器场景下的虚拟化。</p>
+<p>而这篇文章介绍的 <a href="https://pve.proxmox.com/wiki/Main_Page" target="_blank" rel="noopener noreferrer">Proxmox Virtual Environment</a>（后续简称 PVE），就是一个基于 QEMU/KVM 的虚拟机集群管理平台。</p>
+<p>PVE 以 Debian + QEMU/KVM + LXC 为基础进行了深度定制，提供了一套比较完善的 Web UI，基本上 95% 的操作都可以直接通过它的 Web UI 完成，但是仍然有些功能只需要使用它的 CLI 完成，或者说需要手动修改一些配置文件。</p>
+<p>PVE 完全基于 Linux 世界的各种开源技术，存储技术使用了 LVM（也支持 Ceph/iSCSI/NFS），也支持通过 cloudinit 预配置网络、磁盘扩容、设置 hostname（这其实是 libvirtd 的功能）。
+它的文档也比较齐全，而且写得清晰易懂，还包含许多它底层的 QEMU/KVM/CEPH/Cloudinit 等开源技术的内容，对学习 Linux 虚拟化技术也有些帮助。（这里必须喷下 VMware 的文档，真的是写得烂得一批，不知所云）</p>
+<p>总的来说，PVE 没有 <a href="https://www.vmware.com/cn/products/vsphere-hypervisor.html" target="_blank" rel="noopener noreferrer">vShpere Hypervisor</a> 跟 <a href="https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview" target="_blank" rel="noopener noreferrer">Windows Hyper-V</a> 那么成熟、完善、稳定，但是基于 QEMU/KVM 且能够免费使用，很适合 Linux/开源/虚拟化 爱好者折腾。</p>
+<blockquote>
+<p>你可能还听说过 OpenStack，不过这个玩意儿我没接触过，所以这里略过了它。</p>
+</blockquote>
+<p>因为这些原因，我选择了 PVE 作为我的 Homelab 系统。</p>
+<p>先贴一张我当前 Homelab 的 PVE 控制台截图，然后就进入正文。</p>
+<p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/ryan-pve-console.webp" title="/images/proxmox-ve-instruction/ryan-pve-console.webp" data-thumbnail="/images/proxmox-ve-instruction/ryan-pve-console.webp" data-sub-html="<h2>我的 PVE 集群</h2>">
+        <img
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/ryan-pve-console.webp"
+            data-srcset="/images/proxmox-ve-instruction/ryan-pve-console.webp, /images/proxmox-ve-instruction/ryan-pve-console.webp 1.5x, /images/proxmox-ve-instruction/ryan-pve-console.webp 2x"
+            data-sizes="auto"
+            alt="/images/proxmox-ve-instruction/ryan-pve-console.webp">
+    </a><figcaption class="image-caption">我的 PVE 集群</figcaption>
+    </figure></p>
+<h2 id="一安装-pve-系统" class="headerLink">
+    <a href="#%e4%b8%80%e5%ae%89%e8%a3%85-pve-%e7%b3%bb%e7%bb%9f" class="header-mark"></a>一、安装 PVE 系统</h2><p>建议直接使用 <a href="https://github.com/ventoy/Ventoy" target="_blank" rel="noopener noreferrer">ventoy</a> 制作一个 U 盘启动盘，把官网下载的 PVE 拷贝进去即可进行系统安装。
+安装过程中需要注意的点有：</p>
+<ul>
+<li>如果你有多台机器，每台机器需要使用不同的主机名称（hostname），否则后面组建 PVE 集群时会有麻烦。
+<ul>
+<li>建议使用机器型号 + 数字编号作为机器的 hostname</li>
+</ul>
+</li>
+<li>最好是为每台机器配置静态 IP，避免 IP 变更。</li>
+</ul>
+<p>系统安装好后即可按照提示直接访问其 Web UI，会提示 HTTPS 证书无效，忽略即可。另外还会有一个烦人的 PVE 订阅提示，也可直接忽略（7.2 及以上版本，暂时没找到怎么禁用掉这个提示）。</p>
+<p>此外对于国内环境，建议按下面这篇文章配置国内镜像源（提升软件安装速度）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 设置 debian 的阿里镜像源</span>
+</span></span><span class="line"><span class="cl">cp /etc/apt/sources.list /etc/apt/sources.list.bak
+</span></span><span class="line"><span class="cl">sed -i <span class="s2">&#34;s@\(deb\|security\).debian.org@mirrors.aliyun.com@g&#34;</span> /etc/apt/sources.list
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置 pve 国内镜像源</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># https://mirrors.bfsu.edu.cn/help/proxmox/</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;deb https://mirrors.bfsu.edu.cn/proxmox/debian buster pve-no-subscription&#39;</span> &gt; /etc/apt/sources.list.d/pve-no-subscription.list
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="组建-pve-集群" class="headerLink">
+    <a href="#%e7%bb%84%e5%bb%ba-pve-%e9%9b%86%e7%be%a4" class="header-mark"></a>组建 PVE 集群</h3><blockquote>
+<p>如果你仅使用单机 PVE，可忽略这一节内容。</p>
+</blockquote>
+<p>将多台 PVE 节点组成一个集群，可以获得很多新玩法，比如虚拟机在多节点间的热迁移。</p>
+<p>这个也还挺简单的，首先随便登入一台机器的 Web Console，点击「Datacenter」=&gt;「Cluster」=&gt;「Create Cluster」即可创建一个 PVE 集群。</p>
+<p>接着复制「Join Information」中的内容，在其他每台 PVE 节点的 Web Console 页面中，点击「Datacenter」=&gt;「Cluster」=&gt;「Join Cluster」，然后粘贴前面复制的「Join Information」，再输入前面节点的密码，等待大约一分钟，然后刷新页面，PVE 集群即组建完成。</p>
+<p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" title="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" data-sub-html="<h2>PVE 集群配置</h2>">
+        <img
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/pve-cluster-configuration.webp"
+            data-srcset="/images/proxmox-ve-instruction/pve-cluster-configuration.webp, /images/proxmox-ve-instruction/pve-cluster-configuration.webp 1.5x, /images/proxmox-ve-instruction/pve-cluster-configuration.webp 2x"
+            data-sizes="auto"
+            alt="/images/proxmox-ve-instruction/pve-cluster-configuration.webp">
+    </a><figcaption class="image-caption">PVE 集群配置</figcaption>
+    </figure></p>
+<p>PVE 集群的所有节点是完全平等的，集群组建完成后，登录其中任意一个节点的 Web Console 都可以管理集群中所有节点的资源。</p>
+<h2 id="二pve-控制台的使用" class="headerLink">
+    <a href="#%e4%ba%8cpve-%e6%8e%a7%e5%88%b6%e5%8f%b0%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>二、PVE 控制台的使用</h2><p>PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不做详细介绍，主要说明下一些要点：</p>
+<ul>
+<li>CPU
+<ul>
+<li>对于比较吃性能或者对实时性要求高的虚拟机如 windows/openwrt，可以将其 CPU 类型设置为 <code>host</code></li>
+<li>对于虚拟机核数，请将 <code>sockets</code> 设为 1（即 CPU 插槽数，一般物理服务器才会有 2 及以上的 CPU 插槽），cores 设为你想分配给该虚拟机的 CPU 核数</li>
+<li>仅针对多物理 CPU 场景（多 <code>sockets</code>）才需要启用 NUMA</li>
+</ul>
+</li>
+<li>磁盘、网卡
+<ul>
+<li>尽量使用 <code>virtio</code> 作为 scsi 磁盘、network 网卡的虚拟化控制器，它的性能最高</li>
+<li>如果硬盘是 SSD，虚拟机磁盘可以启用 <code>SSD Emulation</code>，对于 IO 性能要求高的场景还可以为磁盘勾选 <code>IO  Thread</code> 功能</li>
+</ul>
+</li>
+<li>其他选项
+<ul>
+<li>调整启动项顺序，对于 cloud image 建议只启用 scsi0 这个选项</li>
+</ul>
+</li>
+<li>虚拟机模板（Template）与克隆（Clone）
+<ul>
+<li>建议首先使用 ubuntu/opensuse cloud image 配置好基础环境（比如安装好 vim/curl/qemu-guest-agent），然后转换为 template，其他所有 Linux 虚拟机都可以直接 clone 一个，改个新名字，再改改 cloudinit 配置跟磁盘大小，就能直接启动使用了。相当方便。</li>
+<li>仅 Full Clone 的虚拟机才可以在 PVE 集群节点间随意迁移，因此如果你需要虚拟机迁移功能，请不要使用 Link Clone.</li>
+</ul>
+</li>
+<li>BIOS 通常都建议使用默认的 SeaBIOS，仅 Windows 等场景才建议换成 OMVF(UEFI)
+<ul>
+<li>OMVF 的分辨率、Secure Boot 等参数，都可以在启动时按 ESC 进入 UEFI 配置界面来调整。</li>
+</ul>
+</li>
+</ul>
+<p>而 PCIe 直通之类的高级功能，我现在还没玩到，建议自行搜索相关资料&hellip;</p>
+<h3 id="1-使用-cloudinit-自动配置网卡ssh密钥存储空间" class="headerLink">
+    <a href="#1-%e4%bd%bf%e7%94%a8-cloudinit-%e8%87%aa%e5%8a%a8%e9%85%8d%e7%bd%ae%e7%bd%91%e5%8d%a1ssh%e5%af%86%e9%92%a5%e5%ad%98%e5%82%a8%e7%a9%ba%e9%97%b4" class="header-mark"></a>1. 使用 cloudinit 自动配置网卡、SSH密钥、存储空间</h3><blockquote>
+<p>完全参照官方文档 <a href="https://pve.proxmox.com/wiki/Cloud-Init_Support" target="_blank" rel="noopener noreferrer">Cloud-Init_Support - PVE Docs</a></p>
+</blockquote>
+<blockquote>
+<p>注意：下面的几种镜像都分别有自己的坑点，仅 Ubuntu/OpenSUSE 测试通过，其他发行版的 Cloud 镜像都有各种毛病&hellip;</p>
+</blockquote>
+<p>首先下载 Cloud 版本的系统镜像：</p>
+<ol>
+<li><a href="https://cloud-images.ubuntu.com/releases/" target="_blank" rel="noopener noreferrer">Ubuntu Cloud Images (RELEASED)</a>: 提供 img 格式的裸镜像（PVE 也支持此格式）
+<ul>
+<li>请下载带有 .img 结尾的镜像，其中 <code>kvm.img</code> 结尾的镜像会更精简一点。</li>
+</ul>
+</li>
+<li><a href="https://download.opensuse.org/repositories/Cloud:/Images:/" target="_blank" rel="noopener noreferrer">OpenSUSE Cloud Images</a>
+<ul>
+<li>请下载带有 NoCloud 或者 OpenStack 字样的镜像。</li>
+</ul>
+</li>
+<li>对于其他镜像，可以考虑手动通过 iso 来制作一个 cloudinit 镜像，参考 <a href="https://docs.openstack.org/image-guide/ubuntu-image.html" target="_blank" rel="noopener noreferrer">openstack - create ubuntu cloud images from iso</a></li>
+</ol>
+<blockquote>
+<p>注：<a href="https://cdimage.debian.org/cdimage/cloud/" target="_blank" rel="noopener noreferrer">Debian Cloud Images</a> 的镜像无法使用，其他 ubuntu/opensuse 的 cloud 镜像也各有问题&hellip;在后面的常见问题中有简单描述这些问题。</p>
+</blockquote>
+<p>上述镜像和我们普通虚拟机使用的 ISO 镜像的区别，一是镜像格式不同，二是都自带了 <code>cloud-init</code>/<code>qemu-guest-agent</code>/<code>cloud-utils-growpart</code> 等 cloud 相关软件。</p>
+<p>其中 NoCloud 表示支持 cloudinit NoCloud 数据源——即使用 <code>seed.iso</code> 提供 user-data/meta-data/network-config 配置，PVE 就是使用的这种模式。
+而 Openstack 镜像通常也都支持 NoCloud 模式，所以一般也是可以使用的。</p>
+<p>cloud image 基本都没有默认密码，并且禁用了 SSH 密码登录，必须通过 cloud-init 设置私钥方式进行 ssh 登录。</p>
+<p>建议在 cloud-init 配置中自行设置账号与私钥，不要使用默认的账号名。
+比如测试环境，可以直接设置账号为 root，并设置相应的私钥。</p>
+<p>接下来我们需要将得到的 qcow2 镜像导入 PVE，并用它创建一个虚拟机模板。</p>
+<p>首先创建虚拟机，并以导入的磁盘为该虚拟机的硬盘</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 创建新虚拟机</span>
+</span></span><span class="line"><span class="cl">qm create <span class="m">9000</span> --name ubuntu-bionic-template --memory <span class="m">2048</span> --net0 virtio,bridge<span class="o">=</span>vmbr0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 将下载好的 img/qcow2 镜像导入为新虚拟机的硬盘</span>
+</span></span><span class="line"><span class="cl">qm importdisk <span class="m">9000</span> ubuntu-20.10-server-cloudimg-amd64.img local-lvm
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过 scsi 方式，将导入的硬盘挂载到虚拟机上</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">9000</span> --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9000-disk-0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># qcow2 镜像默认仅 2G 大小，需要手动扩容到 32G，否则虚拟机启动会报错</span>
+</span></span><span class="line"><span class="cl">qm resize <span class="m">9000</span> scsi0 32G
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 创建一个 cloud-init 需要使用的 CDROM 盘(sr0)</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">9000</span> --ide2 local-lvm:cloudinit
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置系统引导盘</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">9000</span> --boot c --bootdisk scsi0
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置 serial0 为显示终端，很多云镜像都需要这个。（？感觉我不需要？）</span>
+</span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">9000</span> --serial0 socket --vga serial0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>后续配置：</p>
+<ol>
+<li>手动设置 cloud-init 参数，<strong>重新生成 cloudinit image</strong>，启动虚拟机，并通过 ssh 登入远程终端</li>
+<li>检查 qemu-guest-agent，如果未自带，一定要手动安装它！
+<ol>
+<li>ubuntu 需要通过 <code>sudo apt install qemu-guest-agent</code> 手动安装它</li>
+</ol>
+</li>
+<li>安装所需的基础环境，如 docker/docker-compose/vim/git/python3</li>
+<li>关闭虚拟机，然后将虚拟机设为模板</li>
+<li>接下来就可以从这个模板虚拟机，克隆各类新虚拟机了~</li>
+</ol>
+<p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" title="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-sub-html="<h2>改完配置后一定要点击 Regenerate Image!</h2>">
+        <img
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp"
+            data-srcset="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 1.5x, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 2x"
+            data-sizes="auto"
+            alt="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp">
+    </a><figcaption class="image-caption">改完配置后一定要点击 Regenerate Image!</figcaption>
+    </figure></p>
+<p>其他 cloudinit 相关文档：</p>
+<ul>
+<li><a href="https://support.huaweicloud.com/usermanual-ims/ims_01_0407.html" target="_blank" rel="noopener noreferrer">配置 Cloud-Init 工具 - 华为云</a></li>
+<li><a href="https://github.com/canonical/cloud-init" target="_blank" rel="noopener noreferrer">canonical/cloud-init - github</a></li>
+<li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-2-virtual-machine.html" target="_blank" rel="noopener noreferrer">Run Amazon Linux 2 as a virtual machine on premises</a></li>
+</ul>
+<h3 id="2-虚拟机硬盘扩容" class="headerLink">
+    <a href="#2-%e8%99%9a%e6%8b%9f%e6%9c%ba%e7%a1%ac%e7%9b%98%e6%89%a9%e5%ae%b9" class="header-mark"></a>2. 虚拟机硬盘扩容</h3><p>CentOS/Ubuntu/Debian 提供的 Cloud 镜像，都自带了 <code>cloud-utils-growpart</code> 这个组件，可以实现在扩容物理硬盘时，自动调整 Linux 的分区大小。</p>
+<p>因此需要扩容虚拟机时，直接通过 UI 面板/命令行扩容虚拟机的硬盘即可， Linux 的分区会被 <code>cloud-utils-growpart</code> 自动扩容。</p>
+<blockquote>
+<p>因为这个方便的特性，也为了减少虚拟化的开销，Cloud 镜像默认是不使用 LVM 逻辑分区的。
+LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟机因为本身就能动态扩容“物理硬盘”的大小，基本不用不到 LVM。</p>
+</blockquote>
+<blockquote>
+<p>还有一点，就是虚拟机通常只需要一个根分区就行，尤其是归 openstack/kubernetes 管的虚拟机。
+只有在使用分布式存储之类的场景下，数据需要独立存储，才需要用到额外的分区(<code>/data</code> 之类的)。
+一般只有物理机，才需要像网上很多文章提的那样，为 <code>/boot</code> <code>/</code> <code>/home</code> 去单独分区。
+而且现在大家都用 SSD 了，物理机这样做分区的都少了，比如我个人电脑，就是一个 <code>/</code> 分区打天下。。。</p>
+</blockquote>
+<h2 id="三常见问题" class="headerLink">
+    <a href="#%e4%b8%89%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" class="header-mark"></a>三、常见问题</h2><h3 id="1-导入已有的-qcow2-镜像" class="headerLink">
+    <a href="#1-%e5%af%bc%e5%85%a5%e5%b7%b2%e6%9c%89%e7%9a%84-qcow2-%e9%95%9c%e5%83%8f" class="header-mark"></a>1. 导入已有的 qcow2 镜像</h3><blockquote>
+<p>必须要命令行操作</p>
+</blockquote>
+<p>先通过 scp 将 qcow2 传输到 PVE 上，然后命令行使用如下命令导入镜像：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 命令格式</span>
+</span></span><span class="line"><span class="cl">qm importdisk &lt;vmid&gt; &lt;source&gt; &lt;storage&gt;
+</span></span><span class="line"><span class="cl"><span class="c1"># 示例</span>
+</span></span><span class="line"><span class="cl">qm importdisk <span class="m">201</span> vm-201-disk-1.qcow2 local-lvm
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>导入完成后，在 WebUI 界面的左侧会看到多了一个「未使用的磁盘 0」，
+现在新建一台新虚拟机，然后删除掉默认的磁盘（分离+删除，要两步），然后挂载这个「未使用的磁盘 0」就大功告成了。</p>
+<h3 id="2-点击-shutdown-后-pve-系统卡住" class="headerLink">
+    <a href="#2-%e7%82%b9%e5%87%bb-shutdown-%e5%90%8e-pve-%e7%b3%bb%e7%bb%9f%e5%8d%a1%e4%bd%8f" class="header-mark"></a>2. 点击 shutdown 后 PVE 系统卡住</h3><p>PVE 的 <code>shutdown</code> 功能依赖 <code>qemu-guest-agent</code>，对于还没有安装 <code>qemu-guest-agent</code> 的任何主机，或者已经卡死无响应的虚拟机，千万不要点 <code>shutdown</code> 按钮，因为一定会卡住很久，最后失败！</p>
+<p><code>shutdown</code> 卡住的解决办法：手动在下方的「Tasks」面板中双击卡住的「Shutdown」操作，然后点击「stop」停止该操作。</p>
+<p>该如何关闭这类没有 <code>qemu-guest-agent</code> 或者已经卡死无响应的主机？答案是使用 <code>stop</code>！</p>
+<h3 id="3-cant-lock-file-varlockqemu-serverlock-xxxconf--got-timeout" class="headerLink">
+    <a href="#3-cant-lock-file-varlockqemu-serverlock-xxxconf--got-timeout" class="header-mark"></a>3. can’t lock file ‘/var/lock/qemu-server/lock-xxx.conf’ – got timeout</h3><p>PVE 虚拟机卡在 BIOS 系统引导这一步，无法启动，也无法 <code>stop</code>！</p>
+<p>解决方法：手动删除掉 lockfile: <code>/var/lock/qemu-server/lock-xxx.conf</code></p>
+<p>因为虚拟机还卡在 BIOS 引导这一步，删除掉 lockfile 再关闭虚拟机并不会导致数据丢失。</p>
+<h3 id="4-pve-集群有一个节点宕机如何解除关联" class="headerLink">
+    <a href="#4-pve-%e9%9b%86%e7%be%a4%e6%9c%89%e4%b8%80%e4%b8%aa%e8%8a%82%e7%82%b9%e5%ae%95%e6%9c%ba%e5%a6%82%e4%bd%95%e8%a7%a3%e9%99%a4%e5%85%b3%e8%81%94" class="header-mark"></a>4. PVE 集群有一个节点宕机，如何解除关联？</h3><p>将多个节点组成一个 PVE Cluster 是很自然的一个选择，它能提供虚拟机热迁移（同 CPU 供应商）、统一管理面板等非常方便的功能。
+但是这会带来集群级别的高可用问题。</p>
+<p>根据官方文档 <a href="https://pve.proxmox.com/wiki/Cluster_Manager" target="_blank" rel="noopener noreferrer">Cluster_Manager - Proxmox</a>，如果你需要容忍一定数量的节点宕机，PVE Cluster 至少需要三台主机（这跟 Etcd 一样，是 Raft 共识算法的要求），并且所有节点的 PVE 版本要完全一致。</p>
+<p>那么如果节点除了问题，无法修复，该如何将它踢出集群呢？</p>
+<p>如果节点仍然处于可用状态，宕机节点数低于 1/2，流程如下：</p>
+<ul>
+<li>首先通过访问节点的 shell 界面，通过命令 <code>pvecm nodes</code> 确认集群的所有节点</li>
+<li>将需要移除的节点彻底关机，并且确保它不会以当前配置再次启动（也就是说关机后需要清空硬盘，避免数据混乱）</li>
+<li>通过命令 <code>pvecm delnode xxx</code> 将问题节点移除集群</li>
+<li>将旧节点清理干净，重新装机。</li>
+</ul>
+<p>如果你的集群只有 2 个节点，或者有超过 3 个节点但是有超过 1/2 不可用且无法恢复，那出于数据一致性要求，上面的流程就走不通了。会报错 <code>cluster not ready - no quorum?</code> 这时需要首先修改配置，使剩下的节点重新达成一致。其实就是修改选主节点时的投票数。</p>
+<p>对于 2 个节点但挂掉 1 个的情况，首先执行如下指令允许当前节点自己选主：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 设置只需要 1 票就能当前主节点</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 潜在问题是可能有些集群元数据只在损坏节点上有，这么改会导致这些数据丢失，从而造成一些问题。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 安全起见，建议在修复集群后，再重启一遍节点...</span>
+</span></span><span class="line"><span class="cl">pvecm expected <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在 quorum 就已经恢复了，可以走前面给出的节点移除流程。</p>
+<p>如果 corosync 完全无法启动，上面给出的命令也会修改选主投票参数也会失败，这时可以直接手动修改 <code>/etc/corosync/corosync.conf</code> 使 corosync 能正常启动。</p>
+<h3 id="5-cloud-image-的坑" class="headerLink">
+    <a href="#5-cloud-image-%e7%9a%84%e5%9d%91" class="header-mark"></a>5. cloud image 的坑</h3><h4 id="ubuntu-cloud-image-的坑" class="headerLink">
+    <a href="#ubuntu-cloud-image-%e7%9a%84%e5%9d%91" class="header-mark"></a>ubuntu cloud image 的坑</h4><ul>
+<li>ubuntu 启动时会报错 <code>no such device: root</code>，但是过一会就会正常启动。
+<ul>
+<li>这是 ubuntu cloud image 的 bug: <a href="https://bugs.launchpad.net/cloud-images/&#43;bug/1726476" target="_blank" rel="noopener noreferrer">https://bugs.launchpad.net/cloud-images/+bug/1726476</a></li>
+</ul>
+</li>
+<li>ubuntu 启动后很快就会进入登录界面，但是 root 密码可能还没改好，登录会报密码错误，等待一会再尝试登录就 OK 了</li>
+<li>ubuntu 的默认网卡名称是 ens3，不是 eth0，注意修改 network_config 的网卡名称，否则网络配置不会生效</li>
+</ul>
+<h4 id="opensuse-cloud-image-的坑" class="headerLink">
+    <a href="#opensuse-cloud-image-%e7%9a%84%e5%9d%91" class="header-mark"></a>opensuse cloud image 的坑</h4><ul>
+<li>opensuse leap 15 只支持 network_config v1，对 v2 的支持有 bug，<code>gateway4</code> 不会生效</li>
+</ul>
+<h4 id="debian-cloud-image-的坑" class="headerLink">
+    <a href="#debian-cloud-image-%e7%9a%84%e5%9d%91" class="header-mark"></a>debian cloud image 的坑</h4><p>debian 的 cloud 镜像根本没法用，建议避免使用它。</p>
+<ul>
+<li>debian 启动时会彻底卡住，或者直接报错 kernel panic
+<ul>
+<li>原因是添加了 spice 图形卡，换成 vnc 就正常了</li>
+</ul>
+</li>
+<li><a href="https://cdimage.debian.org/cdimage/cloud/" target="_blank" rel="noopener noreferrer">Debian Cloud Images</a> 中的 nocloud 镜像不会在启动时运行 cloudinit，cloudinit 完全不生效
+<ul>
+<li>不知道是啥坑，没解决</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-克隆创建的虚拟机卡在-booting-from-hard-disk-状态" class="headerLink">
+    <a href="#6-%e5%85%8b%e9%9a%86%e5%88%9b%e5%bb%ba%e7%9a%84%e8%99%9a%e6%8b%9f%e6%9c%ba%e5%8d%a1%e5%9c%a8-booting-from-hard-disk-%e7%8a%b6%e6%80%81" class="header-mark"></a>6. 克隆创建的虚拟机，卡在 <code>Booting from Hard Disk...</code> 状态</h3><p>被用做模板的虚拟机可以正常启动，但是克隆的虚拟机就卡住了。</p>
+<p>可能的原因：</p>
+<ol>
+<li>磁盘有问题，出这个问题的 cloud image 是 <code>ubuntu-20.10-server-cloudimg-amd64.img</code>，我更换成 <code>ubuntu-20.10-server-cloudimg-amd64-disk-kvm.img</code> 就没问题了。
+<ol>
+<li>磁盘镜像均下载自 <a href="https://cloud-images.ubuntu.com/releases/groovy/release-20201210/" target="_blank" rel="noopener noreferrer">https://cloud-images.ubuntu.com/releases/groovy/release-20201210/</a></li>
+</ol>
+</li>
+<li>BIOS 不匹配：将 BIOS 从 SeaBIOS 切换到 UEFI</li>
+</ol>
+<h3 id="7-虚拟机启动时-cloudinit-报错-faild-to-start-openbsd-secure-shell-server" class="headerLink">
+    <a href="#7-%e8%99%9a%e6%8b%9f%e6%9c%ba%e5%90%af%e5%8a%a8%e6%97%b6-cloudinit-%e6%8a%a5%e9%94%99-faild-to-start-openbsd-secure-shell-server" class="header-mark"></a>7. 虚拟机启动时 cloudinit 报错 faild to start OpenBSD Secure Shell server</h3><p>有如下几种可能：</p>
+<ul>
+<li><strong>可能性一：虚拟机名称包含非法字符</strong>
+<ul>
+<li>pve 的 cloudinit 配置会在启动时尝试将虚拟机 hostname 修改为与虚拟机一致，但是又没有对虚拟机名称做合法性校验&hellip;</li>
+<li>当你使用的虚拟机名称包含了非法字符时就会出这个问题，比如 <code>ubuntu-22.10-cloudimage-template</code>，其中的 <code>.</code> 就是非法的， <code>.</code> 在 DNS 中用于划分不同的域！</li>
+<li><strong>解决方法</strong>：克隆个新虚拟机，将名称改为合法名称，问题就解决了。</li>
+</ul>
+</li>
+<li><strong>可能性二：磁盘空间不足</strong>
+<ul>
+<li>
+<p>qcow 镜像转换成的虚拟机磁盘很小，只有 2G，如果不扩容，启动时就会出各种奇怪的问题。</p>
+</li>
+<li>
+<p><strong>解决方法</strong>：通过 Web UI 扩容磁盘大小，建议至少给 32G。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-修改-linux-虚拟机的-hostname" class="headerLink">
+    <a href="#8-%e4%bf%ae%e6%94%b9-linux-%e8%99%9a%e6%8b%9f%e6%9c%ba%e7%9a%84-hostname" class="header-mark"></a>8. 修改 Linux 虚拟机的 Hostname</h3><p>如前所述，pve 的 cloudinit 配置会在启动时尝试将虚拟机 hostname 修改为与虚拟机一致，这导致手动修改无法生效无效。</p>
+<p>解决方法：从旧的虚拟机克隆一个新虚拟机，将虚拟机名称改为你期望的 hostname，然后删除旧虚拟机，启动新克隆的虚拟机，即完成了 hostname 重命名。</p>
+<h2 id="四pve-网络配置" class="headerLink">
+    <a href="#%e5%9b%9bpve-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae" class="header-mark"></a>四、PVE 网络配置</h2><h3 id="1-桥接多张物理网卡" class="headerLink">
+    <a href="#1-%e6%a1%a5%e6%8e%a5%e5%a4%9a%e5%bc%a0%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>1. 桥接多张物理网卡</h3><p>示例如下，主要就是在 vmbr0 网桥的 <code>Bridge Ports</code> 里面：</p>
+<p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-multiple-nic.webp" title="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-sub-html="<h2>桥接多张物理网卡</h2>">
+        <img
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/pve-multiple-nic.webp"
+            data-srcset="/images/proxmox-ve-instruction/pve-multiple-nic.webp, /images/proxmox-ve-instruction/pve-multiple-nic.webp 1.5x, /images/proxmox-ve-instruction/pve-multiple-nic.webp 2x"
+            data-sizes="auto"
+            alt="/images/proxmox-ve-instruction/pve-multiple-nic.webp">
+    </a><figcaption class="image-caption">桥接多张物理网卡</figcaption>
+    </figure></p>
+<h3 id="2-手动添加-usb-物理网卡" class="headerLink">
+    <a href="#2-%e6%89%8b%e5%8a%a8%e6%b7%bb%e5%8a%a0-usb-%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>2. 手动添加 USB 物理网卡</h3><blockquote>
+<p>参考官方文档: <a href="https://pve.proxmox.com/pve-docs/chapter-sysadmin.html#sysadmin_network_configuration" target="_blank" rel="noopener noreferrer">SysAdmin - Network Configuration</a></p>
+</blockquote>
+<p>我遇到这个问题的场景是：我的 mini 主机（GTR5）只有两个 2.5G 网卡，不太够用。而家里的路由器剩下的都是千兆网口，路由器也难以拓展网卡。
+网上搜了下 2.5G 交换机又发现价格 429 起步，所以决定买两张 USB 2.5GbE 网卡插在这台小主机上作为便宜的网口拓展方案。</p>
+<p>现在网卡有了，有两种方式可以让 PVE 识别到这张网卡：</p>
+<ol>
+<li>方法一：直接重启机器，然后就能在 Web UI 的 <code>Network</code> 配置中见到这张 USB 网卡了。之后直接把该网卡加入到 vmbr 网桥的 <code>Bridge Ports</code> 中并应用配置，就大功告成了。</li>
+<li>方法二：不重启机器实现添加 USB 网卡。如果机器不能重启，就可以走这个流程：
+<ol>
+<li>首先，使用 <code>ip link</code> 命令打印出当前的所有网络接口</li>
+<li>将 2.5GbE 网卡插到 USB3.0 端口上，Linux 将自动识别到它</li>
+<li>现在再使用 <code>ip link</code> 命令查看所有网络接口，找到新增的接口名称（通常在输出内容最末尾）。
+<ol>
+<li>在我的环境中新的 USB 网卡名称为 <code>enx00e04c680178</code></li>
+</ol>
+</li>
+<li>在配置文件 <code>/etc/network/interfaces</code> 的末尾新增一行：<code>iface enx00e04c680178 inet manual</code>（注意替换网卡名称）</li>
+<li>现在直接刷新 Web UI 页面， USB 网卡就会出现了。之后直接把该网卡加入到 vmbr 网桥的 <code>Bridge Ports</code> 中并应用配置，就大功告成了。</li>
+</ol>
+</li>
+</ol>
+<h3 id="3-配置-wifi-网卡" class="headerLink">
+    <a href="#3-%e9%85%8d%e7%bd%ae-wifi-%e7%bd%91%e5%8d%a1" class="header-mark"></a>3. 配置 WiFi 网卡</h3><p>如果主机自带了 WiFi 网卡，启动后 Proxmox VE 能识别到该网卡，但是无法通过 Web UI 修改它的任何配置。</p>
+<p>那么本着物尽其用的精神，该如何利用上这张 WiFi 网卡呢？</p>
+<p>根据 PVE 官方文档 <a href="https://pve.proxmox.com/wiki/WLAN" target="_blank" rel="noopener noreferrer">WLAN - Proxmox VE Docs</a>，并不建议在 PVE 上使用 WLAN，它存在如下问题：</p>
+<ul>
+<li>WiFi 自身必须是一个 Linux Bridge 设备，无法被桥接到 vmbr0 等网桥上。因为大多数 Access Point 都会直接拒绝掉未授权的源地址发过来的数据包&hellip;</li>
+<li>与有线连接相比，WiFi 的延迟要高得多，而且不太稳定。</li>
+</ul>
+<p>如果要配置 WLAN 网卡的话，可以直接参考 Debian 的官方文档进行配置：<a href="https://wiki.debian.org/WiFi/HowToUse" target="_blank" rel="noopener noreferrer">How to use a WiFi interface - Debian</a></p>
+<p>因此，我觉得将 WiFi 网卡直接 PCI 直通给机器内的 OpenWRT 虚拟机来玩，可能是更好的主意。</p>
+<p>后续将会更新相关内容&hellip;待续</p>
+<h2 id="拓展---cloudinit-高级配置" class="headerLink">
+    <a href="#%e6%8b%93%e5%b1%95---cloudinit-%e9%ab%98%e7%ba%a7%e9%85%8d%e7%bd%ae" class="header-mark"></a>拓展 - cloudinit 高级配置</h2><p>PVE 使用 CDROM 只读盘(<code>/dev/sr0</code>)来进行 cloud-init 的配置。
+在虚拟机启动后，<code>/dev/sr0</code> 将被卸载。</p>
+<p>可挂载上该只读盘，查看其中的初始化配置内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ mkdir cloud-config
+</span></span><span class="line"><span class="cl">$ mount /dev/sr0 cloud-config
+</span></span><span class="line"><span class="cl">mount: /dev/sr0 is write-protected, mounting read-only
+</span></span><span class="line"><span class="cl">$ ls cloud-config
+</span></span><span class="line"><span class="cl">meta-data  network-config  user-data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看其中内容，会发现 <code>user-data</code> 有很多参数都被硬编码了，没有通过 PVE Web Console 暴露出来，导致我们无法自定义这些配置。</p>
+<p>比如它硬编码了 <code>manage_etc_hosts: true</code>，强制每次都使用虚拟机的名称作为 hostname.</p>
+<p>如果确认有修改这些配置的需求，完全可以修改掉 PVE 代码里的硬编码参数。
+通过全文搜索即可找到硬编码参数的位置，以 <code>manage_etc_hosts</code> 为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 在 /usr/share 中全文搜索 manage_etc_hosts 这个关键字</span>
+</span></span><span class="line"><span class="cl">grep -r manage_etc_hosts /usr/share
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>直接就搜索到了硬编码位置是 <code>/usr/share/perl5/PVE/QemuServer/Cloudinit.pm</code>，修改对应的 cloudinit 配置模板，然后重启节点（重启才能重新加载对应的 ruby 程序），即可实现对该硬编码参数的修改。</p>
+<h2 id="拓展---自动化配置与监控告警" class="headerLink">
+    <a href="#%e6%8b%93%e5%b1%95---%e8%87%aa%e5%8a%a8%e5%8c%96%e9%85%8d%e7%bd%ae%e4%b8%8e%e7%9b%91%e6%8e%a7%e5%91%8a%e8%ad%a6" class="header-mark"></a>拓展 - 自动化配置与监控告警</h2><p>自动化沛卓：</p>
+<ol>
+<li><a href="https://github.com/Telmate/terraform-provider-proxmox/" target="_blank" rel="noopener noreferrer">Telmate/terraform-provider-proxmox</a>: 用户最多，但是只支持管理虚拟机资源</li>
+<li><a href="https://github.com/danitso/terraform-provider-proxmox" target="_blank" rel="noopener noreferrer">danitso/terraform-provider-proxmox</a>: stars 少，但是可以管理 PVE 的大部分资源，包括节点、用户、资源池、TLS证书等等
+<ul>
+<li>代码更顺眼，但是作者忙，没时间合并 pr，导致 Bug 更多一些</li>
+</ul>
+</li>
+<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-proxmox</a>: 我维护的一个 proxmox 自动配置工具</li>
+<li><a href="https://github.com/proxmoxer/proxmoxer" target="_blank" rel="noopener noreferrer">Python SDK</a></li>
+</ol>
+<p>监控告警：</p>
+<ul>
+<li><a href="https://github.com/prometheus-pve/prometheus-pve-exporter" target="_blank" rel="noopener noreferrer">prometheus pve expoter</a>: 通过 prometheus+grafana 监控 PVE 集群</li>
+</ul>
+<h2 id="拓展---其他-qemukvm-相关的虚拟化平台" class="headerLink">
+    <a href="#%e6%8b%93%e5%b1%95---%e5%85%b6%e4%bb%96-qemukvm-%e7%9b%b8%e5%85%b3%e7%9a%84%e8%99%9a%e6%8b%9f%e5%8c%96%e5%b9%b3%e5%8f%b0" class="header-mark"></a>拓展 - 其他 QEMU/KVM 相关的虚拟化平台</h2><p>PVE 毕竟是一个商业系统，虽然目前可以免费用，但是以后就不一定了。</p>
+<p>如果你担心 PVE 以后会不提供免费使用的功能，或者单纯想折腾折腾的技术，还可以试试下面这些虚拟化平台：</p>
+<ul>
+<li><a href="https://github.com/retspen/webvirtcloud" target="_blank" rel="noopener noreferrer">webvirtcloud</a>: 其前身是 webvirtmgr，一个完全开源的 QEMU/KVM Web UI，额外提供了用户管理功能。</li>
+<li><a href="https://github.com/kubevirt/kubevirt" target="_blank" rel="noopener noreferrer">kubevirt</a>: 基于 Kubernetes 进行虚拟化管理</li>
+<li><a href="https://github.com/rancher/harvester" target="_blank" rel="noopener noreferrer">rancher/harvester</a>: Rancher 开源的基于 Kubernetes 的超融合平台(HCI)
+<ul>
+<li>其底层使用 kubevirt 提供虚拟化能力，通过 longhorn 提供分布式存储能力。</li>
+<li>HCI 超融合 = 计算虚拟化 + 网络虚拟化 + 分布式存储，它和传统的虚拟化软件最大的不同是：分布式存储。</li>
+<li>企业级场景下一般至少得 10GbE 网络 + SSD 才能 hold 住 HCI 超融合架构。</li>
+<li>超融合对存储的一些要求：
+<ul>
+<li>软件定义 – 解除硬件绑定，可通过升级拓展更丰富的功能，自动化能力高</li>
+<li>全分布式架构 - 扩展性好，消除单点故障风险</li>
+<li>高可靠性 - 智能的故障恢复功能，丰富的数据保护手段</li>
+<li>高性能 – 支持多种存储介质，充分挖掘和利用新式硬件的性能</li>
+<li>高度融合 – 架构简单并易于管理</li>
+</ul>
+</li>
+<li>超融合架构可以降低私有云的构建与维护难度，让私有云的使用维护和公有云一样简单。</li>
+<li>超融合架构下，虚拟机的计算和存储是完全高可用的：计算资源能智能动态更换，存储也是分布式存储，底层计算和存储也可以很简单的扩缩容。</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考" class="headerLink">
+    <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/49118355" target="_blank" rel="noopener noreferrer">KVM 虚拟化环境搭建 - ProxmoxVE</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/49120559" target="_blank" rel="noopener noreferrer">KVM 虚拟化环境搭建 - WebVirtMgr</a></li>
+</ul>
+]]></content></entry><entry><title type="html">刻意练习</title><link href="https://thiscute.world/posts/deliberate-practice/"/><id>https://thiscute.world/posts/deliberate-practice/</id><author><name>ryan4yin</name></author><published>2022-10-05T13:31:00+08:00</published><updated>2022-10-05T13:31:00+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/deliberate-practice/deliberate-practice-achieve-mastery-in-anything.webp" height="1280" width="720"><figcaption></figcaption>
         </figure><p>我最近理解到一个事实——<strong>许多知识或者技能，都是可以通过正确的学习方法，加上短时间大量的练习，就能达到 60 分及格标准的</strong>。
 而这个及格水平，相对于完全没有进行过这样训练的其他人而言，可能就已经很惊艳了。</p>
@@ -6946,294 +7427,8 @@ $$</p>
     <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
 <li><a href="https://github.com/nakov/Practical-Cryptography-for-Developers-Book" target="_blank" rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></li>
 </ul>
-]]></content></entry><entry><title type="html">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</title><link href="https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/"/><id>https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:03+08:00</published><updated>2022-03-01T17:15:03+08:00</updated><content type="html"><![CDATA[<figure>
-          <img class="lazyload" src="/posts/practical-cryptography-basics-3-key-derivation-function/key.webp" height="1080" width="445"><figcaption></figcaption>
-        </figure><blockquote>
-<p>本文主要翻译自 <a href="https://github.com/nakov/Practical-Cryptography-for-Developers-Book" target="_blank" rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a>，笔者补充了 HMAC 的 Python 实现以及 scrypt 使用示例。</p>
-</blockquote>
-<p>《写给开发人员的实用密码学》系列文章目录：</p>
-<ul>
-<li><a href="/posts/practical-cryptography-basics-1/" rel="">写给开发人员的实用密码学（一）—— 概览</a></li>
-<li><a href="/posts/practical-cryptography-basics-2-hash/" rel="">写给开发人员的实用密码学（二）—— 哈希函数</a></li>
-<li><a href="/posts/practical-cryptography-basics-3-key-derivation-function/" rel="">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li>
-<li><a href="/posts/practical-cryptography-basics-4-secure-random-generators/" rel="">写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></li>
-<li><a href="/posts/practical-cryptography-basics-5-key-exchange/" rel="">写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></li>
-<li><a href="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/" rel="">写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></li>
-<li><a href="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/" rel="">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></li>
-<li><a href="/posts/about-tls-cert" rel="">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></li>
-<li>待续</li>
-</ul>
-<h2 id="一mac-消息认证码" class="headerLink">
-    <a href="#%e4%b8%80mac-%e6%b6%88%e6%81%af%e8%ae%a4%e8%af%81%e7%a0%81" class="header-mark"></a>一、MAC 消息认证码</h2><p>MAC 消息认证码，即 Message Authentication Code，是用于验证消息的一小段信息。
-换句话说，能用它确认消息的真实性——消息来自指定的发件人并且没有被篡改。</p>
-<p>MAC 值通过允许验证者（也拥有密钥）检测消息内容的任何更改来保护消息的数据完整性及其真实性。</p>
-<p>一个安全的 MAC 函数，跟加密哈希函数非常类似，也拥有如下特性：</p>
-<ul>
-<li><strong>快速</strong>：计算速度要足够快</li>
-<li><strong>确定性</strong>：对同样的消息跟密钥，应该总是产生同样的输出</li>
-<li><strong>难以分析</strong>：对消息或密钥的任何微小改动，都应该使输出完全发生变化</li>
-<li><strong>不可逆</strong>：从 MAC 值逆向演算出消息跟密钥应该是不可行的。</li>
-<li><strong>无碰撞</strong>：找到具有相同哈希的两条不同消息应该非常困难（或几乎不可能）</li>
-</ul>
-<p>但是 MAC 算法比加密哈希函数多一个输入值：密钥，因此也被称为 keyed hash functions，即「加密钥的哈希函数」。</p>
-<p>如下 Python 代码使用 key 跟 消息计算出对应的 HMAC-SHA256 值：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span><span class="o">,</span> <span class="nn">hmac</span><span class="o">,</span> <span class="nn">binascii</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;key&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">msg</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;some msg&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">mac</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;HMAC-SHA256(</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">)&#34;</span><span class="p">,</span> <span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="n">mac</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># =&gt; HMAC-SHA256(b&#39;key&#39;, b&#39;some msg&#39;) = 32885b49c8a1009e6d66662f8462e7dd5df769a7b725d1d546574e6d5d6e76ad</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>HMAC 的算法实际上非常简单，我参考 <a href="https://en.wikipedia.org/wiki/HMAC" target="_blank" rel="noopener noreferrer">wiki/HMAC</a> 给出的伪码，编写了下面这个 Python 实现，没几行代码，但是完全 work：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span><span class="o">,</span> <span class="nn">binascii</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xor_bytes</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">c</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">my_hmac</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">hash_name</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># hash =&gt; (block_size, output_size)</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># 单位是 bytes，数据来源于 https://en.wikipedia.org/wiki/HMAC</span>
-</span></span><span class="line"><span class="cl">  <span class="n">hash_size_dict</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;md5&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha1&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha224&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha256&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># &#34;sha512/224&#34;: (128, 28),  # 这俩算法暂时不清楚在 hashlib 里叫啥名</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># &#34;sha512/256&#34;: (128, 32),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha_384&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">48</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha_512&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha3_224&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">144</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha3_256&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">136</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha3_384&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">104</span><span class="p">,</span> <span class="mi">48</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;sha3_512&#34;</span><span class="p">:</span> <span class="p">(</span><span class="mi">72</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">hash_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hash_size_dict</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&#34;unknown hash_name&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">block_size</span><span class="p">,</span> <span class="n">output_size</span> <span class="o">=</span> <span class="n">hash_size_dict</span><span class="p">[</span><span class="n">hash_name</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="n">hash_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">hashlib</span><span class="p">,</span> <span class="n">hash_name</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># 确保 key 的长度为 block_size</span>
-</span></span><span class="line"><span class="cl">  <span class="n">block_sized_key</span> <span class="o">=</span> <span class="n">key</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">block_size</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">block_sized_key</span> <span class="o">=</span> <span class="n">hash_</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>  <span class="c1"># 用 hash 函数进行压缩</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">block_size</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">block_sized_key</span> <span class="o">+=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="n">block_size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>  <span class="c1"># 末尾补 0</span>
-</span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">  <span class="n">o_key_pad</span> <span class="o">=</span> <span class="n">xor_bytes</span><span class="p">(</span><span class="n">block_sized_key</span><span class="p">,</span> <span class="p">(</span><span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x5c</span><span class="s2">&#34;</span> <span class="o">*</span> <span class="n">block_size</span><span class="p">))</span>  <span class="c1"># Outer padded key</span>
-</span></span><span class="line"><span class="cl">  <span class="n">i_key_pad</span> <span class="o">=</span> <span class="n">xor_bytes</span><span class="p">(</span><span class="n">block_sized_key</span><span class="p">,</span> <span class="p">(</span><span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x36</span><span class="s2">&#34;</span> <span class="o">*</span> <span class="n">block_size</span><span class="p">))</span>  <span class="c1"># Inner padded key</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">hash_</span><span class="p">(</span><span class="n">o_key_pad</span> <span class="o">+</span> <span class="n">hash_</span><span class="p">(</span><span class="n">i_key_pad</span> <span class="o">+</span> <span class="n">msg</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 下面验证下</span>
-</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;key&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">msg</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;some msg&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">mac_</span> <span class="o">=</span> <span class="n">my_hmac</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="s2">&#34;sha256&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;HMAC-SHA256(</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">)&#34;</span><span class="p">,</span> <span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="n">mac_</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 输出跟标准库完全一致：</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># =&gt; HMAC-SHA256(b&#39;key&#39;, b&#39;some msg&#39;) = 32885b49c8a1009e6d66662f8462e7dd5df769a7b725d1d546574e6d5d6e76ad</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="mac-与哈希函数数字签名的区别" class="headerLink">
-    <a href="#mac-%e4%b8%8e%e5%93%88%e5%b8%8c%e5%87%bd%e6%95%b0%e6%95%b0%e5%ad%97%e7%ad%be%e5%90%8d%e7%9a%84%e5%8c%ba%e5%88%ab" class="header-mark"></a>MAC 与哈希函数、数字签名的区别</h3><p>上一篇文章提到过，哈希函数只负责生成哈希值，不负责哈希值的可靠传递。</p>
-<p>而数字签名呢，跟 MAC 非常相似，但是数字签名使用的是非对称加密系统，更复杂，计算速度也更慢。</p>
-<p>MAC 的功能跟数字签名一致，都是验证消息的真实性（authenticity）、完整性（integrity）、不可否认性（non-repudiation），但是 MAC 使用哈希函数或者对称密码系统来做这件事情，速度要更快，算法也更简单。</p>
-<h3 id="mac-的应用" class="headerLink">
-    <a href="#mac-%e7%9a%84%e5%ba%94%e7%94%a8" class="header-mark"></a>MAC 的应用</h3><h4 id="1-验证消息的真实性完整性" class="headerLink">
-    <a href="#1-%e9%aa%8c%e8%af%81%e6%b6%88%e6%81%af%e7%9a%84%e7%9c%9f%e5%ae%9e%e6%80%a7%e5%ae%8c%e6%95%b4%e6%80%a7" class="header-mark"></a>1. 验证消息的真实性、完整性</h4><p>这是最简单的一个应用场景，在通信双向都持有一个预共享密钥的前提下，通信时都附带上消息的 MAC 码。
-接收方也使用「收到的消息+预共享密钥」计算出 MAC 码，如果跟收到的一致，就说明消息真实无误。</p>
-<p>注意这种应用场景中，消息是不保密的！</p>
-<figure><img src="/images/practical-cryptography-basics-3-key-derivation-function/mac-message-is-authentic.webp"/>
-</figure>
-
-<h4 id="2-ae-认证加密---authenticated-encryption" class="headerLink">
-    <a href="#2-ae-%e8%ae%a4%e8%af%81%e5%8a%a0%e5%af%86---authenticated-encryption" class="header-mark"></a>2. AE 认证加密 - Authenticated encryption</h4><p>常用的加密方法只能保证数据的保密性，并不能保证数据的完整性。</p>
-<p>而这里介绍的 MAC 算法，或者还未介绍的基于非对称加密的数字签名，都只能保证数据的真实性、完整性，不能保证数据被安全传输。</p>
-<p>而认证加密，就是将加密算法与 MAC 算法结合使用的一种加密方案。</p>
-<p>在确保 MAC 码「强不可伪造」的前提下，首先对数据进行加密，然后计算密文的 MAC 码，再同时传输密文与 MAC 码，就能同时保证数据的保密性、完整性、真实性，这种方法叫 Encrypt-then-MAC, 缩写做 EtM. 接收方在解密前先计算密文的 MAC 码与收到的对比，就能验证密文的完整性与真实性。</p>
-<p>AE 有一种更安全的变体——<strong>带有关联数据的认证加密</strong> (authenticated encryption with associated data，<strong>AEAD</strong>)。
-AEAD 将「关联数据(Associated Data, AD)」——也称为「附加验证数据（Additional Authenticated Data, AAD）」——绑定到密文和它应该出现的上下文，以便可以检测和拒绝将有效密文“剪切并粘贴”到不同上下文的尝试。 AEAD 用于加密和未加密数据一起使用的场景（例如，在加密的网络协议中），并确保整个数据流经过身份验证和完整性保护。
-换句话说，AEAD 增加了检查某些内容的完整性和真实性的能力。</p>
-<p>我们会在第六章「对称加密算法」中看到如何通过 Python 使用 AEAD 加密方案 AES-256-GCM.</p>
-<h4 id="3-基于-mac-的伪随机数生成器" class="headerLink">
-    <a href="#3-%e5%9f%ba%e4%ba%8e-mac-%e7%9a%84%e4%bc%aa%e9%9a%8f%e6%9c%ba%e6%95%b0%e7%94%9f%e6%88%90%e5%99%a8" class="header-mark"></a>3. 基于 MAC 的伪随机数生成器</h4><p>MAC 码的另一个用途就是伪随机数生成函数，相比直接使用熵+哈希函数的进行伪随机数计算，MAC 码因为多引入了一个变量 key，理论上它会更安全。</p>
-<p>这种场景下，我们称 MAC 使用的密钥为 <code>salt</code>，即盐。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">next_seed = MAC(salt, seed)
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="二kdf-密钥派生函数" class="headerLink">
-    <a href="#%e4%ba%8ckdf-%e5%af%86%e9%92%a5%e6%b4%be%e7%94%9f%e5%87%bd%e6%95%b0" class="header-mark"></a>二、KDF 密钥派生函数</h2><p>我们都更喜欢使用密码来保护自己的数据而不是二进制的密钥，因为相比之下二进制密钥太难记忆了，字符形式的密码才是符合人类思维习惯的东西。</p>
-<p>可对计算机而言就刚好相反了，现代密码学的很多算法都要求输入是一个大的数字，二进制的密钥就是这样一个大的数字。
-因此显然我们需要一个将字符密码（Password）转换成密钥（Key）的函数，这就是密钥派生函数 Key Derivation Function.</p>
-<p>直接使用 SHA256 之类的加密哈希函数来生成密钥是不安全的，因为为了方便记忆，通常密码并不会很长，绝大多数人的密码长度估计都不超过 15 位。
-甚至很多人都在使用非常常见的弱密码，如 123456 admin 生日等等。
-这就导致如果直接使用 SHA256 之类的算法，许多密码将很容易被暴力破解、字典攻击、彩虹表攻击等手段猜测出来！</p>
-<p>KDF 目前主要从如下三个维度提升 hash 碰撞难度：</p>
-<ol>
-<li>时间复杂度：对应 CPU/GPU 计算资源</li>
-<li>空间复杂度：对应 Memory 内存资源</li>
-<li>并行维度：使用无法分解的算法，锁定只允许单线程运算</li>
-</ol>
-<p>主要手段是加盐，以及多次迭代。这种设计方法被称为「密钥拉伸 Key stretching」。</p>
-<p>KDF 的工作示意图如下：</p>
-<figure><img src="/images/practical-cryptography-basics-3-key-derivation-function/key-derivation-function.webp"/>
-</figure>
-
-<p>因为相比其他加密哈希算法，KDF 具有一个独特属性——计算速度很慢，而且从设计上就使其计算速度难以提升，所以 KDF 也被称作「慢哈希算法」。</p>
-<p>KDF 计算速度的「慢」是相对而言的，对于普通用户而言，KDF 通常只需要在登录时被执行一次，因此慢这么一点点完全可以接受，而且用户也完全有足够的资源执行这个 KDF 函数。
-但是如果一个黑客想要通过 Hash 碰撞来猜测出用户的密码，那它就必须执行海量的 KDF 计算，这个时候 KDF 的威力就显现出来了——黑客将需要提供海量的 CPU/GPU 计算资源、海量的内存资源才能完成目标，而这显然得不偿失，这样 KDF 就确保了用户密码的安全性。</p>
-<p>目前比较著名的 KDF 算法主要有如下几个：</p>
-<ol>
-<li>PBKDF2：这是一个非常简单的加密 KDF 算法，目前已经不推荐使用。</li>
-<li>Bcrypt：安全性在下降，用得越来越少了。不建议使用。</li>
-<li>Scrypt：可以灵活地设定使用的内存大小，在 argon2 不可用时，可使用它。</li>
-<li>Argon2：目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。</li>
-</ol>
-<p>如果你正在开发一个新的程序，需要使用到 KDF，建议选用 argon2/scrypt.</p>
-<p>Python 中最流行的密码学库是 <a href="https://github.com/pyca/cryptography" target="_blank" rel="noopener noreferrer">cryptography</a>，<code>requests</code> 的底层曾经就使用了它（新版本已经换成使用标准库 ssl 了），下面我们使用这个库来演示下 Scrypt 算法的使用：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># pip install cryptography==36.0.1</span>
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">cryptography.hazmat.primitives.kdf.scrypt</span> <span class="kn">import</span> <span class="n">Scrypt</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">salt</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># derive</span>
-</span></span><span class="line"><span class="cl"><span class="n">kdf</span> <span class="o">=</span> <span class="n">Scrypt</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="n">salt</span><span class="o">=</span><span class="n">salt</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">length</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">14</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">key</span> <span class="o">=</span> <span class="n">kdf</span><span class="o">.</span><span class="n">derive</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;my great password&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># verify</span>
-</span></span><span class="line"><span class="cl"><span class="n">kdf</span> <span class="o">=</span> <span class="n">Scrypt</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="n">salt</span><span class="o">=</span><span class="n">salt</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">length</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">14</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">r</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">kdf</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;my great password&#34;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="参考" class="headerLink">
-    <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
-<li><a href="https://github.com/nakov/Practical-Cryptography-for-Developers-Book" target="_blank" rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></li>
-<li><a href="https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd" target="_blank" rel="noopener noreferrer">A complete overview of SSL/TLS and its cryptographic system</a></li>
-</ul>
-]]></content></entry><entry><title type="html">写给开发人员的实用密码学（二）—— 哈希函数</title><link href="https://thiscute.world/posts/practical-cryptography-basics-2-hash/"/><id>https://thiscute.world/posts/practical-cryptography-basics-2-hash/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:01+08:00</published><updated>2022-03-01T17:15:01+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
+]]></content></entry><entry><title type="html">写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</title><link href="https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/"/><id>https://thiscute.world/posts/practical-cryptography-basics-3-key-derivation-function/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:03+08:00</published><updated>2022-03-01T17:15:03+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
+&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">写给开发人员的实用密码学（二）—— 哈希函数</title><link href="https://thiscute.world/posts/practical-cryptography-basics-2-hash/"/><id>https://thiscute.world/posts/practical-cryptography-basics-2-hash/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:01+08:00</published><updated>2022-03-01T17:15:01+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">写给开发人员的实用密码学（一）—— 概览</title><link href="https://thiscute.world/posts/practical-cryptography-basics-1/"/><id>https://thiscute.world/posts/practical-cryptography-basics-1/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:00+08:00</published><updated>2022-03-01T17:15:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">「转」仙马赛记——我又 PB 了</title><link href="https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/"/><id>https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/</id><author><name>ryan4yin</name></author><published>2022-02-26T17:44:00+08:00</published><updated>2022-02-26T17:44:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">「转」MIRT出征广马——首次摸到330的边儿</title><link href="https://thiscute.world/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/"/><id>https://thiscute.world/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/</id><author><name>ryan4yin</name></author><published>2022-02-26T16:59:00+08:00</published><updated>2022-02-26T16:59:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
@@ -7252,7 +7447,7 @@ AEAD 将「关联数据(Associated Data, AD)」——也称为「附加验证数
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">我在创业公司做技术一年多的一点体会</title><link href="https://thiscute.world/posts/end-of-the-first-round/"/><id>https://thiscute.world/posts/end-of-the-first-round/</id><author><name>ryan4yin</name></author><published>2021-02-06T08:46:46+08:00</published><updated>2021-02-06T08:46:46+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">云原生流水线 Argo Workflows 的安装、使用以及个人体验</title><link href="https://thiscute.world/posts/experience-of-argo-workflows/"/><id>https://thiscute.world/posts/experience-of-argo-workflows/</id><author><name>ryan4yin</name></author><published>2021-01-27T15:37:27+08:00</published><updated>2021-01-27T15:37:27+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">secrets 管理工具 Vault 的介绍、安装及使用</title><link href="https://thiscute.world/posts/experience-of-vault/"/><id>https://thiscute.world/posts/experience-of-vault/</id><author><name>ryan4yin</name></author><published>2021-01-24T09:31:41+08:00</published><updated>2021-01-24T09:31:41+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
-&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">QEMU-KVM 虚拟化环境的搭建与使用</title><link href="https://thiscute.world/posts/qemu-kvm-usage/"/><id>https://thiscute.world/posts/qemu-kvm-usage/</id><author><name>ryan4yin</name></author><published>2021-01-17T21:34:04+08:00</published><updated>2021-01-17T21:34:04+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
+&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">QEMU/KVM 虚拟化环境的搭建与使用</title><link href="https://thiscute.world/posts/qemu-kvm-usage/"/><id>https://thiscute.world/posts/qemu-kvm-usage/</id><author><name>ryan4yin</name></author><published>2021-01-17T21:34:04+08:00</published><updated>2021-01-17T21:34:04+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Pulumi 使用体验 - 基础设施代码化</title><link href="https://thiscute.world/posts/experience-of-pulumi/"/><id>https://thiscute.world/posts/experience-of-pulumi/</id><author><name>ryan4yin</name></author><published>2021-01-08T18:51:30+08:00</published><updated>2021-01-08T18:51:30+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">openSUSE 使用指南</title><link href="https://thiscute.world/posts/opensuse-instruction/"/><id>https://thiscute.world/posts/opensuse-instruction/</id><author><name>ryan4yin</name></author><published>2021-01-04T08:42:21+08:00</published><updated>2021-01-04T08:42:21+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">2020 年年终总结</title><link href="https://thiscute.world/posts/2020-summary/"/><id>https://thiscute.world/posts/2020-summary/</id><author><name>ryan4yin</name></author><published>2020-12-12T23:45:00+08:00</published><updated>2020-12-12T23:45:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
@@ -7267,5 +7462,4 @@ AEAD 将「关联数据(Associated Data, AD)」——也称为「附加验证数
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Manjaro 使用指南</title><link href="https://thiscute.world/posts/manjaro-instruction/"/><id>https://thiscute.world/posts/manjaro-instruction/</id><author><name>ryan4yin</name></author><published>2019-07-13T20:38:24+08:00</published><updated>2019-07-13T20:38:24+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">逃离我的大学</title><link href="https://thiscute.world/posts/escape-my-university/"/><id>https://thiscute.world/posts/escape-my-university/</id><author><name>ryan4yin</name></author><published>2019-06-20T22:32:31+08:00</published><updated>2019-06-20T22:32:31+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">SQLAlchemy 学习笔记（三）：ORM 中的关系构建</title><link href="https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/"/><id>https://thiscute.world/posts/sqlalchemy-notes-3-relationship-and-foreignkey/</id><author><name>ryan4yin</name></author><published>2019-05-21T22:19:00+08:00</published><updated>2019-05-21T22:19:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
-&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">瘾的退却</title><link href="https://thiscute.world/posts/webnovel-addiction-recovery/"/><id>https://thiscute.world/posts/webnovel-addiction-recovery/</id><author><name>ryan4yin</name></author><published>2019-04-14T21:27:32+08:00</published><updated>2019-04-14T21:27:32+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry></feed>
