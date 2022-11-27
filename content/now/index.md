@@ -20,6 +20,7 @@ toc:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡并事后补读 10 天)
+  - The Moon and Sixpence  - 1/36
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 82/270 (漏打卡 12 天)
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
@@ -85,7 +86,7 @@ toc:
 正在读：
 
 - The Unlikely Pilgrimage of Harold Fry
-- Moon Palace, by Pual Auster
+- The Moon and Sixpence
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 
 
@@ -97,6 +98,7 @@ toc:
   - Sophie's World
   - Majo no Tabitabi（魔女之旅）Vol.1
   - Tasogare-iro no Uta Tsukai（黄昏色的咏使）Vol.1
+  - Moon Palace, by Pual Auster - 读过中文版，但是看英文版词汇量也不高，可以一读
 - 《江城》
 - 《被讨厌的勇气》
 - 《科学革命的结构》
