@@ -15,10 +15,20 @@ toc:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2022-11-28
+
+- 考虑自己写一些简单的 dashboard 或者简单的工单系统、服务管理平台
+  - 了解了一波[低代码开发平台](https://github.com/topics/low-code-framework)
+    - 好处：开发简单
+    - 缺点：UI 自定义比较困难
+  - @zgq 给推荐了一套轻量级、上手简单的解决方案：[Alpine, Tailwind, Deno, SQLite 我的本地服务四件套](https://limboy.me/posts/local-services-tools/)
+- 顺便阅读了 limboy 的 [应该成为专才还是通才](https://limboy.me/posts/specialize-or-generalist/)
+  - 核心要点是「**要在某个特定领域做到 Top 非常困难，掌握大量不同技能不是解决之道，而应该多考虑如何将技能进行有效组合，技能的有效叠加大有裨益**。」
+
 ### 2022-11-27
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡并事后补读 10 天)
+  - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡 10 天，已补读 5 天)
   - The Time Machine  - 30/30
     - 读完了，内容想象力丰富，新奇有趣，也学到很多熟词生义、新词新表达。
   - The Moon and Sixpence  - 1/36
@@ -26,6 +36,7 @@ toc:
   - 一点英语 270 天英语学习                  - 82/270 (漏打卡 12 天)
   - 一点英语已经漏打卡 12 天，基本都是 2022/11 月漏的。主要原因一是搞 Homelab，二是搬家、跟亲戚朋友聚会...
 - 整理发表文章「Proxmox Virtual Environment 使用指南」
+- OpenMediaVault 的 ISCSI 插件(tgt) 性能太差，研究了一波使用 Windows Server 2022 搭建 ISCSI + SMB 服务，看看是否能跑满我的 2.5G 带宽。
 
 ### 2022-11-20
 

@@ -19,7 +19,7 @@ toc:
 >按优先级排序
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡并事后补读 10 天)
+  - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡 10 天，已补读 5 天)
   - The Moon and Sixpence  - 1/36
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 82/270 (漏打卡 12 天)
