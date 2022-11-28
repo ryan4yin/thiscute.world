@@ -1338,10 +1338,12 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 </span><span class="lnt">10
 </span><span class="lnt">11
 </span><span class="lnt">12
+</span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 添加 cert-manager 的 helm 仓库</span>
 </span></span><span class="line"><span class="cl">helm repo add jetstack https://charts.jetstack.io
+</span></span><span class="line"><span class="cl">helm repo update
 </span></span><span class="line"><span class="cl"><span class="c1"># 查看版本号</span>
 </span></span><span class="line"><span class="cl">helm search repo jetstack/cert-manager -l <span class="p">|</span> head
 </span></span><span class="line"><span class="cl"><span class="c1"># 下载并解压 chart，目的是方便 gitops 版本管理</span>
