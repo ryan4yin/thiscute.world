@@ -40,6 +40,7 @@ cert-manager 是一个证书的自动化管理工具，用于在 Kubernetes 集�
 ```shell
 # 添加 cert-manager 的 helm 仓库
 helm repo add jetstack https://charts.jetstack.io
+helm repo update
 # 查看版本号
 helm search repo jetstack/cert-manager -l | head
 # 下载并解压 chart，目的是方便 gitops 版本管理
