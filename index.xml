@@ -1352,7 +1352,7 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>  cert-manager ./cert-manager <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>  --namespace cert-manager <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>  --create-namespace <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="c1"># 这会导致使用 helm 卸载的时候会删除所有 CRDs，可能导致所有 CRDs 资源全部丢失！要格外注意</span>
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="c1"># 下面这个参数会导致使用 helm 卸载的时候，会删除所有 CRDs，可能导致所有 CRDs 资源全部丢失！要格外注意</span>
 </span></span><span class="line"><span class="cl">  --set <span class="nv">installCRDs</span><span class="o">=</span><span class="nb">true</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -1434,6 +1434,9 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 <p>下面分别演示如何使用 AWS Route53 跟 AliDNS，通过 DNS 验证方式申请一个 Let&rsquo;s Encrypt 证书。（其他 DNS 提供商的配置方式请直接看官方文档）</p>
 <h4 id="11-使用-aws-route53-创建一个证书签发者certificate-issuer" class="headerLink">
     <a href="#11-%e4%bd%bf%e7%94%a8-aws-route53-%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e8%af%81%e4%b9%a6%e7%ad%be%e5%8f%91%e8%80%85certificate-issuer" class="header-mark"></a>1.1 使用 AWS Route53 创建一个证书签发者「Certificate Issuer」</h4><blockquote>
+<p>非 AWS Route53 用户可忽略这一节</p>
+</blockquote>
+<blockquote>
 <p><a href="https://cert-manager.io/docs/configuration/acme/dns01/route53/" target="_blank" rel="noopener noreferrer">https://cert-manager.io/docs/configuration/acme/dns01/route53/</a></p>
 </blockquote>
 <h5 id="111-通过-iam-授权-cert-manager-调用-aws-route53-api" class="headerLink">
