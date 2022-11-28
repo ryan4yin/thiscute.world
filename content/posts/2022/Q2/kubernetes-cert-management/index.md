@@ -49,7 +49,7 @@ helm install \
   cert-manager ./cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  # 这会导致使用 helm 卸载的时候会删除所有 CRDs，可能导致所有 CRDs 资源全部丢失！要格外注意
+  # 下面这个参数会导致使用 helm 卸载的时候，会删除所有 CRDs，可能导致所有 CRDs 资源全部丢失！要格外注意
   --set installCRDs=true
 ```
 
@@ -113,6 +113,8 @@ ACME 支持 HTTP01 跟 DNS01 两种域名验证方式，其中 DNS01 是最简�
 下面分别演示如何使用 AWS Route53 跟 AliDNS，通过 DNS 验证方式申请一个 Let's Encrypt 证书。（其他 DNS 提供商的配置方式请直接看官方文档）
 
 #### 1.1 使用 AWS Route53 创建一个证书签发者「Certificate Issuer」
+
+>非 AWS Route53 用户可忽略这一节
 
 >https://cert-manager.io/docs/configuration/acme/dns01/route53/
 
