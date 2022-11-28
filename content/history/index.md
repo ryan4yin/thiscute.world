@@ -24,6 +24,12 @@ toc:
   - @zgq 给推荐了一套轻量级、上手简单的解决方案：[Alpine, Tailwind, Deno, SQLite 我的本地服务四件套](https://limboy.me/posts/local-services-tools/)
 - 顺便阅读了 limboy 的 [应该成为专才还是通才](https://limboy.me/posts/specialize-or-generalist/)
   - 核心要点是「**要在某个特定领域做到 Top 非常困难，掌握大量不同技能不是解决之道，而应该多考虑如何将技能进行有效组合，技能的有效叠加大有裨益**。」
+- 跟网友沟通后确认，Windows 可以将 SMB/WebDAV/ISCSI 协议共享挂载为网络硬盘，并绑定一个盘号！
+  - 很久之前我 smb 挂载没成功，就一直以为只能挂载 iscsi 硬盘...
+  - 对于 windows10 或者 windows server 2019 以上系统，可以直接使用如下命令为 SMB 文件夹分配盘号：
+    - `New-SmbGlobalMapping -LocalPath z: -RemotePath \\file-system-id.region.nas.aliyuncs.com\myshare -Persistent $true`
+  - 参考了 [Windows系统挂载SMB文件系统](https://help.aliyun.com/document_detail/171332.html)
+  - 或者也可以直接在「我的电脑」=>「映射网络驱动器」，输入盘号跟 WebDAV/SMB 地址点击连接即可。
 
 ### 2022-11-27
 
