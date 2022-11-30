@@ -311,6 +311,7 @@ spec:
         # 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件
         # 以 dnsZones 为例，越长的 Zone 优先级就越高
         # 比如在为 www.sys.exapmle.com 申请证书时，sys.example.com 的优先级就比 example.com 更高
+        # 适用场景：如果你拥有多个域名，使用了多个域名提供商，就可能需要用到它
         dnsZones:
         - "example.com"
       dns01:
