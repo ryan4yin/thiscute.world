@@ -15,12 +15,28 @@ toc:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2022-12-01
+
+- ESPHome 开发版传感器套装到货，首先把两个开发版都刷上了 ESPHome 固件
+  - ESP8266 一次成功
+  - ESP32-C3 默认配置编译失败说 Arudino Framework 不支持此开发版，调整 Arudino Framework 及 `platform-espressif32` 的版本到最新版后解决，并将解法补充到了搜到的 issue 上：[ESP32-C3 Arduino Core 2.0.0 - ESPHome](https://github.com/esphome/issues/issues/3031)
+- 英语阅读
+  - The Unlikely Pilgrimage of Harold Fry - 85/100 (漏打卡 10 天，已补读 5 天)
+  - 一点英语 270 天英语学习                  - 86/270 (漏打卡 14 天)
+
+### 2022-11-30
+
+- 买的米家智能家居设备到货，玩了一晚上的小爱音箱跟摄像头...
+- 英语
+  - The Unlikely Pilgrimage of Harold Fry - 84/100 (漏打卡 10 天，已补读 5 天)
+  - 玩小爱音响跟摄像头，再次把一点英语打卡给鸽掉了...
+
 ### 2022-11-29
 
 - 因为装了个 Home Assistant 后一直闲置，一时兴起开始了解如何把它玩起来，结果从 Home Assistant 一路看到小米米家，再看到 ESPHome...
   - 输出相关文档 [homelab/Home Automation.md](https://github.com/ryan4yin/knowledge/blob/master/homelab/Home%20Automation.md)
   - 买了一堆米家相关的智能家居设备（智能音箱、动感灯带、各种传感器等等），以及 ESPHome 相关开发版、传感器、面包板、万用表啥的...打算体验下
-- 英语阅读
+- 英语
   - The Unlikely Pilgrimage of Harold Fry - 83/100 (漏打卡 10 天，已补读 5 天)
   - 晚上查智能家居相关资料搞太嗨了，把一点英语打卡给鸽掉了...坚持打卡不断真的好难啊...
 
