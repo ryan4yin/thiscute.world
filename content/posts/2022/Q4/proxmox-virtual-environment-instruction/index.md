@@ -20,7 +20,7 @@ comment:
     enable: false
 ---
 
->本文介绍我使用 PVE 的一些心得。
+>本文介绍我使用 PVE 的一些心得（不保证正确 emmmm），可能需要一定使用经验才能顺畅阅读。
 
 ## 前言
 
@@ -91,7 +91,7 @@ PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不�
 
 - CPU
   - 对于比较吃性能或者对实时性要求高的虚拟机如 windows/openwrt，可以将其 CPU 类型设置为 `host`
-  - 对于虚拟机核数，请将 `sockets` 设为 1（即 CPU 插槽数，一般物理服务器才会有 2 及以上的 CPU 插槽），cores 设为你想分配给该虚拟机的 CPU 核数
+  - 对于虚拟机核数，建议将 `sockets` 设为 1（即 CPU 插槽数，一般物理服务器才会有 2 及以上的 CPU 插槽），cores 设为你想分配给该虚拟机的 CPU 核数
   - 仅针对多物理 CPU 场景（多 `sockets`）才需要启用 NUMA
 - 磁盘、网卡
   - 尽量使用 `virtio` 作为 scsi 磁盘、network 网卡的虚拟化控制器，它的性能最高
@@ -115,14 +115,14 @@ PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不�
 首先下载 Cloud 版本的系统镜像：
 
 1. [Ubuntu Cloud Images (RELEASED)](https://cloud-images.ubuntu.com/releases/): 提供 img 格式的裸镜像（PVE 也支持此格式）
-   - 请下载带有 .img 结尾的镜像，其中 `kvm.img` 结尾的镜像会更精简一点。
+   - 请下载带有 .img 结尾的镜像，其中 `kvm.img` 结尾的镜像会更精简一点，而不带 kvm 的会稍微大一点，但是带了所有常用的内核模块。
 2. [OpenSUSE Cloud Images](https://download.opensuse.org/repositories/Cloud:/Images:/)
    - 请下载带有 NoCloud 或者 OpenStack 字样的镜像。
 3. 对于其他镜像，可以考虑手动通过 iso 来制作一个 cloudinit 镜像，参考 [openstack - create ubuntu cloud images from iso](https://docs.openstack.org/image-guide/ubuntu-image.html)
 
 >注：[Debian Cloud Images](https://cdimage.debian.org/cdimage/cloud/) 的镜像无法使用，其他 ubuntu/opensuse 的 cloud 镜像也各有问题...在后面的常见问题中有简单描述这些问题。
 
-上述镜像和我们普通虚拟机使用的 ISO 镜像的区别，一是镜像格式不同，二是都自带了 `cloud-init`/`qemu-guest-agent`/`cloud-utils-growpart` 等 cloud 相关软件。
+上述镜像和我们普通虚拟机使用的 ISO 镜像的区别，一是镜像格式不同，二是都自带了 `cloud-init`/`cloud-utils-growpart` 等 cloud 相关软件，三是如果你使用了。
 
 其中 NoCloud 表示支持 cloudinit NoCloud 数据源——即使用 `seed.iso` 提供 user-data/meta-data/network-config 配置，PVE 就是使用的这种模式。
 而 Openstack 镜像通常也都支持 NoCloud 模式，所以一般也是可以使用的。
@@ -162,6 +162,7 @@ qm set 9000 --serial0 socket --vga serial0
 
 后续配置：
 1. 手动设置 cloud-init 参数，**重新生成 cloudinit image**，启动虚拟机，并通过 ssh 登入远程终端
+   1. 貌似启动虚拟机时 PVE 会自动重新生成 seed.iso，但是手动生成下肯定更保险...
 2. 检查 qemu-guest-agent，如果未自带，一定要手动安装它！
    1. ubuntu 需要通过 `sudo apt install qemu-guest-agent` 手动安装它
 3. 安装所需的基础环境，如 docker/docker-compose/vim/git/python3
@@ -181,6 +182,8 @@ qm set 9000 --serial0 socket --vga serial0
 CentOS/Ubuntu/Debian 提供的 Cloud 镜像，都自带了 `cloud-utils-growpart` 这个组件，可以实现在扩容物理硬盘时，自动调整 Linux 的分区大小。
 
 因此需要扩容虚拟机时，直接通过 UI 面板/命令行扩容虚拟机的硬盘即可， Linux 的分区会被 `cloud-utils-growpart` 自动扩容。
+
+而其他非 Cloud 镜像，则需要在扩容磁盘后再进入虚拟机手动扩容分区跟磁盘，具体命令就不介绍了，请自行查阅相关文档吧。
 
 >因为这个方便的特性，也为了减少虚拟化的开销，Cloud 镜像默认是不使用 LVM 逻辑分区的。
 LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟机因为本身就能动态扩容“物理硬盘”的大小，基本不用不到 LVM。
@@ -230,10 +233,9 @@ PVE 虚拟机卡在 BIOS 系统引导这一步，无法启动，也无法 `stop`
 将多个节点组成一个 PVE Cluster 是很自然的一个选择，它能提供虚拟机热迁移（同 CPU 供应商）、统一管理面板等非常方便的功能。
 但是这会带来集群级别的高可用问题。
 
-根据官方文档 [Cluster_Manager - Proxmox](https://pve.proxmox.com/wiki/Cluster_Manager)，如果你需要容忍一定数量的节点宕机，PVE Cluster 至少需要三台主机（这跟 Etcd 一样，是 Raft 共识算法的要求），并且所有节点的 PVE 版本要完全一致。
+根据官方文档 [Cluster_Manager - Proxmox](https://pve.proxmox.com/wiki/Cluster_Manager)，如果你需要容忍一定数量的节点宕机，PVE Cluster 至少需要三台主机（这跟 Etcd 一样，大概是 Raft 共识算法的要求），并且所有节点的 PVE 版本要完全一致。
 
 那么如果节点除了问题，无法修复，该如何将它踢出集群呢？
-
 
 如果节点仍然处于可用状态，宕机节点数低于 1/2，流程如下：
 
@@ -288,8 +290,8 @@ debian 的 cloud 镜像根本没法用，建议避免使用它。
 
 1. 磁盘有问题，出这个问题的 cloud image 是 `ubuntu-20.10-server-cloudimg-amd64.img`，我更换成 `ubuntu-20.10-server-cloudimg-amd64-disk-kvm.img` 就没问题了。
    1. 磁盘镜像均下载自 https://cloud-images.ubuntu.com/releases/groovy/release-20201210/
-2. BIOS 不匹配：将 BIOS 从 SeaBIOS 切换到 UEFI
-
+2. BIOS 不匹配：将 BIOS 从 SeaBIOS 切换到 OVMF(UEFI)
+   1. 如果仍然无法启动，请进入 OVMF 的 BIOS 界面关闭「Secure Boot」后再重启看看
 
 ### 7. 虚拟机启动时 cloudinit 报错 faild to start OpenBSD Secure Shell server 
 
@@ -298,17 +300,16 @@ debian 的 cloud 镜像根本没法用，建议避免使用它。
 - **可能性一：虚拟机名称包含非法字符**
   - pve 的 cloudinit 配置会在启动时尝试将虚拟机 hostname 修改为与虚拟机一致，但是又没有对虚拟机名称做合法性校验...
   - 当你使用的虚拟机名称包含了非法字符时就会出这个问题，比如 `ubuntu-22.10-cloudimage-template`，其中的 `.` 就是非法的， `.` 在 DNS 中用于划分不同的域！
-  - **解决方法**：克隆个新虚拟机，将名称改为合法名称，问题就解决了。
+  - **解决方法**：克隆个新虚拟机并改用合法名称，再删除旧虚拟机，问题就解决了。
 - **可能性二：磁盘空间不足**
   - qcow 镜像转换成的虚拟机磁盘很小，只有 2G，如果不扩容，启动时就会出各种奇怪的问题。
-
   - **解决方法**：通过 Web UI 扩容磁盘大小，建议至少给 32G。
 
 ### 8. 修改 Linux 虚拟机的 Hostname
 
 如前所述，pve 的 cloudinit 配置会在启动时尝试将虚拟机 hostname 修改为与虚拟机一致，这导致手动修改无法生效无效。
 
-解决方法：从旧的虚拟机克隆一个新虚拟机，将虚拟机名称改为你期望的 hostname，然后删除旧虚拟机，启动新克隆的虚拟机，即完成了 hostname 重命名。
+解决方法：从旧的虚拟机克隆一个新虚拟机，将新虚拟机名称设为你期望的 hostname，然后删除旧虚拟机，启动新克隆的虚拟机，即完成了 hostname 重命名。
 
 
 ## 四、PVE 网络配置
@@ -328,6 +329,8 @@ debian 的 cloud 镜像根本没法用，建议避免使用它。
 网上搜了下 2.5G 交换机又发现价格 429 起步，所以决定买两张 USB 2.5GbE 网卡插在这台小主机上作为便宜的网口拓展方案。
 
 现在网卡有了，有两种方式可以让 PVE 识别到这张网卡：
+
+>好像 PVE 偶尔也能自动识别到网卡，就是比较慢...
 
 1. 方法一：直接重启机器，然后就能在 Web UI 的 `Network` 配置中见到这张 USB 网卡了。之后直接把该网卡加入到 vmbr 网桥的 `Bridge Ports` 中并应用配置，就大功告成了。
 2. 方法二：不重启机器实现添加 USB 网卡。如果机器不能重启，就可以走这个流程：
@@ -351,7 +354,7 @@ debian 的 cloud 镜像根本没法用，建议避免使用它。
 
 如果要配置 WLAN 网卡的话，可以直接参考 Debian 的官方文档进行配置：[How to use a WiFi interface - Debian](https://wiki.debian.org/WiFi/HowToUse)
 
-因此，我觉得将 WiFi 网卡直接 PCI 直通给机器内的 OpenWRT 虚拟机来玩，可能是更好的主意。
+因此，我觉得将 WiFi 网卡直接 USB 直通给机器内的 OpenWRT 虚拟机来玩，可能是更好的主意。
 
 后续将会更新相关内容...待续
 
@@ -387,11 +390,11 @@ grep -r manage_etc_hosts /usr/share
 
 ## 拓展 - 自动化配置与监控告警
 
-自动化沛卓：
+自动化配置相关工具：
 
 1. [Telmate/terraform-provider-proxmox](https://github.com/Telmate/terraform-provider-proxmox/): 用户最多，但是只支持管理虚拟机资源
 1. [danitso/terraform-provider-proxmox](https://github.com/danitso/terraform-provider-proxmox): stars 少，但是可以管理 PVE 的大部分资源，包括节点、用户、资源池、TLS证书等等
-    - 代码更顺眼，但是作者忙，没时间合并 pr，导致 Bug 更多一些
+    - 代码更顺眼，但是作者忙，没时间合并 pr，导致 Bug 更多一些，而且很久没更新了...
 2. [ryan4yin/pulumi-proxmox](https://github.com/ryan4yin/pulumi-proxmox): 我维护的一个 proxmox 自动配置工具
 3. [Python SDK](https://github.com/proxmoxer/proxmoxer)
 
@@ -420,6 +423,7 @@ PVE 毕竟是一个商业系统，虽然目前可以免费用，但是以后就�
   - 超融合架构可以降低私有云的构建与维护难度，让私有云的使用维护和公有云一样简单。
   - 超融合架构下，虚拟机的计算和存储是完全高可用的：计算资源能智能动态更换，存储也是分布式存储，底层计算和存储也可以很简单的扩缩容。
 
+我打算有时间在 PVE 集群里跑个 rancher/harvester 玩玩 emmmm
 
 ## 参考
 
