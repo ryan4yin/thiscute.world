@@ -303,7 +303,30 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </li>
 <li>ubuntu 启动后很快就会进入登录界面，但是 root 密码可能还没改好，登录会报密码错误，等待一会再尝试登录就 OK 了</li>
 <li>ubuntu 的默认网卡名称是 ens3，不是 eth0，注意修改 network_config 的网卡名称，否则网络配置不会生效</li>
+<li>以 kvm 结尾的 Ubuntu Cloud Image 无法识别到 USB 设备，将 USB 端口映射到该虚拟机中没有任何作用。
+<ul>
+<li>kvm 使用了精简版的 linux 内核，去掉了 USB 等在云上用不到的驱动，建议改用无 kvm 结尾的镜像。</li>
 </ul>
+</li>
+</ul>
+<h5 id="ubuntu-cloud-image-无法识别到-usb-设备的排查记录" class="headerLink">
+    <a href="#ubuntu-cloud-image-%e6%97%a0%e6%b3%95%e8%af%86%e5%88%ab%e5%88%b0-usb-%e8%ae%be%e5%a4%87%e7%9a%84%e6%8e%92%e6%9f%a5%e8%ae%b0%e5%bd%95" class="header-mark"></a>「Ubuntu Cloud Image 无法识别到 USB 设备」的排查记录</h5><p>现象：</p>
+<ul>
+<li>在尝试使用 PVE 将 USB 接口直通到 Ubuntu Cloud Image 启动的虚拟机作为 NAS 系统时，发现 <code>lsblk</code> 根本无法找到我的 USB 硬盘</li>
+<li>换成我笔记本接硬盘盒，能够正常识别并挂载硬盘</li>
+<li>使用 <code>lsusb</code> 不会报错，但是也看不到任何内容</li>
+<li>使用 <code>lspci</code> 能找到 USB 对应的 PCI 设备</li>
+<li>进一步使用 <code>cat /proc/modules | grep usb</code> 与 <code>lsmod | grep usb</code> 均查不到任何 usb 相关的内核模块
+<ul>
+<li>而在我笔记本上 <code>lsmod | grep usb</code> 能够输出 <code>usb_storage</code> <code>usb_core</code> 等多项内核模块。</li>
+</ul>
+</li>
+<li>再用 <code>modprobe usb</code> 会提示 <code>modprobe: FATAL: Module usb not found in directory /lib/modules/5.15.0-1021-kvm</code></li>
+</ul>
+<p>问题原因很明显了，Ubuntu 根本没有为 cloud image 预置 usb 内核模块，所以才有这个问题&hellip;</p>
+<p>进一步搜索发现这个帖子：<a href="https://askubuntu.com/questions/1315370/whats-the-difference-between-ubuntus-amd64-disk-kvm-img-and-the-regular-amd64" target="_blank" rel="noopener noreferrer">What&rsquo;s the difference between ubuntu&rsquo;s amd64-disk-kvm.img and the regular amd64.img cloud images?</a>，解答了我的疑惑。</p>
+<p>原因是，我使用了 ubuntu 为 cloud 环境做了精简的 kvm 内核，非常轻量，但是缺少 usb 等常用内核模块。</p>
+<p>对于 NAS 外接存储这个场景，我应该使用不以 kvm 结尾的 ubuntu cloud image，换了个基础镜像后问题就解决了~</p>
 <h4 id="opensuse-cloud-image-的坑" class="headerLink">
     <a href="#opensuse-cloud-image-%e7%9a%84%e5%9d%91" class="header-mark"></a>opensuse cloud image 的坑</h4><ul>
 <li>opensuse leap 15 只支持 network_config v1，对 v2 的支持有 bug，<code>gateway4</code> 不会生效</li>
