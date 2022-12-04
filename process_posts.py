@@ -47,7 +47,8 @@ def gen_folder_name(post: Path):
     post_metadata = parse_post_metadata(post)
     post_time: dt.datetime = post_metadata["date"]
 
-    quater = ceil(post_time.month / 4)
+    # 每三个月一个季度，一年 4 个季度
+    quater = ceil(post_time.month / 3)
 
     # 目前暂按 年/季度 进行分类
     return f"{post_time.year}/Q{quater}"
