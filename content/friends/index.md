@@ -75,8 +75,6 @@ var myFriends = [
     ["https://tftree.top/", "https://cdn.tftree.top//others/202212042117873.png", "@虚空裂隙", "心有猛虎,细嗅蔷薇"], 
 ];
 
-
-
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
 var  targetList = document.getElementById("friendsList");
 while (myFriends.length > 0) {
