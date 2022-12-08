@@ -19,10 +19,10 @@ toc:
 >按优先级排序
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 91/100 (补读 14 天)
-  - The Moon and Sixpence  - 1/36
+  - The Unlikely Pilgrimage of Harold Fry - 92/100 (补读 14 天)
+  - The Moon and Sixpence  - 2/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 92/270 (漏打卡 17 天)
+  - 一点英语 270 天英语学习                  - 92/270 (漏打卡 18 天)
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 英语语法
