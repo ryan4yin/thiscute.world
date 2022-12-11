@@ -33,6 +33,7 @@ toc:
   - 以及玩电子后发现租房桌子不够用，淘宝补了一张 80cm * 60cm * 75cm 的方桌，专门用做电子工作台
   - 大学学电子工程的前同事（现在在搞 C# 开发）过来玩，感叹仿佛看到了当年自己寝室的景象，也是摆满各种元器件 emmm
   - 烧坏一个 1117 稳压管，搜索相关资料时发现宝藏 UP [工科男孙老师](https://space.bilibili.com/43584648)，从硬件入门到晶体管、dcdc 模块设计、示波器，都有讲。
+    - 进一步找到了 [爱上半导体](https://space.bilibili.com/395188578)
 
 ![](/images/now/experience-of-electrical-engineering.webp "我的电子电路初体验")
 
