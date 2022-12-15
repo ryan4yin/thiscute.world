@@ -19,10 +19,10 @@ toc:
 >按优先级排序
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 96/100 (补读 15 天)
+  - The Unlikely Pilgrimage of Harold Fry - 98/100 (补读 15 天)
   - The Moon and Sixpence  - 2/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 97/270 (漏打卡 21 天)
+  - 一点英语 270 天英语学习                  - 99/270 (漏打卡 21 天)
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 英语语法
@@ -81,7 +81,11 @@ toc:
 - [x] 《在峡江的转弯处 - 陈行甲人生笔记》
 - [x] 《The ANSI C Programming Language》
 - [x] The Time Machine
-
+- [x] Learn Robotics With Raspberry Pi
+  - 学习使用树莓派控制智能小车，结合本书与网上资料，我制作了一台使用 Xbox One 手柄遥控的四驱小车，相当有意思~
+- [x] Learn Robotics Programming, 2nd Edition
+  - 跟前面那本一样是讲树莓派小车的，不过这本书更深入，代码含量高很多。
+  - 快速翻了一遍，跳过了其中大部分代码，因为书中的小车不太符合我的需求。
 
 正在读：
 
