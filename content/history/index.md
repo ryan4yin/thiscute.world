@@ -18,9 +18,9 @@ toc:
 ### 2022-12-15
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 98/100 (补读 15 天)
+  - The Unlikely Pilgrimage of Harold Fry - 99/100 (补读 15 天)
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 99/270 (漏打卡 21 天)
+  - 一点英语 270 天英语学习                  - 100/270 (漏打卡 21 天)
 - 电子电路
   - 给昨天组装的树莓派四驱小车，用 pygame 写了七十多行代码，接入了 Xbox One 蓝牙手柄控制，实现了童年时的梦想——拥有一台遥控赛车！
     - Xbox One 蓝牙连接部分参考了 [Setting up Xbox Controllers on the Raspberry Pi](https://pimylifeup.com/xbox-controllers-raspberry-pi/)，pygame 代码参考了 [How to use an Xbox Controller with your Robot](https://www.youtube.com/watch?v=F5Bq7HVJkX0)
@@ -32,7 +32,7 @@ toc:
 ### 2022-12-14
 
 - 英语阅读
-  - The Unlikely Pilgrimage of Harold Fry - 97/100 (补读 15 天)
+  - The Unlikely Pilgrimage of Harold Fry - 98/100 (补读 15 天)
 - 电子电路
   - 组装搭建了一台树莓派四驱小车，用 gpiozero 控制，虽然代码超级简单，但我是第一次玩硬件，感觉好有意思！
     - 元件：树莓派 4B + 面包板 + 面包板电源 + 移动电源 + L9110S 四路直流电机驱动板 + 四驱小车底盘
