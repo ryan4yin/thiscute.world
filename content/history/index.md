@@ -20,7 +20,8 @@ toc:
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 99/100 (补读 15 天)
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 100/270 (漏打卡 21 天)
+  - 一点英语 270 天英语学习                  - 100/270 (漏打卡 24 天)
+    - 学了八分钟，然后就 0 点了...所以没打到卡
 - 电子电路
   - 给昨天组装的树莓派四驱小车，用 pygame 写了七十多行代码，接入了 Xbox One 蓝牙手柄控制，实现了童年时的梦想——拥有一台遥控赛车！
     - Xbox One 蓝牙连接部分参考了 [Setting up Xbox Controllers on the Raspberry Pi](https://pimylifeup.com/xbox-controllers-raspberry-pi/)，pygame 代码参考了 [How to use an Xbox Controller with your Robot](https://www.youtube.com/watch?v=F5Bq7HVJkX0)
