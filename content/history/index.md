@@ -22,13 +22,14 @@ toc:
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 104/270 (漏打卡 25 天)
 - 词汇量测试：又过去了一个月，本月因为玩上了 Homelab 跟电子电路，漏打了很多卡，但是前面厚积薄发，测出的词汇量相比上个月上涨约 700 词，到了 6300
-
-![](/images/now/2022-12-19-test-your-vocabulary-result.webp "2022-12-19 词汇量测试结果：6300 词")
-
-
-![](/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp "2022-11-17 词汇量测试结果：5600 词")
-
-![](/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp "2022-10-18 词汇量测试结果：5100 词")
+  - ![](/images/now/2022-12-19-test-your-vocabulary-result.webp "2022-12-19 词汇量测试结果：6300 词")
+  - ![](/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp "2022-11-17 词汇量测试结果：5600 词")
+  - ![](/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp "2022-10-18 词汇量测试结果：5100 词")
+- 电子电路
+  - 花了一晚上焊好了一块可调电压电流稳压电源，最后看说明书，发现必须输入 AC 24V 交流电...买错板子了尴尬，买的时候只注意了 0-30V 可调，没注意输入电源的参数...
+  - 不过它的元件很多，还有很多大个头，应该是我目前焊接过的最有意思的板子了~
+  - ![](/images/now/zy-kt-104-front.webp "焊好的可调稳压电源 - 正面")
+  - ![](/images/now/zy-kt-104-back.webp "焊好的可调稳压电源 - 背面")
 
 ### 2022-12-18
 
