@@ -35,7 +35,7 @@ nohup python xxx.py &
 也可以使用 tmux，tmux 提供的 session 功能比 nohup 更好用，后面会介绍 tmux
 
 
-### 2. 查找替换 sed/awk
+### 2. 查找替换 sed/awk 与 json/yaml 处理 jq/yq
 
 sed 常用命令：
 
@@ -94,6 +94,37 @@ cat data|awk 'BEGIN {max = 0} {if ($1>max) max=$1 fi} END {print "Max=", max}'
 # 求最小值（min的初始值设置一个超大数即可）
 awk 'BEGIN {min = 1999999} {if ($1<min) min=$1 fi} END {print "Min=", min}'
 ```
+
+[jq](https://github.com/stedolan/jq)/[yq](https://github.com/mikefarah/yq) 常用命令：
+
+```shell
+# 1. jq 是一个命令行 json 处理工具
+
+## 从 json 中查询某一个字段的值
+jq -r '.message' xxx.json
+## 也可从 stdin 读取 json
+cat xxx.json | jq -r '.message' 
+
+## 从 json 内容中删除多个 key
+## -r 表示输出文本采用 raw 格式
+jq -r "del(.dataplane.insync, .dataplane.outdated)" xxx.json
+
+## 更多 jq 的用法参见官方文档：https://stedolan.github.io/jq/tutorial/
+
+# 2. yq 是用于处理 yaml 配置的命令行工具，参数跟 jq 高度相似
+
+## 从 yaml 配置中删除多个 key
+yq "del(.dataplane.insync, .dataplane.outdated)" xxx.yaml
+## 或者从 stdin 读取输入
+cat xxx.yaml | yq "del(.dataplane.insync, .dataplane.outdated)"
+
+## 原地更新某 yaml 配置文件
+yq -i '.a.b[0].c = "cool"' file.yaml
+
+## yq 的更多用法参见官方说明: https://github.com/mikefarah/yq
+```
+
+
 
 ### 3. 压缩相关
 
