@@ -1123,7 +1123,7 @@ toc:
 
 ### 2022-05-22 ~  2022-05-23
 
-- 学习[分布式系统的一致性问题与共识算法](https://github.com/ryan4yin/knowledge/blob/master/blockchain/%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E4%B8%8E%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95.md) 并记录笔记
+- 学习 [分布式系统的一致性问题与共识算法](https://thiscute.world/posts/consistency-and-consensus-algorithm/) 并记录笔记
   - 极客时间《分布式协议与算法实战》 - 22%
 
 ### 2022-05-20
@@ -1138,7 +1138,7 @@ toc:
     - Kubernetes 生态与传统 PaaS 的区别：Kubernetes 提供了基础设施层能力（编排、调度、资源管理等），使得其上的 PaaS 可以专注于应用服务和发布流程管理这两个最核心的功能，开始向更轻、更薄、更以应用为中心的方向进行演进。从而 Serverless 开始蓬勃发展
     - Serverless 的本质：高可扩展性、工作流驱动、按用量计费
     - 「云原生」是一个使用户能低心智负担的、敏捷的，以可扩展、可复制的方式，最大化利用“云”的能力、发挥“云”的价值的一条最佳路径。
-- 学习[分布式系统的一致性问题与共识算法](https://github.com/ryan4yin/knowledge/blob/master/blockchain/%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E4%B8%8E%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95.md) 并记录笔记
+- 学习[分布式系统的一致性问题与共识算法](https://thiscute.world/posts/consistency-and-consensus-algorithm/) 并记录笔记
   - 一致性问题的核心是「ACID 理论中的事务一致性」，与「CAP 理论中的数据一致性」
     - 数据一致性又分为强一致性与弱一致性，而弱一致性的最低限度就是最终一致性：数据最终会一致（再低就永远不会一致了）
     - 最终一致性太模糊，具体实现上往往会最加上一些限定，得到许多一致性模型：读自己写一致性/写后读一致性、单调读一致性、前缀一致性、线性一致性、因果一致性
