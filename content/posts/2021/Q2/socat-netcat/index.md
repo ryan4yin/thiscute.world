@@ -202,10 +202,14 @@ nc 192.168.1.2 8080 < demo.tar.gz
 socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:"python3 web.py"
 ```
 
-假设 `web.py` 的内容为：
+假设 `web.py` 的内容为（注意 print 的内容要与 HTTP 协议格式一致）：
 
 ```python
-print("hello world")
+print("""HTTP/1.1 200 OK
+Content-Type: text/html
+
+hello world
+""")
 ```
 
 那 `curl localhost:8080` 就应该会输出 `hello world`
