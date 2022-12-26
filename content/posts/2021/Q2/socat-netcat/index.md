@@ -206,7 +206,7 @@ socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:"python3 web.py"
 
 ```python
 print("""HTTP/1.1 200 OK
-Content-Type: text/html
+Content-Type: text/plain
 
 hello world
 """)
