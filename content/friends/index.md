@@ -26,14 +26,16 @@ comment:
 
 ## 交换友链
 
-如果你觉得我的博客有些意思，而且也有自己的博客，并且博客运行时间超过半年，至少有 6 篇自认为有价值的原创文章，欢迎与我交换友链~
+希望能先友后链。
+
+<!-- 如果你觉得我的博客有些意思，而且也有自己的博客，并且博客运行时间超过半年，至少有 6 篇自认为有价值的原创文章，欢迎与我交换友链~
 
 可通过 [Issues](https://github.com/ryan4yin/ryan4yin.space/issues) 或者评论区提交友链申请，格式如下：
 
     站点名称：This Cute World
     站点地址：https://thiscute.world/
     个人形象：https://thiscute.world/avatar/myself.webp
-    站点描述：赞美快乐~
+    站点描述：赞美快乐~ -->
 
 
 <script type="text/javascript">
@@ -59,7 +61,7 @@ var myFriends = [
     ["https://fmcf.cc/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@幸吾有志", "他戴着花冠，踏于风雪，探寻迷途的救赎，绽放生命的曙光"], 
     ["https://www.lionad.art/", "/avatar/lionad-morotar.webp", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
     ["https://ryanyang.cn/", "/avatar/ryanyang.webp", "@ryanyang", "一位智慧的阿拉伯诗人 <= Java 后端大佬"], 
-    ["https://bohecat.com/", "https://tc.bohecat.com/image/WX20220210-123651%402x.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
+    ["https://abohe.cn/", "https://img.abohe.cn/logo.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
