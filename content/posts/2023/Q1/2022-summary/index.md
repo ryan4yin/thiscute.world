@@ -39,6 +39,7 @@ comment:
 - 4 月份
   - 读完了 [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)，对以太坊有了基本的了解。
   - 读了《Go 程序设计语言（英文版）》
+    - ![](/images/now/the-go-programming-language.webp "Go 程序设计语言（英文版） 2022-08-19 补图")
   - 很高兴通过了职级晋升，不再是 SRE 萌新了。
   - 主要工作：使用 [aws/karpenter](https://github.com/aws/karpenter) 实现离线计算集群的弹性扩缩容，省了一波成本。
 - 5 月份
@@ -54,8 +55,10 @@ comment:
   - 主要工作：确定并实施网关架构优化的初步方案，使用 Go 语言写了一个 Nginx Gateway 控制器，迁移流量到新容器化网关省了一波成本。
 - 8 月
   - 读完了《在峡江的转弯处 - 陈行甲人生笔记》
+    - ![](/images/now/life-notes-of-chenxingjia.webp "陈行甲人生笔记")
   - 延续上个月对 Linux 系统的兴趣，快速过了一遍 The ANSI C Programming Language 以熟悉 C 的语法，之后开始阅读 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
     - 写了一个小项目 [video2ascii-c](https://github.com/ryan4yin/video2ascii-c) 练手 C 语言。
+    - ![](/images/now/the-asni-c-programming-language.webp "The ANSI C Programming Language")
   - 因为今年搞网关 APISIX/Nginx 接触比较多，看了一点极客时间《OpenResty 从入门到实战》但是因为兴趣并不强烈，又不了了之了。
   - 主要工作：
     - 搞网关优化省了一波成本，但是期间也搞出一个严重故障...
@@ -68,13 +71,18 @@ comment:
 - 10 月
   - 找了很多英语学习资料，通过每日的坚持学习，渐渐找到了自己的英语学习节奏，完善了学习规划。
   - 《Linux/Unix 系统编程手册（上册）》阅读进度过半，但是业余时间就这么点，同时用来学习 Linux 跟英语实在有点吃力，这本书的阅读就慢慢放下了。
+    - ![](/images/now/the-linux-programming-interface.webp "Linux/Unix 系统编程手册（上册）")
   - 通过友链漫游，发现了 [0xFFFF 社区](https://0xffff.one)，内容质量很高，也在社区的 QQ 群里跟群友们聊了些有意思有价值的内容。
+  - 打游戏学英语
+      ![](/images/learn-english-again/genshin-impact-noelle.webp "超飒的重剑女仆 Noelle")
+      ![](/images/learn-english-again/demo2-talk-1.webp "DEEMO 2 中丰富的对话内容")
   - 因为许多原因，中概股大跌，公司架构大调整，公司走了很多大佬级别的人物，包括去年带我冲浪的算法部门前辈。
   - 主要工作
     - 搞数据上报网关的需求，一路踩坑，总算把数万 QPS 的流量全部迁移到新网关上了。
 - 11 月
   - 重新对搞 Homelab 产生了兴趣，买了三台 MINI 主机组了一个 Homelab，时隔一年多又开始折腾 Proxmox VE，做各种规划。
   - 迭代了很多次后的个人 Homelab 文档：[ryan4yin/knowledge/homelab](https://github.com/ryan4yin/knowledge/tree/master/homelab)
+    - ![](/images/now/dashy-homepage.webp "我的 Homelab 导航页 2022-11-12")
   - 因为业余时间沉迷搞 Homelab，英语打卡就变得断断续续了...但是词汇量测试的效果出乎意料，进步速度喜人，阅读能力也能感觉到有明显提升。
   - 主要工作：继续推进线上网关优化项目，以及调研 K8s / Istio 的新版本变化，为集群升级做预备工作。
 - 12 月
