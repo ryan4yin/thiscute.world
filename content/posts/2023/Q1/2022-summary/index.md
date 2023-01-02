@@ -6,7 +6,7 @@ lastmod: 2023-01-02T18:00:45+08:00
 draft: false
 resources:
 - name: "featured-image"
-  src: "wrapped_ryan4yin.webp"
+  src: "github-profile-2022-ryan4yin.webp"
 
 tags: ["总结"]
 categories: ["life", "tech"]
