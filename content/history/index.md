@@ -22,7 +22,7 @@ toc:
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 118/270 (漏打卡 36 天)
 - 词汇量测试：新的一年，测了一下词汇量，测了三次选了结果低的一次，词汇量为 **6583**
-  - ![](/images/now/test-your-vocabulary-2023-01-02.webp "20223-01-02 词汇量测试结果：6583 词")
+  - ![](/images/now/2023-01-02-test-your-vocabulary-result.webp "2023-01-02 词汇量测试结果：6583 词")
   - ![](/images/now/2022-12-19-test-your-vocabulary-result.webp "2022-12-19 词汇量测试结果：6300 词")
   - ![](/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp "2022-11-17 词汇量测试结果：5600 词")
   - ![](/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp "2022-10-18 词汇量测试结果：5100 词")

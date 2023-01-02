@@ -33,8 +33,6 @@ toc:
 今年的学习进展：
 
 - Go 语言 Web 编程
-  - [x] 阅读了《Go 程序设计语言》，学会了 Go 语言基础
-  - [x] 使用 Go+Gin 完成了一个 Nginx 网关控制器项目并上线，实现了一些简单的接口
   - [ ] [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
   - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
   - [ ] [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
@@ -42,18 +40,13 @@ toc:
   - [ ] [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
   - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
 - Kubernetes 原理、Kubernetes APIServer/Operator 编程
-  - [x] 学习了极客时间《深入理解 Kubernetes》专栏
-  - [x] 完成了一个 Nginx 网关项目，熟悉并应用了 client-go 的 informer
   - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - Linux 性能调优与 Linux 网络技术
-  - [x] The ANSI C Programming Language - 用来快速复习下 C 的语法
-  - [x] 完成了一个使用 libav + make 做的一个 [video2chars-c](https://github.com/ryan4yin/video2ascii-c) 小项目练手
   - [ ] 通过其他资料补充学习 gdb ld objdump objcopy 等命令
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
 - 区块链与分布式系统
-  - [x] 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》 - 100%
   - [ ] 极客时间《分布式协议与算法实战》 - 50%
 - 机器学习与深度学习
   - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
@@ -70,28 +63,10 @@ toc:
 
 已读：
 
-- [x] 《人间失格》
-- [x] 《月宫》
-- [x] 《[Practical Cryptography for Developers](https://github.com/nakov/Practical-Cryptography-for-Developers-Book)》
-- [x] 《[Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)》
-- [x] 《Go 程序设计语言（英文版）》
-- [x] 《深入浅出 Kubernetes - 张磊》
-- [x] 《在生命的尽头拥抱你-临终关怀医生手记》
-- [x] 《在峡江的转弯处 - 陈行甲人生笔记》
-- [x] 《The ANSI C Programming Language》
-- [x] The Time Machine
-- [x] Learn Robotics With Raspberry Pi
-  - 学习使用树莓派控制智能小车，结合本书与网上资料，我制作了一台使用 Xbox One 手柄遥控的四驱小车，相当有意思~
-- [x] Learn Robotics Programming, 2nd Edition
-  - 跟前面那本一样是讲树莓派小车的，不过这本书更深入，代码含量高很多。
-  - 快速翻了一遍，跳过了其中大部分代码，因为书中的小车不太符合我的需求。
-- [x] The Unlikely Pilgrimage of Harold Fry
-
 
 正在读：
 
 - The Moon and Sixpence
-- 51 单片机自学笔记
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 
 
