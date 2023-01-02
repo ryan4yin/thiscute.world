@@ -89,6 +89,8 @@ comment:
 - 12 月
   - 从 Homelab 折腾到 HomeAssistant/ESPHome，然后就折腾 ESP32/ESP8266，结果很意外地就买了一堆硬件，入手了电烙铁热风枪万用表等各种仪器，ESP/51/STM32 都玩了个遍...
     - 输出内容有两个代码仓库：[learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm) 与 [learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)，以及一份 EE 笔记：[Electrical Engineering.md](https://github.com/ryan4yin/knowledge/blob/master/electrical-engineering/Electrical%20Engineering.md)
+      {{<figure src="/images/now/experience-of-electrical-engineering.webp" title="我的电子电路初体验" width="60%">}}
+      {{<figure src="/images/now/zy-kt-104-front.webp" title="焊好的可调稳压电源 - 正面" width="60%">}}
   - ChatGPT 横空出世，引发全网热潮。有技术大佬感慨，这个时刻竟然来临得如此之快，惊喜之余也有点猝不及防。我也把玩了一波，也用它帮助我学了许多硬件相关的东西，很有帮助。
     - 个人猜测未来 ChatGPT 成熟后大概率能极大提升技术人员的工作效率，很可能间接影响到许多人的工作。
   - 年底还入手了一台 3D 打印机 ELEGOO Neptune 3 Pro...
@@ -98,18 +100,15 @@ comment:
     - 线上网关优化项目基本落地，取得了预期收益，但是没达到之前设的激进目标。（旧网关仍留存极少部分流量，还需要时间去统一网关架构）
     - 做 K8s 集群升级准备，然后月底公司大面积新冠，拖慢了这项工作的进度，即使后调了升级时间，仍然感觉有点虚...
 
-{{<figure src="/images/now/experience-of-electrical-engineering.webp" title="我的电子电路初体验" width="60%">}}
-{{<figure src="/images/now/zy-kt-104-front.webp" title="焊好的可调稳压电源 - 正面" width="60%">}}
-
 ## 2022 年 Highlight
 
 ### 1. 英语
 
 英语也是我今年比较惊喜的一个部分，很长一段时间内，我都觉得英语的优先级并不高，一直没有把它的学习排上日程，水平也一直没啥显著提升。
 
-但是从今年 9 月份开始到现在的这一波英语学习中，我的进步相当明显，从去年大概  4700 词，到现在测试结果为 6583 词，涨了近 2000 词。
+但是从今年 9 月份开始到现在这四个月的英语学习中，我的进步相当明显，从去年大概  4700 词，到现在测试结果为 6583 词，涨了近 2000 词。
 
-词汇量测试结果按时间排序如下，使用的是看挺多网友也在用的 [Test Your Vocabulary](https://preply.com/en/learn/english/test-your-vocab) ：
+词汇量测试结果按时间排序如下，使用的测试工具是 [Test Your Vocabulary](https://preply.com/en/learn/english/test-your-vocab) ：
 
 {{<figure src="/images/now/2023-01-02-test-your-vocabulary-result.webp" title="2023-01-02 词汇量测试结果：6583 词" width="70%">}}
 {{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
@@ -133,7 +132,7 @@ comment:
 
 ### 3. 工作
 
-SRE 组今年工作的主旋律其实就是省钱，我今年的工作上有更多的挑战，不过因为得心应手很多，反倒没什么想特别着墨讲述的了。
+SRE 组今年工作的主旋律其实就是省钱，我今年的工作上有更多的挑战，不过因为得心应手很多，反倒没什么想特别着墨描述的了。
 
 ### 4. 阅读
 
@@ -164,6 +163,10 @@ SRE 组今年工作的主旋律其实就是省钱，我今年的工作上有更�
 
 ### 技术侧
 
+2022 年的结果跟年初的展望区别仍然是挺大的，但是我个人挺满意。
+
+这里再记一下 2023 年技术上的展望，看看今年能实现多少，又会点出多少意料之外的技能吧哈哈：
+
 - 云原生
   - 去年定的阅读 k8s 及相关生态的源码没任何进度，2023 年继续...
 - Linux
@@ -182,9 +185,12 @@ SRE 组今年工作的主旋律其实就是省钱，我今年的工作上有更�
 
 ### 生活侧
 
+2022 年初我写的生活上的展望，貌似只有「阅读」这一项达标了...
+不过今年也仍旧记录下 2023 年的展望：
+
 - 2022 年因为疫情以及自己懒，参与的户外活动相当少，2023 年希望能更多的做些户外运动，身体还是很重要的啊。
 - 把轮滑水平练上去一点，轮滑鞋在 2022 年吃灰了几乎一整年...
-- 音乐上，口琴、竹笛、midi 键盘、Synthesizer V / ACE Studio / Reaper，总要把其中一个练一练吧...（什么学吉他？不敢开新坑了，旧坑都还没填完呢...）
+- 音乐上，口琴、竹笛、midi 键盘、Synthesizer V / ACE Studio / Reaper，总要把其中一个练一练吧...（什么？学吉他？？不敢开新坑了，旧坑都还没填完呢...）
 - 阅读：仍然跟去年保持一样的节奏就好，目标是一个月至少阅读一本书。
 - 英语：英语的规划在 [Learn English Again](https://thiscute.world/posts/learn-english-again/) 中已经做得比较详尽了，这里仅摘抄下目标。
   - 2023 年达到 CEFR 的 C1 等级，报考并取得 BEC 高级证书
