@@ -34,7 +34,7 @@ comment:
   - 购入 Synthesizer V + 青溯 AI 声库，简单调了几首歌试试，效果非常棒。然后就一直放了一年没碰它...还试用了免费的 ACE 虚拟歌姬，合成效果确实很强，跟收费的 Synthesizer V 有的一拼。
   - 在家过春节，给家里二楼装了空调、加湿器跟地垫。但是没买地暖垫，导致开了空调后地上的垫子冰凉。后面补买了地暖垫但是已经要上班了没体验上。
 - 2 月跟 3 月
-  - 想学下区块链技术，结果发现课程一开始就讲加密哈希函数的基本性质，就决定先搞一波密码学，结果就是输出了一个《写给开发人员的实用密码学》系列文章，内容大部分是翻译的，少部分是我自己补充。
+  - 想学下区块链技术，结果发现课程一开始就讲加密哈希函数的基本性质，就决定先搞一波密码学，结果就是输出了一个[《写给开发人员的实用密码学》系列文章](https://thiscute.world/posts/practical-cryptography-basics-1/)，内容大部分是翻译的，少部分是我自己补充。
   - 主要工作：跟推荐系统大佬一起将服务从 HTTP 切换到 gRPC，效果立竿见影，服务流量下降 50% ~ 60%，延迟下降 30% ~ 50%。
 - 4 月份
   - 读完了 [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)，对以太坊有了基本的了解。
@@ -79,6 +79,7 @@ comment:
   - 主要工作：继续推进线上网关优化项目，以及调研 K8s / Istio 的新版本变化，为集群升级做预备工作。
 - 12 月
   - 从 Homelab 折腾到 HomeAssistant/ESPHome，然后就折腾 ESP32/ESP8266，结果很意外地就买了一堆硬件，入手了电烙铁热风枪万用表等各种仪器，ESP/51/STM32 都玩了个遍...
+    - 输出内容有两个代码仓库：[learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm) 与 [learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)，以及一份 EE 笔记：[Electrical Engineering.md](https://github.com/ryan4yin/knowledge/blob/master/electrical-engineering/Electrical%20Engineering.md)
   - ChatGPT 横空出世，引发全网热潮。有技术大佬感慨，这个时刻竟然来临得如此之快，惊喜之余也有点猝不及防。我也把玩了一波，也用它帮助我学了许多硬件相关的东西，很有帮助。
     - 个人猜测未来 ChatGPT 成熟后大概率能极大提升技术人员的工作效率，很可能间接影响到许多人的工作。
   - 年底还入手了一台 3D 打印机 ELEGOO Neptune 3 Pro...
@@ -88,6 +89,8 @@ comment:
     - 线上网关优化项目基本落地，取得了预期收益，但是没达到之前设的激进目标。（旧网关仍留存极少部分流量，还需要时间去统一网关架构）
     - 做 K8s 集群升级准备，然后月底公司大面积新冠，拖慢了这项工作的进度，即使后调了升级时间，仍然感觉有点虚...
 
+{{<figure src="/images/now/experience-of-electrical-engineering.webp" title="我的电子电路初体验" width="60%">}}
+{{<figure src="/images/now/zy-kt-104-front.webp" title="焊好的可调稳压电源 - 正面" width="60%">}}
 
 ## 2022 年 Highlight
 
@@ -99,10 +102,14 @@ comment:
 
 词汇量测试结果按时间排序如下，使用的是看挺多网友也在用的 [Test Your Vocabulary](https://preply.com/en/learn/english/test-your-vocab) ：
 
-![](/images/now/2023-01-02-test-your-vocabulary-result.webp "2023-01-02 词汇量测试结果：6583 词")
-![](/images/now/2022-12-19-test-your-vocabulary-result.webp "2022-12-19 词汇量测试结果：6300 词")
-![](/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp "2022-11-17 词汇量测试结果：5600 词")
-![](/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp "2022-10-18 词汇量测试结果：5100 词")
+{{<figure src="/images/now/2023-01-02-test-your-vocabulary-result.webp" title="2023-01-02 词汇量测试结果：6583 词" width="70%">}}
+{{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
+{{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
+{{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
+
+以及一些英文原版书阅读成就：
+
+{{<figure src="/images/now/mintreading-first-100days-achivement.webp" title="在薄荷阅读上读完的第一本英语原版书" width="35%">}}
 
 ### 2. 业余技术
 

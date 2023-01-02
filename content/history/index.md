@@ -22,10 +22,6 @@ toc:
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 118/270 (漏打卡 36 天)
 - 词汇量测试：新的一年，测了一下词汇量，测了三次选了结果低的一次，词汇量为 **6583**
-  - ![](/images/now/2023-01-02-test-your-vocabulary-result.webp "2023-01-02 词汇量测试结果：6583 词")
-  - ![](/images/now/2022-12-19-test-your-vocabulary-result.webp "2022-12-19 词汇量测试结果：6300 词")
-  - ![](/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp "2022-11-17 词汇量测试结果：5600 词")
-  - ![](/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp "2022-10-18 词汇量测试结果：5100 词")
 - 电子电路
   - 3D 打印机折腾了几天，暂时放下了。
   - 电子电路的话，跨年前后这几天学完了《51 单片机自学笔记》的汇编部分，然后直接开始通过野火的视频教程学 STM32，跟着写了一些 C 代码挺有意思的。
@@ -33,6 +29,10 @@ toc:
   - 简单看了下 ESP32/ESP8266 开发发现用的是 C++，感觉可能得花一两天时间学下 C++ 的 Class 相关逻辑，不然代码不好懂。
   - 另外也在考虑玩一玩 STM32 Linux 驱动开发以及 Rust 嵌入式开发，这两个大概是新的一年希望点亮的技能了。
 
+{{<figure src="/images/now/2023-01-02-test-your-vocabulary-result.webp" title="2023-01-02 词汇量测试结果：6583 词" width="70%">}}
+{{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
+{{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
+{{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 
 ### 2022-12-25
 
@@ -75,9 +75,9 @@ toc:
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 104/270 (漏打卡 25 天)
 - 词汇量测试：又过去了一个月，本月因为玩上了 Homelab 跟电子电路，漏打了很多卡，但是前面厚积薄发，测出的词汇量相比上个月上涨约 700 词，到了 6300
-  - ![](/images/now/2022-12-19-test-your-vocabulary-result.webp "2022-12-19 词汇量测试结果：6300 词")
-  - ![](/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp "2022-11-17 词汇量测试结果：5600 词")
-  - ![](/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp "2022-10-18 词汇量测试结果：5100 词")
+  {{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
+  {{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
+  {{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 - 电子电路
   - 花了一晚上焊好了一块可调电压电流稳压电源，最后看说明书，发现必须输入 AC 24V 交流电...买错板子了尴尬，买的时候只注意了 0-30V 可调，没注意输入电源的参数...
   - 不过它的元件很多，还有很多大个头，应该是我目前焊接过的最有意思的板子了~
@@ -335,10 +335,9 @@ toc:
   - 而且明显发现测试中的很多词都是最近一个月刚学的词，其中好几个还忘记含义了（哭）。
   - 之前定的目标词汇量增加速度为：每天约 20 个单词，即一个月新增 600 词。估计是因为这个月搞 Homelab 鸽了好几天，导致词汇量上升速度不达预期。
   - 画外：不得不说，这个测试感觉真的很准。
- 
-![](/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp "2022-11-17 词汇量测试结果：5600 词")
 
-![](/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp "2022-10-18 词汇量测试结果：5100 词")
+{{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
+{{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 
 ### 2022-11-13
 
