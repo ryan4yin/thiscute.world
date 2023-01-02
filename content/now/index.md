@@ -19,9 +19,9 @@ toc:
 >按优先级排序
 
 - 英语阅读
-  - The Moon and Sixpence  - 8/36
+  - The Moon and Sixpence  - 15/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 109/270 (漏打卡 28 天)
+  - 一点英语 270 天英语学习                  - 118/270 (漏打卡 36 天)
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 英语语法
