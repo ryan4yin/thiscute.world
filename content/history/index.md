@@ -34,6 +34,11 @@ toc:
 {{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
 {{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 
+哦还有连续三年蝉联我年度歌手的天依同学，截图放这里纪念一下：
+
+{{<figure src="/images/now/netease-cloud-music-2022-singer-of-ryan4yin.webp" title="我的网易云年度歌手" width="50%">}}
+
+
 ### 2022-12-25
 
 - 英语单词与听力练习
