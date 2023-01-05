@@ -85,6 +85,9 @@ comment:
     - ![](/images/now/dashy-homepage.webp "我的 Homelab 导航页 2022-11-12")
   - 因为业余时间沉迷搞 Homelab，英语打卡就变得断断续续了...但是词汇量测试的效果出乎意料，进步速度喜人，阅读能力也能感觉到有明显提升。
   - 月底搬家换了个新租房，床是挂天花板上的，房间就宽敞了很多，而且拉了独立的电信宽带，网速杠杠的。
+  - 11/25 去东莞松山湖跟高中同学聚会，然后跟几位同学打麻将打到半夜三点多，还远远眺望了眼同学读博的地方——「中国散裂中子源」，感觉很高大上
+    ![](/images/now/play-mahjong-with-classmates.webp)
+    ![](/images/now/china-spallation-neutron-source.webp)
   - 主要工作：继续推进线上网关优化项目，以及调研 K8s / Istio 的新版本变化，为集群升级做预备工作。
 - 12 月
   - 从 Homelab 折腾到 HomeAssistant/ESPHome，然后就折腾 ESP32/ESP8266，结果很意外地就买了一堆硬件，入手了电烙铁热风枪万用表等各种仪器，ESP/51/STM32 都玩了个遍...

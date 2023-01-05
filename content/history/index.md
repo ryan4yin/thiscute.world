@@ -302,6 +302,16 @@ toc:
 - 整理发表文章「Proxmox Virtual Environment 使用指南」
 - OpenMediaVault 的 ISCSI 插件(tgt) 性能太差，研究了一波使用 Windows Server 2022 搭建 ISCSI + SMB 服务，看看是否能跑满我的 2.5G 带宽。
 
+### 2022-11-25 - 2022-11-26
+
+- 晚上去东莞松山湖跟高中同学聚会，车跑在高速上，旁边是城市远眺的夜景，还在下雨。朦胧中远眺的城市夜景，对久居城市，并且鲜少夜间出行的我而言。这样的景色显得很科幻。
+- 然后跟几位同学打麻将打到半夜三点多...
+- 第二天一起吃完饭，送读博的同学回工作地点，远远眺望了下他所在的大科学工程「中国散裂中子源」，感觉很高大上。
+
+![](/images/now/play-mahjong-with-classmates.webp)
+![](/images/now/china-spallation-neutron-source.webp)
+
+
 ### 2022-11-20
 
 - 英语阅读
