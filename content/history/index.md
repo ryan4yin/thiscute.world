@@ -28,17 +28,19 @@ toc:
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 118/270 (漏打卡 36 天)
 - 词汇量测试：新的一年，测了一下词汇量，测了三次选了结果低的一次，词汇量为 **6583**
+    {{<figure src="/images/now/2023-01-02-test-your-vocabulary-result.webp" title="2023-01-02 词汇量测试结果：6583 词" width="70%">}}
+    {{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
+    {{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
+    {{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 - 电子电路
   - 3D 打印机折腾了几天，暂时放下了。
   - 电子电路的话，跨年前后这几天学完了《51 单片机自学笔记》的汇编部分，然后直接开始通过野火的视频教程学 STM32，跟着写了一些 C 代码挺有意思的。
   - 输出内容有两个仓库：[learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm) 与 [learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)
+    {{<figure src="/images/now/8051-display-2023.webp" title="8051 汇编 - 数码管显示 2023" width="70%">}}
+    {{<figure src="/images/now/8051-led-dancing.gif" title="8051 汇编 - LED 编舞..." width="70%">}}
+    {{<figure src="/images/now/8051-display-start-seconds.gif" title="8051 汇编 - 数码管动态显示秒数" width="70%">}}
   - 简单看了下 ESP32/ESP8266 开发发现用的是 C++，感觉可能得花一两天时间学下 C++ 的 Class 相关逻辑，不然代码不好懂。
   - 另外也在考虑玩一玩 STM32 Linux 驱动开发以及 Rust 嵌入式开发，这两个大概是新的一年希望点亮的技能了。
-
-{{<figure src="/images/now/2023-01-02-test-your-vocabulary-result.webp" title="2023-01-02 词汇量测试结果：6583 词" width="70%">}}
-{{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
-{{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
-{{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 
 哦还有连续三年蝉联我年度歌手的天依同学，截图放这里纪念一下：
 

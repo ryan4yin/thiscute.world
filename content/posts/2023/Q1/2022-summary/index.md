@@ -94,6 +94,9 @@ comment:
     - 输出内容有两个代码仓库：[learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm) 与 [learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)，以及一份 EE 笔记：[Electrical Engineering.md](https://github.com/ryan4yin/knowledge/blob/master/electrical-engineering/Electrical%20Engineering.md)
       {{<figure src="/images/now/experience-of-electrical-engineering.webp" title="我的电子电路初体验" width="60%">}}
       {{<figure src="/images/now/zy-kt-104-front.webp" title="焊好的可调稳压电源 - 正面" width="60%">}}
+      {{<figure src="/images/now/8051-display-2023.webp" title="8051 汇编 - 数码管显示 2023" width="70%">}}
+      {{<figure src="/images/now/8051-led-dancing.gif" title="8051 汇编 - LED 编舞..." width="70%">}}
+      {{<figure src="/images/now/8051-display-start-seconds.gif" title="8051 汇编 - 数码管动态显示秒数" width="70%">}}
   - ChatGPT 横空出世，引发全网热潮。有技术大佬感慨，这个时刻竟然来临得如此之快，惊喜之余也有点猝不及防。我也把玩了一波，也用它帮助我学了许多硬件相关的东西，很有帮助。
     - 个人猜测未来 ChatGPT 成熟后大概率能极大提升技术人员的工作效率，很可能间接影响到许多人的工作。
   - 年底还入手了一台 3D 打印机 ELEGOO Neptune 3 Pro...
