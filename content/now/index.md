@@ -46,16 +46,7 @@ toc:
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
-- 区块链与分布式系统
-  - [ ] 极客时间《分布式协议与算法实战》 - 50%
-- 机器学习与深度学习
-  - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
-- 英语
-  - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
-  - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
-  - [ ] 《英语语法新思维——初级教程》
-  - [ ] 《English Grammer In Use》语法书
-  - [ ] 《Key words for fluency》口语表达
+
 
 ## 三、今年的阅读进展
 
@@ -127,6 +118,12 @@ toc:
 
 - [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
+- 英语
+  - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
+  - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
+  - [ ] 《英语语法新思维——初级教程》
+  - [ ] 《English Grammer In Use》语法书
+  - [ ] 《Key words for fluency》口语表达
 
 生活：
 - 娱乐+运动：
@@ -194,6 +191,8 @@ toc:
   - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
   - 极客时间《检索技术 25 讲》
 
+- 机器学习与深度学习
+  - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 
 ## 五、备选书单
 
