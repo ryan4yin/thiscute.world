@@ -5076,8 +5076,8 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 <p>wiki 列出了一些 TLS 协议的安全问题：https://en.wikipedia.org/wiki/Transport_Layer_Security#Security</p>
 </blockquote>
 <p>TO BE DONE&hellip;</p>
-<h3 id="在边缘侧卸载-tls" class="headerLink">
-    <a href="#%e5%9c%a8%e8%be%b9%e7%bc%98%e4%be%a7%e5%8d%b8%e8%bd%bd-tls" class="header-mark"></a>在边缘侧卸载 TLS</h3><p>TLS 加密是一个安全协议，工程上虽然有 Google 等公司力推所谓「零信任加密」方案，在所有通信场景下都应用 mTLS 等加密技术。
+<h3 id="5-在边缘侧卸载-tls" class="headerLink">
+    <a href="#5-%e5%9c%a8%e8%be%b9%e7%bc%98%e4%be%a7%e5%8d%b8%e8%bd%bd-tls" class="header-mark"></a>5. 在边缘侧卸载 TLS</h3><p>TLS 加密是一个安全协议，工程上虽然有 Google 等公司力推所谓「零信任加密」方案，在所有通信场景下都应用 mTLS 等加密技术。
 但是为了成本与性能考量，绝大部分公司都选择仅在公网使用 HTTPS，在可信内网场景下使用纯 HTTP。其做法就是在边缘网关层卸载 TLS 协议，再将内部的 HTTP 请求负载均衡到后端服务上。</p>
 <p>所谓卸载 TLS 协议，就是指它对外提供 TLS 协议端口，但是使用 HTTP 等裸协议与上游服务通信。</p>
 <p>在边缘侧卸载 HTTPS 的好处主要有：</p>
