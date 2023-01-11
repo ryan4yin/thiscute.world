@@ -5058,8 +5058,8 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 </ul>
 </li>
 </ul>
-<h4 id="3-tls-协议的逆向手段" class="headerLink">
-    <a href="#3-tls-%e5%8d%8f%e8%ae%ae%e7%9a%84%e9%80%86%e5%90%91%e6%89%8b%e6%ae%b5" class="header-mark"></a>3. TLS 协议的逆向手段</h4><p>要获取一个应用的 HTTPS 数据，有两个方向:</p>
+<h4 id="4-tls-协议的逆向手段" class="headerLink">
+    <a href="#4-tls-%e5%8d%8f%e8%ae%ae%e7%9a%84%e9%80%86%e5%90%91%e6%89%8b%e6%ae%b5" class="header-mark"></a>4. TLS 协议的逆向手段</h4><p>要获取一个应用的 HTTPS 数据，有两个方向:</p>
 <ol>
 <li>服务端入侵: 现代应用的服务端突破难度通常都比较客户端高，注入等漏洞底层框架就有处理。
 <ol>
@@ -5076,6 +5076,19 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 <p>wiki 列出了一些 TLS 协议的安全问题：https://en.wikipedia.org/wiki/Transport_Layer_Security#Security</p>
 </blockquote>
 <p>TO BE DONE&hellip;</p>
+<h3 id="在边缘侧卸载-tls" class="headerLink">
+    <a href="#%e5%9c%a8%e8%be%b9%e7%bc%98%e4%be%a7%e5%8d%b8%e8%bd%bd-tls" class="header-mark"></a>在边缘侧卸载 TLS</h3><p>TLS 加密是一个安全协议，工程上虽然有 Google 等公司力推所谓「零信任加密」方案，在所有通信场景下都应用 mTLS 等加密技术。
+但是为了成本与性能考量，绝大部分公司都选择仅在公网使用 HTTPS，在可信内网场景下使用纯 HTTP。其做法就是在边缘网关层卸载 TLS 协议，再将内部的 HTTP 请求负载均衡到后端服务上。</p>
+<p>所谓卸载 TLS 协议，就是指它对外提供 TLS 协议端口，但是使用 HTTP 等裸协议与上游服务通信。</p>
+<p>在边缘侧卸载 HTTPS 的好处主要有：</p>
+<ul>
+<li>内网环境都使用了纯 HTTP，性能更好，延迟更低，成本更低。</li>
+<li>参见 <a href="https://0xffff.one/d/968-yi-pian-jiang-tls-de-hao-wen-fen" target="_blank" rel="noopener noreferrer">一篇讲 TLS 的好文分享</a>，如果通过 CDN 在边缘节点卸载 TLS，然后使用纯 HTTP 回源，能显著降低请求延迟。
+<ul>
+<li>我本人就于 2022 年，在 AWS 上通过这个手段优化了一波广告业务 API 的延迟，广告收益有明显上涨。</li>
+</ul>
+</li>
+</ul>
 <h2 id="三参考" class="headerLink">
     <a href="#%e4%b8%89%e5%8f%82%e8%80%83" class="header-mark"></a>三、参考</h2><ul>
 <li>
