@@ -5039,7 +5039,7 @@ PEM 其实就是在 DER 的基础上多做一步——使用 Base64 将 DER 编�
 <h4 id="2-公钥锁定public-key-pining技术" class="headerLink">
     <a href="#2-%e5%85%ac%e9%92%a5%e9%94%81%e5%ae%9apublic-key-pining%e6%8a%80%e6%9c%af" class="header-mark"></a>2. 公钥锁定（Public Key Pining）技术</h4><p>前面介绍过证书的结构，它其实包含了公钥、有效期与一系列的其他信息。
 使用了证书锁定技术，会导致证书的有效期也被锁定，APK 内的证书指纹就必须随着证书一起更新。</p>
-<p>更好的做法是指锁定证书中的公钥，即「公钥锁定」技术。
+<p>更好的做法是仅锁定证书中的公钥，即「公钥锁定」技术。
 「公钥锁定」比「证书锁定」更灵活，这样证书本身其实就可以直接轮转了（证书有过期时间），而不需要一个旧证书和新证书共存的中间时期。</p>
 <p><strong>「公钥锁定」是更推荐的锁定技术</strong>。</p>
 <h4 id="3-https-严格传输安全---hsts" class="headerLink">
