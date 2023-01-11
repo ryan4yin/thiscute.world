@@ -996,7 +996,7 @@ HSTS，即 HTTP Strict Transport Security，是一项安全技术，它允许服
   - 也就是说一旦证书失效，站点将完全无法访问，直至服务端修复证书问题。
   - 一旦证书失效，HTTPS 其实就不是严格安全的了，可能会遭遇中间人攻击。
 
-#### 3. TLS 协议的逆向手段
+#### 4. TLS 协议的逆向手段
 
 要获取一个应用的 HTTPS 数据，有两个方向: 
 
@@ -1008,6 +1008,20 @@ HSTS，即 HTTP Strict Transport Security，是一项安全技术，它允许服
 >wiki 列出了一些 TLS 协议的安全问题：https://en.wikipedia.org/wiki/Transport_Layer_Security#Security
 
 TO BE DONE...
+
+
+### 在边缘侧卸载 TLS
+
+TLS 加密是一个安全协议，工程上虽然有 Google 等公司力推所谓「零信任加密」方案，在所有通信场景下都应用 mTLS 等加密技术。
+但是为了成本与性能考量，绝大部分公司都选择仅在公网使用 HTTPS，在可信内网场景下使用纯 HTTP。其做法就是在边缘网关层卸载 TLS 协议，再将内部的 HTTP 请求负载均衡到后端服务上。
+
+所谓卸载 TLS 协议，就是指它对外提供 TLS 协议端口，但是使用 HTTP 等裸协议与上游服务通信。
+
+在边缘侧卸载 HTTPS 的好处主要有：
+
+- 内网环境都使用了纯 HTTP，性能更好，延迟更低，成本更低。
+- 参见 [一篇讲 TLS 的好文分享](https://0xffff.one/d/968-yi-pian-jiang-tls-de-hao-wen-fen)，如果通过 CDN 在边缘节点卸载 TLS，然后使用纯 HTTP 回源，能显著降低请求延迟。
+  - 我本人就于 2022 年，在 AWS 上通过这个手段优化了一波广告业务 API 的延迟，广告收益有明显上涨。
 
 
 ## 三、参考
