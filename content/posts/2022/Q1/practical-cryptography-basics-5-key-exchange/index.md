@@ -48,8 +48,8 @@ code:
 
 目前有许多用于密钥交换的密码算法。其中一些使用公钥密码系统，而另一些则使用更简单的密钥交换方案（如 Diffie-Hellman 密钥交换）；其中有些算法涉及服务器身份验证，也有些涉及客户端身份验证；其中部分算法使用密码，另一部分使用数字证书或其他身份验证机制。下面列举一些知名的密钥交换算法：
 
-- Diffie-Hellman Key Exchange (DHКЕ) ：传统的、应用最为广泛的密钥交换协议
-- 椭圆曲线 Diffie-Hellman (ECDH)
+- Diffie-Hellman Key Exchange (DHКЕ)：传统的、应用最为广泛的密钥交换协议
+- Elliptic-curve Diffie–Hellman (ECDH)：基于椭圆曲线密码学的密钥交换算法，DHKE 的继任者
 - RSA-OAEP 和 RSA-KEM（RSA 密钥传输）
 - PSK（预共享密钥）
 - SRP（安全远程密码协议）
