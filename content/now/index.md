@@ -19,7 +19,7 @@ toc:
 >按优先级排序
 
 - 英语阅读
-  - The Moon and Sixpence  - 15/36
+  - The Moon and Sixpence  - 18/36
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 118/270 (漏打卡 36 天)
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
@@ -161,8 +161,6 @@ toc:
   2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
   3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
   4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
-  5. 尝试餐区分布式领域的开源社区，做一些贡献。
-  6. 对于在读学生，还可以尝试参与一些相关的开源活动，比如谷歌开源之夏、中科院开源之夏、阿里巴巴开源之夏、腾讯犀牛鸟开源人才培训计划等等
 - 其他参考书籍
   - 《Distributed Systems, 3rd Edition, 2017》
   - 《Distributed Algorithms, 2nd Edition, 2018》
