@@ -3278,6 +3278,7 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
 <ul>
 <li>EKS 中的容器如果要访问因特网，就需要通过 NAT 网关，产生 NAT 费用</li>
 <li>如果 VPC 未配置 endpoints 使访问 AWS 服务（dynamodb/s3 等）时直接走 AWS 内部网络，这些流量会经过 VPC 的 NAT 网关，从而产生 NAT 网关费用</li>
+<li>对于托管版 NAT 网关，费用又包含两部分：公网流量费 + NAT 数据处理费用。其中数据处理费用可通过自建 NAT 实例来缩减。</li>
 </ul>
 </li>
 <li>服务如果要对外提供访问，最佳实践是通过 aws-load-balancer-controller 绑定 AWS ALB, 这里会产生 ALB 费用</li>
@@ -3389,7 +3390,11 @@ Algorand 算法（2017 年）基于 PBFT 进行改进，通过引入可验证随
     <a href="#kubernetes-%e6%88%90%e6%9c%ac%e5%88%86%e6%9e%90" class="header-mark"></a>Kubernetes 成本分析</h2><p>前面讨论的内容都很「虚」，下面来点更「务实」的：Kubernetes 成本分析实战。</p>
 <p>目前据我所知，主要有如下两个相关的开源工具：</p>
 <ul>
-<li><a href="https://github.com/kubecost/cost-model" target="_blank" rel="noopener noreferrer">Kubecost</a>: kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，支持按 deployment/service/label 等多个维度进行成本拆分，而且支持拆分网络成本。收费版提供更丰富的功能以及更长的数据存储时间。</li>
+<li><a href="https://github.com/opencost/opencost" target="_blank" rel="noopener noreferrer">Kubecost/Opencost</a>: kubecost 应该是目前最优秀的开源成本分析工具了，self-hosted 是免费的，支持按 deployment/service/label 等多个维度进行成本拆分，而且支持拆分网络成本。收费版提供更丰富的功能以及更长的数据存储时间。
+<ul>
+<li>kubecost 的核心部分已捐献给 CNCF，并改名为 opencost.</li>
+</ul>
+</li>
 <li><a href="https://github.com/gocrane/crane" target="_blank" rel="noopener noreferrer">crane</a>: 腾讯开源的一款 Kubernetes 成本优化工具，支持成本报表以及 EHPA 两个功能，才刚开源几个月，目前还比较简陋。
 <ul>
 <li><a href="https://cloud.tencent.com/developer/article/1960014" target="_blank" rel="noopener noreferrer">腾讯推出国内首个云原生成本优化开源项目 Crane</a></li>
@@ -3687,7 +3692,7 @@ OD 按需实例的资源价格通常比较固定，而 AWS Spot 实例的成本�
     <a href="#2-%e7%bd%91%e7%bb%9c%e6%88%90%e6%9c%ac%e7%9a%84%e5%88%86%e6%9e%90" class="header-mark"></a>2. 网络成本的分析</h4><blockquote>
 <p><a href="https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md" target="_blank" rel="noopener noreferrer">https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md</a></p>
 </blockquote>
-<p>对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。
+<p>对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。NAT 网关成本可以通过自建 NAT 实例来部分缩减（这里仅考察了 AWS 云服务，其他云服务商的收费模式可能存在区别）。
 使用单个可用区风险比较高，资源池也可能不够用，因此我们通常会使用多个可用区，这就导致跨区流量成本激增。</p>
 <p>kubecost 也支持使用 Pod network 监控指标对整个集群的流量成本进行拆分，kubecost 会部署一个绑定 hostNetwork 的 daemonset 来采集需要的网络指标，提供给 prometheus 拉取，再进行进一步的分析。</p>
 <p>kubecost 将网络流量分成如下几类：</p>
