@@ -35,18 +35,16 @@ toc:
 - Go 语言 Web 编程
   - [ ] [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
   - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
-  - [ ] [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
-  - [ ] [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
-  - [ ] [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
-  - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
 - Kubernetes 原理、Kubernetes APIServer/Operator 编程
   - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - Linux 性能调优与 Linux 网络技术
-  - [ ] 通过其他资料补充学习 gdb ld objdump objcopy 等命令
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
-
+- 操作系统
+  - 课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html)
+  - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+  - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
 
 ## 三、今年的阅读进展
 
@@ -87,36 +85,40 @@ toc:
 
 ### 1. 高优先级
 
-- 写几个小项目（使用 rust/go）
-  - 实现一个文本编辑器
-    - https://viewsourcecode.org/snaptoken/kilo/
-  - 实现一个简单的 Linux 容器
-    - https://blog.lizzie.io/linux-containers-in-500-loc.html
-  - 网络代理（不到 2000 行的 TUN 库）
-    - https://github.com/songgao/water
 
+#### 操作系统
 
-- Go 语言进阶
-  - 《Go 学习笔记（第六版下卷）》
-    - 基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
-
+- 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+  - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
+  - OSTEP 学习指南：<https://github.com/ryan4yin/computer-science/tree/master/coursepages/ostep>
+- 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
+- [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
+- 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
+- 给 raspberrypi 写 os 系列
+  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
+  - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
 - Linux 系统
   - 极客时间 《Linux 内核技术实战课》
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
   - 极客时间《容器实战高手课》
   - 极客时间《eBPF 核心技术与实战》
-
-- C 语言进阶
+- C 语言 / Rust 语言
   - 极客时间《深入 C 语言和程序运行原理》
-
-- Rust 语言入门
   - 极客时间《Rust 编程第一课》
 
-- Openresty 技术栈：（暂时感觉兴趣不大）
-  - 阅读《自己动手实现 Lua》
-  - 深入学习 Nginx 及 epoll
 
-- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
+#### 计算机网络
+
+- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
+  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
+  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
+- TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
+
+#### 其他杂项
+
+- Go 语言进阶
+  - 《Go 学习笔记（第六版下卷）》
+    - 基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
 
 - 英语
   - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
@@ -133,26 +135,6 @@ toc:
 ### 2. 中优先级
 
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
-
-#### 操作系统
-
-- 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-  - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
-  - OSTEP 学习指南：<https://github.com/ryan4yin/computer-science/tree/master/coursepages/ostep>
-- 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
-- [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
-- 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
-- 给 raspberrypi 写 os 系列
-  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
-  - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
-
-#### 计算机网络
-
-- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
-  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
-  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
-- TCP/IP 协议栈的实现：如果用 rust 的话，可以参考 [google/gvisor](https://github.com/google/gvisor)
-
 
 #### 分布式数据库
 
@@ -181,6 +163,31 @@ toc:
 
 #### 其他资料
 
+- 写几个小项目（使用 rust/go）
+  - 实现一个文本编辑器
+    - https://viewsourcecode.org/snaptoken/kilo/
+  - 实现一个简单的 Linux 容器
+    - https://blog.lizzie.io/linux-containers-in-500-loc.html
+  - 网络代理（不到 2000 行的 TUN 库）
+    - https://github.com/songgao/water
+
+- 机器学习与深度学习
+  - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
+  - AI 的应用：歌声合成、图片分辨率修复（超分辨率）、AIGC
+
+
+- Go 语言 Web 编程
+  - [ ] [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
+  - [ ] [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
+  - [ ] [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
+  - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
+
+- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
+
+- Openresty 技术栈：（暂时感觉兴趣不大）
+  - 阅读《自己动手实现 Lua》
+  - 深入学习 Nginx 及 epoll
+
 - 容器与 Kubernetes
   - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
@@ -189,8 +196,6 @@ toc:
   - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
   - 极客时间《检索技术 25 讲》
 
-- 机器学习与深度学习
-  - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 
 ## 五、备选书单
 
@@ -240,7 +245,6 @@ toc:
 - 其他感兴趣的
   - 3D 建模与渲染：Blender、Unreal Engine 5、C++、taichi
   - 音乐：乐理、Synthesizer V、Reaper、midi 键盘
-  - 其他：利用深度学习进行歌声合成、图片分辨率修复（超分辨率）、以及其他好玩的玩法
 
 
 {{< particles_effect_up  >}}
