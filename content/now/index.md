@@ -22,8 +22,6 @@ toc:
   - The Moon and Sixpence  - 18/36
 - 英语单词与听力练习
   - 一点英语 270 天英语学习                  - 118/270 (漏打卡 36 天)
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
-- TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 英语语法
   - 《英语语法新思维——初级教程》              - 8/366
 
@@ -37,14 +35,17 @@ toc:
   - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
 - Kubernetes 原理、Kubernetes APIServer/Operator 编程
   - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
+- 操作系统
+  - 课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html)
+  - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+  - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
+  - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
+- 计算机网络
+  - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - Linux 性能调优与 Linux 网络技术
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
-- 操作系统
-  - 课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html)
-  - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-  - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
 
 ## 三、今年的阅读进展
 
@@ -106,14 +107,6 @@ toc:
   - 极客时间《深入 C 语言和程序运行原理》
   - 极客时间《Rust 编程第一课》
 
-
-#### 计算机网络
-
-- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
-  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
-  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
-- TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
-
 #### 其他杂项
 
 - Go 语言进阶
@@ -135,6 +128,14 @@ toc:
 ### 2. 中优先级
 
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
+
+#### 计算机网络
+
+- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
+  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
+  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
+- TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
+
 
 #### 分布式数据库
 
