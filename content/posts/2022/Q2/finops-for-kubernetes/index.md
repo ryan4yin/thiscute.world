@@ -70,6 +70,7 @@ comment:
 - NAT 网关费用
   - EKS 中的容器如果要访问因特网，就需要通过 NAT 网关，产生 NAT 费用
   - 如果 VPC 未配置 endpoints 使访问 AWS 服务（dynamodb/s3 等）时直接走 AWS 内部网络，这些流量会经过 VPC 的 NAT 网关，从而产生 NAT 网关费用
+  - 对于托管版 NAT 网关，费用又包含两部分：公网流量费 + NAT 数据处理费用。其中数据处理费用可通过自建 NAT 实例来缩减。
 - 服务如果要对外提供访问，最佳实践是通过 aws-load-balancer-controller 绑定 AWS ALB, 这里会产生 ALB 费用
 - 监控系统成本
   - Kubernetes 的监控系统是不可或缺的
@@ -329,7 +330,7 @@ kubecost 的成本统计粒度为 container，而 deployment/service/namespace/l
 
 ><https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md>
 
-对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。
+对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。NAT 网关成本可以通过自建 NAT 实例来部分缩减（这里仅考察了 AWS 云服务，其他云服务商的收费模式可能存在区别）。
 使用单个可用区风险比较高，资源池也可能不够用，因此我们通常会使用多个可用区，这就导致跨区流量成本激增。
 
 kubecost 也支持使用 Pod network 监控指标对整个集群的流量成本进行拆分，kubecost 会部署一个绑定 hostNetwork 的 daemonset 来采集需要的网络指标，提供给 prometheus 拉取，再进行进一步的分析。
