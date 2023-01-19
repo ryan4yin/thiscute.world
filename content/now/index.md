@@ -36,7 +36,7 @@ toc:
 - Kubernetes 原理、Kubernetes APIServer/Operator 编程
   - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - 操作系统
-  - 课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html)
+  - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
   - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
