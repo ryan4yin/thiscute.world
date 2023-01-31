@@ -97,8 +97,7 @@ comment:
   - 稳压二极管
 - 三极管
 - MOSFET 场效应管
-  - power converter 电压转换器
-    - 整流器（rectifier）、逆变器（inverter）、斩波器（chopper）及变频驱动器（VFD）
+  - 电压转换器（power converter）：整流器（rectifier）、逆变器（inverter）、斩波器（chopper）及变频驱动器（VFD）
 - 电容
   - 电解电容
   - 瓷片电容
