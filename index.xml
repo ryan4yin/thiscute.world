@@ -686,29 +686,6 @@
 我在淘宝「电子爱好者之家」上买了几个焊接套件，如指尖陀螺、5V 升 12V 升压板、LED 摇摇棒、十二个实验洞洞板套件、高压发生器等。</p>
 <p>边玩边学习相关知识是最有意思的，玩到一定阶段后，可以再考虑补一补基础知识。
 基础理论方面我查到《<strong><a href="https://book.douban.com/subject/3171563/" target="_blank" rel="noopener noreferrer">模拟和数字电子电路基础</a></strong>》这本书比较受推荐，豆瓣评分也很高。</p>
-<p>有一定电路基础后，就可以开始玩单片机了，单片机学习顺序大概是：</p>
-<ul>
-<li>8051: 最简单最经典的单片机
-<ul>
-<li>我的学习笔记与代码：<a href="https://github.com/ryan4yin/learn-8051-asm" target="_blank" rel="noopener noreferrer">ryan4yin/learn-8051-asm</a></li>
-</ul>
-</li>
-<li>STM32: 工业届应用最广泛的单片机，网上资料众多
-<ul>
-<li>我的学习笔记与代码（未完待续）：<a href="https://github.com/ryan4yin/learn-stm32f103c8t6" target="_blank" rel="noopener noreferrer">ryan4yin/learn-stm32f103c8t6</a></li>
-</ul>
-</li>
-<li>ESP32/ESP8266: 包含 wifi 蓝牙功能的单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。</li>
-</ul>
-<p>单片机玩够了后，就可以开始玩 Linux 嵌入式开发了，相关资料（大致按学习顺序排序）：</p>
-<ul>
-<li><a href="https://nju-projectn.github.io/ics-pa-gitbook/" target="_blank" rel="noopener noreferrer">南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)</a></li>
-<li><a href="https://github.com/isometimes/rpi4-osdev" target="_blank" rel="noopener noreferrer">从零开始为树莓派 4B 开发一个操作系统 - rpi4-osdev</a></li>
-<li>《Linux/Unix 系统编程手册》</li>
-<li><a href="https://github.com/d0u9/Linux-Device-Driver" target="_blank" rel="noopener noreferrer">Linux Device Drivers (LDD3) </a>: Linux 驱动开发经典书籍</li>
-<li>《深入理解 Linux 内核》</li>
-<li>《Linux 内核设计与实现》</li>
-</ul>
 <p>学习基础的电路理论时可以仿真软件同步学习，如：</p>
 <ul>
 <li>Multisim（元器件仿真）、Proteus（单片机仿真）
@@ -722,6 +699,63 @@
 <li><a href="https://github.com/KiCad" target="_blank" rel="noopener noreferrer">KiCAD</a>: 开源电路板设计工具，功能强大，支持插件，社区资源多。</li>
 </ul>
 </li>
+</ul>
+<h3 id="1-单片机开发" class="headerLink">
+    <a href="#1-%e5%8d%95%e7%89%87%e6%9c%ba%e5%bc%80%e5%8f%91" class="header-mark"></a>1. 单片机开发</h3><p>有一定电路基础后，就可以开始玩单片机了。</p>
+<ul>
+<li>介绍：单片机的英文名叫 Microcontroller Unit，即 <strong>MCU</strong>. 它是把 CPU、RAM、定时/计数器（timer/counter）、I/O 接口等都集成在一块集成电路芯片上的微型计算机</li>
+<li>应用：主要用于前端的无操作系统、以实时控制为主的环境，如电子钟表、电机控制等。在硬件爱好者手中可用于机器人前端控制，四轴飞行器前端控制，3D打印机前端控制等。</li>
+<li>典型产品：
+<ul>
+<li>Arduino: AVR 单片机为核心控制器的单片机应用开发板，是开源硬件，新手友好</li>
+<li>STM32: 貌似是单片机从业人员的入行首选</li>
+</ul>
+</li>
+<li>补充说明：
+<ul>
+<li>单片机非常简单，因为很接近底层，而且硬件配置极差，干不了太多的事。主要的优势就是稳定、开发也简单。</li>
+<li>单片机跟硬件的绑定很严重，经常出现一套代码换一个单片机平台，就得完全重写。</li>
+</ul>
+</li>
+</ul>
+<p>单片机学习顺序大概是：</p>
+<ul>
+<li>8051: 最简单最经典的单片机
+<ul>
+<li>我的学习笔记与代码：<a href="https://github.com/ryan4yin/learn-8051-asm" target="_blank" rel="noopener noreferrer">ryan4yin/learn-8051-asm</a></li>
+</ul>
+</li>
+<li>STM32: 工业届应用最广泛的单片机，网上资料众多
+<ul>
+<li>我的学习笔记与代码（未完待续）：<a href="https://github.com/ryan4yin/learn-stm32f103c8t6" target="_blank" rel="noopener noreferrer">ryan4yin/learn-stm32f103c8t6</a></li>
+</ul>
+</li>
+<li>ESP32/ESP8266: 包含 wifi 蓝牙功能的单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。</li>
+</ul>
+<h3 id="2-嵌入式-linux-开发linux-embedded-system" class="headerLink">
+    <a href="#2-%e5%b5%8c%e5%85%a5%e5%bc%8f-linux-%e5%bc%80%e5%8f%91linux-embedded-system" class="header-mark"></a>2. 嵌入式 Linux 开发（Linux Embedded System）</h3><p>单片机玩够了后，就可以开始玩 Linux 嵌入式开发了。</p>
+<ul>
+<li>介绍：即运行 Linux 系统的更复杂的计算机系统，行业上最常用 ARM Cortex-A53 系列芯片与 Linux 开发一些嵌入式设备。</li>
+<li>应用：路由器、电视盒子、智能家居等。在硬件爱好者手里可以用来做计算机视觉控制小车、WiFi、蓝牙控制中枢等等。</li>
+<li>典型产品
+<ul>
+<li>Raspberry Pi: 使用 ARM Cortex-M 系列 CPU 的微型计算机，开源硬件，社区庞大，生态丰富。</li>
+</ul>
+</li>
+<li>补充说明
+<ul>
+<li>嵌入式 Linux 代码的可移植性相对要好很多，因为硬件相关的逻辑都封装在驱动层了。</li>
+</ul>
+</li>
+</ul>
+<p>相关资料（大致按学习顺序排序）：</p>
+<ul>
+<li><a href="https://nju-projectn.github.io/ics-pa-gitbook/" target="_blank" rel="noopener noreferrer">南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)</a></li>
+<li><a href="https://github.com/isometimes/rpi4-osdev" target="_blank" rel="noopener noreferrer">从零开始为树莓派 4B 开发一个操作系统 - rpi4-osdev</a></li>
+<li>《Linux/Unix 系统编程手册》</li>
+<li><a href="https://github.com/d0u9/Linux-Device-Driver" target="_blank" rel="noopener noreferrer">Linux Device Drivers (LDD3) </a>: Linux 驱动开发经典书籍</li>
+<li>《深入理解 Linux 内核》</li>
+<li>《Linux 内核设计与实现》</li>
 </ul>
 <p>上面这些都学了一遍的话，业余玩玩硬件应该就很够用了，期待我完成这个学习路线的那一天&hellip;</p>
 ]]></content></entry><entry><title type="html">2022 年年终总结</title><link href="https://thiscute.world/posts/2022-summary/"/><id>https://thiscute.world/posts/2022-summary/</id><author><name>ryan4yin</name></author><published>2023-01-02T18:00:45+08:00</published><updated>2023-01-02T18:00:45+08:00</updated><content type="html"><![CDATA[<figure>
