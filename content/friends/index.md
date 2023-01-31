@@ -26,7 +26,7 @@ comment:
 
 ## 交换友链
 
-希望能先友后链。
+维护不了太多的友链关系，因此希望能先友后链。
 
 <!-- 如果你觉得我的博客有些意思，而且也有自己的博客，并且博客运行时间超过半年，至少有 6 篇自认为有价值的原创文章，欢迎与我交换友链~
 
@@ -76,6 +76,7 @@ var myFriends = [
     ["https://zhangshier.vip/", "https://zhangshier.vip/Hexo_img/avatar.jpg", "@张时贰", "环转码，爱敲代码的小张！<= 很有干劲的后辈"], 
     ["https://tftree.top/", "https://cdn.tftree.top//others/202212042117873.png", "@虚空裂隙", "心有猛虎,细嗅蔷薇"], 
     ["https://zgq.ink/", "https://zgq.ink/favicon.png", "@zgq354", "多一些思考与记录 <= 0xffff 站长，前端佬"], 
+    ["https://bleatingsheep.org/", "https://bleatingsheep.org/favicon.ico", "@bleatingsheep", "偶像咩咩"], 
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
