@@ -620,11 +620,11 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - [立创 EDA](https://lceda.cn/): 国产 EDA，全平台支持，也提供 Web 版
   - [KiCAD](https://github.com/KiCad): 开源电路板设计工具，功能强大，支持插件，社区资源多。
 
-### 1. 单片机系统
+### 1. 单片机
 
 有一定电路基础后，就可以开始玩单片机了。
 
-- 介绍：单片机的英文名叫 Microcontroller Unit，即 **MCU**. 它是把 CPU、RAM、定时/计数器（timer/counter）、I/O 接口等都集成在一块集成电路芯片上的微型计算机。
+- 介绍：单片机的英文名叫 Microcontroller Unit，缩写为 **MCU**. 它是把 CPU、RAM、定时/计数器（timer/counter）、I/O 接口等都集成在一块集成电路芯片上的微型计算机。
 - 应用：主要用于前端的无操作系统、以实时控制为主的环境，如电子钟表、电机控制等。在硬件爱好者手中可用于机器人前端控制，四轴飞行器前端控制，3D打印机前端控制等。
 - 典型产品：
   - Arduino: AVR 单片机为核心控制器的单片机应用开发板，是开源硬件，新手友好
@@ -641,11 +641,13 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - 我的学习笔记与代码（未完待续）：[ryan4yin/learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)
 - ESP32/ESP8266: 包含 wifi 蓝牙功能的单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
 
-### 2. 嵌入式 Linux 系统（Linux Embedded System）
+### 2. 嵌入式 Linux（Linux on Embedded System）
 
-单片机玩够了后，就可以开始玩 Linux 嵌入式系统了。
+>嵌入式系统（Embedded System），是指嵌入机械或电气系统内部、具有专一功能和实时计算性能的计算机系统。
 
-- 介绍：嵌入式 Linux 系统，即运行 Linux 操作系统的、比 MCU 更复杂的计算机系统，行业上最常用 ARM Cortex-A53 系列芯片与 Linux 开发一些嵌入式设备。
+单片机玩够了后，就可以开始玩嵌入式 Linux了。
+
+- 介绍：嵌入式 Linux，即运行 Linux 操作系统的、性能比 MCU 更高的微型计算机，行业上最常用 ARM Cortex-A53 系列芯片与 Linux 开发一些嵌入式设备。
 - 应用：路由器、电视盒子、智能家居等。在硬件爱好者手里可以用来做计算机视觉控制小车、WiFi、蓝牙控制中枢等等。
 - 典型产品
   - Raspberry Pi: 使用 ARM Cortex-A 系列 CPU 的微型计算机，社区庞大，生态丰富。
