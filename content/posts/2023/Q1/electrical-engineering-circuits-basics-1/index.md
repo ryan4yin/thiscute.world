@@ -239,6 +239,8 @@ $\frac{I_{C}}{I_{B}}$ 之间的比率（常数）被称做三极管的电流增�
 
 ### 3. MOSFET 金属氧化物场效应晶体管
 
+>https://elamazing.com/2021/03/31/mosfet/
+
 >MOSFET 与三极管的区别与选用：https://www.eet-china.com/mp/a17394.html
 
 >CMOS 集成电路工艺 - 百科: https://www.zgbk.com/ecph/words?SiteID=1&ID=124559&Type=bkzyb
@@ -254,6 +256,8 @@ MOS管在导通压降下，导通电阻小，栅极驱动不需要电流，损�
 场效应管能在很小电流和很低电压的条件下工作，功耗低，而且可以很方便地把很多场效应管集成在一块硅片上，因此场效应管在大规模集成电路中得到了广泛的应用。
 
 目前主流的数字集成电路，包括 CPU/GPU/RAM，基本都是通过光刻制造的 CMOS 集成电路（Complementary Metal-Oxide-Semiconductor Integrated Circuit），CMOS 就是基于 MOSFET 技术实现的。
+
+MOSFET 管的结构、极性，用法等内容，待补充... TODO
 
 ### 4. 电容 Capacitor
 
