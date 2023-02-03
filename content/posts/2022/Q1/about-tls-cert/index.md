@@ -566,7 +566,7 @@ openssl ecparam -list_curves
   - 优点就是易于签发，很适合做自动化。
   - 各云厂商（AWS/GCP/Cloudflare，以及 Vercel/Github 的站点服务）给自家服务提供的免费证书都是 DV 证书，Let's Encrypt 的证书也是这个类型。
     - 很明显这些证书的签发都非常方便，而且仅验证域名所有权。
-    - 但是 AWS/GCP/Cloudflare/Vercel/Github 提供的 DV 证书都仅能在它们的云服务上使用，不提供私钥功能！
+    - 但是 AWS/GCP/Cloudflare/Vercel/Github 提供的 DV 证书都仅能在它们的云服务上使用，不提供私钥导出功能！
 - Organization Validated (OV) 证书
   - （貌似我也接触地比较少，不做评价）
   - 据说是企业 SSL 证书的首选，通过企业认证确保企业 SSL 证书的真实性。
