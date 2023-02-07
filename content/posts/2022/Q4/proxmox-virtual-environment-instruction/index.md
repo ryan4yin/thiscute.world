@@ -336,6 +336,20 @@ debian 的 cloud 镜像根本没法用，建议避免使用它。
 解决方法：从旧的虚拟机克隆一个新虚拟机，将新虚拟机名称设为你期望的 hostname，然后删除旧虚拟机，启动新克隆的虚拟机，即完成了 hostname 重命名。
 
 
+### 9. 虚拟机迁移时报错 `Host key verification failed`
+
+>社区相关帖子：https://forum.proxmox.com/threads/host-key-verification-failed-when-migrate.41666/
+
+这通常是因为节点增删，或者不小心动到了 `~/.ssh/known_hosts` 文件，导致的问题。
+
+可以通过手动在每台节点上执行如下命令解决：
+
+```shell
+ssh -o 'HostKeyAlias=<Target node Name>' root@<Target node IP>
+```
+
+注意将上述命令中的 `Target node Name>` 改为节点名称，将 `<Target node IP>` 改为节点 IP 地址。
+
 ## 四、PVE 网络配置
 
 ### 1. 桥接多张物理网卡
