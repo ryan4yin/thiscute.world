@@ -352,8 +352,6 @@ ssh -o 'HostKeyAlias=<Target node Name>' root@<Target node IP>
 
 ### 10. PVE 的 vm 不支持 vmx/svm 虚拟化指令集
 
-> 参考: https://zhuanlan.zhihu.com/p/354034712
-
 在 Linux 虚拟机中运行如下命令：
 
 ```shell
@@ -373,11 +371,37 @@ cat /sys/module/kvm_intel/parameters/nested
 cat /sys/module/kvm_amd/parameters/nested
 ```
 
-如果输出不是 `Y`/`1`，请自己网上查下如何启用。
+如果输出不是 `Y`/`1`，则需要手动启用嵌套虚拟化功能。
 
-上面这么一堆操作能证明，宿主机已经启用了嵌套虚拟化，但是虚拟机内部却没有虚拟化指令集。
+如果是 intel cpu，需要使用如下命令启用嵌套虚拟化功能：
 
-**根本原因是使用了默认使用 kvm64 这个 CPU 类型，它是一种虚拟化的 CPU，不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 `host`，然后重启虚拟机，问题就解决了**。
+```shell
+## 1. 关闭所有虚拟机，并卸载 kvm_intel 内核模块
+sudo modprobe -r kvm_intel
+## 2. 启用嵌套虚拟化功能
+sudo modprobe kvm_intel nested=1
+## 3. 保存配置，使嵌套虚拟化功能在重启后自动启用
+cat <<EOF | sudo tee /etc/modprobe.d/kvm.conf
+options kvm_intel nested=1
+EOF
+```
+
+如果是 amd cpu，则应使用如下命令启用嵌套虚拟化功能：
+
+```shell
+## 1. 关闭所有虚拟机，并卸载 kvm_intel 内核模块
+sudo modprobe -r kvm_amd
+## 2. 启用嵌套虚拟化功能
+sudo modprobe kvm_amd nested=1
+## 3. 保存配置，使嵌套虚拟化功能在重启后自动启用
+cat <<EOF | sudo tee /etc/modprobe.d/kvm.conf
+options kvm_amd nested=1
+EOF
+```
+
+上面这么一堆操作后，宿主机就已经启用了嵌套虚拟化，但是虚拟机内部却仍然不一定能有虚拟化指令集。
+
+**根本原因是 PVE 默认使用 kvm64 这种虚拟化的 CPU 类型，它不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 `host`，然后重启虚拟机，问题就解决了**。
 
 
 ## 四、PVE 网络配置
