@@ -33,6 +33,9 @@ comment:
   - 另一个盘绑定到 wsl2 给 docker 容器用，仍然决定用 btrfs 文件系统
 - 遇到一个问题是 windows server 2022 因为没嵌套虚拟化，装不了 hyper-v，一番查找发现，将 vm cpu 类型从 kvm64 改为 host 就解决了
 - 另一个问题是 wsl2 ubuntu 无法启动，通过 [WSL/issues/5440](https://github.com/microsoft/WSL/issues/5440#issuecomment-778660156) 中提到的方法解决了——创建 `~/.wslconfig`，通过它禁用 wsl 嵌套虚拟化功能。
+- 仍然没找到英语学习的节奏，年后基本没学几天英语。
+- 搞硬件的热情又上来了，特别是 RK3558S 这颗 SOC 感觉挺好玩的样子，加了 OrangePi5 的群见了市面（群友们玩得都挺有意思）。
+
 
 ### 2023-02-03
 
