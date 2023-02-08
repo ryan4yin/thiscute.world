@@ -140,22 +140,46 @@ sudo systemctl restart libvirtd.service
 
 ### 3. 启用嵌套虚拟化
 
-如果你需要**在虚拟机中运行虚拟机**（比如在虚拟机里测试 katacontainers 等安全容器技术），那就需要启用内核模块 kvm_intel 实现嵌套虚拟化。
+如果你需要**在虚拟机中运行虚拟机**（比如在虚拟机里测试 katacontainers 等安全容器技术），那就需要启用内核模块 kvm_intel 或 kvm_amd 实现嵌套虚拟化。
+
+首先通过如下指令验证下是否已经启用了嵌套虚拟化（一般的发行版默认都不会启用）：
 
 ```shell
-# 临时启用 kvm_intel 嵌套虚拟化
+# intel 用这个命令，输出 Y 则表示启用了嵌套虚拟化
+cat /sys/module/kvm_intel/parameters/nested
+# amd 用如下指令，输出 1 则表示启用了嵌套虚拟化
+cat /sys/module/kvm_amd/parameters/nested
+```
+
+如果输出不是 `Y`/`1`，说明默认未启用嵌套虚拟化，需要手动启用，步骤如下。
+
+如果是 intel cpu，需要使用如下命令启用嵌套虚拟化功能：
+
+```shell
+## 1. 关闭所有虚拟机，并卸载 kvm_intel 内核模块
 sudo modprobe -r kvm_intel
+## 2. 启用嵌套虚拟化功能
 sudo modprobe kvm_intel nested=1
-# 修改配置，永久启用嵌套虚拟化
-echo "options kvm-intel nested=1" | sudo tee /etc/modprobe.d/kvm-intel.conf
+## 3. 保存配置，使嵌套虚拟化功能在重启后自动启用
+cat <<EOF | sudo tee /etc/modprobe.d/kvm.conf
+options kvm_intel nested=1
+EOF
 ```
 
-验证嵌套虚拟化已经启用：
+如果是 amd cpu，则应使用如下命令启用嵌套虚拟化功能：
 
 ```shell
-$ cat /sys/module/kvm_intel/parameters/nested 
-Y
+## 1. 关闭所有虚拟机，并卸载 kvm_intel 内核模块
+sudo modprobe -r kvm_amd
+## 2. 启用嵌套虚拟化功能
+sudo modprobe kvm_amd nested=1
+## 3. 保存配置，使嵌套虚拟化功能在重启后自动启用
+cat <<EOF | sudo tee /etc/modprobe.d/kvm.conf
+options kvm_amd nested=1
+EOF
 ```
+
+改完后再利用前面提到的命令验证下是否启用成功。
 
 至此，KVM 的安装就大功告成啦，现在应该可以在系统中找到 virt-manager 的图标，进去就可以使用了。
 virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这里就不详细介绍了，自己摸索摸索应该就会了。
