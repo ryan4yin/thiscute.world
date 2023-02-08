@@ -1514,7 +1514,6 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <h3 id="8-修改-linux-虚拟机的-hostname" class="headerLink">
     <a href="#8-%e4%bf%ae%e6%94%b9-linux-%e8%99%9a%e6%8b%9f%e6%9c%ba%e7%9a%84-hostname" class="header-mark"></a>8. 修改 Linux 虚拟机的 Hostname</h3><p>如前所述，pve 的 cloudinit 配置会在启动时尝试将虚拟机 hostname 修改为与虚拟机一致，这导致手动修改无法生效无效。</p>
 <p>解决方法：从旧的虚拟机克隆一个新虚拟机，将新虚拟机名称设为你期望的 hostname，然后删除旧虚拟机，启动新克隆的虚拟机，即完成了 hostname 重命名。</p>
-<p>&laquo;&laquo;&laquo;&lt; HEAD</p>
 <h3 id="9-虚拟机迁移时报错-host-key-verification-failed" class="headerLink">
     <a href="#9-%e8%99%9a%e6%8b%9f%e6%9c%ba%e8%bf%81%e7%a7%bb%e6%97%b6%e6%8a%a5%e9%94%99-host-key-verification-failed" class="header-mark"></a>9. 虚拟机迁移时报错 <code>Host key verification failed</code></h3><blockquote>
 <p>社区相关帖子：https://forum.proxmox.com/threads/host-key-verification-failed-when-migrate.41666/</p>
@@ -1529,9 +1528,9 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh -o <span class="s1">&#39;HostKeyAlias=&lt;Target node Name&gt;&#39;</span> root@&lt;Target node IP&gt;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="注意将上述命令中的-target-node-name-改为节点名称将-target-node-ip-改为节点-ip-地址" class="headerLink">
-    <a href="#%e6%b3%a8%e6%84%8f%e5%b0%86%e4%b8%8a%e8%bf%b0%e5%91%bd%e4%bb%a4%e4%b8%ad%e7%9a%84-target-node-name-%e6%94%b9%e4%b8%ba%e8%8a%82%e7%82%b9%e5%90%8d%e7%a7%b0%e5%b0%86-target-node-ip-%e6%94%b9%e4%b8%ba%e8%8a%82%e7%82%b9-ip-%e5%9c%b0%e5%9d%80" class="header-mark"></a>注意将上述命令中的 <code>Target node Name&gt;</code> 改为节点名称，将 <code>&lt;Target node IP&gt;</code> 改为节点 IP 地址。</h1><h3 id="9-pve-的-vm-不支持-vmxsvm-虚拟化指令集" class="headerLink">
-    <a href="#9-pve-%e7%9a%84-vm-%e4%b8%8d%e6%94%af%e6%8c%81-vmxsvm-%e8%99%9a%e6%8b%9f%e5%8c%96%e6%8c%87%e4%bb%a4%e9%9b%86" class="header-mark"></a>9. PVE 的 vm 不支持 vmx/svm 虚拟化指令集</h3><blockquote>
+</div><p>注意将上述命令中的 <code>Target node Name&gt;</code> 改为节点名称，将 <code>&lt;Target node IP&gt;</code> 改为节点 IP 地址。</p>
+<h3 id="10-pve-的-vm-不支持-vmxsvm-虚拟化指令集" class="headerLink">
+    <a href="#10-pve-%e7%9a%84-vm-%e4%b8%8d%e6%94%af%e6%8c%81-vmxsvm-%e8%99%9a%e6%8b%9f%e5%8c%96%e6%8c%87%e4%bb%a4%e9%9b%86" class="header-mark"></a>10. PVE 的 vm 不支持 vmx/svm 虚拟化指令集</h3><blockquote>
 <p>参考: <a href="https://zhuanlan.zhihu.com/p/354034712" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/354034712</a></p>
 </blockquote>
 <p>在 Linux 虚拟机中运行如下命令：</p>
@@ -1563,21 +1562,6 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </div><p>如果输出不是 <code>Y</code>/<code>1</code>，请自己网上查下如何启用。</p>
 <p>上面这么一堆操作能证明，宿主机已经启用了嵌套虚拟化，但是虚拟机内部却没有虚拟化指令集。</p>
 <p><strong>根本原因是使用了默认使用 kvm64 这个 CPU 类型，它是一种虚拟化的 CPU，不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 <code>host</code>，然后重启虚拟机，问题就解决了</strong>。</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>6e748943 (feat: proxmox-virtual-environment-instruction - nested virtualization)</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
 <h2 id="四pve-网络配置" class="headerLink">
     <a href="#%e5%9b%9bpve-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae" class="header-mark"></a>四、PVE 网络配置</h2><h3 id="1-桥接多张物理网卡" class="headerLink">
     <a href="#1-%e6%a1%a5%e6%8e%a5%e5%a4%9a%e5%bc%a0%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>1. 桥接多张物理网卡</h3><p>示例如下，主要就是在 vmbr0 网桥的 <code>Bridge Ports</code> 里面：</p>
