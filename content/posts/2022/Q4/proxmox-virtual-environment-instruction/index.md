@@ -350,6 +350,36 @@ ssh -o 'HostKeyAlias=<Target node Name>' root@<Target node IP>
 
 注意将上述命令中的 `Target node Name>` 改为节点名称，将 `<Target node IP>` 改为节点 IP 地址。
 
+### 10. PVE 的 vm 不支持 vmx/svm 虚拟化指令集
+
+> 参考: https://zhuanlan.zhihu.com/p/354034712
+
+在 Linux 虚拟机中运行如下命令：
+
+```shell
+egrep '(vmx|svm)' --color=always /proc/cpuinfo
+```
+
+有输出则说明此虚拟机本身也支持 vmx/svm 虚拟化指令集（vmx 是 intel 指令集，svm 是 amd 的指令集）。
+
+如果没有任何输出，说明此虚拟机不支持嵌套虚拟机，无法在其内部运行 Hyper-V 或者 kvm 虚拟化程序。
+
+一般来说 PVE 宿主机默认就会启用嵌套虚拟化功能，可通过如下指令验证：
+
+```shell
+# intel 用这个命令，输出 Y 则表示启用了嵌套虚拟化
+cat /sys/module/kvm_intel/parameters/nested
+# amd 用如下指令，输出 1 则表示启用了嵌套虚拟化
+cat /sys/module/kvm_amd/parameters/nested
+```
+
+如果输出不是 `Y`/`1`，请自己网上查下如何启用。
+
+上面这么一堆操作能证明，宿主机已经启用了嵌套虚拟化，但是虚拟机内部却没有虚拟化指令集。
+
+**根本原因是使用了默认使用 kvm64 这个 CPU 类型，它是一种虚拟化的 CPU，不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 `host`，然后重启虚拟机，问题就解决了**。
+
+
 ## 四、PVE 网络配置
 
 ### 1. 桥接多张物理网卡
