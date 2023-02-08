@@ -40,6 +40,11 @@ comment:
 ### 2023-02-03
 
 - 折腾 Homelab 时，主力节点 UM560 固态翻车了，是才用了三个月的 Asgard 512G SSD，颗粒是长江存储的。走京东售后了
+  - 上次翻车是 2022-11-02 炸了根光威弈 Pro 1T，这也没隔多久啊...
+
+![](/images/now/nvme-critial-medium-error.webp "2022-11-02 翻车记录，系统无法启动，这是显示器输出内容")
+![](/images/now/nvme-device-not-ready.webp "2023-02-03 翻车记录，系统能启动但是文件损坏，这是 dmesg 信息")
+
 
 ### 2023-01-30
 
