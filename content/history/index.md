@@ -22,6 +22,22 @@ comment:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2023-02-08
+
+- 最近买的 Orange Pi 5 到手玩了两天了，确实有点意思。
+  - 其核心 RK3558S 还有 NPU，我找了 rockchip 官方 demo [rknpu2](https://github.com/rockchip-linux/rknpu2) 玩了玩，挺有意思的。
+  - 瑞芯微官方的 [rknn-toolkit2](https://github.com/rockchip-linux/rknn-toolkit2) 好像得安装在 x64 PC 上，模型得用它进行转换后才能跑在 rk3558s 上面，具体还没研究。
+- UM560 炸掉的 asgard 固态 2023/2/7 换新到货了，装好机后重新加入 PVE 集群，重建挂掉的 k3s 集群，调整 NAS 架构，又更新相关的笔记，反正一番折腾。
+- 确定改用 Windows Server 2022 DataCenter 跑 NAS 系统，因为它的 SMB 协议很多黑科技，速度快。硬盘盒就直接映射到这台 Windows Server 里面。
+  - 一个盘给 Windows 当 SMB 硬盘用，用了 ReFS 文件系统
+  - 另一个盘绑定到 wsl2 给 docker 容器用，仍然决定用 btrfs 文件系统
+- 遇到一个问题是 windows server 2022 因为没嵌套虚拟化，装不了 hyper-v，一番查找发现，将 vm cpu 类型从 kvm64 改为 host 就解决了
+- 另一个问题是 wsl2 ubuntu 无法启动，通过 [WSL/issues/5440](https://github.com/microsoft/WSL/issues/5440#issuecomment-778660156) 中提到的方法解决了——创建 `~/.wslconfig`，通过它禁用 wsl 嵌套虚拟化功能。
+
+### 2023-02-03
+
+- 折腾 Homelab 时，主力节点 UM560 固态翻车了，是才用了三个月的 Asgard 512G SSD，颗粒是长江存储的。走京东售后了
+
 ### 2023-01-30
 
 - 健身 30mins: day 2
