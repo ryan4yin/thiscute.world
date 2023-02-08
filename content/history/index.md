@@ -26,7 +26,7 @@ comment:
 
 - 最近买的 Orange Pi 5 到手玩了两天了，确实有点意思。
   - 其核心 RK3558S 还有 NPU，我找了 rockchip 官方 demo [rknpu2](https://github.com/rockchip-linux/rknpu2) 玩了玩，挺有意思的。
-  - 瑞芯微官方的 [rknn-toolkit2](https://github.com/rockchip-linux/rknn-toolkit2) 好像得安装在 x64 PC 上，模型得用它进行转换后才能跑在 rk3558s 上面，具体还没研究。
+  - 瑞芯微官方的 [rknn-toolkit2](https://github.com/rockchip-linux/rknn-toolkit2) 好像得安装在 x64 PC 上，模型得用它进行转换后才能跑在 rk3558s 上面，具体还没研究。玩板子顺便还能玩一玩 AI，挺不错~
 - UM560 炸掉的 asgard 固态 2023/2/7 换新到货了，装好机后重新加入 PVE 集群，重建挂掉的 k3s 集群，调整 NAS 架构，又更新相关的笔记，反正一番折腾。
 - 确定改用 Windows Server 2022 DataCenter 跑 NAS 系统，因为它的 SMB 协议很多黑科技，速度快。硬盘盒就直接映射到这台 Windows Server 里面。
   - 一个盘给 Windows 当 SMB 硬盘用，用了 ReFS 文件系统
