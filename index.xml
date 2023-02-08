@@ -1530,10 +1530,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </div>
 </div><p>注意将上述命令中的 <code>Target node Name&gt;</code> 改为节点名称，将 <code>&lt;Target node IP&gt;</code> 改为节点 IP 地址。</p>
 <h3 id="10-pve-的-vm-不支持-vmxsvm-虚拟化指令集" class="headerLink">
-    <a href="#10-pve-%e7%9a%84-vm-%e4%b8%8d%e6%94%af%e6%8c%81-vmxsvm-%e8%99%9a%e6%8b%9f%e5%8c%96%e6%8c%87%e4%bb%a4%e9%9b%86" class="header-mark"></a>10. PVE 的 vm 不支持 vmx/svm 虚拟化指令集</h3><blockquote>
-<p>参考: <a href="https://zhuanlan.zhihu.com/p/354034712" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/354034712</a></p>
-</blockquote>
-<p>在 Linux 虚拟机中运行如下命令：</p>
+    <a href="#10-pve-%e7%9a%84-vm-%e4%b8%8d%e6%94%af%e6%8c%81-vmxsvm-%e8%99%9a%e6%8b%9f%e5%8c%96%e6%8c%87%e4%bb%a4%e9%9b%86" class="header-mark"></a>10. PVE 的 vm 不支持 vmx/svm 虚拟化指令集</h3><p>在 Linux 虚拟机中运行如下命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1559,9 +1556,55 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </span></span><span class="line"><span class="cl">cat /sys/module/kvm_amd/parameters/nested
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>如果输出不是 <code>Y</code>/<code>1</code>，请自己网上查下如何启用。</p>
-<p>上面这么一堆操作能证明，宿主机已经启用了嵌套虚拟化，但是虚拟机内部却没有虚拟化指令集。</p>
-<p><strong>根本原因是使用了默认使用 kvm64 这个 CPU 类型，它是一种虚拟化的 CPU，不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 <code>host</code>，然后重启虚拟机，问题就解决了</strong>。</p>
+</div><p>如果输出不是 <code>Y</code>/<code>1</code>，则需要手动启用嵌套虚拟化功能。</p>
+<p>如果是 intel cpu，需要使用如下命令启用嵌套虚拟化功能：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">## 1. 关闭所有虚拟机，并卸载 kvm_intel 内核模块</span>
+</span></span><span class="line"><span class="cl">sudo modprobe -r kvm_intel
+</span></span><span class="line"><span class="cl"><span class="c1">## 2. 启用嵌套虚拟化功能</span>
+</span></span><span class="line"><span class="cl">sudo modprobe kvm_intel <span class="nv">nested</span><span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## 3. 保存配置，使嵌套虚拟化功能在重启后自动启用</span>
+</span></span><span class="line"><span class="cl">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modprobe.d/kvm.conf
+</span></span></span><span class="line"><span class="cl"><span class="s">options kvm_intel nested=1
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果是 amd cpu，则应使用如下命令启用嵌套虚拟化功能：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">## 1. 关闭所有虚拟机，并卸载 kvm_intel 内核模块</span>
+</span></span><span class="line"><span class="cl">sudo modprobe -r kvm_amd
+</span></span><span class="line"><span class="cl"><span class="c1">## 2. 启用嵌套虚拟化功能</span>
+</span></span><span class="line"><span class="cl">sudo modprobe kvm_amd <span class="nv">nested</span><span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## 3. 保存配置，使嵌套虚拟化功能在重启后自动启用</span>
+</span></span><span class="line"><span class="cl">cat <span class="s">&lt;&lt;EOF | sudo tee /etc/modprobe.d/kvm.conf
+</span></span></span><span class="line"><span class="cl"><span class="s">options kvm_amd nested=1
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面这么一堆操作后，宿主机就已经启用了嵌套虚拟化，但是虚拟机内部却仍然不一定能有虚拟化指令集。</p>
+<p><strong>根本原因是 PVE 默认使用 kvm64 这种虚拟化的 CPU 类型，它不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 <code>host</code>，然后重启虚拟机，问题就解决了</strong>。</p>
 <h2 id="四pve-网络配置" class="headerLink">
     <a href="#%e5%9b%9bpve-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae" class="header-mark"></a>四、PVE 网络配置</h2><h3 id="1-桥接多张物理网卡" class="headerLink">
     <a href="#1-%e6%a1%a5%e6%8e%a5%e5%a4%9a%e5%bc%a0%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>1. 桥接多张物理网卡</h3><p>示例如下，主要就是在 vmbr0 网桥的 <code>Bridge Ports</code> 里面：</p>
