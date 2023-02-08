@@ -35,7 +35,7 @@ comment:
 - 另一个问题是 wsl2 ubuntu 无法启动，通过 [WSL/issues/5440](https://github.com/microsoft/WSL/issues/5440#issuecomment-778660156) 中提到的方法解决了——创建 `~/.wslconfig`，通过它禁用 wsl 嵌套虚拟化功能。
 - 再一个问题就是通过 wsl2 访问 btrfs 等 linux 系的文件系统
   - 根据官方文档 [在 WSL 2 中装载 Linux 磁盘](https://learn.microsoft.com/zh-cn/windows/wsl/wsl2-mount-disk)，通过 `GET-CimInstance -query "SELECT * from Win32_DiskDrive"` 查询磁盘 ID，再通过 `wsl --mount \\.\PHYSICALDRIVE2 --bare` 挂载即可.
-  - 注意事项是，必须以 `--bare` 裸磁盘的方式挂载进 wsl2 中，再手动在 wsl2 中通过 `sudo mount /dev/sdb1 xxx` 的方式挂载磁盘，否则会报错。
+  - 注意事项是，必须以 `--bare` 裸磁盘的方式挂载进 wsl2 中，再手动在 wsl2 中通过 `sudo mount /dev/sdb1 xxx` 的方式挂载磁盘，否则会报错。(这个文件系统挂载，重启后大概会消失，还得研究下怎么搞成自动挂载)
 - 仍然没找到英语学习的节奏，年后基本没学几天英语。
 - 搞硬件的热情又上来了，特别是 RK3558S 这颗 SOC 感觉挺好玩的样子，加了 OrangePi5 的群见了市面（群友们玩得都挺有意思）。
 
