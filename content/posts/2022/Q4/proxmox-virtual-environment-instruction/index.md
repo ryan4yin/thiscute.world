@@ -90,12 +90,17 @@ PVE 集群的所有节点是完全平等的，集群组建完成后，登录其�
 PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不做详细介绍，主要说明下一些要点：
 
 - CPU
-  - 对于比较吃性能或者对实时性要求高的虚拟机如 windows/openwrt，可以将其 CPU 类型设置为 `host`
+  - 将 CPU 类型设置为 `host` 可以提高性能，适合比较吃性能或者对实时性要求高的虚拟机如 windows/openwrt
   - 对于虚拟机核数，建议将 `sockets` 设为 1（即 CPU 插槽数，一般物理服务器才会有 2 及以上的 CPU 插槽），cores 设为你想分配给该虚拟机的 CPU 核数
-  - 仅针对多物理 CPU 场景（多 `sockets`）才需要启用 NUMA
+  - 仅针对多物理 CPU 场景（多 `sockets`）才需要启用 NUMA（个人猜测，可能有错）
 - 磁盘、网卡
-  - 尽量使用 `virtio` 作为 scsi 磁盘、network 网卡的虚拟化控制器，它的性能最高
+  - 磁盘驱动建议用 `virtio SCSI`、网卡驱动建议用 `VirtIO(paravirtualized)`，它的性能更高。
+    - Linux 虚拟机原生支持 virtio 半虚拟化，而 windows 想要完全开启半虚拟化，需要手动安装驱动，详见 [Windows_VirtIO_Drivers - Proxmox WIKI](https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers)，简单的说就是要下个 iso 挂载到 windows 主机中，并安装其中的驱动。
   - 如果硬盘是 SSD，虚拟机磁盘可以启用 `SSD Emulation`，对于 IO 性能要求高的场景还可以为磁盘勾选 `IO  Thread` 功能
+- 显示器
+  - 默认使用 std 类型，兼容性最好，但是是纯 CPU 模拟的，比较耗 CPU。
+  - 如果你有 windows 等需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 `VirtIO GPU(virtio-gl)` 类型，这是一项正在进行中的工作：以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。仅需要提前手动在 PVE 中先装下这几个包 `apt install libgl1 libegl1`，并且在主机内安装好 virtio 驱动（ 前面提过了，Linux 自带，Windows 需要手动安装 virtio drivers）
+  - 详见 [QEMU Graphic card - Arch WIKI](https://wiki.archlinux.org/title/QEMU#Graphic_card)
 - 其他选项
   - 调整启动项顺序，对于 cloud image 建议只启用 scsi0 这个选项
 - 虚拟机模板（Template）与克隆（Clone）
@@ -104,7 +109,13 @@ PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不�
 - BIOS 通常都建议使用默认的 SeaBIOS，仅 Windows 等场景才建议换成 OMVF(UEFI)
   - OMVF 的分辨率、Secure Boot 等参数，都可以在启动时按 ESC 进入 UEFI 配置界面来调整。
 
-而 PCIe 直通之类的高级功能，我现在还没玩到，建议自行搜索相关资料...
+上面这些内容，官方有详细文档，能读英文的话可以直接看 [Qemu/KVM Virtual Machines - Proxmox WIKI](https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines).
+
+而 PCIe 直通之类的高级功能，我现在还没玩到，建议看官方文档:
+
+- [PCI(e) Passthrough - Proxmox WIKI](https://pve.proxmox.com/wiki/PCI(e)_Passthrough).
+- [GPU OVMF PCI Passthrough (recommended) - Proxmox WIKI](https://pve.proxmox.com/wiki/Pci_passthrough#GPU_OVMF_PCI_Passthrough_.28recommended.29)
+- [QEMU/Guest graphics acceleration - Arch WIKI](https://wiki.archlinux.org/title/QEMU/Guest_graphics_acceleration)
 
 ### 1. 使用 cloudinit 自动配置网卡、SSH密钥、存储空间
 
@@ -404,6 +415,21 @@ EOF
 **根本原因是 PVE 默认使用 kvm64 这种虚拟化的 CPU 类型，它不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 `host`，然后重启虚拟机，问题就解决了**。
 
 
+### 11. 如何在多台主机间同步 iso 镜像、backup 文件
+
+PVE 自动创建的 iso 镜像、backup 文件，默认都只会保存到本机的 `local` 分区中，那万一机器出了问题，很可能备份就一起丢了。
+
+极简解决方案，每台机器放一个 crontab 脚本，定期使用 rsync 将本机的 `/var/lib/vz/template/` 与其他几台主机同步，同时还可以将数据备份一份到外部 HDD 存储确保安全。
+
+示例脚本：
+```shell
+# 将本机的 /var/lib/vz/template/ 文件夹与另外两台主机同步
+rsync -avz --progress /var/lib/vz/template/ root@192.168.5.162:/var/lib/vz/template/
+rsync -avz --progress /var/lib/vz/template/ root@192.168.5.163:/var/lib/vz/template/
+
+```
+
+
 ## 四、PVE 网络配置
 
 ### 1. 桥接多张物理网卡
@@ -521,7 +547,8 @@ PVE 毕竟是一个商业系统，虽然目前可以免费用，但是以后就�
 
 - [KVM 虚拟化环境搭建 - ProxmoxVE](https://zhuanlan.zhihu.com/p/49118355)
 - [KVM 虚拟化环境搭建 - WebVirtMgr](https://zhuanlan.zhihu.com/p/49120559)
-
+- [Proxmox Virtual Environment - Proxmox WIKI](https://pve.proxmox.com/wiki/Main_Page)
+- [QEMU - Arch Linux WIKI](https://wiki.archlinux.org/title/QEMU#top-page)
 
 [vShpere Hypervisor]: https://www.vmware.com/cn/products/vsphere-hypervisor.html
 [Windows Hyper-V]: https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview
