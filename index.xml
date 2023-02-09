@@ -1214,15 +1214,26 @@
 <ul>
 <li>CPU
 <ul>
-<li>对于比较吃性能或者对实时性要求高的虚拟机如 windows/openwrt，可以将其 CPU 类型设置为 <code>host</code></li>
+<li>将 CPU 类型设置为 <code>host</code> 可以提高性能，适合比较吃性能或者对实时性要求高的虚拟机如 windows/openwrt</li>
 <li>对于虚拟机核数，建议将 <code>sockets</code> 设为 1（即 CPU 插槽数，一般物理服务器才会有 2 及以上的 CPU 插槽），cores 设为你想分配给该虚拟机的 CPU 核数</li>
-<li>仅针对多物理 CPU 场景（多 <code>sockets</code>）才需要启用 NUMA</li>
+<li>仅针对多物理 CPU 场景（多 <code>sockets</code>）才需要启用 NUMA（个人猜测，可能有错）</li>
 </ul>
 </li>
 <li>磁盘、网卡
 <ul>
-<li>尽量使用 <code>virtio</code> 作为 scsi 磁盘、network 网卡的虚拟化控制器，它的性能最高</li>
+<li>磁盘驱动建议用 <code>virtio SCSI</code>、网卡驱动建议用 <code>VirtIO(paravirtualized)</code>，它的性能更高。
+<ul>
+<li>Linux 虚拟机原生支持 virtio 半虚拟化，而 windows 想要完全开启半虚拟化，需要手动安装驱动，详见 <a href="https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers" target="_blank" rel="noopener noreferrer">Windows_VirtIO_Drivers - Proxmox WIKI</a>，简单的说就是要下个 iso 挂载到 windows 主机中，并安装其中的驱动。</li>
+</ul>
+</li>
 <li>如果硬盘是 SSD，虚拟机磁盘可以启用 <code>SSD Emulation</code>，对于 IO 性能要求高的场景还可以为磁盘勾选 <code>IO  Thread</code> 功能</li>
+</ul>
+</li>
+<li>显示器
+<ul>
+<li>默认使用 std 类型，兼容性最好，但是是纯 CPU 模拟的，比较耗 CPU。</li>
+<li>如果你有 windows 等需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 <code>VirtIO GPU(virtio-gl)</code> 类型，这是一项正在进行中的工作：以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。仅需要提前手动在 PVE 中先装下这几个包 <code>apt install libgl1 libegl1</code>，并且在主机内安装好 virtio 驱动（ 前面提过了，Linux 自带，Windows 需要手动安装 virtio drivers）</li>
+<li>详见 <a href="https://wiki.archlinux.org/title/QEMU#Graphic_card" target="_blank" rel="noopener noreferrer">QEMU Graphic card - Arch WIKI</a></li>
 </ul>
 </li>
 <li>其他选项
@@ -1242,7 +1253,13 @@
 </ul>
 </li>
 </ul>
-<p>而 PCIe 直通之类的高级功能，我现在还没玩到，建议自行搜索相关资料&hellip;</p>
+<p>上面这些内容，官方有详细文档，能读英文的话可以直接看 <a href="https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines" target="_blank" rel="noopener noreferrer">Qemu/KVM Virtual Machines - Proxmox WIKI</a>.</p>
+<p>而 PCIe 直通之类的高级功能，我现在还没玩到，建议看官方文档:</p>
+<ul>
+<li><a href="https://pve.proxmox.com/wiki/PCI%28e%29_Passthrough" target="_blank" rel="noopener noreferrer">PCI(e) Passthrough - Proxmox WIKI</a>.</li>
+<li><a href="https://pve.proxmox.com/wiki/Pci_passthrough#GPU_OVMF_PCI_Passthrough_.28recommended.29" target="_blank" rel="noopener noreferrer">GPU OVMF PCI Passthrough (recommended) - Proxmox WIKI</a></li>
+<li><a href="https://wiki.archlinux.org/title/QEMU/Guest_graphics_acceleration" target="_blank" rel="noopener noreferrer">QEMU/Guest graphics acceleration - Arch WIKI</a></li>
+</ul>
 <h3 id="1-使用-cloudinit-自动配置网卡ssh密钥存储空间" class="headerLink">
     <a href="#1-%e4%bd%bf%e7%94%a8-cloudinit-%e8%87%aa%e5%8a%a8%e9%85%8d%e7%bd%ae%e7%bd%91%e5%8d%a1ssh%e5%af%86%e9%92%a5%e5%ad%98%e5%82%a8%e7%a9%ba%e9%97%b4" class="header-mark"></a>1. 使用 cloudinit 自动配置网卡、SSH密钥、存储空间</h3><blockquote>
 <p>完全参照官方文档 <a href="https://pve.proxmox.com/wiki/Cloud-Init_Support" target="_blank" rel="noopener noreferrer">Cloud-Init_Support - PVE Docs</a></p>
@@ -1605,7 +1622,23 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </div>
 </div><p>上面这么一堆操作后，宿主机就已经启用了嵌套虚拟化，但是虚拟机内部却仍然不一定能有虚拟化指令集。</p>
 <p><strong>根本原因是 PVE 默认使用 kvm64 这种虚拟化的 CPU 类型，它不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 <code>host</code>，然后重启虚拟机，问题就解决了</strong>。</p>
-<h2 id="四pve-网络配置" class="headerLink">
+<h3 id="11-如何在多台主机间同步-iso-镜像backup-文件" class="headerLink">
+    <a href="#11-%e5%a6%82%e4%bd%95%e5%9c%a8%e5%a4%9a%e5%8f%b0%e4%b8%bb%e6%9c%ba%e9%97%b4%e5%90%8c%e6%ad%a5-iso-%e9%95%9c%e5%83%8fbackup-%e6%96%87%e4%bb%b6" class="header-mark"></a>11. 如何在多台主机间同步 iso 镜像、backup 文件</h3><p>PVE 自动创建的 iso 镜像、backup 文件，默认都只会保存到本机的 <code>local</code> 分区中，那万一机器出了问题，很可能备份就一起丢了。</p>
+<p>极简解决方案，每台机器放一个 crontab 脚本，定期使用 rsync 将本机的 <code>/var/lib/vz/template/</code> 与其他几台主机同步，同时还可以将数据备份一份到外部 HDD 存储确保安全。</p>
+<p>示例脚本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 将本机的 /var/lib/vz/template/ 文件夹与另外两台主机同步</span>
+</span></span><span class="line"><span class="cl">rsync -avz --progress /var/lib/vz/template/ root@192.168.5.162:/var/lib/vz/template/
+</span></span><span class="line"><span class="cl">rsync -avz --progress /var/lib/vz/template/ root@192.168.5.163:/var/lib/vz/template/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="四pve-网络配置" class="headerLink">
     <a href="#%e5%9b%9bpve-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae" class="header-mark"></a>四、PVE 网络配置</h2><h3 id="1-桥接多张物理网卡" class="headerLink">
     <a href="#1-%e6%a1%a5%e6%8e%a5%e5%a4%9a%e5%bc%a0%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>1. 桥接多张物理网卡</h3><p>示例如下，主要就是在 vmbr0 网桥的 <code>Bridge Ports</code> 里面：</p>
 <p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-multiple-nic.webp" title="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-sub-html="<h2>桥接多张物理网卡</h2>">
@@ -1735,6 +1768,8 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
     <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
 <li><a href="https://zhuanlan.zhihu.com/p/49118355" target="_blank" rel="noopener noreferrer">KVM 虚拟化环境搭建 - ProxmoxVE</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/49120559" target="_blank" rel="noopener noreferrer">KVM 虚拟化环境搭建 - WebVirtMgr</a></li>
+<li><a href="https://pve.proxmox.com/wiki/Main_Page" target="_blank" rel="noopener noreferrer">Proxmox Virtual Environment - Proxmox WIKI</a></li>
+<li><a href="https://wiki.archlinux.org/title/QEMU#top-page" target="_blank" rel="noopener noreferrer">QEMU - Arch Linux WIKI</a></li>
 </ul>
 ]]></content></entry><entry><title type="html">刻意练习</title><link href="https://thiscute.world/posts/deliberate-practice/"/><id>https://thiscute.world/posts/deliberate-practice/</id><author><name>ryan4yin</name></author><published>2022-10-05T13:31:00+08:00</published><updated>2022-10-05T13:31:00+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/deliberate-practice/deliberate-practice-achieve-mastery-in-anything.webp" height="1280" width="720"><figcaption></figcaption>
