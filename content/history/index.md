@@ -22,6 +22,18 @@ comment:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2023-02-11
+
+- 研究 Homelab 备份方案：[proxmox-backup-server](https://www.proxmox.com/en/proxmox-backup-server)、[restic](https://github.com/restic/restic)、[rclone](https://github.com/rclone/rclone)
+- 研究了下 Linux 远程桌面方案：SSH X11 Forwarding 跟 xrdp，意外发现在客户端是 Linux 的情况下，SSH X11 Forwarding 配置与使用居然如此简单而且效果也非常好！只需要改一行 sshd 配置，客户端直接 `ssh -X user@host` 就 ok 了~
+- 研究在 orangepi5(rk3558s) 上跑 AI 任务，写了点笔记 [demos_rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/demos_rk3588)
+
+### 2023-02-10
+
+- 重新研究了下 Proxmox VE，更新了之前写的 Proxmox 使用指南
+- 发现 Windows Server 跑的 NAS 数据传输还是不太快，晚上整了一波 Promox VE 的 PCIe 直通想把 USB 控制器直通给 Windows，结果完全失败...
+  - 输出半成品笔记 [Proxmox PCI 直通.md](https://github.com/ryan4yin/knowledge/blob/master/homelab/Proxmox%20PCI%20%E7%9B%B4%E9%80%9A.md)
+
 ### 2023-02-09
 
 - datacenter 版的 win server 2022 有毛病老是挂掉重启，换了 standard 版重装系统
