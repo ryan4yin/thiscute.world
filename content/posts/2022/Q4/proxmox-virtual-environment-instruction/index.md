@@ -426,9 +426,14 @@ PVE 自动创建的 iso 镜像、backup 文件，默认都只会保存到本机�
 # 将本机的 /var/lib/vz/template/ 文件夹与另外两台主机同步
 rsync -avz --progress /var/lib/vz/template/ root@192.168.5.162:/var/lib/vz/template/
 rsync -avz --progress /var/lib/vz/template/ root@192.168.5.163:/var/lib/vz/template/
-
 ```
 
+不过好像 PVE 官方也提供一个 [proxmox-backup-server](https://www.proxmox.com/en/proxmox-backup-server)，感觉可以搞个容器跑这玩意儿，把数据备份到 USB 硬盘盒或者 SMB 挂载的硬盘里，待研究。
+
+- [proxmox/proxmox-backup](https://github.com/proxmox/proxmox-backup)
+- [ayufan/pve-backup-server-dockerfiles](https://github.com/ayufan/pve-backup-server-dockerfiles)
+
+另外开源社区也有 restic/rclone 等工具也可用于备份，备份方案还在研究中，未确定。
 
 ## 四、PVE 网络配置
 
@@ -520,6 +525,8 @@ grep -r manage_etc_hosts /usr/share
 
 - [prometheus pve expoter](https://github.com/prometheus-pve/prometheus-pve-exporter): 通过 prometheus+grafana 监控 PVE 集群
 
+## 拓展
+
 ## 拓展 - 其他 QEMU/KVM 相关的虚拟化平台
 
 PVE 毕竟是一个商业系统，虽然目前可以免费用，但是以后就不一定了。
@@ -549,6 +556,7 @@ PVE 毕竟是一个商业系统，虽然目前可以免费用，但是以后就�
 - [KVM 虚拟化环境搭建 - WebVirtMgr](https://zhuanlan.zhihu.com/p/49120559)
 - [Proxmox Virtual Environment - Proxmox WIKI](https://pve.proxmox.com/wiki/Main_Page)
 - [QEMU - Arch Linux WIKI](https://wiki.archlinux.org/title/QEMU#top-page)
+- [佛西博客 - PVE 相关](https://foxi.buduanwang.vip/category/virtualization/pve/): 这位博主写了很多 pve 相关的内容，而且比较有深度
 
 [vShpere Hypervisor]: https://www.vmware.com/cn/products/vsphere-hypervisor.html
 [Windows Hyper-V]: https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview
