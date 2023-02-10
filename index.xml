@@ -1631,81 +1631,157 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
+</span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 将本机的 /var/lib/vz/template/ 文件夹与另外两台主机同步</span>
 </span></span><span class="line"><span class="cl">rsync -avz --progress /var/lib/vz/template/ root@192.168.5.162:/var/lib/vz/template/
 </span></span><span class="line"><span class="cl">rsync -avz --progress /var/lib/vz/template/ root@192.168.5.163:/var/lib/vz/template/
+</span></span><span class="line"><span class="cl"><span class="o">&lt;&lt;&lt;&lt;&lt;&lt;</span>&lt; HEAD
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="四pve-网络配置" class="headerLink">
-    <a href="#%e5%9b%9bpve-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae" class="header-mark"></a>四、PVE 网络配置</h2><h3 id="1-桥接多张物理网卡" class="headerLink">
-    <a href="#1-%e6%a1%a5%e6%8e%a5%e5%a4%9a%e5%bc%a0%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>1. 桥接多张物理网卡</h3><p>示例如下，主要就是在 vmbr0 网桥的 <code>Bridge Ports</code> 里面：</p>
-<p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-multiple-nic.webp" title="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-sub-html="<h2>桥接多张物理网卡</h2>">
-        <img
-            class="lazyload"
-            data-src="/images/proxmox-ve-instruction/pve-multiple-nic.webp"
-            data-srcset="/images/proxmox-ve-instruction/pve-multiple-nic.webp, /images/proxmox-ve-instruction/pve-multiple-nic.webp 1.5x, /images/proxmox-ve-instruction/pve-multiple-nic.webp 2x"
-            data-sizes="auto"
-            alt="/images/proxmox-ve-instruction/pve-multiple-nic.webp">
-    </a><figcaption class="image-caption">桥接多张物理网卡</figcaption>
-    </figure></p>
-<h3 id="2-手动添加-usb-物理网卡" class="headerLink">
-    <a href="#2-%e6%89%8b%e5%8a%a8%e6%b7%bb%e5%8a%a0-usb-%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>2. 手动添加 USB 物理网卡</h3><blockquote>
-<p>参考官方文档: <a href="https://pve.proxmox.com/pve-docs/chapter-sysadmin.html#sysadmin_network_configuration" target="_blank" rel="noopener noreferrer">SysAdmin - Network Configuration</a></p>
-</blockquote>
-<p>我遇到这个问题的场景是：我的 mini 主机（GTR5）只有两个 2.5G 网卡，不太够用。而家里的路由器剩下的都是千兆网口，路由器也难以拓展网卡。
-网上搜了下 2.5G 交换机又发现价格 429 起步，所以决定买两张 USB 2.5GbE 网卡插在这台小主机上作为便宜的网口拓展方案。</p>
-<p>现在网卡有了，有两种方式可以让 PVE 识别到这张网卡：</p>
-<blockquote>
-<p>好像 PVE 偶尔也能自动识别到网卡，就是比较慢&hellip;</p>
-</blockquote>
-<ol>
-<li>方法一：直接重启机器，然后就能在 Web UI 的 <code>Network</code> 配置中见到这张 USB 网卡了。之后直接把该网卡加入到 vmbr 网桥的 <code>Bridge Ports</code> 中并应用配置，就大功告成了。</li>
-<li>方法二：不重启机器实现添加 USB 网卡。如果机器不能重启，就可以走这个流程：
-<ol>
-<li>首先，使用 <code>ip link</code> 命令打印出当前的所有网络接口</li>
-<li>将 2.5GbE 网卡插到 USB3.0 端口上，Linux 将自动识别到它</li>
-<li>现在再使用 <code>ip link</code> 命令查看所有网络接口，找到新增的接口名称（通常在输出内容最末尾）。
-<ol>
-<li>在我的环境中新的 USB 网卡名称为 <code>enx00e04c680178</code></li>
-</ol>
-</li>
-<li>在配置文件 <code>/etc/network/interfaces</code> 的末尾新增一行：<code>iface enx00e04c680178 inet manual</code>（注意替换网卡名称）</li>
-<li>现在直接刷新 Web UI 页面， USB 网卡就会出现了。之后直接把该网卡加入到 vmbr 网桥的 <code>Bridge Ports</code> 中并应用配置，就大功告成了。</li>
-</ol>
-</li>
-</ol>
-<h3 id="3-配置-wifi-网卡" class="headerLink">
-    <a href="#3-%e9%85%8d%e7%bd%ae-wifi-%e7%bd%91%e5%8d%a1" class="header-mark"></a>3. 配置 WiFi 网卡</h3><p>如果主机自带了 WiFi 网卡，启动后 Proxmox VE 能识别到该网卡，但是无法通过 Web UI 修改它的任何配置。</p>
-<p>那么本着物尽其用的精神，该如何利用上这张 WiFi 网卡呢？</p>
-<p>根据 PVE 官方文档 <a href="https://pve.proxmox.com/wiki/WLAN" target="_blank" rel="noopener noreferrer">WLAN - Proxmox VE Docs</a>，并不建议在 PVE 上使用 WLAN，它存在如下问题：</p>
-<ul>
-<li>WiFi 自身必须是一个 Linux Bridge 设备，无法被桥接到 vmbr0 等网桥上。因为大多数 Access Point 都会直接拒绝掉未授权的源地址发过来的数据包&hellip;</li>
-<li>与有线连接相比，WiFi 的延迟要高得多，而且不太稳定。</li>
-</ul>
-<p>如果要配置 WLAN 网卡的话，可以直接参考 Debian 的官方文档进行配置：<a href="https://wiki.debian.org/WiFi/HowToUse" target="_blank" rel="noopener noreferrer">How to use a WiFi interface - Debian</a></p>
-<p>因此，我觉得将 WiFi 网卡直接 USB 直通给机器内的 OpenWRT 虚拟机来玩，可能是更好的主意。</p>
-<p>后续将会更新相关内容&hellip;待续</p>
-<h2 id="拓展---cloudinit-高级配置" class="headerLink">
-    <a href="#%e6%8b%93%e5%b1%95---cloudinit-%e9%ab%98%e7%ba%a7%e9%85%8d%e7%bd%ae" class="header-mark"></a>拓展 - cloudinit 高级配置</h2><p>PVE 使用 CDROM 只读盘(<code>/dev/sr0</code>)来进行 cloud-init 的配置。
-在虚拟机启动后，<code>/dev/sr0</code> 将被卸载。</p>
-<p>可挂载上该只读盘，查看其中的初始化配置内容：</p>
+</div><p>=======</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ mkdir cloud-config
-</span></span><span class="line"><span class="cl">$ mount /dev/sr0 cloud-config
-</span></span><span class="line"><span class="cl">mount: /dev/sr0 is write-protected, mounting read-only
-</span></span><span class="line"><span class="cl">$ ls cloud-config
-</span></span><span class="line"><span class="cl">meta-data  network-config  user-data
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">不过好像</span><span class="w"> </span><span class="n">PVE</span><span class="w"> </span><span class="err">官方也提供一个</span><span class="w"> </span><span class="p">[</span><span class="n">proxmox</span><span class="o">-</span><span class="n">backup</span><span class="o">-</span><span class="n">server</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="p">.</span><span class="n">proxmox</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">en</span><span class="o">/</span><span class="n">proxmox</span><span class="o">-</span><span class="n">backup</span><span class="o">-</span><span class="n">server</span><span class="p">)</span><span class="err">，感觉可以搞个容器跑这玩意儿，把数据备份到</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="err">硬盘盒或者</span><span class="w"> </span><span class="n">SMB</span><span class="w"> </span><span class="err">挂载的硬盘里，待研究。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">-</span><span class="w"> </span><span class="p">[</span><span class="n">proxmox</span><span class="o">/</span><span class="n">proxmox</span><span class="o">-</span><span class="n">backup</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">proxmox</span><span class="o">/</span><span class="n">proxmox</span><span class="o">-</span><span class="n">backup</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">-</span><span class="w"> </span><span class="p">[</span><span class="n">ayufan</span><span class="o">/</span><span class="n">pve</span><span class="o">-</span><span class="n">backup</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">dockerfiles</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">ayufan</span><span class="o">/</span><span class="n">pve</span><span class="o">-</span><span class="n">backup</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="n">dockerfiles</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">另外开源社区也有</span><span class="w"> </span><span class="n">restic</span><span class="o">/</span><span class="n">rclone</span><span class="w"> </span><span class="err">等工具也可用于备份，备份方案还在研究中，未确定。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><span class="w"> </span><span class="mi">5</span><span class="nf">af23d49</span><span class="w"> </span><span class="p">(</span><span class="n">feat</span><span class="p">:</span><span class="w"> </span><span class="o">/</span><span class="n">proxmox</span><span class="o">-</span><span class="n">virtual</span><span class="o">-</span><span class="n">environment</span><span class="o">-</span><span class="n">instruction</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">## 四、PVE 网络配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">### 1. 桥接多张物理网卡
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">示例如下，主要就是在</span><span class="w"> </span><span class="n">vmbr0</span><span class="w"> </span><span class="err">网桥的</span><span class="w"> </span><span class="o">`</span><span class="n">Bridge</span><span class="w"> </span><span class="n">Ports</span><span class="o">`</span><span class="w"> </span><span class="err">里面：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">!</span><span class="p">[](</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="n">proxmox</span><span class="o">-</span><span class="n">ve</span><span class="o">-</span><span class="n">instruction</span><span class="o">/</span><span class="n">pve</span><span class="o">-</span><span class="n">multiple</span><span class="o">-</span><span class="n">nic</span><span class="p">.</span><span class="n">webp</span><span class="w"> </span><span class="s2">&#34;桥接多张物理网卡&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">### 2. 手动添加 USB 物理网卡
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">&gt;</span><span class="err">参考官方文档</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">SysAdmin</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Network</span><span class="w"> </span><span class="n">Configuration</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pve</span><span class="p">.</span><span class="n">proxmox</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">pve</span><span class="o">-</span><span class="n">docs</span><span class="o">/</span><span class="n">chapter</span><span class="o">-</span><span class="n">sysadmin</span><span class="p">.</span><span class="n">html</span><span class="c1">#sysadmin_network_configuration)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">我遇到这个问题的场景是：我的</span><span class="w"> </span><span class="n">mini</span><span class="w"> </span><span class="err">主机（</span><span class="n">GTR5</span><span class="err">）只有两个</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">5</span><span class="n">G</span><span class="w"> </span><span class="err">网卡，不太够用。而家里的路由器剩下的都是千兆网口，路由器也难以拓展网卡。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">网上搜了下</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">5</span><span class="n">G</span><span class="w"> </span><span class="err">交换机又发现价格</span><span class="w"> </span><span class="mi">429</span><span class="w"> </span><span class="err">起步，所以决定买两张</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">5</span><span class="n">GbE</span><span class="w"> </span><span class="err">网卡插在这台小主机上作为便宜的网口拓展方案。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">现在网卡有了，有两种方式可以让</span><span class="w"> </span><span class="n">PVE</span><span class="w"> </span><span class="err">识别到这张网卡：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">&gt;</span><span class="err">好像</span><span class="w"> </span><span class="n">PVE</span><span class="w"> </span><span class="err">偶尔也能自动识别到网卡，就是比较慢</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="err">方法一：直接重启机器，然后就能在</span><span class="w"> </span><span class="n">Web</span><span class="w"> </span><span class="n">UI</span><span class="w"> </span><span class="err">的</span><span class="w"> </span><span class="o">`</span><span class="n">Network</span><span class="o">`</span><span class="w"> </span><span class="err">配置中见到这张</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="err">网卡了。之后直接把该网卡加入到</span><span class="w"> </span><span class="n">vmbr</span><span class="w"> </span><span class="err">网桥的</span><span class="w"> </span><span class="o">`</span><span class="n">Bridge</span><span class="w"> </span><span class="n">Ports</span><span class="o">`</span><span class="w"> </span><span class="err">中并应用配置，就大功告成了。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="mi">2</span><span class="p">.</span><span class="w"> </span><span class="err">方法二：不重启机器实现添加</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="err">网卡。如果机器不能重启，就可以走这个流程：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="err">首先，使用</span><span class="w"> </span><span class="o">`</span><span class="n">ip</span><span class="w"> </span><span class="n">link</span><span class="o">`</span><span class="w"> </span><span class="err">命令打印出当前的所有网络接口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="mi">2</span><span class="p">.</span><span class="w"> </span><span class="err">将</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">5</span><span class="n">GbE</span><span class="w"> </span><span class="err">网卡插到</span><span class="w"> </span><span class="n">USB3</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="err">端口上，</span><span class="n">Linux</span><span class="w"> </span><span class="err">将自动识别到它</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="mi">3</span><span class="p">.</span><span class="w"> </span><span class="err">现在再使用</span><span class="w"> </span><span class="o">`</span><span class="n">ip</span><span class="w"> </span><span class="n">link</span><span class="o">`</span><span class="w"> </span><span class="err">命令查看所有网络接口，找到新增的接口名称（通常在输出内容最末尾）。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="err">在我的环境中新的</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="err">网卡名称为</span><span class="w"> </span><span class="o">`</span><span class="n">enx00e04c680178</span><span class="o">`</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="mi">4</span><span class="p">.</span><span class="w"> </span><span class="err">在配置文件</span><span class="w"> </span><span class="o">`/</span><span class="n">etc</span><span class="o">/</span><span class="n">network</span><span class="o">/</span><span class="n">interfaces</span><span class="o">`</span><span class="w"> </span><span class="err">的末尾新增一行：</span><span class="o">`</span><span class="n">iface</span><span class="w"> </span><span class="n">enx00e04c680178</span><span class="w"> </span><span class="n">inet</span><span class="w"> </span><span class="n">manual</span><span class="o">`</span><span class="err">（注意替换网卡名称）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="mi">5</span><span class="p">.</span><span class="w"> </span><span class="err">现在直接刷新</span><span class="w"> </span><span class="n">Web</span><span class="w"> </span><span class="n">UI</span><span class="w"> </span><span class="err">页面，</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="err">网卡就会出现了。之后直接把该网卡加入到</span><span class="w"> </span><span class="n">vmbr</span><span class="w"> </span><span class="err">网桥的</span><span class="w"> </span><span class="o">`</span><span class="n">Bridge</span><span class="w"> </span><span class="n">Ports</span><span class="o">`</span><span class="w"> </span><span class="err">中并应用配置，就大功告成了。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">### 3. 配置 WiFi 网卡
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">如果主机自带了</span><span class="w"> </span><span class="n">WiFi</span><span class="w"> </span><span class="err">网卡，启动后</span><span class="w"> </span><span class="n">Proxmox</span><span class="w"> </span><span class="n">VE</span><span class="w"> </span><span class="err">能识别到该网卡，但是无法通过</span><span class="w"> </span><span class="n">Web</span><span class="w"> </span><span class="n">UI</span><span class="w"> </span><span class="err">修改它的任何配置。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">那么本着物尽其用的精神，该如何利用上这张</span><span class="w"> </span><span class="n">WiFi</span><span class="w"> </span><span class="err">网卡呢？</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">根据</span><span class="w"> </span><span class="n">PVE</span><span class="w"> </span><span class="err">官方文档</span><span class="w"> </span><span class="p">[</span><span class="n">WLAN</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Proxmox</span><span class="w"> </span><span class="n">VE</span><span class="w"> </span><span class="n">Docs</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pve</span><span class="p">.</span><span class="n">proxmox</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">wiki</span><span class="o">/</span><span class="n">WLAN</span><span class="p">)</span><span class="err">，并不建议在</span><span class="w"> </span><span class="n">PVE</span><span class="w"> </span><span class="err">上使用</span><span class="w"> </span><span class="n">WLAN</span><span class="err">，它存在如下问题：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">-</span><span class="w"> </span><span class="n">WiFi</span><span class="w"> </span><span class="err">自身必须是一个</span><span class="w"> </span><span class="n">Linux</span><span class="w"> </span><span class="n">Bridge</span><span class="w"> </span><span class="err">设备，无法被桥接到</span><span class="w"> </span><span class="n">vmbr0</span><span class="w"> </span><span class="err">等网桥上。因为大多数</span><span class="w"> </span><span class="n">Access</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="err">都会直接拒绝掉未授权的源地址发过来的数据包</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">-</span><span class="w"> </span><span class="err">与有线连接相比，</span><span class="n">WiFi</span><span class="w"> </span><span class="err">的延迟要高得多，而且不太稳定。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">如果要配置</span><span class="w"> </span><span class="n">WLAN</span><span class="w"> </span><span class="err">网卡的话，可以直接参考</span><span class="w"> </span><span class="n">Debian</span><span class="w"> </span><span class="err">的官方文档进行配置：</span><span class="p">[</span><span class="n">How</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">WiFi</span><span class="w"> </span><span class="n">interface</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Debian</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">wiki</span><span class="p">.</span><span class="n">debian</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="n">WiFi</span><span class="o">/</span><span class="n">HowToUse</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">因此，我觉得将</span><span class="w"> </span><span class="n">WiFi</span><span class="w"> </span><span class="err">网卡直接</span><span class="w"> </span><span class="n">USB</span><span class="w"> </span><span class="err">直通给机器内的</span><span class="w"> </span><span class="n">OpenWRT</span><span class="w"> </span><span class="err">虚拟机来玩，可能是更好的主意。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">后续将会更新相关内容</span><span class="p">...</span><span class="err">待续</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">## 拓展 - cloudinit 高级配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">PVE</span><span class="w"> </span><span class="err">使用</span><span class="w"> </span><span class="n">CDROM</span><span class="w"> </span><span class="err">只读盘</span><span class="p">(</span><span class="o">`/</span><span class="n">dev</span><span class="o">/</span><span class="n">sr0</span><span class="o">`</span><span class="p">)</span><span class="err">来进行</span><span class="w"> </span><span class="n">cloud</span><span class="o">-</span><span class="n">init</span><span class="w"> </span><span class="err">的配置。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">在虚拟机启动后，</span><span class="o">`/</span><span class="n">dev</span><span class="o">/</span><span class="n">sr0</span><span class="o">`</span><span class="w"> </span><span class="err">将被卸载。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">可挂载上该只读盘，查看其中的初始化配置内容：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">```</span><span class="n">shell</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">$</span><span class="w"> </span><span class="n">mkdir</span><span class="w"> </span><span class="n">cloud</span><span class="o">-</span><span class="n">config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">$</span><span class="w"> </span><span class="n">mount</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sr0</span><span class="w"> </span><span class="n">cloud</span><span class="o">-</span><span class="n">config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mount</span><span class="p">:</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sr0</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">write</span><span class="o">-</span><span class="n">protected</span><span class="p">,</span><span class="w"> </span><span class="n">mounting</span><span class="w"> </span><span class="k">read</span><span class="o">-</span><span class="n">only</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">$</span><span class="w"> </span><span class="n">ls</span><span class="w"> </span><span class="n">cloud</span><span class="o">-</span><span class="n">config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">meta</span><span class="o">-</span><span class="n">data</span><span class="w">  </span><span class="n">network</span><span class="o">-</span><span class="n">config</span><span class="w">  </span><span class="k">user</span><span class="o">-</span><span class="n">data</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看其中内容，会发现 <code>user-data</code> 有很多参数都被硬编码了，没有通过 PVE Web Console 暴露出来，导致我们无法自定义这些配置。</p>
 <p>比如它硬编码了 <code>manage_etc_hosts: true</code>，强制每次都使用虚拟机的名称作为 hostname.</p>
@@ -1738,7 +1814,8 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <ul>
 <li><a href="https://github.com/prometheus-pve/prometheus-pve-exporter" target="_blank" rel="noopener noreferrer">prometheus pve expoter</a>: 通过 prometheus+grafana 监控 PVE 集群</li>
 </ul>
-<h2 id="拓展---其他-qemukvm-相关的虚拟化平台" class="headerLink">
+<h2 id="拓展" class="headerLink">
+    <a href="#%e6%8b%93%e5%b1%95" class="header-mark"></a>拓展</h2><h2 id="拓展---其他-qemukvm-相关的虚拟化平台" class="headerLink">
     <a href="#%e6%8b%93%e5%b1%95---%e5%85%b6%e4%bb%96-qemukvm-%e7%9b%b8%e5%85%b3%e7%9a%84%e8%99%9a%e6%8b%9f%e5%8c%96%e5%b9%b3%e5%8f%b0" class="header-mark"></a>拓展 - 其他 QEMU/KVM 相关的虚拟化平台</h2><p>PVE 毕竟是一个商业系统，虽然目前可以免费用，但是以后就不一定了。</p>
 <p>如果你担心 PVE 以后会不提供免费使用的功能，或者单纯想折腾折腾的技术，还可以试试下面这些虚拟化平台：</p>
 <ul>
@@ -1769,8 +1846,26 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <li><a href="https://zhuanlan.zhihu.com/p/49118355" target="_blank" rel="noopener noreferrer">KVM 虚拟化环境搭建 - ProxmoxVE</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/49120559" target="_blank" rel="noopener noreferrer">KVM 虚拟化环境搭建 - WebVirtMgr</a></li>
 <li><a href="https://pve.proxmox.com/wiki/Main_Page" target="_blank" rel="noopener noreferrer">Proxmox Virtual Environment - Proxmox WIKI</a></li>
-<li><a href="https://wiki.archlinux.org/title/QEMU#top-page" target="_blank" rel="noopener noreferrer">QEMU - Arch Linux WIKI</a></li>
+<li><a href="https://wiki.archlinux.org/title/QEMU#top-page" target="_blank" rel="noopener noreferrer">QEMU - Arch Linux WIKI</a>
+&laquo;&laquo;&laquo;&lt; HEAD
+=======</li>
+<li><a href="https://foxi.buduanwang.vip/category/virtualization/pve/" target="_blank" rel="noopener noreferrer">佛西博客 - PVE 相关</a>: 这位博主写了很多 pve 相关的内容，而且比较有深度</li>
 </ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>5af23d49 (feat: /proxmox-virtual-environment-instruction)</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 ]]></content></entry><entry><title type="html">刻意练习</title><link href="https://thiscute.world/posts/deliberate-practice/"/><id>https://thiscute.world/posts/deliberate-practice/</id><author><name>ryan4yin</name></author><published>2022-10-05T13:31:00+08:00</published><updated>2022-10-05T13:31:00+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/deliberate-practice/deliberate-practice-achieve-mastery-in-anything.webp" height="1280" width="720"><figcaption></figcaption>
         </figure><p>我最近理解到一个事实——<strong>许多知识或者技能，都是可以通过正确的学习方法，加上短时间大量的练习，就能达到 60 分及格标准的</strong>。
