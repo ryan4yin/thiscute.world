@@ -1640,7 +1640,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </div>
 </div><p>不过好像 PVE 官方也提供一个 <a href="https://www.proxmox.com/en/proxmox-backup-server" target="_blank" rel="noopener noreferrer">proxmox-backup-server</a>，感觉可以搞个容器跑这玩意儿，把数据备份到 USB 硬盘盒或者 SMB 挂载的硬盘里，待研究。</p>
 <ul>
-<li><a href="https://github.com/proxmox/proxmox-backup" target="_blank" rel="noopener noreferrer">proxmox/proxmox-backup</a></li>
+<li><a href="https://github.com/proxmox/proxmox-backup" target="_blank" rel="noopener noreferrer">proxmox/proxmox-backup</a>: 官方用纯 rust 实现的一个备份服务器</li>
 <li><a href="https://github.com/ayufan/pve-backup-server-dockerfiles" target="_blank" rel="noopener noreferrer">ayufan/pve-backup-server-dockerfiles</a></li>
 </ul>
 <p>另外开源社区也有 restic/rclone 等工具也可用于备份，备份方案还在研究中，未确定。</p>
@@ -1693,6 +1693,17 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <p>如果要配置 WLAN 网卡的话，可以直接参考 Debian 的官方文档进行配置：<a href="https://wiki.debian.org/WiFi/HowToUse" target="_blank" rel="noopener noreferrer">How to use a WiFi interface - Debian</a></p>
 <p>因此，我觉得将 WiFi 网卡直接 USB 直通给机器内的 OpenWRT 虚拟机来玩，可能是更好的主意。</p>
 <p>后续将会更新相关内容&hellip;待续</p>
+<h2 id="五提升-pve-的安全性" class="headerLink">
+    <a href="#%e4%ba%94%e6%8f%90%e5%8d%87-pve-%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7" class="header-mark"></a>五、提升 PVE 的安全性</h2><h3 id="1-配置-acme-证书并使其自动更新" class="headerLink">
+    <a href="#1-%e9%85%8d%e7%bd%ae-acme-%e8%af%81%e4%b9%a6%e5%b9%b6%e4%bd%bf%e5%85%b6%e8%87%aa%e5%8a%a8%e6%9b%b4%e6%96%b0" class="header-mark"></a>1. 配置 ACME 证书并使其自动更新</h3><p>对于个人使用而言，不配置证书好像也 ok，虽然访问 Web UI 时浏览器会提示不安全，但也不影响使用。</p>
+<p>如果你拥有自己的域名，同时也期望更高的安全性，根据<a href="https://pve.proxmox.com/wiki/Certificate_Management#sysadmin_certs_acme_dns_challenge" target="_blank" rel="noopener noreferrer">Certificate Management - 官方文档</a>，pve 可借助 acme.sh 进行证书的申请与自动更新。</p>
+<p>TODO</p>
+<h3 id="2-ssh-禁用密码登录" class="headerLink">
+    <a href="#2-ssh-%e7%a6%81%e7%94%a8%e5%af%86%e7%a0%81%e7%99%bb%e5%bd%95" class="header-mark"></a>2. SSH 禁用密码登录</h3><p>pve 的 ssh 默认是启用了密码登录的，为了安全性，建议上传 ssh 密钥改用密钥登录，并禁用密码登录功能。</p>
+<p>详见 <a href="https://github.com/ryan4yin/knowledge/blob/master/linux/Linux%20%E4%B8%BB%E6%9C%BA%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE.md" target="_blank" rel="noopener noreferrer">Linux 主机安全设置.md - ryan4yin</a></p>
+<h3 id="3-用户管理" class="headerLink">
+    <a href="#3-%e7%94%a8%e6%88%b7%e7%ae%a1%e7%90%86" class="header-mark"></a>3. 用户管理</h3><p>PVE 支持对接多种授权协议，对于个人使用而言，直接使用 Linux PAM 是最简单的。</p>
+<p>即使是在内网，为了安全性，也建议设置复杂密码，同时所有虚拟机也建议仅启用密钥登录，所有 Web 页面都建议设置复杂密码。（特别是家里没有访客网络的时候&hellip;）</p>
 <h2 id="拓展---cloudinit-高级配置" class="headerLink">
     <a href="#%e6%8b%93%e5%b1%95---cloudinit-%e9%ab%98%e7%ba%a7%e9%85%8d%e7%bd%ae" class="header-mark"></a>拓展 - cloudinit 高级配置</h2><p>PVE 使用 CDROM 只读盘(<code>/dev/sr0</code>)来进行 cloud-init 的配置。
 在虚拟机启动后，<code>/dev/sr0</code> 将被卸载。</p>
@@ -1744,8 +1755,15 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <ul>
 <li><a href="https://github.com/prometheus-pve/prometheus-pve-exporter" target="_blank" rel="noopener noreferrer">prometheus pve expoter</a>: 通过 prometheus+grafana 监控 PVE 集群</li>
 </ul>
-<h2 id="拓展" class="headerLink">
-    <a href="#%e6%8b%93%e5%b1%95" class="header-mark"></a>拓展</h2><h2 id="拓展---其他-qemukvm-相关的虚拟化平台" class="headerLink">
+<h2 id="拓展---pve-运行在-arm-开发版上" class="headerLink">
+    <a href="#%e6%8b%93%e5%b1%95---pve-%e8%bf%90%e8%a1%8c%e5%9c%a8-arm-%e5%bc%80%e5%8f%91%e7%89%88%e4%b8%8a" class="header-mark"></a>拓展 - PVE 运行在 ARM 开发版上</h2><p>PVE 官方目前还未推出 ARM 支持，但是社区已有方案：</p>
+<ul>
+<li><a href="https://github.com/pimox/pimox7" target="_blank" rel="noopener noreferrer">pimox7</a></li>
+<li><a href="https://foxi.buduanwang.vip/virtualization/pve/1902.html/" target="_blank" rel="noopener noreferrer">安装Arm版本的Proxmox VE - 佛西博客</a></li>
+<li><a href="https://github.com/jiangcuo/Proxmox-Arm64" target="_blank" rel="noopener noreferrer">Proxmox-Arm64</a></li>
+</ul>
+<p>proxmox 社区比较活跃，建议多在社区内看看相关进展。</p>
+<h2 id="拓展---其他-qemukvm-相关的虚拟化平台" class="headerLink">
     <a href="#%e6%8b%93%e5%b1%95---%e5%85%b6%e4%bb%96-qemukvm-%e7%9b%b8%e5%85%b3%e7%9a%84%e8%99%9a%e6%8b%9f%e5%8c%96%e5%b9%b3%e5%8f%b0" class="header-mark"></a>拓展 - 其他 QEMU/KVM 相关的虚拟化平台</h2><p>PVE 毕竟是一个商业系统，虽然目前可以免费用，但是以后就不一定了。</p>
 <p>如果你担心 PVE 以后会不提供免费使用的功能，或者单纯想折腾折腾的技术，还可以试试下面这些虚拟化平台：</p>
 <ul>
