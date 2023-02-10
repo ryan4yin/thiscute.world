@@ -430,7 +430,7 @@ rsync -avz --progress /var/lib/vz/template/ root@192.168.5.163:/var/lib/vz/templ
 
 不过好像 PVE 官方也提供一个 [proxmox-backup-server](https://www.proxmox.com/en/proxmox-backup-server)，感觉可以搞个容器跑这玩意儿，把数据备份到 USB 硬盘盒或者 SMB 挂载的硬盘里，待研究。
 
-- [proxmox/proxmox-backup](https://github.com/proxmox/proxmox-backup)
+- [proxmox/proxmox-backup](https://github.com/proxmox/proxmox-backup): 官方用纯 rust 实现的一个备份服务器
 - [ayufan/pve-backup-server-dockerfiles](https://github.com/ayufan/pve-backup-server-dockerfiles)
 
 另外开源社区也有 restic/rclone 等工具也可用于备份，备份方案还在研究中，未确定。
@@ -481,6 +481,28 @@ rsync -avz --progress /var/lib/vz/template/ root@192.168.5.163:/var/lib/vz/templ
 
 后续将会更新相关内容...待续
 
+## 五、提升 PVE 的安全性
+
+### 1. 配置 ACME 证书并使其自动更新
+
+对于个人使用而言，不配置证书好像也 ok，虽然访问 Web UI 时浏览器会提示不安全，但也不影响使用。
+
+如果你拥有自己的域名，同时也期望更高的安全性，根据[Certificate Management - 官方文档](https://pve.proxmox.com/wiki/Certificate_Management#sysadmin_certs_acme_dns_challenge)，pve 可借助 acme.sh 进行证书的申请与自动更新。
+
+TODO
+
+### 2. SSH 禁用密码登录
+
+pve 的 ssh 默认是启用了密码登录的，为了安全性，建议上传 ssh 密钥改用密钥登录，并禁用密码登录功能。
+
+详见 [Linux 主机安全设置.md - ryan4yin](https://github.com/ryan4yin/knowledge/blob/master/linux/Linux%20%E4%B8%BB%E6%9C%BA%E5%AE%89%E5%85%A8%E8%AE%BE%E7%BD%AE.md)
+
+### 3. 用户管理
+
+PVE 支持对接多种授权协议，对于个人使用而言，直接使用 Linux PAM 是最简单的。
+
+即使是在内网，为了安全性，也建议设置复杂密码，同时所有虚拟机也建议仅启用密钥登录，所有 Web 页面都建议设置复杂密码。（特别是家里没有访客网络的时候...）
+
 ## 拓展 - cloudinit 高级配置
 
 PVE 使用 CDROM 只读盘(`/dev/sr0`)来进行 cloud-init 的配置。
@@ -525,7 +547,15 @@ grep -r manage_etc_hosts /usr/share
 
 - [prometheus pve expoter](https://github.com/prometheus-pve/prometheus-pve-exporter): 通过 prometheus+grafana 监控 PVE 集群
 
-## 拓展
+## 拓展 - PVE 运行在 ARM 开发版上
+
+PVE 官方目前还未推出 ARM 支持，但是社区已有方案：
+
+- [pimox7](https://github.com/pimox/pimox7)
+- [安装Arm版本的Proxmox VE - 佛西博客](https://foxi.buduanwang.vip/virtualization/pve/1902.html/)
+- [Proxmox-Arm64](https://github.com/jiangcuo/Proxmox-Arm64)
+
+proxmox 社区比较活跃，建议多在社区内看看相关进展。
 
 ## 拓展 - 其他 QEMU/KVM 相关的虚拟化平台
 
