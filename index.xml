@@ -1232,7 +1232,7 @@
 <li>显示器
 <ul>
 <li>默认使用 std 类型，兼容性最好，但是是纯 CPU 模拟的，比较耗 CPU。</li>
-<li>如果你有 windows 等需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 <code>VirtIO GPU(virtio-gl)</code> 类型，这是一项正在进行中的工作：以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。仅需要提前手动在 PVE 中先装下这几个包 <code>apt install libgl1 libegl1</code>，并且在主机内安装好 virtio 驱动（ 前面提过了，Linux 自带，Windows 需要手动安装 virtio drivers）</li>
+<li>如果你有 windows 等需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 <code>VirGL GPU(virtio-gl)</code> 类型，这是一项正在进行中的工作：以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。仅需要提前手动在 PVE 中先装下这几个包 <code>apt install libgl1 libegl1</code>，并且在主机内安装好 virtio 驱动（ 前面提过了，Linux 自带，Windows 需要手动安装 virtio drivers）</li>
 <li>详见 <a href="https://wiki.archlinux.org/title/QEMU#Graphic_card" target="_blank" rel="noopener noreferrer">QEMU Graphic card - Arch WIKI</a></li>
 </ul>
 </li>
@@ -1254,12 +1254,6 @@
 </li>
 </ul>
 <p>上面这些内容，官方有详细文档，能读英文的话可以直接看 <a href="https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines" target="_blank" rel="noopener noreferrer">Qemu/KVM Virtual Machines - Proxmox WIKI</a>.</p>
-<p>而 PCIe 直通之类的高级功能，我现在还没玩到，建议看官方文档:</p>
-<ul>
-<li><a href="https://pve.proxmox.com/wiki/PCI%28e%29_Passthrough" target="_blank" rel="noopener noreferrer">PCI(e) Passthrough - Proxmox WIKI</a>.</li>
-<li><a href="https://pve.proxmox.com/wiki/Pci_passthrough#GPU_OVMF_PCI_Passthrough_.28recommended.29" target="_blank" rel="noopener noreferrer">GPU OVMF PCI Passthrough (recommended) - Proxmox WIKI</a></li>
-<li><a href="https://wiki.archlinux.org/title/QEMU/Guest_graphics_acceleration" target="_blank" rel="noopener noreferrer">QEMU/Guest graphics acceleration - Arch WIKI</a></li>
-</ul>
 <h3 id="1-使用-cloudinit-自动配置网卡ssh密钥存储空间" class="headerLink">
     <a href="#1-%e4%bd%bf%e7%94%a8-cloudinit-%e8%87%aa%e5%8a%a8%e9%85%8d%e7%bd%ae%e7%bd%91%e5%8d%a1ssh%e5%af%86%e9%92%a5%e5%ad%98%e5%82%a8%e7%a9%ba%e9%97%b4" class="header-mark"></a>1. 使用 cloudinit 自动配置网卡、SSH密钥、存储空间</h3><blockquote>
 <p>完全参照官方文档 <a href="https://pve.proxmox.com/wiki/Cloud-Init_Support" target="_blank" rel="noopener noreferrer">Cloud-Init_Support - PVE Docs</a></p>
@@ -1372,7 +1366,20 @@
 <h3 id="2-虚拟机硬盘扩容" class="headerLink">
     <a href="#2-%e8%99%9a%e6%8b%9f%e6%9c%ba%e7%a1%ac%e7%9b%98%e6%89%a9%e5%ae%b9" class="header-mark"></a>2. 虚拟机硬盘扩容</h3><p>CentOS/Ubuntu/Debian 提供的 Cloud 镜像，都自带了 <code>cloud-utils-growpart</code> 这个组件，可以实现在扩容物理硬盘时，自动调整 Linux 的分区大小。</p>
 <p>因此需要扩容虚拟机时，直接通过 UI 面板/命令行扩容虚拟机的硬盘即可， Linux 的分区会被 <code>cloud-utils-growpart</code> 自动扩容。</p>
-<p>而其他非 Cloud 镜像，则需要在扩容磁盘后再进入虚拟机手动扩容分区跟磁盘，具体命令就不介绍了，请自行查阅相关文档吧。</p>
+<p>PVE 可通过如下命令进行磁盘扩容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 将 id 为 9000 的虚拟机的 scsi0 磁盘，扩容到 32G</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 请自行修改虚拟机 ID 与磁盘大小，注意仅支持扩容！不能缩容。</span>
+</span></span><span class="line"><span class="cl">qm resize <span class="m">9000</span> scsi0 32G
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>而其他非 Cloud 镜像，则需要在扩容磁盘后再进入虚拟机手动扩容分区跟磁盘，具体命令就不介绍了，请自行查阅相关文档吧。</p>
 <blockquote>
 <p>因为这个方便的特性，也为了减少虚拟化的开销，Cloud 镜像默认是不使用 LVM 逻辑分区的。
 LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟机因为本身就能动态扩容“物理硬盘”的大小，基本不用不到 LVM。</p>
@@ -1688,11 +1695,13 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <p>根据 PVE 官方文档 <a href="https://pve.proxmox.com/wiki/WLAN" target="_blank" rel="noopener noreferrer">WLAN - Proxmox VE Docs</a>，并不建议在 PVE 上使用 WLAN，它存在如下问题：</p>
 <ul>
 <li>WiFi 自身必须是一个 Linux Bridge 设备，无法被桥接到 vmbr0 等网桥上。因为大多数 Access Point 都会直接拒绝掉未授权的源地址发过来的数据包&hellip;</li>
-<li>与有线连接相比，WiFi 的延迟要高得多，而且不太稳定。</li>
+<li>与有线连接相比，WiFi 的延迟要高得多，而且延迟波动较大。</li>
 </ul>
-<p>如果要配置 WLAN 网卡的话，可以直接参考 Debian 的官方文档进行配置：<a href="https://wiki.debian.org/WiFi/HowToUse" target="_blank" rel="noopener noreferrer">How to use a WiFi interface - Debian</a></p>
-<p>因此，我觉得将 WiFi 网卡直接 USB 直通给机器内的 OpenWRT 虚拟机来玩，可能是更好的主意。</p>
-<p>后续将会更新相关内容&hellip;待续</p>
+<p>因此仅建议在不得已的情况下，才使用 WiFi 网卡.</p>
+<p>如果要配置 WLAN 网卡的话，官方建议直接参考 Debian 的官方文档进行配置：<a href="https://wiki.debian.org/WiFi/HowToUse" target="_blank" rel="noopener noreferrer">How to use a WiFi interface - Debian</a>，不过这里也找到一篇中文博客：</p>
+<ul>
+<li><a href="https://foxi.buduanwang.vip/virtualization/pve/1939.html/" target="_blank" rel="noopener noreferrer">proxmox中使用ax210连接无线网络 - 佛西博客</a></li>
+</ul>
 <h2 id="五提升-pve-的安全性" class="headerLink">
     <a href="#%e4%ba%94%e6%8f%90%e5%8d%87-pve-%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7" class="header-mark"></a>五、提升 PVE 的安全性</h2><h3 id="1-配置-acme-证书并使其自动更新" class="headerLink">
     <a href="#1-%e9%85%8d%e7%bd%ae-acme-%e8%af%81%e4%b9%a6%e5%b9%b6%e4%bd%bf%e5%85%b6%e8%87%aa%e5%8a%a8%e6%9b%b4%e6%96%b0" class="header-mark"></a>1. 配置 ACME 证书并使其自动更新</h3><p>对于个人使用而言，不配置证书好像也 ok，虽然访问 Web UI 时浏览器会提示不安全，但也不影响使用。</p>
@@ -1704,6 +1713,25 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <h3 id="3-用户管理" class="headerLink">
     <a href="#3-%e7%94%a8%e6%88%b7%e7%ae%a1%e7%90%86" class="header-mark"></a>3. 用户管理</h3><p>PVE 支持对接多种授权协议，对于个人使用而言，直接使用 Linux PAM 是最简单的。</p>
 <p>即使是在内网，为了安全性，也建议设置复杂密码，同时所有虚拟机也建议仅启用密钥登录，所有 Web 页面都建议设置复杂密码。（特别是家里没有访客网络的时候&hellip;）</p>
+<h2 id="六pcie-直通显卡硬盘usb-设备等" class="headerLink">
+    <a href="#%e5%85%adpcie-%e7%9b%b4%e9%80%9a%e6%98%be%e5%8d%a1%e7%a1%ac%e7%9b%98usb-%e8%ae%be%e5%a4%87%e7%ad%89" class="header-mark"></a>六、PCI(e) 直通（显卡、硬盘、USB 设备等）</h2><p>QEMU/KVM 的 PCI(e) 直通功能可以让虚拟机<strong>独占</strong>指定的 PCI(e) 设备，越过宿主机控制器直接与该 PCI(e) 设备通信。</p>
+<p>相比使用 QEMU/KVM 提供的 virtio 半虚拟化硬件，PCI(e) 直通有如下优势：</p>
+<ul>
+<li>大大提升虚拟机与 PCI(e) 设备的 IO 性能（更低的延迟，更高的速度，更低的资源占用）。</li>
+<li>可以利用上 QEMU/KVM 本身不支持的硬件特性，比如 PCI 直通最常见的使用场景——显卡直通。</li>
+</ul>
+<p>那么最常见的 PCI(e) 直通需求有：</p>
+<ul>
+<li><strong>显卡直通</strong>，实现在内部 windows 主机中用宿主机显卡看影视、玩游戏、剪视频</li>
+<li><strong>硬盘或 USB 直通</strong>，以提升硬盘或 USB 的 IO 性能。</li>
+</ul>
+<p>首先列举下相关的文档：</p>
+<ul>
+<li><a href="https://pve.proxmox.com/wiki/PCI%28e%29_Passthrough" target="_blank" rel="noopener noreferrer">PCI(e) Passthrough - Proxmox WIKI</a>.</li>
+<li><a href="https://pve.proxmox.com/wiki/Pci_passthrough#GPU_OVMF_PCI_Passthrough_.28recommended.29" target="_blank" rel="noopener noreferrer">GPU OVMF PCI Passthrough (recommended) - Proxmox WIKI</a></li>
+<li><a href="https://wiki.archlinux.org/title/QEMU/Guest_graphics_acceleration" target="_blank" rel="noopener noreferrer">QEMU/Guest graphics acceleration - Arch WIKI</a></li>
+</ul>
+<p>TODO 实操内容待补充&hellip;</p>
 <h2 id="拓展---cloudinit-高级配置" class="headerLink">
     <a href="#%e6%8b%93%e5%b1%95---cloudinit-%e9%ab%98%e7%ba%a7%e9%85%8d%e7%bd%ae" class="header-mark"></a>拓展 - cloudinit 高级配置</h2><p>PVE 使用 CDROM 只读盘(<code>/dev/sr0</code>)来进行 cloud-init 的配置。
 在虚拟机启动后，<code>/dev/sr0</code> 将被卸载。</p>
