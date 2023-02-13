@@ -614,7 +614,11 @@ KVL + 节点电压法是分析电路的一种有效手段。
 我在淘宝「电子爱好者之家」上买了几个焊接套件，如指尖陀螺、5v 升 12v 升压板、LED 摇摇棒、十二个实验洞洞板套件、高压发生器等。
 
 边玩边学习相关知识是最有意思的，玩到一定阶段后，可以再考虑补一补基础知识。
-基础理论方面我查到《**[模拟和数字电子电路基础](https://book.douban.com/subject/3171563/)**》这本书比较受推荐，豆瓣评分也很高。
+基础理论方面我查到这几本（为了我的英语能力，选择读英文的）：
+
+- [Practical Electronics for Inventors, Fourth Edition](https://book.douban.com/subject/30332697/): 中文版名为《实用电子元器件与电路基础》，是评论区 [@辛未羊](https://github.com/panqiincs) 推荐的，感觉确实很适合我这种业余新手入门~
+- **Foundations of Analog and Digital Electronic Circuits](https://book.douban.com/subject/1926610/)**：这本书比较受推荐，中文版《模拟和数字电子电路基础》，豆瓣评分 9.3，不过我看了下比上面那本要难，感觉适合后面进阶看。
+
 
 学习基础的电路理论时可以仿真软件同步学习，如：
 
