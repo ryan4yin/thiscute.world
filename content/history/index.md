@@ -22,6 +22,12 @@ comment:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2023-02-15
+
+- 看上了 [esp-drone](https://github.com/espressif/esp-drone) 这个项目，为了轻松入门，直接在淘宝上买了一套 esp-drone 的散件打算自己组装，花了 180 大洋（感觉自己折腾的话估计只要 100，不过效果不好说）。
+- 翻出了之前买的两块 esp32 开发板，开始学习 vscode + esp-idf 进行 esp32 程序开发，发现它用到的技术确实比较杂（C + CMake + Kconfig + Python），门槛比 STM32 要高，不过对我而言还 OK。
+  - 用 ESP32 整了个 WS2812 跑马灯，比较有意思~
+
 ### 2023-02-11
 
 - 研究 Homelab 备份与数据同步方案，写了点笔记 [数据备份与同步策略](https://github.com/ryan4yin/knowledge/blob/master/homelab/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%90%8C%E6%AD%A5.md)
