@@ -58,7 +58,8 @@ comment:
   - 什么是 SPI/UART/I$^{2}$C 数据传输协议
   - 什么是 GPIO 引脚，以及开发版的引脚各有什么功能
   - 如何使用 USB 转 TTL 串口板给 ESP32/ESP8266/51/STM32 等单片机刷固件
-  - ST-Link 调试编程器（仿真器）与 TTL 串口有何区别，JTAG 和 SWD 模式分别有啥用
+  - ST-Link/J-Link/DAPLink 调试编程器（仿真器）与 TTL 串口有何区别，JTAG 和 SWD 接口又是个啥？该用哪个？
+  - 如何使用 C 语言为单片机编写程序？如何上传编译好的固件？如何调试？
   - ...
 
 总之兴趣驱动，不会的东西就 Google 一下或者问问 ChatGPT，玩起来~
@@ -621,13 +622,13 @@ KVL + 节点电压法是分析电路的一种有效手段。
 基础理论方面我查到这几本（为了我的英语能力，选择读英文的）：
 
 - [Practical Electronics for Inventors, Fourth Edition](https://book.douban.com/subject/30332697/): 中文版名为《实用电子元器件与电路基础》，是评论区 [@辛未羊](https://github.com/panqiincs) 推荐的，感觉确实很适合我这种业余新手入门~
-- **Foundations of Analog and Digital Electronic Circuits](https://book.douban.com/subject/1926610/)**：这本书比较受推荐，中文版《模拟和数字电子电路基础》，豆瓣评分 9.3，不过我看了下比上面那本要难，感觉适合后面进阶看。
+- [Foundations of Analog and Digital Electronic Circuits](https://book.douban.com/subject/1926610/)：这本书比较受推荐，中文版《模拟和数字电子电路基础》，豆瓣评分 9.3，不过我看了下比上面那本要难，感觉适合后面进阶看。
 
 
 学习基础的电路理论时可以仿真软件同步学习，如：
 
 - Multisim（元器件仿真）、Proteus（单片机仿真）
-  - 这两个软件都非常流行，不过基本都仅支持 Windows 系统
+  - 这两个软件都非常流行，不过基本都仅支持 Windows 系统，我选择放弃。
 - EDA（Electronic Design Automation） 电路板原理图、PCB（Printed Circuit Board） 设计工具
   - [立创 EDA](https://lceda.cn/): 国产 EDA，全平台支持，也提供 Web 版
   - [KiCAD](https://github.com/KiCad): 开源电路板设计工具，功能强大，支持插件，社区资源多。
