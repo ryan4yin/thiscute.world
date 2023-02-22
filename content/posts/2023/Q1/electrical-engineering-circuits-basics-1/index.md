@@ -649,10 +649,21 @@ KVL + 节点电压法是分析电路的一种有效手段。
 单片机学习顺序大概是：
 
 - 8051: 最简单最经典的单片机
-  - 我的学习笔记与代码：[ryan4yin/learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm)
+  - 我的 8051 汇编学习笔记与代码：[ryan4yin/learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm)
 - STM32: 工业届应用最广泛的单片机，网上资料众多
-  - 我的学习笔记与代码（未完待续）：[ryan4yin/learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)
-- ESP32/ESP8266: 包含 wifi 蓝牙功能的单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
+  - 我的 STM32 学习笔记与代码（持续更新中，使用 C 语言，后续打算试下 Rust）：[ryan4yin/learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)
+- ESP32: 包含 wifi 蓝牙功能的单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
+  - 乐鑫官方的 ESP-IDF 封装层次比 STM32 HAL 更高，用起来更傻瓜一点。
+  - 我的 ESP32 学习笔记与代码（同样持续更新中，也是用的 C，后面也打算用 Rust 搞搞）：[electrical-engineering/esp32](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/esp32)
+
+此外我还买了几块使用瑞芯微 RK3588s 芯片的国产派，SoC 自带 NPU，跑的 Linux 系统，玩耍的笔记代码放在了这里（Python 与 C 语言）：
+
+- [electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
+
+树莓派则是我最开始整的玩具，当时用 Python 搞了点活，笔记代码在此（Python 语言）：
+
+- [electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
+
 
 ### 2. 嵌入式 Linux（Linux on Embedded System）
 
