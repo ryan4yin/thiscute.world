@@ -58,7 +58,7 @@ var myFriends = [
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
     ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.webp", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。"], 
     ["https://stdrc.cc/", "/avatar/richardchien.webp", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot作者/OS大佬"], 
-    ["https://fmcf.cc/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@幸吾有志", "他戴着花冠，踏于风雪，探寻迷途的救赎，绽放生命的曙光"], 
+    ["https://fmcf.cc/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@春花秋月", "他戴着花冠，踏于风雪，探寻迷途的救赎，绽放生命的曙光"], 
     ["https://www.lionad.art/", "/avatar/lionad-morotar.webp", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
     ["https://ryanyang.cn/", "/avatar/ryanyang.webp", "@ryanyang", "一位智慧的阿拉伯诗人 <= Java 后端大佬"], 
     ["https://abohe.cn/", "https://img.abohe.cn/logo.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
