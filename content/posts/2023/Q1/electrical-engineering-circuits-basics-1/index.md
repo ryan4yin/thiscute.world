@@ -664,7 +664,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 - [electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
 
-树莓派则是我最开始整的玩具，当时用 Python 搞了点活，笔记代码在此（Python 语言）：
+树莓派则是我最开始整的玩具，笔记代码在此（Python 语言）：
 
 - [electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
 
