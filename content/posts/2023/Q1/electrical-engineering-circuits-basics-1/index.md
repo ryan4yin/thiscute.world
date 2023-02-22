@@ -660,15 +660,6 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - 乐鑫官方的 ESP-IDF 封装层次比 STM32 HAL 更高，用起来更傻瓜一点。
   - 我的 ESP32 学习笔记与代码（同样持续更新中，也是用的 C，后面也打算用 Rust 搞搞）：[electrical-engineering/esp32](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/esp32)
 
-此外我还买了几块使用瑞芯微 RK3588s 芯片的国产派，SoC 自带 NPU，跑的 Linux 系统，玩耍的笔记代码放在了这里（Python 与 C 语言）：
-
-- [electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
-
-树莓派则是我最开始整的玩具，笔记代码在此（Python 语言）：
-
-- [electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
-
-
 ### 2. 嵌入式 Linux（Linux on Embedded System）
 
 >嵌入式系统（Embedded System），是指嵌入机械或电气系统内部、具有专一功能和实时计算性能的计算机系统。
@@ -684,7 +675,15 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - 补充说明
   - 嵌入式 Linux 代码的可移植性相对要好很多，因为硬件相关的逻辑都封装在驱动层了。
 
-相关资料（大致按学习顺序排序）：
+我目前的学习顺序与进度：
+
+- 瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU
+  - 玩耍的笔记代码放在了这里（Python 与 C 语言）[electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
+- 树莓派 4B: 
+  - 玩耍笔记与代码：[electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
+
+
+其他打算学习的资料（大致按难度排序）：
 
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [从零开始为树莓派 4B 开发一个操作系统 - rpi4-osdev](https://github.com/isometimes/rpi4-osdev)
