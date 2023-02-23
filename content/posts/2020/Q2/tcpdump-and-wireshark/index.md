@@ -79,10 +79,13 @@ http.host != "xxx.baidu.com" and http.referer == "xxx.baidu.com"
 
 ## 二、tcpdump + ssh + wireshark 远程实时抓包
 
-在进行远程网络抓包分析时，我们通常的做法是：
+在进行远程网络抓包分析时，我们通常的做法是，首先使用如下命令在远程主机上抓包，保存为 pcap 格式的文件：
 
-1. 使用 `tcpdump -i eth0 -l -w temp.pcap` 在远程主机上抓包，保存为 pcap 格式的文件。
-2. 将 pcap 文件拷贝到本地，使用 wireshark 对其进行分析。
+```shell
+tcpdump -i eth0 -w temp.pcap
+```
+
+然后再将 pcap 文件拷贝到本地，使用 wireshark 对其进行分析。
 
 但是这样做没有时效性，而且数据拷贝来去也比较麻烦。
 
