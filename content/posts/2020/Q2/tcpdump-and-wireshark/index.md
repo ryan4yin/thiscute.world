@@ -173,7 +173,18 @@ termshark -r test.pcap
 
 ### tcpdump
 
-也可以直接使用 tcpdump 将抓到的数据打印到 stdout 查看，常用命令如下：
+也可以直接使用 tcpdump 将抓到的数据打印到 stdout 查看，先简单介绍下 tcpdump 的命令行参数（可通过 `man tcpdump` 查看详细文档）：
+
+```
+-A               以 ASCII 字符方式打印所有抓到的数据内容，在抓取纯文本数据时很好用
+-i interface     仅抓取某个特定网络接口上的数据包，特殊参数 `all` 表示所有接口
+
+-s snaplen       设置每个包的最大长度，默认为 262144 bytes。在较老版本的 tcpdump 中 -s 0 即表示使用默认的包长度
+--snapshot-length=snaplen
+```
+
+
+常用命令如下：
 
 ```shell
 # 1. 嗅探所有接口，80 端口上所有 HTTP 协议请求与响应的 headers 以及 body
