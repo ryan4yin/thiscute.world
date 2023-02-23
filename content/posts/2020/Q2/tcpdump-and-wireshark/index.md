@@ -83,6 +83,11 @@ http.host != "xxx.baidu.com" and http.referer == "xxx.baidu.com"
 
 ```shell
 tcpdump -i eth0 -w temp.pcap
+
+# 当然你也可以在抓包阶段就加一些过滤条件，降低抓到的数据量与工作负载
+# 具体的命令行过滤条件在后面的第三节有讲，这里仅简单举例
+# 嗅探 eth0 接口， src/dst ip 地址为 x.x.x.x/a.a.a.a 的所有 tcp 数据包
+tcpdump -i eth0 -w temp.pcap 'tcp and (host x.x.x.x or host a.a.a.a)'
 ```
 
 然后再将 pcap 文件拷贝到本地，使用 wireshark 对其进行分析。
