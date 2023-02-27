@@ -18,14 +18,13 @@ toc:
 
 >按优先级排序
 
+- Practical Electronics for Inventors, Fourth Edition
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
 - 英语阅读
   - The Moon and Sixpence       - 23/36
 - 英语单词与听力练习
   - 一点英语 270 天英语学习        - 145/270 (漏打卡 62 天)
 - VPN 与 socks5 协议研究
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
-- 英语语法
-  - 《英语语法新思维——初级教程》     - 8/366
 
 ## 二、我今年还想搞搞这些
 
@@ -65,6 +64,7 @@ toc:
 
 - 英语语法
   - 《English Grammer In Use》
+  - 《英语语法新思维——初级教程》     - 8/366
 - 英语阅读：
   - Sophie's World
   - Majo no Tabitabi（魔女之旅）Vol.1
@@ -87,8 +87,20 @@ toc:
 
 ### 1. 高优先级
 
+#### 电子电路
+
+电子电路是我 2022 年底开的新坑，目前兴趣强烈。
+
+- 书籍
+  - Practical Electronics for Inventors, Fourth Edition
+- 芯片
+  - STM32 ESP32 RK3588s 
+- 目前的学习目标
+  - DIY 无人机编队飞行！
 
 #### 操作系统
+
+理解 Linux 操作系统也是我继续精进技术必不可少的技能。
 
 - 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
@@ -108,6 +120,26 @@ toc:
   - 极客时间《深入 C 语言和程序运行原理》
   - 极客时间《Rust 编程第一课》
 
+
+#### 计算机网络
+
+计算机网络可算是我的老本行了，用来吃饭的家伙事，技艺不能落下。
+
+- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
+  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
+  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
+- TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
+
+
+#### 机器学习与深度学习
+
+2022 到 2023 这两年，AI 技术又陆续出现明显突破，ChatGPT 与 Stable Diffusion 都令人印象深刻。
+我与大多数普通人一样，对 AI 技术本身兴趣不大，更感兴趣的是 AI 能带给世界哪些改变。
+所以我的目标仅仅是入个门，能在自己感兴趣的领域应用上 AI 的研究成果。
+
+- [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
+
+
 #### 其他杂项
 
 - Go 语言进阶
@@ -126,44 +158,12 @@ toc:
   - 轮滑：倒滑后压步
   - 游泳：学会蛙泳并且提升速度
 
-### 2. 中优先级
+#### 其他资料
+
+>这个列表中的内容没啥优先级，反正先列着，什么时候有兴趣可以玩玩。
 
 >附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
 
-#### 计算机网络
-
-- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
-  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
-  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
-- TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
-
-
-#### 分布式数据库
-
-- 学习路线
-  1. 极客时间《分布式协议与算法实战》 - 学习进度 50%
-  2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
-  3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
-  4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
-- 其他参考书籍
-  - 《Distributed Systems, 3rd Edition, 2017》
-  - 《Distributed Algorithms, 2nd Edition, 2018》
-  - [SQL进阶教程](https://book.douban.com/subject/27194738/)
-
-
-#### 编程语言理论
-
-  - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
-    - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
-  - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
-  - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
-  - 《WebAssembly 核心原理》
-  - 用 Go 语言讲编程语言理论
-    - 《自己动手实现 Lua》
-    - 《自己动手实现 Java 虚拟机》
-
-
-#### 其他资料
 
 - 写几个小项目（使用 rust/go）
   - 实现一个文本编辑器
@@ -172,11 +172,6 @@ toc:
     - https://blog.lizzie.io/linux-containers-in-500-loc.html
   - 网络代理（不到 2000 行的 TUN 库）
     - https://github.com/songgao/water
-
-- 机器学习与深度学习
-  - [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
-  - AI 的应用：歌声合成、图片分辨率修复（超分辨率）、AIGC
-
 
 - Go 语言 Web 编程
   - [ ] [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
@@ -197,6 +192,31 @@ toc:
 - 检索技术
   - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
   - 极客时间《检索技术 25 讲》
+
+
+分布式数据库：
+
+- 学习路线
+  1. 极客时间《分布式协议与算法实战》 - 学习进度 50%
+  2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
+  3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+  4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
+- 其他参考书籍
+  - 《Distributed Systems, 3rd Edition, 2017》
+  - 《Distributed Algorithms, 2nd Edition, 2018》
+  - [SQL进阶教程](https://book.douban.com/subject/27194738/)
+
+
+编程语言理论：
+
+- 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
+  - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
+- [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
+- [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
+- 《WebAssembly 核心原理》
+- 用 Go 语言讲编程语言理论
+  - 《自己动手实现 Lua》
+  - 《自己动手实现 Java 虚拟机》
 
 
 ## 五、备选书单

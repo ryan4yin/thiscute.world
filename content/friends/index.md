@@ -77,6 +77,7 @@ var myFriends = [
     ["https://tftree.top/", "https://cdn.tftree.top//others/202212042117873.png", "@虚空裂隙", "心有猛虎,细嗅蔷薇"], 
     ["https://zgq.ink/", "https://zgq.ink/favicon.png", "@zgq354", "多一些思考与记录 <= 0xffff 站长，前端佬"], 
     ["https://bleatingsheep.org/", "https://bleatingsheep.org/favicon.ico", "@bleatingsheep", "偶像咩咩"], 
+    ["https://vian.top/", "https://www.vian.top/avatar.ico", "@Vian", "想要的都拥有，得不到的都释怀..."], 
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
