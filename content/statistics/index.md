@@ -30,7 +30,7 @@ toc:
 
 >此页面受 [极客兔兔 - 博客折腾记(七) - Gitalk Plus ](https://geektutu.com/post/blog-experience-7.html) 的启发而创建，其核心诉求是「**帮助访客发现本站的优质文章**」~
 
->此页面的数据由 [Github Action](https://github.com/ryan4yin/ryan4yin.space/blob/main/.github/workflows/gh-pages.yaml) 自动从 Google Analytics 获取，~~更新间隔为 6 小时~~，目前由博主看心情更新。
+>此页面的数据由 [Github Action](https://github.com/ryan4yin/thiscute.world/blob/main/.github/workflows/main.yaml) 自动从 Google Analytics 获取，~~更新间隔为 6 小时~~，目前由博主看心情更新。
 
 
 {{< particles_effect_up  >}}
