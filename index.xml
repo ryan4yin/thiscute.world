@@ -1665,8 +1665,25 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </div><p>上面这么一堆操作后，宿主机就已经启用了嵌套虚拟化，但是虚拟机内部却仍然不一定能有虚拟化指令集。</p>
 <p><strong>根本原因是 PVE 默认使用 kvm64 这种虚拟化的 CPU 类型，它不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 <code>host</code>，然后重启虚拟机，问题就解决了</strong>。</p>
 <h3 id="backup" class="headerLink">
-    <a href="#backup" class="header-mark"></a>11. 如何在多台主机间同步 iso 镜像、backup 文件</h3><p>PVE 自动创建的 iso 镜像、backup 文件，默认都只会保存到本机的 <code>local</code> 分区中，那万一机器出了问题，很可能备份就一起丢了。</p>
-<p>而 PVE 虚拟机备份，我考虑了如下几个方案：</p>
+    <a href="#backup" class="header-mark"></a>11. 如何在多台主机间同步 iso 镜像、backup 文件</h3><h1 id="-head" class="headerLink">
+    <a href="#-head" class="header-mark"></a>PVE 自动创建的备份，默认都只会保存到本机的 <code>local</code> 分区中，那万一机器出了问题，很可能备份就一起丢了。
+&laquo;&laquo;&laquo;&lt; HEAD</h1><p>为了确保数据安全，就需要做多机备份，或者将数据统一备份到另一个 NAS 系统。</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>525cba09 (feat: /proxmox-virtual-environment-instruction)</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>我考虑了如下几个备份方案：</p>
 <ol>
 <li><a href="https://www.proxmox.com/en/proxmox-backup-server" target="_blank" rel="noopener noreferrer">proxmox-backup-server</a>：proxmox 官方推出的一个备份工具，使用 rust 编写。
 <ol>
