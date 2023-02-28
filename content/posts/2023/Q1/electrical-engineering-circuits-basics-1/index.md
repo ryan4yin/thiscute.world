@@ -683,10 +683,11 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - 玩耍笔记与代码：[electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
 
 
-其他打算学习的资料（大致按难度排序）：
+其他我感兴趣的资料（大致按难度排序）：
 
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [从零开始为树莓派 4B 开发一个操作系统 - rpi4-osdev](https://github.com/isometimes/rpi4-osdev)
+- [bare-metal-programming-guide](https://github.com/cpq/bare-metal-programming-guide)
 - 《Linux/Unix 系统编程手册》
 - [Linux Device Drivers (LDD3) ](https://github.com/d0u9/Linux-Device-Driver): Linux 驱动开发经典书籍
 - 《深入理解 Linux 内核》
