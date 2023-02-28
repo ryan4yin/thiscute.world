@@ -1193,7 +1193,7 @@
 <p>如果你对使用 PVE 集群干些啥感兴趣，可以瞅一瞅 <a href="https://github.com/ryan4yin/knowledge/tree/master/homelab" target="_blank" rel="noopener noreferrer">homelab - ryan4yin/knowledge</a>.</p>
 </blockquote>
 <h2 id="一安装-pve-系统" class="headerLink">
-    <a href="#%e4%b8%80%e5%ae%89%e8%a3%85-pve-%e7%b3%bb%e7%bb%9f" class="header-mark"></a>一、安装 PVE 系统</h2><p>建议直接使用 <a href="https://github.com/ventoy/Ventoy" target="_blank" rel="noopener noreferrer">ventoy</a> 制作一个 U 盘启动盘，把官网下载的 PVE 拷贝进去即可进行系统安装。
+    <a href="#%e4%b8%80%e5%ae%89%e8%a3%85-pve-%e7%b3%bb%e7%bb%9f" class="header-mark"></a>一、安装 PVE 系统</h2><p>建议直接使用 <a href="https://github.com/ventoy/Ventoy" target="_blank" rel="noopener noreferrer">ventoy</a> 制作一个 U 盘启动盘，把官网下载的 PVE ISO 镜像拷贝进去，即可使用它进行系统安装。
 安装过程中需要注意的点有：</p>
 <ul>
 <li>如果你有多台机器，每台机器需要使用不同的主机名称（hostname），否则后面组建 PVE 集群时会有麻烦。
@@ -1201,7 +1201,7 @@
 <li>建议使用机器型号 + 数字编号作为机器的 hostname</li>
 </ul>
 </li>
-<li>最好是为每台机器配置静态 IP，避免 IP 变更。</li>
+<li>为每台 PVE 节点配置静态 IP，避免 IP 变更。</li>
 </ul>
 <p>系统安装好后即可按照提示直接访问其 Web UI，会提示 HTTPS 证书无效，忽略即可。另外还会有一个烦人的 PVE 订阅提示，也可直接忽略（7.2 及以上版本，暂时没找到怎么禁用掉这个提示）。</p>
 <p>此外对于国内环境，建议按下面这篇文章配置国内镜像源（提升软件安装速度）：</p>
@@ -1243,7 +1243,7 @@
     </figure></p>
 <p>PVE 集群的所有节点是完全平等的，集群组建完成后，登录其中任意一个节点的 Web Console 都可以管理集群中所有节点的资源。</p>
 <h2 id="二pve-控制台的使用" class="headerLink">
-    <a href="#%e4%ba%8cpve-%e6%8e%a7%e5%88%b6%e5%8f%b0%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>二、PVE 控制台的使用</h2><p>PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不做详细介绍，主要说明下一些要点：</p>
+    <a href="#%e4%ba%8cpve-%e6%8e%a7%e5%88%b6%e5%8f%b0%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>二、PVE 控制台的使用</h2><p>PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不做详细介绍，主要说明下创建虚拟机时一些重要的参数：</p>
 <ul>
 <li>CPU
 <ul>
@@ -1265,7 +1265,7 @@
 <li>显示器
 <ul>
 <li>默认使用 std 类型，兼容性最好，但是是纯 CPU 模拟的，比较耗 CPU。</li>
-<li>如果你有 windows 等需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 <code>VirGL GPU(virtio-gl)</code> 类型，这是一项正在进行中的工作：以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。仅需要提前手动在 PVE 中先装下这几个包 <code>apt install libgl1 libegl1</code>，并且在主机内安装好 virtio 驱动（ 前面提过了，Linux 自带，Windows 需要手动安装 virtio drivers）</li>
+<li>如果你有 windows 等需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 <code>VirGL GPU(virtio-gl)</code> 类型，这是一项正在进行中的工作：以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。仅需要提前手动在 PVE 中先装下这几个包 <code>apt install libgl1 libegl1</code>，并且在主机内安装好 virtio 驱动（前面提过了，Linux 自带，Windows 需要手动安装 virtio drivers）</li>
 <li>详见 <a href="https://wiki.archlinux.org/title/QEMU#Graphic_card" target="_blank" rel="noopener noreferrer">QEMU Graphic card - Arch WIKI</a></li>
 </ul>
 </li>
@@ -1294,7 +1294,9 @@
 <blockquote>
 <p>注意：下面的几种镜像都分别有自己的坑点，仅 Ubuntu/OpenSUSE 测试通过，其他发行版的 Cloud 镜像都有各种毛病&hellip;</p>
 </blockquote>
-<p>首先下载 Cloud 版本的系统镜像：</p>
+<p>一般配 Linux 虚拟机，我们当然希望能在虚拟机启动时，就自动配置好 IP 地址、SSH 密钥、文件系统自动扩容，这样能免去很多手工操作。cloudinit 就是一个能帮你自动完成这些功能的工具，AWS、阿里云等各大云服务厂商都支持这种配置方式，好消息是 PVE 也支持。</p>
+<p>下面简单介绍下如何使用 cloudinit 来自动化配置 Linux 虚拟机。</p>
+<p>首先 cloudinit 必须使用特殊的系统镜像，下面是几个知名发行版的 Cloud 系统镜像：</p>
 <ol>
 <li><a href="https://cloud-images.ubuntu.com/releases/" target="_blank" rel="noopener noreferrer">Ubuntu Cloud Images (RELEASED)</a>: 提供 img 格式的裸镜像（PVE 也支持此格式）
 <ul>
@@ -1311,14 +1313,13 @@
 <blockquote>
 <p>注：<a href="https://cdimage.debian.org/cdimage/cloud/" target="_blank" rel="noopener noreferrer">Debian Cloud Images</a> 的镜像无法使用，其他 ubuntu/opensuse 的 cloud 镜像也各有问题&hellip;在后面的常见问题中有简单描述这些问题。</p>
 </blockquote>
-<p>上述镜像和我们普通虚拟机使用的 ISO 镜像的区别，一是镜像格式不同，二是都自带了 <code>cloud-init</code>/<code>cloud-utils-growpart</code> 等 cloud 相关软件，三是如果你使用了。</p>
-<p>其中 NoCloud 表示支持 cloudinit NoCloud 数据源——即使用 <code>seed.iso</code> 提供 user-data/meta-data/network-config 配置，PVE 就是使用的这种模式。
+<blockquote>
+<p>这里评论区有些新内容，指出 cloud image 的各种毛病可能的解决方案，想深入了解请移步评论区。</p>
+</blockquote>
+<p>上述镜像和我们普通虚拟机使用的 ISO 镜像的区别，一是镜像格式不同，二是都自带了 <code>cloud-init</code>/<code>cloud-utils-growpart</code> 等用于自动化配置虚拟机的相关工具。</p>
+<p>其名字中的 NoCloud 表示支持 cloudinit NoCloud 数据源——即使用 <code>seed.iso</code> 提供 user-data/meta-data/network-config 配置，PVE 就是使用的这种模式。
 而 Openstack 镜像通常也都支持 NoCloud 模式，所以一般也是可以使用的。</p>
-<p>cloud image 基本都没有默认密码，并且禁用了 SSH 密码登录，必须通过 cloud-init 设置私钥方式进行 ssh 登录。</p>
-<p>建议在 cloud-init 配置中自行设置账号与私钥，不要使用默认的账号名。
-比如测试环境，可以直接设置账号为 root，并设置相应的私钥。</p>
-<p>接下来我们需要将得到的 qcow2 镜像导入 PVE，并用它创建一个虚拟机模板。</p>
-<p>首先创建虚拟机，并以导入的磁盘为该虚拟机的硬盘</p>
+<p>以 ubuntu 的 cloudimg 镜像为例，下载好镜像后，首先创建虚拟机，并以导入的磁盘为该虚拟机的硬盘，命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1347,7 +1348,8 @@
 </span></span><span class="line"><span class="cl">qm resize <span class="m">9000</span> scsi0 32G
 </span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div><p>然后创建挂载 cloud-init 的 seed.iso，修改启动项以及其他：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1361,15 +1363,15 @@
 </span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">9000</span> --ide2 local-lvm:cloudinit
 </span></span><span class="line"><span class="cl"><span class="c1"># 设置系统引导盘</span>
 </span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">9000</span> --boot c --bootdisk scsi0
-</span></span><span class="line"><span class="cl"><span class="c1"># 设置 serial0 为显示终端，很多云镜像都需要这个。（？感觉我不需要？）</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置 serial0 为显示终端，很多云镜像都需要这个。</span>
 </span></span><span class="line"><span class="cl">qm <span class="nb">set</span> <span class="m">9000</span> --serial0 socket --vga serial0
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>后续配置：</p>
+</div><p>上面的工作都完成后，还需要做一些后续配置</p>
 <ol>
 <li>手动设置 cloud-init 参数，<strong>重新生成 cloudinit image</strong>，启动虚拟机，并通过 ssh 登入远程终端
 <ol>
-<li>貌似启动虚拟机时 PVE 会自动重新生成 seed.iso，但是手动生成下肯定更保险&hellip;</li>
+<li>cloud image 基本都没有默认密码，并且禁用了 SSH 密码登录。必须通过 cloud-init 参数添加私钥、设置账号、密码、私钥。</li>
 </ol>
 </li>
 <li>检查 qemu-guest-agent，如果未自带，一定要手动安装它！
@@ -1379,16 +1381,16 @@
 </li>
 <li>安装所需的基础环境，如 docker/docker-compose/vim/git/python3</li>
 <li>关闭虚拟机，然后将虚拟机设为模板</li>
-<li>接下来就可以从这个模板虚拟机，克隆各类新虚拟机了~</li>
 </ol>
-<p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" title="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-sub-html="<h2>改完配置后一定要点击 Regenerate Image!</h2>">
+<p>接下来就可以从这个模板虚拟机，克隆各类新虚拟机了~</p>
+<p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" title="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-sub-html="<h2>保险起见，改完配置后记得点下 Regenerate Image</h2>">
         <img
             class="lazyload"
             data-src="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp"
             data-srcset="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 1.5x, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 2x"
             data-sizes="auto"
             alt="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp">
-    </a><figcaption class="image-caption">改完配置后一定要点击 Regenerate Image!</figcaption>
+    </a><figcaption class="image-caption">保险起见，改完配置后记得点下 Regenerate Image</figcaption>
     </figure></p>
 <p>其他 cloudinit 相关文档：</p>
 <ul>
