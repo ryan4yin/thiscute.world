@@ -46,7 +46,7 @@ PVE 完全基于 Linux 世界的各种开源技术，存储技术使用了 LVM�
 
 ![](/images/proxmox-ve-instruction/ryan-pve-console.webp "我的 PVE 集群")
 
->如果你对使用 PVE 集群干些啥感兴趣，可以瞅一瞅 [homelab - ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/homelab).
+>如果你想了解我的 PVE 集群都跑了些啥，可以瞅一瞅 [homelab - ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/homelab).
 
 ## 一、安装 PVE 系统
 
