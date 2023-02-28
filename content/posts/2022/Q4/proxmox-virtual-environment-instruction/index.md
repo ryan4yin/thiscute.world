@@ -420,25 +420,63 @@ EOF
 **根本原因是 PVE 默认使用 kvm64 这种虚拟化的 CPU 类型，它不支持 vmx/svm 指令集！将虚拟机的 CPU 类型改为 `host`，然后重启虚拟机，问题就解决了**。
 
 
-### 11. 如何在多台主机间同步 iso 镜像、backup 文件
+### 11. 如何在多台主机间同步 iso 镜像、backup 文件 {#backup}
 
 PVE 自动创建的 iso 镜像、backup 文件，默认都只会保存到本机的 `local` 分区中，那万一机器出了问题，很可能备份就一起丢了。
 
-极简解决方案，每台机器放一个 crontab 脚本，定期使用 rsync 将本机的 `/var/lib/vz/template/` 与其他几台主机同步，同时还可以将数据备份一份到外部 HDD 存储确保安全。
+而 PVE 虚拟机备份，我考虑了如下几个方案：
 
-示例脚本：
+1. [proxmox-backup-server](https://www.proxmox.com/en/proxmox-backup-server)：proxmox 官方推出的一个备份工具，使用 rust 编写。
+   1. 它的主要好处在于，支持直接在 proxmox-ve 中将其添加为 cluster 级别的 storage，然后就可以通过 PVE 的定时备份任务，直接将数据备份到 proxmox-backup-server 中。但是我遇到这么几个问题，导致我放弃了它:
+      1. 一是我想直接把数据通过 SMB 协议备份到 Windows Server 远程存储中，但是将 SMB 挂载磁盘用做  proxmox-backup-server 的 Datastore 会出问题，备份时 pbs 会创建一些特殊的临时文件，可能要用到 SMB 挂载插件不支持的特性，导致操作会失败。
+      2. 二是我的 proxmox-backup-server 跟 Windows Server 都跑在 proxmox 虚拟机里面，那它就不能备份它自己，一备份就会卡住。
+2. cronab + rclone/rsync: 极简方案，使用 crontab 跑定时脚本，用 rclone/rsync 同步数据。流程大致如下：
+   1. 首先在 PVE DataCenter => Backup 中创建一个定期备份任务，将所有 vm 都备份到 local 存储中，它实际就存储位置为宿主机的 `/var/lib/vz/dump`。
+   2. 通过 crontab 定时任务跑脚本，使用 rclone 将每个节点的 `/var/lib/vz/` 中的文件全部通过 SMB 协议同步到 HDD 中。crontab 的运行时间设置在 PVE 完成后为最佳。并且将同步指标上传到 victoria-metrics 监控系统，如果备份功能失效，监控系统将通过短信或邮件告警。
+   3. `/var/lib/vz/` 中除了备份文件外还保存了 iso 镜像等文件，这里也一起备份了。
+3. [restic](https://github.com/restic/restic): 一个更专业的远程增量备份工具，通过 rclone 支持几乎所有常见协议的远程存储（s3/ssh/smb 等），支持多种备份策略、版本策略、保留策略，支持加密备份。
+   1. restic 看着确实挺棒，但是感觉有点复杂了，很多功能我都不需要。PVE 自带的备份功能已经提供了备份的「保留策略」，我这里实际只需要一个数据同步工具。因此没选择它。
+
+如上文所述，一番研究后我抛弃了 proxmox-backup-server 与 restic，最终选择了最简单的 cronab + rclone 方案，简单实用又符合我自己的需求。
+
+同步脚本也很简单，首先通过 `rclone config` 手动将所有 PVE 节点加入为 rclone 的 remote，再将我的 smb 远程存储加进来（也可以手动改 `~/.config/rclone/rclone.conf`）。
+
+rclone 配置好后，我写了个几行的 shell 脚本做备份同步：
+
 ```shell
-# 将本机的 /var/lib/vz/template/ 文件夹与另外两台主机同步
-rsync -avz --progress /var/lib/vz/template/ root@192.168.5.162:/var/lib/vz/template/
-rsync -avz --progress /var/lib/vz/template/ root@192.168.5.163:/var/lib/vz/template/
+# 我的三台 pve 节点，对应的 rclone remote 名称
+declare -a pve_nodes=(
+  "pve-um560"
+  "pve-gtr5"
+  "pve-s500plus"
+)
+
+# crontab 执行任务，需要指定下配置文件的绝对路径
+for node in "${pve_nodes[@]}"; do
+  rclone sync --progress \
+  --config=/home/ryan/.config/rclone/rclone.conf  \
+  ${node}:/var/lib/vz \
+  smb-downloads:/Downloads/proxmox-backup/${node}/
+done
+
+# TODO 上传监控指标到监控系统，用于监控任务是否成功。
 ```
 
-不过好像 PVE 官方也提供一个 [proxmox-backup-server](https://www.proxmox.com/en/proxmox-backup-server)，感觉可以搞个容器跑这玩意儿，把数据备份到 USB 硬盘盒或者 SMB 挂载的硬盘里，待研究。
+然后手动执行 `/bin/bash /home/ryan/rclone-sync-to-nas.sh > /home/ryan/rclone-sync.log` 看看是否运行正常。
 
-- [proxmox/proxmox-backup](https://github.com/proxmox/proxmox-backup): 官方用纯 rust 实现的一个备份服务器
-- [ayufan/pve-backup-server-dockerfiles](https://github.com/ayufan/pve-backup-server-dockerfiles)
 
-另外开源社区也有 restic/rclone 等工具也可用于备份，备份方案还在研究中，未确定。
+运行没问题后，再添加这么一个每天晚上 5 点（UTC 21 点）多执行的定时任务进行同步，就完成了：
+
+```shell
+# 为了均衡负载，建议分钟值随便填个奇数。
+17 21 * * * /bin/bash /home/ryan/rclone-sync-to-nas.sh > /home/ryan/rclone-sync.log
+```
+
+可以把运行时间调整到 1 分钟后确认下效果，如果要看实时日志可以用 `tail -f /home/ryan/rclone-sync.log` 查看。
+
+如果任务未执行，可以通过 `sudo systmctl status cron` 查看任务执行日志，排查问题。
+
+
 
 ## 四、PVE 网络配置
 
