@@ -423,8 +423,9 @@ EOF
 ### 11. 如何在多台主机间同步 iso 镜像、backup 文件 {#backup}
 
 PVE 自动创建的备份，默认都只会保存到本机的 `local` 分区中，那万一机器出了问题，很可能备份就一起丢了。
+为了确保数据安全，就需要做多机备份，或者将数据统一备份到另一个 NAS 系统。
 
-而 PVE 虚拟机备份，我考虑了如下几个方案：
+我考虑了如下几个备份方案：
 
 1. [proxmox-backup-server](https://www.proxmox.com/en/proxmox-backup-server)：proxmox 官方推出的一个备份工具，使用 rust 编写。
    1. 它的主要好处在于，支持直接在 proxmox-ve 中将其添加为 cluster 级别的 storage，然后就可以通过 PVE 的定时备份任务，直接将数据备份到 proxmox-backup-server 中。但是我遇到这么几个问题，导致我放弃了它:
