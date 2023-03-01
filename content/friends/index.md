@@ -78,6 +78,7 @@ var myFriends = [
     ["https://zgq.ink/", "https://zgq.ink/favicon.png", "@zgq354", "多一些思考与记录 <= 0xffff 站长，前端佬"], 
     ["https://bleatingsheep.org/", "https://bleatingsheep.org/favicon.ico", "@bleatingsheep", "偶像咩咩"], 
     ["https://vian.top/", "https://www.vian.top/avatar.ico", "@Vian", "想要的都拥有，得不到的都释怀..."], 
+    ["https://wangyunzi.com/", "https://blog.wangyunzi.com/avatar.png", "@王云子", "此行山高路远，我只剩口袋玫瑰一片 <= 法学在读的文艺少女"], 
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
