@@ -588,7 +588,6 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -A DOCKER -i br-ac3e0514d837 -j RETURN
 -A DOCKER -i docker0 -j RETURN
 # 所有从非 br-ac3e0514d837(caddy-1) 网桥进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去并且目标端口改为 80（端口映射）
-
 # DOCKER 链处理的流量目标地址不是宿主机 IP，因此在路由决策时它会走 FORWARD 链，直接绕过了通常设置在 INPUT 链的主机防火墙规则，这就是 Docker 端口映射能使防火墙配置失效的原因。
 -A DOCKER ! -i br-ac3e0514d837 -p tcp -m tcp --dport 8081 -j DNAT --to-destination 172.18.0.2:80
 
