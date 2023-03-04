@@ -490,7 +490,7 @@ Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /
 ```
 
 
-### 3. 使用 docker-compose 自定义网桥与端口映射
+### 3. 使用 docker-compose 自定义网桥与端口映射 {#docker-publish-ports}
 
 接下来使用如下 docker-compose 配置启动一个 caddy　容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。
 
