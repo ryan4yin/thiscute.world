@@ -44,10 +44,12 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 对照上图，对于发送到某个用户层程序的数据而言，流量顺序如下：
 
 - 首先进入 PREROUTING 链，依次经过这三个表： raw -> mangle -> nat
-- 然后进入 INPUT 链，这个链上也有三个表，处理顺序是：mangle -> nat -> filter
+- 然后通过路由决策，发现目标 IP 为本机地址，于是进入 INPUT 链，这个链上也有三个表，处理顺序是：mangle -> nat -> filter
 - 过了 INPUT 链后，数据才会进入内核协议栈，最终到达用户层程序。
 
 用户层程序发出的报文，则依次经过这几个表：OUTPUT -> POSTROUTING
+
+>在路由决策时，如果目标 IP 不是本机，就得看内核是否开启了 ip_forward 功能，如果没开启数据包就扔掉了。如果开了转发，就会进入 FORWARD 链处理，然后直接进入 POSTROUTING 链，也就是说这类流量不会过 INPUT 链！
 
 从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次是：PREROUTEING -> FORWARD -> POSTROUTING
 
@@ -586,7 +588,8 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -A DOCKER -i br-ac3e0514d837 -j RETURN
 -A DOCKER -i docker0 -j RETURN
 # 所有从非 br-ac3e0514d837(caddy-1) 网桥进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去并且目标端口改为 80（端口映射）
-# DOCKER 是被 PREROUTEING 链的 target，因此这会导致流量直接走了 FORWARD 链，直接绕过了通常设置在 INPUT 链的主机防火墙规则！
+
+# DOCKER 链处理的流量目标地址不是宿主机 IP，因此在路由决策时它会走 FORWARD 链，直接绕过了通常设置在 INPUT 链的主机防火墙规则，这就是 Docker 端口映射能使防火墙配置失效的原因。
 -A DOCKER ! -i br-ac3e0514d837 -p tcp -m tcp --dport 8081 -j DNAT --to-destination 172.18.0.2:80
 
 ❯ sudo iptables -t filter -S
