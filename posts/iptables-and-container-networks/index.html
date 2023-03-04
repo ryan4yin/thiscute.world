@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title class=pjax-title>iptables 及 docker 容器网络分析 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="iptables 及 docker 容器网络分析"><meta property="og:description" content="本文仅针对 ipv4 网络 本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。 一、iptablesiptabl"><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/posts/iptables-and-container-networks/"><meta property="og:image" content="https://thiscute.world/posts/iptables-and-container-networks/docker-turtles-networking.webp"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-08-15T19:11:29+08:00"><meta property="article:modified_time" content="2021-08-15T19:11:29+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/iptables-and-container-networks/docker-turtles-networking.webp"><meta name=twitter:title content="iptables 及 docker 容器网络分析"><meta name=twitter:description content="本文仅针对 ipv4 网络 本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。 一、iptablesiptabl"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/iptables-and-container-networks/><link rel=prev href=https://thiscute.world/posts/linux-virtual-network-interfaces/><link rel=next href=https://thiscute.world/posts/weeds-on-this-side-flowers-on-the-other/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"iptables 及 docker 容器网络分析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/iptables-and-container-networks\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/iptables-and-container-networks\/docker-turtles-networking.webp","width":1950,"height":650}],"genre":"posts","keywords":"Linux, 网络, 虚拟化, 容器, iptables, conntrack","wordcount":8710,"url":"https:\/\/thiscute.world\/posts\/iptables-and-container-networks\/","datePublished":"2021-08-15T19:11:29+08:00","dateModified":"2021-08-15T19:11:29+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark")}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")]</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=# onclick=return!1 class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title class=pjax-title>iptables 及 docker 容器网络分析 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="iptables 及 docker 容器网络分析"><meta property="og:description" content="本文仅针对 ipv4 网络 本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。 一、iptablesiptabl"><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/posts/iptables-and-container-networks/"><meta property="og:image" content="https://thiscute.world/posts/iptables-and-container-networks/docker-turtles-networking.webp"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-08-15T19:11:29+08:00"><meta property="article:modified_time" content="2021-08-15T19:11:29+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/iptables-and-container-networks/docker-turtles-networking.webp"><meta name=twitter:title content="iptables 及 docker 容器网络分析"><meta name=twitter:description content="本文仅针对 ipv4 网络 本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。 一、iptablesiptabl"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/iptables-and-container-networks/><link rel=prev href=https://thiscute.world/posts/linux-virtual-network-interfaces/><link rel=next href=https://thiscute.world/posts/weeds-on-this-side-flowers-on-the-other/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"iptables 及 docker 容器网络分析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/iptables-and-container-networks\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/iptables-and-container-networks\/docker-turtles-networking.webp","width":1950,"height":650}],"genre":"posts","keywords":"Linux, 网络, 虚拟化, 容器, iptables, conntrack","wordcount":9640,"url":"https:\/\/thiscute.world\/posts\/iptables-and-container-networks\/","datePublished":"2021-08-15T19:11:29+08:00","dateModified":"2021-08-15T19:11:29+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark")}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")]</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=# onclick=return!1 class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
 <select class=language-select title="Select Language" id=language-select-desktop onchange="location=this.value"><option value=/posts/iptables-and-container-networks/ selected>Simplified Chinese</option></select>
 </a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a>
@@ -10,13 +10,39 @@
 <span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
 <i class="fas fa-adjust fa-fw"></i>
 </a><a href=# onclick=return!1 class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select title="Select Language" onchange="location=this.value"><option value=/posts/iptables-and-container-networks/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#一iptables>一、iptables</a><ul><li><a href=#1-iptables-基础概念---四表五链>1. iptables 基础概念 - 四表五链</a></li><li><a href=#2-常用命令>2. 常用命令</a></li><li><a href=#3-conntrack-连接跟踪与-nat>3. conntrack 连接跟踪与 NAT</a><ul><li><a href=#1-支持哪些协议>1. 支持哪些协议</a></li><li><a href=#2-实际测试-conntrack>2. 实际测试 conntrack</a></li><li><a href=#3-nat-如何分配端口>3. NAT 如何分配端口？</a></li></ul></li><li><a href=#4-如何持久化-iptables-配置>4. 如何持久化 iptables 配置</a></li></ul></li><li><a href=#二容器网络实现原理---iptables--bridge--veth>二、容器网络实现原理 - iptables + bridge + veth</a></li><li><a href=#三dockerpodman-的-macvlanipvlan-模式>三、Docker/Podman 的 macvlan/ipvlan 模式</a></li><li><a href=#四rootless-容器的网络实现>四、Rootless 容器的网络实现</a></li><li><a href=#五nftables>五、nftables</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">iptables 及 docker 容器网络分析</h1><div class=post-meta><div class=post-meta-line><span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author>ryan4yin</a>
-</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-08-15>2021-08-15</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2021-08-15>2021-08-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8710 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 18 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload data-src=/posts/iptables-and-container-networks/docker-turtles-networking.webp data-srcset="/posts/iptables-and-container-networks/docker-turtles-networking.webp, /posts/iptables-and-container-networks/docker-turtles-networking.webp 1.5x, /posts/iptables-and-container-networks/docker-turtles-networking.webp 2x" data-sizes=auto alt=/posts/iptables-and-container-networks/docker-turtles-networking.webp title=/posts/iptables-and-container-networks/docker-turtles-networking.webp height=650 width=1950></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一iptables>一、iptables</a><ul><li><a href=#1-iptables-基础概念---四表五链>1. iptables 基础概念 - 四表五链</a></li><li><a href=#2-常用命令>2. 常用命令</a></li><li><a href=#3-conntrack-连接跟踪与-nat>3. conntrack 连接跟踪与 NAT</a><ul><li><a href=#1-支持哪些协议>1. 支持哪些协议</a></li><li><a href=#2-实际测试-conntrack>2. 实际测试 conntrack</a></li><li><a href=#3-nat-如何分配端口>3. NAT 如何分配端口？</a></li></ul></li><li><a href=#4-如何持久化-iptables-配置>4. 如何持久化 iptables 配置</a></li></ul></li><li><a href=#二容器网络实现原理---iptables--bridge--veth>二、容器网络实现原理 - iptables + bridge + veth</a></li><li><a href=#三dockerpodman-的-macvlanipvlan-模式>三、Docker/Podman 的 macvlan/ipvlan 模式</a></li><li><a href=#四rootless-容器的网络实现>四、Rootless 容器的网络实现</a></li><li><a href=#五nftables>五、nftables</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><blockquote><p>本文仅针对 ipv4 网络</p></blockquote><p>本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。</p><h2 id=一iptables class=headerLink><a href=#%e4%b8%80iptables class=header-mark></a>一、iptables</h2><p><a href=https://www.netfilter.org/projects/iptables/index.html target=_blank rel="noopener noreferrer">iptables</a> 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT</p><p>iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的子项目。</p><p>但是 eBPF 社区目前正在开发旨在取代 netfilter 的新项目 bpfilter，他们的目标之一是兼容 iptables/nftables 规则，让我们拭目以待吧。</p><h3 id=1-iptables-基础概念---四表五链 class=headerLink><a href=#1-iptables-%e5%9f%ba%e7%a1%80%e6%a6%82%e5%bf%b5---%e5%9b%9b%e8%a1%a8%e4%ba%94%e9%93%be class=header-mark></a>1. iptables 基础概念 - 四表五链</h3><blockquote><p>实际上还有张 SELinux 相关的 security 表（应该是较新的内核新增的，但是不清楚是哪个版本加的），但是我基本没接触过，就略过了。</p></blockquote><blockquote><p>这里只对 iptables 做简短介绍，详细的教程参见 <a href=https://www.zsythink.net/archives/1199 target=_blank rel="noopener noreferrer">iptables详解（1）：iptables概念 - 朱双印</a>，这篇文章写得非常棒！把 iptables 讲清楚了。</p></blockquote><p>默认情况下，iptables 提供了四张表（不考虑 security 的话）和五条链，数据在这四表五链中的处理流程如下图所示：</p><blockquote><p>在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外 <code>conntrack</code> 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。</p></blockquote><p><figure><a class=lightgallery href=/images/netfilter/netfilter-packet-flow.webp title=/images/netfilter/netfilter-packet-flow.webp data-thumbnail=/images/netfilter/netfilter-packet-flow.webp data-sub-html="<h2>netfilter 数据包处理流程，来自 wikipedia</h2>"><img class=lazyload data-src=/images/netfilter/netfilter-packet-flow.webp data-srcset="/images/netfilter/netfilter-packet-flow.webp, /images/netfilter/netfilter-packet-flow.webp 1.5x, /images/netfilter/netfilter-packet-flow.webp 2x" data-sizes=auto alt=/images/netfilter/netfilter-packet-flow.webp></a><figcaption class=image-caption>netfilter 数据包处理流程，来自 wikipedia</figcaption></figure></p><p>对照上图，对于发送到某个用户层程序的数据而言，流量顺序如下：</p><ul><li>首先进入 PREROUTING 链，依次经过这三个表： raw -> mangle -> nat</li><li>然后进入 INPUT 链，这个链上也有三个表，处理顺序是：mangle -> nat -> filter</li><li>过了 INPUT 链后，数据才会进入内核协议栈，最终到达用户层程序。</li></ul><p>用户层程序发出的报文，则依次经过这几个表：OUTPUT -> POSTROUTING</p><p>从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次是：PREROUTEING -> FORWARD -> POSTROUTING</p><p>五链的功能和名称完全一致，应该很容易理解。
+<select class=language-select title="Select Language" onchange="location=this.value"><option value=/posts/iptables-and-container-networks/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#一iptables>一、iptables</a><ul><li><a href=#1-iptables-基础概念---四表五链>1. iptables 基础概念 - 四表五链</a></li><li><a href=#2-常用命令>2. 常用命令</a></li><li><a href=#3-conntrack-连接跟踪与-nat>3. conntrack 连接跟踪与 NAT</a><ul><li><a href=#1-支持哪些协议>1. 支持哪些协议</a></li><li><a href=#2-实际测试-conntrack>2. 实际测试 conntrack</a></li><li><a href=#3-nat-如何分配端口>3. NAT 如何分配端口？</a></li></ul></li><li><a href=#4-如何持久化-iptables-配置>4. 如何持久化 iptables 配置</a></li></ul></li><li><a href=#二容器网络实现原理---iptables--bridge--veth>二、容器网络实现原理 - iptables + bridge + veth</a><ul><li><a href=#1-简单分析-docker0-网桥的原理>1. 简单分析 docker0 网桥的原理</a></li><li><a href=#2-docker0-禁止容器间通信>2. docker0 禁止容器间通信</a></li><li><a href=#3-使用-docker-compose-自定义网桥与端口映射>3. 使用 docker-compose 自定义网桥与端口映射</a></li></ul></li><li><a href=#三dockerpodman-的-macvlanipvlan-模式>三、Docker/Podman 的 macvlan/ipvlan 模式</a></li><li><a href=#四rootless-容器的网络实现>四、Rootless 容器的网络实现</a></li><li><a href=#五nftables>五、nftables</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">iptables 及 docker 容器网络分析</h1><div class=post-meta><div class=post-meta-line><span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author>ryan4yin</a>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-08-15>2021-08-15</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2021-08-15>2021-08-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 9640 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 20 分钟&nbsp;</div></div><div class=featured-image><img class=lazyload data-src=/posts/iptables-and-container-networks/docker-turtles-networking.webp data-srcset="/posts/iptables-and-container-networks/docker-turtles-networking.webp, /posts/iptables-and-container-networks/docker-turtles-networking.webp 1.5x, /posts/iptables-and-container-networks/docker-turtles-networking.webp 2x" data-sizes=auto alt=/posts/iptables-and-container-networks/docker-turtles-networking.webp title=/posts/iptables-and-container-networks/docker-turtles-networking.webp height=650 width=1950></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一iptables>一、iptables</a><ul><li><a href=#1-iptables-基础概念---四表五链>1. iptables 基础概念 - 四表五链</a></li><li><a href=#2-常用命令>2. 常用命令</a></li><li><a href=#3-conntrack-连接跟踪与-nat>3. conntrack 连接跟踪与 NAT</a><ul><li><a href=#1-支持哪些协议>1. 支持哪些协议</a></li><li><a href=#2-实际测试-conntrack>2. 实际测试 conntrack</a></li><li><a href=#3-nat-如何分配端口>3. NAT 如何分配端口？</a></li></ul></li><li><a href=#4-如何持久化-iptables-配置>4. 如何持久化 iptables 配置</a></li></ul></li><li><a href=#二容器网络实现原理---iptables--bridge--veth>二、容器网络实现原理 - iptables + bridge + veth</a><ul><li><a href=#1-简单分析-docker0-网桥的原理>1. 简单分析 docker0 网桥的原理</a></li><li><a href=#2-docker0-禁止容器间通信>2. docker0 禁止容器间通信</a></li><li><a href=#3-使用-docker-compose-自定义网桥与端口映射>3. 使用 docker-compose 自定义网桥与端口映射</a></li></ul></li><li><a href=#三dockerpodman-的-macvlanipvlan-模式>三、Docker/Podman 的 macvlan/ipvlan 模式</a></li><li><a href=#四rootless-容器的网络实现>四、Rootless 容器的网络实现</a></li><li><a href=#五nftables>五、nftables</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><blockquote><p>本文仅针对 ipv4 网络</p></blockquote><p>本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。</p><h2 id=一iptables class=headerLink><a href=#%e4%b8%80iptables class=header-mark></a>一、iptables</h2><p><a href=https://www.netfilter.org/projects/iptables/index.html target=_blank rel="noopener noreferrer">iptables</a> 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT</p><p>iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的子项目。</p><p>但是 eBPF 社区目前正在开发旨在取代 netfilter 的新项目 bpfilter，他们的目标之一是兼容 iptables/nftables 规则，让我们拭目以待吧。</p><h3 id=1-iptables-基础概念---四表五链 class=headerLink><a href=#1-iptables-%e5%9f%ba%e7%a1%80%e6%a6%82%e5%bf%b5---%e5%9b%9b%e8%a1%a8%e4%ba%94%e9%93%be class=header-mark></a>1. iptables 基础概念 - 四表五链</h3><blockquote><p>实际上还有张 SELinux 相关的 security 表（应该是较新的内核新增的，但是不清楚是哪个版本加的），但是我基本没接触过，就略过了。</p></blockquote><blockquote><p>这里只对 iptables 做简短介绍，详细的教程参见 <a href=https://www.zsythink.net/archives/1199 target=_blank rel="noopener noreferrer">iptables详解（1）：iptables概念 - 朱双印</a>，这篇文章写得非常棒！把 iptables 讲清楚了。</p></blockquote><p>默认情况下，iptables 提供了四张表（不考虑 security 的话）和五条链，数据在这四表五链中的处理流程如下图所示：</p><blockquote><p>在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外 <code>conntrack</code> 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。</p></blockquote><p><figure><a class=lightgallery href=/images/netfilter/netfilter-packet-flow.webp title=/images/netfilter/netfilter-packet-flow.webp data-thumbnail=/images/netfilter/netfilter-packet-flow.webp data-sub-html="<h2>netfilter 数据包处理流程，来自 wikipedia</h2>"><img class=lazyload data-src=/images/netfilter/netfilter-packet-flow.webp data-srcset="/images/netfilter/netfilter-packet-flow.webp, /images/netfilter/netfilter-packet-flow.webp 1.5x, /images/netfilter/netfilter-packet-flow.webp 2x" data-sizes=auto alt=/images/netfilter/netfilter-packet-flow.webp></a><figcaption class=image-caption>netfilter 数据包处理流程，来自 wikipedia</figcaption></figure></p><p>对照上图，对于发送到某个用户层程序的数据而言，流量顺序如下：</p><ul><li>首先进入 PREROUTING 链，依次经过这三个表： raw -> mangle -> nat</li><li>然后进入 INPUT 链，这个链上也有三个表，处理顺序是：mangle -> nat -> filter</li><li>过了 INPUT 链后，数据才会进入内核协议栈，最终到达用户层程序。</li></ul><p>用户层程序发出的报文，则依次经过这几个表：OUTPUT -> POSTROUTING</p><p>从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次是：PREROUTEING -> FORWARD -> POSTROUTING</p><p>五链的功能和名称完全一致，应该很容易理解。
 除了默认的五条链外，用户也可以创建自定义的链，自定义的链需要被默认链引用才能生效，我们后面要介绍的 Docker 实际上就定义了好几条自定义链。</p><p>除了「链」外，iptables 还有「表」的概念，四个表的优先级顺序如下：</p><ul><li>raw: 对收到的数据包在连接跟踪前进行处理。一般用不到，可以忽略<ul><li>一旦用户使用了 raw 表，raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了</li></ul></li><li>mangle: 用于修改报文、给报文打标签，用得也较少。</li><li>nat: 主要用于做网络地址转换，SNAT 或者 DNAT</li><li>filter: 主要用于过滤数据包</li></ul><p>数据在按优先级经过四个表的处理时，一旦在某个表中匹配到一条规则 A,下一条处理规则就由规则 A 的 target 参数指定，<strong>后续的所有表</strong>都会被忽略。target 有如下几种类型：</p><ul><li>ACCEPT: 直接允许数据包通过</li><li>DROP: 直接丢弃数据包，对程序而言就是 100% 丢包</li><li>REJECT: 丢弃数据包，但是会给程序返回 RESET。这个对程序更友好，但是存在安全隐患，通常不使用。</li><li>MASQUERADE: （伪装）将 src ip 改写为网卡 ip，和 SNAT 的区别是它会自动读取网卡 ip。路由设备必备。</li><li>SNAT/DNAT: 顾名思义，做网络地址转换</li><li>REDIRECT: 在本机做端口映射</li><li>LOG: 在 <code>/var/log/messages</code> 文件中记录日志信息，然后将数据包传递给下一条规则，也就是说除了记录以外不对数据包做任何其他操作，仍然让下一条规则去匹配。<ul><li>只有这个 target 特殊一些，匹配它的数据仍然可以匹配后续规则，不会直接跳过。</li></ul></li><li>其他自定义链的名称：表示将数据包交给该链进行下一步处理。</li><li>RETURN: 如果是在子链（自定义链）遇到 RETURN，则返回父链的下一条规则继续进行条件的比较。如果是在默认链 RETURN 则直接使用默认的动作（ACCEPT/DROP）</li><li>其他类型，可以用到的时候再查</li></ul><p>理解了上面这张图，以及四个表的用途，就很容易理解 iptables 的命令了。</p><h3 id=2-常用命令 class=headerLink><a href=#2-%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4 class=header-mark></a>2. 常用命令</h3><blockquote><p><strong>注意</strong>: 下面提供的 iptables 命令做的修改是未持久化的，重启就会丢失！在下一节会简单介绍持久化配置的方法。</p></blockquote><p>命令格式：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>iptables <span class=o>[</span>-t table<span class=o>]</span> <span class=o>{</span>-A<span class=p>|</span>-C<span class=p>|</span>-D<span class=o>}</span> chain <span class=o>[</span>-m matchname <span class=o>[</span>per-match-options<span class=o>]]</span> -j targetname <span class=o>[</span>per-target-options<span class=o>]</span>
-</span></span></code></pre></td></tr></table></div></div><p>其中 table 默认为 <code>filter</code> 表，其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。</p><p>以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><p>其中 table 默认为 <code>filter</code> 表（可通过 <code>-t xxx</code> 指定别的表名），其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。</p><p>先介绍下 iptables 的查询指令：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># --list-rules 以命令的形式查看所有规则</span>
+</span></span><span class=line><span class=cl>iptables -S
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --list-rules 查看 INPUT 表中的所有规则</span>
+</span></span><span class=line><span class=cl>iptables -S INPUT
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># -L 表示查看当前表的所有规则，相比 -S 它的显示效果要更 human-readable</span>
+</span></span><span class=line><span class=cl><span class=c1># -n 表示不对 IP 地址进行反查，一般都不需要反查</span>
+</span></span><span class=line><span class=cl>iptables -nL
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看其他表的规则，如 nat 表</span>
+</span></span><span class=line><span class=cl>iptables -t nat -S
+</span></span><span class=line><span class=cl>iptables -t nat -nL
+</span></span></code></pre></td></tr></table></div></div><p>以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙（默认 filter 表，可通过 <code>-t xxx</code> 指定别的表名）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -41,22 +67,8 @@
 </span><span class=lnt>23
 </span><span class=lnt>24
 </span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># --add 允许 80 端口通过</span>
 </span></span><span class=line><span class=cl>iptables -A INPUT -p tcp --dport <span class=m>80</span> -j ACCEPT
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># --list-rules 查看所有规则</span>
-</span></span><span class=line><span class=cl>iptables -S
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># --list-rules 查看 INPUT 表中的所有规则</span>
-</span></span><span class=line><span class=cl>iptables -S INPUT
-</span></span><span class=line><span class=cl><span class=c1># 查看 iptables 中的所有规则（比 -L 更详细）</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># ---delete 通过编号删除规则</span>
 </span></span><span class=line><span class=cl>iptables -D <span class=m>1</span>
@@ -242,7 +254,7 @@
 </span></span><span class=line><span class=cl>18:28:28.729328 IP 198.18.5.130.443 &gt; 172.17.0.4.54636: Flags <span class=o>[</span>.<span class=o>]</span>, ack 693, win 939, options <span class=o>[</span>nop,nop,TS val <span class=m>22099579</span> ecr 3365688488<span class=o>]</span>, length <span class=m>0</span>
 </span></span></code></pre></td></tr></table></div></div><p>能看到数据确实在进入 docker0 网桥前，dst_ip 确实被从 <code>192.168.31.228</code>（wlp4s0 的 ip）被修改为了 <code>172.17.0.4</code>（<code>Container A</code> 的 ip）.</p><h4 id=3-nat-如何分配端口 class=headerLink><a href=#3-nat-%e5%a6%82%e4%bd%95%e5%88%86%e9%85%8d%e7%ab%af%e5%8f%a3 class=header-mark></a>3. NAT 如何分配端口？</h4><p>上一节我们实际测试发现，docker 容器的流量在经过 iptables 的 MASQUERADE 规则处理后，只有 src ip 被修改了，而 port 仍然是一致的。</p><p>但是如果 NAT 不修改连接的端口，实际上是会有问题的。如果有两个容器同时向 <code>ip: 198.18.5.130, port: 443</code> 发起请求，又恰好使用了同一个 src port，在宿主机上就会出现端口冲突！
 因为这两个请求被 SNAT 时，如果只修改 src ip，那它们映射到的将是主机上的同一个连接！</p><p>这个问题 NAT 是如何解决的呢？我想如果遇到这种情况，NAT 应该会通过一定的规则选用一个不同的端口。</p><p>有空可以翻一波源码看看这个，待续&mldr;</p><h3 id=4-如何持久化-iptables-配置 class=headerLink><a href=#4-%e5%a6%82%e4%bd%95%e6%8c%81%e4%b9%85%e5%8c%96-iptables-%e9%85%8d%e7%bd%ae class=header-mark></a>4. 如何持久化 iptables 配置</h3><p>首先需要注意的是，centos7/opensuse 15 都已经切换到了 firewalld 作为防火墙配置软件，
-而 ubuntu18.04 lts 也换成了 ufw 来配置防火墙。</p><p>包括 docker 应该也是在启动的时候动态添加 iptables 配置。</p><p>对于上述新系统，还是建议直接使用 firewalld/ufw 配置防火墙吧，或者网上搜下关闭 ufw/firewalld、启用 iptables 持久化的解决方案。</p><p>本文主要目的在于理解 docker 容器网络的原理，以及为后面理解 kubernetes 网络插件 calico/flannel 打好基础，因此就不多介绍持久化了。</p><h2 id=二容器网络实现原理---iptables--bridge--veth class=headerLink><a href=#%e4%ba%8c%e5%ae%b9%e5%99%a8%e7%bd%91%e7%bb%9c%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86---iptables--bridge--veth class=header-mark></a>二、容器网络实现原理 - iptables + bridge + veth</h2><p>Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全类似。下面以 docker 为例进行分析（Podman 的分析流程也基本一样）。</p><p>首先，使用 <code>docker run</code> 运行几个容器，检查下网络状况：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+而 ubuntu18.04 lts 也换成了 ufw 来配置防火墙。</p><p>包括 docker 应该也是在启动的时候动态添加 iptables 配置。</p><p>对于上述新系统，还是建议直接使用 firewalld/ufw 配置防火墙吧，或者网上搜下关闭 ufw/firewalld、启用 iptables 持久化的解决方案。</p><p>本文主要目的在于理解 docker 容器网络的原理，以及为后面理解 kubernetes 网络插件 calico/flannel 打好基础，因此就不多介绍持久化了。</p><h2 id=二容器网络实现原理---iptables--bridge--veth class=headerLink><a href=#%e4%ba%8c%e5%ae%b9%e5%99%a8%e7%bd%91%e7%bb%9c%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86---iptables--bridge--veth class=header-mark></a>二、容器网络实现原理 - iptables + bridge + veth</h2><p>Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全类似。下面以 docker 为例进行分析（Podman 的分析流程也基本一样）。</p><h3 id=1-简单分析-docker0-网桥的原理 class=headerLink><a href=#1-%e7%ae%80%e5%8d%95%e5%88%86%e6%9e%90-docker0-%e7%bd%91%e6%a1%a5%e7%9a%84%e5%8e%9f%e7%90%86 class=header-mark></a>1. 简单分析 docker0 网桥的原理</h3><p>首先，使用 <code>docker run</code> 运行几个容器，检查下网络状况：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -320,8 +332,8 @@
 </span><span class=lnt>76
 </span><span class=lnt>77
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 运行一个 debian 容器和一个 nginx</span>
-</span></span><span class=line><span class=cl>❯ docker run -dit --name debian --rm debian:buster sleep <span class=m>1000000</span>
-</span></span><span class=line><span class=cl>❯ docker run -dit --name nginx --rm nginx:1.19-alpine 
+</span></span><span class=line><span class=cl>❯ docker run -d --name debian --rm debian:buster sleep <span class=m>1000000</span>
+</span></span><span class=line><span class=cl>❯ docker run -d --name nginx --rm nginx:1.19-alpine 
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1>#　查看网络接口，有两个 veth 接口（而且都没设 ip 地址），分别连接到两个容器的 eth0（dcoker0 网络架构图前面给过了，可以往前面翻翻对照下）</span>
 </span></span><span class=line><span class=cl>❯ ip addr ls
@@ -355,7 +367,7 @@
 </span></span><span class=line><span class=cl>192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric <span class=m>600</span> 
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 查看　iptables 规则</span>
-</span></span><span class=line><span class=cl><span class=c1># NAT 表</span>
+</span></span><span class=line><span class=cl><span class=c1># nat 表</span>
 </span></span><span class=line><span class=cl>❯ sudo iptables -t nat -S
 </span></span><span class=line><span class=cl>-P PREROUTING ACCEPT
 </span></span><span class=line><span class=cl>-P INPUT ACCEPT
@@ -396,7 +408,7 @@
 </span></span><span class=line><span class=cl>-A DOCKER-ISOLATION-STAGE-1 -j RETURN
 </span></span><span class=line><span class=cl>-A DOCKER-ISOLATION-STAGE-2 -j RETURN
 </span></span><span class=line><span class=cl>-A DOCKER-USER -j RETURN
-</span></span></code></pre></td></tr></table></div></div><p>接下来使用如下 docker-compose 配置启动一个 caddy　容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。</p><p><code>docker-compose.yml</code> 内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h3 id=2-docker0-禁止容器间通信 class=headerLink><a href=#2-docker0-%e7%a6%81%e6%ad%a2%e5%ae%b9%e5%99%a8%e9%97%b4%e9%80%9a%e4%bf%a1 class=header-mark></a>2. docker0 禁止容器间通信</h3><p>docker 可以通过为 <code>dockerd</code> 启动参数添加 <code>--icc=false</code> 来禁用容器间通信（inter-container-networking 的缩写），这里来验证下它是如何实现这个功能的。</p><p>首先验证下前面创建的 debian 容器目前是能访问 nginx 容器的：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -412,17 +424,132 @@
 </span><span class=lnt>14
 </span><span class=lnt>15
 </span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 查到 nginx 容器的 ip 地址</span>
+</span></span><span class=line><span class=cl>❯ docker inspect nginx <span class=p>|</span> grep <span class=se>\&#34;</span>IPAddress
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;IPAddress&#34;</span>: <span class=s2>&#34;172.17.0.3&#34;</span>,
+</span></span><span class=line><span class=cl>❯ docker <span class=nb>exec</span> -it debian bash
+</span></span><span class=line><span class=cl><span class=c1># 首先跑 `apt update &amp;&amp; apt install -y curl` 安装 curl 工具，这里略过相关日志</span>
+</span></span><span class=line><span class=cl>......
+</span></span><span class=line><span class=cl><span class=c1># 访问 nginx 容器，返回数据正常</span>
+</span></span><span class=line><span class=cl>root@499fbc07b79c:/# curl -s -v 172.17.0.3:80 -o /dev/null
+</span></span><span class=line><span class=cl>* Expire in <span class=m>0</span> ms <span class=k>for</span> <span class=m>6</span> <span class=o>(</span>transfer 0x5556f6dfd110<span class=o>)</span>
+</span></span><span class=line><span class=cl>*   Trying 172.17.0.3...
+</span></span><span class=line><span class=cl>* TCP_NODELAY <span class=nb>set</span>
+</span></span><span class=line><span class=cl>* Expire in <span class=m>200</span> ms <span class=k>for</span> <span class=m>4</span> <span class=o>(</span>transfer 0x5556f6dfd110<span class=o>)</span>
+</span></span><span class=line><span class=cl>* Connected to 172.17.0.3 <span class=o>(</span>172.17.0.3<span class=o>)</span> port <span class=m>80</span> <span class=o>(</span><span class=c1>#0)</span>
+</span></span><span class=line><span class=cl>&gt; GET / HTTP/1.1
+</span></span><span class=line><span class=cl>&gt; Host: 172.17.0.3
+</span></span><span class=line><span class=cl>&gt; User-Agent: curl/7.64.0
+</span></span><span class=line><span class=cl>&gt; Accept: */*
+</span></span><span class=line><span class=cl>&gt; 
+</span></span><span class=line><span class=cl>&lt; HTTP/1.1 <span class=m>200</span> OK
+</span></span><span class=line><span class=cl>&lt; Server: nginx/1.19.10
+</span></span><span class=line><span class=cl>&lt; Date: Sat, <span class=m>04</span> Mar <span class=m>2023</span> 14:00:09 GMT
+</span></span><span class=line><span class=cl>&lt; Content-Type: text/html
+</span></span><span class=line><span class=cl>&lt; Content-Length: <span class=m>612</span>
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></td></tr></table></div></div><p>接着查找下 docker 的 systemd 配置位置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>❯ sudo systemctl disable docker 
+</span></span><span class=line><span class=cl>Removed <span class=s2>&#34;/etc/systemd/system/multi-user.target.wants/docker.service&#34;</span>.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>❯ sudo systemctl <span class=nb>enable</span> docker 
+</span></span><span class=line><span class=cl>Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
+</span></span></code></pre></td></tr></table></div></div><p>根据日志可定位到我的 docker.service 配置位于 <code>/usr/lib/systemd/system/docker.service</code>，修改此配置，在 <code>ExecStart</code> 一行的末尾添加参数 <code>--icc=false</code>，然后重启 docker 服务：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>❯ sudo systemctl daemon-reload 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>❯ sudo systemctl restart docker 
+</span></span></code></pre></td></tr></table></div></div><p>现在再走一遍前面的测试，会发现 debian 无法访问 nginx 容器了。
+查看 iptables 规则会发现所有 docker0 网桥的内部通信数据全部被 drop 掉了：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># nat 表</span>
+</span></span><span class=line><span class=cl>❯ sudo iptables -t nat -S
+</span></span><span class=line><span class=cl><span class=c1># 内容没有任何变化，这里略过</span>
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl><span class=c1># filter 表</span>
+</span></span><span class=line><span class=cl>❯ sudo iptables -t filter -S
+</span></span><span class=line><span class=cl>-P INPUT ACCEPT
+</span></span><span class=line><span class=cl>-P FORWARD DROP
+</span></span><span class=line><span class=cl>-P OUTPUT ACCEPT
+</span></span><span class=line><span class=cl>-N DOCKER
+</span></span><span class=line><span class=cl>-N DOCKER-ISOLATION-STAGE-1
+</span></span><span class=line><span class=cl>-N DOCKER-ISOLATION-STAGE-2
+</span></span><span class=line><span class=cl>-N DOCKER-USER
+</span></span><span class=line><span class=cl>-A FORWARD -j DOCKER-USER
+</span></span><span class=line><span class=cl>-A FORWARD -j DOCKER-ISOLATION-STAGE-1
+</span></span><span class=line><span class=cl>-A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+</span></span><span class=line><span class=cl><span class=c1># 将所有访问 docker0 的流量都转给自定义链 DOCKER 处理</span>
+</span></span><span class=line><span class=cl>-A FORWARD -o docker0 -j DOCKER
+</span></span><span class=line><span class=cl><span class=c1># 放行 docker0 网桥与外网通信的数据（下一跳不为 docker）</span>
+</span></span><span class=line><span class=cl>-A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+</span></span><span class=line><span class=cl><span class=c1># 丢弃所有 docker0 网桥的内部通信流量（即禁止 docker0 上的容器互相访问）</span>
+</span></span><span class=line><span class=cl>-A FORWARD -i docker0 -o docker0 -j DROP
+</span></span><span class=line><span class=cl>-A DOCKER-ISOLATION-STAGE-1 -i docker0 ! -o docker0 -j DOCKER-ISOLATION-STAGE-2
+</span></span><span class=line><span class=cl>-A DOCKER-ISOLATION-STAGE-1 -j RETURN
+</span></span><span class=line><span class=cl>-A DOCKER-ISOLATION-STAGE-2 -o docker0 -j DROP
+</span></span><span class=line><span class=cl>-A DOCKER-ISOLATION-STAGE-2 -j RETURN
+</span></span><span class=line><span class=cl>-A DOCKER-USER -j RETURN
+</span></span></code></pre></td></tr></table></div></div><h3 id=3-使用-docker-compose-自定义网桥与端口映射 class=headerLink><a href=#3-%e4%bd%bf%e7%94%a8-docker-compose-%e8%87%aa%e5%ae%9a%e4%b9%89%e7%bd%91%e6%a1%a5%e4%b8%8e%e7%ab%af%e5%8f%a3%e6%98%a0%e5%b0%84 class=header-mark></a>3. 使用 docker-compose 自定义网桥与端口映射</h3><p>接下来使用如下 docker-compose 配置启动一个 caddy　容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。</p><p><code>docker-compose.yml</code> 内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;3.3&#34;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>services</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>caddy</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;caddy:2.2.1-alpine&#34;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>container_name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;caddy&#34;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>restart</span><span class=p>:</span><span class=w> </span><span class=l>always</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=l>caddy file-server --browse --root /data/static</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=l>caddy file-server --browse --root /</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=s2>&#34;8081:80&#34;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=s2>&#34;/home/ryan/Downloads:/data/static&#34;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>networks</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>caddy-1</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
@@ -529,15 +656,17 @@
 </span><span class=lnt> 99
 </span><span class=lnt>100
 </span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 启动 caddy</span>
 </span></span><span class=line><span class=cl>❯ docker-compose up -d
 </span></span><span class=line><span class=cl><span class=c1># 查下 caddy 容器的 ip</span>
-</span></span><span class=line><span class=cl>&gt; docker inspect caddy <span class=p>|</span> grep IPAddress
+</span></span><span class=line><span class=cl>❯ docker inspect caddy <span class=p>|</span> grep IPAddress
 </span></span><span class=line><span class=cl>...
 </span></span><span class=line><span class=cl>    <span class=s2>&#34;IPAddress&#34;</span>: <span class=s2>&#34;172.18.0.2&#34;</span>,
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 查看网络接口，可以看到多了一个网桥，它就是上一行命令创建的 caddy-1 网络</span>
-</span></span><span class=line><span class=cl><span class=c1># 还多了一个 veth，它连接到了 caddy 容器的 eth0(veth) 接口</span>
+</span></span><span class=line><span class=cl><span class=c1># 查看网络接口，可以看到多了一个网桥 br-ac3e0514d837 ，它就是上一行命令创建的 caddy-1 网络</span>
+</span></span><span class=line><span class=cl><span class=c1># 还多了一个 veth0c25c6f@if104 ，它实际连接到了 caddy 容器的 eth0(veth) 接口</span>
 </span></span><span class=line><span class=cl>❯ ip addr ls
 </span></span><span class=line><span class=cl>...
 </span></span><span class=line><span class=cl>5: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class=m>1500</span> qdisc noqueue state UP group default 
@@ -566,7 +695,7 @@
 </span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 查看网桥，能看到 caddy 容器的 veth 接口连在了 caddy-1 这个网桥上，没有加入到 docker0 网络</span>
+</span></span><span class=line><span class=cl><span class=c1># 查看网桥，能看到 caddy 容器的 veth0c25c6f 接口连在了 br-ac3e0514d837 也就是 caddy-1 网桥上，没有加入到 docker0 网络</span>
 </span></span><span class=line><span class=cl>❯ sudo brctl show
 </span></span><span class=line><span class=cl>bridge name     bridge id               STP enabled     interfaces
 </span></span><span class=line><span class=cl>br-ac3e0514d837         8000.02427d95ba7e       no              veth0c25c6f
@@ -581,7 +710,7 @@
 </span></span><span class=line><span class=cl>172.18.0.0/16 dev br-ac3e0514d837 proto kernel scope link src 172.18.0.1 
 </span></span><span class=line><span class=cl>192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric <span class=m>600</span> 
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># iptables 中也多了 caddy-1 网桥的 MASQUERADE 规则，以及端口映射的规则</span>
+</span></span><span class=line><span class=cl><span class=c1># iptables 中也多了 caddy-1 网桥的 MASQUERADE 规则，以及端口映射的规则，下面重点给这些新增规则加了注释</span>
 </span></span><span class=line><span class=cl>❯ sudo iptables -t nat -S
 </span></span><span class=line><span class=cl>-P PREROUTING ACCEPT
 </span></span><span class=line><span class=cl>-P INPUT ACCEPT
@@ -592,11 +721,13 @@
 </span></span><span class=line><span class=cl>-A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j DOCKER
 </span></span><span class=line><span class=cl>-A POSTROUTING -s 172.18.0.0/16 ! -o br-ac3e0514d837 -j MASQUERADE
 </span></span><span class=line><span class=cl>-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
-</span></span><span class=line><span class=cl><span class=c1># 端口映射过来的入网流量，都做下 SNAT，把 src ip 换成出口 docker0 的 ip 地址</span>
+</span></span><span class=line><span class=cl><span class=c1># 源地址与目标地址都是 172.18.0.2/32，说明是 caddy 容器在请求它自己，为什么自己请求自己还要做 NAT(MASQUERADE) 呢？？？</span>
+</span></span><span class=line><span class=cl><span class=c1># 我表示也觉得有点离谱，只要容器中的协议栈实现没毛病，请求它自己应该根本不会走到网桥来...</span>
+</span></span><span class=line><span class=cl><span class=c1># 查了一波资料发现老外也同样觉得很离谱: https://www.ipspace.net/kb/DockerSvc/30-nat-iptables.html</span>
 </span></span><span class=line><span class=cl>-A POSTROUTING -s 172.18.0.2/32 -d 172.18.0.2/32 -p tcp -m tcp --dport <span class=m>80</span> -j MASQUERADE
 </span></span><span class=line><span class=cl>-A DOCKER -i br-ac3e0514d837 -j RETURN
 </span></span><span class=line><span class=cl>-A DOCKER -i docker0 -j RETURN
-</span></span><span class=line><span class=cl><span class=c1># 主机上所有其他接口进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去（端口映射）</span>
+</span></span><span class=line><span class=cl><span class=c1># 所有从非 br-ac3e0514d837(caddy-1) 网桥进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去并且目标端口改为 80（端口映射）</span>
 </span></span><span class=line><span class=cl><span class=c1># DOCKER 是被 PREROUTEING 链的 target，因此这会导致流量直接走了 FORWARD 链，直接绕过了通常设置在 INPUT 链的主机防火墙规则！</span>
 </span></span><span class=line><span class=cl>-A DOCKER ! -i br-ac3e0514d837 -p tcp -m tcp --dport <span class=m>8081</span> -j DNAT --to-destination 172.18.0.2:80
 </span></span><span class=line><span class=cl>
