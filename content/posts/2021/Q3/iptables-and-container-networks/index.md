@@ -87,20 +87,31 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 iptables [-t table] {-A|-C|-D} chain [-m matchname [per-match-options]] -j targetname [per-target-options]
 ```
 
-其中 table 默认为 `filter` 表，其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。
+其中 table 默认为 `filter` 表（可通过 `-t xxx` 指定别的表名），其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。
 
-以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙：
+先介绍下 iptables 的查询指令：
 
 ```shell
-# --add 允许 80 端口通过
-iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-
-# --list-rules 查看所有规则
+# --list-rules 以命令的形式查看所有规则
 iptables -S
 
 # --list-rules 查看 INPUT 表中的所有规则
 iptables -S INPUT
-# 查看 iptables 中的所有规则（比 -L 更详细）
+
+# -L 表示查看当前表的所有规则，相比 -S 它的显示效果要更 human-readable
+# -n 表示不对 IP 地址进行反查，一般都不需要反查
+iptables -nL
+
+# 查看其他表的规则，如 nat 表
+iptables -t nat -S
+iptables -t nat -nL
+```
+
+以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙（默认 filter 表，可通过 `-t xxx` 指定别的表名）：
+
+```shell
+# --add 允许 80 端口通过
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 
 # ---delete 通过编号删除规则
 iptables -D 1
@@ -124,8 +135,6 @@ iptables -P INPUT DROP
 
 # --flush 清空 INPUT 表上的所有规则
 iptables -F INPUT
-
-
 ```
 
 ---
@@ -312,12 +321,14 @@ tcp      6 298 ESTABLISHED src=172.17.0.4 dst=198.18.5.130 sport=54636 dport=443
 
 Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全类似。下面以 docker 为例进行分析（Podman 的分析流程也基本一样）。
 
+### 1. 简单分析 docker0 网桥的原理
+
 首先，使用 `docker run` 运行几个容器，检查下网络状况：
 
 ```shell
 # 运行一个 debian 容器和一个 nginx
-❯ docker run -dit --name debian --rm debian:buster sleep 1000000
-❯ docker run -dit --name nginx --rm nginx:1.19-alpine 
+❯ docker run -d --name debian --rm debian:buster sleep 1000000
+❯ docker run -d --name nginx --rm nginx:1.19-alpine 
 
 #　查看网络接口，有两个 veth 接口（而且都没设 ip 地址），分别连接到两个容器的 eth0（dcoker0 网络架构图前面给过了，可以往前面翻翻对照下）
 ❯ ip addr ls
@@ -351,7 +362,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600 
 
 # 查看　iptables 规则
-# NAT 表
+# nat 表
 ❯ sudo iptables -t nat -S
 -P PREROUTING ACCEPT
 -P INPUT ACCEPT
@@ -394,6 +405,92 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -A DOCKER-USER -j RETURN
 ```
 
+### 2. docker0 禁止容器间通信
+
+docker 可以通过为 `dockerd` 启动参数添加 `--icc=false` 来禁用容器间通信（inter-container-networking 的缩写），这里来验证下它是如何实现这个功能的。
+
+首先验证下前面创建的 debian 容器目前是能访问 nginx 容器的：
+
+```shell
+# 查到 nginx 容器的 ip 地址
+❯ docker inspect nginx | grep \"IPAddress
+            "IPAddress": "172.17.0.3",
+❯ docker exec -it debian bash
+# 首先跑 `apt update && apt install -y curl` 安装 curl 工具，这里略过相关日志
+......
+# 访问 nginx 容器，返回数据正常
+root@499fbc07b79c:/# curl -s -v 172.17.0.3:80 -o /dev/null
+* Expire in 0 ms for 6 (transfer 0x5556f6dfd110)
+*   Trying 172.17.0.3...
+* TCP_NODELAY set
+* Expire in 200 ms for 4 (transfer 0x5556f6dfd110)
+* Connected to 172.17.0.3 (172.17.0.3) port 80 (#0)
+> GET / HTTP/1.1
+> Host: 172.17.0.3
+> User-Agent: curl/7.64.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Server: nginx/1.19.10
+< Date: Sat, 04 Mar 2023 14:00:09 GMT
+< Content-Type: text/html
+< Content-Length: 612
+...
+```
+
+接着查找下 docker 的 systemd 配置位置：
+
+```shell
+❯ sudo systemctl disable docker 
+Removed "/etc/systemd/system/multi-user.target.wants/docker.service".
+
+❯ sudo systemctl enable docker 
+Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
+```
+
+根据日志可定位到我的 docker.service 配置位于 `/usr/lib/systemd/system/docker.service`，修改此配置，在 `ExecStart` 一行的末尾添加参数 `--icc=false`，然后重启 docker 服务：
+
+```shell
+❯ sudo systemctl daemon-reload 
+
+❯ sudo systemctl restart docker 
+```
+
+现在再走一遍前面的测试，会发现 debian 无法访问 nginx 容器了。
+查看 iptables 规则会发现所有 docker0 网桥的内部通信数据全部被 drop 掉了：
+
+```shell
+# nat 表
+❯ sudo iptables -t nat -S
+# 内容没有任何变化，这里略过
+...
+# filter 表
+❯ sudo iptables -t filter -S
+-P INPUT ACCEPT
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N DOCKER
+-N DOCKER-ISOLATION-STAGE-1
+-N DOCKER-ISOLATION-STAGE-2
+-N DOCKER-USER
+-A FORWARD -j DOCKER-USER
+-A FORWARD -j DOCKER-ISOLATION-STAGE-1
+-A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+# 将所有访问 docker0 的流量都转给自定义链 DOCKER 处理
+-A FORWARD -o docker0 -j DOCKER
+# 放行 docker0 网桥与外网通信的数据（下一跳不为 docker）
+-A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+# 丢弃所有 docker0 网桥的内部通信流量（即禁止 docker0 上的容器互相访问）
+-A FORWARD -i docker0 -o docker0 -j DROP
+-A DOCKER-ISOLATION-STAGE-1 -i docker0 ! -o docker0 -j DOCKER-ISOLATION-STAGE-2
+-A DOCKER-ISOLATION-STAGE-1 -j RETURN
+-A DOCKER-ISOLATION-STAGE-2 -o docker0 -j DROP
+-A DOCKER-ISOLATION-STAGE-2 -j RETURN
+-A DOCKER-USER -j RETURN
+```
+
+
+### 3. 使用 docker-compose 自定义网桥与端口映射
 
 接下来使用如下 docker-compose 配置启动一个 caddy　容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。
 
@@ -406,11 +503,9 @@ services:
     image: "caddy:2.2.1-alpine"
     container_name: "caddy"
     restart: always
-    command: caddy file-server --browse --root /data/static
+    command: caddy file-server --browse --root /
     ports:
       - "8081:80"
-    volumes:
-      - "/home/ryan/Downloads:/data/static"
     networks:
     - caddy-1
 
@@ -424,12 +519,12 @@ networks:
 # 启动 caddy
 ❯ docker-compose up -d
 # 查下 caddy 容器的 ip
-> docker inspect caddy | grep IPAddress
+❯ docker inspect caddy | grep IPAddress
 ...
     "IPAddress": "172.18.0.2",
 
-# 查看网络接口，可以看到多了一个网桥，它就是上一行命令创建的 caddy-1 网络
-# 还多了一个 veth，它连接到了 caddy 容器的 eth0(veth) 接口
+# 查看网络接口，可以看到多了一个网桥 br-ac3e0514d837 ，它就是上一行命令创建的 caddy-1 网络
+# 还多了一个 veth0c25c6f@if104 ，它实际连接到了 caddy 容器的 eth0(veth) 接口
 ❯ ip addr ls
 ...
 5: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
@@ -458,7 +553,7 @@ networks:
        valid_lft forever preferred_lft forever
 
 
-# 查看网桥，能看到 caddy 容器的 veth 接口连在了 caddy-1 这个网桥上，没有加入到 docker0 网络
+# 查看网桥，能看到 caddy 容器的 veth0c25c6f 接口连在了 br-ac3e0514d837 也就是 caddy-1 网桥上，没有加入到 docker0 网络
 ❯ sudo brctl show
 bridge name     bridge id               STP enabled     interfaces
 br-ac3e0514d837         8000.02427d95ba7e       no              veth0c25c6f
@@ -473,7 +568,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 172.18.0.0/16 dev br-ac3e0514d837 proto kernel scope link src 172.18.0.1 
 192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600 
 
-# iptables 中也多了 caddy-1 网桥的 MASQUERADE 规则，以及端口映射的规则
+# iptables 中也多了 caddy-1 网桥的 MASQUERADE 规则，以及端口映射的规则，下面重点给这些新增规则加了注释
 ❯ sudo iptables -t nat -S
 -P PREROUTING ACCEPT
 -P INPUT ACCEPT
@@ -484,11 +579,13 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j DOCKER
 -A POSTROUTING -s 172.18.0.0/16 ! -o br-ac3e0514d837 -j MASQUERADE
 -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
-# 端口映射过来的入网流量，都做下 SNAT，把 src ip 换成出口 docker0 的 ip 地址
+# 源地址与目标地址都是 172.18.0.2/32，说明是 caddy 容器在请求它自己，为什么自己请求自己还要做 NAT(MASQUERADE) 呢？？？
+# 我表示也觉得有点离谱，只要容器中的协议栈实现没毛病，请求它自己应该根本不会走到网桥来...
+# 查了一波资料发现老外也同样觉得很离谱: https://www.ipspace.net/kb/DockerSvc/30-nat-iptables.html
 -A POSTROUTING -s 172.18.0.2/32 -d 172.18.0.2/32 -p tcp -m tcp --dport 80 -j MASQUERADE
 -A DOCKER -i br-ac3e0514d837 -j RETURN
 -A DOCKER -i docker0 -j RETURN
-# 主机上所有其他接口进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去（端口映射）
+# 所有从非 br-ac3e0514d837(caddy-1) 网桥进来的 tcp 流量，只要目标端口是 8081，就转发到 caddy 容器去并且目标端口改为 80（端口映射）
 # DOCKER 是被 PREROUTEING 链的 target，因此这会导致流量直接走了 FORWARD 链，直接绕过了通常设置在 INPUT 链的主机防火墙规则！
 -A DOCKER ! -i br-ac3e0514d837 -p tcp -m tcp --dport 8081 -j DNAT --to-destination 172.18.0.2:80
 
@@ -695,3 +792,4 @@ table ip6 firewalld {
 - [网络地址转换（NAT）之报文跟踪](https://linux.cn/article-13364-1.html)
 - [容器安全拾遗 - Rootless Container初探](https://developer.aliyun.com/article/700923)
 - [netfilter - wikipedia](https://en.wikipedia.org/wiki/Netfilter)
+
