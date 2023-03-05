@@ -21,7 +21,7 @@ comment:
 
 # 兼容旧的 Path（单词拼写错误）
 aliases:
-- /posts//ee-basics-esp32-display/
+- /posts/ee-basics-esp32-display/
 ---
 
 ## 零、硬件准备与依赖库调研
