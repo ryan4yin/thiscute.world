@@ -28,7 +28,7 @@ comment:
 
 开发板是 ESP-WROOM-32 模组，板子的引脚定义与下图一致：
 
-{{<figure src="/images/ee-basics-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%">}}
 
 其他需要的东西：杜邦线、面包板、四个 10 K$\Omega$ 电阻、四个按键。
 
@@ -111,7 +111,7 @@ build_flags =
 
 再看一下我板子的引脚定义：
 
-{{<figure src="/images/ee-basics-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%">}}
 
 可以看到这块 ESP32 开发板有两个 SPI 端口：HSPI 跟 VSPI，这里我们使用 HSPI，那么 MOSI/MISO/SCK 三个引脚的接线必须与上图的定义完全一致。
 而其他引脚随便找个普通 GPIO 口接上就行。
@@ -130,15 +130,15 @@ build_flags =
 
 我跑出来的效果：
 
-{{<figure src="/images/ee-basics-esp32-display/tft_esp32_meters_demo_2.webp" width="60%">}}
-{{<figure src="/images/ee-basics-esp32-display/tft_esp32_sin_cosin_chart_2.webp" width="60%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_meters_demo_2.webp" width="60%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_sin_cosin_chart_2.webp" width="60%">}}
 
 
 ## 二、显示图片、文字
 
 这需要首先将图片/文字转换成 bitmap 格式的 C 代码，可使用在线工具 [javl/image2cpp](https://github.com/javl/image2cpp) 进行转换，简单演示下：
 
-{{<figure src="/images/ee-basics-esp32-display/how-to-use-image2cpp.webp" width="50%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/how-to-use-image2cpp.webp" width="50%">}}
 
 注意高度与宽度调整为与屏幕大小一致，设置放缩模式，然后色彩改为 RGB565，最后上传图片、生成代码。
 
@@ -189,7 +189,7 @@ void loop() {}
 
 编译上传，效果如下：
 
-{{<figure src="/images/ee-basics-esp32-display/tft_esp32_show_image-2.webp" width="60%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="60%">}}
 
 
 ## 三、移植一个我多年前写的贪吃蛇游戏
@@ -400,7 +400,7 @@ void eat_self()
 
 接线示意图如下（使用 [wokwi](https://wokwi.com/) 绘制）：
 
-{{<figure src="/images/ee-basics-esp32-display/esp32-wiring-4-buttons.webp" width="60%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/esp32-wiring-4-buttons.webp" width="60%">}}
 
 现在运行程序，效果如下（手上只有两个按键，所以是双键模式请见谅...）：
 
