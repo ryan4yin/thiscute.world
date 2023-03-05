@@ -1,12 +1,12 @@
-<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2023-03-05T21:57:01+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">EE 入门（二） - 使用 ESP32 &amp;#43; SPI 画图、显示图片、跑贪吃蛇</title><link href="https://thiscute.world/posts/ee-basics-esp32-display/"/><id>https://thiscute.world/posts/ee-basics-esp32-display/</id><author><name>ryan4yin</name></author><published>2023-03-05T21:57:01+08:00</published><updated>2023-03-05T21:57:01+08:00</updated><content type="html"><![CDATA[<figure>
-          <img class="lazyload" src="/posts/ee-basics-esp32-display/tft_esp32_show_image-2.webp" height="1333" width="1000"><figcaption></figcaption>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2023-03-05T21:57:01+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">EE 入门（二） - 使用 ESP32 &amp;#43; SPI 画图、显示图片、跑贪吃蛇</title><link href="https://thiscute.world/posts/ee-basics-2-esp32-display/"/><id>https://thiscute.world/posts/ee-basics-2-esp32-display/</id><author><name>ryan4yin</name></author><published>2023-03-05T21:57:01+08:00</published><updated>2023-03-05T21:57:01+08:00</updated><content type="html"><![CDATA[<figure>
+          <img class="lazyload" src="/posts/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" height="1333" width="1000"><figcaption></figcaption>
         </figure><h2 id="零硬件准备与依赖库调研" class="headerLink">
     <a href="#%e9%9b%b6%e7%a1%ac%e4%bb%b6%e5%87%86%e5%a4%87%e4%b8%8e%e4%be%9d%e8%b5%96%e5%ba%93%e8%b0%83%e7%a0%94" class="header-mark"></a>零、硬件准备与依赖库调研</h2><p>之前淘货买了挺多显示屏的，本文使用的是这一块：</p>
 <ul>
 <li><a href="http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU:MSP3520" target="_blank" rel="noopener noreferrer">3.5 寸电阻触摸屏，480 * 320，同样是 SPI 协议，驱动 IC 为 ILI9488</a></li>
 </ul>
 <p>开发板是 ESP-WROOM-32 模组，板子的引脚定义与下图一致：</p>
-<figure><img src="/images/ee-basics-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%"/>
+<figure><img src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%"/>
 </figure>
 
 <p>其他需要的东西：杜邦线、面包板、四个 10 K$\Omega$ 电阻、四个按键。</p>
@@ -125,7 +125,7 @@
 </div><p>修好后保存修改，platformio 将自动检测到配置文件变更，并开始根据配置文件下载 Arduino/ESP32 工具链，更新构建配置、拉取依赖库（建议开个全局代理，不然下载会贼慢）。</p>
 <h3 id="2-显示屏接线" class="headerLink">
     <a href="#2-%e6%98%be%e7%a4%ba%e5%b1%8f%e6%8e%a5%e7%ba%bf" class="header-mark"></a>2. 显示屏接线</h3><p>再看一下我板子的引脚定义：</p>
-<figure><img src="/images/ee-basics-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%"/>
+<figure><img src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%"/>
 </figure>
 
 <p>可以看到这块 ESP32 开发板有两个 SPI 端口：HSPI 跟 VSPI，这里我们使用 HSPI，那么 MOSI/MISO/SCK 三个引脚的接线必须与上图的定义完全一致。
@@ -141,15 +141,15 @@
 <p>可以直接从 libdeps 中 copy exmaples 代码过来测试：<code>cp .pio/libdeps/esp32dev/TFT_eSPI/examples/480\ x\ 320/TFT_Meters/TFT_Meters.ino src/main.ino</code></p>
 </blockquote>
 <p>我跑出来的效果：</p>
-<p><figure><img src="/images/ee-basics-esp32-display/tft_esp32_meters_demo_2.webp" width="60%"/>
+<p><figure><img src="/images/ee-basics-2-esp32-display/tft_esp32_meters_demo_2.webp" width="60%"/>
 </figure>
 
-<figure><img src="/images/ee-basics-esp32-display/tft_esp32_sin_cosin_chart_2.webp" width="60%"/>
+<figure><img src="/images/ee-basics-2-esp32-display/tft_esp32_sin_cosin_chart_2.webp" width="60%"/>
 </figure>
 </p>
 <h2 id="二显示图片文字" class="headerLink">
     <a href="#%e4%ba%8c%e6%98%be%e7%a4%ba%e5%9b%be%e7%89%87%e6%96%87%e5%ad%97" class="header-mark"></a>二、显示图片、文字</h2><p>这需要首先将图片/文字转换成 bitmap 格式的 C 代码，可使用在线工具 <a href="https://github.com/javl/image2cpp" target="_blank" rel="noopener noreferrer">javl/image2cpp</a> 进行转换，简单演示下：</p>
-<figure><img src="/images/ee-basics-esp32-display/how-to-use-image2cpp.webp" width="50%"/>
+<figure><img src="/images/ee-basics-2-esp32-display/how-to-use-image2cpp.webp" width="50%"/>
 </figure>
 
 <p>注意高度与宽度调整为与屏幕大小一致，设置放缩模式，然后色彩改为 RGB565，最后上传图片、生成代码。</p>
@@ -236,7 +236,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译上传，效果如下：</p>
-<figure><img src="/images/ee-basics-esp32-display/tft_esp32_show_image-2.webp" width="60%"/>
+<figure><img src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="60%"/>
 </figure>
 
 <h2 id="三移植一个我多年前写的贪吃蛇游戏" class="headerLink">
@@ -630,13 +630,13 @@
 <p>接线方式如下，主要原理就是通过 GND 接线，使四个方向键对应的 GPIO 口默认值为低电平。
 当按键按下时，GPIO 口会被拉升成高电平，从而使程序识别到该按键被按下。</p>
 <p>接线示意图如下（使用 <a href="https://wokwi.com/" target="_blank" rel="noopener noreferrer">wokwi</a> 绘制）：</p>
-<figure><img src="/images/ee-basics-esp32-display/esp32-wiring-4-buttons.webp" width="60%"/>
+<figure><img src="/images/ee-basics-2-esp32-display/esp32-wiring-4-buttons.webp" width="60%"/>
 </figure>
 
 <p>现在运行程序，效果如下（手上只有两个按键，所以是双键模式请见谅&hellip;）：</p>
 <div class="bilibili"><iframe src="//player.bilibili.com/player.html?bvid=BV1jT411e7HJ&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe></div>
 
-]]></content></entry><entry><title type="html">EE 入门 - 电子电路基础知识</title><link href="https://thiscute.world/posts/electrical-engineering-circuits-basics-1/"/><id>https://thiscute.world/posts/electrical-engineering-circuits-basics-1/</id><author><name>ryan4yin</name></author><published>2023-01-31T22:33:51+08:00</published><updated>2023-01-31T22:33:51+08:00</updated><content type="html"><![CDATA[<figure>
+]]></content></entry><entry><title type="html">EE 入门（一） - 电子电路基础知识</title><link href="https://thiscute.world/posts/electrical-engineering-circuits-basics-1/"/><id>https://thiscute.world/posts/electrical-engineering-circuits-basics-1/</id><author><name>ryan4yin</name></author><published>2023-01-31T22:33:51+08:00</published><updated>2023-01-31T22:33:51+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/electrical-engineering-circuits-basics-1/8051-display-2023.webp" height="2108" width="1044"><figcaption></figcaption>
         </figure><h2 id="前言" class="headerLink">
     <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>我是从去年 12 月开始玩电子的，起因是 11 月搞了个 Homelab，然后就一路玩到 ESPHome，买了一堆传感器。
