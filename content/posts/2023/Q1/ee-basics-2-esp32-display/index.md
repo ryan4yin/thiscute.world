@@ -28,7 +28,7 @@ aliases:
 
 之前淘货买了挺多显示屏的，本文使用的是这一块：
 
-- [3.5 寸电阻触摸屏，480 * 320，同样是 SPI 协议，驱动 IC 为 ILI9488](http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU:MSP3520)
+- [3.5 寸电阻触摸屏，480 * 320，SPI 协议，显示屏驱动 IC 为 ILI9488](http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU:MSP3520)
 
 开发板是 ESP-WROOM-32 模组，板子的引脚定义与下图一致：
 
