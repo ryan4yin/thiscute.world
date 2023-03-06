@@ -1,5 +1,5 @@
 ---
-title: "EE 入门（二） - 使用 ESP32 + SPI 画图、显示图片、跑贪吃蛇"
+title: "EE 入门（二） - 使用 ESP32 与 SPI 显示屏绘图、显示图片、跑贪吃蛇"
 date: 2023-03-05T21:57:01+08:00
 lastmod: 2023-03-05T21:57:01+08:00
 draft: false
@@ -8,7 +8,7 @@ resources:
 - name: "featured-image"
   src: "tft_esp32_show_image-2.webp"
 
-tags: ["电子电路", "Electrical Engineering", "MCU", "ESP32", "贪吃蛇", "显示屏"]
+tags: ["电子电路", "Electrical Engineering", "MCU", "ESP32", "SPI", "GPIO", "贪吃蛇", "显示屏"]
 categories: ["tech"]
 
 lightgallery: false
