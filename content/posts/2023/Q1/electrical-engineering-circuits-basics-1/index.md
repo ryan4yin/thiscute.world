@@ -685,10 +685,14 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 其他我感兴趣的资料（大致按难度排序）：
 
-- [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
-- [从零开始为树莓派 4B 开发一个操作系统 - rpi4-osdev](https://github.com/isometimes/rpi4-osdev)
-- [bare-metal-programming-guide](https://github.com/cpq/bare-metal-programming-guide)
 - 《Linux/Unix 系统编程手册》
+- 野火嵌入式 Linux 系列教程：
+  1. [基础使用 + 内核编程](https://doc.embedfire.com/linux/imx6/linux_base/zh/latest/index.html)：感觉跟《Linux/Unix 系统编程手册》内容是重复的，可以简单过一过
+  2. 裸机开发与 Linux 驱动开发
+     1. [基于 IMX6ULL](https://doc.embedfire.com/products/link/zh/latest/linux/ebf_i.mx6ull_doc.html)
+     2. [基于鲁班猫 RK356X 系列板卡](https://doc.embedfire.com/linux/rk356x/driver/zh/latest/index.html)
+  3. [Linux 镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/index.html)
+- [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [Linux Device Drivers (LDD3) ](https://github.com/d0u9/Linux-Device-Driver): Linux 驱动开发经典书籍
 - 《深入理解 Linux 内核》
 - 《Linux 内核设计与实现》
