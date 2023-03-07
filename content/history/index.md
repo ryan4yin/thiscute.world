@@ -27,7 +27,7 @@ comment:
 - 最近接触荔枝派相关的东西比较多，就研究了一波 Sipeed 公司的所有产品，做了个笔记 [electrical-engineering/sipeed](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/sipeed)
 - 心动了，下单了 599 大洋的 MAIX-III AXera-Pi AX620A（爱芯派） + 21.9 大洋的 Maix M0s MCU.
 - 又觉得 MCU 玩了不少时间了，想进阶搞 Linux 驱动开发，爱芯派看上去不太合适，又下单一块 214 大洋的野火鲁班猫 0 无线版。
-- 跟妹妹聊了下，她对电子也挺感兴趣的，于是整理了一份手上多余的万用表、面包板、杜邦线、传感器、显示屏、MCU、SBC 等材料，打算找时间寄回家给她玩。
+- 跟妹妹聊了下，她正在学 Python 跟 C 语言，而且对电子也挺感兴趣的，于是整理了一份手上多余的万用表、面包板、杜邦线、传感器、显示屏、MCU、SBC 等材料，打算找时间寄回家给她玩。
 
 ### 2023-03-02 - 2023-03-06
 
