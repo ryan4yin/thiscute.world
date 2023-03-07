@@ -677,11 +677,16 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 我目前的学习顺序与进度：
 
-- 瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU
+- 瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU(2TOPS * 3)
   - 玩耍的笔记代码放在了这里（Python 与 C 语言）[electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
 - 树莓派 4B: 
   - 玩耍笔记与代码：[electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
-
+- 其他 [electrical-engineering](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/)
+  - STM32: 相当流行的芯片，资料比较多，开发工具链很成熟完善，不过有点偏底层，适合用于学习底层知识。
+  - ESP32: 相当流行的 IoT 芯片，自带无线蓝牙，官方的开发工具链很成熟完善，而且迭代很快。相比 STM32 它的库封装层次更高，屏蔽了许多底层细节，写起来更简单些。
+  - Maix M0S，Sipeed 的新 MCU，待研究玩法。
+  - MAIX-III AXera-Pi AX620A（爱芯派），1.8TOPS 算力（标称 3.6TOPS 的一半不能用于 AI）
+    - 跑全功能 Linux 系统
 
 其他我感兴趣的资料（大致按难度排序）：
 
