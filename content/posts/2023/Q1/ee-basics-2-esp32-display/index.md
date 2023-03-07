@@ -39,10 +39,10 @@ aliases:
 至于需要的依赖库，我找到如下几个 stars 数较高的支持 ILI9488 + ESP32 的显示屏驱动库：
 
 - [Bodmer/TFT_eSPI](https://github.com/Bodmer/TFT_eSPI): 一个基于 Arudino 框架的 tft 显示屏驱动，支持 STM32/ESP32 等多种芯片。
-- [lv_port_esp32](https://github.com/lvgl/lv_port_esp32): 一个 MCU 图形库，官方就提供 esp32 的兼容层。
+- [lv_port_esp32](https://github.com/lvgl/lv_port_esp32): lvgl 官方提供的 esp32 port，但是几百年不更新了，目前仅支持到 esp-idf v4，试用了一波被坑了，不建议使用。
+- [esp-idf/peripherals/lcd](https://github.com/espressif/esp-idf/tree/master/examples/peripherals/lcd): ESP 官方的 lcd 示例，不过仅支持部分常见显示屏驱动，比如我这里用的 ili9488 官方就没有。
 
-我一开始是试用的 lv_port_esp32，但是它目前仅支持到 esp-idf v4，而我本机装的最新的 esp-idf v5.0，试用了一波被坑了，还研究了好久的 esp-idf 多版本共存...
-后面换成 TFT_eSPI 瞬间舒爽了，强烈推荐！所以本文是使用 TFT_eSPI 做为显示屏驱动库 + 绘图库。
+总之强烈推荐 TFT_eSPI 这个库，很好用，而且驱动支持很齐全。
 
 ## 一、开发环境搭建、电路搭建与测试
 
