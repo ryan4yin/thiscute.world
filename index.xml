@@ -1372,15 +1372,17 @@
 <li>我的 8051 汇编学习笔记与代码：<a href="https://github.com/ryan4yin/learn-8051-asm" target="_blank" rel="noopener noreferrer">ryan4yin/learn-8051-asm</a></li>
 </ul>
 </li>
-<li>STM32: 工业届应用最广泛的单片机，网上资料众多
+<li>STM32: 工业届应用最广泛的单片机，网上资料众多。
 <ul>
+<li>开发工具链很成熟完善，不过有点偏底层，适合用于学习底层知识。</li>
 <li>我的 STM32 学习笔记与代码（持续更新中，使用 C 语言，后续打算试下 Rust）：<a href="https://github.com/ryan4yin/learn-stm32f103c8t6" target="_blank" rel="noopener noreferrer">ryan4yin/learn-stm32f103c8t6</a></li>
 </ul>
 </li>
-<li>ESP32: 包含 wifi 蓝牙功能的单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
+<li>ESP32: 包含 wifi 蓝牙功能的 IoT 单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
 <ul>
-<li>乐鑫官方的 ESP-IDF 封装层次比 STM32 HAL 更高，用起来更傻瓜一点。</li>
+<li>乐鑫官方的 ESP-IDF 完全开源，功能比较完善，封装层次比 STM32 HAL 更高，而且迭代很快，用起来更简单（不过相对地就对底层更缺乏掌控）。</li>
 <li>我的 ESP32 学习笔记与代码（同样持续更新中，也是用的 C，后面也打算用 Rust 搞搞）：<a href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/esp32" target="_blank" rel="noopener noreferrer">electrical-engineering/esp32</a></li>
+<li>Maix M0S，Sipeed 的新 MCU，待研究玩法。</li>
 </ul>
 </li>
 </ul>
@@ -1390,12 +1392,12 @@
 </blockquote>
 <p>单片机玩够了后，就可以开始玩嵌入式 Linux了。</p>
 <ul>
-<li>介绍：嵌入式 Linux，即运行 Linux 操作系统的、性能比 MCU 更高的微型计算机，行业上最常用 ARM Cortex-A53 系列芯片与 Linux 开发一些嵌入式设备。</li>
+<li>介绍：嵌入式 Linux，即运行 Linux 操作系统的、性能比 MCU 更高的微型计算机，行业上最常用 ARM Cortex-A5X 系列芯片与 Linux 开发一些嵌入式设备。</li>
 <li>应用：路由器、电视盒子、智能家居等。在硬件爱好者手里可以用来做计算机视觉控制小车、WiFi、蓝牙控制中枢等等。</li>
 <li>典型产品
 <ul>
 <li>Raspberry Pi: 使用 ARM Cortex-A 系列 CPU 的微型计算机，社区庞大，生态丰富。</li>
-<li>其他各种派，如国产 Orange Pi、Rock Pi，比树莓派便宜一点，性能也更高，不过生态会差一些。</li>
+<li>其他各种国产派，如基于瑞芯微 RK35XX 系列 SoC 的 OrangePi、RockPi、野火鲁班猫等，它们都比现在的树莓派便宜很多（2023 年的 4B 2G 全新要 1000+ 太恐怖了），性能也更高，生态差一些不过瑕不掩瑜。</li>
 <li>STM32/IMX6ULL 也有相关产品</li>
 </ul>
 </li>
@@ -1407,21 +1409,21 @@
 </ul>
 <p>我目前的学习顺序与进度：</p>
 <ul>
-<li>瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU(2TOPS * 3)
+<li>
+<p>瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU(2TOPS * 3)</p>
 <ul>
 <li>玩耍的笔记代码放在了这里（Python 与 C 语言）<a href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588" target="_blank" rel="noopener noreferrer">electrical-engineering/rk3588</a></li>
 </ul>
 </li>
-<li>树莓派 4B:
+<li>
+<p>树莓派 4B:</p>
 <ul>
 <li>玩耍笔记与代码：<a href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi" target="_blank" rel="noopener noreferrer">electrical-engineering/raspberrypi</a></li>
 </ul>
 </li>
-<li>其他 <a href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/" target="_blank" rel="noopener noreferrer">electrical-engineering</a>
+<li>
+<p>其他 <a href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/" target="_blank" rel="noopener noreferrer">electrical-engineering</a></p>
 <ul>
-<li>STM32: 相当流行的芯片，资料比较多，开发工具链很成熟完善，不过有点偏底层，适合用于学习底层知识。</li>
-<li>ESP32: 相当流行的 IoT 芯片，自带无线蓝牙，官方的开发工具链很成熟完善，而且迭代很快。相比 STM32 它的库封装层次更高，屏蔽了许多底层细节，写起来更简单些。</li>
-<li>Maix M0S，Sipeed 的新 MCU，待研究玩法。</li>
 <li>MAIX-III AXera-Pi AX620A（爱芯派），1.8TOPS 算力（标称 3.6TOPS 的一半不能用于 AI）
 <ul>
 <li>跑全功能 Linux 系统</li>
