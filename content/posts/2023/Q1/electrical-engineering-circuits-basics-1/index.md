@@ -654,11 +654,14 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 - 8051: 最简单最经典的单片机
   - 我的 8051 汇编学习笔记与代码：[ryan4yin/learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm)
-- STM32: 工业届应用最广泛的单片机，网上资料众多
+- STM32: 工业届应用最广泛的单片机，网上资料众多。
+  - 开发工具链很成熟完善，不过有点偏底层，适合用于学习底层知识。
   - 我的 STM32 学习笔记与代码（持续更新中，使用 C 语言，后续打算试下 Rust）：[ryan4yin/learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)
-- ESP32: 包含 wifi 蓝牙功能的单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
-  - 乐鑫官方的 ESP-IDF 封装层次比 STM32 HAL 更高，用起来更傻瓜一点。
+- ESP32: 包含 wifi 蓝牙功能的 IoT 单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
+  - 乐鑫官方的 ESP-IDF 完全开源，功能比较完善，封装层次比 STM32 HAL 更高，而且迭代很快，用起来更简单（不过相对地就对底层更缺乏掌控）。
   - 我的 ESP32 学习笔记与代码（同样持续更新中，也是用的 C，后面也打算用 Rust 搞搞）：[electrical-engineering/esp32](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/esp32)
+  - Maix M0S，Sipeed 的新 MCU，待研究玩法。
+
 
 ### 2. 嵌入式 Linux（Linux on Embedded System）
 
@@ -666,11 +669,11 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 单片机玩够了后，就可以开始玩嵌入式 Linux了。
 
-- 介绍：嵌入式 Linux，即运行 Linux 操作系统的、性能比 MCU 更高的微型计算机，行业上最常用 ARM Cortex-A53 系列芯片与 Linux 开发一些嵌入式设备。
+- 介绍：嵌入式 Linux，即运行 Linux 操作系统的、性能比 MCU 更高的微型计算机，行业上最常用 ARM Cortex-A5X 系列芯片与 Linux 开发一些嵌入式设备。
 - 应用：路由器、电视盒子、智能家居等。在硬件爱好者手里可以用来做计算机视觉控制小车、WiFi、蓝牙控制中枢等等。
 - 典型产品
   - Raspberry Pi: 使用 ARM Cortex-A 系列 CPU 的微型计算机，社区庞大，生态丰富。
-  - 其他各种派，如国产 Orange Pi、Rock Pi，比树莓派便宜一点，性能也更高，不过生态会差一些。
+  - 其他各种国产派，如基于瑞芯微 RK35XX 系列 SoC 的 OrangePi、RockPi、野火鲁班猫等，它们都比现在的树莓派便宜很多（2023 年的 4B 2G 全新要 1000+ 太恐怖了），性能也更高，生态差一些不过瑕不掩瑜。
   - STM32/IMX6ULL 也有相关产品
 - 补充说明
   - 嵌入式 Linux 代码的可移植性相对要好很多，因为硬件相关的逻辑都封装在驱动层了。
@@ -682,9 +685,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - 树莓派 4B: 
   - 玩耍笔记与代码：[electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
 - 其他 [electrical-engineering](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/)
-  - STM32: 相当流行的芯片，资料比较多，开发工具链很成熟完善，不过有点偏底层，适合用于学习底层知识。
-  - ESP32: 相当流行的 IoT 芯片，自带无线蓝牙，官方的开发工具链很成熟完善，而且迭代很快。相比 STM32 它的库封装层次更高，屏蔽了许多底层细节，写起来更简单些。
-  - Maix M0S，Sipeed 的新 MCU，待研究玩法。
+
   - MAIX-III AXera-Pi AX620A（爱芯派），1.8TOPS 算力（标称 3.6TOPS 的一半不能用于 AI）
     - 跑全功能 Linux 系统
 
