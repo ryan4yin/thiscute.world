@@ -689,20 +689,21 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - MAIX-III AXera-Pi AX620A（爱芯派），1.8TOPS 算力（标称 3.6TOPS 的一半不能用于 AI）
     - 跑全功能 Linux 系统
 
-其他我感兴趣的资料（大致按难度排序）：
+其他我感兴趣的资料（资料内容有一定的重叠）：
 
-- 《Linux/Unix 系统编程手册》
+- 《[Linux/Unix 系统编程手册](https://man7.org/tlpi/index.html)》：讲解 Linux 的主要系统 API
 - 野火嵌入式 Linux 系列教程：
   1. [基础使用 + 内核编程](https://doc.embedfire.com/linux/imx6/linux_base/zh/latest/index.html)：感觉跟《Linux/Unix 系统编程手册》内容是重复的，可以简单过一过
   2. 野火家的裸机开发与 Linux 驱动开发入门教程
      1. [基于 IMX6ULL](https://doc.embedfire.com/products/link/zh/latest/linux/ebf_i.mx6ull_doc.html)
      2. [基于鲁班猫 RK356X 系列板卡](https://doc.embedfire.com/linux/rk356x/driver/zh/latest/index.html)
   3. [Linux 镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/index.html)
-- [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - Linux 驱动开发方面的出版书籍
   - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): 2022 年发布，Linux 驱动编程方面的新书，基于 Linux 5.10，amazon 上评价不错，暂时只有英文版
   - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 2018 年，内容跟上一本比较类似，代码已更新至 Linux 5.4，不过好像多一些实验内容，learn-by-doing 模式，Amazon 上评价挺好。
 - [Linux Kernel Programming: A comprehensive guide to kernel internals, writing kernel modules, and kernel synchronization](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
+- [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
+- [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
 
 
 上面这些都学了一遍的话，业余玩玩硬件应该就很够用了，期待我完成这个学习路线的那一天...
