@@ -18,13 +18,8 @@ toc:
 
 >按优先级排序
 
-- Practical Electronics for Inventors, Fourth Edition
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
-- 英语阅读
-  - The Moon and Sixpence       - 23/36
 - 英语单词与听力练习
   - 一点英语 270 天英语学习        - 145/270 (漏打卡 62 天)
-- VPN 与 socks5 协议研究
 
 ## 二、我今年还想搞搞这些
 
@@ -52,11 +47,9 @@ toc:
 >电子版都可以在 z-library 上很方便地下载到，实体书的话可以在多抓鱼等二手书平台碰碰运气。
 
 已读：
-
+- The Moon and Sixpence
 
 正在读：
-
-- The Moon and Sixpence
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 
 

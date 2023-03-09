@@ -22,6 +22,17 @@ comment:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2023-03-09
+
+- 买的野火鲁班猫 0 无线版到了，这是野火基于 RK3566 的一块开发板，设计类似树莓派，但是资料开放程度大很多，包含 SoC 原厂的各种文档、源码全都开放出来了，还提供很多写得挺详细的教程，比如 Linux 内核编译部署、Linux 驱动开发、嵌入式 QT 开发等等
+- 读完了「The Moon and Sixpence」
+
+### 2023-03-08
+
+- 买的 MAIX-III AXera-Pi（爱芯派）跟 Maix Zero M0s 到货，晚上简单玩了玩爱芯派，M0s 看了点资料得用博流智能提供的 SDK，后面再折腾。
+  - 可能是送的 32G TF 卡 IO 不行，这块板子的 NPU 感觉性能还可以，但是 CPU 有点 IO 拉。
+  - 为了快速编译，根据 ax-pipeline 文档配了下本地交叉编译工具链（没用 docker），没啥坑，编译速度也挺快的。
+
 ### 2023-03-07
 
 - 最近接触荔枝派相关的东西比较多，就研究了一波 Sipeed 公司的所有产品，做了个笔记 [electrical-engineering/sipeed](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/sipeed)
