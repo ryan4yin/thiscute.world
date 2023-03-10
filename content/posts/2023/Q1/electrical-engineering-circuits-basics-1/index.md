@@ -712,7 +712,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
 
->嵌入式 Linxu 领域目前也仍然是 ARM32 架构的天下，但是开源免费的 RISC-V 架构发展也很快，目前（2023-03-10）已有稳定出货的昉星光 2，以及预售的 LicheePi4A，性能越来越强，生态越来越好，很值得期待。
+>嵌入式 Linux 领域目前也仍然是 ARM32 架构的天下，但是开源免费的 RISC-V 架构发展也很快，目前（2023-03-10）已有稳定出货的昉星光 2，以及预售的 LicheePi4A，性能越来越强，生态越来越好，很值得期待。
 
 ## 最后简单总结下
 
