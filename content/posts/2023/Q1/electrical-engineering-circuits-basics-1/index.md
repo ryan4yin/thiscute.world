@@ -170,7 +170,7 @@ comment:
 - 整流桥堆(半桥、全桥)
   - 菱形联接
 
-等等
+等等...
 
 ### 2. 三极管 triode / bipolar transistor
 
@@ -246,19 +246,20 @@ $\frac{I_{C}}{I_{B}}$ 之间的比率（常数）被称做三极管的电流增�
 
 >CMOS 集成电路工艺 - 百科: https://www.zgbk.com/ecph/words?SiteID=1&ID=124559&Type=bkzyb
 
-**MOSFET 晶体管是电压控制元件（通过栅极电压控制源漏间导通电阻），而双极型晶体管（三极管）是电流控制元件（通过基极较小的电流控制较大的集电极电流）**。
+**MOSFET 晶体管一般简称 MOS 管，是电压控制元件（通过栅极电压控制源漏间导通电阻），而双极型晶体管（三极管）是电流控制元件（通过基极较小的电流控制较大的集电极电流）**。
 
-MOS管在导通压降下，导通电阻小，栅极驱动不需要电流，损耗小，驱动电路简单，自带保护二极管，热阻特性好，适合大功率并联，缺点开关速度不高，比较昂贵。
+MOS 管在导通压降下，导通电阻小，栅极驱动不需要电流，损耗小，驱动电路简单，自带保护二极管，热阻特性好，适合大功率并联，缺点开关速度不高，比较昂贵。
 
-三极管开关速度高，大型三极管的 IC 可以做的很大，缺点损耗大，基极驱动电流大，驱动复杂。
+而功能与 MOS 管类似的三极管，特点是开关速度高，大型三极管的 IC 可以做的很大，缺点损耗大，基极驱动电流大，驱动复杂。
 
-一般来说低成本场合，普通应用的先考虑用三极管，不行的话考虑MOS管。
+一般来说低成本场合，普通应用优先考虑用三极管，不行的话才考虑 MOS 管。
 
 场效应管能在很小电流和很低电压的条件下工作，功耗低，而且可以很方便地把很多场效应管集成在一块硅片上，因此场效应管在大规模集成电路中得到了广泛的应用。
-
 目前主流的数字集成电路，包括 CPU/GPU/RAM，基本都是通过光刻制造的 CMOS 集成电路（Complementary Metal-Oxide-Semiconductor Integrated Circuit），CMOS 就是基于 MOSFET 技术实现的。
 
-MOSFET 管的结构、极性，用法等内容，待补充... TODO
+MOSFET 管的结构、极性，用法等内容，待补充...
+
+TODO
 
 ### 4. 电容 Capacitor
 
@@ -660,7 +661,8 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - ESP32: 包含 wifi 蓝牙功能的 IoT 单片机，在物联网领域应用非常广泛，硬件发烧友的最爱。
   - 乐鑫官方的 ESP-IDF 完全开源，功能比较完善，封装层次比 STM32 HAL 更高，而且迭代很快，用起来更简单（不过相对地就对底层更缺乏掌控）。
   - 我的 ESP32 学习笔记与代码（同样持续更新中，也是用的 C，后面也打算用 Rust 搞搞）：[electrical-engineering/esp32](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/esp32)
-  - Maix M0S，Sipeed 的新 MCU，待研究玩法。
+- 其他
+  - 买了块矽速科技新出的 Maix Zero M0S，使用 RISC-V 架构的 MCU，貌似目前必须用芯片官方（博流智能）的 SDK 写代码，待研究玩法。
 
 
 ### 2. 嵌入式 Linux（Linux on Embedded System）
@@ -684,10 +686,14 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - 玩耍的笔记代码放在了这里（Python 与 C 语言）[electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
 - 树莓派 4B: 
   - 玩耍笔记与代码：[electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
-- 其他 [electrical-engineering](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/)
-
+- 其他
+  - 除了前面俩，还兜兜转转玩了很多新产品，笔记都写在这里面了：[electrical-engineering](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/)
   - MAIX-III AXera-Pi AX620A（爱芯派），1.8TOPS 算力（标称 3.6TOPS 的一半不能用于 AI）
-    - 跑全功能 Linux 系统
+    - 这块板子的 NPU 感觉性能还可以，但是 CPU 跟 IO 都有点拉，跑个 `pip3 list` 都要卡老半天。毕竟 A7 内核，估计性能也就这样了，全靠交叉编译续命。
+  - 鲁班猫 0 无线版（LubanCat Zero W）
+    - 基于 RK3566，开放的资料非常全，包含 SoC 原厂的各种文档、SDK 驱动开发包、核心板封装库，还提供许多免费的在线文档，内容包含  Linux 内核编译部署、Linux 驱动开发、嵌入式 QT 开发等等
+    - 因为资料很全，用来学 Linux 内核驱动开发感觉是比较合适的。
+  - 矽速科技的 LicheePi 4A，国产高性能 RISC-V 开发版，预定了但还没出货。
 
 其他我感兴趣的资料（资料内容有一定的重叠）：
 
