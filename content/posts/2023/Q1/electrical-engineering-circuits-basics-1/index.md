@@ -664,6 +664,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - 其他
   - 买了块矽速科技新出的 Maix Zero M0S，使用 RISC-V 架构的 MCU，貌似目前必须用芯片官方（博流智能）的 SDK 写代码，待研究玩法。
 
+>单片机领域目前仍然是 ARM32 架构的天下，不过开源免费的 RISC-V 架构发展迅猛，有望与 ARM32 分庭抗礼。目前乐鑫基于 RISC-V 的 ESP32C3 就挺受欢迎的，还出了书，另外后续版本 ESP32C5 也已经被 ESP-IDF 支持了，发展很快。
 
 ### 2. 嵌入式 Linux（Linux on Embedded System）
 
@@ -711,6 +712,9 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
 
+>嵌入式 Linxu 领域目前也仍然是 ARM32 架构的天下，但是开源免费的 RISC-V 架构发展也很快，目前（2023-03-10）已有稳定出货的昉星光 2，以及预售的 LicheePi4A，性能越来越强，生态越来越好，很值得期待。
+
+## 最后简单总结下
 
 上面这些都学了一遍的话，业余玩玩硬件应该就很够用了，期待我完成这个学习路线的那一天...
 
