@@ -5,11 +5,8 @@
 <ul>
 <li><a href="http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU:MSP3520" target="_blank" rel="noopener noreferrer">3.5 寸电阻触摸屏，480 * 320，SPI 协议，显示屏驱动 IC 为 ILI9488</a></li>
 </ul>
-<p>开发板是 ESP-WROOM-32 模组，板子的引脚定义与下图一致：</p>
-<figure><img src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%"/>
-</figure>
-
-<p>其他需要的东西：杜邦线、面包板、四个 10 K$\Omega$ 电阻、四个按键。</p>
+<p>开发板是 ESP-WROOM-32 模组开发板。
+其他需要的东西：杜邦线、面包板、四个 10 K$\Omega$ 电阻、四个按键。</p>
 <p>至于需要的依赖库，我找到如下几个 stars 数较高的支持 ILI9488 + ESP32 的显示屏驱动库：</p>
 <ul>
 <li><a href="https://github.com/Bodmer/TFT_eSPI" target="_blank" rel="noopener noreferrer">Bodmer/TFT_eSPI</a>: 一个基于 Arudino 框架的 tft 显示屏驱动，支持 STM32/ESP32 等多种芯片。</li>
@@ -34,8 +31,28 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">pio project init --ide<span class="o">=</span>vscode -d tft_esp32_arduino
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>这条命令会创建一个空项目，并配置好 vscode 插件相关配置。</p>
-<p>创建完成后使用如下内容覆盖 <code>platformio.ini</code> 的配置（内容主要来自 <a href="https://github.com/Bodmer/TFT_eSPI/tree/master/docs/PlatformIO" target="_blank" rel="noopener noreferrer">Bodmer/TFT_eSPI/docs/PlatformIO</a>，我做了一点更新）：</p>
+</div><p>这条命令会创建一个空项目，并配置好 vscode 插件相关配置，这样就算完成了一个空的项目框架。</p>
+<h3 id="1-显示屏接线与项目参数配置" class="headerLink">
+    <a href="#1-%e6%98%be%e7%a4%ba%e5%b1%8f%e6%8e%a5%e7%ba%bf%e4%b8%8e%e9%a1%b9%e7%9b%ae%e5%8f%82%e6%95%b0%e9%85%8d%e7%bd%ae" class="header-mark"></a>1. 显示屏接线与项目参数配置</h3><p>网上简单搜了下 ESP32 pinout，找到这张图，引脚定义与我的 ESP32 开发板完全一致，用做接线参考：</p>
+<figure><img src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%"/>
+</figure>
+
+<p>可以看到这块 ESP32 开发板有两个 SPI 端口：HSPI 跟 VSPI，这里我们使用 HSPI，那么 MOSI/MISO/SCK 三个引脚的接线必须与上图的定义完全一致。
+而其他引脚随便找个普通 GPIO 口接上就行。</p>
+<p>此外背光灯的线我试了下接 GPIO 口不好使，建议直接接在 3V3 引脚上（缺点就是没法通过程序关闭背光，问题不大）。</p>
+<p>我的接线如下：</p>
+<p><figure><img src="/images/ee-basics-2-esp32-display/esp32-spi-display-wiring.webp" width="70%"/><figcaption>
+            <h4>使用 wokwi.com 制作的示意图</h4>
+        </figcaption>
+</figure>
+
+<figure><img src="/images/ee-basics-2-esp32-display/esp32-spi-display-wiring-real.webp" width="70%"/><figcaption>
+            <h4>接线实操</h4>
+        </figcaption>
+</figure>
+</p>
+<p>线接好后需要更新下 PlatformIO 项目根目录 <code>platformio.ini</code> 的配置，使其显示屏引脚相关的参数与我们的接线完全对应起来，这样才能正常驱动这个显示屏。</p>
+<p>这里我以驱动库官方提供的模板 <a href="https://github.com/Bodmer/TFT_eSPI/tree/master/docs/PlatformIO" target="_blank" rel="noopener noreferrer">Bodmer/TFT_eSPI/docs/PlatformIO</a> 为基础，更新了其构建参数对应的引脚，加了点注释，得到的内容如下（如果你的接线与我一致，直接抄就行）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -78,6 +95,8 @@
 </span><span class="lnt">38
 </span><span class="lnt">39
 </span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[env:esp32dev]</span>
@@ -102,8 +121,10 @@
 </span></span></span><span class="line"><span class="cl"><span class="s">  # SPI 引脚的接线方式，
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DTFT_MISO=12
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DTFT_MOSI=13
+</span></span></span><span class="line"><span class="cl"><span class="s">  # SCLK 在显示屏上对应的引脚可能叫 SCK，是同一个东西
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DTFT_SCLK=14
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DTFT_CS=15
+</span></span></span><span class="line"><span class="cl"><span class="s">  # DC 在显示屏上对应的引脚可能叫 RS 或者 DC/RS，是同一个东西
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DTFT_DC=4
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DTFT_RST=2
 </span></span></span><span class="line"><span class="cl"><span class="s">  # 背光暂时直接接在 3V3 上
@@ -111,7 +132,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="s">  # 触摸，暂时不用
 </span></span></span><span class="line"><span class="cl"><span class="s">  ;-DTOUCH_CS=22
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DLOAD_GLCD=1
-</span></span></span><span class="line"><span class="cl"><span class="s">  # 其他配置
+</span></span></span><span class="line"><span class="cl"><span class="s">  # 其他配置，保持默认即可
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DLOAD_FONT2=1
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DLOAD_FONT4=1
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DLOAD_FONT6=1
@@ -122,16 +143,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="s">  -DSPI_FREQUENCY=27000000</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>修好后保存修改，platformio 将自动检测到配置文件变更，并开始根据配置文件下载 Arduino/ESP32 工具链，更新构建配置、拉取依赖库（建议开个全局代理，不然下载会贼慢）。</p>
-<h3 id="2-显示屏接线" class="headerLink">
-    <a href="#2-%e6%98%be%e7%a4%ba%e5%b1%8f%e6%8e%a5%e7%ba%bf" class="header-mark"></a>2. 显示屏接线</h3><p>再看一下我板子的引脚定义：</p>
-<figure><img src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%"/>
-</figure>
-
-<p>可以看到这块 ESP32 开发板有两个 SPI 端口：HSPI 跟 VSPI，这里我们使用 HSPI，那么 MOSI/MISO/SCK 三个引脚的接线必须与上图的定义完全一致。
-而其他引脚随便找个普通 GPIO 口接上就行。</p>
-<p>此外背光灯的线我试了下接 GPIO 口不好使，建议直接接在 3V3 引脚上（缺点就是没法通过程序关闭背光，问题不大）。</p>
-<p>线接好后，再按照你的接线方式修改前面的 <code>platformio.ini</code> 中的引脚配置，把数字改对，这样就完成配置啦。</p>
+</div><p>修好后保存修改，platformio 将会自动检测到配置文件变更，并根据配置文件下载 Arduino/ESP32 工具链，更新构建配置、拉取依赖库（建议开个全局代理，不然下载会贼慢）。</p>
 <h3 id="3-测试验证" class="headerLink">
     <a href="#3-%e6%b5%8b%e8%af%95%e9%aa%8c%e8%af%81" class="header-mark"></a>3. 测试验证</h3><p>现在找几个 demo 跑跑看，新建文件 <code>src/main.ino</code>，从如下文件夹中随便找个 demo copy 进去然后编译上传，看看效果：</p>
 <ul>
@@ -239,8 +251,8 @@
 <figure><img src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="60%"/>
 </figure>
 
-<h2 id="三移植一个我多年前写的贪吃蛇游戏" class="headerLink">
-    <a href="#%e4%b8%89%e7%a7%bb%e6%a4%8d%e4%b8%80%e4%b8%aa%e6%88%91%e5%a4%9a%e5%b9%b4%e5%89%8d%e5%86%99%e7%9a%84%e8%b4%aa%e5%90%83%e8%9b%87%e6%b8%b8%e6%88%8f" class="header-mark"></a>三、移植一个我多年前写的贪吃蛇游戏</h2><p>N 年前我写的第一篇博客文章，是用 C 语言写一个贪吃蛇，这里把它移植过来玩玩看~</p>
+<h2 id="三写个极简贪吃蛇游戏" class="headerLink">
+    <a href="#%e4%b8%89%e5%86%99%e4%b8%aa%e6%9e%81%e7%ae%80%e8%b4%aa%e5%90%83%e8%9b%87%e6%b8%b8%e6%88%8f" class="header-mark"></a>三、写个极简贪吃蛇游戏</h2><p>N 年前我写的第一篇博客文章，是用 C 语言写一个贪吃蛇，这里把它移植过来玩玩看~</p>
 <p>我的旧文章地址为：<a href="https://www.cnblogs.com/kirito-c/p/5596160.html" target="_blank" rel="noopener noreferrer">贪吃蛇—C—基于easyx图形库(下):从画图程序到贪吃蛇【自带穿墙术】 </a>，里面详细介绍了程序的思路。</p>
 <p>那么现在开始代码移植，TFT 屏幕前面已经接好了不需要动，要改的只有软件部分，还有就是添加上下左右四个按键的电路。</p>
 <p>首先清空 <code>src</code> 文件夹，新建文件 <code>src/main.ino</code>，内容如下，其中主要逻辑均移植自我前面贴的文章：</p>
@@ -433,11 +445,9 @@
 </span><span class="lnt">185
 </span><span class="lnt">186
 </span><span class="lnt">187
-</span><span class="lnt">188
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;TFT_eSPI.h&gt; // Hardware-specific library</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
@@ -629,13 +639,40 @@
 </div><p>代码就这么点，没几行，接下来我们来接一下按键电路，这部分是参考了 arduino 的官方文档 <a href="https://docs.arduino.cc/built-in-examples/digital/Button" target="_blank" rel="noopener noreferrer">How to Wire and Program a Button</a></p>
 <p>接线方式如下，主要原理就是通过 GND 接线，使四个方向键对应的 GPIO 口默认值为低电平。
 当按键按下时，GPIO 口会被拉升成高电平，从而使程序识别到该按键被按下。</p>
-<p>接线示意图如下（使用 <a href="https://wokwi.com/" target="_blank" rel="noopener noreferrer">wokwi</a> 绘制）：</p>
-<figure><img src="/images/ee-basics-2-esp32-display/esp32-wiring-4-buttons.webp" width="60%"/>
+<p>接线示意图如下（简单起见，省略了前面的显示屏接线部分）：</p>
+<figure><img src="/images/ee-basics-2-esp32-display/esp32-wiring-4-buttons.webp" width="60%"/><figcaption>
+            <h4>使用 wokwi.com 制作的示意图</h4>
+        </figcaption>
 </figure>
 
 <p>现在运行程序，效果如下（手上只有两个按键，所以是双键模式请见谅&hellip;）：</p>
 <div class="bilibili"><iframe src="//player.bilibili.com/player.html?bvid=BV1jT411e7HJ&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe></div>
 
+<!-- 
+因为买的摇秆有问题，没焊好，各种锡把引脚连在了一起，暂时放弃此想法。
+
+## 四、换成用摇杆控制贪吃蛇吧
+
+用按键控制总还是差了点意思，换成用摇杆控制看看是不是更爽一点。
+
+之前在淘宝上买的一堆元件中有一个 HW-504 摇秆，查了下找到这篇文章 [arduino-joystick](https://arduinogetstarted.com/tutorials/arduino-joystick) 详细说明了怎么在 Arduino 中用它，在 ESP32-Arduino 上使用方法也完全类似。
+
+根据其说明，HW-504 这类摇秆的五个引脚功能分别如下：
+
+- GDN: 接地
+- VCC/5V: 接 5V 电源
+- VRx 与 VRy: 分别输出 X 轴与 Y 轴的偏移量，是模拟信号
+- SW: 对应摇秆内部的按键，按下摇秆会使 SW 输出高电平
+
+我们暂时用不到摇秆的按键，所以只需要接上另外四根引脚就行，而 VRx 与 VRy 因为输出的是模拟量，需要用到 ESP32 的 ADC 功能（Analog to Digital Converter 模数转换器）。
+
+根据 ESP32 官方文档 [Analog to Digital Converter (ADC) - ESP32  Peripherals API](https://docs.espressif.com/projects/esp-idf/en/v4.4.4/esp32/api-reference/peripherals/adc.html) 描述，ESP32 包含两个模数转换器 ADC1 与 ADC2，其中 ADC2 在启用 Wi-Fi 时会被 WiFi 占用导致无法使用，所以我们写程序通常仅使用 ADC1。
+
+然后根据前面的文章内容修改 C 代码，用摇秆控制逻辑取代掉按键相关的内容，改好后的代码内容如下：
+
+```c
+
+``` -->
 ]]></content></entry><entry><title type="html">EE 入门（一） - 电子电路基础知识</title><link href="https://thiscute.world/posts/electrical-engineering-circuits-basics-1/"/><id>https://thiscute.world/posts/electrical-engineering-circuits-basics-1/</id><author><name>ryan4yin</name></author><published>2023-01-31T22:33:51+08:00</published><updated>2023-01-31T22:33:51+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/electrical-engineering-circuits-basics-1/8051-display-2023.webp" height="2108" width="1044"><figcaption></figcaption>
         </figure><h2 id="前言" class="headerLink">
