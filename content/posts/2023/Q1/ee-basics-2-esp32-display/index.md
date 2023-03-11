@@ -30,10 +30,7 @@ aliases:
 
 - [3.5 寸电阻触摸屏，480 * 320，SPI 协议，显示屏驱动 IC 为 ILI9488](http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU:MSP3520)
 
-开发板是 ESP-WROOM-32 模组，板子的引脚定义与下图一致：
-
-{{<figure src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%">}}
-
+开发板是 ESP-WROOM-32 模组开发板。
 其他需要的东西：杜邦线、面包板、四个 10 K$\Omega$ 电阻、四个按键。
 
 至于需要的依赖库，我找到如下几个 stars 数较高的支持 ILI9488 + ESP32 的显示屏驱动库：
@@ -61,10 +58,28 @@ ESP32 开发有好几种方式：
 pio project init --ide=vscode -d tft_esp32_arduino
 ```
 
-这条命令会创建一个空项目，并配置好 vscode 插件相关配置。
+这条命令会创建一个空项目，并配置好 vscode 插件相关配置，这样就算完成了一个空的项目框架。
+
+### 1. 显示屏接线与项目参数配置
+
+网上简单搜了下 ESP32 pinout，找到这张图，引脚定义与我的 ESP32 开发板完全一致，用做接线参考：
+
+{{<figure src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%">}}
+
+可以看到这块 ESP32 开发板有两个 SPI 端口：HSPI 跟 VSPI，这里我们使用 HSPI，那么 MOSI/MISO/SCK 三个引脚的接线必须与上图的定义完全一致。
+而其他引脚随便找个普通 GPIO 口接上就行。
+
+此外背光灯的线我试了下接 GPIO 口不好使，建议直接接在 3V3 引脚上（缺点就是没法通过程序关闭背光，问题不大）。
+
+我的接线如下：
+
+{{<figure src="/images/ee-basics-2-esp32-display/esp32-spi-display-wiring.webp" width="70%" title="使用 wokwi.com 制作的示意图">}}
+{{<figure src="/images/ee-basics-2-esp32-display/esp32-spi-display-wiring-real.webp" width="70%" title="接线实操">}}
 
 
-创建完成后使用如下内容覆盖 `platformio.ini` 的配置（内容主要来自 [Bodmer/TFT_eSPI/docs/PlatformIO](https://github.com/Bodmer/TFT_eSPI/tree/master/docs/PlatformIO)，我做了一点更新）：
+线接好后需要更新下 PlatformIO 项目根目录 `platformio.ini` 的配置，使其显示屏引脚相关的参数与我们的接线完全对应起来，这样才能正常驱动这个显示屏。
+
+这里我以驱动库官方提供的模板 [Bodmer/TFT_eSPI/docs/PlatformIO](https://github.com/Bodmer/TFT_eSPI/tree/master/docs/PlatformIO) 为基础，更新了其构建参数对应的引脚，加了点注释，得到的内容如下（如果你的接线与我一致，直接抄就行）：
 
 ```ini
 [env:esp32dev]
@@ -89,8 +104,10 @@ build_flags =
   # SPI 引脚的接线方式，
   -DTFT_MISO=12
   -DTFT_MOSI=13
+  # SCLK 在显示屏上对应的引脚可能叫 SCK，是同一个东西
   -DTFT_SCLK=14
   -DTFT_CS=15
+  # DC 在显示屏上对应的引脚可能叫 RS 或者 DC/RS，是同一个东西
   -DTFT_DC=4
   -DTFT_RST=2
   # 背光暂时直接接在 3V3 上
@@ -98,7 +115,7 @@ build_flags =
   # 触摸，暂时不用
   ;-DTOUCH_CS=22
   -DLOAD_GLCD=1
-  # 其他配置
+  # 其他配置，保持默认即可
   -DLOAD_FONT2=1
   -DLOAD_FONT4=1
   -DLOAD_FONT6=1
@@ -109,20 +126,7 @@ build_flags =
   -DSPI_FREQUENCY=27000000
 ```
 
-修好后保存修改，platformio 将自动检测到配置文件变更，并开始根据配置文件下载 Arduino/ESP32 工具链，更新构建配置、拉取依赖库（建议开个全局代理，不然下载会贼慢）。
-
-### 2. 显示屏接线
-
-再看一下我板子的引脚定义：
-
-{{<figure src="/images/ee-basics-2-esp32-display/ESP32-DOIT-DEVKIT-V1-Board-Pinout-36-GPIOs-updated.webp" width="70%">}}
-
-可以看到这块 ESP32 开发板有两个 SPI 端口：HSPI 跟 VSPI，这里我们使用 HSPI，那么 MOSI/MISO/SCK 三个引脚的接线必须与上图的定义完全一致。
-而其他引脚随便找个普通 GPIO 口接上就行。
-
-此外背光灯的线我试了下接 GPIO 口不好使，建议直接接在 3V3 引脚上（缺点就是没法通过程序关闭背光，问题不大）。
-
-线接好后，再按照你的接线方式修改前面的 `platformio.ini` 中的引脚配置，把数字改对，这样就完成配置啦。
+修好后保存修改，platformio 将会自动检测到配置文件变更，并根据配置文件下载 Arduino/ESP32 工具链，更新构建配置、拉取依赖库（建议开个全局代理，不然下载会贼慢）。
 
 ### 3. 测试验证
 
@@ -196,7 +200,7 @@ void loop() {}
 {{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="60%">}}
 
 
-## 三、移植一个我多年前写的贪吃蛇游戏
+## 三、写个极简贪吃蛇游戏
 
 N 年前我写的第一篇博客文章，是用 C 语言写一个贪吃蛇，这里把它移植过来玩玩看~
 
@@ -207,7 +211,6 @@ N 年前我写的第一篇博客文章，是用 C 语言写一个贪吃蛇，这
 首先清空 `src` 文件夹，新建文件 `src/main.ino`，内容如下，其中主要逻辑均移植自我前面贴的文章：
 
 ```c
-
 #include <math.h>
 #include <stdio.h>
 #include <TFT_eSPI.h> // Hardware-specific library
@@ -402,10 +405,36 @@ void eat_self()
 接线方式如下，主要原理就是通过 GND 接线，使四个方向键对应的 GPIO 口默认值为低电平。
 当按键按下时，GPIO 口会被拉升成高电平，从而使程序识别到该按键被按下。
 
-接线示意图如下（使用 [wokwi](https://wokwi.com/) 绘制）：
+接线示意图如下（简单起见，省略了前面的显示屏接线部分）：
 
-{{<figure src="/images/ee-basics-2-esp32-display/esp32-wiring-4-buttons.webp" width="60%">}}
+{{<figure src="/images/ee-basics-2-esp32-display/esp32-wiring-4-buttons.webp" width="60%" title="使用 wokwi.com 制作的示意图">}}
 
 现在运行程序，效果如下（手上只有两个按键，所以是双键模式请见谅...）：
 
 {{< bilibili id=BV1jT411e7HJ >}}
+
+<!-- 
+因为买的摇秆有问题，没焊好，各种锡把引脚连在了一起，暂时放弃此想法。
+
+## 四、换成用摇杆控制贪吃蛇吧
+
+用按键控制总还是差了点意思，换成用摇杆控制看看是不是更爽一点。
+
+之前在淘宝上买的一堆元件中有一个 HW-504 摇秆，查了下找到这篇文章 [arduino-joystick](https://arduinogetstarted.com/tutorials/arduino-joystick) 详细说明了怎么在 Arduino 中用它，在 ESP32-Arduino 上使用方法也完全类似。
+
+根据其说明，HW-504 这类摇秆的五个引脚功能分别如下：
+
+- GDN: 接地
+- VCC/5V: 接 5V 电源
+- VRx 与 VRy: 分别输出 X 轴与 Y 轴的偏移量，是模拟信号
+- SW: 对应摇秆内部的按键，按下摇秆会使 SW 输出高电平
+
+我们暂时用不到摇秆的按键，所以只需要接上另外四根引脚就行，而 VRx 与 VRy 因为输出的是模拟量，需要用到 ESP32 的 ADC 功能（Analog to Digital Converter 模数转换器）。
+
+根据 ESP32 官方文档 [Analog to Digital Converter (ADC) - ESP32  Peripherals API](https://docs.espressif.com/projects/esp-idf/en/v4.4.4/esp32/api-reference/peripherals/adc.html) 描述，ESP32 包含两个模数转换器 ADC1 与 ADC2，其中 ADC2 在启用 Wi-Fi 时会被 WiFi 占用导致无法使用，所以我们写程序通常仅使用 ADC1。
+
+然后根据前面的文章内容修改 C 代码，用摇秆控制逻辑取代掉按键相关的内容，改好后的代码内容如下：
+
+```c
+
+``` -->
