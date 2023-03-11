@@ -708,7 +708,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - Linux 驱动开发方面的出版书籍
   - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): 2022 年发布，Linux 驱动编程方面的新书，基于 Linux 5.10，amazon 上评价不错，暂时只有英文版
   - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 2018 年，内容跟上一本比较类似，代码已更新至 Linux 5.4，不过好像多一些实验内容，learn-by-doing 模式，Amazon 上评价挺好。
-- [Linux Kernel Programming: A comprehensive guide to kernel internals, writing kernel modules, and kernel synchronization](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
+- [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
 

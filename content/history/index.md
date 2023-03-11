@@ -25,7 +25,8 @@ comment:
 ### 2023-03-11
 
 - 把我用剩的电话卡、以及玩电子的一些元件打包寄给了我妹玩。
-- 继续学习鲁班猫 Linux 驱动开发、镜像构建与部署。
+- 野火的 Linux 驱动开发教程看了感觉没啥乐趣，不知道从何下手，于是开始读 Linux Driver Development for Embedded Processors 2nd Edition
+  - 根据书中内容跨平台编译 Raspberry Pi 4 的 Linux 内核失败，换成跟着 [Cross-Compiling the Kernel - Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/computers/linux_kernel.html#cross-compiling-the-kernel) 编译，一次成功，使用 5900HX 全量编译总用时 6 分钟多一点。
 
 ### 2023-03-10
 
