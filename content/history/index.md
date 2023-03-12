@@ -22,10 +22,16 @@ comment:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+### 2023-03-12
+
+- 跟朋友去游泳，算是今年最剧烈的一次运动了...
+  - 注：预计下周去深圳东西冲穿越海岸线，那将是一项更大的挑战。去年到玩得贼爽（去年是 6 月份去的，很晒、很热、喝了很多水）。
+- 继续学 Linux 驱动开发，读了「Linux Driver Development for Embedded Processors 2nd Edition」跟「[Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)」，发现第二本书更新，而且写得更好。
+
 ### 2023-03-11
 
 - 把我用剩的电话卡、以及玩电子的一些元件打包寄给了我妹玩。
-- 野火的 Linux 驱动开发教程看了感觉没啥乐趣，不知道从何下手，于是开始读 Linux Driver Development for Embedded Processors 2nd Edition
+- 野火的 Linux 驱动开发教程看了感觉没啥乐趣，不知道从何下手，于是开始读「Linux Driver Development for Embedded Processors 2nd Edition」
   - 根据书中内容跨平台编译 Raspberry Pi 4 的 Linux 内核失败，换成跟着 [Cross-Compiling the Kernel - Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/computers/linux_kernel.html#cross-compiling-the-kernel) 编译，一次成功，使用 5900HX 全量编译总用时 6 分钟多一点。
 
 ### 2023-03-10

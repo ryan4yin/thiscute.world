@@ -18,9 +18,9 @@ toc:
 
 >按优先级排序
 
-- Linux Driver Development for Embedded Processors 2nd Edition
+- [Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)
 - 英语阅读
-  - The Great Gatsby - 2/41
+  - The Great Gatsby - 3/41
 - 英语单词与听力练习
   - 一点英语 270 天英语学习        - 184/270 (漏打卡 98 天...)
 
