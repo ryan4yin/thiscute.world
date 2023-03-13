@@ -27,6 +27,7 @@ comment:
 - 跟朋友去游泳，算是今年最剧烈的一次运动了...
   - 注：预计下周去深圳东西冲穿越海岸线，那将是一项更大的挑战。去年到玩得贼爽（去年是 6 月份去的，很晒、很热、喝了很多水）。
 - 继续学 Linux 驱动开发，读了「Linux Driver Development for Embedded Processors 2nd Edition」跟「[Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)」，发现第二本书更新，而且写得更好。
+  - 了解了一个 Hello World 内核模块是怎么编写、编译、加载、卸载的。
 
 ### 2023-03-11
 
