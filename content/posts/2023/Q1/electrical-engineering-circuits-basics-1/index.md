@@ -706,7 +706,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
      2. [基于鲁班猫 RK356X 系列板卡](https://doc.embedfire.com/linux/rk356x/driver/zh/latest/index.html)
   3. [Linux 镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/index.html)
 - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
-    - 另外还有本 2018 年出的 [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition) 可当作参考书看，它写得没上面那本好、内容也没那么新，但是看评价也不错，包含许多的 Lab 可做。
+    - 另外还有本 2018 年出的 [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition) 可当作参考书看，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
 - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。

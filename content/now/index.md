@@ -54,6 +54,8 @@ toc:
 - The Moon and Sixpence
 
 正在读：
+- [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
+- [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 
 
@@ -84,16 +86,28 @@ toc:
 
 ### 1. 高优先级
 
-#### 电子电路
+#### 嵌入式/物联网
 
-电子电路是我 2022 年底开的新坑，目前兴趣强烈。
+嵌入式跟 IoT 是我 2022 年底开的新坑，目前兴趣强烈。
 
-- 书籍
+我目前收集的相关内容（仅是一个资料合集，内容有重复的）：
+
+- 嵌入式 Linux 系列
+  - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
+  - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
+  - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
+  - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
+  - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从 bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一下。 
+- 从零开始造 OS
+  - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
+  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
+  - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
+- 电路原理
   - Practical Electronics for Inventors, Fourth Edition
 - 芯片
   - STM32 ESP32 RK3588s 
 - 目前的学习目标
-  - DIY 无人机编队飞行！
+  - DIY 无人机编队飞行！要达成这个目标需要学习的东西有点多，慢慢努力吧~
 
 #### 操作系统
 
@@ -105,9 +119,6 @@ toc:
 - 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
 - [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
 - 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
-- 给 raspberrypi 写 os 系列
-  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
-  - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
 - Linux 系统
   - 极客时间 《Linux 内核技术实战课》
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
