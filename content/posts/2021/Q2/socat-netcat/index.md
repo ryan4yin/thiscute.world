@@ -60,7 +60,7 @@ brew install socat
 
 ## 三、常用命令
 
-#### 1. 检测远程端口的可连接性
+### 1. 检测远程端口的可连接性
 
 >很多人会用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
 telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat
@@ -81,7 +81,7 @@ nc -vz 192.168.1.2 8080
 nc -vv -w2 -z 192.168.1.2 20-500
 ```
 
-#### 2. 测试本机端口是否能被外部访问
+### 2. 测试本机端口是否能被外部访问
 
 在本机监听一个 TCP 端口，接收到的内容传到 stdout，同时将 stdin 的输入传给客户端：
 
@@ -121,7 +121,7 @@ socat UDP-LISTEN:7000 -
 socat UDP:192.168.31.123:7000 -
 ```
 
-#### 3. 调试 TLS 协议
+### 3. 调试 TLS 协议
 
 >参考 socat 官方文档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
 
