@@ -17,7 +17,7 @@ categories: ["tech"]
 
 netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 `nc`.
 
-而 socat(socket cat)，官方文档描述它是 `"netcat++" (extended design, new implementation)`，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。
+而 [socat(socket cat)](https://github.com/3ndG4me/socat)，官方文档描述它是 `"netcat++" (extended design, new implementation)`，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。
 
 
 在不方便安装 socat 的环境中，我们可以使用系统自带的 netcat.
@@ -60,11 +60,9 @@ brew install socat
 
 ## 三、常用命令
 
-### 1. 网络调试
+#### 1. 检测远程端口的可连接性
 
-#### 1.1 检测远程端口的可连接性（确认防火墙没问题）
-
->以前你可能学过如何用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
+>很多人会用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
 telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat
 
 使用 socat/netcat 检测远程端口的可连接性：
@@ -83,7 +81,7 @@ nc -vz 192.168.1.2 8080
 nc -vv -w2 -z 192.168.1.2 20-500
 ```
 
-#### 1.2 测试本机端口是否能正常被外部访问（检测防火墙、路由）
+#### 2. 测试本机端口是否能被外部访问
 
 在本机监听一个 TCP 端口，接收到的内容传到 stdout，同时将 stdin 的输入传给客户端：
 
@@ -123,7 +121,7 @@ socat UDP-LISTEN:7000 -
 socat UDP:192.168.31.123:7000 -
 ```
 
-#### 1.3 调试 TLS 协议
+#### 3. 调试 TLS 协议
 
 >参考 socat 官方文档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
 
@@ -162,7 +160,7 @@ socat - openssl-connect:192.168.31.123:4433,cafile=ca.crt
 curl -v --cacert ca.crt https://192.168.31.123:4433
 ```
 
-## 2. 数据传输
+### 4. 数据传输
 
 通常传输文件时，我都习惯使用 scp/ssh/rsync，但是 socat 其实也可以传输文件。
 
@@ -192,7 +190,7 @@ nc -l -p 8080 > demo.tar.gz
 nc 192.168.1.2 8080 < demo.tar.gz
 ```
 
-## 3. 担当临时的 web 服务器
+### 5. 担当临时的 web 服务器
 
 使用 `fork` `reuseaddr` `SYSTEM` 三个命令，再用 `systemd`/`supervisor` 管理一下，就可以用几行命令实现一个简单的后台服务器。
 
@@ -224,7 +222,7 @@ python3 -m http.server 8000 --directory /tmp/
 python -m SimpleHTTPServer 8000
 ```
 
-## 4. 端口转发
+### 6. 端口转发
 
 监听 8080 端口，建立该端口与 `baidu.com:80` 之间的双向管道:
 
@@ -244,6 +242,30 @@ curl -v -H 'Host: baidu.com' localhost:8080
 ```shell
 socat TCP-LISTEN:5432,fork,reuseaddr  TCP:localhost:3658
 ```
+
+### 7. 端口扫描
+
+netcat 支持简单的端口扫描功能，如下示例扫描 192.168.1.2 从 8000 到 9000 的所有端口号：
+
+```
+nc -vv -w3 -z 192.168.1.2 8000-9000
+```
+
+socat 貌似不支持这项功能，估计是更建议使用专业的 nmap 吧。
+
+### 其他
+
+socat 还提供了丰富的 examples 与 tutorials，介绍了许多其他用法，包括：
+
+- [Building TUN based virtual networks with socat](http://www.dest-unreach.org/socat/doc/socat-tun.html): 构造 TUN 虚拟网卡
+- [IP Multicasting with Socat](http://www.dest-unreach.org/socat/doc/socat-multicast.html): 支持 IP 包广播，将管道另一端设为一个 CIDR 网段
+- etc...
+
+
+详见官方文档：
+
+- [socat - Multipurpose relay](http://www.dest-unreach.org/socat/)
+- [nc-openbsd man page](https://man.openbsd.org/nc.1)
 
 
 ## 参考
