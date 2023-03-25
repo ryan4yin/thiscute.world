@@ -46,7 +46,7 @@ var myFriends = [
     ["https://rea.ink/", "/avatar/rea.ink.webp", "@倾书", "清风皓月，光景常新 <= 前端"], 
     ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
     // ["https://www.i-lab.top/", "https://www.i-lab.top/favicon.ico", "@震邦的算法日常", "南北传"], 
-    ["https://noif.cc/", "https://noif.cc/avatar.webp", "@单单", "但知行好事，莫要问前程"], 
+    ["https://nopdan.com/", "https://nopdan.com/avatar.webp", "@单单", "但知行好事，莫要问前程"], 
     ["https://farer.org/", "/avatar/farer.webp", "@Stray Episode", "Scientific Evocation"], 
     ["https://wasteland.touko.moe", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
     ["https://blog.k8s.li/", "/avatar/muzi.webp", "@木子", "垃圾佬、搬砖社畜、运维工程师 <= 莫得感情的读书机器"], 
