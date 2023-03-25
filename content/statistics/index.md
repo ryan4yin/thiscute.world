@@ -17,6 +17,10 @@ toc:
 
 {{< statistics_trendingposts  >}}
 
+<!--
+
+由于主题异步加载的原因，此处的 echarts 图表无法正常显示，暂时注释掉。
+
 ## 三、文章发布周期与数量统计
 
 
@@ -25,6 +29,8 @@ toc:
 {{< statistics_echart_posts_count >}}
 
 {{< /echarts >}}
+
+-->
 
 ## 四、说明
 
