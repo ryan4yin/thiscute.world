@@ -1,5 +1,5 @@
 # based on https://github.com/peaceiris/actions-hugo
-name: update main
+name: update & deploy
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
     - cron: "36 5 * * *"  # 分 时 日 月 周
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  update:
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
@@ -43,21 +43,6 @@ jobs:
           git commit -m "feat: update data/"
           git push
           git clean -fxd
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.111.3'
-          extended: true  #  need extended version to support SASS/SCSS
-
-      - name: Build
-        run: hugo --minify --debug --printUnusedTemplates
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          cname: thiscte.world
 
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -69,3 +54,31 @@ jobs:
           node push_argolia_index.js
         env:
           ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
+  # generate static files using dedicated job with pure clean environment
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: [update]  # depends on job `update`
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.110.0'
+          extended: true  #  need extended version to support SASS/SCSS
+
+      - name: Build
+        run: hugo --minify --debug --printUnusedTemplates
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          cname: thiscte.world
