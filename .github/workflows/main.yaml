@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - main
-  # schedule:
-  #   - cron: "0 */6 * * *"  # 分 时 日 月 周
+  schedule:
+    - cron: "36 5 * * *"  # 分 时 日 月 周
 
 jobs:
   deploy:
@@ -46,19 +46,18 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.101.0'
+          hugo-version: '0.111.3'
           extended: true  #  need extended version to support SASS/SCSS
 
       - name: Build
         run: hugo --minify --debug --printUnusedTemplates
 
-      # 自动构建出的 pages 目前有问题，mermaid/music 等 shortcodes 无法正常加载，先不 push
-      # - name: Deploy
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./public
-      #     cname: thiscte.world
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          cname: thiscte.world
 
       - name: Use Node.js
         uses: actions/setup-node@v3

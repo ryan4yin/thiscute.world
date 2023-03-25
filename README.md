@@ -24,6 +24,10 @@ hugo server --debug --buildDrafts --disableFastRender
 
 # serve in production mode
 hugo serve -e production --disableFastRender
+
+# or serve using the static files generated in production mode
+# need to install caddy first
+caddy file-server --root public/ --listen 0.0.0.0:8881
 ```
 
 Now edit the newly created file under `content/posts`, and then you can view the live changes in the browser <http://localhost:1313/>
