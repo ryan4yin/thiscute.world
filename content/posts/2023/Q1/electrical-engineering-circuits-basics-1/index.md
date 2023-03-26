@@ -701,11 +701,9 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - 《[Linux/Unix 系统编程手册](https://man7.org/tlpi/index.html)》：讲解 Linux 的主要系统 API
 - 野火嵌入式 Linux 系列教程：
   1. [基础使用 + 内核编程](https://doc.embedfire.com/linux/imx6/linux_base/zh/latest/index.html)：感觉跟《Linux/Unix 系统编程手册》内容是重复的，可以简单过一过
-  2. 野火家的裸机开发与 Linux 驱动开发入门教程
-     1. [基于 IMX6ULL](https://doc.embedfire.com/products/link/zh/latest/linux/ebf_i.mx6ull_doc.html)
-     2. [基于鲁班猫 RK356X 系列板卡](https://doc.embedfire.com/linux/rk356x/driver/zh/latest/index.html)
-  3. [Linux 镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/index.html)
-- [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
+  2. [Linux 镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/index.html): 跟随此文档自己构建一个 Linux 镜像部署到板卡上，这样可以更好的理解 Linux 的启动过程
+  3. [Linux 驱动开发入门 - 基于鲁班猫 RK356X 系列板卡](https://doc.embedfire.com/linux/rk356x/driver/zh/latest/index.html): Linux 驱动开发入门教程。
+- [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。内容跟野火的教程差不多，可以对照学习。
     - 另外还有本 2018 年出的 [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition) 可当作参考书看，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
 - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
