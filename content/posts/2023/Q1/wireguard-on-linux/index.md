@@ -99,7 +99,7 @@ linux/amd64, go1.20, 055b2c3
 [#] wg setconf wg0 /dev/fd/63              # 设置 wireguard 设备的配置
 [#] ip -4 address add 10.13.13.1 dev wg0   # 为 wireguard 设备添加一个 ip 地址
 [#] ip link set mtu 1420 up dev wg0        # 设置 wireguard 设备的 mtu
-[#] ip -4 route add 10.13.13.2/32 dev wg0  # 为 wireguard peer1 添加路由
+[#] ip -4 route add 10.13.13.2/32 dev wg0  # 为 wireguard peer1 添加路由，其地址来自 wireguard 配置的 `allowedIPs` 参数
 # 下面这几条 iptables 命令为 wireguard 设备添加 NAT 规则，使其成为 WireGuard 虚拟网络的默认网关
 # 并使虚拟网络内的其他 peers 能通过此默认网关访问外部网络。
 [#] iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth+ -j MASQUERADE
@@ -107,8 +107,6 @@ linux/amd64, go1.20, 055b2c3
 ```
 
 通过日志能看到，程序首先创建了 WireGuard 设备 wg0 并绑定了地址 `10.13.13.1`。作为 WireGuard 网络中的服务端，它所创建的这个 wg0 的任务是成为整个 WireGuard 虚拟网络的默认网关，处理来自虚拟网络内的其他 peers 的流量，构成一个星型网络。
-
->注意 WireGuard 本身只是一个点对点隧道协议，基于它能构建各种复杂的网络拓扑，比如星型、环型、树型等等。
 
 然后服务端为它所生成的 peer1 添加了一个路由，使得 peer1 的流量能够被正确路由到 wg0 设备上。
 
@@ -118,6 +116,32 @@ linux/amd64, go1.20, 055b2c3
 - `iptables -t nat -A POSTROUTING -o eth+ -j MASQUERADE`：在 eth+ 网卡上添加 MASQUERADE 规则，即将数据包的源地址伪装成 eth+ 网卡的地址，目的是为了允许 wireguard 的数据包通过 NAT 访问外部网络。
   - 而回来的流量会被 NAT 的 conntrack 链接追踪规则自动允许通过，不过 conntrack 表有自动清理机制，长时间没流量的话会被从 conntrack 表中移除。这就是前面 `docker-compose.yml` 中的 `PERSISTENTKEEPALIVE_PEERS=all` 参数解决的问题通过定期发送心跳包来保持 conntrack 表中的连接信息。
   - 这里还涉及到了 NAT 穿越相关内容，就不多展开了，感兴趣的可以自行了解。
+
+WireGuard 的实现中还有一个比较重要的概念叫做 `AllowedIPs`，它是一个 IP 地址列表，表示允许哪些 IP 地址的流量通过 WireGuard 虚拟网络。
+为了详细说明这一点，我们先看下服务端配置文件夹中 wg0 的配置：
+
+```shell
+$ cat wg0.conf
+[Interface]
+Address = 10.13.13.1
+ListenPort = 51820
+PrivateKey = kGZzt/CU2MVgq19ffXB2YMDSr6WIhlkdlL1MOeGH700=
+# wg0 隧道启动后添加 iptables 规则
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth+ -j MASQUERADE
+# wg0 隧道停止后删除前面添加的 iptables 规则
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth+ -j MASQUERADE
+
+[Peer]
+# peer1
+PublicKey = HR8Kp3xWIt2rNdS3aaCk+Ss7yQqC9cn6h3WS6UK3WE0=
+PresharedKey = 7mCNCZdMKeRz1Zrpl9bFS08jJAdv6/USazRVq7tjznY=
+# AllowedIPs 设置为 peer1 的虚拟 IP 地址，表示允许 peer1 的流量通过 WireGuard 虚拟网络
+AllowedIPs = 10.13.13.2/32
+```
+
+`AllowedIPs` 实际就是每个 peer 在服务端路由表中的 ip 地址，它既可以是 ip 也可以是网段，而且能设置多个，这使所有 peer 都可以负责一个甚至多个 ip 段的转发，也就是充当局域网的路由器——VPN 子路由。
+
+WireGuard 本身只是一个点对点隧道协议，它非常通用。通过 `AllowedIPs` 参数，我们就能在每个 peer 上添加各 peers 的配置与不同的路由规则，构建出各种复杂的网络拓扑，比如星型、环型、树型等等。
 
 ## WireGuard 客户端网络分析
 
@@ -147,6 +171,8 @@ PresharedKey = 7mCNCZdMKeRz1Zrpl9bFS08jJAdv6/USazRVq7tjznY=
 Endpoint = 192.168.5.198:51820
 AllowedIPs = 0.0.0.0/0
 ```
+
+>插入下，这个 Endpoint 的地址也很值得一说，能看到服务端 wg0.conf 的配置中，peer1 并未被设置任何 Endpoint，这实质是表示这个 peer1 的 Endpoint 是动态确认的，也就是说每次 peer1 发送数据到服务端 wg0 时，服务端验证了数据有效性后，就会以数据包的来源 IP 地址作为 peer1 的 Endpoint，这样 peer1 就可以随意更换自己的 IP 地址，而 WireGuard 隧道仍然能正常工作（IP 频繁更换的一个典型场景就是手机的网络漫游与 WiFi 切换）。这使 WireGuard 具备了比较明显的无连接特性，也就是说 WireGuard 隧道不需要保持一个什么连接，切换网络也不需要重连，只要数据包能够到达服务端，就能够正常工作。
 
 因为我这里是内网环境测试，配置文件中的 `Peer` - `Endpoint` 的 IP 地址直接用服务端的内网 IP 地址就行，也就是 `192.168.5.198`。
 
