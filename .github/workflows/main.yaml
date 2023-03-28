@@ -43,17 +43,6 @@ jobs:
           git commit -m "feat: update data/"
           git push
           git clean -fxd
-  # generate static files using dedicated job with pure clean environment
-  deploy:
-    runs-on: ubuntu-22.04
-    needs: [update]  # depends on job `update`
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
