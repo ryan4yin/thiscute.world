@@ -41,7 +41,7 @@ WireGuard 在 2020 年初进入 Linux 主线分支，随后成为 Linux 5.6 的�
 
 在这篇文章里，我将搭建一个简单的单服务器 + 单客户端 WireGuard 网络，然后通过它来分析 WireGuard 的网络原理，服务器与客户端均使用 Ubuntu 20.04 系统，内核版本为 5.15，也就是说都包含了 wireguard 内核模块。
 
-## 部署 WireGuard 服务端
+## WireGuard 服务端网络分析
 
 简单起见，这里使用 docker-compose 启动一个 WireGuard 服务端，使用的镜像是 [linuxserver/docker-wireguard](https://github.com/linuxserver/docker-wireguard)。
 
@@ -87,9 +87,7 @@ services:
 docker-compose up -d
 ```
 
-## 分析 WireGuard 服务端网络
-
-前面已经将 WireGuard 服务端启动好了，现在通过查看下服务端容器的日志（我加了详细注释说明）：
+WireGuard 服务端启动好了，现在通过查看下服务端容器的日志（我加了详细注释说明）：
 
 ```shell
 $ docker logs wireguard
@@ -121,7 +119,7 @@ linux/amd64, go1.20, 055b2c3
   - 而回来的流量会被 NAT 的 conntrack 链接追踪规则自动允许通过，不过 conntrack 表有自动清理机制，长时间没流量的话会被从 conntrack 表中移除。这就是前面 `docker-compose.yml` 中的 `PERSISTENTKEEPALIVE_PEERS=all` 参数解决的问题通过定期发送心跳包来保持 conntrack 表中的连接信息。
   - 这里还涉及到了 NAT 穿越相关内容，就不多展开了，感兴趣的可以自行了解。
 
-## 启动 WireGuard 客户端
+## WireGuard 客户端网络分析
 
 >我这里为了测试方便，客户端与服务端都在我的局域网内。
 
