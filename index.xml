@@ -127,7 +127,7 @@
 </span></span><span class="line"><span class="cl"><span class="o">[</span><span class="c1">#] wg setconf wg0 /dev/fd/63              # 设置 wireguard 设备的配置</span>
 </span></span><span class="line"><span class="cl"><span class="o">[</span><span class="c1">#] ip -4 address add 10.13.13.1 dev wg0   # 为 wireguard 设备添加一个 ip 地址</span>
 </span></span><span class="line"><span class="cl"><span class="o">[</span><span class="c1">#] ip link set mtu 1420 up dev wg0        # 设置 wireguard 设备的 mtu</span>
-</span></span><span class="line"><span class="cl"><span class="o">[</span><span class="c1">#] ip -4 route add 10.13.13.2/32 dev wg0  # 为 wireguard peer1 添加路由</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span><span class="c1">#] ip -4 route add 10.13.13.2/32 dev wg0  # 为 wireguard peer1 添加路由，其地址来自 wireguard 配置的 `allowedIPs` 参数</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 下面这几条 iptables 命令为 wireguard 设备添加 NAT 规则，使其成为 WireGuard 虚拟网络的默认网关</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 并使虚拟网络内的其他 peers 能通过此默认网关访问外部网络。</span>
 </span></span><span class="line"><span class="cl"><span class="o">[</span><span class="c1">#] iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth+ -j MASQUERADE</span>
@@ -135,9 +135,6 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过日志能看到，程序首先创建了 WireGuard 设备 wg0 并绑定了地址 <code>10.13.13.1</code>。作为 WireGuard 网络中的服务端，它所创建的这个 wg0 的任务是成为整个 WireGuard 虚拟网络的默认网关，处理来自虚拟网络内的其他 peers 的流量，构成一个星型网络。</p>
-<blockquote>
-<p>注意 WireGuard 本身只是一个点对点隧道协议，基于它能构建各种复杂的网络拓扑，比如星型、环型、树型等等。</p>
-</blockquote>
 <p>然后服务端为它所生成的 peer1 添加了一个路由，使得 peer1 的流量能够被正确路由到 wg0 设备上。</p>
 <p>最后为了让 WireGuard 虚拟网络内的其他 peers 的流量能够通过 wg0 设备访问外部网络或者互相访问，服务端为 wg0 设备添加了如下的 iptables 规则：</p>
 <ul>
@@ -149,6 +146,48 @@
 </ul>
 </li>
 </ul>
+<p>WireGuard 的实现中还有一个比较重要的概念叫做 <code>AllowedIPs</code>，它是一个 IP 地址列表，表示允许哪些 IP 地址的流量通过 WireGuard 虚拟网络。
+为了详细说明这一点，我们先看下服务端配置文件夹中 wg0 的配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cat wg0.conf
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Interface<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">Address</span> <span class="o">=</span> 10.13.13.1
+</span></span><span class="line"><span class="cl"><span class="nv">ListenPort</span> <span class="o">=</span> <span class="m">51820</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PrivateKey</span> <span class="o">=</span> kGZzt/CU2MVgq19ffXB2YMDSr6WIhlkdlL1MOeGH700<span class="o">=</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># wg0 隧道启动后添加 iptables 规则</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PostUp</span> <span class="o">=</span> iptables -A FORWARD -i %i -j ACCEPT<span class="p">;</span> iptables -A FORWARD -o %i -j ACCEPT<span class="p">;</span> iptables -t nat -A POSTROUTING -o eth+ -j MASQUERADE
+</span></span><span class="line"><span class="cl"><span class="c1"># wg0 隧道停止后删除前面添加的 iptables 规则</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PostDown</span> <span class="o">=</span> iptables -D FORWARD -i %i -j ACCEPT<span class="p">;</span> iptables -D FORWARD -o %i -j ACCEPT<span class="p">;</span> iptables -t nat -D POSTROUTING -o eth+ -j MASQUERADE
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Peer<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># peer1</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PublicKey</span> <span class="o">=</span> HR8Kp3xWIt2rNdS3aaCk+Ss7yQqC9cn6h3WS6UK3WE0<span class="o">=</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PresharedKey</span> <span class="o">=</span> 7mCNCZdMKeRz1Zrpl9bFS08jJAdv6/USazRVq7tjznY<span class="o">=</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># AllowedIPs 设置为 peer1 的虚拟 IP 地址，表示允许 peer1 的流量通过 WireGuard 虚拟网络</span>
+</span></span><span class="line"><span class="cl"><span class="nv">AllowedIPs</span> <span class="o">=</span> 10.13.13.2/32
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>AllowedIPs</code> 实际就是每个 peer 在服务端路由表中的 ip 地址，它既可以是 ip 也可以是网段，而且能设置多个，这使所有 peer 都可以负责一个甚至多个 ip 段的转发，也就是充当局域网的路由器——VPN 子路由。</p>
+<p>WireGuard 本身只是一个点对点隧道协议，它非常通用。通过 <code>AllowedIPs</code> 参数，我们就能在每个 peer 上添加各 peers 的配置与不同的路由规则，构建出各种复杂的网络拓扑，比如星型、环型、树型等等。</p>
 <h2 id="wireguard-客户端网络分析" class="headerLink">
     <a href="#wireguard-%e5%ae%a2%e6%88%b7%e7%ab%af%e7%bd%91%e7%bb%9c%e5%88%86%e6%9e%90" class="header-mark"></a>WireGuard 客户端网络分析</h2><blockquote>
 <p>我这里为了测试方便，客户端与服务端都在我的局域网内。</p>
@@ -197,7 +236,10 @@
 </span></span><span class="line"><span class="cl"><span class="nv">AllowedIPs</span> <span class="o">=</span> 0.0.0.0/0
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>因为我这里是内网环境测试，配置文件中的 <code>Peer</code> - <code>Endpoint</code> 的 IP 地址直接用服务端的内网 IP 地址就行，也就是 <code>192.168.5.198</code>。</p>
+</div><blockquote>
+<p>插入下，这个 Endpoint 的地址也很值得一说，能看到服务端 wg0.conf 的配置中，peer1 并未被设置任何 Endpoint，这实质是表示这个 peer1 的 Endpoint 是动态确认的，也就是说每次 peer1 发送数据到服务端 wg0 时，服务端通过认证加密技术认证了数据后，就会以数据包的来源 IP 地址作为 peer1 的 Endpoint，这样 peer1 就可以随意更换自己的 IP 地址，而 WireGuard 隧道仍然能正常工作（IP 频繁更换的一个典型场景就是手机的网络漫游与 WiFi 切换）。这使 WireGuard 具备了比较明显的无连接特性，也就是说 WireGuard 隧道不需要保持一个什么连接，切换网络也不需要重连，只要数据包能够到达服务端，就能够正常工作。</p>
+</blockquote>
+<p>因为我这里是内网环境测试，配置文件中的 <code>Peer</code> - <code>Endpoint</code> 的 IP 地址直接用服务端的内网 IP 地址就行，也就是 <code>192.168.5.198</code>。</p>
 <p>配置文件确认无误后，将该配置文件保存到客户端的 <code>/etc/wireguard/peer1.conf</code> 这个路径下，然后使用如下命令启动 WireGuard 客户端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
