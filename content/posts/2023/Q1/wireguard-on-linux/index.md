@@ -1,5 +1,5 @@
 ---
-title: "Linux 上的 WireGuard 网络原理分析"
+title: "Linux 上的 WireGuard 网络分析（一）"
 date: 2023-03-28T22:19:25+08:00
 lastmod: 2023-03-28T22:19:25+08:00
 draft: false
@@ -309,6 +309,10 @@ $ sudo wg-quick down peer1
 其巧妙之处在于，它不需要修改主路由表，避免了在启动 WireGuard 客户端时需要删除掉原有的默认路由，也避免了在关闭 WireGuard 客户端时需要重新将旧的默认路由添加回来的麻烦。
 
 >我是看了米开朗基杨的 [WireGuard 基础教程：wg-quick 路由策略解读 - 米开朗基扬](https://icloudnative.io/posts/linux-routing-of-wireguard/) 后，才 GET 到这一点。
+
+总之这篇文章简单分析了 wireguard 虚拟网络在 Linux 上的实现，希望对你有所帮助。
+
+下一篇文章（如果有的话...），我会带来更多的 WireGuard 实现细节，敬请期待。
 
 ## 参考
 
