@@ -326,8 +326,6 @@ $ sudo wg-quick down peer1
 
 一通分析，你是否感觉到了 wg-quick 的实现十分巧妙，通过简单几行 iptables/nftables 与 iproute2 命令就在 WireGuard 隧道上实现了一个 VPN 网络，更妙的是只要把新增的这些 iptables/nftables 与 iproute2 规则删除，就能恢复到 WireGuard 未启动的状态，相当于整个工作是完全可逆的（显然前面的 `sudo wg-quick down peer1` 就是这么干的）。
 
-其巧妙之处在于，它不需要修改主路由表，避免了在启动 WireGuard 客户端时需要删除掉原有的默认路由，也避免了在关闭 WireGuard 客户端时需要重新将旧的默认路由添加回来的麻烦。
-
 总之这篇文章简单分析了 wireguard 虚拟网络在 Linux 上的实现，希望对你有所帮助。
 
 下一篇文章（如果有的话...），我会带来更多的 WireGuard 实现细节，敬请期待。
