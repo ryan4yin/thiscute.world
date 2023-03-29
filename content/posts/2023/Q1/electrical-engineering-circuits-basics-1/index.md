@@ -354,6 +354,7 @@ $$R =  \frac{V}{I}$$
 - [上拉电阻的通俗解释](https://www.bilibili.com/video/BV1W34y1579U/)
 - [下拉电阻的通俗解释](https://www.bilibili.com/video/BV1ZU4y1Q7eo/)
 
+再补充一个博友的文章 [单片机的GPIO配置](https://panqiincs.me/2019/09/25/mcu-gpio-settings/)，详细解释了 GPIO 相关的配置原理。
 
 ### 7. 晶振 (Xtal) 与振荡电路
 
