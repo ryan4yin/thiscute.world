@@ -341,19 +341,19 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ ip rule show
-</span></span><span class="line"><span class="cl">0:      from all lookup <span class="nb">local</span>                         <span class="c1"># 0 是最高优先级，`all` 表示所有流量，`lookup local` 表示查找 local 路由表。</span>
-</span></span><span class="line"><span class="cl">                                                      <span class="c1"># local 是一个特殊路由表，包含对本地和广播地址的优先级控制路由。</span>
+</span></span><span class="line"><span class="cl">0:      from all lookup <span class="nb">local</span>   <span class="c1"># 0 是最高优先级，`all` 表示所有流量，`lookup local` 表示查找 local 路由表。</span>
+</span></span><span class="line"><span class="cl">                                <span class="c1"># local 是一个特殊路由表，包含对本地和广播地址的优先级控制路由。</span>
 </span></span><span class="line"><span class="cl">32764:  from all lookup main suppress_prefixlength <span class="m">0</span>  <span class="c1"># 32764 目前是第二优先级，将所有流量路由到　main 路由表，但是排除掉默认路由（前缀/掩码 &lt;= 0）</span>
 </span></span><span class="line"><span class="cl">                                                      <span class="c1"># 功能是让所有非默认路由的流量都走 main 路由表</span>
 </span></span><span class="line"><span class="cl">                                                      <span class="c1"># 这条规则前面实际解释过了，它是 wg-quick 在启动隧道时添加的规则。</span>
-</span></span><span class="line"><span class="cl">32765:  not from all fwmark 0xca6c lookup <span class="m">51820</span>       <span class="c1"># 所有不带 0xca6c 标记（51820 的 16 进制格式）的流量（普通流量），都走 51820 路由表</span>
-</span></span><span class="line"><span class="cl">                                                      <span class="c1"># 也就是都转发到 WireGuard peer1 接口。</span>
-</span></span><span class="line"><span class="cl">                                                      <span class="c1"># 这条规则是前面的 `ip -4 rule add not fwmark 51820 table 51820` 命令添加的。</span>
-</span></span><span class="line"><span class="cl">                                                      <span class="c1"># 而它所匹配的防火墙标记则是由前面的 `wg set peer1 fwmark 51820` 命令设置的。</span>
-</span></span><span class="line"><span class="cl">32766:  from all lookup main                          <span class="c1"># 所有流量都走 main 路由表，当前是不生效状态，因为前面的规则优先级更高。</span>
-</span></span><span class="line"><span class="cl">                                                      <span class="c1"># main 是系统的默认路由表，通常我们使用 ip route 命令都是在这个表上操作。</span>
-</span></span><span class="line"><span class="cl">32767:  from all lookup default                       <span class="c1"># 所有流量都走 default 路由表，当前同样是不生效状态。</span>
-</span></span><span class="line"><span class="cl">                                                      <span class="c1"># default 是一个系统生成的兜底路由表，默认不包含任何路由规则，可用于自定义路由策略，也可删除。</span>
+</span></span><span class="line"><span class="cl">32765:  not from all fwmark 0xca6c lookup <span class="m">51820</span> <span class="c1"># 所有不带 0xca6c 标记（51820 的 16 进制格式）的流量（普通流量），都走 51820 路由表</span>
+</span></span><span class="line"><span class="cl">                                                <span class="c1"># 也就是都转发到 WireGuard peer1 接口。</span>
+</span></span><span class="line"><span class="cl">                                                <span class="c1"># 这条规则是前面的 `ip -4 rule add not fwmark 51820 table 51820` 命令添加的。</span>
+</span></span><span class="line"><span class="cl">                                                <span class="c1"># 而它所匹配的防火墙标记则是由前面的 `wg set peer1 fwmark 51820` 命令设置的。</span>
+</span></span><span class="line"><span class="cl">32766:  from all lookup main    <span class="c1"># 所有流量都走 main 路由表，当前是不生效状态，因为前面的规则优先级更高。</span>
+</span></span><span class="line"><span class="cl">                                <span class="c1"># main 是系统的默认路由表，通常我们使用 ip route 命令都是在这个表上操作。</span>
+</span></span><span class="line"><span class="cl">32767:  from all lookup default <span class="c1"># 所有流量都走 default 路由表，当前同样是不生效状态。</span>
+</span></span><span class="line"><span class="cl">                                <span class="c1"># default 是一个系统生成的兜底路由表，默认不包含任何路由规则，可用于自定义路由策略，也可删除。</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>结合注释看完上面的路由策略，现在你应该理清楚 WireGuard 的路由规则了，它加了条比默认路由策略 <code>32766</code> 优先级更高的路由策略 <code>32765</code>，将所有普通流量都通过它的自定义路由表路由到 peer1 接口。
