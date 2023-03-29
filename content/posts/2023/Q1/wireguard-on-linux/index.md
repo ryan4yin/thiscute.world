@@ -236,19 +236,19 @@ default dev peer1 scope link
 
 ```shell
 $ ip rule show
-0:      from all lookup local                         # 0 是最高优先级，`all` 表示所有流量，`lookup local` 表示查找 local 路由表。
-                                                      # local 是一个特殊路由表，包含对本地和广播地址的优先级控制路由。
+0:      from all lookup local   # 0 是最高优先级，`all` 表示所有流量，`lookup local` 表示查找 local 路由表。
+                                # local 是一个特殊路由表，包含对本地和广播地址的优先级控制路由。
 32764:  from all lookup main suppress_prefixlength 0  # 32764 目前是第二优先级，将所有流量路由到　main 路由表，但是排除掉默认路由（前缀/掩码 <= 0）
                                                       # 功能是让所有非默认路由的流量都走 main 路由表
                                                       # 这条规则前面实际解释过了，它是 wg-quick 在启动隧道时添加的规则。
-32765:  not from all fwmark 0xca6c lookup 51820       # 所有不带 0xca6c 标记（51820 的 16 进制格式）的流量（普通流量），都走 51820 路由表
-                                                      # 也就是都转发到 WireGuard peer1 接口。
-                                                      # 这条规则是前面的 `ip -4 rule add not fwmark 51820 table 51820` 命令添加的。
-                                                      # 而它所匹配的防火墙标记则是由前面的 `wg set peer1 fwmark 51820` 命令设置的。
-32766:  from all lookup main                          # 所有流量都走 main 路由表，当前是不生效状态，因为前面的规则优先级更高。
-                                                      # main 是系统的默认路由表，通常我们使用 ip route 命令都是在这个表上操作。
-32767:  from all lookup default                       # 所有流量都走 default 路由表，当前同样是不生效状态。
-                                                      # default 是一个系统生成的兜底路由表，默认不包含任何路由规则，可用于自定义路由策略，也可删除。
+32765:  not from all fwmark 0xca6c lookup 51820 # 所有不带 0xca6c 标记（51820 的 16 进制格式）的流量（普通流量），都走 51820 路由表
+                                                # 也就是都转发到 WireGuard peer1 接口。
+                                                # 这条规则是前面的 `ip -4 rule add not fwmark 51820 table 51820` 命令添加的。
+                                                # 而它所匹配的防火墙标记则是由前面的 `wg set peer1 fwmark 51820` 命令设置的。
+32766:  from all lookup main    # 所有流量都走 main 路由表，当前是不生效状态，因为前面的规则优先级更高。
+                                # main 是系统的默认路由表，通常我们使用 ip route 命令都是在这个表上操作。
+32767:  from all lookup default # 所有流量都走 default 路由表，当前同样是不生效状态。
+                                # default 是一个系统生成的兜底路由表，默认不包含任何路由规则，可用于自定义路由策略，也可删除。
 ```
 
 结合注释看完上面的路由策略，现在你应该理清楚 WireGuard 的路由规则了，它加了条比默认路由策略 `32766` 优先级更高的路由策略 `32765`，将所有普通流量都通过它的自定义路由表路由到 peer1 接口。
