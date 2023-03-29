@@ -19,8 +19,8 @@
 <li>除了上面这些，还有很多其他 WireGuard 项目，有兴趣可以去 <a href="https://github.com/cedrickchee/awesome-wireguard" target="_blank" rel="noopener noreferrer">awesome-wireguard</a> 仓库看看。</li>
 </ul>
 <p>WireGuard 本身只是一个点对点隧道协议，只提供点对点通信的能力（这也是其极简主义思想的体现）。而其他网络路由、NAT 穿越、DNS 解析、防火墙策略等功能都是基于 Linux 系统的现有工具来实现的。</p>
-<p>在这篇文章里，我将搭建一个简单的单服务器 + 单客户端 WireGuard 网络，然后分析它如何使用 Linux 系统现有的工具，在 WireGuard 隧道上搭建出一个安全可靠的虚拟网络。
-服务器与客户端均使用 Ubuntu 20.04 系统，内核版本为 5.15，也就是说都包含了 wireguard 内核模块。</p>
+<p>在这篇文章里，我将搭建一个简单的单服务器 + 单客户端 WireGuard 网络，然后分析它如何使用 Linux 系统现有的工具，在 WireGuard 隧道上搭建出一个安全可靠的虚拟网络。</p>
+<p>文章测试用到的服务器与客户端均为虚拟机，使用 Ubuntu 20.04 系统，内核版本为 5.15，也就是说都包含了 wireguard 内核模块。</p>
 <h2 id="wireguard-服务端网络分析" class="headerLink">
     <a href="#wireguard-%e6%9c%8d%e5%8a%a1%e7%ab%af%e7%bd%91%e7%bb%9c%e5%88%86%e6%9e%90" class="header-mark"></a>WireGuard 服务端网络分析</h2><p>简单起见，这里使用 docker-compose 启动一个 WireGuard 服务端，使用的镜像是 <a href="https://github.com/linuxserver/docker-wireguard" target="_blank" rel="noopener noreferrer">linuxserver/docker-wireguard</a>。</p>
 <p>配置文件如下，内容完全参考自此镜像的官方 README：</p>
