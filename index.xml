@@ -191,10 +191,7 @@
 </div><p><code>AllowedIPs</code> 实际就是每个 peer 在服务端路由表中的 ip 地址，它既可以是 ip 也可以是网段，而且能设置多个，这使所有 peer 都可以负责一个甚至多个 ip 段的转发，也就是充当局域网的路由器——VPN 子路由。</p>
 <p>WireGuard 本身只是一个点对点隧道协议，它非常通用。通过 <code>AllowedIPs</code> 参数，我们就能在每个 peer 上添加各 peers 的配置与不同的路由规则，构建出各种复杂的网络拓扑，比如星型、环型、树型等等。</p>
 <h2 id="wireguard-客户端网络分析" class="headerLink">
-    <a href="#wireguard-%e5%ae%a2%e6%88%b7%e7%ab%af%e7%bd%91%e7%bb%9c%e5%88%86%e6%9e%90" class="header-mark"></a>WireGuard 客户端网络分析</h2><blockquote>
-<p>我这里为了测试方便，客户端与服务端都在我的局域网内。</p>
-</blockquote>
-<p>现在换台虚拟机跑 WireGuard 客户端，首先需要安装 wireguard 命令行工具：</p>
+    <a href="#wireguard-%e5%ae%a2%e6%88%b7%e7%ab%af%e7%bd%91%e7%bb%9c%e5%88%86%e6%9e%90" class="header-mark"></a>WireGuard 客户端网络分析</h2><p>现在换台虚拟机跑 WireGuard 客户端，首先需要安装 wireguard 命令行工具：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -242,6 +239,9 @@
 <p>插入下，这个 Endpoint 的地址也很值得一说，能看到服务端 wg0.conf 的配置中，peer1 并未被设置任何 Endpoint，这实质是表示这个 peer1 的 Endpoint 是动态的，也就是说每次 peer1 发送数据到服务端 wg0 时，服务端通过认证加密技术认证了数据后，就会以数据包的来源 IP 地址作为 peer1 的 Endpoint，这样 peer1 就可以随意更换自己的 IP 地址（Roaming），而 WireGuard 隧道仍然能正常工作（IP 频繁更换的一个典型场景就是手机的网络漫游与 WiFi 切换）。这使 WireGuard 具备了比较明显的无连接特性，也就是说 WireGuard 隧道不需要保持一个什么连接，切换网络也不需要重连，只要数据包能够到达服务端，就能够正常工作。</p>
 </blockquote>
 <p>因为我这里是内网环境测试，配置文件中的 <code>Peer</code> - <code>Endpoint</code> 的 IP 地址直接用服务端的内网 IP 地址就行，也就是 <code>192.168.5.198</code>。</p>
+<blockquote>
+<p>如果你的服务端有公网 IP 地址（比如是云服务器，或者通过端口映射用家庭宽带的动态公网 IP），这个 Endpoint 地址也可以使用该公网 IP 地址，效果是一样的。</p>
+</blockquote>
 <p>配置文件确认无误后，将该配置文件保存到客户端的 <code>/etc/wireguard/peer1.conf</code> 这个路径下，然后使用如下命令启动 WireGuard 客户端：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
