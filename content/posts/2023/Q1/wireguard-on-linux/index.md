@@ -191,13 +191,13 @@ sudo wg-quick up peer1
 
 ```shell
 $ sudo wg-quick up peer1
-[#] ip link add peer1 type wireguard             # 创建一个名为 peer1 的 WireGuard 设备
-[#] wg setconf peer1 /dev/fd/63                  # 设置 peer1 设备的配置
-[#] ip -4 address add 10.13.13.2 dev peer1       # 设置 peer1 设备的 IP 地址
-[#] ip link set mtu 1420 up dev peer1            # 设置 peer1 设备的 MTU
-[#] resolvconf -a tun.peer1 -m 0 -x              # 设置 peer1 设备的 DNS，确保 DNS 能够正常工作
-[#] wg set peer1 fwmark 51820                    # 将 peer1 设备的防火墙标记设为 51820，用于标记 WireGuard 出网流量
-                                                 # 该标记是一个 32bits 整数，后面 nft 表会用它追踪连接
+[#] ip link add peer1 type wireguard        # 创建一个名为 peer1 的 WireGuard 设备
+[#] wg setconf peer1 /dev/fd/63             # 设置 peer1 设备的配置
+[#] ip -4 address add 10.13.13.2 dev peer1  # 设置 peer1 设备的 IP 地址
+[#] ip link set mtu 1420 up dev peer1       # 设置 peer1 设备的 MTU
+[#] resolvconf -a tun.peer1 -m 0 -x  # 设置 peer1 设备的 DNS，确保 DNS 能够正常工作
+[#] wg set peer1 fwmark 51820        # 将 peer1 设备的防火墙标记设为 51820，用于标记 WireGuard 出站流量
+                                     # 在后面的路由策略中会使用该标记使 WireGuard 出站流量走默认路由表
 [#] ip -4 route add 0.0.0.0/0 dev peer1 table 51820     # 创建单独的路由表 51820，默认将所有流量转发到 peer1 接口
 [#] ip -4 rule add not fwmark 51820 table 51820         # 所有不带 51820 标记的流量（普通流量），都转发到前面新建的路由表 51820
                                                         # 也就是所有普通流量都转发到 peer1 接口
@@ -252,7 +252,7 @@ $ ip rule show
 ```
 
 结合注释看完上面的路由策略，现在你应该理清楚 WireGuard 的路由规则了，它加了条比默认路由策略 `32766` 优先级更高的路由策略 `32765`，将所有普通流量都通过它的自定义路由表路由到 peer1 接口。
-另一方面 peer1 接口在前面已经被打了 fwmark 标记 `51820` 也就是 16 进制的 0xca6c，所以 peer1 出站到服务端的流量不会被 `32765` 匹配到，所以会走优先级更低的 32766 策略，也就是走了 main 路由表。
+另一方面 peer1 接口在前面已经被打了 fwmark 标记 `51820` 也就是 16 进制的 0xca6c，所以 peer1 出站到服务端的流量不会被 `32765` 匹配到，所以会走优先级更低的 `32766` 策略，也就是走了 main 路由表。
 
 另外 `32764` 这条路由策略有点特殊，这里也简单解释下，此策略在前面注释中已经做了解释——是让所有非默认路由的流量都走 main 路由表，而 main 路由表中的非默认路由一般都是其他程序自动管理添加的，或者是我们手动添加的，所以这条规则其实就是确保这些路由策略仍然有效，避免 WireGuard 策略把它们覆盖掉而导致问题。
 
