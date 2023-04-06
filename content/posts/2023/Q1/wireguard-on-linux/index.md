@@ -24,6 +24,8 @@ comment:
 
 >本文内容部分采用了 Copilot 提示内容，也有部分内容用了 ChatGPT 免费版进行分析，确实都比较有帮助。
 
+最近因为工作需要研究了一波 WireGuard 协议，在这篇文章中简单记录下心得。
+
 ## WireGuard 是什么
 
 WireGuard 是极简主义思想下的 VPN 实现，解决了很多现存 VPN 协议存在的问题。
