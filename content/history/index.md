@@ -32,7 +32,9 @@ comment:
 - 主机配件全部到货，花了一晚上装机。这是我第一台 PC 主机，之前只拥有过三台笔记本，玻璃橱柜机箱装出来的效果很惊艳，成就感爆棚！
   - 临时装了个鲁大师（娱乐大师）跑了下，排名 99.9604%，也算符合预期，毕竟都选了顶配显卡。
 
-![](/images/now/endeavour-rtx4090.webp)
+{{<figure src="/images/now/endeavour-rtx4090.webp" title="主机配置" width="60%">}}
+{{<figure src="/images/now/rtx4090-pc-1.webp" title="机箱展示" width="60%">}}
+{{<figure src="/images/now/rtx4090-pc-2.webp" title="机箱展示" width="60%">}}
 
 ### 2023-04-10
 
