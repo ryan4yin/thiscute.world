@@ -28,7 +28,7 @@ comment:
 - 我的工作状态已经很久不在线了，各种事情能拖就拖，各种拖沓的工作带来的压力使我的业余学习也变得很懈怠。这段时间业余几乎啥也没干，硬件软件都没搞，网络小说倒是看了不少。
 - 天依手办到货，很飒～
 
-{{<figure src="/images/now/tianyi-vsinger.webp" title="主机配置" width="60%">}}
+{{<figure src="/images/now/tianyi-vsinger.webp" title="洛天依 秘境花庭 常服手办" width="60%">}}
 
 
 ### 2023-04-12
