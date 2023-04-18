@@ -446,6 +446,8 @@ PVE 自动创建的备份，默认都只会保存到本机的 `local` 分区中�
 
 同步脚本也很简单，首先通过 `rclone config` 手动将所有 PVE 节点加入为 rclone 的 remote，再将我的 smb 远程存储加进来（也可以手动改 `~/.config/rclone/rclone.conf`）。
 
+>这个方案最大的缺点是，所有备份都需要保存在每台节点的 local 卷中，所以有必要给 local 分配较大的磁盘空间，不然机器多的话很快就满了...
+
 rclone 配置好后，我写了个几行的 shell 脚本做备份同步：
 
 ```shell
@@ -480,7 +482,6 @@ done
 可以把运行时间调整到 1 分钟后确认下效果，如果要看实时日志可以用 `tail -f /home/ryan/rclone-sync.log` 查看。
 
 如果任务未执行，可以通过 `sudo systmctl status cron` 查看任务执行日志，排查问题。
-
 
 
 ## 四、PVE 网络配置
