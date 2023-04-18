@@ -2492,7 +2492,7 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <li>显示器
 <ul>
 <li>默认使用 std 类型，兼容性最好，但是是纯 CPU 模拟的，比较耗 CPU。</li>
-<li>如果你有需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 <code>VirGL GPU(virtio-gl)</code> 类型（注意不是 <code>VirtIO-GPU(virtio)</code>，这个驱动没有显卡加速能力），它能以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。但是目前它仅支持 Linux 4.4+ 的 Guest 主机，并且要求 mesa (&gt;=11.2) compiled with the option <code>gallium-drivers=virgl</code>。</li>
+<li>如果你有需要显卡加速的桌面虚拟机，但是又不想搞复杂的显卡直通，可以选择 <code>VirGL GPU(virtio-gl)</code> 类型（注意不是 <code>VirtIO-GPU(virtio)</code>，这个驱动没有显卡加速能力），它能以较小的性能损耗将虚拟机中的 3D/2D 运算 offload 到 host GPU，而且避免复杂的驱动配置。但是目前它仅支持 Linux 4.4+ 的 Guest 主机，并且要求 mesa (&gt;=11.2) compiled with the option <code>gallium-drivers=virgl</code>（我感觉这功能目前还有点鸡肋）。</li>
 <li>详见 <a href="https://wiki.archlinux.org/title/QEMU#Graphic_card" target="_blank" rel="noopener noreferrer">QEMU Graphic card - Arch WIKI</a></li>
 </ul>
 </li>
