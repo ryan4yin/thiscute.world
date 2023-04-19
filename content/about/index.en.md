@@ -17,7 +17,7 @@ lightgallery: true
 >There’s a lot of despair, but also the odd moment of beauty, where time is no longer the same. -- The Elegance of the Hedgehog by Barbery, Muriel Anderson
 
 - **Nickname**: **ryan4yin**, **ryan_yin**
-- **Gender**: Him/He, like girls.
+- **Gender**: Him/He
 - **Music**:
   - I like listening to Post-rock, Bluegrass, Folk and Instrumental Music.
   - I'm learning Bamboo Flute, Harmonica, [SynthesizerV](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) & [Reaper](https://www.reaper.fm) on and off.
