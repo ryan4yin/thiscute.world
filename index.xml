@@ -2658,7 +2658,8 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
     <a href="#1-%e5%af%bc%e5%85%a5%e5%b7%b2%e6%9c%89%e7%9a%84-qcow2-%e9%95%9c%e5%83%8f" class="header-mark"></a>1. 导入已有的 qcow2 镜像</h3><blockquote>
 <p>必须要命令行操作</p>
 </blockquote>
-<p>先通过 scp 将 qcow2 传输到 PVE 上，然后命令行使用如下命令导入镜像：</p>
+<p>首先在页面上新建一台新虚拟机，记录下虚拟机 ID。</p>
+<p>假设你创建的虚拟机 id 为 201，现在通过 scp/rsync 等手段将 qcow2 传输到 PVE 节点上，然后命令行使用如下命令导入 qcow2/img 镜像：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -2673,8 +2674,9 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </span></span><span class="line"><span class="cl">qm importdisk <span class="m">201</span> vm-201-disk-1.qcow2 local-lvm
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>导入完成后，在 WebUI 界面的左侧会看到多了一个「未使用的磁盘 0」，
-现在新建一台新虚拟机，然后删除掉默认的磁盘（分离+删除，要两步），然后挂载这个「未使用的磁盘 0」就大功告成了。</p>
+</div><p>导入完成后，在虚拟机的 WebUI 界面中，会看到底下多了一个「未使用的磁盘 0」。</p>
+<p>接着删除掉默认的磁盘（分离+删除，要两步），再挂载这个「未使用的磁盘 0」。</p>
+<p>挂载完成后直接启动是不行的，还需要在设置中将新磁盘添加到启动项中，这样就能正常启动了。</p>
 <h3 id="2-点击-shutdown-后-pve-系统卡住" class="headerLink">
     <a href="#2-%e7%82%b9%e5%87%bb-shutdown-%e5%90%8e-pve-%e7%b3%bb%e7%bb%9f%e5%8d%a1%e4%bd%8f" class="header-mark"></a>2. 点击 shutdown 后 PVE 系统卡住</h3><p>PVE 的 <code>shutdown</code> 功能依赖 <code>qemu-guest-agent</code>，对于还没有安装 <code>qemu-guest-agent</code> 的任何主机，或者已经卡死无响应的虚拟机，千万不要点 <code>shutdown</code> 按钮，因为一定会卡住很久，最后失败！</p>
 <p><code>shutdown</code> 卡住的解决办法：手动在下方的「Tasks」面板中双击卡住的「Shutdown」操作，然后点击「stop」停止该操作。</p>
@@ -2922,6 +2924,9 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </ol>
 <p>如上文所述，一番研究后我抛弃了 proxmox-backup-server 与 restic，最终选择了最简单的 cronab + rclone 方案，简单实用又符合我自己的需求。</p>
 <p>同步脚本也很简单，首先通过 <code>rclone config</code> 手动将所有 PVE 节点加入为 rclone 的 remote，再将我的 smb 远程存储加进来（也可以手动改 <code>~/.config/rclone/rclone.conf</code>）。</p>
+<blockquote>
+<p>这个方案最大的缺点是，所有备份都需要保存在每台节点的 local 卷中，所以有必要给 local 分配较大的磁盘空间，不然机器多的话很快就满了&hellip;</p>
+</blockquote>
 <p>rclone 配置好后，我写了个几行的 shell 脚本做备份同步：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
