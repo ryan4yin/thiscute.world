@@ -35,7 +35,8 @@ comment:
     站点名称：This Cute World
     站点地址：https://thiscute.world/
     个人形象：https://thiscute.world/avatar/myself.webp
-    站点描述：赞美快乐~ -->
+    站点描述：赞美快乐~ 
+-->
 
 
 <script type="text/javascript">
@@ -79,6 +80,7 @@ var myFriends = [
     ["https://bleatingsheep.org/", "https://bleatingsheep.org/favicon.ico", "@bleatingsheep", "偶像咩咩"], 
     ["https://vian.top/", "https://www.vian.top/avatar.ico", "@Vian", "想要的都拥有，得不到的都释怀..."], 
     ["https://wangyunzi.com/", "https://blog.wangyunzi.com/avatar.png", "@王云子", "此行山高路远，我只剩口袋玫瑰一片 <= 法学在读的文艺少女"], 
+    ["https://wenderfeng.top/", "https://wenderfeng.top/favicon.ico", "@wenderfeng", "Step by step <= 机器人"], 
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
