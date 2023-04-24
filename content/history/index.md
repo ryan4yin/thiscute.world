@@ -25,7 +25,9 @@ comment:
 ### 2023-04-24
 
 - Homelab 重新折腾一通后，又打算修复下 Homelab 的 k8s 环境，顺便尝试下 Istio 多集群部署。
-  - 折腾一整天，用 kubeadm 部署了个 1.27.0 的 k8s 集群，网络用的 cilium，也搞定了 cert-manager，但是死活没搞定 istio 多集群部署（external-istiod 模式，或者叫 primary-remote 模式）。
+  - 折腾一整天，用 kubeadm 部署了个 1.27.0 的 k8s 集群，网络用的 cilium，也搞定了 cert-manager
+- 死活搞不定 istio 多集群部署（external-istiod 模式，或者叫 primary-remote 模式）。
+- 在新集群上部署了个单集群 istio，尝试了下 [istio with Gateway API](https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/#automated-deployment)，感觉还不错。不需要手动部署 istio ingressgateway 了，配置好 Gateway 资源后 istio 会自动部署对应的 deployment 和 service。
 
 ### 2023-04-23
 
