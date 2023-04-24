@@ -56,9 +56,14 @@ kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 
 
 ## 0. 网络环境的准备
 
-本文行文未考虑国内网络环境，但是 Kubernetes 用到的很多镜像都在 gcr.io 上，在国内访问会有困难。
+本文行文未考虑国内网络环境，但是 Kubernetes 用到的很多镜像都在 gcr.io 上，在国内访问会有困难，这里提供三个解决办法：
 
-如果对可靠性要求高，最好是自建私有镜像仓库，把镜像推送到私有仓库。可以通过如下命令列出所有 kubeadm 需要用到的镜像地址（请提前安装好 kubeadm）：
+- 在家庭路由器上整个科学代理，实现全局科学上网。（我就是这么干的）
+- 使用 [liangyuanpeng](https://github.com/liangyuanpeng) 大佬在评论区提供的 gcr 国内镜像地址，这需要进行如下替换：
+  - k8s.gcr.io---> lank8s.cn
+- 自己维护一个国内镜像仓库（或私有镜像仓库如 harbor），使用 `skopeo` 等工具或脚本将上述镜像列表拷贝到你的私有仓库
+
+如果对可靠性要求高，最好是选择第三个方案——自建私有镜像仓库，把镜像推送到私有仓库。可以通过如下命令列出所有 kubeadm 需要用到的镜像地址（需要先安装好 kubeadm，建议读完本篇文章全文后再尝试）：
 
 ```shell
 ❯ kubeadm config images list --kubernetes-version v1.22.1
@@ -70,13 +75,6 @@ k8s.gcr.io/pause:3.5
 k8s.gcr.io/etcd:3.5.0-0
 k8s.gcr.io/coredns/coredns:v1.8.4
 ```
-
-这里提供三个解决办法：
-
-- 在家庭路由器上整个科学代理，实现全局科学上网。（我就是这么干的）
-- 使用 [liangyuanpeng](https://github.com/liangyuanpeng) 大佬在评论区提供的 gcr 国内镜像地址，这需要进行如下替换：
-  - k8s.gcr.io---> lank8s.cn
-- 自己维护一个国内镜像仓库（或私有镜像仓库如 harbor），使用 `skopeo` 等工具或脚本将上述镜像列表拷贝到你的私有仓库
 
 ## 1. 节点的环境准备
 
