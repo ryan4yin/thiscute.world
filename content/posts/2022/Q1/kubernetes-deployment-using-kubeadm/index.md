@@ -26,7 +26,7 @@ kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很
 因此社区出现了各种各样的安装方案，下面介绍下几种支持裸机（Baremetal）部署的工具：
 
 
-1. [kubeadm](https://kuboard.cn/install/install-k8s.html): 社区的集群安装工具，目前已经很成熟了。
+1. [kubeadm](https://github.com/kubernetes/kubeadm): 社区的集群安装工具，目前已经很成熟了。
    1. 使用难度：简单
 2. [k3s](https://github.com/k3s-io/k3s): 轻量级 kubernetes，资源需求小，部署非常简单，适合开发测试用或者边缘环境
    1. 支持 airgap 离线部署
@@ -58,7 +58,7 @@ kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 
 
 本文行文未考虑国内网络环境，但是 Kubernetes 用到的很多镜像都在 gcr.io 上，在国内访问会有困难。
 
-如果对可靠性要求高，最好是自建私有镜像仓库，把镜像推送到私有仓库。可以通过如下命令列出所有 kubeadm 需要用到的镜像地址：
+如果对可靠性要求高，最好是自建私有镜像仓库，把镜像推送到私有仓库。可以通过如下命令列出所有 kubeadm 需要用到的镜像地址（请提前安装好 kubeadm）：
 
 ```shell
 ❯ kubeadm config images list --kubernetes-version v1.22.1
