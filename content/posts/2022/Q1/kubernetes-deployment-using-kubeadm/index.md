@@ -11,6 +11,8 @@ tags: ["Kubernetes", "云原生"]
 categories: ["tech"]
 ---
 
+>本文完成于 2022-01-25，其中部分内容已经过时，仅供参考。
+
 >本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来，不保证正确
 
 ## 本地 Kubernetes 集群安装工具
@@ -138,7 +140,7 @@ Worker 节点需要开发如下端口：
 
 
 
-## 2. 安装 containerd
+## 2. 安装容器运行时 containerd
 
 首先是环境配置：
 
