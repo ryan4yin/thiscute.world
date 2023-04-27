@@ -36,8 +36,8 @@ comment:
 ### 2023-04-25
 
 - 英语阅读
-  - The Great Gatsby - 10/41
-  - 最近一个月有点迷茫，状态不对劲，没读啥英语...今天读了点 The Greate Gatsby，故事情节都要慢慢回忆...
+  - The Great Gatsby - 9/41
+  - 最近一个月有点迷茫，状态不对劲，没读啥英语...今天读了两篇 The Greate Gatsby，故事情节都要慢慢回忆...
 - 用 RTX4090 玩 Cyperpunk 2077，顶配光追画质（叫啥 onedrive）贼棒，真的非常还原真实环境，在 GeForece Experience 上调了个啥优化参数，帧率得到了很大提升，4K 差不多能稳定在 100 帧，看半天风景。
   - 不过 2077 的碰撞检测还是有点 bug...游戏都出来快三年了还卡 bug...
 
