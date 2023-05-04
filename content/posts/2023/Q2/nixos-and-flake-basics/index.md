@@ -101,7 +101,9 @@ Nix 长期依赖一直没有标准的包结构定义，直到 2020 年才推出�
    1. 在 nix flake 中对应的命令为 `nix profile`
 3. `nix-shell`: nix-shell 用于创建一个临时的 shell 环境
    1. 在 nix flake 中它被 `nix develop` 与 `nix shell` 取代了。
-4. ...
+4. `nix-build`: 用于构建 nix 包，它会将构建结果放到 `/nix/store` 路径下，但是不会记录到 nix 的声明式配置中。
+   1. 在 nix flake 中对应的命令为 `nix build`
+5. ...
 
 
 
@@ -468,7 +470,8 @@ stdenv.mkDerivation rec {
 
 ### 15. Override 与 Overlays
 
-TODO
+- [Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
+- [Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
 
 
 ## 七、以声明式的方式管理系统
@@ -897,6 +900,12 @@ nix build "nixpkgs#bat"
 TODO
 
 ## 进阶玩法
+
+逐渐熟悉 Nix 这一套工具链后，可以进一步读一读 Nix 的三本手册，挖掘更多的玩法：
+
+- [Nix Reference Manual](https://nixos.org/manual/nix/stable/package-management/profiles.html): Nix 包管理器使用手册，主要包含 Nix 包管理器的设计、命令行使用说明。
+- [nixpkgs Manual](https://nixos.org/manual/nixpkgs/unstable/): 
+- [NixOS Manual](https://nixos.org/manual/nixos/unstable/): NixOS 系统使用手册，主要包含 Wayland/X11, GPU 等系统级别的配置说明。
 
 在对 Nix Flake 熟悉到一定程度后，你可以尝试一些进阶玩法，如下是一些比较流行的社区项目，可以试用：
 
