@@ -468,11 +468,15 @@ stdenv.mkDerivation rec {
 ```
 
 
-### 15. Override 与 Overlays
+### 15. Overriding 与 Overlays
+
+Overriding 与 Overlays 是在使用 Nix 时经常会用到的两种技术，它们都是用来修改 Nixpkgs 中的内容的，官方文档如下：
 
 - [Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
 - [Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
 
+
+TODO
 
 ## 七、以声明式的方式管理系统
 
