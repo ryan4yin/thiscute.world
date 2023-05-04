@@ -63,7 +63,7 @@ nix 的缺点：
 - 比较吃硬盘空间：为了保证系统可以随时回退，nix 默认总是保留所有历史环境，这非常吃硬盘空间。虽然可以定期使用 `nix-collect-garbage` 来手动清理旧的历史环境，也还是建议配置个更大的硬盘...
 
 
-## 二、安装
+## 二、安装与简单使用
 
 Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/WSL 三种系统上，Nix 还额外提供了 NixOS ——一个使用 Nix 管理整个系统环境的 Linux 发行版。
 
@@ -77,6 +77,15 @@ Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/
    2. 官方不提供任何卸载手段，你需要手动删除安装的所有资源 & users & group(`nixbld`).
 2. [The Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer): 使用 Rust 编写, 默认启用 `nix-command` & `flake`，并且提供了官方的卸载命令。
 
+安装完成后可以先简单体验下：
+
+```bash
+# 查看当前系统中所有可用的软件包
+```
+
+nix 生成的所有内容，都存放在 `/nix/store` 路径下，这个路径被设置为只读，只有 nix 本身才能修改这个路径下的内容，以保证系统的可复现性。
+
+nix 中每个构建结果的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash>` 是构建结果的 hash 值，`<name>` 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。
 
 ## 三、Nix Flake 与旧的 Nix
 
