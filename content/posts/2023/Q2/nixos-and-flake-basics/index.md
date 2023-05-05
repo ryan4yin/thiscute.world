@@ -433,139 +433,6 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 `derivation` 创建的，我们实际使用的 `stdenv.mkDerivation` 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。
 
-### 14. stdenv.mkDerivation
-
-stdenv，顾名思义即标准构建环境，它是一个 attribute set，提供了构建 Unix 程序所需的标准环境，比如 gcc、glibc、binutils 等等。
-它可以完全取代我们在其他操作系统上常用的构建工具链，比如 `./configure`; `make`; `make install` 等等。
-
-即使 stdenv 提供的环境不能满足你的要求，你也可以通过 `stdenv.mkDerivation` 来创建一个自定义的构建环境。
-
-举个例子：
-
-```nix
-{ lib, stdenv }:
-
-stdenv.mkDerivation rec {
-  pname = "libfoo";
-  version = "1.2.3";
-  # 源码
-  src = fetchurl {
-    url = "http://example.org/libfoo-source-${version}.tar.bz2";
-    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
-  };
-
-  # 构建依赖
-  buildInputs = [libbar perl ncurses];
-
-  # Nix 默认将构建拆分为一系列 phases，这里仅用到其中两个
-  # https://nixos.org/manual/nixpkgs/stable/#ssec-controlling-phases
-  buildPhase = ''
-    gcc foo.c -o foo
-  '';
-  installPhase = ''
-    mkdir -p $out/bin
-    cp foo $out/bin
-  '';
-}
-```
-
-
-### 15. callPackage、Overriding 与 Overlays
-
-callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。
-
-我们知道许多程序都有大量构建参数需要配置，不同的用户会希望使用不同的构建参数，这时候就需要 Overriding 与 Overlays 来实现。我举几个我遇到过的例子：
-
-1. [fcitx5-rime.nix](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix): fcitx5-rime 的 `rimeDataPkgs` 默认使用 `rime-data` 包，但是也可以通过 override 来自定义该参数的值，以加载自定义的 rime 配置（比如加载小鹤音形输入法配置）。
-2. [vscode/with-extensions.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix): vscode 的这个包也可以通过 override 来自定义 `vscodeExtensions` 参数的值来安装自定义插件。
-   1. [nix-vscode-extensions](https://github.com/nix-community/nix-vscode-extensions): 就是利用该参数实现的 vscode 插件管理
-3. [firefox/common.nix](https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix): firefox 同样有许多可自定义的参数
-4. 等等
-
-
-#### callPackages 与 callPackge
-
->[Chapter 13. Callpackage Design Pattern - Nix Pills](https://nixos.org/guides/nix-pills/callpackage-design-pattern.html)
-
-此函数用于执行某个 Nix 文件，自动查找并传递其需要的参数。
-
-TODO
-
-#### Overriding
-
->[Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
-
-简单的说，所有 nixpkgs 中的 Nix 包都可以通过 `<pkg>.override {}` 来自定义某些构建参数，它返回一个使用了自定义参数的新 Derivation. 举个例子：
-
-```nix
-pkgs.fcitx5-rime.override {rimeDataPkgs = [
-    ./rime-data-flypy
-  ];}
-```
-
-上面这个 nix 表达式的执行结果就是一个新的 Derivation，它的 `rimeDataPkgs` 参数被覆盖为 `[./rime-data-flypy]`，而其他参数则沿用原来的值。
-
-除了覆写参数，还可以通过 `overrideAttrs` 来覆写使用 `stdenv.mkDerivation` 构建的 Derivation 的属性，比如：
-
-```nix
-helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
-  separateDebugInfo = true;
-});
-```
-
-上面这个例子中，`helloWithDebug` 就是一个新的 Derivation，它的 `separateDebugInfo` 参数被覆盖为 `true`，而其他参数则沿用原来的值。
-
-
-#### Overlays
-
->[Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
-
-前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
-但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.
-
-解决方法有两个：
-
-1. 如果所有依赖 Derivation A 的包都仅在某个特定作用域内被使用，那么可以使用 `let...in...` 语法，override 该作用域内的 Derivation A
-2. 否则，就只能使用 Overlays 修改 pkgs 中的 Derivation A 了，这是全局的修改。
-
-所以简单的说，Overlays 就是用来全局修改 pkgs 中的 Derivation 的。
-
-在 nix flake 中，使用如下语法来使用 Overlays:
-
-```nix
-# TODO 测试验证这个写法
-let pkgs = import nixpkgs { inherit system; overlays = [
-  # overlayer1 - 参数名用 self 与 super，表达继承关系
-  (self: super: {
-   google-chrome = super.google-chrome.override {
-     commandLineArgs =
-       "--proxy-server='https=127.0.0.1:3128;http=127.0.0.1:3128'";
-   };
-  })
-  # overlayer2 - 还可以使用 extend 来继承其他 overlay
-  # 这里改用 final 与 prev，表达新旧关系
-  (final: prev: {
-    steam = prev.steam.override {
-      extraPkgs = pkgs:
-        with pkgs; [
-          keyutils
-          libkrb5
-          libpng
-          libpulseaudio
-          libvorbis
-          stdenv.cc.cc.lib
-          xorg.libXcursor
-          xorg.libXi
-          xorg.libXinerama
-          xorg.libXScrnSaver
-        ];
-      extraProfile = "export GDK_SCALE=2";
-    };
-  })
-]; }
-```
-
-此外第三方库也提供了一些 Overlays 的简化配置方法，比如 [Overlays - flake-parts](https://flake.parts/overlays.html) 
 
 ## 七、以声明式的方式管理系统
 
@@ -1088,11 +955,145 @@ nix build "nixpkgs#bat"
 
 [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，建议新手读一读。
 
-## 八、使用 Nix Flake 打包应用
+
+## 八、Nixpkgs 的高级用法
+
+callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。
+
+我们知道许多程序都有大量构建参数需要配置，不同的用户会希望使用不同的构建参数，这时候就需要 Overriding 与 Overlays 来实现。我举几个我遇到过的例子：
+
+1. [fcitx5-rime.nix](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix): fcitx5-rime 的 `rimeDataPkgs` 默认使用 `rime-data` 包，但是也可以通过 override 来自定义该参数的值，以加载自定义的 rime 配置（比如加载小鹤音形输入法配置）。
+2. [vscode/with-extensions.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix): vscode 的这个包也可以通过 override 来自定义 `vscodeExtensions` 参数的值来安装自定义插件。
+   1. [nix-vscode-extensions](https://github.com/nix-community/nix-vscode-extensions): 就是利用该参数实现的 vscode 插件管理
+3. [firefox/common.nix](https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix): firefox 同样有许多可自定义的参数
+4. 等等
+
+总之为了自定义上述这类 Nix 包的构建参数，我们需要使用 Overriding 或 Overlays 来实现。
+
+
+### Overriding
+
+>[Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
+
+简单的说，所有 nixpkgs 中的 Nix 包都可以通过 `<pkg>.override {}` 来自定义某些构建参数，它返回一个使用了自定义参数的新 Derivation. 举个例子：
+
+```nix
+pkgs.fcitx5-rime.override {rimeDataPkgs = [
+    ./rime-data-flypy
+  ];}
+```
+
+上面这个 nix 表达式的执行结果就是一个新的 Derivation，它的 `rimeDataPkgs` 参数被覆盖为 `[./rime-data-flypy]`，而其他参数则沿用原来的值。
+
+除了覆写参数，还可以通过 `overrideAttrs` 来覆写使用 `stdenv.mkDerivation` 构建的 Derivation 的属性，比如：
+
+```nix
+helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
+  separateDebugInfo = true;
+});
+```
+
+上面这个例子中，`helloWithDebug` 就是一个新的 Derivation，它的 `separateDebugInfo` 参数被覆盖为 `true`，而其他参数则沿用原来的值。
+
+
+### Overlays
+
+>[Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
+
+前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
+但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.
+
+解决方法有两个：
+
+1. 如果所有依赖 Derivation A 的包都仅在某个特定作用域内被使用，那么可以使用 `let...in...` 语法，override 该作用域内的 Derivation A
+2. 否则，就只能使用 Overlays 修改 pkgs 中的 Derivation A 了，这是全局的修改。
+
+所以简单的说，Overlays 就是用来全局修改 pkgs 中的 Derivation 的。
+
+在 nix flake 中，使用如下语法来使用 Overlays:
+
+```nix
+# TODO 测试验证这个写法
+let pkgs = import nixpkgs { inherit system; overlays = [
+  # overlayer1 - 参数名用 self 与 super，表达继承关系
+  (self: super: {
+   google-chrome = super.google-chrome.override {
+     commandLineArgs =
+       "--proxy-server='https=127.0.0.1:3128;http=127.0.0.1:3128'";
+   };
+  })
+  # overlayer2 - 还可以使用 extend 来继承其他 overlay
+  # 这里改用 final 与 prev，表达新旧关系
+  (final: prev: {
+    steam = prev.steam.override {
+      extraPkgs = pkgs:
+        with pkgs; [
+          keyutils
+          libkrb5
+          libpng
+          libpulseaudio
+          libvorbis
+          stdenv.cc.cc.lib
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXinerama
+          xorg.libXScrnSaver
+        ];
+      extraProfile = "export GDK_SCALE=2";
+    };
+  })
+
+  # overlay3 - 也可以将 overlay 定义在其他文件中
+  ./overlays/overlay3.nix
+]; }
+```
+
+此外第三方库也提供了一些 Overlays 的简化配置方法，比如 [Overlays - flake-parts](https://flake.parts/overlays.html) 
+
+
+## 九、使用 Nix Flake 打包应用
 
 有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。
 
 TODO
+
+
+### stdenv.mkDerivation
+
+stdenv，顾名思义即标准构建环境，它是一个 attribute set，提供了构建 Unix 程序所需的标准环境，比如 gcc、glibc、binutils 等等。
+它可以完全取代我们在其他操作系统上常用的构建工具链，比如 `./configure`; `make`; `make install` 等等。
+
+即使 stdenv 提供的环境不能满足你的要求，你也可以通过 `stdenv.mkDerivation` 来创建一个自定义的构建环境。
+
+举个例子：
+
+```nix
+{ lib, stdenv }:
+
+stdenv.mkDerivation rec {
+  pname = "libfoo";
+  version = "1.2.3";
+  # 源码
+  src = fetchurl {
+    url = "http://example.org/libfoo-source-${version}.tar.bz2";
+    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
+  };
+
+  # 构建依赖
+  buildInputs = [libbar perl ncurses];
+
+  # Nix 默认将构建拆分为一系列 phases，这里仅用到其中两个
+  # https://nixos.org/manual/nixpkgs/stable/#ssec-controlling-phases
+  buildPhase = ''
+    gcc foo.c -o foo
+  '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp foo $out/bin
+  '';
+}
+```
+
 
 ## 进阶玩法
 
