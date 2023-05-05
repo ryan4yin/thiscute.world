@@ -545,196 +545,6 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 <p>store object 的存放路径格式为 <code>/nix/store/&lt;hash&gt;-&lt;name&gt;</code>，其中 <code>&lt;hash&gt;</code> 是构建结果的 hash 值，<code>&lt;name&gt;</code> 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。</p>
 <p><code>/nix/store</code> 被称为 store，存放所有的 store objects，这个路径被设置为只读，只有 nix 本身才能修改这个路径下的内容，以保证系统的可复现性。</p>
 <p>在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 <code>derivation</code> 创建的，我们实际使用的 <code>stdenv.mkDerivation</code> 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。</p>
-<h3 id="14-stdenvmkderivation" class="headerLink">
-    <a href="#14-stdenvmkderivation" class="header-mark"></a>14. stdenv.mkDerivation</h3><p>stdenv，顾名思义即标准构建环境，它是一个 attribute set，提供了构建 Unix 程序所需的标准环境，比如 gcc、glibc、binutils 等等。
-它可以完全取代我们在其他操作系统上常用的构建工具链，比如 <code>./configure</code>; <code>make</code>; <code>make install</code> 等等。</p>
-<p>即使 stdenv 提供的环境不能满足你的要求，你也可以通过 <code>stdenv.mkDerivation</code> 来创建一个自定义的构建环境。</p>
-<p>举个例子：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">lib</span><span class="o">,</span> <span class="n">stdenv</span> <span class="p">}:</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">stdenv</span><span class="o">.</span><span class="n">mkDerivation</span> <span class="k">rec</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">pname</span> <span class="o">=</span> <span class="s2">&#34;libfoo&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">version</span> <span class="o">=</span> <span class="s2">&#34;1.2.3&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># 源码</span>
-</span></span><span class="line"><span class="cl">  <span class="n">src</span> <span class="o">=</span> <span class="n">fetchurl</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;http://example.org/libfoo-source-</span><span class="si">${</span><span class="n">version</span><span class="si">}</span><span class="s2">.tar.bz2&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">sha256</span> <span class="o">=</span> <span class="s2">&#34;0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># 构建依赖</span>
-</span></span><span class="line"><span class="cl">  <span class="n">buildInputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">libbar</span> <span class="n">perl</span> <span class="n">ncurses</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># Nix 默认将构建拆分为一系列 phases，这里仅用到其中两个</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># https://nixos.org/manual/nixpkgs/stable/#ssec-controlling-phases</span>
-</span></span><span class="line"><span class="cl">  <span class="n">buildPhase</span> <span class="o">=</span> <span class="s1">&#39;&#39;
-</span></span></span><span class="line"><span class="cl"><span class="s1">    gcc foo.c -o foo
-</span></span></span><span class="line"><span class="cl"><span class="s1">  &#39;&#39;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">installPhase</span> <span class="o">=</span> <span class="s1">&#39;&#39;
-</span></span></span><span class="line"><span class="cl"><span class="s1">    mkdir -p $out/bin
-</span></span></span><span class="line"><span class="cl"><span class="s1">    cp foo $out/bin
-</span></span></span><span class="line"><span class="cl"><span class="s1">  &#39;&#39;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="15-callpackageoverriding-与-overlays" class="headerLink">
-    <a href="#15-callpackageoverriding-%e4%b8%8e-overlays" class="header-mark"></a>15. callPackage、Overriding 与 Overlays</h3><p>callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。</p>
-<p>我们知道许多程序都有大量构建参数需要配置，不同的用户会希望使用不同的构建参数，这时候就需要 Overriding 与 Overlays 来实现。我举几个我遇到过的例子：</p>
-<ol>
-<li><a href="https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix" target="_blank" rel="noopener noreferrer">fcitx5-rime.nix</a>: fcitx5-rime 的 <code>rimeDataPkgs</code> 默认使用 <code>rime-data</code> 包，但是也可以通过 override 来自定义该参数的值，以加载自定义的 rime 配置（比如加载小鹤音形输入法配置）。</li>
-<li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix" target="_blank" rel="noopener noreferrer">vscode/with-extensions.nix</a>: vscode 的这个包也可以通过 override 来自定义 <code>vscodeExtensions</code> 参数的值来安装自定义插件。
-<ol>
-<li><a href="https://github.com/nix-community/nix-vscode-extensions" target="_blank" rel="noopener noreferrer">nix-vscode-extensions</a>: 就是利用该参数实现的 vscode 插件管理</li>
-</ol>
-</li>
-<li><a href="https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix" target="_blank" rel="noopener noreferrer">firefox/common.nix</a>: firefox 同样有许多可自定义的参数</li>
-<li>等等</li>
-</ol>
-<h4 id="callpackages-与-callpackge" class="headerLink">
-    <a href="#callpackages-%e4%b8%8e-callpackge" class="header-mark"></a>callPackages 与 callPackge</h4><blockquote>
-<p><a href="https://nixos.org/guides/nix-pills/callpackage-design-pattern.html" target="_blank" rel="noopener noreferrer">Chapter 13. Callpackage Design Pattern - Nix Pills</a></p>
-</blockquote>
-<p>此函数用于执行某个 Nix 文件，自动查找并传递其需要的参数。</p>
-<p>TODO</p>
-<h4 id="overriding" class="headerLink">
-    <a href="#overriding" class="header-mark"></a>Overriding</h4><blockquote>
-<p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overrides" target="_blank" rel="noopener noreferrer">Chapter 4. Overriding - nixpkgs Manual</a></p>
-</blockquote>
-<p>简单的说，所有 nixpkgs 中的 Nix 包都可以通过 <code>&lt;pkg&gt;.override {}</code> 来自定义某些构建参数，它返回一个使用了自定义参数的新 Derivation. 举个例子：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">pkgs</span><span class="o">.</span><span class="n">fcitx5-rime</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span><span class="n">rimeDataPkgs</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="sr">./rime-data-flypy</span>
-</span></span><span class="line"><span class="cl">  <span class="p">];}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>上面这个 nix 表达式的执行结果就是一个新的 Derivation，它的 <code>rimeDataPkgs</code> 参数被覆盖为 <code>[./rime-data-flypy]</code>，而其他参数则沿用原来的值。</p>
-<p>除了覆写参数，还可以通过 <code>overrideAttrs</code> 来覆写使用 <code>stdenv.mkDerivation</code> 构建的 Derivation 的属性，比如：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">helloWithDebug</span> <span class="err">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">hello</span><span class="o">.</span><span class="n">overrideAttrs</span> <span class="p">(</span><span class="n">finalAttrs</span><span class="p">:</span> <span class="n">previousAttrs</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">separateDebugInfo</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">});</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>上面这个例子中，<code>helloWithDebug</code> 就是一个新的 Derivation，它的 <code>separateDebugInfo</code> 参数被覆盖为 <code>true</code>，而其他参数则沿用原来的值。</p>
-<h4 id="overlays" class="headerLink">
-    <a href="#overlays" class="header-mark"></a>Overlays</h4><blockquote>
-<p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overlays" target="_blank" rel="noopener noreferrer">Chapter 3. Overlays - nixpkgs Manual</a></p>
-</blockquote>
-<p>前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
-但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.</p>
-<p>解决方法有两个：</p>
-<ol>
-<li>如果所有依赖 Derivation A 的包都仅在某个特定作用域内被使用，那么可以使用 <code>let...in...</code> 语法，override 该作用域内的 Derivation A</li>
-<li>否则，就只能使用 Overlays 修改 pkgs 中的 Derivation A 了，这是全局的修改。</li>
-</ol>
-<p>所以简单的说，Overlays 就是用来全局修改 pkgs 中的 Derivation 的。</p>
-<p>在 nix flake 中，使用如下语法来使用 Overlays:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># TODO 测试验证这个写法</span>
-</span></span><span class="line"><span class="cl"><span class="k">let</span> <span class="n">pkgs</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs</span> <span class="p">{</span> <span class="k">inherit</span> <span class="n">system</span><span class="p">;</span> <span class="n">overlays</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># overlayer1 - 参数名用 self 与 super，表达继承关系</span>
-</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">self</span><span class="p">:</span> <span class="n">super</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">   <span class="n">google-chrome</span> <span class="o">=</span> <span class="n">super</span><span class="o">.</span><span class="n">google-chrome</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">     <span class="n">commandLineArgs</span> <span class="o">=</span>
-</span></span><span class="line"><span class="cl">       <span class="s2">&#34;--proxy-server=&#39;https=127.0.0.1:3128;http=127.0.0.1:3128&#39;&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">   <span class="p">};</span>
-</span></span><span class="line"><span class="cl">  <span class="p">})</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># overlayer2 - 还可以使用 extend 来继承其他 overlay</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># 这里改用 final 与 prev，表达新旧关系</span>
-</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">final</span><span class="p">:</span> <span class="n">prev</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">steam</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="n">steam</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="n">extraPkgs</span> <span class="o">=</span> <span class="n">pkgs</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">          <span class="n">keyutils</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libkrb5</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libpng</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libpulseaudio</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libvorbis</span>
-</span></span><span class="line"><span class="cl">          <span class="n">stdenv</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">lib</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXcursor</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXi</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXinerama</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXScrnSaver</span>
-</span></span><span class="line"><span class="cl">        <span class="p">];</span>
-</span></span><span class="line"><span class="cl">      <span class="n">extraProfile</span> <span class="o">=</span> <span class="s2">&#34;export GDK_SCALE=2&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">};</span>
-</span></span><span class="line"><span class="cl">  <span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="p">];</span> <span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>此外第三方库也提供了一些 Overlays 的简化配置方法，比如 <a href="https://flake.parts/overlays.html" target="_blank" rel="noopener noreferrer">Overlays - flake-parts</a></p>
 <h2 id="七以声明式的方式管理系统" class="headerLink">
     <a href="#%e4%b8%83%e4%bb%a5%e5%a3%b0%e6%98%8e%e5%bc%8f%e7%9a%84%e6%96%b9%e5%bc%8f%e7%ae%a1%e7%90%86%e7%b3%bb%e7%bb%9f" class="header-mark"></a>七、以声明式的方式管理系统</h2><blockquote>
 <p><a href="https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution" target="_blank" rel="noopener noreferrer">https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution</a></p>
@@ -1608,10 +1418,201 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><a href="https://github.com/DeterminateSystems/zero-to-nix" target="_blank" rel="noopener noreferrer">Zero to Nix - Determinate Systems</a> 是一份全新的 Nix &amp; Flake 新手入门文档，建议新手读一读。</p>
-<h2 id="八使用-nix-flake-打包应用" class="headerLink">
-    <a href="#%e5%85%ab%e4%bd%bf%e7%94%a8-nix-flake-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>八、使用 Nix Flake 打包应用</h2><p>有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。</p>
+<h2 id="八nixpkgs-的高级用法" class="headerLink">
+    <a href="#%e5%85%abnixpkgs-%e7%9a%84%e9%ab%98%e7%ba%a7%e7%94%a8%e6%b3%95" class="header-mark"></a>八、Nixpkgs 的高级用法</h2><p>callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。</p>
+<p>我们知道许多程序都有大量构建参数需要配置，不同的用户会希望使用不同的构建参数，这时候就需要 Overriding 与 Overlays 来实现。我举几个我遇到过的例子：</p>
+<ol>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix" target="_blank" rel="noopener noreferrer">fcitx5-rime.nix</a>: fcitx5-rime 的 <code>rimeDataPkgs</code> 默认使用 <code>rime-data</code> 包，但是也可以通过 override 来自定义该参数的值，以加载自定义的 rime 配置（比如加载小鹤音形输入法配置）。</li>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix" target="_blank" rel="noopener noreferrer">vscode/with-extensions.nix</a>: vscode 的这个包也可以通过 override 来自定义 <code>vscodeExtensions</code> 参数的值来安装自定义插件。
+<ol>
+<li><a href="https://github.com/nix-community/nix-vscode-extensions" target="_blank" rel="noopener noreferrer">nix-vscode-extensions</a>: 就是利用该参数实现的 vscode 插件管理</li>
+</ol>
+</li>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix" target="_blank" rel="noopener noreferrer">firefox/common.nix</a>: firefox 同样有许多可自定义的参数</li>
+<li>等等</li>
+</ol>
+<p>总之为了自定义上述这类 Nix 包的构建参数，我们需要使用 Overriding 或 Overlays 来实现。</p>
+<h3 id="overriding" class="headerLink">
+    <a href="#overriding" class="header-mark"></a>Overriding</h3><blockquote>
+<p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overrides" target="_blank" rel="noopener noreferrer">Chapter 4. Overriding - nixpkgs Manual</a></p>
+</blockquote>
+<p>简单的说，所有 nixpkgs 中的 Nix 包都可以通过 <code>&lt;pkg&gt;.override {}</code> 来自定义某些构建参数，它返回一个使用了自定义参数的新 Derivation. 举个例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">pkgs</span><span class="o">.</span><span class="n">fcitx5-rime</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span><span class="n">rimeDataPkgs</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="sr">./rime-data-flypy</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面这个 nix 表达式的执行结果就是一个新的 Derivation，它的 <code>rimeDataPkgs</code> 参数被覆盖为 <code>[./rime-data-flypy]</code>，而其他参数则沿用原来的值。</p>
+<p>除了覆写参数，还可以通过 <code>overrideAttrs</code> 来覆写使用 <code>stdenv.mkDerivation</code> 构建的 Derivation 的属性，比如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">helloWithDebug</span> <span class="err">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">hello</span><span class="o">.</span><span class="n">overrideAttrs</span> <span class="p">(</span><span class="n">finalAttrs</span><span class="p">:</span> <span class="n">previousAttrs</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">separateDebugInfo</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面这个例子中，<code>helloWithDebug</code> 就是一个新的 Derivation，它的 <code>separateDebugInfo</code> 参数被覆盖为 <code>true</code>，而其他参数则沿用原来的值。</p>
+<h3 id="overlays" class="headerLink">
+    <a href="#overlays" class="header-mark"></a>Overlays</h3><blockquote>
+<p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overlays" target="_blank" rel="noopener noreferrer">Chapter 3. Overlays - nixpkgs Manual</a></p>
+</blockquote>
+<p>前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
+但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.</p>
+<p>解决方法有两个：</p>
+<ol>
+<li>如果所有依赖 Derivation A 的包都仅在某个特定作用域内被使用，那么可以使用 <code>let...in...</code> 语法，override 该作用域内的 Derivation A</li>
+<li>否则，就只能使用 Overlays 修改 pkgs 中的 Derivation A 了，这是全局的修改。</li>
+</ol>
+<p>所以简单的说，Overlays 就是用来全局修改 pkgs 中的 Derivation 的。</p>
+<p>在 nix flake 中，使用如下语法来使用 Overlays:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># TODO 测试验证这个写法</span>
+</span></span><span class="line"><span class="cl"><span class="k">let</span> <span class="n">pkgs</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs</span> <span class="p">{</span> <span class="k">inherit</span> <span class="n">system</span><span class="p">;</span> <span class="n">overlays</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># overlayer1 - 参数名用 self 与 super，表达继承关系</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">self</span><span class="p">:</span> <span class="n">super</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">google-chrome</span> <span class="o">=</span> <span class="n">super</span><span class="o">.</span><span class="n">google-chrome</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="n">commandLineArgs</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">       <span class="s2">&#34;--proxy-server=&#39;https=127.0.0.1:3128;http=127.0.0.1:3128&#39;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># overlayer2 - 还可以使用 extend 来继承其他 overlay</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 这里改用 final 与 prev，表达新旧关系</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">final</span><span class="p">:</span> <span class="n">prev</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">steam</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="n">steam</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">extraPkgs</span> <span class="o">=</span> <span class="n">pkgs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="n">keyutils</span>
+</span></span><span class="line"><span class="cl">          <span class="n">libkrb5</span>
+</span></span><span class="line"><span class="cl">          <span class="n">libpng</span>
+</span></span><span class="line"><span class="cl">          <span class="n">libpulseaudio</span>
+</span></span><span class="line"><span class="cl">          <span class="n">libvorbis</span>
+</span></span><span class="line"><span class="cl">          <span class="n">stdenv</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">lib</span>
+</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXcursor</span>
+</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXi</span>
+</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXinerama</span>
+</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXScrnSaver</span>
+</span></span><span class="line"><span class="cl">        <span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="n">extraProfile</span> <span class="o">=</span> <span class="s2">&#34;export GDK_SCALE=2&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># overlay3 - 也可以将 overlay 定义在其他文件中</span>
+</span></span><span class="line"><span class="cl">  <span class="sr">./overlays/overlay3.nix</span>
+</span></span><span class="line"><span class="cl"><span class="p">];</span> <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此外第三方库也提供了一些 Overlays 的简化配置方法，比如 <a href="https://flake.parts/overlays.html" target="_blank" rel="noopener noreferrer">Overlays - flake-parts</a></p>
+<h2 id="九使用-nix-flake-打包应用" class="headerLink">
+    <a href="#%e4%b9%9d%e4%bd%bf%e7%94%a8-nix-flake-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>九、使用 Nix Flake 打包应用</h2><p>有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。</p>
 <p>TODO</p>
-<h2 id="进阶玩法" class="headerLink">
+<h3 id="stdenvmkderivation" class="headerLink">
+    <a href="#stdenvmkderivation" class="header-mark"></a>stdenv.mkDerivation</h3><p>stdenv，顾名思义即标准构建环境，它是一个 attribute set，提供了构建 Unix 程序所需的标准环境，比如 gcc、glibc、binutils 等等。
+它可以完全取代我们在其他操作系统上常用的构建工具链，比如 <code>./configure</code>; <code>make</code>; <code>make install</code> 等等。</p>
+<p>即使 stdenv 提供的环境不能满足你的要求，你也可以通过 <code>stdenv.mkDerivation</code> 来创建一个自定义的构建环境。</p>
+<p>举个例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">lib</span><span class="o">,</span> <span class="n">stdenv</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">stdenv</span><span class="o">.</span><span class="n">mkDerivation</span> <span class="k">rec</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pname</span> <span class="o">=</span> <span class="s2">&#34;libfoo&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">version</span> <span class="o">=</span> <span class="s2">&#34;1.2.3&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 源码</span>
+</span></span><span class="line"><span class="cl">  <span class="n">src</span> <span class="o">=</span> <span class="n">fetchurl</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;http://example.org/libfoo-source-</span><span class="si">${</span><span class="n">version</span><span class="si">}</span><span class="s2">.tar.bz2&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sha256</span> <span class="o">=</span> <span class="s2">&#34;0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># 构建依赖</span>
+</span></span><span class="line"><span class="cl">  <span class="n">buildInputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">libbar</span> <span class="n">perl</span> <span class="n">ncurses</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># Nix 默认将构建拆分为一系列 phases，这里仅用到其中两个</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># https://nixos.org/manual/nixpkgs/stable/#ssec-controlling-phases</span>
+</span></span><span class="line"><span class="cl">  <span class="n">buildPhase</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    gcc foo.c -o foo
+</span></span></span><span class="line"><span class="cl"><span class="s1">  &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">installPhase</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    mkdir -p $out/bin
+</span></span></span><span class="line"><span class="cl"><span class="s1">    cp foo $out/bin
+</span></span></span><span class="line"><span class="cl"><span class="s1">  &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="进阶玩法" class="headerLink">
     <a href="#%e8%bf%9b%e9%98%b6%e7%8e%a9%e6%b3%95" class="header-mark"></a>进阶玩法</h2><p>逐渐熟悉 Nix 这一套工具链后，可以进一步读一读 Nix 的三本手册，挖掘更多的玩法：</p>
 <ul>
 <li><a href="https://nixos.org/manual/nix/stable/package-management/profiles.html" target="_blank" rel="noopener noreferrer">Nix Reference Manual</a>: Nix 包管理器使用手册，主要包含 Nix 包管理器的设计、命令行使用说明。</li>
