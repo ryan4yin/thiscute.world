@@ -8,7 +8,7 @@ resources:
 - name: "featured-image"
   src: "zero-to-nix.png"
 
-tags: []
+tags: ["NixOS", "Nix", "Flake", "Linux", "DevOps"]
 categories: ["tech"]
 
 lightgallery: false
