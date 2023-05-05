@@ -20,6 +20,8 @@ comment:
     enable: false
 ---
 
+>本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flake 仍然为实验性功能。
+
 ## 零、为什么选择 Nix
 
 好几年前就听说过 Nix，用 DSL 来管理系统依赖，还能随时回滚到任一历史状态。
@@ -57,7 +59,7 @@ NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有�
 nix 的缺点：
 
 - 学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 nix 的整个设计。而其他发行版可以直接 `apt install`，因此想要用好 nix，学习成本还是比较高的。
-- 文档混乱：入门文档与进阶使用之间缺乏比较好的填充，学习曲线比较陡峭。另一方面 nix flake 不仅文档比较缺乏，还与旧的 nix-env/nix-channel 相关的文档混在一起，增加了学习与辨别的难度。
+- 文档混乱：首先 Nix 社区绝大多数文档都仍然使用旧的 nix-env/nix-channel，想直接从 Nix Flake 开始学习的话，需要参考大量旧文档，这大大增加了学习成本。其次 Nix Flake 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏，这也是学习阻碍。
 - 包数量比较少：官方宣称 nixpkgs 是有 [80000+](https://search.nixos.org/packages) 个软件包，但是实际体验下来跟 arch linux 的差距还比较大，毕竟 AUR 生态是真的丰富。
   - 官方包不一定能满足需求，因此为了使系统可复现，逐渐熟悉 nix 后肯定需要学习如何自己打包。
 - 比较吃硬盘空间：为了保证系统可以随时回退，nix 默认总是保留所有历史环境，这非常吃硬盘空间。虽然可以定期使用 `nix-collect-garbage` 来手动清理旧的历史环境，也还是建议配置个更大的硬盘...
@@ -91,7 +93,7 @@ nix 中每个构建结果的存放路径格式为 `/nix/store/<hash>-<name>`，�
 
 Nix 长期依赖一直没有标准的包结构定义，直到 2020 年才推出了 `nix-command` & `flake`，它们虽然至今仍然是实验性特性，但是已经得到广泛使用，是强烈推荐使用的功能。
 
-因为 nix-command 与 flake 还未 stable，旧的 Nix 包结构与相关命令行工具仍然是大量 Nix Wiki/教程中的主要内容，从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。
+目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flake 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。
 
 这里列举下在 nix flake 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：
 
@@ -120,15 +122,19 @@ Nix 长期依赖一直没有标准的包结构定义，直到 2020 年才推出�
 
 >https://nix.dev/tutorials/nix-language
 
-Nix 语言是一门比较简单的语言，在已有一定编程基础的情况下，过一遍这些语法用时应该在 2 个小时以内。
+Nix 语言是 Nix 的基础，要想玩转 Nix，第一步就是学会这门语言。
+Nix 是一门比较简单的函数式语言，在已有一定编程基础的情况下，过一遍这些语法用时应该在 2 个小时以内。
 
-主要包含如下内容：
+这一节主要包含如下内容：
 
 1. 数据类型
-2. 函数的声明与调用语法
-3. 内置函数与库函数
-4. inputs 的不纯性
-5. 用于描述 build task 的 derivation
+2. let...in... with inherit 等特殊语法
+3. 函数的声明与调用语法
+4. 内置函数与库函数
+5. inputs 的不纯性
+6. 用于描述 build task 的 derivation
+7. Overriding 与 Overlays
+8. ...
 
 ### 1. 基础数据类型一览
 
@@ -546,7 +552,11 @@ TODO
 
 然后运行 `sudo nixos-rebuild switch` 后，就可以通过 ssh 登录到我的系统了，密码登录会直接报错。
 
-这就是 NixOS 最基础的声明式系统配置，要对系统做任何可复现的变更，都只需要修改 `/etc/nixos/configuration.nix` 文件，然后运行 `sudo nixos-rebuild switch` 即可。
+这就是 NixOS 默认的声明式系统配置，要对系统做任何可复现的变更，都只需要修改 `/etc/nixos/configuration.nix` 文件，然后运行 `sudo nixos-rebuild switch` 即可。
+
+ `/etc/nixos/configuration.nix` 的所有配置项，在 [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration) 中有详细描述，请按需查阅。
+
+
 
 ### 2. 启用 NixOS 的 Flake 支持
 
@@ -555,17 +565,36 @@ TODO
 但是目前 flake 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 `/etc/nixos/configuration.nix` 文件，在函数块中启用 flakes 与 nix-command 功能：
 
 ```nix
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
 { config, pkgs, ... }:
 
 {
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  # 省略掉前面的配置......
+
+  # 启用 nix flakes 功能，以及配套的新 nix-command 命令行工具
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  environment.systemPackages = with pkgs; [
+    git  # nix flake 通过 git 命令拉取依赖，所以必须先安装好 git
+    vim
+    wget
+  ];
+
+  # 省略其他配置......
 }
 ```
 
 然后运行 `sudo nixos-rebuild switch` 应用修改后，即可使用 flake 来管理系统配置。
 
 
-### 3. 将系统配置修改为 flake.nix
+### 3. 将系统配置切换到 flake.nix
 
 在启用了 Nix Flake 特性后，`sudo nixos-rebuild switch` 命令会优先读取 `/etc/nixos/flake.nix` 文件，如果找不到再尝试使用 `/etc/nixos/configuration.nix`。
 
@@ -621,7 +650,8 @@ cat flake.nix
       "nixos-test" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
-        # modules 中每个参数，都是一个 NixOS Module <https://nixos.org/manual/nixos/stable/index.html#sec-modularity>
+        # modules 中每个参数，都是一个 NixOS Module
+        #    <https://nixos.org/manual/nixos/stable/index.html#sec-modularity>
         # NixOS Module 可以是一个 attribute set，也可以是一个返回 attribute set 的函数
         # 如果是函数，那么它的参数就是当前的 NixOS Module 的参数.
         # 根据 Nix Wiki 对 NixOS modules 的描述，NixOS modules 函数的参数可以有这四个（详见本仓库中的 modules 文件）：
@@ -662,10 +692,13 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
 
   # 为了确保够纯，Flake 不依赖系统自身的 /etc/nix/nix.conf，而是在 flake.nix 中通过 nixConfig 设置
   # 但是为了确保安全性，flake 默认仅允许直接设置少数 nixConfig 参数，其他参数都需要在执行 nix 命令时指定 `--accept-flake-config`，否则会被忽略
-  # <https://nixos.org/manual/nix/stable/command-ref/conf-file.html>
-  # 注意：即使添加了国内 cache 镜像，如果有些包国内镜像下载不到，它仍然会走国外，这时候就得靠旁路由来解决了。
-  # 临时修改系统默认网关为旁路由 ip:  sudo ip route add default via 192.168.5.201
-  #                    还原修改:   sudo ip route del default via 192.168.5.201
+  #     <https://nixos.org/manual/nix/stable/command-ref/conf-file.html>
+  # 注意：即使添加了国内 cache 镜像，如果有些包国内镜像下载不到，它仍然会走国外。
+  # 我的解法是使用 openwrt 旁路由 + openclash 加速下载。
+  # 临时修改系统默认网关为我的旁路由 IP:
+  #    sudo ip route add default via 192.168.5.201
+  # 还原路由规则:
+  #    sudo ip route del default via 192.168.5.201
   nixConfig = {
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
@@ -711,6 +744,30 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
   home.username = "ryan";
   home.homeDirectory = "/home/ryan";
 
+  # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
+  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
+
+  # 递归将某个文件夹中的文件，链接到 Home 目录下的指定位置
+  # home.file.".config/i3/scripts" = {
+  #   source = ./scripts;
+  #   recursive = true;   # 递归整个文件夹
+  #   executable = true;  # 将其中所有文件标记为「可执行」
+  # };
+
+  # 直接以 text 的方式，在 nix 配置文件中硬编码文件内容
+  # home.file.".xxx".text = ''
+  #     xxx
+  # '';
+
+  # set cursor size and dpi for 4k monitor
+  xresources.properties = {
+    "Xcursor.size" = 16;
+    "Xft.dpi" = 192;
+  };
+
+
+
+
   # git 相关配置
   programs.git = {
     enable = true;
@@ -744,7 +801,6 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
       };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;
-    };
   };
 
   # This value determines the Home Manager release that your
@@ -817,7 +873,91 @@ nix flake new /etc/nixos -t github:nix-community/home-manager#nixos
 你可以在 [Home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html) 中找到 Home Manager 支持的所有配置项，它涵盖了几乎所有常用的程序，建议通过关键字搜索自己需要的配置项。
 
 
-### 6. Nix Flake's Command Line
+
+### 6. 模块化 NixOS 配置
+
+到这里整个系统的骨架基本就配置完成了，当前我们 `/etc/nixos` 中的系统配置结构应该如下：
+
+```
+$ tree
+.
+├── flake.lock
+├── flake.nix
+├── home.nix
+└── configuration.nix
+```
+
+下面分别说明下这四个文件的功能：
+
+- `flake.lock`: 自动生成的版本锁文件，它记录了整个 flake 所有输入的数据源、hash 值、版本号，确保系统可复现。
+- `flake.nix`: 入口文件，执行 `sudo nixos-rebuild switch` 时会识别并部署它。
+- `configuration.nix`: 在 flake.nix 中被作为系统模块导入，目前所有系统级别的配置都写在此文件中。
+  - 此配置文件中的所有配置项，参见官方文档 [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration)
+- `home.nix`: 在 flake.nix 中被 home-manager 作为 ryan 用户的配置导入，也就是说它包含了 ryan 这个用户的所有 Home Manager 配置，负责管理其 Home 文件夹。
+  - 此配置文件的所有配置项，参见 [Appendix A. Configuration Options - Home Manager](https://nix-community.github.io/home-manager/options.html)
+
+通过修改上面几个配置文件就可以实现对系统与 Home 目录状态的修改，但是系统组件多，单纯依靠 `configuration.nix` 跟 `home.nix` 会导致配置文件臃肿，难以维护。更好的解决方案是通过 Nix 的模块机制，将配置文件拆分成多个模块，分门别类地编写维护。
+
+在前面的 Nix 语法一节有介绍过：「`import` 的参数如果为文件夹路径，那么会返回该文件夹下的 `default.nix` 文件的执行结果」，我们可以依据这个功能，将 `home.nix` 与 `configuration.nix` 拆分成多个 nix 文件。
+
+比如我之前的 i3wm 系统配置 [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2)，结构如下：
+
+```shell
+├── flake.lock
+├── flake.nix
+├── home
+│   ├── default.nix         # 在这里通过 imports = [...] 导入所有子模块
+│   ├── fcitx5              # fcitx5 中文输入法设置，我使用了自定义的小鹤音形输入法
+│   │   ├── default.nix
+│   │   └── rime-data-flypy
+│   ├── i3                  # i3wm 桌面配置
+│   │   ├── config
+│   │   ├── default.nix
+│   │   ├── i3blocks.conf
+│   │   ├── keybindings
+│   │   └── scripts
+│   ├── programs
+│   │   ├── browsers.nix
+│   │   ├── common.nix
+│   │   ├── default.nix   # 在这里通过 imports = [...] 导入 programs 目录下的所有 nix 文件
+│   │   ├── git.nix
+│   │   ├── media.nix
+│   │   ├── vscode.nix
+│   │   └── xdg.nix
+│   ├── rofi              #  rofi 应用启动器配置，通过 i3wm 中配置的快捷键触发
+│   │   ├── configs
+│   │   │   ├── arc_dark_colors.rasi
+│   │   │   ├── arc_dark_transparent_colors.rasi
+│   │   │   ├── power-profiles.rasi
+│   │   │   ├── powermenu.rasi
+│   │   │   ├── rofidmenu.rasi
+│   │   │   └── rofikeyhint.rasi
+│   │   └── default.nix
+│   └── shell             # shell 终端相关配置
+│       ├── common.nix
+│       ├── default.nix
+│       ├── nushell
+│       │   ├── config.nu
+│       │   ├── default.nix
+│       │   └── env.nu
+│       ├── starship.nix
+│       └── terminals.nix
+├── hosts 
+│   ├── msi-rtx4090      # PC 主机的配置
+│   │   ├── default.nix                 # 这就是之前的 configuration.nix，不过大部分内容都拆出到 modules 了
+│   │   └── hardware-configuration.nix  # 与系统硬件相关的配置，安装 nixos 时自动生成的      
+│   └── nixos-test       # 测试用的虚拟机配置
+│       ├── default.nix
+│       └── hardware-configuration.nix
+├── modules          # 从 configuration.nix 中拆分出的一些通用配置
+│   ├── i3.nix
+│   └── system.nix
+└── wallpaper.jpg    # 桌面壁纸，在 i3wm 配置中被引用
+```
+
+详细结构与内容，请移步前面提供的 github 仓库链接。
+
+### 7. Nix Flake's Command Line
 
 after enabled `nix-command` & `flake`, you can use `nix help` to get all the info of [New Nix Commands][New Nix Commands], the main commands include:
 
@@ -851,7 +991,7 @@ after enabled `nix-command` & `flake`, you can use `nix help` to get all the inf
 
 [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] is a brand new guide to get started with Nix & Flake, recommended to read for beginners.
 
-### 7. Flake 的 outputs
+### 8. Flake 的 outputs
 
 Flake outputs are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:
 
@@ -863,7 +1003,7 @@ Flake outputs are what a flake produces as part of its build. Each flake can hav
   - templates can be used by command `nix flake init --template <reference>`
 - 其他用户自定义的 outputs
 
-### Flake 命令行的使用
+### 9. Flake 命令行的使用
 
 ```bash
 # `nixpkgs#ponysay` means `ponysay` from `nixpkgs` flake.
