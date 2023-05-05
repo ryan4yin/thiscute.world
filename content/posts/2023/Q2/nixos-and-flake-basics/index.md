@@ -1109,10 +1109,10 @@ stdenv.mkDerivation rec {
 
 在对 Nix Flake 熟悉到一定程度后，你可以尝试一些进阶玩法，如下是一些比较流行的社区项目，可以试用：
 
-- [flake-parts](https://github.com/hercules-ci/flake-parts): Simplify Nix Flakes with the module system, useful to hold multiple system configurations in a single flake.
-- [flake-utils-plus](https://github.com/gytis-ivaskevicius/flake-utils-plus): an more powerful utils for flake development.
-- [digga][digga]: a powerful nix flake template to hold multiple host's configurations in a single flake.
-- [devshell](https://github.com/numtide/devshell)
+- [flake-parts](https://github.com/hercules-ci/flake-parts): 通过 Module 模块系统简化配置的编写与维护。
+- [flake-utils-plus](https://github.com/gytis-ivaskevicius/flake-utils-plus):同样是用于简化 Flake 配置的第三方包，不过貌似更强大些
+- [devshell](https://github.com/numtide/devshell): 顾名思义
+- [digga][digga]: 一个大而全的 Flake 模板，揉合了各种实用 Nix 工具包的功能，不过结构比较复杂，需要一定经验才能玩得转。
 - etc.
 
 
