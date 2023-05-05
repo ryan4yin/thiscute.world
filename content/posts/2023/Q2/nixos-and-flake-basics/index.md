@@ -907,7 +907,22 @@ $ tree
 
 详细结构与内容，请移步前面提供的 github 仓库链接。
 
-### 7. Flake 的 outputs
+### 7. 更新系统
+
+在使用了 Nix Flake 后，要更新系统也很简单，先更新 flake.lock 文件，然后部署即可。在配置文件夹中执行如下命令：
+
+```shell
+# 更新 flake.lock
+nix flake update
+# 部署系统
+sudo nixos-rebuild switch --flake .#msi-rtx4090
+```
+
+## 八、Nix Flake 的使用
+
+到这里我们已经写了不少 Nix Flake 配置，用来管理 NixOS 系统了。这里再简单介绍下 Nix Flake 的其他用法。
+
+### 1. Flake 的 outputs
 
 `flake.nix` 中的 `outputs` 是一个 attribute set，是整个 Flake 的构建结果，每个 Flake 都可以有许多不同的 outputs，outputs 大致有如下这些类型：
 
@@ -918,7 +933,7 @@ $ tree
 - Nix templates: 名称为 `templates` 的 outputs 是 flake 模板，可以通过此 `nix flake init --template <reference>` 使用模板初始化一个 Flake 包
 - 其他用户自定义的 outputs
 
-### 8. Flake 命令行的使用
+### 2. Flake 命令行的使用
 
 在启用了 `nix-command` & `flake` 功能后，我们就可以使用 Nix 提供的新一代 Nix 命令行工具 [New Nix Commands][New Nix Commands] 了，下面列举下其中常用命令的用法：
 
@@ -956,7 +971,7 @@ nix build "nixpkgs#bat"
 [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，建议新手读一读。
 
 
-## 八、Nixpkgs 的高级用法
+## 九、Nixpkgs 的高级用法
 
 callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。
 
@@ -1051,7 +1066,7 @@ let pkgs = import nixpkgs { inherit system; overlays = [
 此外第三方库也提供了一些 Overlays 的简化配置方法，比如 [Overlays - flake-parts](https://flake.parts/overlays.html) 
 
 
-## 九、使用 Nix Flake 打包应用
+## 十、使用 Nix Flake 打包应用
 
 >参考 [NixOS 系列（三）：软件打包，从入门到放弃](https://lantian.pub/article/modify-computer/nixos-packaging.lantian/)
 
