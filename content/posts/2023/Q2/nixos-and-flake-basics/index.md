@@ -1053,6 +1053,8 @@ let pkgs = import nixpkgs { inherit system; overlays = [
 
 ## 九、使用 Nix Flake 打包应用
 
+>参考 [NixOS 系列（三）：软件打包，从入门到放弃](https://lantian.pub/article/modify-computer/nixos-packaging.lantian/)
+
 有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。
 
 TODO
