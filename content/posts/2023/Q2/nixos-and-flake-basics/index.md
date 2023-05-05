@@ -44,7 +44,7 @@ Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform 很类似�
 
 NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。
 
-因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，并且 Nix 官方也推出了基于 Nix 的运维工具 NixOps。
+因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 [NixOps](https://github.com/NixOS/nixops) 与社区的 [deploy-rs)](https://github.com/serokell/deploy-rs) 都是基于 Nix 实现的运维工具。
 
 >Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync 定期备份到其他地方。或者用 synthing 实时同步到其他主机。
 
