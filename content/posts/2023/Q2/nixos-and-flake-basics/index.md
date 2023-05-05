@@ -1,8 +1,8 @@
 ---
 title: "NixOS 与 Nix Flake 入门"
 date: 2023-05-04T15:19:28+08:00
-lastmod: 2023-05-04T15:19:28+08:00
-draft: true
+lastmod: 2023-05-05T12:02:28+08:00
+draft: false
 
 resources:
 - name: "featured-image"
@@ -957,53 +957,20 @@ $ tree
 
 详细结构与内容，请移步前面提供的 github 仓库链接。
 
-### 7. Nix Flake's Command Line
+### 7. Flake 的 outputs
 
-after enabled `nix-command` & `flake`, you can use `nix help` to get all the info of [New Nix Commands][New Nix Commands], the main commands include:
+`flake.nix` 中的 `outputs` 是一个 attribute set，是整个 Flake 的构建结果，每个 Flake 都可以有许多不同的 outputs，outputs 大致有如下这些类型：
 
-- `nix build` - build a derivation or fetch a store path, generate a result symlink in the current directory
-- `nix develop` - run a bash shell that provides the build environment of a derivation
-- `nix flake` - provides subcommands for creating, modifying and querying Nix flakes.
-  - `nix flake archive` - copy a flake and all its inputs to a store 
-  - `nix flake check` - check whether the flake evaluates and run its tests 
-  - `nix flake clone` - clone flake repository 
-  - `nix flake info` - show flake metadata 
-  - `nix flake init` - create a flake in the current directory from a template 
-  - `nix flake lock` - create missing lock file entries 
-  - `nix flake metadata` - show flake metadata 
-  - `nix flake new` - create a flake in the specified directory from a template 
-  - `nix flake prefetch` - download the source tree denoted by a flake reference into the Nix store 
-  - `nix flake show` - show the outputs provided by a flake 
-  - `nix flake update` - update flake lock file 
-- `nix profile` - manage Nix profiles. nix profile allows you to create and manage Nix profiles. A Nix profile is a set of packages that can be installed and upgraded independently from each other. Nix profiles are versioned, allowing them to be rolled back easily. its a replacement of `nix-env`.
-    - `nix profile diff-closures` - show the closure difference between each version of a profile 
-    - `nix profile history` - show all versions of a profile 
-    - `nix profile install` - install a package into a profile 
-    - `nix profile list` - list installed packages 
-    - `nix profile remove` - remove packages from a profile 
-    - `nix profile rollback` - roll back to the previous version or a specified version of a profile 
-    - `nix profile upgrade` - upgrade packages using their most recent flake 
-    - `nix profile wipe-history` - delete non-current versions of a profile 
-- `nix repl` - start an interactive environment for evaluating Nix expressions
-- `nix run` - run a Nix application. (use `nix run --help` for detail explanation)
-- `nix search` - search for packages, maybe your woulde prefer the website <https://search.nixos.org> instead of this command.
-- `nix shell` - run a shell in which the specified packages are available
-
-[Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] is a brand new guide to get started with Nix & Flake, recommended to read for beginners.
-
-### 8. Flake 的 outputs
-
-Flake outputs are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:
-
-- Nix packages: named `apps.<system>.<name>`, `packages.<system>.<name>`, or `legacyPackages.<system>.<name>`
-- Nix Helper Functions: named `lib`, which means a library for other flakes.
-- Nix development environments: named `devShell`
-- NixOS configurations: has many different outputs
-- Nix templates: named `templates`
-  - templates can be used by command `nix flake init --template <reference>`
+- Nix packages: 名称为 `apps.<system>.<name>`, `packages.<system>.<name>` 或 `legacyPackages.<system>.<name>` 的 outputs，都是 Nix 包，通常都是一个个应用程序。
+- Nix Helper Functions: 名称为 `lib` 的 outputs 是 Flake 函数库，可以被其他 Flake 作为 inputs 导入使用。
+- Nix development environments: 名称为 `devShell` 的 outputs 是 Nix 开发环境
+- NixOS configurations: 名称为 `nixosConfigurations.<hostname>` 的 outputs，是 NixOS 的系统配置。
+- Nix templates: 名称为 `templates` 的 outputs 是 flake 模板，可以通过此 `nix flake init --template <reference>` 使用模板初始化一个 Flake 包
 - 其他用户自定义的 outputs
 
-### 9. Flake 命令行的使用
+### 8. Flake 命令行的使用
+
+在启用了 `nix-command` & `flake` 功能后，我们就可以使用 Nix 提供的新一代 Nix 命令行工具 [New Nix Commands][New Nix Commands] 了，下面列举下其中常用命令的用法：
 
 ```bash
 # `nixpkgs#ponysay` means `ponysay` from `nixpkgs` flake.
@@ -1036,6 +1003,7 @@ nix build "nixpkgs#bat"
 # build a local flake is the same as nix develop, skip it
 ```
 
+[Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，建议新手读一读。
 
 ## 八、使用 Nix Flake 打包应用
 
@@ -1062,7 +1030,7 @@ TODO
 
 ## 参考
 
-- [NixOS 系列（一）：我为什么心动了](https://lantian.pub/article/modify-website/nixos-why.lantian/): 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。
+- [NixOS 系列](https://lantian.pub/article/modify-website/nixos-why.lantian/): 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): 官方的 Nix Flake 系列文章，介绍得比较详细，作为新手入门比较 OK
 - [Nix Flakes - Wiki](https://nixos.wiki/wiki/Flakes): Nix Flakes 的官方 Wiki，此文介绍得比较粗略。
 - 一些参考 nix 配置
