@@ -1036,8 +1036,6 @@ TODO
   - [fufexan/dotfiles](https://github.com/fufexan/dotfiles): 好漂亮，教练我想学这个
   - [davidak/nixos-config](https://codeberg.org/davidak/nixos-config)
   - [davidtwco/veritas](https://github.com/davidtwco/veritas)
-- [NixOS 手册](https://nixos.org/manual/nixos/stable/index.html): 要想把 NixOS 玩透，这是必读的。前面的文章读来会发现很多陌生的概念，需要靠这个补全。
-  - 不过也不是说要把所有内容都补一遍，先看个大概，后面有需要再按图索骥即可。
 
 
 
