@@ -57,17 +57,6 @@
 </li>
 <li><a href="https://github.com/DeterminateSystems/nix-installer" target="_blank" rel="noopener noreferrer">The Determinate Nix Installer</a>: 使用 Rust 编写, 默认启用 <code>nix-command</code> &amp; <code>flake</code>，并且提供了官方的卸载命令。</li>
 </ol>
-<p>安装完成后可以先简单体验下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查看当前系统中所有可用的软件包</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>nix 生成的所有内容，都存放在 <code>/nix/store</code> 路径下，这个路径被设置为只读，只有 nix 本身才能修改这个路径下的内容，以保证系统的可复现性。</p>
-<p>nix 中每个构建结果的存放路径格式为 <code>/nix/store/&lt;hash&gt;-&lt;name&gt;</code>，其中 <code>&lt;hash&gt;</code> 是构建结果的 hash 值，<code>&lt;name&gt;</code> 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。</p>
 <h2 id="三nix-flake-与旧的-nix" class="headerLink">
     <a href="#%e4%b8%89nix-flake-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flake 与旧的 Nix</h2><p>Nix 长期依赖一直没有标准的包结构定义，直到 2020 年才推出了 <code>nix-command</code> &amp; <code>flake</code>，它们虽然至今仍然是实验性特性，但是已经得到广泛使用，是强烈推荐使用的功能。</p>
 <p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flake 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。</p>
@@ -549,7 +538,9 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="13-derivations" class="headerLink">
-    <a href="#13-derivations" class="header-mark"></a>13. Derivations</h3><p>一个构建动作的 nix 语言描述被称做一个 Derivation，它描述了如何构建一个软件包，它的执行结果是一个 store object</p>
+    <a href="#13-derivations" class="header-mark"></a>13. Derivations</h3><p>一个构建动作的 nix 语言描述被称做一个 Derivation，它描述了如何构建一个软件包，它的构建结果是一个 store object</p>
+<p>store object 的存放路径格式为 <code>/nix/store/&lt;hash&gt;-&lt;name&gt;</code>，其中 <code>&lt;hash&gt;</code> 是构建结果的 hash 值，<code>&lt;name&gt;</code> 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。</p>
+<p><code>/nix/store</code> 被称为 store，存放所有的 store objects，这个路径被设置为只读，只有 nix 本身才能修改这个路径下的内容，以保证系统的可复现性。</p>
 <p>在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 <code>derivation</code> 创建的，我们实际使用的 <code>stdenv.mkDerivation</code> 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。</p>
 <h3 id="14-stdenvmkderivation" class="headerLink">
     <a href="#14-stdenvmkderivation" class="header-mark"></a>14. stdenv.mkDerivation</h3><p>stdenv，顾名思义即标准构建环境，它是一个 attribute set，提供了构建 Unix 程序所需的标准环境，比如 gcc、glibc、binutils 等等。
