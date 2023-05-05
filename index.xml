@@ -1343,8 +1343,26 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>详细结构与内容，请移步前面提供的 github 仓库链接。</p>
-<h3 id="7-flake-的-outputs" class="headerLink">
-    <a href="#7-flake-%e7%9a%84-outputs" class="header-mark"></a>7. Flake 的 outputs</h3><p><code>flake.nix</code> 中的 <code>outputs</code> 是一个 attribute set，是整个 Flake 的构建结果，每个 Flake 都可以有许多不同的 outputs，outputs 大致有如下这些类型：</p>
+<h3 id="7-更新系统" class="headerLink">
+    <a href="#7-%e6%9b%b4%e6%96%b0%e7%b3%bb%e7%bb%9f" class="header-mark"></a>7. 更新系统</h3><p>在使用了 Nix Flake 后，要更新系统也很简单，先更新 flake.lock 文件，然后部署即可。在配置文件夹中执行如下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 更新 flake.lock</span>
+</span></span><span class="line"><span class="cl">nix flake update
+</span></span><span class="line"><span class="cl"><span class="c1"># 部署系统</span>
+</span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#msi-rtx4090
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="八nix-flake-的使用" class="headerLink">
+    <a href="#%e5%85%abnix-flake-%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>八、Nix Flake 的使用</h2><p>到这里我们已经写了不少 Nix Flake 配置，用来管理 NixOS 系统了。这里再简单介绍下 Nix Flake 的其他用法。</p>
+<h3 id="1-flake-的-outputs" class="headerLink">
+    <a href="#1-flake-%e7%9a%84-outputs" class="header-mark"></a>1. Flake 的 outputs</h3><p><code>flake.nix</code> 中的 <code>outputs</code> 是一个 attribute set，是整个 Flake 的构建结果，每个 Flake 都可以有许多不同的 outputs，outputs 大致有如下这些类型：</p>
 <ul>
 <li>Nix packages: 名称为 <code>apps.&lt;system&gt;.&lt;name&gt;</code>, <code>packages.&lt;system&gt;.&lt;name&gt;</code> 或 <code>legacyPackages.&lt;system&gt;.&lt;name&gt;</code> 的 outputs，都是 Nix 包，通常都是一个个应用程序。</li>
 <li>Nix Helper Functions: 名称为 <code>lib</code> 的 outputs 是 Flake 函数库，可以被其他 Flake 作为 inputs 导入使用。</li>
@@ -1353,8 +1371,8 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 <li>Nix templates: 名称为 <code>templates</code> 的 outputs 是 flake 模板，可以通过此 <code>nix flake init --template &lt;reference&gt;</code> 使用模板初始化一个 Flake 包</li>
 <li>其他用户自定义的 outputs</li>
 </ul>
-<h3 id="8-flake-命令行的使用" class="headerLink">
-    <a href="#8-flake-%e5%91%bd%e4%bb%a4%e8%a1%8c%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>8. Flake 命令行的使用</h3><p>在启用了 <code>nix-command</code> &amp; <code>flake</code> 功能后，我们就可以使用 Nix 提供的新一代 Nix 命令行工具 <a href="https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html" target="_blank" rel="noopener noreferrer">New Nix Commands</a> 了，下面列举下其中常用命令的用法：</p>
+<h3 id="2-flake-命令行的使用" class="headerLink">
+    <a href="#2-flake-%e5%91%bd%e4%bb%a4%e8%a1%8c%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>2. Flake 命令行的使用</h3><p>在启用了 <code>nix-command</code> &amp; <code>flake</code> 功能后，我们就可以使用 Nix 提供的新一代 Nix 命令行工具 <a href="https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html" target="_blank" rel="noopener noreferrer">New Nix Commands</a> 了，下面列举下其中常用命令的用法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1418,8 +1436,8 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><a href="https://github.com/DeterminateSystems/zero-to-nix" target="_blank" rel="noopener noreferrer">Zero to Nix - Determinate Systems</a> 是一份全新的 Nix &amp; Flake 新手入门文档，建议新手读一读。</p>
-<h2 id="八nixpkgs-的高级用法" class="headerLink">
-    <a href="#%e5%85%abnixpkgs-%e7%9a%84%e9%ab%98%e7%ba%a7%e7%94%a8%e6%b3%95" class="header-mark"></a>八、Nixpkgs 的高级用法</h2><p>callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。</p>
+<h2 id="九nixpkgs-的高级用法" class="headerLink">
+    <a href="#%e4%b9%9dnixpkgs-%e7%9a%84%e9%ab%98%e7%ba%a7%e7%94%a8%e6%b3%95" class="header-mark"></a>九、Nixpkgs 的高级用法</h2><p>callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。</p>
 <p>我们知道许多程序都有大量构建参数需要配置，不同的用户会希望使用不同的构建参数，这时候就需要 Overriding 与 Overlays 来实现。我举几个我遇到过的例子：</p>
 <ol>
 <li><a href="https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix" target="_blank" rel="noopener noreferrer">fcitx5-rime.nix</a>: fcitx5-rime 的 <code>rimeDataPkgs</code> 默认使用 <code>rime-data</code> 包，但是也可以通过 override 来自定义该参数的值，以加载自定义的 rime 配置（比如加载小鹤音形输入法配置）。</li>
@@ -1550,8 +1568,8 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>此外第三方库也提供了一些 Overlays 的简化配置方法，比如 <a href="https://flake.parts/overlays.html" target="_blank" rel="noopener noreferrer">Overlays - flake-parts</a></p>
-<h2 id="九使用-nix-flake-打包应用" class="headerLink">
-    <a href="#%e4%b9%9d%e4%bd%bf%e7%94%a8-nix-flake-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>九、使用 Nix Flake 打包应用</h2><blockquote>
+<h2 id="十使用-nix-flake-打包应用" class="headerLink">
+    <a href="#%e5%8d%81%e4%bd%bf%e7%94%a8-nix-flake-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>十、使用 Nix Flake 打包应用</h2><blockquote>
 <p>参考 <a href="https://lantian.pub/article/modify-computer/nixos-packaging.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（三）：软件打包，从入门到放弃</a></p>
 </blockquote>
 <p>有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。</p>
