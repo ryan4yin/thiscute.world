@@ -21,7 +21,7 @@
     <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform 很类似，都是声明式的配置管理工具，用户需要用 DSL 语言声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。</p>
 <p>基于 nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个系统的状态。</p>
 <p>NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。</p>
-<p>因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs)</a> 都是基于 Nix 实现的运维工具。</p>
+<p>因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> 都是基于 Nix 实现的运维工具。</p>
 <blockquote>
 <p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync 定期备份到其他地方。或者用 synthing 实时同步到其他主机。</p>
 </blockquote>
@@ -1658,16 +1658,7 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 <li><a href="https://lantian.pub/article/modify-website/nixos-why.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列</a>: 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。</li>
 <li><a href="https://www.tweag.io/blog/2020-05-25-flakes/" target="_blank" rel="noopener noreferrer">Nix Flakes Series</a>: 官方的 Nix Flake 系列文章，介绍得比较详细，作为新手入门比较 OK</li>
 <li><a href="https://nixos.wiki/wiki/Flakes" target="_blank" rel="noopener noreferrer">Nix Flakes - Wiki</a>: Nix Flakes 的官方 Wiki，此文介绍得比较粗略。</li>
-<li>一些参考 nix 配置
-<ul>
-<li><a href="https://github.com/xddxdd/nixos-config" target="_blank" rel="noopener noreferrer">xddxdd/nixos-config</a></li>
-<li><a href="https://github.com/bobbbay/dotfiles" target="_blank" rel="noopener noreferrer">bobbbay/dotfiles</a></li>
-<li><a href="https://github.com/gytis-ivaskevicius/nixfiles" target="_blank" rel="noopener noreferrer">gytis-ivaskevicius/nixfiles</a></li>
-<li><a href="https://github.com/fufexan/dotfiles" target="_blank" rel="noopener noreferrer">fufexan/dotfiles</a>: 好漂亮，教练我想学这个</li>
-<li><a href="https://codeberg.org/davidak/nixos-config" target="_blank" rel="noopener noreferrer">davidak/nixos-config</a></li>
-<li><a href="https://github.com/davidtwco/veritas" target="_blank" rel="noopener noreferrer">davidtwco/veritas</a></li>
-</ul>
-</li>
+<li><a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>: 我的 nix 配置仓库，README 中也列出了我参考过的其他配置仓库</li>
 </ul>
 ]]></content></entry><entry><title type="html">Linux 上的 WireGuard 网络分析（一）</title><link href="https://thiscute.world/posts/wireguard-on-linux/"/><id>https://thiscute.world/posts/wireguard-on-linux/</id><author><name>ryan4yin</name></author><published>2023-03-28T22:19:25+08:00</published><updated>2023-03-28T22:19:25+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/wireguard-on-linux/wireguard.png" height="1280" width="500"><figcaption></figcaption>
