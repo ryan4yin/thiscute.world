@@ -11,7 +11,7 @@ resources:
 tags: ["NixOS", "Nix", "Flake", "Linux", "DevOps"]
 categories: ["tech"]
 
-lightgallery: false
+lightgallery: true
 
 comment:
   utterances:
@@ -25,6 +25,9 @@ comment:
 >本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flake 仍然为实验性功能。
 
 >需要有一定 Linux 使用经验与编程经验，才能玩转 Nix Flake。
+
+
+{{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我的 NixOS 桌面" >}}
 
 ## 零、为什么选择 Nix
 
