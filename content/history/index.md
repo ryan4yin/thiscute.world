@@ -22,6 +22,15 @@ comment:
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 >同时如果某一天的日报内容跟前一天并无区别，我会直接省略掉当天的记录。
 
+
+### 2023-05-04 - 2023-05-07
+
+- 研究使用 nix flake 配置 nixos 系统，[nix-config](https://github.com/ryan4yin/nix-config) 
+    - nixos 确实好用，但是官方文档太烂了，学起来很费劲，从 [nix 笔记提交记录](https://github.com/ryan4yin/knowledge/commits/8b1c5d104da1738d76287c0b50cd36a4caec2512/linux/nix) 上看，从 2022/4/21 折腾到现在已经半个月了，才把系统搞到基本可用的状态。
+- 有了 nixos 后，底气足了很多，将桌面环境从 i3wm 切换到 hyprland，确实非常丝滑，hyprland 的动画效果非常棒！
+    - 另外目前遇到最大的坑就是 fcitx5 在 wayland 下，无法在 chrome/vscode 下使用的问题，还没解决，这些中文都是通过 alacritty + vim 写的。因为这个原因，都有点想考虑换成 neovim 了...
+
+
 ### 2023-04-30 - 2023-05-03
 
 - 研究使用 nix flake 配置 nixos 系统，[nix-config](https://github.com/ryan4yin/nix-config) 发布 v0.0.1
