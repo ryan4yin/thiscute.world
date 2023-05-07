@@ -1139,14 +1139,7 @@ TODO
 - [NixOS 系列](https://lantian.pub/article/modify-website/nixos-why.lantian/): 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): 官方的 Nix Flake 系列文章，介绍得比较详细，作为新手入门比较 OK
 - [Nix Flakes - Wiki](https://nixos.wiki/wiki/Flakes): Nix Flakes 的官方 Wiki，此文介绍得比较粗略。
-- 一些参考 nix 配置
-  - [xddxdd/nixos-config](https://github.com/xddxdd/nixos-config)
-  - [bobbbay/dotfiles](https://github.com/bobbbay/dotfiles)
-  - [gytis-ivaskevicius/nixfiles](https://github.com/gytis-ivaskevicius/nixfiles)
-  - [fufexan/dotfiles](https://github.com/fufexan/dotfiles): 好漂亮，教练我想学这个
-  - [davidak/nixos-config](https://codeberg.org/davidak/nixos-config)
-  - [davidtwco/veritas](https://github.com/davidtwco/veritas)
-
+- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 我的 nix 配置仓库，README 中也列出了我参考过的其他配置仓库
 
 
 [digga]: https://github.com/divnix/digga
