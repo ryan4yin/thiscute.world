@@ -38,7 +38,7 @@ comment:
 第一件事是在新组装的 PC 主机上安装 EndeavourOS（Arch Linux 的一个衍生发行版），因为旧系统也是 EndeavourOS 系统，安装完为了省事，我就直接把旧电脑的 Home 目录 rsync 同步到了新 PC 上。
 这一同步就出了问题，所有功能都工作正常，但是视频播放老是卡住，firefox/chrome/mpv 都会卡住，网上找各种资料都没解决，还是我灵光一闪想到是不是 Home 目录同步的锅，清空了 Home 目录，问题立马就解决了...后面又花好长时间从旧电脑一点点恢复 Home 目录下的东西。
 
-第二件事是，想尝鲜 wayland，把桌面从 i3wm 换成了 sway，但是因为用起来区别不明显，再加上诸多不便（hidpi、sway 配置调优要花时间精力，另外我用的是 sway 官方不支持的 nvidia 显卡），就还是回退到了 i3wm。结果回退后，每次系统刚启动时，有一段时间 firefox/thunar 等 GUI 程序会一直卡着。
+第二件事是，想尝鲜 wayland，把桌面从 i3wm 换成了 sway，但是因为用起来区别不明显，再加上诸多不便（hidpi、sway 配置调优要花时间精力，另外我用的是 sway 官方不支持的 nvidia 显卡），就还是回退到了 i3wm。结果回退后，每次系统刚启动时，有一段时间 firefox/thunar 等 GUI 程序会一直卡着，要大概 1 分钟后才能正常启动...
 
 发生第二件事时我就懒得折腾了，想到归根结底还是系统没有版本控制跟回滚机制，导致系统出了问题不能还原，装新系统时各种软件包也全靠自己手工从旧机器导出软件包清单，再在新机器安装恢复。就打算干脆换成 NixOS 试试。
 
@@ -53,24 +53,27 @@ NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有�
 
 因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 [NixOps](https://github.com/NixOS/nixops) 与社区的 [deploy-rs](https://github.com/serokell/deploy-rs) 都是基于 Nix 实现的运维工具。
 
->Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync 定期备份到其他地方。或者用 synthing 实时同步到其他主机。
+>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步。
 
 总结下 nix 的优点：
 
 - 声明式配置，environment as code
   - nix flake 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。
-  - 这与 docker/vargrant 有点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，可以用于管理任何物理机、虚拟机、容器的环境。
-- 可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回滚。所以也被认为是最稳定的包管理方式。
-- 没有依赖冲突问题：因为 nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。任何其他依赖了某个特定包的 nix 包，都会在其配置文件中声明依赖的包的 hash，这样它只能看到这个 hash 对应的包，就不存在冲突。
+  - 这与 docker/vargrant 有点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，适用面更广（代价是 Nix 要更复杂...）
+- 可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回退。所以 Nix 也被认为是最稳定的包管理方式。
+- 没有依赖冲突问题：因为 nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。
+- NixOS 的可自定义程度非常高，系统的绝大多数组件都可以通过简单的声明式配置来自定义，而且也可以很方便地将自己的定制配置分享给他人。
+- 社区很活跃，第三方项目也挺丰富，官方包仓库 nixpkgs 贡献者众多，也有很多人分享自己的 nix 配置，一遍浏览下来，整个生态给我一种发现新大陆的兴奋感。
 
 nix 的缺点：
 
-- 学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 nix 的整个设计。而其他发行版可以直接 `apt install`，因此想要用好 nix，学习成本还是比较高的。
+- 学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 nix 的整个设计，并以声明式的方式管理系统，不能无脑 `nix-env -i`（这类似 `apt-get install`）。
 - 文档混乱：首先 Nix Flake 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏。 其次 Nix 社区绝大多数文档都只介绍了旧的 `nix-env`/`nix-channel`，想直接从 Nix Flake 开始学习的话，需要参考大量旧文档，从中提取出自己需要的内容。
 - 包数量比较少：官方宣称 nixpkgs 是有 [80000+](https://search.nixos.org/packages) 个软件包，但是实际体验下来跟 arch linux 的差距还比较大，毕竟 AUR 生态是真的丰富。
-  - 官方包不一定能满足需求，因此为了使系统可复现，逐渐熟悉 nix 后肯定需要学习如何自己打包。
+  - 用其他发行版，你根本不需要了解 debian/aur 等打包相关的知识，可以直接用现成的，再不济也能根据官方文档手动编译。但用 NixOS，它不遵循标准的 FHS 文件架构，为了安装某些官方与社区没有的程序，也为了系统的可复现性，学习如何使用 nixpkgs 打包几乎是不可避免的。
 - 比较吃硬盘空间：为了保证系统可以随时回退，nix 默认总是保留所有历史环境，这非常吃硬盘空间。虽然可以定期使用 `nix-collect-garbage` 来手动清理旧的历史环境，也还是建议配置个更大的硬盘...
 
+总的来说，我觉得 NixOS 适合那些有一定 Linux 使用经验与编程经验，并且希望对自己的系统拥有更强掌控力的开发者。在开发环境搭建方面 Nix 与相对流行的 Dev Containers 也有些竞争关系，它们的具体区别还有待我发掘~
 
 ## 二、安装与简单使用
 
@@ -78,17 +81,17 @@ Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/
 
 我选择了直接使用 NixOS 的 ISO 镜像安装 NixOS 系统，从而最大程度上通过 Nix 管理整个系统的环境。
 
-安装很简单，这里不多介绍，参见相关资料：
+安装很简单，这里不多介绍，仅列一下我觉得比较有用的参考资料：
 
-- 国内镜像源说明：https://mirrors.bfsu.edu.cn/help/nix/
+- 国内镜像源说明：<https://mirrors.bfsu.edu.cn/help/nix/>
 1. [Nix 的官方安装方式](https://nixos.org/download.html): 使用 bash 脚本编写, 目前（2023-04-23）为止 `nix-command` & `flake` 仍然是实验性特性，需要手动开启。
    1. 你需要参照 [Enable flakes - NixOS Wiki](https://nixos.wiki/wiki/Flakes) 的说明启用 `nix-command` & `flake`
-   2. 官方不提供任何卸载手段，你需要手动删除安装的所有资源 & users & group(`nixbld`).
-2. [The Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer): 使用 Rust 编写, 默认启用 `nix-command` & `flake`，并且提供了官方的卸载命令。
+   2. 官方不提供任何卸载手段，要在 Linux/MacOS 上卸载 Nix，你需要手动删除所有相关的文件、用户以及用户组
+2. [The Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer): 第三方使用 Rust 编写的 installer, 默认启用 `nix-command` & `flake`，并且提供了卸载命令。
 
 ## 三、Nix Flake 与旧的 Nix
 
-Nix 长期以来一直没有标准的包结构定义，直到 2020 年推出了 `nix-command` & `flake` 才改善了这个局面，因此虽然至今 flake 仍然是实验性特性，但是已经被广泛使用，是强烈推荐使用的功能。
+Nix 于 2020 年推出了 `nix-command` & `flake` 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。
 
 目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flake 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。
 
@@ -119,7 +122,8 @@ Nix 长期以来一直没有标准的包结构定义，直到 2020 年推出了 
 
 >https://nix.dev/tutorials/nix-language
 
-Nix 语言是 Nix 的基础，要想玩转 Nix，第一步就是学会这门语言。
+Nix 语言是 Nix 的基础，要想玩得转 NixOS 与 Nix Flakes，享受到它们带来的诸多好处，就必须学会这门语言。
+
 Nix 是一门比较简单的函数式语言，在已有一定编程基础的情况下，过一遍这些语法用时应该在 2 个小时以内。
 
 这一节主要包含如下内容：
@@ -449,9 +453,9 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 同时上一个系统环境会被保留，而且会被加入到 grub 的启动项中，这确保了即使新的环境不能启动，也能随时回退到旧环境。
 
 另一方面，`/etc/nixos/configuration.nix` 是传统的 Nix 配置方式，它依赖 nix-channel 配置的数据源，也没有任何版本锁定机制，实际无法确保系统的可复现性。
-更推荐使用的是 Nix Flake，它可以确保系统的可复现性，同时也可以很方便地管理系统的配置。
+更推荐使用的是 Nix Flakes，它可以确保系统的可复现性，同时也可以很方便地管理系统的配置。
 
-我们下面会分别介绍这两种配置方式。
+我们下面首先介绍下通过 NixOS 默认的配置方式来管理系统，然后再过渡到更先进的 Nix Flakes.
 
 ### 1. 使用 `/etc/nixos/configuration.nix` 配置系统
 
@@ -503,21 +507,21 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 }
 ```
 
-这里我启用了 openssh 服务，并为 ryan 用户添加了 ssh 公钥，并禁用了密码登录。
+这里我启用了 openssh 服务，为 ryan 用户添加了 ssh 公钥，并禁用了密码登录。
 
-然后运行 `sudo nixos-rebuild switch` 后，就可以通过 ssh 登录到我的系统了，密码登录会直接报错。
+现在运行 `sudo nixos-rebuild switch` 部署修改后的配置，之后就可以通过 ssh 密钥远程登录到我的这台主机了。
 
-这就是 NixOS 默认的声明式系统配置，要对系统做任何可复现的变更，都只需要修改 `/etc/nixos/configuration.nix` 文件，然后运行 `sudo nixos-rebuild switch` 即可。
+这就是 NixOS 默认的声明式系统配置，要对系统做任何可复现的变更，都只需要修改 `/etc/nixos/configuration.nix` 文件，然后运行 `sudo nixos-rebuild switch` 部署变更即可。
 
- `/etc/nixos/configuration.nix` 的所有配置项，在 [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration) 中有详细描述，请按需查阅。
+`/etc/nixos/configuration.nix` 的所有配置项，在 [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration) 中有详细描述，请按需查阅。
 
 
 
 ### 2. 启用 NixOS 的 Flake 支持
 
-与 NixOS 默认的配置方式相比，Flake 提供了更好的可复现性，同时它定义的包结构也更加清晰，更容易维护，因此更建议使用 Flake 来管理系统配置。
+与 NixOS 默认的配置方式相比，Nix Flakes 提供了更好的可复现性，同时它定义的包结构也更加清晰，更容易维护，因此更建议使用 Nix Flakes 来管理系统配置。
 
-但是目前 flake 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 `/etc/nixos/configuration.nix` 文件，在函数块中启用 flakes 与 nix-command 功能：
+但是目前 nix flakes 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 `/etc/nixos/configuration.nix` 文件，在函数块中启用 flakes 与 nix-command 功能：
 
 ```nix
 # Edit this configuration file to define what should be installed on
@@ -537,7 +541,7 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
-    git  # nix flake 通过 git 命令拉取依赖，所以必须先安装好 git
+    git  # nix flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git
     vim
     wget
   ];
@@ -546,12 +550,12 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 }
 ```
 
-然后运行 `sudo nixos-rebuild switch` 应用修改后，即可使用 flake 来管理系统配置。
+然后运行 `sudo nixos-rebuild switch` 应用修改后，即可使用 nix flakes 来管理系统配置。
 
 
 ### 3. 将系统配置切换到 flake.nix
 
-在启用了 Nix Flake 特性后，`sudo nixos-rebuild switch` 命令会优先读取 `/etc/nixos/flake.nix` 文件，如果找不到再尝试使用 `/etc/nixos/configuration.nix`。
+在启用了 Nix Flakes 特性后，`sudo nixos-rebuild switch` 命令会优先读取 `/etc/nixos/flake.nix` 文件，如果找不到再尝试使用 `/etc/nixos/configuration.nix`。
 
 可以首先使用官方提供的模板来学习 flake 的编写，先查下有哪些模板：
 
@@ -566,7 +570,7 @@ nix flake init -t templates#full
 cat flake.nix
 ```
 
-简单浏览后，我们创建文件 `/etc/nixos/flake.nix`，后续系统的所有修改都将全部由 nix flake 接管，参照前面的模板，编写如下内容：
+我们参照该模板创建文件 `/etc/nixos/flake.nix` 并编写好配置内容，后续系统的所有修改都将全部由 nix flakes 接管，示例内容如下：
 
 ```nix
 {
@@ -629,17 +633,16 @@ cat flake.nix
 }
 ```
 
-这里我们定义了一个名为 nixos 的系统，它的配置文件为 `./configuration.nix`，这个文件就是我们之前的配置文件，这样我们仍然可以沿用旧的配置。
+这里我们定义了一个名为 `nixos-test` 的系统，它的配置文件为 `./configuration.nix`，这个文件就是我们之前的配置文件，这样我们仍然可以沿用旧的配置。
 
-现在执行 `nixos-rebuild switch` 应用配置。
+现在执行 `nixos-rebuild switch` 应用配置，系统应该没有任何变化，因为我们仅仅是切换到了 Nix Flakes，配置内容与之前还是一致的。
 
 ### 4. 为 Flake 添加国内 cache 源
 
-NixOS 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓存构建结果提供给用户，但是在国内这个地址非常地慢，如果没有全局代理的话，基本上是无法使用的。
+NixOS 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓存构建结果提供给用户，另一方面几乎所有 Flakes 的数据源都是 Github 的某个仓库。
+但是在国内官方的 cache 地址跟 Github 都非常地慢，如果没有全局代理的话，基本上是无法使用的。
 
-在旧的 NixOS 配置方式中，可以通过 `nix-channel` 来添加国内的 cache 源，但是在 flake 中，这个方式已经不再适用了。
-
-Flake 为了提升可复现性，会尽可能地避免使用任何系统级别的配置、环境变量等，我们必须在 flake.nix 中添加 cache 的国内镜像地址，这就是 `nixConfig` 参数，示例如下：
+在旧的 NixOS 配置方式中，可以通过 `nix-channel` 来添加国内的 cache 镜像源，但是 Nix Flakes 会尽可能地避免使用任何系统级别的配置跟环境变量，以确保其构建结果不受环境的影响。因此为了自定义 cache 镜像源，我们必须在 `flake.nix` 中添加相关配置，这就是 `nixConfig` 参数，示例如下：
 
 ```nix
 {
@@ -682,7 +685,9 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
 
 ```
 
-改完后部署即可生效。
+改完后使用 `sudo nixos-rebuild switch` 应用配置即可生效，后续所有的包都会优先从国内镜像源查找缓存。
+
+>注：上述手段只能加速部分包的下载，许多 inputs 数据源仍然会从 Github 拉取，另外如果找不到缓存，会执行本地构建，这通常仍然需要从国外下载源码与构建依赖，因此仍然会很慢。为了完全解决速度问题，仍然建议使用旁路由等局域网全局代理方案。
 
 ### 5. 安装 home-manager
 
@@ -706,7 +711,7 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
   # home.file.".config/i3/scripts" = {
   #   source = ./scripts;
   #   recursive = true;   # 递归整个文件夹
-  #   executable = true;  # 将其中所有文件标记为「可执行」
+  #   executable = true;  # 将其中所有文件添加「执行」权限
   # };
 
   # 直接以 text 的方式，在 nix 配置文件中硬编码文件内容
@@ -717,11 +722,8 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
   # set cursor size and dpi for 4k monitor
   xresources.properties = {
     "Xcursor.size" = 16;
-    "Xft.dpi" = 192;
+    "Xft.dpi" = 172;
   };
-
-
-
 
   # git 相关配置
   programs.git = {
@@ -733,6 +735,7 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
   # Packages that should be installed to the user profile.
   home.packages = [ 
     pkgs.htop
+    pkgs.btop
   ];
 
   # 启用 starship，这是一个漂亮的 shell 提示符
@@ -746,7 +749,7 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
     };
   };
 
-  # alacritty 终端配置，貌似还需要配置 X11 环境，否则无法启动
+  # alacritty 终端配置
   programs.alacritty = {
     enable = true;
       env.TERM = "xterm-256color";
@@ -773,13 +776,13 @@ Flake 为了提升可复现性，会尽可能地避免使用任何系统级别�
 }
 ```
 
-然后再使用如下命令创建 `/etc/nixos/flake.nix`：
+添加好 `/etc/nixos/home.nix` 后，还需要在 `/etc/nixos/flake.nix` 中导入该配置，它才能生效，可以使用如下命令，在当前文件夹中生成一个示例配置以供参考：
 
 ```shell
-nix flake new /etc/nixos -t github:nix-community/home-manager#nixos
+nix flake new -t github:nix-community/home-manager#nixos
 ```
 
-通过模板生成好 `/etc/nixos/flake.nix` 配置后不是万事大吉，还得手动改下相关参数：
+调整好参数后的 `/etc/nixos/flake.nix` 内容示例如下：
 
 ```nix
 {
@@ -828,7 +831,6 @@ nix flake new /etc/nixos -t github:nix-community/home-manager#nixos
 你可以在 [Home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html) 中找到 Home Manager 支持的所有配置项，它涵盖了几乎所有常用的程序，建议通过关键字搜索自己需要的配置项。
 
 
-
 ### 6. 模块化 NixOS 配置
 
 到这里整个系统的骨架基本就配置完成了，当前我们 `/etc/nixos` 中的系统配置结构应该如下：
@@ -851,7 +853,8 @@ $ tree
 - `home.nix`: 在 flake.nix 中被 home-manager 作为 ryan 用户的配置导入，也就是说它包含了 ryan 这个用户的所有 Home Manager 配置，负责管理其 Home 文件夹。
   - 此配置文件的所有配置项，参见 [Appendix A. Configuration Options - Home Manager](https://nix-community.github.io/home-manager/options.html)
 
-通过修改上面几个配置文件就可以实现对系统与 Home 目录状态的修改，但是系统组件多，单纯依靠 `configuration.nix` 跟 `home.nix` 会导致配置文件臃肿，难以维护。更好的解决方案是通过 Nix 的模块机制，将配置文件拆分成多个模块，分门别类地编写维护。
+通过修改上面几个配置文件就可以实现对系统与 Home 目录状态的修改。
+但是随着配置的增多，单纯依靠 `configuration.nix` 跟 `home.nix` 会导致配置文件臃肿，难以维护，因此更好的解决方案是通过 Nix 的模块机制，将配置文件拆分成多个模块，分门别类地编写维护。
 
 在前面的 Nix 语法一节有介绍过：「`import` 的参数如果为文件夹路径，那么会返回该文件夹下的 `default.nix` 文件的执行结果」，我们可以依据这个功能，将 `home.nix` 与 `configuration.nix` 拆分成多个 nix 文件。
 
@@ -910,11 +913,11 @@ $ tree
 └── wallpaper.jpg    # 桌面壁纸，在 i3wm 配置中被引用
 ```
 
-详细结构与内容，请移步前面提供的 github 仓库链接。
+详细结构与内容，请移步前面提供的 github 仓库链接，这里就不多介绍了。
 
 ### 7. 更新系统
 
-在使用了 Nix Flake 后，要更新系统也很简单，先更新 flake.lock 文件，然后部署即可。在配置文件夹中执行如下命令：
+在使用了 Nix Flakes 后，要更新系统也很简单，先更新 flake.lock 文件，然后部署即可。在配置文件夹中执行如下命令：
 
 ```shell
 # 更新 flake.lock
@@ -922,6 +925,94 @@ nix flake update
 # 部署系统
 sudo nixos-rebuild switch --flake .#msi-rtx4090
 ```
+
+### 8. 退回个别软件包的版本
+
+在使用 Nix Flakes 后，目前大家用得比较多的都是 `nixos-unstable` 分支的 nixpkgs，有时候就会遇到一些 bug，比如我最近（2023/5/6）就遇到了 chrome/vscode 闪退的问题。
+
+这时候就需要退回到之前的版本，在 Nix Flakes 中，所有的包版本与 hash 值与其 input 数据源的 git commit 是一一对应的关系，因此回退某个包的到历史版本，就需要锁定其 input 数据源的 git commit.
+
+为了实现上述需求，首先修改 `/etc/nixos/flake.nix`，示例内容如下（主要是利用 `specialArgs` 参数）：
+
+```nix
+{
+  description = "NixOS configuration of Ryan Yin"
+
+  inputs = {
+    # 默认使用 nixos-unstable 分支 for nix flakes
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # 最新 stable 分支的 nixpkgs，用于回退个别软件包的版本，当前最新版本为 22.11
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
+
+    # 另外也可以使用 git commit hash 来锁定版本，这是最彻底的锁定方式
+    nixpkgs-fd40cef8d.url = "github:nixos/nixpkgs/fd40cef8d797670e203a27a91e4b8e6decf0b90c";
+  };
+
+  outputs = inputs@{
+    self,
+    nixpkgs,
+    nixpkgs-stable,
+    nixpkgs-fd40cef8d,
+    ...
+  }: {
+    nixosConfigurations = {
+      nixos-test = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        # 核心参数是这个，将非默认的 nixpkgs 数据源传到其他 modules 中
+        specialArgs = {
+          inherit nixpkgs-stable;
+          inherit nixpkgs-fd40cef8d;
+        };
+        modules = [
+          ./hosts/nixos-test
+          # 省略其他模块配置
+        ];
+      };
+    };
+  };
+}
+```
+
+然后在你对应的 module 中使用该数据源中的包，示例：
+
+```nix
+{
+  pkgs,
+  config,
+  # nix 会从 flake.nix 的 specialArgs 查找并注入此参数
+  nixpkgs-stable,
+  # nixpkgs-fd40cef8d,  # 也可以使用固定 hash 的 nixpkgs 数据源
+  ...
+}:
+
+let
+  # 为了在后面使用 nixpkgs-stable 中的包，需要先给它配置一些参数
+  pkgs-stable = import nixpkgs-stable {
+    # 我们全局的参数会被自动配置到默认的 pkgs 中，这里可以直接从 pkgs 中引用
+    system = pkgs.system;
+    # 为了拉取 chrome，需要允许安装非自由软件
+    config.allowUnfree = true;
+  };
+in {
+  # 这里从 pkg-stable 中引用包
+  home.packages = with pkgs-stable; [
+    firefox-wayland
+
+    # chrome wayland support was broken on nixos-unstable branch, so fallback to stable branch for now
+    # https://github.com/swaywm/sway/issues/7562
+    google-chrome
+  ];
+
+  programs.vscode = {
+    enable = true;
+    package = pkgs-stable.vscode;  # 这里也一样，从 pkgs-stable 中引用包
+  };
+}
+```
+
+配置完成后，通过 `nixos-rebuild switch` 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。
 
 ## 八、Nix Flake 的使用
 
@@ -973,7 +1064,7 @@ nix build "nixpkgs#bat"
 # build a local flake is the same as nix develop, skip it
 ```
 
-[Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，建议新手读一读。
+此外 [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，写得比较浅显易懂，适合新手用来入门。
 
 
 ## 九、Nixpkgs 的高级用法
