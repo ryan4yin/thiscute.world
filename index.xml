@@ -24,9 +24,9 @@
 <p>第二件事是，想尝鲜 wayland，把桌面从 i3wm 换成了 sway，但是因为用起来区别不明显，再加上诸多不便（hidpi、sway 配置调优要花时间精力，另外我用的是 sway 官方不支持的 nvidia 显卡），就还是回退到了 i3wm。结果回退后，每次系统刚启动时，有一段时间 firefox/thunar 等 GUI 程序会一直卡着，要大概 1 分钟后才能正常启动&hellip;</p>
 <p>发生第二件事时我就懒得折腾了，想到归根结底还是系统没有版本控制跟回滚机制，导致系统出了问题不能还原，装新系统时各种软件包也全靠自己手工从旧机器导出软件包清单，再在新机器安装恢复。就打算干脆换成 NixOS 试试。</p>
 <h2 id="一nix-简介" class="headerLink">
-    <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform 很类似，都是声明式的配置管理工具，用户需要用 DSL 语言声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。</p>
-<p>基于 nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个系统的状态。</p>
-<p>NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。</p>
+    <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform 很类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。</p>
+<p>基于 nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个操作系统的状态。</p>
+<p>NixOS 的配置只负责管理系统层面的状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。</p>
 <p>因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> 都是基于 Nix 实现的运维工具。</p>
 <blockquote>
 <p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步。</p>
@@ -35,7 +35,7 @@
     <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>nix 的优点</h3><ul>
 <li>声明式配置，environment as code
 <ul>
-<li>nix flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。</li>
+<li>Nix Flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。</li>
 <li>这与 docker/vargrant 有点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，适用面更广（代价是 Nix 要更复杂&hellip;）</li>
 </ul>
 </li>
@@ -80,8 +80,8 @@
 </ol>
 <h2 id="三nix-flakes-与旧的-nix" class="headerLink">
     <a href="#%e4%b8%89nix-flakes-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flakes 与旧的 Nix</h2><p>Nix 于 2020 年推出了 <code>nix-command</code> &amp; <code>flake</code> 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。</p>
-<p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。</p>
-<p>这里列举下在 nix flake 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：</p>
+<p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 <code>nix-command</code> &amp; <code>flake</code> 学起。</p>
+<p>这里列举下在 <code>nix-command</code> &amp; <code>flake</code> 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：</p>
 <ol>
 <li><code>nix-channel</code>: nix-channel 与其他包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
 <ol>
