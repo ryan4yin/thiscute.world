@@ -946,7 +946,7 @@ sudo nixos-rebuild switch --flake .#msi-rtx4090
 
 另外有时候安装新的包，跑 `nixos-rebuild switch` 时可能会遇到 sha256 不匹配的报错，也可以尝试通过 `nix flake update` 更新 flake.lock 来解决（原理暂时不太清楚）。
 
-### 8. 退回个别软件包的版本
+### 8. 回退个别软件包的版本
 
 在使用 Nix Flakes 后，目前大家用得比较多的都是 `nixos-unstable` 分支的 nixpkgs，有时候就会遇到一些 bug，比如我最近（2023/5/6）就遇到了 [chrome/vscode 闪退的问题](https://github.com/swaywm/sway/issues/7562)。
 
