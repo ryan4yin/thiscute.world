@@ -928,7 +928,7 @@ sudo nixos-rebuild switch --flake .#msi-rtx4090
 
 ### 8. 退回个别软件包的版本
 
-在使用 Nix Flakes 后，目前大家用得比较多的都是 `nixos-unstable` 分支的 nixpkgs，有时候就会遇到一些 bug，比如我最近（2023/5/6）就遇到了 chrome/vscode 闪退的问题。
+在使用 Nix Flakes 后，目前大家用得比较多的都是 `nixos-unstable` 分支的 nixpkgs，有时候就会遇到一些 bug，比如我最近（2023/5/6）就遇到了 [chrome/vscode 闪退的问题](https://github.com/swaywm/sway/issues/7562)。
 
 这时候就需要退回到之前的版本，在 Nix Flakes 中，所有的包版本与 hash 值与其 input 数据源的 git commit 是一一对应的关系，因此回退某个包的到历史版本，就需要锁定其 input 数据源的 git commit.
 
@@ -1013,6 +1013,33 @@ in {
 ```
 
 配置完成后，通过 `nixos-rebuild switch` 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。
+
+### 9. 使用 Git 管理 NixOS 配置
+
+NixOS 的配置文件是纯文本，因此跟普通的 dotfiles 一样可以使用 Git 管理。
+
+此外 Nix Flake 配置也不一定需要放在 `/etc/nixos` 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。
+
+比如我的使用方式是将 Nix Flake 配置放在 `~/nixos-config` 目录下，然后在 `/etc/nixos` 目录下创建一个软链接：
+
+```shell
+sudo mv /etc/nixos /etc/nixos.bak  # 备份原来的配置
+sudo ln -s ~/nixos-config/ /etc/nixos
+```
+
+然后就可以在 `~/nixos-config` 目录下使用 Git 管理配置了，配置使用普通的用户级别权限即可，不要求 owner 为 root.
+
+另一种方法是直接删除掉 `/etc/nixos`，并在每次部署时指定配置文件路径：
+
+```shell
+sudo mv /etc/nixos /etc/nixos.bak  # 备份原来的配置
+cd ~/nixos-config
+
+# 部署时指定使用当前文件夹的 flake.nix
+sudo nixos-rebuild switch --flake .
+```
+
+两种方式都可以，看个人喜好。
 
 ## 八、Nix Flake 的使用
 
