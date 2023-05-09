@@ -45,11 +45,11 @@ comment:
 
 ## 一、Nix 简介
 
-Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform 很类似，都是声明式的配置管理工具，用户需要用 DSL 语言声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。
+Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform 很类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。
 
-基于 nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个系统的状态。
+基于 nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个操作系统的状态。
 
-NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。
+NixOS 的配置只负责管理系统层面的状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。
 
 因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 [NixOps](https://github.com/NixOS/nixops) 与社区的 [deploy-rs](https://github.com/serokell/deploy-rs) 都是基于 Nix 实现的运维工具。
 
@@ -58,7 +58,7 @@ NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有�
 ### nix 的优点
 
 - 声明式配置，environment as code
-  - nix flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。
+  - Nix Flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。
   - 这与 docker/vargrant 有点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，适用面更广（代价是 Nix 要更复杂...）
 - 可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回退。所以 Nix 也被认为是最稳定的包管理方式。
 - 没有依赖冲突问题：因为 nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。
@@ -95,9 +95,9 @@ Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/
 
 Nix 于 2020 年推出了 `nix-command` & `flake` 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。
 
-目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。
+目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 `nix-command` & `flake` 学起。
 
-这里列举下在 nix flake 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：
+这里列举下在 `nix-command` & `flake` 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：
 
 1. `nix-channel`: nix-channel 与其他包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
    1. nix flake 在 flake.nix 中通过 inputs 声明依赖包的数据源，通过 flake.lock 锁定依赖版本，完全取代掉了 nix-channel 的功能。
