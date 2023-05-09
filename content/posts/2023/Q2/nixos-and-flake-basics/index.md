@@ -59,7 +59,7 @@ NixOS 的配置只负责管理系统层面的状态，用户目录不受它管�
 
 - 声明式配置，environment as code
   - Nix Flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。
-  - 这与 docker/vargrant 有点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，适用面更广（代价是 Nix 要更复杂...）
+  - 在某些方面 nix 与 docker/vargrant 有一点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，适用面更广。另外 Nix 是声明式配置，还带版本锁，而 Dockerfile 仍然是命令式配置，对用户暴露了更多细节。（代价是 Nix 要更复杂...）
 - 可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回退。所以 Nix 也被认为是最稳定的包管理方式。
 - 没有依赖冲突问题：因为 nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。
 - NixOS 的可自定义程度非常高，系统的绝大多数组件都可以通过简单的声明式配置来自定义，而且也可以很方便地将自己的定制配置分享给他人。
@@ -1072,6 +1072,7 @@ sudo nixos-rebuild switch --flake .
 ### 2. Flake 命令行的使用
 
 在启用了 `nix-command` & `flake` 功能后，我们就可以使用 Nix 提供的新一代 Nix 命令行工具 [New Nix Commands][New Nix Commands] 了，下面列举下其中常用命令的用法：
+
 <!-- 
 ```bash
 # `nixpkgs#ponysay` means `ponysay` from `nixpkgs` flake.
