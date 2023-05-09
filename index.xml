@@ -1394,7 +1394,7 @@
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 更新 flake.lock</span>
 </span></span><span class="line"><span class="cl">nix flake update
 </span></span><span class="line"><span class="cl"><span class="c1"># 部署系统</span>
-</span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#msi-rtx4090
+</span></span><span class="line"><span class="cl">sudo nixos-rebuild switch
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>另外有时候安装新的包，跑 <code>nixos-rebuild switch</code> 时可能会遇到 sha256 不匹配的报错，也可以尝试通过 <code>nix flake update</code> 更新 flake.lock 来解决（原理暂时不太清楚）。</p>
@@ -1442,6 +1442,7 @@
 </span><span class="lnt">36
 </span><span class="lnt">37
 </span><span class="lnt">38
+</span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
@@ -1476,7 +1477,8 @@
 </span></span><span class="line"><span class="cl">        <span class="p">};</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./hosts/nixos-test</span>
-</span></span><span class="line"><span class="cl">          <span class="c1"># 省略其他模块配置</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          <span class="c1"># 省略其他模块配置...</span>
 </span></span><span class="line"><span class="cl">        <span class="p">];</span>
 </span></span><span class="line"><span class="cl">      <span class="p">};</span>
 </span></span><span class="line"><span class="cl">    <span class="p">};</span>
