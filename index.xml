@@ -4,7 +4,7 @@
 <p>到 2023/05/05 为止，我的 NixOS 练习时长仅半个月，因此本文作为一篇新手学习笔记，难免会有些错漏，请谨慎阅读，当然我也会在后续尽力修补与完善内容。</p>
 </blockquote>
 <blockquote>
-<p>本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flake 仍然为实验性功能。</p>
+<p>本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flakes 仍然为实验性功能。</p>
 </blockquote>
 <blockquote>
 <p>需要有一定 Linux 使用经验与编程经验，才能玩转 NixOS &amp; Nix Flakes，因此不推荐任何 Linux 新手选用 NixOS.</p>
@@ -35,7 +35,7 @@
     <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>nix 的优点</h3><ul>
 <li>声明式配置，environment as code
 <ul>
-<li>nix flake 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。</li>
+<li>nix flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。</li>
 <li>这与 docker/vargrant 有点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，适用面更广（代价是 Nix 要更复杂&hellip;）</li>
 </ul>
 </li>
@@ -53,7 +53,7 @@
 <h3 id="nix-的缺点" class="headerLink">
     <a href="#nix-%e7%9a%84%e7%bc%ba%e7%82%b9" class="header-mark"></a>nix 的缺点</h3><ul>
 <li>学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 nix 的整个设计，并以声明式的方式管理系统，不能无脑 <code>nix-env -i</code>（这类似 <code>apt-get install</code>）。</li>
-<li>文档混乱：首先 Nix Flake 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏。 其次 Nix 社区绝大多数文档都只介绍了旧的 <code>nix-env</code>/<code>nix-channel</code>，想直接从 Nix Flake 开始学习的话，需要参考大量旧文档，从中提取出自己需要的内容。另外一些 Nix 当前的核心功能，官方文档都语焉不详（比如 <code>imports</code> 跟 Nixpkgs Module System），想搞明白基本只能看源码了&hellip;</li>
+<li>文档混乱：首先 Nix Flakes 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏。 其次 Nix 社区绝大多数文档都只介绍了旧的 <code>nix-env</code>/<code>nix-channel</code>，想直接从 Nix Flakes 开始学习的话，需要参考大量旧文档，从中提取出自己需要的内容。另外一些 Nix 当前的核心功能，官方文档都语焉不详（比如 <code>imports</code> 跟 Nixpkgs Module System），想搞明白基本只能看源码了&hellip;</li>
 <li>包数量比较少：官方宣称 nixpkgs 是有 <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> 个软件包，但是实际体验下来跟 arch linux 的差距还比较大，毕竟 AUR 生态是真的丰富。
 <ul>
 <li>用其他发行版，你根本不需要了解 debian/aur 等打包相关的知识，可以直接用现成的，再不济也能根据官方文档手动编译。但用 NixOS，它不遵循标准的 FHS 文件架构，为了安装某些官方与社区没有的程序，也为了系统的可复现性，学习如何使用 nixpkgs 打包几乎是不可避免的。</li>
@@ -78,9 +78,9 @@
 </li>
 <li><a href="https://github.com/DeterminateSystems/nix-installer" target="_blank" rel="noopener noreferrer">The Determinate Nix Installer</a>: 第三方使用 Rust 编写的 installer, 默认启用 <code>nix-command</code> &amp; <code>flake</code>，并且提供了卸载命令。</li>
 </ol>
-<h2 id="三nix-flake-与旧的-nix" class="headerLink">
-    <a href="#%e4%b8%89nix-flake-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flake 与旧的 Nix</h2><p>Nix 于 2020 年推出了 <code>nix-command</code> &amp; <code>flake</code> 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。</p>
-<p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flake 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。</p>
+<h2 id="三nix-flakes-与旧的-nix" class="headerLink">
+    <a href="#%e4%b8%89nix-flakes-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flakes 与旧的 Nix</h2><p>Nix 于 2020 年推出了 <code>nix-command</code> &amp; <code>flake</code> 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。</p>
+<p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 nix flake 学起。</p>
 <p>这里列举下在 nix flake 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：</p>
 <ol>
 <li><code>nix-channel</code>: nix-channel 与其他包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
@@ -110,7 +110,7 @@
 <ol>
 <li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> 是一个包含了所有 nix 包与 nixos 模块/配置的 Git 仓库，其 master 分支包含最新的 nix 包与 nixos 模块/配置。</li>
 <li><a href="https://github.com/nix-community/NUR" target="_blank" rel="noopener noreferrer">NUR</a>: 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 nix 包仓库，它包含了一些 nix 包，但是它们并不包含在 nixpkgs 仓库中，因此需要单独安装。</li>
-<li>Nix Flake 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装一些不在 nixpkgs 仓库中的软件包，或者安装 nixpkgs 仓库中的开发分支的软件包。</li>
+<li>Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装一些不在 nixpkgs 仓库中的软件包，或者安装 nixpkgs 仓库中的开发分支的软件包。</li>
 </ol>
 <h2 id="六nix-语言基础" class="headerLink">
     <a href="#%e5%85%adnix-%e8%af%ad%e8%a8%80%e5%9f%ba%e7%a1%80" class="header-mark"></a>六、Nix 语言基础</h2><blockquote>
@@ -1553,8 +1553,8 @@
 </div><p>配置完成后，通过 <code>nixos-rebuild switch</code> 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。</p>
 <h3 id="9-使用-git-管理-nixos-配置" class="headerLink">
     <a href="#9-%e4%bd%bf%e7%94%a8-git-%e7%ae%a1%e7%90%86-nixos-%e9%85%8d%e7%bd%ae" class="header-mark"></a>9. 使用 Git 管理 NixOS 配置</h3><p>NixOS 的配置文件是纯文本，因此跟普通的 dotfiles 一样可以使用 Git 管理。</p>
-<p>此外 Nix Flake 配置也不一定需要放在 <code>/etc/nixos</code> 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。</p>
-<p>比如我的使用方式是将 Nix Flake 配置放在 <code>~/nixos-config</code> 目录下，然后在 <code>/etc/nixos</code> 目录下创建一个软链接：</p>
+<p>此外 Nix Flakes 配置也不一定需要放在 <code>/etc/nixos</code> 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。</p>
+<p>比如我的使用方式是将 Nix Flakes 配置放在 <code>~/nixos-config</code> 目录下，然后在 <code>/etc/nixos</code> 目录下创建一个软链接：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1584,8 +1584,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>两种方式都可以，看个人喜好。</p>
-<h2 id="八nix-flake-的使用" class="headerLink">
-    <a href="#%e5%85%abnix-flake-%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>八、Nix Flake 的使用</h2><p>到这里我们已经写了不少 Nix Flake 配置，用来管理 NixOS 系统了。这里再简单介绍下 Nix Flake 的其他用法。</p>
+<h2 id="八nix-flakes-的使用" class="headerLink">
+    <a href="#%e5%85%abnix-flakes-%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>八、Nix Flakes 的使用</h2><p>到这里我们已经写了不少 Nix Flakes 配置，用来管理 NixOS 系统了。这里再简单介绍下 Nix Flakes 的其他用法。</p>
 <h3 id="1-flake-的-outputs" class="headerLink">
     <a href="#1-flake-%e7%9a%84-outputs" class="header-mark"></a>1. Flake 的 outputs</h3><p><code>flake.nix</code> 中的 <code>outputs</code> 是一个 attribute set，是整个 Flake 的构建结果，每个 Flake 都可以有许多不同的 outputs，outputs 大致有如下这些类型：</p>
 <ul>
@@ -1796,8 +1796,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>此外第三方库也提供了一些 Overlays 的简化配置方法，比如 <a href="https://flake.parts/overlays.html" target="_blank" rel="noopener noreferrer">Overlays - flake-parts</a></p>
-<h2 id="十使用-nix-flake-打包应用" class="headerLink">
-    <a href="#%e5%8d%81%e4%bd%bf%e7%94%a8-nix-flake-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>十、使用 Nix Flake 打包应用</h2><blockquote>
+<h2 id="十使用-nix-flakes-打包应用" class="headerLink">
+    <a href="#%e5%8d%81%e4%bd%bf%e7%94%a8-nix-flakes-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>十、使用 Nix Flakes 打包应用</h2><blockquote>
 <p>参考 <a href="https://lantian.pub/article/modify-computer/nixos-packaging.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（三）：软件打包，从入门到放弃</a></p>
 </blockquote>
 <p>有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。</p>
@@ -1870,7 +1870,7 @@
 <li><a href="https://nixos.org/manual/nixos/unstable/" target="_blank" rel="noopener noreferrer">NixOS Manual</a>: NixOS 系统使用手册，主要包含 Wayland/X11, GPU 等系统级别的配置说明。</li>
 <li><a href="https://nixos.org/guides/nix-pills" target="_blank" rel="noopener noreferrer">nix-pills</a>: Nix Pills 对如何使用 Nix 构建软件包进行了深入的阐述，写得比官方文档清晰易懂，而且也足够深入，值得一读。</li>
 </ul>
-<p>在对 Nix Flake 熟悉到一定程度后，你可以尝试一些进阶玩法，如下是一些比较流行的社区项目，可以试用：</p>
+<p>在对 Nix Flakes 熟悉到一定程度后，你可以尝试一些进阶玩法，如下是一些比较流行的社区项目，可以试用：</p>
 <ul>
 <li><a href="https://github.com/hercules-ci/flake-parts" target="_blank" rel="noopener noreferrer">flake-parts</a>: 通过 Module 模块系统简化配置的编写与维护。</li>
 <li><a href="https://github.com/gytis-ivaskevicius/flake-utils-plus" target="_blank" rel="noopener noreferrer">flake-utils-plus</a>:同样是用于简化 Flake 配置的第三方包，不过貌似更强大些</li>
@@ -1883,7 +1883,7 @@
 <ul>
 <li><a href="https://github.com/DeterminateSystems/zero-to-nix" target="_blank" rel="noopener noreferrer">Zero to Nix - Determinate Systems</a>: 浅显易懂的 Nix Flakes 新手入门文档，值得一读。</li>
 <li><a href="https://lantian.pub/article/modify-website/nixos-why.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列</a>: 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。</li>
-<li><a href="https://www.tweag.io/blog/2020-05-25-flakes/" target="_blank" rel="noopener noreferrer">Nix Flakes Series</a>: 官方的 Nix Flake 系列文章，介绍得比较详细，作为新手入门比较 OK</li>
+<li><a href="https://www.tweag.io/blog/2020-05-25-flakes/" target="_blank" rel="noopener noreferrer">Nix Flakes Series</a>: 官方的 Nix Flakes 系列文章，介绍得比较详细，作为新手入门比较 OK</li>
 <li><a href="https://nixos.wiki/wiki/Flakes" target="_blank" rel="noopener noreferrer">Nix Flakes - Wiki</a>: Nix Flakes 的官方 Wiki，此文介绍得比较粗略。</li>
 <li><a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>: 我的 nix 配置仓库，README 中也列出了我参考过的其他配置仓库</li>
 </ul>
