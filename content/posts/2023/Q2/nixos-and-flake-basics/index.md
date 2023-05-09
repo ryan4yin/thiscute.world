@@ -1151,7 +1151,7 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 
 >[Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
 
->TODO 这个部分我还没完全理解，可能有错误。
+>TODO 这个部分我还没完全理解，可能有错误，待完善。
 
 前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
 但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.
@@ -1210,7 +1210,7 @@ let pkgs = import nixpkgs { inherit system; overlays = [
 
 有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。
 
-TODO
+TODO 待补充更多内容
 
 
 ### stdenv.mkDerivation
@@ -1249,7 +1249,7 @@ stdenv.mkDerivation rec {
 }
 ```
 
-TODO
+TODO 待补充更多内容
 
 ## 进阶玩法
 
