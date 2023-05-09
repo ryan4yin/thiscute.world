@@ -55,7 +55,7 @@ NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有�
 
 >Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步。
 
-总结下 nix 的优点：
+### nix 的优点
 
 - 声明式配置，environment as code
   - nix flake 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。
@@ -65,7 +65,9 @@ NixOS 的配置只负责管理系统状态，用户目录不受它管辖。有�
 - NixOS 的可自定义程度非常高，系统的绝大多数组件都可以通过简单的声明式配置来自定义，而且也可以很方便地将自己的定制配置分享给他人。
 - 社区很活跃，第三方项目也挺丰富，官方包仓库 nixpkgs 贡献者众多，也有很多人分享自己的 nix 配置，一遍浏览下来，整个生态给我一种发现新大陆的兴奋感。
 
-nix 的缺点：
+{{< figure src="./nixos-bootloader.avif" caption="NixOS 启动项中列出了所有历史版本，图来自 [NixOS Discourse - 10074](https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074)" >}}
+
+### nix 的缺点
 
 - 学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 nix 的整个设计，并以声明式的方式管理系统，不能无脑 `nix-env -i`（这类似 `apt-get install`）。
 - 文档混乱：首先 Nix Flake 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏。 其次 Nix 社区绝大多数文档都只介绍了旧的 `nix-env`/`nix-channel`，想直接从 Nix Flake 开始学习的话，需要参考大量旧文档，从中提取出自己需要的内容。
