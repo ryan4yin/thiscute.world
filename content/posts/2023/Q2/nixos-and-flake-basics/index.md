@@ -1,7 +1,7 @@
 ---
 title: "NixOS 与 Nix Flakes 新手入门"
 date: 2023-05-04T15:19:28+08:00
-lastmod: 2023-05-05T12:02:28+08:00
+lastmod: 2023-05-09T11:41:28+08:00
 draft: false
 
 resources:
