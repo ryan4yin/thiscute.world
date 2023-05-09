@@ -589,7 +589,7 @@ cat flake.nix
   # 这是 flake.nix 的标准格式，inputs 是 flake 的依赖，outputs 是 flake 的输出
   # inputs 中的每一项依赖都会在被拉取、构建后，作为参数传递给 outputs 函数 
   inputs = {
-    # flake inputs 有很多种引用方式，应用最广泛的是 github 的引用方式
+    # flake inputs 有很多种引用方式，应用最广泛的是 github:owner/name/reference，即 github 仓库地址 + branch/commit-id/tag
 
     # NixOS 官方软件源，这里使用 nixos-unstable 分支
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
