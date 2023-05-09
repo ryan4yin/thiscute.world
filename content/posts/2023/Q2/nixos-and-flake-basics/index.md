@@ -1,5 +1,5 @@
 ---
-title: "NixOS 与 Nix Flake 新手入门"
+title: "NixOS 与 Nix Flakes 新手入门"
 date: 2023-05-04T15:19:28+08:00
 lastmod: 2023-05-05T12:02:28+08:00
 draft: false
@@ -8,7 +8,7 @@ resources:
 - name: "featured-image"
   src: "zero-to-nix.png"
 
-tags: ["NixOS", "Nix", "Flake", "Linux", "DevOps"]
+tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]
 
 lightgallery: true
