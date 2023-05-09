@@ -49,6 +49,7 @@ NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞�
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
 
 前因后果交代完毕，那么下面开始正文~
+
 ## 一、Nix 简介
 
 Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。
