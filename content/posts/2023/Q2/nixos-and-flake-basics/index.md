@@ -987,7 +987,8 @@ sudo nixos-rebuild switch --flake .#msi-rtx4090
         };
         modules = [
           ./hosts/nixos-test
-          # 省略其他模块配置
+          
+          # 省略其他模块配置...
         ];
       };
     };
