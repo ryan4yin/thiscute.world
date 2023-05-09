@@ -62,7 +62,7 @@ NixOS 的配置只负责管理系统层面的状态，用户目录不受它管�
 
 ### Nix 的优点
 
-- 声明式配置，environment as code
+- 声明式配置，Environment as Code
   - Nix Flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 Nix 可以在不同机器上生成完全一致的环境。
   - 在某些方面 Nix 与 Docker/Vargrant 有一点类似，不过 Docker/Vargrant 的目标环境都是隔离的容器或虚拟机，Nix 比它们更通用，适用面更广。另外 Nix 是声明式配置，还带版本锁，而 Dockerfile 仍然是命令式配置，对用户暴露了更多细节。（代价是 Nix 要更复杂...）
 - 可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回退。所以 Nix 也被认为是最稳定的包管理方式。
