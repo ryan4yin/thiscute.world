@@ -26,9 +26,6 @@ comment:
 
 >需要有一定 Linux 使用经验与编程经验，才能玩转 NixOS & Nix Flakes，因此不推荐任何 Linux 新手选用 NixOS.
 
-
-{{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我的 NixOS 桌面" >}}
-
 ## 零、为什么选择 Nix
 
 好几年前就听说过 Nix，用 DSL 来管理系统依赖，还能随时回滚到任一历史状态。
@@ -42,7 +39,16 @@ comment:
 
 发生第二件事时我就懒得折腾了，想到归根结底还是系统没有版本控制跟回滚机制，导致出了问题不能还原，装新系统时各种软件包也全靠自己手工从旧机器导出软件包清单，再在新机器安装恢复。就打算干脆换成 NixOS 试试。
 
+然后就研究了半个月 Nix 与 Flakes，将 PC 从之前用的 EndeavourOS 切换到了 NixOS。
 
+我折腾的第一步是在我 homelab 上开了台 NixOS 虚拟机，在这台虚拟机里把我物理机的 EndeavourOS i3 配置迁移到 NixOS + Flakes，还原出了整个桌面环境。
+在虚拟机里搞定后问题就不大了，直接备份好我办公电脑的 Home 目录、软件清单，然后将系统重装为 NixOS，再 git clone 我调试好的 NixOS 配置，改一改硬盘挂载相关的参数，额外补充下 Nvidia 显卡相关的 NixOS 配置，最后一行命令部署配置。几行命令就在我全新的 NixOS 系统上还原出了整个 i3 桌面环境跟我的常用软件，那一刻真的很有成就感！
+
+NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞挂了，于是我前几天我又进一步迁移到了 hyprland 桌面，确实比 i3 香多了，它的动画效果我吹爆！（在以前 EndeavourOS 上我肯定是不太敢做这样的切换的，原因前面已经解释过了——万一把系统搞出问题，会非常麻烦。）
+
+{{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
+
+前因后果交代完毕，那么下面开始正文~
 ## 一、Nix 简介
 
 Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。
