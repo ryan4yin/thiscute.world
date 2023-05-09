@@ -44,6 +44,7 @@ modified_page_titles = {
     # 路径 => 标题
     "/posts/about-tls-cert/": "写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议",
     "/posts/qemu-kvm-usage/": "QEMU/KVM 虚拟化环境的搭建与使用",
+    "/posts/nixos-and-flake-basics/": "NixOS 与 Nix Flakes 新手入门",
 }
 
 
