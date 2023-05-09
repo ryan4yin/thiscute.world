@@ -1272,6 +1272,9 @@ TODO
 
 ## 参考
 
+一些我参考过的比较有用的相关资料：
+
+- [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems]: 浅显易懂的 Nix Flakes 新手入门文档，值得一读。
 - [NixOS 系列](https://lantian.pub/article/modify-website/nixos-why.lantian/): 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): 官方的 Nix Flake 系列文章，介绍得比较详细，作为新手入门比较 OK
 - [Nix Flakes - Wiki](https://nixos.wiki/wiki/Flakes): Nix Flakes 的官方 Wiki，此文介绍得比较粗略。
