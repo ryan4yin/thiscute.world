@@ -105,13 +105,13 @@ Nix 于 2020 年推出了 `nix-command` & `flake` 两个新特性，它们提供
 这里列举下在 `nix-command` & `flake` 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：
 
 1. `nix-channel`: nix-channel 与其他包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
-   1. nix flake 在 flake.nix 中通过 inputs 声明依赖包的数据源，通过 flake.lock 锁定依赖版本，完全取代掉了 nix-channel 的功能。
+   1. Nix Flakes 在 flake.nix 中通过 inputs 声明依赖包的数据源，通过 flake.lock 锁定依赖版本，完全取代掉了 nix-channel 的功能。
 2. `nix-env`: 用于管理用户环境的软件包，是传统 Nix 的核心命令行工具。它从 nix-channel 定义的数据源中安装软件包，所以安装的软件包版本受 channel 影响。通过 `nix-env` 安装的包不会被自动记录到 nix 的声明式配置中，是完全脱离掌控的，无法在其他主机上复现，因此不推荐使用。
-   1. 在 nix flake 中对应的命令为 `nix profile`
+   1. 在 Nix Flakes 中对应的命令为 `nix profile`
 3. `nix-shell`: nix-shell 用于创建一个临时的 shell 环境
-   1. 在 nix flake 中它被 `nix develop` 与 `nix shell` 取代了。
+   1. 在 Nix Flakes 中它被 `nix develop` 与 `nix shell` 取代了。
 4. `nix-build`: 用于构建 nix 包，它会将构建结果放到 `/nix/store` 路径下，但是不会记录到 nix 的声明式配置中。
-   1. 在 nix flake 中对应的命令为 `nix build`
+   1. 在 Nix Flakes 中对应的命令为 `nix build`
 5. ...
 
 
@@ -532,7 +532,7 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 与 NixOS 默认的配置方式相比，Nix Flakes 提供了更好的可复现性，同时它定义的包结构也更加清晰，更容易维护，因此更建议使用 Nix Flakes 来管理系统配置。
 
-但是目前 nix flakes 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 `/etc/nixos/configuration.nix` 文件，在函数块中启用 flakes 与 nix-command 功能：
+但是目前 Nix Flakes 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 `/etc/nixos/configuration.nix` 文件，在函数块中启用 flakes 与 nix-command 功能：
 
 ```nix
 # Edit this configuration file to define what should be installed on
@@ -548,11 +548,11 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
   # 省略掉前面的配置......
 
-  # 启用 nix flakes 功能，以及配套的新 nix-command 命令行工具
+  # 启用 Nix Flakes 功能，以及配套的新 nix-command 命令行工具
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
-    git  # nix flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git
+    git  # Nix Flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git
     vim
     wget
   ];
@@ -561,7 +561,7 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 }
 ```
 
-然后运行 `sudo nixos-rebuild switch` 应用修改后，即可使用 nix flakes 来管理系统配置。
+然后运行 `sudo nixos-rebuild switch` 应用修改后，即可使用 Nix Flakes 来管理系统配置。
 
 
 ### 3. 将系统配置切换到 flake.nix
@@ -581,7 +581,7 @@ nix flake init -t templates#full
 cat flake.nix
 ```
 
-我们参照该模板创建文件 `/etc/nixos/flake.nix` 并编写好配置内容，后续系统的所有修改都将全部由 nix flakes 接管，示例内容如下：
+我们参照该模板创建文件 `/etc/nixos/flake.nix` 并编写好配置内容，后续系统的所有修改都将全部由 Nix Flakes 接管，示例内容如下：
 
 ```nix
 {
@@ -957,7 +957,7 @@ sudo nixos-rebuild switch --flake .#msi-rtx4090
   description = "NixOS configuration of Ryan Yin"
 
   inputs = {
-    # 默认使用 nixos-unstable 分支 for nix flakes
+    # 默认使用 nixos-unstable 分支
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # 最新 stable 分支的 nixpkgs，用于回退个别软件包的版本，当前最新版本为 22.11
