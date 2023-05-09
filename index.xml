@@ -89,22 +89,22 @@
 <ol>
 <li><code>nix-channel</code>: nix-channel 与其他包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
 <ol>
-<li>nix flake 在 flake.nix 中通过 inputs 声明依赖包的数据源，通过 flake.lock 锁定依赖版本，完全取代掉了 nix-channel 的功能。</li>
+<li>Nix Flakes 在 flake.nix 中通过 inputs 声明依赖包的数据源，通过 flake.lock 锁定依赖版本，完全取代掉了 nix-channel 的功能。</li>
 </ol>
 </li>
 <li><code>nix-env</code>: 用于管理用户环境的软件包，是传统 Nix 的核心命令行工具。它从 nix-channel 定义的数据源中安装软件包，所以安装的软件包版本受 channel 影响。通过 <code>nix-env</code> 安装的包不会被自动记录到 nix 的声明式配置中，是完全脱离掌控的，无法在其他主机上复现，因此不推荐使用。
 <ol>
-<li>在 nix flake 中对应的命令为 <code>nix profile</code></li>
+<li>在 Nix Flakes 中对应的命令为 <code>nix profile</code></li>
 </ol>
 </li>
 <li><code>nix-shell</code>: nix-shell 用于创建一个临时的 shell 环境
 <ol>
-<li>在 nix flake 中它被 <code>nix develop</code> 与 <code>nix shell</code> 取代了。</li>
+<li>在 Nix Flakes 中它被 <code>nix develop</code> 与 <code>nix shell</code> 取代了。</li>
 </ol>
 </li>
 <li><code>nix-build</code>: 用于构建 nix 包，它会将构建结果放到 <code>/nix/store</code> 路径下，但是不会记录到 nix 的声明式配置中。
 <ol>
-<li>在 nix flake 中对应的命令为 <code>nix build</code></li>
+<li>在 Nix Flakes 中对应的命令为 <code>nix build</code></li>
 </ol>
 </li>
 <li>&hellip;</li>
@@ -677,7 +677,7 @@
 </ul>
 <h3 id="2-启用-nixos-的-flake-支持" class="headerLink">
     <a href="#2-%e5%90%af%e7%94%a8-nixos-%e7%9a%84-flake-%e6%94%af%e6%8c%81" class="header-mark"></a>2. 启用 NixOS 的 Flake 支持</h3><p>与 NixOS 默认的配置方式相比，Nix Flakes 提供了更好的可复现性，同时它定义的包结构也更加清晰，更容易维护，因此更建议使用 Nix Flakes 来管理系统配置。</p>
-<p>但是目前 nix flakes 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 <code>/etc/nixos/configuration.nix</code> 文件，在函数块中启用 flakes 与 nix-command 功能：</p>
+<p>但是目前 Nix Flakes 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 <code>/etc/nixos/configuration.nix</code> 文件，在函数块中启用 flakes 与 nix-command 功能：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -719,11 +719,11 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># 省略掉前面的配置......</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># 启用 nix flakes 功能，以及配套的新 nix-command 命令行工具</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 启用 Nix Flakes 功能，以及配套的新 nix-command 命令行工具</span>
 </span></span><span class="line"><span class="cl">  <span class="n">nix</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">experimental-features</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;nix-command&#34;</span> <span class="s2">&#34;flakes&#34;</span> <span class="p">];</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="n">environment</span><span class="o">.</span><span class="n">systemPackages</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="n">git</span>  <span class="c1"># nix flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git</span>
+</span></span><span class="line"><span class="cl">    <span class="n">git</span>  <span class="c1"># Nix Flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git</span>
 </span></span><span class="line"><span class="cl">    <span class="n">vim</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wget</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
@@ -732,7 +732,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>然后运行 <code>sudo nixos-rebuild switch</code> 应用修改后，即可使用 nix flakes 来管理系统配置。</p>
+</div><p>然后运行 <code>sudo nixos-rebuild switch</code> 应用修改后，即可使用 Nix Flakes 来管理系统配置。</p>
 <h3 id="3-将系统配置切换到-flakenix" class="headerLink">
     <a href="#3-%e5%b0%86%e7%b3%bb%e7%bb%9f%e9%85%8d%e7%bd%ae%e5%88%87%e6%8d%a2%e5%88%b0-flakenix" class="header-mark"></a>3. 将系统配置切换到 flake.nix</h3><p>在启用了 Nix Flakes 特性后，<code>sudo nixos-rebuild switch</code> 命令会优先读取 <code>/etc/nixos/flake.nix</code> 文件，如果找不到再尝试使用 <code>/etc/nixos/configuration.nix</code>。</p>
 <p>可以首先使用官方提供的模板来学习 flake 的编写，先查下有哪些模板：</p>
@@ -755,7 +755,7 @@
 </span></span><span class="line"><span class="cl">cat flake.nix
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>我们参照该模板创建文件 <code>/etc/nixos/flake.nix</code> 并编写好配置内容，后续系统的所有修改都将全部由 nix flakes 接管，示例内容如下：</p>
+</div><p>我们参照该模板创建文件 <code>/etc/nixos/flake.nix</code> 并编写好配置内容，后续系统的所有修改都将全部由 Nix Flakes 接管，示例内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1447,7 +1447,7 @@
 </span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;NixOS configuration of Ryan Yin&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 默认使用 nixos-unstable 分支 for nix flakes</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 默认使用 nixos-unstable 分支</span>
 </span></span><span class="line"><span class="cl">    <span class="n">nixpkgs</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:nixos/nixpkgs/nixos-unstable&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># 最新 stable 分支的 nixpkgs，用于回退个别软件包的版本，当前最新版本为 22.11</span>
