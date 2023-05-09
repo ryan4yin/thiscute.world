@@ -615,11 +615,12 @@ cat flake.nix
       "nixos-test" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
-        # modules 中每个参数，都是一个 NixOS Module
-        #    <https://nixos.org/manual/nixos/stable/index.html#sec-modularity>
-        # NixOS Module 可以是一个 attribute set，也可以是一个返回 attribute set 的函数
+        # modules 中每个参数，都是一个 Nix Module，nixpkgs manual 中有半份介绍它的文档：
+        #    <https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction>
+        # 说半份是因为它的文档不全，只有一些简单的介绍（Nix 文档现状...）
+        # Nix Module 可以是一个 attribute set，也可以是一个返回 attribute set 的函数
         # 如果是函数，那么它的参数就是当前的 NixOS Module 的参数.
-        # 根据 Nix Wiki 对 NixOS modules 的描述，NixOS modules 函数的参数可以有这四个（详见本仓库中的 modules 文件）：
+        # 根据 Nix Wiki 对 Nix modules 的描述，Nix modules 函数的参数可以有这四个（详见本仓库中的 modules 文件）：
         # 
         #  config: The configuration of the entire system
         #  options: All option declarations refined with all definition and declaration references.
@@ -864,7 +865,11 @@ $ tree
 通过修改上面几个配置文件就可以实现对系统与 Home 目录状态的修改。
 但是随着配置的增多，单纯依靠 `configuration.nix` 跟 `home.nix` 会导致配置文件臃肿，难以维护，因此更好的解决方案是通过 Nix 的模块机制，将配置文件拆分成多个模块，分门别类地编写维护。
 
-在前面的 Nix 语法一节有介绍过：「`import` 的参数如果为文件夹路径，那么会返回该文件夹下的 `default.nix` 文件的执行结果」，我们可以依据这个功能，将 `home.nix` 与 `configuration.nix` 拆分成多个 nix 文件。
+在前面的 Nix 语法一节有介绍过：「`import` 的参数如果为文件夹路径，那么会返回该文件夹下的 `default.nix` 文件的执行结果」，实际 Nix 还提供了一个 `imports` 参数，它可以接受一个 nix 文件列表，并将该列表中的所有配置 merge 到当前的 attribute set 中。
+
+>我只在 [nixpkgs-unstable 官方手册 - evalModules parameters](https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters) 中找到一句关于 `imports` 的描述：`A list of modules. These are merged together to form the final configuration.`，可以意会一下...（Nix 的文档真的一言难尽...这么核心的参数文档就这么一句...）
+
+我们可以依据这个功能，将 `home.nix` 与 `configuration.nix` 拆分成多个 nix 文件。
 
 比如我之前的 i3wm 系统配置 [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2)，结构如下：
 
