@@ -58,11 +58,7 @@
     <a href="#nix-%e7%9a%84%e7%bc%ba%e7%82%b9" class="header-mark"></a>Nix 的缺点</h3><ul>
 <li>学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 Nix 的整个设计，并以声明式的方式管理系统，不能无脑 <code>nix-env -i</code>（这类似 <code>apt-get install</code>）。</li>
 <li>文档混乱：首先 Nix Flakes 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏。 其次 Nix 社区绝大多数文档都只介绍了旧的 <code>nix-env</code>/<code>nix-channel</code>，想直接从 Nix Flakes 开始学习的话，需要参考大量旧文档，从中提取出自己需要的内容。另外一些 Nix 当前的核心功能，官方文档都语焉不详（比如 <code>imports</code> 跟 Nixpkgs Module System），想搞明白基本只能看源码了&hellip;</li>
-<li>包数量比较少：官方宣称 nixpkgs 是有 <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> 个软件包，但是实际体验下来跟 arch linux 的差距还比较大，毕竟 AUR 生态是真的丰富。
-<ul>
-<li>用其他发行版，你根本不需要了解 debian/aur 等打包相关的知识，可以直接用现成的，再不济也能根据官方文档手动编译。但用 NixOS，它不遵循标准的 FHS 文件架构，为了安装某些官方与社区没有的程序，也为了系统的可复现性，学习如何使用 nixpkgs 打包几乎是不可避免的。</li>
-</ul>
-</li>
+<li>包数量比较少：官方宣称 nixpkgs 是有 <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> 个软件包，使用下来确实绝大部分包基本都能在 nixpkgs 里找到，体验还是不错滴。</li>
 <li>比较吃硬盘空间：为了保证系统可以随时回退，nix 默认总是保留所有历史环境，这非常吃硬盘空间。虽然可以定期使用 <code>nix-collect-garbage</code> 来手动清理旧的历史环境，也还是建议配置个更大的硬盘&hellip;</li>
 </ul>
 <p>总的来说，我觉得 NixOS 适合那些有一定 Linux 使用经验与编程经验，并且希望对自己的系统拥有更强掌控力的开发者。在开发环境搭建方面 Nix 与相对流行的 Dev Containers 也有些竞争关系，它们的具体区别还有待我发掘~</p>
