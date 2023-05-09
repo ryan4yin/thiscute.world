@@ -115,13 +115,13 @@ Nix 于 2020 年推出了 `nix-command` & `flakes` 两个新特性，它们提�
 5. ...
 
 
-## 五、NixOS 的包仓库
+## 五、NixOS 的 Flakes 包仓库
 
 跟 Arch Linux 类似，Nix 也有官方与社区的软件包仓库：
 
 1. [nixpkgs](https://github.com/NixOS/nixpkgs) 是一个包含了所有 Nix 包与 NixOS 模块/配置的 Git 仓库，其 master 分支包含最新的 Nix 包与 NixOS 模块/配置。
 2. [NUR](https://github.com/nix-community/NUR): 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。
-3. Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装一些不在 nixpkgs 仓库中的软件包，或者安装 nixpkgs 仓库中的开发分支的软件包。
+3. Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包
 
 
 ## 六、Nix 语言基础
