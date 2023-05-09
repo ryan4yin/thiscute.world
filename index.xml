@@ -1397,8 +1397,9 @@
 </span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#msi-rtx4090
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="8-退回个别软件包的版本" class="headerLink">
-    <a href="#8-%e9%80%80%e5%9b%9e%e4%b8%aa%e5%88%ab%e8%bd%af%e4%bb%b6%e5%8c%85%e7%9a%84%e7%89%88%e6%9c%ac" class="header-mark"></a>8. 退回个别软件包的版本</h3><p>在使用 Nix Flakes 后，目前大家用得比较多的都是 <code>nixos-unstable</code> 分支的 nixpkgs，有时候就会遇到一些 bug，比如我最近（2023/5/6）就遇到了 <a href="https://github.com/swaywm/sway/issues/7562" target="_blank" rel="noopener noreferrer">chrome/vscode 闪退的问题</a>。</p>
+</div><p>另外有时候安装新的包，跑 <code>nixos-rebuild switch</code> 时可能会遇到 sha256 不匹配的报错，也可以尝试通过 <code>nix flake update</code> 更新 flake.lock 来解决（原理暂时不太清楚）。</p>
+<h3 id="8-回退个别软件包的版本" class="headerLink">
+    <a href="#8-%e5%9b%9e%e9%80%80%e4%b8%aa%e5%88%ab%e8%bd%af%e4%bb%b6%e5%8c%85%e7%9a%84%e7%89%88%e6%9c%ac" class="header-mark"></a>8. 回退个别软件包的版本</h3><p>在使用 Nix Flakes 后，目前大家用得比较多的都是 <code>nixos-unstable</code> 分支的 nixpkgs，有时候就会遇到一些 bug，比如我最近（2023/5/6）就遇到了 <a href="https://github.com/swaywm/sway/issues/7562" target="_blank" rel="noopener noreferrer">chrome/vscode 闪退的问题</a>。</p>
 <p>这时候就需要退回到之前的版本，在 Nix Flakes 中，所有的包版本与 hash 值与其 input 数据源的 git commit 是一一对应的关系，因此回退某个包的到历史版本，就需要锁定其 input 数据源的 git commit.</p>
 <p>为了实现上述需求，首先修改 <code>/etc/nixos/flake.nix</code>，示例内容如下（主要是利用 <code>specialArgs</code> 参数）：</p>
 <div class="highlight"><div class="chroma">
