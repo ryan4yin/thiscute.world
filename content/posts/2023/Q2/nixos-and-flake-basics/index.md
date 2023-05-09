@@ -941,7 +941,7 @@ $ tree
 # 更新 flake.lock
 nix flake update
 # 部署系统
-sudo nixos-rebuild switch --flake .#msi-rtx4090
+sudo nixos-rebuild switch
 ```
 
 另外有时候安装新的包，跑 `nixos-rebuild switch` 时可能会遇到 sha256 不匹配的报错，也可以尝试通过 `nix flake update` 更新 flake.lock 来解决（原理暂时不太清楚）。
@@ -987,7 +987,7 @@ sudo nixos-rebuild switch --flake .#msi-rtx4090
         };
         modules = [
           ./hosts/nixos-test
-          
+
           # 省略其他模块配置...
         ];
       };
