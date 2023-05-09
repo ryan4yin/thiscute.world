@@ -209,7 +209,7 @@ let
     };
   };
 in
-a.b.c # result is 1
+a.b.c # 结果是 1
 ```
 
 `.` 操作符也可直接用于赋值：
@@ -226,7 +226,7 @@ Nix 的 `let ... in ...` 语法被称作「let 表达式」或者「let 绑定�
 let
   a = 1;
 in
-a + a  # result is 2
+a + a  # 结果是 2
 ```
 
 let 表达式中的变量只能在 `in` 之后的表达式中使用，理解成临时变量就行。
@@ -250,7 +250,7 @@ let
     z = 3;
   };
 in
-with a; [ x y z ]  # result is [ 1 2 3 ], equavlent to [ a.x a.y a.z ]
+with a; [ x y z ]  # 结果是 [ 1 2 3 ], equavlent to [ a.x a.y a.z ]
 ```
 
 ### 5. 继承 inherit ...
@@ -264,7 +264,7 @@ let
 in
 {
   inherit x y;
-}  # result is { x = 1; y = 2; }
+}  # 结果是 { x = 1; y = 2; }
 ```
 
 inherit 还能直接从某个 attribute set 中继承成员，语法为 `inherit (<attribute-set>) <member-name>;`，比如：
@@ -279,7 +279,7 @@ let
 in
 {
   inherit (a) x y;
-}  # result is { x = 1; y = 2; }
+}  # 结果是 { x = 1; y = 2; }
 ```
 
 ### 6. ${ ... } 字符串插值
@@ -290,7 +290,7 @@ in
 let
   a = 1;
 in
-"the value of a is ${a}"  # result is "the value of a is 1"
+"the value of a is ${a}"  # 结果是 "the value of a is 1"
 ```
 
 ### 7. 文件系统路径
@@ -329,16 +329,16 @@ Nix 会在看到 `<nixpkgs>` 这类三角括号语法时，会在 `NIX_PATH` 环
 举几个常见的例子：
 
 ```nix
-# function with one argument
+# 单参数函数
 a: a + a
 
 # 嵌套函数
 a: b: a + b
 
-# function with two arguments
+# 双参数函数
 { a, b }: a + b
 
-# function with two arguments and default values
+# 双参数函数，带默认值。问号后面的是参数的默认值
 { a ? 1, b ? 2 }: a + b
 
 # 带有命名 attribute set 作为参数的函数，并且使用 ... 收集其他可选参数
@@ -351,16 +351,16 @@ args@{ a, b, ... }: a + b + args.c
 let 
   f = { a ? 1, b ? 2, ... }@args: args  # this will cause an error
 in
-  f {}  # result is {}
+  f {}  # 结果是 {}
 
 # 函数的调用方式就是把参数放在后面，比如下面的 2 就是前面这个函数的参数
-a: a + a 2  # result is 4
+a: a + a 2  # 结果是 4
 
 # 还可以给函数命名，不过必须使用 let 表达式
 let
   f = a: a + a;
 in
-f 2  # result is 4
+f 2  # 结果是 4
 ```
 
 #### 内置函数
@@ -368,7 +368,7 @@ f 2  # result is 4
 Nix 内置了一些函数，可通过 `builtins.<function-name>` 来调用，比如：
 
 ```nix
-builtins.add 1 2  # result is 3
+builtins.add 1 2  # 结果是 3
 ```
 
 详细的内置函数列表参见 [Built-in Functions - Nix Reference Mannual](https://nixos.org/manual/nix/stable/language/builtins.html)
@@ -388,7 +388,7 @@ $ echo "x: x + 1" > file.nix
 然后使用 import 执行它：
 
 ```nix
-import ./file.nix 1  # result is 2
+import ./file.nix 1  # 结果是 2
 ```
 
 #### pkgs.lib 函数包
@@ -399,7 +399,7 @@ import ./file.nix 1  # result is 2
 let
   pkgs = import <nixpkgs> {};
 in
-pkgs.lib.strings.toUpper "search paths considered harmful"  # result is "SEARCH PATHS CONSIDERED HARMFUL"
+pkgs.lib.strings.toUpper "search paths considered harmful"  # 结果是 "SEARCH PATHS CONSIDERED HARMFUL"
 ```
 
 
