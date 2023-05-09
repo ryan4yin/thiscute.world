@@ -138,7 +138,7 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 2. let...in... with inherit 等特殊语法
 3. 函数的声明与调用语法
 4. 内置函数与库函数
-5. inputs 的不纯性
+5. inputs 的不纯性（Impurities）
 6. 用于描述 Build Task 的 Derivation
 7. Overriding 与 Overlays
 8. ...
@@ -405,13 +405,13 @@ pkgs.lib.strings.toUpper "search paths considered harmful"  # 结果是 "SEARCH 
 
 可以通过 [Nixpkgs Library Functions - Nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#sec-functions-library) 查看 lib 函数包的详细内容。
 
-### 11. 不纯
+### 11. 不纯（Impurities）
 
 Nix 语言本身是纯函数式的，是纯的，也就是说它就跟数学中的函数一样，同样的输入永远得到同样的输出。
 
-**Nix 唯一的不纯之处在这里：从文件系统路径或者其他输入源中读取文件作为构建任务的输入**。
+Nix 有两种构建输入，一种是从文件系统路径等输入源中读取文件，另一种是将其他函数作为输入。
 
-Nix 的构建输入只有两种，一种是从文件系统路径等输入源中读取文件，另一种是将其他函数作为输入。
+**Nix 唯一的不纯之处在这里：从文件系统路径或者其他输入源中读取文件作为构建任务的输入**，这些输入源参数可能没变化，但是文件内容或数据源的返回内容可能会变化，这就会导致输入相同，Nix 函数的输出却可能不同——函数变得不纯了。
 
 >Nix 中的搜索路径与 `builtins.currentSystem` 也是不纯的，但是这两个功能都不建议使用，所以这里略过了。
 
