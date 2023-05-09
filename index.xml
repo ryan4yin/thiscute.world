@@ -28,25 +28,25 @@
 
 <p>前因后果交代完毕，那么下面开始正文~</p>
 <h2 id="一nix-简介" class="headerLink">
-    <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。</p>
-<p>基于 nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个操作系统的状态。</p>
+    <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 Nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。</p>
+<p>基于 Nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个操作系统的状态。</p>
 <p>NixOS 的配置只负责管理系统层面的状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。</p>
-<p>因为 nix 声明式、可复现的特性，nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> 都是基于 Nix 实现的运维工具。</p>
+<p>因为 Nix 声明式、可复现的特性，Nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> 都是基于 Nix 实现的运维工具。</p>
 <blockquote>
 <p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步。</p>
 </blockquote>
 <h3 id="nix-的优点" class="headerLink">
-    <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>nix 的优点</h3><ul>
+    <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>Nix 的优点</h3><ul>
 <li>声明式配置，environment as code
 <ul>
-<li>Nix Flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。</li>
-<li>在某些方面 nix 与 docker/vargrant 有一点类似，不过 docker/vargrant 的目标环境都是隔离的容器或虚拟机，nix 比它们更通用，适用面更广。另外 Nix 是声明式配置，还带版本锁，而 Dockerfile 仍然是命令式配置，对用户暴露了更多细节。（代价是 Nix 要更复杂&hellip;）</li>
+<li>Nix Flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 Nix 可以在不同机器上生成完全一致的环境。</li>
+<li>在某些方面 Nix 与 Docker/Vargrant 有一点类似，不过 Docker/Vargrant 的目标环境都是隔离的容器或虚拟机，Nix 比它们更通用，适用面更广。另外 Nix 是声明式配置，还带版本锁，而 Dockerfile 仍然是命令式配置，对用户暴露了更多细节。（代价是 Nix 要更复杂&hellip;）</li>
 </ul>
 </li>
 <li>可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回退。所以 Nix 也被认为是最稳定的包管理方式。</li>
-<li>没有依赖冲突问题：因为 nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。</li>
+<li>没有依赖冲突问题：因为 Nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。</li>
 <li>NixOS 的可自定义程度非常高，系统的绝大多数组件都可以通过简单的声明式配置来自定义，而且也可以很方便地将自己的定制配置分享给他人。</li>
-<li>社区很活跃，第三方项目也挺丰富，官方包仓库 nixpkgs 贡献者众多，也有很多人分享自己的 nix 配置，一遍浏览下来，整个生态给我一种发现新大陆的兴奋感。</li>
+<li>社区很活跃，第三方项目也挺丰富，官方包仓库 nixpkgs 贡献者众多，也有很多人分享自己的 Nix 配置，一遍浏览下来，整个生态给我一种发现新大陆的兴奋感。</li>
 </ul>
 <figure><img src="./nixos-bootloader.avif"
          alt="NixOS 启动项中列出了所有历史版本，图来自 NixOS Discourse - 10074"/><figcaption>
@@ -55,8 +55,8 @@
 </figure>
 
 <h3 id="nix-的缺点" class="headerLink">
-    <a href="#nix-%e7%9a%84%e7%bc%ba%e7%82%b9" class="header-mark"></a>nix 的缺点</h3><ul>
-<li>学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 nix 的整个设计，并以声明式的方式管理系统，不能无脑 <code>nix-env -i</code>（这类似 <code>apt-get install</code>）。</li>
+    <a href="#nix-%e7%9a%84%e7%bc%ba%e7%82%b9" class="header-mark"></a>Nix 的缺点</h3><ul>
+<li>学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 Nix 的整个设计，并以声明式的方式管理系统，不能无脑 <code>nix-env -i</code>（这类似 <code>apt-get install</code>）。</li>
 <li>文档混乱：首先 Nix Flakes 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏。 其次 Nix 社区绝大多数文档都只介绍了旧的 <code>nix-env</code>/<code>nix-channel</code>，想直接从 Nix Flakes 开始学习的话，需要参考大量旧文档，从中提取出自己需要的内容。另外一些 Nix 当前的核心功能，官方文档都语焉不详（比如 <code>imports</code> 跟 Nixpkgs Module System），想搞明白基本只能看源码了&hellip;</li>
 <li>包数量比较少：官方宣称 nixpkgs 是有 <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> 个软件包，但是实际体验下来跟 arch linux 的差距还比较大，毕竟 AUR 生态是真的丰富。
 <ul>
@@ -74,25 +74,25 @@
 <li>国内镜像源说明：<a href="https://mirrors.bfsu.edu.cn/help/nix/" target="_blank" rel="noopener noreferrer">https://mirrors.bfsu.edu.cn/help/nix/</a></li>
 </ul>
 <ol>
-<li><a href="https://nixos.org/download.html" target="_blank" rel="noopener noreferrer">Nix 的官方安装方式</a>: 使用 bash 脚本编写, 目前（2023-04-23）为止 <code>nix-command</code> &amp; <code>flake</code> 仍然是实验性特性，需要手动开启。
+<li><a href="https://nixos.org/download.html" target="_blank" rel="noopener noreferrer">Nix 的官方安装方式</a>: 使用 bash 脚本编写, 目前（2023-04-23）为止 <code>nix-command</code> &amp; <code>flakes</code> 仍然是实验性特性，需要手动开启。
 <ol>
-<li>你需要参照 <a href="https://nixos.wiki/wiki/Flakes" target="_blank" rel="noopener noreferrer">Enable flakes - NixOS Wiki</a> 的说明启用 <code>nix-command</code> &amp; <code>flake</code></li>
+<li>你需要参照 <a href="https://nixos.wiki/wiki/Flakes" target="_blank" rel="noopener noreferrer">Enable flakes - NixOS Wiki</a> 的说明启用 <code>nix-command</code> &amp; <code>flakes</code></li>
 <li>官方不提供任何卸载手段，要在 Linux/MacOS 上卸载 Nix，你需要手动删除所有相关的文件、用户以及用户组</li>
 </ol>
 </li>
-<li><a href="https://github.com/DeterminateSystems/nix-installer" target="_blank" rel="noopener noreferrer">The Determinate Nix Installer</a>: 第三方使用 Rust 编写的 installer, 默认启用 <code>nix-command</code> &amp; <code>flake</code>，并且提供了卸载命令。</li>
+<li><a href="https://github.com/DeterminateSystems/nix-installer" target="_blank" rel="noopener noreferrer">The Determinate Nix Installer</a>: 第三方使用 Rust 编写的 installer, 默认启用 <code>nix-command</code> &amp; <code>flakes</code>，并且提供了卸载命令。</li>
 </ol>
 <h2 id="三nix-flakes-与旧的-nix" class="headerLink">
-    <a href="#%e4%b8%89nix-flakes-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flakes 与旧的 Nix</h2><p>Nix 于 2020 年推出了 <code>nix-command</code> &amp; <code>flake</code> 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。</p>
-<p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 <code>nix-command</code> &amp; <code>flake</code> 学起。</p>
-<p>这里列举下在 <code>nix-command</code> &amp; <code>flake</code> 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：</p>
+    <a href="#%e4%b8%89nix-flakes-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flakes 与旧的 Nix</h2><p>Nix 于 2020 年推出了 <code>nix-command</code> &amp; <code>flakes</code> 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。</p>
+<p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 <code>nix-command</code> &amp; <code>flakes</code> 学起。</p>
+<p>这里列举下在 <code>nix-command</code> &amp; <code>flakes</code> 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：</p>
 <ol>
 <li><code>nix-channel</code>: nix-channel 与其他包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
 <ol>
 <li>Nix Flakes 在 flake.nix 中通过 inputs 声明依赖包的数据源，通过 flake.lock 锁定依赖版本，完全取代掉了 nix-channel 的功能。</li>
 </ol>
 </li>
-<li><code>nix-env</code>: 用于管理用户环境的软件包，是传统 Nix 的核心命令行工具。它从 nix-channel 定义的数据源中安装软件包，所以安装的软件包版本受 channel 影响。通过 <code>nix-env</code> 安装的包不会被自动记录到 nix 的声明式配置中，是完全脱离掌控的，无法在其他主机上复现，因此不推荐使用。
+<li><code>nix-env</code>: 用于管理用户环境的软件包，是传统 Nix 的核心命令行工具。它从 nix-channel 定义的数据源中安装软件包，所以安装的软件包版本受 channel 影响。通过 <code>nix-env</code> 安装的包不会被自动记录到 Nix 的声明式配置中，是完全脱离掌控的，无法在其他主机上复现，因此不推荐使用。
 <ol>
 <li>在 Nix Flakes 中对应的命令为 <code>nix profile</code></li>
 </ol>
@@ -102,7 +102,7 @@
 <li>在 Nix Flakes 中它被 <code>nix develop</code> 与 <code>nix shell</code> 取代了。</li>
 </ol>
 </li>
-<li><code>nix-build</code>: 用于构建 nix 包，它会将构建结果放到 <code>/nix/store</code> 路径下，但是不会记录到 nix 的声明式配置中。
+<li><code>nix-build</code>: 用于构建 Nix 包，它会将构建结果放到 <code>/nix/store</code> 路径下，但是不会记录到 Nix 的声明式配置中。
 <ol>
 <li>在 Nix Flakes 中对应的命令为 <code>nix build</code></li>
 </ol>
@@ -112,8 +112,8 @@
 <h2 id="五nixos-的包仓库" class="headerLink">
     <a href="#%e4%ba%94nixos-%e7%9a%84%e5%8c%85%e4%bb%93%e5%ba%93" class="header-mark"></a>五、NixOS 的包仓库</h2><p>跟 Arch Linux 类似，Nix 也有官方与社区的软件包仓库：</p>
 <ol>
-<li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> 是一个包含了所有 nix 包与 nixos 模块/配置的 Git 仓库，其 master 分支包含最新的 nix 包与 nixos 模块/配置。</li>
-<li><a href="https://github.com/nix-community/NUR" target="_blank" rel="noopener noreferrer">NUR</a>: 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 nix 包仓库，它包含了一些 nix 包，但是它们并不包含在 nixpkgs 仓库中，因此需要单独安装。</li>
+<li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> 是一个包含了所有 Nix 包与 NixOS 模块/配置的 Git 仓库，其 master 分支包含最新的 Nix 包与 NixOS 模块/配置。</li>
+<li><a href="https://github.com/nix-community/NUR" target="_blank" rel="noopener noreferrer">NUR</a>: 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。</li>
 <li>Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装一些不在 nixpkgs 仓库中的软件包，或者安装 nixpkgs 仓库中的开发分支的软件包。</li>
 </ol>
 <h2 id="六nix-语言基础" class="headerLink">
@@ -129,7 +129,7 @@
 <li>函数的声明与调用语法</li>
 <li>内置函数与库函数</li>
 <li>inputs 的不纯性</li>
-<li>用于描述 build task 的 derivation</li>
+<li>用于描述 Build Task 的 Derivation</li>
 <li>Overriding 与 Overlays</li>
 <li>&hellip;</li>
 </ol>
@@ -208,7 +208,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>不过 nix 提供了 <code>rec</code> 关键字（recursive attribute set），可用于创建递归引用的 attribute set：</p>
+</div><p>不过 Nix 提供了 <code>rec</code> 关键字（recursive attribute set），可用于创建递归引用的 attribute set：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -223,7 +223,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>在递归引用的情况下，nix 会按照声明的顺序进行求值，所以如果 <code>a</code> 在 <code>b</code> 之后声明，那么 <code>b</code> 会报错。</p>
+</div><p>在递归引用的情况下，Nix 会按照声明的顺序进行求值，所以如果 <code>a</code> 在 <code>b</code> 之后声明，那么 <code>b</code> 会报错。</p>
 <p>可以使用 <code>.</code> 操作符来访问 attribute set 的成员：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -257,7 +257,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="3-let--in-" class="headerLink">
-    <a href="#3-let--in-" class="header-mark"></a>3. let &hellip; in &hellip;</h3><p>nix 的 <code>let ... in ...</code> 语法被称作「let 表达式」或者「let 绑定」，它用于创建临时使用的局部变量：</p>
+    <a href="#3-let--in-" class="header-mark"></a>3. let &hellip; in &hellip;</h3><p>Nix 的 <code>let ... in ...</code> 语法被称作「let 表达式」或者「let 绑定」，它用于创建临时使用的局部变量：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -492,7 +492,7 @@
 </div>
 </div><p>详细的内置函数列表参见 <a href="https://nixos.org/manual/nix/stable/language/builtins.html" target="_blank" rel="noopener noreferrer">Built-in Functions - Nix Reference Mannual</a></p>
 <h4 id="import-表达式" class="headerLink">
-    <a href="#import-%e8%a1%a8%e8%be%be%e5%bc%8f" class="header-mark"></a>import 表达式</h4><p><code>import</code> 表达式以其他 nix 文件的路径作为参数，返回该 nix 文件的执行结果。</p>
+    <a href="#import-%e8%a1%a8%e8%be%be%e5%bc%8f" class="header-mark"></a>import 表达式</h4><p><code>import</code> 表达式以其他 Nix 文件的路径作为参数，返回该 Nix 文件的执行结果。</p>
 <p><code>import</code> 的参数如果为文件夹路径，那么会返回该文件夹下的 <code>default.nix</code> 文件的执行结果。</p>
 <p>举个例子，首先创建一个 <code>file.nix</code> 文件：</p>
 <div class="highlight"><div class="chroma">
@@ -532,18 +532,18 @@
 <h3 id="11-不纯" class="headerLink">
     <a href="#11-%e4%b8%8d%e7%ba%af" class="header-mark"></a>11. 不纯</h3><p>Nix 语言本身是纯函数式的，是纯的，也就是说它就跟数学中的函数一样，同样的输入永远得到同样的输出。</p>
 <p><strong>Nix 唯一的不纯之处在这里：从文件系统路径或者其他输入源中读取文件作为构建任务的输入</strong>。</p>
-<p>nix 的构建输入只有两种，一种是从文件系统路径等输入源中读取文件，另一种是将其他函数作为输入。</p>
+<p>Nix 的构建输入只有两种，一种是从文件系统路径等输入源中读取文件，另一种是将其他函数作为输入。</p>
 <blockquote>
-<p>nix 中的搜索路径与 <code>builtins.currentSystem</code> 也是不纯的，但是这两个功能都不建议使用，所以这里略过了。</p>
+<p>Nix 中的搜索路径与 <code>builtins.currentSystem</code> 也是不纯的，但是这两个功能都不建议使用，所以这里略过了。</p>
 </blockquote>
 <h3 id="12-fetchers" class="headerLink">
-    <a href="#12-fetchers" class="header-mark"></a>12. Fetchers</h3><p>构建输入除了直接来自文件系统路径之外，还可以通过 Fetchers 来获取，Fetcher 是一种特殊的函数，它的输入是一个 attribute set，输出是 nix store 中的一个系统路径。</p>
+    <a href="#12-fetchers" class="header-mark"></a>12. Fetchers</h3><p>构建输入除了直接来自文件系统路径之外，还可以通过 Fetchers 来获取，Fetcher 是一种特殊的函数，它的输入是一个 attribute set，输出是 Nix Store 中的一个系统路径。</p>
 <p>Nix 提供了四个内置的 Fetcher，分别是：</p>
 <ul>
 <li><code>builtins.fetchurl</code>：从 url 中下载文件</li>
 <li><code>builtins.fetchTarball</code>：从 url 中下载 tarball 文件</li>
 <li><code>builtins.fetchGit</code>：从 git 仓库中下载文件</li>
-<li><code>builtins.fetchClosure</code>：从 Nix store 中获取 derivation</li>
+<li><code>builtins.fetchClosure</code>：从 Nix Store 中获取 Derivation</li>
 </ul>
 <p>举例：</p>
 <div class="highlight"><div class="chroma">
@@ -563,9 +563,9 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="13-derivations" class="headerLink">
-    <a href="#13-derivations" class="header-mark"></a>13. Derivations</h3><p>一个构建动作的 nix 语言描述被称做一个 Derivation，它描述了如何构建一个软件包，它的构建结果是一个 store object</p>
-<p>store object 的存放路径格式为 <code>/nix/store/&lt;hash&gt;-&lt;name&gt;</code>，其中 <code>&lt;hash&gt;</code> 是构建结果的 hash 值，<code>&lt;name&gt;</code> 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。</p>
-<p><code>/nix/store</code> 被称为 store，存放所有的 store objects，这个路径被设置为只读，只有 nix 本身才能修改这个路径下的内容，以保证系统的可复现性。</p>
+    <a href="#13-derivations" class="header-mark"></a>13. Derivations</h3><p>一个构建动作的 Nix 语言描述被称做一个 Derivation，它描述了如何构建一个软件包，它的构建结果是一个 Store Object</p>
+<p>Store Object 的存放路径格式为 <code>/nix/store/&lt;hash&gt;-&lt;name&gt;</code>，其中 <code>&lt;hash&gt;</code> 是构建结果的 hash 值，<code>&lt;name&gt;</code> 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。</p>
+<p><code>/nix/store</code> 被称为 Store，存放所有的 Store Objects，这个路径被设置为只读，只有 Nix 本身才能修改这个路径下的内容，以保证系统的可复现性。</p>
 <p>在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 <code>derivation</code> 创建的，我们实际使用的 <code>stdenv.mkDerivation</code> 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。</p>
 <h2 id="七以声明式的方式管理系统" class="headerLink">
     <a href="#%e4%b8%83%e4%bb%a5%e5%a3%b0%e6%98%8e%e5%bc%8f%e7%9a%84%e6%96%b9%e5%bc%8f%e7%ae%a1%e7%90%86%e7%b3%bb%e7%bb%9f" class="header-mark"></a>七、以声明式的方式管理系统</h2><blockquote>
@@ -868,7 +868,7 @@
 </span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: The location of the module directory of NixOS.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># nix flake 的 modules 系统可将配置模块化，提升配置的可维护性</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Nix 模块系统可将配置模块化，提升配置的可维护性</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="c1"># 导入之前我们使用的 configuration.nix，这样旧的配置文件仍然能生效</span>
 </span></span><span class="line"><span class="cl">          <span class="c1"># 注：configuration.nix 本身也是一个 NixOS Module，因此可以直接在这里导入</span>
@@ -1268,11 +1268,11 @@
 </ul>
 <p>通过修改上面几个配置文件就可以实现对系统与 Home 目录状态的修改。
 但是随着配置的增多，单纯依靠 <code>configuration.nix</code> 跟 <code>home.nix</code> 会导致配置文件臃肿，难以维护，因此更好的解决方案是通过 Nix 的模块机制，将配置文件拆分成多个模块，分门别类地编写维护。</p>
-<p>在前面的 Nix 语法一节有介绍过：「<code>import</code> 的参数如果为文件夹路径，那么会返回该文件夹下的 <code>default.nix</code> 文件的执行结果」，实际 Nix 还提供了一个 <code>imports</code> 参数，它可以接受一个 nix 文件列表，并将该列表中的所有配置**合并（Merge）**到当前的 attribute set 中。注意这里的用词是「合并」，它表明 <code>imports</code> 对重复的配置项不会简单覆盖，而是更合理地处理。比如说我在多个 modules 中都定义了 <code>program.packages = [...]</code>，那么 <code>imports</code> 会是所有 modules 中的 <code>program.packages</code> 合并成一个列表。不仅 list 能被正确合并，attribute set 也能被正确合并，具体行为各位看官可以自行探索。</p>
+<p>在前面的 Nix 语法一节有介绍过：「<code>import</code> 的参数如果为文件夹路径，那么会返回该文件夹下的 <code>default.nix</code> 文件的执行结果」，实际 Nix 还提供了一个 <code>imports</code> 参数，它可以接受一个 <code>.nix</code> 文件列表，并将该列表中的所有配置**合并（Merge）**到当前的 attribute set 中。注意这里的用词是「合并」，它表明 <code>imports</code> 对重复的配置项不会简单覆盖，而是更合理地处理。比如说我在多个 modules 中都定义了 <code>program.packages = [...]</code>，那么 <code>imports</code> 会是所有 modules 中的 <code>program.packages</code> 合并成一个列表。不仅 list 能被正确合并，attribute set 也能被正确合并，具体行为各位看官可以自行探索。</p>
 <blockquote>
 <p>我只在 <a href="https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters" target="_blank" rel="noopener noreferrer">nixpkgs-unstable 官方手册 - evalModules parameters</a> 中找到一句关于 <code>imports</code> 的描述：<code>A list of modules. These are merged together to form the final configuration.</code>，可以意会一下&hellip;（Nix 的文档真的一言难尽&hellip;这么核心的参数文档就这么一句&hellip;）</p>
 </blockquote>
-<p>我们可以借助 <code>imports</code> 参数，将 <code>home.nix</code> 与 <code>configuration.nix</code> 拆分成多个 nix 文件。</p>
+<p>我们可以借助 <code>imports</code> 参数，将 <code>home.nix</code> 与 <code>configuration.nix</code> 拆分成多个 <code>.nix</code> 文件。</p>
 <p>比如我之前的 i3wm 系统配置 <a href="https://github.com/ryan4yin/nix-config/tree/v0.0.2" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/v0.0.2</a>，结构如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1728,7 +1728,7 @@ nix build "nixpkgs#bat"
 </span></span><span class="line"><span class="cl">  <span class="p">];}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>上面这个 nix 表达式的执行结果就是一个新的 Derivation，它的 <code>rimeDataPkgs</code> 参数被覆盖为 <code>[./rime-data-flypy]</code>，而其他参数则沿用原来的值。</p>
+</div><p>上面这个 Nix 表达式的执行结果就是一个新的 Derivation，它的 <code>rimeDataPkgs</code> 参数被覆盖为 <code>[./rime-data-flypy]</code>，而其他参数则沿用原来的值。</p>
 <p>除了覆写参数，还可以通过 <code>overrideAttrs</code> 来覆写使用 <code>stdenv.mkDerivation</code> 构建的 Derivation 的属性，比如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1758,7 +1758,7 @@ nix build "nixpkgs#bat"
 <li>否则，就只能使用 Overlays 修改 pkgs 中的 Derivation A 了，这是全局的修改。</li>
 </ol>
 <p>所以简单的说，Overlays 就是用来全局修改 pkgs 中的 Derivation 的。</p>
-<p>在 nix flake 中，使用如下语法来使用 Overlays:</p>
+<p>在 Nix Flakes 中，使用如下语法来使用 Overlays:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1921,7 +1921,7 @@ nix build "nixpkgs#bat"
 <li><a href="https://lantian.pub/article/modify-website/nixos-why.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列</a>: 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。</li>
 <li><a href="https://www.tweag.io/blog/2020-05-25-flakes/" target="_blank" rel="noopener noreferrer">Nix Flakes Series</a>: 官方的 Nix Flakes 系列文章，介绍得比较详细，作为新手入门比较 OK</li>
 <li><a href="https://nixos.wiki/wiki/Flakes" target="_blank" rel="noopener noreferrer">Nix Flakes - Wiki</a>: Nix Flakes 的官方 Wiki，此文介绍得比较粗略。</li>
-<li><a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>: 我的 nix 配置仓库，README 中也列出了我参考过的其他配置仓库</li>
+<li><a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>: 我的 NixOS 配置仓库，README 中也列出了我参考过的其他配置仓库</li>
 </ul>
 ]]></content></entry><entry><title type="html">Linux 上的 WireGuard 网络分析（一）</title><link href="https://thiscute.world/posts/wireguard-on-linux/"/><id>https://thiscute.world/posts/wireguard-on-linux/</id><author><name>ryan4yin</name></author><published>2023-03-28T22:19:25+08:00</published><updated>2023-03-28T22:19:25+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/wireguard-on-linux/wireguard.png" height="1280" width="500"><figcaption></figcaption>
