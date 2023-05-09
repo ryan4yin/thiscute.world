@@ -515,8 +515,12 @@ store object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 这就是 NixOS 默认的声明式系统配置，要对系统做任何可复现的变更，都只需要修改 `/etc/nixos/configuration.nix` 文件，然后运行 `sudo nixos-rebuild switch` 部署变更即可。
 
-`/etc/nixos/configuration.nix` 的所有配置项，在 [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration) 中有详细描述，请按需查阅。
+`/etc/nixos/configuration.nix` 的所有配置项，可以在这几个地方查到：
 
+- 直接 Google，比如 `Chrome NixOS` 就能找到 Chrome 相关的配置项，一般 NixOS Wiki 或 nixpkgs 仓库源码的排名会比较靠前。
+- 在 [NixOS Options Search](https://search.nixos.org/options) 中搜索关键字
+- 系统级别的配置，可以考虑在 [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration) 找找相关文档
+- 直接在 [nixpkgs](https://github.com/NixOS/nixpkgs) 仓库中搜索关键字，读相关的源码。
 
 
 ### 2. 启用 NixOS 的 Flake 支持
@@ -830,8 +834,10 @@ nix flake new -t github:nix-community/home-manager#nixos
 
 安装完成后，所有用户级别的程序、配置，都可以通过 `/etc/nixos/home.nix` 管理，并且执行 `sudo nixos-rebuild switch` 时也会自动应用 home-manager 的配置。
 
-你可以在 [Home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html) 中找到 Home Manager 支持的所有配置项，它涵盖了几乎所有常用的程序，建议通过关键字搜索自己需要的配置项。
+Home Manager 的配置项有这几种查找方式：
 
+- [Home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html): 一份包含了所有配置项的列表，建议在其中关键字搜索。
+- [home-manager](https://github.com/nix-community/home-manager): 有些配置项在官方文档中没有列出，或者文档描述不够清晰，可以直接在这份 home-manager 的源码中搜索阅读对应的源码。
 
 ### 6. 模块化 NixOS 配置
 
