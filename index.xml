@@ -31,8 +31,8 @@
 <blockquote>
 <p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步。</p>
 </blockquote>
-<p>总结下 nix 的优点：</p>
-<ul>
+<h3 id="nix-的优点" class="headerLink">
+    <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>nix 的优点</h3><ul>
 <li>声明式配置，environment as code
 <ul>
 <li>nix flake 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 nix 可以在不同机器上生成完全一致的环境。</li>
@@ -44,8 +44,14 @@
 <li>NixOS 的可自定义程度非常高，系统的绝大多数组件都可以通过简单的声明式配置来自定义，而且也可以很方便地将自己的定制配置分享给他人。</li>
 <li>社区很活跃，第三方项目也挺丰富，官方包仓库 nixpkgs 贡献者众多，也有很多人分享自己的 nix 配置，一遍浏览下来，整个生态给我一种发现新大陆的兴奋感。</li>
 </ul>
-<p>nix 的缺点：</p>
-<ul>
+<figure><img src="./nixos-bootloader.avif"
+         alt="NixOS 启动项中列出了所有历史版本，图来自 NixOS Discourse - 10074"/><figcaption>
+            <p>NixOS 启动项中列出了所有历史版本，图来自 <a href="https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074" target="_blank" rel="noopener noreferrer">NixOS Discourse - 10074</a></p>
+        </figcaption>
+</figure>
+
+<h3 id="nix-的缺点" class="headerLink">
+    <a href="#nix-%e7%9a%84%e7%bc%ba%e7%82%b9" class="header-mark"></a>nix 的缺点</h3><ul>
 <li>学习成本高：如果你希望系统完全可复现，并且避免各种不当使用导致的坑，那就需要学习了解 nix 的整个设计，并以声明式的方式管理系统，不能无脑 <code>nix-env -i</code>（这类似 <code>apt-get install</code>）。</li>
 <li>文档混乱：首先 Nix Flake 目前仍然是实验性特性，介绍它本身的文档目前比较匮乏。 其次 Nix 社区绝大多数文档都只介绍了旧的 <code>nix-env</code>/<code>nix-channel</code>，想直接从 Nix Flake 开始学习的话，需要参考大量旧文档，从中提取出自己需要的内容。</li>
 <li>包数量比较少：官方宣称 nixpkgs 是有 <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> 个软件包，但是实际体验下来跟 arch linux 的差距还比较大，毕竟 AUR 生态是真的丰富。
@@ -658,7 +664,13 @@
 </div><p>这里我启用了 openssh 服务，为 ryan 用户添加了 ssh 公钥，并禁用了密码登录。</p>
 <p>现在运行 <code>sudo nixos-rebuild switch</code> 部署修改后的配置，之后就可以通过 ssh 密钥远程登录到我的这台主机了。</p>
 <p>这就是 NixOS 默认的声明式系统配置，要对系统做任何可复现的变更，都只需要修改 <code>/etc/nixos/configuration.nix</code> 文件，然后运行 <code>sudo nixos-rebuild switch</code> 部署变更即可。</p>
-<p><code>/etc/nixos/configuration.nix</code> 的所有配置项，在 <a href="https://nixos.org/manual/nixos/unstable/index.html#ch-configuration" target="_blank" rel="noopener noreferrer">Configuration - NixOS Manual</a> 中有详细描述，请按需查阅。</p>
+<p><code>/etc/nixos/configuration.nix</code> 的所有配置项，可以在这几个地方查到：</p>
+<ul>
+<li>直接 Google，比如 <code>Chrome NixOS</code> 就能找到 Chrome 相关的配置项，一般 NixOS Wiki 或 nixpkgs 仓库源码的排名会比较靠前。</li>
+<li>在 <a href="https://search.nixos.org/options" target="_blank" rel="noopener noreferrer">NixOS Options Search</a> 中搜索关键字</li>
+<li>系统级别的配置，可以考虑在 <a href="https://nixos.org/manual/nixos/unstable/index.html#ch-configuration" target="_blank" rel="noopener noreferrer">Configuration - NixOS Manual</a> 找找相关文档</li>
+<li>直接在 <a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> 仓库中搜索关键字，读相关的源码。</li>
+</ul>
 <h3 id="2-启用-nixos-的-flake-支持" class="headerLink">
     <a href="#2-%e5%90%af%e7%94%a8-nixos-%e7%9a%84-flake-%e6%94%af%e6%8c%81" class="header-mark"></a>2. 启用 NixOS 的 Flake 支持</h3><p>与 NixOS 默认的配置方式相比，Nix Flakes 提供了更好的可复现性，同时它定义的包结构也更加清晰，更容易维护，因此更建议使用 Nix Flakes 来管理系统配置。</p>
 <p>但是目前 nix flakes 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 <code>/etc/nixos/configuration.nix</code> 文件，在函数块中启用 flakes 与 nix-command 功能：</p>
@@ -1208,7 +1220,11 @@
 </div>
 </div><p>然后执行 <code>sudo nixos-rebuild switch</code> 应用配置，即可完成 home-manager 的安装。</p>
 <p>安装完成后，所有用户级别的程序、配置，都可以通过 <code>/etc/nixos/home.nix</code> 管理，并且执行 <code>sudo nixos-rebuild switch</code> 时也会自动应用 home-manager 的配置。</p>
-<p>你可以在 <a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">Home Manager - Appendix A. Configuration Options</a> 中找到 Home Manager 支持的所有配置项，它涵盖了几乎所有常用的程序，建议通过关键字搜索自己需要的配置项。</p>
+<p>Home Manager 的配置项有这几种查找方式：</p>
+<ul>
+<li><a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">Home Manager - Appendix A. Configuration Options</a>: 一份包含了所有配置项的列表，建议在其中关键字搜索。</li>
+<li><a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>: 有些配置项在官方文档中没有列出，或者文档描述不够清晰，可以直接在这份 home-manager 的源码中搜索阅读对应的源码。</li>
+</ul>
 <h3 id="6-模块化-nixos-配置" class="headerLink">
     <a href="#6-%e6%a8%a1%e5%9d%97%e5%8c%96-nixos-%e9%85%8d%e7%bd%ae" class="header-mark"></a>6. 模块化 NixOS 配置</h3><p>到这里整个系统的骨架基本就配置完成了，当前我们 <code>/etc/nixos</code> 中的系统配置结构应该如下：</p>
 <div class="highlight"><div class="chroma">
