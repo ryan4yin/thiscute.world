@@ -40,8 +40,7 @@ After switching back, GUI programs such as Firefox and Thunar would always get s
 
 I was too tired to deal with the second problem, after thinking about it carefully, I realized that the root cause was that the system did not have any version control and rollback mechanism, which caused the system to be unable to be restored when problems occurred. 
 And another problem, when installing a new system, I had to manually export the package list from the old machine and then install them on the new machine.
-So I decided to switch to NixOS, and spent half a month studying Nix and Flakes before finally switching from EndeavourOS to NixOS on my PC.
-
+So I decided to switch to NixOS. 
 
 The first step I took was to create a NixOS virtual machine in my Homelab, and debug step by step in this virtual machine to migrate my old PC's EndeavourOS i3 configuration to NixOS + Flakes and restore the entire desktop environment.
 
@@ -52,6 +51,8 @@ The rollback capability of NixOS gave me a lot of confidence - I no longer fear 
 >Note: some friends on V2EX gave feedback that `btrfs`'s snapshot feature can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. `btrfs` can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs based snapshot tools(e.g. [btrbk](https://github.com/digint/btrbk)) is also a good choice. Or if you're still interested in Nix, It is definitely worth learning, as Nix's capabilities are far beyond just system snapshots.
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="My NixOS Desktop" >}}
+
+So after studying Nix and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period of time, hope you like it~
 
 Now that the background information is out of the way, it's time to dive into the world of Nix!
 
