@@ -28,8 +28,6 @@ comment:
 
 >You need to have some Linux experience and programming experience to play with NixOS & Nix Flakes, so I don't recommend NixOS for any Linux beginners.
 
->Mainly translated from Chinese with the help of Copilot & ChatGPT.
-
 ## 0. Why Nix
 
 I heard about Nix several years ago. It uses [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) to manage system dependencies and can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
