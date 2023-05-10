@@ -148,7 +148,7 @@ Similar to Arch Linux, Nix also has official and community software package repo
 
 The Nix language is used to declare packages and configurations to be built by Nix, if you want to play NixOS and Nix Flakes and enjoy the many benefits they bring, you must learn the basics of this language first.
 
-Nix is a relatively simple functional language, if you already have a programming foundation, it should take less than 2 hours to go through these grammars.
+Nix is a relatively simple functional language, if you already have some programming experiences, it should take less than 2 hours to go through these grammars.
 
 Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) to get a basic understanding of Nix language now, it's a very good tutorial.
 
