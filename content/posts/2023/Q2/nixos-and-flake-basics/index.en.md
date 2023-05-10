@@ -20,6 +20,10 @@ comment:
     enable: false
 ---
 
+>As of 2023-05-05, I have only used the NixOS system for half a month, so there will inevitably be some mistakes and omissions in this article, please read it carefully. 
+
+>I will continue to try my best to repair and improve the content in the future, hope you like it, also eager to get any feedback~
+
 > The target NixOS version of this article is 22.11, and the Nix version is 2.15.0. In this environment, Nix Flakes is still an experimental feature.
 
 >You need to have some Linux experience and programming experience to play with NixOS & Nix Flakes, so I don't recommend NixOS for any Linux beginners.
