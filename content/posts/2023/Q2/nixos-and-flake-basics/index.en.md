@@ -772,13 +772,13 @@ Up to now, we have written a lot of Nix Flakes configurations to manage the NixO
 
 ### 1. Flake outputs
 
-Flake outputs are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:
+the `outputs` in `flake.nix` are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:
 
-- Nix packages: named `apps.<system>.<name>`, `packages.<system>.<name>`, or `legacyPackages.<system>.<name>` in `flake.nix`'s `outputs`.
-- Nix Helper Functions: named `lib` in `flake.nix`'s `outputs`., which means a library for other flakes.
-- Nix development environments: named `devShell` in `flake.nix`'s `outputs`.
-- NixOS configurations: named `nixosConfiguration` in `flake.nix`'s `outputs`.
-- Nix templates: named `templates` in `flake.nix`'s `outputs`.
+- Nix packages: named `apps.<system>.<name>`, `packages.<system>.<name>`, or `legacyPackages.<system>.<name>`
+- Nix Helper Functions: named `lib`., which means a library for other flakes.
+- Nix development environments: named `devShell`
+- NixOS configurations: named `nixosConfiguration`
+- Nix templates: named `templates`
   - templates can be used by command `nix flake init --template <reference>`
 - Other user defined outputs
 
