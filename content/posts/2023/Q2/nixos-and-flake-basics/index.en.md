@@ -745,6 +745,9 @@ For example, my usage is to place the Nix Flakes configuration in the `~/nixos-c
 ```shell
 sudo mv /etc/nixos /etc/nixos.bak  # backup the original configuration
 sudo ln -s ~/nixos-config/ /etc/nixos
+
+# deploy the flake.nix located at the default location(/etc/nixos)
+sudo nixos-rebuild switch
 ```
 
 And then you can use Git to manage the configuration in the `~/nixos-config` directory. The configuration can be used with ordinary user-level permissions, and it is not required to be owned by root.
@@ -771,11 +774,11 @@ Up to now, we have written a lot of Nix Flakes configurations to manage the NixO
 
 Flake outputs are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:
 
-- Nix packages: named `apps.<system>.<name>`, `packages.<system>.<name>`, or `legacyPackages.<system>.<name>`
-- Nix Helper Functions: named `lib`, which means a library for other flakes.
-- Nix development environments: named `devShell`
-- NixOS configurations: has many different outputs
-- Nix templates: named `templates`
+- Nix packages: named `apps.<system>.<name>`, `packages.<system>.<name>`, or `legacyPackages.<system>.<name>` in `flake.nix`'s `outputs`.
+- Nix Helper Functions: named `lib` in `flake.nix`'s `outputs`., which means a library for other flakes.
+- Nix development environments: named `devShell` in `flake.nix`'s `outputs`.
+- NixOS configurations: named `nixosConfiguration` in `flake.nix`'s `outputs`.
+- Nix templates: named `templates` in `flake.nix`'s `outputs`.
   - templates can be used by command `nix flake init --template <reference>`
 - Other user defined outputs
 
@@ -844,7 +847,7 @@ pkgs.fcitx5-rime.override {rimeDataPkgs = [
 
 The result of executing the above Nix expression is a new Derivation, where the `rimeDataPkgs` parameter is overridden as `[./rime-data-flypy]`, while other parameters retain their original values.
 
-In addition to overriding parameters, you can also override the attributes of a Derivation built using `stdenv.mkDerivation` by using `overrideAttrs`. For example:
+In addition to overriding parameters, you can also override the attributes of a Derivation(condiftion: it's built using `stdenv.mkDerivation`) by using `overrideAttrs`. For example:
 
 ```nix
 helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
