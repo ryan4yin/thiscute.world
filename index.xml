@@ -21,7 +21,7 @@
 在虚拟机里搞定后问题就不大了，直接备份好我办公电脑的 Home 目录、软件清单，然后将系统重装为 NixOS，再 git clone 我调试好的 NixOS 配置，改一改硬盘挂载相关的参数，额外补充下 Nvidia 显卡相关的 NixOS 配置，最后一行命令部署配置。几行命令就在我全新的 NixOS 系统上还原出了整个 i3 桌面环境跟我的常用软件，那一刻真的很有成就感！</p>
 <p>NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞挂了，于是我前几天我又进一步迁移到了 hyprland 桌面，确实比 i3 香多了，它的动画效果我吹爆！（在以前 EndeavourOS 上我肯定是不太敢做这样的切换的，原因前面已经解释过了——万一把系统搞出问题，会非常麻烦。）</p>
 <blockquote>
-<p>补充：v2ex 上有 v 友反馈 btrfs 的 timeshift 系统快照，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么 btrfs + timeshift 也是一个不错的选择。另一方面如果你仍然对 Nix 感兴趣，那学一学也完全不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已。</p>
+<p>补充：v2ex 上有 v 友反馈 btrfs 文件系统的快照功能，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以像 NixOS 一样配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么基于 btrfs 快照功能的 <a href="https://github.com/digint/btrbk" target="_blank" rel="noopener noreferrer">btrbk</a> 也是一个不错的选择。当然如果你仍然对 Nix 感兴趣，那学一学也绝对不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已～</p>
 </blockquote>
 <figure><img src="./screenshot_2023-05-07-21-21.webp"
          alt="我当前的 NixOS 桌面"/><figcaption>
@@ -39,13 +39,13 @@
 <p>NixOS 的配置只负责管理系统层面的状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。</p>
 <p>因为 Nix 声明式、可复现的特性，Nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> 都是基于 Nix 实现的运维工具。</p>
 <blockquote>
-<p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步，或者用 btrfs timeshift 之类的工具对 home 目录做快照。</p>
+<p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步，或者用 <a href="https://github.com/digint/btrbk" target="_blank" rel="noopener noreferrer">btrbk</a> 之类的工具对 home 目录做快照。</p>
 </blockquote>
 <h3 id="nix-的优点" class="headerLink">
     <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>Nix 的优点</h3><ul>
-<li>声明式配置，Environment as Code，可以直接用 Git 管理配置，只要配置文件不丢，系统就可以随时还原到任一历史状态。
+<li>声明式配置，Environment as Code，可以直接用 Git 管理配置，只要配置文件不丢，系统就可以随时还原到任一历史状态（理想情况下）。
 <ul>
-<li>这跟 cargo.lock/go.mod 等文件锁定依赖版本以确保构建结果可复现的思路是一致的。</li>
+<li>这跟一些编程语言中 cargo.lock/go.mod 等文件锁定依赖库版本以确保构建结果可复现的思路是一致的。</li>
 <li>与 Docker 相比，Dockerfile 实际是命令式的配置，而且也不存在版本锁这样的东西，所以 Docker 的可复现能力远不如 Nix.</li>
 </ul>
 </li>
@@ -72,9 +72,11 @@
 <li><del>包数量比较少</del>：撤回下这一条，官方宣称 nixpkgs 是有 <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> 个软件包，使用下来确实绝大部分包都能在 nixpkgs 里找到，体验还是不错滴。</li>
 <li>比较吃硬盘空间：为了保证系统可以随时回退，nix 默认总是保留所有历史环境，这非常吃硬盘空间。虽然可以定期使用 <code>nix-collect-garbage</code> 来手动清理旧的历史环境，也还是建议配置个更大的硬盘&hellip;</li>
 </ul>
-<p>总的来说，我觉得 NixOS 适合那些有一定 Linux 使用经验与编程经验，并且希望对自己的系统拥有更强掌控力的开发者。在开发环境搭建方面 Nix 与相对流行的 Dev Containers 也有些竞争关系，它们的具体区别还有待我发掘~</p>
-<h2 id="二安装与简单使用" class="headerLink">
-    <a href="#%e4%ba%8c%e5%ae%89%e8%a3%85%e4%b8%8e%e7%ae%80%e5%8d%95%e4%bd%bf%e7%94%a8" class="header-mark"></a>二、安装与简单使用</h2><p>Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/WSL 三种系统上，Nix 还额外提供了 NixOS ——一个使用 Nix 管理整个系统环境的 Linux 发行版。</p>
+<h3 id="简单总结下" class="headerLink">
+    <a href="#%e7%ae%80%e5%8d%95%e6%80%bb%e7%bb%93%e4%b8%8b" class="header-mark"></a>简单总结下</h3><p>总的来说，我觉得 NixOS 适合那些有一定 Linux 使用经验与编程经验，并且希望对自己的系统拥有更强掌控力的开发者。</p>
+<p>另外一条信息：在开发环境搭建方面 Nix 与相对流行的 <a href="https://containers.dev/" target="_blank" rel="noopener noreferrer">Dev Containers</a> 也有些竞争关系，它们的具体区别还有待我发掘~</p>
+<h2 id="二安装" class="headerLink">
+    <a href="#%e4%ba%8c%e5%ae%89%e8%a3%85" class="header-mark"></a>二、安装</h2><p>Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/WSL 三种系统上，Nix 还额外提供了 NixOS ——一个使用 Nix 管理整个系统环境的 Linux 发行版。</p>
 <p>我选择了直接使用 NixOS 的 ISO 镜像安装 NixOS 系统，从而最大程度上通过 Nix 管理整个系统的环境。</p>
 <p>安装很简单，这里不多介绍，仅列一下我觉得比较有用的参考资料：</p>
 <ul>
@@ -90,7 +92,7 @@
 <li><a href="https://github.com/DeterminateSystems/nix-installer" target="_blank" rel="noopener noreferrer">The Determinate Nix Installer</a>: 第三方使用 Rust 编写的 installer, 默认启用 <code>nix-command</code> &amp; <code>flakes</code>，并且提供了卸载命令。</li>
 </ol>
 <h2 id="三nix-flakes-与旧的-nix" class="headerLink">
-    <a href="#%e4%b8%89nix-flakes-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flakes 与旧的 Nix</h2><p>Nix 于 2020 年推出了 <code>nix-command</code> &amp; <code>flakes</code> 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。</p>
+    <a href="#%e4%b8%89nix-flakes-%e4%b8%8e%e6%97%a7%e7%9a%84-nix" class="header-mark"></a>三、Nix Flakes 与旧的 Nix</h2><p>Nix 于 2020 年推出了 <code>nix-command</code> &amp; <code>flakes</code> 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 <code>flake.lock</code> 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。</p>
 <p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 <code>nix-command</code> &amp; <code>flakes</code> 学起。</p>
 <p>这里列举下在 <code>nix-command</code> &amp; <code>flakes</code> 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：</p>
 <ol>
@@ -824,6 +826,8 @@
 </span><span class="lnt">57
 </span><span class="lnt">58
 </span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
@@ -862,6 +866,8 @@
 </span></span><span class="line"><span class="cl">      <span class="s2">&#34;nixos-test&#34;</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Nix 模块系统可将配置模块化，提升配置的可维护性</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># </span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># modules 中每个参数，都是一个 Nix Module，nixpkgs manual 中有半份介绍它的文档：</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#    &lt;https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction&gt;</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># 说半份是因为它的文档不全，只有一些简单的介绍（Nix 文档现状...）</span>
@@ -874,11 +880,11 @@
 </span></span><span class="line"><span class="cl">        <span class="c1">#  pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: The location of the module directory of Nix.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># Nix 模块系统可将配置模块化，提升配置的可维护性</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs，你可以取消注释如下这行来启用该参数</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># specialArgs = {...}  # 向子模块中传递自定义参数</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="c1"># 导入之前我们使用的 configuration.nix，这样旧的配置文件仍然能生效</span>
-</span></span><span class="line"><span class="cl">          <span class="c1"># 注：configuration.nix 本身也是一个 Nix Module，因此可以直接在这里导入</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># 注: /etc/nixos/configuration.nix 本身也是一个 Nix Module，因此可以直接在这里导入</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./configuration.nix</span>
 </span></span><span class="line"><span class="cl">        <span class="p">];</span>
 </span></span><span class="line"><span class="cl">      <span class="p">};</span>
@@ -1492,7 +1498,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>然后在你对应的 module 中使用该数据源中的包，示例：</p>
+</div><p>然后在你对应的 module 中使用该数据源中的包，一个 Home Manager 的子模块示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
