@@ -6,7 +6,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "zero-to-nix.png"
+  src: "screenshot_2023-05-07-21-21.webp"
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]

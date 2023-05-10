@@ -6,7 +6,7 @@ draft: false
 
 resources:
 - name: "featured-image"
-  src: "zero-to-nix.png"
+  src: "screenshot_2023-05-07-21-21.webp"
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]
@@ -29,8 +29,6 @@ comment:
 >You need to have some Linux experience and programming experience to play with NixOS & Nix Flakes, so I don't recommend NixOS for any Linux beginners.
 
 >Mainly translated from Chinese with the help of Copilot & ChatGPT.
-
->The article's banner are copyed from [Introducing Zero To Nix](https://determinate.systems/posts/zero-to-nix), hope this won't be a problem.
 
 ## 0. Why Nix
 
