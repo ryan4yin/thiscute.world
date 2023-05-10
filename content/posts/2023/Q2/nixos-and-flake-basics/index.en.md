@@ -65,7 +65,7 @@ Nix package manager is a declarative configuration management tool similar to pl
 
 The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as "OS as Code", which describes the entire operating system's state using declarative Nix configuration files.
 
-NixOS's configuration only manages the system-level state, the user's HOME directory is not under its control. Another important community project, [home-manager](https://github.com/nix-community/home-manager), filled this gap, home-manager is designed to managing user-level's packages & HOME directories. **By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained**.
+NixOS's configuration only manages the system-level state, the user's HOME directory is not under its control. Another important community project, [home-manager](https://github.com/nix-community/home-manager), filled this gap, home-manager is designed to managing user-level's packages & HOME directories. **By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained**(ideally).
 
 Due to Nix's declarative and reproducible features, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. [NixOps](https://github.com/NixOS/nixops) from the Nix official and [deploy-rs](https://github.com/serokell/deploy-rs)  from the community are both operations tools based on Nix.
 
