@@ -405,7 +405,7 @@ Therefore, in order to customize the cache image source, we must add the related
 
 After the modification, execute `sudo nixos-rebuild switch` to apply the configuration. 
 
-### 5. 安装 home-manager
+### 5. install home-manager
 
 We mentioned earlier that NixOS can only manage system-level configurations, and user-level configurations need to be managed using home-manager.
 
