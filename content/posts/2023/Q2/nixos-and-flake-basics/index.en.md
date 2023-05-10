@@ -843,7 +843,7 @@ Simply put, all Nix packages in nixpkgs can be customized with `<pkg>.override {
 ```nix
 pkgs.fcitx5-rime.override {rimeDataPkgs = [
     ./rime-data-flypy
-  ];}
+];}
 ```
 
 The result of executing the above Nix expression is a new Derivation, where the `rimeDataPkgs` parameter is overridden as `[./rime-data-flypy]`, while other parameters retain their original values.

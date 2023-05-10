@@ -1145,7 +1145,7 @@ callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技�
 ```nix
 pkgs.fcitx5-rime.override {rimeDataPkgs = [
     ./rime-data-flypy
-  ];}
+];}
 ```
 
 上面这个 Nix 表达式的执行结果就是一个新的 Derivation，它的 `rimeDataPkgs` 参数被覆盖为 `[./rime-data-flypy]`，而其他参数则沿用原来的值。
