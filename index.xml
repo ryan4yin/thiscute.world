@@ -20,6 +20,9 @@
 <p>我折腾的第一步是在我 Homelab 上开了台 NixOS 虚拟机，在这台虚拟机里一步步调试，把我物理机的 EndeavourOS i3 配置迁移到 NixOS + Flakes，还原出了整个桌面环境。
 在虚拟机里搞定后问题就不大了，直接备份好我办公电脑的 Home 目录、软件清单，然后将系统重装为 NixOS，再 git clone 我调试好的 NixOS 配置，改一改硬盘挂载相关的参数，额外补充下 Nvidia 显卡相关的 NixOS 配置，最后一行命令部署配置。几行命令就在我全新的 NixOS 系统上还原出了整个 i3 桌面环境跟我的常用软件，那一刻真的很有成就感！</p>
 <p>NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞挂了，于是我前几天我又进一步迁移到了 hyprland 桌面，确实比 i3 香多了，它的动画效果我吹爆！（在以前 EndeavourOS 上我肯定是不太敢做这样的切换的，原因前面已经解释过了——万一把系统搞出问题，会非常麻烦。）</p>
+<blockquote>
+<p>补充：v2ex 上有 v 友反馈其实 btrfs 的 timeshift 系统快照，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么 btrfs + timeshift 也是一个不错的选择。另一方面如果你仍然对 Nix 感兴趣，那学一学也完全不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已。</p>
+</blockquote>
 <figure><img src="./screenshot_2023-05-07-21-21.webp"
          alt="我当前的 NixOS 桌面"/><figcaption>
             <p>我当前的 NixOS 桌面</p>
@@ -29,6 +32,9 @@
 <p>前因后果交代完毕，那么下面开始正文~</p>
 <h2 id="一nix-简介" class="headerLink">
     <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 Nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。</p>
+<blockquote>
+<p>简单解释下什么是「声明式配置」，它是指用户只需要声明好自己想要的结果——比如说希望将 i3 桌面替换成 sway 桌面，Nix 就会帮用户达成这个目标。用户不需要关心底层细节（比如说 sway 需要安装哪些软件包，哪些 i3 相关的软件包需要卸载掉，哪些系统配置或环境变量需要针对 sway 做调整、如果使用了 Nvidia 显卡，Sway 参数要做什么调整才能正常运行），Nix 会自动帮用户处理这些细节。</p>
+</blockquote>
 <p>基于 Nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个操作系统的状态。</p>
 <p>NixOS 的配置只负责管理系统层面的状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。</p>
 <p>因为 Nix 声明式、可复现的特性，Nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> 都是基于 Nix 实现的运维工具。</p>
@@ -37,10 +43,16 @@
 </blockquote>
 <h3 id="nix-的优点" class="headerLink">
     <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>Nix 的优点</h3><ul>
-<li>声明式配置，Environment as Code
+<li>声明式配置，Environment as Code，可以直接用 Git 管理配置，只要配置文件不丢，系统就可以随时还原到任一历史状态。
 <ul>
-<li>Nix Flakes 通过函数式语言的方式描述了软件包的依赖关系，并通过 flake.lock （借鉴了 cargo/npm）记录了所有依赖项的数据源与 hash 值，这使得 Nix 可以在不同机器上生成完全一致的环境。</li>
-<li>在某些方面 Nix 与 Docker/Vargrant 有一点类似，不过 Docker/Vargrant 的目标环境都是隔离的容器或虚拟机，Nix 比它们更通用，适用面更广。另外 Nix 是声明式配置，还带版本锁，而 Dockerfile 仍然是命令式配置，对用户暴露了更多细节。（代价是 Nix 要更复杂&hellip;）</li>
+<li>这跟 cargo.lock/go.mod 等文件锁定依赖版本以确保构建结果可复现的思路是一致的。</li>
+<li>与 Docker 相比，Dockerfile 实际是命令式的配置，而且也不存在版本锁这样的东西，所以 Docker 的可复现能力远不如 Nix.</li>
+</ul>
+</li>
+<li>高度便捷的系统自定义能力
+<ul>
+<li>通过改几行配置，就可以简单地更换系统的各种组件。这是因为 Nix 将底层的复杂操作全部封装在了 nix package 包中，只给用户提供了简洁且必要的声明式参数。</li>
+<li>而且这种修改非常安全，例证之一是有 v 友表示「<a href="https://www.v2ex.com/t/938569#r_13053251" target="_blank" rel="noopener noreferrer">nixos 切换不同桌面非常简单干净，而且很安全，我就经常 gnome/kde/sway 来回换着用。</a>」</li>
 </ul>
 </li>
 <li>可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回退。所以 Nix 也被认为是最稳定的包管理方式。</li>
