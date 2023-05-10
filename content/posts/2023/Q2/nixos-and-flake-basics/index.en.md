@@ -1,5 +1,5 @@
 ---
-title: "NixOS & Nix Flakes Guide for Beginners"
+title: "NixOS & Nix Flakes - A Guide for Beginners"
 date: 2023-05-10T21:23:28+08:00
 lastmod: 2023-05-10T21:23:28+08:00
 draft: false
@@ -28,11 +28,11 @@ comment:
 
 ## 0. Why Nix
 
-I heard about Nix several years ago. It uses DSL to manage system dependencies and can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, so I thought it was too troublesome and didn't study it at the time.
+I heard about Nix several years ago. It uses [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) to manage system dependencies and can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
 
 But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.
 
-The fist problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because the old system is also EndeavourOS, I directly `rsync` the old PC's Home directory to the new PC to save time after installation.
+The fist problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because My old PC also uses EndeavourOS, I directly `rsync` the old PC's Home directory to the new PC to save time after installation.
 However, this synchronization caused a problem. All functions worked normally, but video playback always stuck. Firefox, Chrome, and MPV would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the Home directory synchronization. After clearing the Home directory, the problem was solved immediately... Later, I spent a long time recovering things from the old PC one by one.
 
 The second problem is that I recently wanted to try Wayland, so I changed the desktop from i3wm to sway. 
@@ -50,7 +50,7 @@ Once I had it working on the virtual machine, the rest was easy. I simply backed
 
 The rollback capability of NixOS gave me a lot of confidence - I no longer fear breaking the system. So a few days ago, I further migrated to the hyprland desktop, which is indeed much better than i3, and I love its animation effects! (On EndeavourOS before, I wouldn't have dared to make such a switch for the reasons mentioned earlier - it would have been a big hassle if something went wrong with the system.)
 
->Note: some friends on V2EX gave feedback that the timeshift system snapshot of `btrfs` can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. `btrfs` can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs + timeshift is also a good choice. On the other hand, if you're still interested in Nix, learning it is definitely worth it, as Nix's capabilities are far beyond just system snapshots.
+>Note: some friends on V2EX gave feedback that `btrfs`'s snapshot feature can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. `btrfs` can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs based snapshot tools(e.g. [btrbk](https://github.com/digint/btrbk)) is also a good choice. Or if you're still interested in Nix, It is definitely worth learning, as Nix's capabilities are far beyond just system snapshots.
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="My NixOS Desktop" >}}
 
@@ -58,7 +58,7 @@ Now that the background information is out of the way, it's time to dive into th
 
 ## I. Introduction to Nix
 
-Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using a DSL, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.
+Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using [DSL](https://en.wikipedia.org/wiki/Domain-specific_language), and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.
 
 >To put it simply, "declarative configuration" means that users only need to declare the results they want. For example, you declares that they want to replace the i3 desktop with sway, then Nix will help them achieve that goal. Users don't need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user.
 

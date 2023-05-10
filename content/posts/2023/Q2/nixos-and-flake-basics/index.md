@@ -28,7 +28,7 @@ comment:
 
 ## 零、为什么选择 Nix
 
-好几年前就听说过 Nix，用 DSL 来管理系统依赖，还能随时回滚到任一历史状态。
+好几年前就听说过 Nix，用 [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) 来管理系统依赖，还能随时回滚到任一历史状态。
 虽然听着很牛，但是不仅要多学一门语言，装个包还得写代码，当时觉得太麻烦就没研究。
 但是最近搞系统迁移遇到两件麻烦事，使我决定尝试下 Nix.
 
@@ -52,7 +52,7 @@ NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞�
 
 ## 一、Nix 简介
 
-Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 DSL 声明好期望的系统状态，而 Nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。
+Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) 声明好期望的系统状态，而 Nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。
 
 >简单解释下什么是「声明式配置」，它是指用户只需要声明好自己想要的结果——比如说希望将 i3 桌面替换成 sway 桌面，Nix 就会帮用户达成这个目标。用户不需要关心底层细节（比如说 sway 需要安装哪些软件包，哪些 i3 相关的软件包需要卸载掉，哪些系统配置或环境变量需要针对 sway 做调整、如果使用了 Nvidia 显卡 Sway 参数要做什么调整才能正常运行等等），Nix 会自动帮用户处理这些细节。
 
