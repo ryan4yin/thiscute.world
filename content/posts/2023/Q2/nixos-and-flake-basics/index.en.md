@@ -26,7 +26,7 @@ comment:
 
 >Mainly translated from Chinese with the help of Copilot & ChatGPT.
 
->The article's banner are copy from [Introducing Zero To Nix](https://determinate.systems/posts/zero-to-nix), hope this won't be a problem.
+>The article's banner are copyed from [Introducing Zero To Nix](https://determinate.systems/posts/zero-to-nix), hope this won't be a problem.
 
 ## 0. Why Nix
 
