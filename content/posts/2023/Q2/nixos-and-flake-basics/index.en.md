@@ -60,41 +60,45 @@ Now that the background information is out of the way, it's time to dive into th
 
 Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using [DSL](https://en.wikipedia.org/wiki/Domain-specific_language), and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.
 
->To put it simply, "declarative configuration" means that users only need to declare the results they want. For example, you declares that they want to replace the i3 desktop with sway, then Nix will help them achieve that goal. Users don't need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user.
+>To put it simply, "declarative configuration" means that users only need to declare the results they want. For example, you declares that you want to replace the i3 windows manager with sway, then Nix will help you achieve the goal. You don't need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway's nix packages are designed properly...).
 
 The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as "OS as Code", which describes the entire operating system's state using declarative Nix configuration files.
 
-NixOS's configuration only manages the system-level state, the user's HOME directory is not under its jurisdiction. There is another important community project, home-manager, specifically for managing user's HOME directories. By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained.
+NixOS's configuration only manages the system-level state, the user's HOME directory is not under its control. There is another important community project, [home-manager](https://github.com/nix-community/home-manager), is designed to managing user's HOME directories. **By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained**.
 
 Due to Nix's declarative and reproducible features, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. [NixOps](https://github.com/NixOS/nixops) from the Nix official and [deploy-rs](https://github.com/serokell/deploy-rs)  from the community are both operations tools based on Nix.
 
->Since there are numerous files in the home directory with varying behaviors, it is impossible to version control all of them due to the high cost. Generally, only some important configuration files are managed using home-manager, and other files that need to be backed up can be backed up and synchronized using rsync/synthing, or use tools like btrfs timeshift to take snapshots of the home directory.
+>Since there are numerous files in the home directory with varying behaviors, it is impossible to version control all of them due to the high cost. Generally, only some important configuration files are managed using home-manager, and other files that need to be backed up can be backed up and synchronized using rsync/synthing, or use tools like [btrbk](https://github.com/digint/btrbk) to take snapshots of the home directory.
 
 ### Advantages of Nix
 
-- **Declarative configuration, Environment as Code**, can be managed with Git. As long as the configuration files are not lost, the system can be restored to any historical state at any time.
-  - This approach is consistent with the idea of locking dependency versions in files like cargo.lock/go.mod to ensure reproducible builds.
-  - Compared with Docker, Dockerfile is actually an imperative configuration and there is no such thing as version locking, so Docker's reproducibility is far inferior to Nix.
+- **Declarative configuration, Environment as Code**, can be managed with Git. As long as the configuration files are not lost, the system can be restored to any historical state at any time(ideally).
+  - Nix lock dependent library versions through a lock file named `flake.lock`, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.
+  - Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as `flake.nix` in Docker, Docker's reproducibility relys on share the build result(which is MUCH MORE LARGAR than Dockerfile itself) through image regitry(e.g. DockerHub).
 - **Highly convenient system customization capability**
-  - By changing a few lines of configuration, various components of the system can be easily replaced. This is because Nix encapsulates all the underlying complex operations in nix packages and only exports concise and necessary declarative parameters.
-  - Moreover, this modification is very safe. An example is that some users on the V2EX forum have stated that "[**nixos switching different desktop environments is very simple and clean, and it is very safe. I often switch between gnome/kde/sway.**](https://www.v2ex.com/t/938569#r_13053251)"
-- **Rollback**: The system can be rolled back to any historical environment at any time, and NixOS even adds all old versions to the boot options by default to ensure that the system can be rolled back at any time if it crashes. Therefore, Nix is also considered the most stable package management method.
+  - By changing a few lines of configuration, various components of the NixOS system can be easily customized. This is because Nix encapsulates all the underlying complex operations in nix packages and only exports concise and necessary declarative parameters.
+  - Moreover, this modification is very safe. An example is that one NixOS user on the V2EX forum have stated that "[**on NixOS, switching between different desktop environments is very simple and clean, and it is very safe. I often switch between gnome/kde/sway.**](https://www.v2ex.com/t/938569#r_13053251)"
+- **Rollback**: The system can be rolled back to any historical environment at any time, and NixOS even adds all old versions to the boot options by default to ensure that the system can be rolled back at any time even though it crashes. Therefore, NixOS is also considered one of the most stable Linux Systems.
 - **No dependency conflicts**: Because each software package in Nix has a unique hash, its installation path also includes this hash value, so multiple versions can coexist.
-- **The community is very active, and there are quite a few third-party projects**. The official package repository, nixpkgs, has many contributors, and many people share their Nix configurations. After browsing through it, the entire ecosystem gives me a sense of excitement in discovering a new continent.
+- **The community is very active, and there are quite a few third-party projects**. The official package repository, nixpkgs, has many contributors, and many people share their Nix configurations on Github/Gitlab. After browsing through it, the entire ecosystem gives me a sense of excitement in discovering a new continent.
 
 {{< figure src="./nixos-bootloader.avif" caption="All historical versions are listed in the boot options of NixOS. Image from [NixOS Discourse - 10074](https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074)" >}}
 
 ### Disadvantages of Nix
 
 - **Relatively high learning curve:**: If you want the system to be completely reproducible and avoid pitfalls caused by improper use, you need to learn about the entire design of Nix and manage the system in a declarative manner. You cannot blindly use `nix-env -i` (which is similar to `apt-get install`).
-- **Chaotic documentation**: Firstly, Nix Flakes is still an experimental feature, and there are currently relatively few documents introducing it itself. Secondly, most of the Nix community's documentation only introduces the old `nix-env`/`nix-channel`. If you want to start learning directly from Nix Flakes, you need to refer to a large number of old documents and extract what you need from them. In addition, some of Nix's current core functions are not well-documented (such as `imports` and Nixpkgs Module System), so it is best to look at the source code to understand them.
-- ~~Relatively few packages~~: Retract this one. The official claim is that nixpkgs has [80000+](https://search.nixos.org/packages) packages, and in fact, most packages can be found in nixpkgs
-- **Relatively high disk space usage**: To ensure that the system can be rolled back at any time, Nix preserves all historical environments by default, which can take up a lot of disk space. Although you can manually clean up old historical environments periodically with nix-collect-garbage, it is still recommended to buy a larger hard drive.
+- **Chaotic documentation**: Firstly, Nix Flakes is still an experimental feature, and there are currently relatively few documents introducing it. Secondly, most of the Nix community's documentation only introduces the old `nix-env`/`nix-channel`. If you want to start learning Nix directly from Nix Flakes, you need to refer to a large number of old documents and extract what you need from them. In addition, some of Nix's current core functions are not well-documented (such as `imports` and Nixpkgs Module System), so it is best to look at the source code to understand them.
+- ~~Relatively few packages~~: Retract this one. The official claim is that nixpkgs has [80000+](https://search.nixos.org/packages) packages, and indeed, most packages can be found in nixpkgs。
+- **Relatively high disk space usage**: To ensure that the system can be rolled back at any time, Nix preserves all historical environments by default, which can take up a lot of disk space. Although you can manually clean up old historical environments periodically with `nix-collect-garbage`, it is still recommended to buy a larger hard drive.
 
-Generally speaking, I think NixOS is suitable for developers who have a certain amount of Linux usage experience and programming experience and want to have more control over their systems. There is also some competition between Nix and the relatively popular Dev Containers in the construction of development environment, and the specific differences between them have yet to be explored by me~
+### Summary
+
+Generally speaking, I think NixOS is suitable for developers who have a certain amount of Linux usage experience and programming experience and want to have more control over their systems. 
+
+Another info, there is also some competition between Nix and the relatively popular [Dev Containers](https://containers.dev/) in the construction of development environment, and the specific differences between them have yet to be explored by me~
 
 
-## II. Installation and Basic Usage
+## II. Installation
 
 Nix can be installed in multiple ways and supports being installed on MacOS/Linux/WSL as a package manager. Nix also provides NixOS, a Linux distribution that uses Nix to manage the entire system environment.
 
@@ -111,7 +115,7 @@ some reference materials that maybe useful:
 
 ## III. Nix Flakes and the old Nix
 
-In 2020, Nix introduced two new features, `nix-command` and `flakes`, which provide new command-line tools, standard Nix package structure definitions, and flake.lock version lock files similar to cargo/npm. These two features greatly enhance the capabilities of Nix. Although they are still experimental features as of 2023-05-05, they have been widely used by the Nix community and are strongly recommended.
+In 2020, Nix introduced two new features, `nix-command` and `flakes`, which provide new command-line tools, standard Nix package structure definitions, and `flake.lock` version lock files similar to cargo/npm. These two features greatly enhance the capabilities of Nix. Although they are still experimental features as of 2023-05-05, they have been widely used by the Nix community and are strongly recommended.
 
 Currently, most of the Nix community's documentation still only covers traditional Nix and does not include Nix Flakes-related content. However, from the perspective of reproducibility and ease of management and maintenance, the old Nix package structure and command-line tools are no longer recommended for use. Therefore, this document will not introduce the usage of the old Nix package structure and command-line tools, and it is recommended that beginners ignore these old contents and just start with `nix-command` & `flakes`.
 
@@ -127,6 +131,7 @@ Here are the old Nix command-line tools and related concepts that are no longer 
    1. The corresponding command in Nix Flakes is `nix build`.
 5. ...
 
+>maybe `nix-env -qa` is still useful some times, which returns all packages installed in the System.
 
 ## IV. NixOS Flakes Package Repositories
 
@@ -139,7 +144,12 @@ Similar to Arch Linux, Nix also has official and community software package repo
 
 ## V. Nix language basics
 
-please read [Nix language basics - nix.dev](https://nix.dev/tutorials/first-steps/nix-language) first to get a basic understanding of Nix language, it's a very good tutorial.
+The Nix language is used to declare packages and configurations to be built by Nix, if you want to play NixOS and Nix Flakes and enjoy the many benefits they bring, you must learn the basics of this language first.
+
+Nix is a relatively simple functional language, if you already have a programming foundation, it should take less than 2 hours to go through these grammars.
+
+Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) to get a basic understanding of Nix language now, it's a very good tutorial.
+
 
 ## VI. Managing the system declaratively
 
@@ -147,11 +157,11 @@ please read [Nix language basics - nix.dev](https://nix.dev/tutorials/first-step
 
 After learning the basics of the Nix language, we can start using it to configure the NixOS system. The system configuration file for NixOS is located at `/etc/nixos/configuration.nix`, which contains all the declarative configurations for the system, such as time zone, language, keyboard layout, network, users, file system, boot options, etc.
 
-If we want to modify the system state in a reproducible way (which is also the most recommended way), we need to manually edit the `/etc/nixos/configuration.nix` file, and then execute the `sudo nixos-rebuild switch` command to apply the configuration. This command generates a new system environment based on the configuration file, sets the new environment as the default environment, and preserves the previous environment, which is also added to the grub boot options. This ensures that even if the new environment fails to start, we can always roll back to the old environment.
+If we want to modify the system state in a reproducible way (which is also the most recommended way), we need to manually edit the `/etc/nixos/configuration.nix` file, and then execute `sudo nixos-rebuild switch` to apply the configuration. This command generates a new system environment based on the configuration file, sets the new environment as the default one, and also preserves & added the previous environment into the grub boot options. This ensures we can always roll back to the old environment(even if the new environment fails to start).
 
-On the other hand, `/etc/nixos/configuration.nix` is the traditional Nix configuration method, which relies on data sources configured by nix-channel and has no version locking mechanism, making it difficult to ensure the reproducibility of the system. **A better approach is to use Nix Flakes**, which can ensure the reproducibility of the system and make it easy to manage the configuration.
+On the other hand, `/etc/nixos/configuration.nix` is the traditional Nix configuration method, which relies on data sources configured by `nix-channel` and has no version locking mechanism, making it difficult to ensure the reproducibility of the system. **A better approach is to use Nix Flakes**, which can ensure the reproducibility of the system and make it easy to manage the configuration.
 
-First, we will introduce how to manage the system using the default configuration method of NixOS through `/etc/nixos/configuration.nix`, and then transition to the more advanced Nix Flakes.
+Now first, let's learn how to manage the system using the default configuration method of NixOS through `/etc/nixos/configuration.nix`, and then transition to the more advanced Nix Flakes.
 
 ### 1. Configuring the system using `/etc/nixos/configuration.nix`
 
@@ -203,13 +213,13 @@ For example, to enable ssh and add a user "ryan," simply add the following confi
 
 in the configuration above, we enabled the openssh service, added an ssh public key for the user ryan, and disabled password login.
 
-Now, running `sudo nixos-rebuild switch` deploys the modified configuration, and then we can login to my machine using ssh with ssh keys.
+Now, running `sudo nixos-rebuild switch` deploys the modified configuration, and then we can login to the system using ssh with ssh keys.
 
 This is the default declarative system configuration in NixOS, where any reproducible changes to the system can be made by modifying the `/etc/nixos/configuration.nix` file and deploying the changes by running `sudo nixos-rebuild switch`.
 
 All configuration options in `/etc/nixos/configuration.nix` can be found in the following places:
 
-- By searching on Google, such as `Chrome NixOS`, which will provide configuration options related to Chrome. Generally, the NixOS Wiki or the nixpkgs repository source code will be among the top results.
+- By searching on Google, such as `Chrome NixOS`, which will provide NixOS informations related to Chrome. Generally, the NixOS Wiki and the nixpkgs repository source code will be among the top results.
 - By searching for keywords in [NixOS Options Search](https://search.nixos.org/options).
 - For system-level configurations, relevant documentation can be found in [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration).
 - By searching for keywords directly in the [nixpkgs](https://github.com/NixOS/nixpkgs) repository and reading relevant source code.
@@ -219,7 +229,7 @@ All configuration options in `/etc/nixos/configuration.nix` can be found in the 
 
 Compared to the default configuration approach of NixOS, Nix Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to use Nix Flakes to manage system configurations.
 
-However, Nix Flakes is currently an experimental feature and is not yet enabled by default. So we need to enable it manually by modifying the `/etc/nixos/configuration.nix` file and enabling the flakes and nix-command functionalities in the function block:
+However, Nix Flakes is currently an experimental feature and is not yet enabled by default. We need to enable it manually by modifying the `/etc/nixos/configuration.nix`, example:
 
 ```nix
 # Edit this configuration file to define what should be installed on
@@ -249,14 +259,14 @@ However, Nix Flakes is currently an experimental feature and is not yet enabled 
 }
 ```
 
-Then run `sudo nixos-rebuild switch` to apply the changes, and you can use Nix Flakes to manage the system configuration.
+Now run `sudo nixos-rebuild switch` to apply the changes, and then you can use Nix Flakes to manage the system configuration.
 
 
-### 3. Switching System Configuration to flake.nix
+### 3. Switching System Configuration to `flake.nix`
 
-After enabling the Nix Flakes feature, the `sudo nixos-rebuild switch` command will prioritize reading the `/etc/nixos/flake.nix` file. If not found, it will try to use `/etc/nixos/configuration.nix`.
+After enabling the Nix Flakes feature, the `sudo nixos-rebuild switch` command will prioritize reading the `/etc/nixos/flake.nix` file. If not found, it will fallback to `/etc/nixos/configuration.nix`.
 
-You can first use the official templates provided by Nix to learn how to write flakes, check which templates are available using the following command:
+You can first use the official flake templates provided by Nix to learn how to write flakes, check which templates are available using the following command:
 
 ```bash
 nix flake show templates
@@ -270,15 +280,15 @@ cat flake.nix
 ```
 
 
-We create the file `/ etc/nixos/ flke.nix` and write the configuration content according to this template. All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:
+We create the file `/ etc/nixos/flake.nix` and write the configuration content according to this template. All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:
 
 ```nix
 {
   description = "Ryan's NixOS Flake";
 
-  # This is the standard format for flake.nix. inputs are the dependencies of the flake,
-  # and outputs are the outputs of the flake. Each item in inputs will be passed as a
-  # parameter to the outputs function after being pulled and built.
+  # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
+  # and `outputs` is a function the return the build results of the flake. Each item in `inputs` will be passed as a
+  # parameter to the `outputs` function after being pulled and built.
   inputs = {
     # There are many ways to reference flake inputs. The most widely used is github:owner/name/reference,
     # which represents the GitHub repository URL + branch/commit-id/tag.
@@ -295,39 +305,42 @@ We create the file `/ etc/nixos/ flke.nix` and write the configuration content a
     };
   };
 
-  # Outputs are all the outputs of the flake. nixosConfigurations is just one type of output for NixOS system configurations.
-  # A flake can have many uses and different types of outputs. Parameters in `outputs` are defined in `inputs` and can be referenced
-  # by their names. However, `self` is an exception. This special parameter points to the `outputs` itself (self-reference)
-  # as well as the root directory of the flake. The `@` syntax here is used to alias the attribute set of the function's parameter,
-  # making it convenient to use inside the function.
+  # `outputs` are all the build result of the flake. 
+  # A flake can have many uses and different types of outputs. 
+  # parameters in `outputs` are defined in `inputs` and can be referenced by their names. 
+  # However, `self` is an exception, This special parameter points to the `outputs` itself (self-reference)
+  # The `@` syntax here is used to alias the attribute set of the inputs's parameter, making it convenient to use inside the function.
   outputs = { self, nixpkgs, ... }@inputs: {
-    # Outputs named `nixosConfigurations` will be used when `nixos-rebuild switch --flake .` is executed.
-    # By default, the `nixosConfigurations` with the same name as the hostname will be used.
-    # However, it can also be specified using `--flake .#<name>`.
+    # Outputs named `nixosConfigurations` is used by execute `nixos-rebuild switch --flake /path/to/flakes/directory` on NixOS System.
     nixosConfigurations = {
-      # The host with hostname `nixos-test` will use this configuration.
+      # By default, NixOS will try to refer the nixosConfiguration with its hostname.
+      # so the system named `nixos-test` will use this configuration.
+      # However, the configuration name can also be specified using `nixos-rebuild switch --flake /path/to/flakes/directory#<name>`.
       # The `nixpkgs.lib.nixosSystem` function is used to build this configuration, the following attribute set is its parameter.
-      # Use `nixos-rebuild switch --flake .#nixos-test` To deploy this configuration on a NixOS system
+      # Run `nixos-rebuild switch --flake .#nixos-test` in the flake's directory to deploy this configuration on any NixOS system
       "nixos-test" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
+        # The Nix module system can modularize configurations, improving the maintainability of configurations.
+        #
         # Each parameter in the `modules` is a Nix Module, and there is a partial introduction to it in the nixpkgs manual:
         #    <https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction>
-        # It is said to be partial because the documentation is not complete, only some simple introductions (such is the current state of Nix documentation...)
-        # A Nix Module can be an attribute set or a function that returns an attribute set.
-        # If it is a function, then its parameters are the parameters of the current Nix Module.
-        # According to the Nix Wiki description, Nix modules functions can have these four parameters:
+        # It is said to be partial because the documentation is not complete, only some simple introductions
+        #    (such is the current state of Nix documentation...)
+        # A Nix Module can be an attribute set, or a function that returns an attribute set.
+        # If a Module is a function, according to the Nix Wiki description, this function can have up to four parameters:
         # 
         #   config: The configuration of the entire system
         #   options: All option declarations refined with all definition and declaration references.
         #   pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.
         #   modulesPath: The location of the module directory of Nix.
         #
-        # Only these four parameters can be passed by default. If you need to pass other parameters, you must use `specialArgs`.
-        # The Nix module system can modularize configurations, improving the maintainability of configurations.
+        # Only these four parameters can be passed by default.
+        # If you need to pass other parameters, you must use `specialArgs` by uncomment the following line
+        # specialArgs = {...}  # pass custom arguments into sub module.
         modules = [
           # Import the configuration.nix we used before, so that the old configuration file can still take effect. 
-          # Note: configuration.nix itself is also a Nix Module, so you can import it directly here
+          # Note: /etc/nixos/configuration.nix itself is also a Nix Module, so you can import it directly here
           ./configuration.nix
         ];
       };
@@ -336,24 +349,26 @@ We create the file `/ etc/nixos/ flke.nix` and write the configuration content a
 }
 ```
 
-Here we define a system called `nixos-test`, whose configuration file is `./organization.nix`, which is our previous configuration file, so we can still use the old configuration.
+Here we define a NixOS system called `nixos-test`, whose configuration file is `./organization.nix`, which is our previous configuration file, so we can still use the old configuration.
 
-Now execute the `sudo nixos-rebuild switch` command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the configuration content is the same as before.
+Now execute the `sudo nixos-rebuild switch` command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the actual configuration content is the same as before.
 
 
 ### 4. Add Custom Cache Mirror
 
-In order to speed up package construction, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
+In order to speed up package building, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
 
-In the old NixOS configuration, domestic cache image sources can be added through `nix-channel`, but Nix Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its construction results are not affected by the environment. Therefore, in order to customize the cache image source, we must add the relevant configuration in `flke.nix`, which is the parameter `nixConfig`. The example is as follows:
+In the old NixOS configuration, other cache sources can be added through `nix-channel` command, but Nix Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its build results are not affected by the environment(environment independent). 
+Therefore, in order to customize the cache image source, we must add the related configuration in `flake.nix` by using the parameter `nixConfig`. The example is as follows:
 
 ```nix
 {
   description = "NixOS configuration of Ryan Yin";
 
-  # to ensure purity, Flakes does not rely on the system's `/etc/nix/nix.conf`, we need set arguments in `nixConfig`.
-  # but to ensure security, flake allows only a few nixConfig parameters to be set directly by default. 
-  # Other parameters need to be specified when executing the nix command, otherwise they will be ignored.
+  # 1. To ensure purity, Flakes does not rely on the system's `/etc/nix/nix.conf`, so we have to set related configuration here.
+  # 2. To ensure security, flake allows only a few nixConfig parameters to be set directly by default. 
+  #    you need to add `--accept-flake-config` when executing the nix command, 
+  #    otherwise all other parameters will be ignored, and an warning will printed by nix.
   nixConfig = {
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
@@ -362,8 +377,8 @@ In the old NixOS configuration, domestic cache image sources can be added throug
       "https://cache.nixos.org/"
     ];
 
-    # nix community's cache server
     extra-substituters = [
+      # nix community's cache server
       "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
@@ -382,7 +397,7 @@ In the old NixOS configuration, domestic cache image sources can be added throug
 
 ```
 
-After the modification, you can execute `sudo nixos-rebuild switch` to apply the configuration. 
+After the modification, execute `sudo nixos-rebuild switch` to apply the configuration. 
 
 ### 5. 安装 home-manager
 
@@ -471,7 +486,7 @@ According to the official document [Home Manager Manual](https://nix-community.g
 ```
 
 
-After adding `/ etc/nixos/ home.nix`, you need to import this new configuration file in `/etc/nixos/flake.nix` to make it effective. You can use the following command to generate an example `/etc/nixos/flake.nix` in the current folder for reference:
+After adding `/etc/nixos/home.nix`, you need to import this new configuration file in `/etc/nixos/flake.nix` to make it effective, use the following command to generate an example `/etc/nixos/flake.nix` in the current folder for reference:
 
 ```shell
 nix flake new -t github:nix-community/home-manager#nixos
@@ -616,7 +631,7 @@ For example, the structure of my previous i3wm system configuration [ryan4yin/ni
 └── wallpaper.jpg    # wallpaper
 ```
 
-For the details of the structure and content, please go to the github repository link provided above.
+For the details of the structure and content, please go to the github repository [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2).
 
 ### 7. Update the system
 
@@ -629,7 +644,7 @@ nix flake update
 sudo nixos-rebuild switch
 ```
 
-Sometimes when installing new packages, you may encounter an error of sha256 mismatch when running `nixos-rebuild switch`. You can also try to solve it by updating flake.lock through `nix flake update` (the principle is not clear for now).
+Sometimes when installing new packages, you may encounter an error of sha256 mismatch when running `nixos-rebuild switch`. You can also try to solve it by updating `flake.lock` through `nix flake update`.
 
 ### 8. Rollback the version of some packages
 
@@ -680,7 +695,7 @@ So to rollback the version of some packages, first modify `/etc/nixos/flake.nix`
 }
 ```
 
-And then refer the packages from `nix-stable` or `nixpkgs-fd40cef8d` in your corresponding module, for example:
+And then refer the packages from `nix-stable` or `nixpkgs-fd40cef8d` in your corresponding sub module, a home manager's sub module as an example:
 
 ```nix
 {
@@ -717,13 +732,11 @@ in {
 }
 ```
 
-After adjusted the configuration, you can deploy it with `nixos-rebuild switch` to rollback the version of firefox/chrome/vscode.
+After adjusted the configuration, deploy it with `sudo nixos-rebuild switch`, then your firefox/chrome/vscode will revert to the version corresponding to `nix-stable` or `nixpkgs-fd40cef8d`. 
 
 ### 9. Manage NixOS configuration with Git
 
 NixOS's configuration file is plain text, so it can be managed with Git just like ordinary dotfiles.
-
-此外 Nix Flakes 配置也不一定需要放在 `/etc/nixos` 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。
 
 On the other hand, `flake.nix` do not required to be placed in the `/etc/nixos` directory, they can be placed in any directory, as long as the correct path is specified during deployment.
 

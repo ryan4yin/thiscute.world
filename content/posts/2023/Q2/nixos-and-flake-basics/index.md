@@ -44,7 +44,7 @@ comment:
 
 NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞挂了，于是我前几天我又进一步迁移到了 hyprland 桌面，确实比 i3 香多了，它的动画效果我吹爆！（在以前 EndeavourOS 上我肯定是不太敢做这样的切换的，原因前面已经解释过了——万一把系统搞出问题，会非常麻烦。）
 
->补充：v2ex 上有 v 友反馈 btrfs 的 timeshift 系统快照，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么 btrfs + timeshift 也是一个不错的选择。另一方面如果你仍然对 Nix 感兴趣，那学一学也完全不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已。
+>补充：v2ex 上有 v 友反馈 btrfs 文件系统的快照功能，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以像 NixOS 一样配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么基于 btrfs 快照功能的 [btrbk](https://github.com/digint/btrbk) 也是一个不错的选择。当然如果你仍然对 Nix 感兴趣，那学一学也绝对不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已～
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
 
@@ -62,12 +62,12 @@ NixOS 的配置只负责管理系统层面的状态，用户目录不受它管�
 
 因为 Nix 声明式、可复现的特性，Nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 [NixOps](https://github.com/NixOS/nixops) 与社区的 [deploy-rs](https://github.com/serokell/deploy-rs) 都是基于 Nix 实现的运维工具。
 
->Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步，或者用 btrfs timeshift 之类的工具对 home 目录做快照。
+>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步，或者用 [btrbk](https://github.com/digint/btrbk) 之类的工具对 home 目录做快照。
 
 ### Nix 的优点
 
-- 声明式配置，Environment as Code，可以直接用 Git 管理配置，只要配置文件不丢，系统就可以随时还原到任一历史状态。
-  - 这跟 cargo.lock/go.mod 等文件锁定依赖版本以确保构建结果可复现的思路是一致的。
+- 声明式配置，Environment as Code，可以直接用 Git 管理配置，只要配置文件不丢，系统就可以随时还原到任一历史状态（理想情况下）。
+  - 这跟一些编程语言中 cargo.lock/go.mod 等文件锁定依赖库版本以确保构建结果可复现的思路是一致的。
   - 与 Docker 相比，Dockerfile 实际是命令式的配置，而且也不存在版本锁这样的东西，所以 Docker 的可复现能力远不如 Nix.
 - 高度便捷的系统自定义能力
   - 通过改几行配置，就可以简单地更换系统的各种组件。这是因为 Nix 将底层的复杂操作全部封装在了 nix package 包中，只给用户提供了简洁且必要的声明式参数。
@@ -85,9 +85,13 @@ NixOS 的配置只负责管理系统层面的状态，用户目录不受它管�
 - ~~包数量比较少~~：撤回下这一条，官方宣称 nixpkgs 是有 [80000+](https://search.nixos.org/packages) 个软件包，使用下来确实绝大部分包都能在 nixpkgs 里找到，体验还是不错滴。
 - 比较吃硬盘空间：为了保证系统可以随时回退，nix 默认总是保留所有历史环境，这非常吃硬盘空间。虽然可以定期使用 `nix-collect-garbage` 来手动清理旧的历史环境，也还是建议配置个更大的硬盘...
 
-总的来说，我觉得 NixOS 适合那些有一定 Linux 使用经验与编程经验，并且希望对自己的系统拥有更强掌控力的开发者。在开发环境搭建方面 Nix 与相对流行的 Dev Containers 也有些竞争关系，它们的具体区别还有待我发掘~
+### 简单总结下
 
-## 二、安装与简单使用
+总的来说，我觉得 NixOS 适合那些有一定 Linux 使用经验与编程经验，并且希望对自己的系统拥有更强掌控力的开发者。
+
+另外一条信息：在开发环境搭建方面 Nix 与相对流行的 [Dev Containers](https://containers.dev/) 也有些竞争关系，它们的具体区别还有待我发掘~
+
+## 二、安装
 
 Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/WSL 三种系统上，Nix 还额外提供了 NixOS ——一个使用 Nix 管理整个系统环境的 Linux 发行版。
 
@@ -103,7 +107,7 @@ Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/
 
 ## 三、Nix Flakes 与旧的 Nix
 
-Nix 于 2020 年推出了 `nix-command` & `flakes` 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 flake.lock 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。
+Nix 于 2020 年推出了 `nix-command` & `flakes` 两个新特性，它们提供了全新的命令行工具、标准的 Nix 包结构定义、类似 cargo/npm 的 `flake.lock` 版本锁文件等等。这两个特性极大地增强了 Nix 的能力，因此虽然至今（2023/5/5）它们仍然是实验性特性，但是已经被 Nix 社区广泛使用，是强烈推荐使用的功能。
 
 目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 `nix-command` & `flakes` 学起。
 
@@ -624,6 +628,8 @@ cat flake.nix
       "nixos-test" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
+        # Nix 模块系统可将配置模块化，提升配置的可维护性
+        # 
         # modules 中每个参数，都是一个 Nix Module，nixpkgs manual 中有半份介绍它的文档：
         #    <https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction>
         # 说半份是因为它的文档不全，只有一些简单的介绍（Nix 文档现状...）
@@ -636,11 +642,11 @@ cat flake.nix
         #  pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.
         #  modulesPath: The location of the module directory of Nix.
         #
-        # 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs
-        # Nix 模块系统可将配置模块化，提升配置的可维护性
+        # 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs，你可以取消注释如下这行来启用该参数
+        # specialArgs = {...}  # 向子模块中传递自定义参数
         modules = [
           # 导入之前我们使用的 configuration.nix，这样旧的配置文件仍然能生效
-          # 注：configuration.nix 本身也是一个 Nix Module，因此可以直接在这里导入
+          # 注: /etc/nixos/configuration.nix 本身也是一个 Nix Module，因此可以直接在这里导入
           ./configuration.nix
         ];
       };
@@ -999,7 +1005,7 @@ sudo nixos-rebuild switch
 }
 ```
 
-然后在你对应的 module 中使用该数据源中的包，示例：
+然后在你对应的 module 中使用该数据源中的包，一个 Home Manager 的子模块示例：
 
 ```nix
 {
