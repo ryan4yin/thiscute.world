@@ -39,7 +39,7 @@
 <p>NixOS 的配置只负责管理系统层面的状态，用户目录不受它管辖。有另一个重要的社区项目 home-manager 专门用于管理用户目录，将 home-manager 与 NixOS、Git 结合使用，就可以得到一个完全可复现、可回滚的系统环境。</p>
 <p>因为 Nix 声明式、可复现的特性，Nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> 与社区的 <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> 都是基于 Nix 实现的运维工具。</p>
 <blockquote>
-<p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步。</p>
+<p>Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步，或者用 btrfs timeshift 之类的工具对 home 目录做快照。</p>
 </blockquote>
 <h3 id="nix-的优点" class="headerLink">
     <a href="#nix-%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>Nix 的优点</h3><ul>
