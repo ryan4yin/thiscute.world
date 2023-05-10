@@ -1159,13 +1159,13 @@ Therefore, in order to customize the cache image source, we must add the related
 <h2 id="vii-usage-of-nix-flakes" class="headerLink">
     <a href="#vii-usage-of-nix-flakes" class="header-mark"></a>VII. Usage of Nix Flakes</h2><p>Up to now, we have written a lot of Nix Flakes configurations to manage the NixOS system. Here is a brief introduction to the more detailed content of Nix Flakes, as well as commonly used nix flake commands.</p>
 <h3 id="1-flake-outputs" class="headerLink">
-    <a href="#1-flake-outputs" class="header-mark"></a>1. Flake outputs</h3><p>Flake outputs are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:</p>
+    <a href="#1-flake-outputs" class="header-mark"></a>1. Flake outputs</h3><p>the <code>outputs</code> in <code>flake.nix</code> are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:</p>
 <ul>
-<li>Nix packages: named <code>apps.&lt;system&gt;.&lt;name&gt;</code>, <code>packages.&lt;system&gt;.&lt;name&gt;</code>, or <code>legacyPackages.&lt;system&gt;.&lt;name&gt;</code> in <code>flake.nix</code>&rsquo;s <code>outputs</code>.</li>
-<li>Nix Helper Functions: named <code>lib</code> in <code>flake.nix</code>&rsquo;s <code>outputs</code>., which means a library for other flakes.</li>
-<li>Nix development environments: named <code>devShell</code> in <code>flake.nix</code>&rsquo;s <code>outputs</code>.</li>
-<li>NixOS configurations: named <code>nixosConfiguration</code> in <code>flake.nix</code>&rsquo;s <code>outputs</code>.</li>
-<li>Nix templates: named <code>templates</code> in <code>flake.nix</code>&rsquo;s <code>outputs</code>.
+<li>Nix packages: named <code>apps.&lt;system&gt;.&lt;name&gt;</code>, <code>packages.&lt;system&gt;.&lt;name&gt;</code>, or <code>legacyPackages.&lt;system&gt;.&lt;name&gt;</code></li>
+<li>Nix Helper Functions: named <code>lib</code>., which means a library for other flakes.</li>
+<li>Nix development environments: named <code>devShell</code></li>
+<li>NixOS configurations: named <code>nixosConfiguration</code></li>
+<li>Nix templates: named <code>templates</code>
 <ul>
 <li>templates can be used by command <code>nix flake init --template &lt;reference&gt;</code></li>
 </ul>
