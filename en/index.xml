@@ -11,7 +11,7 @@ I will continue to try my best to repair and improve the content in the future, 
 <p>You need to have some Linux experience and programming experience to play with NixOS &amp; Nix Flakes, so I don&rsquo;t recommend NixOS for any Linux beginners.</p>
 </blockquote>
 <h2 id="0-why-nix" class="headerLink">
-    <a href="#0-why-nix" class="header-mark"></a>0. Why Nix</h2><p>I heard about Nix several years ago. It uses <a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener noreferrer">DSL</a> to manage system dependencies and can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn&rsquo;t study it at the time.</p>
+    <a href="#0-why-nix" class="header-mark"></a>0. Why Nix</h2><p>I heard about the Nix package manager several years ago. It uses <a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener noreferrer">DSL</a> to manage system dependencies, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn&rsquo;t study it at the time.</p>
 <p>But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.</p>
 <p>The fist problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because My old PC also uses EndeavourOS, I directly <code>rsync</code> the old PC&rsquo;s Home directory to the new PC to save time after installation.
 However, this synchronization caused a problem. All functions worked normally, but video playback always stuck. Firefox, Chrome, and MPV would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the Home directory synchronization. After clearing the Home directory, the problem was solved immediately&hellip; Later, I spent a long time recovering things from the old PC one by one.</p>
@@ -37,7 +37,7 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
 <h2 id="i-introduction-to-nix" class="headerLink">
     <a href="#i-introduction-to-nix" class="header-mark"></a>I. Introduction to Nix</h2><p>Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using <a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener noreferrer">DSL</a>, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.</p>
 <blockquote>
-<p>To put it simply, &ldquo;declarative configuration&rdquo; means that users only need to declare the results they want. For example, you declares that you want to replace the i3 windows manager with sway, then Nix will help you achieve the goal. You don&rsquo;t need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway&rsquo;s nix packages are designed properly&hellip;).</p>
+<p>To put it simply, &ldquo;declarative configuration&rdquo; means that users only need to declare the results they want. For example, you declares that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don&rsquo;t need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway&rsquo;s nix packages are designed properly&hellip;).</p>
 </blockquote>
 <p>The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as &ldquo;OS as Code&rdquo;, which describes the entire operating system&rsquo;s state using declarative Nix configuration files.</p>
 <p>NixOS&rsquo;s configuration only manages the system-level state, the user&rsquo;s HOME directory is not under its control. There is another important community project, <a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>, is designed to managing user&rsquo;s HOME directories. <strong>By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained</strong>.</p>
@@ -73,7 +73,7 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
     <a href="#disadvantages-of-nix" class="header-mark"></a>Disadvantages of Nix</h3><ul>
 <li><strong>Relatively high learning curve:</strong>: If you want the system to be completely reproducible and avoid pitfalls caused by improper use, you need to learn about the entire design of Nix and manage the system in a declarative manner. You cannot blindly use <code>nix-env -i</code> (which is similar to <code>apt-get install</code>).</li>
 <li><strong>Chaotic documentation</strong>: Firstly, Nix Flakes is still an experimental feature, and there are currently relatively few documents introducing it. Secondly, most of the Nix community&rsquo;s documentation only introduces the old <code>nix-env</code>/<code>nix-channel</code>. If you want to start learning Nix directly from Nix Flakes, you need to refer to a large number of old documents and extract what you need from them. In addition, some of Nix&rsquo;s current core functions are not well-documented (such as <code>imports</code> and Nixpkgs Module System), so it is best to look at the source code to understand them.</li>
-<li><del>Relatively few packages</del>: Retract this one. The official claim is that nixpkgs has <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> packages, and indeed, most packages can be found in nixpkgs。</li>
+<li><del>Relatively few packages</del>: Retract this one. The official claim is that nixpkgs has <a href="https://search.nixos.org/packages" target="_blank" rel="noopener noreferrer">80000+</a> packages, and indeed, most packages can be found in nixpkgs.</li>
 <li><strong>Relatively high disk space usage</strong>: To ensure that the system can be rolled back at any time, Nix preserves all historical environments by default, which can take up a lot of disk space. Although you can manually clean up old historical environments periodically with <code>nix-collect-garbage</code>, it is still recommended to buy a larger hard drive.</li>
 </ul>
 <h3 id="summary" class="headerLink">
@@ -301,7 +301,7 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
 </div><p>Now run <code>sudo nixos-rebuild switch</code> to apply the changes, and then you can use Nix Flakes to manage the system configuration.</p>
 <h3 id="3-switching-system-configuration-to-flakenix" class="headerLink">
     <a href="#3-switching-system-configuration-to-flakenix" class="header-mark"></a>3. Switching System Configuration to <code>flake.nix</code></h3><p>After enabling the Nix Flakes feature, the <code>sudo nixos-rebuild switch</code> command will prioritize reading the <code>/etc/nixos/flake.nix</code> file. If not found, it will fallback to <code>/etc/nixos/configuration.nix</code>.</p>
-<p>You can first use the official flake templates provided by Nix to learn how to write flakes, check which templates are available using the following command:</p>
+<p>Now let&rsquo;s use the official flake templates provided by Nix to learn how to write flakes, check which templates are available using the following command:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -310,7 +310,7 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nix flake show templates
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>One of the templates, <code>templates#full</code>, shows all possible uses. now take a look at its contents:</p>
+</div><p>One of the templates, <code>templates#full</code>, shows all possible uses., take a look at its contents:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -321,7 +321,8 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
 </span></span><span class="line"><span class="cl">cat flake.nix
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>We create the file <code>/ etc/nixos/flake.nix</code> and write the configuration content according to this template. All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:</p>
+</div><p>Now create a file <code>/etc/nixos/flake.nix</code> and write the configuration content according to the template above.
+All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -394,8 +395,8 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
 </span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;Ryan&#39;s NixOS Flake&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># This is the standard format for flake.nix. `inputs` are the dependencies of the flake,</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># and `outputs` is a function the return the build results of the flake. Each item in `inputs` will be passed as a</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># parameter to the `outputs` function after being pulled and built.</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># and `outputs` function will return all the build results of the flake. </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># There are many ways to reference flake inputs. The most widely used is github:owner/name/reference,</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># which represents the GitHub repository URL + branch/commit-id/tag.</span>
@@ -413,7 +414,7 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># `outputs` are all the build result of the flake. </span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># A flake can have many uses and different types of outputs. </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># A flake can have many use cases and different types of outputs.</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># parameters in `outputs` are defined in `inputs` and can be referenced by their names. </span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># However, `self` is an exception, This special parameter points to the `outputs` itself (self-reference)</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># The `@` syntax here is used to alias the attribute set of the inputs&#39;s parameter, making it convenient to use inside the function.</span>
