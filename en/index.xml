@@ -17,7 +17,7 @@ However, because there was little difference between the two and many inconvenie
 After switching back, GUI programs such as Firefox and Thunar would always get stuck for about a minute after the system started&hellip;</p>
 <p>I was too tired to deal with the second problem, after thinking about it carefully, I realized that the root cause was that the system did not have any version control and rollback mechanism, which caused the system to be unable to be restored when problems occurred.
 And another problem, when installing a new system, I had to manually export the package list from the old machine and then install them on the new machine.
-So I decided to switch to NixOS, and spent half a month studying Nix and Flakes before finally switching from EndeavourOS to NixOS on my PC.</p>
+So I decided to switch to NixOS.</p>
 <p>The first step I took was to create a NixOS virtual machine in my Homelab, and debug step by step in this virtual machine to migrate my old PC&rsquo;s EndeavourOS i3 configuration to NixOS + Flakes and restore the entire desktop environment.</p>
 <p>Once I had it working on the virtual machine, the rest was easy. I simply backed up my Home directory and software list from my work computer, reinstalled the system as NixOS, git cloned my debugged NixOS configuration, made some adjustments to the disk mounting parameters and added some extra NixOS configurations for my Nvidia graphics card. Finally, with just a few commands, I deployed the configuration and was able to restore the entire i3 desktop environment and my commonly used software on my fresh NixOS system. It was a truly satisfying moment!</p>
 <p>The rollback capability of NixOS gave me a lot of confidence - I no longer fear breaking the system. So a few days ago, I further migrated to the hyprland desktop, which is indeed much better than i3, and I love its animation effects! (On EndeavourOS before, I wouldn&rsquo;t have dared to make such a switch for the reasons mentioned earlier - it would have been a big hassle if something went wrong with the system.)</p>
@@ -30,6 +30,7 @@ So I decided to switch to NixOS, and spent half a month studying Nix and Flakes 
         </figcaption>
 </figure>
 
+<p>So after studying Nix and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period of time, hope you like it~</p>
 <p>Now that the background information is out of the way, it&rsquo;s time to dive into the world of Nix!</p>
 <h2 id="i-introduction-to-nix" class="headerLink">
     <a href="#i-introduction-to-nix" class="header-mark"></a>I. Introduction to Nix</h2><p>Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using <a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener noreferrer">DSL</a>, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.</p>
