@@ -42,7 +42,8 @@ code:
 - 密钥传输：双方中其中一方生成出共享密钥，并通过此方案将共享密钥传输给另一方。密钥传输方案通常都通过公钥密码系统实现。比如在 RSA 密钥交换中，客户端使用它的私钥加密一个随机生成的会话密钥，然后将密文发送给服务端，服务端再使用它的公钥解密出会话密钥。
 
 密钥交换协议无时无刻不在数字世界中运行，在你连接 WiFi 时，或者使用 HTTPS 协议访问一个网站，都会执行密钥交换协议。
-密钥交换可以基于匿名的密钥协商协议如 DHKE，一个密码或预共享密钥，一个数字证书等等。有些通讯协议只在开始时交换一次密钥，而有些协议则会随着时间的推移不断地交换密钥。
+密钥交换有很多手段，常见手段有匿名的 DHKE 密钥协商协议、密码或预共享密钥、数字证书等等。
+有些通讯协议只在开始时交换一次密钥，而有些协议则会随着时间的推移不断地交换密钥。
 
 认证密钥交换（AKE）是一种会同时认证相关方身份的密钥交换协议，比如个人 WiFi 通常就会使用 password-authenticated key agreement (PAKE)，而如果你连接的是公开 WiFi，则会使用匿名密钥交换协议。
 
@@ -151,7 +152,7 @@ from cryptography.hazmat.primitives.asymmetric import dh
 
 # 1. 双方协商使用两个独特的正整数 g 与 p
 ## generator => 即基数 g，通常使用 2, 有时也使用 5
-## key_size => 模数 p 的长度，通常使用 2048-3096 位（2048 位的安全性正在减弱）
+## key_size => 模数 p 的长度，通常使用 2048-3072 位（2048 位的安全性正在减弱）
 params = dh.generate_parameters(generator=2, key_size=2048)
 param_numbers = params.parameter_numbers()
 g = param_numbers.g  # => 肯定是 2
@@ -275,7 +276,7 @@ from cryptography.hazmat.primitives.asymmetric import dh
 
 # 1. 双方协商使用两个独特的正整数 g 与 p
 ## generator => 即基数 g，通常使用 2, 有时也使用 5
-## key_size => 模数 p 的长度，通常使用 2048-3096 位（2048 位的安全性正在减弱）
+## key_size => 模数 p 的长度，通常使用 2048-3072 位（2048 位的安全性正在减弱）
 params = dh.generate_parameters(generator=2, key_size=2048)
 param_numbers = params.parameter_numbers()
 g = param_numbers.g  # => 肯定是 2
