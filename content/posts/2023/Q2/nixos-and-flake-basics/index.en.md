@@ -20,7 +20,7 @@ comment:
     enable: false
 ---
 
->As of 2023-05-05, I have only used the NixOS system for half a month, so there will inevitably be some mistakes and omissions in this article, please read it carefully. 
+>As of 2023-05-10, I have only used the NixOS for about 20 days, so there will inevitably be some mistakes and omissions in this article, please read it carefully. 
 
 >I will continue to try my best to repair and improve the content in the future, hope you like it, also eager to get any feedback~
 
