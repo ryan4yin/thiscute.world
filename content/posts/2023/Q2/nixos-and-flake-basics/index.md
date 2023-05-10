@@ -24,8 +24,6 @@ comment:
 
 >本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flakes 仍然为实验性功能。
 
->需要有一定 Linux 使用经验与编程经验，才能玩转 NixOS & Nix Flakes，因此不推荐任何 Linux 新手选用 NixOS.
-
 ## 零、为什么选择 Nix
 
 好几年前就听说过 Nix，用 [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) 来管理系统依赖，还能随时回滚到任一历史状态。

@@ -25,8 +25,6 @@ I will continue to try my best to repair and improve the content in the future, 
 
 > The target NixOS version of this article is 22.11, and the Nix version is 2.15.0. In this environment, Nix Flakes is still an experimental feature.
 
->You need to have some Linux experience and programming experience to play with NixOS & Nix Flakes, so I don't recommend NixOS for any Linux beginners.
-
 ## 0. Why Nix
 
 I heard about the Nix package manager several years ago. It uses [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) to manage system dependencies, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
