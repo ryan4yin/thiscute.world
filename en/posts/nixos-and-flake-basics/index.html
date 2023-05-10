@@ -1,0 +1,914 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>NixOS & Nix Flakes Guide for Beginners - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="NixOS & Nix Flakes Guide for Beginners"><meta property="og:description" content="The target NixOS version of this article is 22.11, and the Nix version is 2.15.0. In this environment, Nix Flakes is still an experimental feature.
+You need to have some Linux experience and programming experience to play with NixOS & Nix Flakes, so I don&rsquo;t recommend NixOS for any Linux beginners.
+Mainly translated from Chinese with the help of Copilot & ChatGPT.
+0. Why NixI heard about Nix several years ago."><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/en/posts/nixos-and-flake-basics/"><meta property="og:image" content="https://thiscute.world/en/posts/nixos-and-flake-basics/zero-to-nix.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-05-10T21:23:28+08:00"><meta property="article:modified_time" content="2023-05-10T21:23:28+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/en/posts/nixos-and-flake-basics/zero-to-nix.png"><meta name=twitter:title content="NixOS & Nix Flakes Guide for Beginners"><meta name=twitter:description content="The target NixOS version of this article is 22.11, and the Nix version is 2.15.0. In this environment, Nix Flakes is still an experimental feature.
+You need to have some Linux experience and programming experience to play with NixOS & Nix Flakes, so I don&rsquo;t recommend NixOS for any Linux beginners.
+Mainly translated from Chinese with the help of Copilot & ChatGPT.
+0. Why NixI heard about Nix several years ago."><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/en/posts/nixos-and-flake-basics/><link rel=prev href=https://thiscute.world/en/posts/2021-summary/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"NixOS \u0026 Nix Flakes Guide for Beginners","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/en\/posts\/nixos-and-flake-basics\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/en\/posts\/nixos-and-flake-basics\/zero-to-nix.png","width":2400,"height":1256}],"genre":"posts","keywords":"NixOS, Nix, Flakes, Linux, DevOps","wordcount":7464,"url":"https:\/\/thiscute.world\/en\/posts\/nixos-and-flake-basics\/","datePublished":"2023-05-10T21:23:28+08:00","dateModified":"2023-05-10T21:23:28+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark")}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")]</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/en/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/en/posts/>Posts </a><a class=menu-item href=/en/categories/tech/>Technology </a><a class=menu-item href=/en/categories/life/>Life </a><a class=menu-item href=/en/tags/>Tags </a><a class=menu-item href=/en/now/>Now </a><a class=menu-item href=/en/about/>About </a><span class="menu-item delimiter"></span><a href=# onclick=return!1 class="menu-item language" title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" id=language-select-desktop onchange="location=this.value"><option value=/posts/nixos-and-flake-basics/>Simplified Chinese</option><option value=/en/posts/nixos-and-flake-basics/ selected>English</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw"></i></a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span>
+</span><a href=# onclick=return!1 class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/en/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw"></i></a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/en/posts/ title>Posts</a><a class=menu-item href=/en/categories/tech/ title>Technology</a><a class=menu-item href=/en/categories/life/ title>Life</a><a class=menu-item href=/en/tags/ title>Tags</a><a class=menu-item href=/en/now/ title>Now</a><a class=menu-item href=/en/about/ title>About</a><a href=# onclick=return!1 class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=# onclick=return!1 class=menu-item title="Select Language">English<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" onchange="location=this.value"><option value=/posts/nixos-and-flake-basics/>Simplified Chinese</option><option value=/en/posts/nixos-and-flake-basics/ selected>English</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#0-why-nix>0. Why Nix</a></li><li><a href=#i-introduction-to-nix>I. Introduction to Nix</a><ul><li><a href=#advantages-of-nix>Advantages of Nix</a></li><li><a href=#disadvantages-of-nix>Disadvantages of Nix</a></li></ul></li><li><a href=#ii-installation-and-basic-usage>II. Installation and Basic Usage</a></li><li><a href=#iii-nix-flakes-and-the-old-nix>III. Nix Flakes and the old Nix</a></li><li><a href=#iv-nixos-flakes-package-repositories>IV. NixOS Flakes Package Repositories</a></li><li><a href=#v-nix-language-basics>V. Nix language basics</a></li><li><a href=#vi-managing-the-system-declaratively>VI. Managing the system declaratively</a><ul><li><a href=#1-configuring-the-system-using-etcnixosconfigurationnix>1. Configuring the system using <code>/etc/nixos/configuration.nix</code></a></li><li><a href=#2-enabling-nixos-flakes-support>2. Enabling NixOS Flakes Support</a></li><li><a href=#3-switching-system-configuration-to-flakenix>3. Switching System Configuration to flake.nix</a></li><li><a href=#4-add-custom-cache-mirror>4. Add Custom Cache Mirror</a></li><li><a href=#5-安装-home-manager>5. 安装 home-manager</a></li><li><a href=#6-modular-nixos-configuration>6. Modular NixOS configuration</a></li><li><a href=#7-update-the-system>7. Update the system</a></li><li><a href=#8-rollback-the-version-of-some-packages>8. Rollback the version of some packages</a></li><li><a href=#9-manage-nixos-configuration-with-git>9. Manage NixOS configuration with Git</a></li></ul></li><li><a href=#vii-usage-of-nix-flakes>VII. Usage of Nix Flakes</a><ul><li><a href=#1-flake-outputs>1. Flake outputs</a></li><li><a href=#2-flake-command-line-usage>2. Flake Command Line Usage</a></li></ul></li><li><a href=#viii-nixpkgss-advanced-usage>VIII. Nixpkgs&rsquo;s Advanced Usage</a><ul><li><a href=#overriding>Overriding</a></li><li><a href=#overlays>Overlays</a></li></ul></li><li><a href=#ix-nix-packaging>IX. Nix Packaging</a></li><li><a href=#advanced-usage>Advanced Usage</a></li><li><a href=#references>References</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">NixOS & Nix Flakes Guide for Beginners</h1><div class=post-meta><div class=post-meta-line><span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author>ryan4yin</a>
+</span>&nbsp;<span class=post-category>included in </span>&nbsp;<span class=post-category>category <a href=/en/categories/tech/><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-05-10>2023-05-10</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2023-05-10>2023-05-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;7464 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;36 minutes&nbsp;</div></div><div class=featured-image><img loading=eager src=/en/posts/nixos-and-flake-basics/zero-to-nix.png srcset="/en/posts/nixos-and-flake-basics/zero-to-nix.png, /en/posts/nixos-and-flake-basics/zero-to-nix.png 1.5x, /en/posts/nixos-and-flake-basics/zero-to-nix.png 2x" sizes=auto alt=/en/posts/nixos-and-flake-basics/zero-to-nix.png title=/en/posts/nixos-and-flake-basics/zero-to-nix.png height=1256 width=2400></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#0-why-nix>0. Why Nix</a></li><li><a href=#i-introduction-to-nix>I. Introduction to Nix</a><ul><li><a href=#advantages-of-nix>Advantages of Nix</a></li><li><a href=#disadvantages-of-nix>Disadvantages of Nix</a></li></ul></li><li><a href=#ii-installation-and-basic-usage>II. Installation and Basic Usage</a></li><li><a href=#iii-nix-flakes-and-the-old-nix>III. Nix Flakes and the old Nix</a></li><li><a href=#iv-nixos-flakes-package-repositories>IV. NixOS Flakes Package Repositories</a></li><li><a href=#v-nix-language-basics>V. Nix language basics</a></li><li><a href=#vi-managing-the-system-declaratively>VI. Managing the system declaratively</a><ul><li><a href=#1-configuring-the-system-using-etcnixosconfigurationnix>1. Configuring the system using <code>/etc/nixos/configuration.nix</code></a></li><li><a href=#2-enabling-nixos-flakes-support>2. Enabling NixOS Flakes Support</a></li><li><a href=#3-switching-system-configuration-to-flakenix>3. Switching System Configuration to flake.nix</a></li><li><a href=#4-add-custom-cache-mirror>4. Add Custom Cache Mirror</a></li><li><a href=#5-安装-home-manager>5. 安装 home-manager</a></li><li><a href=#6-modular-nixos-configuration>6. Modular NixOS configuration</a></li><li><a href=#7-update-the-system>7. Update the system</a></li><li><a href=#8-rollback-the-version-of-some-packages>8. Rollback the version of some packages</a></li><li><a href=#9-manage-nixos-configuration-with-git>9. Manage NixOS configuration with Git</a></li></ul></li><li><a href=#vii-usage-of-nix-flakes>VII. Usage of Nix Flakes</a><ul><li><a href=#1-flake-outputs>1. Flake outputs</a></li><li><a href=#2-flake-command-line-usage>2. Flake Command Line Usage</a></li></ul></li><li><a href=#viii-nixpkgss-advanced-usage>VIII. Nixpkgs&rsquo;s Advanced Usage</a><ul><li><a href=#overriding>Overriding</a></li><li><a href=#overlays>Overlays</a></li></ul></li><li><a href=#ix-nix-packaging>IX. Nix Packaging</a></li><li><a href=#advanced-usage>Advanced Usage</a></li><li><a href=#references>References</a></li></ul></nav></div></div><div class=content id=content><blockquote><p>The target NixOS version of this article is 22.11, and the Nix version is 2.15.0. In this environment, Nix Flakes is still an experimental feature.</p></blockquote><blockquote><p>You need to have some Linux experience and programming experience to play with NixOS & Nix Flakes, so I don&rsquo;t recommend NixOS for any Linux beginners.</p></blockquote><blockquote><p>Mainly translated from Chinese with the help of Copilot & ChatGPT.</p></blockquote><h2 id=0-why-nix class=headerLink><a href=#0-why-nix class=header-mark></a>0. Why Nix</h2><p>I heard about Nix several years ago. It uses DSL to manage system dependencies and can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, so I thought it was too troublesome and didn&rsquo;t study it at the time.</p><p>But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.</p><p>The fist problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because the old system is also EndeavourOS, I directly <code>rsync</code> the old PC&rsquo;s Home directory to the new PC to save time after installation.
+However, this synchronization caused a problem. All functions worked normally, but video playback always stuck. Firefox, Chrome, and MPV would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the Home directory synchronization. After clearing the Home directory, the problem was solved immediately&mldr; Later, I spent a long time recovering things from the old PC one by one.</p><p>The second problem is that I recently wanted to try Wayland, so I changed the desktop from i3wm to sway.
+However, because there was little difference between the two and many inconveniences (hidpi, Sway configuration tuning, etc.), I decided to switch back to i3wm.
+After switching back, GUI programs such as Firefox and Thunar would always get stuck for about a minute after the system started&mldr;</p><p>I was too tired to deal with the second problem, after thinking about it carefully, I realized that the root cause was that the system did not have any version control and rollback mechanism, which caused the system to be unable to be restored when problems occurred.
+And another problem, when installing a new system, I had to manually export the package list from the old machine and then install them on the new machine.
+So I decided to switch to NixOS, and spent half a month studying Nix and Flakes before finally switching from EndeavourOS to NixOS on my PC.</p><p>The first step I took was to create a NixOS virtual machine in my Homelab, and debug step by step in this virtual machine to migrate my old PC&rsquo;s EndeavourOS i3 configuration to NixOS + Flakes and restore the entire desktop environment.</p><p>Once I had it working on the virtual machine, the rest was easy. I simply backed up my Home directory and software list from my work computer, reinstalled the system as NixOS, git cloned my debugged NixOS configuration, made some adjustments to the disk mounting parameters and added some extra NixOS configurations for my Nvidia graphics card. Finally, with just a few commands, I deployed the configuration and was able to restore the entire i3 desktop environment and my commonly used software on my fresh NixOS system. It was a truly satisfying moment!</p><p>The rollback capability of NixOS gave me a lot of confidence - I no longer fear breaking the system. So a few days ago, I further migrated to the hyprland desktop, which is indeed much better than i3, and I love its animation effects! (On EndeavourOS before, I wouldn&rsquo;t have dared to make such a switch for the reasons mentioned earlier - it would have been a big hassle if something went wrong with the system.)</p><blockquote><p>Note: some friends on V2EX gave feedback that the timeshift system snapshot of <code>btrfs</code> can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. <code>btrfs</code> can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs + timeshift is also a good choice. On the other hand, if you&rsquo;re still interested in Nix, learning it is definitely worth it, as Nix&rsquo;s capabilities are far beyond just system snapshots.</p></blockquote><figure><img src=./screenshot_2023-05-07-21-21.webp alt="My NixOS Desktop"><figcaption><p>My NixOS Desktop</p></figcaption></figure><p>Now that the background information is out of the way, it&rsquo;s time to dive into the world of Nix!</p><h2 id=i-introduction-to-nix class=headerLink><a href=#i-introduction-to-nix class=header-mark></a>I. Introduction to Nix</h2><p>Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using a DSL, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.</p><blockquote><p>To put it simply, &ldquo;declarative configuration&rdquo; means that users only need to declare the results they want. For example, you declares that they want to replace the i3 desktop with sway, then Nix will help them achieve that goal. Users don&rsquo;t need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user.</p></blockquote><p>The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as &ldquo;OS as Code&rdquo;, which describes the entire operating system&rsquo;s state using declarative Nix configuration files.</p><p>NixOS&rsquo;s configuration only manages the system-level state, the user&rsquo;s HOME directory is not under its jurisdiction. There is another important community project, home-manager, specifically for managing user&rsquo;s HOME directories. By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained.</p><p>Due to Nix&rsquo;s declarative and reproducible features, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. <a href=https://github.com/NixOS/nixops target=_blank rel="noopener noreferrer">NixOps</a> from the Nix official and <a href=https://github.com/serokell/deploy-rs target=_blank rel="noopener noreferrer">deploy-rs</a> from the community are both operations tools based on Nix.</p><blockquote><p>Since there are numerous files in the home directory with varying behaviors, it is impossible to version control all of them due to the high cost. Generally, only some important configuration files are managed using home-manager, and other files that need to be backed up can be backed up and synchronized using rsync/synthing, or use tools like btrfs timeshift to take snapshots of the home directory.</p></blockquote><h3 id=advantages-of-nix class=headerLink><a href=#advantages-of-nix class=header-mark></a>Advantages of Nix</h3><ul><li><strong>Declarative configuration, Environment as Code</strong>, can be managed with Git. As long as the configuration files are not lost, the system can be restored to any historical state at any time.<ul><li>This approach is consistent with the idea of locking dependency versions in files like cargo.lock/go.mod to ensure reproducible builds.</li><li>Compared with Docker, Dockerfile is actually an imperative configuration and there is no such thing as version locking, so Docker&rsquo;s reproducibility is far inferior to Nix.</li></ul></li><li><strong>Highly convenient system customization capability</strong><ul><li>By changing a few lines of configuration, various components of the system can be easily replaced. This is because Nix encapsulates all the underlying complex operations in nix packages and only exports concise and necessary declarative parameters.</li><li>Moreover, this modification is very safe. An example is that some users on the V2EX forum have stated that &ldquo;<a href=https://www.v2ex.com/t/938569#r_13053251 target=_blank rel="noopener noreferrer"><strong>nixos switching different desktop environments is very simple and clean, and it is very safe. I often switch between gnome/kde/sway.</strong></a>&rdquo;</li></ul></li><li><strong>Rollback</strong>: The system can be rolled back to any historical environment at any time, and NixOS even adds all old versions to the boot options by default to ensure that the system can be rolled back at any time if it crashes. Therefore, Nix is also considered the most stable package management method.</li><li><strong>No dependency conflicts</strong>: Because each software package in Nix has a unique hash, its installation path also includes this hash value, so multiple versions can coexist.</li><li><strong>The community is very active, and there are quite a few third-party projects</strong>. The official package repository, nixpkgs, has many contributors, and many people share their Nix configurations. After browsing through it, the entire ecosystem gives me a sense of excitement in discovering a new continent.</li></ul><figure><img src=./nixos-bootloader.avif alt="All historical versions are listed in the boot options of NixOS. Image from NixOS Discourse - 10074"><figcaption><p>All historical versions are listed in the boot options of NixOS. Image from <a href=https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074 target=_blank rel="noopener noreferrer">NixOS Discourse - 10074</a></p></figcaption></figure><h3 id=disadvantages-of-nix class=headerLink><a href=#disadvantages-of-nix class=header-mark></a>Disadvantages of Nix</h3><ul><li><strong>Relatively high learning curve:</strong>: If you want the system to be completely reproducible and avoid pitfalls caused by improper use, you need to learn about the entire design of Nix and manage the system in a declarative manner. You cannot blindly use <code>nix-env -i</code> (which is similar to <code>apt-get install</code>).</li><li><strong>Chaotic documentation</strong>: Firstly, Nix Flakes is still an experimental feature, and there are currently relatively few documents introducing it itself. Secondly, most of the Nix community&rsquo;s documentation only introduces the old <code>nix-env</code>/<code>nix-channel</code>. If you want to start learning directly from Nix Flakes, you need to refer to a large number of old documents and extract what you need from them. In addition, some of Nix&rsquo;s current core functions are not well-documented (such as <code>imports</code> and Nixpkgs Module System), so it is best to look at the source code to understand them.</li><li><del>Relatively few packages</del>: Retract this one. The official claim is that nixpkgs has <a href=https://search.nixos.org/packages target=_blank rel="noopener noreferrer">80000+</a> packages, and in fact, most packages can be found in nixpkgs</li><li><strong>Relatively high disk space usage</strong>: To ensure that the system can be rolled back at any time, Nix preserves all historical environments by default, which can take up a lot of disk space. Although you can manually clean up old historical environments periodically with nix-collect-garbage, it is still recommended to buy a larger hard drive.</li></ul><p>Generally speaking, I think NixOS is suitable for developers who have a certain amount of Linux usage experience and programming experience and want to have more control over their systems. There is also some competition between Nix and the relatively popular Dev Containers in the construction of development environment, and the specific differences between them have yet to be explored by me~</p><h2 id=ii-installation-and-basic-usage class=headerLink><a href=#ii-installation-and-basic-usage class=header-mark></a>II. Installation and Basic Usage</h2><p>Nix can be installed in multiple ways and supports being installed on MacOS/Linux/WSL as a package manager. Nix also provides NixOS, a Linux distribution that uses Nix to manage the entire system environment.</p><p>I chose to directly install NixOS system using its ISO image, to manage the entire system environment through Nix as much as possible.</p><p>The installation process is simple, and I won&rsquo;t go into details here.</p><p>some reference materials that maybe useful:</p><ol><li><a href=https://nixos.org/download.html target=_blank rel="noopener noreferrer">Official installation method of Nix</a>: written in bash script, <code>nix-command</code> & <code>flakes</code> are still experimental features as of 2023-04-23, and need to be manually enabled.<ol><li>You need to refer to the instructions in <a href=https://nixos.wiki/wiki/Flakes target=_blank rel="noopener noreferrer">Enable flakes - NixOS Wiki</a> to enable <code>nix-command</code> & <code>flakes</code>.</li><li>The official installer does not provide any uninstallation method. To uninstall Nix on Linux/MacOS, you need to manually delete all related files, users, and groups.</li></ol></li><li><a href=https://github.com/DeterminateSystems/nix-installer target=_blank rel="noopener noreferrer">The Determinate Nix Installer</a>: a third-party installer written in Rust, which enables <code>nix-command</code> & <code>flakes</code> by default and provides an uninstallation command.</li></ol><h2 id=iii-nix-flakes-and-the-old-nix class=headerLink><a href=#iii-nix-flakes-and-the-old-nix class=header-mark></a>III. Nix Flakes and the old Nix</h2><p>In 2020, Nix introduced two new features, <code>nix-command</code> and <code>flakes</code>, which provide new command-line tools, standard Nix package structure definitions, and flake.lock version lock files similar to cargo/npm. These two features greatly enhance the capabilities of Nix. Although they are still experimental features as of 2023-05-05, they have been widely used by the Nix community and are strongly recommended.</p><p>Currently, most of the Nix community&rsquo;s documentation still only covers traditional Nix and does not include Nix Flakes-related content. However, from the perspective of reproducibility and ease of management and maintenance, the old Nix package structure and command-line tools are no longer recommended for use. Therefore, this document will not introduce the usage of the old Nix package structure and command-line tools, and it is recommended that beginners ignore these old contents and just start with <code>nix-command</code> & <code>flakes</code>.</p><p>Here are the old Nix command-line tools and related concepts that are no longer needed in <code>nix-command</code> and <code>flakes</code>. When searching for information, you can safely ignore them:</p><ol><li><code>nix-channel</code>: <code>nix-channel</code> is similar to other package management tools such as apt/yum/pacman, managing software package versions through stable/unstable/test channels.<ol><li>In Nix Flakes, the functionality of <code>nix-channel</code> is completely replaced by <code>inputs</code> in <code>flake.nix</code> to declare dependency sources and <code>flake.lock</code> to lock dependency versions.</li></ol></li><li><code>nix-env</code>: <code>nix-env</code> is a core command-line tool for traditional Nix used to manage software packages in the user environment. It installs software packages from the data sources defined by <code>nix-channel</code>, so the installed package versions are influenced by the channel. Packages installed with <code>nix-env</code> are not automatically recorded in Nix&rsquo;s declarative configuration and are entirely outside of its control, making them difficult to reproduce on other machines. Therefore, it is not recommended to use this tool.<ol><li>The corresponding command in Nix Flakes is <code>nix profile</code>.</li></ol></li><li><code>nix-shell</code>: <code>nix-shell</code> is used to create a temporary shell environment.<ol><li>In Nix Flakes, it is replaced by <code>nix develop</code> and <code>nix shell</code>.</li></ol></li><li><code>nix-build</code>: <code>nix-build</code> is used to build Nix packages, and it places the build results in the <code>/nix/store</code> path, but it does not record them in Nix&rsquo;s declarative configuration.<ol><li>The corresponding command in Nix Flakes is <code>nix build</code>.</li></ol></li><li>&mldr;</li></ol><h2 id=iv-nixos-flakes-package-repositories class=headerLink><a href=#iv-nixos-flakes-package-repositories class=header-mark></a>IV. NixOS Flakes Package Repositories</h2><p>Similar to Arch Linux, Nix also has official and community software package repositories:</p><ol><li><a href=https://github.com/NixOS/nixpkgs target=_blank rel="noopener noreferrer">nixpkgs</a> is a Git repository containing all Nix packages and NixOS modules/configurations. Its master branch contains the latest Nix packages and NixOS modules/configurations.</li><li><a href=https://github.com/nix-community/NUR target=_blank rel="noopener noreferrer">NUR</a> is similar to Arch Linux&rsquo;s AUR. NUR is a third-party Nix package repository and serves as a supplement to nixpkgs.</li><li>Nix Flakes can also install software packages directly from Git repositories, which can be used to install Flakes packages provided by anyone.</li></ol><h2 id=v-nix-language-basics class=headerLink><a href=#v-nix-language-basics class=header-mark></a>V. Nix language basics</h2><p>please read <a href=https://nix.dev/tutorials/first-steps/nix-language target=_blank rel="noopener noreferrer">Nix language basics - nix.dev</a> first to get a basic understanding of Nix language, it&rsquo;s a very good tutorial.</p><h2 id=vi-managing-the-system-declaratively class=headerLink><a href=#vi-managing-the-system-declaratively class=header-mark></a>VI. Managing the system declaratively</h2><blockquote><p><a href=https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution target=_blank rel="noopener noreferrer">https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution</a></p></blockquote><p>After learning the basics of the Nix language, we can start using it to configure the NixOS system. The system configuration file for NixOS is located at <code>/etc/nixos/configuration.nix</code>, which contains all the declarative configurations for the system, such as time zone, language, keyboard layout, network, users, file system, boot options, etc.</p><p>If we want to modify the system state in a reproducible way (which is also the most recommended way), we need to manually edit the <code>/etc/nixos/configuration.nix</code> file, and then execute the <code>sudo nixos-rebuild switch</code> command to apply the configuration. This command generates a new system environment based on the configuration file, sets the new environment as the default environment, and preserves the previous environment, which is also added to the grub boot options. This ensures that even if the new environment fails to start, we can always roll back to the old environment.</p><p>On the other hand, <code>/etc/nixos/configuration.nix</code> is the traditional Nix configuration method, which relies on data sources configured by nix-channel and has no version locking mechanism, making it difficult to ensure the reproducibility of the system. <strong>A better approach is to use Nix Flakes</strong>, which can ensure the reproducibility of the system and make it easy to manage the configuration.</p><p>First, we will introduce how to manage the system using the default configuration method of NixOS through <code>/etc/nixos/configuration.nix</code>, and then transition to the more advanced Nix Flakes.</p><h3 id=1-configuring-the-system-using-etcnixosconfigurationnix class=headerLink><a href=#1-configuring-the-system-using-etcnixosconfigurationnix class=header-mark></a>1. Configuring the system using <code>/etc/nixos/configuration.nix</code></h3><p>As mentioned earlier, this is the traditional Nix configuration method and also the default configuration method currently used by NixOS. It relies on data sources configured by <code>nix-channel</code> and has no version locking mechanism, making it difficult to ensure the reproducibility of the system.</p><p>For example, to enable ssh and add a user &ldquo;ryan,&rdquo; simply add the following configuration to <code>/etc/nixos/configuration.nix</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=c1># Edit this configuration file to define what should be installed on</span>
+</span></span><span class=line><span class=cl><span class=c1># your system.  Help is available in the configuration.nix(5) man page</span>
+</span></span><span class=line><span class=cl><span class=c1># and in the NixOS manual (accessible by running ‘nixos-help’).</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=n>config</span><span class=o>,</span> <span class=n>pkgs</span><span class=o>,</span> <span class=o>...</span> <span class=p>}:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>imports</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span> <span class=c1># Include the results of the hardware scan.</span>
+</span></span><span class=line><span class=cl>      <span class=sr>./hardware-configuration.nix</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># Omit the previous configuration.......</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># add user ryan</span>
+</span></span><span class=line><span class=cl>  <span class=n>users</span><span class=o>.</span><span class=n>users</span><span class=o>.</span><span class=n>ryan</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>isNormalUser</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;ryan&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>extraGroups</span> <span class=o>=</span> <span class=p>[</span> <span class=s2>&#34;networkmanager&#34;</span> <span class=s2>&#34;wheel&#34;</span> <span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=n>openssh</span><span class=o>.</span><span class=n>authorizedKeys</span><span class=o>.</span><span class=n>keys</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=c1># replace with your own public key</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;ssh-ed25519 &lt;some-public-key&gt; ryan@ryan-pc&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=n>packages</span> <span class=o>=</span> <span class=k>with</span> <span class=n>pkgs</span><span class=p>;</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=n>firefox</span>
+</span></span><span class=line><span class=cl>    <span class=c1>#  thunderbird</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># enable openssh-server</span>
+</span></span><span class=line><span class=cl>  <span class=n>services</span><span class=o>.</span><span class=n>openssh</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>enable</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>permitRootLogin</span> <span class=o>=</span> <span class=s2>&#34;no&#34;</span><span class=p>;</span>         <span class=c1># disable root login</span>
+</span></span><span class=line><span class=cl>    <span class=n>passwordAuthentication</span> <span class=o>=</span> <span class=no>false</span><span class=p>;</span> <span class=c1># disable password login</span>
+</span></span><span class=line><span class=cl>    <span class=n>openFirewall</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>forwardX11</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>              <span class=c1># enable X11 forwarding</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># omit the rest of the configuration.......</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>in the configuration above, we enabled the openssh service, added an ssh public key for the user ryan, and disabled password login.</p><p>Now, running <code>sudo nixos-rebuild switch</code> deploys the modified configuration, and then we can login to my machine using ssh with ssh keys.</p><p>This is the default declarative system configuration in NixOS, where any reproducible changes to the system can be made by modifying the <code>/etc/nixos/configuration.nix</code> file and deploying the changes by running <code>sudo nixos-rebuild switch</code>.</p><p>All configuration options in <code>/etc/nixos/configuration.nix</code> can be found in the following places:</p><ul><li>By searching on Google, such as <code>Chrome NixOS</code>, which will provide configuration options related to Chrome. Generally, the NixOS Wiki or the nixpkgs repository source code will be among the top results.</li><li>By searching for keywords in <a href=https://search.nixos.org/options target=_blank rel="noopener noreferrer">NixOS Options Search</a>.</li><li>For system-level configurations, relevant documentation can be found in <a href=https://nixos.org/manual/nixos/unstable/index.html#ch-configuration target=_blank rel="noopener noreferrer">Configuration - NixOS Manual</a>.</li><li>By searching for keywords directly in the <a href=https://github.com/NixOS/nixpkgs target=_blank rel="noopener noreferrer">nixpkgs</a> repository and reading relevant source code.</li></ul><h3 id=2-enabling-nixos-flakes-support class=headerLink><a href=#2-enabling-nixos-flakes-support class=header-mark></a>2. Enabling NixOS Flakes Support</h3><p>Compared to the default configuration approach of NixOS, Nix Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to use Nix Flakes to manage system configurations.</p><p>However, Nix Flakes is currently an experimental feature and is not yet enabled by default. So we need to enable it manually by modifying the <code>/etc/nixos/configuration.nix</code> file and enabling the flakes and nix-command functionalities in the function block:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=c1># Edit this configuration file to define what should be installed on</span>
+</span></span><span class=line><span class=cl><span class=c1># your system.  Help is available in the configuration.nix(5) man page</span>
+</span></span><span class=line><span class=cl><span class=c1># and in the NixOS manual (accessible by running ‘nixos-help’).</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=n>config</span><span class=o>,</span> <span class=n>pkgs</span><span class=o>,</span> <span class=o>...</span> <span class=p>}:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>imports</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span> <span class=c1># Include the results of the hardware scan.</span>
+</span></span><span class=line><span class=cl>      <span class=sr>./hardware-configuration.nix</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># omit the previous configuration.......</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># enable Nix Flakes and the new nix-command command line tool</span>
+</span></span><span class=line><span class=cl>  <span class=n>nix</span><span class=o>.</span><span class=n>settings</span><span class=o>.</span><span class=n>experimental-features</span> <span class=o>=</span> <span class=p>[</span> <span class=s2>&#34;nix-command&#34;</span> <span class=s2>&#34;flakes&#34;</span> <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>environment</span><span class=o>.</span><span class=n>systemPackages</span> <span class=o>=</span> <span class=k>with</span> <span class=n>pkgs</span><span class=p>;</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Nix Flakes uses the git command to pull dependencies from data sources, so git must be installed first</span>
+</span></span><span class=line><span class=cl>    <span class=n>git</span>
+</span></span><span class=line><span class=cl>    <span class=n>vim</span>
+</span></span><span class=line><span class=cl>    <span class=n>wget</span>
+</span></span><span class=line><span class=cl>  <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># omit the rest of the configuration.......</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Then run <code>sudo nixos-rebuild switch</code> to apply the changes, and you can use Nix Flakes to manage the system configuration.</p><h3 id=3-switching-system-configuration-to-flakenix class=headerLink><a href=#3-switching-system-configuration-to-flakenix class=header-mark></a>3. Switching System Configuration to flake.nix</h3><p>After enabling the Nix Flakes feature, the <code>sudo nixos-rebuild switch</code> command will prioritize reading the <code>/etc/nixos/flake.nix</code> file. If not found, it will try to use <code>/etc/nixos/configuration.nix</code>.</p><p>You can first use the official templates provided by Nix to learn how to write flakes, check which templates are available using the following command:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>nix flake show templates
+</span></span></code></pre></td></tr></table></div></div><p>One of the templates, <code>templates#full</code>, shows all possible uses. now take a look at its contents:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>nix flake init -t templates#full
+</span></span><span class=line><span class=cl>cat flake.nix
+</span></span></code></pre></td></tr></table></div></div><p>We create the file <code>/ etc/nixos/ flke.nix</code> and write the configuration content according to this template. All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;Ryan&#39;s NixOS Flake&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># This is the standard format for flake.nix. inputs are the dependencies of the flake,</span>
+</span></span><span class=line><span class=cl>  <span class=c1># and outputs are the outputs of the flake. Each item in inputs will be passed as a</span>
+</span></span><span class=line><span class=cl>  <span class=c1># parameter to the outputs function after being pulled and built.</span>
+</span></span><span class=line><span class=cl>  <span class=n>inputs</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># There are many ways to reference flake inputs. The most widely used is github:owner/name/reference,</span>
+</span></span><span class=line><span class=cl>    <span class=c1># which represents the GitHub repository URL + branch/commit-id/tag.</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Official NixOS package source, using nixos-unstable branch here</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs</span><span class=o>.</span><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;github:NixOS/nixpkgs/nixos-unstable&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># home-manager, used for managing user configuration</span>
+</span></span><span class=line><span class=cl>    <span class=n>home-manager</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;github:nix-community/home-manager/release-22.11&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=c1># The `follows` keyword in inputs is used for inheritance.</span>
+</span></span><span class=line><span class=cl>      <span class=c1># Here, `inputs.nixpkgs` of home-manager is kept consistent with the `inputs.nixpkgs` of the current flake,</span>
+</span></span><span class=line><span class=cl>      <span class=c1># to avoid problems caused by different versions of nixpkgs dependencies.</span>
+</span></span><span class=line><span class=cl>      <span class=n>inputs</span><span class=o>.</span><span class=n>nixpkgs</span><span class=o>.</span><span class=n>follows</span> <span class=o>=</span> <span class=s2>&#34;nixpkgs&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># Outputs are all the outputs of the flake. nixosConfigurations is just one type of output for NixOS system configurations.</span>
+</span></span><span class=line><span class=cl>  <span class=c1># A flake can have many uses and different types of outputs. Parameters in `outputs` are defined in `inputs` and can be referenced</span>
+</span></span><span class=line><span class=cl>  <span class=c1># by their names. However, `self` is an exception. This special parameter points to the `outputs` itself (self-reference)</span>
+</span></span><span class=line><span class=cl>  <span class=c1># as well as the root directory of the flake. The `@` syntax here is used to alias the attribute set of the function&#39;s parameter,</span>
+</span></span><span class=line><span class=cl>  <span class=c1># making it convenient to use inside the function.</span>
+</span></span><span class=line><span class=cl>  <span class=n>outputs</span> <span class=o>=</span> <span class=p>{</span> <span class=n>self</span><span class=o>,</span> <span class=n>nixpkgs</span><span class=o>,</span> <span class=o>...</span> <span class=p>}</span><span class=o>@</span><span class=n>inputs</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Outputs named `nixosConfigurations` will be used when `nixos-rebuild switch --flake .` is executed.</span>
+</span></span><span class=line><span class=cl>    <span class=c1># By default, the `nixosConfigurations` with the same name as the hostname will be used.</span>
+</span></span><span class=line><span class=cl>    <span class=c1># However, it can also be specified using `--flake .#&lt;name&gt;`.</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixosConfigurations</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1># The host with hostname `nixos-test` will use this configuration.</span>
+</span></span><span class=line><span class=cl>      <span class=c1># The `nixpkgs.lib.nixosSystem` function is used to build this configuration, the following attribute set is its parameter.</span>
+</span></span><span class=line><span class=cl>      <span class=c1># Use `nixos-rebuild switch --flake .#nixos-test` To deploy this configuration on a NixOS system</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;nixos-test&#34;</span> <span class=o>=</span> <span class=n>nixpkgs</span><span class=o>.</span><span class=n>lib</span><span class=o>.</span><span class=n>nixosSystem</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>system</span> <span class=o>=</span> <span class=s2>&#34;x86_64-linux&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># Each parameter in the `modules` is a Nix Module, and there is a partial introduction to it in the nixpkgs manual:</span>
+</span></span><span class=line><span class=cl>        <span class=c1>#    &lt;https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># It is said to be partial because the documentation is not complete, only some simple introductions (such is the current state of Nix documentation...)</span>
+</span></span><span class=line><span class=cl>        <span class=c1># A Nix Module can be an attribute set or a function that returns an attribute set.</span>
+</span></span><span class=line><span class=cl>        <span class=c1># If it is a function, then its parameters are the parameters of the current Nix Module.</span>
+</span></span><span class=line><span class=cl>        <span class=c1># According to the Nix Wiki description, Nix modules functions can have these four parameters:</span>
+</span></span><span class=line><span class=cl>        <span class=c1># </span>
+</span></span><span class=line><span class=cl>        <span class=c1>#   config: The configuration of the entire system</span>
+</span></span><span class=line><span class=cl>        <span class=c1>#   options: All option declarations refined with all definition and declaration references.</span>
+</span></span><span class=line><span class=cl>        <span class=c1>#   pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.</span>
+</span></span><span class=line><span class=cl>        <span class=c1>#   modulesPath: The location of the module directory of Nix.</span>
+</span></span><span class=line><span class=cl>        <span class=c1>#</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Only these four parameters can be passed by default. If you need to pass other parameters, you must use `specialArgs`.</span>
+</span></span><span class=line><span class=cl>        <span class=c1># The Nix module system can modularize configurations, improving the maintainability of configurations.</span>
+</span></span><span class=line><span class=cl>        <span class=n>modules</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>          <span class=c1># Import the configuration.nix we used before, so that the old configuration file can still take effect. </span>
+</span></span><span class=line><span class=cl>          <span class=c1># Note: configuration.nix itself is also a Nix Module, so you can import it directly here</span>
+</span></span><span class=line><span class=cl>          <span class=sr>./configuration.nix</span>
+</span></span><span class=line><span class=cl>        <span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Here we define a system called <code>nixos-test</code>, whose configuration file is <code>./organization.nix</code>, which is our previous configuration file, so we can still use the old configuration.</p><p>Now execute the <code>sudo nixos-rebuild switch</code> command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the configuration content is the same as before.</p><h3 id=4-add-custom-cache-mirror class=headerLink><a href=#4-add-custom-cache-mirror class=header-mark></a>4. Add Custom Cache Mirror</h3><p>In order to speed up package construction, Nix provides <a href=https://cache.nixos.org target=_blank rel="noopener noreferrer">https://cache.nixos.org</a> to cache build results to avoid build every packages locally.</p><p>In the old NixOS configuration, domestic cache image sources can be added through <code>nix-channel</code>, but Nix Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its construction results are not affected by the environment. Therefore, in order to customize the cache image source, we must add the relevant configuration in <code>flke.nix</code>, which is the parameter <code>nixConfig</code>. The example is as follows:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;NixOS configuration of Ryan Yin&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># to ensure purity, Flakes does not rely on the system&#39;s `/etc/nix/nix.conf`, we need set arguments in `nixConfig`.</span>
+</span></span><span class=line><span class=cl>  <span class=c1># but to ensure security, flake allows only a few nixConfig parameters to be set directly by default. </span>
+</span></span><span class=line><span class=cl>  <span class=c1># Other parameters need to be specified when executing the nix command, otherwise they will be ignored.</span>
+</span></span><span class=line><span class=cl>  <span class=n>nixConfig</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>experimental-features</span> <span class=o>=</span> <span class=p>[</span> <span class=s2>&#34;nix-command&#34;</span> <span class=s2>&#34;flakes&#34;</span> <span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=n>substituters</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=c1># replace official cache with a mirror located in China</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;https://mirrors.bfsu.edu.cn/nix-channels/store&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;https://cache.nixos.org/&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># nix community&#39;s cache server</span>
+</span></span><span class=line><span class=cl>    <span class=n>extra-substituters</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;https://nix-community.cachix.org&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=n>extra-trusted-public-keys</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=s2>&#34;nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>inputs</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># omit some configuration...</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>outputs</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># omit some configuration...</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>After the modification, you can execute <code>sudo nixos-rebuild switch</code> to apply the configuration.</p><h3 id=5-安装-home-manager class=headerLink><a href=#5-%e5%ae%89%e8%a3%85-home-manager class=header-mark></a>5. 安装 home-manager</h3><p>We mentioned earlier that NixOS can only manage system-level configurations, and user-level configurations need to be managed using home-manager.</p><p>According to the official document <a href=https://nix-community.github.io/home-manager/index.htm target=_blank rel="noopener noreferrer">Home Manager Manual</a>, in order to install home-manager as an module of NixOS, we need to create <code>/etc/nixos/home.nix</code> first, an example content shown below:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=p>{</span> <span class=n>config</span><span class=o>,</span> <span class=n>pkgs</span><span class=o>,</span> <span class=o>...</span> <span class=p>}:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1># please change the username &amp; home direcotry to your own</span>
+</span></span><span class=line><span class=cl>  <span class=n>home</span><span class=o>.</span><span class=n>username</span> <span class=o>=</span> <span class=s2>&#34;ryan&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>home</span><span class=o>.</span><span class=n>homeDirectory</span> <span class=o>=</span> <span class=s2>&#34;/home/ryan&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># link the configuration file in current directory to the specified location in Home directory</span>
+</span></span><span class=line><span class=cl>  <span class=c1># home.file.&#34;.config/i3/wallpaper.jpg&#34;.source = ./wallpaper.jpg;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># link all files in `./scripts` to `~/.config/i3/scripts`</span>
+</span></span><span class=line><span class=cl>  <span class=c1># home.file.&#34;.config/i3/scripts&#34; = {</span>
+</span></span><span class=line><span class=cl>  <span class=c1>#   source = ./scripts;</span>
+</span></span><span class=line><span class=cl>  <span class=c1>#   recursive = true;   # link recursively</span>
+</span></span><span class=line><span class=cl>  <span class=c1>#   executable = true;  # make all files executable</span>
+</span></span><span class=line><span class=cl>  <span class=c1># };</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># encode the file content in nix configuration file directly</span>
+</span></span><span class=line><span class=cl>  <span class=c1># home.file.&#34;.xxx&#34;.text = &#39;&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=c1>#     xxx</span>
+</span></span><span class=line><span class=cl>  <span class=c1># &#39;&#39;;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># set cursor size and dpi for 4k monitor</span>
+</span></span><span class=line><span class=cl>  <span class=n>xresources</span><span class=o>.</span><span class=n>properties</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Xcursor.size&#34;</span> <span class=o>=</span> <span class=mi>16</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Xft.dpi&#34;</span> <span class=o>=</span> <span class=mi>172</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># basic configuration of git, please change to your own</span>
+</span></span><span class=line><span class=cl>  <span class=n>programs</span><span class=o>.</span><span class=n>git</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>enable</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>userName</span> <span class=o>=</span> <span class=s2>&#34;Ryan Yin&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>userEmail</span> <span class=o>=</span> <span class=s2>&#34;xiaoyin_c@qq.com&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># Packages that should be installed to the user profile.</span>
+</span></span><span class=line><span class=cl>  <span class=n>home</span><span class=o>.</span><span class=n>packages</span> <span class=o>=</span> <span class=p>[</span> 
+</span></span><span class=line><span class=cl>    <span class=n>pkgs</span><span class=o>.</span><span class=n>htop</span>
+</span></span><span class=line><span class=cl>    <span class=n>pkgs</span><span class=o>.</span><span class=n>btop</span>
+</span></span><span class=line><span class=cl>  <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># enable starship, a beautiful shell prompt</span>
+</span></span><span class=line><span class=cl>  <span class=n>programs</span><span class=o>.</span><span class=n>starship</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>enable</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>settings</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>add_newline</span> <span class=o>=</span> <span class=no>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>aws</span><span class=o>.</span><span class=n>disabled</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>gcloud</span><span class=o>.</span><span class=n>disabled</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>line_break</span><span class=o>.</span><span class=n>disabled</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># alacritty terminal emulator</span>
+</span></span><span class=line><span class=cl>  <span class=n>programs</span><span class=o>.</span><span class=n>alacritty</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>enable</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>env</span><span class=o>.</span><span class=n>TERM</span> <span class=o>=</span> <span class=s2>&#34;xterm-256color&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>font</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>size</span> <span class=o>=</span> <span class=mi>12</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>draw_bold_text_with_bright_colors</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>      <span class=n>scrolling</span><span class=o>.</span><span class=n>multiplier</span> <span class=o>=</span> <span class=mi>5</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=n>selection</span><span class=o>.</span><span class=n>save_to_clipboard</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># This value determines the Home Manager release that your</span>
+</span></span><span class=line><span class=cl>  <span class=c1># configuration is compatible with. This helps avoid breakage</span>
+</span></span><span class=line><span class=cl>  <span class=c1># when a new Home Manager release introduces backwards</span>
+</span></span><span class=line><span class=cl>  <span class=c1># incompatible changes.</span>
+</span></span><span class=line><span class=cl>  <span class=c1>#</span>
+</span></span><span class=line><span class=cl>  <span class=c1># You can update Home Manager without changing this value. See</span>
+</span></span><span class=line><span class=cl>  <span class=c1># the Home Manager release notes for a list of state version</span>
+</span></span><span class=line><span class=cl>  <span class=c1># changes in each release.</span>
+</span></span><span class=line><span class=cl>  <span class=n>home</span><span class=o>.</span><span class=n>stateVersion</span> <span class=o>=</span> <span class=s2>&#34;22.11&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># Let Home Manager install and manage itself.</span>
+</span></span><span class=line><span class=cl>  <span class=n>programs</span><span class=o>.</span><span class=n>home-manager</span><span class=o>.</span><span class=n>enable</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>After adding <code>/ etc/nixos/ home.nix</code>, you need to import this new configuration file in <code>/etc/nixos/flake.nix</code> to make it effective. You can use the following command to generate an example <code>/etc/nixos/flake.nix</code> in the current folder for reference:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>nix flake new -t github:nix-community/home-manager#nixos
+</span></span></code></pre></td></tr></table></div></div><p>After adjusting the parameters, the content of <code>/etc/nixos/flake.nix</code> is as follows:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;NixOS configuration&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>inputs</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs</span><span class=o>.</span><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;github:nixos/nixpkgs/nixos-unstable&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>home-manager</span><span class=o>.</span><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;github:nix-community/home-manager&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>home-manager</span><span class=o>.</span><span class=n>inputs</span><span class=o>.</span><span class=n>nixpkgs</span><span class=o>.</span><span class=n>follows</span> <span class=o>=</span> <span class=s2>&#34;nixpkgs&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>outputs</span> <span class=o>=</span> <span class=n>inputs</span><span class=o>@</span><span class=p>{</span> <span class=n>nixpkgs</span><span class=o>,</span> <span class=n>home-manager</span><span class=o>,</span> <span class=o>...</span> <span class=p>}:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixosConfigurations</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1># please change the hostname to your own</span>
+</span></span><span class=line><span class=cl>      <span class=n>nixos-test</span> <span class=o>=</span> <span class=n>nixpkgs</span><span class=o>.</span><span class=n>lib</span><span class=o>.</span><span class=n>nixosSystem</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>system</span> <span class=o>=</span> <span class=s2>&#34;x86_64-linux&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>modules</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>          <span class=sr>./configuration.nix</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>          <span class=c1># make home-manager as a module of nixos</span>
+</span></span><span class=line><span class=cl>          <span class=c1># so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`</span>
+</span></span><span class=line><span class=cl>          <span class=n>home-manager</span><span class=o>.</span><span class=n>nixosModules</span><span class=o>.</span><span class=n>home-manager</span>
+</span></span><span class=line><span class=cl>          <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>home-manager</span><span class=o>.</span><span class=n>useGlobalPkgs</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>home-manager</span><span class=o>.</span><span class=n>useUserPackages</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1># replace ryan with your own username</span>
+</span></span><span class=line><span class=cl>            <span class=n>home-manager</span><span class=o>.</span><span class=n>users</span><span class=o>.</span><span class=n>ryan</span> <span class=o>=</span> <span class=kn>import</span> <span class=sr>./home.nix</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1># Optionally, use home-manager.extraSpecialArgs to pass</span>
+</span></span><span class=line><span class=cl>            <span class=c1># arguments to home.nix</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Then execute <code>sudo nixos-rebuild switch</code> to apply the configuration, and home-manager will be installed automatically.</p><p>After the installation is complete, all user-level programs and configurations can be managed through <code>/etc/nixos/home.nix</code>, and when executing <code>sudo nixos-rebuild switch</code>, the configuration of home-manager will be applied automatically.</p><p>To find the options of home-manager used in <code>home.nix</code>, use the following methods:</p><ul><li><a href=https://nix-community.github.io/home-manager/options.html target=_blank rel="noopener noreferrer">Home Manager - Appendix A. Configuration Options</a>: A list of all options, it is recommended to search for keywords in it.</li><li><a href=https://github.com/nix-community/home-manager target=_blank rel="noopener noreferrer">home-manager</a>: Some options are not listed in the official documentation, or the documentation is not clear enough, you can directly search and read the corresponding source code in this home-manager repo.</li></ul><h3 id=6-modular-nixos-configuration class=headerLink><a href=#6-modular-nixos-configuration class=header-mark></a>6. Modular NixOS configuration</h3><p>At this point, the skeleton of the entire system is basically configured. The current system configuration structure in <code>/etc/nixos</code> should be as follows:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ tree
+</span></span><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── flake.lock
+</span></span><span class=line><span class=cl>├── flake.nix
+</span></span><span class=line><span class=cl>├── home.nix
+</span></span><span class=line><span class=cl>└── configuration.nix
+</span></span></code></pre></td></tr></table></div></div><p>The functions of these four files are explained below:</p><ul><li><code>flake.lock</code>: An automatically generated version lock file, which records all input data sources, hash values, and version numbers of the entire flake to ensure that the system is reproducible.</li><li><code>flake.nix</code>: The entry file, which will be recognized and deployed when executing <code>sudo nixos-rebuild switch</code>.<ul><li>See <a href=https://nixos.wiki/wiki/Flakes target=_blank rel="noopener noreferrer">Flakes - NixOS Wiki</a> for all options of flake.nix.</li></ul></li><li><code>configuration.nix</code>: Imported as a Nix module in flake.nix, all system-level configurations are currently written in this file.<ul><li>See <a href=https://nixos.org/manual/nixos/unstable/index.html#ch-configuration target=_blank rel="noopener noreferrer">Configuration - NixOS Manual</a> for all options of configuration.nix.</li></ul></li><li><code>home.nix</code>: Imported by home-manager as the configuration of the user <code>ryan</code> in flake.nix, that is, it contains all the Home Manager configurations of <code>ryan</code>, and is responsible for managing <code>ryan</code>&rsquo;s Home folder.<ul><li>See <a href=https://nix-community.github.io/home-manager/options.html target=_blank rel="noopener noreferrer">Appendix A. Configuration Options - Home Manager</a> for all options of home.nix.</li></ul></li></ul><p>By modifying the above configuration files, you can change the status of the system and the Home directory declaratively.</p><p>As the configuration increases, it is difficult to maintain the configuration files by relying solely on <code>configuration.nix</code> and <code>home.nix</code>. Therefore, a better solution is to use the module mechanism of Nix to split the configuration files into multiple modules and write them in a classified manner.</p><p><code>imports</code> parameter can accept a list of <code>.nix</code> files, and merge all the configurations in the list into the current attribute set. Note that the word used here is &ldquo;<strong>merge</strong>&rdquo;, which means that <code>imports</code> will NOT simply overwrite the duplicate configuration items, but handle them more reasonably. For example, if I define <code>program.packages = [...]</code> in multiple modules, then <code>imports</code> will merge all <code>program.packages</code> in all modules into one list. Not only lists can be merged correctly, but attribute sets can also be merged correctly. The specific behavior can be explored by yourself.</p><blockquote><p>I only found a description of <code>imports</code> in <a href=https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters target=_blank rel="noopener noreferrer">nixpkgs-unstable official manual - evalModules parameters</a>: <code>A list of modules. These are merged together to form the final configuration.</code>, you can try to understand it&mldr;</p></blockquote><p>With the help of the <code>imports</code> parameter, we can split <code>home.nix</code> and <code>configuration.nix</code> into multiple <code>.nix</code> files.</p><p>For example, the structure of my previous i3wm system configuration <a href=https://github.com/ryan4yin/nix-config/tree/v0.0.2 target=_blank rel="noopener noreferrer">ryan4yin/nix-config/v0.0.2</a> is as follows:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>├── flake.lock
+</span></span><span class=line><span class=cl>├── flake.nix
+</span></span><span class=line><span class=cl>├── home
+</span></span><span class=line><span class=cl>│   ├── default.nix         <span class=c1># here we import all submodules by imports = [...]</span>
+</span></span><span class=line><span class=cl>│   ├── fcitx5              <span class=c1># fcitx5 input method&#39;s configuration</span>
+</span></span><span class=line><span class=cl>│   │   ├── default.nix
+</span></span><span class=line><span class=cl>│   │   └── rime-data-flypy
+</span></span><span class=line><span class=cl>│   ├── i3                  <span class=c1># i3 window manager&#39;s configuration</span>
+</span></span><span class=line><span class=cl>│   │   ├── config
+</span></span><span class=line><span class=cl>│   │   ├── default.nix
+</span></span><span class=line><span class=cl>│   │   ├── i3blocks.conf
+</span></span><span class=line><span class=cl>│   │   ├── keybindings
+</span></span><span class=line><span class=cl>│   │   └── scripts
+</span></span><span class=line><span class=cl>│   ├── programs
+</span></span><span class=line><span class=cl>│   │   ├── browsers.nix
+</span></span><span class=line><span class=cl>│   │   ├── common.nix
+</span></span><span class=line><span class=cl>│   │   ├── default.nix   <span class=c1># here we import all modules in programs folder by imports = [...]</span>
+</span></span><span class=line><span class=cl>│   │   ├── git.nix
+</span></span><span class=line><span class=cl>│   │   ├── media.nix
+</span></span><span class=line><span class=cl>│   │   ├── vscode.nix
+</span></span><span class=line><span class=cl>│   │   └── xdg.nix
+</span></span><span class=line><span class=cl>│   ├── rofi              <span class=c1>#  rofi launcher&#39;s configuration</span>
+</span></span><span class=line><span class=cl>│   │   ├── configs
+</span></span><span class=line><span class=cl>│   │   │   ├── arc_dark_colors.rasi
+</span></span><span class=line><span class=cl>│   │   │   ├── arc_dark_transparent_colors.rasi
+</span></span><span class=line><span class=cl>│   │   │   ├── power-profiles.rasi
+</span></span><span class=line><span class=cl>│   │   │   ├── powermenu.rasi
+</span></span><span class=line><span class=cl>│   │   │   ├── rofidmenu.rasi
+</span></span><span class=line><span class=cl>│   │   │   └── rofikeyhint.rasi
+</span></span><span class=line><span class=cl>│   │   └── default.nix
+</span></span><span class=line><span class=cl>│   └── shell             <span class=c1># shell/terminal related configuration</span>
+</span></span><span class=line><span class=cl>│       ├── common.nix
+</span></span><span class=line><span class=cl>│       ├── default.nix
+</span></span><span class=line><span class=cl>│       ├── nushell
+</span></span><span class=line><span class=cl>│       │   ├── config.nu
+</span></span><span class=line><span class=cl>│       │   ├── default.nix
+</span></span><span class=line><span class=cl>│       │   └── env.nu
+</span></span><span class=line><span class=cl>│       ├── starship.nix
+</span></span><span class=line><span class=cl>│       └── terminals.nix
+</span></span><span class=line><span class=cl>├── hosts 
+</span></span><span class=line><span class=cl>│   ├── msi-rtx4090      <span class=c1># My main machine&#39;s configuration</span>
+</span></span><span class=line><span class=cl>│   │   ├── default.nix  <span class=c1># This is the old configuration.nix, but most of the content has been split out to modules.</span>
+</span></span><span class=line><span class=cl>│   │   └── hardware-configuration.nix  <span class=c1># hardware &amp; disk related configuration, autogenerated by nixos   </span>
+</span></span><span class=line><span class=cl>│   └── nixos-test       <span class=c1># my test machine&#39;s configuration</span>
+</span></span><span class=line><span class=cl>│       ├── default.nix
+</span></span><span class=line><span class=cl>│       └── hardware-configuration.nix
+</span></span><span class=line><span class=cl>├── modules          <span class=c1># some common NixOS modules that can be reused</span>
+</span></span><span class=line><span class=cl>│   ├── i3.nix
+</span></span><span class=line><span class=cl>│   └── system.nix
+</span></span><span class=line><span class=cl>└── wallpaper.jpg    <span class=c1># wallpaper</span>
+</span></span></code></pre></td></tr></table></div></div><p>For the details of the structure and content, please go to the github repository link provided above.</p><h3 id=7-update-the-system class=headerLink><a href=#7-update-the-system class=header-mark></a>7. Update the system</h3><p>After using Nix Flakes, it is also very simple to update the system. First update the flake.lock file, and then deploy it. Execute the following command in the configuration folder:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># update flake.lock</span>
+</span></span><span class=line><span class=cl>nix flake update
+</span></span><span class=line><span class=cl><span class=c1># deploy the updates</span>
+</span></span><span class=line><span class=cl>sudo nixos-rebuild switch
+</span></span></code></pre></td></tr></table></div></div><p>Sometimes when installing new packages, you may encounter an error of sha256 mismatch when running <code>nixos-rebuild switch</code>. You can also try to solve it by updating flake.lock through <code>nix flake update</code> (the principle is not clear for now).</p><h3 id=8-rollback-the-version-of-some-packages class=headerLink><a href=#8-rollback-the-version-of-some-packages class=header-mark></a>8. Rollback the version of some packages</h3><p>After using Nix Flakes, most people are currently using the <code>nixos-unstable</code> branch of nixpkgs. Sometimes you will encounter some bugs, such as the <a href=https://github.com/swaywm/sway/issues/7562 target=_blank rel="noopener noreferrer">chrome/vscode crash problem</a></p><p>To resolve this problem, we need to rollback the version of some packages. In Nix Flakes, all package versions and hash values are one-to-one corresponding to the git commit of their input data source. Therefore, to rollback a package to a historical version, we need to lock the git commit of its input data source.</p><p>So to rollback the version of some packages, first modify <code>/etc/nixos/flake.nix</code>, the example content is as follows (mainly using the <code>specialArgs</code> parameter):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;NixOS configuration of Ryan Yin&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>inputs</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># default to nixos-unstable branch</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs</span><span class=o>.</span><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;github:nixos/nixpkgs/nixos-unstable&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># the latest stable branch of nixpkgs, used to rollback the version of some packages</span>
+</span></span><span class=line><span class=cl>    <span class=c1># the current latest version is 22.11</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs-stable</span><span class=o>.</span><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;github:nixos/nixpkgs/nixos-22.11&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># we can also use git commit hash to lock the version</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs-fd40cef8d</span><span class=o>.</span><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;github:nixos/nixpkgs/fd40cef8d797670e203a27a91e4b8e6decf0b90c&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=n>outputs</span> <span class=o>=</span> <span class=n>inputs</span><span class=o>@</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>self</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs-stable</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixpkgs-fd40cef8d</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>    <span class=o>...</span>
+</span></span><span class=line><span class=cl>  <span class=p>}:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>nixosConfigurations</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>nixos-test</span> <span class=o>=</span> <span class=n>nixpkgs</span><span class=o>.</span><span class=n>lib</span><span class=o>.</span><span class=n>nixosSystem</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>system</span> <span class=o>=</span> <span class=s2>&#34;x86_64-linux&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># The core parameter, which passes the non-default nixpkgs data source to other modules</span>
+</span></span><span class=line><span class=cl>        <span class=n>specialArgs</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=k>inherit</span> <span class=n>nixpkgs-stable</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>          <span class=k>inherit</span> <span class=n>nixpkgs-fd40cef8d</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>        <span class=n>modules</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>          <span class=sr>./hosts/nixos-test</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>          <span class=c1># omit other configurations...</span>
+</span></span><span class=line><span class=cl>        <span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>And then refer the packages from <code>nix-stable</code> or <code>nixpkgs-fd40cef8d</code> in your corresponding module, for example:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>pkgs</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>  <span class=n>config</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>  <span class=c1># nix will search and jnject this parameter from specialArgs in flake.nix</span>
+</span></span><span class=line><span class=cl>  <span class=n>nixpkgs-stable</span><span class=o>,</span>
+</span></span><span class=line><span class=cl>  <span class=c1># nixpkgs-fd40cef8d,</span>
+</span></span><span class=line><span class=cl>  <span class=o>...</span>
+</span></span><span class=line><span class=cl><span class=p>}:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>let</span>
+</span></span><span class=line><span class=cl>  <span class=c1># To use packages from nixpkgs-stable, we need to configure some parameters for it first</span>
+</span></span><span class=line><span class=cl>  <span class=n>pkgs-stable</span> <span class=o>=</span> <span class=kn>import</span> <span class=n>nixpkgs-stable</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># The Global parameters will be automatically configured to the default pkgs, so we can directly refer to them from pkgs</span>
+</span></span><span class=line><span class=cl>    <span class=n>system</span> <span class=o>=</span> <span class=n>pkgs</span><span class=o>.</span><span class=n>system</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># To use chrome, we need to allow the installation of non-free software</span>
+</span></span><span class=line><span class=cl>    <span class=n>config</span><span class=o>.</span><span class=n>allowUnfree</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=k>in</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1># refer packages from pkgs-stable instead of pkgs</span>
+</span></span><span class=line><span class=cl>  <span class=n>home</span><span class=o>.</span><span class=n>packages</span> <span class=o>=</span> <span class=k>with</span> <span class=n>pkgs-stable</span><span class=p>;</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=n>firefox-wayland</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># chrome wayland support was broken on nixos-unstable branch, so fallback to stable branch for now</span>
+</span></span><span class=line><span class=cl>    <span class=c1># https://github.com/swaywm/sway/issues/7562</span>
+</span></span><span class=line><span class=cl>    <span class=n>google-chrome</span>
+</span></span><span class=line><span class=cl>  <span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=n>programs</span><span class=o>.</span><span class=n>vscode</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>enable</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>package</span> <span class=o>=</span> <span class=n>pkgs-stable</span><span class=o>.</span><span class=n>vscode</span><span class=p>;</span>  <span class=c1># refer vscode from pkgs-stable instead of pkgs</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>After adjusted the configuration, you can deploy it with <code>nixos-rebuild switch</code> to rollback the version of firefox/chrome/vscode.</p><h3 id=9-manage-nixos-configuration-with-git class=headerLink><a href=#9-manage-nixos-configuration-with-git class=header-mark></a>9. Manage NixOS configuration with Git</h3><p>NixOS&rsquo;s configuration file is plain text, so it can be managed with Git just like ordinary dotfiles.</p><p>此外 Nix Flakes 配置也不一定需要放在 <code>/etc/nixos</code> 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。</p><p>On the other hand, <code>flake.nix</code> do not required to be placed in the <code>/etc/nixos</code> directory, they can be placed in any directory, as long as the correct path is specified during deployment.</p><p>For example, my usage is to place the Nix Flakes configuration in the <code>~/nixos-config</code> directory, and then create a soft link in the <code>/etc/nixos</code> directory:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo mv /etc/nixos /etc/nixos.bak  <span class=c1># backup the original configuration</span>
+</span></span><span class=line><span class=cl>sudo ln -s ~/nixos-config/ /etc/nixos
+</span></span></code></pre></td></tr></table></div></div><p>And then you can use Git to manage the configuration in the <code>~/nixos-config</code> directory. The configuration can be used with ordinary user-level permissions, and it is not required to be owned by root.</p><p>Another method is to delete <code>/etc/nixos</code> directly, and specify the configuration file path each time you deploy:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo mv /etc/nixos /etc/nixos.bak
+</span></span><span class=line><span class=cl><span class=nb>cd</span> ~/nixos-config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># deploy the flake.nix located in the current directory</span>
+</span></span><span class=line><span class=cl>sudo nixos-rebuild switch --flake .
+</span></span></code></pre></td></tr></table></div></div><p>Choose whichever you like.</p><h2 id=vii-usage-of-nix-flakes class=headerLink><a href=#vii-usage-of-nix-flakes class=header-mark></a>VII. Usage of Nix Flakes</h2><p>Up to now, we have written a lot of Nix Flakes configurations to manage the NixOS system. Here is a brief introduction to the more detailed content of Nix Flakes, as well as commonly used nix flake commands.</p><h3 id=1-flake-outputs class=headerLink><a href=#1-flake-outputs class=header-mark></a>1. Flake outputs</h3><p>Flake outputs are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:</p><ul><li>Nix packages: named <code>apps.&lt;system>.&lt;name></code>, <code>packages.&lt;system>.&lt;name></code>, or <code>legacyPackages.&lt;system>.&lt;name></code></li><li>Nix Helper Functions: named <code>lib</code>, which means a library for other flakes.</li><li>Nix development environments: named <code>devShell</code></li><li>NixOS configurations: has many different outputs</li><li>Nix templates: named <code>templates</code><ul><li>templates can be used by command <code>nix flake init --template &lt;reference></code></li></ul></li><li>Other user defined outputs</li></ul><h3 id=2-flake-command-line-usage class=headerLink><a href=#2-flake-command-line-usage class=header-mark></a>2. Flake Command Line Usage</h3><p>after enabled <code>nix-command</code> & <code>flake</code>, you can use <code>nix help</code> to get all the info of <a href=https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html target=_blank rel="noopener noreferrer">New Nix Commands</a>, some useful examples are listed below:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># `nixpkgs#ponysay` means `ponysay` from `nixpkgs` flake.</span>
+</span></span><span class=line><span class=cl><span class=c1># [nixpkgs](https://github.com/NixOS/nixpkgs) contains `flake.nix` file, so it&#39;s a flake.</span>
+</span></span><span class=line><span class=cl><span class=c1># `nixpkgs` is a falkeregistry id for `github:NixOS/nixpkgs/nixos-unstable`.</span>
+</span></span><span class=line><span class=cl><span class=c1># you can find all the falkeregistry ids at &lt;https://github.com/NixOS/flake-registry/blob/master/flake-registry.json&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1># so this command means install and run package `ponysay` in `nixpkgs` flake.</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Hello Nix&#34;</span> <span class=p>|</span> nix run <span class=s2>&#34;nixpkgs#ponysay&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># this command is the same as above, but use a full flake URI instead of falkeregistry id.</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Hello Nix&#34;</span> <span class=p>|</span> nix run <span class=s2>&#34;github:NixOS/nixpkgs/nixos-unstable#ponysay&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># instead of treat flake package as an application, </span>
+</span></span><span class=line><span class=cl><span class=c1># this command use the example package in zero-to-nix flake to setup the development environment,</span>
+</span></span><span class=line><span class=cl><span class=c1># and then open a bash shell in that environment.</span>
+</span></span><span class=line><span class=cl>nix develop <span class=s2>&#34;github:DeterminateSystems/zero-to-nix#example&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># instead of using a remote flake, you can open a bash shell using the flake located in the current directory.</span>
+</span></span><span class=line><span class=cl>mkdir my-flake <span class=o>&amp;&amp;</span> <span class=nb>cd</span> my-flake
+</span></span><span class=line><span class=cl><span class=c1>## init a flake with template</span>
+</span></span><span class=line><span class=cl>nix flake init --template <span class=s2>&#34;github:DeterminateSystems/zero-to-nix#javascript-dev&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># open a bash shell using the flake in current directory</span>
+</span></span><span class=line><span class=cl>nix develop
+</span></span><span class=line><span class=cl><span class=c1># or if your flake has multiple devShell outputs, you can specify which one to use.</span>
+</span></span><span class=line><span class=cl>nix develop .#example
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># build package `bat` from flake `nixpkgs`, and put a symlink `result` in the current directory.</span>
+</span></span><span class=line><span class=cl>mkdir build-nix-package <span class=o>&amp;&amp;</span> <span class=nb>cd</span> build-nix-package
+</span></span><span class=line><span class=cl>nix build <span class=s2>&#34;nixpkgs#bat&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># build a local flake is the same as nix develop, skip it</span>
+</span></span></code></pre></td></tr></table></div></div><p><a href=https://github.com/DeterminateSystems/zero-to-nix target=_blank rel="noopener noreferrer">Zero to Nix - Determinate Systems</a> is a brand new guide to get started with Nix & Flake, recommended to read for beginners.</p><h2 id=viii-nixpkgss-advanced-usage class=headerLink><a href=#viii-nixpkgss-advanced-usage class=header-mark></a>VIII. Nixpkgs&rsquo;s Advanced Usage</h2><p><code>callPackage</code>, <code>Overriding</code>, and <code>Overlays</code> are the techniques occasionally used when using Nix to customize the build method of Nix packages.</p><p>We know that many programs have a large number of build parameters that need to be configured, and different users may want to use different build parameters. This is where <code>Overriding</code> and <code>Overlays</code> come in handy. Let me give you a few examples I have encountered:</p><ol><li><a href=https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix target=_blank rel="noopener noreferrer"><code>fcitx5-rime.nix</code></a>: By default, <code>rimeDataPkgs</code> for <code>fcitx5-rime</code> uses the <code>rime-data</code> package, but this parameter can be customized using <code>override</code> to load custom rime configurations (such as loading the Xiaohe keyboard input method configuration).</li><li><a href=https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix target=_blank rel="noopener noreferrer"><code>vscode/with-extensions.nix</code></a>: This package for VS Code can also be customized by overriding the value of the <code>vscodeExtensions</code> parameter to install custom plugins.<ul><li><a href=https://github.com/nix-community/nix-vscode-extensions target=_blank rel="noopener noreferrer"><code>nix-vscode-extensions</code></a>: This is a vscode plugin manager implemented using this parameter.</li></ul></li><li><a href=https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix target=_blank rel="noopener noreferrer"><code>firefox/common.nix</code></a>: Firefox also has many customizable parameters.</li><li>&mldr;</li></ol><p>In short, in order to customize the build parameters of Nix packages of this type, we need to use <code>Overriding</code> or <code>Overlays</code>.</p><h3 id=overriding class=headerLink><a href=#overriding class=header-mark></a>Overriding</h3><blockquote><p><a href=https://nixos.org/manual/nixpkgs/stable/#chap-overrides target=_blank rel="noopener noreferrer">Chapter 4. Overriding - nixpkgs Manual</a></p></blockquote><p>Simply put, all Nix packages in nixpkgs can be customized with <code>&lt;pkg>.override {}</code> to define some build parameters, which returns a new Derivation that uses custom parameters. For example:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=n>pkgs</span><span class=o>.</span><span class=n>fcitx5-rime</span><span class=o>.</span><span class=n>override</span> <span class=p>{</span><span class=n>rimeDataPkgs</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=sr>./rime-data-flypy</span>
+</span></span><span class=line><span class=cl>  <span class=p>];}</span>
+</span></span></code></pre></td></tr></table></div></div><p>The result of executing the above Nix expression is a new Derivation, where the <code>rimeDataPkgs</code> parameter is overridden as <code>[./rime-data-flypy]</code>, while other parameters retain their original values.</p><p>In addition to overriding parameters, you can also override the attributes of a Derivation built using <code>stdenv.mkDerivation</code> by using <code>overrideAttrs</code>. For example:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=n>helloWithDebug</span> <span class=err>=</span> <span class=n>pkgs</span><span class=o>.</span><span class=n>hello</span><span class=o>.</span><span class=n>overrideAttrs</span> <span class=p>(</span><span class=n>finalAttrs</span><span class=p>:</span> <span class=n>previousAttrs</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>separateDebugInfo</span> <span class=o>=</span> <span class=no>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span></code></pre></td></tr></table></div></div><p>In this example, <code>helloWithDebug</code> is a new Derivation, where the <code>separateDebugInfo</code> parameter is overridden as <code>true</code>, while other parameters retain their original values.</p><h3 id=overlays class=headerLink><a href=#overlays class=header-mark></a>Overlays</h3><blockquote><p><a href=https://nixos.org/manual/nixpkgs/stable/#chap-overlays target=_blank rel="noopener noreferrer">Chapter 3. Overlays - nixpkgs Manual</a></p></blockquote><p>TODO I haven&rsquo;t fully understood this part yet</p><h2 id=ix-nix-packaging class=headerLink><a href=#ix-nix-packaging class=header-mark></a>IX. Nix Packaging</h2><p>TODO I haven&rsquo;t fully understood this part yet.</p><h2 id=advanced-usage class=headerLink><a href=#advanced-usage class=header-mark></a>Advanced Usage</h2><p>After becoming familiar with the Nix toolchain, you can further explore Nix&rsquo;s three manuals to discover more ways to use it:</p><ul><li><a href=https://nixos.org/manual/nix/stable/package-management/profiles.html target=_blank rel="noopener noreferrer">Nix Reference Manual</a>: A guide to the Nix package manager, which mainly covers the design of the package manager and instructions for using it from the command line.</li><li><a href=https://nixos.org/manual/nixpkgs/unstable/ target=_blank rel="noopener noreferrer">nixpkgs Manual</a>: A manual that introduces parameters of Nixpkgs, how to use, modify, and package Nix packages.</li><li><a href=https://nixos.org/manual/nixos/unstable/ target=_blank rel="noopener noreferrer">NixOS Manual</a>: A user manual for the NixOS system, mainly including configuration instructions for system-level components such as Wayland/X11 and GPU.</li><li><a href=https://nixos.org/guides/nix-pills target=_blank rel="noopener noreferrer">nix-pills</a>: Nix Pills provides an in-depth explanation of how to use Nix to build software packages. It is written in a clear and understandable way and is worth reading, as it is also sufficiently in-depth.</li></ul><p>After becoming familiar with Nix Flakes, you can try some advanced techniques. Here are some popular community projects to try:</p><ul><li><a href=https://github.com/hercules-ci/flake-parts target=_blank rel="noopener noreferrer">flake-parts</a>: Simplify the writing and maintenance of configuration through the Module module system.</li><li><a href=https://github.com/gytis-ivaskevicius/flake-utils-plus target=_blank rel="noopener noreferrer">flake-utils-plus</a>: A third-party package for simplifying Flake configuration, which is apparently more powerful.</li><li><a href=https://github.com/numtide/devshell target=_blank rel="noopener noreferrer">devshell</a>: As the name suggests.</li><li><a href=https://github.com/divnix/digga target=_blank rel="noopener noreferrer">digga</a>: A large and comprehensive Flake template that combines the functionality of various useful Nix toolkits, but has a complex structure and requires some experience to navigate.</li><li>etc.</li></ul><h2 id=references class=headerLink><a href=#references class=header-mark></a>References</h2><p>Here are some useful resources that I have referred to:</p><ul><li><a href=https://github.com/DeterminateSystems/zero-to-nix target=_blank rel="noopener noreferrer">Zero to Nix - Determinate Systems</a>: A beginner-friendly Nix Flakes tutorial that is worth reading.</li><li><a href=https://lantian.pub/article/modify-website/nixos-why.lantian/ target=_blank rel="noopener noreferrer">NixOS series(in Chinese)</a>: LanTian&rsquo;s NixOS series of articles, which are very clear and easy to understand, and a must-read for beginners.</li><li><a href=https://www.tweag.io/blog/2020-05-25-flakes/ target=_blank rel="noopener noreferrer">Nix Flakes Series</a>: An official Nix Flakes tutorial series, which provides a relatively detailed introduction and is suitable for beginners.</li><li><a href=https://nixos.wiki/wiki/Flakes target=_blank rel="noopener noreferrer">Nix Flakes - Wiki</a>: The official Nix Flakes wiki, which provides a relatively rough introduction.</li><li><a href=https://github.com/ryan4yin/nix-config target=_blank rel="noopener noreferrer">ryan4yin/nix-config</a>: My NixOS configuration repository, which also lists other configuration repositories that I have referred to in the README.</li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2023-05-10</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=# onclick=return!1 title="Share on Twitter" data-sharer=twitter data-url=https://thiscute.world/en/posts/nixos-and-flake-basics/ data-title="NixOS & Nix Flakes Guide for Beginners" data-via=ryan4yin data-hashtags=NixOS,Nix,Flakes,Linux,DevOps><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="Share on Facebook" data-sharer=facebook data-url=https://thiscute.world/en/posts/nixos-and-flake-basics/ data-hashtag=NixOS><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="Share on Reddit" data-sharer=reddit data-url=https://thiscute.world/en/posts/nixos-and-flake-basics/><i class="fab fa-reddit fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/en/tags/nixos/>NixOS</a>,&nbsp;<a href=/en/tags/nix/>Nix</a>,&nbsp;<a href=/en/tags/flakes/>Flakes</a>,&nbsp;<a href=/en/tags/linux/>Linux</a>,&nbsp;<a href=/en/tags/devops/>DevOps</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/en/>Home</a></span></section></div><div class=post-nav><a href=/en/posts/2021-summary/ class=prev rel=prev title="Summary of My 2021"><i class="fas fa-angle-left fa-fw"></i>Summary of My 2021</a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=width:auto;height:15px;margin-bottom:5px></a> <a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=width:auto;height:24px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.110.0">Hugo</a>&nbsp;|&nbsp;Theme - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw"></i></a></div><div class=assets><link rel=stylesheet href=/lib/lightgallery/lightgallery.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},lightGallery:{actualSize:!1,exThumbImage:"data-thumbnail",hideBarsDelay:2e3,selector:".lightgallery",speed:400,thumbContHeight:80,thumbWidth:80,thumbnail:!0},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/algoliasearch/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lightgallery/lightgallery.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-thumbnail.min.js></script><script type=text/javascript src=/lib/lightgallery/lg-zoom.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js defer></script><script type=text/javascript src=/lib/katex/auto-render.min.js defer></script><script type=text/javascript src=/lib/katex/copy-tex.min.js defer></script><script type=text/javascript src=/lib/katex/mhchem.min.js defer></script><script type=text/javascript src=/js/katex.min.js defer></script><script type=text/javascript src=/js/theme.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></div></body></html>

@@ -57,7 +57,6 @@
 </li>
 <li>可回滚：可以随时回滚到任一历史环境，NixOS 甚至默认将所有旧版本都加入到了启动项，确保系统滚挂了也能随时回退。所以 Nix 也被认为是最稳定的包管理方式。</li>
 <li>没有依赖冲突问题：因为 Nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。</li>
-<li>NixOS 的可自定义程度非常高，系统的绝大多数组件都可以通过简单的声明式配置来自定义，而且也可以很方便地将自己的定制配置分享给他人。</li>
 <li>社区很活跃，第三方项目也挺丰富，官方包仓库 nixpkgs 贡献者众多，也有很多人分享自己的 Nix 配置，一遍浏览下来，整个生态给我一种发现新大陆的兴奋感。</li>
 </ul>
 <figure><img src="./nixos-bootloader.avif"
@@ -95,7 +94,7 @@
 <p>目前 Nix 社区的绝大多数文档仍然只介绍了传统 Nix，不包含 Nix Flakes 相关的内容，但是从可复现、易于管理维护的角度讲，旧的 Nix 包结构与命令行工具已经不推荐使用了，因此本文档也不会介绍旧的 Nix 包结构与命令行工具的使用方法，也建议新手直接忽略掉这些旧的内容，从 <code>nix-command</code> &amp; <code>flakes</code> 学起。</p>
 <p>这里列举下在 <code>nix-command</code> &amp; <code>flakes</code> 中已经不需要用到的旧的 Nix 命令行工具与相关概念，在查找资料时，如果看到它们直接忽略掉就行：</p>
 <ol>
-<li><code>nix-channel</code>: nix-channel 与其他包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
+<li><code>nix-channel</code>: nix-channel 与 apt/yum/pacman 等其他 Linux 发行版的包管理工具类似，通过 stable/unstable/test 等 channel 来管理软件包的版本。
 <ol>
 <li>Nix Flakes 在 flake.nix 中通过 inputs 声明依赖包的数据源，通过 flake.lock 锁定依赖版本，完全取代掉了 nix-channel 的功能。</li>
 </ol>
@@ -117,16 +116,16 @@
 </li>
 <li>&hellip;</li>
 </ol>
-<h2 id="五nixos-的-flakes-包仓库" class="headerLink">
-    <a href="#%e4%ba%94nixos-%e7%9a%84-flakes-%e5%8c%85%e4%bb%93%e5%ba%93" class="header-mark"></a>五、NixOS 的 Flakes 包仓库</h2><p>跟 Arch Linux 类似，Nix 也有官方与社区的软件包仓库：</p>
+<h2 id="四nixos-的-flakes-包仓库" class="headerLink">
+    <a href="#%e5%9b%9bnixos-%e7%9a%84-flakes-%e5%8c%85%e4%bb%93%e5%ba%93" class="header-mark"></a>四、NixOS 的 Flakes 包仓库</h2><p>跟 Arch Linux 类似，Nix 也有官方与社区的软件包仓库：</p>
 <ol>
 <li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> 是一个包含了所有 Nix 包与 NixOS 模块/配置的 Git 仓库，其 master 分支包含最新的 Nix 包与 NixOS 模块/配置。</li>
 <li><a href="https://github.com/nix-community/NUR" target="_blank" rel="noopener noreferrer">NUR</a>: 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。</li>
 <li>Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包</li>
 </ol>
-<h2 id="六nix-语言基础" class="headerLink">
-    <a href="#%e5%85%adnix-%e8%af%ad%e8%a8%80%e5%9f%ba%e7%a1%80" class="header-mark"></a>六、Nix 语言基础</h2><blockquote>
-<p><a href="https://nix.dev/tutorials/nix-language" target="_blank" rel="noopener noreferrer">https://nix.dev/tutorials/nix-language</a></p>
+<h2 id="五nix-语言基础" class="headerLink">
+    <a href="#%e4%ba%94nix-%e8%af%ad%e8%a8%80%e5%9f%ba%e7%a1%80" class="header-mark"></a>五、Nix 语言基础</h2><blockquote>
+<p><a href="https://nix.dev/tutorials/first-steps/nix-language" target="_blank" rel="noopener noreferrer">https://nix.dev/tutorials/first-steps/nix-language</a></p>
 </blockquote>
 <p>Nix 语言是 Nix 的基础，要想玩得转 NixOS 与 Nix Flakes，享受到它们带来的诸多好处，就必须学会这门语言。</p>
 <p>Nix 是一门比较简单的函数式语言，在已有一定编程基础的情况下，过一遍这些语法用时应该在 2 个小时以内。</p>
@@ -575,18 +574,18 @@
 <p>Store Object 的存放路径格式为 <code>/nix/store/&lt;hash&gt;-&lt;name&gt;</code>，其中 <code>&lt;hash&gt;</code> 是构建结果的 hash 值，<code>&lt;name&gt;</code> 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。</p>
 <p><code>/nix/store</code> 被称为 Store，存放所有的 Store Objects，这个路径被设置为只读，只有 Nix 本身才能修改这个路径下的内容，以保证系统的可复现性。</p>
 <p>在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 <code>derivation</code> 创建的，我们实际使用的 <code>stdenv.mkDerivation</code> 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。</p>
-<h2 id="七以声明式的方式管理系统" class="headerLink">
-    <a href="#%e4%b8%83%e4%bb%a5%e5%a3%b0%e6%98%8e%e5%bc%8f%e7%9a%84%e6%96%b9%e5%bc%8f%e7%ae%a1%e7%90%86%e7%b3%bb%e7%bb%9f" class="header-mark"></a>七、以声明式的方式管理系统</h2><blockquote>
+<h2 id="六以声明式的方式管理系统" class="headerLink">
+    <a href="#%e5%85%ad%e4%bb%a5%e5%a3%b0%e6%98%8e%e5%bc%8f%e7%9a%84%e6%96%b9%e5%bc%8f%e7%ae%a1%e7%90%86%e7%b3%bb%e7%bb%9f" class="header-mark"></a>六、以声明式的方式管理系统</h2><blockquote>
 <p><a href="https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution" target="_blank" rel="noopener noreferrer">https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution</a></p>
 </blockquote>
 <p>了解了 Nix 语言的基本用法之后，我们就可以开始使用 Nix 语言来配置 NixOS 系统了。NixOS 的系统配置路径为 <code>/etc/nixos/configuration.nix</code>，它包含系统的所有声明式配置，如时区、语言、键盘布局、网络、用户、文件系统、启动项等。</p>
 <p>如果想要以可复现的方式修改系统的状态（这也是最推荐的方式），就需要手工修改 <code>/etc/nixos/configuration.nix</code> 文件，然后执行 <code>sudo nixos-rebuild switch</code> 命令来应用配置，此命令会根据配置文件生成一个新的系统环境，并将新的环境设为默认环境。
 同时上一个系统环境会被保留，而且会被加入到 grub 的启动项中，这确保了即使新的环境不能启动，也能随时回退到旧环境。</p>
-<p>另一方面，<code>/etc/nixos/configuration.nix</code> 是传统的 Nix 配置方式，它依赖 nix-channel 配置的数据源，也没有任何版本锁定机制，实际无法确保系统的可复现性。
-更推荐使用的是 Nix Flakes，它可以确保系统的可复现性，同时也可以很方便地管理系统的配置。</p>
+<p>另一方面，<code>/etc/nixos/configuration.nix</code> 是传统的 Nix 配置方式，它依赖 <code>nix-channel</code> 配置的数据源，也没有任何版本锁定机制，实际无法确保系统的可复现性。
+<strong>更推荐使用的是 Nix Flakes</strong>，它可以确保系统的可复现性，同时也可以很方便地管理系统的配置。</p>
 <p>我们下面首先介绍下通过 NixOS 默认的配置方式来管理系统，然后再过渡到更先进的 Nix Flakes.</p>
 <h3 id="1-使用-etcnixosconfigurationnix-配置系统" class="headerLink">
-    <a href="#1-%e4%bd%bf%e7%94%a8-etcnixosconfigurationnix-%e9%85%8d%e7%bd%ae%e7%b3%bb%e7%bb%9f" class="header-mark"></a>1. 使用 <code>/etc/nixos/configuration.nix</code> 配置系统</h3><p>前面提过了这是传统的 Nix 配置方式，也是当前 NixOS 默认使用的配置方式，它依赖 nix-channel 配置的数据源，也没有任何版本锁定机制，实际无法确保系统的可复现性。</p>
+    <a href="#1-%e4%bd%bf%e7%94%a8-etcnixosconfigurationnix-%e9%85%8d%e7%bd%ae%e7%b3%bb%e7%bb%9f" class="header-mark"></a>1. 使用 <code>/etc/nixos/configuration.nix</code> 配置系统</h3><p>前面提过了这是传统的 Nix 配置方式，也是当前 NixOS 默认使用的配置方式，它依赖 <code>nix-channel</code> 配置的数据源，也没有任何版本锁定机制，实际无法确保系统的可复现性。</p>
 <p>简单起见我们先使用这种方式来配置系统，后面会介绍 Flake 的使用。</p>
 <p>比如要启用 ssh 并添加一个用户 ryan，只需要在 <code>/etc/nixos/configuration.nix</code> 中添加如下配置：</p>
 <div class="highlight"><div class="chroma">
@@ -868,18 +867,18 @@
 </span></span><span class="line"><span class="cl">        <span class="c1"># 说半份是因为它的文档不全，只有一些简单的介绍（Nix 文档现状...）</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># Nix Module 可以是一个 attribute set，也可以是一个返回 attribute set 的函数</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># 如果是函数，那么它的参数就是当前的 NixOS Module 的参数.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># 根据 Nix Wiki 对 Nix modules 的描述，Nix modules 函数的参数可以有这四个（详见本仓库中的 modules 文件）：</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 根据 Nix Wiki 对 Nix modules 的描述，Nix modules 函数的参数可以有这四个：</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># </span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  config: The configuration of the entire system</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  options: All option declarations refined with all definition and declaration references.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: The location of the module directory of NixOS.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: The location of the module directory of Nix.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># Nix 模块系统可将配置模块化，提升配置的可维护性</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="c1"># 导入之前我们使用的 configuration.nix，这样旧的配置文件仍然能生效</span>
-</span></span><span class="line"><span class="cl">          <span class="c1"># 注：configuration.nix 本身也是一个 NixOS Module，因此可以直接在这里导入</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># 注：configuration.nix 本身也是一个 Nix Module，因此可以直接在这里导入</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./configuration.nix</span>
 </span></span><span class="line"><span class="cl">        <span class="p">];</span>
 </span></span><span class="line"><span class="cl">      <span class="p">};</span>
@@ -889,9 +888,9 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里我们定义了一个名为 <code>nixos-test</code> 的系统，它的配置文件为 <code>./configuration.nix</code>，这个文件就是我们之前的配置文件，这样我们仍然可以沿用旧的配置。</p>
-<p>现在执行 <code>nixos-rebuild switch</code> 应用配置，系统应该没有任何变化，因为我们仅仅是切换到了 Nix Flakes，配置内容与之前还是一致的。</p>
+<p>现在执行 <code>sudo nixos-rebuild switch</code> 应用配置，系统应该没有任何变化，因为我们仅仅是切换到了 Nix Flakes，配置内容与之前还是一致的。</p>
 <h3 id="4-为-flake-添加国内-cache-源" class="headerLink">
-    <a href="#4-%e4%b8%ba-flake-%e6%b7%bb%e5%8a%a0%e5%9b%bd%e5%86%85-cache-%e6%ba%90" class="header-mark"></a>4. 为 Flake 添加国内 cache 源</h3><p>NixOS 为了加快包构建速度，提供了 <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> 提前缓存构建结果提供给用户，另一方面几乎所有 Flakes 的数据源都是 Github 的某个仓库。
+    <a href="#4-%e4%b8%ba-flake-%e6%b7%bb%e5%8a%a0%e5%9b%bd%e5%86%85-cache-%e6%ba%90" class="header-mark"></a>4. 为 Flake 添加国内 cache 源</h3><p>Nix 为了加快包构建速度，提供了 <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> 提前缓存构建结果提供给用户，另一方面几乎所有 Flakes 的数据源都是 Github 的某个仓库。
 但是在国内官方的 cache 地址跟 Github 都非常地慢，如果没有全局代理的话，基本上是无法使用的。</p>
 <p>在旧的 NixOS 配置方式中，可以通过 <code>nix-channel</code> 来添加国内的 cache 镜像源，但是 Nix Flakes 会尽可能地避免使用任何系统级别的配置跟环境变量，以确保其构建结果不受环境的影响。因此为了自定义 cache 镜像源，我们必须在 <code>flake.nix</code> 中添加相关配置，这就是 <code>nixConfig</code> 参数，示例如下：</p>
 <div class="highlight"><div class="chroma">
@@ -979,9 +978,8 @@
 <p>注：上述手段只能加速部分包的下载，许多 inputs 数据源仍然会从 Github 拉取，另外如果找不到缓存，会执行本地构建，这通常仍然需要从国外下载源码与构建依赖，因此仍然会很慢。为了完全解决速度问题，仍然建议使用旁路由等局域网全局代理方案。</p>
 </blockquote>
 <h3 id="5-安装-home-manager" class="headerLink">
-    <a href="#5-%e5%ae%89%e8%a3%85-home-manager" class="header-mark"></a>5. 安装 home-manager</h3><p>前面简单提过，NixOS 自身的配置文件只能管理系统级别的配置，而用户级别的配置则需要使用 home-manager 来管理。
-根据官方文档 <a href="https://nix-community.github.io/home-manager/index.htm" target="_blank" rel="noopener noreferrer">Home Manager Manual</a>，安装流程如下：</p>
-<p>我希望将 home manager 作为 NixOS 模块安装，首先需要创建 <code>/etc/nixos/home.nix</code>，示例如下：</p>
+    <a href="#5-%e5%ae%89%e8%a3%85-home-manager" class="header-mark"></a>5. 安装 home-manager</h3><p>前面简单提过，NixOS 自身的配置文件只能管理系统级别的配置，而用户级别的配置则需要使用 home-manager 来管理。</p>
+<p>根据官方文档 <a href="https://nix-community.github.io/home-manager/index.htm" target="_blank" rel="noopener noreferrer">Home Manager Manual</a>，要将 home manager 作为 NixOS 模块安装，首先需要创建 <code>/etc/nixos/home.nix</code>，配置方法如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1218,7 +1216,7 @@
 </span></span><span class="line"><span class="cl">            <span class="n">home-manager</span><span class="o">.</span><span class="n">useUserPackages</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="c1"># 这里的 ryan 也得替换成你的用户名</span>
-</span></span><span class="line"><span class="cl">            <span class="c1"># 这里的 import 指令在前面 Nix 语法中介绍过了，不再赘述</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 这里的 import 函数在前面 Nix 语法中介绍过了，不再赘述</span>
 </span></span><span class="line"><span class="cl">            <span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span> <span class="o">=</span> <span class="kn">import</span> <span class="sr">./home.nix</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="c1"># 使用 home-manager.extraSpecialArgs 自定义传递给 ./home.nix 的参数</span>
@@ -1234,7 +1232,7 @@
 </div>
 </div><p>然后执行 <code>sudo nixos-rebuild switch</code> 应用配置，即可完成 home-manager 的安装。</p>
 <p>安装完成后，所有用户级别的程序、配置，都可以通过 <code>/etc/nixos/home.nix</code> 管理，并且执行 <code>sudo nixos-rebuild switch</code> 时也会自动应用 home-manager 的配置。</p>
-<p>Home Manager 的配置项有这几种查找方式：</p>
+<p><code>home.nix</code> 中 Home Manager 的配置项有这几种查找方式：</p>
 <ul>
 <li><a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">Home Manager - Appendix A. Configuration Options</a>: 一份包含了所有配置项的列表，建议在其中关键字搜索。</li>
 <li><a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>: 有些配置项在官方文档中没有列出，或者文档描述不够清晰，可以直接在这份 home-manager 的源码中搜索阅读对应的源码。</li>
@@ -1599,8 +1597,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>两种方式都可以，看个人喜好。</p>
-<h2 id="八nix-flakes-的使用" class="headerLink">
-    <a href="#%e5%85%abnix-flakes-%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>八、Nix Flakes 的使用</h2><p>到这里我们已经写了不少 Nix Flakes 配置来管理 NixOS 系统了，这里再简单介绍下 Nix Flakes 更细节的内容，以及常用的 nix flake 命令。</p>
+<h2 id="七nix-flakes-的使用" class="headerLink">
+    <a href="#%e4%b8%83nix-flakes-%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>七、Nix Flakes 的使用</h2><p>到这里我们已经写了不少 Nix Flakes 配置来管理 NixOS 系统了，这里再简单介绍下 Nix Flakes 更细节的内容，以及常用的 nix flake 命令。</p>
 <h3 id="1-flake-的-outputs" class="headerLink">
     <a href="#1-flake-%e7%9a%84-outputs" class="header-mark"></a>1. Flake 的 outputs</h3><p><code>flake.nix</code> 中的 <code>outputs</code> 是一个 attribute set，是整个 Flake 的构建结果，每个 Flake 都可以有许多不同的 outputs，outputs 大致有如下这些类型：</p>
 <ul>
@@ -1613,37 +1611,6 @@
 </ul>
 <h3 id="2-flake-命令行的使用" class="headerLink">
     <a href="#2-flake-%e5%91%bd%e4%bb%a4%e8%a1%8c%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>2. Flake 命令行的使用</h3><p>在启用了 <code>nix-command</code> &amp; <code>flakes</code> 功能后，我们就可以使用 Nix 提供的新一代 Nix 命令行工具 <a href="https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html" target="_blank" rel="noopener noreferrer">New Nix Commands</a> 了，下面列举下其中常用命令的用法：</p>
-<!-- 
-```bash
-# `nixpkgs#ponysay` means `ponysay` from `nixpkgs` flake.
-# [nixpkgs](https://github.com/NixOS/nixpkgs) contains `flake.nix` file, so it's a flake.
-# `nixpkgs` is a falkeregistry id for `github:NixOS/nixpkgs/nixos-unstable`.
-# you can find all the falkeregistry ids at <https://github.com/NixOS/flake-registry/blob/master/flake-registry.json>
-# so this command means install and run package `ponysay` in `nixpkgs` flake.
-echo "Hello Nix" | nix run "nixpkgs#ponysay"
-
-# this command is the same as above, but use a full flake URI instead of falkeregistry id.
-echo "Hello Nix" | nix run "github:NixOS/nixpkgs/nixos-unstable#ponysay"
-
-# instead of treat flake package as an application, 
-# this command use the example package in zero-to-nix flake to setup the development environment,
-# and then open a bash shell in that environment.
-nix develop "github:DeterminateSystems/zero-to-nix#example"
-
-# instead of using a remote flake, you can open a bash shell using the flake located in the current directory.
-mkdir my-flake && cd my-flake
-## init a flake with template
-nix flake init --template "github:DeterminateSystems/zero-to-nix#javascript-dev"
-# open a bash shell using the flake in current directory
-nix develop
-# or if your flake has multiple devShell outputs, you can specify which one to use.
-nix develop .#example
-
-# build package `bat` from flake `nixpkgs`, and put a symlink `result` in the current directory.
-mkdir build-nix-package && cd build-nix-package
-nix build "nixpkgs#bat"
-# build a local flake is the same as nix develop, skip it
-``` -->
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1705,8 +1672,8 @@ nix build "nixpkgs#bat"
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>此外 <a href="https://github.com/DeterminateSystems/zero-to-nix" target="_blank" rel="noopener noreferrer">Zero to Nix - Determinate Systems</a> 是一份全新的 Nix &amp; Flake 新手入门文档，写得比较浅显易懂，适合新手用来入门。</p>
-<h2 id="九nixpkgs-的高级用法" class="headerLink">
-    <a href="#%e4%b9%9dnixpkgs-%e7%9a%84%e9%ab%98%e7%ba%a7%e7%94%a8%e6%b3%95" class="header-mark"></a>九、Nixpkgs 的高级用法</h2><p>callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的两种技术，它们都是用来自定义 Nix 包的构建方法的。</p>
+<h2 id="八nixpkgs-的高级用法" class="headerLink">
+    <a href="#%e5%85%abnixpkgs-%e7%9a%84%e9%ab%98%e7%ba%a7%e7%94%a8%e6%b3%95" class="header-mark"></a>八、Nixpkgs 的高级用法</h2><p>callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技术，它们都是用来自定义 Nix 包的构建方法的。</p>
 <p>我们知道许多程序都有大量构建参数需要配置，不同的用户会希望使用不同的构建参数，这时候就需要 Overriding 与 Overlays 来实现。我举几个我遇到过的例子：</p>
 <ol>
 <li><a href="https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix" target="_blank" rel="noopener noreferrer">fcitx5-rime.nix</a>: fcitx5-rime 的 <code>rimeDataPkgs</code> 默认使用 <code>rime-data</code> 包，但是也可以通过 override 来自定义该参数的值，以加载自定义的 rime 配置（比如加载小鹤音形输入法配置）。</li>
@@ -1840,8 +1807,8 @@ nix build "nixpkgs#bat"
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>此外第三方库也提供了一些 Overlays 的简化配置方法，比如 <a href="https://flake.parts/overlays.html" target="_blank" rel="noopener noreferrer">Overlays - flake-parts</a></p>
-<h2 id="十使用-nix-flakes-打包应用" class="headerLink">
-    <a href="#%e5%8d%81%e4%bd%bf%e7%94%a8-nix-flakes-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>十、使用 Nix Flakes 打包应用</h2><blockquote>
+<h2 id="九使用-nix-flakes-打包应用" class="headerLink">
+    <a href="#%e4%b9%9d%e4%bd%bf%e7%94%a8-nix-flakes-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>九、使用 Nix Flakes 打包应用</h2><blockquote>
 <p>参考 <a href="https://lantian.pub/article/modify-computer/nixos-packaging.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（三）：软件打包，从入门到放弃</a></p>
 </blockquote>
 <p>有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。</p>
