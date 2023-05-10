@@ -865,13 +865,13 @@ In this example, `helloWithDebug` is a new Derivation, where the `separateDebugI
 
 ### Overlays
 
->[Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
+>refer [Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
 
 TODO I haven't fully understood this part yet
 
 ## IX. Nix Packaging
 
->https://lantian.pub/en/article/modify-computer/nixos-packaging.lantian/
+>refer: [NixOS Series 3: Software Packaging 101 - Lan Tian @ Blog](https://lantian.pub/en/article/modify-computer/nixos-packaging.lantian/)
 
 TODO I haven't fully understood this part yet.
 
