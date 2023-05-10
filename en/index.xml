@@ -1265,7 +1265,7 @@ Therefore, in order to customize the cache image source, we must add the related
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">pkgs</span><span class="o">.</span><span class="n">fcitx5-rime</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span><span class="n">rimeDataPkgs</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="sr">./rime-data-flypy</span>
-</span></span><span class="line"><span class="cl">  <span class="p">];}</span>
+</span></span><span class="line"><span class="cl"><span class="p">];}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>The result of executing the above Nix expression is a new Derivation, where the <code>rimeDataPkgs</code> parameter is overridden as <code>[./rime-data-flypy]</code>, while other parameters retain their original values.</p>

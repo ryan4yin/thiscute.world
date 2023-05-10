@@ -1162,7 +1162,7 @@
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=n>pkgs</span><span class=o>.</span><span class=n>fcitx5-rime</span><span class=o>.</span><span class=n>override</span> <span class=p>{</span><span class=n>rimeDataPkgs</span> <span class=o>=</span> <span class=p>[</span>
 </span></span><span class=line><span class=cl>    <span class=sr>./rime-data-flypy</span>
-</span></span><span class=line><span class=cl>  <span class=p>];}</span>
+</span></span><span class=line><span class=cl><span class=p>];}</span>
 </span></span></code></pre></td></tr></table></div></div><p>上面这个 Nix 表达式的执行结果就是一个新的 Derivation，它的 <code>rimeDataPkgs</code> 参数被覆盖为 <code>[./rime-data-flypy]</code>，而其他参数则沿用原来的值。</p><p>除了覆写参数，还可以通过 <code>overrideAttrs</code> 来覆写使用 <code>stdenv.mkDerivation</code> 构建的 Derivation 的属性，比如：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
