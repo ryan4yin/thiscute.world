@@ -29,7 +29,7 @@ I will continue to try my best to repair and improve the content in the future, 
 
 ## 0. Why Nix
 
-I heard about Nix several years ago. It uses [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) to manage system dependencies and can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
+I heard about the Nix package manager several years ago. It uses [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) to manage system dependencies, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
 
 But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.
 
@@ -61,7 +61,7 @@ Now that the background information is out of the way, it's time to dive into th
 
 Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using [DSL](https://en.wikipedia.org/wiki/Domain-specific_language), and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.
 
->To put it simply, "declarative configuration" means that users only need to declare the results they want. For example, you declares that you want to replace the i3 windows manager with sway, then Nix will help you achieve the goal. You don't need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway's nix packages are designed properly...).
+>To put it simply, "declarative configuration" means that users only need to declare the results they want. For example, you declares that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don't need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway's nix packages are designed properly...).
 
 The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as "OS as Code", which describes the entire operating system's state using declarative Nix configuration files.
 
@@ -89,7 +89,7 @@ Due to Nix's declarative and reproducible features, Nix is not only used to mana
 
 - **Relatively high learning curve:**: If you want the system to be completely reproducible and avoid pitfalls caused by improper use, you need to learn about the entire design of Nix and manage the system in a declarative manner. You cannot blindly use `nix-env -i` (which is similar to `apt-get install`).
 - **Chaotic documentation**: Firstly, Nix Flakes is still an experimental feature, and there are currently relatively few documents introducing it. Secondly, most of the Nix community's documentation only introduces the old `nix-env`/`nix-channel`. If you want to start learning Nix directly from Nix Flakes, you need to refer to a large number of old documents and extract what you need from them. In addition, some of Nix's current core functions are not well-documented (such as `imports` and Nixpkgs Module System), so it is best to look at the source code to understand them.
-- ~~Relatively few packages~~: Retract this one. The official claim is that nixpkgs has [80000+](https://search.nixos.org/packages) packages, and indeed, most packages can be found in nixpkgs。
+- ~~Relatively few packages~~: Retract this one. The official claim is that nixpkgs has [80000+](https://search.nixos.org/packages) packages, and indeed, most packages can be found in nixpkgs.
 - **Relatively high disk space usage**: To ensure that the system can be rolled back at any time, Nix preserves all historical environments by default, which can take up a lot of disk space. Although you can manually clean up old historical environments periodically with `nix-collect-garbage`, it is still recommended to buy a larger hard drive.
 
 ### Summary
@@ -267,13 +267,13 @@ Now run `sudo nixos-rebuild switch` to apply the changes, and then you can use N
 
 After enabling the Nix Flakes feature, the `sudo nixos-rebuild switch` command will prioritize reading the `/etc/nixos/flake.nix` file. If not found, it will fallback to `/etc/nixos/configuration.nix`.
 
-You can first use the official flake templates provided by Nix to learn how to write flakes, check which templates are available using the following command:
+Now let's use the official flake templates provided by Nix to learn how to write flakes, check which templates are available using the following command:
 
 ```bash
 nix flake show templates
 ```
 
-One of the templates, `templates#full`, shows all possible uses. now take a look at its contents:
+One of the templates, `templates#full`, shows all possible uses., take a look at its contents:
 
 ```bash
 nix flake init -t templates#full
@@ -281,15 +281,16 @@ cat flake.nix
 ```
 
 
-We create the file `/ etc/nixos/flake.nix` and write the configuration content according to this template. All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:
+Now create a file `/etc/nixos/flake.nix` and write the configuration content according to the template above.
+All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:
 
 ```nix
 {
   description = "Ryan's NixOS Flake";
 
   # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
-  # and `outputs` is a function the return the build results of the flake. Each item in `inputs` will be passed as a
-  # parameter to the `outputs` function after being pulled and built.
+  # and `outputs` function will return all the build results of the flake. 
+  # Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.
   inputs = {
     # There are many ways to reference flake inputs. The most widely used is github:owner/name/reference,
     # which represents the GitHub repository URL + branch/commit-id/tag.
@@ -307,7 +308,7 @@ We create the file `/ etc/nixos/flake.nix` and write the configuration content a
   };
 
   # `outputs` are all the build result of the flake. 
-  # A flake can have many uses and different types of outputs. 
+  # A flake can have many use cases and different types of outputs.
   # parameters in `outputs` are defined in `inputs` and can be referenced by their names. 
   # However, `self` is an exception, This special parameter points to the `outputs` itself (self-reference)
   # The `@` syntax here is used to alias the attribute set of the inputs's parameter, making it convenient to use inside the function.
