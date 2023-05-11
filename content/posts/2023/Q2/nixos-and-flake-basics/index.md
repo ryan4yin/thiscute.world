@@ -46,8 +46,6 @@ NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞�
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
 
-So after studying Nix and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period of time, hope you like it~
-
 因此在学了大半个月的 NixOS 与 Nix Flakes 后，我终于将我的 PC 从 EndeavouOS 系统切换到了 NixOS，这篇文章就脱胎于我这段时间的折腾笔记，希望能对你有所帮助～
 
 前因后果交代完毕，那么下面开始正文~
