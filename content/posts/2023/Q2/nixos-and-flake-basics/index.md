@@ -1081,9 +1081,11 @@ sudo nixos-rebuild switch --flake .
 
 - Nix packages: 名称为 `apps.<system>.<name>`, `packages.<system>.<name>` 或 `legacyPackages.<system>.<name>` 的 outputs，都是 Nix 包，通常都是一个个应用程序。
 - Nix Helper Functions: 名称为 `lib` 的 outputs 是 Flake 函数库，可以被其他 Flake 作为 inputs 导入使用。
-- Nix development environments: 名称为 `devShell` 的 outputs 是 Nix 开发环境
+- Nix development environments: 名称为 `devShells` 的 outputs 是 Nix 开发环境
+  - 可以通过 `nix develop` 命令来使用该 Output 创建开发环境
 - NixOS configurations: 名称为 `nixosConfigurations.<hostname>` 的 outputs，是 NixOS 的系统配置。
-- Nix templates: 名称为 `templates` 的 outputs 是 flake 模板，可以通过执行命令 `nix flake init --template <reference>` 使用模板初始化一个 Flake 包
+- Nix templates: 名称为 `templates` 的 outputs 是 flake 模板
+  - 可以通过执行命令 `nix flake init --template <reference>` 使用模板初始化一个 Flake 包
 - 其他用户自定义的 outputs
 
 ### 2. Flake 命令行的使用
@@ -1101,9 +1103,9 @@ echo "Hello Nix" | nix run "nixpkgs#ponysay"
 # 这条命令和上面的命令作用是一样的，只是使用了完整的 flake URI，而不是 flakeregistry id。
 echo "Hello Nix" | nix run "github:NixOS/nixpkgs/nixos-unstable#ponysay"
 
-# 这条命令的作用是使用 zero-to-nix flake 中的 example 包来创建一个开发环境，
+# 这条命令的作用是使用 zero-to-nix 这个 flake 中名 `devShells.example` 的 outptus 来创建一个开发环境，
 # 然后在这个环境中打开一个 bash shell。
-nix develop "github:DeterminateSystems/zero-to-nix#example"
+nix develop "github:DeterminateSystems可以通过此 #example"
 
 # 除了使用远程 flake uri 之外，你也可以使用当前目录下的 flake 来创建一个开发环境。
 mkdir my-flake && cd my-flake

@@ -777,7 +777,8 @@ the `outputs` in `flake.nix` are what a flake produces as part of its build. Eac
 
 - Nix packages: named `apps.<system>.<name>`, `packages.<system>.<name>`, or `legacyPackages.<system>.<name>`
 - Nix Helper Functions: named `lib`., which means a library for other flakes.
-- Nix development environments: named `devShell`
+- Nix development environments: named `devShells`
+  - `devShells` can be used by command `nix develop`, will be introduced later.
 - NixOS configurations: named `nixosConfiguration`
 - Nix templates: named `templates`
   - templates can be used by command `nix flake init --template <reference>`
@@ -799,7 +800,7 @@ echo "Hello Nix" | nix run "nixpkgs#ponysay"
 echo "Hello Nix" | nix run "github:NixOS/nixpkgs/nixos-unstable#ponysay"
 
 # instead of treat flake package as an application, 
-# this command use the example package in zero-to-nix flake to setup the development environment,
+# this command use `devShells.example` in flake `zero-to-nix`'s outputs, to setup the development environment,
 # and then open a bash shell in that environment.
 nix develop "github:DeterminateSystems/zero-to-nix#example"
 
