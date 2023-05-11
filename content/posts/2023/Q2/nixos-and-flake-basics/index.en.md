@@ -350,7 +350,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 }
 ```
 
-Here we define a NixOS system called `nixos-test`, whose configuration file is `./organization.nix`, which is our previous configuration file, so we can still use the old configuration.
+Here we define a NixOS system called `nixos-test`, whose configuration file is `./configuration.nix`, which is our previous configuration file, so we can still use the old configuration.
 
 Now execute the `sudo nixos-rebuild switch` command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the actual configuration content is the same as before.
 
