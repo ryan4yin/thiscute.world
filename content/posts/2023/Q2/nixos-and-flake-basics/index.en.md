@@ -890,6 +890,8 @@ After becoming familiar with Nix Flakes, you can try some advanced techniques. H
 
 ## References
 
+The feedback and discussion of the article is mainly on [this Reddit post](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/), you can also comment directly at the bottom of this page.
+
 Here are some useful resources that I have referred to:
 
 - [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems]: A beginner-friendly Nix Flakes tutorial that is worth reading.
