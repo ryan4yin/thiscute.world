@@ -7,8 +7,8 @@
 <p>本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flakes 仍然为实验性功能。</p>
 </blockquote>
 <h2 id="零为什么选择-nix" class="headerLink">
-    <a href="#%e9%9b%b6%e4%b8%ba%e4%bb%80%e4%b9%88%e9%80%89%e6%8b%a9-nix" class="header-mark"></a>零、为什么选择 Nix</h2><p>好几年前就听说过 Nix，用 Nix 语言编写配置来管理系统依赖，基于 Nix 设计的 Linux 发行版 NixOS，还能随时回滚到任一历史状态。</p>
-<p>虽然听着很牛，但是不仅要多学一门语言，装个包还得写代码，当时觉得太麻烦就没研究。
+    <a href="#%e9%9b%b6%e4%b8%ba%e4%bb%80%e4%b9%88%e9%80%89%e6%8b%a9-nix" class="header-mark"></a>零、为什么选择 Nix</h2><p>好几年前就听说过 Nix 包管理器，它用 Nix 语言编写配置来管理系统依赖，此外基于 Nix 包管理器设计的 Linux 发行版 NixOS，还能随时回滚到任一历史状态。
+虽然听着很牛，但是不仅要多学一门语言，装个包还得写代码，当时觉得太麻烦就没研究。
 但是最近搞系统迁移遇到两件麻烦事，使我决定尝试下 Nix.</p>
 <p>第一件事是在新组装的 PC 主机上安装 EndeavourOS（Arch Linux 的一个衍生发行版），因为旧系统也是 EndeavourOS 系统，安装完为了省事，我就直接把旧电脑的 Home 目录 rsync 同步到了新 PC 上。
 这一同步就出了问题，所有功能都工作正常，但是视频播放老是卡住，firefox/chrome/mpv 都会卡住，网上找各种资料都没解决，还是我灵光一闪想到是不是 Home 目录同步的锅，清空了 Home 目录，问题立马就解决了&hellip;后面又花好长时间从旧电脑一点点恢复 Home 目录下的东西。</p>
