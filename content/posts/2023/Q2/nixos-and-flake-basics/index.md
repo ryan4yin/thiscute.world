@@ -1290,7 +1290,9 @@ TODO 待补充更多内容
 
 ## 参考
 
-一些我参考过的比较有用的相关资料：
+本文的评论与讨论主要集中在[这个 V2ex 帖子](https://www.v2ex.com/t/938569#reply23)上，你也可以直接在文末评论区评论。
+
+如下是我参考过的比较有用的 Nix 相关资料：
 
 - [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems]: 浅显易懂的 Nix Flakes 新手入门文档，值得一读。
 - [NixOS 系列](https://lantian.pub/article/modify-website/nixos-why.lantian/): 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。
