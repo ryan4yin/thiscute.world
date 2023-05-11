@@ -23,11 +23,13 @@ comment:
 
 ### 2023-05-11
 
+- [我在 Reddit 上的 NixOS 新手入门帖子](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/) 的反响非常热烈，轻松杀入 NixOS 话题下月榜前三，再过两天拿下月榜 TOP1 感觉没啥悬念，杀入年榜前十感觉问题也不大。
+  - 除了一致的好评外，也已经有人开始催更后续内容了...
 
 ### 2023-05-10
 
 - 在 NixOS 中文社区某位群友的建议下，将 NixOS 折腾笔记翻译成了英文，并且在 NixOS Froum 跟 Reddit 上都分享了下
-  - [Reddit 上反响非常热烈](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/)！兴奋得我晚上睡不着，爬起来根据 Reddit 上的反馈，再次爆肝优化文章内容，搞到凌晨 5 点才睡...
+  - [Reddit 上才 1 个小时就收到了好几个点赞跟评论](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/)！兴奋得我晚上睡不着，爬起来根据 Reddit 上的反馈，再次爆肝优化文章内容，搞到凌晨 5 点才睡...
 
 
 ### 2023-05-09
