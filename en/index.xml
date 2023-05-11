@@ -1163,7 +1163,11 @@ Therefore, in order to customize the cache image source, we must add the related
 <ul>
 <li>Nix packages: named <code>apps.&lt;system&gt;.&lt;name&gt;</code>, <code>packages.&lt;system&gt;.&lt;name&gt;</code>, or <code>legacyPackages.&lt;system&gt;.&lt;name&gt;</code></li>
 <li>Nix Helper Functions: named <code>lib</code>., which means a library for other flakes.</li>
-<li>Nix development environments: named <code>devShell</code></li>
+<li>Nix development environments: named <code>devShells</code>
+<ul>
+<li><code>devShells</code> can be used by command <code>nix develop</code>, will be introduced later.</li>
+</ul>
+</li>
 <li>NixOS configurations: named <code>nixosConfiguration</code></li>
 <li>Nix templates: named <code>templates</code>
 <ul>
@@ -1217,7 +1221,7 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Hello Nix&#34;</span> <span class="p">|</span> nix run <span class="s2">&#34;github:NixOS/nixpkgs/nixos-unstable#ponysay&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># instead of treat flake package as an application, </span>
-</span></span><span class="line"><span class="cl"><span class="c1"># this command use the example package in zero-to-nix flake to setup the development environment,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># this command use `devShells.example` in flake `zero-to-nix`&#39;s outputs, to setup the development environment,</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># and then open a bash shell in that environment.</span>
 </span></span><span class="line"><span class="cl">nix develop <span class="s2">&#34;github:DeterminateSystems/zero-to-nix#example&#34;</span>
 </span></span><span class="line"><span class="cl">

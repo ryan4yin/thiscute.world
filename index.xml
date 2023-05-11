@@ -1608,9 +1608,17 @@
 <ul>
 <li>Nix packages: 名称为 <code>apps.&lt;system&gt;.&lt;name&gt;</code>, <code>packages.&lt;system&gt;.&lt;name&gt;</code> 或 <code>legacyPackages.&lt;system&gt;.&lt;name&gt;</code> 的 outputs，都是 Nix 包，通常都是一个个应用程序。</li>
 <li>Nix Helper Functions: 名称为 <code>lib</code> 的 outputs 是 Flake 函数库，可以被其他 Flake 作为 inputs 导入使用。</li>
-<li>Nix development environments: 名称为 <code>devShell</code> 的 outputs 是 Nix 开发环境</li>
+<li>Nix development environments: 名称为 <code>devShells</code> 的 outputs 是 Nix 开发环境
+<ul>
+<li>可以通过 <code>nix develop</code> 命令来使用该 Output 创建开发环境</li>
+</ul>
+</li>
 <li>NixOS configurations: 名称为 <code>nixosConfigurations.&lt;hostname&gt;</code> 的 outputs，是 NixOS 的系统配置。</li>
-<li>Nix templates: 名称为 <code>templates</code> 的 outputs 是 flake 模板，可以通过执行命令 <code>nix flake init --template &lt;reference&gt;</code> 使用模板初始化一个 Flake 包</li>
+<li>Nix templates: 名称为 <code>templates</code> 的 outputs 是 flake 模板
+<ul>
+<li>可以通过执行命令 <code>nix flake init --template &lt;reference&gt;</code> 使用模板初始化一个 Flake 包</li>
+</ul>
+</li>
 <li>其他用户自定义的 outputs</li>
 </ul>
 <h3 id="2-flake-命令行的使用" class="headerLink">
@@ -1656,9 +1664,9 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 这条命令和上面的命令作用是一样的，只是使用了完整的 flake URI，而不是 flakeregistry id。</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Hello Nix&#34;</span> <span class="p">|</span> nix run <span class="s2">&#34;github:NixOS/nixpkgs/nixos-unstable#ponysay&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 这条命令的作用是使用 zero-to-nix flake 中的 example 包来创建一个开发环境，</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 这条命令的作用是使用 zero-to-nix 这个 flake 中名 `devShells.example` 的 outptus 来创建一个开发环境，</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 然后在这个环境中打开一个 bash shell。</span>
-</span></span><span class="line"><span class="cl">nix develop <span class="s2">&#34;github:DeterminateSystems/zero-to-nix#example&#34;</span>
+</span></span><span class="line"><span class="cl">nix develop <span class="s2">&#34;github:DeterminateSystems可以通过此 #example&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 除了使用远程 flake uri 之外，你也可以使用当前目录下的 flake 来创建一个开发环境。</span>
 </span></span><span class="line"><span class="cl">mkdir my-flake <span class="o">&amp;&amp;</span> <span class="nb">cd</span> my-flake
