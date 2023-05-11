@@ -1083,7 +1083,7 @@ sudo nixos-rebuild switch --flake .
 - Nix Helper Functions: 名称为 `lib` 的 outputs 是 Flake 函数库，可以被其他 Flake 作为 inputs 导入使用。
 - Nix development environments: 名称为 `devShell` 的 outputs 是 Nix 开发环境
 - NixOS configurations: 名称为 `nixosConfigurations.<hostname>` 的 outputs，是 NixOS 的系统配置。
-- Nix templates: 名称为 `templates` 的 outputs 是 flake 模板，可以通过此 `nix flake init --template <reference>` 使用模板初始化一个 Flake 包
+- Nix templates: 名称为 `templates` 的 outputs 是 flake 模板，可以通过执行命令 `nix flake init --template <reference>` 使用模板初始化一个 Flake 包
 - 其他用户自定义的 outputs
 
 ### 2. Flake 命令行的使用
