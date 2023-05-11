@@ -52,7 +52,7 @@ The rollback capability of NixOS gave me a lot of confidence - I no longer fear 
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="My NixOS Desktop" >}}
 
-So after studying Nix and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period of time, hope you like it~
+So after studying NixOS and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period of time, hope you like it~
 
 Now that the background information is out of the way, it's time to dive into the world of Nix!
 

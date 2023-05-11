@@ -35,7 +35,7 @@ comment:
 
 第二件事是，我最近想尝鲜 wayland，把桌面从 i3wm 换成了 sway，但是因为用起来区别不明显，再加上诸多不便（hidpi、sway 配置调优都要花时间精力），嫌麻烦就还是回退到了 i3wm。结果回退后，每次系统刚启动时，有一段时间 firefox/thunar 等 GUI 程序会一直卡着，要大概 1 分钟后才能正常启动...
 
-发生第二件事时我就懒得折腾了，想到归根结底还是系统没有版本控制跟回滚机制，导致出了问题不能还原，装新系统时各种软件包也全靠自己手工从旧机器导出软件包清单，再在新机器安装恢复。就打算干脆换成 NixOS ，然后就研究了大半个月 Nix 与 Flakes，将 PC 从之前用的 EndeavourOS 切换到了 NixOS。
+发生第二件事时我就懒得折腾了，想到归根结底还是系统没有版本控制跟回滚机制，导致出了问题不能还原，装新系统时各种软件包也全靠自己手工从旧机器导出软件包清单，再在新机器安装恢复。就打算干脆换成 NixOS.
 
 我折腾的第一步是在我 Homelab 上开了台 NixOS 虚拟机，在这台虚拟机里一步步调试，把我物理机的 EndeavourOS i3 配置迁移到 NixOS + Flakes，还原出了整个桌面环境。
 在虚拟机里搞定后问题就不大了，直接备份好我办公电脑的 Home 目录、软件清单，然后将系统重装为 NixOS，再 git clone 我调试好的 NixOS 配置，改一改硬盘挂载相关的参数，额外补充下 Nvidia 显卡相关的 NixOS 配置，最后一行命令部署配置。几行命令就在我全新的 NixOS 系统上还原出了整个 i3 桌面环境跟我的常用软件，那一刻真的很有成就感！
@@ -45,6 +45,10 @@ NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞�
 >补充：v2ex 上有 v 友反馈 btrfs 文件系统的快照功能，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以像 NixOS 一样配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么基于 btrfs 快照功能的 [btrbk](https://github.com/digint/btrbk) 也是一个不错的选择。当然如果你仍然对 Nix 感兴趣，那学一学也绝对不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已～
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
+
+So after studying Nix and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period of time, hope you like it~
+
+因此在学了大半个月的 NixOS 与 Nix Flakes 后，我终于将我的 PC 从 EndeavouOS 系统切换到了 NixOS，这篇文章就脱胎于我这段时间的折腾笔记，希望能对你有所帮助～
 
 前因后果交代完毕，那么下面开始正文~
 
