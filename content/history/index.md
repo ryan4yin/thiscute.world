@@ -21,6 +21,15 @@ comment:
 >Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 >我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+### 2023-05-11
+
+
+### 2023-05-10
+
+- 在 NixOS 中文社区某位群友的建议下，将 NixOS 折腾笔记翻译成了英文，并且在 NixOS Froum 跟 Reddit 上都分享了下
+  - [Reddit 上反响非常热烈](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/)！兴奋得我晚上睡不着，爬起来根据 Reddit 上的反馈，再次爆肝优化文章内容，搞到凌晨 5 点才睡...
+
+
 ### 2023-05-09
 
 - NixOS 的文章整理得差不多了，在 0xffff 社区、NixOS 中文 TG 群、苏洋的折腾群、[V2ex](https://www.v2ex.com/t/938569#reply13) 跟 Twitter 上都分享了下，收获了许多好评反馈，尤其是 NixOS 中文 TG 群的正面反馈，以及 V2ex 上的评论收藏，让我非常开心～
