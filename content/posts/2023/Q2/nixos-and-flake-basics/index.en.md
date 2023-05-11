@@ -27,7 +27,7 @@ I will continue to try my best to repair and improve the content in the future, 
 
 ## 0. Why Nix
 
-I heard about the Nix package manager several years ago. It uses [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) to manage system dependencies, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
+I heard about the Nix package manager several years ago. It uses the Nix language to describe system configuration, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
 
 But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.
 
@@ -58,7 +58,7 @@ Now that the background information is out of the way, it's time to dive into th
 
 ## I. Introduction to Nix
 
-Nix package manager is a declarative configuration management tool similar to plulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state using [DSL](https://en.wikipedia.org/wiki/Domain-specific_language), and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while plulumi/terraform manages cloud resources.
+Nix package manager is a declarative configuration management tool similar to pulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state in some configurations, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while pulumi/terraform manages cloud resources.
 
 >To put it simply, "declarative configuration" means that users only need to declare the results they want. For example, you declares that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don't need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway's nix packages are designed properly...).
 
