@@ -455,7 +455,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>Here we define a NixOS system called <code>nixos-test</code>, whose configuration file is <code>./organization.nix</code>, which is our previous configuration file, so we can still use the old configuration.</p>
+</div><p>Here we define a NixOS system called <code>nixos-test</code>, whose configuration file is <code>./configuration.nix</code>, which is our previous configuration file, so we can still use the old configuration.</p>
 <p>Now execute the <code>sudo nixos-rebuild switch</code> command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the actual configuration content is the same as before.</p>
 <h3 id="4-add-custom-cache-mirror" class="headerLink">
     <a href="#4-add-custom-cache-mirror" class="header-mark"></a>4. Add Custom Cache Mirror</h3><p>In order to speed up package building, Nix provides <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> to cache build results to avoid build every packages locally.</p>
