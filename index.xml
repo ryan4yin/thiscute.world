@@ -7,8 +7,8 @@
 <p>本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flakes 仍然为实验性功能。</p>
 </blockquote>
 <h2 id="零为什么选择-nix" class="headerLink">
-    <a href="#%e9%9b%b6%e4%b8%ba%e4%bb%80%e4%b9%88%e9%80%89%e6%8b%a9-nix" class="header-mark"></a>零、为什么选择 Nix</h2><p>好几年前就听说过 Nix，用 <a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener noreferrer">DSL</a> 来管理系统依赖，还能随时回滚到任一历史状态。
-虽然听着很牛，但是不仅要多学一门语言，装个包还得写代码，当时觉得太麻烦就没研究。
+    <a href="#%e9%9b%b6%e4%b8%ba%e4%bb%80%e4%b9%88%e9%80%89%e6%8b%a9-nix" class="header-mark"></a>零、为什么选择 Nix</h2><p>好几年前就听说过 Nix，用 Nix 语言编写配置来管理系统依赖，基于 Nix 设计的 Linux 发行版 NixOS，还能随时回滚到任一历史状态。</p>
+<p>虽然听着很牛，但是不仅要多学一门语言，装个包还得写代码，当时觉得太麻烦就没研究。
 但是最近搞系统迁移遇到两件麻烦事，使我决定尝试下 Nix.</p>
 <p>第一件事是在新组装的 PC 主机上安装 EndeavourOS（Arch Linux 的一个衍生发行版），因为旧系统也是 EndeavourOS 系统，安装完为了省事，我就直接把旧电脑的 Home 目录 rsync 同步到了新 PC 上。
 这一同步就出了问题，所有功能都工作正常，但是视频播放老是卡住，firefox/chrome/mpv 都会卡住，网上找各种资料都没解决，还是我灵光一闪想到是不是 Home 目录同步的锅，清空了 Home 目录，问题立马就解决了&hellip;后面又花好长时间从旧电脑一点点恢复 Home 目录下的东西。</p>
@@ -28,7 +28,7 @@
 
 <p>前因后果交代完毕，那么下面开始正文~</p>
 <h2 id="一nix-简介" class="headerLink">
-    <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 plulumi/terraform/kubernetes 类似，都是声明式的配置管理工具，用户需要用 <a href="https://en.wikipedia.org/wiki/Domain-specific_language" target="_blank" rel="noopener noreferrer">DSL</a> 声明好期望的系统状态，而 Nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 plulumi/terraform 的管理目标是云上资源。</p>
+    <a href="#%e4%b8%80nix-%e7%ae%80%e4%bb%8b" class="header-mark"></a>一、Nix 简介</h2><p>Nix 包管理器，跟 DevOps 领域当前流行的 pulumi/terraform/kubernetes 类似，都是声明式配置管理工具，用户需要在某些配置文件中声明好期望的系统状态，而 Nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 pulumi/terraform 的管理目标是云上资源。</p>
 <blockquote>
 <p>简单解释下什么是「声明式配置」，它是指用户只需要声明好自己想要的结果——比如说希望将 i3 桌面替换成 sway 桌面，Nix 就会帮用户达成这个目标。用户不需要关心底层细节（比如说 sway 需要安装哪些软件包，哪些 i3 相关的软件包需要卸载掉，哪些系统配置或环境变量需要针对 sway 做调整、如果使用了 Nvidia 显卡 Sway 参数要做什么调整才能正常运行等等），Nix 会自动帮用户处理这些细节。</p>
 </blockquote>
