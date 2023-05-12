@@ -30,15 +30,15 @@ lightgallery: true
   - **2021-3 ~ Now**: worked as a SRE engineer at Mobiuspace, mainly responsible for maintaining and optimizing K8s service platform and traffic links, analyzing and managing AWS/GCP/Tencent cloud computing costs.
 - **Languages**
   - **English**: Good at reading technical articles, but weak in writing, listening and speaking.
-  - **Chinese**: Chinese is my native language.
+  - **Chinese**: My native language.
 - **Programming Languages**
-  - **Python/Go**: It's my current main language, and also the language I am most familiar with.
-  - **Rust**: In learning, a large number of functional syntax candy, thoughtful compiler tips, feel very easy to use
-  - **C**: Can barely understand the code, abandoned for a long time.
+  - **Python/Go**: mainly used language currently.
+  - **Rust**: Learning.
+  - **C**: mainly used to write embedded programs.
   - The languages I have used but have been abandoned: Java/Julia/Mathematica/Lua
-- **Expirence**: **Site Reliability Engineer**
+- **Experience**: **Site Reliability Engineer**
   - Maintain and optimize cloud computing platform and cloud networking, analyze and control cloud computing costs, to support the fast-growing business stably and efficiently.
-- **Tools & Technologies**: Linux/Kubernetes/Istio
+- **Tools & Technologies**: Linux/NixOS/Kubernetes/Istio
 - Contact Me
   - Email: `eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
   - Twitter: <https://twitter.com/ryan4yin>
