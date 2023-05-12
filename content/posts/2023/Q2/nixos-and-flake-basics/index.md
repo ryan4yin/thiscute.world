@@ -800,7 +800,7 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
 添加好 `/etc/nixos/home.nix` 后，还需要在 `/etc/nixos/flake.nix` 中导入该配置，它才能生效，可以使用如下命令，在当前文件夹中生成一个示例配置以供参考：
 
 ```shell
-nix flake new -t github:nix-community/home-manager#nixos
+nix flake new example -t github:nix-community/home-manager#nixos
 ```
 
 调整好参数后的 `/etc/nixos/flake.nix` 内容示例如下：

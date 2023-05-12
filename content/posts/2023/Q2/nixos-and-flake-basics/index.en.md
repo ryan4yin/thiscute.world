@@ -490,7 +490,7 @@ According to the official document [Home Manager Manual](https://nix-community.g
 After adding `/etc/nixos/home.nix`, you need to import this new configuration file in `/etc/nixos/flake.nix` to make it effective, use the following command to generate an example `/etc/nixos/flake.nix` in the current folder for reference:
 
 ```shell
-nix flake new -t github:nix-community/home-manager#nixos
+nix flake new example -t github:nix-community/home-manager#nixos
 ```
 
 After adjusting the parameters, the content of `/etc/nixos/flake.nix` is as follows:
