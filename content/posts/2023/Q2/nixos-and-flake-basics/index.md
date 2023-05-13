@@ -1114,7 +1114,7 @@ echo "Hello Nix" | nix run "github:NixOS/nixpkgs/nixos-unstable#ponysay"
 
 # 这条命令的作用是使用 zero-to-nix 这个 flake 中名 `devShells.example` 的 outptus 来创建一个开发环境，
 # 然后在这个环境中打开一个 bash shell。
-nix develop "github:DeterminateSystems可以通过此 #example"
+nix develop "github:DeterminateSystems/zero-to-nix#example"
 
 # 除了使用远程 flake uri 之外，你也可以使用当前目录下的 flake 来创建一个开发环境。
 mkdir my-flake && cd my-flake
