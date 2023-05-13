@@ -140,6 +140,7 @@
 <li>Overriding 与 Overlays</li>
 <li>&hellip;</li>
 </ol>
+<p>先把语法过一遍，有个大概的印象就行，后面需要用到时再根据右侧目录回来复习。</p>
 <h3 id="1-基础数据类型一览" class="headerLink">
     <a href="#1-%e5%9f%ba%e7%a1%80%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%80%e8%a7%88" class="header-mark"></a>1. 基础数据类型一览</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -198,8 +199,25 @@
 </span></span><span class="line"><span class="cl"><span class="n">bool</span> <span class="o">-&gt;</span> <span class="n">bool</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="2-attribute-set-说明" class="headerLink">
-    <a href="#2-attribute-set-%e8%af%b4%e6%98%8e" class="header-mark"></a>2. attribute set 说明</h3><p>花括号 <code>{}</code> 用于创建 attribute set，也就是 key-value 对的集合，类似于 JSON 中的对象。</p>
+</div><h3 id="2-let--in-" class="headerLink">
+    <a href="#2-let--in-" class="header-mark"></a>2. let &hellip; in &hellip;</h3><p>Nix 的 <code>let ... in ...</code> 语法被称作「let 表达式」或者「let 绑定」，它用于创建临时使用的局部变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="k">let</span>
+</span></span><span class="line"><span class="cl">  <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span>
+</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">+</span> <span class="n">a</span>  <span class="c1"># 结果是 2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>let 表达式中的变量只能在 <code>in</code> 之后的表达式中使用，理解成临时变量就行。</p>
+<h3 id="3-attribute-set-说明" class="headerLink">
+    <a href="#3-attribute-set-%e8%af%b4%e6%98%8e" class="header-mark"></a>3. attribute set 说明</h3><p>花括号 <code>{}</code> 用于创建 attribute set，也就是 key-value 对的集合，类似于 JSON 中的对象。</p>
 <p>attribute set 默认不支持递归引用，如下内容会报错：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -263,24 +281,7 @@
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">a</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="3-let--in-" class="headerLink">
-    <a href="#3-let--in-" class="header-mark"></a>3. let &hellip; in &hellip;</h3><p>Nix 的 <code>let ... in ...</code> 语法被称作「let 表达式」或者「let 绑定」，它用于创建临时使用的局部变量：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="k">let</span>
-</span></span><span class="line"><span class="cl">  <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="k">in</span>
-</span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">+</span> <span class="n">a</span>  <span class="c1"># 结果是 2</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>let 表达式中的变量只能在 <code>in</code> 之后的表达式中使用，理解成临时变量就行。</p>
-<h3 id="4-with-语句" class="headerLink">
+</div><h3 id="4-with-语句" class="headerLink">
     <a href="#4-with-%e8%af%ad%e5%8f%a5" class="header-mark"></a>4. with 语句</h3><p>with 语句的语法如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -310,7 +311,7 @@
 </span></span><span class="line"><span class="cl">    <span class="n">z</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl"><span class="k">in</span>
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">a</span><span class="p">;</span> <span class="p">[</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span> <span class="p">]</span>  <span class="c1"># 结果是 [ 1 2 3 ], equavlent to [ a.x a.y a.z ]</span>
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">a</span><span class="p">;</span> <span class="p">[</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span> <span class="p">]</span>  <span class="c1"># 结果是 [ 1 2 3 ], 等价于 [ a.x a.y a.z ]</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="5-继承-inherit-" class="headerLink">
@@ -382,10 +383,11 @@
     <a href="#7-%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e8%b7%af%e5%be%84" class="header-mark"></a>7. 文件系统路径</h3><p>Nix 中不带引号的字符串会被解析为文件系统路径，路径的语法与 Unix 系统相同。</p>
 <h3 id="8-搜索路径" class="headerLink">
     <a href="#8-%e6%90%9c%e7%b4%a2%e8%b7%af%e5%be%84" class="header-mark"></a>8. 搜索路径</h3><blockquote>
-<p>请不要使用这个功能，搜索路径不是 pure 的，会导致不可预期的行为。</p>
+<p>请不要使用这个功能，它会导致不可预期的行为。</p>
 </blockquote>
 <p>Nix 会在看到 <code>&lt;nixpkgs&gt;</code> 这类三角括号语法时，会在 <code>NIX_PATH</code> 环境变量中指定的路径中搜索该路径。</p>
 <p>因为环境变量 <code>NIX_PATH</code> 是可变更的值，所以这个功能是不纯的，会导致不可预期的行为。</p>
+<p>在这里做个介绍，只是为了让你在看到别人使用类似的语法时不至于抓瞎。</p>
 <h3 id="9-多行字符串" class="headerLink">
     <a href="#9-%e5%a4%9a%e8%a1%8c%e5%ad%97%e7%ac%a6%e4%b8%b2" class="header-mark"></a>9. 多行字符串</h3><p>多行字符串的语法为 <code>''</code>，比如：</p>
 <div class="highlight"><div class="chroma">
@@ -468,14 +470,14 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 带有命名 attribute set 作为参数的函数，并且使用 ... 收集其他可选参数</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 命名 args 与 ... 可选参数通常被一起作为函数的参数定义使用</span>
 </span></span><span class="line"><span class="cl"><span class="n">args</span><span class="o">@</span><span class="p">{</span> <span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 如下内容等价于上面的内容</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 如下内容等价于上面的内容, </span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">args</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">c</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 但是要注意命名参数仅绑定了输入的 attribute set，默认参数不在其中，举例</span>
 </span></span><span class="line"><span class="cl"><span class="k">let</span> 
-</span></span><span class="line"><span class="cl">  <span class="n">f</span> <span class="o">=</span> <span class="p">{</span> <span class="n">a</span> <span class="o">?</span> <span class="mi">1</span><span class="o">,</span> <span class="n">b</span> <span class="o">?</span> <span class="mi">2</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">args</span><span class="p">:</span> <span class="n">args</span>  <span class="c1"># this will cause an error</span>
+</span></span><span class="line"><span class="cl">  <span class="n">f</span> <span class="o">=</span> <span class="p">{</span> <span class="n">a</span> <span class="o">?</span> <span class="mi">1</span><span class="o">,</span> <span class="n">b</span> <span class="o">?</span> <span class="mi">2</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">args</span><span class="p">:</span> <span class="n">args</span>
 </span></span><span class="line"><span class="cl"><span class="k">in</span>
-</span></span><span class="line"><span class="cl">  <span class="n">f</span> <span class="p">{}</span>  <span class="c1"># 结果是 {}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">f</span> <span class="p">{}</span>  <span class="c1"># 结果是 {}，也就说明了 args 中包含默认值</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 函数的调用方式就是把参数放在后面，比如下面的 2 就是前面这个函数的参数</span>
 </span></span><span class="line"><span class="cl"><span class="n">a</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span> <span class="mi">2</span>  <span class="c1"># 结果是 4</span>
@@ -537,7 +539,7 @@
 </div>
 </div><p>可以通过 <a href="https://nixos.org/manual/nixpkgs/stable/#sec-functions-library" target="_blank" rel="noopener noreferrer">Nixpkgs Library Functions - Nixpkgs Manual</a> 查看 lib 函数包的详细内容。</p>
 <h3 id="11-不纯impurities" class="headerLink">
-    <a href="#11-%e4%b8%8d%e7%ba%afimpurities" class="header-mark"></a>11. 不纯（Impurities）</h3><p>Nix 语言本身是纯函数式的，是纯的，也就是说它就跟数学中的函数一样，同样的输入永远得到同样的输出。</p>
+    <a href="#11-%e4%b8%8d%e7%ba%afimpurities" class="header-mark"></a>11. 不纯（Impurities）</h3><p>Nix 语言本身是纯函数式的，是纯的，「纯」是指它就跟数学中的函数一样，同样的输入永远得到同样的输出。</p>
 <p>Nix 有两种构建输入，一种是从文件系统路径等输入源中读取文件，另一种是将其他函数作为输入。</p>
 <p><strong>Nix 唯一的不纯之处在这里：从文件系统路径或者其他输入源中读取文件作为构建任务的输入</strong>，这些输入源参数可能没变化，但是文件内容或数据源的返回内容可能会变化，这就会导致输入相同，Nix 函数的输出却可能不同——函数变得不纯了。</p>
 <blockquote>
