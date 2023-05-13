@@ -24,10 +24,7 @@ lightgallery: true
 - **Sports**: I like **Roller Skating** and **Swimming**, VR games "**Beat Saber**" and "**Pistol Whip**"
 - **Books**: The serious books I read most are IT technical books. In addition, I also like to read science fiction and web novels / light novels that I can't quit.
 - **Movies/TV**: What I watch most are anime, and in addition, science fiction films and tender films.
-- **Major**:
-  - **2015-6 ~ 2019-6**: major in Acoustics, but I didn't learn it very well...
-  - **2019-6 ~ 2021-2**: worked in an unknown start-up company, as an DevOps engineer...
-  - **2021-3 ~ Now**: worked as a SRE engineer at Mobiuspace, mainly responsible for maintaining and optimizing K8s service platform and traffic links, analyzing and managing AWS/GCP/Tencent cloud computing costs.
+- **Major**: Major in Acoustics, but I didn't learn it very well...
 - **Languages**
   - **English**: Good at reading technical articles, but weak in writing, listening and speaking.
   - **Chinese**: My native language.

@@ -21,8 +21,6 @@ toc:
 - [Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)
 - 英语阅读
   - The Great Gatsby - 10/41
-- 英语单词与听力练习
-  - 一点英语 270 天英语学习        - 86/270 (漏打卡 146 天，剩余时间 38 天...)
 
 
 ## 二、我今年还想搞搞这些
