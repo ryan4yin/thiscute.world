@@ -742,6 +742,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后运行 <code>sudo nixos-rebuild switch</code> 应用修改后，即可使用 Nix Flakes 来管理系统配置。</p>
+<p>额外还有个好处就是，现在你可以通过 <code>nix repl</code> 打开一个 nix 交互式环境，有兴趣的话，可以使用它复习测试一遍前面学过的所有 Nix 语法。</p>
 <h3 id="3-将系统配置切换到-flakenix" class="headerLink">
     <a href="#3-%e5%b0%86%e7%b3%bb%e7%bb%9f%e9%85%8d%e7%bd%ae%e5%88%87%e6%8d%a2%e5%88%b0-flakenix" class="header-mark"></a>3. 将系统配置切换到 flake.nix</h3><p>在启用了 Nix Flakes 特性后，<code>sudo nixos-rebuild switch</code> 命令会优先读取 <code>/etc/nixos/flake.nix</code> 文件，如果找不到再尝试使用 <code>/etc/nixos/configuration.nix</code>。</p>
 <p>可以首先使用官方提供的模板来学习 flake 的编写，先查下有哪些模板：</p>
