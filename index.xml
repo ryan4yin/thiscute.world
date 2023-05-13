@@ -189,11 +189,11 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># List concatenation</span>
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># 列表拼接</span>
 </span></span><span class="line"><span class="cl"><span class="p">[</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="p">]</span> <span class="o">++</span> <span class="p">[</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="p">]</span> <span class="c1"># [ 1 2 3 4 5 6 ]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Update attribute set attrset1 with names and values from attrset2.</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="p">}</span> <span class="o">//</span> <span class="p">{</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">}</span> <span class="c1"># { a = 1; b = 3; c = 4; }</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将 // 后面的 attribut set 中的内容，全部更新到 // 前面的 attribute set 中</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="p">}</span> <span class="o">//</span> <span class="p">{</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">}</span> <span class="c1"># 结果为 { a = 1; b = 3; c = 4; }</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 逻辑隐含，等同于 !b1 || b2.</span>
 </span></span><span class="line"><span class="cl"><span class="n">bool</span> <span class="o">-&gt;</span> <span class="n">bool</span>
