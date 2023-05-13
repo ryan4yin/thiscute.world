@@ -176,7 +176,7 @@
 </span></span></code></pre></td></tr></table></div></div><h3 id=10-函数 class=headerLink><a href=#10-%e5%87%bd%e6%95%b0 class=header-mark></a>10. 函数</h3><p>函数的声明语法为：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=sr>&lt;arg1&gt;</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>  <span class=sr>&lt;body&gt;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=sr>&lt;body&gt;</span>
 </span></span></code></pre></td></tr></table></div></div><p>举几个常见的例子：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -240,7 +240,7 @@
 </span></span><span class=line><span class=cl><span class=k>let</span>
 </span></span><span class=line><span class=cl>  <span class=n>f</span> <span class=o>=</span> <span class=n>a</span><span class=p>:</span> <span class=n>a</span> <span class=o>+</span> <span class=n>a</span><span class=p>;</span>
 </span></span><span class=line><span class=cl><span class=k>in</span>
-</span></span><span class=line><span class=cl><span class=n>f</span> <span class=mi>2</span>  <span class=c1># 结果是 4</span>
+</span></span><span class=line><span class=cl>  <span class=n>f</span> <span class=mi>2</span>  <span class=c1># 结果是 4</span>
 </span></span></code></pre></td></tr></table></div></div><h4 id=内置函数 class=headerLink><a href=#%e5%86%85%e7%bd%ae%e5%87%bd%e6%95%b0 class=header-mark></a>内置函数</h4><p>Nix 内置了一些函数，可通过 <code>builtins.&lt;function-name></code> 来调用，比如：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=line><span class=cl><span class=nb>builtins</span><span class=o>.</span><span class=n>add</span> <span class=mi>1</span> <span class=mi>2</span>  <span class=c1># 结果是 3</span>
 </span></span></code></pre></td></tr></table></div></div><p>详细的内置函数列表参见 <a href=https://nixos.org/manual/nix/stable/language/builtins.html target=_blank rel="noopener noreferrer">Built-in Functions - Nix Reference Mannual</a></p><h4 id=import-表达式 class=headerLink><a href=#import-%e8%a1%a8%e8%be%be%e5%bc%8f class=header-mark></a>import 表达式</h4><p><code>import</code> 表达式以其他 Nix 文件的路径作为参数，返回该 Nix 文件的执行结果。</p><p><code>import</code> 的参数如果为文件夹路径，那么会返回该文件夹下的 <code>default.nix</code> 文件的执行结果。</p><p>举个例子，首先创建一个 <code>file.nix</code> 文件：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
