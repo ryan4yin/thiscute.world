@@ -578,6 +578,8 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 然后运行 `sudo nixos-rebuild switch` 应用修改后，即可使用 Nix Flakes 来管理系统配置。
 
+额外还有个好处就是，现在你可以通过 `nix repl` 打开一个 nix 交互式环境，有兴趣的话，可以使用它复习测试一遍前面学过的所有 Nix 语法。
+
 
 ### 3. 将系统配置切换到 flake.nix
 
