@@ -129,7 +129,13 @@ Nix 于 2020 年推出了 `nix-command` & `flakes` 两个新特性，它们提�
 跟 Arch Linux 类似，Nix 也有官方与社区的软件包仓库：
 
 1. [nixpkgs](https://github.com/NixOS/nixpkgs) 是一个包含了所有 Nix 包与 NixOS 模块/配置的 Git 仓库，其 master 分支包含最新的 Nix 包与 NixOS 模块/配置。
+  1. 比如 [qq](https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/networking/instant-messengers/qq) 就直接包含在 nixpkgs 中了
 2. [NUR](https://github.com/nix-community/NUR): 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。
+  1. 这些常用国产软件，都可以通过 NUR 安装：
+    1. [qqmusic](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/qqmusic/default.nix)
+    2. [wechat-uos](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/wechat-uos/default.nix)
+    3. [dingtalk](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/dingtalk/default.nix)
+  2. 更多程序，可以在这里搜索：[Nix User Repositories](https://nur.nix-community.org/)
 3. Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包
 
 
