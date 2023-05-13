@@ -339,7 +339,7 @@ Nix 会在看到 `<nixpkgs>` 这类三角括号语法时，会在 `NIX_PATH` 环
 
 ```nix
 <arg1>:
-  <body>;
+  <body>
 ```
 
 举几个常见的例子：
