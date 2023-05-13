@@ -120,7 +120,13 @@
     <a href="#%e5%9b%9bnixos-%e7%9a%84-flakes-%e5%8c%85%e4%bb%93%e5%ba%93" class="header-mark"></a>四、NixOS 的 Flakes 包仓库</h2><p>跟 Arch Linux 类似，Nix 也有官方与社区的软件包仓库：</p>
 <ol>
 <li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> 是一个包含了所有 Nix 包与 NixOS 模块/配置的 Git 仓库，其 master 分支包含最新的 Nix 包与 NixOS 模块/配置。</li>
+<li>比如 <a href="https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/networking/instant-messengers/qq" target="_blank" rel="noopener noreferrer">qq</a> 就直接包含在 nixpkgs 中了</li>
 <li><a href="https://github.com/nix-community/NUR" target="_blank" rel="noopener noreferrer">NUR</a>: 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。</li>
+<li>这些常用国产软件，都可以通过 NUR 安装：
+1. <a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/qqmusic/default.nix" target="_blank" rel="noopener noreferrer">qqmusic</a>
+2. <a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/wechat-uos/default.nix" target="_blank" rel="noopener noreferrer">wechat-uos</a>
+3. <a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/dingtalk/default.nix" target="_blank" rel="noopener noreferrer">dingtalk</a></li>
+<li>更多程序，可以在这里搜索：<a href="https://nur.nix-community.org/" target="_blank" rel="noopener noreferrer">Nix User Repositories</a></li>
 <li>Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包</li>
 </ol>
 <h2 id="五nix-语言基础" class="headerLink">
