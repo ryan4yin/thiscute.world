@@ -312,13 +312,12 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
   # However, `self` is an exception, This special parameter points to the `outputs` itself (self-reference)
   # The `@` syntax here is used to alias the attribute set of the inputs's parameter, making it convenient to use inside the function.
   outputs = { self, nixpkgs, ... }@inputs: {
-    # Outputs named `nixosConfigurations` is used by execute `nixos-rebuild switch --flake /path/to/flakes/directory` on NixOS System.
     nixosConfigurations = {
       # By default, NixOS will try to refer the nixosConfiguration with its hostname.
       # so the system named `nixos-test` will use this configuration.
-      # However, the configuration name can also be specified using `nixos-rebuild switch --flake /path/to/flakes/directory#<name>`.
+      # However, the configuration name can also be specified using `sudo nixos-rebuild switch --flake /path/to/flakes/directory#<name>`.
       # The `nixpkgs.lib.nixosSystem` function is used to build this configuration, the following attribute set is its parameter.
-      # Run `nixos-rebuild switch --flake .#nixos-test` in the flake's directory to deploy this configuration on any NixOS system
+      # Run `sudo nixos-rebuild switch --flake .#nixos-test` in the flake's directory to deploy this configuration on any NixOS system
       "nixos-test" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 

@@ -635,7 +635,7 @@ cat flake.nix
   # 不过 self 是个例外，这个特殊参数指向 outputs 自身（自引用），以及 flake 根目录
   # 这里的 @ 语法将函数的参数 attribute set 取了个别名，方便在内部使用 
   outputs = { self, nixpkgs, ... }@inputs: {
-    # 名为 nixosConfigurations 的 outputs 会在执行 `nixos-rebuild switch` 时被使用
+    # 名为 nixosConfigurations 的 outputs 会在执行 `sudo nixos-rebuild switch` 时被使用
     # 默认情况下上述命令会使用与主机 hostname 同名的 nixosConfigurations，但是也可以通过 `--flake /path/to/flake/direcotry#nixos-test` 来指定
     # 在 flakes 配置文件夹中执行 `sudo nixos-rebuild switch --flake .#nixos-test` 即可部署此 nixos 配置
     #     其中 `.` 表示使用当前文件夹的 Flakes 配置，`#` 后面的内容则是 nixosConfigurations 的名称
