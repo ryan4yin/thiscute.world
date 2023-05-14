@@ -759,8 +759,8 @@ Another method is to delete `/etc/nixos` directly, and specify the configuration
 sudo mv /etc/nixos /etc/nixos.bak
 cd ~/nixos-config
 
-# deploy the flake.nix located in the current directory
-sudo nixos-rebuild switch --flake .
+# `--flake .#nixos-test` means deploy the flake.nix located in the current directory, and the nixosConfiguration's name is `nixos-test`
+sudo nixos-rebuild switch --flake .#nixos-test
 ```
 
 Choose whichever you like.

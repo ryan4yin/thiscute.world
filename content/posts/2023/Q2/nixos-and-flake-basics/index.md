@@ -591,6 +591,7 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 在启用了 Nix Flakes 特性后，`sudo nixos-rebuild switch` 命令会优先读取 `/etc/nixos/flake.nix` 文件，如果找不到再尝试使用 `/etc/nixos/configuration.nix`。
 
+
 可以首先使用官方提供的模板来学习 flake 的编写，先查下有哪些模板：
 
 ```bash
@@ -634,8 +635,10 @@ cat flake.nix
   # 不过 self 是个例外，这个特殊参数指向 outputs 自身（自引用），以及 flake 根目录
   # 这里的 @ 语法将函数的参数 attribute set 取了个别名，方便在内部使用 
   outputs = { self, nixpkgs, ... }@inputs: {
-    # 名为 nixosConfigurations 的 outputs 会在执行 `nixos-rebuild switch --flake .` 时被使用
-    # 默认情况下会使用与主机 hostname 同名的 nixosConfigurations，但是也可以通过 `--flake .#<name>` 来指定
+    # 名为 nixosConfigurations 的 outputs 会在执行 `nixos-rebuild switch` 时被使用
+    # 默认情况下上述命令会使用与主机 hostname 同名的 nixosConfigurations，但是也可以通过 `--flake /path/to/flake/direcotry#nixos-test` 来指定
+    # 在 flakes 配置文件夹中执行 `sudo nixos-rebuild switch --flake .#nixos-test` 即可部署此 nixos 配置
+    #     其中 `.` 表示使用当前文件夹的 Flakes 配置，`#` 后面的内容则是 nixosConfigurations 的名称
     nixosConfigurations = {
       # hostname 为 nixos-test 的主机会使用这个配置
       # 这里使用了 nixpkgs.lib.nixosSystem 函数来构建配置，后面的 attributes set 是它的参数
@@ -1065,6 +1068,8 @@ NixOS 的配置文件是纯文本，因此跟普通的 dotfiles 一样可以使�
 
 此外 Nix Flakes 配置也不一定需要放在 `/etc/nixos` 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。
 
+>我们在前面第 3 小节的代码注释中有说明过，可以通过 `sudo nixos-rebuild switch --flake .#xxx` 的 `--flake` 参数指定 Flakes 配置的文件夹路径，并通过 `#` 后面的值来指定使用的 outputs 名称。
+
 比如我的使用方式是将 Nix Flakes 配置放在 `~/nixos-config` 目录下，然后在 `/etc/nixos` 目录下创建一个软链接：
 
 ```shell
@@ -1080,8 +1085,8 @@ sudo ln -s ~/nixos-config/ /etc/nixos
 sudo mv /etc/nixos /etc/nixos.bak  # 备份原来的配置
 cd ~/nixos-config
 
-# 部署时指定使用当前文件夹的 flake.nix
-sudo nixos-rebuild switch --flake .
+# 通过 --flake .#nixos-test 参数，指定使用当前文件夹的 flake.nix，使用的 nixosConfiguraitons 名称为 nixos-test
+sudo nixos-rebuild switch --flake .#nixos-test
 ```
 
 两种方式都可以，看个人喜好。
