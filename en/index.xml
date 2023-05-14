@@ -386,7 +386,6 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span><span class="lnt">61
 </span><span class="lnt">62
 </span><span class="lnt">63
-</span><span class="lnt">64
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
@@ -417,13 +416,12 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">  <span class="c1"># However, `self` is an exception, This special parameter points to the `outputs` itself (self-reference)</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># The `@` syntax here is used to alias the attribute set of the inputs&#39;s parameter, making it convenient to use inside the function.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">inputs</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># Outputs named `nixosConfigurations` is used by execute `nixos-rebuild switch --flake /path/to/flakes/directory` on NixOS System.</span>
 </span></span><span class="line"><span class="cl">    <span class="n">nixosConfigurations</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="c1"># By default, NixOS will try to refer the nixosConfiguration with its hostname.</span>
 </span></span><span class="line"><span class="cl">      <span class="c1"># so the system named `nixos-test` will use this configuration.</span>
-</span></span><span class="line"><span class="cl">      <span class="c1"># However, the configuration name can also be specified using `nixos-rebuild switch --flake /path/to/flakes/directory#&lt;name&gt;`.</span>
+</span></span><span class="line"><span class="cl">      <span class="c1"># However, the configuration name can also be specified using `sudo nixos-rebuild switch --flake /path/to/flakes/directory#&lt;name&gt;`.</span>
 </span></span><span class="line"><span class="cl">      <span class="c1"># The `nixpkgs.lib.nixosSystem` function is used to build this configuration, the following attribute set is its parameter.</span>
-</span></span><span class="line"><span class="cl">      <span class="c1"># Run `nixos-rebuild switch --flake .#nixos-test` in the flake&#39;s directory to deploy this configuration on any NixOS system</span>
+</span></span><span class="line"><span class="cl">      <span class="c1"># Run `sudo nixos-rebuild switch --flake .#nixos-test` in the flake&#39;s directory to deploy this configuration on any NixOS system</span>
 </span></span><span class="line"><span class="cl">      <span class="s2">&#34;nixos-test&#34;</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
