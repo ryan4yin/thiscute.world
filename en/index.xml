@@ -1151,8 +1151,8 @@ Therefore, in order to customize the cache image source, we must add the related
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo mv /etc/nixos /etc/nixos.bak
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/nixos-config
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># deploy the flake.nix located in the current directory</span>
-</span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .
+</span></span><span class="line"><span class="cl"><span class="c1"># `--flake .#nixos-test` means deploy the flake.nix located in the current directory, and the nixosConfiguration&#39;s name is `nixos-test`</span>
+</span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#nixos-test
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Choose whichever you like.</p>
