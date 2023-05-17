@@ -8,7 +8,7 @@ resources:
 - name: "featured-image"
   src: "screenshot_2023-05-07-21-21.webp"
 
-tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
+tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps", "Tutorial"]
 categories: ["tech"]
 
 lightgallery: true
