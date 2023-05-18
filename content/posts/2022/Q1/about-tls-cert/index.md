@@ -9,6 +9,10 @@ resources:
 
 tags: ["Cryptography", "密码学", "HTTPS", "TLS", "SSL", "OpenSSL", "PKI", "数字证书", "证书", "SSH", "QUIC", "HTTP/3",  "安全"]
 categories: ["tech"]
+
+series: ["写给开发人员的实用密码学"]
+series_weight: 8
+seriesNavigation: true
 ---
 
 >本文基本上是一篇原创文章，但是行文有点生硬，仍然在优化中，不太适合初学者阅读。

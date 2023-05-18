@@ -9,6 +9,10 @@ resources:
 tags: ["Cryptography", "密码学", "对称加密", "安全", "AES", "ChaCha20"]
 categories: ["tech"]
 
+series: ["写给开发人员的实用密码学"]
+series_weight: 6
+seriesNavigation: true
+
 math:
   enable: true
 code:

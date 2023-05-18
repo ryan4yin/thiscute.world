@@ -10,6 +10,8 @@ resources:
 
 tags: ["电子电路", "Electrical Engineering", "MCU", "ESP32", "SPI", "GPIO", "贪吃蛇", "显示屏"]
 categories: ["tech"]
+series: ["EE 入门"]
+series_weight: 2
 
 lightgallery: false
 

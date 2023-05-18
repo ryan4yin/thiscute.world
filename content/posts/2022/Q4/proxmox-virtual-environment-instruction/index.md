@@ -10,6 +10,7 @@ resources:
 
 tags: ["虚拟化", "Visualization", "KVM", "QEMU", "libvirt", "Proxmox"]
 categories: ["tech"]
+series: []
 
 lightgallery: false
 

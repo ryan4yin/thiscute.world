@@ -137,6 +137,8 @@ enableEmoji = true
     fontawesome = true
     # 是否在文章页面显示原始 Markdown 文档链接
     linkToMarkdown = true
+    # 是否使用「系列」导航
+    seriesNavigation = true
     # DoIt 新增 | 0.2.0 目录配置
     [params.page.toc]
       # 是否使用目录
@@ -302,6 +304,14 @@ enableEmoji = true
       title = ""
       weight = 1
     [[languages.zh-cn.menu.main]]
+      identifier = "series"
+      pre = ""
+      post = ""
+      name = "系列"
+      url = "/series/"
+      title = ""
+      weight = 3
+    [[languages.zh-cn.menu.main]]
       identifier = "tech"
       pre = ""
       post = ""
@@ -376,6 +386,22 @@ enableEmoji = true
       # special amount of posts in each home posts page
       paginate = 10
 
+    # [[languages.zh-cn.menu.main]]
+    #   identifier = "statistics"
+    #   pre = ""
+    #   post = ""
+    #   name = "Trending"
+    #   url = "/statistics/"
+    #   title = ""
+    #   weight = 1
+    [[languages.en.menu.main]]
+      identifier = "series"
+      pre = ""
+      post = ""
+      name = "Series"
+      url = "/series/"
+      title = ""
+      weight = 3
     [[languages.en.menu.main]]
       identifier = "posts"
       pre = ""
@@ -383,7 +409,7 @@ enableEmoji = true
       name = "Posts"
       url = "/posts/"
       title = ""
-      weight = 1
+      weight = 5
     [[languages.en.menu.main]]
       identifier = "tech"
       pre = ""
@@ -391,7 +417,7 @@ enableEmoji = true
       name = "Tech"
       url = "/categories/tech/"
       title = ""
-      weight = 5
+      weight = 7
     [[languages.en.menu.main]]
       identifier = "essays"
       pre = ""
@@ -399,7 +425,7 @@ enableEmoji = true
       name = "Life"
       url = "/categories/life/"
       title = ""
-      weight = 7
+      weight = 9
     [[languages.en.menu.main]]
       identifier = "tags"
       pre = ""
@@ -407,7 +433,7 @@ enableEmoji = true
       name = "Tags"
       url = "/tags/"
       title = ""
-      weight = 9
+      weight = 11
     [[languages.en.menu.main]]
       identifier = "now"
       pre = ""
@@ -415,7 +441,7 @@ enableEmoji = true
       name = "Now"
       url = "/now/"
       title = ""
-      weight = 13
+      weight = 15
     [[languages.en.menu.main]]
       identifier = "about"
       pre = ""
@@ -423,7 +449,7 @@ enableEmoji = true
       name = "About"
       url = "/about/"
       title = ""
-      weight = 15
+      weight = 17
 
 # Hugo 解析文档的配置
 [markup]
@@ -498,6 +524,13 @@ enableEmoji = true
   isHTML = false
   noUgly = true
   permalinkable = false
+
+# 用于分类的设置
+[taxonomies]
+author = "authors"
+category = "categories"
+tag = "tags"
+series = "series"
 
 # 用于 Hugo 输出文档的设置
 [outputs]

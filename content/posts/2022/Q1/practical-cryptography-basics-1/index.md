@@ -9,6 +9,10 @@ resources:
 tags: ["Cryptography", "Hash", "KDF", "密码学", "安全", "哈希", "加解密", "签名"]
 categories: ["tech"]
 
+series: ["写给开发人员的实用密码学"]
+series_weight: 1
+seriesNavigation: true
+
 code:
   # whether to show the copy button of the code block
   copy: false

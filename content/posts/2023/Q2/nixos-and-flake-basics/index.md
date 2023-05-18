@@ -10,6 +10,8 @@ resources:
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]
+series: ["NixOS 与 Nix Flakes"]
+series_weight: 1
 
 lightgallery: true
 

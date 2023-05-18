@@ -10,6 +10,10 @@ resources:
 tags: ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
 categories: ["tech"]
 
+series: ["写给开发人员的实用密码学"]
+series_weight: 5
+seriesNavigation: true
+
 code:
   # whether to show the copy button of the code block
   copy: false

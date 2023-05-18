@@ -10,6 +10,8 @@ resources:
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps", "Tutorial"]
 categories: ["tech"]
+series: ["NixOS & Nix Flakes"]
+series_weight: 1
 
 lightgallery: true
 

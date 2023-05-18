@@ -8,6 +8,7 @@ resources:
 
 tags: ["总结"]
 categories: ["life", "tech"]
+series: ["年终总结"]
 ---
 
 >更新：2022/1/22
