@@ -10,6 +10,7 @@ resources:
 
 tags: ["WireGuard", "VPN", "Linux", "网络", "iptables", "conntrack"]
 categories: ["tech"]
+series: ["计算机网络相关"]
 
 lightgallery: false
 

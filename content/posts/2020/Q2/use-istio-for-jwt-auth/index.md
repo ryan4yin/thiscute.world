@@ -9,6 +9,7 @@ resources:
 
 tags: ["Kubernetes", "Istio", "服务网格"]
 categories: ["tech"]
+series: ["云原生相关"]
 ---
 
 >本文基于 Istio1.5 编写测试

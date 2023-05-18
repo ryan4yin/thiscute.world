@@ -8,6 +8,7 @@ resources:
 
 tags: ["Istio", "Envoy", "Service Mesh", " 服务网格", "网络代理", "Kubernetes"]
 categories: ["tech"]
+series: ["云原生相关"]
 
 code:
   # whether to show the copy button of the code block
