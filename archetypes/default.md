@@ -1,5 +1,7 @@
 ---
-title: "{{ replace .Name "-" " " | title }}"
+title: "{{ replace .TranslationBaseName "-" " " | title }}"
+subtitle: ""
+description: ""
 date: {{ .Date }}
 lastmod: {{ .Date }}
 draft: true
@@ -10,13 +12,24 @@ resources:
 
 tags: []
 categories: ["tech"]
+series: []
+hiddenFromHomePage: false
+hiddenFromSearch: false
 
 lightgallery: false
+
+toc:
+  enable: true
+math:
+  enable: false
+license: ""
 
 comment:
   utterances:
     enable: true
   waline:
+    enable: false
+  disqus:
     enable: false
 ---
 
