@@ -15,9 +15,11 @@ lightgallery: true
 
 comment:
   utterances:
-    enable: true
+    enable: false
   waline:
     enable: false
+  disqus:
+    enable: true
 ---
 
 >As of 2023-05-10, I have only used the NixOS for about 20 days, so there will inevitably be some mistakes and omissions in this article, please read it carefully. 

@@ -8,6 +8,14 @@ resources:
 
 tags: ["Summary"]
 categories: ["life", "tech"]
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: false
+  disqus:
+    enable: true
 ---
 
 

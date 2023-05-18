@@ -5,6 +5,14 @@ draft: false
 
 toc:
   enable: false
+
+comment:
+  utterances:
+    enable: false
+  waline:
+    enable: false
+  disqus:
+    enable: true
 ---
 
 ## 🌱 I’m currently learning
