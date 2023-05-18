@@ -23,19 +23,6 @@ code:
 >本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了 HMAC 的 Python 实现以及 scrypt 使用示例。
 
 
-《写给开发人员的实用密码学》系列文章目录：
-
-- [写给开发人员的实用密码学（一）—— 概览](/posts/practical-cryptography-basics-1/)
-- [写给开发人员的实用密码学（二）—— 哈希函数](/posts/practical-cryptography-basics-2-hash/)
-- [写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
-- [写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG](/posts/practical-cryptography-basics-4-secure-random-generators/)
-- [写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS](/posts/practical-cryptography-basics-5-key-exchange/)
-- [写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
-- [写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC](/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/)
-- [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/about-tls-cert)
-- 待续
-
-
 ## 一、MAC 消息认证码
 
 MAC 消息认证码，即 Message Authentication Code，是用于验证消息的一小段信息。

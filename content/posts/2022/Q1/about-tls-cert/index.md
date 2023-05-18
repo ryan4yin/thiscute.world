@@ -17,18 +17,6 @@ seriesNavigation: true
 
 >本文基本上是一篇原创文章，但是行文有点生硬，仍然在优化中，不太适合初学者阅读。
 
-《写给开发人员的实用密码学》系列文章目录: 
-
-- [写给开发人员的实用密码学（一）—— 概览](/posts/practical-cryptography-basics-1/)
-- [写给开发人员的实用密码学（二）—— 哈希函数](/posts/practical-cryptography-basics-2-hash/)
-- [写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF](/posts/practical-cryptography-basics-3-key-derivation-function/)
-- [写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG](/posts/practical-cryptography-basics-4-secure-random-generators/)
-- [写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS](/posts/practical-cryptography-basics-5-key-exchange/)
-- [写给开发人员的实用密码学（六）—— 对称密钥加密算法](/posts/practical-cryptography-basics-6-symmetric-key-ciphers/)
-- [写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC](/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/)
-- [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/about-tls-cert)
-- 待续
-
 
 ## 更新记录
 
