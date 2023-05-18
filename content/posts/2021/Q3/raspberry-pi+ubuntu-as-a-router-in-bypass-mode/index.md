@@ -7,8 +7,9 @@ resources:
 - name: "featured-image"
   src: "featured-image.webp"
 
-tags: []
-categories: []
+tags: ["Linux", "网络", "树莓派"]
+categories: ["tech"]
+series: ["计算机网络相关"]
 ---
 
 最近换了个房子，才想起自动上次搞 iscsi 炸了之后（io 性能不够），我的树莓派 4b 已经吃灰好久了。

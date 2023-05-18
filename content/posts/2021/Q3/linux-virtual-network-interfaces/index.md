@@ -9,6 +9,7 @@ resources:
 
 tags: ["Linux", "网络", "虚拟化", "容器"]
 categories: ["tech"]
+series: ["计算机网络相关"]
 ---
 
 >本文用到的字符画工具：[vscode-asciiflow2](https://github.com/zenghongtu/vscode-asciiflow2)

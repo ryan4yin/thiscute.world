@@ -9,6 +9,7 @@ resources:
 
 tags: ["NAT", "网络", "NAT 穿越", "内网穿透", "虚拟网络", "P2P", "WebRTC"]
 categories: ["tech"]
+series: ["计算机网络相关"]
 
 # 文章未完成，先不在首页显示
 # hiddenFromHomePage: true

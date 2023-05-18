@@ -9,6 +9,7 @@ resources:
 
 tags: ["网络", "Wireshark", "tcpdump", "抓包分析"]
 categories: ["tech"]
+series: ["计算机网络相关"]
 ---
 
 # 抓包分析

@@ -9,6 +9,7 @@ resources:
 
 tags: ["网络", "Linux", "网络调试"]
 categories: ["tech"]
+series: ["计算机网络相关"]
 ---
 
 >文中的命令均在 macOS Big Sur 和 openSUSE Tumbleweed 上测试通过

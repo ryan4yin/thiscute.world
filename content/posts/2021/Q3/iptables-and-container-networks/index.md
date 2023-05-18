@@ -9,6 +9,7 @@ resources:
 
 tags: ["Linux", "网络", "虚拟化", "容器", "iptables", "conntrack"]
 categories: ["tech"]
+series: ["计算机网络相关"]
 
 code:
   # whether to show the copy button of the code block
