@@ -7,8 +7,9 @@ resources:
 - name: "featured-image"
   src: "argo-workflows.webp"
 
-tags: ["云原生", "CI","持续集成", "流水线"]
+tags: ["云原生", "CI", "持续集成", "流水线", "Kubernetes"]
 categories: ["tech"]
+series: ["云原生相关"]
 
 # 兼容旧的 Path（单词拼写错误）
 aliases:

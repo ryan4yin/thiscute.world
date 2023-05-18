@@ -2,6 +2,9 @@
 title: "Kyverno - Kubernetes 策略管理"
 date: 2021-01-23T16:31:22+08:00
 draft: true
+
+series: ["云原生相关"]
+
 ---
 
 # [kyverno](https://github.com/kyverno/kyverno)

@@ -9,6 +9,7 @@ resources:
 
 tags: ["基础设施即代码", "云原生", "Pulumi","Terraform"]
 categories: ["tech"]
+series: ["云原生相关"]
 
 # 兼容旧的 Path（单词拼写错误）
 aliases:

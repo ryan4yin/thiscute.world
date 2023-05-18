@@ -10,6 +10,7 @@ resources:
 
 tags: ["数字证书", "证书", "TLS", "Kubernetes", "cert-manager"]
 categories: ["tech"]
+series: ["云原生相关"]
 
 lightgallery: false
 

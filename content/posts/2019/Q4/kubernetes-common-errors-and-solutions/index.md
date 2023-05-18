@@ -9,6 +9,7 @@ resources:
 
 tags: ["Kubernetes"]
 categories: ["tech"]
+series: ["云原生相关"]
 ---
 ## Pod 常见错误
 

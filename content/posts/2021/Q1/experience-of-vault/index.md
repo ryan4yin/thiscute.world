@@ -9,6 +9,7 @@ resources:
 
 tags: ["Vault", "云原生", "Secrets", "配置", "配置管理"]
 categories: ["tech"]
+series: ["云原生相关"]
 
 # 兼容旧的 Path（单词拼写错误）
 aliases:

@@ -9,6 +9,7 @@ resources:
 
 tags: ["Kubernetes", "Linux", "NAT", "网络", "内网穿透", "网络隧道", "Overlay 网络", "Underlay 网络", "wireguard"]
 categories: ["tech"]
+series: ["云原生相关"]
 ---
 
 

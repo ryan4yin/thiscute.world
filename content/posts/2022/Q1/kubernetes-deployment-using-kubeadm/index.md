@@ -9,6 +9,7 @@ resources:
 
 tags: ["Kubernetes", "云原生"]
 categories: ["tech"]
+series: ["云原生相关"]
 ---
 
 >本文完成于 2022-01-25，其中部分内容已经过时，仅供参考。

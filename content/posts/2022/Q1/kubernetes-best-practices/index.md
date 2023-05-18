@@ -9,6 +9,7 @@ resources:
 
 tags: ["Kubernetes", "最佳实践", "云原生"]
 categories: ["tech"]
+series: ["云原生相关"]
 ---
 
 >本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来
