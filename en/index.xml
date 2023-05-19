@@ -1154,7 +1154,35 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Choose whichever you like.</p>
-<h2 id="vii-usage-of-nix-flakes" class="headerLink">
+<h3 id="10-other-commands-you-may-need" class="headerLink">
+    <a href="#10-other-commands-you-may-need" class="header-mark"></a>10. Other commands you may need</h3><p>As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>You can also list all Nix packages currently installed in the system with the following command:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nix-env -qa
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>And the command to clean up historical versions to release storage space:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo nix-collect-garbage --delete-order-than <span class="m">14</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="vii-usage-of-nix-flakes" class="headerLink">
     <a href="#vii-usage-of-nix-flakes" class="header-mark"></a>VII. Usage of Nix Flakes</h2><p>Up to now, we have written a lot of Nix Flakes configurations to manage the NixOS system. Here is a brief introduction to the more detailed content of Nix Flakes, as well as commonly used nix flake commands.</p>
 <h3 id="1-flake-outputs" class="headerLink">
     <a href="#1-flake-outputs" class="header-mark"></a>1. Flake outputs</h3><p>the <code>outputs</code> in <code>flake.nix</code> are what a flake produces as part of its build. Each flake can have many different outputs simultaneously, including but not limited to:</p>
