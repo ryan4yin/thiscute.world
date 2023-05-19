@@ -140,6 +140,7 @@ Nix 于 2020 年推出了 `nix-command` & `flakes` 两个新特性，它们提�
   2. 更多程序，可以在这里搜索：[Nix User Repositories](https://nur.nix-community.org/)
 3. Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包
 
+此外一些没有 Nix 支持或者支持不佳的软件，也可以考虑通过 Flatpak 或者 AppImage 的方式安装使用，这两个都是在所有 Linux 发行版上可用的软件打包与安装手段，详情请自行搜索，这里就不介绍细节了。
 
 ## 五、Nix 语言基础
 
@@ -973,7 +974,7 @@ nix flake update
 sudo nixos-rebuild switch
 ```
 
-另外有时候安装新的包，跑 `nixos-rebuild switch` 时可能会遇到 sha256 不匹配的报错，也可以尝试通过 `nix flake update` 更新 flake.lock 来解决（原理暂时不太清楚）。
+另外有时候安装新的包，跑 `sudo nixos-rebuild switch` 时可能会遇到 sha256 不匹配的报错，也可以尝试通过 `nix flake update` 更新 flake.lock 来解决（原理暂时不太清楚）。
 
 ### 8. 回退个别软件包的版本
 
@@ -1062,7 +1063,7 @@ in {
 }
 ```
 
-配置完成后，通过 `nixos-rebuild switch` 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。
+配置完成后，通过 `sudo nixos-rebuild switch` 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。
 
 ### 9. 使用 Git 管理 NixOS 配置
 
@@ -1092,6 +1093,30 @@ sudo nixos-rebuild switch --flake .#nixos-test
 ```
 
 两种方式都可以，看个人喜好。
+
+### 10. 其他可能需要用到的指令
+
+>这里提供了部分 `nix-env` 指令，因为新的 Nix 命令行工具貌似未提供对应的功能。
+
+如前所述，NixOS 的每次部署都会生成一个新的版本，所有版本都会被添加到系统启动项中，除了重启电脑外，我们也可以通过如下命令查询当前可用的所有历史版本：
+
+```shell
+sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+```
+
+另外如下命令会列出所有系统中当前安装的 Nix 包：
+
+```shell
+nix-env -qa
+```
+
+以及清理历史版本释放存储空间的命令：
+
+```shell
+# 清理 14 天之前的所有历史版本
+sudo nix-collect-garbage --delete-order-than 14
+```
+
 
 ## 七、Nix Flakes 的使用
 
@@ -1159,8 +1184,7 @@ callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技�
 3. [firefox/common.nix](https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix): firefox 同样有许多可自定义的参数
 4. 等等
 
-总之为了自定义上述这类 Nix 包的构建参数，我们需要使用 Overriding 或 Overlays 来实现。
-
+总之如果需要自定义上述这类 Nix 包的构建参数，或者实施某些比较底层的修改，我们就得用到 Overriding 跟 Overlays。
 
 ### Overriding
 
@@ -1307,12 +1331,10 @@ TODO 待补充更多内容
 - [flake-utils-plus](https://github.com/gytis-ivaskevicius/flake-utils-plus):同样是用于简化 Flake 配置的第三方包，不过貌似更强大些
 - [devshell](https://github.com/numtide/devshell): 顾名思义
 - [digga][digga]: 一个大而全的 Flake 模板，揉合了各种实用 Nix 工具包的功能，不过结构比较复杂，需要一定经验才能玩得转。
-- etc.
+- ......
 
 
 ## 参考
-
-本文的评论与讨论主要集中在[这个 V2ex 帖子](https://www.v2ex.com/t/938569#reply23)上，你也可以直接在文末评论区评论。
 
 如下是我参考过的比较有用的 Nix 相关资料：
 

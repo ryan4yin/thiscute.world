@@ -769,6 +769,27 @@ sudo nixos-rebuild switch --flake .#nixos-test
 Choose whichever you like.
 
 
+
+### 10. Other commands you may need
+
+As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:
+
+```shell
+sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+```
+
+You can also list all Nix packages currently installed in the system with the following command:
+
+```shell
+nix-env -qa
+```
+
+And the command to clean up historical versions to release storage space:
+
+```shell
+sudo nix-collect-garbage --delete-order-than 14
+```
+
 ## VII. Usage of Nix Flakes
 
 
