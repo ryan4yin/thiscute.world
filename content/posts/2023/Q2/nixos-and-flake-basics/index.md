@@ -554,7 +554,7 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 ### 2. 启用 NixOS 的 Flakes 支持
 
-与 NixOS 默认的配置方式相比，Nix Flakes 提供了更好的可复现性，同时它定义的包结构也更加清晰，更容易维护，因此更建议使用 Nix Flakes 来管理系统配置。
+与 NixOS 默认的配置方式相比，Nix Flakes 提供了更好的可复现性，同时它清晰的包结构定义原生支持了以其他 Git 仓库为依赖，便于代码分享，因此更建议使用 Nix Flakes 来管理系统配置。
 
 但是目前 Nix Flakes 作为一个实验性的功能，仍未被默认启用。所以我们需要手动启用它，修改 `/etc/nixos/configuration.nix` 文件，在函数块中启用 flakes 与 nix-command 功能：
 
@@ -1114,7 +1114,7 @@ nix-env -qa
 
 ```shell
 # 清理 14 天之前的所有历史版本
-sudo nix-collect-garbage --delete-order-than 14
+sudo nix-collect-garbage --delete-older-than 14d
 ```
 
 
