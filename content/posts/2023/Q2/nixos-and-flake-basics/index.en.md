@@ -787,7 +787,7 @@ nix-env -qa
 And the command to clean up historical versions to release storage space:
 
 ```shell
-sudo nix-collect-garbage --delete-order-than 14
+sudo nix-collect-garbage --delete-older-than 14d
 ```
 
 ## VII. Usage of Nix Flakes
