@@ -26,7 +26,10 @@ comment:
 
 ## 更新日志
 
-- 2023/5/21: 补充 overlays 一节的内容，移除「九、使用 Nix Flakes 打包应用」，这部分可能会放在后续文章中介绍。
+- 2023/5/21
+    - 补充 overlays 一节的内容。
+    - 移除「九、使用 Nix Flakes 打包应用」，这部分可能会放在后续文章中介绍。
+    - 六-4 一节补充了一个通过 flakes 数据源安装程序的例子。
 
 ## 零、为什么选择 Nix
 
@@ -684,7 +687,7 @@ cat flake.nix
         #  modulesPath: The location of the module directory of Nix.
         #
         # 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs，你可以取消注释如下这行来启用该参数
-        # specialArgs = {...}  # 向子模块中传递自定义参参数
+        # specialArgs = inputs  # 将 inputs 中的参数传入所有子模块
         modules = [
           # 导入之前我们使用的 configuration.nix，这样旧的配置文件仍然能生效
           # 注: /etc/nixos/configuration.nix 本身也是一个 Nix Module，因此可以直接在这里导入
@@ -700,7 +703,71 @@ cat flake.nix
 
 现在执行 `sudo nixos-rebuild switch` 应用配置，系统应该没有任何变化，因为我们仅仅是切换到了 Nix Flakes，配置内容与之前还是一致的。
 
-### 4. 为 Flake 添加国内 cache 源
+### 4. 通过 Flakes 来管理系统软件
+
+切换完毕后，我们就可以通过 Flakes 来管理系统了。管系统最常见的需求就是装软件，我们在前面已经见识过如何通过 `environment.systemPackages` 来安装 `pkgs` 中的包，这些包都来自官方的 nixpkgs 仓库。
+
+现在我们学习下如何通过 Flakes 安装其他来源的软件包，这比直接安装 nixpkgs 要灵活很多，最显而易见的好处是你可以很方便地设定软件的版本。
+以 [helix](https://github.com/helix-editor/helix) 编辑器为例，我们首先需要在 `flake.nix` 中添加 helix 这个 inputs 数据源：
+
+```nix
+{
+  description = "NixOS configuration of Ryan Yin";
+
+  # ......
+
+  inputs = {
+    # ......
+
+    # helix editor, use tag 23.05
+    helix.url = "github:helix-editor/helix/23.05"
+  };
+
+  outputs = inputs@{ self, nixpkgs, ... }: {
+    nixosConfigurations = {
+      nixos-test = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        # 将所有 inputs 参数设为所有子模块的特殊参数，这样就能在子模块中使用 helix 这个 inputs 了
+        specialArgs = inputs;
+        modules = [
+          ./configuration.nix
+        ];
+      };
+    };
+  };
+}
+```
+
+接下来在 `configuration.nix` 中就能引用这个 flake input 数据源了：
+
+```nix
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+# Nix 会通过名称匹配，自动将 specialArgs 中的 helix 注入到此函数的第三个参数
+{ config, pkgs, helix, ... }:
+
+{
+  # 省略掉前面的配置......
+
+  environment.systemPackages = with pkgs; [
+    git  # Nix Flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git
+    vim
+    wget
+
+    # 这里从 helix 这个 inputs 数据源安装了 helix 程序
+    helix."${pkgs.system}".packages.helix
+  ];
+
+  # 省略其他配置......
+}
+```
+
+改好后再 `sudo nixos-rebuild switch` 部署，就能安装好 helix 程序了，可直接在终端使用 `helix` 命令测试验证。
+
+
+### 5. 为 Flake 添加国内 cache 源
 
 Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓存构建结果提供给用户，但是在国内访问这个 cache 地址非常地慢，如果没有全局代理的话，基本上是无法使用的。
 另外 Flakes 的数据源基本都是某个 Github 仓库，在国内从 Github 下载 Flakes 数据源也同样非常非常慢。
@@ -754,7 +821,7 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
 
 >注：上述手段只能加速部分包的下载，许多 inputs 数据源仍然会从 Github 拉取，另外如果找不到缓存，会执行本地构建，这通常仍然需要从国外下载源码与构建依赖，因此仍然会很慢。为了完全解决速度问题，仍然建议使用旁路由等局域网全局代理方案。
 
-### 5. 安装 home-manager
+### 6. 安装 home-manager
 
 前面简单提过，NixOS 自身的配置文件只能管理系统级别的配置，而用户级别的配置则需要使用 home-manager 来管理。
 
@@ -897,7 +964,7 @@ nix flake new example -t github:nix-community/home-manager#nixos
 - [Home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html): 一份包含了所有配置项的列表，建议在其中关键字搜索。
 - [home-manager](https://github.com/nix-community/home-manager): 有些配置项在官方文档中没有列出，或者文档描述不够清晰，可以直接在这份 home-manager 的源码中搜索阅读对应的源码。
 
-### 6. 模块化 NixOS 配置
+### 7. 模块化 NixOS 配置
 
 到这里整个系统的骨架基本就配置完成了，当前我们 `/etc/nixos` 中的系统配置结构应该如下：
 
@@ -985,7 +1052,7 @@ $ tree
 
 详细结构与内容，请移步前面提供的 github 仓库链接，这里就不多介绍了。
 
-### 7. 更新系统
+### 8. 更新系统
 
 在使用了 Nix Flakes 后，要更新系统也很简单，先更新 flake.lock 文件，然后部署即可。在配置文件夹中执行如下命令：
 
@@ -998,7 +1065,7 @@ sudo nixos-rebuild switch
 
 另外有时候安装新的包，跑 `sudo nixos-rebuild switch` 时可能会遇到 sha256 不匹配的报错，也可以尝试通过 `nix flake update` 更新 flake.lock 来解决（原理暂时不太清楚）。
 
-### 8. 回退个别软件包的版本
+### 9. 回退个别软件包的版本
 
 在使用 Nix Flakes 后，目前大家用得比较多的都是 `nixos-unstable` 分支的 nixpkgs，有时候就会遇到一些 bug，比如我最近（2023/5/6）就遇到了 [chrome/vscode 闪退的问题](https://github.com/swaywm/sway/issues/7562)。
 
@@ -1087,7 +1154,7 @@ in {
 
 配置完成后，通过 `sudo nixos-rebuild switch` 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。
 
-### 9. 使用 Git 管理 NixOS 配置
+### 10. 使用 Git 管理 NixOS 配置
 
 NixOS 的配置文件是纯文本，因此跟普通的 dotfiles 一样可以使用 Git 管理。
 
@@ -1116,7 +1183,7 @@ sudo nixos-rebuild switch --flake .#nixos-test
 
 两种方式都可以，看个人喜好。
 
-### 10. 其他可能需要用到的指令
+### 11. 其他可能需要用到的指令
 
 >这里提供了部分 `nix-env` 指令，因为新的 Nix 命令行工具貌似未提供对应的功能。
 
@@ -1404,7 +1471,11 @@ args:
 └── README.md
 ```
 
+你可以在我的配置仓库 [ryan4yin/nix-config/v0.0.4](https://github.com/ryan4yin/nix-config/tree/v0.0.4) 查看更详细的内容，获取些灵感。
+
+
 ## 进阶玩法
+
 
 逐渐熟悉 Nix 这一套工具链后，可以进一步读一读 Nix 的三本手册，挖掘更多的玩法：
 

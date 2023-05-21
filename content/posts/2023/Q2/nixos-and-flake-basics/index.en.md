@@ -28,7 +28,10 @@ comment:
 
 ## Article History
 
-- 2023/5/21: Complete the "Overlays" section, remove the "IX. Nix Packaging" section, which may be moved to a separate article in the future.
+- 2023/5/21
+  - Complete the "Overlays" section.
+  - remove the "IX. Nix Packaging" section, which may be moved to a separate article in the future.
+  - Add an example of installing a program via the flakes at section VI-4.
 
 ## 0. Why Nix
 
@@ -358,6 +361,73 @@ Here we define a NixOS system called `nixos-test`, whose configuration file is `
 
 Now execute the `sudo nixos-rebuild switch` command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the actual configuration content is the same as before.
 
+
+### 4. Manage system software through Flakes
+
+After the switch, we can manage the system through Flakes. The most common requirement for managing a system is to install software. We have seen how to install packages in `pkgs` through `environment.systemPackages` before, and these packages are all from the official nixpkgs repository.
+
+Now let's learn how to install packages from other sources through Flakes. This is much more flexible than installing nixpkgs directly. The most obvious benefit is that you can easily set the version of the software.
+
+Use [helix](https://github.com/helix-editor/helix) editor as an example, we first need to add the helix input data source in `flake.nix`:
+
+```nix
+{
+  description = "NixOS configuration of Ryan Yin";
+
+  # ......
+
+  inputs = {
+    # ......
+
+    # helix editor, use tag 23.05
+    helix.url = "github:helix-editor/helix/23.05"
+  };
+
+  outputs = inputs@{ self, nixpkgs, ... }: {
+    nixosConfigurations = {
+      nixos-test = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        # set all inputs parameters as specialArgs of all sub module
+        # so that we can use `helix` input in sub modules
+        specialArgs = inputs;
+        modules = [
+          ./configuration.nix
+        ];
+      };
+    };
+  };
+}
+```
+
+Then udpate `configuration.nix` to install `helix` from flake input:
+
+```nix
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+# 
+# Nix will automatically inject `helix` from specialArgs
+# into the third parameter of this function through name matching
+{ config, pkgs, helix, ... }:
+
+{
+  # omit other configurations......
+
+  environment.systemPackages = with pkgs; [
+    git
+    vim
+    wget
+
+    # install helix from flake input `helix`
+    helix."${pkgs.system}".packages.helix
+  ];
+
+  # omit other configurations......
+}
+```
+
+Now deploy the changes with `sudo nixos-rebuild switch`, and the helix editor will be installed. You can test it with the `helix` command.
 
 ### 4. Add Custom Cache Mirror
 
