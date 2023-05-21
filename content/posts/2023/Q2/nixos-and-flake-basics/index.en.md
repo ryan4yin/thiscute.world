@@ -31,7 +31,7 @@ comment:
 - 2023/5/21
   - Complete the "Overlays" section.
   - remove the "IX. Nix Packaging" section, which may be moved to a separate article in the future.
-  - Add an example of installing a program via the flakes at section VI-4.
+  - Add an example of installing programs via flakes at section VI-4.
 
 ## 0. Why Nix
 
@@ -1137,6 +1137,16 @@ After becoming familiar with Nix Flakes, you can try some advanced techniques. H
 - [flake-utils-plus](https://github.com/gytis-ivaskevicius/flake-utils-plus): A third-party package for simplifying Flake configuration, which is apparently more powerful.
 - [digga][digga]: A large and comprehensive Flake template that combines the functionality of various useful Nix toolkits, but has a complex structure and requires some experience to navigate.
 - etc.
+
+And many other useful community projects to explore, here are some of them:
+
+- [devenv](https://github.com/cachix/devenv): development environment management
+- [agenix](https://github.com/ryantm/agenix): secrets management
+- [colmena](https://github.com/zhaofengli/colmena): NixOS deployment tools
+- [nixos-generator](https://github.com/nix-community/nixos-generators): generate iso/qcow2/... from nixos configuration
+- [lanzaboote](https://github.com/nix-community/lanzaboote): enable secure boot for NixOS
+- [impermanence](https://github.com/nix-community/impermanence): used to make NixOS stateless, to imporve the reproduciability of NixOS system.
+
 
 ## References
 
