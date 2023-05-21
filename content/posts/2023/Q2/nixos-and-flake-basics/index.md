@@ -1162,7 +1162,9 @@ sudo nix-collect-garbage --delete-older-than 14d
 ```bash
 # 解释下这条指令涉及的参数：
 #   `nixpkgs#ponysay` 意思是 `nixpkgs` 这个 flake 中的 `ponysay` 包。
-#   `nixpkgs` 是一个 flakeregistry id，nix 会从 <https://github.com/NixOS/flake-registry/blob/master/flake-registry.json> 中找到这个 id 对应的 github 仓库地址。
+#   `nixpkgs` 是一个 flakeregistry ida,
+#    nix 会从 <https://github.com/NixOS/flake-registry/blob/master/flake-registry.json> 中
+#    找到这个 id 对应的 github 仓库地址
 # 所以这个命令的意思是创建一个新环境，安装并运行 `nixpkgs` 这个 flake 提供的 `ponysay` 包。
 #   注：前面已经介绍过了，nix 包 是 flake outputs 中的一种。
 echo "Hello Nix" | nix run "nixpkgs#ponysay"
@@ -1183,7 +1185,8 @@ nix develop
 # 或者如果你的 flake 有多个 devShell 输出，你可以指定使用名为 example 的那个
 nix develop .#example
 
-# 构建 `nixpkgs` flake 中的 `bat` 这个包，并在当前目录下创建一个名为 `result` 的符号链接，链接到该构建结果文件夹。
+# 构建 `nixpkgs` flake 中的 `bat` 这个包
+# 并在当前目录下创建一个名为 `result` 的符号链接，链接到该构建结果文件夹。
 mkdir build-nix-package && cd build-nix-package
 nix build "nixpkgs#bat"
 # 构建一个本地 flake 和 nix develop 是一样的，不再赘述
@@ -1288,13 +1291,96 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
     })
 
     # overlay3 - 也可以将 overlay 定义在其他文件中
-    ./overlays/overlay3.nix
+    (import ./overlays/overlay3.nix)
   ];
 }
 ```
 
 这里只是个示例配置，参照此格式编写你自己的 overlays 配置，将该配置作为 NixOS Module 或者 Home Manager Module 引入，然后部署就可以看到效果了。
 
+#### 模块化 overlays 配置
+
+上面的例子说明了如何编写 overlays，但是所有 overlays 都一股脑儿写在一起，就有点难以维护了，写得多了自然就希望模块化管理这些 overlays.
+
+这里介绍下我找到的一个 overlays 模块化管理的最佳实践。
+
+首先在 Git 仓库中创建 `overlays` 文件夹用于存放所有 overlays 配置，然后创建 `overlays/default.nix`，其内容如下：
+
+```nix
+args:
+  # import 当前文件夹下所有的 nix 文件，并以 args 为参数执行它们
+  # 返回值是一个所有执行结果的列表，也就是 overlays 的列表
+  builtins.map
+  (f: (import (./. + "/${f}") args))  # map 的第一个参数，是一个 import 并执行 nix 文件的函数
+  (builtins.filter          # map 的第二个参数，它返回一个当前文件夹下除 default.nix 外所有 nix 文件的列表
+    (f: f != "default.nix")
+    (builtins.attrNames (builtins.readDir ./.)))
+```
+
+后续所有 overlays 配置都添加到 `overlays` 文件夹中，一个示例配置 `overlays/fcitx5/default.nix` 内容如下：
+
+```nix
+# 为了不使用默认的 rime-data，改用我自定义的小鹤音形数据，这里需要 override
+# 参考 https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix
+{pkgs, config, lib, ...}: 
+
+(self: super: {
+  # 小鹤音形配置，配置来自 flypy.com 官方网盘的鼠须管配置压缩包「小鹤音形“鼠须管”for macOS.zip」
+  rime-data = ./rime-data-flypy;
+  fcitx5-rime = super.fcitx5-rime.override { rimeDataPkgs = [ ./rime-data-flypy ]; };
+})
+```
+
+我通过上面这个 overlays 修改了 fcitx5-rime 输入法的默认数据，加载了我自定义的小鹤音形输入法。
+
+最后，还需要通过 `nixpkgs.overlays` 这个 option 加载 `overlays/default.nix` 返回的所有 overlays 配置，在任一 NixOS Module 中添加如下参数即可：
+
+```nix
+{ config, pkgs, lib, ... } @ args:
+
+{
+  # ......
+
+  # 添加此参数
+  nixpkgs.overlays = import /path/to/overlays/dir;
+
+  # ......
+}
+```
+
+比如说直接写 `flake.nix` 里：
+
+```nix
+{
+  description = "NixOS configuration of Ryan Yin";
+
+  # ......
+
+  inputs = {
+    # ......
+  };
+
+  outputs = inputs@{ self, nixpkgs, ... }: {
+    nixosConfigurations = {
+      nixos-test = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs; 
+        modules = [
+          ./hosts/nixos-test
+
+          # 添加如下内嵌 module 定义
+          #   这里将 modules 的所有参数 args 都传递到了 overlays 中
+          (args: { nixpkgs.overlays = import ./overlays args; })
+          
+          # ......
+        ];
+      };
+    };
+  };
+}
+```
+
+按照上述方法进行配置，就可以很方便地模块化管理所有 overlays 配置了。
 
 ## 九、使用 Nix Flakes 打包应用
 
