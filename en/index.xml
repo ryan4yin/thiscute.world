@@ -5,7 +5,7 @@
 </blockquote>
 <h2 id="article-history" class="headerLink">
     <a href="#article-history" class="header-mark"></a>Article History</h2><ul>
-<li>2023/5/21: Complete the &ldquo;Overlays&rdquo; section, remove the &ldquo;IX. Nix Packaging&rdquo; section.</li>
+<li>2023/5/21: Complete the &ldquo;Overlays&rdquo; section, remove the &ldquo;IX. Nix Packaging&rdquo; section, which may be moved to a separate article in the future.</li>
 </ul>
 <h2 id="0-why-nix" class="headerLink">
     <a href="#0-why-nix" class="header-mark"></a>0. Why Nix</h2><p>I heard about the Nix package manager several years ago. It uses the Nix language to describe system configuration, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn&rsquo;t study it at the time.</p>
@@ -1411,7 +1411,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>This is just an example configuration, refer to this format to write your own overlays configuration, import the configuration as a NixOS Module or a Home Manager Module, and then deploy it to see the effect.</p>
+</div><p>refer to this example to write your own overlays, import the configuration as a NixOS Module or a Home Manager Module, and then deploy it to see the effect.</p>
 <h4 id="modular-overlays" class="headerLink">
     <a href="#modular-overlays" class="header-mark"></a>Modular overlays</h4><p>The example above shows how to write overlays, but all overlays are written in a single nix file, which is a bit difficult to maintain.</p>
 <p>To resolve this problem,here is a best practice of how to manage overlays in a modular way.</p>
