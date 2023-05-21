@@ -1380,7 +1380,27 @@ args:
 }
 ```
 
-按照上述方法进行配置，就可以很方便地模块化管理所有 overlays 配置了。
+按照上述方法进行配置，就可以很方便地模块化管理所有 overlays 配置了，以我的配置为例，overlays 文件夹的结构大致如下：
+
+```nix
+.
+├── flake.lock
+├── flake.nix
+├── home
+├── hosts
+├── modules
+├── ......
+├── overlays
+│   ├── default.nix         # 它返回一个所有 overlays 的列表
+│   └── fcitx5              # fcitx5 overlay
+│       ├── default.nix
+│       ├── README.md
+│       └── rime-data-flypy  # 自定义的 rime-data，需要遵循它的文件夹格式
+│           └── share
+│               └── rime-data
+│                   ├── ......  # rime-data 文件
+└── README.md
+```
 
 ## 九、使用 Nix Flakes 打包应用
 
