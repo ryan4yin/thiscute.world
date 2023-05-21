@@ -577,8 +577,8 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Now deploy the changes with <code>sudo nixos-rebuild switch</code>, and the helix editor will be installed. You can test it with the <code>helix</code> command.</p>
-<h3 id="4-add-custom-cache-mirror" class="headerLink">
-    <a href="#4-add-custom-cache-mirror" class="header-mark"></a>4. Add Custom Cache Mirror</h3><p>In order to speed up package building, Nix provides <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> to cache build results to avoid build every packages locally.</p>
+<h3 id="5-add-custom-cache-mirror" class="headerLink">
+    <a href="#5-add-custom-cache-mirror" class="header-mark"></a>5. Add Custom Cache Mirror</h3><p>In order to speed up package building, Nix provides <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> to cache build results to avoid build every packages locally.</p>
 <p>In the old NixOS configuration, other cache sources can be added through <code>nix-channel</code> command, but Nix Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its build results are not affected by the environment(environment independent).
 Therefore, in order to customize the cache image source, we must add the related configuration in <code>flake.nix</code> by using the parameter <code>nixConfig</code>. The example is as follows:</p>
 <div class="highlight"><div class="chroma">
@@ -652,8 +652,8 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>After the modification, execute <code>sudo nixos-rebuild switch</code> to apply the configuration.</p>
-<h3 id="5-install-home-manager" class="headerLink">
-    <a href="#5-install-home-manager" class="header-mark"></a>5. install home-manager</h3><p>We mentioned earlier that NixOS can only manage system-level configurations, and user-level configurations need to be managed using home-manager.</p>
+<h3 id="6-install-home-manager" class="headerLink">
+    <a href="#6-install-home-manager" class="header-mark"></a>6. install home-manager</h3><p>We mentioned earlier that NixOS can only manage system-level configurations, and user-level configurations need to be managed using home-manager.</p>
 <p>According to the official document <a href="https://nix-community.github.io/home-manager/index.htm" target="_blank" rel="noopener noreferrer">Home Manager Manual</a>, in order to install home-manager as an module of NixOS, we need to create <code>/etc/nixos/home.nix</code> first, an example content shown below:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -908,8 +908,8 @@ Therefore, in order to customize the cache image source, we must add the related
 <li><a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">Home Manager - Appendix A. Configuration Options</a>: A list of all options, it is recommended to search for keywords in it.</li>
 <li><a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>: Some options are not listed in the official documentation, or the documentation is not clear enough, you can directly search and read the corresponding source code in this home-manager repo.</li>
 </ul>
-<h3 id="6-modular-nixos-configuration" class="headerLink">
-    <a href="#6-modular-nixos-configuration" class="header-mark"></a>6. Modular NixOS configuration</h3><p>At this point, the skeleton of the entire system is basically configured. The current system configuration structure in <code>/etc/nixos</code> should be as follows:</p>
+<h3 id="7-modular-nixos-configuration" class="headerLink">
+    <a href="#7-modular-nixos-configuration" class="header-mark"></a>7. Modular NixOS configuration</h3><p>At this point, the skeleton of the entire system is basically configured. The current system configuration structure in <code>/etc/nixos</code> should be as follows:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1062,8 +1062,8 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>For the details of the structure and content, please go to the github repository <a href="https://github.com/ryan4yin/nix-config/tree/v0.0.2" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/v0.0.2</a>.</p>
-<h3 id="7-update-the-system" class="headerLink">
-    <a href="#7-update-the-system" class="header-mark"></a>7. Update the system</h3><p>After using Nix Flakes, it is also very simple to update the system. First update the flake.lock file, and then deploy it. Execute the following command in the configuration folder:</p>
+<h3 id="8-update-the-system" class="headerLink">
+    <a href="#8-update-the-system" class="header-mark"></a>8. Update the system</h3><p>After using Nix Flakes, it is also very simple to update the system. First update the flake.lock file, and then deploy it. Execute the following command in the configuration folder:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1079,8 +1079,8 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Sometimes when installing new packages, you may encounter an error of sha256 mismatch when running <code>nixos-rebuild switch</code>. You can also try to solve it by updating <code>flake.lock</code> through <code>nix flake update</code>.</p>
-<h3 id="8-rollback-the-version-of-some-packages" class="headerLink">
-    <a href="#8-rollback-the-version-of-some-packages" class="header-mark"></a>8. Rollback the version of some packages</h3><p>After using Nix Flakes, most people are currently using the <code>nixos-unstable</code> branch of nixpkgs. Sometimes you will encounter some bugs, such as the <a href="https://github.com/swaywm/sway/issues/7562" target="_blank" rel="noopener noreferrer">chrome/vscode crash problem</a></p>
+<h3 id="9-rollback-the-version-of-some-packages" class="headerLink">
+    <a href="#9-rollback-the-version-of-some-packages" class="header-mark"></a>9. Rollback the version of some packages</h3><p>After using Nix Flakes, most people are currently using the <code>nixos-unstable</code> branch of nixpkgs. Sometimes you will encounter some bugs, such as the <a href="https://github.com/swaywm/sway/issues/7562" target="_blank" rel="noopener noreferrer">chrome/vscode crash problem</a></p>
 <p>To resolve this problem, we need to rollback the version of some packages. In Nix Flakes, all package versions and hash values are one-to-one corresponding to the git commit of their input data source. Therefore, to rollback a package to a historical version, we need to lock the git commit of its input data source.</p>
 <p>So to rollback the version of some packages, first modify <code>/etc/nixos/flake.nix</code>, the example content is as follows (mainly using the <code>specialArgs</code> parameter):</p>
 <div class="highlight"><div class="chroma">
@@ -1237,8 +1237,8 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>After adjusted the configuration, deploy it with <code>sudo nixos-rebuild switch</code>, then your firefox/chrome/vscode will revert to the version corresponding to <code>nix-stable</code> or <code>nixpkgs-fd40cef8d</code>.</p>
-<h3 id="9-manage-nixos-configuration-with-git" class="headerLink">
-    <a href="#9-manage-nixos-configuration-with-git" class="header-mark"></a>9. Manage NixOS configuration with Git</h3><p>NixOS&rsquo;s configuration file is plain text, so it can be managed with Git just like ordinary dotfiles.</p>
+<h3 id="10-manage-nixos-configuration-with-git" class="headerLink">
+    <a href="#10-manage-nixos-configuration-with-git" class="header-mark"></a>10. Manage NixOS configuration with Git</h3><p>NixOS&rsquo;s configuration file is plain text, so it can be managed with Git just like ordinary dotfiles.</p>
 <p>On the other hand, <code>flake.nix</code> do not required to be placed in the <code>/etc/nixos</code> directory, they can be placed in any directory, as long as the correct path is specified during deployment.</p>
 <p>For example, my usage is to place the Nix Flakes configuration in the <code>~/nixos-config</code> directory, and then create a soft link in the <code>/etc/nixos</code> directory:</p>
 <div class="highlight"><div class="chroma">
@@ -1276,8 +1276,8 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Choose whichever you like.</p>
-<h3 id="10-other-commands-you-may-need" class="headerLink">
-    <a href="#10-other-commands-you-may-need" class="header-mark"></a>10. Other commands you may need</h3><p>As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:</p>
+<h3 id="11-other-commands-you-may-need" class="headerLink">
+    <a href="#11-other-commands-you-may-need" class="header-mark"></a>11. Other commands you may need</h3><p>As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
