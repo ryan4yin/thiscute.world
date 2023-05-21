@@ -901,11 +901,7 @@ When using Nix Flakes to write NixOS configuration, Home Manager and NixOS both 
 - [home-manager docs - `nixpkgs.overlays`](https://nix-community.github.io/home-manager/options.html#opt-nixpkgs.overlays)
 - [nixpkgs source code - `nixpkgs.overlays`](https://github.com/NixOS/nixpkgs/blob/30d7dd7e7f2cba9c105a6906ae2c9ed419e02f17/nixos/modules/misc/nixpkgs.nix#L169)
 
-举个例子，如下内容就是一个加载 Overlays 的 Module，它既可以用做 Home Manager Module，也可以用做 NixOS Module，因为这俩定义完全是一致的：
-
 For example, the following content is a Module that loads Overlays, which can be used as either a Home Manager Module or a NixOS Module, because the two definitions are exactly the same:
-
->不过我使用发现，Home Manager 毕竟是个外部组件，而且现在全都用的 unstable 分支，这导致 Home Manager Module 有时候会有点小毛病，因此更建议以 NixOS Module 的形式引入 overlays
 
 >Home Manager is an external component after all, and most people use the unstable branch of Home Manager & nixpkgs, which sometimes causes problems with Home Manager Module, so it is recommended to import `overlays` in a NixOS Module.
 
