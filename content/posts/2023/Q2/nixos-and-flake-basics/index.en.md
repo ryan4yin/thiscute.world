@@ -429,7 +429,7 @@ Then udpate `configuration.nix` to install `helix` from flake input:
 
 Now deploy the changes with `sudo nixos-rebuild switch`, and the helix editor will be installed. You can test it with the `helix` command.
 
-### 4. Add Custom Cache Mirror
+### 5. Add Custom Cache Mirror
 
 In order to speed up package building, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
 
@@ -474,7 +474,7 @@ Therefore, in order to customize the cache image source, we must add the related
 
 After the modification, execute `sudo nixos-rebuild switch` to apply the configuration. 
 
-### 5. install home-manager
+### 6. install home-manager
 
 We mentioned earlier that NixOS can only manage system-level configurations, and user-level configurations need to be managed using home-manager.
 
@@ -617,7 +617,7 @@ To find the options of home-manager used in `home.nix`, use the following method
 - [Home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html): A list of all options, it is recommended to search for keywords in it.
 - [home-manager](https://github.com/nix-community/home-manager): Some options are not listed in the official documentation, or the documentation is not clear enough, you can directly search and read the corresponding source code in this home-manager repo.
 
-### 6. Modular NixOS configuration
+### 7. Modular NixOS configuration
 
 At this point, the skeleton of the entire system is basically configured. The current system configuration structure in `/etc/nixos` should be as follows:
 
@@ -708,7 +708,7 @@ For example, the structure of my previous i3wm system configuration [ryan4yin/ni
 
 For the details of the structure and content, please go to the github repository [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2).
 
-### 7. Update the system
+### 8. Update the system
 
 After using Nix Flakes, it is also very simple to update the system. First update the flake.lock file, and then deploy it. Execute the following command in the configuration folder:
 
@@ -721,7 +721,7 @@ sudo nixos-rebuild switch
 
 Sometimes when installing new packages, you may encounter an error of sha256 mismatch when running `nixos-rebuild switch`. You can also try to solve it by updating `flake.lock` through `nix flake update`.
 
-### 8. Rollback the version of some packages
+### 9. Rollback the version of some packages
 
 After using Nix Flakes, most people are currently using the `nixos-unstable` branch of nixpkgs. Sometimes you will encounter some bugs, such as the [chrome/vscode crash problem](https://github.com/swaywm/sway/issues/7562)
 
@@ -809,7 +809,7 @@ in {
 
 After adjusted the configuration, deploy it with `sudo nixos-rebuild switch`, then your firefox/chrome/vscode will revert to the version corresponding to `nix-stable` or `nixpkgs-fd40cef8d`. 
 
-### 9. Manage NixOS configuration with Git
+### 10. Manage NixOS configuration with Git
 
 NixOS's configuration file is plain text, so it can be managed with Git just like ordinary dotfiles.
 
@@ -841,7 +841,7 @@ Choose whichever you like.
 
 
 
-### 10. Other commands you may need
+### 11. Other commands you may need
 
 As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:
 
