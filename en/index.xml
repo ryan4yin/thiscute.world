@@ -5,7 +5,13 @@
 </blockquote>
 <h2 id="article-history" class="headerLink">
     <a href="#article-history" class="header-mark"></a>Article History</h2><ul>
-<li>2023/5/21: Complete the &ldquo;Overlays&rdquo; section, remove the &ldquo;IX. Nix Packaging&rdquo; section, which may be moved to a separate article in the future.</li>
+<li>2023/5/21
+<ul>
+<li>Complete the &ldquo;Overlays&rdquo; section.</li>
+<li>remove the &ldquo;IX. Nix Packaging&rdquo; section, which may be moved to a separate article in the future.</li>
+<li>Add an example of installing a program via the flakes at section VI-4.</li>
+</ul>
+</li>
 </ul>
 <h2 id="0-why-nix" class="headerLink">
     <a href="#0-why-nix" class="header-mark"></a>0. Why Nix</h2><p>I heard about the Nix package manager several years ago. It uses the Nix language to describe system configuration, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn&rsquo;t study it at the time.</p>
@@ -455,6 +461,122 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </div>
 </div><p>Here we define a NixOS system called <code>nixos-test</code>, whose configuration file is <code>./configuration.nix</code>, which is our previous configuration file, so we can still use the old configuration.</p>
 <p>Now execute the <code>sudo nixos-rebuild switch</code> command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the actual configuration content is the same as before.</p>
+<h3 id="4-manage-system-software-through-flakes" class="headerLink">
+    <a href="#4-manage-system-software-through-flakes" class="header-mark"></a>4. Manage system software through Flakes</h3><p>After the switch, we can manage the system through Flakes. The most common requirement for managing a system is to install software. We have seen how to install packages in <code>pkgs</code> through <code>environment.systemPackages</code> before, and these packages are all from the official nixpkgs repository.</p>
+<p>Now let&rsquo;s learn how to install packages from other sources through Flakes. This is much more flexible than installing nixpkgs directly. The most obvious benefit is that you can easily set the version of the software.</p>
+<p>Use <a href="https://github.com/helix-editor/helix" target="_blank" rel="noopener noreferrer">helix</a> editor as an example, we first need to add the helix input data source in <code>flake.nix</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;NixOS configuration of Ryan Yin&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># helix editor, use tag 23.05</span>
+</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:helix-editor/helix/23.05&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">@</span><span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nixosConfigurations</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># set all inputs parameters as specialArgs of all sub module</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># so that we can use `helix` input in sub modules</span>
+</span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="sr">./configuration.nix</span>
+</span></span><span class="line"><span class="cl">        <span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then udpate <code>configuration.nix</code> to install <code>helix</code> from flake input:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># Edit this configuration file to define what should be installed on</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># your system.  Help is available in the configuration.nix(5) man page</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and in the NixOS manual (accessible by running ‘nixos-help’).</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Nix will automatically inject `helix` from specialArgs</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># into the third parameter of this function through name matching</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">helix</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># omit other configurations......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">environment</span><span class="o">.</span><span class="n">systemPackages</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="n">git</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vim</span>
+</span></span><span class="line"><span class="cl">    <span class="n">wget</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># install helix from flake input `helix`</span>
+</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="s2">&#34;</span><span class="si">${</span><span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="si">}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">helix</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># omit other configurations......</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Now deploy the changes with <code>sudo nixos-rebuild switch</code>, and the helix editor will be installed. You can test it with the <code>helix</code> command.</p>
 <h3 id="4-add-custom-cache-mirror" class="headerLink">
     <a href="#4-add-custom-cache-mirror" class="header-mark"></a>4. Add Custom Cache Mirror</h3><p>In order to speed up package building, Nix provides <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> to cache build results to avoid build every packages locally.</p>
 <p>In the old NixOS configuration, other cache sources can be added through <code>nix-channel</code> command, but Nix Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its build results are not affected by the environment(environment independent).
