@@ -1809,18 +1809,20 @@
     <a href="#overlays" class="header-mark"></a>Overlays</h3><blockquote>
 <p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overlays" target="_blank" rel="noopener noreferrer">Chapter 3. Overlays - nixpkgs Manual</a></p>
 </blockquote>
-<blockquote>
-<p>TODO 这个部分我还没完全理解，可能有错误，待完善。</p>
-</blockquote>
 <p>前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
 但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.</p>
-<p>解决方法有两个：</p>
-<ol>
-<li>如果所有依赖 Derivation A 的包都仅在某个特定作用域内被使用，那么可以使用 <code>let...in...</code> 语法，override 该作用域内的 Derivation A</li>
-<li>否则，就只能使用 Overlays 修改 pkgs 中的 Derivation A 了，这是全局的修改。</li>
-</ol>
-<p>所以简单的说，Overlays 就是用来全局修改 pkgs 中的 Derivation 的。</p>
-<p>在 Nix Flakes 中，使用如下语法来使用 Overlays:</p>
+<p>为了解决这个问题，Nix 提供了 overlays 能力。简单的说，Overlays 可以全局修改 pkgs 中的 Derivation。</p>
+<p>在旧的 Nix 环境中，Nix 默认会自动应用 <code>~/.config/nixpkgs/overlays.nix</code> <code>~/.config/nixpkgs/overlays/*.nix</code> 这类路径下的所有 overlays 配置。</p>
+<p>但是在 Flakes 中，为了确保系统的可复现性，它不能依赖任何 Git 仓库之外的配置，所以这种旧的方法就不能用了。</p>
+<p>在使用 Nix Flakes 编写 NixOS 配置时，home-manager 与 NixOS 都提供了 <code>nixpkgs.overlays</code> 这个 option 来引入 overlays, 相关文档：</p>
+<ul>
+<li><a href="https://nix-community.github.io/home-manager/options.html#opt-nixpkgs.overlays" target="_blank" rel="noopener noreferrer">home-manager docs - <code>nixpkgs.overlays</code></a></li>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/30d7dd7e7f2cba9c105a6906ae2c9ed419e02f17/nixos/modules/misc/nixpkgs.nix#L169" target="_blank" rel="noopener noreferrer">nixpkgs source code - <code>nixpkgs.overlays</code></a></li>
+</ul>
+<p>举个例子，如下内容就是一个加载 Overlays 的 Module，它既可以用做 Home Manager Module，也可以用做 NixOS Module，因为这俩定义完全是一致的：</p>
+<blockquote>
+<p>不过我使用发现，Home Manager 毕竟是个外部组件，而且现在全都用的 unstable 分支，这导致 Home Manager Module 有时候会有点小毛病。</p>
+</blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1856,44 +1858,52 @@
 </span><span class="lnt">31
 </span><span class="lnt">32
 </span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># TODO 测试验证这个写法</span>
-</span></span><span class="line"><span class="cl"><span class="k">let</span> <span class="n">pkgs</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs</span> <span class="p">{</span> <span class="k">inherit</span> <span class="n">system</span><span class="p">;</span> <span class="n">overlays</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># overlayer1 - 参数名用 self 与 super，表达继承关系</span>
-</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">self</span><span class="p">:</span> <span class="n">super</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">   <span class="n">google-chrome</span> <span class="o">=</span> <span class="n">super</span><span class="o">.</span><span class="n">google-chrome</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">     <span class="n">commandLineArgs</span> <span class="o">=</span>
-</span></span><span class="line"><span class="cl">       <span class="s2">&#34;--proxy-server=&#39;https=127.0.0.1:3128;http=127.0.0.1:3128&#39;&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">   <span class="p">};</span>
-</span></span><span class="line"><span class="cl">  <span class="p">})</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># overlayer2 - 还可以使用 extend 来继承其他 overlay</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># 这里改用 final 与 prev，表达新旧关系</span>
-</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">final</span><span class="p">:</span> <span class="n">prev</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">steam</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="n">steam</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="n">extraPkgs</span> <span class="o">=</span> <span class="n">pkgs</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">          <span class="n">keyutils</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libkrb5</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libpng</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libpulseaudio</span>
-</span></span><span class="line"><span class="cl">          <span class="n">libvorbis</span>
-</span></span><span class="line"><span class="cl">          <span class="n">stdenv</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">lib</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXcursor</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXi</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXinerama</span>
-</span></span><span class="line"><span class="cl">          <span class="n">xorg</span><span class="o">.</span><span class="n">libXScrnSaver</span>
-</span></span><span class="line"><span class="cl">        <span class="p">];</span>
-</span></span><span class="line"><span class="cl">      <span class="n">extraProfile</span> <span class="o">=</span> <span class="s2">&#34;export GDK_SCALE=2&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">};</span>
-</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># overlay3 - 也可以将 overlay 定义在其他文件中</span>
-</span></span><span class="line"><span class="cl">  <span class="sr">./overlays/overlay3.nix</span>
-</span></span><span class="line"><span class="cl"><span class="p">];</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">nixpkgs</span><span class="o">.</span><span class="n">overlays</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># overlayer1 - 参数名用 self 与 super，表达继承关系</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="n">self</span><span class="p">:</span> <span class="n">super</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="n">google-chrome</span> <span class="o">=</span> <span class="n">super</span><span class="o">.</span><span class="n">google-chrome</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="n">commandLineArgs</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">         <span class="s2">&#34;--proxy-server=&#39;https=127.0.0.1:3128;http=127.0.0.1:3128&#39;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">     <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># overlayer2 - 还可以使用 extend 来继承其他 overlay</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 这里改用 final 与 prev，表达新旧关系</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="n">final</span><span class="p">:</span> <span class="n">prev</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">steam</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="n">steam</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">extraPkgs</span> <span class="o">=</span> <span class="n">pkgs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">          <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="n">keyutils</span>
+</span></span><span class="line"><span class="cl">            <span class="n">libkrb5</span>
+</span></span><span class="line"><span class="cl">            <span class="n">libpng</span>
+</span></span><span class="line"><span class="cl">            <span class="n">libpulseaudio</span>
+</span></span><span class="line"><span class="cl">            <span class="n">libvorbis</span>
+</span></span><span class="line"><span class="cl">            <span class="n">stdenv</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">cc</span><span class="o">.</span><span class="n">lib</span>
+</span></span><span class="line"><span class="cl">            <span class="n">xorg</span><span class="o">.</span><span class="n">libXcursor</span>
+</span></span><span class="line"><span class="cl">            <span class="n">xorg</span><span class="o">.</span><span class="n">libXi</span>
+</span></span><span class="line"><span class="cl">            <span class="n">xorg</span><span class="o">.</span><span class="n">libXinerama</span>
+</span></span><span class="line"><span class="cl">            <span class="n">xorg</span><span class="o">.</span><span class="n">libXScrnSaver</span>
+</span></span><span class="line"><span class="cl">          <span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">extraProfile</span> <span class="o">=</span> <span class="s2">&#34;export GDK_SCALE=2&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># overlay3 - 也可以将 overlay 定义在其他文件中</span>
+</span></span><span class="line"><span class="cl">    <span class="sr">./overlays/overlay3.nix</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>此外第三方库也提供了一些 Overlays 的简化配置方法，比如 <a href="https://flake.parts/overlays.html" target="_blank" rel="noopener noreferrer">Overlays - flake-parts</a></p>
+</div><p>这里只是个示例配置，参照此格式编写你自己的 overlays 配置，将该配置作为 NixOS Module 或者 Home Manager Module 引入，然后部署就可以看到效果了。</p>
 <h2 id="九使用-nix-flakes-打包应用" class="headerLink">
     <a href="#%e4%b9%9d%e4%bd%bf%e7%94%a8-nix-flakes-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>九、使用 Nix Flakes 打包应用</h2><blockquote>
 <p>参考 <a href="https://lantian.pub/article/modify-computer/nixos-packaging.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（三）：软件打包，从入门到放弃</a></p>
