@@ -1232,57 +1232,65 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 
 >[Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
 
->TODO 这个部分我还没完全理解，可能有错误，待完善。
-
 前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
 但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.
 
-解决方法有两个：
+为了解决这个问题，Nix 提供了 overlays 能力。简单的说，Overlays 可以全局修改 pkgs 中的 Derivation。
 
-1. 如果所有依赖 Derivation A 的包都仅在某个特定作用域内被使用，那么可以使用 `let...in...` 语法，override 该作用域内的 Derivation A
-2. 否则，就只能使用 Overlays 修改 pkgs 中的 Derivation A 了，这是全局的修改。
+在旧的 Nix 环境中，Nix 默认会自动应用 `~/.config/nixpkgs/overlays.nix` `~/.config/nixpkgs/overlays/*.nix` 这类路径下的所有 overlays 配置。
 
-所以简单的说，Overlays 就是用来全局修改 pkgs 中的 Derivation 的。
+但是在 Flakes 中，为了确保系统的可复现性，它不能依赖任何 Git 仓库之外的配置，所以这种旧的方法就不能用了。
 
-在 Nix Flakes 中，使用如下语法来使用 Overlays:
+在使用 Nix Flakes 编写 NixOS 配置时，home-manager 与 NixOS 都提供了 `nixpkgs.overlays` 这个 option 来引入 overlays, 相关文档：
+
+- [home-manager docs - `nixpkgs.overlays`](https://nix-community.github.io/home-manager/options.html#opt-nixpkgs.overlays)
+- [nixpkgs source code - `nixpkgs.overlays`](https://github.com/NixOS/nixpkgs/blob/30d7dd7e7f2cba9c105a6906ae2c9ed419e02f17/nixos/modules/misc/nixpkgs.nix#L169)
+
+举个例子，如下内容就是一个加载 Overlays 的 Module，它既可以用做 Home Manager Module，也可以用做 NixOS Module，因为这俩定义完全是一致的：
+
+>不过我使用发现，Home Manager 毕竟是个外部组件，而且现在全都用的 unstable 分支，这导致 Home Manager Module 有时候会有点小毛病。
 
 ```nix
-# TODO 测试验证这个写法
-let pkgs = import nixpkgs { inherit system; overlays = [
-  # overlayer1 - 参数名用 self 与 super，表达继承关系
-  (self: super: {
-   google-chrome = super.google-chrome.override {
-     commandLineArgs =
-       "--proxy-server='https=127.0.0.1:3128;http=127.0.0.1:3128'";
-   };
-  })
-  # overlayer2 - 还可以使用 extend 来继承其他 overlay
-  # 这里改用 final 与 prev，表达新旧关系
-  (final: prev: {
-    steam = prev.steam.override {
-      extraPkgs = pkgs:
-        with pkgs; [
-          keyutils
-          libkrb5
-          libpng
-          libpulseaudio
-          libvorbis
-          stdenv.cc.cc.lib
-          xorg.libXcursor
-          xorg.libXi
-          xorg.libXinerama
-          xorg.libXScrnSaver
-        ];
-      extraProfile = "export GDK_SCALE=2";
-    };
-  })
+{ config, pkgs, lib, ... }:
 
-  # overlay3 - 也可以将 overlay 定义在其他文件中
-  ./overlays/overlay3.nix
-]; }
+{
+  nixpkgs.overlays = [
+    # overlayer1 - 参数名用 self 与 super，表达继承关系
+    (self: super: {
+     google-chrome = super.google-chrome.override {
+       commandLineArgs =
+         "--proxy-server='https=127.0.0.1:3128;http=127.0.0.1:3128'";
+     };
+    })
+
+    # overlayer2 - 还可以使用 extend 来继承其他 overlay
+    # 这里改用 final 与 prev，表达新旧关系
+    (final: prev: {
+      steam = prev.steam.override {
+        extraPkgs = pkgs:
+          with pkgs; [
+            keyutils
+            libkrb5
+            libpng
+            libpulseaudio
+            libvorbis
+            stdenv.cc.cc.lib
+            xorg.libXcursor
+            xorg.libXi
+            xorg.libXinerama
+            xorg.libXScrnSaver
+          ];
+        extraProfile = "export GDK_SCALE=2";
+      };
+    })
+
+    # overlay3 - 也可以将 overlay 定义在其他文件中
+    ./overlays/overlay3.nix
+  ];
+}
 ```
 
-此外第三方库也提供了一些 Overlays 的简化配置方法，比如 [Overlays - flake-parts](https://flake.parts/overlays.html) 
+这里只是个示例配置，参照此格式编写你自己的 overlays 配置，将该配置作为 NixOS Module 或者 Home Manager Module 引入，然后部署就可以看到效果了。
 
 
 ## 九、使用 Nix Flakes 打包应用
