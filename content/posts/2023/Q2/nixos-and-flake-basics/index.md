@@ -656,9 +656,10 @@ cat flake.nix
   # 这里的 @ 语法将函数的参数 attribute set 取了个别名，方便在内部使用 
   outputs = { self, nixpkgs, ... }@inputs: {
     # 名为 nixosConfigurations 的 outputs 会在执行 `sudo nixos-rebuild switch` 时被使用
-    # 默认情况下上述命令会使用与主机 hostname 同名的 nixosConfigurations，但是也可以通过 `--flake /path/to/flake/direcotry#nixos-test` 来指定
-    # 在 flakes 配置文件夹中执行 `sudo nixos-rebuild switch --flake .#nixos-test` 即可部署此 nixos 配置
-    #     其中 `.` 表示使用当前文件夹的 Flakes 配置，`#` 后面的内容则是 nixosConfigurations 的名称
+    # 默认情况下上述命令会使用与主机 hostname 同名的 nixosConfigurations
+    # 但是也可以通过 `--flake /path/to/flake/direcotry#nixos-test` 来指定
+    # 在 flakes 配置文件夹中执行 `sudo nixos-rebuild switch --flake .#nixos-test` 即可部署此配置
+    #   其中 `.` 表示使用当前文件夹的 Flakes 配置，`#` 后面的内容则是 nixosConfigurations 的名称
     nixosConfigurations = {
       # hostname 为 nixos-test 的主机会使用这个配置
       # 这里使用了 nixpkgs.lib.nixosSystem 函数来构建配置，后面的 attributes set 是它的参数
@@ -681,7 +682,7 @@ cat flake.nix
         #  modulesPath: The location of the module directory of Nix.
         #
         # 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs，你可以取消注释如下这行来启用该参数
-        # specialArgs = {...}  # 向子模块中传递自定义参数
+        # specialArgs = {...}  # 向子模块中传递自定义参参数
         modules = [
           # 导入之前我们使用的 configuration.nix，这样旧的配置文件仍然能生效
           # 注: /etc/nixos/configuration.nix 本身也是一个 Nix Module，因此可以直接在这里导入
@@ -699,10 +700,12 @@ cat flake.nix
 
 ### 4. 为 Flake 添加国内 cache 源
 
-Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓存构建结果提供给用户，另一方面几乎所有 Flakes 的数据源都是 Github 的某个仓库。
-但是在国内官方的 cache 地址跟 Github 都非常地慢，如果没有全局代理的话，基本上是无法使用的。
+Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓存构建结果提供给用户，但是在国内访问这个 cache 地址非常地慢，如果没有全局代理的话，基本上是无法使用的。
+另外 Flakes 的数据源基本都是某个 Github 仓库，在国内从 Github 下载 Flakes 数据源也同样非常非常慢。
 
-在旧的 NixOS 配置方式中，可以通过 `nix-channel` 来添加国内的 cache 镜像源，但是 Nix Flakes 会尽可能地避免使用任何系统级别的配置跟环境变量，以确保其构建结果不受环境的影响。因此为了自定义 cache 镜像源，我们必须在 `flake.nix` 中添加相关配置，这就是 `nixConfig` 参数，示例如下：
+在旧的 NixOS 配置方式中，可以通过 `nix-channel` 命令添加国内的 cache 镜像源以提升下载速度，但是 Nix Flakes 会尽可能地避免使用任何系统级别的配置跟环境变量，以确保其构建结果不受环境的影响，因此在使用了 Flakes 后 `nix-channel` 命令就失效了。
+
+为了自定义 cache 镜像源，我们必须在 `flake.nix` 中添加相关配置，这就是 `nixConfig` 参数，示例如下：
 
 ```nix
 {
