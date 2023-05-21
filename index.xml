@@ -135,7 +135,7 @@
 <p><a href="https://nix.dev/tutorials/first-steps/nix-language" target="_blank" rel="noopener noreferrer">https://nix.dev/tutorials/first-steps/nix-language</a></p>
 </blockquote>
 <p>Nix 语言是 Nix 的基础，要想玩得转 NixOS 与 Nix Flakes，享受到它们带来的诸多好处，就必须学会这门语言。</p>
-<p>Nix 是一门比较简单的函数式语言，在已有一定编程基础的情况下，过一遍这些语法用时应该在 2 个小时以内。</p>
+<p>Nix 是一门比较简单的函数式语言，在已有一定编程基础的情况下，过一遍这些语法用时应该在 2 个小时以内，本文假设你具有一定编程基础（也就是说写得不会很细）。</p>
 <p>这一节主要包含如下内容：</p>
 <ol>
 <li>数据类型</li>
@@ -149,7 +149,8 @@
 </ol>
 <p>先把语法过一遍，有个大概的印象就行，后面需要用到时再根据右侧目录回来复习。</p>
 <h3 id="1-基础数据类型一览" class="headerLink">
-    <a href="#1-%e5%9f%ba%e7%a1%80%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%80%e8%a7%88" class="header-mark"></a>1. 基础数据类型一览</h3><div class="highlight"><div class="chroma">
+    <a href="#1-%e5%9f%ba%e7%a1%80%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%80%e8%a7%88" class="header-mark"></a>1. 基础数据类型一览</h3><p>下面通过一个 attribute set （这类似 json 或者其他语言中的 map/dict）来简要说明所有基础数据类型：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -183,7 +184,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>以及一些基础操作符，普通的算术运算、布尔运算就跳过了：</p>
+</div><p>以及一些基础操作符（普通的算术运算、布尔运算就跳过不介绍了）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -288,7 +289,31 @@
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">a</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="4-with-语句" class="headerLink">
+</div><p>此外 attribute set 还支持一个 has attribute 操作符，它可用于检测 attribute set 中是否包含某个属性，返回 bool 值：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="k">let</span>
+</span></span><span class="line"><span class="cl">  <span class="n">a</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">b</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span>
+</span></span><span class="line"><span class="cl"><span class="n">a</span><span class="o">?</span><span class="n">b</span>  <span class="c1"># 结果是 true，因为 a.b 这个属性确实存在</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>has attribute 操作符在 nixpkgs 库中常被用于检测处理 <code>args?system</code> 等参数，以 <code>(args?system)</code> 或 <code>(! args?system)</code> 的形式作为函数参数使用（叹号表示对 bool 值取反，是常见 bool 值运算符）。</p>
+<h3 id="4-with-语句" class="headerLink">
     <a href="#4-with-%e8%af%ad%e5%8f%a5" class="header-mark"></a>4. with 语句</h3><p>with 语句的语法如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
