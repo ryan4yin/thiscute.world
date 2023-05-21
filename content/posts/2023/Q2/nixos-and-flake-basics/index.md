@@ -1241,14 +1241,14 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 
 但是在 Flakes 中，为了确保系统的可复现性，它不能依赖任何 Git 仓库之外的配置，所以这种旧的方法就不能用了。
 
-在使用 Nix Flakes 编写 NixOS 配置时，home-manager 与 NixOS 都提供了 `nixpkgs.overlays` 这个 option 来引入 overlays, 相关文档：
+在使用 Nix Flakes 编写 NixOS 配置时，Home Manager 与 NixOS 都提供了 `nixpkgs.overlays` 这个 option 来引入 overlays, 相关文档：
 
 - [home-manager docs - `nixpkgs.overlays`](https://nix-community.github.io/home-manager/options.html#opt-nixpkgs.overlays)
 - [nixpkgs source code - `nixpkgs.overlays`](https://github.com/NixOS/nixpkgs/blob/30d7dd7e7f2cba9c105a6906ae2c9ed419e02f17/nixos/modules/misc/nixpkgs.nix#L169)
 
 举个例子，如下内容就是一个加载 Overlays 的 Module，它既可以用做 Home Manager Module，也可以用做 NixOS Module，因为这俩定义完全是一致的：
 
->不过我使用发现，Home Manager 毕竟是个外部组件，而且现在全都用的 unstable 分支，这导致 Home Manager Module 有时候会有点小毛病。
+>不过我使用发现，Home Manager 毕竟是个外部组件，而且现在全都用的 unstable 分支，这导致 Home Manager Module 有时候会有点小毛病，因此更建议以 NixOS Module 的形式引入 overlays
 
 ```nix
 { config, pkgs, lib, ... }:
