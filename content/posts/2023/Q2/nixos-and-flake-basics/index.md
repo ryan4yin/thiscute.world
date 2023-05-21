@@ -24,7 +24,12 @@ comment:
 
 >到 2023/05/05 为止，我的 NixOS 练习时长仅半个月，因此本文作为一篇新手学习笔记，难免会有些错漏，请谨慎阅读，当然我也会在后续尽力修补与完善内容。
 
->本文的目标 NixOS 版本为 22.11，Nix 版本为 2.15.0，在此环境下 Nix Flakes 仍然为实验性功能。
+>本文的目标 NixOS 版本为 22.11，Nix 版本为 2.13.3，在此环境下 Nix Flakes 仍然为实验性功能。
+
+
+## 更新日志
+
+- 2023/5/21: 补充 overlays 一节的内容，移除「九、使用 Nix Flakes 打包应用」，这部分可能会放在后续文章中介绍。
 
 ## 零、为什么选择 Nix
 
@@ -1402,53 +1407,6 @@ args:
 └── README.md
 ```
 
-## 九、使用 Nix Flakes 打包应用
-
->参考 [NixOS 系列（三）：软件打包，从入门到放弃](https://lantian.pub/article/modify-computer/nixos-packaging.lantian/)
-
-有时候我们需要使用的应用，nixpkgs 不一定有，社区也找不到，那就只能自己动手打包了。
-
-TODO 待补充更多内容
-
-
-### stdenv.mkDerivation
-
-stdenv，顾名思义即标准构建环境，它是一个 attribute set，提供了构建 Unix 程序所需的标准环境，比如 gcc、glibc、binutils 等等。
-它可以完全取代我们在其他操作系统上常用的构建工具链，比如 `./configure`; `make`; `make install` 等等。
-
-即使 stdenv 提供的环境不能满足你的要求，你也可以通过 `stdenv.mkDerivation` 来创建一个自定义的构建环境。
-
-举个例子：
-
-```nix
-{ lib, stdenv }:
-
-stdenv.mkDerivation rec {
-  pname = "libfoo";
-  version = "1.2.3";
-  # 源码
-  src = fetchurl {
-    url = "http://example.org/libfoo-source-${version}.tar.bz2";
-    sha256 = "0x2g1jqygyr5wiwg4ma1nd7w4ydpy82z9gkcv8vh2v8dn3y58v5m";
-  };
-
-  # 构建依赖
-  buildInputs = [libbar perl ncurses];
-
-  # Nix 默认将构建拆分为一系列 phases，这里仅用到其中两个
-  # https://nixos.org/manual/nixpkgs/stable/#ssec-controlling-phases
-  buildPhase = ''
-    gcc foo.c -o foo
-  '';
-  installPhase = ''
-    mkdir -p $out/bin
-    cp foo $out/bin
-  '';
-}
-```
-
-TODO 待补充更多内容
-
 ## 进阶玩法
 
 逐渐熟悉 Nix 这一套工具链后，可以进一步读一读 Nix 的三本手册，挖掘更多的玩法：
@@ -1463,10 +1421,15 @@ TODO 待补充更多内容
 
 - [flake-parts](https://github.com/hercules-ci/flake-parts): 通过 Module 模块系统简化配置的编写与维护。
 - [flake-utils-plus](https://github.com/gytis-ivaskevicius/flake-utils-plus):同样是用于简化 Flake 配置的第三方包，不过貌似更强大些
-- [devshell](https://github.com/numtide/devshell): 顾名思义
 - [digga][digga]: 一个大而全的 Flake 模板，揉合了各种实用 Nix 工具包的功能，不过结构比较复杂，需要一定经验才能玩得转。
 - ......
 
+
+## 总结
+
+这是本系列文章的第一篇，介绍了使用 Nix Flakes 配置 NixOS 系统的基础知识，跟着这篇文章把系统配置好，就算是入门了。
+
+我会在后续文章中介绍 NixOS & Nix Flakes 的进阶知识：开发环境管理、secrets 管理、软件打包等等，尽请期待。
 
 ## 参考
 

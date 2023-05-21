@@ -27,7 +27,7 @@ comment:
 >As of 2023-05-10, I have only used the NixOS for about 20 days, so there will inevitably be some mistakes and omissions in this article, please read it carefully. 
 I will continue to try my best to repair and improve the content in the future, hope you like it, looking forward to any feedback~
 
-> The target NixOS version of this article is 22.11, and the Nix version is 2.15.0. In this environment, Nix Flakes is still an experimental feature.
+> The target NixOS version of this article is 22.11, and the Nix version is 2.13.3. In this environment, Nix Flakes is still an experimental feature.
 
 ## 0. Why Nix
 
