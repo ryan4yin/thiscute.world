@@ -2053,8 +2053,48 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>按照上述方法进行配置，就可以很方便地模块化管理所有 overlays 配置了。</p>
-<h2 id="九使用-nix-flakes-打包应用" class="headerLink">
+</div><p>按照上述方法进行配置，就可以很方便地模块化管理所有 overlays 配置了，以我的配置为例，overlays 文件夹的结构大致如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="o">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">flake</span><span class="o">.</span><span class="n">lock</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">flake</span><span class="o">.</span><span class="n">nix</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">home</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">hosts</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">modules</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="o">......</span>
+</span></span><span class="line"><span class="cl"><span class="err">├──</span> <span class="n">overlays</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">├──</span> <span class="n">default</span><span class="o">.</span><span class="n">nix</span>         <span class="c1"># 它返回一个所有 overlays 的列表</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>   <span class="err">└──</span> <span class="n">fcitx5</span>              <span class="c1"># fcitx5 overlay</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">├──</span> <span class="n">default</span><span class="o">.</span><span class="n">nix</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">├──</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>       <span class="err">└──</span> <span class="n">rime-data-flypy</span>  <span class="c1"># 自定义的 rime-data，需要遵循它的文件夹格式</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>           <span class="err">└──</span> <span class="n">share</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>               <span class="err">└──</span> <span class="n">rime-data</span>
+</span></span><span class="line"><span class="cl"><span class="err">│</span>                   <span class="err">├──</span> <span class="o">......</span>  <span class="c1"># rime-data 文件</span>
+</span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="九使用-nix-flakes-打包应用" class="headerLink">
     <a href="#%e4%b9%9d%e4%bd%bf%e7%94%a8-nix-flakes-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>九、使用 Nix Flakes 打包应用</h2><blockquote>
 <p>参考 <a href="https://lantian.pub/article/modify-computer/nixos-packaging.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（三）：软件打包，从入门到放弃</a></p>
 </blockquote>
