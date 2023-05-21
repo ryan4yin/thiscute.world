@@ -28,7 +28,7 @@ comment:
 
 ## Article History
 
-- 2023/5/21: Complete the "Overlays" section, remove the "IX. Nix Packaging" section.
+- 2023/5/21: Complete the "Overlays" section, remove the "IX. Nix Packaging" section, which may be moved to a separate article in the future.
 
 ## 0. Why Nix
 
@@ -945,7 +945,7 @@ For example, the following content is a Module that loads Overlays, which can be
 }
 ```
 
-This is just an example configuration, refer to this format to write your own overlays configuration, import the configuration as a NixOS Module or a Home Manager Module, and then deploy it to see the effect.
+refer to this example to write your own overlays, import the configuration as a NixOS Module or a Home Manager Module, and then deploy it to see the effect.
 
 
 #### Modular overlays
