@@ -1730,11 +1730,16 @@
 </span><span class="lnt">25
 </span><span class="lnt">26
 </span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 解释下这条指令涉及的参数：</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#   `nixpkgs#ponysay` 意思是 `nixpkgs` 这个 flake 中的 `ponysay` 包。</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#   `nixpkgs` 是一个 flakeregistry id，nix 会从 &lt;https://github.com/NixOS/flake-registry/blob/master/flake-registry.json&gt; 中找到这个 id 对应的 github 仓库地址。</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   `nixpkgs` 是一个 flakeregistry ida,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#    nix 会从 &lt;https://github.com/NixOS/flake-registry/blob/master/flake-registry.json&gt; 中</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#    找到这个 id 对应的 github 仓库地址</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 所以这个命令的意思是创建一个新环境，安装并运行 `nixpkgs` 这个 flake 提供的 `ponysay` 包。</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#   注：前面已经介绍过了，nix 包 是 flake outputs 中的一种。</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Hello Nix&#34;</span> <span class="p">|</span> nix run <span class="s2">&#34;nixpkgs#ponysay&#34;</span>
@@ -1755,7 +1760,8 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 或者如果你的 flake 有多个 devShell 输出，你可以指定使用名为 example 的那个</span>
 </span></span><span class="line"><span class="cl">nix develop .#example
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 构建 `nixpkgs` flake 中的 `bat` 这个包，并在当前目录下创建一个名为 `result` 的符号链接，链接到该构建结果文件夹。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 构建 `nixpkgs` flake 中的 `bat` 这个包</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 并在当前目录下创建一个名为 `result` 的符号链接，链接到该构建结果文件夹。</span>
 </span></span><span class="line"><span class="cl">mkdir build-nix-package <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build-nix-package
 </span></span><span class="line"><span class="cl">nix build <span class="s2">&#34;nixpkgs#bat&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 构建一个本地 flake 和 nix develop 是一样的，不再赘述</span>
@@ -1901,12 +1907,153 @@
 </span></span><span class="line"><span class="cl">    <span class="p">})</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># overlay3 - 也可以将 overlay 定义在其他文件中</span>
-</span></span><span class="line"><span class="cl">    <span class="sr">./overlays/overlay3.nix</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="kn">import</span> <span class="sr">./overlays/overlay3.nix</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里只是个示例配置，参照此格式编写你自己的 overlays 配置，将该配置作为 NixOS Module 或者 Home Manager Module 引入，然后部署就可以看到效果了。</p>
+<h4 id="模块化-overlays-配置" class="headerLink">
+    <a href="#%e6%a8%a1%e5%9d%97%e5%8c%96-overlays-%e9%85%8d%e7%bd%ae" class="header-mark"></a>模块化 overlays 配置</h4><p>上面的例子说明了如何编写 overlays，但是所有 overlays 都一股脑儿写在一起，就有点难以维护了，写得多了自然就希望模块化管理这些 overlays.</p>
+<p>这里介绍下我找到的一个 overlays 模块化管理的最佳实践。</p>
+<p>首先在 Git 仓库中创建 <code>overlays</code> 文件夹用于存放所有 overlays 配置，然后创建 <code>overlays/default.nix</code>，其内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">args</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># import 当前文件夹下所有的 nix 文件，并以 args 为参数执行它们</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 返回值是一个所有执行结果的列表，也就是 overlays 的列表</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">builtins</span><span class="o">.</span><span class="nb">map</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="kn">import</span> <span class="p">(</span><span class="sr">./.</span> <span class="o">+</span> <span class="s2">&#34;/</span><span class="si">${</span><span class="n">f</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span> <span class="n">args</span><span class="p">))</span>  <span class="c1"># map 的第一个参数，是一个 import 并执行 nix 文件的函数</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nb">builtins</span><span class="o">.</span><span class="n">filter</span>          <span class="c1"># map 的第二个参数，它返回一个当前文件夹下除 default.nix 外所有 nix 文件的列表</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">f</span> <span class="o">!=</span> <span class="s2">&#34;default.nix&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="nb">builtins</span><span class="o">.</span><span class="n">attrNames</span> <span class="p">(</span><span class="nb">builtins</span><span class="o">.</span><span class="n">readDir</span> <span class="sr">./.</span><span class="p">)))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>后续所有 overlays 配置都添加到 <code>overlays</code> 文件夹中，一个示例配置 <code>overlays/fcitx5/default.nix</code> 内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># 为了不使用默认的 rime-data，改用我自定义的小鹤音形数据，这里需要 override</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 参考 https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="n">pkgs</span><span class="o">,</span> <span class="n">config</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span><span class="p">}:</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="n">self</span><span class="p">:</span> <span class="n">super</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 小鹤音形配置，配置来自 flypy.com 官方网盘的鼠须管配置压缩包「小鹤音形“鼠须管”for macOS.zip」</span>
+</span></span><span class="line"><span class="cl">  <span class="n">rime-data</span> <span class="o">=</span> <span class="sr">./rime-data-flypy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">fcitx5-rime</span> <span class="o">=</span> <span class="n">super</span><span class="o">.</span><span class="n">fcitx5-rime</span><span class="o">.</span><span class="n">override</span> <span class="p">{</span> <span class="n">rimeDataPkgs</span> <span class="o">=</span> <span class="p">[</span> <span class="sr">./rime-data-flypy</span> <span class="p">];</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我通过上面这个 overlays 修改了 fcitx5-rime 输入法的默认数据，加载了我自定义的小鹤音形输入法。</p>
+<p>最后，还需要通过 <code>nixpkgs.overlays</code> 这个 option 加载 <code>overlays/default.nix</code> 返回的所有 overlays 配置，在任一 NixOS Module 中添加如下参数即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span> <span class="o">@</span> <span class="n">args</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># 添加此参数</span>
+</span></span><span class="line"><span class="cl">  <span class="n">nixpkgs</span><span class="o">.</span><span class="n">overlays</span> <span class="o">=</span> <span class="kn">import</span> <span class="sr">/path/to/overlays/dir</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>比如说直接写 <code>flake.nix</code> 里：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;NixOS configuration of Ryan Yin&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">@</span><span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nixosConfigurations</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="sr">./hosts/nixos-test</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          <span class="c1"># 添加如下内嵌 module 定义</span>
+</span></span><span class="line"><span class="cl">          <span class="c1">#   这里将 modules 的所有参数 args 都传递到了 overlays 中</span>
+</span></span><span class="line"><span class="cl">          <span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="p">{</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">overlays</span> <span class="o">=</span> <span class="kn">import</span> <span class="sr">./overlays</span> <span class="n">args</span><span class="p">;</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">          
+</span></span><span class="line"><span class="cl">          <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">        <span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>按照上述方法进行配置，就可以很方便地模块化管理所有 overlays 配置了。</p>
 <h2 id="九使用-nix-flakes-打包应用" class="headerLink">
     <a href="#%e4%b9%9d%e4%bd%bf%e7%94%a8-nix-flakes-%e6%89%93%e5%8c%85%e5%ba%94%e7%94%a8" class="header-mark"></a>九、使用 Nix Flakes 打包应用</h2><blockquote>
 <p>参考 <a href="https://lantian.pub/article/modify-computer/nixos-packaging.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（三）：软件打包，从入门到放弃</a></p>
