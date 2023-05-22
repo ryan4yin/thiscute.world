@@ -1,5 +1,5 @@
 ---
-title: "MacOS 窗口管理器器 yabai 玩耍笔记"
+title: "MacOS 窗口管理器 yabai 玩耍笔记"
 subtitle: ""
 description: ""
 date: 2023-05-22T12:24:57+08:00
