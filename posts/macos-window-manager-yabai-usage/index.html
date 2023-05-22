@@ -1,0 +1,335 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>MacOS 窗口管理器器 yabai 玩耍笔记 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="MacOS 窗口管理器器 yabai 玩耍笔记"><meta property="og:description" content="在 Linux 上用了一段时间 i3wm 后，我就有点忍受不了工作电脑的桌面环境了，公司给配的是 Macbook Pro 2020，一番查找发现 yabai 比较符合我的需求，于是开始了折腾之旅。"><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/posts/macos-window-manager-yabai-usage/"><meta property="og:image" content="https://thiscute.world/posts/macos-window-manager-yabai-usage/yabai.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-05-22T12:24:57+08:00"><meta property="article:modified_time" content="2023-05-22T12:24:57+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/macos-window-manager-yabai-usage/yabai.png"><meta name=twitter:title content="MacOS 窗口管理器器 yabai 玩耍笔记"><meta name=twitter:description content="在 Linux 上用了一段时间 i3wm 后，我就有点忍受不了工作电脑的桌面环境了，公司给配的是 Macbook Pro 2020，一番查找发现 yabai 比较符合我的需求，于是开始了折腾之旅。"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/macos-window-manager-yabai-usage/><link rel=prev href=https://thiscute.world/posts/nixos-and-flake-basics/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/color.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"MacOS 窗口管理器器 yabai 玩耍笔记","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thiscute.world\/posts\/macos-window-manager-yabai-usage\/"},"image":[{"@type":"ImageObject","url":"https:\/\/thiscute.world\/posts\/macos-window-manager-yabai-usage\/yabai.png","width":1280,"height":640}],"genre":"posts","keywords":"MacOS, 窗口管理器, Window Manager, yabai","wordcount":2777,"url":"https:\/\/thiscute.world\/posts\/macos-window-manager-yabai-usage\/","datePublished":"2023-05-22T12:24:57+08:00","dateModified":"2023-05-22T12:24:57+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https:\/\/thiscute.world\/avatar\/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script><script src=//instant.page/5.1.1 defer type=module integrity=sha384-MWfCL6g1OTGsbSwfuMHc8+8J2u71/LA8dzlIN3ycajckxuZZmF+DNjdm7O6H3PSq></script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" id=language-select-desktop onchange="location=this.value"><option value=/posts/macos-window-manager-yabai-usage/ selected>Simplified Chinese</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select title="Select Language" onchange="location=this.value"><option value=/posts/macos-window-manager-yabai-usage/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#使用体验总结>使用体验总结</a></li><li><a href=#安装流程>安装流程</a></li><li><a href=#自定义-skhd-与-yabai-配置>自定义 skhd 与 yabai 配置</a></li><li><a href=#问题排查>问题排查</a><ul><li><a href=#1-yabai>1. yabai</a></li><li><a href=#2-skhd>2. skhd</a></li></ul></li><li><a href=#堆叠模式下的可视化>堆叠模式下的可视化</a></li><li><a href=#使用时的常见问题与解决方法>使用时的常见问题与解决方法</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">MacOS 窗口管理器器 yabai 玩耍笔记</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class="author fas fa-user-circle fa-fw"></span><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author>ryan4yin</a>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-05-22>2023-05-22</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2023-05-22>2023-05-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2777 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/macos-window-manager-yabai-usage/yabai.png srcset="/posts/macos-window-manager-yabai-usage/yabai.png, /posts/macos-window-manager-yabai-usage/yabai.png 1.5x, /posts/macos-window-manager-yabai-usage/yabai.png 2x" sizes=auto alt=/posts/macos-window-manager-yabai-usage/yabai.png title=/posts/macos-window-manager-yabai-usage/yabai.png height=640 width=1280></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#使用体验总结>使用体验总结</a></li><li><a href=#安装流程>安装流程</a></li><li><a href=#自定义-skhd-与-yabai-配置>自定义 skhd 与 yabai 配置</a></li><li><a href=#问题排查>问题排查</a><ul><li><a href=#1-yabai>1. yabai</a></li><li><a href=#2-skhd>2. skhd</a></li></ul></li><li><a href=#堆叠模式下的可视化>堆叠模式下的可视化</a></li><li><a href=#使用时的常见问题与解决方法>使用时的常见问题与解决方法</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><p>在 Linux 上用了一段时间 i3wm 后，我就有点忍受不了工作电脑的桌面环境了，公司给配的是 Macbook Pro 2020，一番查找发现 yabai 比较符合我的需求，于是开始了折腾之旅。</p><h2 id=使用体验总结 class=headerLink><a href=#%e4%bd%bf%e7%94%a8%e4%bd%93%e9%aa%8c%e6%80%bb%e7%bb%93 class=header-mark></a>使用体验总结</h2><p>我的电脑配置为 Macbook Pro 2020，i5 + 16G RAM + 512G Disk，性能尚可。
+我从 2023-04-25 开始在这台机器上使用 yabai，到现在（2023-05-18）有三周了，刚刚把 yabai 卸载掉，这里总结下使用体验。</p><p>一句话总结：体验还不错，但是总体还不太成熟，Bug 比较多，而且有点吃性能，安装 yabai 后偶尔就会卡顿一下。</p><p>快捷键自动分屏的体验还是很舒服的，劝退我的主要是如下这些问题：</p><ol><li>对有些软件，比如企业微信、微信、QQ，自动分屏功能不太行，会出现窗口错位。</li><li>全屏下 Chrome 搜索框下方的提示栏被会 Chrome 本身遮挡，必须退出全屏功能才能看到。</li><li>Chrome 页面中的输入框「自动填充」功能在非全屏下会被 Chrome 遮挡，必须进入全屏模式下才能看到。</li><li>在右键修改 Firefox Bookmark 中标签时，弹出的修改菜单会被 Bookmark 收藏夹本身的弹窗遮挡，导致有些选项无法点击到。</li><li>开始使用 yabai 后，系统经常性地卡顿，或者风扇狂转，说明这玩意儿有点吃性能。</li></ol><h2 id=安装流程 class=headerLink><a href=#%e5%ae%89%e8%a3%85%e6%b5%81%e7%a8%8b class=header-mark></a>安装流程</h2><p>首先参考这篇官方 Wiki <a href=https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection target=_blank rel="noopener noreferrer">Disabling System Integrity Protection</a> 关闭 SIP，然后参照如下流程安装 yabai 与 skhd。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 安装yabai</span>
+</span></span><span class=line><span class=cl>brew install koekeishiya/formulae/yabai
+</span></span><span class=line><span class=cl>sudo yabai --install-sa
+</span></span><span class=line><span class=cl><span class=c1># 启动yabai 这时候需要授权辅助功能</span>
+</span></span><span class=line><span class=cl>brew services start yabai
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装skhd</span>
+</span></span><span class=line><span class=cl>brew install koekeishiya/formulae/skhd
+</span></span><span class=line><span class=cl><span class=c1># 启动skhd 这时候需要授权辅助功能</span>
+</span></span><span class=line><span class=cl>brew services start skhd
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>########### 为 yabai 添加 sudo 权限 ###########</span>
+</span></span><span class=line><span class=cl>sudo yabai --load-sa
+</span></span><span class=line><span class=cl>sudo visudo -f /private/etc/sudoers.d/yabai
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 然后输入以下内容 其中 &lt;user&gt; 修改为当前 mac 的用户名</span>
+</span></span><span class=line><span class=cl><span class=c1># input the line below into the file you are editing.</span>
+</span></span><span class=line><span class=cl><span class=c1>#  replace &lt;yabai&gt; with the path to the yabai binary (output of: which yabai).</span>
+</span></span><span class=line><span class=cl><span class=c1>#  replace &lt;user&gt; with your username (output of: whoami). </span>
+</span></span><span class=line><span class=cl><span class=c1>#  replace &lt;hash&gt; with the sha256 hash of the yabai binary (output of: shasum -a 256 $(which yabai)).</span>
+</span></span><span class=line><span class=cl><span class=c1>#   this hash must be updated manually after running brew upgrade.</span>
+</span></span><span class=line><span class=cl>&lt;user&gt; <span class=nv>ALL</span><span class=o>=(</span>root<span class=o>)</span> NOPASSWD: sha256:&lt;hash&gt; &lt;yabai&gt; --load-sa
+</span></span></code></pre></td></tr></table></div></div><p>上面就完成了安装流程，但是到这里还不能使用，还需要为 skhd 与 yabai 添加配置文件，并添加自定义配置。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 创建yabai配置文件</span>
+</span></span><span class=line><span class=cl>touch ~/.yabairc
+</span></span><span class=line><span class=cl>chmod +x ~/.yabairc
+</span></span><span class=line><span class=cl><span class=c1># 创建skhd配置文件</span>
+</span></span><span class=line><span class=cl>touch ~/.skhdrc
+</span></span><span class=line><span class=cl>chmod +x ~/.skhdrc
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 之后在 ~/.yabairc 中添加以下命令</span>
+</span></span><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF &gt; ~/.yabairc
+</span></span></span><span class=line><span class=cl><span class=s>#!/usr/bin/env sh
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s># wiki 要求在配置最前面加这个，看起来是跟 sudo 权限相关的东西
+</span></span></span><span class=line><span class=cl><span class=s>sudo yabai --load-sa
+</span></span></span><span class=line><span class=cl><span class=s>yabai -m signal --add event=dock_did_restart action=&#34;sudo yabai --load-sa&#34;
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=自定义-skhd-与-yabai-配置 class=headerLink><a href=#%e8%87%aa%e5%ae%9a%e4%b9%89-skhd-%e4%b8%8e-yabai-%e9%85%8d%e7%bd%ae class=header-mark></a>自定义 skhd 与 yabai 配置</h2><p>这里配置的目标是，尽量与 i3wm 的默认快捷键保持一致，因为我在家用的是 Linux，只有办公电脑是 Mac.</p><p>我目前的 <code>~/.yabairc</code>，它用于配置 yabai 的各种行为：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=cp>#!/usr/bin/env sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1># wiki 要求在配置最前面加这个，看起来是跟 sudo 权限相关的东西</span>
+</span></span><span class=line><span class=cl>sudo yabai --load-sa
+</span></span><span class=line><span class=cl>yabai -m signal --add <span class=nv>event</span><span class=o>=</span>dock_did_restart <span class=nv>action</span><span class=o>=</span><span class=s2>&#34;sudo yabai --load-sa&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>## 输出 debug 日志，出问题时方便排查</span>
+</span></span><span class=line><span class=cl>yabai -m config debug_output on
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口平铺</span>
+</span></span><span class=line><span class=cl>yabai -m space --layout bsp
+</span></span><span class=line><span class=cl><span class=c1># 默认拆分规则 first_child second_child</span>
+</span></span><span class=line><span class=cl>yabai -m config window_placement             second_child
+</span></span><span class=line><span class=cl><span class=c1># 窗口间距设置</span>
+</span></span><span class=line><span class=cl>yabai -m config top_padding                  <span class=m>10</span>
+</span></span><span class=line><span class=cl>yabai -m config bottom_padding               <span class=m>10</span>
+</span></span><span class=line><span class=cl>yabai -m config left_padding                 <span class=m>10</span>
+</span></span><span class=line><span class=cl>yabai -m config right_padding                <span class=m>10</span>
+</span></span><span class=line><span class=cl>yabai -m config window_gap                   <span class=m>10</span>
+</span></span><span class=line><span class=cl><span class=c1># 自动平衡所有窗口始终占据相同的空间</span>
+</span></span><span class=line><span class=cl>yabai -m config auto_balance                 off
+</span></span><span class=line><span class=cl><span class=c1># 如果禁用自动平衡，此项属性定义的是新窗口占用的空间量。0.5意为旧窗口占用50%</span>
+</span></span><span class=line><span class=cl>yabai -m config split_ratio                 0.50
+</span></span><span class=line><span class=cl><span class=c1># 鼠标修饰键 意思就是按着这个键就可以使用鼠标单独修改窗口大小了</span>
+</span></span><span class=line><span class=cl>yabai -m config mouse_modifier ctrl
+</span></span><span class=line><span class=cl><span class=c1># ctrl + 鼠标左键 移动窗口</span>
+</span></span><span class=line><span class=cl>yabai -m config mouse_action1 move
+</span></span><span class=line><span class=cl><span class=c1># ctrl + 鼠标右键 调整窗口大小</span>
+</span></span><span class=line><span class=cl>yabai -m config mouse_action2 resize
+</span></span><span class=line><span class=cl><span class=c1># 焦点跟随鼠标 默认off: 关闭  autoraise:自动提升 autofocus: 自动对焦</span>
+</span></span><span class=line><span class=cl>yabai -m config focus_follows_mouse          autofocus
+</span></span><span class=line><span class=cl><span class=c1># 设置鼠标是否跟随当前活动窗口 默认 off: 关闭 on: 开启</span>
+</span></span><span class=line><span class=cl>yabai -m config mouse_follows_focus          on
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 浮动窗口问题在顶部</span>
+</span></span><span class=line><span class=cl>yabai -m config window_topmost               on
+</span></span><span class=line><span class=cl><span class=c1># 修改窗口阴影 on: 打开 off: 关闭 float: 只显示浮动窗口的阴影</span>
+</span></span><span class=line><span class=cl>yabai -m config window_shadow                float
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 窗口透明度设置</span>
+</span></span><span class=line><span class=cl>yabai -m config window_opacity               on
+</span></span><span class=line><span class=cl><span class=c1># 配置活动窗口不透明度</span>
+</span></span><span class=line><span class=cl>yabai -m config active_window_opacity        0.98
+</span></span><span class=line><span class=cl>yabai -m config normal_window_opacity        0.9
+</span></span><span class=line><span class=cl>yabai -m config window_opacity_duration      0.0
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在所有显示器上的每个空间顶部添加 0 填充 底部添加 0 填充</span>
+</span></span><span class=line><span class=cl>yabai -m config external_bar all:0:0
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ================================ 规则 ================================</span>
+</span></span><span class=line><span class=cl><span class=c1># 打开系统偏好设置，不使用平铺模式</span>
+</span></span><span class=line><span class=cl>yabai -m rule --add <span class=nv>app</span><span class=o>=</span><span class=s2>&#34;^系统偏好设置</span>$<span class=s2>&#34;</span> <span class=nv>manage</span><span class=o>=</span>off
+</span></span><span class=line><span class=cl>yabai -m rule --add <span class=nv>app</span><span class=o>=</span><span class=s2>&#34;^提醒事项</span>$<span class=s2>&#34;</span> <span class=nv>manage</span><span class=o>=</span>off
+</span></span><span class=line><span class=cl>yabai -m rule --add <span class=nv>app</span><span class=o>=</span><span class=s2>&#34;^关于本机</span>$<span class=s2>&#34;</span> <span class=nv>manage</span><span class=o>=</span>off
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;yabai configuration loaded..&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>再就是 <code>~/.skhdrc</code>，它负责配置各种快捷键，如下是我的配置:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 配置语法 : &lt;modifier&gt; - &lt;key&gt; : &lt;command&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1># modifier 可以是单个键比如 cmd, alt, ctrl, 也可以是组合键比如  ctrl + shift, ctrl + alt</span>
+</span></span><span class=line><span class=cl><span class=c1># ================================ 打开终端 ================================</span>
+</span></span><span class=line><span class=cl><span class=c1># 启动终端</span>
+</span></span><span class=line><span class=cl>cmd - <span class=k>return</span> : open -a iTerm
+</span></span><span class=line><span class=cl><span class=c1># 关闭当前窗口，这个不需要加，macOS 默认是 cmd + q，我 Linux 也这么设置的</span>
+</span></span><span class=line><span class=cl><span class=c1># ================================ 窗口设置 ================================</span>
+</span></span><span class=line><span class=cl><span class=c1># =============== 为了避免快捷键冲突改用了 ctrl 作为 modifier =================</span>
+</span></span><span class=line><span class=cl><span class=c1># ctrl + e 切换为平铺模式</span>
+</span></span><span class=line><span class=cl>ctrl - e : yabai -m space --layout bsp
+</span></span><span class=line><span class=cl><span class=c1># ctrl + s 切换为堆叠模式</span>
+</span></span><span class=line><span class=cl>ctrl - s : yabai -m space --layout stack
+</span></span><span class=line><span class=cl><span class=c1># 浮动/不浮动窗口 float</span>
+</span></span><span class=line><span class=cl>ctrl - f : yabai -m window --toggle float
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ================================ 多桌面配置  ================================</span>
+</span></span><span class=line><span class=cl><span class=c1># 创建一个新桌面，并把当前活动的窗口发送到新桌面，并且自动跳转到新桌面. 需要 jq 支持 brew install jq</span>
+</span></span><span class=line><span class=cl><span class=nb>shift</span> + cmd - n : yabai -m space --create <span class=o>&amp;&amp;</span> <span class=nv>index</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>yabai -m query --spaces --display <span class=p>|</span> jq <span class=s1>&#39;.| length&#39;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> yabai -m window --space <span class=s2>&#34;</span><span class=si>${</span><span class=nv>index</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> yabai -m space --focus <span class=s2>&#34;</span><span class=si>${</span><span class=nv>index</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> yabai -m space --layout bsp
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在 stack 模式下通过方向键切换窗口</span>
+</span></span><span class=line><span class=cl>ctrl - down : yabai -m window --focus stack.next <span class=o>||</span> yabai -m window --focus south
+</span></span><span class=line><span class=cl>ctrl - up : yabai -m window --focus stack.prev <span class=o>||</span> yabai -m window --focus north
+</span></span><span class=line><span class=cl><span class=c1># 在 bsp 模式下通过方向键切换窗口</span>
+</span></span><span class=line><span class=cl>cmd - left : yabai -m window --focus west
+</span></span><span class=line><span class=cl>cmd - right : yabai -m window --focus east
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在 9 个桌面之间切换</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>1</span> : yabai -m space --focus <span class=m>1</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>2</span> : yabai -m space --focus <span class=m>2</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>3</span> : yabai -m space --focus <span class=m>3</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>4</span> : yabai -m space --focus <span class=m>4</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>5</span> : yabai -m space --focus <span class=m>5</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>6</span> : yabai -m space --focus <span class=m>6</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>7</span> : yabai -m space --focus <span class=m>7</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>8</span> : yabai -m space --focus <span class=m>8</span>
+</span></span><span class=line><span class=cl>ctrl - <span class=m>9</span> : yabai -m space --focus <span class=m>9</span>
+</span></span><span class=line><span class=cl><span class=c1># 将窗口发送到某个其他桌面</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>1</span> : yabai -m window --space <span class=m>1</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>2</span> : yabai -m window --space <span class=m>2</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>3</span> : yabai -m window --space <span class=m>3</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>4</span> : yabai -m window --space <span class=m>4</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>5</span> : yabai -m window --space <span class=m>5</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>6</span> : yabai -m window --space <span class=m>6</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>7</span> : yabai -m window --space <span class=m>7</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>8</span> : yabai -m window --space <span class=m>8</span>
+</span></span><span class=line><span class=cl>ctrl + <span class=nb>shift</span> - <span class=m>9</span> : yabai -m window --space <span class=m>9</span>
+</span></span></code></pre></td></tr></table></div></div><p>配置加好后重启 yabai 与 skhd:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>brew services restart yabai
+</span></span><span class=line><span class=cl>brew services restart skhd
+</span></span></code></pre></td></tr></table></div></div><p>现在就可以随便打开几个程序试试，正常情况下 yabai 会自动帮你分屏。
+再尝试下添加好的这些快捷键，看看是否生效。</p><h2 id=问题排查 class=headerLink><a href=#%e9%97%ae%e9%a2%98%e6%8e%92%e6%9f%a5 class=header-mark></a>问题排查</h2><h3 id=1-yabai class=headerLink><a href=#1-yabai class=header-mark></a>1. yabai</h3><p>如果 yabai 配置没有生效，有可能是权限问题，可以试下这个命令重启 yabai:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo yabai --uninstall-sa<span class=p>;</span> sudo yabai --load-sa<span class=p>;</span> brew services restart yabai
+</span></span></code></pre></td></tr></table></div></div><p>其他问题可查看 yabai 的日志解决：</p><ul><li>错误日志路径: /usr/local/var/log/yabai/yabai.err.log</li><li>普通日志路径: /usr/local/var/log/yabai/yabai.out.log</li></ul><h3 id=2-skhd class=headerLink><a href=#2-skhd class=header-mark></a>2. skhd</h3><p>如果 skhd 配置没有生效，首先可以查看 skhd 的日志:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>cat /usr/local/var/log/skhd/*.log
+</span></span></code></pre></td></tr></table></div></div><p>如果日志文件不存在，可以停止 skhd 服务并手动启动它，看看是否有输出报错：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>brew services stop skhd
+</span></span><span class=line><span class=cl>skhd -c ~/.skhdrc
+</span></span></code></pre></td></tr></table></div></div><p>比如我之前改错了配置，执行上述命令就会报错：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>#27:7 expected modifier
+</span></span></code></pre></td></tr></table></div></div><p>提示我配置的第 27 行配置有问题，我就去看了下，发现是我把 <code>cmd - return</code> 写成了 <code>cmd + return</code>，改正后再 <code>brew services start skhd</code> 重启 skhd 就好了。</p><h2 id=堆叠模式下的可视化 class=headerLink><a href=#%e5%a0%86%e5%8f%a0%e6%a8%a1%e5%bc%8f%e4%b8%8b%e7%9a%84%e5%8f%af%e8%a7%86%e5%8c%96 class=header-mark></a>堆叠模式下的可视化</h2><p>yabai 在堆叠模式下的可视化效果不是很好，可以使用 <a href=https://github.com/AdamWagner/stackline target=_blank rel="noopener noreferrer">stackline</a> 来改善一下。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># stackline 依赖 hammerspoon，这是一个 macOS 桌面自动化工具</span>
+</span></span><span class=line><span class=cl>brew install hammerspoon --cask
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 现在将 stackline 安装到 hammerspoon 的配置目录中</span>
+</span></span><span class=line><span class=cl>git clone https://github.com/AdamWagner/stackline.git ~/.hammerspoon/stackline
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Make stackline run when hammerspoon launches</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> ~/.hammerspoon
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;stackline = require &#34;stackline&#34;&#39;</span> &gt;&gt; init.lua
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;stackline:init()&#39;</span> &gt;&gt; init.lua
+</span></span></code></pre></td></tr></table></div></div><p>现在还需要安装下 hammerspoon 的命令行工具 hs，它用于在脚本中执行 stackline 操作，安装方法如下：</p><ol><li>首先搜索打开 Hamerspoon 程序，或者使用命令 <code>open -a "Hammerspoon"</code><ol><li>这里启动时会申请权限，需要手动打开下</li><li>同时注意勾选登录时自动启动</li></ol></li><li>在下方的命令输出栏中键入 <code>hs.ipc.cliInstall()</code> 再回车，即可完成安装</li></ol><p>现在确认下 hs 命令已经可用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>which hs
+</span></span></code></pre></td></tr></table></div></div><h2 id=使用时的常见问题与解决方法 class=headerLink><a href=#%e4%bd%bf%e7%94%a8%e6%97%b6%e7%9a%84%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e4%b8%8e%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95 class=header-mark></a>使用时的常见问题与解决方法</h2><ol><li>Chrome/WeChat 等程序的弹窗无法显示: 尝试下进入全屏或者退出全屏，总有一种场景下可以显示弹窗&mldr;</li><li>&mldr;</li></ol><h2 id=参考 class=headerLink><a href=#%e5%8f%82%e8%80%83 class=header-mark></a>参考</h2><ul><li><a href=https://vccv.cc/article/mac-tiling-yabai.html target=_blank rel="noopener noreferrer">mac下的平铺桌面yabai使用 - 月青悠</a></li><li><a href=https://gist.github.com/Krever/74d43fa38c57c42c355df55faa0a00ee target=_blank rel="noopener noreferrer">Yabai setup for i3wm users - Krever</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2023-05-22</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><button title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/macos-window-manager-yabai-usage/ data-title="MacOS 窗口管理器器 yabai 玩耍笔记" data-via=ryan4yin data-hashtags="MacOS,窗口管理器,Window Manager,yabai"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer=facebook data-url=https://thiscute.world/posts/macos-window-manager-yabai-usage/ data-hashtag=MacOS><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/macos-window-manager-yabai-usage/><span class="fab fa-reddit fa-fw"></span></button></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/macos/>MacOS</a>,&nbsp;<a href=/tags/%E7%AA%97%E5%8F%A3%E7%AE%A1%E7%90%86%E5%99%A8/>窗口管理器</a>,&nbsp;<a href=/tags/window-manager/>Window Manager</a>,&nbsp;<a href=/tags/yabai/>yabai</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/nixos-and-flake-basics/ class=prev rel=prev title="NixOS 与 Nix Flakes 新手入门"><i class="fas fa-angle-left fa-fw"></i>NixOS 与 Nix Flakes 新手入门</a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=width:auto;height:15px;margin-bottom:5px></a> <a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=width:auto;height:24px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.110.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.3.0"><i class="far fa-edit fa-fw"></i> DoIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><div class=assets><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/js/theme.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></div></body></html>
