@@ -182,7 +182,9 @@ termshark -r test.pcap
 
 ### tcpdump
 
-也可以直接使用 tcpdump 将抓到的数据打印到 stdout 查看，先简单介绍下 tcpdump 的命令行参数（可通过 `man tcpdump` 查看详细文档）：
+也可以直接使用 tcpdump 将抓到的数据打印到 stdout 查看，这种方法比较适合在命令行中临时抓些明文数据看看。
+
+先简单介绍下 tcpdump 的命令行参数（可通过 `man tcpdump` 查看详细文档）：
 
 ```
 -A               以 ASCII 字符方式打印所有抓到的数据内容，在抓取纯文本数据时很好用
@@ -195,15 +197,25 @@ termshark -r test.pcap
 
 常用命令如下：
 
+>注意 tcpdump 在直接打印数据时，有可能会发现较长的数据尾部会被截断，丢失信息。
+>这是 tcpdump 本身的问题，在这种模式下 tcpdump 是针对每个 tcp 数据包应用 http 过滤参数，而过长的 body 后半部分在另一个 tcp 包里，就过滤不出来了。
+>如果有必要抓这类 body 很大的数据的话，建议结合 wireshark 分析。
+
 ```shell
 # 1. 嗅探所有接口，80 端口上所有 HTTP 协议请求与响应的 headers 以及 body
 tcpdump -A -s 0 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+## 改抓 8080 端口
+tcpdump -A -s 0 'tcp port 8080 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
 
 # 2. 嗅探 eth0 接口，80 端口上所有 HTTP GET 请求（'GET ' => 0x47455420）
 tcpdump -A -i eth0 -s 0 'tcp port 80 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420'
+## 改抓 8080 端口
+tcpdump -A -i eth0 -s 0 'tcp port 8080 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x47455420'
 
 # 3. 嗅探 eth0 接口，80 端口上所有 HTTP POST 请求（'POST' => 0x504F5354）
 tcpdump -A -i eth0 -s 0 'tcp port 80 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504F5354'
+## 改抓 8080 端口
+tcpdump -A -i eth0 -s 0 'tcp port 8080 and tcp[((tcp[12:1] & 0xf0) >> 2):4] = 0x504F5354'
 
 # 4. 也可以使用 not 进行参数排除，比如排除掉 9091 跟 2379 端口
 tcpdump -A -s 0 'tcp and port not 9091 and port not 2379 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
