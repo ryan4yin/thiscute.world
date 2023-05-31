@@ -16,10 +16,27 @@ comment:
 
 ![](/images/now/book-shelf-1.webp)
 
->记录下我的学习轨迹。（结果写着写着有点像是技术笔记跟日记的混合了 hhhh）
+> 记录下我的学习轨迹。（结果写着写着有点像是技术笔记跟日记的混合了 hhhh）
 
->Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
->我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
+> Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
+> 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
+
+### 2023-05-31
+
+- 继续研究了一波 OBS，不过没直播，随便录了点东西。
+- 研究 OBS 音频卡顿的问题
+  - 尝试了重启各种软件（Remmina/OBS）、重启系统，调整录制参数，全都没有用，仍然卡顿。
+  - 最终发现把音频录制从 PulseAudio 切换到 ALSA，卡顿问题就解决了。所以能确认是 PulseAudio 的问题。
+  - 但是这个 ALSA 驱动貌似只能录制麦克风的声音，无法录制系统输出的声音，所以想要将完整的歌曲输出到 OBS，还存在问题。
+  - 为了彻底解决问题，专门研究了一波 NixOS 的几个音频驱动：内核模块 ALSA、新框架 Pipewire，旧的 PulseAudio/JACK，调了一波 NixOS 参数，仅启用 Pipewire，重启后再次用 OBS 自带的 PulseAudio 插件录制，仍然有问题。
+  - 最终使用一个社区的 Pipewire 录制插件，完美解决了音频卡顿的问题：[obs-pipewire-audio-capture](https://github.com/dimtpap/obs-pipewire-audio-capture)
+
+### 2023-05-30
+
+- 之前不知道咋的突然对搞直播产生了点兴趣，研究了一波买了个影石 Insta360 Link AI 4K 摄像头，30 号到货，晚上就用它进行了人生第一次直播，有几位朋友前来捧场。
+  - 这个云台摄像头确实有点意思，可以自动跟踪人脸，还能手势控制，如果是 Windows 系统，还能安装电脑客户端控制进行俯拍模式。
+  - 不过价格也确实感人，618 折后也要 1598。
+- 用 OBS Studio 直播时遇到音频有卡顿的问题，没解决就直接静默了...
 
 ### 2023-05-23
 
@@ -29,10 +46,9 @@ comment:
 ### 2023-05-16
 
 - 玩了玩 Github 上流行的 LLM 本地知识库项目 langchain-ChatGLM 跟 5 月份新开源的 DB-GPT
-    - langchain-ChatGLM stars 多，但是效果不太行，不太能搜到知识库的内容，而且 ChatGLM-6B 模型的理解能力不太行。
-    - DB-GPT 效果还不错，但是它的基础模型 Vicuna-13B 太大了，在 RTX4090 上也动不动就爆显存，问不了复杂的内容。
+  - langchain-ChatGLM stars 多，但是效果不太行，不太能搜到知识库的内容，而且 ChatGLM-6B 模型的理解能力不太行。
+  - DB-GPT 效果还不错，但是它的基础模型 Vicuna-13B 太大了，在 RTX4090 上也动不动就爆显存，问不了复杂的内容。
 - 打算后续跟进下 DB-GPT 的进展，同时也学习下 LoRa 微调技术，看看能不能通过把个人知识库训练成 LoRa 来降低对显存的需求，或者完成些别的有趣的任务。
-
 
 ### 2023-05-12
 
@@ -50,21 +66,18 @@ comment:
 - 在 NixOS 中文社区某位群友的建议下，将 NixOS 折腾笔记翻译成了英文，并且在 NixOS Froum 跟 Reddit 上都分享了下
   - [Reddit 上才 1 个小时就收到了好几个点赞跟评论](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/)！兴奋得我晚上睡不着，爬起来根据 Reddit 上的反馈，再次爆肝优化文章内容，搞到凌晨 5 点才睡...
 
-
 ### 2023-05-09
 
 - NixOS 的文章整理得差不多了，在 0xffff 社区、NixOS 中文 TG 群、苏洋的折腾群、[V2ex](https://www.v2ex.com/t/938569#reply13) 跟 Twitter 上都分享了下，收获了许多好评反馈，尤其是 NixOS 中文 TG 群的正面反馈，以及 V2ex 上的评论收藏，让我非常开心～
-   - 也再次爆肝优化了一波文章内容。
-
+  - 也再次爆肝优化了一波文章内容。
 
 ### 2023-05-04 - 2023-05-07
 
-- 研究使用 nix flake 配置 nixos 系统，[nix-config](https://github.com/ryan4yin/nix-config) 
-    - nixos 确实好用，但是官方文档太烂了，学起来很费劲，从 [nix 笔记提交记录](https://github.com/ryan4yin/knowledge/commits/8b1c5d104da1738d76287c0b50cd36a4caec2512/linux/nix) 上看，从 2022/4/21 折腾到现在已经半个月了，才把系统搞到基本可用的状态。
+- 研究使用 nix flake 配置 nixos 系统，[nix-config](https://github.com/ryan4yin/nix-config)
+  - nixos 确实好用，但是官方文档太烂了，学起来很费劲，从 [nix 笔记提交记录](https://github.com/ryan4yin/knowledge/commits/8b1c5d104da1738d76287c0b50cd36a4caec2512/linux/nix) 上看，从 2022/4/21 折腾到现在已经半个月了，才把系统搞到基本可用的状态。
 - 有了 nixos 后，底气足了很多，将桌面环境从 i3wm 切换到 hyprland，确实非常丝滑，hyprland 的动画效果非常棒！
-    - 另外目前遇到最大的坑就是 fcitx5 在 wayland 下，无法在 chrome/vscode 下使用的问题，还没解决，这些中文都是通过 alacritty + vim 写的。因为这个原因，都有点想考虑换成 neovim 了...
+  - 另外目前遇到最大的坑就是 fcitx5 在 wayland 下，无法在 chrome/vscode 下使用的问题，还没解决，这些中文都是通过 alacritty + vim 写的。因为这个原因，都有点想考虑换成 neovim 了...
 - 也将 NixOS 折腾笔记整理了下，发了篇新博客文章。不过内容还有点乱，不太拿得出手。
-
 
 ### 2023-04-30 - 2023-05-03
 
@@ -73,7 +86,6 @@ comment:
 ### 2023-04-27
 
 - The Great Gatsby - 10/41
-
 
 ### 2023-04-26
 
@@ -145,7 +157,6 @@ comment:
   - CPU/GPU 双 360mm 水冷，B760M+I5-13600KF 板 U 套装，七彩虹 RTX4090 24G 水神，32 寸 4K144Hz 显示器等等，林林总总花了接近 26k，刷新我自己的花钱记录了。
   - 毕竟买的是 4090，那么除了 AI 之外，我当然也很期待它在 VR 与其他 3A 游戏上的表现。
 
-
 ### 2023-04-08
 
 - 搞了个 chatglm-6b int4 量化版，本地用我的拯救者笔记本（16G RAM + RTX3070 8G）玩了下，响应速度感觉可以，确实有一定的上下文联想能力，简单的问题也能解答，但是有点不聪明的样子，内容投毒比较严重。
@@ -161,15 +172,14 @@ comment:
   - [怎么一步一步走出职业倦怠期？](https://www.zhihu.com/question/465045834/answer/1941141141)
 - 我现在的工作可以说是很清闲了，而且现在大环境也不好，因此还是很希望自己能再按部就班地工作一年攒攒钱，同时业余时间系统地学一学嵌入式，然后再考虑转行或者考研。
 - 也是是说，还是得把心态摆正啊，不说多么有进取心，至少把本职工作做好吧。
-- 听了 [wd 佬](https://github.com/wdvxdr1123)的建议整了个达尔优 A87Pro 天空轴v3，一番体验这个天空轴v3 手感确实贼爽、声音也小，感觉可能有点类似静电容了（虽然我没用过静电容 emmm）。
+- 听了 [wd 佬](https://github.com/wdvxdr1123)的建议整了个达尔优 A87Pro 天空轴 v3，一番体验这个天空轴 v3 手感确实贼爽、声音也小，感觉可能有点类似静电容了（虽然我没用过静电容 emmm）。
   - 我毕业以来就 19 年跟 20 年分别买过两把 IKBC 的茶轴跟红轴，茶轴放家里了，红轴一直放在公司用。当时国产轴感觉还不太出名，但是现在我聊键盘的朋友都看不上 cherry 轴了，网上搜了下 cheery 轴也有各种品控下降、轴心不稳、杂音大的诟病。
-  - 结合朋友推荐，另外看到 v2ex 上聊键盘的朋友也有说天空轴v3 好用的，还在知乎上也看到有人说这个轴不错，于是就按捺不住心思下单了。到手确实很惊艳，甚至让我再一次喜欢上了打字的感觉！打了几篇小鹤练习群的赛文享受这种飘逸的感觉。
+  - 结合朋友推荐，另外看到 v2ex 上聊键盘的朋友也有说天空轴 v3 好用的，还在知乎上也看到有人说这个轴不错，于是就按捺不住心思下单了。到手确实很惊艳，甚至让我再一次喜欢上了打字的感觉！打了几篇小鹤练习群的赛文享受这种飘逸的感觉。
 
 ### 2023-03-29
 
 - 买的陆地冲浪板到货了，晚上 11 点半跑到小区外的商业街门口玩到 0 点 40，会一点滑行跟转弯了，不过还不稳当。
 <!-- - 跟壁画之家的偶像们一起用网易云「一起听」功能听歌。 -->
-
 
 ### 2023-03-28
 
@@ -185,12 +195,11 @@ comment:
   - 反驳：学 EE 可能也没必要考研，现在经济不景气考研的人太多了难度大，另一方面学习终究还是考自己，考个普通普通学校没啥意义，好学校又不是那么容易考的。
 - 折腾 WireGuard 协议
 
-
 ### 2023-03-26
 
 - 对用 ESP32 搞一搞 IP-KVM 远程控制产生了点兴趣，研究了一波 USB 协议。
 - 发现合宙的 ESP32S3 开发板有个 DVP 摄像头接口，就尝试在上面跑 [esp32-camera](https://github.com/espressif/esp32-camera)，
-  - 首先搞了个 demo，根据 [CORE-ESP32-S3开发板原理图 - LuatOS](https://wiki.luatos.com/chips/esp32s3/hardware.html) 确定引脚
+  - 首先搞了个 demo，根据 [CORE-ESP32-S3 开发板原理图 - LuatOS](https://wiki.luatos.com/chips/esp32s3/hardware.html) 确定引脚
   - 然后就败北了，日志啥的都正常，可 PSRAM 初始化怎么着都失败，找半圈这里说到了 [luatos-esp32s3-camera 拓展板 - 立创开源](https://oshwhub.com/chain01/luatos-esp32s3-camera) 合宙 ESP32S3 的 PSRAM 跟它的摄像头接口是冲突的，需要额外的转接板...
 - 今年以来，业余搞硬件搞到有一点失去方向，对工作有点失去兴趣，久违地又感到了些许迷茫。
 - 买了个陆地冲浪板，型号是「YATAGA 八咫乌 SFW06 - 双驱 - 32 英寸」，780 大洋，等到货了。
@@ -218,7 +227,6 @@ comment:
   - 笔记记录在 [electrical-engineering/sipeed](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/sipeed)
   - 上手现在 5 块矽速的板子了，如果算上还没出货的两块 LicheePi4A 那就是 7 块。最近 Maix II Dock 降价还搞得我手痒难耐，但是其实完全没啥需求去买，光手上现有的板子就够我玩好久了...
 - 英语学习又鸽了一周多了...
-
 
 ### 2023-03-19
 
@@ -258,7 +266,7 @@ comment:
 ### 2023-03-09
 
 - 买的野火鲁班猫 0 无线版到了，这是野火基于 RK3566 的一块开发板
-  - 它的设计类似树莓派，但是开放的资料非常全，包含 SoC 原厂的各种文档、SDK 驱动开发包、核心板封装库，还提供许多免费的在线文档，内容包含  Linux 内核编译部署、Linux 驱动开发、嵌入式 QT 开发等等
+  - 它的设计类似树莓派，但是开放的资料非常全，包含 SoC 原厂的各种文档、SDK 驱动开发包、核心板封装库，还提供许多免费的在线文档，内容包含 Linux 内核编译部署、Linux 驱动开发、嵌入式 QT 开发等等
 - 读完了「The Moon and Sixpence」
 
 ### 2023-03-08
@@ -350,7 +358,6 @@ comment:
 - 仍然没找到英语学习的节奏，年后基本没学几天英语。
 - 搞硬件的热情又上来了，特别是 RK3558S 这颗 SOC 感觉挺好玩的样子，加了 OrangePi5 的群见了市面（群友们玩得都挺有意思）。
 
-
 ### 2023-02-03
 
 - 折腾 Homelab 时，主力节点 UM560 固态翻车了，是才用了三个月的 Asgard 512G SSD，颗粒是长江存储的。走京东售后了
@@ -358,7 +365,6 @@ comment:
 
 ![](/images/now/nvme-critial-medium-error.webp "2022-11-02 翻车记录，系统无法启动，这是显示器输出内容")
 ![](/images/now/nvme-device-not-ready.webp "2023-02-03 翻车记录，系统能启动但是文件损坏，这是 dmesg 信息")
-
 
 ### 2023-01-30
 
@@ -372,9 +378,9 @@ comment:
 - 健身 30mins: day 1
   - 玩了玩几样健身设备，感觉还挺有意思的。练习强度也不大，不累，算是体验阶段。后续再慢慢加量。
 - 英语阅读
-  - The Moon and Sixpence  - 23/36
+  - The Moon and Sixpence - 23/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习   - 145/270 (漏打卡 62 天)
+  - 一点英语 270 天英语学习 - 145/270 (漏打卡 62 天)
 
 ### 2023-01-14
 
@@ -384,12 +390,10 @@ comment:
   - 之前也在跟人的一些沟通中提到过一点——「我在学校时负面情绪就已经爆棚了，刚工作时虽然起点贼低，但是相比在学校时心理压力小太多了，反而感觉到获得了解放。工作上的负面情绪对我而言可能就像毛毛雨，而做自己喜欢的事带来的成就感则是我在学校时从未体会过的。这种从业前期的经历使我更在意成就感、同事的认可而非某些负面情绪。」
   - 古人总结过这个叫「塞翁失马，焉知非福」，现代也有很多人叫「吃亏是福」。
 
-
 ### 2023-01-11
 
 - 一晚上没接告警，工作真告一段落了。
 - 然后就是失去了继续学习英语、折腾其他东西的东西，感觉真的需要停一下，修养一段时间，恢复下被新冠、咳嗽、以及 K8s 升级这个大任务消耗掉的精气神。
-
 
 ### 2023-01-10
 
@@ -417,14 +421,14 @@ comment:
 ### 2023-01-02
 
 - 英语阅读
-  - The Moon and Sixpence  - 15/36
+  - The Moon and Sixpence - 15/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 118/270 (漏打卡 36 天)
+  - 一点英语 270 天英语学习 - 118/270 (漏打卡 36 天)
 - 词汇量测试：新的一年，测了一下词汇量，测了三次选了结果低的一次，词汇量为 **6583**
-    {{<figure src="/images/now/2023-01-02-test-your-vocabulary-result.webp" title="2023-01-02 词汇量测试结果：6583 词" width="70%">}}
-    {{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
-    {{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
-    {{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
+  {{<figure src="/images/now/2023-01-02-test-your-vocabulary-result.webp" title="2023-01-02 词汇量测试结果：6583 词" width="70%">}}
+  {{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
+  {{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
+  {{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 - 电子电路
   - 3D 打印机折腾了几天，暂时放下了。
   - 电子电路的话，跨年前后这几天学完了《51 单片机自学笔记》的汇编部分，然后直接开始通过野火的视频教程学 STM32，跟着写了一些 C 代码挺有意思的。
@@ -439,11 +443,10 @@ comment:
 
 {{<figure src="/images/now/netease-cloud-music-2022-singer-of-ryan4yin.webp" title="我的网易云年度歌手" width="50%">}}
 
-
 ### 2022-12-25
 
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 110/270 (漏打卡 29 天)
+  - 一点英语 270 天英语学习 - 110/270 (漏打卡 29 天)
 - 电子电路
   - 在焦急地等待大半天后，晚上 3D 打印机「ELEGOO Neptune 3 Pro」终于到货了，折腾了一波，很好玩（
   - 继续通过我的摇摇棒学习《51 单片机自学笔记》
@@ -452,9 +455,9 @@ comment:
 ### 2022-12-24
 
 - 英语阅读
-  - The Moon and Sixpence  - 8/36
+  - The Moon and Sixpence - 8/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 109/270 (漏打卡 28 天)
+  - 一点英语 270 天英语学习 - 109/270 (漏打卡 28 天)
 - 电子电路
   - 又下单一批元器件，另外斥巨资 1499 买了一台 3D 打印机「ELEGOO Neptune 3 Pro」，预计明天到货
   - 因为之前的摇摇棒刚好是用的 STC89S52 单片机，开始通过它学习《51 单片机自学笔记》。
@@ -464,9 +467,9 @@ comment:
 ### 2022-12-20
 
 - 英语阅读
-  - The Moon and Sixpence  - 6/36
+  - The Moon and Sixpence - 6/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 105/270 (漏打卡 25 天)
+  - 一点英语 270 天英语学习 - 105/270 (漏打卡 25 天)
 - 电子电路
   - 找到 [platform-intel_mcs51/issues/47](https://github.com/platformio/platform-intel_mcs51/issues/47) 这个 issue，根据它的描述，解决了上周摇摇棒（使用的 51 单片机）烧录卡住的问题
   - 焊接了一个指尖陀螺套件，这也是我第一次焊接贴片元件，贴得歪歪扭扭的，不过工作正常，效果很惊艳~很好玩 emmmm
@@ -477,9 +480,9 @@ comment:
 ### 2022-12-19
 
 - 英语阅读
-  - The Moon and Sixpence  - 4/36
+  - The Moon and Sixpence - 4/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 104/270 (漏打卡 25 天)
+  - 一点英语 270 天英语学习 - 104/270 (漏打卡 25 天)
 - 词汇量测试：又过去了一个月，本月因为玩上了 Homelab 跟电子电路，漏打了很多卡，但是前面厚积薄发，测出的词汇量相比上个月上涨约 700 词，到了 6300
   {{<figure src="/images/now/2022-12-19-test-your-vocabulary-result.webp" title="2022-12-19 词汇量测试结果：6300 词" width="40%">}}
   {{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
@@ -518,7 +521,7 @@ comment:
     - 凌晨一点低烧（腋温 38）睡不着，看完了这本书的最后一段。全书 9W 词不算多，但是 100 天却感觉这么长。读完还是挺感慨的。小说的内容很不错，值 5 颗星。
     - 想起去年 12 月，凌晨在高铁站看完保罗奥斯特的《月宫》，而此时此刻，今年 12 月，我在凌晨发着烧看完了《The Unlikely Pilgrimage of Harold Fry》。再次清晰地理解到，一年又过去了啊
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 101/270 (漏打卡 24 天)
+  - 一点英语 270 天英语学习 - 101/270 (漏打卡 24 天)
 - 电子电路
   - 安装好了淘宝 28 块钱买的四自由度模板机械臂，拿昨天写的遥控小车代码改了改逻辑，使用树莓派实现了蓝牙手柄遥控机械臂。不过机械臂钳子的舵机被我弄坏了，夹不了东西 emmm
   - 焊接好了淘宝 23.5 元买的行走机器人套件，虽然确实能正常前进后退，但是前进/回退的切换间隔有点长，调了半天没搞明白怎么调电位器能缩短它的间隔时间。当然显然我也还没明白它的电路图原理，只是单纯照着 PCB 板标注把元器件焊接上去了而已，隔几天再研究下这个电路图，了解下各个元器件的功能，以及电路如何工作。
@@ -530,7 +533,7 @@ comment:
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 99/100 (补读 15 天)
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 100/270 (漏打卡 24 天)
+  - 一点英语 270 天英语学习 - 100/270 (漏打卡 24 天)
     - 学了八分钟，然后就 0 点了...所以没打到卡
 - 电子电路
   - 给昨天组装的树莓派四驱小车，用 pygame 写了七十多行代码，接入了 Xbox One 蓝牙手柄控制，实现了童年时的梦想——拥有一台遥控赛车！
@@ -569,7 +572,7 @@ comment:
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 96/100 (补读 15 天)
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 97/270 (漏打卡 21 天)
+  - 一点英语 270 天英语学习 - 97/270 (漏打卡 21 天)
 - 电子电路
   - 网友改装的 PD 供电 L245 焊笔（兼容 JBC245 烙铁头）到货，焊接了我的第一块电路板（洞洞板），毕竟第一次，卖相显然不咋样...不过能够 work 哈哈
   - 玩着玩着，发现烙铁头变黑了...
@@ -582,9 +585,9 @@ comment:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 95/100 (补读 15 天)
-  - The Moon and Sixpence  - 2/36
+  - The Moon and Sixpence - 2/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 96/270 (漏打卡 20 天)
+  - 一点英语 270 天英语学习 - 96/270 (漏打卡 20 天)
   - 发现背单词确实比英语阅读更难坚持，读故事更容易坚持一点...
   - 另外就是最近沉迷搞电子...
 - 电子电路
@@ -592,19 +595,18 @@ comment:
     - 焊接工具套装、各种开发版、电子元件包、七八个各种 ESP 开发版/模块、四驱小车套件 + 机械臂套件
     - 为了练习焊接 + 学一些电子电路基础，在淘宝「电子爱好者之家」上买了许多初中级的焊接套件
     - 各种其他相关工具：耐高温硅胶垫、螺丝磁性收纳垫等等
-  - 以及玩电子后发现租房桌子不够用，淘宝补了一张 80cm * 60cm * 75cm 的方桌，专门用做电子工作台
+  - 以及玩电子后发现租房桌子不够用，淘宝补了一张 80cm _ 60cm _ 75cm 的方桌，专门用做电子工作台
   - 大学学电子工程的前同事（现在在搞 C# 开发）过来玩，感叹仿佛看到了当年自己寝室的景象，也是摆满各种元器件 emmm
   - 烧坏一个 1117 稳压管，搜索相关资料时发现宝藏 UP [工科男孙老师](https://space.bilibili.com/43584648)，从硬件入门到晶体管、dcdc 模块设计、示波器，都有讲。
     - 进一步找到了 [爱上半导体](https://space.bilibili.com/395188578)
 
 ![](/images/now/experience-of-electrical-engineering.webp "我的电子电路初体验")
 
-
 ### 2022-12-08
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 92/100 (补读 14 天)
-  - The Moon and Sixpence  - 1/36
+  - The Moon and Sixpence - 1/36
 - ESPHome & Home Assistant
   - 之前买的 DHT11 传感器一直只有温度读数而且还高了室温 10 多摄氏度，湿度读数一直为 0. 网上怎么查都查不到相关资料，今天把它的蓝色塑料壳拆掉，随便擦了擦里面的面板后，瞬间两个读数都有了，而且运行一段时间后，温度也渐渐地接近室温了
     - 看起来就是里面有啥看不见的脏东西，或者就是塑料外壳本身有问题。
@@ -643,7 +645,7 @@ comment:
   - The Unlikely Pilgrimage of Harold Fry - 88/100 (漏打卡 10 天，已补读 8 天)
   - 薄荷阅读读满 80 天赠送的实体书到货了，回看下过去近三个月的阅读，收获良多，也感慨坚持之不易。主要我的兴趣点经常变化，近一两个月折腾 Homelab 跟智能家居，漏打了很多天的卡...
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 89/270 (漏打卡 15 天)
+  - 一点英语 270 天英语学习 - 89/270 (漏打卡 15 天)
 - ESPHome
   - 搞定了显示模块、红外空调遥控模块
   - （一直对搞电子电路很感兴趣，但是没想到我是这个时间点，从玩智能家居开始真正进入这个方向）
@@ -659,7 +661,7 @@ comment:
   - ESP32-C3 默认配置编译失败说 Arudino Framework 不支持此开发版，调整 Arudino Framework 及 `platform-espressif32` 的版本到最新版后解决，并将解法补充到了搜到的 issue 上：[ESP32-C3 Arduino Core 2.0.0 - ESPHome](https://github.com/esphome/issues/issues/3031)
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 85/100 (漏打卡 10 天，已补读 5 天)
-  - 一点英语 270 天英语学习                  - 86/270 (漏打卡 14 天)
+  - 一点英语 270 天英语学习 - 86/270 (漏打卡 14 天)
 
 ### 2022-11-30
 
@@ -694,11 +696,11 @@ comment:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 81/100 (漏打卡 10 天，已补读 5 天)
-  - The Time Machine  - 30/30
+  - The Time Machine - 30/30
     - 读完了，内容想象力丰富，新奇有趣，也学到很多熟词生义、新词新表达。
-  - The Moon and Sixpence  - 0.5/36
+  - The Moon and Sixpence - 0.5/36
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 82/270 (漏打卡 12 天)
+  - 一点英语 270 天英语学习 - 82/270 (漏打卡 12 天)
   - 一点英语已经漏打卡 12 天，基本都是 2022/11 月漏的。主要原因一是搞 Homelab，二是搬家、跟亲戚朋友聚会...
 - 整理发表文章「Proxmox Virtual Environment 使用指南」
 - OpenMediaVault 的 ISCSI 插件(tgt) 性能太差，研究了一波使用 Windows Server 2022 搭建 ISCSI + SMB 服务，看看是否能跑满我的 2.5G 带宽。
@@ -712,11 +714,10 @@ comment:
 ![](/images/now/play-mahjong-with-classmates.webp)
 ![](/images/now/china-spallation-neutron-source.webp)
 
-
 ### 2022-11-20
 
 - 英语阅读
-  - The Time Machine                          - 27/30
+  - The Time Machine - 27/30
 - 在朋友的帮助下搬家，最重的书都是朋友帮我搬上楼了，结果我仍然累得不行...相当尴尬...
 - 新租房开通了电信 1000M 宽带，家庭网络体验感直线上升。
 
@@ -724,9 +725,9 @@ comment:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 73/100
-  - The Time Machine                          - 25/30
+  - The Time Machine - 25/30
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 74/270
+  - 一点英语 270 天英语学习 - 74/270
 - 11/19 下午找了一圈房子，定了个 2000 一月的（包管理费），离坪洲站 50 米
   - 租房价格明显比去年低了很多，感觉跟今年经济不景气有关，很多人离开了深圳
 
@@ -734,9 +735,9 @@ comment:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 71/100
-  - The Time Machine                          - 24/30
+  - The Time Machine - 24/30
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 72/270
+  - 一点英语 270 天英语学习 - 72/270
 - 跟 RC（NoneBot/CQHTTP 作者）聊了聊，互相加了个小社群。
   - 沟通中梳理了下我今年对「高质量社群」的一些总结：社群的最大好处是能互相提供不一样的角度去看世界，互相提供价值。
   - 我今年算上 RC 的小群，一共加了四个感觉对我比较有帮助的群聊：
@@ -759,9 +760,9 @@ comment:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 67/100
-  - The Time Machine                          - 22/30
+  - The Time Machine - 22/30
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 68/270
+  - 一点英语 270 天英语学习 - 68/270
 - 跟 0xFFFF 社区线下约饭，聊了到学英语、业务逻辑、搞 infra、国内国外等等，体验很好~
   - 一起聊的伙伴们各行各业都有，嵌入式 Linux、数仓、研究生
 
@@ -778,11 +779,10 @@ comment:
 
 ### 2022-11-09
 
-
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 63/100
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 64/270
+  - 一点英语 270 天英语学习 - 64/270
 - 也快年底了，趁着做 Review 写 OKR，顺便梳理下我今年的工作，除去参与日常的成本分析与管控、运维工作外，主要有如下这些：
   - 2022Q1（两个月） - 搞 HTTP 迁移到 gRPC 的支持方案，帮助业务方迁移到 gRPC 协议，流量成本与延迟的下降非常明显
   - 2022Q2（两个月） - 改用 AWS karpenter 做 EKS 离线计算集群（EMRonEKS）的扩缩容，使集群快速缩容，降低成本
@@ -875,16 +875,15 @@ comment:
 - K3s 问题
   - 在 raspberrypi 上遇到 [Fail running on Raspberry Pi Ubuntu 21.10](https://github.com/k3s-io/k3s/issues/4234#issuecomment-947954002) 这个问题，跑了下 `sudo apt install linux-modules-extra-raspi` 再重启问题就解决了。
   - 新版本 k8s 需要指定 ingressClassName，但是 k3s 默认没有创建 ingressClass : [Create by default traefik ingressClass when creating a cluster](https://github.com/k3s-io/k3s/issues/556
-  - 在 1.25 版的 k3s 集群上安装 victoria-metrics-k8s-stack 时，operator 一直报错，排查日志发现是 `policy/v1beta1` 被废弃导致的，顺手提了个 PR [fix: bump victoria-metrics-operator's version to 0.15.*](https://github.com/VictoriaMetrics/helm-charts/pull/401)
-
+  - 在 1.25 版的 k3s 集群上安装 victoria-metrics-k8s-stack 时，operator 一直报错，排查日志发现是 `policy/v1beta1` 被废弃导致的，顺手提了个 PR [fix: bump victoria-metrics-operator's version to 0.15.\*](https://github.com/VictoriaMetrics/helm-charts/pull/401)
 
 ### 2022-11-03
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 57/100
-  - The Time Machine                          - 21/30
+  - The Time Machine - 21/30
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 58/270
+  - 一点英语 270 天英语学习 - 58/270
 - 上班：大数据服务遭遇性能瓶颈，发送 kafka 延迟高涨。
   - 因为节点没安装 node-exporter 没法看监控，手动跑了一堆 sysstat 相关的命令分析网络 IO、磁盘 IO，以及一堆其他命令分析 TCP 连接、CPU 利用率等等，都很正常...（再次确认 node-exporter 有多么方便...）
   - 最后通过 **kubectl-flame 画火焰图**，定位到是启用了 gzip 压缩耗时很长。改成不压缩后估算发现 kafka 带宽顶不住全部流量，最后改成 lz4 压缩算法解决，平衡了客户端压缩性能与贷款消耗。
@@ -911,15 +910,14 @@ comment:
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 51/100
-  - The Time Machine                          - 17/30
+  - The Time Machine - 17/30
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 52/270
+  - 一点英语 270 天英语学习 - 52/270
 - 跟朋友及同事聊了聊近况，网关技术、Web3，以及个人发展
 - 大宇方向与团队结构调整，送走了很多人，包括去年带我一起冲浪的算法大佬。
   - 这短短两天，真的走了好多超强的大佬啊，其中很多在公司都呆了四五年了，当然也不乏才进公司不到一年的新人。第一次遇到这种场面，难免有些 emo
   - 翻了翻公司的邮件组，emo 之余，也能感觉到公司早期的时候，内部氛围真的很好，互相分享韩语、日语、设计技能。
 - 因为一些意外，发现了大宇前 FE Leader 的博客，读了 [[Review] 2020](https://github.com/JasKang/blog/issues/11)，对做开源项目有了些新的感悟。
-
 
 ### 2022-10-23
 
@@ -938,17 +936,17 @@ comment:
   - 基于「动态规划」去优化「最短理论编码」算法，关键点在于它的「重叠子问题」是哪个？
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 46/100
-  - The Time Machine                          - 9/30
+  - The Time Machine - 9/30
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 47/270
+  - 一点英语 270 天英语学习 - 47/270
 
 ### 2022-10-19 - 2022-10-20
 
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 43/100
-  - The Time Machine                          - 4/30
+  - The Time Machine - 4/30
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 44/270
+  - 一点英语 270 天英语学习 - 44/270
 - 在英语学习规划中补充了 Cambly/Lingoda 等口语练习站点
 - 在「一点英语」上过一遍 96 个单词，大概需要 90mins 的时间，另外在薄荷英语+知米阅读上还需要花差不多 40mins
 - 发现最近英语学习成了我业余生活的主旋律，每天花大概 130mins 在英语学习上，基本上工作日没有任何时间去学习 Linux 跟 TCP/IP 了
@@ -960,7 +958,7 @@ comment:
   - The Unlikely Pilgrimage of Harold Fry - 41/100
   - 感觉薄荷英语小程序做得不太行，一番查找发现了价格更亲民，小程序也做得更好的「知米阅读」，花 199 买了它的年费会员。并且开始在「知米阅读」上看《The Time Machine》这本书。
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 42/270
+  - 一点英语 270 天英语学习 - 42/270
 - 使用 [Test Your Vocabulary](https://preply.com/en/learn/english/test-your-vocab) 做了一次词汇量评估，发现相比去年词汇量上升了大概 400 词（隐约记得去年测试大概是 4700 左右）。说明最近的单词跟阅读学习，效果显著，有点成就感~
   - 目标词汇量增加速度：每天约 20 个单词，再用 5 个月的时间完成 8000 词的目标。
   - 也不能忽视「熟词生义」跟「词组」学习，这个主要通过「薄荷阅读」跟「知米阅读」来补充。
@@ -973,9 +971,9 @@ comment:
 - 英语阅读
   - The Unlikely Pilgrimage of Harold Fry - 40/100
 - 英语单词与听力练习
-  - 一点英语 270 天英语学习                  - 41/270
+  - 一点英语 270 天英语学习 - 41/270
 - 英语语法
-  - 《英语语法新思维——初级教程》              - 8/366
+  - 《英语语法新思维——初级教程》 - 8/366
 
 ### 2022-10-15 - 2022-10-16
 
@@ -984,7 +982,7 @@ comment:
 - 跟 0xFFFF 社区的朋友交流，积累了一点有价值的讨论：[记 QQ 群里一次关于日常笔记、学习规划、学习节奏的讨论](https://0xffff.one/d/1352-ji-qq-qun-li-yi-ci-guan-yu-ri-chang)
 - 打游戏学英语，玩了玩 Genshin Impact 跟 Deemo 2，体验挺不错的。
 - The Unlikely Pilgrimage of Harold Fry - 39/100
-- 一点英语 270 天英语学习                  - 40/270
+- 一点英语 270 天英语学习 - 40/270
 
 ![](/images/learn-english-again/genshin-impact-noelle.webp "超飒的重剑女仆 Noelle")
 
@@ -1004,9 +1002,8 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 35/100
-  - 一点英语 270 天英语学习                  - 36/270
+  - 一点英语 270 天英语学习 - 36/270
   - 重新读了一遍恶魔奶爸分享的词典文章，在平板上用欧路词典配置好了所有双解词典、英英词典、搭配用法词典、词根词缀 vocabulary builder。确实很好用。
-
 
 ### 2022-10-11
 
@@ -1020,12 +1017,11 @@ comment:
   - 最后我选择了 logseq，因为多维表格类的笔记软件目前没有特别出彩的，而且它的存储格式是个问题——markdown 的特性太弱不足以支撑多维表格的特性。而且 logseq 进阶可以用 emacs org mode，虽然没用过但是听说是功能更丰富的排版格式。
   - logseq 能直接导出成站点，但是目前还不支持自定义导出站点的样式（默认的暗色主题有点丑...）
 
-
 ### 2022-10-06 - 2022-10-08
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 31/100
-  - 一点英语 270 天英语学习                  - 32/270
+  - 一点英语 270 天英语学习 - 32/270
   - 打 galgame 学英语（剧情吸引人，日常用语跟某方面的词汇量也很丰富...）
     - 找英文 galgame 了解到一个黄油社区 f95zone...
 
@@ -1033,16 +1029,16 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 28/100
-  - 一点英语 270 天英语学习                  - 29/270
+  - 一点英语 270 天英语学习 - 29/270
   - 打 galgame 学英语（剧情吸引人，日常用语跟某方面的词汇量也很丰富...）
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
   - 完成了习题 12-3
 
 ### 2022-10-04
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 27/100
-  - 一点英语 270 天英语学习                  - 28/270
+  - 一点英语 270 天英语学习 - 28/270
   - 打 galgame 学英语（剧情吸引人，日常用语跟某方面的词汇量也很丰富...）
 - 看完了《赛博朋克：边缘行者》
   - 剧情比较狗血，不带脑子看还是很爽的。
@@ -1053,8 +1049,8 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 26/100
-  - 一点英语 270 天英语学习                  - 27/270
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
+  - 一点英语 270 天英语学习 - 27/270
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
   - 看完了 I/O 缓冲、文件系统、目录跟链接，而文件属性、拓展属性、ACL 不太感兴趣，就走马观花看了看。
   - 完成了 12 章的习题 1 跟 2，不太熟悉 C 语言，还是有点费劲的。
 
@@ -1062,8 +1058,8 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 23/100
-  - 一点英语 270 天英语学习                  - 24/270
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 190/572
+  - 一点英语 270 天英语学习 - 24/270
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 190/572
   - 完成第 12 章 /prod 文件系统与 uname 系统调用，明天做下习题。
 
 ### 2022-09-29
@@ -1078,17 +1074,16 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 19/100
-  - 一点英语 270 天英语学习                  - 20/270
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 174/572
+  - 一点英语 270 天英语学习 - 20/270
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 174/572
   - 略读了「进程凭证」、「时间」「系统限制与选项」三章，因为对其内容不太感兴趣，跳过了习题。
   - 第 12 章讲 /proc 我比较感兴趣，明天读
-
 
 ### 2022-09-24 - 2022-09-25
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 18/100
-  - 一点英语 270 天英语学习                  - 19/270
+  - 一点英语 270 天英语学习 - 19/270
     - 试了下每天靠通视频语料背 80 个单词（包含复习每日复习），花了 100 分钟，难度略高。暂时改成 50 个明天试试看。
   - [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程 - 一周目 2/16
 
@@ -1116,7 +1111,7 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 16/100
-  - 一点英语 270 天英语学习                  - 17/270
+  - 一点英语 270 天英语学习 - 17/270
   - [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程 - 一周目 1/16
   - 多抓鱼上下单了《English Grammer In Use》跟《赖世雄经典英语语法》，语法几乎全忘光了，这次打算补一补语法
   - z-library 上下载了《Key words for fluency》前两本书，因为发现自己口语经常不太会表达自己的想法，打算靠这个补补看
@@ -1125,11 +1120,11 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 14/100
-  - 一点英语 270 天英语学习                  - 15/270
+  - 一点英语 270 天英语学习 - 15/270
 - [APISIX 504 问题](https://github.com/apache/apisix/issues/7934)
   - 周会同步，同事提示我 node-exporter 的 network traffic 部分就有列出 nf_conntrack 表的监控。但是因为环境问题，我跑 APISIX 这批机器刚好没整这个监控...再次确认了完善的监控功能的重要性
   - 调整 nf_conntrack 相关参数后，问题暂时解决了。但是接下来遇到 TCP 连接数无法超过 65535 的问题，导致 504 报错...
-    - 按理说我 nginx 有两个 worker，`worker_connections` 也设置到了 65535，至少应该也能撑住 65535 * 2 的连接数量？
+    - 按理说我 nginx 有两个 worker，`worker_connections` 也设置到了 65535，至少应该也能撑住 65535 \* 2 的连接数量？
     - 发现 alloc : orphaned : timewait 三类 TCP 连接数的比值大概为 66% : 13% : 21%，`dmesg` 命令能看到很多这样的错误：`TCP: too many orphaned sockets`
     - 搜索一番确定 orphaned 连接太多一般有两种可能：一是 tcp 连接的内存用尽导致无法为新连接分配内存，二是 TIME_WAIT 导致的 orphaned 连接。所以解决方法是调整 tcp 内存相关参数，启用 TIME_WAIT reuse
 - 读了一点《深入理解 Linux 网络》这本书，因为这两天搞 APISIX 网关，深刻意识到自己对相关知识缺乏了解
@@ -1138,20 +1133,19 @@ comment:
 
 - 英语
   - The Unlikely Pilgrimage of Harold Fry - 13/100
-  - 一点英语 270 天英语学习                  - 14/270
-  - Moon Palace, by Pual Auster           - 10.6%
+  - 一点英语 270 天英语学习 - 14/270
+  - Moon Palace, by Pual Auster - 10.6%
 - [APISIX 504 问题](https://github.com/apache/apisix/issues/7934)
   - 上周给这个 case 提了个 issue 到 APISIX 社区，但是官方给出的思路并无参考价值。
   - 今天晚上左思右想，最可能还是 TCP/IP 协议栈有问题，网上搜了下「丢包 504 超时」，然后根据找到的流程排查了一下，第二个排查项直接命中，就是 nf_conntrack 满了导致的问题！
     - 就好像是找到了正确的房门钥匙是「丢包 超时 排查」，困扰我好几天的问题，瞬间就找到了突破口。
   - 此问题相关的笔记，我后续会在 [Linux 504 超时丢包问题解决思路.md](https://github.com/ryan4yin/knowledge/blob/master/linux/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/Linux%20504%20%E8%B6%85%E6%97%B6%E4%B8%A2%E5%8C%85%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF.md) 更新
 
-
 ### 2022-09-18
 
 - 沉迷学英语...
   - 薄荷英语 100 天阅读一本英文书 - 11/100
-  - 一点英语 270 天英语学习      - 12/270
+  - 一点英语 270 天英语学习 - 12/270
   - Moon Palace, by Paul Auster - 6.5%
 - 完成 TLPI 第 5/6 章的习题
   - 习题告诉我 longjmp 是个大坑，能不用千万别用，出错的现象太诡异了。
@@ -1160,7 +1154,7 @@ comment:
 
 - 沉迷学英语...
   - 薄荷英语 100 天阅读一本英文书 - 10/100
-  - 一点英语 270 天英语学习      - 11/270
+  - 一点英语 270 天英语学习 - 11/270
   - Moon Palace, by Paul Auster - 4.2%
 - 最近一直在跟薄荷英语的原版书课程《The Unlikely Pilgrimage of Harold Fry》，就想再次挑战下自己直接去读英文原版书。结果发现 Paul Auster 的《Moon Palace》意外地好读，生词很少，读得很流畅。
   - 然后又陆续试了下《Sophie's World》、《Majo no Tabitabi（魔女之旅）》，难度都不高，只有《Tasogare-iro no Uta Tsukai（黄昏色的咏使）》生词偏多，读着费劲。
@@ -1193,7 +1187,7 @@ comment:
 ### 2022-09-11
 
 - 学英语
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 136/572
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 136/572
   - 这本书的主要内容就是在介绍 Linux 的各种 C 语言 API，跟想象中的还是有些不一样。（我以为可能像《深入理解 Linux 内核》一样，还会讲内核的一些实现细节。）
     - 也能感觉到 Linux 中也存在相当多的历史包袱，比如说一个文件描述符复制就有 `dup()` `dup2()` `dup3()` 三个函数可用，大文件读写的支持也有好几种实现方式，另外标准 API 中错误值返回方式也存在一些特例需要记忆。总之就是很多地方都有补丁的痕迹，Linux 在不断地进化，许多旧的 API 会慢慢被弃用，新的 API 也会被不断地添加。
   - 虽然不是很有趣，但是还挺好读的，进度已经差不多 1/4 了。不过今天跳过了所有习题，打算明天把跳过的习题都做一遍（不然读了过两天就忘了，等于没读）
@@ -1209,8 +1203,7 @@ comment:
   - 主要交流了如何通过各类电影、电视剧等材料去学习英语。明确的一点就是单纯为了娱乐看美剧，对学英语的帮助是很小的。
   - 关键就是重复听，一直到不看字幕能听懂的程度，还可以去领会其中词组、语法、句式的用法。
 - 下午到晚上在 Discord 的中英交流 Chatting Room 里泡了大半天，很多英语还听不太懂，但是氛围很好，聊得很舒服。
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 72/572
-
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 72/572
 
 ### 2022-09-05 - 2022-09-09
 
@@ -1259,7 +1252,7 @@ comment:
   9. 找前端的朋友给了个 canonical link 的 CSS 选择语法，使用该语法修改主题，测试发现问题解决
   10. 提 PR 给这个 Hugo 主题的 github 仓库: https://github.com/HEIGE-PCloud/DoIt/pull/709
   11. 总共用时大约 1h
-- 逛 [@Bensz](https://blognas.hwb0307.com/me) 的友链时，发现 [APISIX高级路由之通过Body参数转发请求 - 张戈博客](https://zhangge.net/5157.html)这篇文章，它为我正在解决的一个问题提供了非常优雅的思路——使用 apisix `route` 的 `filter_func` 功能，真的是意外之喜~
+- 逛 [@Bensz](https://blognas.hwb0307.com/me) 的友链时，发现 [APISIX 高级路由之通过 Body 参数转发请求 - 张戈博客](https://zhangge.net/5157.html)这篇文章，它为我正在解决的一个问题提供了非常优雅的思路——使用 apisix `route` 的 `filter_func` 功能，真的是意外之喜~
 
 ### 2022-08-28
 
@@ -1271,7 +1264,7 @@ comment:
 今天跟朋友讨论时，突然发现居然是 `index.xml` 在跑我的流量，我之前一直以为这个地方显示的是 `index.html` 首页，就没觉得它有问题...
 
 最后确认这个是我站点的 RSS Feed 文件，也就是 RSS 订阅造成的。
-我全站现在一个月也就大概 80G 流量，其中接近 90% 都是这个 RSS Feed 跑出来的 —_—||
+我全站现在一个月也就大概 80G 流量，其中接近 90% 都是这个 RSS Feed 跑出来的 —\_—||
 
 排查之下发现是之前为了 RSS 订阅的体验，把所有文章的内容都嵌进去了，导致体积有 2.8M，可能因为订阅量越来越多，以及 RSS 订阅的周期性拉取，导致数据量一直在涨。
 
@@ -1280,7 +1273,6 @@ comment:
 做了一波修改，现在只将最新的 15 篇文章内容嵌入到 RSS 里，其他文章只给个标题跟原文 URL，使 RSS Feed 文件的大小降到了 700K，暂时应该不用担心 Vercel 流量用光了...
 
 ![](/images/now/rss-feed-used-too-much-traffic.webp)
-
 
 ### 2022-08-25
 
@@ -1304,7 +1296,6 @@ comment:
   - 花了较长时间研究 Makefile 语法跟 clang 的参数，然后又花了很长时间熟悉 ffmpeg 的 api
   - 目前已经集齐用五种不同语言实现的 video2ascii 工具，除了 C 语言是调用的原生 API 外，其他语言都是使用 ffmpeg/opencv 的 wrapper 实现的。
 
-
 ### 2022-08-20
 
 - 读完 The ANSI C Programming Language
@@ -1316,7 +1307,6 @@ comment:
 ![](/images/now/the-asni-c-programming-language.webp "The ANSI C Programming Language")
 
 ![](/images/now/the-linux-programming-interface.webp "Linux/Unix 系统编程手册（上册）")
-
 
 ### 2022-08-19
 
@@ -1336,7 +1326,6 @@ comment:
   - 本地压测一切正常，无法复现这个 RESET 问题
   - 还有一个问题是，发现 cert-manager 给出的证书文件包含了域名证书、中间证书、根证书，导致 TLS 握手阶段发一个证书给客户端直接用了 4000 bytes... 有点费流量...
 - 听歌，看着《江城》，我意识到一件事——多记日记跟笔记，这样到了想要写些有意思的文字的时候，就能发现手边已经有了大量的一手资料，或者发现自己在这方面的积累还很少，或许现在还不是时机。
-
 
 ### 2022-08-17
 
@@ -1394,7 +1383,7 @@ comment:
     - https://www.nginx.com/blog/performance-tuning-tips-tricks/
     - https://www.nginx.com/blog/tuning-nginx/
     - https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/
-    - [【优化】nginx启用reuseport](https://wfhu.gitbooks.io/life/content/chapter7/nginx-enable-reuseport.html)
+    - [【优化】nginx 启用 reuseport](https://wfhu.gitbooks.io/life/content/chapter7/nginx-enable-reuseport.html)
     - [digitalocean/nginxconfig.io](https://github.com/digitalocean/nginxconfig.io)
     - [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx)
     - [nginx-admins-handbook](https://github.com/trimstray/nginx-admins-handbook)
@@ -1530,7 +1519,6 @@ comment:
     - 仅针对 k8s 的方案主要是 kilo，基于 wireguard 直接通过公网实现 overlay 网络，但是感觉时延很可能难以接受，还是得用 VPN 才行。
     - 整个云通用的方案目前只有部分供应商在做，而且不开源，有 vendor lock-in 的可能，而且不清楚封装出的具体效果如何
 
-
 ### 2022-05-29
 
 - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
@@ -1576,7 +1564,7 @@ comment:
 
 - 极客时间《分布式协议与算法实战》 - 36%
 
-### 2022-05-22 ~  2022-05-23
+### 2022-05-22 ~ 2022-05-23
 
 - 学习 [分布式系统的一致性问题与共识算法](https://thiscute.world/posts/consistency-and-consensus-algorithm/) 并记录笔记
   - 极客时间《分布式协议与算法实战》 - 22%
@@ -1647,7 +1635,7 @@ comment:
 
 - 了解到 2021 年是区块链投资大涨的一年，总投资涨了 7 倍多到了 252 亿美元，NFT 更离谱直接从 2020 年的 37m 涨到 4802m 美元，感觉确实非常有前景
   - 数据来源 [State Of Blockchain 2021 Report - CB Insights Research](https://www.cbinsights.com/research/report/blockchain-trends-2021/)
-- 分两次从币安转了 0.01 ETH + 0.05 ETH 到 Ethereum，币安收了固定手续费 0.0016 ETH * 2
+- 分两次从币安转了 0.01 ETH + 0.05 ETH 到 Ethereum，币安收了固定手续费 0.0016 ETH \* 2
   - 购买 ENS 域名 thiscute.eth 10 年并设为我的主域名，花了约 0.027 ETH，算上 gas 费一共花了 0.0321 ETH 也就是 67 刀
 - 给自己再次整了一个 mirror.xyz 账号，有了 ENS 就是爽。
 - 但是发现我现有的几个域名如 thiscute.world，其实可以直接通过 DNSSEC 导入到 ENS，感觉血亏 0.027 ETH...
@@ -1669,7 +1657,6 @@ comment:
 - 阅读 [dcbuild3r/blockchain-development-guide](https://github.com/dcbuild3r/blockchain-development-guide)，了解如何进行区块链开发
   - 我把这个 guide 完整过了一遍（后面关于自我提升、社会影响力啥的仅走马观花看了看），真的好长的一篇文章啊。
   - 很多干货，现在我对搞区块链开发要学的东西，认知更清晰了。
-
 
 ### 2022-05-12
 
@@ -1720,8 +1707,7 @@ comment:
 
 ### 2022-05-02
 
-- 学习[Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
-
+- 学习[Go 语言动手写 Web 框架](https://geektutu.com/post/gee.html) - 进度 20%
 
 ### 2022-05-01
 
@@ -1744,7 +1730,6 @@ comment:
 
 ![](/images/now/the-go-programming-language.webp "Go 程序设计语言（英文版） 2022-08-19 补图")
 
-
 ### 2022-04-24
 
 - 阅读《Go 程序设计语言（英文版）》 - 进度 90%
@@ -1753,8 +1738,7 @@ comment:
 ### 2022-04-22 - 2022-04-23
 
 - 阅读《Go 程序设计语言（英文版）》 - 进度 72%
-    - 主要完成了 goroutines/channels 以及「并发与变量共享 sync」两个章节
-
+  - 主要完成了 goroutines/channels 以及「并发与变量共享 sync」两个章节
 
 ### 2022-04-21
 
@@ -1790,7 +1774,7 @@ comment:
 - 重新整理书单，放到 /now 页面中
 - 学习 NAT 原理知识
 
-### 2022-04-15 ~ 2022-04-16 
+### 2022-04-15 ~ 2022-04-16
 
 - 阅读《Go 程序设计语言（英文版）》 - 进度 5/13
 
@@ -1831,7 +1815,6 @@ comment:
   - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
     - 这个视频及相关的 Github 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论后，实战合约编写
 
-
 ### 2021-03-23 - 2021-3-25
 
 - 阅读《在生命的尽头拥抱你-临终关怀医生手记》
@@ -1845,7 +1828,6 @@ comment:
 ### 2021-03-15 - 2021-03-19
 
 - 学习 Envoy，完成 [Envoy 笔记](https://github.com/ryan4yin/knowledge/tree/master/network/proxy%26server/envoy)
-
 
 ### 2021-03-11 - 2021-03-14
 
@@ -1895,7 +1877,6 @@ comment:
   - 添加「阅读排行」页，定期从 Google Analytics 同步数据
   - 从博客园迁移部分有价值的文章到独立博客
 
-
 ### 2022-01-08 - 2022-01-16
 
 - 购入 Synthesizer V + 青溯 AI 声库，简单调了几首歌试试，效果非常棒。
@@ -1925,11 +1906,10 @@ comment:
   - 确认问题[来自 HPA behavior 的 Bug](https://github.com/kubernetes/kubernetes/issues/107038)
     1. 储存于 etcd 中的 object 仅会有一个版本，透过 apiserver 读取时会转换成请求的 autoscaling API 版本。
     2. autoscaling/v2beta2 scaleUp 及 scaleDown 对象不能为 null，并在[其 Kubernetse 代码](https://github.com/kubernetes/kubernetes/blob/6ac2d8edc8606ab387924b8b865b4a69630080e0/pkg/apis/autoscaling/v2/defaults.go#L104)可以查看到相应的检查机制。
-    3. 当使用 autoscaling/v1 时，v2beta2 版本中的相关对象字段将作为 annotation 保留，apiserver 不会检查 ScaleUp/ScaleDown 的 annotation是否为 non-null，而导致 kube-controller-manager panic 问题。
+    3. 当使用 autoscaling/v1 时，v2beta2 版本中的相关对象字段将作为 annotation 保留，apiserver 不会检查 ScaleUp/ScaleDown 的 annotation 是否为 non-null，而导致 kube-controller-manager panic 问题。
     4. 我们可以使用 v1 或 v2beta2 创建一个 HPA 对象，然后使用 v1 或 v2beta2 读取、更新或删除该对象。 etcd 中存储的对象只有一个版本，每当您使用 v1 或 v2beta2 获取 HPA 对象时，apiserver 从 etcd 读取它，然后将其转换为您请求的版本。
     5. 在使用 kubectl 时，客户端将默认使用 v1(`kubectl get hpa`)，因此我们必须明确请求 v2beta2 才能使用这些功能(`kubectl get hpa.v2beta2.autoscaling`)
     6. 如果在更新 v1 版本的 HPA 时（kubectl 默认用 v1），手动修改了 v2beta2 功能相关的 annotation 将 scaleUp/scaleDown 设为 null，会导致 controller-manager 挂掉.
-
 
 ### 2021-10-23
 
@@ -1942,7 +1922,7 @@ comment:
 
 ### 2021-09-13 - 2021-09-17
 
-- 学习极客时间《10X程序员工作法》
+- 学习极客时间《10X 程序员工作法》
   - 以终推始
   - 识别关键问题
   - ownership
@@ -1958,13 +1938,13 @@ comment:
 ### 2021-08-31 - 2021-09-01
 
 - 思考我在工作中遇到的一些非技术问题，寻找解法
-    - 效率：如何在没人 push 的情况下（没有外部压力），维持住高效率的工作状态（早早干完活下班它不香么？）。
-      - 建立有效的「自检」与「纠错」机制
-        - 自检：
-          - 列出目前已知的「异常」和「健康」两类工作状态，每日做一个对比。
-          - 每日都列一下详细的工作计划，精确到小时（预留 1 小时 buffer 应对临时需求）。
-    - 沟通：遇到问题（各种意义上的问题）时，及时沟通清楚再继续推进，是一件 ROI 非常高的事。否则几乎肯定会在后面的某个节点，被这个问题坑一把。
-    - 目前的关键目标是啥？存在哪些关键问题（实现关键目标最大的阻碍）？我最近做的主要工作，是不是在为关键目标服务？
+  - 效率：如何在没人 push 的情况下（没有外部压力），维持住高效率的工作状态（早早干完活下班它不香么？）。
+    - 建立有效的「自检」与「纠错」机制
+      - 自检：
+        - 列出目前已知的「异常」和「健康」两类工作状态，每日做一个对比。
+        - 每日都列一下详细的工作计划，精确到小时（预留 1 小时 buffer 应对临时需求）。
+  - 沟通：遇到问题（各种意义上的问题）时，及时沟通清楚再继续推进，是一件 ROI 非常高的事。否则几乎肯定会在后面的某个节点，被这个问题坑一把。
+  - 目前的关键目标是啥？存在哪些关键问题（实现关键目标最大的阻碍）？我最近做的主要工作，是不是在为关键目标服务？
   - 如何把安排到手上的事情做好？
     - 思考这件事情真正的目标的什么？
       - 比如任务是排查下某服务状态码有无问题，真正的目的应该是想知道服务有没有异常
@@ -2015,6 +1995,5 @@ comment:
     - 在推进过程中，有哪些阶段性成果或者 check point？
 
 ---
-
 
 {{< particles_effect_up  >}}
