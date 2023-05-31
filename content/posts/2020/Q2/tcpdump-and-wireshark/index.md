@@ -102,6 +102,9 @@ tcpdump -i eth0 -w temp.pcap 'tcp and (host x.x.x.x or host a.a.a.a)'
 ```shell
 # eth0 更换成你的机器 interface 名称，虚拟机可能是 ens33
 ssh root@some.host "tcpdump -i eth0 -l -w -" | wireshark -k -i -
+
+# 添加一些 tcpdump 过滤条件进行精确过滤，这也能避免数据量过大
+ssh root@some.host "tcpdump -i eth0 -l -w - 'tcp and (host x.x.x.x or host a.a.a.a)'" | wireshark -k -i -
 ```
 
 在不方便使用 ssh 协议的情况下（比如容器抓包、Android 抓包），可以考虑使用 `nc`(netcat) 进行数据流的转发：
