@@ -1095,7 +1095,7 @@ For example, add the parameter directly in `flake.nix`:
 }
 ```
 
-According to the above method, it is very convenient to modularize all overlays configurations. Taking my configuration as an example, the structure of the `overlays` folder is roughly as follows:
+According to the method above, it is very convenient to modularize all overlays configurations. Taking my configuration as an example, the structure of the `overlays` folder is roughly as follows:
 
 ```nix
 .
