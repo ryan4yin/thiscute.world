@@ -1133,6 +1133,14 @@ Therefore, in order to customize the cache image source, we must add the related
 </span><span class="lnt">36
 </span><span class="lnt">37
 </span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
@@ -1156,13 +1164,21 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span><span class="line"><span class="cl">    <span class="o">...</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">nixosConfigurations</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="k">rec</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1"># The core parameter, which passes the non-default nixpkgs data source to other modules</span>
 </span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="k">inherit</span> <span class="n">nixpkgs-stable</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">          <span class="k">inherit</span> <span class="n">nixpkgs-fd40cef8d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># To use packages from nixpkgs-stable, we need to configure some parameters for it first</span>
+</span></span><span class="line"><span class="cl">          <span class="n">pkgs-stable</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs-stable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="p">;</span>  <span class="c1"># refer the `system` parameter form outer scope recursively</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># To use chrome, we need to allow the installation of non-free software</span>
+</span></span><span class="line"><span class="cl">            <span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">};</span>
+</span></span><span class="line"><span class="cl">          <span class="n">pkgs-fd40cef8d</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs-fd40cef8d</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">};</span>
 </span></span><span class="line"><span class="cl">        <span class="p">};</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./hosts/nixos-test</span>
@@ -1202,34 +1218,18 @@ Therefore, in order to customize the cache image source, we must add the related
 </span><span class="lnt">22
 </span><span class="lnt">23
 </span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="n">pkgs</span><span class="o">,</span>
 </span></span><span class="line"><span class="cl">  <span class="n">config</span><span class="o">,</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># nix will search and jnject this parameter from specialArgs in flake.nix</span>
-</span></span><span class="line"><span class="cl">  <span class="n">nixpkgs-stable</span><span class="o">,</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># nixpkgs-fd40cef8d,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pkgs-stable</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># pkgs-fd40cef8d,</span>
 </span></span><span class="line"><span class="cl">  <span class="o">...</span>
 </span></span><span class="line"><span class="cl"><span class="p">}:</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">let</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># To use packages from nixpkgs-stable, we need to configure some parameters for it first</span>
-</span></span><span class="line"><span class="cl">  <span class="n">pkgs-stable</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs-stable</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># The Global parameters will be automatically configured to the default pkgs, so we can directly refer to them from pkgs</span>
-</span></span><span class="line"><span class="cl">    <span class="n">system</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># To use chrome, we need to allow the installation of non-free software</span>
-</span></span><span class="line"><span class="cl">    <span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">};</span>
-</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># refer packages from pkgs-stable instead of pkgs</span>
 </span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">packages</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs-stable</span><span class="p">;</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="n">firefox-wayland</span>
@@ -1246,7 +1246,10 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>After adjusted the configuration, deploy it with <code>sudo nixos-rebuild switch</code>, then your firefox/chrome/vscode will revert to the version corresponding to <code>nix-stable</code> or <code>nixpkgs-fd40cef8d</code>.</p>
+</div><p>After adjusted the configuration, deploy it with <code>sudo nixos-rebuild switch</code>, then your firefox/chrome/vscode will revert to the version corresponding to <code>nixpkgs-stable</code> or <code>nixpkgs-fd40cef8d</code>.</p>
+<blockquote>
+<p>according to <a href="https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347" target="_blank" rel="noopener noreferrer">1000 instances of nixpkgs</a>, it&rsquo;s not a good practice to use <code>import</code> in sub modules to customize <code>nixpkgs</code>, because each <code>import</code> will create a new instance of nixpkgs, which will increase the build time and memory usage as the configuration grows. So here we create all nixpkgs instances in <code>flake.nix</code> to avoid this problem.</p>
+</blockquote>
 <h3 id="10-manage-nixos-configuration-with-git" class="headerLink">
     <a href="#10-manage-nixos-configuration-with-git" class="header-mark"></a>10. Manage NixOS configuration with Git</h3><p>NixOS&rsquo;s configuration file is plain text, so it can be managed with Git just like ordinary dotfiles.</p>
 <p>On the other hand, <code>flake.nix</code> do not required to be placed in the <code>/etc/nixos</code> directory, they can be placed in any directory, as long as the correct path is specified during deployment.</p>

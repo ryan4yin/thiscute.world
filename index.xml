@@ -2070,6 +2070,17 @@
 </span><span class="lnt">37
 </span><span class="lnt">38
 </span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
@@ -2094,13 +2105,24 @@
 </span></span><span class="line"><span class="cl">    <span class="o">...</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">nixosConfigurations</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="k">rec</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1"># 核心参数是这个，将非默认的 nixpkgs 数据源传到其他 modules 中</span>
 </span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="k">inherit</span> <span class="n">nixpkgs-stable</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">          <span class="k">inherit</span> <span class="n">nixpkgs-fd40cef8d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># 注意每次 import 都会生成一个新的 nixpkgs 实例</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># 这里我们直接在 flake.nix 中创建实例， 再传递到其他子 modules 中使用</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># 这样能有效重用 nixpkgs 实例，避免 nixpkgs 实例泛滥。</span>
+</span></span><span class="line"><span class="cl">          <span class="n">pkgs-stable</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs-stable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="p">;</span>  <span class="c1"># 这里递归引用了外部的 system 属性</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 为了拉取 chrome 等软件包，需要允许安装非自由软件</span>
+</span></span><span class="line"><span class="cl">            <span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          <span class="n">pkgs-fd40cef8d</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs-fd40cef8d</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">system</span> <span class="o">=</span> <span class="n">system</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">};</span>
 </span></span><span class="line"><span class="cl">        <span class="p">};</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./hosts/nixos-test</span>
@@ -2140,34 +2162,18 @@
 </span><span class="lnt">22
 </span><span class="lnt">23
 </span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="n">pkgs</span><span class="o">,</span>
 </span></span><span class="line"><span class="cl">  <span class="n">config</span><span class="o">,</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># nix 会从 flake.nix 的 specialArgs 查找并注入此参数</span>
-</span></span><span class="line"><span class="cl">  <span class="n">nixpkgs-stable</span><span class="o">,</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># nixpkgs-fd40cef8d,  # 也可以使用固定 hash 的 nixpkgs 数据源</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pkgs-stable</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># pkgs-fd40cef8d,  # 也可以使用固定 hash 的 nixpkgs 数据源</span>
 </span></span><span class="line"><span class="cl">  <span class="o">...</span>
 </span></span><span class="line"><span class="cl"><span class="p">}:</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">let</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># 为了在后面使用 nixpkgs-stable 中的包，需要先给它配置一些参数</span>
-</span></span><span class="line"><span class="cl">  <span class="n">pkgs-stable</span> <span class="o">=</span> <span class="kn">import</span> <span class="n">nixpkgs-stable</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 我们全局的参数会被自动配置到默认的 pkgs 中，这里可以直接从 pkgs 中引用</span>
-</span></span><span class="line"><span class="cl">    <span class="n">system</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 为了拉取 chrome，需要允许安装非自由软件</span>
-</span></span><span class="line"><span class="cl">    <span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">};</span>
-</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># 这里从 pkg-stable 中引用包</span>
 </span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">packages</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs-stable</span><span class="p">;</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="n">firefox-wayland</span>
@@ -2185,6 +2191,9 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>配置完成后，通过 <code>sudo nixos-rebuild switch</code> 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。</p>
+<blockquote>
+<p>根据 @fbewivpjsbsby 补充的文章 <a href="https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347" target="_blank" rel="noopener noreferrer">1000 instances of nixpkgs</a>，在子模块中用 <code>import</code> 来定制 <code>nixpkgs</code> 不是一个好的习惯，因为每次 <code>import</code> 都会重新求值并产生一个新的 nixpkgs 实例，在配置越来越多时会导致构建时间变长、内存占用变大。所以这里改为了在 <code>flake.nix</code> 中创建所有 nixpkgs 实例。</p>
+</blockquote>
 <h3 id="git-manage-nixos-config" class="headerLink">
     <a href="#git-manage-nixos-config" class="header-mark"></a>10. 使用 Git 管理 NixOS 配置</h3><p>NixOS 的配置文件是纯文本，因此跟普通的 dotfiles 一样可以使用 Git 管理。</p>
 <p>此外 Nix Flakes 配置也不一定需要放在 <code>/etc/nixos</code> 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。</p>
