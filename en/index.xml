@@ -45,7 +45,7 @@ So I decided to switch to NixOS.</p>
 </blockquote>
 <p>The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as &ldquo;OS as Code&rdquo;, which describes the entire operating system&rsquo;s state using declarative Nix configuration files.</p>
 <p>NixOS&rsquo;s configuration only manages the system-level state, the user&rsquo;s HOME directory is not under its control. Another important community project, <a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>, filled this gap, home-manager is designed to managing user-level&rsquo;s packages &amp; HOME directories. <strong>By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained</strong>(ideally).</p>
-<p>Due to Nix&rsquo;s declarative and reproducible features, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> from the Nix official and <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a>  from the community are both operations tools based on Nix.</p>
+<p>Due to Nix&rsquo;s declarative and reproducible features, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> from the Nix official and <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> from the community are both operations tools based on Nix.</p>
 <blockquote>
 <p>Since there are numerous files in the home directory with varying behaviors, it is impossible to version control all of them due to the high cost. Generally, only some important configuration files are managed using home-manager, and other files that need to be backed up can be backed up and synchronized using rsync/synthing, or use tools like <a href="https://github.com/digint/btrbk" target="_blank" rel="noopener noreferrer">btrbk</a> to take snapshots of the home directory.</p>
 </blockquote>
@@ -403,7 +403,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;Ryan&#39;s NixOS Flake&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># This is the standard format for flake.nix. `inputs` are the dependencies of the flake,</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># and `outputs` function will return all the build results of the flake. </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># and `outputs` function will return all the build results of the flake.</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># There are many ways to reference flake inputs. The most widely used is github:owner/name/reference,</span>
@@ -421,9 +421,9 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">    <span class="p">};</span>
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># `outputs` are all the build result of the flake. </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># `outputs` are all the build result of the flake.</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># A flake can have many use cases and different types of outputs.</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># parameters in `outputs` are defined in `inputs` and can be referenced by their names. </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># parameters in `outputs` are defined in `inputs` and can be referenced by their names.</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># However, `self` is an exception, This special parameter points to the `outputs` itself (self-reference)</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># The `@` syntax here is used to alias the attribute set of the inputs&#39;s parameter, making it convenient to use inside the function.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">inputs</span><span class="p">:</span> <span class="p">{</span>
@@ -444,7 +444,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">        <span class="c1">#    (such is the current state of Nix documentation...)</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># A Nix Module can be an attribute set, or a function that returns an attribute set.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># If a Module is a function, according to the Nix Wiki description, this function can have up to four parameters:</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># </span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  lib:     the nixpkgs function library, which provides many useful functions for operating Nix expressions</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#            https://nixos.org/manual/nixpkgs/stable/#id-1.4</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  config:  all config options of the current flake</span>
@@ -452,14 +452,14 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">        <span class="c1">#  pkgs:   a collection of all packages defined in nixpkgs.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#           you can assume its default value is `nixpkgs.legacyPackages.&#34;${system}&#34;` for now.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#           can be customed by `nixpkgs.pkgs` option</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: the default path of nixpkgs&#39;s builtin modules folder, </span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: the default path of nixpkgs&#39;s builtin modules folder,</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#               used to import some extra modules from nixpkgs.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#               this parameter is rarely used, you can ignore it for now.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># Only the parameters above can be passed by default.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># If you need to pass other parameters, you must use `specialArgs` by uncomment the following line</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># specialArgs = {...}  # pass custom arguments into sub module.</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">          <span class="c1"># Import the configuration.nix we used before, so that the old configuration file can still take effect. </span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># Import the configuration.nix we used before, so that the old configuration file can still take effect.</span>
 </span></span><span class="line"><span class="cl">          <span class="c1"># Note: /etc/nixos/configuration.nix itself is also a Nix Module, so you can import it directly here</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./configuration.nix</span>
 </span></span><span class="line"><span class="cl">        <span class="p">];</span>
@@ -565,7 +565,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># Edit this configuration file to define what should be installed on</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># your system.  Help is available in the configuration.nix(5) man page</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># and in the NixOS manual (accessible by running ‘nixos-help’).</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># </span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># Nix will automatically inject `helix` from specialArgs</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># into the third parameter of this function through name matching</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">helix</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
@@ -631,8 +631,8 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;NixOS configuration of Ryan Yin&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># 1. To ensure purity, Flakes does not rely on the system&#39;s `/etc/nix/nix.conf`, so we have to set related configuration here.</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># 2. To ensure security, flake allows only a few nixConfig parameters to be set directly by default. </span>
-</span></span><span class="line"><span class="cl">  <span class="c1">#    you need to add `--accept-flake-config` when executing the nix command, </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 2. To ensure security, flake allows only a few nixConfig parameters to be set directly by default.</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#    you need to add `--accept-flake-config` when executing the nix command,</span>
 </span></span><span class="line"><span class="cl">  <span class="c1">#    otherwise all other parameters will be ignored, and an warning will printed by nix.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">nixConfig</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">experimental-features</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;nix-command&#34;</span> <span class="s2">&#34;flakes&#34;</span> <span class="p">];</span>
@@ -782,7 +782,7 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># Packages that should be installed to the user profile.</span>
-</span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">packages</span> <span class="o">=</span> <span class="p">[</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pkgs</span><span class="o">.</span><span class="n">htop</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pkgs</span><span class="o">.</span><span class="n">btop</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
@@ -1058,10 +1058,10 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span><span class="line"><span class="cl">│       │   └── env.nu
 </span></span><span class="line"><span class="cl">│       ├── starship.nix
 </span></span><span class="line"><span class="cl">│       └── terminals.nix
-</span></span><span class="line"><span class="cl">├── hosts 
+</span></span><span class="line"><span class="cl">├── hosts
 </span></span><span class="line"><span class="cl">│   ├── msi-rtx4090      <span class="c1"># My main machine&#39;s configuration</span>
 </span></span><span class="line"><span class="cl">│   │   ├── default.nix  <span class="c1"># This is the old configuration.nix, but most of the content has been split out to modules.</span>
-</span></span><span class="line"><span class="cl">│   │   └── hardware-configuration.nix  <span class="c1"># hardware &amp; disk related configuration, autogenerated by nixos   </span>
+</span></span><span class="line"><span class="cl">│   │   └── hardware-configuration.nix  <span class="c1"># hardware &amp; disk related configuration, autogenerated by nixos</span>
 </span></span><span class="line"><span class="cl">│   └── nixos-test       <span class="c1"># my test machine&#39;s configuration</span>
 </span></span><span class="line"><span class="cl">│       ├── default.nix
 </span></span><span class="line"><span class="cl">│       └── hardware-configuration.nix
@@ -1378,7 +1378,7 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span><span class="line"><span class="cl"><span class="c1"># this command is the same as above, but use a full flake URI instead of falkeregistry id.</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Hello Nix&#34;</span> <span class="p">|</span> nix run <span class="s2">&#34;github:NixOS/nixpkgs/nixos-unstable#ponysay&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># instead of treat flake package as an application, </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># instead of treat flake package as an application,</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># this command use `devShells.example` in flake `zero-to-nix`&#39;s outputs, to setup the development environment,</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># and then open a bash shell in that environment.</span>
 </span></span><span class="line"><span class="cl">nix develop <span class="s2">&#34;github:DeterminateSystems/zero-to-nix#example&#34;</span>
@@ -1586,7 +1586,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># to add my custom input method, I override the default rime-data here</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># refer to https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="n">pkgs</span><span class="o">,</span> <span class="n">config</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span><span class="p">}:</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="n">pkgs</span><span class="o">,</span> <span class="n">config</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span><span class="p">}:</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">(</span><span class="n">self</span><span class="p">:</span> <span class="n">super</span><span class="p">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># my custom input method&#39;s rime-data, downloaded from https://flypy.com</span>
@@ -1668,14 +1668,14 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl">    <span class="n">nixosConfigurations</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./hosts/nixos-test</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">          <span class="c1"># add the following inline module definition</span>
 </span></span><span class="line"><span class="cl">          <span class="c1">#   here, all parameters of modules are passed to overlays</span>
 </span></span><span class="line"><span class="cl">          <span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="p">{</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">overlays</span> <span class="o">=</span> <span class="kn">import</span> <span class="sr">./overlays</span> <span class="n">args</span><span class="p">;</span> <span class="p">})</span>
-</span></span><span class="line"><span class="cl">          
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">          <span class="c1"># ......</span>
 </span></span><span class="line"><span class="cl">        <span class="p">];</span>
 </span></span><span class="line"><span class="cl">      <span class="p">};</span>
