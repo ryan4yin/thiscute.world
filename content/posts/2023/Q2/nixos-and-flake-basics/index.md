@@ -26,10 +26,12 @@ comment:
 
 ## 更新日志
 
+- 2023/6/1
+  - 更新「六-9」一节，为了避免 [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347) 描述的 nixpkgs 实例泛滥问题，改为仅在全局创建 nixpkgs 实例。
 - 2023/5/21
   - 补充 overlays 一节的内容。
   - 移除「九、使用 Nix Flakes 打包应用」，这部分可能会放在后续文章中介绍。
-  - 六-4 一节补充了一个通过 flakes 数据源安装程序的例子。
+  - 「六-4」一节补充了一个通过 flakes 数据源安装程序的例子。
 
 ## 零、为什么选择 Nix
 
