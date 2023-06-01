@@ -577,10 +577,10 @@
 <li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> 是一个包含了所有 Nix 包与 NixOS 模块/配置的 Git 仓库，其 master 分支包含最新的 Nix 包与 NixOS 模块/配置。</li>
 <li>比如 <a href="https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/networking/instant-messengers/qq" target="_blank" rel="noopener noreferrer">qq</a> 就直接包含在 nixpkgs 中了</li>
 <li><a href="https://github.com/nix-community/NUR" target="_blank" rel="noopener noreferrer">NUR</a>: 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。</li>
-<li>这些常用国产软件，都可以通过 NUR 安装：
-1. <a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/qqmusic/default.nix" target="_blank" rel="noopener noreferrer">qqmusic</a>
-2. <a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/wechat-uos/default.nix" target="_blank" rel="noopener noreferrer">wechat-uos</a>
-3. <a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/dingtalk/default.nix" target="_blank" rel="noopener noreferrer">dingtalk</a></li>
+<li>这些常用国产软件，都可以通过 NUR 安装：</li>
+<li><a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/qqmusic/default.nix" target="_blank" rel="noopener noreferrer">qqmusic</a></li>
+<li><a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/wechat-uos/default.nix" target="_blank" rel="noopener noreferrer">wechat-uos</a></li>
+<li><a href="https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/dingtalk/default.nix" target="_blank" rel="noopener noreferrer">dingtalk</a></li>
 <li>更多程序，可以在这里搜索：<a href="https://nur.nix-community.org/" target="_blank" rel="noopener noreferrer">Nix User Repositories</a></li>
 <li>Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包</li>
 </ol>
@@ -957,11 +957,11 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 带有命名 attribute set 作为参数的函数，并且使用 ... 收集其他可选参数</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 命名 args 与 ... 可选参数通常被一起作为函数的参数定义使用</span>
 </span></span><span class="line"><span class="cl"><span class="n">args</span><span class="o">@</span><span class="p">{</span> <span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 如下内容等价于上面的内容, </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 如下内容等价于上面的内容,</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">args</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">c</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 但是要注意命名参数仅绑定了输入的 attribute set，默认参数不在其中，举例</span>
-</span></span><span class="line"><span class="cl"><span class="k">let</span> 
+</span></span><span class="line"><span class="cl"><span class="k">let</span>
 </span></span><span class="line"><span class="cl">  <span class="n">f</span> <span class="o">=</span> <span class="p">{</span> <span class="n">a</span> <span class="o">?</span> <span class="mi">1</span><span class="o">,</span> <span class="n">b</span> <span class="o">?</span> <span class="mi">2</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">args</span><span class="p">:</span> <span class="n">args</span>
 </span></span><span class="line"><span class="cl"><span class="k">in</span>
 </span></span><span class="line"><span class="cl">  <span class="n">f</span> <span class="p">{}</span>  <span class="c1"># 结果是 {}，也就说明了 args 中包含默认值</span>
@@ -1325,7 +1325,7 @@
 </span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;Ryan&#39;s NixOS Flake&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># 这是 flake.nix 的标准格式，inputs 是 flake 的依赖，outputs 是 flake 的输出</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># inputs 中的每一项依赖都会在被拉取、构建后，作为参数传递给 outputs 函数 </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># inputs 中的每一项依赖都会在被拉取、构建后，作为参数传递给 outputs 函数</span>
 </span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># flake inputs 有很多种引用方式，应用最广泛的是 github:owner/name/reference，即 github 仓库地址 + branch/commit-id/tag</span>
 </span></span><span class="line"><span class="cl">
@@ -1335,7 +1335,7 @@
 </span></span><span class="line"><span class="cl">    <span class="n">home-manager</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:nix-community/home-manager/release-22.11&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">      <span class="c1"># follows 是 inputs 中的继承语法</span>
-</span></span><span class="line"><span class="cl">      <span class="c1"># 这里使 home-manager 的 nixpkgs 这个 inputs 与当前 flake 的 inputs.nixpkgs </span>
+</span></span><span class="line"><span class="cl">      <span class="c1"># 这里使 home-manager 的 nixpkgs 这个 inputs 与当前 flake 的 inputs.nixpkgs</span>
 </span></span><span class="line"><span class="cl">      <span class="c1"># 保持一致，避免依赖的 nixpkgs 版本不一致导致问题</span>
 </span></span><span class="line"><span class="cl">      <span class="n">inputs</span><span class="o">.</span><span class="n">nixpkgs</span><span class="o">.</span><span class="n">follows</span> <span class="o">=</span> <span class="s2">&#34;nixpkgs&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">};</span>
@@ -1343,10 +1343,10 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># outputs 即 flake 的所有输出，其中的 nixosConfigurations 即 NixOS 系统配置</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># 一个 flake 可以有很多用途，也可以有很多种不同的输出，nixosConfigurations 只是其中一种</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># </span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># outputs 的参数都是 inputs 中定义的依赖项，可以通过它们的名称来引用。</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># 不过 self 是个例外，这个特殊参数指向 outputs 自身（自引用），以及 flake 根目录</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># 这里的 @ 语法将函数的参数 attribute set 取了个别名，方便在内部使用 </span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 这里的 @ 语法将函数的参数 attribute set 取了个别名，方便在内部使用</span>
 </span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}</span><span class="o">@</span><span class="n">inputs</span><span class="p">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># 名为 nixosConfigurations 的 outputs 会在执行 `sudo nixos-rebuild switch` 时被使用</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># 默认情况下上述命令会使用与主机 hostname 同名的 nixosConfigurations</span>
@@ -1361,14 +1361,14 @@
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1"># Nix 模块系统可将配置模块化，提升配置的可维护性</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># </span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># modules 中每个参数，都是一个 Nix Module，nixpkgs manual 中有半份介绍它的文档：</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#    &lt;https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction&gt;</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># 说半份是因为它的文档不全，只有一些简单的介绍（Nix 文档现状...）</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># Nix Module 可以是一个 attribute set，也可以是一个返回 attribute set 的函数</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># 如果是函数，那么它的参数就是当前的 NixOS Module 的参数.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># 根据 Nix Wiki 对 Nix modules 的描述，Nix modules 函数的参数可以有这四个：</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># </span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  config: The configuration of the entire system</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  options: All option declarations refined with all definition and declaration references.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.</span>
@@ -1708,7 +1708,7 @@
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># Packages that should be installed to the user profile.</span>
-</span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">packages</span> <span class="o">=</span> <span class="p">[</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pkgs</span><span class="o">.</span><span class="n">htop</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pkgs</span><span class="o">.</span><span class="n">btop</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
@@ -1984,10 +1984,10 @@
 </span></span><span class="line"><span class="cl">│       │   └── env.nu
 </span></span><span class="line"><span class="cl">│       ├── starship.nix
 </span></span><span class="line"><span class="cl">│       └── terminals.nix
-</span></span><span class="line"><span class="cl">├── hosts 
+</span></span><span class="line"><span class="cl">├── hosts
 </span></span><span class="line"><span class="cl">│   ├── msi-rtx4090      <span class="c1"># PC 主机的配置</span>
 </span></span><span class="line"><span class="cl">│   │   ├── default.nix                 <span class="c1"># 这就是之前的 configuration.nix，不过大部分内容都拆出到 modules 了</span>
-</span></span><span class="line"><span class="cl">│   │   └── hardware-configuration.nix  <span class="c1"># 与系统硬件相关的配置，安装 nixos 时自动生成的      </span>
+</span></span><span class="line"><span class="cl">│   │   └── hardware-configuration.nix  <span class="c1"># 与系统硬件相关的配置，安装 nixos 时自动生成的</span>
 </span></span><span class="line"><span class="cl">│   └── nixos-test       <span class="c1"># 测试用的虚拟机配置</span>
 </span></span><span class="line"><span class="cl">│       ├── default.nix
 </span></span><span class="line"><span class="cl">│       └── hardware-configuration.nix
@@ -2520,7 +2520,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># 为了不使用默认的 rime-data，改用我自定义的小鹤音形数据，这里需要 override</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 参考 https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="n">pkgs</span><span class="o">,</span> <span class="n">config</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span><span class="p">}:</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="n">pkgs</span><span class="o">,</span> <span class="n">config</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span><span class="p">}:</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">(</span><span class="n">self</span><span class="p">:</span> <span class="n">super</span><span class="p">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># 小鹤音形配置，配置来自 flypy.com 官方网盘的鼠须管配置压缩包「小鹤音形“鼠须管”for macOS.zip」</span>
@@ -2602,14 +2602,14 @@
 </span></span><span class="line"><span class="cl">    <span class="n">nixosConfigurations</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="n">nixos-test</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">specialArgs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./hosts/nixos-test</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">          <span class="c1"># 添加如下内嵌 module 定义</span>
 </span></span><span class="line"><span class="cl">          <span class="c1">#   这里将 modules 的所有参数 args 都传递到了 overlays 中</span>
 </span></span><span class="line"><span class="cl">          <span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="p">{</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">overlays</span> <span class="o">=</span> <span class="kn">import</span> <span class="sr">./overlays</span> <span class="n">args</span><span class="p">;</span> <span class="p">})</span>
-</span></span><span class="line"><span class="cl">          
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">          <span class="c1"># ......</span>
 </span></span><span class="line"><span class="cl">        <span class="p">];</span>
 </span></span><span class="line"><span class="cl">      <span class="p">};</span>
@@ -2679,10 +2679,10 @@
 <ul>
 <li><a href="https://github.com/cachix/devenv" target="_blank" rel="noopener noreferrer">devenv</a>: 开发环境管理</li>
 <li><a href="https://github.com/ryantm/agenix" target="_blank" rel="noopener noreferrer">agenix</a>: secrets 管理</li>
-<li><a href="https://github.com/zhaofengli/colmena" target="_blank" rel="noopener noreferrer">colmena</a>: NixOS 主机部署工具</li>
 <li><a href="https://github.com/nix-community/nixos-generators" target="_blank" rel="noopener noreferrer">nixos-generator</a>: 镜像生成工具，从 nixos 配置生成 iso/qcow2 等格式的镜像</li>
-<li><a href="https://github.com/nix-community/lanzaboote" target="_blank" rel="noopener noreferrer">lanzaboote</a>: 主机启用 secure boot</li>
-<li><a href="https://github.com/nix-community/impermanence" target="_blank" rel="noopener noreferrer">impermanence</a>: 用于配置无状态系统，以提升系统的可复现能力。</li>
+<li><a href="https://github.com/nix-community/lanzaboote" target="_blank" rel="noopener noreferrer">lanzaboote</a>: 启用 secure boot</li>
+<li><a href="https://github.com/nix-community/impermanence" target="_blank" rel="noopener noreferrer">impermanence</a>: 用于配置无状态系统。可用它持久化你指定的文件或文件夹，同时再将 /home 目录挂载为 tmpfs 或者每次启动时用工具擦除一遍。这样所有不受 impermanence 管理的数据都将成为临时数据，如果它们导致了任何问题，重启下系统这些数据就全部还原到初始状态了！</li>
+<li><a href="https://github.com/zhaofengli/colmena" target="_blank" rel="noopener noreferrer">colmena</a>: NixOS 主机部署工具</li>
 </ul>
 <h2 id="summary" class="headerLink">
     <a href="#summary" class="header-mark"></a>总结</h2><p>这是本系列文章的第一篇，介绍了使用 Nix Flakes 配置 NixOS 系统的基础知识，跟着这篇文章把系统配置好，就算是入门了。</p>
@@ -4730,11 +4730,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <ul>
 <li><figure><a class="lightgallery" href="/images/now/the-go-programming-language.webp" title="/images/now/the-go-programming-language.webp" data-thumbnail="/images/now/the-go-programming-language.webp" data-sub-html="<h2>Go 程序设计语言（英文版） 2022-08-19 补图</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/now/the-go-programming-language.webp"
-            srcset="/images/now/the-go-programming-language.webp, /images/now/the-go-programming-language.webp 1.5x, /images/now/the-go-programming-language.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/the-go-programming-language.webp"
+            data-srcset="/images/now/the-go-programming-language.webp, /images/now/the-go-programming-language.webp 1.5x, /images/now/the-go-programming-language.webp 2x"
+            data-sizes="auto"
             alt="/images/now/the-go-programming-language.webp">
     </a><figcaption class="image-caption">Go 程序设计语言（英文版） 2022-08-19 补图</figcaption>
     </figure></li>
@@ -4770,11 +4769,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <ul>
 <li><figure><a class="lightgallery" href="/images/now/life-notes-of-chenxingjia.webp" title="/images/now/life-notes-of-chenxingjia.webp" data-thumbnail="/images/now/life-notes-of-chenxingjia.webp" data-sub-html="<h2>陈行甲人生笔记</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/now/life-notes-of-chenxingjia.webp"
-            srcset="/images/now/life-notes-of-chenxingjia.webp, /images/now/life-notes-of-chenxingjia.webp 1.5x, /images/now/life-notes-of-chenxingjia.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/life-notes-of-chenxingjia.webp"
+            data-srcset="/images/now/life-notes-of-chenxingjia.webp, /images/now/life-notes-of-chenxingjia.webp 1.5x, /images/now/life-notes-of-chenxingjia.webp 2x"
+            data-sizes="auto"
             alt="/images/now/life-notes-of-chenxingjia.webp">
     </a><figcaption class="image-caption">陈行甲人生笔记</figcaption>
     </figure></li>
@@ -4785,11 +4783,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <li>写了一个小项目 <a href="https://github.com/ryan4yin/video2ascii-c" target="_blank" rel="noopener noreferrer">video2ascii-c</a> 练手 C 语言。</li>
 <li><figure><a class="lightgallery" href="/images/now/the-asni-c-programming-language.webp" title="/images/now/the-asni-c-programming-language.webp" data-thumbnail="/images/now/the-asni-c-programming-language.webp" data-sub-html="<h2>The ANSI C Programming Language</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/now/the-asni-c-programming-language.webp"
-            srcset="/images/now/the-asni-c-programming-language.webp, /images/now/the-asni-c-programming-language.webp 1.5x, /images/now/the-asni-c-programming-language.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/the-asni-c-programming-language.webp"
+            data-srcset="/images/now/the-asni-c-programming-language.webp, /images/now/the-asni-c-programming-language.webp 1.5x, /images/now/the-asni-c-programming-language.webp 2x"
+            data-sizes="auto"
             alt="/images/now/the-asni-c-programming-language.webp">
     </a><figcaption class="image-caption">The ANSI C Programming Language</figcaption>
     </figure></li>
@@ -4822,11 +4819,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <ul>
 <li><figure><a class="lightgallery" href="/images/now/the-linux-programming-interface.webp" title="/images/now/the-linux-programming-interface.webp" data-thumbnail="/images/now/the-linux-programming-interface.webp" data-sub-html="<h2>Linux/Unix 系统编程手册（上册）</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/now/the-linux-programming-interface.webp"
-            srcset="/images/now/the-linux-programming-interface.webp, /images/now/the-linux-programming-interface.webp 1.5x, /images/now/the-linux-programming-interface.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/the-linux-programming-interface.webp"
+            data-srcset="/images/now/the-linux-programming-interface.webp, /images/now/the-linux-programming-interface.webp 1.5x, /images/now/the-linux-programming-interface.webp 2x"
+            data-sizes="auto"
             alt="/images/now/the-linux-programming-interface.webp">
     </a><figcaption class="image-caption">Linux/Unix 系统编程手册（上册）</figcaption>
     </figure></li>
@@ -4836,21 +4832,19 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <li>打游戏学英语
 <figure><a class="lightgallery" href="/images/learn-english-again/genshin-impact-noelle.webp" title="/images/learn-english-again/genshin-impact-noelle.webp" data-thumbnail="/images/learn-english-again/genshin-impact-noelle.webp" data-sub-html="<h2>超飒的重剑女仆 Noelle</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/learn-english-again/genshin-impact-noelle.webp"
-            srcset="/images/learn-english-again/genshin-impact-noelle.webp, /images/learn-english-again/genshin-impact-noelle.webp 1.5x, /images/learn-english-again/genshin-impact-noelle.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/learn-english-again/genshin-impact-noelle.webp"
+            data-srcset="/images/learn-english-again/genshin-impact-noelle.webp, /images/learn-english-again/genshin-impact-noelle.webp 1.5x, /images/learn-english-again/genshin-impact-noelle.webp 2x"
+            data-sizes="auto"
             alt="/images/learn-english-again/genshin-impact-noelle.webp">
     </a><figcaption class="image-caption">超飒的重剑女仆 Noelle</figcaption>
     </figure>
 <figure><a class="lightgallery" href="/images/learn-english-again/demo2-talk-1.webp" title="/images/learn-english-again/demo2-talk-1.webp" data-thumbnail="/images/learn-english-again/demo2-talk-1.webp" data-sub-html="<h2>DEEMO 2 中丰富的对话内容</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/learn-english-again/demo2-talk-1.webp"
-            srcset="/images/learn-english-again/demo2-talk-1.webp, /images/learn-english-again/demo2-talk-1.webp 1.5x, /images/learn-english-again/demo2-talk-1.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/learn-english-again/demo2-talk-1.webp"
+            data-srcset="/images/learn-english-again/demo2-talk-1.webp, /images/learn-english-again/demo2-talk-1.webp 1.5x, /images/learn-english-again/demo2-talk-1.webp 2x"
+            data-sizes="auto"
             alt="/images/learn-english-again/demo2-talk-1.webp">
     </a><figcaption class="image-caption">DEEMO 2 中丰富的对话内容</figcaption>
     </figure></li>
@@ -4869,11 +4863,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <ul>
 <li><figure><a class="lightgallery" href="/images/now/dashy-homepage.webp" title="/images/now/dashy-homepage.webp" data-thumbnail="/images/now/dashy-homepage.webp" data-sub-html="<h2>我的 Homelab 导航页 2022-11-12</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/now/dashy-homepage.webp"
-            srcset="/images/now/dashy-homepage.webp, /images/now/dashy-homepage.webp 1.5x, /images/now/dashy-homepage.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/dashy-homepage.webp"
+            data-srcset="/images/now/dashy-homepage.webp, /images/now/dashy-homepage.webp 1.5x, /images/now/dashy-homepage.webp 2x"
+            data-sizes="auto"
             alt="/images/now/dashy-homepage.webp">
     </a><figcaption class="image-caption">我的 Homelab 导航页 2022-11-12</figcaption>
     </figure></li>
@@ -4882,24 +4875,22 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <li>因为业余时间沉迷搞 Homelab，英语打卡就变得断断续续了&hellip;但是词汇量测试的效果出乎意料，进步速度喜人，阅读能力也能感觉到有明显提升。</li>
 <li>月底搬家换了个新租房，床是挂天花板上的，房间就宽敞了很多，而且拉了独立的电信宽带，网速杠杠的。</li>
 <li>11/25 去东莞松山湖跟高中同学聚会，然后跟几位同学打麻将打到半夜三点多&hellip; 还远远眺望了眼同学读博的地方——「<a href="http://english.ihep.cas.cn/csns/" target="_blank" rel="noopener noreferrer">中国散裂中子源</a>」，感觉很高大上
-<figure><a class="lightgallery" href="/images/now/play-mahjong-with-classmates.webp" title="/images/now/play-mahjong-with-classmates.webp" data-thumbnail="/images/now/play-mahjong-with-classmates.webp">
+<a class="lightgallery" href="/images/now/play-mahjong-with-classmates.webp" title="/images/now/play-mahjong-with-classmates.webp" data-thumbnail="/images/now/play-mahjong-with-classmates.webp">
         <img
-            
-            loading="lazy"
-            src="/images/now/play-mahjong-with-classmates.webp"
-            srcset="/images/now/play-mahjong-with-classmates.webp, /images/now/play-mahjong-with-classmates.webp 1.5x, /images/now/play-mahjong-with-classmates.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/play-mahjong-with-classmates.webp"
+            data-srcset="/images/now/play-mahjong-with-classmates.webp, /images/now/play-mahjong-with-classmates.webp 1.5x, /images/now/play-mahjong-with-classmates.webp 2x"
+            data-sizes="auto"
             alt="/images/now/play-mahjong-with-classmates.webp">
-    </a></figure>
-<figure><a class="lightgallery" href="/images/now/china-spallation-neutron-source.webp" title="/images/now/china-spallation-neutron-source.webp" data-thumbnail="/images/now/china-spallation-neutron-source.webp">
+    </a>
+<a class="lightgallery" href="/images/now/china-spallation-neutron-source.webp" title="/images/now/china-spallation-neutron-source.webp" data-thumbnail="/images/now/china-spallation-neutron-source.webp">
         <img
-            
-            loading="lazy"
-            src="/images/now/china-spallation-neutron-source.webp"
-            srcset="/images/now/china-spallation-neutron-source.webp, /images/now/china-spallation-neutron-source.webp 1.5x, /images/now/china-spallation-neutron-source.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/china-spallation-neutron-source.webp"
+            data-srcset="/images/now/china-spallation-neutron-source.webp, /images/now/china-spallation-neutron-source.webp 1.5x, /images/now/china-spallation-neutron-source.webp 2x"
+            data-sizes="auto"
             alt="/images/now/china-spallation-neutron-source.webp">
-    </a></figure></li>
+    </a></li>
 <li>主要工作：继续推进线上网关优化项目，以及调研 K8s / Istio 的新版本变化，为集群升级做预备工作。</li>
 </ul>
 </li>
@@ -5105,11 +5096,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <p>先贴一张我当前 Homelab 的 PVE 控制台截图，然后就进入正文。</p>
 <p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/ryan-pve-console.webp" title="/images/proxmox-ve-instruction/ryan-pve-console.webp" data-thumbnail="/images/proxmox-ve-instruction/ryan-pve-console.webp" data-sub-html="<h2>我的 PVE 集群</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/proxmox-ve-instruction/ryan-pve-console.webp"
-            srcset="/images/proxmox-ve-instruction/ryan-pve-console.webp, /images/proxmox-ve-instruction/ryan-pve-console.webp 1.5x, /images/proxmox-ve-instruction/ryan-pve-console.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/ryan-pve-console.webp"
+            data-srcset="/images/proxmox-ve-instruction/ryan-pve-console.webp, /images/proxmox-ve-instruction/ryan-pve-console.webp 1.5x, /images/proxmox-ve-instruction/ryan-pve-console.webp 2x"
+            data-sizes="auto"
             alt="/images/proxmox-ve-instruction/ryan-pve-console.webp">
     </a><figcaption class="image-caption">我的 PVE 集群</figcaption>
     </figure></p>
@@ -5158,11 +5148,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <p>接着复制「Join Information」中的内容，在其他每台 PVE 节点的 Web Console 页面中，点击「Datacenter」=&gt;「Cluster」=&gt;「Join Cluster」，然后粘贴前面复制的「Join Information」，再输入前面节点的密码，等待大约一分钟，然后刷新页面，PVE 集群即组建完成。</p>
 <p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" title="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" data-sub-html="<h2>PVE 集群配置</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/proxmox-ve-instruction/pve-cluster-configuration.webp"
-            srcset="/images/proxmox-ve-instruction/pve-cluster-configuration.webp, /images/proxmox-ve-instruction/pve-cluster-configuration.webp 1.5x, /images/proxmox-ve-instruction/pve-cluster-configuration.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/pve-cluster-configuration.webp"
+            data-srcset="/images/proxmox-ve-instruction/pve-cluster-configuration.webp, /images/proxmox-ve-instruction/pve-cluster-configuration.webp 1.5x, /images/proxmox-ve-instruction/pve-cluster-configuration.webp 2x"
+            data-sizes="auto"
             alt="/images/proxmox-ve-instruction/pve-cluster-configuration.webp">
     </a><figcaption class="image-caption">PVE 集群配置</figcaption>
     </figure></p>
@@ -5314,11 +5303,10 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <p>接下来就可以从这个模板虚拟机，克隆各类新虚拟机了~</p>
 <p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" title="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp" data-sub-html="<h2>保险起见，改完配置后记得点下 Regenerate Image</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp"
-            srcset="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 1.5x, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp"
+            data-srcset="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 1.5x, /images/proxmox-ve-instruction/pve-cloudinit-configuration.webp 2x"
+            data-sizes="auto"
             alt="/images/proxmox-ve-instruction/pve-cloudinit-configuration.webp">
     </a><figcaption class="image-caption">保险起见，改完配置后记得点下 Regenerate Image</figcaption>
     </figure></p>
@@ -5695,11 +5683,10 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
     <a href="#1-%e6%a1%a5%e6%8e%a5%e5%a4%9a%e5%bc%a0%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>1. 桥接多张物理网卡</h3><p>示例如下，主要就是在 vmbr0 网桥的 <code>Bridge Ports</code> 里面：</p>
 <p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-multiple-nic.webp" title="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-multiple-nic.webp" data-sub-html="<h2>桥接多张物理网卡</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/proxmox-ve-instruction/pve-multiple-nic.webp"
-            srcset="/images/proxmox-ve-instruction/pve-multiple-nic.webp, /images/proxmox-ve-instruction/pve-multiple-nic.webp 1.5x, /images/proxmox-ve-instruction/pve-multiple-nic.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/proxmox-ve-instruction/pve-multiple-nic.webp"
+            data-srcset="/images/proxmox-ve-instruction/pve-multiple-nic.webp, /images/proxmox-ve-instruction/pve-multiple-nic.webp 1.5x, /images/proxmox-ve-instruction/pve-multiple-nic.webp 2x"
+            data-sizes="auto"
             alt="/images/proxmox-ve-instruction/pve-multiple-nic.webp">
     </a><figcaption class="image-caption">桥接多张物理网卡</figcaption>
     </figure></p>
@@ -5966,31 +5953,28 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </ul>
 <p><figure><a class="lightgallery" href="/images/learn-english-again/genshin-impact-noelle.webp" title="/images/learn-english-again/genshin-impact-noelle.webp" data-thumbnail="/images/learn-english-again/genshin-impact-noelle.webp" data-sub-html="<h2>Genshin Impact 里超飒的重剑女仆 Noelle</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/learn-english-again/genshin-impact-noelle.webp"
-            srcset="/images/learn-english-again/genshin-impact-noelle.webp, /images/learn-english-again/genshin-impact-noelle.webp 1.5x, /images/learn-english-again/genshin-impact-noelle.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/learn-english-again/genshin-impact-noelle.webp"
+            data-srcset="/images/learn-english-again/genshin-impact-noelle.webp, /images/learn-english-again/genshin-impact-noelle.webp 1.5x, /images/learn-english-again/genshin-impact-noelle.webp 2x"
+            data-sizes="auto"
             alt="/images/learn-english-again/genshin-impact-noelle.webp">
     </a><figcaption class="image-caption">Genshin Impact 里超飒的重剑女仆 Noelle</figcaption>
     </figure></p>
 <p><figure><a class="lightgallery" href="/images/learn-english-again/demo2-talk-1.webp" title="/images/learn-english-again/demo2-talk-1.webp" data-thumbnail="/images/learn-english-again/demo2-talk-1.webp" data-sub-html="<h2>DEEMO 2 中丰富的对话内容</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/learn-english-again/demo2-talk-1.webp"
-            srcset="/images/learn-english-again/demo2-talk-1.webp, /images/learn-english-again/demo2-talk-1.webp 1.5x, /images/learn-english-again/demo2-talk-1.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/learn-english-again/demo2-talk-1.webp"
+            data-srcset="/images/learn-english-again/demo2-talk-1.webp, /images/learn-english-again/demo2-talk-1.webp 1.5x, /images/learn-english-again/demo2-talk-1.webp 2x"
+            data-sizes="auto"
             alt="/images/learn-english-again/demo2-talk-1.webp">
     </a><figcaption class="image-caption">DEEMO 2 中丰富的对话内容</figcaption>
     </figure></p>
 <p><figure><a class="lightgallery" href="/images/learn-english-again/demo2-collections.webp" title="/images/learn-english-again/demo2-collections.webp" data-thumbnail="/images/learn-english-again/demo2-collections.webp" data-sub-html="<h2>DEEMO 2 的一些设定</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/learn-english-again/demo2-collections.webp"
-            srcset="/images/learn-english-again/demo2-collections.webp, /images/learn-english-again/demo2-collections.webp 1.5x, /images/learn-english-again/demo2-collections.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/learn-english-again/demo2-collections.webp"
+            data-srcset="/images/learn-english-again/demo2-collections.webp, /images/learn-english-again/demo2-collections.webp 1.5x, /images/learn-english-again/demo2-collections.webp 2x"
+            data-sizes="auto"
             alt="/images/learn-english-again/demo2-collections.webp">
     </a><figcaption class="image-caption">DEEMO 2 的一些设定</figcaption>
     </figure></p>
@@ -6007,21 +5991,19 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <p>并且使用上述几款软件提供的英语能力测试，完整评估了下我的英语水平。下图从左至右依次是一点英语、开言英语，以及英语流利说的整体英语水平跟口语水平两项测试结果（结果偏高，仅供参考）：</p>
 <p><figure><a class="lightgallery" href="/images/now/ryan4yin-english-level.webp" title="/images/now/ryan4yin-english-level.webp" data-thumbnail="/images/now/ryan4yin-english-level.webp" data-sub-html="<h2>各 APP 的英语水平测评结果（一点英语的结果明显偏高）</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/now/ryan4yin-english-level.webp"
-            srcset="/images/now/ryan4yin-english-level.webp, /images/now/ryan4yin-english-level.webp 1.5x, /images/now/ryan4yin-english-level.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/now/ryan4yin-english-level.webp"
+            data-srcset="/images/now/ryan4yin-english-level.webp, /images/now/ryan4yin-english-level.webp 1.5x, /images/now/ryan4yin-english-level.webp 2x"
+            data-sizes="auto"
             alt="/images/now/ryan4yin-english-level.webp">
     </a><figcaption class="image-caption">各 APP 的英语水平测评结果（一点英语的结果明显偏高）</figcaption>
     </figure></p>
 <p><figure><a class="lightgallery" href="/images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp" title="/images/learn-english-again/流利说-English-Level.webp" data-thumbnail="/images/learn-english-again/流利说-English-Level.webp" data-sub-html="<h2>流利说英语评级对照表</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp"
-            srcset="/images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp, /images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp 1.5x, /images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp"
+            data-srcset="/images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp, /images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp 1.5x, /images/learn-english-again/%e6%b5%81%e5%88%a9%e8%af%b4-English-Level.webp 2x"
+            data-sizes="auto"
             alt="/images/learn-english-again/流利说-English-Level.webp">
     </a><figcaption class="image-caption">流利说英语评级对照表</figcaption>
     </figure></p>
