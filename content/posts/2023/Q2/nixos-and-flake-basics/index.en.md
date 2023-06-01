@@ -29,7 +29,7 @@ comment:
 ## Article History
 
 - 2023/6/1
-  - update VI-9 according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), create all nixpkgs instances in `flake.nix` to avoid this problem.
+  - update VI-9 according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), create all nixpkgs instances globally in `flake.nix` to avoid this problem.
 - 2023/5/21
   - Complete the section "Overlays".
   - remove the section "IX. Nix Packaging", which may be moved to a separate article in the future.
