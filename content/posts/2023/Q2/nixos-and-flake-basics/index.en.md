@@ -22,6 +22,12 @@ comment:
     enable: false
   disqus:
     enable: true
+
+code:
+  # whether to show the copy button of the code block
+  copy: true
+  # the maximum number of lines of displayed code by default
+  maxShownLines: 300
 ---
 
 > The target NixOS version of this article is 22.11, and the Nix version is 2.13.3. In this environment, Nix Flakes is still an experimental feature.

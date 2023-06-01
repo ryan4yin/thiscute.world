@@ -20,6 +20,12 @@ comment:
     enable: true
   waline:
     enable: false
+
+code:
+  # whether to show the copy button of the code block
+  copy: true
+  # the maximum number of lines of displayed code by default
+  maxShownLines: 300
 ---
 
 > 本文的目标 NixOS 版本为 22.11，Nix 版本为 2.13.3，在此环境下 Nix Flakes 仍然为实验性功能。
