@@ -1091,13 +1091,24 @@ sudo nixos-rebuild switch
     ...
   }: {
     nixosConfigurations = {
-      nixos-test = nixpkgs.lib.nixosSystem {
+      nixos-test = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
 
         # 核心参数是这个，将非默认的 nixpkgs 数据源传到其他 modules 中
         specialArgs = {
-          inherit nixpkgs-stable;
-          inherit nixpkgs-fd40cef8d;
+          # 注意每次 import 都会生成一个新的 nixpkgs 实例
+          # 这里我们直接在 flake.nix 中创建实例， 再传递到其他子 modules 中使用
+          # 这样能有效重用 nixpkgs 实例，避免 nixpkgs 实例泛滥。
+          pkgs-stable = import nixpkgs-stable {
+            system = system;  # 这里递归引用了外部的 system 属性
+            # 为了拉取 chrome 等软件包，需要允许安装非自由软件
+            config.allowUnfree = true;
+          };
+
+          pkgs-fd40cef8d = import nixpkgs-fd40cef8d {
+            system = system;
+            config.allowUnfree = true;
+          };
         };
         modules = [
           ./hosts/nixos-test
@@ -1117,20 +1128,12 @@ sudo nixos-rebuild switch
   pkgs,
   config,
   # nix 会从 flake.nix 的 specialArgs 查找并注入此参数
-  nixpkgs-stable,
-  # nixpkgs-fd40cef8d,  # 也可以使用固定 hash 的 nixpkgs 数据源
+  pkgs-stable,
+  # pkgs-fd40cef8d,  # 也可以使用固定 hash 的 nixpkgs 数据源
   ...
 }:
 
-let
-  # 为了在后面使用 nixpkgs-stable 中的包，需要先给它配置一些参数
-  pkgs-stable = import nixpkgs-stable {
-    # 我们全局的参数会被自动配置到默认的 pkgs 中，这里可以直接从 pkgs 中引用
-    system = pkgs.system;
-    # 为了拉取 chrome，需要允许安装非自由软件
-    config.allowUnfree = true;
-  };
-in {
+{
   # 这里从 pkg-stable 中引用包
   home.packages = with pkgs-stable; [
     firefox-wayland
@@ -1148,6 +1151,8 @@ in {
 ```
 
 配置完成后，通过 `sudo nixos-rebuild switch` 部署即可将 firefox/chrome/vscode 三个软件包回退到 stable 分支的版本。
+
+> 根据 @fbewivpjsbsby 补充的文章 [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347)，在子模块中用 `import` 来定制 `nixpkgs` 不是一个好的习惯，因为每次 `import` 都会重新求值并产生一个新的 nixpkgs 实例，在配置越来越多时会导致构建时间变长、内存占用变大。所以这里改为了在 `flake.nix` 中创建所有 nixpkgs 实例。
 
 ### 10. 使用 Git 管理 NixOS 配置 {#git-manage-nixos-config}
 

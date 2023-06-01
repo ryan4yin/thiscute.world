@@ -746,13 +746,21 @@ So to rollback the version of some packages, first modify `/etc/nixos/flake.nix`
     ...
   }: {
     nixosConfigurations = {
-      nixos-test = nixpkgs.lib.nixosSystem {
+      nixos-test = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
 
         # The core parameter, which passes the non-default nixpkgs data source to other modules
         specialArgs = {
-          inherit nixpkgs-stable;
-          inherit nixpkgs-fd40cef8d;
+          # To use packages from nixpkgs-stable, we need to configure some parameters for it first
+          pkgs-stable = import nixpkgs-stable {
+            system = system;  # refer the `system` parameter form outer scope recursively
+            # To use chrome, we need to allow the installation of non-free software
+            config.allowUnfree = true;
+          };
+          pkgs-fd40cef8d = import nixpkgs-fd40cef8d {
+            system = system;
+            config.allowUnfree = true;
+          };
         };
         modules = [
           ./hosts/nixos-test
@@ -772,20 +780,12 @@ And then refer the packages from `nix-stable` or `nixpkgs-fd40cef8d` in your cor
   pkgs,
   config,
   # nix will search and jnject this parameter from specialArgs in flake.nix
-  nixpkgs-stable,
-  # nixpkgs-fd40cef8d,
+  pkgs-stable,
+  # pkgs-fd40cef8d,
   ...
 }:
 
-let
-  # To use packages from nixpkgs-stable, we need to configure some parameters for it first
-  pkgs-stable = import nixpkgs-stable {
-    # The Global parameters will be automatically configured to the default pkgs, so we can directly refer to them from pkgs
-    system = pkgs.system;
-    # To use chrome, we need to allow the installation of non-free software
-    config.allowUnfree = true;
-  };
-in {
+{
   # refer packages from pkgs-stable instead of pkgs
   home.packages = with pkgs-stable; [
     firefox-wayland
@@ -802,7 +802,9 @@ in {
 }
 ```
 
-After adjusted the configuration, deploy it with `sudo nixos-rebuild switch`, then your firefox/chrome/vscode will revert to the version corresponding to `nix-stable` or `nixpkgs-fd40cef8d`.
+After adjusted the configuration, deploy it with `sudo nixos-rebuild switch`, then your firefox/chrome/vscode will revert to the version corresponding to `nixpkgs-stable` or `nixpkgs-fd40cef8d`.
+
+> according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), it's not a good practice to use `import` in sub modules to customize `nixpkgs`, because each `import` will create a new instance of nixpkgs, which will increase the build time and memory usage as the configuration grows. So here we create all nixpkgs instances in `flake.nix` to avoid this problem.
 
 ### 10. Manage NixOS configuration with Git
 
