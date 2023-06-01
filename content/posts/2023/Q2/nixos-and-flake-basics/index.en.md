@@ -1048,7 +1048,7 @@ Then you can write all overlays configurations in the `overlays` folder, an exam
 
 I custom the `rime-data` package through the above overlay.
 
-At last, you need to load all overlays configurations returned by `overlays/default.nix` through the `nixpkgs.overlays` option, add the following parameter to any NixOS Module:
+At last, you need to load all overlays returned by `overlays/default.nix` through the `nixpkgs.overlays` option, add the following parameter to any NixOS Module to achieve this:
 
 ```nix
 { config, pkgs, lib, ... } @ args:
