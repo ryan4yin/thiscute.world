@@ -5,8 +5,8 @@ lastmod: 2023-05-09T11:41:28+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "screenshot_2023-05-07-21-21.webp"
+  - name: "featured-image"
+    src: "screenshot_2023-05-07-21-21.webp"
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]
@@ -22,14 +22,14 @@ comment:
     enable: false
 ---
 
->本文的目标 NixOS 版本为 22.11，Nix 版本为 2.13.3，在此环境下 Nix Flakes 仍然为实验性功能。
+> 本文的目标 NixOS 版本为 22.11，Nix 版本为 2.13.3，在此环境下 Nix Flakes 仍然为实验性功能。
 
 ## 更新日志
 
 - 2023/5/21
-    - 补充 overlays 一节的内容。
-    - 移除「九、使用 Nix Flakes 打包应用」，这部分可能会放在后续文章中介绍。
-    - 六-4 一节补充了一个通过 flakes 数据源安装程序的例子。
+  - 补充 overlays 一节的内容。
+  - 移除「九、使用 Nix Flakes 打包应用」，这部分可能会放在后续文章中介绍。
+  - 六-4 一节补充了一个通过 flakes 数据源安装程序的例子。
 
 ## 零、为什么选择 Nix
 
@@ -49,7 +49,7 @@ comment:
 
 NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞挂了，于是我前几天我又进一步迁移到了 hyprland 桌面，确实比 i3 香多了，它的动画效果我吹爆！（在以前 EndeavourOS 上我肯定是不太敢做这样的切换的，原因前面已经解释过了——万一把系统搞出问题，会非常麻烦。）
 
->补充：v2ex 上有 v 友反馈 btrfs 文件系统的快照功能，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以像 NixOS 一样配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么基于 btrfs 快照功能的 [btrbk](https://github.com/digint/btrbk) 也是一个不错的选择。当然如果你仍然对 Nix 感兴趣，那学一学也绝对不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已～
+> 补充：v2ex 上有 v 友反馈 btrfs 文件系统的快照功能，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以像 NixOS 一样配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么基于 btrfs 快照功能的 [btrbk](https://github.com/digint/btrbk) 也是一个不错的选择。当然如果你仍然对 Nix 感兴趣，那学一学也绝对不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已～
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
 
@@ -61,7 +61,7 @@ NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞�
 
 Nix 包管理器，跟 DevOps 领域当前流行的 pulumi/terraform/kubernetes 类似，都是声明式配置管理工具，用户需要在某些配置文件中声明好期望的系统状态，而 Nix 负责达成目标。区别在于 Nix 的管理目标是软件包，而 pulumi/terraform 的管理目标是云上资源。
 
->简单解释下什么是「声明式配置」，它是指用户只需要声明好自己想要的结果——比如说希望将 i3 桌面替换成 sway 桌面，Nix 就会帮用户达成这个目标。用户不需要关心底层细节（比如说 sway 需要安装哪些软件包，哪些 i3 相关的软件包需要卸载掉，哪些系统配置或环境变量需要针对 sway 做调整、如果使用了 Nvidia 显卡 Sway 参数要做什么调整才能正常运行等等），Nix 会自动帮用户处理这些细节。
+> 简单解释下什么是「声明式配置」，它是指用户只需要声明好自己想要的结果——比如说希望将 i3 桌面替换成 sway 桌面，Nix 就会帮用户达成这个目标。用户不需要关心底层细节（比如说 sway 需要安装哪些软件包，哪些 i3 相关的软件包需要卸载掉，哪些系统配置或环境变量需要针对 sway 做调整、如果使用了 Nvidia 显卡 Sway 参数要做什么调整才能正常运行等等），Nix 会自动帮用户处理这些细节。
 
 基于 Nix 构建的 Linux 发行版 NixOS，可以简单用 OS as Code 来形容，它通过声明式的 Nix 配置文件来描述整个操作系统的状态。
 
@@ -69,7 +69,7 @@ NixOS 的配置只负责管理系统层面的状态，用户目录不受它管�
 
 因为 Nix 声明式、可复现的特性，Nix 不仅可用于管理桌面电脑的环境，也有很多人用它管理开发编译环境、云上虚拟机、容器镜像构建，Nix 官方的 [NixOps](https://github.com/NixOS/nixops) 与社区的 [deploy-rs](https://github.com/serokell/deploy-rs) 都是基于 Nix 实现的运维工具。
 
->Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步，或者用 [btrbk](https://github.com/digint/btrbk) 之类的工具对 home 目录做快照。
+> Home 目录下文件众多，行为也不一，因此不可能对其中的所有文件进行版本控制，代价太高。一般仅使用 home-manager 管理一些重要的配置文件，而其他需要备份的文件可以用 rsync/synthing 等手段做备份同步，或者用 [btrbk](https://github.com/digint/btrbk) 之类的工具对 home 目录做快照。
 
 ### Nix 的优点 {#nix-advantages}
 
@@ -109,6 +109,7 @@ Nix 有多种安装方式，支持以包管理器的形式安装到 MacOS/Linux/
 安装很简单，这里不多介绍，仅列一下我觉得比较有用的参考资料：
 
 - 国内镜像源说明：<https://mirrors.bfsu.edu.cn/help/nix/>
+
 1. [Nix 的官方安装方式](https://nixos.org/download.html): 使用 bash 脚本编写, 目前（2023-04-23）为止 `nix-command` & `flakes` 仍然是实验性特性，需要手动开启。
    1. 你需要参照 [Enable flakes - NixOS Wiki](https://nixos.wiki/wiki/Flakes) 的说明启用 `nix-command` & `flakes`
    2. 官方不提供任何卸载手段，要在 Linux/MacOS 上卸载 Nix，你需要手动删除所有相关的文件、用户以及用户组
@@ -132,26 +133,25 @@ Nix 于 2020 年推出了 `nix-command` & `flakes` 两个新特性，它们提�
    1. 在 Nix Flakes 中对应的命令为 `nix build`
 5. ...
 
-
 ## 四、NixOS 的 Flakes 包仓库 {#nixos-flakes-repo}
 
 跟 Arch Linux 类似，Nix 也有官方与社区的软件包仓库：
 
 1. [nixpkgs](https://github.com/NixOS/nixpkgs) 是一个包含了所有 Nix 包与 NixOS 模块/配置的 Git 仓库，其 master 分支包含最新的 Nix 包与 NixOS 模块/配置。
-  1. 比如 [qq](https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/networking/instant-messengers/qq) 就直接包含在 nixpkgs 中了
-2. [NUR](https://github.com/nix-community/NUR): 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。
-  1. 这些常用国产软件，都可以通过 NUR 安装：
-    1. [qqmusic](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/qqmusic/default.nix)
-    2. [wechat-uos](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/wechat-uos/default.nix)
-    3. [dingtalk](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/dingtalk/default.nix)
-  2. 更多程序，可以在这里搜索：[Nix User Repositories](https://nur.nix-community.org/)
-3. Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包
+1. 比如 [qq](https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/networking/instant-messengers/qq) 就直接包含在 nixpkgs 中了
+1. [NUR](https://github.com/nix-community/NUR): 类似 Arch Linux 的 AUR，NUR 是 Nix 的一个第三方的 Nix 包仓库，算是 nixpkgs 的一个增补包仓库。
+1. 这些常用国产软件，都可以通过 NUR 安装：
+1. [qqmusic](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/qqmusic/default.nix)
+1. [wechat-uos](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/wechat-uos/default.nix)
+1. [dingtalk](https://github.com/nix-community/nur-combined/blob/master/repos/xddxdd/pkgs/uncategorized/dingtalk/default.nix)
+1. 更多程序，可以在这里搜索：[Nix User Repositories](https://nur.nix-community.org/)
+1. Nix Flakes 也可直接从 Git 仓库中安装软件包，这种方式可以用于安装任何人提供的 Flakes 包
 
 此外一些没有 Nix 支持或者支持不佳的软件，也可以考虑通过 Flatpak 或者 AppImage 的方式安装使用，这两个都是在所有 Linux 发行版上可用的软件打包与安装手段，详情请自行搜索，这里就不介绍细节了。
 
 ## 五、Nix 语言基础 {#nix-language}
 
->https://nix.dev/tutorials/first-steps/nix-language
+> https://nix.dev/tutorials/first-steps/nix-language
 
 Nix 语言是 Nix 的基础，要想玩得转 NixOS 与 Nix Flakes，享受到它们带来的诸多好处，就必须学会这门语言。
 
@@ -169,7 +169,6 @@ Nix 是一门比较简单的函数式语言，在已有一定编程基础的情�
 8. ...
 
 先把语法过一遍，有个大概的印象就行，后面需要用到时再根据右侧目录回来复习。
-
 
 ### 1. 基础数据类型一览 {#basic-data-types}
 
@@ -217,7 +216,6 @@ a + a  # 结果是 2
 ```
 
 let 表达式中的变量只能在 `in` 之后的表达式中使用，理解成临时变量就行。
-
 
 ### 3. attribute set 说明 {#attribute-set}
 
@@ -277,9 +275,7 @@ a?b  # 结果是 true，因为 a.b 这个属性确实存在
 
 has attribute 操作符在 nixpkgs 库中常被用于检测处理 `args?system` 等参数，以 `(args?system)` 或 `(! args?system)` 的形式作为函数参数使用（叹号表示对 bool 值取反，是常见 bool 值运算符）。
 
-
 ### 4. with 语句 {#with-statement}
-
 
 with 语句的语法如下：
 
@@ -346,7 +342,7 @@ Nix 中不带引号的字符串会被解析为文件系统路径，路径的语�
 
 ### 8. 搜索路径 {#search-path}
 
->请不要使用这个功能，它会导致不可预期的行为。
+> 请不要使用这个功能，它会导致不可预期的行为。
 
 Nix 会在看到 `<nixpkgs>` 这类三角括号语法时，会在 `NIX_PATH` 环境变量中指定的路径中搜索该路径。
 
@@ -393,11 +389,11 @@ a: b: a + b
 # 带有命名 attribute set 作为参数的函数，并且使用 ... 收集其他可选参数
 # 命名 args 与 ... 可选参数通常被一起作为函数的参数定义使用
 args@{ a, b, ... }: a + b + args.c
-# 如下内容等价于上面的内容, 
+# 如下内容等价于上面的内容,
 { a, b, ... }@args: a + b + args.c
 
 # 但是要注意命名参数仅绑定了输入的 attribute set，默认参数不在其中，举例
-let 
+let
   f = { a ? 1, b ? 2, ... }@args: args
 in
   f {}  # 结果是 {}，也就说明了 args 中包含默认值
@@ -451,7 +447,6 @@ in
 pkgs.lib.strings.toUpper "search paths considered harmful"  # 结果是 "SEARCH PATHS CONSIDERED HARMFUL"
 ```
 
-
 可以通过 [Nixpkgs Library Functions - Nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#sec-functions-library) 查看 lib 函数包的详细内容。
 
 ### 11. 不纯（Impurities） {#impurities}
@@ -462,7 +457,7 @@ Nix 有两种构建输入，一种是从文件系统路径等输入源中读取�
 
 **Nix 唯一的不纯之处在这里：从文件系统路径或者其他输入源中读取文件作为构建任务的输入**，这些输入源参数可能没变化，但是文件内容或数据源的返回内容可能会变化，这就会导致输入相同，Nix 函数的输出却可能不同——函数变得不纯了。
 
->Nix 中的搜索路径与 `builtins.currentSystem` 也是不纯的，但是这两个功能都不建议使用，所以这里略过了。
+> Nix 中的搜索路径与 `builtins.currentSystem` 也是不纯的，但是这两个功能都不建议使用，所以这里略过了。
 
 ### 12. Fetchers {#fetchers}
 
@@ -475,7 +470,6 @@ Nix 提供了四个内置的 Fetcher，分别是：
 - `builtins.fetchGit`：从 git 仓库中下载文件
 - `builtins.fetchClosure`：从 Nix Store 中获取 Derivation
 
-
 举例：
 
 ```nix
@@ -485,7 +479,6 @@ builtins.fetchurl "https://github.com/NixOS/nix/archive/7c3ab5751568a0bc63430b33
 builtins.fetchTarball "https://github.com/NixOS/nix/archive/7c3ab5751568a0bc63430b33a5169c5e4784a0ff.tar.gz"
 # result example(auto unzip the tarball) => "/nix/store/d59llm96vgis5fy231x6m7nrijs0ww36-source"
 ```
-
 
 ### 13. Derivations {#derivations}
 
@@ -497,10 +490,9 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 `derivation` 创建的，我们实际使用的 `stdenv.mkDerivation` 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。
 
-
 ## 六、以声明式的方式管理系统 {#declarative-system-management}
 
->https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution
+> https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution
 
 了解了 Nix 语言的基本用法之后，我们就可以开始使用 Nix 语言来配置 NixOS 系统了。NixOS 的系统配置路径为 `/etc/nixos/configuration.nix`，它包含系统的所有声明式配置，如时区、语言、键盘布局、网络、用户、文件系统、启动项等。
 
@@ -575,7 +567,6 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 - 系统级别的配置，可以考虑在 [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration) 找找相关文档
 - 直接在 [nixpkgs](https://github.com/NixOS/nixpkgs) 仓库中搜索关键字，读相关的源码。
 
-
 ### 2. 启用 NixOS 的 Flakes 支持 {#enable-nix-flakes}
 
 与 NixOS 默认的配置方式相比，Nix Flakes 提供了更好的可复现性，同时它清晰的包结构定义原生支持了以其他 Git 仓库为依赖，便于代码分享，因此更建议使用 Nix Flakes 来管理系统配置。
@@ -613,11 +604,9 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 
 额外还有个好处就是，现在你可以通过 `nix repl` 打开一个 nix 交互式环境，有兴趣的话，可以使用它复习测试一遍前面学过的所有 Nix 语法。
 
-
 ### 3. 将系统配置切换到 flake.nix {#switch-to-flake-nix}
 
 在启用了 Nix Flakes 特性后，`sudo nixos-rebuild switch` 命令会优先读取 `/etc/nixos/flake.nix` 文件，如果找不到再尝试使用 `/etc/nixos/configuration.nix`。
-
 
 可以首先使用官方提供的模板来学习 flake 的编写，先查下有哪些模板：
 
@@ -639,7 +628,7 @@ cat flake.nix
   description = "Ryan's NixOS Flake";
 
   # 这是 flake.nix 的标准格式，inputs 是 flake 的依赖，outputs 是 flake 的输出
-  # inputs 中的每一项依赖都会在被拉取、构建后，作为参数传递给 outputs 函数 
+  # inputs 中的每一项依赖都会在被拉取、构建后，作为参数传递给 outputs 函数
   inputs = {
     # flake inputs 有很多种引用方式，应用最广泛的是 github:owner/name/reference，即 github 仓库地址 + branch/commit-id/tag
 
@@ -649,7 +638,7 @@ cat flake.nix
     home-manager = {
       url = "github:nix-community/home-manager/release-22.11";
       # follows 是 inputs 中的继承语法
-      # 这里使 home-manager 的 nixpkgs 这个 inputs 与当前 flake 的 inputs.nixpkgs 
+      # 这里使 home-manager 的 nixpkgs 这个 inputs 与当前 flake 的 inputs.nixpkgs
       # 保持一致，避免依赖的 nixpkgs 版本不一致导致问题
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -657,10 +646,10 @@ cat flake.nix
 
   # outputs 即 flake 的所有输出，其中的 nixosConfigurations 即 NixOS 系统配置
   # 一个 flake 可以有很多用途，也可以有很多种不同的输出，nixosConfigurations 只是其中一种
-  # 
+  #
   # outputs 的参数都是 inputs 中定义的依赖项，可以通过它们的名称来引用。
   # 不过 self 是个例外，这个特殊参数指向 outputs 自身（自引用），以及 flake 根目录
-  # 这里的 @ 语法将函数的参数 attribute set 取了个别名，方便在内部使用 
+  # 这里的 @ 语法将函数的参数 attribute set 取了个别名，方便在内部使用
   outputs = { self, nixpkgs, ... }@inputs: {
     # 名为 nixosConfigurations 的 outputs 会在执行 `sudo nixos-rebuild switch` 时被使用
     # 默认情况下上述命令会使用与主机 hostname 同名的 nixosConfigurations
@@ -675,14 +664,14 @@ cat flake.nix
         system = "x86_64-linux";
 
         # Nix 模块系统可将配置模块化，提升配置的可维护性
-        # 
+        #
         # modules 中每个参数，都是一个 Nix Module，nixpkgs manual 中有半份介绍它的文档：
         #    <https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction>
         # 说半份是因为它的文档不全，只有一些简单的介绍（Nix 文档现状...）
         # Nix Module 可以是一个 attribute set，也可以是一个返回 attribute set 的函数
         # 如果是函数，那么它的参数就是当前的 NixOS Module 的参数.
         # 根据 Nix Wiki 对 Nix modules 的描述，Nix modules 函数的参数可以有这四个：
-        # 
+        #
         #  config: The configuration of the entire system
         #  options: All option declarations refined with all definition and declaration references.
         #  pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.
@@ -768,7 +757,6 @@ cat flake.nix
 
 改好后再 `sudo nixos-rebuild switch` 部署，就能安装好 helix 程序了，可直接在终端使用 `helix` 命令测试验证。
 
-
 ### 5. 为 Flake 添加国内 cache 源 {#add-cache-source-for-flake}
 
 Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓存构建结果提供给用户，但是在国内访问这个 cache 地址非常地慢，如果没有全局代理的话，基本上是无法使用的。
@@ -821,7 +809,7 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
 
 改完后使用 `sudo nixos-rebuild switch` 应用配置即可生效，后续所有的包都会优先从国内镜像源查找缓存。
 
->注：上述手段只能加速部分包的下载，许多 inputs 数据源仍然会从 Github 拉取，另外如果找不到缓存，会执行本地构建，这通常仍然需要从国外下载源码与构建依赖，因此仍然会很慢。为了完全解决速度问题，仍然建议使用旁路由等局域网全局代理方案。
+> 注：上述手段只能加速部分包的下载，许多 inputs 数据源仍然会从 Github 拉取，另外如果找不到缓存，会执行本地构建，这通常仍然需要从国外下载源码与构建依赖，因此仍然会很慢。为了完全解决速度问题，仍然建议使用旁路由等局域网全局代理方案。
 
 ### 6. 安装 home-manager {#install-home-manager}
 
@@ -866,7 +854,7 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
   };
 
   # Packages that should be installed to the user profile.
-  home.packages = [ 
+  home.packages = [
     pkgs.htop
     pkgs.btop
   ];
@@ -993,7 +981,7 @@ $ tree
 
 在前面的 Nix 语法一节有介绍过：「`import` 的参数如果为文件夹路径，那么会返回该文件夹下的 `default.nix` 文件的执行结果」，实际 Nix 还提供了一个 `imports` 参数，它可以接受一个 `.nix` 文件列表，并将该列表中的所有配置**合并**（Merge）到当前的 attribute set 中。注意这里的用词是「合并」，它表明 `imports` 如果遇到重复的配置项，不会简单地按执行顺序互相覆盖，而是更合理地处理。比如说我在多个 modules 中都定义了 `program.packages = [...]`，那么 `imports` 会将所有 modules 中的 `program.packages` 这个 list 合并。不仅 list 能被正确合并，attribute set 也能被正确合并，具体行为各位看官可以自行探索。
 
->我只在 [nixpkgs-unstable 官方手册 - evalModules parameters](https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters) 中找到一句关于 `imports` 的描述：`A list of modules. These are merged together to form the final configuration.`，可以意会一下...（Nix 的文档真的一言难尽...这么核心的参数文档就这么一句...）
+> 我只在 [nixpkgs-unstable 官方手册 - evalModules parameters](https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters) 中找到一句关于 `imports` 的描述：`A list of modules. These are merged together to form the final configuration.`，可以意会一下...（Nix 的文档真的一言难尽...这么核心的参数文档就这么一句...）
 
 我们可以借助 `imports` 参数，将 `home.nix` 与 `configuration.nix` 拆分成多个 `.nix` 文件。
 
@@ -1039,10 +1027,10 @@ $ tree
 │       │   └── env.nu
 │       ├── starship.nix
 │       └── terminals.nix
-├── hosts 
+├── hosts
 │   ├── msi-rtx4090      # PC 主机的配置
 │   │   ├── default.nix                 # 这就是之前的 configuration.nix，不过大部分内容都拆出到 modules 了
-│   │   └── hardware-configuration.nix  # 与系统硬件相关的配置，安装 nixos 时自动生成的      
+│   │   └── hardware-configuration.nix  # 与系统硬件相关的配置，安装 nixos 时自动生成的
 │   └── nixos-test       # 测试用的虚拟机配置
 │       ├── default.nix
 │       └── hardware-configuration.nix
@@ -1162,7 +1150,7 @@ NixOS 的配置文件是纯文本，因此跟普通的 dotfiles 一样可以使�
 
 此外 Nix Flakes 配置也不一定需要放在 `/etc/nixos` 目录下，可以放在任意目录下，只要在部署时指定正确的路径即可。
 
->我们在前面第 3 小节的代码注释中有说明过，可以通过 `sudo nixos-rebuild switch --flake .#xxx` 的 `--flake` 参数指定 Flakes 配置的文件夹路径，并通过 `#` 后面的值来指定使用的 outputs 名称。
+> 我们在前面第 3 小节的代码注释中有说明过，可以通过 `sudo nixos-rebuild switch --flake .#xxx` 的 `--flake` 参数指定 Flakes 配置的文件夹路径，并通过 `#` 后面的值来指定使用的 outputs 名称。
 
 比如我的使用方式是将 Nix Flakes 配置放在 `~/nixos-config` 目录下，然后在 `/etc/nixos` 目录下创建一个软链接：
 
@@ -1187,7 +1175,7 @@ sudo nixos-rebuild switch --flake .#nixos-test
 
 ### 11. 其他可能需要用到的指令 {#other-useful-commands}
 
->这里提供了部分 `nix-env` 指令，因为新的 Nix 命令行工具貌似未提供对应的功能。
+> 这里提供了部分 `nix-env` 指令，因为新的 Nix 命令行工具貌似未提供对应的功能。
 
 如前所述，NixOS 的每次部署都会生成一个新的版本，所有版本都会被添加到系统启动项中，除了重启电脑外，我们也可以通过如下命令查询当前可用的所有历史版本：
 
@@ -1207,7 +1195,6 @@ nix-env -qa
 # 清理 14 天之前的所有历史版本
 sudo nix-collect-garbage --delete-older-than 14d
 ```
-
 
 ## 七、Nix Flakes 的使用 {#nix-flakes-usage}
 
@@ -1265,7 +1252,6 @@ nix build "nixpkgs#bat"
 
 此外 [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，写得比较浅显易懂，适合新手用来入门。
 
-
 ## 八、Nixpkgs 的高级用法 {#nixpkgs-advanced-usage}
 
 callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技术，它们都是用来自定义 Nix 包的构建方法的。
@@ -1282,7 +1268,7 @@ callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技�
 
 ### Overriding
 
->[Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
+> [Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
 
 简单的说，所有 nixpkgs 中的 Nix 包都可以通过 `<pkg>.override {}` 来自定义某些构建参数，它返回一个使用了自定义参数的新 Derivation. 举个例子：
 
@@ -1304,10 +1290,9 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 
 上面这个例子中，`helloWithDebug` 就是一个新的 Derivation，它的 `separateDebugInfo` 参数被覆盖为 `true`，而其他参数则沿用原来的值。
 
-
 ### Overlays
 
->[Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
+> [Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
 
 前面介绍的 override 函数都会生成新的 Derivation，不影响 pkgs 中原有的 Derivation，只适合作为局部参数使用。
 但如果你需要覆写的 Derivation 还被其他 Nix 包所依赖，那其他 Nix 包使用的仍然会是原有的 Derivation.
@@ -1325,7 +1310,7 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 
 举个例子，如下内容就是一个加载 Overlays 的 Module，它既可以用做 Home Manager Module，也可以用做 NixOS Module，因为这俩定义完全是一致的：
 
->不过我使用发现，Home Manager 毕竟是个外部组件，而且现在全都用的 unstable 分支，这导致 Home Manager Module 有时候会有点小毛病，因此更建议以 NixOS Module 的形式引入 overlays
+> 不过我使用发现，Home Manager 毕竟是个外部组件，而且现在全都用的 unstable 分支，这导致 Home Manager Module 有时候会有点小毛病，因此更建议以 NixOS Module 的形式引入 overlays
 
 ```nix
 { config, pkgs, lib, ... }:
@@ -1393,7 +1378,7 @@ args:
 ```nix
 # 为了不使用默认的 rime-data，改用我自定义的小鹤音形数据，这里需要 override
 # 参考 https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix
-{pkgs, config, lib, ...}: 
+{pkgs, config, lib, ...}:
 
 (self: super: {
   # 小鹤音形配置，配置来自 flypy.com 官方网盘的鼠须管配置压缩包「小鹤音形“鼠须管”for macOS.zip」
@@ -1435,14 +1420,14 @@ args:
     nixosConfigurations = {
       nixos-test = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = inputs; 
+        specialArgs = inputs;
         modules = [
           ./hosts/nixos-test
 
           # 添加如下内嵌 module 定义
           #   这里将 modules 的所有参数 args 都传递到了 overlays 中
           (args: { nixpkgs.overlays = import ./overlays args; })
-          
+
           # ......
         ];
       };
@@ -1475,9 +1460,7 @@ args:
 
 你可以在我的配置仓库 [ryan4yin/nix-config/v0.0.4](https://github.com/ryan4yin/nix-config/tree/v0.0.4) 查看更详细的内容，获取些灵感。
 
-
 ## 进阶玩法 {#advanced-topics}
-
 
 逐渐熟悉 Nix 这一套工具链后，可以进一步读一读 Nix 的三本手册，挖掘更多的玩法：
 
@@ -1485,7 +1468,6 @@ args:
 - [nixpkgs Manual](https://nixos.org/manual/nixpkgs/unstable/): 主要介绍 Nixpkgs 的参数、Nix 包的使用、修改、打包方法。
 - [NixOS Manual](https://nixos.org/manual/nixos/unstable/): NixOS 系统使用手册，主要包含 Wayland/X11, GPU 等系统级别的配置说明。
 - [nix-pills](https://nixos.org/guides/nix-pills): Nix Pills 对如何使用 Nix 构建软件包进行了深入的阐述，写得比官方文档清晰易懂，而且也足够深入，值得一读。
-
 
 在对 Nix Flakes 熟悉到一定程度后，你可以尝试一些 Flakes 的进阶玩法，如下是一些比较流行的社区项目，可以试用：
 
@@ -1498,11 +1480,10 @@ args:
 
 - [devenv](https://github.com/cachix/devenv): 开发环境管理
 - [agenix](https://github.com/ryantm/agenix): secrets 管理
-- [colmena](https://github.com/zhaofengli/colmena): NixOS 主机部署工具
 - [nixos-generator](https://github.com/nix-community/nixos-generators): 镜像生成工具，从 nixos 配置生成 iso/qcow2 等格式的镜像
-- [lanzaboote](https://github.com/nix-community/lanzaboote): 主机启用 secure boot
-- [impermanence](https://github.com/nix-community/impermanence): 用于配置无状态系统，以提升系统的可复现能力。
-
+- [lanzaboote](https://github.com/nix-community/lanzaboote): 启用 secure boot
+- [impermanence](https://github.com/nix-community/impermanence): 用于配置无状态系统。可用它持久化你指定的文件或文件夹，同时再将 /home 目录挂载为 tmpfs 或者每次启动时用工具擦除一遍。这样所有不受 impermanence 管理的数据都将成为临时数据，如果它们导致了任何问题，重启下系统这些数据就全部还原到初始状态了！
+- [colmena](https://github.com/zhaofengli/colmena): NixOS 主机部署工具
 
 ## 总结 {#summary}
 
@@ -1519,7 +1500,6 @@ args:
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): 官方的 Nix Flakes 系列文章，介绍得比较详细，作为新手入门比较 OK
 - [Nix Flakes - Wiki](https://nixos.wiki/wiki/Flakes): Nix Flakes 的官方 Wiki，此文介绍得比较粗略。
 - [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 我的 NixOS 配置仓库，README 中也列出了我参考过的其他配置仓库
-
 
 [digga]: https://github.com/divnix/digga
 [New Nix Commands]: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html
