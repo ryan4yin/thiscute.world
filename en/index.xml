@@ -392,6 +392,11 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span><span class="lnt">61
 </span><span class="lnt">62
 </span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
@@ -440,12 +445,17 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">        <span class="c1"># A Nix Module can be an attribute set, or a function that returns an attribute set.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># If a Module is a function, according to the Nix Wiki description, this function can have up to four parameters:</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># </span>
-</span></span><span class="line"><span class="cl">        <span class="c1">#   config: The configuration of the entire system</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">#   options: All option declarations refined with all definition and declaration references.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">#   pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">#   modulesPath: The location of the module directory of Nix.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">#</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># Only these four parameters can be passed by default.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#  lib:     the nixpkgs function library, which provides many useful functions for operating Nix expressions</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#            https://nixos.org/manual/nixpkgs/stable/#id-1.4</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#  config:  all config options of the current flake</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#  options: all options defined in all NixOS Modules in the current flake</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#  pkgs:   a collection of all packages defined in nixpkgs.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#           you can assume its default value is `nixpkgs.legacyPackages.&#34;${system}&#34;` for now.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#           can be customed by `nixpkgs.pkgs` option</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: the default path of nixpkgs&#39;s builtin modules folder, </span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#               used to import some extra modules from nixpkgs.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#               this parameter is rarely used, you can ignore it for now.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Only the parameters above can be passed by default.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># If you need to pass other parameters, you must use `specialArgs` by uncomment the following line</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># specialArgs = {...}  # pass custom arguments into sub module.</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
