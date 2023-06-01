@@ -670,14 +670,19 @@ cat flake.nix
         # 说半份是因为它的文档不全，只有一些简单的介绍（Nix 文档现状...）
         # Nix Module 可以是一个 attribute set，也可以是一个返回 attribute set 的函数
         # 如果是函数，那么它的参数就是当前的 NixOS Module 的参数.
-        # 根据 Nix Wiki 对 Nix modules 的描述，Nix modules 函数的参数可以有这四个：
+        # 根据 Nix Wiki 对 Nix modules 的描述，Nix modules 函数的参数可以有这几个：
         #
-        #  config: The configuration of the entire system
-        #  options: All option declarations refined with all definition and declaration references.
-        #  pkgs: The attribute set extracted from the Nix package collection and enhanced with the nixpkgs.config option.
-        #  modulesPath: The location of the module directory of Nix.
+        #  lib:     nixpkgs 自带的函数库，提供了许多操作 Nix 表达式的实用函数
+        #           详见 https://nixos.org/manual/nixpkgs/stable/#id-1.4
+        #  config:  当前 flake 的所有 config 参数的集何
+        #  options: 当前 flake 中所有 NixOS Modules 中定义的所有参数的集合
+        #  pkgs:    一个包含所有 nixpkgs 包的集合
+        #           入门阶段可以认为它的默认值为 `nixpkgs.legacyPackages.”${system}“`
+        #           可通过 `nixpkgs.pkgs` 这个 option 来自定义 pkgs 的值
+        #  modulesPath: 默认 nixpkgs 的内置 Modules 文件夹路径，常用于从 nixpkgs 中导入一些额外的模块
+        #               这个参数通常都用不到，我只在制作 iso 镜像时用到过
         #
-        # 默认只能传上面这四个参数，如果需要传其他参数，必须使用 specialArgs，你可以取消注释如下这行来启用该参数
+        # 默认只能传上面这几个参数，如果需要传其他参数，必须使用 specialArgs，你可以取消注释如下这行来启用该参数
         # specialArgs = inputs  # 将 inputs 中的参数传入所有子模块
         modules = [
           # 导入之前我们使用的 configuration.nix，这样旧的配置文件仍然能生效
