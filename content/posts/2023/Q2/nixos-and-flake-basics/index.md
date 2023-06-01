@@ -677,7 +677,7 @@ cat flake.nix
         #  config:  当前 flake 的所有 config 参数的集何
         #  options: 当前 flake 中所有 NixOS Modules 中定义的所有参数的集合
         #  pkgs:    一个包含所有 nixpkgs 包的集合
-        #           入门阶段可以认为它的默认值为 `nixpkgs.legacyPackages.”${system}“`
+        #           入门阶段可以认为它的默认值为 `nixpkgs.legacyPackages."${system}"`
         #           可通过 `nixpkgs.pkgs` 这个 option 来自定义 pkgs 的值
         #  modulesPath: 默认 nixpkgs 的内置 Modules 文件夹路径，常用于从 nixpkgs 中导入一些额外的模块
         #               这个参数通常都用不到，我只在制作 iso 镜像时用到过
