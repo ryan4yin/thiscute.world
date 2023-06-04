@@ -1191,27 +1191,27 @@ sudo nixos-rebuild switch --flake .#nixos-test
 
 两种方式都可以，看个人喜好。
 
-### 11. 其他可能需要用到的指令 {#other-useful-commands}
-
-> 这里提供了部分 `nix-env` 指令，因为新的 Nix 命令行工具貌似未提供对应的功能。
+### 11. 查看与清理历史数据 {#view-and-delete-history}
 
 如前所述，NixOS 的每次部署都会生成一个新的版本，所有版本都会被添加到系统启动项中，除了重启电脑外，我们也可以通过如下命令查询当前可用的所有历史版本：
 
 ```shell
-sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
-```
-
-另外如下命令会列出所有系统中当前安装的 Nix 包：
-
-```shell
-nix-env -qa
+nix profile history --profile /nix/var/nix/profiles/system
 ```
 
 以及清理历史版本释放存储空间的命令：
 
 ```shell
-# 清理 14 天之前的所有历史版本
-sudo nix-collect-garbage --delete-older-than 14d
+# 清理 7 天之前的所有历史版本
+sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+# 清理历史版本并不会删除数据，还需要手动 gc 下
+sudo nix store gc --debug
+```
+
+以及查看系统层面安装的所有软件包（这个貌似只能用 `nix-env`）：
+
+```shell
+nix-env -qa
 ```
 
 ## 七、Nix Flakes 的使用 {#nix-flakes-usage}

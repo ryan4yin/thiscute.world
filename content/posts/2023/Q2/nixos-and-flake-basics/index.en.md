@@ -34,6 +34,9 @@ code:
 
 ## Article History
 
+- 2023/6/4
+  - replace `nix-env --list-generations` by `nix profile history`
+  - replace `nix-collect-garbage` by `nix store gc`
 - 2023/6/1
   - update VI-9 according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), create all nixpkgs instances globally in `flake.nix` to avoid this problem.
 - 2023/5/21
@@ -844,24 +847,28 @@ sudo nixos-rebuild switch --flake .#nixos-test
 
 Choose whichever you like.
 
-### 11. Other commands you may need
+### 11. View and delete history data {#view-and-delete-history}
 
 As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:
 
 ```shell
-sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
-```
-
-You can also list all Nix packages currently installed in the system with the following command:
-
-```shell
-nix-env -qa
+nix profile history --profile /nix/var/nix/profiles/system
 ```
 
 And the command to clean up historical versions to release storage space:
 
 ```shell
-sudo nix-collect-garbage --delete-older-than 14d
+# delete all historical versions older than 7 days
+sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+
+# we need to collect garbages after wipe-history
+sudo nix store gc --debug
+```
+
+another command may be useful, it returns all packages installed in the system:
+
+```shell
+nix-env -qa
 ```
 
 ## VII. Usage of Nix Flakes
