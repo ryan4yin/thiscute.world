@@ -44,9 +44,7 @@ src="/videos/video2chars-1-basics/video2chars-cli-badapple.webm"
 type="video/webm"
 preload="auto"
 autoplay="true"
-loop="true"
-
-> }}
+loop="true" >}}
 
 ### 步骤
 
