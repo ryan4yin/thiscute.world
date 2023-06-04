@@ -5,6 +5,12 @@
 </blockquote>
 <h2 id="article-history" class="headerLink">
     <a href="#article-history" class="header-mark"></a>Article History</h2><ul>
+<li>2023/6/4
+<ul>
+<li>replace <code>nix-env --list-generations</code> by <code>nix profile history</code></li>
+<li>replace <code>nix-collect-garbage</code> by <code>nix store gc</code></li>
+</ul>
+</li>
 <li>2023/6/1
 <ul>
 <li>update VI-9 according to <a href="https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347" target="_blank" rel="noopener noreferrer">1000 instances of nixpkgs</a>, create all nixpkgs instances globally in <code>flake.nix</code> to avoid this problem.</li>
@@ -1294,32 +1300,40 @@ Therefore, in order to customize the cache image source, we must add the related
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Choose whichever you like.</p>
-<h3 id="11-other-commands-you-may-need" class="headerLink">
-    <a href="#11-other-commands-you-may-need" class="header-mark"></a>11. Other commands you may need</h3><p>As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:</p>
+<h3 id="view-and-delete-history" class="headerLink">
+    <a href="#view-and-delete-history" class="header-mark"></a>11. View and delete history data</h3><p>As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>You can also list all Nix packages currently installed in the system with the following command:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nix-env -qa
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nix profile <span class="nb">history</span> --profile /nix/var/nix/profiles/system
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>And the command to clean up historical versions to release storage space:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo nix-collect-garbage --delete-older-than 14d
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># delete all historical versions older than 7 days</span>
+</span></span><span class="line"><span class="cl">sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># we need to collect garbages after wipe-history</span>
+</span></span><span class="line"><span class="cl">sudo nix store gc --debug
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>another command may be useful, it returns all packages installed in the system:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nix-env -qa
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="vii-usage-of-nix-flakes" class="headerLink">
@@ -1604,7 +1618,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>I custom the <code>rime-data</code> package through the above overlay.</p>
-<p>At last, you need to load all overlays configurations returned by <code>overlays/default.nix</code> through the <code>nixpkgs.overlays</code> option, add the following parameter to any NixOS Module:</p>
+<p>At last, you need to load all overlays returned by <code>overlays/default.nix</code> through the <code>nixpkgs.overlays</code> option, add the following parameter to any NixOS Module to achieve this:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1799,19 +1813,21 @@ However, I am quite satisfied with the overall results, the current work has bee
 <ul>
 <li><figure><a class="lightgallery" href="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp" title="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp" data-thumbnail="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp" data-sub-html="<h2>YunMi RO Filterred Water Dispenser</h2>">
         <img
-            class="lazyload"
-            data-src="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp"
-            data-srcset="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 1.5x, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 2x"
-            data-sizes="auto"
+            
+            loading="lazy"
+            src="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp"
+            srcset="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 1.5x, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 2x"
+            sizes="auto"
             alt="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp">
     </a><figcaption class="image-caption">YunMi RO Filterred Water Dispenser</figcaption>
     </figure></li>
 <li><figure><a class="lightgallery" href="/images/2021-summary/my-tea.webp" title="/images/2021-summary/my-tea.webp" data-thumbnail="/images/2021-summary/my-tea.webp" data-sub-html="<h2>All kinds of tea</h2>">
         <img
-            class="lazyload"
-            data-src="/images/2021-summary/my-tea.webp"
-            data-srcset="/images/2021-summary/my-tea.webp, /images/2021-summary/my-tea.webp 1.5x, /images/2021-summary/my-tea.webp 2x"
-            data-sizes="auto"
+            
+            loading="lazy"
+            src="/images/2021-summary/my-tea.webp"
+            srcset="/images/2021-summary/my-tea.webp, /images/2021-summary/my-tea.webp 1.5x, /images/2021-summary/my-tea.webp 2x"
+            sizes="auto"
             alt="/images/2021-summary/my-tea.webp">
     </a><figcaption class="image-caption">All kinds of tea</figcaption>
     </figure></li>
@@ -1821,10 +1837,11 @@ However, I am quite satisfied with the overall results, the current work has bee
 <ul>
 <li><figure><a class="lightgallery" href="/images/2021-summary/Posts-and-Garage-Kit.webp" title="/images/2021-summary/Posts-and-Garage-Kit.webp" data-thumbnail="/images/2021-summary/Posts-and-Garage-Kit.webp" data-sub-html="<h2>Anime PVC Figures and Anime Figure Painting in my room</h2>">
         <img
-            class="lazyload"
-            data-src="/images/2021-summary/Posts-and-Garage-Kit.webp"
-            data-srcset="/images/2021-summary/Posts-and-Garage-Kit.webp, /images/2021-summary/Posts-and-Garage-Kit.webp 1.5x, /images/2021-summary/Posts-and-Garage-Kit.webp 2x"
-            data-sizes="auto"
+            
+            loading="lazy"
+            src="/images/2021-summary/Posts-and-Garage-Kit.webp"
+            srcset="/images/2021-summary/Posts-and-Garage-Kit.webp, /images/2021-summary/Posts-and-Garage-Kit.webp 1.5x, /images/2021-summary/Posts-and-Garage-Kit.webp 2x"
+            sizes="auto"
             alt="/images/2021-summary/Posts-and-Garage-Kit.webp">
     </a><figcaption class="image-caption">Anime PVC Figures and Anime Figure Painting in my room</figcaption>
     </figure></li>
@@ -1849,10 +1866,11 @@ However, I am quite satisfied with the overall results, the current work has bee
 After all, Mobiuspace, whether it is the level of colleagues or the working atmosphere, or the number of customers, compared with my last company is qualitatively different.</p>
 <p><figure><a class="lightgallery" href="/images/2021-summary/workstation-1.webp" title="/images/2021-summary/workstation-1.webp" data-thumbnail="/images/2021-summary/workstation-1.webp" data-sub-html="<h2>My first station in Mobiuspace</h2>">
         <img
-            class="lazyload"
-            data-src="/images/2021-summary/workstation-1.webp"
-            data-srcset="/images/2021-summary/workstation-1.webp, /images/2021-summary/workstation-1.webp 1.5x, /images/2021-summary/workstation-1.webp 2x"
-            data-sizes="auto"
+            
+            loading="lazy"
+            src="/images/2021-summary/workstation-1.webp"
+            srcset="/images/2021-summary/workstation-1.webp, /images/2021-summary/workstation-1.webp 1.5x, /images/2021-summary/workstation-1.webp 2x"
+            sizes="auto"
             alt="/images/2021-summary/workstation-1.webp">
     </a><figcaption class="image-caption">My first station in Mobiuspace</figcaption>
     </figure>
@@ -1862,10 +1880,11 @@ After getting familiar with the contents and methods of the work, leader tried h
 <p>When there were several delays in my work, leader accompanied me to work overtime. After the work was done, he took me to a big dinner to reward myself. I really thanked him for his help and support.</p>
 <p><figure><a class="lightgallery" href="/images/2021-summary/workstation-2.webp" title="/images/2021-summary/workstation-2.webp" data-thumbnail="/images/2021-summary/workstation-2.webp" data-sub-html="<h2>My new station, near the floor-to-ceiling window, the view is great.</h2>">
         <img
-            class="lazyload"
-            data-src="/images/2021-summary/workstation-2.webp"
-            data-srcset="/images/2021-summary/workstation-2.webp, /images/2021-summary/workstation-2.webp 1.5x, /images/2021-summary/workstation-2.webp 2x"
-            data-sizes="auto"
+            
+            loading="lazy"
+            src="/images/2021-summary/workstation-2.webp"
+            srcset="/images/2021-summary/workstation-2.webp, /images/2021-summary/workstation-2.webp 1.5x, /images/2021-summary/workstation-2.webp 2x"
+            sizes="auto"
             alt="/images/2021-summary/workstation-2.webp">
     </a><figcaption class="image-caption">My new station, near the floor-to-ceiling window, the view is great.</figcaption>
     </figure></p>
