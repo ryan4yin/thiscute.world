@@ -4,8 +4,8 @@ date: 2021-08-15T19:11:29+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "docker-turtles-networking.webp"
+  - name: "featured-image"
+    src: "docker-turtles-networking.webp"
 
 tags: ["Linux", "网络", "虚拟化", "容器", "iptables", "conntrack"]
 categories: ["tech"]
@@ -18,7 +18,7 @@ code:
   maxShownLines: 150
 ---
 
->本文仅针对 ipv4 网络
+> 本文仅针对 ipv4 网络
 
 本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。
 
@@ -32,13 +32,13 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 
 ### 1. iptables 基础概念 - 四表五链
 
->实际上还有张 SELinux 相关的 security 表（应该是较新的内核新增的，但是不清楚是哪个版本加的），但是我基本没接触过，就略过了。
+> 实际上还有张 SELinux 相关的 security 表（应该是较新的内核新增的，但是不清楚是哪个版本加的），但是我基本没接触过，就略过了。
 
->这里只对 iptables 做简短介绍，详细的教程参见 [iptables详解（1）：iptables概念 - 朱双印](https://www.zsythink.net/archives/1199)，这篇文章写得非常棒！把 iptables 讲清楚了。
+> 这里只对 iptables 做简短介绍，详细的教程参见 [iptables 详解（1）：iptables 概念 - 朱双印](https://www.zsythink.net/archives/1199)，这篇文章写得非常棒！把 iptables 讲清楚了。
 
 默认情况下，iptables 提供了四张表（不考虑 security 的话）和五条链，数据在这四表五链中的处理流程如下图所示：
 
->在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外 `conntrack` 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。
+> 在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外 `conntrack` 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。
 
 ![](/images/netfilter/netfilter-packet-flow.webp "netfilter 数据包处理流程，来自 wikipedia")
 
@@ -50,7 +50,7 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 
 用户层程序发出的报文，则依次经过这几个表：OUTPUT -> POSTROUTING
 
->在路由决策时，如果目标 IP 不是本机，就得看内核是否开启了 ip_forward 功能，如果没开启数据包就扔掉了。如果开了转发，就会进入 FORWARD 链处理，然后直接进入 POSTROUTING 链，也就是说这类流量不会过 INPUT 链！
+> 在路由决策时，如果目标 IP 不是本机，就得看内核是否开启了 ip_forward 功能，如果没开启数据包就扔掉了。如果开了转发，就会进入 FORWARD 链处理，然后直接进入 POSTROUTING 链，也就是说这类流量不会过 INPUT 链！
 
 从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次是：PREROUTEING -> FORWARD -> POSTROUTING
 
@@ -69,7 +69,7 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 
 - ACCEPT: 直接允许数据包通过
 - DROP: 直接丢弃数据包，对程序而言就是 100% 丢包
-- REJECT: 丢弃数据包，但是会给程序返回  RESET。这个对程序更友好，但是存在安全隐患，通常不使用。
+- REJECT: 丢弃数据包，但是会给程序返回 RESET。这个对程序更友好，但是存在安全隐患，通常不使用。
 - MASQUERADE: （伪装）将 src ip 改写为网卡 ip，和 SNAT 的区别是它会自动读取网卡 ip。路由设备必备。
 - SNAT/DNAT: 顾名思义，做网络地址转换
 - REDIRECT: 在本机做端口映射
@@ -83,9 +83,10 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 
 ### 2. 常用命令
 
->**注意**: 下面提供的 iptables 命令做的修改是未持久化的，重启就会丢失！在下一节会简单介绍持久化配置的方法。
+> **注意**: 下面提供的 iptables 命令做的修改是未持久化的，重启就会丢失！在下一节会简单介绍持久化配置的方法。
 
 命令格式：
+
 ```shell
 iptables [-t table] {-A|-C|-D} chain [-m matchname [per-match-options]] -j targetname [per-target-options]
 ```
@@ -142,8 +143,8 @@ iptables -F INPUT
 
 ---
 
->本文后续分析时，假设用户已经清楚 linux bridge、veth 等虚拟网络接口相关知识。
-如果你还缺少这些前置知识，请先阅读文章 [Linux 中的虚拟网络接口](https://thiscute.world/posts/linux-virtual-network-interfaces/)。
+> 本文后续分析时，假设用户已经清楚 linux bridge、veth 等虚拟网络接口相关知识。
+> 如果你还缺少这些前置知识，请先阅读文章 [Linux 中的虚拟网络接口](https://thiscute.world/posts/linux-virtual-network-interfaces/)。
 
 ### 3. conntrack 连接跟踪与 NAT
 
@@ -224,7 +225,6 @@ conntrack 连接跟踪模块目前只支持以下六种协议：`TCP`、`UDP`、
 
 要注意的一点是，conntrack 跟踪的「连接」，跟「TCP 连接」不是一个层面的概念，可以看到 conntrack 也支持 UDP 这种无连接通讯协议。
 
-
 #### 2. 实际测试 conntrack
 
 现在我们来实际测试一下，看看是不是这么回事：
@@ -297,7 +297,6 @@ tcp      6 298 ESTABLISHED src=172.17.0.4 dst=198.18.5.130 sport=54636 dport=443
 
 能看到数据确实在进入 docker0 网桥前，dst_ip 确实被从 `192.168.31.228`（wlp4s0 的 ip）被修改为了 `172.17.0.4`（`Container A` 的 ip）.
 
-
 #### 3. NAT 如何分配端口？
 
 上一节我们实际测试发现，docker 容器的流量在经过 iptables 的 MASQUERADE 规则处理后，只有 src ip 被修改了，而 port 仍然是一致的。
@@ -331,24 +330,24 @@ Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全�
 ```shell
 # 运行一个 debian 容器和一个 nginx
 ❯ docker run -d --name debian --rm debian:buster sleep 1000000
-❯ docker run -d --name nginx --rm nginx:1.19-alpine 
+❯ docker run -d --name nginx --rm nginx:1.19-alpine
 
-#　查看网络接口，有两个 veth 接口（而且都没设 ip 地址），分别连接到两个容器的 eth0（dcoker0 网络架构图前面给过了，可以往前面翻翻对照下）
+# 查看网络接口，有两个 veth 接口（而且都没设 ip 地址），分别连接到两个容器的 eth0（dcoker0 网络架构图前面给过了，可以往前面翻翻对照下）
 ❯ ip addr ls
 ...
-5: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+5: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
     link/ether 02:42:42:c7:12:ba brd ff:ff:ff:ff:ff:ff
     inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
        valid_lft forever preferred_lft forever
-    inet6 fe80::42:42ff:fec7:12ba/64 scope link 
+    inet6 fe80::42:42ff:fec7:12ba/64 scope link
        valid_lft forever preferred_lft forever
-100: veth16b37ea@if99: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default 
+100: veth16b37ea@if99: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
     link/ether 42:af:34:ae:74:ae brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet6 fe80::40af:34ff:feae:74ae/64 scope link 
+    inet6 fe80::40af:34ff:feae:74ae/64 scope link
        valid_lft forever preferred_lft forever
-102: veth4b4dada@if101: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default 
+102: veth4b4dada@if101: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
     link/ether 9e:f1:58:1a:cf:ae brd ff:ff:ff:ff:ff:ff link-netnsid 1
-    inet6 fe80::9cf1:58ff:fe1a:cfae/64 scope link 
+    inet6 fe80::9cf1:58ff:fe1a:cfae/64 scope link
        valid_lft forever preferred_lft forever
 
 # 两个 veth 接口都连接到了 docker0 上面，说明两个容器都使用了 docker 默认的 bridge 网络
@@ -361,10 +360,10 @@ docker0         8000.024242c712ba       no              veth16b37ea
 ❯ ip route ls
 default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 #下列路由规则将 `172.17.0.0/16` 网段的所有流量转发到 docker0
-172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
-192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
+192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600
 
-# 查看　iptables 规则
+# 查看 iptables 规则
 # nat 表
 ❯ sudo iptables -t nat -S
 -P PREROUTING ACCEPT
@@ -432,7 +431,7 @@ root@499fbc07b79c:/# curl -s -v 172.17.0.3:80 -o /dev/null
 > Host: 172.17.0.3
 > User-Agent: curl/7.64.0
 > Accept: */*
-> 
+>
 < HTTP/1.1 200 OK
 < Server: nginx/1.19.10
 < Date: Sat, 04 Mar 2023 14:00:09 GMT
@@ -444,19 +443,19 @@ root@499fbc07b79c:/# curl -s -v 172.17.0.3:80 -o /dev/null
 接着查找下 docker 的 systemd 配置位置：
 
 ```shell
-❯ sudo systemctl disable docker 
+❯ sudo systemctl disable docker
 Removed "/etc/systemd/system/multi-user.target.wants/docker.service".
 
-❯ sudo systemctl enable docker 
+❯ sudo systemctl enable docker
 Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
 ```
 
 根据日志可定位到我的 docker.service 配置位于 `/usr/lib/systemd/system/docker.service`，修改此配置，在 `ExecStart` 一行的末尾添加参数 `--icc=false`，然后重启 docker 服务：
 
 ```shell
-❯ sudo systemctl daemon-reload 
+❯ sudo systemctl daemon-reload
 
-❯ sudo systemctl restart docker 
+❯ sudo systemctl restart docker
 ```
 
 现在再走一遍前面的测试，会发现 debian 无法访问 nginx 容器了。
@@ -492,10 +491,9 @@ Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /
 -A DOCKER-USER -j RETURN
 ```
 
-
 ### 3. 使用 docker-compose 自定义网桥与端口映射 {#docker-publish-ports}
 
-接下来使用如下 docker-compose 配置启动一个 caddy　容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。
+接下来使用如下 docker-compose 配置启动一个 caddy 容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。
 
 `docker-compose.yml` 内容：
 
@@ -510,7 +508,7 @@ services:
     ports:
       - "8081:80"
     networks:
-    - caddy-1
+      - caddy-1
 
 networks:
   caddy-1:
@@ -530,29 +528,29 @@ networks:
 # 还多了一个 veth0c25c6f@if104 ，它实际连接到了 caddy 容器的 eth0(veth) 接口
 ❯ ip addr ls
 ...
-5: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+5: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
     link/ether 02:42:42:c7:12:ba brd ff:ff:ff:ff:ff:ff
     inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
        valid_lft forever preferred_lft forever
-    inet6 fe80::42:42ff:fec7:12ba/64 scope link 
+    inet6 fe80::42:42ff:fec7:12ba/64 scope link
        valid_lft forever preferred_lft forever
-100: veth16b37ea@if99: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default 
+100: veth16b37ea@if99: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
     link/ether 42:af:34:ae:74:ae brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet6 fe80::40af:34ff:feae:74ae/64 scope link 
+    inet6 fe80::40af:34ff:feae:74ae/64 scope link
        valid_lft forever preferred_lft forever
-102: veth4b4dada@if101: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default 
+102: veth4b4dada@if101: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
     link/ether 9e:f1:58:1a:cf:ae brd ff:ff:ff:ff:ff:ff link-netnsid 1
-    inet6 fe80::9cf1:58ff:fe1a:cfae/64 scope link 
+    inet6 fe80::9cf1:58ff:fe1a:cfae/64 scope link
        valid_lft forever preferred_lft forever
-103: br-ac3e0514d837: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+103: br-ac3e0514d837: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
     link/ether 02:42:7d:95:ba:7e brd ff:ff:ff:ff:ff:ff
     inet 172.18.0.1/16 brd 172.18.255.255 scope global br-ac3e0514d837
        valid_lft forever preferred_lft forever
-    inet6 fe80::42:7dff:fe95:ba7e/64 scope link 
+    inet6 fe80::42:7dff:fe95:ba7e/64 scope link
        valid_lft forever preferred_lft forever
-105: veth0c25c6f@if104: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-ac3e0514d837 state UP group default 
+105: veth0c25c6f@if104: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-ac3e0514d837 state UP group default
     link/ether 9a:03:e1:f0:26:ea brd ff:ff:ff:ff:ff:ff link-netnsid 2
-    inet6 fe80::9803:e1ff:fef0:26ea/64 scope link 
+    inet6 fe80::9803:e1ff:fef0:26ea/64 scope link
        valid_lft forever preferred_lft forever
 
 
@@ -563,13 +561,13 @@ br-ac3e0514d837         8000.02427d95ba7e       no              veth0c25c6f
 docker0         8000.024242c712ba       no              veth16b37ea
                                                         veth4b4dada
 
-# 查看路由，能看到新网桥使用的地址段是 172.18.0.0/16，是 docker0 递增上来的 
+# 查看路由，能看到新网桥使用的地址段是 172.18.0.0/16，是 docker0 递增上来的
 ❯ ip route ls
-default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600 
-172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 
+default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1
 # 多了一个网桥的
-172.18.0.0/16 dev br-ac3e0514d837 proto kernel scope link src 172.18.0.1 
-192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600 
+172.18.0.0/16 dev br-ac3e0514d837 proto kernel scope link src 172.18.0.1
+192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600
 
 # iptables 中也多了 caddy-1 网桥的 MASQUERADE 规则，以及端口映射的规则，下面重点给这些新增规则加了注释
 ❯ sudo iptables -t nat -S
@@ -627,10 +625,9 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 到这里，我们简单地分析了下 docker 如何通过 iptables 实现 bridge 网络和端口映射。
 有了这个基础，后面就可以尝试深入分析 kubernetes 网络插件 flannel/calico/cilium 了哈哈。
 
-
 ## 三、Docker/Podman 的 macvlan/ipvlan 模式
 
->注意：macvlan 和 wifi 好像不兼容，测试时不要使用无线网络的接口！
+> 注意：macvlan 和 wifi 好像不兼容，测试时不要使用无线网络的接口！
 
 我在前面介绍 Linux 虚拟网络接口的文章中，有介绍过 macvlan 和 ipvlan 两种新的虚拟接口。
 
@@ -656,18 +653,18 @@ $ docker run --network macnet0 --ip=192.168.31.233 --rm -it buildpack-deps:buste
 # 在容器中查看网络接口状况，能看到 eth0 是一个 macvlan 接口
 root@4319488cb5e7:/# ip -d addr ls
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-8: eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
-    link/ether 02:42:c0:a8:1f:e9 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 9194 
-    macvlan mode bridge numtxqueues 1 numrxqueues 1 gso_max_size 64000 gso_max_segs 64 
+8: eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:c0:a8:1f:e9 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 9194
+    macvlan mode bridge numtxqueues 1 numrxqueues 1 gso_max_size 64000 gso_max_segs 64
     inet 192.168.31.233/24 brd 192.168.31.255 scope global eth0
        valid_lft forever preferred_lft forever
 # 路由表，默认 gateway 被自动配置进来了
 root@4319488cb5e7:/# ip route ls
-default via 192.168.31.1 dev eth0 
-192.168.31.0/24 dev eth0 proto kernel scope link src 192.168.31.233 
+default via 192.168.31.1 dev eth0
+192.168.31.0/24 dev eth0 proto kernel scope link src 192.168.31.233
 
 # 可以正常访问 baidu
 root@4319488cb5e7:/# curl baidu.com
@@ -696,18 +693,18 @@ $ docker run --network ipvnet0 --ip=192.168.31.234 --rm -it buildpack-deps:buste
 # 在容器中查看网络接口状况，能看到 eth0 是一个 ipvlan 接口
 root@d0764ebbbf42:/# ip -d addr ls
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-12: eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default 
-    link/ether 38:f3:ab:a3:e6:71 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 65535 
-    ipvlan  mode l2 bridge numtxqueues 1 numrxqueues 1 gso_max_size 64000 gso_max_segs 64 
+12: eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default
+    link/ether 38:f3:ab:a3:e6:71 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 65535
+    ipvlan  mode l2 bridge numtxqueues 1 numrxqueues 1 gso_max_size 64000 gso_max_segs 64
     inet 192.168.31.234/24 brd 192.168.31.255 scope global eth0
        valid_lft forever preferred_lft forever
 # 路由表，默认 gateway 被自动配置进来了
 root@d0764ebbbf42:/# ip route ls
-default via 192.168.31.1 dev eth0 
-192.168.31.0/24 dev eth0 proto kernel scope link src 192.168.31.234 
+default via 192.168.31.1 dev eth0
+192.168.31.0/24 dev eth0 proto kernel scope link src 192.168.31.234
 
 # 可以正常访问 baidu
 root@d0764ebbbf42:/# curl baidu.com
@@ -787,12 +784,10 @@ table ip6 firewalld {
 
 但是现在 kubernetes/docker 都还是用的 iptables，nftables 我学了用处不大，以后有空再补充。
 
-
 ## 参考
 
-- [iptables详解（1）：iptables概念](https://www.zsythink.net/archives/1199)
+- [iptables 详解（1）：iptables 概念](https://www.zsythink.net/archives/1199)
 - [连接跟踪（conntrack）：原理、应用及 Linux 内核实现](https://arthurchiao.art/blog/conntrack-design-and-implementation-zh/)
 - [网络地址转换（NAT）之报文跟踪](https://linux.cn/article-13364-1.html)
-- [容器安全拾遗 - Rootless Container初探](https://developer.aliyun.com/article/700923)
+- [容器安全拾遗 - Rootless Container 初探](https://developer.aliyun.com/article/700923)
 - [netfilter - wikipedia](https://en.wikipedia.org/wiki/Netfilter)
-

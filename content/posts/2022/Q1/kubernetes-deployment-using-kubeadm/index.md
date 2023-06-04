@@ -197,7 +197,7 @@ RELEASE="1.22.1"
 RELEASE_VERSION="v0.4.0"
 # 架构
 ARCH="amd64"
-#　安装目录
+# 安装目录
 DOWNLOAD_DIR=/usr/local/bin
 
 
@@ -661,4 +661,3 @@ kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
   - 如果外部 NFS 服务器出问题，应用就会崩。
 - 直接使用云上的对象存储，适合希望数据不丢失、对性能要求不高的场景。
   - 直接使用 https://github.com/rclone/rclone mount 模式来保存数据，或者直接同步文件夹数据到云端（可能会有一定数据丢失）。
-

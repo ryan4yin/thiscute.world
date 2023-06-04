@@ -242,7 +242,7 @@ default dev peer1 scope link
 $ ip rule show
 0:      from all lookup local   # 0 是最高优先级，`all` 表示所有流量，`lookup local` 表示查找 local 路由表。
                                 # local 是一个特殊路由表，包含对本地和广播地址的优先级控制路由。
-32764:  from all lookup main suppress_prefixlength 0  # 32764 目前是第二优先级，将所有流量路由到　main 路由表，但是排除掉默认路由（前缀/掩码 <= 0）
+32764:  from all lookup main suppress_prefixlength 0  # 32764 目前是第二优先级，将所有流量路由到 main 路由表，但是排除掉默认路由（前缀/掩码 <= 0）
                                                       # 功能是让所有非默认路由的流量都走 main 路由表
                                                       # 这条规则前面实际解释过了，它是 wg-quick 在启动隧道时添加的规则。
 32765:  not from all fwmark 0xca6c lookup 51820 # 所有不带 0xca6c 标记（51820 的 16 进制格式）的流量（普通流量），都走 51820 路由表
@@ -340,4 +340,3 @@ $ sudo wg-quick down peer1
 - [WireGuard到底好在哪？](https://zhuanlan.zhihu.com/p/404402933): 比较深入浅出的随想，值得一读。
 - [Understanding modern Linux routing (and wg-quick)](https://ro-che.info/articles/2021-02-27-linux-routing): 对 WireGuard 客户端用到的多路由表与路由策略技术做了详细的介绍。
   - 它的中文翻译：[WireGuard 基础教程：wg-quick 路由策略解读 - 米开朗基扬](https://icloudnative.io/posts/linux-routing-of-wireguard/)
-
