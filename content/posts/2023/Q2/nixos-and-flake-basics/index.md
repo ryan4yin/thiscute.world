@@ -32,6 +32,9 @@ code:
 
 ## 更新日志
 
+- 2023/6/4
+  - 使用 `nix profile history` 替换掉旧指令 `nix-env --list-generations`
+  - 使用 `nix store gc` 替换掉旧指令 `nix-collect-garbage`
 - 2023/6/1
   - 更新「六-9」一节，为了避免 [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347) 描述的 nixpkgs 实例泛滥问题，改为仅在全局创建 nixpkgs 实例。
 - 2023/5/21
