@@ -46,44 +46,42 @@ code:
 
 ## 0. Why Nix
 
-I heard about the Nix package manager several years ago. It uses the Nix language to describe system configuration, and the Linux distribution build on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
+I heard about the Nix package manager several years ago. It uses the Nix language to describe system configuration, and the Linux distribution built on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn't study it at the time.
 
 But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.
 
-The fist problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because My old PC also uses EndeavourOS, I directly `rsync` the old PC's Home directory to the new PC to save time after installation.
-However, this synchronization caused a problem. All functions worked normally, but video playback always stuck. Firefox, Chrome, and MPV would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the Home directory synchronization. After clearing the Home directory, the problem was solved immediately... Later, I spent a long time recovering things from the old PC one by one.
+The first problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because My old PC also uses EndeavourOS, I directly `rsync` the old PC's Home directory to the new PC to save time after installation.
+However, this synchronization caused a problem. All functions worked normally, but video playback always stuck. Firefox, Chrome, and MPV would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the Home directory synchronization. After clearing the Home directory, the problem was solved immediately… Later, I spent a long time recovering things from the old PC one by one.
 
 The second problem is that I recently wanted to try Wayland, so I changed the desktop from i3wm to sway.
-However, because there was little difference between the two and many inconveniences (hidpi, Sway configuration tuning, etc.), I decided to switch back to i3wm.
-After switching back, GUI programs such as Firefox and Thunar would always get stuck for about a minute after the system started...
 
-I was too tired to deal with the second problem, after thinking about it carefully, I realized that the root cause was that the system did not have any version control and rollback mechanism, which caused the system to be unable to be restored when problems occurred.
-And another problem, when installing a new system, I had to manually export the package list from the old machine and then install them on the new machine.
-So I decided to switch to NixOS.
+However, because there was little difference between the two and many inconveniences (hidpi, Sway configuration tuning, etc.), I decided to switch back to i3wm. After switching back, GUI programs such as Firefox and Thunar would always get stuck for about a minute after the system started…
 
-The first step I took was to create a NixOS virtual machine in my Homelab, and debug step by step in this virtual machine to migrate my old PC's EndeavourOS i3 configuration to NixOS + Flakes and restore the entire desktop environment.
+I was too tired to deal with the second problem, after thinking about it carefully, I realized that the root cause was that the system did not have any version control and rollback mechanism, which caused the system to be unable to be restored when problems occurred. And another problem, when installing a new system, I had to manually export the package list from the old machine and then install them on the new machine. So I decided to switch to NixOS.
 
-Once I had it working on the virtual machine, the rest was easy. I simply backed up my Home directory and software list from my work computer, reinstalled the system as NixOS, git cloned my debugged NixOS configuration, made some adjustments to the disk mounting parameters and added some extra NixOS configurations for my Nvidia graphics card. Finally, with just a few commands, I deployed the configuration and was able to restore the entire i3 desktop environment and my commonly used software on my fresh NixOS system. It was a truly satisfying moment!
+The first step I took was to create a NixOS virtual machine in my homelab, and debug step by step in this virtual machine to migrate my old PC's EndeavourOS i3 configuration to NixOS + Flakes and restore the entire desktop environment.
+
+Once I had it working on the virtual machine, the rest was easy. I simply backed up my Home directory and software list from my work computer, reinstalled the system as NixOS, `git clone`d my debugged NixOS configuration, made some adjustments to the disk mounting parameters, and added some extra NixOS configurations for my Nvidia graphics card. Finally, with just a few commands, I deployed the configuration and was able to restore the entire i3 desktop environment and my commonly used software on my fresh NixOS system. It was a truly satisfying moment!
 
 The rollback capability of NixOS gave me a lot of confidence - I no longer fear breaking the system. So a few days ago, I further migrated to the hyprland desktop, which is indeed much better than i3, and I love its animation effects! (On EndeavourOS before, I wouldn't have dared to make such a switch for the reasons mentioned earlier - it would have been a big hassle if something went wrong with the system.)
 
-> Note: some friends on V2EX gave feedback that `btrfs`'s snapshot feature can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. `btrfs` can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs based snapshot tools(e.g. [btrbk](https://github.com/digint/btrbk)) is also a good choice. Or if you're still interested in Nix, It is definitely worth learning, as Nix's capabilities are far beyond just system snapshots.
+> Note: some friends on V2EX gave feedback that `btrfs`'s snapshot feature can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. `btrfs` can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs based snapshot tools(e.g. [btrbk](https://github.com/digint/btrbk)) are also a good choice. Or if you're still interested in Nix, It is definitely worth learning, as Nix's capabilities are far beyond just system snapshots.
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="My NixOS Desktop" >}}
 
-So after studying NixOS and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period of time, hope you like it~
+So after studying NixOS and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period time, hope you like it~
 
 Now that the background information is out of the way, it's time to dive into the world of Nix!
 
 ## I. Introduction to Nix
 
-Nix package manager is a declarative configuration management tool similar to pulumi/terraform/kubernetes that are currently popular in the DevOps field. Users need to declare the expected system state in some configurations, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while pulumi/terraform manages cloud resources.
+Nix package manager is a declarative configuration management tool similar to pulumi/terraform/kubernetes which are currently popular in the DevOps field. Users need to declare the expected system state in some configurations, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while pulumi/terraform manages cloud resources.
 
 > To put it simply, "declarative configuration" means that users only need to declare the results they want. For example, you declares that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don't need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway's nix packages are designed properly...).
 
 The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as "OS as Code", which describes the entire operating system's state using declarative Nix configuration files.
 
-NixOS's configuration only manages the system-level state, the user's HOME directory is not under its control. Another important community project, [home-manager](https://github.com/nix-community/home-manager), filled this gap, home-manager is designed to managing user-level's packages & HOME directories. **By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained**(ideally).
+NixOS's configuration only manages the system-level state, the user's HOME directory is not under its control. Another important community project, [home-manager](https://github.com/nix-community/home-manager), filled this gap, home-manager is designed to manage user-level packages & HOME directories. **By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained**(ideally).
 
 Due to Nix's declarative and reproducible features, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. [NixOps](https://github.com/NixOS/nixops) from the Nix official and [deploy-rs](https://github.com/serokell/deploy-rs) from the community are both operations tools based on Nix.
 
@@ -93,10 +91,10 @@ Due to Nix's declarative and reproducible features, Nix is not only used to mana
 
 - **Declarative configuration, Environment as Code**, can be managed with Git. As long as the configuration files are not lost, the system can be restored to any historical state at any time(ideally).
   - Nix lock dependent library versions through a lock file named `flake.lock`, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.
-  - Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as `flake.nix` in Docker, Docker's reproducibility relys on share the build result(which is MUCH MORE LARGAR than Dockerfile itself) through image regitry(e.g. DockerHub).
+  - Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as `flake.nix` in Docker, Docker's reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).
 - **Highly convenient system customization capability**
   - By changing a few lines of configuration, various components of the NixOS system can be easily customized. This is because Nix encapsulates all the underlying complex operations in nix packages and only exports concise and necessary declarative parameters.
-  - Moreover, this modification is very safe. An example is that one NixOS user on the V2EX forum have stated that "[**on NixOS, switching between different desktop environments is very simple and clean, and it is very safe. I often switch between gnome/kde/sway.**](https://www.v2ex.com/t/938569#r_13053251)"
+  - Moreover, this modification is very safe. An example is that one NixOS user on the V2EX forum stated that "[**on NixOS, switching between different desktop environments is very simple and clean, and it is very safe. I often switch between gnome/kde/sway.**](https://www.v2ex.com/t/938569#r_13053251)"
 - **Rollback**: The system can be rolled back to any historical environment at any time, and NixOS even adds all old versions to the boot options by default to ensure that the system can be rolled back at any time even though it crashes. Therefore, NixOS is also considered one of the most stable Linux Systems.
 - **No dependency conflicts**: Because each software package in Nix has a unique hash, its installation path also includes this hash value, so multiple versions can coexist.
 - **The community is very active, and there are quite a few third-party projects**. The official package repository, nixpkgs, has many contributors, and many people share their Nix configurations on Github/Gitlab. After browsing through it, the entire ecosystem gives me a sense of excitement in discovering a new continent.
@@ -114,7 +112,7 @@ Due to Nix's declarative and reproducible features, Nix is not only used to mana
 
 Generally speaking, I think NixOS is suitable for developers who have a certain amount of Linux usage experience and programming experience and want to have more control over their systems.
 
-Another info, there is also some competition between Nix and the relatively popular [Dev Containers](https://containers.dev/) in the construction of development environment, and the specific differences between them have yet to be explored by me~
+Another piece of info, there is also some competition between Nix and the relatively popular [Dev Containers](https://containers.dev/) in the construction of the development environment, and the specific differences between them have yet to be explored by me~
 
 ## II. Installation
 
@@ -124,7 +122,7 @@ I chose to directly install NixOS system using its ISO image, to manage the enti
 
 The installation process is simple, and I won't go into details here.
 
-some reference materials that maybe useful:
+some reference materials that may be useful:
 
 1. [Official installation method of Nix](https://nixos.org/download.html): written in bash script, `nix-command` & `flakes` are still experimental features as of 2023-04-23, and need to be manually enabled.
    1. You need to refer to the instructions in [Enable flakes - NixOS Wiki](https://nixos.wiki/wiki/Flakes) to enable `nix-command` & `flakes`.
@@ -163,7 +161,7 @@ Similar to Arch Linux, Nix also has official and community software package repo
 
 The Nix language is used to declare packages and configurations to be built by Nix, if you want to play NixOS and Nix Flakes and enjoy the many benefits they bring, you must learn the basics of this language first.
 
-Nix is a relatively simple functional language, if you already have some programming experiences, it should take less than 2 hours to go through these grammars.
+Nix is a relatively simple functional language, if you already have some programming experience, it should take less than 2 hours to go through Nix lanuage's basics.
 
 Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) to get a basic understanding of Nix language now, it's a very good tutorial.
 
@@ -175,7 +173,7 @@ After learning the basics of the Nix language, we can start using it to configur
 
 If we want to modify the system state in a reproducible way (which is also the most recommended way), we need to manually edit the `/etc/nixos/configuration.nix` file, and then execute `sudo nixos-rebuild switch` to apply the configuration. This command generates a new system environment based on the configuration file, sets the new environment as the default one, and also preserves & added the previous environment into the grub boot options. This ensures we can always roll back to the old environment(even if the new environment fails to start).
 
-On the other hand, `/etc/nixos/configuration.nix` is the traditional Nix configuration method, which relies on data sources configured by `nix-channel` and has no version locking mechanism, making it difficult to ensure the reproducibility of the system. **A better approach is to use Nix Flakes**, which can ensure the reproducibility of the system and make it easy to manage the configuration.
+On the other hand, `/etc/nixos/configuration.nix` is the traditional Nix configuration method, which relies on data sources configured by `nix-channel` and has no version-locking mechanism, making it difficult to ensure the reproducibility of the system. **A better approach is to use Nix Flakes**, which can ensure the reproducibility of the system and make it easy to manage the configuration.
 
 Now first, let's learn how to manage the system using the default configuration method of NixOS through `/etc/nixos/configuration.nix`, and then transition to the more advanced Nix Flakes.
 
@@ -188,7 +186,7 @@ For example, to enable ssh and add a user "ryan," simply add the following confi
 ```nix
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 { config, pkgs, ... }:
 
 {
@@ -249,7 +247,7 @@ However, Nix Flakes is currently an experimental feature and is not yet enabled 
 ```nix
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 { config, pkgs, ... }:
 
 {
@@ -414,7 +412,7 @@ Then udpate `configuration.nix` to install `helix` from flake input:
 ```nix
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 #
 # Nix will automatically inject `helix` from specialArgs
 # into the third parameter of this function through name matching
@@ -440,10 +438,10 @@ Now deploy the changes with `sudo nixos-rebuild switch`, and the helix editor wi
 
 ### 5. Add Custom Cache Mirror
 
-In order to speed up package building, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
+To speed up package building, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
 
 In the old NixOS configuration, other cache sources can be added through `nix-channel` command, but Nix Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its build results are not affected by the environment(environment independent).
-Therefore, in order to customize the cache image source, we must add the related configuration in `flake.nix` by using the parameter `nixConfig`. The example is as follows:
+Therefore, to customize the cache image source, we must add the related configuration in `flake.nix` by using the parameter `nixConfig`. The example is as follows:
 
 ```nix
 {
@@ -483,11 +481,11 @@ Therefore, in order to customize the cache image source, we must add the related
 
 After the modification, execute `sudo nixos-rebuild switch` to apply the configuration.
 
-### 6. install home-manager
+### 6. Install home-manager
 
 We mentioned earlier that NixOS can only manage system-level configurations, and user-level configurations need to be managed using home-manager.
 
-According to the official document [Home Manager Manual](https://nix-community.github.io/home-manager/index.htm), in order to install home-manager as an module of NixOS, we need to create `/etc/nixos/home.nix` first, an example content shown below:
+According to the official document [Home Manager Manual](https://nix-community.github.io/home-manager/index.htm), in order to install home-manager as a module of NixOS, we need to create `/etc/nixos/home.nix` first, an example content shown below:
 
 ```nix
 { config, pkgs, ... }:
