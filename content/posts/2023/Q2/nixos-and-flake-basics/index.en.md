@@ -1259,7 +1259,7 @@ Here are some useful resources that I have referred to:
 - [NixOS series](https://lantian.pub/en/article/modify-website/nixos-why.lantian/): LanTian's NixOS series, which are very clear and easy to understand, a must-read for beginners.
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): An official Nix Flakes tutorial series, which provides a relatively detailed introduction and is suitable for beginners.
 - [Nix Flakes - Wiki](https://nixos.wiki/wiki/Flakes): The official Nix Flakes wiki, which provides a relatively rough introduction.
-- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): My NixOS configuration repository, which also lists other configuration repositories that I have referred to in the README.
+- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): My Flake for NixOS & macOS.
 
 [digga]: https://github.com/divnix/digga
 [New Nix Commands]: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html
