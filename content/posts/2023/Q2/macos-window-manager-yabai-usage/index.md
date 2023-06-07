@@ -7,8 +7,8 @@ lastmod: 2023-05-22T12:24:57+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "yabai.png"
+  - name: "featured-image"
+    src: "yabai.png"
 
 tags: ["MacOS", "窗口管理器", "Window Manager", "yabai"]
 categories: ["tech"]
@@ -45,10 +45,11 @@ comment:
 自动分屏 + 快捷键自动调整窗口的体验还是很舒服的，劝退我的主要是如下这些问题：
 
 1. 对有些软件，比如企业微信、微信、QQ，自动分屏功能不太行，会出现窗口错位。
-2. 全屏下 Chrome 搜索框下方的提示栏被会 Chrome 本身遮挡，必须退出全屏功能才能看到。
-3. Chrome 页面中的输入框「自动填充」功能在非全屏下会被 Chrome 遮挡，必须进入全屏模式下才能看到。
-4. 在右键修改 Firefox Bookmark 中标签时，弹出的修改菜单会被 Bookmark 收藏夹本身的弹窗遮挡，导致有些选项无法点击到。
-5. 开始使用 yabai 后，系统经常性地卡顿，或者风扇狂转，说明这玩意儿有点吃性能。
+2. 如下两个问题逼着我一会儿进入全屏模式，一会儿又要退出全屏，简直离谱。
+   1. 全屏下 Chrome 搜索框下方的提示栏被会 Chrome 本身遮挡，必须退出全屏功能才能看到。
+   2. 非全屏下，Chrome 页面中的输入框「自动填充」功能会被 Chrome 遮挡，必须进入全屏模式才能看到...
+3. 在右键修改 Firefox Bookmark 中标签时，弹出的修改菜单会被 Bookmark 收藏夹本身的弹窗遮挡，导致有些选项无法点击到。
+4. 开始使用 yabai 后，系统经常性地卡顿，或者风扇狂转，说明这玩意儿有点吃性能。
 
 ## 安装流程
 
@@ -73,7 +74,7 @@ sudo visudo -f /private/etc/sudoers.d/yabai
 # 然后输入以下内容 其中 <user> 修改为当前 mac 的用户名
 # input the line below into the file you are editing.
 #  replace <yabai> with the path to the yabai binary (output of: which yabai).
-#  replace <user> with your username (output of: whoami). 
+#  replace <user> with your username (output of: whoami).
 #  replace <hash> with the sha256 hash of the yabai binary (output of: shasum -a 256 $(which yabai)).
 #   this hash must be updated manually after running brew upgrade.
 <user> ALL=(root) NOPASSWD: sha256:<hash> <yabai> --load-sa
@@ -294,16 +295,12 @@ echo 'stackline:init()' >> init.lua
 which hs
 ```
 
-
 ## 使用时的常见问题与解决方法
 
 1. Chrome/WeChat 等程序的弹窗无法显示: 尝试下进入全屏或者退出全屏，总有一种场景下可以显示弹窗...
 2. ...
 
-
-
 ## 参考
 
-- [mac下的平铺桌面yabai使用 - 月青悠](https://vccv.cc/article/mac-tiling-yabai.html)
-- [Yabai setup for i3wm users  - Krever](https://gist.github.com/Krever/74d43fa38c57c42c355df55faa0a00ee)
-
+- [mac 下的平铺桌面 yabai 使用 - 月青悠](https://vccv.cc/article/mac-tiling-yabai.html)
+- [Yabai setup for i3wm users - Krever](https://gist.github.com/Krever/74d43fa38c57c42c355df55faa0a00ee)
