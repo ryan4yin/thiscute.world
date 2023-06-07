@@ -206,14 +206,16 @@ def process_data(data):
         reading_duration = int(p['userEngagementDuration'])
         p['readingDuration'] = reading_duration
         p['humanizedReadingDuration'] = humanize_duration(reading_duration)
+
+        activateUsers = int(p['activeUsers'])
         # 人均阅读时长
-        reading_duration_per_user = reading_duration // int(p['activeUsers'])
+        reading_duration_per_user = reading_duration // activateUsers
         p['readingDurationPerUser'] = reading_duration_per_user
         p['humanizedReadingDurationPerUser'] = humanize_duration(
             reading_duration_per_user)
-        
-        if reading_duration_per_user < 15:
-            # 跳过人均阅读时常低于 15s 的文章（文章的质量片低或者受众片小，没必要列出来）
+
+        if activateUsers < 5 or reading_duration_per_user < 20:
+            # 跳过人均阅读时常低于 20s 或阅读人数低于 5 的文章（文章的质量偏低或者受众偏小，没必要列出来）
             continue
 
         items.append(p)
