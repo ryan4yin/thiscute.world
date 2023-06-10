@@ -6,7 +6,7 @@ on:
     branches:
       - main
   # schedule:
-    # - cron: "36 5 * * *"  # 分 时 日 月 周
+  # - cron: "36 5 * * *"  # 分 时 日 月 周
 
 jobs:
   update:
@@ -14,15 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          submodules: recursive  # Fetch Hugo themes recursively
-          fetch-depth: 0         # Fetch all history for .GitInfo and .Lastmod
-          lfs: true              # download Git-LFS files
+          submodules: recursive # Fetch Hugo themes recursively
+          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
+          lfs: true # download Git-LFS files
 
       - name: Use Python3
         uses: actions/setup-python@v3
         with:
-          python-version: '3.10'
-          architecture: 'x64'
+          python-version: "3.10"
+          architecture: "x64"
 
       - name: Update Posts Trending
         run: |
@@ -47,8 +47,8 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.110.0'
-          extended: true  #  need extended version to support SASS/SCSS
+          hugo-version: "0.110.0"
+          extended: true #  need extended version to support SASS/SCSS
 
       - name: Build
         run: hugo --minify --debug --printUnusedTemplates
@@ -64,7 +64,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: "16.x"
       - name: Push Argolia Index
         run: |
           npm install algoliasearch@4.12.1
