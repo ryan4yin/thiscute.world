@@ -1,33 +1,3 @@
----
-title: "NixOS 与 Nix Flakes 新手入门"
-date: 2023-05-04T15:19:28+08:00
-lastmod: 2023-06-04T14:25:15+08:00
-draft: false
-
-resources:
-  - name: "featured-image"
-    src: "screenshot_2023-05-07-21-21.webp"
-
-tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
-categories: ["tech"]
-series: ["NixOS 与 Nix Flakes"]
-series_weight: 1
-
-lightgallery: true
-
-comment:
-  utterances:
-    enable: true
-  waline:
-    enable: false
-
-code:
-  # whether to show the copy button of the code block
-  copy: true
-  # the maximum number of lines of displayed code by default
-  maxShownLines: 300
----
-
 > 本文的目标 NixOS 版本为 22.11，Nix 版本为 2.13.3，在此环境下 Nix Flakes 仍然为实验性功能。
 
 ## 更新日志
