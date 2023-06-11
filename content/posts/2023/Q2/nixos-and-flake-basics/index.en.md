@@ -845,7 +845,17 @@ cd ~/nixos-config
 sudo nixos-rebuild switch --flake .#nixos-test
 ```
 
-Choose whichever you like.
+Choose whichever you like. After that, system rollback becomes very simple, just switch to the previous commit:
+
+```shell
+cd ~/nixos-config
+# switch to the previous commit
+git checkout HEAD^1
+# deploy the flake.nix located in the current directory, and the nixosConfiguration's name is `nixos-test`
+sudo nixos-rebuild switch --flake .#nixos-test
+```
+
+More operations on Git are not described here. Generally speaking, rollback can be done directly through Git. Only when the system crashes completely, you need to restart into bootloader and boot the system from the previous historical version.
 
 ### 11. View and delete history data {#view-and-delete-history}
 

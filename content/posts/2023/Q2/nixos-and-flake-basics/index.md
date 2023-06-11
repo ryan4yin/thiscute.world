@@ -1164,7 +1164,17 @@ cd ~/nixos-config
 sudo nixos-rebuild switch --flake .#nixos-test
 ```
 
-两种方式都可以，看个人喜好。
+两种方式都可以，看个人喜好。搞定之后，系统的回滚也变得非常简单，只需要切换到上一个 commit 即可：
+
+```shell
+cd ~/nixos-config
+# 回滚到上一个 commit
+git checkout HEAD^1
+# 部署
+sudo nixos-rebuild switch --flake .#nixos-test
+```
+
+Git 的更多操作这里就不介绍了，总之一般情况下的回滚都能直接通过 Git 完成，只在系统完全崩溃的情况下，才需要通过重启进入 grub，从上一个历史版本启动系统。
 
 ### 11. 查看与清理历史数据 {#view-and-delete-history}
 
