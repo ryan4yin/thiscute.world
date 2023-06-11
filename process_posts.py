@@ -33,6 +33,8 @@ def parse_post_metadata(path: Path):
             else:
                 # it's the end of markdown metadata
                 return yaml.safe_load("".join(metadata_lines))
+            
+    print(f"failed to load metadata: {path}")
 
 
 def gen_folder_name(post: Path):
