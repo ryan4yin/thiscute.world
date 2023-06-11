@@ -32,14 +32,16 @@
 <h2 id="0-why-nix" class="headerLink">
     <a href="#0-why-nix" class="header-mark"></a>0. Why Nix</h2><p>I heard about the Nix package manager several years ago. It uses the Nix language to describe system configuration, and the Linux distribution built on top of it can roll back to any historical state at any time. Although it sounds impressive, it requires learning a new language and writing code to install packages, I thought it was too troublesome and didn&rsquo;t study it at the time.</p>
 <p>But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.</p>
-<p>The first problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because My old PC also uses EndeavourOS, I directly <code>rsync</code> the old PC&rsquo;s Home directory to the new PC to save time after installation.
-However, this synchronization caused a problem. All functions worked normally, but video playback always stuck. Firefox, Chrome, and MPV would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the Home directory synchronization. After clearing the Home directory, the problem was solved immediately… Later, I spent a long time recovering things from the old PC one by one.</p>
-<p>The second problem is that I recently wanted to try Wayland, so I changed the desktop from i3wm to sway.</p>
-<p>However, because there was little difference between the two and many inconveniences (hidpi, Sway configuration tuning, etc.), I decided to switch back to i3wm. After switching back, GUI programs such as Firefox and Thunar would always get stuck for about a minute after the system started…</p>
-<p>I was too tired to deal with the second problem, after thinking about it carefully, I realized that the root cause was that the system did not have any version control and rollback mechanism, which caused the system to be unable to be restored when problems occurred. And another problem, when installing a new system, I had to manually export the package list from the old machine and then install them on the new machine. So I decided to switch to NixOS.</p>
+<p>The first problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because My old PC also uses EndeavourOS, to save time, I directly <code>rsync</code> the old PC&rsquo;s home directory to the new PC.
+However, this synchronization caused a problem &ndash; All functions worked normally, but video playback always stuck, firefox, chrome, and mpv would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the home directory synchronization. After clearing the home directory, the problem was solved immediately… Later, I spent a long time recovering things from the old PC one by one.</p>
+<p>The second problem is that I recently wanted to give wayland a try, so I changed the compositor from i3 to sway.</p>
+<p>However, because there was little difference between the two and many inconveniences (hidpi, Sway configuration tuning, etc.), I decided to switch back to i3. After switching back, GUI programs such as firefox and thunar would all get stuck for about a minute after the system started…</p>
+<p>I was too tired to deal with the second problem, after thinking about it carefully, I realized that the root cause was that the system did not have any version control and rollback mechanism, which caused the system to be unable to be restored when problems occurred. And another problem, when installing a new system, I had to manually export the package list from the old machine and then install them on the new machine.</p>
+<p>So I decided to switch to NixOS.</p>
 <p>The first step I took was to create a NixOS virtual machine in my homelab, and debug step by step in this virtual machine to migrate my old PC&rsquo;s EndeavourOS i3 configuration to NixOS + Flakes and restore the entire desktop environment.</p>
-<p>Once I had it working on the virtual machine, the rest was easy. I simply backed up my Home directory and software list from my work computer, reinstalled the system as NixOS, <code>git clone</code>d my debugged NixOS configuration, made some adjustments to the disk mounting parameters, and added some extra NixOS configurations for my Nvidia graphics card. Finally, with just a few commands, I deployed the configuration and was able to restore the entire i3 desktop environment and my commonly used software on my fresh NixOS system. It was a truly satisfying moment!</p>
-<p>The rollback capability of NixOS gave me a lot of confidence - I no longer fear breaking the system. So a few days ago, I further migrated to the hyprland desktop, which is indeed much better than i3, and I love its animation effects! (On EndeavourOS before, I wouldn&rsquo;t have dared to make such a switch for the reasons mentioned earlier - it would have been a big hassle if something went wrong with the system.)</p>
+<p>Once I had it working on the virtual machine, the rest was easy. I simply backed up my home directory from my work computer, reinstalled the system as NixOS, <code>rysnc</code> the NixOS configuration from the virtual machine, made some adjustments to the disk mounting parameters, and added some extra configuration for my Nvidia graphics card. Finally, with just a few commands, I deployed the configuration and was able to restore the entire i3 environment and my commonly used software on my fresh NixOS system.
+It was a truly satisfying moment!</p>
+<p>The rollback capability of NixOS gave me a lot of confidence - I no longer fear breaking the system. So a few days ago, I further migrated to the hyprland compositor, which is indeed much better than i3, and I love its animation effects! (On EndeavourOS before, I wouldn&rsquo;t have dared to make such a switch for the reasons mentioned earlier - it would have been a big hassle if something went wrong with the system.)</p>
 <blockquote>
 <p>Note: some friends on V2EX gave feedback that <code>btrfs</code>&rsquo;s snapshot feature can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. <code>btrfs</code> can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs based snapshot tools(e.g. <a href="https://github.com/digint/btrbk" target="_blank" rel="noopener noreferrer">btrbk</a>) are also a good choice. Or if you&rsquo;re still interested in Nix, It is definitely worth learning, as Nix&rsquo;s capabilities are far beyond just system snapshots.</p>
 </blockquote>
@@ -52,9 +54,9 @@ However, this synchronization caused a problem. All functions worked normally, b
 <p>So after studying NixOS and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period time, hope you like it~</p>
 <p>Now that the background information is out of the way, it&rsquo;s time to dive into the world of Nix!</p>
 <h2 id="i-introduction-to-nix" class="headerLink">
-    <a href="#i-introduction-to-nix" class="header-mark"></a>I. Introduction to Nix</h2><p>Nix package manager is a declarative configuration management tool similar to pulumi/terraform/kubernetes which are currently popular in the DevOps field. Users need to declare the expected system state in some configurations, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while pulumi/terraform manages cloud resources.</p>
+    <a href="#i-introduction-to-nix" class="header-mark"></a>I. Introduction to Nix</h2><p>Nix package manager is a declarative configuration management tool similar to pulumi/terraform/kubernetes which are currently popular in the DevOps field. Users need to declare the expected system state in some configuration, and Nix is responsible for achieving that goal. The difference is that Nix manages software packages, while pulumi/terraform manages cloud resources.</p>
 <blockquote>
-<p>To put it simply, &ldquo;declarative configuration&rdquo; means that users only need to declare the results they want. For example, you declares that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don&rsquo;t need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configurations or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway&rsquo;s nix packages are designed properly&hellip;).</p>
+<p>To put it simply, &ldquo;declarative configuration&rdquo; means that users only need to declare the results they want. For example, you declare that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don&rsquo;t need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configuration or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway&rsquo;s nix packages are designed properly&hellip;).</p>
 </blockquote>
 <p>The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as &ldquo;OS as Code&rdquo;, which describes the entire operating system&rsquo;s state using declarative Nix configuration files.</p>
 <p>NixOS&rsquo;s configuration only manages the system-level state, the user&rsquo;s HOME directory is not under its control. Another important community project, <a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>, filled this gap, home-manager is designed to manage user-level packages &amp; HOME directories. <strong>By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained</strong>(ideally).</p>
@@ -66,8 +68,8 @@ However, this synchronization caused a problem. All functions worked normally, b
     <a href="#advantages-of-nix" class="header-mark"></a>Advantages of Nix</h3><ul>
 <li><strong>Declarative configuration, Environment as Code</strong>, can be managed with Git. As long as the configuration files are not lost, the system can be restored to any historical state at any time(ideally).
 <ul>
-<li>Nix lock dependent library versions through a lock file named <code>flake.lock</code>, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.</li>
-<li>Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as <code>flake.nix</code> in Docker, Docker&rsquo;s reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).</li>
+<li>Nix lock dependences&rsquo;s version through a lock file named <code>flake.lock</code>, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.</li>
+<li>Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as <code>flake.lock</code> in Docker, Docker&rsquo;s reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).</li>
 </ul>
 </li>
 <li><strong>Highly convenient system customization capability</strong>
@@ -78,7 +80,7 @@ However, this synchronization caused a problem. All functions worked normally, b
 </li>
 <li><strong>Rollback</strong>: The system can be rolled back to any historical environment at any time, and NixOS even adds all old versions to the boot options by default to ensure that the system can be rolled back at any time even though it crashes. Therefore, NixOS is also considered one of the most stable Linux Systems.</li>
 <li><strong>No dependency conflicts</strong>: Because each software package in Nix has a unique hash, its installation path also includes this hash value, so multiple versions can coexist.</li>
-<li><strong>The community is very active, and there are quite a few third-party projects</strong>. The official package repository, nixpkgs, has many contributors, and many people share their Nix configurations on Github/Gitlab. After browsing through it, the entire ecosystem gives me a sense of excitement in discovering a new continent.</li>
+<li><strong>The community is very active, and there are quite a few third-party projects</strong>. The official package repository, nixpkgs, has many contributors, and many people share their Nix configuration on Github/Gitlab. After browsing through it, the entire ecosystem gives me a sense of excitement in discovering a new continent.</li>
 </ul>
 <figure><img src="./nixos-bootloader.avif"
          alt="All historical versions are listed in the boot options of NixOS. Image from NixOS Discourse - 10074"/><figcaption>
@@ -143,19 +145,19 @@ However, this synchronization caused a problem. All functions worked normally, b
 <h2 id="iv-nixos-flakes-package-repositories" class="headerLink">
     <a href="#iv-nixos-flakes-package-repositories" class="header-mark"></a>IV. NixOS Flakes Package Repositories</h2><p>Similar to Arch Linux, Nix also has official and community software package repositories:</p>
 <ol>
-<li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> is a Git repository containing all Nix packages and NixOS modules/configurations. Its master branch contains the latest Nix packages and NixOS modules/configurations.</li>
+<li><a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> is a Git repository containing all Nix packages and NixOS modules/configuration. Its master branch contains the latest Nix packages and NixOS modules/configuration.</li>
 <li><a href="https://github.com/nix-community/NUR" target="_blank" rel="noopener noreferrer">NUR</a> is similar to Arch Linux&rsquo;s AUR. NUR is a third-party Nix package repository and serves as a supplement to nixpkgs.</li>
 <li>Nix Flakes can also install software packages directly from Git repositories, which can be used to install Flakes packages provided by anyone.</li>
 </ol>
 <h2 id="v-nix-language-basics" class="headerLink">
-    <a href="#v-nix-language-basics" class="header-mark"></a>V. Nix language basics</h2><p>The Nix language is used to declare packages and configurations to be built by Nix, if you want to play NixOS and Nix Flakes and enjoy the many benefits they bring, you must learn the basics of this language first.</p>
+    <a href="#v-nix-language-basics" class="header-mark"></a>V. Nix language basics</h2><p>The Nix language is used to declare packages and configuration to be built by Nix, if you want to play NixOS and Nix Flakes and enjoy the many benefits they bring, you must learn the basics of this language first.</p>
 <p>Nix is a relatively simple functional language, if you already have some programming experience, it should take less than 2 hours to go through Nix lanuage&rsquo;s basics.</p>
 <p>Please read <a href="https://nix.dev/tutorials/first-steps/nix-language" target="_blank" rel="noopener noreferrer"><strong>Nix language basics - nix.dev</strong></a> to get a basic understanding of Nix language now, it&rsquo;s a very good tutorial.</p>
 <h2 id="vi-managing-the-system-declaratively" class="headerLink">
     <a href="#vi-managing-the-system-declaratively" class="header-mark"></a>VI. Managing the system declaratively</h2><blockquote>
 <p><a href="https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution" target="_blank" rel="noopener noreferrer">https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution</a></p>
 </blockquote>
-<p>After learning the basics of the Nix language, we can start using it to configure the NixOS system. The system configuration file for NixOS is located at <code>/etc/nixos/configuration.nix</code>, which contains all the declarative configurations for the system, such as time zone, language, keyboard layout, network, users, file system, boot options, etc.</p>
+<p>After learning the basics of the Nix language, we can start using it to configure the NixOS system. The system configuration file for NixOS is located at <code>/etc/nixos/configuration.nix</code>, which contains all the declarative configuration for the system, such as time zone, language, keyboard layout, network, users, file system, boot options, etc.</p>
 <p>If we want to modify the system state in a reproducible way (which is also the most recommended way), we need to manually edit the <code>/etc/nixos/configuration.nix</code> file, and then execute <code>sudo nixos-rebuild switch</code> to apply the configuration. This command generates a new system environment based on the configuration file, sets the new environment as the default one, and also preserves &amp; added the previous environment into the grub boot options. This ensures we can always roll back to the old environment(even if the new environment fails to start).</p>
 <p>On the other hand, <code>/etc/nixos/configuration.nix</code> is the traditional Nix configuration method, which relies on data sources configured by <code>nix-channel</code> and has no version-locking mechanism, making it difficult to ensure the reproducibility of the system. <strong>A better approach is to use Nix Flakes</strong>, which can ensure the reproducibility of the system and make it easy to manage the configuration.</p>
 <p>Now first, let&rsquo;s learn how to manage the system using the default configuration method of NixOS through <code>/etc/nixos/configuration.nix</code>, and then transition to the more advanced Nix Flakes.</p>
@@ -253,11 +255,11 @@ However, this synchronization caused a problem. All functions worked normally, b
 <ul>
 <li>By searching on Google, such as <code>Chrome NixOS</code>, which will provide NixOS informations related to Chrome. Generally, the NixOS Wiki and the nixpkgs repository source code will be among the top results.</li>
 <li>By searching for keywords in <a href="https://search.nixos.org/options" target="_blank" rel="noopener noreferrer">NixOS Options Search</a>.</li>
-<li>For system-level configurations, relevant documentation can be found in <a href="https://nixos.org/manual/nixos/unstable/index.html#ch-configuration" target="_blank" rel="noopener noreferrer">Configuration - NixOS Manual</a>.</li>
+<li>For system-level configuration, relevant documentation can be found in <a href="https://nixos.org/manual/nixos/unstable/index.html#ch-configuration" target="_blank" rel="noopener noreferrer">Configuration - NixOS Manual</a>.</li>
 <li>By searching for keywords directly in the <a href="https://github.com/NixOS/nixpkgs" target="_blank" rel="noopener noreferrer">nixpkgs</a> repository and reading relevant source code.</li>
 </ul>
 <h3 id="2-enabling-nixos-flakes-support" class="headerLink">
-    <a href="#2-enabling-nixos-flakes-support" class="header-mark"></a>2. Enabling NixOS Flakes Support</h3><p>Compared to the default configuration approach of NixOS, Nix Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to use Nix Flakes to manage system configurations.</p>
+    <a href="#2-enabling-nixos-flakes-support" class="header-mark"></a>2. Enabling NixOS Flakes Support</h3><p>Compared to the default configuration approach of NixOS, Nix Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to use Nix Flakes to manage system configuration.</p>
 <p>However, Nix Flakes is currently an experimental feature and is not yet enabled by default. We need to enable it manually by modifying the <code>/etc/nixos/configuration.nix</code>, example:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -449,7 +451,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">      <span class="s2">&#34;nixos-test&#34;</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">nixosSystem</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">system</span> <span class="o">=</span> <span class="s2">&#34;x86_64-linux&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="c1"># The Nix module system can modularize configurations, improving the maintainability of configurations.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># The Nix module system can modularize configuration, improving the maintainability of configuration.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># Each parameter in the `modules` is a Nix Module, and there is a partial introduction to it in the nixpkgs manual:</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#    &lt;https://nixos.org/manual/nixpkgs/unstable/#module-system-introduction&gt;</span>
@@ -584,7 +586,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">helix</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># omit other configurations......</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># omit other configuration......</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="n">environment</span><span class="o">.</span><span class="n">systemPackages</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="n">git</span>
@@ -595,7 +597,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="s2">&#34;</span><span class="si">${</span><span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="si">}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">helix</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># omit other configurations......</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># omit other configuration......</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -676,8 +678,8 @@ Therefore, to customize the cache image source, we must add the related configur
 </div>
 </div><p>After the modification, execute <code>sudo nixos-rebuild switch</code> to apply the configuration.</p>
 <h3 id="6-install-home-manager" class="headerLink">
-    <a href="#6-install-home-manager" class="header-mark"></a>6. Install home-manager</h3><p>We mentioned earlier that NixOS can only manage system-level configurations, and user-level configurations need to be managed using home-manager.</p>
-<p>According to the official document <a href="https://nix-community.github.io/home-manager/index.htm" target="_blank" rel="noopener noreferrer">Home Manager Manual</a>, in order to install home-manager as a module of NixOS, we need to create <code>/etc/nixos/home.nix</code> first, an example content shown below:</p>
+    <a href="#6-install-home-manager" class="header-mark"></a>6. Install home-manager</h3><p>We mentioned earlier that NixOS can only manage system-level configuration, and user-level configuration need to be managed using home-manager.</p>
+<p>According to the official document <a href="https://nix-community.github.io/home-manager/index.htm" target="_blank" rel="noopener noreferrer">home Manager Manual</a>, in order to install home-manager as a module of NixOS, we need to create <code>/etc/nixos/home.nix</code> first, an example content shown below:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -766,7 +768,7 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="s2">&#34;ryan&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">homeDirectory</span> <span class="o">=</span> <span class="s2">&#34;/home/ryan&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># link the configuration file in current directory to the specified location in Home directory</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># link the configuration file in current directory to the specified location in home directory</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># home.file.&#34;.config/i3/wallpaper.jpg&#34;.source = ./wallpaper.jpg;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># link all files in `./scripts` to `~/.config/i3/scripts`</span>
@@ -823,17 +825,17 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">      <span class="n">selection</span><span class="o">.</span><span class="n">save_to_clipboard</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># This value determines the Home Manager release that your</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># This value determines the home Manager release that your</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># configuration is compatible with. This helps avoid breakage</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># when a new Home Manager release introduces backwards</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># when a new home Manager release introduces backwards</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># incompatible changes.</span>
 </span></span><span class="line"><span class="cl">  <span class="c1">#</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># You can update Home Manager without changing this value. See</span>
-</span></span><span class="line"><span class="cl">  <span class="c1"># the Home Manager release notes for a list of state version</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># You can update home Manager without changing this value. See</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># the home Manager release notes for a list of state version</span>
 </span></span><span class="line"><span class="cl">  <span class="c1"># changes in each release.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">stateVersion</span> <span class="o">=</span> <span class="s2">&#34;22.11&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># Let Home Manager install and manage itself.</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># Let home Manager install and manage itself.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">programs</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -925,10 +927,10 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Then execute <code>sudo nixos-rebuild switch</code> to apply the configuration, and home-manager will be installed automatically.</p>
-<p>After the installation is complete, all user-level programs and configurations can be managed through <code>/etc/nixos/home.nix</code>, and when executing <code>sudo nixos-rebuild switch</code>, the configuration of home-manager will be applied automatically.</p>
+<p>After the installation is complete, all user-level programs and configuration can be managed through <code>/etc/nixos/home.nix</code>, and when executing <code>sudo nixos-rebuild switch</code>, the configuration of home-manager will be applied automatically.</p>
 <p>To find the options of home-manager used in <code>home.nix</code>, use the following methods:</p>
 <ul>
-<li><a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">Home Manager - Appendix A. Configuration Options</a>: A list of all options, it is recommended to search for keywords in it.</li>
+<li><a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">home Manager - Appendix A. Configuration Options</a>: A list of all options, it is recommended to search for keywords in it.</li>
 <li><a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>: Some options are not listed in the official documentation, or the documentation is not clear enough, you can directly search and read the corresponding source code in this home-manager repo.</li>
 </ul>
 <h3 id="7-modular-nixos-configuration" class="headerLink">
@@ -959,20 +961,20 @@ Therefore, to customize the cache image source, we must add the related configur
 <li>See <a href="https://nixos.wiki/wiki/Flakes" target="_blank" rel="noopener noreferrer">Flakes - NixOS Wiki</a> for all options of flake.nix.</li>
 </ul>
 </li>
-<li><code>configuration.nix</code>: Imported as a Nix module in flake.nix, all system-level configurations are currently written in this file.
+<li><code>configuration.nix</code>: Imported as a Nix module in flake.nix, all system-level configuration are currently written in this file.
 <ul>
 <li>See <a href="https://nixos.org/manual/nixos/unstable/index.html#ch-configuration" target="_blank" rel="noopener noreferrer">Configuration - NixOS Manual</a> for all options of configuration.nix.</li>
 </ul>
 </li>
-<li><code>home.nix</code>: Imported by home-manager as the configuration of the user <code>ryan</code> in flake.nix, that is, it contains all the Home Manager configurations of <code>ryan</code>, and is responsible for managing <code>ryan</code>&rsquo;s Home folder.
+<li><code>home.nix</code>: Imported by home-manager as the configuration of the user <code>ryan</code> in flake.nix, that is, it contains all the home Manager configuration of <code>ryan</code>, and is responsible for managing <code>ryan</code>&rsquo;s home folder.
 <ul>
-<li>See <a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">Appendix A. Configuration Options - Home Manager</a> for all options of home.nix.</li>
+<li>See <a href="https://nix-community.github.io/home-manager/options.html" target="_blank" rel="noopener noreferrer">Appendix A. Configuration Options - home Manager</a> for all options of home.nix.</li>
 </ul>
 </li>
 </ul>
-<p>By modifying the above configuration files, you can change the status of the system and the Home directory declaratively.</p>
+<p>By modifying the above configuration files, you can change the status of the system and the home directory declaratively.</p>
 <p>As the configuration increases, it is difficult to maintain the configuration files by relying solely on <code>configuration.nix</code> and <code>home.nix</code>. Therefore, a better solution is to use the module mechanism of Nix to split the configuration files into multiple modules and write them in a classified manner.</p>
-<p><code>imports</code> parameter can accept a list of <code>.nix</code> files, and merge all the configurations in the list into the current attribute set. Note that the word used here is &ldquo;<strong>merge</strong>&rdquo;, which means that <code>imports</code> will NOT simply overwrite the duplicate configuration items, but handle them more reasonably. For example, if I define <code>program.packages = [...]</code> in multiple modules, then <code>imports</code> will merge all <code>program.packages</code> in all modules into one list. Not only lists can be merged correctly, but attribute sets can also be merged correctly. The specific behavior can be explored by yourself.</p>
+<p><code>imports</code> parameter can accept a list of <code>.nix</code> files, and merge all the configuration in the list into the current attribute set. Note that the word used here is &ldquo;<strong>merge</strong>&rdquo;, which means that <code>imports</code> will NOT simply overwrite the duplicate configuration items, but handle them more reasonably. For example, if I define <code>program.packages = [...]</code> in multiple modules, then <code>imports</code> will merge all <code>program.packages</code> in all modules into one list. Not only lists can be merged correctly, but attribute sets can also be merged correctly. The specific behavior can be explored by yourself.</p>
 <blockquote>
 <p>I only found a description of <code>imports</code> in <a href="https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters" target="_blank" rel="noopener noreferrer">nixpkgs-unstable official manual - evalModules parameters</a>: <code>A list of modules. These are merged together to form the final configuration.</code>, you can try to understand it&hellip;</p>
 </blockquote>
@@ -1196,7 +1198,7 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">          <span class="sr">./hosts/nixos-test</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">          <span class="c1"># omit other configurations...</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># omit other configuration...</span>
 </span></span><span class="line"><span class="cl">        <span class="p">];</span>
 </span></span><span class="line"><span class="cl">      <span class="p">};</span>
 </span></span><span class="line"><span class="cl">    <span class="p">};</span>
@@ -1301,7 +1303,24 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#nixos-test
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>Choose whichever you like.</p>
+</div><p>Choose whichever you like. After that, system rollback becomes very simple, just switch to the previous commit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> ~/nixos-config
+</span></span><span class="line"><span class="cl"><span class="c1"># switch to the previous commit</span>
+</span></span><span class="line"><span class="cl">git checkout HEAD^1
+</span></span><span class="line"><span class="cl"><span class="c1"># deploy the flake.nix located in the current directory, and the nixosConfiguration&#39;s name is `nixos-test`</span>
+</span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#nixos-test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>More operations on Git are not described here. Generally speaking, rollback can be done directly through Git. Only when the system crashes completely, you need to restart into bootloader and boot the system from the previous historical version.</p>
 <h3 id="view-and-delete-history" class="headerLink">
     <a href="#view-and-delete-history" class="header-mark"></a>11. View and delete history data</h3><p>As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:</p>
 <div class="highlight"><div class="chroma">
@@ -1339,7 +1358,7 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="vii-usage-of-nix-flakes" class="headerLink">
-    <a href="#vii-usage-of-nix-flakes" class="header-mark"></a>VII. Usage of Nix Flakes</h2><p>Up to now, we have written a lot of Nix Flakes configurations to manage the NixOS system. Here is a brief introduction to the more detailed content of Nix Flakes, as well as commonly used nix flake commands.</p>
+    <a href="#vii-usage-of-nix-flakes" class="header-mark"></a>VII. Usage of Nix Flakes</h2><p>Up to now, we have written a lot of Nix Flakes configuration to manage the NixOS system. Here is a brief introduction to the more detailed content of Nix Flakes, as well as commonly used nix flake commands.</p>
 <h3 id="flake-inputs" class="headerLink">
     <a href="#flake-inputs" class="header-mark"></a>1. Flake 的 inputs</h3><p>the <code>inputs</code> of <code>flake.nix</code> is a attribute set, used to specify the dependencies of the current flake, there are many types of <code>inputs</code>, for example:</p>
 <div class="highlight"><div class="chroma">
@@ -1432,7 +1451,7 @@ Therefore, to customize the cache image source, we must add the related configur
 <li><code>devShells</code> can be used by command <code>nix develop</code>, will be introduced later.</li>
 </ul>
 </li>
-<li>NixOS configurations: named <code>nixosConfiguration</code>
+<li>NixOS configuration: named <code>nixosConfiguration</code>
 <ul>
 <li><code>nixosConfiguration</code> will be used by command <code>nixos-rebuild switch --flake .#&lt;name&gt;</code></li>
 </ul>
@@ -1610,7 +1629,7 @@ Therefore, to customize the cache image source, we must add the related configur
     <a href="#viii-nixpkgss-advanced-usage" class="header-mark"></a>VIII. Nixpkgs&rsquo;s Advanced Usage</h2><p><code>callPackage</code>, <code>Overriding</code>, and <code>Overlays</code> are the techniques occasionally used when using Nix to customize the build method of Nix packages.</p>
 <p>We know that many programs have a large number of build parameters that need to be configured, and different users may want to use different build parameters. This is where <code>Overriding</code> and <code>Overlays</code> come in handy. Let me give you a few examples I have encountered:</p>
 <ol>
-<li><a href="https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix" target="_blank" rel="noopener noreferrer"><code>fcitx5-rime.nix</code></a>: By default, <code>rimeDataPkgs</code> for <code>fcitx5-rime</code> uses the <code>rime-data</code> package, but this parameter can be customized using <code>override</code> to load custom rime configurations (such as loading the Xiaohe keyboard input method configuration).</li>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix" target="_blank" rel="noopener noreferrer"><code>fcitx5-rime.nix</code></a>: By default, <code>rimeDataPkgs</code> for <code>fcitx5-rime</code> uses the <code>rime-data</code> package, but this parameter can be customized using <code>override</code> to load custom rime configuration (such as loading the Xiaohe keyboard input method configuration).</li>
 <li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix" target="_blank" rel="noopener noreferrer"><code>vscode/with-extensions.nix</code></a>: This package for VS Code can also be customized by overriding the value of the <code>vscodeExtensions</code> parameter to install custom plugins.
 <ul>
 <li><a href="https://github.com/nix-community/nix-vscode-extensions" target="_blank" rel="noopener noreferrer"><code>nix-vscode-extensions</code></a>: This is a vscode plugin manager implemented using this parameter.</li>
@@ -1659,16 +1678,16 @@ Therefore, to customize the cache image source, we must add the related configur
 <p>The <code>override</code> we introduced above will generate a new Derivation, which does not affect the original Derivation in <code>pkgs</code>, and is only suitable for use as a local parameter,
 if you need to override a Derivation that is also depended on by other Nix packages, then other Nix packages will still use the original Derivation.</p>
 <p>To solve this problem, Nix provides the ability to use <code>overlays</code>. Simply put, <code>overlays</code> can globally modify the Derivation in <code>pkgs</code>.</p>
-<p>In the classic Nix environment, Nix automatically applies all <code>overlays</code> configurations under the paths <code>~/.config/nixpkgs/overlays.nix</code> <code>~/.config/nixpkgs/overlays/*.nix</code>,
+<p>In the classic Nix environment, Nix automatically applies all <code>overlays</code> configuration under the paths <code>~/.config/nixpkgs/overlays.nix</code> <code>~/.config/nixpkgs/overlays/*.nix</code>,
 but in Flakes, in order to ensure the reproducibility of the system, it cannot depend on any configuration outside the Git repository, so this classic method cannot be used now.</p>
-<p>When using Nix Flakes to write NixOS configuration, Home Manager and NixOS both provide the <code>nixpkgs.overlays</code> option to define <code>overlays</code>, related documentation:</p>
+<p>When using Nix Flakes to write NixOS configuration, home Manager and NixOS both provide the <code>nixpkgs.overlays</code> option to define <code>overlays</code>, related documentation:</p>
 <ul>
 <li><a href="https://nix-community.github.io/home-manager/options.html#opt-nixpkgs.overlays" target="_blank" rel="noopener noreferrer">home-manager docs - <code>nixpkgs.overlays</code></a></li>
 <li><a href="https://github.com/NixOS/nixpkgs/blob/30d7dd7e7f2cba9c105a6906ae2c9ed419e02f17/nixos/modules/misc/nixpkgs.nix#L169" target="_blank" rel="noopener noreferrer">nixpkgs source code - <code>nixpkgs.overlays</code></a></li>
 </ul>
-<p>For example, the following content is a Module that loads Overlays, which can be used as either a Home Manager Module or a NixOS Module, because the two definitions are exactly the same:</p>
+<p>For example, the following content is a Module that loads Overlays, which can be used as either a home Manager Module or a NixOS Module, because the two definitions are exactly the same:</p>
 <blockquote>
-<p>Home Manager is an external component after all, and most people use the unstable branch of Home Manager &amp; nixpkgs, which sometimes causes problems with Home Manager Module, so it is recommended to import <code>overlays</code> in a NixOS Module.</p>
+<p>home Manager is an external component after all, and most people use the unstable branch of home Manager &amp; nixpkgs, which sometimes causes problems with home Manager Module, so it is recommended to import <code>overlays</code> in a NixOS Module.</p>
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1750,11 +1769,11 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>refer to this example to write your own overlays, import the configuration as a NixOS Module or a Home Manager Module, and then deploy it to see the effect.</p>
+</div><p>refer to this example to write your own overlays, import the configuration as a NixOS Module or a home Manager Module, and then deploy it to see the effect.</p>
 <h4 id="modular-overlays" class="headerLink">
     <a href="#modular-overlays" class="header-mark"></a>Modular overlays</h4><p>The example above shows how to write overlays, but all overlays are written in a single nix file, which is a bit difficult to maintain.</p>
 <p>To resolve this problem,here is a best practice of how to manage overlays in a modular way.</p>
-<p>First, create an <code>overlays</code> folder in the Git repository to store all overlays configurations, and then create <code>overlays/default.nix</code>, whose content is as follows:</p>
+<p>First, create an <code>overlays</code> folder in the Git repository to store all overlays configuration, and then create <code>overlays/default.nix</code>, whose content is as follows:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1777,7 +1796,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="nb">builtins</span><span class="o">.</span><span class="n">attrNames</span> <span class="p">(</span><span class="nb">builtins</span><span class="o">.</span><span class="n">readDir</span> <span class="sr">./.</span><span class="p">)))</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>Then you can write all overlays configurations in the <code>overlays</code> folder, an example configuration <code>overlays/fcitx5/default.nix</code> is as follows:</p>
+</div><p>Then you can write all overlays configuration in the <code>overlays</code> folder, an example configuration <code>overlays/fcitx5/default.nix</code> is as follows:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1891,7 +1910,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>According to the method above, it is very convenient to modularize all overlays configurations. Taking my configuration as an example, the structure of the <code>overlays</code> folder is roughly as follows:</p>
+</div><p>According to the method above, it is very convenient to modularize all overlays configuration. Taking my configuration as an example, the structure of the <code>overlays</code> folder is roughly as follows:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1

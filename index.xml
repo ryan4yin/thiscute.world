@@ -2249,7 +2249,24 @@
 </span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#nixos-test
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>两种方式都可以，看个人喜好。</p>
+</div><p>两种方式都可以，看个人喜好。搞定之后，系统的回滚也变得非常简单，只需要切换到上一个 commit 即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> ~/nixos-config
+</span></span><span class="line"><span class="cl"><span class="c1"># 回滚到上一个 commit</span>
+</span></span><span class="line"><span class="cl">git checkout HEAD^1
+</span></span><span class="line"><span class="cl"><span class="c1"># 部署</span>
+</span></span><span class="line"><span class="cl">sudo nixos-rebuild switch --flake .#nixos-test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Git 的更多操作这里就不介绍了，总之一般情况下的回滚都能直接通过 Git 完成，只在系统完全崩溃的情况下，才需要通过重启进入 grub，从上一个历史版本启动系统。</p>
 <h3 id="view-and-delete-history" class="headerLink">
     <a href="#view-and-delete-history" class="header-mark"></a>11. 查看与清理历史数据</h3><p>如前所述，NixOS 的每次部署都会生成一个新的版本，所有版本都会被添加到系统启动项中，除了重启电脑外，我们也可以通过如下命令查询当前可用的所有历史版本：</p>
 <div class="highlight"><div class="chroma">
