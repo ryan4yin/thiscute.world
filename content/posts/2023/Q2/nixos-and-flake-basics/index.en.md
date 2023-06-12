@@ -888,7 +888,7 @@ nix-env -qa
 
 Up to now, we have written a lot of Nix Flakes configuration to manage the NixOS system. Here is a brief introduction to the more detailed content of Nix Flakes, as well as commonly used nix flake commands.
 
-### 1. Flake 的 inputs {#flake-inputs}
+### 1. Flake inputs {#flake-inputs}
 
 the `inputs` of `flake.nix` is a attribute set, used to specify the dependencies of the current flake, there are many types of `inputs`, for example:
 
