@@ -32,22 +32,37 @@ caddy file-server --root public/ --listen 0.0.0.0:8881
 
 Now edit the newly created file under `content/posts`, and then you can view the live changes in the browser <http://localhost:1313/>
 
-
 ## Github Action
 
-Push updates to `main` branch will trigger a github action to deploy the updates automatically.
+Push updates to `main` branch will trigger a GitHub action to deploy the updates automatically.
 
 The action workflow will:
 
 - Fetch Posts Trending Data from Google Analytics([website_statistics.json](./data/website_statistics.json)).
-- Deploy to Github Pages(branch `gh-page`).
+- Deploy to GitHub Pages(branch `gh-page`).
 - Push Argolia Index for Search.
 
 See [.github/workflows/](/.github/workflows/) for details.
+
+## Process Posts
+
+on NixOS, cd into the project root directory will automatically enter a nix devShell with all the dependencies installed,
+this is done by `direnv`.
+
+if you do not have `direnv` installed, you can also manually enter the devShell by running:
+
+```shell
+nix develop
+```
+
+then process posts by running:
+
+```shell
+python3 process_posts.py
+```
 
 ## Related Repositories
 
 - Serverless Comment System
   - [ryan4yin/waline-comment-api](https://github.com/ryan4yin/waline-comment-api)
   - [ryan4yin/waline-comments-backup](https://github.com/ryan4yin/waline-comments-backup)
-
