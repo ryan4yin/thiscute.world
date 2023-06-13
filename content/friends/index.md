@@ -26,7 +26,7 @@ comment:
 
 ## 交换友链
 
-{{< admonition type=warning>}}
+{{< admonition type=warning >}}
 由于友链数量较多，目前已停止接受友链申请，谢谢！
 {{< /admonition >}}
 
