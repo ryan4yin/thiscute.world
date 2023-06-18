@@ -30,6 +30,10 @@ comment:
 - 看 [2023 Linux 上海聊天会 - LitterHouge](https://www.bilibili.com/video/BV1FP41117oA/)
   - 一开始只觉得有趣，后面发现我在整的 LP4A 编译，底层用的 revyos，咋视频里有一位昵称就是 revy 呢？然后一查发现都是大佬，revyos 的主要开发者就是视频里这位，膜拜了...
   - [revy](https://github.com/Rabenda) 在各种平台上都用的一个涩涩的头像，结果现实中却是个好胖的大叔，这种反差真的太有意思了 emmmm
+  - 另外视频里很健谈的 [xen0n](https://github.com/xen0n) 是 qiniu 的佬，同时也是 Linux loongarch 架构的 reviewer.
+    - 但是看他的博客跟视频中的表现，确实给 loongarch 社区做贡献对他的本职工作产生了很大负面影响，而且 2022 年还自付了 5 位数去国际会议上做 loongarch 的宣讲。
+      - 从这个方面讲做开源确实是需要付出很多，跟收获的影响力相比，这也并不算微不足道。
+      - 尤其是他博客中还提到，给开源贡献意味着在 PR 被合并之前，你会有很大部分精力被消耗在跟 reviewer 的沟通上，你需要注意及时跟进 upstream 更新、及时回复 reviewer 的反馈，长时间去做这种工作，就相当于是在打白工了。本职工作不可避免的会受到影响。
 - 看上面 huoge 的视频，通过 B 站推荐意外跳到了 TheCW 的视频里，发现宝藏 UP 主一枚，还加了他的 discord 闲聊群。
   - 上个月水了篇 yabai 的文章，前几天就有网友评论问我是不是 B 站上的 TheCW（因为跟我域名 thiscute.world 有点像），结果今天就发现发现 TheCW 5 月份也出了个介绍 yabai 的视频，确实有那么点缘分在 emmm
 
