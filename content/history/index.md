@@ -21,6 +21,18 @@ comment:
 > Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+## 2023-06-17 - 2023-06-18
+
+- 在家整了两天的 [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)，试了很多方案，还是没能成功编译出 rootfs...
+  - 在 [LicheePi 4A —— 这个小板有点意思（第一部分）](https://litterhougelangley.club/blog/2023/05/27/licheepi-4a-%e8%bf%99%e4%b8%aa%e5%b0%8f%e6%9d%bf%e6%9c%89%e7%82%b9%e6%84%8f%e6%80%9d%ef%bc%88%e7%ac%ac%e4%b8%80%e9%83%a8%e5%88%86%ef%bc%89/) 上留了言，看看大佬是否有时间给我提供些帮助。
+  - 编译 NixOS 时发现 RISC-V 架构下基本没有缓存可用，为了解决构建速度问题，意外研究了一波 Nix 的分布式构建，组建了一个 NixOS 分布式构建集群，我得说真的很爽。
+  - 还给集群搞了点有意思的「艺名」：[nix-config/hosts/idols](https://github.com/ryan4yin/nix-config/tree/main/hosts/idols)
+- 看 [2023 Linux 上海聊天会 - LitterHouge](https://www.bilibili.com/video/BV1FP41117oA/)
+  - 一开始只觉得有趣，后面发现我在整的 LP4A 编译，底层用的 revyos，咋视频里有一位昵称就是 revy 呢？然后一查发现都是大佬，revyos 的主要开发者就是视频里这位，膜拜了...
+  - [revy](https://github.com/Rabenda) 在各种平台上都用的一个涩涩的头像，结果现实中却是个好胖的大叔，这种反差真的太有意思了 emmmm
+- 看上面 huoge 的视频，通过 B 站推荐意外跳到了 TheCW 的视频里，发现宝藏 UP 主一枚，还加了他的 discord 闲聊群。
+  - 上个月水了篇 yabai 的文章，前几天就有网友评论问我是不是 B 站上的 TheCW（因为跟我域名 thiscute.world 有点像），结果今天就发现发现 TheCW 5 月份也出了个介绍 yabai 的视频，确实有那么点缘分在 emmm
+
 ## 2023-06-15
 
 - 学习了 Linux 的各种安全技术
