@@ -928,7 +928,6 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
     hugo # static site generator
     glow # markdown previewer in terminal
 
-    # 一些我常用的命令行工具
     btop  # replacement of htop/nmon
     iotop # io monitoring
     iftop # network monitoring
