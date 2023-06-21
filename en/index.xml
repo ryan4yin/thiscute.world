@@ -5,26 +5,31 @@
 </blockquote>
 <h2 id="article-history" class="headerLink">
     <a href="#article-history" class="header-mark"></a>Article History</h2><ul>
+<li>2023/6/21
+<ul>
+<li>Add some details about the usage of <code>callPackage</code>, <code>override</code> and <code>overlays</code> in section <code>VIII. Advanced Usage of Nixpkgs</code>.</li>
+</ul>
+</li>
 <li>2023/6/6
 <ul>
-<li>add examples of flake&rsquo;s inputs &amp; outputs into section <code>VII. Usage of Nix Flakes</code></li>
+<li>Add examples of flake&rsquo;s inputs &amp; outputs into section <code>VII. Usage of Nix Flakes</code></li>
 </ul>
 </li>
 <li>2023/6/4
 <ul>
-<li>replace <code>nix-env --list-generations</code> by <code>nix profile history</code></li>
-<li>replace <code>nix-collect-garbage</code> by <code>nix store gc</code></li>
+<li>Replace <code>nix-env --list-generations</code> by <code>nix profile history</code></li>
+<li>Replace <code>nix-collect-garbage</code> by <code>nix store gc</code></li>
 </ul>
 </li>
 <li>2023/6/1
 <ul>
-<li>update VI-9 according to <a href="https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347" target="_blank" rel="noopener noreferrer">1000 instances of nixpkgs</a>, create all nixpkgs instances globally in <code>flake.nix</code> to avoid this problem.</li>
+<li>Update VI-9 according to <a href="https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347" target="_blank" rel="noopener noreferrer">1000 instances of nixpkgs</a>, create all nixpkgs instances globally in <code>flake.nix</code> to avoid this problem.</li>
 </ul>
 </li>
 <li>2023/5/21
 <ul>
 <li>Complete the section &ldquo;Overlays&rdquo;.</li>
-<li>remove the section &ldquo;IX. Nix Packaging&rdquo;, which may be moved to a separate article in the future.</li>
+<li>Remove the section &ldquo;IX. Nix Packaging&rdquo;, which may be moved to a separate article in the future.</li>
 <li>Add an example of installing programs via flakes at section VI-4.</li>
 </ul>
 </li>
@@ -1639,8 +1644,21 @@ Therefore, to customize the cache image source, we must add the related configur
 <li>&hellip;</li>
 </ol>
 <p>In short, in order to customize the build parameters of Nix packages of this type, we need to use <code>Overriding</code> or <code>Overlays</code>.</p>
+<h3 id="callpackage" class="headerLink">
+    <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><p>前面我们介绍并大量使用了 <code>import xxx.nix</code> 来导入 Nix 文件，这种语法只是单纯地返回该文件的执行结果，不会对该结果进行进一步处理。
+比如说 <code>xxx.nix</code> 的内容是形如 <code>{...}: {...}</code>，那么 <code>import xxx.nix</code> 的结果就是该文件中定义的这个函数。</p>
+<p><code>pkgs.callPackage</code> 也是用来导入 Nix 文件的，它的语法是 <code>pkgs.callPackage xxx.nix { ... }</code>. 但跟 <code>import</code> 不同的是，它导入的 nix 文件内容必须是一个 Derivation 或者返回 Derivation 的函数，它的执行结果一定是一个 Derivation，也就是一个软件包。</p>
+<p>那可以作为 <code>pkgs.callPackge</code> 参数的 nix 文件具体长啥样呢，可以去看看我们前面举例过的 <code>hello.nix</code> <code>fcitx5-rime.nix</code> <code>vscode/with-extensions.nix</code> <code>firefox/common.nix</code>，它们都可以被 <code>pkgs.callPackage</code> 导入。</p>
+<p>当 <code>pkgs.callPackge xxx.nix {...}</code> 中的 <code>xxx.nix</code>，其内容为一个函数时（绝大多数 nix 包都是如此），执行流程如下：</p>
+<ol>
+<li><code>pkgs.callPackge xxx.nix {...}</code> 会先 <code>import xxx.nix</code>，得到其中定义的函数，该函数的参数通常会有 <code>lib</code>, <code>stdenv</code>, <code>fetchurl</code> 等参数，以及一些自定义参数，自定义参数通常都有默认值。</li>
+<li>接着 <code>pkgs.callPackge</code> 会首先从当前环境中查找名称匹配的值，作为将要传递给前述函数的参数。像 <code>lib</code> <code>stdenv</code> <code>fetchurl</code> 这些都是 nixpkgs 中的函数，在这一步就会查找到它们。</li>
+<li>接着 <code>pkgs.callPackge</code> 会将其第二个参数 <code>{...}</code> 与前一步得到的参数集（attribute set）进行合并，得到一个新的参数列表，然后将其传递给该函数并执行。</li>
+<li>函数执行结果是一个 Derivation，也就是一个软件包。</li>
+</ol>
+<p>这个函数比较常见的用途是用来导入一些自定义的 Nix 包，比如说我们自己写了一个 <code>hello.nix</code>，然后就可以在任意 Nix Module 中使用 <code>pkgs.callPackage ./hello.nix {}</code> 来导入并使用它。</p>
 <h3 id="overriding" class="headerLink">
-    <a href="#overriding" class="header-mark"></a>Overriding</h3><blockquote>
+    <a href="#overriding" class="header-mark"></a>2. Overriding</h3><blockquote>
 <p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overrides" target="_blank" rel="noopener noreferrer">Chapter 4. Overriding - nixpkgs Manual</a></p>
 </blockquote>
 <p>Simply put, all Nix packages in nixpkgs can be customized with <code>&lt;pkg&gt;.override {}</code> to define some build parameters, which returns a new Derivation that uses custom parameters. For example:</p>
@@ -1657,7 +1675,123 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>The result of executing the above Nix expression is a new Derivation, where the <code>rimeDataPkgs</code> parameter is overridden as <code>[./rime-data-flypy]</code>, while other parameters retain their original values.</p>
-<p>In addition to overriding parameters, you can also override the attributes of a Derivation(condiftion: it&rsquo;s built using <code>stdenv.mkDerivation</code>) by using <code>overrideAttrs</code>. For example:</p>
+<p>How to know which parameters can be overridden for <code>fcitx5-rime</code>? There are several ways:</p>
+<ol>
+<li>Try to find the source code of the package in the nixpkgs repository on GitHub, such as <a href="https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix" target="_blank" rel="noopener noreferrer">fcitx5-rime.nix</a>
+<ol>
+<li>Note: Be sure to select the correct branch, for example, if you are using the nixos-unstable branch, you need to find it in the nixos-unstable branch.</li>
+</ol>
+</li>
+<li>Check by using <code>nix repl '&lt;nixpkgs&gt;'</code>, then enter <code>:e pkgs.fcitx5-rime</code>, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.</li>
+</ol>
+<p>Through the above two methods, you can see that the <code>fcitx5-rime</code> package has the following input parameters, which can all be modified by <code>override</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">lib</span><span class="o">,</span> <span class="n">stdenv</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">fetchFromGitHub</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">pkg-config</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">cmake</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">extra-cmake-modules</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">gettext</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">fcitx5</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">librime</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">rime-data</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">symlinkJoin</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">rimeDataPkgs</span> <span class="o">?</span> <span class="p">[</span> <span class="n">rime-data</span> <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">stdenv</span><span class="o">.</span><span class="n">mkDerivation</span> <span class="k">rec</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Instead of override the function&rsquo;s parameters, we can also override the attributes of the Derivation created by <code>stdenv.mkDerivation</code>.</p>
+<p>Take <code>pkgs.hello</code> as an example, first check the source code of this package through the above method:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/misc/hello/default.nix</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">callPackage</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">lib</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">stdenv</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">fetchurl</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">nixos</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">testers</span>
+</span></span><span class="line"><span class="cl"><span class="o">,</span> <span class="n">hello</span>
+</span></span><span class="line"><span class="cl"><span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">stdenv</span><span class="o">.</span><span class="n">mkDerivation</span> <span class="p">(</span><span class="n">finalAttrs</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pname</span> <span class="o">=</span> <span class="s2">&#34;hello&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">version</span> <span class="o">=</span> <span class="s2">&#34;2.12.1&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">src</span> <span class="o">=</span> <span class="n">fetchurl</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;mirror://gnu/hello/hello-</span><span class="si">${</span><span class="n">finalAttrs</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s2">.tar.gz&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sha256</span> <span class="o">=</span> <span class="s2">&#34;sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">doCheck</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The <code>pname</code> <code>version</code> <code>src</code> <code>doCheck</code> attributes show above can all be overridden by using <code>overrideAttrs</code>, for example:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="n">helloWithDebug</span> <span class="err">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">hello</span><span class="o">.</span><span class="n">overrideAttrs</span> <span class="p">(</span><span class="n">finalAttrs</span><span class="p">:</span> <span class="n">previousAttrs</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">doCheck</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Here we use <code>overrideAttrs</code> to override the attribute <code>doCheck</code> of <code>hello</code>,  while other attributes retain their original values.</p>
+<p>Some default attributes defined in <code>stdenv.mkDerivation</code> can also be overridden by <code>overrideAttrs</code>, for example:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1670,9 +1804,10 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl"><span class="p">});</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>In this example, <code>helloWithDebug</code> is a new Derivation, where the <code>separateDebugInfo</code> parameter is overridden as <code>true</code>, while other parameters retain their original values.</p>
-<h3 id="overlays" class="headerLink">
-    <a href="#overlays" class="header-mark"></a>Overlays</h3><blockquote>
+</div><p>The attribute we override here, <code>separateDebugInfo</code>, is not defined in the source code of <code>hello</code>, but it is defined in <code>stdenv.mkDerivation</code>.
+We can check the source code of <code>stdenv.mkDerivation</code> to see all the attributes defined in it, by using <code>nix repl '&lt;nixpkgs&gt;'</code> and then enter <code>:e stdenv.mkDerivation</code>.</p>
+<h3 id="3-overlays" class="headerLink">
+    <a href="#3-overlays" class="header-mark"></a>3. Overlays</h3><blockquote>
 <p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overlays" target="_blank" rel="noopener noreferrer">Chapter 3. Overlays - nixpkgs Manual</a></p>
 </blockquote>
 <p>The <code>override</code> we introduced above will generate a new Derivation, which does not affect the original Derivation in <code>pkgs</code>, and is only suitable for use as a local parameter,
@@ -1728,6 +1863,8 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span><span class="lnt">35
 </span><span class="lnt">36
 </span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
@@ -1764,6 +1901,8 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl">    <span class="p">})</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># overlay3 - define overlays in other files</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># here the content of overlay3.nix is the same as above:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#   `final: prev: { xxx = prev.xxx.override { ... }; }`</span>
 </span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="kn">import</span> <span class="sr">./overlays/overlay3.nix</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
