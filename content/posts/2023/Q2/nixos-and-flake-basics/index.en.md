@@ -187,9 +187,9 @@ Now first, let's learn how to manage NixOS through the classic method, `/etc/nix
 
 ### 1. Configuring the system using `/etc/nixos/configuration.nix`
 
-As mentioned earlier, this is the traditional Nix configuration method and also the default configuration method currently used by NixOS. It relies on data sources configured by `nix-channel` and has no version locking mechanism, making it difficult to ensure the reproducibility of the system.
+As mentioned earlier, this is the classic method to configured NixOS, and also the default method currently used by NixOS. It relies on data sources configured by `nix-channel` and has no version-locking mechanism, making it difficult to ensure the reproducibility of the system.
 
-For example, to enable ssh and add a user "ryan," simply add the following configuration to `/etc/nixos/configuration.nix`:
+For example, to enable ssh and add a user "ryan", simply add the following content into `/etc/nixos/configuration.nix`:
 
 ```nix
 # Edit this configuration file to define what should be installed on
@@ -233,24 +233,24 @@ For example, to enable ssh and add a user "ryan," simply add the following confi
 }
 ```
 
-in the configuration above, we enabled the openssh service, added an ssh public key for the user ryan, and disabled password login.
+In the configuration above, we enabled the openssh service, added an ssh public key for the user ryan, and disabled password login.
 
-Now, running `sudo nixos-rebuild switch` deploys the modified configuration, and then we can login to the system using ssh with ssh keys.
+Now, running `sudo nixos-rebuild switch` to deploy the modified configuration, and then we can login to the system using ssh with the ssh keys we configured.
 
-This is the default declarative system configuration in NixOS, where any reproducible changes to the system can be made by modifying `/etc/nixos/configuration.nix` and deploying the changes by running `sudo nixos-rebuild switch`.
+Any reproducible changes to the system can be made by modifying `/etc/nixos/configuration.nix` and deploying the changes by running `sudo nixos-rebuild switch`.
 
 All configuration options in `/etc/nixos/configuration.nix` can be found in the following places:
 
-- By searching on Google, such as `Chrome NixOS`, which will provide NixOS informations related to Chrome. Generally, the NixOS Wiki and the nixpkgs repository source code will be among the top results.
+- By searching on Google, such as `Chrome NixOS`, which will provide NixOS informations related to Chrome. Generally, the NixOS Wiki and the source code of Nixpkgs will be among the top results.
 - By searching for keywords in [NixOS Options Search](https://search.nixos.org/options).
 - For system-level configuration, relevant documentation can be found in [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration).
-- By searching for keywords directly in the [nixpkgs](https://github.com/NixOS/nixpkgs) repository and reading relevant source code.
+- By searching for keywords directly in the source code of [nixpkgs](https://github.com/NixOS/nixpkgs) on GitHub.
 
 ### 2. Enabling NixOS Flakes Support
 
-Compared to the default configuration approach of NixOS, Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to use Flakes to manage system configuration.
+Compared to the default configuration approach of NixOS, Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to manage NixOS with Flakes.
 
-However, Flakes is currently an experimental feature and is not yet enabled by default. We need to enable it manually by modifying `/etc/nixos/configuration.nix`, example:
+However, as Flakes is still an experimental feature currently, it's not enabled by default yet, we need to enable it manually by modifying `/etc/nixos/configuration.nix`, example as follows:
 
 ```nix
 # Edit this configuration file to define what should be installed on
@@ -266,11 +266,11 @@ However, Flakes is currently an experimental feature and is not yet enabled by d
 
   # omit the previous configuration.......
 
-  # enable Flakes and the new nix-command command line tool
+  # enable Flakes and the new command line tool
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
-    # Flakes uses the git command to pull dependencies from data sources, so git must be installed first
+    # Flakes uses git to pull dependencies from data sources, so git must be installed first
     git
     vim
     wget
@@ -282,27 +282,29 @@ However, Flakes is currently an experimental feature and is not yet enabled by d
 }
 ```
 
-Now run `sudo nixos-rebuild switch` to apply the changes, and then you can write the configuration of NixOS with Flakes.
+Now run `sudo nixos-rebuild switch` to apply the changes, and then you can write the configuration for NixOS with Flakes.
 
 ### 3. Switching System Configuration to `flake.nix`
 
-After enabling the Flakes feature, the `sudo nixos-rebuild switch` command will prioritize reading `/etc/nixos/flake.nix`. If not found, it will fallback to `/etc/nixos/configuration.nix`.
+After enabling the feature `flakes`, when you run `sudo nixos-rebuild switch`, it will try to read`/etc/nixos/flake.nix` first, if not found, it will fallback to `/etc/nixos/configuration.nix`.
 
-Now let's use the official flake templates provided by Nix to learn how to write flakes, check which templates are available using the following command:
+Now to learn how to write a flake, let's use the official flake templates provided by Nix. First, let's check which templates are available:
 
 ```bash
 nix flake show templates
 ```
 
-One of the templates, `templates#full`, shows all possible uses., take a look at its contents:
+The templates `templates#full` contains all possible usecases, let's take a look at its contents:
 
 ```bash
 nix flake init -t templates#full
 cat flake.nix
 ```
 
-Now create a file `/etc/nixos/flake.nix` and write the configuration content according to the template above.
-All system modifications will be taken over by Flakes from now on. An example configuration is shown below:
+After reading the example above, let's create a file `/etc/nixos/flake.nix`, and write its content according to what we read before.
+All system modifications will be taken over by Flakes from now on.
+
+An example of `/etc/nixos/flake.nix` is as follows:
 
 ```nix
 {
@@ -375,17 +377,17 @@ All system modifications will be taken over by Flakes from now on. An example co
 }
 ```
 
-Here we define a NixOS system called `nixos-test`, whose configuration file is `./configuration.nix`, which is our previous configuration file, so we can still use the old configuration.
+Here we defined a NixOS system called `nixos-test`, whose configuration file is `./configuration.nix`, which is the classic configuration we modified before, so we can still make use of this classic configuration.
 
-Now execute the `sudo nixos-rebuild switch` command to apply the configuration, and there should be no change to the system, because we just switch to Flakes, and the actual configuration content is the same as before.
+Now run `sudo nixos-rebuild switch` to apply the configuration, and there should be no changes, because we just switch to Flakes, and the actual configuration content is the same as before.
 
 ### 4. Manage system software through Flakes
 
-After the switch, we can manage the system through Flakes. The most common requirement for managing a system is to install software. We have seen how to install packages in `pkgs` through `environment.systemPackages` before, and these packages are all from the official nixpkgs repository.
+After the switch, we can now manage the system through Flakes. The most common requirement for managing a system is to install softwares. We have seen how to install packages through `environment.systemPackages` before, and these packages are all from the official nixpkgs repository.
 
-Now let's learn how to install packages from other sources through Flakes. This is much more flexible than installing nixpkgs directly. The most obvious benefit is that you can easily set the version of the software.
+Now let's learn how to install packages from other sources through Flakes. This is much more flexible than installing from nixpkgs directly. The most obvious benefit is that you can easily set the version of the software.
 
-Use [helix](https://github.com/helix-editor/helix) editor as an example, we first need to add the helix input data source in `flake.nix`:
+Use [helix](https://github.com/helix-editor/helix) editor as an example, first we need to add the helix as an input into `flake.nix`:
 
 ```nix
 {
@@ -396,7 +398,7 @@ Use [helix](https://github.com/helix-editor/helix) editor as an example, we firs
   inputs = {
     # ......
 
-    # helix editor, use tag 23.05
+    # helix editor, use the tag 23.05
     helix.url = "github:helix-editor/helix/23.05"
   };
 
@@ -417,7 +419,7 @@ Use [helix](https://github.com/helix-editor/helix) editor as an example, we firs
 }
 ```
 
-Then udpate `configuration.nix` to install `helix` from flake input:
+Then udpate `configuration.nix` to install `helix` from the input `helix`:
 
 ```nix
 # Edit this configuration file to define what should be installed on
@@ -437,7 +439,7 @@ Then udpate `configuration.nix` to install `helix` from flake input:
     wget
     curl
 
-    # install helix from flake input `helix`
+    # install helix from the input `helix`
     helix."${pkgs.system}".packages.helix
   ];
 
@@ -445,14 +447,15 @@ Then udpate `configuration.nix` to install `helix` from flake input:
 }
 ```
 
-Now deploy the changes with `sudo nixos-rebuild switch`, and the helix editor will be installed. You can test it with the command `helix`.
+Now deploy the changes by `sudo nixos-rebuild switch`, and then we can start the helix editor by `helix` command.
 
 ### 5. Add Custom Cache Mirror
 
 To speed up package building, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
 
-In the old NixOS configuration, other cache sources can be added through `nix-channel` command, but Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its build results are not affected by the environment(environment independent).
-Therefore, to customize the cache image source, we must add the related configuration in `flake.nix` by using the parameter `nixConfig`. The example is as follows:
+With the NixOS's classic configuration method, other cache sources can be added by using `nix-channel`, but Flakes avoids using any system-level configuration and environment variables to ensure that its build results are not affected by the environment(so the build results are reproducible).
+
+Therefore, to customize the cache source, we must add the related configuration in `flake.nix` by using the parameter `nixConfig`. An example is as follows:
 
 ```nix
 {
@@ -490,13 +493,13 @@ Therefore, to customize the cache image source, we must add the related configur
 
 ```
 
-After the modification, execute `sudo nixos-rebuild switch` to apply the configuration.
+After the modification, run `sudo nixos-rebuild switch` to apply the updates.
 
 ### 6. Install home-manager
 
-We mentioned earlier that NixOS can only manage system-level configuration, and user-level configuration need to be managed using home-manager.
+As we mentioned earlier, NixOS can only manage system-level configuration, to manage the Home directory(user-level configuration), we need to install home-manager.
 
-According to the official document [home Manager Manual](https://nix-community.github.io/home-manager/index.htm), in order to install home-manager as a module of NixOS, we need to create `/etc/nixos/home.nix` first, an example content shown below:
+According to the official document [Home Manager Manual](https://nix-community.github.io/home-manager/index.htm), in order to install home-manager as a module of NixOS, we need to create `/etc/nixos/home.nix` first, an example content shown below:
 
 ```nix
 { config, pkgs, ... }:
@@ -614,7 +617,7 @@ According to the official document [home Manager Manual](https://nix-community.g
     };
   };
 
-  # alacritty 终端配置
+  # alacritty - a cross-platform, GPU-accelerated terminal emulator
   programs.alacritty = {
     enable = true;
       env.TERM = "xterm-256color";
@@ -656,7 +659,7 @@ According to the official document [home Manager Manual](https://nix-community.g
 }
 ```
 
-After adding `/etc/nixos/home.nix`, you need to import this new configuration file in `/etc/nixos/flake.nix` to make it effective, use the following command to generate an example `/etc/nixos/flake.nix` in the current folder for reference:
+After adding `/etc/nixos/home.nix`, you need to import this new configuration file in `/etc/nixos/flake.nix` to make use of it, use the following command to generate an example in the current folder for reference:
 
 ```shell
 nix flake new example -t github:nix-community/home-manager#nixos
@@ -676,7 +679,7 @@ After adjusting the parameters, the content of `/etc/nixos/flake.nix` is as foll
 
   outputs = inputs@{ nixpkgs, home-manager, ... }: {
     nixosConfigurations = {
-      # please change the hostname to your own
+      # TODO please change the hostname to your own
       nixos-test = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
@@ -689,11 +692,10 @@ After adjusting the parameters, the content of `/etc/nixos/flake.nix` is as foll
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            # replace ryan with your own username
+            # TODO replace ryan with your own username
             home-manager.users.ryan = import ./home.nix;
 
-            # Optionally, use home-manager.extraSpecialArgs to pass
-            # arguments to home.nix
+            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
           }
         ];
       };
@@ -702,18 +704,18 @@ After adjusting the parameters, the content of `/etc/nixos/flake.nix` is as foll
 }
 ```
 
-Then execute `sudo nixos-rebuild switch` to apply the configuration, and home-manager will be installed automatically.
+Then run `sudo nixos-rebuild switch` to apply the configuration, and home-manager will be installed automatically.
 
-After the installation is complete, all user-level programs and configuration can be managed through `/etc/nixos/home.nix`, and when executing `sudo nixos-rebuild switch`, the configuration of home-manager will be applied automatically.
+After the installation is complete, all user-level packages and configuration can be managed through `/etc/nixos/home.nix`. When running `sudo nixos-rebuild switch`, the configuration of home-manager will be applied automatically. (**It's not necessary to run `home-manager switch` manually**!)
 
-To find the options of home-manager used in `home.nix`, use the following methods:
+To find the options we can use in `home.nix`, we can refer to the following documents:
 
-- [home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html): A list of all options, it is recommended to search for keywords in it.
+- [Home Manager - Appendix A. Configuration Options](https://nix-community.github.io/home-manager/options.html): A list of all options, it is recommended to search for keywords in it.
 - [home-manager](https://github.com/nix-community/home-manager): Some options are not listed in the official documentation, or the documentation is not clear enough, you can directly search and read the corresponding source code in this home-manager repo.
 
 ### 7. Modular NixOS configuration
 
-At this point, the skeleton of the entire system is basically configured. The current system configuration structure in `/etc/nixos` should be as follows:
+At this point, the skeleton of the entire system is basically configured. The current configuration structure in `/etc/nixos` should be as follows:
 
 ```
 $ tree
@@ -726,25 +728,25 @@ $ tree
 
 The functions of these four files are explained below:
 
-- `flake.lock`: An automatically generated version lock file, which records all input data sources, hash values, and version numbers of the entire flake to ensure that the system is reproducible.
+- `flake.lock`: An automatically generated version-lock file, which records all input sources, hash values, and version numbers of the entire flake to ensure that the system is reproducible.
 - `flake.nix`: The entry file, which will be recognized and deployed when executing `sudo nixos-rebuild switch`.
   - See [Flakes - NixOS Wiki](https://nixos.wiki/wiki/Flakes) for all options of flake.nix.
-- `configuration.nix`: Imported as a Nix module in flake.nix, all system-level configuration are currently written in this file.
+- `configuration.nix`: Imported as a nix module in flake.nix, all system-level configuration are currently written here.
   - See [Configuration - NixOS Manual](https://nixos.org/manual/nixos/unstable/index.html#ch-configuration) for all options of configuration.nix.
-- `home.nix`: Imported by home-manager as the configuration of the user `ryan` in flake.nix, that is, it contains all the home Manager configuration of `ryan`, and is responsible for managing `ryan`'s home folder.
+- `home.nix`: Imported by home-manager as the configuration of the user `ryan` in flake.nix, that is, it contains all the configuration of `ryan`, and is responsible for managing `ryan`'s home folder.
   - See [Appendix A. Configuration Options - home Manager](https://nix-community.github.io/home-manager/options.html) for all options of home.nix.
 
-By modifying the above configuration files, you can change the status of the system and the home directory declaratively.
+By modifying these files, you can change the status of the system and the home directory declaratively.
 
-As the configuration increases, it is difficult to maintain the configuration files by relying solely on `configuration.nix` and `home.nix`. Therefore, a better solution is to use the module mechanism of Nix to split the configuration files into multiple modules and write them in a classified manner.
+As the configuration increases, it will be difficult to maintain the configuration by relying solely on `configuration.nix` and `home.nix`. Therefore, a better solution is to use the nix module system to split the configuration into multiple modules and write them in a classified manner.
 
-`imports` parameter can accept a list of `.nix` files, and merge all the configuration in the list into the current attribute set. Note that the word used here is "**merge**", which means that `imports` will NOT simply overwrite the duplicate configuration items, but handle them more reasonably. For example, if I define `program.packages = [...]` in multiple modules, then `imports` will merge all `program.packages` in all modules into one list. Not only lists can be merged correctly, but attribute sets can also be merged correctly. The specific behavior can be explored by yourself.
+nix module system provide a paramter, `imports`,which accept a list of `.nix` files, and merge all the configuration defined in these files into the current nix module. Note that the word used here is "**merge**", which means that `imports` will **NOT** simply overwrite the duplicate configuration, but handle them more reasonably. For example, if I define `program.packages = [...]` in multiple modules, then `imports` will merge all `program.packages` defined in all nix modules into one list. Not only lists can be merged correctly, but attribute sets can also be merged correctly. The specific behavior can be explored by yourself.
 
-> I only found a description of `imports` in [nixpkgs-unstable official manual - evalModules parameters](https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters): `A list of modules. These are merged together to form the final configuration.`, you can try to understand it...
+> I only found a description of `imports` in [nixpkgs-unstable official manual - evalModules parameters](https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters): `A list of modules. These are merged together to form the final configuration.`, it's a bit ambiguous...
 
-With the help of `imports`, we can split `home.nix` and `configuration.nix` into multiple `.nix` files.
+With the help of `imports`, we can split `home.nix` and `configuration.nix` into multiple nix modules defined in diffrent `.nix` files.
 
-For example, the structure of my previous i3wm system configuration [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2) is as follows:
+Use [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2) as an example, which is the configuration of my previous NixOS system with i3 window manager. The structure of it is as follows:
 
 ```shell
 ├── flake.lock
@@ -799,28 +801,29 @@ For example, the structure of my previous i3wm system configuration [ryan4yin/ni
 └── wallpaper.jpg    # wallpaper
 ```
 
-For the details of the structure and content, please go to the github repository [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2).
+For more details, see [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2).
 
 ### 8. Update the system
 
-With Flakes, it is also very simple to update the system. First update the flake.lock file, and then deploy it. Execute the following command in the configuration folder:
+With Flakes, it is also very simple to update the system. Just run the following commands in `/etc/nixos`:
 
 ```shell
 # update flake.lock
 nix flake update
-# deploy the updates
+# apply the updates
 sudo nixos-rebuild switch
 ```
 
-Sometimes when installing new packages, you may encounter an error of sha256 mismatch when running `nixos-rebuild switch`. You can also try to solve it by updating `flake.lock` through `nix flake update`.
+Sometimes you may encounter some error of sha256 mismatch when running `nixos-rebuild switch`, which may be solved by updating `flake.lock` through `nix flake update`.
 
-### 9. Rollback the version of some packages
+### 9. Downgrade or upgrade some packages
 
 After using Flakes, most people are currently using the `nixos-unstable` branch of nixpkgs. Sometimes you will encounter some bugs, such as the [chrome/vscode crash problem](https://github.com/swaywm/sway/issues/7562)
 
-To resolve this problem, we need to rollback the version of some packages. In Flakes, all package versions and hash values are one-to-one corresponding to the git commit of their input data source. Therefore, to rollback a package to a historical version, we need to lock the git commit of its input data source.
+To resolve problems, we may need to downgrade or upgrade some packages. In Flakes, all package versions and hash values are one-to-one corresponding to the git commit of their flake input.
+Therefore, to downgrade or upgrade a package, we need to lock the git commit of its flake input.
 
-So to rollback the version of some packages, first modify `/etc/nixos/flake.nix`, the example content is as follows (by using `specialArgs`):
+For exmaple, let's add multiple nixpkgs, each using a different git commit or branch:
 
 ```nix
 {
@@ -847,7 +850,7 @@ So to rollback the version of some packages, first modify `/etc/nixos/flake.nix`
       nixos-test = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
 
-        # The core parameter, which passes the non-default nixpkgs data source to other modules
+        # The core parameter, which passes the non-default nixpkgs instances to other nix modules
         specialArgs = {
           # To use packages from nixpkgs-stable, we need to configure some parameters for it first
           pkgs-stable = import nixpkgs-stable {
@@ -871,7 +874,7 @@ So to rollback the version of some packages, first modify `/etc/nixos/flake.nix`
 }
 ```
 
-And then refer the packages from `nix-stable` or `nixpkgs-fd40cef8d` in your corresponding sub module, a home manager's sub module as an example:
+And then refer the packages from `pkgs-stable` or `pkgs-fd40cef8d` in your sub module, a home manager's sub module as an example:
 
 ```nix
 {
@@ -900,17 +903,18 @@ And then refer the packages from `nix-stable` or `nixpkgs-fd40cef8d` in your cor
 }
 ```
 
-After adjusted the configuration, deploy it with `sudo nixos-rebuild switch`, then your firefox/chrome/vscode will revert to the version corresponding to `nixpkgs-stable` or `nixpkgs-fd40cef8d`.
+After adjusted the configuration, deploy it with `sudo nixos-rebuild switch`, then your firefox/chrome/vscode will be downgraded to the version corresponding to `nixpkgs-stable` or `nixpkgs-fd40cef8d`.
 
 > according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), it's not a good practice to use `import` in sub modules to customize `nixpkgs`, because each `import` will create a new instance of nixpkgs, which will increase the build time and memory usage as the configuration grows. So here we create all nixpkgs instances in `flake.nix` to avoid this problem.
 
 ### 10. Manage the configuration with Git
 
-NixOS's configuration is just plain text, so it can be managed with Git just like other ordinary dotfiles.
+NixOS configuration is just a set of text files, it is very suitable to be managed with Git, and thus we can easily rollback to a previous version when we encounter some problems.
 
-On the other hand, `flake.nix` do not required to be placed in `/etc/nixos`, they can be placed in any directory, as long as the correct path is specified during deployment.
+However, NixOS places the configuration in `/etc/nixos` by default, which requires root permissions to modify, which is not convenient for daily use.
+Luckily, Flakes can solve this problem, you can place your flake anywhere you like.
 
-For example, my usage is to place my Flake in `~/nixos-config`, and then create a soft link in `/etc/nixos`:
+For example, my usage is to place my flake in `~/nixos-config`, and then create a soft link in `/etc/nixos`:
 
 ```shell
 sudo mv /etc/nixos /etc/nixos.bak  # backup the original configuration
@@ -922,7 +926,7 @@ sudo nixos-rebuild switch
 
 And then you can use Git to manage the configuration in `~/nixos-config`. The configuration can be used with ordinary user-level permissions, and it is not required to be owned by root.
 
-Another method is to delete `/etc/nixos` directly, and specify the configuration file path each time you deploy:
+Another method is jsut to delete `/etc/nixos` directly, and specify the configuration file path each time you deploy it:
 
 ```shell
 sudo mv /etc/nixos /etc/nixos.bak
@@ -932,7 +936,7 @@ cd ~/nixos-config
 sudo nixos-rebuild switch --flake .#nixos-test
 ```
 
-Choose whichever you like. After that, system rollback becomes very simple, just switch to the previous commit:
+Choose whichever you like. After that, system rollback will become very simple, just switch to the previous commit and then deploy it:
 
 ```shell
 cd ~/nixos-config
@@ -942,7 +946,7 @@ git checkout HEAD^1
 sudo nixos-rebuild switch --flake .#nixos-test
 ```
 
-More operations on Git are not described here. Generally speaking, rollback can be done directly through Git. Only when the system crashes completely, you need to restart into bootloader and boot the system from the previous historical version.
+More operations on Git are not described here. Generally speaking, rollback can be done directly through Git. Only when the system crashes completely, you will need to restart into bootloader and boot the system from the previous historical version.
 
 ### 11. View and delete history data {#view-and-delete-history}
 
