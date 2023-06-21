@@ -849,7 +849,6 @@ Therefore, to customize the cache image source, we must add the related configur
 </span><span class="lnt">153
 </span><span class="lnt">154
 </span><span class="lnt">155
-</span><span class="lnt">156
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
@@ -939,7 +938,6 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">    <span class="n">hugo</span> <span class="c1"># static site generator</span>
 </span></span><span class="line"><span class="cl">    <span class="n">glow</span> <span class="c1"># markdown previewer in terminal</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1"># 一些我常用的命令行工具</span>
 </span></span><span class="line"><span class="cl">    <span class="n">btop</span>  <span class="c1"># replacement of htop/nmon</span>
 </span></span><span class="line"><span class="cl">    <span class="n">iotop</span> <span class="c1"># io monitoring</span>
 </span></span><span class="line"><span class="cl">    <span class="n">iftop</span> <span class="c1"># network monitoring</span>
@@ -1810,18 +1808,19 @@ Therefore, to customize the cache image source, we must add the related configur
 </ol>
 <p>In short, in order to customize the build parameters of Nix packages of this type, we need to use <code>Overriding</code> or <code>Overlays</code>.</p>
 <h3 id="callpackage" class="headerLink">
-    <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><p>前面我们介绍并大量使用了 <code>import xxx.nix</code> 来导入 Nix 文件，这种语法只是单纯地返回该文件的执行结果，不会对该结果进行进一步处理。
-比如说 <code>xxx.nix</code> 的内容是形如 <code>{...}: {...}</code>，那么 <code>import xxx.nix</code> 的结果就是该文件中定义的这个函数。</p>
-<p><code>pkgs.callPackage</code> 也是用来导入 Nix 文件的，它的语法是 <code>pkgs.callPackage xxx.nix { ... }</code>. 但跟 <code>import</code> 不同的是，它导入的 nix 文件内容必须是一个 Derivation 或者返回 Derivation 的函数，它的执行结果一定是一个 Derivation，也就是一个软件包。</p>
-<p>那可以作为 <code>pkgs.callPackge</code> 参数的 nix 文件具体长啥样呢，可以去看看我们前面举例过的 <code>hello.nix</code> <code>fcitx5-rime.nix</code> <code>vscode/with-extensions.nix</code> <code>firefox/common.nix</code>，它们都可以被 <code>pkgs.callPackage</code> 导入。</p>
-<p>当 <code>pkgs.callPackge xxx.nix {...}</code> 中的 <code>xxx.nix</code>，其内容为一个函数时（绝大多数 nix 包都是如此），执行流程如下：</p>
+    <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><p>We have introduced and used <code>import xxx.nix</code> to import Nix files in the previous content. This syntax simply returns the execution result of the file without further processing of the result.</p>
+<p>And <code>pkgs.callPackage</code> is also used to import Nix files, its syntax is <code>pkgs.callPackage xxx.nix { ... }</code>.
+But unlike <code>import</code>, the Nix file imported by it must be a Derivation or a function that returns a Derivation. Its execution result must be a Derivation(a software package).</p>
+<p>So what does the Nix file that can be used as a parameter of <code>pkgs.callPackge</code> look like? You can take a look at the <code>hello.nix</code> <code>fcitx5-rime.nix</code> <code>vscode/with-extensions.nix</code> <code>firefox/common.nix</code> we mentioned earlier, they can all be imported by <code>pkgs.callPackage</code>.</p>
+<p>When  the <code>xxx.nix</code> used in <code>pkgs.callPackge xxx.nix {...}</code> is a function (most Nix packages are like this), the execution flow is as follows:</p>
 <ol>
-<li><code>pkgs.callPackge xxx.nix {...}</code> 会先 <code>import xxx.nix</code>，得到其中定义的函数，该函数的参数通常会有 <code>lib</code>, <code>stdenv</code>, <code>fetchurl</code> 等参数，以及一些自定义参数，自定义参数通常都有默认值。</li>
-<li>接着 <code>pkgs.callPackge</code> 会首先从当前环境中查找名称匹配的值，作为将要传递给前述函数的参数。像 <code>lib</code> <code>stdenv</code> <code>fetchurl</code> 这些都是 nixpkgs 中的函数，在这一步就会查找到它们。</li>
-<li>接着 <code>pkgs.callPackge</code> 会将其第二个参数 <code>{...}</code> 与前一步得到的参数集（attribute set）进行合并，得到一个新的参数列表，然后将其传递给该函数并执行。</li>
-<li>函数执行结果是一个 Derivation，也就是一个软件包。</li>
+<li><code>pkgs.callPackge xxx.nix {...}</code> will first <code>import xxx.nix</code> to get the function defined in it. The parameters of this function usually have <code>lib</code>, <code>stdenv</code>, <code>fetchurl</code> and other parameters, as well as some custom parameters, which usually have default values.</li>
+<li>Then <code>pkgs.callPackge</code> will first look up the value matching the name from the current environment as the parameter to be passed to the function. parameters like <code>lib</code> <code>stdenv</code> <code>fetchurl</code> are defined in nixpkgs, and they will be found in this step.</li>
+<li>Then <code>pkgs.callPackge</code> will merge its second parameter <code>{...}</code> with the attribute set obtained in the previous step, and then pass it to the function imported from <code>xxx.nix</code> and execute it.</li>
+<li>Finally we get a Derivation as the result of the function execution.</li>
 </ol>
-<p>这个函数比较常见的用途是用来导入一些自定义的 Nix 包，比如说我们自己写了一个 <code>hello.nix</code>，然后就可以在任意 Nix Module 中使用 <code>pkgs.callPackage ./hello.nix {}</code> 来导入并使用它。</p>
+<p>So the common usage of <code>pkgs.callPackage</code> is to import custom Nix packages and used it in Nix Module.
+For example, we wrote a <code>hello.nix</code> ourselves, and then we can use <code>pkgs.callPackage ./hello.nix {}</code> in any Nix Module to import and use it.</p>
 <h3 id="overriding" class="headerLink">
     <a href="#overriding" class="header-mark"></a>2. Overriding</h3><blockquote>
 <p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overrides" target="_blank" rel="noopener noreferrer">Chapter 4. Overriding - nixpkgs Manual</a></p>
