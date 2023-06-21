@@ -8,6 +8,7 @@
 <li>2023/6/21
 <ul>
 <li>Add some details about the usage of <code>callPackage</code>, <code>override</code> and <code>overlays</code> in section <code>VIII. Advanced Usage of Nixpkgs</code>.</li>
+<li>Add some command line tools I used frequently in section VI-6.</li>
 </ul>
 </li>
 <li>2023/6/6
@@ -293,6 +294,8 @@ It was a truly satisfying moment!</p>
 </span><span class="lnt">23
 </span><span class="lnt">24
 </span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># Edit this configuration file to define what should be installed on</span>
@@ -316,6 +319,8 @@ It was a truly satisfying moment!</p>
 </span></span><span class="line"><span class="cl">    <span class="n">git</span>
 </span></span><span class="line"><span class="cl">    <span class="n">vim</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wget</span>
+</span></span><span class="line"><span class="cl">    <span class="n">curl</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># omit the rest of the configuration.......</span>
@@ -580,6 +585,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span><span class="lnt">20
 </span><span class="lnt">21
 </span><span class="lnt">22
+</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># Edit this configuration file to define what should be installed on</span>
@@ -597,6 +603,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 </span></span><span class="line"><span class="cl">    <span class="n">git</span>
 </span></span><span class="line"><span class="cl">    <span class="n">vim</span>
 </span></span><span class="line"><span class="cl">    <span class="n">wget</span>
+</span></span><span class="line"><span class="cl">    <span class="n">curl</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># install helix from flake input `helix`</span>
 </span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="s2">&#34;</span><span class="si">${</span><span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="si">}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">helix</span>
@@ -687,83 +694,162 @@ Therefore, to customize the cache image source, we must add the related configur
 <p>According to the official document <a href="https://nix-community.github.io/home-manager/index.htm" target="_blank" rel="noopener noreferrer">home Manager Manual</a>, in order to install home-manager as a module of NixOS, we need to create <code>/etc/nixos/home.nix</code> first, an example content shown below:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span><span class="lnt">59
-</span><span class="lnt">60
-</span><span class="lnt">61
-</span><span class="lnt">62
-</span><span class="lnt">63
-</span><span class="lnt">64
-</span><span class="lnt">65
-</span><span class="lnt">66
-</span><span class="lnt">67
-</span><span class="lnt">68
-</span><span class="lnt">69
-</span><span class="lnt">70
-</span><span class="lnt">71
-</span><span class="lnt">72
-</span><span class="lnt">73
-</span><span class="lnt">74
-</span><span class="lnt">75
-</span><span class="lnt">76
-</span><span class="lnt">77
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
@@ -803,11 +889,75 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># Packages that should be installed to the user profile.</span>
 </span></span><span class="line"><span class="cl">  <span class="n">home</span><span class="o">.</span><span class="n">packages</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="n">pkgs</span><span class="o">.</span><span class="n">htop</span>
-</span></span><span class="line"><span class="cl">    <span class="n">pkgs</span><span class="o">.</span><span class="n">btop</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># here is some command line tools I use frequently</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># feel free to add your own or remove some of them</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">neofetch</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nnn</span> <span class="c1"># terminal file manager</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># archives</span>
+</span></span><span class="line"><span class="cl">    <span class="n">zip</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xz</span>
+</span></span><span class="line"><span class="cl">    <span class="n">unzip</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p7zip</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># utils</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ripgrep</span> <span class="c1"># recursively searches directories for a regex pattern</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jq</span> <span class="c1"># A lightweight and flexible command-line JSON processor</span>
+</span></span><span class="line"><span class="cl">    <span class="n">yq-go</span> <span class="c1"># yaml processer https://github.com/mikefarah/yq</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exa</span> <span class="c1"># A modern replacement for ‘ls’</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fzf</span> <span class="c1"># A command-line fuzzy finder</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># networking tools</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mtr</span> <span class="c1"># A network diagnostic tool</span>
+</span></span><span class="line"><span class="cl">    <span class="n">iperf3</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dnsutils</span>  <span class="c1"># `dig` + `nslookup`</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ldns</span> <span class="c1"># replacement of `dig`, it provide the command `drill`</span>
+</span></span><span class="line"><span class="cl">    <span class="n">aria2</span> <span class="c1"># A lightweight multi-protocol &amp; multi-source command-line download utility</span>
+</span></span><span class="line"><span class="cl">    <span class="n">socat</span> <span class="c1"># replacement of openbsd-netcat</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nmap</span> <span class="c1"># A utility for network discovery and security auditing</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ipcalc</span>  <span class="c1"># it is a calculator for the IPv4/v6 addresses</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># misc</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cowsay</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file</span>
+</span></span><span class="line"><span class="cl">    <span class="n">which</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tree</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gnused</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gnutar</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gawk</span>
+</span></span><span class="line"><span class="cl">    <span class="n">zstd</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gnupg</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># nix related</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># </span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># it provides the command `nom` works just like `nix</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># with more details log output</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nix-output-monitor</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># productivity</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hugo</span> <span class="c1"># static site generator</span>
+</span></span><span class="line"><span class="cl">    <span class="n">glow</span> <span class="c1"># markdown previewer in terminal</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 一些我常用的命令行工具</span>
+</span></span><span class="line"><span class="cl">    <span class="n">btop</span>  <span class="c1"># replacement of htop/nmon</span>
+</span></span><span class="line"><span class="cl">    <span class="n">iotop</span> <span class="c1"># io monitoring</span>
+</span></span><span class="line"><span class="cl">    <span class="n">iftop</span> <span class="c1"># network monitoring</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># system call monitoring</span>
+</span></span><span class="line"><span class="cl">    <span class="n">strace</span> <span class="c1"># system call monitoring</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ltrace</span> <span class="c1"># library call monitoring</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lsof</span> <span class="c1"># list open files</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># system tools</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sysstat</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lm_sensors</span> <span class="c1"># for `sensors` command</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ethtool</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pciutils</span> <span class="c1"># lspci</span>
+</span></span><span class="line"><span class="cl">    <span class="n">usbutils</span> <span class="c1"># lsusb</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># enable starship, a beautiful shell prompt</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 启用 starship，这是一个漂亮的 shell 提示符</span>
 </span></span><span class="line"><span class="cl">  <span class="n">programs</span><span class="o">.</span><span class="n">starship</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
@@ -818,7 +968,7 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">    <span class="p">};</span>
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1"># alacritty terminal emulator</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># alacritty 终端配置</span>
 </span></span><span class="line"><span class="cl">  <span class="n">programs</span><span class="o">.</span><span class="n">alacritty</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">      <span class="n">env</span><span class="o">.</span><span class="n">TERM</span> <span class="o">=</span> <span class="s2">&#34;xterm-256color&#34;</span><span class="p">;</span>
@@ -828,6 +978,21 @@ Therefore, to customize the cache image source, we must add the related configur
 </span></span><span class="line"><span class="cl">      <span class="p">};</span>
 </span></span><span class="line"><span class="cl">      <span class="n">scrolling</span><span class="o">.</span><span class="n">multiplier</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">      <span class="n">selection</span><span class="o">.</span><span class="n">save_to_clipboard</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">programs</span><span class="o">.</span><span class="n">bash</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enableCompletion</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bashrcExtra</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">      export PATH=&#34;$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># set some aliases, feel free to add more or remove some</span>
+</span></span><span class="line"><span class="cl">    <span class="n">shellAliases</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">urldecode</span> <span class="o">=</span> <span class="s2">&#34;python3 -c &#39;import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))&#39;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">urlencode</span> <span class="o">=</span> <span class="s2">&#34;python3 -c &#39;import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))&#39;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">httpproxy</span> <span class="o">=</span> <span class="s2">&#34;export https_proxy=http://127.0.0.1:7890; export http_proxy=http://127.0.0.1:7890;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># This value determines the home Manager release that your</span>
@@ -2156,21 +2321,19 @@ However, I am quite satisfied with the overall results, the current work has bee
 <ul>
 <li><figure><a class="lightgallery" href="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp" title="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp" data-thumbnail="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp" data-sub-html="<h2>YunMi RO Filterred Water Dispenser</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp"
-            srcset="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 1.5x, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp"
+            data-srcset="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 1.5x, /images/2021-summary/yunmi-ro-filterred-water-dispenser.webp 2x"
+            data-sizes="auto"
             alt="/images/2021-summary/yunmi-ro-filterred-water-dispenser.webp">
     </a><figcaption class="image-caption">YunMi RO Filterred Water Dispenser</figcaption>
     </figure></li>
 <li><figure><a class="lightgallery" href="/images/2021-summary/my-tea.webp" title="/images/2021-summary/my-tea.webp" data-thumbnail="/images/2021-summary/my-tea.webp" data-sub-html="<h2>All kinds of tea</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/2021-summary/my-tea.webp"
-            srcset="/images/2021-summary/my-tea.webp, /images/2021-summary/my-tea.webp 1.5x, /images/2021-summary/my-tea.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/2021-summary/my-tea.webp"
+            data-srcset="/images/2021-summary/my-tea.webp, /images/2021-summary/my-tea.webp 1.5x, /images/2021-summary/my-tea.webp 2x"
+            data-sizes="auto"
             alt="/images/2021-summary/my-tea.webp">
     </a><figcaption class="image-caption">All kinds of tea</figcaption>
     </figure></li>
@@ -2180,11 +2343,10 @@ However, I am quite satisfied with the overall results, the current work has bee
 <ul>
 <li><figure><a class="lightgallery" href="/images/2021-summary/Posts-and-Garage-Kit.webp" title="/images/2021-summary/Posts-and-Garage-Kit.webp" data-thumbnail="/images/2021-summary/Posts-and-Garage-Kit.webp" data-sub-html="<h2>Anime PVC Figures and Anime Figure Painting in my room</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/2021-summary/Posts-and-Garage-Kit.webp"
-            srcset="/images/2021-summary/Posts-and-Garage-Kit.webp, /images/2021-summary/Posts-and-Garage-Kit.webp 1.5x, /images/2021-summary/Posts-and-Garage-Kit.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/2021-summary/Posts-and-Garage-Kit.webp"
+            data-srcset="/images/2021-summary/Posts-and-Garage-Kit.webp, /images/2021-summary/Posts-and-Garage-Kit.webp 1.5x, /images/2021-summary/Posts-and-Garage-Kit.webp 2x"
+            data-sizes="auto"
             alt="/images/2021-summary/Posts-and-Garage-Kit.webp">
     </a><figcaption class="image-caption">Anime PVC Figures and Anime Figure Painting in my room</figcaption>
     </figure></li>
@@ -2209,11 +2371,10 @@ However, I am quite satisfied with the overall results, the current work has bee
 After all, Mobiuspace, whether it is the level of colleagues or the working atmosphere, or the number of customers, compared with my last company is qualitatively different.</p>
 <p><figure><a class="lightgallery" href="/images/2021-summary/workstation-1.webp" title="/images/2021-summary/workstation-1.webp" data-thumbnail="/images/2021-summary/workstation-1.webp" data-sub-html="<h2>My first station in Mobiuspace</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/2021-summary/workstation-1.webp"
-            srcset="/images/2021-summary/workstation-1.webp, /images/2021-summary/workstation-1.webp 1.5x, /images/2021-summary/workstation-1.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/2021-summary/workstation-1.webp"
+            data-srcset="/images/2021-summary/workstation-1.webp, /images/2021-summary/workstation-1.webp 1.5x, /images/2021-summary/workstation-1.webp 2x"
+            data-sizes="auto"
             alt="/images/2021-summary/workstation-1.webp">
     </a><figcaption class="image-caption">My first station in Mobiuspace</figcaption>
     </figure>
@@ -2223,11 +2384,10 @@ After getting familiar with the contents and methods of the work, leader tried h
 <p>When there were several delays in my work, leader accompanied me to work overtime. After the work was done, he took me to a big dinner to reward myself. I really thanked him for his help and support.</p>
 <p><figure><a class="lightgallery" href="/images/2021-summary/workstation-2.webp" title="/images/2021-summary/workstation-2.webp" data-thumbnail="/images/2021-summary/workstation-2.webp" data-sub-html="<h2>My new station, near the floor-to-ceiling window, the view is great.</h2>">
         <img
-            
-            loading="lazy"
-            src="/images/2021-summary/workstation-2.webp"
-            srcset="/images/2021-summary/workstation-2.webp, /images/2021-summary/workstation-2.webp 1.5x, /images/2021-summary/workstation-2.webp 2x"
-            sizes="auto"
+            class="lazyload"
+            data-src="/images/2021-summary/workstation-2.webp"
+            data-srcset="/images/2021-summary/workstation-2.webp, /images/2021-summary/workstation-2.webp 1.5x, /images/2021-summary/workstation-2.webp 2x"
+            data-sizes="auto"
             alt="/images/2021-summary/workstation-2.webp">
     </a><figcaption class="image-caption">My new station, near the floor-to-ceiling window, the view is great.</figcaption>
     </figure></p>
