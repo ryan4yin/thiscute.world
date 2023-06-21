@@ -126,7 +126,7 @@ Another piece of info, there is also some competition between Nix and the relati
 
 ## II. Installation
 
-Nix can be installed in multiple ways and supports being installed on MacOS/Linux/WSL as a package manager. Nix also provides NixOS, a Linux distribution that uses Nix to manage the entire system environment.
+Nix can be installed in multiple ways and supports being installed on macOS/Linux/WSL as a package manager. Nix also provides NixOS, a Linux distribution that uses Nix to manage the entire system environment.
 
 I chose to directly install NixOS system using its ISO image, to manage the entire system environment through Nix as much as possible.
 
@@ -136,7 +136,7 @@ some reference materials that may be useful:
 
 1. [Official installation method of Nix](https://nixos.org/download.html): written in bash script, `nix-command` & `flakes` are still experimental features as of 2023-04-23, and need to be manually enabled.
    1. You need to refer to the instructions in [Enable flakes - NixOS Wiki](https://nixos.wiki/wiki/Flakes) to enable `nix-command` & `flakes`.
-   2. The official installer does not provide any uninstallation method. To uninstall Nix on Linux/MacOS, you need to manually delete all related files, users, and groups.
+   2. The official installer does not provide any uninstallation method. To uninstall Nix on Linux/macOS, you need to manually delete all related files, users, and groups.
 2. [The Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer): a third-party installer written in Rust, which enables `nix-command` & `flakes` by default and provides an uninstallation command.
 
 ## III. Nix Flakes and the classic Nix
