@@ -1,7 +1,7 @@
 ---
 title: "NixOS & Nix Flakes - A Guide for Beginners"
 date: 2023-05-10T21:23:28+08:00
-lastmod: 2023-06-21T16:16:00+08:00
+lastmod: 2023-06-22T02:50:00+08:00
 draft: false
 
 resources:
