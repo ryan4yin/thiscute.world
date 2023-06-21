@@ -32,7 +32,7 @@ code:
 
 > The target NixOS version of this post is 22.11, and the Nix version is 2.13.3. In this environment, Flakes is still an experimental feature.
 
-## Article History
+## Changelog
 
 - 2023/6/21
   - Add some details about the usage of `callPackage`, `override` and `overlays` in section `VIII. Advanced Usage of Nixpkgs`.
