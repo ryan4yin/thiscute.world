@@ -36,6 +36,7 @@ code:
   - 在 `八、Nixpkgs 的高级用法` 补充 callPackage、override 与 overlays 的使用细节。
   - 在 `六-6` 补充了一些我常用的命令行工具配置。
   - 添加 `五-14` 一节，介绍 if...then...else... 语句。
+  - 在文末添加新的一节「Flakes 何时会成为稳定特性？」
 - 2023/6/6
   - 在 `七、Nix Flakes 的使用` 一节中添加 flake 的 inputs 与 outpus 使用案例。
 - 2023/6/4
@@ -1808,9 +1809,25 @@ args:
 我会在后续文章中介绍 NixOS & Nix Flakes 的进阶知识：开发环境管理、secrets 管理、软件打包、远程主机管理等等，尽请期待。
 
 
-## 最后，Flakes 何时会成为稳定特性？ {#when-will-flakes-become-stable}
+## 最后，Flakes 何时会成为稳定特性？ {#when-will-flakes-stablized}
 
-我们通篇文章两万多字，
+我们通篇文章两万多字，详细介绍了如何开始使用 Flakes 配置 NixOS 系统，但是文章开头就提到了 Flakes 目前还是实验性功能，这不免让人担忧，如果啥时候 Flakes 被大改甚至被移除，那到时可能还需要花费大量的精力去迁移配置。
+
+实际上这也是目前整个 NixOS 社区最关心的问题之一Flakes 何时会成为稳定特性？
+
+我深入了解了下 Flakes 现状与未来计划相关的资料，大概有这些：
+
+- https://github.com/NixOS/rfcs/pull/136: 一份渐进式地将 Flakes 与 new CLI 两个实验性特性推向稳定的 RFC，目前还在讨论中。
+- https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317: 最近的一次关于 Flakes 稳定性的讨论，可以看到大家的疑惑，以及社区对 Flakes 的态度。
+- https://grahamc.com/blog/flakes-are-an-obviously-good-thing/: NixOS 社区成员的文章，记录了他对 Flakes 的看法，以及对社区当初添加 Flakes 特性时的不当举措的懊悔。
+- https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9： NixOS Fundation 的一份 Roadmap，其中提到了 Flakes 的计划：`Stabilize flakes and release Nix 3.0. Flakes are widely used (there are more GitHub repos being created with a flake.nix than a default.nix) but they’re still marked as experimental, which is not a good situation. The same applies to the new nix CLI.`
+
+读完上述内容后，我对 Flakes 的未来有了更清晰的认识：**它大概将在未来一两年内成为稳定特性**。
+
+Flakes 带来的好处是显而易见的，整个 NixOS 社区都很喜欢它，目前超过半数的用户已经在大量使用 Flakes（尤其是 NixOS 社区的新用户），因此我们可以确定 Flakes 绝对不会被废弃。
+但是 Flakes 目前仍然存在许多问题，将它推向稳定的过程中，很可能会引入一些不兼容的改动，这个改动的大小目前还无法确定。
+
+因此总的来说，我仍然推荐大家使用 Flakes，但是也要做好准备——未来可能需要解决许多不兼容变更带来的问题。
 
 ## 参考 {#reference}
 

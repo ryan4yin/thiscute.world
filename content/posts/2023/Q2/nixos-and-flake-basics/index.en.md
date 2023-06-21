@@ -37,6 +37,7 @@ code:
 - 2023/6/21
   - Add some details about the usage of `callPackage`, `override` and `overlays` in section `VIII. Advanced Usage of Nixpkgs`.
   - Add some command line tools I used frequently in section VI-6.
+  - Add a new section [When will flakes stablized?]
 - 2023/6/6
   - Add examples of flake's inputs & outputs into section `VII. Usage of Nix Flakes`
 - 2023/6/4
@@ -1438,6 +1439,28 @@ And many other useful community projects to explore, here are some of them:
 - [nixos-generator](https://github.com/nix-community/nixos-generators): generate iso/qcow2/... from nixos configuration
 - [lanzaboote](https://github.com/nix-community/lanzaboote): enable secure boot for NixOS
 - [impermanence](https://github.com/nix-community/impermanence): used to make NixOS stateless, to imporve the reproduciability of NixOS system.
+
+
+## When will flakes stablized {#when-will-flakes-stablized}
+
+Throughout so much content of the article, I've introduced in detail how to start using Flakes to configure the NixOS system, but at the beginning of the article we mentioned that **Flakes is still an experimental feature, which is worrying**. If Flakes is greatly changed or even removed, we may need to spend a lot of time to migrate the configuration.
+
+In fact this is also one of the most concerned issues in the entire NixOS community, **when will Flakes become a stable feature**?
+
+I dived into some details about flakes:
+
+- https://github.com/NixOS/rfcs/pull/136: A plan to stabilize Flakes and the new CLI incrementally, still WIP.
+- https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317: A post, Why are flakes still experimental?
+- https://grahamc.com/blog/flakes-are-an-obviously-good-thing/: Flakes are such an obviously good thing... but the design and development process should be better.
+- https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9： A roadmap of nixos fundation, which includes plan about the stabilization of flakes.
+
+After reading all of these, I feel like that flakes will eventually be stabilized in one or two years, with some important breaking changes.
+
+The benefits of Flakes are obvious, and the entire NixOS community likes it very much. Currently, more than half of the users are using Flakes (especially new users in the NixOS community), so we can be sure that Flakes will never be deprecated.
+
+But currently Flakes still has many problems, and it is likely to introduce some breaking changes in the process of stablizing it, and it's currently uncertain how greatly of the breaking changes.
+
+So overall, I still recommend everyone to use Flakes, but be prepared for the problems that may be caused by the upcomming breaking changes.
 
 ## References
 
