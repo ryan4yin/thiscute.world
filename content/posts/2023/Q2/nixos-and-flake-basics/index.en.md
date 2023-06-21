@@ -30,7 +30,7 @@ code:
   maxShownLines: 300
 ---
 
-> The target NixOS version of this article is 22.11, and the Nix version is 2.13.3. In this environment, Nix Flakes is still an experimental feature.
+> The target NixOS version of this post is 22.11, and the Nix version is 2.13.3. In this environment, Flakes is still an experimental feature.
 
 ## Article History
 
@@ -47,7 +47,7 @@ code:
   - Update VI-9 according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), create all nixpkgs instances globally in `flake.nix` to avoid this problem.
 - 2023/5/21
   - Complete the section "Overlays".
-  - Remove the section "IX. Nix Packaging", which may be moved to a separate article in the future.
+  - Remove the section "IX. Nix Packaging", which may be moved to a separate post in the future.
   - Add an example of installing programs via flakes at section VI-4.
 
 ## 0. Why Nix
@@ -78,7 +78,7 @@ The rollback capability of NixOS gave me a lot of confidence - I no longer fear 
 
 {{< figure src="./screenshot_2023-05-07-21-21.webp" caption="My NixOS Desktop" >}}
 
-So after studying NixOS and Nix Flakes for about half a month, I finally completed my system switch, and this article is born out of the notes I wrote during this period time, hope you like it~
+So after studying NixOS and Flakes for about half a month, I finally completed my system switch, and this post is born out of the notes I wrote during this period time, hope you like it~
 
 Now that the background information is out of the way, it's time to dive into the world of Nix!
 
@@ -98,11 +98,12 @@ Due to Nix's declarative and reproducible features, Nix is not only used to mana
 
 ### Advantages of Nix
 
-- **Declarative configuration, Environment as Code**, can be managed with Git. As long as the configuration files are not lost, the system can be restored to any historical state at any time(ideally).
+- **Declarative configuration, Environment as Code, can be managed with Git**
+  - As long as the configuration files are not lost, the system can be restored to any historical state at any time(ideally).
   - Nix lock dependences's version through a lock file named `flake.lock`, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.
   - Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as `flake.lock` in Docker, Docker's reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).
 - **Highly convenient system customization capability**
-  - By changing a few lines of configuration, various components of the NixOS system can be easily customized. This is because Nix encapsulates all the underlying complex operations in nix packages and only exports concise and necessary declarative parameters.
+  - By changing a few lines of configuration, various components of NixOS can be easily customized. This is because Nix encapsulates all the underlying complex operations in nix packages and only exports concise and necessary declarative parameters.
   - Moreover, this modification is very safe. An example is that one NixOS user on the V2EX forum stated that "[**on NixOS, switching between different desktop environments is very simple and clean, and it is very safe. I often switch between gnome/kde/sway.**](https://www.v2ex.com/t/938569#r_13053251)"
 - **Rollback**: The system can be rolled back to any historical environment at any time, and NixOS even adds all old versions to the boot options by default to ensure that the system can be rolled back at any time even though it crashes. Therefore, NixOS is also considered one of the most stable Linux Systems.
 - **No dependency conflicts**: Because each software package in Nix has a unique hash, its installation path also includes this hash value, so multiple versions can coexist.
@@ -113,7 +114,7 @@ Due to Nix's declarative and reproducible features, Nix is not only used to mana
 ### Disadvantages of Nix
 
 - **Relatively high learning curve:**: If you want the system to be completely reproducible and avoid pitfalls caused by improper use, you need to learn about the entire design of Nix and manage the system in a declarative manner. You cannot blindly use `nix-env -i` (which is similar to `apt-get install`).
-- **Chaotic documentation**: Firstly, Nix Flakes is still an experimental feature, and there are currently relatively few documents introducing it. Secondly, most of the Nix community's documentation only introduces the old `nix-env`/`nix-channel`. If you want to start learning Nix directly from Nix Flakes, you need to refer to a large number of old documents and extract what you need from them. In addition, some of Nix's current core functions are not well-documented (such as `imports` and Nixpkgs Module System), so it is best to look at the source code to understand them.
+- **Chaotic documentation**: Flakes is still an experimental feature, and there are currently few documents introducing it, Most of the Nix community's documentation only introduces the old cli such as `nix-env`/`nix-channel`. If you want to start learning Nix directly from Flakes, you need to refer to a large number of old documents and extract what you need from them. In addition, some of Nix's current core functions are not well-documented (such as `imports` and Nix Module System), to figure out what it does, it is best to look at the source code...
 - ~~Relatively few packages~~: Retract this one. The official claim is that nixpkgs has [80000+](https://search.nixos.org/packages) packages, and indeed, most packages can be found in nixpkgs.
 - **Relatively high disk space usage**: To ensure that the system can be rolled back at any time, Nix preserves all historical environments by default, which can take up a lot of disk space. Although you can manually clean up old historical environments periodically with `nix-collect-garbage`, it is still recommended to buy a larger hard drive.
 
@@ -138,39 +139,37 @@ some reference materials that may be useful:
    2. The official installer does not provide any uninstallation method. To uninstall Nix on Linux/MacOS, you need to manually delete all related files, users, and groups.
 2. [The Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer): a third-party installer written in Rust, which enables `nix-command` & `flakes` by default and provides an uninstallation command.
 
-## III. Nix Flakes and the old Nix
+## III. Nix Flakes and the classic Nix
 
-In 2020, Nix introduced two new features, `nix-command` and `flakes`, which provide new command-line tools, standard Nix package structure definitions, and `flake.lock` version lock files similar to cargo/npm. These two features greatly enhance the capabilities of Nix. Although they are still experimental features as of 2023-05-05, they have been widely used by the Nix community and are strongly recommended.
+Currently, most of the Nix community's documentation still only covers traditional Nix and does not include Flakes-related content. However, from the perspective of reproducibility and ease of management and maintenance, the classic Nix package structure and cli are no longer recommended for use. Therefore, this post will not introduce the usage of the classic Nix, and it is recommended that beginners ignore these old contents and just start with `nix-command` & `flakes`.
 
-Currently, most of the Nix community's documentation still only covers traditional Nix and does not include Nix Flakes-related content. However, from the perspective of reproducibility and ease of management and maintenance, the old Nix package structure and command-line tools are no longer recommended for use. Therefore, this document will not introduce the usage of the old Nix package structure and command-line tools, and it is recommended that beginners ignore these old contents and just start with `nix-command` & `flakes`.
-
-Here are the old Nix command-line tools and related concepts that are no longer needed in `nix-command` and `flakes`. When searching for information, you can safely ignore them:
+Here are the classic Nix commands and related concepts that are no longer needed after you enabled `nix-command` and `flakes`, when searching for information, you can safely ignore them:
 
 1. `nix-channel`: `nix-channel` is similar to other package management tools such as apt/yum/pacman, managing software package versions through stable/unstable/test channels.
-   1. In Nix Flakes, the functionality of `nix-channel` is completely replaced by `inputs` in `flake.nix` to declare dependency sources and `flake.lock` to lock dependency versions.
+   1. In Flakes, the functionality of `nix-channel` is completely replaced by `inputs` in `flake.nix` to declare dependency sources and `flake.lock` to lock dependency versions.
 2. `nix-env`: `nix-env` is a core command-line tool for traditional Nix used to manage software packages in the user environment. It installs software packages from the data sources defined by `nix-channel`, so the installed package versions are influenced by the channel. Packages installed with `nix-env` are not automatically recorded in Nix's declarative configuration and are entirely outside of its control, making them difficult to reproduce on other machines. Therefore, it is not recommended to use this tool.
-   1. The corresponding command in Nix Flakes is `nix profile`.
+   1. The corresponding command in Flakes is `nix profile`.
 3. `nix-shell`: `nix-shell` is used to create a temporary shell environment.
-   1. In Nix Flakes, it is replaced by `nix develop` and `nix shell`.
-4. `nix-build`: `nix-build` is used to build Nix packages, and it places the build results in the `/nix/store` path, but it does not record them in Nix's declarative configuration.
-   1. The corresponding command in Nix Flakes is `nix build`.
+   1. In Flakes, it is replaced by `nix develop` and `nix shell`.
+4. `nix-build`: `nix-build` is used to build Nix packages, and it places the build results in `/nix/store`, but it does not record them in Nix's declarative configuration.
+   1. The corresponding command in Flakes is `nix build`.
 5. ...
 
 > maybe `nix-env -qa` is still useful some times, which returns all packages installed in the System.
 
-## IV. NixOS Flakes Package Repositories
+## IV. Package Repositories of Nix
 
 Similar to Arch Linux, Nix also has official and community software package repositories:
 
 1. [nixpkgs](https://github.com/NixOS/nixpkgs) is a Git repository containing all Nix packages and NixOS modules/configuration. Its master branch contains the latest Nix packages and NixOS modules/configuration.
 2. [NUR](https://github.com/nix-community/NUR) is similar to Arch Linux's AUR. NUR is a third-party Nix package repository and serves as a supplement to nixpkgs.
-3. Nix Flakes can also install software packages directly from Git repositories, which can be used to install Flakes packages provided by anyone.
+3. Flakes can also install software packages directly from Git repositories, which can be used to install Flakes packages provided by anyone, we will talk about this later.
 
-## V. Nix language basics
+## V. Basics of The Nix language
 
-The Nix language is used to declare packages and configuration to be built by Nix, if you want to play NixOS and Nix Flakes and enjoy the many benefits they bring, you must learn the basics of this language first.
+The Nix language is used to declare the configuration to be built by Nix, if you want to play with NixOS and Flakes and enjoy the benefits they bring, you must learn the basics of this language first.
 
-Nix is a relatively simple functional language, if you already have some programming experience, it should take less than 2 hours to go through Nix lanuage's basics.
+The Nix language is a simple functional language, if you already have some programming experience, it should take less than 2 hours to go through Nix lanuage's basics.
 
 Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) and [Chapter 4. The Basics of the Language - Nix Pills](https://nixos.org/guides/nix-pills/basics-of-language.html) to get a basic understanding of Nix language now, they are all good introductory materials.
 
@@ -178,13 +177,13 @@ Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-
 
 > https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution
 
-After learning the basics of the Nix language, we can start using it to configure the NixOS system. The system configuration file for NixOS is located at `/etc/nixos/configuration.nix`, which contains all the declarative configuration for the system, such as time zone, language, keyboard layout, network, users, file system, boot options, etc.
+After learning the basics of the Nix language, we can start using it to configure our NixOS. The default configuration for NixOS is located at `/etc/nixos/configuration.nix`, which contains all the declarative configuration for the system, such as time zone, language, keyboard layout, network, users, file system, boot options, etc.
 
-If we want to modify the system state in a reproducible way (which is also the most recommended way), we need to manually edit the `/etc/nixos/configuration.nix` file, and then execute `sudo nixos-rebuild switch` to apply the configuration. This command generates a new system environment based on the configuration file, sets the new environment as the default one, and also preserves & added the previous environment into the grub boot options. This ensures we can always roll back to the old environment(even if the new environment fails to start).
+If we want to modify the system state in a reproducible way (**which is also the most recommended way**), we need to manually edit `/etc/nixos/configuration.nix`, and then execute `sudo nixos-rebuild switch` to apply the modified configuration, it will generate a new system environment based on the configuration file we modified, sets the new environment as the default one, and also preserves & added the previous environment into the boot options of grub/sytemd-boot. This ensures we can always roll back to the old environment(even if the new environment fails to start).
 
-On the other hand, `/etc/nixos/configuration.nix` is the traditional Nix configuration method, which relies on data sources configured by `nix-channel` and has no version-locking mechanism, making it difficult to ensure the reproducibility of the system. **A better approach is to use Nix Flakes**, which can ensure the reproducibility of the system and make it easy to manage the configuration.
+`/etc/nixos/configuration.nix` is the classic method to configure NixOS, which relies on data sources configured by `nix-channel` and has no version-locking mechanism, making it difficult to ensure the reproducibility of the system. **A better approach is to use Flakes**, which can ensure the reproducibility of the system and make it easy to manage the configuration.
 
-Now first, let's learn how to manage the system using the default configuration method of NixOS through `/etc/nixos/configuration.nix`, and then transition to the more advanced Nix Flakes.
+Now first, let's learn how to manage NixOS through the classic method, `/etc/nixos/configuration.nix`, and then transition to the more advanced Flakes.
 
 ### 1. Configuring the system using `/etc/nixos/configuration.nix`
 
@@ -238,7 +237,7 @@ in the configuration above, we enabled the openssh service, added an ssh public 
 
 Now, running `sudo nixos-rebuild switch` deploys the modified configuration, and then we can login to the system using ssh with ssh keys.
 
-This is the default declarative system configuration in NixOS, where any reproducible changes to the system can be made by modifying the `/etc/nixos/configuration.nix` file and deploying the changes by running `sudo nixos-rebuild switch`.
+This is the default declarative system configuration in NixOS, where any reproducible changes to the system can be made by modifying `/etc/nixos/configuration.nix` and deploying the changes by running `sudo nixos-rebuild switch`.
 
 All configuration options in `/etc/nixos/configuration.nix` can be found in the following places:
 
@@ -249,9 +248,9 @@ All configuration options in `/etc/nixos/configuration.nix` can be found in the 
 
 ### 2. Enabling NixOS Flakes Support
 
-Compared to the default configuration approach of NixOS, Nix Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to use Nix Flakes to manage system configuration.
+Compared to the default configuration approach of NixOS, Flakes provide better reproducibility and a clearer package structure that is easier to maintain. Therefore, it is recommended to use Flakes to manage system configuration.
 
-However, Nix Flakes is currently an experimental feature and is not yet enabled by default. We need to enable it manually by modifying the `/etc/nixos/configuration.nix`, example:
+However, Flakes is currently an experimental feature and is not yet enabled by default. We need to enable it manually by modifying `/etc/nixos/configuration.nix`, example:
 
 ```nix
 # Edit this configuration file to define what should be installed on
@@ -267,11 +266,11 @@ However, Nix Flakes is currently an experimental feature and is not yet enabled 
 
   # omit the previous configuration.......
 
-  # enable Nix Flakes and the new nix-command command line tool
+  # enable Flakes and the new nix-command command line tool
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
-    # Nix Flakes uses the git command to pull dependencies from data sources, so git must be installed first
+    # Flakes uses the git command to pull dependencies from data sources, so git must be installed first
     git
     vim
     wget
@@ -283,11 +282,11 @@ However, Nix Flakes is currently an experimental feature and is not yet enabled 
 }
 ```
 
-Now run `sudo nixos-rebuild switch` to apply the changes, and then you can use Nix Flakes to manage the system configuration.
+Now run `sudo nixos-rebuild switch` to apply the changes, and then you can write the configuration of NixOS with Flakes.
 
 ### 3. Switching System Configuration to `flake.nix`
 
-After enabling the Nix Flakes feature, the `sudo nixos-rebuild switch` command will prioritize reading the `/etc/nixos/flake.nix` file. If not found, it will fallback to `/etc/nixos/configuration.nix`.
+After enabling the Flakes feature, the `sudo nixos-rebuild switch` command will prioritize reading `/etc/nixos/flake.nix`. If not found, it will fallback to `/etc/nixos/configuration.nix`.
 
 Now let's use the official flake templates provided by Nix to learn how to write flakes, check which templates are available using the following command:
 
@@ -303,7 +302,7 @@ cat flake.nix
 ```
 
 Now create a file `/etc/nixos/flake.nix` and write the configuration content according to the template above.
-All system modifications will be taken over by Nix Flakes from now on. An example configuration is shown below:
+All system modifications will be taken over by Flakes from now on. An example configuration is shown below:
 
 ```nix
 {
@@ -378,7 +377,7 @@ All system modifications will be taken over by Nix Flakes from now on. An exampl
 
 Here we define a NixOS system called `nixos-test`, whose configuration file is `./configuration.nix`, which is our previous configuration file, so we can still use the old configuration.
 
-Now execute the `sudo nixos-rebuild switch` command to apply the configuration, and there should be no change to the system, because we just switch to Nix Flakes, and the actual configuration content is the same as before.
+Now execute the `sudo nixos-rebuild switch` command to apply the configuration, and there should be no change to the system, because we just switch to Flakes, and the actual configuration content is the same as before.
 
 ### 4. Manage system software through Flakes
 
@@ -446,13 +445,13 @@ Then udpate `configuration.nix` to install `helix` from flake input:
 }
 ```
 
-Now deploy the changes with `sudo nixos-rebuild switch`, and the helix editor will be installed. You can test it with the `helix` command.
+Now deploy the changes with `sudo nixos-rebuild switch`, and the helix editor will be installed. You can test it with the command `helix`.
 
 ### 5. Add Custom Cache Mirror
 
 To speed up package building, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
 
-In the old NixOS configuration, other cache sources can be added through `nix-channel` command, but Nix Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its build results are not affected by the environment(environment independent).
+In the old NixOS configuration, other cache sources can be added through `nix-channel` command, but Flakes avoids using any system-level configuration and environment variables as far as possible to ensure that its build results are not affected by the environment(environment independent).
 Therefore, to customize the cache image source, we must add the related configuration in `flake.nix` by using the parameter `nixConfig`. The example is as follows:
 
 ```nix
@@ -578,7 +577,7 @@ According to the official document [home Manager Manual](https://nix-community.g
     gnupg
 
     # nix related
-    # 
+    #
     # it provides the command `nom` works just like `nix
     # with more details log output
     nix-output-monitor
@@ -743,7 +742,7 @@ As the configuration increases, it is difficult to maintain the configuration fi
 
 > I only found a description of `imports` in [nixpkgs-unstable official manual - evalModules parameters](https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-parameters): `A list of modules. These are merged together to form the final configuration.`, you can try to understand it...
 
-With the help of the `imports` parameter, we can split `home.nix` and `configuration.nix` into multiple `.nix` files.
+With the help of `imports`, we can split `home.nix` and `configuration.nix` into multiple `.nix` files.
 
 For example, the structure of my previous i3wm system configuration [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2) is as follows:
 
@@ -804,7 +803,7 @@ For the details of the structure and content, please go to the github repository
 
 ### 8. Update the system
 
-After using Nix Flakes, it is also very simple to update the system. First update the flake.lock file, and then deploy it. Execute the following command in the configuration folder:
+With Flakes, it is also very simple to update the system. First update the flake.lock file, and then deploy it. Execute the following command in the configuration folder:
 
 ```shell
 # update flake.lock
@@ -817,11 +816,11 @@ Sometimes when installing new packages, you may encounter an error of sha256 mis
 
 ### 9. Rollback the version of some packages
 
-After using Nix Flakes, most people are currently using the `nixos-unstable` branch of nixpkgs. Sometimes you will encounter some bugs, such as the [chrome/vscode crash problem](https://github.com/swaywm/sway/issues/7562)
+After using Flakes, most people are currently using the `nixos-unstable` branch of nixpkgs. Sometimes you will encounter some bugs, such as the [chrome/vscode crash problem](https://github.com/swaywm/sway/issues/7562)
 
-To resolve this problem, we need to rollback the version of some packages. In Nix Flakes, all package versions and hash values are one-to-one corresponding to the git commit of their input data source. Therefore, to rollback a package to a historical version, we need to lock the git commit of its input data source.
+To resolve this problem, we need to rollback the version of some packages. In Flakes, all package versions and hash values are one-to-one corresponding to the git commit of their input data source. Therefore, to rollback a package to a historical version, we need to lock the git commit of its input data source.
 
-So to rollback the version of some packages, first modify `/etc/nixos/flake.nix`, the example content is as follows (mainly using the `specialArgs` parameter):
+So to rollback the version of some packages, first modify `/etc/nixos/flake.nix`, the example content is as follows (by using `specialArgs`):
 
 ```nix
 {
@@ -905,13 +904,13 @@ After adjusted the configuration, deploy it with `sudo nixos-rebuild switch`, th
 
 > according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), it's not a good practice to use `import` in sub modules to customize `nixpkgs`, because each `import` will create a new instance of nixpkgs, which will increase the build time and memory usage as the configuration grows. So here we create all nixpkgs instances in `flake.nix` to avoid this problem.
 
-### 10. Manage NixOS configuration with Git
+### 10. Manage the configuration with Git
 
-NixOS's configuration file is plain text, so it can be managed with Git just like ordinary dotfiles.
+NixOS's configuration is just plain text, so it can be managed with Git just like other ordinary dotfiles.
 
-On the other hand, `flake.nix` do not required to be placed in the `/etc/nixos` directory, they can be placed in any directory, as long as the correct path is specified during deployment.
+On the other hand, `flake.nix` do not required to be placed in `/etc/nixos`, they can be placed in any directory, as long as the correct path is specified during deployment.
 
-For example, my usage is to place the Nix Flakes configuration in the `~/nixos-config` directory, and then create a soft link in the `/etc/nixos` directory:
+For example, my usage is to place my Flake in `~/nixos-config`, and then create a soft link in `/etc/nixos`:
 
 ```shell
 sudo mv /etc/nixos /etc/nixos.bak  # backup the original configuration
@@ -921,7 +920,7 @@ sudo ln -s ~/nixos-config/ /etc/nixos
 sudo nixos-rebuild switch
 ```
 
-And then you can use Git to manage the configuration in the `~/nixos-config` directory. The configuration can be used with ordinary user-level permissions, and it is not required to be owned by root.
+And then you can use Git to manage the configuration in `~/nixos-config`. The configuration can be used with ordinary user-level permissions, and it is not required to be owned by root.
 
 Another method is to delete `/etc/nixos` directly, and specify the configuration file path each time you deploy:
 
@@ -947,13 +946,13 @@ More operations on Git are not described here. Generally speaking, rollback can 
 
 ### 11. View and delete history data {#view-and-delete-history}
 
-As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot items. In addition to restarting the computer, we can also query all available historical versions through the following command:
+As we mentioned before, each deployment of NixOS will generate a new version, and all versions will be added to the system boot options. In addition to restarting the computer, we can also query all available historical versions through the following command:
 
 ```shell
 nix profile history --profile /nix/var/nix/profiles/system
 ```
 
-And the command to clean up historical versions to release storage space:
+The command to clean up historical versions to release storage space:
 
 ```shell
 # delete all historical versions older than 7 days
@@ -963,7 +962,7 @@ sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-th
 sudo nix store gc --debug
 ```
 
-another command may be useful, it returns all packages installed in the system:
+Another command returns all packages installed in the system:
 
 ```shell
 nix-env -qa
@@ -971,11 +970,11 @@ nix-env -qa
 
 ## VII. Usage of Nix Flakes
 
-Up to now, we have written a lot of Nix Flakes configuration to manage the NixOS system. Here is a brief introduction to the more detailed content of Nix Flakes, as well as commonly used nix flake commands.
+Up to now, we have written a lot of configuration with Flakes to manage NixOS. Here is a brief introduction to the more detailed content of the Flakes, as well as the new command lines commonly used with flakes.
 
 ### 1. Flake inputs {#flake-inputs}
 
-the `inputs` of `flake.nix` is a attribute set, used to specify the dependencies of the current flake, there are many types of `inputs`, for example:
+The `inputs` in `flake.nix` is a attribute set, used to specify the dependencies of the current flake, there are many types of `inputs`, for example:
 
 ```nix
 {
@@ -998,7 +997,7 @@ the `inputs` of `flake.nix` is a attribute set, used to specify the dependencies
     sops-nix = {
       url = "github:Mic92/sops-nix";
       # The `follows` keyword in inputs is used for inheritance.
-      # Here, `inputs.nixpkgs` of sops-nix is kept consistent with the `inputs.nixpkgs` of
+      # Here, `inputs.nixpkgs` of sops-nix is kept consistent with the `inputs.nixpkgs` in
       # the current flake, to avoid problems caused by different versions of nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -1123,27 +1122,25 @@ nix build "nixpkgs#bat"
 
 We know that many programs have a large number of build parameters that need to be configured, and different users may want to use different build parameters. This is where `Overriding` and `Overlays` come in handy. Let me give you a few examples I have encountered:
 
-1. [`fcitx5-rime.nix`](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix): By default, `rimeDataPkgs` for `fcitx5-rime` uses the `rime-data` package, but this parameter can be customized using `override` to load custom rime configuration (such as loading the Xiaohe keyboard input method configuration).
-2. [`vscode/with-extensions.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix): This package for VS Code can also be customized by overriding the value of the `vscodeExtensions` parameter to install custom plugins.
-   - [`nix-vscode-extensions`](https://github.com/nix-community/nix-vscode-extensions): This is a vscode plugin manager implemented using this parameter.
-3. [`firefox/common.nix`](https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix): Firefox also has many customizable parameters.
+1. [`fcitx5-rime.nix`](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix): By default, `fcitx5-rime` use `rime-data` as the value of `rimeDataPkgs`, but this parameter can be customized by `override`.
+2. [`vscode/with-extensions.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vscode/with-extensions.nix): This package for VS Code can also be customized by overriding the value of `vscodeExtensions`, thus we can install some custom plugins into VS Code.
+   - [`nix-vscode-extensions`](https://github.com/nix-community/nix-vscode-extensions): This is a vscode plugin manager implemented by overriding `vscodeExtensions`.
+3. [`firefox/common.nix`](https://github.com/NixOS/nixpkgs/blob/416ffcd08f1f16211130cd9571f74322e98ecef6/pkgs/applications/networking/browsers/firefox/common.nix): Firefox has many customizable parameters too.
 4. ...
 
-In short, in order to customize the build parameters of Nix packages of this type, we need to use `Overriding` or `Overlays`.
-
+In short, `Overriding` or `Overlays` can be used to customize the build parameters of Nix packages.
 
 ### 1. pkgs.callPackage {#callpackage}
 
 > [Chapter 13. Callpackage Design Pattern - Nix Pills](https://nixos.org/guides/nix-pills/callpackage-design-pattern.html)
 
-We have introduced and used `import xxx.nix` to import Nix files in the previous content. This syntax simply returns the execution result of the file without further processing of the result.
+In the content above, We have used `import xxx.nix` to import Nix files many times, this syntax simply returns the execution result of the file, without any further processing of the it.
 
-And `pkgs.callPackage` is also used to import Nix files, its syntax is `pkgs.callPackage xxx.nix { ... }`. 
-But unlike `import`, the Nix file imported by it must be a Derivation or a function that returns a Derivation. Its execution result must be a Derivation(a software package).
+`pkgs.callPackage` is also used to import Nix files, its syntax is `pkgs.callPackage xxx.nix { ... }`, but unlike `import`, the Nix file imported by it must be a Derivation or a function that returns a Derivation. Its result is a Derivation(a software package) too.
 
 So what does the Nix file that can be used as a parameter of `pkgs.callPackge` look like? You can take a look at the `hello.nix` `fcitx5-rime.nix` `vscode/with-extensions.nix` `firefox/common.nix` we mentioned earlier, they can all be imported by `pkgs.callPackage`.
 
-When  the `xxx.nix` used in `pkgs.callPackge xxx.nix {...}` is a function (most Nix packages are like this), the execution flow is as follows:
+When the `xxx.nix` used in `pkgs.callPackge xxx.nix {...}` is a function (most Nix packages are like this), the execution flow is as follows:
 
 1. `pkgs.callPackge xxx.nix {...}` will first `import xxx.nix` to get the function defined in it. The parameters of this function usually have `lib`, `stdenv`, `fetchurl` and other parameters, as well as some custom parameters, which usually have default values.
 2. Then `pkgs.callPackge` will first look up the value matching the name from the current environment as the parameter to be passed to the function. parameters like `lib` `stdenv` `fetchurl` are defined in nixpkgs, and they will be found in this step.
@@ -1165,13 +1162,13 @@ pkgs.fcitx5-rime.override {rimeDataPkgs = [
 ];}
 ```
 
-The result of executing the above Nix expression is a new Derivation, where the `rimeDataPkgs` parameter is overridden as `[./rime-data-flypy]`, while other parameters retain their original values.
+The result of this Nix expression is a new Derivation, where `rimeDataPkgs` is overridden as `[./rime-data-flypy]`, while other parameters remain their original values.
 
-How to know which parameters can be overridden for `fcitx5-rime`? There are several ways:
+How to know which parameters of `fcitx5-rime` can be overridden? There are several ways:
 
 1. Try to find the source code of the package in the nixpkgs repository on GitHub, such as [fcitx5-rime.nix](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix)
    1. Note: Be sure to select the correct branch, for example, if you are using the nixos-unstable branch, you need to find it in the nixos-unstable branch.
-2.  Check by using `nix repl '<nixpkgs>'`, then enter `:e pkgs.fcitx5-rime`, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.
+2. Check by using `nix repl '<nixpkgs>'`, then enter `:e pkgs.fcitx5-rime`, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.
 
 Through the above two methods, you can see that the `fcitx5-rime` package has the following input parameters, which can all be modified by `override`:
 
@@ -1194,9 +1191,9 @@ stdenv.mkDerivation rec {
 }
 ```
 
-Instead of override the function's parameters, we can also override the attributes of the Derivation created by `stdenv.mkDerivation`. 
+Instead of override the function's parameters, we can also override the attributes of the Derivation created by `stdenv.mkDerivation`.
 
-Take `pkgs.hello` as an example, first check the source code of this package through the above method:
+Take `pkgs.hello` as an example, first check the source code of this package through the method we mentioned above:
 
 ```nix
 # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/misc/hello/default.nix
@@ -1224,7 +1221,7 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-The `pname` `version` `src` `doCheck` attributes show above can all be overridden by using `overrideAttrs`, for example:
+The attributes showed above, such as `pname` `version` `src` `doCheck`, can all be overridden by `overrideAttrs`, for example:
 
 ```nix
 helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
@@ -1232,7 +1229,7 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 });
 ```
 
-Here we use `overrideAttrs` to override the attribute `doCheck` of `hello`,  while other attributes retain their original values.
+Here we use `overrideAttrs` to override `doCheck`, while other attributes remain their original values.
 
 Some default attributes defined in `stdenv.mkDerivation` can also be overridden by `overrideAttrs`, for example:
 
@@ -1242,8 +1239,8 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 });
 ```
 
-The attribute we override here, `separateDebugInfo`, is not defined in the source code of `hello`, but it is defined in `stdenv.mkDerivation`. 
-We can check the source code of `stdenv.mkDerivation` to see all the attributes defined in it, by using `nix repl '<nixpkgs>'` and then enter `:e stdenv.mkDerivation`.
+The attribute we override here, `separateDebugInfo`, is defined in `stdenv.mkDerivation`, not in the source code of `hello`.
+We can check the source code of `stdenv.mkDerivation` to see all the attributes defined in it by using `nix repl '<nixpkgs>'` and then enter `:e stdenv.mkDerivation`.
 
 ### 3. Overlays
 
@@ -1257,7 +1254,7 @@ To solve this problem, Nix provides the ability to use `overlays`. Simply put, `
 In the classic Nix environment, Nix automatically applies all `overlays` configuration under the paths `~/.config/nixpkgs/overlays.nix` `~/.config/nixpkgs/overlays/*.nix`,
 but in Flakes, in order to ensure the reproducibility of the system, it cannot depend on any configuration outside the Git repository, so this classic method cannot be used now.
 
-When using Nix Flakes to write NixOS configuration, home Manager and NixOS both provide the `nixpkgs.overlays` option to define `overlays`, related documentation:
+When using Flakes to write configuration for NixOS, home Manager and NixOS both provide the `nixpkgs.overlays` option to define `overlays`, related documentation:
 
 - [home-manager docs - `nixpkgs.overlays`](https://nix-community.github.io/home-manager/options.html#opt-nixpkgs.overlays)
 - [nixpkgs source code - `nixpkgs.overlays`](https://github.com/NixOS/nixpkgs/blob/30d7dd7e7f2cba9c105a6906ae2c9ed419e02f17/nixos/modules/misc/nixpkgs.nix#L169)
@@ -1420,10 +1417,10 @@ After becoming familiar with the Nix toolchain, you can further explore Nix's th
 
 - [Nix Reference Manual](https://nixos.org/manual/nix/stable/package-management/profiles.html): A guide to the Nix package manager, which mainly covers the design of the package manager and instructions for using it from the command line.
 - [nixpkgs Manual](https://nixos.org/manual/nixpkgs/unstable/): A manual that introduces parameters of Nixpkgs, how to use, modify, and package Nix packages.
-- [NixOS Manual](https://nixos.org/manual/nixos/unstable/): A user manual for the NixOS system, mainly including configuration instructions for system-level components such as Wayland/X11 and GPU.
+- [NixOS Manual](https://nixos.org/manual/nixos/unstable/): A user manual for NixOS, mainly including configuration instructions for system-level components such as Wayland/X11 and GPU.
 - [nix-pills](https://nixos.org/guides/nix-pills): Nix Pills provides an in-depth explanation of how to use Nix to build software packages. It is written in a clear and understandable way and is worth reading, as it is also sufficiently in-depth.
 
-After becoming familiar with Nix Flakes, you may want to try some advanced techniques. Here are some popular community projects to try:
+After becoming familiar with Flakes, you may want to try some advanced techniques. Here are some popular community projects to try:
 
 - [flake-parts](https://github.com/hercules-ci/flake-parts): Simplify the writing and maintenance of configuration through the Module module system.
 - [flake-utils-plus](https://github.com/gytis-ivaskevicius/flake-utils-plus): A third-party package for simplifying Flake configuration, which is apparently more powerful.
@@ -1440,10 +1437,9 @@ And many other useful community projects to explore, here are some of them:
 - [lanzaboote](https://github.com/nix-community/lanzaboote): enable secure boot for NixOS
 - [impermanence](https://github.com/nix-community/impermanence): used to make NixOS stateless, to imporve the reproduciability of NixOS system.
 
-
 ## When will flakes stablized {#when-will-flakes-stablized}
 
-Throughout so much content of the article, I've introduced in detail how to start using Flakes to configure the NixOS system, but at the beginning of the article we mentioned that **Flakes is still an experimental feature, which is worrying**. If Flakes is greatly changed or even removed, we may need to spend a lot of time to migrate the configuration.
+Throughout so much content of this post, I've introduced in detail how to start using Flakes to configure NixOS, but at the beginning of this post we mentioned that **Flakes is still an experimental feature, which is worrying**. If Flakes is greatly changed or even removed, we may need to spend a lot of time to migrate the configuration.
 
 In fact this is also one of the most concerned issues in the entire NixOS community, **when will Flakes become a stable feature**?
 
@@ -1464,14 +1460,14 @@ So overall, I still recommend everyone to use Flakes, but be prepared for the pr
 
 ## References
 
-The feedback and discussion of the article is mainly on [this Reddit post](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/), you can also comment directly at the bottom of this page.
+The feedback and discussion of this post is mainly on [this Reddit post](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/), you can also comment directly at the bottom of this page.
 
 Here are some useful resources that I referred to:
 
 - [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems]: A beginner-friendly Nix Flakes tutorial that is worth reading.
 - [NixOS series](https://lantian.pub/en/article/modify-website/nixos-why.lantian/): LanTian's NixOS series, which are very clear and easy to understand.
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): An official Nix Flakes tutorial series, which provides a relatively detailed introduction and is suitable for beginners.
-- [Nix Flakes - Wiki](https://nixos.wiki/wiki/Flakes): The official Nix Flakes wiki, which provides a relatively rough introduction.
+- [Flakes - NixOS Wiki](https://nixos.wiki/wiki/Flakes): The official Nix Flakes wiki, which provides a relatively rough introduction.
 - [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): My Flake for NixOS & macOS.
 
 [digga]: https://github.com/divnix/digga
