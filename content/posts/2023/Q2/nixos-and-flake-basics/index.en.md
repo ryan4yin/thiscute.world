@@ -36,6 +36,7 @@ code:
 
 - 2023/6/21
   - Add some details about the usage of `callPackage`, `override` and `overlays` in section `VIII. Advanced Usage of Nixpkgs`.
+  - Add some command line tools I used frequently in section VI-6.
 - 2023/6/6
   - Add examples of flake's inputs & outputs into section `VII. Usage of Nix Flakes`
 - 2023/6/4
@@ -273,6 +274,8 @@ However, Nix Flakes is currently an experimental feature and is not yet enabled 
     git
     vim
     wget
+    curl
+
   ];
 
   # omit the rest of the configuration.......
@@ -432,6 +435,7 @@ Then udpate `configuration.nix` to install `helix` from flake input:
     git
     vim
     wget
+    curl
 
     # install helix from flake input `helix`
     helix."${pkgs.system}".packages.helix
@@ -532,11 +536,75 @@ According to the official document [home Manager Manual](https://nix-community.g
 
   # Packages that should be installed to the user profile.
   home.packages = [
-    pkgs.htop
-    pkgs.btop
+    # here is some command line tools I use frequently
+    # feel free to add your own or remove some of them
+
+    neofetch
+    nnn # terminal file manager
+
+    # archives
+    zip
+    xz
+    unzip
+    p7zip
+
+    # utils
+    ripgrep # recursively searches directories for a regex pattern
+    jq # A lightweight and flexible command-line JSON processor
+    yq-go # yaml processer https://github.com/mikefarah/yq
+    exa # A modern replacement for ‘ls’
+    fzf # A command-line fuzzy finder
+
+    # networking tools
+    mtr # A network diagnostic tool
+    iperf3
+    dnsutils  # `dig` + `nslookup`
+    ldns # replacement of `dig`, it provide the command `drill`
+    aria2 # A lightweight multi-protocol & multi-source command-line download utility
+    socat # replacement of openbsd-netcat
+    nmap # A utility for network discovery and security auditing
+    ipcalc  # it is a calculator for the IPv4/v6 addresses
+
+    # misc
+    cowsay
+    file
+    which
+    tree
+    gnused
+    gnutar
+    gawk
+    zstd
+    gnupg
+
+    # nix related
+    # 
+    # it provides the command `nom` works just like `nix
+    # with more details log output
+    nix-output-monitor
+
+    # productivity
+    hugo # static site generator
+    glow # markdown previewer in terminal
+
+    # 一些我常用的命令行工具
+    btop  # replacement of htop/nmon
+    iotop # io monitoring
+    iftop # network monitoring
+
+    # system call monitoring
+    strace # system call monitoring
+    ltrace # library call monitoring
+    lsof # list open files
+
+    # system tools
+    sysstat
+    lm_sensors # for `sensors` command
+    ethtool
+    pciutils # lspci
+    usbutils # lsusb
   ];
 
-  # enable starship, a beautiful shell prompt
+  # 启用 starship，这是一个漂亮的 shell 提示符
   programs.starship = {
     enable = true;
     settings = {
@@ -547,7 +615,7 @@ According to the official document [home Manager Manual](https://nix-community.g
     };
   };
 
-  # alacritty terminal emulator
+  # alacritty 终端配置
   programs.alacritty = {
     enable = true;
       env.TERM = "xterm-256color";
@@ -557,6 +625,21 @@ According to the official document [home Manager Manual](https://nix-community.g
       };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;
+  };
+
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    bashrcExtra = ''
+      export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+    '';
+
+    # set some aliases, feel free to add more or remove some
+    shellAliases = {
+      urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
+      urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+      httpproxy = "export https_proxy=http://127.0.0.1:7890; export http_proxy=http://127.0.0.1:7890;";
+    };
   };
 
   # This value determines the home Manager release that your

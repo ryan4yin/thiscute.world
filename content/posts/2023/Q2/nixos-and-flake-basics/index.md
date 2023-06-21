@@ -34,6 +34,7 @@ code:
 
 - 2023/6/21
   - 在 `八、Nixpkgs 的高级用法` 补充 callPackage、override 与 overlays 的使用细节。
+  - 在 `六-6` 补充了一些我常用的命令行工具配置。
 - 2023/6/6
   - 在 `七、Nix Flakes 的使用` 一节中添加 flake 的 inputs 与 outpus 使用案例。
 - 2023/6/4
@@ -609,6 +610,7 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
     git  # Nix Flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git
     vim
     wget
+    curl
   ];
 
   # 省略其他配置......
@@ -766,6 +768,7 @@ cat flake.nix
     git  # Nix Flakes 通过 git 命令从数据源拉取依赖，所以必须先安装好 git
     vim
     wget
+    curl
 
     # 这里从 helix 这个 inputs 数据源安装了 helix 程序
     helix."${pkgs.system}".packages.helix
@@ -876,9 +879,71 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
   # 通过 home.packages 安装一些常用的软件
   # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
   # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
-  home.packages = [
-    pkgs.htop
-    pkgs.btop
+  home.packages = with pkgs;[
+    # 如下是我常用的一些命令行工具，你可以根据自己的需要进行增删
+    neofetch
+    nnn # terminal file manager
+
+    # archives
+    zip
+    xz
+    unzip
+    p7zip
+
+    # utils
+    ripgrep # recursively searches directories for a regex pattern
+    jq # A lightweight and flexible command-line JSON processor
+    yq-go # yaml processer https://github.com/mikefarah/yq
+    exa # A modern replacement for ‘ls’
+    fzf # A command-line fuzzy finder
+
+    # networking tools
+    mtr # A network diagnostic tool
+    iperf3
+    dnsutils  # `dig` + `nslookup`
+    ldns # replacement of `dig`, it provide the command `drill`
+    aria2 # A lightweight multi-protocol & multi-source command-line download utility
+    socat # replacement of openbsd-netcat
+    nmap # A utility for network discovery and security auditing
+    ipcalc  # it is a calculator for the IPv4/v6 addresses
+
+    # misc
+    cowsay
+    file
+    which
+    tree
+    gnused
+    gnutar
+    gawk
+    zstd
+    gnupg
+
+    # nix related
+    # 
+    # it provides the command `nom` works just like `nix
+    # with more details log output
+    nix-output-monitor
+
+    # productivity
+    hugo # static site generator
+    glow # markdown previewer in terminal
+
+    # 一些我常用的命令行工具
+    btop  # replacement of htop/nmon
+    iotop # io monitoring
+    iftop # network monitoring
+
+    # system call monitoring
+    strace # system call monitoring
+    ltrace # library call monitoring
+    lsof # list open files
+
+    # system tools
+    sysstat
+    lm_sensors # for `sensors` command
+    ethtool
+    pciutils # lspci
+    usbutils # lsusb
   ];
 
   # 启用 starship，这是一个漂亮的 shell 提示符
@@ -902,6 +967,21 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
       };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;
+  };
+
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    bashrcExtra = ''
+      export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+    '';
+
+    # set some aliases, feel free to add more or remove some
+    shellAliases = {
+      urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
+      urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+      httpproxy = "export https_proxy=http://127.0.0.1:7890; export http_proxy=http://127.0.0.1:7890;";
+    };
   };
 
   # This value determines the Home Manager release that your
