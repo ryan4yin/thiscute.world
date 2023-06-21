@@ -171,7 +171,7 @@ The Nix language is used to declare packages and configuration to be built by Ni
 
 Nix is a relatively simple functional language, if you already have some programming experience, it should take less than 2 hours to go through Nix lanuage's basics.
 
-Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) to get a basic understanding of Nix language now, it's a very good tutorial.
+Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) and [Chapter 4. The Basics of the Language - Nix Pills](https://nixos.org/guides/nix-pills/basics-of-language.html) to get a basic understanding of Nix language now, they are all good introductory materials.
 
 ## VI. Managing the system declaratively
 
