@@ -32,6 +32,8 @@ code:
 
 ## 更新日志
 
+- 2023/6/21
+  - 在 `八、Nixpkgs 的高级用法` 补充 callPackage、override 与 overlays 的使用细节。
 - 2023/6/6
   - 在 `七、Nix Flakes 的使用` 一节中添加 flake 的 inputs 与 outpus 使用案例。
 - 2023/6/4
@@ -495,7 +497,7 @@ builtins.fetchTarball "https://github.com/NixOS/nix/archive/7c3ab5751568a0bc6343
 
 ### 13. Derivations {#derivations}
 
-一个构建动作的 Nix 语言描述被称做一个 Derivation，它描述了如何构建一个软件包，它的构建结果是一个 Store Object
+一个构建动作的 Nix 语言描述被称做一个 Derivation，它描述了如何构建一个软件包，它的构建结果是一个 Store Object.
 
 Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash>` 是构建结果的 hash 值，`<name>` 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。
 
@@ -1379,7 +1381,6 @@ nix build "nixpkgs#bat"
 ```
 
 此外 [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，写得比较浅显易懂，适合新手用来入门。
-
 ## 八、Nixpkgs 的高级用法 {#nixpkgs-advanced-usage}
 
 callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技术，它们都是用来自定义 Nix 包的构建方法的。
@@ -1394,7 +1395,25 @@ callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技�
 
 总之如果需要自定义上述这类 Nix 包的构建参数，或者实施某些比较底层的修改，我们就得用到 Overriding 跟 Overlays。
 
-### Overriding
+### 1. pkgs.callPackage {#callpackage}
+
+前面我们介绍并大量使用了 `import xxx.nix` 来导入 Nix 文件，这种语法只是单纯地返回该文件的执行结果，不会对该结果进行进一步处理。
+比如说 `xxx.nix` 的内容是形如 `{...}: {...}`，那么 `import xxx.nix` 的结果就是该文件中定义的这个函数。
+
+`pkgs.callPackage` 也是用来导入 Nix 文件的，它的语法是 `pkgs.callPackage xxx.nix { ... }`. 但跟 `import` 不同的是，它导入的 nix 文件内容必须是一个 Derivation 或者返回 Derivation 的函数，它的执行结果一定是一个 Derivation，也就是一个软件包。
+
+那可以作为 `pkgs.callPackge` 参数的 nix 文件具体长啥样呢，可以去看看我们前面举例过的 `hello.nix` `fcitx5-rime.nix` `vscode/with-extensions.nix` `firefox/common.nix`，它们都可以被 `pkgs.callPackage` 导入。
+
+当 `pkgs.callPackge xxx.nix {...}` 中的 `xxx.nix`，其内容为一个函数时（绝大多数 nix 包都是如此），执行流程如下：
+
+1. `pkgs.callPackge xxx.nix {...}` 会先 `import xxx.nix`，得到其中定义的函数，该函数的参数通常会有 `lib`, `stdenv`, `fetchurl` 等参数，以及一些自定义参数，自定义参数通常都有默认值。
+2. 接着 `pkgs.callPackge` 会首先从当前环境中查找名称匹配的值，作为将要传递给前述函数的参数。像 `lib` `stdenv` `fetchurl` 这些都是 nixpkgs 中的函数，在这一步就会查找到它们。
+3. 接着 `pkgs.callPackge` 会将其第二个参数 `{...}` 与前一步得到的参数集（attribute set）进行合并，得到一个新的参数列表，然后将其传递给该函数并执行。
+4. 函数执行结果是一个 Derivation，也就是一个软件包。
+
+这个函数比较常见的用途是用来导入一些自定义的 Nix 包，比如说我们自己写了一个 `hello.nix`，然后就可以在任意 Nix Module 中使用 `pkgs.callPackage ./hello.nix {}` 来导入并使用它。
+
+### 2. Overriding {#overriding}
 
 > [Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
 
@@ -1408,7 +1427,73 @@ pkgs.fcitx5-rime.override {rimeDataPkgs = [
 
 上面这个 Nix 表达式的执行结果就是一个新的 Derivation，它的 `rimeDataPkgs` 参数被覆盖为 `[./rime-data-flypy]`，而其他参数则沿用原来的值。
 
-除了覆写参数，还可以通过 `overrideAttrs` 来覆写使用 `stdenv.mkDerivation` 构建的 Derivation 的属性，比如：
+如何知道 `fcitx5-rime` 这个包有哪些参数可以覆写呢？有几种方法：
+
+1. 直接在 GitHub 的 nixpkgs 源码中找：[fcitx5-rime.nix](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix)
+   1. 注意要选择正确的分支，加入你用的是 nixos-unstable 分支，那就要在 nixos-unstable 分支中找。
+2. 通过 `nix repl` 交互式查看：`nix repl '<nixpkgs>'`，然后输入 `:e pkgs.fcitx5-rime`，会通过编辑器打开这个包的源码，然后就可以看到这个包的所有参数了。
+
+通过上述两种方法，都可以看到 `fcitx5-rime` 这个包拥有如下输入参数，它们都是可以通过 `override` 修改的：
+
+```nix
+{ lib, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, extra-cmake-modules
+, gettext
+, fcitx5
+, librime
+, rime-data
+, symlinkJoin
+, rimeDataPkgs ? [ rime-data ]
+}:
+
+stdenv.mkDerivation rec {
+  ...
+}
+```
+
+除了覆写参数，还可以通过 `overrideAttrs` 来覆写使用 `stdenv.mkDerivation` 构建的 Derivation 的属性。
+以 `pkgs.hello` 为例，首先通过前述方法查看这个包的源码：
+
+```nix
+# https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/misc/hello/default.nix
+{ callPackage
+, lib
+, stdenv
+, fetchurl
+, nixos
+, testers
+, hello
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "hello";
+  version = "2.12.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=";
+  };
+
+  doCheck = true;
+
+  # ......
+})
+```
+
+其中 `pname` `version` `src` `doCheck` 等属性都是可以通过 `overrideAttrs` 来覆写的，比如：
+
+```nix
+helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
+  doCheck = false;
+});
+```
+
+上面这个例子中，`doCheck` 就是一个新的 Derivation，它的 `doCheck` 参数被改写为 `false`，而其他参数则沿用原来的值。
+
+除了包源码中自定义的参数值外，我们也可以通过 `overrideAttrs` 直接改写 `stdenv.mkDerivation` 内部的默认参数，比如：
 
 ```nix
 helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
@@ -1416,9 +1501,9 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 });
 ```
 
-上面这个例子中，`helloWithDebug` 就是一个新的 Derivation，它的 `separateDebugInfo` 参数被覆盖为 `true`，而其他参数则沿用原来的值。
+具体的内部参数可以通过 `nix repl '<nixpkgs>'` 然后输入 `:e stdenv.mkDerivation` 来查看其源码。
 
-### Overlays
+### 3. Overlays {#overlays}
 
 > [Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
 
@@ -1475,6 +1560,7 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
     })
 
     # overlay3 - 也可以将 overlay 定义在其他文件中
+    # 这里 overlay3.nix 中的内容格式与上面的一致，都是 `final: prev: { xxx = prev.xxx.override { ... }; }`
     (import ./overlays/overlay3.nix)
   ];
 }

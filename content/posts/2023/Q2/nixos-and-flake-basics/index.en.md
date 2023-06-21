@@ -34,16 +34,18 @@ code:
 
 ## Article History
 
+- 2023/6/21
+  - Add some details about the usage of `callPackage`, `override` and `overlays` in section `VIII. Advanced Usage of Nixpkgs`.
 - 2023/6/6
-  - add examples of flake's inputs & outputs into section `VII. Usage of Nix Flakes`
+  - Add examples of flake's inputs & outputs into section `VII. Usage of Nix Flakes`
 - 2023/6/4
-  - replace `nix-env --list-generations` by `nix profile history`
-  - replace `nix-collect-garbage` by `nix store gc`
+  - Replace `nix-env --list-generations` by `nix profile history`
+  - Replace `nix-collect-garbage` by `nix store gc`
 - 2023/6/1
-  - update VI-9 according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), create all nixpkgs instances globally in `flake.nix` to avoid this problem.
+  - Update VI-9 according to [1000 instances of nixpkgs](https://discourse.nixos.org/t/1000-instances-of-nixpkgs/17347), create all nixpkgs instances globally in `flake.nix` to avoid this problem.
 - 2023/5/21
   - Complete the section "Overlays".
-  - remove the section "IX. Nix Packaging", which may be moved to a separate article in the future.
+  - Remove the section "IX. Nix Packaging", which may be moved to a separate article in the future.
   - Add an example of installing programs via flakes at section VI-4.
 
 ## 0. Why Nix
@@ -1046,7 +1048,26 @@ We know that many programs have a large number of build parameters that need to 
 
 In short, in order to customize the build parameters of Nix packages of this type, we need to use `Overriding` or `Overlays`.
 
-### Overriding
+
+### 1. pkgs.callPackage {#callpackage}
+
+前面我们介绍并大量使用了 `import xxx.nix` 来导入 Nix 文件，这种语法只是单纯地返回该文件的执行结果，不会对该结果进行进一步处理。
+比如说 `xxx.nix` 的内容是形如 `{...}: {...}`，那么 `import xxx.nix` 的结果就是该文件中定义的这个函数。
+
+`pkgs.callPackage` 也是用来导入 Nix 文件的，它的语法是 `pkgs.callPackage xxx.nix { ... }`. 但跟 `import` 不同的是，它导入的 nix 文件内容必须是一个 Derivation 或者返回 Derivation 的函数，它的执行结果一定是一个 Derivation，也就是一个软件包。
+
+那可以作为 `pkgs.callPackge` 参数的 nix 文件具体长啥样呢，可以去看看我们前面举例过的 `hello.nix` `fcitx5-rime.nix` `vscode/with-extensions.nix` `firefox/common.nix`，它们都可以被 `pkgs.callPackage` 导入。
+
+当 `pkgs.callPackge xxx.nix {...}` 中的 `xxx.nix`，其内容为一个函数时（绝大多数 nix 包都是如此），执行流程如下：
+
+1. `pkgs.callPackge xxx.nix {...}` 会先 `import xxx.nix`，得到其中定义的函数，该函数的参数通常会有 `lib`, `stdenv`, `fetchurl` 等参数，以及一些自定义参数，自定义参数通常都有默认值。
+2. 接着 `pkgs.callPackge` 会首先从当前环境中查找名称匹配的值，作为将要传递给前述函数的参数。像 `lib` `stdenv` `fetchurl` 这些都是 nixpkgs 中的函数，在这一步就会查找到它们。
+3. 接着 `pkgs.callPackge` 会将其第二个参数 `{...}` 与前一步得到的参数集（attribute set）进行合并，得到一个新的参数列表，然后将其传递给该函数并执行。
+4. 函数执行结果是一个 Derivation，也就是一个软件包。
+
+这个函数比较常见的用途是用来导入一些自定义的 Nix 包，比如说我们自己写了一个 `hello.nix`，然后就可以在任意 Nix Module 中使用 `pkgs.callPackage ./hello.nix {}` 来导入并使用它。
+
+### 2. Overriding {#overriding}
 
 > [Chapter 4. Overriding - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
 
@@ -1060,7 +1081,74 @@ pkgs.fcitx5-rime.override {rimeDataPkgs = [
 
 The result of executing the above Nix expression is a new Derivation, where the `rimeDataPkgs` parameter is overridden as `[./rime-data-flypy]`, while other parameters retain their original values.
 
-In addition to overriding parameters, you can also override the attributes of a Derivation(condiftion: it's built using `stdenv.mkDerivation`) by using `overrideAttrs`. For example:
+How to know which parameters can be overridden for `fcitx5-rime`? There are several ways:
+
+1. Try to find the source code of the package in the nixpkgs repository on GitHub, such as [fcitx5-rime.nix](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix)
+   1. Note: Be sure to select the correct branch, for example, if you are using the nixos-unstable branch, you need to find it in the nixos-unstable branch.
+2.  Check by using `nix repl '<nixpkgs>'`, then enter `:e pkgs.fcitx5-rime`, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.
+
+Through the above two methods, you can see that the `fcitx5-rime` package has the following input parameters, which can all be modified by `override`:
+
+```nix
+{ lib, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, extra-cmake-modules
+, gettext
+, fcitx5
+, librime
+, rime-data
+, symlinkJoin
+, rimeDataPkgs ? [ rime-data ]
+}:
+
+stdenv.mkDerivation rec {
+  ...
+}
+```
+
+Instead of override the function's parameters, we can also override the attributes of the Derivation created by `stdenv.mkDerivation`. 
+
+Take `pkgs.hello` as an example, first check the source code of this package through the above method:
+
+```nix
+# https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/misc/hello/default.nix
+{ callPackage
+, lib
+, stdenv
+, fetchurl
+, nixos
+, testers
+, hello
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "hello";
+  version = "2.12.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=";
+  };
+
+  doCheck = true;
+
+  # ......
+})
+```
+
+The `pname` `version` `src` `doCheck` attributes show above can all be overridden by using `overrideAttrs`, for example:
+
+```nix
+helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
+  doCheck = false;
+});
+```
+
+Here we use `overrideAttrs` to override the attribute `doCheck` of `hello`,  while other attributes retain their original values.
+
+Some default attributes defined in `stdenv.mkDerivation` can also be overridden by `overrideAttrs`, for example:
 
 ```nix
 helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
@@ -1068,9 +1156,10 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 });
 ```
 
-In this example, `helloWithDebug` is a new Derivation, where the `separateDebugInfo` parameter is overridden as `true`, while other parameters retain their original values.
+The attribute we override here, `separateDebugInfo`, is not defined in the source code of `hello`, but it is defined in `stdenv.mkDerivation`. 
+We can check the source code of `stdenv.mkDerivation` to see all the attributes defined in it, by using `nix repl '<nixpkgs>'` and then enter `:e stdenv.mkDerivation`.
 
-### Overlays
+### 3. Overlays
 
 > [Chapter 3. Overlays - nixpkgs Manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays)
 
@@ -1126,6 +1215,8 @@ For example, the following content is a Module that loads Overlays, which can be
     })
 
     # overlay3 - define overlays in other files
+    # here the content of overlay3.nix is the same as above:
+    #   `final: prev: { xxx = prev.xxx.override { ... }; }`
     (import ./overlays/overlay3.nix)
   ];
 }
