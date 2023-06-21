@@ -1478,6 +1478,8 @@ callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技�
 
 ### 1. pkgs.callPackage {#callpackage}
 
+> [Chapter 13. Callpackage Design Pattern - Nix Pills](https://nixos.org/guides/nix-pills/callpackage-design-pattern.html)
+
 前面我们介绍并大量使用了 `import xxx.nix` 来导入 Nix 文件，这种语法只是单纯地返回该文件的执行结果，不会对该结果进行进一步处理。
 比如说 `xxx.nix` 的内容是形如 `{...}: {...}`，那么 `import xxx.nix` 的结果就是该文件中定义的这个函数。
 

@@ -1133,6 +1133,8 @@ In short, in order to customize the build parameters of Nix packages of this typ
 
 ### 1. pkgs.callPackage {#callpackage}
 
+> [Chapter 13. Callpackage Design Pattern - Nix Pills](https://nixos.org/guides/nix-pills/callpackage-design-pattern.html)
+
 We have introduced and used `import xxx.nix` to import Nix files in the previous content. This syntax simply returns the execution result of the file without further processing of the result.
 
 And `pkgs.callPackage` is also used to import Nix files, its syntax is `pkgs.callPackage xxx.nix { ... }`. 
