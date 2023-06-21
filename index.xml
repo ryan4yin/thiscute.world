@@ -456,6 +456,7 @@
 <ul>
 <li>在 <code>八、Nixpkgs 的高级用法</code> 补充 callPackage、override 与 overlays 的使用细节。</li>
 <li>在 <code>六-6</code> 补充了一些我常用的命令行工具配置。</li>
+<li>添加 <code>五-14</code> 一节，介绍 if&hellip;then&hellip;else&hellip; 语句。</li>
 </ul>
 </li>
 <li>2023/6/6
@@ -1089,7 +1090,32 @@
 <p>Store Object 的存放路径格式为 <code>/nix/store/&lt;hash&gt;-&lt;name&gt;</code>，其中 <code>&lt;hash&gt;</code> 是构建结果的 hash 值，<code>&lt;name&gt;</code> 是它的名字。路径 hash 值确保了每个构建结果都是唯一的，因此可以多版本共存，而且不会出现依赖冲突的问题。</p>
 <p><code>/nix/store</code> 被称为 Store，存放所有的 Store Objects，这个路径被设置为只读，只有 Nix 本身才能修改这个路径下的内容，以保证系统的可复现性。</p>
 <p>在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 <code>derivation</code> 创建的，我们实际使用的 <code>stdenv.mkDerivation</code> 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。</p>
-<h2 id="declarative-system-management" class="headerLink">
+<h3 id="if-then-else" class="headerLink">
+    <a href="#if-then-else" class="header-mark"></a>14. if&hellip;then&hellip;else&hellip;</h3><p>if&hellip;then&hellip;else&hellip; 用于条件判断，它是一个有返回值的表达式，语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="k">if</span> <span class="mi">3</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="k">then</span> <span class="s2">&#34;yes&#34;</span> <span class="k">else</span> <span class="s2">&#34;no&#34;</span> <span class="c1"># 结果为 &#34;no&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以与 let&hellip;in&hellip; 一起使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="k">let</span>
+</span></span><span class="line"><span class="cl">  <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="k">then</span> <span class="s2">&#34;yes&#34;</span> <span class="k">else</span> <span class="s2">&#34;no&#34;</span> <span class="c1"># 结果为 &#34;no&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="declarative-system-management" class="headerLink">
     <a href="#declarative-system-management" class="header-mark"></a>六、以声明式的方式管理系统</h2><blockquote>
 <p><a href="https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution" target="_blank" rel="noopener noreferrer">https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution</a></p>
 </blockquote>
@@ -3227,6 +3253,8 @@
 <h2 id="summary" class="headerLink">
     <a href="#summary" class="header-mark"></a>总结</h2><p>这是本系列文章的第一篇，介绍了使用 Nix Flakes 配置 NixOS 系统的基础知识，跟着这篇文章把系统配置好，就算是入门了。</p>
 <p>我会在后续文章中介绍 NixOS &amp; Nix Flakes 的进阶知识：开发环境管理、secrets 管理、软件打包、远程主机管理等等，尽请期待。</p>
+<h2 id="when-will-flakes-become-stable" class="headerLink">
+    <a href="#when-will-flakes-become-stable" class="header-mark"></a>最后，Flakes 何时会成为稳定特性？</h2><p>我们通篇文章两万多字，</p>
 <h2 id="reference" class="headerLink">
     <a href="#reference" class="header-mark"></a>参考</h2><p>如下是我参考过的比较有用的 Nix 相关资料：</p>
 <ul>
