@@ -1431,6 +1431,7 @@ After becoming familiar with Nix Flakes, you may want to try some advanced techn
 
 And many other useful community projects to explore, here are some of them:
 
+- [dev-templates](https://github.com/the-nix-way/dev-templates): Dev environments for numerous languages based on Nix flakes.
 - [devenv](https://github.com/cachix/devenv): development environment management
 - [agenix](https://github.com/ryantm/agenix): secrets management
 - [colmena](https://github.com/zhaofengli/colmena): NixOS deployment tools
