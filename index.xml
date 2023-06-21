@@ -2753,7 +2753,10 @@
 </ol>
 <p>总之如果需要自定义上述这类 Nix 包的构建参数，或者实施某些比较底层的修改，我们就得用到 Overriding 跟 Overlays。</p>
 <h3 id="callpackage" class="headerLink">
-    <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><p>前面我们介绍并大量使用了 <code>import xxx.nix</code> 来导入 Nix 文件，这种语法只是单纯地返回该文件的执行结果，不会对该结果进行进一步处理。
+    <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><blockquote>
+<p><a href="https://nixos.org/guides/nix-pills/callpackage-design-pattern.html" target="_blank" rel="noopener noreferrer">Chapter 13. Callpackage Design Pattern - Nix Pills</a></p>
+</blockquote>
+<p>前面我们介绍并大量使用了 <code>import xxx.nix</code> 来导入 Nix 文件，这种语法只是单纯地返回该文件的执行结果，不会对该结果进行进一步处理。
 比如说 <code>xxx.nix</code> 的内容是形如 <code>{...}: {...}</code>，那么 <code>import xxx.nix</code> 的结果就是该文件中定义的这个函数。</p>
 <p><code>pkgs.callPackage</code> 也是用来导入 Nix 文件的，它的语法是 <code>pkgs.callPackage xxx.nix { ... }</code>. 但跟 <code>import</code> 不同的是，它导入的 nix 文件内容必须是一个 Derivation 或者返回 Derivation 的函数，它的执行结果一定是一个 Derivation，也就是一个软件包。</p>
 <p>那可以作为 <code>pkgs.callPackge</code> 参数的 nix 文件具体长啥样呢，可以去看看我们前面举例过的 <code>hello.nix</code> <code>fcitx5-rime.nix</code> <code>vscode/with-extensions.nix</code> <code>firefox/common.nix</code>，它们都可以被 <code>pkgs.callPackage</code> 导入。</p>

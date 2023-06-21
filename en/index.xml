@@ -1808,7 +1808,10 @@ Therefore, to customize the cache image source, we must add the related configur
 </ol>
 <p>In short, in order to customize the build parameters of Nix packages of this type, we need to use <code>Overriding</code> or <code>Overlays</code>.</p>
 <h3 id="callpackage" class="headerLink">
-    <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><p>We have introduced and used <code>import xxx.nix</code> to import Nix files in the previous content. This syntax simply returns the execution result of the file without further processing of the result.</p>
+    <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><blockquote>
+<p><a href="https://nixos.org/guides/nix-pills/callpackage-design-pattern.html" target="_blank" rel="noopener noreferrer">Chapter 13. Callpackage Design Pattern - Nix Pills</a></p>
+</blockquote>
+<p>We have introduced and used <code>import xxx.nix</code> to import Nix files in the previous content. This syntax simply returns the execution result of the file without further processing of the result.</p>
 <p>And <code>pkgs.callPackage</code> is also used to import Nix files, its syntax is <code>pkgs.callPackage xxx.nix { ... }</code>.
 But unlike <code>import</code>, the Nix file imported by it must be a Derivation or a function that returns a Derivation. Its execution result must be a Derivation(a software package).</p>
 <p>So what does the Nix file that can be used as a parameter of <code>pkgs.callPackge</code> look like? You can take a look at the <code>hello.nix</code> <code>fcitx5-rime.nix</code> <code>vscode/with-extensions.nix</code> <code>firefox/common.nix</code> we mentioned earlier, they can all be imported by <code>pkgs.callPackage</code>.</p>
