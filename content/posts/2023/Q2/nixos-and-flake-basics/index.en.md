@@ -34,6 +34,8 @@ code:
 
 ## Changelog
 
+- 2022/6/22
+  - Polish the language of the post.
 - 2023/6/21
   - Add some details about the usage of `callPackage`, `override` and `overlays` in section `VIII. Advanced Usage of Nixpkgs`.
   - Add some command line tools I used frequently in section VI-6.
