@@ -35,6 +35,7 @@ code:
 - 2023/6/21
   - 在 `八、Nixpkgs 的高级用法` 补充 callPackage、override 与 overlays 的使用细节。
   - 在 `六-6` 补充了一些我常用的命令行工具配置。
+  - 添加 `五-14` 一节，介绍 if...then...else... 语句。
 - 2023/6/6
   - 在 `七、Nix Flakes 的使用` 一节中添加 flake 的 inputs 与 outpus 使用案例。
 - 2023/6/4
@@ -505,6 +506,23 @@ Store Object 的存放路径格式为 `/nix/store/<hash>-<name>`，其中 `<hash
 `/nix/store` 被称为 Store，存放所有的 Store Objects，这个路径被设置为只读，只有 Nix 本身才能修改这个路径下的内容，以保证系统的可复现性。
 
 在 Nix 语言的最底层，一个构建任务就是使用 builtins 中的不纯函数 `derivation` 创建的，我们实际使用的 `stdenv.mkDerivation` 就是它的一个 wrapper，屏蔽了底层的细节，简化了用法。
+
+### 14. if...then...else... {#if-then-else}
+
+if...then...else... 用于条件判断，它是一个有返回值的表达式，语法如下：
+
+```nix
+if 3 > 4 then "yes" else "no" # 结果为 "no"
+```
+
+也可以与 let...in... 一起使用：
+
+```nix
+let
+  x = 3;
+in
+  if x > 4 then "yes" else "no" # 结果为 "no"
+```
 
 ## 六、以声明式的方式管理系统 {#declarative-system-management}
 
@@ -1788,6 +1806,11 @@ args:
 这是本系列文章的第一篇，介绍了使用 Nix Flakes 配置 NixOS 系统的基础知识，跟着这篇文章把系统配置好，就算是入门了。
 
 我会在后续文章中介绍 NixOS & Nix Flakes 的进阶知识：开发环境管理、secrets 管理、软件打包、远程主机管理等等，尽请期待。
+
+
+## 最后，Flakes 何时会成为稳定特性？ {#when-will-flakes-become-stable}
+
+我们通篇文章两万多字，
 
 ## 参考 {#reference}
 
