@@ -36,10 +36,12 @@ code:
 
 - 2022/6/22
   - Polish the language of the post.
+  - Add a new section `XI. Best Practices`.
+  - Add a new section into `VI-7`, introduces `lib.mkOverride`, `lib.mkDefault`, `lib.mkForce`, `lib.mkOrder`, `lib.mkBefore` and `lib.mkAfter`
 - 2023/6/21
   - Add some details about the usage of `callPackage`, `override` and `overlays` in section `VIII. Advanced Usage of Nixpkgs`.
   - Add some command line tools I used frequently in section VI-6.
-  - Add a new section [When will flakes stablized?]
+  - Add a new section `When will flakes stablized?`
 - 2023/6/6
   - Add examples of flake's inputs & outputs into section `VII. Usage of Nix Flakes`
 - 2023/6/4
@@ -806,6 +808,164 @@ Use [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.
 
 For more details, see [ryan4yin/nix-config/v0.0.2](https://github.com/ryan4yin/nix-config/tree/v0.0.2).
 
+#### 7.1. `mkOverride`, `lib.mkDefault` and `lib.mkForce`
+
+You may found some people use `lib.mkDefault` `lib.mkForce` to define values in Nix files, as their names suggest, `lib.mkDefault` and `lib.mkForce` are used to set default values or force values of options.
+
+You can read the source code of `lib.mkDefault` and `lib.mkForce` to understand them by running `nix repl -f '<nixpkgs>'` and then enter `:e lib.mkDefault`(To learn the basic usage of `nix repl`, just type `:?` to see the help information).
+
+its source code is as follows:
+
+```nix
+  # ......
+
+  mkOverride = priority: content:
+    { _type = "override";
+      inherit priority content;
+    };
+
+  mkOptionDefault = mkOverride 1500; # priority of option defaults
+  mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
+  mkForce = mkOverride 50;
+  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  # ......
+```
+
+So `lib.mkDefault` is used to set default values of options, it has a priority of 1000 internally,
+and `lib.mkForce` is used to force values of options, it has a priority of 50 internally.
+If you just set a value of an option directly, it will be set with a default priority of 1000(the same as `lib.mkDefault`).
+
+the lower the `priority`'s value is, the higher the actual priority is, so `lib.mkForce` has a higher priority than `lib.mkDefault`.
+If you defined multiple values with the same priority, Nix will throw an error.
+
+They are useful to modularize the configuration, as you can set default values in a low-level module(base module), and force values in a high-level module.
+
+For example, I defined some default values in <https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-server.nix#L30>:
+
+```nix
+{ lib, pkgs, ... }:
+
+{
+  # ......
+
+  nixpkgs.config.allowUnfree = lib.mkDefault false;
+
+  # ......
+}
+```
+
+And for my dekstop machine, I force the values to another value in <https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-desktop.nix#L15>:
+
+```nix
+{ lib, pkgs, ... }:
+
+{
+  # import the base module
+  imports = [
+    ./core-server.nix
+  ];
+
+  # override the default value defined in the base module
+  nixpkgs.config.allowUnfree = lib.mkForce true;
+
+  # ......
+}
+```
+
+#### 7.2 `lib.mkOrder`, `lib.mkBefore` and `lib.mkAfter`
+
+`lib.mkBefore` and `lib.mkAfter` are used to set the merge order of **list-type options**, just like `lib.mkDefault` and `lib.mkForce`, they're also useful to modularize the configuration.
+
+I said before that if you defined multiple values with the same **override priority**, Nix will throw an error.
+But with `lib.mkOrder`, `lib.mkBefore` or `lib.mkAfter`, you can define multiple values with the same override priority, they will be merged in the order you defined.
+
+Let's running `nix repl -f '<nixpkgs>'` and then enter `:e lib.mkBefore` to take a look at its source code(To learn the basic usage of `nix repl`, just type `:?` to see the help information):
+
+```nix
+  # ......
+
+  mkOrder = priority: content:
+    { _type = "order";
+      inherit priority content;
+    };
+
+  mkBefore = mkOrder 500;
+  mkAfter = mkOrder 1500;
+
+  # The default priority for things that don't have a priority specified.
+  defaultPriority = 100;
+
+  # ......
+```
+
+So `lib.mkBefore` is a shortcut for `lib.mkOrder 500`, and `lib.mkAfter` is a shortcut for `lib.mkOrder 1500`.
+
+To test the usage of `lib.mkBefore` and `lib.mkAfter`, let's create a simple Flake project:
+
+```shell
+# create flake.nix with the following content
+› cat <<EOF | sudo tee flake.nix
+{
+  description = "Ryan's NixOS Flake";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+  };
+
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations = {
+      "nixos-test" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          # demo module 1, insert git at the head of list
+          ({lib, pkgs, ...}: {
+            environment.systemPackages = lib.mkBefore [pkgs.git];
+          })
+
+          # demo module 2, insert vim at the tail of list
+          ({lib, pkgs, ...}: {
+            environment.systemPackages = lib.mkAfter [pkgs.vim];
+          })
+
+          # demo module 3, just add curl to the list normally
+          ({lib, pkgs, ...}: {
+            environment.systemPackages = with pkgs; [curl];
+          })
+        ];
+      };
+    };
+  };
+}
+EOF
+
+# create flake.lock
+› nix flake update
+
+# enter nix repl environment
+› nix repl
+Welcome to Nix 2.13.3. Type :? for help.
+
+# load the flake we just created
+nix-repl> :lf .
+Added 9 variables.
+
+# check the order of systemPackages
+nix-repl> outputs.nixosConfigurations.nixos-test.config.environment.systemPackages
+[ «derivation /nix/store/0xvn7ssrwa0ax646gl4hwn8cpi05zl9j-git-2.40.1.drv»
+  «derivation /nix/store/7x8qmbvfai68sf73zq9szs5q78mc0kny-curl-8.1.1.drv»
+  «derivation /nix/store/bly81l03kh0dfly9ix2ysps6kyn1hrjl-nixos-container.drv»
+  ......
+  ......
+  «derivation /nix/store/qpmpvq5azka70lvamsca4g4sf55j8994-vim-9.0.1441.drv» ]
+```
+
+So we can see that the order of `systemPackages` is `git -> curl -> default packages -> vim`, which is the same as the order we defined in `flake.nix`.
+
+> Though it's useless to adjust the order of `systemPackages`, it may be helpful at some other places...
+
 ### 8. Update the system
 
 With Flakes, it is also very simple to update the system. Just run the following commands in `/etc/nixos`:
@@ -1176,6 +1336,7 @@ How to know which parameters of `fcitx5-rime` can be overridden? There are sever
 1. Try to find the source code of the package in the nixpkgs repository on GitHub, such as [fcitx5-rime.nix](https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix)
    1. Note: Be sure to select the correct branch, for example, if you are using the nixos-unstable branch, you need to find it in the nixos-unstable branch.
 2. Check by using `nix repl '<nixpkgs>'`, then enter `:e pkgs.fcitx5-rime`, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.
+   1. Note: To learn the basic usage of `nix repl`, just type `:?` to see the help information
 
 Through these two methods, you can see that the `fcitx5-rime` package has the following input parameters, which can all be modified by `override`:
 
@@ -1247,7 +1408,7 @@ helloWithDebug = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
 ```
 
 The attribute we override here, `separateDebugInfo`, is defined in `stdenv.mkDerivation`, not in the source code of `hello`.
-We can check the source code of `stdenv.mkDerivation` to see all the attributes defined in it by using `nix repl '<nixpkgs>'` and then enter `:e stdenv.mkDerivation`.
+We can check the source code of `stdenv.mkDerivation` to see all the attributes defined in it by using `nix repl '<nixpkgs>'` and then enter `:e stdenv.mkDerivation`(To learn the basic usage of `nix repl`, just type `:?` to see the help information).
 
 ### 3. Overlays
 
@@ -1418,7 +1579,28 @@ By using this modular approach, it is very convenient to modularize all your ove
 └── README.md
 ```
 
-## Advanced Usage
+## IX. When will flakes stablized {#when-will-flakes-stablized}
+
+Throughout so much content of this post, I've introduced in detail how to start using Flakes to configure NixOS, but at the beginning of this post we mentioned that **Flakes is still an experimental feature, which is worrying**. If Flakes is greatly changed or even removed, we may need to spend a lot of time to migrate the configuration.
+
+In fact this is also one of the most concerned issues in the entire NixOS community, **when will Flakes become a stable feature**?
+
+I dived into some details about flakes:
+
+- https://github.com/NixOS/rfcs/pull/136: A plan to stabilize Flakes and the new CLI incrementally, still WIP.
+- https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317: A post, Why are flakes still experimental?
+- https://grahamc.com/blog/flakes-are-an-obviously-good-thing/: Flakes are such an obviously good thing... but the design and development process should be better.
+- https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9： A roadmap of nixos fundation, which includes plan about the stabilization of flakes.
+
+After reading all of these, I feel like that flakes will eventually be stabilized in one or two years, with some important breaking changes.
+
+The benefits of Flakes are obvious, and the entire NixOS community likes it very much. Currently, more than half of the users are using Flakes (especially new users in the NixOS community), so we can be sure that Flakes will never be deprecated.
+
+But currently Flakes still has many problems, and it is likely to introduce some breaking changes in the process of stablizing it, and it's currently uncertain how greatly the breaking changes will be.
+
+So overall, I still recommend everyone to use Flakes, but be prepared for the problems that may be caused by the upcomming breaking changes.
+
+## X. Advanced Usage
 
 After becoming familiar with the Nix toolchain, you can further explore Nix's three manuals to discover more ways to use it:
 
@@ -1444,26 +1626,202 @@ And many other useful community projects to explore, here are some of them:
 - [lanzaboote](https://github.com/nix-community/lanzaboote): enable secure boot for NixOS
 - [impermanence](https://github.com/nix-community/impermanence): used to make NixOS stateless, to imporve the reproduciability of NixOS system.
 
-## When will flakes stablized {#when-will-flakes-stablized}
+## XI. Best Practices
 
-Throughout so much content of this post, I've introduced in detail how to start using Flakes to configure NixOS, but at the beginning of this post we mentioned that **Flakes is still an experimental feature, which is worrying**. If Flakes is greatly changed or even removed, we may need to spend a lot of time to migrate the configuration.
+> [Tips&Tricks for NixOS Desktop - NixOS Discourse][Tips&Tricks for NixOS Desktop - NixOS Discourse]
 
-In fact this is also one of the most concerned issues in the entire NixOS community, **when will Flakes become a stable feature**?
+Nix is powerful and flexible, it provides a lot of ways to do things, making it difficult to find the most suitable way to do your job.
+Here are some best practices that I've learned from the community, hope it can help you.
 
-I dived into some details about flakes:
+### 1. Run downloaded binaries on NixOS
 
-- https://github.com/NixOS/rfcs/pull/136: A plan to stabilize Flakes and the new CLI incrementally, still WIP.
-- https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317: A post, Why are flakes still experimental?
-- https://grahamc.com/blog/flakes-are-an-obviously-good-thing/: Flakes are such an obviously good thing... but the design and development process should be better.
-- https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9： A roadmap of nixos fundation, which includes plan about the stabilization of flakes.
+NixOS does not follow the FHS standard, so the binaries you download from the Internet will not likely work on NixOS. But there are some ways to make it work.
 
-After reading all of these, I feel like that flakes will eventually be stabilized in one or two years, with some important breaking changes.
+Here is a detailed guide which provides 10 ways to run downloaded binaries on NixOS: [Different methods to run a non-nixos executable on Nixos](https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos), I recommend you to read it.
 
-The benefits of Flakes are obvious, and the entire NixOS community likes it very much. Currently, more than half of the users are using Flakes (especially new users in the NixOS community), so we can be sure that Flakes will never be deprecated.
+Among these methods, I prefer creating a FHS environment to run the binary, which is very convenient and easy to use.
 
-But currently Flakes still has many problems, and it is likely to introduce some breaking changes in the process of stablizing it, and it's currently uncertain how greatly the breaking changes will be.
+To create such an environment, add the following code to one of your nix modules:
 
-So overall, I still recommend everyone to use Flakes, but be prepared for the problems that may be caused by the upcomming breaking changes.
+```nix
+{ config, pkgs, lib, ... }:
+
+{
+  # ......omit many configurations
+
+  environment.systemPackages = with pkgs; [
+    # ......omit many packages
+
+    # create a fhs environment by command `fhs`, so we can run non-nixos packages in nixos!
+    (pkgs.buildFHSUserEnv (base // {
+      name = "fhs";
+      targetPkgs = pkgs: (
+        # pkgs.buildFHSUserEnv provides only a minimal fhs environment,
+        # it lacks many basic packages needed by most softwares.
+        # so we need to add them manually.
+        #
+        # pkgs.appimageTools provides basic packages needed by most softwares.
+        (pkgs.appimageTools.defaultFhsEnvArgs.targetPkgs pkgs) ++ with pkgs; [
+          pkg-config
+          ncurses
+          # feel free to add more packages here, if you need
+        ]
+      );
+      profile = "export FHS=1";
+      runScript = "bash";
+      extraOutputsToInstall = ["dev"];
+    }))
+  ];
+
+  # ......omit many configurations
+}
+```
+
+after applying the updated configuration, you can run `fhs` to enter the FHS environment, and then run the binary you downloaded, e.g.
+
+```shell
+# Activating FHS drops me in a shell which looks like a "normal" Linux
+$ fhs
+# check what we have in /usr/bin
+(fhs) $ ls /usr/bin
+# try to run a non-nixos binary downloaded from the Internet
+(fhs) $ ./bin/code
+```
+
+### 2. check the source code of packages and modules
+
+We've used `nix repl '<nixpkgs>'` many times to check the source code in this guide, it's really a powerful tool to help us understand how things work in Nix.
+
+Better take a look at the help message of `nix repl`:
+
+```
+› nix repl -f '<nixpkgs>'
+Welcome to Nix 2.13.3. Type :? for help.
+
+Loading installable ''...
+Added 17755 variables.
+nix-repl> :?
+The following commands are available:
+
+  <expr>        Evaluate and print expression
+  <x> = <expr>  Bind expression to variable
+  :a <expr>     Add attributes from resulting set to scope
+  :b <expr>     Build a derivation
+  :bl <expr>    Build a derivation, creating GC roots in the working directory
+  :e <expr>     Open package or function in $EDITOR
+  :i <expr>     Build derivation, then install result into current profile
+  :l <path>     Load Nix expression and add it to scope
+  :lf <ref>     Load Nix flake and add it to scope
+  :p <expr>     Evaluate and print expression recursively
+  :q            Exit nix-repl
+  :r            Reload all files
+  :sh <expr>    Build dependencies of derivation, then start nix-shell
+  :t <expr>     Describe result of evaluation
+  :u <expr>     Build derivation, then start nix-shell
+  :doc <expr>   Show documentation of a builtin function
+  :log <expr>   Show logs for a derivation
+  :te [bool]    Enable, disable or toggle showing traces for errors
+```
+
+Some expressions that I use frequently: `:lf <ref>`, `:e <expr>`.
+
+`:e <expr>` is very intuitive, so I won't repeat it. let's take a look at `:lf <ref>`:
+
+```nix
+# cd into my nix-config repo
+› cd ~/nix-config/
+
+# enter nix repl
+› nix repl
+Welcome to Nix 2.13.3. Type :? for help.
+
+# load my nix flake and add it to scope
+nix-repl> :lf .
+Added 16 variables.
+
+# press <TAB> to see what we have in scope
+nix-repl><TAB>
+# ......omit some outputs
+__isInt                          nixosConfigurations
+__isList                         null
+__isPath                         outPath
+__isString                       outputs
+__langVersion                    packages
+# ......omit some outputs
+
+# check the outputs of my nix flake
+nix-repl> outputs.nixosConfigurations.<TAB>
+outputs.nixosConfigurations.ai
+outputs.nixosConfigurations.aquamarine
+outputs.nixosConfigurations.kana
+outputs.nixosConfigurations.ruby
+
+nix-repl> outputs.nixosConfigurations.ai.<TAB>
+outputs.nixosConfigurations.ai._module
+outputs.nixosConfigurations.ai._type
+outputs.nixosConfigurations.ai.class
+outputs.nixosConfigurations.ai.config
+outputs.nixosConfigurations.ai.extendModules
+outputs.nixosConfigurations.ai.extraArgs
+outputs.nixosConfigurations.ai.options
+outputs.nixosConfigurations.ai.pkgs
+outputs.nixosConfigurations.ai.type
+
+nix-repl> outputs.nixosConfigurations.ai.config.
+outputs.nixosConfigurations.ai.config.age
+outputs.nixosConfigurations.ai.config.appstream
+outputs.nixosConfigurations.ai.config.assertions
+outputs.nixosConfigurations.ai.config.boot
+outputs.nixosConfigurations.ai.config.console
+outputs.nixosConfigurations.ai.config.containers
+# ......omit other outputs
+
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.<TAB>
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.activation
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.activationPackage
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.emptyActivationPath
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.enableDebugInfo
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.enableNixpkgsReleaseCheck
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraActivationPath
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraBuilderCommands
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraOutputsToInstall
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraProfileCommands
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file
+# ......omit other outputs
+
+
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.<TAB>
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.BROWSER
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.DELTA_PAGER
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.EDITOR
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.GLFW_IM_MODULE
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.MANPAGER
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.QT_IM_MODULE
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.TERM
+# ......omit other outputs
+
+# check the value of `TERM`
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.TERM
+"xterm-256color"
+
+
+# check all files defined by `home.file`
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file.<TAB>
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..bash_profile
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..bashrc
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/fcitx5/profile
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/fcitx5/profile-bak
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/config
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/i3blocks.conf
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/keybindings
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/layouts
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/scripts
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/wallpaper.png
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/rofi
+#......
+```
+
+As you can see, we can check every value of my flake in the REPL after loading it, which is very convenient for debugging.
 
 ## References
 
@@ -1480,3 +1838,4 @@ Here are some useful resources that I referred to:
 [digga]: https://github.com/divnix/digga
 [New Nix Commands]: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html
 [Zero to Nix - Determinate Systems]: https://github.com/DeterminateSystems/zero-to-nix
+[Tips&Tricks for NixOS Desktop - NixOS Discourse]: https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488

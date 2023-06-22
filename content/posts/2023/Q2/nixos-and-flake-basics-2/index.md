@@ -1,5 +1,5 @@
 ---
-title: "NixOS 与 Nix Flakes 的最佳实践"
+title: "NixOS 与 Nix Flakes 打包与开发"
 date: 2023-06-22T03:10:28+08:00
 lastmod: 2023-06-22T03:10:00+08:00
 draft: true
@@ -29,43 +29,6 @@ code:
 ---
 
 这篇文章主要介绍 NixOS 与 Flakes 的一些实用技巧，以及一些常用的工具。
-
-## 创建 FHS 环境
-
-TODO
-
-## 学习使用 nix repl
-
-首先第一步，是使用 `:?` 查看帮助：
-
-```
-› nix repl -f '<nixpkgs>'
-Welcome to Nix 2.13.3. Type :? for help.
-
-Loading installable ''...
-Added 17755 variables.
-nix-repl> :?
-The following commands are available:
-
-  <expr>        Evaluate and print expression
-  <x> = <expr>  Bind expression to variable
-  :a <expr>     Add attributes from resulting set to scope
-  :b <expr>     Build a derivation
-  :bl <expr>    Build a derivation, creating GC roots in the working directory
-  :e <expr>     Open package or function in $EDITOR
-  :i <expr>     Build derivation, then install result into current profile
-  :l <path>     Load Nix expression and add it to scope
-  :lf <ref>     Load Nix flake and add it to scope
-  :p <expr>     Evaluate and print expression recursively
-  :q            Exit nix-repl
-  :r            Reload all files
-  :sh <expr>    Build dependencies of derivation, then start nix-shell
-  :t <expr>     Describe result of evaluation
-  :u <expr>     Build derivation, then start nix-shell
-  :doc <expr>   Show documentation of a builtin function
-  :log <expr>   Show logs for a derivation
-  :te [bool]    Enable, disable or toggle showing traces for errors
-```
 
 ## other useful tools
 

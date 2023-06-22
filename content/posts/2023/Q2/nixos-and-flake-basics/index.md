@@ -32,6 +32,9 @@ code:
 
 ## 更新日志 {#updates}
 
+- 2022/6/22
+  - 添加新内容 `十一、最佳实践`.
+  - 在 `六-7` 中补充介绍这几个函数：`lib.mkOverride`, `lib.mkDefault`, `lib.mkForce`, `lib.mkOrder`, `lib.mkBefore` and `lib.mkAfter`
 - 2023/6/21
   - 在 `八、Nixpkgs 的高级用法` 补充 callPackage、override 与 overlays 的使用细节。
   - 在 `六-6` 补充了一些我常用的命令行工具配置。
@@ -938,7 +941,7 @@ Nix 为了加快包构建速度，提供了 <https://cache.nixos.org> 提前缓�
     gnupg
 
     # nix related
-    # 
+    #
     # it provides the command `nom` works just like `nix
     # with more details log output
     nix-output-monitor
@@ -1161,6 +1164,166 @@ $ tree
 ```
 
 详细结构与内容，请移步前面提供的 github 仓库链接，这里就不多介绍了。
+
+#### 7.1. `mkOverride`, `lib.mkDefault` and `lib.mkForce`
+
+你可能会发现有些人在 Nix 文件中使用 `lib.mkDefault` `lib.mkForce` 来定义值，顾名思义，`lib.mkDefault` 和 `lib.mkForce` 用于设置选项的默认值，或者强制设置选项的值。
+
+直接这么说可能不太好理解，官方文档也没啥对这几个函数的详细解释，最直接的理解方法，是看源码。
+
+开个新窗口，输入命令 `nix repl -f '<nixpkgs>'` 进入 REPL 解释器，然后输入 `:e lib.mkDefault`，就可以看到 `lib.mkDefault` 的源码了（不太懂 `:e` 是干啥的？请直接输入 `:?` 查看帮助信息学习下）。
+
+源码截取如下：
+
+```nix
+  # ......
+
+  mkOverride = priority: content:
+    { _type = "override";
+      inherit priority content;
+    };
+
+  mkOptionDefault = mkOverride 1500; # priority of option defaults
+  mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
+  mkForce = mkOverride 50;
+  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  # ......
+```
+
+所以 `lib.mkDefault` 就是用于设置选项的默认值，它的优先级是 1000，而 `lib.mkForce` 则用于强制设置选项的值，它的优先级是 50。
+如果你直接设置选项的值，那么它的优先级就是 1000（和 `lib.mkDefault` 一样）。
+
+`priority` 的值越低，它实际的优先级就越高，所以 `lib.mkForce` 的优先级比 `lib.mkDefault` 高。
+而如果你定义了多个优先级相同的值，Nix 会报错说存在参数冲突，需要你手动解决。
+
+这几个函数在模块化 NixOS 配置中非常有用，因为你可以在低层级的模块（base module）中设置默认值，然后在高层级的模块（high-level module）中设置优先级更高的值。
+
+举个例子，我在这里定义了一个默认值：<https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-server.nix#L30>
+
+```nix
+{ lib, pkgs, ... }:
+
+{
+  # ......
+
+  nixpkgs.config.allowUnfree = lib.mkDefault false;
+
+  # ......
+}
+```
+
+然后在桌面机器的配置中，我强制覆盖了默认值： <https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-desktop.nix#L15>
+
+```nix
+{ lib, pkgs, ... }:
+
+{
+  # 导入 base module
+  imports = [
+    ./core-server.nix
+  ];
+
+  # 覆盖 base module 中定义的默认值
+  nixpkgs.config.allowUnfree = lib.mkForce true;
+
+  # ......
+}
+```
+
+#### 7.2 `lib.mkOrder`, `lib.mkBefore` 与 `lib.mkAfter`
+
+`lib.mkBefore` 跟 `lib.mkAfter` 用于设置**列表类型**的合并顺序，它们跟 `lib.mkDefault` 和 `lib.mkForce` 一样，也被用于模块化配置。
+
+前面说了如果你定义了多个优先级相同的值，Nix 会报错说存在参数冲突，需要你手动解决。
+
+但是如果你定义的是**列表类型**的值，Nix 就不会报错了，因为 Nix 会把你定义的多个值合并成一个列表，而 `lib.mkBefore` 跟 `lib.mkAfter` 就是用于设置这个列表的合并顺序的。
+
+还是先来看看源码，开个终端键入 `nix repl -f '<nixpkgs>'` 进入 REPL 解释器，然后输入 `:e lib.mkBefore`，就可以看到 `lib.mkBefore` 的源码了（不太懂 `:e` 是干啥的？请直接输入 `:?` 查看帮助信息学习下）。
+
+```nix
+  # ......
+
+  mkOrder = priority: content:
+    { _type = "order";
+      inherit priority content;
+    };
+
+  mkBefore = mkOrder 500;
+  mkAfter = mkOrder 1500;
+
+  # The default priority for things that don't have a priority specified.
+  defaultPriority = 100;
+
+  # ......
+```
+
+能看到 `lib.mkBefore` 只是个 `lib.mkOrder 500` 的别名，而 `lib.mkAfter` 则是个 `lib.mkOrder 1500` 的别名。
+
+为了更直观地理解这两个函数，现在来创建一个 flake 测试下：
+
+```shell
+# 使用如下内容创建一个 flake.nix 文件
+› cat <<EOF | sudo tee flake.nix
+{
+  description = "Ryan's NixOS Flake";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+  };
+
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations = {
+      "nixos-test" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          # demo module 1, 在列表头插入 git
+          ({lib, pkgs, ...}: {
+            environment.systemPackages = lib.mkBefore [pkgs.git];
+          })
+
+          # demo module 2, 在列表尾插入 vim
+          ({lib, pkgs, ...}: {
+            environment.systemPackages = lib.mkAfter [pkgs.vim];
+          })
+
+          # demo module 3, 添加 curl，但是不设置优先级
+          ({lib, pkgs, ...}: {
+            environment.systemPackages = with pkgs; [curl];
+          })
+        ];
+      };
+    };
+  };
+}
+EOF
+
+# 生成 flake.lock
+› nix flake update
+
+# 进入 nix REPL 解释器
+› nix repl
+Welcome to Nix 2.13.3. Type :? for help.
+
+# 将我们刚刚创建好的 flake 加载到当前作用域中
+nix-repl> :lf .
+Added 9 variables.
+
+# 检查下 systemPackages 的顺序，看看跟我们预期的是否一致
+nix-repl> outputs.nixosConfigurations.nixos-test.config.environment.systemPackages
+[ «derivation /nix/store/0xvn7ssrwa0ax646gl4hwn8cpi05zl9j-git-2.40.1.drv»
+  «derivation /nix/store/7x8qmbvfai68sf73zq9szs5q78mc0kny-curl-8.1.1.drv»
+  «derivation /nix/store/bly81l03kh0dfly9ix2ysps6kyn1hrjl-nixos-container.drv»
+  ......
+  ......
+  «derivation /nix/store/qpmpvq5azka70lvamsca4g4sf55j8994-vim-9.0.1441.drv» ]
+```
+
+能看到 `systemPackages` 的顺序是 `git -> curl -> default packages -> vim`，跟我们预期的一致。`lib.mkBefore [pkgs.git]` 确实是将 `git` 插入到了列表头，而 `lib.mkAfter [pkgs.vim]` 则是将 `vim` 插入到了列表尾。
+
+> 虽然单纯调整 `systemPackages` 的顺序没什么用，但是在其他地方可能会有用...
 
 ### 8. 更新系统 {#update-nixos-system}
 
@@ -1481,6 +1644,7 @@ nix build "nixpkgs#bat"
 ```
 
 此外 [Zero to Nix - Determinate Systems][Zero to Nix - Determinate Systems] 是一份全新的 Nix & Flake 新手入门文档，写得比较浅显易懂，适合新手用来入门。
+
 ## 八、Nixpkgs 的高级用法 {#nixpkgs-advanced-usage}
 
 callPackage、Overriding 与 Overlays 是在使用 Nix 时偶尔会用到的技术，它们都是用来自定义 Nix 包的构建方法的。
@@ -1776,7 +1940,27 @@ args:
 
 你可以在我的配置仓库 [ryan4yin/nix-config/v0.0.4](https://github.com/ryan4yin/nix-config/tree/v0.0.4) 查看更详细的内容，获取些灵感。
 
-## 进阶玩法 {#advanced-topics}
+## 九、Flakes 何时会成为稳定特性？ {#when-will-flakes-stablized}
+
+我们通篇文章两万多字，详细介绍了如何开始使用 Flakes 配置 NixOS 系统，但是文章开头就提到了 Flakes 目前还是实验性功能，这不免让人担忧，如果啥时候 Flakes 被大改甚至被移除，那到时可能还需要花费大量的精力去迁移配置。
+
+实际上这也是目前整个 NixOS 社区最关心的问题之一 Flakes 何时会成为稳定特性？
+
+我深入了解了下 Flakes 现状与未来计划相关的资料，大概有这些：
+
+- https://github.com/NixOS/rfcs/pull/136: 一份渐进式地将 Flakes 与 new CLI 两个实验性特性推向稳定的 RFC，目前还在讨论中。
+- https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317: 最近的一次关于 Flakes 稳定性的讨论，可以看到大家的疑惑，以及社区对 Flakes 的态度。
+- https://grahamc.com/blog/flakes-are-an-obviously-good-thing/: NixOS 社区成员的文章，记录了他对 Flakes 的看法，以及对社区当初添加 Flakes 特性时的不当举措的懊悔。
+- https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9： NixOS Fundation 的一份 Roadmap，其中提到了 Flakes 的计划：`Stabilize flakes and release Nix 3.0. Flakes are widely used (there are more GitHub repos being created with a flake.nix than a default.nix) but they’re still marked as experimental, which is not a good situation. The same applies to the new nix CLI.`
+
+读完上述内容后，我对 Flakes 的未来有了更清晰的认识：**它大概将在未来一两年内成为稳定特性**。
+
+Flakes 带来的好处是显而易见的，整个 NixOS 社区都很喜欢它，目前超过半数的用户已经在大量使用 Flakes（尤其是 NixOS 社区的新用户），因此我们可以确定 Flakes 绝对不会被废弃。
+但是 Flakes 目前仍然存在许多问题，将它推向稳定的过程中，很可能会引入一些不兼容的改动，这个改动的大小目前还无法确定。
+
+因此总的来说，我仍然推荐大家使用 Flakes，但是也要做好准备——未来可能需要解决许多不兼容变更带来的问题。
+
+## 十、进阶玩法 {#advanced-topics}
 
 逐渐熟悉 Nix 这一套工具链后，可以进一步读一读 Nix 的三本手册，挖掘更多的玩法：
 
@@ -1802,32 +1986,201 @@ args:
 - [impermanence](https://github.com/nix-community/impermanence): 用于配置无状态系统。可用它持久化你指定的文件或文件夹，同时再将 /home 目录挂载为 tmpfs 或者每次启动时用工具擦除一遍。这样所有不受 impermanence 管理的数据都将成为临时数据，如果它们导致了任何问题，重启下系统这些数据就全部还原到初始状态了！
 - [colmena](https://github.com/zhaofengli/colmena): NixOS 主机部署工具
 
-## 总结 {#summary}
+## 十一、最佳实践 {#best-practices}
 
-这是本系列文章的第一篇，介绍了使用 Nix Flakes 配置 NixOS 系统的基础知识，跟着这篇文章把系统配置好，就算是入门了。
+> [Tips&Tricks for NixOS Desktop - NixOS Discourse][Tips&Tricks for NixOS Desktop - NixOS Discourse]
 
-我会在后续文章中介绍 NixOS & Nix Flakes 的进阶知识：开发环境管理、secrets 管理、软件打包、远程主机管理等等，尽请期待。
+Nix 非常强大且灵活，做一件事有非常多的方法，这就导致了很难找到最合适的方法来做你的工作。
+这里记录了一些我在使用 NixOS 中学习到的最佳实践，希望能帮到你。
+
+### 1. 运行非 NixOS 的二进制文件 {#run-non-nixos-binaries}
+
+NixOS 不遵循 FHS 标准，因此你从网上下载的二进制程序在 NixOS 上大概率是跑不了的。
+为了在 NixOS 上跑这些非 NixOS 的二进制程序，需要做一些骚操作。有位老兄在这里总结了 10 种实现此目的的方法：[Different methods to run a non-nixos executable on Nixos](https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos)，推荐一读。
+
+我个人用的比较多的方法是，直接创建一个 FHS 环境来运行二进制程序，这种方法非常方便易用。
+
+大概玩法是这样的，首先在你的 `environment.systemPackages` 中添加这个包：
+
+```nix
+{ config, pkgs, lib, ... }:
+
+{
+  # ......
+
+  environment.systemPackages = with pkgs; [
+    # ......o
+
+    # create a fhs environment by command `fhs`, so we can run non-nixos packages in nixos!
+    (pkgs.buildFHSUserEnv (base // {
+      name = "fhs";
+      targetPkgs = pkgs: (
+        # pkgs.buildFHSUserEnv 只提供一个最小的 FHS 环境，缺少很多常用软件所必须的基础包
+        # 所以直接使用它很可能会报错
+        #
+        # pkgs.appimageTools 提供了大多数程序常用的基础包，所以我们可以直接用它来补充
+        (pkgs.appimageTools.defaultFhsEnvArgs.targetPkgs pkgs) ++ with pkgs; [
+          pkg-config
+          ncurses
+          # 如果你的 FHS 程序还有其他依赖，把它们添加在这里
+        ]
+      );
+      profile = "export FHS=1";
+      runScript = "bash";
+      extraOutputsToInstall = ["dev"];
+    }))
+  ];
+
+  # ......
+}
+```
+
+部署好上面的配置后，你就能用 `fhs` 命令进入我们定义好的 FHS 环境了，然后就可以运行你下载的二进制程序了，比如：
+
+```shell
+# 进入我们定义好的 fhs 环境，它就跟其他 Linux 发行版一样了
+$ fhs
+# 看看我们的 /usr/bin 里是不是多了很多东西
+(fhs) $ ls /usr/bin
+# 尝试下跑一个非 nixos 的二进制程序
+(fhs) $ ./bin/code
+```
+
+### 2. 通过 nix repl 查看源码与调试 {#view-source-code-via-nix-repl}
+
+前面我们已经使用 `nix repl '<nixpkgs>'` 看过很多次源码了，这是一个非常强大的工具，可以帮助我们理解 Nix 的工作原理。
+
+要学会用 `nix repl`，最好先看看它的 help 信息：
+
+```
+› nix repl -f '<nixpkgs>'
+Welcome to Nix 2.13.3. Type :? for help.
+
+Loading installable ''...
+Added 17755 variables.
+nix-repl> :?
+The following commands are available:
+
+  <expr>        Evaluate and print expression
+  <x> = <expr>  Bind expression to variable
+  :a <expr>     Add attributes from resulting set to scope
+  :b <expr>     Build a derivation
+  :bl <expr>    Build a derivation, creating GC roots in the working directory
+  :e <expr>     Open package or function in $EDITOR
+  :i <expr>     Build derivation, then install result into current profile
+  :l <path>     Load Nix expression and add it to scope
+  :lf <ref>     Load Nix flake and add it to scope
+  :p <expr>     Evaluate and print expression recursively
+  :q            Exit nix-repl
+  :r            Reload all files
+  :sh <expr>    Build dependencies of derivation, then start nix-shell
+  :t <expr>     Describe result of evaluation
+  :u <expr>     Build derivation, then start nix-shell
+  :doc <expr>   Show documentation of a builtin function
+  :log <expr>   Show logs for a derivation
+  :te [bool]    Enable, disable or toggle showing traces for errors
+```
+
+我最常用的命令是 `:lf <ref>` 跟 `:e <expr>`.
+
+`:e <expr>` 非常直观，所以这里不再赘述，我们来看看 `:lf <ref>`：
+
+```nix
+# 进入我的 nix 配置目录
+› cd ~/nix-config/
+
+# 进入 nix repl 解释器
+› nix repl
+Welcome to Nix 2.13.3. Type :? for help.
+
+# 将我的 nix 配置作为一个 flake 加载到当前作用域中
+nix-repl> :lf .
+Added 16 variables.
+
+# 按 <TAB> 看看当前作用域中有哪些变量，果然 nixosConfigurations outputs 跟 packages 都在里面
+nix-repl><TAB>
+# ......omit some outputs
+__isInt                          nixosConfigurations
+__isList                         null
+__isPath                         outPath
+__isString                       outputs
+__langVersion                    packages
+# ......omit some outputs
+
+# 看看 outputs 里都有些啥
+nix-repl> outputs.nixosConfigurations.<TAB>
+outputs.nixosConfigurations.ai
+outputs.nixosConfigurations.aquamarine
+outputs.nixosConfigurations.kana
+outputs.nixosConfigurations.ruby
+
+# 看看 ai 的配置都有些啥
+nix-repl> outputs.nixosConfigurations.ai.<TAB>
+outputs.nixosConfigurations.ai._module
+outputs.nixosConfigurations.ai._type
+outputs.nixosConfigurations.ai.class
+outputs.nixosConfigurations.ai.config
+outputs.nixosConfigurations.ai.extendModules
+outputs.nixosConfigurations.ai.extraArgs
+outputs.nixosConfigurations.ai.options
+outputs.nixosConfigurations.ai.pkgs
+outputs.nixosConfigurations.ai.type
+
+nix-repl> outputs.nixosConfigurations.ai.config.
+outputs.nixosConfigurations.ai.config.age
+outputs.nixosConfigurations.ai.config.appstream
+outputs.nixosConfigurations.ai.config.assertions
+outputs.nixosConfigurations.ai.config.boot
+outputs.nixosConfigurations.ai.config.console
+outputs.nixosConfigurations.ai.config.containers
+# ......omit other outputs
+
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.<TAB>
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.activation
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.activationPackage
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.emptyActivationPath
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.enableDebugInfo
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.enableNixpkgsReleaseCheck
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraActivationPath
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraBuilderCommands
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraOutputsToInstall
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.extraProfileCommands
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file
+# ......omit other outputs
 
 
-## 最后，Flakes 何时会成为稳定特性？ {#when-will-flakes-stablized}
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.<TAB>
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.BROWSER
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.DELTA_PAGER
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.EDITOR
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.GLFW_IM_MODULE
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.MANPAGER
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.QT_IM_MODULE
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.TERM
+# ......omit other outputs
 
-我们通篇文章两万多字，详细介绍了如何开始使用 Flakes 配置 NixOS 系统，但是文章开头就提到了 Flakes 目前还是实验性功能，这不免让人担忧，如果啥时候 Flakes 被大改甚至被移除，那到时可能还需要花费大量的精力去迁移配置。
+# 看看 `TERM` 这个环境变量的值是啥
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.sessionVariables.TERM
+"xterm-256color"
 
-实际上这也是目前整个 NixOS 社区最关心的问题之一Flakes 何时会成为稳定特性？
 
-我深入了解了下 Flakes 现状与未来计划相关的资料，大概有这些：
+# 看下我使用 `home.file` 定义的所有文件
+nix-repl> outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file.<TAB>
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..bash_profile
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..bashrc
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/fcitx5/profile
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/fcitx5/profile-bak
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/config
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/i3blocks.conf
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/keybindings
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/layouts
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/scripts
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/wallpaper.png
+outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/rofi
+#......
+```
 
-- https://github.com/NixOS/rfcs/pull/136: 一份渐进式地将 Flakes 与 new CLI 两个实验性特性推向稳定的 RFC，目前还在讨论中。
-- https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317: 最近的一次关于 Flakes 稳定性的讨论，可以看到大家的疑惑，以及社区对 Flakes 的态度。
-- https://grahamc.com/blog/flakes-are-an-obviously-good-thing/: NixOS 社区成员的文章，记录了他对 Flakes 的看法，以及对社区当初添加 Flakes 特性时的不当举措的懊悔。
-- https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9： NixOS Fundation 的一份 Roadmap，其中提到了 Flakes 的计划：`Stabilize flakes and release Nix 3.0. Flakes are widely used (there are more GitHub repos being created with a flake.nix than a default.nix) but they’re still marked as experimental, which is not a good situation. The same applies to the new nix CLI.`
-
-读完上述内容后，我对 Flakes 的未来有了更清晰的认识：**它大概将在未来一两年内成为稳定特性**。
-
-Flakes 带来的好处是显而易见的，整个 NixOS 社区都很喜欢它，目前超过半数的用户已经在大量使用 Flakes（尤其是 NixOS 社区的新用户），因此我们可以确定 Flakes 绝对不会被废弃。
-但是 Flakes 目前仍然存在许多问题，将它推向稳定的过程中，很可能会引入一些不兼容的改动，这个改动的大小目前还无法确定。
-
-因此总的来说，我仍然推荐大家使用 Flakes，但是也要做好准备——未来可能需要解决许多不兼容变更带来的问题。
+能看到，通过 `nix repl` 加载好我的 flake 配置后，就能很方便地检查所有的配置项了，这对于调试非常有用。
 
 ## 参考 {#reference}
 
@@ -1837,8 +2190,10 @@ Flakes 带来的好处是显而易见的，整个 NixOS 社区都很喜欢它，
 - [NixOS 系列](https://lantian.pub/article/modify-website/nixos-why.lantian/): 这是 LanTian 大佬的 NixOS 系列文章，写得非常清晰明了，新手必读。
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): 官方的 Nix Flakes 系列文章，介绍得比较详细，作为新手入门比较 OK
 - [Nix Flakes - Wiki](https://nixos.wiki/wiki/Flakes): Nix Flakes 的官方 Wiki，此文介绍得比较粗略。
+- [Tips&Tricks for NixOS Desktop - NixOS Discourse][Tips&Tricks for NixOS Desktop - NixOS Discourse]: 一些使用 NixOS 的实用技巧
 - [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 我的 NixOS 配置仓库，README 中也列出了我参考过的其他配置仓库
 
 [digga]: https://github.com/divnix/digga
 [New Nix Commands]: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html
 [Zero to Nix - Determinate Systems]: https://github.com/DeterminateSystems/zero-to-nix
+[Tips&Tricks for NixOS Desktop - NixOS Discourse]: https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488
