@@ -2043,7 +2043,7 @@ $ fhs
 (fhs) $ ./bin/code
 ```
 
-### 2. 通过 nix repl 查看源码与调试 {#view-source-code-via-nix-repl}
+### 2. 通过 `nix repl` 查看源码、调试配置 {#view-source-code-via-nix-repl}
 
 前面我们已经使用 `nix repl '<nixpkgs>'` 看过很多次源码了，这是一个非常强大的工具，可以帮助我们理解 Nix 的工作原理。
 
@@ -2083,7 +2083,7 @@ The following commands are available:
 `:e <expr>` 非常直观，所以这里不再赘述，我们来看看 `:lf <ref>`：
 
 ```nix
-# 进入我的 nix 配置目录
+# 进入我的 nix 配置目录（建议替换成你自己的配置目录）
 › cd ~/nix-config/
 
 # 进入 nix repl 解释器
@@ -2094,7 +2094,8 @@ Welcome to Nix 2.13.3. Type :? for help.
 nix-repl> :lf .
 Added 16 variables.
 
-# 按 <TAB> 看看当前作用域中有哪些变量，果然 nixosConfigurations outputs 跟 packages 都在里面
+# 按 <TAB> 看看当前作用域中有哪些变量，果然 nixosConfigurations inputs outputs 跟 packages 都在里面
+# 这意味着我们可以很方便地检查这些配置的内部状态
 nix-repl><TAB>
 # ......omit some outputs
 __isInt                          nixosConfigurations
@@ -2103,6 +2104,22 @@ __isPath                         outPath
 __isString                       outputs
 __langVersion                    packages
 # ......omit some outputs
+
+# 看看 inputs 里都有些啥
+nix-repl> inputs.<TAB>
+inputs.agenix            inputs.nixpkgs
+inputs.darwin            inputs.nixpkgs-darwin
+inputs.home-manager      inputs.nixpkgs-unstable
+inputs.hyprland          inputs.nixpkgs-wayland
+inputs.nil
+inputs.nixos-generators
+
+# 看看 inputs.nil.packages 里都有些啥
+nix-repl> inputs.nil.packages.
+inputs.nil.packages.aarch64-darwin
+inputs.nil.packages.aarch64-linux
+inputs.nil.packages.x86_64-darwin
+inputs.nil.packages.x86_64-linux
 
 # 看看 outputs 里都有些啥
 nix-repl> outputs.nixosConfigurations.<TAB>

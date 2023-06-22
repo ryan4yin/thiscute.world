@@ -1688,7 +1688,7 @@ $ fhs
 (fhs) $ ./bin/code
 ```
 
-### 2. check the source code of packages and modules
+### 2. check the source code and debug with `nix repl`
 
 We've used `nix repl '<nixpkgs>'` many times to check the source code in this guide, it's really a powerful tool to help us understand how things work in Nix.
 
@@ -1728,7 +1728,7 @@ Some expressions that I use frequently: `:lf <ref>`, `:e <expr>`.
 `:e <expr>` is very intuitive, so I won't repeat it. let's take a look at `:lf <ref>`:
 
 ```nix
-# cd into my nix-config repo
+# cd into my nix-config repo(you should replace it with your own nix-config repo)
 › cd ~/nix-config/
 
 # enter nix repl
@@ -1748,6 +1748,23 @@ __isPath                         outPath
 __isString                       outputs
 __langVersion                    packages
 # ......omit some outputs
+
+
+# check what's in inputs
+nix-repl> inputs.<TAB>
+inputs.agenix            inputs.nixpkgs
+inputs.darwin            inputs.nixpkgs-darwin
+inputs.home-manager      inputs.nixpkgs-unstable
+inputs.hyprland          inputs.nixpkgs-wayland
+inputs.nil
+inputs.nixos-generators
+
+# check what's in inputs.nil
+nix-repl> inputs.nil.packages.
+inputs.nil.packages.aarch64-darwin
+inputs.nil.packages.aarch64-linux
+inputs.nil.packages.x86_64-darwin
+inputs.nil.packages.x86_64-linux
 
 # check the outputs of my nix flake
 nix-repl> outputs.nixosConfigurations.<TAB>
