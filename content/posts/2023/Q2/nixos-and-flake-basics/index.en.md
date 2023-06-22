@@ -408,7 +408,7 @@ Use [helix](https://github.com/helix-editor/helix) editor as an example, first w
     # ......
 
     # helix editor, use the tag 23.05
-    helix.url = "github:helix-editor/helix/23.05"
+    helix.url = "github:helix-editor/helix/23.05";
   };
 
   outputs = inputs@{ self, nixpkgs, ... }: {
@@ -445,7 +445,7 @@ Then udpate `configuration.nix` to install `helix` from the input `helix`:
     curl
 
     # install helix from the input `helix`
-    helix."${pkgs.system}".packages.helix
+    helix.packages."${pkgs.system}".helix
   ];
 
   # omit other configuration......

@@ -755,7 +755,7 @@ cat flake.nix
     # ......
 
     # helix editor, use tag 23.05
-    helix.url = "github:helix-editor/helix/23.05"
+    helix.url = "github:helix-editor/helix/23.05";
   };
 
   outputs = inputs@{ self, nixpkgs, ... }: {
@@ -777,9 +777,6 @@ cat flake.nix
 接下来在 `configuration.nix` 中就能引用这个 flake input 数据源了：
 
 ```nix
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
 # Nix 会通过名称匹配，自动将 specialArgs 中的 helix 注入到此函数的第三个参数
 { config, pkgs, helix, ... }:
 
@@ -793,7 +790,7 @@ cat flake.nix
     curl
 
     # 这里从 helix 这个 inputs 数据源安装了 helix 程序
-    helix."${pkgs.system}".packages.helix
+    helix.packages."${pkgs.system}".helix
   ];
 
   # 省略其他配置......
