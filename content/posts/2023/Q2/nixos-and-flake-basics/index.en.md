@@ -59,7 +59,7 @@ I heard about the Nix package manager several years ago. It uses the Nix languag
 But recently I encountered two troublesome things when migrating the system, which made me decide to try Nix.
 
 The first problem was installing EndeavourOS (a derivative distribution of Arch Linux) on a newly assembled PC. Because My old PC also uses EndeavourOS, to save time, I directly `rsync` the old PC's home directory to the new PC.
-However, this synchronization caused problems -- All functions worked normally, but video playback always stuck, firefox, chrome, and mpv would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the home directory synchronization. After clearing the home directory, the problem was solved immediately… Later, I spent a long time recovering things from the old PC one by one.
+However, this synchronization caused problems -- All functions works normally, but video playback always stuck, firefox, chrome, and mpv would all get stuck. I searched various resources online but could not solve the problem until I realized it might be caused by the home directory synchronization. After clearing the home directory, the problem was solved immediately… Later, I spent a long time recovering things from the old PC one by one.
 
 The second problem is that I recently wanted to give wayland a try, so I changed the compositor from i3 to sway.
 However, because there was little difference between the two and many inconveniences (hidpi, Sway configuration tuning, etc.), I decided to switch back to i3. After switching back, GUI programs such as firefox and thunar would all get stuck for about a minute after the system started…
