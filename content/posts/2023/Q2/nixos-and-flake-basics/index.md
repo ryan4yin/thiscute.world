@@ -2228,6 +2228,8 @@ nixos-rebuild --flake .#aquamarine --target-host 192.168.4.1 --build-host 192.16
 
 另外如果你不想直接使用 ip 地址，可以在 `~/.ssh/config` 或者 `/etc/ssh/ssh_config` 中定义一些主机别名，比如：
 
+> 当然如下这份配置也完全可以通过 Nix 来管理，这个就留给读者自己去实现了。
+
 ```bash
 › cat ~/.ssh/config
 

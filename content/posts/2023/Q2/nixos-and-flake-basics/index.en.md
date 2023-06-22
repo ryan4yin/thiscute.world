@@ -1873,6 +1873,8 @@ If you want to build the configuration locally and deploy it to the remote serve
 
 Instead of use ip address directly, we can also define some host aliases in `~/.ssh/config` or `/etc/ssh/ssh_config`, for example:
 
+> ssh's config can be generated completely through Nix configuration, and this task is left to you.
+
 ```bash
 › cat ~/.ssh/config
 
