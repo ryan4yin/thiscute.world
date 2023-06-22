@@ -3,6 +3,9 @@
         </figure><blockquote>
 <p>The target NixOS version of this post is 22.11, and the Nix version is 2.13.3. In this environment, Flakes is still an experimental feature.</p>
 </blockquote>
+<blockquote>
+<p>TODO: rewrite and break this post up into a several articles, based on the constructive critism at <a href="https://www.reddit.com/r/NixOS/comments/14fvz1q/comment/jp4xhj3/?context=3" target="_blank" rel="noopener noreferrer">Updates: NixOS &amp; Nix Flakes - A Guide for Beginners</a></p>
+</blockquote>
 <h2 id="changelog" class="headerLink">
     <a href="#changelog" class="header-mark"></a>Changelog</h2><ul>
 <li>2022/6/22
@@ -73,7 +76,7 @@ It was a truly satisfying moment!</p>
 <p>To put it simply, &ldquo;declarative configuration&rdquo; means that users only need to declare the results they want. For example, you declare that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don&rsquo;t need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configuration or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway&rsquo;s nix packages are designed properly&hellip;).</p>
 </blockquote>
 <p>NixOS, the Linux distribution built on top of the Nix package manager, can be simply described as &ldquo;OS as Code&rdquo;, which describes the entire operating system&rsquo;s state using declarative Nix configuration files.</p>
-<p>The configuration of NixOS manages only the system-level state, user&rsquo;s HOME directory is not under its control. Another important community project, <a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>, filled this gap, home-manager is designed to manage user-level packages &amp; HOME directories. <strong>By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained</strong>(ideally).</p>
+<p>The configuration of NixOS manages only the system-level state, user&rsquo;s HOME directory is not under its control. Another important community project, <a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>, filled this gap, home-manager is designed to manage user-level packages &amp; HOME directories. <strong>By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained</strong>.</p>
 <p>Due to Nix&rsquo;s features such as declarative and reproducible, Nix is not only used to manage desktop environments but also widely used to manage development environments, compilation environments, cloud virtual machines, container image construction, etc. <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> from the Nix official and <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> from the community are both operations tools based on Nix.</p>
 <blockquote>
 <p>Since there are numerous files in the home directory with varying behaviors, it is impossible to version control all of them due to the high cost. Generally, only some important configuration files are managed using home-manager, and other files that need to be backed up can be backed up and synchronized using rsync/synthing, or use tools like <a href="https://github.com/digint/btrbk" target="_blank" rel="noopener noreferrer">btrbk</a> to take snapshots of the home directory.</p>
@@ -82,9 +85,9 @@ It was a truly satisfying moment!</p>
     <a href="#advantages-of-nix" class="header-mark"></a>Advantages of Nix</h3><ul>
 <li><strong>Declarative configuration, Environment as Code, can be managed with Git</strong>
 <ul>
-<li>As long as the configuration files are not lost, the system can be restored to any historical state at any time(ideally).</li>
-<li>Nix lock dependences&rsquo;s version through a lock file named <code>flake.lock</code>, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.</li>
-<li>Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as <code>flake.lock</code> in Docker, Docker&rsquo;s reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).</li>
+<li>As long as the configuration files are not lost, the system can be restored to any historical state at any time(except the state that are NOT managed by NixOS, such as docker containers, postgresql data, etc&hellip;)</li>
+<li>Nix Flakes lock dependences&rsquo;s version through a lock file named <code>flake.lock</code>, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.</li>
+<li>Compared with Docker, Nix Flakes provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as <code>flake.lock</code> in Docker, Docker&rsquo;s reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).</li>
 </ul>
 </li>
 <li><strong>Highly convenient system customization capability</strong>
