@@ -94,7 +94,8 @@ NixOS 的配置只负责管理系统层面的状态，用户目录不受它管�
 
 ### Nix 的优点 {#nix-advantages}
 
-- 声明式配置，Environment as Code，可以直接用 Git 管理配置，只要配置文件不丢，系统就可以随时还原到任一历史状态（理想情况下）。
+- 声明式配置，Environment as Code，可以直接用 Git 管理配置
+  - Nix Flakes 使用，只要配置文件不丢，系统就可以随时还原到任一历史状态（理想情况下）。
   - 这跟一些编程语言中 cargo.lock/go.mod 等文件锁定依赖库版本以确保构建结果可复现的思路是一致的。
   - 与 Docker 相比，Dockerfile 实际是命令式的配置，而且也不存在版本锁这样的东西，所以 Docker 的可复现能力远不如 Nix.
 - 高度便捷的系统自定义能力
