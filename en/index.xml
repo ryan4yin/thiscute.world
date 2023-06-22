@@ -2964,6 +2964,229 @@ Here are some best practices that I&rsquo;ve learned from the community, hope it
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>As you can see, we can check every attribute of my flake in the REPL after loading it, which is very convenient for debugging.</p>
+<h3 id="3-remote-deployment" class="headerLink">
+    <a href="#3-remote-deployment" class="header-mark"></a>3. Remote deployment</h3><p>Some tools like <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a>, <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a>, and <a href="https://github.com/zhaofengli/colmena" target="_blank" rel="noopener noreferrer">colmena</a> can all be used to deploy NixOS configuration to remote hosts, but they are all too complicated for me, so skip them all.</p>
+<p><code>nixos-rebuild</code>, the tool we use to deploy NixOS configuration, also supports remote deployment through ssh protocol, which is very convenient and simple.</p>
+<p>But <code>nixos-rebuild</code> does not support deploying with password authentication, so to use it for remote deployment, we need to:</p>
+<ol>
+<li>Configure ssh public key authentication for the remote hosts.</li>
+<li>To avoid sudo password verification failures, we need to use the <code>root</code> user to deploy, or grant the user sudo permission without password verification.
+<ol>
+<li>related issue: <a href="https://github.com/NixOS/nixpkgs/issues/118655" target="_blank" rel="noopener noreferrer">https://github.com/NixOS/nixpkgs/issues/118655</a></li>
+</ol>
+</li>
+</ol>
+<p>After the above configuration is completed, we can deploy the configuration to the server through the following command:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 1. add the ssh key to ssh-agent first</span>
+</span></span><span class="line"><span class="cl">ssh-add ~/.ssh/ai-idols
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. deploy the configuration to the remote host, using the ssh key we added in step 1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#    and the username defaults to `$USER`, it&#39;s `ryan` in my case.</span>
+</span></span><span class="line"><span class="cl">nixos-rebuild --flake .#aquamarine --target-host 192.168.4.1 --build-host 192.168.4.1 switch --use-remote-sudo --verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The commands above will build &amp; deploy the configuration to aquamarine, the build process will be executed on aquamarine too,
+and the <code>--use-remote-sudo</code> option indicates that we need to use sudo permission on the remote server to deploy the configuration.</p>
+<p>If you want to build the configuration locally and deploy it to the remote server, just replace <code>--build-host aquamarinr</code> with <code>--build-host localhost</code>.</p>
+<p>Instead of use ip address directly, we can also define some host aliases in <code>~/.ssh/config</code> or <code>/etc/ssh/ssh_config</code>, for example:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">› cat ~/.ssh/config
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host ai
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.100
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host aquamarine
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.101
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host ruby
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.102
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host kana
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.103
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then we can use the host alias to deploy the configuration:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo --verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4-work-with-makefile" class="headerLink">
+    <a href="#4-work-with-makefile" class="header-mark"></a>4. Work with Makefile</h3><blockquote>
+<p>NOTE: Makefile&rsquo;s target name should not be the same as one of the file or directory in the current directory, otherwise the target will not be executed!</p>
+</blockquote>
+<p>I use Makefile to manage the commands of my flake, which is very convenient.</p>
+<p>For example, my Makefile looks like this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">#  NOTE: Makefile&#39;s target name should not be the same as one of the file or directory in the current directory,
+</span></span></span><span class="line"><span class="cl"><span class="c">#    otherwise the target will not be executed!
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">#  Nix commands related to the local machine
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">deploy</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild switch --flake . --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">debug</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild switch --flake . --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">update</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nix flake update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">history</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nix profile <span class="nb">history</span> --profile /nix/var/nix/profiles/system
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">gc</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	<span class="c1"># remove all generations older than 7 days</span>
+</span></span><span class="line"><span class="cl">	sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1"># garbage collect all unused nix store entries</span>
+</span></span><span class="line"><span class="cl">	sudo nix store gc --debug
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">#  Idols, Commands related to my remote distributed building cluster
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">add-idols-ssh-key</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	ssh-add ~/.ssh/ai-idols
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">aqua</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">aqua-debug</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">ruby</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#ruby --target-host ruby --build-host ruby switch --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">ruby-debug</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#ruby --target-host ruby --build-host ruby switch --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">kana</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#kana --target-host kana --build-host kana switch --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">kana-debug</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#kana --target-host kana --build-host kana switch --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">idols</span><span class="o">:</span> <span class="n">aqua</span> <span class="n">ruby</span> <span class="n">kana</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">idols-debug</span><span class="o">:</span> <span class="n">aqua</span>-<span class="n">debug</span> <span class="n">ruby</span>-<span class="n">debug</span> <span class="n">kana</span>-<span class="n">debug</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Save the above Makefile to the root directory of the flake, and then we can use <code>make deploy</code> to deploy the configuration to the local machine, and use <code>make idols</code> to deploy the configuration to all my remote servers.</p>
 <h2 id="references" class="headerLink">
     <a href="#references" class="header-mark"></a>References</h2><p>The feedback and discussion of this post is mainly on <a href="https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/" target="_blank" rel="noopener noreferrer">this Reddit post</a>, you can also comment directly at the bottom of this page.</p>
 <p>Here are some useful resources that I referred to:</p>
@@ -2975,7 +3198,13 @@ Here are some best practices that I&rsquo;ve learned from the community, hope it
 <li><a href="https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488" target="_blank" rel="noopener noreferrer">Tips&amp;Tricks for NixOS Desktop - NixOS Discourse</a>: Just as the title says, it is a collection of tips and tricks for NixOS desktop.</li>
 <li><a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>: My Flake for NixOS &amp; macOS.</li>
 </ul>
-]]></content></entry><entry><title type="html">Summary of My 2021</title><link href="https://thiscute.world/en/posts/2021-summary/"/><id>https://thiscute.world/en/posts/2021-summary/</id><author><name>ryan4yin</name></author><published>2022-01-23T01:40:00+08:00</published><updated>2022-01-23T01:40:00+08:00</updated><content type="html"><![CDATA[<figure>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"></code></pre></td></tr></table>
+</div>
+</div>]]></content></entry><entry><title type="html">Summary of My 2021</title><link href="https://thiscute.world/en/posts/2021-summary/"/><id>https://thiscute.world/en/posts/2021-summary/</id><author><name>ryan4yin</name></author><published>2022-01-23T01:40:00+08:00</published><updated>2022-01-23T01:40:00+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/en/posts/2021-summary/wrapped_ryan4yin.webp" height="2650" width="1560"><figcaption></figcaption>
         </figure><h2 id="gossip" class="headerLink">
     <a href="#gossip" class="header-mark"></a>Gossip</h2><p>Another year has passed in the twinkling of an eye, and this New year, the global epidemic has set a new record. After Christmas, the daily increase in the United States has directly exceeded 1 million. In China, poor management in Xi&rsquo;an has led to hunger.</p>

@@ -3912,6 +3912,221 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>能看到，通过 <code>nix repl</code> 加载好我的 flake 配置后，就能很方便地检查所有的配置项了，这对于调试非常有用。</p>
+<h3 id="3-远程部署" class="headerLink">
+    <a href="#3-%e8%bf%9c%e7%a8%8b%e9%83%a8%e7%bd%b2" class="header-mark"></a>3. 远程部署</h3><p>社区的一些工具，比如 <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a>, <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a>, 跟 <a href="https://github.com/zhaofengli/colmena" target="_blank" rel="noopener noreferrer">colmena</a>，都可以用来部署 NixOS 配置到远程主机，但是都太复杂了，所以先全部跳过。</p>
+<p>实际上我们前面使用了多次的 NixOS 本机部署命令 <code>nixos-rebuild</code>，这个工具也支持通过 ssh 协议进行远程部署，非常方便。</p>
+<p>美中不足的是，<code>nixos-rebuild</code> 不支持使用密码认证进行部署，所以要想使用它进行远程部署，我们需要：</p>
+<ol>
+<li>为远程主机配置 ssh 公钥认证。</li>
+<li>为了避免 sudo 密码认证失败，需要使用 <code>root</code> 用户进行部署，或者给用户授予 sudo 权限不需要密码认证。
+<ol>
+<li>相关 issue: <a href="https://github.com/NixOS/nixpkgs/issues/118655" target="_blank" rel="noopener noreferrer">https://github.com/NixOS/nixpkgs/issues/118655</a></li>
+</ol>
+</li>
+</ol>
+<p>在搞定上面两点后，我们就可以使用 <code>nixos-rebuild</code> 进行远程部署了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 1. 首先将本地的 ssh 私钥加载到 ssh-agent 中，以便后续使用</span>
+</span></span><span class="line"><span class="cl">ssh-add ~/.ssh/ai-idols
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 将 NixOS 配置部署到远程主机，使用第一步添加的 ssh key 进行认证，用户名默认为 `$USER`</span>
+</span></span><span class="line"><span class="cl">nixos-rebuild --flake .#aquamarine --target-host 192.168.4.1 --build-host 192.168.4.1 switch --use-remote-sudo --verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面的命令会将 NixOS 配置部署到 <code>aquamarine</code> 这台主机上，参数解释如下：</p>
+<ol>
+<li><code>--target-host</code>: 设置远程主机的 ip 地址</li>
+<li><code>--build-host</code> 指定了构建 NixOS 配置的主机，这里设置为跟 <code>--target-host</code> 相同，表示在远程主机上构建配置。</li>
+<li><code>--use-remote-sudo</code> 表示部署需要用到远程主机的 sudo 权限，如果不设置这个参数，部署会失败。</li>
+</ol>
+<p>如果你希望在本地构建配置，然后再部署到远程主机，可以命令中的 <code>--build-host aquamarinr</code> 替换为 <code>--build-host localhost</code>。</p>
+<p>另外如果你不想直接使用 ip 地址，可以在 <code>~/.ssh/config</code> 或者 <code>/etc/ssh/ssh_config</code> 中定义一些主机别名，比如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">› cat ~/.ssh/config
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host ai
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.100
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host aquamarine
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.101
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host ruby
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.102
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host kana
+</span></span><span class="line"><span class="cl">  HostName 192.168.5.103
+</span></span><span class="line"><span class="cl">  Port <span class="m">22</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样我们就可以使用主机别名进行部署了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo --verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4-使用-makefile-简化命令" class="headerLink">
+    <a href="#4-%e4%bd%bf%e7%94%a8-makefile-%e7%ae%80%e5%8c%96%e5%91%bd%e4%bb%a4" class="header-mark"></a>4. 使用 Makefile 简化命令</h3><blockquote>
+<p>注意: Makefile 的 target 名称不能与当前目录下的文件或者目录重名，否则 target 将不会被执行！</p>
+</blockquote>
+<p>在使用 NixOS 的过程中，我们会经常使用 <code>nixos-rebuild</code> 命令，经常需要输入一大堆参数，比较繁琐。</p>
+<p>所以我使用 Makefile 来管理我的 flake 配置相关的命令，简化使用。</p>
+<p>我的 Makefile 大概内容截取如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">#  Nix commands related to the local machine
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">deploy</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild switch --flake . --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">debug</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild switch --flake . --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">update</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nix flake update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">history</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	nix profile <span class="nb">history</span> --profile /nix/var/nix/profiles/system
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">gc</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	<span class="c1"># remove all generations older than 7 days</span>
+</span></span><span class="line"><span class="cl">	sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1"># garbage collect all unused nix store entries</span>
+</span></span><span class="line"><span class="cl">	sudo nix store gc --debug
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">#  Idols, Commands related to my remote distributed building cluster
+</span></span></span><span class="line"><span class="cl"><span class="c">#
+</span></span></span><span class="line"><span class="cl"><span class="c">############################################################################
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">add-idols-ssh-key</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	ssh-add ~/.ssh/ai-idols
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">aqua</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">aqua-debug</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">ruby</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#ruby --target-host ruby --build-host ruby switch --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">ruby-debug</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#ruby --target-host ruby --build-host ruby switch --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">kana</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#kana --target-host kana --build-host kana switch --use-remote-sudo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">kana-debug</span><span class="o">:</span> <span class="n">add</span>-<span class="n">idols</span>-<span class="n">ssh</span>-<span class="n">key</span>
+</span></span><span class="line"><span class="cl">	nixos-rebuild --flake .#kana --target-host kana --build-host kana switch --use-remote-sudo --show-trace --verbose
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">idols</span><span class="o">:</span> <span class="n">aqua</span> <span class="n">ruby</span> <span class="n">kana</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">idols-debug</span><span class="o">:</span> <span class="n">aqua</span>-<span class="n">debug</span> <span class="n">ruby</span>-<span class="n">debug</span> <span class="n">kana</span>-<span class="n">debug</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>将上述 Makefile 放到 NixOS 配置的根目录下，然后我们就可以使用 <code>make</code> 命令来执行相关的命令了。
+比如说我这里 <code>make deploy</code> 就是部署 NixOS 配置到本地主机，<code>make idols</code> 就是部署到我的远程主机集群。</p>
 <h2 id="reference" class="headerLink">
     <a href="#reference" class="header-mark"></a>参考</h2><p>如下是我参考过的比较有用的 Nix 相关资料：</p>
 <ul>
