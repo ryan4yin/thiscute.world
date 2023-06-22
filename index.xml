@@ -3625,7 +3625,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="view-source-code-via-nix-repl" class="headerLink">
-    <a href="#view-source-code-via-nix-repl" class="header-mark"></a>2. 通过 nix repl 查看源码与调试</h3><p>前面我们已经使用 <code>nix repl '&lt;nixpkgs&gt;'</code> 看过很多次源码了，这是一个非常强大的工具，可以帮助我们理解 Nix 的工作原理。</p>
+    <a href="#view-source-code-via-nix-repl" class="header-mark"></a>2. 通过 <code>nix repl</code> 查看源码、调试配置</h3><p>前面我们已经使用 <code>nix repl '&lt;nixpkgs&gt;'</code> 看过很多次源码了，这是一个非常强大的工具，可以帮助我们理解 Nix 的工作原理。</p>
 <p>要学会用 <code>nix repl</code>，最好先看看它的 help 信息：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -3689,101 +3689,118 @@
 <p><code>:e &lt;expr&gt;</code> 非常直观，所以这里不再赘述，我们来看看 <code>:lf &lt;ref&gt;</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span><span class="lnt">59
-</span><span class="lnt">60
-</span><span class="lnt">61
-</span><span class="lnt">62
-</span><span class="lnt">63
-</span><span class="lnt">64
-</span><span class="lnt">65
-</span><span class="lnt">66
-</span><span class="lnt">67
-</span><span class="lnt">68
-</span><span class="lnt">69
-</span><span class="lnt">70
-</span><span class="lnt">71
-</span><span class="lnt">72
-</span><span class="lnt">73
-</span><span class="lnt">74
-</span><span class="lnt">75
-</span><span class="lnt">76
-</span><span class="lnt">77
-</span><span class="lnt">78
-</span><span class="lnt">79
-</span><span class="lnt">80
-</span><span class="lnt">81
-</span><span class="lnt">82
-</span><span class="lnt">83
-</span><span class="lnt">84
-</span><span class="lnt">85
-</span><span class="lnt">86
-</span><span class="lnt">87
-</span><span class="lnt">88
-</span><span class="lnt">89
-</span><span class="lnt">90
-</span><span class="lnt">91
-</span><span class="lnt">92
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># 进入我的 nix 配置目录</span>
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># 进入我的 nix 配置目录（建议替换成你自己的配置目录）</span>
 </span></span><span class="line"><span class="cl"><span class="err">›</span> <span class="n">cd</span> <span class="sr">~/nix-config/</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 进入 nix repl 解释器</span>
@@ -3794,7 +3811,8 @@
 </span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="p">:</span><span class="n">lf</span> <span class="o">.</span>
 </span></span><span class="line"><span class="cl"><span class="n">Added</span> <span class="mi">16</span> <span class="n">variables</span><span class="o">.</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 按 &lt;TAB&gt; 看看当前作用域中有哪些变量，果然 nixosConfigurations outputs 跟 packages 都在里面</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 按 &lt;TAB&gt; 看看当前作用域中有哪些变量，果然 nixosConfigurations inputs outputs 跟 packages 都在里面</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 这意味着我们可以很方便地检查这些配置的内部状态</span>
 </span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span><span class="sr">&lt;TAB&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># ......omit some outputs</span>
 </span></span><span class="line"><span class="cl"><span class="n">__isInt</span>                          <span class="n">nixosConfigurations</span>
@@ -3803,6 +3821,22 @@
 </span></span><span class="line"><span class="cl"><span class="n">__isString</span>                       <span class="n">outputs</span>
 </span></span><span class="line"><span class="cl"><span class="n">__langVersion</span>                    <span class="n">packages</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># ......omit some outputs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 看看 inputs 里都有些啥</span>
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">inputs</span><span class="o">.</span><span class="sr">&lt;TAB&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">agenix</span>            <span class="n">inputs</span><span class="o">.</span><span class="n">nixpkgs</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">darwin</span>            <span class="n">inputs</span><span class="o">.</span><span class="n">nixpkgs-darwin</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">home-manager</span>      <span class="n">inputs</span><span class="o">.</span><span class="n">nixpkgs-unstable</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">hyprland</span>          <span class="n">inputs</span><span class="o">.</span><span class="n">nixpkgs-wayland</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">nil</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">nixos-generators</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 看看 inputs.nil.packages 里都有些啥</span>
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">inputs</span><span class="o">.</span><span class="n">nil</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">nil</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">aarch64-darwin</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">nil</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">aarch64-linux</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">nil</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">x86_64-darwin</span>
+</span></span><span class="line"><span class="cl"><span class="n">inputs</span><span class="o">.</span><span class="n">nil</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">x86_64-linux</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 看看 outputs 里都有些啥</span>
 </span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="sr">&lt;TAB&gt;</span>
