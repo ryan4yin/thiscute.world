@@ -32,7 +32,7 @@ code:
 
 > The target NixOS version of this post is 22.11, and the Nix version is 2.13.3. In this environment, Flakes is still an experimental feature.
 
-> TODO: rewrite and break this post up into a several articles, based on the constructive critism at [Updates: NixOS & Nix Flakes - A Guide for Beginners](https://www.reddit.com/r/NixOS/comments/14fvz1q/comment/jp4xhj3/?context=3)
+> TODO: rewrite and break this post into a series of articles, based on the constructive critism at [Updates: NixOS & Nix Flakes - A Guide for Beginners](https://www.reddit.com/r/NixOS/comments/14fvz1q/comment/jp4xhj3/?context=3)
 
 ## Changelog
 
