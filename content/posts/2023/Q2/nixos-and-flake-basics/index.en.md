@@ -611,7 +611,7 @@ According to the official document [Home Manager Manual](https://nix-community.g
     usbutils # lsusb
   ];
 
-  # 启用 starship，这是一个漂亮的 shell 提示符
+  # starship - an customizable prompt for any shell
   programs.starship = {
     enable = true;
     settings = {
