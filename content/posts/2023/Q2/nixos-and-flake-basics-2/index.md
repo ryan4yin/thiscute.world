@@ -39,10 +39,6 @@ code:
 
 TODO
 
-## 远程部署
-
-TODO
-
 ## 通过 dev-templates 创建开发环境
 
 [numtide/devshell](https://github.com/numtide/devshell) seems to be a personal project, and not documented well.
