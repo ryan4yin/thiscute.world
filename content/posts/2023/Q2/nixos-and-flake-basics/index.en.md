@@ -93,7 +93,7 @@ Nix package manager is a declarative configuration management tool similar to pu
 
 NixOS, the Linux distribution built on top of the Nix package manager, can be simply described as "OS as Code", which describes the entire operating system's state using declarative Nix configuration files.
 
-The configuration of NixOS manages only the system-level state, user's HOME directory is not under its control. Another important community project, [home-manager](https://github.com/nix-community/home-manager), filled this gap, home-manager is designed to manage user-level packages & HOME directories. **By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained**(ideally).
+The configuration of NixOS manages only the system-level state, user's HOME directory is not under its control. Another important community project, [home-manager](https://github.com/nix-community/home-manager), filled this gap, home-manager is designed to manage user-level packages & HOME directories. **By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained**.
 
 Due to Nix's features such as declarative and reproducible, Nix is not only used to manage desktop environments but also widely used to manage development environments, compilation environments, cloud virtual machines, container image construction, etc. [NixOps](https://github.com/NixOS/nixops) from the Nix official and [deploy-rs](https://github.com/serokell/deploy-rs) from the community are both operations tools based on Nix.
 
@@ -102,9 +102,9 @@ Due to Nix's features such as declarative and reproducible, Nix is not only used
 ### Advantages of Nix
 
 - **Declarative configuration, Environment as Code, can be managed with Git**
-  - As long as the configuration files are not lost, the system can be restored to any historical state at any time(ideally).
-  - Nix lock dependences's version through a lock file named `flake.lock`, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.
-  - Compared with Docker, Nix provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as `flake.lock` in Docker, Docker's reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).
+  - As long as the configuration files are not lost, the system can be restored to any historical state at any time(except the state that are NOT managed by NixOS, such as docker containers, postgresql data, etc...)
+  - Nix Flakes lock dependences's version through a lock file named `flake.lock`, to ensure that the system is reproducible, this idea actually borrows from some package managers such as npm, cargo, etc.
+  - Compared with Docker, Nix Flakes provides a much stronger guarantee for the reproducibility of build results, because Dockerfile is actually an imperative configuration and there is no such thing as `flake.lock` in Docker, Docker's reproducibility relies on sharing the build result(which is MUCH MORE LARGER than Dockerfile itself) through image registry(e.g. DockerHub).
 - **Highly convenient system customization capability**
   - By changing a few lines of configuration, various components of NixOS can be easily customized. This is because Nix encapsulates all the underlying complex operations in nix packages and only exports concise and necessary declarative parameters.
   - Moreover, this modification is very safe. An example is that one NixOS user on the V2EX forum stated that "[**on NixOS, switching between different desktop environments is very simple and clean, and it is very safe. I often switch between gnome/kde/sway.**](https://www.v2ex.com/t/938569#r_13053251)"
