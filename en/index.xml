@@ -130,27 +130,27 @@ It was a truly satisfying moment!</p>
 <h2 id="iii-nix-flakes-and-the-classic-nix" class="headerLink">
     <a href="#iii-nix-flakes-and-the-classic-nix" class="header-mark"></a>III. Nix Flakes and the classic Nix</h2><p>As <code>nix-command</code> &amp; <code>flakes</code> are still experimental features, the official documentation does not cover them in detail, and the community&rsquo;s documentation about them is also very scattered.
 However, from the perspective of reproducibility and ease of management and maintenance, the classic Nix package structure and cli are no longer recommended for use.
-So I will not introduce the usage of the classic Nix. It&rsquo;s recommended that beginners just start with <code>nix-command</code> &amp; <code>flakes</code> and ignore all thecontents about the classic Nix.</p>
+So I will not introduce the usage of the classic Nix. It&rsquo;s recommended that beginners just start with <code>nix-command</code> &amp; <code>flakes</code> and ignore all the contents about the classic Nix.</p>
 <p>Here are the classic Nix commands and related concepts that are no longer needed after you enabling <code>nix-command</code> and <code>flakes</code>, when searching for information, you can safely ignore them:</p>
 <ol>
 <li><code>nix-channel</code>: <code>nix-channel</code> is similar to other package management tools such as apt/yum/pacman, managing software package versions through stable/unstable/test channels.
 <ol>
-<li>In Flakes, the functionality of <code>nix-channel</code> is completely replaced by <code>inputs</code> in <code>flake.nix</code> to declare dependency sources and <code>flake.lock</code> to lock dependency versions.</li>
+<li>In Flakes, the functionality of <code>nix-channel</code> is completely replaced by <code>inputs</code> in <code>flake.nix</code>.</li>
 </ol>
 </li>
-<li><code>nix-env</code>: <code>nix-env</code> is a core command-line tool for traditional Nix used to manage software packages in the user environment. It installs software packages from the data sources defined by <code>nix-channel</code>, so the installed package versions are influenced by the channel. Packages installed with <code>nix-env</code> are not automatically recorded in Nix&rsquo;s declarative configuration and are entirely outside of its control, making them difficult to reproduce on other machines. Therefore, it is not recommended to use this tool.
+<li><code>nix-env</code>: <code>nix-env</code> is a core command-line tool for classic Nix used to manage software packages in the user environment. It installs packages from the data sources added by <code>nix-channel</code>, so the installed package&rsquo;s version are influenced by the channel. Packages installed with <code>nix-env</code> are not automatically recorded in Nix&rsquo;s declarative configuration and are entirely outside of its control, making them difficult to reproduce on other machines. Therefore, it is not recommended to use this tool.
 <ol>
-<li>The corresponding command in Flakes is <code>nix profile</code>.</li>
+<li>The corresponding command in Flakes is <code>nix profile</code>, it&rsquo;s not recommended to use it either.</li>
 </ol>
 </li>
-<li><code>nix-shell</code>: <code>nix-shell</code> is used to create a temporary shell environment.
+<li><code>nix-shell</code>: <code>nix-shell</code> is used to create a temporary shell environment, which is useful for development and testing.
 <ol>
 <li>In Flakes, it is replaced by <code>nix develop</code> and <code>nix shell</code>.</li>
 </ol>
 </li>
 <li><code>nix-build</code>: <code>nix-build</code> is used to build Nix packages, and it places the build results in <code>/nix/store</code>, but it does not record them in Nix&rsquo;s declarative configuration.
 <ol>
-<li>The corresponding command in Flakes is <code>nix build</code>.</li>
+<li>In Flakes, <code>nix-build</code> is replaced by <code>nix build</code>.</li>
 </ol>
 </li>
 <li>&hellip;</li>
@@ -177,8 +177,8 @@ So I will not introduce the usage of the classic Nix. It&rsquo;s recommended tha
 </ol>
 <h2 id="v-basics-of-the-nix-language" class="headerLink">
     <a href="#v-basics-of-the-nix-language" class="header-mark"></a>V. Basics of The Nix language</h2><p>The Nix language is used to declare the configuration to be built by Nix, if you want to play with NixOS and Flakes and enjoy the benefits they bring, you must learn the basics of this language first.</p>
-<p>The Nix language is a simple functional language, if you already have some experience in programming, it should take less than 2 hours to go through Nix lanuage&rsquo;s basics.</p>
-<p>Please read <a href="https://nix.dev/tutorials/first-steps/nix-language" target="_blank" rel="noopener noreferrer"><strong>Nix language basics - nix.dev</strong></a> and <a href="https://nixos.org/guides/nix-pills/basics-of-language.html" target="_blank" rel="noopener noreferrer">Chapter 4. The Basics of the Language - Nix Pills</a> to get a basic understanding of Nix language now, they are all good introductory materials.</p>
+<p>The Nix language is a simple functional language, if you already have some experience in programming, it should take less than 2 hours to go through its basics.</p>
+<p>Please read <a href="https://nix.dev/tutorials/first-steps/nix-language" target="_blank" rel="noopener noreferrer"><strong>Nix language basics - nix.dev</strong></a> and <a href="https://nixos.org/guides/nix-pills/basics-of-language.html" target="_blank" rel="noopener noreferrer">Chapter 4. The Basics of the Language - Nix Pills</a> to get a basic understanding of the Nix language now, they are all good introductory materials.</p>
 <h2 id="vi-managing-the-system-declaratively" class="headerLink">
     <a href="#vi-managing-the-system-declaratively" class="header-mark"></a>VI. Managing the system declaratively</h2><blockquote>
 <p><a href="https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution" target="_blank" rel="noopener noreferrer">https://nixos.wiki/wiki/Overview_of_the_NixOS_Linux_distribution</a></p>
@@ -372,7 +372,7 @@ So I will not introduce the usage of the classic Nix. It&rsquo;s recommended tha
 </div>
 </div><p>After reading this example, let&rsquo;s create a file <code>/etc/nixos/flake.nix</code> and copy the content of the example into it.
 With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken over by Flakes from now on.</p>
-<p>The template we copied can not jsut be used directly, we need to modify it to make it work, an example of <code>/etc/nixos/flake.nix</code> is as follows:</p>
+<p>The template we copied CAN NOT be used directly, we need to modify it to make it work, an example of <code>/etc/nixos/flake.nix</code> is as follows:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -443,6 +443,7 @@ With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken o
 </span><span class="lnt">66
 </span><span class="lnt">67
 </span><span class="lnt">68
+</span><span class="lnt">69
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
@@ -489,7 +490,7 @@ With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken o
 </span></span><span class="line"><span class="cl">        <span class="c1"># It is said to be partial because the documentation is not complete, only some simple introductions</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#    (such is the current state of Nix documentation...)</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># A Nix Module can be an attribute set, or a function that returns an attribute set.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># If a Module is a function, according to the Nix Wiki description, this function can have up to four parameters:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># If a Module is a function, this function can only have the following parameters:</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  lib:     the nixpkgs function library, which provides many useful functions for operating Nix expressions</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#            https://nixos.org/manual/nixpkgs/stable/#id-1.4</span>
@@ -501,6 +502,7 @@ With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken o
 </span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: the default path of nixpkgs&#39;s builtin modules folder,</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#               used to import some extra modules from nixpkgs.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#               this parameter is rarely used, you can ignore it for now.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># Only these parameters can be passed by default.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># If you need to pass other parameters, you must use `specialArgs` by uncomment the following line</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># specialArgs = {...}  # pass custom arguments into sub module.</span>
@@ -628,7 +630,10 @@ With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken o
 </div>
 </div><p>Now deploy the changes by <code>sudo nixos-rebuild switch</code>, and then we can start the helix editor by <code>helix</code> command.</p>
 <h3 id="5-add-custom-cache-mirror" class="headerLink">
-    <a href="#5-add-custom-cache-mirror" class="header-mark"></a>5. Add Custom Cache Mirror</h3><p>To speed up package building, Nix provides <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> to cache build results to avoid build every packages locally.</p>
+    <a href="#5-add-custom-cache-mirror" class="header-mark"></a>5. Add Custom Cache Mirror</h3><blockquote>
+<p>You can skip this section if you don&rsquo;t need to customize the cache mirror.</p>
+</blockquote>
+<p>To speed up package building, Nix provides <a href="https://cache.nixos.org" target="_blank" rel="noopener noreferrer">https://cache.nixos.org</a> to cache build results to avoid build every packages locally.</p>
 <p>With the NixOS&rsquo;s classic configuration method, other cache sources can be added by using <code>nix-channel</code>, but Flakes avoids using any system-level configuration and environment variables to ensure that its build results are not affected by the environment(so the build results are reproducible).</p>
 <p>Therefore, to customize the cache source, we must add the related configuration in <code>flake.nix</code> by using the parameter <code>nixConfig</code>. An example is as follows:</p>
 <div class="highlight"><div class="chroma">
