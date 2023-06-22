@@ -1994,7 +1994,3 @@ Here are some useful resources that I referred to:
 [New Nix Commands]: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html
 [Zero to Nix - Determinate Systems]: https://github.com/DeterminateSystems/zero-to-nix
 [Tips&Tricks for NixOS Desktop - NixOS Discourse]: https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488
-
-```
-
-```
