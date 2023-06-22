@@ -8,13 +8,15 @@
 <li>2022/6/22
 <ul>
 <li>Polish the language of the post.</li>
+<li>Add a new section <code>XI. Best Practices</code>.</li>
+<li>Add a new section into <code>VI-7</code>, introduces <code>lib.mkOverride</code>, <code>lib.mkDefault</code>, <code>lib.mkForce</code>, <code>lib.mkOrder</code>, <code>lib.mkBefore</code> and <code>lib.mkAfter</code></li>
 </ul>
 </li>
 <li>2023/6/21
 <ul>
 <li>Add some details about the usage of <code>callPackage</code>, <code>override</code> and <code>overlays</code> in section <code>VIII. Advanced Usage of Nixpkgs</code>.</li>
 <li>Add some command line tools I used frequently in section VI-6.</li>
-<li>Add a new section [When will flakes stablized?]</li>
+<li>Add a new section <code>When will flakes stablized?</code></li>
 </ul>
 </li>
 <li>2023/6/6
@@ -1264,6 +1266,269 @@ With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken o
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>For more details, see <a href="https://github.com/ryan4yin/nix-config/tree/v0.0.2" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/v0.0.2</a>.</p>
+<h4 id="71-mkoverride-libmkdefault-and-libmkforce" class="headerLink">
+    <a href="#71-mkoverride-libmkdefault-and-libmkforce" class="header-mark"></a>7.1. <code>mkOverride</code>, <code>lib.mkDefault</code> and <code>lib.mkForce</code></h4><p>You may found some people use <code>lib.mkDefault</code> <code>lib.mkForce</code> to define values in Nix files, as their names suggest, <code>lib.mkDefault</code> and <code>lib.mkForce</code> are used to set default values or force values of options.</p>
+<p>You can read the source code of <code>lib.mkDefault</code> and <code>lib.mkForce</code> to understand them by running <code>nix repl -f '&lt;nixpkgs&gt;'</code> and then enter <code>:e lib.mkDefault</code>(To learn the basic usage of <code>nix repl</code>, just type <code>:?</code> to see the help information).</p>
+<p>its source code is as follows:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">mkOverride</span> <span class="err">=</span> <span class="n">priority</span><span class="p">:</span> <span class="n">content</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="n">_type</span> <span class="o">=</span> <span class="s2">&#34;override&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">inherit</span> <span class="n">priority</span> <span class="n">content</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">mkOptionDefault</span> <span class="err">=</span> <span class="n">mkOverride</span> <span class="mi">1500</span><span class="p">;</span> <span class="c1"># priority of option defaults</span>
+</span></span><span class="line"><span class="cl">  <span class="n">mkDefault</span> <span class="err">=</span> <span class="n">mkOverride</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1"># used in config sections of non-user modules to set a default</span>
+</span></span><span class="line"><span class="cl">  <span class="n">mkImageMediaOverride</span> <span class="err">=</span> <span class="n">mkOverride</span> <span class="mi">60</span><span class="p">;</span> <span class="c1"># image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce</span>
+</span></span><span class="line"><span class="cl">  <span class="n">mkForce</span> <span class="err">=</span> <span class="n">mkOverride</span> <span class="mi">50</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">mkVMOverride</span> <span class="err">=</span> <span class="n">mkOverride</span> <span class="mi">10</span><span class="p">;</span> <span class="c1"># used by ‘nixos-rebuild build-vm’</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>So <code>lib.mkDefault</code> is used to set default values of options, it has a priority of 1000 internally,
+and <code>lib.mkForce</code> is used to force values of options, it has a priority of 50 internally.
+If you just set a value of an option directly, it will be set with a default priority of 1000(the same as <code>lib.mkDefault</code>).</p>
+<p>the lower the <code>priority</code>&rsquo;s value is, the higher the actual priority is, so <code>lib.mkForce</code> has a higher priority than <code>lib.mkDefault</code>.
+If you defined multiple values with the same priority, Nix will throw an error.</p>
+<p>They are useful to modularize the configuration, as you can set default values in a low-level module(base module), and force values in a high-level module.</p>
+<p>For example, I defined some default values in <a href="https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-server.nix#L30" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-server.nix#L30</a>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">lib</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">nixpkgs</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">mkDefault</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>And for my dekstop machine, I force the values to another value in <a href="https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-desktop.nix#L15" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nix-config/blob/main/modules/nixos/core-desktop.nix#L15</a>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">lib</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># import the base module</span>
+</span></span><span class="line"><span class="cl">  <span class="n">imports</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="sr">./core-server.nix</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># override the default value defined in the base module</span>
+</span></span><span class="line"><span class="cl">  <span class="n">nixpkgs</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">allowUnfree</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">mkForce</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="72-libmkorder-libmkbefore-and-libmkafter" class="headerLink">
+    <a href="#72-libmkorder-libmkbefore-and-libmkafter" class="header-mark"></a>7.2 <code>lib.mkOrder</code>, <code>lib.mkBefore</code> and <code>lib.mkAfter</code></h4><p><code>lib.mkBefore</code> and <code>lib.mkAfter</code> are used to set the merge order of <strong>list-type options</strong>, just like <code>lib.mkDefault</code> and <code>lib.mkForce</code>, they&rsquo;re also useful to modularize the configuration.</p>
+<p>I said before that if you defined multiple values with the same <strong>override priority</strong>, Nix will throw an error.
+But with <code>lib.mkOrder</code>, <code>lib.mkBefore</code> or <code>lib.mkAfter</code>, you can define multiple values with the same override priority, they will be merged in the order you defined.</p>
+<p>Let&rsquo;s running <code>nix repl -f '&lt;nixpkgs&gt;'</code> and then enter <code>:e lib.mkBefore</code> to take a look at its source code(To learn the basic usage of <code>nix repl</code>, just type <code>:?</code> to see the help information):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">mkOrder</span> <span class="err">=</span> <span class="n">priority</span><span class="p">:</span> <span class="n">content</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="n">_type</span> <span class="o">=</span> <span class="s2">&#34;order&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">inherit</span> <span class="n">priority</span> <span class="n">content</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">mkBefore</span> <span class="err">=</span> <span class="n">mkOrder</span> <span class="mi">500</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">mkAfter</span> <span class="err">=</span> <span class="n">mkOrder</span> <span class="mi">1500</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># The default priority for things that don&#39;t have a priority specified.</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defaultPriority</span> <span class="err">=</span> <span class="mi">100</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>So <code>lib.mkBefore</code> is a shortcut for <code>lib.mkOrder 500</code>, and <code>lib.mkAfter</code> is a shortcut for <code>lib.mkOrder 1500</code>.</p>
+<p>To test the usage of <code>lib.mkBefore</code> and <code>lib.mkAfter</code>, let&rsquo;s create a simple Flake project:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># create flake.nix with the following content</span>
+</span></span><span class="line"><span class="cl">› cat <span class="s">&lt;&lt;EOF | sudo tee flake.nix
+</span></span></span><span class="line"><span class="cl"><span class="s">{
+</span></span></span><span class="line"><span class="cl"><span class="s">  description = &#34;Ryan&#39;s NixOS Flake&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">  inputs = {
+</span></span></span><span class="line"><span class="cl"><span class="s">    nixpkgs.url = &#34;github:NixOS/nixpkgs/nixos-23.05&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s">  };
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">  outputs = { self, nixpkgs, ... }@inputs: {
+</span></span></span><span class="line"><span class="cl"><span class="s">    nixosConfigurations = {
+</span></span></span><span class="line"><span class="cl"><span class="s">      &#34;nixos-test&#34; = nixpkgs.lib.nixosSystem {
+</span></span></span><span class="line"><span class="cl"><span class="s">        system = &#34;x86_64-linux&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">        modules = [
+</span></span></span><span class="line"><span class="cl"><span class="s">          # demo module 1, insert git at the head of list
+</span></span></span><span class="line"><span class="cl"><span class="s">          ({lib, pkgs, ...}: {
+</span></span></span><span class="line"><span class="cl"><span class="s">            environment.systemPackages = lib.mkBefore [pkgs.git];
+</span></span></span><span class="line"><span class="cl"><span class="s">          })
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">          # demo module 2, insert vim at the tail of list
+</span></span></span><span class="line"><span class="cl"><span class="s">          ({lib, pkgs, ...}: {
+</span></span></span><span class="line"><span class="cl"><span class="s">            environment.systemPackages = lib.mkAfter [pkgs.vim];
+</span></span></span><span class="line"><span class="cl"><span class="s">          })
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">          # demo module 3, just add curl to the list normally
+</span></span></span><span class="line"><span class="cl"><span class="s">          ({lib, pkgs, ...}: {
+</span></span></span><span class="line"><span class="cl"><span class="s">            environment.systemPackages = with pkgs; [curl];
+</span></span></span><span class="line"><span class="cl"><span class="s">          })
+</span></span></span><span class="line"><span class="cl"><span class="s">        ];
+</span></span></span><span class="line"><span class="cl"><span class="s">      };
+</span></span></span><span class="line"><span class="cl"><span class="s">    };
+</span></span></span><span class="line"><span class="cl"><span class="s">  };
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># create flake.lock</span>
+</span></span><span class="line"><span class="cl">› nix flake update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># enter nix repl environment</span>
+</span></span><span class="line"><span class="cl">› nix repl
+</span></span><span class="line"><span class="cl">Welcome to Nix 2.13.3. Type :? <span class="k">for</span> help.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># load the flake we just created</span>
+</span></span><span class="line"><span class="cl">nix-repl&gt; :lf .
+</span></span><span class="line"><span class="cl">Added <span class="m">9</span> variables.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># check the order of systemPackages</span>
+</span></span><span class="line"><span class="cl">nix-repl&gt; outputs.nixosConfigurations.nixos-test.config.environment.systemPackages
+</span></span><span class="line"><span class="cl"><span class="o">[</span> «derivation /nix/store/0xvn7ssrwa0ax646gl4hwn8cpi05zl9j-git-2.40.1.drv»
+</span></span><span class="line"><span class="cl">  «derivation /nix/store/7x8qmbvfai68sf73zq9szs5q78mc0kny-curl-8.1.1.drv»
+</span></span><span class="line"><span class="cl">  «derivation /nix/store/bly81l03kh0dfly9ix2ysps6kyn1hrjl-nixos-container.drv»
+</span></span><span class="line"><span class="cl">  ......
+</span></span><span class="line"><span class="cl">  ......
+</span></span><span class="line"><span class="cl">  «derivation /nix/store/qpmpvq5azka70lvamsca4g4sf55j8994-vim-9.0.1441.drv» <span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>So we can see that the order of <code>systemPackages</code> is <code>git -&gt; curl -&gt; default packages -&gt; vim</code>, which is the same as the order we defined in <code>flake.nix</code>.</p>
+<blockquote>
+<p>Though it&rsquo;s useless to adjust the order of <code>systemPackages</code>, it may be helpful at some other places&hellip;</p>
+</blockquote>
 <h3 id="8-update-the-system" class="headerLink">
     <a href="#8-update-the-system" class="header-mark"></a>8. Update the system</h3><p>With Flakes, it is also very simple to update the system. Just run the following commands in <code>/etc/nixos</code>:</p>
 <div class="highlight"><div class="chroma">
@@ -1859,7 +2124,11 @@ For example, we wrote a <code>hello.nix</code> ourselves, and then we can use <c
 <li>Note: Be sure to select the correct branch, for example, if you are using the nixos-unstable branch, you need to find it in the nixos-unstable branch.</li>
 </ol>
 </li>
-<li>Check by using <code>nix repl '&lt;nixpkgs&gt;'</code>, then enter <code>:e pkgs.fcitx5-rime</code>, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.</li>
+<li>Check by using <code>nix repl '&lt;nixpkgs&gt;'</code>, then enter <code>:e pkgs.fcitx5-rime</code>, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.
+<ol>
+<li>Note: To learn the basic usage of <code>nix repl</code>, just type <code>:?</code> to see the help information</li>
+</ol>
+</li>
 </ol>
 <p>Through these two methods, you can see that the <code>fcitx5-rime</code> package has the following input parameters, which can all be modified by <code>override</code>:</p>
 <div class="highlight"><div class="chroma">
@@ -1982,7 +2251,7 @@ For example, we wrote a <code>hello.nix</code> ourselves, and then we can use <c
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>The attribute we override here, <code>separateDebugInfo</code>, is defined in <code>stdenv.mkDerivation</code>, not in the source code of <code>hello</code>.
-We can check the source code of <code>stdenv.mkDerivation</code> to see all the attributes defined in it by using <code>nix repl '&lt;nixpkgs&gt;'</code> and then enter <code>:e stdenv.mkDerivation</code>.</p>
+We can check the source code of <code>stdenv.mkDerivation</code> to see all the attributes defined in it by using <code>nix repl '&lt;nixpkgs&gt;'</code> and then enter <code>:e stdenv.mkDerivation</code>(To learn the basic usage of <code>nix repl</code>, just type <code>:?</code> to see the help information).</p>
 <h3 id="3-overlays" class="headerLink">
     <a href="#3-overlays" class="header-mark"></a>3. Overlays</h3><blockquote>
 <p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overlays" target="_blank" rel="noopener noreferrer">Chapter 3. Overlays - nixpkgs Manual</a></p>
@@ -2267,8 +2536,22 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl"><span class="err">└──</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="advanced-usage" class="headerLink">
-    <a href="#advanced-usage" class="header-mark"></a>Advanced Usage</h2><p>After becoming familiar with the Nix toolchain, you can further explore Nix&rsquo;s three manuals to discover more ways to use it:</p>
+</div><h2 id="when-will-flakes-stablized" class="headerLink">
+    <a href="#when-will-flakes-stablized" class="header-mark"></a>IX. When will flakes stablized</h2><p>Throughout so much content of this post, I&rsquo;ve introduced in detail how to start using Flakes to configure NixOS, but at the beginning of this post we mentioned that <strong>Flakes is still an experimental feature, which is worrying</strong>. If Flakes is greatly changed or even removed, we may need to spend a lot of time to migrate the configuration.</p>
+<p>In fact this is also one of the most concerned issues in the entire NixOS community, <strong>when will Flakes become a stable feature</strong>?</p>
+<p>I dived into some details about flakes:</p>
+<ul>
+<li><a href="https://github.com/NixOS/rfcs/pull/136" target="_blank" rel="noopener noreferrer">https://github.com/NixOS/rfcs/pull/136</a>: A plan to stabilize Flakes and the new CLI incrementally, still WIP.</li>
+<li><a href="https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317" target="_blank" rel="noopener noreferrer">https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317</a>: A post, Why are flakes still experimental?</li>
+<li><a href="https://grahamc.com/blog/flakes-are-an-obviously-good-thing/" target="_blank" rel="noopener noreferrer">https://grahamc.com/blog/flakes-are-an-obviously-good-thing/</a>: Flakes are such an obviously good thing&hellip; but the design and development process should be better.</li>
+<li><a href="https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9" target="_blank" rel="noopener noreferrer">https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9</a>： A roadmap of nixos fundation, which includes plan about the stabilization of flakes.</li>
+</ul>
+<p>After reading all of these, I feel like that flakes will eventually be stabilized in one or two years, with some important breaking changes.</p>
+<p>The benefits of Flakes are obvious, and the entire NixOS community likes it very much. Currently, more than half of the users are using Flakes (especially new users in the NixOS community), so we can be sure that Flakes will never be deprecated.</p>
+<p>But currently Flakes still has many problems, and it is likely to introduce some breaking changes in the process of stablizing it, and it&rsquo;s currently uncertain how greatly the breaking changes will be.</p>
+<p>So overall, I still recommend everyone to use Flakes, but be prepared for the problems that may be caused by the upcomming breaking changes.</p>
+<h2 id="x-advanced-usage" class="headerLink">
+    <a href="#x-advanced-usage" class="header-mark"></a>X. Advanced Usage</h2><p>After becoming familiar with the Nix toolchain, you can further explore Nix&rsquo;s three manuals to discover more ways to use it:</p>
 <ul>
 <li><a href="https://nixos.org/manual/nix/stable/package-management/profiles.html" target="_blank" rel="noopener noreferrer">Nix Reference Manual</a>: A guide to the Nix package manager, which mainly covers the design of the package manager and instructions for using it from the command line.</li>
 <li><a href="https://nixos.org/manual/nixpkgs/unstable/" target="_blank" rel="noopener noreferrer">nixpkgs Manual</a>: A manual that introduces parameters of Nixpkgs, how to use, modify, and package Nix packages.</li>
@@ -2292,20 +2575,356 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 <li><a href="https://github.com/nix-community/lanzaboote" target="_blank" rel="noopener noreferrer">lanzaboote</a>: enable secure boot for NixOS</li>
 <li><a href="https://github.com/nix-community/impermanence" target="_blank" rel="noopener noreferrer">impermanence</a>: used to make NixOS stateless, to imporve the reproduciability of NixOS system.</li>
 </ul>
-<h2 id="when-will-flakes-stablized" class="headerLink">
-    <a href="#when-will-flakes-stablized" class="header-mark"></a>When will flakes stablized</h2><p>Throughout so much content of this post, I&rsquo;ve introduced in detail how to start using Flakes to configure NixOS, but at the beginning of this post we mentioned that <strong>Flakes is still an experimental feature, which is worrying</strong>. If Flakes is greatly changed or even removed, we may need to spend a lot of time to migrate the configuration.</p>
-<p>In fact this is also one of the most concerned issues in the entire NixOS community, <strong>when will Flakes become a stable feature</strong>?</p>
-<p>I dived into some details about flakes:</p>
-<ul>
-<li><a href="https://github.com/NixOS/rfcs/pull/136" target="_blank" rel="noopener noreferrer">https://github.com/NixOS/rfcs/pull/136</a>: A plan to stabilize Flakes and the new CLI incrementally, still WIP.</li>
-<li><a href="https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317" target="_blank" rel="noopener noreferrer">https://discourse.nixos.org/t/why-are-flakes-still-experimental/29317</a>: A post, Why are flakes still experimental?</li>
-<li><a href="https://grahamc.com/blog/flakes-are-an-obviously-good-thing/" target="_blank" rel="noopener noreferrer">https://grahamc.com/blog/flakes-are-an-obviously-good-thing/</a>: Flakes are such an obviously good thing&hellip; but the design and development process should be better.</li>
-<li><a href="https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9" target="_blank" rel="noopener noreferrer">https://nixos-foundation.notion.site/1-year-roadmap-0dc5c2ec265a477ea65c549cd5e568a9</a>： A roadmap of nixos fundation, which includes plan about the stabilization of flakes.</li>
-</ul>
-<p>After reading all of these, I feel like that flakes will eventually be stabilized in one or two years, with some important breaking changes.</p>
-<p>The benefits of Flakes are obvious, and the entire NixOS community likes it very much. Currently, more than half of the users are using Flakes (especially new users in the NixOS community), so we can be sure that Flakes will never be deprecated.</p>
-<p>But currently Flakes still has many problems, and it is likely to introduce some breaking changes in the process of stablizing it, and it&rsquo;s currently uncertain how greatly the breaking changes will be.</p>
-<p>So overall, I still recommend everyone to use Flakes, but be prepared for the problems that may be caused by the upcomming breaking changes.</p>
+<h2 id="xi-best-practices" class="headerLink">
+    <a href="#xi-best-practices" class="header-mark"></a>XI. Best Practices</h2><blockquote>
+<p><a href="https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488" target="_blank" rel="noopener noreferrer">Tips&amp;Tricks for NixOS Desktop - NixOS Discourse</a></p>
+</blockquote>
+<p>Nix is powerful and flexible, it provides a lot of ways to do things, making it difficult to find the most suitable way to do your job.
+Here are some best practices that I&rsquo;ve learned from the community, hope it can help you.</p>
+<h3 id="1-run-downloaded-binaries-on-nixos" class="headerLink">
+    <a href="#1-run-downloaded-binaries-on-nixos" class="header-mark"></a>1. Run downloaded binaries on NixOS</h3><p>NixOS does not follow the FHS standard, so the binaries you download from the Internet will not likely work on NixOS. But there are some ways to make it work.</p>
+<p>Here is a detailed guide which provides 10 ways to run downloaded binaries on NixOS: <a href="https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos" target="_blank" rel="noopener noreferrer">Different methods to run a non-nixos executable on Nixos</a>, I recommend you to read it.</p>
+<p>Among these methods, I prefer creating a FHS environment to run the binary, which is very convenient and easy to use.</p>
+<p>To create such an environment, add the following code to one of your nix modules:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">lib</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......omit many configurations</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">environment</span><span class="o">.</span><span class="n">systemPackages</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># ......omit many packages</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># create a fhs environment by command `fhs`, so we can run non-nixos packages in nixos!</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="n">pkgs</span><span class="o">.</span><span class="n">buildFHSUserEnv</span> <span class="p">(</span><span class="n">base</span> <span class="o">//</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;fhs&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">targetPkgs</span> <span class="o">=</span> <span class="n">pkgs</span><span class="p">:</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># pkgs.buildFHSUserEnv provides only a minimal fhs environment,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># it lacks many basic packages needed by most softwares.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># so we need to add them manually.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># pkgs.appimageTools provides basic packages needed by most softwares.</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="n">pkgs</span><span class="o">.</span><span class="n">appimageTools</span><span class="o">.</span><span class="n">defaultFhsEnvArgs</span><span class="o">.</span><span class="n">targetPkgs</span> <span class="n">pkgs</span><span class="p">)</span> <span class="o">++</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="n">pkg-config</span>
+</span></span><span class="line"><span class="cl">          <span class="n">ncurses</span>
+</span></span><span class="line"><span class="cl">          <span class="c1"># feel free to add more packages here, if you need</span>
+</span></span><span class="line"><span class="cl">        <span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">profile</span> <span class="o">=</span> <span class="s2">&#34;export FHS=1&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">runScript</span> <span class="o">=</span> <span class="s2">&#34;bash&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">extraOutputsToInstall</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;dev&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># ......omit many configurations</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>after applying the updated configuration, you can run <code>fhs</code> to enter the FHS environment, and then run the binary you downloaded, e.g.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># Activating FHS drops me in a shell which looks like a &#34;normal&#34; Linux</span>
+</span></span><span class="line"><span class="cl">$ fhs
+</span></span><span class="line"><span class="cl"><span class="c1"># check what we have in /usr/bin</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>fhs<span class="o">)</span> $ ls /usr/bin
+</span></span><span class="line"><span class="cl"><span class="c1"># try to run a non-nixos binary downloaded from the Internet</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>fhs<span class="o">)</span> $ ./bin/code
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-check-the-source-code-of-packages-and-modules" class="headerLink">
+    <a href="#2-check-the-source-code-of-packages-and-modules" class="header-mark"></a>2. check the source code of packages and modules</h3><p>We&rsquo;ve used <code>nix repl '&lt;nixpkgs&gt;'</code> many times to check the source code in this guide, it&rsquo;s really a powerful tool to help us understand how things work in Nix.</p>
+<p>Better take a look at the help message of <code>nix repl</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="err">›</span> <span class="nx">nix</span> <span class="nx">repl</span> <span class="o">-</span><span class="nx">f</span> <span class="err">&#39;</span><span class="p">&lt;</span><span class="nx">nixpkgs</span><span class="p">&gt;</span><span class="err">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Welcome</span> <span class="nx">to</span> <span class="nx">Nix</span> <span class="mf">2.13.3</span><span class="p">.</span> <span class="nx">Type</span> <span class="p">:</span><span class="err">?</span> <span class="k">for</span> <span class="nx">help</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Loading</span> <span class="nx">installable</span> <span class="err">&#39;&#39;</span><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Added</span> <span class="mi">17755</span> <span class="nx">variables</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">nix</span><span class="o">-</span><span class="nx">repl</span><span class="p">&gt;</span> <span class="p">:</span><span class="err">?</span>
+</span></span><span class="line"><span class="cl"><span class="nx">The</span> <span class="nx">following</span> <span class="nx">commands</span> <span class="nx">are</span> <span class="nx">available</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>        <span class="nx">Evaluate</span> <span class="nx">and</span> <span class="nx">print</span> <span class="nx">expression</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nx">x</span><span class="p">&gt;</span> <span class="p">=</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>  <span class="nx">Bind</span> <span class="nx">expression</span> <span class="nx">to</span> <span class="nx">variable</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">a</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>     <span class="nx">Add</span> <span class="nx">attributes</span> <span class="nx">from</span> <span class="nx">resulting</span> <span class="nx">set</span> <span class="nx">to</span> <span class="nx">scope</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">b</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>     <span class="nx">Build</span> <span class="nx">a</span> <span class="nx">derivation</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">bl</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>    <span class="nx">Build</span> <span class="nx">a</span> <span class="nx">derivation</span><span class="p">,</span> <span class="nx">creating</span> <span class="nx">GC</span> <span class="nx">roots</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">working</span> <span class="nx">directory</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">e</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>     <span class="nx">Open</span> <span class="kn">package</span> <span class="nx">or</span> <span class="nx">function</span> <span class="nx">in</span> <span class="err">$</span><span class="nx">EDITOR</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">i</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>     <span class="nx">Build</span> <span class="nx">derivation</span><span class="p">,</span> <span class="nx">then</span> <span class="nx">install</span> <span class="nx">result</span> <span class="nx">into</span> <span class="nx">current</span> <span class="nx">profile</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">l</span> <span class="p">&lt;</span><span class="nx">path</span><span class="p">&gt;</span>     <span class="nx">Load</span> <span class="nx">Nix</span> <span class="nx">expression</span> <span class="nx">and</span> <span class="nx">add</span> <span class="nx">it</span> <span class="nx">to</span> <span class="nx">scope</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">lf</span> <span class="p">&lt;</span><span class="nx">ref</span><span class="p">&gt;</span>     <span class="nx">Load</span> <span class="nx">Nix</span> <span class="nx">flake</span> <span class="nx">and</span> <span class="nx">add</span> <span class="nx">it</span> <span class="nx">to</span> <span class="nx">scope</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">p</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>     <span class="nx">Evaluate</span> <span class="nx">and</span> <span class="nx">print</span> <span class="nx">expression</span> <span class="nx">recursively</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">q</span>            <span class="nx">Exit</span> <span class="nx">nix</span><span class="o">-</span><span class="nx">repl</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">r</span>            <span class="nx">Reload</span> <span class="nx">all</span> <span class="nx">files</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">sh</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>    <span class="nx">Build</span> <span class="nx">dependencies</span> <span class="nx">of</span> <span class="nx">derivation</span><span class="p">,</span> <span class="nx">then</span> <span class="nx">start</span> <span class="nx">nix</span><span class="o">-</span><span class="nx">shell</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">t</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>     <span class="nx">Describe</span> <span class="nx">result</span> <span class="nx">of</span> <span class="nx">evaluation</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">u</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>     <span class="nx">Build</span> <span class="nx">derivation</span><span class="p">,</span> <span class="nx">then</span> <span class="nx">start</span> <span class="nx">nix</span><span class="o">-</span><span class="nx">shell</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">doc</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>   <span class="nx">Show</span> <span class="nx">documentation</span> <span class="nx">of</span> <span class="nx">a</span> <span class="nx">builtin</span> <span class="nx">function</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">log</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span>   <span class="nx">Show</span> <span class="nx">logs</span> <span class="k">for</span> <span class="nx">a</span> <span class="nx">derivation</span>
+</span></span><span class="line"><span class="cl">  <span class="p">:</span><span class="nx">te</span> <span class="p">[</span><span class="kt">bool</span><span class="p">]</span>    <span class="nx">Enable</span><span class="p">,</span> <span class="nx">disable</span> <span class="nx">or</span> <span class="nx">toggle</span> <span class="nx">showing</span> <span class="nx">traces</span> <span class="k">for</span> <span class="nx">errors</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Some expressions that I use frequently: <code>:lf &lt;ref&gt;</code>, <code>:e &lt;expr&gt;</code>.</p>
+<p><code>:e &lt;expr&gt;</code> is very intuitive, so I won&rsquo;t repeat it. let&rsquo;s take a look at <code>:lf &lt;ref&gt;</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># cd into my nix-config repo</span>
+</span></span><span class="line"><span class="cl"><span class="err">›</span> <span class="n">cd</span> <span class="sr">~/nix-config/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># enter nix repl</span>
+</span></span><span class="line"><span class="cl"><span class="err">›</span> <span class="n">nix</span> <span class="n">repl</span>
+</span></span><span class="line"><span class="cl"><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Nix</span> <span class="mi">2</span><span class="mf">.13.3</span><span class="o">.</span> <span class="n">Type</span> <span class="p">:</span><span class="o">?</span> <span class="n">for</span> <span class="n">help</span><span class="o">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># load my nix flake and add it to scope</span>
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="p">:</span><span class="n">lf</span> <span class="o">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">Added</span> <span class="mi">16</span> <span class="n">variables</span><span class="o">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># press &lt;TAB&gt; to see what we have in scope</span>
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span><span class="sr">&lt;TAB&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ......omit some outputs</span>
+</span></span><span class="line"><span class="cl"><span class="n">__isInt</span>                          <span class="n">nixosConfigurations</span>
+</span></span><span class="line"><span class="cl"><span class="n">__isList</span>                         <span class="no">null</span>
+</span></span><span class="line"><span class="cl"><span class="n">__isPath</span>                         <span class="n">outPath</span>
+</span></span><span class="line"><span class="cl"><span class="n">__isString</span>                       <span class="n">outputs</span>
+</span></span><span class="line"><span class="cl"><span class="n">__langVersion</span>                    <span class="n">packages</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ......omit some outputs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># check the outputs of my nix flake</span>
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="sr">&lt;TAB&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">aquamarine</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">kana</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ruby</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="sr">&lt;TAB&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">_module</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">_type</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">class</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">extendModules</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">extraArgs</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">options</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">pkgs</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">type</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">age</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">appstream</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">assertions</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">boot</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">console</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">containers</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ......omit other outputs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="sr">&lt;TAB&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">activation</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">activationPackage</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">emptyActivationPath</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">enableDebugInfo</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">enableNixpkgsReleaseCheck</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">extraActivationPath</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">extraBuilderCommands</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">extraOutputsToInstall</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">extraProfileCommands</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">file</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ......omit other outputs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="sr">&lt;TAB&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">BROWSER</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">DELTA_PAGER</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">EDITOR</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">GLFW_IM_MODULE</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">MANPAGER</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">QT_IM_MODULE</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">TERM</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ......omit other outputs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># check the value of `TERM`</span>
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">sessionVariables</span><span class="o">.</span><span class="n">TERM</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;xterm-256color&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># check all files defined by `home.file`</span>
+</span></span><span class="line"><span class="cl"><span class="n">nix-repl</span><span class="o">&gt;</span> <span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="sr">&lt;TAB&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">file</span><span class="o">..</span><span class="n">bash_profile</span>
+</span></span><span class="line"><span class="cl"><span class="n">outputs</span><span class="o">.</span><span class="n">nixosConfigurations</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">home-manager</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">ryan</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">file</span><span class="o">..</span><span class="n">bashrc</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/fcitx5/profile</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/fcitx5/profile-bak</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/config</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/i3blocks.conf</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/keybindings</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/layouts</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/scripts</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/i3/wallpaper.png</span>
+</span></span><span class="line"><span class="cl"><span class="sr">outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/rofi</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#......</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>As you can see, we can check every value of my flake in the REPL after loading it, which is very convenient for debugging.</p>
 <h2 id="references" class="headerLink">
     <a href="#references" class="header-mark"></a>References</h2><p>The feedback and discussion of this post is mainly on <a href="https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/" target="_blank" rel="noopener noreferrer">this Reddit post</a>, you can also comment directly at the bottom of this page.</p>
 <p>Here are some useful resources that I referred to:</p>
