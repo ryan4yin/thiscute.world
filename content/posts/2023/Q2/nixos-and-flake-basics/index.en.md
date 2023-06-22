@@ -510,7 +510,7 @@ According to the official document [Home Manager Manual](https://nix-community.g
 { config, pkgs, ... }:
 
 {
-  # please change the username & home direcotry to your own
+  # TODO please change the username & home direcotry to your own
   home.username = "ryan";
   home.homeDirectory = "/home/ryan";
 
@@ -711,7 +711,7 @@ After adjusting the parameters, the content of `/etc/nixos/flake.nix` is as foll
 
 Then run `sudo nixos-rebuild switch` to apply the configuration, and home-manager will be installed automatically.
 
-After the installation is complete, all user-level packages and configuration can be managed through `/etc/nixos/home.nix`. When running `sudo nixos-rebuild switch`, the configuration of home-manager will be applied automatically. (**It's not necessary to run `home-manager switch` manually**!)
+After the installation, all user-level packages and configuration can be managed through `/etc/nixos/home.nix`. When running `sudo nixos-rebuild switch`, the configuration of home-manager will be applied automatically. (**It's not necessary to run `home-manager switch` manually**!)
 
 To find the options we can use in `home.nix`, referring to the following documents:
 
