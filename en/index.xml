@@ -70,9 +70,9 @@ It was a truly satisfying moment!</p>
 <blockquote>
 <p>To put it simply, &ldquo;declarative configuration&rdquo; means that users only need to declare the results they want. For example, you declare that you want to replace the i3 window manager with sway, then Nix will help you achieve the goal. You don&rsquo;t need to worry about the underlying details (such as which packages sway needs to install, which i3-related packages need to be uninstalled, which system configuration or environment variables need to be adjusted for sway, what adjustments need to be made to the Sway parameters if an Nvidia graphics card is used, etc.), Nix will automatically handle these details for the user(prerequisite: if the sway&rsquo;s nix packages are designed properly&hellip;).</p>
 </blockquote>
-<p>The Linux distribution built on top of the Nix package manager, NixOS, can be simply described as &ldquo;OS as Code&rdquo;, which describes the entire operating system&rsquo;s state using declarative Nix configuration files.</p>
-<p>NixOS&rsquo;s configuration only manages the system-level state, the user&rsquo;s HOME directory is not under its control. Another important community project, <a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>, filled this gap, home-manager is designed to manage user-level packages &amp; HOME directories. <strong>By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained</strong>(ideally).</p>
-<p>Due to Nix&rsquo;s declarative and reproducible features, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> from the Nix official and <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> from the community are both operations tools based on Nix.</p>
+<p>NixOS, the Linux distribution built on top of the Nix package manager, can be simply described as &ldquo;OS as Code&rdquo;, which describes the entire operating system&rsquo;s state using declarative Nix configuration files.</p>
+<p>the configuration of NixOS manages only the system-level state, user&rsquo;s HOME directory is not under its control. Another important community project, <a href="https://github.com/nix-community/home-manager" target="_blank" rel="noopener noreferrer">home-manager</a>, filled this gap, home-manager is designed to manage user-level packages &amp; HOME directories. <strong>By combining home-manager with NixOS and Git, a fully reproducible and rollbackable system environment can be obtained</strong>(ideally).</p>
+<p>Due to Nix&rsquo;s declarative and reproducible, Nix is not only used to manage desktop environments but also widely used to manage development and compilation environments, cloud virtual machines, and container image construction. <a href="https://github.com/NixOS/nixops" target="_blank" rel="noopener noreferrer">NixOps</a> from the Nix official and <a href="https://github.com/serokell/deploy-rs" target="_blank" rel="noopener noreferrer">deploy-rs</a> from the community are both operations tools based on Nix.</p>
 <blockquote>
 <p>Since there are numerous files in the home directory with varying behaviors, it is impossible to version control all of them due to the high cost. Generally, only some important configuration files are managed using home-manager, and other files that need to be backed up can be backed up and synchronized using rsync/synthing, or use tools like <a href="https://github.com/digint/btrbk" target="_blank" rel="noopener noreferrer">btrbk</a> to take snapshots of the home directory.</p>
 </blockquote>
@@ -109,13 +109,13 @@ It was a truly satisfying moment!</p>
 <li><strong>Relatively high disk space usage</strong>: To ensure that the system can be rolled back at any time, Nix preserves all historical environments by default, which can take up a lot of disk space. Although you can manually clean up old historical environments periodically with <code>nix-collect-garbage</code>, it is still recommended to buy a larger hard drive.</li>
 </ul>
 <h3 id="summary" class="headerLink">
-    <a href="#summary" class="header-mark"></a>Summary</h3><p>Generally speaking, I think NixOS is suitable for developers who have a certain amount of Linux usage experience and programming experience and want to have more control over their systems.</p>
-<p>Another piece of info, there is also some competition between Nix and the relatively popular <a href="https://containers.dev/" target="_blank" rel="noopener noreferrer">Dev Containers</a> in the construction of the development environment, and the specific differences between them have yet to be explored by me~</p>
+    <a href="#summary" class="header-mark"></a>Summary</h3><p>Generally speaking, I think NixOS is suitable for developers who have some experience in using Linux and programming and want to have more control over their systems.</p>
+<p>I don&rsquo;t recommend you getting started with NixOS if you are new to Linux, it can be a very painful journey.</p>
 <h2 id="ii-installation" class="headerLink">
     <a href="#ii-installation" class="header-mark"></a>II. Installation</h2><p>Nix can be installed in multiple ways and supports being installed on macOS/Linux/WSL as a package manager. Nix also provides NixOS, a Linux distribution that uses Nix to manage the entire system environment.</p>
-<p>I chose to directly install NixOS system using its ISO image, to manage the entire system environment through Nix as much as possible.</p>
+<p>I chose to directly install NixOS system using its ISO image, to manage the entire system through Nix as much as possible.</p>
 <p>The installation process is simple, and I won&rsquo;t go into details here.</p>
-<p>some reference materials that may be useful:</p>
+<p>some materials that may be useful:</p>
 <ol>
 <li><a href="https://nixos.org/download.html" target="_blank" rel="noopener noreferrer">Official installation method of Nix</a>: written in bash script, <code>nix-command</code> &amp; <code>flakes</code> are still experimental features as of 2023-04-23, and need to be manually enabled.
 <ol>
@@ -126,8 +126,10 @@ It was a truly satisfying moment!</p>
 <li><a href="https://github.com/DeterminateSystems/nix-installer" target="_blank" rel="noopener noreferrer">The Determinate Nix Installer</a>: a third-party installer written in Rust, which enables <code>nix-command</code> &amp; <code>flakes</code> by default and provides an uninstallation command.</li>
 </ol>
 <h2 id="iii-nix-flakes-and-the-classic-nix" class="headerLink">
-    <a href="#iii-nix-flakes-and-the-classic-nix" class="header-mark"></a>III. Nix Flakes and the classic Nix</h2><p>Currently, most of the Nix community&rsquo;s documentation still only covers traditional Nix and does not include Flakes-related content. However, from the perspective of reproducibility and ease of management and maintenance, the classic Nix package structure and cli are no longer recommended for use. Therefore, this post will not introduce the usage of the classic Nix, and it is recommended that beginners ignore these old contents and just start with <code>nix-command</code> &amp; <code>flakes</code>.</p>
-<p>Here are the classic Nix commands and related concepts that are no longer needed after you enabled <code>nix-command</code> and <code>flakes</code>, when searching for information, you can safely ignore them:</p>
+    <a href="#iii-nix-flakes-and-the-classic-nix" class="header-mark"></a>III. Nix Flakes and the classic Nix</h2><p>As <code>nix-command</code> &amp; <code>flakes</code> are still experimental features, the official documentation does not cover them in detail, and the community&rsquo;s documentation is also very scattered.
+However, from the perspective of reproducibility and ease of management and maintenance, the classic Nix package structure and cli are no longer recommended for use.
+So I will not introduce the usage of the classic Nix. It&rsquo;s recommended that beginners just start with <code>nix-command</code> &amp; <code>flakes</code> and ignore all thecontents about the classic Nix.</p>
+<p>Here are the classic Nix commands and related concepts that are no longer needed after you enabling <code>nix-command</code> and <code>flakes</code>, when searching for information, you can safely ignore them:</p>
 <ol>
 <li><code>nix-channel</code>: <code>nix-channel</code> is similar to other package management tools such as apt/yum/pacman, managing software package versions through stable/unstable/test channels.
 <ol>
@@ -163,7 +165,7 @@ It was a truly satisfying moment!</p>
 </ol>
 <h2 id="v-basics-of-the-nix-language" class="headerLink">
     <a href="#v-basics-of-the-nix-language" class="header-mark"></a>V. Basics of The Nix language</h2><p>The Nix language is used to declare the configuration to be built by Nix, if you want to play with NixOS and Flakes and enjoy the benefits they bring, you must learn the basics of this language first.</p>
-<p>The Nix language is a simple functional language, if you already have some programming experience, it should take less than 2 hours to go through Nix lanuage&rsquo;s basics.</p>
+<p>The Nix language is a simple functional language, if you already have some experience in programming, it should take less than 2 hours to go through Nix lanuage&rsquo;s basics.</p>
 <p>Please read <a href="https://nix.dev/tutorials/first-steps/nix-language" target="_blank" rel="noopener noreferrer"><strong>Nix language basics - nix.dev</strong></a> and <a href="https://nixos.org/guides/nix-pills/basics-of-language.html" target="_blank" rel="noopener noreferrer">Chapter 4. The Basics of the Language - Nix Pills</a> to get a basic understanding of Nix language now, they are all good introductory materials.</p>
 <h2 id="vi-managing-the-system-declaratively" class="headerLink">
     <a href="#vi-managing-the-system-declaratively" class="header-mark"></a>VI. Managing the system declaratively</h2><blockquote>
@@ -260,7 +262,7 @@ It was a truly satisfying moment!</p>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>In the configuration above, we enabled the openssh service, added an ssh public key for the user ryan, and disabled password login.</p>
+</div><p>In the configuration here, we enabled the openssh service, added an ssh public key for the user ryan, and disabled password login.</p>
 <p>Now, running <code>sudo nixos-rebuild switch</code> to deploy the modified configuration, and then we can login to the system using ssh with the ssh keys we configured.</p>
 <p>Any reproducible changes to the system can be made by modifying <code>/etc/nixos/configuration.nix</code> and deploying the changes by running <code>sudo nixos-rebuild switch</code>.</p>
 <p>All configuration options in <code>/etc/nixos/configuration.nix</code> can be found in the following places:</p>
@@ -356,7 +358,7 @@ It was a truly satisfying moment!</p>
 </span></span><span class="line"><span class="cl">cat flake.nix
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>After reading the example above, let&rsquo;s create a file <code>/etc/nixos/flake.nix</code>, and write its content according to what we read before.
+</div><p>After reading this example, let&rsquo;s create a file <code>/etc/nixos/flake.nix</code>, and write its content according to what we read before.
 All system modifications will be taken over by Flakes from now on.</p>
 <p>An example of <code>/etc/nixos/flake.nix</code> is as follows:</p>
 <div class="highlight"><div class="chroma">
@@ -487,7 +489,7 @@ All system modifications will be taken over by Flakes from now on.</p>
 </span></span><span class="line"><span class="cl">        <span class="c1">#  modulesPath: the default path of nixpkgs&#39;s builtin modules folder,</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#               used to import some extra modules from nixpkgs.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">#               this parameter is rarely used, you can ignore it for now.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># Only the parameters above can be passed by default.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Only these parameters can be passed by default.</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># If you need to pass other parameters, you must use `specialArgs` by uncomment the following line</span>
 </span></span><span class="line"><span class="cl">        <span class="c1"># specialArgs = {...}  # pass custom arguments into sub module.</span>
 </span></span><span class="line"><span class="cl">        <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span>
@@ -1581,7 +1583,7 @@ Luckily, Flakes can solve this problem, you can place your flake anywhere you li
 </span></span><span class="line"><span class="cl">    <span class="n">nixpkgs</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:Mic92/nixpkgs/master&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># Git URL, can be used for any Git repository based on https/ssh protocol</span>
 </span></span><span class="line"><span class="cl">    <span class="n">git-example</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;git+https://git.somehost.tld/user/path?ref=branch&amp;rev=fdc8ef970de2b4634e1b3dca296e1ed918459a9e&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># The example above will also copy .git, use this for (shallow) local Git repos</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># The above example will also copy .git, use this for (shallow) local Git repos</span>
 </span></span><span class="line"><span class="cl">    <span class="n">git-directory-example</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;git+file:/path/to/repo?shallow=1&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1"># Local directories (for absolute paths you can omit &#39;path:&#39;)</span>
 </span></span><span class="line"><span class="cl">    <span class="n">directory-example</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;path:/path/to/repo&#34;</span><span class="p">;</span>
@@ -1818,7 +1820,7 @@ Luckily, Flakes can solve this problem, you can place your flake anywhere you li
     <a href="#callpackage" class="header-mark"></a>1. pkgs.callPackage</h3><blockquote>
 <p><a href="https://nixos.org/guides/nix-pills/callpackage-design-pattern.html" target="_blank" rel="noopener noreferrer">Chapter 13. Callpackage Design Pattern - Nix Pills</a></p>
 </blockquote>
-<p>In the content above, We have used <code>import xxx.nix</code> to import Nix files many times, this syntax simply returns the execution result of the file, without any further processing of the it.</p>
+<p>In the previous content, We have used <code>import xxx.nix</code> to import Nix files many times, this syntax simply returns the execution result of the file, without any further processing of the it.</p>
 <p><code>pkgs.callPackage</code> is also used to import Nix files, its syntax is <code>pkgs.callPackage xxx.nix { ... }</code>, but unlike <code>import</code>, the Nix file imported by it must be a Derivation or a function that returns a Derivation. Its result is a Derivation(a software package) too.</p>
 <p>So what does the Nix file that can be used as a parameter of <code>pkgs.callPackge</code> look like? You can take a look at the <code>hello.nix</code> <code>fcitx5-rime.nix</code> <code>vscode/with-extensions.nix</code> <code>firefox/common.nix</code> we mentioned earlier, they can all be imported by <code>pkgs.callPackage</code>.</p>
 <p>When the <code>xxx.nix</code> used in <code>pkgs.callPackge xxx.nix {...}</code> is a function (most Nix packages are like this), the execution flow is as follows:</p>
@@ -1857,7 +1859,7 @@ For example, we wrote a <code>hello.nix</code> ourselves, and then we can use <c
 </li>
 <li>Check by using <code>nix repl '&lt;nixpkgs&gt;'</code>, then enter <code>:e pkgs.fcitx5-rime</code>, which will open the source code of this package through the default editor, and then you can see all the parameters of this package.</li>
 </ol>
-<p>Through the above two methods, you can see that the <code>fcitx5-rime</code> package has the following input parameters, which can all be modified by <code>override</code>:</p>
+<p>Through these two methods, you can see that the <code>fcitx5-rime</code> package has the following input parameters, which can all be modified by <code>override</code>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1897,7 +1899,7 @@ For example, we wrote a <code>hello.nix</code> ourselves, and then we can use <c
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>Instead of override the function&rsquo;s parameters, we can also override the attributes of the Derivation created by <code>stdenv.mkDerivation</code>.</p>
-<p>Take <code>pkgs.hello</code> as an example, first check the source code of this package through the method we mentioned above:</p>
+<p>Take <code>pkgs.hello</code> as an example, first check the source code of this package through the method we mentioned earlier:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1983,7 +1985,7 @@ We can check the source code of <code>stdenv.mkDerivation</code> to see all the 
     <a href="#3-overlays" class="header-mark"></a>3. Overlays</h3><blockquote>
 <p><a href="https://nixos.org/manual/nixpkgs/stable/#chap-overlays" target="_blank" rel="noopener noreferrer">Chapter 3. Overlays - nixpkgs Manual</a></p>
 </blockquote>
-<p>The <code>override</code> we introduced above will generate a new Derivation, which does not affect the original Derivation in <code>pkgs</code>, and is only suitable for use as a local parameter,
+<p>The <code>override</code> we introduced previously will generate a new Derivation, which does not affect the original Derivation in <code>pkgs</code>, and is only suitable for use as a local parameter,
 if you need to override a Derivation that is also depended on by other Nix packages, then other Nix packages will still use the original Derivation.</p>
 <p>To solve this problem, Nix provides the ability to use <code>overlays</code>. Simply put, <code>overlays</code> can globally modify the Derivation in <code>pkgs</code>.</p>
 <p>In the classic Nix environment, Nix automatically applies all <code>overlays</code> configuration under the paths <code>~/.config/nixpkgs/overlays.nix</code> <code>~/.config/nixpkgs/overlays/*.nix</code>,
@@ -2083,7 +2085,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </div>
 </div><p>refer to this example to write your own overlays, import the configuration as a NixOS Module or a home Manager Module, and then deploy it to see the effect.</p>
 <h4 id="modular-overlays" class="headerLink">
-    <a href="#modular-overlays" class="header-mark"></a>Modular overlays</h4><p>The example above shows how to write overlays, but all overlays are written in a single nix file, which is a bit difficult to maintain.</p>
+    <a href="#modular-overlays" class="header-mark"></a>Modular overlays</h4><p>The previous example shows how to write overlays, but all overlays are written in a single nix file, which is a bit difficult to maintain.</p>
 <p>To resolve this problem,here is a best practice of how to manage overlays in a modular way.</p>
 <p>First, create an <code>overlays</code> folder in the Git repository to store all overlays configuration, and then create <code>overlays/default.nix</code>, whose content is as follows:</p>
 <div class="highlight"><div class="chroma">
@@ -2133,7 +2135,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl"><span class="p">})</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>I custom the <code>rime-data</code> package through the above overlay.</p>
+</div><p>I custom the <code>rime-data</code> package through the overlay shown above.</p>
 <p>At last, you need to load all overlays returned by <code>overlays/default.nix</code> through the <code>nixpkgs.overlays</code> option, add the following parameter to any NixOS Module to achieve this:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2161,7 +2163,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>For example, add the parameter directly in <code>flake.nix</code>:</p>
+</div><p>For example, you can just add it directly in <code>flake.nix</code>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -2222,7 +2224,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>According to the method above, it is very convenient to modularize all overlays configuration. Taking my configuration as an example, the structure of the <code>overlays</code> folder is roughly as follows:</p>
+</div><p>By using this modular approach, it is very convenient to modularize all your overlays. Taking my configuration as an example, the structure of the <code>overlays</code> folder is roughly as follows:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -2300,7 +2302,7 @@ but in Flakes, in order to ensure the reproducibility of the system, it cannot d
 </ul>
 <p>After reading all of these, I feel like that flakes will eventually be stabilized in one or two years, with some important breaking changes.</p>
 <p>The benefits of Flakes are obvious, and the entire NixOS community likes it very much. Currently, more than half of the users are using Flakes (especially new users in the NixOS community), so we can be sure that Flakes will never be deprecated.</p>
-<p>But currently Flakes still has many problems, and it is likely to introduce some breaking changes in the process of stablizing it, and it&rsquo;s currently uncertain how greatly of the breaking changes.</p>
+<p>But currently Flakes still has many problems, and it is likely to introduce some breaking changes in the process of stablizing it, and it&rsquo;s currently uncertain how greatly the breaking changes will be.</p>
 <p>So overall, I still recommend everyone to use Flakes, but be prepared for the problems that may be caused by the upcomming breaking changes.</p>
 <h2 id="references" class="headerLink">
     <a href="#references" class="header-mark"></a>References</h2><p>The feedback and discussion of this post is mainly on <a href="https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/" target="_blank" rel="noopener noreferrer">this Reddit post</a>, you can also comment directly at the bottom of this page.</p>
