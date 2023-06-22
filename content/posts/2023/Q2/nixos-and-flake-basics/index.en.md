@@ -1838,7 +1838,7 @@ outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/
 #......
 ```
 
-As you can see, we can check every value of my flake in the REPL after loading it, which is very convenient for debugging.
+As you can see, we can check every attribute of my flake in the REPL after loading it, which is very convenient for debugging.
 
 ## References
 
