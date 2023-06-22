@@ -146,18 +146,18 @@ some materials that may be useful:
 
 As `nix-command` & `flakes` are still experimental features, the official documentation does not cover them in detail, and the community's documentation about them is also very scattered.
 However, from the perspective of reproducibility and ease of management and maintenance, the classic Nix package structure and cli are no longer recommended for use.
-So I will not introduce the usage of the classic Nix. It's recommended that beginners just start with `nix-command` & `flakes` and ignore all thecontents about the classic Nix.
+So I will not introduce the usage of the classic Nix. It's recommended that beginners just start with `nix-command` & `flakes` and ignore all the contents about the classic Nix.
 
 Here are the classic Nix commands and related concepts that are no longer needed after you enabling `nix-command` and `flakes`, when searching for information, you can safely ignore them:
 
 1. `nix-channel`: `nix-channel` is similar to other package management tools such as apt/yum/pacman, managing software package versions through stable/unstable/test channels.
-   1. In Flakes, the functionality of `nix-channel` is completely replaced by `inputs` in `flake.nix` to declare dependency sources and `flake.lock` to lock dependency versions.
-2. `nix-env`: `nix-env` is a core command-line tool for traditional Nix used to manage software packages in the user environment. It installs software packages from the data sources defined by `nix-channel`, so the installed package versions are influenced by the channel. Packages installed with `nix-env` are not automatically recorded in Nix's declarative configuration and are entirely outside of its control, making them difficult to reproduce on other machines. Therefore, it is not recommended to use this tool.
-   1. The corresponding command in Flakes is `nix profile`.
-3. `nix-shell`: `nix-shell` is used to create a temporary shell environment.
+   1. In Flakes, the functionality of `nix-channel` is completely replaced by `inputs` in `flake.nix`.
+2. `nix-env`: `nix-env` is a core command-line tool for classic Nix used to manage software packages in the user environment. It installs packages from the data sources added by `nix-channel`, so the installed package's version are influenced by the channel. Packages installed with `nix-env` are not automatically recorded in Nix's declarative configuration and are entirely outside of its control, making them difficult to reproduce on other machines. Therefore, it is not recommended to use this tool.
+   1. The corresponding command in Flakes is `nix profile`, it's not recommended to use it either.
+3. `nix-shell`: `nix-shell` is used to create a temporary shell environment, which is useful for development and testing.
    1. In Flakes, it is replaced by `nix develop` and `nix shell`.
 4. `nix-build`: `nix-build` is used to build Nix packages, and it places the build results in `/nix/store`, but it does not record them in Nix's declarative configuration.
-   1. The corresponding command in Flakes is `nix build`.
+   1. In Flakes, `nix-build` is replaced by `nix build`.
 5. ...
 
 > maybe `nix-env -qa` is still useful some times, which returns all packages installed in the System.
@@ -178,9 +178,9 @@ Similar to Arch Linux, Nix also has official and community software package repo
 
 The Nix language is used to declare the configuration to be built by Nix, if you want to play with NixOS and Flakes and enjoy the benefits they bring, you must learn the basics of this language first.
 
-The Nix language is a simple functional language, if you already have some experience in programming, it should take less than 2 hours to go through Nix lanuage's basics.
+The Nix language is a simple functional language, if you already have some experience in programming, it should take less than 2 hours to go through its basics.
 
-Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) and [Chapter 4. The Basics of the Language - Nix Pills](https://nixos.org/guides/nix-pills/basics-of-language.html) to get a basic understanding of Nix language now, they are all good introductory materials.
+Please read [**Nix language basics - nix.dev**](https://nix.dev/tutorials/first-steps/nix-language) and [Chapter 4. The Basics of the Language - Nix Pills](https://nixos.org/guides/nix-pills/basics-of-language.html) to get a basic understanding of the Nix language now, they are all good introductory materials.
 
 ## VI. Managing the system declaratively
 
@@ -313,7 +313,7 @@ cat flake.nix
 After reading this example, let's create a file `/etc/nixos/flake.nix` and copy the content of the example into it.
 With `/etc/nixos/flake.nix`, all system modifications will be taken over by Flakes from now on.
 
-The template we copied can not jsut be used directly, we need to modify it to make it work, an example of `/etc/nixos/flake.nix` is as follows:
+The template we copied CAN NOT be used directly, we need to modify it to make it work, an example of `/etc/nixos/flake.nix` is as follows:
 
 ```nix
 {
@@ -360,7 +360,7 @@ The template we copied can not jsut be used directly, we need to modify it to ma
         # It is said to be partial because the documentation is not complete, only some simple introductions
         #    (such is the current state of Nix documentation...)
         # A Nix Module can be an attribute set, or a function that returns an attribute set.
-        # If a Module is a function, according to the Nix Wiki description, this function can have up to four parameters:
+        # If a Module is a function, this function can only have the following parameters:
         #
         #  lib:     the nixpkgs function library, which provides many useful functions for operating Nix expressions
         #            https://nixos.org/manual/nixpkgs/stable/#id-1.4
@@ -372,6 +372,7 @@ The template we copied can not jsut be used directly, we need to modify it to ma
         #  modulesPath: the default path of nixpkgs's builtin modules folder,
         #               used to import some extra modules from nixpkgs.
         #               this parameter is rarely used, you can ignore it for now.
+        #
         # Only these parameters can be passed by default.
         # If you need to pass other parameters, you must use `specialArgs` by uncomment the following line
         # specialArgs = {...}  # pass custom arguments into sub module.
@@ -455,6 +456,8 @@ Then udpate `configuration.nix` to install `helix` from the input `helix`:
 Now deploy the changes by `sudo nixos-rebuild switch`, and then we can start the helix editor by `helix` command.
 
 ### 5. Add Custom Cache Mirror
+
+> You can skip this section if you don't need to customize the cache mirror.
 
 To speed up package building, Nix provides <https://cache.nixos.org> to cache build results to avoid build every packages locally.
 
