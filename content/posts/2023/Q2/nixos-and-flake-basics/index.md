@@ -72,7 +72,7 @@ NixOS 的回滚能力给了我非常大的底气——再也不怕把系统搞�
 
 > 补充：v2ex 上有 v 友反馈 btrfs 文件系统的快照功能，也能提供类似的回滚能力，而且简单很多。我研究了下发现确实如此，btrfs 甚至也可以像 NixOS 一样配置 grub 从快照启动。所以如果你只是想要系统回滚能力，那么基于 btrfs 快照功能的 [btrbk](https://github.com/digint/btrbk) 也是一个不错的选择。当然如果你仍然对 Nix 感兴趣，那学一学也绝对不亏，毕竟 Nix 的能力远不止于此，系统快照只是它能力的一部分而已～
 
-{{< figure src="./screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
+{{< figure src="screenshot_2023-05-07-21-21.webp" caption="我当前的 NixOS 桌面" >}}
 
 在学了大半个月的 NixOS 与 Nix Flakes 后，我终于将我的 PC 从 EndeavouOS 系统切换到了 NixOS，这篇文章就脱胎于我这段时间的折腾笔记，希望能对你有所帮助～
 
@@ -104,7 +104,7 @@ NixOS 的配置只负责管理系统层面的状态，用户目录不受它管�
 - 没有依赖冲突问题：因为 Nix 中每个软件包都拥有唯一的 hash，其安装路径中也会包含这个 hash 值，因此可以多版本共存。
 - 社区很活跃，第三方项目也挺丰富，官方包仓库 nixpkgs 贡献者众多，也有很多人分享自己的 Nix 配置，一遍浏览下来，整个生态给我一种发现新大陆的兴奋感。
 
-{{< figure src="./nixos-bootloader.avif" caption="NixOS 启动项中列出了所有历史版本，图来自 [NixOS Discourse - 10074](https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074)" >}}
+{{< figure src="nixos-bootloader.avif" caption="NixOS 启动项中列出了所有历史版本，图来自 [NixOS Discourse - 10074](https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074)" >}}
 
 ### Nix 的缺点 {#nix-disadvantages}
 

@@ -79,7 +79,7 @@ The rollback capability of NixOS gave me a lot of confidence - I no longer fear 
 
 > Note: some friends on V2EX gave feedback that `btrfs`'s snapshot feature can also provide similar rollback capabilities, and it is much simpler. After some research, I found that to be true. `btrfs` can even be configured to boot from a snapshot using GRUB(just like the NixOS does). So if you only want the system rollback capability, then btrfs based snapshot tools(e.g. [btrbk](https://github.com/digint/btrbk)) are also a good choice. Or if you're still interested in Nix, It is definitely worth learning, as Nix's capabilities are far beyond just system snapshots.
 
-{{< figure src="./screenshot_2023-05-07-21-21.webp" caption="My NixOS Desktop" >}}
+{{< figure src="screenshot_2023-05-07-21-21.webp" caption="My NixOS Desktop" >}}
 
 So after studying NixOS and Flakes for about half a month, I finally completed my system switch, and this post is born out of the notes I wrote during this period time, hope you like it~
 
@@ -112,7 +112,7 @@ Due to Nix's features such as declarative and reproducible, Nix is not only used
 - **No dependency conflicts**: Because each software package in Nix has a unique hash, its installation path also includes this hash value, so multiple versions can coexist.
 - **The community is very active, and there are quite a few third-party projects**. The official package repository, nixpkgs, has many contributors, and many people share their Nix configuration on Github/Gitlab. After browsing through it, the entire ecosystem gives me a sense of excitement in discovering a new continent.
 
-{{< figure src="./nixos-bootloader.avif" caption="All historical versions are listed in the boot options of NixOS. Image from [NixOS Discourse - 10074](https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074)" >}}
+{{< figure src="nixos-bootloader.avif" caption="All historical versions are listed in the boot options of NixOS. Image from [NixOS Discourse - 10074](https://discourse.nixos.org/t/how-to-make-uefis-grub2-menu-the-same-as-bioss-one/10074)" >}}
 
 ### Disadvantages of Nix
 
