@@ -1843,6 +1843,138 @@ outputs.nixosConfigurations.ai.config.home-manager.users.ryan.home.file..config/
 
 As you can see, we can check every attribute of my flake in the REPL after loading it, which is very convenient for debugging.
 
+### 3. Remote deployment
+
+Some tools like [NixOps](https://github.com/NixOS/nixops), [deploy-rs](https://github.com/serokell/deploy-rs), and [colmena](https://github.com/zhaofengli/colmena) can all be used to deploy NixOS configuration to remote hosts, but they are all too complicated for me, so skip them all.
+
+`nixos-rebuild`, the tool we use to deploy NixOS configuration, also supports remote deployment through ssh protocol, which is very convenient and simple.
+
+But `nixos-rebuild` does not support deploying with password authentication, so to use it for remote deployment, we need to:
+
+1. Configure ssh public key authentication for the remote hosts.
+2. To avoid sudo password verification failures, we need to use the `root` user to deploy, or grant the user sudo permission without password verification.
+   1. related issue: <https://github.com/NixOS/nixpkgs/issues/118655>
+
+After the above configuration is completed, we can deploy the configuration to the server through the following command:
+
+```bash
+# 1. add the ssh key to ssh-agent first
+ssh-add ~/.ssh/ai-idols
+
+# 2. deploy the configuration to the remote host, using the ssh key we added in step 1
+#    and the username defaults to `$USER`, it's `ryan` in my case.
+nixos-rebuild --flake .#aquamarine --target-host 192.168.4.1 --build-host 192.168.4.1 switch --use-remote-sudo --verbose
+```
+
+The commands above will build & deploy the configuration to aquamarine, the build process will be executed on aquamarine too,
+and the `--use-remote-sudo` option indicates that we need to use sudo permission on the remote server to deploy the configuration.
+
+If you want to build the configuration locally and deploy it to the remote server, just replace `--build-host aquamarinr` with `--build-host localhost`.
+
+Instead of use ip address directly, we can also define some host aliases in `~/.ssh/config` or `/etc/ssh/ssh_config`, for example:
+
+```bash
+› cat ~/.ssh/config
+
+# ......
+
+Host ai
+  HostName 192.168.5.100
+  Port 22
+
+Host aquamarine
+  HostName 192.168.5.101
+  Port 22
+
+Host ruby
+  HostName 192.168.5.102
+  Port 22
+
+Host kana
+  HostName 192.168.5.103
+  Port 22
+```
+
+Then we can use the host alias to deploy the configuration:
+
+```bash
+nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo --verbose
+```
+
+### 4. Work with Makefile
+
+> NOTE: Makefile's target name should not be the same as one of the file or directory in the current directory, otherwise the target will not be executed!
+
+I use Makefile to manage the commands of my flake, which is very convenient.
+
+For example, my Makefile looks like this:
+
+```makefile
+#
+#  NOTE: Makefile's target name should not be the same as one of the file or directory in the current directory,
+#    otherwise the target will not be executed!
+#
+
+
+############################################################################
+#
+#  Nix commands related to the local machine
+#
+############################################################################
+
+deploy:
+	nixos-rebuild switch --flake . --use-remote-sudo
+
+debug:
+	nixos-rebuild switch --flake . --use-remote-sudo --show-trace --verbose
+
+update:
+	nix flake update
+
+history:
+	nix profile history --profile /nix/var/nix/profiles/system
+
+gc:
+	# remove all generations older than 7 days
+	sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+
+	# garbage collect all unused nix store entries
+	sudo nix store gc --debug
+
+############################################################################
+#
+#  Idols, Commands related to my remote distributed building cluster
+#
+############################################################################
+
+add-idols-ssh-key:
+	ssh-add ~/.ssh/ai-idols
+
+aqua: add-idols-ssh-key
+	nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo
+
+aqua-debug: add-idols-ssh-key
+	nixos-rebuild --flake .#aquamarine --target-host aquamarine --build-host aquamarine switch --use-remote-sudo --show-trace --verbose
+
+ruby: add-idols-ssh-key
+	nixos-rebuild --flake .#ruby --target-host ruby --build-host ruby switch --use-remote-sudo
+
+ruby-debug: add-idols-ssh-key
+	nixos-rebuild --flake .#ruby --target-host ruby --build-host ruby switch --use-remote-sudo --show-trace --verbose
+
+kana: add-idols-ssh-key
+	nixos-rebuild --flake .#kana --target-host kana --build-host kana switch --use-remote-sudo
+
+kana-debug: add-idols-ssh-key
+	nixos-rebuild --flake .#kana --target-host kana --build-host kana switch --use-remote-sudo --show-trace --verbose
+
+idols: aqua ruby kana
+
+idols-debug: aqua-debug ruby-debug kana-debug
+```
+
+Save the above Makefile to the root directory of the flake, and then we can use `make deploy` to deploy the configuration to the local machine, and use `make idols` to deploy the configuration to all my remote servers.
+
 ## References
 
 The feedback and discussion of this post is mainly on [this Reddit post](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/), you can also comment directly at the bottom of this page.
@@ -1860,3 +1992,7 @@ Here are some useful resources that I referred to:
 [New Nix Commands]: https://nixos.org/manual/nix/stable/command-ref/new-cli/nix.html
 [Zero to Nix - Determinate Systems]: https://github.com/DeterminateSystems/zero-to-nix
 [Tips&Tricks for NixOS Desktop - NixOS Discourse]: https://discourse.nixos.org/t/tips-tricks-for-nixos-desktop/28488
+
+```
+
+```
