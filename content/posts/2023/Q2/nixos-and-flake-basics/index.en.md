@@ -1833,6 +1833,7 @@ Here are some useful resources that I referred to:
 - [NixOS series](https://lantian.pub/en/article/modify-website/nixos-why.lantian/): LanTian's NixOS series, which are very clear and easy to understand.
 - [Nix Flakes Series](https://www.tweag.io/blog/2020-05-25-flakes/): An official Nix Flakes tutorial series, which provides a relatively detailed introduction and is suitable for beginners.
 - [Flakes - NixOS Wiki](https://nixos.wiki/wiki/Flakes): The official Nix Flakes wiki, which provides a relatively rough introduction.
+- [Tips&Tricks for NixOS Desktop - NixOS Discourse][Tips&Tricks for NixOS Desktop - NixOS Discourse]: Just as the title says, it is a collection of tips and tricks for NixOS desktop.
 - [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): My Flake for NixOS & macOS.
 
 [digga]: https://github.com/divnix/digga
