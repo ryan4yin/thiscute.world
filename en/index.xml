@@ -561,7 +561,7 @@ With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken o
 </span></span><span class="line"><span class="cl">    <span class="c1"># ......</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># helix editor, use the tag 23.05</span>
-</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:helix-editor/helix/23.05&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:helix-editor/helix/23.05&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">@</span><span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="p">{</span>
@@ -619,7 +619,7 @@ With <code>/etc/nixos/flake.nix</code>, all system modifications will be taken o
 </span></span><span class="line"><span class="cl">    <span class="n">curl</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># install helix from the input `helix`</span>
-</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="s2">&#34;</span><span class="si">${</span><span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="si">}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">helix</span>
+</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="s2">&#34;</span><span class="si">${</span><span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="si">}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">helix</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># omit other configuration......</span>

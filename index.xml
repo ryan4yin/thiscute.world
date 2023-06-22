@@ -1503,7 +1503,7 @@
 </span></span><span class="line"><span class="cl">    <span class="c1"># ......</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># helix editor, use tag 23.05</span>
-</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:helix-editor/helix/23.05&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:helix-editor/helix/23.05&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">@</span><span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span> <span class="p">{</span>
@@ -1543,15 +1543,9 @@
 </span><span class="lnt">16
 </span><span class="lnt">17
 </span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># Edit this configuration file to define what should be installed on</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># your system.  Help is available in the configuration.nix(5) man page</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># and in the NixOS manual (accessible by running ‘nixos-help’).</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># Nix 会通过名称匹配，自动将 specialArgs 中的 helix 注入到此函数的第三个参数</span>
+<pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="c1"># Nix 会通过名称匹配，自动将 specialArgs 中的 helix 注入到此函数的第三个参数</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">config</span><span class="o">,</span> <span class="n">pkgs</span><span class="o">,</span> <span class="n">helix</span><span class="o">,</span> <span class="o">...</span> <span class="p">}:</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -1564,7 +1558,7 @@
 </span></span><span class="line"><span class="cl">    <span class="n">curl</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1"># 这里从 helix 这个 inputs 数据源安装了 helix 程序</span>
-</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="s2">&#34;</span><span class="si">${</span><span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="si">}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">helix</span>
+</span></span><span class="line"><span class="cl">    <span class="n">helix</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="s2">&#34;</span><span class="si">${</span><span class="n">pkgs</span><span class="o">.</span><span class="n">system</span><span class="si">}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">helix</span>
 </span></span><span class="line"><span class="cl">  <span class="p">];</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1"># 省略其他配置......</span>
