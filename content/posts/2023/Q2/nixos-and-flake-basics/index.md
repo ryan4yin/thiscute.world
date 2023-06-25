@@ -32,4 +32,4 @@ code:
 
 - [NixOS 与 Flakes | 一份非官方的新手指南](https://github.com/ryan4yin/nixos-and-flakes-book)
 
-非常感谢 Reddit、文章评论区以及 V2EX 上各位朋友的反馈、批评与建议 ❤️
+非常感谢 [Reddit](https://www.reddit.com/r/NixOS/comments/14fvz1q/comment/jp4xhj3/?context=3)、文章评论区、[V2EX](https://www.v2ex.com/t/951190#reply9) 以及 [0xffff.one](https://0xffff.one/d/1521-nixos-yu-nix-flakes-xin-shou-ru-men/4) 等平台上各位朋友的反馈、批评与建议 ❤️
