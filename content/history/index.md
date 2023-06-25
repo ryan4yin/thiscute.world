@@ -21,6 +21,23 @@ comment:
 > Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+## 2023-06-23 - 2023-06-24
+
+- 根据前面收到的批评与建议，新建了一个 GitHub 仓库作为用于与社区协作共建此文档：[nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，使用 vitepress 搭建了全新的文档站点，同时也更新了所有被指出存在误导的内容。
+  - 这此更新花了我一整天的时间，效果非常惊艳，我自己都明显觉得 vitepress 搭建的新文档站索引很齐全很方便，阅读体验比超长的一页博客好太多了。
+  - 也再次在 [Reddit](https://www.reddit.com/r/NixOS/comments/14fvz1q/updates_nixos_nix_flakes_a_guide_for_beginners/) [v2ex](https://www.v2ex.com/t/951190#reply9) [0xffff.one](https://0xffff.one/d/1547-nixos-yu-flakes-yi-fen-fei-guan) 等社区以及交流群分享了下，收到了许多 stars.
+- 在 LicheePi 4A 群同步了下进展，仍然未能成功编译 rootfs. 意外得到 revy 老师的帮助，在他修了几个内核 bug 后，我成功将 NixOS 的 rootfs 编译了出来！
+  - 不过刷到板子上启动不了，看了下发现原来 boot 分区是不能直接用 revyos 的，必须要从 NixOS 生成，解决掉这个问题应该就能启动了。
+
+## 2023-06-21 - 2023-06-22
+
+- 对 [NixOS 与 Flakes 新手入门](https://thiscute.world/posts/nixos-and-flake-basics/) 这篇文章进行了大量更新，并在 [Reddit](https://www.reddit.com/r/NixOS/comments/14fvz1q/updates_nixos_nix_flakes_a_guide_for_beginners/) 上宣传了下。
+  - 除了许多好评外，还在 Reddit 与 Discord 上收到一些非常有建设性的批评与建议，简要总结如下：
+    - 批评之一是文章太长，阅读困难。与其说它是一篇文章，倒不如说它更像是一本给初学者写的入门书。它不是博客这种简短的读物，而是内容更广泛且更有野心的文档。
+    - 批评之二是文章内容包含许多与 NixOS 无关的冗余信息，噪音太多。如果当成博客写这自然无所谓，但是如果想要面对更广泛的 NixOS 用户，那就不合适了。
+    - 批评之三是一些内容存在误解，或者说写得比较随意，不够精确，容易误导新人。
+  - 忠言逆耳，这些批评虽然让我有一点不舒服，但是都非常有价值。
+
 ## 2023-06-17 - 2023-06-18
 
 - 在家整了两天的 [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)，试了很多方案，还是没能成功编译出 rootfs...
