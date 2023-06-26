@@ -32,6 +32,7 @@ code:
 
 Since the article is so long now, for the convenience of readers, the content of this post has been moved to a separate site:
 
-- [An unofficial NixOS & Flakes book for Beginners](https://github.com/ryan4yin/nixos-and-flakes-book)
+- Document Site: <https://nixos-and-flakes.thiscute.world/>
+- GitHub Repo: <https://github.com/ryan4yin/nixos-and-flakes-book>
 
 Thanks for the feedback, criticism, suggestions from [Reddit](https://www.reddit.com/r/NixOS/comments/14fvz1q/comment/jp4xhj3/?context=3)❤️
