@@ -31,6 +31,7 @@ comment:
 
 - 持续优化 [nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book) 的内容，主要是英文内容，备受好评的同时也有好几位指出其中存在相当多的语法错误、拼写错误、表达错误...
   - 先后用 copilot chat 与 chatgpt 3.5 优化了一波英文内容，发现 chatgpt 3.5 确实强多了，copilot chat 不适合干这活。
+  - 这份文档是我在与读者的沟通中一步步优化的，读者的好评带来的成就感是我更新的最大动力，一些读者的反馈也对它的「进化」产生了很大的帮助。我最初只是想分享一下自己的 NixOS 折腾心得，内容也比较随意，没想到最后却成了一本包含中英双语的开源书籍，国外的阅读量甚至是国内的两倍，而且还得到了许多 stars ，真的完全没预料到，不过很开心。
 - LicheePi 4A 的 rootfs 虽然编译出来了，但是死活引导不成功。感觉是 uboot-spl 跟 boot 分区这两个地方的内容有问题，但是 Linux 引导我屁也不懂一个，至今没搞定。
   - 中间尝试了打出镜像用 QEMU 进行测试，但是跑起来打印出 OpenSBI 的日志后就卡住了，CPU 一直有一两个核心跑到 100%，也搞不清楚是咋了。
 - 也试着搞了搞 [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588) 中的 Rock 5A 以及 OrangePi 5 Plus 支持，没搞定，内核编译不成功...
