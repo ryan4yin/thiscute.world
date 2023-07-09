@@ -4,10 +4,22 @@ date: 2022-02-13T16:09:00+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "terminal.webp"
+  - name: "featured-image"
+    src: "terminal.webp"
 
-tags: ["Linux", "MacOSX", "Windows", "CLI", "Powershell", "Shell", "tmux", "rsync", "vim", "awk"]
+tags:
+  [
+    "Linux",
+    "MacOSX",
+    "Windows",
+    "CLI",
+    "Powershell",
+    "Shell",
+    "tmux",
+    "rsync",
+    "vim",
+    "awk",
+  ]
 categories: ["tech"]
 
 code:
@@ -17,11 +29,11 @@ code:
   maxShownLines: 100
 ---
 
->个人笔记，只会列出我自己容易忘掉的命令，方便查阅。
+> 个人笔记，只会列出我自己容易忘掉的命令，方便查阅。
 
->内容比较多，适合当参考手册用。可能不太适合从头读到尾...
+> 内容比较多，适合当参考手册用。可能不太适合从头读到尾...
 
->本文主要介绍 Linux 命令，顺带介绍下 Windows/MacOSX.
+> 本文主要介绍 Linux 命令，顺带介绍下 Windows/MacOSX.
 
 ## 一、Linux
 
@@ -34,7 +46,6 @@ nohup python xxx.py &
 
 也可以使用 tmux，tmux 提供的 session 功能比 nohup 更好用，后面会介绍 tmux
 
-
 ### 2. 查找替换 sed/awk 与 json/yaml 处理 jq/yq
 
 sed 常用命令：
@@ -45,6 +56,9 @@ grep "main()" . -r --include *.{py, dart}
 
 ## 在 .js 文件中搜索关键字 xxxxx 并仅展示关键字前后 40 个字符（用在 .js 等被压缩过的文本文件上很有效）
 cat *.js | grep -o -P '.{0,40}xxxxx.{0,40}'
+
+# 在文件夹中递归查找所有中文字符（在做中英双语内容维护时比较有用）
+grep -P '[\x{4e00}-\x{9f5a}]' -r .
 
 ## 1） 全文搜索并替换
 ### -i --in-place 原地替换（修改原文件）
@@ -72,7 +86,7 @@ awk 用于按列处理文本，它比 sed 更强大更复杂，常用命令：
 cat xxx.txt | awk -F '{print $1}' | head
 
 ## 2. 可以使用 -F 指定分隔符，打印出多列
-awk -F ',' '{print $1,$2}'| head 
+awk -F ',' '{print $1,$2}'| head
 
 ## 3. 打印出行数
 cat log_test | awk '{print NR,$1}' | more
@@ -80,7 +94,7 @@ cat log_test | awk '{print NR,$1}' | more
 ## 4. if 判断语句
 cat log_test | awk '{if($11>300) print($1,$11)}'
 
-cat log_test | awk '{print $11}' | sort -n | uniq -c  
+cat log_test | awk '{print $11}' | sort -n | uniq -c
 
 # 求和
 cat data|awk '{sum+=$1} END {print "Sum = ", sum}'
@@ -103,7 +117,7 @@ awk 'BEGIN {min = 1999999} {if ($1<min) min=$1 fi} END {print "Min=", min}'
 ## 从 json 中查询某一个字段的值
 jq -r '.message' xxx.json
 ## 也可从 stdin 读取 json
-cat xxx.json | jq -r '.message' 
+cat xxx.json | jq -r '.message'
 
 ## 从 json 内容中删除多个 key
 ## -r 表示输出文本采用 raw 格式
@@ -123,8 +137,6 @@ yq -i '.a.b[0].c = "cool"' file.yaml
 
 ## yq 的更多用法参见官方说明: https://github.com/mikefarah/yq
 ```
-
-
 
 ### 3. 压缩相关
 
@@ -170,7 +182,6 @@ ssh <user>@<host> -p 22 "tar cz <filename or foldername or glob>" | pv | tar xz 
 scp -P 22 <user>@<host>:<folder-name or filename> <filename>  # 通过 scp 传输，传文件夹时记得添加 -r 参数（recursive）
 ```
 
-
 #### 2. rsync
 
 rsync 的功能其实和前面的 scp/(tar+ssh) 是一样的，将文件从一个地方拷贝到另一个地方。
@@ -193,7 +204,7 @@ rsync -avz --progress -e "ssh -i id_xxx" /path/src user@host:dest  # 使用指�
 rsync -avz --progress --exclude "foor/bar" src user@host:dest
 
 # 有时我们希望在同步数据时修改文件的 user/group
-# --chown    # 设置文件的 user:group，必须与 `-og`/`--owner --group` 同时使用！（`-a` 隐含了 `-og`） 
+# --chown    # 设置文件的 user:group，必须与 `-og`/`--owner --group` 同时使用！（`-a` 隐含了 `-og`）
 rsync -avz --progress --chown=root:root src user@host:dest  # 传输时修改 user/group 为 root
 
 # 详细说明 src 和 dest 的位置
@@ -213,9 +224,7 @@ rsync -avz --progress --ignore-existing src user@host:dest
 
 另外也有使用双冒号 `::` 分隔的传输命令，这种命令使用 `rsync` 协议进行传输，要求目标主机启用 rsync-daemon。用得会比 ssh 少一些，暂时不做介绍。
 
-
 rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `man rsync`.
-
 
 ### 5. Tmux
 
@@ -226,7 +235,6 @@ rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `ma
 5. 通过 `tmux attach -t <session-name/id>` 重新接入后台会话。
    1. 缩写 `tmux a -t <session>`
 6. 或者通过 `tmux kill-session -t <session-name/id>` 杀死一个后台会话。
-
 
 常用快捷键：
 
@@ -263,6 +271,7 @@ prefix w # 通过数字标签选择 window
 ```
 
 参考文档：
+
 - https://github.com/tmux/tmux/wiki/Getting-Started
 - https://www.ruanyifeng.com/blog/2019/10/tmux.html
 
@@ -292,7 +301,7 @@ for f in $(find . -name *.py); do echo $f; done
 
 ```shell
 for i in $(seq 1 5)
-do 
+do
   echo $i
 done  # sh/bash 都支持
 ```
@@ -312,10 +321,9 @@ else
 fi
 ```
 
+#### 3. Shell 脚本中的 set 指令，比如 set -x 和 set -e
 
-#### 3. Shell脚本中的set指令，比如set -x 和 set -e
-
-参见：[Shell脚本中的set指令，比如set -x 和 set -e](https://www.cnblogs.com/robinunix/p/11635560.html)
+参见：[Shell 脚本中的 set 指令，比如 set -x 和 set -e](https://www.cnblogs.com/robinunix/p/11635560.html)
 
 #### 4. 实用小工具
 
@@ -353,7 +361,6 @@ history
 
 - [shell_scripts](https://github.com/mritd/shell_scripts): 实用 shell 小脚本
 
-
 ### 7. socket 连接查询 - ss/netcat/lsof {#socket-commands}
 
 查看 socket 信息可以帮我们回答下列问题：
@@ -363,9 +370,8 @@ history
 1. 进程们分别在使用哪些端口？
 1. 我的连接数是否达到了上限？
 
->现在较新版本的 Ubuntu 和 CentOS 都已经使用 `iproute2` 替换掉了 `net-tools`，
-如果你还需要使用陈旧的 `route` `netstat` 等命令，需要手动安装 `net-tools`。
-
+> 现在较新版本的 Ubuntu 和 CentOS 都已经使用 `iproute2` 替换掉了 `net-tools`，
+> 如果你还需要使用陈旧的 `route` `netstat` 等命令，需要手动安装 `net-tools`。
 
 我们可以使用 ss(socket statistics) 或者 netstat 命令来查看 socket 信息:
 
@@ -421,7 +427,7 @@ TCP 连接数受 Linux 文件描述符上限控制，可以通过如下方法查
 # 已用文件描述符数量
 lsof | wc -l
 # 文件描述符上限
-ulimit -n 
+ulimit -n
 ```
 
 ### 8. 其他网络相关命令
@@ -469,7 +475,7 @@ nsenter --target $PID --net ss -s
 
 `nsenter` 这个工具貌似是 docker 自带的或者是系统内置命令，只要装了 docker，ubuntu/centos 都可以直接使用这个命令。
 
->nsenter 是一个进入名字空间的工具，功能不仅仅局限在「网络诊断」，还有更多用法。
+> nsenter 是一个进入名字空间的工具，功能不仅仅局限在「网络诊断」，还有更多用法。
 
 ### 10. 用户与群组
 
@@ -658,7 +664,6 @@ route print -4  # 仅 ipv4
 
 比如我们遇到端口占用问题时，就可以通过上述命令查找到端口对应的 Pid，然后使用 `kill <Pid>` 命令（powershell `stop-process` 的别名）杀死对应的进程。
 
-
 ## 三、Mac OS X
 
 Mac OS X 系统也是 unix-like 系统，也使用 zsh/bash，因此大部分命令基本都跟 Linux 没啥区别，可以直接参考前面 Linux 一节的内容。
@@ -672,7 +677,7 @@ Mac OS X 系统也是 unix-like 系统，也使用 zsh/bash，因此大部分命
 
 ### 1. 查看 socket 信息
 
-Mac OS X 系统目前没有 `ss`，但是自带 `netstat`，该命令和 Linux 下的 `netstat` 有一定差别，而且还很慢，还不能显示 pid. 
+Mac OS X 系统目前没有 `ss`，但是自带 `netstat`，该命令和 Linux 下的 `netstat` 有一定差别，而且还很慢，还不能显示 pid.
 
 所以 stackoverflow 上更推荐使用 `lsof`，几条常用命令记录如下
 
@@ -702,7 +707,6 @@ sudo killall -HUP mDNSResponder
 # 其他版本请自己网上搜...
 ```
 
-
 ```shell
 # 查看所有网络接口及相关参数（ip/mac/type...）
 ifconfig
@@ -711,7 +715,6 @@ ifconfig
 netstat -nr
 ```
 
-
 ## 四、跨平台程序
 
 ### 1. vim
@@ -719,6 +722,7 @@ netstat -nr
 #### 常用技巧
 
 移动：
+
 - `0`/`^` 回到行首，`$` 去到行末
 - w 跳到下个单词的首部，e 跳到下个单词末尾
   - 也能使用 2w 2e 这种命令按单词数量跳转
@@ -729,7 +733,6 @@ netstat -nr
 - d$ 删除到行末，`d0`/`d^` 删除到行首
 - `d(`/`d{`/`d[[` 删除到文件首部，`d)`/`d}`/`d]]` 删除到文件末尾
 - `r` 替换一个字符，`R` 持续往后替换
-
 
 #### 多行修改
 
@@ -749,16 +752,13 @@ netstat -nr
   - visual block 的特点是它是垂直选择，而 visual 模式是段落选择
 - 按 `d` 键就能删除被选中的所有内容。
 
-
 #### 多行替换（基本和 sed 一致）
 
 多行行首插入注释符号 `#`
 
-
       :1,6 s/^/#/g
       :2,$ s/^/#/g   注：此为2行至尾行
       :% s/^/#/g     注：此为所有行
-
 
 这里使用了正则表达式 `^` 匹配行首，改成 `$` 就可在行尾进行批量修改。
 
@@ -777,13 +777,11 @@ netstat -nr
 - 输入内容 `w new.txt`，此时显示效果应该是 `:'<,'>w new.txt`
 - 回车就能完成文件写入
 
-
 #### 问题：在 vim 中粘贴 yaml 时缩进会变得一团糟
 
 解决方法：在命令模式下输入 `:set paste` 进入粘贴模式，然后再粘贴 yaml 内容。
 
 注意行首可能会丢失几个字符，需要手动补上。
-
 
 ## 参考
 
