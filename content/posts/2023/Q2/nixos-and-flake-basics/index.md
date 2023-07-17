@@ -6,7 +6,7 @@ draft: false
 
 resources:
   - name: "featured-image"
-    src: "screenshot_2023-05-07-21-21.webp"
+    src: "nixos-and-flakes-book.webp"
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]
