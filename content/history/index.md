@@ -21,6 +21,17 @@ comment:
 > Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+## 2023-07-16 - 2023-07-17
+
+- 根据评论更新给 esp-idf 提的 PR [fix: create-project & create_component with proper file permission - esp-idf](https://github.com/espressif/esp-idf/pull/11836)
+- 修复我 nix-config 配置中的两个 bug:
+  - [neovim: smartindent breaks indented comments](https://github.com/ryan4yin/nix-config/issues/4)
+    - 顺便给 astronvim 提了个 PR [fix(options): don't set smartindent](https://github.com/AstroNvim/AstroNvim/pull/2136) 修了下这个毛病。
+    - 这个问题很烦，之前真是没啥头绪，尝试了修改 tree-sitter.nvim/null-ls.nvim 甚至删掉所有 nix 相关配置，都没用。
+    - 然后 7/17 又尝试根据找到的几个可能的参数一个个加上关键问题描述搜索了下，就找到了两个相关 issue，问题瞬间就清晰了。
+  - 另一个是上班发现 macOS 上的 wireguard `wg-quick` 命令有毛病，把我网络搞坏了。
+    - 问了有 wireguard 经验的同事，他之前就处理过这个问题，很快就帮我确认了问题是 wireguard 停掉后 DNS 解析没更新，导致 DNS 解析挂掉。
+    - 解决方案：[wireguard: DNS stop to work after wg-quick down xxx on macOS](https://github.com/ryan4yin/nix-config/issues/5)
 
 ## 2023-07-15
 
