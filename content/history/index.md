@@ -23,6 +23,8 @@ comment:
 
 ## 2023-07-16 - 2023-07-17
 
+- 发现 alacritty 还是不太行了，图片显示分辨率太低，另外在 macOS 上也有些小问题。
+    - 研究后发现 kitty 可能是更好的选择，切换到 kitty 后体验很好，alacritty 现在沦为备胎。
 - 根据评论更新给 esp-idf 提的 PR [fix: create-project & create_component with proper file permission - esp-idf](https://github.com/espressif/esp-idf/pull/11836)
 - 修复我 nix-config 配置中的两个 bug:
   - [neovim: smartindent breaks indented comments](https://github.com/ryan4yin/nix-config/issues/4)
@@ -32,6 +34,9 @@ comment:
   - 另一个是上班发现 macOS 上的 wireguard `wg-quick` 命令有毛病，把我网络搞坏了。
     - 问了有 wireguard 经验的同事，他之前就处理过这个问题，很快就帮我确认了问题是 wireguard 停掉后 DNS 解析没更新，导致 DNS 解析挂掉。
     - 解决方案：[wireguard: DNS stop to work after wg-quick down xxx on macOS](https://github.com/ryan4yin/nix-config/issues/5)
+- 发现 macOS 上的输入法用着很不顺手，macOS 百度输入法加载了小鹤挂接码后卡得没法用，macOS 官方的又只有双拼。
+    - 最后决定用 squirrel 输入法，体验下来是个很棒的想法！
+    - 现在我的 Linux 跟 macOS 都使用的同一份小鹤音形 rime 词库，macOS 使用 brew 自动安装 squirrel，Linux 使用 fcitx5-rime，使用体验也完全统一了，感觉非常好！
 - 开始看《无职转生》这部动漫，它对应的小说我大概在大三时看过，作者对涩涩的描写有点烦，不过故事真的很棒，当时看完小说就有点怅然若失。
   - 动漫看下来也很棒，感觉还是比较还原原著的。世界观很宏大，有很多不同的景色，人物也很有生命力，主角的成长也很有意思。
 
