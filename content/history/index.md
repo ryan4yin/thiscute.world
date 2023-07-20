@@ -21,6 +21,11 @@ comment:
 > Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+
+## 2021-07-25
+
+- 终于在 NixOS 上完成了一次 ESP32 编译烧录 [ryan4yin/tft-esp32-auduino](https://github.com/ryan4yin/tft-esp32-auduino)，之前一直卡着的烧录报权限错误的问题终于解决了，参考了 <https://github.com/NixOS/nixpkgs/issues/224895>
+
 ## 2021-07-19 - 2021-07-20
 
 - 制作了一个 [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter) 模板仓库，并且在 [Twitter](https://twitter.com/ryan4yin/status/1681639068957028352) 等社区分享了一波，获得一波好评。
