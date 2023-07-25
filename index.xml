@@ -2911,6 +2911,9 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <p>如果你仅使用单机 PVE，可忽略这一节内容。</p>
 </blockquote>
 <p>将多台 PVE 节点组成一个集群，可以获得很多新玩法，比如虚拟机在多节点间的热迁移。</p>
+<blockquote>
+<p>注意 CPU 架构差别较大很可能会导致无法热迁移，建议使用同品牌、同代的 CPU，最好是 CPU 型号完全一致。比如都是 Intel 的 12 代 CPU，或者都是 AMD 的 5 代 CPU。</p>
+</blockquote>
 <p>这个也还挺简单的，首先随便登入一台机器的 Web Console，点击「Datacenter」=&gt;「Cluster」=&gt;「Create Cluster」即可创建一个 PVE 集群。</p>
 <p>接着复制「Join Information」中的内容，在其他每台 PVE 节点的 Web Console 页面中，点击「Datacenter」=&gt;「Cluster」=&gt;「Join Cluster」，然后粘贴前面复制的「Join Information」，再输入前面节点的密码，等待大约一分钟，然后刷新页面，PVE 集群即组建完成。</p>
 <p><figure><a class="lightgallery" href="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" title="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" data-thumbnail="/images/proxmox-ve-instruction/pve-cluster-configuration.webp" data-sub-html="<h2>PVE 集群配置</h2>">
@@ -2986,7 +2989,7 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <ol>
 <li><a href="https://cloud-images.ubuntu.com/releases/" target="_blank" rel="noopener noreferrer">Ubuntu Cloud Images (RELEASED)</a>: 提供 img 格式的裸镜像（PVE 也支持此格式）
 <ul>
-<li>请下载带有 .img 结尾的镜像，其中 <code>kvm.img</code> 结尾的镜像会更精简一点，而不带 kvm 的会稍微大一点，但是带了所有常用的内核模块。</li>
+<li>请下载带有 .img 结尾的镜像，其中以 <code>kvm.img</code> 结尾的镜像会更精简一点，而名称中不包含 kvm 的镜像会稍微大一点，但是带了所有常用的内核模块。（如果你不理解前者精简了啥，请选择后者——也就是稍大的这个镜像文件。）</li>
 </ul>
 </li>
 <li><a href="https://download.opensuse.org/repositories/Cloud:/Images:/" target="_blank" rel="noopener noreferrer">OpenSUSE Cloud Images</a>
@@ -3006,6 +3009,9 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 <p>其名字中的 NoCloud 表示支持 cloudinit NoCloud 数据源——即使用 <code>seed.iso</code> 提供 user-data/meta-data/network-config 配置，PVE 就是使用的这种模式。
 而 Openstack 镜像通常也都支持 NoCloud 模式，所以一般也是可以使用的。</p>
 <p>以 ubuntu 的 cloudimg 镜像为例，下载好镜像后，首先创建虚拟机，并以导入的磁盘为该虚拟机的硬盘，命令如下：</p>
+<blockquote>
+<p>如下操作也可在 Web UI 上操作，这里仅以命令行为例。</p>
+</blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -3087,7 +3093,7 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 </ul>
 <h3 id="2-虚拟机硬盘扩容" class="headerLink">
     <a href="#2-%e8%99%9a%e6%8b%9f%e6%9c%ba%e7%a1%ac%e7%9b%98%e6%89%a9%e5%ae%b9" class="header-mark"></a>2. 虚拟机硬盘扩容</h3><p>CentOS/Ubuntu/Debian 提供的 Cloud 镜像，都自带了 <code>cloud-utils-growpart</code> 这个组件，可以实现在扩容物理硬盘时，自动调整 Linux 的分区大小。</p>
-<p>因此需要扩容虚拟机时，直接通过 UI 面板/命令行扩容虚拟机的硬盘即可， Linux 的分区会被 <code>cloud-utils-growpart</code> 自动扩容。</p>
+<p>因此需要扩容虚拟机时，直接通过 UI 面板/命令行扩容虚拟机的硬盘，然后重启虚拟机即可，Linux 的分区会在系统启动阶段被 <code>cloud-utils-growpart</code> 自动扩容。</p>
 <p>PVE 可通过如下命令进行磁盘扩容：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -3115,7 +3121,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <h2 id="三常见问题" class="headerLink">
     <a href="#%e4%b8%89%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" class="header-mark"></a>三、常见问题</h2><h3 id="1-导入已有的-qcow2-镜像" class="headerLink">
     <a href="#1-%e5%af%bc%e5%85%a5%e5%b7%b2%e6%9c%89%e7%9a%84-qcow2-%e9%95%9c%e5%83%8f" class="header-mark"></a>1. 导入已有的 qcow2 镜像</h3><blockquote>
-<p>必须要命令行操作</p>
+<p>这一步必须要命令行操作，WebUI 界面不支持。</p>
 </blockquote>
 <p>首先在页面上新建一台新虚拟机，记录下虚拟机 ID。</p>
 <p>假设你创建的虚拟机 id 为 201，现在通过 scp/rsync 等手段将 qcow2 传输到 PVE 节点上，然后命令行使用如下命令导入 qcow2/img 镜像：</p>
@@ -3145,7 +3151,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <p>解决方法：手动删除掉 lockfile: <code>/var/lock/qemu-server/lock-xxx.conf</code></p>
 <p>因为虚拟机还卡在 BIOS 引导这一步，删除掉 lockfile 再关闭虚拟机并不会导致数据丢失。</p>
 <h3 id="4-pve-集群有一个节点宕机如何解除关联" class="headerLink">
-    <a href="#4-pve-%e9%9b%86%e7%be%a4%e6%9c%89%e4%b8%80%e4%b8%aa%e8%8a%82%e7%82%b9%e5%ae%95%e6%9c%ba%e5%a6%82%e4%bd%95%e8%a7%a3%e9%99%a4%e5%85%b3%e8%81%94" class="header-mark"></a>4. PVE 集群有一个节点宕机，如何解除关联？</h3><p>将多个节点组成一个 PVE Cluster 是很自然的一个选择，它能提供虚拟机热迁移（同 CPU 供应商）、统一管理面板等非常方便的功能。
+    <a href="#4-pve-%e9%9b%86%e7%be%a4%e6%9c%89%e4%b8%80%e4%b8%aa%e8%8a%82%e7%82%b9%e5%ae%95%e6%9c%ba%e5%a6%82%e4%bd%95%e8%a7%a3%e9%99%a4%e5%85%b3%e8%81%94" class="header-mark"></a>4. PVE 集群有一个节点宕机，如何解除关联？</h3><p>将多个节点组成一个 PVE Cluster 是很自然的一个选择，它能提供虚拟机热迁移、统一管理面板等非常方便的功能。
 但是这会带来集群级别的高可用问题。</p>
 <p>根据官方文档 <a href="https://pve.proxmox.com/wiki/Cluster_Manager" target="_blank" rel="noopener noreferrer">Cluster_Manager - Proxmox</a>，如果你需要容忍一定数量的节点宕机，PVE Cluster 至少需要三台主机（这跟 Etcd 一样，大概是 Raft 共识算法的要求），并且所有节点的 PVE 版本要完全一致。</p>
 <p>那么如果个别节点出了问题，无法修复，该如何将它踢出集群呢？</p>
@@ -3385,7 +3391,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 </ol>
 </li>
 </ol>
-<p>如上文所述，一番研究后我抛弃了 proxmox-backup-server 与 restic，最终选择了最简单的 cronab + rclone 方案，简单实用又符合我自己的需求。</p>
+<p>如上文所述，一番研究后我抛弃了 proxmox-backup-server 与 restic，最终选择了最简单的 cronab + rclone 方案，简单实用又符合我自己的需求（仅我个人的选择，建议结合需求自行抉择）。</p>
 <p>同步脚本也很简单，首先通过 <code>rclone config</code> 手动将所有 PVE 节点加入为 rclone 的 remote，再将我的 smb 远程存储加进来（也可以手动改 <code>~/.config/rclone/rclone.conf</code>）。</p>
 <blockquote>
 <p>这个方案最大的缺点是，所有备份都需要保存在每台节点的 local 卷中，所以有必要给 local 分配较大的磁盘空间，不然机器多的话很快就满了&hellip;</p>
@@ -3446,7 +3452,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <h3 id="12-使用-cloud-image-创建的虚拟机扩容磁盘并重启后文件系统未自动扩容" class="headerLink">
     <a href="#12-%e4%bd%bf%e7%94%a8-cloud-image-%e5%88%9b%e5%bb%ba%e7%9a%84%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%89%a9%e5%ae%b9%e7%a3%81%e7%9b%98%e5%b9%b6%e9%87%8d%e5%90%af%e5%90%8e%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e6%9c%aa%e8%87%aa%e5%8a%a8%e6%89%a9%e5%ae%b9" class="header-mark"></a>12. 使用 cloud image 创建的虚拟机扩容磁盘并重启后，文件系统未自动扩容</h3><p>这个我遇到过几次，都是因为磁盘容量用尽，导致 cloudinit 扩容脚本运行失败，只要手动回收些空间，再重启系统，就能自动扩容。</p>
 <p>我试了只要能确保系统还剩余 100M 左右的存储空间就能正常扩容了，更低的还没试过。</p>
-<p>如果数据实在不能清，也可以考虑手动扩容，请自行搜索相关内容。</p>
+<p>如果数据实在不能清，也可以考虑手动扩容，请自行搜索相关内容（基本流程就是用 <code>fdisk</code> 先删除分区，再重新创建分区，实现修改分区表扩容，操作得当不会丢数据）。</p>
 <h2 id="四pve-网络配置" class="headerLink">
     <a href="#%e5%9b%9bpve-%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae" class="header-mark"></a>四、PVE 网络配置</h2><h3 id="1-桥接多张物理网卡" class="headerLink">
     <a href="#1-%e6%a1%a5%e6%8e%a5%e5%a4%9a%e5%bc%a0%e7%89%a9%e7%90%86%e7%bd%91%e5%8d%a1" class="header-mark"></a>1. 桥接多张物理网卡</h3><p>示例如下，主要就是在 vmbr0 网桥的 <code>Bridge Ports</code> 里面：</p>
@@ -3573,7 +3579,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 <li>代码更顺眼，但是作者忙，没时间合并 pr，导致 Bug 更多一些，而且很久没更新了&hellip;</li>
 </ul>
 </li>
-<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-proxmox</a>: 我维护的一个 proxmox 自动配置工具</li>
+<li><a href="https://github.com/ryan4yin/pulumi-proxmox" target="_blank" rel="noopener noreferrer">ryan4yin/pulumi-proxmox</a>: 我维护的一个 proxmox 自动配置工具（很久没更新了&hellip;）</li>
 <li><a href="https://github.com/proxmoxer/proxmoxer" target="_blank" rel="noopener noreferrer">Python SDK</a></li>
 </ol>
 <p>监控告警：</p>
