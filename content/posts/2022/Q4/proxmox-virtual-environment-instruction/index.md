@@ -78,6 +78,8 @@ echo 'deb https://mirrors.bfsu.edu.cn/proxmox/debian buster pve-no-subscription'
 
 将多台 PVE 节点组成一个集群，可以获得很多新玩法，比如虚拟机在多节点间的热迁移。
 
+> 注意 CPU 架构差别较大很可能会导致无法热迁移，建议使用同品牌、同代的 CPU，最好是 CPU 型号完全一致。比如都是 Intel 的 12 代 CPU，或者都是 AMD 的 5 代 CPU。
+
 这个也还挺简单的，首先随便登入一台机器的 Web Console，点击「Datacenter」=>「Cluster」=>「Create Cluster」即可创建一个 PVE 集群。
 
 接着复制「Join Information」中的内容，在其他每台 PVE 节点的 Web Console 页面中，点击「Datacenter」=>「Cluster」=>「Join Cluster」，然后粘贴前面复制的「Join Information」，再输入前面节点的密码，等待大约一分钟，然后刷新页面，PVE 集群即组建完成。
@@ -127,7 +129,7 @@ PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不�
 首先 cloudinit 必须使用特殊的系统镜像，下面是几个知名发行版的 Cloud 系统镜像：
 
 1. [Ubuntu Cloud Images (RELEASED)](https://cloud-images.ubuntu.com/releases/): 提供 img 格式的裸镜像（PVE 也支持此格式）
-   - 请下载带有 .img 结尾的镜像，其中 `kvm.img` 结尾的镜像会更精简一点，而不带 kvm 的会稍微大一点，但是带了所有常用的内核模块。
+   - 请下载带有 .img 结尾的镜像，其中以 `kvm.img` 结尾的镜像会更精简一点，而名称中不包含 kvm 的镜像会稍微大一点，但是带了所有常用的内核模块。（如果你不理解前者精简了啥，请选择后者——也就是稍大的这个镜像文件。）
 2. [OpenSUSE Cloud Images](https://download.opensuse.org/repositories/Cloud:/Images:/)
    - 请下载带有 NoCloud 或者 OpenStack 字样的镜像。
 3. 对于其他镜像，可以考虑手动通过 iso 来制作一个 cloudinit 镜像，参考 [openstack - create ubuntu cloud images from iso](https://docs.openstack.org/image-guide/ubuntu-image.html)
@@ -142,6 +144,8 @@ PVE 控制台的使用还挺简单的，多试试基本就会用了。这里不�
 而 Openstack 镜像通常也都支持 NoCloud 模式，所以一般也是可以使用的。
 
 以 ubuntu 的 cloudimg 镜像为例，下载好镜像后，首先创建虚拟机，并以导入的磁盘为该虚拟机的硬盘，命令如下：
+
+> 如下操作也可在 Web UI 上操作，这里仅以命令行为例。
 
 ```shell
 # 创建新虚拟机
@@ -191,7 +195,7 @@ qm set 9000 --serial0 socket --vga serial0
 
 CentOS/Ubuntu/Debian 提供的 Cloud 镜像，都自带了 `cloud-utils-growpart` 这个组件，可以实现在扩容物理硬盘时，自动调整 Linux 的分区大小。
 
-因此需要扩容虚拟机时，直接通过 UI 面板/命令行扩容虚拟机的硬盘即可， Linux 的分区会被 `cloud-utils-growpart` 自动扩容。
+因此需要扩容虚拟机时，直接通过 UI 面板/命令行扩容虚拟机的硬盘，然后重启虚拟机即可，Linux 的分区会在系统启动阶段被 `cloud-utils-growpart` 自动扩容。
 
 PVE 可通过如下命令进行磁盘扩容：
 
@@ -215,7 +219,7 @@ LVM 逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟�
 
 ### 1. 导入已有的 qcow2 镜像
 
->必须要命令行操作
+>这一步必须要命令行操作，WebUI 界面不支持。
 
 首先在页面上新建一台新虚拟机，记录下虚拟机 ID。
 
@@ -252,7 +256,7 @@ PVE 虚拟机卡在 BIOS 系统引导这一步，无法启动，也无法 `stop`
 
 ### 4. PVE 集群有一个节点宕机，如何解除关联？
 
-将多个节点组成一个 PVE Cluster 是很自然的一个选择，它能提供虚拟机热迁移（同 CPU 供应商）、统一管理面板等非常方便的功能。
+将多个节点组成一个 PVE Cluster 是很自然的一个选择，它能提供虚拟机热迁移、统一管理面板等非常方便的功能。
 但是这会带来集群级别的高可用问题。
 
 根据官方文档 [Cluster_Manager - Proxmox](https://pve.proxmox.com/wiki/Cluster_Manager)，如果你需要容忍一定数量的节点宕机，PVE Cluster 至少需要三台主机（这跟 Etcd 一样，大概是 Raft 共识算法的要求），并且所有节点的 PVE 版本要完全一致。
@@ -445,7 +449,7 @@ PVE 自动创建的备份，默认都只会保存到本机的 `local` 分区中�
 3. [restic](https://github.com/restic/restic): 一个更专业的远程增量备份工具，通过 rclone 支持几乎所有常见协议的远程存储（s3/ssh/smb 等），支持多种备份策略、版本策略、保留策略，支持加密备份。
    1. restic 看着确实挺棒，但是感觉有点复杂了，很多功能我都不需要。PVE 自带的备份功能已经提供了备份的「保留策略」，我这里实际只需要一个数据同步工具。因此没选择它。
 
-如上文所述，一番研究后我抛弃了 proxmox-backup-server 与 restic，最终选择了最简单的 cronab + rclone 方案，简单实用又符合我自己的需求。
+如上文所述，一番研究后我抛弃了 proxmox-backup-server 与 restic，最终选择了最简单的 cronab + rclone 方案，简单实用又符合我自己的需求（仅我个人的选择，建议结合需求自行抉择）。
 
 同步脚本也很简单，首先通过 `rclone config` 手动将所有 PVE 节点加入为 rclone 的 remote，再将我的 smb 远程存储加进来（也可以手动改 `~/.config/rclone/rclone.conf`）。
 
@@ -493,7 +497,7 @@ done
 
 我试了只要能确保系统还剩余 100M 左右的存储空间就能正常扩容了，更低的还没试过。
 
-如果数据实在不能清，也可以考虑手动扩容，请自行搜索相关内容。
+如果数据实在不能清，也可以考虑手动扩容，请自行搜索相关内容（基本流程就是用 `fdisk` 先删除分区，再重新创建分区，实现修改分区表扩容，操作得当不会丢数据）。
 
 ## 四、PVE 网络配置
 
@@ -624,7 +628,7 @@ grep -r manage_etc_hosts /usr/share
 1. [Telmate/terraform-provider-proxmox](https://github.com/Telmate/terraform-provider-proxmox/): 用户最多，但是只支持管理虚拟机资源
 1. [danitso/terraform-provider-proxmox](https://github.com/danitso/terraform-provider-proxmox): stars 少，但是可以管理 PVE 的大部分资源，包括节点、用户、资源池、TLS证书等等
     - 代码更顺眼，但是作者忙，没时间合并 pr，导致 Bug 更多一些，而且很久没更新了...
-2. [ryan4yin/pulumi-proxmox](https://github.com/ryan4yin/pulumi-proxmox): 我维护的一个 proxmox 自动配置工具
+2. [ryan4yin/pulumi-proxmox](https://github.com/ryan4yin/pulumi-proxmox): 我维护的一个 proxmox 自动配置工具（很久没更新了...）
 3. [Python SDK](https://github.com/proxmoxer/proxmoxer)
 
 监控告警：
