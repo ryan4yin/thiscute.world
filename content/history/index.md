@@ -21,10 +21,34 @@ comment:
 > Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+## 2023-07-29 - 2023-07-30
+
+- ryan4yin/nix-config 继续大量更新，并发布 v0.1.1
+    - 统一了所有 APP 的主题配色，在所有 APP 中都尽量使用 catppuccin-mocha 配色。
+    - 在子文件夹中添加了许多 README 介绍其中的内容。
+    - 试用了 ranger 命令行文件管理器，相当地开箱即用，图片预览功能非常爽，强烈推荐！
+    - 壁纸文件太大了，将它们拆分到单独的仓库中，方便管理。同时还添加了随机切换壁纸的功能。
+    - 使用 anyrun 替换掉之前用的 wofi，这个启动器很新，但是感觉很好用，有点 macOS 上 raycast 的感觉，能帮我做很多的事。
+    - README 迭代了一波，添加了一些截图，漂亮了不少。
+    - 一些其他的更新。
+- 在 Reddit 的 r/unixporn 上发布帖子 [[Hyprland + NixOS] Catppuccin for all apps](https://www.reddit.com/r/unixporn/comments/15co6ns/comment/jtyhrhv/)，体验不错。这个 subreddit 的人数要比 NixOS 大很多，感觉很轻易就能获得许多的赞。
+- 从 4 月份折腾 NixOS 到现在，GitHub 上开了五六个 Nix 项目，获得了接近 400 stars，也认识了许多朋友、收到了许多好评，在这个圈子里是有点混开了的 feel.
+
+## 2023-07-26 - 2023-07-28
+
+- 更新 NixOS & Flakes Book，添加了「前言」一章，同时也补充了些 Flakes 相关的简单介绍。
+- 重构 ryan4yin/nix-config 的内容
+    - 发布了 v0.1.0，并记录了下自 6/9 发布 v0.5.0 以来的更新。
+    - 将 user/email 等信息提取到了 flake.nix 入口文件中，
+    - 通过提取出几个 helper 函数到 lib 中，简化了 flake.nix，提升了维护性。
+    - 更清晰的 README.
 
 ## 2021-07-25
 
 - 终于在 NixOS 上完成了一次 ESP32 编译烧录 [ryan4yin/tft-esp32-auduino](https://github.com/ryan4yin/tft-esp32-auduino)，之前一直卡着的烧录报权限错误的问题终于解决了，参考了 <https://github.com/NixOS/nixpkgs/issues/224895>
+- 修改 ryan4yin/nix-config
+    - 支持通过参数来控制部署 i3 配置还是 hyprland，切换不同的桌面现在非常方便了。
+    - ssh 配置中添加 `AddKeysToAgent yes`，在连接远程主机时自动将私钥添加到 ssh-agent 中，这样就不用手动跑 `ssh-add` 命令了。
 
 ## 2021-07-19 - 2021-07-20
 
