@@ -35,7 +35,7 @@ comment:
 
 我折腾过许多的小众技术，而今年新折腾的主要有 NixOS、窗口管理器 i3 / hyprland、以及 Neovim，其中 NixOS 我甚至折腾到了一个新境界——出了一本帮助新手入门的中英双语开源书籍 [nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，还搞了好几个 NixOS 相关的开源项目（比如 [nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter) 跟 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config)），都收到了许多好评。
 
-结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用 NixOS / Neovim / 小鹤音形中文输入法？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。
+结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用 [NixOS](nixos.org/) / [Neovim](https://github.com/neovim/neovim) / [小鹤音形中文输入法](https://flypy.com/)？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。
 
 <!--more-->
 
