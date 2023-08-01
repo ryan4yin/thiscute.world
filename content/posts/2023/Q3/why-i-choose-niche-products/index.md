@@ -35,7 +35,7 @@ comment:
 
 我折腾过许多的小众技术，而今年新折腾的主要有 NixOS、窗口管理器 i3 / hyprland、以及 Neovim，其中 NixOS 我甚至折腾到了一个新境界——出了一本帮助新手入门的中英双语开源书籍 [nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，还搞了好几个 NixOS 相关的开源项目（比如 [nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter) 跟 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config)），都收到了许多好评。
 
-结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用 [NixOS](nixos.org/) / [Neovim](https://github.com/neovim/neovim) / [小鹤音形中文输入法](https://flypy.com/)？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。
+结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用 [NixOS](nixos.org/) / [Neovim](https://github.com/Neovim/Neovim) / [小鹤音形中文输入法](https://flypy.com/)？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。
 
 <!--more-->
 
@@ -85,8 +85,8 @@ comment:
 我折腾过许多小众技术，而原因中最大的一部分，应该是好奇心。
 但好奇心只能让我去尝试，让我留下来的，是它们优秀的使用体验。
 
-比如说最近折腾的 neovim 编辑器、Hyprland 窗口管理器，让我留下来继续使用它们的原因，一是 neovim 跟 hyprland 配置好了之后，真的很漂亮！而且 neovim 速度真的超快、太快了！
-这种快对没体验过的 VSCode / IDEA 用户来说可能觉得不过如此，但是一旦你体验过，就会发现这种快真的很爽，就像三体中图恒宇的感叹一样（550W 太快了，这速度太快了！）
+比如说最近折腾的 Neovim 编辑器、Hyprland 窗口管理器，让我留下来继续使用它们的原因，一是 Neovim 跟 Hyprland 配置好了之后，真的很漂亮！而且 Neovim 速度真的超快、太快了！
+这种快对没体验过的 VSCode / IDEA 用户来说可能觉得不过如此，但是一旦你体验过，就会发现这种快真的很爽，就像三体中图恒宇的感叹一样（550W 太快了!这速度太快了！）
 二是实际入门后，发现它们用起来很爽快，基于键盘的交互，能带给我形码输入法的那种掌控感、流畅感（优雅，太优雅了 hhh）。
 
 
