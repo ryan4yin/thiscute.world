@@ -92,7 +92,7 @@ comment:
 而我折腾并且爱上 NixOS，也是基于类似的原因。
 拥有声明式、可复现（一致的运行环境）、OS as Code 等这些特点的 NixOS，对于本运维狗而言，真就是理想中的样子，这让我迫不及待地想要使用它，即使发现了问题也希望能尽快完善它，使它能够适用于更多的场景。
 
-> 前两天在 4chan 上看到某外国网友的这么一段评论（虽然言语有点偏激，但我还真有点认同...）：
+> 前两天在 4chan 上看到某外国网友的这么一段评论（虽然言词有点偏激，但我还真有点认同...）：
 > Completely and utterly unacceptable. Imagine having a tool that can't even properly undo an operation and then relying on it to manage an operating system.
 > `apt`, `pip`, `pm`, `rpm`, `pacman`, whatever are all a mad fucking joke.
 
