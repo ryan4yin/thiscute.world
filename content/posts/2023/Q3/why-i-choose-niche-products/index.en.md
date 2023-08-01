@@ -108,3 +108,11 @@ However, compared to doing something boring for leisure, there are some useful t
 The experiences gained, open-source projects created, PRs left in upstream repositories, and the appreciation received in the community all feel valuable. It may not necessarily have business value, but it's fun, and you get to make friends, help others, and leave your mark in the open-source community - isn't that interesting?
 
 Linus, when he first created Linux, did it [just for fun](https://www.goodreads.com/book/show/160171.Just_for_Fun).
+
+
+## Conclusion
+
+You can't connect the dots looking forward; you can only connect them looking backwards. So you have to trust that the dots will somehow connect in future. You have to trust in something - your gut, destiny, life, karma, whatever. This approach has never let me down, and it has made all the difference in my life.
+
+—— [You’ve got to find what you love, by Steve Jobs, CEO of Apple Computer](https://news.stanford.edu/2005/06/12/youve-got-find-love-jobs-says/)
+
