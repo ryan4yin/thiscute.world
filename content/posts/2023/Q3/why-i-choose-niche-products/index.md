@@ -8,7 +8,7 @@ draft: false
 
 resources:
   - name: "featured-image"
-    src: " anime-girls-seagulls.webp"
+    src: "anime-girls-seagulls.webp"
 
 tags: ["Vim", "Neovim", "VSCode", "Editor", "IDE", "Linux", "中文输入法"]
 categories: ["tech", "life"]
