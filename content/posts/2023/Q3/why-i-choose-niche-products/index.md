@@ -47,7 +47,7 @@ comment:
 
 | 领域           | 小众技术                                   | 大众技术              |
 | -------------- | ------------------------------------------ | --------------------- |
-| 编辑器         | Neovim、Emacs                              | VSCode、Pycharm、IDEA |
+| 编辑器         | Neovim、Emacs                              | VSCode、PyCharm、IDEA |
 | 中文输入方案   | 双拼、小鹤音形、五笔、二笔、郑码、灵形速影 | 智能拼音              |
 | Linux 操作系统 | NixOS、Gentoo、Arch Linux                  | Ubuntu、Fedora        |
 | 窗口管理器     | i3、hyprland                               | KDE、GNOME            |

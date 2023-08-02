@@ -43,12 +43,12 @@ Based on my experiences with these niche technologies and the frequent questions
 
 According to this definition, I can list some niche technologies I have encountered in different fields:
 
-| Domain                | Niche Technologies                                                                                                | Mainstream Technologies |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| Text Editors          | Neovim, Emacs                                                                                                     | VSCode, Pycharm, IDEA   |
-| Chinese Input Methods | Double Pinyin（双拼）, Flypy（小鹤音形）, Wubi（五笔）, Erbi（二笔）, Zhengma（郑码）, Lingxingsuying（灵形速影） | Intelligent Pinyin      |
-| Linux Distros         | NixOS, Gentoo, Arch Linux                                                                                         | Ubuntu, Fedora          |
-| Window Managers       | i3, hyprland                                                                                                      | KDE, GNOME              |
+| Domain          | Niche Technologies        | Mainstream Technologies |
+| --------------- | ------------------------- | ----------------------- |
+| Text Editors    | Neovim, Emacs             | VSCode, Pycharm, IDEA   |
+| Keyboard Layout | Dvorak                    | QWERTY                  |
+| Linux Distros   | NixOS, Gentoo, Arch Linux | Ubuntu, Fedora          |
+| Window Managers | i3, hyprland              | KDE, GNOME              |
 
 Most people tend to choose mainstream technologies in these fields due to their lower learning curve and ease of use. I was once part of the majority, but I gradually discovered the advantages of niche technologies, which led me to try and eventually transition to them.
 
@@ -109,10 +109,8 @@ The experiences gained, open-source projects created, PRs left in upstream repos
 
 Linus, when he first created Linux, did it [just for fun](https://www.goodreads.com/book/show/160171.Just_for_Fun).
 
-
 ## Conclusion
 
 You can't connect the dots looking forward; you can only connect them looking backwards. So you have to trust that the dots will somehow connect in future. You have to trust in something - your gut, destiny, life, karma, whatever. This approach has never let me down, and it has made all the difference in my life.
 
 —— [You’ve got to find what you love, by Steve Jobs, CEO of Apple Computer](https://news.stanford.edu/2005/06/12/youve-got-find-love-jobs-says/)
-
