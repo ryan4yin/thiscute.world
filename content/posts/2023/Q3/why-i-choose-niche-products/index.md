@@ -141,4 +141,10 @@ Stay Hungry. Stay Foolish.
 —— [You’ve got to find what you love, by Steve Jobs, CEO of Apple Computer](https://news.stanford.edu/2005/06/12/youve-got-find-love-jobs-says/)
 
 
+## 评论区
+
+文末附上来自其他论坛的评论，不乏一些有趣的观点：
+
+- 0xffff.one: <https://0xffff.one/d/1595-wei-shen-me-wo-zhe-teng-zhei-xie>
+- v2ex: <https://www.v2ex.com/t/961562>
 
