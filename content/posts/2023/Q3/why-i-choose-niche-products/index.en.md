@@ -111,6 +111,6 @@ Linus, when he first created Linux, did it [just for fun](https://www.goodreads.
 
 ## Conclusion
 
-You can't connect the dots looking forward; you can only connect them looking backwards. So you have to trust that the dots will somehow connect in future. You have to trust in something - your gut, destiny, life, karma, whatever. This approach has never let me down, and it has made all the difference in my life.
+You can't connect the dots looking forward; you can only connect them looking backward. So you have to trust that the dots will somehow connect in your future. You have to trust in something — your gut, destiny, life, karma, whatever. This approach has never let me down, and it has made all the difference in my life.
 
 —— [You’ve got to find what you love, by Steve Jobs, CEO of Apple Computer](https://news.stanford.edu/2005/06/12/youve-got-find-love-jobs-says/)
