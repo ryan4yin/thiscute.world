@@ -143,7 +143,7 @@ Stay Hungry. Stay Foolish.
 
 ## 评论区
 
-文末附上来自其他论坛的评论，不乏一些有趣的观点：
+文末附上来自其他论坛的评论，其中不乏一些有趣的观点：
 
 - 0xffff.one: <https://0xffff.one/d/1595-wei-shen-me-wo-zhe-teng-zhei-xie>
 - v2ex: <https://www.v2ex.com/t/961562>
