@@ -21,6 +21,30 @@ comment:
 > Twitter 上 @manjusaka.eth 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+## 2023-08-05 - 2023-08-06
+
+- 时隔一个多月，在 Telegram 群组被老外 ping Lichee Pi 4A 的移植进展。一番尝试下，成功在 Lichee Pi 4A 上把 NixOS 跑起来了！
+  - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
+- 相当振奋人心，ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至表示要给我打 $50 美元以表感谢，因为这太有意思了！
+- 解决问题的流程
+  - 首先按照 [chainsx/fedora-riscv-builder](https://github.com/chainsx/fedora-riscv-builder)  的 README，在 Lichee Pi 4A 上成功地跑起来了 Fedora RISC-V 版本。
+  - 这样就确认了 chainsx 这个方案是没问题的。但是我之前跑我构建的 NixOS 镜像却不行，怀疑是我生成的 NixOS 的 boot 分区有问题。
+  - 于是打算使用 Fedora 镜像已经生成好的 boot/root 分区，将 NixOS 的东西塞进去，看看能不能跑起来。
+    - 首先，因为打算直接使用 Fedora 现成的分区，我的 NixOS 镜像需要根据它的配置调整下 root 分区的 uuid 参数、root 分区的 label 名称。调整完成后构建出一个新 NixOS 镜像待用。
+    - 将 SD 卡中已经刷好的 Fedora rootfs 中的内容彻底删除，然后将我构建出的 NixOS rootfs rsync 进该 rootfs 文件系统。
+    - 再将我的 NixOS boot 分区中的 `/extlinux` 与 `/nixos` 这两个文件夹 rsync 进 SD 卡的 boot 分区中，覆盖掉其中原有的 `/extlinux`.
+      - 注意这一步没有清理掉 boot 分区中的其他文件，因为我怀疑就是这些文件导致了 NixOS 无法启动。
+    - 重启，成功跑起来了！
+  - 这样我就有了一个可以跑起来的镜像，但是这是纯手工生成的。接下来我通过一步步排查调试，成功从我的 nix flake 配置中自动构建出了一个可运行的系统镜像。
+    - 首先，我尝试了使用 USB 转 TTL 线来连接 Lichee Pi 4A 的 0 号串口，发现确实可以在启动时看到详细的启动日志，这对后续排查问题起了非常大的帮助！
+    - 然后就是不断调整我的配置，刷入 SD 卡尝试启动，然后看启动日志。再对比 Fedora SD 卡的文件系统结构以及启动日志，一步步排查问题。
+    - 首先是发现 Fedora 用的是 GPT 分区表，而我之前生成的 NixOS 镜像用的是 MBR/DOS 分区表。启动日志报错说我的 NixOS 镜像根本找不到文件系统。于是我调整了我的配置，生成了一个 GPT 分区表的镜像。
+    - 文件系统问题解决后，启动日志跑到 OenSBI 时又报错 `init_clodboot: timer init failed(error -3)`，跟 chainsx 提了一嘴，他一针见血地指出这是因为我用了主线 OpenSBI.
+    - 尝试在 NixOS 上源码构建 revyos 的 opensbi，失败。临时替换成 Fedora 镜像中已经构建好的的 opensbi，成功进入到 NixOS 系统，但是在 stage 3 阶段报错说找不到 `/nix/store/xx`，排查发现是我 rootfs 分区有问题，无法挂载。
+    - 进一步定位到我生成的 NixOS 镜像的 size 不够，导致 rootfs 分区最后有大概 1MB 的内容被截断，导致分区无法挂载。
+    - 又调试了半天，仍然没解决镜像 size 不够的问题。最后选择了在生成镜像后，手动调整镜像大小的方式来解决这个问题。
+    - 至此，我终于发布了我第一个可在 Lichee Pi 4A 上跑起来的 NixOS 镜像！（uboot 仍然使用了 chainsx 提前构建好的，没在 NixOS 上从源码构建）
+
 ## 2023-07-29 - 2023-07-30
 
 - ryan4yin/nix-config 继续大量更新，并发布 v0.1.1
