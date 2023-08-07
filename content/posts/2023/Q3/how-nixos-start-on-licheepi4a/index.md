@@ -99,11 +99,11 @@ Linux 引导相关内容：
 
 ### RISCV 开发版当前的引导流程
 
-![](_img/current-riscv-boot-flow.webp)
+![](./current-riscv-boot-flow.webp)
 
 ### ARM64 开发版当前的引导流程
 
-![](_img/current-arm64-boot-flow.webp)
+![](./current-arm64-boot-flow.webp)
 
 ### u-boot，u-boot-spl，u-boot-tpl 的关系
 
