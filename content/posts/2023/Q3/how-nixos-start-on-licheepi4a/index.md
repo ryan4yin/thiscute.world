@@ -52,7 +52,10 @@ comment:
 
 在之前工作的基础上一番骚操作后，我在 8 月 6 号晚上终于成功启动了 NixOS，这次意外的顺利，后续也成功通过一份 Nix Flake 配置编译出了可用的 NixOS 镜像。
 
-感觉这个折腾过程挺曲折，也挺有意思。在这个过程中我学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50 美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@revy 、@
+这个折腾过程挺曲折，虽然最终达成了目标，但是期间遭受了不少折磨 emmm
+不过也是一次有趣的经历，学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50 美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@Rabenda(revy) 等各位大佬混了个脸熟。
+
+这篇文章就是记录下我在这个折腾过程中学到的所有知识，以飨读者，同时也梳理一下自己的收获。
 
 ## Lichee Pi 4A 介绍
 
@@ -83,21 +86,7 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 
 而 Lichee Pi 4A 就比较曲折，也比较有话题性。所以才有了这篇文章。
 
-## Lichee Pi 4A 的启动流程
-
-> RISCV Boot Flows
-
-Linux 引导相关内容：
-
-- vmlinux
-- Image
-- u-boot
-  - u-boot spl
-    - spl：Secondary Program Loader，二级加载器
-  - u-boot proper
-- opensbi
-
-### 引导流程
+## RISC-V / ARM64 开发板的启动流程
 
 {{<figure src="./current-riscv-boot-flow.webp" title="RISCV 开发版当前的引导流程" width="60%">}}
 
@@ -132,13 +121,13 @@ flowchart LR
 
 首先编译出 `fw_dynamib.bin`：
 
-```
+```bash
 CROSS_COMPILE=riscv64-buildroot-linux-gnu- make PLATFORM=sifive/fu540
 ```
 
 然后基于该文件构建 u-boot-spl.bin:
 
-```
+```bash
 CROSS_COMPILE=riscv64-buildroot-linux-gnu- make sfive_fu540_spl_defconfig
 
 export OPENSBI=</path/to/fw_dynamic.bin>
@@ -170,14 +159,22 @@ CROSS_COMPILE=riscv64-buildroot-linux-gnu- make
 在早期的 linux 系统中，一般只有硬盘或者软盘被用来作为 linux 根文件系统的存储设备，因此也就很容易把这些设备的驱动程序集成到内核中。但是现在的嵌入式系统中可能将根文件系统保存到各种存储设备上，包括 scsi、sata，u-disk 等等。因此把这些设备的驱动代码全部编译到内核中显然就不是很方便。
 
 为了解决这一矛盾，于是出现了 initrd，它的英文含义是 boot loader iniTIalized RAM disk，就是由 boot loader 初始化的内存盘。在 linux 内核启动前， boot loader 会将存储介质中的 initrd 文件加载到内存，内核启动时会在访问真正的文件系统前先访问该内存中的 initrd 文件系统。
-在 boot loader 配置了 initrd 在这情况下，内核启动被分成了两个阶段，第一阶段内核会解压缩 initrd 文件，将解压后的 initrd 挂载为根目录；第二阶段才执行根目录中的 /linuxrc 脚本（cpio 格式的 initrd 为 /init,而 image 格式的 initrd<也称老式块设备的 initrd 或传统的文件镜像格式的 initrd>为 /initrc）。
-在 `/init` 通常是一个 bash 脚本，我们可以通过它加载 realfs（真实文件系统）的驱动程序，并挂载好 /dev /proc /sys 等文件夹，接着就可以 mount 并 chroot 到真正的根目录，完成整个 rootfs 的加载。
+在 boot loader 配置了 initrd 在这情况下，内核启动被分成了两个阶段，第一阶段内核会解压缩 initrd 文件，将解压后的 initrd 挂载为根目录；第二阶段才执行根目录中的 `/init` 脚本（cpio 格式的 initr 为 `/init`, 而 image 格式的 initrd<也称老式块设备的 initrd 或传统的文件镜像格式的 initrd>为 `/initrc`）。
+
+`/init` 通常是一个 bash 脚本，我们可以通过它加载 realfs（真实文件系统）的驱动程序，并挂载好 /dev /proc /sys 等文件夹，接着就可以 mount 并 chroot 到真正的根目录，完成整个 rootfs 的加载。
 
 #### initramfs
 
 在 linux2.5 中出现了 initramfs，它的作用和 initrd 类似，只是和内核编译成一个文件(该 initramfs 是经过 gzip 压缩后的 cpio 格式的数据文件)，该 cpio 格式的文件被链接进了内核中特殊的数据段.init.ramfs 上，其中全局变量**initramfs_start 和**initramfs_end 分别指向这个数据段的起始地址和结束地址。内核启动时会对.init.ramfs 段中的数据进行解压，然后使用它作为临时的根文件系统。
 
 ### 设备树
+
+TODO
+
+### Linux 的不同引导方式
+
+1. extlinux
+2. u-boot
 
 TODO
 
