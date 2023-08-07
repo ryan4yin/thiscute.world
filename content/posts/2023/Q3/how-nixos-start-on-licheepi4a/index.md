@@ -52,6 +52,8 @@ comment:
 
 在之前工作的基础上一番骚操作后，我在 8 月 6 号晚上终于成功启动了 NixOS，这次意外的顺利，后续也成功通过一份 Nix Flake 配置编译出了可用的 NixOS 镜像。
 
+最终成果：<https://github.com/ryan4yin/nixos-licheepi4a>
+
 这个折腾过程挺曲折，虽然最终达成了目标，但是期间遭受了不少折磨 emmm
 不过也是一次有趣的经历，学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50 美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@Rabenda(revy) 等各位大佬混了个脸熟。
 
