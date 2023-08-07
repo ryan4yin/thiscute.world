@@ -90,7 +90,13 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 
 而 Lichee Pi 4A 就比较曲折，也比较有话题性。所以才有了这篇文章。
 
+
 ## 移植思路
+
+一个完整的 Linux 系统，通常包含了 U-Boot、kernel、设备树以及根文件系统（rootfs）四个部分。
+
+其中 U-Boot，kernel 跟设备树，都是与硬件相关的，需要针对不同的硬件进行定制。
+而 rootfs 的大部分内容，都是与硬件无关的，可以通用（比如说 NixOS）。
 
 LicheePi 4A use RevyOS officially. The basic idea of this repo is to use revyos's kernel, u-boot and opensbi, with a NixOS rootfs, to get NixOS running on LicheePi 4A.
 
