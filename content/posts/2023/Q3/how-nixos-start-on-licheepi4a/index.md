@@ -2,7 +2,7 @@
 title: "NixOS 在 Lichee Pi 4A 上是如何启动的"
 subtitle: ""
 description: ""
-date: 2023-08-007T18:40:57+08:00
+date: 2023-08-07T18:40:57+08:00
 lastmod: 2023-08-07T18:40:57+08:00
 draft: true
 

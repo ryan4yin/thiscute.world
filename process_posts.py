@@ -35,6 +35,7 @@ def parse_post_metadata(path: Path):
                 return yaml.safe_load("".join(metadata_lines))
             
     print(f"failed to load metadata: {path}")
+    raise Exception("failed to load metadata")
 
 
 def gen_folder_name(post: Path):
@@ -48,6 +49,8 @@ def gen_folder_name(post: Path):
     """
     post_metadata = parse_post_metadata(post)
     post_time: dt.datetime = post_metadata["date"]
+    if not isinstance(post_time, dt.datetime):
+        raise Exception(f"invalid date: {post_time}")
 
     # 每三个月一个季度，一年 4 个季度
     quater = ceil(post_time.month / 3)
