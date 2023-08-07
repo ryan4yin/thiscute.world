@@ -665,7 +665,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - 乐鑫官方的 ESP-IDF 完全开源，功能比较完善，封装层次比 STM32 HAL 更高，而且迭代很快，用起来更简单（不过相对地就对底层更缺乏掌控）。
   - 我的 ESP32 学习笔记与代码（同样持续更新中，也是用的 C，后面也打算用 Rust 搞搞）：[electrical-engineering/esp32](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/esp32)
 - 其他
-  - 买了块矽速科技新出的 Maix Zero M0S，使用 RISC-V 架构的 MCU，貌似目前必须用芯片官方（博流智能）的 SDK 写代码，待研究玩法。
+  - 买了矽速科技新出的 Maix Zero M0S/M1S，使用 RISC-V 架构的 MCU，貌似目前必须用芯片官方（博流智能）的 SDK 写代码。点了个灯就一直吃灰了（
 
 >单片机领域目前仍然是 ARM32 架构的天下，不过开源免费的 RISC-V 架构发展迅猛，有望与 ARM32 分庭抗礼。目前乐鑫基于 RISC-V 的 ESP32C3 就挺受欢迎的，还出了书，另外后续版本 ESP32C5 也已经被 ESP-IDF 支持了，发展很快。
 
@@ -694,10 +694,15 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - 除了前面俩，还兜兜转转玩了很多新产品，笔记都写在这里面了：[electrical-engineering](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/)
   - MAIX-III AXera-Pi AX620A（爱芯派），1.8TOPS 算力（标称 3.6TOPS 的一半不能用于 AI）
     - 这块板子的 NPU 感觉性能还可以，但是 CPU 跟 IO 都有点拉，跑个 `pip3 list` 都要卡老半天。毕竟 A7 内核，估计性能也就这样了，全靠交叉编译续命。
+    - 没啥开源资料，只适合用来玩玩 AI，Linux 系统没啥可玩性。
   - 鲁班猫 0 无线版（LubanCat Zero W）
     - 基于 RK3566，开放的资料非常全，包含 SoC 原厂的各种文档、SDK 驱动开发包、核心板封装库，还提供许多免费的在线文档，内容包含  Linux 内核编译部署、Linux 驱动开发、嵌入式 QT 开发等等
     - 因为资料很全，用来学 Linux 内核驱动开发感觉是比较合适的。
-  - 矽速科技的 LicheePi 4A，国产高性能 RISC-V 开发版，预定了但还没出货。
+  - 矽速科技的 LicheePi 4A，国产高性能 RISC-V 开发版。
+    - 已经用它玩上了 NixOS: [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
+  - 群星闪耀家的 Milk-V Mars，同样是国产高性能 RISC-V 开发版，不过比 LicheePi 4A 弱一些（价格低好多哪）。
+    - 用的是赛昉家的 JH7100 芯片，在尝试用它玩 NixOS，但是目前还没成功。
+    - 吐槽：它家这名字是会取的，不论是「群星闪耀」还是「Milk-V」都很有意思
 
 其他我感兴趣的资料（资料内容有一定的重叠）：
 
