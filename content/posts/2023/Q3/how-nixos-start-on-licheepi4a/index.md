@@ -97,13 +97,11 @@ Linux 引导相关内容：
   - u-boot proper
 - opensbi
 
-### RISCV 开发版当前的引导流程
+### 引导流程
 
-![](./current-riscv-boot-flow.webp)
+{{<figure src="./current-riscv-boot-flow.webp" title="RISCV 开发版当前的引导流程" width="60%">}}
 
-### ARM64 开发版当前的引导流程
-
-![](./current-arm64-boot-flow.webp)
+{{<figure src="./current-arm64-boot-flow.webp" title="ARM64 开发版当前的引导流程" width="60%">}}
 
 ### u-boot，u-boot-spl，u-boot-tpl 的关系
 
