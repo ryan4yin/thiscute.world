@@ -1003,5 +1003,5 @@ TODO
 - [ARMv8 架构 u-boot 启动流程详细分析(一)](https://bbs.huaweicloud.com/blogs/363735)
 - [聊聊 SOC 启动（五） uboot 启动流程一](https://zhuanlan.zhihu.com/p/520060653)
 - [基于 qemu-riscv 从 0 开始构建嵌入式 linux 系统 ch5-1. 什么是多级 BootLoader 与 opensbi(上)¶](https://quard-star-tutorial.readthedocs.io/zh_CN/latest/ch5-1.html)
-
+- [Linux系统构成简单介绍 - 野火 嵌入式Linux镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/building_image/image_composition/image_composition.html)
 
