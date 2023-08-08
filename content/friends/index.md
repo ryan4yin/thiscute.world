@@ -87,6 +87,7 @@ var myFriends = [
     ["https://wangyunzi.com/", "https://blog.wangyunzi.com/avatar.png", "@王云子", "此行山高路远，我只剩口袋玫瑰一片 <= 法学在读的文艺少女"], 
     ["https://wenderfeng.top/", "https://wenderfeng.top/favicon.ico", "@wenderfeng", "Step by step <= 机械 PhD 在读的机器人玩家"], 
     ["https://lado.me", "https://lado.me/static/img/gravatar-black.png", "@啦哆咪", "用 Linux 做音乐"], 
+    ["https://sxyz.blog/", "/avatar/sxyazi.jpg", "@三咲雅 · Misaki Masa", "四時行焉，百物生焉，天何言哉？"],
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
