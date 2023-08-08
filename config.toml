@@ -20,14 +20,16 @@ enableEmoji = true
 
 [params]
   # DoIt 主题版本
-  version = "0.2.X"
+  version = "0.4.X"
 
   description = "This Cute World"
 
   # 网站关键词
-  keywords = ["Blog", "部落格", "博客", "Ryan4Yin", "於清樂", "ThisCuteWorld"]
+  keywords = ["Blog", "部落格", "博客", "Ryan4Yin", "於清樂", "二花", "ThisCuteWorld"]
   # 网站默认主题样式 ("light", "dark", "auto")
   defaultTheme = "auto"
+  # DoIt 新增 | 0.2.11 开启 PWA 支持
+  enablePWA = false
 
   # DoIt 新增 | 0.2.0 搜索配置
   [params.search]
@@ -77,10 +79,19 @@ enableEmoji = true
     enable = true
     # Custom content (HTML format is supported)
     # 自定义内容 (支持 HTML 格式)
-    custom = '<a href="https://www.foreverblog.cn/" target="_blank"> <img src="https://img.foreverblog.cn/logo_en_default.png" alt="" style="width:auto;height:15px;margin-bottom:5px;"> </a> <a href="https://www.foreverblog.cn/go.html" target="_blank"> <img src="https://img.foreverblog.cn/wormhole_3.gif" alt="" style="width:auto;height:24px;" title="穿梭虫洞-随机访问十年之约友链博客"></a>'
+    custom = """
+      <a href="https://www.foreverblog.cn/" target="_blank">
+        <img src="https://img.foreverblog.cn/logo_en_default.png" alt="" style="display: inline-block;width:auto;height:20px;">
+      </a>
+      <a href="https://www.foreverblog.cn/go.html" target="_blank">
+        <img src="https://img.foreverblog.cn/wormhole_3.gif" alt="" style="display: inline-block;width:auto;height:20px;" title="穿梭虫洞-随机访问十年之约友链博客">
+      </a>
+    """
     # whether to show Hugo and theme info
     # 是否显示 Hugo 和主题信息
     hugo = true
+    # DoIt 新增 | 0.2.14 托管服务信息 (支持 HTML 格式)
+    hostedOn = '<a title="Vercel" href="https://vercel.com/" target="_blank" rel="noopener noreffer">Vercel</a>'
     # whether to show copyright info
     # 是否显示版权信息
     copyright = true
@@ -95,12 +106,20 @@ enableEmoji = true
     icp = ""
     # license info (HTML format is supported)
     # 许可协议信息 (支持 HTML 格式)
-    license= '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+    license= """
+      <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+    """
 
   #  Section (所有文章) 页面配置
   [params.section]
     # section 页面每页显示文章数量
     paginate = 1000  # 尽量一页列出所有文章
+    # DoIt 新增 | 0.2.13 最近更新文章设置
+    [params.section.recentlyUpdated]
+      enable = true
+      rss = false
+      days = 30
+      maxCount = 10
 
   #  List (目录或标签) 页面配置
   [params.list]
@@ -136,7 +155,7 @@ enableEmoji = true
     fontawesome = true
     # 是否在文章页面显示原始 Markdown 文档链接
     linkToMarkdown = true
-    # 是否使用「系列」导航
+    # DoIt 新增 | 0.2.13 是否在文章开头显示系列导航
     seriesNavigation = true
     # DoIt 新增 | 0.2.0 目录配置
     [params.page.toc]
@@ -185,11 +204,9 @@ enableEmoji = true
     [params.page.share]
       enable = true
       Twitter = true
-      Facebook = true
+      Mastodon = true
       Reddit = true
-      HackerNews = false
-      Pocket = false
-      Tumblr = false
+      HackerNews = true
     # DoIt 更改 | 0.2.0 评论系统设置
     [params.page.comment]
       enable = true
@@ -230,6 +247,11 @@ enableEmoji = true
       [params.page.seo.publisher]
         name = "ryan4yin"
         logoUrl = "/avatar/myself.png"
+    # DoIt 新增 | 0.2.14 相关文章推荐配置
+    [params.page.related]
+      enable = true
+      count = 3
+
 
   # 网站验证代码，用于 Google/Bing/Yandex/Pinterest/Baidu
   [params.verification]
@@ -263,6 +285,13 @@ enableEmoji = true
     languageName = "Simplified Chinese"
     # whether to include Chinese/Japanese/Korean
     hasCJKLanguage = true
+
+    # DoIt 新增 | 0.2.13 赞赏配置
+    [languages.zh-cn.params.sponsor]
+      enable = true
+      bio = "如果你觉得这篇文章对你有所帮助，欢迎赞赏~"
+      link = "https://afdian.net/a/ryan4yin" # 你的赞赏页面的地址
+      custom = "" # 自定义 HTML
 
     [languages.zh-cn.params.home.profile]
       enable = true
@@ -380,6 +409,12 @@ enableEmoji = true
       # DoIt 新增 | 0.2.0 免责声明 (支持 HTML 格式)
       disclaimer = ""
 
+    [languages.en.params.sponsor]
+      enable = true
+      bio = "If you find my posts or projects helpful, please consider sponsoring."
+      link = "https://www.buymeacoffee.com/ryan4yin" # The link to your sponsor page
+      custom = "" # Custom HTML button
+
     [languages.en.params.home.posts]
       enable = true
       # special amount of posts in each home posts page
@@ -483,6 +518,8 @@ enableEmoji = true
 # 作者配置
 [author]
   name = "ryan4yin"
+  nickname = "Ryan4Yin"
+  avatar = "https://thiscute.world/avatar/myself.webp"
   link = "https://thiscute.world/"
 
 

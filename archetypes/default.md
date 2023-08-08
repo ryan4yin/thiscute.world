@@ -18,11 +18,12 @@ hiddenFromSearch: false
 
 lightgallery: false
 
+# 否开启表格排序
+table:
+  sort: false
+
 toc:
   enable: true
-math:
-  enable: false
-license: ""
 
 comment:
   utterances:
