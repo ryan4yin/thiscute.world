@@ -35,6 +35,9 @@ code:
 
 > 本文主要介绍 Linux 命令，顺带介绍下 Windows/MacOSX.
 
+> 其中 awk 只需要学会些常用的用法就够了，其实也不太建议使用它的复杂用法，可读性差、而且很容易出错。
+> 奇技淫巧，过犹不及。复杂场景建议直接 Python 脚本，虽然要费点时间，但可读性好、可维护性好。
+
 ## 一、Linux
 
 ### 1. 后台运行
@@ -48,18 +51,53 @@ nohup python xxx.py &
 
 ### 2. 查找替换 sed/awk 与 json/yaml 处理 jq/yq
 
-sed 常用命令：
+grep 常用命令：
 
-```shell
+```bash
 ## 只在目录中所有的 .py 和 .dart 文件中递归搜索字符"main()"
+# -r 表示递归搜索
 grep "main()" . -r --include *.{py, dart}
+
+cat xxx | grep -10 "main()"  # 显示匹配行的前后 10 行
+cat xxx | grep -A 10 -B 5 "main()"  # 显示匹配行的前 5 行和后 10 行
 
 ## 在 .js 文件中搜索关键字 xxxxx 并仅展示关键字前后 40 个字符（用在 .js 等被压缩过的文本文件上很有效）
 cat *.js | grep -o -P '.{0,40}xxxxx.{0,40}'
 
-# 在文件夹中递归查找所有中文字符（在做中英双语内容维护时比较有用）
-grep -P '[\x{4e00}-\x{9f5a}]' -r .
+# 正则搜索（`egrep` 是 `grep -E` 的简写，表示使用扩展正则表达式）
+cat xxx | egrep 'pattern1|pattern2|pattern3'
 
+# 反向搜索（不包含某个关键字）
+cat xxx | grep -v 'pattern'
+
+# 高亮显示搜索结果
+cat xxx | grep --color 'pattern'
+
+# 在文件夹中递归查找所有中文字符（在做中英双语内容维护时比较有用）
+# -P 表示使用 Perl 正则表达式，[\x{4e00}-\x{9f5a}] 表示匹配所有中文字符
+grep -P '[\x{4e00}-\x{9f5a}]' -r .
+```
+
+更 morden 的命令是 ripgrep，它的速度比 grep 快很多，而且默认就是正则匹配、递归搜索、高亮显示搜索结果：
+
+```bash
+# 在当前文件夹递归搜索所有包含关键字 "main()" 的文件
+# 注意 rg 默认使用 rust 的正则匹配库
+# 也可通过 -P 参数使用 PCRE2 正则匹配库
+rg "main\(\)"
+
+# 在指定文件夹递归搜索所有包含关键字 "main()" 的文件
+rg "main\(\)" <path>
+
+# 类似 sed 的功能，替换文件中的字符串
+#  -N 表示不输出匹配的行，只输出替换后的结果
+#  -r 表示 replace 替换
+rg --passthru -N 'and' -r '&' ip.txt > ip2.txt
+```
+
+sed 常用命令：
+
+```bash
 ## 1） 全文搜索并替换
 ### -i --in-place 原地替换（修改原文件）
 ### -i=SUFFIX  替换后的文件添加 SUFFIX 这个后缀
@@ -74,6 +112,41 @@ sed -ri "s/pattern_str/replace_str/g" `find . -name "pattern"`
 # \L 转小写  \U 转大写
 sed -ri 's@http://GITLAB.*.git@\L&@g' `find . -name pubspec*`
 
+# 只有包含 2 的行才会替换逗号为破折号
+printf '1,2,3,4\na,b,c,d\n' | sed '/2/ s/,/-/g'
+
+# 只打印出被替换成功的行
+sed -n 's/warm/cool/gp' rhymes.txt
+
+# 删除掉第 3-8 行，保留其他行
+seq 15 24 | sed '3,8 d'
+# 删除除 3-8 行之外的所有行
+seq 15 24 | sed '3,8! d'
+
+# 删除掉第 3 行到第 11(3+8) 行，保留其他行
+seq 15 24 | sed '3,+8 d'
+
+# 对于所有包含 2 的行，都替换逗号为破折号
+printf '1,2,3,4\na,b,c,d\n' | sed '/2/ s/,/-/g'
+# 对于所有不包含 2 的行，都替换逗号为破折号
+printf '1,2,3,4\na,b,c,d\n' | sed '/2/! s/,/-/g'
+
+# 在第 2 行之后插入一行，内容为 hello
+seq 1 3 | sed '2a hello'
+# 将第 2 行的内容改为 hello
+seq 1 3 | sed '2c hello'
+# 将能匹配上指定正则表达式的行，改为 hello
+seq 1 5 | sed -E '/(11|22)/c hello'
+# 在第二行的前面插入一行，内容为 hello
+seq 1 3 | sed '2i hello'
+
+# 将第 2-4 行的内容改为 hello（改完后只有一行，而不是 3 行）
+seq 5 | sed '2,4c hello'
+# 将第 2-4 行每一行的内容都改为 hello（改完后是 3 行）
+seq 5 | sed '2,4 s/.*/hello/'
+
+# 一次使用多条指令
+seq 4 | sed -e '2c hi' -e '3a bye'
 
 ## 4) 拷贝文件，并且保持文件夹结构（--parents 表示保持文件夹结构）
 cp --parents `find <src-dir> -name *.py` <dst-dir>
@@ -81,12 +154,15 @@ cp --parents `find <src-dir> -name *.py` <dst-dir>
 
 awk 用于按列处理文本，它比 sed 更强大更复杂，常用命令：
 
-```shell
+```bash
 ## 1. 单独选出第 1 列的文本
 cat xxx.txt | awk -F '{print $1}' | head
 
 ## 2. 可以使用 -F 指定分隔符，打印出多列
 awk -F ',' '{print $1,$2}'| head
+
+# 在文件开头与末尾分别添加字符串
+seq 2 | awk 'BEGIN{print "---"} 1; END{print "%%%"}'
 
 ## 3. 打印出行数
 cat log_test | awk '{print NR,$1}' | more
