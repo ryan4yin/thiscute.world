@@ -22,22 +22,22 @@ comment:
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
 
-## 2023-08-13
+### 2023-08-13
 
 - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，我于是再次更新了下各个平台的赞助链接，新增了 Patreon 与 Ethereum Address 两个赞助链接。
 
-## 2023-08-12
+### 2023-08-12
 
 - 折腾了一天的 Neovim 配置，修复了一些问题，也新增了一些很有用的插件。
 - 同时也卸载了吃灰快一个月的 VSCode，拜拜了您哦。
 
-## 2023-08-09
+### 2023-08-09
 
 - 因为前几天有老外给我捐赠了 $50 美元，我意识到或许有更多的潜在读者会对赞助我的工作感兴趣，于是在我的 Blog, GitHub Profile 以及 GitHub 项目中加入了赞助链接。
     - 添加了 buymeacoffe.com（国外）, afdian.net（国内）两个赞助链接。
     - 好久以前也曾经在博客中添加过支付宝/微信的收款码，但是从来没收到过一分钱，所以就删掉了。所以这算是我第二次尝试获取赞助（从当前的反馈来看，或许很快就能收到第一笔赞助～）。
 
-## 2023-08-05 - 2023-08-06
+### 2023-08-05 - 2023-08-06
 
 - 时隔一个多月，在 Telegram 群组被老外 ping Lichee Pi 4A 的移植进展。一番尝试下，成功在 Lichee Pi 4A 上把 NixOS 跑起来了！
   - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
@@ -61,7 +61,7 @@ comment:
     - 又调试了半天，仍然没解决镜像 size 不够的问题。最后选择了在生成镜像后，手动调整镜像大小的方式来解决这个问题。
     - 至此，我终于发布了我第一个可在 Lichee Pi 4A 上跑起来的 NixOS 镜像！（uboot 仍然使用了 chainsx 提前构建好的，没在 NixOS 上从源码构建）
 
-## 2023-07-29 - 2023-07-30
+### 2023-07-29 - 2023-07-30
 
 - ryan4yin/nix-config 继续大量更新，并发布 v0.1.1
     - 统一了所有 APP 的主题配色，在所有 APP 中都尽量使用 catppuccin-mocha 配色。
@@ -74,7 +74,7 @@ comment:
 - 在 Reddit 的 r/unixporn 上发布帖子 [[Hyprland + NixOS] Catppuccin for all apps](https://www.reddit.com/r/unixporn/comments/15co6ns/comment/jtyhrhv/)，体验不错。这个 subreddit 的人数要比 NixOS 大很多，感觉很轻易就能获得许多的赞。
 - 从 4 月份折腾 NixOS 到现在，GitHub 上开了五六个 Nix 项目，获得了接近 400 stars，也认识了许多朋友、收到了许多好评，在这个圈子里是有点混开了的 feel.
 
-## 2023-07-26 - 2023-07-28
+### 2023-07-26 - 2023-07-28
 
 - 更新 NixOS & Flakes Book，添加了「前言」一章，同时也补充了些 Flakes 相关的简单介绍。
 - 重构 ryan4yin/nix-config 的内容
@@ -83,14 +83,14 @@ comment:
     - 通过提取出几个 helper 函数到 lib 中，简化了 flake.nix，提升了维护性。
     - 更清晰的 README.
 
-## 2021-07-25
+### 2023-07-25
 
 - 终于在 NixOS 上完成了一次 ESP32 编译烧录 [ryan4yin/tft-esp32-auduino](https://github.com/ryan4yin/tft-esp32-auduino)，之前一直卡着的烧录报权限错误的问题终于解决了，参考了 <https://github.com/NixOS/nixpkgs/issues/224895>
 - 修改 ryan4yin/nix-config
     - 支持通过参数来控制部署 i3 配置还是 hyprland，切换不同的桌面现在非常方便了。
     - ssh 配置中添加 `AddKeysToAgent yes`，在连接远程主机时自动将私钥添加到 ssh-agent 中，这样就不用手动跑 `ssh-add` 命令了。
 
-## 2021-07-19 - 2021-07-20
+### 2023-07-19 - 2023-07-20
 
 - 制作了一个 [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter) 模板仓库，并且在 [Twitter](https://twitter.com/ryan4yin/status/1681639068957028352) 等社区分享了一波，获得一波好评。
 - 发现有老铁在将我的 NixOS 小书翻译成俄语！[fl42v/nixos-and-flakes-book-ru](https://github.com/fl42v/nixos-and-flakes-book-ru)，很有成就感！
@@ -98,7 +98,7 @@ comment:
 - 回顾了下 2022 年年终总结，又看了看苏洋的 2023 年中总结。对照了下发现去年的有些目标已经实现了大半，当然也有些目标完全没进展。
     - 发觉我可能也需要写个年中总结，重新梳理下过去的半年，也重新确定下下半年的目标。
 
-## 2023-07-16 - 2023-07-17
+### 2023-07-16 - 2023-07-17
 
 - 发现 alacritty 还是不太行了，图片显示分辨率太低，另外在 macOS 上也有些小问题。
     - 研究后发现 kitty 可能是更好的选择，切换到 kitty 后体验很好，alacritty 现在沦为备胎。
@@ -118,7 +118,7 @@ comment:
   - 动漫看下来也很棒，感觉还是比较还原原著的。世界观很宏大，有很多不同的景色，人物也很有生命力，主角的成长也很有意思。
 
 
-## 2023-07-15
+### 2023-07-15
 
 - 週六，在家把公司的 Macbook Pro 2020 重裝了一遍系統，新環境完全通過 nix-darwin 安裝，就連大部分的 macOS 系統配置，我也用 nix-darwin 配好了，感覺非常香！
     - GUI APP 主要通過 nix-darwin 的 homebrew 功能安裝。
@@ -126,7 +126,7 @@ comment:
 - 現在感覺我的 nix-config 配置在當前階段很完美地 cover 了我所有的個人配置，包括一些存放在 nix-secrets 私有倉庫中的敏感信息。
 
 
-## 2023-07-10 - 2023-10-13
+### 2023-07-10 - 2023-10-13
 
 - 最近在 NixOS 上搞嵌入式开发，感觉 VSCode 有点力不从心了。它老是想安装自己的环境，但我希望它直接使用我 `nix develop` 在命令行中打开的环境，各种环境毛病。
   - 想了下 neovim 本身就跑在命令行里，可以完美解决这个问题！这是使我尝试切换到 neovim 的主要原因。
@@ -139,7 +139,7 @@ comment:
     - 最終發現 AstroNvim 很匹配我需求，但是它默認用 Mason.nvim 裝 lsp 等插件，這些插件在 NixOS 上都用不了，必須改成用 nix 安裝，爲了解決這個問題又折騰了好久。
 - 初步配置完成後，發了條 Twitter [最近两天开始从 VSCode 迁移到 Neovim](https://twitter.com/ryan4yin/status/1679176508844445696) 結果意外受歡迎。
 
-## 2023-07-08 - 2023-07-09
+### 2023-07-08 - 2023-07-09
 
 - 更新了一波 NixOS & Flakes Book 的显示效果，充分利用上 vitepress 的各种功能。
   - 补充了全套站点 favicon，基于 NixOS 官方图标生成的。
@@ -150,13 +150,13 @@ comment:
   - ESP-IDF 跟 PlatformIO 的命令行都搞定了，能正常编译烧录。
   - 但是这俩的 VSCode 插件都各种毛病，感觉这类 GUI IDE 还是太偏向初学者了，老喜欢装自己的环境，在 NixOS 这种非 FHS 的机器上就有点水土不服。有点想尝试切换到 neovim.
 
-## 2023-07-04
+### 2023-07-04
 
 - 新买的 Milk-V Duo 板子到货，晚上久违地拿出了电烙铁把引脚焊上了，然后学习了一波这玩意儿的玩法。
   - 发现它使用 buildroot 生成 rootfs，所以又学习了一波 buildroot 的使用。
   - 这个玩意儿官方 SDK 比较全，打算通过它学习下 RISC-V Linux 相关的知识，尤其是引导部分，然后再继续折腾 LicheePi 4A.
 
-## 2023-06-25 - 2023-07-03
+### 2023-06-25 - 2023-07-03
 
 - 持续优化 [nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book) 的内容，主要是英文内容，备受好评的同时也有好几位指出其中存在相当多的语法错误、拼写错误、表达错误...
   - 先后用 copilot chat 与 chatgpt 3.5 优化了一波英文内容，发现 chatgpt 3.5 确实强多了，copilot chat 不适合干这活。
@@ -170,7 +170,7 @@ comment:
   - 应该是最近最恐怖的一次经历了，最庆幸的是它是午饭漏的水，就二十分钟回来就发现了，时间比较短水不多，排插也还没漏电...
   - 想起前两天才看过 B 站大猛子说自己之前喝酒误事，水龙头没关，水从 4 楼淹到 1 楼，各种交涉，腻子啥的全整一遍估计得配 10 多万，几年白干...心中只有庆幸。
 
-## 2023-06-23 - 2023-06-24
+### 2023-06-23 - 2023-06-24
 
 - 根据前面收到的批评与建议，新建了一个 GitHub 仓库作为用于与社区协作共建此文档：[nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，使用 vitepress 搭建了全新的文档站点，同时也更新了所有被指出存在误导的内容。
   - 这此更新花了我一整天的时间，效果非常惊艳，我自己都明显觉得 vitepress 搭建的新文档站索引很齐全很方便，阅读体验比超长的一页博客好太多了。
@@ -178,7 +178,7 @@ comment:
 - 在 LicheePi 4A 群同步了下进展，仍然未能成功编译 rootfs. 意外得到 revy 老师的帮助，在他修了几个内核 bug 后，我成功将 NixOS 的 rootfs 编译了出来！
   - 不过刷到板子上启动不了，看了下发现原来 boot 分区是不能直接用 revyos 的，必须要从 NixOS 生成，解决掉这个问题应该就能启动了。
 
-## 2023-06-21 - 2023-06-22
+### 2023-06-21 - 2023-06-22
 
 - 对 [NixOS 与 Flakes 新手入门](https://thiscute.world/posts/nixos-and-flake-basics/) 这篇文章进行了大量更新，并在 [Reddit](https://www.reddit.com/r/NixOS/comments/14fvz1q/updates_nixos_nix_flakes_a_guide_for_beginners/) 上宣传了下。
   - 除了许多好评外，还在 Reddit 与 Discord 上收到一些非常有建设性的批评与建议，简要总结如下：
@@ -187,7 +187,7 @@ comment:
     - 批评之三是一些内容存在误解，或者说写得比较随意，不够精确，容易误导新人。
   - 忠言逆耳，这些批评虽然让我有一点不舒服，但是都非常有价值。
 
-## 2023-06-17 - 2023-06-18
+### 2023-06-17 - 2023-06-18
 
 - 在家整了两天的 [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)，试了很多方案，还是没能成功编译出 rootfs...
   - 在 [LicheePi 4A —— 这个小板有点意思（第一部分）](https://litterhougelangley.club/blog/2023/05/27/licheepi-4a-%e8%bf%99%e4%b8%aa%e5%b0%8f%e6%9d%bf%e6%9c%89%e7%82%b9%e6%84%8f%e6%80%9d%ef%bc%88%e7%ac%ac%e4%b8%80%e9%83%a8%e5%88%86%ef%bc%89/) 上留了言，看看大佬是否有时间给我提供些帮助。
@@ -203,13 +203,13 @@ comment:
 - 看上面 huoge 的视频，通过 B 站推荐意外跳到了 TheCW 的视频里，发现宝藏 UP 主一枚，还加了他的 discord 闲聊群。
   - 上个月水了篇 yabai 的文章，前几天就有网友评论问我是不是 B 站上的 TheCW（因为跟我域名 thiscute.world 有点像），结果今天就发现发现 TheCW 5 月份也出了个介绍 yabai 的视频，确实有那么点缘分在 emmm
 
-## 2023-06-15
+### 2023-06-15
 
 - 学习了 Linux 的各种安全技术
   - 主要过了一遍 apparmor/selinux, firejail/bubblewrap, seccomp, 以及 Linux PAM
   - 笔记 [Linux 应用安全](https://github.com/ryan4yin/knowledge/blob/master/linux/Linux%20%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8.md)
 
-## 2023-06-13 - 2023-06-14
+### 2023-06-13 - 2023-06-14
 
 - 折腾 [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)，尝试在 LicheePi 4A 上把 NixOS 跑起来。
   - 一开始使用标准工具链 + binfmt 模拟 riscv64 架构进行构建，跑着就睡了，醒来发现在跑了 4h30mins 后构建失败了，卡在 guile 这个包的某个依赖上。
