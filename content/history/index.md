@@ -26,7 +26,7 @@ comment:
 
 - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，我于是再次更新了下各个平台的赞助链接，新增了 Patreon 与 Ethereum Address 两个赞助链接。
 
-{{<figure src="/images/now/2023-08-13-mail-about-creating-patreon-group.png" width="60%">}}
+{{<figure src="/images/now/2023-08-13-mail-about-creating-patreon-group.png" width="80%">}}
 
 ### 2023-08-12
 
@@ -143,7 +143,7 @@ comment:
     - 最終發現 AstroNvim 很匹配我需求，但是它默認用 Mason.nvim 裝 lsp 等插件，這些插件在 NixOS 上都用不了，必須改成用 nix 安裝，爲了解決這個問題又折騰了好久。
 - 初步配置完成後，發了條 Twitter [最近两天开始从 VSCode 迁移到 Neovim](https://twitter.com/ryan4yin/status/1679176508844445696) 結果意外受歡迎。
 
-{{<figure src="/images/now/now/2023-07-29_astronvim.webp" width="60%">}}
+{{<figure src="/images/now/2023-07-29_astronvim.webp" width="60%">}}
 
 ### 2023-07-08 - 2023-07-09
 
@@ -156,7 +156,7 @@ comment:
   - ESP-IDF 跟 PlatformIO 的命令行都搞定了，能正常编译烧录。
   - 但是这俩的 VSCode 插件都各种毛病，感觉这类 GUI IDE 还是太偏向初学者了，老喜欢装自己的环境，在 NixOS 这种非 FHS 的机器上就有点水土不服。有点想尝试切换到 neovim.
 
-{{<figure src="/images/now/now/2023-08-13-nixos-and-flakes-book.webp" title="NixOS & Flakes Book" width="60%">}}
+{{<figure src="/images/now/2023-08-13-nixos-and-flakes-book.webp" title="NixOS & Flakes Book" width="60%">}}
 
 ### 2023-07-04
 
