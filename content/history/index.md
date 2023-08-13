@@ -63,7 +63,7 @@ comment:
     - 又调试了半天，仍然没解决镜像 size 不够的问题。最后选择了在生成镜像后，手动调整镜像大小的方式来解决这个问题。
     - 至此，我终于发布了我第一个可在 Lichee Pi 4A 上跑起来的 NixOS 镜像！（uboot 仍然使用了 chainsx 提前构建好的，没在 NixOS 上从源码构建）
 
-{{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.png" width="60%">}}
+{{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.webp" width="60%">}}
 
 ### 2023-07-29 - 2023-07-30
 
@@ -156,7 +156,7 @@ comment:
   - ESP-IDF 跟 PlatformIO 的命令行都搞定了，能正常编译烧录。
   - 但是这俩的 VSCode 插件都各种毛病，感觉这类 GUI IDE 还是太偏向初学者了，老喜欢装自己的环境，在 NixOS 这种非 FHS 的机器上就有点水土不服。有点想尝试切换到 neovim.
 
-{{<figure src="/images/now/now/2023-08-13-nixos-and-flakes-book.png" title="NixOS & Flakes Book" width="60%">}}
+{{<figure src="/images/now/now/2023-08-13-nixos-and-flakes-book.webp" title="NixOS & Flakes Book" width="60%">}}
 
 ### 2023-07-04
 
