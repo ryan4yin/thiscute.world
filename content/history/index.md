@@ -26,6 +26,8 @@ comment:
 
 - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，我于是再次更新了下各个平台的赞助链接，新增了 Patreon 与 Ethereum Address 两个赞助链接。
 
+{{<figure src="/images/now/2023-08-13-mail-about-creating-patreon-group.png" width="60%">}}
+
 ### 2023-08-12
 
 - 折腾了一天的 Neovim 配置，修复了一些问题，也新增了一些很有用的插件。
@@ -60,6 +62,8 @@ comment:
     - 进一步定位到我生成的 NixOS 镜像的 size 不够，导致 rootfs 分区最后有大概 1MB 的内容被截断，导致分区无法挂载。
     - 又调试了半天，仍然没解决镜像 size 不够的问题。最后选择了在生成镜像后，手动调整镜像大小的方式来解决这个问题。
     - 至此，我终于发布了我第一个可在 Lichee Pi 4A 上跑起来的 NixOS 镜像！（uboot 仍然使用了 chainsx 提前构建好的，没在 NixOS 上从源码构建）
+
+{{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.png" width="60%">}}
 
 ### 2023-07-29 - 2023-07-30
 
@@ -139,6 +143,8 @@ comment:
     - 最終發現 AstroNvim 很匹配我需求，但是它默認用 Mason.nvim 裝 lsp 等插件，這些插件在 NixOS 上都用不了，必須改成用 nix 安裝，爲了解決這個問題又折騰了好久。
 - 初步配置完成後，發了條 Twitter [最近两天开始从 VSCode 迁移到 Neovim](https://twitter.com/ryan4yin/status/1679176508844445696) 結果意外受歡迎。
 
+{{<figure src="/images/now/now/2023-07-29_astronvim.webp" width="60%">}}
+
 ### 2023-07-08 - 2023-07-09
 
 - 更新了一波 NixOS & Flakes Book 的显示效果，充分利用上 vitepress 的各种功能。
@@ -149,6 +155,8 @@ comment:
 - 几个月没折腾 MCU 了，尝试了在 NixOS 上使用 ESP-IDF、PlatformIO 进行 MCU 开发。给 ESP-IDF 提了个 PR 修复在 NixOS 上存在的 Bug.
   - ESP-IDF 跟 PlatformIO 的命令行都搞定了，能正常编译烧录。
   - 但是这俩的 VSCode 插件都各种毛病，感觉这类 GUI IDE 还是太偏向初学者了，老喜欢装自己的环境，在 NixOS 这种非 FHS 的机器上就有点水土不服。有点想尝试切换到 neovim.
+
+{{<figure src="/images/now/now/2023-08-13-nixos-and-flakes-book.png" title="NixOS & Flakes Book" width="60%">}}
 
 ### 2023-07-04
 
