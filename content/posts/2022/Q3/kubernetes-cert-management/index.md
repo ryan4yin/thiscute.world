@@ -31,7 +31,7 @@ cert-manager 是一个证书的自动化管理工具，用于在 Kubernetes 集�
 
 >注：cert-manager 的管理对象是「证书」，如果你仅需要使用非对称加密的公私钥对进行 JWT 签名、数据加解密，可以考虑直接使用 [secrets 管理工具 Vault](https://thiscute.world/posts/experience-of-vault/).
 
-## 一、部署
+## 一、部署 {#deploy}
 
 >https://cert-manager.io/docs/installation/helm/
 
@@ -54,7 +54,7 @@ helm install \
   --set installCRDs=true
 ```
 
-## 二、创建 Issuer
+## 二、创建 Issuer {#create-issuer}
 
 cert-manager 支持多种 issuer，你甚至可以通过它的标准 API 创建自己的 Issuer。
 
@@ -66,7 +66,7 @@ cert-manager 支持多种 issuer，你甚至可以通过它的标准 API 创建�
 
 下面介绍下如何申请公网证书以及本地签名证书。
 
-### 1. 通过权威机构创建公网受信证书
+### 1. 通过权威机构创建公网受信证书 {#create-public-cert}
 
 通过权威机构创建的公网受信证书，可以直接应用在边界网关上，用于给公网用户提供 TLS 加密访问服务，比如各种 HTTPS 站点、API。
 这是需求最广的一类数字证书服务。
@@ -113,13 +113,13 @@ ACME 支持 HTTP01 跟 DNS01 两种域名验证方式，其中 DNS01 是最简�
 
 下面分别演示如何使用 AWS Route53 跟 AliDNS，通过 DNS 验证方式申请一个 Let's Encrypt 证书。（其他 DNS 提供商的配置方式请直接看官方文档）
 
-#### 1.1 使用 AWS Route53 创建一个证书签发者「Certificate Issuer」
+#### 1.1 使用 AWS Route53 创建一个证书签发者「Certificate Issuer」 {#1-1-aws-route53}
 
 >非 AWS Route53 用户可忽略这一节
 
 >https://cert-manager.io/docs/configuration/acme/dns01/route53/
 
-##### 1.1.1 通过 IAM 授权 cert-manager 调用 AWS Route53 API
+##### 1.1.1 通过 IAM 授权 cert-manager 调用 AWS Route53 API {#1-1-1-iam-cert-manager-aws-route53-api}
 
 >这里介绍一种不需要创建 ACCESS_KEY_ID/ACCESS_SECRET，直接使用 AWS EKS 官方的免密认证的方法。会更复杂一点，但是更安全可维护。
 
@@ -203,7 +203,7 @@ helm upgrade -i cert-manager ./cert-manager -n cert-manager -f cert-manager-valu
 
 这样就完成了授权。
 
-##### 1.1.2 创建一个使用 AWS Route53 进行验证的 ACME Issuer
+##### 1.1.2 创建一个使用 AWS Route53 进行验证的 ACME Issuer {#1-1-2-aws-route53-acme-issuer}
 
 在 xxx 名字空间创建一个 Iusser：
 
@@ -244,7 +244,7 @@ spec:
 ```
 
 
-#### 1.2 使用 AliDNS 创建一个证书签发者「Certificate Issuer」
+#### 1.2 使用 AliDNS 创建一个证书签发者「Certificate Issuer」 {#1-2-alidns-certificate-issuer}
 
 >https://cert-manager.io/docs/configuration/acme/dns01/#webhook
 
@@ -282,7 +282,7 @@ helm -n cert-manager install alidns-webhook \
   --set groupName=example.com
 ```
 
-##### 1.1.2 创建一个使用 AliDNS 进行验证的 ACME Issuer
+##### 1.1.2 创建一个使用 AliDNS 进行验证的 ACME Issuer {#1-1-2-alidns-acme-issuer}
 
 在 xxx 名字空间创建一个 Iusser：
 
@@ -330,7 +330,7 @@ spec:
             solverName: alidns-solver
 ```
 
-#### 1.3 通过 ACME 创建证书
+#### 1.3 通过 ACME 创建证书 {#1-3-acme-certificate}
 
 >https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources
 
@@ -433,7 +433,7 @@ Events:
 - challenge 验证通过后会逐层往回走，前面的 Order CSR 状态都会立即变成 valid
 - 最终证书签发成功，Certificate 状态变成 Ready，所有 Order CSR challenge 资源都被自动清理掉。
 
-#### 1.4 通过 csi-driver 创建证书
+#### 1.4 通过 csi-driver 创建证书 {#csi-driver}
 
 >https://cert-manager.io/docs/projects/csi-driver/
 
@@ -467,7 +467,7 @@ cert-manager 提供的 Private CA 服务有：
 TO BE DONE.
 
 
-## 三、cert-manager 与 istio/ingress 等网关集成
+## 三、cert-manager 与 istio/ingress 等网关集成 {#cert-manager-and-gateway}
 
 cert-manager 提供的 `Certificate` 资源，会将生成好的公私钥存放在 Secret 中，而 Istio/Ingress 都支持这种格式的 Secret，所以使用还是挺简单的。
 
@@ -558,7 +558,7 @@ spec:
 
 之后再配合 VirtualService 等资源，就可以将 Istio 跟 cert-manager 结合起来啦。
 
-## 四、将 cert-manager 证书挂载到自定义网关中
+## 四、将 cert-manager 证书挂载到自定义网关中 {#cert-manager-istio-ingress}
 
 >注意，千万别使用 `subPath` 挂载，根据[官方文档](https://kubernetes.io/docs/concepts/configuration/secret/#mounted-secrets-are-updated-automatically)，这种方式挂载的 Secret 文件不会自动更新！
 
@@ -588,7 +588,7 @@ spec:
 
 或者可以考虑直接写个 k8s informer 监控 secret 的变更，有变更就直接 reload 所有 nginx 实例，总之实现的方式有很多种。
 
-## 五、监控告警
+## 五、监控告警 {#monitoring-and-alerting}
 
 证书的过期时间是一个很重要的指标，证书过期了，网站就无法正常访问了。
 虽然正常情况下 cert-manager 应该能够自动更新证书，但是万一出现了问题，又没有及时发现，那就麻烦了。
@@ -609,7 +609,7 @@ cert-manager 提供了 Prometheus 监控指标，可以直接使用 Prometheus �
 
 上面这个 PromQL 表示，如果证书的过期时间小于 20 天，就会触发告警。
 
-## 六、注意事项
+## 六、注意事项 {#attention}
 
 服务端 TLS 协议的配置有许多的优化点，有些配置对性能的提升是很明显的，建议自行网上搜索相关资料，这里仅列出部分相关信息。
 
