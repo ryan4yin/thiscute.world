@@ -588,7 +588,28 @@ spec:
 
 或者可以考虑直接写个 k8s informer 监控 secret 的变更，有变更就直接 reload 所有 nginx 实例，总之实现的方式有很多种。
 
-## 五、注意事项
+## 五、监控告警
+
+证书的过期时间是一个很重要的指标，证书过期了，网站就无法正常访问了。
+虽然正常情况下 cert-manager 应该能够自动更新证书，但是万一出现了问题，又没有及时发现，那就麻烦了。
+
+因此，建议对证书的过期时间进行监控，当证书的过期时间小于一定阈值时，及时发出告警。
+
+cert-manager 提供了 Prometheus 监控指标，可以直接使用 Prometheus 等工具进行监控告警。
+
+官方文档是这个：<https://cert-manager.io/docs/usage/prometheus-metrics/#scraping-metrics>
+
+文档中没详细列出所有的指标，可以直接接入到 Prometheus 中，然后通过 Grafana 查看。
+
+比如要设置证书过期时间的告警，可以使用如下 PromQL：
+
+```promql
+(certmanager_certificate_expiration_timestamp_seconds - time())/3600/24 < 20
+``````
+
+上面这个 PromQL 表示，如果证书的过期时间小于 20 天，就会触发告警。
+
+## 六、注意事项
 
 服务端 TLS 协议的配置有许多的优化点，有些配置对性能的提升是很明显的，建议自行网上搜索相关资料，这里仅列出部分相关信息。
 
