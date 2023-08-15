@@ -28,6 +28,7 @@ comment:
 - 测试并完善 licheepi4a 的自定义部署 [ryan4yin/nixos-licheepi4a/demo](https://github.com/ryan4yin/nixos-licheepi4a/tree/cfe7981/demo)
     - 其实之前虽然搞定了 NixOS on LicheePi4A，但是一直没想好要怎么去更新、管理系统。之前试了 `nixos-rebuild` 的远程部署，但是踩了一晚上坑也没搞定，最后还是放弃了。前两天看到有个 NixOS 资深老哥拿我代码直接在他的 flake 里 import 进去了，从他这个思路出发，我也慢慢想明白了正确的使用姿势。
     - 测了一圈发现 colmena 是最好用的远程部署工具之一，而 deploy-rs 在 riscv64 上则有点水土不服。但是感觉 colmena 的文档写得有点晦涩（主要是它结构跟 nixosConfiguration 差别有点大），不太好懂。
+- 将我两块 LicheePi4A 的配置添加到了我的 nix-config 中，并连好了线开始作为长期运行的服务器使用，现在可以直接通过 `make roll` 执行这两块小板子的远程部署。
 - 顺便在 nixos-and-flakes-book 跟 nixos-rk3588 中也更新/添加了远程部署相关的文档。
 - nixos-and-flakes-book 添加了对多 nixpkgs 实例这种玩法的介绍。
 - 出于对学一门新编程语言的兴趣，了解了一下 zig，读了这篇文章 [连 1.0 版本都没有，Uber 为什么会采用这样一项新技术？ - InfoQ](https://www.infoq.cn/article/q016nwr7ojhvoj3rkzc0)
