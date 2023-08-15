@@ -1,7 +1,7 @@
 ---
 title: "Kubernetes 中的证书管理工具 - cert-manager"
 date: 2022-07-31T15:11:46+08:00
-lastmod: 2022-07-31T15:11:46+08:00
+lastmod: 2023-08-14T15:11:46+08:00
 draft: false
 
 resources:
