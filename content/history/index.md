@@ -22,10 +22,12 @@ comment:
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
 
-### 2023-08-14
+### 2023-08-14 - 2023-08-15
 
 - 测试并完善 licheepi4a 的自定义部署 [ryan4yin/nixos-licheepi4a/demo](https://github.com/ryan4yin/nixos-licheepi4a/tree/cfe7981/demo)
     - 测了一圈发现 colmena 是最好用的远程部署工具之一，而 deploy-rs 在 riscv64 上则有点水土不服。但是感觉 colmena 的文档写得有点晦涩（主要是它结构跟 nixosConfiguration 差别有点大），不太好懂。
+- 顺便在 nixos-and-flakes-book 跟 nixos-rk3588 中也更新/添加了远程部署相关的文档。
+- nixos-and-flakes-book 添加了对多 nixpkgs 实例这种玩法的介绍。
 
 ### 2023-08-13
 
