@@ -30,6 +30,14 @@ comment:
     - 测了一圈发现 colmena 是最好用的远程部署工具之一，而 deploy-rs 在 riscv64 上则有点水土不服。但是感觉 colmena 的文档写得有点晦涩（主要是它结构跟 nixosConfiguration 差别有点大），不太好懂。
 - 顺便在 nixos-and-flakes-book 跟 nixos-rk3588 中也更新/添加了远程部署相关的文档。
 - nixos-and-flakes-book 添加了对多 nixpkgs 实例这种玩法的介绍。
+- 出于对学一门新编程语言的兴趣，了解了一下 zig，读了这篇文章 [连 1.0 版本都没有，Uber 为什么会采用这样一项新技术？ - InfoQ](https://www.infoq.cn/article/q016nwr7ojhvoj3rkzc0)
+    - 总结下，Uber 只是将 Zig 用做 C/C++ 的交叉编译器，并未使用 Zig 语言。解决的痛点：
+        - Uber 有许多项目需要用到 CGO，但是 CGO 会依赖操作系统上发现的任何编译器（macOS 上是 Clang，Linux 上是 GCC），环境不一致会导致构建结果不一致。
+        - Go 官方提供的二进制文件，构建时使用的 GCC 版本比 Uber 的构建机 / 运行机更新，导致 CGO 运行出问题。Uber 不得不自己编译 Go 本身。
+        - 在使用 Zig 之前，Uber 一直借助 musl 实现项目的静态编译，从而不受操作系统环境的影响。但是这也存在许多问题。（未说明具体的细节）
+        - 而 Zig 是一个完全封闭的 C/C++ 编译器，体积很小，支持直接通过参数设置 GCC 版本（而传统的构建方法，CGO 在当前环境找到啥版本的 GCC 就会用啥版本...），还原生支持交叉编译。这能极大程度简化 Uber 的构建流程，不用担心构建出的程序因为各种环境不一致而出现问题。
+        - Zig 对 macOS 封闭式交叉编译的支持很完善，这是 Uber 选择 Zig 很重要的原因（互联网公司的员工基本都是配发 macOS）。
+- 作为对比，我想到了 Nix 的 macOS 支持，它大量貌似大量依赖了 macOS 的 Clang，导致同一份 Nix 配置，在 Linux 上与在 macOS 上得到的环境是不一样的。我在之前测试 devbox 时发现同一个软件的版本，在 Linux 跟 macOS 上都可能会不一致...这是件比较尴尬的事。Zig 在这里或许大有可为？
 
 ### 2023-08-13
 
