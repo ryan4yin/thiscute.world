@@ -22,6 +22,18 @@ comment:
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
 
+### 2023-08-17
+
+- 发现才开没几天的 Patreon 收到了第一笔赞助！超级开心！
+
+{{<figure src="/images/now/nixos-patreon_the-first-member.jpg" width="80%">}}
+
+
+### 2023-08-16
+
+- 测了一波 rock5a，还是没搞定 NixOS 的移植。我用 armbian 镜像能成功启动，HDMI 正常，但是任何串口日志读不到，很奇怪。怀疑是接错了串口，之后再试试。
+- 把 orangepi 5 的配置添加到了我的 nix-config 中，现在我的配置 x86_64, aarch64, riscv64 三个架构齐活了～
+
 ### 2023-08-14 - 2023-08-15
 
 - 因为最近一次证书自动更新失败导致的故障，吃了点教训，往 [Kubernetes 中的证书管理工具 - cert-manager](https://thiscute.world/posts/kubernetes-cert-management/) 添加了监控告警一节。
