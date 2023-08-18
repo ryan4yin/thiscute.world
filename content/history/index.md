@@ -27,7 +27,7 @@ comment:
 - 最近的两笔赞助，让我可能有点异想天开？查了一波「如何通过开源项目养活自己」类似的信息。
 - 目前想到的，需要重点搞明白的东西：
     - 了解 Patreon 与 GitHub Sponsoring 这类每月赞助的模式，搞明白如何让用户愿意持续赞助。
-        - 目前我的赞助者之一的反馈是：如果我能隔几周发布一些 Nix 相关的新内容，对他有帮助，他会考虑继续赞助。
+        - 与我 Patreon 上的第一位赞助者做了一些沟通，我提了一些想法，比如说创建一个 discord server。然后他给出了非常有价值的建议！
 - 其他资料：
     - https://zhuanlan.zhihu.com/p/150556033
     - https://emacs-china.org/t/topic/20855
@@ -36,6 +36,8 @@ comment:
     - 这种成功的开源项目盈利期能延续多久？
         - 我觉得盈利期只能算考量点之一，真的去做了这件事，能获得的经验是很宝贵的。
         就算后面失败了，技术能力在这，再回去找家公司上班，感觉也不是难事吧。
+
+{{<figure src="/images/now/technology-is-wealth_my-first-sponsor-on-patreon.webp" title="Technology is Wealth - From my first sponsor on Patreon" width="80%">}}
 
 ### 2023-08-17
 
