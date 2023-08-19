@@ -93,7 +93,7 @@ comment:
 - [2017-03-07 - 我患上了阅读焦虑症](https://thiscute.world/posts/reading-anxiety/)
 - [2017-02-06 - 忽而假末](https://thiscute.world/posts/the-holiday-is-coming-to-an-end/)
 
-另外大学期间我迷上了编程，开始自学各种编程技术，最开始是 C，后来有一次学校校友、在美国常春縢读天体物理学博士的[季索清学长](https://github.com/jisuoqing)（现在已经是 Professor of Astrophysics 了）回校演讲，谈到了他们实验室现在都用 Python 了，Matlab 都没人用了，于是我开始学习 Python. 后来又跟着知乎上的推荐学习路线学习过 SICP、Linux C 编程等各种内容。
+另外大学期间我迷上了编程，开始自学各种编程技术，最开始是 C，后来有一次学校校友、在美国常春滕读天体物理学博士的[季索清学长](https://github.com/jisuoqing)（现在已经是 Professor of Astrophysics 了）回校演讲，谈到了他们实验室现在都用 Python 了，Matlab 都没人用了，于是我开始学习 Python. 后来又跟着知乎上的推荐学习路线学习过 SICP、Linux C 编程等各种内容。
 
 大学四年，学校对我帮助最大的，一就是让我接触到了更大的世界，二就是图书馆藏书丰富，尤其是计算机类书籍。四年时间我读了很多很多的书，学校的图书馆成了我最喜欢的地方。
 
