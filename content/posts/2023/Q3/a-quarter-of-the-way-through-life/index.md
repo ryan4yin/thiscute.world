@@ -195,7 +195,7 @@ comment:
 
 > The three most powerful motives are curiosity, delight, and the desire to do something impressive. Sometimes they converge, and that combination is the most powerful of all.
 
-> 三个最强大的内在动机是好奇心、快乐和做出令人印象深刻的事情的欲望，当它们会聚在一起时，会成为最强大的组合。
+> 三个最强大的内在动机是好奇心、快乐和做出令人印象深刻的事情的欲望，当它们汇聚在一起时，会成为最强大的组合。
 
 写这篇文章花了我一整天时间，第二天我又做了不少修修补补的工作。
 写作时我回想了很多的东西，也翻阅了我自己过往的各种日记、随笔，往事历历在目。
