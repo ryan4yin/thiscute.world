@@ -34,6 +34,7 @@ comment:
     - 接着，会提示你输入 SMTP 服务器地址，设为「smtp.gmail.com」
     - smtp 服务器的密码，可以在 <https://myaccount.google.com/apppasswords> 中生成一个你 Google 账号的应用密码，然后填入即可
     - 最后，点击「下一步」，会发送一封确认邮件到你的邮箱「ryan4yin@linux.com」，点击确认，即完成了设置。
+    - 如此设置后，你可以「ryan4yin@linux.com」为发件人发送邮件，但是接收方会额外看到一句「由 xxx@gmail.com 代发」这样的注释。
 
 ### 2023-08-22
 
