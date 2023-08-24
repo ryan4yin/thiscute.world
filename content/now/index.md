@@ -27,22 +27,15 @@ toc:
 
 今年的学习进展：
 
-- Go 语言 Web 编程
-  - [ ] [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
-  - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
-- Kubernetes 原理、Kubernetes APIServer/Operator 编程
-  - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 - 操作系统
   - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
   - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
-- 计算机网络
-  - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
-- Linux 性能调优与 Linux 网络技术
-  - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
-  - [ ] 极客时间《网络排查案例课》
-  - [ ] 极客时间 《Linux 性能优化实战》
+- 从零开始造 OS
+  - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
+  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
+  - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
 
 ## 三、今年的阅读进展
 
@@ -55,6 +48,7 @@ toc:
 - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
 - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
+- The Great Gatsby
 
 
 想读，但是没啥计划：
@@ -96,10 +90,6 @@ toc:
   - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
   - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
   - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从 bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一下。 
-- 从零开始造 OS
-  - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
-  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
-  - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
 - 电路原理
   - Practical Electronics for Inventors, Fourth Edition
 - 芯片
@@ -126,11 +116,17 @@ toc:
   - 极客时间《深入 C 语言和程序运行原理》
   - 极客时间《Rust 编程第一课》
 
+- Linux 性能调优与 Linux 网络技术
+  - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
+  - [ ] 极客时间《网络排查案例课》
+  - [ ] 极客时间 《Linux 性能优化实战》
 
 #### 计算机网络
 
 计算机网络可算是我的老本行了，用来吃饭的家伙事，技艺不能落下。
 
+- 计算机网络
+  - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
 - 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
   - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
   - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
@@ -151,6 +147,11 @@ toc:
 - Go 语言进阶
   - 《Go 学习笔记（第六版下卷）》
     - 基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
+  - [ ] [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
+  - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
+
+- Kubernetes 原理、Kubernetes APIServer/Operator 编程
+  - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 
 - 英语
   - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
