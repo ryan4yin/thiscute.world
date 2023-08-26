@@ -22,6 +22,37 @@ comment:
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
 
+### 2023-08-25
+
+- 给 spi flash 刷上 uboot 后，成功在 orange pi 5 plus 上把 NixOS 跑起来了！
+- rock 5a 的 spi flash 默认没上设备树，要手动添加设备树，加上后刷上 uboot，还是启动不了，还在研究中。
+- [如何看待某「业余科学家」在天文学顶刊 MNRAS 以一作身份发表重量级论文？](https://www.zhihu.com/question/616579768/answer/3159773076): 看了这篇文章后，我再次确认了兴趣的力量。结合前两天看到的 How to do great work, 相互印证了，兴趣真的是最好的老师，要成大事，最好的方法就是跟随自己的兴趣。
+- 另外最近其实也在想，是不是该看点「中西哲学」、「古今历史」之类的书，希望自己的思想能够更加全面。比如说前 leader 推荐的鬼谷子，以及我一直想看的老子、庄子、易经、王阳明朱熹等等。
+- 另外发现我最近写东西，遇到打不出字的情况变多了，主要是小鹤形码的规则几乎全忘了，全靠肌肉记忆。一些打得少的字，就只能靠 Google 查...感觉还得找时间复习下小鹤形码。
+- How to do great work? 摘抄
+    - So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.
+    - When in doubt, optimize for interestingness. 
+    - If in the course of working on one thing you discover another that's more exciting, don't be afraid to switch.
+    - The best way to do this is to make something you yourself want. Write the story you want to read; build the tool you want to use.
+    - If you're interested, you're not astray.
+    - 跟随兴趣，就是「乘风而起（staying upwind）」，我们都知道一句话，「风口上的猪都能飞」！
+    - Following your interests may sound like a rather passive strategy, but in practice it usually means following them past all sorts of obstacles. You usually have to risk rejection and failure. So it does take a good deal of boldness.
+    - Am I working on what I most want to work on?" When you're young it's ok if the answer is sometimes no, but this gets increasingly dangerous as you get older.
+    - People who do great things don't get a lot done every day. They get something done, rather than nothing. If you do work that compounds, you'll get exponential growth.(Learning, for example, is an instance of this phenomenon: the more you learn about something, the easier it is to learn more.)
+    - The trouble with exponential growth is that the curve feels flat in the beginning. It isn't; it's still a wonderful exponential curve. 
+    - (灵光并不常在工作中出现)By letting your mind wander a little, you'll often solve problems you were unable to solve by frontal attack.
+    - The core of being earnest is being intellectually honest. We're taught as children to be honest as an unselfish virtue — as a kind of sacrifice. But in fact it's a source of power too.
+    - How can you have a sharp eye for the truth if you're intellectually dishonest?（真诚能帮人拥有真实之眼，这个眼睛可有用得很，比如说我觉得我药哥很会夸人，他之前就说，这是因为他真诚。）
+    - Nerds have a kind of innocent boldness that's exactly what you need in doing great work.
+    - Be the one who puts things out there rather than the one who sits back and offers sophisticated-sounding criticisms of them. "It's easy to criticize" is true in the most literal sense, and the route to great work is never easy.(这让我想起来昨天跟我对线的一个傻逼，我说的每一句话都要被他琢磨几番有没有问题，然后趾高气扬地说我这错了那得改。)
+    - The Old Testament says it's better to keep quiet lest you look like a fool. But that's advice for seeming smart. If you actually want to discover new things, it's better to take the risk of telling people your ideas.（使自己看起来很聪明很拉风，没啥意义，还是要多做多说，才能收获更多。不过也不是说乱做乱说...）
+    - Great work will often be tool-like in the sense of being something others build on. So it's a good sign if you're creating ideas that others could use, or exposing questions that others could answer. The best ideas have implications in many different areas.
+    - Original ideas don't come from trying to have original ideas. They come from trying to build or understand something slightly too difficult.
+    - Talking or writing about the things you're interested in is a good way to generate new ideas. When you try to put ideas into words, a missing idea creates a sort of vacuum that draws it out of you. Indeed, there's a kind of thinking that can only be done by writing.
+    - Curiosity is itself a kind of originality; it's roughly to questions what originality is to answers. And since questions at their best are a big component of answers, curiosity at its best is a creative force.
+    - 先看到这，阅读进度大约 50%
+
+
 ### 2023-08-23
 
 - 努力工作一整天
