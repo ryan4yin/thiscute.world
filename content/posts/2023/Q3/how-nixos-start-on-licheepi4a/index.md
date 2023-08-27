@@ -1000,7 +1000,97 @@ TODO
 
 TODO
 
+## Rockchip 的 U-Boot 启动流程
 
+> https://opensource.rock-chips.com/wiki_Boot_option
+
+U-Boot 的几种构建产物介绍：
+
+1. `spl/u-boot-spl.bin`：SPL，Secondary Program Loader，二级加载器
+2. `u-boot.itb`: FIT uImage，Flattened Image Tree uImage.
+3. `idbloader.img`: a Rockchip format pre-loader suppose to work at SoC start up
+
+> U-Boot 官方文档：https://u-boot.readthedocs.io/en/latest/index.html
+
+> U-Boot 启动流程：https://u-boot.readthedocs.io/en/latest/develop/bootstd.html
+
+查看 U-Boot 的所有环境变量，U-Boot 的启动项顺序、启动设备选择等都可通过环境变量控制：
+
+```shell
+=> env print -a
+arch=arm
+autoload=no
+baudrate=1500000
+board=evb_rk3588
+board_name=evb_rk3588
+boot_a_script=load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}
+boot_extlinux=sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}extlinux/extlinux.conf
+boot_net_usb_start=usb start
+boot_pci_enum=pci enum
+boot_prefixes=/ /boot/
+boot_script_dhcp=boot.scr.uimg
+boot_scripts=boot.scr.uimg boot.scr
+boot_targets=nvme0 mmc1 mmc0 mtd2 mtd1 mtd0 usb0 pxe dhcp 
+bootargs=storagemedia=sd androidboot.storagemedia=sd androidboot.mode=normal 
+bootcmd=run distro_bootcmd;boot_android ${devtype} ${devnum};boot_fit;bootrkp;
+bootcmd_dhcp=run boot_net_usb_start; run boot_pci_enum; if dhcp ${scriptaddr} ${boot_script_dhcp}; then source ${scriptaddr}; fi;
+bootcmd_mmc0=setenv devnum 0; run mmc_boot
+bootcmd_mmc1=setenv devnum 1; run mmc_boot
+bootcmd_mtd0=setenv devnum 0; run mtd_boot
+bootcmd_mtd1=setenv devnum 1; run mtd_boot
+bootcmd_mtd2=setenv devnum 2; run mtd_boot
+bootcmd_nvme0=setenv devnum 0; run nvme_boot
+bootcmd_pxe=run boot_net_usb_start; run boot_pci_enum; dhcp; if pxe get; then pxe boot; fi
+bootcmd_usb0=setenv devnum 0; run usb_boot
+bootdelay=0
+bootfile=/boot/extlinux/extlinux.conf
+bootfstype=ext4
+cpu=armv8
+devnum=0
+devplist=1
+devtype=mmc
+distro_bootcmd=setenv nvme_need_init; for target in ${boot_targets}; do run bootcmd_${target}; done
+eth1addr=9a:da:80:4e:b7:36
+ethaddr=96:da:80:4e:b7:36
+fdt_addr_r=0x08300000
+fdtfile=rockchip/rk3588s-rock-5a.dtb
+fdtoverlay_addr_r=0x08200000
+fileaddr=0x500000
+filesize=0x45d
+kernel_addr_c=0x05480000
+kernel_addr_r=0x00400000
+mmc_boot=if mmc dev ${devnum}; then setenv devtype mmc; run scan_dev_for_boot_part; fi
+mtd_boot=if mtd_blk dev ${devnum}; then setenv devtype mtd; run scan_dev_for_boot_part; fi
+nvme_boot=run boot_pci_enum; run nvme_init; if nvme dev ${devnum}; then setenv devtype nvme; run scan_dev_for_boot_part; fi
+nvme_init=if ${nvme_need_init}; then setenv nvme_need_init false; nvme scan; fi
+nvme_need_init=false
+partitions=uuid_disk=${uuid_gpt_disk};name=uboot,start=8MB,size=4MB,uuid=${uuid_gpt_loader2};name=trust,size=4M,uuid=${uuid_gpt_atf};name=misc,size=4MB,uuid=${uuid_gpt_misc};name=resource,size=16MB,uuid=${uuid_g
+pt_resource};name=kernel,size=32M,uuid=${uuid_gpt_kernel};name=boot,size=32M,bootable,uuid=${uuid_gpt_boot};name=recovery,size=32M,uuid=${uuid_gpt_recovery};name=backup,size=112M,uuid=${uuid_gpt_backup};name=cac
+he,size=512M,uuid=${uuid_gpt_cache};name=system,size=2048M,uuid=${uuid_gpt_system};name=metadata,size=16M,uuid=${uuid_gpt_metadata};name=vendor,size=32M,uuid=${uuid_gpt_vendor};name=oem,size=32M,uuid=${uuid_gpt_
+oem};name=frp,size=512K,uuid=${uuid_gpt_frp};name=security,size=2M,uuid=${uuid_gpt_security};name=userdata,size=-,uuid=${uuid_gpt_userdata};
+pxefile_addr_r=0x00600000
+ramdisk_addr_r=0x0a200000
+rkimg_bootdev=if nvme dev 0; then setenv devtype nvme; setenv devnum 0; echo Boot from nvme;elif mmc dev 1 && rkimgtest mmc 1; then setenv devtype mmc; setenv devnum 1; echo Boot from SDcard;elif mmc dev 0; then
+ setenv devtype mmc; setenv devnum 0;elif mtd_blk dev 0; then setenv devtype mtd; setenv devnum 0;elif mtd_blk dev 1; then setenv devtype mtd; setenv devnum 1;elif mtd_blk dev 2; then setenv devtype mtd; setenv 
+devnum 2;elif rknand dev 0; then setenv devtype rknand; setenv devnum 0;elif rksfc dev 0; then setenv devtype spinand; setenv devnum 0;elif rksfc dev 1; then setenv devtype spinor; setenv devnum 1;else;setenv de
+vtype ramdisk; setenv devnum 0;fi; 
+scan_dev_for_boot=echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixes}; do run scan_dev_for_extlinux; run scan_dev_for_scripts; done;
+scan_dev_for_boot_part=part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv devplist 1; for distro_bootpart in ${devplist}; do if fstype ${devtype} ${devnum}:${distro_bootpart} bootfs
+type; then run scan_dev_for_boot; fi; done
+scan_dev_for_extlinux=if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}extlinux/extlinux.conf; then echo Found ${prefix}extlinux/extlinux.conf; run boot_extlinux; echo SCRIPT FAILED: continuing...; fi
+scan_dev_for_scripts=for script in ${boot_scripts}; do if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found U-Boot script ${prefix}${script}; run boot_a_script; echo SCRIPT FAIL
+ED: continuing...; fi; done
+scriptaddr=0x00500000
+serial#=87485315897af1df
+soc=rockchip
+stderr=serial,vidconsole
+stdout=serial,vidconsole
+usb_boot=usb start; if usb dev ${devnum}; then setenv devtype usb; run scan_dev_for_boot_part; fi
+vendor=rockchip
+
+Environment size: 4737/32764 bytes
+=> 
+```
 
 ## 参考
 
