@@ -21,6 +21,10 @@ comment:
 > Twitter 上 @Manjusaka_Lee 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+## 2023-08-31
+
+- 看完了 Paul Graham 的 How to do greate work，写得真的很棒！总结下来最重要的其实就是「好奇心」，让好奇心驱动自己去尝试各种有趣的东西，Just for Fun! 只要尝试得够多，就一定会有一番成就。当然失败是成功他妈，你在取得成就前，肯定也会经历许多的失败，你要相信它们都只是你的垫脚石。
+
 ## 2023-08-30
 
 - 前几天把 Docker 镜像（20G 的 AIGC 镜像）提前预置在了 EC2 基础镜像里，降了 10 分钟的环境启动时间。结果今天发现内部加载环境的脚本慢了 5 分钟...效果直接打了 5 折。
@@ -63,6 +67,32 @@ comment:
     - Talking or writing about the things you're interested in is a good way to generate new ideas. When you try to put ideas into words, a missing idea creates a sort of vacuum that draws it out of you. Indeed, there's a kind of thinking that can only be done by writing.
     - Curiosity is itself a kind of originality; it's roughly to questions what originality is to answers. And since questions at their best are a big component of answers, curiosity at its best is a creative force.
     - 先看到这，阅读进度大约 50%
+    - 8/31 继续摘抄
+    - When you fix a broken model, new ideas become obvious. But noticing and fixing a broken model is hard. That's how new ideas can be both obvious and yet hard to discover: they're easy to see after you do something hard.
+    - （良药苦口，忠言逆耳）The other thing you need is a willingness to break rules. if you want to fix your model of the world, it helps to be the sort of person who's comfortable breaking rules.
+    - （正确而疯狂的想法，那就是你想要找寻的）a good new idea has to seem bad to most people, or someone would have already explored it. So what you're looking for is ideas that seem crazy, but the right kind of crazy. 
+    - People are often wrong about the problem that people think has been fully explored, it hasn't.
+    - （放纵自己，让自己跟随好奇心，随心所欲地探索，这是找到被大多数人忽略掉的问题的最简单有效的方式）By being self-indulgent — by letting your curiosity have its way, and tuning out, at least temporarily, the little voice in your head that says you should only be working on "important" problems.
+    - （最重要的就是，选择下一步要做什么。）the initial step — deciding what to work on — is in a sense the key to the whole game.
+    - People think big ideas are answers, but often the real insight was in the question. It's a great thing to be rich in unanswered questions. And this is one of those situations where the rich get richer, because the best way to acquire new questions is to try answering existing ones. Questions don't just lead to answers, but also to more questions.
+    - The initial versions of big things were often just experiments, or side projects, or talks, which then grew into something bigger. So start lots of small things.
+    - （只有找到过足够多的坏想法，你才能拥有足够多的好想法）Being prolific is underrated. The more different things you try, the greater the chance of discovering something new. Understand, though, that trying lots of things will mean trying lots of things that don't work. You can't have a lot of good ideas without also having a lot of bad ones.
+    - （尝试没人干过的新事物，可比重新造轮子有意思多了，而且能帮你更好的理解旧轮子）Though it sounds more responsible to begin by studying everything that's been done before, you'll learn faster and have more fun by trying stuff. And you'll understand previous work better when you do look at it. 
+    - （从最简单的例子开始做起）Begin by trying the simplest thing that could possibly work.
+    - 如果你想做创造性的工作，就不要做太多的计划，计划只会让你陷入困境。
+    - （多承担些风险，不要寻找确定性，要寻找可能性！如果你不经常遭遇失败，那你可能有点太保守了。）Take as much risk as you can afford. In an efficient market, risk is proportionate to reward, so don't look for certainty, but for a bet with high expected value. If you're not failing occasionally, you're probably being too conservative.
+    - 年轻人缺乏经验，这使他们害怕风险，但实际上年轻的时候才拥有最多可能性，可以尽情地探索。
+    - （年轻人不知道自己在时间上多么的富有。将这些时间转变成优势的最佳手段，就是遵循自己的好奇心，去做喜欢的事，觉得酷的事！）The young have no idea how rich they are in time. The best way to turn this time to advantage is to use it in slightly frivolous ways: to learn about something you don't need to know about, just out of curiosity, or to try building something just because it would be cool, or to become freakishly good at something.
+    - （无知也是一种财富，它使你能以最干净的眼睛看待所有新事物，不被任何规矩束缚）The most subtle advantage of youth, or more precisely of inexperience, is that you're seeing everything with fresh eyes. 
+    - （在没抛弃掉所有世俗带给你的废话、教条、坏习惯前，你无法做出什么牛逼的工作！）You arrive at adulthood with your head full of nonsense — bad habits you've acquired and false things you've been taught — and you won't be able to do great work till you clear away at least the nonsense in the way of whatever type of work you want to do.
+    - 对学生而言，不要把各种什么委员会之类的人的拒绝放在心上，他们的评价标准，跟做牛逼的工作的标准，是完全不同的。他们的拒绝代表不了什么。
+    - 明确地将挫折视为你的过程的一部分来避免被挫折打击到士气，毕竟解决难题总是需要一些回头路（Solving hard problems always involves some backtracking.）。
+    - （做牛逼工作就是一个深度优先搜索，不要钻牛角尖，如果失败了，可以重试，也可以回退几步，再重试。）Doing great work is a depth-first search whose root node is the desire to. So "If at first you don't succeed, try, try again" isn't quite right. It should be: If at first you don't succeed, either try again, or backtrack and then try again.
+    - （挫折难以避免，但不要惊慌失措。你可以在必要的时候走一点回头路，但不要因为一点点挫折，就否定掉自己的才能！永远不要放弃掉搜索树的根节点，或者叫你人生的锚点）
+    - 听众是使你保持士气的重要因素，如果你有一小批喜欢你的作品的人，那你就会有动力继续做下去。
+    - Curiosity is the best guide. Your curiosity never lies, and it knows more than you do about what's worth paying attention to.
+    - Curiosity is the key to all four steps in doing great work: it will choose the field for you, get you to the frontier, cause you to notice the gaps in it, and drive you to explore them. The whole process is a kind of dance with curiosity.
+
 
 ### 2023-08-25
 
