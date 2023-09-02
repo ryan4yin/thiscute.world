@@ -632,6 +632,11 @@ cert-manager 提供了 Prometheus 监控指标，可以直接使用 Prometheus �
 
 为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，基本 Nginx/Caddy 等各大 Web 服务器或网关，都支持 OCSP stapling 协议。
 
+在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
+因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。
+
+而另一个方法，就是选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。
+
 可以使用如下命令测试，确认站点是否启用了 ocsp stapling:
 
 ```conf
@@ -647,8 +652,3 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 >我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
 
 
-
-在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
-因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。
-
-而另一个方法，就是选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。
