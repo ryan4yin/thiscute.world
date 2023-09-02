@@ -35,7 +35,7 @@ comment:
 
 ## 2023-08-31
 
-- 看完了 Paul Graham 的 How to do greate work，写得真的很棒！总结下来最重要的其实就是「好奇心」，让好奇心驱动自己去尝试各种有趣的东西，Just for Fun! 只要尝试得够多，就一定会有一番成就。当然失败是成功他妈，你在取得成就前，肯定也会经历许多的失败，把它们都视做你成功路上的垫脚石就 OK 了，别被打击了士气。
+- 看完了 Paul Graham 的 How to Do Great Work，写得真的很棒！总结下来最重要的其实就是「好奇心」，让好奇心驱动自己去尝试各种有趣的东西，Just for Fun! 只要尝试得够多，就一定会有一番成就。当然失败是成功他妈，你在取得成就前，肯定也会经历许多的失败，把它们都视做你成功路上的垫脚石就 OK 了，别被打击了士气。
 
 ## 2023-08-30
 
@@ -57,7 +57,7 @@ comment:
 
 ## 2023-08-26
 
-- How to do great work? 摘抄
+- How to Do Great Work? 摘抄
     - So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.
     - When in doubt, optimize for interestingness. 
     - If in the course of working on one thing you discover another that's more exciting, don't be afraid to switch.
