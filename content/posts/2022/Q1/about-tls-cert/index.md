@@ -24,6 +24,7 @@ seriesNavigation: true
 - **2022-03-13** ~ **2022-03-14**: 重新整理补充，改写为《写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议》，整合进我的实用密码学系列文章中
   - 补充 PKI 公钥基础架构及 X509 证书标准介绍
 - TODO:
+  - 补充 ALPN 应用层协议协商的介绍
   - 补充 TLS 协议的逆向手段
   - 基于 [cfssl](https://shoujo.ink/2021/11/cfssl-%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E5%88%86%E6%9E%90/) 详细介绍 PKI 的各项组件
   - 基于 PKI 的应用服务间身份识别技术：[SPIFF ID](https://github.com/spiffe/spiffe)
@@ -764,6 +765,19 @@ TLS 1.3 从协议中删除了所有不安全的算法或协议，可以说只要
 
 前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。
 
+这导致了一些问题：
+
+- Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
+  - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
+- 因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。
+
+为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，基本 Nginx/Caddy 等各大 Web 服务器或网关，都支持 OCSP stapling 协议。
+
+在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
+因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。
+
+而另一个方法，就是选用 ocsp 服务器在目标用户区域速度快的 CA 机构签发证书。
+
 可以使用如下命令测试，确认站点是否启用了 ocsp stapling:
 
 ```conf
@@ -778,20 +792,7 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 
 >我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
 
-这导致了一些问题：
 
-- Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
-  - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
-- 因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。
-- 如果因为某些原因导致客户端无法访问 OCSP 服务器，会导致站点的初次访问时间用时变得很长。因为浏览器会每隔一阵时间就重新尝试去访问 OCSP 服务器！
-  - 一个典型的例子就是 [提高https载入速度，记一次nginx升级优化](https://www.hawu.me/operation/2129)，因为 Let's Encrypt 的 OCSP 服务器被 GFW 屏蔽，导致国内使用该证书的站点首次访问速度非常慢。
-
-为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地。
-
-在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
-因为 OCSP 信息会带有 CA 证书的签名及有效期，客户端可以直接通过签名验证 OCSP 信息的真实性与有效性，这样就避免了客户端访问 OCSP 服务器带来的开销。
-
-对于 Let's Encrypt 的 OCSP 服务器被 GFW 屏蔽这样的场景，开不开 OCSP Stapling 对站点访问速度的影响就会变得非常地大！
 
 #### ALPN 应用层协议协商
 
