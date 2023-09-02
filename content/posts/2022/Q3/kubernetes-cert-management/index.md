@@ -624,6 +624,14 @@ cert-manager 提供了 Prometheus 监控指标，可以直接使用 Prometheus �
 
 前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。
 
+这导致了一些问题：
+
+- Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
+  - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
+- 因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。
+
+为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，基本 Nginx/Caddy 等各大 Web 服务器或网关，都支持 OCSP stapling 协议。
+
 可以使用如下命令测试，确认站点是否启用了 ocsp stapling:
 
 ```conf
@@ -638,13 +646,6 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 
 >我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
 
-这导致了一些问题：
-
-- Chrome/Firefox 等浏览器都会定期通过 OCSP 协议去请求 CA 机构的 OCSP 服务器验证证书状态，这可能会拖慢 HTTPS 协议的响应速度。
-  - 所谓的定期是指超过上一个 OCSP 响应的 `nextUpdate` 时间（一般为 7 天），或者如果该值为空的话，Firefox 默认 24h 后会重新查询 OCSP 状态。
-- 因为客户端直接去请求 CA 机构的 OCSP 地址获取证书状态，这就导致 CA 机构可以获取到一些对应站点的用户信息（IP 地址、网络状态等）。
-
-为了解决这两个问题，[rfc6066](https://www.rfc-editor.org/rfc/rfc6066) 定义了 OCSP stapling 功能，它使服务器可以提前访问 OCSP 获取证书状态信息并缓存到本地，基本 Nginx/Caddy 等各大 Web 服务器或网关，都支持 OCSP stapling 协议。
 
 
 在客户端使用 TLS 协议访问 HTTPS 服务时，服务端会直接在握手阶段将缓存的 OCSP 信息发送给客户端。
