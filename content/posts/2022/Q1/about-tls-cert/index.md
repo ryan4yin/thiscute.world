@@ -432,16 +432,17 @@ TLS 证书支持配置多个域名，并且支持所谓的通配符（泛）域�
 openssl ecparam -list_curves
 ```
 
-目前在 TLS 协议以及 JWT 签名算法中，目前应该最广泛的椭圆曲线仍然是 NIST 系列：
+目前（2022 年）在 TLS 协议以及 JWT 签名算法中，应用最广泛的椭圆曲线仍然是 NIST 系列：
 
-- `P-256`: 到目前为止 P-256 应该仍然是应用最为广泛的椭圆曲线
+
+- `P-256`: 目前仍然应用最为广泛的椭圆曲线
   - 在 openssl 中对应的名称为 `prime256v1`
 - `P-384`
   - 在 openssl 中对应的名称为 `secp384r1`
 - `P-521`
   - 在 openssl 中对应的名称为 `secp521r1`
 
->此外还有新兴的 x25519 系列，这里不多介绍了，有兴趣可自行了解。
+> 但是我们也看到 X25519(`Curve25519`) 正在越来越流行，因为美国政府有前科（[NSA 在 RSA 加密算法中安置后门是怎么一回事，有何影响？——知乎](https://www.zhihu.com/question/22343037），NIST 标准被怀疑可能有后门，目前很多人都在推动使用 `Curve25519` 等社区方案取代掉 NIST 标准曲线。限于篇幅，感兴趣请自行了解。
 
 生成一个使用 `P-384` 曲线的 ECC 证书的示例如下: 
 
@@ -527,10 +528,10 @@ openssl ecparam -list_curves
 
 而证书的申请与管理方式又分为两种：
 
-1. 通过 [ACMEv2（Automated Certificate Management Environment (ACME) ](https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment) 协议进行证书的自动化申请与管理。支持使用此开放协议申请证书的权威机构有：
+- 通过 [ACMEv2（Automated Certificate Management Environment (ACME) ](https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment) 协议进行证书的自动化申请与管理。有许多权威机构支持使用此开放协议申请证书，按是否收费可分为如下两类：
   - 免费服务
     - Let's Encrypt: 众所周知，它提供三个月有效期的免费证书。
-    - [ZeroSSL](https://zerossl.com/documentation/acme/):  貌似也是一个比较有名的 SSL 证书服务
+    - [ZeroSSL](https://zerossl.com/documentation/acme/):  也是一个比较有名的 SSL 证书服务，它既有免费服务，也有付费服务。
       - 通过 ACME 协议支持不限数量的 90 天证书，也支持多域名证书与泛域名证书。
       - 它相比 Let's Encrypt 的优势是，它提供一个证书控制台，可以查看与管理用户当前的所有证书，了解其状态。
   - 付费服务
@@ -538,7 +539,7 @@ openssl ecparam -list_curves
     - Google Trust Services: Google 推出的公网证书服务，也是三个月有效期，其根证书交叉验证了 GlobalSign。官方文档 [Automate Public Certificates Lifecycle Management via RFC 8555 (ACME)](https://cloud.google.com/blog/products/identity-security/automate-public-certificate-lifecycle-management-via--acme-client-api)
     - Entrust: 官方文档 [Entrust's ACME implementation](https://www.entrust.com/knowledgebase/ssl/how-to-use-acme-to-install-ssl-tls-certificates-in-entrust-certificate-services-apache#step1)
     - GlobalSign: 官方文档 [GlobalSign ACME Service](https://www.globalsign.com/en/acme-automated-certificate-management)
-  - 相关的自动化工具
+  - ACME 相关的自动化工具
     - 很多代理工具都有提供基于 ACMEv2 协议的证书申请与自动更新，比如:
       - [Traefik](/network-proxy+web-server/traefik/README.md)
       - [Caddy](https://github.com/caddyserver/caddy)
@@ -546,8 +547,8 @@ openssl ecparam -list_curves
     - **网上也有一些 [certbot](https://github.com/certbot/certbot) 插件，可以通过 DNS 提供商的 API 进行 ACMEv2 证书的申请与自动更新，比如**: 
       - [certbot-dns-aliyun](https://github.com/tengattack/certbot-dns-aliyun)
     - **terraform 也有相关 provider**: [terraform-provider-acme](https://github.com/vancluever/terraform-provider-acme)
-    - [cert-manager](https://github.com/cert-manager/cert-manager): kubernetes 中的证书管理工具，支持 ACMEv2，也支持创建与管理私有证书。
-1. 通过一些权威 CA 机构或代理商提供的 Web 网站，手动填写信息来申请与更新证书。
+    - [cert-manager](https://github.com/cert-manager/cert-manager): kubernetes 中的证书管理工具，支持 ACMEv2，也支持创建与管理私有证书。我写过一篇文章介绍此工具的使用 [Kubernetes 中的证书管理工具 - cert-manager](https://thiscute.world/posts/kubernetes-cert-management/)
+- 通过一些权威 CA 机构或代理商提供的 Web 网站，手动填写信息来申请与更新证书。
   - 这个流程相对会比较繁琐。
 
 这些权威机构提供的证书服务，提供的证书又有不同的分级，这里详细介绍下三种不同的证书级别，以及该如何选用：
