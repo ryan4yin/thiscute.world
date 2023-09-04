@@ -1018,7 +1018,17 @@ TLS 加密是一个安全协议，工程上虽然有 Google 等公司力推所�
   - 我本人就于 2022 年，在 AWS 上通过这个手段优化了一波广告业务 API 的延迟，广告收益有明显上涨。
 
 
-## 三、参考
+## 三、其他推荐读物
+
+> 内容会有些重叠，但各有新知 
+
+- [图解密码技术 - [日]结城浩](https://book.douban.com/subject/26822106/)
+- [给工程师：关于证书（certificate）和公钥基础设施（PKI）的一切](https://mp.weixin.qq.com/s/li3ZjfNgX5nh7AKjyyzt5A)
+- [有关 TLS/SSL 证书（我所知道的）的一切 - 卡瓦邦噶](https://www.kawabangga.com/posts/5330)
+- [HTTPS 隐私安全的一些实践 - Laisky](https://blog.laisky.com/p/https-in-action/)
+
+
+## 四、参考
 
 - [HTTPS 温故知新（三） —— 直观感受 TLS 握手流程(上)](https://halfrost.com/https_tls1-2_handshake/)
 - [HTTPS 温故知新（五） —— TLS 中的密钥计算](https://halfrost.com/https-key-cipher/)
@@ -1037,12 +1047,4 @@ TLS 加密是一个安全协议，工程上虽然有 Google 等公司力推所�
 
 - [Certificate and Public Key Pinning - OWASP](https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning)
 - [Difference between certificate pinning and public key pinning](https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning)
-
-
-其他推荐读物（内容会有些重叠，但各有新知）: 
-
-- [图解密码技术 - [日]结城浩](https://book.douban.com/subject/26822106/)
-- [给工程师：关于证书（certificate）和公钥基础设施（PKI）的一切](https://mp.weixin.qq.com/s/li3ZjfNgX5nh7AKjyyzt5A)
-- [有关 TLS/SSL 证书（我所知道的）的一切 - 卡瓦邦噶](https://www.kawabangga.com/posts/5330)
-- [HTTPS 隐私安全的一些实践 - Laisky](https://blog.laisky.com/p/https-in-action/)
 
