@@ -18,10 +18,11 @@ toc:
 
 >按优先级排序
 
-- [Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)
-- 英语阅读
-  - The Great Gatsby - 10/41
-
+- 学习研究 NixOS 与 ARM64 / RISCV64 开发板
+- 学习与理解公益，参与公益活动
+  - 目前想了解的：英国的社会企业与医疗体系，中国的扶贫攻坚
+- 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
+- 《一个天文学家的夜空漫游指南》
 
 ## 二、我今年还想搞搞这些
 
@@ -42,60 +43,42 @@ toc:
 >电子版都可以在 z-library 上很方便地下载到，实体书的话可以在多抓鱼等二手书平台碰碰运气。
 
 已读：
-- The Moon and Sixpence
+- 2023-03-09 - The Moon and Sixpence
+  - 你是要地上的六便士，还是要天上的月亮？
+- 2023-06-23 - [NixOS & Flakes Book](https://github.com/ryan4yin/nixos-and-flakes-book)
+  - 这不是我今年读的书，而是我自己写的一本中英双语的开源小书，算是今年到目前为止的巅峰成就了。
+- 2023-08-31 - [How to Do Great Work - Paul Graham](http://www.paulgraham.com/greatwork.html)
+  - 黑客与画家一篇两万多字的长文，也算是一本小书了吧，干货满满。
 
 正在读：
+- 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
+- 《一个天文学家的夜空漫游指南》
+- The Great Gatsby - 10/41
 - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
-- [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
-- The Great Gatsby
 
 
-想读，但是没啥计划：
+想读，但是没啥计划（大致按感兴趣程度排序）：
 
-- 英语语法
-  - 《English Grammer In Use》
-  - 《英语语法新思维——初级教程》     - 8/366
-- 英语阅读：
-  - Sophie's World
-  - Majo no Tabitabi（魔女之旅）Vol.1
-  - Tasogare-iro no Uta Tsukai（黄昏色的咏使）Vol.1
-  - Moon Palace, by Pual Auster - 读过中文版，但是看英文版词汇量也不高，可以一读
-- 《江城》
-- 《被讨厌的勇气》
-- 《科学革命的结构》
-- 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-- 《语言学的邀请》- 进度 68/288
-  - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
-- 《云原生服务网格 Istio：原理、实践、架构与源码解析》
-  - 比较老的书了，不过用来学下 Istio 的底层架构跟源码，感觉还是有价值的。
-- 《生命最后的读书会》
-- 《凤凰项目：一个 IT 运维的传奇故事》
-- 《复杂 - 梅拉尼 米歇尔》
-- 《Principles Of Economics, 9e, N. Gregory Mankiw》
+- 第一梯队
+  - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
+  - 《一个天文学家的夜空漫游指南》
+  - 《刘擎西方现代思想讲义》
+  - 《界限：通往个人自由的实践指南》
+  - 《复杂 - 梅拉尼 米歇尔》
+- 第二梯队
+  - 《科学革命的结构》
+  - 《江城》
+  - 《山月记》
+  - 《生命最后的读书会》
+  - 《被讨厌的勇气》
+  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+  - 《步天歌研究》
+  - 《性命圭旨》
 
 ## 四、备选学习路线
 
 ### 1. 高优先级
-
-#### 嵌入式/物联网
-
-嵌入式跟 IoT 是我 2022 年底开的新坑，目前兴趣强烈。
-
-我目前收集的相关内容（仅是一个资料合集，内容有重复的）：
-
-- 嵌入式 Linux 系列
-  - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
-  - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
-  - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
-  - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
-  - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从 bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一下。 
-- 电路原理
-  - Practical Electronics for Inventors, Fourth Edition
-- 芯片
-  - STM32 ESP32 RK3588s 
-- 目前的学习目标
-  - DIY 无人机编队飞行！要达成这个目标需要学习的东西有点多，慢慢努力吧~
 
 #### 操作系统
 
@@ -120,6 +103,28 @@ toc:
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
+
+
+#### 嵌入式/物联网
+
+嵌入式跟 IoT 是我 2022 年底开的新坑，目前兴趣强烈。
+
+我目前收集的相关内容（仅是一个资料合集，内容有重复的）：
+
+- 嵌入式 Linux 系列
+  - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
+  - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
+  - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
+  - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
+  - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从 bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一下。 
+- 电路原理
+  - Practical Electronics for Inventors, Fourth Edition
+- 芯片
+  - STM32 ESP32 RK3588s 
+- 目前的学习目标
+  - DIY 无人机编队飞行！要达成这个目标需要学习的东西有点多，慢慢努力吧~
+
+### 2. 以后可能会感兴趣的
 
 #### 计算机网络
 
@@ -233,7 +238,7 @@ toc:
 - 文学类：
   - 《百年孤独》：高中的时候读过一遍，但是都忘差不多了
   - 《霍乱时期的爱情》
-  - 《苏菲的世界》：据说是哲学启蒙读物，曾经看过，但是对内容完全没印象了。
+  - 《苏菲的世界（Sophie's World）》：据说是哲学启蒙读物，曾经看过，但是对内容完全没印象了。
   - 《你一生的故事》：我也曾是个科幻迷
   - 《沈从文的后半生》：这本书更偏研究性质，有点难读
   - 《房思琪的初恋乐园》
@@ -243,11 +248,15 @@ toc:
 - 人文社科
   - 《Social Psychology, 13e, David Myers》
   - 《Intimate Relationships》 - 进度 14/449
+  - 《Principles Of Economics, 9e, N. Gregory Mankiw》
+  - Majo no Tabitabi（魔女之旅）Vol.1
+  - Tasogare-iro no Uta Tsukai（黄昏色的咏使）Vol.1
+  - Moon Palace, by Pual Auster - 读过中文版，但是看英文版词汇量也不高，可以一读
+  - Animal Farm - 一本政治讽刺小书
   - 《手把手教你读财报》
   - 《原则 - 应对变化中的世界秩序》
   - 《探路之役 - 1978-1922 年的中国经济改革》
   - 《筚路维艰 - 中国社会主义路径的五次选择》
-  - 《刘擎西方现代思想讲义》
   - 《圆圈正义-作为自由前提的信念》
   - 《人体简史》
   - 《邓小平时代》
@@ -258,13 +267,20 @@ toc:
   - 《投资中最简单的事》
   - 《债务危机 - 我的应对原则》
   - 《分析与思考 - 黄奇帆的复旦经济课》：这本书会需要一定的经济学基础知识，打算在入门经济学后再看
+  - 《语言学的邀请》- 进度 68/288
+    - 对语言学有点兴趣，同时听说这本书对表达（沟通、写作）也大有帮助~
 - 技术类
   - 《人月神话》
   - 《绩效使能：超越 OKR》
   - 《奈飞文化手册》
   - 《幕后产品-打造突破式思维》
   - 《重构 - 改善既有代码的设计》
-
+  - 《云原生服务网格 Istio：原理、实践、架构与源码解析》
+    - 比较老的书了，不过用来学下 Istio 的底层架构跟源码，感觉还是有价值的。
+  - 《凤凰项目：一个 IT 运维的传奇故事》
+- 英语语法
+  - 《English Grammer In Use》
+  - 《英语语法新思维——初级教程》     - 8/366
 
 ---
 
