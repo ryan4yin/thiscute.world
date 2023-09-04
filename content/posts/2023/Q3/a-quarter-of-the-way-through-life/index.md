@@ -9,7 +9,7 @@ resources:
   src: "2023-08-20_github-projects.webp"
 
 tags: ["总结"]
-categories: ["life", "tech"]
+categories: ["life"]
 series: ["年终总结"]
 
 lightgallery: false
