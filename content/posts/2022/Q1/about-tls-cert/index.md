@@ -1039,7 +1039,10 @@ TLS 加密是一个安全协议，工程上虽然有 Google 等公司力推所�
 - [Difference between certificate pinning and public key pinning](https://security.stackexchange.com/questions/85209/difference-between-certificate-pinning-and-public-key-pinning)
 
 
-其他推荐读物: 
+其他推荐读物（内容会有些重叠，但各有新知）: 
 
 - [图解密码技术 - [日]结城浩](https://book.douban.com/subject/26822106/)
 - [给工程师：关于证书（certificate）和公钥基础设施（PKI）的一切](https://mp.weixin.qq.com/s/li3ZjfNgX5nh7AKjyyzt5A)
+- [有关 TLS/SSL 证书（我所知道的）的一切 - 卡瓦邦噶](https://www.kawabangga.com/posts/5330)
+- [HTTPS 隐私安全的一些实践 - Laisky](https://blog.laisky.com/p/https-in-action/)
+
