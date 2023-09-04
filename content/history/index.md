@@ -1786,6 +1786,9 @@ comment:
     - 「好题目往往是较大的加分项哈，比如《你当像鸟飞往你的山》比原著那个《Educated:  A  Memoir》具象和诗意N多？我承认，我就是被那本书的标题所吸引，然后一气呵成读完的。。。」
 - 总之，@Dafoffil 给我推荐了《步行者日记》跟《当你像鸟飞往你的山》，而我给他推荐了《陈行甲人生笔记》跟《走出荒野（Wild: From Lost to Found on the Pacific Crest Trail）》，非常愉快的一次互相荐书！
 
+
+{{<figure src="/images/now/recommend-books.webp" title="荐书《在峡江的转弯处——陈行甲人生笔记》" width="80%">}}
+
 ### 2022-08-21
 
 - 为了练习 C 语言，使用 ffmpeg 完成了一个 video2ascii 项目
