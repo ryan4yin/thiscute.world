@@ -121,7 +121,9 @@ toc:
 - 电路原理
   - Practical Electronics for Inventors, Fourth Edition
 - 芯片
-  - STM32 ESP32 RK3588s 
+  - ARM64: STM32 ESP32 RK3588s
+  - RISCV: milkv mars/duo, licheepi4a
+  - FPGA: 荔枝糖系列，verilog 练习 https://hdlbits.01xz.net/wiki/Main_Page
 - 目前的学习目标
   - DIY 无人机编队飞行！要达成这个目标需要学习的东西有点多，慢慢努力吧~
 
