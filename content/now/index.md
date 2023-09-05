@@ -125,7 +125,7 @@ toc:
 - 芯片
   - ARM64: STM32 ESP32 RK3588s
   - RISCV: milkv mars/duo, licheepi4a
-  - FPGA: 荔枝糖系列，verilog 练习 https://hdlbits.01xz.net/wiki/Main_Page
+  - FPGA / 电路设计: [FPGA 玩耍之旅](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/fpga)
 - 目前的学习目标
   - DIY 无人机编队飞行！要达成这个目标需要学习的东西有点多，慢慢努力吧~
 
