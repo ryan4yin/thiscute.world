@@ -73,6 +73,14 @@ cat xxx | grep -v 'pattern'
 # 高亮显示搜索结果
 cat xxx | grep --color 'pattern'
 
+# 通过 find 查找所有子文件夹中的 config.xml 文件，并在其中查找包含关键字 <recipients> 的行
+# 再通过 awk 提取出文件名和需要的关键字
+#   -maxdepth 2 表示最大递归深度为 2（子文件夹）
+#   -exec echo \'{}\' \; 表示将 find 命令的输出使用 echo 命令添加单引号包裹起来，防止文件名中有空格导致 grep 命令出错
+#   xargs grep '<recipients>' 表示将 find 命令的输出作为 grep 命令的输入
+#   awk -F '[:<>]' '{print $1,$4}' 表示使用 : < > 作为分隔符，打印出第 1 列和第 4 列
+find -maxdepth 2 -name "config.xml" -exec echo \'{}\' \; | xargs grep '<recipients>' | awk -F '[:<>]' '{print $1,$4}'
+
 # 在文件夹中递归查找所有中文字符（在做中英双语内容维护时比较有用）
 # -P 表示使用 Perl 正则表达式，[\x{4e00}-\x{9f5a}] 表示匹配所有中文字符
 grep -P '[\x{4e00}-\x{9f5a}]' -r .
@@ -160,6 +168,8 @@ cat xxx.txt | awk -F '{print $1}' | head
 
 ## 2. 可以使用 -F 指定分隔符，打印出多列
 awk -F ',' '{print $1,$2}'| head
+### -F 也可以使用正则表达式指定多个分隔符
+awk -F '[,;]' '{print $1,$2}'| head
 
 # 在文件开头与末尾分别添加字符串
 seq 2 | awk 'BEGIN{print "---"} 1; END{print "%%%"}'
@@ -187,7 +197,7 @@ awk 'BEGIN {min = 1999999} {if ($1<min) min=$1 fi} END {print "Min=", min}'
 
 [jq](https://github.com/stedolan/jq)/[yq](https://github.com/mikefarah/yq) 常用命令：
 
-```shell
+```bash
 # 1. jq 是一个命令行 json 处理工具
 
 ## 从 json 中查询某一个字段的值
