@@ -21,6 +21,21 @@ comment:
 > Twitter 上 @Manjusaka_Lee 等大佬喜欢写周报，不过我不太喜欢周报的形式。因为周报的标题本身没啥意义，而要看其中的内容却得一个个点进去看，这对我自己回顾过往的学习、工作、生活，体验非常不方便。
 > 我比较喜欢类似「一镜到底」的阅读体验，所以我采用这种单页的方式来记录我的日常。（基于同样的理由，我将博客单页展示的文章数量上限调整成了 `1000`）
 
+### 2023-09-06
+
+- 发现昨天找的书，前面数字电路部分讲得太学术，找了本更适合入门的教程看：Practical Electronics for Inventors, Fourth Edition
+- 简单读了点组合电路设计后，我直接跳到了书的第 14 章（FPGA 与 Verilog），发现阅读没啥障碍，于是直接开始折腾 FPGA 了。
+- 花了一个多小时尝试将高云的 IDE 打包运行在 NixOS 上，发现没那么简单，先放弃了，直接重启进 Windows 开始折腾 FPGA。
+- 首先跑了荔枝糖 9K 官方的流水灯例子，然后对照第 14 章，学习了 verilog 的基本语法，将流水灯例子中的时钟信号替换成了引脚的按键信号，实现了按键控制切换流水灯的效果，很有意思！
+- 了解了 verilog 与 system verilog 的区别
+    - verilog 类似 C 语言，更贴近硬件，非常老牌，目前在国内还是主流的芯片设计语言（平头哥的 xuantie 系列都是 verilog）
+    - system verilog 根据我看的 《Digital Design and Computer Architecture RISC-V Edition》的说法，是 verilog 的超集，而且未来会取代掉 verilog 的地位。但国内目前貌似主要将它应用在芯片验证领域，用于设计的可能少一点。
+    - 此外还有新兴的基于 scala 语言平台的 chisel 等语言，还不太成熟，已经有一些公司在用了，但还没普及开来。写起来肯定是有一些优势，但总体而言属于可学可不学的东西，有兴趣可以玩玩。
+- 我学的电路书主要还是介绍电路，verilog 语言就简单介绍了几个例子。还是得找专门的教程学一学，这是两个 google 出来最好的教程：
+    - https://www.chipverify.com/tutorials/verilog
+    - （页面风格有点古早）https://www.asic-world.com/verilog/veritut.html
+    - 以及 system verilog 教程： https://www.chipverify.com/tutorials/systemverilog
+
 ### 2023-09-05
 
 - 突然对 FPGA 燃起了兴趣，看了点《Digital Design and Computer Architecture RISC-V Edition》
