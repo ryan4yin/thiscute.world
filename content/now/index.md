@@ -28,8 +28,9 @@ toc:
   - 再学点 FPGA 基础知识
     - 书籍：Practical Electronics for Inventors, Fourth Edition
     - 开发板：矽速荔枝糖系列，主要用 verilog 语言开发
-    - 阅读第 14 章，再网上找点其他 verilog 资料对照学习下
-    - verilog 练习题：https://hdlbits.01xz.net/wiki/Main_Page
+    - 阅读第 14 章，简单入门 FPGA
+    - verilog 语言，直接用这个站点就够了，是非常好的教程 + 练习场：
+      - <https://hdlbits.01xz.net/wiki/Main_Page>
   - 进阶：学习 RISCV 与处理器微架构
     - 书籍：Digital Design and Computer Architecture RISC-V Edition
     - 此书从第六章开始讲 RISCV 微架构。
