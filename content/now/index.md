@@ -31,6 +31,8 @@ toc:
     - 阅读第 14 章，简单入门 FPGA
     - verilog 语言，直接用这个站点就够了，是非常好的教程 + 练习场：
       - <https://hdlbits.01xz.net/wiki/Main_Page>
+    - 更有趣的练习题： https://www.fpga4fun.com/
+    - 从 LED 点灯到 RISCV CPU（循序渐进）: https://github.com/BrunoLevy/learn-fpga/blob/master/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/README.md
   - 进阶：学习 RISCV 与处理器微架构
     - 书籍：Digital Design and Computer Architecture RISC-V Edition
     - 此书从第六章开始讲 RISCV 微架构。
