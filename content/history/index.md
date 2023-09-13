@@ -31,6 +31,9 @@ comment:
 
 - 预定了大半年的「流浪地球笨笨模型」到货了，一整晚拼了四个半小时，搞到晚上一点多才完成（真的比上班还累、中间休息了半个小时），效果确实不错。
 
+{{<figure src="/images/now/the-wandering-earth-2_benben_1.webp" title="流浪地球 2 笨笨模型开箱" width="80%">}}
+{{<figure src="/images/now/the-wandering-earth-2_benben_complete.webp" title="流浪地球 2 笨笨模型完成图" width="80%">}}
+
 ### 2023-09-10
 
 - 今天读到一篇文章，认为最近在日本把自己饿死的王懿，是中国「失落的一代」，这给我一些新的感悟。
