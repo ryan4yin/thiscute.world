@@ -36,12 +36,10 @@ toc:
   - 进阶：学习 RISCV 与处理器微架构
     - 书籍：Digital Design and Computer Architecture RISC-V Edition
     - 此书从第六章开始讲 RISCV 微架构。
-- 学习研究 NixOS 与 ARM64 / RISCV64 开发板
 - 《孩子：挑战》：如何在尊重孩子、给孩子平等自由的同时，让孩子尊重规则、承担责任、赢得合作。阿德勒心理学。
 - 《P.E.T.父母效能训练 - 让亲子沟通如此高效而简单》
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - 《一个天文学家的夜空漫游指南》
-- 练习 Midi 键盘
 
 ## 二、我今年还想搞搞这些
 
@@ -56,6 +54,7 @@ toc:
   - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
   - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
   - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
+- 学习研究 NixOS 与 ARM64 / RISCV64 开发板 - 这项意料之外的工作进展神速！
 
 ## 三、今年的阅读进展
 
