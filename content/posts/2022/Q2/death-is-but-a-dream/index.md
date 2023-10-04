@@ -61,9 +61,9 @@ comment:
 那是多少年前了呢？只知道是很多年前了，不仔细回忆回忆、掐指算算，都搞不清具体过了多少年月。
 这么多个日日夜夜里，我幼稚过、热血过，也迷茫过、颓废过，倒也不算庸庸碌碌，我还是知足的，这种心态貌似是被称作现充 emmm
 
-高三时曾经看过一本超级喜欢的励志书，这么多年来我一直带在身边，名字叫《这一生再也不会有的奇遇》。书的扉页只有一句话：「当明天再也不是无限，你还会像今天一样度过你的人生吗？」
+高三时曾经看过一本超级喜欢的励志书，后来我高考完于徽州求学、深圳打工，这么多年一直将它带在身边，书名叫《这一生再也不会有的奇遇》。书的扉页只有一句话：「当明天再也不是无限，你还会像今天一样度过你的人生吗？」
 
-{{< figure src="/images/death-is-but-a-dream/an-adventure-that-will-never-happen-again-in-this-life_cover.webp" title="《这一生再也不会有的奇遇》已陪我度过了七八个春秋" >}}
+{{< figure src="/images/death-is-but-a-dream/an-adventure-that-will-never-happen-again-in-this-life_cover.webp" title="《这一生再也不会有的奇遇》已陪我度过了七八个春夏秋冬" >}}
 
 {{< figure src="/images/death-is-but-a-dream/an-adventure-that-will-never-happen-again-in-this-life_title-page.webp" title="当明天再也不是无限" >}}
 
