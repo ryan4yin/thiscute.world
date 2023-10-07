@@ -66,7 +66,7 @@ toc:
 - 2023-03-09 - The Moon and Sixpence
   - 你是要地上的六便士，还是要天上的月亮？
 - 2023-06-23 - [NixOS & Flakes Book](https://github.com/ryan4yin/nixos-and-flakes-book)
-  - 这不是我今年读的书，而是我自己写的一本中英双语的开源小书，算是今年到目前为止的巅峰成就了。
+  - 我自己写的一本开源小书，算是今年到目前为止的巅峰成就了
 - 2023-08-31 - [How to Do Great Work - Paul Graham](http://www.paulgraham.com/greatwork.html)
   - 黑客与画家一篇两万多字的长文，也算是一本小书了吧，干货满满。
 - 2023-09-29 - 《被讨厌的勇气》
