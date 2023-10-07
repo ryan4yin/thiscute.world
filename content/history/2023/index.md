@@ -1,5 +1,5 @@
 ---
-title: "曾经的我"
+title: "曾经的我 - 2023"
 date: 2021-02-01T14:14:35+08:00
 draft: false
 
@@ -23,7 +23,7 @@ comment:
 
 历史记录：
 
-- [今年](/history/thisyear/)
+- [2023](/history/2023/)
 - [2022](/history/2022/)
 - [2021](/history/2021/)
 
