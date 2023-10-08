@@ -363,6 +363,34 @@ toc:
 - 神秘学（没准啥时候我就想写点小说...）
   - 《性命圭旨》
 
+
+## 探索互联网上的高质量内容
+
+> 主要参考自 https://www.owenyoung.com/sources/
+
+> 互联网信息泛滥，我从各种信息来源中挑选了一部分我感兴趣的、受推荐次数较多的信息源列在了这里。
+> 也要注意的是，天天看最新的新闻与热点，对个人并没有什么好处。在有兴趣或者无聊的时候翻一翻，了解一下世界的变化就好了。
+
+中国与国际上的政史内容：
+
+- [爱思想网](https://www.aisixiang.com/): 国内的一个学术分享站点，国内许多学者在上面针砭时弊。
+- [中国 1850 - 1950 年间的各种报纸](https://archive.org/details/eastasia-periodicals)
+
+时事新闻（全英文）：
+
+> 有人精选了一些信息源，并制作了一份中文摘要索引: https://www.buzzing.cc/
+
+- [纽约客](https://www.newyorker.com/): 纽约客是一份美国的文学、艺术和时事杂志，以其对政治、文化和时事的评论而闻名。
+- [大西洋](https://www.theatlantic.com/): 大西洋是一份美国社论杂志，的特色文章涉及政治、外交，商业与经济，文化与艺术，科技和科学等领域。
+- [英国卫报](https://www.theguardian.com/uk): 英国卫报是英国的一家全国性报纸。
+- [日本读卖新闻](https://www.yomiuri.co.jp/): 日本读卖新闻是日本的一家全国性报纸。
+- [半岛电视台](https://www.aljazeera.com/): 卡塔尔的国际媒体，由卡塔尔王室拥有。其特点是中东阿拉伯世界的视角。
+- 一些新兴媒体
+    - [新政治家](https://www.newstatesman.com/): 英国的一份进步政治与文化杂志。
+    - [Rest of the world](https://restofworld.org/): 科技报道
+    - [NOEMA](https://www.noemamag.com/): 「探索席卷我们世界的变革」，发表有关哲学、治理、地缘政治、经济、技术和文化交叉领域的文章。
+    - [Semafor](https://www.semafor.com/): 将无可争议的事实与记者对这些事实的分析分开，提供不同的和更全面的观点，并分享其他媒体对该主题的有力报道。
+
 ---
 
 ## 其他 ideas
