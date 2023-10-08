@@ -688,6 +688,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 - 瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU(2TOPS * 3)
   - 玩耍的笔记代码放在了这里（Python 与 C 语言）[electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
+  - 也用它玩上了 NixOS: [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588)
 - 树莓派 4B: 
   - 玩耍笔记与代码：[electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
 - 其他
@@ -701,7 +702,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
   - 矽速科技的 LicheePi 4A，国产高性能 RISC-V 开发版。
     - 已经用它玩上了 NixOS: [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
   - 群星闪耀家的 Milk-V Mars，同样是国产高性能 RISC-V 开发版，不过比 LicheePi 4A 弱一些（价格低好多哪）。
-    - 用的是赛昉家的 JH7100 芯片，在尝试用它玩 NixOS，但是目前还没成功。
+    - 用的是赛昉家的 JH7100 芯片，用 Nick_Cao 老师的代码跑了 NixOS 玩。
     - 吐槽：它家这名字是会取的，不论是「群星闪耀」还是「Milk-V」都很有意思
 
 其他我感兴趣的资料（资料内容有一定的重叠）：
