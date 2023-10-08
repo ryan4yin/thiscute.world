@@ -720,6 +720,12 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 >嵌入式 Linux 领域目前也仍然是 ARM 架构的天下，但是开源免费的 RISC-V 架构发展也很快，性能越来越强，生态越来越好，很值得期待。
 
+## 其他
+
+最近也整了点 FPGA 玩，学了点 Verilog 语言，浅尝辄止，做了点笔记：
+
+- [ee/fpga](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/fpga)
+
 ## 社区公众号收藏
 
 单纯一个人埋头自学未免太过枯燥，效率也不一定高，偶尔也可以逛逛各种社区、看看相关的技术博客、文章，是一个更丰富的信息源。

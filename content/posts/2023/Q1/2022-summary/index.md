@@ -92,7 +92,7 @@ comment:
   - 主要工作：继续推进线上网关优化项目，以及调研 K8s / Istio 的新版本变化，为集群升级做预备工作。
 - 12 月
   - 从 Homelab 折腾到 HomeAssistant/ESPHome，然后就折腾 ESP32/ESP8266，结果很意外地就买了一堆硬件，入手了电烙铁热风枪万用表等各种仪器，ESP/51/STM32 都玩了个遍...
-    - 输出内容有两个代码仓库：[learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm) 与 [learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)，以及一份 EE 笔记：[Electrical Engineering.md](https://github.com/ryan4yin/knowledge/blob/master/electrical-engineering/Electrical%20Engineering.md)
+    - 输出内容有两个代码仓库：[learn-8051-asm](https://github.com/ryan4yin/learn-8051-asm) 与 [learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)，以及一份 EE 笔记：[Electrical Engineering](https://github.com/ryan4yin/knowledge/blob/master/electrical-engineering)
       {{<figure src="/images/now/experience-of-electrical-engineering.webp" title="我的电子电路初体验" width="60%">}}
       {{<figure src="/images/now/8051-display-2023.webp" title="8051 汇编 - 数码管显示 2023" width="70%">}}
   - ChatGPT 横空出世，引发全网热潮。有技术大佬感慨，这个时刻竟然来临得如此之快，惊喜之余也有点猝不及防。我也把玩了一波，也用它帮助我学了许多硬件相关的东西，很有帮助。
