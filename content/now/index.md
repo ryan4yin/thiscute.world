@@ -395,12 +395,5 @@ toc:
 
 ---
 
-## 其他 ideas
-
-- 我看到 github 上 [gopala-kr/10-weeks](https://github.com/gopala-kr/10-weeks) 这个项目，作者进行了一项挑战——每周学习一个新技术栈，目标是在一周内理解该技术栈各项热词的含义并列出大纲，使用该技术构建一个简单的程序，并写一篇博客。我觉得我也可以试试，不过可以把难度降低一些——**利用业余时间，每两个月学习一门新技术，并达成与 gopala-kr 类似的目标**。
-- 其他感兴趣的
-  - 3D 建模与渲染：Blender、Unreal Engine 5、C++、taichi
-  - 音乐：乐理、Synthesizer V、Reaper、midi 键盘
-
 
 {{< particles_effect_up  >}}
