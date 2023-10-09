@@ -23,6 +23,11 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2023-10-09
+
+- 继续读《置身事内》
+- NixOS & Flakes Book 上 Hacker News 热门了，很开心：[NixOS and Flakes Book: An unofficial book for beginners (free)](https://news.ycombinator.com/item?id=37818570)
+
 ### 2023-10-08
 
 - v2ex 上总是不缺乏讨论人生意义的日经贴，找到一份古早的帖子，成年的梦想家们：[假如你不缺钱了，你会做件什么样的大事/有什么新的目标？](https://www.v2ex.com/t/345741)
