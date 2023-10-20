@@ -17,10 +17,16 @@ comment:
 
 ## 🌱 I’m currently learning
 
-- [Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)
-- TCP/IP Illustrated, Volume 1, 2nd Edition
-- [The Linux Programming Interface](https://man7.org/tlpi/)
+- How to Think Straight About Psychology, 11th Edition
+- Complexity: A Guideed Tour
+- Set Boundaries, Find Peace: A Guide to Reclaiming Yourself
 - The Great Gatsby
+- CS-EE
+  - [Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)
+  - TCP/IP Illustrated, Volume 1, 2nd Edition
+  - [The Linux Programming Interface](https://man7.org/tlpi/)
+  - Practical Electronics for Inventors, Fourth Edition
+  - Digital Design and Computer Architecture RISC-V Edition
 
 ## 🤤 I want to learn
 
