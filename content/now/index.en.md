@@ -17,6 +17,8 @@ comment:
 
 ## 🌱 I’m currently learning
 
+- [Mindfulness expert Jon Kabat-Zinn teaches you how to incorporate meditation into your everyday life to improve your health and happiness.](https://www.masterclass.com/classes/jon-kabat-zinn-teaches-mindfulness-and-meditation)
+  - After being diagnosed with ADHD, my doctor advised me to practice mindfulness meditation.
 - How to Think Straight About Psychology, 11th Edition
 - Complexity: A Guideed Tour
 - Set Boundaries, Find Peace: A Guide to Reclaiming Yourself
