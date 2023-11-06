@@ -22,24 +22,7 @@ toc:
 
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 《复杂 - 梅拉尼 米歇尔》
--  Neuroscience: Exploring the Brain, 4th edition (2015)
--  Cognitive Neuroscience: The Biology of the Mind, 5th edition (2019)
-- 从数字电路到 FPGA 再到 RISC-V
-  - 当前目标：用 FPGA 实现些小功能
-  - 先学点数字电路基础知识
-    - 书籍：Practical Electronics for Inventors, Fourth Edition
-    - 为了快速上手，直接跳过模拟电路部分，看第 12 到第 13 章
-  - 再学点 FPGA 基础知识
-    - 书籍：Practical Electronics for Inventors, Fourth Edition
-    - 开发板：矽速荔枝糖系列，主要用 verilog 语言开发
-    - 阅读第 14 章，简单入门 FPGA
-    - verilog 语言，直接用这个站点就够了，是非常好的教程 + 练习场：
-      - <https://hdlbits.01xz.net/wiki/Main_Page>
-    - 更有趣的练习题： https://www.fpga4fun.com/
-    - 从 LED 点灯到 RISCV CPU（循序渐进）: https://github.com/BrunoLevy/learn-fpga/blob/master/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/README.md
-  - 进阶：学习 RISCV 与处理器微架构
-    - 书籍：Digital Design and Computer Architecture RISC-V Edition
-    - 此书从第六章开始讲 RISCV 微架构。
+- Psychology and Life, 20th edition, by Richard J. Gerrig
 
 
 ## 二、我今年还想搞搞这些
@@ -105,6 +88,21 @@ toc:
 
 ### 1. 高优先级
 
+#### 心理学与认知神经科学
+
+学习路线：
+
+- 入门：
+    - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+    - Psychology and Life, 20th edition, by Richard J. Gerrig
+    - 《发展心理学：人的毕生发展 第8版（Development Across the Life Span）》
+- 进阶到认知神经科学
+   -  Neuroscience: Exploring the Brain, 4th edition (2015)
+   -  Cognitive Neuroscience: The Biology of the Mind, 5th edition (2019)
+- 其他方向
+   - 《Intimate Relationships》 - 进度 14/449
+   - 《Social Psychology, 14e, David Myers》
+
 #### 操作系统
 
 理解 Linux 操作系统也是我继续精进技术必不可少的技能。
@@ -133,6 +131,26 @@ toc:
 #### 嵌入式/物联网
 
 嵌入式跟 IoT 是我 2022 年底开的新坑，目前兴趣强烈。
+
+之前制定的 FPGA 学习路线：
+
+- 从数字电路到 FPGA 再到 RISC-V
+  - 当前目标：用 FPGA 实现些小功能
+  - 先学点数字电路基础知识
+    - 书籍：Practical Electronics for Inventors, Fourth Edition
+    - 为了快速上手，直接跳过模拟电路部分，看第 12 到第 13 章
+  - 再学点 FPGA 基础知识
+    - 书籍：Practical Electronics for Inventors, Fourth Edition
+    - 开发板：矽速荔枝糖系列，主要用 verilog 语言开发
+    - 阅读第 14 章，简单入门 FPGA
+    - verilog 语言，直接用这个站点就够了，是非常好的教程 + 练习场：
+      - <https://hdlbits.01xz.net/wiki/Main_Page>
+    - 更有趣的练习题： https://www.fpga4fun.com/
+    - 从 LED 点灯到 RISCV CPU（循序渐进）: https://github.com/BrunoLevy/learn-fpga/blob/master/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/README.md
+  - 进阶：学习 RISCV 与处理器微架构
+    - 书籍：Digital Design and Computer Architecture RISC-V Edition
+    - 此书从第六章开始讲 RISCV 微架构。
+
 
 我目前收集的相关内容（仅是一个资料合集，内容有重复的）：
 
@@ -340,9 +358,6 @@ toc:
   - 《为公益而共和 - 阿拉善SEE生态协会治理之路》
   - 《公益創業 - 青年創業與中年專業的新選擇》
   - 《蓝毛衣》：如何成为一个社会企业家，有作者的亲身经历，走过的失败教训与成功经验
-- 心理学 / 人际关系
-  - 《Intimate Relationships》 - 进度 14/449
-  - 《Social Psychology, 14e, David Myers》
 - 虚构类
   - Majo no Tabitabi（魔女之旅）Vol.1
   - Tasogare-iro no Uta Tsukai（黄昏色的咏使）Vol.1
