@@ -96,6 +96,7 @@ toc:
     - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
     - Psychology and Life, 20th edition, by Richard J. Gerrig
     - 《发展心理学：人的毕生发展 第8版（Development Across the Life Span）》
+    - 《教育心理学（第14版）》，作者: [美]安妮塔·伍尔福克（Anita Woolfolk）
 - 进阶到认知神经科学
    -  Neuroscience: Exploring the Brain, 4th edition (2015)
    -  Cognitive Neuroscience: The Biology of the Mind, 5th edition (2019)
