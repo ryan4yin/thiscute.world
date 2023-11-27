@@ -23,6 +23,24 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2023-11-25 - 2023-11-26
+
+- NixOS 系统最近总是启动没多久网络就会卡死，重装了 NixOS 系统并添加了 LUKS 全盘加密，问题就消失了，猜测是 home 目录有什么 GUI 相关的配置文件有毛病导致的。
+    - 之前的问题：
+      - 系统启动没多久网络就会卡死，但除网络之外其他的都正常。
+      - 测了 X11 / Wayland 都有一样的问题，但是退出 X11 / Wayland 切换到 TTY 后，网络就恢复正常了。
+      - dmesg / journalctl 都没找到啥有用的信息。
+    -  新的 NixOS+BTRFS 全盘加密方案文档及配置：<https://github.com/ryan4yin/nix-config/tree/nixos-install>
+- 跟朋友聊了 BTRFS 与 LUKS 加密相关的信息，他提到了 Secure Boot + TPM2 + FIDO2 + LUKS + Recover Key 的方案，这应该是目前最安全的方案了，打算有空研究下。
+    - NixOS + Secuer Boot 的配置方法：<https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md>
+    - 在 NixOS 上使用 TPM2 自动解锁 LUKS 的配置方法待研究。
+- 后面打算逐步把 Homelab 所有物理机都改成全盘加密方案，同时所有数据盘 / 备份盘也都改成 LUKS 加密，全面强化数据安全。
+
+### 2023-11-13 - 2023-11-24
+
+- 工作上效率挺高，上班时间沉迷工作无法自拔...
+- 2023-11-18 - 2023-11-19 带我妹到处玩玩，复诊。安非他酮我妹吃着效果
+
 
 ### 2023-11-14
 
