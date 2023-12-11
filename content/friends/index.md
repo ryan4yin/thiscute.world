@@ -48,10 +48,9 @@ comment:
 // 以下为样例内容，按照格式可以随意修改
 var myFriends = [
     ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
-    // ["https://sanshiliuxiao.top/", "https://cdn.jsdelivr.net/gh/vensing/static@latest/avatar/sanshiliuxiao.jpg", "@三十六咲", "快走吧，趁风停止之前"], 
+    ["https://blog.z-xl-t.top/", "https://blog.z-xl-t.top/favicon.jpg", "@薯条流浪法师", "快走吧，趁风停止之前"], 
     ["https://rea.ink/", "/avatar/rea.ink.webp", "@倾书", "清风皓月，光景常新 <= 前端"], 
     ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
-    // ["https://www.i-lab.top/", "https://www.i-lab.top/favicon.ico", "@震邦的算法日常", "南北传"], 
     ["https://nopdan.com/", "https://nopdan.com/avatar.webp", "@单单", "但知行好事，莫要问前程"], 
     ["https://farer.org/", "/avatar/farer.webp", "@Stray Episode", "Scientific Evocation"], 
     ["https://wasteland.touko.moe", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
@@ -66,7 +65,6 @@ var myFriends = [
     ["https://stdrc.cc/", "/avatar/richardchien.webp", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot作者/OS大佬"], 
     ["https://fmcf.cc/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@春花秋月", "他戴着花冠，踏于风雪，探寻迷途的救赎，绽放生命的曙光"], 
     ["https://www.lionad.art/", "/avatar/lionad-morotar.webp", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
-    ["https://ryanyang.cn/", "/avatar/ryanyang.webp", "@ryanyang", "一位智慧的阿拉伯诗人 <= Java 后端大佬"], 
     ["https://abohe.cn/", "https://img.abohe.cn/logo.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
