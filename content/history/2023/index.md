@@ -1152,7 +1152,7 @@ comment:
 
 - 研究 Homelab 备份与数据同步方案，写了点笔记 [数据备份与同步策略](https://github.com/ryan4yin/knowledge/blob/master/homelab/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%90%8C%E6%AD%A5.md)
 - 研究了下 Linux 远程桌面方案：SSH X11 Forwarding 跟 xrdp，意外发现在客户端是 Linux 的情况下，SSH X11 Forwarding 配置与使用居然如此简单而且效果也非常好！只需要改一行 sshd 配置，客户端直接 `ssh -X user@host` 就 ok 了~
-- 研究在 orangepi5(rk3558s) 上跑 AI 任务，写了点笔记 [demos_rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/demos_rk3588)
+- 研究在 orangepi5(rk3558s) 上跑 AI 任务，写了点笔记 [demos_rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
 
 ### 2023-02-10
 
