@@ -1,7 +1,7 @@
 ---
 title: "2023 年年终总结"
-date: 2023-12-30T18:00:45+08:00
-lastmod: 2023-12-30T18:00:45+08:00
+date: 2023-12-10T18:00:45+08:00
+lastmod: 2023-12-10T18:00:45+08:00
 
 draft: true
 resources:
@@ -39,8 +39,8 @@ comment:
     - 研究在 orangepi5(rk3558s) 上用 npu 跑 AI 任务，写了点笔记 [demos_rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
   - 折腾 Proxmox VE 集群
     - 主力节点 UM560 固态翻车了，是才用了三个月的 Asgard 512G SSD，颗粒是长江存储的。走京东售后了。（上次翻车是 2022-11-02 炸了根光威弈 Pro 1T，这也没隔多久啊...）
-      ![](/images/now/nvme-critial-medium-error.webp "2022-11-02 翻车记录，系统无法启动，这是显示器输出内容")
-      ![](/images/now/nvme-device-not-ready.webp "2023-02-03 翻车记录，系统能启动但是文件损坏，这是 dmesg 信息")
+      ![](/images/now/nvme-critial-medium-error.webp "2022-11-02 翻车记录，系统无法启动")
+      ![](/images/now/nvme-device-not-ready.webp "2023-02-03 翻车记录，系统能启动但是文件损坏")
     - 研究 Homelab 备份与数据同步方案，写了点笔记 [数据备份与同步策略](https://github.com/ryan4yin/knowledge/blob/master/homelab/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%90%8C%E6%AD%A5.md)
   - 简单玩了玩 Stable-Diffusion-WebUI 跟 sd-webui-controlnet，抄了些网上的提示词，效果确实很惊艳。不过玩了一波就没啥兴趣了，不太想花很多精力去折腾它。
 - 3 月
@@ -61,18 +61,19 @@ comment:
     - 结合朋友推荐，另外看到 v2ex 上聊键盘的朋友也有说天空轴 v3 好用的，还在知乎上也看到有人说这个轴不错，于是就按捺不住心思下单了。到手确实很惊艳，甚至让我再一次喜欢上了打字的感觉！打了几篇小鹤练习群的赛文享受这种飘逸的感觉。
   - 搞了个 chatglm-6b int4 量化版，本地用我的拯救者笔记本（16G RAM + RTX3070 8G）玩了下，响应速度感觉可以，确实有一定的上下文联想能力，简单的问题也能解答，但是有点不聪明的样子，内容投毒比较严重。
   - 玩 AI 联想到淘垃圾显卡，看嗨了就直接整了套新主机新显示器（我的第一台 PC 主机，以前只买过笔记本电脑），玻璃侧透机箱，RTX 4090，双水冷，组装了大半夜，后面又折腾了好几天，机箱直接当手办展示柜了，效果相当惊艳！缺点一是套下来貌似花了两万多...
-    {{<figure src="/images/now/endeavour-rtx4090.webp" title="主机配置" width="60%">}}
-    {{<figure src="/images/now/rtx4090-pc-1.webp" title="机箱展示" width="60%">}}
-    {{<figure src="/images/now/rtx4090-pc-2.webp" title="机箱展示" width="60%">}}
+    {{<figure src="/images/now/endeavour-rtx4090.webp" title="主机配置" width="80%">}}
+    {{<figure src="/images/now/rtx4090-pc-1.webp" title="机箱展示" width="80%">}}
+    {{<figure src="/images/now/rtx4090-pc-2.webp" title="机箱展示" width="80%">}}
   - 去听了个 Live House，乐队叫迎春归，青岛的乐队，不过前面许多歌我都觉得一般般，主唱唱功也差了点，全靠架子鼓贝斯烘托。不过末尾几首歌还挺好听的。
   - 天依手办到货，很飒～
-    {{<figure src="/images/now/tianyi-vsinger.webp" title="洛天依 秘境花庭 常服手办" width="60%">}}
+    {{<figure src="/images/now/tianyi-vsinger.webp" title="洛天依 秘境花庭 常服手办" width="80%">}}
   - 新主机装了个 Endeavour OS 遇到些奇怪的问题，一怒之下决定换 OS，刚好朋友提到了 NixOS，听说过这玩意儿能做到「可复现」，直接就在 Homelab 里开了个 NixOS 虚拟机开始折腾，由此开始了我的 NixOS 之旅。
   - 用新主机试玩了米忽悠的新游戏「星穹铁道」，还是熟悉的画风跟 UI，制作质量也很高，回合式对战的玩法我本以为会枯燥，不过也还 OK。最重要是 4090 画质够高，游戏的动画跟剧情也都很在线，总体评价很 OK。
   - 用新主机连 Quest 2 打 VR 游戏，发现做过参数优化后，RTX4090 跑 beta saber，Quest 2 的画质参数全调到最高， 5K 120 帧无压力，相当流畅。
   - 用 RTX4090 玩 Cyperpunk 2077，顶配光追画质（叫啥 onedrive）贼棒，真的非常还原真实环境，在 GeForece Experience 上调了个啥优化参数后，4K 差不多能稳定在 100 帧，看半天风景。
 - 5 月
   - 月初，在虚拟机里折腾了大半个月 NixOS 后，成功地用几条简单的命令，在我的新主机上复现了整个 NixOS 环境，那一刻真的超级开心，半个月的努力终于得到了回报！
+    {{<figure src="i3_2023-07-29_1.webp" width="100%">}}
   - 在新主机上成功复现出我的 NixOS 环境后，紧接着发布了我的系统配置 [ryan4yin/nix-config/v0.0.2)](https://github.com/ryan4yin/nix-config/releases/tag/v0.0.2) 以及这大半个月的学习笔记 [NixOS 与 Nix Flakes 新手入门](https://thiscute.world/posts/nixos-and-flake-basics/)，然后事情就变得越来越有趣起来了！随着读者的反馈以及我对它的不断迭代，这份学习笔记逐渐膨胀成一篇一万多字的博文，并且有了中英双语，然后又转变成一本开源书藉 [nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)，在 NixOS 国际社区获得了大量好评！截止 2023-12-13 本书的 GitHub 仓库已经有了 848 stars，是我目前 stars 最多的仓库，它给我带来了巨大的成就感以及社区参与感。我在社区发布的相关帖子：
     - [[2023-05-11] NixOS & Nix Flakes - A Guide for Beginners - Reddit](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/)
     - [[2023-06-22] Updates: NixOS & Nix Flakes - A Guide for Beginners - Reddit](https://www.reddit.com/r/NixOS/comments/14fvz1q/updates_nixos_nix_flakes_a_guide_for_beginners/)
@@ -87,7 +88,7 @@ comment:
     - 花了好几天时间研究，在俄罗斯网友的耐心帮助下，终于在 6/4 晚上在 Orange Pi 5 上把 NixOS 跑起来了，还挺有成就感的（虽然现在也不知道拿这板子用来干啥...）
     - 之后断断续续折腾了一个月的 NixOS on LicheePi 4A，试了很多方案，还请教了 [HougeLangley](https://github.com/HougeLangley)、[@nickcao](https://github.com/NickCao)、[@chainsx](https://github.com/chainsx) 等大佬，学会了很多 Linux 相关的东西，费尽千辛万苦终于成功把 rootfs 编译出来了，但死活引导不成功。感觉是 uboot-spl 跟 boot 分区这两个地方的内容有问题，但不知道怎么解决，累觉不爱。
   - 受读者评论启发，将之前的 NixOS 笔记做成了一个单独的文档站点 + GitHub 仓库，[nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，也对其内容做了大量更新，用 ChatGPT 3.5 全面优化了英文内容，阅读体验大大提升（英文苦手默默路过...）
-    {{<figure src="/images/now/2023-08-13-nixos-and-flakes-book.webp" title="NixOS & Flakes Book" width="80%">}}
+    {{<figure src="/images/now/2023-08-13-nixos-and-flakes-book.webp" title="NixOS & Flakes Book" width="100%">}}
 - 7 月
   - NixOS 系统配置 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config) 迭代：
     - 把办公电脑 Macbook Pro 2020 重裝了一遍系統，新系统環境完全通過 nix-darwin 安裝管理，就連大部分的 macOS 系統配置也用声明管理了。至此，我的常用电脑环境全部都使用同一份 nix 配置管理起来了，感覺非常香！
@@ -98,19 +99,20 @@ comment:
     - 添加了三台在 Proxmox VE 上运行的 NixOS 虚拟机，并且尝试用它们组建 NixOS 的分布式构建集群，挺有意思。
     - 发现之前用的 alacritty 功能有限，于是将主力终端换成了 kitty，wezterm 作为备用选择，而 alacritty 就基本不使用了。
     - 主力编辑器从 VsCode 换成了 AstroNvim， 一个 Neovim 发行版，使用非常顺手，启动速度以及使用流畅度都比 VSCode 快很多，缺点就是花了挺长的时间完善我的 Neovim 配置（时间销金窟哪）。
-      {{<figure src="/images/now/2023-07-29_astronvim.webp" title="AstroNvim(Neovim)" width="80%">}}
+      {{<figure src="/images/now/2023-07-29_astronvim.webp" title="AstroNvim(Neovim)" width="100%">}}
   - 基于在 macOS 上折腾 nix-darwin 的经验，制作了一个 [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter) 模板仓库，并且在 [Twitter](https://twitter.com/ryan4yin/status/1681639068957028352) 等社区分享了一波，获得一波好评。
   - 从 4 月份折腾 NixOS 到现在，GitHub 上开了五六个 Nix 项目，获得了接近 400 stars，也认识了许多朋友、收到了许多好评，在这个圈子里是有点混开了的 feel.
     - 甚至发现有俄罗斯的老铁在将我的 NixOS 小书翻译成俄语！[fl42v/nixos-and-flakes-book-ru](https://github.com/fl42v/nixos-and-flakes-book-ru)，成就感又涨了一点。
 - 8 月
   - 时隔一个多月，在 LicheePi 的 Telegram 群组被老外 ping NixOS 移植进展。又来了点动力再次接续之前 6 月份的移植工作，一番尝试后成功在 Lichee Pi 4A 上把 NixOS 跑起来了！离开始移植已经过去了两个月，迟来的成功，泪目！ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至表示要给我打 $50 美元以表感谢，因为这太有意思了！
     - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
-    - {{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.webp" width="60%">}}
+      {{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.webp" width="100%">}}
   - 排查问题的方法：首先刷好一个可在 LicheePi 4A 上正常启动的 Fedora 系统，然后用我编译出的 NixOS 的 rootfs 与 initrd 等文件，替换掉 Fedora 的 rootfs 以及 boot 分区中对应的文件，结果发现就能正常启动了！进一步排查确认到，我 6 月份生成的 NixOS rootfs 无法启动的原因是：
     - 我使用了 opensbi 的主线代码编译出的 opensbi，而 LicheePi 4A 的 TH1520 核心需要使用它 fork 的分支
     - 此外我生成的 img 镜像，分区也存在问题，root 分区的大小不对劲。
   - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 $50 刀，我于是在 GitHub 个人页面以及项目中都新增了 Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
-    - 新来的 Patreon 本月也收到了一笔赞助 {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" width="80%">}}
+    - 新来的 Patreon 本月也收到了一笔赞助
+      {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" width="100%">}}
   - 写下新文章 [人生已过四分之一](https://thiscute.world/posts/a-quarter-of-the-way-through-life/)，回顾我到目前为止的人生，以及对未来的展望，挺多感想。
   - 在 [@Manjusaka_Lee](https://twitter.com/Manjusaka_Lee) 的熏陶下，我也整了一个新的邮箱地址 ryan4yin@linux.com。先给 Linux Foundation 捐 \$99，然后再付 \$150 就能得到这个终身邮箱地址。
     - 一是用了这么久 Linux 也该捐点钱，二是感觉这个邮箱很酷！
@@ -120,7 +122,7 @@ comment:
   - 临时起意看了个午夜场的《奥本海默》，IMAX 巨幕。给个 4 星没问题吧，演挺好的，原来美共曾经有这么多美国高级知识分子，这是我以前不了解的。
   - 前几天跟妹妹聊时，她引用了我看的小说里的一句话，然后我看「仿生狮子」兄的荐书时发现，这一句就是《山月记》的摘抄，药哥说他也看过这书，挺好。当时就下单了，今天书到了，决定读一读。
     - 读了第一个短篇，最知名的《山月记》，更类似一个寓言故事，最有韵味的就是那一句「**深怕自己并非明珠而不敢刻苦琢磨，又自信有几分才华，不甘与瓦砾为伍。日渐避世离俗，心中自卑怯懦之自尊终在愤懑与羞怒中愈发张狂。世人皆为驯兽师，猛兽即个人性情**。」
-    - {{<figure src="/images/now/2023-09-02_midi-keyboard.webp" title="MIDI 键盘、山月记、以及凌乱的桌台..." width="80%">}}
+      {{<figure src="/images/now/2023-09-02_midi-keyboard.webp" title="MIDI 键盘、山月记、以及凌乱的桌台..." width="100%">}}
   - 跟朋友聊到陈行甲老师，他给我分享了深慈联《2023 年第二期慈善大讲堂》（报道见 [“坚守初心，笃行致远”，深慈联举办2023年第二期慈善大讲堂](https://new.qq.com/rain/a/20230821A06QDX00)）的视频，看上去分享者与与会者年龄段主要在 40+ 到 50+，他们看待问题的角度跟我们年轻人完全不同，陈行甲老师以及肖兴萍老师的演讲都干货满满，很有收获。
   - 请半天假去看了中国国际光博会，看到了挺多新鲜的东西，像啥气动开关啊、光波导眼镜啊、高能量密度的锌空电池充电包啊、中科院光电所的两台小光刻机啊、长春光机所的空间站小机械臂啊、以及压电陶瓷驱动技术的各种应用，长了见识。
   - 看了些 NixCon 2023 的视频，挺有意思。而且发现所有视频都有一只招财猫在讲台上哈哈。
