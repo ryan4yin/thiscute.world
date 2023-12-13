@@ -107,13 +107,14 @@ comment:
 - 8 月
   - 时隔一个多月，在 LicheePi 的 Telegram 群组被老外 ping NixOS 移植进展。又来了点动力再次接续之前 6 月份的移植工作，一番尝试后成功在 Lichee Pi 4A 上把 NixOS 跑起来了！离开始移植已经过去了两个月，迟来的成功，泪目！ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至表示要给我打 $50 美元以表感谢，因为这太有意思了！
     - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
-      {{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.webp" width="100%">}}
+      {{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.webp" width="70%">}}
   - 排查问题的方法：首先刷好一个可在 LicheePi 4A 上正常启动的 Fedora 系统，然后用我编译出的 NixOS 的 rootfs 与 initrd 等文件，替换掉 Fedora 的 rootfs 以及 boot 分区中对应的文件，结果发现就能正常启动了！进一步排查确认到，我 6 月份生成的 NixOS rootfs 无法启动的原因是：
     - 我使用了 opensbi 的主线代码编译出的 opensbi，而 LicheePi 4A 的 TH1520 核心需要使用它 fork 的分支
     - 此外我生成的 img 镜像，分区也存在问题，root 分区的大小不对劲。
   - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 $50 刀，我于是在 GitHub 个人页面以及项目中都新增了 Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
-    - 新来的 Patreon 本月也收到了一笔赞助
-      {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" width="100%">}}
+    - 截止 2023 年底，Patreon 共收到赞助 $10 刀，buymeacoffee 收到赞助 $35 刀，爱发点收到赞助 ￥25 元，以及加密货币收到赞助 $50 刀。
+      {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" title="Patreon Messages" width="80%">}}
+      {{<figure src="buymeacoffe_earning-2023-12-13.webp" title="Buy Me a Coffee - Earning" width="80%">}}
   - 写下新文章 [人生已过四分之一](https://thiscute.world/posts/a-quarter-of-the-way-through-life/)，回顾我到目前为止的人生，以及对未来的展望，挺多感想。
   - 在 [@Manjusaka_Lee](https://twitter.com/Manjusaka_Lee) 的熏陶下，我也整了一个新的邮箱地址 ryan4yin@linux.com。先给 Linux Foundation 捐 \$99，然后再付 \$150 就能得到这个终身邮箱地址。
     - 一是用了这么久 Linux 也该捐点钱，二是感觉这个邮箱很酷！
