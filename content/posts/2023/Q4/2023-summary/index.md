@@ -35,13 +35,14 @@ comment:
 - 2 月
   - 延续去年底开始对嵌入式硬件的兴趣，继续折腾 stm32 / orange pi 5 / esp32 等嵌入式硬件。
     - 用 STM32 点亮了 TFT 液晶屏，以及搞定了使用 printf 打印日志到串口 - [ryan4yin/learn-stm32f103c8t6](https://github.com/ryan4yin/learn-stm32f103c8t6)
-    - 发布文章 [EE 入门（二） - 使用 ESP32 + SPI 显示屏绘图、显示图片、跑贪吃蛇](https://thiscute.world/posts/ee-basics-2-esp32-display/)
     - 研究在 orangepi5(rk3558s) 上用 npu 跑 AI 任务，写了点笔记 [demos_rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
   - 折腾 Proxmox VE 集群
     - 主力节点 UM560 固态翻车了，是才用了三个月的 Asgard 512G SSD，颗粒是长江存储的。走京东售后了。（上次翻车是 2022-11-02 炸了根光威弈 Pro 1T，这也没隔多久啊...）
       ![](/images/now/nvme-critial-medium-error.webp "2022-11-02 翻车记录，系统无法启动")
       ![](/images/now/nvme-device-not-ready.webp "2023-02-03 翻车记录，系统能启动但是文件损坏")
     - 研究 Homelab 备份与数据同步方案，写了点笔记 [数据备份与同步策略](https://github.com/ryan4yin/knowledge/blob/master/homelab/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%90%8C%E6%AD%A5.md)
+    - 发布文章 [EE 入门（二） - 使用 ESP32 + SPI 显示屏绘图、显示图片、跑贪吃蛇](https://thiscute.world/posts/ee-basics-2-esp32-display/)
+      {{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="100%">}}
   - 简单玩了玩 Stable-Diffusion-WebUI 跟 sd-webui-controlnet，抄了些网上的提示词，效果确实很惊艳。不过玩了一波就没啥兴趣了，不太想花很多精力去折腾它。
 - 3 月
   - 生活上
