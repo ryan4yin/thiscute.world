@@ -74,20 +74,18 @@ comment:
   - 用 RTX4090 玩 Cyperpunk 2077，顶配光追画质（叫啥 onedrive）贼棒，真的非常还原真实环境，在 GeForece Experience 上调了个啥优化参数后，4K 差不多能稳定在 100 帧，看半天风景。
 - 5 月
   - 月初，在虚拟机里折腾了大半个月 NixOS 后，成功地用几条简单的命令，在我的新主机上复现了整个 NixOS 环境，那一刻真的超级开心，半个月的努力终于得到了回报！
-    {{<figure src="i3_2023-07-29_1.webp" width="100%">}}
-  - 在新主机上成功复现出我的 NixOS 环境后，紧接着发布了我的系统配置 [ryan4yin/nix-config/v0.0.2)](https://github.com/ryan4yin/nix-config/releases/tag/v0.0.2) 以及这大半个月的学习笔记 [NixOS 与 Nix Flakes 新手入门](https://thiscute.world/posts/nixos-and-flake-basics/)，然后事情就变得越来越有趣起来了！随着读者的反馈以及我对它的不断迭代，这份学习笔记逐渐膨胀成一篇一万多字的博文，并且有了中英双语，然后又转变成一本开源书藉 [nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)，在 NixOS 国际社区获得了大量好评！截止 2023-12-13 本书的 GitHub 仓库已经有了 848 stars，是我目前 stars 最多的仓库，它给我带来了巨大的成就感以及社区参与感。我在社区发布的相关帖子：
-    - [[2023-05-11] NixOS & Nix Flakes - A Guide for Beginners - Reddit](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/)
-    - [[2023-06-22] Updates: NixOS & Nix Flakes - A Guide for Beginners - Reddit](https://www.reddit.com/r/NixOS/comments/14fvz1q/updates_nixos_nix_flakes_a_guide_for_beginners/)
-    - [[2023-06-24] An unofficial NixOS & Flakes book for beginners - Discourse](https://discourse.nixos.org/t/an-unofficial-nixos-flakes-book-for-beginners/29561)
-    - [[2023-07-06] This isn't an issue but it has to be said: - Discussions](https://github.com/ryan4yin/nixos-and-flakes-book/discussions/43)
-    - [[2023-05-09] NixOS 与 Nix Flakes 新手入门 - v2ex 社区](https://www.v2ex.com/t/938569#reply45)
-    - [[2023-06-24] NixOS 与 Flakes | 一份非官方的新手指南 - v2ex 社区](https://www.v2ex.com/t/951190#reply9)
-    - [[2023-06-24] NixOS 与 Flakes | 一份非官方的新手指南 - 0xffff 社区](https://0xffff.one/d/1547-nixos-yu-flakes-yi-fen-fei-guan)
+    {{<figure src="/images/2023-summary/i3_2023-07-29_1.webp" width="100%">}}
+  - 在新主机上成功复现出我的 NixOS 环境后，紧接着发布了我的系统配置 [ryan4yin/nix-config/v0.0.2)](https://github.com/ryan4yin/nix-config/releases/tag/v0.0.2) 以及这大半个月的学习笔记 [NixOS 与 Nix Flakes 新手入门](https://thiscute.world/posts/nixos-and-flake-basics/)，然后事情就变得越来越有趣起来了！随着读者的反馈以及我对它的不断迭代，这份学习笔记逐渐膨胀成一篇一万多字的博文，并且有了中英双语，然后又转变成一本开源书藉 [nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)，在 NixOS 国际社区获得了大量好评！它给我带来了巨大的成就感以及社区参与感。
+    {{<figure src="/images/2023-summary/nixos-and-flakes-book-comments_reddit.webp" title="NixOS & Flakes Book 的部分评论 - Reddit" width="100%">}}
+    {{<figure src="/images/2023-summary/nixos-and-flakes-book-comments_discourse-github.webp" title="NixOS & Flakes Book 的部分评论 - Discourse 与 GitHub" width="100%">}}
+    {{<figure src="/images/2023-summary/nixos-and-flakes-book-comments_discord.webp" title="NixOS & Flakes Book 的部分评论 - Discord" width="100%">}}
   - 在 NixOS 上尝试了 i3 与 Hyprland 两个窗口管理器，并且使用 agenix 管理了系统中的敏感信息，比如密码、私钥、wireguard 配置等。
 - 6 月
   - 立了个 flag - 把 NixOS 移稙到我手上的两块开发版上跑起来，一块 ARM64 架构的 Orange Pi 5，以及另一块 RISC-V 架构的 LicheePi 4A.
     - 花了好几天时间研究，在俄罗斯网友的耐心帮助下，终于在 6/4 晚上在 Orange Pi 5 上把 NixOS 跑起来了，还挺有成就感的（虽然现在也不知道拿这板子用来干啥...）
     - 之后断断续续折腾了一个月的 NixOS on LicheePi 4A，试了很多方案，还请教了 [HougeLangley](https://github.com/HougeLangley)、[@nickcao](https://github.com/NickCao)、[@chainsx](https://github.com/chainsx) 等大佬，学会了很多 Linux 相关的东西，费尽千辛万苦终于成功把 rootfs 编译出来了，但死活引导不成功。感觉是 uboot-spl 跟 boot 分区这两个地方的内容有问题，但不知道怎么解决，累觉不爱。
+  - 收到一封来自 2018 年的我在 futureme.org 发送的邮件，回想起来，当时我是真迷茫哪。
+    {{<figure src="/images/2023-summary/futureme-from-2018-to-2023.webp" title="2018 年的我给 2023 年的我写的邮件" width="100%">}}
   - 受读者评论启发，将之前的 NixOS 笔记做成了一个单独的文档站点 + GitHub 仓库，[nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，也对其内容做了大量更新，用 ChatGPT 3.5 全面优化了英文内容，阅读体验大大提升（英文苦手默默路过...）
     {{<figure src="/images/now/2023-08-13-nixos-and-flakes-book.webp" title="NixOS & Flakes Book" width="100%">}}
 - 7 月
@@ -107,6 +105,7 @@ comment:
 - 8 月
   - 时隔一个多月，在 LicheePi 的 Telegram 群组被老外 ping NixOS 移植进展。又来了点动力再次接续之前 6 月份的移植工作，一番尝试后成功在 Lichee Pi 4A 上把 NixOS 跑起来了！离开始移植已经过去了两个月，迟来的成功，泪目！ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至表示要给我打 $50 美元以表感谢，因为这太有意思了！
     - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
+      {{<figure src="/images/2023-summary/nixos-riscv-cluster.webp" title="NixOS on LicheePi4A" width="100%">}}
       {{<figure src="/images/now/2023-08-05-sending-me-$50-for-fun.webp" width="70%">}}
   - 排查问题的方法：首先刷好一个可在 LicheePi 4A 上正常启动的 Fedora 系统，然后用我编译出的 NixOS 的 rootfs 与 initrd 等文件，替换掉 Fedora 的 rootfs 以及 boot 分区中对应的文件，结果发现就能正常启动了！进一步排查确认到，我 6 月份生成的 NixOS rootfs 无法启动的原因是：
     - 我使用了 opensbi 的主线代码编译出的 opensbi，而 LicheePi 4A 的 TH1520 核心需要使用它 fork 的分支
@@ -114,7 +113,7 @@ comment:
   - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 $50 刀，我于是在 GitHub 个人页面以及项目中都新增了 Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
     - 截止 2023 年底，Patreon 共收到赞助 $10 刀，buymeacoffee 收到赞助 $35 刀，爱发点收到赞助 ￥25 元，以及加密货币收到赞助 $50 刀。
       {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" title="Patreon Messages" width="80%">}}
-      {{<figure src="buymeacoffe_earning-2023-12-13.webp" title="Buy Me a Coffee - Earning" width="80%">}}
+      {{<figure src="/images/2023-summary/buymeacoffe_earning-2023-12-13.webp" title="Buy Me a Coffee - Earning" width="80%">}}
   - 写下新文章 [人生已过四分之一](https://thiscute.world/posts/a-quarter-of-the-way-through-life/)，回顾我到目前为止的人生，以及对未来的展望，挺多感想。
   - 在 [@Manjusaka_Lee](https://twitter.com/Manjusaka_Lee) 的熏陶下，我也整了一个新的邮箱地址 ryan4yin@linux.com。先给 Linux Foundation 捐 \$99，然后再付 \$150 就能得到这个终身邮箱地址。
     - 一是用了这么久 Linux 也该捐点钱，二是感觉这个邮箱很酷！
@@ -159,4 +158,88 @@ comment:
     - 重装好系统后网络问题就消失了，猜测是 home 目录有什么 X Server 相关的配置文件有毛病导致的。
 - 12 月
   - 沉寂一个多月的对业余项目的兴趣又逐渐回来了，但也对我当前的工作状态产生了一些负面影响，希望能将它控制在一定范围内，可别再像以前那样严重影响工作了。
+
+## 2023 年 Highlights
+
+### 1. 业余技术
+
+技术方面我今年的进展还是挺大的，但跟去年写的展望几乎没啥关联... 人生总是充满了意外哈哈。
+
+今年的主要技术成就基本完全集中在 NixOS 这一块，如下几个新项目都或者了很多好评（统计数据截止 2023/12/15）：
+
+- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 23 位贡献者，861 个 stars，以及 4 位国外读者的共计 $45 零花钱赞助，成为了我目前 stars 数最高的项目。它的文档站目前稳定在每天 150 UV.
+- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 274 个 stars.
+- [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter): 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 125 stars.
+- [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588): 这是我在 2023/6/4 创建的一个 NixOS 移植项目，目前支持了三块 RK3588 开发板，获得了 46 stars.
+- [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a): 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板，断断续续花了两个月才搞定移植工作（用时远超预料...不过成功后获得的成就感也是巨大的）。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 $50 给我。
+
+在折腾 NixOS 的过程中我做的开源项目、入门指南获得了国内外社区的大量好评，认识了好几位国内外的 NixOS 资深用户与嵌入式开发者，还收到了一些外国读者的打赏，[nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)，在 NixOS 国际社区获得了大量好评，给我带来了巨大的成就感以及社区参与感！这完全契合了我年初给自己的期许——「**认识更多有趣的人，见识下更宽广的世界**」。
+
+### 2. 工作
+
+工作上只能说马马虎虎，上半年的大部分精力基本都花在了 NixOS 上，工作搞得一团糟，挺迷茫的。
+下半年因为一些原因（这个后面会说）想明白不少，才开始逐渐回归工作与生活。
+
+### 3. 生活
+
+#### 1. 确诊 ADHD 以及治疗
+
+8 月份通过 [我的四分之一人生](https://thiscute.world/posts/a-quarter-of-the-way-through-life/) 做了一个人生回顾后，虽然感觉自己想明白不少，但实际工作上还是很难集中注意力，分心的情况仍然相当严重。
+也尝试了通过番茄钟之类的方式来提高工作效率，但效果不佳。
+
+直到国庆后[@咩咩](bleatingsheep.org/) 催促我去看心理医生，确诊了 ADHD 并开始服药后，我的工作效率才有了质的提升。
+于是我搞明白了，原来我一直以来的注意力问题，并不是什么品格或者意志力问题，而是一种可以治疗的病症。
+
+考虑到 ADHD 的遗传特性，跟妹妹、父母一番沟通后，带我妹来深圳看医生，确诊了 ADHD 以及抑郁症。
+说真的，我一直知道我妹妹情绪比较敏感，但从没想过是因为抑郁症。
+
+这之后，除了工作外，我大部分的精力都花在了关心家人、运动、学习心理学等事情上，技术上的东西很放下了一阵子。
+
+#### 2. 参与公益活动
+
+因缘际会跟 [@Manjusaka_Lee](https://twitter.com/Manjusaka_Lee) 聊到了公益，当时在工作上缺乏动力，想在其他的事情上找找感觉，公益本身也是一件很有意义的事情，那段时间学习了解了许多公益资料，参加了一些公益会展与捐款活动，还一度考虑做志愿者。
+
+#### 3. 阅读与写作
+
+首先是我 2023 年的读书记录：
+
+- 2023-03-09 - The Moon and Sixpence
+  - 你是要地上的六便士，还是要天上的月亮？
+- 2023-08-31 - [How to Do Great Work - Paul Graham](http://www.paulgraham.com/greatwork.html)
+  - 黑客与画家一篇两万多字的长文，也算是一本小书了吧，干货满满。
+- 2023-09-29 - 《被讨厌的勇气》
+  - 一本通过对话的形式讲述阿勒德心理学的书，这门心理学与现代科学心理学不同，它更偏向哲学。
+- 2023-10-08 - 《叫魂：1768 年中国妖术大恐慌》
+  - 从 1768 年的叫魂案出发，分析了乾隆时期的中国社会的许多方面。比如因各种原因导致人口过度增长、人均资源减少、社会矛盾激化导致的普遍恐慌，以及官僚君主制的运作机制、存在的问题。此书以史为鉴，能帮助我们理解现代中国政治与中国社会的一些基本问题。
+- 2023-10-17 - 《分心不是我的错》
+  - 介绍 ADHD 的一本书，列举了很多 ADHD 案例，也给出了诊疗建议，对我相当有用！
+
+以及一些未读完的书：
+
+- 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+- Psychology and Life, 20th edition, by Richard J. Gerrig
+- The Great Gatsby - 10/41
+- 《复杂 - 梅拉尼 米歇尔》
+- [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
+
+2023 年我读的书籍数量不多，没达成每月读一本书的目标。
+而写作方面，算上这篇总结，今年我一共写了 9 篇博文，也没达成每月写一篇的目标。
+
+但鉴于我今年写了一本挺受欢迎的小书 [NixOS & Flakes Book](https://github.com/ryan4yin/nixos-and-flakes-book)，它得到了 NixOS 社区诸多好评，上了 Hacker News 热榜，甚至被官方文档列入推荐阅读，我姑且将今年「阅读与写作」这一项的评分定为「超出期待」！
+
+#### 3. 其他
+
+1. 给我老爸全款买了我们全家的第一辆小轿车，全家都很开心。
+
+
+## 2023 年展望
+
+### 1. 技术侧
+
+TODO
+
+### 2. 生活侧
+
+TODO
+
 
