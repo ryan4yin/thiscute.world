@@ -47,7 +47,6 @@ comment:
 <script type="text/javascript">
 // 以下为样例内容，按照格式可以随意修改
 var myFriends = [
-    ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
     ["https://blog.z-xl-t.top/", "https://blog.z-xl-t.top/favicon.jpg", "@薯条流浪法师", "快走吧，趁风停止之前"], 
     ["https://rea.ink/", "/avatar/rea.ink.webp", "@倾书", "清风皓月，光景常新 <= 前端"], 
     ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
@@ -70,9 +69,8 @@ var myFriends = [
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
     ["https://blog.010sec.cn/", "/avatar/c4rt1y.webp", "@c4rt1y", "<= 运维搬砖人"], 
-    ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "记录生活点滴 <= 密码学/Golang/逆向"], 
     ["https://ferryxie.com/", "/avatar/ferryxie.webp", "@Ferry", "金融科技与人文思考并存"], 
-    ["https://imcbc.cn/", "https://fastly.jsdelivr.net/gh/caibingcheng/resources@main/images/2B2pd1.png", "@BBing", "自由 分享 合作 <= C/C++/Linux 高手"], 
+    ["https://imcbc.cn/", "https://imcbc.cn/apple-touch-icon.png", "@BBing", "自由 分享 合作 <= C/C++/Linux 高手"], 
     ["https://blognas.hwb0307.com/", "https://blognas.hwb0307.com/logo.jpg", "@Bensz", "浮云翩迁之间 <= Linux/Docker/R语言爱好者"], 
     ["https://lisenhui.cn", "https://lisenhui.cn/imgs/avatar.png", "@凡梦星尘", "再平凡的人也有属于他的梦想！"], 
     ["https://blog.li2niu.com/", "https://blog.li2niu.com/portrait.webp", "@李二牛", "Addicted to marathons <= Developer & Runner"], 
@@ -86,6 +84,9 @@ var myFriends = [
     ["https://wenderfeng.top/", "https://wenderfeng.top/favicon.ico", "@wenderfeng", "Step by step <= 机械 PhD 在读的机器人玩家"], 
     ["https://lado.me", "https://lado.me/static/img/gravatar-black.png", "@啦哆咪", "用 Linux 做音乐"], 
     ["https://sxyz.blog/", "/avatar/sxyazi.jpg", "@三咲雅 · Misaki Masa", "四時行焉，百物生焉，天何言哉？"],
+    // 以下为无法访问，暂时下线的友链
+    // ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
+    // ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "记录生活点滴 <= 密码学/Golang/逆向"], 
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
