@@ -243,6 +243,31 @@ comment:
 
 生活上今年达成了这么多有意义的成就（确诊 ADHD、将更多精力花在关心家人上、参与公益活动、给家里买车等等），我给自己的评价当然是「优秀」。
 
+### 4. 站点统计数据
+
+> 截图待月底补充
+
+首先是我的博客站点 <https://thiscute.world/> 的统计数据：
+
+{{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics.webp" title="thiscute.world - 2023 年 Google Analytics 统计数据" width="100%">}}
+
+{{<figure src="/images/2023-summary/thiscute.world-2023-google-search.webp" title="thiscute.world - 2023 年 Google Search 统计数据" width="100%">}}
+
+另外是今年我新建的 NixOS 笔记站点 <https://nixos-and-flakes.thiscute.world> 的统计数据：
+
+{{<figure src="/images/2023-summary/nixos-and-flakes-book-2023-google-analytics.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 统计数据" width="100%">
+
+{{<figure src="/images/2023-summary/nixos-and-flakes-book-2023-google-search.webp" title="NixOS & Flakes Book - 2023 年 Google Search 统计数据" width="100%">}}
+
+以及两个站点全年在 Vercel 上的流量统计：
+
+{{<figure src="/images/2023-summary/vercel-2023-traffic.webp" title="Vercel - 2023 年流量统计" width="100%">}}
+
+最后是文章阅读量 Top 10：
+
+{{<figure src="/images/2023-summary/2023-top-10-posts.webp" title="2023 年文章阅读量 Top 10" width="100%">}}
+
+
 ## 2023 年展望
 
 其实现在对明年反而没啥特别的期望，现在的状态就挺好的（这大概就是「现充」吧 emmm）。
