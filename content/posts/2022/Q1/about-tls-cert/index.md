@@ -802,6 +802,58 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 
 TODO
 
+可使用 curl 命令进行简单的协议协商测试:
+
+```shell
+› curl -v https://www.baidu.com
+*   Trying 183.2.172.42:443...
+* Connected to www.baidu.com (183.2.172.42) port 443 (#0)
+* ALPN: offers h2,http/1.1
+* (304) (OUT), TLS handshake, Client hello (1):
+*  CAfile: /etc/ssl/cert.pem
+*  CApath: none
+* (304) (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN: server accepted http/1.1
+* Server certificate:
+*  subject: C=CN; ST=beijing; L=beijing; O=Beijing Baidu Netcom Science Technology Co., Ltd; CN=baidu.com
+*  start date: Jul  6 01:51:06 2023 GMT
+*  expire date: Aug  6 01:51:05 2024 GMT
+*  subjectAltName: host "www.baidu.com" matched cert's "*.baidu.com"
+*  issuer: C=BE; O=GlobalSign nv-sa; CN=GlobalSign RSA OV SSL CA 2018
+*  SSL certificate verify ok.
+* using HTTP/1.1
+> GET / HTTP/1.1
+> Host: www.baidu.com
+> User-Agent: curl/7.88.1
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+< Accept-Ranges: bytes
+< Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform
+< Connection: keep-alive
+...
+```
+
+日志显示，客户端支持的协议有 `h2` 和 `http/1.1`，而服务端从中选择了 `http/1.1` 协议，于是在 TLS 握手完毕后，客户端使用 `http/1.1` 协议发起了请求。
+
+另外还经常使用如下命令测试网关：
+
+```bash
+curl -v --resolve 'example.com:443:11.22.33.44' https://example.com:443/xxx
+```
+
+`--resolve` 是自定义 DNS 解析的 curl 参数，上述命令会向 `11.22.33.44:443` 这个地址发起 TLS 请求，SNI 为 `example.com`，请求的路径为 `/xxx`。
+常用于测试网关的 ALPN 协商、TLS 握手流程、数字证书等是否正常工作。
+
 ### 2. mTLS 双向认证
 
 TLS 协议（tls1.0+，RFC: [TLS1.2 - RFC5246](https://tools.ietf.org/html/rfc5246#section-7.4.4)）也定义了可选的服务端请求验证客户端证书的方法。这
