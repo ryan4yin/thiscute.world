@@ -255,7 +255,7 @@ comment:
 
 另外是今年我新建的 NixOS 笔记站点 <https://nixos-and-flakes.thiscute.world> 的统计数据：
 
-{{<figure src="/images/2023-summary/nixos-and-flakes-book-2023-google-analytics.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 统计数据" width="100%">
+{{<figure src="/images/2023-summary/nixos-and-flakes-book-2023-google-analytics.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 统计数据" width="100%">}}
 
 {{<figure src="/images/2023-summary/nixos-and-flakes-book-2023-google-search.webp" title="NixOS & Flakes Book - 2023 年 Google Search 统计数据" width="100%">}}
 
