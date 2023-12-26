@@ -56,7 +56,7 @@ comment:
     - 发了篇新博客：[Linux 上的 WireGuard 网络分析（一）](https://thiscute.world/posts/wireguard-on-linux/)
     - 读了一点 [Linux Device Drivers Development 2nd Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition)
 - 4 月
-  - 在业余爱好上投入的精力越来越多，工作上相对的越来越懈怠，感觉碰到了瓶颈，但搞不明白该怎么突破。
+  - 在业余爱好上投入的精力越来越多，工作上相对的越来越懈怠，感觉碰到了瓶颈，但搞不明白该怎么解决。
   - 听了 [wd 佬](https://github.com/wdvxdr1123)的建议整了个达尔优 A87Pro 天空轴 v3，一番体验这个天空轴 v3 手感确实贼爽、声音也小，感觉可能有点类似静电容了（虽然我没用过静电容 emmm）。
     - 我毕业以来就 19 年跟 20 年分别买过两把 IKBC 的茶轴跟红轴，茶轴放家里了，红轴一直放在公司用。当时国产轴感觉还不太出名，但是现在我聊键盘的朋友都看不上 cherry 轴了，网上搜了下 cheery 轴也有各种品控下降、轴心不稳、杂音大的诟病。
     - 结合朋友推荐，另外看到 v2ex 上聊键盘的朋友也有说天空轴 v3 好用的，还在知乎上也看到有人说这个轴不错，于是就按捺不住心思下单了。到手确实很惊艳，甚至让我再一次喜欢上了打字的感觉！打了几篇小鹤练习群的赛文享受这种飘逸的感觉。
@@ -80,6 +80,7 @@ comment:
     {{<figure src="/images/2023-summary/nixos-and-flakes-book-comments_discourse-github.webp" title="NixOS & Flakes Book 的部分评论 - Discourse 与 GitHub" width="100%">}}
     {{<figure src="/images/2023-summary/nixos-and-flakes-book-comments_discord.webp" title="NixOS & Flakes Book 的部分评论 - Discord" width="100%">}}
   - 在 NixOS 上尝试了 i3 与 Hyprland 两个窗口管理器，并且使用 agenix 管理了系统中的敏感信息，比如密码、私钥、wireguard 配置等。
+    - agenix 确实 OK，但它纯 bash 脚本实现的核心功能，体验太差了，错误信息一团糟，解决错误全靠自己摸索。
 - 6 月
   - 立了个 flag - 把 NixOS 移稙到我手上的两块开发版上跑起来，一块 ARM64 架构的 Orange Pi 5，以及另一块 RISC-V 架构的 LicheePi 4A.
     - 花了好几天时间研究，在俄罗斯网友的耐心帮助下，终于在 6/4 晚上在 Orange Pi 5 上把 NixOS 跑起来了，还挺有成就感的（虽然现在也不知道拿这板子用来干啥...）
@@ -157,6 +158,10 @@ comment:
     - 重装好系统后网络问题就消失了，猜测是 home 目录有什么 X Server 相关的配置文件有毛病导致的。
 - 12 月
   - 沉寂一个多月的对业余项目的兴趣回来了一点，对 NixOS 相关的几个项目做了一番更新。
+  - 工作电脑用满三年换新了，新电脑是 Macbook Pro M2，终于用上了 M 系列的 CPU，体验显然比之前的 Intel 版本好很多，不发热了风扇也不响了，续航知道很牛但没啥机会测试。
+  - 淘汰下的旧工作电脑给装了个 NixOS，体验还不错，有些小问题但勉强能忍受。
+    - 主要问题：Touchbar 跑着跑着会失灵，Touch ID 无法使用，盖上盖子会直接关机，触摸板比较容易误触。其他的体验都挺不错的，第一次在笔记本上用 NixOS，还挺新奇的。
+  - 学习 Guile Scheme 以及 nushell，打算后面大量使用这俩语言整些活，Python 脚本有点写腻歪了。
   - 年底确实也缺乏些动力，更多的时间花在了娱乐上。
 
 ## 2023 年 Highlights
@@ -165,11 +170,11 @@ comment:
 
 技术方面我今年的进展还是挺大的，但跟去年写的展望几乎没啥关联，人生总是充满了意外哈哈...
 
-今年的主要技术成就基本完全集中在 NixOS 这一块，如下几个新项目都或者了很多好评（统计数据截止 2023/12/15）：
+今年的主要技术成就基本完全集中在 NixOS 这一块，如下几个新项目都或者了很多好评（统计数据截止 2023/12/26）：
 
-- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 23 位贡献者，861 个 stars，以及 4 位国外读者的共计 $45 零花钱赞助，成为了我目前 stars 数最高的项目。它的文档站目前稳定在每天 150 UV.
-- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 274 个 stars.
-- [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter): 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 125 stars.
+- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 23 位贡献者，908 个 stars，以及 4 位国外读者的共计 $70 零花钱赞助，成为了我目前 stars 数最高的项目。它的文档站目前稳定在每天 150 UV.
+- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 290 个 stars.
+- [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter): 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 129 stars.
 - [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588): 这是我在 2023/6/4 创建的一个 NixOS 移植项目，目前支持了三块 RK3588 开发板，获得了 46 stars.
 - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a): 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板，断断续续花了两个月才搞定移植工作（用时远超预料...不过成功后获得的成就感也是巨大的）。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 $50 给我。
 
@@ -182,7 +187,7 @@ comment:
 ### 2. 工作
 
 工作上只能说马马虎虎，上半年的大部分精力基本都花在了 NixOS 上，工作搞得一团糟，挺迷茫的。
-下半年因为一些原因（这个后面会说）想明白不少，才开始逐渐回归工作与生活。
+下半年因为一些原因（这个后面会说）想明白不少，才开始逐渐回归工作与生活，这才保住了下半年的绩效...
 
 工作上总体比去年做得要差，我给自己的评价是「及格」。
 

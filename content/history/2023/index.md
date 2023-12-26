@@ -23,12 +23,30 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2023-12-26
+
+- 今晚研究了下 Guix Scheme 语言，打算好好学一学，再深入折腾下 Guix 系统。而且 eww 的配置文件也是 Lisp 系语言，Scheme 学了用得上，动力就比较足。
+
+### 2023-12-25
+
+- 晚上不知道有啥可干，跟 NixOS 群友聊了聊 nushell 的优势跟 bash 的垃圾，突然有想法把 NixOS 配置中的所有 shell 脚本全改造成 nushell，试用了 nuenv 来打 Nix 包，一试就搞到凌晨...也是各种踩坑的血泪教训，算是熟悉了下 nushell 以及 Nix 的打包环境。
+    - 主要就是各种 Permission Denied 的错误，以前 bash 打包完全没遇到过，试到凌晨才搞明白，貌似 Nix 打包中的 source 文件都是只读的，另外 $out 中的内容也是一旦写入后就无法修改的，至少用 nushell 是这样。我因为尝试直接改 source 文件，或者在 $out 中改文件，就一直 Permission Denied 到哭...
+
+### 2023-12-24
+
+- 周末这两天尝试把 NixOS 在 Macbook Pro 2020 上装起来了，500G 的磁盘分了 300G 给 NixOS. 使用体验还不错，主要大冬天的可以在床上折腾 NixOS 了。
+    - 安装过程中遇到的主要问题
+        - 因为我几张 TF 卡的读写速度都比手上的 U 盘快，之前折腾开发板也习惯了用 TF 卡加读卡器来装系统，结果 macOS 死活识别不了，最后还是换成我的垃圾 U 盘，才成功识别到...
+        - 一开始过于自信，直接尝试在 U 盘的 LiveOS 系统上一次性安装我的整个 NixOS 配置，结果内核编译报错重试好几次，重试好多遍搞了大半夜，最后放弃了... 第二天老老实实整了个 minimal 的 flake 配置，结果搞好几个小时还是编译不过 kernel，各种重启进 Live OS、挂载硬盘、加载 WiFi 驱动、通过难用得要死的 wpa_cli 连接 WiFi，再部署 NixOS 配置，这套流程一晚上不知道走了多少遍，我 WiFi 密码都输麻了...
+        - 最后直接换成了 NixOS 的 mainline latest kernel 才一次安装成功，重启进入系统后再部署我完整的 NixOS 配置 + Apple T2 定制 kernel，很顺利就成功了！感动！
+        - 所以说系统安装也还是搞个 stage1 stage2 这样两步安装最省心哪，不要老想着一步到位。
+
 ### 2023-12-21
 
 - 完成了数据上报网关及对应 EKS 集群的的升级，加了许多新特性，但总体升级还挺顺利的。一个总体接近 500 万连接的网关，折腾起来还是挺有成就感的。
     - 开始做实际的迁移工作与回话之前，想得还不是很清楚，心里是没底的。但实际把前期工作、迁移规划与验证做好后，真正开始迁移工作时，又觉得这没啥难的。
 - 继续对新电脑的 Nix 配置做了些调整，更新了下 NixOS 入门小书的部分内容。
-- 继续研究在 Macbook Pro 2022 M2 上安装 NixOS.
+- 继续研究在 Macbook Pro 2020 上安装 NixOS.
 
 {{<figure src="/images/now/2023-12-21_nixos-and-flakes-book-888-stars.webp" title="NixOS 入门小书 888 stars 了，截图纪念一下" width="80%">}}
 
@@ -38,7 +56,7 @@ comment:
 - 继续做数据上报网关的升级迁移工作，今年 roadmap 中的核心工作，算上这个就都搞定了，心里感觉很踏实。
     - 今年工作状态一度挺糟糕，10 月份确诊 ADHD 是个转折点，之后的工作状态就有了非常大的改善，这也是我今年最大的收获之一。
 - 新电脑到手了，仍然是换了台库存二手机，Macbook Pro 2022 M2 16G. 但库存机有个好处就是，很快就能换新 emmm 这台电脑用到 2023/8 就又能换台新的了。
-    - 尝试在新电脑上部署我的 nix-darwin 配置，遇到些问题，但总体挺顺利的，之前在旧办公电脑（Macbook Pro 2022 I5 16G）上使用的 nix 配置基本没改几行代码，就能直接在这台新 M2 上用
+    - 尝试在新电脑上部署我的 nix-darwin 配置，遇到些问题，但总体挺顺利的，之前在旧办公电脑（Macbook Pro 2020 I5 16G）上使用的 nix 配置基本没改几行代码，就能直接在这台新 M2 上用
         - 总结下，主要的修改就是把 system 参数从 x86_64-darwin 改成 aarch64-darwin，以及 nixpkgs 中的 gdb 不支持 aarch64-darwin，把它排除掉，然后就没啥问题了。
 - 旧的 Intel 版 Macbook 以后就放家里当床上电脑用了，考虑装个 NixOS，晚上看了点在 Macbook Pro 2022 I5 16G 上装 NixOS 的文档：<https://github.com/NixOS/nixos-hardware/tree/master/apple/t2>
 
