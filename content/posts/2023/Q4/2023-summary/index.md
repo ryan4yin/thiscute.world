@@ -182,9 +182,15 @@ comment:
 
 {{<figure src="/images/2023-summary/2023-01-01-github-metrics.svg" attr="2023/01/01 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/f58f1769a72289b44e5313eaed3bbfc21febebda/metrics.classic.svg">}}
 
-
 TODO: update images & links
 {{<figure src="/images/2023-summary/2023-12-31-github-metrics.svg" attr="2023/12/31 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/master/metrics.classic.svg">}}
+
+几个关键指标的变化：
+
+- Stars: 12 => 2044, 涨幅 555%.
+- Followers: 152 => 468, 涨幅 208%.
+- Forkers: 97 => 201, 涨幅 107%.
+- Watchers: 39 => 102, 涨幅 161%.
 
 在折腾 NixOS 的过程中我做的开源项目、入门指南获得了国内外社区的大量好评，认识了好几位国内外的 NixOS 资深用户与嵌入式开发者，还收到了一些外国读者的打赏，[nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)，在 NixOS 国际社区获得了大量好评，给我带来了巨大的成就感以及社区参与感！这完全契合了我年初给自己的期许——「**认识更多有趣的人，见识下更宽广的世界**」。
 
