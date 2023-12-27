@@ -85,7 +85,7 @@ var myFriends = [
     ["https://lado.me", "https://lado.me/static/img/gravatar-black.png", "@啦哆咪", "用 Linux 做音乐"], 
     ["https://sxyz.blog/", "/avatar/sxyazi.jpg", "@三咲雅 · Misaki Masa", "四時行焉，百物生焉，天何言哉？"],
     // 以下为无法访问，暂时下线的友链
-    // ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
+    ["https://blog.youmuwhisper.space/", "https://blog.youmuwhisper.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
     // ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "记录生活点滴 <= 密码学/Golang/逆向"], 
 ];
 
