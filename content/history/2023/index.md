@@ -23,6 +23,13 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2023-12-27
+
+- 了解了下 Helix 插件系统，试用时发现 Helix 也没内置的终端功能，相关 Issue 讨论中发现挺多用户习惯使用 tmux/zellij 作为日常的终端环境。联想到我最近在使用 kitty/wezterm 时发现它们的搜索/终端历史选择复制等功能上存在的诸多欠缺，而 Neovim 里我目前主要使用的 toggleterm.nvim 插件也日常导致 neovim 卡死，瞬间就对将 zellij 作为日常终端环境产生了兴趣。
+    - 一番探究发现 Zellij 很优雅地解决了我在 kitty/wezterm/neovim 遇到的这些问题，而且速度很快，再者它在任何终端模拟器中都能提供一致的体验。以及最重要的是，它使用起来真的很简单，对新手相当友好，键位也很符合直觉！甚至跟 Neovim 一样也支持鼠标操作！
+    - 晚上直接把 Neovim/kitty/wezterm 里面相关的配置与插件全部删掉了，并且在 nushell 中设置为自动启动 Zellij，终端环境全面替换成了 Zellij，体验下来非常舒适！（我确实得说，这体验跟 tmux 不是一个级别的，tmux 真的新手劝退，而且性能很差）
+- Scheme 的语法跟 Guile 的文档都走马观花看了一遍，再次尝试折腾 Guix 系统。
+
 ### 2023-12-26
 
 - 今晚研究了下 Guix Scheme 语言，打算好好学一学，再深入折腾下 Guix 系统。而且 eww 的配置文件也是 Lisp 系语言，Scheme 学了用得上，动力就比较足。
