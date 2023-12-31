@@ -1,12 +1,12 @@
 ---
-title: "2023 年年终总结"
+title: "我的 2023 年 - 认识更多有趣的人，见识更宽广的世界"
 date: 2023-12-10T18:00:45+08:00
 lastmod: 2023-12-10T18:00:45+08:00
 
-draft: true
+draft: false
 resources:
 - name: "featured-image"
-  src: "github-profile-2023-ryan4yin.webp"
+  src: "2023-ryan4yin-github-oss-insight.webp"
 
 tags: ["总结"]
 categories: ["life", "tech"]
@@ -20,6 +20,8 @@ comment:
   waline:
     enable: false
 ---
+
+> 多图预警！多图预警！多图预警！
 
 ## 闲言碎语
 
@@ -111,9 +113,8 @@ comment:
     - 我使用了 opensbi 的主线代码编译出的 opensbi，而 LicheePi 4A 的 TH1520 核心需要使用它 fork 的分支
     - 此外我生成的 img 镜像，分区也存在问题，root 分区的大小不对劲。
   - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 $50 刀，我于是在 GitHub 个人页面以及项目中都新增了 Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
-    - 截止 2023 年底，Patreon 共收到赞助 $10 刀，buymeacoffee 收到赞助 $35 刀，爱发点收到赞助 ￥25 元，以及加密货币收到赞助 $50 刀。
+    - 截止 2023 年底，[Patreon](https://patreon.com/ryan4yin) 共收到赞助 $10 刀， [buymeacoffee](https://www.buymeacoffee.com/ryan4yin) 收到赞助 $70 刀，爱发点收到赞助 ￥25 元，以及加密货币收到赞助 $50 刀。
       {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" title="Patreon Messages" width="80%">}}
-      {{<figure src="/images/2023-summary/buymeacoffe_earning-2023-12-13.webp" title="Buy Me a Coffee - Earning" width="80%">}}
   - 写下新文章 [人生已过四分之一](https://thiscute.world/posts/a-quarter-of-the-way-through-life/)，回顾我到目前为止的人生，以及对未来的展望，挺多感想。
   - 在 [@Manjusaka_Lee](https://twitter.com/Manjusaka_Lee) 的熏陶下，我也整了一个新的邮箱地址 ryan4yin@linux.com。先给 Linux Foundation 捐 \$99，然后再付 \$150 就能得到这个终身邮箱地址。
     - 一是用了这么久 Linux 也该捐点钱，二是感觉这个邮箱很酷！
@@ -152,6 +153,7 @@ comment:
     - 我妹确诊抑郁症这一点真的让我很意外，让我意识到我一直有些忽视她的心理健康问题。
   - 我确诊 ADHD 并开始用药之后心态有很大的变化，我妹确诊抑郁症又给了我很大的触动。我完全放下了所有技术上的业余爱好，工作上专心工作，业余时间更多地花在了关心家人、运动、学习心理学等事情上。
 - 11 月
+  - 我的 NixOS & Flakes Book 被加进了 NixOS 官方文档的推荐阅读，挺开心的：[nix.dev - PR 781](https://github.com/NixOS/nix.dev/pull/781)
   - 持续服药治疗以及复诊，确诊后这段时间是我印象中工作效率最高的一段时间，治疗挺有成效。
   - 给我妹买往返火车票、学校请假、预约医生、带她在深圳到处玩。
   - 有挺长一阵没怎么碰电脑了，最近发现我的 NixOS 总是启动没多久网络就会卡死，为了解决问题，我重装了 NixOS 系统，顺便给系统添加了 LUKS 全盘加密 + Secure Boot + impermanence，根卷换成了 tmpfs，因此任何未显式声明持久化的数据，每次重启系统都会被清空。优雅，太优雅了！
@@ -163,6 +165,7 @@ comment:
     - 主要问题：Touchbar 跑着跑着会失灵，Touch ID 无法使用，盖上盖子会直接关机，触摸板比较容易误触。其他的体验都挺不错的，第一次在笔记本上用 NixOS，还挺新奇的。
   - 折腾 Guix 系统、Scheme 语言、Emacs 编辑器以及 nushell.
     - 打算后面多写写 Scheme 跟 nushell，Python 脚本有点写腻歪了，而且 Python 在 NixOS 上有点水土不服。
+  - 将 Zellij 设为了默认的终端环境，体验非常丝滑，而且新手引导做得简直绝了，极大地降低了上手难度。
   - 带我妹逛了深圳 AD01 动漫展。第一次逛漫展，体验挺不错的，玩得挺开心。
 
 
@@ -172,8 +175,11 @@ comment:
 
 技术方面我今年的进展还是挺大的，但跟去年写的展望几乎没啥关联，人生总是充满了意外哈哈...
 
-今年的主要技术成就基本完全集中在 NixOS 这一块，新建的几个项目都收到了挺多 stars 跟好评。截止 2023/12/31，我 stars 比较高的几个项目如下：
-- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 15 个 issues，24 位贡献者，43 个 forks，923 个 stars，以及 4 位国外读者的共计 $70 零花钱赞助。
+今年的主要技术成就基本完全集中在 NixOS 这一块，新建的几个项目都收到了挺多 stars 跟好评。
+
+截止 2023/12/31，我 stars 比较高的几个项目如下：
+
+- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 15 个 issues，24 位贡献者，43 个 forks，923 个 stars，以及 4 位国外读者的共计 $80 零花钱赞助。
   - 是我目前 stars 数最高的项目
   - 它的文档站目前稳定在每天 150 UV
 - [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge): 这份个人笔记我从 2019 年工作开始写，目前有了 38 个 forks，363 个 stars.
@@ -198,9 +204,12 @@ TODO: update images & links
 - Watchers: 39 => 102, 涨幅 161%.
 
 在折腾 NixOS 的过程中我写的入门指南（[nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)）获得了国内外社区的大量好评，其他项目也各有斩获；另外认识了好几位国内外的 NixOS 资深用户、开源项目作者以及嵌入式开发者，还收到了一些外国读者的打赏。
-这些成绩给我带来了巨大的成就感以及社区参与感！也完全契合了我年初给自己的期许——「**认识更多有趣的人，见识下更宽广的世界**」。
+
+这些成绩给我带来了巨大的成就感以及社区参与感，也完全契合了我年初给自己的期许——「**认识更多有趣的人，见识下更宽广的世界**」。
 
 今年不仅给 AstroNvim, ESP-IDF 等知名项目贡献了少许代码，甚至还创造了这么多个受欢迎的新项目、收到了几十个 PR。之前定的给一些开源项目贡献代码的目标，完全是超额完成了。
+
+在折腾上 NixOS 后，年中的时候又顺带将 VSCode 彻底换成了 Zellij + Neovim，甚至年底又开始折腾 Guix 系统、Emacs 编辑器，以及 nushell 等新鲜玩意儿。
 
 总的来说，业余技术今年搞到这个程度，相比去年，能称得上是「优秀」、「超出预期」。
 
@@ -221,7 +230,7 @@ TODO: update images & links
 当时有点认命了，想着人生可能就是这样永远在这样未知的道路上的挣扎着前进，也有痛苦，也有快乐。
 
 转折点是国庆前跟朋友提了嘴感觉自己有 ADHD，国庆后就被[@咩咩](bleatingsheep.org/)催促去看心理医生，之后就确诊了 ADHD 并开始服药。
-确诊让我的心态出现巨大的改变，业余爱好因此放下了好几个月。而服药则帮助我扭转了工作状态，我的专注能力有了质的提升，这也是我今年最大的收获之一。
+确诊让我的心态出现巨大的改变，业余爱好因此放下了一个多月。而服药则帮助我扭转了工作状态，我的专注能力有了质的提升，这也是我今年最大的收获之一。
 
 总体上，我今年的工作做得比去年差，尤其是上半年，我给自己的评价是「及格」。
 
@@ -235,7 +244,8 @@ TODO: update images & links
 考虑到 ADHD 的遗传特性，跟妹妹、父母一番沟通后，带我妹来深圳看医生，确诊了 ADHD 以及抑郁症。
 说真的，我一直知道我妹妹情绪比较敏感，但从没想过是因为抑郁症。
 
-这之后，除了工作外，我大部分的精力都花在了关心家人、运动、学习心理学等事情上，技术上的东西放下了一个多月，最近才慢慢捡起来。
+这之后，除了工作外，我大部分的精力都花在了关心家人、运动、学习心理学等事情上。
+这是一个非常明显的转变，我跟我妹的关系更好了，另外持续好几个月的治疗跟每个月带她在深圳散散心，她的情绪也有了很大的改善。
 
 #### 2. 参与公益活动
 
@@ -267,7 +277,7 @@ TODO: update images & links
 2023 年我读的书籍数量不多，没达成每月读一本书的目标。
 而写作方面，算上这篇总结，今年我一共写了 9 篇博文，也没达成每月写一篇的目标。
 
-但鉴于我今年写了一本挺受欢迎的小书 [NixOS & Flakes Book](https://github.com/ryan4yin/nixos-and-flakes-book)，它得到了 NixOS 社区诸多好评，上了 Hacker News 热榜，甚至被官方文档列入推荐阅读，我姑且将今年「阅读与写作」这一项的评分定为「超出期待」！
+但鉴于我今年写了一本挺受欢迎的小书 [NixOS & Flakes Book](https://github.com/ryan4yin/nixos-and-flakes-book)，它得到了 NixOS 社区诸多好评，还在 10 月份上了 Hacker News 热榜，甚至被官方文档 [nix.dev](https://nix.dev/recommended-reading#other-articles) 列入推荐阅读，我姑且将今年「阅读与写作」这一项的评分定为「超出期待」！
 
 #### 3. 其他
 
@@ -282,9 +292,6 @@ TODO: update images & links
 ### 4. 各种统计数据
 
 首先是我的博客站点 <https://thiscute.world/> 的统计数据：
-
-
-TODO: update images & links
 
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计" width="100%">}}
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats-by-country.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计 - 按国家分类" width="100%">}}
@@ -303,14 +310,22 @@ TODO: update images & links
 {{<figure src="/images/2023-summary/2023-12-31-vercel-bandwidth-stats.webp" title="Vercel - 2023 年流量统计" width="100%">}}
 
 
-还有文章阅读量 Top 10：
+还有文章阅读排行统计：
 
-{{<figure src="/images/2023-summary/2023-top-10-posts.webp" title="2023 年文章阅读量 Top 10" width="100%">}}
+{{<figure src="/images/2023-summary/2023-top-posts-stats.webp" title="2023 年文章阅读排行" width="100%">}}
 
 
 此外，我今年在 [Twitter(X)](https://twitter.com/ryan4yin) 上比较活跃，也新增了不少粉丝：
 
 {{<figure src="/images/2023-summary/2023-twitter-stats.webp" title="2023 年 Twitter 统计数据" width="100%">}}
+
+最后，是一些赞助平台的统计：
+
+{{<figure src="/images/2023-summary/2023-buymeacoffee-earning.webp" title="2023 年 buymeacoffee 收入统计" width="100%">}}
+{{<figure src="/images/2023-summary/2023-patreon-earning.webp" title="2023 年 patreon 收入统计" width="100%">}}
+{{<figure src="/images/2023-summary/2023-afdian-earning.webp" title="2023 年爱发电收入统计" width="100%">}}
+
+>另有加密货币 $50 没有好的统计页面，就不放截图了。以及部分国外读者希望使用我未使用的支付方式赞助，我比较懒没折腾了...
 
 ## 2023 年展望
 
