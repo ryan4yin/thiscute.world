@@ -161,8 +161,10 @@ comment:
   - 工作电脑用满三年换新了，新电脑是 Macbook Pro M2，终于用上了 M 系列的 CPU，体验显然比之前的 Intel 版本好很多，不发热了风扇也不响了，续航知道很牛但没啥机会测试。
   - 淘汰下的旧工作电脑给装了个 NixOS，体验还不错，有些小问题但勉强能忍受。
     - 主要问题：Touchbar 跑着跑着会失灵，Touch ID 无法使用，盖上盖子会直接关机，触摸板比较容易误触。其他的体验都挺不错的，第一次在笔记本上用 NixOS，还挺新奇的。
-  - 学习 Guile Scheme 以及 nushell，打算后面大量使用这俩语言整些活，Python 脚本有点写腻歪了。
-  - 年底确实也缺乏些动力，更多的时间花在了娱乐上。
+  - 折腾 Guix 系统、Scheme 语言、Emacs 编辑器以及 nushell.
+    - 打算后面多写写 Scheme 跟 nushell，Python 脚本有点写腻歪了，而且 Python 在 NixOS 上有点水土不服。
+  - 带我妹逛了深圳 AD01 动漫展。第一次逛漫展，体验挺不错的，玩得挺开心。
+
 
 ## 2023 年 Highlights
 
@@ -170,13 +172,16 @@ comment:
 
 技术方面我今年的进展还是挺大的，但跟去年写的展望几乎没啥关联，人生总是充满了意外哈哈...
 
-今年的主要技术成就基本完全集中在 NixOS 这一块，如下几个新项目都或者了很多好评（统计数据截止 2023/12/26）：
-- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 23 位贡献者，908 个 stars，以及 4 位国外读者的共计 $70 零花钱赞助，成为了我目前 stars 数最高的项目。它的文档站目前稳定在每天 150 UV.
-- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 290 个 stars.
-- [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter): 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 129 stars.
-- [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588): 这是我在 2023/6/4 创建的一个 NixOS 移植项目，目前支持了三块 RK3588 开发板，获得了 46 stars.
-
-- [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a): 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板，断断续续花了两个月才搞定移植工作（用时远超预料...不过成功后获得的成就感也是巨大的）。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 $50 给我。
+今年的主要技术成就基本完全集中在 NixOS 这一块，新建的几个项目都收到了挺多 stars 跟好评。截止 2023/12/31，我 stars 比较高的几个项目如下：
+- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 15 个 issues，24 位贡献者，43 个 forks，923 个 stars，以及 4 位国外读者的共计 $70 零花钱赞助。
+  - 是我目前 stars 数最高的项目
+  - 它的文档站目前稳定在每天 150 UV
+- [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge): 这份个人笔记我从 2019 年工作开始写，目前有了 38 个 forks，363 个 stars.
+- [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 6 位贡献者，23 个 forks，以及 297 个 stars.
+- [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter): 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 133 stars.
+- [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588): 这是我在 2023/6/4 创建的一个 NixOS 移植项目，目前支持了三块 RK3588 开发板，获得了 2 位贡献者，9 个 forks，11 个 issues，以及 49 stars.
+- [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a): 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 $50 给我。
+  - 这个项目断断续续花了两个月才搞定，用时远超预料...不过成功后获得的成就感也是巨大的！
 
 对比下从 2023 年 1 月 1 日到现在，我的 GitHub Metrics 统计数据：
 
@@ -187,32 +192,36 @@ TODO: update images & links
 
 几个关键指标的变化：
 
-- Stars: 12 => 2044, 涨幅 555%.
+- Stars: 312 => 2072, 涨幅 564%.
 - Followers: 152 => 468, 涨幅 208%.
-- Forkers: 97 => 201, 涨幅 107%.
+- Forkers: 97 => 203, 涨幅 109%.
 - Watchers: 39 => 102, 涨幅 161%.
 
-在折腾 NixOS 的过程中我做的开源项目、入门指南获得了国内外社区的大量好评，认识了好几位国内外的 NixOS 资深用户与嵌入式开发者，还收到了一些外国读者的打赏，[nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)，在 NixOS 国际社区获得了大量好评，给我带来了巨大的成就感以及社区参与感！这完全契合了我年初给自己的期许——「**认识更多有趣的人，见识下更宽广的世界**」。
+在折腾 NixOS 的过程中我写的入门指南（[nixos-and-flakes-book](https://nixos-and-flakes.thiscute.world/)）获得了国内外社区的大量好评，其他项目也各有斩获；另外认识了好几位国内外的 NixOS 资深用户、开源项目作者以及嵌入式开发者，还收到了一些外国读者的打赏。
+这些成绩给我带来了巨大的成就感以及社区参与感！也完全契合了我年初给自己的期许——「**认识更多有趣的人，见识下更宽广的世界**」。
 
-今年不仅给 AstroNvim, ESP-IDF 等知名项目贡献了少许代码，甚至还创造了这么多个受欢迎的新项目，且收到了几十个 PR。之前定的给一些开源项目贡献代码的目标，完全是超额完成了。
+今年不仅给 AstroNvim, ESP-IDF 等知名项目贡献了少许代码，甚至还创造了这么多个受欢迎的新项目、收到了几十个 PR。之前定的给一些开源项目贡献代码的目标，完全是超额完成了。
 
 总的来说，业余技术今年搞到这个程度，相比去年，能称得上是「优秀」、「超出预期」。
 
 ### 2. 工作
 
+工作上只能说马马虎虎，上半年业余在 NixOS 上做的成果得到了非常多的认可，相当有成就感，花了大量的精力在 NixOS 上，也创建了许多相关项目。
+但另一方面，精力就这么多，我也一直做不到平衡好工作与生活/业余爱好，其结果就是那段时间没啥心思在工作上，把工作搞得一团糟。
+当时觉得自己进入了一个瓶颈期，在工作上找不到什么成就感，业余爱好虽然做出了不错的成绩，但又不能靠这个吃饭。
 
-工作上只能说马马虎虎，上半年业余在 NixOS 上做的成果得到了非常多的认可，相当有成就感，花了大量的精力在 NixOS 上，也创建了许多相关项目。但另一方面，精力就这么多，我也一直做不到平衡好工作与生活/业余爱好，其结果就是那段时间没啥心思在工作上，把工作搞得一团糟。
-当时觉得自己进入了一个瓶颈期，在工作上找不到什么成就感，业余爱好做出了不错的成绩，但又不能靠这个吃饭。
-
-在折腾业余爱好期间，一种找不到方向的焦虑感也一直萦绕着我，有跟一些朋友、同事沟通过这个问题，但大道理谁都懂，真要做起来又是另一回事了。
+在折腾业余爱好期间，一种找不到方向的焦虑感一直萦绕着我，有跟一些朋友、同事沟通过这个问题，但大道理谁都懂，真要做起来又是另一回事了。
 因为业余搞了些嵌入式硬件感觉有意思，也有隐约考虑过转行搞硬件，但只是些粗浅的想法。
-到 8 月份的时候，因为做了一些 NixOS 项目收到几笔赞助，让我可能有点异想天开？了解了些「如何通过开源项目养活自己」类似的信息，8 月中下旬的时候在苏洋的折腾群里提到这个想法，被洋哥泼了冷水 emmm 冷静下来后回想，洋哥说的挺在理的，靠开源用爱发电真能养活自己的凤毛麟角，如果专门往商业项目的方向做，又没了那份折腾的快乐了。
+到 8 月份的时候，做的几个 NixOS 项目收到些赞助，让我可能有点异想天开？了解了些「如何通过开源项目养活自己」类似的信息，8 月中下旬的时候在苏洋的折腾群里提到这个想法，被洋哥泼了冷水 emmm 冷静下来后回想，洋哥说的挺在理的，靠开源用爱发电真能养活自己的凤毛麟角，如果专门往商业项目的方向做，又没了那份折腾的快乐了。
 
-8 月底的时候，苏洋的折腾群里发起一场自我介绍活动，读了许多群友的自我介绍，把我自己在群里发的自我介绍扩写了下，就成了这篇文章 [人生已过四分之一](https://thiscute.world/posts/a-quarter-of-the-way-through-life/)。
+8 月底的时候，苏洋的折腾群里发起一场自我介绍活动，读了许多群友的自我介绍，很有感触，于是基于我自己在群里发的自我介绍调整扩写，成果就是这篇 [人生已过四分之一](https://thiscute.world/posts/a-quarter-of-the-way-through-life/)。
 
-当时觉得自己想明白不少，也跟领导同事做了些沟通，工作上状态有所好转，但还是没能完全回到正轨，当时觉得人生可能就是这样永远在这样未知的道路上的挣扎着前进了，也有痛苦，也有快乐。
+当时文章完成后发出来，真觉得自己想明白不少，也跟领导同事做了些沟通，工作上状态有所好转。
+但还是很难集中注意力，分心的情况仍然相当严重。也尝试了通过番茄钟之类的方式来提高工作效率，但效果不佳。
+当时有点认命了，想着人生可能就是这样永远在这样未知的道路上的挣扎着前进，也有痛苦，也有快乐。
 
-转折点是国庆后，咩咩催促我去看心理医生，确诊了 ADHD 并开始服药后，我的工作效率才有了质的提升，这也是我今年最大的收获之一。
+转折点是国庆前跟朋友提了嘴感觉自己有 ADHD，国庆后就被[@咩咩](bleatingsheep.org/)催促去看心理医生，之后就确诊了 ADHD 并开始服药。
+确诊让我的心态出现巨大的改变，业余爱好因此放下了好几个月。而服药则帮助我扭转了工作状态，我的专注能力有了质的提升，这也是我今年最大的收获之一。
 
 总体上，我今年的工作做得比去年差，尤其是上半年，我给自己的评价是「及格」。
 
@@ -220,16 +229,13 @@ TODO: update images & links
 
 #### 1. 确诊 ADHD 以及治疗
 
-8 月份通过 [我的四分之一人生](https://thiscute.world/posts/a-quarter-of-the-way-through-life/) 做了一个人生回顾后，虽然感觉自己想明白不少，但实际工作上还是很难集中注意力，分心的情况仍然相当严重。
-也尝试了通过番茄钟之类的方式来提高工作效率，但效果不佳。
-
-直到国庆后[@咩咩](bleatingsheep.org/)催促我去看心理医生，确诊了 ADHD 并开始服药后，我的工作效率才有了质的提升。
-于是我搞明白了，原来我一直以来的注意力问题，并不是什么品格或者意志力问题，而是一种可以治疗的病症。
+前文提了，我今年确诊了 ADHD，这是我今年最大的收获之一。
+它让我搞明白了，原来我一直存在的注意力问题，并不是什么人格缺陷或者意志力不够，而是一种有挺多人都存在的功能失调（disorder），可以通过药物等方式治疗缓解。
 
 考虑到 ADHD 的遗传特性，跟妹妹、父母一番沟通后，带我妹来深圳看医生，确诊了 ADHD 以及抑郁症。
 说真的，我一直知道我妹妹情绪比较敏感，但从没想过是因为抑郁症。
 
-这之后，除了工作外，我大部分的精力都花在了关心家人、运动、学习心理学等事情上，技术上的东西放下有一阵子了。
+这之后，除了工作外，我大部分的精力都花在了关心家人、运动、学习心理学等事情上，技术上的东西放下了一个多月，最近才慢慢捡起来。
 
 #### 2. 参与公益活动
 
@@ -280,24 +286,31 @@ TODO: update images & links
 
 TODO: update images & links
 
-{{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics.webp" title="thiscute.world - 2023 年 Google Analytics 统计数据" width="100%">}}
+{{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计" width="100%">}}
+{{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats-by-country.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计 - 按国家分类" width="100%">}}
 
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-search.webp" title="thiscute.world - 2023 年 Google Search 统计数据" width="100%">}}
 
 另外是今年我新建的 NixOS 笔记站点 <https://nixos-and-flakes.thiscute.world> 的统计数据：
 
-{{<figure src="/images/2023-summary/nixos-and-flakes-book-2023-google-analytics.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 统计数据" width="100%">}}
+{{<figure src="/images/2023-summary/nixos-and-flakes-2023-google-analytics-stats.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 访问统计" width="100%">}}
+{{<figure src="/images/2023-summary/nixos-and-flakes-2023-google-analytics-stats-by-country.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 访问统计 - 按国家分类" width="100%">}}
 
-{{<figure src="/images/2023-summary/nixos-and-flakes-book-2023-google-search.webp" title="NixOS & Flakes Book - 2023 年 Google Search 统计数据" width="100%">}}
+{{<figure src="/images/2023-summary/nixos-and-flakes-2023-google-search.webp" title="NixOS & Flakes Book - 2023 年 Google Search 访问统计" width="100%">}}
 
-以及两个站点全年在 Vercel 上的流量统计：
+以及两个站点全年在 Vercel 上的流量统计（感谢 Vercel 每个月的 100G 免费流量，目前看白嫖阶段还有挺大增长空间哈哈）：
 
-{{<figure src="/images/2023-summary/vercel-2023-traffic.webp" title="Vercel - 2023 年流量统计" width="100%">}}
+{{<figure src="/images/2023-summary/2023-12-31-vercel-bandwidth-stats.webp" title="Vercel - 2023 年流量统计" width="100%">}}
 
-最后是文章阅读量 Top 10：
+
+还有文章阅读量 Top 10：
 
 {{<figure src="/images/2023-summary/2023-top-10-posts.webp" title="2023 年文章阅读量 Top 10" width="100%">}}
 
+
+此外，我今年在 [Twitter(X)](https://twitter.com/ryan4yin) 上比较活跃，也新增了不少粉丝：
+
+{{<figure src="/images/2023-summary/2023-twitter-stats.webp" title="2023 年 Twitter 统计数据" width="100%">}}
 
 ## 2023 年展望
 

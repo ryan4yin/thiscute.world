@@ -23,6 +23,20 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+
+### 2023-12-30 - 2023-12-31
+
+- 因为 Guix 推荐使用 Emacs 作为主力编辑器（都是 Lisp 圈子的），加之在 Neovim 上没找到好用的 Guix/Scheme 插件，装了个 doom-emacs 开始了 emacs 折腾之旅。
+- 带我妹来深圳复诊，顺便玩。
+    - 逛了深圳 AD01 动漫展。第一次逛漫展，体验挺不错的。
+    - 到大梅沙看了看大海。小孩比例超高，又比较热，体验差了点。大鹏那边会好玩很多，但太远了。
+
+### 2023-12-28 - 2023-12-29
+
+- 已经完全适应了将 zellij+neovim 用做默认开发环境，体验非常棒！
+- 业余继续尝试折腾 Guix 系统，遇到了 Scheme 语言、Guix 配置、构建速度慢等各种问题，都一一解决了，记了些笔记。
+    - https://github.com/ryan4yin/guix-config
+
 ### 2023-12-27
 
 - 了解了下 Helix 插件系统，试用时发现 Helix 也没内置的终端功能，相关 Issue 讨论中发现挺多用户习惯使用 tmux/zellij 作为日常的终端环境。联想到我最近在使用 kitty/wezterm 时发现它们的搜索/终端历史选择复制等功能上存在的诸多欠缺，而 Neovim 里我目前主要使用的 toggleterm.nvim 插件也日常导致 neovim 卡死，瞬间就对将 zellij 作为日常终端环境产生了兴趣。
