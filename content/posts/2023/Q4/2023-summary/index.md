@@ -193,7 +193,6 @@ comment:
 
 {{<figure src="/images/2023-summary/2023-01-01-github-metrics.svg" attr="2023/01/01 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/f58f1769a72289b44e5313eaed3bbfc21febebda/metrics.classic.svg">}}
 
-TODO: update images & links
 {{<figure src="/images/2023-summary/2023-12-31-github-metrics.svg" attr="2023/12/31 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/master/metrics.classic.svg">}}
 
 几个关键指标的变化：
