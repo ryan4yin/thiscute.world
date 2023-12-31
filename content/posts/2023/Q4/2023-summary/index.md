@@ -106,14 +106,14 @@ comment:
   - 从 4 月份折腾 NixOS 到现在，GitHub 上开了五六个 Nix 项目，获得了接近 400 stars，也认识了许多朋友、收到了许多好评，在这个圈子里是有点混开了的 feel.
     - 甚至发现有俄罗斯的老铁在将我的 NixOS 小书翻译成俄语！[fl42v/nixos-and-flakes-book-ru](https://github.com/fl42v/nixos-and-flakes-book-ru)，成就感又涨了一点。
 - 8 月
-  - 时隔一个多月，在 LicheePi 的 Telegram 群组被老外 ping NixOS 移植进展。又来了点动力再次接续之前 6 月份的移植工作，一番尝试后成功在 Lichee Pi 4A 上把 NixOS 跑起来了！离开始移植已经过去了两个月，迟来的成功，泪目！ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至表示要给我打 $50 美元以表感谢，因为这太有意思了！
+  - 时隔一个多月，在 LicheePi 的 Telegram 群组被老外 ping NixOS 移植进展。又来了点动力再次接续之前 6 月份的移植工作，一番尝试后成功在 Lichee Pi 4A 上把 NixOS 跑起来了！离开始移植已经过去了两个月，迟来的成功，泪目！ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至表示要给我打 \$50 美元以表感谢，因为这太有意思了！
     - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
       {{<figure src="/images/2023-summary/nixos-riscv-cluster.webp" title="NixOS on LicheePi4A" width="100%">}}
   - 排查问题的方法：首先刷好一个可在 LicheePi 4A 上正常启动的 Fedora 系统，然后用我编译出的 NixOS 的 rootfs 与 initrd 等文件，替换掉 Fedora 的 rootfs 以及 boot 分区中对应的文件，结果发现就能正常启动了！进一步排查确认到，我 6 月份生成的 NixOS rootfs 无法启动的原因是：
     - 我使用了 opensbi 的主线代码编译出的 opensbi，而 LicheePi 4A 的 TH1520 核心需要使用它 fork 的分支
     - 此外我生成的 img 镜像，分区也存在问题，root 分区的大小不对劲。
-  - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 $50 刀，我于是在 GitHub 个人页面以及项目中都新增了 Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
-    - 截止 2023 年底，[Patreon](https://patreon.com/ryan4yin) 共收到赞助 $10 刀， [buymeacoffee](https://www.buymeacoffee.com/ryan4yin) 收到赞助 $70 刀，爱发点收到赞助 ￥25 元，以及加密货币收到赞助 $50 刀。
+  - 有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 \$50 刀，我于是在 GitHub 个人页面以及项目中都新增了 Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
+    - 截止 2023 年底，[Patreon](https://patreon.com/ryan4yin) 共收到赞助 \$10 刀， [buymeacoffee](https://www.buymeacoffee.com/ryan4yin) 收到赞助 \$70 刀，爱发点收到赞助 ￥25 元，以及加密货币收到赞助 \$50 刀。
       {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" title="Patreon Messages" width="80%">}}
   - 写下新文章 [人生已过四分之一](https://thiscute.world/posts/a-quarter-of-the-way-through-life/)，回顾我到目前为止的人生，以及对未来的展望，挺多感想。
   - 在 [@Manjusaka_Lee](https://twitter.com/Manjusaka_Lee) 的熏陶下，我也整了一个新的邮箱地址 ryan4yin@linux.com。先给 Linux Foundation 捐 \$99，然后再付 \$150 就能得到这个终身邮箱地址。
@@ -179,14 +179,14 @@ comment:
 
 截止 2023/12/31，我 stars 比较高的几个项目如下：
 
-- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 15 个 issues，24 位贡献者，43 个 forks，923 个 stars，以及 4 位国外读者的共计 $80 零花钱赞助。
+- [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book): 这本开源小书的仓库于 2023/6/23 创建，目前获得了 15 个 issues，24 位贡献者，43 个 forks，923 个 stars，以及 4 位国外读者的共计 \$80 零花钱赞助。
   - 是我目前 stars 数最高的项目
   - 它的文档站目前稳定在每天 150 UV
 - [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge): 这份个人笔记我从 2019 年工作开始写，目前有了 38 个 forks，363 个 stars.
 - [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config): 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 6 位贡献者，23 个 forks，以及 297 个 stars.
 - [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter): 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 133 stars.
 - [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588): 这是我在 2023/6/4 创建的一个 NixOS 移植项目，目前支持了三块 RK3588 开发板，获得了 2 位贡献者，9 个 forks，11 个 issues，以及 49 stars.
-- [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a): 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 $50 给我。
+- [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a): 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 \$50 给我。
   - 这个项目断断续续花了两个月才搞定，用时远超预料...不过成功后获得的成就感也是巨大的！
 
 对比下从 2023 年 1 月 1 日到现在，我的 GitHub Metrics 统计数据：
@@ -326,7 +326,7 @@ comment:
 {{<figure src="/images/2023-summary/2023-patreon-earning.webp" title="2023 年 patreon 收入统计" width="100%">}}
 {{<figure src="/images/2023-summary/2023-afdian-earning.webp" title="2023 年爱发电收入统计" width="100%">}}
 
->另有加密货币 $50 没有好的统计页面，就不放截图了。以及部分国外读者希望使用我未使用的支付方式赞助，我比较懒没折腾了...
+>另有加密货币 \$50 没有好的统计页面，就不放截图了。以及部分国外读者希望使用我未使用的支付方式赞助，我比较懒没折腾了...
 
 ## 2023 年展望
 
