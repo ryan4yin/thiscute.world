@@ -292,19 +292,21 @@ comment:
 
 首先是我的博客站点 <https://thiscute.world/> 的统计数据：
 
+> 我在 6 月份的时候把 NixOS & Flakes 那篇文章迁移到单独的站点，博客里仅保留了跳转链接，Engagement Time 有因此受到比较大的影响。去掉这个因素的话感觉应该能超过 2 分钟。
+
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计" width="100%">}}
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats-by-country.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计 - 按国家分类" width="100%">}}
 
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-search.webp" title="thiscute.world - 2023 年 Google Search 统计数据" width="100%">}}
 
-另外是今年我新建的 NixOS 笔记站点 <https://nixos-and-flakes.thiscute.world> 的统计数据：
+另外是我今年 6 月份新建的 NixOS 笔记站点 <https://nixos-and-flakes.thiscute.world> 的统计数据（国外读者相当多，这跟 stars 以及收到的赞助情况也比较匹配）：
 
 {{<figure src="/images/2023-summary/nixos-and-flakes-2023-google-analytics-stats.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 访问统计" width="100%">}}
 {{<figure src="/images/2023-summary/nixos-and-flakes-2023-google-analytics-stats-by-country.webp" title="NixOS & Flakes Book - 2023 年 Google Analytics 访问统计 - 按国家分类" width="100%">}}
 
 {{<figure src="/images/2023-summary/nixos-and-flakes-2023-google-search.webp" title="NixOS & Flakes Book - 2023 年 Google Search 访问统计" width="100%">}}
 
-以及两个站点全年在 Vercel 上的流量统计（感谢 Vercel 每个月的 100G 免费流量，目前看白嫖阶段还有挺大增长空间哈哈）：
+以及两个站点全年在 Vercel 上的流量统计（感谢 Vercel 每个月的 100G 免费流量，目前看白嫖阶段流量还有挺大增长空间哈哈）：
 
 {{<figure src="/images/2023-summary/2023-12-31-vercel-bandwidth-stats.webp" title="Vercel - 2023 年流量统计" width="100%">}}
 
