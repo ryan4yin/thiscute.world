@@ -93,7 +93,7 @@ comment:
     {{<figure src="/images/now/2023-08-13-nixos-and-flakes-book.webp" title="NixOS & Flakes Book" width="100%">}}
 - 7 月
   - NixOS 系统配置 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config) 迭代：
-    - 把办公电脑 Macbook Pro 2020 重裝了一遍系統，新系统環境完全通過 nix-darwin 安裝管理，就連大部分的 macOS 系統配置也完全声明式管理了。至此，我的常用电脑环境（）全部都使用同一份 nix 配置管理起来了，感覺非常香！
+    - 把办公电脑 Macbook Pro 2020 重裝了一遍系統，新系统環境完全通過 nix-darwin 安裝管理，就連大部分的 macOS 系統配置也完全声明式管理了。至此，我的常用电脑环境（NixOS+macOS）全部都使用同一份 nix 配置管理起来了，感覺非常香！
       - Linux 与 macOS 都使用了同一份小鹤音形的 rime 配置，现在输入法的跨平台体验也完全一致了，非常棒！
       - nixpkgs 对 macOS 的支持有限，因此常用的 GUI 程序都通过 nix-darwin 调用 homebrew 进行安装管理。
     - 所有命令行工具的主题，全部统一为了 [catppuccin-mocha](https://github.com/catppuccin/catppuccin).
