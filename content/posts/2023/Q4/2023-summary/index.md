@@ -21,8 +21,6 @@ comment:
     enable: false
 ---
 
-> 多图预警！多图预警！多图预警！
-
 ## 闲言碎语
 
 啊呀，又到了一年一度的传统节目——年终总结时间。
@@ -323,7 +321,7 @@ comment:
 
 {{<figure src="/images/2023-summary/2023-twitter-stats.webp" title="2023 年 Twitter 统计数据" width="100%">}}
 
-最后，是一些赞助平台上受到的零花钱统计：
+最后，是一些赞助平台上收到的零花钱统计：
 
 {{<figure src="/images/2023-summary/2023-buymeacoffee-earning.webp" title="2023 年 buymeacoffee 收入统计" width="100%">}}
 {{<figure src="/images/2023-summary/2023-patreon-earning.webp" title="2023 年 patreon 收入统计" width="100%">}}
