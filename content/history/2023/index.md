@@ -23,7 +23,6 @@ comment:
 
 全部历史记录：[/history](/history/)
 
-
 ### 2023-12-30 - 2023-12-31
 
 - 因为 Guix 推荐使用 Emacs 作为主力编辑器（都是 Lisp 圈子的），加之在 Neovim 上没找到好用的 Guix/Scheme 插件，装了个 doom-emacs 开始了 emacs 折腾之旅。
