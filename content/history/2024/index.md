@@ -24,6 +24,11 @@ comment:
 全部历史记录：[/history](/history/)
 
 
+### 2023-01-09
+
+- [pass : 密码管理本不复杂](https://nyk.ma/posts/password-store/): 前两天学 Emacs 看到了这篇文章，给我带来了对密码管理的新思路！
+- 然后今天研究一天的 password-store 跟 gpg 的使用，把所有原本保存在 Firefox 中的密码全部迁移到了 password-store + GnuPG 加密，并 push 到 GitHub 的一个私有仓库上。太香了！
+
 ### 2024-01-01 - 2024-01-07
 
 - 继续尝鲜 DoomEmacs，对其配置做了大量的迭代。
