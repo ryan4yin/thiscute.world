@@ -23,6 +23,8 @@ toc:
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 《复杂 - 梅拉尼 米歇尔》
 - Psychology and Life, 20th edition, by Richard J. Gerrig
+- 折腾 Guix, Emacs 跟 Nushell，算是 2023 年折腾 NixOS, Neovim 的延续
+- 结合工作需求，深入了解下当下火热的 AIGC 技术
 
 ## 二、我今年还想搞搞这些
 
