@@ -37,7 +37,6 @@ toc:
   - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
   - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
   - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
-- 学习研究 NixOS 与 ARM64 / RISCV64 开发板 - 这项意料之外的工作进展神速！
 
 ## 三、今年的阅读进展
 
