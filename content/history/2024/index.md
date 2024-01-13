@@ -24,7 +24,20 @@ comment:
 全部历史记录：[/history](/history/)
 
 
-### 2023-01-09
+### 2024-01-14
+
+- 参加 Emacs 深圳线下聚会，作为一个玩 Emacs 不到一个月的新手，去听听大佬们的分享，学习一下，也感受下极客圈的氛围哈哈。
+
+### 2024-01-10 - 2024-01-13
+
+- 完成了将密码管理全部迁移到 password-store 的工作，现在 NixOS/macOS 跟 Android 上都可以使用了，非常香！
+- 继续微调 emacs 配置，之前加了 lsp-bridge 后语法高亮各种毛病，它的配置还是太复杂了，我换回了 lsp-mode. doom-emacs 下 lsp-mode 完全是开箱即用的，慢一点但配置起来不费脑子！
+- 熟悉 orgmode 语法，用起来还是挺多不习惯，尤其是它的转义问题，我研究了一整天，现在还是有几个「[未解之迷](https://github.com/ryan4yin/guix-config/blob/079bd61/ORGMODE.org)」...
+- 发现 NixOS 内置了 Guix 支持 [nixos/guix: init](https://github.com/NixOS/nixpkgs/pull/264331)，装上玩了一波。
+- 跟领导聊完了年终绩效，以及明年的工作展望。看起来我明年需要深入搞一搞 AIGC 的规模化，有机会深入搞下新鲜火热的 AI 技术，还挺期待的。
+  - RTX 4090 虽然吃灰大半年，但现在国内已经禁售了... 或许今年还能发挥一下它的作用
+
+### 2024-01-09
 
 - [pass : 密码管理本不复杂](https://nyk.ma/posts/password-store/): 前两天学 Emacs 看到了这篇文章，给我带来了对密码管理的新思路！
 - 然后今天研究一天的 password-store 跟 gpg 的使用，把所有原本保存在 Firefox 中的密码全部迁移到了 password-store + GnuPG 加密，并 push 到 GitHub 的一个私有仓库上。太香了！
