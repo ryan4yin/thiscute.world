@@ -168,6 +168,15 @@ comment:
     - 感觉漫展真的相当年轻化，大都是 00 后，超有活力，是平常我接触不到的人群，混迹其中有找回一点我逝去的青春 emmmm
     - 明年再参加的话，或许该考虑下 Cos 个啥角色，更能融入这个圈子，玩得更开心。
 
+{{<figure width="70%" src="/images/2023-summary/anime-convention-1.webp" title="漫展刚入场">}}
+{{<figure width="70%" src="/images/2023-summary/anime-convention_chinese-classical-dress-1.webp" title="古风 coser - 魔道祖师？">}}
+{{<figure width="70%" src="/images/2023-summary/anime-convention_frieren-coser-1.webp" title="芙莉莲">}}
+{{<figure width="70%" src="/images/2023-summary/anime-convention_Miku-cartoon-backpack-1.webp" title="Miku 卡通背包 - 我妹同款 emmm">}}
+{{<figure width="70%" src="/images/2023-summary/anime-convention_Scenery-Fox-Spirit-Matchmaker.webp" title="狐妖小红娘布景">}}
+{{<figure width="70%" src="/images/2023-summary/anime-convention_poster-Bocchi-the-Rock!-1.webp" title="卖海报的小店">}}
+
+{{<figure width="70%" src="/images/2023-summary/老北京铜锅涮.webp" title="跟我妹一起下馆子 - 老北京铜锅涮">}}
+
 ## 2023 年 Highlights
 
 ### 1. 业余技术
