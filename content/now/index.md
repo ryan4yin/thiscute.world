@@ -21,15 +21,16 @@ toc:
 >按优先级排序
 
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-- 《复杂 - 梅拉尼 米歇尔》
-- Psychology and Life, 20th edition, by Richard J. Gerrig
-- 折腾 Guix, Emacs 跟 Nushell，算是 2023 年折腾 NixOS, Neovim 的延续
-- 结合工作需求，深入了解下当下火热的 AIGC 技术
+- 深度使用 Neovim/Emacs，尝试下纯键盘操作（我目前还是鼠标用挺多的） 
+    - 熟悉 vim 自身的各种功能，这能在 vim/Neovim/Emacs 上通用 - 70%
+    - 尝试
+- 因为渐渐意识到 Nix 设计上存在的一些缺陷，正在尝试折腾 Guix
 
 ## 二、我今年还想搞搞这些
 
 今年的学习进展：
 
+- 结合工作需求，深入了解下当下火热的 AIGC 技术
 - 操作系统
   - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
@@ -51,7 +52,8 @@ toc:
 - The Great Gatsby - 10/41
 - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
-
+- 《复杂 - 梅拉尼 米歇尔》
+- Psychology and Life, 20th edition, by Richard J. Gerrig
 
 想读，但是没啥计划（大致按感兴趣程度排序）：
 
