@@ -26,6 +26,8 @@ comment:
 
 ### 2024-01-18
 
+- 学习了 Emacs Magit 拓展的用法，确实挺香的。
+
 {{<figure src="/images/now-2024/2023-01-18_nixos-book-1k-stars.webp" title="NixOS 小书满 1k stars 了！" width="80%">}}
 
 ### 2024-01-17
@@ -37,6 +39,10 @@ comment:
 
 {{<figure src="/images/now-2024/2023-01-17_evernote-china-delete-account.webp" title="注销了从大一用到现在的 evernote 印象笔记，数据都迁移到了 GitJournal" width="70%">}}
 {{<figure src="/images/now-2024/2023-01-17_buy-usb-keys-for-security.webp" title="买了一堆 U 盘，用于 GPG 密钥等数据的双备份，LUKS 加密存储" width="70%">}}
+
+### 2023-01-16
+
+- 偶尔想起，在 NixOS TG 群里提到我电脑重启经常报 /dev/xxx is not a LUKS devices，NickCao 立马问我是不是有多个磁盘，问题马上就定位到了，万能的 NickCao!
 
 ### 2024-01-15
 
