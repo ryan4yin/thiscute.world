@@ -177,6 +177,9 @@ comment:
 
 {{<figure width="70%" src="/images/2023-summary/老北京铜锅涮.webp" title="跟我妹一起下馆子 - 老北京铜锅涮">}}
 
+
+{{<figure width="70%" src="/images/2023-summary/2023-favourite-singers-netease-cloud-music.webp" title="卖海报的小店">}}
+
 ## 2023 年 Highlights
 
 ### 1. 业余技术
@@ -306,11 +309,9 @@ comment:
 
 生活上今年达成了这么多有意义的成就（确诊 ADHD、将更多精力花在关心家人上、参与公益活动、给家里买车等等），我给自己的评价当然是「优秀」。
 
-### 4. 各种统计数据
+### 4. 各种站点的统计数据
 
 首先是我的博客站点 <https://thiscute.world/> 的统计数据：
-
-> 我在 6 月份的时候把 NixOS & Flakes 那篇文章迁移到单独的站点，博客里仅保留了跳转链接，Engagement Time 有因此受到比较大的影响。去掉这个因素的话感觉应该能超过 2 分钟。
 
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计" width="100%">}}
 {{<figure src="/images/2023-summary/thiscute.world-2023-google-analytics-stats-by-country.webp" title="thiscute.world - 2023 年 Google Analytics 访问统计 - 按国家分类" width="100%">}}

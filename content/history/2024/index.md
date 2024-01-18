@@ -24,6 +24,20 @@ comment:
 全部历史记录：[/history](/history/)
 
 
+### 2024-01-18
+
+{{<figure src="/images/now-2024/2023-01-18_nixos-book-1k-stars.webp" title="NixOS 小书满 1k stars 了！" width="80%">}}
+
+### 2024-01-17
+
+- 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将笔记迁移到了一个私有 Git 仓库，用 GitJournal 在手机上查看编辑笔记。
+- 考虑到笔记跟其他各种数据的安全性，买了一堆 U 盘，用于重要数据的双备份，打算全部 LUKS 加密存储，LUKS 解密密钥交叉保存在不同的 U 盘上。
+  - 简单的说就是，一定要两个不同的 U 盘都在手上才能解密其中的数据。
+  - 以前对安全的考虑不多，曾经把各种重要账号的 backup_code 直接保存在百度云盘或 onedrive 上，一些密码经过简单的转换后直接写在印象笔记中。隐患挺大。这次加密备份方案上线过程中，也打算同步更新一次所有的 backup codes 以及主要账号的密码。
+
+{{<figure src="/images/now-2024/2023-01-17_evernote-china-delete-account.webp" title="注销了从大一用到现在的 evernote 印象笔记，数据都迁移到了 GitJournal" width="70%">}}
+{{<figure src="/images/now-2024/2023-01-17_buy-usb-keys-for-security.webp" title="买了一堆 U 盘，用于 GPG 密钥等数据的双备份，LUKS 加密存储" width="70%">}}
+
 ### 2024-01-15
 
 - 读了一遍 Vim 的官方文档 <https://vimhelp.org/>，深入学习了 Vim 本身的使用。
