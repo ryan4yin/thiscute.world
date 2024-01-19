@@ -178,7 +178,7 @@ comment:
 {{<figure width="70%" src="/images/2023-summary/老北京铜锅涮.webp" title="跟我妹一起下馆子 - 老北京铜锅涮">}}
 
 
-{{<figure width="70%" src="/images/2023-summary/2023-favourite-singers-netease-cloud-music.webp" title="卖海报的小店">}}
+{{<figure width="70%" src="/images/2023-summary/2023-favourite-singers-netease-cloud-music.webp" title="网易云音乐年度歌手 - 今年是初音">}}
 
 ## 2023 年 Highlights
 

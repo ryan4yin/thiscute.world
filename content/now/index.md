@@ -22,14 +22,14 @@ toc:
 
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 深度使用 Neovim/Emacs/Helix，尝试下纯键盘操作（我目前还是鼠标用挺多的） 
-- 因为渐渐意识到 Nix 设计上存在的一些缺陷，正在尝试折腾 Guix.
+- 因为渐渐意识到 Nix 设计上存在的一些缺陷，正在尝试折腾 Guix 跟 Guile 语言。
     - 目前只能说没有银弹，Guix 也有它自己的缺点...
 
 ## 二、我今年还想搞搞这些
 
-今年的学习进展：
-
 - 结合工作需求，深入了解下当下火热的 AIGC 技术
+  - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
+- 折腾 Guile 语言以及 Guix 操作系统
 - 操作系统
   - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
@@ -173,15 +173,6 @@ toc:
 - TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
 
 
-#### 机器学习与深度学习
-
-2022 到 2023 这两年，AI 技术又如何成为一个社会企业家，有作者的亲身经历，走过的失败教训与成功经验陆续出现明显突破，ChatGPT 与 Stable Diffusion 都令人印象深刻。
-我与大多数普通人一样，对 AI 技术本身兴趣不大，更感兴趣的是 AI 能带给世界哪些改变。
-所以我的目标仅仅是入个门，能在自己感兴趣的领域应用上 AI 的研究成果。
-
-- [ ] [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
-
-
 #### 其他杂项
 
 - Go 语言进阶
@@ -232,7 +223,7 @@ toc:
   - 阅读《自己动手实现 Lua》
   - 深入学习 Nginx 及 epoll
 
-- 容器与 Kubernetes
+- 容器与 Kubernetes（其实好像也没啥兴趣）
   - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 
