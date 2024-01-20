@@ -86,6 +86,7 @@ var myFriends = [
     ["https://sxyz.blog/", "/avatar/sxyazi.jpg", "@三咲雅 · Misaki Masa", "四時行焉，百物生焉，天何言哉？"],
     // 以下为无法访问，暂时下线的友链
     ["https://blog.youmuwhisper.space/", "https://blog.youmuwhisper.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
+    ["https://raxcl.cn/", "https://raxcl.cn/img/avatar.jpg", "@raxcl", "剑未佩妥，出门已是江湖。"], 
     // ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "记录生活点滴 <= 密码学/Golang/逆向"], 
 ];
 
