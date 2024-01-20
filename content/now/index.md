@@ -19,7 +19,7 @@ toc:
 ## 零、2024 年学习计划
 
 - 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
-- 技术上今年主要就是三个学习目标：**AIGC、Lisp 生态与 Guix 系统、操作系统**。
+- 技术上今年主要就是三个学习目标：**搞搞 AIGC、学学操作系统、了解下 Lisp/Emacs 生态圈**。
 - 其他方面主要是多运动、入门心理学。
 
 
@@ -29,14 +29,17 @@ toc:
 
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 深度使用 Neovim/Emacs/Helix，尝试下纯键盘操作（我目前还是鼠标用挺多的） 
-- 因为渐渐意识到 Nix 设计上存在的一些缺陷，正在尝试折腾 Guix 跟 Guile 语言。
-    - 目前只能说没有银弹，Guix 也有它自己的缺点...
 
 ## 二、我今年还想搞搞这些
 
 - 结合工作需求，深入了解下当下火热的 AIGC 技术
   - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
-- 折腾 Guile 语言以及 Guix 操作系统
+- All in NixOS
+  - 将 OpenWRT 旁路由替换成 NixOS - 进行中 - 5%
+  - 将 Homelab 中 Kubernetes 集群的节点全都替换成 NixOS - 未开始 - 0%
+  - 将 Homelab 中的其他测试机，能替换的都替换成 NixOS - 未开始 - 0%
+  - 终极目标 - 将整个 Proxmox VE 集群全都替换成 NixOS，在 NixOS 上跑 KVM 虚拟机 - 未开始 - 0%
+- 折腾 Emacs、Guile Scheme 语言以及 Guix 操作系统
 - 操作系统
   - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
