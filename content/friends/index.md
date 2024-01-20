@@ -64,7 +64,6 @@ var myFriends = [
     ["https://stdrc.cc/", "/avatar/richardchien.webp", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot作者/OS大佬"], 
     ["https://fmcf.cc/", "https://q1.qlogo.cn/g?b=qq&nk=2357307393&s=640", "@春花秋月", "他戴着花冠，踏于风雪，探寻迷途的救赎，绽放生命的曙光"], 
     ["https://www.lionad.art/", "/avatar/lionad-morotar.webp", "@仿生狮子", "前端攻城狮 | 砸吉他 | 午夜恶魔 | 兴趣泛滥 | 逃离地球"], 
-    ["https://abohe.cn/", "https://img.abohe.cn/logo.png", "@薄荷的猫草", "90后懒癌博主一枚~"], 
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
@@ -84,10 +83,8 @@ var myFriends = [
     ["https://wenderfeng.top/", "https://wenderfeng.top/favicon.ico", "@wenderfeng", "Step by step <= 机械 PhD 在读的机器人玩家"], 
     ["https://lado.me", "https://lado.me/static/img/gravatar-black.png", "@啦哆咪", "用 Linux 做音乐"], 
     ["https://sxyz.blog/", "/avatar/sxyazi.jpg", "@三咲雅 · Misaki Masa", "四時行焉，百物生焉，天何言哉？"],
-    // 以下为无法访问，暂时下线的友链
     ["https://blog.youmuwhisper.space/", "https://blog.youmuwhisper.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
     ["https://raxcl.cn/", "https://raxcl.cn/img/avatar.jpg", "@raxcl", "剑未佩妥，出门已是江湖。"], 
-    // ["https://mcenjoy.cn/", "https://mcenjoy.cn/avatar", "@mcenjoy", "记录生活点滴 <= 密码学/Golang/逆向"], 
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
