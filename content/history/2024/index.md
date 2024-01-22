@@ -29,6 +29,13 @@ comment:
 - 研究了一波所有 rust/go 重写的摩登命令行工具的简单使用及区别：eza/bat/sad/duf/dust/gdu/fzf/ripgrep/fd 等等。
 - 因为跟朋友聊到 Emacs Magit 插件好用，他向我推荐了类似的 TUI 工具 lazygit 跟 lazydocker，确实也都很好用，而且比 Emacs 轻量、对新手更友好。
 - 读了点 NixOS 创始人的论文：[The Purely Functional Software Deployment Model](https://edolstra.github.io/pubs/phd-thesis.pdf)
+- 朋友 @碎冰冰 问了下「你在学一个新的技术或者框架的时候，是怎么做的笔记？我看技术书籍老觉得有时候做成了抄书，有时候看二手资料，也觉得有点一叶障目。」
+    - 我的回答：
+        - 我以前自学了点分布式系统，做了这个笔记： https://thiscute.world/posts/consistency-and-consensus-algorithm/
+        - 我学这玩意儿的时候看的各种资料，都只讲了作者自己想到的某个方面，没有任何一篇文章能完整地解答我的疑惑。
+        - 我带着疑问，通过查阅各种资料，把我想知道的东西全部汇总到了一起，结果就是这篇文章。其实里面绝大部分数据都是抄的，但我觉得写出来自己还是清晰了不少。
+        - 而且我也相信我做了一些别人没做过的事情，因为我自己的这篇文章能解答我学习过程中的疑惑，但我看过的其他任何一份资料都做不到这一点。
+        - **所以我觉得，内容是不是抄的并不重要。最核心的是，要带着疑问去做笔记，笔记里要有自己的思考在**。
 
 ### 2024-01-21
 
