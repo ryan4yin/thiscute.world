@@ -24,6 +24,11 @@ comment:
 全部历史记录：[/history](/history/)
 
 
+### 2024-01-22
+
+- 研究了一波所有 rust/go 重写的摩登命令行工具的简单使用及区别：eza/bat/sad/duf/dust/gdu/fzf/ripgrep/fd 等等。
+- 读了点 NixOS 创始人的论文：[The Purely Functional Software Deployment Model](https://edolstra.github.io/pubs/phd-thesis.pdf)
+
 ### 2024-01-21
 
 - 了解了下 canokey 跟其他硬件密钥方案，以后有兴趣自己搞几个看看。
