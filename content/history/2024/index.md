@@ -27,6 +27,7 @@ comment:
 ### 2024-01-22
 
 - 研究了一波所有 rust/go 重写的摩登命令行工具的简单使用及区别：eza/bat/sad/duf/dust/gdu/fzf/ripgrep/fd 等等。
+- 因为跟朋友聊到 Emacs Magit 插件好用，他向我推荐了类似的 TUI 工具 lazygit 跟 lazydocker，确实也都很好用，而且比 Emacs 轻量、对新手更友好。
 - 读了点 NixOS 创始人的论文：[The Purely Functional Software Deployment Model](https://edolstra.github.io/pubs/phd-thesis.pdf)
 
 ### 2024-01-21
