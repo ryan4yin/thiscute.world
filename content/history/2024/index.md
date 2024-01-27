@@ -23,6 +23,16 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-01-26 - 2024-01-27
+
+- 研究了 OpenSSH 与 GnuPG 的密钥安全性，并据此重新生成了所有个人 SSH 及 PGP 密钥对。
+- 更新了一遍我所有重要账号的密码，以及 backup codes，全部保存在了我的 password-store 中。
+  - 改了近 30 个账号的密码，包括微信、QQ、GitHub、Google、Microsoft、等等。
+- 使用新生成的 GPG 新密钥对重新加密整个 pass 密码仓库，清理整个 pass 仓库的所有历史 commit，确保只有新的密钥对能解密其中数据
+- 做了完善的数据备份，所有备份数据全部通过 rclone 加密存储。
+  - rclone 的加密配置保存在 secrets 仓库中，而 secrets 的恢复密钥当然不能用 rclone 加密存储，否则就死锁了。所以我将 secrets 仓库的恢复密钥使用 age 对称加密后再存储在备份盘中（passphrase 与 GPG 一致以避免遗忘）。
+  - 其实 secrets 仓库恢复用的 SSH 密钥本身就有 passphrase，但 OpenSSH 自身的加密算法不够 morden，所以再用 age 加密一层会保险很多（即使使用的是相同的 passphrase）。
+- 在去年发的帖子中更新了最新进展： [学习并强化个人的数据安全性（持续更新）](https://0xffff.one/d/1528/10)
 
 ### 2024-01-22
 

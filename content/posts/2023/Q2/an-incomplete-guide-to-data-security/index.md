@@ -10,7 +10,7 @@ resources:
 - name: "featured-image"
   src: "datasecurity.webp"
 
-tags: ["安全", "Linux", "SSH", "密码学", "LUKS", "全盘加密"]
+tags: ["安全", "密码学", "Linux", "SSH", "PGP", "密码管理", "LUKS", "全盘加密", "零信任", "rclone"]
 categories: ["tech"]
 series: []
 hiddenFromHomePage: false
@@ -41,4 +41,6 @@ comment:
    2. passphrase 的实现原理，是否真正安全？是否存在被暴力破解的可能？应该设置为多长、多复杂比较合适？
 3. GPG 密钥 + passphrase + gpg-agent + 2FA
    1. 这是个啥玩意儿？
+
+之前持续更新的 <https://0xffff.one/d/1528/13>
 
