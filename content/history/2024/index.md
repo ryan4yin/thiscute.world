@@ -33,6 +33,7 @@ comment:
   - rclone 的加密配置保存在 secrets 仓库中，而 secrets 的恢复密钥当然不能用 rclone 加密存储，否则就死锁了。所以我将 secrets 仓库的恢复密钥使用 age 对称加密后再存储在备份盘中（passphrase 与 GPG 一致以避免遗忘）。
   - 其实 secrets 仓库恢复用的 SSH 密钥本身就有 passphrase，但 OpenSSH 自身的加密算法不够 morden，所以再用 age 加密一层会保险很多（即使使用的是相同的 passphrase）。
 - 在去年发的帖子中更新了最新进展： [学习并强化个人的数据安全性（持续更新）](https://0xffff.one/d/1528/10)
+- 读了一遍 [Wayland 官方文档](https://wayland.freedesktop.org/)，大概了解了 X11 的缺陷，以及 Wayland 的改进。大概意思就是去掉中间代理商 X.org Server，让 Compositor 自己直接跟内核通信，同时 Application 也直接通过共享内存的方式自己渲染，结果上就是比 X11 好许多的性能，以及比 X11 精简非常多的协议实现。Compositor 跟 Application 都获得了更大的自由空间，这也激发了社区的创造力。所以在 wlroots 这个工具库之上，出现了许多活跃的现代化的 Compositor 实现，比如说 Hyprland.
 
 ### 2024-01-22
 
