@@ -34,6 +34,10 @@ comment:
   - 其实 secrets 仓库恢复用的 SSH 密钥本身就有 passphrase，但 OpenSSH 自身的加密算法不够 morden，所以再用 age 加密一层会保险很多（即使使用的是相同的 passphrase）。
 - 在去年发的帖子中更新了最新进展： [学习并强化个人的数据安全性（持续更新）](https://0xffff.one/d/1528/10)
 - 读了一遍 [Wayland 官方文档](https://wayland.freedesktop.org/)，大概了解了 X11 的缺陷，以及 Wayland 的改进。大概意思就是去掉中间代理商 X.org Server，让 Compositor 自己直接跟内核通信，同时 Application 也直接通过共享内存的方式自己渲染，结果上就是比 X11 好许多的性能，以及比 X11 精简非常多的协议实现。Compositor 跟 Application 都获得了更大的自由空间，这也激发了社区的创造力。所以在 wlroots 这个工具库之上，出现了许多活跃的现代化的 Compositor 实现，比如说 Hyprland.
+- 调研了下支持 Wayland 的远程桌面方案，在 X11 上是有很多成熟的方案可选的，比如说 `ssh -X`/RDP，而在 Wayland 上，目前看（2024-01）比较 OK 的方案有（待测试）：
+    - [waypipe](https://gitlab.freedesktop.org/mstoeckl/waypipe/): 一个类似 `ssh -X` 的方案
+    - 据说 rustdesk 目前对 wayland 的支持比较 OK
+    - 也有很多人推荐使用 sunshine + moonlight 这套游戏串流方案。
 
 ### 2024-01-22
 
