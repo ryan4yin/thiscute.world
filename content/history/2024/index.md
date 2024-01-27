@@ -25,7 +25,7 @@ comment:
 
 ### 2024-01-26 - 2024-01-27
 
-- 研究了 OpenSSH 与 GnuPG 的密钥安全性，并据此重新生成了所有个人 SSH 及 PGP 密钥对。
+- 研究了 OpenSSH 与 GnuPG 的密钥安全性，并据此重新生成了所有个人 SSH 及 PGP 密钥对。它们的 passphrase 也全部使用了新生成的随机密码，专门编了些小故事来记忆它们（毕竟人类擅长记忆故事，但不擅长记忆随机字符）。
 - 更新了一遍我所有重要账号的密码，以及 backup codes，全部保存在了我的 password-store 中。
   - 改了近 30 个账号的密码，包括微信、QQ、GitHub、Google、Microsoft、等等。
 - 使用新生成的 GPG 新密钥对重新加密整个 pass 密码仓库，清理整个 pass 仓库的所有历史 commit，确保只有新的密钥对能解密其中数据
