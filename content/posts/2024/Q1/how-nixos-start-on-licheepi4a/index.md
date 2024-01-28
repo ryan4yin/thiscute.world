@@ -2,8 +2,8 @@
 title: "NixOS 在 Lichee Pi 4A 上是如何启动的"
 subtitle: ""
 description: ""
-date: 2023-08-07T18:40:57+08:00
-lastmod: 2023-08-07T18:40:57+08:00
+date: 2024-01-28T00:40:57+08:00
+lastmod: 2024-01-28T00:40:57+08:00
 draft: true
 
 resources:
@@ -32,6 +32,8 @@ comment:
   disqus:
     enable: false
 ---
+
+> 文章是从 2023-08-07 开始写的，后面就完全忘掉这回事了...
 
 ## 前言
 

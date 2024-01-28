@@ -33,12 +33,15 @@ comment:
     enable: false
 ---
 
+> 2024-01-28 更新：换了新 Macbook Pro 之后，我又重新把 yabai 装上了，目前体验还不错，比 23 年好了不少。
+> 另外我新的配置完全基于 nix-darwin 部署，内容也有些改动，有兴趣的可以看看：[ryan4yin/nix-config/darwin/wm](https://github.com/ryan4yin/nix-config/tree/main/modules/darwin/wm)
+> 附上 nix-darwin 新手起步模板 [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter)
+
 在 Linux 上用了一段时间 i3wm 后，我就有点忍受不了工作电脑的桌面环境了，公司给配的是 Macbook Pro 2020，一番查找发现 yabai 比较符合我的需求，于是开始了折腾之旅。
 
 ## 使用体验总结
 
 我的电脑配置为 Macbook Pro 2020，i5 + 16G RAM + 512G Disk，性能尚可。
-我从 2023-04-25 开始在这台机器上使用 yabai，到现在（2023-05-18）有三周了，刚刚把 yabai 卸载掉，这里总结下使用体验。
 
 一句话总结：体验还不错，但是还不太成熟，Bug 比较多，而且有点吃性能，安装 yabai 后偶尔就会卡顿一下。
 
