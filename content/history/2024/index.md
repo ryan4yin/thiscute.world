@@ -23,6 +23,15 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-01-28
+
+- 对 nix-config 做了比较多的改动
+    - 尝试了在 Hyprland 下使用 sunshine/rustdesk 当远程桌面，全部失败，wayland 下的远程桌面方案稳定性仍旧很差。
+    - yabai 在 macOS 14.3 Intel 下无法正常工作，排查到 6.0.7 解决了这个问题，但 Nixpkgs 里仍旧只有 6.0.6，所以 override 了一下解决了问题。
+    - 将旧的基于 Ubuntu 22.04 的 tailscale-gateway 虚拟机替换成了 NixOS，非常舒适。
+    - 尝试使用 NixOS + dae 作为 bypass router 替代掉我当前的 OpenWRT 旁路由，加了点初步的配置，但还没开始测试。
+    - 将所有 Hosts 的静态 IP、网关配置集中管理，方便以后修改。
+
 ### 2024-01-26 - 2024-01-27
 
 - 研究了 OpenSSH 与 GnuPG 的密钥安全性，并据此重新生成了所有个人 SSH 及 PGP 密钥对。它们的 passphrase 也全部使用了新生成的随机密码，专门编了些小故事来记忆它们（毕竟人类擅长记忆故事，但不擅长记忆随机字符）。
