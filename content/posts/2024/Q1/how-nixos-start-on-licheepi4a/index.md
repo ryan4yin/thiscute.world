@@ -2,13 +2,13 @@
 title: "NixOS 在 Lichee Pi 4A 上是如何启动的"
 subtitle: ""
 description: ""
-date: 2024-01-28T00:40:57+08:00
-lastmod: 2024-01-28T00:40:57+08:00
-draft: true
+date: 2024-01-29T00:58:57+08:00
+lastmod: 2024-01-29T00:58:57+08:00
+draft: false
 
 resources:
   - name: "featured-image"
-    src: "featured-image.webp"
+    src: "lp4a-pinout-debuglog-1.webp"
 
 tags: [Linux", "NixOS", "LicheePi4A", "Embedded", "U-Boot", "RISC-V"]
 categories: ["tech"]
@@ -31,11 +31,17 @@ comment:
     enable: false
   disqus:
     enable: false
+
+code:
+  # whether to show the copy button of the code block
+  copy: true
+  # the maximum number of lines of displayed code by default
+  maxShownLines: 300
 ---
 
-> 文章是从 2023-08-07 开始写的，后面就完全忘掉这回事了...
+> 文章是从 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要发布下...所以注意文章中的时间线是 2023 年 8 月。
 
-## 前言
+## 零、前言
 
 我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当时没怎么折腾。
 
@@ -50,20 +56,22 @@ comment:
 
 镜像是有了，系统却无法启动...找了各种资料也没解决，也没好意思麻烦各位大佬，搞得有点心灰意冷，就先把这部分工作放下了。
 
-接着就隔了一个多月没碰 Lichee Pi 4A，直到 8 月 5 号，外国友人 @JayDeLux 在 [Mainline Linux for RISC-V](https://t.me/linux4rv) TG 群组中 ping 了下我，我才决定再次尝试一下。
+接着就隔了一个多月没碰 Lichee Pi 4A，直到 8 月 5 号，外国友人 @JayDeLux 在 [Mainline Linux for RISC-V](https://t.me/linux4rv) TG 群组中询问我 NixOS 移植工作的进展如何（之前有在群里提过我在尝试移植），我才决定再次尝试一下。
 
 在之前工作的基础上一番骚操作后，我在 8 月 6 号晚上终于成功启动了 NixOS，这次意外的顺利，后续也成功通过一份 Nix Flake 配置编译出了可用的 NixOS 镜像。
 
 最终成果：<https://github.com/ryan4yin/nixos-licheepi4a>
 
-这个折腾过程挺曲折，虽然最终达成了目标，但是期间遭受了不少折磨 emmm
-不过也是一次有趣的经历，学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50 美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@Rabenda(revy) 等各位大佬混了个脸熟。
+整个折腾过程相当曲折，虽然最终达成了目标，但是期间遭受的折磨也真的不少。
+总的来说仍然是一次很有趣的经历，既学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50 美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@Rabenda(revy) 等各位大佬混了个脸熟。
 
 这篇文章就是记录下我在这个折腾过程中学到的所有知识，以飨读者，同时也梳理一下自己的收获。
 
 本文的写作思路是自顶向下的，先从 NixOS 镜像的 boot 分区配置、启动脚本开始分析，过渡到实际的启动日志，这样先对整个启动过程有个大概的了解，接着再详细分析其中各个陌生概念的含义、各组件的作用。
 
-## Lichee Pi 4A 介绍
+## 一、基础知识介绍
+
+### 1. Lichee Pi 4A 介绍
 
 LicheePi 4A 是当前市面上性能最高的 RISC-V Linux 开发板之一，它以 TH1520 为主控核心（4xC910@1.85G， RV64GCV，4TOPS@int8 NPU， 50GFLOP GPU），板载最大 16GB 64bit LPDDR4X，128GB eMMC，支持 HDMI+MIPI 双4K 显示输出，支持 4K 摄像头接入，双千兆网口（其中一个支持POE供电）和 4 个 USB3.0 接口，多种音频输入输出（由专用 C906 核心处理）。
 
@@ -74,15 +82,9 @@ LicheePi 4A 是当前市面上性能最高的 RISC-V Linux 开发板之一，它
 LicheePi 4A 官方主要支持 [RevyOS](https://github.com/revyos/revyos/)—— 一款针对 T-Head 芯片生态的 Debian 优化定制发行版。
 根据猴哥（@HougeLangley）文章介绍，它也是目前唯一且确实能够启用 Lichee Pi 4A 板载 GPU 的发行版，
 
-RevyOS 的内核、u-boot 和 opensbi 代码仓库：
+### 2. NixOS 介绍
 
-- https://github.com/revyos/thead-kernel.git
-- https://github.com/revyos/thead-u-boot.git
-- https://github.com/revyos/thead-opensbi.git
-
-## NixOS 介绍
-
-这个感觉就不用多说了啊，我在这几个月已经给 NixOS 写了非常多的文字了，感兴趣请直接移步 [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book).
+这个感觉就不用多说了，我在这几个月已经给 NixOS 写了非常多的文字了，感兴趣请直接移步 [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book).
 
 在 4 月份接触了 NixOS 后，我成了 NixOS 铁粉。
 作为一名铁粉，我当然想把我手上的所有性能好点的板子都装上 NixOS，Lichee Pi 4A 自然也不例外。
@@ -92,75 +94,122 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 
 而 Lichee Pi 4A 就比较曲折，也比较有话题性。所以才有了这篇文章。
 
+## 二、移植思路
 
-## 移植思路
-
-一个完整的 Linux 系统，通常包含了 U-Boot、kernel、设备树以及根文件系统（rootfs）四个部分。
+一个完整的嵌入式 Linux 系统，通常包含了 U-Boot、kernel、设备树以及根文件系统（rootfs）四个部分。
 
 其中 U-Boot，kernel 跟设备树，都是与硬件相关的，需要针对不同的硬件进行定制。
-而 rootfs 的大部分内容，都是与硬件无关的，可以通用（比如说 NixOS）。
+而 rootfs 的大部分内容（比如说 NixOS 系统的 rootfs 本身），都是与硬件无关的，可以通用。
 
-LicheePi 4A use RevyOS officially. The basic idea of this repo is to use revyos's kernel, u-boot and opensbi, with a NixOS rootfs, to get NixOS running on LicheePi 4A.
+我的移植思路是，从 LicheePi4A 官方使用的 RevyOS 中拿出跟硬件相关的部分（也就是 U-Boot, kernel 跟设备树这三个），再结合上跟硬件无关的 NixOS rootfs，组合成一个完整的、可在 LicheePi4A 上正常启动运行的 NixOS 系统。
+
+RevyOS 针对 LicheePi4A 定制的几个项目源码如下：
+
+- https://github.com/revyos/thead-kernel.git
+- https://github.com/revyos/thead-u-boot.git
+- https://github.com/revyos/thead-opensbi.git
+
+思路很清晰，但因为 NixOS 本身的特殊性，实际操作起来，现有的 Gentoo, Arch Linux, Fedora 的移植仓库代码全都无法直接使用，需要做的工作还是不少的。
 
 
-## NixOS 启动流程分析
+## 三、NixOS 启动流程分析
 
-rootfs 已经成功构建完成，内容如下：
+要做移植，首先就要了解 NixOS 系统本身的文件树结构以及系统启动流程，搞明白它跟 Arch Linux, Fedora 等其他发行版的区别，这样才好参考其他发行版的移植工作，搞明白该如何入手。
+
+### 1. Bootloader 配置与系统文件树分析
+
+这里方便起见，我直接使用我自己为 LicheePi4A 构建好的 NixOS 镜像进行分析。
+首先参照 [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a) 的 README 下载解压镜像，再使用 losetup 跟 mount 直接挂载镜像中的各分区进行初步分析：
 
 ```bash
-╭───┬───────────────────────┬──────┬──────────┬──────────────╮
-│ # │         name          │ type │   size   │   modified   │
-├───┼───────────────────────┼──────┼──────────┼──────────────┤
-│ 0 │ boot                  │ dir  │   4.1 KB │ 53 years ago │
-│ 1 │ lost+found            │ dir  │  16.4 KB │ 53 years ago │
-│ 2 │ nix                   │ dir  │   4.1 KB │ 53 years ago │
-│ 3 │ nix-path-registration │ file │ 242.7 KB │ 53 years ago │
-╰───┴───────────────────────┴──────┴──────────┴──────────────╯
+# 解压镜像
+› mv nixos-licheepi4a-sd-image-*-riscv64-linux.img.zst nixos-lp4a.img.zst
+› zstd -d nixos-lp4a.img.zst
+# 将 img 文件作为虚拟 loop 设备连接到系统中
+› sudo losetup --find --partscan nixos-lp4a.img
+# 查看挂载的 loop 设备
+› lsblk | grep loop
+loop0               7:0    0  1.9G  0 loop
+├─loop0p1         259:8    0  200M  0 part
+└─loop0p2         259:9    0  1.7G  0 part
+# 分别挂载镜像中的 boot 跟 rootfs 分区
+› mkdir boot root
+› sudo mount /dev/loop0p1 boot
+› sudo mount /dev/loop0p2 root
+# 查看 boot 分区内容
+› ls boot/
+╭───┬───────────────────────────┬──────┬─────────┬──────────────╮
+│ # │           name            │ type │  size   │   modified   │
+├───┼───────────────────────────┼──────┼─────────┼──────────────┤
+│ 0 │ boot/extlinux             │ dir  │  4.1 KB │ 44 years ago │
+│ 1 │ boot/fw_dynamic.bin       │ file │ 85.9 KB │ 24 years ago │
+│ 2 │ boot/light_aon_fpga.bin   │ file │ 50.3 KB │ 24 years ago │
+│ 3 │ boot/light_c906_audio.bin │ file │ 16.4 KB │ 24 years ago │
+│ 4 │ boot/nixos                │ dir  │  4.1 KB │ 44 years ago │
+╰───┴───────────────────────────┴──────┴─────────┴──────────────╯
+# 查看 root 分区内容
+› ls root/
+╭───┬────────────────────────────┬──────┬──────────┬──────────────╮
+│ # │            name            │ type │   size   │   modified   │
+├───┼────────────────────────────┼──────┼──────────┼──────────────┤
+│ 0 │ root/boot                  │ dir  │   4.1 KB │ 54 years ago │
+│ 1 │ root/lost+found            │ dir  │  16.4 KB │ 54 years ago │
+│ 2 │ root/nix                   │ dir  │   4.1 KB │ 54 years ago │
+│ 3 │ root/nix-path-registration │ file │ 242.0 KB │ 54 years ago │
+╰───┴────────────────────────────┴──────┴──────────┴──────────────╯
 ```
 
-可以看到 NixOS 整个根目录下一共就两个文件夹 `/boot` 跟 `/nix/store`，这与传统的 Linux 发行版大相径庭。
-传统的 Linux 发行版遵循 UNIX 系统的 [FHS](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard) 标准，根目录下会有很多文件夹，比如 `/bin`、`/etc`、`/home`、`/lib`、`/opt`、`/root`、`/sbin`、`/srv`、`/tmp`、`/usr`、`/var` 等等。
+可以看到 NixOS 整个根目录（`/root`）下一共就四个文件夹，其中真正保存有系统数据的文件夹只有 `/boot` 跟 `/nix` 这两个，这与传统的 Linux 发行版大相径庭。
+有一点 Linux 使用经验的朋友都应该清楚，传统的 Linux 发行版遵循 UNIX 系统的 [FHS](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard) 标准，根目录下会有很多文件夹，比如 `/bin`、`/etc`、`/home`、`/lib`、`/opt`、`/root`、`/sbin`、`/srv`、`/tmp`、`/usr`、`/var` 等等。
 
-仔细看下 `/boot` 的内容：
+那 NixOS 它这么玩，真的能正常启动么？这就是我在构建出镜像后却发现无法在 LicheePi 4A 上启动时，最先产生的疑问。
+在询问 @chainsx 跟 @revy 系统无法启动的解决思路的时候，他们也一脸懵逼，觉得这个文件树有点奇葩，很怀疑是我构建流程有问题导致文件树不完整。
+
+但实际上 NixOS 就是这么玩的，它 rootfs 中所有的数据全都存放在 `/nix/store` 这个目录下并且被挂载为只读，其他的文件夹以及其中的文件都是在运行时动态创建的。
+这是它实现声明式系统配置、可回滚更新、可并行安装多个版本的软件包等等特性的基础。
+
+
+下面继续分析，先仔细看下 `/boot` 的内容：
 
 ```bash
-› tree
-.
+› tree boot
+boot
 ├── extlinux
 │   └── extlinux.conf
+├── fw_dynamic.bin
+├── light_aon_fpga.bin
+├── light_c906_audio.bin
 └── nixos
-    ├── rzc42b6qjxy10wb1wkfmrxjcxsw52015-linux-riscv64-unknown-linux-gnu-5.10.113-thead-1520-dtbs
+    ├── 2n6fjh4lhzaswbyacaf72zmz6mdsmm8l-initrd-k-riscv64-unknown-linux-gnu-initrd
+    ├── l18cz7jd37n35dwyf8wc8divm46k7sdf-k-riscv64-unknown-linux-gnu-dtbs
     │   ├── sifive
     │   │   └── hifive-unleashed-a00.dtb
     │   └── thead
     │       ├── fire-emu-crash.dtb
     │       ├── fire-emu.dtb
-    │       ├── fire-emu-gpu-dpu-dsi0.dtb
-    │       ├── fire-emu-soc-base.dtb
-    │       ├── fire-emu-soc-c910x4.dtb
-    │       ├── fire-emu-vi-dsp-vo.dtb
-    │       ├── fire-emu-vi-vp-vo.dtb
-    │       ├── ......
+    │       ├── ...... (省略)
+    │       ├── light-fm-emu-audio.dtb
     │       ├── light-fm-emu-dsi0-hdmi.dtb
     │       ├── light-fm-emu-dsp.dtb
-    │       ├── light-fm-emu.dtb
     │       ├── light-fm-emu-gpu.dtb
     │       ├── light-fm-emu-hdmi.dtb
-    │       ├── light-fm-emu-npu-fce.dtb
     │       ├── light-lpi4a-ddr2G.dtb
-    │       ├── light-lpi4a.dtb
     │       └── light_mpw.dtb
-    ├── rzc42b6qjxy10wb1wkfmrxjcxsw52015-linux-riscv64-unknown-linux-gnu-5.10.113-thead-1520-Image
-    └── vh8624bjxdpxh7ds3nqvqbx992yx63hp-initrd-linux-riscv64-unknown-linux-gnu-5.10.113-thead-1520-initrd
+    └── l18cz7jd37n35dwyf8wc8divm46k7sdf-k-riscv64-unknown-linux-gnu-Image
 
-5 directories, 61 files
+6 directories, 64 files
 ```
 
-可以看到它使用 extlinux 作为 bootloader，再看下 extlinux 的配置内容：
+可以看到：
 
+1. 它使用 `/boot/extlinux/extlinux.conf` 作为 U-Boot 的启动项配置，据 [U-Boot 官方的 Distro 文档](https://github.com/ARM-software/u-boot/blob/master/doc/README.distro) 所言，这是 U-Boot 的标准配置文件。
+2. 另外还有一些 `xxx.bin` 文件，这些是一些硬件固件，其中的 `light_c906_audio.bin` 显然是[玄铁 906](https://www.t-head.cn/product/C906?lang=zh) 这个 IP 核的音频固件，其他的后面再研究。
+3. NixOS 的 `initrd`, `dtbs` 以及 `Image` 文件都是在 `/boot/nixos` 下，这三个文件也都是跟 Linux 的启动相关的，现在不用管它们，下一步会分析。
+
+再看下 `/boot/extlinux/extlinux.conf` 的内容：
 
 ```bash
-› cat extlinux.conf
+› cat boot/extlinux/extlinux.conf
 # Generated file, all changes will be lost on nixos-rebuild!
 
 # Change this to e.g. nixos-42 to temporarily boot to an older configuration.
@@ -171,596 +220,57 @@ TIMEOUT 50
 
 LABEL nixos-default
   MENU LABEL NixOS - Default
-  LINUX ../nixos/rzc42b6qjxy10wb1wkfmrxjcxsw52015-linux-riscv64-unknown-linux-gnu-5.10.113-thead-1520-Image
-  INITRD ../nixos/vh8624bjxdpxh7ds3nqvqbx992yx63hp-initrd-linux-riscv64-unknown-linux-gnu-5.10.113-thead-1520-initrd
-  APPEND init=/nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37/init console=ttyS0,115200 root=/dev/mmcblk0p3 rootfstype=ext4 rootwait rw earlycon clk_ignore_unused eth=$ethaddr rootrwoptions=rw,noatime rootrwreset=yes loglevel=4
-  FDT ../nixos/rzc42b6qjxy10wb1wkfmrxjcxsw52015-linux-riscv64-unknown-linux-gnu-5.10.113-thead-1520-dtbs/thead/light-lpi4a.dtb
+  LINUX ../nixos/l18cz7jd37n35dwyf8wc8divm46k7sdf-k-riscv64-unknown-linux-gnu-Image
+  INITRD ../nixos/2n6fjh4lhzaswbyacaf72zmz6mdsmm8l-initrd-k-riscv64-unknown-linux-gnu-initrd
+  APPEND init=/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init console=ttyS0,115200 root=UUID=14e19a7b-0ae0-484d-9d54-43bd6fdc20c7 rootfstype=ext4 rootwait rw earlycon clk_ignore_unused eth=$ethaddr rootrwoptions=rw,noatime rootrwreset=yes loglevel=4
+  FDT ../nixos/l18cz7jd37n35dwyf8wc8divm46k7sdf-k-riscv64-unknown-linux-gnu-dtbs/thead/light-lpi4a.dtb
 ```
 
-可以看到它使用了 `/nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37/init` 作为 init 程序，系统的 rootfs 分区为 `/dev/mmcblk0p3`，使用的文件系统为 ext4，等等。
+从上述中能获得这些信息：
 
+1. 它创建了一个名为 `nixos-default` 的启动项并将它设为了默认启动项，extlinux 在启动阶段会根据该配置启动 NixOS 系统
+2. 启动项中的 `LINUX` `INITRD` `FDT` 三个参数分别指定了 kernel(Image 文件)、initrd 以及设备树（dtb）的位置，这三个文件我们在前面已经看到了，都在 `/boot/nixos` 下。
+    1. 根据 Linux 官方文档 [Using the initial RAM disk (initrd)](https://docs.kernel.org/admin-guide/initrd.html) 所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
+        1. bootloader(这里是 extlinux) 根据配置加载 kernel 文件（`Image`）、dtb 设备树文件以及 `initrd` 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.
+        1. Kernel 将传入的 initrd 转换成一个内存盘并挂载为根文件系统，然后释放 initrd 的内存。
+        1. Kernel 接着运行 `init` 参数指定的可执行程序，这里是 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这个 init 程序会挂载真正的根文件系统，并在其上执行后续的启动流程。
+        1. initrd 文件系统被移除，系统启动完毕。
+    1. `initrd` 这样一个临时的内存盘，通常用于在系统启动阶段加载一些内核中未内置但启动却必需的驱动或数据文件供 `init` 程序使用，以便后续能够挂载真正的根文件系统。
+        1. 比如说挂载一个 LUKS 加密的根文件系统，这通常会涉及到提示用户输入 passphrase、从某个地方读取解密用的 keyfile 或者与插入的 USB 硬件密钥交互，这会需要读取内核之外的 keyfile 文件、用到内核之外的加密模块、USB 驱动、HID 用户输入输出模块或者其他因为许可协议、模块大小等问题无法被静态链接到内核中的各种内核模块或程序。initrd 就是用来解决这些问题的。
+3. `APPEND` 参数包含有许多关键信息：
+    1. 系统的 init 程序，也就是传说中的 1 号进程（PID 1），被设置为 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这实际是一个 shell 脚本，我们下一步会重点分析它。
+        1. 在传统的 Linux 发行版中，init 通常使用默认值 `/sbin/init`，它会被链接到 `/lib/systemd/systemd`，也就是直接使用 systemd 作为 1 号进程。你可以在 Fedora/Ubuntu 等传统发行版中运行 `ls -al /sbin/init` 确认这一点，以及检查它们的 `/boot/grub/grub.cfs` 启动项配置，看看它们有无自定义内核的 `init` 参数。
+    1. 系统的 rootfs 分区为 `/dev/disk/by-uuid/14e19a7b-0ae0-484d-9d54-43bd6fdc20c7`，使用的文件系统为 ext4.
+    1. `earlycon`(early console) 表示在系统启动早期就启用控制台输出，这样可以在系统启动阶段通过 UAER/HDMI 等接口看到相关的启动日志，方便调试。
+    1. 其他参数先不管。
 
-再看下 init 脚本，会发现 `/etc` `/etc/nixos` `/tmp` `/run` `/proc` `/dev` `/sys` 等文件夹都是在这一步被自动创建的，而且其中许多东西都是直接 symlink 到 `/nix/store` 中的文件：
+这样一分析就能得出结论：在执行 `init` 程序之前的启动流程都未涉及到真正的根文件系统，NixOS 与其他发行版在该流程中并无明显差异。
+
+### 2. 实际启动日志分析
+
+为了方便后续内容的理解，先看下 NixOS 系统在 LicheePi 4A 上的实际启动日志是个很不错的选择。
+
+按我项目中的 README 正常烧录好系统后，使用 USB 转串口工具连接到 LicheePi 4A 的 UART0 串口，然后启动系统，就能看到 NixOS 的启动日志。
+
+接线示例：
+
+{{<figure src="./lp4a-pinout-debuglog-1.webp" title="LicheePi4A UART 调试接线 - 正面" width="80%">}}
+{{<figure src="./lp4a-pinout-debuglog-2.webp" title="LicheePi4A UART 调试接线 - 反面" width="80%">}}
+
+接好线后使用 minicom 查看日志：
 
 ```bash
-› cat /nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37/init
-#! /nix/store/ny69lqq5dgw5xz6h5ply8cwzifcvplxx-bash-5.2-p15-riscv64-unknown-linux-gnu/bin/bash
-
-systemConfig=/nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37
-
-export HOME=/root PATH="/nix/store/4l7v9y3r2mp2sdhjxjl35yvjsxmrdl4h-coreutils-riscv64-unknown-linux-gnu-9.1/bin:/nix/store/c1xb4z38bvl29vbvc2la2957gv9sdy61-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin/bin"
-
-
-if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
-    # Process the kernel command line.
-    for o in $(</proc/cmdline); do
-        case $o in
-            boot.debugtrace)
-                # Show each command.
-                set -x
-                ;;
-        esac
-    done
-
-
-    # Print a greeting.
-    echo
-    echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
-    echo
-
-
-    # Normally, stage 1 mounts the root filesystem read/writable.
-    # However, in some environments, stage 2 is executed directly, and the
-    # root is read-only.  So make it writable here.
-    if [ -z "$container" ]; then
-        mount -n -o remount,rw none /
-    fi
-fi
-
-
-# Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
-# stage 1, we need to do that here.
-if [ ! -e /proc/1 ]; then
-    specialMount() {
-        local device="$1"
-        local mountPoint="$2"
-        local options="$3"
-        local fsType="$4"
-
-        # We must not overwrite this mount because it's bind-mounted
-        # from stage 1's /run
-        if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ] && [ "${mountPoint}" = /run ]; then
-            return
-        fi
-
-        install -m 0755 -d "$mountPoint"
-        mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
-    }
-    source /nix/store/z1b5brgask2dvsq2gjkk8vc9rv5r2c0y-mounts.sh
-fi
-
-
-if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ]; then
-    echo "booting system configuration ${systemConfig}"
-else
-    echo "booting system configuration $systemConfig" > /dev/kmsg
-fi
-
-
-# Make /nix/store a read-only bind mount to enforce immutability of
-# the Nix store.  Note that we can't use "chown root:nixbld" here
-# because users/groups might not exist yet.
-# Silence chown/chmod to fail gracefully on a readonly filesystem
-# like squashfs.
-chown -f 0:30000 /nix/store
-chmod -f 1775 /nix/store
-if [ -n "1" ]; then
-    if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
-        if [ -z "$container" ]; then
-            mount --bind /nix/store /nix/store
-        else
-            mount --rbind /nix/store /nix/store
-        fi
-        mount -o remount,ro,bind /nix/store
-    fi
-fi
-
-
-if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
-    # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
-    if [ -n "" ] && [ -e /etc/resolv.conf ]; then
-        resolvconf -m 1000 -a host </etc/resolv.conf
-    fi
-
-
-    # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
-    # Only at this point are all the necessary prerequisites ready for these commands.
-    exec {logOutFd}>&1 {logErrFd}>&2
-    if test -w /dev/kmsg; then
-        exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
-            if test -n "$line"; then
-                echo "<7>stage-2-init: $line" > /dev/kmsg
-            fi
-        done) 2>&1
-        exec > >(tee -i /run/log/stage-2-init.log) 2>&1
-    fi
-fi
-
-
-# Required by the activation script
-install -m 0755 -d /etc /etc/nixos
-install -m 01777 -d /tmp
-
-
-# Run the script that performs all configuration activation that does
-# not have to be done at boot time.
-echo "running activation script..."
-$systemConfig/activate
-
-
-# Record the boot configuration.
-ln -sfn "$systemConfig" /run/booted-system
-
-
-# Run any user-specified commands.
-/nix/store/ny69lqq5dgw5xz6h5ply8cwzifcvplxx-bash-5.2-p15-riscv64-unknown-linux-gnu/bin/bash /nix/store/b63lb8ssxjzdwdvrn39k73vavlk8kinj-local-cmds
-
-
-# Ensure systemd doesn't try to populate /etc, by forcing its first-boot
-# heuristic off. It doesn't matter what's in /etc/machine-id for this purpose,
-# and systemd will immediately fill in the file when it starts, so just
-# creating it is enough. This `: >>` pattern avoids forking and avoids changing
-# the mtime if the file already exists.
-: >> /etc/machine-id
-
-
-# No need to restore the stdout/stderr streams we never redirected and
-# especially no need to start systemd
-if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
-    # Reset the logging file descriptors.
-    exec 1>&$logOutFd 2>&$logErrFd
-    exec {logOutFd}>&- {logErrFd}>&-
-
-
-    # Start systemd in a clean environment.
-    echo "starting systemd..."
-    exec /run/current-system/systemd/lib/systemd/systemd "$@"
-fi
-
-
-
-# 再看看其中的 $systemConfig/activate 都干了些啥
-# 能看到它就是继续生成与链接各种 Linux 运行必备的 FHS 文件树，以及各种必备的文件
-# 比如 /bin/sh /home /root /etc /var 等等
-› cat /nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37/activate
-#!/nix/store/ny69lqq5dgw5xz6h5ply8cwzifcvplxx-bash-5.2-p15-riscv64-unknown-linux-gnu/bin/bash
-
-systemConfig='/nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37'
-
-export PATH=/empty
-for i in /nix/store/4l7v9y3r2mp2sdhjxjl35yvjsxmrdl4h-coreutils-riscv64-unknown-linux-gnu-9.1 /nix/store/00k2kgxrxx8nrs9sqrajl43aabg58655-gnugrep-riscv64-unknown-linux-gnu-3.7 /nix/store/pjsjh36lkn6jqina5l30609d8ldyqw7g-findutils-riscv64-unknown-linux-gnu-4.9.0 /nix/store/n0wk98079d81zaa37ll4nnkh0gnnjp45-getent-glibc-riscv64-unknown-linux-gnu-2.37-8 /nix/store/j3vh88d4kkpgnjdpxhqibpjqa4x59pzy-glibc-riscv64-unknown-linux-gnu-2.37-8-bin /nix/store/wj90d7n8xfk163vwyg74fvnxh88fsp6h-shadow-riscv64-unknown-linux-gnu-4.13 /nix/store/csi20f6aksz8fdcjb7sz9a860vjd4v9g-net-tools-riscv64-unknown-linux-gnu-2.10 /nix/store/c1xb4z38bvl29vbvc2la2957gv9sdy61-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin; do
-    PATH=$PATH:$i/bin:$i/sbin
-done
-
-_status=0
-trap "_status=1 _localstatus=\$?" ERR
-
-# Ensure a consistent umask.
-umask 0022
-
-#### Activation script snippet specialfs:
-_localstatus=0
-specialMount() {
-  local device="$1"
-  local mountPoint="$2"
-  local options="$3"
-  local fsType="$4"
-
-  if mountpoint -q "$mountPoint"; then
-    local options="remount,$options"
-  else
-    mkdir -m 0755 -p "$mountPoint"
-  fi
-  mount -t "$fsType" -o "$options" "$device" "$mountPoint"
-}
-source /nix/store/z1b5brgask2dvsq2gjkk8vc9rv5r2c0y-mounts.sh
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "specialfs" "$_localstatus"
-fi
-
-#### Activation script snippet binfmt:
-_localstatus=0
-mkdir -p -m 0755 /run/binfmt
-
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "binfmt" "$_localstatus"
-fi
-
-#### Activation script snippet stdio:
-_localstatus=0
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "stdio" "$_localstatus"
-fi
-
-#### Activation script snippet binsh:
-_localstatus=0
-# Create the required /bin/sh symlink; otherwise lots of things
-# (notably the system() function) won't work.
-mkdir -m 0755 -p /bin
-ln -sfn "/nix/store/qs8dvkg2719slcc6rvv89whphg697cwm-bash-interactive-5.2-p15-riscv64-unknown-linux-gnu/bin/sh" /bin/.sh.tmp
-mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "binsh" "$_localstatus"
-fi
-
-#### Activation script snippet check-manual-docbook:
-_localstatus=0
-if [[ $(cat /nix/store/v3hlwi9fqqhgwsggd5p478rgmsqxfph5-options-used-docbook) = 1 ]]; then
-  echo -e "\e[31;1mwarning\e[0m: This configuration contains option documentation in docbook." \
-          "Support for docbook is deprecated and will be removed after NixOS 23.05." \
-          "See nix-store --read-log /nix/store/0z3bpdvagjpmpl7m2i4ajzjyg6cipc8a-options.json.drv"
-fi
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "check-manual-docbook" "$_localstatus"
-fi
-
-#### Activation script snippet domain:
-_localstatus=0
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "domain" "$_localstatus"
-fi
-
-#### Activation script snippet users:
-_localstatus=0
-install -m 0700 -d /root
-install -m 0755 -d /home
-
-/nix/store/r5wdgk9pwj7bvff208vsd9a821b9dw0c-perl-riscv64-unknown-linux-gnu-5.36.0-env/bin/perl \
--w /nix/store/jb6kmxd6ixbcb8s338ah2pdz26n0bbz4-update-users-groups.pl /nix/store/yjjxriwk6s7k14hrkd4mkmixmj1vskv5-users-groups.json
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "users" "$_localstatus"
-fi
-
-#### Activation script snippet groups:
-_localstatus=0
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "groups" "$_localstatus"
-fi
-
-#### Activation script snippet etc:
-_localstatus=0
-# Set up the statically computed bits of /etc.
-echo "setting up /etc..."
-/nix/store/h1hh2x1zj7h7ih36jy6482x01976cyhd-perl-riscv64-unknown-linux-gnu-5.36.0-env/bin/perl /nix/store/rg5rf512szdxmnj9qal3wfdnpfsx38qi-setup-etc.pl /nix/store/b154qqwp6pybryjrdn9yfcvckipn5ybj-etc/etc
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "etc" "$_localstatus"
-fi
-
-#### Activation script snippet hashes:
-_localstatus=0
-users=()
-while IFS=: read -r user hash tail; do
-  if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
-    users+=("$user")
-  fi
-done </etc/shadow
-
-if (( "${#users[@]}" )); then
-  echo "
-WARNING: The following user accounts rely on password hashing algorithms
-that have been removed. They need to be renewed as soon as possible, as
-they do prevent their users from logging in."
-  printf ' - %s\n' "${users[@]}"
-fi
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "hashes" "$_localstatus"
-fi
-
-#### Activation script snippet hostname:
-_localstatus=0
-hostname "nixos"
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "hostname" "$_localstatus"
-fi
-
-#### Activation script snippet modprobe:
-_localstatus=0
-# Allow the kernel to find our wrapped modprobe (which searches
-# in the right location in the Nix store for kernel modules).
-# We need this when the kernel (or some module) auto-loads a
-# module.
-echo /nix/store/zafa80062xl2sybshivrz81qa38nas5y-kmod-riscv64-unknown-linux-gnu-30/bin/modprobe > /proc/sys/kernel/modprobe
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "modprobe" "$_localstatus"
-fi
-
-#### Activation script snippet nix:
-_localstatus=0
-install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
-
-# Subscribe the root user to the NixOS channel by default.
-if [ ! -e "/root/.nix-channels" ]; then
-    echo "https://nixos.org/channels/nixos-23.05 nixos" > "/root/.nix-channels"
-fi
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "nix" "$_localstatus"
-fi
-
-#### Activation script snippet systemd-timesyncd-init-clock:
-_localstatus=0
-if ! [ -f /var/lib/systemd/timesync/clock ]; then
-  test -d /var/lib/systemd/timesync || mkdir -p /var/lib/systemd/timesync
-  touch /var/lib/systemd/timesync/clock
-fi
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "systemd-timesyncd-init-clock" "$_localstatus"
-fi
-
-#### Activation script snippet udevd:
-_localstatus=0
-# The deprecated hotplug uevent helper is not used anymore
-if [ -e /proc/sys/kernel/hotplug ]; then
-  echo "" > /proc/sys/kernel/hotplug
-fi
-
-# Allow the kernel to find our firmware.
-if [ -e /sys/module/firmware_class/parameters/path ]; then
-  echo -n "/nix/store/h4hgs3gig9l1x1d15v3cnlq11hg4p1r0-firmware/lib/firmware" > /sys/module/firmware_class/parameters/path
-fi
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "udevd" "$_localstatus"
-fi
-
-#### Activation script snippet usrbinenv:
-_localstatus=0
-mkdir -m 0755 -p /usr/bin
-ln -sfn /nix/store/4l7v9y3r2mp2sdhjxjl35yvjsxmrdl4h-coreutils-riscv64-unknown-linux-gnu-9.1/bin/env /usr/bin/.env.tmp
-mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "usrbinenv" "$_localstatus"
-fi
-
-#### Activation script snippet var:
-_localstatus=0
-# Various log/runtime directories.
-
-mkdir -m 1777 -p /var/tmp
-
-# Empty, immutable home directory of many system accounts.
-mkdir -p /var/empty
-# Make sure it's really empty
-/nix/store/2fw7rr6yaaspkwwix771lcdwj02a3qxx-e2fsprogs-riscv64-unknown-linux-gnu-1.46.6-bin/bin/chattr -f -i /var/empty || true
-find /var/empty -mindepth 1 -delete
-chmod 0555 /var/empty
-chown root:root /var/empty
-/nix/store/2fw7rr6yaaspkwwix771lcdwj02a3qxx-e2fsprogs-riscv64-unknown-linux-gnu-1.46.6-bin/bin/chattr -f +i /var/empty || true
-
-
-if (( _localstatus > 0 )); then
-  printf "Activation script snippet '%s' failed (%s)\n" "var" "$_localstatus"
-fi
-
-#### Activation script snippet wrappers:
-_localstatus=0
-chmod 755 "/run/wrappers"
-
-# We want to place the tmpdirs for the wrappers to the parent dir.
-wrapperDir=$(mktemp --directory --tmpdir="/run/wrappers" wrappers.XXXXXXXXXX)
-chmod a+rx "$wrapperDir"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/chsh"
-echo -n "/nix/store/wj90d7n8xfk163vwyg74fvnxh88fsp6h-shadow-riscv64-unknown-linux-gnu-4.13/bin/chsh" > "$wrapperDir/chsh.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/chsh"
-chown root:root "$wrapperDir/chsh"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/chsh"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/dbus-daemon-launch-helper"
-echo -n "/nix/store/3x1cpq5axfwygjssjg42clfvi085xjgp-dbus-riscv64-unknown-linux-gnu-1.14.6/libexec/dbus-daemon-launch-helper" > "$wrapperDir/dbus-daemon-launch-helper.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/dbus-daemon-launch-helper"
-chown root:messagebus "$wrapperDir/dbus-daemon-launch-helper"
-
-chmod "u+s,g-s,u+rx,g+rx,o-rx" "$wrapperDir/dbus-daemon-launch-helper"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/fusermount"
-echo -n "/nix/store/770sky5x7dbcmzc2xahvws7pw250bj2s-fuse-riscv64-unknown-linux-gnu-2.9.9/bin/fusermount" > "$wrapperDir/fusermount.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/fusermount"
-chown root:root "$wrapperDir/fusermount"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/fusermount"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/fusermount3"
-echo -n "/nix/store/gkxzqirzcf548w4421jlwhn1imp4979d-fuse-riscv64-unknown-linux-gnu-3.11.0/bin/fusermount3" > "$wrapperDir/fusermount3.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/fusermount3"
-chown root:root "$wrapperDir/fusermount3"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/fusermount3"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/mount"
-echo -n "/nix/store/c1xb4z38bvl29vbvc2la2957gv9sdy61-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin/bin/mount" > "$wrapperDir/mount.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/mount"
-chown root:root "$wrapperDir/mount"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/mount"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/newgidmap"
-echo -n "/nix/store/wj90d7n8xfk163vwyg74fvnxh88fsp6h-shadow-riscv64-unknown-linux-gnu-4.13/bin/newgidmap" > "$wrapperDir/newgidmap.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/newgidmap"
-chown root:root "$wrapperDir/newgidmap"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/newgidmap"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/newgrp"
-echo -n "/nix/store/wj90d7n8xfk163vwyg74fvnxh88fsp6h-shadow-riscv64-unknown-linux-gnu-4.13/bin/newgrp" > "$wrapperDir/newgrp.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/newgrp"
-chown root:root "$wrapperDir/newgrp"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/newgrp"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/newuidmap"
-echo -n "/nix/store/wj90d7n8xfk163vwyg74fvnxh88fsp6h-shadow-riscv64-unknown-linux-gnu-4.13/bin/newuidmap" > "$wrapperDir/newuidmap.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/newuidmap"
-chown root:root "$wrapperDir/newuidmap"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/newuidmap"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/passwd"
-echo -n "/nix/store/wj90d7n8xfk163vwyg74fvnxh88fsp6h-shadow-riscv64-unknown-linux-gnu-4.13/bin/passwd" > "$wrapperDir/passwd.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/passwd"
-chown root:root "$wrapperDir/passwd"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/passwd"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/ping"
-echo -n "/nix/store/vwzakxlkma6lg0yd5ilx0cbj69whpm38-iputils-riscv64-unknown-linux-gnu-20221126/bin/ping" > "$wrapperDir/ping.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/ping"
-chown root:root "$wrapperDir/ping"
-
-# Set desired capabilities on the file plus cap_setpcap so
-# the wrapper program can elevate the capabilities set on
-# its file into the Ambient set.
-/nix/store/cpnqm7m872fsqky7bjbqwy8llbbf33l9-libcap-riscv64-unknown-linux-gnu-2.68/bin/setcap "cap_setpcap,cap_net_raw+p" "$wrapperDir/ping"
-
-# Set the executable bit
-chmod u+rx,g+x,o+x "$wrapperDir/ping"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/sg"
-echo -n "/nix/store/wj90d7n8xfk163vwyg74fvnxh88fsp6h-shadow-riscv64-unknown-linux-gnu-4.13/bin/sg" > "$wrapperDir/sg.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/sg"
-chown root:root "$wrapperDir/sg"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/sg"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/su"
-echo -n "/nix/store/jy1c86m85801g025pd6gs9ljhj301bsi-shadow-riscv64-unknown-linux-gnu-4.13-su/bin/su" > "$wrapperDir/su.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/su"
-chown root:root "$wrapperDir/su"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/su"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/sudo"
-echo -n "/nix/store/54s80ssm7q2y1aqaavnrkvw7b4hkdm1g-sudo-riscv64-unknown-linux-gnu-1.9.13p3/bin/sudo" > "$wrapperDir/sudo.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/sudo"
-chown root:root "$wrapperDir/sudo"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/sudo"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/sudoedit"
-echo -n "/nix/store/54s80ssm7q2y1aqaavnrkvw7b4hkdm1g-sudo-riscv64-unknown-linux-gnu-1.9.13p3/bin/sudoedit" > "$wrapperDir/sudoedit.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/sudoedit"
-chown root:root "$wrapperDir/sudoedit"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/sudoedit"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/umount"
-echo -n "/nix/store/c1xb4z38bvl29vbvc2la2957gv9sdy61-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin/bin/umount" > "$wrapperDir/umount.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/umount"
-chown root:root "$wrapperDir/umount"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/umount"
-
-cp /nix/store/ms8338dmzf45grswqknyghvzfszv6cby-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/unix_chkpwd"
-echo -n "/nix/store/cffy2kkpwgams7b94ixrslvf9nny88pv-linux-pam-riscv64-unknown-linux-gnu-1.5.2/bin/unix_chkpwd" > "$wrapperDir/unix_chkpwd.real"
-
-# Prevent races
-chmod 0000 "$wrapperDir/unix_chkpwd"
-chown root:root "$wrapperDir/unix_chkpwd"
-
-chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/unix_chkpwd"
-
-
-if [ -L /run/wrappers/bin ]; then
-  # Atomically replace the symlink
-  # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-  old=$(readlink -f /run/wrappers/bin)
-  if [ -e "/run/wrappers/bin-tmp" ]; then
-    rm --force --recursive "/run/wrappers/bin-tmp"
-  fi
-  ln --symbolic --force --no-dereference "$wrapperDir" "/run/wrappers/bin-tmp"
-  mv --no-target-directory "/run/wrappers/bin-tmp" "/run/wrappers/bin"
-  rm --force --recursive "$old"
-
-
-# Make this configuration the current configuration.
-# The readlink is there to ensure that when $systemConfig = /system
-# (which is a symlink to the store), /run/current-system is still
-# used as a garbage collection root.
-ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
-
-# Prevent the current configuration from being garbage-collected.
-mkdir -p /nix/var/nix/gcroots
-ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
-
-exit $_status
+› ls /dev/ttyUSB0
+╭───┬──────────────┬─────────────┬──────┬───────────────╮
+│ # │     name     │    type     │ size │   modified    │
+├───┼──────────────┼─────────────┼──────┼───────────────┤
+│ 0 │ /dev/ttyUSB0 │ char device │  0 B │ 6 minutes ago │
+╰───┴──────────────┴─────────────┴──────┴───────────────╯
+
+› minicom -d /dev/ttyusb0 -b 115200
 ```
 
-
-## 实际启动日志
-
-使用 USB 转串口工具，连接到开发板的 UART0 串口，就能看到开发板的启动日志。
-一个正常的启动流程日志如下所示：
+一个正常的启动日志示例如下：
 
 ```
 Welcome to minicom 2.8
@@ -907,199 +417,788 @@ Welcome to NixOS 23.05 (Stoat)!
 ......
 ```
 
+简单总结下日志中的信息：
+
+1. 整个启动流程被分成了三个阶段，分别是：
+    1. OpenSBI: 这个阶段貌似进行了一些硬件相关的初始化，比如说串口、SPI、SD 卡等，貌似还有些报错，先不管。
+    1. NixOS Stage 1: 这应该就是 `initrd` 阶段干的活，内核加载了 systemd udev 内核模块，然后使用 busybox 的 fsck 检查了根文件系统，接着挂载了根文件系统。
+    1. NixOS Stage 2:
+        1. 运行了一个什么`activation script`，它首先设置好了 `/etc` 文件夹，然后检查了根分区文件系统的情况，并自动执行了分区与文件系统的扩容操作。
+        2. 接着通过 `nix-env -p /nix/vm...` 大概是切换了个运行环境。
+        3. 最后启动了 systemd，这之后的流程就跟其他发行版没啥区别了（都是 systemd）。
+
+
+### 3. init 程序分析
+
+有了上面这些信息，我们就可以比较容易地理解 init 这个程序了，它主要对应前面日志中的 NixOS Stage 2，即在真正挂载根文件系统之后，执行的第一个用户态程序。
+
+在 NixOS 中这个 init 程序实际上是一个 shell 脚本，可以直接通过 `cat` 或者 `vim` 来查看它的内容：
+
+```bash
+› cat /nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37/init
+#! /nix/store/91hllz70n1b0qkb0r9iw1bg9xzx66a3b-bash-5.2-p15-riscv64-unknown-linux-gnu/bin/bash
+
+systemConfig=/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b
+
+export HOME=/root PATH="/nix/store/fifbf1h3i83jvan2vkk7xm4fraq7drm7-coreutils-riscv64-unknown-linux-gnu-9.1/bin:/nix/store/2w8nachmhqvbjswrrsdia5cx1afxxx60-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin/bin"
+
+
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Process the kernel command line.
+    for o in $(</proc/cmdline); do
+        case $o in
+            boot.debugtrace)
+                # Show each command.
+                set -x
+                ;;
+        esac
+    done
+
+
+    # Print a greeting.
+    echo
+    echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
+    echo
+
+
+    # Normally, stage 1 mounts the root filesystem read/writable.
+    # However, in some environments, stage 2 is executed directly, and the
+    # root is read-only.  So make it writable here.
+    if [ -z "$container" ]; then
+        mount -n -o remount,rw none /
+    fi
+fi
+
+
+# Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
+# stage 1, we need to do that here.
+if [ ! -e /proc/1 ]; then
+    specialMount() {
+        local device="$1"
+        local mountPoint="$2"
+        local options="$3"
+        local fsType="$4"
+
+        # We must not overwrite this mount because it's bind-mounted
+        # from stage 1's /run
+        if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ] && [ "${mountPoint}" = /run ]; then
+            return
+        fi
+
+        install -m 0755 -d "$mountPoint"
+        mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
+    }
+    source /nix/store/vn0sga6rn69vkdbs0d2njh0aig7zmzi6-mounts.sh
+fi
+
+
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ]; then
+    echo "booting system configuration ${systemConfig}"
+else
+    echo "booting system configuration $systemConfig" > /dev/kmsg
+fi
+
+
+# Make /nix/store a read-only bind mount to enforce immutability of
+# the Nix store.  Note that we can't use "chown root:nixbld" here
+# because users/groups might not exist yet.
+# Silence chown/chmod to fail gracefully on a readonly filesystem
+# like squashfs.
+chown -f 0:30000 /nix/store
+chmod -f 1775 /nix/store
+if [ -n "1" ]; then
+    if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
+        if [ -z "$container" ]; then
+            mount --bind /nix/store /nix/store
+        else
+            mount --rbind /nix/store /nix/store
+        fi
+        mount -o remount,ro,bind /nix/store
+    fi
+fi
+
+
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
+    if [ -n "" ] && [ -e /etc/resolv.conf ]; then
+        resolvconf -m 1000 -a host </etc/resolv.conf
+    fi
+
+
+    # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
+    # Only at this point are all the necessary prerequisites ready for these commands.
+    exec {logOutFd}>&1 {logErrFd}>&2
+    if test -w /dev/kmsg; then
+        exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
+            if test -n "$line"; then
+                echo "<7>stage-2-init: $line" > /dev/kmsg
+            fi
+        done) 2>&1
+    else
+        mkdir -p /run/log
+        exec > >(tee -i /run/log/stage-2-init.log) 2>&1
+    fi
+fi
+
+
+# Required by the activation script
+install -m 0755 -d /etc /etc/nixos
+install -m 01777 -d /tmp
+
+
+# Run the script that performs all configuration activation that does
+# not have to be done at boot time.
+echo "running activation script..."
+$systemConfig/activate
+
+
+# Record the boot configuration.
+ln -sfn "$systemConfig" /run/booted-system
+
+
+# Run any user-specified commands.
+/nix/store/91hllz70n1b0qkb0r9iw1bg9xzx66a3b-bash-5.2-p15-riscv64-unknown-linux-gnu/bin/bash /nix/store/cmvnjz39iq4bx4cq3lvri2jj0sjq5h24-local-cmds
+
+
+# Ensure systemd doesn't try to populate /etc, by forcing its first-boot
+# heuristic off. It doesn't matter what's in /etc/machine-id for this purpose,
+# and systemd will immediately fill in the file when it starts, so just
+# creating it is enough. This `: >>` pattern avoids forking and avoids changing
+# the mtime if the file already exists.
+: >> /etc/machine-id
+
+
+# No need to restore the stdout/stderr streams we never redirected and
+# especially no need to start systemd
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Reset the logging file descriptors.
+    exec 1>&$logOutFd 2>&$logErrFd
+    exec {logOutFd}>&- {logErrFd}>&-
+
+
+    # Start systemd in a clean environment.
+    echo "starting systemd..."
+    exec /run/current-system/systemd/lib/systemd/systemd "$@"
+fi
+```
+
+简单总结下这个脚本的功能：
+
+1. 通过 `mount -o remount,ro,bind /nix/store` 将 `/nix/store` 目录重新挂载为只读，确保 Nix Store 的不可变性，从而使系统状态可复现。
+2. 直接开始执行 `$systemConfig/activate` 这个程序。
+3. activate 完毕后，启动真正的 1 号进程 systemd，进入后续启动流程。
+
+### 4. activate 程序分析
+
+前面的 init 程序其实没干啥，
+根据我们看过的启动日志，大部分的功能应该都是在 `$systemConfig/activate` 这个程序中完成的。
+
+再看看其中的 $systemConfig/activate 的内容，它同样是一个 shell 脚本，直接 `cat`/`vim` 查看下：
+
+```bash
+› cat root/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/activate
+#!/nix/store/91hllz70n1b0qkb0r9iw1bg9xzx66a3b-bash-5.2-p15-riscv64-unknown-linux-gnu/bin/bash
+
+systemConfig='/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b'
+
+export PATH=/empty
+for i in /nix/store/fifbf1h3i83jvan2vkk7xm4fraq7drm7-coreutils-riscv64-unknown-linux-gnu-9.1 /nix/store/x3hfwbwcqgl9zpqrk8kvm3p2kjns9asm-gnugrep-riscv64-unknown-linux-gnu-3.7 /nix/store/qn0yhj5d7r432rdh1885cn40gz184ww9-findutils-riscv64-unknown-linux-gnu-4.9.0 /nix/store/slwk77dzar2l1c4h9fikdw93ig4wdfy1-getent-glibc-riscv64-unknown-linux-gnu-2.37-8 /nix/store/yrf57f5h1rwmf3q70msx35a2p9f0rsjr-glibc-riscv64-unknown-linux-gnu-2.37-8-bin /nix/store/9al8xczxbm72i5q63n91fli5rynrfprl-shadow-riscv64-unknown-linux-gnu-4.13 /nix/store/2imxx6v9xhy8mbbx9q1r2d991m81inar-net-tools-riscv64-unknown-linux-gnu-2.10 /nix/store/2w8nachmhqvbjswrrsdia5cx1afxxx60-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin; do
+    PATH=$PATH:$i/bin:$i/sbin
+done
+
+_status=0
+trap "_status=1 _localstatus=\$?" ERR
+
+# Ensure a consistent umask.
+umask 0022
+
+#### Activation script snippet specialfs:
+_localstatus=0
+specialMount() {
+  local device="$1"
+  local mountPoint="$2"
+  local options="$3"
+  local fsType="$4"
+
+  if mountpoint -q "$mountPoint"; then
+    local options="remount,$options"
+  else
+    mkdir -m 0755 -p "$mountPoint"
+  fi
+  mount -t "$fsType" -o "$options" "$device" "$mountPoint"
+}
+source /nix/store/vn0sga6rn69vkdbs0d2njh0aig7zmzi6-mounts.sh
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "specialfs" "$_localstatus"
+fi
+
+#### Activation script snippet binfmt:
+_localstatus=0
+mkdir -p -m 0755 /run/binfmt
 
 
 
-## RISC-V / ARM64 开发板的启动流程
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "binfmt" "$_localstatus"
+fi
 
-{{<figure src="./current-riscv-boot-flow.webp" title="RISCV 开发版当前的引导流程" width="60%">}}
+#### Activation script snippet stdio:
+_localstatus=0
 
-{{<figure src="./current-arm64-boot-flow.webp" title="ARM64 开发版当前的引导流程" width="60%">}}
 
-### u-boot，u-boot-spl，u-boot-tpl 的关系
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "stdio" "$_localstatus"
+fi
 
-对于一般嵌入式而言只需要一个 u-boot 作为 bootloader 即可，但是在小内存，或者有 atf 的情况下还可以有 spl，tpl:
+#### Activation script snippet binsh:
+_localstatus=0
+# Create the required /bin/sh symlink; otherwise lots of things
+# (notably the system() function) won't work.
+mkdir -m 0755 -p /bin
+ln -sfn "/nix/store/4y83vxk3mfk216d1jjfjgckkxwrbassi-bash-interactive-5.2-p15-riscv64-unknown-linux-gnu/bin/sh" /bin/.sh.tmp
+mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "binsh" "$_localstatus"
+fi
+
+#### Activation script snippet check-manual-docbook:
+_localstatus=0
+if [[ $(cat /nix/store/xzgmgymf510dicgppghq27lrh9fjpxfi-options-used-docbook) = 1 ]]; then
+  echo -e "\e[31;1mwarning\e[0m: This configuration contains option documentation in docbook." \
+          "Support for docbook is deprecated and will be removed after NixOS 23.05." \
+          "See nix-store --read-log /nix/store/n232fhpqqqnlfjl0rj59xxms419glja2-options.json.drv"
+fi
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "check-manual-docbook" "$_localstatus"
+fi
+
+#### Activation script snippet domain:
+_localstatus=0
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "domain" "$_localstatus"
+fi
+
+#### Activation script snippet users:
+_localstatus=0
+install -m 0700 -d /root
+install -m 0755 -d /home
+
+/nix/store/6fap9xv6snx5fr2m7m804v4gc23pb1jh-perl-riscv64-unknown-linux-gnu-5.36.0-env/bin/perl \
+-w /nix/store/gx91fdp4a099jpfwdkbdw2imvl3lalsk-update-users-groups.pl /nix/store/1zj6fk93qkqd3z8n34s4r40xnby2ci21-users-groups.json
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "users" "$_localstatus"
+fi
+
+#### Activation script snippet groups:
+_localstatus=0
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "groups" "$_localstatus"
+fi
+
+#### Activation script snippet etc:
+_localstatus=0
+# Set up the statically computed bits of /etc.
+echo "setting up /etc..."
+/nix/store/habrmd12my31s9r9fdby78l2dg5p7qyx-perl-riscv64-unknown-linux-gnu-5.36.0-env/bin/perl /nix/store/rg5rf512szdxmnj9qal3wfdnpfsx38qi-setup-etc.pl /nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "etc" "$_localstatus"
+fi
+
+#### Activation script snippet hashes:
+_localstatus=0
+users=()
+while IFS=: read -r user hash tail; do
+  if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+    users+=("$user")
+  fi
+done </etc/shadow
+
+if (( "${#users[@]}" )); then
+  echo "
+WARNING: The following user accounts rely on password hashing algorithms
+that have been removed. They need to be renewed as soon as possible, as
+they do prevent their users from logging in."
+  printf ' - %s\n' "${users[@]}"
+fi
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "hashes" "$_localstatus"
+fi
+
+#### Activation script snippet hostname:
+_localstatus=0
+hostname "lp4a"
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "hostname" "$_localstatus"
+fi
+
+#### Activation script snippet modprobe:
+_localstatus=0
+# Allow the kernel to find our wrapped modprobe (which searches
+# in the right location in the Nix store for kernel modules).
+# We need this when the kernel (or some module) auto-loads a
+# module.
+echo /nix/store/wv00igsmj6mkk1ybssdch52hx0hx0x67-kmod-riscv64-unknown-linux-gnu-30/bin/modprobe > /proc/sys/kernel/modprobe
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "modprobe" "$_localstatus"
+fi
+
+#### Activation script snippet nix:
+_localstatus=0
+install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "nix" "$_localstatus"
+fi
+
+#### Activation script snippet nix-channel:
+_localstatus=0
+# Subscribe the root user to the NixOS channel by default.
+if [ ! -e "/root/.nix-channels" ]; then
+    echo "https://nixos.org/channels/nixos-23.05 nixos" > "/root/.nix-channels"
+fi
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "nix-channel" "$_localstatus"
+fi
+
+#### Activation script snippet systemd-timesyncd-init-clock:
+_localstatus=0
+if ! [ -f /var/lib/systemd/timesync/clock ]; then
+  test -d /var/lib/systemd/timesync || mkdir -p /var/lib/systemd/timesync
+  touch /var/lib/systemd/timesync/clock
+fi
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "systemd-timesyncd-init-clock" "$_localstatus"
+fi
+
+#### Activation script snippet udevd:
+_localstatus=0
+# The deprecated hotplug uevent helper is not used anymore
+if [ -e /proc/sys/kernel/hotplug ]; then
+  echo "" > /proc/sys/kernel/hotplug
+fi
+
+# Allow the kernel to find our firmware.
+if [ -e /sys/module/firmware_class/parameters/path ]; then
+  echo -n "/nix/store/ann0ayjx9qf296pssrk2b26fry235idz-firmware/lib/firmware" > /sys/module/firmware_class/parameters/path
+fi
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "udevd" "$_localstatus"
+fi
+
+#### Activation script snippet usrbinenv:
+_localstatus=0
+mkdir -m 0755 -p /usr/bin
+ln -sfn /nix/store/fifbf1h3i83jvan2vkk7xm4fraq7drm7-coreutils-riscv64-unknown-linux-gnu-9.1/bin/env /usr/bin/.env.tmp
+mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "usrbinenv" "$_localstatus"
+fi
+
+#### Activation script snippet var:
+_localstatus=0
+# Various log/runtime directories.
+
+mkdir -m 1777 -p /var/tmp
+
+# Empty, immutable home directory of many system accounts.
+mkdir -p /var/empty
+# Make sure it's really empty
+/nix/store/yln7ma9dldr3f2dva4l0iq275s4brxml-e2fsprogs-riscv64-unknown-linux-gnu-1.46.6-bin/bin/chattr -f -i /var/empty || true
+find /var/empty -mindepth 1 -delete
+chmod 0555 /var/empty
+chown root:root /var/empty
+/nix/store/yln7ma9dldr3f2dva4l0iq275s4brxml-e2fsprogs-riscv64-unknown-linux-gnu-1.46.6-bin/bin/chattr -f +i /var/empty || true
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "var" "$_localstatus"
+fi
+
+#### Activation script snippet wrappers:
+_localstatus=0
+chmod 755 "/run/wrappers"
+
+# We want to place the tmpdirs for the wrappers to the parent dir.
+wrapperDir=$(mktemp --directory --tmpdir="/run/wrappers" wrappers.XXXXXXXXXX)
+chmod a+rx "$wrapperDir"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/chsh"
+echo -n "/nix/store/9al8xczxbm72i5q63n91fli5rynrfprl-shadow-riscv64-unknown-linux-gnu-4.13/bin/chsh" > "$wrapperDir/chsh.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/chsh"
+chown root:root "$wrapperDir/chsh"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/chsh"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/dbus-daemon-launch-helper"
+echo -n "/nix/store/jqk530wxiq3832zyiqn8qi6i2pr3snnl-dbus-riscv64-unknown-linux-gnu-1.14.8/libexec/dbus-daemon-launch-helper" > "$wrapperDir/dbus-daemon-launch-helper.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/dbus-daemon-launch-helper"
+chown root:messagebus "$wrapperDir/dbus-daemon-launch-helper"
+
+chmod "u+s,g-s,u+rx,g+rx,o-rx" "$wrapperDir/dbus-daemon-launch-helper"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/fusermount"
+echo -n "/nix/store/2d68cpnlqls47ijrwss83swjk2q1v953-fuse-riscv64-unknown-linux-gnu-2.9.9/bin/fusermount" > "$wrapperDir/fusermount.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/fusermount"
+chown root:root "$wrapperDir/fusermount"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/fusermount"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/fusermount3"
+echo -n "/nix/store/06w8lm5k9i2n1xhkszsf4pa9hw9l0r5s-fuse-riscv64-unknown-linux-gnu-3.11.0/bin/fusermount3" > "$wrapperDir/fusermount3.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/fusermount3"
+chown root:root "$wrapperDir/fusermount3"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/fusermount3"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/mount"
+echo -n "/nix/store/2w8nachmhqvbjswrrsdia5cx1afxxx60-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin/bin/mount" > "$wrapperDir/mount.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/mount"
+chown root:root "$wrapperDir/mount"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/mount"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/newgidmap"
+echo -n "/nix/store/9al8xczxbm72i5q63n91fli5rynrfprl-shadow-riscv64-unknown-linux-gnu-4.13/bin/newgidmap" > "$wrapperDir/newgidmap.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/newgidmap"
+chown root:root "$wrapperDir/newgidmap"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/newgidmap"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/newgrp"
+echo -n "/nix/store/9al8xczxbm72i5q63n91fli5rynrfprl-shadow-riscv64-unknown-linux-gnu-4.13/bin/newgrp" > "$wrapperDir/newgrp.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/newgrp"
+chown root:root "$wrapperDir/newgrp"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/newgrp"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/newuidmap"
+echo -n "/nix/store/9al8xczxbm72i5q63n91fli5rynrfprl-shadow-riscv64-unknown-linux-gnu-4.13/bin/newuidmap" > "$wrapperDir/newuidmap.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/newuidmap"
+chown root:root "$wrapperDir/newuidmap"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/newuidmap"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/passwd"
+echo -n "/nix/store/9al8xczxbm72i5q63n91fli5rynrfprl-shadow-riscv64-unknown-linux-gnu-4.13/bin/passwd" > "$wrapperDir/passwd.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/passwd"
+chown root:root "$wrapperDir/passwd"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/passwd"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/ping"
+echo -n "/nix/store/mckzq3q58m31d8ax04gnjqx43niamis0-iputils-riscv64-unknown-linux-gnu-20221126/bin/ping" > "$wrapperDir/ping.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/ping"
+chown root:root "$wrapperDir/ping"
+
+# Set desired capabilities on the file plus cap_setpcap so
+# the wrapper program can elevate the capabilities set on
+# its file into the Ambient set.
+/nix/store/z2gpziznsj8rnv55vyq5n287g5cvx7lg-libcap-riscv64-unknown-linux-gnu-2.68/bin/setcap "cap_setpcap,cap_net_raw+p" "$wrapperDir/ping"
+
+# Set the executable bit
+chmod u+rx,g+x,o+x "$wrapperDir/ping"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/sg"
+echo -n "/nix/store/9al8xczxbm72i5q63n91fli5rynrfprl-shadow-riscv64-unknown-linux-gnu-4.13/bin/sg" > "$wrapperDir/sg.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/sg"
+chown root:root "$wrapperDir/sg"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/sg"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/su"
+echo -n "/nix/store/gbp100zp8a8gja22dyjz4nwv0qsxb7qy-shadow-riscv64-unknown-linux-gnu-4.13-su/bin/su" > "$wrapperDir/su.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/su"
+chown root:root "$wrapperDir/su"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/su"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/sudo"
+echo -n "/nix/store/scywdc7rd6cjfvji166a6d0bsjj90vys-sudo-riscv64-unknown-linux-gnu-1.9.13p3/bin/sudo" > "$wrapperDir/sudo.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/sudo"
+chown root:root "$wrapperDir/sudo"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/sudo"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/sudoedit"
+echo -n "/nix/store/scywdc7rd6cjfvji166a6d0bsjj90vys-sudo-riscv64-unknown-linux-gnu-1.9.13p3/bin/sudoedit" > "$wrapperDir/sudoedit.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/sudoedit"
+chown root:root "$wrapperDir/sudoedit"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/sudoedit"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/umount"
+echo -n "/nix/store/2w8nachmhqvbjswrrsdia5cx1afxxx60-util-linux-riscv64-unknown-linux-gnu-2.38.1-bin/bin/umount" > "$wrapperDir/umount.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/umount"
+chown root:root "$wrapperDir/umount"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/umount"
+
+cp /nix/store/wl1c1dgxb1zklpy5inpk7p798pm4zcca-security-wrapper-riscv64-unknown-linux-gnu/bin/security-wrapper "$wrapperDir/unix_chkpwd"
+echo -n "/nix/store/cn72qv0n576vg61mgaran7g2vj6gdjwn-linux-pam-riscv64-unknown-linux-gnu-1.5.2/bin/unix_chkpwd" > "$wrapperDir/unix_chkpwd.real"
+
+# Prevent races
+chmod 0000 "$wrapperDir/unix_chkpwd"
+chown root:root "$wrapperDir/unix_chkpwd"
+
+chmod "u+s,g-s,u+rx,g+x,o+x" "$wrapperDir/unix_chkpwd"
+
+
+if [ -L /run/wrappers/bin ]; then
+  # Atomically replace the symlink
+  # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+  old=$(readlink -f /run/wrappers/bin)
+  if [ -e "/run/wrappers/bin-tmp" ]; then
+    rm --force --recursive "/run/wrappers/bin-tmp"
+  fi
+  ln --symbolic --force --no-dereference "$wrapperDir" "/run/wrappers/bin-tmp"
+  mv --no-target-directory "/run/wrappers/bin-tmp" "/run/wrappers/bin"
+  rm --force --recursive "$old"
+else
+  # For initial setup
+  ln --symbolic "$wrapperDir" "/run/wrappers/bin"
+fi
+
+
+if (( _localstatus > 0 )); then
+  printf "Activation script snippet '%s' failed (%s)\n" "wrappers" "$_localstatus"
+fi
+
+
+# Make this configuration the current configuration.
+# The readlink is there to ensure that when $systemConfig = /system
+# (which is a symlink to the store), /run/current-system is still
+# used as a garbage collection root.
+ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
+
+# Prevent the current configuration from being garbage-collected.
+mkdir -p /nix/var/nix/gcroots
+ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
+
+exit $_status
+```
+
+这个脚本有点长，简单总结下它干了啥：
+
+1. 通过 `source /nix/store/vn0sga6rn69vkdbs0d2njh0aig7zmzi6-mounts.sh` 挂载一些目录，看下这个文件内容就知道，挂的是 `/proc` `/sys` `/dev` `/rum` 等几个临时目录。
+1. 通过 `mkdir`/`install` 等指令自动创建 `/home` `/root` `/bin` `/usr` `/usr/bin` 等目录
+1. 通过 `perl /nix/store/rg5rf512szdxmnj9qal3wfdnpfsx38qi-setup-etc.pl /nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc` 配置生成 `/etc` 目录中的各种文件。
+1. 通过 `ln` 命令添加其他各种软链接，以及一些别的设置。
+
+其中第三步 etc 目录的设置，实际数据基本都来自该脚本的第二个参数：
+
+```bash
+› ls root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc
+╭────┬──────────────────────────────────────────────────────────────────────────┬─────────┬────────┬──────────────╮
+│  # │                                   name                                   │  type   │  size  │   modified   │
+├────┼──────────────────────────────────────────────────────────────────────────┼─────────┼────────┼──────────────┤
+│  0 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/bashrc           │ symlink │   54 B │ 54 years ago │
+│  1 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/binfmt.d         │ dir     │ 4.1 KB │ 54 years ago │
+│  2 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/dbus-1           │ symlink │   50 B │ 54 years ago │
+│  3 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/default          │ dir     │ 4.1 KB │ 54 years ago │
+│  4 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/dhcpcd.exit-hook │ symlink │   60 B │ 54 years ago │
+│  5 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/fonts            │ symlink │   69 B │ 54 years ago │
+│  6 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/fstab            │ symlink │   53 B │ 54 years ago │
+│  7 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/fuse.conf        │ symlink │   57 B │ 54 years ago │
+│  8 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/host.conf        │ symlink │   57 B │ 54 years ago │
+│  9 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/hostname         │ symlink │   56 B │ 54 years ago │
+│ 10 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/hosts            │ symlink │   49 B │ 54 years ago │
+│ 11 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/inputrc          │ symlink │   51 B │ 54 years ago │
+│ 12 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/issue            │ symlink │   49 B │ 54 years ago │
+│ 13 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/kbd              │ symlink │   61 B │ 54 years ago │
+│ 14 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/locale.conf      │ symlink │   55 B │ 54 years ago │
+│ 15 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/login.defs       │ symlink │   54 B │ 54 years ago │
+│ 16 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/lsb-release      │ symlink │   59 B │ 54 years ago │
+│ 17 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/lvm              │ dir     │ 4.1 KB │ 54 years ago │
+│ 18 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/man_db.conf      │ symlink │   59 B │ 54 years ago │
+│ 19 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/modprobe.d       │ dir     │ 4.1 KB │ 54 years ago │
+│ 20 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/modules-load.d   │ dir     │ 4.1 KB │ 54 years ago │
+│ 21 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/nanorc           │ symlink │   54 B │ 54 years ago │
+│ 22 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/netgroup         │ symlink │   56 B │ 54 years ago │
+│ 23 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/nix              │ dir     │ 4.1 KB │ 54 years ago │
+│ 24 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/nscd.conf        │ symlink │   57 B │ 54 years ago │
+│ 25 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/nsswitch.conf    │ symlink │   61 B │ 54 years ago │
+│ 26 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/os-release       │ symlink │   58 B │ 54 years ago │
+│ 27 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/pam              │ dir     │ 4.1 KB │ 54 years ago │
+│ 28 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/pam.d            │ dir     │ 4.1 KB │ 54 years ago │
+│ 29 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/pki              │ dir     │ 4.1 KB │ 54 years ago │
+│ 30 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/profile          │ symlink │   55 B │ 54 years ago │
+│ 31 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/protocols        │ symlink │   75 B │ 54 years ago │
+│ 32 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/pulse            │ dir     │ 4.1 KB │ 54 years ago │
+│ 33 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/resolvconf.conf  │ symlink │   63 B │ 54 years ago │
+│ 34 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/rpc              │ symlink │   90 B │ 54 years ago │
+│ 35 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/samba            │ dir     │ 4.1 KB │ 54 years ago │
+│ 36 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/services         │ symlink │   74 B │ 54 years ago │
+│ 37 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/set-environment  │ symlink │   59 B │ 54 years ago │
+│ 38 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/shells           │ symlink │   54 B │ 54 years ago │
+│ 39 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/ssh              │ dir     │ 4.1 KB │ 54 years ago │
+│ 40 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/ssl              │ dir     │ 4.1 KB │ 54 years ago │
+│ 41 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/sudoers          │ symlink │   51 B │ 54 years ago │
+│ 42 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/sudoers.gid      │ file    │    3 B │ 54 years ago │
+│ 43 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/sudoers.mode     │ file    │    5 B │ 54 years ago │
+│ 44 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/sudoers.uid      │ file    │    3 B │ 54 years ago │
+│ 45 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/sysctl.d         │ dir     │ 4.1 KB │ 54 years ago │
+│ 46 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/systemd          │ dir     │ 4.1 KB │ 54 years ago │
+│ 47 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/terminfo         │ symlink │   70 B │ 54 years ago │
+│ 48 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/tmpfiles.d       │ dir     │ 4.1 KB │ 54 years ago │
+│ 49 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/udev             │ dir     │ 4.1 KB │ 54 years ago │
+│ 50 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/vconsole.conf    │ symlink │   57 B │ 54 years ago │
+│ 51 │ root/nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc/zoneinfo         │ symlink │   97 B │ 54 years ago │
+├────┼──────────────────────────────────────────────────────────────────────────┼─────────┼────────┼──────────────┤
+│  # │                                   name                                   │  type   │  size  │   modified   │
+╰────┴──────────────────────────────────────────────────────────────────────────┴─────────┴────────┴──────────────╯
+```
+
+这个 perl 脚本基本就是根据这个 nix store 中的 etc 文件夹，生成 `/etc` 目录中的各种文件或软链接。
+
+## 四、硬件驱动部分
+
+NixOS 要能在 LicheePi 4A 上正常启动，还需要有硬件固件的支持，因此光了解 NixOS 的启动流程还不够，还需要了解硬件固件的启动流程。
+这里简要介绍下 Linux 在 RISC-V 上的启动流程。
+
+### 1. u-boot，u-boot-spl，u-boot-tpl 的关系
+
+U-Boot 是嵌入式领域最常用的 bootloader，
+
+对于一般嵌入式系统而言只需要一个 u-boot 作为 bootloader 即可，
+但入今的嵌入式 IC 已经转向 SOC 片上系统，其内部不仅仅是一颗 CPU 核，还可能包含各种各样的其他 IP，因而相关的上层软件也需要针对性的划分不同的功能域，操作域，安全域等上层应用。
+为了支持这些复杂而碎片化的应用需求，又或者因为 SRAM 太小以致无法放下整个 bootloader，SOC 的 Boot 阶段衍生出了多级 BootLoader，u-boot 为此定义了二三级加载器:
 
 - spl：Secondary Program Loader，二级加载器
 - tpl：Tertiary Program Loader，三级加载器
 
-出现 spl 和 tpl 的原因最开始是因为系统 sram 太小，rom 无法在 ddr 未初始化的情况下一次性把所有代码从 flash，emmc，usb 等搬运到 sram 中执行，也或者是 flash 太小，无法完整放下整个 u-boot 来进行片上执行。所以 u-boot 又定义了 spl 和 tpl，spl 和 tpl 走 u-boot 完全相同的 boot 流程，不过在 spl 和 tpl 中大多数驱动和功能被去除了，根据需要只保留一部分 spl 和 tpl 需要的功能，通过 CONFIG_SPL_BUILD 和 CONFIG_TPL_BUILD 控制；一般只用 spl 就足够了，spl 完成 ddr 初始化，并完成一些外设驱动初始化，比如 usb，emmc，以此从其他外围设备加载 u-boot，但是如果对于小系统 spl 还是太大了，则可以继续加入 tpl，tpl 只做 ddr 等的特定初始化保证代码体积极小，以此再次从指定位置加载 spl，spl 再去加载 u-boot。
+spl 和 tpl 走 u-boot 完全相同的 boot 流程，不过在 spl 和 tpl 中大多数驱动和功能被去除了，根据需要只保留一部分 spl 和 tpl 需要的功能，通过 CONFIG_SPL_BUILD 和 CONFIG_TPL_BUILD 控制；一般只用 spl 就足够了，spl 完成 ddr 初始化，并完成一些外设驱动初始化，比如 usb，emmc，以此从其他外围设备加载 u-boot，但是如果对于小系统 spl 还是太大了，则可以继续加入 tpl，tpl 只做 ddr 等的特定初始化保证代码体积极小，以此再次从指定位置加载 spl，spl 再去加载 u-boot。
 
-从目前来看，spl 可以取代上图中 bl2 的位置，或者 bl1，根据具体厂商实现来决定，有一些芯片厂商会将 spl 固化在 rom 中，使其具有从 emmc，usb 等设备加载 u-boot 或者其他固件的能力。
-
-### OpenSBI
-
-OpenSBI 是 System call type interface layer between Firmware runtime, M-Mode
-to Operating system, S-Mode.
-
-```mermaid
-flowchart LR
-    U["U-Boot SPL(M-Mode)"] --> O["OpenSBI(M-Mode)"] --> O2["U-Boot Proper(S-Mode)"]
-    O2--> L["Linux Kernel(S-Mode)"] --> USER["User Space(U-Mode)"]
-```
-
-#### FW_DYNAMIC
-
-- Pack the firmware with runtime accessible to the next level boot stage, fw_dynamic.bin
-- Can be packable in U-Boot SPL, Coreboot
-
-首先编译出 `fw_dynamib.bin`：
+LicheePi4A 就使用了二级加载器，它甚至写死了 eMMC 的分区表，要求我们使用 fastboot 往对应的分区写入 u-boot-spl.bin，官方给出的命令如下：
 
 ```bash
-CROSS_COMPILE=riscv64-buildroot-linux-gnu- make PLATFORM=sifive/fu540
+# flash u-boot into spl partition
+sudo fastboot flash ram u-boot-with-spl.bin
+sudo fastboot reboot
+# flash uboot partition
+sudo fastboot flash uboot u-boot-with-spl.bin
 ```
 
-然后基于该文件构建 u-boot-spl.bin:
+### 2. RISC-V 的启动流程
 
-```bash
-CROSS_COMPILE=riscv64-buildroot-linux-gnu- make sfive_fu540_spl_defconfig
+网上找到的一个图，涉及到一些 RISC-V 指令集相关的知识点：
 
-export OPENSBI=</path/to/fw_dynamic.bin>
-CROSS_COMPILE=riscv64-buildroot-linux-gnu- make
-```
+{{<figure src="./current-riscv-boot-flow.webp" title="RISCV 开发版当前的引导流程" width="80%">}}
 
-### vmlinux vmlinuz Image zImage 等都有何关系
+根据我们前面的 NixOS 启动日志，跟这个图还是比较匹配的，但我们没观察到任何 U-Boot 日志，有可能是因为 U-Boot 没开日志，暂时不打算细究。
 
-> https://www.baeldung.com/linux/kernel-images
+### 3. OpenSBI
 
-按生成顺序依次介绍如下：
+前面的 NixOS 启动日志跟启动流程图中都出现了 OpenSBI，那么 OpenSBI 是什么呢？
+为什么 ARM 开发版的启动流程中没有这么个玩意儿？
 
-- vmlinux：Linux 内核编译出来的原始的内核文件，elf 格式，未做压缩处理。
-  - 该映像可用于定位内核问题，但不能直接引导 Linux 系统启动。
-- Image：Linux 内核编译时，使用 objcopy 处理 vmlinux 后生成的二进制内核映像。
-  - 该映像未压缩，可直接引导 Linux 系统启动。
-- zImage：一种 Linux 内核映像，专为 X86 架构的系统设计，它使用 LZ77 压缩算法。
-- bzImage: 一种可启动的二进制压缩内核映像
-  - `bz` 是 big zipped 的缩写。通常使用 gzip 压缩算法，但是也可以用别的算法。
-  - 包含 boot loader header + gzip 压缩后的 vmlinux 映像
-- vmlinuz: 它跟 bzImage 一样都是指压缩后的内核映像，两个名称基本可以互换。
+查了下资料，大概是说因为 RISC-V是一个开源的硬件框架，任何人都可以基于 RISC-V 开发自己的定制指令集，或者定制 IC 布局。
+这显然存在很明显的碎片化问题。
+OpenSBI 就是为了避免此问题而设计的，
+它提供了一个标准的接口，即 Supervisor Binary Interface, SBI.
+上层系统只需要适配 SBI 就可以了，不需要关心底层硬件的细节。
+IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI 的上层系统能在其硬件平台上正常运行。
 
-### initrd 与 initramfs
+而 OpenSBI 则是 SBI 标准的一个开源实现，IC 开发商只需要将 OpenSBI 移植到自己的硬件平台上即可支持 SBI 标准。
 
-> https://www.zhihu.com/question/22045825
+### 4. fw_dynamic.bin 跟 u-boot-spl.bin 两个文件
 
-#### initrd
+1. `fw_dynamic.bin`: 我们 NixOS 镜像的 `/boot` 中就有这个固件，它是 OpenSBI 的编译产物。
+    1. RevyOS 的定制 OpenSBI 构建方法：<https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml>
+2. `u-boot-spl.bin`: 这个文件是 u-boot 的编译产物，它是二级加载器。
+    1. RevyOS 的定制 u-boot 构建方法：<https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml>
 
-在早期的 linux 系统中，一般只有硬盘或者软盘被用来作为 linux 根文件系统的存储设备，因此也就很容易把这些设备的驱动程序集成到内核中。但是现在的嵌入式系统中可能将根文件系统保存到各种存储设备上，包括 scsi、sata，u-disk 等等。因此把这些设备的驱动代码全部编译到内核中显然就不是很方便。
+### 5. T-Head 官方的编译工具链
 
-为了解决这一矛盾，于是出现了 initrd，它的英文含义是 boot loader iniTIalized RAM disk，就是由 boot loader 初始化的内存盘。在 linux 内核启动前， boot loader 会将存储介质中的 initrd 文件加载到内存，内核启动时会在访问真正的文件系统前先访问该内存中的 initrd 文件系统。
-在 boot loader 配置了 initrd 在这情况下，内核启动被分成了两个阶段，第一阶段内核会解压缩 initrd 文件，将解压后的 initrd 挂载为根目录；第二阶段才执行根目录中的 `/init` 脚本（cpio 格式的 initr 为 `/init`, 而 image 格式的 initrd<也称老式块设备的 initrd 或传统的文件镜像格式的 initrd>为 `/initrc`）。
+因为历史原因，TH1520 设计时貌似 RVV 还没出正式的规范，因此它使用了一些非标准的指令集，GCC 官方貌似宣称了永远不会支持这些指令集...
 
-`/init` 通常是一个 bash 脚本，我们可以通过它加载 realfs（真实文件系统）的驱动程序，并挂载好 /dev /proc /sys 等文件夹，接着就可以 mount 并 chroot 到真正的根目录，完成整个 rootfs 的加载。
+因此为了获得最佳性能，LicheePi4A 官方文档建议使用 T-Head 提供的工具链编译整个系统。
 
-#### initramfs
+但我在研究了 NixOS 的工具链实现，以及咨询了 @NickCao 后，确认了在 NixOS 上这几乎是不可行的。
+NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔改，要在 NixOS 上使用 T-Head 的工具链，就要使这一堆魔改的东西在 T-Head 的工具链上也能 Work，这个工作量很大，也很有技术难度。
 
-在 linux2.5 中出现了 initramfs，它的作用和 initrd 类似，只是和内核编译成一个文件(该 initramfs 是经过 gzip 压缩后的 cpio 格式的数据文件)，该 cpio 格式的文件被链接进了内核中特殊的数据段.init.ramfs 上，其中全局变量**initramfs_start 和**initramfs_end 分别指向这个数据段的起始地址和结束地址。内核启动时会对.init.ramfs 段中的数据进行解压，然后使用它作为临时的根文件系统。
+所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一些编译问题。
 
-### 设备树
+## 五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的
 
-TODO
+到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，最终成功启动的截图：
 
-### Linux 的不同引导方式
+{{<figure src="./nixos-licheepi-neofetch.webp" title="NixOS 成功启动" width="80%">}}
 
-1. extlinux
-2. u-boot
+那么我们如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像呢？
 
-TODO
+这个讲起来就很费时间了，涉及到了 NixOS 的交叉编译系统，内核 override, flakes, 镜像构建等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<https://github.com/ryan4yin/nixos-licheepi4a>.
 
-## Rockchip 的 U-Boot 启动流程
+用一句话概括就是：跟传统 Linux 发行版的构建方法也完全不同，整个镜像构建的项目完全使用 Nix 语言声明式编写，而且这份配置也可用于系统后续的持续声明式更新部署（我还给出了一个 demo）。
 
-> https://opensource.rock-chips.com/wiki_Boot_option
-
-U-Boot 的几种构建产物介绍：
-
-1. `spl/u-boot-spl.bin`：SPL，Secondary Program Loader，二级加载器
-2. `u-boot.itb`: FIT uImage，Flattened Image Tree uImage.
-3. `idbloader.img`: a Rockchip format pre-loader suppose to work at SoC start up
-
-> U-Boot 官方文档：https://u-boot.readthedocs.io/en/latest/index.html
-
-> U-Boot 启动流程：https://u-boot.readthedocs.io/en/latest/develop/bootstd.html
-
-查看 U-Boot 的所有环境变量，U-Boot 的启动项顺序、启动设备选择等都可通过环境变量控制：
-
-```shell
-=> env print -a
-arch=arm
-autoload=no
-baudrate=1500000
-board=evb_rk3588
-board_name=evb_rk3588
-boot_a_script=load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}
-boot_extlinux=sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}extlinux/extlinux.conf
-boot_net_usb_start=usb start
-boot_pci_enum=pci enum
-boot_prefixes=/ /boot/
-boot_script_dhcp=boot.scr.uimg
-boot_scripts=boot.scr.uimg boot.scr
-boot_targets=nvme0 mmc1 mmc0 mtd2 mtd1 mtd0 usb0 pxe dhcp 
-bootargs=storagemedia=sd androidboot.storagemedia=sd androidboot.mode=normal 
-bootcmd=run distro_bootcmd;boot_android ${devtype} ${devnum};boot_fit;bootrkp;
-bootcmd_dhcp=run boot_net_usb_start; run boot_pci_enum; if dhcp ${scriptaddr} ${boot_script_dhcp}; then source ${scriptaddr}; fi;
-bootcmd_mmc0=setenv devnum 0; run mmc_boot
-bootcmd_mmc1=setenv devnum 1; run mmc_boot
-bootcmd_mtd0=setenv devnum 0; run mtd_boot
-bootcmd_mtd1=setenv devnum 1; run mtd_boot
-bootcmd_mtd2=setenv devnum 2; run mtd_boot
-bootcmd_nvme0=setenv devnum 0; run nvme_boot
-bootcmd_pxe=run boot_net_usb_start; run boot_pci_enum; dhcp; if pxe get; then pxe boot; fi
-bootcmd_usb0=setenv devnum 0; run usb_boot
-bootdelay=0
-bootfile=/boot/extlinux/extlinux.conf
-bootfstype=ext4
-cpu=armv8
-devnum=0
-devplist=1
-devtype=mmc
-distro_bootcmd=setenv nvme_need_init; for target in ${boot_targets}; do run bootcmd_${target}; done
-eth1addr=9a:da:80:4e:b7:36
-ethaddr=96:da:80:4e:b7:36
-fdt_addr_r=0x08300000
-fdtfile=rockchip/rk3588s-rock-5a.dtb
-fdtoverlay_addr_r=0x08200000
-fileaddr=0x500000
-filesize=0x45d
-kernel_addr_c=0x05480000
-kernel_addr_r=0x00400000
-mmc_boot=if mmc dev ${devnum}; then setenv devtype mmc; run scan_dev_for_boot_part; fi
-mtd_boot=if mtd_blk dev ${devnum}; then setenv devtype mtd; run scan_dev_for_boot_part; fi
-nvme_boot=run boot_pci_enum; run nvme_init; if nvme dev ${devnum}; then setenv devtype nvme; run scan_dev_for_boot_part; fi
-nvme_init=if ${nvme_need_init}; then setenv nvme_need_init false; nvme scan; fi
-nvme_need_init=false
-partitions=uuid_disk=${uuid_gpt_disk};name=uboot,start=8MB,size=4MB,uuid=${uuid_gpt_loader2};name=trust,size=4M,uuid=${uuid_gpt_atf};name=misc,size=4MB,uuid=${uuid_gpt_misc};name=resource,size=16MB,uuid=${uuid_g
-pt_resource};name=kernel,size=32M,uuid=${uuid_gpt_kernel};name=boot,size=32M,bootable,uuid=${uuid_gpt_boot};name=recovery,size=32M,uuid=${uuid_gpt_recovery};name=backup,size=112M,uuid=${uuid_gpt_backup};name=cac
-he,size=512M,uuid=${uuid_gpt_cache};name=system,size=2048M,uuid=${uuid_gpt_system};name=metadata,size=16M,uuid=${uuid_gpt_metadata};name=vendor,size=32M,uuid=${uuid_gpt_vendor};name=oem,size=32M,uuid=${uuid_gpt_
-oem};name=frp,size=512K,uuid=${uuid_gpt_frp};name=security,size=2M,uuid=${uuid_gpt_security};name=userdata,size=-,uuid=${uuid_gpt_userdata};
-pxefile_addr_r=0x00600000
-ramdisk_addr_r=0x0a200000
-rkimg_bootdev=if nvme dev 0; then setenv devtype nvme; setenv devnum 0; echo Boot from nvme;elif mmc dev 1 && rkimgtest mmc 1; then setenv devtype mmc; setenv devnum 1; echo Boot from SDcard;elif mmc dev 0; then
- setenv devtype mmc; setenv devnum 0;elif mtd_blk dev 0; then setenv devtype mtd; setenv devnum 0;elif mtd_blk dev 1; then setenv devtype mtd; setenv devnum 1;elif mtd_blk dev 2; then setenv devtype mtd; setenv 
-devnum 2;elif rknand dev 0; then setenv devtype rknand; setenv devnum 0;elif rksfc dev 0; then setenv devtype spinand; setenv devnum 0;elif rksfc dev 1; then setenv devtype spinor; setenv devnum 1;else;setenv de
-vtype ramdisk; setenv devnum 0;fi; 
-scan_dev_for_boot=echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixes}; do run scan_dev_for_extlinux; run scan_dev_for_scripts; done;
-scan_dev_for_boot_part=part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv devplist 1; for distro_bootpart in ${devplist}; do if fstype ${devtype} ${devnum}:${distro_bootpart} bootfs
-type; then run scan_dev_for_boot; fi; done
-scan_dev_for_extlinux=if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}extlinux/extlinux.conf; then echo Found ${prefix}extlinux/extlinux.conf; run boot_extlinux; echo SCRIPT FAILED: continuing...; fi
-scan_dev_for_scripts=for script in ${boot_scripts}; do if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found U-Boot script ${prefix}${script}; run boot_a_script; echo SCRIPT FAIL
-ED: continuing...; fi; done
-scriptaddr=0x00500000
-serial#=87485315897af1df
-soc=rockchip
-stderr=serial,vidconsole
-stdout=serial,vidconsole
-usb_boot=usb start; if usb dev ${devnum}; then setenv devtype usb; run scan_dev_for_boot_part; fi
-vendor=rockchip
-
-Environment size: 4737/32764 bytes
-=> 
-```
+最后，再推荐一波我的 NixOS 入门指南：[ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，对 NixOS 感兴趣的读者们，快进我碗里来（
 
 ## 参考
 
 - [LicheePi 4A —— 这个小板有点意思（第一部分） - HougeLangley](https://litterhougelangley.club/blog/2023/05/27/licheepi-4a-%e8%bf%99%e4%b8%aa%e5%b0%8f%e6%9d%bf%e6%9c%89%e7%82%b9%e6%84%8f%e6%80%9d%ef%bc%88%e7%ac%ac%e4%b8%80%e9%83%a8%e5%88%86%ef%bc%89/)
+- [Analyzing the Linux boot process - By Alison Chaiken](https://opensource.com/article/18/1/analyzing-linux-boot-process)
+- [OpenSBI Platform Firmwares](https://github.com/riscv-software-src/opensbi/blob/master/docs/firmware/fw.md)
 - [An Introduction to RISC-V Boot flow: Overview, Blob vs Blobfree standards](https://crvf2019.github.io/pdf/43.pdf)
-- [ARMv8 架构 u-boot 启动流程详细分析(一)](https://bbs.huaweicloud.com/blogs/363735)
-- [聊聊 SOC 启动（五） uboot 启动流程一](https://zhuanlan.zhihu.com/p/520060653)
 - [基于 qemu-riscv 从 0 开始构建嵌入式 linux 系统 ch5-1. 什么是多级 BootLoader 与 opensbi(上)¶](https://quard-star-tutorial.readthedocs.io/zh_CN/latest/ch5-1.html)
-- [Linux系统构成简单介绍 - 野火 嵌入式Linux镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/building_image/image_composition/image_composition.html)
+- [Using the initial RAM disk (initrd) - kernel.org](https://docs.kernel.org/admin-guide/initrd.html)
+- [Differences Between vmlinux, vmlinuz, vmlinux.bin, zimage, and bzimage](https://www.baeldung.com/linux/kernel-images)
+- [U-Boot 官方的 Distro 文档](https://github.com/ARM-software/u-boot/blob/master/doc/README.distro)
 
