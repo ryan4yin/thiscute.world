@@ -226,12 +226,12 @@ LABEL nixos-default
   FDT ../nixos/l18cz7jd37n35dwyf8wc8divm46k7sdf-k-riscv64-unknown-linux-gnu-dtbs/thead/light-lpi4a.dtb
 ```
 
-从上述中能获得这些信息：
+从上述配置中能获得这些信息：
 
 1. 它创建了一个名为 `nixos-default` 的启动项并将它设为了默认启动项，extlinux 在启动阶段会根据该配置启动 NixOS 系统
 2. 启动项中的 `LINUX` `INITRD` `FDT` 三个参数分别指定了 kernel(Image 文件)、initrd 以及设备树（dtb）的位置，这三个文件我们在前面已经看到了，都在 `/boot/nixos` 下。
     1. 根据 Linux 官方文档 [Using the initial RAM disk (initrd)](https://docs.kernel.org/admin-guide/initrd.html) 所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
-        1. bootloader(这里是 extlinux) 根据配置加载 kernel 文件（`Image`）、dtb 设备树文件以及 `initrd` 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.
+        1. bootloader(这里是 u-boot) 根据配置加载 kernel 文件（`Image`）、dtb 设备树文件以及 `initrd` 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.
         1. Kernel 将传入的 initrd 转换成一个内存盘并挂载为根文件系统，然后释放 initrd 的内存。
         1. Kernel 接着运行 `init` 参数指定的可执行程序，这里是 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这个 init 程序会挂载真正的根文件系统，并在其上执行后续的启动流程。
         1. initrd 文件系统被移除，系统启动完毕。
