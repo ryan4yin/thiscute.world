@@ -45,7 +45,7 @@ code:
 
 我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当时没怎么折腾。
 
-6 月初的时候我开始尝试在 Orange Pi 5 上运行 NixOS，在 [NixOS on ARM 的 Matrix 群组](https://matrix.to/#/#nixos-on-arm:nixos.org) 中得到了 @K900 的帮助，没费多大劲就成功了，一共就折腾了三天。
+6 月初的时候我开始尝试在 Orange Pi 5 上运行 NixOS，在 [NixOS on ARM 的 Matrix 群组](https://matrix.to/#/#nixos-on-arm:nixos.org) 中得到了俄罗斯老哥 @K900 的帮助，没费多大劲就成功了，一共就折腾了三天。
 
 于是我接着尝试在 Lichee Pi 4A 上运行 NixOS，因为已经拥有了 Orange Pi 5 上的折腾经验，我以为这次会很顺利。
 但是实际难度远远超出了我的预期，我从 6 月 13 号开始断断续续折腾到 7 月 3 号，接触了大量的新东西，包括 U-Boot、OpenSBI、SPL Flash、RISCV Boot Flows 等等，
