@@ -386,7 +386,7 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <p>此外还有我 Homelab 的一些服务器、虚拟机，为了方便在所有主机上 ssh 登录，都统一使用了一个 Homelab 专用私钥，保存在我的 secrets 仓库中，在部署我的 nix-config 时，agenix 会将其解密出来并存放到特定位置。
 我的 <code>~/.ssh/config</code> 会指定使用该固定位置的密钥登录 Homelab 主机。</p>
 <h3 id="macosnixos-数据的灾难恢复" class="headerLink">
-    <a href="#macosnixos-%e6%95%b0%e6%8d%ae%e7%9a%84%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d" class="header-mark"></a>macOS/NixOS 数据的灾难恢复？</h3><p>在使用 nix-darwin 跟 NixOS 的情况下，整个系统都是通过我的 <a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a> 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。</p>
+    <a href="#macosnixos-%e6%95%b0%e6%8d%ae%e7%9a%84%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d" class="header-mark"></a>macOS/NixOS 数据的灾难恢复？</h3><p>在使用 nix-darwin 跟 NixOS 的情况下，整个 macOS/Nixos 的系统环境都是通过我的 <a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a> 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。</p>
 <p>只需要简单的几行命令就能在一个全新的系统上恢复出我的 macOS / NixOS 桌面环境，所有密钥也会由 agenix 自动解密并放置到正确的位置。</p>
 <p>要说有恢复难题的，也就是一些个人数据了，这部分已经在前面第七小节介绍过了，用 rclone/restic 就行。</p>
 <h2 id="九总结下我的数据存在了哪些地方" class="headerLink">
