@@ -323,6 +323,7 @@ gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo
 
 对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
 详见 [ryan4yin/nix-config/secrets](https://github.com/ryan4yin/nix-config/tree/27f1d54/secrets).
+关于这个仓库的详细加解密方法，在后面第八节「桌面电脑的数据安全」中会介绍。
 
 ## 六、灾难恢复相关的数据存储与管理
 
