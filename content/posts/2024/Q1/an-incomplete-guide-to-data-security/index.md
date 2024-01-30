@@ -76,8 +76,6 @@ comment:
 1. **零信任**：不信任任何云服务提供商、本地硬盘、网络等的可靠性与安全性，因此任何数据的落盘、网络传输都应该加密，任何数据都应该有多个副本。
 1. **Serverless**: 尽可能利用已有的各种云服务或 Git 之类的分布式存储工具来存储数据，而不是自己额外搭建一堆各种服务。减轻维护负担。
 
-
-
 这篇文章记录下我做的数据调研工作、我当前的数据安全方案以及未来可能的改进方向。
 
 ## 一、个人数据安全包含哪些部分？
@@ -365,6 +363,7 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。
     ```
     cryptsetup --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-urandom --verify-passphrase luksFormat device
     ```
+  - LUKS2 使用的 argon2id 是比 scrypt 更强的 KDF 算法，其安全性是足够的。
 - 重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地对应的密钥自动解密。
   - 也就是说要在一台新电脑上成功部署我的 nix-config 配置，需要的准备流程：
     - 本地生成一个新的 ssh key，将公钥配置到 GitHub，并 `ssh-add` 这个新的私钥，使其能够访问到我的私有 secrets 仓库。
