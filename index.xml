@@ -125,7 +125,7 @@
 </div>
 </div><p>所以从 2014 年发布的 OpenSSH 6.5 开始，ed25519 密钥的 passphrase 才是使用 bcrypt KDF 生成的。
 而对于其他类型的密钥，仍旧长期使用基于 MD5 hash 的密钥格式，没啥安全性可言。</p>
-<p>即使 2023-08-10 发布的 9.4 版本增加了默认的 bcrypt KDF rounds 数量，它的安全性仍然很值得怀疑。
+<p>即使 2023-08-10 发布的 9.4 版本增加了默认的 bcrypt KDF rounds 次数，它的安全性仍然很值得怀疑。
 bcrypt 本身的安全性就越来越差，现代化的加密工具基本都已经升级到了 scrypt 甚至 argon2.
 因此要想提升安全性，最好是能更换更现代的 KDF 算法，或者至少增加 bcrypt KDF 的 rounds 数量。</p>
 <p>我进一步看了 <code>man ssh-keygen</code> 的文档，没找到任何修改 KDF 算法的参数，不过能通过 <code>-a</code> 参数来修改 KDF 的 rounds 数量，
@@ -156,9 +156,10 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </span></span><span class="line"><span class="cl">   (January 2014).
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>也就是说从 2023-10-04 发布的 9.5 开始，OpenSSH 才默认使用 ED25519，所以可以推断出，目前绝大部分用户都是使用的 RSA 密钥，且其 passphrase 的安全性很差，不加 passphrase 就是裸奔，加了也很容易被破解。
-如果你使用的也这种比较老的密钥类型，那千万别觉得自己加了 passphrase 保护就很安全，这完全是错觉（
-即使是使用最新的 ssh-keygen 生成的 ED25519 密钥，其默认也是用的 bcrypt 16 rounds 生成加密密钥，其安全性在我看来也是不够的。</p>
+</div><p>也就是说从 2023-10-04 发布的 9.5 开始，OpenSSH 才默认使用 ED25519。</p>
+<p>结合上面的分析可以推断出，目前绝大部分用户都是使用的 RSA 密钥，且其 passphrase 的安全性很差，不加 passphrase 就是裸奔，加了也很容易被破解。
+如果你使用的也这种比较老的密钥类型，那千万别觉得自己加了 passphrase 保护就很安全，这完全是错觉（</p>
+<p>即使是使用最新的 ssh-keygen 生成的 ED25519 密钥，其默认也是用的 bcrypt 16 rounds 生成加密密钥，其安全性在我看来也是不够的。</p>
 <p>总结下，在不考虑其他硬件密钥/SSH CA 的情况下，最佳的 SSH Key 生成方式应该是：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
