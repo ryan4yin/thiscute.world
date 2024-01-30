@@ -263,8 +263,8 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 因此，使用默认参数生成的 GPG 密钥，其安全性是不够的。</p>
 <p>为了获得最佳安全性，我们需要：</p>
 <ol>
-<li>使用如下参数生成 GPG 密钥：</li>
-</ol>
+<li>
+<p>使用如下参数生成 GPG 密钥：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -273,8 +273,10 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo AES256 ...
 </span></span></code></pre></td></tr></table>
 </div>
-</div><ol start="2">
-<li>加密、签名、认证都使用不同的密钥，每个密钥只用于特定的场景，这样即使某个密钥泄漏，也不会影响其他场景的安全性。</li>
+</div></li>
+<li>
+<p>加密、签名、认证都使用不同的密钥，每个密钥只用于特定的场景，这样即使某个密钥泄漏，也不会影响其他场景的安全性。</p>
+</li>
 </ol>
 <p>为了在全局使用这些参数，可以将它们添加到你的 <code>~/.gnupg/gpg.conf</code> 配置文件中。</p>
 <p>详见我的 gpg 配置 <a href="https://github.com/ryan4yin/nix-config/tree/90cd503/home/base/desktop/gpg" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/gpg</a></p>
@@ -375,6 +377,10 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </ul>
 <p>此外还有我 Homelab 的一些服务器、虚拟机，为了方便在所有主机上 ssh 登录，都统一使用了一个 Homelab 专用私钥，保存在我的 secrets 仓库中，在部署我的 nix-config 时，agenix 会将其解密出来并存放到特定位置。
 我的 <code>~/.ssh/config</code> 会指定使用该固定位置的密钥登录 Homelab 主机。</p>
+<h3 id="macosnixos-数据的灾难恢复" class="headerLink">
+    <a href="#macosnixos-%e6%95%b0%e6%8d%ae%e7%9a%84%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d" class="header-mark"></a>macOS/NixOS 数据的灾难恢复？</h3><p>在使用 nix-darwin 跟 NixOS 的情况下，整个系统都是通过我的 <a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a> 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。</p>
+<p>只需要简单的几行命令就能在一个全新的系统上恢复出我的 macOS / NixOS 桌面环境，所有密钥也会由 agenix 自动解密并放置到正确的位置。</p>
+<p>要说有恢复难题的，也就是一些个人数据了，这部分已经在前面第七小节介绍过了，用 rclone/restic 就行。</p>
 <h2 id="九总结下我的数据存在了哪些地方" class="headerLink">
     <a href="#%e4%b9%9d%e6%80%bb%e7%bb%93%e4%b8%8b%e6%88%91%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%9c%a8%e4%ba%86%e5%93%aa%e4%ba%9b%e5%9c%b0%e6%96%b9" class="header-mark"></a>九、总结下我的数据存在了哪些地方</h2><ol>
 <li>secrets 私有仓库: 它会被我的 nix-config 自动拉取并部署到所有主力电脑上，包含了 homelab ssh key, GPG subkey, 以及其他一些重要的 secrets.
