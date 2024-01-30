@@ -354,7 +354,7 @@ gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo
 ## 八、桌面电脑的数据安全
 
 我主要使用两个操作系统：macOS 与 NixOS.
-Windows 也有使用，但基本没啥个人数据，可以忽略。
+另外 Windows 虽然也有使用，但基本没啥个人数据，可以忽略。
 
 对于 NixOS，我当前的方案如下：
 
@@ -365,7 +365,7 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。
     cryptsetup --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-urandom --verify-passphrase luksFormat device
     ```
   - LUKS2 使用的 argon2id 是比 scrypt 更强的 KDF 算法，其安全性是足够的。
-- 重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地对应的密钥自动解密。
+- 重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地的 SSH 系统私钥自动解密。
   - 也就是说要在一台新电脑上成功部署我的 nix-config 配置，需要的准备流程：
     - 本地生成一个新的 ssh key，将公钥配置到 GitHub，并 `ssh-add` 这个新的私钥，使其能够访问到我的私有 secrets 仓库。
     - 将新主机的系统公钥 `/etc/ssh/ssh_host_ed25519_key.pub` 发送到一台旧的可解密 secrets 仓库数据的主机上。如果该文件不存在则先用 `sudo ssh-keygen -A` 生成。
@@ -389,7 +389,9 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。
 2. password-store: 我的私人账号密码存储库，通过 pass 命令行工具管理，使用 GPG 加密，GPG 密钥备份被加密保存在上述 secrets 仓库中。
 3. rclone 加密的备份 U 盘（双副本）：离线保存一些重要的数据。其配置文件被加密保存在 secrets 仓库中，其配置文件的解密密码被加密保存在 password-store 仓库中。
 
-因此可以看到，我的 secrets 仓库是整个方案的核心，它包含了所有重要数据（password-store/rclone）的解密密钥。
+整套方案都可使用我的 Nix 配置进行自动化部署，整个流程自动化程度很高，所以这套方案带来 的额外负担其实并不大。自动化部署，整个流程自动化程度很高，所以实施这套方案并未给我带来许多额外负担。
+
+secrets 这个私有仓库是整个方案的核心，它包含了所有重要数据（password-store/rclone）的解密密钥。
 如果它丢失了，那么所有的数据都无法解密。
 
 但好在 Git 仓库本身是分布式的，我所有的桌面电脑上都有对应的完整备份，我的灾难恢复存储中也会定期备份一份 secrets/password-store 两个仓库的数据过去以避免丢失。
