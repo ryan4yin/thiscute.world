@@ -320,7 +320,7 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </ol>
 <h2 id="八桌面电脑的数据安全" class="headerLink">
     <a href="#%e5%85%ab%e6%a1%8c%e9%9d%a2%e7%94%b5%e8%84%91%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ae%89%e5%85%a8" class="header-mark"></a>八、桌面电脑的数据安全</h2><p>我主要使用两个操作系统：macOS 与 NixOS.
-Windows 也有使用，但基本没啥个人数据，可以忽略。</p>
+另外 Windows 虽然也有使用，但基本没啥个人数据，可以忽略。</p>
 <p>对于 NixOS，我当前的方案如下：</p>
 <ul>
 <li>桌面主机启用 LUKS2 全盘加密 + Secure Boot，在系统启动阶段需要输入 passphrase 解密 NixOS 系统盘才能正常进入系统。
@@ -339,7 +339,7 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。</p>
 <li>LUKS2 使用的 argon2id 是比 scrypt 更强的 KDF 算法，其安全性是足够的。</li>
 </ul>
 </li>
-<li>重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地对应的密钥自动解密。
+<li>重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地的 SSH 系统私钥自动解密。
 <ul>
 <li>也就是说要在一台新电脑上成功部署我的 nix-config 配置，需要的准备流程：
 <ul>
@@ -371,7 +371,8 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。</p>
 <li>password-store: 我的私人账号密码存储库，通过 pass 命令行工具管理，使用 GPG 加密，GPG 密钥备份被加密保存在上述 secrets 仓库中。</li>
 <li>rclone 加密的备份 U 盘（双副本）：离线保存一些重要的数据。其配置文件被加密保存在 secrets 仓库中，其配置文件的解密密码被加密保存在 password-store 仓库中。</li>
 </ol>
-<p>因此可以看到，我的 secrets 仓库是整个方案的核心，它包含了所有重要数据（password-store/rclone）的解密密钥。
+<p>整套方案都可使用我的 Nix 配置进行自动化部署，整个流程自动化程度很高，所以这套方案带来 的额外负担其实并不大。自动化部署，整个流程自动化程度很高，所以实施这套方案并未给我带来许多额外负担。</p>
+<p>secrets 这个私有仓库是整个方案的核心，它包含了所有重要数据（password-store/rclone）的解密密钥。
 如果它丢失了，那么所有的数据都无法解密。</p>
 <p>但好在 Git 仓库本身是分布式的，我所有的桌面电脑上都有对应的完整备份，我的灾难恢复存储中也会定期备份一份 secrets/password-store 两个仓库的数据过去以避免丢失。</p>
 <p>另外需要注意的是，为了避免循环依赖，secrets 与 password-store 这两个仓库的备份不应该使用 rclone 再次加密，而是直接使用 age 对称加密。
