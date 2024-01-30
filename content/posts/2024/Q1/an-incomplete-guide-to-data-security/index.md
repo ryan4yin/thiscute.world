@@ -90,11 +90,11 @@ comment:
 1. SSH 密钥管理
 2. 各种网站、APP 的账号密码管理
 3. 灾难恢复相关的数据存储与管理
-  1, 比如说 GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份等，日常都不需要用到，但非常重要，建议离线加密存储。
+   1, 比如说 GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份等，日常都不需要用到，但非常重要，建议离线加密存储。
 4. 需要在多端访问的重要个人数据
-  2. 比如说个人笔记、图片、视频等数据，这些数据具有私密性，但又需要在多端访问。可借助支持将数据加密存储到云端的工具来实现。
-5. 个人电脑的数据安全与灾难恢复
-  3. 我主要使用 macOS 与 NixOS，因此主要考虑的是这两个系统的数据安全与灾难恢复。
+5. 比如说个人笔记、图片、视频等数据，这些数据具有私密性，但又需要在多端访问。可借助支持将数据加密存储到云端的工具来实现。
+6. 个人电脑的数据安全与灾难恢复
+7. 我主要使用 macOS 与 NixOS，因此主要考虑的是这两个系统的数据安全与灾难恢复。
 
 下面就分别就这几个部分展开讨论。
 
@@ -285,16 +285,16 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 为了获得最佳安全性，我们需要：
 
 1. 使用如下参数生成 GPG 密钥：
-  ```
-  gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo AES256 ...
-  ```
-2. 加密、签名、认证都使用不同的密钥，每个密钥只用于特定的场景，这样即使某个密钥泄漏，也不会影响其他场景的安全性。
 
+```
+gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo AES256 ...
+```
+
+2. 加密、签名、认证都使用不同的密钥，每个密钥只用于特定的场景，这样即使某个密钥泄漏，也不会影响其他场景的安全性。
 
 为了在全局使用这些参数，可以将它们添加到你的 `~/.gnupg/gpg.conf` 配置文件中。
 
 详见我的 gpg 配置 [ryan4yin/nix-config/gpg](https://github.com/ryan4yin/nix-config/tree/90cd503/home/base/desktop/gpg)
-
 
 ## 五、跨平台的加密备份同步工具的选择
 
@@ -311,13 +311,13 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
    1. 跨平台且比较活跃的项目中，我找到了 **rclone** 与 **restic** 这两个项目，都支持云同步，各有优缺点。
    1. restic 相对 rclone 的优势，主要是天然支持增量 snapshots 的功能，可以保存备份的历史快照，并设置灵活的历史快照保存策略。这对可能有回滚需求的数据而言是很重要的。比如说 PVE 虚拟机快照的备份，有了 restic 我们就不再需要依赖 PVE 自身孱弱的快照保留功能，全交给 restic 实现就行。
 3. 多端加密同步
-  1. 上面提到的 rclone 与 restic 都支持各种云存储，因此都是不错的多端加密同步工具。
+   1. 上面提到的 rclone 与 restic 都支持各种云存储，因此都是不错的多端加密同步工具。
 
 进一步调研后，我选择了 **age**, **rclone** 与 **restic** 作为我的跨平台加密备份与同步工具。
 这三个工具都比较活跃，stars 很高，使用的也都是比较现代的密码学算法：
 
 1. [age](https://age-encryption.org/v1): 对于对称加密的场景，使用 ChaCha20-Poly1305 AEAD 加密方案，对称加密密钥使用 scrypt KDF 算法生成。
-2. [rclone](https://rclone.org/crypt/): 使用基于 XSalsa20-Poly1305 的 AEAD 加密方案，key 通过 scrypt KDF 算法生成，并且默认会加盐。 
+2. [rclone](https://rclone.org/crypt/): 使用基于 XSalsa20-Poly1305 的 AEAD 加密方案，key 通过 scrypt KDF 算法生成，并且默认会加盐。
 3. [restic](https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac): 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。
 
 对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
@@ -342,13 +342,12 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 我的方案如下：
 
 1. 个人笔记：使用 [GitJournal](https://github.com/GitJournal/GitJournal) APP，将笔记存储在 GitHub 私有仓库中，并通过该仓库做多端同步。
-  1. 遗憾的是目前在 Android 平台上并未找到很合适的基于 Git 的加密笔记 APP，GitJournal 本身也不支持加密，因此我的个人笔记目前是明文存储的。
+1. 遗憾的是目前在 Android 平台上并未找到很合适的基于 Git 的加密笔记 APP，GitJournal 本身也不支持加密，因此我的个人笔记目前是明文存储的。
 1. 照片、视频等其他个人数据
-  1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
-  1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
+1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
+1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
     - [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
     - [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
-
 
 ## 八、桌面电脑的数据安全
 
@@ -379,7 +378,6 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。
 
 此外还有我 Homelab 的一些服务器、虚拟机，为了方便在所有主机上 ssh 登录，都统一使用了一个 Homelab 专用私钥，保存在我的 secrets 仓库中，在部署我的 nix-config 时，agenix 会将其解密出来并存放到特定位置。
 我的 `~/.ssh/config` 会指定使用该固定位置的密钥登录 Homelab 主机。
-
 
 ## 七、总结下我的数据存在了哪些地方
 
@@ -414,6 +412,7 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。
 3. 重新生成了所有重要账号的密码，全部使用随机密码，一共改了二三十个账号。考虑到旧的 backup code 可能已经泄漏，我也重新生成了所有重要账号的 backup code.
 4. 重装 NixOS，使用 LUKS2 做全盘加密，启用 Secure Boot.
 5. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记迁移到了一个私有 Git 仓库，用 GitJournal APP 在手机上查看编辑笔记，电脑端则是用 Emacs/Neovim。用了三四天挺顺手的。
+
 - 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.
 
 ## 九、灾难恢复预案
