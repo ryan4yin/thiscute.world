@@ -69,7 +69,7 @@
 <li>ED25519: 这是密码学家 Dan Bernstein 设计的一种新的签名算法，其安全性与 RSA 3072 位密钥相当，但其签名速度更快，且密钥更短，因此目前推荐使用 ED25519 密钥。</li>
 </ol>
 <h3 id="22-ssh-密钥的安全性" class="headerLink">
-    <a href="#22-ssh-%e5%af%86%e9%92%a5%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7" class="header-mark"></a>2.2 SSH 密钥的安全性</h3><p>RSA 跟 Curve25519 都是被广泛使用的密码学算法，其安全性都是经过严格验证的，因此我们可以放心使用。
+    <a href="#22-ssh-%e5%af%86%e9%92%a5%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7" class="header-mark"></a>2.2 SSH 密钥的安全性</h3><p>RSA 跟 ED25519 都是被广泛使用的密码学算法，其安全性都是经过严格验证的，因此我们可以放心使用。
 但为了在密钥泄漏的情况下，能够尽可能减少损失，强烈建议给个人使用的密钥添加 passphrase 保护。</p>
 <p>那这个 passphrase 保护到底有多安全呢？</p>
 <p>有一些密码学知识的人应该知道，pssphrase 保护的实现原理通常是：通过 KDF 算法将用户输入的 passphrase 字符串转换成一个二进制对称密钥，然后再用这个密钥加解密具体的数据。</p>
@@ -126,7 +126,7 @@
 </div><p>所以从 2014 年发布的 OpenSSH 6.5 开始，ed25519 密钥的 passphrase 才是使用 bcrypt KDF 生成的。
 而对于其他类型的密钥，仍旧长期使用基于 MD5 hash 的密钥格式，没啥安全性可言。</p>
 <p>即使 2023-08-10 发布的 9.4 版本增加了默认的 bcrypt KDF rounds 数量，它的安全性仍然很值得怀疑。
-bcrypt 本身的安全性就越来越差，现代化的加密工具基本都已经升级到了 scrypt 甚至 Argon2.
+bcrypt 本身的安全性就越来越差，现代化的加密工具基本都已经升级到了 scrypt 甚至 argon2.
 因此要想提升安全性，最好是能更换更现代的 KDF 算法，或者至少增加 bcrypt KDF 的 rounds 数量。</p>
 <p>我进一步看了 <code>man ssh-keygen</code> 的文档，没找到任何修改 KDF 算法的参数，不过能通过 <code>-a</code> 参数来修改 KDF 的 rounds 数量，
 OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
