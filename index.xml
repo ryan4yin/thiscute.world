@@ -2002,7 +2002,7 @@ IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI �
 <p>因此为了获得最佳性能，LicheePi4A 官方文档建议使用 T-Head 提供的工具链编译整个系统。</p>
 <p>但我在研究了 NixOS 的工具链实现，以及咨询了 @NickCao 后，确认了在 NixOS 上这几乎是不可行的。
 NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔改，要在 NixOS 上使用 T-Head 的工具链，就要使这一堆魔改的东西在 T-Head 的工具链上也能 Work，这个工作量很大，也很有技术难度。</p>
-<p>所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一些编译问题。</p>
+<p>所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一些标准工具链上的编译问题。</p>
 <p>Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关信息：<a href="https://github.com/ryan4yin/nixos-licheepi4a/issues/14" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nixos-licheepi4a/issues/14</a></p>
 <h2 id="五我是如何构建出一个可以在-licheepi-4a-上运行的-nixos-镜像的" class="headerLink">
     <a href="#%e4%ba%94%e6%88%91%e6%98%af%e5%a6%82%e4%bd%95%e6%9e%84%e5%bb%ba%e5%87%ba%e4%b8%80%e4%b8%aa%e5%8f%af%e4%bb%a5%e5%9c%a8-licheepi-4a-%e4%b8%8a%e8%bf%90%e8%a1%8c%e7%9a%84-nixos-%e9%95%9c%e5%83%8f%e7%9a%84" class="header-mark"></a>五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的</h2><p>到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，
