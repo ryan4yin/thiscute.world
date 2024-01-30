@@ -360,8 +360,8 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </ul>
 <p>此外还有我 Homelab 的一些服务器、虚拟机，为了方便在所有主机上 ssh 登录，都统一使用了一个 Homelab 专用私钥，保存在我的 secrets 仓库中，在部署我的 nix-config 时，agenix 会将其解密出来并存放到特定位置。
 我的 <code>~/.ssh/config</code> 会指定使用该固定位置的密钥登录 Homelab 主机。</p>
-<h2 id="七总结下我的数据存在了哪些地方" class="headerLink">
-    <a href="#%e4%b8%83%e6%80%bb%e7%bb%93%e4%b8%8b%e6%88%91%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%9c%a8%e4%ba%86%e5%93%aa%e4%ba%9b%e5%9c%b0%e6%96%b9" class="header-mark"></a>七、总结下我的数据存在了哪些地方</h2><ol>
+<h2 id="九总结下我的数据存在了哪些地方" class="headerLink">
+    <a href="#%e4%b9%9d%e6%80%bb%e7%bb%93%e4%b8%8b%e6%88%91%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%9c%a8%e4%ba%86%e5%93%aa%e4%ba%9b%e5%9c%b0%e6%96%b9" class="header-mark"></a>九、总结下我的数据存在了哪些地方</h2><ol>
 <li>secrets 私有仓库: 它会被我的 nix-config 自动拉取并部署到所有主力电脑上，包含了 homelab ssh key, GPG subkey, 以及其他一些重要的 secrets.
 <ol>
 <li>它通过我所有桌面电脑的 <code>/etc/ssh/ssh_host_ed25519_key</code> 公钥加密，在部署时自动使用对应的私钥解密。</li>
@@ -377,13 +377,13 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <p>但好在 Git 仓库本身是分布式的，我所有的桌面电脑上都有对应的完整备份，我的灾难恢复存储中也会定期备份一份 secrets/password-store 两个仓库的数据过去以避免丢失。</p>
 <p>另外需要注意的是，为了避免循环依赖，secrets 与 password-store 这两个仓库的备份不应该使用 rclone 再次加密，而是直接使用 age 对称加密。
 这样只要我还记得 age 的解密密码、gpg 密钥的 passphrase 等少数几个密码，就能顺着整条链路解密出所有的数据。</p>
-<h2 id="七这套方案下需要记忆几个密码" class="headerLink">
-    <a href="#%e4%b8%83%e8%bf%99%e5%a5%97%e6%96%b9%e6%a1%88%e4%b8%8b%e9%9c%80%e8%a6%81%e8%ae%b0%e5%bf%86%e5%87%a0%e4%b8%aa%e5%af%86%e7%a0%81" class="header-mark"></a>七、这套方案下需要记忆几个密码？</h2><p>绝大部分密码都通过 pass 加密保存与多端同步了，不需要额外记忆。
+<h2 id="十这套方案下需要记忆几个密码" class="headerLink">
+    <a href="#%e5%8d%81%e8%bf%99%e5%a5%97%e6%96%b9%e6%a1%88%e4%b8%8b%e9%9c%80%e8%a6%81%e8%ae%b0%e5%bf%86%e5%87%a0%e4%b8%aa%e5%af%86%e7%a0%81" class="header-mark"></a>十、这套方案下需要记忆几个密码？</h2><p>绝大部分密码都通过 pass 加密保存与多端同步了，不需要额外记忆。
 再通过一些合理的密码复用手段，可以将需要记忆的密码数量降到 3 - 5 个，并且确保日常都会输入，避免遗忘。</p>
 <p>此外为了方便记忆，可以专门编些小故事来记忆它们，hint 中也能加上故事中的一些关键字。
 毕竟人类擅长记忆故事，但不擅长记忆随机字符。</p>
-<h2 id="八为了落地这套方案我做了哪些工作" class="headerLink">
-    <a href="#%e5%85%ab%e4%b8%ba%e4%ba%86%e8%90%bd%e5%9c%b0%e8%bf%99%e5%a5%97%e6%96%b9%e6%a1%88%e6%88%91%e5%81%9a%e4%ba%86%e5%93%aa%e4%ba%9b%e5%b7%a5%e4%bd%9c" class="header-mark"></a>八、为了落地这套方案，我做了哪些工作？</h2><p>前面以及基本都提到了，这里再总结下：</p>
+<h2 id="十一为了落地这套方案我做了哪些工作" class="headerLink">
+    <a href="#%e5%8d%81%e4%b8%80%e4%b8%ba%e4%ba%86%e8%90%bd%e5%9c%b0%e8%bf%99%e5%a5%97%e6%96%b9%e6%a1%88%e6%88%91%e5%81%9a%e4%ba%86%e5%93%aa%e4%ba%9b%e5%b7%a5%e4%bd%9c" class="header-mark"></a>十一、为了落地这套方案，我做了哪些工作？</h2><p>前面以及基本都提到了，这里再总结下：</p>
 <ol>
 <li>重新生成了所有的 SSH Key，增强了 passphrase 强度，bcrypt rounds 增加到 256，通过 <code>ssh-add</code> 使用，只需要在系统启动后输入一次密码即可，也不麻烦。</li>
 <li>重新生成了所有的 PGP Key，主密钥离线加密存储，本地只保留了加密、签名、认证三个 PGP 子密钥。</li>
@@ -393,11 +393,11 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.</li>
 <li>针对 Homelab 的虚拟机快照备份，从我旧的基于 rclone + crontab 的明文备份方案，切换到了基于 restic 的加密备份方案。</li>
 </ol>
-<h2 id="九灾难恢复预案" class="headerLink">
-    <a href="#%e4%b9%9d%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e9%a2%84%e6%a1%88" class="header-mark"></a>九、灾难恢复预案</h2><p>这里考虑我的 GPG 子密钥泄漏了、pass 密码仓库泄漏了等各种情况下的灾难恢复流程。</p>
+<h2 id="十二灾难恢复预案" class="headerLink">
+    <a href="#%e5%8d%81%e4%ba%8c%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e9%a2%84%e6%a1%88" class="header-mark"></a>十二、灾难恢复预案</h2><p>这里考虑我的 GPG 子密钥泄漏了、pass 密码仓库泄漏了等各种情况下的灾难恢复流程。</p>
 <p>TODO 后续再慢慢补充。</p>
-<h2 id="十未来可能的改进方向" class="headerLink">
-    <a href="#%e5%8d%81%e6%9c%aa%e6%9d%a5%e5%8f%af%e8%83%bd%e7%9a%84%e6%94%b9%e8%bf%9b%e6%96%b9%e5%90%91" class="header-mark"></a>十、未来可能的改进方向</h2><p>目前我的主要个人数据基本都已经通过上述方案进行了安全管理。
+<h2 id="十三未来可能的改进方向" class="headerLink">
+    <a href="#%e5%8d%81%e4%b8%89%e6%9c%aa%e6%9d%a5%e5%8f%af%e8%83%bd%e7%9a%84%e6%94%b9%e8%bf%9b%e6%96%b9%e5%90%91" class="header-mark"></a>十三、未来可能的改进方向</h2><p>目前我的主要个人数据基本都已经通过上述方案进行了安全管理。
 但还有这些方面可以进一步改进：</p>
 <ul>
 <li>我的 Homelab 目前仍未考虑安全性，需要做安全改造，考虑使用 All in NixOS 的声明式配置管理方案。将 Homelab 中对我而言偏黑盒且可复现性差的 Ubuntu、Kubernetes 集群节点、OpenWRT 等 VM （乃至底层的 Proxmox VE）全面替换成更白盒且可复现性强的 NixOS，提升我对内网环境的掌控度，进而提升内网安全性。这是一个长期计划，没有明确的时间线，不过希望能在 2024 年完成这个工作。</li>
