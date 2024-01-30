@@ -295,7 +295,8 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li><a href="https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac" target="_blank" rel="noopener noreferrer">restic</a>: 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。</li>
 </ol>
 <p>对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
-详见 <a href="https://github.com/ryan4yin/nix-config/tree/27f1d54/secrets" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/secrets</a>.</p>
+详见 <a href="https://github.com/ryan4yin/nix-config/tree/27f1d54/secrets" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/secrets</a>.
+关于这个仓库的详细加解密方法，在后面第八节「桌面电脑的数据安全」中会介绍。</p>
 <h2 id="六灾难恢复相关的数据存储与管理" class="headerLink">
     <a href="#%e5%85%ad%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e7%9b%b8%e5%85%b3%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%82%a8%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>六、灾难恢复相关的数据存储与管理</h2><p>相关数据包括：GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份、PGP 主密钥与吊销证书等等。</p>
 <p>这些数据日常都不需要用到，但在账号或两步验证设备丢失时就非要使用到其中的数据才能找回账号或吊销某个证书，是非常重要的数据。</p>
