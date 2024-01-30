@@ -1187,7 +1187,7 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 
 {{<figure src="./nixos-licheepi-neofetch.webp" title="NixOS 成功启动" width="80%">}}
 
-那么我们如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像呢？
+那么基于我们到目前为止学到的知识，要如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像呢？
 
 这个讲起来就很费时间了，涉及到了 NixOS 的[交叉编译系统](https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation)，[内核 override](https://nixos-and-flakes.thiscute.world/zh/development/kernel-development), [flakes](https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes), [镜像构建](https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix)等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<https://github.com/ryan4yin/nixos-licheepi4a>.
 
