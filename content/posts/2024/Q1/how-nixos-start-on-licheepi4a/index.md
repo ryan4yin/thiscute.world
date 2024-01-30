@@ -1150,7 +1150,7 @@ sudo fastboot flash uboot u-boot-with-spl.bin
 前面的 NixOS 启动日志跟启动流程图中都出现了 OpenSBI，那么 OpenSBI 是什么呢？
 为什么 ARM 开发版的启动流程中没有这么个玩意儿？
 
-查了下资料，大概是说因为 RISC-V是一个开源的硬件框架，任何人都可以基于 RISC-V 开发自己的定制指令集，或者定制 IC 布局。
+查了下资料，大概是说因为 RISC-V 是一个开放指令集，任何人都可以基于 RISC-V 开发自己的定制指令集，或者定制 IC 布局。
 这显然存在很明显的碎片化问题。
 OpenSBI 就是为了避免此问题而设计的，
 它提供了一个标准的接口，即 Supervisor Binary Interface, SBI.
@@ -1158,6 +1158,8 @@ OpenSBI 就是为了避免此问题而设计的，
 IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI 的上层系统能在其硬件平台上正常运行。
 
 而 OpenSBI 则是 SBI 标准的一个开源实现，IC 开发商只需要将 OpenSBI 移植到自己的硬件平台上即可支持 SBI 标准。
+
+而 ARM 跟 X86 等指令集则是封闭的，不允许其他公司修改与拓展其指令集，因此不存在碎片化的问题，也就不需要 OpenSBI 这样的东西。
 
 ### 4. fw_dynamic.bin 跟 u-boot-spl.bin 两个文件
 
