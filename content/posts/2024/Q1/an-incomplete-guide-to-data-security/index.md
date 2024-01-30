@@ -412,8 +412,7 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。
 3. 重新生成了所有重要账号的密码，全部使用随机密码，一共改了二三十个账号。考虑到旧的 backup code 可能已经泄漏，我也重新生成了所有重要账号的 backup code.
 4. 重装 NixOS，使用 LUKS2 做全盘加密，启用 Secure Boot.
 5. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记迁移到了一个私有 Git 仓库，用 GitJournal APP 在手机上查看编辑笔记，电脑端则是用 Emacs/Neovim。用了三四天挺顺手的。
-
-- 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.
+6. 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.
 
 ## 九、灾难恢复预案
 
