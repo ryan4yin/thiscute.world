@@ -280,8 +280,11 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>restic 相对 rclone 的优势，主要是天然支持增量 snapshots 的功能，可以保存备份的历史快照，并设置灵活的历史快照保存策略。这对可能有回滚需求的数据而言是很重要的。比如说 PVE 虚拟机快照的备份，有了 restic 我们就不再需要依赖 PVE 自身孱弱的快照保留功能，全交给 restic 实现就行。</li>
 </ol>
 </li>
-<li>多端加密同步</li>
+<li>多端加密同步
+<ol>
 <li>上面提到的 rclone 与 restic 都支持各种云存储，因此都是不错的多端加密同步工具。</li>
+</ol>
+</li>
 </ol>
 <p>进一步调研后，我选择了 <strong>age</strong>, <strong>rclone</strong> 与 <strong>restic</strong> 作为我的跨平台加密备份与同步工具。
 这三个工具都比较活跃，stars 很高，使用的也都是比较现代的密码学算法：</p>
@@ -307,8 +310,11 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>照片、视频等其他个人数据</li>
 <li>Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。</li>
 <li>部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
-- <a href="https://www.qingcloud.com/products/objectstorage/" target="_blank" rel="noopener noreferrer">青云对象存储</a> 与 <a href="https://www.qiniu.com/prices/kodo" target="_blank" rel="noopener noreferrer">七牛云对象存储 Kodo</a>，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
-- <a href="https://help.aliyun.com/zh/oss/product-overview/billing-overview" target="_blank" rel="noopener noreferrer">阿里云 OSS</a> 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。</li>
+<ul>
+<li><a href="https://www.qingcloud.com/products/objectstorage/" target="_blank" rel="noopener noreferrer">青云对象存储</a> 与 <a href="https://www.qiniu.com/prices/kodo" target="_blank" rel="noopener noreferrer">七牛云对象存储 Kodo</a>，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。</li>
+<li><a href="https://help.aliyun.com/zh/oss/product-overview/billing-overview" target="_blank" rel="noopener noreferrer">阿里云 OSS</a> 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。</li>
+</ul>
+</li>
 </ol>
 <h2 id="八桌面电脑的数据安全" class="headerLink">
     <a href="#%e5%85%ab%e6%a1%8c%e9%9d%a2%e7%94%b5%e8%84%91%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ae%89%e5%85%a8" class="header-mark"></a>八、桌面电脑的数据安全</h2><p>我主要使用两个操作系统：macOS 与 NixOS.
@@ -361,7 +367,7 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。</p>
 </ol>
 </li>
 <li>password-store: 我的私人账号密码存储库，通过 pass 命令行工具管理，使用 GPG 加密，GPG 密钥备份被加密保存在上述 secrets 仓库中。</li>
-<li>rclone 加密的备份 U 盘：离线保存一些重要的数据。其配置文件被加密保存在 secrets 仓库中，其配置文件的解密密码被加密保存在 password-store 仓库中。</li>
+<li>rclone 加密的备份 U 盘（双副本）：离线保存一些重要的数据。其配置文件被加密保存在 secrets 仓库中，其配置文件的解密密码被加密保存在 password-store 仓库中。</li>
 </ol>
 <p>因此可以看到，我的 secrets 仓库是整个方案的核心，它包含了所有重要数据（password-store/rclone）的解密密钥。
 如果它丢失了，那么所有的数据都无法解密。</p>
@@ -381,10 +387,8 @@ Windows 也有使用，但基本没啥个人数据，可以忽略。</p>
 <li>重新生成了所有重要账号的密码，全部使用随机密码，一共改了二三十个账号。考虑到旧的 backup code 可能已经泄漏，我也重新生成了所有重要账号的 backup code.</li>
 <li>重装 NixOS，使用 LUKS2 做全盘加密，启用 Secure Boot.</li>
 <li>注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记迁移到了一个私有 Git 仓库，用 GitJournal APP 在手机上查看编辑笔记，电脑端则是用 Emacs/Neovim。用了三四天挺顺手的。</li>
-</ol>
-<ul>
 <li>比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.</li>
-</ul>
+</ol>
 <h2 id="九灾难恢复预案" class="headerLink">
     <a href="#%e4%b9%9d%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e9%a2%84%e6%a1%88" class="header-mark"></a>九、灾难恢复预案</h2><p>这里考虑我的 GPG 子密钥泄漏了、pass 密码仓库泄漏了等各种情况下的灾难恢复流程。</p>
 <p>TODO 后续再慢慢补充。</p>
