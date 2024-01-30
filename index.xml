@@ -1,4 +1,383 @@
-<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2024-01-29T00:58:57+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">NixOS 在 Lichee Pi 4A 上是如何启动的</title><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/"/><id>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</id><author><name>ryan4yin</name></author><published>2024-01-29T00:58:57+08:00</published><updated>2024-01-29T00:58:57+08:00</updated><content type="html"><![CDATA[<figure>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2024-01-30T13:48:30+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">个人数据安全不完全指南</title><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/"/><id>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</id><author><name>ryan4yin</name></author><published>2024-01-30T13:48:30+08:00</published><updated>2024-01-30T13:48:30+08:00</updated><content type="html"><![CDATA[<figure>
+          <img class="lazyload" src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" height="900" width="471"><figcaption></figcaption>
+        </figure><h2 id="零前言" class="headerLink">
+    <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>在接触电脑以来很长的一段时间里，我都没怎么在意自己的数据安全。比如说：</p>
+<ol>
+<li>长期使用的同一个没有 pssphrase 保护的 SSH 密钥（RSA 2048 位），为了方便我还把它存到了 onedrive 里，而且在各种需要访问 GitHub/Gitee 或SSH 权限的虚拟机跟 PC 上传来传去。</li>
+<li>Homelab 跟桌面 PC 都从来没开过全盘加密。</li>
+<li>在 2022 年我的 Homelab 去年坏掉了两块国产固态硬盘（阿斯加特跟光威弈 Pro 各一根），都是系统一启动就挂，没法手动磁盘格式化，走售后直接被京东换货了。因为我的数据是明文存储的，这很可能导致我的个人数据泄露&hellip;</li>
+<li>几个密码在各种站点上重复使用，其中重要账号的随机密码还是我在十多年前用 lastpass 生成的，到处用了这么多年，很难说这些密码有没有泄露（lastpass 近几年爆出的泄漏事故就不少&hellip;）</li>
+<li>GitHub, Google, Jetbrains 等账号的 Backup Code 被我明文存储到了百度云盘，中间发现百度云盘安全性太差又转存到了 OneDrive，但一直是明文存储，从来没加过密。</li>
+<li>一些银行账号之类的随机密码，因为担心遗忘，长期被我保存在一份印象笔记的笔记里，也是明文存储，仅做了些简单的内容替换，要猜出真正的密码感觉并不是很难。</li>
+</ol>
+<p>现在在 IT 行业工作了几年，从我当下的经验来看，企业后台的管理员如果真有兴趣，查看用户的数据真的是很简单的一件事，至少国内绝大部分公司的用户数据，都不会做非常严格的数据加密与权限管控。
+就算真有加密，那也很少是用户级别的，对运维人员或开发人员而言这些数据仍旧与未加密无异。
+对系统做比较大的迭代时，把小部分用户数据导入到测试环境进行测试也是挺常见的做法&hellip;</p>
+<p>总之对我而言，这些安全隐患在过去并不算大问题，毕竟我 GitHub, Google 等账号里也没啥重要数据，银行卡里也没几分钱。</p>
+<p>但随着我个人数据的积累与在 GitHub, Google 上的活动越来越多、银行卡里 Money 的增加（狗头），这些数据的价值也越来越大。
+比如说如果我的 GitHub 私钥泄漏，仓库被篡改甚至删除，以前我 GitHub 上没啥数据也没啥 stars 当然无所谓，
+但现在我已经无法忍受丢失 GitHub 两千多个 stars 的风险了。</p>
+<p>在 2022 年的时候因为对区块链的兴趣，顺便学习了一波应用密码学，了解了一些密码学的基础知识，这使我意识到我的个人数据安全已经是一个不可忽视的问题。
+因此，为了避免 Github 私钥泄漏、区块链钱包助记词泄漏、个人隐私泄漏等可能，我在 2023 年 5 月做了全面强化个人数据安全的决定，并在 0XFFFF 社区发了篇帖子征求意见——<a href="https://0xffff.one/d/1528" target="_blank" rel="noopener noreferrer">学习并强化个人的数据安全性（持续更新）</a>。</p>
+<p>现在大半年过去，我已经在个人数据安全上做了许多工作，目前算是达到了一个比较不错的状态。</p>
+<p>这篇文章记录下我做的数据调研工作、我当前的数据安全方案以及未来可能的改进方向。</p>
+<h2 id="一个人数据安全包含哪些部分" class="headerLink">
+    <a href="#%e4%b8%80%e4%b8%aa%e4%ba%ba%e6%95%b0%e6%8d%ae%e5%ae%89%e5%85%a8%e5%8c%85%e5%90%ab%e5%93%aa%e4%ba%9b%e9%83%a8%e5%88%86" class="header-mark"></a>一、个人数据安全包含哪些部分？</h2><p>数据安全大概有这些方面：</p>
+<ol>
+<li>保障数据不会泄漏——也就是加密。</li>
+<li>保障数据不会丢失——也就是备份。</li>
+</ol>
+<p>就我个人而言，我的数据安全主要考虑以下几个部分：</p>
+<ol>
+<li>SSH 密钥管理</li>
+<li>各种网站、APP 的账号密码管理</li>
+<li>灾难恢复相关的数据存储与管理
+1, 比如说 GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份等，日常都不需要用到，但非常重要，建议离线加密存储。</li>
+<li>需要在多端访问的重要个人数据</li>
+<li>比如说个人笔记、图片、视频等数据，这些数据具有私密性，但又需要在多端访问。可借助支持将数据加密存储到云端的工具来实现。</li>
+<li>个人电脑的数据安全与灾难恢复</li>
+<li>我主要使用 macOS 与 NixOS，因此主要考虑的是这两个系统的数据安全与灾难恢复。</li>
+</ol>
+<p>下面就分别就这几个部分展开讨论。</p>
+<h2 id="二是否需要使用-yubikey-等硬件密钥" class="headerLink">
+    <a href="#%e4%ba%8c%e6%98%af%e5%90%a6%e9%9c%80%e8%a6%81%e4%bd%bf%e7%94%a8-yubikey-%e7%ad%89%e7%a1%ac%e4%bb%b6%e5%af%86%e9%92%a5" class="header-mark"></a>二、是否需要使用 YubiKey 等硬件密钥？</h2><p>硬件密钥的好处是可以防止密钥泄漏，但 YubiKey 在国内无官方购买渠道，而且价格不菲，只买一个 YubiKey 的话还存在丢失的风险。</p>
+<p>另一方面其实基于现代密码学算法的软件密钥安全性对我而言是足够的，而且软件密钥的使用更加方便。
+或许在未来，我会考虑使用 <a href="https://github.com/canokeys/canokey-core" target="_blank" rel="noopener noreferrer">canokey-core</a>、<a href="https://github.com/google/OpenSK" target="_blank" rel="noopener noreferrer">OpenSK</a>、<a href="https://github.com/solokeys/solo1" target="_blank" rel="noopener noreferrer">solokey</a> 等开源方案 DIY 几个硬件密钥，但目前我并不觉得有这必要。</p>
+<h2 id="三ssh-密钥管理" class="headerLink">
+    <a href="#%e4%b8%89ssh-%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86" class="header-mark"></a>三、SSH 密钥管理</h2><h3 id="21-ssh-密钥的生成" class="headerLink">
+    <a href="#21-ssh-%e5%af%86%e9%92%a5%e7%9a%84%e7%94%9f%e6%88%90" class="header-mark"></a>2.1 SSH 密钥的生成</h3><p>我们一般都是直接使用 <code>ssh-keygen</code> 命令生成 SSH 密钥对，OpenSSH 目前主要支持两种密钥算法：</p>
+<ol>
+<li>RSA: 目前你在网上看到的大部分教程都是使用的 RSA 2048 位密钥，但其破解风险在不断提升，目前仅推荐使用 3072 位及以上的 RSA 密钥。</li>
+<li>ED25519: 这是密码学家 Dan Bernstein 设计的一种新的签名算法，其安全性与 RSA 3072 位密钥相当，但其签名速度更快，且密钥更短，因此目前推荐使用 ED25519 密钥。</li>
+</ol>
+<h3 id="22-ssh-密钥的安全性" class="headerLink">
+    <a href="#22-ssh-%e5%af%86%e9%92%a5%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7" class="header-mark"></a>2.2 SSH 密钥的安全性</h3><p>RSA 跟 Curve25519 都是被广泛使用的密码学算法，其安全性都是经过严格验证的，因此我们可以放心使用。
+但为了在密钥泄漏的情况下，能够尽可能减少损失，强烈建议给个人使用的密钥添加 passphrase 保护。</p>
+<p>那这个 passphrase 保护到底有多安全呢？</p>
+<p>有一些密码学知识的人应该知道，pssphrase 保护的实现原理通常是：通过 KDF 算法将用户输入的 passphrase 字符串转换成一个二进制对称密钥，然后再用这个密钥加解密具体的数据。</p>
+<p>因此，使用 pssphrase 加密保护的 SSH Key 的安全性，取决于：</p>
+<ol>
+<li>passphrase 的复杂度，这对应其长度、字符集、是否包含特殊字符等。这由我们自己控制。</li>
+<li>所使用的 KDF 算法的安全性。这由 OpenSSH 的实现决定。</li>
+</ol>
+<p>那么，OpenSSH 的 passphrase 是如何实现的？是否足够安全？</p>
+<p>我首先 Google 了下，找到一些相关的文章：</p>
+<ul>
+<li><a href="https://news.ycombinator.com/item?id=17682946" target="_blank" rel="noopener noreferrer">(2018)The default OpenSSH key encryption is worse than plaintext</a>: The default SSH RSA key format uses straight MD5 to derive the AES key used to encrypt your RSA private key, which means it&rsquo;s lightning fast to crack</li>
+<li><a href="https://serverfault.com/questions/1056814/password-security-of-encrypted-ssh-private-key-how-to-read-round-number-or-cost" target="_blank" rel="noopener noreferrer">(2021)Password security of encrypted SSH private key: How to read round number or costfactor of bcrypt</a></li>
+</ul>
+<p>在 <a href="https://www.openssh.com/releasenotes.html" target="_blank" rel="noopener noreferrer">OpenSSH release notes</a> 中搜索 passphrase 跟 kdf 两个关键字，找到些关键信息如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">OpenSSH 9.4/9.4p1 (2023-08-10)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> * ssh-keygen(1): increase the default work factor (rounds) for the
+</span></span><span class="line"><span class="cl">   bcrypt KDF used to derive symmetric encryption keys for passphrase
+</span></span><span class="line"><span class="cl">   protected key files by 50%.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------------------------
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OpenSSH 6.5/6.5p1 (2014-01-30)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> * Add a new private key format that uses a bcrypt KDF to better
+</span></span><span class="line"><span class="cl">   protect keys at rest. This format is used unconditionally for
+</span></span><span class="line"><span class="cl">   Ed25519 keys, but may be requested when generating or saving
+</span></span><span class="line"><span class="cl">   existing keys of other types via the -o ssh-keygen(1) option.
+</span></span><span class="line"><span class="cl">   We intend to make the new format the default in the near future.
+</span></span><span class="line"><span class="cl">   Details of the new format are in the PROTOCOL.key file.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>所以从 2014 年发布的 OpenSSH 6.5 开始，ed25519 密钥的 passphrase 才是使用 bcrypt KDF 生成的。
+而对于其他类型的密钥，仍旧长期使用基于 MD5 hash 的密钥格式，没啥安全性可言。</p>
+<p>即使 2023-08-10 发布的 9.4 版本增加了默认的 bcrypt KDF rounds 数量，它的安全性仍然很值得怀疑。
+bcrypt 本身的安全性就越来越差，现代化的加密工具基本都已经升级到了 scrypt 甚至 Argon2.
+因此要想提升安全性，最好是能更换更现代的 KDF 算法，或者至少增加 bcrypt KDF 的 rounds 数量。</p>
+<p>我进一步看了 <code>man ssh-keygen</code> 的文档，没找到任何修改 KDF 算法的参数，不过能通过 <code>-a</code> 参数来修改 KDF 的 rounds 数量，
+OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
+<p>考虑到大部分人都使用默认参数生成 Key，而且绝大部分用户都没有密码学基础，大概率不知道 KDF、Rounds 是什么意思，我们再了解下 <code>ssh-keygen</code> 默认参数。
+在 relase note 中我进一步找到这个：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">OpenSSH 9.5/9.5p1 (2023-10-04)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Potentially incompatible changes
+</span></span><span class="line"><span class="cl">--------------------------------
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> * ssh-keygen(1): generate Ed25519 keys by default. Ed25519 public keys
+</span></span><span class="line"><span class="cl">   are very convenient due to their small size. Ed25519 keys are
+</span></span><span class="line"><span class="cl">   specified in RFC 8709 and OpenSSH has supported them since version 6.5
+</span></span><span class="line"><span class="cl">   (January 2014).
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也就是说从 2023-10-04 发布的 9.5 开始，OpenSSH 才默认使用 ED25519，所以可以推断出，目前绝大部分用户都是使用的 RSA 密钥，且其 passphrase 的安全性很差，不加 passphrase 就是裸奔，加了也很容易被破解。
+如果你使用的也这种比较老的密钥类型，那千万别觉得自己加了 passphrase 保护就很安全，这完全是错觉（
+即使是使用最新的 ssh-keygen 生成的 ED25519 密钥，其默认也是用的 bcrypt 16 rounds 生成加密密钥，其安全性在我看来也是不够的。</p>
+<p>总结下，在不考虑其他硬件密钥/SSH CA 的情况下，最佳的 SSH Key 生成方式应该是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen -t ed25519 -a <span class="m">256</span> -C <span class="s2">&#34;xxx@xxx&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>rounds 的值根据你本地的 CPU 性能来定，我在 Macbook Pro M2 上测了下，
+64 rounds 大概是 0.5s，128 rounds 大概需要 1s，256 rounds 大概 2s，用时与 rounds 值是线性关系。</p>
+<p>考虑到我的个人电脑性能都还挺不错，而且只需要在每次重启电脑后通过 <code>ssh-add ~/.ssh/xxx</code> 解锁一次，后续就一直使用内存中的密钥了，一两秒的时间还是可以接受的，因此我将当前使用的所有 SSH Key 都使用上述参数重新生成了一遍。</p>
+<h3 id="23-ssh-密钥的分类管理" class="headerLink">
+    <a href="#23-ssh-%e5%af%86%e9%92%a5%e7%9a%84%e5%88%86%e7%b1%bb%e7%ae%a1%e7%90%86" class="header-mark"></a>2.3 SSH 密钥的分类管理</h3><p>在所有机器上使用同一个 SSH 密钥，这是我过去的做法，但这样做有几个问题：</p>
+<ol>
+<li>一旦某台机器的密钥泄漏，那么就需要重新生成并替换所有机器上的密钥，这很麻烦。</li>
+<li>密钥需要通过各种方式传输到各个机器上，这也存在泄漏的风险。</li>
+</ol>
+<p>因此，我现在的做法是：</p>
+<ol>
+<li>对所有桌面电脑跟笔记本，都在其本地生成一个专用的 SSH 密钥配置到 GitHub 跟常用的服务器上。这个 SSH 私钥永远不会离开这台机器。</li>
+<li>对于一些相对不重要的 Homelab 服务器，额外生成一个专用的 SSH 密钥，配置到这些服务器上。在一些跳板机跟测试机上会配置这个密钥方便测试与登录到其他机器。</li>
+<li>上述所有 SSH 密钥都添加了 passphrase 保护，且使用了 bcrypt 256 rounds.</li>
+</ol>
+<p>我通过这种方式缩小了风险范围，即使某台机器的密钥泄漏，也只需要重新生成并替换这台机器上的密钥即可。</p>
+<h3 id="24-ssh-ca---更安全合理的-ssh-密钥管理方案" class="headerLink">
+    <a href="#24-ssh-ca---%e6%9b%b4%e5%ae%89%e5%85%a8%e5%90%88%e7%90%86%e7%9a%84-ssh-%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86%e6%96%b9%e6%a1%88" class="header-mark"></a>2.4 SSH CA - 更安全合理的 SSH 密钥管理方案？</h3><p>搜到些资料：</p>
+<ul>
+<li><a href="https://www.ruanyifeng.com/blog/2020/07/ssh-certificate.html" target="_blank" rel="noopener noreferrer">SSH 证书登录教程</a></li>
+</ul>
+<p>TODO 待研究。</p>
+<h2 id="四个人的账号密码管理" class="headerLink">
+    <a href="#%e5%9b%9b%e4%b8%aa%e4%ba%ba%e7%9a%84%e8%b4%a6%e5%8f%b7%e5%af%86%e7%a0%81%e7%ae%a1%e7%90%86" class="header-mark"></a>四、个人的账号密码管理</h2><p>我曾经大量使用了 Chrome/Firefox 自带的密码存储功能，但用到现在其实也发现了它们的许多弊端。
+有同事推崇 1Password 的使用体验，它的自动填充跟同站点的多密码管理确实做得非常优秀，但一是要收费，二是它是商业的在线方案，我不太喜欢。</p>
+<p>作为开源爱好者，我最近找到了一个非常适合我自己的方案：<a href="https://www.passwordstore.org/" target="_blank" rel="noopener noreferrer"><strong>password-store</strong></a></p>
+<p>这套方案使用 gpg 加密账号密码，每个文件就是一个账号密码，通过文件树来组织与匹配账号密码与 APP/站点的对应关系，并且生态完善，对 firefox/chrome/android/ios 的支持都挺好。</p>
+<p>缺点是用 GPG 加密，上手有点难度，但对咱来说完全可以接受。</p>
+<p>我在最近使用 pass-import 从 firefox/chrome 中导入了我当前所有的账号密码，并对所有的重要账号密码进行了一次全面的更新，一共改了二三十个账号，全部采用了随机密码。</p>
+<p>当前的存储同步与多端使用方式：</p>
+<ol>
+<li>pass 的加密数据使用 GitHub 私有仓库存储，pass 原生支持基于 Git 的存储方案。
+<ol>
+<li>因为数据全都是使用 ECC Curve 25519 GPG 加密的，即使仓库内容泄漏，数据的安全性仍然有保障。</li>
+</ol>
+</li>
+<li>在安卓与电脑浏览器中，分别使用这些客户端来读写 pass 中的密码：</li>
+<li>Android: <a href="https://github.com/android-password-store/Android-Password-Store" target="_blank" rel="noopener noreferrer">https://github.com/android-password-store/Android-Password-Store</a></li>
+<li>Brosers(Chrome/Firefox): <a href="https://github.com/browserpass/browserpass-extension" target="_blank" rel="noopener noreferrer">https://github.com/browserpass/browserpass-extension</a></li>
+</ol>
+<p>其他相关资料：</p>
+<ul>
+<li><a href="https://github.com/tijn/awesome-password-store" target="_blank" rel="noopener noreferrer">awesome-password-store</a></li>
+<li><a href="https://github.com/gopasspw/gopass" target="_blank" rel="noopener noreferrer">https://github.com/gopasspw/gopass</a>: reimplement in go, with more features.</li>
+</ul>
+<h3 id="31-pass-使用的-gpg-够安全么" class="headerLink">
+    <a href="#31-pass-%e4%bd%bf%e7%94%a8%e7%9a%84-gpg-%e5%a4%9f%e5%ae%89%e5%85%a8%e4%b9%88" class="header-mark"></a>3.1 pass 使用的 GPG 够安全么？</h3><p>GnuPG 是一个很有历史，而且使用广泛的加密工具，但它的安全性如何呢？</p>
+<p>我找到些相关文档：</p>
+<ul>
+<li><a href="https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/" target="_blank" rel="noopener noreferrer">2021年，用更现代的方法使用PGP（上）</a></li>
+<li><a href="https://nullprogram.com/blog/2019/07/10/" target="_blank" rel="noopener noreferrer">Predictable, Passphrase-Derived PGP Keys</a></li>
+<li><a href="https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/" target="_blank" rel="noopener noreferrer">OpenPGP - The almost perfect key pair</a></li>
+</ul>
+<p>简单总结下，GnuPG 的每个 secret key 都是随机生成的，互相之间没有关联（即不像区块链钱包那样具有确定性）。
+生成出的 key 被使用 passphrase 加密保存，每次使用时都需要输入 passphrase 解密。</p>
+<p>那么还是之前在调研 OpenSSH 时我们提到的问题：它使用的 KDF 算法与参数是否足够安全？</p>
+<p>OpenPGP 标准定义了 <a href="https://datatracker.ietf.org/doc/html/rfc4880#section-3.7" target="_blank" rel="noopener noreferrer">String-to-Key (S2K)</a>
+算法用于从 passphrase 生成对称加密密钥，GnuPG 遵循该规范，并且提供了相关的参数配置选项，
+相关参数的文档 <a href="https://gnupg.org/documentation/manuals/gnupg/OpenPGP-Options.html#OpenPGP-Options" target="_blank" rel="noopener noreferrer">OpenPGP protocol specific options</a> 内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">--s2k-cipher-algo name
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Use name as the cipher algorithm for symmetric encryption with a passphrase if --personal-cipher-preferences and --cipher-algo are not given. The default is AES-128.
+</span></span><span class="line"><span class="cl">--s2k-digest-algo name
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Use name as the digest algorithm used to mangle the passphrases for symmetric encryption. The default is SHA-1.
+</span></span><span class="line"><span class="cl">--s2k-mode n
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Selects how passphrases for symmetric encryption are mangled. If n is 0 a plain passphrase (which is in general not recommended) will be used, a 1 adds a salt (which should not be used) to the passphrase and a 3 (the default) iterates the whole process a number of times (see --s2k-count).
+</span></span><span class="line"><span class="cl">--s2k-count n
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Specify how many times the passphrases mangling for symmetric encryption is repeated. This value may range between 1024 and 65011712 inclusive. The default is inquired from gpg-agent. Note that not all values in the 1024-65011712 range are legal and if an illegal value is selected, GnuPG will round up to the nearest legal value. This option is only meaningful if --s2k-mode is set to the default of 3.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>默认还使用的是 AES-128 跟 SHA-1，这俩都已经不太安全了，尤其是 SHA-1，已经被证明存在安全问题。
+因此，使用默认参数生成的 GPG 密钥，其安全性是不够的。</p>
+<p>为了获得最佳安全性，我们需要：</p>
+<ol>
+<li>使用如下参数生成 GPG 密钥：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo AES256 ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>加密、签名、认证都使用不同的密钥，每个密钥只用于特定的场景，这样即使某个密钥泄漏，也不会影响其他场景的安全性。</li>
+</ol>
+<p>为了在全局使用这些参数，可以将它们添加到你的 <code>~/.gnupg/gpg.conf</code> 配置文件中。</p>
+<p>详见我的 gpg 配置 <a href="https://github.com/ryan4yin/nix-config/tree/90cd503/home/base/desktop/gpg" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/gpg</a></p>
+<h2 id="五跨平台的加密备份同步工具的选择" class="headerLink">
+    <a href="#%e4%ba%94%e8%b7%a8%e5%b9%b3%e5%8f%b0%e7%9a%84%e5%8a%a0%e5%af%86%e5%a4%87%e4%bb%bd%e5%90%8c%e6%ad%a5%e5%b7%a5%e5%85%b7%e7%9a%84%e9%80%89%e6%8b%a9" class="header-mark"></a>五、跨平台的加密备份同步工具的选择</h2><p>我日常同时在使用 macOS 与 NixOS，因此不论是需要离线存储的灾难恢复数据，还是需要在多端访问的个人数据，都需要一个跨平台的加密备份与同步工具。</p>
+<p>前面提到的 pass 使用 GnuPG 进行文件级别的加密，但在很多场景下这不太适用，而且 GPG 本身也太重了，还一堆历史遗留问题，我不太喜欢。</p>
+<p>为了其他数据备份与同步的需要，我需要一个跨平台的加密工具，目前调研到有如下这些：</p>
+<ol>
+<li>文件级别的加密
+<ol>
+<li>这个有很多现成的工具，比如 <strong>age</strong>/gpg/<strong>sops</strong>, 都挺不错，但是文件级别的加密用起来繁琐一些，需要手动加解密。大量文件的情况下可能还得先打包成 tarball 再加密，解密后再解包，比较麻烦。</li>
+</ol>
+</li>
+<li>全盘加密，或者支持通过 FUSE 模拟文件系统
+<ol>
+<li>首先 LUKS 就不用考虑了，它基本只在 Linux 上能用。</li>
+<li>跨平台且比较活跃的项目中，我找到了 <strong>rclone</strong> 与 <strong>restic</strong> 这两个项目，都支持云同步，各有优缺点。</li>
+<li>restic 相对 rclone 的优势，主要是天然支持增量 snapshots 的功能，可以保存备份的历史快照，并设置灵活的历史快照保存策略。这对可能有回滚需求的数据而言是很重要的。比如说 PVE 虚拟机快照的备份，有了 restic 我们就不再需要依赖 PVE 自身孱弱的快照保留功能，全交给 restic 实现就行。</li>
+</ol>
+</li>
+<li>多端加密同步</li>
+<li>上面提到的 rclone 与 restic 都支持各种云存储，因此都是不错的多端加密同步工具。</li>
+</ol>
+<p>进一步调研后，我选择了 <strong>age</strong>, <strong>rclone</strong> 与 <strong>restic</strong> 作为我的跨平台加密备份与同步工具。
+这三个工具都比较活跃，stars 很高，使用的也都是比较现代的密码学算法：</p>
+<ol>
+<li><a href="https://age-encryption.org/v1" target="_blank" rel="noopener noreferrer">age</a>: 对于对称加密的场景，使用 ChaCha20-Poly1305 AEAD 加密方案，对称加密密钥使用 scrypt KDF 算法生成。</li>
+<li><a href="https://rclone.org/crypt/" target="_blank" rel="noopener noreferrer">rclone</a>: 使用基于 XSalsa20-Poly1305 的 AEAD 加密方案，key 通过 scrypt KDF 算法生成，并且默认会加盐。</li>
+<li><a href="https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac" target="_blank" rel="noopener noreferrer">restic</a>: 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。</li>
+</ol>
+<p>对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
+详见 <a href="https://github.com/ryan4yin/nix-config/tree/27f1d54/secrets" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/secrets</a>.</p>
+<h2 id="六灾难恢复相关的数据存储与管理" class="headerLink">
+    <a href="#%e5%85%ad%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e7%9b%b8%e5%85%b3%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%82%a8%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>六、灾难恢复相关的数据存储与管理</h2><p>相关数据包括：GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份、PGP 主密钥与吊销证书等等。</p>
+<p>这些数据日常都不需要用到，但在账号或两步验证设备丢失时就非要使用到其中的数据才能找回账号或吊销某个证书，是非常重要的数据。</p>
+<p>我目前的策略是：使用 rclone + 1024bits 随机密码加密存储到两个 U 盘中（双副本），放在不同的地方，并且每隔半年到一年检查一遍数据。</p>
+<p>对应的 rclone 解密配置本身也设置了比较强的 passphrase 保护，并通过我的 secrets 私有 Git 仓库多端加密同步。</p>
+<h2 id="七需要在多端访问的重要个人数据" class="headerLink">
+    <a href="#%e4%b8%83%e9%9c%80%e8%a6%81%e5%9c%a8%e5%a4%9a%e7%ab%af%e8%ae%bf%e9%97%ae%e7%9a%84%e9%87%8d%e8%a6%81%e4%b8%aa%e4%ba%ba%e6%95%b0%e6%8d%ae" class="header-mark"></a>七、需要在多端访问的重要个人数据</h2><p>相关数据包括：个人笔记、重要的照片、录音、视频、等等。</p>
+<p>因为日常就需要在多端访问，因此显然不能离线存储。</p>
+<p>我的方案如下：</p>
+<ol>
+<li>个人笔记：使用 <a href="https://github.com/GitJournal/GitJournal" target="_blank" rel="noopener noreferrer">GitJournal</a> APP，将笔记存储在 GitHub 私有仓库中，并通过该仓库做多端同步。</li>
+<li>遗憾的是目前在 Android 平台上并未找到很合适的基于 Git 的加密笔记 APP，GitJournal 本身也不支持加密，因此我的个人笔记目前是明文存储的。</li>
+<li>照片、视频等其他个人数据</li>
+<li>Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。</li>
+<li>部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
+- <a href="https://www.qingcloud.com/products/objectstorage/" target="_blank" rel="noopener noreferrer">青云对象存储</a> 与 <a href="https://www.qiniu.com/prices/kodo" target="_blank" rel="noopener noreferrer">七牛云对象存储 Kodo</a>，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
+- <a href="https://help.aliyun.com/zh/oss/product-overview/billing-overview" target="_blank" rel="noopener noreferrer">阿里云 OSS</a> 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。</li>
+</ol>
+<h2 id="八桌面电脑的数据安全" class="headerLink">
+    <a href="#%e5%85%ab%e6%a1%8c%e9%9d%a2%e7%94%b5%e8%84%91%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ae%89%e5%85%a8" class="header-mark"></a>八、桌面电脑的数据安全</h2><p>我主要使用两个操作系统：macOS 与 NixOS.
+Windows 也有使用，但基本没啥个人数据，可以忽略。</p>
+<p>对于 NixOS，我当前的方案如下：</p>
+<ul>
+<li>桌面主机启用 LUKS2 全盘加密 + Secure Boot，在系统启动阶段需要输入 passphrase 解密 NixOS 系统盘才能正常进入系统。
+<ul>
+<li>LUKS2 的 passphrase 为一个比较长的密码学随机字符串，包含了特殊字符、数字、大小写字母。</li>
+<li>LUKS2 的所有安全设置全拉到能接受的最高（比较重要的是 <code>--iter-time</code>，计算出 unlock key 的用时，默认 2s，安全起见咱设置成了 5s）
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cryptsetup --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-urandom --verify-passphrase luksFormat device
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+<li>重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地对应的密钥自动解密。
+<ul>
+<li>也就是说要在一台新电脑上成功部署我的 nix-config 配置，需要的准备流程：
+<ul>
+<li>本地生成一个新的 ssh key，将公钥配置到 GitHub，并 <code>ssh-add</code> 这个新的私钥，使其能够访问到我的私有 secrets 仓库。</li>
+<li>将新主机的系统公钥 <code>/etc/ssh/ssh_host_ed25519_key.pub</code> 发送到一台旧的可解密 secrets 仓库数据的主机上。如果该文件不存在则先用 <code>sudo ssh-keygen -A</code> 生成。</li>
+<li>在旧主机上，将收到的新主机公钥添加到 secrets 仓库的 secrets.nix 配置文件中，并使用 agenix 命令 rekey 所有 secrets 数据，然后 commit &amp; push。</li>
+<li>现在新主机就能够通过 <code>nixos-rebuild switch</code> 或 <code>darwin-rebuild switch</code> 成功部署我的 nix-config 了，agenix 会自动使用新主机的系统私钥 <code>/etc/ssh/ssh_host_ed25519_key</code> 解密 secrets 仓库中的数据并完成部署工作。</li>
+</ul>
+</li>
+<li>这份 secrets 配置在 macOS 跟 NixOS 上通用，也与 CPU 架构无关，agenix 在这两个系统上都能正常工作。</li>
+</ul>
+</li>
+</ul>
+<p>对于 macOS，它本身的磁盘安全我感觉就已经做得很 OK 了，而且它能改的东西也比较有限。我的安全设置如下：</p>
+<ul>
+<li>启用 macOS 的全盘加密功能</li>
+<li>常用的 secrets 的部署与使用方式，与前面 NixOS 的描述完全一致</li>
+</ul>
+<p>此外还有我 Homelab 的一些服务器、虚拟机，为了方便在所有主机上 ssh 登录，都统一使用了一个 Homelab 专用私钥，保存在我的 secrets 仓库中，在部署我的 nix-config 时，agenix 会将其解密出来并存放到特定位置。
+我的 <code>~/.ssh/config</code> 会指定使用该固定位置的密钥登录 Homelab 主机。</p>
+<h2 id="七总结下我的数据存在了哪些地方" class="headerLink">
+    <a href="#%e4%b8%83%e6%80%bb%e7%bb%93%e4%b8%8b%e6%88%91%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%9c%a8%e4%ba%86%e5%93%aa%e4%ba%9b%e5%9c%b0%e6%96%b9" class="header-mark"></a>七、总结下我的数据存在了哪些地方</h2><ol>
+<li>secrets 私有仓库: 它会被我的 nix-config 自动拉取并部署到所有主力电脑上，包含了 homelab ssh key, GPG subkey, 以及其他一些重要的 secrets.
+<ol>
+<li>它通过我所有桌面电脑的 <code>/etc/ssh/ssh_host_ed25519_key</code> 公钥加密，在部署时自动使用对应的私钥解密。</li>
+<li>此外该仓库还添加了一个灾难恢复用的公钥，确保在我所有桌面电脑都丢失的极端情况下，仍可通过对应的灾难恢复私钥解密此仓库的数据。该私钥在使用 age 加密后（注：未使用 rclone 加密），与我其他的灾难恢复数据保存在一起。</li>
+</ol>
+</li>
+<li>password-store: 我的私人账号密码存储库，通过 pass 命令行工具管理，使用 GPG 加密，GPG 密钥备份被加密保存在上述 secrets 仓库中。</li>
+<li>rclone 加密的备份 U 盘：离线保存一些重要的数据。其配置文件被加密保存在 secrets 仓库中，其配置文件的解密密码被加密保存在 password-store 仓库中。</li>
+</ol>
+<p>因此可以看到，我的 secrets 仓库是整个方案的核心，它包含了所有重要数据（password-store/rclone）的解密密钥。
+如果它丢失了，那么所有的数据都无法解密。</p>
+<p>但好在 Git 仓库本身是分布式的，我所有的桌面电脑上都有对应的完整备份，我的灾难恢复存储中也会定期备份一份 secrets/password-store 两个仓库的数据过去以避免丢失。</p>
+<p>另外需要注意的是，为了避免循环依赖，secrets 与 password-store 这两个仓库的备份不应该使用 rclone 再次加密，而是直接使用 age 对称加密。
+这样只要我还记得 age 的解密密码、gpg 密钥的 passphrase 等少数几个密码，就能顺着整条链路解密出所有的数据。</p>
+<h2 id="七这套方案下需要记忆几个密码" class="headerLink">
+    <a href="#%e4%b8%83%e8%bf%99%e5%a5%97%e6%96%b9%e6%a1%88%e4%b8%8b%e9%9c%80%e8%a6%81%e8%ae%b0%e5%bf%86%e5%87%a0%e4%b8%aa%e5%af%86%e7%a0%81" class="header-mark"></a>七、这套方案下需要记忆几个密码？</h2><p>绝大部分密码都通过 pass 加密保存与多端同步了，不需要额外记忆。
+再通过一些合理的密码复用手段，可以将需要记忆的密码数量降到 3 - 5 个，并且确保日常都会输入，避免遗忘。</p>
+<p>此外为了方便记忆，可以专门编些小故事来记忆它们，hint 中也能加上故事中的一些关键字。
+毕竟人类擅长记忆故事，但不擅长记忆随机字符。</p>
+<h2 id="八灾难恢复预案" class="headerLink">
+    <a href="#%e5%85%ab%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e9%a2%84%e6%a1%88" class="header-mark"></a>八、灾难恢复预案</h2><p>这里考虑我的 GPG 子密钥泄漏了、pass 密码仓库泄漏了等各种情况下的灾难恢复流程。</p>
+<p>TODO</p>
+<h2 id="九未来可能的改进方向" class="headerLink">
+    <a href="#%e4%b9%9d%e6%9c%aa%e6%9d%a5%e5%8f%af%e8%83%bd%e7%9a%84%e6%94%b9%e8%bf%9b%e6%96%b9%e5%90%91" class="header-mark"></a>九、未来可能的改进方向</h2><p>目前我的主要个人数据基本都已经通过上述方案进行了安全管理。
+但还有这些方面可以进一步改进：</p>
+<ul>
+<li>我的 Homelab 目前仍未考虑安全性，需要做安全改造，考虑使用 All in NixOS 的声明式配置管理方案。</li>
+<li>手机端的照片视频虽然已经在上面设计好了备份同步方案，但仍未实施。考虑使用 roundsync 加密备份到云端，实现多端访问。</li>
+</ul>
+]]></content></entry><entry><title type="html">NixOS 在 Lichee Pi 4A 上是如何启动的</title><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/"/><id>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</id><author><name>ryan4yin</name></author><published>2024-01-29T00:58:57+08:00</published><updated>2024-01-29T00:58:57+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/how-nixos-start-on-licheepi4a/lp4a-pinout-debuglog-1.webp" height="4096" width="3072"><figcaption></figcaption>
         </figure><blockquote>
 <p>文章是 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要整理发布下&hellip;所以注意文章中的时间线是 2023 年 8 月。</p>
@@ -5409,378 +5788,8 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 </ul>
 <h2 id="最后简单总结下" class="headerLink">
     <a href="#%e6%9c%80%e5%90%8e%e7%ae%80%e5%8d%95%e6%80%bb%e7%bb%93%e4%b8%8b" class="header-mark"></a>最后简单总结下</h2><p>上面这些都学了一遍的话，业余玩玩硬件应该就很够用了，期待我完成这个学习路线的那一天&hellip;</p>
-]]></content></entry><entry><title type="html">2022 年年终总结</title><link href="https://thiscute.world/posts/2022-summary/"/><id>https://thiscute.world/posts/2022-summary/</id><author><name>ryan4yin</name></author><published>2023-01-02T18:00:45+08:00</published><updated>2023-01-02T18:00:45+08:00</updated><content type="html"><![CDATA[<figure>
-          <img class="lazyload" src="/posts/2022-summary/github-profile-2022-ryan4yin.webp" height="1772" width="882"><figcaption></figcaption>
-        </figure><h2 id="闲言碎语" class="headerLink">
-    <a href="#%e9%97%b2%e8%a8%80%e7%a2%8e%e8%af%ad" class="header-mark"></a>闲言碎语</h2><p>是的又过去一年，又到了一年一度的传统节目——年终总结时间。</p>
-<h2 id="2022-年流水账" class="headerLink">
-    <a href="#2022-%e5%b9%b4%e6%b5%81%e6%b0%b4%e8%b4%a6" class="header-mark"></a>2022 年流水账</h2><p>先简单过一下我 2022 年的流水账（有记录一个 <code>/history</code>，回顾起来就是方便）：</p>
-<ul>
-<li>1 月
-<ul>
-<li>购入 Synthesizer V + 青溯 AI 声库，简单调了几首歌试试，效果非常棒。然后就一直放了一年没碰它&hellip;还试用了免费的 ACE 虚拟歌姬，合成效果确实很强，跟收费的 Synthesizer V 有的一拼。</li>
-<li>在家过春节，给家里二楼装了空调、加湿器跟地垫。但是没买地暖垫，导致开了空调后地上的垫子冰凉。后面补买了地暖垫但是已经要上班了没体验上。</li>
-</ul>
-</li>
-<li>2 月跟 3 月
-<ul>
-<li>想学下区块链技术，结果发现课程一开始就讲加密哈希函数的基本性质，就决定先搞一波密码学，结果就是输出了一个<a href="https://thiscute.world/posts/practical-cryptography-basics-1/" target="_blank" rel="noopener noreferrer">《写给开发人员的实用密码学》系列文章</a>，内容大部分是翻译的，少部分是我自己补充。</li>
-<li>主要工作：跟推荐系统大佬一起将服务从 HTTP 切换到 gRPC，效果立竿见影，服务流量下降 50% ~ 60%，延迟下降 30% ~ 50%。</li>
-</ul>
-</li>
-<li>4 月份
-<ul>
-<li>读完了 <a href="https://github.com/ethereumbook/ethereumbook" target="_blank" rel="noopener noreferrer">Mastering Ethereum</a>，对以太坊有了基本的了解。</li>
-<li>读了《Go 程序设计语言（英文版）》
-<ul>
-<li><figure><img
-        
-        loading="lazy"
-        src="/images/now/the-go-programming-language.webp"
-        srcset="/images/now/the-go-programming-language.webp, /images/now/the-go-programming-language.webp 1.5x, /images/now/the-go-programming-language.webp 2x"
-        sizes="auto"
-        alt="/images/now/the-go-programming-language.webp"
-        title="/images/now/the-go-programming-language.webp" ><figcaption class="image-caption">Go 程序设计语言（英文版） 2022-08-19 补图</figcaption>
-    </figure></li>
-</ul>
-</li>
-<li>很高兴通过了职级晋升，不再是 SRE 萌新了。</li>
-<li>主要工作：使用 <a href="https://github.com/aws/karpenter" target="_blank" rel="noopener noreferrer">aws/karpenter</a> 实现离线计算集群的弹性扩缩容，省了一波成本。</li>
-</ul>
-</li>
-<li>5 月份
-<ul>
-<li>主要是学完了《深入浅出 Kubernetes》这个极客时间专栏</li>
-<li>通过《分布式协议与算法实战》等相关资料简单了解了下分布式共识算法的原理，记录了些笔记，8 月份的时候把笔记整理输出为了一篇博客 <a href="https://thiscute.world/posts/consistency-and-consensus-algorithm/" target="_blank" rel="noopener noreferrer">分布式系统的一致性问题与共识算法</a></li>
-<li>还读了许多社区的区块链相关资料，包括但不限于 <a href="https://www.zhihu.com/special/1452635344142909440" target="_blank" rel="noopener noreferrer">Web 3.0：穿越十年的讨论 - 知乎</a>、<a href="https://guoyu.mirror.xyz/RD-xkpoxasAU7x5MIJmiCX4gll3Cs0pAd5iM258S1Ek" target="_blank" rel="noopener noreferrer">《Web3 DApp 最佳编程实践指南》</a>、<a href="https://github.com/dcbuild3r/blockchain-development-guide" target="_blank" rel="noopener noreferrer">dcbuild3r/blockchain-development-guide</a></li>
-<li>因为 AI 发展迅猛，来了三分钟兴趣学了一点 <a href="https://github.com/d2l-ai/d2l-zh" target="_blank" rel="noopener noreferrer">动手学深度学习 - Pytorch 版</a>，但是进度条走了不到 15% 就不了了之了。</li>
-<li>主要工作：研究跨云应用部署方案与跨云 kubernetes 网络方案，如 karmada/kubevela/istio，以及 L4/L7 层的开源/商业网关方案</li>
-</ul>
-</li>
-<li>6 月份
-<ul>
-<li>读完了《在生命的尽头拥抱你-临终关怀医生手记》</li>
-<li>读了一点买的新书：《语言学的邀请》跟《Intimate Relationship》</li>
-</ul>
-</li>
-<li>7 月份
-<ul>
-<li>主要工作：确定并实施网关架构优化的初步方案，使用 Go 语言写了一个 Nginx Gateway 控制器，迁移流量到新容器化网关省了一波成本。</li>
-</ul>
-</li>
-<li>8 月
-<ul>
-<li>读完了《在峡江的转弯处 - 陈行甲人生笔记》
-<ul>
-<li><figure><img
-        
-        loading="lazy"
-        src="/images/now/life-notes-of-chenxingjia.webp"
-        srcset="/images/now/life-notes-of-chenxingjia.webp, /images/now/life-notes-of-chenxingjia.webp 1.5x, /images/now/life-notes-of-chenxingjia.webp 2x"
-        sizes="auto"
-        alt="/images/now/life-notes-of-chenxingjia.webp"
-        title="/images/now/life-notes-of-chenxingjia.webp" ><figcaption class="image-caption">陈行甲人生笔记</figcaption>
-    </figure></li>
-</ul>
-</li>
-<li>延续上个月对 Linux 系统的兴趣，快速过了一遍 The ANSI C Programming Language 以熟悉 C 的语法，之后开始阅读 <a href="https://man7.org/tlpi/" target="_blank" rel="noopener noreferrer">Linux/Unix 系统编程手册（上册）</a>
-<ul>
-<li>写了一个小项目 <a href="https://github.com/ryan4yin/video2ascii-c" target="_blank" rel="noopener noreferrer">video2ascii-c</a> 练手 C 语言。</li>
-<li><figure><img
-        
-        loading="lazy"
-        src="/images/now/the-asni-c-programming-language.webp"
-        srcset="/images/now/the-asni-c-programming-language.webp, /images/now/the-asni-c-programming-language.webp 1.5x, /images/now/the-asni-c-programming-language.webp 2x"
-        sizes="auto"
-        alt="/images/now/the-asni-c-programming-language.webp"
-        title="/images/now/the-asni-c-programming-language.webp" ><figcaption class="image-caption">The ANSI C Programming Language</figcaption>
-    </figure></li>
-</ul>
-</li>
-<li>因为今年搞网关 APISIX/Nginx 接触比较多，看了一点极客时间《OpenResty 从入门到实战》但是因为兴趣并不强烈，又不了了之了。</li>
-<li>主要工作：
-<ul>
-<li>搞网关优化省了一波成本，但是期间也搞出一个严重故障&hellip;</li>
-<li>承接了一个数据上报网关的需求，需要在网关层支持一些稍微复杂点的功能确保升级流程的稳定性。跟 APISIX 官方沟通后得到了比较好的解决方案 <a href="https://github.com/apache/apisix/discussions/7773" target="_blank" rel="noopener noreferrer">custom plugin - set an upstream as a http fallback server</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>9 月
-<ul>
-<li>偶然发现手机桌面上有一个安装了好久但是一直没用过的 APP 英语流利说，顺手用它测了下自己的英文水平。然后就对英语感兴趣了，制定了英语学习计划并发布对应的博文 <a href="https://thiscute.world/posts/learn-english-again/" target="_blank" rel="noopener noreferrer">Learn English Again</a>，然后就开始坚持学英语，感觉整个过程都很顺利。</li>
-<li>主要工作：
-<ul>
-<li>仍然是搞网关优化省成本，因为各种原因，再次输出一篇 Post Mortem</li>
-<li>搞数据上报网关的需求</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>10 月
-<ul>
-<li>找了很多英语学习资料，通过每日的坚持学习，渐渐找到了自己的英语学习节奏，完善了学习规划。</li>
-<li>《Linux/Unix 系统编程手册（上册）》阅读进度过半，但是业余时间就这么点，同时用来学习 Linux 跟英语实在有点吃力，这本书的阅读就慢慢放下了。
-<ul>
-<li><figure><img
-        
-        loading="lazy"
-        src="/images/now/the-linux-programming-interface.webp"
-        srcset="/images/now/the-linux-programming-interface.webp, /images/now/the-linux-programming-interface.webp 1.5x, /images/now/the-linux-programming-interface.webp 2x"
-        sizes="auto"
-        alt="/images/now/the-linux-programming-interface.webp"
-        title="/images/now/the-linux-programming-interface.webp" ><figcaption class="image-caption">Linux/Unix 系统编程手册（上册）</figcaption>
-    </figure></li>
-</ul>
-</li>
-<li>通过友链漫游，发现了 <a href="https://0xffff.one" target="_blank" rel="noopener noreferrer">0xFFFF 社区</a>，内容质量很高，也在社区的 QQ 群里跟群友们聊了些有意思有价值的内容。</li>
-<li>打游戏学英语
-<figure><img
-        
-        loading="lazy"
-        src="/images/learn-english-again/genshin-impact-noelle.webp"
-        srcset="/images/learn-english-again/genshin-impact-noelle.webp, /images/learn-english-again/genshin-impact-noelle.webp 1.5x, /images/learn-english-again/genshin-impact-noelle.webp 2x"
-        sizes="auto"
-        alt="/images/learn-english-again/genshin-impact-noelle.webp"
-        title="/images/learn-english-again/genshin-impact-noelle.webp" ><figcaption class="image-caption">超飒的重剑女仆 Noelle</figcaption>
-    </figure>
-<figure><img
-        
-        loading="lazy"
-        src="/images/learn-english-again/demo2-talk-1.webp"
-        srcset="/images/learn-english-again/demo2-talk-1.webp, /images/learn-english-again/demo2-talk-1.webp 1.5x, /images/learn-english-again/demo2-talk-1.webp 2x"
-        sizes="auto"
-        alt="/images/learn-english-again/demo2-talk-1.webp"
-        title="/images/learn-english-again/demo2-talk-1.webp" ><figcaption class="image-caption">DEEMO 2 中丰富的对话内容</figcaption>
-    </figure></li>
-<li>因为许多原因，中概股大跌，公司架构大调整，走了很多大佬，包括去年带我冲浪的算法部门前辈。</li>
-<li>主要工作
-<ul>
-<li>搞数据上报网关的需求，一路踩坑，总算把数万 QPS 的流量全部迁移到新网关上了。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>11 月
-<ul>
-<li>重新对搞 Homelab 产生了兴趣，买了三台 MINI 主机组了一个 Homelab，时隔一年多又开始折腾 Proxmox VE，做各种规划。</li>
-<li>迭代了很多次后的个人 Homelab 文档：<a href="https://github.com/ryan4yin/knowledge/tree/master/homelab" target="_blank" rel="noopener noreferrer">ryan4yin/knowledge/homelab</a>
-<ul>
-<li><figure><img
-        
-        loading="lazy"
-        src="/images/now/dashy-homepage.webp"
-        srcset="/images/now/dashy-homepage.webp, /images/now/dashy-homepage.webp 1.5x, /images/now/dashy-homepage.webp 2x"
-        sizes="auto"
-        alt="/images/now/dashy-homepage.webp"
-        title="/images/now/dashy-homepage.webp" ><figcaption class="image-caption">我的 Homelab 导航页 2022-11-12</figcaption>
-    </figure></li>
-</ul>
-</li>
-<li>因为业余时间沉迷搞 Homelab，英语打卡就变得断断续续了&hellip;但是词汇量测试的效果出乎意料，进步速度喜人，阅读能力也能感觉到有明显提升。</li>
-<li>月底搬家换了个新租房，床是挂天花板上的，房间就宽敞了很多，而且拉了独立的电信宽带，网速杠杠的。</li>
-<li>11/25 去东莞松山湖跟高中同学聚会，然后跟几位同学打麻将打到半夜三点多&hellip; 还远远眺望了眼同学读博的地方——「<a href="http://english.ihep.cas.cn/csns/" target="_blank" rel="noopener noreferrer">中国散裂中子源</a>」，感觉很高大上
-<figure><img
-        
-        loading="lazy"
-        src="/images/now/play-mahjong-with-classmates.webp"
-        srcset="/images/now/play-mahjong-with-classmates.webp, /images/now/play-mahjong-with-classmates.webp 1.5x, /images/now/play-mahjong-with-classmates.webp 2x"
-        sizes="auto"
-        alt="/images/now/play-mahjong-with-classmates.webp"
-        title="/images/now/play-mahjong-with-classmates.webp" ></figure>
-<figure><img
-        
-        loading="lazy"
-        src="/images/now/china-spallation-neutron-source.webp"
-        srcset="/images/now/china-spallation-neutron-source.webp, /images/now/china-spallation-neutron-source.webp 1.5x, /images/now/china-spallation-neutron-source.webp 2x"
-        sizes="auto"
-        alt="/images/now/china-spallation-neutron-source.webp"
-        title="/images/now/china-spallation-neutron-source.webp" ></figure></li>
-<li>主要工作：继续推进线上网关优化项目，以及调研 K8s / Istio 的新版本变化，为集群升级做预备工作。</li>
-</ul>
-</li>
-<li>12 月
-<ul>
-<li>从 Homelab 折腾到 HomeAssistant/ESPHome，然后就折腾 ESP32/ESP8266，结果很意外地就买了一堆硬件，入手了电烙铁热风枪万用表等各种仪器，ESP/51/STM32 都玩了个遍&hellip;
-<ul>
-<li>输出内容有两个代码仓库：<a href="https://github.com/ryan4yin/learn-8051-asm" target="_blank" rel="noopener noreferrer">learn-8051-asm</a> 与 <a href="https://github.com/ryan4yin/learn-stm32f103c8t6" target="_blank" rel="noopener noreferrer">learn-stm32f103c8t6</a>，以及一份 EE 笔记：<a href="https://github.com/ryan4yin/knowledge/blob/master/electrical-engineering" target="_blank" rel="noopener noreferrer">Electrical Engineering</a>
-<figure><img src="/images/now/experience-of-electrical-engineering.webp" width="60%"/><figcaption>
-                  <h4>我的电子电路初体验</h4>
-              </figcaption>
-      </figure>
-
-<figure><img src="/images/now/8051-display-2023.webp" width="70%"/><figcaption>
-                  <h4>8051 汇编 - 数码管显示 2023</h4>
-              </figcaption>
-      </figure>
-</li>
-</ul>
-</li>
-<li>ChatGPT 横空出世，引发全网热潮。有技术大佬感慨，这个时刻竟然来临得如此之快，惊喜之余也有点猝不及防。我也把玩了一波，也用它帮助我学了许多硬件相关的东西，很有帮助。
-<ul>
-<li>个人猜测未来 ChatGPT 成熟后大概率能极大提升技术人员的工作效率，很可能间接影响到许多人的工作。</li>
-</ul>
-</li>
-<li>年底还入手了一台 3D 打印机 ELEGOO Neptune 3 Pro&hellip;</li>
-<li>全国逐渐放开疫情管控，我得了新冠，然后康复&hellip;</li>
-<li>这个月折腾硬件，英语漏打卡更严重了，但是词汇量仍然在稳步增长，阅读起来也是越来越顺畅。</li>
-<li>主要工作：
-<ul>
-<li>线上网关优化项目基本落地，取得了预期收益，但是没达到之前设的激进目标。（旧网关仍留存极少部分流量，还需要时间去统一网关架构）</li>
-<li>做 K8s 集群升级准备，然后月底公司大面积新冠，拖慢了这项工作的进度，即使后调了升级时间，仍然感觉有点虚&hellip;</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>最后是连续三年蝉联我年度歌手的天依同学，截图放这里纪念一下：
-<figure><img src="/images/now/netease-cloud-music-2022-singer-of-ryan4yin.webp" width="50%"/><figcaption>
-              <h4>我的网易云年度歌手</h4>
-          </figcaption>
-  </figure>
-</li>
-</ul>
-<h2 id="2022-年-highlight" class="headerLink">
-    <a href="#2022-%e5%b9%b4-highlight" class="header-mark"></a>2022 年 Highlight</h2><h3 id="1-英语" class="headerLink">
-    <a href="#1-%e8%8b%b1%e8%af%ad" class="header-mark"></a>1. 英语</h3><p>英语也是我今年比较惊喜的一个部分，很长一段时间内，我都觉得英语的优先级并不高，一直没有把它的学习排上日程，水平也一直没啥显著提升。</p>
-<p>但是从今年 9 月份开始到现在这四个月的英语学习中，我的进步相当明显，从去年大概  4700 词，到现在测试结果为 6583 词，涨了近 2000 词，月均接近 500 词（按这个速度，2023 年 10000 词的目标好像没啥难度了）。</p>
-<p>词汇量测试结果按时间排序如下，使用的测试工具是 <a href="https://preply.com/en/learn/english/test-your-vocab" target="_blank" rel="noopener noreferrer">Test Your Vocabulary</a> ：</p>
-<p><figure><img src="/images/now/2023-01-02-test-your-vocabulary-result.webp" width="70%"/><figcaption>
-            <h4>2023-01-02 词汇量测试结果：6583 词</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/images/now/2022-12-19-test-your-vocabulary-result.webp" width="40%"/><figcaption>
-            <h4>2022-12-19 词汇量测试结果：6300 词</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" width="65%"/><figcaption>
-            <h4>2022-11-17 词汇量测试结果：5600 词</h4>
-        </figcaption>
-</figure>
-
-<figure><img src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" width="40%"/><figcaption>
-            <h4>2022-10-18 词汇量测试结果：5100 词</h4>
-        </figcaption>
-</figure>
-</p>
-<p>另外因为主要是靠读书来学英语，今年的英文阅读能力也有明显提升，跟 9 月份刚开始读的时候比，阅读体验要流畅多了。
-一些英文原版书阅读成就：</p>
-<figure><img src="/images/now/mintreading-first-100days-achivement.webp" width="35%"/><figcaption>
-            <h4>在薄荷阅读上读完的第一本英语原版书</h4>
-        </figcaption>
-</figure>
-
-<p>而口语、写作这些今年基本没练习，原地踏步。</p>
-<h3 id="2-业余技术" class="headerLink">
-    <a href="#2-%e4%b8%9a%e4%bd%99%e6%8a%80%e6%9c%af" class="header-mark"></a>2. 业余技术</h3><p>今年业余搞的技术，感觉这些都是我比较满意的：</p>
-<ul>
-<li>Web3: 今年上半年花了不少时间去了解 Web3，但是仍然没敢说自己已经懂了它。水比较深，浅尝辄止。</li>
-<li>电子电路（硬件）：点亮这个技能完全是个意外&hellip;但也挺惊喜的，毕竟我大学学的建筑声学，以前都没接触过硬件。</li>
-<li>Go 语言：去年底定的目标是将 Go 语言应用在至少两个项目上，实际上只用在了一个项目上，完成度 50% 吧。</li>
-<li>Linux: Linux 今年主要是复习了一遍 C 语言，然后看了半本《Linux/Unix 系统编程手册（上册）》，之后因为学英语就给放下了。
-<ul>
-<li>毕竟英语的成果很不错，这个结果我觉得也是预期内的。</li>
-</ul>
-</li>
-<li>博客：今年博客经营得尚可，数了下有 18 篇技术干货，四篇非技术文章。最主要是三月份翻译密码学的文章冲了一波内容量。虽然 12 月份又鸽掉了&hellip;总体还是满意的。</li>
-</ul>
-<h3 id="3-工作" class="headerLink">
-    <a href="#3-%e5%b7%a5%e4%bd%9c" class="header-mark"></a>3. 工作</h3><p>SRE 组 2022 年工作的主旋律其实就是省钱，我 2022 年的工作上有更多的挑战，不过因为得心应手很多，反倒没什么想特别着墨描述的了。</p>
-<p>我上半年工作成果比较突出，下半年虽然工作成果差一些，但是业余的学习成果相当突出，总体很满意自己今年的成绩。</p>
-<p>单纯从工作方面讲，我给自己的评价仍然是「良好」。</p>
-<h3 id="4-阅读" class="headerLink">
-    <a href="#4-%e9%98%85%e8%af%bb" class="header-mark"></a>4. 阅读</h3><p>2022 年一共读完了这些书：</p>
-<ul>
-<li><input checked="" disabled="" type="checkbox"> 《人间失格》</li>
-<li><input checked="" disabled="" type="checkbox"> 《月宫》</li>
-<li><input checked="" disabled="" type="checkbox"> 《<a href="https://github.com/nakov/Practical-Cryptography-for-Developers-Book" target="_blank" rel="noopener noreferrer">Practical Cryptography for Developers</a>》</li>
-<li><input checked="" disabled="" type="checkbox"> 《<a href="https://github.com/ethereumbook/ethereumbook" target="_blank" rel="noopener noreferrer">Mastering Ethereum</a>》</li>
-<li><input checked="" disabled="" type="checkbox"> 《Go 程序设计语言（英文版）》</li>
-<li><input checked="" disabled="" type="checkbox"> 《深入浅出 Kubernetes - 张磊》</li>
-<li><input checked="" disabled="" type="checkbox"> 《在生命的尽头拥抱你-临终关怀医生手记》</li>
-<li><input checked="" disabled="" type="checkbox"> 《在峡江的转弯处 - 陈行甲人生笔记》</li>
-<li><input checked="" disabled="" type="checkbox"> 《The ANSI C Programming Language》</li>
-<li><input checked="" disabled="" type="checkbox"> The Time Machine</li>
-<li><input checked="" disabled="" type="checkbox"> Learn Robotics With Raspberry Pi
-<ul>
-<li>学习使用树莓派控制智能小车，结合本书与网上资料，我制作了一台使用 Xbox One 手柄遥控的四驱小车，相当有意思~</li>
-</ul>
-</li>
-<li><input checked="" disabled="" type="checkbox"> Learn Robotics Programming, 2nd Edition
-<ul>
-<li>跟前面那本一样是讲树莓派小车的，不过这本书更深入，代码含量高很多。</li>
-<li>快速翻了一遍，跳过了其中大部分代码，因为书中的小车不太符合我的需求。</li>
-</ul>
-</li>
-<li><input checked="" disabled="" type="checkbox"> The Unlikely Pilgrimage of Harold Fry</li>
-<li><input checked="" disabled="" type="checkbox"> 51 单片机自学笔记</li>
-</ul>
-<p>看起来，去年定的一个月至少读一本书的目标，还是达成了滴~</p>
-<h2 id="2023-年的展望" class="headerLink">
-    <a href="#2023-%e5%b9%b4%e7%9a%84%e5%b1%95%e6%9c%9b" class="header-mark"></a>2023 年的展望</h2><h3 id="技术侧" class="headerLink">
-    <a href="#%e6%8a%80%e6%9c%af%e4%be%a7" class="header-mark"></a>技术侧</h3><p>2022 年的结果跟年初的展望区别仍然是挺大的，但是我个人挺满意。</p>
-<p>这里再记一下 2023 年技术上的展望，看看今年能实现多少，又会点出多少意料之外的技能吧哈哈：</p>
-<ul>
-<li>云原生
-<ul>
-<li>去年定的阅读 k8s 及相关生态的源码没任何进度，2023 年继续&hellip;</li>
-<li>2019 年到现在，我的工作时长已经有三年半了，希望更多的东西能通过学习底层知识去知其所以然，而不是全靠网上找资料，人云亦云一知半解地去解决问题。</li>
-</ul>
-</li>
-<li>Linux 与网络
-<ul>
-<li>2023 年把《Linux/Unix 系统编程手册》这套书看完，并且过完 <a href="https://0xffff.one/d/1085-mit6-s081-operating-system" target="_blank" rel="noopener noreferrer">0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)</a> 这个课，对 Linux 内核与操作系统形成较深入的理解。</li>
-<li>借着对硬件的兴趣学一学 Linux 驱动开发。</li>
-<li>学习学习时下超流行的 eBPF 技术</li>
-</ul>
-</li>
-<li>3D 打印
-<ul>
-<li>2022 年底买了台打印机，那不必须得打印点自己设计的东西？</li>
-<li>FreeCAD 学！Blender 可能跟 3D 打印没啥关系但是也要学！</li>
-</ul>
-</li>
-<li>编程语言
-<ul>
-<li>今年 Go/C 两个语言的技能点感觉是点出来了，2023 年需要巩固下，用它们完成些更复杂的任务。</li>
-<li>另外借着搞硬件的兴趣，把 Rust/C++ 两门语言也玩一玩
-<ul>
-<li>C++ 主要是用来玩 ESP32/ESP8266，rust 那可是时下最潮的系统级语言，2022 年虽然用 rust 写了点 demo 但离熟练还差很远。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>其他
-<ul>
-<li>2022 年我给开源社区提交的代码贡献几乎没有，希望 2023 年能至少给三个开源项目提交一些代码贡献，这也是检验自己的代码水平。</li>
-<li>制作一台自己的无人机或者穿越机（虽然还不太懂什么是穿越机&hellip;），并借此练习自己学习的软硬件知识。</li>
-<li>更多地在公司内部、博客等地方分享自己所学的知识，提升所学知识的可复用性，同时也碰撞出更多的灵光，更深入地理解它们。</li>
-</ul>
-</li>
-</ul>
-<h3 id="生活侧" class="headerLink">
-    <a href="#%e7%94%9f%e6%b4%bb%e4%be%a7" class="header-mark"></a>生活侧</h3><p>2022 年初我写的生活上的展望，貌似只有「阅读」这一项达标了&hellip;
-不过今年也仍旧记录下 2023 年的展望：</p>
-<ul>
-<li>2022 年因为疫情以及自己懒，参与的户外活动相当少，2023 年希望能更多的做些户外运动，身体还是很重要的啊。</li>
-<li>把轮滑水平练上去一点，轮滑鞋在 2022 年吃灰了几乎一整年&hellip;</li>
-<li>音乐上，口琴、竹笛、midi 键盘、Synthesizer V / ACE Studio / Reaper，总要把其中一个练一练吧&hellip;（什么？学吉他？？不敢开新坑了，旧坑都还没填完呢&hellip;）</li>
-<li>阅读：仍然跟去年保持一样的节奏就好，目标是一个月至少阅读一本书。</li>
-<li>英语：英语的规划在 <a href="https://thiscute.world/posts/learn-english-again/" target="_blank" rel="noopener noreferrer">Learn English Again</a> 中已经做得比较详尽了，这里仅摘抄下目标。
-<ul>
-<li>2023 年达到 CEFR 的 C1 等级，报考并取得 BEC 高级证书</li>
-<li>2023 年底词汇量超过 10000</li>
-</ul>
-</li>
-</ul>
-<h2 id="结语" class="headerLink">
-    <a href="#%e7%bb%93%e8%af%ad" class="header-mark"></a>结语</h2><p>2021 年的年终总结文末，我给自己 2022 年的期许是「更上一层楼」，感觉确实应验了。</p>
-<p>那么 2023 年，我希望自己能够「认识更多有趣的人，见识下更宽广的世界」~</p>
-<blockquote>
-<p>更多有趣的的 2022 年度总结：<a href="https://github.com/saveweb/review-2022" target="_blank" rel="noopener noreferrer">https://github.com/saveweb/review-2022</a></p>
-</blockquote>
-]]></content></entry><entry><title type="html">Proxmox Virtual Environment 使用指南</title><link href="https://thiscute.world/posts/proxmox-virtual-environment-instruction/"/><id>https://thiscute.world/posts/proxmox-virtual-environment-instruction/</id><author><name>ryan4yin</name></author><published>2022-11-27T22:38:03+08:00</published><updated>2022-11-27T22:38:03+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
+]]></content></entry><entry><title type="html">2022 年年终总结</title><link href="https://thiscute.world/posts/2022-summary/"/><id>https://thiscute.world/posts/2022-summary/</id><author><name>ryan4yin</name></author><published>2023-01-02T18:00:45+08:00</published><updated>2023-01-02T18:00:45+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
+&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Proxmox Virtual Environment 使用指南</title><link href="https://thiscute.world/posts/proxmox-virtual-environment-instruction/"/><id>https://thiscute.world/posts/proxmox-virtual-environment-instruction/</id><author><name>ryan4yin</name></author><published>2022-11-27T22:38:03+08:00</published><updated>2022-11-27T22:38:03+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">刻意练习</title><link href="https://thiscute.world/posts/deliberate-practice/"/><id>https://thiscute.world/posts/deliberate-practice/</id><author><name>ryan4yin</name></author><published>2022-10-05T13:31:00+08:00</published><updated>2022-10-05T13:31:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Learn English Again</title><link href="https://thiscute.world/posts/learn-english-again/"/><id>https://thiscute.world/posts/learn-english-again/</id><author><name>ryan4yin</name></author><published>2022-09-04T13:22:00+08:00</published><updated>2022-09-04T13:22:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">分布式数据库的一致性问题与共识算法</title><link href="https://thiscute.world/posts/consistency-and-consensus-algorithm/"/><id>https://thiscute.world/posts/consistency-and-consensus-algorithm/</id><author><name>ryan4yin</name></author><published>2022-08-07T04:11:23+08:00</published><updated>2022-08-07T04:11:23+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
@@ -5799,5 +5808,4 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">写给开发人员的实用密码学（二）—— 哈希函数</title><link href="https://thiscute.world/posts/practical-cryptography-basics-2-hash/"/><id>https://thiscute.world/posts/practical-cryptography-basics-2-hash/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:01+08:00</published><updated>2022-03-01T17:15:01+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">写给开发人员的实用密码学（一）—— 概览</title><link href="https://thiscute.world/posts/practical-cryptography-basics-1/"/><id>https://thiscute.world/posts/practical-cryptography-basics-1/</id><author><name>ryan4yin</name></author><published>2022-03-01T17:15:00+08:00</published><updated>2022-03-01T17:15:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">「转」仙马赛记——我又 PB 了</title><link href="https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/"/><id>https://thiscute.world/posts/likenttt-2021-04-11-xianlin-half-marathon-1_33_12/</id><author><name>ryan4yin</name></author><published>2022-02-26T17:44:00+08:00</published><updated>2022-02-26T17:44:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
-&lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">「转」MIRT出征广马——首次摸到330的边儿</title><link href="https://thiscute.world/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/"/><id>https://thiscute.world/posts/likenttt-2020-12-13-guangzhou-marathon-3_30_15/</id><author><name>ryan4yin</name></author><published>2022-02-26T16:59:00+08:00</published><updated>2022-02-26T16:59:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry></feed>
