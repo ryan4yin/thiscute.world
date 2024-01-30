@@ -136,7 +136,7 @@ RSA 跟 ED25519 都是被广泛使用的密码学算法，其安全性都是经�
 我首先 Google 了下，找到一些相关的文章（注意如下文章内容与其时间点相关，OpenSSH 的新版本会有些变化）：
 
 - [(2018)The default OpenSSH key encryption is worse than plaintext](https://news.ycombinator.com/item?id=17682946): OpenSSH 默认的 SSH RSA 密钥格式直接使用 MD5 来派生出用于 AES 加密的对称密钥，再用这个密钥加密你的 RSA 私钥，这意味着它的破解速度将会相当的快。
-- [(2021)Password security of encrypted SSH private key: How to read round number or costfactor of bcrypt](https://serverfault.com/questions/1056814/password-security-of-encrypted-ssh-private-key-how-to-read-round-number-or-cost)
+- [(2021)Password security of encrypted SSH private key: How to read round number or costfactor of bcrypt](https://serverfault.com/questions/1056814/password-security-of-encrypted-ssh-private-key-how-to-read-round-number-or-cost): 这里有个老哥在回答中简单推算了下，以说明他认为 OpenSSH 默认的 passphrase 加密相当安全。
 
 在 [OpenSSH release notes](https://www.openssh.com/releasenotes.html) 中搜索 passphrase 跟 kdf 两个关键字，找到些关键信息如下：
 
