@@ -1977,13 +1977,14 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 <h3 id="3-opensbi" class="headerLink">
     <a href="#3-opensbi" class="header-mark"></a>3. OpenSBI</h3><p>前面的 NixOS 启动日志跟启动流程图中都出现了 OpenSBI，那么 OpenSBI 是什么呢？
 为什么 ARM 开发版的启动流程中没有这么个玩意儿？</p>
-<p>查了下资料，大概是说因为 RISC-V是一个开源的硬件框架，任何人都可以基于 RISC-V 开发自己的定制指令集，或者定制 IC 布局。
+<p>查了下资料，大概是说因为 RISC-V 是一个开放指令集，任何人都可以基于 RISC-V 开发自己的定制指令集，或者定制 IC 布局。
 这显然存在很明显的碎片化问题。
 OpenSBI 就是为了避免此问题而设计的，
 它提供了一个标准的接口，即 Supervisor Binary Interface, SBI.
 上层系统只需要适配 SBI 就可以了，不需要关心底层硬件的细节。
 IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI 的上层系统能在其硬件平台上正常运行。</p>
 <p>而 OpenSBI 则是 SBI 标准的一个开源实现，IC 开发商只需要将 OpenSBI 移植到自己的硬件平台上即可支持 SBI 标准。</p>
+<p>而 ARM 跟 X86 等指令集则是封闭的，不允许其他公司修改与拓展其指令集，因此不存在碎片化的问题，也就不需要 OpenSBI 这样的东西。</p>
 <h3 id="4-fw_dynamicbin-跟-u-boot-splbin-两个文件" class="headerLink">
     <a href="#4-fw_dynamicbin-%e8%b7%9f-u-boot-splbin-%e4%b8%a4%e4%b8%aa%e6%96%87%e4%bb%b6" class="header-mark"></a>4. fw_dynamic.bin 跟 u-boot-spl.bin 两个文件</h3><ol>
 <li><code>fw_dynamic.bin</code>: 我们 NixOS 镜像的 <code>/boot</code> 中就有这个固件，它是 OpenSBI 的编译产物。
