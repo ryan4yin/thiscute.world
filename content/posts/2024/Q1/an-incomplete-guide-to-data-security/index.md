@@ -56,8 +56,9 @@ comment:
 4. 几个密码在各种站点上重复使用，其中重要账号的随机密码还是我在十多年前用 lastpass 生成的，到处用了这么多年，很难说这些密码有没有泄露（lastpass 近几年爆出的泄漏事故就不少...）
 5. GitHub, Google, Jetbrains 等账号的 Backup Code 被我明文存储到了百度云盘，中间发现百度云盘安全性太差又转存到了 OneDrive，但一直是明文存储，从来没加过密。
 6. 一些银行账号之类的随机密码，因为担心遗忘，长期被我保存在一份印象笔记的笔记里，也是明文存储，仅做了些简单的内容替换，要猜出真正的密码感觉并不是很难。
+7. 我以前也有过因为对 Git 操作不熟悉或者粗心大意，在公开仓库中提交了一些包含敏感信息的 commit，比如说 SSH 密钥、密码等等，有的甚至很长时间都没发现。
 
-现在在 IT 行业工作了几年，从我当下的经验来看，企业后台的管理员如果真有兴趣，查看用户的数据真的是很简单的一件事，至少国内绝大部分公司的用户数据，都不会做非常严格的数据加密与权限管控。
+现在在 IT 行业工作了几年，从我当下的经验来看，企业后台的管理员如果真有兴趣，查看用户的数据真的是很简单的一件事，至少国内大部分公司的用户数据，都不会做非常严格的数据加密与权限管控。
 就算真有加密，那也很少是用户级别的，对运维人员或开发人员而言这些数据仍旧与未加密无异。
 对系统做比较大的迭代时，把小部分用户数据导入到测试环境进行测试也是挺常见的做法...
 
@@ -286,7 +287,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
     Specify how many times the passphrases mangling for symmetric encryption is repeated. This value may range between 1024 and 65011712 inclusive. The default is inquired from gpg-agent. Note that not all values in the 1024-65011712 range are legal and if an illegal value is selected, GnuPG will round up to the nearest legal value. This option is only meaningful if --s2k-mode is set to the default of 3.
 ```
 
-默认还使用的是 AES-128 跟 SHA-1，这俩都已经不太安全了，尤其是 SHA-1，已经被证明存在安全问题。
+默认仍旧使用 AES-128 做 pssphrase 场景下的对称加密，数据签名还是用的 SHA-1，这俩都已经不太安全了，尤其是 SHA-1，已经被证明存在安全问题。
 因此，使用默认参数生成的 GPG 密钥，其安全性是不够的。
 
 为了获得最佳安全性，我们需要：
@@ -312,7 +313,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 为了其他数据备份与同步的需要，我需要一个跨平台的加密工具，目前调研到有如下这些：
 
 1. 文件级别的加密
-   1. 这个有很多现成的工具，比如 **age**/gpg/**sops**, 都挺不错，但是文件级别的加密用起来繁琐一些，需要手动加解密。大量文件的情况下可能还得先打包成 tarball 再加密，解密后再解包，比较麻烦。
+   1. 这个有很多现成的现代加密工具，比如 **age**/**sops**, 都挺不错，但是针对大量文件的情况下使用比较繁琐。
 2. 全盘加密，或者支持通过 FUSE 模拟文件系统
    1. 首先 LUKS 就不用考虑了，它基本只在 Linux 上能用。
    1. 跨平台且比较活跃的项目中，我找到了 **rclone** 与 **restic** 这两个项目，都支持云同步，各有优缺点。
@@ -350,13 +351,15 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 我的方案如下：
 
-1. 个人笔记：使用 [GitJournal](https://github.com/GitJournal/GitJournal) APP，将笔记存储在 GitHub 私有仓库中，并通过该仓库做多端同步。
-1. 遗憾的是目前在 Android 平台上并未找到很合适的基于 Git 的加密笔记 APP，GitJournal 本身也不支持加密，因此我的个人笔记目前是明文存储的。
-1. 照片、视频等其他个人数据
-1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
-1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
-   - [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
-   - [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
+1. 个人笔记：
+    1. 使用 [GitJournal](https://github.com/GitJournal/GitJournal) APP，将笔记存储在 GitHub 私有仓库中，并通过该仓库做多端同步。
+    1. 遗憾的是目前在 Android 平台上并未找到很合适的基于 Git 的加密笔记 APP，GitJournal 本身也不支持加密，因此我的个人笔记目前是明文存储的。
+1. 照片、视频等其他个人数据：
+    1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
+    1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
+        1. [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
+        1. [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
+
 
 ## 八、桌面电脑的数据安全
 
@@ -399,9 +402,10 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 ## 九、总结下我的数据存在了哪些地方
 
 1. secrets 私有仓库: 它会被我的 nix-config 自动拉取并部署到所有主力电脑上，包含了 homelab ssh key, GPG subkey, 以及其他一些重要的 secrets.
-   1. 它通过我所有桌面电脑的 `/etc/ssh/ssh_host_ed25519_key` 公钥加密，在部署时自动使用对应的私钥解密。
-   1. 此外该仓库还添加了一个灾难恢复用的公钥，确保在我所有桌面电脑都丢失的极端情况下，仍可通过对应的灾难恢复私钥解密此仓库的数据。该私钥在使用 age 加密后（注：未使用 rclone 加密）与我其他的灾难恢复数据保存在一起。
-2. password-store: 我的私人账号密码存储库，通过 pass 命令行工具管理，使用 GPG 加密，GPG 密钥备份被加密保存在上述 secrets 仓库中。
+    1. 它通过我所有桌面电脑的 `/etc/ssh/ssh_host_ed25519_key` 公钥加密，在部署时自动使用对应的私钥解密。
+    1. 此外该仓库还添加了一个灾难恢复用的公钥，确保在我所有桌面电脑都丢失的极端情况下，仍可通过对应的灾难恢复私钥解密此仓库的数据。该私钥在使用 age 加密后（注：未使用 rclone 加密）与我其他的灾难恢复数据保存在一起。
+2. password-store: 我的私人账号密码存储库，通过 pass 命令行工具管理，使用 GPG 加密，GPG 密钥备份被通过 age/agenix 加密保存在上述 secrets 仓库中。
+    1. 由于 GnuPG 自身导出的密钥备份数据安全性欠佳，因此我使用了 age + passphrase 对其进行了二次对称加密，然后再通过 agenix 加密（第三次加密，使用非对称加密算法）保存在 secrets 仓库中。这保障了即使我的 GPG 密钥在我所有的桌面电脑上都存在，但安全性仍旧很够。
 3. rclone 加密的备份 U 盘（双副本）：离线保存一些重要的数据。其配置文件被加密保存在 secrets 仓库中，其配置文件的解密密码被加密保存在 password-store 仓库中。
 
 整套方案都可使用我的 Nix 配置进行自动化部署，整个流程自动化程度很高，所以这套方案带来 的额外负担其实并不大。自动化部署，整个流程自动化程度很高，所以实施这套方案并未给我带来许多额外负担。
