@@ -1179,13 +1179,17 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 
 ## 五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的
 
-到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，最终成功启动的截图：
+到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，
+**NixOS 跟其他传统发行版在启动流程中最大的区别是它自定义了一个 init 脚本，在启动 systemd 之前，它会先执行这个脚本进行文件系统的初始化操作，准备好最基础的 FHS 目录结构，使得后续的 systemd 以及其他服务能正常启动**。
+正是因为这个 init 脚本，NixOS 才能在仅有 `/boot` 与 `/nix` 这两个目录的情况下正常启动整个系统。
+
+最终在 LicheePi4A 成功启动后的登录的截图：
 
 {{<figure src="./nixos-licheepi-neofetch.webp" title="NixOS 成功启动" width="80%">}}
 
 那么我们如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像呢？
 
-这个讲起来就很费时间了，涉及到了 NixOS 的交叉编译系统，内核 override, flakes, 镜像构建等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<https://github.com/ryan4yin/nixos-licheepi4a>.
+这个讲起来就很费时间了，涉及到了 NixOS 的[交叉编译系统](https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation)，[内核 override](https://nixos-and-flakes.thiscute.world/zh/development/kernel-development), [flakes](https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes), [镜像构建](https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix)等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<https://github.com/ryan4yin/nixos-licheepi4a>.
 
 用一句话概括就是：跟传统 Linux 发行版的构建方法也完全不同，整个镜像构建的项目完全使用 Nix 语言声明式编写，而且这份配置也可用于系统后续的持续声明式更新部署（我还给出了一个 demo）。
 
