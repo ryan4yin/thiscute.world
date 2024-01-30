@@ -1177,6 +1177,8 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 
 所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一些编译问题。
 
+Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关信息：<https://github.com/ryan4yin/nixos-licheepi4a/issues/14>
+
 ## 五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的
 
 到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，
