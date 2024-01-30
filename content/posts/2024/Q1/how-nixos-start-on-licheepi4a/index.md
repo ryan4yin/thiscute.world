@@ -1191,7 +1191,8 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 
 这个讲起来就很费时间了，涉及到了 NixOS 的[交叉编译系统](https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation)，[内核 override](https://nixos-and-flakes.thiscute.world/zh/development/kernel-development), [flakes](https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes), [镜像构建](https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix)等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<https://github.com/ryan4yin/nixos-licheepi4a>.
 
-用一句话概括就是：跟传统 Linux 发行版的构建方法也完全不同，整个镜像构建的项目完全使用 Nix 语言声明式编写，而且这份配置也可用于系统后续的持续声明式更新部署（我还给出了一个 demo）。
+简单的说，NixOS 跟传统 Linux 发行版的系统镜像构建思路是一致的，但因为其声明式与可复现性的特点，实际实现时出现了非常大的区别。
+以我的项目仓库为例，整个项目完全使用 Nix 语言声明式编写（内嵌了部分 Shell 脚本...），而且这份配置也可用于系统后续的持续声明式更新部署（我还给出了一个 demo）。
 
 最后，再推荐一波我的 NixOS 入门指南：[ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，对 NixOS 感兴趣的读者们，快进我碗里来（
 
