@@ -2010,6 +2010,10 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
     <a href="#%e4%ba%94%e6%88%91%e6%98%af%e5%a6%82%e4%bd%95%e6%9e%84%e5%bb%ba%e5%87%ba%e4%b8%80%e4%b8%aa%e5%8f%af%e4%bb%a5%e5%9c%a8-licheepi-4a-%e4%b8%8a%e8%bf%90%e8%a1%8c%e7%9a%84-nixos-%e9%95%9c%e5%83%8f%e7%9a%84" class="header-mark"></a>五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的</h2><p>到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，
 <strong>NixOS 跟其他传统发行版在启动流程中最大的区别是它自定义了一个 init 脚本，在启动 systemd 之前，它会先执行这个脚本进行文件系统的初始化操作，准备好最基础的 FHS 目录结构，使得后续的 systemd 以及其他服务能正常启动</strong>。
 正是因为这个 init 脚本，NixOS 才能在仅有 <code>/boot</code> 与 <code>/nix</code> 这两个目录的情况下正常启动整个系统。</p>
+<blockquote>
+<p>NixOS 数据的集中化只读存储使更多的骚操作成为可能，比如直接使用 tmpfs 作为根文件系统，将需要持久化的目录挂载到外部存储设备上，这样每次重启系统时，所有预期之外的临时数据都会被清空，进一步保证了系统的可复现性与安全性。
+如果你有系统洁癖，而且有兴趣折腾，那就快来看看 @LanTian 写的 <a href="https://lantian.pub/article/modify-computer/nixos-impermanence.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（四）：「无状态」操作系统</a> 吧~</p>
+</blockquote>
 <p>最终在 LicheePi4A 成功启动后的登录的截图：</p>
 <figure><img src="./nixos-licheepi-neofetch.webp" width="80%"/><figcaption>
             <h4>NixOS 成功启动</h4>
