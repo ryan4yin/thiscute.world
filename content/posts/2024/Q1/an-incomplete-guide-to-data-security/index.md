@@ -210,9 +210,9 @@ rounds 的值根据你本地的 CPU 性能来定，我在 Macbook Pro M2 上测�
 
 因此，我现在的做法是：
 
-1. 对所有桌面电脑跟笔记本，都在其本地生成一个专用的 SSH 密钥配置到 GitHub 跟常用的服务器上。这个 SSH 私钥永远不会离开这台机器。
+1. 对所有桌面电脑跟笔记本，都在其本地生成一个专用的 SSH 密钥配置到 GitHub 跟常用的服务器上。**这个 SSH 私钥永远不会离开这台机器**。
 2. 对于一些相对不重要的 Homelab 服务器，额外生成一个专用的 SSH 密钥，配置到这些服务器上。在一些跳板机跟测试机上会配置这个密钥方便测试与登录到其他机器。
-3. 上述所有 SSH 密钥都添加了 passphrase 保护，且使用了 bcrypt 256 rounds.
+3. 上述所有 SSH 密钥都添加了 passphrase 保护，且使用了 bcrypt 256 rounds 生成加密密钥。
 
 我通过这种方式缩小了风险范围，即使某台机器的密钥泄漏，也只需要重新生成并替换这台机器上的密钥即可。
 
@@ -227,9 +227,9 @@ TODO 待研究。
 ## 四、个人的账号密码管理
 
 我曾经大量使用了 Chrome/Firefox 自带的密码存储功能，但用到现在其实也发现了它们的许多弊端。
-有同事推崇 1Password 的使用体验，它的自动填充跟同站点的多密码管理确实做得非常优秀，但一是要收费，二是它是商业的在线方案，我不太喜欢。
+有同事推崇 1Password 的使用体验，它的自动填充跟同站点的多密码管理确实做得非常优秀，但一是要收费，二是它是商业的在线方案，基于零信任原则，我不太想使用这种方案。
 
-作为开源爱好者，我最近找到了一个非常适合我自己的方案：[**password-store**](https://www.passwordstore.org/)
+作为开源爱好者，我最近找到了一个非常适合我自己的方案：[**password-store**](https://www.passwordstore.org/).
 
 这套方案使用 gpg 加密账号密码，每个文件就是一个账号密码，通过文件树来组织与匹配账号密码与 APP/站点的对应关系，并且生态完善，对 firefox/chrome/android/ios 的支持都挺好。
 
@@ -244,6 +244,8 @@ TODO 待研究。
 1. 在安卓与电脑浏览器中，分别使用这些客户端来读写 pass 中的密码：
 1. Android: <https://github.com/android-password-store/Android-Password-Store>
 1. Brosers(Chrome/Firefox): <https://github.com/browserpass/browserpass-extension>
+
+我的详细 pass 配置见 [ryan4yin/nix-config/password-store](https://github.com/ryan4yin/nix-config/tree/main/home/base/desktop/password-store).
 
 其他相关资料：
 
