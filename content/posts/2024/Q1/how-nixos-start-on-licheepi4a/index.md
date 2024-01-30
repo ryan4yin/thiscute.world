@@ -10,7 +10,7 @@ resources:
   - name: "featured-image"
     src: "lp4a-pinout-debuglog-1.webp"
 
-tags: [Linux", "NixOS", "LicheePi4A", "Embedded", "U-Boot", "RISC-V"]
+tags: ["Linux", "NixOS", "LicheePi4A", "Embedded", "U-Boot", "RISC-V"]
 categories: ["tech"]
 series: []
 hiddenFromHomePage: false
