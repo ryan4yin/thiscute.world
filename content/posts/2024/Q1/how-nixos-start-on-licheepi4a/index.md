@@ -12,7 +12,7 @@ resources:
 
 tags: ["Linux", "NixOS", "LicheePi4A", "Embedded", "U-Boot", "RISC-V"]
 categories: ["tech"]
-series: []
+series: ["NixOS 与 Nix Flakes"]
 hiddenFromHomePage: false
 hiddenFromSearch: false
 
