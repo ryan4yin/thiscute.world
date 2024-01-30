@@ -76,7 +76,7 @@ comment:
 
 1. **零信任**：不信任任何云服务提供商、本地硬盘、网络等的可靠性与安全性，因此任何数据的落盘、网络传输都应该加密，任何数据都应该有多个副本。
 1. **Serverless**: 尽可能利用已有的各种云服务或 Git 之类的分布式存储工具来存储数据，而不是自己额外搭建一堆各种服务。减轻维护负担。
-    1. 实际上我个人最近三四年都没维护过任何个人的公网服务器，这个博客以及去年搭建的 NixOS 文档站全都是用的 Vercel 免费静态站点服务，各种数据也全都优先选用 Git 做存储与版本管理。我 Homelab 算力不错，但主要都是用来做各种测试的，一想到要在里面跑什么服务然后还要确保它不挂就头疼——那不就跟每天上班做的事情一样了么 emmmm
+   1. 实际上我个人最近三四年都没维护过任何个人的公网服务器，这个博客以及去年搭建的 NixOS 文档站全都是用的 Vercel 免费静态站点服务，各种数据也全都优先选用 Git 做存储与版本管理。我 Homelab 算力不错，但主要都是用来做各种测试的，一想到要在里面跑什么服务然后还要确保它不挂就头疼——那不就跟每天上班做的事情一样了么 emmmm
 
 这篇文章记录下我做的相关调研工作、我当前的数据安全方案以及未来可能的改进方向。
 
@@ -92,11 +92,11 @@ comment:
 1. SSH 密钥管理
 2. 各种网站、APP 的账号密码管理
 3. 灾难恢复相关的数据存储与管理
-    1. 比如说 GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份等，日常都不需要用到，但非常重要，建议离线加密存储。
+   1. 比如说 GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份等，日常都不需要用到，但非常重要，建议离线加密存储。
 4. 需要在多端访问的重要个人数据
-    1. 比如说个人笔记、图片、视频等数据，这些数据具有私密性，但又需要在多端访问。可借助支持将数据加密存储到云端的工具来实现。
-6. 个人电脑的数据安全与灾难恢复
-    1. 我主要使用 macOS 与 NixOS，因此主要考虑的是这两个系统的数据安全与灾难恢复。
+   1. 比如说个人笔记、图片、视频等数据，这些数据具有私密性，但又需要在多端访问。可借助支持将数据加密存储到云端的工具来实现。
+5. 个人电脑的数据安全与灾难恢复
+   1. 我主要使用 macOS 与 NixOS，因此主要考虑的是这两个系统的数据安全与灾难恢复。
 
 下面就分别就这几个部分展开讨论。
 
@@ -293,9 +293,9 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 1. 使用如下参数生成 GPG 密钥：
 
-```
-gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo AES256 ...
-```
+   ```
+   gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo AES256 ...
+   ```
 
 2. 加密、签名、认证都使用不同的密钥，每个密钥只用于特定的场景，这样即使某个密钥泄漏，也不会影响其他场景的安全性。
 
@@ -355,8 +355,8 @@ gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo
 1. 照片、视频等其他个人数据
 1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
 1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
-    - [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
-    - [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
+   - [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
+   - [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
 
 ## 八、桌面电脑的数据安全
 
@@ -387,6 +387,14 @@ gpg --s2k-mode 3 --s2k-count 65011712 --s2k-digest-algo SHA512 --s2k-cipher-algo
 
 此外还有我 Homelab 的一些服务器、虚拟机，为了方便在所有主机上 ssh 登录，都统一使用了一个 Homelab 专用私钥，保存在我的 secrets 仓库中，在部署我的 nix-config 时，agenix 会将其解密出来并存放到特定位置。
 我的 `~/.ssh/config` 会指定使用该固定位置的密钥登录 Homelab 主机。
+
+### macOS/NixOS 数据的灾难恢复？
+
+在使用 nix-darwin 跟 NixOS 的情况下，整个系统都是通过我的 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config) 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。
+
+只需要简单的几行命令就能在一个全新的系统上恢复出我的 macOS / NixOS 桌面环境，所有密钥也会由 agenix 自动解密并放置到正确的位置。
+
+要说有恢复难题的，也就是一些个人数据了，这部分已经在前面第七小节介绍过了，用 rclone/restic 就行。
 
 ## 九、总结下我的数据存在了哪些地方
 
