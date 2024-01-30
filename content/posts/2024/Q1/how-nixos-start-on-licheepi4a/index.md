@@ -1188,6 +1188,9 @@ Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关
 **NixOS 跟其他传统发行版在启动流程中最大的区别是它自定义了一个 init 脚本，在启动 systemd 之前，它会先执行这个脚本进行文件系统的初始化操作，准备好最基础的 FHS 目录结构，使得后续的 systemd 以及其他服务能正常启动**。
 正是因为这个 init 脚本，NixOS 才能在仅有 `/boot` 与 `/nix` 这两个目录的情况下正常启动整个系统。
 
+> NixOS 数据的集中化只读存储使更多的骚操作成为可能，比如直接使用 tmpfs 作为根文件系统，将需要持久化的目录挂载到外部存储设备上，这样每次重启系统时，所有预期之外的临时数据都会被清空，进一步保证了系统的可复现性与安全性。
+> 如果你有系统洁癖，而且有兴趣折腾，那就快来看看 @LanTian 写的 [NixOS 系列（四）：「无状态」操作系统](https://lantian.pub/article/modify-computer/nixos-impermanence.lantian/) 吧~
+
 最终在 LicheePi4A 成功启动后的登录的截图：
 
 {{<figure src="./nixos-licheepi-neofetch.webp" title="NixOS 成功启动" width="80%">}}
