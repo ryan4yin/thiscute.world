@@ -2004,14 +2004,17 @@ IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI �
 NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔改，要在 NixOS 上使用 T-Head 的工具链，就要使这一堆魔改的东西在 T-Head 的工具链上也能 Work，这个工作量很大，也很有技术难度。</p>
 <p>所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一些编译问题。</p>
 <h2 id="五我是如何构建出一个可以在-licheepi-4a-上运行的-nixos-镜像的" class="headerLink">
-    <a href="#%e4%ba%94%e6%88%91%e6%98%af%e5%a6%82%e4%bd%95%e6%9e%84%e5%bb%ba%e5%87%ba%e4%b8%80%e4%b8%aa%e5%8f%af%e4%bb%a5%e5%9c%a8-licheepi-4a-%e4%b8%8a%e8%bf%90%e8%a1%8c%e7%9a%84-nixos-%e9%95%9c%e5%83%8f%e7%9a%84" class="header-mark"></a>五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的</h2><p>到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，最终成功启动的截图：</p>
+    <a href="#%e4%ba%94%e6%88%91%e6%98%af%e5%a6%82%e4%bd%95%e6%9e%84%e5%bb%ba%e5%87%ba%e4%b8%80%e4%b8%aa%e5%8f%af%e4%bb%a5%e5%9c%a8-licheepi-4a-%e4%b8%8a%e8%bf%90%e8%a1%8c%e7%9a%84-nixos-%e9%95%9c%e5%83%8f%e7%9a%84" class="header-mark"></a>五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的</h2><p>到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，
+<strong>NixOS 跟其他传统发行版在启动流程中最大的区别是它自定义了一个 init 脚本，在启动 systemd 之前，它会先执行这个脚本进行文件系统的初始化操作，准备好最基础的 FHS 目录结构，使得后续的 systemd 以及其他服务能正常启动</strong>。
+正是因为这个 init 脚本，NixOS 才能在仅有 <code>/boot</code> 与 <code>/nix</code> 这两个目录的情况下正常启动整个系统。</p>
+<p>最终在 LicheePi4A 成功启动后的登录的截图：</p>
 <figure><img src="./nixos-licheepi-neofetch.webp" width="80%"/><figcaption>
             <h4>NixOS 成功启动</h4>
         </figcaption>
 </figure>
 
 <p>那么我们如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像呢？</p>
-<p>这个讲起来就很费时间了，涉及到了 NixOS 的交叉编译系统，内核 override, flakes, 镜像构建等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nixos-licheepi4a</a>.</p>
+<p>这个讲起来就很费时间了，涉及到了 NixOS 的<a href="https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation" target="_blank" rel="noopener noreferrer">交叉编译系统</a>，<a href="https://nixos-and-flakes.thiscute.world/zh/development/kernel-development" target="_blank" rel="noopener noreferrer">内核 override</a>, <a href="https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes" target="_blank" rel="noopener noreferrer">flakes</a>, <a href="https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix" target="_blank" rel="noopener noreferrer">镜像构建</a>等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nixos-licheepi4a</a>.</p>
 <p>用一句话概括就是：跟传统 Linux 发行版的构建方法也完全不同，整个镜像构建的项目完全使用 Nix 语言声明式编写，而且这份配置也可用于系统后续的持续声明式更新部署（我还给出了一个 demo）。</p>
 <p>最后，再推荐一波我的 NixOS 入门指南：<a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-and-flakes-book</a>，对 NixOS 感兴趣的读者们，快进我碗里来（</p>
 <h2 id="参考" class="headerLink">
