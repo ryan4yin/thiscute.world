@@ -210,7 +210,7 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>Android: <a href="https://github.com/android-password-store/Android-Password-Store" target="_blank" rel="noopener noreferrer">https://github.com/android-password-store/Android-Password-Store</a></li>
 <li>Brosers(Chrome/Firefox): <a href="https://github.com/browserpass/browserpass-extension" target="_blank" rel="noopener noreferrer">https://github.com/browserpass/browserpass-extension</a></li>
 </ol>
-<p>我的详细 pass 配置见 <a href="https://github.com/ryan4yin/nix-config/tree/main/home/base/desktop/password-store" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/password-store</a>.</p>
+<p>我的详细 pass 配置见 <a href="https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/password-store" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/password-store</a>.</p>
 <p>其他相关资料：</p>
 <ul>
 <li><a href="https://github.com/tijn/awesome-password-store" target="_blank" rel="noopener noreferrer">awesome-password-store</a></li>
@@ -280,7 +280,7 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </li>
 </ol>
 <p>为了在全局使用这些参数，可以将它们添加到你的 <code>~/.gnupg/gpg.conf</code> 配置文件中。</p>
-<p>详见我的 gpg 配置 <a href="https://github.com/ryan4yin/nix-config/tree/90cd503/home/base/desktop/gpg" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/gpg</a></p>
+<p>详见我的 gpg 配置 <a href="https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/gpg" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/gpg</a></p>
 <h2 id="五跨平台的加密备份同步工具的选择" class="headerLink">
     <a href="#%e4%ba%94%e8%b7%a8%e5%b9%b3%e5%8f%b0%e7%9a%84%e5%8a%a0%e5%af%86%e5%a4%87%e4%bb%bd%e5%90%8c%e6%ad%a5%e5%b7%a5%e5%85%b7%e7%9a%84%e9%80%89%e6%8b%a9" class="header-mark"></a>五、跨平台的加密备份同步工具的选择</h2><p>我日常同时在使用 macOS 与 NixOS，因此不论是需要离线存储的灾难恢复数据，还是需要在多端访问的个人数据，都需要一个跨平台的加密备份与同步工具。</p>
 <p>前面提到的 pass 使用 GnuPG 进行文件级别的加密，但在很多场景下这不太适用，而且 GPG 本身也太重了，还一堆历史遗留问题，我不太喜欢。</p>
@@ -313,7 +313,7 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li><a href="https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac" target="_blank" rel="noopener noreferrer">restic</a>: 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。</li>
 </ol>
 <p>对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
-详见 <a href="https://github.com/ryan4yin/nix-config/tree/27f1d54/secrets" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/secrets</a>.
+详见 <a href="https://github.com/ryan4yin/nix-config/tree/7e67466/secrets" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/secrets</a>.
 关于这个仓库的详细加解密方法，在后面第八节「桌面电脑的数据安全」中会介绍。</p>
 <h2 id="六灾难恢复相关的数据存储与管理" class="headerLink">
     <a href="#%e5%85%ad%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e7%9b%b8%e5%85%b3%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%82%a8%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>六、灾难恢复相关的数据存储与管理</h2><p>相关数据包括：GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份、PGP 主密钥与吊销证书等等。</p>
