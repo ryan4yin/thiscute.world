@@ -28,7 +28,7 @@ comment:
 - 发了两篇博客
     - [NixOS 在 Lichee Pi 4A 上是如何启动的](https://thiscute.world/posts/how-nixos-start-on-licheepi4a/)
     - [个人数据安全不完全指南](https://thiscute.world/posts/an-incomplete-guide-to-data-security/)
-- 对深入学习 NixOS 产生了兴趣，读了些 [the Nix community RFCs](https://github.com/NixOS/rfcs/)、Nixpkgs PR 等相关资料。
+- 对深入学习 NixOS 产生了兴趣，读了些 [the Nix community RFCs](https://github.com/NixOS/rfcs/)、[Nixpkgs PR](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Acomments-desc) 等相关资料。
     - [RFC062 - content-addressed-paths](https://github.com/NixOS/rfcs/blob/master/rfcs/0062-content-addressed-paths.md) 
         - 受到许多 Nix 用户关注的一个实验特性。它从包的 output 计算其 Output path 与对应的 Hash 值，固定的 Output 总是输出到固定的地址。
         - 这一是能减少许多重复的构建（许多包可能因其 Input 不同而被重复构建，浪费资源），二是可以替代掉旧的基于 public key 的缓存信任模型（拉下来的缓存只要地址跟源码能匹配，那就肯定没有被篡改过）。[Content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage) 是一个在存储领域被广泛用于数据可信校验与数据去重，比如你在 QQ 里上传一份，有时候发现它几个 G 的数据一两秒就上传成功了，这实际根本没上传数据，只是对比了下文件 Hash 发现 QQ 线上已经有这个文件了。
