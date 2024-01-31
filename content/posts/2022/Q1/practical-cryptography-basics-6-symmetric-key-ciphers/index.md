@@ -39,9 +39,8 @@ code:
 - ciphertext: 密文，即加密后的信息。对应的词是明文 plaintext
 - password: 这个应该不需要解释，就是我们日常用的各种字符或者数字密码，也可称作口令，通常都比较短（绝大部分用户密码应该都只有 8 - 16 位）。
   - 因为站点太多，密码太难记，现代社会正在逐步推荐使用生物特征（指纹、面部识别等，如 pass key、手机指纹识别）或者硬件密钥（U2F）来替代传统的密码。
-- [passphrase](https://en.wikipedia.org/wiki/Passphrase): 翻译成「密码词组」或者「密碼片語」，通常指用于保护密钥或者其他敏感数据的一个 password
-  - 如果你用 ssh/gnupg/openssl 等工具生成或使用过密钥，应该对它不陌生。
-  - 因为 PGP 密钥、ssh key 通常都比较重要，泄漏会造成较大风险，因此它们的 passphrase 要设得比 password 长才够安全，建议至少设置为 16 位。
+- [passphrase](https://en.wikipedia.org/wiki/Passphrase): 翻译成「密码词组」，也就是用一个个单词组合而成的 Password，特点是长度比较长，而且比随机密码更容易记忆。
+  - 如果你用 ssh/gnupg/openssl 等工具生成或使用过密钥，应该对它不陌生，它们的 passphrase 长度不受限，因此可以使用类似 `you-are-not-my-enemy-but-I'm-your-father` 这样的词组方式作为其密码，强度高，而且好记。
 
 在密码学里面，最容易搞混的词估计就是「密码」了，cipher/password/passphrase 都可以被翻译成「密码」，需要注意下其中区别。
 
