@@ -369,7 +369,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 对于 NixOS，我当前的方案如下：
 
 - 桌面主机启用 LUKS2 全盘加密 + Secure Boot，在系统启动阶段需要输入 passphrase 解密 NixOS 系统盘才能正常进入系统。
-  - LUKS2 的 passphrase 为一个比较长的密码学随机字符串，包含了特殊字符、数字、大小写字母。
+  - LUKS2 的 passphrase 为一个比较长的密码学随机字符串。
   - LUKS2 的所有安全设置全拉到能接受的最高（比较重要的是 `--iter-time`，计算出 unlock key 的用时，默认 2s，安全起见咱设置成了 5s）
     ```
     cryptsetup --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-urandom --verify-passphrase luksFormat device
@@ -418,13 +418,20 @@ secrets 这个私有仓库是整个方案的核心，它包含了所有重要数
 另外需要注意的是，为了避免循环依赖，secrets 与 password-store 这两个仓库的备份不应该使用 rclone 再次加密，而是直接使用 age 对称加密。
 这样只要我还记得 age 的解密密码、gpg 密钥的 passphrase 等少数几个密码，就能顺着整条链路解密出所有的数据。
 
-## 十、这套方案下需要记忆几个密码？
+## 十、这套方案下需要记忆几个密码？这些密码该如何设计？
 
-绝大部分密码都通过 pass 加密保存与多端同步了，不需要额外记忆。
+绝大部分密码都建议设置为包含大小写跟部分特殊字符的密码学随机字符串，通过 pass 加密保存与多端同步与自动填充，不需要额外记忆。
+考虑到我们基本不会需要手动输入这些密码，因此它们的长度可以设置得比较长，比如 16-24 位。
+
 再通过一些合理的密码复用手段，可以将需要记忆的密码数量降到 3 - 5 个，并且确保日常都会输入，避免遗忘。
 
 不过这里需要注意一点，就是 SSH 密钥、GPG 密钥、系统登录密码这三个密码最好不要设成一样。
 前面我们已经做了分析，这三个 passphrase 的加密强度区别很大，设成一样的话，使用 bcrypt 的 SSH 密钥将会成为整个方案的短板。
+
+而关于密码内容的设计，网上能搜到很多成熟的建议，有两个思路：
+
+1. 使用由一个个单词组成的较长的 passphrase，比如 `don't-do-evil_I-promise-this-would-become-not-a-dark-corner` 这样的。
+2. 使用字母大小写加数字、特殊字符组成的密码学随机字符串，比如 `` 这样的。
 
 此外为了方便记忆，可以专门编些小故事来记忆它们，hint 中也能加上故事中的一些关键字。
 毕竟人类擅长记忆故事，但不擅长记忆随机字符。
