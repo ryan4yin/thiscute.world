@@ -246,7 +246,7 @@ TODO 待研究。
 1. Android: <https://github.com/android-password-store/Android-Password-Store>
 1. Brosers(Chrome/Firefox): <https://github.com/browserpass/browserpass-extension>
 
-我的详细 pass 配置见 [ryan4yin/nix-config/password-store](https://github.com/ryan4yin/nix-config/tree/main/home/base/desktop/password-store).
+我的详细 pass 配置见 [ryan4yin/nix-config/password-store](https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/password-store).
 
 其他相关资料：
 
@@ -302,7 +302,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 为了在全局使用这些参数，可以将它们添加到你的 `~/.gnupg/gpg.conf` 配置文件中。
 
-详见我的 gpg 配置 [ryan4yin/nix-config/gpg](https://github.com/ryan4yin/nix-config/tree/90cd503/home/base/desktop/gpg)
+详见我的 gpg 配置 [ryan4yin/nix-config/gpg](https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/gpg)
 
 ## 五、跨平台的加密备份同步工具的选择
 
@@ -330,7 +330,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 3. [restic](https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac): 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。
 
 对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
-详见 [ryan4yin/nix-config/secrets](https://github.com/ryan4yin/nix-config/tree/27f1d54/secrets).
+详见 [ryan4yin/nix-config/secrets](https://github.com/ryan4yin/nix-config/tree/7e67466/secrets).
 关于这个仓库的详细加解密方法，在后面第八节「桌面电脑的数据安全」中会介绍。
 
 ## 六、灾难恢复相关的数据存储与管理
