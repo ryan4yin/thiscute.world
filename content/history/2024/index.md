@@ -26,6 +26,11 @@ comment:
 ### 2024-02-07
 
 - 帮我妹弄了个 Copilot，她对弄个人网站感兴趣，又把前年国庆给她弄的 Hugo 站点捡回来搞了下。
+- 在 NixOS 中文群水群，跟群友聊了 Nix/NixOS 当前文档上的一些问题：
+    - nix.dev 的 sidebar index 很散乱，完全没搞明白自己的定位。尤其是里面 NixOS 这一块塞了一堆杂七杂八的东西，搞得又好像个 wiki，根本不适合新手学习。
+    - nix.dev 的定位是 Nix 教程，从涵盖入门到深入学习的各种内容。但它现在的结构不太匹配这个定位。另一方面这也是说，官方目前根本没有 NixOS 的新手教程。
+    - Nixpkgs/NixOS 的文档没有分页，对 SEO 跟阅读都很不友好。
+- 另外也聊到了 nix flake lock --update-input 这个命令已经被废弃了，现在推荐用 nix flake update xxx 来更新 flake 的依赖。
 
 ### 2024-02-05
 
