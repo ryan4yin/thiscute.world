@@ -242,9 +242,10 @@ TODO 待研究。
 
 1. pass 的加密数据使用 GitHub 私有仓库存储，pass 原生支持基于 Git 的存储方案。
    1. 因为数据全都是使用 ECC Curve 25519 GPG 加密的，即使仓库内容泄漏，数据的安全性仍然有保障。
-1. 在安卓与电脑浏览器中，分别使用这些客户端来读写 pass 中的密码：
-1. Android: <https://github.com/android-password-store/Android-Password-Store>
-1. Brosers(Chrome/Firefox): <https://github.com/browserpass/browserpass-extension>
+1. 在浏览器与移动端，则分别使用这些客户端来读写 pass 中的密码：
+   1. Android: <https://github.com/android-password-store/Android-Password-Store>
+   1. IOS： <https://github.com/mssun/passforios>
+   1. Brosers(Chrome/Firefox): <https://github.com/browserpass/browserpass-extension>
 
 我的详细 pass 配置见 [ryan4yin/nix-config/password-store](https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/password-store).
 
