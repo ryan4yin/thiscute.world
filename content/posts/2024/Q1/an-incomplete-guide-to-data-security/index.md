@@ -394,7 +394,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 ### macOS/NixOS 数据的灾难恢复？
 
-在使用 nix-darwin 跟 NixOS 的情况下，整个 macOS/Nixos 的系统环境都是通过我的 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config) 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。
+在使用 nix-darwin 跟 NixOS 的情况下，整个 macOS/NixOS 的系统环境都是通过我的 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config) 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。
 
 只需要简单的几行命令就能在一个全新的系统上恢复出我的 macOS / NixOS 桌面环境，所有密钥也会由 agenix 自动解密并放置到正确的位置。
 
