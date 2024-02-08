@@ -376,6 +376,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
     cryptsetup --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-urandom --verify-passphrase luksFormat device
     ```
   - LUKS2 使用的 argon2id 是比 scrypt 更强的 KDF 算法，其安全性是足够的。
+- 使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空，这强制我去了解自己装的每个软件都存了哪些数据，是否需要持久化，使整个系统更白盒，提升了整个系统的环境可信度。
 - 重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地的 SSH 系统私钥自动解密。
   - 也就是说要在一台新电脑上成功部署我的 nix-config 配置，需要的准备流程：
     - 本地生成一个新的 ssh key，将公钥配置到 GitHub，并 `ssh-add` 这个新的私钥，使其能够访问到我的私有 secrets 仓库。
@@ -470,7 +471,7 @@ secrets 这个私有仓库是整个方案的核心，它包含了所有重要数
 1. 重新生成了所有的 SSH Key，增强了 passphrase 强度，bcrypt rounds 增加到 256，通过 `ssh-add` 使用，只需要在系统启动后输入一次密码即可，也不麻烦。
 2. 重新生成了所有的 PGP Key，主密钥离线加密存储，本地只保留了加密、签名、认证三个 PGP 子密钥。
 3. 重新生成了所有重要账号的密码，全部使用随机密码，一共改了二三十个账号。考虑到旧的 backup code 可能已经泄漏，我也重新生成了所有重要账号的 backup code.
-4. 重装 NixOS，使用 LUKS2 做全盘加密，启用 Secure Boot. 同时使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空，这强制我去了解自己装的每个软件都存了哪些数据，是否需要持久化，使整个系统更白盒，提升了我整个系统的环境可信度。
+4. 重装 NixOS，使用 LUKS2 做全盘加密，启用 Secure Boot. 同时使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空。
 5. 使用 nix-darwin 与 home-manager 重新声明式地配置了我的两台 MacBook Pro（Intel 跟 Apple Silicon 各一台），与我的 NixOS 共用了许多配置，最大程度上保持了所有桌面电脑的开发环境一致性，也确保了我始终能快速地在一台新电脑上部署我的整个开发环境。
 5. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记迁移到了一个私有 Git 仓库，用 GitJournal APP 在手机上查看编辑笔记，电脑端则是用 Emacs/Neovim。用了几周挺顺手的。
 6. 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.
