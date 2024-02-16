@@ -23,6 +23,14 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-02-16 - 2024-02-17
+
+- 弄了一天的 NixOS Router 跟 dae 配置，完成了这个 PR [ryan4yin/nix-config/pull/60](https://github.com/ryan4yin/nix-config/pull/60)，并且删掉了之前的 OpenWRT 虚拟机，离 All in NixOS 又近了一步。
+
+### 2024-02-14 - 2024-02-15
+
+- 回深圳，路上没事干，写了一天的 NixOS 文档，完成了这个 PR [ryan4yin/nixos-and-flakes-book/pull/86](https://github.com/ryan4yin/nixos-and-flakes-book/pull/86)
+
 ### 2024-02-10
 
 - 大年初一，拜年，吃饭。
