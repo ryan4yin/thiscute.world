@@ -3,7 +3,7 @@ title: "个人数据安全不完全指南"
 subtitle: ""
 description: ""
 date: 2024-01-30T13:48:30+08:00
-lastmod: 2024-01-30T13:48:30+08:00
+lastmod: 2024-02-19T13:48:30+08:00
 draft: false
 
 resources:
@@ -75,9 +75,11 @@ comment:
 
 我的个人数据安全方案，有两个核心的指导思想：
 
-1. **零信任**：不信任任何云服务提供商、本地硬盘、网络等的可靠性与安全性，因此任何数据的落盘、网络传输都应该加密，任何数据都应该有多个副本。
-1. **Serverless**: 尽可能利用已有的各种云服务或 Git 之类的分布式存储工具来存储数据，而不是自己额外搭建一堆各种服务。减轻维护负担。
-   1. 实际上我个人最近三四年都没维护过任何个人的公网服务器，这个博客以及去年搭建的 NixOS 文档站全都是用的 Vercel 免费静态站点服务，各种数据也全都优先选用 Git 做存储与版本管理。我 Homelab 算力不错，但主要都是用来做各种测试的，一想到要在里面跑什么服务然后还要确保它不挂就头疼——那不就跟每天上班做的事情一样了么 emmmm
+1. **零信任**：不信任任何云服务提供商、本地硬盘、网络等的可靠性与安全性，因此任何数据的落盘、网络传输都应该加密，任何数据都应该有多个副本（本地与云端）。
+1. **Serverless**: 尽可能利用已有的各种云服务或 Git 之类的分布式存储工具来存储数据、管理数据版本。
+   1. 实际上我个人最近三四年都没维护过任何个人的公网服务器，这个博客以及去年搭建的 NixOS 文档站全都是用的 Vercel 免费静态站点服务，各种数据也全都优先选用 Git 做存储与版本管理。
+   1. 我 Homelab 算力不错，但每次往其中添加一个服务前，我都会考虑下这是否有必要，是否能使用已有的工具完成这些工作。毕竟跑的服务越多，维护成本越高，安全隐患也越多。
+1. **开源**：尽可能使用开源工具，因为开源工具的安全性更容易被验证，也避免被供应商绑架。
 
 这篇文章记录下我做的相关调研工作、我当前的数据安全方案以及未来可能的改进方向。
 
@@ -350,16 +352,49 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 因为日常就需要在多端访问，因此显然不能离线存储。
 
-我的方案如下：
+### 1. 个人笔记
 
-1. 个人笔记：
-    1. 使用 [GitJournal](https://github.com/GitJournal/GitJournal) APP，将笔记存储在 GitHub 私有仓库中，并通过该仓库做多端同步。
-    1. 遗憾的是目前在 Android 平台上并未找到很合适的基于 Git 的加密笔记 APP，GitJournal 本身也不支持加密，因此我的个人笔记目前是明文存储的。
-1. 照片、视频等其他个人数据：
-    1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
-    1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
-        1. [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
-        1. [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
+不包含个人隐私的笔记，我直接用公开 GitHub 仓库 [ryan4yin/knowledge] (https://github.com/ryan4yin/knowledge/) 存储了，不需要加密。
+
+对于不便公开的个人笔记，有这些考虑：
+
+1. 我的个人笔记目前主要是在移动端编辑，因此支持 Android/iOS 的客户端是必须的。
+1. 要能支持 Markdown/Orgmode 等通用的纯文本格式，纯文本格式更容易编写与分析，而通用格式则可以避免被平台绑定。
+1. 因为主要是移动端编辑，其实不需要多复杂的功能。
+   - 以后可能会希望在桌面端做富文本编辑，但目前还没这种私人笔记的需求。
+1. 希望具有类似 Git 的分布式存储与同步、笔记版本管理功能，如果能直接使用 Git 那肯定是最好的。
+1. 端到端的加密存储与同步
+1. 如果有类似 Git 的 Diff 功能就更好了。
+
+我一开始考虑直接使用基于 Git 仓库的方案，能获得 Git 的所有功能，同时还避免额外自建一个笔记服务。
+找到个 [GitJournal](https://github.com/GitJournal/GitJournal) ，数据存在 GitHub 私有仓库用了一个月，功能不太多但够用。但发现它项目不咋活跃，基于 SSH 协议的 Git 同步在大仓库上也有些毛病，而且数据明文存在 Git 仓库里，安全性相对差一些。
+
+另外找到个 [git-crypt](https://github.com/AGWA/git-crypt) 能在 Git 上做一层透明加密，但没找到支持它的移动端 APP，而且项目也不咋活跃。
+
+在 <https://github.com/topics/note-taking> 下看了些流行项目，主要有这些：
+
+1. Joplin, Standard Notes 等支持端到端加密的笔记 APP
+    - Markdown 支持
+    - 全平台客户端支持
+    - 需要使用服务端实现端到端加密同步，可自建服务端
+2. Outline 等 Wiki 系统
+    - 它直接就是个 Web 服务，主要面向公开的 Wiki，不适合私人笔记
+3. Logseq/Obsidian 等双链笔记软件（其中 Obsidian 是闭源软件）
+    - 都是基于本地文件的笔记系统，也没加密工具，需要借助其他工具实现数据加密与同步
+    - 其中 Logseq 是大纲流，一切皆列表。而 Obsidian 是文档流，比较贴近传统的文档编辑体验。
+    - Obsidian 跟 Logseq 的 Sync 功能都是按月收费，相当的贵。社区有通过 Git 同步的方案，但都很 trickk，也不稳定。
+3. AppFlowy/Affine/apitable 等 Notion 替代品
+    - 都是富文本编辑，不适合移动端设备
+
+在移动端使用 synthing 或 git 等第三方工具同步笔记数据，都很麻烦，而且安全性也不够。
+因此目前看最稳妥的选择，是选用第一类能自建服务端的笔记 APP，简单试用后我选择了最流行的 Joplin.
+
+### 2. 照片、视频等其他个人数据
+
+1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
+1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
+    1. [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
+    1. [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
 
 
 ## 八、桌面电脑的数据安全
