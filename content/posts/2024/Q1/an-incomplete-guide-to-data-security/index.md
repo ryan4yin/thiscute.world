@@ -256,6 +256,10 @@ TODO 待研究。
 - [awesome-password-store](https://github.com/tijn/awesome-password-store)
 - <https://github.com/gopasspw/gopass>: reimplement in go, with more features.
 
+遇到过的一些问题与解法：
+
+- [passforios - Merge conflicts](https://github.com/mssun/passforios/issues/131)
+
 ### 3.1 pass 使用的 GPG 够安全么？
 
 GnuPG 是一个很有历史，而且使用广泛的加密工具，但它的安全性如何呢？
