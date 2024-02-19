@@ -373,10 +373,8 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 在 <https://github.com/topics/note-taking> 下看了些流行项目，主要有这些：
 
-1. Joplin, Standard Notes 等支持端到端加密的笔记 APP
-    - Markdown 支持
-    - 全平台客户端支持
-    - 需要使用服务端实现端到端加密同步，可自建服务端
+1. Joplin
+   - 支持 S3/WebDAV 等多种协议同步数据，支持端到端加密
 2. Outline 等 Wiki 系统
     - 它直接就是个 Web 服务，主要面向公开的 Wiki，不适合私人笔记
 3. Logseq/Obsidian 等双链笔记软件（其中 Obsidian 是闭源软件）
@@ -386,8 +384,8 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 3. AppFlowy/Affine/apitable 等 Notion 替代品
     - 都是富文本编辑，不适合移动端设备
 
-在移动端使用 synthing 或 git 等第三方工具同步笔记数据，都很麻烦，而且安全性也不够。
-因此目前看最稳妥的选择，是选用第一类能自建服务端的笔记 APP，简单试用后我选择了最流行的 Joplin.
+在移动端使用 Synthing 或 Git 等第三方工具同步笔记数据，都很麻烦，而且安全性也不够。
+因此目前看在移动端也能用得舒服的话，最稳妥的选择是第一类笔记 APP，简单试用后我选择了最流行的 Joplin.
 
 ### 2. 照片、视频等其他个人数据
 
