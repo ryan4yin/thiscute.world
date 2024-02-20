@@ -56,12 +56,6 @@ toc:
 
 - 结合工作需求，深入了解下当下火热的 AIGC 技术
   - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
-- All in NixOS
-  - 将 OpenWRT 旁路由替换成 NixOS - 进行中 - 5%
-  - 将 Homelab 中 Kubernetes 集群的节点全都替换成 NixOS - 未开始 - 0%
-  - 将 Homelab 中的其他测试机，能替换的都替换成 NixOS - 未开始 - 0%
-  - 终极目标 - 将整个 Proxmox VE 集群全都替换成 NixOS，在 NixOS 上跑 KVM 虚拟机 - 未开始 - 0%
-- 折腾 Emacs、Guile Scheme 语言以及 Guix 操作系统
 - 操作系统
   - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
