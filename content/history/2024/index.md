@@ -23,6 +23,15 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-03-18 - 2024-02-19
+
+- 春節正式結束，開始了新的一年的工作，不過還沒咋進入工作狀態。
+- 搞了下 Homelab，將之前弄的三臺 NixOS 主機分別擔任監控、應用、路由器三個角色：
+    - 使用 NixOS 部署了 Prometheus + Node-Exporters 監控系統，一些好用的 Grafana Dashbaords，用 caddy 做反向代理。
+    - 負責應用的 NixOS 主機上部署了許多應用，如 Homelab, SFTPGO， Uptime-Kuma 等。
+- 加了一個 6 節點的 k3s 集羣，並嘗試使用 pulumi 來聲明式 + GitOps 地管理整個集羣配置，但還沒搞定。
+
+
 ### 2024-02-16 - 2024-02-17
 
 - 弄了一天的 NixOS Router 跟 dae 配置，完成了这个 PR [ryan4yin/nix-config/pull/60](https://github.com/ryan4yin/nix-config/pull/60)，并且删掉了之前的 OpenWRT 虚拟机，离 All in NixOS 又近了一步。
