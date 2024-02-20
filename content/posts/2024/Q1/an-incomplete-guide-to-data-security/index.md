@@ -407,11 +407,11 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 ## 八、桌面电脑與 Homelab 的数据安全
 
-我的桌面電腦都是 macOS 與 NixOS，Homlab 虛擬機也已經 all in NixOS，另外我目前沒有任何雲上服務器。
+我的桌面电脑都是 macOS 与 NixOS，Homlab 虚拟机也已经 all in NixOS，另外我目前没有任何云上服务器。
 
-另外虽然也有兩臺 Windows 虛擬機，但極少對它們做啥改動，只要做好虛擬機快照的備份就 OK 了。
+另外虽然也有两台 Windows 虚拟机，但极少对它们做啥改动，只要做好虚拟机快照的备份就 OK 了。
 
-对于 NixOS 桌面系統與 Homelab 虛擬機，我当前的方案如下：
+对于 NixOS 桌面系统与 Homelab 虚拟机，我当前的方案如下：
 
 - 桌面主机
   - 启用 LUKS2 全盘加密 + Secure Boot，在系统启动阶段需要输入 passphrase 解密 NixOS 系统盘才能正常进入系统。
@@ -423,9 +423,9 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
     - LUKS2 使用的 argon2id 是比 scrypt 更强的 KDF 算法，其安全性是足够的。
   - 桌面主機使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空，这强制我去了解自己装的每个软件都存了哪些数据，是否需要持久化，使整个系统更白盒，提升了整个系统的环境可信度。
 - Homelab
-  - Homelab 的 PVE 物理機啟用 LUKS 全盘加密與 btrfs + zstd 壓縮，買幾個便宜的 U 盤用於自動解密（注意解密密鑰的離線加密備份）。
-  - Homelab 虛擬機統一使用一個 Homelab 专用 SSH 私钥，保存在我的 secrets 仓库中，在部署我的桌面電腦與 Homelab 中的專用跳板機时，agenix 会将其解密出来并存放到特定位置。
-    - Homelab 虛擬機包含的重要數據相對少些，因此安全要求要弱於桌面主機。
+  - Homelab 的 PVE 物理机启用 LUKS 全盘加密与 btrfs + zstd 压缩，买几个便宜的 U 盘用于自动解密（注意解密密钥的离线加密备份）。
+  - Homelab 虚拟机统一使用一个 Homelab 专用 SSH 私钥，保存在我的 secrets 仓库中，在部署我的桌面电脑与 Homelab 中的专用跳板机时，agenix 会将其解密出来并存放到特定位置。
+    - Homelab 虚拟机包含的重要数据相对少些，因此安全要求要弱于桌面主机。
 - Secrets 說明
   - 重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地的 SSH 系统私钥自动解密。
     - 也就是说要在一台新电脑（不論是桌面主機還是 NixOS 虛擬機）上成功部署我的 nix-config 配置，需要的准备流程：
@@ -434,10 +434,10 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
       - 在旧主机上，将收到的新主机公钥添加到 secrets 仓库的 secrets.nix 配置文件中，并使用 agenix 命令 rekey 所有 secrets 数据，然后 commit & push。
       - 现在新主机就能够通过 `nixos-rebuild switch` 或 `darwin-rebuild switch` 成功部署我的 nix-config 了，agenix 会自动使用新主机的系统私钥 `/etc/ssh/ssh_host_ed25519_key` 解密 secrets 仓库中的数据并完成部署工作。
     - 这份 secrets 配置在 macOS 跟 NixOS 上通用，也与 CPU 架构无关，agenix 在这两个系统上都能正常工作。
-  - 基於安全性考慮，對 secrets 進行分類管理與加密：
-    - 桌面電腦能解密所有的 secrets
-    - Homelab 中的跳板機只能解密 Homelab 相關的所有 secrets
-    - 其他所有的 NixOS 虛擬機只能解密同類別的 secrets，比如一臺監控機只能解密監控相關的 secrets.
+  - 基于安全性考虑，对 secrets 进行分类管理与加密：
+    - 桌面电脑能解密所有的 secrets
+    - Homelab 中的跳板机只能解密 Homelab 相关的所有 secrets
+    - 其他所有的 NixOS 虚拟机只能解密同类别的 secrets，比如一台监控机只能解密监控相关的 secrets.
 
 对于 macOS，它本身的磁盘安全我感觉就已经做得很 OK 了，而且它能改的东西也比较有限。我的安全设置如下：
 

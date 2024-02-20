@@ -32,23 +32,23 @@ toc:
 
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - Homelab 改造
-  - All in NixOS，做到 99% 的聲明式配置
-    - 監控系統遷移到 NixOS（Prometheus + Alertmanager + Grafana + Uptime-Kuma） - 100%
-    - 網絡設備遷移到 NixOS（dae 旁路網關 + tailscale 網關） - 100%
-    - K8s 集羣遷移到 NixOS - 100%
-  - K8s 集羣使用 Pulumi 進行聲明式自動配置 - 30%
-    - 部署 victoriametrics 監控系統 - 10%
-    - 部署 cert-manager 並使用它聲明管理所有 Homelab 所需 TLS 證書 - 0%
-    - 所有 Homelab 流量全部走 K8s 實現自動化的 HTTPS 證書管理 - 0%
-  - Proxmox VE 所有節點的磁盤做 LUKS 加密，使用幾個便宜的 U 盤存儲解密密鑰（注意備份密鑰！） - 0%
-  - Proxmox VE 所有節點的配置也使用 Pulumi 配合 NixOS 進行聲明式自動配置 - 0%
-  - 基於 restic 與 rclone 做 Homelab 數據加密備份與版本控制 - 0%
-  - 監控節點性能給得夠高，將其同時用做 homelab 的控制節點，方便我在 macOS 上進行 homelab 的管理與更新 - 0%
-    - 控制節點需要存儲一些重要的 SSH 私鑰等數據，安全要求僅次於我所有桌面電腦，必須在 PVE 節點磁盤加密方案完成後才能繼續推進。
+  - All in NixOS，做到 99% 的声明式配置
+    - 监控系统迁移到 NixOS（Prometheus + Alertmanager + Grafana + Uptime-Kuma） - 100%
+    - 网络设备迁移到 NixOS（dae 旁路网关 + tailscale 网关） - 100%
+    - K8s 集羣迁移到 NixOS - 100%
+  - K8s 集羣使用 Pulumi 进行声明式自动配置 - 30%
+    - 部署 victoriametrics 监控系统 - 10%
+    - 部署 cert-manager 并使用它声明管理所有 Homelab 所需 TLS 证书 - 0%
+    - 所有 Homelab 流量全部走 K8s 实现自动化的 HTTPS 证书管理 - 0%
+  - Proxmox VE 所有节点的磁盘做 LUKS 加密，使用几个便宜的 U 盘存储解密密钥（注意备份密钥！） - 0%
+  - Proxmox VE 所有节点的配置也使用 Pulumi 配合 NixOS 进行声明式自动配置 - 0%
+  - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
+  - 监控节点性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS 上进行 homelab 的管理与更新 - 0%
+    - 控制节点需要存储一些重要的 SSH 私钥等数据，安全要求仅次于我所有桌面电脑，必须在 PVE 节点磁盘加密方案完成后才能继续推进。
     - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
-- 個人筆記遷移
-  - 數據全部到 Joplin + OneDrive 並啟用 E2EE 加密 - 100%
-  - 使用 restic 做 OneDrive 中 Joplin 數據的備份與版本控制 - 0%
+- 个人笔记迁移
+  - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
+  - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
 
 
 
