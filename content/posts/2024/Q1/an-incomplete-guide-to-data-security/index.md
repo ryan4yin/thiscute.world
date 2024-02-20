@@ -338,7 +338,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 3. [restic](https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac): 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。
 
 对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
-详见 [ryan4yin/nix-config/secrets](https://github.com/ryan4yin/nix-config/tree/7e67466/secrets).
+详见 [ryan4yin/nix-config/secrets].
 关于这个仓库的详细加解密方法，在后面第八节「桌面电脑的数据安全」中会介绍。
 
 ## 六、灾难恢复相关的数据存储与管理
@@ -441,7 +441,7 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 ### macOS/NixOS 数据的灾难恢复？
 
-在使用 nix-darwin 跟 NixOS 的情况下，整个 macOS/NixOS 的系统环境都是通过我的 [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config) 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。
+在使用 nix-darwin 跟 NixOS 的情况下，整个 macOS/NixOS 的系统环境都是通过我的 [ryan4yin/nix-config] 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。
 
 只需要简单的几行命令就能在一个全新的系统上恢复出我的 macOS / NixOS 桌面环境，所有密钥也会由 agenix 自动解密并放置到正确的位置。
 
@@ -549,3 +549,5 @@ TODO 后续再慢慢补充。
 [2021年，用更现代的方法使用PGP（上）]: https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/
 [Predictable, Passphrase-Derived PGP Keys]: https://nullprogram.com/blog/2019/07/10/
 [OpenPGP - The almost perfect key pair]: https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/
+[ryan4yin/nix-config]: (https://github.com/ryan4yin/nix-config)
+[ryan4yin/nix-config/secrets]: https://github.com/ryan4yin/nix-config/tree/7e67466/secrets
