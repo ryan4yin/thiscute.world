@@ -396,9 +396,9 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </li>
 </ol>
 <h2 id="八桌面电脑與-homelab-的数据安全" class="headerLink">
-    <a href="#%e5%85%ab%e6%a1%8c%e9%9d%a2%e7%94%b5%e8%84%91%e8%88%87-homelab-%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ae%89%e5%85%a8" class="header-mark"></a>八、桌面电脑與 Homelab 的数据安全</h2><p>我的桌面電腦都是 macOS 與 NixOS，Homlab 虛擬機也已經 all in NixOS，另外我目前沒有任何雲上服務器。</p>
-<p>另外虽然也有兩臺 Windows 虛擬機，但極少對它們做啥改動，只要做好虛擬機快照的備份就 OK 了。</p>
-<p>对于 NixOS 桌面系統與 Homelab 虛擬機，我当前的方案如下：</p>
+    <a href="#%e5%85%ab%e6%a1%8c%e9%9d%a2%e7%94%b5%e8%84%91%e8%88%87-homelab-%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ae%89%e5%85%a8" class="header-mark"></a>八、桌面电脑與 Homelab 的数据安全</h2><p>我的桌面电脑都是 macOS 与 NixOS，Homlab 虚拟机也已经 all in NixOS，另外我目前没有任何云上服务器。</p>
+<p>另外虽然也有两台 Windows 虚拟机，但极少对它们做啥改动，只要做好虚拟机快照的备份就 OK 了。</p>
+<p>对于 NixOS 桌面系统与 Homelab 虚拟机，我当前的方案如下：</p>
 <ul>
 <li>桌面主机
 <ul>
@@ -423,10 +423,10 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </li>
 <li>Homelab
 <ul>
-<li>Homelab 的 PVE 物理機啟用 LUKS 全盘加密與 btrfs + zstd 壓縮，買幾個便宜的 U 盤用於自動解密（注意解密密鑰的離線加密備份）。</li>
-<li>Homelab 虛擬機統一使用一個 Homelab 专用 SSH 私钥，保存在我的 secrets 仓库中，在部署我的桌面電腦與 Homelab 中的專用跳板機时，agenix 会将其解密出来并存放到特定位置。
+<li>Homelab 的 PVE 物理机启用 LUKS 全盘加密与 btrfs + zstd 压缩，买几个便宜的 U 盘用于自动解密（注意解密密钥的离线加密备份）。</li>
+<li>Homelab 虚拟机统一使用一个 Homelab 专用 SSH 私钥，保存在我的 secrets 仓库中，在部署我的桌面电脑与 Homelab 中的专用跳板机时，agenix 会将其解密出来并存放到特定位置。
 <ul>
-<li>Homelab 虛擬機包含的重要數據相對少些，因此安全要求要弱於桌面主機。</li>
+<li>Homelab 虚拟机包含的重要数据相对少些，因此安全要求要弱于桌面主机。</li>
 </ul>
 </li>
 </ul>
@@ -446,11 +446,11 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>这份 secrets 配置在 macOS 跟 NixOS 上通用，也与 CPU 架构无关，agenix 在这两个系统上都能正常工作。</li>
 </ul>
 </li>
-<li>基於安全性考慮，對 secrets 進行分類管理與加密：
+<li>基于安全性考虑，对 secrets 进行分类管理与加密：
 <ul>
-<li>桌面電腦能解密所有的 secrets</li>
-<li>Homelab 中的跳板機只能解密 Homelab 相關的所有 secrets</li>
-<li>其他所有的 NixOS 虛擬機只能解密同類別的 secrets，比如一臺監控機只能解密監控相關的 secrets.</li>
+<li>桌面电脑能解密所有的 secrets</li>
+<li>Homelab 中的跳板机只能解密 Homelab 相关的所有 secrets</li>
+<li>其他所有的 NixOS 虚拟机只能解密同类别的 secrets，比如一台监控机只能解密监控相关的 secrets.</li>
 </ul>
 </li>
 </ul>
