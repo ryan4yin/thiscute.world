@@ -42,9 +42,10 @@ toc:
     - 所有 Homelab 流量全部走 K8s 實現自動化的 HTTPS 證書管理 - 0%
   - Proxmox VE 所有節點的磁盤做 LUKS 加密，使用幾個便宜的 U 盤存儲解密密鑰（注意備份密鑰！） - 0%
   - Proxmox VE 所有節點的配置也使用 Pulumi 配合 NixOS 進行聲明式自動配置 - 0%
-  - 基於 restic 與 rclone 做 Homelab 數據備份與版本控制 - 0%
+  - 基於 restic 與 rclone 做 Homelab 數據加密備份與版本控制 - 0%
   - 監控節點性能給得夠高，將其同時用做 homelab 的控制節點，方便我在 macOS 上進行 homelab 的管理與更新 - 0%
     - 控制節點需要存儲一些重要的 SSH 私鑰等數據，安全要求僅次於我所有桌面電腦，必須在 PVE 節點磁盤加密方案完成後才能繼續推進。
+    - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
 - 個人筆記遷移
   - 數據全部到 Joplin + OneDrive 並啟用 E2EE 加密 - 100%
   - 使用 restic 做 OneDrive 中 Joplin 數據的備份與版本控制 - 0%

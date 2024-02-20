@@ -248,6 +248,7 @@ TODO 待研究。
    1. Android: <https://github.com/android-password-store/Android-Password-Store>
    1. IOS： <https://github.com/mssun/passforios>
    1. Brosers(Chrome/Firefox): <https://github.com/browserpass/browserpass-extension>
+1. 基於雞蛋不放在同一個籃子裏的原則，otp/mfa 的動態密碼則使用 google authenticator 保存與多端同步，並留有一份離線備份用於災難恢復。登錄 Google 賬號目前需要我 Android 手機或短信驗證，因此安全性符合我的需求。
 
 我的详细 pass 配置见 [ryan4yin/nix-config/password-store](https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/password-store).
 
@@ -510,9 +511,9 @@ secrets 这个私有仓库是整个方案的核心，它包含了所有重要数
 3. 重新生成了所有重要账号的密码，全部使用随机密码，一共改了二三十个账号。考虑到旧的 backup code 可能已经泄漏，我也重新生成了所有重要账号的 backup code.
 4. 重装 NixOS，使用 LUKS2 做全盘加密，启用 Secure Boot. 同时使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空。
 5. 使用 nix-darwin 与 home-manager 重新声明式地配置了我的两台 MacBook Pro（Intel 跟 Apple Silicon 各一台），与我的 NixOS 共用了许多配置，最大程度上保持了所有桌面电脑的开发环境一致性，也确保了我始终能快速地在一台新电脑上部署我的整个开发环境。
-5. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记迁移到了一个私有 Git 仓库，用 GitJournal APP 在手机上查看编辑笔记，电脑端则是用 Emacs/Neovim。用了几周挺顺手的。
+5. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记遷移到了 Joplin + OneDrive 上，Homelab 中設了通過 restic 定期自動加密備份 OneDrive 中的 Joplin 數據。
 6. 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.
-7. 针对 Homelab 的虚拟机快照备份，从我旧的基于 rclone + crontab 的明文备份方案，切换到了基于 restic 的加密备份方案。
+7. All in NixOS，将 Homelab 中对我而言偏黑盒且可复现性差的 Ubuntu、Kubernetes 集群节点、OpenWRT 等 VM 全面替换成更白盒且可复现性强的 NixOS，提升我对内网环境的掌控度，进而提升内网安全性。
 
 ## 十二、灾难恢复预案
 
@@ -525,12 +526,13 @@ TODO 后续再慢慢补充。
 目前我的主要个人数据基本都已经通过上述方案进行了安全管理。
 但还有这些方面可以进一步改进：
 
-- 我的 Homelab 目前仍未考虑安全性，需要做安全改造，考虑使用 All in NixOS 的声明式配置管理方案。将 Homelab 中对我而言偏黑盒且可复现性差的 Ubuntu、Kubernetes 集群节点、OpenWRT 等 VM （乃至底层的 Proxmox VE）全面替换成更白盒且可复现性强的 NixOS，提升我对内网环境的掌控度，进而提升内网安全性。这是一个长期计划，没有明确的时间线，不过希望能在 2024 年完成这个工作。
+- Homelab 需要做基於 U 盤的 LUKS 全盤加密改造，認證密碼與 SSH 也要做安全強化與驗證。
+- 针对 Homelab 的虚拟机快照备份，从我旧的基于 rclone + crontab 的明文备份方案，切换到了基于 restic 的加密备份方案。
 - 手机端的照片视频虽然已经在上面设计好了备份同步方案，但仍未实施。考虑使用 roundsync 加密备份到云端，实现多端访问。
 - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
-- 2FA: 目前是在我的手机与平板上分别导入了我所有的 2FA 信息。使用的是 Microsoft Authenticator，考虑替换成开源方案并研究备份方法。
 - Git 提交是否可以使用 GnuPG 签名，目前没这么做主要是觉得 PGP 这个东西太重了，目前我也只在 pass 上用了它，而且还在研究用 age 取代它。
 - 尝试通过 [hashcat](https://github.com/hashcat/hashcat), [wifi-cracking](https://github.com/brannondorsey/wifi-cracking) 等手段破解自己的重要密码、SSH 密钥、GPG 密钥等数据，评估其安全性。
+- 考虑使用一些流行的渗透测试工具测试我的 Homelab 与内网环境，评估其安全性。
 - 考虑使用一些流行的渗透测试工具测试我的 Homelab 与内网环境，评估其安全性。
 
 安全总是相对的，而且其中涉及的知识点不少，我 2022 年学了密码学算是为此打下了个不错的基础，但目前看前头还有挺多知识点在等待着我。
