@@ -98,7 +98,7 @@ comment:
    1. 比如说 GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份等，日常都不需要用到，但非常重要，建议离线加密存储
 4. 需要在多端访问的重要个人数据
    1. 比如说个人笔记、图片、视频等数据，这些数据具有私密性，但又需要在多端访问。可借助支持将数据加密存储到云端的工具来实现
-5. 个人电脑的数据安全与灾难恢复
+5. 个人电脑與 Homelab 的数据安全与灾难恢复
    1. 我主要使用 macOS 与 NixOS，因此主要考虑的是这两个系统的数据安全与灾难恢复
 
 下面就分别就这几个部分展开讨论。
@@ -400,36 +400,44 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
     1. [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
 
 
-## 八、桌面电脑的数据安全
+## 八、桌面电脑與 Homelab 的数据安全
 
-我主要使用两个操作系统：macOS 与 NixOS.
-另外 Windows 虽然也有使用，但基本没啥个人数据，可以忽略。
+我的桌面電腦都是 macOS 與 NixOS，Homlab 虛擬機也已經 all in NixOS，另外我目前沒有任何雲上服務器。
 
-对于 NixOS，我当前的方案如下：
+另外虽然也有兩臺 Windows 虛擬機，但極少對它們做啥改動，只要做好虛擬機快照的備份就 OK 了。
 
-- 桌面主机启用 LUKS2 全盘加密 + Secure Boot，在系统启动阶段需要输入 passphrase 解密 NixOS 系统盘才能正常进入系统。
-  - LUKS2 的 passphrase 为一个比较长的密码学随机字符串。
-  - LUKS2 的所有安全设置全拉到能接受的最高（比较重要的是 `--iter-time`，计算出 unlock key 的用时，默认 2s，安全起见咱设置成了 5s）
-    ```
-    cryptsetup --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-urandom --verify-passphrase luksFormat device
-    ```
-  - LUKS2 使用的 argon2id 是比 scrypt 更强的 KDF 算法，其安全性是足够的。
-- 使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空，这强制我去了解自己装的每个软件都存了哪些数据，是否需要持久化，使整个系统更白盒，提升了整个系统的环境可信度。
-- 重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地的 SSH 系统私钥自动解密。
-  - 也就是说要在一台新电脑上成功部署我的 nix-config 配置，需要的准备流程：
-    - 本地生成一个新的 ssh key，将公钥配置到 GitHub，并 `ssh-add` 这个新的私钥，使其能够访问到我的私有 secrets 仓库。
-    - 将新主机的系统公钥 `/etc/ssh/ssh_host_ed25519_key.pub` 发送到一台旧的可解密 secrets 仓库数据的主机上。如果该文件不存在则先用 `sudo ssh-keygen -A` 生成。
-    - 在旧主机上，将收到的新主机公钥添加到 secrets 仓库的 secrets.nix 配置文件中，并使用 agenix 命令 rekey 所有 secrets 数据，然后 commit & push。
-    - 现在新主机就能够通过 `nixos-rebuild switch` 或 `darwin-rebuild switch` 成功部署我的 nix-config 了，agenix 会自动使用新主机的系统私钥 `/etc/ssh/ssh_host_ed25519_key` 解密 secrets 仓库中的数据并完成部署工作。
-  - 这份 secrets 配置在 macOS 跟 NixOS 上通用，也与 CPU 架构无关，agenix 在这两个系统上都能正常工作。
+对于 NixOS 桌面系統與 Homelab 虛擬機，我当前的方案如下：
+
+- 桌面主机
+  - 启用 LUKS2 全盘加密 + Secure Boot，在系统启动阶段需要输入 passphrase 解密 NixOS 系统盘才能正常进入系统。
+    - LUKS2 的 passphrase 为一个比较长的密码学随机字符串。
+    - LUKS2 的所有安全设置全拉到能接受的最高（比较重要的是 `--iter-time`，计算出 unlock key 的用时，默认 2s，安全起见咱设置成了 5s）
+      ```
+      cryptsetup --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-urandom --verify-passphrase luksFormat device
+      ```
+    - LUKS2 使用的 argon2id 是比 scrypt 更强的 KDF 算法，其安全性是足够的。
+  - 桌面主機使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空，这强制我去了解自己装的每个软件都存了哪些数据，是否需要持久化，使整个系统更白盒，提升了整个系统的环境可信度。
+- Homelab
+  - Homelab 的 PVE 物理機啟用 LUKS 全盘加密與 btrfs + zstd 壓縮，買幾個便宜的 U 盤用於自動解密（注意解密密鑰的離線加密備份）。
+  - Homelab 虛擬機統一使用一個 Homelab 专用 SSH 私钥，保存在我的 secrets 仓库中，在部署我的桌面電腦與 Homelab 中的專用跳板機时，agenix 会将其解密出来并存放到特定位置。
+    - Homelab 虛擬機包含的重要數據相對少些，因此安全要求要弱於桌面主機。
+- Secrets 說明
+  - 重要的通用 secrets，都加密保存在我的 secrets 私有仓库中，在部署我的 nix-config 时使用主机本地的 SSH 系统私钥自动解密。
+    - 也就是说要在一台新电脑（不論是桌面主機還是 NixOS 虛擬機）上成功部署我的 nix-config 配置，需要的准备流程：
+      - 本地生成一个新的 ssh key，将公钥配置到 GitHub，并 `ssh-add` 这个新的私钥，使其能够访问到我的私有 secrets 仓库。
+      - 将新主机的系统公钥 `/etc/ssh/ssh_host_ed25519_key.pub` 发送到一台旧的可解密 secrets 仓库数据的主机上。如果该文件不存在则先用 `sudo ssh-keygen -A` 生成。
+      - 在旧主机上，将收到的新主机公钥添加到 secrets 仓库的 secrets.nix 配置文件中，并使用 agenix 命令 rekey 所有 secrets 数据，然后 commit & push。
+      - 现在新主机就能够通过 `nixos-rebuild switch` 或 `darwin-rebuild switch` 成功部署我的 nix-config 了，agenix 会自动使用新主机的系统私钥 `/etc/ssh/ssh_host_ed25519_key` 解密 secrets 仓库中的数据并完成部署工作。
+    - 这份 secrets 配置在 macOS 跟 NixOS 上通用，也与 CPU 架构无关，agenix 在这两个系统上都能正常工作。
+  - 基於安全性考慮，對 secrets 進行分類管理與加密：
+    - 桌面電腦能解密所有的 secrets
+    - Homelab 中的跳板機只能解密 Homelab 相關的所有 secrets
+    - 其他所有的 NixOS 虛擬機只能解密同類別的 secrets，比如一臺監控機只能解密監控相關的 secrets.
 
 对于 macOS，它本身的磁盘安全我感觉就已经做得很 OK 了，而且它能改的东西也比较有限。我的安全设置如下：
 
 - 启用 macOS 的全盘加密功能
 - 常用的 secrets 的部署与使用方式，与前面 NixOS 的描述完全一致
-
-此外还有我 Homelab 的一些服务器、虚拟机，为了方便在所有主机上 ssh 登录，都统一使用了一个 Homelab 专用私钥，保存在我的 secrets 仓库中，在部署我的 nix-config 时，agenix 会将其解密出来并存放到特定位置。
-我的 `~/.ssh/config` 会指定使用该固定位置的密钥登录 Homelab 主机。
 
 ### macOS/NixOS 数据的灾难恢复？
 
@@ -526,14 +534,12 @@ TODO 后续再慢慢补充。
 目前我的主要个人数据基本都已经通过上述方案进行了安全管理。
 但还有这些方面可以进一步改进：
 
-- Homelab 需要做基於 U 盤的 LUKS 全盤加密改造，認證密碼與 SSH 也要做安全強化與驗證。
 - 针对 Homelab 的虚拟机快照备份，从我旧的基于 rclone + crontab 的明文备份方案，切换到了基于 restic 的加密备份方案。
 - 手机端的照片视频虽然已经在上面设计好了备份同步方案，但仍未实施。考虑使用 roundsync 加密备份到云端，实现多端访问。
 - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
 - Git 提交是否可以使用 GnuPG 签名，目前没这么做主要是觉得 PGP 这个东西太重了，目前我也只在 pass 上用了它，而且还在研究用 age 取代它。
 - 尝试通过 [hashcat](https://github.com/hashcat/hashcat), [wifi-cracking](https://github.com/brannondorsey/wifi-cracking) 等手段破解自己的重要密码、SSH 密钥、GPG 密钥等数据，评估其安全性。
-- 考虑使用一些流行的渗透测试工具测试我的 Homelab 与内网环境，评估其安全性。
-- 考虑使用一些流行的渗透测试工具测试我的 Homelab 与内网环境，评估其安全性。
+- 使用一些流行的渗透测试工具测试我的 Homelab 与内网环境，评估其安全性。
 
 安全总是相对的，而且其中涉及的知识点不少，我 2022 年学了密码学算是为此打下了个不错的基础，但目前看前头还有挺多知识点在等待着我。
 目前仍然打算以比较 casual 的心态去推进这件事情，什么时候有兴趣就推进一点点。
