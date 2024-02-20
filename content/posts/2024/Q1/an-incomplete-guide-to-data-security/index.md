@@ -549,5 +549,5 @@ TODO 后续再慢慢补充。
 [2021年，用更现代的方法使用PGP（上）]: https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/
 [Predictable, Passphrase-Derived PGP Keys]: https://nullprogram.com/blog/2019/07/10/
 [OpenPGP - The almost perfect key pair]: https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/
-[ryan4yin/nix-config]: (https://github.com/ryan4yin/nix-config)
+[ryan4yin/nix-config]: https://github.com/ryan4yin/nix-config
 [ryan4yin/nix-config/secrets]: https://github.com/ryan4yin/nix-config/tree/7e67466/secrets
