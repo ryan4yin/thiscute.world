@@ -1,6 +1,6 @@
 ---
 
-title: "我的 NixOS 使用体会"
+title: "OS as Code - 我的 NixOS 使用体会"
 subtitle: ""
 description: ""
 date: 2024-02-21T16:26:21+08:00
