@@ -43,7 +43,7 @@ comment:
 
 - [NixOS 与 FLakes - 一份非官方的新手指南](https://nixos-and-flakes.thiscute.world/zh/)
 
-{{<figure src="./my-nix-config.webp" title="NixOS & Flakes Book" width="80%">}}
+{{<figure src="./nixos-and-flakes-book-202402.webp" title="NixOS & Flakes Book" width="80%">}}
 
 那么作为一个已经深度使用 NixOS 作为主力桌面系统接近 10 个月的熟手，我在这里也从另一个角度来分享下我的入坑体会。
 
