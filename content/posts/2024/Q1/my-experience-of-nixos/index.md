@@ -14,7 +14,25 @@ resources:
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]
 series: ["NixOS 与 Nix Flakes"]
-series_weight: 2
+series_weight: 3
+hiddenFromHomePage: false
+hiddenFromSearch: false
+
+lightgallery: false
+
+toc:
+  enable: true
+math:
+  enable: false
+license: ""
+
+comment:
+  utterances:
+    enable: true
+  waline:
+    enable: false
+  disqus:
+    enable: false
 ---
 
 > 本文最初发表于 [如何评价NixOS?](https://www.zhihu.com/question/56543855/answer/3403111768)，觉得比较有价值所以再搬运到我的博客。
