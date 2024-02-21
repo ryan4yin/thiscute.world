@@ -1,6 +1,6 @@
 ---
 
-title: "我的 NixOS 使用体验"
+title: "我的 NixOS 使用体会"
 subtitle: ""
 description: ""
 date: 2024-02-21T16:26:21+08:00
@@ -45,7 +45,7 @@ comment:
 
 {{<figure src="./my-nix-config.webp" title="NixOS & Flakes Book" width="80%">}}
 
-那么作为一个已经深度使用 NixOS 作为主力桌面系统接近 10 个月的熟手，我在这里也从另一个角度来分享下我的入坑体验。
+那么作为一个已经深度使用 NixOS 作为主力桌面系统接近 10 个月的熟手，我在这里也从另一个角度来分享下我的入坑体会。
 
 注意，这篇文章不是 NixOS 入门教程，想看教程请移步上面给的链接。
 
