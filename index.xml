@@ -1,4 +1,4 @@
-<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2024-02-21T16:26:21+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">我的 NixOS 使用体会</title><link href="https://thiscute.world/posts/my-experience-of-nixos/"/><id>https://thiscute.world/posts/my-experience-of-nixos/</id><author><name>ryan4yin</name></author><published>2024-02-21T16:26:21+08:00</published><updated>2024-02-21T16:26:21+08:00</updated><content type="html"><![CDATA[<figure>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2024-02-21T16:26:21+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">OS as Code - 我的 NixOS 使用体会</title><link href="https://thiscute.world/posts/my-experience-of-nixos/"/><id>https://thiscute.world/posts/my-experience-of-nixos/</id><author><name>ryan4yin</name></author><published>2024-02-21T16:26:21+08:00</published><updated>2024-02-21T16:26:21+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/my-experience-of-nixos/nixos-and-flakes-book-202402.webp" height="2614" width="1216"><figcaption></figcaption>
         </figure><blockquote>
 <p>本文最初发表于 <a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer">如何评价NixOS?</a>，觉得比较有价值所以再搬运到我的博客。</p>
@@ -61,7 +61,8 @@
 <li>快照与当前硬件环境强相关，直接在不同硬件的机器上使用很容易遇到各种奇怪的问题，也就是说这东西<strong>不可迁移</strong>。</li>
 <li>快照是一堆庞大的二进制文件，它的体积非常大，这使得备份与分享它的成本高昂。</li>
 </ol>
-<p>Docker 的容器镜像可由 Dockerfile 完全描述，也就是说它是<strong>可解释</strong>的，此外容器镜像能在不同环境中复现出完全一致的环境，这表明它是<strong>可迁移</strong>的。
+<p>Docker 能解决上述问题中的一部分。
+首先它的容器镜像可由 Dockerfile 完全描述，也就是说它是<strong>可解释</strong>的，此外容器镜像能在不同环境中复现出完全一致的环境，这表明它是<strong>可迁移</strong>的。
 对于服务器环境，将应用程序全都跑在容器中，宿主机只负责跑容器，这种架构使得你只需要维护最基础的系统环境，以及一些 Dockerfile 跟 Compose 文件，这极大地降低了系统的维护成本，从而成为了 DevOps 的首选。</p>
 <p>但 Docker 容器技术是专为应用程序的提供一致的运行环境而设计的，在虚拟机、桌面环境等场景下它并不适用（当然你非要这么弄也不是不行，很麻烦就是了）。
 此外 Dockerfile 仍旧依赖你所编写的各种脚本、命令来构建镜像，这些脚本、命令都需要你自己维护，其运行结果的可复现能力也完全看你自己的水平。</p>
@@ -69,7 +70,9 @@
 为了降低系统维护难度，我以前使用 Deepin Manjaro EndeavourOS 的过程中，基本没对系统配置做任何大变动。
 作为一名 SRE/DevOps，我在工作中就已经踩了够多的环境问题的坑，写腻写烦各种安装脚本、Ansible 配置了，业余完全不想搞这些幺蛾子。</p>
 <p>但如果你是个喜欢定制与深入研究系统细节的极客，随着你对系统所做的定制越来越多，越来越复杂，或者你 Homelab 与云上的 Linux 机器越来越多，你一定会在某个时间点开始编写各种部署流程的文档、部署脚本或使用一些自动化工具帮自己完成一些繁琐的工作。</p>
-<p>文档就不用说了，这个显然很容易过时，没啥大用。如果你选择自己写自动化脚本或选用自动化工具，它的配置会越来越复杂，而且系统更新经常会破坏掉其中一些功能，需要你手动修复。此外它还高度依赖你当前的系统环境，当你某天装了台新机器然后信心满满地用它部署环境时，大概率会遇到各种环境不一致导致的错误需要手动解决。还有一点是，你写的脚本大概率并没有仔细考量抽象、模块化、错误处理等内容，这也会导致随着规模的扩大，维护它变得越来越痛苦。</p>
+<p>文档就不用说了，这个显然很容易过时，没啥大用。
+如果你选择自己写自动化脚本或选用自动化工具，它的配置会越来越复杂，而且系统更新经常会破坏掉其中一些功能，需要你手动修复。
+此外它还高度依赖你当前的系统环境，当你某天装了台新机器然后信心满满地用它部署环境时，大概率会遇到各种环境不一致导致的错误需要手动解决。还有一点是，你写的脚本大概率并没有仔细考量抽象、模块化、错误处理等内容，这也会导致随着规模的扩大，维护它变得越来越痛苦。</p>
 <p>然后你发现了 NixOS，它有什么声明式的配置，你仔细看了下它的实现，哦这声明式的配置，不就是把一堆 bash 脚本封装了下，对用户只提供了一套简洁干净的 api 么，它实际干的活不跟我自己这几年写的一堆脚本一模一样？好像没啥新鲜的。</p>
 <p>嗯接着你试用了一下，发现  NixOS 的这套系统定制脚本都存在一个叫 nixpkgs  的仓库中，有数千人在持续维护它，几十年积累下来已经拥有了一套非常丰富、也比较稳定的声明式抽象、模块系统、类型系统，专为这套超大型系统配置而开发的大规模  CICD 系统 hydra，以及逐渐形成的能满足数千人协作更新这套复杂配置的社区运营模式。</p>
 <p>你立马学习 nix 语言，然后动手把这套维护了 N 年的脚本改写成 NixOS 配置。</p>
@@ -92,7 +95,9 @@
 <p>总之因为上面这两点，理解 Nixpkgs 中的源码或者使用 Nix 语言自己打几个包并不难，可以说每个有一定经验的 NixOS 用户同时也会是 NixOS 打包人。</p>
 <h2 id="总结" class="headerLink">
     <a href="#%e6%80%bb%e7%bb%93" class="header-mark"></a>总结</h2><p>从决定入坑 NixOS 到现在，短短 10 个月，我在 Linux 上取得的收获远超过去三年。我已经在 PC 上尝试了非常多的新技术新工具，我的 Homelab 内容也丰富了非常多（我目前已经有了十多台 NixOS 主机），我对 Linux 系统结构的了解也越来越深刻。光是这几点收获，就完全值回票价了。</p>
-<p>总的来说，NixOS 很特殊，很强大。另一方面它也有着相当多的历史债务，比如说文档混乱不说人话、Flakes 特性从 2019 年搞到现在 2024 年还处在实验状态等等。但社区正在蓬勃发展，文档、Flakes 等技术债社区都在积极解决中，而且 NixOS 的热度也在持续提升（我写的新手教程也为此出了一份力），因此我对它的未来持比较乐观的态度。</p>
+<p>总的来说，NixOS 很特殊，很强大。
+但另一方面它也有着相当多的历史债务，比如说文档混乱不说人话、Flakes 特性从 2019 年搞到现在 2024 年还处在实验状态、Nix 语言太过简单导致 Nixpkgs 中大量使用 Bash 脚本、模块系统的实现缺陷导致报错信息相当隐晦，等等。
+但社区正在蓬勃发展，文档、Flakes 等技术债社区都在积极解决中，而且 NixOS 的热度也在持续提升（我写的新手教程也为此出了一份力），因此我对它的未来持比较乐观的态度。</p>
 ]]></content></entry><entry><title type="html">个人数据安全不完全指南</title><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/"/><id>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</id><author><name>ryan4yin</name></author><published>2024-01-30T13:48:30+08:00</published><updated>2024-02-20T11:39:30+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" height="900" width="471"><figcaption></figcaption>
         </figure><h2 id="零前言" class="headerLink">
