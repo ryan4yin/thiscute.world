@@ -36,9 +36,9 @@ comment:
 ---
 
 
-> 本文最初发表于 [如何评价NixOS?](https://www.zhihu.com/question/56543855/answer/3403111768)，觉得比较有价值所以再搬运到我的博客。
+> 本文最初发表于 [如何评价NixOS? - 知乎]，觉得比较有价值所以再搬运到我的博客。
 
-我 23 年 4 月开始用 NixOS 之前也看过（[如何评价NixOS?](https://www.zhihu.com/question/56543855/answer/3403111768)） 这个帖子，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。
+我 23 年 4 月开始用 NixOS 之前也看过（[如何评价NixOS? - 知乎]） 这个问答，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。
 
 现在是 2024 年 2 月，距离我入坑 NixOS 刚好 10 个月，我当初写的新手笔记已经获得了大量好评与不少的赞助，并成为了整个社区最受欢迎的入门教程之一。自 2023 年 6 月我为它专门创建一个 GitHub 仓库与单独的文档站点以来，它已经获得了 1189 个 stars，除我之外还有 37 位读者给它提了 PR：
 
@@ -185,4 +185,5 @@ NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编�
 但社区正在蓬勃发展，文档、Flakes 等技术债社区都在积极解决中，而且 NixOS 的热度也在持续提升（我写的新手教程也为此出了一份力），因此我对它的未来持比较乐观的态度。
 
 
+[如何评价NixOS? - 知乎]: https://www.zhihu.com/question/56543855/answer/3403111768
 [The Purely Functional Software Deployment Model]: https://edolstra.github.io/pubs/phd-thesis.pdf
