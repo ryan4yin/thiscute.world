@@ -110,7 +110,8 @@ Firstly, Docker container images can be fully described by Dockerfiles, meaning 
 
 For server environments, running all applications in containers, with the host machine only responsible for running containers, greatly reduces the cost of system maintenance by only requiring you to maintain the most basic system environment and some Dockerfiles and yaml files and is thus the preferred choice for DevOps.
 
-However, Docker container technology is designed for providing a consistent runtime environment for applications and is not suitable for virtual machine and desktop environments (of course, you can use it in these scenarios if you wish, but it would be quite麻烦). Additionally, Dockerfiles still rely on various scripts and commands you write to build the image, which you need to maintain, and the reproducibility of the results depends on your own skills.
+However, Docker container technology is designed for providing a consistent runtime environment for applications and is not suitable for virtual machine and desktop environments (of course, you can use it in these scenarios if you wish, but it would be quite complicated).
+Additionally, Dockerfiles still rely on various scripts and commands you write to build the image, which you need to maintain, and the reproducibility of the results depends on your own skills.
 
 If you choose a minimalist strategy—customizing as little as possible on any desktop system or virtual machine environment and using default settings wherever possible—this was me before switching to NixOS.
 
@@ -158,7 +159,7 @@ I will illustrate this point from two aspects.
 
 First, Nix is a relatively simple language with very few syntax rules, **far simpler than general-purpose languages like Java or Python**. Therefore, engineers with some programming experience can master its syntax in just a few hours. With a bit more time, reading common Nix code shouldn't be too difficult.
 
-Second, **NixOS's good declarative abstraction and modularization system divide the OS into many layers**, allowing users to focus only on the current layer of abstraction while still having the option to dive deeper into the next layer to more freely implement the desired functions (this choice of权利实际上也给了用户机会去逐步理解NixOS本身). For example, new users can normally use NixOS just by understanding the top-level abstraction. When you want to implement some customizations, digging one level deeper into the abstraction (such as customizing some operations directly through systemd's declarative parameters) is usually enough. If you are already a seasoned NixOS user and want to be more geeky, you can continue to delve deeper.
+Second, **NixOS's good declarative abstraction and modularization system divide the OS into many layers**, allowing users to focus only on the current layer of abstraction while still having the option to dive deeper into the next layer to more freely implement the desired functions (The right to choose, in fact, also gives users the opportunity to understand NixOS progressively.). For example, new users can normally use NixOS just by understanding the top-level abstraction. When you want to implement some customizations, digging one level deeper into the abstraction (such as customizing some operations directly through systemd's declarative parameters) is usually enough. If you are already a seasoned NixOS user and want to be more geeky, you can continue to delve deeper.
 
 In summary, understanding the source code in Nixpkgs or using Nix to package a few programs is not difficult, and each NixOS user with some experience can also be a NixOS packager.
 
