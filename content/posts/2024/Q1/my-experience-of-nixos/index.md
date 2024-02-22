@@ -42,7 +42,7 @@ comment:
 
 现在是 2024 年 2 月，距离我入坑 NixOS 刚好 10 个月，我当初写的新手笔记已经获得了大量好评与不少的赞助，并成为了整个社区最受欢迎的入门教程之一。自 2023 年 6 月我为它专门创建一个 GitHub 仓库与单独的文档站点以来，它已经获得了 1189 个 stars，除我之外还有 37 位读者给它提了 PR：
 
-- [NixOS 与 FLakes - 一份非官方的新手指南](https://nixos-and-flakes.thiscute.world/zh/)
+- [NixOS 与 Flakes - 一份非官方的新手指南](https://nixos-and-flakes.thiscute.world/zh/)
 
 {{<figure src="./nixos-and-flakes-book-202402.webp" title="NixOS & Flakes Book" width="80%">}}
 
