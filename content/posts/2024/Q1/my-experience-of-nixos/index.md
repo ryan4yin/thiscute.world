@@ -35,6 +35,7 @@ comment:
     enable: false
 ---
 
+
 > 本文最初发表于 [如何评价NixOS?](https://www.zhihu.com/question/56543855/answer/3403111768)，觉得比较有价值所以再搬运到我的博客。
 
 我 23 年 4 月开始用 NixOS 之前也看过（[如何评价NixOS?](https://www.zhihu.com/question/56543855/answer/3403111768)） 这个帖子，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。
