@@ -192,8 +192,3 @@ On the other hand, it also has a considerable amount of historical debt. For exa
 
 However, the community is developing rapidly, and the community is actively solving technical debts like documentation and Flakes. Moreover, the popularity of NixOS is also increasing (my beginner tutorial has also contributed to this), so I am quite optimistic about its future.
 
-From deciding to dive into NixOS to now, in just 10 months, the harvest I have gained on Linux far exceeds that of the past three years. I have tried a lot of new technologies and tools on my PC, and my Homelab has become much richer (I now have more than ten NixOS hosts). My understanding of the Linux system structure has also deepened. Just these few points are enough to justify my choice.
-
-In summary, NixOS is very special and powerful. On the other hand, it also has a considerable amount of historical debt. For example, the documentation is a mess, not user-friendly, the Flakes feature has been in an experimental state since 2019, and Nix's simplicity leads to a large number of Bash scripts in Nixpkgs, and the implementation defects of the module system result in very vague error messages, and so on.
-
-However, the community is developing rapidly, and the community is actively solving technical debts like documentation and Flakes. Moreover, the popularity of NixOS is also increasing (my beginner tutorial has also contributed to this), so I am quite optimistic about its future.
