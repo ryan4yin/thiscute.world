@@ -149,9 +149,8 @@ NixOS's configuration declares the complete state of the entire system, and you 
 
 The entry barrier of NixOS is relatively high and is not suitable for beginners who have never touched Linux and programming. This is because its design philosophy is quite different from traditional Linux distributions. However, this is also its advantage, as once you cross that threshold, you will find a whole new world.
 
-For example, **reading the source code of Nixpkgs and submitting PRs to add features or packages to fix bugs is a basic skill for NixOS users**, and **NixOS users who do this are quite common**.
-
-This is both a deterrent that scares away new users and a ladder for Linux users who have chosen NixOS.
+For example, **reading the source code of Nixpkgs and submitting PRs to add features/packages or fix bugs is a basic skill for NixOS users**, and **NixOS users who do this are quite common**.
+**This is both a deterrent that scares away new users and a ladder for Linux users who have chosen NixOS**.
 
 Imagine that most Arch users (like me in the past) might have used Arch for several years but didn't understand the underlying implementation details of Arch, nor did they package their own software. But with NixOS, diving into the source code becomes a norm, which also shows that understanding its implementation details is not difficult.
 
