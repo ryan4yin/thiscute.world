@@ -47,7 +47,9 @@ Note that this article is not a NixOS beginner's tutorial; if you're looking for
 
 ## Nixpkgs Has Too Few Packages?
 
-Firstly, let's clarify that NixOS has a vast number of packages. In terms of size, Nixpkgs is on par with Arch AUR. [Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total) show that:
+Some people(in China) say that NixOS has too few packages, and this is one of the reasons they don't use it. Is this true?
+
+Firstly, let's clarify that NixOS has a vast number of packages. In terms of size, Nixpkgs is on par with Arch Linux's AUR. [Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total) show that:
 
 ![Repository statistics](./repository-statistics.webp)
 
@@ -59,7 +61,7 @@ This is also where NixOS differs from Arch: Arch's official package repository h
 
 NixOS, on the other hand, is quite different. Its official package repository, Nixpkgs, is quite open to new packages, and it's relatively easier to add a package or feature to Nixpkgs compared to other distributions. This is one of the direct reasons why Nixpkgs' size is close to AUR (GitHub shows that Nixpkgs has over 5000 historical contributors, which is quite astonishing). NixOS actually also has a NUR (Nix User Repository) similar to AUR, but because of Nixpkgs' lax attitude, NUR doesn't have much content.
 
-For example, you can directly download and use QQ from the Nixpkgs official package repository, while on Arch, you would need to use AUR or archlinux-cn.
+For example, you can directly download and use QQ(an IM App popular in China) from the Nixpkgs official package repository, while on Arch, you would need to use AUR or archlinux-cn.
 
 This can be seen as having its own advantages. NixOS is criticized for having too few packages mainly because it does not follow the FHS standard, which means that most Linux programs downloaded online cannot run directly on NixOS. Of course, there are solutions to this. I suggest first checking if there is already a package for the desired software in Nixpkgs, and if so, use it directly. If not, try some community solutions or package it yourself.
 
@@ -83,29 +85,29 @@ For example, the official documentation is so bad that it forced me, a beginner 
 
 Let me share my experience with traditional distributions like Arch and Ubuntu, and why I chose NixOS, and the changes it brought me, from a personal perspective.
 
-For example, when I used Deepin Ubuntu in the past, I didn't customize the system much for fear of causing problems and not being able to fix them easily. Moreover, any customizations I made were black boxes and not migratable. A month later, I would have forgotten everything, and the system would have become increasingly chaotic and opaque over time.
+For example, when I used Deepin, Ubuntu and other traditional distros in the past, I didn't customize the system much for fear of causing problems and not being able to fix them easily. Moreover, any customizations I made were black boxes and not migratable. A month later, I would have forgotten everything, and the system would have become increasingly chaotic and opaque over time.
 
 If you're using a rolling release distribution like Arch, the issues you encounter are generally minor. But with Ubuntu or Deepin, it's rare for in-place upgrades to go smoothly, which means I had to re-customize everything on the new Ubuntu version. Worse yet, I might have forgotten what I did in the past, meaning I had to spend more time researching my system environment and how everything was installed and configured. This repetitive labor is very painful.
 
 Clearly, the more complex and customized the system, the harder it is to migrate to a new version.
 
-This is why rolling release distributions like Arch, Gentoo, and Fedora are so popular among Linux enthusiasts. Linux users who like to customize their systems mostly use these types of distributions.
+I think this is why rolling release distributions like Arch, Gentoo, and Fedora are so popular among Linux enthusiasts. Linux users who like to customize their systems mostly use these types of distributions.
 
-Can Arch or Fedora solve the problem completely? Obviously not.
+So can Arch or Fedora solve the problems completely? Obviously not.
 
-Firstly, they have a higher update frequency, which means you're more likely to break something on your system. Of course, this is a small problem, as most Linux users now use btrfs or zfs file system snapshots for rollback in case of issues.
+Firstly, they have a higher update frequency, which means you're more likely to break something on your system.
+Of course, this is a small problem, as most Linux users now use btrfs or zfs file system snapshots for rollback in case of issues.
 
-Their fundamental problem, however, is:
+Their fundamental problems, however, is:
 
 1. Your Arch system environment, file system snapshots, or virtual machine snapshots are still black boxes. They will become increasingly chaotic with continuous use and do not include the "knowledge" of how to build this environment from scratch, making them **unexplainable.**
-   - In my work, I've seen some "ancestral virtual machine snapshots" or "ancestral cloud server snapshots" where no one knows how the environment was set up, and each new person who takes over can only continue to pile on buffs, then pass the time bomb to the next person. This is like the game where people take turns adding water to a cup, and whoever adds water when it overflows is out of luck.
+   - In my work, I've seen some "**ancestral virtual machine snapshots**" or "**ancestral cloud server snapshots**" where no one knows how the environment was set up, and each new person who takes over can only continue to pile on buffs, then pass the time bomb to the next person. This is like the game where people take turns adding water to a cup, and whoever adds water when it overflows is out of luck.
 1. Arch essentially requires you to follow its updates continuously, which means you must continuously maintain it.
-   - If you let a machine run stable for a year and a half and then decide to update it, the risk of problems is quite high. If you then decide to set up a new Arch machine and restore the old environment, you're back to the same problem—you have to figure out how to restore your customization process from the old environment, which is also not a pleasant task.
+   - If you let a machine run stable for a year and then decide to update it, the risk of problems is quite high. If you then decide to set up a new Arch machine and restore the old environment, you're back to the same problem — you have to figure out how to restore your customization process from the old environment, which is also not a pleasant task.
 1. Snapshots are strongly associated with the current hardware environment and are easily affected by various strange issues when used directly on different hardware machines, making them **unmovable.**
 1. Snapshots are large binary files, making them expensive to back up and share.
 
 Docker can solve some of these problems.
-
 Firstly, Docker container images can be fully described by Dockerfiles, meaning they are **explainable**, and the same environment can be replicated in different environments. This indicates that they are **movable.**
 
 For server environments, running all applications in containers, with the host machine only responsible for running containers, greatly reduces the cost of system maintenance by only requiring you to maintain the most basic system environment and some Dockerfiles and yaml files and is thus the preferred choice for DevOps.
@@ -113,7 +115,7 @@ For server environments, running all applications in containers, with the host m
 However, Docker container technology is designed for providing a consistent runtime environment for applications and is not suitable for virtual machine and desktop environments (of course, you can use it in these scenarios if you wish, but it would be quite complicated).
 Additionally, Dockerfiles still rely on various scripts and commands you write to build the image, which you need to maintain, and the reproducibility of the results depends on your own skills.
 
-If you choose a minimalist strategy—customizing as little as possible on any desktop system or virtual machine environment and using default settings wherever possible—this was me before switching to NixOS.
+If you choose a minimalist strategy - customizing as little as possible on any desktop system or virtual machine environment and using default settings wherever possible, this was me before switching to NixOS.
 
 To reduce the difficulty of system maintenance, I barely made any significant changes to the systems I used, such as Deepin, Manjaro, EndeavourOS, etc. As an SRE/DevOps, I had already encountered enough environmental problem pitfalls in my work and was tired of writing various installation scripts and Ansible configurations, so I had no desire to deal with these issues in my spare time.
 
@@ -121,7 +123,7 @@ However, if you are a geek who likes to customize and delve into the details of 
 
 Documentation aside, it's obvious that writing automation scripts or choosing automation tools will lead to increasingly complex configurations, and system updates often break some of these functions, requiring you to fix them manually. Moreover, they are highly dependent on your current system environment, so when you confidently use them to deploy environments on new machines, you are very likely to encounter various inconsistent environment-related errors that need to be resolved manually. Another point is that the scripts you write are likely not to have carefully considered abstraction, modularization, error handling, and other aspects, which will also make it increasingly painful to maintain them as the scale expands.
 
-Then you discover NixOS, and you realize that its declarative configuration essentially wraps a pile of bash scripts and provides users with a set of clean and simple APIs. The actual work it does is exactly the same as the pile of scripts I've been writing for years.
+Then you discover NixOS, and you realize that its declarative configuration essentially wraps a pile of bash scripts and provides users with a set of clean and simple APIs. The actual work it does is exactly the same as the pile of scripts you've been writing for years.
 
 You try it out and find that the system customization scripts in NixOS are all stored in a repository called Nixpkgs, maintained by thousands of people, with decades of accumulation, and with a very rich and relatively stable declarative abstraction, module system, type system, a large-scale CI system called Hydra specifically developed for this huge software package repository and NixOS system configuration, and a community operation mode that has formed to facilitate collaboration and updating this complex configuration for thousands of people.
 
@@ -131,13 +133,13 @@ The more you write, the more satisfied you become, as the reduced configuration 
 
 A large part of the functionality previously achieved with various scripts and tools is now encapsulated in Nixpkgs, and you can enable it and pass a few key parameters to run it painlessly. The scripts in Nixpkgs have dedicated maintainers who update and fix any issues found by users, and any updates that haven't undergone CI and multiple stages of testing and validation, such as staging and unstable, won't enter the stable channel.
 
-The you I mentioned earlier is none other than myself.
+The "you" I mentioned earlier is none other than myself.
 
 Now, when I think back to the days when I struggled with systemd to run a simple little tool, I can't help but shed tears... If only I had known about NixOS earlier...
 
 ## The Declarative Configuration of NixOS - OS as Code
 
-People with some programming experience should know the importance of abstraction and modularization, as the complexity of a scenario increases, the benefits of abstraction and modularization also increase. The popularity of Terraform/Kubernetes, and even Spring Boot, reflects this. NixOS's declarative configuration is also like this, as it encapsulates the underlying implementation details and has a community responsible for updating and maintaining these lower-level encapsulations. This greatly reduces my cognitive load and frees up my productivity. Its reproducibility also alleviates my concerns about breaking the system.
+People with some programming experience should know the importance of abstraction and modularization, as the complexity of a scenario increases, the benefits of abstraction and modularization also increase. The popularity of Terraform, Kubernetes, and even Spring Boot, reflects this. NixOS's declarative configuration is also like this, as it encapsulates the underlying implementation details and has a community responsible for updating and maintaining these lower-level encapsulations. This greatly reduces my cognitive load and frees up my productivity. Its reproducibility also alleviates my concerns about breaking the system.
 
 NixOS is built on top of Nix, a functional package manager, drawing its design philosophy from Eelco Dolstra's paper [The Purely Functional Software Deployment Model]. "Purely functional" means it has no side effects, much like a mathematical function $y = f(x)$, where the same NixOS configuration file (input parameter $x$) always yields the same NixOS system environment (output $y$).
 
@@ -151,7 +153,7 @@ You can easily copy other NixOS users' system configurations to ensure you'll ge
 
 The entry barrier of NixOS is relatively high and is not suitable for beginners who have never touched Linux and programming. This is because its design philosophy is quite different from traditional Linux distributions. However, this is also its advantage, as once you cross that threshold, you will find a whole new world.
 
-For example, **reading the source code of Nixpkgs and submitting PRs to add features, packages, or fix bugs is a basic skill for NixOS users**, and **NixOS users who do this are quite common**.
+For example, **reading the source code of Nixpkgs and submitting PRs to add features， add packages or fix bugs is a basic skill for NixOS users**, and **NixOS users who do this are quite common**.
 **This is both a deterrent that scares away new users and a ladder for Linux users who have chosen NixOS**.
 
 Imagine that most Arch users (like me in the past) might have used Arch for several years but didn't understand the underlying implementation details of Arch, nor did they package their own software. But with NixOS, diving into the source code becomes a norm, which also shows that understanding its implementation details is not difficult.
@@ -168,7 +170,7 @@ In summary, understanding the source code in Nixpkgs or using Nix to package a f
 
 We've heard a lot about NixOS's strengths, and I've mentioned many of them above.
 
-People outside the circle might mainly hear about its lack of dependency conflicts, the ability to roll back at any time, and its powerful reproducibility.
+People outside the Nix community might mainly hear about its dependency-conflicts-free, the ability to roll back at any time, and its powerful reproducibility.
 
 If you have actually used NixOS, you should also know about its other advantages:
 

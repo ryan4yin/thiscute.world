@@ -52,7 +52,7 @@ comment:
 
 ## Nixpkgs 中的包太少？ {#is-nixpkgs-lacking-packages}
 
-先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch AUR 是一个级别的。[Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total) 的包仓库统计数据如下：
+先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch Linux 的 AUR 是一个级别的。[Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total) 的包仓库统计数据如下：
 
 ![Repository statistics](./repository-statistics.webp)
 
@@ -85,7 +85,7 @@ OK，闲话说完，下面进入正题。
 
 **这里的规模，一是指你对 Linux 系统所做的自定义内容的规模，二是指你系统更新的频繁程度，三是指你 Linux 机器的数量**。
 
-下面我从个人经历的角度来讲下我以前用 Arch Ubuntu 等传统发行版的体验，以及我为什么选择了 NixOS，NixOS 又为我带来了什么样的改变。
+下面我从个人经历的角度来讲下我以前用 Arch Linux、Ubuntu 等传统发行版的体验，以及我为什么选择了 NixOS，NixOS 又为我带来了什么样的改变。
 
 举个例子，以前我用 Deepin Ubuntu 时我基本没对系统做过什么深入定制，一是担心把系统弄出问题修复起来头疼，二是如果不额外写一份文档或脚本记录下步骤的话，我做的所有定制都是黑盒且不可迁移的，一个月后我就全忘了，只能战战兢兢地持续维护这个随着我的使用而越来越黑盒、状态越来越混沌的系统。
 
@@ -93,9 +93,9 @@ OK，闲话说完，下面进入正题。
 
 总之很显然的一点是，我对系统做的定制越多越复杂，迁移到新版本的难度就越大。
 
-我想也正是因为这一点，Arch Gentoo Fedora 这种滚动发行版才在 Linux 爱好者圈子中如此受欢迎，喜欢定制自己系统的 Linux 用户也大都使用这类滚动发行版。
+我想也正是因为这一点，Arch、Gentoo、Fedora 这种滚动发行版才在 Linux 爱好者圈子中如此受欢迎，喜欢定制自己系统的 Linux 用户也大都使用这类滚动发行版。
 
-那么 Arch Fedora 就能彻底解决问题了么？显然并不是。
+那么 Arch、Fedora 就能彻底解决问题了么？显然并不是。
 首先它们的更新频率比较高，这代表着你会更容易把你的系统搞出点毛病来。当然这其实是个小问题，现在 Linux 社区谁还没整上个 btrfs / zfs 文件系统快照啊，出问题回滚快照就行。
 它们最根本的问题是：
 
@@ -139,7 +139,7 @@ Docker 能解决上述问题中的一部分。
 
 ## NixOS 的声明式配置 - OS as Code {#nixos-declarative-configuration}
 
-有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform/Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。
+有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform、Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。
 
 NixOS 构建在 Nix 函数式包管理器这上，它的设计理念来自 Eelco Dolstra 的论文 [The Purely Functional Software Deployment Model]（纯函数式软件部署模型），纯函数式是指它没有副作用，就类似数学函数 $y = f(x)$，同样的 NixOS 配置文件（即输入参数 $x$ ）总是能得到同样的 NixOS 系统环境（即输出 $y$）。
 
@@ -167,7 +167,7 @@ NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编�
 ## NixOS 的卖点？ {#nixos-advantages}
 
 我们看了许多人提到 NixOS 的优点，上面我也提到了不少。
-圈外人听得比较多的可能主要是它不存在依赖冲突，能随时回滚，强大的可复现能力。
+Nix 的圈外人听得比较多的可能主要是它解决了依赖冲突问题，能随时回滚，强大的可复现能力。
 如果你有实际使用过 NixOS，那你也应该知道 NixOS 的这些优势：
 
 1. 系统更新具有类似数据库事务的原子化特性，这意味着你的系统更新要么成功要么失败，（一般）不会出现中间状态。
