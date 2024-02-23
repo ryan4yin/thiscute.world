@@ -200,7 +200,7 @@ NixOS is very special and powerful, but on the other hand, it has a considerable
 5. Nix's simplicity has resulted in a large number of Bash scripts being used in Nixpkgs.
 6. Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages. Long-term use of folders to classify software packages, with no way to classify and query packages except through the source code, leads to a very poor experience.
 7. The maintainer of the <https://nixos.wiki> site has left, and the official has long failed to provide an alternative, making NixOS's documentation even worse than it already was.
-8. The recent rapid growth of NixOS's user base has posed challenges to its community operation model.
+8. The recent rapid growth of Nix/NixOS's user base has posed challenges to its community operation model.
 9. ...
 
 These historical debts are the main reasons why NixOS has not been more widely used. 
@@ -216,19 +216,19 @@ First, let's look at the Nixpkgs project, which stores all the software packages
 
 [![](./nixpkgs-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
 
-The graph shows that the activity of the Nixpkgs project has been continuously increasing since 2021. Among the Top 6 contributors, three began contributing code in large quantities after 2021. If you look at GitHub, you'll see that five out of the Top 10 contributors joined the community after 2021, including seasoned Chinese community members @NickCao and @figdoda.
+The graph shows that the activity of the Nixpkgs project has been continuously increasing since 2021. Among the Top 6 contributors, three began contributing code in large quantities after 2021. If you look at GitHub, you'll see that five out of the Top 10 contributors joined the community after 2021, including seasoned NixOS-CN members @NickCao and @figsoda.
 
 Now let's look at the commit history of the Nix package manager, which is the underlying technology of NixOS:
 
 [![](./nix-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
 
-The graph shows a significant increase in activity in the Nix project in 2020, with all six top contributors beginning to contribute code in large quantities after 2020.
+The graph shows a significant increase in activity in the Nix project in 2020, five of the top 6 contributors beginning to contribute code in large quantities after 2020.
 
-Next, let's look at the search heat for the keyword "NixOS" on Google Trends:
+Next, let's look at the Google Trends for the keyword "NixOS":
 
 [![](./nixos-google-trends.webp)](https://trends.google.com/trends/explore?cat=5&date=2014-01-23%202024-02-23&q=NixOS)
 
-This graph shows several obvious upticks in the search heat for NixOS:
+This graph shows several obvious upticks in the search trending for NixOS:
 
 1. In December 2021
    - This is likely due to the release of Nix 2.4 in November 2021, which brought experimental Flakes features and a new CLI. Flakes greatly improved the reproducibility of NixOS, and the new CLI was more intuitive for users.

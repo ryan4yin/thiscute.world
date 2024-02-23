@@ -192,7 +192,7 @@ NixOS 很特殊，很强大，但另一方面**它也有着相当多的历史债
 1. Nix 语言太过简单导致 Nixpkgs 中大量使用 Bash 脚本
 1. NixOS 的大量实现细节隐藏在 Nixpkgs 源码中，比如说软件包的分类。长期一直使用文件夹来对软件包进行分类，没有任何查看源码之外的手段来分类查询其中的软件包，体验很差。
 1. <https://nixos.wiki> 站点维护者跑路，官方又长期未提供替代品，导致 NixOS 的文档在本来就很烂的基础上又雪上加霜。
-1. NixOS 近来快速增长的用户群体，使得它的社区运营模式也面临着挑战
+1. Nix/NixOS 近来快速增长的用户群体，使得它的社区运营模式也面临着挑战
 1. ...
 
 这一堆历史债是 NixOS 一直没能得到更广泛使用的主要原因。
@@ -208,13 +208,13 @@ NixOS 很特殊，很强大，但另一方面**它也有着相当多的历史债
 [![](./nixpkgs-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
 
 上图能看到从 2021 年开始 Nixpkgs 项目的活跃度开始持续上升，
-Top 6 贡献者中有 3 位都是 2021 年之后开始大量提交代码，你点进 GitHub 看，能看到 Top 10 贡献者中有 5 位都是 2021 年之后加入社区的（新增的 @NickCao 与 @figdoda 都是 NixOS 中文社区资深用户）。
+Top 6 贡献者中有 3 位都是 2021 年之后开始大量提交代码，你点进 GitHub 看，能看到 Top 10 贡献者中有 5 位都是 2021 年之后加入社区的（新增的 @NickCao 与 @figsoda 都是 NixOS 中文社区资深用户）。
 
 再看看 Nix 包管理器的提交记录，它是 NixOS 的底层技术：
 
-[![](./nix-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
+[![](./nix-contributors.webp)](https://github.com/NixOS/nix/graphs/contributors)
 
-上图显示 Nix 项目的活跃度在 2020 年明显上升，Top 6 贡献者中也有 6 位都是在 2020 年之后才开始大量贡献代码的。
+上图显示 Nix 项目的活跃度在 2020 年明显上升，Top 6 贡献者中有 5 位都是在 2020 年之后才开始大量贡献代码的。
 
 再看看 Google Trends 中 NixOS 这个关键词的搜索热度：
 
