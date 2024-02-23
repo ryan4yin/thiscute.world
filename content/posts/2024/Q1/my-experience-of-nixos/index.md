@@ -178,14 +178,84 @@ NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编�
 这些都是 NixOS 的卖点，其中一些特性现在在传统发行版上也能实现，Fedora Silverblue 等新兴的不可变发行版也在这些方面有些不错的创新。
 但能解决所有这些问题的系统，目前只有 NixOS（以及更小众的 Guix——它同样基于 Nix 包管理器）。
 
+## NixOS 的缺点与历史债务
+
+自 NixOS 项目创建至今二十多年来，Nix 包管理器与 NixOS 操作系统一直是非常小众的技术，
+尤其是在国内，知道它们存在的人都是少数 Linux 极客，更别说使用它们了。
+
+NixOS 很特殊，很强大，但另一方面**它也有着相当多的历史债务**，比如说：
+
+1. 文档混乱不说人话
+1. Flakes 特性使 NixOS 真正满足了它一直宣称的可复现能力，但从 2019 年搞到现在 2024 年，它仍旧处在实验状态。
+1. Nix 的 CLI 处在换代期，新版本的 CLI 优雅很多，但其实现目前与 Flakes 特性强绑定，导致两项功能都难以 stable，甚至还阻碍了许多其他特性的开发工作。
+1. 模块系统的缺陷与 Nix 错误处理方面的不足，导致长期以来它的报错信息相当隐晦，令人抓狂
+1. Nix 语言太过简单导致 Nixpkgs 中大量使用 Bash 脚本
+1. NixOS 的大量实现细节隐藏在 Nixpkgs 源码中，比如说软件包的分类。长期一直使用文件夹来对软件包进行分类，没有任何查看源码之外的手段来分类查询其中的软件包，体验很差。
+1. <https://nixos.wiki> 站点维护者跑路，官方又长期未提供替代品，导致 NixOS 的文档在本来就很烂的基础上又雪上加霜。
+1. NixOS 近来快速增长的用户群体，使得它的社区运营模式也面临着挑战
+1. ...
+
+这些问题都是 NixOS 的历史债务，它们是 NixOS 一直没能得到更广泛使用的主要原因。
+但这些问题也是 NixOS 未来的机会，社区目前正在积极解决这些问题，我很期待看到这些问题被解决后， NixOS 将会有怎样的发展。
+
+## NixOS 的未来
+
+谁也不会对一项没前途的技术感兴趣，那么 NixOS 的未来如何呢？我是否看好它？
+这里我尝试使用一些数据来说明我对 NixOS 的未来的看法。
+
+首先看 Nixpkgs 项目，它存储了 NixOS 所有的软件包及 NixOS 自身的实现代码：
+
+[![](./nixpkgs-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
+
+上图能看到从 2021 年开始 Nixpkgs 项目的活跃度开始持续上升，
+Top 6 贡献者中有 4 位都是 2021 年之后开始大量提交代码，你点进 GitHub 看，能看到 Top 10 贡献者中有 6 位都是 2021 年之后加入社区的（新增的 @NickCao 与 @figdoda 都是 NixOS 中文社区资深用户）。
+
+再看看 Nix 包管理器的提交记录，它是 NixOS 的底层技术：
+
+[![](./nix-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
+
+上图显示 Nix 项目的活跃度在 2020 年明显上升，Top 6 贡献者中也有 6 位都是在 2020 年之后才开始大量贡献代码的。
+
+再看看 Google Trends 中 NixOS 这个关键词的搜索热度：
+
+[![](./nixos-google-trends.webp)](https://trends.google.com/trends/explore?cat=5&date=2014-01-23%202024-02-23&q=NixOS)
+
+这个图显示 NixOS 的搜索热度有几个明显的上升时间点：
+
+1. 2021 年 12 年
+   - 这大概率是因为在 2021 年 11 月 [Nix 2.4](https://nixos.org/manual/nix/unstable/release-notes/rl-2.4) 发布了，它带来了实验性的 Flakes 特性与新版 CLI，
+Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更符合用户直觉。
+1. 2023 年 6 月
+   - 最重要的原因应该是，Youtube 上 Linux 相关的热门频道在这个时间点推出了好几个关于 NixOS 的视频，截至 2024-02-23，Youtube 上播放量最高的三个 NixOS 相关视频都是在 2023-06 ~ 2023-07 这个时间段推出的，它们的播放量之和超过了 130 万。
+   ![](./nixos-youtube-videos.webp)
+   - China 的兴趣指数在近期最高，这可能是因为国内的用户群一直很少，然后我在 6 月份发布了 [NixOS 与 Flakes - 一份非官方的新手指南](https://nixos-and-flakes.thiscute.world/zh/)，并且在 [科技爱好者周刊](https://github.com/ruanyf/weekly/issues/3315) 等渠道做了些推广，导致 NixOS 的相对指数出现明显上升。
+1. 2024 年 1 月
+   - 这个我目前不太确定原因。
+
+再看看 Nix/NixOS 社区从 2022 年启用的年度用户调查。
+
+1. [2022 Nix Survey Results](https://discourse.nixos.org/t/2022-nix-survey-results/18983)，根据其中数据计算可得出：
+   - 74.5% 的用户是是在三年内开始使用 Nix/NixOS 的。
+   - 关于如何拓展 Nixpkgs 的调查中，36.7% 的用户使用 Flakes 特性拓展 Nixpkgs，仅次于传统的 overlays.
+2. [Nix Community Survey 2023 Results](https://discourse.nixos.org/t/nix-community-survey-2023-results/33124)，简单计算可得出，
+   - 54.1% 的用户是是在三年内开始使用 Nix/NixOS 的。
+   - 关于如何拓展 Nixpkgs 的调查中，使用 Flakes 特性的用户占比为 49.2%，超过了传统的 Overlays.
+   - 关于实验特性的调查中，使用 Flakes 特性的用户占比已经达到了 59.1%.
+
+另外 GitHub 的 [Octoverse 2023](https://github.blog/2023-11-08-the-state-of-open-source-and-ai/) 也难得地提了一嘴 Nixpkgs:
+
+> Developers see benefits to combining packages and containerization. As we noted earlier, 4.3 million repositories used Docker in 2023.<br/>
+> **On the other side of the coin, Linux distribution NixOS/nixpkgs has been on the top list of open source projects by contributor for the last two years**.
+
+这些数据都与我们前面提到的 Nixpkgs 与 Nix 项目的活跃度相符，都显示 Nix/NixOS 社区在 2021 年之后开始迅速增长。
+
+结合上面这些数据看，我对 NixOS 的未来持很乐观的态度。
+
 ## 总结
 
 从决定入坑 NixOS 到现在，短短 10 个月，我在 Linux 上取得的收获远超过去三年。我已经在 PC 上尝试了非常多的新技术新工具，我的 Homelab 内容也丰富了非常多（我目前已经有了十多台 NixOS 主机），我对 Linux 系统结构的了解也越来越深刻。光是这几点收获，就完全值回票价了。
 
-总的来说，NixOS 很特殊，很强大。
-但另一方面它也有着相当多的历史债务，比如说文档混乱不说人话、Flakes 特性从 2019 年搞到现在 2024 年还处在实验状态、Nix 语言太过简单导致 Nixpkgs 中大量使用 Bash 脚本、模块系统的实现缺陷导致报错信息相当隐晦，等等。
-但社区正在蓬勃发展，文档、Flakes 等技术债社区都在积极解决中，而且 NixOS 的热度也在持续提升（我写的新手教程也为此出了一份力），因此我对它的未来持比较乐观的态度。
-
+期待 NixOS 的未来，也期待更多的人能够尝试 NixOS，体验它的强大与优雅。
 
 [如何评价NixOS? - 知乎]: https://www.zhihu.com/question/56543855/answer/3403111768
 [The Purely Functional Software Deployment Model]: https://edolstra.github.io/pubs/phd-thesis.pdf
