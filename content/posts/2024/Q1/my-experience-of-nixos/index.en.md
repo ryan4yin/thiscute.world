@@ -139,17 +139,19 @@ Now, when I think back to the days when I struggled with systemd to run a simple
 
 People with some programming experience should know the importance of abstraction and modularization, as the complexity of a scenario increases, the benefits of abstraction and modularization also increase. The popularity of Terraform/Kubernetes, and even Spring Boot, reflects this. NixOS's declarative configuration is also like this, as it encapsulates the underlying implementation details and has a community responsible for updating and maintaining these lower-level encapsulations. This greatly reduces my cognitive load and frees up my productivity. Its reproducibility also alleviates my concerns about breaking the system.
 
-On the other hand, NixOS's declarative configuration is also a kind of knowledge that describes how to build an OS from scratch, or a kind of source code that can build your NixOS system environment.
+NixOS is built on top of Nix, a functional package manager, drawing its design philosophy from Eelco Dolstra's paper [The Purely Functional Software Deployment Model]. "Purely functional" means it has no side effects, much like a mathematical function $y = f(x)$, where the same NixOS configuration file (input parameter $x$) always yields the same NixOS system environment (output $y$).
 
-As long as this source code doesn't get lost, modifying it, reviewing it, sharing it with others, or borrowing some features you want from others' source code is very easy.
+This means that NixOS's configuration declares the entire system's state, **OS as Code**!
 
-NixOS's configuration declares the complete state of the entire system, and you can easily copy the configuration of other NixOS users to get an identical environment. In contrast, copying the configurations of users of traditional distributions like Arch or Ubuntu is much more complicated, considering various version differences and environment differences, leading to a high level of uncertainty.
+As long as you have the source code of your NixOS system and it hasn't been lost, modifying it, reviewing it, sharing the source code with others, or borrowing features from someone else's source code is quite straightforward.
+
+You can easily copy other NixOS users' system configurations to ensure you'll get the same environment. In contrast, copying configurations from users of traditional distributions like Arch or Ubuntu is much more cumbersome, considering the various version differences and environmental peculiarities, leading to a high level of uncertainty.
 
 ## The Learning Curve of NixOS
 
 The entry barrier of NixOS is relatively high and is not suitable for beginners who have never touched Linux and programming. This is because its design philosophy is quite different from traditional Linux distributions. However, this is also its advantage, as once you cross that threshold, you will find a whole new world.
 
-For example, **reading the source code of Nixpkgs and submitting PRs to add features/packages or fix bugs is a basic skill for NixOS users**, and **NixOS users who do this are quite common**.
+For example, **reading the source code of Nixpkgs and submitting PRs to add features, packages, or fix bugs is a basic skill for NixOS users**, and **NixOS users who do this are quite common**.
 **This is both a deterrent that scares away new users and a ladder for Linux users who have chosen NixOS**.
 
 Imagine that most Arch users (like me in the past) might have used Arch for several years but didn't understand the underlying implementation details of Arch, nor did they package their own software. But with NixOS, diving into the source code becomes a norm, which also shows that understanding its implementation details is not difficult.
@@ -190,4 +192,7 @@ In summary, NixOS is very special and powerful.
 On the other hand, it also has a considerable amount of historical debt. For example, the documentation is a mess, not user-friendly, the Flakes feature has been in an experimental state since 2019, and Nix's simplicity leads to a large number of Bash scripts in Nixpkgs, and the implementation defects of the module system result in very vague error messages, and so on.
 
 However, the community is developing rapidly, and the community is actively solving technical debts like documentation and Flakes. Moreover, the popularity of NixOS is also increasing (my beginner tutorial has also contributed to this), so I am quite optimistic about its future.
+
+
+[The Purely Functional Software Deployment Model]: https://edolstra.github.io/pubs/phd-thesis.pdf
 
