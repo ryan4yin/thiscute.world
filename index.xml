@@ -16,7 +16,7 @@
 <p>那么作为一名已经深度使用 NixOS 作为主力桌面系统接近 10 个月的熟手，我在这里也从另一个角度来分享下我的入坑体会。</p>
 <p>注意，这篇文章不是 NixOS 入门教程，想看教程请移步上面给的链接。</p>
 <h2 id="is-nixpkgs-lacking-packages" class="headerLink">
-    <a href="#is-nixpkgs-lacking-packages" class="header-mark"></a>Nixpkgs 中的包太少？</h2><p>先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch AUR 是一个级别的。<a href="https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total" target="_blank" rel="noopener noreferrer">Repository statistics</a> 的包仓库统计数据如下：</p>
+    <a href="#is-nixpkgs-lacking-packages" class="header-mark"></a>Nixpkgs 中的包太少？</h2><p>先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch Linux 的 AUR 是一个级别的。<a href="https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total" target="_blank" rel="noopener noreferrer">Repository statistics</a> 的包仓库统计数据如下：</p>
 <p><figure><img
         
         loading="lazy"
@@ -39,12 +39,12 @@
 <h2 id="is-nixos-worth-learning" class="headerLink">
     <a href="#is-nixos-worth-learning" class="header-mark"></a>NixOS 值不值得学？</h2><p><strong>NixOS 值不值得学或者说投入产出比是否够高？在我看来，这归根结底是个规模问题</strong>。</p>
 <p><strong>这里的规模，一是指你对 Linux 系统所做的自定义内容的规模，二是指你系统更新的频繁程度，三是指你 Linux 机器的数量</strong>。</p>
-<p>下面我从个人经历的角度来讲下我以前用 Arch Ubuntu 等传统发行版的体验，以及我为什么选择了 NixOS，NixOS 又为我带来了什么样的改变。</p>
+<p>下面我从个人经历的角度来讲下我以前用 Arch Linux、Ubuntu 等传统发行版的体验，以及我为什么选择了 NixOS，NixOS 又为我带来了什么样的改变。</p>
 <p>举个例子，以前我用 Deepin Ubuntu 时我基本没对系统做过什么深入定制，一是担心把系统弄出问题修复起来头疼，二是如果不额外写一份文档或脚本记录下步骤的话，我做的所有定制都是黑盒且不可迁移的，一个月后我就全忘了，只能战战兢兢地持续维护这个随着我的使用而越来越黑盒、状态越来越混沌的系统。</p>
 <p>如果用的是 Arch 这种滚动发行版还好，系统一点点增量更新，遇到的一般都是小问题。而对 Ubuntu Deepin 这种，原地升级只出小问题是很少见的，这基本就意味着我必须在某个时间点，在新版本的 Ubuntu 上把我以前做过的定制再全部重做一遍，更关键的是，我非常有可能已经忘了我以前做了什么，这就意味着我得花更多的时间去研究我的系统环境里到底都有些啥东西，是怎么安装配置的，这种重复劳动非常痛苦。</p>
 <p>总之很显然的一点是，我对系统做的定制越多越复杂，迁移到新版本的难度就越大。</p>
-<p>我想也正是因为这一点，Arch Gentoo Fedora 这种滚动发行版才在 Linux 爱好者圈子中如此受欢迎，喜欢定制自己系统的 Linux 用户也大都使用这类滚动发行版。</p>
-<p>那么 Arch Fedora 就能彻底解决问题了么？显然并不是。
+<p>我想也正是因为这一点，Arch、Gentoo、Fedora 这种滚动发行版才在 Linux 爱好者圈子中如此受欢迎，喜欢定制自己系统的 Linux 用户也大都使用这类滚动发行版。</p>
+<p>那么 Arch、Fedora 就能彻底解决问题了么？显然并不是。
 首先它们的更新频率比较高，这代表着你会更容易把你的系统搞出点毛病来。当然这其实是个小问题，现在 Linux 社区谁还没整上个 btrfs / zfs 文件系统快照啊，出问题回滚快照就行。
 它们最根本的问题是：</p>
 <ol>
@@ -81,7 +81,7 @@
 <p>上面所说的你，嗯就是我自己。</p>
 <p>现在回想下我当初就为了用 systemd 跑个简单的小工具而跟 systemd 疯狂搏斗的场景，泪目&hellip; 要是我当初就懂 NixOS&hellip;</p>
 <h2 id="nixos-declarative-configuration" class="headerLink">
-    <a href="#nixos-declarative-configuration" class="header-mark"></a>NixOS 的声明式配置 - OS as Code</h2><p>有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform/Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。</p>
+    <a href="#nixos-declarative-configuration" class="header-mark"></a>NixOS 的声明式配置 - OS as Code</h2><p>有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform、Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。</p>
 <p>NixOS 构建在 Nix 函数式包管理器这上，它的设计理念来自 Eelco Dolstra 的论文 <a href="https://edolstra.github.io/pubs/phd-thesis.pdf" target="_blank" rel="noopener noreferrer">The Purely Functional Software Deployment Model</a>（纯函数式软件部署模型），纯函数式是指它没有副作用，就类似数学函数 $y = f(x)$，同样的 NixOS 配置文件（即输入参数 $x$ ）总是能得到同样的 NixOS 系统环境（即输出 $y$）。</p>
 <p>这也就是说 <strong>NixOS 的配置声明了整个系统完整的状态，OS as Code</strong>！</p>
 <p>只要这个你 NixOS 系统的这份源代码没丢，对它进行修改、审查，将源代码分享给别人，或者从别人的源代码中借鉴一些自己想要的功能，都是非常容易的。
@@ -97,7 +97,7 @@
 <p>总之因为上面这两点，理解 Nixpkgs 中的源码或者使用 Nix 语言自己打几个包并不难，可以说每个有一定经验的 NixOS 用户同时也会是 NixOS 打包人。</p>
 <h2 id="nixos-advantages" class="headerLink">
     <a href="#nixos-advantages" class="header-mark"></a>NixOS 的卖点？</h2><p>我们看了许多人提到 NixOS 的优点，上面我也提到了不少。
-圈外人听得比较多的可能主要是它不存在依赖冲突，能随时回滚，强大的可复现能力。
+Nix 的圈外人听得比较多的可能主要是它解决了依赖冲突问题，能随时回滚，强大的可复现能力。
 如果你有实际使用过 NixOS，那你也应该知道 NixOS 的这些优势：</p>
 <ol>
 <li>系统更新具有类似数据库事务的原子化特性，这意味着你的系统更新要么成功要么失败，（一般）不会出现中间状态。</li>
