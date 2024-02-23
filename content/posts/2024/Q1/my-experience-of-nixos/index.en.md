@@ -185,6 +185,27 @@ These are all selling points of NixOS, some of which can now also be achieved by
 However, the system that can solve all these problems right now is only NixOS (and the more niche Guix, which also relies on the Nix package manager).
 
 
+## NixOS's Disadvantages and Historical Debts {#nixos-disadvantages}
+
+For over two decades since the creation of the NixOS project, Nix package manager and the NixOS operating system have been very niche technologies, especially in China, where only a few Linux enthusiasts are aware of their existence, let alone using them.
+
+NixOS is very special and powerful, but on the other hand, it has a considerable amount of historical debt, such as:
+
+1. Poorly organized and impenetrable documentation
+2. The Flakes feature, which truly enables NixOS to meet its claimed reproducibility, has been in an experimental state since 2019 and is still not stable as of 2024.
+3. The Nix CLI is in a transition period, and the new version is much more elegant, but its implementation is strongly bound to the Flakes feature, making both difficult to stabilize and even hindering the development of many other features.
+4. Defects in the module system and insufficient error handling in Nix have led to long-term cryptic error messages, driving users crazy.
+5. Nix's simplicity has resulted in a large number of Bash scripts being used in Nixpkgs.
+6. Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages. Long-term use of folders to classify software packages, with no way to classify and query packages except through the source code, leads to a very poor experience.
+7. The maintainer of the <https://nixos.wiki> site has left, and the official has long failed to provide an alternative, making NixOS's documentation even worse than it already was.
+8. The recent rapid growth of NixOS's user base has posed challenges to its community operation model.
+9. ...
+
+These historical debts are the main reasons why NixOS has not been more widely used. 
+But these issues are also opportunities for NixOS's future, as the community is actively working to solve them.
+I am looking forward to seeing how NixOS will develop once these issues are resolved.
+
+
 ## The Future of NixOS
 
 No one is interested in a technology that has no future, so what about the future of NixOS? Am I optimistic about it? Here, I try to illustrate my views on the future of NixOS using some data.

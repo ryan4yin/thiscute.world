@@ -50,7 +50,7 @@ comment:
 
 注意，这篇文章不是 NixOS 入门教程，想看教程请移步上面给的链接。
 
-## Nixpkgs 中的包太少？
+## Nixpkgs 中的包太少？ {#is-nixpkgs-lacking-packages}
 
 先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch AUR 是一个级别的。[Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total) 的包仓库统计数据如下：
 
@@ -79,7 +79,7 @@ OK，闲话说完，下面进入正题。
 举例来说，它的官方文档烂到逼得我一个刚学 NixOS 的新手自己边学边写入门文档。在我用自己的渣渣英语把笔记翻译了一遍发到 reddit （[NixOS & Nix Flakes - A Guide for Beginners](https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/)）后，居然还获得了许多老外的大量好评（经过这么长时间的持续迭代，现在甚至已经变成了社区最受欢迎的新手教程之一），这侧面也说明官方文档到底有多烂。
 
 
-## NixOS 值不值得学？
+## NixOS 值不值得学？ {#is-nixos-worth-learning}
 
 **NixOS 值不值得学或者说投入产出比是否够高？在我看来，这归根结底是个规模问题**。
 
@@ -137,7 +137,7 @@ Docker 能解决上述问题中的一部分。
 
 现在回想下我当初就为了用 systemd 跑个简单的小工具而跟 systemd 疯狂搏斗的场景，泪目... 要是我当初就懂 NixOS...
 
-## NixOS 的声明式配置 - OS as Code
+## NixOS 的声明式配置 - OS as Code {#nixos-declarative-configuration}
 
 有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform/Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。
 
@@ -148,7 +148,7 @@ NixOS 构建在 Nix 函数式包管理器这上，它的设计理念来自 Eelco
 只要这个你 NixOS 系统的这份源代码没丢，对它进行修改、审查，将源代码分享给别人，或者从别人的源代码中借鉴一些自己想要的功能，都是非常容易的。
 你简单的抄点其他 NixOS 用户的系统配置就能很确定自己将得到同样的环境。相比之下，你抄其他 Arch/Ubuntu 等传统发行版用户的配置就要麻烦的多，要考虑各种版本区别、环境区别，不确定性很高。
 
-## NixOS 的学习成本
+## NixOS 的学习成本 {#nixos-learning-curve}
 
 NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编程的小白，这是因为它的设计理念与传统 Linux 发行版有很大不同。
 但这也是它的优势所在，跨过那道门槛，你会发现一片新天地。
@@ -164,7 +164,7 @@ NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编�
 
 总之因为上面这两点，理解 Nixpkgs 中的源码或者使用 Nix 语言自己打几个包并不难，可以说每个有一定经验的 NixOS 用户同时也会是 NixOS 打包人。
 
-## NixOS 的卖点？
+## NixOS 的卖点？ {#nixos-advantages}
 
 我们看了许多人提到 NixOS 的优点，上面我也提到了不少。
 圈外人听得比较多的可能主要是它不存在依赖冲突，能随时回滚，强大的可复现能力。
@@ -178,7 +178,7 @@ NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编�
 这些都是 NixOS 的卖点，其中一些特性现在在传统发行版上也能实现，Fedora Silverblue 等新兴的不可变发行版也在这些方面有些不错的创新。
 但能解决所有这些问题的系统，目前只有 NixOS（以及更小众的 Guix——它同样基于 Nix 包管理器）。
 
-## NixOS 的缺点与历史债务
+## NixOS 的缺点与历史债务 {#nixos-disadvantages}
 
 自 NixOS 项目创建至今二十多年来，Nix 包管理器与 NixOS 操作系统一直是非常小众的技术，
 尤其是在国内，知道它们存在的人都是少数 Linux 极客，更别说使用它们了。
@@ -195,10 +195,10 @@ NixOS 很特殊，很强大，但另一方面**它也有着相当多的历史债
 1. NixOS 近来快速增长的用户群体，使得它的社区运营模式也面临着挑战
 1. ...
 
-这些问题都是 NixOS 的历史债务，它们是 NixOS 一直没能得到更广泛使用的主要原因。
+这一堆历史债是 NixOS 一直没能得到更广泛使用的主要原因。
 但这些问题也是 NixOS 未来的机会，社区目前正在积极解决这些问题，我很期待看到这些问题被解决后， NixOS 将会有怎样的发展。
 
-## NixOS 的未来
+## NixOS 的未来 {#nixos-future}
 
 谁也不会对一项没前途的技术感兴趣，那么 NixOS 的未来如何呢？我是否看好它？
 这里我尝试使用一些数据来说明我对 NixOS 的未来的看法。
@@ -251,7 +251,7 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 
 结合上面这些数据看，我对 NixOS 的未来持很乐观的态度。
 
-## 总结
+## 总结 {#conclusion}
 
 从决定入坑 NixOS 到现在，短短 10 个月，我在 Linux 上取得的收获远超过去三年。我已经在 PC 上尝试了非常多的新技术新工具，我的 Homelab 内容也丰富了非常多（我目前已经有了十多台 NixOS 主机），我对 Linux 系统结构的了解也越来越深刻。光是这几点收获，就完全值回票价了。
 
