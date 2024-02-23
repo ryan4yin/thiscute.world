@@ -235,10 +235,10 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 再看看 Nix/NixOS 社区从 2022 年启用的年度用户调查。
 
 1. [2022 Nix Survey Results](https://discourse.nixos.org/t/2022-nix-survey-results/18983)，根据其中数据计算可得出：
-   - 74.5% 的用户是是在三年内开始使用 Nix/NixOS 的。
+   - 74.5% 的用户是在三年内开始使用 Nix/NixOS 的。
    - 关于如何拓展 Nixpkgs 的调查中，36.7% 的用户使用 Flakes 特性拓展 Nixpkgs，仅次于传统的 overlays.
 2. [Nix Community Survey 2023 Results](https://discourse.nixos.org/t/nix-community-survey-2023-results/33124)，简单计算可得出，
-   - 54.1% 的用户是是在三年内开始使用 Nix/NixOS 的。
+   - 54.1% 的用户是在三年内开始使用 Nix/NixOS 的。
    - 关于如何拓展 Nixpkgs 的调查中，使用 Flakes 特性的用户占比为 49.2%，超过了传统的 Overlays.
    - 关于实验特性的调查中，使用 Flakes 特性的用户占比已经达到了 59.1%.
 
