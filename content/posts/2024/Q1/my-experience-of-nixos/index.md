@@ -208,7 +208,7 @@ NixOS 很特殊，很强大，但另一方面**它也有着相当多的历史债
 [![](./nixpkgs-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
 
 上图能看到从 2021 年开始 Nixpkgs 项目的活跃度开始持续上升，
-Top 6 贡献者中有 4 位都是 2021 年之后开始大量提交代码，你点进 GitHub 看，能看到 Top 10 贡献者中有 6 位都是 2021 年之后加入社区的（新增的 @NickCao 与 @figdoda 都是 NixOS 中文社区资深用户）。
+Top 6 贡献者中有 3 位都是 2021 年之后开始大量提交代码，你点进 GitHub 看，能看到 Top 10 贡献者中有 5 位都是 2021 年之后加入社区的（新增的 @NickCao 与 @figdoda 都是 NixOS 中文社区资深用户）。
 
 再看看 Nix 包管理器的提交记录，它是 NixOS 的底层技术：
 
