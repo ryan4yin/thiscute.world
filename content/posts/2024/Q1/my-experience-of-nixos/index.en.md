@@ -141,7 +141,7 @@ People with some programming experience should know the importance of abstractio
 
 NixOS is built on top of Nix, a functional package manager, drawing its design philosophy from Eelco Dolstra's paper [The Purely Functional Software Deployment Model]. "Purely functional" means it has no side effects, much like a mathematical function $y = f(x)$, where the same NixOS configuration file (input parameter $x$) always yields the same NixOS system environment (output $y$).
 
-This means that NixOS's configuration declares the entire system's state, **OS as Code**!
+This means that **NixOS's configuration declares the entire system's state, OS as Code**!
 
 As long as you have the source code of your NixOS system and it hasn't been lost, modifying it, reviewing it, sharing the source code with others, or borrowing features from someone else's source code is quite straightforward.
 
