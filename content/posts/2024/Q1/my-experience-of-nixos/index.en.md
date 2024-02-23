@@ -184,15 +184,61 @@ These are all selling points of NixOS, some of which can now also be achieved by
 
 However, the system that can solve all these problems right now is only NixOS (and the more niche Guix, which also relies on the Nix package manager).
 
+
+## The Future of NixOS
+
+No one is interested in a technology that has no future, so what about the future of NixOS? Am I optimistic about it? Here, I try to illustrate my views on the future of NixOS using some data.
+
+First, let's look at the Nixpkgs project, which stores all the software packages for NixOS and the implementation code for NixOS itself:
+
+[![](./nixpkgs-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
+
+The graph shows that the activity of the Nixpkgs project has been continuously increasing since 2021. Among the Top 6 contributors, three began contributing code in large quantities after 2021. If you look at GitHub, you'll see that five out of the Top 10 contributors joined the community after 2021, including seasoned Chinese community members @NickCao and @figdoda.
+
+Now let's look at the commit history of the Nix package manager, which is the underlying technology of NixOS:
+
+[![](./nix-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
+
+The graph shows a significant increase in activity in the Nix project in 2020, with all six top contributors beginning to contribute code in large quantities after 2020.
+
+Next, let's look at the search heat for the keyword "NixOS" on Google Trends:
+
+[![](./nixos-google-trends.webp)](https://trends.google.com/trends/explore?cat=5&date=2014-01-23%202024-02-23&q=NixOS)
+
+This graph shows several obvious upticks in the search heat for NixOS:
+
+1. In December 2021
+   - This is likely due to the release of Nix 2.4 in November 2021, which brought experimental Flakes features and a new CLI. Flakes greatly improved the reproducibility of NixOS, and the new CLI was more intuitive for users.
+1. In June 2023
+   - The most important reason should be that several popular Linux-related channels on YouTube launched several videos about NixOS around this time. As of 2024-02-23, the three NixOS-related videos with the highest views on YouTube were all released between June and July 2023, with a total view count exceeding 1.3 million.
+   - Interest in China peaked recently, which may be because the user base in China has always been small. Then in June, I released [NixOS and Flakes - An Unofficial Beginner's Guide](https://nixos-and-flakes.thiscute.world/zh/), and I did some promotion through channels like [Technology Lover's Weekly](https://github.com/ruanyf/weekly/issues/3315), leading to a significant increase in the relative index of NixOS.
+1. In January 2024
+   - I'm not sure of the reason for this yet.
+
+Now let's look at the annual user survey started by the Nix/NixOS community in 2022.
+
+1. [2022 Nix Survey Results](https://discourse.nixos.org/t/2022-nix-survey-results/18983), based on the data:
+   - 74.5% of users began using Nix/NixOS within the last three years.
+   - In the survey about expanding Nixpkgs, 36.7% of users use Flakes to expand Nixpkgs, second only to traditional overlays.
+2. [Nix Community Survey 2023 Results](https://discourse.nixos.org/t/nix-community-survey-2023-results/33124), a simple calculation reveals:
+   - 54.1% of users began using Nix/NixOS within the last three years.
+   - In the survey about expanding Nixpkgs, the percentage of users using Flakes reached 49.2%, surpassing traditional Overlays.
+   - In the survey about experimental features, the percentage of users using Flakes reached 59.1%.
+
+Additionally, GitHub's [Octoverse 2023](https://github.blog/2023-11-08-the-state-of-open-source-and-ai/) report also mentioned Nixpkgs:
+
+> Developers see benefits to combining packages and containerization. As we noted earlier, 4.3 million repositories used Docker in 2023.
+> **On the other side of the coin, Linux distribution NixOS/nixpkgs has been on the top list of open source projects by contributor for the last two years**.
+
+These data points align with the increased activity in the Nixpkgs and Nix projects and show that the Nix/NixOS community began growing rapidly after 2021.
+
+Considering all these data points, I am very optimistic about the future of NixOS.
+
 ## Conclusion
 
-From deciding to try NixOS to now, just 10 months later, the gains I've made on Linux far exceed the previous three years. I've tried a lot of new technologies and tools on my PC, and my Homelab has become much richer (I now have more than ten NixOS hosts). My understanding of the Linux system structure has also deepened. Just these few points are worth the price of admission.
+From deciding to dive into NixOS to now, just 10 months later, the gains I've made on Linux far exceed those of the past three years. I have tried a lot of new technologies and tools on my PC, and my Homelab has become much richer (I now have more than ten NixOS hosts). My understanding of the Linux system structure has also deepened. Just these few points are enough to justify my choice.
 
-In summary, NixOS is very special and powerful.
-On the other hand, it also has a considerable amount of historical debt. For example, the documentation is a mess, not user-friendly, the Flakes feature has been in an experimental state since 2019, and Nix's simplicity leads to a large number of Bash scripts in Nixpkgs, and the implementation defects of the module system result in very vague error messages, and so on.
-
-However, the community is developing rapidly, and the community is actively solving technical debts like documentation and Flakes. Moreover, the popularity of NixOS is also increasing (my beginner tutorial has also contributed to this), so I am quite optimistic about its future.
-
+I look forward to the future of NixOS and hope that more people can try NixOS and experience its strength and elegance.
 
 [The Purely Functional Software Deployment Model]: https://edolstra.github.io/pubs/phd-thesis.pdf
 
