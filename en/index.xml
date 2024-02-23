@@ -112,6 +112,23 @@ Additionally, Dockerfiles still rely on various scripts and commands you write t
 </ol>
 <p>These are all selling points of NixOS, some of which can now also be achieved by traditional distributions with innovations like Fedora Silverblue.</p>
 <p>However, the system that can solve all these problems right now is only NixOS (and the more niche Guix, which also relies on the Nix package manager).</p>
+<h2 id="nixos-disadvantages" class="headerLink">
+    <a href="#nixos-disadvantages" class="header-mark"></a>NixOS&rsquo;s Disadvantages and Historical Debts</h2><p>For over two decades since the creation of the NixOS project, Nix package manager and the NixOS operating system have been very niche technologies, especially in China, where only a few Linux enthusiasts are aware of their existence, let alone using them.</p>
+<p>NixOS is very special and powerful, but on the other hand, it has a considerable amount of historical debt, such as:</p>
+<ol>
+<li>Poorly organized and impenetrable documentation</li>
+<li>The Flakes feature, which truly enables NixOS to meet its claimed reproducibility, has been in an experimental state since 2019 and is still not stable as of 2024.</li>
+<li>The Nix CLI is in a transition period, and the new version is much more elegant, but its implementation is strongly bound to the Flakes feature, making both difficult to stabilize and even hindering the development of many other features.</li>
+<li>Defects in the module system and insufficient error handling in Nix have led to long-term cryptic error messages, driving users crazy.</li>
+<li>Nix&rsquo;s simplicity has resulted in a large number of Bash scripts being used in Nixpkgs.</li>
+<li>Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages. Long-term use of folders to classify software packages, with no way to classify and query packages except through the source code, leads to a very poor experience.</li>
+<li>The maintainer of the <a href="https://nixos.wiki" target="_blank" rel="noopener noreferrer">https://nixos.wiki</a> site has left, and the official has long failed to provide an alternative, making NixOS&rsquo;s documentation even worse than it already was.</li>
+<li>The recent rapid growth of NixOS&rsquo;s user base has posed challenges to its community operation model.</li>
+<li>&hellip;</li>
+</ol>
+<p>These historical debts are the main reasons why NixOS has not been more widely used.
+But these issues are also opportunities for NixOS&rsquo;s future, as the community is actively working to solve them.
+I am looking forward to seeing how NixOS will develop once these issues are resolved.</p>
 <h2 id="the-future-of-nixos" class="headerLink">
     <a href="#the-future-of-nixos" class="header-mark"></a>The Future of NixOS</h2><p>No one is interested in a technology that has no future, so what about the future of NixOS? Am I optimistic about it? Here, I try to illustrate my views on the future of NixOS using some data.</p>
 <p>First, let&rsquo;s look at the Nixpkgs project, which stores all the software packages for NixOS and the implementation code for NixOS itself:</p>

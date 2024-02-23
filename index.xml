@@ -15,8 +15,8 @@
 
 <p>那么作为一名已经深度使用 NixOS 作为主力桌面系统接近 10 个月的熟手，我在这里也从另一个角度来分享下我的入坑体会。</p>
 <p>注意，这篇文章不是 NixOS 入门教程，想看教程请移步上面给的链接。</p>
-<h2 id="nixpkgs-中的包太少" class="headerLink">
-    <a href="#nixpkgs-%e4%b8%ad%e7%9a%84%e5%8c%85%e5%a4%aa%e5%b0%91" class="header-mark"></a>Nixpkgs 中的包太少？</h2><p>先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch AUR 是一个级别的。<a href="https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total" target="_blank" rel="noopener noreferrer">Repository statistics</a> 的包仓库统计数据如下：</p>
+<h2 id="is-nixpkgs-lacking-packages" class="headerLink">
+    <a href="#is-nixpkgs-lacking-packages" class="header-mark"></a>Nixpkgs 中的包太少？</h2><p>先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch AUR 是一个级别的。<a href="https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total" target="_blank" rel="noopener noreferrer">Repository statistics</a> 的包仓库统计数据如下：</p>
 <p><figure><img
         
         loading="lazy"
@@ -36,8 +36,8 @@
 <p>OK，闲话说完，下面进入正题。</p>
 <p>首先，NixOS 比传统发行版复杂很多，也存在非常多的历史遗留问题。</p>
 <p>举例来说，它的官方文档烂到逼得我一个刚学 NixOS 的新手自己边学边写入门文档。在我用自己的渣渣英语把笔记翻译了一遍发到 reddit （<a href="https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/" target="_blank" rel="noopener noreferrer">NixOS &amp; Nix Flakes - A Guide for Beginners</a>）后，居然还获得了许多老外的大量好评（经过这么长时间的持续迭代，现在甚至已经变成了社区最受欢迎的新手教程之一），这侧面也说明官方文档到底有多烂。</p>
-<h2 id="nixos-值不值得学" class="headerLink">
-    <a href="#nixos-%e5%80%bc%e4%b8%8d%e5%80%bc%e5%be%97%e5%ad%a6" class="header-mark"></a>NixOS 值不值得学？</h2><p><strong>NixOS 值不值得学或者说投入产出比是否够高？在我看来，这归根结底是个规模问题</strong>。</p>
+<h2 id="is-nixos-worth-learning" class="headerLink">
+    <a href="#is-nixos-worth-learning" class="header-mark"></a>NixOS 值不值得学？</h2><p><strong>NixOS 值不值得学或者说投入产出比是否够高？在我看来，这归根结底是个规模问题</strong>。</p>
 <p><strong>这里的规模，一是指你对 Linux 系统所做的自定义内容的规模，二是指你系统更新的频繁程度，三是指你 Linux 机器的数量</strong>。</p>
 <p>下面我从个人经历的角度来讲下我以前用 Arch Ubuntu 等传统发行版的体验，以及我为什么选择了 NixOS，NixOS 又为我带来了什么样的改变。</p>
 <p>举个例子，以前我用 Deepin Ubuntu 时我基本没对系统做过什么深入定制，一是担心把系统弄出问题修复起来头疼，二是如果不额外写一份文档或脚本记录下步骤的话，我做的所有定制都是黑盒且不可迁移的，一个月后我就全忘了，只能战战兢兢地持续维护这个随着我的使用而越来越黑盒、状态越来越混沌的系统。</p>
@@ -80,14 +80,14 @@
 <p>很大部分以前自己用各种脚本跟工具实现的功能，都被  Nixpkgs 封装好了，只需要 enable 一下再传几个关键参数，就能无痛运行。nixpkgs 中的脚本都有专门的 maintainer  维护更新，任何发现了问题的用户也可以提个 PR 修下问题，在没经过 CI 与 staging unstable  等好几个阶段的广泛验证前，更新也不会进入 stable.</p>
 <p>上面所说的你，嗯就是我自己。</p>
 <p>现在回想下我当初就为了用 systemd 跑个简单的小工具而跟 systemd 疯狂搏斗的场景，泪目&hellip; 要是我当初就懂 NixOS&hellip;</p>
-<h2 id="nixos-的声明式配置---os-as-code" class="headerLink">
-    <a href="#nixos-%e7%9a%84%e5%a3%b0%e6%98%8e%e5%bc%8f%e9%85%8d%e7%bd%ae---os-as-code" class="header-mark"></a>NixOS 的声明式配置 - OS as Code</h2><p>有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform/Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。</p>
+<h2 id="nixos-declarative-configuration" class="headerLink">
+    <a href="#nixos-declarative-configuration" class="header-mark"></a>NixOS 的声明式配置 - OS as Code</h2><p>有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform/Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。</p>
 <p>NixOS 构建在 Nix 函数式包管理器这上，它的设计理念来自 Eelco Dolstra 的论文 <a href="https://edolstra.github.io/pubs/phd-thesis.pdf" target="_blank" rel="noopener noreferrer">The Purely Functional Software Deployment Model</a>（纯函数式软件部署模型），纯函数式是指它没有副作用，就类似数学函数 $y = f(x)$，同样的 NixOS 配置文件（即输入参数 $x$ ）总是能得到同样的 NixOS 系统环境（即输出 $y$）。</p>
 <p>这也就是说 <strong>NixOS 的配置声明了整个系统完整的状态，OS as Code</strong>！</p>
 <p>只要这个你 NixOS 系统的这份源代码没丢，对它进行修改、审查，将源代码分享给别人，或者从别人的源代码中借鉴一些自己想要的功能，都是非常容易的。
 你简单的抄点其他 NixOS 用户的系统配置就能很确定自己将得到同样的环境。相比之下，你抄其他 Arch/Ubuntu 等传统发行版用户的配置就要麻烦的多，要考虑各种版本区别、环境区别，不确定性很高。</p>
-<h2 id="nixos-的学习成本" class="headerLink">
-    <a href="#nixos-%e7%9a%84%e5%ad%a6%e4%b9%a0%e6%88%90%e6%9c%ac" class="header-mark"></a>NixOS 的学习成本</h2><p>NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编程的小白，这是因为它的设计理念与传统 Linux 发行版有很大不同。
+<h2 id="nixos-learning-curve" class="headerLink">
+    <a href="#nixos-learning-curve" class="header-mark"></a>NixOS 的学习成本</h2><p>NixOS 的入门门槛相对较高，也不适合从来没接触过 Linux 与编程的小白，这是因为它的设计理念与传统 Linux 发行版有很大不同。
 但这也是它的优势所在，跨过那道门槛，你会发现一片新天地。</p>
 <p>举例来说，<strong>NixOS 用户翻 Nixpkgs 中的实现源码实际是每个用户的基本技能，给 Nixpkgs 提 PR 加功能、加包或者修 Bug 的 NixOS 用户也相当常见</strong>。
 <strong>这既是使新用户望而却步的拦路之虎，同时也是给选择了 NixOS 的 Linux 用户提供的进阶之梯</strong>。</p>
@@ -95,8 +95,8 @@
 <p>第一，Nix 是一门相当简单的语言，语法规则相当少，<strong>比 Java Python 这种通用语言简单了太多</strong>。因此有一定编程经验的工程师能花两三个小时就完整过一遍它的语法。再多花一点时间，读些常见 Nix 代码就没啥难度了。</p>
 <p>第二，<strong>NixOS 良好的声明式抽象与模块化系统，将 OS 分成了许多层来实现，使用户在使用过程中，既可以只关注当前这一层抽象接口，也可以选择再深入到下一层抽象来更自由地实现自己想要的功能</strong>（<strong>这种选择的权利，实际也给了用户机会去渐进式地理解 NixOS 本身</strong>）。举例来说，新手用户只要懂最上层的抽象就正常使用 NixOS。当你有了一点使用经验，想实现些自定义需求，挖下深挖一层抽象（比如说直接通过 systemd 的声明式参数自定义一些操作）通常就足够了。如果你已经是个 NixOS 熟手，想更极客一点，就可以再继续往下挖。</p>
 <p>总之因为上面这两点，理解 Nixpkgs 中的源码或者使用 Nix 语言自己打几个包并不难，可以说每个有一定经验的 NixOS 用户同时也会是 NixOS 打包人。</p>
-<h2 id="nixos-的卖点" class="headerLink">
-    <a href="#nixos-%e7%9a%84%e5%8d%96%e7%82%b9" class="header-mark"></a>NixOS 的卖点？</h2><p>我们看了许多人提到 NixOS 的优点，上面我也提到了不少。
+<h2 id="nixos-advantages" class="headerLink">
+    <a href="#nixos-advantages" class="header-mark"></a>NixOS 的卖点？</h2><p>我们看了许多人提到 NixOS 的优点，上面我也提到了不少。
 圈外人听得比较多的可能主要是它不存在依赖冲突，能随时回滚，强大的可复现能力。
 如果你有实际使用过 NixOS，那你也应该知道 NixOS 的这些优势：</p>
 <ol>
@@ -107,8 +107,8 @@
 </ol>
 <p>这些都是 NixOS 的卖点，其中一些特性现在在传统发行版上也能实现，Fedora Silverblue 等新兴的不可变发行版也在这些方面有些不错的创新。
 但能解决所有这些问题的系统，目前只有 NixOS（以及更小众的 Guix——它同样基于 Nix 包管理器）。</p>
-<h2 id="nixos-的缺点与历史债务" class="headerLink">
-    <a href="#nixos-%e7%9a%84%e7%bc%ba%e7%82%b9%e4%b8%8e%e5%8e%86%e5%8f%b2%e5%80%ba%e5%8a%a1" class="header-mark"></a>NixOS 的缺点与历史债务</h2><p>自 NixOS 项目创建至今二十多年来，Nix 包管理器与 NixOS 操作系统一直是非常小众的技术，
+<h2 id="nixos-disadvantages" class="headerLink">
+    <a href="#nixos-disadvantages" class="header-mark"></a>NixOS 的缺点与历史债务</h2><p>自 NixOS 项目创建至今二十多年来，Nix 包管理器与 NixOS 操作系统一直是非常小众的技术，
 尤其是在国内，知道它们存在的人都是少数 Linux 极客，更别说使用它们了。</p>
 <p>NixOS 很特殊，很强大，但另一方面<strong>它也有着相当多的历史债务</strong>，比如说：</p>
 <ol>
@@ -122,10 +122,10 @@
 <li>NixOS 近来快速增长的用户群体，使得它的社区运营模式也面临着挑战</li>
 <li>&hellip;</li>
 </ol>
-<p>这些问题都是 NixOS 的历史债务，它们是 NixOS 一直没能得到更广泛使用的主要原因。
+<p>这一堆历史债是 NixOS 一直没能得到更广泛使用的主要原因。
 但这些问题也是 NixOS 未来的机会，社区目前正在积极解决这些问题，我很期待看到这些问题被解决后， NixOS 将会有怎样的发展。</p>
-<h2 id="nixos-的未来" class="headerLink">
-    <a href="#nixos-%e7%9a%84%e6%9c%aa%e6%9d%a5" class="header-mark"></a>NixOS 的未来</h2><p>谁也不会对一项没前途的技术感兴趣，那么 NixOS 的未来如何呢？我是否看好它？
+<h2 id="nixos-future" class="headerLink">
+    <a href="#nixos-future" class="header-mark"></a>NixOS 的未来</h2><p>谁也不会对一项没前途的技术感兴趣，那么 NixOS 的未来如何呢？我是否看好它？
 这里我尝试使用一些数据来说明我对 NixOS 的未来的看法。</p>
 <p>首先看 Nixpkgs 项目，它存储了 NixOS 所有的软件包及 NixOS 自身的实现代码：</p>
 <p><a href="https://github.com/NixOS/nixpkgs/graphs/contributors" target="_blank" rel="noopener noreferrer"><figure><img
@@ -208,8 +208,8 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 </blockquote>
 <p>这些数据都与我们前面提到的 Nixpkgs 与 Nix 项目的活跃度相符，都显示 Nix/NixOS 社区在 2021 年之后开始迅速增长。</p>
 <p>结合上面这些数据看，我对 NixOS 的未来持很乐观的态度。</p>
-<h2 id="总结" class="headerLink">
-    <a href="#%e6%80%bb%e7%bb%93" class="header-mark"></a>总结</h2><p>从决定入坑 NixOS 到现在，短短 10 个月，我在 Linux 上取得的收获远超过去三年。我已经在 PC 上尝试了非常多的新技术新工具，我的 Homelab 内容也丰富了非常多（我目前已经有了十多台 NixOS 主机），我对 Linux 系统结构的了解也越来越深刻。光是这几点收获，就完全值回票价了。</p>
+<h2 id="conclusion" class="headerLink">
+    <a href="#conclusion" class="header-mark"></a>总结</h2><p>从决定入坑 NixOS 到现在，短短 10 个月，我在 Linux 上取得的收获远超过去三年。我已经在 PC 上尝试了非常多的新技术新工具，我的 Homelab 内容也丰富了非常多（我目前已经有了十多台 NixOS 主机），我对 Linux 系统结构的了解也越来越深刻。光是这几点收获，就完全值回票价了。</p>
 <p>期待 NixOS 的未来，也期待更多的人能够尝试 NixOS，体验它的强大与优雅。</p>
 ]]></content></entry><entry><title type="html">个人数据安全不完全指南</title><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/"/><id>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</id><author><name>ryan4yin</name></author><published>2024-01-30T13:48:30+08:00</published><updated>2024-02-20T11:39:30+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" height="900" width="471"><figcaption></figcaption>
