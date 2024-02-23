@@ -243,10 +243,10 @@ Now let's look at the annual user survey started by the Nix/NixOS community in 2
 
 1. [2022 Nix Survey Results](https://discourse.nixos.org/t/2022-nix-survey-results/18983), based on the data:
    - 74.5% of users began using Nix/NixOS within the last three years.
-   - In the survey about expanding Nixpkgs, 36.7% of users use Flakes to expand Nixpkgs, second only to traditional overlays.
+   - In the survey about extending Nixpkgs, 36.7% of users use Flakes to extend Nixpkgs, second only to traditional overlays.
 2. [Nix Community Survey 2023 Results](https://discourse.nixos.org/t/nix-community-survey-2023-results/33124), a simple calculation reveals:
    - 54.1% of users began using Nix/NixOS within the last three years.
-   - In the survey about expanding Nixpkgs, the percentage of users using Flakes reached 49.2%, surpassing traditional Overlays.
+   - In the survey about extending Nixpkgs, the percentage of users using Flakes reached 49.2%, surpassing traditional Overlays.
    - In the survey about experimental features, the percentage of users using Flakes reached 59.1%.
 
 Additionally, GitHub's [Octoverse 2023](https://github.blog/2023-11-08-the-state-of-open-source-and-ai/) report also mentioned Nixpkgs:
