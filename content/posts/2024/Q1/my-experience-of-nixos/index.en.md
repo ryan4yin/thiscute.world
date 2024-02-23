@@ -231,9 +231,10 @@ Next, let's look at the Google Trends for the keyword "NixOS":
 This graph shows several obvious upticks in the search trending for NixOS:
 
 1. In December 2021
-   - This is likely due to the release of Nix 2.4 in November 2021, which brought experimental Flakes features and a new CLI. Flakes greatly improved the reproducibility of NixOS, and the new CLI was more intuitive for users.
+   - This is likely due to the release of Nix 2.4 in November 2021, which brought experimental Flakes features and a new CLI. Flakes greatly improves the reproducibility of NixOS,and the new CLI is more in line with user intuition.
 1. In June 2023
    - The most important reason should be that several popular Linux-related channels on YouTube launched several videos about NixOS around this time. As of 2024-02-23, the three NixOS-related videos with the highest views on YouTube were all released between June and July 2023, with a total view count exceeding 1.3 million.
+   ![](./nixos-youtube-videos.webp)
    - Interest in China peaked recently, which may be because the user base in China has always been small. Then in June, I released [NixOS and Flakes - An Unofficial Beginner's Guide](https://nixos-and-flakes.thiscute.world/zh/), and I did some promotion through channels like [Technology Lover's Weekly](https://github.com/ruanyf/weekly/issues/3315), leading to a significant increase in the relative index of NixOS.
 1. In January 2024
    - I'm not sure of the reason for this yet.
