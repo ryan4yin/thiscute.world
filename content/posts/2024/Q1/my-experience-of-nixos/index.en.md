@@ -257,9 +257,10 @@ Considering all these data points, I am very optimistic about the future of NixO
 
 ## Conclusion
 
-From deciding to dive into NixOS to now, just 10 months later, the gains I've made on Linux far exceed those of the past three years. I have tried a lot of new technologies and tools on my PC, and my Homelab has become much richer (I now have more than ten NixOS hosts). My understanding of the Linux system structure has also deepened. Just these few points are enough to justify my choice.
+From deciding to dive into NixOS to now, just 10 months later, the gains I've made on Linux far exceed those of the past three years. I have tried a lot of new technologies and tools on my PC, and my Homelab has become much richer (I now have more than ten NixOS hosts). My understanding of the Linux system structure has also deepened.
 
-I look forward to the future of NixOS and hope that more people can try NixOS and experience its strength and elegance.
+These few points alone are enough to justify the choice, welcome to the world of NixOS!
+
 
 [The Purely Functional Software Deployment Model]: https://edolstra.github.io/pubs/phd-thesis.pdf
 

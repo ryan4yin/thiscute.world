@@ -253,9 +253,10 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 
 ## 总结 {#conclusion}
 
-从决定入坑 NixOS 到现在，短短 10 个月，我在 Linux 上取得的收获远超过去三年。我已经在 PC 上尝试了非常多的新技术新工具，我的 Homelab 内容也丰富了非常多（我目前已经有了十多台 NixOS 主机），我对 Linux 系统结构的了解也越来越深刻。光是这几点收获，就完全值回票价了。
+从决定入坑 NixOS 到现在，短短 10 个月，我在 Linux 上取得的收获远超过去三年。我已经在 PC 上尝试了非常多的新技术新工具，我的 Homelab 内容也丰富了非常多（我目前已经有了十多台 NixOS 主机），我对 Linux 系统结构的了解也越来越深刻。
 
-期待 NixOS 的未来，也期待更多的人能够尝试 NixOS，体验它的强大与优雅。
+光是这几点收获，就完全值回票价了，欢迎入坑 NixOS~
+
 
 [如何评价NixOS? - 知乎]: https://www.zhihu.com/question/56543855/answer/3403111768
 [The Purely Functional Software Deployment Model]: https://edolstra.github.io/pubs/phd-thesis.pdf
