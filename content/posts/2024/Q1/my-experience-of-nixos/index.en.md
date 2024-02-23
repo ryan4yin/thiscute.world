@@ -194,7 +194,7 @@ For over two decades since the creation of the NixOS project, Nix package manage
 NixOS is very special and powerful, but on the other hand, it has a considerable amount of historical debt, such as:
 
 1. Poorly organized and impenetrable documentation
-2. The Flakes feature, which truly enables NixOS to meet its claimed reproducibility, has been in an experimental state since 2019 and is still not stable as of 2024.
+2. The Flakes feature, which truly enables NixOS to meet its claimed reproducibility, is still in an experimental state from its official release in 2021(Nix 2.4) to 2024 now..
 3. The Nix CLI is in a transition period, and the new version is much more elegant, but its implementation is strongly bound to the Flakes feature, making both difficult to stabilize and even hindering the development of many other features.
 4. Defects in the module system and insufficient error handling in Nix have led to long-term cryptic error messages, driving users crazy.
 5. Nix's simplicity has resulted in a large number of Bash scripts being used in Nixpkgs.
