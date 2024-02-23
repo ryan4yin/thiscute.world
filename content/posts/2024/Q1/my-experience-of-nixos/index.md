@@ -247,7 +247,7 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 > Developers see benefits to combining packages and containerization. As we noted earlier, 4.3 million repositories used Docker in 2023.<br/>
 > **On the other side of the coin, Linux distribution NixOS/nixpkgs has been on the top list of open source projects by contributor for the last two years**.
 
-这些数据都与我们前面提到的 Nixpkgs 与 Nix 项目的活跃度相符，都显示 Nix/NixOS 社区在 2021 年之后开始迅速增长。
+这些数据与我们前面提到的 Nixpkgs 与 Nix 项目的活跃度相符，都显示 Nix/NixOS 社区在 2021 年之后开始迅速增长壮大。
 
 结合上面这些数据看，我对 NixOS 的未来持很乐观的态度。
 
