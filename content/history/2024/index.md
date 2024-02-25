@@ -23,6 +23,17 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+
+### 2024-02-24 ~ 2024-02-25
+
+- 看《葬送的芙莉莲》
+- 尝试将一台 PVE 节点替换成 LUKS 加密 + BTRFS 文件系统，大败北
+    - 首先发现 PVE 的安装程序不支持 LUKS 加密，必须首先安装 Debian，然后再安装 PVE 来实现。或者先安装好 PVE，然后再手动加密整个磁盘。
+    - 尝试使用 disko 自动分区、LUKS 加密、挂载 BTRFS，用得非常舒服，比手动跑一堆命令要方便太多了。
+    - 使用 debootstrap 安装 Debian，也遇到一些问题，在花了许多时间后都解决了。
+    - 最后安装 PVE 时，发现它对文件系统的分区以及文件系统都有些要求，太脆弱了，遇到各种报错，最后放弃了。
+- PVE 没搞定，而且也不太喜欢这种不可复现的系统，刚好最近看到说 kubevirt 发布 1.0 了，打算直接上 NixOS + K3s + kubevirt 来搞虚拟化。正在研究中。
+
 ### 2024-02-21 - 2024-02-23
 
 - 写了 [OS as Code - 我的 NixOS 使用体会](https://thiscute.world/posts/my-experience-of-nixos/)，然后优化这篇文章...

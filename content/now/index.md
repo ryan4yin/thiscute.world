@@ -42,8 +42,7 @@ toc:
     - 部署 victoriametrics 监控系统 - 10%
     - 部署 cert-manager 并使用它声明管理所有 Homelab 所需 TLS 证书 - 0%
     - 所有 Homelab 流量全部走 K8s 实现自动化的 HTTPS 证书管理 - 0%
-  - Proxmox VE 所有节点的磁盘做 LUKS 加密，使用几个便宜的 U 盘存储解密密钥（注意备份密钥！） - 0%
-  - Proxmox VE 所有节点的配置也使用 Pulumi 配合 NixOS 进行声明式自动配置 - 0%
+  - 使用 kubevirt 全面替换 Proxmox VE 集群，并启用 LUKS 加密 - 0%
   - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
   - 监控节点性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS 上进行 homelab 的管理与更新 - 0%
     - 控制节点需要存储一些重要的 SSH 私钥等数据，安全要求仅次于我所有桌面电脑，必须在 PVE 节点磁盘加密方案完成后才能继续推进。
