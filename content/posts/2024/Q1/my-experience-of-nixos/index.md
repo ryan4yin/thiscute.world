@@ -171,8 +171,6 @@ Nix 的圈外人听得比较多的可能主要是它解决了依赖冲突问题�
 如果你有实际使用过 NixOS，那你也应该知道 NixOS 的这些优势：
 
 
-1. NixOS's flakes feature allows you to lock the system to a specific state, and you can update it when you want to, even if it spans a year or two. NixOS does not force you to update your system frequently, you can choose to do this or not at all. Because the state of the system can be completely inferred from your NixOS configuration, it's much easier to upgrade from a old version to the latest one.
-   1. It's always good to have a choice, I don't like being forced, and neither do sysadmins or DevOps in companies.
 1. NixOS 的 Flakes 特性使你能将系统锁定在一个特定的状态，你可以在任何想更新的时候才更新它，即使有个一年半载不更新也完全没毛病。NixOS 不会强迫你频繁更新系统，你可以选择是否这么做。因为系统的状态可以完全从你的 NixOS 配置中推断出来，所以从旧版本升级到最新版本也容易很多。
    1. 有的选总是好的，我不喜欢被强迫频繁更新（即使我实际更新还挺频繁的），公司里的系统管理员或者 DevOps 就更是如此了。
 1. 系统更新具有类似数据库事务的原子化特性，这意味着你的系统更新要么成功要么失败，（一般）不会出现中间状态。
