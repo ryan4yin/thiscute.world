@@ -174,10 +174,14 @@ People outside the Nix community might mainly hear about its dependency-conflict
 
 If you have actually used NixOS, you should also know about its other advantages:
 
+
+1. NixOS's flakes feature allows you to lock the system to a specific state, and you can update it when you want to, even if it spans a year or two. NixOS does not force you to update your system frequently, you can choose to do this or not at all. Because the state of the system can be completely inferred from your NixOS configuration, it's much easier to upgrade from a old version to the latest one.
+   1. It's always good to have a choice, I don't like being forced, and neither do sysadmins or DevOps in companies.
+
 1. System updates have similar atomic properties to database transactions, which means your system updates either succeed or fail (usually without intermediate states).
 
 2. NixOS's declarative configuration actually implements OS as Code, making these configurations very easy to share. You can simply copy the code for the desired functionality from other NixOS users into your system configuration, and you'll get an identical environment. Beginner users can also easily learn a lot from others' configurations.
-
+   1. This is also why more and more users are using NixOS for Linux desktop ricing on GitHub and reddit r/unixporn in recent years.
 3. The declarative configuration provides users with highly convenient system customization capabilities, allowing them to quickly switch various components of the system by changing a few lines of configuration.
 
 4. And so on.
