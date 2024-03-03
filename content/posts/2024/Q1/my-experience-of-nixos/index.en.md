@@ -202,7 +202,9 @@ NixOS is very special and powerful, but on the other hand, it has a considerable
 3. The Nix CLI is in a transition period, and the new version is much more elegant, but its implementation is strongly bound to the Flakes feature, making both difficult to stabilize and even hindering the development of many other features.
 4. Defects in the module system and insufficient error handling in Nix have led to long-term cryptic error messages, driving users crazy.
 5. Nix's simplicity has resulted in a large number of Bash scripts being used in Nixpkgs.
-6. Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages. Long-term use of folders to classify software packages, with no way to classify and query packages except through the source code, leads to a very poor experience.
+1. Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages and what attributes can be overridden in derivations.
+   - Nixpkgs has long used folders to classify software packages, and there is no way to query the software packages by category except through the source code.
+   - All derivation-related information in Nixpkgs can currently only be obtained by looking at the source code.
 7. The maintainer of the <https://nixos.wiki> site has left, and the official has long failed to provide an alternative, making NixOS's documentation even worse than it already was.
 8. The recent rapid growth of Nix/NixOS's user base has posed challenges to its community operation model.
 9. ...
