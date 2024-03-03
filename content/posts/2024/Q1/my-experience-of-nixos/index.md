@@ -23,7 +23,7 @@ lightgallery: false
 toc:
   enable: true
 math:
-  enable: false
+  enable: true
 license: ""
 
 comment:
