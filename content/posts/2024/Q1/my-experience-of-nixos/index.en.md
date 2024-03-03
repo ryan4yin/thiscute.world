@@ -201,7 +201,7 @@ NixOS is very special and powerful, but on the other hand, it has a considerable
 2. The Flakes feature, which truly enables NixOS to meet its claimed reproducibility, is still in an experimental state from its official release in 2021(Nix 2.4) to 2024 now..
 3. The Nix CLI is in a transition period, and the new version is much more elegant, but its implementation is strongly bound to the Flakes feature, making both difficult to stabilize and even hindering the development of many other features.
 4. Defects in the module system and insufficient error handling in Nix have led to long-term cryptic error messages, driving users crazy.
-5. Nix's simplicity has resulted in a large number of Bash scripts being used in Nixpkgs.
+5. The Nix language's simplicity has resulted in a large number of Bash scripts being used in Nixpkgs, and most of Nix's features are implemented in C++, making it a black box from the perspective of Nix.
 1. Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages and what attributes can be overridden in derivations.
    - Nixpkgs has long used folders to classify software packages, and there is no way to query the software packages by category except through the source code.
    - All derivation-related information in Nixpkgs can currently only be obtained by looking at the source code.
