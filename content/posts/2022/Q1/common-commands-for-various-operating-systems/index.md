@@ -234,6 +234,16 @@ xzcat xxx.xz | more  # xz
 tar -axvf xxx.tar.*  # 通过后缀识别压缩格式，智能解压
 ```
 
+以及日常可通过压缩 + bas64 编码来通过 IM 等聊天软件快速传输数据量不多的文件夹：
+
+```bash
+# 压缩文件夹并通过 base64 编码
+tar czv <folder-name> | base64 > xxx
+
+# 解压消息到文件夹
+cat "xxx" | base64 -d | tar zxv
+```
+
 更多命令参见 [常见压缩格式的区别，及 Linux 下的压缩相关指令](https://thiscute.world/posts/compression-related-instructions-under-linux/)
 
 ### 4. 文件拷贝与同步
