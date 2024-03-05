@@ -23,6 +23,20 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2023-03-01 - 2023-03-05
+
+- 认识了 dae 社区的新朋友，聊 NixOS 跟 CloudNative 等话题，聊得火热。
+- 探索 NixOS + K3s + KubeVirt 这套虚拟化方案，遇到一些难点：
+    - 虚拟机需要使用 underlay 网络，接入到宿主机的网桥上。但直接桥接好像说会导致无法热迁移，这个研究了很多。
+    - 为虚拟机分配静态 IP 地址，毕竟 K8s 默认使用动态 IP.
+    - 分布式存储方案，因为虚拟机数据是在 PVC 里的，如果不使用分布式存储，那么机器就无法迁移到其他节点上了（文档只说了热迁移要求这个，但我感觉非热迁移显然也会有问题吧）。
+- 一开始尝试使用 pulumi 来声明式地配置整个 KubeVirt 集群，测试代码 [ryan4yin/nix-config/pull/71](https://github.com/ryan4yin/nix-config/pull/71/files)，但发现用 pulumi 管集群确实不太爽快，尤其是它对依赖关系的处理很不好。destroy 时它先把我 operator 的 pods 给删掉了，但后面删除 CR 时又得由 operator/controller 完成 finalizer 操作，结果就是删除无法成功...
+    - 跟 Kev/Viz 两位朋友聊了后，决定换成 flux2/argocd 来以 GitOps 的方式管理整个集群，貌似它们有些黑科技能自动识别到这些依赖关系，总之不会出现先删掉我 operator/controller 导致 CR 无法清理的问题。
+- 如果使用 KubeVirt，可 KubeVirt 一是它比较复杂也没那么成熟，肯定没 PVE 那么稳定，二是它需要拉取镜像，这最好是过一下我软路由。所以软路由、Git 仓库、Homelab 监控等组件，就得单独部署，不能跑在 KubeVirt 里面（我依赖我自己这种架构，出了问题没法修）。
+- 所以就决定把软路由(dae)、Git 仓库、Homelab 监控等组件单独部署到一块 ARM 开发板上，但安全起见也要设置 LUKS 加密。接着就开始折腾我的 Orange Pi 5 跟 Orange Pi 5 Plus 两块板子。
+  - 以前使用的直接 dd 的方式不兼容 LUKS 加密，而且我之前做的镜像也无法在 Orange Pi 5 Plus 上从 SSD 启动，于是又研究了一晚上的 EDK2-RK3588，想看看用 UEFI 的方式能否解决此问题，结果是能进 Grub，但接着 NixOS 怎么启动都是一直报错。
+
+
 ### 2024-02-29
 
 - 朋友聊到 BTC 大涨，看了下币安发现我的加密货币也涨挺多，SOL 更离谱，涨了十多倍。
