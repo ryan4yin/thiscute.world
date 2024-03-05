@@ -41,7 +41,7 @@ toc:
   - 将 Homelab 监控、Git 仓库、旁路网关都迁移到一块 Orange Pi 5 上，并启用 LUKS 加密 - 100%
     - 这是 KubeVirt 改造的前置工作，这三项服务都需要最高的稳定性，也被 kubevirt 依赖，因此需要放在 kubevirt 集群之外
   - K8s 集群使用 Flux2 进行 GitOps 式自动配置 - 30%
-    - 部署 victoriametrics 监控系统 - 10%
+    - 部署 victoriametrics 监控系统 - 100%
     - 部署 cert-manager 并使用它声明管理所有 Homelab 所需 TLS 证书 - 0%
     - 所有 Homelab 流量全部走 K8s 实现自动化的 HTTPS 证书管理 - 0%
   - 使用 kubevirt 全面替换 Proxmox VE 集群，并启用 LUKS 加密 - 0%
