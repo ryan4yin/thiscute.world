@@ -38,14 +38,15 @@ toc:
     - 监控系统迁移到 NixOS（Prometheus + Alertmanager + Grafana + Uptime-Kuma） - 100%
     - 网络设备迁移到 NixOS（dae 旁路网关 + tailscale 网关） - 100%
     - K8s 集羣迁移到 NixOS - 100%
-  - K8s 集羣使用 Pulumi 进行声明式自动配置 - 30%
+  - 将 Homelab 监控、Git 仓库、旁路网关都迁移到一块 Orange Pi 5 上，并启用 LUKS 加密 - 100%
+    - 这是 KubeVirt 改造的前置工作，这三项服务都需要最高的稳定性，也被 kubevirt 依赖，因此需要放在 kubevirt 集群之外
+  - K8s 集羣使用 Flux2 进行 GitOps 式自动配置 - 30%
     - 部署 victoriametrics 监控系统 - 10%
     - 部署 cert-manager 并使用它声明管理所有 Homelab 所需 TLS 证书 - 0%
     - 所有 Homelab 流量全部走 K8s 实现自动化的 HTTPS 证书管理 - 0%
   - 使用 kubevirt 全面替换 Proxmox VE 集群，并启用 LUKS 加密 - 0%
   - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
   - 监控节点(hostname=ruby)性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS 上进行 homelab 的管理与更新 - 0%
-    - 通过 `ssh -A xxx` 将桌面电脑的 ssh-agent 临时提供给控制节点 ruby 使用，免去在服务器上保存私钥带来的安全隐患 - 0%
     - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
 - 个人笔记迁移
   - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
