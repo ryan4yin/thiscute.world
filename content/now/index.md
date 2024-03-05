@@ -37,10 +37,10 @@ toc:
   - All in NixOS，做到 99% 的声明式配置
     - 监控系统迁移到 NixOS（Prometheus + Alertmanager + Grafana + Uptime-Kuma） - 100%
     - 网络设备迁移到 NixOS（dae 旁路网关 + tailscale 网关） - 100%
-    - K8s 集羣迁移到 NixOS - 100%
+    - K8s 集群迁移到 NixOS - 100%
   - 将 Homelab 监控、Git 仓库、旁路网关都迁移到一块 Orange Pi 5 上，并启用 LUKS 加密 - 100%
     - 这是 KubeVirt 改造的前置工作，这三项服务都需要最高的稳定性，也被 kubevirt 依赖，因此需要放在 kubevirt 集群之外
-  - K8s 集羣使用 Flux2 进行 GitOps 式自动配置 - 30%
+  - K8s 集群使用 Flux2 进行 GitOps 式自动配置 - 30%
     - 部署 victoriametrics 监控系统 - 10%
     - 部署 cert-manager 并使用它声明管理所有 Homelab 所需 TLS 证书 - 0%
     - 所有 Homelab 流量全部走 K8s 实现自动化的 HTTPS 证书管理 - 0%
