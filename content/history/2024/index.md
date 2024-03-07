@@ -23,7 +23,13 @@ comment:
 
 全部历史记录：[/history](/history/)
 
-### 2023-03-01 - 2023-03-05
+### 2024-03-06 - 2024-03-07
+
+- [ryan4yin/nixos-rk3588/pull/19](https://github.com/ryan4yin/nixos-rk3588/pull/19): 搞定了 ISO 镜像在 UEFI + NixOS 模式下启动失败的问题，解法是直接生成 Raw Image 而不是 iso 镜像。
+- [ryan4yin/nix-config/pull/74](https://github.com/ryan4yin/nix-config/pull/74): 尝试在 RK3588 上添使用 NixOS + LUKS + Secure Boot 启动。
+
+
+### 2024-03-01 - 2024-03-05
 
 - 认识了 dae 社区的新朋友，聊 NixOS 跟 CloudNative 等话题，聊得火热。
 - 探索 NixOS + K3s + KubeVirt 这套虚拟化方案，遇到一些难点：
