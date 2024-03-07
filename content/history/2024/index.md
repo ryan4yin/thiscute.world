@@ -29,6 +29,7 @@ comment:
 - [ryan4yin/nix-config/pull/74](https://github.com/ryan4yin/nix-config/pull/74): 尝试在 RK3588 上添使用 NixOS + LUKS + Secure Boot 启动。
 - 报名参加了 3/14 的 2024 玄铁 RISC-V 生态大会，因为是周四工作日，还提前请了假。Pi Day 玩玩 RISC-V，感觉很有意思。
     - 呼朋引伴，拉到了 0xffff.one 社区与其他对 RISC-V 感兴趣的朋友一起去。
+- 这两天搞 ARM 板子，对继续更新 nixos-rk3588 跟 nixos-licheepi4a 又起了兴趣，打算把它们搞得更完善一些，对已有的 Issues 做了些整理，也跟几位 issue owners 做了些沟通。
 
 ### 2024-03-01 - 2024-03-05
 
