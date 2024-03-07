@@ -43,7 +43,8 @@ toc:
     - 部署 victoriametrics 监控系统 - 100%
     - 部署 cert-manager 并使用它声明管理所有 Homelab 所需 TLS 证书 - 0%
     - 所有 Homelab 流量全部走 K8s 实现自动化的 HTTPS 证书管理 - 0%
-  - 使用 kubevirt 全面替换 Proxmox VE 集群，并启用 LUKS 加密 - 10%
+  - 两块 RK3588 板子启用 UEFI + NixOS + LUKS + Secure Boot - 50%
+  - 使用 kubevirt 全面替换 Proxmox VE 集群，并启用 LUKS 加密 + Secure Boot - 10%
   - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
   - 监控节点(hostname=ruby)性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS 上进行 homelab 的管理与更新 - 0%
     - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
