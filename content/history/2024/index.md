@@ -27,7 +27,8 @@ comment:
 
 - [ryan4yin/nixos-rk3588/pull/19](https://github.com/ryan4yin/nixos-rk3588/pull/19): 搞定了 ISO 镜像在 UEFI + NixOS 模式下启动失败的问题，解法是直接生成 Raw Image 而不是 iso 镜像。
 - [ryan4yin/nix-config/pull/74](https://github.com/ryan4yin/nix-config/pull/74): 尝试在 RK3588 上添使用 NixOS + LUKS + Secure Boot 启动。
-
+- 报名参加了 3/14 的 2024 玄铁 RISC-V 生态大会，因为是周四工作日，还提前请了假。Pi Day 玩玩 RISC-V，感觉很有意思。
+    - 呼朋引伴，拉到了 0xffff.one 社区与其他对 RISC-V 感兴趣的朋友一起去。
 
 ### 2024-03-01 - 2024-03-05
 
