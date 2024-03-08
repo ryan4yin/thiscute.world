@@ -66,3 +66,9 @@ python3 process_posts.py
 - Serverless Comment System
   - [ryan4yin/waline-comment-api](https://github.com/ryan4yin/waline-comment-api)
   - [ryan4yin/waline-comments-backup](https://github.com/ryan4yin/waline-comments-backup)
+
+
+## LICENSE
+
+[CC BY-NC 4.0 Deed](https://creativecommons.org/licenses/by-nc/4.0/)
+
