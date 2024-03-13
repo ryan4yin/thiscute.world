@@ -28,6 +28,7 @@ comment:
 
 - 偶然在 NixOS 中文群聊天，guangtao 老师提出可以用 overlays 来解决 darwin 的 broken packages 问题，非常好用：[Refactor: Remove darwin packages](https://github.com/ryan4yin/nix-config/pull/84/files#diff-3c2d7691414cb91e9476b1dc1302f1375e6daa96259b31789a9308a97f75ef69)
 - 继续研究 ArgoCD 跟 Flux2，发现 ArgoCD 的文档很乱，HA 的架构也比较复杂。Flux2 的文档相对清晰许多，而且架构简单，使用方便，所以决定在公司的几个项目跟我个人 Homelab 上都使用 Flux2 来管理 K8s 集群。
+- Nix 配置少量重构，添加 Eval Tests 跟 NixOS Tests，并且修了一堆之前重构导致的 Bug，之前因为没有测试，有些 bug 现在加了测试才发现。
 
 ### 2024-03-09 - 2024-03-10
 
