@@ -23,6 +23,27 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+
+### 2024-03-11 - 2024-03-13
+
+- 偶然在 NixOS 中文群聊天，guangtao 老师提出可以用 overlays 来解决 darwin 的 broken packages 问题，非常好用：[Refactor: Remove darwin packages](https://github.com/ryan4yin/nix-config/pull/84/files#diff-3c2d7691414cb91e9476b1dc1302f1375e6daa96259b31789a9308a97f75ef69)
+- 继续研究 ArgoCD 跟 Flux2，发现 ArgoCD 的文档很乱，HA 的架构也比较复杂。Flux2 的文档相对清晰许多，而且架构简单，使用方便，所以决定在公司的几个项目跟我个人 Homelab 上都使用 Flux2 来管理 K8s 集群。
+
+### 2024-03-09 - 2024-03-10
+
+- 发现我当前的 Nix 配置已经比较复杂了，而且不太能支撑我想要的一些功能，于是决定重构。
+    - 首先提了个 issue 记录了下改造目标：[(Feature) Refactor the code to make it more maintainable and readable](https://github.com/ryan4yin/nix-config/issues/83)
+    - 完成并合并了第一个 PR [refactor: flake outputs & hosts](https://github.com/ryan4yin/nix-config/pull/79)，解决了当前最大的痛点。
+- 几个社区项目都多了挺多 Issue，不过在搞配置重构，没怎么管它们。
+- nixos-rk3588 有人提问新版本默认不能交叉编译了，沟通后给加了个 PR [feat: add fully cross compilation](https://github.com/ryan4yin/nixos-rk3588/pull/21)
+
+
+### 2024-03-08
+
+- 更新 NixOS & Flakes Book 的部分内容，许可证从 MIT 替换成了更适合文档的 CC-BY-SA 4.0。
+- 搞定了 NixOS RK3588 + UEFI + tmpfs + LUKS，上到了我的两块 Orange Pi 5 / Plus 板子上。
+- 之前尝试在 Homelab 上使用 Pulumi，但遇到比较多的问题，放弃了。跟 @Kev @Viz 聊过后，在他们的推荐下，转而开始研究 ArgoCD 跟 FLux2 两个 K8s GitOps 工具，打算上线到 Homelab。
+
 ### 2024-03-06 - 2024-03-07
 
 - [ryan4yin/nixos-rk3588/pull/19](https://github.com/ryan4yin/nixos-rk3588/pull/19): 搞定了 ISO 镜像在 UEFI + NixOS 模式下启动失败的问题，解法是直接生成 Raw Image 而不是 iso 镜像。
