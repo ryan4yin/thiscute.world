@@ -7,8 +7,7 @@ resources:
   - name: "featured-image"
     src: "dhke.webp"
 
-tags:
-  ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
+tags: ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]

@@ -3,8 +3,8 @@ title: "写给开发人员的实用密码学（三）—— MAC 与密钥派生�
 date: 2022-03-01T17:15:03+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "key.webp"
+  - name: "featured-image"
+    src: "key.webp"
 
 tags: ["Cryptography", "Hash", "哈希", "散列", "密码学", "安全", "MAC", "HMAC", "KDF", "Scrypt"]
 categories: ["tech"]
@@ -20,8 +20,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了 HMAC 的 Python 实现以及 scrypt 使用示例。
-
+> 本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了 HMAC 的 Python 实现以及 scrypt 使用示例。
 
 ## 一、MAC 消息认证码
 
@@ -92,7 +91,7 @@ def my_hmac(key, msg, hash_name):
     block_sized_key = hash_(key).digest()  # 用 hash 函数进行压缩
   if len(key) < block_size:
     block_sized_key += b'\x00' * (block_size - len(key))  # 末尾补 0
-  
+
   o_key_pad = xor_bytes(block_sized_key, (b"\x5c" * block_size))  # Outer padded key
   i_key_pad = xor_bytes(block_sized_key, (b"\x36" * block_size))  # Inner padded key
 
@@ -231,4 +230,3 @@ kdf.verify(b"my great password", key)
 - [A complete overview of SSL/TLS and its cryptographic system](https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd)
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
-

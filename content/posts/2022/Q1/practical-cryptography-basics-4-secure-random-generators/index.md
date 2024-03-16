@@ -3,8 +3,8 @@ title: "写给开发人员的实用密码学（四）—— 安全随机数生�
 date: 2022-03-01T17:15:04+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "random-numbers.webp"
+  - name: "featured-image"
+    src: "random-numbers.webp"
 
 tags: ["Cryptography", "密码学", "伪随机数", "安全", "PRNG", "CSPRNG"]
 categories: ["tech"]
@@ -20,8 +20,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
-
+> 本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
 
 ## 一、前言
 
@@ -58,7 +57,7 @@ def random_number_generator(seed: bytes, max_num: int):
   counter = 0
 
   while True:
-    state = hmac.new(state, bytes(counter), hashlib.sha1).digest()    
+    state = hmac.new(state, bytes(counter), hashlib.sha1).digest()
     counter += 1
 
     # 这里取余实际上是压缩了信息，某种程度上说，这可以保证内部的真实状态 state 不被逆向出来
@@ -69,7 +68,6 @@ gen = random_number_generator(b"abc", 100)
 print([next(gen) for _ in range(20)])
 # => [71, 41, 52, 18, 51, 14, 58, 30, 70, 20, 59, 93, 3, 10, 81, 63, 48, 67, 18, 36]
 ```
-
 
 ## 三、随机性 - 熵
 
@@ -96,7 +94,7 @@ Cryptography Secure Random Number Generators(CSPRNG) 是一种适用于密码学
 - 基于数论设计的 CSPRNG，它依靠整数分解问题（IFP）、离散对数问题（DLP）或椭圆曲线离散对数问题（ECDLP）的高难度来确保安全性
 - CSPRNG 基于加密安全随机性的特殊设计，例如 Yarrow algorithm 和 Fortuna，这俩分别被用于 MacOS 和 FreeBSD.
 
-大多数的 CSPRNG 结合使用来自 OS 的熵与高质量的 PRNG，并且一旦系统生成了新的熵（这可能来自用户输入、磁盘  IO、系统中断、或者硬件 RNG），CSPRNG 会立即使用新的熵来作为 PRNG 新的种子。
+大多数的 CSPRNG 结合使用来自 OS 的熵与高质量的 PRNG，并且一旦系统生成了新的熵（这可能来自用户输入、磁盘 IO、系统中断、或者硬件 RNG），CSPRNG 会立即使用新的熵来作为 PRNG 新的种子。
 这种不断重置 PRNG 种子的行为，使随机数变得非常难以预测。
 
 ### CSPRNG 的用途
@@ -105,7 +103,6 @@ Cryptography Secure Random Number Generators(CSPRNG) 是一种适用于密码学
 - 其他需要安全随机数的场景 emmmm
 
 ## 如何在代码中使用 CSPRNG
-
 
 多数系统都内置了 CSPRNG 算法并提供了内核 API，Unix-like 系统都通过如下两个虚拟设备提供 CSPRNG:
 
@@ -141,4 +138,3 @@ random_string(24)
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
-

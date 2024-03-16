@@ -4,15 +4,24 @@ date: 2022-05-06T11:56:00+08:00
 draft: true
 
 resources:
-- name: "featured-image"
-  src: "kubernetes-networking.webp"
+  - name: "featured-image"
+    src: "kubernetes-networking.webp"
 
-tags: ["Kubernetes", "Linux", "NAT", "网络", "内网穿透", "网络隧道", "Overlay 网络", "Underlay 网络", "wireguard"]
+tags:
+  [
+    "Kubernetes",
+    "Linux",
+    "NAT",
+    "网络",
+    "内网穿透",
+    "网络隧道",
+    "Overlay 网络",
+    "Underlay 网络",
+    "wireguard",
+  ]
 categories: ["tech"]
 series: ["云原生相关", "计算机网络相关"]
-
 ---
-
 
 本文包含如下几个部分：
 
@@ -37,7 +46,6 @@ series: ["云原生相关", "计算机网络相关"]
 第五部分：
 
 Network Policy
-
 
 ## 参考
 

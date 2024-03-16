@@ -8,17 +8,7 @@ resources:
   - name: "featured-image"
     src: "tft_esp32_show_image-2.webp"
 
-tags:
-  [
-    "电子电路",
-    "Electrical Engineering",
-    "MCU",
-    "ESP32",
-    "SPI",
-    "GPIO",
-    "贪吃蛇",
-    "显示屏",
-  ]
+tags: ["电子电路", "Electrical Engineering", "MCU", "ESP32", "SPI", "GPIO", "贪吃蛇", "显示屏"]
 categories: ["tech"]
 series: ["EE 入门"]
 series_weight: 2

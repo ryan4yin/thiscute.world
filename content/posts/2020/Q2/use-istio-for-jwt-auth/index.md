@@ -4,15 +4,15 @@ date: 2020-04-06T21:48:26+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "istio.webp"
+  - name: "featured-image"
+    src: "istio.webp"
 
 tags: ["Kubernetes", "Istio", "服务网格"]
 categories: ["tech"]
 series: ["云原生相关"]
 ---
 
->本文基于 Istio1.5 编写测试
+> 本文基于 Istio1.5 编写测试
 
 Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authentication），支持多种 JWT 签名算法。
 
@@ -24,7 +24,7 @@ Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authen
 
 ### 1. 介绍 JWK 与 JWKS
 
-Istio 要求提供 JWKS 格式的信息，用于 JWT 签名验证。因此这里得先介绍一下 JWK 和 JWKS. 
+Istio 要求提供 JWKS 格式的信息，用于 JWT 签名验证。因此这里得先介绍一下 JWK 和 JWKS.
 
 JWKS ，也就是 JWK Set，json 结构如下：
 
@@ -64,7 +64,7 @@ JWK 中 RSA 公钥的具体定义参见 [RSA Keys - JSON Web Algorithms (JWA)](h
 
 要生成 JWK 公钥，需要先生成私钥，生成方法参见 [JWT 签名算法 HS256、RS256 及 ES256 及密钥生成](https://thiscute.world/posts/jwt-algorithm-key-generation/)。
 
->公钥不需要用上述方法生成，因为我们需要的是 JWK 格式的公钥。后面会通过 python 生成出 JWK 公钥。
+> 公钥不需要用上述方法生成，因为我们需要的是 JWK 格式的公钥。后面会通过 python 生成出 JWK 公钥。
 
 上面的命令会将生成出的 RSA 私钥写入 key.pem 中，查看一下私钥内容。
 
@@ -195,8 +195,7 @@ JWT 的验证规则是：
 2. JWT 的 header 中有 kid 属性，第二步在 jwks 的公钥列表中，中找到 kid 相同的公钥。
 3. 使用找到的公钥进行 JWT 签名验证。
 
->配置中的 `spec.selector` 可以省略，这样会直接在整个 namespace 中生效，而如果是在 `istio-system` 名字空间，该配置将在全集群的所有 sidecar/ingressgateway 上生效！
-
+> 配置中的 `spec.selector` 可以省略，这样会直接在整个 namespace 中生效，而如果是在 `istio-system` 名字空间，该配置将在全集群的所有 sidecar/ingressgateway 上生效！
 
 ### 6. 启用 Payload 转发/Authorization 转发
 
@@ -234,7 +233,9 @@ spec:
 加了转发后，流程图如下（需要 mermaid 渲染）：
 
 {{< mermaid >}}sequenceDiagram;
+
 # autonumber
+
 participant User as 用户
 participant Auth as 授权服务
 participant IG as IngressGateway
@@ -248,7 +249,6 @@ IG->>-SVC: 请求信息（转发 JWT）
 SVC-->>IG: 返回信息
 IG-->>User: 返回信息
 {{< /mermaid >}}
-
 
 ### 7. 设定强制认证规则
 
@@ -270,9 +270,9 @@ spec:
       istio: ingressgateway
   action: DENY # 拒绝
   rules:
-  - from:
-    - source:
-        notRequestPrincipals: ["*"]  # 不存在任何请求身份（Principal）的 requests
+    - from:
+        - source:
+            notRequestPrincipals: ["*"] # 不存在任何请求身份（Principal）的 requests
 ```
 
 如果仅希望强制要求对部分 path 的请求必须带有 Authorization Header，可以这样设置：
@@ -289,14 +289,14 @@ spec:
       istio: ingressgateway
   action: DENY # 拒绝
   rules:
-  - from:
-    - source:
-        notRequestPrincipals: ["*"]  # 不存在任何请求身份（Principal）的 requests
-    # 仅强制要求如下 host/path 相关的请求，必须带上 JWT token
-    to:
-    - operation:
-        hosts: ["another-host.com"]
-        paths: ["/headers"]
+    - from:
+        - source:
+            notRequestPrincipals: ["*"] # 不存在任何请求身份（Principal）的 requests
+      # 仅强制要求如下 host/path 相关的请求，必须带上 JWT token
+      to:
+        - operation:
+            hosts: ["another-host.com"]
+            paths: ["/headers"]
 ```
 
 注意这两个 Istio CR 返回的错误码是不同的：

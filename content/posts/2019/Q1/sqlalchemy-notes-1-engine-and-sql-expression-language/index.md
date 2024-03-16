@@ -3,15 +3,14 @@ title: "SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"
 date: 2019-01-21T14:02:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "sqlalchemy-intro.webp"
+  - name: "featured-image"
+    src: "sqlalchemy-intro.webp"
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["tech"]
 ---
 
-
->个人笔记，如有错误烦请指正。
+> 个人笔记，如有错误烦请指正。
 
 SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下：
 
@@ -20,6 +19,7 @@ SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框�
 其中最常用的组件，应该是 **ORM** 和 **SQL 表达式语言**，这两者既可以独立使用，也能结合使用。
 
 **ORM** 的好处在于它
+
 1. 自动处理了数据库和 Python 对象之间的映射关系，屏蔽了两套系统之间的差异。程序员不需要再编写复杂的 SQL 语句，直接操作 Python 对象就行。
 2. 屏蔽了各数据库之间的差异，更换底层数据库不需要修改 SQL 语句，改下配置就行。
 3. 使数据库结构文档化，models 定义很清晰地描述了数据库的结构。
@@ -36,7 +36,7 @@ SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框�
 ```python
 from sqlalchemy import create_engine
 
-engine = create_engine('sqlite:///:memory:', 
+engine = create_engine('sqlite:///:memory:',
                     echo=True,  # echo=True 表示打印出自动生成的 SQL 语句（通过 logging）
                     pool_size=5,  # 连接池容量，默认为 5，生产环境下太小，需要修改。
                     # 下面是 connection 回收的时间限制，默认 -1 不回收
@@ -67,8 +67,8 @@ mssql+pyodbc://scott:tiger@some_dsn
 
 如果你的密码中含有 '@' 等特殊字符，就不能直接放入 URI 中，必须使用 `urllib.parse.quote_plus` 编码，然后再插入 URI.
 
-
 引擎创建后，我们就可以直接获取 connection，然后执行 SQL 语句了。这种用法相当于把 SQLAlchemy 当成带 log 的数据库连接池使用：
+
 ```python
 with engine.connect() as conn:
     res = conn.execute("select username from users")  # 无参直接使用
@@ -83,6 +83,7 @@ with engine.connect() as conn:
 
 但是要注意的是，connection 的 execute 是自动提交的（autocommit），这就像在 shell 里打开一个数据库客户端一样，分号结尾的 SQL 会被自动提交。
 只有在 `BEGIN TRANSACTION` 内部，`AUTOCOMMIT` 会被临时设置为 `FALSE`，可以通过如下方法开始一个内部事务：
+
 ```python
 def transaction_a(connection):
     trans = connection.begin()  # 开启一个 transaction
@@ -101,7 +102,9 @@ with engine.connect() as conn:
 ### 1. 使用 [text()](https://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.text) 构建 SQL
 
 相比直接使用 string，text() 的优势在于它：
+
 1. 提供了统一的参数绑定语法，与具体的 DBAPI 无关。
+
 ```python
 # 1. 参数绑定语法
 from sqlalchemy import text
@@ -123,6 +126,7 @@ connection.execute(t, {"alarm_time_param": date_param})
 ```
 
 1. 可以很方便地转换 Result 中列的类型
+
 ```python
 stmt = text("SELECT * FROM table",
             # 使用 typemap 指定将 id 列映射为 Integer 类型，name 映射为 String 类型
@@ -135,7 +139,7 @@ result = connection.execute(stmt)
 
 ## 二、SQL 表达式语言
 
->复杂的 SQL 查询可以直接用 raw sql 写，而增删改一般都是单表操作，用 SQL 表达式语言最方便。
+> 复杂的 SQL 查询可以直接用 raw sql 写，而增删改一般都是单表操作，用 SQL 表达式语言最方便。
 
 SQLAlchemy 表达式语言是一个使用 Python 结构表示关系数据库结构和表达式的系统。
 
@@ -146,6 +150,7 @@ SQL 表达式语言使用 Table 来定义表，而表的列则用 Column 定义�
 一组 Table 对象以及它们的子对象的集合就被称作「数据库元数据（database metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table 放在一个 metadata 中。
 
 下面是创建元数据（一组相关联的表）的例子，：
+
 ```python
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 
@@ -168,13 +173,13 @@ metadata.create_all(engine)  # 使用 engine 创建 metadata 内的所有 Tables
 
 #### 表定义中的约束
 
->应该给所有的约束命名，即为 `name` 参数指定一个不冲突的列名。详见 [The Importance of Naming Constraints](https://alembic.sqlalchemy.org/en/latest/naming.html)
+> 应该给所有的约束命名，即为 `name` 参数指定一个不冲突的列名。详见 [The Importance of Naming Constraints](https://alembic.sqlalchemy.org/en/latest/naming.html)
 
 表还有一个属性：[约束条件](https://www.cnblogs.com/kirito-c/p/10295693.html)。下面一一进行说明。
 
 1. **外键约束**：用于在删除或更新某个值或行时，对主键/外键关系中一组数据列强制进行的操作限制。
-    1. 用法一：`Column('user_id', None, ForeignKey('user.id'))`，直接在 `Column` 中指定。这也是最常用的方法
-    2. 用法二：通过 `ForeignKeyConstraint(columns, refcolumns)` 构建约束，作为参数传给 `Table`.
+   1. 用法一：`Column('user_id', None, ForeignKey('user.id'))`，直接在 `Column` 中指定。这也是最常用的方法
+   2. 用法二：通过 `ForeignKeyConstraint(columns, refcolumns)` 构建约束，作为参数传给 `Table`.
 
 ```python
 item = Table('item', metadata,  # 商品 table
@@ -188,16 +193,12 @@ item = Table('item', metadata,  # 商品 table
 ```
 
 1. `on delete` 与 `on update`：**外键约束的两个约束条件**，通过 `ForeignKey()` 或 `ForeignKeyConstraint()` 的关键字参数 `ondelete/onupdate` 传入。
-可选值有：
-    1. **默认行为 `NO ACTION`**：什么都不做，直接报错。
-    1. `CASCADE`：删除/更新 父表数据时，**从表数据会同时被 删除/更新**。（无报错）
-    1. `RESTRICT`：**不允许直接 删除/更新 父表数据**，直接报错。（和默认行为基本一致）
-    1. `SET NULL` or `SET DEFAULT`：删除/更新 父表数据时，将对应的从表数据重置为 `NULL` 或者默认值。
+   可选值有：1. **默认行为 `NO ACTION`**：什么都不做，直接报错。1. `CASCADE`：删除/更新 父表数据时，**从表数据会同时被 删除/更新**。（无报错）1. `RESTRICT`：**不允许直接 删除/更新 父表数据**，直接报错。（和默认行为基本一致）1. `SET NULL` or `SET DEFAULT`：删除/更新 父表数据时，将对应的从表数据重置为 `NULL` 或者默认值。
 1. **唯一性约束**：`UniqueConstraint('col2', 'col3', name='uix_1')`，作为参数传给 `Table`.
 1. **CHECK 约束**：`CheckConstraint('col2 > col3 + 5', name='check1')`， 作为参数传给 `Table`.
 1. 主键约束：不解释
-    1. 方法一：通过 `Column('id', Integer, primary_key=True)` 指定主键。（参数 `primary_key` 可在多个 `Column` 上使用）
-    1. 方法二：使用 `PrimaryKeyConstraint`
+   1. 方法一：通过 `Column('id', Integer, primary_key=True)` 指定主键。（参数 `primary_key` 可在多个 `Column` 上使用）
+   1. 方法二：使用 `PrimaryKeyConstraint`
 
 ```python
 from sqlalchemy import PrimaryKeyConstraint
@@ -210,10 +211,10 @@ my_table = Table('mytable', metadata,
         )
 ```
 
-
 ### 2. 增删改查语句
 
-1. **增**: 
+1. **增**:
+
 ```python
 # 方法一，使用 values 传参
 ins = users.insert().values(name="Jack", fullname="Jack Jones")  # 可以通过 str(ins) 查看自动生成的 sql
@@ -231,7 +232,7 @@ conn.execute(addresses.insert(), [  # 插入到 addresses 表
 ])
 
 # 此外，通过使用 bindparam，INSERT 还可以执行更复杂的操作
-stmt = users.insert() \ 
+stmt = users.insert() \
          .values(name=bindparam('_name') + " .. name")  # string 拼接
 conn.execute(stmt, [
         {'id':4, '_name':'name1'},
@@ -241,6 +242,7 @@ conn.execute(stmt, [
 ```
 
 2. **删**：
+
 ```python
 _table.delete() \
         .where(_table.c.f1==value1) \
@@ -248,6 +250,7 @@ _table.delete() \
 ```
 
 3. **改**：
+
 ```python
 # 举例
 stmt = users.update() \
@@ -279,7 +282,7 @@ s2 = select([users.c.name, users.c.fullname])  # 这个就是只 select 一部�
 
 # 2. 添加过滤条件
 s3 = select([users]) \
-    .where(users.c.id == addresses.c.user_id) 
+    .where(users.c.id == addresses.c.user_id)
 
 res = conn.execute(s1)
 # 可用 for row in res 遍历结果集，也可用 fetchone() 只获取一行
@@ -303,7 +306,7 @@ result.rowcount  # 结果集的行数
 
 ### where 进阶
 
-通过使用 or_、and_、in_ model.join 等方法，where 可以构建更复杂的 SQL 语句。
+通过使用 or*、and*、in\_ model.join 等方法，where 可以构建更复杂的 SQL 语句。
 
 ```python
 from sqlalchemy.sql import and_, or_, not_

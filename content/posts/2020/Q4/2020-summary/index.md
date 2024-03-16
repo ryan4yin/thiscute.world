@@ -3,14 +3,13 @@ title: "2020 年年终总结"
 date: 2020-12-12T23:45:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["总结"]
 categories: ["life", "tech"]
 series: ["年终总结"]
 ---
-
 
 ## 闲言碎语
 
@@ -41,7 +40,7 @@ series: ["年终总结"]
 
 1. 重构及维护 CI/CD 代码，让它能在多个产品线上复用
 1. 云上环境管理：今年熟悉了阿里云这一套东西，并且用上了自动化工具对云上环境进行管理。
-   - 一开始是使用 terraform，但是 terraform 的 hcl 语法不够灵活，最近切换到了 pulumi+python，不得不说真香。目前云上的资源及配置 95% 都完全用 pulumi 管理了（还剩大概 5% 因为各种原因，需要手动配置）。 
+   - 一开始是使用 terraform，但是 terraform 的 hcl 语法不够灵活，最近切换到了 pulumi+python，不得不说真香。目前云上的资源及配置 95% 都完全用 pulumi 管理了（还剩大概 5% 因为各种原因，需要手动配置）。
 1. kubernetes云原生: 今年我在这个领域的进步最大，熟悉了 k8s/istio/flagger/vault/prometheus/helm/traefik 等等。不过目前这里面大部分工具还停留在「会用」的状态。
 1. 服务器虚拟化系统从 vSphere 切换到 PVE
    - VMware 的 vCenter 吃的资源太多，而且还不能自动扩缩容硬盘，Python SDK 也超难用。因此我在公司尝试使用 PVE 替换 vSphere 这一套，效果很不错。
@@ -52,11 +51,10 @@ series: ["年终总结"]
    - 因为 argo 的 UI 和 jenkins 差别过大，暂定仍以 jenkins 为前端，通过 python 将任务分派给 argo 运行。这样 argo 对使用者而言是隐形的，用户体验基本上没区别。
 1. 杂事：修水电、修服务器、组装办公电脑、搬机房...
 
-
 ## 今年在技术方面的感受
 
 1. Podman/Skopeo/Buildah/Kaniko 等技术进一步发展，正在逐渐蚕食 Docker 的地盘.
-    1. kubernetes 已经弃用 docker-shim，直接对接 containerd，下一步应该是彻底切换到 CRI-O。
+   1. kubernetes 已经弃用 docker-shim，直接对接 containerd，下一步应该是彻底切换到 CRI-O。
 1. Istio 1.5 合并为单体架构效果很明显，各微信公众号三天两头就讲服务网格，服务网格是毋庸置疑的未来
 1. 阿里云的 OAM 进一步发展，目前阿里基于 OAM 研发的 Kubevela 致力于封装 Kubernetes 的功能，让小白也能用上 Kubernetes。而这同时还能保留 k8s 完整的能力，值得期待。
 1. 云上安全越来越引起重视了，目前 CNCF 社区上容器安全相关的项目在快速发展。包括镜像安全/安全容器(kata containers)等。

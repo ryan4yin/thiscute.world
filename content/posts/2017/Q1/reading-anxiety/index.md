@@ -4,8 +4,8 @@ date: 2017-03-07T12:39:00+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["阅读", "焦虑"]
 categories: ["life"]
@@ -16,7 +16,6 @@ comment:
   waline:
     enable: true
 ---
-
 
 生活总是在给你希望之时，再埋点伏笔。本来我以为进了大学，就是一个全新的世界了，我可以重新开始，只要我很努力很努力，一切困难都将不堪一击。
 

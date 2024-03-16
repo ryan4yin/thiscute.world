@@ -5,8 +5,8 @@ lastmod: 2024-01-19T10:12:45+08:00
 
 draft: false
 resources:
-- name: "featured-image"
-  src: "2023-ryan4yin-github-oss-insight.webp"
+  - name: "featured-image"
+    src: "2023-ryan4yin-github-oss-insight.webp"
 
 tags: ["总结"]
 categories: ["life", "tech"]
@@ -132,7 +132,7 @@ comment:
   - 了解了下 [世界法治指数](https://worldjusticeproject.org/rule-of-law-index/country/2022/China) 与 [中国各省份司法文明指数](https://www.cnfin.com/hg-lb/detail/20230425/3851364_1.html)
     - 湖南省貌似一直在倒数前二徘徊...很尴尬。
   - 今天看到推上有 MTF 说自己双相情感障碍（躁郁症），突然就想百度一下，进一步找到了注意力缺失障碍（ADHD）这个病，联想到我自己好像有这个问题。
-      - 大学时曾经怀疑自己有这个注意力缺失症，还买了本《分心不是我的错》，但书买了一直没看（我整个大学期间都不太看得下书），也没去医院看过。
+    - 大学时曾经怀疑自己有这个注意力缺失症，还买了本《分心不是我的错》，但书买了一直没看（我整个大学期间都不太看得下书），也没去医院看过。
   - 中秋国庆连休
     - 看完了《被讨厌的勇气》，觉得它虽然缺乏科学依据，但这套理论得确实很有价值，给我很大启发。
     - 看了一点《这才是心理学》
@@ -143,7 +143,7 @@ comment:
   - 看了记录片《溥仪：末代皇帝》跟电影《末代皇帝》，两个片子的内容有些出入，不过这边的史料显然可信度更高，都好评。
   - 我的开源小书 NixOS & Flakes Book 上了 Hacker News 热门，很开心：[NixOS and Flakes Book: An unofficial book for beginners (free)](https://news.ycombinator.com/item?id=37818570)
   - 之前跟朋友聊过我可能有注意力缺失障碍（ADHD），朋友提到可以去看看医生。国庆后经 [@咩咩](bleatingsheep.org/) 再次提醒，约了深圳康宁医院（深圳市精神卫生中心）的特需门诊，然后确诊，开始服药治疗...
-    - 跟 0xffff 群友辩论 ADHD 病症相关问题，讨论的内容逐渐发散 - [从 ADHD 注意力缺失症聊开去](https://0xffff.one/d/1643-cong-adhd-zhu-yi-li-que-shi-zheng) 
+    - 跟 0xffff 群友辩论 ADHD 病症相关问题，讨论的内容逐渐发散 - [从 ADHD 注意力缺失症聊开去](https://0xffff.one/d/1643-cong-adhd-zhu-yi-li-que-shi-zheng)
   - 遵医嘱，搜了些正念冥想的资料，看了点 [正念减压疗法创始人-乔.卡巴金 教正念冥想大师课（中英字幕）](https://www.bilibili.com/video/BV19y4y1V7RU)，尝试了下还有点意思。
   - 跟我妹沟通后感觉她也比较有可能有 ADHD，提前安排她来深圳看心理医生。我妹确诊了抑郁症 + ADHD，医生给开了安非他酮，先吃半个月看看效果再复诊，同时也建议多带我妹出去运动散心。
     - 我妹确诊抑郁症这一点真的让我很意外，让我意识到我一直有些忽视她的心理健康问题。
@@ -176,7 +176,6 @@ comment:
 {{<figure width="70%" src="/images/2023-summary/anime-convention_poster-Bocchi-the-Rock!-1.webp" title="卖海报的小店">}}
 
 {{<figure width="70%" src="/images/2023-summary/老北京铜锅涮.webp" title="跟我妹一起下馆子 - 老北京铜锅涮">}}
-
 
 {{<figure width="70%" src="/images/2023-summary/2023-favourite-singers-netease-cloud-music.webp" title="网易云音乐年度歌手 - 今年是初音">}}
 
@@ -234,7 +233,7 @@ comment:
 在折腾业余爱好期间，一种找不到方向的焦虑感一直萦绕着我，有跟一些朋友、同事沟通过这个问题，但大道理谁都懂，真要做起来又是另一回事了。
 
 因为业余搞了些嵌入式硬件感觉有意思，也有隐约考虑过转行搞硬件，但只是些粗浅的想法。
-到 8 月份的时候，做的几个 NixOS 项目收到些赞助，让我可能有点异想天开？了解了些「如何通过开源项目养活自己」类似的信息，8 月中下旬的时候在苏洋的折腾群里提到这个想法，被洋哥泼了冷水 emmm 
+到 8 月份的时候，做的几个 NixOS 项目收到些赞助，让我可能有点异想天开？了解了些「如何通过开源项目养活自己」类似的信息，8 月中下旬的时候在苏洋的折腾群里提到这个想法，被洋哥泼了冷水 emmm
 
 冷静下来后回想，洋哥说的挺在理的，靠开源用爱发电真能养活自己的凤毛麟角，如果专门往商业项目的方向做，又没了那份折腾的快乐了。
 
@@ -303,7 +302,7 @@ comment:
 
 1. 运动方面乏善可陈，穿越了一次东西冲海岸线，游了几次泳，12 月初晨跑了一周但因为是空腹跑，胃炎给跑犯了，就没再跑了。体重全年都在 60kg 波动，没啥变化。
 1. 给我老爸全款买了我们全家的第一辆小轿车（自己没买，一是天天坐地铁用不到，二是我对车也缺乏兴趣）。
-2. 计划开始给父母约年度体检，待实施。
+1. 计划开始给父母约年度体检，待实施。
 
 #### 3.5. 总结
 
@@ -329,11 +328,9 @@ comment:
 
 {{<figure src="/images/2023-summary/2023-12-31-vercel-bandwidth-stats.webp" title="Vercel - 2023 年流量统计" width="100%">}}
 
-
 还有文章阅读排行统计：
 
 {{<figure src="/images/2023-summary/2023-top-posts-stats.webp" title="2023 年文章阅读排行" width="100%">}}
-
 
 此外，我今年在 [Twitter(X)](https://twitter.com/ryan4yin) 上比较活跃，也新增了不少粉丝：
 
@@ -345,7 +342,7 @@ comment:
 {{<figure src="/images/2023-summary/2023-patreon-earning.webp" title="2023 年 patreon 收入统计" width="100%">}}
 {{<figure src="/images/2023-summary/2023-afdian-earning.webp" title="2023 年爱发电收入统计" width="100%">}}
 
->另有加密货币 \$50 没有好的统计页面，就不放截图了。以及部分国外读者希望使用我未使用的支付方式赞助，我比较懒没折腾了...
+> 另有加密货币 \$50 没有好的统计页面，就不放截图了。以及部分国外读者希望使用我未使用的支付方式赞助，我比较懒没折腾了...
 
 ## 2024 年展望
 
@@ -399,4 +396,3 @@ comment:
 > Carpe Diem. Seize The Day, Boys. Make Your Lives Extraordinary. -- [《死亡诗社》](https://movie.douban.com/subject/1291548/)
 
 > 文末推荐一个年终回顾与展望的帮助手册，感觉设计得很好：<https://yearcompass.com/cn/>
-

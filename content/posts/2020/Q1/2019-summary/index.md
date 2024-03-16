@@ -3,15 +3,15 @@ title: "2019 年年终总结"
 date: 2020-01-31T19:19:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "beginning-the-devops-journey.webp"
+  - name: "featured-image"
+    src: "beginning-the-devops-journey.webp"
 
 tags: ["总结"]
 categories: ["life", "tech"]
 series: ["年终总结"]
 ---
 
->迟到的年终总结
+> 迟到的年终总结
 
 ## 闲言碎语
 
@@ -28,13 +28,13 @@ series: ["年终总结"]
 
 1. 测试：指 UI 测试、API 测试、压力测试。单元测试算在构建流程中。
 1. 构建：更新依赖->单元测试->构建 Library 或镜像
-    - 公司的内部代码使用分层结构，底层封装了各种第三方包，并实现了一些通用的功能，形成了所谓的**中台**。目前是通过批量任务逐级自下向上构建。
+   - 公司的内部代码使用分层结构，底层封装了各种第三方包，并实现了一些通用的功能，形成了所谓的**中台**。目前是通过批量任务逐级自下向上构建。
 1. 部署：扫描镜像仓库中各镜像，生成最新的 k8s 部署文件，然后进行部署。
 
 所以这半年中，我差不多熟悉了自动化运维的工作。主要包括
 
 1. Jenkins Pipeline 的编写，我们基本都是使用 Jenkins 调用 Python 代码来进行具体的构建。
-    - 公司的构建有很多自己特殊的需求，Jenkins 自带的插件无法满足。
+   - 公司的构建有很多自己特殊的需求，Jenkins 自带的插件无法满足。
 1. 熟悉了 Python 的 subprocess 库，为了远程调用，又熟悉了 fabric（当作 library 用）。
 1. 做压测时，熟悉了 locust
 1. 因为基本都是通过命令行进行测试、构建，我现在比前后端组还熟悉 csharp/flutter/golang 的 cli...
@@ -55,9 +55,9 @@ series: ["年终总结"]
 1. 分布式、微服务模式下的**监控(prometheus)、日志分析(elk)、安全、链路追踪(jaeger)**，是运维关注的重点。
 1. 服务网格正在走向成熟，Istio 很值得学习和试用。
 1. 开源的分布式数据库/云数据库成为越来越多企业的选择，开源的 TiDB（HTAP）和阿里云的 PolarDB（计算存储分离）都应该了解了解。
-    - Transaction Processing: **面向交易**，数据的变动(增删改)多，涉及的数据量和计算量(查)少，实时性要求高。
-    - Analytical Processing：**面向分析**，数据的变动少，但涉及的数据量和计算量很多！
-    - HTAP（Hybrid transaction/analytical processing）：混合型数据库，可同时被用于上述两种场景。
+   - Transaction Processing: **面向交易**，数据的变动(增删改)多，涉及的数据量和计算量(查)少，实时性要求高。
+   - Analytical Processing：**面向分析**，数据的变动少，但涉及的数据量和计算量很多！
+   - HTAP（Hybrid transaction/analytical processing）：混合型数据库，可同时被用于上述两种场景。
 1. Knative/Jenkins-X 这类 Serverless 的 CI/CD 也正在快速发展，需要深入调研。
 
 ## 明年的展望
@@ -84,4 +84,3 @@ series: ["年终总结"]
 1. 学习 C# 语言，阅读公司的源码，熟悉企业级的业务代码。
 1. 学习 go 语言，用于 DevOps。（其实还想学 rust，不过明年可能没时间）
 1. 要把 xhup 那个项目完成，也不知道能不能抽出时间。。
-

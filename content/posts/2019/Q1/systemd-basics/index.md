@@ -3,8 +3,8 @@ title: "通过 systemctl 设置自定义 Service"
 date: 2019-01-28T20:13:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "linux-systemd.webp"
+  - name: "featured-image"
+    src: "linux-systemd.webp"
 
 tags: ["Linux", "Systemd", "Init System"]
 categories: ["tech"]
@@ -32,6 +32,7 @@ code:
 > `ExecXXX` 中的命令，均可以正常使用转义字符以及环境变量插值语法，比如用 `\` 结尾表示换行，用 $Xxx 获取环境变量。
 
 配置文件的内容说明：
+
 ```toml
 [Unit]: 服务的启动顺序与依赖关系
 Description: 当前服务的简单描述
@@ -83,6 +84,7 @@ Type 感觉是整个配置文件里面最不好理解的一个配置项，它的
 3. `Type=oneshot`：`ExecStart` 命令。可能需要同时设置 `RemainAfterExit=yes` 使得 `systemd` 在服务进程退出之后仍然认为服务处于激活状态
 
 4. `Type=notify`：与 `Type=simple` 相同，但约定服务会在就绪后向 systemd 发送一个信号，以表明自己已经启动成功。
+
    - 细节：systemd 会创建一个 unix socket，并将地址通过 $NOTIFY_SOCKET 环境变量提供给服务，同时监听该 socket 上的信号。服务可以使用 systemd 提供的 C 函数 `sd_notify()` 或者命令行工具 `systemd-notify` 发送信号给 systemd.
    - 因为多了个 notify 信号，所以这一 Type 要比 simple 更精确一点。但是需要服务的配合，
 
@@ -95,6 +97,7 @@ Type 感觉是整个配置文件里面最不好理解的一个配置项，它的
 ### 配置举例
 
 比如 shadsocks Server Service，的配置文件 `ss-server.service` 的内容为：
+
 ```toml
 [Unit]
 Description=shadsocks server

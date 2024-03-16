@@ -14,9 +14,9 @@ comment:
 
 ![口琴](harmonica.webp)
 
->本站的文章可能以[中文](https://thiscute.world/zh-cn/)或[英文](https://thiscute.world/en/)两种语言书写，其中部分文章可能是双语，也有部分文章只有[中文](https://thiscute.world/zh-cn/)或者[英文](https://thiscute.world/en/)版本，请读者按需阅读。
+> 本站的文章可能以[中文](https://thiscute.world/zh-cn/)或[英文](https://thiscute.world/en/)两种语言书写，其中部分文章可能是双语，也有部分文章只有[中文](https://thiscute.world/zh-cn/)或者[英文](https://thiscute.world/en/)版本，请读者按需阅读。
 
->The articles on this site may be written in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/), some of them may be bilingual, and some of them are only available in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/). Please read them as needed.
+> The articles on this site may be written in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/), some of them may be bilingual, and some of them are only available in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/). Please read them as needed.
 
 ## 关于我
 
@@ -59,7 +59,7 @@ comment:
 
 ## 关于此博客
 
->“对我来说，博客首先是一种知识管理工具，其次才是传播工具。我的技术文章，主要用来整理我还不懂的知识。我只写那些我还没有完全掌握的东西，那些我精通的东西，往往没有动力写。炫耀从来不是我的动机，好奇才是。"   ──阮一峰
+> “对我来说，博客首先是一种知识管理工具，其次才是传播工具。我的技术文章，主要用来整理我还不懂的知识。我只写那些我还没有完全掌握的东西，那些我精通的东西，往往没有动力写。炫耀从来不是我的动机，好奇才是。" ──阮一峰
 
 我从 2016 年开始写博客，已经有很多年了，也试用过国内外很多的写作平台，不过最终还是选择了搭建一个自己的站点，因为它完全受我自己管控，自由度最高，文章不会无故被删除或封锁。其次是很多免费的静态站点服务可用（如 Github Pages、Vercel 等），基本不花钱。
 
@@ -80,7 +80,7 @@ comment:
 在这里也将它们送给各位读者，希望它们也能给你以力量！
 
 {{< admonition note "2021-02-06 ~ 2022-01-03" true >}}
-拆破玉笼飞彩凤，顿开金锁走蛟龙。  —— 来自好友 @二牛 的赠语
+拆破玉笼飞彩凤，顿开金锁走蛟龙。 —— 来自好友 @二牛 的赠语
 {{< /admonition >}}
 
 {{< admonition note "2021-01-16 - 2022-04-04" true >}}
@@ -99,10 +99,10 @@ comment:
 脚下虽有万水千山，但行者必至。 ——《在峡江的转弯处 - 陈行甲人生笔记》
 {{< /admonition >}}
 
-
 ### 博客时间线
 
 {{< admonition tip "博客时间线" true >}}
+
 - 2016-06-17：（大一下学期）在博客园创建博客 <https://www.cnblogs.com/kirito-c/>
   - 第一篇博文是[贪吃蛇—C—基于easyx图形库](https://www.cnblogs.com/kirito-c/p/5595355.html)，现在还能回忆起收到第一条评论时的兴奋之情。
 - 2021-01-16：（工作一年多后）申请域名并开设独立博客 <https://ryan4yin.space/>
@@ -110,7 +110,7 @@ comment:
 - 2021-02-07：（第一份工作结束后赋闲）将博客主域名切换为 <https://thiscute.world/>，另外新增备用域名 <https://writefor.fun>
 - 2022-02-07：站点添加「阅读排行」页，展示从 Google Analytics 拉取的站点统计数据。
 - 2022-02-16：站点通过十年之约审核，正式加入[十年之约](https://foreverblog.cn/)
-{{< /admonition >}}
+  {{< /admonition >}}
 
 {{< admonition info "博客快照-2020-01-21" >}}
 ![](/images/about/cnblog-2020-01-21.webp "博客园快照")

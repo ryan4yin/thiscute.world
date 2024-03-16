@@ -5,8 +5,8 @@ lastmod: 2021-11-16T02:14:37+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "白鸟过河滩.webp"
+  - name: "featured-image"
+    src: "白鸟过河滩.webp"
 
 tags: []
 categories: ["life"]
@@ -21,6 +21,7 @@ comment:
 ---
 
 <!-- 遥远的歌 -->
+
 {{< music server="netease" type="song" id="418257688" >}}
 
 已过了立冬，却没想象中的那么冷。
@@ -38,4 +39,3 @@ comment:
 嘿，又想要喝点酒了，梦里或许有好酒呢。
 
 恍惚间，又回到了那年大二开学，我拖着个旧皮箱，在凌晨薄雾的校园里走着，耳边只有皮箱轮子的滚动声和几声鸟鸣。耳机里放着一首《遥远的歌》。
-

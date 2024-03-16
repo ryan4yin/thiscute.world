@@ -4,8 +4,8 @@ date: 2018-04-27T10:49:14+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["读后感", "观后感", "动漫"]
 categories: ["书藉", "影视", "life"]
@@ -23,16 +23,12 @@ comment:
 
 ![乐俊](/images/the-twelve-kingdoms/968138-20201122221647185-1479026304.webp)
 
-
 而花了大篇幅描写的庆东国的景王，还有一路走来的祥琼和铃、更夜还有泰麒，他们一度迷失掉了自我，虽然作为结果的他们实现了自我救赎，但是这个过程我喜欢不起来。大概因为我也是个偏激的人吧......
 
 ![景王](/images/the-twelve-kingdoms/968138-20201122221704136-1512420559.webp)
 
-
 ![十二国记](/images/the-twelve-kingdoms/968138-20201122221721050-408249578.webp)
-
 
 珠晶遇到了顽丘，景王和祥琼被乐俊救赎，铃也有自己的贵人，更夜在斡由被杀时终于承认了自己的错误，泰麒也是被麒麟们合力救回来的。
 
 谁都不可能只活在自己的世界，就能得到救赎。(这样就又得到了一个和刺猬的优雅类似的结论...)
-

@@ -4,8 +4,8 @@ date: 2019-04-14T21:27:32+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "addction-vs-life.webp"
+  - name: "featured-image"
+    src: "addction-vs-life.webp"
 
 tags: ["Webnovel", "网络小说"]
 categories: ["life"]

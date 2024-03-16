@@ -5,8 +5,8 @@ lastmod: 2023-08-23T18:00:45+08:00
 
 draft: true
 resources:
-- name: "featured-image"
-  src: ""
+  - name: "featured-image"
+    src: ""
 tags: ["总结"]
 categories: ["life"]
 series: ["年终总结"]
@@ -25,4 +25,3 @@ comment:
 <!--more-->
 
 但是感觉现在有点写不动，先占个坑吧。
-

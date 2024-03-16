@@ -4,8 +4,8 @@ date: 2018-05-16T20:00:02+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "grimgargroup.webp"
+  - name: "featured-image"
+    src: "grimgargroup.webp"
 
 tags: ["英语", "语言学习"]
 categories: ["life"]
@@ -29,7 +29,6 @@ comment:
 
 之后又跟着[练习英语口语的办法 - 恶魔奶爸](https://zhuanlan.zhihu.com/p/20836532)的规划练口语，听完了《赖世雄美语音标》，又看了点美国的口语纠正视频。这件事干得倒还算可以，口语的确标准了不少。不过也就花了十多天，就没然后了。
 
-
 我学计算机的过程，和我的英文学习过程也有不少重合的地方。
 
 印象中第一次读英文资料，是想学计算机图形学，被知乎上的高手们推荐看一个英文教程。死嗑了三天，坚持不下去放弃了。。
@@ -39,7 +38,6 @@ comment:
 后来慢慢的开始熟悉 Python，在图书馆借了 Head First Python 英文版，可能是被厚度吓到了，看了几页就不了了之了。。
 
 再后来用 Github，Pycharm IDEA 也是英文的，Python Docs 和 Java Docs 也全是英文的，标准库里的注释是英文的，Error 信息是英文的...... 虽然学啥都半途而废，但英文水平的确是慢慢地提升着。
-
 
 慢慢地，能够不怎么吃力地看懂 Python 标准库了，有问题也可以看英文博客解决了。
 

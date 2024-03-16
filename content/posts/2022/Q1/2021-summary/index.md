@@ -3,15 +3,15 @@ title: "2021 年年终总结"
 date: 2022-01-03T14:50:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "wrapped_ryan4yin.webp"
+  - name: "featured-image"
+    src: "wrapped_ryan4yin.webp"
 
 tags: ["总结"]
 categories: ["life", "tech"]
 series: ["年终总结"]
 ---
 
->更新：2022/1/22
+> 更新：2022/1/22
 
 ## 闲言碎语
 
@@ -43,7 +43,6 @@ series: ["年终总结"]
   - ![](/images/2021-summary/my-tea.webp "桌面上的各种茶叶")
 - 2022 年 1 月，第一次买动漫手办，妆点后感觉房间都增色不少~
   - ![](/images/2021-summary/Posts-and-Garage-Kit.webp "我的房间-挂画-手办")
-
 
 ## 读书
 
@@ -101,8 +100,7 @@ series: ["年终总结"]
 
 顺便公司的新办公区真的超赞，详情见我的 twitter：
 
-<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">新办公区真好呐～<br><br>值此良辰美景，好想整个榻榻米坐垫，坐在角落的落地窗边工作🤣<br>那种使用公共设施工（mo）作（yu）的乐趣，以及平常工位见不到的景色交相辉映，是不太好表述的奇妙体验 <a href="https://t.co/FASffzw8N3">pic.twitter.com/FASffzw8N3</a></p>&mdash; ryan4yin | 於清樂 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1482891448731070466?ref_src=twsrc%5Etfw">January 17, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
-
+<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">新办公区真好呐～<br><br>值此良辰美景，好想整个榻榻米坐垫，坐在角落的落地窗边工作🤣<br>那种使用公共设施工（mo）作（yu）的乐趣，以及平常工位见不到的景色交相辉映，是不太好表述的奇妙体验 <a href="https://t.co/FASffzw8N3">pic.twitter.com/FASffzw8N3</a></p>&mdash; ryan4yin | 於清樂 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1482891448731070466?ref_src=twsrc%5Etfw">January 17, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ## 技术方面的感受
 
@@ -152,14 +150,14 @@ series: ["年终总结"]
    3. 网络插件 Cilium + eBPF
 4. AWS K8s 成本与服务稳定性优化
    1. 通过拓扑感知的请求转发，节约跨可用区/跨域的流量成本
-     1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
-     2. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
-   2. 推广 gRPC 协议
-   3. 通过亲和性与反亲和性 + [descheduler](https://github.com/kubernetes-sigs/descheduler)，实现合理调度 Pods 减少跨域流量、也提升服务容灾能力
+   1. K8s 新特性：[Topology Aware Hints](https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/)
+   1. Istio: [Locality Load Balancing](https://istio.io/latest/docs/tasks/traffic-management/locality-load-balancing/)
+   1. 推广 gRPC 协议
+   1. 通过亲和性与反亲和性 + [descheduler](https://github.com/kubernetes-sigs/descheduler)，实现合理调度 Pods 减少跨域流量、也提升服务容灾能力
 5. 提升本地开发效率：
    1. [nocalhost](https://github.com/nocalhost/nocalhost)
 6. 多集群的应用部署、容灾
-      1. karmada
+   1. karmada
 7. 探索新技术与可能性（优先级低）
    1. 基于 Kubernetes 的服务平台，未来的发展方向
       1. kubevela
@@ -171,7 +169,6 @@ series: ["年终总结"]
       2. OpenFunction
    3. 机器学习、深度学习技术：想尝试下将 AI 应用在音乐、语音、SRE 等我感兴趣的领域，即使是调包也行啊，总之想出点成果...
 
-
 可以预料到明年 SRE 团队有超多的机会，这其中我具体能负责哪些部分，又能做出怎样的成果，真的相当期待~
 
 ### 生活侧
@@ -182,7 +179,7 @@ series: ["年终总结"]
 - 音乐：
   - 再一次学习乐理...
   - midi 键盘买了一直吃灰，多多练习吧
-  - 买了个 Synthesizer V  Stduio Pro + 「青溯 AI」，新的一年想学下调教，翻唱些自己喜欢的歌。
+  - 买了个 Synthesizer V Stduio Pro + 「青溯 AI」，新的一年想学下调教，翻唱些自己喜欢的歌。
 - 阅读：清单如下，一个月至少读完其中一本。
   - 文学类：
     - [x] 《人间失格》：久仰大名的一本书，曾经有同学力荐，但是一直没看。
@@ -224,12 +221,10 @@ series: ["年终总结"]
     - [ ]《重构 - 改善既有代码的设计》
     - [ ]《网络是怎样连接的》：曾经学习过《计算机网络：自顶向下方法》，不过只学到网络层。就从这本书开始重新学习吧。
 
-
 ## 结语
 
 2021 年初朋友与我给自己的期许是「拆破玉笼飞彩凤，顿开金锁走蛟龙」，感觉确实应验了。
 
 今年我希望不论是在生活上还是在工作上，都能「更上一层楼」~
 
-
->更多有趣的、有深度的 2021 年度总结：<https://github.com/saveweb/review-2021>
+> 更多有趣的、有深度的 2021 年度总结：<https://github.com/saveweb/review-2021>

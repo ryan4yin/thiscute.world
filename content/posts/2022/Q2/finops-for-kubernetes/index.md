@@ -9,16 +9,7 @@ resources:
     src: "finops-for-kubernetes.webp"
 
 tags:
-  [
-    "云原生",
-    "Kubernetes",
-    "FinOps",
-    "成本分析",
-    "Kubecost",
-    "MultiCloud",
-    "多云",
-    "多云财务管控",
-  ]
+  ["云原生", "Kubernetes", "FinOps", "成本分析", "Kubecost", "MultiCloud", "多云", "多云财务管控"]
 categories: ["tech"]
 series: ["云原生相关"]
 

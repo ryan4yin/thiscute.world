@@ -5,8 +5,8 @@ lastmod: 2023-03-28T22:19:25+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "wireguard.png"
+  - name: "featured-image"
+    src: "wireguard.png"
 
 tags: ["WireGuard", "VPN", "Linux", "网络", "iptables", "conntrack"]
 categories: ["tech"]
@@ -21,9 +21,9 @@ comment:
     enable: false
 ---
 
->阅读此文章需要前置知识：Linux 网络基础知识、iptables、conntrack
+> 阅读此文章需要前置知识：Linux 网络基础知识、iptables、conntrack
 
->本文内容部分采用了 Copilot 提示内容，也有部分内容用了 ChatGPT 免费版进行分析，确实都比较有帮助。
+> 本文内容部分采用了 Copilot 提示内容，也有部分内容用了 ChatGPT 免费版进行分析，确实都比较有帮助。
 
 最近因为工作需要研究了一波 WireGuard 协议，在这篇文章中简单记录下心得。
 
@@ -61,22 +61,22 @@ services:
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
     container_name: wireguard
-    cap_add:           
+    cap_add:
       - NET_ADMIN
       - SYS_MODULE
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - SERVERURL=auto   # 自动确定服务器的外部 IP 地址，在生成客户端配置时会用到
+      - SERVERURL=auto # 自动确定服务器的外部 IP 地址，在生成客户端配置时会用到
       - SERVERPORT=51820 # 服务端监听的端口号
-      - PEERS=1          # 自动生成 1 个客户端配置
-      - PEERDNS=auto     # 自动确定客户端的 DNS 服务器地址，同样是在生成客户端配置时会用到
-      - INTERNAL_SUBNET=10.13.13.0    # WireGuard 虚拟网络的网段
-      - ALLOWEDIPS=0.0.0.0/0          # 这条规则表示允许虚拟网络内的所有客户端将流量发送到此节点
+      - PEERS=1 # 自动生成 1 个客户端配置
+      - PEERDNS=auto # 自动确定客户端的 DNS 服务器地址，同样是在生成客户端配置时会用到
+      - INTERNAL_SUBNET=10.13.13.0 # WireGuard 虚拟网络的网段
+      - ALLOWEDIPS=0.0.0.0/0 # 这条规则表示允许虚拟网络内的所有客户端将流量发送到此节点
       # 众所周知，NAT 网络需要定期发送心跳包来保持 NAT 表内容不过期，俗称连接保活。
       # 这里设置为 all 表示所有客户端都开启连接保活。
-      - PERSISTENTKEEPALIVE_PEERS=all 
+      - PERSISTENTKEEPALIVE_PEERS=all
       - LOG_CONFS=true # 开启日志
     volumes:
       - ./config:/config
@@ -177,11 +177,11 @@ Endpoint = 192.168.5.198:51820
 AllowedIPs = 0.0.0.0/0
 ```
 
->插入下，这个 Endpoint 的地址也很值得一说，能看到服务端 wg0.conf 的配置中，peer1 并未被设置任何 Endpoint，这实质是表示这个 peer1 的 Endpoint 是动态的，也就是说每次 peer1 发送数据到服务端 wg0 时，服务端通过认证加密技术认证了数据后，就会以数据包的来源 IP 地址作为 peer1 的 Endpoint，这样 peer1 就可以随意更换自己的 IP 地址（Roaming），而 WireGuard 隧道仍然能正常工作（IP 频繁更换的一个典型场景就是手机的网络漫游与 WiFi 切换）。这使 WireGuard 具备了比较明显的无连接特性，也就是说 WireGuard 隧道不需要保持一个什么连接，切换网络也不需要重连，只要数据包能够到达服务端，就能够正常工作。
+> 插入下，这个 Endpoint 的地址也很值得一说，能看到服务端 wg0.conf 的配置中，peer1 并未被设置任何 Endpoint，这实质是表示这个 peer1 的 Endpoint 是动态的，也就是说每次 peer1 发送数据到服务端 wg0 时，服务端通过认证加密技术认证了数据后，就会以数据包的来源 IP 地址作为 peer1 的 Endpoint，这样 peer1 就可以随意更换自己的 IP 地址（Roaming），而 WireGuard 隧道仍然能正常工作（IP 频繁更换的一个典型场景就是手机的网络漫游与 WiFi 切换）。这使 WireGuard 具备了比较明显的无连接特性，也就是说 WireGuard 隧道不需要保持一个什么连接，切换网络也不需要重连，只要数据包能够到达服务端，就能够正常工作。
 
 因为我这里是内网环境测试，配置文件中的 `Peer` - `Endpoint` 的 IP 地址直接用服务端的内网 IP 地址就行，也就是 `192.168.5.198`。
 
->如果你的服务端有公网 IP 地址（比如是云服务器，或者通过端口映射用家庭宽带的动态公网 IP），这个 Endpoint 地址也可以使用该公网 IP 地址，效果是一样的。
+> 如果你的服务端有公网 IP 地址（比如是云服务器，或者通过端口映射用家庭宽带的动态公网 IP），这个 Endpoint 地址也可以使用该公网 IP 地址，效果是一样的。
 
 配置文件确认无误后，将该配置文件保存到客户端的 `/etc/wireguard/peer1.conf` 这个路径下，然后使用如下命令启动 WireGuard 客户端：
 
@@ -213,14 +213,14 @@ $ sudo wg-quick up peer1
 
 跑完后我们现在确认下状态，应该是能正常走 WireGuard 访问相关网络了，可以 WireShark 抓个包确认下。
 
->如果网络不通，那肯定是中间哪一步配置有问题，可以根据上面的日志一步步排查网络接口、路由表、路由策略、iptables/nftables 的配置，必要时可以通过 WireShark 抓包定位。
+> 如果网络不通，那肯定是中间哪一步配置有问题，可以根据上面的日志一步步排查网络接口、路由表、路由策略、iptables/nftables 的配置，必要时可以通过 WireShark 抓包定位。
 
 现在再检查下系统的网络状态，首先检查下路由表，会发现路由表没任何变化：
 
 ```shell
 $ ip route ls
-default via 192.168.5.201 dev eth0 proto static 
-192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.197 
+default via 192.168.5.201 dev eth0 proto static
+192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.197
 ```
 
 但是我们的 WireGuard 隧道已经生效了，这就说明现在我们的流量已经不是直接走上面这个默认路由表了，还有其他配置在起作用。
@@ -263,7 +263,7 @@ $ ip rule show
 前面都分析完了，现在还剩下 wg-quick 日志的最后一行 `nft -f /dev/fd/63`，它到底做了什么呢？
 nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nftables 规则，我们查看下它的规则内容：
 
->注意：nftables 的这些 chain 名称是完全自定义的，没啥特殊意义
+> 注意：nftables 的这些 chain 名称是完全自定义的，没啥特殊意义
 
 ```shell
 $ sudo nft list ruleset
@@ -296,11 +296,10 @@ table ip wg-quick-peer1 {
 3. `postmangle` 链：此链用于确保所有 UDP 数据包都能被正确从 WireGuard 接口出站。
    1. 它将所有 UDP 数据包的标记设置为 0xca6c（51820 的 16 进制格式）（同样没理解这个标记是如何生效的...）。
 
-
 最后看下 WireGuard 的状态，它是前面 `wg setconf peer1 /dev/fd/63` 设置的：
 
 ```shell
-ryan@ubuntu-2004-builder:~$ sudo wg show 
+ryan@ubuntu-2004-builder:~$ sudo wg show
 interface: peer1
   public key: HR8Kp3xWIt2rNdS3aaCk+Ss7yQqC9cn6h3WS6UK3WE0=
   private key: (hidden)

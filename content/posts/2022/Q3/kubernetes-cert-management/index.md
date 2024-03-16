@@ -138,10 +138,7 @@ cert-manager 需要查询与更新 Route53 记录的权限，因此需要使用�
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "route53:ChangeResourceRecordSets",
-        "route53:ListResourceRecordSets"
-      ],
+      "Action": ["route53:ChangeResourceRecordSets", "route53:ListResourceRecordSets"],
       "Resource": "arn:aws:route53:::hostedzone/*"
     },
     {

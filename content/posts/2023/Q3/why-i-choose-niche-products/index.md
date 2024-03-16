@@ -52,10 +52,8 @@ comment:
 | Linux 操作系统 | NixOS、Gentoo、Arch Linux                  | Ubuntu、Fedora        |
 | 窗口管理器     | i3、hyprland                               | KDE、GNOME            |
 
-
 大多数人在使用这些领域的技术时，都会选择大众技术，因为它们的入门门槛低，使用起来也比较方便。
 我曾经也是这大多数人之一，但是我渐渐发现，这些小众技术也有它们的优势，所以我开始尝试使用它们，并逐渐过渡到了它们。
-
 
 ## 这些小众技术有什么特点？
 
@@ -90,7 +88,6 @@ comment:
 
 二是实际入门后，发现它们用起来很爽快，基于键盘的交互，能带给我形码输入法的那种掌控感、流畅感（优雅，太优雅了 hhh）。
 
-
 {{<figure src="./hyprland_2023-07-29_1.webp" title="我的 NixOS + Hyprland 桌面" width="85%">}}
 {{<figure src="./hyprland_2023-07-29_2.webp" title="我的 Neovim 编辑器" width="85%">}}
 
@@ -114,7 +111,6 @@ comment:
 
 或者有人会说，完全熟悉后，vim/emacs 能使你更容易进入心流状态？这个也很难说吧。
 
-
 ## 那折腾这些东西，到底有什么好处？
 
 如果从很功利的角度看的话，确实就没啥好处，就跟打游戏一样，单纯在消遣时光而已。
@@ -131,7 +127,6 @@ comment:
 
 Linus 最开始写 Linux，也[只是为了好玩（Just For Fun）](https://book.douban.com/subject/1451172/).
 
-
 ## 结语
 
 你展望人生的时候，不可能把这些点连起来；只有当你回顾人生的时候，才能发现它们之间的联系。所以你必须有信心，相信这些点总会以某种方式，对你的未来产生影响。你必须相信一些事情——你的勇气、命运、人生、缘分等等。这样做从未令我失望，反而决定了我人生中所有与众不同之处。
@@ -140,11 +135,9 @@ Stay Hungry. Stay Foolish.
 
 —— [You’ve got to find what you love, by Steve Jobs, CEO of Apple Computer](https://news.stanford.edu/2005/06/12/youve-got-find-love-jobs-says/)
 
-
 ## 评论区
 
 文末附上来自其他论坛的评论，其中不乏一些有趣的观点：
 
 - 0xffff.one: <https://0xffff.one/d/1595-wei-shen-me-wo-zhe-teng-zhei-xie>
 - v2ex: <https://www.v2ex.com/t/961562>
-

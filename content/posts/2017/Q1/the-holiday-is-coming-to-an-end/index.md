@@ -4,8 +4,8 @@ date: 2017-02-06T20:17:55+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: []
 categories: ["life"]
@@ -16,7 +16,6 @@ comment:
   waline:
     enable: true
 ---
-
 
 {{< music server="netease" type="song" id="415086030" >}}
 
@@ -38,4 +37,4 @@ comment:
 
 现在没有了万丈豪情，不再敢说“未来将是一片坦途”；也没有绝望到要写“我的人生到底出了什么差错？”这样的句子，那还是用我最喜欢的那个模棱两可的四字词作结吧。
 
->且行且寻
+> 且行且寻

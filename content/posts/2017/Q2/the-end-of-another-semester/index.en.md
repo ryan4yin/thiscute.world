@@ -4,8 +4,8 @@ date: 2017-06-27T01:28:45+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "5-centimeters-per-second.webp"
+  - name: "featured-image"
+    src: "5-centimeters-per-second.webp"
 
 tags: []
 categories: ["life"]
@@ -20,6 +20,7 @@ comment:
 ---
 
 <!-- Love Story - The Piano Guys -->
+
 {{< music server="netease" type="song" id="29460780" >}}
 
 Ah, there are still ten days to get rid of the city and return to that reassuring mountain forest, waiting and anxious, wondering why the remaining ten days are so difficult.

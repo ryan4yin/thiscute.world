@@ -4,19 +4,21 @@
 */
 
 // For the default version
-const algoliasearch = require('algoliasearch');
+const algoliasearch = require("algoliasearch")
 
 const appID = "747LJ10EI7"
 const indexName = "ryan-space"
 const adminKey = process.env.ALGOLIA_ADMIN_KEY
 const indexFile = "./public/index.json"
 
-const client = algoliasearch(appID, adminKey);
-const index = client.initIndex(indexName);
-const indexJson = require(indexFile);
+const client = algoliasearch(appID, adminKey)
+const index = client.initIndex(indexName)
+const indexJson = require(indexFile)
 
-index.saveObjects(indexJson, {
-  autoGenerateObjectIDIfNotExist: true
-}).then(({ objectIDs }) => {
-  console.log(objectIDs);
-});
+index
+  .saveObjects(indexJson, {
+    autoGenerateObjectIDIfNotExist: true,
+  })
+  .then(({ objectIDs }) => {
+    console.log(objectIDs)
+  })

@@ -4,8 +4,8 @@ date: 2017-06-27T01:28:45+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "5-centimeters-per-second.webp"
+  - name: "featured-image"
+    src: "5-centimeters-per-second.webp"
 
 tags: []
 categories: ["life"]
@@ -18,6 +18,7 @@ comment:
 ---
 
 <!-- Love Story - The Piano Guys -->
+
 {{< music server="netease" type="song" id="29460780" >}}
 
 啊啊，还有十天就可以摆脱这个城市，回到那个令人安心的山林里了，一边期待着，一边焦躁着，想着为什么剩下的十天这么难熬这样的问题。

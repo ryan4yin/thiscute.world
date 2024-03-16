@@ -4,8 +4,8 @@ date: 2021-09-21T17:14:02+08:00
 draft: true
 
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["Linux", "网络", "树莓派"]
 categories: ["tech"]
@@ -20,16 +20,15 @@ series: ["计算机网络相关"]
 
 至于为什么不整 OpenWrt，显然是因为它不够通用，树莓派单纯用来搞个旁路由感觉有点浪费哈，如果换成 Ubuntu 的话，无聊时也可以试试折腾下别的。
 
-
 ## 安装 Ubuntu Server
 
->官方文档：[tutorials/how-to-install-ubuntu-on-your-raspberry-pi](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview)
+> 官方文档：[tutorials/how-to-install-ubuntu-on-your-raspberry-pi](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview)
 
 安装步骤很简单，使用 rpi-imager 直接傻瓜式安装。
 
 稍微复杂点的是网络配置这一步，ubuntu server 在 boot 阶段使用 cloud-init 进行网络配置，对应的配置文件为 `system-boot` 分区的 `network-config` 文件。
 
->cloud-init 主要被用在云虚拟机中，我曾经写过篇相关文章 [https://github.com/ryan4yin/knowledge/blob/master/os/virutal%20machine/KVM/%E5%9C%A8%20QEMU%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20cloud-init.md](https://github.com/ryan4yin/knowledge/blob/master/os/virutal%20machine/KVM/%E5%9C%A8%20QEMU%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20cloud-init.md)
+> cloud-init 主要被用在云虚拟机中，我曾经写过篇相关文章 [https://github.com/ryan4yin/knowledge/blob/master/os/virutal%20machine/KVM/%E5%9C%A8%20QEMU%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20cloud-init.md](https://github.com/ryan4yin/knowledge/blob/master/os/virutal%20machine/KVM/%E5%9C%A8%20QEMU%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20cloud-init.md)
 
 该文件的示例配置如下，注意换成你自己的静态 ip，如果希望使用 wifi 也请自行修改：
 
@@ -71,13 +70,11 @@ ethernets:
 $ ssh ubuntu@192.168.31.200
 ```
 
-
 ## 安装 Clash 并配置为 TUN 模式
 
 网上大部分的资料教的都是通过 openwrt 的 web ui 进行旁路路由的配置，我们这里使用的是 ubuntu server，自然就不适用了。
 
 不过基本原理是一致的，我们首先安装 Clash 并配置为 TUN 模式。
-
 
 ## 修改默认网关为树莓派 IP
 
@@ -86,7 +83,6 @@ $ ssh ubuntu@192.168.31.200
 - 全局模式：直接修改主路由的 DHCP 配置，把默认网关地址设为树莓派 IP，网络内的所有设备就默认走。
 - 单机模式：只修改需要使用 Clash 的设备路由表，缺点是每个客户端都得这么改一遍。
 
-
 首先，对于本机而言，需要首先开启包转发：
 
 ```shell
@@ -94,9 +90,6 @@ echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 sysctl -p
 ```
 
-
 ```shell
 sudo ip route change 0.0.0.0/0 via 198.18.0.1 dev utun
 ```
-
-

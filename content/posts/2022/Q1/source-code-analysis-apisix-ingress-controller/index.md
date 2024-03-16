@@ -4,16 +4,14 @@ date: 2022-03-30T00:11:21+08:00
 draft: true
 
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["网络代理", "网关", "源码分析", "APISIX", "Ingress", "Kubernetes"]
 categories: ["tech"]
 ---
 
 最近发现有牛人写了 kong-ingress-controller 的源码分析文章，我就想模仿下，也写篇 apisix-ingress-controller 的源码分析。
-
-
 
 ## 参考
 

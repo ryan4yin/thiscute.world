@@ -3,8 +3,8 @@ title: "写给开发人员的实用密码学（一）—— 概览"
 date: 2022-03-01T17:15:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "data-security.webp"
+  - name: "featured-image"
+    src: "data-security.webp"
 
 tags: ["Cryptography", "Hash", "KDF", "密码学", "安全", "哈希", "加解密", "签名"]
 categories: ["tech"]
@@ -20,8 +20,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
-
+> 本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]
 
 ## 零、前言
 
@@ -133,6 +132,5 @@ code:
 程序员经常会自嘲日常复制粘贴，但是在编写涉及到密码学的代码时，一定要**谨慎处理**！盲目地从 Internet 复制/粘贴代码或遵循博客中的示例可能会导致安全问题；曾经安全的代码、算法或者最佳实践，随着时间的推移也可能变得不再安全。
 
 本系列文章的后续部分，会分别介绍上述密码学概念，并使用 Python 演示其用法，其他语言的写法网上也很容易找到。
-
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book

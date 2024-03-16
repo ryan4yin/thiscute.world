@@ -4,19 +4,18 @@ date: 2022-02-13T19:22:19+08:00
 draft: true
 
 resources:
-- name: "featured-image"
-  src: "website-statistics.webp"
+  - name: "featured-image"
+    src: "website-statistics.webp"
 
 tags: ["博客", "Google Analytics", "阅读统计"]
 categories: ["tech"]
 ---
 
-
 ## 前言
 
 前段时间偶然读到了@极客兔兔的[博客折腾记(七) - Gitalk Plus ](https://geektutu.com/post/blog-experience-7.html)，里面有一段描述让我意识到，静态博客确实缺少一些访客需要的统计数据跟相关性推荐能力。
 
->如果文章旁边的推荐链接显示了阅读量，我很可能会被阅读量最大的那一篇文章吸引，并点进去。如果发现有意思，可能会进入更多的页面。如果每天访问的童鞋有 30% 因为推荐链接显示了阅读量这么做了，人均 PV 自然就能上一个台阶了。
+> 如果文章旁边的推荐链接显示了阅读量，我很可能会被阅读量最大的那一篇文章吸引，并点进去。如果发现有意思，可能会进入更多的页面。如果每天访问的童鞋有 30% 因为推荐链接显示了阅读量这么做了，人均 PV 自然就能上一个台阶了。
 
 于是说做就做，我就给博客做了一个[「阅读排行」](https://thiscute.world/statistics/)，个人感觉效果非常棒~
 不仅是方便了访客们，就连我自己也多了很多 insight！
@@ -81,7 +80,6 @@ categories: ["tech"]
 
 <https://github.com/ryan4yin/ryan4yin.space/blob/main/update_statistics.py>
 
-
 ## 二、编写「阅读排行」页
 
 ```shell
@@ -100,7 +98,6 @@ hugo new statistics/index.md
 
 <https://github.com/ryan4yin/ryan4yin.space/blob/main/content/statistics/index.md>
 
-
 ## 三、编写 Github Action
 
 同样懒得介绍了，请直接看我的 action 配置：
@@ -110,8 +107,6 @@ hugo new statistics/index.md
 ## 参考
 
 - [Use Google Analytics to Show Popular Content on Your Static Blog][hugo-popular-content]
-
-
 
 [ga4-data-api]: https://developers.google.com/analytics/devguides/reporting/data/v1
 [ua-reporting-api-v4]: https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-py

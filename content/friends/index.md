@@ -14,7 +14,7 @@ comment:
 
 {{< particles_effect_up  >}}
 
->感谢 @芝士部落格 提供了友链页面模板~
+> 感谢 @芝士部落格 提供了友链页面模板~
 
 在友链形成的网络中漫游，是一件很有意思的事情。
 
@@ -42,7 +42,6 @@ comment:
     站点地址：https://thiscute.world/
     个人形象：https://thiscute.world/avatar/myself.webp
     站点描述：赞美快乐~  -->
-
 
 <script type="text/javascript">
 // 以下为样例内容，按照格式可以随意修改
@@ -111,7 +110,6 @@ while (myFriends.length > 0) {
     myFriends.splice(rndNum, 1);
 }
 </script>
-
 
 <style>
 

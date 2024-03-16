@@ -113,7 +113,6 @@ RevyOS 针对 LicheePi4A 定制的几个项目源码如下：
 
 思路很清晰，但因为 NixOS 本身的特殊性，实际操作起来，现有的 Gentoo, Arch Linux, Fedora 的移植仓库代码全都无法直接使用，需要做的工作还是不少的。
 
-
 ## 三、NixOS 启动流程分析
 
 要做移植，首先就要了解 NixOS 系统本身的文件树结构以及系统启动流程，搞明白它跟 Arch Linux, Fedora 等其他发行版的区别，这样才好参考其他发行版的移植工作，搞明白该如何入手。
@@ -169,7 +168,6 @@ loop0               7:0    0  1.9G  0 loop
 
 但实际上 NixOS 就是这么玩的，它 rootfs 中所有的数据全都存放在 `/nix/store` 这个目录下并且被挂载为只读，其他的文件夹以及其中的文件都是在运行时动态创建的。
 这是它实现声明式系统配置、可回滚更新、可并行安装多个版本的软件包等等特性的基础。
-
 
 下面继续分析，先仔细看下 `/boot` 的内容：
 
@@ -232,19 +230,19 @@ LABEL nixos-default
 
 1. 它创建了一个名为 `nixos-default` 的启动项并将它设为了默认启动项，extlinux 在启动阶段会根据该配置启动 NixOS 系统
 2. 启动项中的 `LINUX` `INITRD` `FDT` 三个参数分别指定了 kernel(Image 文件)、initrd 以及设备树（dtb）的位置，这三个文件我们在前面已经看到了，都在 `/boot/nixos` 下。
-    1. 根据 Linux 官方文档 [Using the initial RAM disk (initrd)](https://docs.kernel.org/admin-guide/initrd.html) 所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
-        1. bootloader(这里是 u-boot) 根据配置加载 kernel 文件（`Image`）、dtb 设备树文件以及 `initrd` 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.
-        1. Kernel 将传入的 initrd 转换成一个内存盘并挂载为根文件系统，然后释放 initrd 的内存。
-        1. Kernel 接着运行 `init` 参数指定的可执行程序，这里是 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这个 init 程序会挂载真正的根文件系统，并在其上执行后续的启动流程。
-        1. initrd 文件系统被移除，系统启动完毕。
-    1. `initrd` 这样一个临时的内存盘，通常用于在系统启动阶段加载一些内核中未内置但启动却必需的驱动或数据文件供 `init` 程序使用，以便后续能够挂载真正的根文件系统。
-        1. 比如说挂载一个 LUKS 加密的根文件系统，这通常会涉及到提示用户输入 passphrase、从某个地方读取解密用的 keyfile 或者与插入的 USB 硬件密钥交互，这会需要读取内核之外的 keyfile 文件、用到内核之外的加密模块、USB 驱动、HID 用户输入输出模块或者其他因为许可协议、模块大小等问题无法被静态链接到内核中的各种内核模块或程序。initrd 就是用来解决这些问题的。
+   1. 根据 Linux 官方文档 [Using the initial RAM disk (initrd)](https://docs.kernel.org/admin-guide/initrd.html) 所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
+      1. bootloader(这里是 u-boot) 根据配置加载 kernel 文件（`Image`）、dtb 设备树文件以及 `initrd` 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.
+      1. Kernel 将传入的 initrd 转换成一个内存盘并挂载为根文件系统，然后释放 initrd 的内存。
+      1. Kernel 接着运行 `init` 参数指定的可执行程序，这里是 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这个 init 程序会挂载真正的根文件系统，并在其上执行后续的启动流程。
+      1. initrd 文件系统被移除，系统启动完毕。
+   1. `initrd` 这样一个临时的内存盘，通常用于在系统启动阶段加载一些内核中未内置但启动却必需的驱动或数据文件供 `init` 程序使用，以便后续能够挂载真正的根文件系统。
+      1. 比如说挂载一个 LUKS 加密的根文件系统，这通常会涉及到提示用户输入 passphrase、从某个地方读取解密用的 keyfile 或者与插入的 USB 硬件密钥交互，这会需要读取内核之外的 keyfile 文件、用到内核之外的加密模块、USB 驱动、HID 用户输入输出模块或者其他因为许可协议、模块大小等问题无法被静态链接到内核中的各种内核模块或程序。initrd 就是用来解决这些问题的。
 3. `APPEND` 参数包含有许多关键信息：
-    1. 系统的 init 程序，也就是传说中的 1 号进程（PID 1），被设置为 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这实际是一个 shell 脚本，我们下一步会重点分析它。
-        1. 在传统的 Linux 发行版中，init 通常使用默认值 `/sbin/init`，它会被链接到 `/lib/systemd/systemd`，也就是直接使用 systemd 作为 1 号进程。你可以在 Fedora/Ubuntu 等传统发行版中运行 `ls -al /sbin/init` 确认这一点，以及检查它们的 `/boot/grub/grub.cfs` 启动项配置，看看它们有无自定义内核的 `init` 参数。
-    1. 系统的 rootfs 分区为 `/dev/disk/by-uuid/14e19a7b-0ae0-484d-9d54-43bd6fdc20c7`，使用的文件系统为 ext4.
-    1. `earlycon`(early console) 表示在系统启动早期就启用控制台输出，这样可以在系统启动阶段通过 UAER/HDMI 等接口看到相关的启动日志，方便调试。
-    1. 其他参数先不管。
+   1. 系统的 init 程序，也就是传说中的 1 号进程（PID 1），被设置为 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这实际是一个 shell 脚本，我们下一步会重点分析它。
+      1. 在传统的 Linux 发行版中，init 通常使用默认值 `/sbin/init`，它会被链接到 `/lib/systemd/systemd`，也就是直接使用 systemd 作为 1 号进程。你可以在 Fedora/Ubuntu 等传统发行版中运行 `ls -al /sbin/init` 确认这一点，以及检查它们的 `/boot/grub/grub.cfs` 启动项配置，看看它们有无自定义内核的 `init` 参数。
+   1. 系统的 rootfs 分区为 `/dev/disk/by-uuid/14e19a7b-0ae0-484d-9d54-43bd6fdc20c7`，使用的文件系统为 ext4.
+   1. `earlycon`(early console) 表示在系统启动早期就启用控制台输出，这样可以在系统启动阶段通过 UAER/HDMI 等接口看到相关的启动日志，方便调试。
+   1. 其他参数先不管。
 
 这样一分析就能得出结论：在执行 `init` 程序之前的启动流程都未涉及到真正的根文件系统，NixOS 与其他发行版在该流程中并无明显差异。
 
@@ -422,13 +420,12 @@ Welcome to NixOS 23.05 (Stoat)!
 简单总结下日志中的信息：
 
 1. 整个启动流程被分成了三个阶段，分别是：
-    1. OpenSBI: 这个阶段貌似进行了一些硬件相关的初始化，比如说串口、SPI、SD 卡等，貌似还有些报错，先不管。
-    1. NixOS Stage 1: 这应该就是 `initrd` 阶段干的活，内核加载了 systemd udev 内核模块，然后使用 busybox 的 fsck 检查了根文件系统，接着挂载了根文件系统。
-    1. NixOS Stage 2:
-        1. 运行了一个什么`activation script`，它首先设置好了 `/etc` 文件夹，然后检查了根分区文件系统的情况，并自动执行了分区与文件系统的扩容操作。
-        2. 接着通过 `nix-env -p /nix/vm...` 大概是切换了个运行环境。
-        3. 最后启动了 systemd，这之后的流程就跟其他发行版没啥区别了（都是 systemd）。
-
+   1. OpenSBI: 这个阶段貌似进行了一些硬件相关的初始化，比如说串口、SPI、SD 卡等，貌似还有些报错，先不管。
+   1. NixOS Stage 1: 这应该就是 `initrd` 阶段干的活，内核加载了 systemd udev 内核模块，然后使用 busybox 的 fsck 检查了根文件系统，接着挂载了根文件系统。
+   1. NixOS Stage 2:
+      1. 运行了一个什么`activation script`，它首先设置好了 `/etc` 文件夹，然后检查了根分区文件系统的情况，并自动执行了分区与文件系统的扩容操作。
+      2. 接着通过 `nix-env -p /nix/vm...` 大概是切换了个运行环境。
+      3. 最后启动了 systemd，这之后的流程就跟其他发行版没啥区别了（都是 systemd）。
 
 ### 3. init 程序分析
 
@@ -1166,9 +1163,9 @@ IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI �
 ### 4. fw_dynamic.bin 跟 u-boot-spl.bin 两个文件
 
 1. `fw_dynamic.bin`: 我们 NixOS 镜像的 `/boot` 中就有这个固件，它是 OpenSBI 的编译产物。
-    1. RevyOS 的定制 OpenSBI 构建方法：<https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml>
+   1. RevyOS 的定制 OpenSBI 构建方法：<https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml>
 2. `u-boot-spl.bin`: 这个文件是 u-boot 的编译产物，它是二级加载器。
-    1. RevyOS 的定制 u-boot 构建方法：<https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml>
+   1. RevyOS 的定制 u-boot 构建方法：<https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml>
 
 ### 5. T-Head 官方的编译工具链
 
@@ -1215,4 +1212,3 @@ Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关
 - [Using the initial RAM disk (initrd) - kernel.org](https://docs.kernel.org/admin-guide/initrd.html)
 - [Differences Between vmlinux, vmlinuz, vmlinux.bin, zimage, and bzimage](https://www.baeldung.com/linux/kernel-images)
 - [U-Boot 官方的 Distro 文档](https://github.com/ARM-software/u-boot/blob/master/doc/README.distro)
-

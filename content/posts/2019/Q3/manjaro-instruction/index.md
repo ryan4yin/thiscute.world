@@ -4,20 +4,19 @@ date: 2019-07-13T20:38:24+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "manjaro.webp"
+  - name: "featured-image"
+    src: "manjaro.webp"
 
 tags: ["Manjaro", "Linux", "Arch Linux"]
 categories: ["tech"]
 ---
-
 
 Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。
 最大的特点，是包仓库很丰富，而且都很新。代价是偶尔会出些小毛病。
 
 <!--more-->
 
->2021-09-22 更新：今天被群友科普，可能我下面列举的几个滚挂事件，可能都和我使用了 archlinuxcn 这个源有关，这确实有可能。
+> 2021-09-22 更新：今天被群友科普，可能我下面列举的几个滚挂事件，可能都和我使用了 archlinuxcn 这个源有关，这确实有可能。
 
 我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两个月，升级了两个大版本才恢复。
 另一个就是 [VSCode - Incorrect locale 'en-US' used everywhere](https://github.com/microsoft/vscode/issues/110322)
@@ -42,7 +41,7 @@ pacman 是 arch/manjaro 的官方包管理器，而刚刚安装的 yay，则是�
 pacman 的常用命令语法：
 
 ```sh
-pacman -S package_name        # 安装软件  
+pacman -S package_name        # 安装软件
 pacman -S extra/package_name  # 安装不同仓库中的版本
 pacman -Syu                   # 升级整个系统，y是更新数据库，yy是强制更新，u是升级软件
 pacman -Ss string             # 在包数据库中查询软件
@@ -111,6 +110,7 @@ sudo gpasswd --add $USER docker  # 同上
 #### 3.1 fcitx5-rime 配置小鹤音形
 
 首先安装 fcitx5-rime, 注意这些组件一个都不能省略：
+
 ```shell
 sudo pacman -S fcitx5  fcitx5-chinese-addons fcitx5-gtk  fcitx5-qt  kcm-fcitx5 fcitx5-rime
 ```
@@ -126,7 +126,7 @@ QT_IM_MODULE  DEFAULT=fcitx5
 XMODIFIERS    DEFAULT=@im=fcitx5
 ```
 
-[pam-env](https://wiki.archlinux.org/index.php/PAM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)) 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。
+[pam-env](<https://wiki.archlinux.org/index.php/PAM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>) 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。
 
 添加自动启动：
 
@@ -148,9 +148,8 @@ mv rime ~/.local/share/fcitx5/
 使用过程中，我也遇到了一些坑：
 
 1. 安装软件包时，无法在线安装旧版本！除非你本地有旧版本的安装包没清除，才可以通过缓存安装旧版本。
-      - 这种问题没遇到时好说，但有时候新版本有问题，旧安装包也清理掉了无法回退，就非常麻烦。
-      - 而且就算你回退了版本，一升级它就又更新了。。
-
+   - 这种问题没遇到时好说，但有时候新版本有问题，旧安装包也清理掉了无法回退，就非常麻烦。
+   - 而且就算你回退了版本，一升级它就又更新了。。
 
 ## 彻底删除 Manjaro 及其引导项
 
@@ -183,9 +182,9 @@ grub2-mkconfig >  /boot/grub2/grub.cfg
 
 ## 参考
 
-- [Arch Linux Wiki - 中文](https://wiki.archlinux.org/index.php/Main_page_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+- [Arch Linux Wiki - 中文](<https://wiki.archlinux.org/index.php/Main_page_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>)
 - [AUR 仓库](https://aur.archlinux.org/packages)
 - [Arch Linux 中文社区仓库](https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/)
 - [yay - Yet another Yogurt - An AUR Helper written in Go ](https://github.com/Jguer/yay)
 - [安装Manjaro之后的配置 ](https://panqiincs.me/2019/06/05/after-installing-manjaro/)
-- [Arch Linux Wiki - Fcitx5](https://wiki.archlinux.org/index.php/Fcitx5_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+- [Arch Linux Wiki - Fcitx5](<https://wiki.archlinux.org/index.php/Fcitx5_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>)

@@ -3,15 +3,14 @@ title: "SQLAlchemy 学习笔记（三）：ORM 中的关系构建"
 date: 2019-05-21T22:19:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "sqlalchemy-relationships.webp"
+  - name: "featured-image"
+    src: "sqlalchemy-relationships.webp"
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["tech"]
 ---
 
-
->个人笔记，不保证正确。
+> 个人笔记，不保证正确。
 
 ## 一、关系构建：`ForeignKey` 与 `relationship`
 
@@ -25,6 +24,7 @@ categories: ["tech"]
 这个函数有点难用，一是因为它的有几个参数不太好理解，二是因为它的参数非常丰富，让人望而却步。下面通过**一对多**、**多对一**、**多对多**几个场景下 `relationship` 的使用，来一步步熟悉它的用法。
 
 首先初始化：
+
 ```python3
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
@@ -64,6 +64,7 @@ class Child(Base):
 而 `back_populates` 必须在两个类中显式地使用 `back_populates`，更显繁琐。（但是也更清晰？）
 
 先看 `backref` 版：
+
 ```python3
 class Parent(Base):
     __tablename__ = 'parent'
@@ -75,11 +76,12 @@ class Parent(Base):
 ```
 
 再看 `back_populates` 版：
+
 ```python3
 class Parent(Base):
     __tablename__ = 'parent'
     id = Column(Integer, primary_key=True)
-    children = relationship("Child", back_populates="parent")  # back_populates 
+    children = relationship("Child", back_populates="parent")  # back_populates
 
 class Child(Base):
     __tablename__ = 'child'
@@ -95,25 +97,26 @@ class Child(Base):
 #### 1.1.2. 反向引用的参数：`sqlalchemy.orm.backref(name, **kwargs)`
 
 使用 `back_populates` 时，我们可以很方便地在两个 `relationship` 函数中指定各种参数：
+
 ```python3
 class Parent(Base):
     __tablename__ = 'parent'
     id = Column(Integer, primary_key=True)
-    children = relationship("Child", back_populates="parent", 
+    children = relationship("Child", back_populates="parent",
                                         lazy='dynamic')  # 指定 lazy 的值
 
 class Child(Base):
     __tablename__ = 'child'
     id = Column(Integer, primary_key=True)
     parent_id = Column(Integer, ForeignKey('parent.id'))
-    parent = relationship("Parent", back_populates="children", 
+    parent = relationship("Parent", back_populates="children",
                                       lazy='dynamic')  # 指定 lazy 的值
 ```
-
 
 但是如果使用 `backref`，因为我们只有一个 `relationship` 函数，`Child.parent` 是被隐式创建的，我们该如何指定这个属性的参数呢？
 
 答案就是 `backref()` 函数，使用它替代 `backref` 参数的值：
+
 ```python3
 from sqlalchemy.orm import backref
 
@@ -128,7 +131,6 @@ class Parent(Base):
 
 `backref()` 的参数会被传递给 `relationship()`，因此它俩的参数也完全一致。
 
-
 ### 2. 多对一
 
 A many-to-one is similar to a one-to-many relationship. The difference is that this relationship is looked at from the "many" side.
@@ -139,7 +141,7 @@ A many-to-one is similar to a one-to-many relationship. The difference is that t
 class Parent(Base):
     __tablename__ = 'parent'
     id = Column(Integer, primary_key=True)
-    child = relationship("Child", 
+    child = relationship("Child",
                                     uselist=False,   # 不使用 collection！这是关键
                                     back_populates="parent")
 
@@ -149,7 +151,7 @@ class Child(Base):
     parent_id = Column(Integer, ForeignKey('parent.id'))
 
      # 包含 ForeignKey 的类，此属性默认为 attribute，因此不需要 uselist=False
-    parent = relationship("Parent", back_populates="child") 
+    parent = relationship("Parent", back_populates="child")
 ```
 
 ### 4. 多对多
@@ -204,10 +206,11 @@ class User(UserMixin, db.Model):
         lazy='dynamic',  # 延迟求值，这样才能用 filter_by 等过滤函数
         backref=db.backref('followers', lazy='dynamic'))  # followers 也要延迟求值
 ```
+
 这里比较绕的，就是容易搞混 `primaryjoin` 和 `secondaryjoin` 两个参数。
+
 1. primaryjoin：（多对多中）用于从子对象查询其父对象的 condition（child.parents），默认只考虑外键。
 2. secondaryjoin：（多对多中）用于从父对象查询其所有子对象的 condition（parent.children），同样的，默认情况下只考虑外键。
-
 
 ## 三、ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade
 
@@ -219,17 +222,18 @@ class User(UserMixin, db.Model):
 
 外键约束中的 `ON DELETE` 和 `ON UPDATE`，与 ORM 层的 `CASCADE` 在功能上，确实有很多重叠的地方。
 但是也有很多不同：
+
 1. 数据库层面的 `ON DELETE` 级联能高效地处理 **many-to-one** 的关联；我们在 `many` 方定义外键，也在这里添加 `ON DELETE` 约束。而在 ORM 层，就**刚好相反**。SQLAlchemy 在 `one` 方处理 `many` 方的删除操作，这意味着它更适合处理 **one-to-many** 的关联。
 1. 数据库层面上，不带 `ON DELETE` 的外键常用于防止父数据被删除，而导致子数据成为无法被索引到的垃圾数据。如果要在一个 one-to-many 映射上实现这个行为，SQLAlchemy 将外键设置为 NULL 的默认行为可以通过以下两种方式之一捕获：
-    1. 最简单也最常用的方法，当然是将外键定义为 **NOT NULL**. 尝试将该列设为 NULL 会触发 NOT NULL constraint exception.
-    1. 另一种更特殊的方法，是将 `passive_deletes` 标志设置为字 `all`. 这会完全禁用 SQLAlchemy 将外键列设置为 NULL 的行为，并且 DELETE 父数据而不会对子数据产生任何影响。这样才能触发数据库层面的 `ON DELETE` 约束，或者其他的触发器。
-    1. 数据库层面的 `ON DELETE` 级联 比 ORM 层面的级联更高效。数据库可以同时在多个 relationship 中链接一系列级联操作。
-    1. SQLAlchemy 不需要这么复杂，因为我们通过将 passive_deletes 选项与正确配置的外键约束结合使用，提供与数据库的 `ON DELETE` 功能的平滑集成。
-
+   1. 最简单也最常用的方法，当然是将外键定义为 **NOT NULL**. 尝试将该列设为 NULL 会触发 NOT NULL constraint exception.
+   1. 另一种更特殊的方法，是将 `passive_deletes` 标志设置为字 `all`. 这会完全禁用 SQLAlchemy 将外键列设置为 NULL 的行为，并且 DELETE 父数据而不会对子数据产生任何影响。这样才能触发数据库层面的 `ON DELETE` 约束，或者其他的触发器。
+   1. 数据库层面的 `ON DELETE` 级联 比 ORM 层面的级联更高效。数据库可以同时在多个 relationship 中链接一系列级联操作。
+   1. SQLAlchemy 不需要这么复杂，因为我们通过将 passive_deletes 选项与正确配置的外键约束结合使用，提供与数据库的 `ON DELETE` 功能的平滑集成。
 
 ### 方法一：ORM 层的 cascade 实现
 
 `relationship` 的 `cascade` 参数决定了修改父表时，什么时候子表要进行级联操作。它的可选项有（str，选项之间用逗号分隔）：
+
 1. `save-update`：默认选项之一。在 add（对应 SQL 的 insert 或 update）一个对象的时候，会 add 所有它相关联的对象。
 1. `merge`：默认选项之一。在 merge（相当字典的update操作，有就替换掉，没有就合并）一个对象的时候，会 merge 所有和它相关联的对象。
 1. `expunge` ：移除操作的时候，会将相关联的对象也进行移除。这个操作只是从session中移除，并不会真正的从数据库中删除。
@@ -248,7 +252,6 @@ class User(UserMixin, db.Model):
 1. 为 `relationship` 添加关键字参数 `passive_deletes="all"`，这样就完全禁用 SQLAlchemy 将外键列设置为 NULL 的行为，并且 DELETE 父数据不会对子数据产生任何影响。
 
 这样 DELETE 操作时，就会触发数据库的 `ON DELETE` 约束，从而级联删除子数据。
-
 
 ## 参考
 

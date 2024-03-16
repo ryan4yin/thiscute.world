@@ -4,15 +4,14 @@ date: 2019-01-20T21:08:46+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "sql.webp"
+  - name: "featured-image"
+    src: "sql.webp"
 
 tags: ["SQL", "数据库", "Database"]
 categories: ["tech"]
 ---
 
-
->个人笔记不保证正确。
+> 个人笔记不保证正确。
 
 数据类型是限制我们可以在表里存储什么数据的一种方法。不过，对于许多应用来说， 这种限制实在是太粗糙了。比如，一个包含产品价格的字段应该只接受正数。 但是没有哪种标准数据类型只接受正数。 另外一个问题是你可能需要根据其它字段或者其它行的数据来约束字段数据。比如， 在一个包含产品信息的表中，每个产品编号都应该只有一行。
 
@@ -20,8 +19,9 @@ categories: ["tech"]
 
 ### 1. 外键 `FOREIGN KEY`
 
-外键约束声明一个字段(或者一组字段)的数值必须匹配另外一个表中出现的数值。 
+外键约束声明一个字段(或者一组字段)的数值必须匹配另外一个表中出现的数值。
 创建外键约束的前提是，该外键所在的表已经存在，并且外键必须是 UNIQUE 的。（主键默认 UNIQUE 且 NOT NULL）
+
 ```sql
 CREATE TABLE <表名> (
     <字段名> <类型> PRIMARY KEY,
@@ -31,6 +31,7 @@ CREATE TABLE <表名> (
 ```
 
 还有另一种语法，它支持以多个字段为外键（**字段约束也可以写成表约束，也就是放在一个独立的行中。而反过来很可能不行**）：
+
 ```
 CREATE TABLE <表名> (
     <字段名1> <类型> PRIMARY KEY,
@@ -42,6 +43,7 @@ CREATE TABLE <表名> (
 ```
 
 一个表也可以包含多个外键约束。这个特性用于实现表之间的多对多关系。 比如你有关于产品和订单的表，但现在你想允许一个订单可以包含多种产品 (上面那个结构是不允许这么做的)，你可以使用这样的结构：
+
 ```sql
 CREATE TABLE products (
     product_no integer PRIMARY KEY,
@@ -67,13 +69,14 @@ CREATE TABLE order_items (
 
 ### 2. 级联操作 `ON DELETE` 与 `ON UPDATE`
 
-上面说过：外键约束声明一个字段(或者一组字段)的数值必须匹配另外一个表中出现的数值。 
+上面说过：外键约束声明一个字段(或者一组字段)的数值必须匹配另外一个表中出现的数值。
 
 但是以 1. 中最后一个 sql 为例，如果一个订单（order）在创建之后，该订单包含的某个产品（product）被删除了，会发生什么？
 
 这个例子中，订单包含的产品通过外键被记录在 order_items 表中。现在如果你要删除 product 中某个被 order_items 引用了的行，默认情况为 `NO ACTION`，就是直接报错。
 
 这个行为也可以手动指定：
+
 ```sql
 CREATE TABLE products (
     product_no integer PRIMARY KEY,
@@ -120,6 +123,7 @@ CREATE TABLE products (
 ```
 
 稍微复杂一点的例子：
+
 ```sql
 CREATE TABLE products (
     product_no integer,
@@ -145,8 +149,6 @@ CREATE TABLE products (
 ```
 
 要注意的是，**当约束表达式计算结果为真或 NULL 的时候，检查约束会被认为是满足条件的**。 因为大多数表达式在含有 NULL 操作数的时候结果都是 NULL ，所以这些约束不能阻止字段值为 NULL 。要排除掉 NULL，只能使用 `NOT NULL` 约束。（所以就说 NULL 是万恶之源hhh）
-
-
 
 ### 参考
 

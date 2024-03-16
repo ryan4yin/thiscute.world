@@ -4,20 +4,19 @@ date: 2022-05-13T11:46:00+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "nat.webp"
+  - name: "featured-image"
+    src: "nat.webp"
 
 tags: ["NAT", "网络", "NAT 穿越", "内网穿透", "虚拟网络", "P2P", "WebRTC"]
 categories: ["tech"]
 series: ["计算机网络相关"]
-
 # 文章未完成，先不在首页显示
 # hiddenFromHomePage: true
 ---
 
->个人笔记，不一定正确...
+> 个人笔记，不一定正确...
 
->当前文章完成度 - 70%
+> 当前文章完成度 - 70%
 
 ## 前言
 
@@ -38,9 +37,9 @@ NAT 就是在 IPv6 普及前，临时解决 IPv4 地址空间不够用而开发�
 于是中国电信等运营商不得不再加一层 NAT，让多个家庭共用同一个 IP 地址，这时网络架构会变成这样：「家庭局域网」=>「家庭 NAT 网关」=>「运营商广域网」=>「运营商 NAT 网关」=>「公共因特网」。
 由于此架构通过两层 NAT 网关串联了三个不同的 IPv4 网络，它也被形象地称为 **NAT444** 技术，详见 [电信级NAT - 维基百科](https://zh.wikipedia.org/wiki/%E7%94%B5%E4%BF%A1%E7%BA%A7NAT)。
 
->[据 v2ex 上传闻](https://v2ex.com/t/876430)因为 IPv4 地址紧缺，国内运营商甚至开始尝试使用 **NAT4444** 了，就是中间加两层运营商的私有网络...
+> [据 v2ex 上传闻](https://v2ex.com/t/876430)因为 IPv4 地址紧缺，国内运营商甚至开始尝试使用 **NAT4444** 了，就是中间加两层运营商的私有网络...
 
->不过 IPv6 也正在变得越来越流行，看 v2ex 上最近（2022-08）就很多人在聊，一些城市在试点 ipv4 over ipv6 隧道技术，底层完全换成 IPv6 协议加 IPoE 拨号了，带来的问题是没法桥接，详见 [电信又一新动作：上网业务不再使用 PPPoE 新装宽带无法改桥接 - v2ex](https://www.v2ex.com/t/875362)。
+> 不过 IPv6 也正在变得越来越流行，看 v2ex 上最近（2022-08）就很多人在聊，一些城市在试点 ipv4 over ipv6 隧道技术，底层完全换成 IPv6 协议加 IPoE 拨号了，带来的问题是没法桥接，详见 [电信又一新动作：上网业务不再使用 PPPoE 新装宽带无法改桥接 - v2ex](https://www.v2ex.com/t/875362)。
 
 总的来说，NAT 是一项非常成功的技术，它成功帮 IPv4 续命了几十年，甚至到如今 2022 年，全球网络仍然是 IPv4 的天下。
 
@@ -62,7 +61,7 @@ NAT 的具体实现有许多的变种，不存在统一的规范，但是大体�
 
 ### 1. 一对一 NAT
 
-一对一 NAT，这种类型的 NAT 在 [RFC2663](https://datatracker.ietf.org/doc/html/rfc2663) 中被称为  Basic NAT。
+一对一 NAT，这种类型的 NAT 在 [RFC2663](https://datatracker.ietf.org/doc/html/rfc2663) 中被称为 Basic NAT。
 它在技术上比较简单，只利用网络层的信息，对 IP 地址进行转换。
 
 简单的说，Basic NAT 要求每个内网 IP 都需要绑定一个唯一的公网 IP，才能连通外部网络。
@@ -86,12 +85,12 @@ Basic NAT 有三种类型：「**静态 NAT**」、「**动态 NAT**」以及「
 
 {{< figure src="/images/about-nat/aws-vpc-nat-internet-gateway.webp" title="AWS VPC 中的 NAT 网关以及 Internet 网关">}}
 
->云服务 VPC 中的公有子网，实际上就是一个 DMZ(Demilitarized Zone) 隔离区，是不安全的。而私有子网则是安全区，公网无法直接访问到其中的主机。
+> 云服务 VPC 中的公有子网，实际上就是一个 DMZ(Demilitarized Zone) 隔离区，是不安全的。而私有子网则是安全区，公网无法直接访问到其中的主机。
 
 而「动态 NAT」则需要路由器维护一个**公网 IP 地址池**，内网服务器需要访问公网时，动态 NAT 就从地址池中拿出一个公网 IP 给它使用，用完再回收。
 这种场景需要一个公网 IP 地址池，每当内部有服务需要请求外网时，就动态地为它分配一个公网 IP 地址，使用完再回收。
 
-Basic NAT 的好处是，它仅工作在 L3 网络层，网络层上的协议都可以正常使用（比如 P2P），不需要啥「内网穿越」技术。 
+Basic NAT 的好处是，它仅工作在 L3 网络层，网络层上的协议都可以正常使用（比如 P2P），不需要啥「内网穿越」技术。
 
 ### 2. 一对多 NAT - NAPT
 
@@ -114,7 +113,7 @@ NAPT 的端口分配与转换规则（**Mapping Behavior**）以及对外来流�
 
 下面我们逐一介绍这四种不同的 NAPT 类型。
 
->从这里开始，下文中的 NAT 特指 NAPT，如果涉及「一对一 NAT」会使用它的全名。
+> 从这里开始，下文中的 NAT 特指 NAPT，如果涉及「一对一 NAT」会使用它的全名。
 
 ##### 1. Full-cone NAT
 
@@ -155,7 +154,7 @@ Full-cone NAT 的特点如下：
 
 Linux 的网络栈中，可通过 `iptables/netfilter` 的 `SNAT/MASQUERADE` 实现 NAPT 网关，这种方式只能实现一个 Symmetric NAT.
 
-也就是说绝大多数基于 Linux 实现的家庭局域网、Docker 虚拟网络、Kubernetes 虚拟网络、云服务的虚拟网络，都是 Symmetric NAT. 
+也就是说绝大多数基于 Linux 实现的家庭局域网、Docker 虚拟网络、Kubernetes 虚拟网络、云服务的虚拟网络，都是 Symmetric NAT.
 
 只有一些有 Full-cone NAT 需求的网吧、ISP 的 LSN(Large Scale NAT) 网关等组织，会使用非 Linux 内核的企业级路由器提供 Full-cone NAT 能力，这些设备可能是基于 FPGA 等专用芯片设计的。
 
@@ -188,7 +187,6 @@ RFC3489 这个早期 RFC 存在一些问题，问题之一就是它对 NAT 归�
 
 - **APDF**（Address and Port-Dependent Filtering）外部地址和端口相关过滤：对于一个内网 `Endpoint(X,x)` ，只有它曾经向 IP 地址为 D1，端口号为 d1 的外网目的 `Endpoint(D1,d1)` 发送过报文，那么也只有外网 HostD1 中来自`Endpoint(D1,d1)`返回的报文，才能被转换并发往内网，其他报文被过滤掉。
 
-
 ##### 3. RFC3489 与 RFC5389 的 NAT 类型定义关系
 
 - Full Cone NAT 是 EIM 和 EIF 的组合。
@@ -215,7 +213,7 @@ RFC3489 这个早期 RFC 存在一些问题，问题之一就是它对 NAT 归�
 
 为了穿越这些 NAT 网关进行 P2P 通讯，就需要借助 [NAT 穿越技术](https://en.wikipedia.org/wiki/NAT_traversal)。
 
->这里讨论的前提是，你的网络只有单层 NAT，如果外部还存在公寓 NAT、ISP 广域网 NAT，那下面介绍的 NAT 提升技术实际上就没啥意义了。
+> 这里讨论的前提是，你的网络只有单层 NAT，如果外部还存在公寓 NAT、ISP 广域网 NAT，那下面介绍的 NAT 提升技术实际上就没啥意义了。
 
 ### 1. 「DMZ 主机」或者「定向 DNAT 转发」
 
@@ -242,7 +240,7 @@ iptables -t nat -A PREROUTING -i eth0 -j DNAT --to-destination 192.168.1.3 # 将
 
 ### 3. UPnP 动态端口转发
 
->最流行的 UPnP 实现是 <https://github.com/miniupnp/miniupnp>
+> 最流行的 UPnP 实现是 <https://github.com/miniupnp/miniupnp>
 
 静态端口转发对用户的技术要求较高，我作为一个网络小白，希望有一个傻瓜式的开关能让我愉快地玩耍 Xbox/PS5 联机游戏，该怎么办呢？
 你需要的只是在路由器上启用 UPnP(Universal Plug and Play) 协议，启用它后，内网游戏设备就可以通过 UPnP 向路由器动态申请一个端口号供其使用，UPnP 会自动配置对应的端口转发规则。
@@ -269,7 +267,7 @@ UPnP 解决了「静态端口转发」需要手动配置的问题，在启用了
 - [RFC8445 - Interactive Connectivity Establishment (ICE)](https://datatracker.ietf.org/doc/html/rfc8445)
   - 一个 NAT 穿越的协商协议，它统一了 STUN 与 TURN 两种协议，会尝试遍历所有可能的连接方案。
 
-总的来说，标准的 NAT 穿越协议优先使用打洞（**[NAT Hole Pounching](https://en.wikipedia.org/wiki/Hole_punching_(networking))**）技术，如果打洞失败，就使用中继服务器技术兜底，确保能成功穿越。
+总的来说，标准的 NAT 穿越协议优先使用打洞（**[NAT Hole Pounching](<https://en.wikipedia.org/wiki/Hole_punching_(networking)>)**）技术，如果打洞失败，就使用中继服务器技术兜底，确保能成功穿越。
 
 #### STUN/TURN/ICE 的 NAT 类型检测
 
@@ -330,12 +328,12 @@ TBD
 
 在使用 STUN/TURN 进行 NAT 穿越时，支持的的 NAT 类型如下表。行与列分别代表双方的 NAT 类型，✅ 表示支持 UDP 穿越，❌ 表示 TURN 无法进行 UDP 穿越：
 
-|       NAT 类型      | Full Cone | Restricted | Port-Restricted | Symmetric |
-| ------------------ | --------- | ---------- | --------------- | --------- |
-| Full Cone          | ✅         | ✅          | ✅               | ✅         |
-| Restricted         | ✅         | ✅          | ✅               | ✅         |
-| Port-Restricted    | ✅         | ✅          | ✅               | ❌         |
-| Symmetric          | ✅         | ✅          | ❌               | ❌         |
+| NAT 类型        | Full Cone | Restricted | Port-Restricted | Symmetric |
+| --------------- | --------- | ---------- | --------------- | --------- |
+| Full Cone       | ✅        | ✅         | ✅              | ✅        |
+| Restricted      | ✅        | ✅         | ✅              | ✅        |
+| Port-Restricted | ✅        | ✅         | ✅              | ❌        |
+| Symmetric       | ✅        | ✅         | ❌              | ❌        |
 
 这种场景下 TURN 协议给出的解决方案是，fallback 到中继服务器策略作为兜底方案，保证连接能成功，但是这会给中继服务器带来很大压力，延迟等参数将不可避免地变差。
 
@@ -474,4 +472,3 @@ AWS VPC 提供两种网关类型：
 - [Network address translation - wikipedia](https://en.wikipedia.org/wiki/Network_address_translation)
 - [WebRTC NAT Traversal Methods: A Case for Embedded TURN](https://www.liveswitch.io/blog/webrtc-nat-traversal-methods-a-case-for-embedded-turn)
 - [WireGuard 教程：使用 DNS-SD 进行 NAT-to-NAT 穿透 - 云原生实验室](https://icloudnative.io/posts/wireguard-endpoint-discovery-nat-traversal/)
-

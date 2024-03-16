@@ -3,8 +3,8 @@ title: "刻意练习"
 date: 2022-10-05T13:31:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "deliberate-practice-achieve-mastery-in-anything.webp"
+  - name: "featured-image"
+    src: "deliberate-practice-achieve-mastery-in-anything.webp"
 
 tags: ["学习", "方法论", "舒适区", "延迟满足"]
 categories: ["life"]
@@ -20,7 +20,6 @@ comment:
 而这个及格水平，相对于完全没有进行过这样训练的其他人而言，可能就已经很惊艳了。
 
 如果你总是半途而废，可能只是你受了快餐式短期快乐的诱惑而放弃，或者你潜意识觉得它并不重要从而无法坚持。
-
 
 ## 佐证之一 - 英语口语
 

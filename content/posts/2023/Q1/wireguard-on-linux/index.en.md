@@ -5,8 +5,8 @@ lastmod: 2023-03-28T22:19:25+08:00
 draft: true
 
 resources:
-- name: "featured-image"
-  src: "wireguard.png"
+  - name: "featured-image"
+    src: "wireguard.png"
 
 tags: ["WireGuard", "VPN", "Linux", "网络", "iptables", "conntrack"]
 categories: ["tech"]
@@ -60,21 +60,21 @@ services:
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
     container_name: wireguard
-    cap_add:           
+    cap_add:
       - NET_ADMIN
       - SYS_MODULE
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - SERVERURL=auto   # Automatically determines the server's external IP address, used when generating client configurations.
+      - SERVERURL=auto # Automatically determines the server's external IP address, used when generating client configurations.
       - SERVERPORT=51820 # Port number on which the server listens.
-      - PEERS=1          # Automatically generates 1 client configuration.
-      - PEERDNS=auto     # Automatically determines the client's DNS server address, also used when generating client configurations.
-      - INTERNAL_SUBNET=10.13.13.0    # Subnet for the WireGuard virtual network.
-      - ALLOWEDIPS=0.0.0.0/0          # This rule allows all clients in the virtual network to send traffic to this node.
+      - PEERS=1 # Automatically generates 1 client configuration.
+      - PEERDNS=auto # Automatically determines the client's DNS server address, also used when generating client configurations.
+      - INTERNAL_SUBNET=10.13.13.0 # Subnet for the WireGuard virtual network.
+      - ALLOWEDIPS=0.0.0.0/0 # This rule allows all clients in the virtual network to send traffic to this node.
       # Well-known NAT networks require sending periodic keep-alive packets to maintain the NAT table. This parameter, set to 'all', enables keep-alive for all clients.
-      - PERSISTENTKEEPALIVE_PEERS=all 
+      - PERSISTENTKEEPALIVE_PEERS=all
       - LOG_CONFS=true # Enable logging.
     volumes:
       - ./config:/config
@@ -120,7 +120,7 @@ Finally, to enable other peers in the WireGuard virtual network to access the ex
 - `iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT;`: Allow packets entering and exiting the `wg0` device to pass through the netfilter's FORWARD chain (the default rule is DROP, which means it does not allow packets to pass through by default).
 - `iptables -t nat -A POSTROUTING -o eth
 
-+ -j MASQUERADE`: Add a MASQUERADE rule on the `eth+` network interface, which means the source addresses of the packets will be masked as the address of the `eth+` interface. This is to allow WireGuard packets to access the external network through NAT.
+* -j MASQUERADE`: Add a MASQUERADE rule on the `eth+`network interface, which means the source addresses of the packets will be masked as the address of the`eth+` interface. This is to allow WireGuard packets to access the external network through NAT.
   - The return traffic will automatically pass through the NAT's conntrack RELATED rule, allowing it to pass through without explicit configuration. However, the conntrack table has an automatic cleanup mechanism, and if there is no traffic for a long time, the entry will be removed from the conntrack table. This is the issue addressed by the `PERSISTENTKEEPALIVE_PEERS=all` parameter in the `docker-compose.yml`, which keeps the connections alive by sending periodic keep-alive packets.
   - This also involves NAT traversal, which I won't delve into here, but you can explore it if you're interested.
 
@@ -180,7 +180,7 @@ AllowedIPs = 0.0.0.0/0
 
 Because my current environment is an intranet setup, I can directly use the server's private IP address for the `Peer` - `Endpoint` in the configuration file, which is `192.168.5.198`.
 
->If your server has a public IP address (e.g., a cloud server or using port forwarding with a dynamic public IP on a home broadband connection), you can also use that public IP address as the Endpoint, and the effect will be the same.
+> If your server has a public IP address (e.g., a cloud server or using port forwarding with a dynamic public IP on a home broadband connection), you can also use that public IP address as the Endpoint, and the effect will be the same.
 
 After confirming that the configuration file is correct, save it to the client's path `/etc/wireguard/peer1.conf`, and then use the following command to start the WireGuard client:
 
@@ -212,14 +212,14 @@ $ sudo wg-quick up peer1
 
 After going through the above process, you should now be able to access the related network through WireGuard. You can use WireShark to capture packets for confirmation.
 
->If the network is still not working, it means there is a problem with the configuration in one of the steps. You can troubleshoot it step by step by examining network interfaces, routing tables, routing policies, and iptables/nftables configurations. If necessary, you can use WireShark to capture packets and locate the issue.
+> If the network is still not working, it means there is a problem with the configuration in one of the steps. You can troubleshoot it step by step by examining network interfaces, routing tables, routing policies, and iptables/nftables configurations. If necessary, you can use WireShark to capture packets and locate the issue.
 
 Now, let's check the current system's network status. First, check the routing table, and you will find that the routing table hasn't changed:
 
 ```shell
 $ ip route ls
-default via 192.168.5.201 dev eth0 proto static 
-192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.197 
+default via 192.168.5.201 dev eth0 proto static
+192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.197
 ```
 
 However, the WireGuard tunnel is already active, indicating that the traffic is no longer going directly through the default routing table. There are other configurations in effect.
@@ -300,7 +300,7 @@ Sure, here's the missing part:
 Now, let's check the status of WireGuard. It was set earlier by the command `wg setconf peer1 /dev/fd/63`:
 
 ```shell
-ryan@ubuntu-2004-builder:~$ sudo wg show 
+ryan@ubuntu-2004-builder:~$ sudo wg show
 interface: peer1
   public key: HR8Kp3xWIt2rNdS3aaCk+Ss7yQqC9cn6h3WS6UK3WE0=
   private key: (hidden)
@@ -339,4 +339,3 @@ In the next article (if there is one...), I will delve into more details of Wire
 - [WireGuard Protocol](https://www.wireguard.com/protocol/): Official documentation and whitepaper, written in a clear and easy-to-understand manner.
 - [WireGuard: What makes it special?](https://zhuanlan.zhihu.com/p/404402933): A deeper and easier-to-understand perspective, worth reading.
 - [Understanding modern Linux routing (and wg-quick)](https://ro-che.info/articles/2021-02-27-linux-routing): Detailed explanation of the multiple routing tables and routing policy techniques used by the WireGuard client.
-

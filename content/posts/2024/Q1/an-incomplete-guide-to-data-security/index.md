@@ -10,19 +10,7 @@ resources:
   - name: "featured-image"
     src: "datasecurity.webp"
 
-tags:
-  [
-    "安全",
-    "密码学",
-    "Linux",
-    "SSH",
-    "PGP",
-    "密码管理",
-    "LUKS",
-    "全盘加密",
-    "零信任",
-    "rclone",
-  ]
+tags: ["安全", "密码学", "Linux", "SSH", "PGP", "密码管理", "LUKS", "全盘加密", "零信任", "rclone"]
 categories: ["tech"]
 series: ["写给开发人员的实用密码学"]
 series_weight: 11

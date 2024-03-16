@@ -1,12 +1,12 @@
 ---
 title: "月宫"
-date:  2021-12-27T17:23:00+08:00
+date: 2021-12-27T17:23:00+08:00
 draft: false
 
 math: true
 resources:
-- name: "featured-image"
-  src: "qudu-temple.webp"
+  - name: "featured-image"
+    src: "qudu-temple.webp"
 
 tags: ["生死"]
 categories: ["life"]

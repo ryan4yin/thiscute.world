@@ -5,8 +5,8 @@ lastmod: 2017-11-18T01:52:00+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "fate-of-mortals.webp"
+  - name: "featured-image"
+    src: "fate-of-mortals.webp"
 
 tags: ["读后感", "小说"]
 categories: ["书藉", "life"]
@@ -19,8 +19,6 @@ comment:
   waline:
     enable: true
 ---
-
-
 
 店小二杀了巡界使，然后离了客栈，入了道德宗，应了一错缘，又给道德宗干了一堆破事，活的浑浑噩噩。
 
@@ -37,4 +35,3 @@ comment:
 青石与巡界使，被命运捉弄，被贬下凡间受百世轮回，九十九世相濡以沫，最后一世却横生波折。
 
 终于回得仙界，相对大笑三声，相忘于江湖。
-

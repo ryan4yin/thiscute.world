@@ -4,7 +4,6 @@ date: 2021-01-23T16:31:22+08:00
 draft: true
 
 series: ["云原生相关"]
-
 ---
 
 # [kyverno](https://github.com/kyverno/kyverno)
@@ -18,4 +17,3 @@ series: ["云原生相关"]
 ## 参考
 
 - [Kyverno: The Swiss Army Knife of Kubernetes](https://neonmirrors.net/post/2021-01/kyverno-the-swiss-army-knife-of-kubernetes/)
-

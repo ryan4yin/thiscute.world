@@ -3,13 +3,12 @@ title: "SQLAlchemy 学习笔记（二）：ORM 基础"
 date: 2019-02-11T19:52:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "sqlalchemy-models.webp"
+  - name: "featured-image"
+    src: "sqlalchemy-models.webp"
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["tech"]
 ---
-
 
 照例先看层次图
 
@@ -48,9 +47,10 @@ engine 的创建请见上篇文档 [SQLAlchemy 学习笔记（一）：Engine �
 
 #### 约束条件
 
->可参考 [SQL 基础笔记（三）：约束](https://www.cnblogs.com/kirito-c/p/10295693.html) 与 [SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言 - 表定义中的约束](https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F)
+> 可参考 [SQL 基础笔记（三）：约束](https://www.cnblogs.com/kirito-c/p/10295693.html) 与 [SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言 - 表定义中的约束](https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F)
 
 使用 ORM 来定义约束条件，与直接使用 SQL 表达式语言定义很类似，也有两种方法：
+
 1. 直接将约束条件作为 `Column`、`ForeignKey` 的参数传入。这种方式最简洁，也最常用。
 1. 使用 `UniqueConstraint`、`CheckConstraint` 等类构造约束，然后放入 `__table_args__` 属性中。举例：
 
@@ -87,6 +87,7 @@ Session = sessionmaker(bind=engine)  # 获取 session
 而修改，则是先查询出对应的 row 对象，直接修改这个对象，然后 commit 就行。
 
 1. 增添：
+
 ```python
 ed_user = User(name='ed', fullname='Ed Jones', password='edspassword')  # 用构造器构造对象
 session.add(ed_user)  # 添加，此外还有批量添加 add_all([user1, user2...])
@@ -94,6 +95,7 @@ session.commit()  # 必须手动 commit
 ```
 
 1. 修改：
+
 ```python
 ed_user = session.query(User).filter_by(name='ed').first()  # 先获取到 User 对象
 ed_user.password = 'f8s7ccs'  # 改了密码
@@ -128,6 +130,7 @@ session.commit()
 1. group_by: 通过指定 column 分组
 1. distinct(): 去重
 1. join(): 关联
+
 ```python
 query.filter(User.name == 'ed')  # 这个等同于 filter_by，但是更繁琐
 query.filter(User.name != 'ed')  # 不等于，这个就是 filter_by 无法做到的了
@@ -166,6 +169,7 @@ session.query(User).outerjoin(User.addresses) \
 #### 执行查询，获取数据
 
 查询返回 query 对象，但 SQL 还没有被执行，直到你调用下列几个方法：
+
 ```python
 # 构造 query 对象
 query = session.query(User).filter(User.name.like('%ed')).order_by(User.id)
@@ -184,7 +188,6 @@ res = query.one()
 4. one_or_none 差别在于结果为空，它不抛出异常，而是返回 None
 res = query.one_or_none()
 ```
-
 
 ### 参考
 

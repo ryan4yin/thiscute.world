@@ -3,8 +3,8 @@ title: "「小歌行」-景德镇文艺复兴-2020巡演-深圳"
 date: 2020-11-28T11:49:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["景德镇文艺复兴", "后摇"]
 categories: ["音乐", "life"]
@@ -49,11 +49,9 @@ lightgallery: true
 
 录到最后手机没电了，为了留点电量刷公交车卡和门禁卡，最后一首《水码头》没有录完。（到家时真的差点刷不了门禁hhh）
 
-
 好了，下面是演出的照片集锦：
 
 ![](/images/jingdezhen-renaissance-band/968138-20201128113509598-520668629.webp "Live House 入口的宣传海报")
-
 
 ![](/images/jingdezhen-renaissance-band/968138-20201128113624303-2016722864.webp "老村长1")
 ![](/images/jingdezhen-renaissance-band/968138-20201128113628764-1153463538.webp "老村长2")

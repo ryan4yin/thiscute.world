@@ -4,8 +4,8 @@ date: 2019-06-20T22:32:31+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "hefei-to-shenzhen.webp"
+  - name: "featured-image"
+    src: "hefei-to-shenzhen.webp"
 
 tags: []
 categories: ["life"]

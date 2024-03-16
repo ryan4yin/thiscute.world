@@ -4,8 +4,8 @@ date: 2022-03-09T20:50:00+08:00
 lastmod: 2022-03-13T15:26:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "symmetric-vs-asymmetric.webp"
+  - name: "featured-image"
+    src: "symmetric-vs-asymmetric.webp"
 
 tags: ["Cryptography", "密码学", "非对称加密", "安全", "RSA", "ECC"]
 categories: ["tech"]
@@ -21,11 +21,9 @@ code:
   maxShownLines: 100
 ---
 
+> 本文部分内容翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了密码学历史以及 openssl 命令示例，并重写了 RSA/ECC 算法原理、代码示例等内容。
 
->本文部分内容翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了密码学历史以及 openssl 命令示例，并重写了 RSA/ECC 算法原理、代码示例等内容。
-
->这篇文章中会涉及到一些数论知识，本文不会详细介绍这些数学知识，可以在有疑惑的时候自行查找相关知识，或者选择跳过相关内容。
-
+> 这篇文章中会涉及到一些数论知识，本文不会详细介绍这些数学知识，可以在有疑惑的时候自行查找相关知识，或者选择跳过相关内容。
 
 ## 一、公钥密码学 / 非对称密码学
 
@@ -62,7 +60,6 @@ code:
 
 因此公钥密码学成为了现代密码学的基石，而「公钥密码学」的诞生时间 1976 年被认为是现代密码学的开端。
 
-
 ### 公钥密码学的概念
 
 公钥密码系统的密钥始终以公钥 + 私钥对的形式出现，公钥密码系统提供数学框架和算法来生成公钥+私钥对。
@@ -76,10 +73,9 @@ code:
 
 比较著名的公钥密码系统有：RSA、ECC（椭圆曲线密码学）、ElGamal、Diffie-Hellman、ECDH、ECDSA 和 EdDSA。许多密码算法都是以这些密码系统为基础实现的，例如 RSA 签名、RSA 加密/解密、ECDH 密钥交换以及 ECDSA 和 EdDSA 签名。
 
-
 ### 量子安全性
 
->参考文档：https://en.wikipedia.org/wiki/Post-quantum_cryptography
+> 参考文档：https://en.wikipedia.org/wiki/Post-quantum_cryptography
 
 目前流行的公钥密码系统基本都依赖于 IFP（整数分解问题）、DLP（离散对数问题）或者 ECDLP（椭圆曲线离散对数问题），这导致这些算法都是**量子不安全**（quantum-unsafe）的。
 
@@ -159,7 +155,7 @@ RSA 密钥对的生成跟我们在本系列文章的第 5 篇介绍的「DHKE �
 
 首先看下我们怎么使用 openssl 生成一个 1024 位的 RSA 密钥对（**仅用做演示，实际应用中建议 3072 位**）：
 
->[OpenSSL](https://github.com/openssl/openssl) 是目前使用最广泛的网络加密算法库，支持非常多流行的现代密码学算法，几乎所有操作系统都会内置 openssl.
+> [OpenSSL](https://github.com/openssl/openssl) 是目前使用最广泛的网络加密算法库，支持非常多流行的现代密码学算法，几乎所有操作系统都会内置 openssl.
 
 ```
 # 生成 1024 位的 RSA 私钥
@@ -247,7 +243,7 @@ coefficient:
     44:e5:b2:34
 
 # 查看私钥内容
-❯ cat rsa-public-key.pem 
+❯ cat rsa-public-key.pem
 -----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNE8QZLJZXREOeWZ2ilAzGC4Kj
 q/PfsFzrXGj8g3IaS4/J3JrBo3qEq/k9XoRzOmNPyvWCj2FAY7A099d7qX4ztthB
@@ -291,8 +287,8 @@ RSA 描述的私钥的结构如下（其中除 $n, d$ 之外的都是冗余信�
 
 下面就介绍下具体的密钥对生成流程，搞清楚 openssl 生成出的这个私钥，各项参数分别是什么含义：
 
->这里不会详细介绍其中的各种数学证明，具体的请参考维基百科。
->相关数学知识包括取模运算的性质、欧拉函数、模倒数（拓展欧几里得算法）
+> 这里不会详细介绍其中的各种数学证明，具体的请参考维基百科。
+> 相关数学知识包括取模运算的性质、欧拉函数、模倒数（拓展欧几里得算法）
 
 - 随机选择两个不相等的质数 $p$ 与 $q$
   - p 跟 q 应该非常大，但是长度相差几个整数，这样会使得破解更加困难
@@ -367,7 +363,7 @@ $$
 \text{encryptedMsg} = msg^e \mod n
 $$
 
-通常的手段是，先使用 [EAOP](https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding)  将被加密消息编码成一个个符合条件的整数，再使用上述公式一个个加密。
+通常的手段是，先使用 [EAOP](https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding) 将被加密消息编码成一个个符合条件的整数，再使用上述公式一个个加密。
 
 解密的方法，就是对被每一段加密的数据 $encryptedMsg$，进行如下运算：
 
@@ -377,7 +373,7 @@ $$
 
 #### RSA 解密运算的证明
 
->这里的证明需要用到一些数论知识，觉得不容易理解的话，建议自行查找相关资料。
+> 这里的证明需要用到一些数论知识，觉得不容易理解的话，建议自行查找相关资料。
 
 证明流程如下：
 
@@ -405,12 +401,12 @@ $$
 \end{alignedat}
 $$
 
-又有[费马小定理](https://zh.wikipedia.org/wiki/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86)指出，在 $a$ 为整数，$p$ 为质数的情况下，有同余等式 
+又有[费马小定理](https://zh.wikipedia.org/wiki/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86)指出，在 $a$ 为整数，$p$ 为质数的情况下，有同余等式
 
 $$a^{p-1} \equiv 1 {\pmod  p}$$
 
 因为我们的模数 $n=pq$ 并不是质数，不能直接利用费马小定理给出的同余公式。
-但是 $p$, $q$ 两数都为质数，我们可以分别计算方程  对 $p$ 以及 $q$ 取模的结果，然后再根据[中国剩余定理](https://zhuanlan.zhihu.com/p/44591114)得出通解，也就得到我们需要的结果。
+但是 $p$, $q$ 两数都为质数，我们可以分别计算方程 对 $p$ 以及 $q$ 取模的结果，然后再根据[中国剩余定理](https://zhuanlan.zhihu.com/p/44591114)得出通解，也就得到我们需要的结果。
 
 对于模 $p$ 的情况，计算方法如下：
 
@@ -425,11 +421,11 @@ $$a^{p-1} \equiv 1 {\pmod  p}$$
   \end{alignedat}
   $$
 
-同理，对模 $q$ 的情况，也能得到等式 
+同理，对模 $q$ 的情况，也能得到等式
 
 $$msg^{ed} \equiv msg \pmod  q$$
 
-有了上面两个结果，根据中国剩余定理，就能得到 
+有了上面两个结果，根据中国剩余定理，就能得到
 
 $$msg^{ed} \equiv msg \pmod  {pq}$$
 
@@ -549,7 +545,6 @@ hashFromSignature = pow(signature, e, n)
 print("Signature valid:", hash == hashFromSignature)
 ```
 
-
 ## 四、ECC 密码系统
 
 {{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/ecc.webp" >}}
@@ -581,10 +576,9 @@ $$
 y^2 = x^3 + 7
 $$
 
-
 椭圆曲线大概长这么个形状：
 
->椭圆曲线跟椭圆的关系，就犹如雷锋跟雷峰塔、Java 跟 JavaScript...
+> 椭圆曲线跟椭圆的关系，就犹如雷锋跟雷峰塔、Java 跟 JavaScript...
 
 {{< figure src="/images/practical-cryptography-basics-7-asymmetric-key-ciphers/elliptic-curve.webp" >}}
 
@@ -595,7 +589,7 @@ $$
 
 数学家在椭圆曲线上定义了一些运算规则，ECC 就依赖于这些规则，下面简单介绍下我们用得到的部分。
 
->椭圆曲线上的运算跟我们所熟知的实数域运算不太一样，它在现实生活中并无实际意义，但是它的一些性质使其很适合被应用在密码学中。
+> 椭圆曲线上的运算跟我们所熟知的实数域运算不太一样，它在现实生活中并无实际意义，但是它的一些性质使其很适合被应用在密码学中。
 
 ##### 1. 加法与负元
 
@@ -666,7 +660,7 @@ $$
   - $y3 = (k(x1 - x3) - y1) \mod p$
   - 斜率 $k$ 的计算
     - 如果 $P=Q$，则 $k=\dfrac {3x^{2}+a} {2y_{1}}$
-    - 否则 $k=\dfrac {y_{2}-y_{1}} {x_{2}-x_{1}} $
+    - 否则 $k=\dfrac {y*{2}-y*{1}} {x*{2}-x*{1}} $
 
 #### ECDLP 椭圆曲线离散对数问题
 
@@ -674,7 +668,7 @@ $$
 
 椭圆曲线上的除法是一个尚未被解决的难题——「ECDLP 椭圆曲线离散对数问题」：
 
->已知 $kG$ 与基点 $G$，求整数 $k$ 的值。
+> 已知 $kG$ 与基点 $G$，求整数 $k$ 的值。
 
 目前并没有有效的手段可以快速计算出 $k$ 的值。
 比较直观的方法应该是从基点 $G$ 开始不断进行加法运算，直到结果与 $kG$ 相等。
@@ -682,11 +676,9 @@ $$
 目前已知的 ECDLP 最快的解法所需步骤为 $\sqrt{k}$，而 **k 倍运算**高效算法前面已经介绍过了，所需步骤为 $log_2(k)$。
 在 $k$ 非常大的情况下，它们的计算用时将会有指数级的差距。
 
->椭圆曲线上的 **k 倍运算**与素数上的幂运算很类似，因此 ECC 底层的数学难题 ECDLP 与 RSA 的离散对数问题 DLP 也有很大相似性。
-
+> 椭圆曲线上的 **k 倍运算**与素数上的幂运算很类似，因此 ECC 底层的数学难题 ECDLP 与 RSA 的离散对数问题 DLP 也有很大相似性。
 
 ### ECC 密钥对生成
-
 
 首先，跟 RSA 一样，让我们先看下怎么使用 openssl 生成一个使用 prime256v1 曲线的 ECC 密钥对：
 
@@ -718,7 +710,7 @@ priv:
     69:b7:c1:3f:e6:e2:00:da:a0:91:8a:7c:01:c3:5d:
     5d:81:56:d7:72:6f:f6:8f:4c:84:c9:47:90:7a:29:
     51:2d
-pub: 
+pub:
     04:e4:81:08:a2:bc:34:59:4e:7e:a2:6f:d4:81:fc:
     98:48:aa:2c:88:63:ba:1e:97:bc:87:19:2a:2f:91:
     94:54:fc:ae:e0:b2:64:7f:0f:de:f7:dc:e1:34:96:
@@ -728,7 +720,7 @@ ASN1 OID: prime256v1
 NIST CURVE: P-256
 
 # 查看公钥内容
-❯ cat ecc-public-key.pem 
+❯ cat ecc-public-key.pem
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE5IEIorw0WU5+om/UgfyYSKosiGO6
 Hpe8hxkqL5GUVPyu4LJkfw/e99zhNJatliZ1Az/yCKww5KrXC8bQ9wGQvw==
@@ -738,7 +730,7 @@ Hpe8hxkqL5GUVPyu4LJkfw/e99zhNJatliZ1Az/yCKww5KrXC8bQ9wGQvw==
 ❯ openssl ec -noout -text -pubin -in ecc-public-key.pem
 read EC key
 Private-Key: (256 bit)
-pub: 
+pub:
     04:e4:81:08:a2:bc:34:59:4e:7e:a2:6f:d4:81:fc:
     98:48:aa:2c:88:63:ba:1e:97:bc:87:19:2a:2f:91:
     94:54:fc:ae:e0:b2:64:7f:0f:de:f7:dc:e1:34:96:
@@ -785,12 +777,12 @@ ECC 本身并没有提供加密与解密的功能，但是我们可以借助 ECD
       - 密文公钥 `ciphertextPubKey`：使用此公式从私钥生成 `ciphertextPubKey =ciphertextPrivKey * G`
    2. 使用 ECDH 算法计算出「共享密钥」：`sharedECCKey = alicePubKey * ciphertextPrivKey`
    3. 为了确保安全性，每份密文都应该使用不同的「**临时 ECC 密钥对**」作为「密文密钥对」，不应该直接使用「Bob 的密钥对」！「Bob 的密钥对」只在 Alice 回复密文消息给 Bob 时才应该被用到。
-2. Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 `C`
+1. Bob 使用「共享密钥」与对称加密算法加密消息，得到密文 `C`
    - 比如使用 AES-256-GCM 或者 ChaCha20-Poly1305 进行对称加密
-3. Bob 将 `C` 与「密文公钥 `ciphertextPubKey`」打包传输给 Alice
-4. Alice 使用「密文公钥」与自己的私钥计算出「共享密钥」`sharedECCKey = ciphertextPubKey * alicePrivKey`
+1. Bob 将 `C` 与「密文公钥 `ciphertextPubKey`」打包传输给 Alice
+1. Alice 使用「密文公钥」与自己的私钥计算出「共享密钥」`sharedECCKey = ciphertextPubKey * alicePrivKey`
    1. 根据 ECDH 算法可知，这里计算出的共享密钥 `sharedECCKey`，跟 Bob 加密数据使用的共享密钥是完全一致的
-5. Alice 使用计算出的共享密钥解密 `C` 得到消息 `M`
+1. Alice 使用计算出的共享密钥解密 `C` 得到消息 `M`
 
 实际上就是消息的发送方先生成一个临时的 ECC 密钥对，然后借助 ECDH 协议计算出共享密钥用于加密。
 消息的接收方同样通过 ECDH 协议计算出共享密钥再解密数据。
@@ -844,7 +836,6 @@ print("decryption key:", compress_point(decryptKey))
 # 6. Alice 使用 decryptKey 解密密文得到原始消息
 ```
 
-
 ### ECC 数字签名
 
 前面已经介绍了 RSA 签名，这里介绍下基于 ECC 的签名算法。
@@ -865,7 +856,6 @@ EdDSA 签名算法及其变体 Ed25519 和 Ed448 在技术上在 [RFC8032](https
 对于 edwards25519 输出的签名长度为 64 字节，而对于 Ed448 输出为 114 字节。
 
 具体的算法虽然比 ECDSA 简单，但还是有点难度的，这里就直接略过了。
-
 
 下面给出个 ed25519 的计算示例：
 
@@ -898,7 +888,6 @@ public_key = private_key.public_key()
 # Raises InvalidSignature if verification fails
 public_key.verify(signature, b"my authenticated message")
 ```
-
 
 ### 密码学常用椭圆曲线介绍
 
@@ -941,7 +930,6 @@ $$
 前面我们已经提过子群的阶 $r$ 会限制总的私钥数量，导致算法强度变弱！因此不恰当的 $G$ 点可能会导致我们遭受「[小子群攻击](https://datatracker.ietf.org/doc/html/rfc2785)」。
 为了避免这种风险，建议尽量使用被广泛使用的加密库，而不是自己撸一个。
 
-
 #### 椭圆曲线的域参数
 
 ECC椭圆曲线由一组椭圆曲线域参数描述，如曲线方程参数、场参数和生成点坐标。这些参数在各种密码学标准中指定，你可以网上搜到相应的 RFC 或 NIST 文档。
@@ -952,19 +940,16 @@ ECC椭圆曲线由一组椭圆曲线域参数描述，如曲线方程参数、�
 
 开发人员应该仅使用各项标准文档给出的、经过密码学家充分研究的命名曲线。
 
-
 ##### secp256k1
 
 此曲线被应用在比特币中，它的域参数如下：
 
-
-* _**p**_ \(modulus\) = `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F`
-* _**n**_ \(order; size; the count of all possible EC points\) = `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141`
-* _**a**_ \(方程 $y^2 ≡ x^3 + a\*x + b \(\mod p\)$ 中的常数\) = `0x0000000000000000000000000000000000000000000000000000000000000000`
-* _**b**_ \(方程 $y^2 ≡ x^3 + a\*x + b \(\mod p\)$ 中的常数\)= `0x0000000000000000000000000000000000000000000000000000000000000007`
-* _**g**_ \(the curve generator point G {x, y}\) = \(`0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798`, `0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8`\)
-* _**h**_ \(cofactor, typically 1\) = 01
-
+- _**p**_ \(modulus\) = `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F`
+- _**n**_ \(order; size; the count of all possible EC points\) = `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141`
+- _**a**_ \(方程 $y^2 ≡ x^3 + a\*x + b \(\mod p\)$ 中的常数\) = `0x0000000000000000000000000000000000000000000000000000000000000000`
+- _**b**_ \(方程 $y^2 ≡ x^3 + a\*x + b \(\mod p\)$ 中的常数\)= `0x0000000000000000000000000000000000000000000000000000000000000007`
+- _**g**_ \(the curve generator point G {x, y}\) = \(`0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798`, `0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8`\)
+- _**h**_ \(cofactor, typically 1\) = 01
 
 ##### Edwards 曲线
 
@@ -982,6 +967,7 @@ $$
 ![](/images/practical-cryptography-basics-7-asymmetric-key-ciphers/edwards-curve.webp)
 
 知名的 Edwards 曲线有：
+
 - Curve1174 (251-bit)
 - Curve25519 (255-bit)
 - Curve383187 (383-bit)
@@ -990,10 +976,9 @@ $$
 - E-521 (521-bit)
 - ...
 
-
 ##### Curve25519, X25519 和 Ed25519
 
->https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ed25519/
+> https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ed25519/
 
 只要域参数选得好，Edwards 就可以以非常高的性能实现 ECC 密钥交换、数字签名、混合加密方案。
 
@@ -1028,7 +1013,7 @@ Curve25519 的私钥为 251 位，通常编码为 256 位整数（32 个字节�
 
 ##### Curve448, X448 和 Ed448
 
->https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ed448/
+> https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ed448/
 
 [Curve448](https://en.wikipedia.org/wiki/Curve448)（Curve448-Goldilocks）是一种非扭曲 Edwards 曲线，它的方程定义如下：
 
@@ -1064,9 +1049,7 @@ Curve448 的私钥为 446 位，通常编码为 448 位整数（56 个字节，1
   - 比如 `secp224k1` `secp192k1` 啥的就可以扫进历史尘埃里了
 - 暂时没有想补充的，可以参考 <https://safecurves.cr.yp.to>
 
-
 目前（2022 年）在 TLS 协议以及 JWT 签名算法中，应用最广泛的椭圆曲线仍然是 NIST 系列：
-
 
 - `P-256`: 目前仍然应用最为广泛的椭圆曲线
   - 在 openssl 中对应的名称为 `prime256v1`

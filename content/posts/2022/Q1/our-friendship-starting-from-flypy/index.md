@@ -4,8 +4,8 @@ date: 2022-02-17T00:37:00+08:00
 draft: true
 
 resources:
-- name: "featured-image"
-  src: "friendship-starting-from-flypy.webp"
+  - name: "featured-image"
+    src: "friendship-starting-from-flypy.webp"
 
 tags: ["友谊", "成长", "青春", "中文输入方案", "音乐", "编程"]
 categories: ["life"]
@@ -24,4 +24,3 @@ comment:
 真的，很想写一写我们的故事。每一刻的我们，都是如此平淡，但是时间长河中相识四年的我们放在一起看，又在散发着星星点点的光芒。
 
 感谢有你们陪伴成长的日子
-

@@ -34,7 +34,6 @@ comment:
     enable: false
 ---
 
-
 It's February 2024, exactly 10 months since I started using NixOS. The beginner notes I wrote initially have received a lot of positive feedback and some sponsorships, becoming one of the most popular entry-level tutorials in the entire community. Since I created a dedicated GitHub repository and a separate documentation site for it in June 2023, it has garnered 1189 stars, and besides me, 37 other readers have submitted PRs:
 
 - [NixOS & Flakes - An Unofficial Beginner's Guide](https://nixos-and-flakes.thiscute.world/zh/)
@@ -174,22 +173,21 @@ People outside the Nix community might mainly hear about its dependency-conflict
 
 If you have actually used NixOS, you should also know about its other advantages:
 
-
 1. NixOS's flakes feature allows you to lock the system to a specific state, and you can update it when you want to, even if it spans a year or two. NixOS does not force you to update your system frequently, you can choose to do this or not at all. Because the state of the system can be completely inferred from your NixOS configuration, it's much easier to upgrade from a old version to the latest one.
+
    1. It's always good to have a choice, I don't like being forced, and neither do sysadmins or DevOps in companies.
 
 1. System updates have similar atomic properties to database transactions, which means your system updates either succeed or fail (usually without intermediate states).
 
-2. NixOS's declarative configuration actually implements OS as Code, making these configurations very easy to share. You can simply copy the code for the desired functionality from other NixOS users into your system configuration, and you'll get an identical environment. Beginner users can also easily learn a lot from others' configurations.
+1. NixOS's declarative configuration actually implements OS as Code, making these configurations very easy to share. You can simply copy the code for the desired functionality from other NixOS users into your system configuration, and you'll get an identical environment. Beginner users can also easily learn a lot from others' configurations.
    1. This is also why more and more users are using NixOS for Linux desktop ricing on GitHub and reddit r/unixporn in recent years.
-3. The declarative configuration provides users with highly convenient system customization capabilities, allowing them to quickly switch various components of the system by changing a few lines of configuration.
+1. The declarative configuration provides users with highly convenient system customization capabilities, allowing them to quickly switch various components of the system by changing a few lines of configuration.
 
-4. And so on.
+1. And so on.
 
 These are all selling points of NixOS, some of which can now also be achieved by traditional distributions with innovations like Fedora Silverblue.
 
 However, the system that can solve all these problems right now is only NixOS (and the more niche Guix, which also relies on the Nix package manager).
-
 
 ## NixOS's Disadvantages and Historical Debts {#nixos-disadvantages}
 
@@ -202,17 +200,16 @@ NixOS is very special and powerful, but on the other hand, it has a considerable
 3. The Nix CLI is in a transition period, and the new version is much more elegant, but its implementation is strongly bound to the Flakes feature, making both difficult to stabilize and even hindering the development of many other features.
 4. Defects in the module system and insufficient error handling in Nix have led to long-term cryptic error messages, driving users crazy.
 5. The Nix language's simplicity has resulted in a large number of Bash scripts being used in Nixpkgs, and most of Nix's features are implemented in C++, making it a black box from the perspective of Nix.
-1. Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages and what attributes can be overridden in derivations.
+6. Many implementation details of NixOS are hidden in the Nixpkgs source code, such as the classification of software packages and what attributes can be overridden in derivations.
    - Nixpkgs has long used folders to classify software packages, and there is no way to query the software packages by category except through the source code.
    - All derivation-related information in Nixpkgs can currently only be obtained by looking at the source code.
 7. The maintainer of the <https://nixos.wiki> site has left, and the official has long failed to provide an alternative, making NixOS's documentation even worse than it already was.
 8. The recent rapid growth of Nix/NixOS's user base has posed challenges to its community operation model.
 9. ...
 
-These historical debts are the main reasons why NixOS has not been more widely used. 
+These historical debts are the main reasons why NixOS has not been more widely used.
 But these issues are also opportunities for NixOS's future, as the community is actively working to solve them.
 I am looking forward to seeing how NixOS will develop once these issues are resolved.
-
 
 ## The Future of NixOS
 
@@ -240,7 +237,7 @@ This graph shows several obvious upticks in the search trending for NixOS:
    - This is likely due to the release of Nix 2.4 in November 2021, which brought experimental Flakes features and a new CLI. Flakes greatly improves the reproducibility of NixOS,and the new CLI is more in line with user intuition.
 1. In June 2023
    - The most important reason should be that several popular Linux-related channels on YouTube launched several videos about NixOS around this time. As of 2024-02-23, the three NixOS-related videos with the highest views on YouTube were all released between June and July 2023, with a total view count exceeding 1.3 million.
-   ![](./nixos-youtube-videos.webp)
+     ![](./nixos-youtube-videos.webp)
    - Interest in China peaked recently, which may be because the user base in China has always been small. Then in June, I released [NixOS and Flakes - An Unofficial Beginner's Guide](https://nixos-and-flakes.thiscute.world/zh/), and I did some promotion through channels like [Technology Lover's Weekly](https://github.com/ruanyf/weekly/issues/3315), leading to a significant increase in the relative index of NixOS.
 1. In January 2024
    - I'm not sure of the reason for this yet.
@@ -270,6 +267,4 @@ From deciding to dive into NixOS to now, just 10 months later, the gains I've ma
 
 These few points alone are enough to justify the choice, welcome to the world of NixOS!
 
-
 [The Purely Functional Software Deployment Model]: https://edolstra.github.io/pubs/phd-thesis.pdf
-
