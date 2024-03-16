@@ -66,7 +66,7 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span><span class=lnt>28
 </span><span class=lnt>29
 </span><span class=lnt>30
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>             
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>+----------------------------------------------------------------------+
 </span></span><span class=line><span class=cl>|                                                                      |
 </span></span><span class=line><span class=cl>|  +--------------------+      +--------------------+                  |
@@ -242,7 +242,7 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>&gt; gcc mytun.c -o mytun
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl># 创建并监听 tun 设备需要 root 权限
-</span></span><span class=line><span class=cl>&gt; sudo mytun 
+</span></span><span class=line><span class=cl>&gt; sudo mytun
 </span></span><span class=line><span class=cl>Open tun/tap device: tun0 for reading...
 </span></span></code></pre></td></tr></table></div></div><p>现在使用 iproute2 查看下链路层设备：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -286,10 +286,10 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>    link/ether c0:3c:59:36:a4:16 brd ff:ff:ff:ff:ff:ff
 </span></span><span class=line><span class=cl>    inet 192.168.31.228/24 brd 192.168.31.255 scope global dynamic noprefixroute wlp4s0
 </span></span><span class=line><span class=cl>       valid_lft 41010sec preferred_lft 41010sec
-</span></span><span class=line><span class=cl>    inet6 fe80::4ab0:130f:423b:5d37/64 scope link noprefixroute 
+</span></span><span class=line><span class=cl>    inet6 fe80::4ab0:130f:423b:5d37/64 scope link noprefixroute
 </span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
 </span></span><span class=line><span class=cl>7: tun0: &lt;POINTOPOINT,MULTICAST,NOARP&gt; mtu 1500 qdisc noop state DOWN group default qlen 500
-</span></span><span class=line><span class=cl>    link/none 
+</span></span><span class=line><span class=cl>    link/none
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl># 为 tun0 设置 ip 地址，注意不要和其他接口在同一网段，会导致路由冲突
 </span></span><span class=line><span class=cl>&gt; sudo ip addr add 172.21.22.23/24 dev tun0
@@ -297,19 +297,19 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>&gt; sudo ip link set tun0 up
 </span></span><span class=line><span class=cl>#确认上一步添加的路由策略是否存在
 </span></span><span class=line><span class=cl>❯ ip route ls
-</span></span><span class=line><span class=cl>default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600 
-</span></span><span class=line><span class=cl>172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
-</span></span><span class=line><span class=cl>172.21.22.0/24 dev tun0 proto kernel scope link src 172.21.22.23 
-</span></span><span class=line><span class=cl>192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600 
+</span></span><span class=line><span class=cl>default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
+</span></span><span class=line><span class=cl>172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
+</span></span><span class=line><span class=cl>172.21.22.0/24 dev tun0 proto kernel scope link src 172.21.22.23
+</span></span><span class=line><span class=cl>192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl># 此时再查看接口，发现 tun0 状态为 unknown
 </span></span><span class=line><span class=cl>&gt; ip addr ls
 </span></span><span class=line><span class=cl>......
 </span></span><span class=line><span class=cl>8: tun0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UNKNOWN group default qlen 500
-</span></span><span class=line><span class=cl>    link/none 
+</span></span><span class=line><span class=cl>    link/none
 </span></span><span class=line><span class=cl>    inet 172.21.22.23/24 scope global tun0
 </span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
-</span></span><span class=line><span class=cl>    inet6 fe80::3d52:49b5:1cf3:38fd/64 scope link stable-privacy 
+</span></span><span class=line><span class=cl>    inet6 fe80::3d52:49b5:1cf3:38fd/64 scope link stable-privacy
 </span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl># 使用 tcpdump 尝试抓下 tun0 的数据，会阻塞在这里，等待数据到达
@@ -377,8 +377,8 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>00:22:06.677341 IP (tos 0x0, ttl 64, id 37667, offset 0, flags [DF], proto ICMP (1), length 84)
 </span></span><span class=line><span class=cl>    172.21.22.23 &gt; 172.21.22.26: ICMP echo request, id 11, seq 4, length 64
 </span></span></code></pre></td></tr></table></div></div><p>更复杂的 tun 程序，可以参考</p><ul><li><a href=https://github.com/gregnietsky/simpletun target=_blank rel="noopener noreferrer">simpletun</a></li><li><a href=https://github.com/marywangran/simpletun target=_blank rel="noopener noreferrer">marywangran/simpletun</a></li><li><a href=https://github.com/marywangran/gotun-tunnel/blob/main/tun/tun.go target=_blank rel="noopener noreferrer">tun go 语言版</a></li></ul><h3 id=tun-与-tap-的区别 class=headerLink><a href=#tun-%e4%b8%8e-tap-%e7%9a%84%e5%8c%ba%e5%88%ab class=header-mark></a>TUN 与 TAP 的区别</h3><p>TUN 和 TAP 的区别在于工作的网络层次不同，用户程序通过 TUN 设备只能读写网络层的 IP 数据包，而 TAP 设备则支持读写链路层的数据包（通常是以太网数据包，带有 Ethernet headers）。</p><p>TUN 与 TAP 的关系，就类似于 socket 和 raw socket.</p><p>TUN/TAP 应用最多的场景是 VPN 代理，比如:</p><ol><li><a href=https://github.com/ryan4yin/clash target=_blank rel="noopener noreferrer">clash</a>: 一个支持各种规则的隧道，也支持 TUN 模式</li><li><a href=https://github.com/xjasonlyu/tun2socks/wiki target=_blank rel="noopener noreferrer">tun2socks</a>: 一个全局透明代理，和 VPN 的工作模式一样，它通过创建虚拟网卡+修改路由表，在第三层网络层代理系统流量。</li></ol><h2 id=二veth class=headerLink><a href=#%e4%ba%8cveth class=header-mark></a>二、veth</h2><p>veth 接口总是成对出现，一对 veth 接口就类似一根网线，从一端进来的数据会从另一端出去。</p><p>同时 veth 又是一个虚拟网络接口，因此它和 TUN/TAP 或者其他物理网络接口一样，也都能配置 mac/ip 地址（但是并不是一定得配 mac/ip 地址）。</p><p>其主要作用就是连接不同的网络，比如在容器网络中，用于将容器的 namespace 与 root namespace 的网桥 br0 相连。
-容器网络中，容器侧的 veth 自身设置了 ip/mac 地址并被重命名为 eth0，作为容器的网络接口使用，而主机侧的 veth 则直接连接在 docker0/br0 上面。</p><p>使用 veth 实现容器网络，需要结合下一小节介绍的 bridge，在下一小节将给出容器网络结构图。</p><h2 id=三bridge class=headerLink><a href=#%e4%b8%89bridge class=header-mark></a>三、bridge</h2><p>Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 <code>brige</code> 提供，它负责在所有连接到它的接口之间转发链路层数据包。</p><p>添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。
-在 Bridge 中会进行一个类似物理交换机的查MAC端口映射表、转发、更新MAC端口映射表这样的处理逻辑，从而数据包可以被转发到另一个接口/丢弃/广播/发往上层协议栈，由此 Bridge 实现了数据转发的功能。</p><p>如果使用 tcpdump 在 Bridge 接口上抓包，可以抓到网桥上所有接口进出的包，因为这些数据包都要通过网桥进行转发。</p><p>与物理交换机不同的是，Bridge 本身可以设置 IP 地址，可以认为当使用 <code>brctl addbr br0</code> 新建一个 br0 网桥时，系统自动创建了一个同名的隐藏 <code>br0</code> 网络接口。<code>br0</code> 一旦设置 IP 地址，就意味着这个隐藏的 br0 接口可以作为路由接口设备，参与 IP 层的路由选择(可以使用 <code>route -n</code> 查看最后一列 <code>Iface</code>)。因此只有当 <code>br0</code> 设置 <code>IP</code> 地址时，Bridge 才有可能将数据包发往上层协议栈。</p><p>但被添加到 Bridge 上的网卡是不能配置 IP 地址的，他们工作在数据链路层，对路由系统不可见。</p><p>它常被用于在虚拟机、主机上不同的 namepsaces 之间转发数据。</p><h3 id=虚拟机场景桥接模式 class=headerLink><a href=#%e8%99%9a%e6%8b%9f%e6%9c%ba%e5%9c%ba%e6%99%af%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f class=header-mark></a>虚拟机场景（桥接模式）</h3><p>以 qemu-kvm 为例，在虚拟机的桥接模式下，qemu-kvm 会为每个虚拟机创建一个 tun/tap 虚拟网卡并连接到 br0 网桥。
+容器网络中，容器侧的 veth 自身设置了 ip/mac 地址并被重命名为 eth0，作为容器的网络接口使用，而主机侧的 veth 则直接连接在 docker0/br0 上面。</p><p>使用 veth 实现容器网络，需要结合下一小节介绍的 bridge，在下一小节将给出容器网络结构图。</p><h2 id=三bridge class=headerLink><a href=#%e4%b8%89bridge class=header-mark></a>三、bridge</h2><p>Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 <code>bridge</code> 提供，它负责在所有连接到它的接口之间转发链路层数据包。</p><p>添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。
+在 Bridge 中会进行一个类似物理交换机的查MAC端口映射表、转发、更新MAC端口映射表这样的处理逻辑，从而数据包可以被转发到另一个接口/丢弃/广播/发往上层协议栈，由此 Bridge 实现了数据转发的功能。</p><p>如果使用 tcpdump 在 Bridge 接口上抓包，可以抓到网桥上所有接口进出的包，因为这些数据包都要通过网桥进行转发。</p><p>与物理交换机不同的是，Bridge 本身可以设置 IP 地址，可以认为当使用 <code>brctl addbr br0</code> 新建一个 br0 网桥时，系统自动创建了一个同名的隐藏 <code>br0</code> 网络接口。<code>br0</code> 一旦设置 IP 地址，就意味着这个隐藏的 br0 接口可以作为路由接口设备，参与 IP 层的路由选择(可以使用 <code>route -n</code> 查看最后一列 <code>Iface</code>)。因此只有当 <code>br0</code> 设置 <code>IP</code> 地址时，Bridge 才有可能将数据包发往上层协议栈。</p><p>但被添加到 Bridge 上的网卡是不能配置 IP 地址的，他们工作在数据链路层，对路由系统不可见。</p><p>它常被用于在虚拟机、主机上不同的 namespaces 之间转发数据。</p><h3 id=虚拟机场景桥接模式 class=headerLink><a href=#%e8%99%9a%e6%8b%9f%e6%9c%ba%e5%9c%ba%e6%99%af%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f class=header-mark></a>虚拟机场景（桥接模式）</h3><p>以 qemu-kvm 为例，在虚拟机的桥接模式下，qemu-kvm 会为每个虚拟机创建一个 tun/tap 虚拟网卡并连接到 br0 网桥。
 虚拟机内部的网络接口 <code>eth0</code> 是 qemu-kvm 软件模拟的，实际上虚拟机内网络数据的收发都会被 qemu-kvm 转换成对 <code>/dev/net/tun</code> 的读写。</p><p>以发送数据为例，整个流程如下：</p><ul><li>虚拟机发出去的数据包先到达 qemu-kvm 程序</li><li>数据被用户层程序 qemu-kvm 写入到 <code>/dev/net/tun</code>，到达 tap 设备</li><li>tap 设备把数据传送到 br0 网桥</li><li>br0 把数据交给 eth0 发送出去</li></ul><p>整个流程跑完，数据包都不需要经过宿主机的协议栈，效率高。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -501,12 +501,12 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>❯ docker run -it --rm debian:buster bash
 </span></span><span class=line><span class=cl>root@5facbe4ddc1e:/# ip --details addr ls
 </span></span><span class=line><span class=cl>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class=m>65536</span> qdisc noqueue state UNKNOWN group default qlen <span class=m>1000</span>
-</span></span><span class=line><span class=cl>    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity <span class=m>0</span> minmtu <span class=m>0</span> maxmtu <span class=m>0</span> numtxqueues <span class=m>1</span> numrxqueues <span class=m>1</span> gso_max_size <span class=m>65536</span> gso_max_segs <span class=m>65535</span> 
+</span></span><span class=line><span class=cl>    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity <span class=m>0</span> minmtu <span class=m>0</span> maxmtu <span class=m>0</span> numtxqueues <span class=m>1</span> numrxqueues <span class=m>1</span> gso_max_size <span class=m>65536</span> gso_max_segs <span class=m>65535</span>
 </span></span><span class=line><span class=cl>    inet 127.0.0.1/8 scope host lo
 </span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
-</span></span><span class=line><span class=cl>20: eth0@if21: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class=m>1500</span> qdisc noqueue state UP group default 
-</span></span><span class=line><span class=cl>    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid <span class=m>0</span> promiscuity <span class=m>0</span> minmtu <span class=m>68</span> maxmtu <span class=m>65535</span> 
-</span></span><span class=line><span class=cl>    veth numtxqueues <span class=m>1</span> numrxqueues <span class=m>1</span> gso_max_size <span class=m>65536</span> gso_max_segs <span class=m>65535</span> 
+</span></span><span class=line><span class=cl>20: eth0@if21: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class=m>1500</span> qdisc noqueue state UP group default
+</span></span><span class=line><span class=cl>    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid <span class=m>0</span> promiscuity <span class=m>0</span> minmtu <span class=m>68</span> maxmtu <span class=m>65535</span>
+</span></span><span class=line><span class=cl>    veth numtxqueues <span class=m>1</span> numrxqueues <span class=m>1</span> gso_max_size <span class=m>65536</span> gso_max_segs <span class=m>65535</span>
 </span></span><span class=line><span class=cl>    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
 </span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
 </span></span></code></pre></td></tr></table></div></div><p>同时在宿主机中能看到对应的 veth 设备是绑定到了 docker0 网桥的：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
@@ -515,8 +515,7 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>❯ sudo brctl show
 </span></span><span class=line><span class=cl>bridge name     bridge id               STP enabled     interfaces
 </span></span><span class=line><span class=cl>docker0         8000.0242fce99ef5       no              vethea4171a
-</span></span></code></pre></td></tr></table></div></div><h2 id=四macvlan class=headerLink><a href=#%e5%9b%9bmacvlan class=header-mark></a>四、macvlan</h2><blockquote><p>目前 docker/podman 都支持创建基于 macvlan 的 Linux 容器网络。</p></blockquote><blockquote><p>注意 macvlan 和 WiFi 存在兼容问题，如果使用笔记本测试，可能会遇到麻烦。</p></blockquote><blockquote><p>参考文档：<a href=https://cizixs.com/2017/02/14/network-virtualization-macvlan/ target=_blank rel="noopener noreferrer">linux 网络虚拟化： macvlan</a></p></blockquote><p>macvlan 是比较新的 Linux 特性，需要内核版本 >= 3.9，它被用于在主机的网络接口（父接口）上配置多个虚拟子接口，这些子接口都拥有各自独立的 mac 地址，也可以配上 ip 地址进行通讯。</p><p>macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享同一个广播域。macvlan 和 bridge 比较相似，但因为它省去了 bridge 的存在，所以配置和调试起来比较简单，而且效率也相对高。除此之外，macvlan 自身也完美支持 VLAN。</p><p>如果希望容器或者虚拟机放在主机相同的网络中，享受已经存在网络栈的各种优势，可以考虑 macvlan。</p><p>我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了&mldr;</p><h2 id=五ipvlan class=headerLink><a href=#%e4%ba%94ipvlan class=header-mark></a>五、ipvlan</h2><blockquote><p><a href=https://cizixs.com/2017/02/17/network-virtualization-ipvlan/ target=_blank rel="noopener noreferrer">linux 网络虚拟化： ipvlan</a></p></blockquote><blockquote><p>cilium 1.9 已经提供了基于 ipvlan 的网络（beta 特性），用于替换传统的 veth+bridge 容器网络。详见 <a href=https://docs.cilium.io/en/v1.9/gettingstarted/ipvlan/ target=_blank rel="noopener noreferrer">IPVLAN based Networking (beta) - Cilium 1.9 Docs</a></p></blockquote><p>ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（父接口）上配置出多个虚拟的子接口。但不同的是，ipvlan 的各子接口没有独立的 mac 地址，它们和主机的父接口共享 mac 地址。</p><blockquote><p>因为 mac 地址共享，所以如果使用 DHCP，就要注意不能使用 mac 地址做 DHCP，需要额外配置唯一的 clientID.</p></blockquote><p>如果你遇到以下的情况，请考虑使用 ipvlan：</p><ul><li>父接口对 mac 地址数目有限制，或者在 mac 地址过多的情况下会造成严重的性能损失</li><li>工作在 802.11(wireless)无线网络中（macvlan 无法和无线网络共同工作）</li><li>希望搭建比较复杂的网络拓扑（不是简单的二层网络和 VLAN），比如要和 BGP 网络一起工作</li></ul><p>基于 ipvlan/macvlan 的容器网络，比 veth+bridge+iptables 的性能要更高。</p><p>我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了&mldr;</p><h2 id=六vlan class=headerLink><a href=#%e5%85%advlan class=header-mark></a>六、vlan</h2><p>vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性问题。被隔离的广播域之间需要上升到第三层才能完成通讯。</p><p>常用的企业路由器如 ER-X 基本都可以设置 vlan，Linux 也直接支持了 vlan.</p><p>以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。</p><h2 id=vxlan-geneve class=headerLink><a href=#vxlan-geneve class=header-mark></a>七、vxlan/geneve</h2><blockquote><p><a href=https://datatracker.ietf.org/doc/html/rfc8926 target=_blank rel="noopener noreferrer">rfc8926 - Geneve: Generic Network Virtualization Encapsulation</a>
-<a href=https://datatracker.ietf.org/doc/html/rfc7348 target=_blank rel="noopener noreferrer">rfc7348 - Virtual eXtensible Local Area Network (VXLAN)</a></p></blockquote><blockquote><p><a href=https://cizixs.com/2017/09/28/linux-vxlan/ target=_blank rel="noopener noreferrer">linux 上实现 vxlan 网络</a></p></blockquote><p>在介绍 vxlan 前，先说明下两个名词的含义：</p><ul><li><strong>underlay 网络</strong>：即物理网络</li><li><strong>overlay 网络</strong>：指在现有的物理网络之上构建的虚拟网络。其实就是一种隧道技术，将原生态的二层数据帧报文进行封装后通过隧道进行传输。</li></ul><p>vxlan 与 geneve 都是 overlay 网络协议，它俩都是使用 UDP 包来封装链路层的以太网帧。</p><p>vxlan 在 2014 年标准化，而 geneve 在 2020 年底才通过草案阶段，目前尚未形成最终标准。但是目前 linux/cilium 都已经支持了 geneve.</p><p>geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度是可变的。</p><p>目前所有 overlay 的跨主机容器网络方案，几乎都是基于 vxlan 实现的（例外：cilium 也支持 geneve）。</p><blockquote><p>我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如 flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。</p></blockquote><p>先介绍下 vxlan 的数据包结构：</p><figure><img src=/images/linux-virtual-interfaces/vxlan-frame.webp><figcaption><h4>VXLAN 栈帧结构</h4></figcaption></figure><p>在创建 vxlan 的 vtep 虚拟设备时，我们需要手动设置图中的如下属性：</p><ul><li>VXLAN 目标端口：即接收方 vtep 使用的端口，这里 IANA 定义的端口是 4789，但是只有 calico 的 vxlan 模式默认使用该端口 calico，而 cilium/flannel 的默认端口都是 Linux 默认的 8472.</li><li>VNID: 每个 VXLAN 网络接口都会被分配一个独立的 VNID</li></ul><p>一个点对点的 vxlan 网络架构图如下:</p><figure><img src=/images/linux-virtual-interfaces/vxlan-architecture.gif><figcaption><h4>VXLAN 点对点网络架构</h4></figcaption></figure><p>可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。</p><p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个<strong>点对点的 VXLAN 隧道</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h2 id=四macvlan class=headerLink><a href=#%e5%9b%9bmacvlan class=header-mark></a>四、macvlan</h2><blockquote><p>目前 docker/podman 都支持创建基于 macvlan 的 Linux 容器网络。</p></blockquote><blockquote><p>注意 macvlan 和 WiFi 存在兼容问题，如果使用笔记本测试，可能会遇到麻烦。</p></blockquote><blockquote><p>参考文档：<a href=https://cizixs.com/2017/02/14/network-virtualization-macvlan/ target=_blank rel="noopener noreferrer">linux 网络虚拟化： macvlan</a></p></blockquote><p>macvlan 是比较新的 Linux 特性，需要内核版本 >= 3.9，它被用于在主机的网络接口（父接口）上配置多个虚拟子接口，这些子接口都拥有各自独立的 mac 地址，也可以配上 ip 地址进行通讯。</p><p>macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享同一个广播域。macvlan 和 bridge 比较相似，但因为它省去了 bridge 的存在，所以配置和调试起来比较简单，而且效率也相对高。除此之外，macvlan 自身也完美支持 VLAN。</p><p>如果希望容器或者虚拟机放在主机相同的网络中，享受已经存在网络栈的各种优势，可以考虑 macvlan。</p><p>我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了&mldr;</p><h2 id=五ipvlan class=headerLink><a href=#%e4%ba%94ipvlan class=header-mark></a>五、ipvlan</h2><blockquote><p><a href=https://cizixs.com/2017/02/17/network-virtualization-ipvlan/ target=_blank rel="noopener noreferrer">linux 网络虚拟化： ipvlan</a></p></blockquote><blockquote><p>cilium 1.9 已经提供了基于 ipvlan 的网络（beta 特性），用于替换传统的 veth+bridge 容器网络。详见 <a href=https://docs.cilium.io/en/v1.9/gettingstarted/ipvlan/ target=_blank rel="noopener noreferrer">IPVLAN based Networking (beta) - Cilium 1.9 Docs</a></p></blockquote><p>ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（父接口）上配置出多个虚拟的子接口。但不同的是，ipvlan 的各子接口没有独立的 mac 地址，它们和主机的父接口共享 mac 地址。</p><blockquote><p>因为 mac 地址共享，所以如果使用 DHCP，就要注意不能使用 mac 地址做 DHCP，需要额外配置唯一的 clientID.</p></blockquote><p>如果你遇到以下的情况，请考虑使用 ipvlan：</p><ul><li>父接口对 mac 地址数目有限制，或者在 mac 地址过多的情况下会造成严重的性能损失</li><li>工作在 802.11(wireless)无线网络中（macvlan 无法和无线网络共同工作）</li><li>希望搭建比较复杂的网络拓扑（不是简单的二层网络和 VLAN），比如要和 BGP 网络一起工作</li></ul><p>基于 ipvlan/macvlan 的容器网络，比 veth+bridge+iptables 的性能要更高。</p><p>我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了&mldr;</p><h2 id=六vlan class=headerLink><a href=#%e5%85%advlan class=header-mark></a>六、vlan</h2><p>vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性问题。被隔离的广播域之间需要上升到第三层才能完成通讯。</p><p>常用的企业路由器如 ER-X 基本都可以设置 vlan，Linux 也直接支持了 vlan.</p><p>以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。</p><h2 id=vxlan-geneve class=headerLink><a href=#vxlan-geneve class=header-mark></a>七、vxlan/geneve</h2><blockquote><p><a href=https://datatracker.ietf.org/doc/html/rfc8926 target=_blank rel="noopener noreferrer">rfc8926 - Geneve: Generic Network Virtualization Encapsulation</a> ><a href=https://datatracker.ietf.org/doc/html/rfc7348 target=_blank rel="noopener noreferrer">rfc7348 - Virtual eXtensible Local Area Network (VXLAN)</a></p></blockquote><blockquote><p><a href=https://cizixs.com/2017/09/28/linux-vxlan/ target=_blank rel="noopener noreferrer">linux 上实现 vxlan 网络</a></p></blockquote><p>在介绍 vxlan 前，先说明下两个名词的含义：</p><ul><li><strong>underlay 网络</strong>：即物理网络</li><li><strong>overlay 网络</strong>：指在现有的物理网络之上构建的虚拟网络。其实就是一种隧道技术，将原生态的二层数据帧报文进行封装后通过隧道进行传输。</li></ul><p>vxlan 与 geneve 都是 overlay 网络协议，它俩都是使用 UDP 包来封装链路层的以太网帧。</p><p>vxlan 在 2014 年标准化，而 geneve 在 2020 年底才通过草案阶段，目前尚未形成最终标准。但是目前 linux/cilium 都已经支持了 geneve.</p><p>geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度是可变的。</p><p>目前所有 overlay 的跨主机容器网络方案，几乎都是基于 vxlan 实现的（例外：cilium 也支持 geneve）。</p><blockquote><p>我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如 flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。</p></blockquote><p>先介绍下 vxlan 的数据包结构：</p><figure><img src=/images/linux-virtual-interfaces/vxlan-frame.webp><figcaption><h4>VXLAN 栈帧结构</h4></figcaption></figure><p>在创建 vxlan 的 vtep 虚拟设备时，我们需要手动设置图中的如下属性：</p><ul><li>VXLAN 目标端口：即接收方 vtep 使用的端口，这里 IANA 定义的端口是 4789，但是只有 calico 的 vxlan 模式默认使用该端口 calico，而 cilium/flannel 的默认端口都是 Linux 默认的 8472.</li><li>VNID: 每个 VXLAN 网络接口都会被分配一个独立的 VNID</li></ul><p>一个点对点的 vxlan 网络架构图如下:</p><figure><img src=/images/linux-virtual-interfaces/vxlan-architecture.gif><figcaption><h4>VXLAN 点对点网络架构</h4></figcaption></figure><p>可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。</p><p>有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个<strong>点对点的 VXLAN 隧道</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -586,7 +585,7 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span></span><span class=line><span class=cl><span class=se></span>    id <span class=m>42</span> <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>    dstport <span class=m>4789</span> <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>    group 239.1.1.1 <span class=se>\
-</span></span></span><span class=line><span class=cl><span class=se></span>    dev enp0s8 
+</span></span></span><span class=line><span class=cl><span class=se></span>    dev enp0s8
 </span></span><span class=line><span class=cl>ip addr add 10.20.1.2/24 dev vxlan0
 </span></span><span class=line><span class=cl>ip link <span class=nb>set</span> vxlan0 up
 </span></span></code></pre></td></tr></table></div></div><p>可以看到，只需要简单地把 local_ip/remote_ip 替换成一个组播地址就行。组播功能会将收到的数据包发送给组里的所有 vtep 接口，但是只有 VNID 能对上的 vtep 会处理该报文，其他 vtep 会直接丢弃数据。</p><p>接下来，为了能让所有的虚拟机/容器，都通过 vtep 通信，我们再添加一个 bridge 网络，充当 vtep 与容器间的交换机。架构如下：</p><figure><img src=/images/linux-virtual-interfaces/linux-vxlan-with-bridge.webp><figcaption><h4>VXLAN 多播网络架构</h4></figcaption></figure><p>使用 ip 命令创建网桥、网络名字空间、veth pairs 组成上图中的容器网络：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
@@ -679,7 +678,7 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span><span class=lnt>18
 </span><span class=lnt>19
 </span><span class=lnt>20
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>❯ cat /etc/os-release 
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>❯ cat /etc/os-release
 </span></span><span class=line><span class=cl>NAME=&#34;openSUSE Tumbleweed&#34;
 </span></span><span class=line><span class=cl># VERSION=&#34;20210810&#34;
 </span></span><span class=line><span class=cl>...
@@ -771,16 +770,16 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>Connecting to host 127.0.0.1, port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span> <span class=nb>local</span> 127.0.0.1 port <span class=m>48656</span> connected to 127.0.0.1 port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr  Cwnd
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.46 GBytes  38.3 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  4.61 GBytes  39.6 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  5.69 GBytes  48.9 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.11 GBytes  52.5 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.04 GBytes  51.9 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  6.01 GBytes  51.6 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.34 GBytes  54.5 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.91 GBytes  50.8 Gbits/sec    <span class=m>0</span>   1.62 MBytes       
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.46 GBytes  38.3 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  4.61 GBytes  39.6 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  5.69 GBytes  48.9 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.11 GBytes  52.5 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.04 GBytes  51.9 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  6.01 GBytes  51.6 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.34 GBytes  54.5 Gbits/sec    <span class=m>0</span>   1.62 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.91 GBytes  50.8 Gbits/sec    <span class=m>0</span>   1.62 MBytes
 </span></span><span class=line><span class=cl>- - - - - - - - - - - - - - - - - - - - - - - - -
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-10.00  sec  57.3 GBytes  49.2 Gbits/sec    <span class=m>0</span>             sender
@@ -791,16 +790,16 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>Connecting to host 192.168.31.228, port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span> <span class=nb>local</span> 192.168.31.228 port <span class=m>43430</span> connected to 192.168.31.228 port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr  Cwnd
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  5.12 GBytes  43.9 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  5.29 GBytes  45.5 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  5.92 GBytes  50.9 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.00 GBytes  51.5 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  5.98 GBytes  51.4 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  6.16 GBytes  52.9 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.08 GBytes  52.2 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.00 GBytes  51.6 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  6.01 GBytes  51.6 Gbits/sec    <span class=m>0</span>   1.25 MBytes       
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  5.12 GBytes  43.9 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  5.29 GBytes  45.5 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  5.92 GBytes  50.9 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.00 GBytes  51.5 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  5.98 GBytes  51.4 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  6.16 GBytes  52.9 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.08 GBytes  52.2 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.00 GBytes  51.6 Gbits/sec    <span class=m>0</span>   1.25 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  6.01 GBytes  51.6 Gbits/sec    <span class=m>0</span>   1.25 MBytes
 </span></span><span class=line><span class=cl>- - - - - - - - - - - - - - - - - - - - - - - - -
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-10.00  sec  58.6 GBytes  50.3 Gbits/sec    <span class=m>0</span>             sender
@@ -811,16 +810,16 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>Connecting to host 192.168.31.228, port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span> <span class=nb>local</span> 172.17.0.2 port <span class=m>43436</span> connected to 192.168.31.228 port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr  Cwnd
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.49 GBytes  38.5 Gbits/sec    <span class=m>0</span>    <span class=m>403</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  5.31 GBytes  45.6 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  6.14 GBytes  52.8 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  5.85 GBytes  50.3 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.14 GBytes  52.7 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  5.99 GBytes  51.5 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  5.86 GBytes  50.4 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  5.99 GBytes  51.5 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  6.12 GBytes  52.5 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes       
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.49 GBytes  38.5 Gbits/sec    <span class=m>0</span>    <span class=m>403</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  5.31 GBytes  45.6 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  6.14 GBytes  52.8 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  5.85 GBytes  50.3 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.14 GBytes  52.7 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  5.99 GBytes  51.5 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  5.86 GBytes  50.4 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  5.99 GBytes  51.5 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  6.12 GBytes  52.5 Gbits/sec    <span class=m>0</span>    <span class=m>544</span> KBytes
 </span></span><span class=line><span class=cl>- - - - - - - - - - - - - - - - - - - - - - - - -
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-10.00  sec  58.0 GBytes  49.8 Gbits/sec    <span class=m>0</span>             sender
@@ -922,16 +921,16 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>Connecting to host 172.17.0.2, port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span> <span class=nb>local</span> 172.17.0.3 port <span class=m>40776</span> connected to 172.17.0.2 port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr  Cwnd
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.74 GBytes  40.7 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  4.48 GBytes  38.5 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  5.38 GBytes  46.2 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  5.39 GBytes  46.3 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  5.42 GBytes  46.6 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  5.39 GBytes  46.3 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  5.38 GBytes  46.2 Gbits/sec    <span class=m>0</span>    <span class=m>635</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  5.37 GBytes  46.1 Gbits/sec    <span class=m>0</span>    <span class=m>667</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.01 GBytes  51.7 Gbits/sec    <span class=m>0</span>    <span class=m>735</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.74 GBytes  49.3 Gbits/sec    <span class=m>0</span>    <span class=m>735</span> KBytes       
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.74 GBytes  40.7 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  4.48 GBytes  38.5 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  5.38 GBytes  46.2 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  5.39 GBytes  46.3 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  5.42 GBytes  46.6 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  5.39 GBytes  46.3 Gbits/sec    <span class=m>0</span>    <span class=m>600</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  5.38 GBytes  46.2 Gbits/sec    <span class=m>0</span>    <span class=m>635</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  5.37 GBytes  46.1 Gbits/sec    <span class=m>0</span>    <span class=m>667</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.01 GBytes  51.7 Gbits/sec    <span class=m>0</span>    <span class=m>735</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.74 GBytes  49.3 Gbits/sec    <span class=m>0</span>    <span class=m>735</span> KBytes
 </span></span><span class=line><span class=cl>- - - - - - - - - - - - - - - - - - - - - - - - -
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-10.00  sec  53.3 GBytes  45.8 Gbits/sec    <span class=m>0</span>             sender
@@ -942,16 +941,16 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>Connecting to host 172.17.0.2, port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span> <span class=nb>local</span> 172.17.0.1 port <span class=m>56486</span> connected to 172.17.0.2 port <span class=m>5201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr  Cwnd
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  5.01 GBytes  43.0 Gbits/sec    <span class=m>0</span>    <span class=m>632</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  5.19 GBytes  44.6 Gbits/sec    <span class=m>0</span>    <span class=m>703</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  6.46 GBytes  55.5 Gbits/sec    <span class=m>0</span>    <span class=m>789</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.80 GBytes  58.4 Gbits/sec    <span class=m>0</span>    <span class=m>789</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.82 GBytes  58.6 Gbits/sec    <span class=m>0</span>    <span class=m>913</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  6.79 GBytes  58.3 Gbits/sec    <span class=m>0</span>   <span class=m>1007</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  6.63 GBytes  56.9 Gbits/sec    <span class=m>0</span>   1.04 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.75 GBytes  58.0 Gbits/sec    <span class=m>0</span>   1.04 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.19 GBytes  53.2 Gbits/sec    <span class=m>0</span>   1.04 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  6.55 GBytes  56.3 Gbits/sec    <span class=m>0</span>   1.04 MBytes       
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  5.01 GBytes  43.0 Gbits/sec    <span class=m>0</span>    <span class=m>632</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  5.19 GBytes  44.6 Gbits/sec    <span class=m>0</span>    <span class=m>703</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  6.46 GBytes  55.5 Gbits/sec    <span class=m>0</span>    <span class=m>789</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.80 GBytes  58.4 Gbits/sec    <span class=m>0</span>    <span class=m>789</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.82 GBytes  58.6 Gbits/sec    <span class=m>0</span>    <span class=m>913</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  6.79 GBytes  58.3 Gbits/sec    <span class=m>0</span>   <span class=m>1007</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  6.63 GBytes  56.9 Gbits/sec    <span class=m>0</span>   1.04 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  6.75 GBytes  58.0 Gbits/sec    <span class=m>0</span>   1.04 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  6.19 GBytes  53.2 Gbits/sec    <span class=m>0</span>   1.04 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  6.55 GBytes  56.3 Gbits/sec    <span class=m>0</span>   1.04 MBytes
 </span></span><span class=line><span class=cl>- - - - - - - - - - - - - - - - - - - - - - - - -
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-10.00  sec  63.2 GBytes  54.3 Gbits/sec    <span class=m>0</span>             sender
@@ -963,16 +962,16 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>Connecting to host 127.0.0.1, port <span class=m>6201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span> <span class=nb>local</span> 127.0.0.1 port <span class=m>48862</span> connected to 127.0.0.1 port <span class=m>6201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr  Cwnd
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  2.71 GBytes  23.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  3.64 GBytes  31.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  4.08 GBytes  35.0 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  3.49 GBytes  30.0 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  5.50 GBytes  47.2 Gbits/sec    <span class=m>2</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  4.06 GBytes  34.9 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  4.12 GBytes  35.4 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  3.99 GBytes  34.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  3.49 GBytes  30.0 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.51 GBytes  47.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes       
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  2.71 GBytes  23.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  3.64 GBytes  31.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  4.08 GBytes  35.0 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  3.49 GBytes  30.0 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  5.50 GBytes  47.2 Gbits/sec    <span class=m>2</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  4.06 GBytes  34.9 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  4.12 GBytes  35.4 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  3.99 GBytes  34.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  3.49 GBytes  30.0 Gbits/sec    <span class=m>0</span>   1.37 MBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.51 GBytes  47.3 Gbits/sec    <span class=m>0</span>   1.37 MBytes
 </span></span><span class=line><span class=cl>- - - - - - - - - - - - - - - - - - - - - - - - -
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-10.00  sec  40.6 GBytes  34.9 Gbits/sec    <span class=m>2</span>             sender
@@ -983,16 +982,16 @@ Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设
 </span></span><span class=line><span class=cl>Connecting to host 192.168.31.228, port <span class=m>6201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span> <span class=nb>local</span> 192.168.31.228 port <span class=m>54582</span> connected to 192.168.31.228 port <span class=m>6201</span>
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr  Cwnd
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.34 GBytes  37.3 Gbits/sec    <span class=m>0</span>    <span class=m>795</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  4.78 GBytes  41.0 Gbits/sec    <span class=m>0</span>    <span class=m>834</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  6.26 GBytes  53.7 Gbits/sec    <span class=m>0</span>    <span class=m>834</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.30 GBytes  54.1 Gbits/sec    <span class=m>0</span>    <span class=m>875</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.26 GBytes  53.8 Gbits/sec    <span class=m>0</span>    <span class=m>875</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  5.75 GBytes  49.4 Gbits/sec    <span class=m>0</span>    <span class=m>875</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  5.49 GBytes  47.2 Gbits/sec    <span class=m>0</span>    <span class=m>966</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  5.72 GBytes  49.1 Gbits/sec    <span class=m>2</span>    <span class=m>966</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  4.81 GBytes  41.3 Gbits/sec    <span class=m>2</span>    <span class=m>966</span> KBytes       
-</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.98 GBytes  51.4 Gbits/sec    <span class=m>0</span>    <span class=m>966</span> KBytes       
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-1.00   sec  4.34 GBytes  37.3 Gbits/sec    <span class=m>0</span>    <span class=m>795</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   1.00-2.00   sec  4.78 GBytes  41.0 Gbits/sec    <span class=m>0</span>    <span class=m>834</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   2.00-3.00   sec  6.26 GBytes  53.7 Gbits/sec    <span class=m>0</span>    <span class=m>834</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   3.00-4.00   sec  6.30 GBytes  54.1 Gbits/sec    <span class=m>0</span>    <span class=m>875</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   4.00-5.00   sec  6.26 GBytes  53.8 Gbits/sec    <span class=m>0</span>    <span class=m>875</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   5.00-6.00   sec  5.75 GBytes  49.4 Gbits/sec    <span class=m>0</span>    <span class=m>875</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   6.00-7.00   sec  5.49 GBytes  47.2 Gbits/sec    <span class=m>0</span>    <span class=m>966</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   7.00-8.00   sec  5.72 GBytes  49.1 Gbits/sec    <span class=m>2</span>    <span class=m>966</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   8.00-9.00   sec  4.81 GBytes  41.3 Gbits/sec    <span class=m>2</span>    <span class=m>966</span> KBytes
+</span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   9.00-10.00  sec  5.98 GBytes  51.4 Gbits/sec    <span class=m>0</span>    <span class=m>966</span> KBytes
 </span></span><span class=line><span class=cl>- - - - - - - - - - - - - - - - - - - - - - - - -
 </span></span><span class=line><span class=cl><span class=o>[</span> ID<span class=o>]</span> Interval           Transfer     Bitrate         Retr
 </span></span><span class=line><span class=cl><span class=o>[</span>  5<span class=o>]</span>   0.00-10.00  sec  55.7 GBytes  47.8 Gbits/sec    <span class=m>4</span>             sender

@@ -31,7 +31,7 @@
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=k>def</span> <span class=nf>f</span><span class=p>():</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=k>yield</span> <span class=mi>1</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=k>yield</span> <span class=mi>2</span>
-</span></span><span class=line><span class=cl><span class=o>...</span> 
+</span></span><span class=line><span class=cl><span class=o>...</span>
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=n>f</span><span class=p>()</span>  <span class=c1># 返回的是 generator</span>
 </span></span><span class=line><span class=cl><span class=o>&lt;</span><span class=n>generator</span> <span class=nb>object</span> <span class=n>f</span> <span class=n>at</span> <span class=mh>0x7f672c460570</span><span class=o>&gt;</span>
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=n>g</span> <span class=o>=</span> <span class=n>f</span><span class=p>()</span>
@@ -59,7 +59,7 @@
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=k>def</span> <span class=nf>func</span><span class=p>():</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=n>r</span> <span class=o>=</span> <span class=k>yield</span> <span class=mi>1</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=k>yield</span> <span class=n>r</span>
-</span></span><span class=line><span class=cl><span class=o>...</span> 
+</span></span><span class=line><span class=cl><span class=o>...</span>
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=n>g</span> <span class=o>=</span> <span class=n>func</span><span class=p>()</span>
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=nb>next</span><span class=p>(</span><span class=n>g</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=mi>1</span>
@@ -80,7 +80,7 @@
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=k>yield from</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span>  <span class=c1># iterable</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=k>yield</span> <span class=mi>5</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=k>yield from</span> <span class=nb>range</span><span class=p>(</span><span class=mi>4</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>  <span class=c1># iterable</span>
-</span></span><span class=line><span class=cl><span class=o>...</span> 
+</span></span><span class=line><span class=cl><span class=o>...</span>
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=nb>list</span><span class=p>(</span><span class=n>f</span><span class=p>())</span>
 </span></span><span class=line><span class=cl><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>1</span><span class=p>]</span>
 </span></span></code></pre></td></tr></table></div></div><p>当然，<code>yield from &lt;iterable></code> 也是一个 expression，也有值。它的值就是 StopIteration 异常的第一个参数，内置类型的这个值都是 None.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
@@ -92,11 +92,11 @@
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=k>def</span> <span class=nf>f</span><span class=p>():</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=n>r</span> <span class=o>=</span> <span class=k>yield from</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>]</span>
 </span></span><span class=line><span class=cl><span class=o>...</span>     <span class=k>yield</span> <span class=sa>f</span><span class=s2>&#34;value of yield from is </span><span class=si>{</span><span class=n>r</span><span class=si>}</span><span class=s2>&#34;</span>
-</span></span><span class=line><span class=cl><span class=o>...</span> 
+</span></span><span class=line><span class=cl><span class=o>...</span>
 </span></span><span class=line><span class=cl><span class=o>&gt;&gt;&gt;</span> <span class=nb>list</span><span class=p>(</span><span class=n>f</span><span class=p>())</span>
 </span></span><span class=line><span class=cl><span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=s1>&#39;value of yield from is None&#39;</span><span class=p>]</span>
 </span></span></code></pre></td></tr></table></div></div><p>当 &lt;iterable> 是 generator 时，<code>yield from</code> 会直接将函数调用委托给这个子 generator，这里的调用包括了前面说过的 next、send、throw、close 四个函数。
-并直接将 sub generator yield 的值 yield 给 caller.</p><h3 id=3-yield-和-return-混用会发生什么 class=headerLink><a href=#3-yield-%e5%92%8c-return-%e6%b7%b7%e7%94%a8%e4%bc%9a%e5%8f%91%e7%94%9f%e4%bb%80%e4%b9%88 class=header-mark></a>3. yield 和 return 混用会发生什么？</h3><p>generator 中的 <code>return value</code>，语义上等同于 <code>rasie StopIteration(value)</code>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+并直接将 sub generator yield 的值 yield 给 caller.</p><h3 id=3-yield-和-return-混用会发生什么 class=headerLink><a href=#3-yield-%e5%92%8c-return-%e6%b7%b7%e7%94%a8%e4%bc%9a%e5%8f%91%e7%94%9f%e4%bb%80%e4%b9%88 class=header-mark></a>3. yield 和 return 混用会发生什么？</h3><p>generator 中的 <code>return value</code>，语义上等同于 <code>raise StopIteration(value)</code>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -116,7 +116,7 @@
 </span></span><span class=line><span class=cl>...     yield <span class=m>1</span>
 </span></span><span class=line><span class=cl>...     <span class=k>return</span> <span class=m>2</span>
 </span></span><span class=line><span class=cl>...     yield <span class=m>3</span>  <span class=c1># 永远不会被执行</span>
-</span></span><span class=line><span class=cl>... 
+</span></span><span class=line><span class=cl>...
 </span></span><span class=line><span class=cl>&gt;&gt;&gt; <span class=nv>g</span> <span class=o>=</span> f<span class=o>()</span>
 </span></span><span class=line><span class=cl>&gt;&gt;&gt; next<span class=o>(</span>g<span class=o>)</span>
 </span></span><span class=line><span class=cl><span class=m>1</span>
@@ -137,7 +137,7 @@
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>&gt;&gt;&gt; def f2<span class=o>()</span>:
 </span></span><span class=line><span class=cl>...     <span class=nv>a</span> <span class=o>=</span> yield from f<span class=o>()</span>
 </span></span><span class=line><span class=cl>...     yield a  <span class=c1># a 是 f() 中 return 的值</span>
-</span></span><span class=line><span class=cl>...     
+</span></span><span class=line><span class=cl>...
 </span></span><span class=line><span class=cl>&gt;&gt;&gt; list<span class=o>(</span>f2<span class=o>())</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>1, 2<span class=o>]</span>
 </span></span></code></pre></td></tr></table></div></div><blockquote><p><a href=https://www.python.org/dev/peps/pep-0479/#background-information target=_blank rel="noopener noreferrer">PEP 479 &ndash; Change StopIteration handling inside generators</a> 修改了StopIteration 的行为，该 PEP 使人为 raise 的 StopIteration 引发一个 RuntimeError。
