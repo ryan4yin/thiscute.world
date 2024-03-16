@@ -27,6 +27,7 @@ comment:
 
 - 又对 NixOS & Flakes Book 做了大量更新，主要是各种小问题的修复。
   - NixOS 群友建议使用 pre-commit-hooks 自动调用一些 spellchecker/markdown-formatter 等工具，试了下帮我解决了大量的格式问题与拼写错误，非常好用！已经把这个也抄到了我其他项目中。
+- 拿到了护照跟港澳通行证，要开始摇人一起去香港新加坡玩了～
 
 ### 2024-03-14
 
