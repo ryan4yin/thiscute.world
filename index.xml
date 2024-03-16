@@ -1,12 +1,36 @@
 <feed xmlns="http://www.w3.org/2005/Atom"><title>This Cute World</title><link href="https://thiscute.world/index.xml" rel="self"/><link href="https://thiscute.world/"/><updated>2024-02-21T16:26:21+08:00</updated><id>https://thiscute.world/</id><author><name>ryan4yin</name></author><generator>Hugo -- gohugo.io</generator><entry><title type="html">OS as Code - 我的 NixOS 使用体会</title><link href="https://thiscute.world/posts/my-experience-of-nixos/"/><id>https://thiscute.world/posts/my-experience-of-nixos/</id><author><name>ryan4yin</name></author><published>2024-02-21T16:26:21+08:00</published><updated>2024-02-21T16:26:21+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/my-experience-of-nixos/nixos-and-flakes-book-202402.webp" height="2614" width="1216"><figcaption></figcaption>
         </figure><blockquote>
-<p>本文最初发表于 <a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer">如何评价NixOS? - 知乎</a>，觉得比较有价值所以再搬运到我的博客。</p>
+<p>本文最初发表于 <a
+  href="https://www.zhihu.com/question/56543855/answer/3403111768"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>如何评价NixOS? - 知乎</a>
+，觉得比较有价值所以再搬运到我的博客。</p>
 </blockquote>
-<p>我 23 年 4 月开始用 NixOS 之前看过（<a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer">如何评价NixOS? - 知乎</a>） 这个问答，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。</p>
+<p>我 23 年 4 月开始用 NixOS 之前看过（<a
+  href="https://www.zhihu.com/question/56543855/answer/3403111768"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>如何评价NixOS? - 知乎</a>
+） 这个问答，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。</p>
 <p>现在是 2024 年 2 月，距离我入坑 NixOS 刚好 10 个月，我当初写的新手笔记已经获得了大量好评与不少的赞助，并成为了整个社区最受欢迎的入门教程之一。自 2023 年 6 月我为它专门创建一个 GitHub 仓库与单独的文档站点以来，它已经获得了 1189 个 stars，除我之外还有 37 位读者给它提了 PR：</p>
 <ul>
-<li><a href="https://nixos-and-flakes.thiscute.world/zh/" target="_blank" rel="noopener noreferrer">NixOS 与 Flakes - 一份非官方的新手指南</a></li>
+<li><a
+  href="https://nixos-and-flakes.thiscute.world/zh/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS 与 Flakes - 一份非官方的新手指南</a>
+</li>
 </ul>
 <figure><img src="./nixos-and-flakes-book-202402.webp" width="80%"/><figcaption>
             <h4>NixOS &amp; Flakes Book</h4>
@@ -16,15 +40,26 @@
 <p>那么作为一名已经深度使用 NixOS 作为主力桌面系统接近 10 个月的熟手，我在这里也从另一个角度来分享下我的入坑体会。</p>
 <p>注意，这篇文章不是 NixOS 入门教程，想看教程请移步上面给的链接。</p>
 <h2 id="is-nixpkgs-lacking-packages" class="headerLink">
-    <a href="#is-nixpkgs-lacking-packages" class="header-mark"></a>Nixpkgs 中的包太少？</h2><p>先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch Linux 的 AUR 是一个级别的。<a href="https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total" target="_blank" rel="noopener noreferrer">Repository statistics</a> 的包仓库统计数据如下：</p>
+    <a href="#is-nixpkgs-lacking-packages" class="header-mark"></a>Nixpkgs 中的包太少？</h2><p>先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch Linux 的 AUR 是一个级别的。<a
+  href="https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Repository statistics</a>
+ 的包仓库统计数据如下：</p>
 <p><figure><img
-        
-        loading="lazy"
-        src="./repository-statistics.webp"
-        srcset="./repository-statistics.webp, ./repository-statistics.webp 1.5x, ./repository-statistics.webp 2x"
-        sizes="auto"
-        alt="Repository statistics"
-        title="Repository statistics" ></figure></p>
+    
+    loading="lazy"
+    src="./repository-statistics.webp"
+    srcset="./repository-statistics.webp,
+        ./repository-statistics.webp 1.5x,
+        ./repository-statistics.webp 2x"
+    title="Repository statistics"
+    
+    
+  /></figure></p>
 <p>虽然 Nixpkgs 因为还打了许多 npm 之类的包，包的总数有水分，但即使排除掉这部分包，它跟 AUR 的包数量应该也是差不多的。</p>
 <p>而且因为 Nixpkgs 是官方包仓库，使用了 Monorepo 与 PR Review 机制，整体的包质量肯定是比 AUR 要好的。上面截图也能看到 Nixpkgs 的包整体上比 AUR 更新、漏洞更少。</p>
 <p>包仓库这里也是 NixOS 跟 Arch 不太同的地方，Arch 的官方包仓库收录很严格，相对的 AUR 生态相当繁荣。但任何人都能往 AUR 上传内容，虽然有一个投票机制起到一定审核作用，但这个限制太松散了。</p>
@@ -35,7 +70,15 @@
 <p>另外即使有些程序本身确实能在 NixOS 上无痛运行，但为了做到可复现，NixOS 用户通常也会选择自己手动给它打个包。</p>
 <p>OK，闲话说完，下面进入正题。</p>
 <p>首先，NixOS 比传统发行版复杂很多，也存在非常多的历史遗留问题。</p>
-<p>举例来说，它的官方文档烂到逼得我一个刚学 NixOS 的新手自己边学边写入门文档。在我用自己的渣渣英语把笔记翻译了一遍发到 reddit （<a href="https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/" target="_blank" rel="noopener noreferrer">NixOS &amp; Nix Flakes - A Guide for Beginners</a>）后，居然还获得了许多老外的大量好评（经过这么长时间的持续迭代，现在甚至已经变成了社区最受欢迎的新手教程之一），这侧面也说明官方文档到底有多烂。</p>
+<p>举例来说，它的官方文档烂到逼得我一个刚学 NixOS 的新手自己边学边写入门文档。在我用自己的渣渣英语把笔记翻译了一遍发到 reddit （<a
+  href="https://www.reddit.com/r/NixOS/comments/13dxw9d/nixos_nix_flakes_a_guide_for_beginners/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS &amp; Nix Flakes - A Guide for Beginners</a>
+）后，居然还获得了许多老外的大量好评（经过这么长时间的持续迭代，现在甚至已经变成了社区最受欢迎的新手教程之一），这侧面也说明官方文档到底有多烂。</p>
 <h2 id="is-nixos-worth-learning" class="headerLink">
     <a href="#is-nixos-worth-learning" class="header-mark"></a>NixOS 值不值得学？</h2><p><strong>NixOS 值不值得学或者说投入产出比是否够高？在我看来，这归根结底是个规模问题</strong>。</p>
 <p><strong>这里的规模，一是指你对 Linux 系统所做的自定义内容的规模，二是指你系统更新的频繁程度，三是指你 Linux 机器的数量</strong>。</p>
@@ -82,7 +125,15 @@
 <p>现在回想下我当初就为了用 systemd 跑个简单的小工具而跟 systemd 疯狂搏斗的场景，泪目&hellip; 要是我当初就懂 NixOS&hellip;</p>
 <h2 id="nixos-declarative-configuration" class="headerLink">
     <a href="#nixos-declarative-configuration" class="header-mark"></a>NixOS 的声明式配置 - OS as Code</h2><p>有过一定编程经验的人都应该知道抽象与模块化的重要性，复杂程度越高的场景，抽象与模块化带来的收益就越高。Terraform、Kubernetes 甚至 Spring Boot 的流行都体现了这一点。NixOS 的声明式配置也是如此，它将底层的实现细节都封装起来了，并且这些底层封装大都有社区负责更新维护，还有 PR Review、CI 与多阶段的测试验证确保其可靠性，这极大地降低了我的心智负担，从而解放了我的生产力。它的可复现能力则免除了我的后顾之忧，让我不再担心搞坏系统。</p>
-<p>NixOS 构建在 Nix 函数式包管理器这上，它的设计理念来自 Eelco Dolstra 的论文 <a href="https://edolstra.github.io/pubs/phd-thesis.pdf" target="_blank" rel="noopener noreferrer">The Purely Functional Software Deployment Model</a>（纯函数式软件部署模型），纯函数式是指它没有副作用，就类似数学函数 $y = f(x)$，同样的 NixOS 配置文件（即输入参数 $x$ ）总是能得到同样的 NixOS 系统环境（即输出 $y$）。</p>
+<p>NixOS 构建在 Nix 函数式包管理器这上，它的设计理念来自 Eelco Dolstra 的论文 <a
+  href="https://edolstra.github.io/pubs/phd-thesis.pdf"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>The Purely Functional Software Deployment Model</a>
+（纯函数式软件部署模型），纯函数式是指它没有副作用，就类似数学函数 $y = f(x)$，同样的 NixOS 配置文件（即输入参数 $x$ ）总是能得到同样的 NixOS 系统环境（即输出 $y$）。</p>
 <p>这也就是说 <strong>NixOS 的配置声明了整个系统完整的状态，OS as Code</strong>！</p>
 <p>只要你 NixOS 系统的这份源代码没丢，对它进行修改、审查，将源代码分享给别人，或者从别人的源代码中借鉴一些自己想要的功能，都是非常容易的。
 你简单的抄点其他 NixOS 用户的系统配置就能很确定自己将得到同样的环境。相比之下，你抄其他 Arch/Ubuntu 等传统发行版用户的配置就要麻烦的多，要考虑各种版本区别、环境区别，不确定性很高。</p>
@@ -132,7 +183,15 @@ Nix 的圈外人听得比较多的可能主要是它解决了依赖冲突问题�
 <li>Nixpkgs 中的所有 derivation 相关信息，目前也只能通过查看源码来了解。</li>
 </ul>
 </li>
-<li><a href="https://nixos.wiki" target="_blank" rel="noopener noreferrer">https://nixos.wiki</a> 站点维护者跑路，官方又长期未提供替代品，导致 NixOS 的文档在本来就很烂的基础上又雪上加霜。</li>
+<li><a
+  href="https://nixos.wiki"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://nixos.wiki</a>
+ 站点维护者跑路，官方又长期未提供替代品，导致 NixOS 的文档在本来就很烂的基础上又雪上加霜。</li>
 <li>Nix/NixOS 近来快速增长的用户群体，使得它的社区运营模式也面临着挑战</li>
 <li>&hellip;</li>
 </ol>
@@ -142,40 +201,81 @@ Nix 的圈外人听得比较多的可能主要是它解决了依赖冲突问题�
     <a href="#nixos-future" class="header-mark"></a>NixOS 的未来</h2><p>谁也不会对一项没前途的技术感兴趣，那么 NixOS 的未来如何呢？我是否看好它？
 这里我尝试使用一些数据来说明我对 NixOS 的未来的看法。</p>
 <p>首先看 Nixpkgs 项目，它存储了 NixOS 所有的软件包及 NixOS 自身的实现代码：</p>
-<p><a href="https://github.com/NixOS/nixpkgs/graphs/contributors" target="_blank" rel="noopener noreferrer"><figure><img
-        
-        loading="lazy"
-        src="./nixpkgs-contributors.webp"
-        srcset="./nixpkgs-contributors.webp, ./nixpkgs-contributors.webp 1.5x, ./nixpkgs-contributors.webp 2x"
-        sizes="auto"
-        alt="./nixpkgs-contributors.webp"
-        title="./nixpkgs-contributors.webp" ></figure></a></p>
+<p><a
+  href="https://github.com/NixOS/nixpkgs/graphs/contributors"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+><figure><img
+    
+    loading="lazy"
+    src="./nixpkgs-contributors.webp"
+    srcset="./nixpkgs-contributors.webp,
+        ./nixpkgs-contributors.webp 1.5x,
+        ./nixpkgs-contributors.webp 2x"
+    title="./nixpkgs-contributors.webp"
+    
+    
+  /></figure></a>
+</p>
 <p>上图能看到从 2021 年开始 Nixpkgs 项目的活跃度开始持续上升，
 Top 6 贡献者中有 3 位都是 2021 年之后开始大量提交代码，你点进 GitHub 看，能看到 Top 10 贡献者中有 5 位都是 2021 年之后加入社区的（新增的 @NickCao 与 @figsoda 都是 NixOS 中文社区资深用户）。</p>
 <p>再看看 Nix 包管理器的提交记录，它是 NixOS 的底层技术：</p>
-<p><a href="https://github.com/NixOS/nix/graphs/contributors" target="_blank" rel="noopener noreferrer"><figure><img
-        
-        loading="lazy"
-        src="./nix-contributors.webp"
-        srcset="./nix-contributors.webp, ./nix-contributors.webp 1.5x, ./nix-contributors.webp 2x"
-        sizes="auto"
-        alt="./nix-contributors.webp"
-        title="./nix-contributors.webp" ></figure></a></p>
+<p><a
+  href="https://github.com/NixOS/nix/graphs/contributors"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+><figure><img
+    
+    loading="lazy"
+    src="./nix-contributors.webp"
+    srcset="./nix-contributors.webp,
+        ./nix-contributors.webp 1.5x,
+        ./nix-contributors.webp 2x"
+    title="./nix-contributors.webp"
+    
+    
+  /></figure></a>
+</p>
 <p>上图显示 Nix 项目的活跃度在 2020 年明显上升，Top 6 贡献者中有 5 位都是在 2020 年之后才开始大量贡献代码的。</p>
 <p>再看看 Google Trends 中 NixOS 这个关键词的搜索热度：</p>
-<p><a href="https://trends.google.com/trends/explore?cat=5&amp;date=2014-01-23%202024-02-23&amp;q=NixOS" target="_blank" rel="noopener noreferrer"><figure><img
-        
-        loading="lazy"
-        src="./nixos-google-trends.webp"
-        srcset="./nixos-google-trends.webp, ./nixos-google-trends.webp 1.5x, ./nixos-google-trends.webp 2x"
-        sizes="auto"
-        alt="./nixos-google-trends.webp"
-        title="./nixos-google-trends.webp" ></figure></a></p>
+<p><a
+  href="https://trends.google.com/trends/explore?cat=5&amp;date=2014-01-23%202024-02-23&amp;q=NixOS"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+><figure><img
+    
+    loading="lazy"
+    src="./nixos-google-trends.webp"
+    srcset="./nixos-google-trends.webp,
+        ./nixos-google-trends.webp 1.5x,
+        ./nixos-google-trends.webp 2x"
+    title="./nixos-google-trends.webp"
+    
+    
+  /></figure></a>
+</p>
 <p>这个图显示 NixOS 的搜索热度有几个明显的上升时间点：</p>
 <ol>
 <li>2021 年 12 年
 <ul>
-<li>这大概率是因为在 2021 年 11 月 <a href="https://nixos.org/manual/nix/unstable/release-notes/rl-2.4" target="_blank" rel="noopener noreferrer">Nix 2.4</a> 发布了，它带来了实验性的 Flakes 特性与新版 CLI，
+<li>这大概率是因为在 2021 年 11 月 <a
+  href="https://nixos.org/manual/nix/unstable/release-notes/rl-2.4"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Nix 2.4</a>
+ 发布了，它带来了实验性的 Flakes 特性与新版 CLI，
 Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更符合用户直觉。</li>
 </ul>
 </li>
@@ -183,14 +283,33 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 <ul>
 <li>最重要的原因应该是，Youtube 上 Linux 相关的热门频道在这个时间点推出了好几个关于 NixOS 的视频，截至 2024-02-23，Youtube 上播放量最高的三个 NixOS 相关视频都是在 2023-06 ~ 2023-07 这个时间段推出的，它们的播放量之和超过了 130 万。
 <figure><img
-        
-        loading="lazy"
-        src="./nixos-youtube-videos.webp"
-        srcset="./nixos-youtube-videos.webp, ./nixos-youtube-videos.webp 1.5x, ./nixos-youtube-videos.webp 2x"
-        sizes="auto"
-        alt="./nixos-youtube-videos.webp"
-        title="./nixos-youtube-videos.webp" ></figure></li>
-<li>China 的兴趣指数在近期最高，这可能是因为国内的用户群一直很少，然后我在 6 月份发布了 <a href="https://nixos-and-flakes.thiscute.world/zh/" target="_blank" rel="noopener noreferrer">NixOS 与 Flakes - 一份非官方的新手指南</a>，并且在 <a href="https://github.com/ruanyf/weekly/issues/3315" target="_blank" rel="noopener noreferrer">科技爱好者周刊</a> 等渠道做了些推广，导致 NixOS 的相对指数出现明显上升。</li>
+    
+    loading="lazy"
+    src="./nixos-youtube-videos.webp"
+    srcset="./nixos-youtube-videos.webp,
+        ./nixos-youtube-videos.webp 1.5x,
+        ./nixos-youtube-videos.webp 2x"
+    title="./nixos-youtube-videos.webp"
+    
+    
+  /></figure></li>
+<li>China 的兴趣指数在近期最高，这可能是因为国内的用户群一直很少，然后我在 6 月份发布了 <a
+  href="https://nixos-and-flakes.thiscute.world/zh/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS 与 Flakes - 一份非官方的新手指南</a>
+，并且在 <a
+  href="https://github.com/ruanyf/weekly/issues/3315"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>科技爱好者周刊</a>
+ 等渠道做了些推广，导致 NixOS 的相对指数出现明显上升。</li>
 </ul>
 </li>
 <li>2024 年 1 月
@@ -201,13 +320,29 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 </ol>
 <p>再看看 Nix/NixOS 社区从 2022 年启用的年度用户调查。</p>
 <ol>
-<li><a href="https://discourse.nixos.org/t/2022-nix-survey-results/18983" target="_blank" rel="noopener noreferrer">2022 Nix Survey Results</a>，根据其中数据计算可得出：
+<li><a
+  href="https://discourse.nixos.org/t/2022-nix-survey-results/18983"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>2022 Nix Survey Results</a>
+，根据其中数据计算可得出：
 <ul>
 <li>74.5% 的用户是在三年内开始使用 Nix/NixOS 的。</li>
 <li>关于如何拓展 Nixpkgs 的调查中，36.7% 的用户使用 Flakes 特性拓展 Nixpkgs，仅次于传统的 overlays.</li>
 </ul>
 </li>
-<li><a href="https://discourse.nixos.org/t/nix-community-survey-2023-results/33124" target="_blank" rel="noopener noreferrer">Nix Community Survey 2023 Results</a>，简单计算可得出，
+<li><a
+  href="https://discourse.nixos.org/t/nix-community-survey-2023-results/33124"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Nix Community Survey 2023 Results</a>
+，简单计算可得出，
 <ul>
 <li>54.1% 的用户是在三年内开始使用 Nix/NixOS 的。</li>
 <li>关于如何拓展 Nixpkgs 的调查中，使用 Flakes 特性的用户占比为 49.2%，超过了传统的 Overlays.</li>
@@ -215,7 +350,15 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 </ul>
 </li>
 </ol>
-<p>另外 GitHub 的 <a href="https://github.blog/2023-11-08-the-state-of-open-source-and-ai/" target="_blank" rel="noopener noreferrer">Octoverse 2023</a> 也难得地提了一嘴 Nixpkgs:</p>
+<p>另外 GitHub 的 <a
+  href="https://github.blog/2023-11-08-the-state-of-open-source-and-ai/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Octoverse 2023</a>
+ 也难得地提了一嘴 Nixpkgs:</p>
 <blockquote>
 <p>Developers see benefits to combining packages and containerization. As we noted earlier, 4.3 million repositories used Docker in 2023.<br/> &gt; <strong>On the other side of the coin, Linux distribution NixOS/nixpkgs has been on the top list of open source projects by contributor for the last two years</strong>.</p>
 </blockquote>
@@ -245,7 +388,15 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 比如说如果我的 GitHub 私钥泄漏，仓库被篡改甚至删除，以前我 GitHub 上没啥数据也没啥 stars 当然无所谓，
 但现在我已经无法忍受丢失 GitHub 两千多个 stars 的风险了。</p>
 <p>在 2022 年的时候我因为对区块链的兴趣顺便学习了一点应用密码学，了解了一些密码学的基础知识，然后年底又经历了几次可能的数据泄漏，这使我意识到我的个人数据安全已经是一个不可忽视的问题。
-因此，为了避免 Github 私钥泄漏、区块链钱包助记词泄漏、个人隐私泄漏等可能，我在 2023 年 5 月做了全面强化个人数据安全的决定，并在 0XFFFF 社区发了篇帖子征求意见——<a href="https://0xffff.one/d/1528" target="_blank" rel="noopener noreferrer">学习并强化个人的数据安全性（持续更新）</a>。</p>
+因此，为了避免 Github 私钥泄漏、区块链钱包助记词泄漏、个人隐私泄漏等可能，我在 2023 年 5 月做了全面强化个人数据安全的决定，并在 0XFFFF 社区发了篇帖子征求意见——<a
+  href="https://0xffff.one/d/1528"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>学习并强化个人的数据安全性（持续更新）</a>
+。</p>
 <p>现在大半年过去，我已经在个人数据安全上做了许多工作，目前算是达到了一个比较不错的状态。</p>
 <p>我的个人数据安全方案，有两个核心的指导思想：</p>
 <ol>
@@ -295,7 +446,31 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 <h2 id="二是否需要使用-yubikey-等硬件密钥" class="headerLink">
     <a href="#%e4%ba%8c%e6%98%af%e5%90%a6%e9%9c%80%e8%a6%81%e4%bd%bf%e7%94%a8-yubikey-%e7%ad%89%e7%a1%ac%e4%bb%b6%e5%af%86%e9%92%a5" class="header-mark"></a>二、是否需要使用 YubiKey 等硬件密钥？</h2><p>硬件密钥的好处是可以防止密钥泄漏，但 YubiKey 在国内无官方购买渠道，而且价格不菲，只买一个 YubiKey 的话还存在丢失的风险。</p>
 <p>另一方面其实基于现代密码学算法的软件密钥安全性对我而言是足够的，而且软件密钥的使用更加方便。
-或许在未来，我会考虑使用 <a href="https://github.com/canokeys/canokey-core" target="_blank" rel="noopener noreferrer">canokey-core</a>、<a href="https://github.com/google/OpenSK" target="_blank" rel="noopener noreferrer">OpenSK</a>、<a href="https://github.com/solokeys/solo1" target="_blank" rel="noopener noreferrer">solokey</a> 等开源方案 DIY 几个硬件密钥，但目前我并不觉得有这必要。</p>
+或许在未来，我会考虑使用 <a
+  href="https://github.com/canokeys/canokey-core"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>canokey-core</a>
+、<a
+  href="https://github.com/google/OpenSK"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>OpenSK</a>
+、<a
+  href="https://github.com/solokeys/solo1"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>solokey</a>
+ 等开源方案 DIY 几个硬件密钥，但目前我并不觉得有这必要。</p>
 <h2 id="三ssh-密钥管理" class="headerLink">
     <a href="#%e4%b8%89ssh-%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86" class="header-mark"></a>三、SSH 密钥管理</h2><h3 id="21-ssh-密钥的生成" class="headerLink">
     <a href="#21-ssh-%e5%af%86%e9%92%a5%e7%9a%84%e7%94%9f%e6%88%90" class="header-mark"></a>2.1 SSH 密钥的生成</h3><p>我们一般都是直接使用 <code>ssh-keygen</code> 命令生成 SSH 密钥对，OpenSSH 目前主要支持两种密钥算法：</p>
@@ -316,10 +491,34 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 <p>那么，OpenSSH 的 passphrase 是如何实现的？是否足够安全？</p>
 <p>我首先 Google 了下，找到一些相关的文章（注意如下文章内容与其时间点相关，OpenSSH 的新版本会有些变化）：</p>
 <ul>
-<li><a href="https://news.ycombinator.com/item?id=17682946" target="_blank" rel="noopener noreferrer">(2018)The default OpenSSH key encryption is worse than plaintext</a>: OpenSSH 默认的 SSH RSA 密钥格式直接使用 MD5 来派生出用于 AES 加密的对称密钥，再用这个密钥加密你的 RSA 私钥，这意味着它的破解速度将会相当的快。</li>
-<li><a href="https://serverfault.com/questions/1056814/password-security-of-encrypted-ssh-private-key-how-to-read-round-number-or-cost" target="_blank" rel="noopener noreferrer">(2021)Password security of encrypted SSH private key: How to read round number or costfactor of bcrypt</a>: 这里有个老哥在回答中简单推算了下，以说明他认为 OpenSSH 默认的 passphrase 加密相当安全。</li>
+<li><a
+  href="https://news.ycombinator.com/item?id=17682946"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>(2018)The default OpenSSH key encryption is worse than plaintext</a>
+: OpenSSH 默认的 SSH RSA 密钥格式直接使用 MD5 来派生出用于 AES 加密的对称密钥，再用这个密钥加密你的 RSA 私钥，这意味着它的破解速度将会相当的快。</li>
+<li><a
+  href="https://serverfault.com/questions/1056814/password-security-of-encrypted-ssh-private-key-how-to-read-round-number-or-cost"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>(2021)Password security of encrypted SSH private key: How to read round number or costfactor of bcrypt</a>
+: 这里有个老哥在回答中简单推算了下，以说明他认为 OpenSSH 默认的 passphrase 加密相当安全。</li>
 </ul>
-<p>在 <a href="https://www.openssh.com/releasenotes.html" target="_blank" rel="noopener noreferrer">OpenSSH release notes</a> 中搜索 passphrase 跟 kdf 两个关键字，找到些关键信息如下：</p>
+<p>在 <a
+  href="https://www.openssh.com/releasenotes.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>OpenSSH release notes</a>
+ 中搜索 passphrase 跟 kdf 两个关键字，找到些关键信息如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -423,13 +622,29 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <h3 id="24-ssh-ca---更安全合理的-ssh-密钥管理方案" class="headerLink">
     <a href="#24-ssh-ca---%e6%9b%b4%e5%ae%89%e5%85%a8%e5%90%88%e7%90%86%e7%9a%84-ssh-%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86%e6%96%b9%e6%a1%88" class="header-mark"></a>2.4 SSH CA - 更安全合理的 SSH 密钥管理方案？</h3><p>搜到些资料：</p>
 <ul>
-<li><a href="https://www.ruanyifeng.com/blog/2020/07/ssh-certificate.html" target="_blank" rel="noopener noreferrer">SSH 证书登录教程</a></li>
+<li><a
+  href="https://www.ruanyifeng.com/blog/2020/07/ssh-certificate.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>SSH 证书登录教程</a>
+</li>
 </ul>
 <p>TODO 待研究。</p>
 <h2 id="四个人的账号密码管理" class="headerLink">
     <a href="#%e5%9b%9b%e4%b8%aa%e4%ba%ba%e7%9a%84%e8%b4%a6%e5%8f%b7%e5%af%86%e7%a0%81%e7%ae%a1%e7%90%86" class="header-mark"></a>四、个人的账号密码管理</h2><p>我曾经大量使用了 Chrome/Firefox 自带的密码存储功能，但用到现在其实也发现了它们的许多弊端。
 有同事推崇 1Password 的使用体验，它的自动填充跟同站点的多密码管理确实做得非常优秀，但一是要收费，二是它是商业的在线方案，基于零信任原则，我不太想使用这种方案。</p>
-<p>作为开源爱好者，我最近找到了一个非常适合我自己的方案：<a href="https://www.passwordstore.org/" target="_blank" rel="noopener noreferrer"><strong>password-store</strong></a>.</p>
+<p>作为开源爱好者，我最近找到了一个非常适合我自己的方案：<a
+  href="https://www.passwordstore.org/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+><strong>password-store</strong></a>
+.</p>
 <p>这套方案使用 gpg 加密账号密码，每个文件就是一个账号密码，通过文件树来组织与匹配账号密码与 APP/站点的对应关系，并且生态完善，对 firefox/chrome/android/ios 的支持都挺好。</p>
 <p>缺点是用 GPG 加密，上手有点难度，但对咱来说完全可以接受。</p>
 <p>我在最近使用 pass-import 从 firefox/chrome 中导入了我当前所有的账号密码，并对所有的重要账号密码进行了一次全面的更新，一共改了二三十个账号，全部采用了随机密码。</p>
@@ -442,37 +657,133 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </li>
 <li>在浏览器与移动端，则分别使用这些客户端来读写 pass 中的密码：
 <ol>
-<li>Android: <a href="https://github.com/android-password-store/Android-Password-Store" target="_blank" rel="noopener noreferrer">https://github.com/android-password-store/Android-Password-Store</a></li>
-<li>IOS： <a href="https://github.com/mssun/passforios" target="_blank" rel="noopener noreferrer">https://github.com/mssun/passforios</a></li>
-<li>Brosers(Chrome/Firefox): <a href="https://github.com/browserpass/browserpass-extension" target="_blank" rel="noopener noreferrer">https://github.com/browserpass/browserpass-extension</a></li>
+<li>Android: <a
+  href="https://github.com/android-password-store/Android-Password-Store"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/android-password-store/Android-Password-Store</a>
+</li>
+<li>IOS： <a
+  href="https://github.com/mssun/passforios"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/mssun/passforios</a>
+</li>
+<li>Brosers(Chrome/Firefox): <a
+  href="https://github.com/browserpass/browserpass-extension"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/browserpass/browserpass-extension</a>
+</li>
 </ol>
 </li>
 <li>基於雞蛋不放在同一個籃子裏的原則，otp/mfa 的動態密碼則使用 google authenticator 保存與多端同步，並留有一份離線備份用於災難恢復。登錄 Google 賬號目前需要我 Android 手機或短信驗證，因此安全性符合我的需求。</li>
 </ol>
-<p>我的详细 pass 配置见 <a href="https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/password-store" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/password-store</a>.</p>
+<p>我的详细 pass 配置见 <a
+  href="https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/password-store"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config/password-store</a>
+.</p>
 <p>其他相关资料：</p>
 <ul>
-<li><a href="https://github.com/tijn/awesome-password-store" target="_blank" rel="noopener noreferrer">awesome-password-store</a></li>
-<li><a href="https://github.com/gopasspw/gopass" target="_blank" rel="noopener noreferrer">https://github.com/gopasspw/gopass</a>: reimplement in go, with more features.</li>
+<li><a
+  href="https://github.com/tijn/awesome-password-store"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>awesome-password-store</a>
+</li>
+<li><a
+  href="https://github.com/gopasspw/gopass"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/gopasspw/gopass</a>
+: reimplement in go, with more features.</li>
 </ul>
 <p>遇到过的一些问题与解法：</p>
 <ul>
-<li><a href="https://github.com/mssun/passforios/issues/131" target="_blank" rel="noopener noreferrer">passforios - Merge conflicts</a></li>
+<li><a
+  href="https://github.com/mssun/passforios/issues/131"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>passforios - Merge conflicts</a>
+</li>
 </ul>
 <h3 id="31-pass-使用的-gpg-够安全么" class="headerLink">
     <a href="#31-pass-%e4%bd%bf%e7%94%a8%e7%9a%84-gpg-%e5%a4%9f%e5%ae%89%e5%85%a8%e4%b9%88" class="header-mark"></a>3.1 pass 使用的 GPG 够安全么？</h3><p>GnuPG 是一个很有历史，而且使用广泛的加密工具，但它的安全性如何呢？</p>
 <p>我找到些相关文档：</p>
 <ul>
-<li><a href="https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/" target="_blank" rel="noopener noreferrer">2021年，用更现代的方法使用PGP（上）</a></li>
-<li><a href="https://nullprogram.com/blog/2019/07/10/" target="_blank" rel="noopener noreferrer">Predictable, Passphrase-Derived PGP Keys</a></li>
-<li><a href="https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/" target="_blank" rel="noopener noreferrer">OpenPGP - The almost perfect key pair</a></li>
+<li><a
+  href="https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>2021年，用更现代的方法使用PGP（上）</a>
+</li>
+<li><a
+  href="https://nullprogram.com/blog/2019/07/10/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Predictable, Passphrase-Derived PGP Keys</a>
+</li>
+<li><a
+  href="https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>OpenPGP - The almost perfect key pair</a>
+</li>
 </ul>
 <p>简单总结下，GnuPG 的每个 secret key 都是随机生成的，互相之间没有关联（即不像区块链钱包那样具有确定性）。
 生成出的 key 被使用 passphrase 加密保存，每次使用时都需要输入 passphrase 解密。</p>
 <p>那么还是之前在调研 OpenSSH 时我们提到的问题：它使用的 KDF 算法与参数是否足够安全？</p>
-<p>OpenPGP 标准定义了 <a href="https://datatracker.ietf.org/doc/html/rfc4880#section-3.7" target="_blank" rel="noopener noreferrer">String-to-Key (S2K)</a>
+<p>OpenPGP 标准定义了 <a
+  href="https://datatracker.ietf.org/doc/html/rfc4880#section-3.7"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>String-to-Key (S2K)</a>
+
 算法用于从 passphrase 生成对称加密密钥，GnuPG 遵循该规范，并且提供了相关的参数配置选项，
-相关参数的文档 <a href="https://gnupg.org/documentation/manuals/gnupg/OpenPGP-Options.html#OpenPGP-Options" target="_blank" rel="noopener noreferrer">OpenPGP protocol specific options</a> 内容如下：</p>
+相关参数的文档 <a
+  href="https://gnupg.org/documentation/manuals/gnupg/OpenPGP-Options.html#OpenPGP-Options"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>OpenPGP protocol specific options</a>
+ 内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -523,7 +834,15 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </li>
 </ol>
 <p>为了在全局使用这些参数，可以将它们添加到你的 <code>~/.gnupg/gpg.conf</code> 配置文件中。</p>
-<p>详见我的 gpg 配置 <a href="https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/gpg" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/gpg</a></p>
+<p>详见我的 gpg 配置 <a
+  href="https://github.com/ryan4yin/nix-config/tree/7e67466/home/base/desktop/gpg"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config/gpg</a>
+</p>
 <h2 id="五跨平台的加密备份同步工具的选择" class="headerLink">
     <a href="#%e4%ba%94%e8%b7%a8%e5%b9%b3%e5%8f%b0%e7%9a%84%e5%8a%a0%e5%af%86%e5%a4%87%e4%bb%bd%e5%90%8c%e6%ad%a5%e5%b7%a5%e5%85%b7%e7%9a%84%e9%80%89%e6%8b%a9" class="header-mark"></a>五、跨平台的加密备份同步工具的选择</h2><p>我日常同时在使用 macOS 与 NixOS，因此不论是需要离线存储的灾难恢复数据，还是需要在多端访问的个人数据，都需要一个跨平台的加密备份与同步工具。</p>
 <p>前面提到的 pass 使用 GnuPG 进行文件级别的加密，但在很多场景下这不太适用，而且 GPG 本身也太重了，还一堆历史遗留问题，我不太喜欢。</p>
@@ -551,12 +870,44 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <p>进一步调研后，我选择了 <strong>age</strong>, <strong>rclone</strong> 与 <strong>restic</strong> 作为我的跨平台加密备份与同步工具。
 这三个工具都比较活跃，stars 很高，使用的也都是比较现代的密码学算法：</p>
 <ol>
-<li><a href="https://age-encryption.org/v1" target="_blank" rel="noopener noreferrer">age</a>: 对于对称加密的场景，使用 ChaCha20-Poly1305 AEAD 加密方案，对称加密密钥使用 scrypt KDF 算法生成。</li>
-<li><a href="https://rclone.org/crypt/" target="_blank" rel="noopener noreferrer">rclone</a>: 使用基于 XSalsa20-Poly1305 的 AEAD 加密方案，key 通过 scrypt KDF 算法生成，并且默认会加盐。</li>
-<li><a href="https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac" target="_blank" rel="noopener noreferrer">restic</a>: 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。</li>
+<li><a
+  href="https://age-encryption.org/v1"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>age</a>
+: 对于对称加密的场景，使用 ChaCha20-Poly1305 AEAD 加密方案，对称加密密钥使用 scrypt KDF 算法生成。</li>
+<li><a
+  href="https://rclone.org/crypt/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>rclone</a>
+: 使用基于 XSalsa20-Poly1305 的 AEAD 加密方案，key 通过 scrypt KDF 算法生成，并且默认会加盐。</li>
+<li><a
+  href="https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>restic</a>
+: 使用 AES-256-CTR 加密，使用 Poly1305-AES 认证数据，key 通过 scrypt KDF 算法生成。</li>
 </ol>
 <p>对于 Nix 相关的 secrets 配置，我使用了 age 的一个适配库 agenix 完成其自动加解密配置，并将相关的加密数据保存在我的 GitHub 私有仓库中。
-详见 <a href="https://github.com/ryan4yin/nix-config/tree/7e67466/secrets" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/secrets</a>.
+详见 <a
+  href="https://github.com/ryan4yin/nix-config/tree/7e67466/secrets"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config/secrets</a>
+.
 关于这个仓库的详细加解密方法，在后面第八节「桌面电脑的数据安全」中会介绍。</p>
 <h2 id="六灾难恢复相关的数据存储与管理" class="headerLink">
     <a href="#%e5%85%ad%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e7%9b%b8%e5%85%b3%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ad%98%e5%82%a8%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>六、灾难恢复相关的数据存储与管理</h2><p>相关数据包括：GitHub, Twitter, Google 等重要账号的二次认证恢复代码、账号数据备份、PGP 主密钥与吊销证书等等。</p>
@@ -567,7 +918,15 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
     <a href="#%e4%b8%83%e9%9c%80%e8%a6%81%e5%9c%a8%e5%a4%9a%e7%ab%af%e8%ae%bf%e9%97%ae%e7%9a%84%e9%87%8d%e8%a6%81%e4%b8%aa%e4%ba%ba%e6%95%b0%e6%8d%ae" class="header-mark"></a>七、需要在多端访问的重要个人数据</h2><p>相关数据包括：个人笔记、重要的照片、录音、视频、等等。</p>
 <p>因为日常就需要在多端访问，因此显然不能离线存储。</p>
 <h3 id="1-个人笔记" class="headerLink">
-    <a href="#1-%e4%b8%aa%e4%ba%ba%e7%ac%94%e8%ae%b0" class="header-mark"></a>1. 个人笔记</h3><p>不包含个人隐私的笔记，我直接用公开 GitHub 仓库 [ryan4yin/knowledge] (<a href="https://github.com/ryan4yin/knowledge/" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/knowledge/</a>) 存储了，不需要加密。</p>
+    <a href="#1-%e4%b8%aa%e4%ba%ba%e7%ac%94%e8%ae%b0" class="header-mark"></a>1. 个人笔记</h3><p>不包含个人隐私的笔记，我直接用公开 GitHub 仓库 [ryan4yin/knowledge] (<a
+  href="https://github.com/ryan4yin/knowledge/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/ryan4yin/knowledge/</a>
+) 存储了，不需要加密。</p>
 <p>对于不便公开的个人笔记，有这些考虑：</p>
 <ol>
 <li>我的个人笔记目前主要是在移动端编辑，因此支持 Android/iOS 的客户端是必须的。</li>
@@ -582,9 +941,33 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>如果有类似 Git 的 Diff 功能就更好了。</li>
 </ol>
 <p>我一开始考虑直接使用基于 Git 仓库的方案，能获得 Git 的所有功能，同时还避免额外自建一个笔记服务。
-找到个 <a href="https://github.com/GitJournal/GitJournal" target="_blank" rel="noopener noreferrer">GitJournal</a> ，数据存在 GitHub 私有仓库用了一个月，功能不太多但够用。但发现它项目不咋活跃，基于 SSH 协议的 Git 同步在大仓库上也有些毛病，而且数据明文存在 Git 仓库里，安全性相对差一些。</p>
-<p>另外找到个 <a href="https://github.com/AGWA/git-crypt" target="_blank" rel="noopener noreferrer">git-crypt</a> 能在 Git 上做一层透明加密，但没找到支持它的移动端 APP，而且项目也不咋活跃。</p>
-<p>在 <a href="https://github.com/topics/note-taking" target="_blank" rel="noopener noreferrer">https://github.com/topics/note-taking</a> 下看了些流行项目，主要有这些：</p>
+找到个 <a
+  href="https://github.com/GitJournal/GitJournal"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>GitJournal</a>
+ ，数据存在 GitHub 私有仓库用了一个月，功能不太多但够用。但发现它项目不咋活跃，基于 SSH 协议的 Git 同步在大仓库上也有些毛病，而且数据明文存在 Git 仓库里，安全性相对差一些。</p>
+<p>另外找到个 <a
+  href="https://github.com/AGWA/git-crypt"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>git-crypt</a>
+ 能在 Git 上做一层透明加密，但没找到支持它的移动端 APP，而且项目也不咋活跃。</p>
+<p>在 <a
+  href="https://github.com/topics/note-taking"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/topics/note-taking</a>
+ 下看了些流行项目，主要有这些：</p>
 <ol>
 <li>Joplin
 <ul>
@@ -616,8 +999,32 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。</li>
 <li>部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
 <ol>
-<li><a href="https://www.qingcloud.com/products/objectstorage/" target="_blank" rel="noopener noreferrer">青云对象存储</a> 与 <a href="https://www.qiniu.com/prices/kodo" target="_blank" rel="noopener noreferrer">七牛云对象存储 Kodo</a>，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。</li>
-<li><a href="https://help.aliyun.com/zh/oss/product-overview/billing-overview" target="_blank" rel="noopener noreferrer">阿里云 OSS</a> 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。</li>
+<li><a
+  href="https://www.qingcloud.com/products/objectstorage/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>青云对象存储</a>
+ 与 <a
+  href="https://www.qiniu.com/prices/kodo"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>七牛云对象存储 Kodo</a>
+，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。</li>
+<li><a
+  href="https://help.aliyun.com/zh/oss/product-overview/billing-overview"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>阿里云 OSS</a>
+ 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。</li>
 </ol>
 </li>
 </ol>
@@ -688,7 +1095,15 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>常用的 secrets 的部署与使用方式，与前面 NixOS 的描述完全一致</li>
 </ul>
 <h3 id="macosnixos-数据的灾难恢复" class="headerLink">
-    <a href="#macosnixos-%e6%95%b0%e6%8d%ae%e7%9a%84%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d" class="header-mark"></a>macOS/NixOS 数据的灾难恢复？</h3><p>在使用 nix-darwin 跟 NixOS 的情况下，整个 macOS/NixOS 的系统环境都是通过我的 <a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a> 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。</p>
+    <a href="#macosnixos-%e6%95%b0%e6%8d%ae%e7%9a%84%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d" class="header-mark"></a>macOS/NixOS 数据的灾难恢复？</h3><p>在使用 nix-darwin 跟 NixOS 的情况下，整个 macOS/NixOS 的系统环境都是通过我的 <a
+  href="https://github.com/ryan4yin/nix-config"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config</a>
+ 声明式配置的，因此桌面电脑的灾难恢复根本不是一个问题。</p>
 <p>只需要简单的几行命令就能在一个全新的系统上恢复出我的 macOS / NixOS 桌面环境，所有密钥也会由 agenix 自动解密并放置到正确的位置。</p>
 <p>要说有恢复难题的，也就是一些个人数据了，这部分已经在前面第七小节介绍过了，用 rclone/restic 就行。</p>
 <h2 id="九总结下我的数据存在了哪些地方" class="headerLink">
@@ -741,7 +1156,15 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <p>把上面这些联想串起来，就是一个怀旧、雷人、结尾又有点温馨的无厘头小故事了，肯定能令你自己印象深刻。
 故事写得够离谱的话，你可能想忘都忘不掉了。</p>
 <p>总之就是用这种方式，然后把密码中的每个字符都与故事中的某个关键字联系起来，这样就能很容易地记住这个密码了。
-如果你对深入学习如何记忆这类复杂的东西感兴趣，可以看看这本<a href="https://book.douban.com/subject/6710983/" target="_blank" rel="noopener noreferrer">我最想要的记忆魔法书</a>.</p>
+如果你对深入学习如何记忆这类复杂的东西感兴趣，可以看看这本<a
+  href="https://book.douban.com/subject/6710983/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>我最想要的记忆魔法书</a>
+.</p>
 <p>最后一点，就是定期更新一遍这些密码、SSH 密钥、GPG 密钥。
 所有数据的加密安全性都是随着时间推移而降低的，曾经安全的密码学算法在未来也可能会变得不再安全（这方面 MD5, SHA-1 都是很好的例子），因此定期更新这些密码跟密钥是很有必要的。</p>
 <p>几个核心密码更新起来会简单些，可以考虑每年更新一遍，而密钥可以考虑每两三年更新一遍（时间凭感觉说的哈，没有做论证）。
@@ -769,7 +1192,23 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 <li>手机端的照片视频虽然已经在上面设计好了备份同步方案，但仍未实施。考虑使用 roundsync 加密备份到云端，实现多端访问。</li>
 <li>进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。</li>
 <li>Git 提交是否可以使用 GnuPG 签名，目前没这么做主要是觉得 PGP 这个东西太重了，目前我也只在 pass 上用了它，而且还在研究用 age 取代它。</li>
-<li>尝试通过 <a href="https://github.com/hashcat/hashcat" target="_blank" rel="noopener noreferrer">hashcat</a>, <a href="https://github.com/brannondorsey/wifi-cracking" target="_blank" rel="noopener noreferrer">wifi-cracking</a> 等手段破解自己的重要密码、SSH 密钥、GPG 密钥等数据，评估其安全性。</li>
+<li>尝试通过 <a
+  href="https://github.com/hashcat/hashcat"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>hashcat</a>
+, <a
+  href="https://github.com/brannondorsey/wifi-cracking"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>wifi-cracking</a>
+ 等手段破解自己的重要密码、SSH 密钥、GPG 密钥等数据，评估其安全性。</li>
 <li>使用一些流行的渗透测试工具测试我的 Homelab 与内网环境，评估其安全性。</li>
 </ul>
 <p>安全总是相对的，而且其中涉及的知识点不少，我 2022 年学了密码学算是为此打下了个不错的基础，但目前看前头还有挺多知识点在等待着我。
@@ -782,16 +1221,40 @@ OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.</p>
 </blockquote>
 <h2 id="零前言" class="headerLink">
     <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当时没怎么折腾。</p>
-<p>6 月初的时候我开始尝试在 Orange Pi 5 上运行 NixOS，在 <a href="https://matrix.to/#/#nixos-on-arm:nixos.org" target="_blank" rel="noopener noreferrer">NixOS on ARM 的 Matrix 群组</a> 中得到了俄罗斯老哥 @K900 的帮助，没费多大劲就成功了，一共就折腾了三天。</p>
+<p>6 月初的时候我开始尝试在 Orange Pi 5 上运行 NixOS，在 <a
+  href="https://matrix.to/#/#nixos-on-arm:nixos.org"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS on ARM 的 Matrix 群组</a>
+ 中得到了俄罗斯老哥 @K900 的帮助，没费多大劲就成功了，一共就折腾了三天。</p>
 <p>于是我接着尝试在 Lichee Pi 4A 上运行 NixOS，因为已经拥有了 Orange Pi 5 上的折腾经验，我以为这次会很顺利。
 但是实际难度远远超出了我的预期，我从 6 月 13 号开始断断续续折腾到 7 月 3 号，接触了大量的新东西，包括 U-Boot、OpenSBI、SPL Flash、RISCV Boot Flows 等等，
 还参考了 @chainsx 的 Fedora for Lichee Pi 4A 方案，请教了 @NickCao 许多 NixOS 相关的问题，@revy 帮我修了好几个 revyos/thead-kernel 在标准工具链上编译的 bug，期间也请教过 @HougeLangley 他折腾 Lichee Pi 4A 的经验。
 我在付出了这么多的努力后，才最终成功编译出了 NixOS 的系统镜像（包含 boot 跟 rootfs 两个分区）。</p>
 <p>但是！现在要说「但是」了。</p>
 <p>镜像是有了，系统却无法启动&hellip;找了各种资料也没解决，也没好意思麻烦各位大佬，搞得有点心灰意冷，就先把这部分工作放下了。</p>
-<p>接着就隔了一个多月没碰 Lichee Pi 4A，直到 8 月 5 号，外国友人 @JayDeLux 在 <a href="https://t.me/linux4rv" target="_blank" rel="noopener noreferrer">Mainline Linux for RISC-V</a> TG 群组中询问我 NixOS 移植工作的进展如何（之前有在群里提过我在尝试移植），我才决定再次尝试一下。</p>
+<p>接着就隔了一个多月没碰 Lichee Pi 4A，直到 8 月 5 号，外国友人 @JayDeLux 在 <a
+  href="https://t.me/linux4rv"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Mainline Linux for RISC-V</a>
+ TG 群组中询问我 NixOS 移植工作的进展如何（之前有在群里提过我在尝试移植），我才决定再次尝试一下。</p>
 <p>在之前工作的基础上一番骚操作后，我在 8 月 6 号晚上终于成功启动了 NixOS，这次意外的顺利，后续也成功通过一份 Nix Flake 配置编译出了可用的 NixOS 镜像。</p>
-<p>最终成果：<a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nixos-licheepi4a</a></p>
+<p>最终成果：<a
+  href="https://github.com/ryan4yin/nixos-licheepi4a"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/ryan4yin/nixos-licheepi4a</a>
+</p>
 <p>整个折腾过程相当曲折，虽然最终达成了目标，但是期间遭受的折磨也真的不少。
 总的来说仍然是一次很有趣的经历，既学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50 美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@Rabenda(revy) 等各位大佬混了个脸熟。</p>
 <p>这篇文章就是记录下我在这个折腾过程中学到的所有知识，以飨读者，同时也梳理一下自己的收获。</p>
@@ -800,12 +1263,36 @@ NixOS 分析完了后，再看看与 RISC-V 相关的硬件固件与 bootloader 
 <h2 id="一基础知识介绍" class="headerLink">
     <a href="#%e4%b8%80%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86%e4%bb%8b%e7%bb%8d" class="header-mark"></a>一、基础知识介绍</h2><h3 id="1-lichee-pi-4a-介绍" class="headerLink">
     <a href="#1-lichee-pi-4a-%e4%bb%8b%e7%bb%8d" class="header-mark"></a>1. Lichee Pi 4A 介绍</h3><p>LicheePi 4A 是当前市面上性能最高的 RISC-V Linux 开发板之一，它以 TH1520 为主控核心（4xC910@1.85G， RV64GCV，4TOPS@int8 NPU， 50GFLOP GPU），板载最大 16GB 64bit LPDDR4X，128GB eMMC，支持 HDMI+MIPI 双4K 显示输出，支持 4K 摄像头接入，双千兆网口（其中一个支持POE供电）和 4 个 USB3.0 接口，多种音频输入输出（由专用 C906 核心处理）。</p>
-<p>以上来自 Lichee Pi 4A 官方文档 <a href="https://wiki.sipeed.com/hardware/zh/lichee/th1520/lpi4a/1_intro.html" target="_blank" rel="noopener noreferrer">Lichee Pi 4A - Sipeed Wiki</a>.</p>
+<p>以上来自 Lichee Pi 4A 官方文档 <a
+  href="https://wiki.sipeed.com/hardware/zh/lichee/th1520/lpi4a/1_intro.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Lichee Pi 4A - Sipeed Wiki</a>
+.</p>
 <p>总之它是我手上性能最高的 RISC-V 开发板。</p>
-<p>LicheePi 4A 官方主要支持 <a href="https://github.com/revyos/revyos/" target="_blank" rel="noopener noreferrer">RevyOS</a>—— 一款针对 T-Head 芯片生态的 Debian 优化定制发行版。
+<p>LicheePi 4A 官方主要支持 <a
+  href="https://github.com/revyos/revyos/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>RevyOS</a>
+—— 一款针对 T-Head 芯片生态的 Debian 优化定制发行版。
 根据猴哥（@HougeLangley）文章介绍，它也是目前唯一且确实能够启用 Lichee Pi 4A 板载 GPU 的发行版，</p>
 <h3 id="2-nixos-介绍" class="headerLink">
-    <a href="#2-nixos-%e4%bb%8b%e7%bb%8d" class="header-mark"></a>2. NixOS 介绍</h3><p>这个感觉就不用多说了，我在这几个月已经给 NixOS 写了非常多的文字了，感兴趣请直接移步 <a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-and-flakes-book</a>.</p>
+    <a href="#2-nixos-%e4%bb%8b%e7%bb%8d" class="header-mark"></a>2. NixOS 介绍</h3><p>这个感觉就不用多说了，我在这几个月已经给 NixOS 写了非常多的文字了，感兴趣请直接移步 <a
+  href="https://github.com/ryan4yin/nixos-and-flakes-book"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nixos-and-flakes-book</a>
+.</p>
 <p>在 4 月份接触了 NixOS 后，我成了 NixOS 铁粉。
 作为一名铁粉，我当然想把我手上的所有性能好点的板子都装上 NixOS，Lichee Pi 4A 自然也不例外。</p>
 <p>我目前主要完成了两块板子的 NixOS 移植工作，一块是 Orange Pi 5，另一块就是 Lichee Pi 4A。
@@ -818,16 +1305,48 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 <p>我的移植思路是，从 LicheePi4A 官方使用的 RevyOS 中拿出跟硬件相关的部分（也就是 U-Boot, kernel 跟设备树这三个），再结合上跟硬件无关的 NixOS rootfs，组合成一个完整的、可在 LicheePi4A 上正常启动运行的 NixOS 系统。</p>
 <p>RevyOS 针对 LicheePi4A 定制的几个项目源码如下：</p>
 <ul>
-<li><a href="https://github.com/revyos/thead-kernel.git" target="_blank" rel="noopener noreferrer">https://github.com/revyos/thead-kernel.git</a></li>
-<li><a href="https://github.com/revyos/thead-u-boot.git" target="_blank" rel="noopener noreferrer">https://github.com/revyos/thead-u-boot.git</a></li>
-<li><a href="https://github.com/revyos/thead-opensbi.git" target="_blank" rel="noopener noreferrer">https://github.com/revyos/thead-opensbi.git</a></li>
+<li><a
+  href="https://github.com/revyos/thead-kernel.git"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/revyos/thead-kernel.git</a>
+</li>
+<li><a
+  href="https://github.com/revyos/thead-u-boot.git"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/revyos/thead-u-boot.git</a>
+</li>
+<li><a
+  href="https://github.com/revyos/thead-opensbi.git"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/revyos/thead-opensbi.git</a>
+</li>
 </ul>
 <p>思路很清晰，但因为 NixOS 本身的特殊性，实际操作起来，现有的 Gentoo, Arch Linux, Fedora 的移植仓库代码全都无法直接使用，需要做的工作还是不少的。</p>
 <h2 id="三nixos-启动流程分析" class="headerLink">
     <a href="#%e4%b8%89nixos-%e5%90%af%e5%8a%a8%e6%b5%81%e7%a8%8b%e5%88%86%e6%9e%90" class="header-mark"></a>三、NixOS 启动流程分析</h2><p>要做移植，首先就要了解 NixOS 系统本身的文件树结构以及系统启动流程，搞明白它跟 Arch Linux, Fedora 等其他发行版的区别，这样才好参考其他发行版的移植工作，搞明白该如何入手。</p>
 <h3 id="1-bootloader-配置与系统文件树分析" class="headerLink">
     <a href="#1-bootloader-%e9%85%8d%e7%bd%ae%e4%b8%8e%e7%b3%bb%e7%bb%9f%e6%96%87%e4%bb%b6%e6%a0%91%e5%88%86%e6%9e%90" class="header-mark"></a>1. Bootloader 配置与系统文件树分析</h3><p>这里方便起见，我直接使用我自己为 LicheePi4A 构建好的 NixOS 镜像进行分析。
-首先参照 <a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-licheepi4a</a> 的 README 下载解压镜像，再使用 losetup 跟 mount 直接挂载镜像中的各分区进行初步分析：</p>
+首先参照 <a
+  href="https://github.com/ryan4yin/nixos-licheepi4a"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nixos-licheepi4a</a>
+ 的 README 下载解压镜像，再使用 losetup 跟 mount 直接挂载镜像中的各分区进行初步分析：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -905,7 +1424,15 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到 NixOS 整个根目录（<code>/root</code>）下一共就四个文件夹，其中真正保存有系统数据的文件夹只有 <code>/boot</code> 跟 <code>/nix</code> 这两个，这与传统的 Linux 发行版大相径庭。
-有一点 Linux 使用经验的朋友都应该清楚，传统的 Linux 发行版遵循 UNIX 系统的 <a href="https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard" target="_blank" rel="noopener noreferrer">FHS</a> 标准，根目录下会有很多文件夹，比如 <code>/bin</code>、<code>/etc</code>、<code>/home</code>、<code>/lib</code>、<code>/opt</code>、<code>/root</code>、<code>/sbin</code>、<code>/srv</code>、<code>/tmp</code>、<code>/usr</code>、<code>/var</code> 等等。</p>
+有一点 Linux 使用经验的朋友都应该清楚，传统的 Linux 发行版遵循 UNIX 系统的 <a
+  href="https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>FHS</a>
+ 标准，根目录下会有很多文件夹，比如 <code>/bin</code>、<code>/etc</code>、<code>/home</code>、<code>/lib</code>、<code>/opt</code>、<code>/root</code>、<code>/sbin</code>、<code>/srv</code>、<code>/tmp</code>、<code>/usr</code>、<code>/var</code> 等等。</p>
 <p>那 NixOS 它这么玩，真的能正常启动么？这就是我在构建出镜像后却发现无法在 LicheePi 4A 上启动时，最先产生的疑问。
 在询问 @chainsx 跟 @revy 系统无法启动的解决思路的时候，他们也一脸懵逼，觉得这个文件树有点奇葩，很怀疑是我构建流程有问题导致文件树不完整。</p>
 <p>但实际上 NixOS 就是这么玩的，它 rootfs 中所有的数据全都存放在 <code>/nix/store</code> 这个目录下并且被挂载为只读，其他的文件夹以及其中的文件都是在运行时动态创建的。
@@ -971,8 +1498,24 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 </div>
 </div><p>可以看到：</p>
 <ol>
-<li>它使用 <code>/boot/extlinux/extlinux.conf</code> 作为 U-Boot 的启动项配置，据 <a href="https://github.com/ARM-software/u-boot/blob/master/doc/README.distro" target="_blank" rel="noopener noreferrer">U-Boot 官方的 Distro 文档</a> 所言，这是 U-Boot 的标准配置文件。</li>
-<li>另外还有一些 <code>xxx.bin</code> 文件，这些是一些硬件固件，其中的 <code>light_c906_audio.bin</code> 显然是<a href="https://www.t-head.cn/product/C906?lang=zh" target="_blank" rel="noopener noreferrer">玄铁 906</a> 这个 IP 核的音频固件，其他的后面再研究。</li>
+<li>它使用 <code>/boot/extlinux/extlinux.conf</code> 作为 U-Boot 的启动项配置，据 <a
+  href="https://github.com/ARM-software/u-boot/blob/master/doc/README.distro"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>U-Boot 官方的 Distro 文档</a>
+ 所言，这是 U-Boot 的标准配置文件。</li>
+<li>另外还有一些 <code>xxx.bin</code> 文件，这些是一些硬件固件，其中的 <code>light_c906_audio.bin</code> 显然是<a
+  href="https://www.t-head.cn/product/C906?lang=zh"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>玄铁 906</a>
+ 这个 IP 核的音频固件，其他的后面再研究。</li>
 <li>NixOS 的 <code>initrd</code>, <code>dtbs</code> 以及 <code>Image</code> 文件都是在 <code>/boot/nixos</code> 下，这三个文件也都是跟 Linux 的启动相关的，现在不用管它们，下一步会分析。</li>
 </ol>
 <p>再看下 <code>/boot/extlinux/extlinux.conf</code> 的内容：</p>
@@ -1017,7 +1560,15 @@ Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用
 <li>它创建了一个名为 <code>nixos-default</code> 的启动项并将它设为了默认启动项，extlinux 在启动阶段会根据该配置启动 NixOS 系统</li>
 <li>启动项中的 <code>LINUX</code> <code>INITRD</code> <code>FDT</code> 三个参数分别指定了 kernel(Image 文件)、initrd 以及设备树（dtb）的位置，这三个文件我们在前面已经看到了，都在 <code>/boot/nixos</code> 下。
 <ol>
-<li>根据 Linux 官方文档 <a href="https://docs.kernel.org/admin-guide/initrd.html" target="_blank" rel="noopener noreferrer">Using the initial RAM disk (initrd)</a> 所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
+<li>根据 Linux 官方文档 <a
+  href="https://docs.kernel.org/admin-guide/initrd.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Using the initial RAM disk (initrd)</a>
+ 所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
 <ol>
 <li>bootloader(这里是 u-boot) 根据配置加载 kernel 文件（<code>Image</code>）、dtb 设备树文件以及 <code>initrd</code> 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.</li>
 <li>Kernel 将传入的 initrd 转换成一个内存盘并挂载为根文件系统，然后释放 initrd 的内存。</li>
@@ -2767,12 +3318,28 @@ IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI �
     <a href="#4-fw_dynamicbin-%e8%b7%9f-u-boot-splbin-%e4%b8%a4%e4%b8%aa%e6%96%87%e4%bb%b6" class="header-mark"></a>4. fw_dynamic.bin 跟 u-boot-spl.bin 两个文件</h3><ol>
 <li><code>fw_dynamic.bin</code>: 我们 NixOS 镜像的 <code>/boot</code> 中就有这个固件，它是 OpenSBI 的编译产物。
 <ol>
-<li>RevyOS 的定制 OpenSBI 构建方法：<a href="https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml" target="_blank" rel="noopener noreferrer">https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml</a></li>
+<li>RevyOS 的定制 OpenSBI 构建方法：<a
+  href="https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml</a>
+</li>
 </ol>
 </li>
 <li><code>u-boot-spl.bin</code>: 这个文件是 u-boot 的编译产物，它是二级加载器。
 <ol>
-<li>RevyOS 的定制 u-boot 构建方法：<a href="https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml" target="_blank" rel="noopener noreferrer">https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml</a></li>
+<li>RevyOS 的定制 u-boot 构建方法：<a
+  href="https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml</a>
+</li>
 </ol>
 </li>
 </ol>
@@ -2782,14 +3349,30 @@ IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI �
 <p>但我在研究了 NixOS 的工具链实现，以及咨询了 @NickCao 后，确认了在 NixOS 上这几乎是不可行的。
 NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔改，要在 NixOS 上使用 T-Head 的工具链，就要使这一堆魔改的东西在 T-Head 的工具链上也能 Work，这个工作量很大，也很有技术难度。</p>
 <p>所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一些标准工具链上的编译问题。</p>
-<p>Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关信息：<a href="https://github.com/ryan4yin/nixos-licheepi4a/issues/14" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nixos-licheepi4a/issues/14</a></p>
+<p>Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关信息：<a
+  href="https://github.com/ryan4yin/nixos-licheepi4a/issues/14"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/ryan4yin/nixos-licheepi4a/issues/14</a>
+</p>
 <h2 id="五我是如何构建出一个可以在-licheepi-4a-上运行的-nixos-镜像的" class="headerLink">
     <a href="#%e4%ba%94%e6%88%91%e6%98%af%e5%a6%82%e4%bd%95%e6%9e%84%e5%bb%ba%e5%87%ba%e4%b8%80%e4%b8%aa%e5%8f%af%e4%bb%a5%e5%9c%a8-licheepi-4a-%e4%b8%8a%e8%bf%90%e8%a1%8c%e7%9a%84-nixos-%e9%95%9c%e5%83%8f%e7%9a%84" class="header-mark"></a>五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的</h2><p>到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，
 <strong>NixOS 跟其他传统发行版在启动流程中最大的区别是它自定义了一个 init 脚本，在启动 systemd 之前，它会先执行这个脚本进行文件系统的初始化操作，准备好最基础的 FHS 目录结构，使得后续的 systemd 以及其他服务能正常启动</strong>。
 正是因为这个 init 脚本，NixOS 才能在仅有 <code>/boot</code> 与 <code>/nix</code> 这两个目录的情况下正常启动整个系统。</p>
 <blockquote>
 <p>NixOS 数据的集中化只读存储使更多的骚操作成为可能，比如直接使用 tmpfs 作为根文件系统，将需要持久化的目录挂载到外部存储设备上，这样每次重启系统时，所有预期之外的临时数据都会被清空，进一步保证了系统的可复现性与安全性。
-如果你有系统洁癖，而且有兴趣折腾，那就快来看看 @LanTian 写的 <a href="https://lantian.pub/article/modify-computer/nixos-impermanence.lantian/" target="_blank" rel="noopener noreferrer">NixOS 系列（四）：「无状态」操作系统</a> 吧~</p>
+如果你有系统洁癖，而且有兴趣折腾，那就快来看看 @LanTian 写的 <a
+  href="https://lantian.pub/article/modify-computer/nixos-impermanence.lantian/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS 系列（四）：「无状态」操作系统</a>
+ 吧~</p>
 </blockquote>
 <p>最终在 LicheePi4A 成功启动后的登录的截图：</p>
 <figure><img src="./nixos-licheepi-neofetch.webp" width="80%"/><figcaption>
@@ -2798,20 +3381,132 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 </figure>
 
 <p>那么基于我们到目前为止学到的知识，要如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像呢？</p>
-<p>这个讲起来就很费时间了，涉及到了 NixOS 的<a href="https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation" target="_blank" rel="noopener noreferrer">交叉编译系统</a>，<a href="https://nixos-and-flakes.thiscute.world/zh/development/kernel-development" target="_blank" rel="noopener noreferrer">内核 override</a>, <a href="https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes" target="_blank" rel="noopener noreferrer">flakes</a>, <a href="https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix" target="_blank" rel="noopener noreferrer">镜像构建</a>等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nixos-licheepi4a</a>.</p>
+<p>这个讲起来就很费时间了，涉及到了 NixOS 的<a
+  href="https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>交叉编译系统</a>
+，<a
+  href="https://nixos-and-flakes.thiscute.world/zh/development/kernel-development"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>内核 override</a>
+, <a
+  href="https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>flakes</a>
+, <a
+  href="https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>镜像构建</a>
+等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<a
+  href="https://github.com/ryan4yin/nixos-licheepi4a"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://github.com/ryan4yin/nixos-licheepi4a</a>
+.</p>
 <p>简单的说，NixOS 跟传统 Linux 发行版的系统镜像构建思路是一致的，但因为其声明式与可复现性的特点，实际实现时出现了非常大的区别。
 以我的项目仓库为例，整个项目完全使用 Nix 语言声明式编写（内嵌了部分 Shell 脚本&hellip;），而且这份配置也可用于系统后续的持续声明式更新部署（我还给出了一个 demo）。</p>
-<p>最后，再推荐一波我的 NixOS 入门指南：<a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-and-flakes-book</a>，对 NixOS 感兴趣的读者们，快进我碗里来（</p>
+<p>最后，再推荐一波我的 NixOS 入门指南：<a
+  href="https://github.com/ryan4yin/nixos-and-flakes-book"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nixos-and-flakes-book</a>
+，对 NixOS 感兴趣的读者们，快进我碗里来（</p>
 <h2 id="参考" class="headerLink">
     <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
-<li><a href="https://litterhougelangley.club/blog/2023/05/27/licheepi-4a-%e8%bf%99%e4%b8%aa%e5%b0%8f%e6%9d%bf%e6%9c%89%e7%82%b9%e6%84%8f%e6%80%9d%ef%bc%88%e7%ac%ac%e4%b8%80%e9%83%a8%e5%88%86%ef%bc%89/" target="_blank" rel="noopener noreferrer">LicheePi 4A —— 这个小板有点意思（第一部分） - HougeLangley</a></li>
-<li><a href="https://opensource.com/article/18/1/analyzing-linux-boot-process" target="_blank" rel="noopener noreferrer">Analyzing the Linux boot process - By Alison Chaiken</a></li>
-<li><a href="https://github.com/riscv-software-src/opensbi/blob/master/docs/firmware/fw.md" target="_blank" rel="noopener noreferrer">OpenSBI Platform Firmwares</a></li>
-<li><a href="https://crvf2019.github.io/pdf/43.pdf" target="_blank" rel="noopener noreferrer">An Introduction to RISC-V Boot flow: Overview, Blob vs Blobfree standards</a></li>
-<li><a href="https://quard-star-tutorial.readthedocs.io/zh_CN/latest/ch5-1.html" target="_blank" rel="noopener noreferrer">基于 qemu-riscv 从 0 开始构建嵌入式 linux 系统 ch5-1. 什么是多级 BootLoader 与 opensbi(上)¶</a></li>
-<li><a href="https://docs.kernel.org/admin-guide/initrd.html" target="_blank" rel="noopener noreferrer">Using the initial RAM disk (initrd) - kernel.org</a></li>
-<li><a href="https://www.baeldung.com/linux/kernel-images" target="_blank" rel="noopener noreferrer">Differences Between vmlinux, vmlinuz, vmlinux.bin, zimage, and bzimage</a></li>
-<li><a href="https://github.com/ARM-software/u-boot/blob/master/doc/README.distro" target="_blank" rel="noopener noreferrer">U-Boot 官方的 Distro 文档</a></li>
+<li><a
+  href="https://litterhougelangley.club/blog/2023/05/27/licheepi-4a-%e8%bf%99%e4%b8%aa%e5%b0%8f%e6%9d%bf%e6%9c%89%e7%82%b9%e6%84%8f%e6%80%9d%ef%bc%88%e7%ac%ac%e4%b8%80%e9%83%a8%e5%88%86%ef%bc%89/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>LicheePi 4A —— 这个小板有点意思（第一部分） - HougeLangley</a>
+</li>
+<li><a
+  href="https://opensource.com/article/18/1/analyzing-linux-boot-process"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Analyzing the Linux boot process - By Alison Chaiken</a>
+</li>
+<li><a
+  href="https://github.com/riscv-software-src/opensbi/blob/master/docs/firmware/fw.md"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>OpenSBI Platform Firmwares</a>
+</li>
+<li><a
+  href="https://crvf2019.github.io/pdf/43.pdf"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>An Introduction to RISC-V Boot flow: Overview, Blob vs Blobfree standards</a>
+</li>
+<li><a
+  href="https://quard-star-tutorial.readthedocs.io/zh_CN/latest/ch5-1.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>基于 qemu-riscv 从 0 开始构建嵌入式 linux 系统 ch5-1. 什么是多级 BootLoader 与 opensbi(上)¶</a>
+</li>
+<li><a
+  href="https://docs.kernel.org/admin-guide/initrd.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Using the initial RAM disk (initrd) - kernel.org</a>
+</li>
+<li><a
+  href="https://www.baeldung.com/linux/kernel-images"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Differences Between vmlinux, vmlinuz, vmlinux.bin, zimage, and bzimage</a>
+</li>
+<li><a
+  href="https://github.com/ARM-software/u-boot/blob/master/doc/README.distro"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>U-Boot 官方的 Distro 文档</a>
+</li>
 </ul>
 ]]></content></entry><entry><title type="html">我的 2023 - 认识更多有趣的人，见识更宽广的世界</title><link href="https://thiscute.world/posts/2023-summary/"/><id>https://thiscute.world/posts/2023-summary/</id><author><name>ryan4yin</name></author><published>2023-12-31T23:59:45+08:00</published><updated>2024-01-19T10:12:45+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/2023-summary/2023-ryan4yin-github-oss-insight.webp" height="1753" width="874"><figcaption></figcaption>
@@ -2830,8 +3525,24 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <ul>
 <li>延续去年底开始对嵌入式硬件的兴趣，继续折腾 stm32 / orange pi 5 / esp32 等嵌入式硬件。
 <ul>
-<li>用 STM32 点亮了 TFT 液晶屏，以及搞定了使用 printf 打印日志到串口 - <a href="https://github.com/ryan4yin/learn-stm32f103c8t6" target="_blank" rel="noopener noreferrer">ryan4yin/learn-stm32f103c8t6</a></li>
-<li>研究在 orangepi5(rk3558s) 上用 npu 跑 AI 任务，写了点笔记 <a href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588" target="_blank" rel="noopener noreferrer">demos_rk3588</a></li>
+<li>用 STM32 点亮了 TFT 液晶屏，以及搞定了使用 printf 打印日志到串口 - <a
+  href="https://github.com/ryan4yin/learn-stm32f103c8t6"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/learn-stm32f103c8t6</a>
+</li>
+<li>研究在 orangepi5(rk3558s) 上用 npu 跑 AI 任务，写了点笔记 <a
+  href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>demos_rk3588</a>
+</li>
 </ul>
 </li>
 <li>折腾 Proxmox VE 集群
@@ -2847,8 +3558,24 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
               </figcaption>
       </figure>
 </li>
-<li>研究 Homelab 备份与数据同步方案，写了点笔记 <a href="https://github.com/ryan4yin/knowledge/blob/master/homelab/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%90%8C%E6%AD%A5.md" target="_blank" rel="noopener noreferrer">数据备份与同步策略</a></li>
-<li>发布文章 <a href="https://thiscute.world/posts/ee-basics-2-esp32-display/" target="_blank" rel="noopener noreferrer">EE 入门（二） - 使用 ESP32 + SPI 显示屏绘图、显示图片、跑贪吃蛇</a>
+<li>研究 Homelab 备份与数据同步方案，写了点笔记 <a
+  href="https://github.com/ryan4yin/knowledge/blob/master/homelab/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%90%8C%E6%AD%A5.md"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>数据备份与同步策略</a>
+</li>
+<li>发布文章 <a
+  href="https://thiscute.world/posts/ee-basics-2-esp32-display/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>EE 入门（二） - 使用 ESP32 + SPI 显示屏绘图、显示图片、跑贪吃蛇</a>
+
 <figure><img src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="100%"/>
       </figure>
 </li>
@@ -2871,8 +3598,24 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <ul>
 <li>仍旧是折腾各种嵌入式设备，新入手了 Sipeed MAIX-III AXera-Pi AX620A（爱芯派）+ Maix M0s MCU, 野火鲁班猫 0，荔枝糖 Nano 9K、M1s Dock、Longan Nano 等一堆大小开发板，折腾各种 Linux 编译、嵌入式开发的内容。</li>
 <li>被 Copilot X 小小震撼了下，花了 100 美刀买了个 1 年的订阅，价格不贵，希望能切实帮我提升写代码的效率。</li>
-<li>发了篇新博客：<a href="https://thiscute.world/posts/wireguard-on-linux/" target="_blank" rel="noopener noreferrer">Linux 上的 WireGuard 网络分析（一）</a></li>
-<li>读了一点 <a href="https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition" target="_blank" rel="noopener noreferrer">Linux Device Drivers Development 2nd Edition</a></li>
+<li>发了篇新博客：<a
+  href="https://thiscute.world/posts/wireguard-on-linux/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Linux 上的 WireGuard 网络分析（一）</a>
+</li>
+<li>读了一点 <a
+  href="https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Linux Device Drivers Development 2nd Edition</a>
+</li>
 </ul>
 </li>
 </ul>
@@ -2880,7 +3623,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>4 月
 <ul>
 <li>在业余爱好上投入的精力越来越多，工作上相对的越来越懈怠，感觉碰到了瓶颈，但搞不明白该怎么解决。</li>
-<li>听了 <a href="https://github.com/wdvxdr1123" target="_blank" rel="noopener noreferrer">wd 佬</a>的建议整了个达尔优 A87Pro 天空轴 v3，一番体验这个天空轴 v3 手感确实贼爽、声音也小，感觉可能有点类似静电容了（虽然我没用过静电容 emmm）。
+<li>听了 <a
+  href="https://github.com/wdvxdr1123"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>wd 佬</a>
+的建议整了个达尔优 A87Pro 天空轴 v3，一番体验这个天空轴 v3 手感确实贼爽、声音也小，感觉可能有点类似静电容了（虽然我没用过静电容 emmm）。
 <ul>
 <li>我毕业以来就 19 年跟 20 年分别买过两把 IKBC 的茶轴跟红轴，茶轴放家里了，红轴一直放在公司用。当时国产轴感觉还不太出名，但是现在我聊键盘的朋友都看不上 cherry 轴了，网上搜了下 cheery 轴也有各种品控下降、轴心不稳、杂音大的诟病。</li>
 <li>结合朋友推荐，另外看到 v2ex 上聊键盘的朋友也有说天空轴 v3 好用的，还在知乎上也看到有人说这个轴不错，于是就按捺不住心思下单了。到手确实很惊艳，甚至让我再一次喜欢上了打字的感觉！打了几篇小鹤练习群的赛文享受这种飘逸的 feel~</li>
@@ -2922,7 +3673,31 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <figure><img src="/images/2023-summary/i3_2023-07-29_1.webp" width="100%"/>
     </figure>
 </li>
-<li>在新主机上成功复现出我的 NixOS 环境后，紧接着发布了我的系统配置 <a href="https://github.com/ryan4yin/nix-config/releases/tag/v0.0.2" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/v0.0.2)</a> 以及这大半个月的学习笔记 <a href="https://thiscute.world/posts/nixos-and-flake-basics/" target="_blank" rel="noopener noreferrer">NixOS 与 Nix Flakes 新手入门</a>，然后事情就变得越来越有趣起来了！随着读者的反馈以及我对它的不断迭代，这份学习笔记逐渐膨胀成一篇一万多字的博文，并且有了中英双语，然后又转变成一本开源书藉 <a href="https://nixos-and-flakes.thiscute.world/" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>，在 NixOS 国际社区获得了大量好评！它给我带来了巨大的成就感以及社区参与感。
+<li>在新主机上成功复现出我的 NixOS 环境后，紧接着发布了我的系统配置 <a
+  href="https://github.com/ryan4yin/nix-config/releases/tag/v0.0.2"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config/v0.0.2)</a>
+ 以及这大半个月的学习笔记 <a
+  href="https://thiscute.world/posts/nixos-and-flake-basics/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS 与 Nix Flakes 新手入门</a>
+，然后事情就变得越来越有趣起来了！随着读者的反馈以及我对它的不断迭代，这份学习笔记逐渐膨胀成一篇一万多字的博文，并且有了中英双语，然后又转变成一本开源书藉 <a
+  href="https://nixos-and-flakes.thiscute.world/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>nixos-and-flakes-book</a>
+，在 NixOS 国际社区获得了大量好评！它给我带来了巨大的成就感以及社区参与感。
 <figure><img src="/images/2023-summary/nixos-and-flakes-book-comments_reddit.webp" width="100%"/><figcaption>
                 <h4>NixOS &amp; Flakes Book 的部分评论 - Reddit</h4>
             </figcaption>
@@ -2950,7 +3725,31 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>立了个 flag - 把 NixOS 移稙到我手上的两块开发版上跑起来，一块 ARM64 架构的 Orange Pi 5，以及另一块 RISC-V 架构的 LicheePi 4A.
 <ul>
 <li>花了好几天时间研究，在俄罗斯网友的耐心帮助下，终于在 6/4 晚上在 Orange Pi 5 上把 NixOS 跑起来了，还挺有成就感的（虽然现在也不知道拿这板子用来干啥&hellip;）</li>
-<li>之后断断续续折腾了一个月的 NixOS on LicheePi 4A，试了很多方案，还请教了 <a href="https://github.com/HougeLangley" target="_blank" rel="noopener noreferrer">HougeLangley</a>、<a href="https://github.com/NickCao" target="_blank" rel="noopener noreferrer">@nickcao</a>、<a href="https://github.com/chainsx" target="_blank" rel="noopener noreferrer">@chainsx</a> 等大佬，学会了很多 Linux 相关的东西，费尽千辛万苦终于成功把 rootfs 编译出来了，但死活引导不成功。感觉是 uboot-spl 跟 boot 分区这两个地方的内容有问题，但不知道怎么解决，累觉不爱。</li>
+<li>之后断断续续折腾了一个月的 NixOS on LicheePi 4A，试了很多方案，还请教了 <a
+  href="https://github.com/HougeLangley"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>HougeLangley</a>
+、<a
+  href="https://github.com/NickCao"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>@nickcao</a>
+、<a
+  href="https://github.com/chainsx"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>@chainsx</a>
+ 等大佬，学会了很多 Linux 相关的东西，费尽千辛万苦终于成功把 rootfs 编译出来了，但死活引导不成功。感觉是 uboot-spl 跟 boot 分区这两个地方的内容有问题，但不知道怎么解决，累觉不爱。</li>
 </ul>
 </li>
 <li>收到一封来自 2018 年的我在 futureme.org 发送的邮件，回想起来，当时我是真迷茫哪。
@@ -2959,7 +3758,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
             </figcaption>
     </figure>
 </li>
-<li>受读者评论启发，将之前的 NixOS 笔记做成了一个单独的文档站点 + GitHub 仓库，<a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>，也对其内容做了大量更新，用 ChatGPT 3.5 全面优化了英文内容，阅读体验大大提升（英文苦手默默路过&hellip;）
+<li>受读者评论启发，将之前的 NixOS 笔记做成了一个单独的文档站点 + GitHub 仓库，<a
+  href="https://github.com/ryan4yin/nixos-and-flakes-book"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>nixos-and-flakes-book</a>
+，也对其内容做了大量更新，用 ChatGPT 3.5 全面优化了英文内容，阅读体验大大提升（英文苦手默默路过&hellip;）
 <figure><img src="/images/now/2023-08-13-nixos-and-flakes-book.webp" width="100%"/><figcaption>
                 <h4>NixOS &amp; Flakes Book</h4>
             </figcaption>
@@ -2969,7 +3776,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 </li>
 <li>7 月
 <ul>
-<li>NixOS 系统配置 <a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a> 迭代：
+<li>NixOS 系统配置 <a
+  href="https://github.com/ryan4yin/nix-config"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config</a>
+ 迭代：
 <ul>
 <li>把办公电脑 Macbook Pro 2020 重裝了一遍系統，新系统環境完全通過 nix-darwin 安裝管理，就連大部分的 macOS 系統配置也完全声明式管理了。至此，我的常用电脑环境（NixOS+macOS）全部都使用同一份 nix 配置管理起来了，感覺非常香！
 <ul>
@@ -2977,7 +3792,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>nixpkgs 对 macOS 的支持有限，因此常用的 GUI 程序都通过 nix-darwin 调用 homebrew 进行安装管理。</li>
 </ul>
 </li>
-<li>所有命令行工具的主题，全部统一为了 <a href="https://github.com/catppuccin/catppuccin" target="_blank" rel="noopener noreferrer">catppuccin-mocha</a>.</li>
+<li>所有命令行工具的主题，全部统一为了 <a
+  href="https://github.com/catppuccin/catppuccin"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>catppuccin-mocha</a>
+.</li>
 <li>壁纸文件太大了，将它们拆分到单独的仓库中，方便管理。同时还添加了随机切换壁纸的功能。</li>
 <li>添加了三台在 Proxmox VE 上运行的 NixOS 虚拟机，并且尝试用它们组建 NixOS 的分布式构建集群，挺有意思。</li>
 <li>发现之前用的 alacritty 功能有限，于是将主力终端换成了 kitty，wezterm 作为备用选择，而 alacritty 就基本不使用了。</li>
@@ -2989,10 +3812,34 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 </li>
 </ul>
 </li>
-<li>基于在 macOS 上折腾 nix-darwin 的经验，制作了一个 <a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer">ryan4yin/nix-darwin-kickstarter</a> 模板仓库，并且在 <a href="https://twitter.com/ryan4yin/status/1681639068957028352" target="_blank" rel="noopener noreferrer">Twitter</a> 等社区分享了一波，获得一波好评。</li>
+<li>基于在 macOS 上折腾 nix-darwin 的经验，制作了一个 <a
+  href="https://github.com/ryan4yin/nix-darwin-kickstarter"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-darwin-kickstarter</a>
+ 模板仓库，并且在 <a
+  href="https://twitter.com/ryan4yin/status/1681639068957028352"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Twitter</a>
+ 等社区分享了一波，获得一波好评。</li>
 <li>从 4 月份折腾 NixOS 到现在，GitHub 上开了五六个 Nix 项目，获得了接近 400 stars，也认识了许多朋友、收到了许多好评，在这个圈子里是有点混开了的 feel.
 <ul>
-<li>甚至发现有俄罗斯的老铁在将我的 NixOS 小书翻译成俄语！<a href="https://github.com/fl42v/nixos-and-flakes-book-ru" target="_blank" rel="noopener noreferrer">fl42v/nixos-and-flakes-book-ru</a>，成就感又涨了一点。</li>
+<li>甚至发现有俄罗斯的老铁在将我的 NixOS 小书翻译成俄语！<a
+  href="https://github.com/fl42v/nixos-and-flakes-book-ru"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>fl42v/nixos-and-flakes-book-ru</a>
+，成就感又涨了一点。</li>
 </ul>
 </li>
 </ul>
@@ -3001,7 +3848,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <ul>
 <li>时隔一个多月，在 LicheePi 的 Telegram 群组被老外 ping NixOS 移植进展。又来了点动力再次接续之前 6 月份的移植工作，一番尝试后成功在 Lichee Pi 4A 上把 NixOS 跑起来了！离开始移植已经过去了两个月，迟来的成功，泪目！ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至给我打了 $50 美元以表感谢，原因是「这太有意思了！」
 <ul>
-<li><a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-licheepi4a</a>
+<li><a
+  href="https://github.com/ryan4yin/nixos-licheepi4a"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nixos-licheepi4a</a>
+
 <figure><img src="/images/2023-summary/nixos-riscv-cluster.webp" width="100%"/><figcaption>
                   <h4>NixOS on LicheePi4A</h4>
               </figcaption>
@@ -3017,7 +3872,23 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 </li>
 <li>有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 $50 刀，我于是在 GitHub 个人页面以及项目中都新增了 Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
 <ul>
-<li>截止 2023 年底，<a href="https://patreon.com/ryan4yin" target="_blank" rel="noopener noreferrer">Patreon</a> 共收到赞助 10 刀，<a href="https://www.buymeacoffee.com/ryan4yin" target="_blank" rel="noopener noreferrer">buymeacoffee</a> 收到赞助 70 刀，爱发电收到赞助 ￥25 元，以及加密货币收到赞助 50 刀。
+<li>截止 2023 年底，<a
+  href="https://patreon.com/ryan4yin"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Patreon</a>
+ 共收到赞助 10 刀，<a
+  href="https://www.buymeacoffee.com/ryan4yin"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>buymeacoffee</a>
+ 收到赞助 70 刀，爱发电收到赞助 ￥25 元，以及加密货币收到赞助 50 刀。
 <figure><img src="/images/now/nixos-patreon_the-first-member.jpg" width="80%"/><figcaption>
                   <h4>Patreon Messages</h4>
               </figcaption>
@@ -3025,20 +3896,58 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 </li>
 </ul>
 </li>
-<li>写下新文章 <a href="https://thiscute.world/posts/a-quarter-of-the-way-through-life/" target="_blank" rel="noopener noreferrer">人生已过四分之一</a>，回顾我到目前为止的人生，以及对未来的展望，挺多感想。</li>
-<li>在 <a href="https://twitter.com/Manjusaka_Lee" target="_blank" rel="noopener noreferrer">@Manjusaka_Lee</a> 的熏陶下，我也整了一个新的邮箱地址 <a href="mailto:ryan4yin@linux.com" rel="">ryan4yin@linux.com</a>。先给 Linux Foundation 捐 99 刀，然后再付 150 刀就能得到这个终身邮箱地址。
+<li>写下新文章 <a
+  href="https://thiscute.world/posts/a-quarter-of-the-way-through-life/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>人生已过四分之一</a>
+，回顾我到目前为止的人生，以及对未来的展望，挺多感想。</li>
+<li>在 <a
+  href="https://twitter.com/Manjusaka_Lee"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>@Manjusaka_Lee</a>
+ 的熏陶下，我也整了一个新的邮箱地址 <a
+  href="mailto:ryan4yin@linux.com"
+  
+  rel=""
+  
+>ryan4yin@linux.com</a>
+。先给 Linux Foundation 捐 99 刀，然后再付 150 刀就能得到这个终身邮箱地址。
 <ul>
 <li>一是用了这么久 Linux 也该捐点钱，二是感觉这个邮箱很酷！</li>
 </ul>
 </li>
 <li>因为一些心态上的变化，开始参加一些公益活动，想在工作与业余爱好之外，再找到一些自我价值感，比如说加入了「恒晖公益月捐」活动，每月捐 300 块。</li>
-<li>在 <a href="https://github.com/chainsx" target="_blank" rel="noopener noreferrer">@chainsx</a> 的帮助下，成功在 rock 5a 跟 orange pi 5 plus 两块板子上把 NixOS 跑了起来。</li>
+<li>在 <a
+  href="https://github.com/chainsx"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>@chainsx</a>
+ 的帮助下，成功在 rock 5a 跟 orange pi 5 plus 两块板子上把 NixOS 跑了起来。</li>
 </ul>
 </li>
 <li>9 月
 <ul>
 <li>临时起意看了个午夜场的《奥本海默》，IMAX 巨幕。给个 4 星没问题吧，演挺好的，原来美共曾经有这么多美国高级知识分子，这是我以前不了解的。</li>
-<li>前几天跟老妹聊时，她引用了我看的小说里的一句话，然后我看<a href="https://www.lionad.art/" target="_blank" rel="noopener noreferrer">@仿生狮子</a>的荐书时发现，这一句就是《山月记》的摘抄，药哥说他也看过这书，挺好。当时就下单了，今天书到了，决定读一读。
+<li>前几天跟老妹聊时，她引用了我看的小说里的一句话，然后我看<a
+  href="https://www.lionad.art/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>@仿生狮子</a>
+的荐书时发现，这一句就是《山月记》的摘抄，药哥说他也看过这书，挺好。当时就下单了，今天书到了，决定读一读。
 <ul>
 <li>读了第一个短篇，最知名的《山月记》，更类似一个寓言故事，最有韵味的就是那一句「<strong>深怕自己并非明珠而不敢刻苦琢磨，又自信有几分才华，不甘与瓦砾为伍。日渐避世离俗，心中自卑怯懦之自尊终在愤懑与羞怒中愈发张狂。世人皆为驯兽师，猛兽即个人性情</strong>。」
 <figure><img src="/images/now/2023-09-02_midi-keyboard.webp" width="100%"/><figcaption>
@@ -3048,13 +3957,61 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 </li>
 </ul>
 </li>
-<li>跟朋友聊到陈行甲老师，他给我分享了深慈联《2023 年第二期慈善大讲堂》（报道见 <a href="https://new.qq.com/rain/a/20230821A06QDX00" target="_blank" rel="noopener noreferrer">“坚守初心，笃行致远”，深慈联举办2023年第二期慈善大讲堂</a>）的视频，看上去分享者与与会者年龄段主要在 40+ 到 50+，他们看待问题的角度跟我们年轻人完全不同，陈行甲老师以及肖兴萍老师的演讲都干货满满，很有收获。</li>
+<li>跟朋友聊到陈行甲老师，他给我分享了深慈联《2023 年第二期慈善大讲堂》（报道见 <a
+  href="https://new.qq.com/rain/a/20230821A06QDX00"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>“坚守初心，笃行致远”，深慈联举办2023年第二期慈善大讲堂</a>
+）的视频，看上去分享者与与会者年龄段主要在 40+ 到 50+，他们看待问题的角度跟我们年轻人完全不同，陈行甲老师以及肖兴萍老师的演讲都干货满满，很有收获。</li>
 <li>请半天假去看了中国国际光博会，看到了挺多新鲜的东西，像啥气动开关啊、光波导眼镜啊、高能量密度的锌空电池充电包啊、中科院光电所的两台小光刻机啊、长春光机所的空间站小机械臂啊、以及压电陶瓷驱动技术的各种应用，长了见识。</li>
 <li>看了些 NixCon 2023 的视频，挺有意思。而且发现所有视频都有一只招财猫在讲台上哈哈。</li>
-<li>最感兴趣的内容是这个 - <a href="https://www.youtube.com/watch?v=Gm8yrvbgY-Y" target="_blank" rel="noopener noreferrer">NixCon2023 Bootstrapping Nix and Linux from TinyCC</a></li>
-<li>看了记录片 <a href="https://movie.douban.com/subject/25850443/" target="_blank" rel="noopener noreferrer">史蒂夫·乔布斯 Steve Jobs</a>，Jobs 简直是最差的丈夫、父亲跟同事，但他确实是最牛逼的设计天才（或许这两句都应该再加一个「之一」）。</li>
-<li>听了天依的新曲<a href="https://www.bilibili.com/video/BV1Yp4y1j7jX/" target="_blank" rel="noopener noreferrer">《歌行四方 - 天依游学记》</a>，曲跟词都非常棒！完美融合了二次元跟三次元的各种传统音乐，天依的人物建模、服装设计跟渲染质量也提升了一个档次。 很多年前第一次听天依，感觉声音怪怪的，后来出了全息现场会，效果其实也挺差的，然后一步步地建模质量越来越好，人物越来越生动活泼，声音越来越自然，现在又走进了三次元，与传统音乐大师一起合奏。听下来真的很感动，有一种老父亲甚感欣慰的 feel.</li>
-<li>了解了下 <a href="https://worldjusticeproject.org/rule-of-law-index/country/2022/China" target="_blank" rel="noopener noreferrer">世界法治指数</a> 与 <a href="https://www.cnfin.com/hg-lb/detail/20230425/3851364_1.html" target="_blank" rel="noopener noreferrer">中国各省份司法文明指数</a>
+<li>最感兴趣的内容是这个 - <a
+  href="https://www.youtube.com/watch?v=Gm8yrvbgY-Y"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixCon2023 Bootstrapping Nix and Linux from TinyCC</a>
+</li>
+<li>看了记录片 <a
+  href="https://movie.douban.com/subject/25850443/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>史蒂夫·乔布斯 Steve Jobs</a>
+，Jobs 简直是最差的丈夫、父亲跟同事，但他确实是最牛逼的设计天才（或许这两句都应该再加一个「之一」）。</li>
+<li>听了天依的新曲<a
+  href="https://www.bilibili.com/video/BV1Yp4y1j7jX/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>《歌行四方 - 天依游学记》</a>
+，曲跟词都非常棒！完美融合了二次元跟三次元的各种传统音乐，天依的人物建模、服装设计跟渲染质量也提升了一个档次。 很多年前第一次听天依，感觉声音怪怪的，后来出了全息现场会，效果其实也挺差的，然后一步步地建模质量越来越好，人物越来越生动活泼，声音越来越自然，现在又走进了三次元，与传统音乐大师一起合奏。听下来真的很感动，有一种老父亲甚感欣慰的 feel.</li>
+<li>了解了下 <a
+  href="https://worldjusticeproject.org/rule-of-law-index/country/2022/China"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>世界法治指数</a>
+ 与 <a
+  href="https://www.cnfin.com/hg-lb/detail/20230425/3851364_1.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>中国各省份司法文明指数</a>
+
 <ul>
 <li>湖南省貌似一直在倒数前二徘徊&hellip;很尴尬。</li>
 </ul>
@@ -3078,13 +4035,43 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <ul>
 <li>读完了《叫魂：1768 年中国妖术大恐慌》</li>
 <li>看了记录片《溥仪：末代皇帝》跟电影《末代皇帝》，两个片子的内容有些出入，不过这边的史料显然可信度更高，都好评。</li>
-<li>我的开源小书 NixOS &amp; Flakes Book 上了 Hacker News 热门，很开心：<a href="https://news.ycombinator.com/item?id=37818570" target="_blank" rel="noopener noreferrer">NixOS and Flakes Book: An unofficial book for beginners (free)</a></li>
-<li>之前跟朋友聊过我可能有注意力缺失障碍（ADHD），朋友提到可以去看看医生。国庆后经 <a href="bleatingsheep.org/" rel="">@咩咩</a> 再次提醒，约了深圳康宁医院（深圳市精神卫生中心）的特需门诊，然后确诊，开始服药治疗&hellip;
+<li>我的开源小书 NixOS &amp; Flakes Book 上了 Hacker News 热门，很开心：<a
+  href="https://news.ycombinator.com/item?id=37818570"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS and Flakes Book: An unofficial book for beginners (free)</a>
+</li>
+<li>之前跟朋友聊过我可能有注意力缺失障碍（ADHD），朋友提到可以去看看医生。国庆后经 <a
+  href="bleatingsheep.org/"
+  
+  rel=""
+  
+>@咩咩</a>
+ 再次提醒，约了深圳康宁医院（深圳市精神卫生中心）的特需门诊，然后确诊，开始服药治疗&hellip;
 <ul>
-<li>跟 0xffff 群友辩论 ADHD 病症相关问题，讨论的内容逐渐发散 - <a href="https://0xffff.one/d/1643-cong-adhd-zhu-yi-li-que-shi-zheng" target="_blank" rel="noopener noreferrer">从 ADHD 注意力缺失症聊开去</a></li>
+<li>跟 0xffff 群友辩论 ADHD 病症相关问题，讨论的内容逐渐发散 - <a
+  href="https://0xffff.one/d/1643-cong-adhd-zhu-yi-li-que-shi-zheng"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>从 ADHD 注意力缺失症聊开去</a>
+</li>
 </ul>
 </li>
-<li>遵医嘱，搜了些正念冥想的资料，看了点 <a href="https://www.bilibili.com/video/BV19y4y1V7RU" target="_blank" rel="noopener noreferrer">正念减压疗法创始人-乔.卡巴金 教正念冥想大师课（中英字幕）</a>，尝试了下还有点意思。</li>
+<li>遵医嘱，搜了些正念冥想的资料，看了点 <a
+  href="https://www.bilibili.com/video/BV19y4y1V7RU"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>正念减压疗法创始人-乔.卡巴金 教正念冥想大师课（中英字幕）</a>
+，尝试了下还有点意思。</li>
 <li>跟我妹沟通后感觉她也比较有可能有 ADHD，提前安排她来深圳看心理医生。我妹确诊了抑郁症 + ADHD，医生给开了安非他酮，先吃半个月看看效果再复诊，同时也建议多带我妹出去运动散心。
 <ul>
 <li>我妹确诊抑郁症这一点真的让我很意外，让我意识到我一直有些忽视她的心理健康问题。</li>
@@ -3095,7 +4082,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 </li>
 <li>11 月
 <ul>
-<li>我的 NixOS &amp; Flakes Book 被加进了 NixOS 官方文档的推荐阅读，挺开心的：<a href="https://github.com/NixOS/nix.dev/pull/781" target="_blank" rel="noopener noreferrer">nix.dev - PR 781</a></li>
+<li>我的 NixOS &amp; Flakes Book 被加进了 NixOS 官方文档的推荐阅读，挺开心的：<a
+  href="https://github.com/NixOS/nix.dev/pull/781"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>nix.dev - PR 781</a>
+</li>
 <li>持续服药治疗以及复诊，确诊后这段时间是我印象中工作效率最高的一段时间，治疗挺有成效。</li>
 <li>给我妹买往返火车票、学校请假、预约医生、带她在深圳到处玩。</li>
 <li>有挺长一阵没怎么碰电脑了，最近发现我的 NixOS 总是启动没多久网络就会卡死，为了解决问题，我重装了 NixOS 系统，顺便给系统添加了 LUKS 全盘加密 + Secure Boot + impermanence，根卷换成了 tmpfs，因此任何未显式声明持久化的数据，每次重启系统都会被清空。优雅，太优雅了！
@@ -3177,17 +4172,65 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <p>今年的主要技术成就基本完全集中在 NixOS 这一块，新建的几个项目都收到了挺多 stars 跟好评。</p>
 <p>截止 2023/12/31，我 stars 比较高的几个项目如下：</p>
 <ul>
-<li><a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-and-flakes-book</a>: 这本开源小书的仓库于 2023/6/23 创建，目前获得了 15 个 issues，24 位贡献者，43 个 forks，923 个 stars，以及 4 位国外读者的共计 $80 零花钱赞助。
+<li><a
+  href="https://github.com/ryan4yin/nixos-and-flakes-book"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nixos-and-flakes-book</a>
+: 这本开源小书的仓库于 2023/6/23 创建，目前获得了 15 个 issues，24 位贡献者，43 个 forks，923 个 stars，以及 4 位国外读者的共计 $80 零花钱赞助。
 <ul>
 <li>是我目前 stars 数最高的项目</li>
 <li>它的文档站目前稳定在每天 150 UV</li>
 </ul>
 </li>
-<li><a href="https://github.com/ryan4yin/knowledge" target="_blank" rel="noopener noreferrer">ryan4yin/knowledge</a>: 这份个人笔记我从 2019 年工作开始写，目前有了 38 个 forks，363 个 stars.</li>
-<li><a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>: 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 6 位贡献者，23 个 forks，以及 297 个 stars.</li>
-<li><a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer">ryan4yin/nix-darwin-kickstarter</a>: 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 133 stars.</li>
-<li><a href="https://github.com/ryan4yin/nixos-rk3588" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-rk3588</a>: 这是我在 2023/6/4 创建的一个 NixOS 移植项目，目前支持了三块 RK3588 开发板，获得了 2 位贡献者，9 个 forks，11 个 issues，以及 49 stars.</li>
-<li><a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-licheepi4a</a>: 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 $50 给我。
+<li><a
+  href="https://github.com/ryan4yin/knowledge"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/knowledge</a>
+: 这份个人笔记我从 2019 年工作开始写，目前有了 38 个 forks，363 个 stars.</li>
+<li><a
+  href="https://github.com/ryan4yin/nix-config"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config</a>
+: 这份 NixOS 系统配置仓库于 2023/4/23 创建，目前获得了 6 位贡献者，23 个 forks，以及 297 个 stars.</li>
+<li><a
+  href="https://github.com/ryan4yin/nix-darwin-kickstarter"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-darwin-kickstarter</a>
+: 我于 2023/7/19 创建的一个 Nix-Darwin 模板仓库，目前 133 stars.</li>
+<li><a
+  href="https://github.com/ryan4yin/nixos-rk3588"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nixos-rk3588</a>
+: 这是我在 2023/6/4 创建的一个 NixOS 移植项目，目前支持了三块 RK3588 开发板，获得了 2 位贡献者，9 个 forks，11 个 issues，以及 49 stars.</li>
+<li><a
+  href="https://github.com/ryan4yin/nixos-licheepi4a"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nixos-licheepi4a</a>
+: 同样是一个 NixOS 移植项目，但目标是基于 RISC-V 指令集的 LicheePi 4A 开发板。目前获得了 3 位贡献者与 23 stars，其中一位贡献者还赞助了 $50 给我。
 <ul>
 <li>这个项目断断续续花了两个月才搞定，用时远超预料&hellip;不过成功后获得的成就感也是巨大的！</li>
 </ul>
@@ -3213,7 +4256,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>Forkers: 97 =&gt; 203, 涨幅 109%.</li>
 <li>Watchers: 39 =&gt; 102, 涨幅 161%.</li>
 </ul>
-<p>在折腾 NixOS 的过程中我写的入门指南（<a href="https://nixos-and-flakes.thiscute.world/" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>）获得了国内外社区的大量好评，其他项目也各有斩获；另外认识了好几位国内外的 NixOS 资深用户、开源项目作者以及嵌入式开发者，还收到了一些外国读者的打赏。</p>
+<p>在折腾 NixOS 的过程中我写的入门指南（<a
+  href="https://nixos-and-flakes.thiscute.world/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>nixos-and-flakes-book</a>
+）获得了国内外社区的大量好评，其他项目也各有斩获；另外认识了好几位国内外的 NixOS 资深用户、开源项目作者以及嵌入式开发者，还收到了一些外国读者的打赏。</p>
 <p>这些成绩给我带来了巨大的成就感以及社区参与感，也完全契合了我年初给自己的期许——「<strong>认识更多有趣的人，见识下更宽广的世界</strong>」。</p>
 <p>今年不仅给 AstroNvim, ESP-IDF 等知名项目贡献了少许代码，甚至还创造了这么多个受欢迎的新项目、收到了几十个 PR。之前定的给一些开源项目贡献代码的目标，完全是超额完成了。</p>
 <p>在折腾上 NixOS 后，年中的时候又顺带将 VSCode 彻底换成了 Zellij + Neovim，甚至年底又开始折腾 Guix 系统、Emacs 编辑器，以及 nushell 等新鲜玩意儿。</p>
@@ -3227,11 +4278,25 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <p>因为业余搞了些嵌入式硬件感觉有意思，也有隐约考虑过转行搞硬件，但只是些粗浅的想法。
 到 8 月份的时候，做的几个 NixOS 项目收到些赞助，让我可能有点异想天开？了解了些「如何通过开源项目养活自己」类似的信息，8 月中下旬的时候在苏洋的折腾群里提到这个想法，被洋哥泼了冷水 emmm</p>
 <p>冷静下来后回想，洋哥说的挺在理的，靠开源用爱发电真能养活自己的凤毛麟角，如果专门往商业项目的方向做，又没了那份折腾的快乐了。</p>
-<p>8 月底的时候，苏洋的折腾群里发起一场自我介绍活动，读了许多群友的自我介绍，很有感触，于是基于我自己在群里发的自我介绍调整扩写，成果就是这篇 <a href="https://thiscute.world/posts/a-quarter-of-the-way-through-life/" target="_blank" rel="noopener noreferrer">人生已过四分之一</a>。</p>
+<p>8 月底的时候，苏洋的折腾群里发起一场自我介绍活动，读了许多群友的自我介绍，很有感触，于是基于我自己在群里发的自我介绍调整扩写，成果就是这篇 <a
+  href="https://thiscute.world/posts/a-quarter-of-the-way-through-life/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>人生已过四分之一</a>
+。</p>
 <p>当时文章完成后发出来，真觉得自己想明白不少，也跟领导同事做了些沟通，工作上状态有所好转。
 但还是很难集中注意力，分心的情况仍然相当严重。也尝试了通过番茄钟之类的方式来提高工作效率，但效果不佳。
 当时有点认命了，想着人生可能就是这样永远在这样未知的道路上的挣扎着前进，也有痛苦，也有快乐。</p>
-<p>转折点是国庆前跟朋友提了嘴感觉自己有 ADHD，国庆后就被<a href="bleatingsheep.org/" rel="">@咩咩</a>催促去看心理医生，之后就确诊了 ADHD 并开始服药。
+<p>转折点是国庆前跟朋友提了嘴感觉自己有 ADHD，国庆后就被<a
+  href="bleatingsheep.org/"
+  
+  rel=""
+  
+>@咩咩</a>
+催促去看心理医生，之后就确诊了 ADHD 并开始服药。
 确诊让我的心态出现巨大的改变，业余爱好因此放下了一个多月。而服药则帮助我扭转了工作状态，我的专注能力有了质的提升，这也是我今年最大的收获之一。</p>
 <p>总体上，我今年的工作做得比去年差，尤其是上半年，总体上只能算「及格」吧。</p>
 <h3 id="3-生活" class="headerLink">
@@ -3243,7 +4308,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <p>这之后，除了工作外，我大部分的精力都花在了关心家人、运动、学习心理学等事情上。
 这是一个非常明显的转变，我跟我妹的关系更好了，另外持续好几个月的治疗跟每个月带她在深圳散散心，她的情绪也有了很大的改善。</p>
 <h4 id="32-参与公益活动" class="headerLink">
-    <a href="#32-%e5%8f%82%e4%b8%8e%e5%85%ac%e7%9b%8a%e6%b4%bb%e5%8a%a8" class="header-mark"></a>3.2. 参与公益活动</h4><p>因缘际会跟 <a href="https://twitter.com/Manjusaka_Lee" target="_blank" rel="noopener noreferrer">@Manjusaka_Lee</a> 以及另一位朋友聊到了公益，当时在工作上缺乏动力，想在其他的事情上找找感觉，公益本身也是一件很有意义的事情，那段时间学习了解了许多公益资料，参加了一些公益会展与捐款活动，还一度考虑做志愿者。</p>
+    <a href="#32-%e5%8f%82%e4%b8%8e%e5%85%ac%e7%9b%8a%e6%b4%bb%e5%8a%a8" class="header-mark"></a>3.2. 参与公益活动</h4><p>因缘际会跟 <a
+  href="https://twitter.com/Manjusaka_Lee"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>@Manjusaka_Lee</a>
+ 以及另一位朋友聊到了公益，当时在工作上缺乏动力，想在其他的事情上找找感觉，公益本身也是一件很有意义的事情，那段时间学习了解了许多公益资料，参加了一些公益会展与捐款活动，还一度考虑做志愿者。</p>
 <p>今年算是迈出了参与公益活动的第一步，这拓展了我的视野，让我更加了解了社会。
 在学习了解公益期间也结识了一些志同道合的朋友，这也挺符合我去年给自己的期许——「认识更多有趣的人，见识下更宽广的世界」。</p>
 <p>做事情，最难的就是从 0 到 1，因此今年的这一进展就显得尤为可贵，称得上是「优秀」。</p>
@@ -3255,7 +4328,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>你是要地上的六便士，还是要天上的月亮？</li>
 </ul>
 </li>
-<li>2023-08-31 - <a href="http://www.paulgraham.com/greatwork.html" target="_blank" rel="noopener noreferrer">How to Do Great Work - Paul Graham</a>
+<li>2023-08-31 - <a
+  href="http://www.paulgraham.com/greatwork.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>How to Do Great Work - Paul Graham</a>
+
 <ul>
 <li>黑客与画家一篇两万多字的长文，也算是一本小书了吧，干货满满。</li>
 </ul>
@@ -3282,11 +4363,35 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>Psychology and Life, 20th edition, by Richard J. Gerrig</li>
 <li>The Great Gatsby - 10/41</li>
 <li>《复杂 - 梅拉尼 米歇尔》</li>
-<li><a href="https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition" target="_blank" rel="noopener noreferrer">Linux Device Driver Development - Second Edition</a>: Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。</li>
+<li><a
+  href="https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Linux Device Driver Development - Second Edition</a>
+: Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。</li>
 </ul>
 <p>2023 年我读的书籍数量不多，没达成每月读一本书的目标。
 而写作方面，算上这篇总结，今年我一共写了 9 篇博文，也没达成每月写一篇的目标。</p>
-<p>但鉴于我今年写了一本挺受欢迎的小书 <a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">NixOS &amp; Flakes Book</a>，它得到了 NixOS 社区诸多好评，还在 10 月份上了 Hacker News 热榜，甚至被官方文档 <a href="https://nix.dev/recommended-reading#other-articles" target="_blank" rel="noopener noreferrer">nix.dev</a> 列入推荐阅读，我姑且将今年「阅读与写作」这一项的评分定为「超出期待」！</p>
+<p>但鉴于我今年写了一本挺受欢迎的小书 <a
+  href="https://github.com/ryan4yin/nixos-and-flakes-book"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>NixOS &amp; Flakes Book</a>
+，它得到了 NixOS 社区诸多好评，还在 10 月份上了 Hacker News 热榜，甚至被官方文档 <a
+  href="https://nix.dev/recommended-reading#other-articles"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>nix.dev</a>
+ 列入推荐阅读，我姑且将今年「阅读与写作」这一项的评分定为「超出期待」！</p>
 <h4 id="34-其他" class="headerLink">
     <a href="#34-%e5%85%b6%e4%bb%96" class="header-mark"></a>3.4. 其他</h4><ol>
 <li>运动方面乏善可陈，穿越了一次东西冲海岸线，游了几次泳，12 月初晨跑了一周但因为是空腹跑，胃炎给跑犯了，就没再跑了。体重全年都在 60kg 波动，没啥变化。</li>
@@ -3296,7 +4401,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <h4 id="35-总结" class="headerLink">
     <a href="#35-%e6%80%bb%e7%bb%93" class="header-mark"></a>3.5. 总结</h4><p>生活上今年达成了这么多有意义的成就（确诊 ADHD、将更多精力花在关心家人上、参与公益活动、给家里买车等等），我给自己的评价当然是「优秀」。</p>
 <h3 id="4-各种站点的统计数据" class="headerLink">
-    <a href="#4-%e5%90%84%e7%a7%8d%e7%ab%99%e7%82%b9%e7%9a%84%e7%bb%9f%e8%ae%a1%e6%95%b0%e6%8d%ae" class="header-mark"></a>4. 各种站点的统计数据</h3><p>首先是我的博客站点 <a href="https://thiscute.world/" target="_blank" rel="noopener noreferrer">https://thiscute.world/</a> 的统计数据：</p>
+    <a href="#4-%e5%90%84%e7%a7%8d%e7%ab%99%e7%82%b9%e7%9a%84%e7%bb%9f%e8%ae%a1%e6%95%b0%e6%8d%ae" class="header-mark"></a>4. 各种站点的统计数据</h3><p>首先是我的博客站点 <a
+  href="https://thiscute.world/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://thiscute.world/</a>
+ 的统计数据：</p>
 <p><figure><img src="/images/2023-summary/thiscute.world-2023-google-analytics-stats.webp" width="100%"/><figcaption>
             <h4>thiscute.world - 2023 年 Google Analytics 访问统计</h4>
         </figcaption>
@@ -3312,7 +4425,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
         </figcaption>
 </figure>
 
-<p>另外是我今年 6 月份新建的 NixOS 笔记站点 <a href="https://nixos-and-flakes.thiscute.world" target="_blank" rel="noopener noreferrer">https://nixos-and-flakes.thiscute.world</a> 的统计数据（国外读者相当多，这跟 stars 以及收到的赞助情况也比较匹配）：</p>
+<p>另外是我今年 6 月份新建的 NixOS 笔记站点 <a
+  href="https://nixos-and-flakes.thiscute.world"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://nixos-and-flakes.thiscute.world</a>
+ 的统计数据（国外读者相当多，这跟 stars 以及收到的赞助情况也比较匹配）：</p>
 <p><figure><img src="/images/2023-summary/nixos-and-flakes-2023-google-analytics-stats.webp" width="100%"/><figcaption>
             <h4>NixOS &amp; Flakes Book - 2023 年 Google Analytics 访问统计</h4>
         </figcaption>
@@ -3340,7 +4461,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
         </figcaption>
 </figure>
 
-<p>此外，我今年在 <a href="https://twitter.com/ryan4yin" target="_blank" rel="noopener noreferrer">Twitter(X)</a> 上比较活跃，也新增了不少粉丝：</p>
+<p>此外，我今年在 <a
+  href="https://twitter.com/ryan4yin"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Twitter(X)</a>
+ 上比较活跃，也新增了不少粉丝：</p>
 <figure><img src="/images/2023-summary/2023-twitter-stats.webp" width="100%"/><figcaption>
             <h4>2023 年 Twitter 统计数据</h4>
         </figcaption>
@@ -3407,10 +4536,26 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 由衷感谢在 2023 年给我帮助与支持的亲人、朋友、同事，以及努力探索未知的我自己！</p>
 <p>那么在 2024 年，我希望自己能够「<strong>工作与业余爱好上稳中求进，生活上锻炼好身体、多关心家人</strong>」~</p>
 <blockquote>
-<p>Carpe Diem. Seize The Day, Boys. Make Your Lives Extraordinary. &ndash; <a href="https://movie.douban.com/subject/1291548/" target="_blank" rel="noopener noreferrer">《死亡诗社》</a></p>
+<p>Carpe Diem. Seize The Day, Boys. Make Your Lives Extraordinary. &ndash; <a
+  href="https://movie.douban.com/subject/1291548/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>《死亡诗社》</a>
+</p>
 </blockquote>
 <blockquote>
-<p>文末推荐一个年终回顾与展望的帮助手册，感觉设计得很好：<a href="https://yearcompass.com/cn/" target="_blank" rel="noopener noreferrer">https://yearcompass.com/cn/</a></p>
+<p>文末推荐一个年终回顾与展望的帮助手册，感觉设计得很好：<a
+  href="https://yearcompass.com/cn/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://yearcompass.com/cn/</a>
+</p>
 </blockquote>
 ]]></content></entry><entry><title type="html">两岸猿声啼不住，轻舟已过万重山——我的四分之一人生</title><link href="https://thiscute.world/posts/a-quarter-of-the-way-through-life/"/><id>https://thiscute.world/posts/a-quarter-of-the-way-through-life/</id><author><name>ryan4yin</name></author><published>2023-08-19T18:00:45+08:00</published><updated>2023-08-19T18:00:45+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/a-quarter-of-the-way-through-life/2023-08-20_github-projects.webp" height="1661" width="536"><figcaption></figcaption>
@@ -3449,7 +4594,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <p>然后是浑浑噩噩地等待高考成绩，中间也胡思乱想过一些要不要考虑复读的问题，但最终还是决定不复读了，因为我觉得我不可能再坚持一年了。</p>
 <p>或许是因为我心态很平稳（心如死灰），考试时发挥得很好，成绩出来居然超过了一本线十多分。</p>
 <p>之后就是填报志愿了，我不知道自己想学什么，可能是电子信息？毕竟我小时候挺喜欢捣鼓各种电子设备。</p>
-<p>偶然想起在学校阅览室读杂志时，曾被<a href="https://read.douban.com/ebook/3088216/" target="_blank" rel="noopener noreferrer">科幻世界 2013 年 12 期</a>里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵“看见”世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
+<p>偶然想起在学校阅览室读杂志时，曾被<a
+  href="https://read.douban.com/ebook/3088216/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>科幻世界 2013 年 12 期</a>
+里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵“看见”世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
 <p>这样我开始考虑选择声学。</p>
 <p>我从高中同桌推荐的《刀剑神域》开始接触日本的 ACG 文化，后来接触到初音未来和洛天依，就对歌声合成(singing synthesis)产生了很大的兴趣，仔细一想发现这也应该是声学的范畴，这使我坚定了我选择声学的想法。</p>
 <p>家里父母都没学问，他们的意见就是听我的，于是我的第一志愿就填了安徽建筑大学的声学专业。</p>
@@ -3462,10 +4615,34 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 另一方面我刚进大学时，为了弥补自己高三的遗憾，如同苦行僧一般的学习，而这种状态完全无法持续。</p>
 <p>我很快就出了问题，这从我以前写过的文章中可见一斑：</p>
 <ul>
-<li><a href="https://thiscute.world/posts/reading-anxiety/" target="_blank" rel="noopener noreferrer">2017-03-07 - 我患上了阅读焦虑症</a></li>
-<li><a href="https://thiscute.world/posts/the-holiday-is-coming-to-an-end/" target="_blank" rel="noopener noreferrer">2017-02-06 - 忽而假末</a></li>
+<li><a
+  href="https://thiscute.world/posts/reading-anxiety/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>2017-03-07 - 我患上了阅读焦虑症</a>
+</li>
+<li><a
+  href="https://thiscute.world/posts/the-holiday-is-coming-to-an-end/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>2017-02-06 - 忽而假末</a>
+</li>
 </ul>
-<p>另外大学期间我迷上了编程，开始自学各种编程技术，最开始是 C，后来有一次学校校友、在美国常春滕读天体物理学博士的<a href="https://github.com/jisuoqing" target="_blank" rel="noopener noreferrer">季索清学长</a>（现在已经是 Professor of Astrophysics 了）回校演讲，谈到了他们实验室现在都用 Python 了，Matlab 都没人用了，于是我开始学习 Python. 后来又跟着知乎上的推荐学习路线学习过 SICP、Linux C 编程等各种内容。</p>
+<p>另外大学期间我迷上了编程，开始自学各种编程技术，最开始是 C，后来有一次学校校友、在美国常春滕读天体物理学博士的<a
+  href="https://github.com/jisuoqing"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>季索清学长</a>
+（现在已经是 Professor of Astrophysics 了）回校演讲，谈到了他们实验室现在都用 Python 了，Matlab 都没人用了，于是我开始学习 Python. 后来又跟着知乎上的推荐学习路线学习过 SICP、Linux C 编程等各种内容。</p>
 <p>大学四年，学校对我帮助最大的，一是让我接触到了更大的世界，二是图书馆藏书丰富，尤其是计算机类书籍。四年时间我读了很多很多的书，学校的图书馆成了我最喜欢的地方。</p>
 <p>但我始终无法平衡学业与编程，我开始彻底忽略学业。</p>
 <p>问题愈演愈烈，大三时我尝试过申请休学，但是又被劝住了。
@@ -3473,7 +4650,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 尤其因为我性格还比较轴，觉得这个世界不应该是这样的，不想学的课程我一个字都不想看，相关的考试我要么缺考要么交白卷。</p>
 <p>结果就是我完全无法毕业，觉得前途一片灰暗，见不到任何光亮，甚至感觉自己要得抑郁症，那是我这四分之一人生中最黑暗的时期。</p>
 <p>某天跟在深圳工作的初中同学聊天，他说到深圳这方面的公司挺多的，建议我考虑下。</p>
-<p>于是我买了张火车票直接就奔去了深圳，还写下了<a href="https://thiscute.world/posts/escape-my-university/" target="_blank" rel="noopener noreferrer">逃离我的大学</a>，现在回想起来，当时的想法大概是，「做什么都好，总之再也不想继续待在这个对我而言暗无天日的地方了。」</p>
+<p>于是我买了张火车票直接就奔去了深圳，还写下了<a
+  href="https://thiscute.world/posts/escape-my-university/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>逃离我的大学</a>
+，现在回想起来，当时的想法大概是，「做什么都好，总之再也不想继续待在这个对我而言暗无天日的地方了。」</p>
 <p>在学校的经历让我对学校产生了极大的反感，我拉黑了学校的所有联系方式。
 这完全是我自己的问题，我的导员对我很好，我在学校也有过许多美好的回忆，但我就是心理上无法接受再跟这个地方有任何联系。</p>
 <blockquote>
@@ -3493,7 +4678,23 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <p>在这第一份正式工作期间，我学会了 Kubernetes、Istio、Docker、阿里云、Terraform/Pulumi、Argo Workflows 等云原生技术，Jenkins 等自动化运维技术，写了很多 Python 代码锻炼了自己的代码能力，还折腾了洋垃圾服务器、组装了公司办公电脑，工作能力也得到了领导同事的认可。</p>
 <p>我很感谢这家公司，它是我 IT 生涯的起点，在这里我学到了令我足以在 IT 行业立足的技术，也建立起了技术自信。
 但它给的工资实在太低了，还加班严重、画饼充饥，很多东西都不规范，处处透露着小作坊的气息，因此在工作了一年零八个月后，我决定离职。</p>
-<p>离职后我休息了一个多月，给自己放了一个长假，期间也写了 <a href="https://thiscute.world/posts/end-of-the-first-round/" target="_blank" rel="noopener noreferrer">我在创业公司做技术一年多的一点体会</a> 跟 <a href="https://thiscute.world/posts/no-more-dreams/" target="_blank" rel="noopener noreferrer">脚踏实地，仰望星空</a>。
+<p>离职后我休息了一个多月，给自己放了一个长假，期间也写了 <a
+  href="https://thiscute.world/posts/end-of-the-first-round/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>我在创业公司做技术一年多的一点体会</a>
+ 跟 <a
+  href="https://thiscute.world/posts/no-more-dreams/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>脚踏实地，仰望星空</a>
+。
 现在看来，当时这些文章也是写得纯真又幼稚。或许再过几年回头看，我会觉得现在这篇文章也纯真又幼稚？那就再好不过了——<strong>我对这个世界的认知又更正确了一点</strong>，我得以再次优化指导我行动的「<strong>人生模型</strong>」，避免在未来因此造成更大的问题（笑</p>
 <p>之后我开始找工作。我当时很自信地（其实也有点忐忑）在简历上写下了「本人因学分不足，未能取得学位」，实话说，这句话帮我省去了不少无意义的沟通，大概 50% 的公司在确认了情况后会直接忽略我。
 即使如此，我仍然拿到好几份 offer，也得以进入现在这家公司，职位是 SRE。</p>
@@ -3504,7 +4705,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>年初的期许：<strong>拆破玉笼飞彩凤，顿开金锁走蛟龙</strong>。</li>
 <li>工作上我的工资相比之前翻了数倍，工作环境也好了太多。同事中不乏 985 211、海归甚至清北的大佬（同事的 title 可能代表不了什么，但这确实让我很有成就感），跟他们学到了许多东西，熟悉了全新的工作文化（OKR 等），接触到了拥有数千万日活、十多万 QPS 的云上系统架构，并且完成了其中核心组件 K8s 集群的运维升级工作，获得了许多牛逼同事与领导对我专业能力的认可。</li>
 <li>业余生活上被同事带着第一次海边冲浪、烧烤，又开始玩轮滑，还学上了泡茶。</li>
-<li><a href="https://thiscute.world/posts/2021-summary/" target="_blank" rel="noopener noreferrer">2021 年年终总结</a></li>
+<li><a
+  href="https://thiscute.world/posts/2021-summary/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>2021 年年终总结</a>
+</li>
 </ul>
 </li>
 <li>2022 年：
@@ -3512,7 +4721,15 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>年初的期许：<strong>更上一层楼</strong></li>
 <li>工作上一是通过了职级晋升，不再是 SRE 萌新了。二是在流量链路上做了很多工作，帮公司省了很多钱，还因此拿了一个 S（公司最高绩效），年终奖也很丰厚。</li>
 <li>业余生活上做出了更多的探索，学了很多新技术，认识了很多有趣的人（0xffff 社区），还坚持学了好几个月的英语。</li>
-<li><a href="https://thiscute.world/posts/2022-summary/" target="_blank" rel="noopener noreferrer">2022 年年终总结</a></li>
+<li><a
+  href="https://thiscute.world/posts/2022-summary/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>2022 年年终总结</a>
+</li>
 </ul>
 </li>
 <li>2023 年（虽然还没过完）：
@@ -3520,14 +4737,30 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <li>年初的期许：<strong>认识更多有趣的人，见识下更宽广的世界</strong></li>
 <li>今年在工作上没有做出很好的成绩，马马虎虎。我更多的把时间投入到了业余爱好上。</li>
 <li>业余生活上，我又折腾了许多新技术（MCU 开发、各种 ARM/RISCV 开发板、Homelab、NixOS），并且因此认识了许多嵌入式领域的大佬。在折腾 NixOS 的过程中我做的开源项目、入门指南更是获得了国内外社区的大量好评，认识了好几位外国朋友，还收到了一些外国读者的打赏。这完全契合了我年初给自己的期许。</li>
-<li><a href="https://www.zhihu.com/question/20870514/answer/3024654921" target="_blank" rel="noopener noreferrer">我今年写 NixOS 入门指南的经历</a></li>
+<li><a
+  href="https://www.zhihu.com/question/20870514/answer/3024654921"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>我今年写 NixOS 入门指南的经历</a>
+</li>
 </ul>
 </li>
 </ul>
 <p>两份工作，四年多的时间，我的经历很难通过上面这只言片语就完全概括，中间当然也有过许多挣扎、迷茫、许多心酸苦辣。
 但就得到的结果来说，在第一家公司我学到了很多很多，接着从进入新公司开始到现在，我每一年年初给自己的期许，也都能如约兑现。</p>
 <p>现在，我相信在深圳这四年只是我上升期的第一步，这一步我完成了自信心的构建、眼界的开拓、基础技术能力的积累，也攒下了能让我衣食无忧好几年的少许财富（就在今天，还给我老爸全款买了我们全家的第一辆小轿车，全家都很开心）。
-下一个四年或者五年，我一定能收获更多，就像几年前我第一份工作刚结束，好朋友 <a href="https://github.com/Likenttt" target="_blank" rel="noopener noreferrer">@Likenttt</a> 送我的诗一样：</p>
+下一个四年或者五年，我一定能收获更多，就像几年前我第一份工作刚结束，好朋友 <a
+  href="https://github.com/Likenttt"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>@Likenttt</a>
+ 送我的诗一样：</p>
 <blockquote>
 <p><strong>拆破玉笼飞彩凤，顿开金锁走蛟龙</strong>。</p>
 </blockquote>
@@ -3537,12 +4770,36 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 但我的未来正是构建在此之上。</p>
 <p>有的人喜欢稳定，但当今大世，AI 飞速发展、中美摩擦不断、欧洲也各种难民、党争问题，全世界都在变化，真的有什么绝对稳定的东西可以依靠么？
 世事无常，纷繁复杂，我能做的，是在接受这份无常的同时，仍然能维持自驱力，在这个世界中探索出自己的一片天地。</p>
-<p>最近在<a href="https://zhuanlan.zhihu.com/p/557928933" target="_blank" rel="noopener noreferrer">苏洋的折腾群</a>，从大家的自我介绍里看到了形形色色的人生，年龄从 20+ 到 50+，学历从高中专科到博士，
+<p>最近在<a
+  href="https://zhuanlan.zhihu.com/p/557928933"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>苏洋的折腾群</a>
+，从大家的自我介绍里看到了形形色色的人生，年龄从 20+ 到 50+，学历从高中专科到博士，
 职业从软硬件到电工、灯光师、全职公益人、见证纸媒体消亡的电脑报前编辑，生活地点也遍布全球。我甚至还发现最近跟我深入交流过 NixOS 相关技术问题的群友，在十多年前就做过我当时使用或者接触过的产品，而那个时候我还在上初中甚至小学，这让我感到十分震撼。
 其中大部群友的年龄都比我大许多，他们的经历给了我很大的启发，让我意识到我往后 3/4 的人生还有很多的可能。</p>
 <p>另外随着我近两年逐渐在自己的业余爱好上有所建树，我也越来越觉得工作作为养家糊口的手段，确实很重要，但它只是生活的一部分，在工作之外我还有许多可以做的事。</p>
 <p>我一直在践行「兴趣是最好的老师」，虽然因为太过兴趣驱动以及一些其他原因导致我大学读得比较糟糕，但是能让我达成现在的成就的同样是兴趣，让我最近几个月接触 NixOS 并且获得了众多好评与感谢的同样是兴趣。
-最近有推友分享了一篇很实用的长文 <a href="http://www.paulgraham.com/greatwork.html" target="_blank" rel="noopener noreferrer">How to Do Great Work - Paul Graham</a>（中译 <a href="https://mp.weixin.qq.com/s/31iL-Kbs4KrqpgrERVRNzQ" target="_blank" rel="noopener noreferrer">【实用指南】Paul Graham 两万字新文：如何取得杰出成就 </a>），我读了个开头，还没看完，但是发觉它很契合我，它与我的经历能相互印证，也对我未来的行动很有指导意义。
+最近有推友分享了一篇很实用的长文 <a
+  href="http://www.paulgraham.com/greatwork.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>How to Do Great Work - Paul Graham</a>
+（中译 <a
+  href="https://mp.weixin.qq.com/s/31iL-Kbs4KrqpgrERVRNzQ"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>【实用指南】Paul Graham 两万字新文：如何取得杰出成就 </a>
+），我读了个开头，还没看完，但是发觉它很契合我，它与我的经历能相互印证，也对我未来的行动很有指导意义。
 其中我目前读到印象最深刻的一句话就是：</p>
 <blockquote>
 <p>The three most powerful motives are curiosity, delight, and the desire to do something impressive. Sometimes they converge, and that combination is the most powerful of all.</p>
@@ -3580,9 +4837,33 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 在跟评论区一些朋友交流时，也碰撞出了许多思想的火花，这也让我相当开心。</p>
 <p>为着让大家都能看到其中好的内容，我把它们都列在这里。</p>
 <ul>
-<li><a href="https://0xffff.one/d/1605-liang-an-yuan-sheng-ti-bu-zhu-qing" target="_blank" rel="noopener noreferrer">0xffff 社区</a>: 0xffff 评论区真的有很多真知灼见，强烈推荐一读！</li>
-<li><a href="https://www.v2ex.com/t/966753" target="_blank" rel="noopener noreferrer">v2ex</a>: 有些很治愈的评论，也有个别不好的，我觉得这些评论都挺有意思。</li>
-<li><a href="https://www.cnblogs.com/kirito-c/p/a-quarter-of-the-way-through-life.html" target="_blank" rel="noopener noreferrer">博客园</a></li>
+<li><a
+  href="https://0xffff.one/d/1605-liang-an-yuan-sheng-ti-bu-zhu-qing"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>0xffff 社区</a>
+: 0xffff 评论区真的有很多真知灼见，强烈推荐一读！</li>
+<li><a
+  href="https://www.v2ex.com/t/966753"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>v2ex</a>
+: 有些很治愈的评论，也有个别不好的，我觉得这些评论都挺有意思。</li>
+<li><a
+  href="https://www.cnblogs.com/kirito-c/p/a-quarter-of-the-way-through-life.html"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>博客园</a>
+</li>
 </ul>
 <blockquote>
 <p>关于这些不好的评论（譬如 v2ex 上有人评论我是在「无病呻吟」，还挺多人点赞。另外 Twitter 上有人发推喷我「谁 TM 在意你的人生怎么样」，我觉得都挺好笑的），我想在这里为一些因此不快意的读者解释下。
@@ -3595,8 +4876,54 @@ NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔�
 <p>如果说体系自洽有点不好懂，那我可以用个简单的类比来说明这一点：面对这种品头论足，我觉得我简直是在对牛弹琴。牛的哞哞叫会让我感到不开心么？我有必要跟牛解释我弹的曲子么？它听不懂关我何事？</p>
 </blockquote>]]></content></entry><entry><title type="html">为什么我折腾这些小众技术？</title><link href="https://thiscute.world/posts/why-i-choose-niche-products/"/><id>https://thiscute.world/posts/why-i-choose-niche-products/</id><author><name>ryan4yin</name></author><published>2023-08-01T11:40:57+08:00</published><updated>2023-08-01T11:40:57+08:00</updated><content type="html"><![CDATA[<figure>
           <img class="lazyload" src="/posts/why-i-choose-niche-products/anime-girls-seagulls.webp" height="2428" width="1134"><figcaption></figcaption>
-        </figure><p>我折腾过许多的小众技术，而今年新折腾的主要有 NixOS、窗口管理器 i3 / hyprland、以及 Neovim，其中 NixOS 我甚至折腾到了一个新境界——出了一本帮助新手入门的中英双语开源书籍 <a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>，还搞了好几个 NixOS 相关的开源项目（比如 <a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer">nix-darwin-kickstarter</a> 跟 <a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>），都收到了许多好评。</p>
-<p>结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用 <a href="nixos.org/" rel="">NixOS</a> / <a href="https://github.com/Neovim/Neovim" target="_blank" rel="noopener noreferrer">Neovim</a> / <a href="https://flypy.com/" target="_blank" rel="noopener noreferrer">小鹤音形中文输入法</a>？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。</p>
+        </figure><p>我折腾过许多的小众技术，而今年新折腾的主要有 NixOS、窗口管理器 i3 / hyprland、以及 Neovim，其中 NixOS 我甚至折腾到了一个新境界——出了一本帮助新手入门的中英双语开源书籍 <a
+  href="https://github.com/ryan4yin/nixos-and-flakes-book"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>nixos-and-flakes-book</a>
+，还搞了好几个 NixOS 相关的开源项目（比如 <a
+  href="https://github.com/ryan4yin/nix-darwin-kickstarter"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>nix-darwin-kickstarter</a>
+ 跟 <a
+  href="https://github.com/ryan4yin/nix-config"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>ryan4yin/nix-config</a>
+），都收到了许多好评。</p>
+<p>结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用 <a
+  href="nixos.org/"
+  
+  rel=""
+  
+>NixOS</a>
+ / <a
+  href="https://github.com/Neovim/Neovim"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>Neovim</a>
+ / <a
+  href="https://flypy.com/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>小鹤音形中文输入法</a>
+？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。</p>
 <h2 id="什么是小众技术" class="headerLink">
     <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e5%b0%8f%e4%bc%97%e6%8a%80%e6%9c%af" class="header-mark"></a>什么是小众技术？</h2><p>小众，是相对于大众而言的。小众技术，指在该领域中用户占比较相对较小的技术。</p>
 <p>基于这样的定义，我可以列举出我接触过的不同领域的一些小众技术：</p>
@@ -3692,16 +5019,48 @@ Completely and utterly unacceptable. Imagine having a tool that can&rsqu
 啥时候发现某工具缺少自己想要的功能，我也可能直接自己写一个。</p>
 <p>这些折腾过程中获得的经验、创建的开源项目、在上游仓库中留下的 PR 、在社区中收获的感谢，感觉都是有价值的。
 它不一定有啥业务价值，但是它好玩啊，还能交到朋友，帮到别人，在开源社区留下自己的痕迹，这不是很有意思么？</p>
-<p>Linus 最开始写 Linux，也<a href="https://book.douban.com/subject/1451172/" target="_blank" rel="noopener noreferrer">只是为了好玩（Just For Fun）</a>.</p>
+<p>Linus 最开始写 Linux，也<a
+  href="https://book.douban.com/subject/1451172/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>只是为了好玩（Just For Fun）</a>
+.</p>
 <h2 id="结语" class="headerLink">
     <a href="#%e7%bb%93%e8%af%ad" class="header-mark"></a>结语</h2><p>你展望人生的时候，不可能把这些点连起来；只有当你回顾人生的时候，才能发现它们之间的联系。所以你必须有信心，相信这些点总会以某种方式，对你的未来产生影响。你必须相信一些事情——你的勇气、命运、人生、缘分等等。这样做从未令我失望，反而决定了我人生中所有与众不同之处。</p>
 <p>Stay Hungry. Stay Foolish.</p>
-<p>—— <a href="https://news.stanford.edu/2005/06/12/youve-got-find-love-jobs-says/" target="_blank" rel="noopener noreferrer">You’ve got to find what you love, by Steve Jobs, CEO of Apple Computer</a></p>
+<p>—— <a
+  href="https://news.stanford.edu/2005/06/12/youve-got-find-love-jobs-says/"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>You’ve got to find what you love, by Steve Jobs, CEO of Apple Computer</a>
+</p>
 <h2 id="评论区" class="headerLink">
     <a href="#%e8%af%84%e8%ae%ba%e5%8c%ba" class="header-mark"></a>评论区</h2><p>文末附上来自其他论坛的评论，其中不乏一些有趣的观点：</p>
 <ul>
-<li>0xffff.one: <a href="https://0xffff.one/d/1595-wei-shen-me-wo-zhe-teng-zhei-xie" target="_blank" rel="noopener noreferrer">https://0xffff.one/d/1595-wei-shen-me-wo-zhe-teng-zhei-xie</a></li>
-<li>v2ex: <a href="https://www.v2ex.com/t/961562" target="_blank" rel="noopener noreferrer">https://www.v2ex.com/t/961562</a></li>
+<li>0xffff.one: <a
+  href="https://0xffff.one/d/1595-wei-shen-me-wo-zhe-teng-zhei-xie"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://0xffff.one/d/1595-wei-shen-me-wo-zhe-teng-zhei-xie</a>
+</li>
+<li>v2ex: <a
+  href="https://www.v2ex.com/t/961562"
+  
+     target="_blank"
+  
+  rel="noopener noreferrer"
+  
+>https://www.v2ex.com/t/961562</a>
+</li>
 </ul>]]></content></entry><entry><title type="html">MacOS 窗口管理器 yabai 玩耍笔记</title><link href="https://thiscute.world/posts/macos-window-manager-yabai-usage/"/><id>https://thiscute.world/posts/macos-window-manager-yabai-usage/</id><author><name>ryan4yin</name></author><published>2023-05-22T12:24:57+08:00</published><updated>2023-05-22T12:24:57+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">NixOS 与 Nix Flakes 新手入门</title><link href="https://thiscute.world/posts/nixos-and-flake-basics/"/><id>https://thiscute.world/posts/nixos-and-flake-basics/</id><author><name>ryan4yin</name></author><published>2023-05-04T15:19:28+08:00</published><updated>2023-06-21T16:16:00+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
 &lt;p>This post is too old, please click the original URL to read it.&lt;/p></content></entry><entry><title type="html">Linux 上的 WireGuard 网络分析（一）</title><link href="https://thiscute.world/posts/wireguard-on-linux/"/><id>https://thiscute.world/posts/wireguard-on-linux/</id><author><name>ryan4yin</name></author><published>2023-03-28T22:19:25+08:00</published><updated>2023-03-28T22:19:25+08:00</updated><content type="html">&lt;p>文章比较老就不放 RSS 里啦，请点击阅读原文吧。&lt;/p>
