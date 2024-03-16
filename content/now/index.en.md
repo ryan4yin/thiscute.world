@@ -18,7 +18,8 @@ comment:
 ## 🌱 I’m currently learning
 
 - [Mindfulness expert Jon Kabat-Zinn teaches you how to incorporate meditation into your everyday life to improve your health and happiness.](https://www.masterclass.com/classes/jon-kabat-zinn-teaches-mindfulness-and-meditation)
-  - After being diagnosed with ADHD, my doctor advised me to practice mindfulness meditation.
+  - After being diagnosed with ADHD, my doctor advised me to practice mindfulness
+    meditation.
 - How to Think Straight About Psychology, 11th Edition
 - Complexity: A Guideed Tour
 - Set Boundaries, Find Peace: A Guide to Reclaiming Yourself
@@ -37,7 +38,9 @@ comment:
   - Computer Networking - A Top-Down Approach, 7e
 - AI
   - [Dive into Deep Learning](https://github.com/d2l-ai/d2l-en)
-- Music: [SynthesizerV](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) + [Reaper](https://www.reaper.fm)
+- Music:
+  [SynthesizerV](https://dreamtonics.com/en/synthesizerv/)/[ACE](https://space.bilibili.com/418030) +
+  [Reaper](https://www.reaper.fm)
 - Modeling & Design: Blender, Unreal Engine 5
 
 {{< particles_effect_up  >}}

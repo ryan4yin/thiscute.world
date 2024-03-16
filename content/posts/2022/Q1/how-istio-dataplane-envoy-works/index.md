@@ -17,7 +17,8 @@ code:
   maxShownLines: 100
 ---
 
-本文着重分析，在数据面 Envoy 上，Istio 是如何实现上层抽象 VirtualService DestinationRule Gateway 等功能的：
+本文着重分析，在数据面 Envoy 上，Istio 是如何实现上层抽象 VirtualService DestinationRule
+Gateway 等功能的：
 
 - 作为一个反向代理，Envoy 如何处理监听、请求转发、HTTP/gRPC 负载均衡、限流限并发
 - 作为一个正向代理，Envoy 如何处理 Pod 发送出去的数据

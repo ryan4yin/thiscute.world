@@ -16,9 +16,12 @@ categories: ["tech"]
 
 ### 一、声明映射关系
 
-使用 ORM 时，我们首先需要定义要操作的表（通过 `Table`），然后再定义该表对应的 Python class，并声明两者之间的映射关系（通过 `Mapper`）。
+使用 ORM 时，我们首先需要定义要操作的表（通过 `Table`），然后再定义该表对应的 Python
+class，并声明两者之间的映射关系（通过 `Mapper`）。
 
-方便起见，SQLAlchemy 提供了 Declarative 系统来一次完成上述三个步骤，Declarative 系统提供 base class，这个 base class 会为继承了它的 Python class（可称作 model）创建 Table，并维护两者的映射关系。
+方便起见，SQLAlchemy 提供了 Declarative 系统来一次完成上述三个步骤，Declarative 系统提供
+base class，这个 base class 会为继承了它的 Python class（可称作 model）创建 Table，并维护
+两者的映射关系。
 
 ```python
 from sqlalchemy.ext.declarative import declarative_base
@@ -37,22 +40,26 @@ class User(Base):
         return f"<User {self.username}>"
 ```
 
-这样就声明好了一个对象-关系映射，上一篇文章说过所有的 Table 都在某个 MetaData 中，可以通过 `Base.metadata` 获取它。
+这样就声明好了一个对象-关系映射，上一篇文章说过所有的 Table 都在某个 MetaData 中，可以通过
+`Base.metadata` 获取它。
 
 ```python
 Base.metadata.create_all(engine)  # 通过 metadata 创建表（或者说生成模式 schema）
 ```
 
-engine 的创建请见上篇文档 [SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言](https://www.cnblogs.com/kirito-c/p/10269485.html)
+engine 的创建请见上篇文档
+[SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言](https://www.cnblogs.com/kirito-c/p/10269485.html)
 
 #### 约束条件
 
-> 可参考 [SQL 基础笔记（三）：约束](https://www.cnblogs.com/kirito-c/p/10295693.html) 与 [SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言 - 表定义中的约束](https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F)
+> 可参考 [SQL 基础笔记（三）：约束](https://www.cnblogs.com/kirito-c/p/10295693.html) 与
+> [SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言 - 表定义中的约束](https://www.cnblogs.com/kirito-c/p/10269485.html#%E8%A1%A8%E5%AE%9A%E4%B9%89%E4%B8%AD%E7%9A%84%E7%BA%A6%E6%9D%9F)
 
 使用 ORM 来定义约束条件，与直接使用 SQL 表达式语言定义很类似，也有两种方法：
 
 1. 直接将约束条件作为 `Column`、`ForeignKey` 的参数传入。这种方式最简洁，也最常用。
-1. 使用 `UniqueConstraint`、`CheckConstraint` 等类构造约束，然后放入 `__table_args__` 属性中。举例：
+1. 使用 `UniqueConstraint`、`CheckConstraint` 等类构造约束，然后放入 `__table_args__` 属性
+   中。举例：
 
 ```python3
 class User(Base):
@@ -70,7 +77,8 @@ class User(Base):
 
 ### 二、获取 session
 
-上一节讲 engine 时，我们是通过 connection 来与数据库交互，而在 ORM 中我们使用 Session 访问数据库。
+上一节讲 engine 时，我们是通过 connection 来与数据库交互，而在 ORM 中我们使用 Session 访问
+数据库。
 
 ```python
 from sqlalchemy.orm import sessionmaker
@@ -80,11 +88,13 @@ Session = sessionmaker(bind=engine)  # 获取 session
 
 ### 三、增删改查
 
-直接使用 SQL 表达式语言时，我们使用 insert()、select()、update()、delete() 四个函数构造 SQL，使用 where() 添加条件，使用 model.join(another_model) 进行 join 操作。
-而使用 ORM 时，数据库操作不再与 SQL 直接对应。我们现在是通过操作 Python 对象来操作数据库了。
+直接使用 SQL 表达式语言时，我们使用 insert()、select()、update()、delete() 四个函数构造
+SQL，使用 where() 添加条件，使用 model.join(another_model) 进行 join 操作。而使用 ORM 时，
+数据库操作不再与 SQL 直接对应。我们现在是通过操作 Python 对象来操作数据库了。
 
-现在，我们通过 db.session.add()、db.session.delete() 进行添加与删除，使用 db.session.query(Model) 进行查询，通过 filter 和 filter_by 添加过滤条件。
-而修改，则是先查询出对应的 row 对象，直接修改这个对象，然后 commit 就行。
+现在，我们通过 db.session.add()、db.session.delete() 进行添加与删除，使用
+db.session.query(Model) 进行查询，通过 filter 和 filter_by 添加过滤条件。而修改，则是先查
+询出对应的 row 对象，直接修改这个对象，然后 commit 就行。
 
 1. 增添：
 

@@ -12,22 +12,27 @@ categories: ["tech"]
 
 > 个人笔记，如有错误烦请指正。
 
-SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下：
+SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构
+成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下：
 
 {{< figure src="/images/sqlalchemy-notes/sqlalchemy-arch.webp" title="SQLAlchemy 层次结构" >}}
 
-其中最常用的组件，应该是 **ORM** 和 **SQL 表达式语言**，这两者既可以独立使用，也能结合使用。
+其中最常用的组件，应该是 **ORM** 和 **SQL 表达式语言**，这两者既可以独立使用，也能结合使
+用。
 
 **ORM** 的好处在于它
 
-1. 自动处理了数据库和 Python 对象之间的映射关系，屏蔽了两套系统之间的差异。程序员不需要再编写复杂的 SQL 语句，直接操作 Python 对象就行。
+1. 自动处理了数据库和 Python 对象之间的映射关系，屏蔽了两套系统之间的差异。程序员不需要再
+   编写复杂的 SQL 语句，直接操作 Python 对象就行。
 2. 屏蔽了各数据库之间的差异，更换底层数据库不需要修改 SQL 语句，改下配置就行。
 3. 使数据库结构文档化，models 定义很清晰地描述了数据库的结构。
 4. 避免了不规范、冗余、风格不统一的 SQL 语句，可以避免很多人为 Bug，也方便维护。
 
-但是 ORM 需要消耗额外的性能来处理对象关系映射，此外用 ORM 做多表关联查询或复杂 SQL 查询时，效率低下。因此它适用于场景不太复杂，性能要求不太苛刻的场景。
+但是 ORM 需要消耗额外的性能来处理对象关系映射，此外用 ORM 做多表关联查询或复杂 SQL 查询
+时，效率低下。因此它适用于场景不太复杂，性能要求不太苛刻的场景。
 
-都说 ORM 学习成本高，我自己也更倾向于直接使用 SQL 语句（毕竟更熟悉），因此这一篇笔记不涉及 ORM 部分，只记录 SQLAlchemy 的 Engine 与 SQL 表达式语言。
+都说 ORM 学习成本高，我自己也更倾向于直接使用 SQL 语句（毕竟更熟悉），因此这一篇笔记不涉及
+ORM 部分，只记录 SQLAlchemy 的 Engine 与 SQL 表达式语言。
 
 ## 一、直接使用 [Engine](https://docs.sqlalchemy.org/en/latest/core/engines.html#sqlalchemy.create_engine) 和 Connections
 
@@ -43,7 +48,9 @@ engine = create_engine('sqlite:///:memory:',
                     pool_recycle=7200)   # 超过 2 小时就重新连接（MySQL 默认的连接最大闲置时间为 8 小时）
 ```
 
-`create_engine` 接受的第一个参数是数据库 URI，格式为 `dialect+driver://username:password@host:port/database`，dialect 是具体的数据库名称，driver 是驱动名称。key-value 是可选的参数。举例：
+`create_engine` 接受的第一个参数是数据库 URI，格式为
+`dialect+driver://username:password@host:port/database`，dialect 是具体的数据库名
+称，driver 是驱动名称。key-value 是可选的参数。举例：
 
 ```shell
 # PostgreSQL
@@ -65,9 +72,11 @@ sqlite:////home/ryan/Codes/Python/dbtest.db
 mssql+pyodbc://scott:tiger@some_dsn
 ```
 
-如果你的密码中含有 '@' 等特殊字符，就不能直接放入 URI 中，必须使用 `urllib.parse.quote_plus` 编码，然后再插入 URI.
+如果你的密码中含有 '@' 等特殊字符，就不能直接放入 URI 中，必须使用
+`urllib.parse.quote_plus` 编码，然后再插入 URI.
 
-引擎创建后，我们就可以直接获取 connection，然后执行 SQL 语句了。这种用法相当于把 SQLAlchemy 当成带 log 的数据库连接池使用：
+引擎创建后，我们就可以直接获取 connection，然后执行 SQL 语句了。这种用法相当于把
+SQLAlchemy 当成带 log 的数据库连接池使用：
 
 ```python
 with engine.connect() as conn:
@@ -81,8 +90,9 @@ with engine.connect() as conn:
         print("username:", row['username'])
 ```
 
-但是要注意的是，connection 的 execute 是自动提交的（autocommit），这就像在 shell 里打开一个数据库客户端一样，分号结尾的 SQL 会被自动提交。
-只有在 `BEGIN TRANSACTION` 内部，`AUTOCOMMIT` 会被临时设置为 `FALSE`，可以通过如下方法开始一个内部事务：
+但是要注意的是，connection 的 execute 是自动提交的（autocommit），这就像在 shell 里打开一
+个数据库客户端一样，分号结尾的 SQL 会被自动提交。只有在 `BEGIN TRANSACTION` 内
+部，`AUTOCOMMIT` 会被临时设置为 `FALSE`，可以通过如下方法开始一个内部事务：
 
 ```python
 def transaction_a(connection):
@@ -139,15 +149,18 @@ result = connection.execute(stmt)
 
 ## 二、SQL 表达式语言
 
-> 复杂的 SQL 查询可以直接用 raw sql 写，而增删改一般都是单表操作，用 SQL 表达式语言最方便。
+> 复杂的 SQL 查询可以直接用 raw sql 写，而增删改一般都是单表操作，用 SQL 表达式语言最方
+> 便。
 
 SQLAlchemy 表达式语言是一个使用 Python 结构表示关系数据库结构和表达式的系统。
 
 ### 1. 定义并创建表
 
-SQL 表达式语言使用 Table 来定义表，而表的列则用 Column 定义。Column 总是关联到一个 Table 对象上。
+SQL 表达式语言使用 Table 来定义表，而表的列则用 Column 定义。Column 总是关联到一个 Table
+对象上。
 
-一组 Table 对象以及它们的子对象的集合就被称作「数据库元数据（database metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table 放在一个 metadata 中。
+一组 Table 对象以及它们的子对象的集合就被称作「数据库元数据（database
+metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table 放在一个 metadata 中。
 
 下面是创建元数据（一组相关联的表）的例子，：
 
@@ -173,13 +186,18 @@ metadata.create_all(engine)  # 使用 engine 创建 metadata 内的所有 Tables
 
 #### 表定义中的约束
 
-> 应该给所有的约束命名，即为 `name` 参数指定一个不冲突的列名。详见 [The Importance of Naming Constraints](https://alembic.sqlalchemy.org/en/latest/naming.html)
+> 应该给所有的约束命名，即为 `name` 参数指定一个不冲突的列名。详见
+> [The Importance of Naming Constraints](https://alembic.sqlalchemy.org/en/latest/naming.html)
 
-表还有一个属性：[约束条件](https://www.cnblogs.com/kirito-c/p/10295693.html)。下面一一进行说明。
+表还有一个属性：[约束条件](https://www.cnblogs.com/kirito-c/p/10295693.html)。下面一一进行
+说明。
 
-1. **外键约束**：用于在删除或更新某个值或行时，对主键/外键关系中一组数据列强制进行的操作限制。
-   1. 用法一：`Column('user_id', None, ForeignKey('user.id'))`，直接在 `Column` 中指定。这也是最常用的方法
-   2. 用法二：通过 `ForeignKeyConstraint(columns, refcolumns)` 构建约束，作为参数传给 `Table`.
+1. **外键约束**：用于在删除或更新某个值或行时，对主键/外键关系中一组数据列强制进行的操作限
+   制。
+   1. 用法一：`Column('user_id', None, ForeignKey('user.id'))`，直接在 `Column` 中指定。这
+      也是最常用的方法
+   2. 用法二：通过 `ForeignKeyConstraint(columns, refcolumns)` 构建约束，作为参数传给
+      `Table`.
 
 ```python
 item = Table('item', metadata,  # 商品 table
@@ -192,12 +210,18 @@ item = Table('item', metadata,  # 商品 table
 )
 ```
 
-1. `on delete` 与 `on update`：**外键约束的两个约束条件**，通过 `ForeignKey()` 或 `ForeignKeyConstraint()` 的关键字参数 `ondelete/onupdate` 传入。
-   可选值有：1. **默认行为 `NO ACTION`**：什么都不做，直接报错。1. `CASCADE`：删除/更新 父表数据时，**从表数据会同时被 删除/更新**。（无报错）1. `RESTRICT`：**不允许直接 删除/更新 父表数据**，直接报错。（和默认行为基本一致）1. `SET NULL` or `SET DEFAULT`：删除/更新 父表数据时，将对应的从表数据重置为 `NULL` 或者默认值。
+1. `on delete` 与 `on update`：**外键约束的两个约束条件**，通过 `ForeignKey()` 或
+   `ForeignKeyConstraint()` 的关键字参数 `ondelete/onupdate` 传入。可选值有：1. **默认行为
+   `NO ACTION`**：什么都不做，直接报错。1. `CASCADE`：删除/更新 父表数据时，**从表数据会同
+   时被 删除/更新**。（无报错）1. `RESTRICT`：**不允许直接 删除/更新 父表数据**，直接报
+   错。（和默认行为基本一致）1. `SET NULL` or `SET DEFAULT`：删除/更新 父表数据时，将对应
+   的从表数据重置为 `NULL` 或者默认值。
 1. **唯一性约束**：`UniqueConstraint('col2', 'col3', name='uix_1')`，作为参数传给 `Table`.
-1. **CHECK 约束**：`CheckConstraint('col2 > col3 + 5', name='check1')`， 作为参数传给 `Table`.
+1. **CHECK 约束**：`CheckConstraint('col2 > col3 + 5', name='check1')`， 作为参数传给
+   `Table`.
 1. 主键约束：不解释
-   1. 方法一：通过 `Column('id', Integer, primary_key=True)` 指定主键。（参数 `primary_key` 可在多个 `Column` 上使用）
+   1. 方法一：通过 `Column('id', Integer, primary_key=True)` 指定主键。（参数
+      `primary_key` 可在多个 `Column` 上使用）
    1. 方法二：使用 `PrimaryKeyConstraint`
 
 ```python
@@ -269,7 +293,8 @@ conn.execute(stmt, [
      ])
 ```
 
-可以看到，所有的条件都是通过 `where` 指定的，它和后面 ORM 的 filter 接受的参数是一样的。（详细的会在第二篇文章里讲）
+可以看到，所有的条件都是通过 `where` 指定的，它和后面 ORM 的 filter 接受的参数是一样的。
+（详细的会在第二篇文章里讲）
 
 4. **查**
 
@@ -288,7 +313,8 @@ res = conn.execute(s1)
 # 可用 for row in res 遍历结果集，也可用 fetchone() 只获取一行
 ```
 
-查询返回的是 ResultProxy 对象，这是 SQLAlchemy 对 Python DB-API 的 cursor 的一个封装类，要从中获取结果行，主要有下列几个方法：
+查询返回的是 ResultProxy 对象，这是 SQLAlchemy 对 Python DB-API 的 cursor 的一个封装类，要
+从中获取结果行，主要有下列几个方法：
 
 ```python
 row1 = result.fetchone()  # 对应 cursor.fetchone()

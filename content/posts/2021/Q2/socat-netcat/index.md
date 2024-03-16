@@ -16,12 +16,15 @@ series: ["计算机网络相关"]
 
 ## socat & netcat
 
-netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 `nc`.
+netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行
+版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 `nc`.
 
-而 [socat(socket cat)](https://github.com/3ndG4me/socat)，官方文档描述它是 `"netcat++" (extended design, new implementation)`，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。
+而 [socat(socket cat)](https://github.com/3ndG4me/socat)，官方文档描述它是
+`"netcat++" (extended design, new implementation)`，项目比较活
+跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。
 
-在不方便安装 socat 的环境中，我们可以使用系统自带的 netcat.
-而在其他环境，可以考虑优先使用 socat.
+在不方便安装 socat 的环境中，我们可以使用系统自带的 netcat. 而在其他环境，可以考虑优先使用
+socat.
 
 ## 一、简介
 
@@ -31,13 +34,17 @@ socat 的基本命令格式：
 socat [参数] 地址1 地址2
 ```
 
-给 socat 提供两个地址，socat 干的活就是把两个地址的流对接起来。左边地址的输出传给右边，同时又把右边地址的输出传给左边，也就是一个**双向的数据管道**。
+给 socat 提供两个地址，socat 干的活就是把两个地址的流对接起来。左边地址的输出传给右边，同
+时又把右边地址的输出传给左边，也就是一个**双向的数据管道**。
 
-听起来好像没啥特别的，但是实际上计算机网络干的活也就是数据传输而已，却影响了整个世界，不可小觑它的功能。
+听起来好像没啥特别的，但是实际上计算机网络干的活也就是数据传输而已，却影响了整个世界，不可
+小觑它的功能。
 
-socat 支持非常多的地址类型：`-`/stdio，TCP, TCP-LISTEN, UDP, UDP-LISTEN, OPEN, EXEC, SOCKS, PROXY 等等，可用于端口监听、链接，文件和进程读写，代理桥接等等。
+socat 支持非常多的地址类型：`-`/stdio，TCP, TCP-LISTEN, UDP, UDP-LISTEN, OPEN, EXEC,
+SOCKS, PROXY 等等，可用于端口监听、链接，文件和进程读写，代理桥接等等。
 
-socat 的功能就是这么简单，命令行参数也很简洁，唯一需要花点精力学习的就是它各种地址的定义和搭配写法。
+socat 的功能就是这么简单，命令行参数也很简洁，唯一需要花点精力学习的就是它各种地址的定义和
+搭配写法。
 
 而 netcat 定义貌似没这么严谨，可以简单的理解为网络版的 cat 命令 2333
 
@@ -62,8 +69,8 @@ brew install socat
 
 ### 1. 检测远程端口的可连接性
 
-> 很多人会用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
-> telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat
+> 很多人会用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安
+> 装。telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat
 
 使用 socat/netcat 检测远程端口的可连接性：
 
@@ -123,9 +130,11 @@ socat UDP:192.168.31.123:7000 -
 
 ### 3. 调试 TLS 协议
 
-> 参考 socat 官方文档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
+> 参考 socat 官方文
+> 档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
 
-> 测试证书及私钥的生成参见 [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/about-tls-cert/)
+> 测试证书及私钥的生成参见
+> [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/about-tls-cert/)
 
 模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：
 
@@ -163,8 +172,7 @@ curl -v --cacert ca.crt https://192.168.31.123:4433
 
 通常传输文件时，我都习惯使用 scp/ssh/rsync，但是 socat 其实也可以传输文件。
 
-以将 demo.tar.gz 从主机 A 发送到主机 B 为例，
-首先在数据发送方 A 执行如下命令：
+以将 demo.tar.gz 从主机 A 发送到主机 B 为例，首先在数据发送方 A 执行如下命令：
 
 ```shell
 # -u 表示数据只从左边的地址单向传输给右边（socat 默认是一个双向管道）
@@ -191,9 +199,11 @@ nc 192.168.1.2 8080 < demo.tar.gz
 
 ### 5. 担当临时的 web 服务器
 
-使用 `fork` `reuseaddr` `SYSTEM` 三个命令，再用 `systemd`/`supervisor` 管理一下，就可以用几行命令实现一个简单的后台服务器。
+使用 `fork` `reuseaddr` `SYSTEM` 三个命令，再用 `systemd`/`supervisor` 管理一下，就可以用
+几行命令实现一个简单的后台服务器。
 
-下面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问 `http://<ip>:8080` 来查看效果。
+下面的命令将监听 8080 端口，并将数据流和 web.py 的 stdio 连接起来，可以直接使用浏览器访问
+`http://<ip>:8080` 来查看效果。
 
 ```shell
 socat TCP-LISTEN:8080,reuseaddr,fork SYSTEM:"python3 web.py"
@@ -236,7 +246,8 @@ socat TCP-LISTEN:8080,fork,reuseaddr  TCP:baidu.com:80
 curl -v -H 'Host: baidu.com' localhost:8080
 ```
 
-其他用法，比如为一个仅监听了 `127.0.0.1` loopback 网卡的服务，允许通过外部网络访问（注意安全性）：
+其他用法，比如为一个仅监听了 `127.0.0.1` loopback 网卡的服务，允许通过外部网络访问（注意安
+全性）：
 
 ```shell
 socat TCP-LISTEN:5432,fork,reuseaddr  TCP:localhost:3658
@@ -258,8 +269,10 @@ socat 貌似不支持这项功能，估计是更建议使用专业的 nmap 吧�
 
 socat 还提供了丰富的 examples 与 tutorials，介绍了许多其他用法，包括：
 
-- [Building TUN based virtual networks with socat](http://www.dest-unreach.org/socat/doc/socat-tun.html): 构造 TUN 虚拟网卡
-- [IP Multicasting with Socat](http://www.dest-unreach.org/socat/doc/socat-multicast.html): 支持 IP 包广播，将管道另一端设为一个 CIDR 网段
+- [Building TUN based virtual networks with socat](http://www.dest-unreach.org/socat/doc/socat-tun.html):
+  构造 TUN 虚拟网卡
+- [IP Multicasting with Socat](http://www.dest-unreach.org/socat/doc/socat-multicast.html):
+  支持 IP 包广播，将管道另一端设为一个 CIDR 网段
 - etc...
 
 详见官方文档：

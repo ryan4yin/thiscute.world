@@ -18,18 +18,23 @@ code:
 
 ## 前言
 
-如果要在Linux 上设置一个开机自启，出现问题自动重启，并且有良好日志的程序，比较流行的方法有 `supervisord`、`systemd`，除此之外，还有 upstart、runit 等类似的工具。
-但是自从 systemd 被 ubuntu、centos 等主流 Linux 发行版应用以来，systemd 渐渐成为主流方案。
+如果要在Linux 上设置一个开机自启，出现问题自动重启，并且有良好日志的程序，比较流行的方法有
+`supervisord`、`systemd`，除此之外，还有 upstart、runit 等类似的工具。但是自从 systemd 被
+ubuntu、centos 等主流 Linux 发行版应用以来，systemd 渐渐成为主流方案。
 
-如果你需要跨平台(Linux/MacOSX/FreeBSD)的方案，那么建议使用 `supervisord`，如果只需要支持 Linux 则建议选用 `systemd`.
+如果你需要跨平台(Linux/MacOSX/FreeBSD)的方案，那么建议使用 `supervisord`，如果只需要支持
+Linux 则建议选用 `systemd`.
 
 ### 配置说明
 
-要自定义一个服务，需要在 `/usr/lib/systemd/system/` 下添加一个配置文件：`<software-name>.service`
+要自定义一个服务，需要在 `/usr/lib/systemd/system/` 下添加一个配置文
+件：`<software-name>.service`
 
-> 如果 `/usr/lib/systemd/system/` 不存在，可考虑使用 `/lib/systemd/system/` 或 `/etc/systemd/system/`
+> 如果 `/usr/lib/systemd/system/` 不存在，可考虑使用 `/lib/systemd/system/` 或
+> `/etc/systemd/system/`
 
-> `ExecXXX` 中的命令，均可以正常使用转义字符以及环境变量插值语法，比如用 `\` 结尾表示换行，用 $Xxx 获取环境变量。
+> `ExecXXX` 中的命令，均可以正常使用转义字符以及环境变量插值语法，比如用 `\` 结尾表示换
+> 行，用 $Xxx 获取环境变量。
 
 配置文件的内容说明：
 
@@ -75,24 +80,32 @@ WantedBy=multi-user.target
 
 ### Type 说明
 
-Type 感觉是整个配置文件里面最不好理解的一个配置项，它的实际作用就是：**告诉 systemd 你的 Service 是如何启动的**
+Type 感觉是整个配置文件里面最不好理解的一个配置项，它的实际作用就是：**告诉 systemd 你的
+Service 是如何启动的**
 
 1. `Type=simple`（默认值）：`ExecStart` 命令会立即启动你的服务，并且持续运行，不会退出。
 
-2. `Type=forking`：`ExecStart` 命令会 fork 出你的服务主进程，然后正常退出。使用此 Type 时应同时指定 `PIDFile=`，systemd 使用它跟踪服务的主进程。
+2. `Type=forking`：`ExecStart` 命令会 fork 出你的服务主进程，然后正常退出。使用此 Type 时
+   应同时指定 `PIDFile=`，systemd 使用它跟踪服务的主进程。
 
-3. `Type=oneshot`：`ExecStart` 命令。可能需要同时设置 `RemainAfterExit=yes` 使得 `systemd` 在服务进程退出之后仍然认为服务处于激活状态
+3. `Type=oneshot`：`ExecStart` 命令。可能需要同时设置 `RemainAfterExit=yes` 使得 `systemd`
+   在服务进程退出之后仍然认为服务处于激活状态
 
-4. `Type=notify`：与 `Type=simple` 相同，但约定服务会在就绪后向 systemd 发送一个信号，以表明自己已经启动成功。
+4. `Type=notify`：与 `Type=simple` 相同，但约定服务会在就绪后向 systemd 发送一个信号，以表
+   明自己已经启动成功。
 
-   - 细节：systemd 会创建一个 unix socket，并将地址通过 $NOTIFY_SOCKET 环境变量提供给服务，同时监听该 socket 上的信号。服务可以使用 systemd 提供的 C 函数 `sd_notify()` 或者命令行工具 `systemd-notify` 发送信号给 systemd.
+   - 细节：systemd 会创建一个 unix socket，并将地址通过 $NOTIFY_SOCKET 环境变量提供给服
+     务，同时监听该 socket 上的信号。服务可以使用 systemd 提供的 C 函数 `sd_notify()` 或者
+     命令行工具 `systemd-notify` 发送信号给 systemd.
    - 因为多了个 notify 信号，所以这一 Type 要比 simple 更精确一点。但是需要服务的配合，
 
-5. `Type=dbus`：若以此方式启动，当指定的 BusName 出现在 DBus 系统总线上时，systemd 认为服务就绪。
+5. `Type=dbus`：若以此方式启动，当指定的 BusName 出现在 DBus 系统总线上时，systemd 认为服
+   务就绪。
 
 6. `Type=idle`：没搞明白，不过通常也用不到。
 
-更详细的见 [Systemd 入门教程：命令篇 - 阮一峰](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html)。
+更详细的见
+[Systemd 入门教程：命令篇 - 阮一峰](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html)。
 
 ### 配置举例
 

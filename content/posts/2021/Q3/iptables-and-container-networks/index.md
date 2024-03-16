@@ -20,70 +20,89 @@ code:
 
 > 本文仅针对 ipv4 网络
 
-本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。
+本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和
+Linux 虚拟网络接口实现的单机容器网络。
 
 ## 一、iptables
 
-[iptables](https://www.netfilter.org/projects/iptables/index.html) 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT
+[iptables](https://www.netfilter.org/projects/iptables/index.html) 提供了包过滤、NAT 以及
+其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT
 
 iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的子项目。
 
-但是 eBPF 社区目前正在开发旨在取代 netfilter 的新项目 bpfilter，他们的目标之一是兼容 iptables/nftables 规则，让我们拭目以待吧。
+但是 eBPF 社区目前正在开发旨在取代 netfilter 的新项目 bpfilter，他们的目标之一是兼容
+iptables/nftables 规则，让我们拭目以待吧。
 
 ### 1. iptables 基础概念 - 四表五链
 
-> 实际上还有张 SELinux 相关的 security 表（应该是较新的内核新增的，但是不清楚是哪个版本加的），但是我基本没接触过，就略过了。
+> 实际上还有张 SELinux 相关的 security 表（应该是较新的内核新增的，但是不清楚是哪个版本加
+> 的），但是我基本没接触过，就略过了。
 
-> 这里只对 iptables 做简短介绍，详细的教程参见 [iptables 详解（1）：iptables 概念 - 朱双印](https://www.zsythink.net/archives/1199)，这篇文章写得非常棒！把 iptables 讲清楚了。
+> 这里只对 iptables 做简短介绍，详细的教程参见
+> [iptables 详解（1）：iptables 概念 - 朱双印](https://www.zsythink.net/archives/1199)，这
+> 篇文章写得非常棒！把 iptables 讲清楚了。
 
-默认情况下，iptables 提供了四张表（不考虑 security 的话）和五条链，数据在这四表五链中的处理流程如下图所示：
+默认情况下，iptables 提供了四张表（不考虑 security 的话）和五条链，数据在这四表五链中的处
+理流程如下图所示：
 
-> 在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外 `conntrack` 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。
+> 在这里的介绍中，可以先忽略掉图中 link layer 层的链路，它属于 ebtables 的范畴。另外
+> `conntrack` 也暂时忽略，在下一小节会详细介绍 conntrack 的功能。
 
 ![](/images/netfilter/netfilter-packet-flow.webp "netfilter 数据包处理流程，来自 wikipedia")
 
 对照上图，对于发送到某个用户层程序的数据而言，流量顺序如下：
 
 - 首先进入 PREROUTING 链，依次经过这三个表： raw -> mangle -> nat
-- 然后通过路由决策，发现目标 IP 为本机地址，于是进入 INPUT 链，这个链上也有三个表，处理顺序是：mangle -> nat -> filter
+- 然后通过路由决策，发现目标 IP 为本机地址，于是进入 INPUT 链，这个链上也有三个表，处理顺
+  序是：mangle -> nat -> filter
 - 过了 INPUT 链后，数据才会进入内核协议栈，最终到达用户层程序。
 
 用户层程序发出的报文，则依次经过这几个表：OUTPUT -> POSTROUTING
 
-> 在路由决策时，如果目标 IP 不是本机，就得看内核是否开启了 ip_forward 功能，如果没开启数据包就扔掉了。如果开了转发，就会进入 FORWARD 链处理，然后直接进入 POSTROUTING 链，也就是说这类流量不会过 INPUT 链！
+> 在路由决策时，如果目标 IP 不是本机，就得看内核是否开启了 ip_forward 功能，如果没开启数据
+> 包就扔掉了。如果开了转发，就会进入 FORWARD 链处理，然后直接进入 POSTROUTING 链，也就是说
+> 这类流量不会过 INPUT 链！
 
-从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次是：PREROUTEING -> FORWARD -> POSTROUTING
+从图中也很容易看出，如果数据 dst ip 不是本机任一接口的 ip，那它通过的几个链依次
+是：PREROUTEING -> FORWARD -> POSTROUTING
 
-五链的功能和名称完全一致，应该很容易理解。
-除了默认的五条链外，用户也可以创建自定义的链，自定义的链需要被默认链引用才能生效，我们后面要介绍的 Docker 实际上就定义了好几条自定义链。
+五链的功能和名称完全一致，应该很容易理解。除了默认的五条链外，用户也可以创建自定义的链，自
+定义的链需要被默认链引用才能生效，我们后面要介绍的 Docker 实际上就定义了好几条自定义链。
 
 除了「链」外，iptables 还有「表」的概念，四个表的优先级顺序如下：
 
 - raw: 对收到的数据包在连接跟踪前进行处理。一般用不到，可以忽略
-  - 一旦用户使用了 raw 表，raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址转换和数据包的链接跟踪处理了
+  - 一旦用户使用了 raw 表，raw 表处理完后，将跳过 nat 表和 ip_conntrack 处理，即不再做地址
+    转换和数据包的链接跟踪处理了
 - mangle: 用于修改报文、给报文打标签，用得也较少。
 - nat: 主要用于做网络地址转换，SNAT 或者 DNAT
 - filter: 主要用于过滤数据包
 
-数据在按优先级经过四个表的处理时，一旦在某个表中匹配到一条规则 A,下一条处理规则就由规则 A 的 target 参数指定，**后续的所有表**都会被忽略。target 有如下几种类型：
+数据在按优先级经过四个表的处理时，一旦在某个表中匹配到一条规则 A,下一条处理规则就由规则 A
+的 target 参数指定，**后续的所有表**都会被忽略。target 有如下几种类型：
 
 - ACCEPT: 直接允许数据包通过
 - DROP: 直接丢弃数据包，对程序而言就是 100% 丢包
-- REJECT: 丢弃数据包，但是会给程序返回 RESET。这个对程序更友好，但是存在安全隐患，通常不使用。
-- MASQUERADE: （伪装）将 src ip 改写为网卡 ip，和 SNAT 的区别是它会自动读取网卡 ip。路由设备必备。
+- REJECT: 丢弃数据包，但是会给程序返回 RESET。这个对程序更友好，但是存在安全隐患，通常不使
+  用。
+- MASQUERADE: （伪装）将 src ip 改写为网卡 ip，和 SNAT 的区别是它会自动读取网卡 ip。路由设
+  备必备。
 - SNAT/DNAT: 顾名思义，做网络地址转换
 - REDIRECT: 在本机做端口映射
-- LOG: 在 `/var/log/messages` 文件中记录日志信息，然后将数据包传递给下一条规则，也就是说除了记录以外不对数据包做任何其他操作，仍然让下一条规则去匹配。
+- LOG: 在 `/var/log/messages` 文件中记录日志信息，然后将数据包传递给下一条规则，也就是说除
+  了记录以外不对数据包做任何其他操作，仍然让下一条规则去匹配。
   - 只有这个 target 特殊一些，匹配它的数据仍然可以匹配后续规则，不会直接跳过。
 - 其他自定义链的名称：表示将数据包交给该链进行下一步处理。
-- RETURN: 如果是在子链（自定义链）遇到 RETURN，则返回父链的下一条规则继续进行条件的比较。如果是在默认链 RETURN 则直接使用默认的动作（ACCEPT/DROP）
+- RETURN: 如果是在子链（自定义链）遇到 RETURN，则返回父链的下一条规则继续进行条件的比较。
+  如果是在默认链 RETURN 则直接使用默认的动作（ACCEPT/DROP）
 - 其他类型，可以用到的时候再查
 
 理解了上面这张图，以及四个表的用途，就很容易理解 iptables 的命令了。
 
 ### 2. 常用命令
 
-> **注意**: 下面提供的 iptables 命令做的修改是未持久化的，重启就会丢失！在下一节会简单介绍持久化配置的方法。
+> **注意**: 下面提供的 iptables 命令做的修改是未持久化的，重启就会丢失！在下一节会简单介绍
+> 持久化配置的方法。
 
 命令格式：
 
@@ -91,7 +110,8 @@ iptables 及新的 nftables 都是基于 netfilter 开发的，是 netfilter 的
 iptables [-t table] {-A|-C|-D} chain [-m matchname [per-match-options]] -j targetname [per-target-options]
 ```
 
-其中 table 默认为 `filter` 表（可通过 `-t xxx` 指定别的表名），其中系统管理员实际使用最多的是 INPUT 链，用于设置防火墙。
+其中 table 默认为 `filter` 表（可通过 `-t xxx` 指定别的表名），其中系统管理员实际使用最多
+的是 INPUT 链，用于设置防火墙。
 
 先介绍下 iptables 的查询指令：
 
@@ -111,7 +131,8 @@ iptables -t nat -S
 iptables -t nat -nL
 ```
 
-以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙（默认 filter 表，可通过 `-t xxx` 指定别的表名）：
+以下简单介绍在 INPUT 链上添加、修改规则，来设置防火墙（默认 filter 表，可通过 `-t xxx` 指
+定别的表名）：
 
 ```shell
 # --add 允许 80 端口通过
@@ -143,8 +164,9 @@ iptables -F INPUT
 
 ---
 
-> 本文后续分析时，假设用户已经清楚 linux bridge、veth 等虚拟网络接口相关知识。
-> 如果你还缺少这些前置知识，请先阅读文章 [Linux 中的虚拟网络接口](https://thiscute.world/posts/linux-virtual-network-interfaces/)。
+> 本文后续分析时，假设用户已经清楚 linux bridge、veth 等虚拟网络接口相关知识。如果你还缺少
+> 这些前置知识，请先阅读文章
+> [Linux 中的虚拟网络接口](https://thiscute.world/posts/linux-virtual-network-interfaces/)。
 
 ### 3. conntrack 连接跟踪与 NAT
 
@@ -152,9 +174,11 @@ iptables -F INPUT
 
 ![](/images/netfilter/netfilter-packet-flow.webp "netfilter 数据包处理流程，来自 wikipedia")
 
-上一节中我们忽略了图中的 conntrack，它就是本节的主角——netfilter 的连接跟踪（connection tracking）模块。
+上一节中我们忽略了图中的 conntrack，它就是本节的主角——netfilter 的连接跟踪（connection
+tracking）模块。
 
-netfilter/conntrack 是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件，上面的流程图显示， conntrack 在 PREROUTEING 和 OUTPUT 链的 raw 表之后生效。
+netfilter/conntrack 是 iptables 实现 SNAT/DNAT/MASQUERADE 的前提条件，上面的流程图显示，
+conntrack 在 PREROUTEING 和 OUTPUT 链的 raw 表之后生效。
 
 下面以 docker 默认的 bridge 网络为例详细介绍下 conntrack 的功能。
 
@@ -199,23 +223,34 @@ docker 会在 iptables 中为 docker0 网桥添加如下规则：
 -t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 ```
 
-这几行规则使 docker 容器能正常访问外部网络。`MASQUERADE` 在请求出网时，会自动做 `SNAT`，将 src ip 替换成出口网卡的 ip.
-这样数据包能正常出网，而且对端返回的数据包现在也能正常回到出口网卡。
+这几行规则使 docker 容器能正常访问外部网络。`MASQUERADE` 在请求出网时，会自动做 `SNAT`，将
+src ip 替换成出口网卡的 ip. 这样数据包能正常出网，而且对端返回的数据包现在也能正常回到出口
+网卡。
 
-现在问题就来了：**出口网卡收到返回的数据包后，还能否将数据包转发到数据的初始来源端——某个 docker 容器**？难道 docker 还额外添加了与 MASQUERADE 对应的 dst ip 反向转换规则？
+现在问题就来了：**出口网卡收到返回的数据包后，还能否将数据包转发到数据的初始来源端——某个
+docker 容器**？难道 docker 还额外添加了与 MASQUERADE 对应的 dst ip 反向转换规则？
 
-实际上这一步依赖的是本节的主角——iptables 提供的 conntrack 连接跟踪功能（在「参考」中有一篇文章详细介绍了此功能）。
+实际上这一步依赖的是本节的主角——iptables 提供的 conntrack 连接跟踪功能（在「参考」中有一篇
+文章详细介绍了此功能）。
 
-连接跟踪对 NAT 的贡献是：在做 NAT 转换时，无需手动添加额外的规则来执行**反向转换**以实现数据的双向传输。netfilter/conntrack 系统会记录 NAT 的连接状态，NAT 地址的反向转换是根据这个状态自动完成的。
+连接跟踪对 NAT 的贡献是：在做 NAT 转换时，无需手动添加额外的规则来执行**反向转换**以实现数
+据的双向传输。netfilter/conntrack 系统会记录 NAT 的连接状态，NAT 地址的反向转换是根据这个
+状态自动完成的。
 
-比如上图中的 `Container A` 通过 bridge 网络向 baidu.com 发起了 N 个连接，这时数据的处理流程如下：
+比如上图中的 `Container A` 通过 bridge 网络向 baidu.com 发起了 N 个连接，这时数据的处理流
+程如下：
 
-- 首先 `Container A` 发出的数据包被 MASQUERADE 规则处理，将 src ip 替换成 eth0 的 ip，然后发送到物理网络 `192.168.31.0/24`。
-  - conntrack 系统记录此连接被 NAT 处理前后的状态信息，并将其状态设置为 NEW，表示这是新发起的一个连接
+- 首先 `Container A` 发出的数据包被 MASQUERADE 规则处理，将 src ip 替换成 eth0 的 ip，然后
+  发送到物理网络 `192.168.31.0/24`。
+  - conntrack 系统记录此连接被 NAT 处理前后的状态信息，并将其状态设置为 NEW，表示这是新发
+    起的一个连接
 - 对端 baidu.com 返回数据包后，会首先到达 eth0 网卡
-- conntrack 查表，发现返回数据包的连接已经记录在表中并且状态为 NEW，于是它将连接的状态修改为 ESTABLISHED，并且将 dst_ip 改为 `172.17.0.2` 然后发送出去
+- conntrack 查表，发现返回数据包的连接已经记录在表中并且状态为 NEW，于是它将连接的状态修改
+  为 ESTABLISHED，并且将 dst_ip 改为 `172.17.0.2` 然后发送出去
   - 注意，这个和 tcp 的 ESTABLISHED 没任何关系
-- 经过路由匹配，数据包会进入到 docker0，然后匹配上 iptables 规则：`-t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT`，数据直接被放行
+- 经过路由匹配，数据包会进入到 docker0，然后匹配上 iptables 规
+  则：`-t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT`，
+  数据直接被放行
 - 数据经过 veth 后，最终进入到 `Container A` 中，交由容器的内核协议栈处理。
 - 数据被 `Container A` 的内核协议栈发送到「发起连接的应用程序」。
 
@@ -223,7 +258,8 @@ docker 会在 iptables 中为 docker0 网桥添加如下规则：
 
 conntrack 连接跟踪模块目前只支持以下六种协议：`TCP`、`UDP`、`ICMP`、`DCCP`、`SCTP`、`GRE`
 
-要注意的一点是，conntrack 跟踪的「连接」，跟「TCP 连接」不是一个层面的概念，可以看到 conntrack 也支持 UDP 这种无连接通讯协议。
+要注意的一点是，conntrack 跟踪的「连接」，跟「TCP 连接」不是一个层面的概念，可以看到
+conntrack 也支持 UDP 这种无连接通讯协议。
 
 #### 2. 实际测试 conntrack
 
@@ -295,33 +331,41 @@ tcp      6 298 ESTABLISHED src=172.17.0.4 dst=198.18.5.130 sport=54636 dport=443
 18:28:28.729328 IP 198.18.5.130.443 > 172.17.0.4.54636: Flags [.], ack 693, win 939, options [nop,nop,TS val 22099579 ecr 3365688488], length 0
 ```
 
-能看到数据确实在进入 docker0 网桥前，dst_ip 确实被从 `192.168.31.228`（wlp4s0 的 ip）被修改为了 `172.17.0.4`（`Container A` 的 ip）.
+能看到数据确实在进入 docker0 网桥前，dst_ip 确实被从 `192.168.31.228`（wlp4s0 的 ip）被修
+改为了 `172.17.0.4`（`Container A` 的 ip）.
 
 #### 3. NAT 如何分配端口？
 
-上一节我们实际测试发现，docker 容器的流量在经过 iptables 的 MASQUERADE 规则处理后，只有 src ip 被修改了，而 port 仍然是一致的。
+上一节我们实际测试发现，docker 容器的流量在经过 iptables 的 MASQUERADE 规则处理后，只有
+src ip 被修改了，而 port 仍然是一致的。
 
-但是如果 NAT 不修改连接的端口，实际上是会有问题的。如果有两个容器同时向 `ip: 198.18.5.130, port: 443` 发起请求，又恰好使用了同一个 src port，在宿主机上就会出现端口冲突！
-因为这两个请求被 SNAT 时，如果只修改 src ip，那它们映射到的将是主机上的同一个连接！
+但是如果 NAT 不修改连接的端口，实际上是会有问题的。如果有两个容器同时向
+`ip: 198.18.5.130, port: 443` 发起请求，又恰好使用了同一个 src port，在宿主机上就会出现端
+口冲突！因为这两个请求被 SNAT 时，如果只修改 src ip，那它们映射到的将是主机上的同一个连
+接！
 
-这个问题 NAT 是如何解决的呢？我想如果遇到这种情况，NAT 应该会通过一定的规则选用一个不同的端口。
+这个问题 NAT 是如何解决的呢？我想如果遇到这种情况，NAT 应该会通过一定的规则选用一个不同的
+端口。
 
 有空可以翻一波源码看看这个，待续...
 
 ### 4. 如何持久化 iptables 配置
 
-首先需要注意的是，centos7/opensuse 15 都已经切换到了 firewalld 作为防火墙配置软件，
-而 ubuntu18.04 lts 也换成了 ufw 来配置防火墙。
+首先需要注意的是，centos7/opensuse 15 都已经切换到了 firewalld 作为防火墙配置软件，而
+ubuntu18.04 lts 也换成了 ufw 来配置防火墙。
 
 包括 docker 应该也是在启动的时候动态添加 iptables 配置。
 
-对于上述新系统，还是建议直接使用 firewalld/ufw 配置防火墙吧，或者网上搜下关闭 ufw/firewalld、启用 iptables 持久化的解决方案。
+对于上述新系统，还是建议直接使用 firewalld/ufw 配置防火墙吧，或者网上搜下关闭
+ufw/firewalld、启用 iptables 持久化的解决方案。
 
-本文主要目的在于理解 docker 容器网络的原理，以及为后面理解 kubernetes 网络插件 calico/flannel 打好基础，因此就不多介绍持久化了。
+本文主要目的在于理解 docker 容器网络的原理，以及为后面理解 kubernetes 网络插件
+calico/flannel 打好基础，因此就不多介绍持久化了。
 
 ## 二、容器网络实现原理 - iptables + bridge + veth
 
-Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全类似。下面以 docker 为例进行分析（Podman 的分析流程也基本一样）。
+Docker/Podman 默认使用的都是 bridge 网络，它们的底层实现完全类似。下面以 docker 为例进行分
+析（Podman 的分析流程也基本一样）。
 
 ### 1. 简单分析 docker0 网桥的原理
 
@@ -409,7 +453,8 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 
 ### 2. docker0 禁止容器间通信
 
-docker 可以通过为 `dockerd` 启动参数添加 `--icc=false` 来禁用容器间通信（inter-container-networking 的缩写），这里来验证下它是如何实现这个功能的。
+docker 可以通过为 `dockerd` 启动参数添加 `--icc=false` 来禁用容器间通信
+（inter-container-networking 的缩写），这里来验证下它是如何实现这个功能的。
 
 首先验证下前面创建的 debian 容器目前是能访问 nginx 容器的：
 
@@ -450,7 +495,8 @@ Removed "/etc/systemd/system/multi-user.target.wants/docker.service".
 Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
 ```
 
-根据日志可定位到我的 docker.service 配置位于 `/usr/lib/systemd/system/docker.service`，修改此配置，在 `ExecStart` 一行的末尾添加参数 `--icc=false`，然后重启 docker 服务：
+根据日志可定位到我的 docker.service 配置位于 `/usr/lib/systemd/system/docker.service`，修
+改此配置，在 `ExecStart` 一行的末尾添加参数 `--icc=false`，然后重启 docker 服务：
 
 ```shell
 ❯ sudo systemctl daemon-reload
@@ -458,8 +504,8 @@ Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /
 ❯ sudo systemctl restart docker
 ```
 
-现在再走一遍前面的测试，会发现 debian 无法访问 nginx 容器了。
-查看 iptables 规则会发现所有 docker0 网桥的内部通信数据全部被 drop 掉了：
+现在再走一遍前面的测试，会发现 debian 无法访问 nginx 容器了。查看 iptables 规则会发现所有
+docker0 网桥的内部通信数据全部被 drop 掉了：
 
 ```shell
 # nat 表
@@ -493,7 +539,8 @@ Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /
 
 ### 3. 使用 docker-compose 自定义网桥与端口映射 {#docker-publish-ports}
 
-接下来使用如下 docker-compose 配置启动一个 caddy 容器，添加自定义 network 和端口映射，待会就能验证 docker 是如何实现这两种网络的了。
+接下来使用如下 docker-compose 配置启动一个 caddy 容器，添加自定义 network 和端口映射，待会
+就能验证 docker 是如何实现这两种网络的了。
 
 `docker-compose.yml` 内容：
 
@@ -622,8 +669,8 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 -A DOCKER-USER -j RETURN
 ```
 
-到这里，我们简单地分析了下 docker 如何通过 iptables 实现 bridge 网络和端口映射。
-有了这个基础，后面就可以尝试深入分析 kubernetes 网络插件 flannel/calico/cilium 了哈哈。
+到这里，我们简单地分析了下 docker 如何通过 iptables 实现 bridge 网络和端口映射。有了这个基
+础，后面就可以尝试深入分析 kubernetes 网络插件 flannel/calico/cilium 了哈哈。
 
 ## 三、Docker/Podman 的 macvlan/ipvlan 模式
 
@@ -631,7 +678,8 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 
 我在前面介绍 Linux 虚拟网络接口的文章中，有介绍过 macvlan 和 ipvlan 两种新的虚拟接口。
 
-目前 Podman/Docker 都支持使用 macvlan 来构建容器网络，这种模式下创建的容器直连外部网络，容器可以拥有独立的外部 IP，不需要端口映射，也不需要借助 iptables.
+目前 Podman/Docker 都支持使用 macvlan 来构建容器网络，这种模式下创建的容器直连外部网络，容
+器可以拥有独立的外部 IP，不需要端口映射，也不需要借助 iptables.
 
 这和虚拟机的 Bridge 模式就很类似，主要适用于希望容器拥有独立外部 IP 的情况。
 
@@ -673,7 +721,8 @@ root@4319488cb5e7:/# curl baidu.com
 </html>
 ```
 
-Docker 支持的另一种网络模式是 ipvlan（ipvlan 和 macvlan 的区别我在前一篇文章中已经介绍过，不再赘言），创建命令和 macvlan 几乎一样：
+Docker 支持的另一种网络模式是 ipvlan（ipvlan 和 macvlan 的区别我在前一篇文章中已经介绍过，
+不再赘言），创建命令和 macvlan 几乎一样：
 
 ```shell
 # 首先创建一个 macvlan 网络
@@ -715,37 +764,47 @@ root@d0764ebbbf42:/# curl baidu.com
 
 ## 四、Rootless 容器的网络实现
 
-如果容器运行时也在 Rootless 模式下运行，那它就没有权限在宿主机添加 bridge/veth 等虚拟网络接口，这种情况下，我们前面描述的容器网络就无法设置了。
+如果容器运行时也在 Rootless 模式下运行，那它就没有权限在宿主机添加 bridge/veth 等虚拟网络
+接口，这种情况下，我们前面描述的容器网络就无法设置了。
 
 那么 podman/containerd(nerdctl) 目前是如何在 Rootless 模式下构建容器网络的呢？
 
-查看文档，发现它们都用到了 rootlesskit 相关的东西，而 rootlesskit 提供了 rootless 网络的几个实现，文档参见 [rootlesskit/docs/network.md](https://github.com/rootless-containers/rootlesskit/blob/master/docs/network.md)
+查看文档，发现它们都用到了 rootlesskit 相关的东西，而 rootlesskit 提供了 rootless 网络的几
+个实现，文档参见
+[rootlesskit/docs/network.md](https://github.com/rootless-containers/rootlesskit/blob/master/docs/network.md)
 
-其中目前推荐使用，而且 podman/containerd(nerdctl) 都默认使用的方案，是 [rootless-containers/slirp4netns](https://github.com/rootless-containers/slirp4netns)
+其中目前推荐使用，而且 podman/containerd(nerdctl) 都默认使用的方案，是
+[rootless-containers/slirp4netns](https://github.com/rootless-containers/slirp4netns)
 
-以 containerd(nerdctl) 为例，按官方文档安装好后，随便启动几个容器，然后在宿主机查 `iptables`/`ip addr ls`，会发现啥也没有。
-这显然是因为 rootless 模式下 containerd 改不了宿主机的 iptables 配置和虚拟网络接口。但是可以查看到宿主机 slirp4netns 在后台运行：
+以 containerd(nerdctl) 为例，按官方文档安装好后，随便启动几个容器，然后在宿主机查
+`iptables`/`ip addr ls`，会发现啥也没有。这显然是因为 rootless 模式下 containerd 改不了宿
+主机的 iptables 配置和虚拟网络接口。但是可以查看到宿主机 slirp4netns 在后台运行：
 
 ```shell
 ❯ ps aux | grep tap
 ryan     11644  0.0  0.0   5288  3312 ?        S    00:01   0:02 slirp4netns --mtu 65520 -r 3 --disable-host-loopback --enable-sandbox --enable-seccomp 11625 tap0
 ```
 
-但是我看半天文档，只看到怎么使用 `rootlesskit`/`slirp4netns` 创建新的名字空间，没看到有介绍如何进入一个已存在的 `slirp4netns` 名字空间...
+但是我看半天文档，只看到怎么使用 `rootlesskit`/`slirp4netns` 创建新的名字空间，没看到有介
+绍如何进入一个已存在的 `slirp4netns` 名字空间...
 
 使用 `nsenter -a -t 11644` 也一直报错，任何程序都是 `no such binary`...
 
 以后有空再重新研究一波...
 
-总之能确定的是，它通过在虚拟的名字空间中创建了一个 `tap` 虚拟接口来实现容器网络，性能相比前面介绍的网络多少是要差一点的。
+总之能确定的是，它通过在虚拟的名字空间中创建了一个 `tap` 虚拟接口来实现容器网络，性能相比
+前面介绍的网络多少是要差一点的。
 
 ## 五、nftables
 
-前面介绍了 iptables 以及其在 docker 和防火墙上的应用。但是实际上目前各大 Linux 发行版都已经不建议使用 iptables 了，甚至把 iptables 重命名为了 `iptables-legacy`.
+前面介绍了 iptables 以及其在 docker 和防火墙上的应用。但是实际上目前各大 Linux 发行版都已
+经不建议使用 iptables 了，甚至把 iptables 重命名为了 `iptables-legacy`.
 
-目前 opensuse/debian/opensuse 都已经预装了并且推荐使用 nftables，**而且 firewalld 已经默认使用 nftables 作为它的后端了**。
+目前 opensuse/debian/opensuse 都已经预装了并且推荐使用 nftables，**而且 firewalld 已经默认
+使用 nftables 作为它的后端了**。
 
-我在 opensuse tumbleweed 上实测，firewalld 添加的是 nftables 配置，而 docker 仍然在用旧的 iptables，也就是说我现在的机器上有两套 netfilter 工具并存：
+我在 opensuse tumbleweed 上实测，firewalld 添加的是 nftables 配置，而 docker 仍然在用旧的
+iptables，也就是说我现在的机器上有两套 netfilter 工具并存：
 
 ```
 # 查看 iptables 数据

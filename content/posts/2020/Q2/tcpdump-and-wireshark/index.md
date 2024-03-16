@@ -16,11 +16,12 @@ series: ["计算机网络相关"]
 
 抓包分析工具主要有两种：
 
-1. http/https 网络代理工具：[mitmproxy](https://github.com/mitmproxy/mitmproxy)/fiddler 都属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。
+1. http/https 网络代理工具：[mitmproxy](https://github.com/mitmproxy/mitmproxy)/fiddler 都
+   属于这一类，用于分析 http 非常方便。但是只支持 http/https，有局限性。
 2. tcp/udp/icmp 等网络嗅探工具：tcpdump/tshark 都属于这一类，网络故障分析等场景常用。
 
-这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。
-而 mitmproxy 抓包和 wireshark 本地抓包都相当简单，就不介绍了。
+这里主要介绍如何使用 tcpdump + wireshark 进行远程实时抓包分析。而 mitmproxy 抓包和
+wireshark 本地抓包都相当简单，就不介绍了。
 
 > P.S. tshark 是 wireshark 的命令行版本，用法 tcpdump 非常相似。
 
@@ -34,8 +35,7 @@ WireShark 的 UI 界面如何使用，网上能搜得到各种类型的 wireshar
 3. 「TCP 协议 wireshark 抓包分析」
 4. 等等
 
-主要需要介绍的，应该是 wireshark 的数据包过滤器。
-wireshark 中有两种包过滤器：
+主要需要介绍的，应该是 wireshark 的数据包过滤器。wireshark 中有两种包过滤器：
 
 1. 捕获过滤器：在抓包的时候使用它对数据包进行过滤。
 1. 显示过滤器：对抓到的所有数据包进行过滤。
@@ -80,7 +80,8 @@ http.host != "xxx.baidu.com" and http.referer == "xxx.baidu.com"
 
 ## 二、tcpdump + ssh + wireshark 远程实时抓包
 
-在进行远程网络抓包分析时，我们通常的做法是，首先使用如下命令在远程主机上抓包，保存为 pcap 格式的文件：
+在进行远程网络抓包分析时，我们通常的做法是，首先使用如下命令在远程主机上抓包，保存为 pcap
+格式的文件：
 
 ```shell
 tcpdump -i eth0 -w temp.pcap
@@ -107,7 +108,8 @@ ssh root@some.host "tcpdump -i eth0 -l -w -" | wireshark -k -i -
 ssh root@some.host "tcpdump -i eth0 -l -w - 'tcp and (host x.x.x.x or host a.a.a.a)'" | wireshark -k -i -
 ```
 
-在不方便使用 ssh 协议的情况下（比如容器抓包、Android 抓包），可以考虑使用 `nc`(netcat) 进行数据流的转发：
+在不方便使用 ssh 协议的情况下（比如容器抓包、Android 抓包），可以考虑使用 `nc`(netcat) 进
+行数据流的转发：
 
 ```shell
 # 1. 远程主机抓包：将数据流通过 11111 端口暴露出去
@@ -138,24 +140,28 @@ nc localhost 11111 | wireshark -k -S -i -
 # 如果你只需要简单地抓 http/https 包，请使用 fiddler/mitmproxy
 ```
 
-如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用 [ksniff](https://github.com/eldadru/ksniff)!
+如果需要对 Kubernetes 集群中的容器进行抓包，推荐直接使用
+[ksniff](https://github.com/eldadru/ksniff)!
 
 ### Windows 系统
 
 另外如果你本机是 Windows 系统，要分 shell 讨论：
 
 1. `cmd`: 可以直接使用上述命令。
-2. `powershell`: **PowerShell 管道对 `native commands` 的支持不是很好，管道两边的命令貌似是串行执行的，这会导致 wireshark 无法启动**！目前没有找到好的解决方法。。
+2. `powershell`: **PowerShell 管道对 `native commands` 的支持不是很好，管道两边的命令貌似
+   是串行执行的，这会导致 wireshark 无法启动**！目前没有找到好的解决方法。。
 
-另外如果你使用 `wsl`，那么可以通过如下命令使 `wsl` 调用 windows 中的 wireshark 进行抓包分析：
+另外如果你使用 `wsl`，那么可以通过如下命令使 `wsl` 调用 windows 中的 wireshark 进行抓包分
+析：
 
 ```shell
 # 添加软链接
 sudo ln -s "$(which wireshark.exe)" /usr/local/bin/wireshark
 ```
 
-添加了上述软链接后，就可以正常地在 `wsl` 中使用前面介绍的所有抓包指令了（包括 [ksniff](https://github.com/eldadru/ksniff)）。
-它能正常调用 windows 中的 wireshark，数据流也能正常地通过 shell 管道传输。
+添加了上述软链接后，就可以正常地在 `wsl` 中使用前面介绍的所有抓包指令了（包括
+[ksniff](https://github.com/eldadru/ksniff)）。它能正常调用 windows 中的 wireshark，数据流
+也能正常地通过 shell 管道传输。
 
 ## 三、直接在命令行抓包检查
 
@@ -163,8 +169,9 @@ sudo ln -s "$(which wireshark.exe)" /usr/local/bin/wireshark
 
 可以直接使用命令行 UI 工具 [termshark](https://github.com/gcla/termshark) 进行实时抓包分析
 
-有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。
-这时你可以考虑直接使用命令行版本的 `wireshark` UI: [termshark](https://github.com/gcla/termshark)，直接在命令行进行实时的抓包分析。
+有的时候，远程实时抓包因为某些原因无法实现，而把 pcap 数据拷贝到本地分析又比较麻烦。这时你
+可以考虑直接使用命令行版本的 `wireshark` UI:
+[termshark](https://github.com/gcla/termshark)，直接在命令行进行实时的抓包分析。
 
 可以直接使用 termshark 抓包查看：
 
@@ -178,11 +185,13 @@ termshark -i eth0 icmp
 termshark -r test.pcap
 ```
 
-[kubectl-debug](https://github.com/aylei/kubectl-debug) 默认的调试镜像中，就自带 `termshark`.
+[kubectl-debug](https://github.com/aylei/kubectl-debug) 默认的调试镜像中，就自带
+`termshark`.
 
 ### tcpdump
 
-也可以直接使用 tcpdump 将抓到的数据打印到 stdout 查看，这种方法比较适合在命令行中临时抓些明文数据看看。
+也可以直接使用 tcpdump 将抓到的数据打印到 stdout 查看，这种方法比较适合在命令行中临时抓些
+明文数据看看。
 
 先简单介绍下 tcpdump 的命令行参数（可通过 `man tcpdump` 查看详细文档）：
 
@@ -196,9 +205,10 @@ termshark -r test.pcap
 
 常用命令如下：
 
-> 注意 tcpdump 在直接打印数据时，有可能会发现较长的数据尾部会被截断，丢失信息。
-> 这是 tcpdump 本身的问题，在这种模式下 tcpdump 是针对每个 tcp 数据包应用 http 过滤参数，而过长的 body 后半部分在另一个 tcp 包里，就过滤不出来了。
-> 如果有必要抓这类 body 很大的数据的话，建议结合 wireshark 分析。
+> 注意 tcpdump 在直接打印数据时，有可能会发现较长的数据尾部会被截断，丢失信息。这是
+> tcpdump 本身的问题，在这种模式下 tcpdump 是针对每个 tcp 数据包应用 http 过滤参数，而过长
+> 的 body 后半部分在另一个 tcp 包里，就过滤不出来了。如果有必要抓这类 body 很大的数据的
+> 话，建议结合 wireshark 分析。
 
 ```shell
 # 1. 嗅探所有接口，80 端口上所有 HTTP 协议请求与响应的 headers 以及 body

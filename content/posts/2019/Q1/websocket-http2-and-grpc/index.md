@@ -42,15 +42,22 @@ Sec-WebSocket-Protocol: chat // 表明选择的子协议
 
 握手完成后，接下来的 TCP 数据包就都是 WebSocket 协议的帧了。
 
-可以看到，这里的握手不是 TCP 的握手，而是在 TCP 连接内部，从 HTTP/1.1 upgrade 到 WebSocket 的握手。
+可以看到，这里的握手不是 TCP 的握手，而是在 TCP 连接内部，从 HTTP/1.1 upgrade 到 WebSocket
+的握手。
 
-WebSocket 提供两种协议：不加密的 `ws://` 和 加密的 `wss://`. 因为是用 HTTP 握手，它和 HTTP 使用同样的端口：ws 是 80（HTTP），wss 是 443（HTTPS）
+WebSocket 提供两种协议：不加密的 `ws://` 和 加密的 `wss://`. 因为是用 HTTP 握手，它和 HTTP
+使用同样的端口：ws 是 80（HTTP），wss 是 443（HTTPS）
 
-在 Python 编程中，可使用 [websockets](https://github.com/aaugustin/websockets) 实现的异步 WebSocket 客户端与服务端。此外 aiohttp 也提供了 WebSocket 支持。
+在 Python 编程中，可使用 [websockets](https://github.com/aaugustin/websockets) 实现的异步
+WebSocket 客户端与服务端。此外 aiohttp 也提供了 WebSocket 支持。
 
-**Note**：如果你搜索 Flask 的 WebSocket 插件，得到的第一个结果很可能是 [Flask-SocketIO](https://github.com/miguelgrinberg/python-socketio)。但是 **Flask-ScoektIO** 使用的是它独有的 SocketIO 协议，并不是标准的 WebSocket。只是它刚好提供与 WebSocket 相同的功能而已。
+**Note**：如果你搜索 Flask 的 WebSocket 插件，得到的第一个结果很可能是
+[Flask-SocketIO](https://github.com/miguelgrinberg/python-socketio)。但是
+**Flask-ScoektIO** 使用的是它独有的 SocketIO 协议，并不是标准的 WebSocket。只是它刚好提供
+与 WebSocket 相同的功能而已。
 
-SocketIO 的优势在于只要 Web 端使用了 SocketIO.js，就能支持该协议。而纯 WS 协议，只有较新的浏览器才支持。对于客户端非 Web 的情况，更好的选择可能是使用 Flask-Sockets。
+SocketIO 的优势在于只要 Web 端使用了 SocketIO.js，就能支持该协议。而纯 WS 协议，只有较新的
+浏览器才支持。对于客户端非 Web 的情况，更好的选择可能是使用 Flask-Sockets。
 
 ### JS API
 
@@ -79,25 +86,33 @@ socket.onerror = function (error) {
 
 HTTP/2 于 2015 年标准化，主要目的是优化性能。其特性如下：
 
-1. 二进制协议：HTTP/2 的消息头使用二进制格式，而非文本格式。并且使用专门设计的 HPack 算法压缩。
-1. 多路复用（Multiplexing）：就是说 HTTP/2 可以重复使用同一个 TCP 连接，并且连接是多路的，多个请求或响应可以同时传输。
+1. 二进制协议：HTTP/2 的消息头使用二进制格式，而非文本格式。并且使用专门设计的 HPack 算法
+   压缩。
+1. 多路复用（Multiplexing）：就是说 HTTP/2 可以重复使用同一个 TCP 连接，并且连接是多路的，
+   多个请求或响应可以同时传输。
    - 对比之下，HTTP/1.1 的长连接也能复用 TCP 连接，但是只能串行，不能“多路”。
-1. 服务器推送：服务端能够直接把资源推送给客户端，当客户端需要这些文件的时候，它已经在客户端了。（该推送对 Web App 是隐藏的，由浏览器处理）
+1. 服务器推送：服务端能够直接把资源推送给客户端，当客户端需要这些文件的时候，它已经在客户
+   端了。（该推送对 Web App 是隐藏的，由浏览器处理）
 1. HTTP/2 允许取消某个正在传输的数据流（通过发送 RST_STREAM 帧），而不关闭 TCP 连接。
    - 这正是二进制协议的好处之一，可以定义多种功能的数据帧。
 
-它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 `from disk cache` 或者 `from memory cache`.
+它允许服务端将资源推送到客户端缓存，我们访问淘宝等网站时，经常会发现很多请求的请求头部分会
+提示“provisional headers are shown”，这通常就是直接从缓存加载了资源，因此请求根本没有被发
+送。观察 Chrome Network 的 Size 列，这种请求的该字段一般都是 `from disk cache` 或者
+`from memory cache`.
 
 Chrome 可以通过如下方式查看请求使用的协议：
 {{< figure src="/images/websocket-http2-and-grpc/chrome-protocol.webp" >}}
 
-> 2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知乎、bilibili、GIthub 使用了 `wss` 协议，也有很多网站使用了 SSE（格式如 `data:image/png;base64,<base64 string>`）
-> 而且很多网站都有使用 HTTP/2 + QUIC，该协议的新名称是 HTTP/3，它是基于 UDP 的 HTTP 协议。
+> 2019-02-10: 使用 Chrome 查看，目前主流网站基本都已经部分使用了 HTTP/2，知
+> 乎、bilibili、GIthub 使用了 `wss` 协议，也有很多网站使用了 SSE（格式如
+> `data:image/png;base64,<base64 string>`）而且很多网站都有使用 HTTP/2 + QUIC，该协议的新
+> 名称是 HTTP/3，它是基于 UDP 的 HTTP 协议。
 
 ### SSE
 
-服务端推送事件，是通过 HTTP 长连接进行信息推送的一个功能。
-它首先由浏览器向服务端建立一个 HTTP 长连接，然后服务端不断地通过这个长连接将消息推送给浏览器。JS API 如下：
+服务端推送事件，是通过 HTTP 长连接进行信息推送的一个功能。它首先由浏览器向服务端建立一个
+HTTP 长连接，然后服务端不断地通过这个长连接将消息推送给浏览器。JS API 如下：
 
 ```javascript
 // create SSE connection
@@ -173,16 +188,20 @@ data: message\n\n
 1. 加密与否：
 
    - WebSocket 支持明文通信 `ws://` 和加密 `wss://`，
-   - 而 HTTP/2 协议虽然没有规定必须加密，但是[主流浏览器都只支持 HTTP/2 over TLS](https://en.wikipedia.org/wiki/HTTP/2#Encryption).
+   - 而 HTTP/2 协议虽然没有规定必须加密，但
+     是[主流浏览器都只支持 HTTP/2 over TLS](https://en.wikipedia.org/wiki/HTTP/2#Encryption).
    - SSE 是使用的 HTTP 协议通信，支持 http/https
 
 1. 消息推送：
    - WebSocket是全双工通道，可以双向通信。而且消息是直接推送给 Web App.
    - SSE 只能**单向串行地**从服务端将数据推送给 Web App.
-   - HTTP/2 虽然也支持 Server Push，但是服务器只能主动将资源推送到客户端缓存！并不允许将数据推送到客户端里跑的 Web App 本身。服务器推送只能由浏览器处理，不会在应用程序代码中弹出服务器数据，这意味着应用程序没有 API 来获取这些事件的通知。
+   - HTTP/2 虽然也支持 Server Push，但是服务器只能主动将资源推送到客户端缓存！并不允许将数
+     据推送到客户端里跑的 Web App 本身。服务器推送只能由浏览器处理，不会在应用程序代码中弹
+     出服务器数据，这意味着应用程序没有 API 来获取这些事件的通知。
      - 为了接近实时地将数据推送给 Web App， HTTP/2 可以结合 SSE（Server-Sent Event）使用。
 
-WebSocket 在需要接近实时双向通信的领域，很有用武之地。而 HTTP/2 + SSE 适合用于展示实时数据。
+WebSocket 在需要接近实时双向通信的领域，很有用武之地。而 HTTP/2 + SSE 适合用于展示实时数
+据。
 
 另外在客户端非浏览器的情况下，使用不加密的 HTTP/2 也是可能的。
 
@@ -197,14 +216,17 @@ WebSocket 在需要接近实时双向通信的领域，很有用武之地。而 
 11
 ```
 
-但是 requests 默认使用 HTTP/1.1，并且不支持 HTTP/2.（不过这也不是什么大问题，HTTP/2 只是做了性能优化，用 HTTP/1.1 也就是慢一点而已。）
+但是 requests 默认使用 HTTP/1.1，并且不支持 HTTP/2.（不过这也不是什么大问题，HTTP/2 只是做
+了性能优化，用 HTTP/1.1 也就是慢一点而已。）
 
 ## 三、gRPC 协议
 
-gRPC 是一个远程过程调用框架，默认使用 protobuf3 进行数据的高效序列化与 service 定义，使用 HTTP/2 进行数据传输。
-这里讨论的是 [gRPC over HTTP/2](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md) 协议。
+gRPC 是一个远程过程调用框架，默认使用 protobuf3 进行数据的高效序列化与 service 定义，使用
+HTTP/2 进行数据传输。这里讨论的是
+[gRPC over HTTP/2](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md) 协议。
 
-目前 gRPC 主要被用在微服务通信中，但是因为其优越的性能，它也很契合游戏、loT 等需要高性能低延迟的场景。
+目前 gRPC 主要被用在微服务通信中，但是因为其优越的性能，它也很契合游戏、loT 等需要高性能低
+延迟的场景。
 
 其实光从协议先进程度上讲，gRPC 基本全面超越 REST:
 
@@ -213,19 +235,23 @@ gRPC 是一个远程过程调用框架，默认使用 protobuf3 进行数据的�
 1. gRPC 官方就支持从 api 定义生成代码，而 REST api 需要借助 openapi-codegen 等第三方工具。
 1. 支持 4 种通信模式：一对一(unary)、客户端流、服务端流、双端流。更灵活
 
-只是目前 gRPC 对 browser 的支持仍然不是很好，如果你需要通过浏览器访问 api，那 gRPC 可能不是你的菜。
-如果你的产品只打算面向 App 等可控的客户端，可以考虑上 gRPC。
+只是目前 gRPC 对 browser 的支持仍然不是很好，如果你需要通过浏览器访问 api，那 gRPC 可能不
+是你的菜。如果你的产品只打算面向 App 等可控的客户端，可以考虑上 gRPC。
 
-对同时需要为浏览器和 APP 提供服务应用而言，也可以考虑 APP 使用 gRPC 协议，而浏览器使用 API 网关提供的 HTTP 接口，在 API 网关上进行 HTTP - gRPC 协议转换。
+对同时需要为浏览器和 APP 提供服务应用而言，也可以考虑 APP 使用 gRPC 协议，而浏览器使用 API
+网关提供的 HTTP 接口，在 API 网关上进行 HTTP - gRPC 协议转换。
 
 ### gRPC over HTTP/2 定义
 
-详细的定义参见官方文档 [gRPC over HTTP/2](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md).
+详细的定义参见官方文档
+[gRPC over HTTP/2](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md).
 
 这里是简要说明几点：
 
-1. gRPC 完全隐藏了 HTTP/2 本身的 method、headers、path 等语义，这些信息对用户而言完全不可见了。
-   1. 请求统一使用 POST，响应状态统一为 200。只要响应是标准的 gRPC 格式，响应中的 HTTP 状态码将被完全忽略。
+1. gRPC 完全隐藏了 HTTP/2 本身的 method、headers、path 等语义，这些信息对用户而言完全不可
+   见了。
+   1. 请求统一使用 POST，响应状态统一为 200。只要响应是标准的 gRPC 格式，响应中的 HTTP 状
+      态码将被完全忽略。
 1. gRPC 定义了自己的 status 状态码、格式固定的 path、还有它自己的 headers。
 
 ## 参考

@@ -9,7 +9,9 @@ toc:
 
 > 在这个信息爆炸的时代，更需要能够放慢脚步，沉下心，系统性的学习。
 
-> 虽然这一页列了这么多东西，但我实际学习还是从心，当前对啥感兴趣就学啥。我也会尝试找到感兴趣的应用场景，做点小玩意或者写点学习感悟，毕竟学而不用，那一是兴趣难以持续，二是纸上谈兵学不到真本事。
+> 虽然这一页列了这么多东西，但我实际学习还是从心，当前对啥感兴趣就学啥。我也会尝试找到感兴
+> 趣的应用场景，做点小玩意或者写点学习感悟，毕竟学而不用，那一是兴趣难以持续，二是纸上谈兵
+> 学不到真本事。
 
 <!-- >过去的我：[学习轨迹记录](/history/thisyear) -->
 
@@ -18,9 +20,12 @@ toc:
 ## 零、2024 年学习计划
 
 - 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
-- 技术上今年主要就是三个学习目标：**搞搞 AIGC、学学操作系统、尝试更深入地使用 NixOS 以及参与社区贡献**。
-- [学习并强化个人的数据安全性](https://thiscute.world/posts/an-incomplete-guide-to-data-security/) - 100%
-  - 这是我 2023 年 5 月开始的一个长期计划，目前以及完成了大部分工作，也输出了一篇博客总结我当前的方案。
+- 技术上今年主要就是三个学习目标：**搞搞 AIGC、学学操作系统、尝试更深入地使用 NixOS 以及参
+  与社区贡献**。
+- [学习并强化个人的数据安全性](https://thiscute.world/posts/an-incomplete-guide-to-data-security/) -
+  100%
+  - 这是我 2023 年 5 月开始的一个长期计划，目前以及完成了大部分工作，也输出了一篇博客总结
+    我当前的方案。
 - 其他方面主要是多运动、入门心理学。
 
 ## 一、我正在研究这些
@@ -35,8 +40,10 @@ toc:
     - 监控系统迁移到 NixOS（Prometheus + Alertmanager + Grafana + Uptime-Kuma） - 100%
     - 网络设备迁移到 NixOS（dae 旁路网关 + tailscale 网关） - 100%
     - K8s 集群迁移到 NixOS - 100%
-  - 将 Homelab 监控、Git 仓库、旁路网关都迁移到一块 Orange Pi 5 上，并启用 LUKS 加密 - 100%
-    - 这是 KubeVirt 改造的前置工作，这三项服务都需要最高的稳定性，也被 kubevirt 依赖，因此需要放在 kubevirt 集群之外
+  - 将 Homelab 监控、Git 仓库、旁路网关都迁移到一块 Orange Pi 5 上，并启用 LUKS 加密 -
+    100%
+    - 这是 KubeVirt 改造的前置工作，这三项服务都需要最高的稳定性，也被 kubevirt 依赖，因此
+      需要放在 kubevirt 集群之外
   - K8s 集群使用 Flux2 进行 GitOps 式自动配置 - 30%
     - 部署 victoriametrics 监控系统 - 100%
     - 部署 cert-manager 并使用它声明管理所有 Homelab 所需 TLS 证书 - 0%
@@ -44,8 +51,10 @@ toc:
   - 两块 RK3588 板子启用 UEFI + NixOS + LUKS + Secure Boot - 50%
   - 使用 kubevirt 全面替换 Proxmox VE 集群，并启用 LUKS 加密 + Secure Boot - 10%
   - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
-  - 监控节点(hostname=ruby)性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS 上进行 homelab 的管理与更新 - 0%
-    - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
+  - 监控节点(hostname=ruby)性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS
+    上进行 homelab 的管理与更新 - 0%
+    - 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC
+      上。
 - 个人笔记迁移
   - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
   - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
@@ -53,13 +62,15 @@ toc:
 ## 二、我今年还想搞搞这些
 
 - 操作系统
-  - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
+  - 课程
+    [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
   - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
 - 从零开始造 OS
   - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
-  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials): rust 版
+  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials):
+    rust 版
   - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
 
 ## 三、今年的阅读进展
@@ -73,7 +84,9 @@ toc:
 正在读：
 
 - The Great Gatsby - 10/41
-- [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
+- [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition):
+  Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文
+  版，写的很好，对新手很友好。
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 - 《复杂 - 梅拉尼 米歇尔》
 - Psychology and Life, 20th edition, by Richard J. Gerrig
@@ -121,12 +134,18 @@ toc:
 
 理解 Linux 操作系统也是我继续精进技术必不可少的技能。
 
-- 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-  - 课程相关资源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
-  - OSTEP 学习指南：<https://github.com/ryan4yin/computer-science/tree/master/coursepages/ostep>
-- 学到 xv6 时可结合这份资料啃源码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
-- [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html): 进阶读物，搞系统性能优化的
-- 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据包处理、性能分析、系统监控的。
+- 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书
+  [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+  - 课程相关资
+    源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
+  - OSTEP 学习指
+    南：<https://github.com/ryan4yin/computer-science/tree/master/coursepages/ostep>
+- 学到 xv6 时可结合这份资料啃源
+  码：[xv6-annotated](https://github.com/palladian1/xv6-annotated)
+- [Systems Performance: Enterprise and the Cloud, 2nd Edition (2020)](http://www.brendangregg.com/systems-performance-2nd-edition-book.html):
+  进阶读物，搞系统性能优化的
+- 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据
+  包处理、性能分析、系统监控的。
 - Linux 系统
   - 极客时间 《Linux 内核技术实战课》
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
@@ -160,7 +179,8 @@ toc:
     - verilog 语言，直接用这个站点就够了，是非常好的教程 + 练习场：
       - <https://hdlbits.01xz.net/wiki/Main_Page>
     - 更有趣的练习题： https://www.fpga4fun.com/
-    - 从 LED 点灯到 RISCV CPU（循序渐进）: https://github.com/BrunoLevy/learn-fpga/blob/master/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/README.md
+    - 从 LED 点灯到 RISCV CPU（循序渐进）:
+      https://github.com/BrunoLevy/learn-fpga/blob/master/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/README.md
   - 进阶：学习 RISCV 与处理器微架构
     - 书籍：Digital Design and Computer Architecture RISC-V Edition
     - 此书从第六章开始讲 RISCV 微架构。
@@ -168,17 +188,26 @@ toc:
 我目前收集的相关内容（仅是一个资料合集，内容有重复的）：
 
 - 嵌入式 Linux 系列
-  - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
-  - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
-  - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
-  - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
-  - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从 bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一下。
+  - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition):
+    Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文
+    版，写的很好，对新手很友好。
+  - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition):
+    这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的
+    Lab 可做。
+  - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/):
+    Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
+  - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux
+    内核技术进阶。
+  - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从
+    bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一
+    下。
 - 电路原理
   - Practical Electronics for Inventors, Fourth Edition
 - 芯片
   - ARM64: STM32 ESP32 RK3588s
   - RISCV: milkv mars/duo, licheepi4a
-  - FPGA / 电路设计: [FPGA 玩耍之旅](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/fpga)
+  - FPGA / 电路设计:
+    [FPGA 玩耍之旅](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/fpga)
 - 目前的学习目标
   - DIY 无人机编队飞行！要达成这个目标需要学习的东西有点多，慢慢努力吧~
 
@@ -190,7 +219,8 @@ toc:
 
 - 计算机网络
   - TCP/IP Illustrated, Volume 1, 2nd Edition - 进度 31/920
-- 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
+- 课程
+  [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
   - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
   - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
 - TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
@@ -209,8 +239,10 @@ toc:
   - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 
 - 英语
-  - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
-  - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
+  - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美
+        语发音教程
+  - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/)
+        进阶发音教程
   - [ ] 《英语语法新思维——初级教程》
   - [ ] 《English Grammar In Use》语法书
   - [ ] 《Key words for fluency》口语表达
@@ -241,9 +273,11 @@ toc:
   - [ ] [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
   - [ ] [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
   - [ ] [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
-  - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见 balancer 算法
+  - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见
+        balancer 算法
 
-- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
+- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/):
+  花几个小时，快速学习开发人员需要了解的安全知识
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
 
@@ -252,8 +286,10 @@ toc:
 
 - 容器与 Kubernetes（其实好像也没啥兴趣）
 
-  - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
-  - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
+  - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/):
+    Kubernetes 安全，威胁模型以及如何防护。
+  - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/):
+    容器安全，这书在亚马逊上评价很好。
 
 - 检索技术
   - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
@@ -263,8 +299,10 @@ toc:
 
 - 学习路线
   1. 极客时间《分布式协议与算法实战》 - 学习进度 50%
-  2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书 [Designing Data-Intensive Applications](https://dataintensive.net/)
-  3. 数据库系统：课程 [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
+  2. 分布式系统：课程 [MIT 6.824](https://pdos.csail.mit.edu/6.824/schedule.html) + 书
+     [Designing Data-Intensive Applications](https://dataintensive.net/)
+  3. 数据库系统：课程
+     [CMU 15-445](https://15445.courses.cs.cmu.edu/fall2019/schedule.html)
   4. 参加 tidb 的 [talent-plan](https://tidb.net/talent-plan)，完成 tinykv 项目
 - 其他参考书籍
   - 《Distributed Systems, 3rd Edition, 2017》
@@ -273,7 +311,8 @@ toc:
 
 编程语言理论：
 
-- 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
+- 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计
+  书籍，好评如潮。
   - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
 - [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
 - [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
@@ -290,20 +329,29 @@ toc:
 
 - 家庭教育（教育也要讲究科学，凭直觉做事往往会错得很离谱）
   - 《教育与美好生活》：大名鼎鼎的思想家罗素的教育观。
-  - 《孩子：挑战（Children - The Challenge）》：美国人写的书，如何在尊重孩子、给孩子平等自由的同时，让孩子尊重规则、承担责任、赢得合作。阿德勒心理学。
+  - 《孩子：挑战（Children - The Challenge）》：美国人写的书，如何在尊重孩子、给孩子平等自
+    由的同时，让孩子尊重规则、承担责任、赢得合作。阿德勒心理学。
   - 《P.E.T.父母效能训练 - 让亲子沟通如此高效而简单》
-  - 《高压年代：如何帮助孩子在大学渡过难关、顺利成人（The Stressed Years of Their Lives）》：作者之一的儿子杰森在上大学的第一年出现了严重的心理问题：无法返校继续学业，情绪濒于崩溃，甚至产生自杀冲动。本书总结了如何去发现并解决青少年的心理问题，帮助他们完成从家庭到大学、从青春期到真正成年的顺利过渡。
-  - 《享受孩子成长 - 留美教育博士十八年教育手记》：这书主要是个流水账，既包含作者主观的教育理念、也援引了许多教育、心理学等领域的重要科学发现。正在读，目前评个 7 分吧。
-  - 《游戏力（Playful Parenting）》：游戏力的游戏，特指亲子间的互动。它是思考方式，是互动方式，也是大人与孩子在一起轻松开心的状态。本书的重点是解决孩子常见的行为问题，激发孩子内在的自信力，重建父母与孩子间亲密沟通的桥梁。
+  - 《高压年代：如何帮助孩子在大学渡过难关、顺利成人（The Stressed Years of Their
+    Lives）》：作者之一的儿子杰森在上大学的第一年出现了严重的心理问题：无法返校继续学业，
+    情绪濒于崩溃，甚至产生自杀冲动。本书总结了如何去发现并解决青少年的心理问题，帮助他们完
+    成从家庭到大学、从青春期到真正成年的顺利过渡。
+  - 《享受孩子成长 - 留美教育博士十八年教育手记》：这书主要是个流水账，既包含作者主观的教
+    育理念、也援引了许多教育、心理学等领域的重要科学发现。正在读，目前评个 7 分吧。
+  - 《游戏力（Playful Parenting）》：游戏力的游戏，特指亲子间的互动。它是思考方式，是互动
+    方式，也是大人与孩子在一起轻松开心的状态。本书的重点是解决孩子常见的行为问题，激发孩子
+    内在的自信力，重建父母与孩子间亲密沟通的桥梁。
   - 《真希望我父母读过这本书》
-  - 《为什么学生不喜欢上学?（Why Don't Students Like School?）》：用认知心理学的原理，详细分析了学生学习的过程和教师在课堂教学中必须注意的一些问题。
+  - 《为什么学生不喜欢上学?（Why Don't Students Like School?）》：用认知心理学的原理，详细
+    分析了学生学习的过程和教师在课堂教学中必须注意的一些问题。
   - 《学习的本质》：法国人安德烈·焦尔当的书
 - 经济 / 管理 / 社会
   - 《Principles Of Economics, 9e, N. Gregory Mankiw》
   - 《圆圈正义-作为自由前提的信念》
   - 《投资中最简单的事》
   - 《债务危机 - 我的应对原则》
-  - 《分析与思考 - 黄奇帆的复旦经济课》：这本书会需要一定的经济学基础知识，打算在入门经济学后再看
+  - 《分析与思考 - 黄奇帆的复旦经济课》：这本书会需要一定的经济学基础知识，打算在入门经济
+    学后再看
   - Animal Farm - 一本政治讽刺小书
   - 《手把手教你读财报》
   - 《原则 - 应对变化中的世界秩序》
@@ -324,13 +372,17 @@ toc:
   - 《维特根斯坦传》
   - 《李光耀观天下》
   - 《沈从文的后半生》：这本书更偏研究性质，有点难读
-  - 《陆征祥评传》：从中国外交家陆征祥的史料出发考察清末、北洋到国民政府时期，近代中国与世界的互动历程。
-  - 《第一圈》：不是自传，胜似自传。诺奖得主索尔仁尼琴以自己的亲身经历为原型，再现了斯大林时期的独裁制度对人性的摧残和破坏。
+  - 《陆征祥评传》：从中国外交家陆征祥的史料出发考察清末、北洋到国民政府时期，近代中国与世
+    界的互动历程。
+  - 《第一圈》：不是自传，胜似自传。诺奖得主索尔仁尼琴以自己的亲身经历为原型，再现了斯大林
+    时期的独裁制度对人性的摧残和破坏。
   - 《别闹了，费曼先生：科学顽童的故事》
-  - 《我的前半生——爱新觉罗·溥仪》：看完电影《末代皇帝》后，对清朝历史产生了兴趣，打算看看。
+  - 《我的前半生——爱新觉罗·溥仪》：看完电影《末代皇帝》后，对清朝历史产生了兴趣，打算看
+    看。
 - 历史与纪实作品
   - 《万历十五年》
-  - 《跨越边界的社区（修订版）》：持续至今的真实“北漂”史。转型中的中国城市、流动人口、经济与社会。北京“浙江村”与“浙江村人”三十年生活记录研究。
+  - 《跨越边界的社区（修订版）》：持续至今的真实“北漂”史。转型中的中国城市、流动人口、经济
+    与社会。北京“浙江村”与“浙江村人”三十年生活记录研究。
   - 《天朝的崩溃：鸦片战争再研究（修订版）》
   - 《甲午战争前后之晚清战局》
   - 《晚期帝制中国的科举文化史》
@@ -357,7 +409,8 @@ toc:
 - 公益慈善 / NGO
   - 《如何改变世界 - 社会企业家与新思想的威力》：据评社会企业的概念即源自此书
   - 《离开微软 改变世界》
-  - 《穷人的银行家》：穷人知道该怎么摆脱贫困，只要你给予平等的借贷的权力。相信并支持每个独立人自己的选择。
+  - 《穷人的银行家》：穷人知道该怎么摆脱贫困，只要你给予平等的借贷的权力。相信并支持每个独
+    立人自己的选择。
   - 《撬动公益 - 慈善和社会投资新前沿导论》
   - 《表达的力量 - 当中国公益组织遇上媒体》
   - 《财富的责任与资本主义演变 - 美国百年公益发展的启示》
@@ -371,7 +424,8 @@ toc:
 - 文学类：
   - 《百年孤独》：高中的时候读过一遍，但是都忘差不多了
   - 《霍乱时期的爱情》
-  - 《苏菲的世界（Sophie's World）》：据说是哲学启蒙读物，曾经看过，但是对内容完全没印象了。
+  - 《苏菲的世界（Sophie's World）》：据说是哲学启蒙读物，曾经看过，但是对内容完全没印象
+    了。
   - 《你一生的故事》：我也曾是个科幻迷
   - 《房思琪的初恋乐园》
   - 《月光落在左手上》
@@ -396,28 +450,35 @@ toc:
 
 > 主要参考自 https://www.owenyoung.com/sources/
 
-> 互联网信息泛滥，我从各种信息来源中挑选了一部分我感兴趣的、受推荐次数较多的信息源列在了这里。
-> 也要注意的是，天天看最新的新闻与热点，对个人并没有什么好处。在有兴趣或者无聊的时候翻一翻，了解一下世界的变化就好了。
+> 互联网信息泛滥，我从各种信息来源中挑选了一部分我感兴趣的、受推荐次数较多的信息源列在了这
+> 里。也要注意的是，天天看最新的新闻与热点，对个人并没有什么好处。在有兴趣或者无聊的时候翻
+> 一翻，了解一下世界的变化就好了。
 
 中国与国际上的政史内容：
 
-- [爱思想网](https://www.aisixiang.com/): 国内的一个学术分享站点，国内许多学者在上面针砭时弊。
+- [爱思想网](https://www.aisixiang.com/): 国内的一个学术分享站点，国内许多学者在上面针砭时
+  弊。
 - [中国 1850 - 1950 年间的各种报纸](https://archive.org/details/eastasia-periodicals)
 
 时事新闻（全英文）：
 
 > 有人精选了一些信息源，并制作了一份中文摘要索引: https://www.buzzing.cc/
 
-- [纽约客](https://www.newyorker.com/): 纽约客是一份美国的文学、艺术和时事杂志，以其对政治、文化和时事的评论而闻名。
-- [大西洋](https://www.theatlantic.com/): 大西洋是一份美国社论杂志，的特色文章涉及政治、外交，商业与经济，文化与艺术，科技和科学等领域。
+- [纽约客](https://www.newyorker.com/): 纽约客是一份美国的文学、艺术和时事杂志，以其对政
+  治、文化和时事的评论而闻名。
+- [大西洋](https://www.theatlantic.com/): 大西洋是一份美国社论杂志，的特色文章涉及政治、外
+  交，商业与经济，文化与艺术，科技和科学等领域。
 - [英国卫报](https://www.theguardian.com/uk): 英国卫报是英国的一家全国性报纸。
 - [日本读卖新闻](https://www.yomiuri.co.jp/): 日本读卖新闻是日本的一家全国性报纸。
-- [半岛电视台](https://www.aljazeera.com/): 卡塔尔的国际媒体，由卡塔尔王室拥有。其特点是中东阿拉伯世界的视角。
+- [半岛电视台](https://www.aljazeera.com/): 卡塔尔的国际媒体，由卡塔尔王室拥有。其特点是中
+  东阿拉伯世界的视角。
 - 一些新兴媒体
   - [新政治家](https://www.newstatesman.com/): 英国的一份进步政治与文化杂志。
   - [Rest of the world](https://restofworld.org/): 科技报道
-  - [NOEMA](https://www.noemamag.com/): 「探索席卷我们世界的变革」，发表有关哲学、治理、地缘政治、经济、技术和文化交叉领域的文章。
-  - [Semafor](https://www.semafor.com/): 将无可争议的事实与记者对这些事实的分析分开，提供不同的和更全面的观点，并分享其他媒体对该主题的有力报道。
+  - [NOEMA](https://www.noemamag.com/): 「探索席卷我们世界的变革」，发表有关哲学、治理、地
+    缘政治、经济、技术和文化交叉领域的文章。
+  - [Semafor](https://www.semafor.com/): 将无可争议的事实与记者对这些事实的分析分开，提供
+    不同的和更全面的观点，并分享其他媒体对该主题的有力报道。
 
 ---
 

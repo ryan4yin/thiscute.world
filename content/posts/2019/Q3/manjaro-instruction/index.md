@@ -11,17 +11,20 @@ tags: ["Manjaro", "Linux", "Arch Linux"]
 categories: ["tech"]
 ---
 
-Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。
-最大的特点，是包仓库很丰富，而且都很新。代价是偶尔会出些小毛病。
+Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。最大的特点，是包仓库很丰
+富，而且都很新。代价是偶尔会出些小毛病。
 
 <!--more-->
 
-> 2021-09-22 更新：今天被群友科普，可能我下面列举的几个滚挂事件，可能都和我使用了 archlinuxcn 这个源有关，这确实有可能。
+> 2021-09-22 更新：今天被群友科普，可能我下面列举的几个滚挂事件，可能都和我使用了
+> archlinuxcn 这个源有关，这确实有可能。
 
-我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两个月，升级了两个大版本才恢复。
-另一个就是 [VSCode - Incorrect locale 'en-US' used everywhere](https://github.com/microsoft/vscode/issues/110322)
+我一年多的使用中，遇到过 qv2-ray 动态链接库炸掉的问题，没专门去找修复方法，好像是等了一两
+个月，升级了两个大版本才恢复。另一个就是
+[VSCode - Incorrect locale 'en-US' used everywhere](https://github.com/microsoft/vscode/issues/110322)
 
-还遇到过 `libguestfs` 的一个问题：`vrit-v2v`/`virt-p2v` 两个工具被拆分出去，导致 manjaro 只能通过源码安装这俩货。这貌似目前仍旧没有解决。
+还遇到过 `libguestfs` 的一个问题：`vrit-v2v`/`virt-p2v` 两个工具被拆分出去，导致 manjaro
+只能通过源码安装这俩货。这貌似目前仍旧没有解决。
 
 总的来说体验很不错，能很及时地用上各种新版本的软件。
 
@@ -36,7 +39,8 @@ sudo pacman -Syyu  # 强制更新 package 目录，并尝试更新已安装的�
 sudo pacman -S yay  # 安装 yay
 ```
 
-pacman 是 arch/manjaro 的官方包管理器，而刚刚安装的 yay，则是一个能查询 arch linux 的 aur 仓库的第三方包管理器，非常流行。
+pacman 是 arch/manjaro 的官方包管理器，而刚刚安装的 yay，则是一个能查询 arch linux 的 aur
+仓库的第三方包管理器，非常流行。
 
 pacman 的常用命令语法：
 
@@ -68,11 +72,15 @@ yay -c  # 卸载所有无用的依赖。类比 apt-get autoremove
 
 ### 1. 添加 archlinux 中文社区仓库
 
-[Arch Linux 中文社区仓库](https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/) 是由 Arch Linux 中文社区驱动的非官方用户仓库，包含一些额外的软件包以及已有软件的 git 版本等变种。部分软件包的打包脚本来源于 AUR。
+[Arch Linux 中文社区仓库](https://www.archlinuxcn.org/archlinux-cn-repo-and-mirror/) 是由
+Arch Linux 中文社区驱动的非官方用户仓库，包含一些额外的软件包以及已有软件的 git 版本等变
+种。部分软件包的打包脚本来源于 AUR。
 
-一些国内软件，如果直接从 aur 安装，那就会有一个编译过程，有点慢。而 archlinuxcn 有已经编译好的包，可以直接安装。更新速度也很快，推荐使用。
+一些国内软件，如果直接从 aur 安装，那就会有一个编译过程，有点慢。而 archlinuxcn 有已经编译
+好的包，可以直接安装。更新速度也很快，推荐使用。
 
-配置方法见 [Arch Linux Chinese Community Repository](https://github.com/archlinuxcn/repo)。
+配置方法见
+[Arch Linux Chinese Community Repository](https://github.com/archlinuxcn/repo)。
 
 ### 2. 安装常用软件
 
@@ -103,7 +111,8 @@ sudo gpasswd --add $USER docker  # 同上
 
 ### 3. 中文输入法
 
-有两个选择：[中州韵（rime）](https://rime.im/)和[搜狗拼音（sogoupinyin）](https://aur.archlinux.org/packages/fcitx-sogoupinyin/)。
+有两个选
+择：[中州韵（rime）](https://rime.im/)和[搜狗拼音（sogoupinyin）](https://aur.archlinux.org/packages/fcitx-sogoupinyin/)。
 
 简单省事用搜狗，要用特殊的输入方案（五笔、音形、二笔等等）就只有 rime 可选了。
 
@@ -126,7 +135,8 @@ QT_IM_MODULE  DEFAULT=fcitx5
 XMODIFIERS    DEFAULT=@im=fcitx5
 ```
 
-[pam-env](<https://wiki.archlinux.org/index.php/PAM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>) 模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。
+[pam-env](<https://wiki.archlinux.org/index.php/PAM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>)
+模块会在所有登录会话中读取上面的配置文件，包括 X11 会话和 Wayland 会话。
 
 添加自动启动：
 
@@ -135,7 +145,8 @@ XMODIFIERS    DEFAULT=@im=fcitx5
 echo 'fcitx5 &' >> ~/.xprofile
 ```
 
-然后，从 http://flypy.ys168.com/ 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：
+然后，从 http://flypy.ys168.com/ 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件
+夹拷贝到 ~/.local/share/fcitx5/ 下：
 
 ```shell
 mv rime ~/.local/share/fcitx5/
@@ -147,7 +158,8 @@ mv rime ~/.local/share/fcitx5/
 
 使用过程中，我也遇到了一些坑：
 
-1. 安装软件包时，无法在线安装旧版本！除非你本地有旧版本的安装包没清除，才可以通过缓存安装旧版本。
+1. 安装软件包时，无法在线安装旧版本！除非你本地有旧版本的安装包没清除，才可以通过缓存安装
+   旧版本。
    - 这种问题没遇到时好说，但有时候新版本有问题，旧安装包也清理掉了无法回退，就非常麻烦。
    - 而且就算你回退了版本，一升级它就又更新了。。
 

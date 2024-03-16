@@ -102,13 +102,14 @@ glob 中的 \* 表示任意字符，而 ** 则表示任意层目录。（在大�
 
 ### 2. 时间日期处理
 
-python3 在时间日期处理方面，有标准库 `datetime` 跟 `calender`，也有流行的第三方库 `arrow` 跟 `maya`.
+python3 在时间日期处理方面，有标准库 `datetime` 跟 `calender`，也有流行的第三方库 `arrow`
+跟 `maya`.
 
-标准库 datetime 有时候不太方便，比如没有提供解析 iso 格式的函数。
-另外就是用标准库时，经常需要自定义格式化串。
-相比之下，`maya` 和 `arrow` 这两个第三方库会方便很多。
+标准库 datetime 有时候不太方便，比如没有提供解析 iso 格式的函数。另外就是用标准库时，经常
+需要自定义格式化串。相比之下，`maya` 和 `arrow` 这两个第三方库会方便很多。
 
-不过第三方库并不是任何时候都可用，这里只介绍标准库 `datetime` 的用法，`maya`/`arrow` 请自行查找官方文档学习。
+不过第三方库并不是任何时候都可用，这里只介绍标准库 `datetime` 的用法，`maya`/`arrow` 请自
+行查找官方文档学习。
 
 #### 1. 获取当前时间
 
@@ -285,11 +286,13 @@ getattr(obj, "a")  # return obj.a
 
 1. `__getattr__`: 当被访问的属性不存在时，这个方法会被调用，它的返回值会成为对象的该属性。
    - 用于动态生成实例的属性/函数
-1. `__getattribute__`: 与 `__getattr__` 唯一的差别在于，访问对象的任何属性，都会直接调用这个方法，**不管属性存不存在**。
+1. `__getattribute__`: 与 `__getattr__` 唯一的差别在于，访问对象的任何属性，都会直接调用这
+   个方法，**不管属性存不存在**。
 
 #### 3. operator.methodcaller
 
-可用于调用函数，它和 attrgetter 很像，差别在于 attrgetter 只是返回指定的属性，而 methodcaller 会直接把指定的属性当成函数调用，然后返回结果。
+可用于调用函数，它和 attrgetter 很像，差别在于 attrgetter 只是返回指定的属性，而
+methodcaller 会直接把指定的属性当成函数调用，然后返回结果。
 
 举例
 
@@ -304,16 +307,19 @@ operator.add、operator.sub、operator.mul、operator.div 等等，函数式编�
 
 ### 4. itertools
 
-[itertools](https://docs.python.org/3/library/itertools.html) 提供了许多针对可迭代对象的实用函数
+[itertools](https://docs.python.org/3/library/itertools.html) 提供了许多针对可迭代对象的实
+用函数
 
-方法很多，基本不可能一次全记住。还是要用到时多查吧。大致记住有提供哪些功能，需要用到时能想起可以查这个模块就行。
+方法很多，基本不可能一次全记住。还是要用到时多查吧。大致记住有提供哪些功能，需要用到时能想
+起可以查这个模块就行。
 
 #### 1. 无限迭代器
 
 1. count(start=0, step=1): 从 start 开始，每次迭代时，返回值都加一个 step
    - 默认返回序列为 0 1 2 3...
 1. cycle(iterable): 不断循环迭代 iterable
-1. repeat(element, times=None): 默认永远返回 element。（如果 times 不为 None，就迭代 times 后结束）
+1. repeat(element, times=None): 默认永远返回 element。（如果 times 不为 None，就迭代 times
+   后结束）
 
 #### 2. 排列组合迭代器
 
@@ -342,12 +348,14 @@ operator.add、operator.sub、operator.mul、operator.div 等等，函数式编�
 ...
 ```
 
-1. permutations(p[, r])：p 中元素，长度为 r 的所有可能的排列。相当于 product 去重后的结果。
+1. permutations(p[, r])：p 中元素，长度为 r 的所有可能的排列。相当于 product 去重后的结
+   果。
 1. combinations(p, r)：既然有排列，当然就有组合了。
 
 #### 3. 其他
 
-1. `zip_longest(*iterables, fillvalue=None)`：和 zip 的差别在于，缺失的元素它会用 fillvalue 补全，而不是直接结束。
+1. `zip_longest(*iterables, fillvalue=None)`：和 zip 的差别在于，缺失的元素它会用
+   fillvalue 补全，而不是直接结束。
 1. `takewhile()`
 1. `dropwhile()`
 1. `groupby()`
@@ -362,8 +370,10 @@ operator.add、operator.sub、operator.mul、operator.div 等等，函数式编�
 1. **`Counter`**：方便、快速的计数器。常用于分类统计
 1. `deque`：一个线程安全的双端队列
 1. `OrderedDict`：有时候会需要有序字典
-1. `namedtuple`：命名元组，有时用于参数传递。与 tuple 的差别是它提供了关键字参数和通过名字访问属性的功能
-1. `ChainMap`：将多个 map 连接（chain）在一起，提供一个统一的视图。因为是视图，所以原来的 map 不会被影响。
+1. `namedtuple`：命名元组，有时用于参数传递。与 tuple 的差别是它提供了关键字参数和通过名字
+   访问属性的功能
+1. `ChainMap`：将多个 map 连接（chain）在一起，提供一个统一的视图。因为是视图，所以原来的
+   map 不会被影响。
 
 ### 6. 常用函数装饰器 functools
 
@@ -371,7 +381,8 @@ functools 提供了几个有时很有用的函数和装饰器
 
 #### 1. @functools.wraps
 
-这个装饰器用于使装饰器 copy 被装饰的对象的 `__module__`, `__name__`, `__qualname__`, `__annotations__` and `__doc__` 属性，这样装饰器就显得更加透明。
+这个装饰器用于使装饰器 copy 被装饰的对象的 `__module__`, `__name__`, `__qualname__`,
+`__annotations__` and `__doc__` 属性，这样装饰器就显得更加透明。
 
 ```python3
 from functools import wraps
@@ -388,13 +399,14 @@ def func(xx):
     print("this is func~")
 ```
 
-如果不用 wraps 的话，因为实际上返回的是 wrapper，被装饰对象的这些文档属性都会丢失。（比如 docstring）
-**因此在使用 wrapper 装饰器时，添加 @wraps() 装饰器是个好习惯**。
+如果不用 wraps 的话，因为实际上返回的是 wrapper，被装饰对象的这些文档属性都会丢失。（比如
+docstring） **因此在使用 wrapper 装饰器时，添加 @wraps() 装饰器是个好习惯**。
 
 #### 2. functools.partial
 
-这个感觉和高等数学的偏函数很像：比如函数 z = f(x, y) 有 x 和 y 两个变量，现在把 x 看作常数，就可以对 y 进行求导运算。
-而 python 的 partial 也差不多，不过它不是把 x 看作常数，而是先给定 x 的值。用法如下：
+这个感觉和高等数学的偏函数很像：比如函数 z = f(x, y) 有 x 和 y 两个变量，现在把 x 看作常
+数，就可以对 y 进行求导运算。而 python 的 partial 也差不多，不过它不是把 x 看作常数，而是
+先给定 x 的值。用法如下：
 
 ```python3
 from functools import partial
@@ -407,7 +419,8 @@ basetwo('10010')  # return 18
 
 #### 3. @functools.lru_cache(maxsize=128, typed=False)
 
-如果某方法可能被频繁调用（使用相同的参数），而且它的结果在一定时间内不会改变。可以用 lru_cache 装饰它，减少运算量或 IO 操作。
+如果某方法可能被频繁调用（使用相同的参数），而且它的结果在一定时间内不会改变。可以用
+lru_cache 装饰它，减少运算量或 IO 操作。
 
 ```python3
 from functools import lru_cache
@@ -421,7 +434,8 @@ def my_sum(x):  # 后续的调用中，如果参数能匹配到缓存，就直�
 比如用递归计算斐波那契数列，数值较低的参数会被频繁使用，于是可以用 lru_cache 来缓存它们。
 或者爬取网页，可能会需要频繁爬取一个变化不快的网页，这时完全可以用 cache 缓存。
 
-但是它不能控制缓存失效时间，因此不能用于 Web 系统的缓存。还是得自己写个简单的装饰器，把缓存存到 redis 里并设置 expires。或者直接用 Flask 或 Django 的 caching 插件。
+但是它不能控制缓存失效时间，因此不能用于 Web 系统的缓存。还是得自己写个简单的装饰器，把缓
+存存到 redis 里并设置 expires。或者直接用 Flask 或 Django 的 caching 插件。
 
 #### 4. @functools.singledispatch
 
@@ -445,8 +459,9 @@ def _(arg: list):  # python3.7 开始，可以直接用类型注解来标注第�
     print('这次输入的是列表')
 ```
 
-画外：有单重派发，自然就有多重派发，Julia 语言就支持多重派发，即根据函数所有参数的类型，来决定调用哪一个同名函数。
-Julia 语言根本没有类这个定义，类型的所有方法都是通过多重派发来定义的。
+画外：有单重派发，自然就有多重派发，Julia 语言就支持多重派发，即根据函数所有参数的类型，来
+决定调用哪一个同名函数。Julia 语言根本没有类这个定义，类型的所有方法都是通过多重派发来定义
+的。
 
 #### 其他
 
@@ -459,9 +474,11 @@ Julia 语言根本没有类这个定义，类型的所有方法都是通过多�
 
 #### 1. 使用 `__enter__` 和 `__exit__`
 
-Java 使用 try 来自动管理资源，只要实现了 AutoCloseable 接口，就可以部分摆脱手动 colse 的地狱了。
+Java 使用 try 来自动管理资源，只要实现了 AutoCloseable 接口，就可以部分摆脱手动 colse 的地
+狱了。
 
-而 Python，则是定义了两个 Protocol：`__enter__` 和 `__exit__`. 下面是一个 open 的模拟实现：
+而 Python，则是定义了两个 Protocol：`__enter__` 和 `__exit__`. 下面是一个 open 的模拟实
+现：
 
 ```python3
 class OpenContext(object):
@@ -481,19 +498,23 @@ with OpenContext('/tmp/a', 'a') as f:
     f.write('hello world')
 ```
 
-这里唯一有点复杂的，就是 `__exit__` 方法。和 Java 一样，`__exit__` 相当于 `try - catch - finally` 的 `finally` 代码块，在发生异常时，它也会被调用。
+这里唯一有点复杂的，就是 `__exit__` 方法。和 Java 一样，`__exit__` 相当于
+`try - catch - finally` 的 `finally` 代码块，在发生异常时，它也会被调用。
 
-当没有异常发生时，`__exit__` 的三个参数 `exc_type, exc_value, traceback` 都为 None，而当发生异常时，它们就对应异常的详细信息。
-发生异常时， `__exit__` **的返回值将被用于决定是否向外层抛出该异常**，返回 True 则抛出，返回 False 则抑制（swallow it）。
+当没有异常发生时，`__exit__` 的三个参数 `exc_type, exc_value, traceback` 都为 None，而当发
+生异常时，它们就对应异常的详细信息。发生异常时， `__exit__` **的返回值将被用于决定是否向外
+层抛出该异常**，返回 True 则抛出，返回 False 则抑制（swallow it）。
 
-Note 1：Python 3.6 提供了 async with 异步上下文管理器，它的 Protocol 和同步的 with 完全类似，是 `__aenter__` 和 `__aexit__` 两个方法。
-Note 2：与 Java 相同，with 支持同时管理多个资源，因此可以直接写 `with open(x) as a, open(y) as b:` 这样的形式。
+Note 1：Python 3.6 提供了 async with 异步上下文管理器，它的 Protocol 和同步的 with 完全类
+似，是 `__aenter__` 和 `__aexit__` 两个方法。Note 2：与 Java 相同，with 支持同时管理多个资
+源，因此可以直接写 `with open(x) as a, open(y) as b:` 这样的形式。
 
 #### 2. 推荐：contextlib
 
 ##### 2.1 @contextlib.contextmanager
 
-对于简单的 with 资源管理，编写一个类可能会显得比较繁琐，为此 contextlib 提供了一个方便的装饰器 `@contextlib.contextmanager` 用来简化代码。
+对于简单的 with 资源管理，编写一个类可能会显得比较繁琐，为此 contextlib 提供了一个方便的装
+饰器 `@contextlib.contextmanager` 用来简化代码。
 
 使用它，上面的 OpenContext 可以改写成这样：
 
@@ -512,7 +533,8 @@ with make_open_context('/tmp/a', 'a') as f:
     f.write('hello world')
 ```
 
-使用 `contextmanager` 装饰一个生成器函数，yield 之前的代码对应 `__enter__`，finally 代码块就对应 `__exit__`.
+使用 `contextmanager` 装饰一个生成器函数，yield 之前的代码对应 `__enter__`，finally 代码块
+就对应 `__exit__`.
 
 Note：同样，也有异步版本的装饰器 `@contextlib.asynccontextmanager`
 
@@ -604,7 +626,8 @@ list(group_each(a, 3, longest=True))
 # => [('a', 'b', 'c'), ('d', 'e', 'f'), ('g', 'h', 'i'), ('j', 'k', None)]
 ```
 
-这个函数还可以进一步简化为 `zip(*[iter(a)] * 3)`，如果没想到浅复制（Shallow Copy）特性的话，会很难理解它的逻辑。
+这个函数还可以进一步简化为 `zip(*[iter(a)] * 3)`，如果没想到浅复制（Shallow Copy）特性的
+话，会很难理解它的逻辑。
 
 此外，如果某个 size 比较常用（比如 2），还可以用 `partial` 封装一下：
 
@@ -625,7 +648,8 @@ list(group_each_2(a, longest=True))
 
 ### 2. 扁平版本的 map
 
-稍微接触过函数式应该都知道 flat_map，可 Python 标准库却没有提供。下面是我在 stackoverflow 上找到的实现，其实很简单
+稍微接触过函数式应该都知道 flat_map，可 Python 标准库却没有提供。下面是我在 stackoverflow
+上找到的实现，其实很简单
 
 ```python3
 from itertools import chain
@@ -645,7 +669,8 @@ def flat_map(f, items):
 
 ### 3. 轮流迭代多个迭代器
 
-假设我有多个可迭代对象（迭代器、列表等），现在我需要每次从每个对象中取一个值，直到某个对象为空。如果用循环写会比较繁琐，但是用 itertools 可以这样写：
+假设我有多个可迭代对象（迭代器、列表等），现在我需要每次从每个对象中取一个值，直到某个对象
+为空。如果用循环写会比较繁琐，但是用 itertools 可以这样写：
 
 ```python
 from itertools import chain
@@ -662,8 +687,9 @@ list(iter_one_by_one([a,b,c]))  # =>  [1, 4, 7, 2, 5, 8, 3, 6, 9]
 
 ### 4. 多 dict 的去重
 
-假设我们有一个 dict 的列表，里面可能有内容一模一样的 dict，我们需要对它做去重。
-容易想到的方法就是使用 set，可是 set 中的元素必须是 hashable 的，而 dict 是 unhashable 的，因此不能直接放进 set 里。
+假设我们有一个 dict 的列表，里面可能有内容一模一样的 dict，我们需要对它做去重。容易想到的
+方法就是使用 set，可是 set 中的元素必须是 hashable 的，而 dict 是 unhashable 的，因此不能
+直接放进 set 里。
 
 ```ipython
 >>> a = [{'a': 1}, {'a': 1}, {'b': 2}]
@@ -704,8 +730,8 @@ Out[10]: True
 
 ### 6. 判断两个对象的所有属性都相同
 
-python 和 java 一样，直接用 == 做判断，默认是比较的引用，相当于 is。对自定义的类，你需要重写 `__eq__` 函数。
-判断值相等的方法很简单，一行代码：
+python 和 java 一样，直接用 == 做判断，默认是比较的引用，相当于 is。对自定义的类，你需要重
+写 `__eq__` 函数。判断值相等的方法很简单，一行代码：
 
 ```python3
 class A:
@@ -765,7 +791,8 @@ key_values = dict(groups)   # 得到的 key_values 与上面需要的 dict 别�
 
 ### 1. 浅复制导致错误
 
-利用好浅复制，可以非常简洁的实现前面提到的[元素分组/group](##group_size)功能，但是如果不注意，也会导致非常隐晦的错误！
+利用好浅复制，可以非常简洁的实现前面提到的[元素分组/group](##group_size)功能，但是如果不注
+意，也会导致非常隐晦的错误！
 
 比如在使用 \* 作为重复运算符时，如果目标是一个嵌套的可变对象，就会产生令人费解的问题：
 
@@ -782,15 +809,21 @@ key_values = dict(groups)   # 得到的 key_values 与上面需要的 dict 别�
 [[1, 4, 3], [1, 4, 3], [1, 4, 3]]
 ```
 
-因为 _ 并不是深拷贝，它只是简单地复制了 [a] 这个列表，里面的 [1,2,3] 都是同一个对象，所以改了一个，所有的都会改变。
-\*\*解决方法是不要使用 _ 号，改用`[a.copy() for i in range(3)]` 执行深拷贝。如果不需要修改，请直接使用不可变对象\*\*。
+因为 _ 并不是深拷贝，它只是简单地复制了 [a] 这个列表，里面的 [1,2,3] 都是同一个对象，所以
+改了一个，所有的都会改变。\*\*解决方法是不要使用 _ 号，改用`[a.copy() for i in range(3)]`
+执行深拷贝。如果不需要修改，请直接使用不可变对象\*\*。
 
 ### 2. 变量作用域
 
-1. Python 中**只有模块，类以及函数才会引入新的作用域**，其它的代码块是不会引入新的作用域的。（而在 C/Java 中，任何一个 `{}` 块就构成一个局部作用域。另外 Julia 中 for/while/try-catch 都是局部作用域，但 if-else 又不是局部作用域。总之这些小差别要注意。）
-1. 局部变量可以与外部变量同名，并且在其作用域中，局部变量会覆盖掉外部变量。
-   不知是出于实现简单或是性能，还是其他的原因，好像所有的语言都是这样的。其实我更希望变量的作用域覆盖会报错。
-1. 如果有函数与其他函数或变量（甚至某些保留字）同名，后定义的会覆盖掉先定义的。（这是因为 Python 中函数也是对象。而在 C/Java 中这是会报错的）
+1. Python 中**只有模块，类以及函数才会引入新的作用域**，其它的代码块是不会引入新的作用域
+   的。（而在 C/Java 中，任何一个 `{}` 块就构成一个局部作用域。另外 Julia 中
+   for/while/try-catch 都是局部作用域，但 if-else 又不是局部作用域。总之这些小差别要注
+   意。）
+1. 局部变量可以与外部变量同名，并且在其作用域中，局部变量会覆盖掉外部变量。不知是出于实现
+   简单或是性能，还是其他的原因，好像所有的语言都是这样的。其实我更希望变量的作用域覆盖会
+   报错。
+1. 如果有函数与其他函数或变量（甚至某些保留字）同名，后定义的会覆盖掉先定义的。（这是因为
+   Python 中函数也是对象。而在 C/Java 中这是会报错的）
 
 此外，还有一个小问题，先看一个例子：
 
@@ -818,8 +851,9 @@ Traceback (most recent call last):
 UnboundLocalError: local variable 'i' referenced before assignment
 ```
 
-如果在内部作用域先访问外部作用域，再定义一个同名的局部变量，解释器就懵逼了。
-如果你其实想做的是改变全局变量 i 的值，就应该在开头声明 `global i`. 而如果 外部变量 i 不是存在于全局作用域，而是在某个闭合作用域内的话，就该用 `nonlocal i`
+如果在内部作用域先访问外部作用域，再定义一个同名的局部变量，解释器就懵逼了。如果你其实想做
+的是改变全局变量 i 的值，就应该在开头声明 `global i`. 而如果 外部变量 i 不是存在于全局作用
+域，而是在某个闭合作用域内的话，就该用 `nonlocal i`
 
 ## 四、自定义装饰器
 
@@ -856,8 +890,8 @@ F = decorator(A, B)(F)      # Rebind F to result of decorator's return value
 F(99)                                # Essentially calls decorator(A, B)(F)(99)
 ```
 
-上面演示的是用函数定义的装饰器，也是最常用的装饰器。
-装饰器接收的参数可以是各种各样的，下面是一个带参的装饰器：
+上面演示的是用函数定义的装饰器，也是最常用的装饰器。装饰器接收的参数可以是各种各样的，下面
+是一个带参的装饰器：
 
 ```python
 @on_command("info")
@@ -888,7 +922,8 @@ def _deco_maker(event_type: str) -> Callable:  # 调用这个，获取 on_xxx �
     return deco_deco
 ```
 
-我们知道 Python 的类实际上是可以很方便的修改的，因此函数装饰器也能用于装饰类，修改类的某些行为。
+我们知道 Python 的类实际上是可以很方便的修改的，因此函数装饰器也能用于装饰类，修改类的某些
+行为。
 
 ```python
 def log_getattribute(cls):
@@ -917,7 +952,8 @@ class A:
 
 类定义装饰器和函数定义装饰器的使用方式完全一致。它也可以用于装饰函数或者类。
 
-那么为啥还需要类定义装饰器呢？它的优势在于类是可以继承的，这样的话，就能用继承的方式定义装饰器，将通用部分定义成超类。
+那么为啥还需要类定义装饰器呢？它的优势在于类是可以继承的，这样的话，就能用继承的方式定义装
+饰器，将通用部分定义成超类。
 
 类定义装饰器的定义方法如下：
 
@@ -954,13 +990,15 @@ Exited func1
 
 ## 五、OOP
 
-1.  调用超类方法：- 直接通过`超类名.__init__(self,xx)`调用 - 通过`super(__class__, self).__init__()`调用。
-    （Python3 可直接用 `super().__init__()`
-    但是要搞清楚，**[super() 方法](https://docs.python.org/3/library/functions.html#super)返回的是一个代理类。另外被代理的类也不一定是其超类。如果不清楚这些差别，最好还是显式用方法一最好**。）
+1.  调用超类方法：- 直接通过`超类名.__init__(self,xx)`调用 - 通
+    过`super(__class__, self).__init__()`调用。（Python3 可直接用 `super().__init__()` 但
+    是要搞清楚，**[super() 方法](https://docs.python.org/3/library/functions.html#super)返
+    回的是一个代理类。另外被代理的类也不一定是其超类。如果不清楚这些差别，最好还是显式用方
+    法一最好**。）
 
 2.  抽象超类：@abstractmethod
-3.  `@staticmethod` `@classmethod` 与 Java 的 static 方法对比
-    python的类方法、静态方法，与java的静态方法：
+3.  `@staticmethod` `@classmethod` 与 Java 的 static 方法对比 python的类方法、静态方法，与
+    java的静态方法：
 
         1. java 中 constants、utils 这样的静态类，对应的是python的一个模块（文件），类属性对应模块的全局属性，静态方法对应模块的函数
 
@@ -968,20 +1006,24 @@ Exited func1
 
         3. 对于不需要访问任何类属性，也不属于第一类的方法，应该用 `@staticmathod` 实现。这种方法其实完全不需要放到类里面，它就是一个独立的函数。（仍然放里面，是为了把功能类似的函数组织到一起而已。）
 
-4.  `__slots__`: 属性导出，不在该列表内的属性，若存在则为只读。不存在的话，就不存在。。6.` __getattr__`: 拦截对不存在的属性的访问，可用于实现动态分配属性。
+4.  `__slots__`: 属性导出，不在该列表内的属性，若存在则为只读。不存在的话，就不存
+    在。。6.` __getattr__`: 拦截对不存在的属性的访问，可用于实现动态分配属性。
 5.  `__getattribute__`: 和上面相同，但是它拦截对所有属性的访问，包括对已存在的属性的访问。
 6.  @property: 提供对属性访问的安全检查
 
-7.  descriptor: **get** **set** **delete** 控制对类的访问。（上面的 **getattr** 等是控制对类的属性的访问）
+7.  descriptor: **get** **set** **delete** 控制对类的访问。（上面的 **getattr** 等是控制对
+    类的属性的访问）
 
-8.  类构造器 `__new__`：在 `__init__` 之前运行，它接收一个 `cls` 参数，然后使用它构造并返回类实例 `self`。
+8.  类构造器 `__new__`：在 `__init__` 之前运行，它接收一个 `cls` 参数，然后使用它构造并返
+    回类实例 `self`。
 
-9.  类方法的 `cls` 即是当前类，是 type 的实例，`cls.xxx` 和 `<类名>.xxx` 调用结果是一致的。而 self 由 `__new__` 构造，是 cls 的实例。
+9.  类方法的 `cls` 即是当前类，是 type 的实例，`cls.xxx` 和 `<类名>.xxx` 调用结果是一致
+    的。而 self 由 `__new__` 构造，是 cls 的实例。
 
 ### 元类 metaclasses
 
-元类，也就是用于创建class 的 class，算是很高级的话题了（If you wonder whether you need metaclasses, you don’t ）
-元类的工作流程：
+元类，也就是用于创建class 的 class，算是很高级的话题了（If you wonder whether you need
+metaclasses, you don’t ）元类的工作流程：
 
 1. 拦截类的创建
 2. 修改类
@@ -991,11 +1033,16 @@ Exited func1
 
 ## 六、查看 Python 源码
 
-对一般的标准库的模块，要查看其具体的 Python 实现是很简单的：直接通过 `__file__` 属性就能看到 `.py` 文件的位置。
+对一般的标准库的模块，要查看其具体的 Python 实现是很简单的：直接通过 `__file__` 属性就能看
+到 `.py` 文件的位置。
 
 但是 Python 很多功能是 C 写的，对于这类函数/类，`__file__` 就没啥用了。
 
-如果是需要查看 [builtins 模块](https://stackoverflow.com/questions/8608587/finding-the-source-code-for-built-in-python-functions) 的具体实现，直接查看 [Python/bltinmodule.c](https://github.com/python/cpython/blob/master/Python/bltinmodule.c) 就行。
+如果是需要查看
+[builtins 模块](https://stackoverflow.com/questions/8608587/finding-the-source-code-for-built-in-python-functions)
+的具体实现，直接查看
+[Python/bltinmodule.c](https://github.com/python/cpython/blob/master/Python/bltinmodule.c)
+就行。
 
 其他 C 模块的源码，待补充具体的查看方法。
 

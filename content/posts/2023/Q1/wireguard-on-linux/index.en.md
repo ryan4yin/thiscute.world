@@ -21,37 +21,60 @@ comment:
     enable: false
 ---
 
-> Reading this article requires prior knowledge of Linux network basics, iptables, and conntrack.
+> Reading this article requires prior knowledge of Linux network basics, iptables, and
+> conntrack.
 
-> This article incorporates some prompts from Copilot and also includes analysis from ChatGPT's free version, which has been helpful.
+> This article incorporates some prompts from Copilot and also includes analysis from
+> ChatGPT's free version, which has been helpful.
 
-Recently, due to work requirements, I delved into the WireGuard protocol and would like to briefly share my insights in this article.
+Recently, due to work requirements, I delved into the WireGuard protocol and would like to
+briefly share my insights in this article.
 
 ## What is WireGuard?
 
-WireGuard is a VPN implementation based on minimalist principles that addresses many existing issues with VPN protocols. It was designed and implemented by Jason A. Donenfeld in 2015 and has gained widespread attention for its clean and easy-to-understand code, simple configuration, high performance, and strong security.
+WireGuard is a VPN implementation based on minimalist principles that addresses many
+existing issues with VPN protocols. It was designed and implemented by Jason A. Donenfeld
+in 2015 and has gained widespread attention for its clean and easy-to-understand code,
+simple configuration, high performance, and strong security.
 
-In early 2020, WireGuard was introduced into the Linux mainline branch and later became a kernel module in Linux 5.6. Following this, numerous open-source projects and related enterprises based on WireGuard emerged. Major VPN service providers also gradually started supporting the WireGuard protocol, and many businesses began using it to build enterprise VPN networks.
+In early 2020, WireGuard was introduced into the Linux mainline branch and later became a
+kernel module in Linux 5.6. Following this, numerous open-source projects and related
+enterprises based on WireGuard emerged. Major VPN service providers also gradually started
+supporting the WireGuard protocol, and many businesses began using it to build enterprise
+VPN networks.
 
 Some notable open-source projects based on WireGuard include:
 
-- [tailscale](https://github.com/tailscale/tailscale): A simple and easy-to-use WireGuard VPN private network solution, highly recommended!
-- [headscale](https://github.com/juanfont/headscale): An open-source implementation of the tailscale control server, enabling the self-hosting of tailscale services.
-- [kilo](https://github.com/squat/kilo): A WireGuard-based Kubernetes multi-cloud networking solution.
+- [tailscale](https://github.com/tailscale/tailscale): A simple and easy-to-use WireGuard
+  VPN private network solution, highly recommended!
+- [headscale](https://github.com/juanfont/headscale): An open-source implementation of the
+  tailscale control server, enabling the self-hosting of tailscale services.
+- [kilo](https://github.com/squat/kilo): A WireGuard-based Kubernetes multi-cloud
+  networking solution.
 - ...
-- Besides the ones mentioned above, there are many other WireGuard projects. If you're interested, you can explore the [awesome-wireguard](https://github.com/cedrickchee/awesome-wireguard) repository.
+- Besides the ones mentioned above, there are many other WireGuard projects. If you're
+  interested, you can explore the
+  [awesome-wireguard](https://github.com/cedrickchee/awesome-wireguard) repository.
 
-WireGuard itself is just a point-to-point tunneling protocol, providing the ability for point-to-point communication (which reflects its minimalist philosophy). Other functionalities such as network routing, NAT traversal, DNS resolution, and firewall policies are all implemented using existing Linux system tools.
+WireGuard itself is just a point-to-point tunneling protocol, providing the ability for
+point-to-point communication (which reflects its minimalist philosophy). Other
+functionalities such as network routing, NAT traversal, DNS resolution, and firewall
+policies are all implemented using existing Linux system tools.
 
-In this article, I will set up a simple single-server + single-client WireGuard network and analyze how it utilizes existing Linux system tools to build a secure and reliable virtual network over the WireGuard tunnel.
+In this article, I will set up a simple single-server + single-client WireGuard network
+and analyze how it utilizes existing Linux system tools to build a secure and reliable
+virtual network over the WireGuard tunnel.
 
-The servers and clients used for testing in this article are both virtual machines running Ubuntu 20.04 with kernel version 5.15, which includes the wireguard kernel module.
+The servers and clients used for testing in this article are both virtual machines running
+Ubuntu 20.04 with kernel version 5.15, which includes the wireguard kernel module.
 
 ## WireGuard Server Network Analysis
 
-For simplicity, I will use `docker-compose` to start a WireGuard server, using the image [linuxserver/docker-wireguard](https://github.com/linuxserver/docker-wireguard).
+For simplicity, I will use `docker-compose` to start a WireGuard server, using the image
+[linuxserver/docker-wireguard](https://github.com/linuxserver/docker-wireguard).
 
-The configuration file is as follows, and the content is entirely referenced from the official README of this image:
+The configuration file is as follows, and the content is entirely referenced from the
+official README of this image:
 
 ```yaml
 ---
@@ -86,13 +109,15 @@ services:
     restart: unless-stopped
 ```
 
-Save the above configuration as `docker-compose.yml` and then start the WireGuard server in the background using the following command:
+Save the above configuration as `docker-compose.yml` and then start the WireGuard server
+in the background using the following command:
 
 ```shell
 docker-compose up -d
 ```
 
-The WireGuard server is now running. Let's check the logs of the server container (detailed comments added):
+The WireGuard server is now running. Let's check the logs of the server container
+(detailed comments added):
 
 ```shell
 $ docker logs wireguard
@@ -111,20 +136,41 @@ linux/amd64, go1.20, 055b2c3
 [ls.io-init] done.
 ```
 
-From the logs, we can see that the program first creates a WireGuard device `wg0` and assigns the address `10.13.13.1` to it. As the server-side of the WireGuard network, this `wg0` device serves as the default gateway for the entire WireGuard virtual network, handling traffic from other peers within the virtual network and forming a star network topology.
+From the logs, we can see that the program first creates a WireGuard device `wg0` and
+assigns the address `10.13.13.1` to it. As the server-side of the WireGuard network, this
+`wg0` device serves as the default gateway for the entire WireGuard virtual network,
+handling traffic from other peers within the virtual network and forming a star network
+topology.
 
-Next, the server adds a route for the peer it generated (`peer1` in this case), allowing the peer's traffic to be correctly routed to the `wg0` device.
+Next, the server adds a route for the peer it generated (`peer1` in this case), allowing
+the peer's traffic to be correctly routed to the `wg0` device.
 
-Finally, to enable other peers in the WireGuard virtual network to access the external network or each other, the server adds the following iptables rules to the `wg0` device:
+Finally, to enable other peers in the WireGuard virtual network to access the external
+network or each other, the server adds the following iptables rules to the `wg0` device:
 
-- `iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT;`: Allow packets entering and exiting the `wg0` device to pass through the netfilter's FORWARD chain (the default rule is DROP, which means it does not allow packets to pass through by default).
+- `iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT;`: Allow
+  packets entering and exiting the `wg0` device to pass through the netfilter's FORWARD
+  chain (the default rule is DROP, which means it does not allow packets to pass through
+  by default).
 - `iptables -t nat -A POSTROUTING -o eth
 
-* -j MASQUERADE`: Add a MASQUERADE rule on the `eth+`network interface, which means the source addresses of the packets will be masked as the address of the`eth+` interface. This is to allow WireGuard packets to access the external network through NAT.
-  - The return traffic will automatically pass through the NAT's conntrack RELATED rule, allowing it to pass through without explicit configuration. However, the conntrack table has an automatic cleanup mechanism, and if there is no traffic for a long time, the entry will be removed from the conntrack table. This is the issue addressed by the `PERSISTENTKEEPALIVE_PEERS=all` parameter in the `docker-compose.yml`, which keeps the connections alive by sending periodic keep-alive packets.
-  - This also involves NAT traversal, which I won't delve into here, but you can explore it if you're interested.
+* -j
+  MASQUERADE`: Add a MASQUERADE rule on the `eth+`network interface, which means the source addresses of the packets will be masked as the address of the`eth+`
+  interface. This is to allow WireGuard packets to access the external network through
+  NAT.
+  - The return traffic will automatically pass through the NAT's conntrack RELATED rule,
+    allowing it to pass through without explicit configuration. However, the conntrack
+    table has an automatic cleanup mechanism, and if there is no traffic for a long time,
+    the entry will be removed from the conntrack table. This is the issue addressed by the
+    `PERSISTENTKEEPALIVE_PEERS=all` parameter in the `docker-compose.yml`, which keeps the
+    connections alive by sending periodic keep-alive packets.
+  - This also involves NAT traversal, which I won't delve into here, but you can explore
+    it if you're interested.
 
-WireGuard also introduces an essential concept called `AllowedIPs`, which is a list of IP addresses indicating which IP addresses' traffic is allowed to pass through the WireGuard virtual network. To illustrate this, let's first look at the server-side configuration file for `wg0`:
+WireGuard also introduces an essential concept called `AllowedIPs`, which is a list of IP
+addresses indicating which IP addresses' traffic is allowed to pass through the WireGuard
+virtual network. To illustrate this, let's first look at the server-side configuration
+file for `wg0`:
 
 ```shell
 $ cat wg0.conf
@@ -145,19 +191,27 @@ PresharedKey = 7mCNCZdMKeRz1Zrpl9bFS08jJAdv6/USazRVq7tjznY=
 AllowedIPs = 10.13.13.2/32
 ```
 
-`AllowedIPs` represents the IP addresses or subnets allowed to pass through the WireGuard virtual network for each peer. It can be a single IP address or a range, and multiple entries can be set. This allows all peers to be responsible for forwarding one or more IP ranges, effectively acting as routers for the VPN subnet.
+`AllowedIPs` represents the IP addresses or subnets allowed to pass through the WireGuard
+virtual network for each peer. It can be a single IP address or a range, and multiple
+entries can be set. This allows all peers to be responsible for forwarding one or more IP
+ranges, effectively acting as routers for the VPN subnet.
 
-WireGuard itself is just a point-to-point tunneling protocol, making it very versatile. Through the `AllowedIPs` parameter, we can add different configurations and routing rules for each peer, creating various complex network topologies, such as star, ring, tree, etc.
+WireGuard itself is just a point-to-point tunneling protocol, making it very versatile.
+Through the `AllowedIPs` parameter, we can add different configurations and routing rules
+for each peer, creating various complex network topologies, such as star, ring, tree, etc.
 
 ## WireGuard Client Network Analysis
 
-Now, let's switch to another virtual machine to run the WireGuard client. First, we need to install the `wireguard` command-line tool:
+Now, let's switch to another virtual machine to run the WireGuard client. First, we need
+to install the `wireguard` command-line tool:
 
 ```shell
 sudo apt install wireguard resolvconf
 ```
 
-The second step is to find the `peer1/peer1.conf` file in the server's configuration folder. It is the client configuration file automatically generated by the server container based on the `PEERS=1` parameter. Let's first check its content:
+The second step is to find the `peer1/peer1.conf` file in the server's configuration
+folder. It is the client configuration file automatically generated by the server
+container based on the `PEERS=1` parameter. Let's first check its content:
 
 ```shell
 $ cd ./config/peer1
@@ -176,21 +230,40 @@ Endpoint = 192.168.5.198:51820
 AllowedIPs = 0.0.0.0/0
 ```
 
-> As an additional note, the address of this Endpoint is also worth mentioning. You can see from the server's wg0.conf configuration that peer1 is not assigned any specific Endpoint. This essentially means that the Endpoint of this peer1 is dynamic, i.e., each time peer1 sends data to the server's wg0, the server will use the source IP address of the data packet as the Endpoint for peer1 after authenticating and encrypting the data. This allows peer1 to change its IP address freely (Roaming), and the WireGuard tunnel will still function correctly (a typical scenario is frequent IP changes in mobile network roaming and WiFi switching). This gives WireGuard a distinct connectionless characteristic, meaning the WireGuard tunnel does not need to maintain a constant connection, and switching networks does not require reconnection. As long as the data packets can reach the server, the tunnel will work correctly.
+> As an additional note, the address of this Endpoint is also worth mentioning. You can
+> see from the server's wg0.conf configuration that peer1 is not assigned any specific
+> Endpoint. This essentially means that the Endpoint of this peer1 is dynamic, i.e., each
+> time peer1 sends data to the server's wg0, the server will use the source IP address of
+> the data packet as the Endpoint for peer1 after authenticating and encrypting the data.
+> This allows peer1 to change its IP address freely (Roaming), and the WireGuard tunnel
+> will still function correctly (a typical scenario is frequent IP changes in mobile
+> network roaming and WiFi switching). This gives WireGuard a distinct connectionless
+> characteristic, meaning the WireGuard tunnel does not need to maintain a constant
+> connection, and switching networks does not require reconnection. As long as the data
+> packets can reach the server, the tunnel will work correctly.
 
-Because my current environment is an intranet setup, I can directly use the server's private IP address for the `Peer` - `Endpoint` in the configuration file, which is `192.168.5.198`.
+Because my current environment is an intranet setup, I can directly use the server's
+private IP address for the `Peer` - `Endpoint` in the configuration file, which is
+`192.168.5.198`.
 
-> If your server has a public IP address (e.g., a cloud server or using port forwarding with a dynamic public IP on a home broadband connection), you can also use that public IP address as the Endpoint, and the effect will be the same.
+> If your server has a public IP address (e.g., a cloud server or using port forwarding
+> with a dynamic public IP on a home broadband connection), you can also use that public
+> IP address as the Endpoint, and the effect will be the same.
 
-After confirming that the configuration file is correct, save it to the client's path `/etc/wireguard/peer1.conf`, and then use the following command to start the WireGuard client:
+After confirming that the configuration file is correct, save it to the client's path
+`/etc/wireguard/peer1.conf`, and then use the following command to start the WireGuard
+client:
 
 ```shell
 sudo wg-quick up peer1
 ```
 
-The above command will automatically find the configuration file named `peer1.conf` in the `/etc/wireguard/` directory, and then start a WireGuard device named `peer1` with the corresponding configuration.
+The above command will automatically find the configuration file named `peer1.conf` in the
+`/etc/wireguard/` directory, and then start a WireGuard device named `peer1` with the
+corresponding configuration.
 
-Here are the logs when I started it, and `wg-quick` prints all the network-related commands it executed (detailed comments added):
+Here are the logs when I started it, and `wg-quick` prints all the network-related
+commands it executed (detailed comments added):
 
 ```shell
 $ sudo wg-quick up peer1
@@ -210,11 +283,16 @@ $ sudo wg-quick up peer1
 [#] nft -f /dev/fd/63                                   # Configure nftables rules to ensure WireGuard traffic is correctly routed and prevent malicious packets from entering the network.
 ```
 
-After going through the above process, you should now be able to access the related network through WireGuard. You can use WireShark to capture packets for confirmation.
+After going through the above process, you should now be able to access the related
+network through WireGuard. You can use WireShark to capture packets for confirmation.
 
-> If the network is still not working, it means there is a problem with the configuration in one of the steps. You can troubleshoot it step by step by examining network interfaces, routing tables, routing policies, and iptables/nftables configurations. If necessary, you can use WireShark to capture packets and locate the issue.
+> If the network is still not working, it means there is a problem with the configuration
+> in one of the steps. You can troubleshoot it step by step by examining network
+> interfaces, routing tables, routing policies, and iptables/nftables configurations. If
+> necessary, you can use WireShark to capture packets and locate the issue.
 
-Now, let's check the current system's network status. First, check the routing table, and you will find that the routing table hasn't changed:
+Now, let's check the current system's network status. First, check the routing table, and
+you will find that the routing table hasn't changed:
 
 ```shell
 $ ip route ls
@@ -222,20 +300,28 @@ default via 192.168.5.201 dev eth0 proto static
 192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.197
 ```
 
-However, the WireGuard tunnel is already active, indicating that the traffic is no longer going directly through the default routing table. There are other configurations in effect.
-Going back to the client startup logs, it shows that `wg-quick` created a routing table named `51820`. Let's check this table:
+However, the WireGuard tunnel is already active, indicating that the traffic is no longer
+going directly through the default routing table. There are other configurations in
+effect. Going back to the client startup logs, it shows that `wg-quick` created a routing
+table named `51820`. Let's check this table:
 
 ```shell
 ryan@ubuntu-2004-builder:~$ ip route ls table 51820
 default dev peer1 scope link
 ```
 
-As you can see, this table indeed forwards all traffic to the WireGuard interface `peer1`, confirming that the traffic is now going through this routing table.
-So, the question is, how is the system forwarding the traffic to this routing table? Why is the default routing table no longer in effect?
+As you can see, this table indeed forwards all traffic to the WireGuard interface `peer1`,
+confirming that the traffic is now going through this routing table. So, the question is,
+how is the system forwarding the traffic to this routing table? Why is the default routing
+table no longer in effect?
 
-To understand this, we need to add some knowledge. Linux has supported multiple routing tables since version 2.2, and it uses a routing policy database to choose the correct routing table for each packet. You can view and modify this routing policy database using the `ip rule` command.
+To understand this, we need to add some knowledge. Linux has supported multiple routing
+tables since version 2.2, and it uses a routing policy database to choose the correct
+routing table for each packet. You can view and modify this routing policy database using
+the `ip rule` command.
 
-Now, let's take a look at the current routing policy of the system, and I have added comments to explain it:
+Now, let's take a look at the current routing policy of the system, and I have added
+comments to explain it:
 
 ```shell
 $ ip rule show
@@ -250,17 +336,29 @@ $ ip rule show
 32767:  from all lookup default # All traffic goes through the default routing table, and it is also currently not in effect.
 ```
 
-After analyzing the above routing policy, you should understand the WireGuard routing rules. It added a rule with a higher priority than the default routing policy `32766`, namely `32765`, which forwards all ordinary traffic to its custom routing table `51820`, thus making it go through the `peer1` interface.
-On the other hand, the `peer1` interface has been given a firewall mark `51820`, which is the hexadecimal format of `0xca6c`, so outbound traffic from `peer1` to the server will not match the `32765` rule, and therefore, it will go through the lower priority `32766` policy, i.e., it will go through the main routing table.
+After analyzing the above routing policy, you should understand the WireGuard routing
+rules. It added a rule with a higher priority than the default routing policy `32766`,
+namely `32765`, which forwards all ordinary traffic to its custom routing table `51820`,
+thus making it go through the `peer1` interface. On the other hand, the `peer1` interface
+has been given a firewall mark `51820`, which is the hexadecimal format of `0xca6c`, so
+outbound traffic from `peer1` to the server will not match the `32765` rule, and
+therefore, it will go through the lower priority `32766` policy, i.e., it will go through
+the main routing table.
 
 In addition, the rule `
 
-32764` is a bit special. It was explained in the previous comments—it ensures that all non-default routing traffic goes through the main routing table, and the non-default routes in the main routing table are usually managed automatically by other programs or manually added, so this rule ensures that these routing policies are still effective and not overridden by the WireGuard policy.
+32764` is a bit special. It was explained in the previous comments—it ensures that all
+non-default routing traffic goes through the main routing table, and the non-default
+routes in the main routing table are usually managed automatically by other programs or
+manually added, so this rule ensures that these routing policies are still effective and
+not overridden by the WireGuard policy.
 
-With the above analysis, the last line in the wg-quick log `nft -f /dev/fd/63` remains to be explained. What exactly does it do?
-`nft` is the command-line tool for nftables. It sets some nftables rules. Let's check its rules:
+With the above analysis, the last line in the wg-quick log `nft -f /dev/fd/63` remains to
+be explained. What exactly does it do? `nft` is the command-line tool for nftables. It
+sets some nftables rules. Let's check its rules:
 
-> Note: The chain names in nftables are entirely customizable and do not have any special meanings.
+> Note: The chain names in nftables are entirely customizable and do not have any special
+> meanings.
 
 ```shell
 $ sudo nft list ruleset
@@ -282,22 +380,32 @@ table ip wg-quick-peer1 {
 }
 ```
 
-Here, a table named `wg-quick-peer1` is created, and it sets the following rules on the netfilter:
+Here, a table named `wg-quick-peer1` is created, and it sets the following rules on the
+netfilter:
 
-1. `preraw` chain: This chain is used to prevent malicious packets from entering the network.
-   1. The type line at the beginning of the rule indicates the type, which is `filter`, and it only matches the `prerouting` table of the `raw` chain.
-   2. It drops all packets that are not from the `peer1` interface, have a destination address of `10.13.13.2`, and do not have a local source address.
-   3. In summary, it allows only local addresses or the `peer1` interface to directly access the address `10.13.13.2`.
-2. `premangle` chain: This chain ensures that all UDP packets can be correctly received from the WireGuard interface.
-   1. It sets the connection tracking mark for all UDP packets (didn't quite understand how this mark is applied...).
-3. `postmangle` chain: This chain ensures that all UDP packets can be correctly sent through the WireGuard interface.
-   1. It sets the mark to `0xca6c` (in hexadecimal format) for all UDP packets (also not entirely clear how this mark is applied...).
+1. `preraw` chain: This chain is used to prevent malicious packets from entering the
+   network.
+   1. The type line at the beginning of the rule indicates the type, which is `filter`,
+      and it only matches the `prerouting` table of the `raw` chain.
+   2. It drops all packets that are not from the `peer1` interface, have a destination
+      address of `10.13.13.2`, and do not have a local source address.
+   3. In summary, it allows only local addresses or the `peer1` interface to directly
+      access the address `10.13.13.2`.
+2. `premangle` chain: This chain ensures that all UDP packets can be correctly received
+   from the WireGuard interface.
+   1. It sets the connection tracking mark for all UDP packets (didn't quite understand
+      how this mark is applied...).
+3. `postmangle` chain: This chain ensures that all UDP packets can be correctly sent
+   through the WireGuard interface.
+   1. It sets the mark to `0xca6c` (in hexadecimal format) for all UDP packets (also not
+      entirely clear how this mark is applied...).
 
 Sure, here's the missing part:
 
 ## Final Check: WireGuard Status
 
-Now, let's check the status of WireGuard. It was set earlier by the command `wg setconf peer1 /dev/fd/63`:
+Now, let's check the status of WireGuard. It was set earlier by the command
+`wg setconf peer1 /dev/fd/63`:
 
 ```shell
 ryan@ubuntu-2004-builder:~$ sudo wg show
@@ -315,7 +423,8 @@ peer: t95vF4b11RLCId3ArVVIJoC5Ih9CNbI0VTNuDuEzZyw=
   transfer: 124 B received, 324 B sent
 ```
 
-With the analysis complete, now you can close the WireGuard client and restore the client host's network to its normal state.
+With the analysis complete, now you can close the WireGuard client and restore the client
+host's network to its normal state.
 
 ```shell
 $ sudo wg-quick down peer1
@@ -328,14 +437,24 @@ $ sudo wg-quick down peer1
 
 ## Conclusion
 
-After going through the analysis, do you feel that the implementation of `wg-quick` is quite clever? With just a few iptables/nftables and iproute2 commands, it sets up a VPN network on top of WireGuard. What's even more impressive is that simply removing these added iptables/nftables and iproute2 rules will revert the system to its state before WireGuard was started (as demonstrated by the `sudo wg-quick down peer1` command).
+After going through the analysis, do you feel that the implementation of `wg-quick` is
+quite clever? With just a few iptables/nftables and iproute2 commands, it sets up a VPN
+network on top of WireGuard. What's even more impressive is that simply removing these
+added iptables/nftables and iproute2 rules will revert the system to its state before
+WireGuard was started (as demonstrated by the `sudo wg-quick down peer1` command).
 
-In summary, this article provides a brief analysis of the implementation of the WireGuard virtual network on Linux, and I hope it has been helpful to you.
+In summary, this article provides a brief analysis of the implementation of the WireGuard
+virtual network on Linux, and I hope it has been helpful to you.
 
-In the next article (if there is one...), I will delve into more details of WireGuard implementation. Stay tuned!
+In the next article (if there is one...), I will delve into more details of WireGuard
+implementation. Stay tuned!
 
 ## References
 
-- [WireGuard Protocol](https://www.wireguard.com/protocol/): Official documentation and whitepaper, written in a clear and easy-to-understand manner.
-- [WireGuard: What makes it special?](https://zhuanlan.zhihu.com/p/404402933): A deeper and easier-to-understand perspective, worth reading.
-- [Understanding modern Linux routing (and wg-quick)](https://ro-che.info/articles/2021-02-27-linux-routing): Detailed explanation of the multiple routing tables and routing policy techniques used by the WireGuard client.
+- [WireGuard Protocol](https://www.wireguard.com/protocol/): Official documentation and
+  whitepaper, written in a clear and easy-to-understand manner.
+- [WireGuard: What makes it special?](https://zhuanlan.zhihu.com/p/404402933): A deeper
+  and easier-to-understand perspective, worth reading.
+- [Understanding modern Linux routing (and wg-quick)](https://ro-che.info/articles/2021-02-27-linux-routing):
+  Detailed explanation of the multiple routing tables and routing policy techniques used
+  by the WireGuard client.

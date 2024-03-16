@@ -40,70 +40,93 @@ code:
   maxShownLines: 300
 ---
 
-> 文章是 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要整理发布下...所以注意文章中的时间线是 2023 年 8 月。
+> 文章是 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要整理发布下...所以
+> 注意文章中的时间线是 2023 年 8 月。
 
 ## 零、前言
 
-我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当时没怎么折腾。
+我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当
+时没怎么折腾。
 
-6 月初的时候我开始尝试在 Orange Pi 5 上运行 NixOS，在 [NixOS on ARM 的 Matrix 群组](https://matrix.to/#/#nixos-on-arm:nixos.org) 中得到了俄罗斯老哥 @K900 的帮助，没费多大劲就成功了，一共就折腾了三天。
+6 月初的时候我开始尝试在 Orange Pi 5 上运行 NixOS，在
+[NixOS on ARM 的 Matrix 群组](https://matrix.to/#/#nixos-on-arm:nixos.org) 中得到了俄罗斯
+老哥 @K900 的帮助，没费多大劲就成功了，一共就折腾了三天。
 
-于是我接着尝试在 Lichee Pi 4A 上运行 NixOS，因为已经拥有了 Orange Pi 5 上的折腾经验，我以为这次会很顺利。
-但是实际难度远远超出了我的预期，我从 6 月 13 号开始断断续续折腾到 7 月 3 号，接触了大量的新东西，包括 U-Boot、OpenSBI、SPL Flash、RISCV Boot Flows 等等，
-还参考了 @chainsx 的 Fedora for Lichee Pi 4A 方案，请教了 @NickCao 许多 NixOS 相关的问题，@revy 帮我修了好几个 revyos/thead-kernel 在标准工具链上编译的 bug，期间也请教过 @HougeLangley 他折腾 Lichee Pi 4A 的经验。
-我在付出了这么多的努力后，才最终成功编译出了 NixOS 的系统镜像（包含 boot 跟 rootfs 两个分区）。
+于是我接着尝试在 Lichee Pi 4A 上运行 NixOS，因为已经拥有了 Orange Pi 5 上的折腾经验，我以
+为这次会很顺利。但是实际难度远远超出了我的预期，我从 6 月 13 号开始断断续续折腾到 7 月 3
+号，接触了大量的新东西，包括 U-Boot、OpenSBI、SPL Flash、RISCV Boot Flows 等等，还参考了
+@chainsx 的 Fedora for Lichee Pi 4A 方案，请教了 @NickCao 许多 NixOS 相关的问题，@revy 帮
+我修了好几个 revyos/thead-kernel 在标准工具链上编译的 bug，期间也请教过 @HougeLangley 他折
+腾 Lichee Pi 4A 的经验。我在付出了这么多的努力后，才最终成功编译出了 NixOS 的系统镜像（包
+含 boot 跟 rootfs 两个分区）。
 
 但是！现在要说「但是」了。
 
-镜像是有了，系统却无法启动...找了各种资料也没解决，也没好意思麻烦各位大佬，搞得有点心灰意冷，就先把这部分工作放下了。
+镜像是有了，系统却无法启动...找了各种资料也没解决，也没好意思麻烦各位大佬，搞得有点心灰意
+冷，就先把这部分工作放下了。
 
-接着就隔了一个多月没碰 Lichee Pi 4A，直到 8 月 5 号，外国友人 @JayDeLux 在 [Mainline Linux for RISC-V](https://t.me/linux4rv) TG 群组中询问我 NixOS 移植工作的进展如何（之前有在群里提过我在尝试移植），我才决定再次尝试一下。
+接着就隔了一个多月没碰 Lichee Pi 4A，直到 8 月 5 号，外国友人 @JayDeLux 在
+[Mainline Linux for RISC-V](https://t.me/linux4rv) TG 群组中询问我 NixOS 移植工作的进展如
+何（之前有在群里提过我在尝试移植），我才决定再次尝试一下。
 
-在之前工作的基础上一番骚操作后，我在 8 月 6 号晚上终于成功启动了 NixOS，这次意外的顺利，后续也成功通过一份 Nix Flake 配置编译出了可用的 NixOS 镜像。
+在之前工作的基础上一番骚操作后，我在 8 月 6 号晚上终于成功启动了 NixOS，这次意外的顺利，后
+续也成功通过一份 Nix Flake 配置编译出了可用的 NixOS 镜像。
 
 最终成果：<https://github.com/ryan4yin/nixos-licheepi4a>
 
-整个折腾过程相当曲折，虽然最终达成了目标，但是期间遭受的折磨也真的不少。
-总的来说仍然是一次很有趣的经历，既学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50 美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@Rabenda(revy) 等各位大佬混了个脸熟。
+整个折腾过程相当曲折，虽然最终达成了目标，但是期间遭受的折磨也真的不少。总的来说仍然是一次
+很有趣的经历，既学到了许多新技术知识、认识了些有趣的外国友人（@JayDeLux 甚至还给我打了 $50
+美刀表示感谢），也跟 @HougeLangley 、@chainsx 、@Rabenda(revy) 等各位大佬混了个脸熟。
 
 这篇文章就是记录下我在这个折腾过程中学到的所有知识，以飨读者，同时也梳理一下自己的收获。
 
-本文的写作思路是自顶向下的，先从 NixOS 镜像的 boot 分区配置、启动脚本开始分析，过渡到实际的启动日志，再接续分析下后续的启动流程。
-NixOS 分析完了后，再看看与 RISC-V 相关的硬件固件与 bootloader 部分要如何与 NixOS 协同工作，使得 NixOS 能够在 Lichee Pi 4A 上正常启动。
+本文的写作思路是自顶向下的，先从 NixOS 镜像的 boot 分区配置、启动脚本开始分析，过渡到实际
+的启动日志，再接续分析下后续的启动流程。NixOS 分析完了后，再看看与 RISC-V 相关的硬件固件与
+bootloader 部分要如何与 NixOS 协同工作，使得 NixOS 能够在 Lichee Pi 4A 上正常启动。
 
 ## 一、基础知识介绍
 
 ### 1. Lichee Pi 4A 介绍
 
-LicheePi 4A 是当前市面上性能最高的 RISC-V Linux 开发板之一，它以 TH1520 为主控核心（4xC910@1.85G， RV64GCV，4TOPS@int8 NPU， 50GFLOP GPU），板载最大 16GB 64bit LPDDR4X，128GB eMMC，支持 HDMI+MIPI 双4K 显示输出，支持 4K 摄像头接入，双千兆网口（其中一个支持POE供电）和 4 个 USB3.0 接口，多种音频输入输出（由专用 C906 核心处理）。
+LicheePi 4A 是当前市面上性能最高的 RISC-V Linux 开发板之一，它以 TH1520 为主控核心
+（4xC910@1.85G， RV64GCV，4TOPS@int8 NPU， 50GFLOP GPU），板载最大 16GB 64bit
+LPDDR4X，128GB eMMC，支持 HDMI+MIPI 双4K 显示输出，支持 4K 摄像头接入，双千兆网口（其中一
+个支持POE供电）和 4 个 USB3.0 接口，多种音频输入输出（由专用 C906 核心处理）。
 
-以上来自 Lichee Pi 4A 官方文档 [Lichee Pi 4A - Sipeed Wiki](https://wiki.sipeed.com/hardware/zh/lichee/th1520/lpi4a/1_intro.html).
+以上来自 Lichee Pi 4A 官方文档
+[Lichee Pi 4A - Sipeed Wiki](https://wiki.sipeed.com/hardware/zh/lichee/th1520/lpi4a/1_intro.html).
 
 总之它是我手上性能最高的 RISC-V 开发板。
 
-LicheePi 4A 官方主要支持 [RevyOS](https://github.com/revyos/revyos/)—— 一款针对 T-Head 芯片生态的 Debian 优化定制发行版。
-根据猴哥（@HougeLangley）文章介绍，它也是目前唯一且确实能够启用 Lichee Pi 4A 板载 GPU 的发行版，
+LicheePi 4A 官方主要支持 [RevyOS](https://github.com/revyos/revyos/)—— 一款针对 T-Head 芯
+片生态的 Debian 优化定制发行版。根据猴哥（@HougeLangley）文章介绍，它也是目前唯一且确实能
+够启用 Lichee Pi 4A 板载 GPU 的发行版，
 
 ### 2. NixOS 介绍
 
-这个感觉就不用多说了，我在这几个月已经给 NixOS 写了非常多的文字了，感兴趣请直接移步 [ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book).
+这个感觉就不用多说了，我在这几个月已经给 NixOS 写了非常多的文字了，感兴趣请直接移步
+[ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book).
 
-在 4 月份接触了 NixOS 后，我成了 NixOS 铁粉。
-作为一名铁粉，我当然想把我手上的所有性能好点的板子都装上 NixOS，Lichee Pi 4A 自然也不例外。
+在 4 月份接触了 NixOS 后，我成了 NixOS 铁粉。作为一名铁粉，我当然想把我手上的所有性能好点
+的板子都装上 NixOS，Lichee Pi 4A 自然也不例外。
 
 我目前主要完成了两块板子的 NixOS 移植工作，一块是 Orange Pi 5，另一块就是 Lichee Pi 4A。
-Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用户 @K900，在他的帮助下我很顺利地就完成了移植工作。
+Orange Pi 5 是 ARM64 架构的，刚好也遇到了拥有该板子的 NixOS 用户 @K900，在他的帮助下我很顺
+利地就完成了移植工作。
 
 而 Lichee Pi 4A 就比较曲折，也比较有话题性。所以才有了这篇文章。
 
 ## 二、移植思路
 
-一个完整的嵌入式 Linux 系统，通常包含了 U-Boot、kernel、设备树以及根文件系统（rootfs）四个部分。
+一个完整的嵌入式 Linux 系统，通常包含了 U-Boot、kernel、设备树以及根文件系统（rootfs）四个
+部分。
 
-其中 U-Boot，kernel 跟设备树，都是与硬件相关的，需要针对不同的硬件进行定制。
-而 rootfs 的大部分内容（比如说 NixOS 系统的 rootfs 本身），都是与硬件无关的，可以通用。
+其中 U-Boot，kernel 跟设备树，都是与硬件相关的，需要针对不同的硬件进行定制。而 rootfs 的大
+部分内容（比如说 NixOS 系统的 rootfs 本身），都是与硬件无关的，可以通用。
 
-我的移植思路是，从 LicheePi4A 官方使用的 RevyOS 中拿出跟硬件相关的部分（也就是 U-Boot, kernel 跟设备树这三个），再结合上跟硬件无关的 NixOS rootfs，组合成一个完整的、可在 LicheePi4A 上正常启动运行的 NixOS 系统。
+我的移植思路是，从 LicheePi4A 官方使用的 RevyOS 中拿出跟硬件相关的部分（也就是 U-Boot,
+kernel 跟设备树这三个），再结合上跟硬件无关的 NixOS rootfs，组合成一个完整的、可在
+LicheePi4A 上正常启动运行的 NixOS 系统。
 
 RevyOS 针对 LicheePi4A 定制的几个项目源码如下：
 
@@ -111,16 +134,19 @@ RevyOS 针对 LicheePi4A 定制的几个项目源码如下：
 - https://github.com/revyos/thead-u-boot.git
 - https://github.com/revyos/thead-opensbi.git
 
-思路很清晰，但因为 NixOS 本身的特殊性，实际操作起来，现有的 Gentoo, Arch Linux, Fedora 的移植仓库代码全都无法直接使用，需要做的工作还是不少的。
+思路很清晰，但因为 NixOS 本身的特殊性，实际操作起来，现有的 Gentoo, Arch Linux, Fedora 的
+移植仓库代码全都无法直接使用，需要做的工作还是不少的。
 
 ## 三、NixOS 启动流程分析
 
-要做移植，首先就要了解 NixOS 系统本身的文件树结构以及系统启动流程，搞明白它跟 Arch Linux, Fedora 等其他发行版的区别，这样才好参考其他发行版的移植工作，搞明白该如何入手。
+要做移植，首先就要了解 NixOS 系统本身的文件树结构以及系统启动流程，搞明白它跟 Arch Linux,
+Fedora 等其他发行版的区别，这样才好参考其他发行版的移植工作，搞明白该如何入手。
 
 ### 1. Bootloader 配置与系统文件树分析
 
-这里方便起见，我直接使用我自己为 LicheePi4A 构建好的 NixOS 镜像进行分析。
-首先参照 [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a) 的 README 下载解压镜像，再使用 losetup 跟 mount 直接挂载镜像中的各分区进行初步分析：
+这里方便起见，我直接使用我自己为 LicheePi4A 构建好的 NixOS 镜像进行分析。首先参照
+[ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a) 的 README 下载解
+压镜像，再使用 losetup 跟 mount 直接挂载镜像中的各分区进行初步分析：
 
 ```bash
 # 解压镜像
@@ -160,14 +186,21 @@ loop0               7:0    0  1.9G  0 loop
 ╰───┴────────────────────────────┴──────┴──────────┴──────────────╯
 ```
 
-可以看到 NixOS 整个根目录（`/root`）下一共就四个文件夹，其中真正保存有系统数据的文件夹只有 `/boot` 跟 `/nix` 这两个，这与传统的 Linux 发行版大相径庭。
-有一点 Linux 使用经验的朋友都应该清楚，传统的 Linux 发行版遵循 UNIX 系统的 [FHS](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard) 标准，根目录下会有很多文件夹，比如 `/bin`、`/etc`、`/home`、`/lib`、`/opt`、`/root`、`/sbin`、`/srv`、`/tmp`、`/usr`、`/var` 等等。
+可以看到 NixOS 整个根目录（`/root`）下一共就四个文件夹，其中真正保存有系统数据的文件夹只有
+`/boot` 跟 `/nix` 这两个，这与传统的 Linux 发行版大相径庭。有一点 Linux 使用经验的朋友都应
+该清楚，传统的 Linux 发行版遵循 UNIX 系统的
+[FHS](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard) 标准，根目录下会有很多
+文件夹，比如
+`/bin`、`/etc`、`/home`、`/lib`、`/opt`、`/root`、`/sbin`、`/srv`、`/tmp`、`/usr`、`/var`
+等等。
 
-那 NixOS 它这么玩，真的能正常启动么？这就是我在构建出镜像后却发现无法在 LicheePi 4A 上启动时，最先产生的疑问。
-在询问 @chainsx 跟 @revy 系统无法启动的解决思路的时候，他们也一脸懵逼，觉得这个文件树有点奇葩，很怀疑是我构建流程有问题导致文件树不完整。
+那 NixOS 它这么玩，真的能正常启动么？这就是我在构建出镜像后却发现无法在 LicheePi 4A 上启动
+时，最先产生的疑问。在询问 @chainsx 跟 @revy 系统无法启动的解决思路的时候，他们也一脸懵
+逼，觉得这个文件树有点奇葩，很怀疑是我构建流程有问题导致文件树不完整。
 
-但实际上 NixOS 就是这么玩的，它 rootfs 中所有的数据全都存放在 `/nix/store` 这个目录下并且被挂载为只读，其他的文件夹以及其中的文件都是在运行时动态创建的。
-这是它实现声明式系统配置、可回滚更新、可并行安装多个版本的软件包等等特性的基础。
+但实际上 NixOS 就是这么玩的，它 rootfs 中所有的数据全都存放在 `/nix/store` 这个目录下并且
+被挂载为只读，其他的文件夹以及其中的文件都是在运行时动态创建的。这是它实现声明式系统配置、
+可回滚更新、可并行安装多个版本的软件包等等特性的基础。
 
 下面继续分析，先仔细看下 `/boot` 的内容：
 
@@ -202,9 +235,14 @@ boot
 
 可以看到：
 
-1. 它使用 `/boot/extlinux/extlinux.conf` 作为 U-Boot 的启动项配置，据 [U-Boot 官方的 Distro 文档](https://github.com/ARM-software/u-boot/blob/master/doc/README.distro) 所言，这是 U-Boot 的标准配置文件。
-2. 另外还有一些 `xxx.bin` 文件，这些是一些硬件固件，其中的 `light_c906_audio.bin` 显然是[玄铁 906](https://www.t-head.cn/product/C906?lang=zh) 这个 IP 核的音频固件，其他的后面再研究。
-3. NixOS 的 `initrd`, `dtbs` 以及 `Image` 文件都是在 `/boot/nixos` 下，这三个文件也都是跟 Linux 的启动相关的，现在不用管它们，下一步会分析。
+1. 它使用 `/boot/extlinux/extlinux.conf` 作为 U-Boot 的启动项配置，据
+   [U-Boot 官方的 Distro 文档](https://github.com/ARM-software/u-boot/blob/master/doc/README.distro)
+   所言，这是 U-Boot 的标准配置文件。
+2. 另外还有一些 `xxx.bin` 文件，这些是一些硬件固件，其中的 `light_c906_audio.bin` 显然
+   是[玄铁 906](https://www.t-head.cn/product/C906?lang=zh) 这个 IP 核的音频固件，其他的后
+   面再研究。
+3. NixOS 的 `initrd`, `dtbs` 以及 `Image` 文件都是在 `/boot/nixos` 下，这三个文件也都是跟
+   Linux 的启动相关的，现在不用管它们，下一步会分析。
 
 再看下 `/boot/extlinux/extlinux.conf` 的内容：
 
@@ -228,29 +266,51 @@ LABEL nixos-default
 
 从上述配置中能获得这些信息：
 
-1. 它创建了一个名为 `nixos-default` 的启动项并将它设为了默认启动项，extlinux 在启动阶段会根据该配置启动 NixOS 系统
-2. 启动项中的 `LINUX` `INITRD` `FDT` 三个参数分别指定了 kernel(Image 文件)、initrd 以及设备树（dtb）的位置，这三个文件我们在前面已经看到了，都在 `/boot/nixos` 下。
-   1. 根据 Linux 官方文档 [Using the initial RAM disk (initrd)](https://docs.kernel.org/admin-guide/initrd.html) 所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
-      1. bootloader(这里是 u-boot) 根据配置加载 kernel 文件（`Image`）、dtb 设备树文件以及 `initrd` 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.
-      1. Kernel 将传入的 initrd 转换成一个内存盘并挂载为根文件系统，然后释放 initrd 的内存。
-      1. Kernel 接着运行 `init` 参数指定的可执行程序，这里是 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这个 init 程序会挂载真正的根文件系统，并在其上执行后续的启动流程。
+1. 它创建了一个名为 `nixos-default` 的启动项并将它设为了默认启动项，extlinux 在启动阶段会
+   根据该配置启动 NixOS 系统
+2. 启动项中的 `LINUX` `INITRD` `FDT` 三个参数分别指定了 kernel(Image 文件)、initrd 以及设
+   备树（dtb）的位置，这三个文件我们在前面已经看到了，都在 `/boot/nixos` 下。
+   1. 根据 Linux 官方文档
+      [Using the initial RAM disk (initrd)](https://docs.kernel.org/admin-guide/initrd.html)
+      所言，在使用了 initrd 这个内存盘的情况下，Linux 的启动流程如下：
+      1. bootloader(这里是 u-boot) 根据配置加载 kernel 文件（`Image`）、dtb 设备树文件以及
+         `initrd` 文件系统，然后以设备树跟 initrd 的地址为参数启动 Kernel.
+      1. Kernel 将传入的 initrd 转换成一个内存盘并挂载为根文件系统，然后释放 initrd 的内
+         存。
+      1. Kernel 接着运行 `init` 参数指定的可执行程序，这里是
+         `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，
+         这个 init 程序会挂载真正的根文件系统，并在其上执行后续的启动流程。
       1. initrd 文件系统被移除，系统启动完毕。
-   1. `initrd` 这样一个临时的内存盘，通常用于在系统启动阶段加载一些内核中未内置但启动却必需的驱动或数据文件供 `init` 程序使用，以便后续能够挂载真正的根文件系统。
-      1. 比如说挂载一个 LUKS 加密的根文件系统，这通常会涉及到提示用户输入 passphrase、从某个地方读取解密用的 keyfile 或者与插入的 USB 硬件密钥交互，这会需要读取内核之外的 keyfile 文件、用到内核之外的加密模块、USB 驱动、HID 用户输入输出模块或者其他因为许可协议、模块大小等问题无法被静态链接到内核中的各种内核模块或程序。initrd 就是用来解决这些问题的。
+   1. `initrd` 这样一个临时的内存盘，通常用于在系统启动阶段加载一些内核中未内置但启动却必
+      需的驱动或数据文件供 `init` 程序使用，以便后续能够挂载真正的根文件系统。
+      1. 比如说挂载一个 LUKS 加密的根文件系统，这通常会涉及到提示用户输入 passphrase、从某
+         个地方读取解密用的 keyfile 或者与插入的 USB 硬件密钥交互，这会需要读取内核之外的
+         keyfile 文件、用到内核之外的加密模块、USB 驱动、HID 用户输入输出模块或者其他因为
+         许可协议、模块大小等问题无法被静态链接到内核中的各种内核模块或程序。initrd 就是用
+         来解决这些问题的。
 3. `APPEND` 参数包含有许多关键信息：
-   1. 系统的 init 程序，也就是传说中的 1 号进程（PID 1），被设置为 `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，这实际是一个 shell 脚本，我们下一步会重点分析它。
-      1. 在传统的 Linux 发行版中，init 通常使用默认值 `/sbin/init`，它会被链接到 `/lib/systemd/systemd`，也就是直接使用 systemd 作为 1 号进程。你可以在 Fedora/Ubuntu 等传统发行版中运行 `ls -al /sbin/init` 确认这一点，以及检查它们的 `/boot/grub/grub.cfs` 启动项配置，看看它们有无自定义内核的 `init` 参数。
-   1. 系统的 rootfs 分区为 `/dev/disk/by-uuid/14e19a7b-0ae0-484d-9d54-43bd6fdc20c7`，使用的文件系统为 ext4.
-   1. `earlycon`(early console) 表示在系统启动早期就启用控制台输出，这样可以在系统启动阶段通过 UAER/HDMI 等接口看到相关的启动日志，方便调试。
+   1. 系统的 init 程序，也就是传说中的 1 号进程（PID 1），被设置为
+      `/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/init`，
+      这实际是一个 shell 脚本，我们下一步会重点分析它。
+      1. 在传统的 Linux 发行版中，init 通常使用默认值 `/sbin/init`，它会被链接到
+         `/lib/systemd/systemd`，也就是直接使用 systemd 作为 1 号进程。你可以在
+         Fedora/Ubuntu 等传统发行版中运行 `ls -al /sbin/init` 确认这一点，以及检查它们的
+         `/boot/grub/grub.cfs` 启动项配置，看看它们有无自定义内核的 `init` 参数。
+   1. 系统的 rootfs 分区为 `/dev/disk/by-uuid/14e19a7b-0ae0-484d-9d54-43bd6fdc20c7`，使用
+      的文件系统为 ext4.
+   1. `earlycon`(early console) 表示在系统启动早期就启用控制台输出，这样可以在系统启动阶段
+      通过 UAER/HDMI 等接口看到相关的启动日志，方便调试。
    1. 其他参数先不管。
 
-这样一分析就能得出结论：在执行 `init` 程序之前的启动流程都未涉及到真正的根文件系统，NixOS 与其他发行版在该流程中并无明显差异。
+这样一分析就能得出结论：在执行 `init` 程序之前的启动流程都未涉及到真正的根文件系统，NixOS
+与其他发行版在该流程中并无明显差异。
 
 ### 2. 实际启动日志分析
 
 为了方便后续内容的理解，先看下 NixOS 系统在 LicheePi 4A 上的实际启动日志是个很不错的选择。
 
-按我项目中的 README 正常烧录好系统后，使用 USB 转串口工具连接到 LicheePi 4A 的 UART0 串口，然后启动系统，就能看到 NixOS 的启动日志。
+按我项目中的 README 正常烧录好系统后，使用 USB 转串口工具连接到 LicheePi 4A 的 UART0 串
+口，然后启动系统，就能看到 NixOS 的启动日志。
 
 接线示例：
 
@@ -420,18 +480,23 @@ Welcome to NixOS 23.05 (Stoat)!
 简单总结下日志中的信息：
 
 1. 整个启动流程被分成了三个阶段，分别是：
-   1. OpenSBI: 这个阶段貌似进行了一些硬件相关的初始化，比如说串口、SPI、SD 卡等，貌似还有些报错，先不管。
-   1. NixOS Stage 1: 这应该就是 `initrd` 阶段干的活，内核加载了 systemd udev 内核模块，然后使用 busybox 的 fsck 检查了根文件系统，接着挂载了根文件系统。
+   1. OpenSBI: 这个阶段貌似进行了一些硬件相关的初始化，比如说串口、SPI、SD 卡等，貌似还有
+      些报错，先不管。
+   1. NixOS Stage 1: 这应该就是 `initrd` 阶段干的活，内核加载了 systemd udev 内核模块，然
+      后使用 busybox 的 fsck 检查了根文件系统，接着挂载了根文件系统。
    1. NixOS Stage 2:
-      1. 运行了一个什么`activation script`，它首先设置好了 `/etc` 文件夹，然后检查了根分区文件系统的情况，并自动执行了分区与文件系统的扩容操作。
+      1. 运行了一个什么`activation script`，它首先设置好了 `/etc` 文件夹，然后检查了根分区
+         文件系统的情况，并自动执行了分区与文件系统的扩容操作。
       2. 接着通过 `nix-env -p /nix/vm...` 大概是切换了个运行环境。
       3. 最后启动了 systemd，这之后的流程就跟其他发行版没啥区别了（都是 systemd）。
 
 ### 3. init 程序分析
 
-有了上面这些信息，我们就可以比较容易地理解 init 这个程序了，它主要对应前面日志中的 NixOS Stage 2，即在真正挂载根文件系统之后，执行的第一个用户态程序。
+有了上面这些信息，我们就可以比较容易地理解 init 这个程序了，它主要对应前面日志中的 NixOS
+Stage 2，即在真正挂载根文件系统之后，执行的第一个用户态程序。
 
-在 NixOS 中这个 init 程序实际上是一个 shell 脚本，可以直接通过 `cat` 或者 `vim` 来查看它的内容：
+在 NixOS 中这个 init 程序实际上是一个 shell 脚本，可以直接通过 `cat` 或者 `vim` 来查看它的
+内容：
 
 ```bash
 › cat /nix/store/a5gnycsy3cq4ix2k8624649zj8xqzkxc-nixos-system-nixos-23.05.20230624.3ef8b37/init
@@ -583,16 +648,18 @@ fi
 
 简单总结下这个脚本的功能：
 
-1. 通过 `mount -o remount,ro,bind /nix/store` 将 `/nix/store` 目录重新挂载为只读，确保 Nix Store 的不可变性，从而使系统状态可复现。
+1. 通过 `mount -o remount,ro,bind /nix/store` 将 `/nix/store` 目录重新挂载为只读，确保 Nix
+   Store 的不可变性，从而使系统状态可复现。
 2. 直接开始执行 `$systemConfig/activate` 这个程序。
 3. activate 完毕后，启动真正的 1 号进程 systemd，进入后续启动流程。
 
 ### 4. activate 程序分析
 
-前面的 init 程序其实没干啥，
-根据我们看过的启动日志，大部分的功能应该都是在 `$systemConfig/activate` 这个程序中完成的。
+前面的 init 程序其实没干啥，根据我们看过的启动日志，大部分的功能应该都是在
+`$systemConfig/activate` 这个程序中完成的。
 
-再看看其中的 $systemConfig/activate 的内容，它同样是一个 shell 脚本，直接 `cat`/`vim` 查看下：
+再看看其中的 $systemConfig/activate 的内容，它同样是一个 shell 脚本，直接 `cat`/`vim` 查看
+下：
 
 ```bash
 › cat root/nix/store/71wh9lvf94i1jcd6qpqw228fy5s8fv24-nixos-system-lp4a-23.05.20230806.240472b/activate
@@ -1037,9 +1104,12 @@ exit $_status
 
 这个脚本有点长，简单总结下它干了啥：
 
-1. 通过 `source /nix/store/vn0sga6rn69vkdbs0d2njh0aig7zmzi6-mounts.sh` 挂载一些目录，看下这个文件内容就知道，挂的是 `/proc` `/sys` `/dev` `/rum` 等几个临时目录。
+1. 通过 `source /nix/store/vn0sga6rn69vkdbs0d2njh0aig7zmzi6-mounts.sh` 挂载一些目录，看下
+   这个文件内容就知道，挂的是 `/proc` `/sys` `/dev` `/rum` 等几个临时目录。
 1. 通过 `mkdir`/`install` 等指令自动创建 `/home` `/root` `/bin` `/usr` `/usr/bin` 等目录
-1. 通过 `perl /nix/store/rg5rf512szdxmnj9qal3wfdnpfsx38qi-setup-etc.pl /nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc` 配置生成 `/etc` 目录中的各种文件。
+1. 通过
+   `perl /nix/store/rg5rf512szdxmnj9qal3wfdnpfsx38qi-setup-etc.pl /nix/store/qsbx6lnsbs54yszy7d1ni7xgz6h6ayjd-etc/etc`
+   配置生成 `/etc` 目录中的各种文件。
 1. 通过 `ln` 命令添加其他各种软链接，以及一些别的设置。
 
 其中第三步 etc 目录的设置，实际数据基本都来自该脚本的第二个参数：
@@ -1106,27 +1176,35 @@ exit $_status
 ╰────┴──────────────────────────────────────────────────────────────────────────┴─────────┴────────┴──────────────╯
 ```
 
-这个 perl 脚本基本就是根据这个 nix store 中的 etc 文件夹，生成 `/etc` 目录中的各种文件或软链接。
+这个 perl 脚本基本就是根据这个 nix store 中的 etc 文件夹，生成 `/etc` 目录中的各种文件或软
+链接。
 
 ## 四、硬件驱动部分
 
-NixOS 要能在 LicheePi 4A 上正常启动，还需要有硬件固件的支持，因此光了解 NixOS 的启动流程还不够，还需要了解硬件固件的启动流程。
-这里简要介绍下 Linux 在 RISC-V 上的启动流程。
+NixOS 要能在 LicheePi 4A 上正常启动，还需要有硬件固件的支持，因此光了解 NixOS 的启动流程还
+不够，还需要了解硬件固件的启动流程。这里简要介绍下 Linux 在 RISC-V 上的启动流程。
 
 ### 1. u-boot，u-boot-spl，u-boot-tpl 的关系
 
 U-Boot 是嵌入式领域最常用的 bootloader，
 
-对于一般嵌入式系统而言只需要一个 u-boot 作为 bootloader 即可，
-但入今的嵌入式 IC 已经转向 SOC 片上系统，其内部不仅仅是一颗 CPU 核，还可能包含各种各样的其他 IP，因而相关的上层软件也需要针对性的划分不同的功能域，操作域，安全域等上层应用。
-为了支持这些复杂而碎片化的应用需求，又或者因为 SRAM 太小以致无法放下整个 bootloader，SOC 的 Boot 阶段衍生出了多级 BootLoader，u-boot 为此定义了二三级加载器:
+对于一般嵌入式系统而言只需要一个 u-boot 作为 bootloader 即可，但入今的嵌入式 IC 已经转向
+SOC 片上系统，其内部不仅仅是一颗 CPU 核，还可能包含各种各样的其他 IP，因而相关的上层软件也
+需要针对性的划分不同的功能域，操作域，安全域等上层应用。为了支持这些复杂而碎片化的应用需
+求，又或者因为 SRAM 太小以致无法放下整个 bootloader，SOC 的 Boot 阶段衍生出了多级
+BootLoader，u-boot 为此定义了二三级加载器:
 
 - spl：Secondary Program Loader，二级加载器
 - tpl：Tertiary Program Loader，三级加载器
 
-spl 和 tpl 走 u-boot 完全相同的 boot 流程，不过在 spl 和 tpl 中大多数驱动和功能被去除了，根据需要只保留一部分 spl 和 tpl 需要的功能，通过 CONFIG_SPL_BUILD 和 CONFIG_TPL_BUILD 控制；一般只用 spl 就足够了，spl 完成 ddr 初始化，并完成一些外设驱动初始化，比如 usb，emmc，以此从其他外围设备加载 u-boot，但是如果对于小系统 spl 还是太大了，则可以继续加入 tpl，tpl 只做 ddr 等的特定初始化保证代码体积极小，以此再次从指定位置加载 spl，spl 再去加载 u-boot。
+spl 和 tpl 走 u-boot 完全相同的 boot 流程，不过在 spl 和 tpl 中大多数驱动和功能被去除了，
+根据需要只保留一部分 spl 和 tpl 需要的功能，通过 CONFIG_SPL_BUILD 和 CONFIG_TPL_BUILD 控
+制；一般只用 spl 就足够了，spl 完成 ddr 初始化，并完成一些外设驱动初始化，比如 usb，emmc，
+以此从其他外围设备加载 u-boot，但是如果对于小系统 spl 还是太大了，则可以继续加入 tpl，tpl
+只做 ddr 等的特定初始化保证代码体积极小，以此再次从指定位置加载 spl，spl 再去加载 u-boot。
 
-LicheePi4A 就使用了二级加载器，它甚至写死了 eMMC 的分区表，要求我们使用 fastboot 往对应的分区写入 u-boot-spl.bin，官方给出的命令如下：
+LicheePi4A 就使用了二级加载器，它甚至写死了 eMMC 的分区表，要求我们使用 fastboot 往对应的
+分区写入 u-boot-spl.bin，官方给出的命令如下：
 
 ```bash
 # flash u-boot into spl partition
@@ -1142,65 +1220,90 @@ sudo fastboot flash uboot u-boot-with-spl.bin
 
 {{<figure src="./current-riscv-boot-flow.webp" title="RISCV 开发版当前的引导流程" width="80%">}}
 
-根据我们前面的 NixOS 启动日志，跟这个图还是比较匹配的，但我们没观察到任何 U-Boot 日志，有可能是因为 U-Boot 没开日志，暂时不打算细究。
+根据我们前面的 NixOS 启动日志，跟这个图还是比较匹配的，但我们没观察到任何 U-Boot 日志，有
+可能是因为 U-Boot 没开日志，暂时不打算细究。
 
 ### 3. OpenSBI
 
-前面的 NixOS 启动日志跟启动流程图中都出现了 OpenSBI，那么 OpenSBI 是什么呢？
-为什么 ARM 开发版的启动流程中没有这么个玩意儿？
+前面的 NixOS 启动日志跟启动流程图中都出现了 OpenSBI，那么 OpenSBI 是什么呢？为什么 ARM 开
+发版的启动流程中没有这么个玩意儿？
 
-查了下资料，大概是说因为 RISC-V 是一个开放指令集，任何人都可以基于 RISC-V 开发自己的定制指令集，或者定制 IC 布局。
-这显然存在很明显的碎片化问题。
-OpenSBI 就是为了避免此问题而设计的，
-它提供了一个标准的接口，即 Supervisor Binary Interface, SBI.
-上层系统只需要适配 SBI 就可以了，不需要关心底层硬件的细节。
-IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI 的上层系统能在其硬件平台上正常运行。
+查了下资料，大概是说因为 RISC-V 是一个开放指令集，任何人都可以基于 RISC-V 开发自己的定制指
+令集，或者定制 IC 布局。这显然存在很明显的碎片化问题。OpenSBI 就是为了避免此问题而设计的，
+它提供了一个标准的接口，即 Supervisor Binary Interface, SBI. 上层系统只需要适配 SBI 就可以
+了，不需要关心底层硬件的细节。IC 开发商也只需要实现 SBI 的接口，就可以让任何适配了 SBI 的
+上层系统能在其硬件平台上正常运行。
 
-而 OpenSBI 则是 SBI 标准的一个开源实现，IC 开发商只需要将 OpenSBI 移植到自己的硬件平台上即可支持 SBI 标准。
+而 OpenSBI 则是 SBI 标准的一个开源实现，IC 开发商只需要将 OpenSBI 移植到自己的硬件平台上即
+可支持 SBI 标准。
 
-而 ARM 跟 X86 等指令集则是封闭的，不允许其他公司修改与拓展其指令集，因此不存在碎片化的问题，也就不需要 OpenSBI 这样的东西。
+而 ARM 跟 X86 等指令集则是封闭的，不允许其他公司修改与拓展其指令集，因此不存在碎片化的问
+题，也就不需要 OpenSBI 这样的东西。
 
 ### 4. fw_dynamic.bin 跟 u-boot-spl.bin 两个文件
 
 1. `fw_dynamic.bin`: 我们 NixOS 镜像的 `/boot` 中就有这个固件，它是 OpenSBI 的编译产物。
-   1. RevyOS 的定制 OpenSBI 构建方法：<https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml>
+   1. RevyOS 的定制 OpenSBI 构建方
+      法：<https://github.com/revyos/thead-opensbi/blob/lpi4a/.github/workflows/build.yml>
 2. `u-boot-spl.bin`: 这个文件是 u-boot 的编译产物，它是二级加载器。
-   1. RevyOS 的定制 u-boot 构建方法：<https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml>
+   1. RevyOS 的定制 u-boot 构建方
+      法：<https://github.com/revyos/thead-u-boot/blob/lpi4a/.github/workflows/build.yml>
 
 ### 5. T-Head 官方的编译工具链
 
-因为历史原因，TH1520 设计时貌似 RVV 还没出正式的规范，因此它使用了一些非标准的指令集，GCC 官方貌似宣称了永远不会支持这些指令集...（个人理解，可能有误哈）
+因为历史原因，TH1520 设计时貌似 RVV 还没出正式的规范，因此它使用了一些非标准的指令集，GCC
+官方貌似宣称了永远不会支持这些指令集...（个人理解，可能有误哈）
 
 因此为了获得最佳性能，LicheePi4A 官方文档建议使用 T-Head 提供的工具链编译整个系统。
 
-但我在研究了 NixOS 的工具链实现，以及咨询了 @NickCao 后，确认了在 NixOS 上这几乎是不可行的。
-NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔改，要在 NixOS 上使用 T-Head 的工具链，就要使这一堆魔改的东西在 T-Head 的工具链上也能 Work，这个工作量很大，也很有技术难度。
+但我在研究了 NixOS 的工具链实现，以及咨询了 @NickCao 后，确认了在 NixOS 上这几乎是不可行
+的。NixOS 因为不遵循 FHS 标准，它对 GCC 等工具链做了非常多的魔改，要在 NixOS 上使用 T-Head
+的工具链，就要使这一堆魔改的东西在 T-Head 的工具链上也能 Work，这个工作量很大，也很有技术
+难度。
 
-所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一些标准工具链上的编译问题。
+所以最终选择了用 NixOS 的标准工具链编译系统，@revy 老师也为此帮我做了些适配工作，解决了一
+些标准工具链上的编译问题。
 
-Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关信息：<https://github.com/ryan4yin/nixos-licheepi4a/issues/14>
+Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关信
+息：<https://github.com/ryan4yin/nixos-licheepi4a/issues/14>
 
 ## 五、我是如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像的
 
-到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了，
-**NixOS 跟其他传统发行版在启动流程中最大的区别是它自定义了一个 init 脚本，在启动 systemd 之前，它会先执行这个脚本进行文件系统的初始化操作，准备好最基础的 FHS 目录结构，使得后续的 systemd 以及其他服务能正常启动**。
-正是因为这个 init 脚本，NixOS 才能在仅有 `/boot` 与 `/nix` 这两个目录的情况下正常启动整个系统。
+到这里，NixOS 在 LicheePI4A 上启动的整个流程就基本讲清楚了， **NixOS 跟其他传统发行版在启
+动流程中最大的区别是它自定义了一个 init 脚本，在启动 systemd 之前，它会先执行这个脚本进行
+文件系统的初始化操作，准备好最基础的 FHS 目录结构，使得后续的 systemd 以及其他服务能正常启
+动**。正是因为这个 init 脚本，NixOS 才能在仅有 `/boot` 与 `/nix` 这两个目录的情况下正常启
+动整个系统。
 
-> NixOS 数据的集中化只读存储使更多的骚操作成为可能，比如直接使用 tmpfs 作为根文件系统，将需要持久化的目录挂载到外部存储设备上，这样每次重启系统时，所有预期之外的临时数据都会被清空，进一步保证了系统的可复现性与安全性。
-> 如果你有系统洁癖，而且有兴趣折腾，那就快来看看 @LanTian 写的 [NixOS 系列（四）：「无状态」操作系统](https://lantian.pub/article/modify-computer/nixos-impermanence.lantian/) 吧~
+> NixOS 数据的集中化只读存储使更多的骚操作成为可能，比如直接使用 tmpfs 作为根文件系统，将
+> 需要持久化的目录挂载到外部存储设备上，这样每次重启系统时，所有预期之外的临时数据都会被清
+> 空，进一步保证了系统的可复现性与安全性。如果你有系统洁癖，而且有兴趣折腾，那就快来看看
+> @LanTian 写的
+> [NixOS 系列（四）：「无状态」操作系统](https://lantian.pub/article/modify-computer/nixos-impermanence.lantian/)
+> 吧~
 
 最终在 LicheePi4A 成功启动后的登录的截图：
 
 {{<figure src="./nixos-licheepi-neofetch.webp" title="NixOS 成功启动" width="80%">}}
 
-那么基于我们到目前为止学到的知识，要如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像呢？
+那么基于我们到目前为止学到的知识，要如何构建出一个可以在 LicheePi 4A 上运行的 NixOS 镜像
+呢？
 
-这个讲起来就很费时间了，涉及到了 NixOS 的[交叉编译系统](https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation)，[内核 override](https://nixos-and-flakes.thiscute.world/zh/development/kernel-development), [flakes](https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes), [镜像构建](https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix)等等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓库：<https://github.com/ryan4yin/nixos-licheepi4a>.
+这个讲起来就很费时间了，涉及到了 NixOS
+的[交叉编译系统](https://nixos-and-flakes.thiscute.world/zh/development/cross-platform-compilation)，[内核 override](https://nixos-and-flakes.thiscute.world/zh/development/kernel-development),
+[flakes](https://nixos-and-flakes.thiscute.world/zh/nixos-with-flakes/introduction-to-flakes),
+[镜像构建](https://github.com/ryan4yin/nixos-licheepi4a/blob/main/modules/sd-image/sd-image.nix)等
+等，要展开讲的话也是下一篇文章了，有兴趣的可以直接看我的 NixOS on LicheePi4A 仓
+库：<https://github.com/ryan4yin/nixos-licheepi4a>.
 
-简单的说，NixOS 跟传统 Linux 发行版的系统镜像构建思路是一致的，但因为其声明式与可复现性的特点，实际实现时出现了非常大的区别。
-以我的项目仓库为例，整个项目完全使用 Nix 语言声明式编写（内嵌了部分 Shell 脚本...），而且这份配置也可用于系统后续的持续声明式更新部署（我还给出了一个 demo）。
+简单的说，NixOS 跟传统 Linux 发行版的系统镜像构建思路是一致的，但因为其声明式与可复现性的
+特点，实际实现时出现了非常大的区别。以我的项目仓库为例，整个项目完全使用 Nix 语言声明式编
+写（内嵌了部分 Shell 脚本...），而且这份配置也可用于系统后续的持续声明式更新部署（我还给出
+了一个 demo）。
 
-最后，再推荐一波我的 NixOS 入门指南：[ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，对 NixOS 感兴趣的读者们，快进我碗里来（
+最后，再推荐一波我的 NixOS 入门指
+南：[ryan4yin/nixos-and-flakes-book](https://github.com/ryan4yin/nixos-and-flakes-book)，
+对 NixOS 感兴趣的读者们，快进我碗里来（
 
 ## 参考
 

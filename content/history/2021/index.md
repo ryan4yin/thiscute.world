@@ -34,16 +34,29 @@ comment:
 ### 2021-11-08 - 2021-11-12
 
 - 将上次 EKS 升级过程中，有问题的服务迁移到 1.21 的 EKS 集群，直接切线上流量测试。
-  - 复现了问题，通过 JFR + pods 数量监控，确认到是服务链路上的个别服务频繁扩缩容导致的，这些服务比较重，对扩缩容比较敏感。
-  - 测试在 HPA 中添加 behavior 降低缩容速率，同时添加上 PodDisruptionBudget 以避免节点回收导致大量 Pod 被回收，经测试问题基本解决。
-- 遭遇 AWS EKS 托管的控制平面故障，controller-manager 挂了一整天。现象非常奇怪，又是第一次遇到，导致长时间未排查到问题。
-  - 确认问题[来自 HPA behavior 的 Bug](https://github.com/kubernetes/kubernetes/issues/107038)
-    1. 储存于 etcd 中的 object 仅会有一个版本，透过 apiserver 读取时会转换成请求的 autoscaling API 版本。
-    2. autoscaling/v2beta2 scaleUp 及 scaleDown 对象不能为 null，并在[其 Kubernetse 代码](https://github.com/kubernetes/kubernetes/blob/6ac2d8edc8606ab387924b8b865b4a69630080e0/pkg/apis/autoscaling/v2/defaults.go#L104)可以查看到相应的检查机制。
-    3. 当使用 autoscaling/v1 时，v2beta2 版本中的相关对象字段将作为 annotation 保留，apiserver 不会检查 ScaleUp/ScaleDown 的 annotation 是否为 non-null，而导致 kube-controller-manager panic 问题。
-    4. 我们可以使用 v1 或 v2beta2 创建一个 HPA 对象，然后使用 v1 或 v2beta2 读取、更新或删除该对象。 etcd 中存储的对象只有一个版本，每当您使用 v1 或 v2beta2 获取 HPA 对象时，apiserver 从 etcd 读取它，然后将其转换为您请求的版本。
-    5. 在使用 kubectl 时，客户端将默认使用 v1(`kubectl get hpa`)，因此我们必须明确请求 v2beta2 才能使用这些功能(`kubectl get hpa.v2beta2.autoscaling`)
-    6. 如果在更新 v1 版本的 HPA 时（kubectl 默认用 v1），手动修改了 v2beta2 功能相关的 annotation 将 scaleUp/scaleDown 设为 null，会导致 controller-manager 挂掉.
+  - 复现了问题，通过 JFR + pods 数量监控，确认到是服务链路上的个别服务频繁扩缩容导致的，这
+    些服务比较重，对扩缩容比较敏感。
+  - 测试在 HPA 中添加 behavior 降低缩容速率，同时添加上 PodDisruptionBudget 以避免节点回收
+    导致大量 Pod 被回收，经测试问题基本解决。
+- 遭遇 AWS EKS 托管的控制平面故障，controller-manager 挂了一整天。现象非常奇怪，又是第一次
+  遇到，导致长时间未排查到问题。
+  - 确认问
+    题[来自 HPA behavior 的 Bug](https://github.com/kubernetes/kubernetes/issues/107038)
+    1. 储存于 etcd 中的 object 仅会有一个版本，透过 apiserver 读取时会转换成请求的
+       autoscaling API 版本。
+    2. autoscaling/v2beta2 scaleUp 及 scaleDown 对象不能为 null，并
+       在[其 Kubernetse 代码](https://github.com/kubernetes/kubernetes/blob/6ac2d8edc8606ab387924b8b865b4a69630080e0/pkg/apis/autoscaling/v2/defaults.go#L104)可
+       以查看到相应的检查机制。
+    3. 当使用 autoscaling/v1 时，v2beta2 版本中的相关对象字段将作为 annotation 保
+       留，apiserver 不会检查 ScaleUp/ScaleDown 的 annotation 是否为 non-null，而导致
+       kube-controller-manager panic 问题。
+    4. 我们可以使用 v1 或 v2beta2 创建一个 HPA 对象，然后使用 v1 或 v2beta2 读取、更新或删
+       除该对象。 etcd 中存储的对象只有一个版本，每当您使用 v1 或 v2beta2 获取 HPA 对象
+       时，apiserver 从 etcd 读取它，然后将其转换为您请求的版本。
+    5. 在使用 kubectl 时，客户端将默认使用 v1(`kubectl get hpa`)，因此我们必须明确请求
+       v2beta2 才能使用这些功能(`kubectl get hpa.v2beta2.autoscaling`)
+    6. 如果在更新 v1 版本的 HPA 时（kubectl 默认用 v1），手动修改了 v2beta2 功能相关的
+       annotation 将 scaleUp/scaleDown 设为 null，会导致 controller-manager 挂掉.
 
 ### 2021-10-23
 
@@ -72,13 +85,16 @@ comment:
 ### 2021-08-31 - 2021-09-01
 
 - 思考我在工作中遇到的一些非技术问题，寻找解法
-  - 效率：如何在没人 push 的情况下（没有外部压力），维持住高效率的工作状态（早早干完活下班它不香么？）。
+  - 效率：如何在没人 push 的情况下（没有外部压力），维持住高效率的工作状态（早早干完活下班
+    它不香么？）。
     - 建立有效的「自检」与「纠错」机制
       - 自检：
         - 列出目前已知的「异常」和「健康」两类工作状态，每日做一个对比。
         - 每日都列一下详细的工作计划，精确到小时（预留 1 小时 buffer 应对临时需求）。
-  - 沟通：遇到问题（各种意义上的问题）时，及时沟通清楚再继续推进，是一件 ROI 非常高的事。否则几乎肯定会在后面的某个节点，被这个问题坑一把。
-  - 目前的关键目标是啥？存在哪些关键问题（实现关键目标最大的阻碍）？我最近做的主要工作，是不是在为关键目标服务？
+  - 沟通：遇到问题（各种意义上的问题）时，及时沟通清楚再继续推进，是一件 ROI 非常高的事。
+    否则几乎肯定会在后面的某个节点，被这个问题坑一把。
+  - 目前的关键目标是啥？存在哪些关键问题（实现关键目标最大的阻碍）？我最近做的主要工作，是
+    不是在为关键目标服务？
   - 如何把安排到手上的事情做好？
     - 思考这件事情真正的目标的什么？
       - 比如任务是排查下某服务状态码有无问题，真正的目的应该是想知道服务有没有异常

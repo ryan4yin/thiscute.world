@@ -7,7 +7,19 @@ resources:
   - name: "featured-image"
     src: "terminal.webp"
 
-tags: ["Linux", "MacOSX", "Windows", "CLI", "Powershell", "Shell", "tmux", "rsync", "vim", "awk"]
+tags:
+  [
+    "Linux",
+    "MacOSX",
+    "Windows",
+    "CLI",
+    "Powershell",
+    "Shell",
+    "tmux",
+    "rsync",
+    "vim",
+    "awk",
+  ]
 categories: ["tech"]
 
 code:
@@ -23,8 +35,9 @@ code:
 
 > 本文主要介绍 Linux 命令，顺带介绍下 Windows/MacOSX.
 
-> 其中 awk 只需要学会些常用的用法就够了，这类命令行工具比较适合临时处理一些文本，可读性与维护性都比较差。
-> 对于需求比较复杂，而且需要长期使用的脚本，建议使用 Python/Go 等语言编写。
+> 其中 awk 只需要学会些常用的用法就够了，这类命令行工具比较适合临时处理一些文本，可读性与
+> 维护性都比较差。对于需求比较复杂，而且需要长期使用的脚本，建议使用 Python/Go 等语言编
+> 写。
 
 ## 一、Linux
 
@@ -74,7 +87,8 @@ find -maxdepth 2 -name "config.xml" -exec echo \'{}\' \; | xargs grep '<recipien
 grep -P '[\x{4e00}-\x{9f5a}]' -r .
 ```
 
-更 morden 的命令是 ripgrep，它的速度比 grep 快很多，而且默认就是正则匹配、递归搜索、高亮显示搜索结果：
+更 morden 的命令是 ripgrep，它的速度比 grep 快很多，而且默认就是正则匹配、递归搜索、高亮显
+示搜索结果：
 
 ```bash
 # 在当前文件夹递归搜索所有包含关键字 "main()" 的文件
@@ -232,7 +246,8 @@ tar czv <folder-name> | base64 > xxx
 cat "xxx" | base64 -d | tar zxv
 ```
 
-更多命令参见 [常见压缩格式的区别，及 Linux 下的压缩相关指令](https://thiscute.world/posts/compression-related-instructions-under-linux/)
+更多命令参见
+[常见压缩格式的区别，及 Linux 下的压缩相关指令](https://thiscute.world/posts/compression-related-instructions-under-linux/)
 
 ### 4. 文件拷贝与同步
 
@@ -268,8 +283,9 @@ scp -P 22 <user>@<host>:<folder-name or filename> <filename>  # 通过 scp 传�
 
 #### 2. rsync
 
-rsync 的功能其实和前面的 scp/(tar+ssh) 是一样的，将文件从一个地方拷贝到另一个地方。
-区别在于它只做增量同步，在多次拷贝文件时，只拷贝（同步）修改过的部分，很多场景下可以大大加快拷贝/备份速度。
+rsync 的功能其实和前面的 scp/(tar+ssh) 是一样的，将文件从一个地方拷贝到另一个地方。区别在
+于它只做增量同步，在多次拷贝文件时，只拷贝（同步）修改过的部分，很多场景下可以大大加快拷贝
+/备份速度。
 
 rsync 的常用命令：
 
@@ -306,15 +322,18 @@ rsync -avz --progress --delete src user@host:dest
 rsync -avz --progress --ignore-existing src user@host:dest
 ```
 
-另外也有使用双冒号 `::` 分隔的传输命令，这种命令使用 `rsync` 协议进行传输，要求目标主机启用 rsync-daemon。用得会比 ssh 少一些，暂时不做介绍。
+另外也有使用双冒号 `::` 分隔的传输命令，这种命令使用 `rsync` 协议进行传输，要求目标主机启
+用 rsync-daemon。用得会比 ssh 少一些，暂时不做介绍。
 
 rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `man rsync`.
 
 ### 5. Tmux
 
-1. 输入 `tmux` 启动一个 tmux 会话。（或者用 `tmux new -s <session-name>` 启动一个命名会话）
+1. 输入 `tmux` 启动一个 tmux 会话。（或者用 `tmux new -s <session-name>` 启动一个命名会
+   话）
 2. 输入 `python xxx.py`，python 进程开始运行。
-3. 按快捷键 `ctrl+b`，然后再按一下 `d` 脱离(detach)当前会话。此时 python 进程进入后台运行，关闭当前终端对 python 进程没有影响。
+3. 按快捷键 `ctrl+b`，然后再按一下 `d` 脱离(detach)当前会话。此时 python 进程进入后台运
+   行，关闭当前终端对 python 进程没有影响。
 4. 输入 `tmux ls` 可以查看当前正在后台运行的会话。（命名会话会显示名称，否则只显示 id）
 5. 通过 `tmux attach -t <session-name/id>` 重新接入后台会话。
    1. 缩写 `tmux a -t <session>`
@@ -361,7 +380,8 @@ prefix w # 通过数字标签选择 window
 
 ### 6. Bash Shell 基础
 
-目标：能使用 shell 编写 10 行以内的脚本。更长的脚本可以使用 Python 编写，就没必要折腾 Shell 了。
+目标：能使用 shell 编写 10 行以内的脚本。更长的脚本可以使用 Python 编写，就没必要折腾
+Shell 了。
 
 #### 1. For 循环
 
@@ -407,7 +427,8 @@ fi
 
 #### 3. Shell 脚本中的 set 指令，比如 set -x 和 set -e
 
-参见：[Shell 脚本中的 set 指令，比如 set -x 和 set -e](https://www.cnblogs.com/robinunix/p/11635560.html)
+参
+见：[Shell 脚本中的 set 指令，比如 set -x 和 set -e](https://www.cnblogs.com/robinunix/p/11635560.html)
 
 #### 4. 实用小工具
 
@@ -454,8 +475,8 @@ history
 1. 进程们分别在使用哪些端口？
 1. 我的连接数是否达到了上限？
 
-> 现在较新版本的 Ubuntu 和 CentOS 都已经使用 `iproute2` 替换掉了 `net-tools`，
-> 如果你还需要使用陈旧的 `route` `netstat` 等命令，需要手动安装 `net-tools`。
+> 现在较新版本的 Ubuntu 和 CentOS 都已经使用 `iproute2` 替换掉了 `net-tools`，如果你还需要
+> 使用陈旧的 `route` `netstat` 等命令，需要手动安装 `net-tools`。
 
 我们可以使用 ss(socket statistics) 或者 netstat 命令来查看 socket 信息:
 
@@ -541,9 +562,11 @@ sudo killall -HUP dnsmasq  # 直接发送 HUP 信号也可以
 
 Docker 容器有自己的 namespace，直接通过宿主机的 ss 命令是查看不到容器的 socket 信息的。
 
-比较直观的方法是直接通过 `docker exec` 在容器中通过 ss 命令。但是这要求容器中必须自带 ss 等程序，有的精简镜像可能不会自带它。
+比较直观的方法是直接通过 `docker exec` 在容器中通过 ss 命令。但是这要求容器中必须自带 ss
+等程序，有的精简镜像可能不会自带它。
 
-通过 `nsenter` 可以直接进入到容器的指定 namespace 中，这样就能直接查询容器网络相关的信息了。
+通过 `nsenter` 可以直接进入到容器的指定 namespace 中，这样就能直接查询容器网络相关的信息
+了。
 
 ```shell
 docker ps | grep xxx
@@ -557,7 +580,8 @@ PID=$(docker inspect --format {{.State.Pid}} $CONTAINER)
 nsenter --target $PID --net ss -s
 ```
 
-`nsenter` 这个工具貌似是 docker 自带的或者是系统内置命令，只要装了 docker，ubuntu/centos 都可以直接使用这个命令。
+`nsenter` 这个工具貌似是 docker 自带的或者是系统内置命令，只要装了 docker，ubuntu/centos
+都可以直接使用这个命令。
 
 > nsenter 是一个进入名字空间的工具，功能不仅仅局限在「网络诊断」，还有更多用法。
 
@@ -574,8 +598,9 @@ cat /etc/group | grep <group-name>
 
 ## 二、Powershell
 
-Powershell 是微软推出的一款新一代 shell，它的特点之一是，命令都有一致的命名规则：**谓词-名词**，
-谓词表示动作：Get/Set/Stop/Start 等，名词指示操作对象：Service/Member/ChildItem/Command 等。
+Powershell 是微软推出的一款新一代 shell，它的特点之一是，命令都有一致的命名规则：**谓词-名
+词**，谓词表示动作：Get/Set/Stop/Start 等，名词指示操作对
+象：Service/Member/ChildItem/Command 等。
 
 这样的命名格式使我们可以很容易地猜测到自己需要的命令的名称。
 
@@ -718,7 +743,8 @@ Remove-NetNeighbor  # 清除 MAC 地址缓存
 
 ### 4. socket 信息查询 - netstat
 
-Windows 系统和 macOS 一样，也没有 `ss`，但是自带 `netstat`，该命令和 Linux 下的 `netstat` 有一定差别，具体使用方法如下：
+Windows 系统和 macOS 一样，也没有 `ss`，但是自带 `netstat`，该命令和 Linux 下的 `netstat`
+有一定差别，具体使用方法如下：
 
 ```powershell
 netstat -?  # 查看使用帮助，很清晰易懂
@@ -746,11 +772,13 @@ route print    # 查看所有路由信息
 route print -4  # 仅 ipv4
 ```
 
-比如我们遇到端口占用问题时，就可以通过上述命令查找到端口对应的 Pid，然后使用 `kill <Pid>` 命令（powershell `stop-process` 的别名）杀死对应的进程。
+比如我们遇到端口占用问题时，就可以通过上述命令查找到端口对应的 Pid，然后使用 `kill <Pid>`
+命令（powershell `stop-process` 的别名）杀死对应的进程。
 
 ## 三、Mac OS X
 
-Mac OS X 系统也是 unix-like 系统，也使用 zsh/bash，因此大部分命令基本都跟 Linux 没啥区别，可以直接参考前面 Linux 一节的内容。
+Mac OS X 系统也是 unix-like 系统，也使用 zsh/bash，因此大部分命令基本都跟 Linux 没啥区别，
+可以直接参考前面 Linux 一节的内容。
 
 但是要注意一些坑：
 
@@ -761,7 +789,8 @@ Mac OS X 系统也是 unix-like 系统，也使用 zsh/bash，因此大部分命
 
 ### 1. 查看 socket 信息
 
-Mac OS X 系统目前没有 `ss`，但是自带 `netstat`，该命令和 Linux 下的 `netstat` 有一定差别，而且还很慢，还不能显示 pid.
+Mac OS X 系统目前没有 `ss`，但是自带 `netstat`，该命令和 Linux 下的 `netstat` 有一定差别，
+而且还很慢，还不能显示 pid.
 
 所以 stackoverflow 上更推荐使用 `lsof`，几条常用命令记录如下
 

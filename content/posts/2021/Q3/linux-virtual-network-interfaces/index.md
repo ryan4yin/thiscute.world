@@ -12,13 +12,16 @@ categories: ["tech"]
 series: ["计算机网络相关"]
 ---
 
-> 本文用到的字符画工具：[vscode-asciiflow2](https://github.com/zenghongtu/vscode-asciiflow2)
+> 本文用到的字符画工
+> 具：[vscode-asciiflow2](https://github.com/zenghongtu/vscode-asciiflow2)
 
 > 注意: 本文中使用 `ip` 命令创建或修改的任何网络配置，都是未持久化的，主机重启即消失。
 
-Linux 具有强大的虚拟网络能力，这也是 openstack 网络、docker 容器网络以及 kubernetes 网络等虚拟网络的基础。
+Linux 具有强大的虚拟网络能力，这也是 openstack 网络、docker 容器网络以及 kubernetes 网络等
+虚拟网络的基础。
 
-这里介绍 Linux 常用的虚拟网络接口类型：TUN/TAP、bridge、veth、ipvlan/macvlan、vlan 以及 vxlan/geneve.
+这里介绍 Linux 常用的虚拟网络接口类型：TUN/TAP、bridge、veth、ipvlan/macvlan、vlan 以及
+vxlan/geneve.
 
 ## 一、tun/tap 虚拟网络接口
 
@@ -26,8 +29,10 @@ tun/tap 是操作系统内核中的虚拟网络设备，他们为用户层程序
 
 普通的物理网络接口如 eth0，它的两端分别是内核协议栈和外面的物理网络。
 
-而对于 TUN/TAP 虚拟接口如 tun0，它的一端一定是连接的用户层程序，另一端则视配置方式的不同而变化，可以直连内核协议栈，也可以是某个 bridge（后面会介绍）。
-Linux 通过内核模块 TUN 提供 tun/tap 功能，该模块提供了一个设备接口 `/dev/net/tun` 供用户层程序读写，用户层程序通过 `/dev/net/tun` 读写主机内核协议栈的数据。
+而对于 TUN/TAP 虚拟接口如 tun0，它的一端一定是连接的用户层程序，另一端则视配置方式的不同而
+变化，可以直连内核协议栈，也可以是某个 bridge（后面会介绍）。Linux 通过内核模块 TUN 提供
+tun/tap 功能，该模块提供了一个设备接口 `/dev/net/tun` 供用户层程序读写，用户层程序通过
+`/dev/net/tun` 读写主机内核协议栈的数据。
 
 ```
 > modinfo tun
@@ -80,15 +85,20 @@ description:    Universal TUN/TAP device driver
 
 因为 TUN/TAP 设备的一端是内核协议栈，显然流入 tun0 的数据包是先经过本地的路由规则匹配的。
 
-路由匹配成功，数据包被发送到 tun0 后，tun0 发现另一端是通过 `/dev/net/tun` 连接到应用程序 B，就会将数据丢给应用程序 B。
+路由匹配成功，数据包被发送到 tun0 后，tun0 发现另一端是通过 `/dev/net/tun` 连接到应用程序
+B，就会将数据丢给应用程序 B。
 
-应用程序对数据包进行处理后，可能会构造新的数据包，通过物理网卡发送出去。比如常见的 VPN 程序就是把原来的数据包封装/加密一遍，再发送给 VPN 服务器。
+应用程序对数据包进行处理后，可能会构造新的数据包，通过物理网卡发送出去。比如常见的 VPN 程
+序就是把原来的数据包封装/加密一遍，再发送给 VPN 服务器。
 
 ### C 语言编程测试 TUN 设备
 
-为了使用 tun/tap 设备，用户层程序需要通过系统调用打开 `/dev/net/tun` 获得一个读写该设备的文件描述符(FD)，并且调用 `ioctl()` 向内核注册一个 TUN 或 TAP 类型的虚拟网卡(实例化一个 tun/tap 设备)，其名称可能是 `tun0/tap0` 等。
+为了使用 tun/tap 设备，用户层程序需要通过系统调用打开 `/dev/net/tun` 获得一个读写该设备的
+文件描述符(FD)，并且调用 `ioctl()` 向内核注册一个 TUN 或 TAP 类型的虚拟网卡(实例化一个
+tun/tap 设备)，其名称可能是 `tun0/tap0` 等。
 
-此后，用户程序可以通过该 TUN/TAP 虚拟网卡与主机内核协议栈（或者其他网络设备）交互。当用户层程序关闭后，其注册的 TUN/TAP 虚拟网卡以及自动生成的路由表相关条目都会被内核释放。
+此后，用户程序可以通过该 TUN/TAP 虚拟网卡与主机内核协议栈（或者其他网络设备）交互。当用户
+层程序关闭后，其注册的 TUN/TAP 虚拟网卡以及自动生成的路由表相关条目都会被内核释放。
 
 可以把用户层程序看做是网络上另一台主机，他们通过 tun/tap 虚拟网卡相连。
 
@@ -272,36 +282,48 @@ Read 84 bytes from tun/tap device
 
 ### TUN 与 TAP 的区别
 
-TUN 和 TAP 的区别在于工作的网络层次不同，用户程序通过 TUN 设备只能读写网络层的 IP 数据包，而 TAP 设备则支持读写链路层的数据包（通常是以太网数据包，带有 Ethernet headers）。
+TUN 和 TAP 的区别在于工作的网络层次不同，用户程序通过 TUN 设备只能读写网络层的 IP 数据包，
+而 TAP 设备则支持读写链路层的数据包（通常是以太网数据包，带有 Ethernet headers）。
 
 TUN 与 TAP 的关系，就类似于 socket 和 raw socket.
 
 TUN/TAP 应用最多的场景是 VPN 代理，比如:
 
 1. [clash](https://github.com/ryan4yin/clash): 一个支持各种规则的隧道，也支持 TUN 模式
-2. [tun2socks](https://github.com/xjasonlyu/tun2socks/wiki): 一个全局透明代理，和 VPN 的工作模式一样，它通过创建虚拟网卡+修改路由表，在第三层网络层代理系统流量。
+2. [tun2socks](https://github.com/xjasonlyu/tun2socks/wiki): 一个全局透明代理，和 VPN 的工
+   作模式一样，它通过创建虚拟网卡+修改路由表，在第三层网络层代理系统流量。
 
 ## 二、veth
 
 veth 接口总是成对出现，一对 veth 接口就类似一根网线，从一端进来的数据会从另一端出去。
 
-同时 veth 又是一个虚拟网络接口，因此它和 TUN/TAP 或者其他物理网络接口一样，也都能配置 mac/ip 地址（但是并不是一定得配 mac/ip 地址）。
+同时 veth 又是一个虚拟网络接口，因此它和 TUN/TAP 或者其他物理网络接口一样，也都能配置
+mac/ip 地址（但是并不是一定得配 mac/ip 地址）。
 
-其主要作用就是连接不同的网络，比如在容器网络中，用于将容器的 namespace 与 root namespace 的网桥 br0 相连。
-容器网络中，容器侧的 veth 自身设置了 ip/mac 地址并被重命名为 eth0，作为容器的网络接口使用，而主机侧的 veth 则直接连接在 docker0/br0 上面。
+其主要作用就是连接不同的网络，比如在容器网络中，用于将容器的 namespace 与 root namespace
+的网桥 br0 相连。容器网络中，容器侧的 veth 自身设置了 ip/mac 地址并被重命名为 eth0，作为容
+器的网络接口使用，而主机侧的 veth 则直接连接在 docker0/br0 上面。
 
 使用 veth 实现容器网络，需要结合下一小节介绍的 bridge，在下一小节将给出容器网络结构图。
 
 ## 三、bridge
 
-Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `bridge` 提供，它负责在所有连接到它的接口之间转发链路层数据包。
+Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `bridge` 提供，它负责在所有连接
+到它的接口之间转发链路层数据包。
 
-添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。
-在 Bridge 中会进行一个类似物理交换机的查MAC端口映射表、转发、更新MAC端口映射表这样的处理逻辑，从而数据包可以被转发到另一个接口/丢弃/广播/发往上层协议栈，由此 Bridge 实现了数据转发的功能。
+添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。在
+Bridge 中会进行一个类似物理交换机的查MAC端口映射表、转发、更新MAC端口映射表这样的处理逻
+辑，从而数据包可以被转发到另一个接口/丢弃/广播/发往上层协议栈，由此 Bridge 实现了数据转发
+的功能。
 
-如果使用 tcpdump 在 Bridge 接口上抓包，可以抓到网桥上所有接口进出的包，因为这些数据包都要通过网桥进行转发。
+如果使用 tcpdump 在 Bridge 接口上抓包，可以抓到网桥上所有接口进出的包，因为这些数据包都要
+通过网桥进行转发。
 
-与物理交换机不同的是，Bridge 本身可以设置 IP 地址，可以认为当使用 `brctl addbr br0` 新建一个 br0 网桥时，系统自动创建了一个同名的隐藏 `br0` 网络接口。`br0` 一旦设置 IP 地址，就意味着这个隐藏的 br0 接口可以作为路由接口设备，参与 IP 层的路由选择(可以使用 `route -n` 查看最后一列 `Iface`)。因此只有当 `br0` 设置 `IP` 地址时，Bridge 才有可能将数据包发往上层协议栈。
+与物理交换机不同的是，Bridge 本身可以设置 IP 地址，可以认为当使用 `brctl addbr br0` 新建一
+个 br0 网桥时，系统自动创建了一个同名的隐藏 `br0` 网络接口。`br0` 一旦设置 IP 地址，就意味
+着这个隐藏的 br0 接口可以作为路由接口设备，参与 IP 层的路由选择(可以使用 `route -n` 查看最
+后一列 `Iface`)。因此只有当 `br0` 设置 `IP` 地址时，Bridge 才有可能将数据包发往上层协议
+栈。
 
 但被添加到 Bridge 上的网卡是不能配置 IP 地址的，他们工作在数据链路层，对路由系统不可见。
 
@@ -309,8 +331,9 @@ Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `b
 
 ### 虚拟机场景（桥接模式）
 
-以 qemu-kvm 为例，在虚拟机的桥接模式下，qemu-kvm 会为每个虚拟机创建一个 tun/tap 虚拟网卡并连接到 br0 网桥。
-虚拟机内部的网络接口 `eth0` 是 qemu-kvm 软件模拟的，实际上虚拟机内网络数据的收发都会被 qemu-kvm 转换成对 `/dev/net/tun` 的读写。
+以 qemu-kvm 为例，在虚拟机的桥接模式下，qemu-kvm 会为每个虚拟机创建一个 tun/tap 虚拟网卡并
+连接到 br0 网桥。虚拟机内部的网络接口 `eth0` 是 qemu-kvm 软件模拟的，实际上虚拟机内网络数
+据的收发都会被 qemu-kvm 转换成对 `/dev/net/tun` 的读写。
 
 以发送数据为例，整个流程如下：
 
@@ -353,11 +376,14 @@ Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `b
 
 ### 跨 namespace 通信场景（容器网络，NAT 模式）
 
-> docker/podman 提供的 bridge 网络模式，就是使用 veth+bridge+iptalbes 实现的。我会在下一篇文章详细介绍「容器网络」。
+> docker/podman 提供的 bridge 网络模式，就是使用 veth+bridge+iptalbes 实现的。我会在下一篇
+> 文章详细介绍「容器网络」。
 
-由于容器运行在自己单独的 network namespace 里面，所以和虚拟机一样，它们也都有自己单独的协议栈。
+由于容器运行在自己单独的 network namespace 里面，所以和虚拟机一样，它们也都有自己单独的协
+议栈。
 
-容器网络的结构和虚拟机差不多，但是它改用了 NAT 网络，并把 tun/tap 换成了 veth，导致 docker0 过来的数据，要先经过宿主机协议栈，然后才进入 veth 接口。
+容器网络的结构和虚拟机差不多，但是它改用了 NAT 网络，并把 tun/tap 换成了 veth，导致
+docker0 过来的数据，要先经过宿主机协议栈，然后才进入 veth 接口。
 
 多了一层 NAT，以及多走了一层宿主机协议栈，都会导致性能下降。
 
@@ -393,7 +419,8 @@ Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `b
     Physical Network  (192.168.31.0/24)
 ```
 
-每创建一个新容器，都会在容器的 namespace 里新建一个 veth 接口并命令为 eth0，同时在主 namespace 创建一个 veth，将容器的 eth0 与 docker0 连接。
+每创建一个新容器，都会在容器的 namespace 里新建一个 veth 接口并命令为 eth0，同时在主
+namespace 创建一个 veth，将容器的 eth0 与 docker0 连接。
 
 可以在容器中通过 iproute2 查看到， eth0 的接口类型为 `veth`：
 
@@ -425,13 +452,18 @@ docker0         8000.0242fce99ef5       no              vethea4171a
 
 > 注意 macvlan 和 WiFi 存在兼容问题，如果使用笔记本测试，可能会遇到麻烦。
 
-> 参考文档：[linux 网络虚拟化： macvlan](https://cizixs.com/2017/02/14/network-virtualization-macvlan/)
+> 参考文
+> 档：[linux 网络虚拟化： macvlan](https://cizixs.com/2017/02/14/network-virtualization-macvlan/)
 
-macvlan 是比较新的 Linux 特性，需要内核版本 >= 3.9，它被用于在主机的网络接口（父接口）上配置多个虚拟子接口，这些子接口都拥有各自独立的 mac 地址，也可以配上 ip 地址进行通讯。
+macvlan 是比较新的 Linux 特性，需要内核版本 >= 3.9，它被用于在主机的网络接口（父接口）上配
+置多个虚拟子接口，这些子接口都拥有各自独立的 mac 地址，也可以配上 ip 地址进行通讯。
 
-macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享同一个广播域。macvlan 和 bridge 比较相似，但因为它省去了 bridge 的存在，所以配置和调试起来比较简单，而且效率也相对高。除此之外，macvlan 自身也完美支持 VLAN。
+macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享同一个广播域。macvlan 和 bridge 比
+较相似，但因为它省去了 bridge 的存在，所以配置和调试起来比较简单，而且效率也相对高。除此之
+外，macvlan 自身也完美支持 VLAN。
 
-如果希望容器或者虚拟机放在主机相同的网络中，享受已经存在网络栈的各种优势，可以考虑 macvlan。
+如果希望容器或者虚拟机放在主机相同的网络中，享受已经存在网络栈的各种优势，可以考虑
+macvlan。
 
 我会在下一篇文章对 docker 的 macvlan/ipvlan 做个分析，这里先略过了...
 
@@ -439,11 +471,15 @@ macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享
 
 > [linux 网络虚拟化： ipvlan](https://cizixs.com/2017/02/17/network-virtualization-ipvlan/)
 
-> cilium 1.9 已经提供了基于 ipvlan 的网络（beta 特性），用于替换传统的 veth+bridge 容器网络。详见 [IPVLAN based Networking (beta) - Cilium 1.9 Docs](https://docs.cilium.io/en/v1.9/gettingstarted/ipvlan/)
+> cilium 1.9 已经提供了基于 ipvlan 的网络（beta 特性），用于替换传统的 veth+bridge 容器网
+> 络。详见
+> [IPVLAN based Networking (beta) - Cilium 1.9 Docs](https://docs.cilium.io/en/v1.9/gettingstarted/ipvlan/)
 
-ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（父接口）上配置出多个虚拟的子接口。但不同的是，ipvlan 的各子接口没有独立的 mac 地址，它们和主机的父接口共享 mac 地址。
+ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（父接口）上配置出多个虚拟的子接
+口。但不同的是，ipvlan 的各子接口没有独立的 mac 地址，它们和主机的父接口共享 mac 地址。
 
-> 因为 mac 地址共享，所以如果使用 DHCP，就要注意不能使用 mac 地址做 DHCP，需要额外配置唯一的 clientID.
+> 因为 mac 地址共享，所以如果使用 DHCP，就要注意不能使用 mac 地址做 DHCP，需要额外配置唯一
+> 的 clientID.
 
 如果你遇到以下的情况，请考虑使用 ipvlan：
 
@@ -457,11 +493,13 @@ ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（�
 
 ## 六、vlan
 
-vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性问题。被隔离的广播域之间需要上升到第三层才能完成通讯。
+vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用于切分局域网，解决广播泛滥和安全性
+问题。被隔离的广播域之间需要上升到第三层才能完成通讯。
 
 常用的企业路由器如 ER-X 基本都可以设置 vlan，Linux 也直接支持了 vlan.
 
-以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。
+以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换
+机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。
 
 ## 七、vxlan/geneve {#vxlan-geneve}
 
@@ -472,17 +510,21 @@ vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用
 在介绍 vxlan 前，先说明下两个名词的含义：
 
 - **underlay 网络**：即物理网络
-- **overlay 网络**：指在现有的物理网络之上构建的虚拟网络。其实就是一种隧道技术，将原生态的二层数据帧报文进行封装后通过隧道进行传输。
+- **overlay 网络**：指在现有的物理网络之上构建的虚拟网络。其实就是一种隧道技术，将原生态的
+  二层数据帧报文进行封装后通过隧道进行传输。
 
 vxlan 与 geneve 都是 overlay 网络协议，它俩都是使用 UDP 包来封装链路层的以太网帧。
 
-vxlan 在 2014 年标准化，而 geneve 在 2020 年底才通过草案阶段，目前尚未形成最终标准。但是目前 linux/cilium 都已经支持了 geneve.
+vxlan 在 2014 年标准化，而 geneve 在 2020 年底才通过草案阶段，目前尚未形成最终标准。但是目
+前 linux/cilium 都已经支持了 geneve.
 
 geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度是可变的。
 
-目前所有 overlay 的跨主机容器网络方案，几乎都是基于 vxlan 实现的（例外：cilium 也支持 geneve）。
+目前所有 overlay 的跨主机容器网络方案，几乎都是基于 vxlan 实现的（例外：cilium 也支持
+geneve）。
 
-> 我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如 flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。
+> 我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如
+> flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。
 
 先介绍下 vxlan 的数据包结构：
 
@@ -490,16 +532,19 @@ geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度�
 
 在创建 vxlan 的 vtep 虚拟设备时，我们需要手动设置图中的如下属性：
 
-- VXLAN 目标端口：即接收方 vtep 使用的端口，这里 IANA 定义的端口是 4789，但是只有 calico 的 vxlan 模式默认使用该端口 calico，而 cilium/flannel 的默认端口都是 Linux 默认的 8472.
+- VXLAN 目标端口：即接收方 vtep 使用的端口，这里 IANA 定义的端口是 4789，但是只有 calico
+  的 vxlan 模式默认使用该端口 calico，而 cilium/flannel 的默认端口都是 Linux 默认的 8472.
 - VNID: 每个 VXLAN 网络接口都会被分配一个独立的 VNID
 
 一个点对点的 vxlan 网络架构图如下:
 
 {{< figure src="/images/linux-virtual-interfaces/vxlan-architecture.gif" title="VXLAN 点对点网络架构" >}}
 
-可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。
+可以看到每台虚拟机 VM 都会被分配一个唯一的 VNID，然后两台物理机之间通过 VTEP 虚拟网络设备
+建立了 VXLAN 隧道，所有 VXLAN 网络中的虚拟机，都通过 VTEP 来互相通信。
 
-有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个**点对点的 VXLAN 隧道**：
+有了上面这些知识，我们就可以通过如下命令在两台 Linux 机器间建立一个**点对点的 VXLAN 隧
+道**：
 
 ```shell
 # 在主机 A 上创建 VTEP 设备 vxlan0
@@ -535,8 +580,8 @@ ping 10.20.1.2
 
 点对点的 vxlan 隧道实际用处不大，如果集群中的每个节点都互相建 vxlan 隧道，代价太高了。
 
-一种更好的方式，是使用 **「组播模式」的 vxlan 隧道**，这种模式下一个 vtep 可以一次与组内的所有 vtep 建立隧道。
-示例命令如下（这里略过了如何设置组播地址 `239.1.1.1` 的信息）：
+一种更好的方式，是使用 **「组播模式」的 vxlan 隧道**，这种模式下一个 vtep 可以一次与组内的
+所有 vtep 建立隧道。示例命令如下（这里略过了如何设置组播地址 `239.1.1.1` 的信息）：
 
 ```shell
 ip link add vxlan0 type vxlan \
@@ -548,9 +593,12 @@ ip addr add 10.20.1.2/24 dev vxlan0
 ip link set vxlan0 up
 ```
 
-可以看到，只需要简单地把 local_ip/remote_ip 替换成一个组播地址就行。组播功能会将收到的数据包发送给组里的所有 vtep 接口，但是只有 VNID 能对上的 vtep 会处理该报文，其他 vtep 会直接丢弃数据。
+可以看到，只需要简单地把 local_ip/remote_ip 替换成一个组播地址就行。组播功能会将收到的数据
+包发送给组里的所有 vtep 接口，但是只有 VNID 能对上的 vtep 会处理该报文，其他 vtep 会直接丢
+弃数据。
 
-接下来，为了能让所有的虚拟机/容器，都通过 vtep 通信，我们再添加一个 bridge 网络，充当 vtep 与容器间的交换机。架构如下：
+接下来，为了能让所有的虚拟机/容器，都通过 vtep 通信，我们再添加一个 bridge 网络，充当 vtep
+与容器间的交换机。架构如下：
 
 {{< figure src="/images/linux-virtual-interfaces/linux-vxlan-with-bridge.webp" title="VXLAN 多播网络架构" >}}
 
@@ -584,21 +632,25 @@ ip netns exec container1 ip link set eth0 up
 
 ### 比组播更高效的 vxlan 实现
 
-组播最大的问题在于，因为它不知道数据的目的地，所以每个 vtep 都发了一份。如果每次发数据时，如果能够精确到对应的 vtep，就能节约大量资源。
+组播最大的问题在于，因为它不知道数据的目的地，所以每个 vtep 都发了一份。如果每次发数据时，
+如果能够精确到对应的 vtep，就能节约大量资源。
 
 另一个问题是 ARP 查询也会被组播，要知道 vxlan 本身就是个 overlay 网络，ARP 的成本也很高。
 
-上述问题都可以通过一个中心化的注册中心（如 etcd）来解决，所有容器、网络的注册与变更，都写入到这个注册中心，然后由程序自动维护 vtep 之间的隧道、fdb 表及 ARP 表.
+上述问题都可以通过一个中心化的注册中心（如 etcd）来解决，所有容器、网络的注册与变更，都写
+入到这个注册中心，然后由程序自动维护 vtep 之间的隧道、fdb 表及 ARP 表.
 
 ## 八、虚拟网络接口的速率
 
-Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。
-他们的速率是不是也像物理链路一样，存在链路层（比如以太网）协议的带宽限制呢？
+Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件模拟的网络设备。他们的速率是不是也
+像物理链路一样，存在链路层（比如以太网）协议的带宽限制呢？
 
-比如目前很多老旧的网络设备，都是只支持到百兆以太网，这就决定了它的带宽上限。
-即使是较新的设备，目前基本也都只支持到千兆，也就是 1GbE 以太网标准，那本文提到的虚拟网络接口单纯在本机内部通信，是否也存在这样的制约呢？是否也只能跑到 1GbE?
+比如目前很多老旧的网络设备，都是只支持到百兆以太网，这就决定了它的带宽上限。即使是较新的设
+备，目前基本也都只支持到千兆，也就是 1GbE 以太网标准，那本文提到的虚拟网络接口单纯在本机内
+部通信，是否也存在这样的制约呢？是否也只能跑到 1GbE?
 
-另外物理网络还存在链路层协议协商机制，将一个千兆接口与一个百兆接口连接，它们会自动协商使用百兆以太网标准进行通讯。虚拟网络接口是否也存在这样的机制呢？
+另外物理网络还存在链路层协议协商机制，将一个千兆接口与一个百兆接口连接，它们会自动协商使用
+百兆以太网标准进行通讯。虚拟网络接口是否也存在这样的机制呢？
 
 先使用 ethtool 检查看看：
 
@@ -618,7 +670,8 @@ Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件�
 # 此外 ethtool 无法检查 lo 以及 wifi 的速率，先略过不提
 ```
 
-从上面的输出能看到，虚拟接口的 `Speed` 属性都有点离谱，veth 接口显示 10Gb/s，tun0 更是离谱的 10Mb/s.
+从上面的输出能看到，虚拟接口的 `Speed` 属性都有点离谱，veth 接口显示 10Gb/s，tun0 更是离谱
+的 10Mb/s.
 
 那么事实真的如此么？话不多说，先实测一波。
 
@@ -808,8 +861,9 @@ Connecting to host 192.168.31.228, port 6201
 [  5]   0.00-10.00  sec  55.7 GBytes  47.8 Gbits/sec                  receiver
 ```
 
-总的来看，loopback、bridge、veth 这几个接口基本上是没被限速的，veth 有查到上限为 10000Mb/s（10Gb/s） 感觉也是个假数字，
-实际上测出来的数据基本在 35Gb/s 到 55Gb/s 之间，视情况浮动。
+总的来看，loopback、bridge、veth 这几个接口基本上是没被限速的，veth 有查到上限为
+10000Mb/s（10Gb/s） 感觉也是个假数字，实际上测出来的数据基本在 35Gb/s 到 55Gb/s 之间，视情
+况浮动。
 
 性能的变化和虚拟网络设备的链路和类型有关，或许和默认配置的区别也有关系。
 

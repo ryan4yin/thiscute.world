@@ -11,23 +11,25 @@ tags: ["openSUSE", "Linux"]
 categories: ["tech"]
 ---
 
-openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
-但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。
+openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。但是它的官方包管理器是专有的
+zypper，挺好用的，软件也很新。
 
-我最近从 [Manjaro](/posts/manjaro-instruction/) 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。
+我最近从 [Manjaro](/posts/manjaro-instruction/) 切换到了 openSUSE，发现 KDE 桌面确实比
+Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。
 
 <!--more-->
 
-尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
-本文算是对迁移流程做的一个总结。
+尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。本文算是对迁移流
+程做的一个总结。
 
-> 本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。
-> openSUSE 社区的大部分用户都是使用的 Tumbleweed.
-> 它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。
+> 本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源
+> 都很新。openSUSE 社区的大部分用户都是使用的 Tumbleweed. 它的硬件兼容性也要比 openSUSE
+> Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。
 
 ## 一、zypper 的基础命令
 
-zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如国内的清华源等。
+zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如
+国内的清华源等。
 
 但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：
 
@@ -56,8 +58,10 @@ sudo zypper clean  # 清理本地的包缓存
 
 ## Install Software
 
-> 这里需要用到 [OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)](https://mirrors.openSUSE.org/list/bs.html)，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
-> 建议有条件可以在路由器上加智能代理提速。
+> 这里需要用到
+> [OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)](https://mirrors.openSUSE.org/list/bs.html)，
+> 因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。建议有条件可以在路
+> 由器上加智能代理提速。
 
 安装需要用到的各类软件:
 
@@ -193,7 +197,8 @@ sudo zypper refresh
 sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime
 ```
 
-然后，从 http://flypy.ys168.com/ 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：
+然后，从 http://flypy.ys168.com/ 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件
+夹拷贝到 ~/.local/share/fcitx5/ 下：
 
 ```shell
 mv rime ~/.local/share/fcitx5/
@@ -232,7 +237,9 @@ firewall-cmd --add-port=1723/tcp --permanent
 sudo firewall-cmd --reload
 ```
 
-允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 `/etc/wireguard/xxx.conf` 就能配置 iptables 参数放行相关端口，这里就不赘述了。
+允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard
+自身的配置文件 `/etc/wireguard/xxx.conf` 就能配置 iptables 参数放行相关端口，这里就不赘述
+了。
 
 ## 触摸板手势
 
@@ -258,7 +265,8 @@ zypper in  x11-video-nvidiaG06 x11-video-nvidiaG06
 
 如果你还需要安装 CUDA 来本地炼丹，CUDA 的安装有两种方法：
 
-- 直接将 CUDA 安装在本机，可参考 [NVIDIA CUDA Installation Guide for Linux](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
+- 直接将 CUDA 安装在本机，可参考
+  [NVIDIA CUDA Installation Guide for Linux](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
 - 使用 Docker 容器炼丹，可参考 [nvidia-docker](https://github.com/NVIDIA/nvidia-docker)
 
 ## 设置代理工具
@@ -269,31 +277,40 @@ zypper in  x11-video-nvidiaG06 x11-video-nvidiaG06
 
 1. 首先 `sudo zypper in clash` 安装好 clash
 2. clash 环境配置（记不清是否得手动配置这个了...）
-   1. 下载好 [Country.mmdb](https://github.com/Dreamacro/maxmind-geoip/releases) 放到 `~/.config/clash` 中
+   1. 下载好 [Country.mmdb](https://github.com/Dreamacro/maxmind-geoip/releases) 放到
+      `~/.config/clash` 中
    2. 好像还需要下载下 clash-dashboard 到 `~/.config/clash/ui`
-3. 找到你自己的 clash 配置订阅地址（各种机场都会提供的），写个小脚本内容为 `curl "<订阅地址>" > ~/.config/clash/config.yaml`
+3. 找到你自己的 clash 配置订阅地址（各种机场都会提供的），写个小脚本内容为
+   `curl "<订阅地址>" > ~/.config/clash/config.yaml`
    1. 如果这个文件夹还没有就先创建一下
    2. 如果代理是自己搭建的，那就自己写这个配置咯
 4. 把脚本放在 PATH 中的某个目录中，方便随时调用更新
 5. 使用 tmux 后台启动 clash，代理就设置完成了
    1. 浏览器可以通过 swichomega 来设置细致的代理规则
-   2. 命令行可以直接使用 `export HTTP_PROXY=http://127.0.0.1; export HTTPS_PROXY=http://127.0.0.1` 来使用代理，大部分命令行程序都会使用这两个环境变量的配置。
-6. 一般机场给的 clash 配置都会直接开启 clash Web 配置页，可以通过 <http://localhost:9090/ui/#/proxies> 直接访问
+   2. 命令行可以直接使用
+      `export HTTP_PROXY=http://127.0.0.1; export HTTPS_PROXY=http://127.0.0.1` 来使用代
+      理，大部分命令行程序都会使用这两个环境变量的配置。
+6. 一般机场给的 clash 配置都会直接开启 clash Web 配置页，可以通过
+   <http://localhost:9090/ui/#/proxies> 直接访问
 
 ## 设置 zypper 使用 proxy 下载更新
 
-zypper 默认不会读取 `HTTP_PROXY` 跟 `HTTPS_PROXY` 等环境变量，对于一些无国内镜像的源而言，可以通过如下方式配置走代理提升下载速度（这需要你已经有本地代理才行，比如说 clash）：
+zypper 默认不会读取 `HTTP_PROXY` 跟 `HTTPS_PROXY` 等环境变量，对于一些无国内镜像的源而言，
+可以通过如下方式配置走代理提升下载速度（这需要你已经有本地代理才行，比如说 clash）：
 
 - 进入 YaST GUI
 - 在搜索框直接搜索 `proxy` 即可找到对应的配置项
-- 配置好 http 以及 https 协议的代理地址，如果是本地的 clash，可以直接填 `http://127.0.0.1:7890`
+- 配置好 http 以及 https 协议的代理地址，如果是本地的 clash，可以直接填
+  `http://127.0.0.1:7890`
 - 在「No Proxy Domains」中添加国内镜像源地址，使它们不要走代理
-  - 如果是跟我的教程走的，应该需要将这个值改成 `localhost,127.0.0.1,mirrors.bfsu.edu.cn,mirrors.aliyun.com`
+  - 如果是跟我的教程走的，应该需要将这个值改成
+    `localhost,127.0.0.1,mirrors.bfsu.edu.cn,mirrors.aliyun.com`
 
 ### KDE Connect
 
-KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共享文件夹、通知同步等等。
-总而言之非常好用，只要手机和 PC 处于同一个局域网就行，不需要什么数据线。
+KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共
+享文件夹、通知同步等等。总而言之非常好用，只要手机和 PC 处于同一个局域网就行，不需要什么数
+据线。
 
 如果安装系统时选择了打开防火墙，KDE Connect 是连不上的，需要手动开放端口号：
 
@@ -313,8 +330,11 @@ sudo firewall-cmd --list-all
 
 目前存在的 Bug:
 
-- [ ] Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。
-  - 如果你有 ROOT 权限，可以参考 [Fix clipboard permission on Android 10](https://szclsya.me/posts/android/fix-clipboard-android-10/) 的方法，安装 ClipboardWhitelist 来打开权限。
+- [ ] Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法
+      反向同步。
+  - 如果你有 ROOT 权限，可以参考
+    [Fix clipboard permission on Android 10](https://szclsya.me/posts/android/fix-clipboard-android-10/)
+    的方法，安装 ClipboardWhitelist 来打开权限。
   - 否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。
 
 ### VPN 连接与其他防火墙相关配置
@@ -341,7 +361,8 @@ sudo firewall-cmd --list-all
 
 允许使用 wireguard 协议：
 
-此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件 `/etc/wireguard/xxx.conf` 就能配置 iptables 参数放行相关端口，这里就不赘述了。
+此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件
+`/etc/wireguard/xxx.conf` 就能配置 iptables 参数放行相关端口，这里就不赘述了。
 
 ### OpenSSH 服务
 
@@ -359,7 +380,8 @@ sudo systemctl status sshd
 
 显然密钥登录才足够安全，这里介绍下我如何设置密钥登录。
 
-先生成密钥对（如果你常用 github，本地应该已经有密钥对了，可以考虑直接使用同一个密钥对，这样就能跳过这一步）：
+先生成密钥对（如果你常用 github，本地应该已经有密钥对了，可以考虑直接使用同一个密钥对，这
+样就能跳过这一步）：
 
 ```shell
 # 或者直接命令行指定密钥算法类型(-t)、名称与路径(-f)、注释(-C)、密钥的保护密码(-P)。
@@ -368,7 +390,8 @@ sudo systemctl status sshd
 ssh-keygen -t ed25519 -f id_rsa_for_xxx -C "ssh key for xxx" -P ''
 ```
 
-接下来需要把公钥追加到主机的 `$HOME/.ssh/authorized_keys` 文件的末尾（`$HOME` 是 user 的家目录，不是 root 的家目录，请看清楚了）：
+接下来需要把公钥追加到主机的 `$HOME/.ssh/authorized_keys` 文件的末尾（`$HOME` 是 user 的家
+目录，不是 root 的家目录，请看清楚了）：
 
 ```shell
 # 方法一，手动将公钥添加到 ~/.ssh/authorized_keys 中
@@ -398,7 +421,8 @@ openSUSE 的 OpenSSH 服务默认是允许密码登录的，虽然也有登录�
 
 请取消注释并修改 `/usr/etc/ssh/sshd_config` 中如下参数的值：
 
-> 注意 OpenSSH 的主配置文件是 `/usr/etc/ssh/sshd_config`，而不是大部分 Linux 发行版使用的 `/etc/ssh/sshd_config`。
+> 注意 OpenSSH 的主配置文件是 `/usr/etc/ssh/sshd_config`，而不是大部分 Linux 发行版使用的
+> `/etc/ssh/sshd_config`。
 
 ```conf
 # 安全相关配置
@@ -431,7 +455,8 @@ ssh -o PubkeyAuthentication=no user@host
 
 ### firewall 防火墙介绍
 
-firewall 是 SUSE/RedHat 等 RPM 发行版使用的防火墙程序，它底层使用的是 iptables/nftables，常用命令如下：
+firewall 是 SUSE/RedHat 等 RPM 发行版使用的防火墙程序，它底层使用的是 iptables/nftables，
+常用命令如下：
 
 ```bash
 systemctl enable firewalld   # 启用 firewalld 服务，即打开「开机自启」功能
@@ -456,4 +481,5 @@ sudo firewall-cmd --list-all
 
 ## 其他设置
 
-从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。
+从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行
+为」-「常规行为」-「点击行为」中修改。

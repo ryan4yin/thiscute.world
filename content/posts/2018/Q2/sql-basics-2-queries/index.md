@@ -11,13 +11,16 @@ tags: ["SQL", "数据库", "Database"]
 categories: ["tech"]
 ---
 
-> 本笔记整理自[《SQL 基础教程》](https://book.douban.com/subject/24841239/)、[《MySQL 必知必会》](https://book.douban.com/subject/3354490/)和网上资料。个人笔记不保证正确。
+> 本笔记整理
+> 自[《SQL 基础教程》](https://book.douban.com/subject/24841239/)、[《MySQL 必知必会》](https://book.douban.com/subject/3354490/)和
+> 网上资料。个人笔记不保证正确。
 
 ## 一、复杂查询
 
 ### 视图
 
-将 SELECT 查询包装成一个虚拟表，该虚拟表就被称为视图。（因为只是一个包装，因此视图的数据也会随着原表的更新而更新）
+将 SELECT 查询包装成一个虚拟表，该虚拟表就被称为视图。（因为只是一个包装，因此视图的数据也
+会随着原表的更新而更新）
 
 1. 用途：
    1. 简化复杂的SQL查询，用它替换子查询，能降低查询的嵌套深度。
@@ -32,7 +35,10 @@ CREATE VIEW <视图名称>
     <SELECT 语句>;
 ```
 
-其中 SELECT 的结果列和视图列名一一对应。3. 视图的限制 1. 视图的 SELECT 子句，不能包含 ORDER BY 子句。因为视图也是表，而表是集合，它没有顺序。（也有些DB支持该用法，但不通用）1. 视图的更新：只在很有限的条件下，才能在视图上使用 INSERT/DELETE/UPDATE 这样的变更数据的语句。（**视图应该只用于检索，能不更新就不要更新它**）4. 删除视图：`DROP VIEW <视图名称>;`
+其中 SELECT 的结果列和视图列名一一对应。3. 视图的限制 1. 视图的 SELECT 子句，不能包含
+ORDER BY 子句。因为视图也是表，而表是集合，它没有顺序。（也有些DB支持该用法，但不通用）1.
+视图的更新：只在很有限的条件下，才能在视图上使用 INSERT/DELETE/UPDATE 这样的变更数据的语
+句。（**视图应该只用于检索，能不更新就不要更新它**）4. 删除视图：`DROP VIEW <视图名称>;`
 
 ### 子查询
 
@@ -46,7 +52,8 @@ SELECT ...
     ...
 ```
 
-上面的查询的 FROM 子句中，给另一 SELECT 子句定义了一个别名，并将它作为了查询对象。这就是一个子查询。
+上面的查询的 FROM 子句中，给另一 SELECT 子句定义了一个别名，并将它作为了查询对象。这就是一
+个子查询。
 
 子查询不仅能用于 FROM，还能用在 WHERE 子句等很多地方。
 
@@ -89,7 +96,9 @@ SELECT ...
    - EXTRACT(unit FROM date) 截取日期元素，unit 可为 `YEAR` `MONTH` `HOUR` 等等
 1. [转换函数](https://dev.mysql.com/doc/refman/5.7/en/cast-functions.html)
    - CAST(expr AS type) 将 expr 的结果转换成 type 类型
-   - [COALESCE(value,...)](https://dev.mysql.com/doc/refman/5.7/en/comparison-operators.html#function_coalesce) 从左往右扫描，返回第一个非 NULL 的值。常用于将 NULL 转换为其他值。eg. COALESCE(sth, 1) 如果 sth 为 NULL 就会返回1.
+   - [COALESCE(value,...)](https://dev.mysql.com/doc/refman/5.7/en/comparison-operators.html#function_coalesce)
+     从左往右扫描，返回第一个非 NULL 的值。常用于将 NULL 转换为其他值。eg.
+     COALESCE(sth, 1) 如果 sth 为 NULL 就会返回1.
 1. 聚合函数：基本就五个，已经学过了。
 
 ### 谓词
@@ -120,7 +129,10 @@ SELECT name
 - BETWEEN：范围匹配，eg. `BETWEEN 1 AND 10`
 - IS NULL、IS NOT NULL
 - IN、NOT IN：是否在某集合内
-- EXISTS、NOT EXISTS（比较难的一个，入门阶段不要求）：该谓词比较特殊，只需要右侧一个参数，**而且该参数绝大多数情况下，都是一个关联子查询**。而且该子查询的SELECT子句的参数基本可以随意，通常使用`SELECT *`. 对于子查询有返回值的列，它返回True，否则返回False. 但要注意为 NULL 时返回 UNKNOW.（而 WHERE 只认 True）
+- EXISTS、NOT EXISTS（比较难的一个，入门阶段不要求）：该谓词比较特殊，只需要右侧一个参
+  数，**而且该参数绝大多数情况下，都是一个关联子查询**。而且该子查询的SELECT子句的参数基本
+  可以随意，通常使用`SELECT *`. 对于子查询有返回值的列，它返回True，否则返回False. 但要注
+  意为 NULL 时返回 UNKNOW.（而 WHERE 只认 True）
 
 ### CASE 表达式
 
@@ -182,7 +194,8 @@ SELECT ...
     WHERE filter_condition;
 ```
 
-使用 跟在 INNER JOIN 子句后的 ON 子句指定联结条件。（这里我特意用了括号，表示 JOIN 和 ON 两个子句是配套的）
+使用 跟在 INNER JOIN 子句后的 ON 子句指定联结条件。（这里我特意用了括号，表示 JOIN 和 ON
+两个子句是配套的）
 
 也有另一个很常用的语法（但是现在已经不推荐使用）：
 
@@ -193,13 +206,15 @@ SELECT ...
         AND filter_condition;
 ```
 
-对于 shop 表中有多行对应同一个 product 的情况（有多人购买了同一款商品），结果中该 product 会被复制给 shop 中的多个购买记录。（也就是说该 product 会变成多行）
+对于 shop 表中有多行对应同一个 product 的情况（有多人购买了同一款商品），结果中该 product
+会被复制给 shop 中的多个购买记录。（也就是说该 product 会变成多行）
 
 > INNER 可以省略，也就是说只写 JOIN，就默认是 INNER JOIN
 
 #### 外联(OUTER JOIN)
 
-> **外联以某表为主表，将另一表的列联结到该表**。另一表没有值的列，就用 NULL 代替。使用`LEFT` 或 `RIGHT`指定主表。（两个关键字都能实现同样的效果，不过用 LEFT 的多一些）
+> **外联以某表为主表，将另一表的列联结到该表**。另一表没有值的列，就用 NULL 代替。使
+> 用`LEFT` 或 `RIGHT`指定主表。（两个关键字都能实现同样的效果，不过用 LEFT 的多一些）
 
 语法：
 
@@ -209,7 +224,8 @@ SELECT ...
         ON product.p_id = shop.p_id;
 ```
 
-这和内联很相似，差别只是联结关键词改成了`LEFT OUTER JOIN`。这表示以左边的表为主表，把右边的表的内容联结上去。因此左表的所有列都会出现在结果集中。
+这和内联很相似，差别只是联结关键词改成了`LEFT OUTER JOIN`。这表示以左边的表为主表，把右边
+的表的内容联结上去。因此左表的所有列都会出现在结果集中。
 
 多表联查举例：
 
@@ -232,11 +248,11 @@ select distinct batches.identity_number as '登录失败账号', accounts.passwo
 
 ## 画外：字段引用符号
 
-如果数据库的字段名/数据库名/表名可能和数据库关键字重复，就需要用引用符号将他们引用起来，消除歧义。
+如果数据库的字段名/数据库名/表名可能和数据库关键字重复，就需要用引用符号将他们引用起来，消
+除歧义。
 
-MySQL 中经常用反引号干这个事。
-而 SQL Server 则使用方括号。
-标准 SQL 使用双引号。在看到这些符号时要知道这些差别。
+MySQL 中经常用反引号干这个事。而 SQL Server 则使用方括号。标准 SQL 使用双引号。在看到这些
+符号时要知道这些差别。
 
 ## 查询语句分析
 
@@ -246,7 +262,8 @@ MySQL 中经常用反引号干这个事。
 
 ### 隐式类型转换
 
-在MySQL中，当操作符与不同类型的操作数一起使用时，会发生类型转换以使操作数兼容。则会发生隐式类型转换。
+在MySQL中，当操作符与不同类型的操作数一起使用时，会发生类型转换以使操作数兼容。则会发生隐
+式类型转换。
 
 隐式类型转换会导致查询不会走索引！！！可能会严重拖累性能。另外还可能会导致各种奇怪的问题。
 

@@ -33,30 +33,38 @@ comment:
     enable: false
 ---
 
-> 2024-01-28 更新：换了新 Macbook Pro 之后，我又重新把 yabai 装上了，目前体验还不错，比 23 年好了不少。
-> 另外我新的配置完全基于 nix-darwin 部署，内容也有些改动，有兴趣的可以看看：[ryan4yin/nix-config/darwin/wm](https://github.com/ryan4yin/nix-config/tree/main/modules/darwin/wm)
-> 附上 nix-darwin 新手起步模板 [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter)
+> 2024-01-28 更新：换了新 Macbook Pro 之后，我又重新把 yabai 装上了，目前体验还不错，比 23
+> 年好了不少。另外我新的配置完全基于 nix-darwin 部署，内容也有些改动，有兴趣的可以看
+> 看：[ryan4yin/nix-config/darwin/wm](https://github.com/ryan4yin/nix-config/tree/main/modules/darwin/wm)
+> 附上 nix-darwin 新手起步模板
+> [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter)
 
-在 Linux 上用了一段时间 i3wm 后，我就有点忍受不了工作电脑的桌面环境了，公司给配的是 Macbook Pro 2020，一番查找发现 yabai 比较符合我的需求，于是开始了折腾之旅。
+在 Linux 上用了一段时间 i3wm 后，我就有点忍受不了工作电脑的桌面环境了，公司给配的是
+Macbook Pro 2020，一番查找发现 yabai 比较符合我的需求，于是开始了折腾之旅。
 
 ## 使用体验总结
 
 我的电脑配置为 Macbook Pro 2020，i5 + 16G RAM + 512G Disk，性能尚可。
 
-一句话总结：体验还不错，但是还不太成熟，Bug 比较多，而且有点吃性能，安装 yabai 后偶尔就会卡顿一下。
+一句话总结：体验还不错，但是还不太成熟，Bug 比较多，而且有点吃性能，安装 yabai 后偶尔就会
+卡顿一下。
 
 自动分屏 + 快捷键自动调整窗口的体验还是很舒服的，劝退我的主要是如下这些问题：
 
 1. 对有些软件，比如企业微信、微信、QQ，自动分屏功能不太行，会出现窗口错位。
 2. 如下两个问题逼着我一会儿进入全屏模式，一会儿又要退出全屏，简直离谱。
    1. 全屏下 Chrome 搜索框下方的提示栏被会 Chrome 本身遮挡，必须退出全屏功能才能看到。
-   2. 非全屏下，Chrome 页面中的输入框「自动填充」功能会被 Chrome 遮挡，必须进入全屏模式才能看到...
-3. 在右键修改 Firefox Bookmark 中标签时，弹出的修改菜单会被 Bookmark 收藏夹本身的弹窗遮挡，导致有些选项无法点击到。
+   2. 非全屏下，Chrome 页面中的输入框「自动填充」功能会被 Chrome 遮挡，必须进入全屏模式才
+      能看到...
+3. 在右键修改 Firefox Bookmark 中标签时，弹出的修改菜单会被 Bookmark 收藏夹本身的弹窗遮
+   挡，导致有些选项无法点击到。
 4. 开始使用 yabai 后，系统经常性地卡顿，或者风扇狂转，说明这玩意儿有点吃性能。
 
 ## 安装流程
 
-首先参考这篇官方 Wiki [Disabling System Integrity Protection](https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection) 关闭 SIP，然后参照如下流程安装 yabai 与 skhd。
+首先参考这篇官方 Wiki
+[Disabling System Integrity Protection](https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection)
+关闭 SIP，然后参照如下流程安装 yabai 与 skhd。
 
 ```shell
 # 安装yabai
@@ -83,7 +91,8 @@ sudo visudo -f /private/etc/sudoers.d/yabai
 <user> ALL=(root) NOPASSWD: sha256:<hash> <yabai> --load-sa
 ```
 
-上面就完成了安装流程，但是到这里还不能使用，还需要为 skhd 与 yabai 添加配置文件，并添加自定义配置。
+上面就完成了安装流程，但是到这里还不能使用，还需要为 skhd 与 yabai 添加配置文件，并添加自
+定义配置。
 
 ```shell
 # 创建yabai配置文件
@@ -105,7 +114,8 @@ EOF
 
 ## 自定义 skhd 与 yabai 配置
 
-这里配置的目标是，尽量与 i3wm 的默认快捷键保持一致，因为我在家用的是 Linux，只有办公电脑是 Mac.
+这里配置的目标是，尽量与 i3wm 的默认快捷键保持一致，因为我在家用的是 Linux，只有办公电脑是
+Mac.
 
 我目前的 `~/.yabairc`，它用于配置 yabai 的各种行为：
 
@@ -227,8 +237,8 @@ brew services restart yabai
 brew services restart skhd
 ```
 
-现在就可以随便打开几个程序试试，正常情况下 yabai 会自动帮你分屏。
-再尝试下添加好的这些快捷键，看看是否生效。
+现在就可以随便打开几个程序试试，正常情况下 yabai 会自动帮你分屏。再尝试下添加好的这些快捷
+键，看看是否生效。
 
 ## 问题排查
 
@@ -266,11 +276,13 @@ skhd -c ~/.skhdrc
 #27:7 expected modifier
 ```
 
-提示我配置的第 27 行配置有问题，我就去看了下，发现是我把 `cmd - return` 写成了 `cmd + return`，改正后再 `brew services start skhd` 重启 skhd 就好了。
+提示我配置的第 27 行配置有问题，我就去看了下，发现是我把 `cmd - return` 写成了
+`cmd + return`，改正后再 `brew services start skhd` 重启 skhd 就好了。
 
 ## 堆叠模式下的可视化
 
-yabai 在堆叠模式下的可视化效果不是很好，可以使用 [stackline](https://github.com/AdamWagner/stackline) 来改善一下。
+yabai 在堆叠模式下的可视化效果不是很好，可以使用
+[stackline](https://github.com/AdamWagner/stackline) 来改善一下。
 
 ```shell
 # stackline 依赖 hammerspoon，这是一个 macOS 桌面自动化工具
@@ -285,7 +297,8 @@ echo 'stackline = require "stackline"' >> init.lua
 echo 'stackline:init()' >> init.lua
 ```
 
-现在还需要安装下 hammerspoon 的命令行工具 hs，它用于在脚本中执行 stackline 操作，安装方法如下：
+现在还需要安装下 hammerspoon 的命令行工具 hs，它用于在脚本中执行 stackline 操作，安装方法
+如下：
 
 1. 首先搜索打开 Hamerspoon 程序，或者使用命令 `open -a "Hammerspoon"`
    1. 这里启动时会申请权限，需要手动打开下
@@ -300,7 +313,8 @@ which hs
 
 ## 使用时的常见问题与解决方法
 
-1. Chrome/WeChat 等程序的弹窗无法显示: 尝试下进入全屏或者退出全屏，总有一种场景下可以显示弹窗...
+1. Chrome/WeChat 等程序的弹窗无法显示: 尝试下进入全屏或者退出全屏，总有一种场景下可以显示
+   弹窗...
 2. ...
 
 ## 参考
