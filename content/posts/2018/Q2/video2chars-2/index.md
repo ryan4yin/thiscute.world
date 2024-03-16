@@ -39,9 +39,7 @@ src="/videos/video2chars-2/video2chars-html.webm"
 type="video/webm"
 preload="auto"
 autoplay="true"
-loop="true"
-
-> }}
+loop="true" >}}
 
 > 本文的优化仍然是针对 shell 版本的，html 版由于缺陷太大就不写文章介绍了。
 
