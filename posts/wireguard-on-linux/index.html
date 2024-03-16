@@ -51,22 +51,22 @@
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>wireguard</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>lscr.io/linuxserver/wireguard:latest</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>container_name</span><span class=p>:</span><span class=w> </span><span class=l>wireguard</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>cap_add</span><span class=p>:</span><span class=w>           
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>cap_add</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>NET_ADMIN</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>SYS_MODULE</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PUID=1000</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PGID=1000</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>TZ=Etc/UTC</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>SERVERURL=auto  </span><span class=w> </span><span class=c># 自动确定服务器的外部 IP 地址，在生成客户端配置时会用到</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>SERVERURL=auto</span><span class=w> </span><span class=c># 自动确定服务器的外部 IP 地址，在生成客户端配置时会用到</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>SERVERPORT=51820</span><span class=w> </span><span class=c># 服务端监听的端口号</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PEERS=1         </span><span class=w> </span><span class=c># 自动生成 1 个客户端配置</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PEERDNS=auto    </span><span class=w> </span><span class=c># 自动确定客户端的 DNS 服务器地址，同样是在生成客户端配置时会用到</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>INTERNAL_SUBNET=10.13.13.0   </span><span class=w> </span><span class=c># WireGuard 虚拟网络的网段</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>ALLOWEDIPS=0.0.0.0/0         </span><span class=w> </span><span class=c># 这条规则表示允许虚拟网络内的所有客户端将流量发送到此节点</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PEERS=1</span><span class=w> </span><span class=c># 自动生成 1 个客户端配置</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PEERDNS=auto</span><span class=w> </span><span class=c># 自动确定客户端的 DNS 服务器地址，同样是在生成客户端配置时会用到</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>INTERNAL_SUBNET=10.13.13.0</span><span class=w> </span><span class=c># WireGuard 虚拟网络的网段</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>ALLOWEDIPS=0.0.0.0/0</span><span class=w> </span><span class=c># 这条规则表示允许虚拟网络内的所有客户端将流量发送到此节点</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=c># 众所周知，NAT 网络需要定期发送心跳包来保持 NAT 表内容不过期，俗称连接保活。</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=c># 这里设置为 all 表示所有客户端都开启连接保活。</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PERSISTENTKEEPALIVE_PEERS=all </span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PERSISTENTKEEPALIVE_PEERS=all</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>LOG_CONFS=true</span><span class=w> </span><span class=c># 开启日志</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>./config:/config</span><span class=w>
@@ -205,8 +205,8 @@
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ ip route ls
-</span></span><span class=line><span class=cl>default via 192.168.5.201 dev eth0 proto static 
-</span></span><span class=line><span class=cl>192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.197 
+</span></span><span class=line><span class=cl>default via 192.168.5.201 dev eth0 proto static
+</span></span><span class=line><span class=cl>192.168.5.0/24 dev eth0 proto kernel scope link src 192.168.5.197
 </span></span></code></pre></td></tr></table></div></div><p>但是我们的 WireGuard 隧道已经生效了，这就说明现在我们的流量已经不是直接走上面这个默认路由表了，还有其他配置在起作用。
 往回看看前面的客户端启动日志，其中显示 wg-quick 创建了一个名为 51820 的路由表，我们来检查下这个表：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -290,7 +290,7 @@ nft 是 nftables 的命令行工具名称，所以它实际是设置了一些 nf
 </span><span class=lnt>11
 </span><span class=lnt>12
 </span><span class=lnt>13
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>ryan@ubuntu-2004-builder:~$ sudo wg show 
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>ryan@ubuntu-2004-builder:~$ sudo wg show
 </span></span><span class=line><span class=cl>interface: peer1
 </span></span><span class=line><span class=cl>  public key: HR8Kp3xWIt2rNdS3aaCk+Ss7yQqC9cn6h3WS6UK3WE0<span class=o>=</span>
 </span></span><span class=line><span class=cl>  private key: <span class=o>(</span>hidden<span class=o>)</span>

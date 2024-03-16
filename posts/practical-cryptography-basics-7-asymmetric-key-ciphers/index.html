@@ -214,7 +214,7 @@ RSA 算法以其作者（Rivest–Shamir–Adleman）的首字母命名。</p><p
 </span></span><span class=line><span class=cl>    44:e5:b2:34
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl># 查看私钥内容
-</span></span><span class=line><span class=cl>❯ cat rsa-public-key.pem 
+</span></span><span class=line><span class=cl>❯ cat rsa-public-key.pem
 </span></span><span class=line><span class=cl>-----BEGIN PUBLIC KEY-----
 </span></span><span class=line><span class=cl>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNE8QZLJZXREOeWZ2ilAzGC4Kj
 </span></span><span class=line><span class=cl>q/PfsFzrXGj8g3IaS4/J3JrBo3qEq/k9XoRzOmNPyvWCj2FAY7A099d7qX4ztthB
@@ -531,7 +531,7 @@ $$</p><p>然后再迭代计算其中各项的值，它的运算复杂度为 $log
 有限域 $\mathbb {F} _{p}$ 上的 EC 椭圆曲线方程为：</p><p>$$
 y^2 = x^3 + ax + b (\mod p), 0 \le x \le p
 $$</p><p>目前主要有两种有限域在 ECC 中被广泛应用：</p><ul><li>以素数为模的整数域: $\mathbb {F} _{p}$<ul><li>在通用处理器上计算很快</li></ul></li><li>以 2 的幂为模的整数域: $\mathbb {F} _{2^{m}}$<ul><li>当使用专用硬件时，计算速度很快</li></ul></li></ul><p>通过限制 x 为整数，并使用取模进行了映射后，椭圆曲线的形状已经面目全非了，它的加减法也不再具有几何意义。
-但是它的一些特性仍然跟椭圆曲线很类似，各种公式基本加个 $\mod p$ 就变成了它的有限域版本：</p><ul><li>无穷远点 $O_{\infty}$ 是零元，$O_{\infty} + O_{\infty} = O_{\infty}$，$O_{\infty} + P = P$</li><li>$P_{x, y}$ 的负元为 $P_{x, -y}$,，并且有 $P + (-P) = O_{\infty}$</li><li>$P * 0 = O_{\infty}$</li><li>如果 $P_{x1, y1} + Q_{x2, y2} = R_{x3, y3}$，则其坐标有如下关系<ul><li>$x3 = (k^2 - x1 - x2) \mod p$</li><li>$y3 = (k(x1 - x3) - y1) \mod p$</li><li>斜率 $k$ 的计算<ul><li>如果 $P=Q$，则 $k=\dfrac {3x^{2}+a} {2y_{1}}$</li><li>否则 $k=\dfrac {y_{2}-y_{1}} {x_{2}-x_{1}} $</li></ul></li></ul></li></ul><h4 id=ecdlp-椭圆曲线离散对数问题 class=headerLink><a href=#ecdlp-%e6%a4%ad%e5%9c%86%e6%9b%b2%e7%ba%bf%e7%a6%bb%e6%95%a3%e5%af%b9%e6%95%b0%e9%97%ae%e9%a2%98 class=header-mark></a>ECDLP 椭圆曲线离散对数问题</h4><p>前面已经介绍了椭圆曲线上的 <strong>k 倍运算</strong> 及相关的高效算法，但是我们还没有涉及到除法。</p><p>椭圆曲线上的除法是一个尚未被解决的难题——「ECDLP 椭圆曲线离散对数问题」：</p><blockquote><p>已知 $kG$ 与基点 $G$，求整数 $k$ 的值。</p></blockquote><p>目前并没有有效的手段可以快速计算出 $k$ 的值。
+但是它的一些特性仍然跟椭圆曲线很类似，各种公式基本加个 $\mod p$ 就变成了它的有限域版本：</p><ul><li>无穷远点 $O_{\infty}$ 是零元，$O_{\infty} + O_{\infty} = O_{\infty}$，$O_{\infty} + P = P$</li><li>$P_{x, y}$ 的负元为 $P_{x, -y}$,，并且有 $P + (-P) = O_{\infty}$</li><li>$P * 0 = O_{\infty}$</li><li>如果 $P_{x1, y1} + Q_{x2, y2} = R_{x3, y3}$，则其坐标有如下关系<ul><li>$x3 = (k^2 - x1 - x2) \mod p$</li><li>$y3 = (k(x1 - x3) - y1) \mod p$</li><li>斜率 $k$ 的计算<ul><li>如果 $P=Q$，则 $k=\dfrac {3x^{2}+a} {2y_{1}}$</li><li>否则 $k=\dfrac {y*{2}-y*{1}} {x*{2}-x*{1}} $</li></ul></li></ul></li></ul><h4 id=ecdlp-椭圆曲线离散对数问题 class=headerLink><a href=#ecdlp-%e6%a4%ad%e5%9c%86%e6%9b%b2%e7%ba%bf%e7%a6%bb%e6%95%a3%e5%af%b9%e6%95%b0%e9%97%ae%e9%a2%98 class=header-mark></a>ECDLP 椭圆曲线离散对数问题</h4><p>前面已经介绍了椭圆曲线上的 <strong>k 倍运算</strong> 及相关的高效算法，但是我们还没有涉及到除法。</p><p>椭圆曲线上的除法是一个尚未被解决的难题——「ECDLP 椭圆曲线离散对数问题」：</p><blockquote><p>已知 $kG$ 与基点 $G$，求整数 $k$ 的值。</p></blockquote><p>目前并没有有效的手段可以快速计算出 $k$ 的值。
 比较直观的方法应该是从基点 $G$ 开始不断进行加法运算，直到结果与 $kG$ 相等。</p><p>目前已知的 ECDLP 最快的解法所需步骤为 $\sqrt{k}$，而 <strong>k 倍运算</strong>高效算法前面已经介绍过了，所需步骤为 $log_2(k)$。
 在 $k$ 非常大的情况下，它们的计算用时将会有指数级的差距。</p><blockquote><p>椭圆曲线上的 <strong>k 倍运算</strong>与素数上的幂运算很类似，因此 ECC 底层的数学难题 ECDLP 与 RSA 的离散对数问题 DLP 也有很大相似性。</p></blockquote><h3 id=ecc-密钥对生成 class=headerLink><a href=#ecc-%e5%af%86%e9%92%a5%e5%af%b9%e7%94%9f%e6%88%90 class=header-mark></a>ECC 密钥对生成</h3><p>首先，跟 RSA 一样，让我们先看下怎么使用 openssl 生成一个使用 prime256v1 曲线的 ECC 密钥对：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -615,7 +615,7 @@ $$</p><p>目前主要有两种有限域在 ECC 中被广泛应用：</p><ul><li>
 </span></span><span class=line><span class=cl>    69:b7:c1:3f:e6:e2:00:da:a0:91:8a:7c:01:c3:5d:
 </span></span><span class=line><span class=cl>    5d:81:56:d7:72:6f:f6:8f:4c:84:c9:47:90:7a:29:
 </span></span><span class=line><span class=cl>    51:2d
-</span></span><span class=line><span class=cl>pub: 
+</span></span><span class=line><span class=cl>pub:
 </span></span><span class=line><span class=cl>    04:e4:81:08:a2:bc:34:59:4e:7e:a2:6f:d4:81:fc:
 </span></span><span class=line><span class=cl>    98:48:aa:2c:88:63:ba:1e:97:bc:87:19:2a:2f:91:
 </span></span><span class=line><span class=cl>    94:54:fc:ae:e0:b2:64:7f:0f🇩🇪f7:dc:e1:34:96:
@@ -625,7 +625,7 @@ $$</p><p>目前主要有两种有限域在 ECC 中被广泛应用：</p><ul><li>
 </span></span><span class=line><span class=cl>NIST CURVE: P-256
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 查看公钥内容</span>
-</span></span><span class=line><span class=cl>❯ cat ecc-public-key.pem 
+</span></span><span class=line><span class=cl>❯ cat ecc-public-key.pem
 </span></span><span class=line><span class=cl>-----BEGIN PUBLIC KEY-----
 </span></span><span class=line><span class=cl>MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE5IEIorw0WU5+om/UgfyYSKosiGO6
 </span></span><span class=line><span class=cl>Hpe8hxkqL5GUVPyu4LJkfw/e99zhNJatliZ1Az/yCKww5KrXC8bQ9wGQvw<span class=o>==</span>
@@ -635,7 +635,7 @@ $$</p><p>目前主要有两种有限域在 ECC 中被广泛应用：</p><ul><li>
 </span></span><span class=line><span class=cl>❯ openssl ec -noout -text -pubin -in ecc-public-key.pem
 </span></span><span class=line><span class=cl><span class=nb>read</span> EC key
 </span></span><span class=line><span class=cl>Private-Key: <span class=o>(</span><span class=m>256</span> bit<span class=o>)</span>
-</span></span><span class=line><span class=cl>pub: 
+</span></span><span class=line><span class=cl>pub:
 </span></span><span class=line><span class=cl>    04:e4:81:08:a2:bc:34:59:4e:7e:a2:6f:d4:81:fc:
 </span></span><span class=line><span class=cl>    98:48:aa:2c:88:63:ba:1e:97:bc:87:19:2a:2f:91:
 </span></span><span class=line><span class=cl>    94:54:fc:ae:e0:b2:64:7f:0f🇩🇪f7:dc:e1:34:96:

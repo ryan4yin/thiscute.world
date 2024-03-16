@@ -35,7 +35,7 @@
 </span></span><span class=line><span class=cl>  <span class=n>counter</span> <span class=o>=</span> <span class=mi>0</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=kc>True</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>    <span class=n>state</span> <span class=o>=</span> <span class=n>hmac</span><span class=o>.</span><span class=n>new</span><span class=p>(</span><span class=n>state</span><span class=p>,</span> <span class=nb>bytes</span><span class=p>(</span><span class=n>counter</span><span class=p>),</span> <span class=n>hashlib</span><span class=o>.</span><span class=n>sha1</span><span class=p>)</span><span class=o>.</span><span class=n>digest</span><span class=p>()</span>    
+</span></span><span class=line><span class=cl>    <span class=n>state</span> <span class=o>=</span> <span class=n>hmac</span><span class=o>.</span><span class=n>new</span><span class=p>(</span><span class=n>state</span><span class=p>,</span> <span class=nb>bytes</span><span class=p>(</span><span class=n>counter</span><span class=p>),</span> <span class=n>hashlib</span><span class=o>.</span><span class=n>sha1</span><span class=p>)</span><span class=o>.</span><span class=n>digest</span><span class=p>()</span>
 </span></span><span class=line><span class=cl>    <span class=n>counter</span> <span class=o>+=</span> <span class=mi>1</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=c1># 这里取余实际上是压缩了信息，某种程度上说，这可以保证内部的真实状态 state 不被逆向出来</span>

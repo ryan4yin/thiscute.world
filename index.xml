@@ -74,10 +74,10 @@
 如果你选择自己写自动化脚本或选用自动化工具，它的配置会越来越复杂，而且系统更新经常会破坏掉其中一些功能，需要你手动修复。
 此外它还高度依赖你当前的系统环境，当你某天装了台新机器然后信心满满地用它部署环境时，大概率会遇到各种环境不一致导致的错误需要手动解决。还有一点是，你写的脚本大概率并没有仔细考量抽象、模块化、错误处理等内容，这也会导致随着规模的扩大，维护它变得越来越痛苦。</p>
 <p>然后你发现了 NixOS，它有什么声明式的配置，你仔细看了下它的实现，哦这声明式的配置，不就是把一堆 bash 脚本封装了下，对用户只提供了一套简洁干净的 api 么，它实际干的活不跟我自己这几年写的一堆脚本一模一样？好像没啥新鲜的。</p>
-<p>嗯接着你试用了一下，发现  NixOS  的这套系统定制脚本都存在一个叫 Nixpkgs   的仓库中，有数千人在持续维护它，几十年积累下来已经拥有了一套非常丰富、也比较稳定的声明式抽象、模块系统、类型系统、专为这套超大型的软件包仓库与 NixOS 系统配置而开发的大规模 CI 系统 Hydra、以及逐渐形成的能满足数千人协作更新这套复杂配置的社区运营模式。</p>
+<p>嗯接着你试用了一下，发现 NixOS 的这套系统定制脚本都存在一个叫 Nixpkgs 的仓库中，有数千人在持续维护它，几十年积累下来已经拥有了一套非常丰富、也比较稳定的声明式抽象、模块系统、类型系统、专为这套超大型的软件包仓库与 NixOS 系统配置而开发的大规模 CI 系统 Hydra、以及逐渐形成的能满足数千人协作更新这套复杂配置的社区运营模式。</p>
 <p>你立马学习 nix 语言，然后动手把这套维护了 N 年的脚本改写成 NixOS 配置。</p>
 <p>越写就对它越满意，改造后的配置缩水了相当多，维护难度直线下降。</p>
-<p>很大部分以前自己用各种脚本跟工具实现的功能，都被  Nixpkgs 封装好了，只需要 enable 一下再传几个关键参数，就能无痛运行。nixpkgs 中的脚本都有专门的 maintainer  维护更新，任何发现了问题的用户也可以提个 PR 修下问题，在没经过 CI 与 staging unstable  等好几个阶段的广泛验证前，更新也不会进入 stable.</p>
+<p>很大部分以前自己用各种脚本跟工具实现的功能，都被 Nixpkgs 封装好了，只需要 enable 一下再传几个关键参数，就能无痛运行。nixpkgs 中的脚本都有专门的 maintainer 维护更新，任何发现了问题的用户也可以提个 PR 修下问题，在没经过 CI 与 staging unstable 等好几个阶段的广泛验证前，更新也不会进入 stable.</p>
 <p>上面所说的你，嗯就是我自己。</p>
 <p>现在回想下我当初就为了用 systemd 跑个简单的小工具而跟 systemd 疯狂搏斗的场景，泪目&hellip; 要是我当初就懂 NixOS&hellip;</p>
 <h2 id="nixos-declarative-configuration" class="headerLink">
@@ -217,8 +217,7 @@ Flakes 使得 NixOS 的可复现能力得到了极大的提升，新 CLI 也更�
 </ol>
 <p>另外 GitHub 的 <a href="https://github.blog/2023-11-08-the-state-of-open-source-and-ai/" target="_blank" rel="noopener noreferrer">Octoverse 2023</a> 也难得地提了一嘴 Nixpkgs:</p>
 <blockquote>
-<p>Developers see benefits to combining packages and containerization. As we noted earlier, 4.3 million repositories used Docker in 2023.<br/>
-<strong>On the other side of the coin, Linux distribution NixOS/nixpkgs has been on the top list of open source projects by contributor for the last two years</strong>.</p>
+<p>Developers see benefits to combining packages and containerization. As we noted earlier, 4.3 million repositories used Docker in 2023.<br/> &gt; <strong>On the other side of the coin, Linux distribution NixOS/nixpkgs has been on the top list of open source projects by contributor for the last two years</strong>.</p>
 </blockquote>
 <p>这些数据与我们前面提到的 Nixpkgs 与 Nix 项目的活跃度相符，都显示 Nix/NixOS 社区在 2021 年之后开始迅速增长壮大。</p>
 <p>结合上面这些数据看，我对 NixOS 的未来持很乐观的态度。</p>
