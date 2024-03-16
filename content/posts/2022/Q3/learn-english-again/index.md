@@ -3,8 +3,8 @@ title: "Learn English Again"
 date: 2022-09-04T13:22:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "english-word.webp"
+  - name: "featured-image"
+    src: "english-word.webp"
 
 tags: ["英语", "语言学习"]
 categories: ["life"]
@@ -38,7 +38,6 @@ comment:
 - **无障碍看美剧**：我的听力水平跟词汇水平大概差不多，看美剧还是得有个英文字幕，还需要提升。
 - **写英文博客**：高中毕业后就没学过语法，也没怎么练过写作，词汇量又低，我的写作能力显然还有很大的提升空间。
 
-
 ### 二、英语自学路线完全指南
 
 因为最近对英语来了电，就打算深入了解下市面上常见的英语学习路径，争取找到最佳学习路线。
@@ -67,7 +66,7 @@ comment:
 - [每日英语听写 Daily English Dictation 1-400](https://www.bilibili.com/video/BV1U7411a7xG/)
   - 这是 Youtube 上相当火的一个英语听写系列视频，做得非常棒，坚持听完 400 期，听力就神功大成了！
   - 个人感觉起码得有个 CET4 水平，才能比较舒服地跟这个课程。
-- 一些对话、角色设定、世界观设定较多的游戏也是学英语的好材料，比如「Genshin Imapct」、「DEEMO 2」，或者一些 Galgame 都可。娱乐跟英语两不误 emmm
+- 一些对话、角色设定、世界观设定较多的游戏也是学英语的好材料，比如「Genshin Impact」、「DEEMO 2」，或者一些 Galgame 都可。娱乐跟英语两不误 emmm
 
 ![](/images/learn-english-again/genshin-impact-noelle.webp "Genshin Impact 里超飒的重剑女仆 Noelle")
 
@@ -75,13 +74,11 @@ comment:
 
 ![](/images/learn-english-again/demo2-collections.webp "DEEMO 2 的一些设定")
 
-
 上面主要是针对 CET4 四级以上水平的英语学习者，如果基础比较差，可以考虑按照恶魔奶爸推荐的零基础英语学习路线进行自学：
 
 - [英语：壹章 - 恶魔奶爸](https://zhuanlan.zhihu.com/p/19768351)：针对零基础/基础超级不好的同学
 - [英语：贰章 - 恶魔奶爸](https://zhuanlan.zhihu.com/p/19768409)：针对处于英语初级阶段的同学
 - [英语：叁章 - 恶魔奶爸](https://zhuanlan.zhihu.com/p/19768454)：针对大学四六级水平的同学（就跟我上面列的差不多了）
-
 
 #### 2. 花钱抄捷径
 
@@ -161,7 +158,7 @@ comment:
 - 百词斩
   - 更适合用于趣味性背单词
 
->对很多学生党（比如大学期间的我）而言这些 APP 一年下来好几千的费用确实是难以承担，但是对我这样的工作党而言，不失为一个很好的学习手段。
+> 对很多学生党（比如大学期间的我）而言这些 APP 一年下来好几千的费用确实是难以承担，但是对我这样的工作党而言，不失为一个很好的学习手段。
 
 上述这些软件最大的优势是「互动」，这会使它比单纯自学有趣很多，更容易坚持。
 
@@ -182,7 +179,7 @@ comment:
 
 其次，如果你的上网工具能使你用上 Discord，也有一些英语学习的 Discord Server 非常值得推荐，你能在上面跟各种母语、各个国家、各种口音的朋友一起用英语聊天，体验还不错，还能交到有意思的国外朋友。
 
-英语学习 Discord Server 地址: 
+英语学习 Discord Server 地址:
 
 - <https://discord.gg/english>
 - <https://discord.gg/c-e>
@@ -193,7 +190,7 @@ comment:
 
 - [Lingoda](https://www.lingoda.com/en/): 被认为是最佳成人英语学习平台之一，它有部分课还提供了学费返还机制，可以了解下。
 - [Cambly](https://www.cambly.com/english): twitter 上推友推荐的，最流行的英语学习平台之一，真人外教一对一教学
-  - 据说打折时很便宜，优惠价只要人民币 30 元 30 分钟 
+  - 据说打折时很便宜，优惠价只要人民币 30 元 30 分钟
 - [Preply](https://preply.com/en/online/english-tutors): 我用的词汇测试站点，现在就属于这家公司的产品。据说比较专业，提供 4-5 人小组教学跟一对一教学两种学习模式
   - 貌似比较贵：$15-20 per hour
   - 你还可以在这个站点上面应聘汉语教学（有 20%-30% 的抽成，150 美刀才能提现）
@@ -228,7 +225,7 @@ comment:
   - 关键点总结：学习一门语言文字的最短最佳途径，是掌握它的词根（root），也就是那些其他单词借以形成的原生词
 - [知乎「英语学习」话题下的精华回答](https://www.zhihu.com/topic/19558435/top-answers)
 
------
+---
 
 ## 学习成果记录 - 持续更新
 
@@ -243,7 +240,6 @@ comment:
 ### 1. 词汇量
 
 词汇量测试结果按时间排序如下，使用的测试工具是 [Test Your Vocabulary](https://preply.com/en/learn/english/test-your-vocab) ：
-
 
 - 2022 年 9 月初，测试结果：4700 词（无截图）
 - 2022-10-18 词汇量测试结果：5100 词 {{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
@@ -264,5 +260,4 @@ comment:
   - 计划在 2023 年进行专门练习，未完待续...
 - 阅读能力
   - 2022 年的 4 个月里，阅读是我提升词汇量的主要手段之一，看统计读了有 15 万词，词汇量跟阅读速度都有明显提升。
-  - {{<figure src="/images/now/mintreading-first-100days-achivement.webp" title="在薄荷阅读上读完的第一本英语原版书" width="35%">}}
-
+  - {{<figure src="/images/now/mintreading-first-100days-achievement.webp" title="在薄荷阅读上读完的第一本英语原版书" width="35%">}}

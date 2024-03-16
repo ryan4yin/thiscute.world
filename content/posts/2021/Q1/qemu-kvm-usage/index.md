@@ -4,18 +4,16 @@ date: 2021-01-17T21:34:04+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "qemu-kvm-libvirt-go.webp"
+  - name: "featured-image"
+    src: "qemu-kvm-libvirt-go.webp"
 
 tags: ["虚拟化", "Visualization", "KVM", "QEMU", "libvirt"]
 categories: ["tech"]
 ---
 
-QEMU/KVM 虚拟化
----
+## QEMU/KVM 虚拟化
 
->QEMU/KVM 有一定的使用门槛，本文假设你已经拥有基础的虚拟化相关知识，最好是已经有 virtualbox 或 vmware workstation 的使用经验。
-
+> QEMU/KVM 有一定的使用门槛，本文假设你已经拥有基础的虚拟化相关知识，最好是已经有 virtualbox 或 vmware workstation 的使用经验。
 
 ## 前言
 
@@ -41,17 +39,16 @@ QEMU/KVM 虚拟化
 QEMU/KVM 环境需要安装很多的组件，它们各司其职：
 
 1. qemu: 模拟各类输入输出设备（网卡、磁盘、USB端口等）
-    - qemu 底层使用 kvm 模拟 CPU 和 RAM，比软件模拟的方式快很多。
+   - qemu 底层使用 kvm 模拟 CPU 和 RAM，比软件模拟的方式快很多。
 1. libvirt: 提供简单且统一的工具和 API，用于管理虚拟机，屏蔽了底层的复杂结构。（支持 qemu-kvm/virtualbox/vmware）
 1. ovmf: 为虚拟机启用 UEFI 支持
 1. virt-manager: 用于管理虚拟机的 GUI 界面（可以管理远程 kvm 主机）。
-2. virt-viewer: 通过 GUI 界面直接与虚拟机交互（可以管理远程 kvm 主机）。
-3. dnsmasq vde2 bridge-utils openbsd-netcat: 网络相关组件，提供了以太网虚拟化、网络桥接、NAT网络等虚拟网络功能。
-    - dnsmasq 提供了 NAT 虚拟网络的 DHCP 及 DNS 解析功能。
-    - vde2: 以太网虚拟化
-    - bridge-utils: 顾名思义，提供网络桥接相关的工具。
-    - openbsd-netcat: TCP/IP 的瑞士军刀，详见 [socat & netcat](https://thiscute.world/posts/socat-netcat/)，这里不清楚是哪个网络组件会用到它。
-
+1. virt-viewer: 通过 GUI 界面直接与虚拟机交互（可以管理远程 kvm 主机）。
+1. dnsmasq vde2 bridge-utils openbsd-netcat: 网络相关组件，提供了以太网虚拟化、网络桥接、NAT网络等虚拟网络功能。
+   - dnsmasq 提供了 NAT 虚拟网络的 DHCP 及 DNS 解析功能。
+   - vde2: 以太网虚拟化
+   - bridge-utils: 顾名思义，提供网络桥接相关的工具。
+   - openbsd-netcat: TCP/IP 的瑞士军刀，详见 [socat & netcat](https://thiscute.world/posts/socat-netcat/)，这里不清楚是哪个网络组件会用到它。
 
 安装命令：
 
@@ -86,13 +83,11 @@ sudo yast2 virtualization
 4. `virt-list-filesystems /file/xx.img`：查看文件系统信息
 5. `virt-list-partitions /file/xx.img`：查看分区信息
 6. `guestmount -a /file/xx.qcow2(raw/qcow2都支持) -m /dev/VolGroup/lv_root --rw /mnt`：直接将分区挂载到宿主机
-7. `guestfish`: 交互式 shell，可运行上述所有命令。 
+7. `guestfish`: 交互式 shell，可运行上述所有命令。
 8. `virt-v2v`: 将其他格式的虚拟机(比如 ova) 转换成 kvm 虚拟机。
 9. `virt-p2v`: 将一台物理机转换成虚拟机。
 
-
 学习过程中可能会使用到上述命令，提前安装好总不会有错，安装命令如下：
-
 
 ```shell
 # opensuse
@@ -184,11 +179,10 @@ EOF
 至此，KVM 的安装就大功告成啦，现在应该可以在系统中找到 virt-manager 的图标，进去就可以使用了。
 virt-manager 的使用方法和 virtualbox/vmware workstation 大同小异，这里就不详细介绍了，自己摸索摸索应该就会了。
 
+---
 
--------------
-
->如下内容是进阶篇，主要介绍如何通过命令行来管理虚拟机磁盘，以及 KVM。
-如果你还是 kvm 新手，建议先通过图形界面 virt-manager 熟悉熟悉，再往下继续读。
+> 如下内容是进阶篇，主要介绍如何通过命令行来管理虚拟机磁盘，以及 KVM。
+> 如果你还是 kvm 新手，建议先通过图形界面 virt-manager 熟悉熟悉，再往下继续读。
 
 ## 二、虚拟机磁盘映像管理
 
@@ -220,7 +214,7 @@ qemu-img convert -f qcow2 -O raw vm01.qcow2 vm01.img  # qcow2 => raw
 virt-v2v -i ova centos7-test01.ova -o local -os /vmhost/centos7-01  -of qcow2
 ```
 
-也可以先从 ova 中解压出 vmdk 磁盘映像，将 vmware 的  vmdk 文件转换成 qcow2 格式，然后再导入 kvm（网卡需要重新配置）：
+也可以先从 ova 中解压出 vmdk 磁盘映像，将 vmware 的 vmdk 文件转换成 qcow2 格式，然后再导入 kvm（网卡需要重新配置）：
 
 ```shell
 # 转换映像格式
@@ -241,7 +235,6 @@ img 镜像文件，就是所谓的 raw 格式镜像，也被称为裸镜像，IO
 ```shell
 qemu-img convert -f raw -O qcow2 vm01.img vm01.qcow2
 ```
-
 
 ## 三、虚拟机管理
 
@@ -266,7 +259,7 @@ GUI 很傻瓜式，就不介绍了，这里主要介绍命令行工具 `virsh`/`
 `qemu:///system` 是系统全局的 qemu 环境，而 `qemu:///session` 的环境是按用户隔离的。
 另外 `qemu:///session` 没有默认的 `network`，创建虚拟机时会出毛病。。。
 
-因此，你需要将默认的 URI 改为 `qemu:///system`，否则绝对会被坑: 
+因此，你需要将默认的 URI 改为 `qemu:///system`，否则绝对会被坑:
 
 ```shell
 echo 'export LIBVIRT_DEFAULT_URI="qemu:///system"' >> ~/.bashrc
@@ -300,10 +293,9 @@ $ sudo virsh net-list --all
  default   active   yes         yes
 ```
 
-
 也可以创建新的虚拟机网络，这需要手动编写网络的 xml 配置，然后通过 `virsh net-define --file my-network.xml` 创建，这里就不详细介绍了，因为暂时用不到...
 
-### 2. 创建虚拟机 - virt-intall
+### 2. 创建虚拟机 - virt-install
 
 ```shell
 # 使用 iso 镜像创建全新的 proxmox 虚拟机，自动创建一个 60G 的磁盘。
@@ -418,6 +410,7 @@ virsh setmem opensuse15 4096
 ```
 
 虚拟机监控：
+
 ```shell
 # 待续
 ```
@@ -442,7 +435,7 @@ virsh detach-interface
 
 ### 下载 cloud image
 
->注意：下面的几种镜像都分别有自己的坑点，仅 Ubuntu/OpenSUSE 测试通过，其他发行版的 Cloud 镜像都有各种毛病...
+> 注意：下面的几种镜像都分别有自己的坑点，仅 Ubuntu/OpenSUSE 测试通过，其他发行版的 Cloud 镜像都有各种毛病...
 
 首先下载 Cloud 版本的系统镜像：
 
@@ -457,7 +450,7 @@ virsh detach-interface
 其中 NoCloud 表示支持 cloudinit NoCloud 数据源——即使用 `seed.iso` 提供 user-data/meta-data/network-config 配置，PVE 就是使用的这种模式。
 而 Openstack 镜像通常也都支持 NoCloud 模式，所以一般也是可以使用的。
 
->cloud image 基本都没有默认密码，并且禁用了 SSH 密码登录，必须通过 cloud-init 设置私钥方式进行 ssh 登录。
+> cloud image 基本都没有默认密码，并且禁用了 SSH 密码登录，必须通过 cloud-init 设置私钥方式进行 ssh 登录。
 
 ### 配置 cloudinit 并创建虚拟机
 
@@ -482,11 +475,10 @@ cd cloud-utils && sudo make install
 
 首先编写 `user-data`:
 
-
 ```yaml
 #cloud-config
 hostname: opensuse15-2
-fqdn: opensuse15-2.local  
+fqdn: opensuse15-2.local
 # 让 cloud-init 自动更新 /etc/hosts 中 localhost 相关的内容
 manage_etc_hosts: localhost
 
@@ -504,12 +496,12 @@ ssh_authorized_keys:
 chpasswd:
   # expire 使密码用完即失效，用户每次登录都需要设置并使用密码！
   expire: false
-  
+
 # ssh 允许密码登录（不建议开启）
 ssh_pwauth: false
 ```
 
->注意 `user-data` 的第一行的 `#cloud-config` 绝对不能省略！它标识配置格式为 `text/cloud-config`！
+> 注意 `user-data` 的第一行的 `#cloud-config` 绝对不能省略！它标识配置格式为 `text/cloud-config`！
 
 再编写 `network-config`(其格式和 ubuntu 的 netplan 基本完全一致，但是我只测通了 v1 版本，v2 版没测通):
 
@@ -536,7 +528,7 @@ config:
 cloud-localds seed.iso user-data --network-config network-config
 ```
 
->每次都手动生成 `seed.iso` 太麻烦了，实际使用，建议用后面介绍的自动化功能 proxmox-libvirt 或者 terraform-libvirt-provider~
+> 每次都手动生成 `seed.iso` 太麻烦了，实际使用，建议用后面介绍的自动化功能 proxmox-libvirt 或者 terraform-libvirt-provider~
 
 这样就生成出了一个 seed.iso，创建虚拟机时同时需要载入 seed.iso 和 cloud image，cloud-image 自身为启动盘，这样就大功告成了。
 示例命令如下：
@@ -589,6 +581,7 @@ debian 的 cloud 镜像根本没法用，建议避免使用它。
 ### 画外：cloudinit 主机名称
 
 cloudinit 有三个参数与 hostname 相关。其中有两个，就是上面提到的 `user-data` 中的：
+
 1. hostname: 主机名称
 2. fqdn: 主机的完全限定域名，优先级比 `hostname` 更高
 

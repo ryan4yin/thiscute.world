@@ -5,10 +5,20 @@ lastmod: 2022-05-05T19:31:00+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "finops-for-kubernetes.webp"
+  - name: "featured-image"
+    src: "finops-for-kubernetes.webp"
 
-tags: ["云原生", "Kubernetes", "FinOps", "成本分析", "Kubecost", "MultiCloud", "多云", "多云财务管控"]
+tags:
+  [
+    "云原生",
+    "Kubernetes",
+    "FinOps",
+    "成本分析",
+    "Kubecost",
+    "MultiCloud",
+    "多云",
+    "多云财务管控",
+  ]
 categories: ["tech"]
 series: ["云原生相关"]
 
@@ -21,7 +31,7 @@ comment:
     enable: false
 ---
 
->FinOps 是一种不断发展的云财务管理学科和文化实践，通过帮助工程、财务、技术和业务团队在数据驱动的预算分配上进行协作，使成本预算能够产生最大的业务价值。
+> FinOps 是一种不断发展的云财务管理学科和文化实践，通过帮助工程、财务、技术和业务团队在数据驱动的预算分配上进行协作，使成本预算能够产生最大的业务价值。
 
 ## 云计算成本管控
 
@@ -63,7 +73,7 @@ comment:
 
 - AWS EKS 本身有 $0.1 per hour 的固定费用，这个很低
 - EKS 的所有节点会收对应的 EC2 实例运行费用、EBS 数据卷费用
-- EKS 中使用的 PV 会带来 EBS  数据卷的费用
+- EKS 中使用的 PV 会带来 EBS 数据卷的费用
 - 跨区流量传输费用
   - 所有节点之间的通讯（主要是服务之间的互相访问），如果跨了可用区，会收跨区流量传输费用
   - EKS 中的服务访问其他 AWS 服务如 RDS/ElastiCache，如果是跨可用区，会收取跨区流量费用
@@ -173,7 +183,7 @@ kubecost 有两种推荐的安装方法：
     - postgres 长期存储，仅企业版支持
     - kubecost-network-costs 一个 daemonset，提供网络指标用于计算网络成本（貌似未开源）
     - cluster-controller 提供集群「大小调整（RightSizing）」以及「定时关闭集群」的能力
-  - 只保留 15 天的指标，无 SSO/SAML 登录支持，无 alerts/notification, 不可保存 reportes 报表
+  - 只保留 15 天的指标，无 SSO/SAML 登录支持，无 alerts/notification, 不可保存 reporters 报表
   - 每个 kubecost 只可管理一个集群
 - 只安装 Apache License 开源的 cost-model，它仅提供基础的成本拆分功能以及 API，无 UI 面板、长期存储、网络成本拆分、SAML 接入及其他商业功能。
 
@@ -208,7 +218,7 @@ global:
 ## 更好的选择是单独部署 grafana，不使用 kubecost 的 subchart
 grafana:
   image:
-    repository: grafana/grafana  # 建议替换成私有镜像仓库地址
+    repository: grafana/grafana # 建议替换成私有镜像仓库地址
     tag: 8.3.2
 
 # prometheus 子 chart 的配置
@@ -217,8 +227,8 @@ prometheus:
   server:
     persistentVolume:
       enabled: true
-      size:  32Gi # 这个大小得视情况调整，集群较大的话 32Gi 肯定不够
-    retention: 15d  # p8s 指标保留时长
+      size: 32Gi # 这个大小得视情况调整，集群较大的话 32Gi 肯定不够
+    retention: 15d # p8s 指标保留时长
   nodeExporter:
     enabled: true
     ## If true, node-exporter pods share the host network namespace
@@ -229,7 +239,7 @@ prometheus:
     name: node-exporter
     ## node-exporter container image
     image:
-      repository: quay.io/prometheus/node-exporter  # 替换成 quay 仓库避免 docker 仓库拉取限制
+      repository: quay.io/prometheus/node-exporter # 替换成 quay 仓库避免 docker 仓库拉取限制
       tag: v0.18.1
       pullPolicy: IfNotPresent
 
@@ -245,12 +255,12 @@ prometheus:
 
       ## configmap-reload container image
       image:
-        repository: jimmidyson/configmap-reload  # 建议替换成私有仓库避免 docker 仓库拉取限制
+        repository: jimmidyson/configmap-reload # 建议替换成私有仓库避免 docker 仓库拉取限制
         tag: v0.7.1
 
 persistentVolume:
   enabled: true
-  size: 32Gi  # 同前所述
+  size: 32Gi # 同前所述
   # storageClass: "-" #
 
 # 配置 ingress 入口，供外部访问
@@ -277,7 +287,7 @@ networkPolicy:
 # 分析网络成本，需要额外部署一个 daemonset
 networkCosts:
   enabled: false
-  config: {}  # 详见 values.yaml 内容
+  config: {} # 详见 values.yaml 内容
 
 serviceAccount:
   create: true
@@ -285,7 +295,7 @@ serviceAccount:
     # 如果是 aws 上的集群，可以通过 serviceAccount 授权访问 ec2 pricing API 及 cur 数据
     # 也可以直接为服务提供 AccessKeyID/Secret 进行授权
     # 与 AWS 的集成会在后面详细介绍
-    eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/KubecostRole  # 注意替换这个 role-arn
+    eks.amazonaws.com/role-arn: arn:aws:iam:112233445566:role/KubecostRole # 注意替换这个 role-arn
 
 # 如下配置也可通过 Kubecost product UI 调整
 # 但是此处的配置优先级更高，如果在这里配置了默认值，容器重启后就会使用此默认值，UI 上的修改将失效
@@ -315,7 +325,6 @@ kubectl port-forward --namespace kubecost deployment/kubecost-cost-analyzer 9090
 
 {{< figure src="/images/finops-for-kubernetes/kubecost-demo.webp" title="Kubecost 示例" >}}
 
-
 ### kubecost 的成本统计原理
 
 #### 1. CPU/RAM/GPU/Storage 成本分析
@@ -323,14 +332,13 @@ kubectl port-forward --namespace kubecost deployment/kubecost-cost-analyzer 9090
 Kubecost 通过 AWS/GCP 等云服务商 API 动态获取各 region/zone 的上述四项资源的每小时成本：CPU-hour, GPU-hour, Storage Gb-hour 与 RAM Gb-hour，或者通过 json 文件静态配置这几项资源的成本。
 OD 按需实例的资源价格通常比较固定，而 AWS Spot 实例的成本波动会比较大，可以通过 SpotCPU/SpotRAM 这两个参数来设置 spot 的默认价格，也可以为 kubecost 提供权限使它动态获取这两项资源的价格。
 
-
 kubecost 根据每个容器的资源请求 requests 以及资源用量监控进行成本分配，对于未配置 requests 的资源将仅按实际用量监控进行成本分配。
 
 kubecost 的成本统计粒度为 container，而 deployment/service/namespace/label 只是按不同的维度进行成本聚合而已。
 
 #### 2. 网络成本的分析
 
-><https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md>
+> <https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/network-allocation.md>
 
 对提供线上服务的云上 Kubernetes 集群而言，网络成本很可能等于甚至超过计算成本。这里面最贵的，是跨区/跨域传输的流量成本，以及 NAT 网关成本。NAT 网关成本可以通过自建 NAT 实例来部分缩减（这里仅考察了 AWS 云服务，其他云服务商的收费模式可能存在区别）。
 使用单个可用区风险比较高，资源池也可能不够用，因此我们通常会使用多个可用区，这就导致跨区流量成本激增。
@@ -345,11 +353,11 @@ kubecost 将网络流量分成如下几类：
 
 更多的待研究，看 kubecost 官方文档吧。
 
->另外还看到 kubecost 有忽略 s3 流量（因为不收费）的 issue: <https://github.com/kubecost/cost-model/issues/517>
+> 另外还看到 kubecost 有忽略 s3 流量（因为不收费）的 issue: <https://github.com/kubecost/cost-model/issues/517>
 
 ### kubecost API
 
->https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/apis.md
+> https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/apis.md
 
 - 成本拆分文档：https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/cost-allocation.md
 - 成本拆分 API 文档：https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/allocation.md
@@ -389,9 +397,9 @@ print(result[0])
 
 ### Kubecost 与 AWS 集成
 
->https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/aws-cloud-integrations.md
+> https://github.com/kubecost/docs/blob/b7e9d25994ce3df6b3936a06023588f2249554e5/aws-cloud-integrations.md
 
->https://github.com/kubecost/docs/blob/main/aws-node-price-reconcilitation-methodology.md
+> https://github.com/kubecost/docs/blob/main/aws-node-price-reconcilitation-methodology.md
 
 TBD
 

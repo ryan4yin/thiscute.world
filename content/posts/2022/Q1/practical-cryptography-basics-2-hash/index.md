@@ -3,10 +3,11 @@ title: "写给开发人员的实用密码学（二）—— 哈希函数"
 date: 2022-03-01T17:15:01+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "cryptographic_hash_function.webp"
+  - name: "featured-image"
+    src: "cryptographic_hash_function.webp"
 
-tags: ["Cryptography", "Hash", "密码学", "哈希", "散列", "安全", "SHA-2", "SHA-3"]
+tags:
+  ["Cryptography", "Hash", "密码学", "哈希", "散列", "安全", "SHA-2", "SHA-3"]
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
@@ -20,8 +21,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者额外补充了「非加密哈希函数」的简单介绍。
-
+> 本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者额外补充了「非加密哈希函数」的简单介绍。
 
 ## 一、什么是哈希函数
 
@@ -66,9 +66,8 @@ code:
 
 {{< figure src="/images/practical-cryptography-basics-2-hash/openssl-sha256-checksum.webp" >}}
 
-
->现代网络基本都很难遇到文件损坏的情况了，但是在古早的低速网络中，即使 TCP 跟底层协议已经有多种数据纠错手段，下载完成的文件仍然是有可能损坏的。
-这也是以前 rar 压缩格式很流行的原因之一—— rar 压缩文件拥有一定程度上的自我修复能力，传输过程中损坏少量数据，仍然能正常解压。
+> 现代网络基本都很难遇到文件损坏的情况了，但是在古早的低速网络中，即使 TCP 跟底层协议已经有多种数据纠错手段，下载完成的文件仍然是有可能损坏的。
+> 这也是以前 rar 压缩格式很流行的原因之一—— rar 压缩文件拥有一定程度上的自我修复能力，传输过程中损坏少量数据，仍然能正常解压。
 
 #### 2. 保存密码
 
@@ -76,20 +75,18 @@ code:
 
 {{< figure src="/images/practical-cryptography-basics-2-hash/sha512-password-hash.webp" >}}
 
-
 #### 3. 生成唯一 ID
 
 加密哈希函数也被用于为文档或消息生成（绝大多数情况下）唯一的 ID，因此哈希值也被称为**数字指纹**。
 
->注意这里说的是数字指纹，而非数字签名。
-数字签名是与下一篇文章介绍的「MAC」码比较类似的，用于验证消息的真实、完整、认证作者身份的一段数据。
+> 注意这里说的是数字指纹，而非数字签名。
+> 数字签名是与下一篇文章介绍的「MAC」码比较类似的，用于验证消息的真实、完整、认证作者身份的一段数据。
 
 加密哈希函数计算出的哈希值理论上确实有碰撞的概率，但是这个概率实在太小了，因此绝大多数系统（如 Git）都假设哈希函数是无碰撞的（collision free）。
 
 文档的哈希值可以被用于证明该文档的存在性，或者被当成一个索引，用于从存储系统中提取文档。
 
 使用哈希值作为唯一 ID 的典型例子，Git 版本控制系统（如 `3c3be25bc1757ca99aba55d4157596a8ea217698`）肯定算一个，比特币地址（如 `1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2`）也算。
-
 
 #### 4. 伪随机数生成
 
@@ -102,7 +99,7 @@ code:
 
 当然为了确保安全性，实际的加密随机数生成器会比这再复杂一些，我们会在后面的「随机数生成器」一节学习其中细节。
 
-###  安全的加密哈希算法
+### 安全的加密哈希算法
 
 #### 1. SHA-2, SHA-256, SHA-512
 
@@ -175,6 +172,7 @@ print(f"SHA3-512({text}) = ", binascii.hexlify(sha3_512hash).decode("utf8"))
 ```
 
 输出：
+
 ```
 SHA3-256('hello') = 3338be694f50c5f338814986cdf0686453a888b84f424d792af4b9202398f392
 Keccak-256('hello') = 1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8
@@ -238,7 +236,6 @@ print("RIPEMD-160({text}) = ", binascii.hexlify(ripemd160).decode("utf-8"))
 # => RIPEMD-160({text}) =  108f07b8382412612c048d07d13f814118445acd
 ```
 
-
 #### 6. 其他安全哈希算法
 
 以下是目前流行的强加密哈希函数，它们都可被用于替代 SHA-2、SHA-3 和 BLAKE2：
@@ -247,7 +244,7 @@ print("RIPEMD-160({text}) = ", binascii.hexlify(ripemd160).decode("utf-8"))
 
 - **SM3** 是中国国密密码杂凑算法标准，由国家密码管理局于 2010 年 12 月公布。它类似于 SHA-256（基于 Merkle-Damgård 结构），输出为 256 位哈希值。
 
-- **GOST**（GOST R 34.11-94）哈希函数是俄罗斯的国家标准，它的输出也是 256 位哈希值。
+- **GHOST**（GHOST R 34.11-94）哈希函数是俄罗斯的国家标准，它的输出也是 256 位哈希值。
 
 以下函数是 SHA-2、SHA-3 和 BLAKE 的不太受欢迎的替代品，它们是[SHA3 NIST 比赛](https://en.wikipedia.org/wiki/NIST_hash_function_competition#Finalists)的决赛入围者
 
@@ -272,14 +269,14 @@ print("RIPEMD-160({text}) = ", binascii.hexlify(ripemd160).decode("utf-8"))
 因为哈希值是不可预测的，为了找出符合条件的哈希值，矿工需要计算数十亿个不同的哈希值，再从中找出最大的那个。
 比如，一个工作量证明问题可能会被定义成这样：已有常数 `x`，要求找到一个数 `p`，使 `hash(x + p)` 的前十个比特都为 `0`.
 
-有许多哈希函数是专为工作量证明挖掘算法设计的，例如 ETHash、Equihash、CryptoNight 和 Cookoo Cycle. 
+有许多哈希函数是专为工作量证明挖掘算法设计的，例如 ETHash、Equihash、CryptoNight 和 Cuckoo Cycle.
 这些哈希函数的计算速度很慢，通常使用 GPU 硬件（如 NVIDIA GTX 1080 等显卡）或强大的 CPU 硬件（如 Intel Core i7-8700K）和大量快速 RAM 内存（如 DDR4 芯片）来执行这类算法。
 这些挖矿算法的目标是通过刺激小型矿工（家庭用户和小型矿场）来**最大限度地减少挖矿的集中化**，并限制挖矿行业中高级玩家们（他们有能力建造巨型挖矿设施和数据中心）的力量。
 与少数的高玩相比，**大量小玩家意味着更好的去中心化**。
 
 目前大型虚拟货币挖矿公司手中的主要武器是 ASIC 矿机，因此，现代加密货币通常会要求使用「抗 ASIC 哈希算法」或「权益证明（proof-of-stake）共识协议」进行「工作量证明挖矿」，以限制这部分高级玩家，达成更好的去中心化。
 
->因为工作量证明算法需要消耗大量能源，不够环保，以太坊等区块链已经声明未来将会升级到权益证明（Proof-of-S）这类更环保的算法。不过这里我们只关注 PoW 如何基于哈希函数实现的，不讨论这个。
+> 因为工作量证明算法需要消耗大量能源，不够环保，以太坊等区块链已经声明未来将会升级到权益证明（Proof-of-S）这类更环保的算法。不过这里我们只关注 PoW 如何基于哈希函数实现的，不讨论这个。
 
 #### 1. ETHash
 
@@ -310,7 +307,6 @@ Equihash 的工作流程：
 
 更多信息参见 <https://github.com/tromp/equihash>
 
-
 ## 三、非加密哈希函数
 
 加密哈希函数非常看重「加密」，为了实现更高的安全强度，费了非常多的心思、也付出了很多代价。
@@ -335,6 +331,5 @@ Equihash 的工作流程：
 - [Practical-Cryptography-for-Developers-Book][cryptobook]
 - [漫谈非加密哈希算法](https://segmentfault.com/a/1190000010990136)
 - [开发中常见的一些Hash函数（一）](http://thomaslau.xyz/2020/05/20/2020-05-20-on_hash_1/)
-
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book

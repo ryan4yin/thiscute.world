@@ -4,8 +4,8 @@ date: 2019-02-11T16:53:26+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "featured-image.webp"
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["Chrome", "Firefox", "DevTools", "Browser"]
 categories: ["tech"]
@@ -13,22 +13,22 @@ categories: ["tech"]
 lightgallary: true
 ---
 
-
 不管是做爬虫还是写 Web App，Chrome 和 Firefox 的 DevTools 都是超常用的，但是经常发现别人的截图有什么字段我找不到，别人的什么功能我的 Chrome 没有，仔细一搜索才知道，原来是我不会用。。
 
 ---
+
 `Ctrl + Shift + I`：打开 DevTools
 `Ctrl + Shift + J`：打开控制台
-
 
 ### 搜索
 
 1. `Ctrl + F`：在当前位置搜索关键字
-    - 在网页界面用这个快捷键，就是页内搜索
-    - 在 Network 的 Response 页面，就是在 Response 中搜索
+
+   - 在网页界面用这个快捷键，就是页内搜索
+   - 在 Network 的 Response 页面，就是在 Response 中搜索
 
 1. `Ctrl + Shift + F`：全文搜索，在当前 Web App 的所有文件中搜索。
-    - **爬虫必备**！！！要寻找一些特殊字符串的来源，用它搜索屡试不爽。
+   - **爬虫必备**！！！要寻找一些特殊字符串的来源，用它搜索屡试不爽。
 
 ### Command
 
@@ -59,7 +59,7 @@ Chrome 可以右键属性列名来增减属性列，Firefox-Dev 也是一样：
 Chrome 的 Response 页面左下角，有`{}`按钮，可以 beautify 响应。
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211145915794-1971618603.webp" >}}
- 
+
 而 Firefox-Dev 只在 Debugger 页面提供该按钮，Response 中不支持。
 
 Firefox 响应的 preview 和 payload 是放在 Response 页面下。而 Chrome 是分成了两个标签页
@@ -92,10 +92,9 @@ Chrome 不能查看 HTTP/2 的 Raw Headers。
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211172845339-1004306694.webp" >}}
 
-
 #### 6. 审查 WebSocket（Chrome only）
 
-在 NetWork 中点击对应的 WebScoket 请求，在右侧选择 Frames 标签，就可以看到所有的消息了
+在 NetWork 中点击对应的 WebSocket 请求，在右侧选择 Frames 标签，就可以看到所有的消息了
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211161734224-864236086.webp" >}}
 
@@ -119,10 +118,7 @@ Chrome 不能查看 HTTP/2 的 Raw Headers。
 
 #### 1. DOM 元素断点（Chrome only）
 
-在 `Elements` 页面，右键一个元素，有一个 `Break on` 选项，可以控制在特定事件发生时 Break.
-    - subtree modification: 子节点被修改
-    - attribute modification：当前节点的属性被修改。（inline style 被修改也会触发此事件）
-    - node removal：节点被移除
+在 `Elements` 页面，右键一个元素，有一个 `Break on` 选项，可以控制在特定事件发生时 Break. - subtree modification: 子节点被修改 - attribute modification：当前节点的属性被修改。（inline style 被修改也会触发此事件）- node removal：节点被移除
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211152916189-42263251.webp" >}}
 
@@ -141,9 +137,9 @@ Chrome 不能查看 HTTP/2 的 Raw Headers。
 {{< figure src="/images/web-browser-dev-tools/968138-20190211160511912-2063790850.webp" >}}
 
 1. 可以将颜色属性转换成多个格式（Chrome only）
-    - 默认格式：`#207981`
-    - RGB格式：`rgb(32, 121, 129)`
-    - HSL格式：`hsl(185, 60%, 32%)`
+   - 默认格式：`#207981`
+   - RGB格式：`rgb(32, 121, 129)`
+   - HSL格式：`hsl(185, 60%, 32%)`
 1. 提供 color picker，可用于在网页任意位置取色。（Firefox-Dev 也有）
 1. 提供复制按键，直接将该颜色当前格式的表达复制到剪切板
 
@@ -158,14 +154,14 @@ Chrome 不能查看 HTTP/2 的 Raw Headers。
 Sources 右侧的 Debugger 支持各种断点调试。
 
 1. 条件断点
-    Sources 中，在任意 JS 代码的行号上单击鼠标左键，就能在该行设置一个普通断点（在 Response 中可不行）。在行号上右键，能直接设置条件断点。
-    {{< figure src="/images/web-browser-dev-tools/968138-20190211154841386-1840257581.webp" >}}
+   Sources 中，在任意 JS 代码的行号上单击鼠标左键，就能在该行设置一个普通断点（在 Response 中可不行）。在行号上右键，能直接设置条件断点。
+   {{< figure src="/images/web-browser-dev-tools/968138-20190211154841386-1840257581.webp" >}}
 1. XHR 断点：在右侧 Debugger 中，可以添加 XHR 断点。
-    - 如果条件留空，一旦有 XHR 发起，就会无条件进入调试。
-    - 条件是 “Break When URL Contaions <your string>”
+   - 如果条件留空，一旦有 XHR 发起，就会无条件进入调试。
+   - 条件是 “Break When URL Contaions <your string>”
 1. Watch Expressions：表达式审查
-    - 双击选中 JS 代码中的任意变量，然后右键它，可以将该变量添加到 Watch 中，这样就可以随时观察它的值。
-    - 也可以在右侧 Watch 中手动输入 JS 表达式。
+   - 双击选中 JS 代码中的任意变量，然后右键它，可以将该变量添加到 Watch 中，这样就可以随时观察它的值。
+   - 也可以在右侧 Watch 中手动输入 JS 表达式。
 1. DOM 元素断点（Chrome only）：在 Elements 部分讲过了。
 
 Chrome 的断点功能比 Firefox-Dev 的更丰富。
@@ -177,7 +173,6 @@ Chrome 的断点功能比 Firefox-Dev 的更丰富。
 方法一：在 DevTools 界面，按快捷键 `Ctrl + Shift + P` 打开 Command 窗口，然后输入 `screenshot`，在下拉栏里选择你需要的截图命令就行。
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190212163124375-995667384.webp" >}}
-
 
 方法二：
 先进 dev tools，点击 左上角的设备图标（toggle device toolbar），然后页面顶部就会出现一个导航栏，在这里好选择设备或者自定义图像尺寸，然后点击该导航栏右侧（不是 dev tools 右侧）的 options 图标，会有两个选项：“截图（capture screenshot）”和“截网页全图（capture full size screenshot）”，如下：
@@ -199,10 +194,11 @@ Chrome 的断点功能比 Firefox-Dev 的更丰富。
 在 Chrome 中进入 DevTools，点击右上角的 options 按钮，选择 More tools -> Sensors，在 Geolocation 处选择 Custom location，就可以修改地理位置了。
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211161131091-420638637.webp" >}}
- 
+
 #### 2. 自定义请求头
 
 #### For Chrome
+
 和 上一小节一样，先进 More tools，选择 Network conditions，取消勾选 Select atuomatically，就可以修改请求头了。
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211170346973-560763838.webp" >}}
@@ -224,7 +220,6 @@ Chrome 的断点功能比 Firefox-Dev 的更丰富。
 然后就可以在 More tools -> Request blocking 中看到你设置的阻塞条件。
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211172032733-566193435.webp" >}}
-
 
 ### 参考
 

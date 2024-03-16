@@ -3,8 +3,8 @@ title: "Julia 学习笔记（一）：数组"
 date: 2019-01-14T19:51:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "julialang.webp"
+  - name: "featured-image"
+    src: "julialang.webp"
 
 tags: ["JuliaLang"]
 categories: ["tech"]
@@ -16,8 +16,7 @@ code:
   maxShownLines: 100
 ---
 
-
->个人向，只会记录一些需要注意的点。
+> 个人向，只会记录一些需要注意的点。
 
 ## 前言
 
@@ -32,6 +31,7 @@ code:
 在 Julia 中，数组被用作列表（lists）、向量（vectors）、表（tables）和矩阵（matrices）。
 
 ### 1. 数组的创建
+
 这里尤其需要注意的是数组构造的几种方法，以及它们的区别。
 
 #### 1.1 一维数组（vector/list）
@@ -44,6 +44,7 @@ julia> v = [1, 2, 3, 4]  # 逗号分隔的语法用于创建一维数组
  3
  4
 ```
+
 向量，指列向量，Julia 使用的是 Fortran Order，各种操作都是**列优先于行**的。（和 numpy 相反，numpy 是 C Order 的，行优先于列）
 
 #### 1.2. 二维数组（table/matrix）
@@ -63,6 +64,7 @@ julia> [1 2; 3 4]  # 分号和换行符(\n)，用于分隔数组中不同的行
 分号和换行对应函数 `vcat`，表示垂直拼接各个矩阵/元素。
 
 下面的例子演示了拼接（空格）和单纯分隔各个元素（逗号）的区别：
+
 ```julia
 julia> [1 2 [3 4] 5] # 用空格做横向拼接（或称水平拼接）
 1×5 Array{Int64,2}:
@@ -70,23 +72,27 @@ julia> [1 2 [3 4] 5] # 用空格做横向拼接（或称水平拼接）
 
 julia> [1, 2, [3, 4], 5] # 用逗号分隔
 4-element Array{Any,1}:
- 1      
- 2      
+ 1
+ 2
   [3, 4]
  5
 ```
+
 能看到在拼接操作中，`[3 4]` 被“解开”了，而用逗号时，它的行为和 Python 的 `list` 一样（区别只是 Julia 的 list 列优先）。
 
 使用拼接需要注意的情况举例：
+
 ```julia
 julia> [1 2 [3, 4] 5]  # 横向拼接要求 items 的行数相同！
 ERROR: DimensionMismatch("mismatch in dimension 1 (expected 1 got 2)")
 ```
+
 因为 `[3, 4]` 有两行，而 数组中的其他项是数值，显然行数不同，所以抛出了 Error.
 
 可以想见，垂直拼接则要求 items 的列数相同。
 
 另外当垂直拼接用于基本元素时，效果等同于逗号。（结果都是单列数组）
+
 ```julia
 julia> v = [1, 2, 3, 4]
 4-element Array{Int64,1}:
@@ -117,6 +123,7 @@ julia> [[1; 2]; [3, 4]]  # 等价于 [[1, 2]; [3, 4]]
 这里我想说的是类似“齐次坐标”的索引特性。
 
 首先，单个元素可以看作是零维的向量，数学上零维也可以看作是任意维，因此可以这样玩：
+
 ```julia
 julia> 2[1]
 2
@@ -137,13 +144,14 @@ julia> π[1, 1]
 π = 3.1415926535897...
 
 julia> '1'[1]
-'1': ASCII/Unicode U+0031 (category Nd: Number, decimal digit)
+'1': ASCII/Unicode U+0031 (category And: Number, decimal digit)
 
 julia> '1'[1, 1]
-'1': ASCII/Unicode U+0031 (category Nd: Number, decimal digit)
+'1': ASCII/Unicode U+0031 (category And: Number, decimal digit)
 ```
 
 多维数组也能使用类似“齐次坐标”的索引方式：
+
 ```julia
 julia> m = [1 2; 3 4]
 2×2 Array{Int64,2}:
@@ -163,6 +171,7 @@ julia> m[1, 1, 1, 1]
 多维矩阵，在更高的维度上，也能被当成“零维”来看待，前面说过了“零维”也相当于“无限维”，所以多维数组也能用这么索引。
 
 但是拓展的维度索引只能是 1！既然被看作“零维”，就只相当于一个点，自然不可能有更高的索引：
+
 ```julia
 julia> 1[1, 2]
 ERROR: BoundsError

@@ -15,7 +15,6 @@ toc:
 
 ![](/images/now/book-shelf-2.webp)
 
-
 ## 零、2024 年学习计划
 
 - 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
@@ -24,10 +23,9 @@ toc:
   - 这是我 2023 年 5 月开始的一个长期计划，目前以及完成了大部分工作，也输出了一篇博客总结我当前的方案。
 - 其他方面主要是多运动、入门心理学。
 
-
 ## 一、我正在研究这些
 
->按优先级排序
+> 按优先级排序
 
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 结合工作需求，深入了解下当下火热的 AIGC 技术
@@ -52,14 +50,12 @@ toc:
   - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
   - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
 
-
-
 ## 二、我今年还想搞搞这些
 
 - 操作系统
   - 课程 [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-  - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)  - 进度 296/572
+  - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
   - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
 - 从零开始造 OS
   - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
@@ -68,12 +64,14 @@ toc:
 
 ## 三、今年的阅读进展
 
->电子版都可以在 z-library 上很方便地下载到，实体书的话可以在多抓鱼等二手书平台碰碰运气。
+> 电子版都可以在 z-library 上很方便地下载到，实体书的话可以在多抓鱼等二手书平台碰碰运气。
 
 已读：
+
 - 暂无，毕竟 2024 年还没开始几天...
 
 正在读：
+
 - The Great Gatsby - 10/41
 - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
@@ -108,16 +106,16 @@ toc:
 学习路线：
 
 - 入门：
-    - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-    - Psychology and Life, 20th edition, by Richard J. Gerrig, 2012
-    - Educational Psychology, 14th Global Edition (Anita Woolfolk, 2021)
-    - Development Across the Life Span, 10th edition (Robert S. Feldman, 2023)
+  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+  - Psychology and Life, 20th edition, by Richard J. Gerrig, 2012
+  - Educational Psychology, 14th Global Edition (Anita Woolfolk, 2021)
+  - Development Across the Life Span, 10th edition (Robert S. Feldman, 2023)
 - 进阶到认知神经科学
-   -  Neuroscience: Exploring the Brain, 4th edition (2015)
-   -  Cognitive Neuroscience: The Biology of the Mind, 5th edition (2019)
+  - Neuroscience: Exploring the Brain, 4th edition (2015)
+  - Cognitive Neuroscience: The Biology of the Mind, 5th edition (2019)
 - 其他方向
-   - 《Intimate Relationships》 - 进度 14/449
-   - 《Social Psychology, 14e, David Myers》
+  - 《Intimate Relationships》 - 进度 14/449
+  - 《Social Psychology, 14e, David Myers》
 
 #### 操作系统
 
@@ -135,6 +133,7 @@ toc:
   - 极客时间《容器实战高手课》
   - 极客时间《eBPF 核心技术与实战》
 - C 语言 / Rust 语言
+
   - 极客时间《深入 C 语言和程序运行原理》
   - 极客时间《Rust 编程第一课》
 
@@ -142,7 +141,6 @@ toc:
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
-
 
 #### 嵌入式/物联网
 
@@ -167,7 +165,6 @@ toc:
     - 书籍：Digital Design and Computer Architecture RISC-V Edition
     - 此书从第六章开始讲 RISCV 微架构。
 
-
 我目前收集的相关内容（仅是一个资料合集，内容有重复的）：
 
 - 嵌入式 Linux 系列
@@ -175,7 +172,7 @@ toc:
   - [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition): 这本是 2018 年出的，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
   - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
   - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
-  - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从 bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一下。 
+  - [linux-insides](https://0xax.gitbooks.io/linux-insides/content/index.html): 从 bootloader 开始讲解了 Linux 内核的许多重要的功能模块，看 stars 很高所以也在这里列一下。
 - 电路原理
   - Practical Electronics for Inventors, Fourth Edition
 - 芯片
@@ -192,44 +189,46 @@ toc:
 计算机网络可算是我的老本行了，用来吃饭的家伙事，技艺不能落下。
 
 - 计算机网络
-  - TCP/IP Illustrated, Volume 1, 2nd Edition  - 进度 31/920
+  - TCP/IP Illustrated, Volume 1, 2nd Edition - 进度 31/920
 - 课程 [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
   - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
   - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
 - TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
 
-
 #### 其他杂项
 
 - Go 语言进阶
+
   - 《Go 学习笔记（第六版下卷）》
     - 基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
   - [ ] [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
   - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
 
 - Kubernetes 原理、Kubernetes APIServer/Operator 编程
+
   - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 
 - 英语
   - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程
   - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/) 进阶发音教程
   - [ ] 《英语语法新思维——初级教程》
-  - [ ] 《English Grammer In Use》语法书
+  - [ ] 《English Grammar In Use》语法书
   - [ ] 《Key words for fluency》口语表达
 
 生活：
+
 - 娱乐+运动：
   - 轮滑：倒滑后压步
   - 游泳：学会蛙泳并且提升速度
 
 #### 其他资料
 
->这个列表中的内容没啥优先级，反正先列着，什么时候有兴趣可以玩玩。
+> 这个列表中的内容没啥优先级，反正先列着，什么时候有兴趣可以玩玩。
 
->附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
-
+> 附一份屌炸天的 CS 自学指南：https://github.com/pkuflyingpig/cs-self-learning/
 
 - 写几个小项目（使用 rust/go）
+
   - 实现一个文本编辑器
     - https://viewsourcecode.org/snaptoken/kilo/
   - 实现一个简单的 Linux 容器
@@ -238,6 +237,7 @@ toc:
     - https://github.com/songgao/water
 
 - Go 语言 Web 编程
+
   - [ ] [7天用Go从零实现分布式缓存GeeCache](https://geektutu.com/post/geecache.html)
   - [ ] [7天用Go从零实现ORM框架GeeORM](https://geektutu.com/post/geeorm.html)
   - [ ] [7天用Go从零实现RPC框架GeeRPC](https://geektutu.com/post/geerpc.html)
@@ -246,17 +246,18 @@ toc:
 - [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/): 花几个小时，快速学习开发人员需要了解的安全知识
 
 - Openresty 技术栈：（暂时感觉兴趣不大）
+
   - 阅读《自己动手实现 Lua》
   - 深入学习 Nginx 及 epoll
 
 - 容器与 Kubernetes（其实好像也没啥兴趣）
+
   - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/): Kubernetes 安全，威胁模型以及如何防护。
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/): 容器安全，这书在亚马逊上评价很好。
 
 - 检索技术
   - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
   - 极客时间《检索技术 25 讲》
-
 
 分布式数据库：
 
@@ -270,7 +271,6 @@ toc:
   - 《Distributed Algorithms, 2nd Edition, 2018》
   - [SQL进阶教程](https://book.douban.com/subject/27194738/)
 
-
 编程语言理论：
 
 - 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计书籍，好评如潮。
@@ -281,7 +281,6 @@ toc:
 - 用 Go 语言讲编程语言理论
   - 《自己动手实现 Lua》
   - 《自己动手实现 Java 虚拟机》
-
 
 ## 五、备选书单
 
@@ -309,7 +308,7 @@ toc:
   - 《手把手教你读财报》
   - 《原则 - 应对变化中的世界秩序》
   - 《探路之役 - 1978-1922 年的中国经济改革》
-  - 《筚路维艰 - 中国社会主义路径的五次选择》 
+  - 《筚路维艰 - 中国社会主义路径的五次选择》
   - 《邓小平时代》
   - 《论中国》
   - 《中国国家治理的制度逻辑》
@@ -388,11 +387,10 @@ toc:
   - 《凤凰项目：一个 IT 运维的传奇故事》
   - 《一人企业：一个人也能赚钱的商业新模式》
 - 英语语法
-  - 《English Grammer In Use》
-  - 《英语语法新思维——初级教程》     - 8/366
+  - 《English Grammar In Use》
+  - 《英语语法新思维——初级教程》 - 8/366
 - 神秘学（没准啥时候我就想写点小说...）
   - 《性命圭旨》
-
 
 ## 探索互联网上的高质量内容
 
@@ -416,12 +414,11 @@ toc:
 - [日本读卖新闻](https://www.yomiuri.co.jp/): 日本读卖新闻是日本的一家全国性报纸。
 - [半岛电视台](https://www.aljazeera.com/): 卡塔尔的国际媒体，由卡塔尔王室拥有。其特点是中东阿拉伯世界的视角。
 - 一些新兴媒体
-    - [新政治家](https://www.newstatesman.com/): 英国的一份进步政治与文化杂志。
-    - [Rest of the world](https://restofworld.org/): 科技报道
-    - [NOEMA](https://www.noemamag.com/): 「探索席卷我们世界的变革」，发表有关哲学、治理、地缘政治、经济、技术和文化交叉领域的文章。
-    - [Semafor](https://www.semafor.com/): 将无可争议的事实与记者对这些事实的分析分开，提供不同的和更全面的观点，并分享其他媒体对该主题的有力报道。
+  - [新政治家](https://www.newstatesman.com/): 英国的一份进步政治与文化杂志。
+  - [Rest of the world](https://restofworld.org/): 科技报道
+  - [NOEMA](https://www.noemamag.com/): 「探索席卷我们世界的变革」，发表有关哲学、治理、地缘政治、经济、技术和文化交叉领域的文章。
+  - [Semafor](https://www.semafor.com/): 将无可争议的事实与记者对这些事实的分析分开，提供不同的和更全面的观点，并分享其他媒体对该主题的有力报道。
 
 ---
-
 
 {{< particles_effect_up  >}}

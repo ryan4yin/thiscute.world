@@ -3,8 +3,8 @@ title: "Python 并发编程：PoolExecutor 篇"
 date: 2019-03-15T22:34:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "python-concurrency.webp"
+  - name: "featured-image"
+    src: "python-concurrency.webp"
 
 tags: ["Python", "Concurrency", "并发"]
 categories: ["tech"]
@@ -16,7 +16,7 @@ code:
   maxShownLines: 100
 ---
 
->个人笔记，如有疏漏，还请指正。
+> 个人笔记，如有疏漏，还请指正。
 
 使用多线程（threading）和多进程（multiprocessing）完成常规的并发需求，在启动的时候 start、join 等步骤不能省，复杂的需要还要用 1-2 个队列。
 随着需求越来越复杂，如果没有良好的设计和抽象这部分的功能层次，代码量越多调试的难度就越大。
@@ -25,13 +25,14 @@ code:
 
 这个包提供了两个执行器：线程池执行器 ThreadPoolExecutor 和进程池执行器 ProcessPoolExecutor，两个执行器提供同样的 API。
 
->池的概念主要目的是为了重用：让线程或进程在生命周期内可以多次使用。它减少了创建创建线程和进程的开销，提高了程序性能。重用不是必须的规则，但它是程序员在应用中使用池的主要原因。
+> 池的概念主要目的是为了重用：让线程或进程在生命周期内可以多次使用。它减少了创建创建线程和进程的开销，提高了程序性能。重用不是必须的规则，但它是程序员在应用中使用池的主要原因。
 
 池，只有固定个数的线程/进程，通过 max_workers 指定。
+
 1. 任务通过 executor.submit 提交到 executor 的任务队列，返回一个 future 对象。
-    - Future 是常见的一种并发设计模式。一个Future对象代表了一些尚未就绪（完成）的结果，在「将来」的某个时间就绪了之后就可以获取到这个结果。
+   - Future 是常见的一种并发设计模式。一个Future对象代表了一些尚未就绪（完成）的结果，在「将来」的某个时间就绪了之后就可以获取到这个结果。
 1. 任务被调度到各个 workers 中执行。但是要注意，**一个任务一旦被执行，在执行完毕前，会一直占用该 worker**！
-    - **如果 workers 不够用，其他的任务会一直等待**！因此 PoolExecutor 不适合实时任务。
+   - **如果 workers 不够用，其他的任务会一直等待**！因此 PoolExecutor 不适合实时任务。
 
 ```python
 import concurrent.futures
@@ -72,34 +73,35 @@ if __name__ == "__main__":
 ## API 详细说明
 
 concurrent.futures 包含三个部分的 API：
+
 1. PoolExecutor：也就是两个执行器的 API
-    - 构造器：主要的参数是 max_workers，用于指定线程池大小（或者说 workers 个数）
-    - `submit(fn, *args, **kwargs)`：将任务函数 fn 提交到执行器，args 和 kwargs 就是 fn 需要的参数。
-        - 返回一个 future，用于获取结果
-    - `map(func, *iterables, timeout=None, chunksize=1)`：当任务是同一个，只有参数不同时，可以用这个方法代替 submit。iterables 的每个元素对应 func 的一组参数。
-        - 返回一个 futures 的迭代器
-    - `shutdown(wait=True)`：关闭执行器，一般都使用 with 管理器自动关闭。
+   - 构造器：主要的参数是 max_workers，用于指定线程池大小（或者说 workers 个数）
+   - `submit(fn, *args, **kwargs)`：将任务函数 fn 提交到执行器，args 和 kwargs 就是 fn 需要的参数。
+     - 返回一个 future，用于获取结果
+   - `map(func, *iterables, timeout=None, chunksize=1)`：当任务是同一个，只有参数不同时，可以用这个方法代替 submit。iterables 的每个元素对应 func 的一组参数。
+     - 返回一个 futures 的迭代器
+   - `shutdown(wait=True)`：关闭执行器，一般都使用 with 管理器自动关闭。
 1. Future：任务被提交给执行器后，会返回一个 future
-    - `future.result(timout=None)`：**最常用的方法**，返回任务的结果。如果任务尚未结束，这个方法会一直等待！
-        - timeout 指定超时时间，为 None 时没有超时限制。超时会抛出 concurrent.futures.TimeoutError 异常。
-        - 如果调用抛出了异常，result 会抛出同样的异常
-        - 如果调用被取消，result 抛出 CancelledError 异常
-    - `exception(timeout=None)`：返回任务抛出的异常。和 result() 一样，也会等待任务结束。
-      - timeout 参数跟 result 一致，超时会抛出 concurrent.futures.TimeoutError 异常。
-        - 如果调用抛出了异常，exception 会返回同样的异常，否则返回 None
-        - 如果调用被取消，result 抛出 CancelledError 异常
-    - `cancel()`：取消此任务
-    - `add_done_callback(fn)`：future 完成后，会执行 `fn(future)`。
-    - `running()`：是否正在运行
-    - `done()`：future 是否已经结束了，boolean
-    - ...详见官方文档
+   - `future.result(timeout=None)`：**最常用的方法**，返回任务的结果。如果任务尚未结束，这个方法会一直等待！
+     - timeout 指定超时时间，为 None 时没有超时限制。超时会抛出 concurrent.futures.TimeoutError 异常。
+     - 如果调用抛出了异常，result 会抛出同样的异常
+     - 如果调用被取消，result 抛出 CancelledError 异常
+   - `exception(timeout=None)`：返回任务抛出的异常。和 result() 一样，也会等待任务结束。
+     - timeout 参数跟 result 一致，超时会抛出 concurrent.futures.TimeoutError 异常。
+       - 如果调用抛出了异常，exception 会返回同样的异常，否则返回 None
+       - 如果调用被取消，result 抛出 CancelledError 异常
+   - `cancel()`：取消此任务
+   - `add_done_callback(fn)`：future 完成后，会执行 `fn(future)`。
+   - `running()`：是否正在运行
+   - `done()`：future 是否已经结束了，boolean
+   - ...详见官方文档
 1. 模块带有的实用函数
-    - `concurrent.futures.as_completed(fs, timeout=None)`：等待 fs （futures iterable）中的 future 完成
-        - 一旦 fs 中的某 future 完成了，这个函数就立即返回该 future。
-        - 这个方法，使每次返回的 future，总是最先完成的 future。而不是先等待任务 1，再等待任务 2...
-        - 常通过 `for future in as_completed(fs):` 使用此函数。
-    - `concurrent.futures.wait(fs, timeout=None, return_when=ALL_COMPLETED)`：一直等待，直到 return_when 所指定的事发生，或者 timeout
-        - return_when 有三个选项：ALL_COMPLETED（fs 中的 futures 全部完成），FIRST__COMPLETED（fs 中任意一个 future 完成）还有 FIRST_EXCEPTION（某任务抛出异常）
+   - `concurrent.futures.as_completed(fs, timeout=None)`：等待 fs （futures iterable）中的 future 完成
+     - 一旦 fs 中的某 future 完成了，这个函数就立即返回该 future。
+     - 这个方法，使每次返回的 future，总是最先完成的 future。而不是先等待任务 1，再等待任务 2...
+     - 常通过 `for future in as_completed(fs):` 使用此函数。
+   - `concurrent.futures.wait(fs, timeout=None, return_when=ALL_COMPLETED)`：一直等待，直到 return_when 所指定的事发生，或者 timeout
+     - return_when 有三个选项：ALL_COMPLETED（fs 中的 futures 全部完成），FIRST\_\_COMPLETED（fs 中任意一个 future 完成）还有 FIRST_EXCEPTION（某任务抛出异常）
 
 ## Future 设计模式
 

@@ -4,22 +4,21 @@ date: 2021-04-11T16:38:13+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "yume_grimgar.webp"
+  - name: "featured-image"
+    src: "yume_grimgar.webp"
 
 tags: ["网络", "Linux", "网络调试"]
 categories: ["tech"]
 series: ["计算机网络相关"]
 ---
 
->文中的命令均在 macOS Big Sur 和 openSUSE Tumbleweed 上测试通过
+> 文中的命令均在 macOS Big Sure 和 openSUSE Tumbleweed 上测试通过
 
 ## socat & netcat
 
 netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 `nc`.
 
 而 [socat(socket cat)](https://github.com/3ndG4me/socat)，官方文档描述它是 `"netcat++" (extended design, new implementation)`，项目比较活跃，kubernetes-client(kubectl) 底层就是使用的它做各种流量转发。
-
 
 在不方便安装 socat 的环境中，我们可以使用系统自带的 netcat.
 而在其他环境，可以考虑优先使用 socat.
@@ -63,8 +62,8 @@ brew install socat
 
 ### 1. 检测远程端口的可连接性
 
->很多人会用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
-telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat
+> 很多人会用 telnet 来做这项测试，不过现在很多发行版基本都不自带 telnet 了，还需要额外安装。
+> telnet 差不多已经快寿终正寝了，还是建议使用更专业的 socat/netcat
 
 使用 socat/netcat 检测远程端口的可连接性：
 
@@ -124,10 +123,9 @@ socat UDP:192.168.31.123:7000 -
 
 ### 3. 调试 TLS 协议
 
->参考 socat 官方文档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
+> 参考 socat 官方文档：[Securing Traffic Between two Socat Instances Using SSL](http://www.dest-unreach.org/socat/doc/socat-openssltunnel.html)
 
->测试证书及私钥的生成参见 [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/about-tls-cert/)
-
+> 测试证书及私钥的生成参见 [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](/posts/about-tls-cert/)
 
 模拟一个 mTLS 服务器，监听 4433 端口，接收到的数据同样输出到 stdout：
 
@@ -264,12 +262,10 @@ socat 还提供了丰富的 examples 与 tutorials，介绍了许多其他用法
 - [IP Multicasting with Socat](http://www.dest-unreach.org/socat/doc/socat-multicast.html): 支持 IP 包广播，将管道另一端设为一个 CIDR 网段
 - etc...
 
-
 详见官方文档：
 
 - [socat - Multipurpose relay](http://www.dest-unreach.org/socat/)
 - [nc-openbsd man page](https://man.openbsd.org/nc.1)
-
 
 ## 参考
 

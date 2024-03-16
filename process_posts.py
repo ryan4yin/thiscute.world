@@ -53,10 +53,10 @@ def gen_folder_name(post: Path):
         raise Exception(f"invalid date: {post_time}")
 
     # 每三个月一个季度，一年 4 个季度
-    quater = ceil(post_time.month / 3)
+    quarter = ceil(post_time.month / 3)
 
     # 目前暂按 年/季度 进行分类
-    return f"{post_time.year}/Q{quater}"
+    return f"{post_time.year}/Q{quarter}"
 
 
 def restructure_posts(posts):

@@ -5,10 +5,20 @@ lastmod: 2023-03-05T21:57:01+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "tft_esp32_show_image-2.webp"
+  - name: "featured-image"
+    src: "tft_esp32_show_image-2.webp"
 
-tags: ["电子电路", "Electrical Engineering", "MCU", "ESP32", "SPI", "GPIO", "贪吃蛇", "显示屏"]
+tags:
+  [
+    "电子电路",
+    "Electrical Engineering",
+    "MCU",
+    "ESP32",
+    "SPI",
+    "GPIO",
+    "贪吃蛇",
+    "显示屏",
+  ]
 categories: ["tech"]
 series: ["EE 入门"]
 series_weight: 2
@@ -23,14 +33,14 @@ comment:
 
 # 兼容旧的 Path（单词拼写错误）
 aliases:
-- /posts/ee-basics-esp32-display/
+  - /posts/ee-basics-esp32-display/
 ---
 
 ## 零、硬件准备与依赖库调研
 
 之前淘货买了挺多显示屏的，本文使用的是这一块：
 
-- [3.5 寸电阻触摸屏，480 * 320，SPI 协议，显示屏驱动 IC 为 ILI9488](http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU:MSP3520)
+- [3.5 寸电阻触摸屏，480 \* 320，SPI 协议，显示屏驱动 IC 为 ILI9488](http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU:MSP3520)
 
 开发板是 ESP-WROOM-32 模组开发板。
 其他需要的东西：杜邦线、面包板、四个 10 K$\Omega$ 电阻、四个按键。
@@ -78,7 +88,6 @@ pio project init --ide=vscode -d tft_esp32_arduino
 {{<figure src="/images/ee-basics-2-esp32-display/esp32-spi-display-wiring.webp" width="70%" title="使用 wokwi.com 制作的示意图">}}
 {{<figure src="/images/ee-basics-2-esp32-display/esp32-spi-display-wiring-real.webp" width="70%" title="接线实操">}}
 
-
 线接好后需要更新下 PlatformIO 项目根目录 `platformio.ini` 的配置，使其显示屏引脚相关的参数与我们的接线完全对应起来，这样才能正常驱动这个显示屏。
 
 这里我以驱动库官方提供的模板 [Bodmer/TFT_eSPI/docs/PlatformIO](https://github.com/Bodmer/TFT_eSPI/tree/master/docs/PlatformIO) 为基础，更新了其构建参数对应的引脚，加了点注释，得到的内容如下（如果你的接线与我一致，直接抄就行）：
@@ -96,7 +105,7 @@ build_flags =
   -Os
   -DCORE_DEBUG_LEVEL=ARDUHAL_LOG_LEVEL_DEBUG
   -DUSER_SETUP_LOADED=1
-  
+
   ; Define the TFT driver, pins etc here:
   ; 显示屏驱动要对得上
   -DILI9488_DRIVER=1
@@ -136,13 +145,12 @@ build_flags =
 
 - [Bodmer/TFT_eSPI - examples/480x320](https://github.com/Bodmer/TFT_eSPI/blob/master/examples/480%20x%20320)
 
->可以直接从 libdeps 中 copy exmaples 代码过来测试：`cp .pio/libdeps/esp32dev/TFT_eSPI/examples/480\ x\ 320/TFT_Meters/TFT_Meters.ino src/main.ino`
+> 可以直接从 libdeps 中 copy examples 代码过来测试：`cp .pio/libdeps/esp32dev/TFT_eSPI/examples/480\ x\ 320/TFT_Meters/TFT_Meters.ino src/main.ino`
 
 我跑出来的效果：
 
 {{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_meters_demo_2.webp" width="60%">}}
 {{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_sin_cosin_chart_2.webp" width="60%">}}
-
 
 ## 二、显示图片、文字
 
@@ -196,11 +204,9 @@ void setup()
 void loop() {}
 ```
 
-
 编译上传，效果如下：
 
 {{<figure src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="60%">}}
-
 
 ## 三、写个极简贪吃蛇游戏
 
@@ -305,28 +311,28 @@ void command() // 获取按键命令命令
   if (digitalRead(BUTTON_LEFT_PIN) == HIGH) {
       if (DIRECTION.x != 1 || DIRECTION.y != 0)
       { // 如果不是反方向，按键才有效
-        Serial.println("Trun Left!");
+        Serial.println("Turn Left!");
         DIRECTION.x = -1;
         DIRECTION.y = 0;
       }
   } else if (digitalRead(BUTTON_RIGHT_PIN) == HIGH) {
       if (DIRECTION.x != -1 || DIRECTION.y != 0)
       {
-        Serial.println("Trun Right!");
+        Serial.println("Turn Right!");
         DIRECTION.x = 1;
         DIRECTION.y = 0;
       }
   } else if (digitalRead(BUTTON_UP_PIN) == HIGH) {
       if (DIRECTION.x != 0 || DIRECTION.y != 1)
       {  // 注意 Y 轴，向上是负轴，因为屏幕左上角是原点 (0,0)
-        Serial.println("Trun Up!");
+        Serial.println("Turn Up!");
         DIRECTION.x = 0;
         DIRECTION.y = -1;
       }
   } else if (digitalRead(BUTTON_DOWN_PIN) == HIGH) {
       if (DIRECTION.x != 0 || DIRECTION.y != -1)
       {
-        Serial.println("Trun Down!");
+        Serial.println("Turn Down!");
         DIRECTION.x = 0;
         DIRECTION.y = 1;
       }
@@ -415,7 +421,7 @@ void eat_self()
 
 {{< bilibili id=BV1jT411e7HJ >}}
 
-<!-- 
+<!--
 因为买的摇秆有问题，没焊好，各种锡把引脚连在了一起，暂时放弃此想法。
 
 ## 四、换成用摇杆控制贪吃蛇吧

@@ -103,7 +103,7 @@ comment:
   - 安装好了淘宝 28 块钱买的四自由度模板机械臂，拿昨天写的遥控小车代码改了改逻辑，使用树莓派实现了蓝牙手柄遥控机械臂。不过机械臂钳子的舵机被我弄坏了，夹不了东西 emmm
   - 焊接好了淘宝 23.5 元买的行走机器人套件，虽然确实能正常前进后退，但是前进/回退的切换间隔有点长，调了半天没搞明白怎么调电位器能缩短它的间隔时间。当然显然我也还没明白它的电路图原理，只是单纯照着 PCB 板标注把元器件焊接上去了而已，隔几天再研究下这个电路图，了解下各个元器件的功能，以及电路如何工作。
 
-{{<figure src="/images/now/mintreading-first-100days-achivement.webp" title="在薄荷阅读上读完的第一本英语原版书" width="35%">}}
+{{<figure src="/images/now/mintreading-first-100days-achievement.webp" title="在薄荷阅读上读完的第一本英语原版书" width="35%">}}
 
 ### 2022-12-15
 
@@ -690,7 +690,7 @@ comment:
   - The Unlikely Pilgrimage of Harold Fry - 16/100
   - 一点英语 270 天英语学习 - 17/270
   - [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美语发音教程 - 一周目 1/16
-  - 多抓鱼上下单了《English Grammer In Use》跟《赖世雄经典英语语法》，语法几乎全忘光了，这次打算补一补语法
+  - 多抓鱼上下单了《English Grammar In Use》跟《赖世雄经典英语语法》，语法几乎全忘光了，这次打算补一补语法
   - z-library 上下载了《Key words for fluency》前两本书，因为发现自己口语经常不太会表达自己的想法，打算靠这个补补看
 
 ### 2022-09-21
@@ -868,14 +868,13 @@ comment:
 
 ### 2022-08-24
 
->2023-09-04 自 [荐书《在峡江的转弯处——陈行甲人生笔记》- 十年之约论坛](https://bozu.net/thread-878.htm) 补录
+> 2023-09-04 自 [荐书《在峡江的转弯处——陈行甲人生笔记》- 十年之约论坛](https://bozu.net/thread-878.htm) 补录
 
 - 在十年之约论坛上荐书《陈行甲人生笔记》，得到了 @Daffodil 的热烈回应：
-    - 「很感谢你的推荐！！真心的。我用了一晚上的时间基本看完了（不是一目十行那种，而是多次伴随着眼眶发热的情况下），真心受教，感概良多。会想起了自己的前半生和自己的原生家庭教育。作为回馈，我推荐你一本Donald L. Brown<The Morphine Dream>（中译《步行者日记》）以示感谢。」
-    - 「我喜欢真实人物、底层&普通人物的传记和回忆录，有强烈的可读性和教育及借鉴性。」
-    - 「好题目往往是较大的加分项哈，比如《你当像鸟飞往你的山》比原著那个《Educated:  A  Memoir》具象和诗意N多？我承认，我就是被那本书的标题所吸引，然后一气呵成读完的。。。」
+  - 「很感谢你的推荐！！真心的。我用了一晚上的时间基本看完了（不是一目十行那种，而是多次伴随着眼眶发热的情况下），真心受教，感概良多。会想起了自己的前半生和自己的原生家庭教育。作为回馈，我推荐你一本Donald L. Brown<The Morphine Dream>（中译《步行者日记》）以示感谢。」
+  - 「我喜欢真实人物、底层&普通人物的传记和回忆录，有强烈的可读性和教育及借鉴性。」
+  - 「好题目往往是较大的加分项哈，比如《你当像鸟飞往你的山》比原著那个《Educated: A Memoir》具象和诗意N多？我承认，我就是被那本书的标题所吸引，然后一气呵成读完的。。。」
 - 总之，@Dafoffil 给我推荐了《步行者日记》跟《当你像鸟飞往你的山》，而我给他推荐了《陈行甲人生笔记》跟《走出荒野（Wild: From Lost to Found on the Pacific Crest Trail）》，非常愉快的一次互相荐书！
-
 
 {{<figure src="/images/now/recommend-books.webp" title="荐书《在峡江的转弯处——陈行甲人生笔记》" width="80%">}}
 
@@ -1161,7 +1160,7 @@ comment:
 
 ### 2022-05-20
 
-- 学习极客时间的《深入剖析 Kuberntes》 - 100%
+- 学习极客时间的《深入剖析 Kubernetes》 - 100%
   - 学完后第一次做测验，拿了 50 分，陷入自我怀疑 emmmm
   - 容器运行时
     - Kubelet 控制循环 `SyncLoop` 绝对不会阻塞，任何长时间任务都会创建新的 goroutine 来异步执行
@@ -1178,9 +1177,9 @@ comment:
 
 ### 2022-05-19
 
-- 学习极客时间的《深入剖析 Kuberntes》 - 87%
+- 学习极客时间的《深入剖析 Kubernetes》 - 87%
   - 简单学习了 CRD + Controller 的编写，包含 Informer 机制等。不过内容太老了，还是之后看 Programming Kubernetes 再详细学吧。
-  - K8s API 资源的组织方式为 `api/<apiGroup>/<GroupVersion>/<Resource>`，yaml 中的 `apiVersion` 为 `<apiGroup>/<GroupVersion>`，而 `Kind` 的值就是 `<Resouce>`
+  - K8s API 资源的组织方式为 `api/<apiGroup>/<GroupVersion>/<Resource>`，yaml 中的 `apiVersion` 为 `<apiGroup>/<GroupVersion>`，而 `Kind` 的值就是 `<Resource>`
     - Pod/Node/configmap 等几个核心资源的 `<apiGroup>` 为空，因此可以直接省略掉
     - 其他核心资源都是以功能分类的，都有 `<apiGroup>` 属性
   - RBAC 是以 Role 为授权的基本单位，`Role` 的规则会指定用户对不同 apiGroups/Resources/resourceNames 可以执行哪些动作 `verbs`
@@ -1256,7 +1255,7 @@ comment:
 
 ### 2022-05-11
 
-- 学习极客时间的《深入剖析 Kuberntes》 - 53%
+- 学习极客时间的《深入剖析 Kubernetes》 - 53%
   - 学习了 NetoworkPolicy、kube-proxy 的实现原理，其实都是用 iptables 实现的，原理挺简单的。
   - 不过 kube-proxy 很早就支持了 ipvs 模式，它在大规模场景下比 iptables 性能更好一些。但是 AWS EKS 目前官方仍然并不支持 ipvs 模式，打开可能会有坑。
 - 极客时间《分布式协议与算法实战》 - 4%
@@ -1267,7 +1266,7 @@ comment:
 
 ### 2022-05-09
 
-- 学习极客时间的《深入剖析 Kuberntes》 - 48%
+- 学习极客时间的《深入剖析 Kubernetes》 - 48%
   - 复习了 Linux 虚拟网络接口以及容器网络原理、学习了 CNI 网络插件的原理
   - 学习了两个 underlay 网络实现：flannel 的 host-gw 模式实现原理、calico 基于 BGP 的实现原理
   - calico 在跨 vlan 时需要使用 IPIP，学习了相关原理
@@ -1475,5 +1474,3 @@ comment:
 ### 2022-01-01
 
 - 了解 APISIX/Nginx/Envoy 中的各种负载均衡算法，及其适用场景、局限性。
-
-

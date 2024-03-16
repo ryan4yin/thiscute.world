@@ -5,8 +5,8 @@ lastmod: 2023-01-02T18:00:45+08:00
 
 draft: false
 resources:
-- name: "featured-image"
-  src: "github-profile-2022-ryan4yin.webp"
+  - name: "featured-image"
+    src: "github-profile-2022-ryan4yin.webp"
 
 tags: ["总结"]
 categories: ["life", "tech"]
@@ -23,9 +23,7 @@ comment:
 
 ## 闲言碎语
 
-
 是的又过去一年，又到了一年一度的传统节目——年终总结时间。
-
 
 ## 2022 年流水账
 
@@ -45,7 +43,7 @@ comment:
   - 主要工作：使用 [aws/karpenter](https://github.com/aws/karpenter) 实现离线计算集群的弹性扩缩容，省了一波成本。
 - 5 月份
   - 主要是学完了《深入浅出 Kubernetes》这个极客时间专栏
-  - 通过《分布式协议与算法实战》等相关资料简单了解了下分布式共识算法的原理，记录了些笔记，8 月份的时候把笔记整理输出为了一篇博客 [分布式系统的一致性问题与共识算法](https://thiscute.world/posts/consistency-and-consensus-algorithm/) 
+  - 通过《分布式协议与算法实战》等相关资料简单了解了下分布式共识算法的原理，记录了些笔记，8 月份的时候把笔记整理输出为了一篇博客 [分布式系统的一致性问题与共识算法](https://thiscute.world/posts/consistency-and-consensus-algorithm/)
   - 还读了许多社区的区块链相关资料，包括但不限于 [Web 3.0：穿越十年的讨论 - 知乎](https://www.zhihu.com/special/1452635344142909440)、[《Web3 DApp 最佳编程实践指南》](https://guoyu.mirror.xyz/RD-xkpoxasAU7x5MIJmiCX4gll3Cs0pAd5iM258S1Ek)、[dcbuild3r/blockchain-development-guide](https://github.com/dcbuild3r/blockchain-development-guide)
   - 因为 AI 发展迅猛，来了三分钟兴趣学了一点 [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh)，但是进度条走了不到 15% 就不了了之了。
   - 主要工作：研究跨云应用部署方案与跨云 kubernetes 网络方案，如 karmada/kubevela/istio，以及 L4/L7 层的开源/商业网关方案
@@ -75,8 +73,8 @@ comment:
     - ![](/images/now/the-linux-programming-interface.webp "Linux/Unix 系统编程手册（上册）")
   - 通过友链漫游，发现了 [0xFFFF 社区](https://0xffff.one)，内容质量很高，也在社区的 QQ 群里跟群友们聊了些有意思有价值的内容。
   - 打游戏学英语
-      ![](/images/learn-english-again/genshin-impact-noelle.webp "超飒的重剑女仆 Noelle")
-      ![](/images/learn-english-again/demo2-talk-1.webp "DEEMO 2 中丰富的对话内容")
+    ![](/images/learn-english-again/genshin-impact-noelle.webp "超飒的重剑女仆 Noelle")
+    ![](/images/learn-english-again/demo2-talk-1.webp "DEEMO 2 中丰富的对话内容")
   - 因为许多原因，中概股大跌，公司架构大调整，走了很多大佬，包括去年带我冲浪的算法部门前辈。
   - 主要工作
     - 搞数据上报网关的需求，一路踩坑，总算把数万 QPS 的流量全部迁移到新网关上了。
@@ -106,14 +104,13 @@ comment:
 - 最后是连续三年蝉联我年度歌手的天依同学，截图放这里纪念一下：
   {{<figure src="/images/now/netease-cloud-music-2022-singer-of-ryan4yin.webp" title="我的网易云年度歌手" width="50%">}}
 
-
 ## 2022 年 Highlight
 
 ### 1. 英语
 
 英语也是我今年比较惊喜的一个部分，很长一段时间内，我都觉得英语的优先级并不高，一直没有把它的学习排上日程，水平也一直没啥显著提升。
 
-但是从今年 9 月份开始到现在这四个月的英语学习中，我的进步相当明显，从去年大概  4700 词，到现在测试结果为 6583 词，涨了近 2000 词，月均接近 500 词（按这个速度，2023 年 10000 词的目标好像没啥难度了）。
+但是从今年 9 月份开始到现在这四个月的英语学习中，我的进步相当明显，从去年大概 4700 词，到现在测试结果为 6583 词，涨了近 2000 词，月均接近 500 词（按这个速度，2023 年 10000 词的目标好像没啥难度了）。
 
 词汇量测试结果按时间排序如下，使用的测试工具是 [Test Your Vocabulary](https://preply.com/en/learn/english/test-your-vocab) ：
 
@@ -122,11 +119,10 @@ comment:
 {{<figure src="/images/learn-english-again/2022-11-17-test-your-vocabulary-result.webp" title="2022-11-17 词汇量测试结果：5600 词" width="65%">}}
 {{<figure src="/images/learn-english-again/2022-10-18-test-your-vocabulary-result.webp" title="2022-10-18 词汇量测试结果：5100 词" width="40%">}}
 
-
 另外因为主要是靠读书来学英语，今年的英文阅读能力也有明显提升，跟 9 月份刚开始读的时候比，阅读体验要流畅多了。
 一些英文原版书阅读成就：
 
-{{<figure src="/images/now/mintreading-first-100days-achivement.webp" title="在薄荷阅读上读完的第一本英语原版书" width="35%">}}
+{{<figure src="/images/now/mintreading-first-100days-achievement.webp" title="在薄荷阅读上读完的第一本英语原版书" width="35%">}}
 
 而口语、写作这些今年基本没练习，原地踏步。
 
@@ -175,7 +171,6 @@ SRE 组 2022 年工作的主旋律其实就是省钱，我 2022 年的工作上�
 
 ## 2023 年的展望
 
-
 ### 技术侧
 
 2022 年的结果跟年初的展望区别仍然是挺大的，但是我个人挺满意。
@@ -201,7 +196,6 @@ SRE 组 2022 年工作的主旋律其实就是省钱，我 2022 年的工作上�
   - 制作一台自己的无人机或者穿越机（虽然还不太懂什么是穿越机...），并借此练习自己学习的软硬件知识。
   - 更多地在公司内部、博客等地方分享自己所学的知识，提升所学知识的可复用性，同时也碰撞出更多的灵光，更深入地理解它们。
 
-
 ### 生活侧
 
 2022 年初我写的生活上的展望，貌似只有「阅读」这一项达标了...
@@ -221,4 +215,4 @@ SRE 组 2022 年工作的主旋律其实就是省钱，我 2022 年的工作上�
 
 那么 2023 年，我希望自己能够「认识更多有趣的人，见识下更宽广的世界」~
 
->更多有趣的的 2022 年度总结：<https://github.com/saveweb/review-2022>
+> 更多有趣的的 2022 年度总结：<https://github.com/saveweb/review-2022>

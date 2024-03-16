@@ -1,0 +1,19 @@
+[files]
+ignore-dot = true
+ignore-files = true
+extend-exclude = ["themes/", "data/", "static-surprises/", "resources/"]
+
+[default]
+binary = false
+# ignore some special identifiers(sha256, mac address, crypto keys, etc)
+extend-ignore-re = [
+  "6wSenmFo",     # crypto keys
+  "UE5",          # Unreal Engine 5
+  "CIPH",         # cipher
+  "024242c712ba", # some inteface id
+  "02427d95ba7e",
+  "02:42:7d:95:ba:7e",
+  "02:42:42:c7:12:ba", # some mac like address
+  "98:48:aa:2c:88:63:ba:1e:97:bc:87:19:2a:2f:91:", # some mac like address
+  "ixlWnnpTibRiKBaGMIaLglYRhvbvibUo8PH4woIidTho2e6swF2aqILk6YFJDpxX", # crypto key
+]

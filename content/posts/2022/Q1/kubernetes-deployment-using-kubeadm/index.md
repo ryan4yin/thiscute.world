@@ -4,23 +4,23 @@ date: 2022-01-25T01:37:00+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "adopt-kubernetes.webp"
+  - name: "featured-image"
+    src: "adopt-kubernetes.webp"
 
 tags: ["Kubernetes", "云原生"]
 categories: ["tech"]
 series: ["云原生相关"]
 ---
 
->本文完成于 2022-01-25，其中部分内容已经过时，仅供参考。
+> 本文完成于 2022-01-25，其中部分内容已经过时，仅供参考。
 
->本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来，不保证正确
+> 本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来，不保证正确
 
 ## 本地 Kubernetes 集群安装工具
 
->云上的 Kubernetes 集群，基本上各云厂商都支持一键部署。这里主要关注本地部署，或者叫做裸机(baremetal)部署
+> 云上的 Kubernetes 集群，基本上各云厂商都支持一键部署。这里主要关注本地部署，或者叫做裸机(baremetal)部署
 
->本文介绍的方法适合开发测试使用，安全性、稳定性、长期可用性等方案都可能还有问题。
+> 本文介绍的方法适合开发测试使用，安全性、稳定性、长期可用性等方案都可能还有问题。
 
 kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很多组件都有多种实现，这些实现各有特点，让初学者眼花缭乱。
 
@@ -28,14 +28,13 @@ kubernetes 是一个组件化的系统，安装过程有很大的灵活性，很
 
 因此社区出现了各种各样的安装方案，下面介绍下几种支持裸机（Baremetal）部署的工具：
 
-
 1. [kubeadm](https://github.com/kubernetes/kubeadm): 社区的集群安装工具，目前已经很成熟了。
    1. 使用难度：简单
 2. [k3s](https://github.com/k3s-io/k3s): 轻量级 kubernetes，资源需求小，部署非常简单，适合开发测试用或者边缘环境
    1. 支持 airgap 离线部署
    2. 使用难度：超级简单
 3. [alibaba/sealer](https://github.com/alibaba/sealer): 支持将整个 kubernetes 打包成一个镜像进行交付，而且部署也非常简单。
-   1. 使用难度：超级简单 
+   1. 使用难度：超级简单
    2. 这个项目目前还在发展中，不过貌似已经有很多 toB 的公司在使用它进行 k8s 应用的交付了。
 4. [kubespray](https://github.com/kubernetes-sigs/kubespray): 适合自建生产级别的集群，是一个大而全的 kubernetes 安装方案，自动安装容器运行时、k8s、网络插件等组件，而且各组件都有很多方案可选，但是感觉有点复杂。
    1. 使用难度：中等
@@ -53,9 +52,9 @@ kubernetes 官方介绍了两种高可用集群的拓扑结构：「堆叠 Etcd 
 简单起见，本文使用「堆叠 Etcd 拓扑」结构，创建一个 3 master 的高可用集群。
 
 参考：
+
 - [Kubernetes Docs - Installing kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 - [Kubernetes Docs - Creating Highly Available clusters with kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/)
-
 
 ## 0. 网络环境的准备
 
@@ -99,6 +98,7 @@ k8s.gcr.io/coredns/coredns:v1.8.4
 目前 kubernetes 的容器网络，默认使用的是 bridge 模式，这种模式下，需要使 `iptables` 能够接管 bridge 上的流量。
 
 配置如下：
+
 ```shell
 sudo modprobe br_netfilter
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
@@ -114,32 +114,29 @@ sudo sysctl --system
 
 ### 1.2 开放节点端口
 
->局域网环境的话，建议直接关闭防火墙。这样所有端口都可用，方便快捷。
+> 局域网环境的话，建议直接关闭防火墙。这样所有端口都可用，方便快捷。
 
->通常我们的云上集群，也是关闭防火墙的，只是会通过云服务提供的「安全组」来限制客户端 ip
+> 通常我们的云上集群，也是关闭防火墙的，只是会通过云服务提供的「安全组」来限制客户端 ip
 
 Control-plane 节点，也就是 master，需要开放如下端口：
 
-| Protocol | Direction | Port Range | Purpose                 | Used By                   |
-|----------|-----------|------------|-------------------------|---------------------------|
-| TCP      | Inbound   | 6443\*      | Kubernetes API server   | All                       |
-| TCP      | Inbound   | 2379-2380  | etcd server client API  | kube-apiserver, etcd      |
-| TCP      | Inbound   | 10250      | kubelet API             | Self, Control plane       |
-| TCP      | Inbound   | 10251      | kube-scheduler          | Self                      |
-| TCP      | Inbound   | 10252      | kube-controller-manager | Self                      |
+| Protocol | Direction | Port Range | Purpose                 | Used By              |
+| -------- | --------- | ---------- | ----------------------- | -------------------- |
+| TCP      | Inbound   | 6443\*     | Kubernetes API server   | All                  |
+| TCP      | Inbound   | 2379-2380  | etcd server client API  | kube-apiserver, etcd |
+| TCP      | Inbound   | 10250      | kubelet API             | Self, Control plane  |
+| TCP      | Inbound   | 10251      | kube-scheduler          | Self                 |
+| TCP      | Inbound   | 10252      | kube-controller-manager | Self                 |
 
 Worker 节点需要开发如下端口：
 
-| Protocol | Direction | Port Range  | Purpose               | Used By                 |
-|----------|-----------|-------------|-----------------------|-------------------------|
-| TCP      | Inbound   | 10250       | kubelet API           | Self, Control plane     |
-| TCP      | Inbound   | 30000-32767 | NodePort Services†    | All                     |
-
+| Protocol | Direction | Port Range  | Purpose            | Used By             |
+| -------- | --------- | ----------- | ------------------ | ------------------- |
+| TCP      | Inbound   | 10250       | kubelet API        | Self, Control plane |
+| TCP      | Inbound   | 30000-32767 | NodePort Services† | All                 |
 
 另外通常我们本地测试的时候，可能更想直接在 `80` `443` `8080` 等端口上使用 `NodePort`，
 就需要修改 kube-apiserver 的 `--service-node-port-range` 参数来自定义 NodePort 的端口范围，相应的 Worker 节点也得开放这些端口。
-
-
 
 ## 2. 安装容器运行时 containerd
 
@@ -240,7 +237,7 @@ crictl images
 
 简单起见，我们直接用 kube-vip 吧，参考了 kube-vip 的官方文档：[Kube-vip as a Static Pod with Kubelet](https://kube-vip.io/install_static/).
 
->P.S. 我也见过有的安装工具会直接抛弃 keepalived，直接在每个节点上跑一个 nginx 做负载均衡，配置里写死了所有 master 的地址...
+> P.S. 我也见过有的安装工具会直接抛弃 keepalived，直接在每个节点上跑一个 nginx 做负载均衡，配置里写死了所有 master 的地址...
 
 首先使用如下命令生成 kube-vip 的配置文件，以 ARP 为例（生产环境建议换成 BGP）：
 
@@ -315,11 +312,13 @@ kubeadm init --config kubeadm-config.yaml --upload-certs
 ```
 
 kubeadm 应该会报错，提示你有些依赖不存在，下面先安装好依赖项。
+
 ```shell
 sudo zypper in -y socat ebtables conntrack-tools
 ```
 
 再重新运行前面的 kubeadm 命令，应该就能正常执行了，它做的操作有：
+
 - 拉取控制面的容器镜像
 - 生成 ca 根证书
 - 使用根证书为 etcd/apiserver 等一票工具生成 tls 证书
@@ -340,7 +339,7 @@ sudo zypper in -y socat ebtables conntrack-tools
 - worker 节点加入集群的命令:
   ```shell
   kubeadm join 192.168.122.200:6443 --token <token> \
-        --discovery-token-ca-cert-hash sha256:<hash> 
+        --discovery-token-ca-cert-hash sha256:<hash>
   ```
 
 跑完第一部分 `kubeconfig` 的处理命令后，就可以使用 kubectl 查看集群状况了：
@@ -380,7 +379,7 @@ k8s-worker-1   NotReady   <none>                 86s     v1.22.1
 
 ```shell
 ❯ kubectl get csr --sort-by='{.spec.username}'
-NAME        AGE     SIGNERNAME                                    REQUESTOR                  REQUESTEDDURATION   CONDITION
+NAME        AGE     SIGNERNAME                                    REQUESTER                  REQUESTEDDURATION   CONDITION
 csr-95hll   6m58s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    <none>              Approved,Issued
 csr-tklnr   7m5s    kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    <none>              Approved,Issued
 csr-w92jv   9m15s   kubernetes.io/kube-apiserver-client-kubelet   system:bootstrap:q8ivnz    <none>              Approved,Issued
@@ -464,7 +463,7 @@ sudo zypper in helm
 
 ### 7.1 安装 Cilium
 
->官方文档：https://docs.cilium.io/en/v1.10/gettingstarted/k8s-install-kubeadm/
+> 官方文档：https://docs.cilium.io/en/v1.10/gettingstarted/k8s-install-kubeadm/
 
 cilium 通过 eBPF 提供了高性能与高可观测的 k8s 集群网络，
 另外 cilium 还提供了比 kube-proxy 更高效的实现，可以完全替代 kube-proxy.
@@ -542,7 +541,7 @@ kubectl delete namespace cilium-test
 
 ### 7.2 安装 Calico
 
->官方文档：https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises
+> 官方文档：https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises
 
 也就两三行命令。安装确实特别简单，懒得介绍了，看官方文档吧。
 
@@ -558,10 +557,9 @@ sudo zypper in k9s
 
 然后就可以愉快地玩耍了。
 
-
 ## 9. 安装 metrics-server
 
->这一步可能遇到的问题：[Enabling signed kubelet serving certificates](https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#kubelet-serving-certs)
+> 这一步可能遇到的问题：[Enabling signed kubelet serving certificates](https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/#kubelet-serving-certs)
 
 如果需要使用 HPA 以及简单的集群监控，那么 metrics-server 是必须安装的，现在我们安装一下它。
 
@@ -583,61 +581,59 @@ helm search repo metrics-server/metrics-server -l | head
 helm upgrade --install metrics-server metrics-server/metrics-server --version 3.5.0 --namespace kube-system
 ```
 
->metrics-server 默认只会部署一个实例，如果希望高可用，请参考官方配置：[metrics-server - high-availability manifests](https://github.com/kubernetes-sigs/metrics-server/tree/master/manifests/high-availability)
+> metrics-server 默认只会部署一个实例，如果希望高可用，请参考官方配置：[metrics-server - high-availability manifests](https://github.com/kubernetes-sigs/metrics-server/tree/master/manifests/high-availability)
 
 等 metrics-server 启动好后，就可以使用 `kubectl top` 命令啦：
 
 ```shell
 ❯ kubectl top node
-NAME           CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
-k8s-master-0   327m         16%    1465Mi          50%       
-k8s-master-1   263m         13%    1279Mi          44%       
-k8s-master-2   289m         14%    1282Mi          44%       
-k8s-worker-0   62m          3%     518Mi           13%       
-k8s-worker-1   115m         2%     659Mi           8%        
+NAME           CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+k8s-master-0   327m         16%    1465Mi          50%
+k8s-master-1   263m         13%    1279Mi          44%
+k8s-master-2   289m         14%    1282Mi          44%
+k8s-worker-0   62m          3%     518Mi           13%
+k8s-worker-1   115m         2%     659Mi           8%
 
 ❯ kubectl top pod
 No resources found in default namespace.
 
 ❯ kubectl top pod -A
-NAMESPACE     NAME                                   CPU(cores)   MEMORY(bytes)   
-kube-system   cilium-45nw4                           9m           135Mi           
-kube-system   cilium-5x7jf                           6m           154Mi           
-kube-system   cilium-84sr2                           7m           160Mi           
-kube-system   cilium-operator-78f45675-dp4b6         2m           30Mi            
-kube-system   cilium-operator-78f45675-fpm5g         1m           30Mi            
-kube-system   cilium-tkhl4                           6m           141Mi           
-kube-system   cilium-zxbvm                           5m           138Mi           
-kube-system   coredns-78fcd69978-dpxxk               3m           16Mi            
-kube-system   coredns-78fcd69978-ptd9p               1m           18Mi            
-kube-system   etcd-k8s-master-0                      61m          88Mi            
-kube-system   etcd-k8s-master-1                      50m          85Mi            
-kube-system   etcd-k8s-master-2                      55m          83Mi            
-kube-system   kube-apiserver-k8s-master-0            98m          462Mi           
-kube-system   kube-apiserver-k8s-master-1            85m          468Mi           
-kube-system   kube-apiserver-k8s-master-2            85m          423Mi           
-kube-system   kube-controller-manager-k8s-master-0   22m          57Mi            
-kube-system   kube-controller-manager-k8s-master-1   2m           23Mi            
-kube-system   kube-controller-manager-k8s-master-2   2m           23Mi            
-kube-system   kube-proxy-j2s76                       1m           24Mi            
-kube-system   kube-proxy-k6d6z                       1m           18Mi            
-kube-system   kube-proxy-k85rx                       1m           23Mi            
-kube-system   kube-proxy-pknsc                       1m           20Mi            
-kube-system   kube-proxy-xsq4m                       1m           15Mi            
-kube-system   kube-scheduler-k8s-master-0            3m           25Mi            
-kube-system   kube-scheduler-k8s-master-1            4m           21Mi            
-kube-system   kube-scheduler-k8s-master-2            5m           21Mi            
-kube-system   kube-vip-k8s-master-0                  4m           17Mi            
-kube-system   kube-vip-k8s-master-1                  2m           16Mi            
-kube-system   kube-vip-k8s-master-2                  2m           17Mi            
-kube-system   metrics-server-559f85484-5b6xf         7m           27Mi    
+NAMESPACE     NAME                                   CPU(cores)   MEMORY(bytes)
+kube-system   cilium-45nw4                           9m           135Mi
+kube-system   cilium-5x7jf                           6m           154Mi
+kube-system   cilium-84sr2                           7m           160Mi
+kube-system   cilium-operator-78f45675-dp4b6         2m           30Mi
+kube-system   cilium-operator-78f45675-fpm5g         1m           30Mi
+kube-system   cilium-tkhl4                           6m           141Mi
+kube-system   cilium-zxbvm                           5m           138Mi
+kube-system   coredns-78fcd69978-dpxxk               3m           16Mi
+kube-system   coredns-78fcd69978-pdf9p               1m           18Mi
+kube-system   etcd-k8s-master-0                      61m          88Mi
+kube-system   etcd-k8s-master-1                      50m          85Mi
+kube-system   etcd-k8s-master-2                      55m          83Mi
+kube-system   kube-apiserver-k8s-master-0            98m          462Mi
+kube-system   kube-apiserver-k8s-master-1            85m          468Mi
+kube-system   kube-apiserver-k8s-master-2            85m          423Mi
+kube-system   kube-controller-manager-k8s-master-0   22m          57Mi
+kube-system   kube-controller-manager-k8s-master-1   2m           23Mi
+kube-system   kube-controller-manager-k8s-master-2   2m           23Mi
+kube-system   kube-proxy-j2s76                       1m           24Mi
+kube-system   kube-proxy-k6d6z                       1m           18Mi
+kube-system   kube-proxy-k85rx                       1m           23Mi
+kube-system   kube-proxy-pknsc                       1m           20Mi
+kube-system   kube-proxy-xsq4m                       1m           15Mi
+kube-system   kube-scheduler-k8s-master-0            3m           25Mi
+kube-system   kube-scheduler-k8s-master-1            4m           21Mi
+kube-system   kube-scheduler-k8s-master-2            5m           21Mi
+kube-system   kube-vip-k8s-master-0                  4m           17Mi
+kube-system   kube-vip-k8s-master-1                  2m           16Mi
+kube-system   kube-vip-k8s-master-2                  2m           17Mi
+kube-system   metrics-server-559f85484-5b6xf         7m           27Mi
 ```
-
 
 ## 10. 为 etcd 添加定期备份能力
 
 请移步 [etcd 的备份与恢复](https://github.com/ryan4yin/knowledge/blob/master/datastore/etcd/etcd%20%E7%9A%84%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D.md)
-
 
 ## 11. 安装 Volume Provisioner
 

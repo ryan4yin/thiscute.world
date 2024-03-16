@@ -4,8 +4,8 @@ date: 2021-01-24T09:31:41+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "bankvault.webp"
+  - name: "featured-image"
+    src: "bankvault.webp"
 
 tags: ["Vault", "云原生", "Secrets", "配置", "配置管理"]
 categories: ["tech"]
@@ -14,7 +14,7 @@ series_weight: 9
 
 # 兼容旧的 Path（单词拼写错误）
 aliases:
-- /posts/expirence-of-vault/
+  - /posts/expirence-of-vault/
 ---
 
 [Vault](https://github.com/hashicorp/vault) 是 hashicorp 推出的 secrets 管理、加密即服务与权限管理工具。它的功能简介如下：
@@ -24,8 +24,8 @@ aliases:
 3. 权限管理：通过 policy，可以设定非常细致的 ACL 权限。
 4. 密钥引擎：也支持接管各大云厂商的账号体系（比如阿里云RAM子账号体系），实现 API Key 的自动轮转。
 5. 支持接入 kubernetes rbac 认证体系，通过 serviceaccount+role 为每个 Pod 单独配置认证角色。
-  - 支持通过 sidecar/init-container 将 secrets 注入到 pod 中，或者通过 k8s operator 将 vault 数据同步到 k8s secrets 中
 
+- 支持通过 sidecar/init-container 将 secrets 注入到 pod 中，或者通过 k8s operator 将 vault 数据同步到 k8s secrets 中
 
 在使用 Vault 之前，我们是以携程开源的 [Apollo](https://github.com/ctripcorp/apollo) 作为微服务的分布式配置中心。
 
@@ -36,7 +36,7 @@ Apollo 在国内非常流行。它功能强大，支持配置的继承，也有�
 
 ## 一、Vault 基础概念
 
->「基本概念」这一节，基本都翻译自官方文档: <https://www.vaultproject.io/docs/internals/architecture>
+> 「基本概念」这一节，基本都翻译自官方文档: <https://www.vaultproject.io/docs/internals/architecture>
 
 首先看一下 Vault 的架构图：
 
@@ -68,9 +68,8 @@ Vault，翻译成中文就是**金库**。类比银行金库，「屏障」就�
 
 ![](/images/experience-of-vault/vault-shamir-secret-sharing.svg "vault-shamir-secret-sharing")
 
->**分割密钥**的总数，以及重建主密钥最少需要的**分割密钥**数量，都是可以调整的。
-沙米尔密钥分割算法也可以关闭，这样主密钥将被直接提供给管理员，管理员可直接使用它进行解封操作。
-
+> **分割密钥**的总数，以及重建主密钥最少需要的**分割密钥**数量，都是可以调整的。
+> 沙米尔密钥分割算法也可以关闭，这样主密钥将被直接提供给管理员，管理员可直接使用它进行解封操作。
 
 ### 2. 认证系统及权限系统
 
@@ -103,7 +102,6 @@ core 会将其注册到 **expiration manager**，并给它附加一个 lease ID�
 
 core 还负责处理**审核代理 audit broker**的请求及响应日志，将请求发送到所有已配置的**审核设备 audit devices**. 不过默认情况下这个功能貌似是关闭的。
 
-
 ### 3. Secret Engine
 
 **Secret Engine** 是保存、生成或者加密数据的组件，它非常灵活。
@@ -116,10 +114,9 @@ core 还负责处理**审核代理 audit broker**的请求及响应日志，将�
 常用的 engine 举例：
 
 1. **AliCloud Secrets Engine**: 基于 RAM 策略动态生成 AliCloud Access Token，或基于 RAM 角色动态生成 AliCloud STS 凭据
-    - Access Token 会自动更新(Renew)，而 STS 凭据是临时使用的，过期后就失效了。
+   - Access Token 会自动更新(Renew)，而 STS 凭据是临时使用的，过期后就失效了。
 1. **kv**: 键值存储，可用于存储一些静态的配置。它一定程度上能替代掉携程的 Apollo 配置中心。
 1. **Transit Secrets Engine**: 提供加密即服务的功能，它只负责加密和解密，不负责存储。主要应用场景是帮 app 加解密数据，但是数据仍旧存储在 MySQL 等数据库中。
-
 
 ## 二、部署 Vault
 
@@ -140,12 +137,12 @@ core 还负责处理**审核代理 audit broker**的请求及响应日志，将�
 
 ### 1. docker-compose 部署（非 HA）
 
->推荐用于本地开发测试环境，或者其他不需要高可用的环境。
+> 推荐用于本地开发测试环境，或者其他不需要高可用的环境。
 
 `docker-compose.yml` 示例如下：
 
 ```yaml
-version: '3.3'
+version: "3.3"
 services:
   vault:
     # 文档：https://hub.docker.com/_/vault
@@ -197,8 +194,7 @@ listener "tcp" {
 
 ### 2. 通过 helm 部署高可用的 vault {#install-by-helm}
 
->推荐用于生产环境
-
+> 推荐用于生产环境
 
 通过 helm 部署：
 
@@ -214,8 +210,8 @@ helm pull hashicorp/vault --version  0.11.0 --untar
 参照下载下来的 `./vault/values.yaml` 编写 `custom-values.yaml`，
 部署一个以 `mysql` 为后端存储的 HA vault，配置示例如下:
 
->配置内容虽然多，但是大都是直接拷贝自 `./vault/values.yaml`，改动很少。
->测试 Vault 时可以忽略掉其中大多数的配置项。
+> 配置内容虽然多，但是大都是直接拷贝自 `./vault/values.yaml`，改动很少。
+> 测试 Vault 时可以忽略掉其中大多数的配置项。
 
 ```yaml
 global:
@@ -269,7 +265,6 @@ server:
     # Target port to which the service should be mapped to
     targetPort: 8200
 
-
   # This configures the Vault Statefulset to create a PVC for audit
   # logs.  Once Vault is deployed, initialized and unseal, Vault must
   # be configured to use this for audit logs.  This will be mounted to
@@ -295,10 +290,10 @@ server:
     # config is a raw string of default configuration when using a Stateful
     # deployment. Default is to use a Consul for its HA storage backend.
     # This should be HCL.
-    
-    # Note: Configuration files are stored in ConfigMaps so sensitive data 
+
+    # Note: Configuration files are stored in ConfigMaps so sensitive data
     # such as passwords should be either mounted through extraSecretEnvironmentVars
-    # or through a Kube secret.  For more information see: 
+    # or through a Kube secret.  For more information see:
     # https://www.vaultproject.io/docs/platform/k8s/helm/run#protecting-sensitive-vault-configurations
     config: |
       ui = true
@@ -321,11 +316,11 @@ server:
       service_registration "kubernetes" {}
 
       # Example configuration for using auto-unseal, using AWS KMS. 
-      # the cluster must have a service account that is authorized to access AWS KMS, throught an IAM Role.
+      # the cluster must have a service account that is authorized to access AWS KMS, through an IAM Role.
       # seal "awskms" {
       #   region     = "us-east-1"
       #   kms_key_id = "<some-key-id>"
-      #   默认情况下插件会使用 awskms 的公网 enpoint，但是也可以使用如下参数，改用自行创建的 vpc 内网 endpoint
+      #   默认情况下插件会使用 awskms 的公网 endpoint，但是也可以使用如下参数，改用自行创建的 vpc 内网 endpoint
       #   endpoint   = "https://<vpc-endpoint-id>.kms.us-east-1.vpce.amazonaws.com"
       # }
 
@@ -358,7 +353,7 @@ helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 
 ### 3. 初始化并解封 vault
 
->官方文档：[Initialize and unseal Vault - Vault on Kubernetes Deployment Guide](https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault)
+> 官方文档：[Initialize and unseal Vault - Vault on Kubernetes Deployment Guide](https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes#install-vault)
 
 通过 helm 部署 vault，默认会部署一个三副本的 StatefulSet，但是这三个副本都会处于 NotReady 状态（docker 方式部署的也一样）。
 接下来还需要手动初始化并解封 vault，才能 `Ready`:
@@ -366,7 +361,7 @@ helm upgrade --install vault ./vault --namespace vault -f custom-values.yaml
 1. 第一步：从三个副本中随便选择一个，运行 vault 的初始化命令：`kubectl exec -ti vault-0 -- vault operator init`
    1. 初始化操作会返回 5 个 unseal keys，以及一个 Initial Root Token，这些数据非常敏感非常重要，一定要保存到安全的地方！
 2. 第二步：在每个副本上，使用任意三个 unseal keys 进行解封操作。
-   1. 一共有三个副本，也就是说要解封 3*3 次，才能完成 vault 的完整解封！
+   1. 一共有三个副本，也就是说要解封 3\*3 次，才能完成 vault 的完整解封！
 
 ```shell
 # 每个实例都需要解封三次！
@@ -393,24 +388,19 @@ $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 3
 2. 如果你不想用云服务，那可以考虑 [autounseal-transit](https://learn.hashicorp.com/tutorials/vault/autounseal-transit)，这种方法使用另一个 vault 实例提供的 transit 引擎来实现 auto-unseal.
 3. 简单粗暴：直接写个 crontab 或者在 CI 平台上加个定时任务去执行解封命令，以实现自动解封。不过这样安全性就不好说了。
 
-
 以使用 awskms 为例，首先创建 aws IAM 的 policy 内容如下:
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VaultKMSUnseal",
-            "Effect": "Allow",
-            "Action": [
-                "kms:Decrypt",
-                "kms:Encrypt",
-                "kms:DescribeKey"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VaultKMSUnseal",
+      "Effect": "Allow",
+      "Action": ["kms:Decrypt", "kms:Encrypt", "kms:DescribeKey"],
+      "Resource": "*"
+    }
+  ]
 }
 ```
 
@@ -419,7 +409,6 @@ $ kubectl exec -ti vault-0 -- vault operator unseal # ... Unseal Key 3
 这样 vault 使用的 serviceaccount 自身就拥有了访问 awskms 的权限，也就不需要额外通过 access_key/secret_key 来访问 awskms.
 
 关于 IAM Role 和 k8s serviceaccount 如何绑定，参见官方文档：[IAM roles for EKS service accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html)
-
 
 完事后再修改好前面提供的 helm 配置，部署它，最后使用如下命令初始化一下：
 
@@ -432,7 +421,6 @@ kubectl exec -ti vault-0 -- vault operator init
 
 然后就大功告成了，可以尝试下删除 vault 的 pod，新建的 Pod 应该会自动解封。
 
-
 ## 三、Vault 自身的配置管理
 
 Vault 本身是一个复杂的 secrets 工具，它提供了 **Web UI** 和 **CLI** 用于手动管理与查看 Vault 的内容。
@@ -442,10 +430,9 @@ Vault 本身是一个复杂的 secrets 工具，它提供了 **Web UI** 和 **CL
 - 使用 vault 的 sdk: python-[hvac](https://github.com/hvac/hvac)
 - 使用 [terraform-provider-vault](https://github.com/hashicorp/terraform-provider-vault) 或者 [pulumi-vault](https://github.com/pulumi/pulumi-vault) 实现 vault 配置的自动化管理。
 
-Web UI 适合手工操作，而 sdk/`terraform-provider-vault` 则适合用于自动化管理 vault. 
+Web UI 适合手工操作，而 sdk/`terraform-provider-vault` 则适合用于自动化管理 vault.
 
 我们的测试环境就是使用 `pulumi-vault` 完成的自动化配置 vault policy 和 kubernetes role，然后自动化注入所有测试用的 secrets.
-
 
 ### 1. 使用 pulumi 自动化配置 vault
 
@@ -485,7 +472,6 @@ path "auth/token/create" {
 
 不给这个权限，pulumi_vault 就会一直报错。。
 
-
 然后还得给它「自动化配置」需要的权限，比如自动创建/更新 policy/secrets/kubernetes 等等，示例如下:
 
 ```hcl
@@ -513,7 +499,6 @@ path "auth/kubernetes/role/*"
 }
 ```
 
-
 ## 四、在 Kubernetes 中使用 vault 注入 secrets
 
 ![](/images/experience-of-vault/vault-k8s-auth-workflow.webp "vault-k8s-auth-workflow")
@@ -539,7 +524,7 @@ path "auth/kubernetes/role/*"
 kubectl exec -n vault -it vault-0 -- /bin/sh
 export VAULT_TOKEN='<your-root-token>'
 export VAULT_ADDR='http://localhost:8200'
- 
+
 # 启用 Kubernetes 身份验证
 vault auth enable kubernetes
 
@@ -552,9 +537,9 @@ vault write auth/kubernetes/config \
 
 #### 1.1 使用集群外部的 valut 实例
 
->如果你没这个需求，请跳过这一节。
+> 如果你没这个需求，请跳过这一节。
 
->详见 [Install the Vault Helm chart configured to address an external Vault](https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault)
+> 详见 [Install the Vault Helm chart configured to address an external Vault](https://learn.hashicorp.com/tutorials/vault/kubernetes-external-vault?in=vault/kubernetes#install-the-vault-helm-chart-configured-to-address-an-external-vault)
 
 kubernetes 也可以和外部的 vault 实例集成，集群中只部署 vault-agent.
 
@@ -653,15 +638,15 @@ subjects:
 
 现在在 vault 实例这边，启用 kubernetes 身份验证，在 vault 实例内，执行如下命令：
 
->vault 实例内显然没有 kubectl 和 kubeconfig，简便起见，下列的 vault 命令也可以通过 Web UI 完成。
+> vault 实例内显然没有 kubectl 和 kubeconfig，简便起见，下列的 vault 命令也可以通过 Web UI 完成。
 
 ```shell
 export VAULT_TOKEN='<your-root-token>'
 export VAULT_ADDR='http://localhost:8200'
- 
+
 # 启用 Kubernetes 身份验证
 vault auth enable kubernetes
- 
+
 # kube-apiserver API 配置，vault 需要通过 kube-apiserver 完成对 serviceAccount 的身份验证
 # TOKEN_REVIEW_JWT: 就是我们前面创建的 secret `vault-auth`
 TOKEN_REVIEW_JWT=$(kubectl -n vault get secret vault-auth -o go-template='{{ .data.token }}' | base64 --decode)
@@ -692,7 +677,7 @@ vault write auth/kubernetes/config \
 
 方便起见，vault policy / role / k8s serviceaccount 这三个配置，都建议和微服务使用相同的名称。
 
->上述配置中，role 起到一个承上启下的作用，它关联了 k8s serviceaccount 和 vault policy 两个配置。
+> 上述配置中，role 起到一个承上启下的作用，它关联了 k8s serviceaccount 和 vault policy 两个配置。
 
 比如创建一个名为 `my-app-policy` 的 vault policy，内容为:
 
@@ -707,7 +692,8 @@ path "myapp/metadata/*" {
 }
 ```
 
-然后在 vault 的 kuberntes 插件配置中，创建 role `my-app-role`，配置如下:
+然后在 vault 的 kubernetes 插件配置中，创建 role `my-app-role`，配置如下:
+
 1. 关联 k8s default 名字空间中的 serviceaccount `my-app-account`，并创建好这个 serviceaccount.
 2. 关联 vault token policy，这就是前面创建的 `my-app-policy`
 3. 设置 token period（有效期）
@@ -716,7 +702,7 @@ path "myapp/metadata/*" {
 
 ### 3. 部署 Pod
 
->参考文档：<https://www.vaultproject.io/docs/platform/k8s/injector>
+> 参考文档：<https://www.vaultproject.io/docs/platform/k8s/injector>
 
 下一步就是将配置注入到微服务容器中，这需要使用到 Agent Sidecar Injector。
 vault 通过 sidecar 实现配置的自动注入与动态更新。
@@ -752,10 +738,10 @@ spec:
   template:
     metadata:
       annotations:
-        vault.hashicorp.com/agent-init-first: 'true'  # 是否使用 initContainer 提前初始化配置文件
-        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-init-first: "true" # 是否使用 initContainer 提前初始化配置文件
+        vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/secret-volume-path: vault
-        vault.hashicorp.com/role: "my-app-role"  # vault kubernetes 插件的 role 名称
+        vault.hashicorp.com/role: "my-app-role" # vault kubernetes 插件的 role 名称
         vault.hashicorp.com/agent-inject-template-config.json: |
           # 渲染模板的语法在后面介绍
         vault.hashicorp.com/agent-limits-cpu: 250m
@@ -766,9 +752,9 @@ spec:
         app: my-app
     spec:
       containers:
-      - image: registry.svc.local/xx/my-app:latest
-        imagePullPolicy: IfNotPresent
-        # 此处省略若干配置...
+        - image: registry.svc.local/xx/my-app:latest
+          imagePullPolicy: IfNotPresent
+          # 此处省略若干配置...
       serviceAccountName: my-app-account
 ```
 
@@ -795,7 +781,7 @@ vautl-agent 的 template 说明：
 ```consul-template
 {
     {{ range secrets "<engine-name>/metadata/<service-name>/" }}
-        "{{ printf "%s" . }}": 
+        "{{ printf "%s" . }}":
         {{ with secret (printf "<engine-name>/<service-name>/%s" .) }}
         {{ .Data.data | toJSONPretty }},
         {{ end }}
@@ -803,25 +789,25 @@ vautl-agent 的 template 说明：
 }
 ```
 
->template 的详细语法参见: https://github.com/hashicorp/consul-template#secret
+> template 的详细语法参见: https://github.com/hashicorp/consul-template#secret
 
->注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
-必须要写成 `range secrets "<engine-name>/metadata/<service-name>/"`，也就是中间要插入 `metadata`，而且 policy 中必须开放 `<engine-name>/metadata/<service-name>/` 的 read/list 权限！
-官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 [KV Secrets Engine - Version 2 (API)](https://www.vaultproject.io/api-docs/secret/kv/kv-v2) 才搞明白这个。
+> 注意：v2 版本的 kv secrets，它的 list 接口有变更，因此在遍历 v2 kv secrets 时，
+> 必须要写成 `range secrets "<engine-name>/metadata/<service-name>/"`，也就是中间要插入 `metadata`，而且 policy 中必须开放 `<engine-name>/metadata/<service-name>/` 的 read/list 权限！
+> 官方文档完全没提到这一点，我通过 wireshark 抓包调试，对照官方的 [KV Secrets Engine - Version 2 (API)](https://www.vaultproject.io/api-docs/secret/kv/kv-v2) 才搞明白这个。
 
 这样生成出来的内容将是 json 格式，不过有个不兼容的地方：最后一个 secrets 的末尾有逗号 `,`
 渲染出的效果示例：
 
 ```json
 {
-    "secret-a": {
-  "a": "b",
-  "c": "d"
-},
-    "secret-b": {
-  "v": "g",
-  "r": "c"
-},
+  "secret-a": {
+    "a": "b",
+    "c": "d"
+  },
+  "secret-b": {
+    "v": "g",
+    "r": "c"
+  }
 }
 ```
 
@@ -829,7 +815,6 @@ vautl-agent 的 template 说明：
 那该如何去解析它呢？我在万能的 stackoverflow 上找到了解决方案：**yaml 完全兼容 json 语法，并且支持尾部逗号**！
 
 以 python 为例，直接 `yaml.safe_load()` 就能完美解析 vault 生成出的 json 内容。
-
 
 ### 5. 拓展：在 kubernetes 中使用 vault 的其他姿势
 
@@ -843,6 +828,3 @@ vautl-agent 的 template 说明：
 ## 五、使用 vault 实现 AWS IAM Credentials 的自动轮转
 
 待续。。。
-
-
-

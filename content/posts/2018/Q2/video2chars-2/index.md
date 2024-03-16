@@ -5,8 +5,8 @@ lastmod: 2022-08-13T14:16:02+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "video2chars-html.webp"
+  - name: "featured-image"
+    src: "video2chars-html.webp"
 
 tags: []
 categories: ["tech"]
@@ -26,7 +26,7 @@ code:
   maxShownLines: 300
 ---
 
->本文最初于 2018-05-25 发表在[博客园](https://www.cnblogs.com/kirito-c/p/9089873.html)，2022-08-13 搬迁至 <https://thiscute.world>
+> 本文最初于 2018-05-25 发表在[博客园](https://www.cnblogs.com/kirito-c/p/9089873.html)，2022-08-13 搬迁至 <https://thiscute.world>
 
 ### 0. 话说在前头
 
@@ -34,16 +34,16 @@ code:
 
 下面的效果动画是使用 html 实现的字符动画效果（上一篇的效果动画是 shell 版的）：
 
-{{< video 
-  src="/videos/video2chars-2/video2chars-html.webm"
-  type="video/webm"
-  preload="auto"
-  autoplay="true"
-  loop="true"
->}}
+{{< video
+src="/videos/video2chars-2/video2chars-html.webm"
+type="video/webm"
+preload="auto"
+autoplay="true"
+loop="true"
 
+> }}
 
->本文的优化仍然是针对 shell 版本的，html 版由于缺陷太大就不写文章介绍了。
+> 本文的优化仍然是针对 shell 版本的，html 版由于缺陷太大就不写文章介绍了。
 
 ### 1. 速度优化
 
@@ -62,7 +62,7 @@ import pickle
 ```python
 def dump(obj, file_name):
     """
-    将指定对象，以file_nam为名，保存到本地
+    将指定对象，以file_name为名，保存到本地
     """
     with open(file_name, 'wb') as f:
         pickle.dump(obj, f)
@@ -136,7 +136,6 @@ if __name__ == "__main__":
 
 另一个优化方法就是边转换边播放，就是同时执行上述三个步骤。学会了的话，可以自己实现一下试试。
 
-
 ### 2. 字符视频和音乐同时播放
 
 没有配乐的动画，虽然做出来了是很有成就感，但是你可能看上两遍就厌倦了。
@@ -145,26 +144,30 @@ if __name__ == "__main__":
 首先我们需要找个方法来播放视频的配乐，怎么做呢？
 先介绍一下一个跨平台视频播放器：[**mpv**](https://mpv.io)，它有很棒的命令行支持，请先安装好它。
 要让 mpv 只播放视频的音乐部分，只需要命令：
+
 ```shell
 mpv --no-video video_path
 ```
 
 好了，现在有了音乐，可总不能还让人开俩shell，先放音乐，再放字符画吧。
-这时候，我们需要的功能是：[使用 Python 调用外部应用](https://www.cnblogs.com/kirito-c/p/9088276.html#python-invoke). 
+这时候，我们需要的功能是：[使用 Python 调用外部应用](https://www.cnblogs.com/kirito-c/p/9088276.html#python-invoke).
 但是 mpv 使用了类似 curses 的功能，标准库的 os.system 不能隐藏掉这个部分，播放效果不尽如人意。
 因此我使用了 [pyinvoke](https://github.com/pyinvoke/invoke) 模块，只要给它指定参数`hide=True`，就可以完美隐藏掉被调用程序的输出（指 stdout，其实 subprocess 也可以的）。运行下面代码前，请先用pip安装好 invoke.（能够看到这里的，安装个模块还不是小菜一碟）
 
 好了废话说这么多，上代码：
+
 ```python
 import invoke
 
 video_path = "BadApple.mp4"
 invoke.run(f"mpv --no-video {video_path}", hide=True, warn=True)
 ```
+
 运行上面的测试代码，如果听到了音乐，而shell啥都没输出，但是能听到音乐的话，就正常了。我们继续。（这里使用了python3.6的f字符串）
 
 音乐已经有了，那就好办了。
 添加一个播放音乐的函数
+
 ```python
 import invoke
 def play_audio(video_path):
@@ -172,6 +175,7 @@ def play_audio(video_path):
 ```
 
 然后修改main()方法：
+
 ```python
 def main():
     # 宽，高
@@ -181,7 +185,7 @@ def main():
 
     # 只转换三十秒，这个属性是才添加的，但是上一篇的代码没有更新。你可能需要先上github看看最新的代码。其实就稍微改了一点。
     seconds = 30
-    
+
     # 这里的fps是帧率，也就是每秒钟播放的的字符画数。用于和音乐同步。这个更新也没写进上一篇，请上github看看新代码。
     video_chars, fps = get_video_chars(video_path, size, seconds)
 
@@ -199,6 +203,7 @@ if __name__ == "__main__":
 然后运行。。并不是我坑你，你只听到了声音，却没看到字符画。。原因是： invoke.run()函数是阻塞的，音乐没放完，代码就到不了`play_video(video_chars, fps)`这一行。
 
 所以 `play_audio` 还要改一下，改成这样：
+
 ```python
 import invoke
 from threading import Thread
@@ -222,5 +227,5 @@ def play_audio(video_path):
 2. 画布方式：直接把画在图片上，然后自动合成为 mp4 文件。这种方式要优于 html 方式，而且有个很方便的库能用，核心代码就 70 行的样子。代码见 [video2chars](https://github.com/ryan4yin/video2chars/)
 
 ### 参考
-- [Python将视频转换为全字符视频（含音频）](https://blog.csdn.net/kongfu_cat/article/details/79681719)
 
+- [Python将视频转换为全字符视频（含音频）](https://blog.csdn.net/kongfu_cat/article/details/79681719)

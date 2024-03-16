@@ -326,7 +326,7 @@ rsync 详细文档参见 https://rsync.samba.org/documentation.html，或者 `ma
 
 1. 输入 `tmux` 启动一个 tmux 会话。（或者用 `tmux new -s <session-name>` 启动一个命名会话）
 2. 输入 `python xxx.py`，python 进程开始运行。
-3. 按快捷键 `ctrl+b`，然后再按一下 `d` 脱离(detatch)当前会话。此时 python 进程进入后台运行，关闭当前终端对 python 进程没有影响。
+3. 按快捷键 `ctrl+b`，然后再按一下 `d` 脱离(detach)当前会话。此时 python 进程进入后台运行，关闭当前终端对 python 进程没有影响。
 4. 输入 `tmux ls` 可以查看当前正在后台运行的会话。（命名会话会显示名称，否则只显示 id）
 5. 通过 `tmux attach -t <session-name/id>` 重新接入后台会话。
    1. 缩写 `tmux a -t <session>`

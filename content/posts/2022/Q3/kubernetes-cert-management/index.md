@@ -5,8 +5,8 @@ lastmod: 2023-08-14T15:11:46+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "cert-manager.webp"
+  - name: "featured-image"
+    src: "cert-manager.webp"
 
 tags: ["数字证书", "证书", "TLS", "Kubernetes", "cert-manager"]
 categories: ["tech"]
@@ -24,20 +24,19 @@ comment:
 
 我在之前的文章 [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](https://thiscute.world/posts/about-tls-cert/) 中，介绍了如何使用 openssl 生成与管理各种用途的数字证书，也简单介绍了如何通过 certbot 等工具与 ACME 证书申请与管理协议，进行数字证书的申请与自动更新（autorenew）。
 
-这篇文章要介绍的 cert-mangager，跟 certbot 这类工具有点类似，区别在于它是工作在 Kubernetes 中的。
+这篇文章要介绍的 cert-manager，跟 certbot 这类工具有点类似，区别在于它是工作在 Kubernetes 中的。
 
 cert-manager 是一个证书的自动化管理工具，用于在 Kubernetes 集群中自动化地颁发与管理各种来源、各种用途的数字证书。它将确保证书有效，并在合适的时间自动更新证书。
 
 多的就不说了，证书相关的内容请参见我的 [写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议](https://thiscute.world/posts/about-tls-cert/) 或者其他资料，现在直接进入正题。
 
->注：cert-manager 的管理对象是「证书」，如果你仅需要使用非对称加密的公私钥对进行 JWT 签名、数据加解密，可以考虑直接使用 [secrets 管理工具 Vault](https://thiscute.world/posts/experience-of-vault/).
+> 注：cert-manager 的管理对象是「证书」，如果你仅需要使用非对称加密的公私钥对进行 JWT 签名、数据加解密，可以考虑直接使用 [secrets 管理工具 Vault](https://thiscute.world/posts/experience-of-vault/).
 
 ## 一、部署 {#deploy}
 
->https://cert-manager.io/docs/installation/helm/
+> https://cert-manager.io/docs/installation/helm/
 
 官方提供了多种部署方式，使用 helm3 安装的方法如下：
-
 
 ```shell
 # 添加 cert-manager 的 helm 仓库
@@ -81,7 +80,7 @@ cert-manager 支持两种申请公网受信证书的方式：
 
 - 免费服务
   - Let's Encrypt: 众所周知，它提供三个月有效期的免费证书。
-  - [ZeroSSL](https://zerossl.com/documentation/acme/):  貌似也是一个比较有名的 SSL 证书服务
+  - [ZeroSSL](https://zerossl.com/documentation/acme/): 貌似也是一个比较有名的 SSL 证书服务
     - 通过 ACME 协议支持不限数量的 90 天证书，也支持多域名证书与泛域名证书。
     - 它提供了一个额外的 Dashboard 查看与管理所有申请的证书，这是比较方便的地方。
 - 付费服务
@@ -116,13 +115,13 @@ ACME 支持 HTTP01 跟 DNS01 两种域名验证方式，其中 DNS01 是最简�
 
 #### 1.1 使用 AWS Route53 创建一个证书签发者「Certificate Issuer」 {#1-1-aws-route53}
 
->非 AWS Route53 用户可忽略这一节
+> 非 AWS Route53 用户可忽略这一节
 
->https://cert-manager.io/docs/configuration/acme/dns01/route53/
+> https://cert-manager.io/docs/configuration/acme/dns01/route53/
 
 ##### 1.1.1 通过 IAM 授权 cert-manager 调用 AWS Route53 API {#1-1-1-iam-cert-manager-aws-route53-api}
 
->这里介绍一种不需要创建 ACCESS_KEY_ID/ACCESS_SECRET，直接使用 AWS EKS 官方的免密认证的方法。会更复杂一点，但是更安全可维护。
+> 这里介绍一种不需要创建 ACCESS_KEY_ID/ACCESS_SECRET，直接使用 AWS EKS 官方的免密认证的方法。会更复杂一点，但是更安全可维护。
 
 首先需要为 EKS 集群创建 OIDC provider，参见 [aws-iam-and-kubernetes](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/security/aws-iam-and-kubernetes.md)，这里不再赘述。
 
@@ -140,8 +139,8 @@ cert-manager 需要查询与更新 Route53 记录的权限，因此需要使用�
     {
       "Effect": "Allow",
       "Action": [
- "route53:ChangeResourceRecordSets",
- "route53:ListResourceRecordSets"
+        "route53:ChangeResourceRecordSets",
+        "route53:ListResourceRecordSets"
       ],
       "Resource": "arn:aws:route53:::hostedzone/*"
     },
@@ -227,27 +226,26 @@ spec:
     # 用于存放 ACME 账号私钥的 Secret 名称，Issuer 创建时会自动生成此 secret
     privateKeySecretRef:
       name: letsencrypt-prod-aws
-    
+
     # DNS 验证设置
     solvers:
-    - selector:
-        # 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件
-        # 以 dnsZones 为例，越长的 Zone 优先级就越高
-        # 比如在为 www.sys.exapmle.com 申请证书时，sys.example.com 的优先级就比 example.com 更高
-        dnsZones:
-        - "example.com"
-      dns01:
-        # 使用 route53 进行验证
-        route53:
-          region: us-east-1
-          # cert-manager 已经通过 ServiceAccount 绑定了 IAM Role
-          # 这里不需要补充额外的 IAM 授权相关信息！
+      - selector:
+          # 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件
+          # 以 dnsZones 为例，越长的 Zone 优先级就越高
+          # 比如在为 www.sys.example.com 申请证书时，sys.example.com 的优先级就比 example.com 更高
+          dnsZones:
+            - "example.com"
+        dns01:
+          # 使用 route53 进行验证
+          route53:
+            region: us-east-1
+            # cert-manager 已经通过 ServiceAccount 绑定了 IAM Role
+            # 这里不需要补充额外的 IAM 授权相关信息！
 ```
-
 
 #### 1.2 使用 AliDNS 创建一个证书签发者「Certificate Issuer」 {#1-2-alidns-certificate-issuer}
 
->https://cert-manager.io/docs/configuration/acme/dns01/#webhook
+> https://cert-manager.io/docs/configuration/acme/dns01/#webhook
 
 cert-manager 官方并未提供 alidns 相关的支持，而是提供了一种基于 WebHook 的拓展机制。社区有第三方创建了对 alidns 的支持插件：
 
@@ -306,18 +304,18 @@ spec:
     # 用于存放 ACME 账号私钥的 Secret 名称，Issuer 创建时会自动生成此 secret
     privateKeySecretRef:
       name: letsencrypt-prod-alidns
-    
+
     # DNS 验证设置
     solvers:
-    - selector:
-        # 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件
-        # 以 dnsZones 为例，越长的 Zone 优先级就越高
-        # 比如在为 www.sys.exapmle.com 申请证书时，sys.example.com 的优先级就比 example.com 更高
-        # 适用场景：如果你拥有多个域名，使用了多个域名提供商，就可能需要用到它
-        dnsZones:
-        - "example.com"
-      dns01:
-        webhook:
+      - selector:
+          # 在有多个 solvers 的情况下，会根据每个 solvers 的 selector 来确定优先级，选择其中合适的 solver 来处理证书申请事件
+          # 以 dnsZones 为例，越长的 Zone 优先级就越高
+          # 比如在为 www.sys.example.com 申请证书时，sys.example.com 的优先级就比 example.com 更高
+          # 适用场景：如果你拥有多个域名，使用了多个域名提供商，就可能需要用到它
+          dnsZones:
+            - "example.com"
+        dns01:
+          webhook:
             config:
               accessTokenSecretRef:
                 key: access-token
@@ -333,7 +331,7 @@ spec:
 
 #### 1.3 通过 ACME 创建证书 {#1-3-acme-certificate}
 
->https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources
+> https://cert-manager.io/docs/usage/certificate/#creating-certificate-resources
 
 在创建证书前，先简单过一下证书的申请流程，示意图如下（出问题时需要靠这个来排查）：
 
@@ -343,7 +341,7 @@ spec:
   (  +---------+  )
          |                                                     |
          |   +-------------+      +--------------------+       |  +-------+       +-----------+
-         |-> | Certificate |----> | CertificateRequest | ----> |  | Order | ----> | Challenge | 
+         |-> | Certificate |----> | CertificateRequest | ----> |  | Order | ----> | Challenge |
              +-------------+      +--------------------+       |  +-------+       +-----------+
                                                                |
 ```
@@ -365,7 +363,7 @@ spec:
   # copied to the Secret named tls-example.com. These labels and annotations will
   # be re-reconciled if the Certificate's secretTemplate changes. secretTemplate
   # is also enforced, so relevant label and annotation changes on the Secret by a
-  # third party will be overwriten by cert-manager to match the secretTemplate.
+  # third party will be overwritten by cert-manager to match the secretTemplate.
   secretTemplate:
     annotations:
       my-secret-annotation-1: "foo"
@@ -377,17 +375,17 @@ spec:
   renewBefore: 360h # 15d
   # https://cert-manager.io/docs/reference/api-docs/#cert-manager.io/v1.CertificatePrivateKey
   privateKey:
-    algorithm: ECDSA  # RSA/ECDSA/Ed25519，其中 RSA 应用最广泛，Ed25519 被认为最安全
-    encoding: PKCS1  # 对于 TLS 加密，通常都用 PKCS1 格式
-    size: 256  # RSA 默认为 2048，ECDSA 默认为 256，而 Ed25519 不使用此属性！
-    rotationPolicy: Always  # renew 时总是重新创建新的私钥
+    algorithm: ECDSA # RSA/ECDSA/Ed25519，其中 RSA 应用最广泛，Ed25519 被认为最安全
+    encoding: PKCS1 # 对于 TLS 加密，通常都用 PKCS1 格式
+    size: 256 # RSA 默认为 2048，ECDSA 默认为 256，而 Ed25519 不使用此属性！
+    rotationPolicy: Always # renew 时总是重新创建新的私钥
   # The use of the common name field has been deprecated since 2000 and is
   # discouraged from being used.
   commonName: example.com
   # At least one of a DNS Name, URI, or IP address is required.
   dnsNames:
     - example.com
-    - '*.example.com'
+    - "*.example.com"
   isCA: false
   usages:
     - server auth
@@ -405,19 +403,19 @@ spec:
   issuerRef:
     name: letsencrypt-prod-aws
     # name: letsencrypt-prod-alidns  # 如果你前面创建的是 alidns 那就用这个
-    kind: Issuer  # 如果你创建的是 ClusterIssuer 就需要改下这个值
+    kind: Issuer # 如果你创建的是 ClusterIssuer 就需要改下这个值
     group: cert-manager.io
 ```
 
 部署好 Certificate 后，describe 它就能看到当前的进度：
 
 ```
-Events: 
-  Type    Reason     Age   From    Message 
-  ----    ------     ----  ----    ------- 
-  Normal  Issuing    117s  cert-manager-certificates-trigger   Issuing certificate as Secret does not exist      
-  Normal  Generated  116s  cert-manager-certificates-key-manager      Stored new private key in temporary Secret resource "example.com-f044j"     
-  Normal  Requested  116s  cert-manager-certificates-request-manager  Created new CertificateRequest resource "example.com-unv3d"   
+Events:
+  Type    Reason     Age   From    Message
+  ----    ------     ----  ----    -------
+  Normal  Issuing    117s  cert-manager-certificates-trigger   Issuing certificate as Secret does not exist
+  Normal  Generated  116s  cert-manager-certificates-key-manager      Stored new private key in temporary Secret resource "example.com-f044j"
+  Normal  Requested  116s  cert-manager-certificates-request-manager  Created new CertificateRequest resource "example.com-unv3d"
   Normal  Issuing    20s   cert-manager-certificates-issuing   The certificate has been successfully issued
 ```
 
@@ -436,7 +434,7 @@ Events:
 
 #### 1.4 通过 csi-driver 创建证书 {#csi-driver}
 
->https://cert-manager.io/docs/projects/csi-driver/
+> https://cert-manager.io/docs/projects/csi-driver/
 
 直接使用 `Certificate` 资源创建的证书，会被存放在 Kubernetes Secrets 中，被认为并非足够安全。
 而 cert-manager csi-driver 则避免了这个缺陷，具体而言，它提升安全性的做法有：
@@ -467,7 +465,6 @@ cert-manager 提供的 Private CA 服务有：
 
 TO BE DONE.
 
-
 ## 三、cert-manager 与 istio/ingress 等网关集成 {#cert-manager-and-gateway}
 
 cert-manager 提供的 `Certificate` 资源，会将生成好的公私钥存放在 Secret 中，而 Istio/Ingress 都支持这种格式的 Secret，所以使用还是挺简单的。
@@ -483,23 +480,23 @@ spec:
   selector:
     istio: ingressgateway
   servers:
-  - port:
-      number: 8080
-      name: http
-      protocol: HTTP
-    hosts:
-    - product.example.com
-    tls:
-      httpsRedirect: true # sends 301 redirect for http requests
-  - port:
-      number: 8443
-      name: https
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE # enables HTTPS on this port
-      credentialName: tls-example.com # This should match the Certificate secretName
-    hosts:
-    - product.example.com # This should match a DNS name in the Certificate
+    - port:
+        number: 8080
+        name: http
+        protocol: HTTP
+      hosts:
+        - product.example.com
+      tls:
+        httpsRedirect: true # sends 301 redirect for http requests
+    - port:
+        number: 8443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE # enables HTTPS on this port
+        credentialName: tls-example.com # This should match the Certificate secretName
+      hosts:
+        - product.example.com # This should match a DNS name in the Certificate
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -507,15 +504,15 @@ metadata:
   name: product
 spec:
   hosts:
-  - product.example.com
+    - product.example.com
   gateways:
-  - example-gateway
+    - example-gateway
   http:
-  - route:
-    - destination:
-        host: product
-        port:
-          number: 8080
+    - route:
+        - destination:
+            host: product
+            port:
+              number: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -526,14 +523,14 @@ metadata:
   namespace: prod
 spec:
   ports:
-  - name: grpc
-    port: 9090
-    protocol: TCP
-    targetPort: 9090
-  - name: http
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
+    - name: grpc
+      port: 9090
+      protocol: TCP
+      targetPort: 9090
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
   selector:
     app: product
   sessionAffinity: None
@@ -547,12 +544,12 @@ spec:
   host: product
   # 定义了两个 subset
   subsets:
-  - labels:
-      version: v1
-    name: v1
-  - labels:
-      version: v2
-    name: v2
+    - labels:
+        version: v1
+      name: v1
+    - labels:
+        version: v2
+      name: v2
 ---
 # 其他 deployment 等配置
 ```
@@ -561,7 +558,7 @@ spec:
 
 ## 四、将 cert-manager 证书挂载到自定义网关中 {#cert-manager-istio-ingress}
 
->注意，千万别使用 `subPath` 挂载，根据[官方文档](https://kubernetes.io/docs/concepts/configuration/secret/#mounted-secrets-are-updated-automatically)，这种方式挂载的 Secret 文件不会自动更新！
+> 注意，千万别使用 `subPath` 挂载，根据[官方文档](https://kubernetes.io/docs/concepts/configuration/secret/#mounted-secrets-are-updated-automatically)，这种方式挂载的 Secret 文件不会自动更新！
 
 既然证书被存放在 Secret 中，自然可以直接当成数据卷挂载到 Pods 中，示例如下：
 
@@ -572,17 +569,17 @@ metadata:
   name: nginx
 spec:
   containers:
-  - name: nginx
-    image: nginx:latest
-    volumeMounts:
-    - name: tls-example.com
-      mountPath: "/certs/example.com"
-      readOnly: true
+    - name: nginx
+      image: nginx:latest
+      volumeMounts:
+        - name: tls-example.com
+          mountPath: "/certs/example.com"
+          readOnly: true
   volumes:
-  - name: tls-example.com
-    secret:
-      secretName: tls-example.com
-      optional: false # default setting; "mysecret" must exist
+    - name: tls-example.com
+      secret:
+        secretName: tls-example.com
+        optional: false # default setting; "mysecret" must exist
 ```
 
 对于 nginx 而言，可以简单地搞个 sidecar 监控下，有配置变更就 reload 下 nginx，实现证书自动更新。
@@ -606,7 +603,7 @@ cert-manager 提供了 Prometheus 监控指标，可以直接使用 Prometheus �
 
 ```promql
 (certmanager_certificate_expiration_timestamp_seconds - time())/3600/24 < 20
-``````
+```
 
 上面这个 PromQL 表示，如果证书的过期时间小于 20 天，就会触发告警。
 
@@ -616,11 +613,11 @@ cert-manager 提供了 Prometheus 监控指标，可以直接使用 Prometheus �
 
 ### OCSP 证书验证协议会大幅拖慢 HTTPS 协议的响应速度
 
->https://www.ssl.com/blogs/how-do-browsers-handle-revoked-ssl-tls-certificates/
+> https://www.ssl.com/blogs/how-do-browsers-handle-revoked-ssl-tls-certificates/
 
->https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html
+> https://imququ.com/post/why-can-not-turn-on-ocsp-stapling.html
 
->https://www.digicert.com/help/
+> https://www.digicert.com/help/
 
 前面提到除了数字证书自带的有效期外，为了在私钥泄漏的情况下，能够吊销对应的证书，PKI 公钥基础设施还提供了 OCSP（Online Certificate Status Protocol）证书状态查询协议。
 
@@ -646,9 +643,7 @@ $ openssl s_client -connect www.digicert.com:443 -servername www.digicert.com -s
 如果输出包含 `OCSP Response Status: successful` 就说明站点支持 ocsp stapling，
 如果输出内容为 `OCSP response: no response sent` 则说明站点不支持ocsp stapling。
 
->实际上 Google/AWS 等大多数站点都不会启用也不需要启用 ocsp stapling，一是因为它们自己就是证书颁发机构，OCSP 服务器也归它们自己管，不存在隐私的问题。二是它们的 OCSP 服务器遍布全球，也不存在性能问题。
-这种情况下开个 OCSP Stapling 反而是浪费流量，因为每次 TLS 握手都得发送一个 OCSP 状态信息。
+> 实际上 Google/AWS 等大多数站点都不会启用也不需要启用 ocsp stapling，一是因为它们自己就是证书颁发机构，OCSP 服务器也归它们自己管，不存在隐私的问题。二是它们的 OCSP 服务器遍布全球，也不存在性能问题。
+> 这种情况下开个 OCSP Stapling 反而是浪费流量，因为每次 TLS 握手都得发送一个 OCSP 状态信息。
 
->我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.
-
-
+> 我测试发现只有 www.digicert.com/www.douban.com 等少数站点启用了 ocsp stapling，www.baidu.com/www.google.com/www.zhihu.com 都未启用 ocsp stapling.

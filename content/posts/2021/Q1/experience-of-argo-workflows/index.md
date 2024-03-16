@@ -4,8 +4,8 @@ date: 2021-01-27T15:37:27+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "argo-workflows.webp"
+  - name: "featured-image"
+    src: "argo-workflows.webp"
 
 tags: ["云原生", "CI", "持续集成", "流水线", "Kubernetes"]
 categories: ["tech"]
@@ -13,10 +13,10 @@ series: ["云原生相关"]
 
 # 兼容旧的 Path（单词拼写错误）
 aliases:
-- /posts/expirence-of-argo-workflow/
+  - /posts/expirence-of-argo-workflow/
 ---
 
->注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo-workflows/)
+> 注意：这篇文章并不是一篇入门教程，学习 Argo Workflows 请移步官方文档 [Argo Documentation](https://argoproj.github.io/argo-workflows/)
 
 [Argo Workflows](https://github.com/argoproj/argo-workflows/) 是一个云原生工作流引擎，专注于**编排并行任务**。它的特点如下：
 
@@ -61,7 +61,6 @@ Argo Workflows 相比其他流水线项目(Jenkins/Tekton/Drone/Gitlab-CI)而言
 一个复杂工作流的示例如下：
 
 ![](/images/experience-of-argo-workflows/complex-workflows.webp "https://github.com/argoproj/argo/issues/1088#issuecomment-445884543")
-
 
 ### 3. Workflow 的声明式配置
 
@@ -114,7 +113,6 @@ Argo Workflows 的流水线有多种触发方式：
 - 通过 Git 仓库变更触发：借助 [argo-events](https://github.com/argoproj/argo-events) 可以实现此功能，详见其文档。
   - 另外目前也不清楚 WebHook 的可靠程度如何，会不会因为宕机、断网等故障，导致 Git 仓库变更了，而 Workflow 却没触发，而且还没有任何显眼的错误通知？如果这个错误就这样藏起来了，就可能会导致很严重的问题！
 
-
 ### 7. secrets 管理
 
 Argo Workflows 的流水线，可以从 kubernetes secrets/configmap 中获取信息，将信息注入到环境变量中、或者以文件形式挂载到 Pod 中。
@@ -122,7 +120,6 @@ Argo Workflows 的流水线，可以从 kubernetes secrets/configmap 中获取�
 Git 私钥、Harbor 仓库凭据、CD 需要的 kubeconfig，都可以直接从 secrets/configmap 中获取到。
 
 另外因为 Vault 很流行，也可以将 secrets 保存在 Vault 中，再通过 vault agent 将配置注入进 Pod。
-
 
 ### 8. Artifacts
 
@@ -132,14 +129,13 @@ Argo 支持接入对象存储，做全局的 Artifact 仓库，本地可以使�
 
 另外也可以考虑借助 Artifact 仓库实现跨流水线的缓存复用（未测试），提升构建速度。
 
-
 ### 9. 容器镜像的构建
 
 借助 Buildkit 等容器镜像构建工具，可以实现容器镜像的分布式构建。
 
 Buildkit 对构建缓存的支持也很好，可以直接将缓存存储在容器镜像仓库中。
 
->不建议使用 Google 的 Kaniko，它对缓存复用的支持不咋地，社区也不活跃。
+> 不建议使用 Google 的 Kaniko，它对缓存复用的支持不咋地，社区也不活跃。
 
 ### 10. 客户端/SDK
 
@@ -151,7 +147,7 @@ Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。
   - 说实话，感觉和 kubernetes-client/python 一样难用，毕竟都是 openapi-generator 生成出来的...
 - [argo-python-dsl](https://github.com/argoproj-labs/argo-python-dsl): 使用 Python DSL 编写 Argo Workflows
   - 感觉使用难度比 yaml 高，也不太好用。
-- [couler](https://github.com/couler-proj/couler): 为  Argo/Tekton/Airflow 提供统一的构建与管理接口
+- [couler](https://github.com/couler-proj/couler): 为 Argo/Tekton/Airflow 提供统一的构建与管理接口
   - 理念倒是很好，待研究
 
 感觉 couler 挺不错的，可以直接用 Python 写 WorkflowTemplate，这样就一步到位，所有 CI/CD 代码全部是 Python 了。
@@ -160,10 +156,9 @@ Argo 有提供一个命令行客户端，也有 HTTP API 可供使用。
 
 目前我们一些步骤非常多，但是重复度也很高的 Argo 流水线配置，就是使用 helm 生成的——关键数据抽取到 values.yaml 中，使用 helm 模板 + `range` 循环来生成 workflow 配置。
 
-
 ## 二、安装 Argo Workflows
 
->参考官方文档：https://argoproj.github.io/argo-workflows/installation/
+> 参考官方文档：https://argoproj.github.io/argo-workflows/installation/
 
 安装一个集群版(cluster wide)的 Argo Workflows，使用 MinIO 做 artifacts 存储：
 
@@ -210,10 +205,9 @@ minio 部署好后，它会将默认的 `accesskey` 和 `secretkey` 保存在名
 现在还差最后一步：手动进入 minio 的 Web UI，创建好 `argo-bucket` 这个 bucket.
 直接访问 minio 的 9000 端口（需要使用 nodeport/ingress 等方式暴露此端口）就能进入 Web UI，使用前面提到的 secret `minio` 中的 key/secret 登录，就能创建 bucket.
 
-
 ### ServiceAccount 配置
 
->https://argoproj.github.io/argo-workflows/service-accounts/
+> https://argoproj.github.io/argo-workflows/service-accounts/
 
 Argo Workflows 依赖于 ServiceAccount 进行验证与授权，而且默认情况下，它使用所在 namespace 的 `default` ServiceAccount 运行 workflow.
 
@@ -221,7 +215,7 @@ Argo Workflows 依赖于 ServiceAccount 进行验证与授权，而且默认情�
 
 为此，Argo 的官方文档提供了两个解决方法。
 
-方法一，直接给 default 绑定 `cluster-admin` ClusterRole，给它集群管理员的权限，只要一行命令（但是显然安全性堪忧）： 
+方法一，直接给 default 绑定 `cluster-admin` ClusterRole，给它集群管理员的权限，只要一行命令（但是显然安全性堪忧）：
 
 ```shell
 kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=<namespace>:default -n <namespace>
@@ -235,24 +229,24 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-role
 rules:
-# pod get/watch is used to identify the container IDs of the current pod
-# pod patch is used to annotate the step's outputs back to controller (e.g. artifact location)
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - get
-  - watch
-  - patch
-# logs get/watch are used to get the pods logs for script outputs, and for log archival
-- apiGroups:
-  - ""
-  resources:
-  - pods/log
-  verbs:
-  - get
-  - watch
+  # pod get/watch is used to identify the container IDs of the current pod
+  # pod patch is used to annotate the step's outputs back to controller (e.g. artifact location)
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - watch
+      - patch
+  # logs get/watch are used to get the pods logs for script outputs, and for log archival
+  - apiGroups:
+      - ""
+    resources:
+      - pods/log
+    verbs:
+      - get
+      - watch
 ```
 
 创建好上面这个最小的 ClusterRole，然后为每个名字空间，跑一下如下命令，给 default 账号绑定这个 clusterrole:
@@ -265,10 +259,9 @@ kubectl create rolebinding default-argo-workflows --clusterrole=argo-workflows-r
 
 或者如果你希望使用别的 ServiceAccount 来运行 workflow，也可以自行创建 ServiceAccount，然后再走上面方法二的流程，但是最后，要记得在 workflow 的 `spec.serviceAccountName` 中设定好 ServiceAccount 名称。
 
-
 ### Workflow Executors
 
->https://argoproj.github.io/argo-workflows/workflow-executors/
+> https://argoproj.github.io/argo-workflows/workflow-executors/
 
 Workflow Executor 是符合特定接口的一个进程(Process)，Argo 可以通过它执行一些动作，如监控 Pod 日志、收集 Artifacts、管理容器生命周期等等...
 
@@ -300,7 +293,6 @@ data:
     # ...
 ```
 
-
 ## 三、使用 Argo Workflows 做 CI 工具
 
 官方的 Reference 还算详细，也有提供非常多的 examples 供我们参考，这里提供我们几个常用的 workflow 定义。
@@ -308,7 +300,6 @@ data:
 1. 使用 buildkit 构建镜像：https://github.com/argoproj/argo-workflows/blob/master/examples/buildkit-template.yaml
    1. buildkit 支持缓存，可以在这个 example 的基础上自定义参数
    2. 注意使用 PVC 来跨 step 共享存储空间这种手段，速度会比通过 artifacts 高很多。
-
 
 ## 四、常见问题
 
@@ -319,7 +310,6 @@ workflow 的流程默认使用 root 账号，如果你的镜像默认使用非 r
 解决方法：通过 Pod Security Context 手动设定容器的 user/group:
 
 - [Workflow Pod Security Context](https://argoproj.github.io/argo-workflows/workflow-pod-security-context/)
-
 
 安全起见，我建议所有的 workflow 都手动设定 `securityContext`，示例：
 
@@ -338,7 +328,7 @@ spec:
 
 ### 2. 如何从 hashicorp vault 中读取 secrets?
 
->参考 [Support to get secrets from Vault](https://github.com/argoproj/argo-workflows/issues/3267#issuecomment-650119636)
+> 参考 [Support to get secrets from Vault](https://github.com/argoproj/argo-workflows/issues/3267#issuecomment-650119636)
 
 hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理工具。
 我们在生产环境用它做为分布式配置中心，同时在本地 CI/CD 中，也使用它存储相关的敏感信息。
@@ -348,7 +338,6 @@ hashicorp vault 目前可以说是云原生领域最受欢迎的 secrets 管理�
 目前最推荐的方法，是使用 vault 的 vault-agent，将 secrets 以文件的形式注入到 pod 中。
 
 通过 valut-policy - vault-role - k8s-serviceaccount 一系列认证授权配置，可以制定非常细粒度的 secrets 权限规则，而且配置信息阅后即焚，安全性很高。
-
 
 ### 3. 如何在多个名字空间中使用同一个 secrets?
 
@@ -368,20 +357,20 @@ metadata:
 spec:
   background: false
   rules:
-  # 将 secret vault 从 argo Namespace 同步到其他所有 Namespace
-  - name: sync-vault-secret
-    match:
-      resources:
-        kinds:
-        - Namespace
-    generate:
-      kind: Secret
-      name: regcred
-      namespace: "{{request.object.metadata.name}}"
-      synchronize: true
-      clone:
-        namespace: argo
-        name: vault
+    # 将 secret vault 从 argo Namespace 同步到其他所有 Namespace
+    - name: sync-vault-secret
+      match:
+        resources:
+          kinds:
+            - Namespace
+      generate:
+        kind: Secret
+        name: regcred
+        namespace: "{{request.object.metadata.name}}"
+        synchronize: true
+        clone:
+          namespace: argo
+          name: vault
   # 可以配置多个 rules，每个 rules 同步一个 secret
 ```
 
@@ -392,7 +381,6 @@ spec:
 ### 4. Argo 对 CR 资源的验证不够严谨，写错了 key 都不报错
 
 待研究
-
 
 ### 5. 如何归档历史数据？
 
@@ -439,7 +427,7 @@ Argo Workflows 的配置，都保存在 `workflow-controller-configmap` 这个 c
   - 也支持配置过期时间
 - `sso`: 启用单点登录
 
-### 7. 是否应该尽量使用 CI/CD 工具提供的功能？ 
+### 7. 是否应该尽量使用 CI/CD 工具提供的功能？
 
 我从同事以及网络上，了解到部分 DevOps 人员主张尽量自己使用 Python/Go 来实现 CI/CD 流水线，CI/CD 工具提供的功能能不使用就不要使用。
 
@@ -468,9 +456,8 @@ Argo Workflows 的配置，都保存在 `workflow-controller-configmap` 这个 c
 2. 流水线的步骤之间包含很多逻辑判断/数据传递，那很可能是你的流水线设计有问题！
    1. **流水线的步骤之间传递的数据应该尽可能少！复杂的逻辑判断应该尽量封装在其中一个步骤中**！
    2. 这种情况下，就应该使用 python 脚本来封装复杂的逻辑，而不应该将这些逻辑暴露到 Argo Workflows 中！
-3. 我需要批量运行很多的流水线，而且它们之间还有复杂的依赖关系：那显然应该利用上 argo wrokflow 的高级特性。
-   1.  argo 的 dag/steps 和 workflow of workflows 这两个功能结合，可以简单地实现上述功能。
-
+3. 我需要批量运行很多的流水线，而且它们之间还有复杂的依赖关系：那显然应该利用上 argo workflow 的高级特性。
+   1. argo 的 dag/steps 和 workflow of workflows 这两个功能结合，可以简单地实现上述功能。
 
 ## 8. 如何提升 Argo Workflows 的创建和销毁速度？
 
@@ -508,9 +495,9 @@ Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间�
 
 为此，在进行微服务的全量升级时，就需要沿着 RPC 调用链路按序升级，这里就涉及到了 Kubernetes 资源之间的依赖关系。
 
->我目前获知的关键问题在于：我们使用的并不是真正的微服务开发模式，而是在把整个微服务系统当成一个「单体服务」在看待，所以引申出了这样的依赖关键的问题。
-我进入的新公司完全没有这样的问题，所有的服务之间在 CI/CD 这个阶段都是解耦的，CI/CD 不需要考虑服务之间的依赖关系，也没有自动按照依赖关系进行微服务批量发布的功能，这些都由开发人员自行维护。
-或许这才是正确的使用姿势，如果动不动就要批量更新一大批服务，那微服务体系的设计、拆分肯定是有问题了，生产环境也不会允许这么轻率的更新。
+> 我目前获知的关键问题在于：我们使用的并不是真正的微服务开发模式，而是在把整个微服务系统当成一个「单体服务」在看待，所以引申出了这样的依赖关键的问题。
+> 我进入的新公司完全没有这样的问题，所有的服务之间在 CI/CD 这个阶段都是解耦的，CI/CD 不需要考虑服务之间的依赖关系，也没有自动按照依赖关系进行微服务批量发布的功能，这些都由开发人员自行维护。
+> 或许这才是正确的使用姿势，如果动不动就要批量更新一大批服务，那微服务体系的设计、拆分肯定是有问题了，生产环境也不会允许这么轻率的更新。
 
 前面讲了，阿里云提供的「应用端服务依赖检查」和「独立的服务依赖检查逻辑」是最佳实践。它们的优点有：
 
@@ -533,9 +520,6 @@ Argo 相比其他 CI 工具，最大的特点，是它假设「任务」之间�
 
 - [Argo加入CNCF孵化器，一文解析Kubernetes原生工作流](https://www.infoq.cn/article/fFZPvrKtbykg53x03IaH)
 
-
 视频:
 
 - [How to Multiply the Power of Argo Projects By Using Them Together - Hong Wang](https://www.youtube.com/watch?v=fKiU7txd4RI&list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut&index=149)
-
-

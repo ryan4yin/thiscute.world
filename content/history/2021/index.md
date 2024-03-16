@@ -67,7 +67,7 @@ comment:
   - 了解 EKS 集群的原地升级的细节
   - 输出 EKS 集群原地升级的测试方案，以及生产环境的 EKS 集群升级方案
 - 学习使用 kubeadm+containerd 部署 k8s 测试集群
-  - 涉及到的组件：Kuberntes 控制面、网络插件 Cilium、kube-proxy、coredns、containerd
+  - 涉及到的组件：Kubernetes 控制面、网络插件 Cilium、kube-proxy、coredns、containerd
 
 ### 2021-08-31 - 2021-09-01
 

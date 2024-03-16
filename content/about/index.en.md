@@ -16,13 +16,13 @@ comment:
 
 ![Harmonica](harmonica.webp)
 
->The articles on this site may be written in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/), some of them may be bilingual, and some of them are only available in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/). Please read them as needed.
+> The articles on this site may be written in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/), some of them may be bilingual, and some of them are only available in [Chinese](https://thiscute.world/zh-cn/) or [English](https://thiscute.world/en/). Please read them as needed.
 
->本站的文章可能以[中文](https://thiscute.world/zh-cn/)或[英文](https://thiscute.world/en/)两种语言书写，其中部分文章可能是双语，也有部分文章只有[中文](https://thiscute.world/zh-cn/)或者[英文](https://thiscute.world/en/)版本，请读者按需阅读。
+> 本站的文章可能以[中文](https://thiscute.world/zh-cn/)或[英文](https://thiscute.world/en/)两种语言书写，其中部分文章可能是双语，也有部分文章只有[中文](https://thiscute.world/zh-cn/)或者[英文](https://thiscute.world/en/)版本，请读者按需阅读。
 
 ## About Me
 
->There’s a lot of despair, but also the odd moment of beauty, where time is no longer the same. -- The Elegance of the Hedgehog by Barbery, Muriel Anderson
+> There’s a lot of despair, but also the odd moment of beauty, where time is no longer the same. -- The Elegance of the Hedgehog by Barbery, Muriel Anderson
 
 - **Nickname**: **ryan4yin**, **ryan_yin**
 - **Gender**: Him/He
@@ -55,28 +55,27 @@ comment:
   - Twitter: <https://twitter.com/ryan4yin>
   - Github: <https://github.com/ryan4yin/thiscute.world/issues>
 
-
 ## About This Blog
 
->"For me, blog is first of all a knowledge management tool, followed by a communication tool. My technical articles are mainly used to sort out the knowledge I don't understand yet. I only write about things that I haven't fully mastered yet. As for the things I am proficient in, I usually have no incentive to write related articles. Showing off has never been my motivation to write. Curiosity is."  ──阮一峰
-
+> "For me, blog is first of all a knowledge management tool, followed by a communication tool. My technical articles are mainly used to sort out the knowledge I don't understand yet. I only write about things that I haven't fully mastered yet. As for the things I am proficient in, I usually have no incentive to write related articles. Showing off has never been my motivation to write. Curiosity is." ──阮一峰
 
 I started writing blogs in 2016, and it's been many years now. I've experimented with various writing platforms, but ultimately, I chose to create my own website. This choice grants me full control and the highest degree of freedom. My articles won't be deleted or blocked without reason. Additionally, there are many free static site hosting services available (such as GitHub Pages, Vercel, etc.), which essentially require no monetary investment.
 
 Whether it's a lifestyle blog or a technical blog, every blogger has their own objectives. My purpose for blogging has changed many times. Initially, I simply wanted to try out new things. Later, I aimed to gain more readership and comments because they provided a strong sense of accomplishment. Subsequently, I used my blog as a technical notebook and diary, jotting down numerous miscellaneous thoughts. Now, my primary goal for blogging is to use it as a tool to organize and construct my knowledge framework. My blog, along with my personal notes repository [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge), serves as my treasure trove of knowledge. As I continually add new content, I find myself increasingly reliant on it for my daily work and even leisure activities. My secondary objective is to share the knowledge I acquire with those who need it, embracing the joy of helping others. Lastly, I use blogging to document myself—my joys, sorrows, and personal growth.
 
-I've purchased domain names for the longest duration of ten years, and renewing them every few years. 
+I've purchased domain names for the longest duration of ten years, and renewing them every few years.
 I hope this blog will accompany me for a very long time. Looking back at my blog in the next decade and reflecting on the path I've walked over these ten years, I believe that time will hold special significance.
 
 {{< admonition tip "Blog Timeline" true >}}
+
 - 2021-01-16: Set up the blog <https://ryan4yin.space/>
 - 2022-01-23: Add English Version <https://ryan4yin.space/en/>
-- 2022-02-07: swith domain to <https://thiscute.world/>, add a backup domain <https://writefor.fun>
-{{< /admonition >}}
+- 2022-02-07: switch domain to <https://thiscute.world/>, add a backup domain <https://writefor.fun>
+  {{< /admonition >}}
 
-The Internet is vast, and this website is in a corner. 
+The Internet is vast, and this website is in a corner.
 
-If it is lucky enough to be found by you, and its content are also helpful to you, that would be great! 
+If it is lucky enough to be found by you, and its content are also helpful to you, that would be great!
 
 Thank you for reading~
 
@@ -104,14 +103,12 @@ There’s a lot of despair, but also the odd moment of beauty, where time is no 
 Though there are countless waters and mountains ahead, the traveler will surely arrive. — "At the Bend of the Xiajiang - Notes on Chen Xingjia's Life"
 {{< /admonition >}}
 
-
-###  NOTICE
+### NOTICE
 
 The content in this blog is only my opinion, I can only try to reduce errors and omissions, but can not guarantee the correctness of the content!
 
 So please look at anything in this blog critically.
 
 In addition, many of the pictures/banners used on this site are from the Internet. If there is any infringement, please contact me to delete it.
-
 
 {{< particles_effect_up  >}}

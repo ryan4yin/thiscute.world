@@ -87,7 +87,6 @@ comment:
 是一个长期的学习、实践与方案迭代的过程。
 另外如果你错误地使用了本文中介绍的工具或方案，可能反而会降低你的数据安全性，由此产生的任何损失与风险皆由你自己承担。
 
-
 ## 一、个人数据安全包含哪些部分？
 
 数据安全大概有这些方面：
@@ -177,7 +176,7 @@ bcrypt 本身的安全性就越来越差，现代化的加密工具基本都已�
 OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.
 
 考虑到大部分人都使用默认参数生成 Key，而且绝大部分用户都没有密码学基础，大概率不知道 KDF、Rounds 是什么意思，我们再了解下 `ssh-keygen` 默认参数。
-在 relase note 中我进一步找到这个：
+在 release note 中我进一步找到这个：
 
 ```
 OpenSSH 9.5/9.5p1 (2023-10-04)
@@ -386,13 +385,13 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 1. Joplin
    - 支持 S3/WebDAV 等多种协议同步数据，支持端到端加密
 2. Outline 等 Wiki 系统
-    - 它直接就是个 Web 服务，主要面向公开的 Wiki，不适合私人笔记
+   - 它直接就是个 Web 服务，主要面向公开的 Wiki，不适合私人笔记
 3. Logseq/Obsidian 等双链笔记软件（其中 Obsidian 是闭源软件）
-    - 都是基于本地文件的笔记系统，也没加密工具，需要借助其他工具实现数据加密与同步
-    - 其中 Logseq 是大纲流，一切皆列表。而 Obsidian 是文档流，比较贴近传统的文档编辑体验。
-    - Obsidian 跟 Logseq 的 Sync 功能都是按月收费，相当的贵。社区有通过 Git 同步的方案，但都很 trickk，也不稳定。
-3. AppFlowy/Affine/apitable 等 Notion 替代品
-    - 都是富文本编辑，不适合移动端设备
+   - 都是基于本地文件的笔记系统，也没加密工具，需要借助其他工具实现数据加密与同步
+   - 其中 Logseq 是大纲流，一切皆列表。而 Obsidian 是文档流，比较贴近传统的文档编辑体验。
+   - Obsidian 跟 Logseq 的 Sync 功能都是按月收费，相当的贵。社区有通过 Git 同步的方案，但都很 trickk，也不稳定。
+4. AppFlowy/Affine/apitable 等 Notion 替代品
+   - 都是富文本编辑，不适合移动端设备
 
 在移动端使用 Synthing 或 Git 等第三方工具同步笔记数据，都很麻烦，而且安全性也不够。
 因此目前看在移动端也能用得舒服的话，最稳妥的选择是第一类笔记 APP，简单试用后我选择了最流行的 Joplin.
@@ -401,9 +400,8 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 
 1. Homelab 中的 Windows-NAS-Server，两个 4TB 的硬盘，通过 SMB 局域网共享，公网所有客户端（包括移动端）都能通过 tailscale + rclone 流畅访问。
 1. 部分重要的数据再通过 rclone 加密备份一份到云端，可选项有：
-    1. [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
-    1. [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
-
+   1. [青云对象存储](https://www.qingcloud.com/products/objectstorage/) 与 [七牛云对象存储 Kodo](https://www.qiniu.com/prices/kodo)，它们都有每月 10GB 的免费存储空间，以及 1GB-10GB 的免费外网流量。
+   1. [阿里云 OSS](https://help.aliyun.com/zh/oss/product-overview/billing-overview) 也能免费存 5GB 数据以及每月 5GB 的外网流量，可以考虑使用。
 
 ## 八、桌面电脑與 Homelab 的数据安全
 
@@ -455,10 +453,10 @@ OpenPGP 标准定义了 [String-to-Key (S2K)](https://datatracker.ietf.org/doc/h
 ## 九、总结下我的数据存在了哪些地方
 
 1. secrets 私有仓库: 它会被我的 nix-config 自动拉取并部署到所有主力电脑上，包含了 homelab ssh key, GPG subkey, 以及其他一些重要的 secrets.
-    1. 它通过我所有桌面电脑的 `/etc/ssh/ssh_host_ed25519_key.pub` 公钥加密，在部署时自动使用对应的私钥解密。
-    1. 此外该仓库还添加了一个灾难恢复用的公钥，确保在我所有桌面电脑都丢失的极端情况下，仍可通过对应的灾难恢复私钥解密此仓库的数据。该私钥在使用 age 加密后（注：未使用 rclone 加密）与我其他的灾难恢复数据保存在一起。
+   1. 它通过我所有桌面电脑的 `/etc/ssh/ssh_host_ed25519_key.pub` 公钥加密，在部署时自动使用对应的私钥解密。
+   1. 此外该仓库还添加了一个灾难恢复用的公钥，确保在我所有桌面电脑都丢失的极端情况下，仍可通过对应的灾难恢复私钥解密此仓库的数据。该私钥在使用 age 加密后（注：未使用 rclone 加密）与我其他的灾难恢复数据保存在一起。
 2. password-store: 我的私人账号密码存储库，通过 pass 命令行工具管理，使用 GPG 加密，GPG 密钥备份被通过 age/agenix 加密保存在上述 secrets 仓库中。
-    1. 由于 GnuPG 自身导出的密钥备份数据安全性欠佳，因此我使用了 age + passphrase 对其进行了二次对称加密，然后再通过 agenix 加密（第三次加密，使用非对称加密算法）保存在 secrets 仓库中。这保障了即使我的 GPG 密钥在我所有的桌面电脑上都存在，但安全性仍旧很够。
+   1. 由于 GnuPG 自身导出的密钥备份数据安全性欠佳，因此我使用了 age + passphrase 对其进行了二次对称加密，然后再通过 agenix 加密（第三次加密，使用非对称加密算法）保存在 secrets 仓库中。这保障了即使我的 GPG 密钥在我所有的桌面电脑上都存在，但安全性仍旧很够。
 3. rclone 加密的备份 U 盘（双副本）：离线保存一些重要的数据。其配置文件被加密保存在 secrets 仓库中，其配置文件的解密密码被加密保存在 password-store 仓库中。
 
 这套方案的大部分部署工作都是由我的 Nix 配置自动完成的，整个流程的自动化程度很高，所以这套方案带给我的额外负担并不大。
@@ -497,9 +495,9 @@ secrets 这个私有仓库是整个方案的核心，它包含了所有重要数
 
 - `fs`: 「佛说」这首歌里面的歌词
 - `D!`: 头文字D!
-- `.*`: 地面上的光斑(.)，天上的星光(*)
-- `v_`: 嘴巴张开（v）睡得很香的样子，口水都流到地上了(_)
-- `F*sdn`: F*ck 软件定义网络(sdn)
+- `.*`: 地面上的光斑(.)，天上的星光(\*)
+- `v_`: 嘴巴张开（v）睡得很香的样子，口水都流到地上了(\_)
+- `F*sdn`: F\*ck 软件定义网络(sdn)
 - `zFkJM`: 在政府（zf）大门口（k），看(k) 见了 Jack Ma (JM) 在跳脱yi舞...
 - `)nQ`: 宁静的夏夜，凉风习习，天上一轮弯月，你(n)问(Q)我，当下这一刻是否足够
 
@@ -524,9 +522,9 @@ secrets 这个私有仓库是整个方案的核心，它包含了所有重要数
 3. 重新生成了所有重要账号的密码，全部使用随机密码，一共改了二三十个账号。考虑到旧的 backup code 可能已经泄漏，我也重新生成了所有重要账号的 backup code.
 4. 重装 NixOS，使用 LUKS2 做全盘加密，启用 Secure Boot. 同时使用 tmpfs 作为根目录，所有未明确声明持久化的数据，都会在每次重启后被清空。
 5. 使用 nix-darwin 与 home-manager 重新声明式地配置了我的两台 MacBook Pro（Intel 跟 Apple Silicon 各一台），与我的 NixOS 共用了许多配置，最大程度上保持了所有桌面电脑的开发环境一致性，也确保了我始终能快速地在一台新电脑上部署我的整个开发环境。
-5. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记遷移到了 Joplin + OneDrive 上，Homelab 中設了通過 restic 定期自動加密備份 OneDrive 中的 Joplin 數據。
-6. 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.
-7. All in NixOS，将 Homelab 中对我而言偏黑盒且可复现性差的 Ubuntu、Kubernetes 集群节点、OpenWRT 等 VM 全面替换成更白盒且可复现性强的 NixOS，提升我对内网环境的掌控度，进而提升内网安全性。
+6. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记遷移到了 Joplin + OneDrive 上，Homelab 中設了通過 restic 定期自動加密備份 OneDrive 中的 Joplin 數據。
+7. 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动同步到国内 Gitee.
+8. All in NixOS，将 Homelab 中对我而言偏黑盒且可复现性差的 Ubuntu、Kubernetes 集群节点、OpenWRT 等 VM 全面替换成更白盒且可复现性强的 NixOS，提升我对内网环境的掌控度，进而提升内网安全性。
 
 ## 十二、灾难恢复预案
 

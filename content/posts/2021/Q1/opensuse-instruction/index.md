@@ -4,8 +4,8 @@ date: 2021-01-04T08:42:21+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "linux-opensuse.webp"
+  - name: "featured-image"
+    src: "linux-opensuse.webp"
 
 tags: ["openSUSE", "Linux"]
 categories: ["tech"]
@@ -21,9 +21,9 @@ openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。
 尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。
 本文算是对迁移流程做的一个总结。
 
->本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。
-openSUSE 社区的大部分用户都是使用的 Tumbleweed.
-它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。
+> 本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。
+> openSUSE 社区的大部分用户都是使用的 Tumbleweed.
+> 它的硬件兼容性也要比 openSUSE Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。
 
 ## 一、zypper 的基础命令
 
@@ -43,7 +43,7 @@ sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss
 
 ```shell
 sudo zypper refresh  # refresh all repos
-sudo zypper update   # update all softwares
+sudo zypper update   # update all software
 
 sudo zypper search --installed-only  <package-name>  # 查找本地安装的程序
 sudo zypper search <package-name>  # 查找本地和软件源中的程序
@@ -54,12 +54,12 @@ sudo zypper remove --clean-deps <package-name>  # 卸载程序，注意添加 --
 sudo zypper clean  # 清理本地的包缓存
 ```
 
-## Install Softwares
+## Install Software
 
->这里需要用到 [OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)](https://mirrors.openSUSE.org/list/bs.html)，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
->建议有条件可以在路由器上加智能代理提速。
+> 这里需要用到 [OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)](https://mirrors.openSUSE.org/list/bs.html)，因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。
+> 建议有条件可以在路由器上加智能代理提速。
 
-安装需要用到的各类软件: 
+安装需要用到的各类软件:
 
 ```shell
 # 启用 Packman 仓库，使用阿里云镜像源
@@ -121,18 +121,17 @@ echo "conda activate base" >> ~/.bashrc
 echo "export PATH=\$PATH:\$HOME/.local/bin" >> ~/.bashrc
 ```
 
-
 接下来安装 VSCode 插件，下列是我的插件列表：
 
 1. 语言：
-    1. python/go/c#/julia/flutter
-    2. c/c++ extension pack
-    3. rust-analyzer
-    4. shellchecker
-    5. redhat xml & yaml
-    6. even-better-toml
-    7. edit-csv
-    8. vscode-proto3
+   1. python/go/c#/julia/flutter
+   2. c/c++ extension pack
+   3. rust-analyzer
+   4. shellchecker
+   5. redhat xml & yaml
+   6. even-better-toml
+   7. edit-csv
+   8. vscode-proto3
 2. ansible/terraform
 3. markdown all in one + Markdown Preview Enhanced
 4. 美化：
@@ -144,10 +143,10 @@ echo "export PATH=\$PATH:\$HOME/.local/bin" >> ~/.bashrc
 7. gitlens
 8. prettier
 9. utils
-    1. comment translate
-    2. path intellisense
-    3. svg
-    4. visual studio intellicode
+   1. comment translate
+   2. path intellisense
+   3. svg
+   4. visual studio intellicode
 10. remote ssh + remote containers
 11. rest client
 12. vscode databases
@@ -169,7 +168,6 @@ sudo systemctl start docker
 # 简单起见，直接用 pip 安装 docker-compose 和 podman-compose
 sudo pip install docker-compose podman-compose
 ```
-
 
 ### 办公、音乐、聊天
 
@@ -203,7 +201,6 @@ mv rime ~/.local/share/fcitx5/
 
 现在重启系统，在 fcitx5 配置里面添加 rime「中州韵」，就可以正常使用小鹤音形了。
 
-
 ### QEMU/KVM
 
 不得不说，openSUSE 安装 KVM 真的超方便，纯 GUI 操作：
@@ -214,7 +211,7 @@ sudo yast2 virtualization
 # enter to terminal ui, select kvm + kvm tools, and then install it.
 ```
 
-KVM 的详细文档参见 [KVM/README.md](../../virutal%20machine/KVM/README.md)
+KVM 的详细文档参见 [KVM/README.md](../../virtual%20machine/KVM/README.md)
 
 ### VPN 连接与防火墙
 
@@ -243,7 +240,7 @@ sudo firewall-cmd --reload
 
 ## 安装 Nvidia 闭源驱动
 
->完全参考官方文档 <https://en.opensuse.org/SDB:NVIDIA_drivers>
+> 完全参考官方文档 <https://en.opensuse.org/SDB:NVIDIA_drivers>
 
 ```shell
 # 添加 Nvidia 官方镜像源
@@ -283,7 +280,6 @@ zypper in  x11-video-nvidiaG06 x11-video-nvidiaG06
    2. 命令行可以直接使用 `export HTTP_PROXY=http://127.0.0.1; export HTTPS_PROXY=http://127.0.0.1` 来使用代理，大部分命令行程序都会使用这两个环境变量的配置。
 6. 一般机场给的 clash 配置都会直接开启 clash Web 配置页，可以通过 <http://localhost:9090/ui/#/proxies> 直接访问
 
-
 ## 设置 zypper 使用 proxy 下载更新
 
 zypper 默认不会读取 `HTTP_PROXY` 跟 `HTTPS_PROXY` 等环境变量，对于一些无国内镜像的源而言，可以通过如下方式配置走代理提升下载速度（这需要你已经有本地代理才行，比如说 clash）：
@@ -293,7 +289,6 @@ zypper 默认不会读取 `HTTP_PROXY` 跟 `HTTPS_PROXY` 等环境变量，对�
 - 配置好 http 以及 https 协议的代理地址，如果是本地的 clash，可以直接填 `http://127.0.0.1:7890`
 - 在「No Proxy Domains」中添加国内镜像源地址，使它们不要走代理
   - 如果是跟我的教程走的，应该需要将这个值改成 `localhost,127.0.0.1,mirrors.bfsu.edu.cn,mirrors.aliyun.com`
-
 
 ### KDE Connect
 
@@ -319,8 +314,8 @@ sudo firewall-cmd --list-all
 目前存在的 Bug:
 
 - [ ] Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。
-    - 如果你有 ROOT 权限，可以参考 [Fix clipboard permission on Android 10](https://szclsya.me/posts/android/fix-clipboard-android-10/) 的方法，安装 ClipboardWhitelist 来打开权限。
-    - 否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。
+  - 如果你有 ROOT 权限，可以参考 [Fix clipboard permission on Android 10](https://szclsya.me/posts/android/fix-clipboard-android-10/) 的方法，安装 ClipboardWhitelist 来打开权限。
+  - 否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。
 
 ### VPN 连接与其他防火墙相关配置
 
@@ -401,10 +396,9 @@ openSUSE 的 OpenSSH 服务默认是允许密码登录的，虽然也有登录�
 
 既然我们前面已经设置好了密钥登录，现在就可以把密码登录功能完全禁用掉，提升安全性。
 
-
 请取消注释并修改 `/usr/etc/ssh/sshd_config` 中如下参数的值：
 
->注意 OpenSSH 的主配置文件是 `/usr/etc/ssh/sshd_config`，而不是大部分 Linux 发行版使用的 `/etc/ssh/sshd_config`。
+> 注意 OpenSSH 的主配置文件是 `/usr/etc/ssh/sshd_config`，而不是大部分 Linux 发行版使用的 `/etc/ssh/sshd_config`。
 
 ```conf
 # 安全相关配置
@@ -463,4 +457,3 @@ sudo firewall-cmd --list-all
 ## 其他设置
 
 从 Windows 带过来的习惯是单击选中文件，双击才打开，这个可以在「系统设置」-「工作空间行为」-「常规行为」-「点击行为」中修改。
-

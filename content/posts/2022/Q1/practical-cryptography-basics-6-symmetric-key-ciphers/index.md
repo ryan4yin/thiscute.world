@@ -3,8 +3,8 @@ title: "写给开发人员的实用密码学（六）—— 对称密钥加密�
 date: 2022-03-06T18:44:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "symmetric-vs-asymmetric.webp"
+  - name: "featured-image"
+    src: "symmetric-vs-asymmetric.webp"
 
 tags: ["Cryptography", "密码学", "对称加密", "安全", "AES", "ChaCha20"]
 categories: ["tech"]
@@ -22,8 +22,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了部分代码示例。
-
+> 本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者补充了部分代码示例。
 
 ## 零、术语介绍
 
@@ -122,7 +121,7 @@ IV 通常无需保密，但是应当足够随机（无法预测），而且不�
 
 ### 1. CTR (Counter) 分组模式 {#counter_mode}
 
->参考文档: https://csrc.nist.gov/publications/detail/sp/800-38a/final
+> 参考文档: https://csrc.nist.gov/publications/detail/sp/800-38a/final
 
 下图说明了「CTR 分组工作模式」的加密解密流程，基本上就是将明文/密文拆分成一个个长度固定的分组，然后使用一定的算法进行加密与解密：
 
@@ -155,7 +154,7 @@ $$
 - $I_i$ 表示计数器返回的第 $i$ 个值，其长度应与分组的长度相同
 - $\text{CIPH}_{key}$ 表示使用密钥 $key$ 的对称加密算法
 
-上面的公式只描述了 $ 0 \ge i \le n-1$ 的场景，最后一个分组  $i = n$ 要特殊一些——它的长度可能比 `Key` 要短。
+上面的公式只描述了 $ 0 \ge i \le n-1$ 的场景，最后一个分组 $i = n$ 要特殊一些——它的长度可能比 `Key` 要短。
 CTR 模式加解密这最后这个分组时，会直接忽略掉 $O_n$ 末尾多余的 bytes.
 这种处理方式使得 CTR 模式不需要使用填充算法对最后一个分组进行填充，而且还使密文跟明文的长度完全一致。
 我们假设最后一个分组的长度为 $u$，它的加解密算法描述如下（$MSB_u(O_n)$ 表示取 $O_n$ 的 u 个最高有效位）：
@@ -313,13 +312,14 @@ GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。
 ## 四、对称加密算法与对称加密方案
 
 前面啰嗦了这么多，下面进入正题：对称加密算法
+
 ### 1. 安全的对称加密算法
 
 目前应用最广泛的对称加密算法，是 AES 跟 Salsa20 / ChaCha20 这两个系列。
 
 #### 1. AES (Rijndael)
 
->wiki: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
+> wiki: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
 
 AES（高级加密标准，也称为 Rijndael）是现代 IT 行业中最流行和广泛使用的对称加密算法。AES 被证明是高度安全、快速且标准化的，到目前为止没有发现任何明显的弱点或攻击手段，而且几乎在所有平台上都得到了很好的支持。 AES 是 128 位分组密码，使用 128、192 或 256 位密钥。它通常与分组模式组合成分组加密方案（如 AES-CTR 或 AES-GCM）以处理流数据。
 在大多数分组模式中，AES 还需要一个随机的 128 位初始向量 IV。
@@ -404,11 +404,11 @@ descrypt_text = decrypt(
 
 #### 2. Salsa20 / ChaCha20
 
->wiki: https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant
+> wiki: https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant
 
 Salsa20 及其改进的变体 ChaCha（ChaCha8、ChaCha12、ChaCha20）和 XSalsa20 是由密码学家 Daniel Bernstein 设计的现代、快速的对称流密码家族。 Salsa20 密码是对称流密码设计竞赛 eSTREAM（2004-2008）的决赛选手之一，它随后与相关的 BLAKE 哈希函数一起被广泛采用。 Salsa20 及其变体是免版税的，没有专利。
 
-Salsa20 密码将 128 位或 256 位对称密钥 + 随机生成的 64 位随机数（初始向量）和无限长度的数据流作为输入，并生成长度相同的加密数据流作为输出输入流。 
+Salsa20 密码将 128 位或 256 位对称密钥 + 随机生成的 64 位随机数（初始向量）和无限长度的数据流作为输入，并生成长度相同的加密数据流作为输出输入流。
 
 ##### ChaCha20-Poly1305
 
@@ -446,16 +446,16 @@ decryptor.update(ct)
 
 还有一些其他的现代安全对称密码，它们的应用不如 AES 和 ChaCha20 这么广泛，但在程序员和信息安全社区中仍然很流行：
 
-- [Serpent](https://en.wikipedia.org/wiki/Serpent_(cipher)) - 安全对称密钥分组密码（密钥大小：128、192 或 256 位），公众所有（Public Domain），完全免费
+- [Serpent](<https://en.wikipedia.org/wiki/Serpent_(cipher)>) - 安全对称密钥分组密码（密钥大小：128、192 或 256 位），公众所有（Public Domain），完全免费
 - [Twofish](https://en.wikipedia.org/wiki/Twofish) - 安全对称密钥分组密码（密钥大小：128、192 或 256 位），公众所有（Public Domain），完全免费
-- [Camellia](https://en.wikipedia.org/wiki/Camellia_(cipher)) - 安全对称密钥分组密码（分组大小：128 位；密钥大小：128、192 和 256 位），专利算法，但完全免费
+- [Camellia](<https://en.wikipedia.org/wiki/Camellia_(cipher)>) - 安全对称密钥分组密码（分组大小：128 位；密钥大小：128、192 和 256 位），专利算法，但完全免费
   - 该算法由三菱和日本电信电话（NTT）在 2000 年共同发明
 - [RC5](https://en.wikipedia.org/wiki/RC5) - 安全对称密钥分组密码（密钥大小：128 到 2040 位；分组大小：32、64 或 128 位；轮数：1 ... 255），短密钥不安全（56 位密钥已被暴力破解） , 专利在 2015 年到期，现在完全免费
 - [RC6](https://en.wikipedia.org/wiki/RC6) - 安全对称密钥分组密码，类似于 RC5，但更复杂（密钥大小：128 到 2040 位；分组大小：32、64 或 128 位；轮数：1 ... 255），专利在 2017 年到期，现在完全免费
 - [IDEA](https://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm) - 安全对称密钥分组密码（密钥大小：128 位），所有专利在均 2012 年前过期，完全免费
 - [CAST (CAST-128 / CAST5, CAST-256 / CAST6)](https://en.wikipedia.org/wiki/CAST-256) - 安全对称密钥分组密码系列（密钥大小：40 ... 256 位），免版税
-- [ARIA](https://en.wikipedia.org/wiki/ARIA_(cipher)) - 安全对称密钥分组密码，类似于 AES（密钥大小：128、192 或 256 位），韩国官方标准，免费供公众使用
-- [SM4](https://en.wikipedia.org/wiki/SM4_(cipher)) - 安全对称密钥分组密码，类似于 AES（密钥大小：128 位），中国官方标准，免费供公众使用
+- [ARIA](<https://en.wikipedia.org/wiki/ARIA_(cipher)>) - 安全对称密钥分组密码，类似于 AES（密钥大小：128、192 或 256 位），韩国官方标准，免费供公众使用
+- [SM4](<https://en.wikipedia.org/wiki/SM4_(cipher)>) - 安全对称密钥分组密码，类似于 AES（密钥大小：128 位），中国官方标准，免费供公众使用
   - 由中国国家密码管理局于 2012 年 3 月 21 日发布
 
 具体的算法内容这里就不介绍了，有兴趣或者用得到的时候，可以再去仔细了解。
@@ -470,7 +470,7 @@ decryptor.update(ct)
 - RC4 - 流密码，已被破解，网上存在大量它的破解资料
 - Blowfish - 旧的 64 位密码，已被破坏
   - [Sweet32: Birthday attacks on 64-bit block ciphers in TLS and OpenVPN](https://web.archive.org/web/20161009174028/https://sweet32.info/)
-- GOST - 俄罗斯 64 位分组密码，有争议的安全性，被认为有风险
+- GHOST - 俄罗斯 64 位分组密码，有争议的安全性，被认为有风险
 
 ### 对称认证加密算法 AE / AEAD
 
@@ -500,7 +500,6 @@ decryptor.update(ct)
 目前应用最广泛的对称加密方案应该是 AES-128-GCM，
 而 ChaCha20-Poly1305 因为其极高的性能，也越来越多地被应用在 TLS1.2、TLS1.3、QUIC/HTTP3、Wireguard、SSH 等协议中。
 
-
 ## 五、AES 算法案例：以太坊钱包加密
 
 在这一小节我们研究一个现实中的 AES 应用场景：以太坊区块链的标准加密钱包文件格式。
@@ -523,20 +522,22 @@ UTC / JSON 钱包的一个示例如下：
   "version": 3,
   "id": "07a9f767-93c5-4842-9afd-b3b083659f04",
   "address": "aef8cad64d29fcc4ed07629b9e896ebc3160a8d0",
-  "Crypto": {
-    "ciphertext": "99d0e66c67941a08690e48222a58843ef2481e110969325db7ff5284cd3d3093",
-    "cipherparams": { "iv": "7d7fabf8dee2e77f0d7e3ff3b965fc23" },
-    "cipher": "aes-128-ctr",
-    "kdf": "scrypt",
-    "kdfparams": {
-      "dklen": 32,
-      "salt": "85ad073989d461c72358ccaea3551f7ecb8e672503cb05c2ee80cfb6b922f4d4",
-      "n": 8192,
-      "r": 8,
-      "p": 1
-      },
-    "mac": "06dcf1cc4bffe1616fafe94a2a7087fd79df444756bb17c93af588c3ab02a913"
-  }
+  "Crypto":
+    {
+      "ciphertext": "99d0e66c67941a08690e48222a58843ef2481e110969325db7ff5284cd3d3093",
+      "cipherparams": { "iv": "7d7fabf8dee2e77f0d7e3ff3b965fc23" },
+      "cipher": "aes-128-ctr",
+      "kdf": "scrypt",
+      "kdfparams":
+        {
+          "dklen": 32,
+          "salt": "85ad073989d461c72358ccaea3551f7ecb8e672503cb05c2ee80cfb6b922f4d4",
+          "n": 8192,
+          "r": 8,
+          "p": 1,
+        },
+      "mac": "06dcf1cc4bffe1616fafe94a2a7087fd79df444756bb17c93af588c3ab02a913",
+    },
 }
 ```
 

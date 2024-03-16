@@ -4,10 +4,11 @@ date: 2022-03-01T17:15:05+08:00
 lastmod: 2022-03-13T15:26:00+08:00
 draft: false
 resources:
-- name: "featured-image"
-  src: "dhke.webp"
+  - name: "featured-image"
+    src: "dhke.webp"
 
-tags: ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
+tags:
+  ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
@@ -21,7 +22,7 @@ code:
   maxShownLines: 100
 ---
 
->本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者额外补充了 DHKE/ECDH 的代码示例，以及「PFS 完美前向保密协议 DHE/ECDHE」一节。
+> 本文主要翻译自 [Practical-Cryptography-for-Developers-Book][cryptobook]，笔者额外补充了 DHKE/ECDH 的代码示例，以及「PFS 完美前向保密协议 DHE/ECDHE」一节。
 
 ## 一、前言
 
@@ -35,7 +36,7 @@ code:
 密钥交换有很多手段，常见手段有匿名的 DHKE 密钥协商协议、密码或预共享密钥、数字证书等等。
 有些通讯协议只在开始时交换一次密钥，而有些协议则会随着时间的推移不断地交换密钥。
 
-认证密钥交换（AKE）是一种会同时认证相关方身份的密钥交换协议，比如个人 WiFi 通常就会使用 password-authenticated key agreement (PAKE)，而如果你连接的是公开 WiFi，则会使用匿名密钥交换协议。
+认证密钥交换（ACHE）是一种会同时认证相关方身份的密钥交换协议，比如个人 WiFi 通常就会使用 password-authenticated key agreement (PAKE)，而如果你连接的是公开 WiFi，则会使用匿名密钥交换协议。
 
 目前有许多用于密钥交换的密码算法。其中一些使用公钥密码系统，而另一些则使用更简单的密钥交换方案（如 Diffie-Hellman 密钥交换）；其中有些算法涉及服务器身份验证，也有些涉及客户端身份验证；其中部分算法使用密码，另一部分使用数字证书或其他身份验证机制。下面列举一些知名的密钥交换算法：
 
@@ -75,7 +76,6 @@ DHKE 有两种实现方案：
 - 之后，Alice 跟 Bob 再回到公开信道上，交换双方的**混合色彩**。
   - 我们假设在仅知道**初始色彩**跟**混合色彩**的情况下，很难推导出被混合的**秘密色彩**。这样第三方就猜不出 Bob 跟 Alice 分别选择了什么**秘密色彩**了。
 - 最后 Alice 跟 Bob 再分别将**自己的秘密色彩**，跟**对方的混合色彩**混合，就得到了最终的**秘密色彩**。这个最终色彩只有 Alice 跟 Bob 知道，信道上的任何人都无法猜出来。
-
 
 DHKE 协议也是基于类似的原理，但是使用的是离散对数（discrete logarithms）跟模幂（modular exponentiations）而不是色彩混合。
 
@@ -119,17 +119,16 @@ $$
   - 假设 <span style="color:red">$a=4$</span>，则 <span style="color:green">$A$</span>$\ = 5^4 \mod 23 = 4$
 - Bob 也选择一个秘密整数 <span style="color:red">$b$</span>，计算 <span style="color:green">$B$</span>$\ = g^b \mod p$ 并发送给 Alice
   - 假设 <span style="color:red">$b=3$</span>，则 <span style="color:green">$B$</span>$\ = 5^3 \mod 23 = 10$
-- Alice 计算  $S_1 = B^a \mod p$
+- Alice 计算 $S_1 = B^a \mod p$
   - $S_1 = 10^4 \mod 23 = 18$
 - Bob 计算 $S_2 = A^b \mod p$
   - $S_2 = 4^3 \mod 23 = 18$
-- 已知 $B^a \mod p = g^{ab} \mod p = A^b \mod p$，因此 <span style="color:red">$S_1 = S_2 = S$</span> 
+- 已知 $B^a \mod p = g^{ab} \mod p = A^b \mod p$，因此 <span style="color:red">$S_1 = S_2 = S$</span>
 - 这样 Alice 跟 Bob 就协商出了密钥 <span style="color:red">$S$</span>
 - 因为离散对数的计算非常难，任何窃听者都几乎不可能通过公开的 <span style="color:green">$p$ $g$ $A$ $B$</span> 逆推出 <span style="color:red">$S$</span> 的值
 
 在最常见的 DHKE 实现中（[RFC3526](https://tools.ietf.org/html/rfc3526)），基数是 $g = 2$，模数 $p$ 是一个 1536 到 8192 比特的大素数。
 而整数 <span style="color:green">$A$ $B$</span> 通常会使用非常大的数字（1024、2048 或 4096 比特甚至更大）以防范暴力破解。
-
 
 DHKE 协议基于 Diffie-Hellman 问题的实际难度，这是计算机科学中众所周知的离散对数问题（DLP）的变体，目前还不存在有效的算法。
 
@@ -349,4 +348,3 @@ shared_key_2 = alice_priv_key_2.exchange(bob_pub_key_2)
 - [A complete overview of SSL/TLS and its cryptographic system](https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd)
 
 [cryptobook]: https://github.com/nakov/Practical-Cryptography-for-Developers-Book
-

@@ -5,8 +5,8 @@ lastmod: 2023-08-08T07:23:51+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "8051-display-2023.webp"
+  - name: "featured-image"
+    src: "8051-display-2023.webp"
 
 tags: ["电子电路", "Electrical Engineering", "MCU"]
 categories: ["tech"]
@@ -35,7 +35,7 @@ comment:
 
 - [纵横向导 - 电路入门](https://rmxd.gitee.io/guide/elec_start/)
   - 采用类比的方法来讲解电路基础，很适合业余玩家零基础快速入门。
-- [Electrical Engineering Essentails - sparkfun](https://www.sparkfun.com/engineering_essentials)
+- [Electrical Engineering Essentials - sparkfun](https://www.sparkfun.com/engineering_essentials)
   - 同样是零基础入门，尤其是还介绍了电烙铁等玩电路板的实用知识。
 - [The Amazing World of Electronics - Only the Cool Stuff :-)](https://elamazing.com/)
   - 这个是一篇篇零散的文章，每篇文章一个知识点，但是讲得比较深入透彻。
@@ -65,7 +65,6 @@ comment:
   - ...
 
 总之兴趣驱动，不会的东西就 Google 一下或者问问 ChatGPT，玩起来~
-
 
 ## 一、常见基础公式
 
@@ -109,7 +108,7 @@ comment:
 
 ### 1. 二极管 Diode
 
->https://learn.sparkfun.com/tutorials/diodes
+> https://learn.sparkfun.com/tutorials/diodes
 
 二极管是一种**只允许电流由单一方向流过**，具有两个电极的元件，是现代电子产业的基石。
 可类比水流中的单向阀门，水只能从一端流向另一端，而不能逆流。
@@ -118,7 +117,7 @@ comment:
 后来美国人使用半导体材料发明了晶体二极管（或者叫半导体二极管）。
 目前常用的二极管都是晶体二极管，主要使用硅或者锗这类半导体材料。
 
-晶体二极管的核心是 PN 结（p–n junction），要了解  PN 结，需要先介绍半导体的几个概念：
+晶体二极管的核心是 PN 结（p–n junction），要了解 PN 结，需要先介绍半导体的几个概念：
 
 - 空穴：又称 Electron hole，物理学中指原子的共价键上流失一个电子，最后在共价键上留下的空位。
 - 载流子：半导体中有两种载流子，即价带中带正电的空穴，和导带中带负电的电子。
@@ -141,14 +140,14 @@ comment:
 
 几个主要特征与相关名词介绍：
 
->更详细的文章：[PN Junction Diode](https://elamazing.com/2021/04/13/pn-junction-diode/)
+> 更详细的文章：[PN Junction Diode](https://elamazing.com/2021/04/13/pn-junction-diode/)
 
 - 正向压降 Forward Voltage: 指使电流能够导通的最小电压 $V_F$
   - 「正向压降」被用于克服二极管的内部电场了，所以在电流通过二极管后，电压需要减去这个电压，这也是中文名「正向压降」的由来。
     - 硅二极管的正向压降通常为 0.6v - 1v，锗二极管的正向压降通常为 0.3v
   - 根据伏安特性曲线，实际上随着电流的变化，「正向压降」也是有小幅波动的，不过计算时一般都认为它是固定值。
 - 击穿电压 Breakdown Voltage: 指使电流能否反向导通的最小电压，从图中标识看 $V_{BR}$ 为 -50v，显然它远大于不到 1v 的「正向压降」。
-    - 当电流能经过二极管反向导通时，我们称二极管被击穿（Breakdown）
+  - 当电流能经过二极管反向导通时，我们称二极管被击穿（Breakdown）
 
 二极管依据其设计目标，分类了许多不同类别：
 
@@ -219,7 +218,7 @@ b 与 e 之间的电压形成一个小电流，这个小电流越大，c 与 e �
 
 可以看到**在 $I_{B}$ 一定的情况下，不论 $V_{CE}$ 在 2v 以上如何变化，$I_{C}$ 的电流都几乎是恒定的**。换个角度看电压在 2v - 12v 之间时，$I_{B}$ 与 $I_{C}$ 几乎是完全的线性关系，不受电压波动的影响。
 
->注意 12v 以上只是没有画出来，假使这个三极管最多只能承受 12v 电压，那更高的电压会击穿它，你就能看到三极管冒火花了...
+> 注意 12v 以上只是没有画出来，假使这个三极管最多只能承受 12v 电压，那更高的电压会击穿它，你就能看到三极管冒火花了...
 
 $\frac{I_{C}}{I_{B}}$ 之间的比率（常数）被称做三极管的电流增益（Current Gain），一般使用 $\beta$ 表示。
 
@@ -242,11 +241,11 @@ $\frac{I_{C}}{I_{B}}$ 之间的比率（常数）被称做三极管的电流增�
 
 ### 3. MOSFET 金属氧化物场效应晶体管
 
->https://elamazing.com/2021/03/31/mosfet/
+> https://elamazing.com/2021/03/31/mosfet/
 
->MOSFET 与三极管的区别与选用：https://www.eet-china.com/mp/a17394.html
+> MOSFET 与三极管的区别与选用：https://www.eet-china.com/mp/a17394.html
 
->CMOS 集成电路工艺 - 百科: https://www.zgbk.com/ecph/words?SiteID=1&ID=124559&Type=bkzyb
+> CMOS 集成电路工艺 - 百科: https://www.zgbk.com/ecph/words?SiteID=1&ID=124559&Type=bkzyb
 
 **MOSFET 晶体管一般简称 MOS 管，是电压控制元件（通过栅极电压控制源漏间导通电阻），而双极型晶体管（三极管）是电流控制元件（通过基极较小的电流控制较大的集电极电流）**。
 
@@ -312,12 +311,11 @@ TODO
 
 而我们这里提的电感这种元器件，其核心原理是楞次定律（Lenz's law）：
 
->由于磁通量的改变而产生的感应电流，此电流的流向为抗拒磁通量改变的方向。
+> 由于磁通量的改变而产生的感应电流，此电流的流向为抗拒磁通量改变的方向。
 
 将楞次定律应用在闭合回路的自感效应中，得到的结论是：
 
->电路上所诱导出的电动势的方向，总是使得它所驱动的电流，会阻碍原先产生它（即电动势）的磁通量之变化。
-
+> 电路上所诱导出的电动势的方向，总是使得它所驱动的电流，会阻碍原先产生它（即电动势）的磁通量之变化。
 
 具体而言，**对于「电感」，当电流增加时它会将能量以磁场的形式暂时存储起来，等到电流减小时它又会将磁场的能量释放出来，这会产生抵抗电流变化的效果**。
 
@@ -327,7 +325,7 @@ TODO
 
 ### 6. 电阻
 
->足够深入的分析：[电阻的定义到底是什么？](https://www.zhihu.com/question/68567332)
+> 足够深入的分析：[电阻的定义到底是什么？](https://www.zhihu.com/question/68567332)
 
 我们对电阻最直观的理解，是中学时学过的：
 
@@ -341,7 +339,7 @@ $$R =  \frac{V}{I}$$
 
 但是在交流电路中，因为电流始终是在震荡的，这个问题就会变得相当明显，以至于无法简单地使用「电阻」来表达一个电阻器的特性，为此引入了一个新概念叫「阻抗」。
 
->在具有电阻、电感和电容的电路里，对电路中的电流所起的阻碍作用叫做阻抗。阻抗常用Z表示，是一个复数，实部称为电阻，虚部称为电抗，其中电容在电路中对交流电所起的阻碍作用称为容抗 ,电感在电路中对交流电所起的阻碍作用称为感抗，电容和电感在电路中对交流电引起的阻碍作用总称为阻抗。 阻抗的单位是欧姆。阻抗的概念不仅存在于电路中，在力学的振动系统中也有涉及。
+> 在具有电阻、电感和电容的电路里，对电路中的电流所起的阻碍作用叫做阻抗。阻抗常用Z表示，是一个复数，实部称为电阻，虚部称为电抗，其中电容在电路中对交流电所起的阻碍作用称为容抗 ,电感在电路中对交流电所起的阻碍作用称为感抗，电容和电感在电路中对交流电引起的阻碍作用总称为阻抗。 阻抗的单位是欧姆。阻抗的概念不仅存在于电路中，在力学的振动系统中也有涉及。
 
 如果仔细看看你买过的耳机的相关参数，会发现它就包含一个「阻抗」参数，知乎上就有相关讨论 [耳机是不是阻抗越高越好？](https://www.zhihu.com/question/22519059).
 
@@ -360,7 +358,7 @@ $$R =  \frac{V}{I}$$
 
 ### 7. 晶振 (Xtal) 与振荡电路
 
->[秒懂单片机晶振电路原理](https://zhuanlan.zhihu.com/p/72583737)
+> [秒懂单片机晶振电路原理](https://zhuanlan.zhihu.com/p/72583737)
 
 石英晶体或晶振，是利用石英晶体（又称水晶）的压电效应，用来产生高精度振荡频率的一种电子器件，属于被动器件（无源源件）。
 
@@ -378,7 +376,6 @@ $$R =  \frac{V}{I}$$
 
 可能有些初学者会对晶振的频率感到奇怪，12M、24M 之类的晶振较好理解，选用如 11.0592MHZ 的晶振给人一种奇怪的感觉，这个问题解释起来比较麻烦，如果初学者在练习串口编程的时候就会对此有所理解，这种晶振主要是可以方便和精确的设计串口或其它异步通讯时的波特率。
 
-
 ### 8. 地
 
 电路中每个器件上有电能量集聚，形成电势差，就相当于物体的高度差。
@@ -390,7 +387,7 @@ $$R =  \frac{V}{I}$$
 
 #### 静电破坏与防静电
 
->https://zhuanlan.zhihu.com/p/570713171
+> https://zhuanlan.zhihu.com/p/570713171
 
 弱电领域另外一个常见的接地应该就是静电接地了，这是为了确保人体/工作台与地面的电势差为零，避免工作时静电放电导致元器件损坏。
 
@@ -511,7 +508,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 #### 电烙铁的使用与保养
 
->参考：http://www.cxg.cn/newshow1346.html
+> 参考：http://www.cxg.cn/newshow1346.html
 
 前面讲了，我毕竟买的是 150 一把的焊笔，C245 这个烙铁头也不便宜，直接当耗材随便折腾就太浪费了。有必要搞清楚怎么使用与保养电烙铁：
 
@@ -538,7 +535,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 #### 焊锡丝在焊接过程中为什么会爆锡？
 
->https://zhuanlan.zhihu.com/p/584316437
+> https://zhuanlan.zhihu.com/p/584316437
 
 建议直接看上面的文章，可能的原因大概是：
 
@@ -628,7 +625,6 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - [Practical Electronics for Inventors, Fourth Edition](https://book.douban.com/subject/30332697/): 中文版名为《实用电子元器件与电路基础》，是评论区 [@辛未羊](https://github.com/panqiincs) 推荐的，感觉确实很适合我这种业余新手入门~
 - [Foundations of Analog and Digital Electronic Circuits](https://book.douban.com/subject/1926610/)：这本书比较受推荐，中文版《模拟和数字电子电路基础》，豆瓣评分 9.3，不过我看了下比上面那本要难，感觉适合后面进阶看。
 
-
 学习基础的电路理论时可以仿真软件同步学习，如：
 
 - Multisim（元器件仿真）、Proteus（单片机仿真）
@@ -667,11 +663,11 @@ KVL + 节点电压法是分析电路的一种有效手段。
 - 其他
   - 买了矽速科技新出的 Maix Zero M0S/M1S，使用 RISC-V 架构的 MCU，貌似目前必须用芯片官方（博流智能）的 SDK 写代码。点了个灯就一直吃灰了（
 
->单片机领域目前仍然是 ARM32 架构的天下，不过开源免费的 RISC-V 架构发展迅猛，有望与 ARM32 分庭抗礼。目前乐鑫基于 RISC-V 的 ESP32C3 就挺受欢迎的，还出了书，另外后续版本 ESP32C5 也已经被 ESP-IDF 支持了，发展很快。
+> 单片机领域目前仍然是 ARM32 架构的天下，不过开源免费的 RISC-V 架构发展迅猛，有望与 ARM32 分庭抗礼。目前乐鑫基于 RISC-V 的 ESP32C3 就挺受欢迎的，还出了书，另外后续版本 ESP32C5 也已经被 ESP-IDF 支持了，发展很快。
 
 ### 2. 嵌入式 Linux（Linux on Embedded System）
 
->嵌入式系统（Embedded System），是指嵌入机械或电气系统内部、具有专一功能和实时计算性能的计算机系统。
+> 嵌入式系统（Embedded System），是指嵌入机械或电气系统内部、具有专一功能和实时计算性能的计算机系统。
 
 单片机玩够了后，就可以开始玩嵌入式 Linux了。
 
@@ -686,10 +682,10 @@ KVL + 节点电压法是分析电路的一种有效手段。
 
 我目前的学习顺序与进度：
 
-- 瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU(2TOPS * 3)
+- 瑞芯微 RK3588s 系列国产派: 性能贼强，还自带 NPU(2TOPS \* 3)
   - 玩耍的笔记代码放在了这里（Python 与 C 语言）[electrical-engineering/rk3588](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588)
   - 也用它玩上了 NixOS: [ryan4yin/nixos-rk3588](https://github.com/ryan4yin/nixos-rk3588)
-- 树莓派 4B: 
+- 树莓派 4B:
   - 玩耍笔记与代码：[electrical-engineering/raspberrypi](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/raspberrypi)
 - 其他
   - 除了前面俩，还兜兜转转玩了很多新产品，笔记都写在这里面了：[electrical-engineering](https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/)
@@ -697,7 +693,7 @@ KVL + 节点电压法是分析电路的一种有效手段。
     - 这块板子的 NPU 感觉性能还可以，但是 CPU 跟 IO 都有点拉，跑个 `pip3 list` 都要卡老半天。毕竟 A7 内核，估计性能也就这样了，全靠交叉编译续命。
     - 没啥开源资料，只适合用来玩玩 AI，Linux 系统没啥可玩性。
   - 鲁班猫 0 无线版（LubanCat Zero W）
-    - 基于 RK3566，开放的资料非常全，包含 SoC 原厂的各种文档、SDK 驱动开发包、核心板封装库，还提供许多免费的在线文档，内容包含  Linux 内核编译部署、Linux 驱动开发、嵌入式 QT 开发等等
+    - 基于 RK3566，开放的资料非常全，包含 SoC 原厂的各种文档、SDK 驱动开发包、核心板封装库，还提供许多免费的在线文档，内容包含 Linux 内核编译部署、Linux 驱动开发、嵌入式 QT 开发等等
     - 因为资料很全，用来学 Linux 内核驱动开发感觉是比较合适的。
   - 矽速科技的 LicheePi 4A，国产高性能 RISC-V 开发版。
     - 已经用它玩上了 NixOS: [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
@@ -713,12 +709,12 @@ KVL + 节点电压法是分析电路的一种有效手段。
   2. [Linux 镜像构建与部署](https://doc.embedfire.com/linux/rk356x/build_and_deploy/zh/latest/index.html): 跟随此文档自己构建一个 Linux 镜像部署到板卡上，这样可以更好的理解 Linux 的启动过程
   3. [Linux 驱动开发入门 - 基于鲁班猫 RK356X 系列板卡](https://doc.embedfire.com/linux/rk356x/driver/zh/latest/index.html): Linux 驱动开发入门教程。
 - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition): Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文版，写的很好，对新手很友好。内容跟野火的教程差不多，可以对照学习。
-    - 另外还有本 2018 年出的 [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition) 可当作参考书看，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
+  - 另外还有本 2018 年出的 [Linux Driver Development for Embedded Processors 2nd Edition](https://github.com/ALIBERA/linux_book_2nd_edition) 可当作参考书看，写得没上面那本好、内容也没那么新，但是看评价也不错，特点是有许多的 Lab 可做。
 - [Linux Kernel Programming: A comprehensive guide to kernel internals](https://book.douban.com/subject/35415097/): Linux 内核编程领域的新书，适合入门 Linux 内核，amazon 上评价挺好，先收藏一个
 - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
 - [Understanding the Linux Kernel, 3rd Edition](https://book.douban.com/subject/1776614/)：Linux 内核技术进阶。
 
->嵌入式 Linux 领域目前也仍然是 ARM 架构的天下，但是开源免费的 RISC-V 架构发展也很快，性能越来越强，生态越来越好，很值得期待。
+> 嵌入式 Linux 领域目前也仍然是 ARM 架构的天下，但是开源免费的 RISC-V 架构发展也很快，性能越来越强，生态越来越好，很值得期待。
 
 ## 其他
 
@@ -737,5 +733,3 @@ KVL + 节点电压法是分析电路的一种有效手段。
 ## 最后简单总结下
 
 上面这些都学了一遍的话，业余玩玩硬件应该就很够用了，期待我完成这个学习路线的那一天...
-
-

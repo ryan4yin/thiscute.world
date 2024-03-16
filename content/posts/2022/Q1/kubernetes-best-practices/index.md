@@ -4,15 +4,15 @@ date: 2022-01-25T00:13:00+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "kubernetes-best-practices.webp"
+  - name: "featured-image"
+    src: "kubernetes-best-practices.webp"
 
 tags: ["Kubernetes", "最佳实践", "云原生"]
 categories: ["tech"]
 series: ["云原生相关"]
 ---
 
->本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来
+> 本文由个人笔记 [ryan4yin/knowledge](https://github.com/ryan4yin/knowledge/tree/master/kubernetes) 整理而来
 
 本文主要介绍我个人在使用 Kubernetes 的过程中，总结出的一套「Kubernetes 配置」，是我个人的「最佳实践」。
 其中大部分内容都经历过线上环境的考验，但是也有少部分还只在我脑子里模拟过，请谨慎参考。
@@ -22,7 +22,6 @@ series: ["云原生相关"]
 - 这份文档比较长，囊括了很多内容，建议当成参考手册使用，先参照目录简单读一读，有需要再细读相关内容。
 - 这份文档需要一定的 Kubernetes 基础才能理解，而且如果没有过实践经验的话，看上去可能会比较枯燥。
   - 而有过实践经验的大佬，可能会跟我有不同的见解，欢迎各路大佬评论~
-
 
 我会视情况不定期更新这份文档。
 
@@ -34,7 +33,6 @@ series: ["云原生相关"]
 - 我们不使用 Deployment 的滚动更新能力，而是为每个服务的每个版本，都创建不同的 Deployment + HPA + PodDisruptionBudget，这是为了方便做金丝雀/灰度发布
 - 我们的服务可能会使用 IngressController / Service Mesh 来进行服务的负载均衡、流量切分
 
-
 下面先给出一个 Deployment + HPA + PodDisruptionBudget 的 demo，后面再拆开详细说下：
 
 ```yaml
@@ -42,7 +40,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-app-v3
-  namespace: prod  # 建议按业务逻辑划分名字空间，prod 仅为示例
+  namespace: prod # 建议按业务逻辑划分名字空间，prod 仅为示例
   labels:
     app: my-app
 spec:
@@ -52,8 +50,8 @@ spec:
     # 因为服务的每个版本都使用各自的 Deployment，服务更新时其实是用不上这里的滚动更新策略的
     # 这个配置应该只在 SRE 手动修改 Deployment 配置时才会生效（通常不应该发生这种事）
     rollingUpdate:
-      maxSurge: 10%  # 滚动更新时，每次最多更新 10% 的 Pods
-      maxUnavailable: 0  # 滚动更新时，不允许出现不可用的 Pods，也就是说始终要维持 3 个可用副本
+      maxSurge: 10% # 滚动更新时，每次最多更新 10% 的 Pods
+      maxUnavailable: 0 # 滚动更新时，不允许出现不可用的 Pods，也就是说始终要维持 3 个可用副本
   selector:
     matchLabels:
       app: my-app
@@ -69,122 +67,122 @@ spec:
         # topologySpreadConstraints 可能是更好的选择
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution: # 非强制性条件
-          - weight: 100  # weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - my-app
-                - key: version
-                  operator: In
-                  values:
-                  - v3
-              # pod 尽量使用同一种节点类型，也就是尽量保证节点的性能一致
-              topologyKey: node.kubernetes.io/instance-type
+            - weight: 100 # weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - my-app
+                    - key: version
+                      operator: In
+                      values:
+                        - v3
+                # pod 尽量使用同一种节点类型，也就是尽量保证节点的性能一致
+                topologyKey: node.kubernetes.io/instance-type
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution: # 非强制性条件
-          - weight: 100  # weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）
-            podAffinityTerm:
-              labelSelector:
+            - weight: 100 # weight 用于为节点评分，会优先选择评分最高的节点（只有一条规则的情况下，这个值没啥意义）
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - my-app
+                    - key: version
+                      operator: In
+                      values:
+                        - v3
+                # 将 pod 尽量打散在多个可用区
+                topologyKey: topology.kubernetes.io/zone
+          requiredDuringSchedulingIgnoredDuringExecution: # 强制性要求（这个建议按需添加）
+            # 注意这个没有 weights，必须满足列表中的所有条件
+            - labelSelector:
                 matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - my-app
-                - key: version
-                  operator: In
-                  values:
-                  - v3
-              # 将 pod 尽量打散在多个可用区
-              topologyKey: topology.kubernetes.io/zone
-          requiredDuringSchedulingIgnoredDuringExecution:  # 强制性要求（这个建议按需添加）
-          # 注意这个没有 weights，必须满足列表中的所有条件
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - my-app
-              - key: version
-                operator: In
-                values:
-                - v3
-            # Pod 必须运行在不同的节点上
-            topologyKey: kubernetes.io/hostname
+                  - key: app
+                    operator: In
+                    values:
+                      - my-app
+                  - key: version
+                    operator: In
+                    values:
+                      - v3
+              # Pod 必须运行在不同的节点上
+              topologyKey: kubernetes.io/hostname
       securityContext:
         # runAsUser: 1000  # 设定用户
         # runAsGroup: 1000  # 设定用户组
-        runAsNonRoot: true  # Pod 必须以非 root 用户运行
-        seccompProfile:  # security compute mode
+        runAsNonRoot: true # Pod 必须以非 root 用户运行
+        seccompProfile: # security compute mode
           type: RuntimeDefault
       nodeSelector:
-        nodegroup: common  # 使用专用节点组，如果希望使用多个节点组，可改用节点亲和性
+        nodegroup: common # 使用专用节点组，如果希望使用多个节点组，可改用节点亲和性
       volumes:
-      - name: tmp-dir
-        emptyDir: {}
+        - name: tmp-dir
+          emptyDir: {}
       containers:
-      - name: my-app-v3
-        image: my-app:v3  # 建议使用私有镜像仓库，规避 docker.io 的镜像拉取限制
-        imagePullPolicy: IfNotPresent
-        volumeMounts:
-        - mountPath: /tmp
-          name: tmp-dir
-        lifecycle:
-          preStop:  # 在容器被 kill 之前执行
-            exec:
-              command:
-              - /bin/sh
-              - -c
-              - "while [ $(netstat -plunt | grep tcp | wc -l | xargs) -ne 0 ]; do sleep 1; done"
-        resources:  # 资源请求与限制
-          # 对于核心服务，建议设置 requests = limits，避免资源竞争
-          requests:
-            # HPA 会使用 requests 计算资源利用率
-            # 建议将 requests 设为服务正常状态下的 CPU 使用率，HPA 的目前指标设为 80%
-            # 所有容器的 requests 总量不建议为 2c/4G 4c/8G 等常见值，因为节点通常也是这个配置，这会导致 Pod 只能调度到更大的节点上，适当调小 requests 等扩充可用的节点类型，从而扩充节点池。 
-            cpu: 1000m
-            memory: 1Gi
-          limits:
-            # limits - requests 为允许超卖的资源量，建议为 requests 的 1 到 2 倍，酌情配置。
-            cpu: 1000m
-            memory: 1Gi
-        securityContext:
-          # 将容器层设为只读，防止容器文件被篡改
-          ## 如果需要写入临时文件，建议额外挂载 emptyDir 来提供可读写的数据卷
-          readOnlyRootFilesystem: true
-          # 禁止 Pod 做任何权限提升
-          allowPrivilegeEscalation: false
-          capabilities:
-            # drop ALL 的权限比较严格，可按需修改
-            drop:
-            - ALL
-        startupProbe:  # 要求 kubernetes 1.18+
-          httpGet:
-            path: /actuator/health  # 直接使用健康检查接口即可
-            port: 8080
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 20  # 最多提供给服务 5s * 20 的启动时间
-          successThreshold: 1
-        livenessProbe:
-          httpGet:
-            path: /actuator/health  # spring 的通用健康检查路径
-            port: 8080
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 5
-          successThreshold: 1
-        # Readiness probes are very important for a RollingUpdate to work properly,
-        readinessProbe:
-          httpGet:
-            path: /actuator/health  # 简单起见可直接使用 livenessProbe 相同的接口，当然也可额外定义
-            port: 8080
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 5
-          successThreshold: 1
+        - name: my-app-v3
+          image: my-app:v3 # 建议使用私有镜像仓库，规避 docker.io 的镜像拉取限制
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp-dir
+          lifecycle:
+            preStop: # 在容器被 kill 之前执行
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - "while [ $(netstat -plunt | grep tcp | wc -l | xargs) -ne 0 ]; do sleep 1; done"
+          resources: # 资源请求与限制
+            # 对于核心服务，建议设置 requests = limits，避免资源竞争
+            requests:
+              # HPA 会使用 requests 计算资源利用率
+              # 建议将 requests 设为服务正常状态下的 CPU 使用率，HPA 的目前指标设为 80%
+              # 所有容器的 requests 总量不建议为 2c/4G 4c/8G 等常见值，因为节点通常也是这个配置，这会导致 Pod 只能调度到更大的节点上，适当调小 requests 等扩充可用的节点类型，从而扩充节点池。
+              cpu: 1000m
+              memory: 1Gi
+            limits:
+              # limits - requests 为允许超卖的资源量，建议为 requests 的 1 到 2 倍，酌情配置。
+              cpu: 1000m
+              memory: 1Gi
+          securityContext:
+            # 将容器层设为只读，防止容器文件被篡改
+            ## 如果需要写入临时文件，建议额外挂载 emptyDir 来提供可读写的数据卷
+            readOnlyRootFilesystem: true
+            # 禁止 Pod 做任何权限提升
+            allowPrivilegeEscalation: false
+            capabilities:
+              # drop ALL 的权限比较严格，可按需修改
+              drop:
+                - ALL
+          startupProbe: # 要求 kubernetes 1.18+
+            httpGet:
+              path: /actuator/health # 直接使用健康检查接口即可
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 20 # 最多提供给服务 5s * 20 的启动时间
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /actuator/health # spring 的通用健康检查路径
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5
+            successThreshold: 1
+          # Readiness probes are very important for a RollingUpdate to work properly,
+          readinessProbe:
+            httpGet:
+              path: /actuator/health # 简单起见可直接使用 livenessProbe 相同的接口，当然也可额外定义
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5
+            successThreshold: 1
 ---
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
@@ -201,12 +199,12 @@ spec:
   maxReplicas: 50
   minReplicas: 3
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -259,13 +257,13 @@ spec:
 一个简单的示例如下，它使 Pod 被 Terminate 时，总是在 stop 前先等待 15s，再发送 SIGTERM 信号给容器：
 
 ```yaml
-    containers:
-    - name: my-app
-      # 添加下面这部分
-      lifecycle:
-        preStop:
-          exec:
-            command:
+containers:
+  - name: my-app
+    # 添加下面这部分
+    lifecycle:
+      preStop:
+        exec:
+          command:
             - /bin/sleep
             - "15"
 ```
@@ -273,16 +271,16 @@ spec:
 更好的解决办法，是直接等待所有 tcp 连接都关闭（需要镜像中有 netstat）：
 
 ```yaml
-    containers:
-    - name: my-app
-      # 添加下面这部分
-      lifecycle:
-      preStop:
-          exec:
-            command:
-            - /bin/sh
-            - -c
-            - "while [ $(netstat -plunt | grep tcp | wc -l | xargs) -ne 0 ]; do sleep 1; done"
+containers:
+  - name: my-app
+    # 添加下面这部分
+    lifecycle:
+    preStop:
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - "while [ $(netstat -plunt | grep tcp | wc -l | xargs) -ne 0 ]; do sleep 1; done"
 ```
 
 ### 如果我的服务还使用了 Sidecar 代理网络请求，该怎么处理？ {#k8s-istio-pod-prestop}
@@ -303,24 +301,22 @@ spec:
 和主容器一样，Envoy 也能直接加 `preStop`，修改 `istio-sidecar-injector` 这个 `configmap`，在 sidecar 里添加 preStop sleep 命令:
 
 ```yaml
-    containers:
-    - name: istio-proxy
-      # 添加下面这部分
-      lifecycle:
-      preStop:
-          exec:
-            command:
-            - /bin/sh
-            - -c
-            - "while [ $(netstat -plunt | grep tcp | grep -v envoy | wc -l | xargs) -ne 0 ]; do sleep 1; done"
+containers:
+  - name: istio-proxy
+    # 添加下面这部分
+    lifecycle:
+    preStop:
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - "while [ $(netstat -plunt | grep tcp | grep -v envoy | wc -l | xargs) -ne 0 ]; do sleep 1; done"
 ```
-
 
 ### 参考
 
 - [Kubernetes best practices: terminating with grace](https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace)
 - [Graceful shutdown in Kubernetes is not always trivial](https://medium.com/flant-com/kubernetes-graceful-shutdown-nginx-php-fpm-d5ab266963c2)
-
 
 ## 二、服务的伸缩配置 - HPA {#k8s-hpa}
 
@@ -329,7 +325,7 @@ Kubernetes 官方主要支持基于 Pod CPU 的伸缩，这是应用最为广泛
 先回顾下前面给出的，基于 Pod CPU 使用率进行伸缩的示例：
 
 ```yaml
-apiVersion: autoscaling/v2beta2  # k8s 1.23+ 此 API 已经 GA
+apiVersion: autoscaling/v2beta2 # k8s 1.23+ 此 API 已经 GA
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
@@ -344,12 +340,12 @@ spec:
   maxReplicas: 50
   minReplicas: 3
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
 ```
 
 ### 1. 当前指标值的计算方式
@@ -381,19 +377,17 @@ HPA 默认使用 Pod 的当前指标进行计算，以 CPU 使用率为例，其
   - 但是因为不同服务负载的区别，需要根据实际负载为每个服务调整 HPA 的期望指标。
 - 方法二：HPA 仍然使用 Pod 利用率进行扩缩容，但是针对每个服务的 CPU 使用情况，为每个服务的 sidecar 设置不同的 requests/limits，降低 sidecar 对扩缩容的影响。
 - 方法三：使用 KEDA 等第三方组件，获取到应用容器的 CPU 利用率（排除掉 Sidecar），使用它进行扩缩容
-- 方法四：使用 k8s 1.20 提供的 alpha 特性：[Container Resourse Metrics](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics).
+- 方法四：使用 k8s 1.20 提供的 alpha 特性：[Container Resource Metrics](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#container-resource-metrics).
   - 这种方式可以将 Pod 的不同容器的指标区分看待，算是最佳的处理方法了，但是该特性仍未进入 beta 阶段，慎用。
-
 
 ### 2. HPA 的扩缩容算法
 
 HPA 什么时候会扩容，这一点是很好理解的。但是 HPA 的缩容策略，会有些迷惑，下面简单分析下。
 
 1. HPA 的「目标指标」可以使用两种形式：绝对度量指标和资源利用率。
-    - 绝对度量指标：比如 CPU，就是指 CPU 的使用量
-    - 资源利用率（资源使用量/资源请求 * 100%）：在 Pod 设置了资源请求时，可以使用资源利用率进行 Pod 伸缩
+   - 绝对度量指标：比如 CPU，就是指 CPU 的使用量
+   - 资源利用率（资源使用量/资源请求 \* 100%）：在 Pod 设置了资源请求时，可以使用资源利用率进行 Pod 伸缩
 2. HPA 的「当前指标」是一段时间内所有 Pods 的平均值，不是峰值。
-
 
 HPA 的扩缩容算法为：
 
@@ -411,14 +405,12 @@ HPA 的扩缩容算法为：
    4. 如果 `当前指标 / 目标指标` 从 1 降到 0.5，副本的数量将会减半。（虽然说副本数越多，发生这么大变化的可能性就越小。）
 3. `当前副本数 / 目标指标`的值越大，「当前指标」的波动对「期望副本数」的影响就越大。
 
-
 为了防止扩缩容过于敏感，HPA 有几个相关参数：
 
 1. Hardcoded 参数
    1. HPA Loop 延时：默认 15 秒，每 15 秒钟进行一次 HPA 扫描。
    2. 缩容冷却时间：默认 5 分钟。
 2. 对于 K8s 1.18+，HPA 通过 `spec.behavior` 提供了多种控制扩缩容行为的参数，后面会具体介绍。
-
 
 ### 3. HPA 的期望值设成多少合适？如何兼顾资源利用率与服务稳定性？
 
@@ -440,7 +432,7 @@ HPA 的扩缩容算法为：
 
 相关资料：
 
- - [最佳实践｜Kubernetes集群利用率提升的思路和实现方式 - 腾讯云原生](https://mp.weixin.qq.com/s/NRd7G1c_SkjHSZYBLFgncA)
+- [最佳实践｜Kubernetes集群利用率提升的思路和实现方式 - 腾讯云原生](https://mp.weixin.qq.com/s/NRd7G1c_SkjHSZYBLFgncA)
 
 ### 4. HPA 的常见问题
 
@@ -478,8 +470,8 @@ Java/C# 这类运行在 VM 上的语言，在启动阶段与第一次执行请�
    1. [steinsag/warm-me-up](https://github.com/steinsag/warm-me-up)
    2. [How to Warm Up the JVM](https://www.baeldung.com/java-jvm-warmup)
 
-
 也可以在「基础设施层面」解决：
+
 1. 像 AWS ALB TargetGroup 以及其他云服务商的 ALB 服务，通常都可以设置 `slow_start` 时长，即对新加入的实例，使用一定时间慢慢地把流量切过去，最终达到预期的负载均衡状态。这个可以解决服务预热问题。
 2. Envoy 也已经支持 `slow_start` 模式，支持在一个设置好的时间窗口内，把流量慢慢负载到新加入的实例上，达成预热效果。
 
@@ -488,6 +480,7 @@ Java/C# 这类运行在 VM 上的语言，在启动阶段与第一次执行请�
 通常来讲，K8s 上绝大部分负载都应该选择使用 CPU 进行扩缩容。因为 CPU 通常能很好的反映服务的负载情况
 
 但是有些服务会存在其他影响 CPU 使用率的因素，导致使用 CPU 扩缩容变得不那么可靠，比如：
+
 - 有些 Java 服务堆内存设得很大，GC pause 也设得比较长，因此内存 GC 会造成 CPU 间歇性飙升，CPU 监控会有大量的尖峰。
 - 有些服务有定时任务，定时任务一运行 CPU 就涨，但是这跟服务的 QPS 是无关的
 - 有些服务可能一运行 CPU 就会立即处于一个高位状态，它可能希望使用别的业务侧指标来进行扩容，而不是 CPU.
@@ -496,6 +489,7 @@ Java/C# 这类运行在 VM 上的语言，在启动阶段与第一次执行请�
 而有些服务（如我们的「推荐服务」），对「扩容」和「缩容」都是比较敏感的，每次扩缩都会造成服务可用率抖动。
 
 对这类服务而言，HPA 有这几种调整策略：
+
 - 选择使用 **QPS** 等相对比较平滑，没有 GC 这类干扰的指标来进行扩缩容，这需要借助 KEDA 等社区组件。
 - 对 kubernetes 1.18+，可以直接使用 HPA 的 `behavior.scaleDown` 和 `behavior.scaleUp` 两个参数，控制每次扩缩容的最多 pod 数量或者比例。 示例如下：
 
@@ -514,38 +508,37 @@ spec:
   minReplicas: 3
   maxReplicas: 50
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 50  # 期望的 CPU 平均值
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50 # 期望的 CPU 平均值
   behavior:
     scaleUp:
-      stabilizationWindowSeconds: 0  # 默认为 0，只使用当前值进行扩缩容
+      stabilizationWindowSeconds: 0 # 默认为 0，只使用当前值进行扩缩容
       policies:
-      - periodSeconds: 180  # 每 3 分钟最多扩容 5% 的 Pods
-        type: Percent
-        value: 5
-      - periodSeconds: 60  # 每分钟最多扩容 1 个 Pod，扩的慢一点主要是为了一个个地预热，避免一次扩容太多未预热的 Pods 导致服务可用率剧烈抖动
-        type: Pods
-        value: 1
-      selectPolicy: Min  # 选择最小的策略
+        - periodSeconds: 180 # 每 3 分钟最多扩容 5% 的 Pods
+          type: Percent
+          value: 5
+        - periodSeconds: 60 # 每分钟最多扩容 1 个 Pod，扩的慢一点主要是为了一个个地预热，避免一次扩容太多未预热的 Pods 导致服务可用率剧烈抖动
+          type: Pods
+          value: 1
+      selectPolicy: Min # 选择最小的策略
     # 以下的一切配置，都是为了更平滑地缩容
     scaleDown:
-      stabilizationWindowSeconds: 600  # 使用过去 10 mins 的最大 cpu 值进行缩容计算，避免过快缩容
+      stabilizationWindowSeconds: 600 # 使用过去 10 mins 的最大 cpu 值进行缩容计算，避免过快缩容
       policies:
-      - type: Percent  # 每 3 mins 最多缩容 `ceil[当前副本数 * 5%]` 个 pod（20 个 pod 以内，一次只缩容 1 个 pod）
-        value: 5
-        periodSeconds: 180
-      - type: Pods  # 每 1 mins 最多缩容 1 个 pod
-        value: 1
-        periodSeconds: 60
-      selectPolicy: Min  # 上面的 policies 列表，只生效其中最小的值作为缩容限制（保证平滑缩容）
+        - type: Percent # 每 3 mins 最多缩容 `ceil[当前副本数 * 5%]` 个 pod（20 个 pod 以内，一次只缩容 1 个 pod）
+          value: 5
+          periodSeconds: 180
+        - type: Pods # 每 1 mins 最多缩容 1 个 pod
+          value: 1
+          periodSeconds: 60
+      selectPolicy: Min # 上面的 policies 列表，只生效其中最小的值作为缩容限制（保证平滑缩容）
 ```
 
 而对于扩容不够平滑这个问题，可以考虑提供类似 AWS ALB TargetGroup `slow_start` 的功能，在扩容时缓慢将流量切到新 Pod 上，以实现预热服务（JVM 预热以及本地缓存预热），这样就能达到比较好的平滑扩容效果。
-
 
 ### 5. HPA 注意事项
 
@@ -567,10 +560,9 @@ kubectl get hpa.v2beta2.autoscaling
 - [Pod 水平自动伸缩 - Kubernetes Docs](https://kubernetes.io/zh/docs/tasks/run-application/horizontal-pod-autoscale/)
 - [Horizontal Pod Autoscaler演练 - Kubernetes Docs](https://kubernetes.io/zh/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/)
 
-
 ## 三、节点维护与Pod干扰预算 {#k8s-PodDistruptionBuget}
 
->https://kubernetes.io/zh/docs/tasks/run-application/configure-pdb/
+> https://kubernetes.io/zh/docs/tasks/run-application/configure-pdb/
 
 在我们通过 `kubectl drain` 将某个节点上的容器驱逐走的时候，
 kubernetes 会依据 Pod 的「PodDistruptionBuget」来进行 Pod 的驱逐。
@@ -586,8 +578,8 @@ metadata:
   name: podinfo-pdb
 spec:
   # 如果不满足 PDB，Pod 驱逐将会失败！
-  minAvailable: 1      # 最少也要维持一个 Pod 可用
-#   maxUnavailable: 1  # 最大不可用的 Pod 数，与 minAvailable 不能同时配置！二选一
+  minAvailable: 1 # 最少也要维持一个 Pod 可用
+  #   maxUnavailable: 1  # 最大不可用的 Pod 数，与 minAvailable 不能同时配置！二选一
   selector:
     matchLabels:
       app: podinfo
@@ -619,8 +611,7 @@ node/node-205 evicted
 
 大约 15 秒后，最先被驱逐走的 Pod 在新节点上启动完成了，另一个 Pod 满足了 PDB 所以终于也被驱逐了。这才完成了一个节点的 drain 操作。
 
->ClusterAutoscaler 等集群节点伸缩组件，在缩容节点时也会考虑 PodDisruptionBudget. 如果你的集群使用了 ClusterAutoscaler 等动态扩缩容节点的组件，强烈建议设置为所有服务设置 PodDisruptionBudget.
-
+> ClusterAutoscaler 等集群节点伸缩组件，在缩容节点时也会考虑 PodDisruptionBudget. 如果你的集群使用了 ClusterAutoscaler 等动态扩缩容节点的组件，强烈建议设置为所有服务设置 PodDisruptionBudget.
 
 #### 在 PDB 中使用百分比的注意事项
 
@@ -638,8 +629,8 @@ node/node-205 evicted
 
 - Deployment: 管理服务自身的 Pods 嘛
 - HPA: 负责 Pods 的扩缩容，通常使用 CPU 指标进行扩缩容
-- PodDisruptionBudget(PDB): 建议按照 HPA 的目标值，来设置 PDB. 
-  - 比如 HPA CPU 目标值为 60%，就可以考虑设置 PDB `minAvailable=65%`，保证至少有 65% 的 Pod 可用。这样理论上极限情况下 QPS 均摊到剩下 65% 的 Pods 上也不会造成雪崩（这里假设 QPS 和 CPU 是完全的线性关系） 
+- PodDisruptionBudget(PDB): 建议按照 HPA 的目标值，来设置 PDB.
+  - 比如 HPA CPU 目标值为 60%，就可以考虑设置 PDB `minAvailable=65%`，保证至少有 65% 的 Pod 可用。这样理论上极限情况下 QPS 均摊到剩下 65% 的 Pods 上也不会造成雪崩（这里假设 QPS 和 CPU 是完全的线性关系）
 
 ## 四、节点亲和性与节点组 {#k8s-affinity}
 
@@ -679,56 +670,55 @@ spec:
         nodeAffinity:
           # 优先选择 spot-group-c 的节点
           preferredDuringSchedulingIgnoredDuringExecution:
-          - preference:
-              matchExpressions:
-              - key: eks.amazonaws.com/nodegroup
-                operator: In
-                values:
-                - spot-group-c
-            weight: 80  # weight 用于为节点评分，会优先选择评分最高的节点
-          - preference:
-              matchExpressions:
-              # 优先选择 aws c6i 的机器
-              - key: node.kubernetes.io/instance-type
-                operator: In
-                values:
-                - "c6i.xlarge"
-                - "c6i.2xlarge"
-                - "c6i.4xlarge"
-                - "c6i.8xlarge"
-            weight: 70
-          - preference:
-              matchExpressions:
-              # 其次选择 aws c5 的机器
-              - key: node.kubernetes.io/instance-type
-                operator: In
-                values:
-                - "c5.xlarge"
-                - "c5.2xlarge"
-                - "c5.4xlarge"
-                - "c5.9xlarge"
-            weight: 60
-         # 如果没 spot-group-c 可用，也可选择 ondemand-group-c 的节点跑
+            - preference:
+                matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In
+                    values:
+                      - spot-group-c
+              weight: 80 # weight 用于为节点评分，会优先选择评分最高的节点
+            - preference:
+                matchExpressions:
+                  # 优先选择 aws c6i 的机器
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                      - "c6i.xlarge"
+                      - "c6i.2xlarge"
+                      - "c6i.4xlarge"
+                      - "c6i.8xlarge"
+              weight: 70
+            - preference:
+                matchExpressions:
+                  # 其次选择 aws c5 的机器
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                      - "c5.xlarge"
+                      - "c5.2xlarge"
+                      - "c5.4xlarge"
+                      - "c5.9xlarge"
+              weight: 60
+          # 如果没 spot-group-c 可用，也可选择 ondemand-group-c 的节点跑
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: eks.amazonaws.com/nodegroup
-                operator: In
-                values:
-                - spot-group-c
-                - ondemand-group-c
+              - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In
+                    values:
+                      - spot-group-c
+                      - ondemand-group-c
       containers:
         # ...
 ```
 
-
 ### 2. Pod 反亲和性
 
->Pod 亲和性与反亲和性可能不是最佳的实现手段，这部分内容待更新
+> Pod 亲和性与反亲和性可能不是最佳的实现手段，这部分内容待更新
 
->相关 Issue: <https://github.com/kubernetes/kubernetes/issues/72479>
+> 相关 Issue: <https://github.com/kubernetes/kubernetes/issues/72479>
 
->相关替代方案：<https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/>
+> 相关替代方案：<https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/>
 
 通常建议为每个 Deployment 的 template 配置 Pod 反亲和性，把 Pods 打散在所有节点上：
 
@@ -747,36 +737,35 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution: # 非强制性条件
-          - weight: 100  # weight 用于为节点评分，会优先选择评分最高的节点
-            podAffinityTerm:
-              labelSelector:
+            - weight: 100 # weight 用于为节点评分，会优先选择评分最高的节点
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - xxx
+                    - key: version
+                      operator: In
+                      values:
+                        - v12
+                # 将 pod 尽量打散在多个可用区
+                topologyKey: topology.kubernetes.io/zone
+          requiredDuringSchedulingIgnoredDuringExecution: # 强制性要求
+            # 注意这个没有 weights，必须满足列表中的所有条件
+            - labelSelector:
                 matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - xxx
-                - key: version
-                  operator: In
-                  values:
-                  - v12
-              # 将 pod 尽量打散在多个可用区
-              topologyKey: topology.kubernetes.io/zone
-          requiredDuringSchedulingIgnoredDuringExecution:  # 强制性要求
-          # 注意这个没有 weights，必须满足列表中的所有条件
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - xxx
-              - key: version
-                operator: In
-                values:
-                - v12
-            # Pod 必须运行在不同的节点上
-            topologyKey: kubernetes.io/hostname
+                  - key: app
+                    operator: In
+                    values:
+                      - xxx
+                  - key: version
+                    operator: In
+                    values:
+                      - v12
+              # Pod 必须运行在不同的节点上
+              topologyKey: kubernetes.io/hostname
 ```
-
 
 ## 五、Pod 的就绪探针、存活探针与启动探针 {#k8s-container-probe}
 
@@ -796,12 +785,11 @@ Pod 提供如下三种探针，均支持使用 Command、HTTP API、TCP Socket �
   - 存活探针失败次数超过 `failureThreshold` 限制（默认三次），容器将被杀死，随后根据重启策略执行重启。
     - `kubectl describe pod` 会显示重启原因为 `State.Last State.Reason = Error, Exit Code=137`，同时 Events 中会有 `Liveness probe failed: ...` 这样的描述。
 
-
 上述三类探测器的参数都是通用的，五个时间相关的参数列举如下：
 
 ```yaml
 # 下面的值就是 k8s 的默认值
-initialDelaySeconds: 0  # 默认没有 delay 时间
+initialDelaySeconds: 0 # 默认没有 delay 时间
 periodSeconds: 10
 timeoutSeconds: 1
 failureThreshold: 3
@@ -821,35 +809,35 @@ spec:
     #  ...
     spec:
       containers:
-      - name: my-app-v3
-        image: xxx.com/app/my-app:v3
-        imagePullPolicy: IfNotPresent 
-        # ... 省略若干配置
-        startupProbe:
-          httpGet:
-            path: /actuator/health  # 直接使用健康检查接口即可
-            port: 8080
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 20  # 最多提供给服务 5s * 20 的启动时间
-          successThreshold: 1
-        livenessProbe:
-          httpGet:
-            path: /actuator/health  # spring 的通用健康检查路径
-            port: 8080
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 5
-          successThreshold: 1
-        # Readiness probes are very important for a RollingUpdate to work properly,
-        readinessProbe:
-          httpGet:
-            path: /actuator/health  # 简单起见可直接使用 livenessProbe 相同的接口，当然也可额外定义
-            port: 8080
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 5
-          successThreshold: 1
+        - name: my-app-v3
+          image: xxx.com/app/my-app:v3
+          imagePullPolicy: IfNotPresent
+          # ... 省略若干配置
+          startupProbe:
+            httpGet:
+              path: /actuator/health # 直接使用健康检查接口即可
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 20 # 最多提供给服务 5s * 20 的启动时间
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /actuator/health # spring 的通用健康检查路径
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5
+            successThreshold: 1
+          # Readiness probes are very important for a RollingUpdate to work properly,
+          readinessProbe:
+            httpGet:
+              path: /actuator/health # 简单起见可直接使用 livenessProbe 相同的接口，当然也可额外定义
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5
+            successThreshold: 1
 ```
 
 在 Kubernetes 1.18 之前，通用的手段是为「就绪探针」添加较长的 `initialDelaySeconds` 来实现类似「启动探针」的功能动，避免容器因为启动太慢，存活探针失败导致容器被重启。示例如下：
@@ -865,29 +853,29 @@ spec:
     #  ...
     spec:
       containers:
-      - name: my-app-v3
-        image: xxx.com/app/my-app:v3
-        imagePullPolicy: IfNotPresent 
-        # ... 省略若干配置
-        livenessProbe:
-          httpGet:
-            path: /actuator/health  # spring 的通用健康检查路径
-            port: 8080
-          initialDelaySeconds: 120  # 前两分钟，都假设服务健康，避免 livenessProbe 失败导致服务重启
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 5
-          successThreshold: 1
-        # 容器一启动，Readiness probes 就会不断进行检测
-        readinessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 3  # readiness probe 不需要设太长时间，使 Pod 尽快加入到 Endpoints.
-          periodSeconds: 5
-          timeoutSeconds: 1
-          failureThreshold: 5
-          successThreshold: 1
+        - name: my-app-v3
+          image: xxx.com/app/my-app:v3
+          imagePullPolicy: IfNotPresent
+          # ... 省略若干配置
+          livenessProbe:
+            httpGet:
+              path: /actuator/health # spring 的通用健康检查路径
+              port: 8080
+            initialDelaySeconds: 120 # 前两分钟，都假设服务健康，避免 livenessProbe 失败导致服务重启
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5
+            successThreshold: 1
+          # 容器一启动，Readiness probes 就会不断进行检测
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 3 # readiness probe 不需要设太长时间，使 Pod 尽快加入到 Endpoints.
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 5
+            successThreshold: 1
 ```
 
 ## 六、Pod 安全 {#k8s-pod-security}
@@ -896,19 +884,18 @@ spec:
 
 ### 1. Pod SecurityContext
 
->https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+> https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 
 通过设置 Pod 的 SecurityContext，可以为每个 Pod 设置特定的安全策略。
 
 SecurityContext 有两种类型：
 
 1. `spec.securityContext`: 这是一个 [PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podsecuritycontext-v1-core) 对象
-    - 顾名思义，它对 Pod 中的所有 contaienrs 都有效。
+   - 顾名思义，它对 Pod 中的所有 containers 都有效。
 2. `spec.containers[*].securityContext`: 这是一个 [SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#securitycontext-v1-core) 对象
-    - container 私有的 SecurityContext
+   - container 私有的 SecurityContext
 
 这两个 SecurityContext 的参数只有部分重叠，重叠的部分 `spec.containers[*].securityContext` 优先级更高。
-
 
 我们比较常遇到的一些**提升权限**的安全策略：
 
@@ -920,11 +907,11 @@ SecurityContext 有两种类型：
 **权限限制**相关的安全策略有（**强烈建议在所有 Pod 上按需配置如下安全策略**！）：
 
 1. `spec.volumes`: 所有的数据卷都可以设定读写权限
-3. `spec.securityContext.runAsNonRoot: true` Pod 必须以非 root 用户运行
-4. `spec.containers[*].securityContext.readOnlyRootFileSystem:true` **将容器层设为只读，防止容器文件被篡改**。
+2. `spec.securityContext.runAsNonRoot: true` Pod 必须以非 root 用户运行
+3. `spec.containers[*].securityContext.readOnlyRootFileSystem:true` **将容器层设为只读，防止容器文件被篡改**。
    1. 如果微服务需要读写文件，建议额外挂载 `emptydir` 类型的数据卷。
-5. `spec.containers[*].securityContext.allowPrivilegeEscalation: false` 不允许 Pod 做任何权限提升！
-6. `spec.containers[*].securityContext.capabilities.drop`: 移除（Capabilities）可选的系统级能力
+4. `spec.containers[*].securityContext.allowPrivilegeEscalation: false` 不允许 Pod 做任何权限提升！
+5. `spec.containers[*].securityContext.capabilities.drop`: 移除（Capabilities）可选的系统级能力
 
 还有其他诸如指定容器的运行用户(user)/用户组(group)等功能未列出，请自行查阅 Kubernetes 相关文档。
 
@@ -939,7 +926,7 @@ spec:
   containers:
   - name: <container name>
     image: <image>
-    imagePullPolicy: IfNotPresent 
+    imagePullPolicy: IfNotPresent
     # ......此处省略 500 字
     securityContext:
       readOnlyRootFilesystem: true  # 将容器层设为只读，防止容器文件被篡改。
@@ -981,9 +968,7 @@ seccomp 和 seccomp-bpf 允许对系统调用进行过滤，可以防止用户�
   - 解决办法（未验证）：
     - 尽量使用性能相同的实例类型：通过 `podAffinity` 及 `nodeAffinity` 添加节点类型的亲和性
 
-
 ## 参考
 
 - [istio 实践指南 - imroc.cc](https://imroc.cc/istio/)
 - [Kubernetes 实践指南 - imroc.cc](https://imroc.cc/kubernetes/)
-

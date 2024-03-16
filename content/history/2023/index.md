@@ -27,20 +27,20 @@ comment:
 
 - 因为 Guix 推荐使用 Emacs 作为主力编辑器（都是 Lisp 圈子的），加之在 Neovim 上没找到好用的 Guix/Scheme 插件，装了个 doom-emacs 开始了 emacs 折腾之旅。
 - 带我妹来深圳复诊，顺便玩。
-    - 逛了深圳 AD01 动漫展。第一次逛漫展，体验挺不错的。
-    - 到大梅沙看了看大海。小孩比例超高，又比较热，体验差了点。大鹏那边会好玩很多，但太远了。
+  - 逛了深圳 AD01 动漫展。第一次逛漫展，体验挺不错的。
+  - 到大梅沙看了看大海。小孩比例超高，又比较热，体验差了点。大鹏那边会好玩很多，但太远了。
 
 ### 2023-12-28 - 2023-12-29
 
 - 已经完全适应了将 zellij+neovim 用做默认开发环境，体验非常棒！
 - 业余继续尝试折腾 Guix 系统，遇到了 Scheme 语言、Guix 配置、构建速度慢等各种问题，都一一解决了，记了些笔记。
-    - https://github.com/ryan4yin/guix-config
+  - https://github.com/ryan4yin/guix-config
 
 ### 2023-12-27
 
 - 了解了下 Helix 插件系统，试用时发现 Helix 也没内置的终端功能，相关 Issue 讨论中发现挺多用户习惯使用 tmux/zellij 作为日常的终端环境。联想到我最近在使用 kitty/wezterm 时发现它们的搜索/终端历史选择复制等功能上存在的诸多欠缺，而 Neovim 里我目前主要使用的 toggleterm.nvim 插件也日常导致 neovim 卡死，瞬间就对将 zellij 作为日常终端环境产生了兴趣。
-    - 一番探究发现 Zellij 很优雅地解决了我在 kitty/wezterm/neovim 遇到的这些问题，而且速度很快，再者它在任何终端模拟器中都能提供一致的体验。以及最重要的是，它使用起来真的很简单，对新手相当友好，键位也很符合直觉！甚至跟 Neovim 一样也支持鼠标操作！
-    - 晚上直接把 Neovim/kitty/wezterm 里面相关的配置与插件全部删掉了，并且在 nushell 中设置为自动启动 Zellij，终端环境全面替换成了 Zellij，体验下来非常舒适！（我确实得说，这体验跟 tmux 不是一个级别的，tmux 真的新手劝退，而且性能很差）
+  - 一番探究发现 Zellij 很优雅地解决了我在 kitty/wezterm/neovim 遇到的这些问题，而且速度很快，再者它在任何终端模拟器中都能提供一致的体验。以及最重要的是，它使用起来真的很简单，对新手相当友好，键位也很符合直觉！甚至跟 Neovim 一样也支持鼠标操作！
+  - 晚上直接把 Neovim/kitty/wezterm 里面相关的配置与插件全部删掉了，并且在 nushell 中设置为自动启动 Zellij，终端环境全面替换成了 Zellij，体验下来非常舒适！（我确实得说，这体验跟 tmux 不是一个级别的，tmux 真的新手劝退，而且性能很差）
 - Scheme 的语法跟 Guile 的文档都走马观花看了一遍，再次尝试折腾 Guix 系统。
 
 ### 2023-12-26
@@ -50,34 +50,33 @@ comment:
 ### 2023-12-25
 
 - 晚上不知道有啥可干，跟 NixOS 群友聊了聊 nushell 的优势跟 bash 的垃圾，突然有想法把 NixOS 配置中的所有 shell 脚本全改造成 nushell，试用了 nuenv 来打 Nix 包，一试就搞到凌晨...也是各种踩坑的血泪教训，算是熟悉了下 nushell 以及 Nix 的打包环境。
-    - 主要就是各种 Permission Denied 的错误，以前 bash 打包完全没遇到过，试到凌晨才搞明白，貌似 Nix 打包中的 source 文件都是只读的，另外 $out 中的内容也是一旦写入后就无法修改的，至少用 nushell 是这样。我因为尝试直接改 source 文件，或者在 $out 中改文件，就一直 Permission Denied 到哭...
+  - 主要就是各种 Permission Denied 的错误，以前 bash 打包完全没遇到过，试到凌晨才搞明白，貌似 Nix 打包中的 source 文件都是只读的，另外 $out 中的内容也是一旦写入后就无法修改的，至少用 nushell 是这样。我因为尝试直接改 source 文件，或者在 $out 中改文件，就一直 Permission Denied 到哭...
 
 ### 2023-12-24
 
 - 周末这两天尝试把 NixOS 在 Macbook Pro 2020 上装起来了，500G 的磁盘分了 300G 给 NixOS. 使用体验还不错，主要大冬天的可以在床上折腾 NixOS 了。
-    - 安装过程中遇到的主要问题
-        - 因为我几张 TF 卡的读写速度都比手上的 U 盘快，之前折腾开发板也习惯了用 TF 卡加读卡器来装系统，结果 macOS 死活识别不了，最后还是换成我的垃圾 U 盘，才成功识别到...
-        - 一开始过于自信，直接尝试在 U 盘的 LiveOS 系统上一次性安装我的整个 NixOS 配置，结果内核编译报错重试好几次，重试好多遍搞了大半夜，最后放弃了... 第二天老老实实整了个 minimal 的 flake 配置，结果搞好几个小时还是编译不过 kernel，各种重启进 Live OS、挂载硬盘、加载 WiFi 驱动、通过难用得要死的 wpa_cli 连接 WiFi，再部署 NixOS 配置，这套流程一晚上不知道走了多少遍，我 WiFi 密码都输麻了...
-        - 最后直接换成了 NixOS 的 mainline latest kernel 才一次安装成功，重启进入系统后再部署我完整的 NixOS 配置 + Apple T2 定制 kernel，很顺利就成功了！感动！
-        - 所以说系统安装也还是搞个 stage1 stage2 这样两步安装最省心哪，不要老想着一步到位。
+  - 安装过程中遇到的主要问题
+    - 因为我几张 TF 卡的读写速度都比手上的 U 盘快，之前折腾开发板也习惯了用 TF 卡加读卡器来装系统，结果 macOS 死活识别不了，最后还是换成我的垃圾 U 盘，才成功识别到...
+    - 一开始过于自信，直接尝试在 U 盘的 LiveOS 系统上一次性安装我的整个 NixOS 配置，结果内核编译报错重试好几次，重试好多遍搞了大半夜，最后放弃了... 第二天老老实实整了个 minimal 的 flake 配置，结果搞好几个小时还是编译不过 kernel，各种重启进 Live OS、挂载硬盘、加载 WiFi 驱动、通过难用得要死的 wpa_cli 连接 WiFi，再部署 NixOS 配置，这套流程一晚上不知道走了多少遍，我 WiFi 密码都输麻了...
+    - 最后直接换成了 NixOS 的 mainline latest kernel 才一次安装成功，重启进入系统后再部署我完整的 NixOS 配置 + Apple T2 定制 kernel，很顺利就成功了！感动！
+    - 所以说系统安装也还是搞个 stage1 stage2 这样两步安装最省心哪，不要老想着一步到位。
 
 ### 2023-12-21
 
 - 完成了数据上报网关及对应 EKS 集群的的升级，加了许多新特性，但总体升级还挺顺利的。一个总体接近 500 万连接的网关，折腾起来还是挺有成就感的。
-    - 开始做实际的迁移工作与回话之前，想得还不是很清楚，心里是没底的。但实际把前期工作、迁移规划与验证做好后，真正开始迁移工作时，又觉得这没啥难的。
+  - 开始做实际的迁移工作与回话之前，想得还不是很清楚，心里是没底的。但实际把前期工作、迁移规划与验证做好后，真正开始迁移工作时，又觉得这没啥难的。
 - 继续对新电脑的 Nix 配置做了些调整，更新了下 NixOS 入门小书的部分内容。
 - 继续研究在 Macbook Pro 2020 上安装 NixOS.
 
 {{<figure src="/images/now/2023-12-21_nixos-and-flakes-book-888-stars.webp" title="NixOS 入门小书 888 stars 了，截图纪念一下" width="80%">}}
 
-
 ### 2023-12-20
 
 - 继续做数据上报网关的升级迁移工作，今年 roadmap 中的核心工作，算上这个就都搞定了，心里感觉很踏实。
-    - 今年工作状态一度挺糟糕，10 月份确诊 ADHD 是个转折点，之后的工作状态就有了非常大的改善，这也是我今年最大的收获之一。
+  - 今年工作状态一度挺糟糕，10 月份确诊 ADHD 是个转折点，之后的工作状态就有了非常大的改善，这也是我今年最大的收获之一。
 - 新电脑到手了，仍然是换了台库存二手机，Macbook Pro 2022 M2 16G. 但库存机有个好处就是，很快就能换新 emmm 这台电脑用到 2023/8 就又能换台新的了。
-    - 尝试在新电脑上部署我的 nix-darwin 配置，遇到些问题，但总体挺顺利的，之前在旧办公电脑（Macbook Pro 2020 I5 16G）上使用的 nix 配置基本没改几行代码，就能直接在这台新 M2 上用
-        - 总结下，主要的修改就是把 system 参数从 x86_64-darwin 改成 aarch64-darwin，以及 nixpkgs 中的 gdb 不支持 aarch64-darwin，把它排除掉，然后就没啥问题了。
+  - 尝试在新电脑上部署我的 nix-darwin 配置，遇到些问题，但总体挺顺利的，之前在旧办公电脑（Macbook Pro 2020 I5 16G）上使用的 nix 配置基本没改几行代码，就能直接在这台新 M2 上用
+    - 总结下，主要的修改就是把 system 参数从 x86_64-darwin 改成 aarch64-darwin，以及 nixpkgs 中的 gdb 不支持 aarch64-darwin，把它排除掉，然后就没啥问题了。
 - 旧的 Intel 版 Macbook 以后就放家里当床上电脑用了，考虑装个 NixOS，晚上看了点在 Macbook Pro 2022 I5 16G 上装 NixOS 的文档：<https://github.com/NixOS/nixos-hardware/tree/master/apple/t2>
 
 ### 2023-12-19
@@ -104,21 +103,20 @@ comment:
 ### 2023-11-25 - 2023-11-28
 
 - NixOS 系统最近总是启动没多久网络就会卡死，重装了 NixOS 系统并添加了 LUKS 全盘加密，问题就消失了，猜测是 home 目录有什么 GUI 相关的配置文件有毛病导致的。
-    - 之前的问题：
-      - 系统启动没多久网络就会卡死，但除网络之外其他的都正常。
-      - 测了 X11 / Wayland 都有一样的问题，但是退出 X11 / Wayland 切换到 TTY 后，网络就恢复正常了。
-      - dmesg / journalctl 都没找到啥有用的信息。
-    -  新的 NixOS+BTRFS 全盘加密方案文档及配置：<https://github.com/ryan4yin/nix-config/tree/nixos-install>
+  - 之前的问题：
+    - 系统启动没多久网络就会卡死，但除网络之外其他的都正常。
+    - 测了 X11 / Wayland 都有一样的问题，但是退出 X11 / Wayland 切换到 TTY 后，网络就恢复正常了。
+    - dmesg / journalctl 都没找到啥有用的信息。
+  - 新的 NixOS+BTRFS 全盘加密方案文档及配置：<https://github.com/ryan4yin/nix-config/tree/nixos-install>
 - 跟朋友聊了 BTRFS 与 LUKS 加密相关的信息，他提到了 Secure Boot + TPM2 + FIDO2 + LUKS + Recover Key 的方案，这应该是目前最安全的方案了，打算有空研究下。
-    - NixOS + Secuer Boot 的配置方法：<https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md>
-    - 在 NixOS 上使用 TPM2 自动解锁 LUKS 的配置方法待研究。
+  - NixOS + Secuer Boot 的配置方法：<https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md>
+  - 在 NixOS 上使用 TPM2 自动解锁 LUKS 的配置方法待研究。
 - 后面打算逐步把 Homelab 所有物理机都改成全盘加密方案，同时所有数据盘 / 备份盘也都改成 LUKS 加密，全面强化数据安全。
 
 ### 2023-11-13 - 2023-11-24
 
 - 工作上效率挺高，上班时间沉迷工作无法自拔...
 - 2023-11-18 - 2023-11-19 带我妹到处玩玩，复诊。安非他酮我妹吃着效果
-
 
 ### 2023-11-14
 
@@ -137,7 +135,7 @@ comment:
 - 11/3 带我妹看心理医生，顺便在岗厦北等几个地铁大站点玩了玩。我妹确诊了 抑郁症 + ADHD，医生给开了安非他酮，先吃半个月看看效果再复诊，同时也建议多带我妹出去运动散心。
 - 11/4 特种兵游玩，上午在一个海边公园玩，下午跟几个在深圳的伯父堂弟到爬凤凰山，晚上也是聚会。
 - 11/5 带我妹到壹方城玩了一个上午，看各种书店杂货店里的二次元周边，她说玩得非常开心！一路各种哇喔哇喔（这就是大城市啊）
-    - 晚上送妹妹跟老爸坐火车硬卧回家，也约好了医生 11/19 的复诊。
+  - 晚上送妹妹跟老爸坐火车硬卧回家，也约好了医生 11/19 的复诊。
 
 ### 2023-10-30
 
@@ -154,7 +152,6 @@ comment:
 - 持续吃专注达，一天一颗。效果挺好，它不能解决所有问题，我仍然会经常想要打开手机的各种 APP 或者各种网页，但能够控制得住自己了。
 - 体感上其实不太能确定这种自控力的提升是不是药物的功劳，因为以前我也有过这种类似「大彻大悟」的体验，两者不太好区分。但我确实感觉到最近两周是我工作状态最好的一段时间了。
 
-
 ### 2023-10-19
 
 - 感冒症状，下午请半天假回家休息。
@@ -165,17 +162,17 @@ comment:
 - 嗑药（专注达），效果很好，并且在持续记录自己的治疗状况。
 - 10/17 看完了《分心不是我的错》，对我了解自身的 ADHD 病症很有帮助，我给了 5 星。
 - 10/17 下班后，跟 0xffff 群友辩论 ADHD 病症相关问题，渐渐地聊到了人生的意义、道之类的东西，很有意思，我写个回复写到晚上快 2 点钟。
-    - [从 ADHD 注意力缺失症聊开去](https://0xffff.one/d/1643-cong-adhd-zhu-yi-li-que-shi-zheng) 
+  - [从 ADHD 注意力缺失症聊开去](https://0xffff.one/d/1643-cong-adhd-zhu-yi-li-que-shi-zheng)
 
 ### 2023-10-15
 
 - 康宁医院的坪山院区，在辉辉那睡了一晚，第二天一早他开车送我去医院看诊，跟着我在医院呆了一整天，下午又把我送到地铁站。
-    - 事实证明预约 VIP 门诊是一个明智的决定，因为普通门诊的病人会更多，不好占用医师太多的时间，而 VIP 门诊费贵十多倍（挂号费 400 + 初诊费 200），就诊病人少（但复诊有时候还是需要等一会儿），院区的各种检测也都完全不用排队。
-    - 花了大概 40 分钟跟医生聊我的过往病史，医生说我的症状很典型。
-    - 医生给开了各种检测，一共花了我自费 160，医保 800 + 843 + 599 + 50 = 2292。
-        - 测验最重要的一部分是各种注意力、认知功能、眼动功能测验，一部分是对其他疾病的排除性检查，另一部分是确认身体各项指标是否正常以确保能安全服用专注达。
-    - 最后医生给确诊了 ADHD 注意力缺失障碍，开了 14 片专注达（医保全报销 266 元），一天一到两片，另外建议我两周后复诊。
-    - 医生也建议我做一些专注力训练，主要是拼图拼模型，以及正念冥想，还有就是阅读纸质书（强调翻页的这个动作、触感这些信息）。
+  - 事实证明预约 VIP 门诊是一个明智的决定，因为普通门诊的病人会更多，不好占用医师太多的时间，而 VIP 门诊费贵十多倍（挂号费 400 + 初诊费 200），就诊病人少（但复诊有时候还是需要等一会儿），院区的各种检测也都完全不用排队。
+  - 花了大概 40 分钟跟医生聊我的过往病史，医生说我的症状很典型。
+  - 医生给开了各种检测，一共花了我自费 160，医保 800 + 843 + 599 + 50 = 2292。
+    - 测验最重要的一部分是各种注意力、认知功能、眼动功能测验，一部分是对其他疾病的排除性检查，另一部分是确认身体各项指标是否正常以确保能安全服用专注达。
+  - 最后医生给确诊了 ADHD 注意力缺失障碍，开了 14 片专注达（医保全报销 266 元），一天一到两片，另外建议我两周后复诊。
+  - 医生也建议我做一些专注力训练，主要是拼图拼模型，以及正念冥想，还有就是阅读纸质书（强调翻页的这个动作、触感这些信息）。
 - 晚上预约了同一个医生两周后（10/30 周一）的复诊，到时候再与医生沟通用药效果与下一步治疗方案。
 - 为了尝试一下专注达的效果，晚上先吃了一片，打算从今天开始写 ADHD 治疗日记。
 
@@ -188,9 +185,8 @@ comment:
 
 - 打新买的 VR 游戏
 - 之前跟朋友聊过我可能有注意里缺失障碍（ADHD），朋友提到可以去看看医生。这两天经 [@咩咩](bleatingsheep.org/) 再次提醒，预约了深圳康宁医院（深圳市精神卫生中心）的门诊。
-    - 因为约不到「成人多动症专科门诊」，这两天有空就查一下医院的预约页，约到了同一个医生本周日（10/15）的「特需心理门诊（VIP Clinic）」。
-    - 业余也看了些资料，越看越觉得我从小到大的各种毛病，都跟其症状很匹配。
-
+  - 因为约不到「成人多动症专科门诊」，这两天有空就查一下医院的预约页，约到了同一个医生本周日（10/15）的「特需心理门诊（VIP Clinic）」。
+  - 业余也看了些资料，越看越觉得我从小到大的各种毛病，都跟其症状很匹配。
 
 ### 2023-10-10
 
@@ -200,20 +196,20 @@ comment:
 
 - 继续读《置身事内》
 - NixOS & Flakes Book 上 Hacker News 热门了，很开心：[NixOS and Flakes Book: An unofficial book for beginners (free)](https://news.ycombinator.com/item?id=37818570)
-    - 被 HN 的网友吐槽站点的代码块配色跟换行问题很大，花了挺长时间排查修复（发现主要的锅是 vitepress 自身，有点后悔，当初可能选 docusaurus 更好些）。
+  - 被 HN 的网友吐槽站点的代码块配色跟换行问题很大，花了挺长时间排查修复（发现主要的锅是 vitepress 自身，有点后悔，当初可能选 docusaurus 更好些）。
 
 ### 2023-10-08
 
 - v2ex 上总是不缺乏讨论人生意义的日经贴，找到一份古早的帖子，成年的梦想家们：[假如你不缺钱了，你会做件什么样的大事/有什么新的目标？](https://www.v2ex.com/t/345741)
 - 上面简单的梦想太过乏味，知乎上的这篇 [如何找到人生目标](https://www.zhihu.com/question/20054842) 更具启发性。
 - 读了 0xffff.one 站长的 [疫情后的一些思考](https://zgq.ink/posts/after-covid-19)，挺有感触。尤其是最近参与些慈善活动，又联想到欧美的社会公益做得比中国好了太多，中国的公益慈善体系还很青涩稚嫩。仔细想来，爱、平等、自由，甚至现代科学、社会主义，在这片土地上至今仍是外来文化，社会的发展转变需要时间，转变过程中的文化冲突、观念差异不可避免。
-    - 期待整个社会一夜之间焕然一新不现实，而如果因此厌恶逃避甚至反过来嘲讽这一切，对我而言似也缺失了一些应有的担当。还是实事求是、脚踏实地做人做事吧，相信明天会更好。
+  - 期待整个社会一夜之间焕然一新不现实，而如果因此厌恶逃避甚至反过来嘲讽这一切，对我而言似也缺失了一些应有的担当。还是实事求是、脚踏实地做人做事吧，相信明天会更好。
 - 又上班摸鱼看了这篇[当一位清华本硕博放弃“北京中产”，去往非洲 | 二湘空间](https://mp.weixin.qq.com/s/T1SdSwBAdpbvdnPuTxRN6Q)，有些观点我很认同。
-    - 「总而言之，做题这个游戏被我玩通关了之后，我几乎是必然地去思考我接下来的生活会是什么样的。」跟我今年的感触很类似，今年我的想法与以前有了很大变化。
-    - 「所以其实最显示的对策就是跑，就是离开这个大环境，不跟这个焦虑的大环境产生往来。」，这就是说要跳出这个「围城」，「旁观者清」，做一个旁观者，才能「平静地看着命运的车轮究竟会将你载向何方」。
-    - 「因为人类社会它是一个二阶混沌系统，它是不可预测的，不仅不可预测，还会根据人主观意志的扰动而急剧变化，你的所有精密的算计都必然是一场空。」嗯人生无常
-    - 「但你不觉得这种未知本身就很吸引人吗？你不知道你的未来将向何处去，你也不知道你将以什么样的角色来面对这些未知，这本身难道不就是生活的意义吗？」未知意味着巨大的可能性，这是青年人最大的宝藏。
-    - 「祝愿所有的青年朋友们，愿上帝赐予你勇气与决断，让你能够如旁观者一般，平静地看着命运的车轮究竟会将你载向何方。」共勉
+  - 「总而言之，做题这个游戏被我玩通关了之后，我几乎是必然地去思考我接下来的生活会是什么样的。」跟我今年的感触很类似，今年我的想法与以前有了很大变化。
+  - 「所以其实最显示的对策就是跑，就是离开这个大环境，不跟这个焦虑的大环境产生往来。」，这就是说要跳出这个「围城」，「旁观者清」，做一个旁观者，才能「平静地看着命运的车轮究竟会将你载向何方」。
+  - 「因为人类社会它是一个二阶混沌系统，它是不可预测的，不仅不可预测，还会根据人主观意志的扰动而急剧变化，你的所有精密的算计都必然是一场空。」嗯人生无常
+  - 「但你不觉得这种未知本身就很吸引人吗？你不知道你的未来将向何处去，你也不知道你将以什么样的角色来面对这些未知，这本身难道不就是生活的意义吗？」未知意味着巨大的可能性，这是青年人最大的宝藏。
+  - 「祝愿所有的青年朋友们，愿上帝赐予你勇气与决断，让你能够如旁观者一般，平静地看着命运的车轮究竟会将你载向何方。」共勉
 - 读完了《叫魂》
 - 读了一点《置身事内》，写挺好。
 
@@ -229,34 +225,34 @@ comment:
 - 颈椎按摩仪按着是疼的，但确实有意思。
 - 顺便又下单一个 349 大洋的网易严选的腰部按摩靠枕跟 84 块钱的可视挖耳勺（最近耳朵有点痒，怎么挖都不舒服）。
 - 继续看了点《叫魂》，顺便把很久前看的动漫「识夜描银」看完了，这部动漫的音乐、作画、背景设定都很棒，但是故事越讲越崩...
-    - 因为最近看的是这些各种「妖术」的东西，晚上做的梦也变得有点奇怪哈哈
+  - 因为最近看的是这些各种「妖术」的东西，晚上做的梦也变得有点奇怪哈哈
 - 随便翻了下之前买的《刘擎西方现代思想讲义》，网上搜他写的年度西方思想年度述评，进一步发现了 [爱思想网](https://www.aisixiang.com/) 这个宝藏站点，各大学者在这里针砭时弊，打算最近多读读。
 - 回想起来国庆到现在这几天，基本就没咋碰电脑（除了教我妹的时间外），将自己暂时从程序员世界中解放出来了，几乎每天都在看书。
-    - 偶尔这样 gap 一段时间，从各种日常中抽离出来，思考些更深的问题，非常舒服。
+  - 偶尔这样 gap 一段时间，从各种日常中抽离出来，思考些更深的问题，非常舒服。
 
 ### 2023-10-05
 
 - 回深圳，抢不到全程的票，只好买了一站，上车再补票到广州，再从广州坐城际列车（Cxxxx）回深圳。
-    - 广州到深圳的城际列车往来频繁不用怕没票，主要是湖南到广州/深圳的高铁票太难抢了。
-    - 4 个小时高铁站票到广州，然后转车又在广州地铁上站了 1 个小时，腿是真的累。（不过相比以前上大学春节回家抢不到卧铺，17 个小时的火车站票或者硬座，现在还是舒服太多了）
+  - 广州到深圳的城际列车往来频繁不用怕没票，主要是湖南到广州/深圳的高铁票太难抢了。
+  - 4 个小时高铁站票到广州，然后转车又在广州地铁上站了 1 个小时，腿是真的累。（不过相比以前上大学春节回家抢不到卧铺，17 个小时的火车站票或者硬座，现在还是舒服太多了）
 - 晚上久违地玩了玩 VR 游戏 Beat Saber，出了点汗。
 - 买买买，一番研究整了个一加 Buds Pro 2 真无线降噪蓝牙耳机，769 大洋，以及一个 299 大洋的海尔颈椎按摩仪。
 
 ### 2023-10-04
 
 - 给几个重要仓库添加了自动同步到 gitee 的 GitHub Action
-    - 考虑后续写个程序定时自动将我所有的公开仓库同步到 gitee，这样就不用在每个仓库中都添加一个这样的 action 了
+  - 考虑后续写个程序定时自动将我所有的公开仓库同步到 gitee，这样就不用在每个仓库中都添加一个这样的 action 了
 - 处理了 NixOS & Flakes Book 的几个 issue，重写了内容有误的 `pkgs.callPackage` 一节，添加了自动构建 PDF 的 GitHub Action
 - 继续看《叫魂：1768 年中国妖术大恐慌》跟《我的前半生——爱新觉罗·溥仪》
 - 赶明早的高铁回深圳，晚上把我高中时看过的，挺有纪念意义的一本书送给了我妹，《这一生再也不会有的奇遇》。
-    - 我曾在 [Death Is But a Dream](https://thiscute.world/posts/death-is-but-a-dream/) 中写过，这本书曾跟随我度过了高三，那时在书里写过很多青涩的词句跟胡思乱想。后来它又陪过在安徽合肥度过了四年大学、在深圳度过了四年多的打工生涯。它对我而言有很特别的意义。如果它也能给我妹一点动力，那就太好了。
+  - 我曾在 [Death Is But a Dream](https://thiscute.world/posts/death-is-but-a-dream/) 中写过，这本书曾跟随我度过了高三，那时在书里写过很多青涩的词句跟胡思乱想。后来它又陪过在安徽合肥度过了四年大学、在深圳度过了四年多的打工生涯。它对我而言有很特别的意义。如果它也能给我妹一点动力，那就太好了。
 - 前天做完波比跳后，上臂、腹肌以及大腿内侧靠膝盖部分都酸疼了两天，今天才好了些...我最近这几个月真的是心思全放 NixOS / 硬盘上了，身体素质差了挺多。
 
 ### 2023-10-03
 
 - 继续看《叫魂：1768 年中国妖术大恐慌》
 - 尝试使用《什么是数学》作为教材教我妹数学，她数学相当的差。结果准备不足，她读不下去，觉得前面的自然数算术规律太简单，又看不懂后面的内容... 等我把书重新看了一遍，打算教她时，她怄气不愿意学了...
-    - 心理学没学到位啊，我几次压抑住自己摆烂的颓丧，温声细语很久仍然没能有效地沟通下去。
+  - 心理学没学到位啊，我几次压抑住自己摆烂的颓丧，温声细语很久仍然没能有效地沟通下去。
 - 看了记录片《溥仪：末代皇帝》，内容跟电影《末代皇帝》有点出入，不过这边的史料显然可信度更高，好评。
 - 记录片中提到溥仪自传《我的前半生》，挺感兴趣，又翻来读了一读。
 - 在村上溜达，周边大爷大妈都说我胖了好多，都不敢认了，看来必须减肥了...
@@ -271,23 +267,23 @@ comment:
 ### 2023-09-30 - 2023-10-01
 
 - 阅读《为什么学生不喜欢上学》、《这才是心理学》以及《享受孩子成长》
-    - 其中《这才是心理学》这本书干货最多，也是最难读的。其次是《为什么学生不喜欢上学》。
+  - 其中《这才是心理学》这本书干货最多，也是最难读的。其次是《为什么学生不喜欢上学》。
 - 带我妹使用 ESP32 练习 C 语言，兴趣导向。
-    - 玩了用 5x5 的 WS2812 彩灯模块写一个红绿灯小程序，后面她还非要用 SSD1306 小屏幕显示个「原神启动」，做出来还是挺开心的。
+  - 玩了用 5x5 的 WS2812 彩灯模块写一个红绿灯小程序，后面她还非要用 SSD1306 小屏幕显示个「原神启动」，做出来还是挺开心的。
 
 ### 2023-09-29
 
 - 看完了《被讨厌的勇气》，觉得它虽然缺乏科学依据，但这套理论得确实很好，给我很大启发。
 - 《被讨厌的勇气》与我在看的《这才是心理学》，内容其实是存在冲突的（科学心理学与偏哲学的心理学），为了搞明白这个冲突，我也开始做我的心理学学习笔记。
 - 带我妹使用 ESP32 练习 C 语言，兴趣导向。
-    - 玩了用 5x5 的 WS2812 彩灯模块写跑马灯小程序，以及显示各种不同的颜色，挺开心。
+  - 玩了用 5x5 的 WS2812 彩灯模块写跑马灯小程序，以及显示各种不同的颜色，挺开心。
 
 ### 2023-09-28
 
 - 看了一半《被讨厌的勇气》，主要是介绍阿勒德的个体心理学，讲如何改变自己。
-    - 这书我应该是去年买的，但当时看了两页就看不下去了（原因很多，对对话式没感觉、对内容提不起兴趣等等）。今天读下来发现还写挺好的，戏剧性的冲突也不少，读着不乏味，其中内容也引人深思。
+  - 这书我应该是去年买的，但当时看了两页就看不下去了（原因很多，对对话式没感觉、对内容提不起兴趣等等）。今天读下来发现还写挺好的，戏剧性的冲突也不少，读着不乏味，其中内容也引人深思。
 - 带我妹使用 ESP32 练习 C 语言，兴趣导向。
-    - 玩了使用 ESP32 点灯，面包板上插了 7 个小灯泡，写了个跑马灯小程序，看她挺开心。
+  - 玩了使用 ESP32 点灯，面包板上插了 7 个小灯泡，写了个跑马灯小程序，看她挺开心。
 
 ### 2023-09-27
 
@@ -296,27 +292,26 @@ comment:
 ### 2023-09-26
 
 - 今天看到推上有 MTF 说自己双相情感障碍（躁郁症），突然就想百度一下，进一步找到了注意力缺失障碍（ADHD）这个病，联想到我自己好像有这个问题。
-    - 大学时曾经怀疑自己有这个注意力缺失症，还买了本《分心不是我的错》，但书买了一直没看（我整个大学期间都不太看得下书），但没去医院看过。
-    - 回想起来，我刚初一时有个老师给我们练坐正姿，我死活坐不住，老师说了几遍都没用，直接被她骂「你是不是脑子有毛病啊！」后来高三闹过退学（不知道是否跟这有关），大二大三也都闹过休学，到大四学分不够没法毕业时，干脆直接从学校跑路了。换个角度看，这些经历都可能跟这个病有关系。
-    - 跟朋友聊了后，打算国庆后找个医生看看，深圳应该有这方面的医生。
+  - 大学时曾经怀疑自己有这个注意力缺失症，还买了本《分心不是我的错》，但书买了一直没看（我整个大学期间都不太看得下书），但没去医院看过。
+  - 回想起来，我刚初一时有个老师给我们练坐正姿，我死活坐不住，老师说了几遍都没用，直接被她骂「你是不是脑子有毛病啊！」后来高三闹过退学（不知道是否跟这有关），大二大三也都闹过休学，到大四学分不够没法毕业时，干脆直接从学校跑路了。换个角度看，这些经历都可能跟这个病有关系。
+  - 跟朋友聊了后，打算国庆后找个医生看看，深圳应该有这方面的医生。
 - 晚上看了点《这才是心理学》
 - 最近买的两本传记《史蒂夫·乔布斯传》跟《埃隆·马斯克传》都到货了，查了下发现都是同一位传记作家写的，进一步发现他曾经给爱因斯坦、富兰克林、达·芬奇、基辛格等各历史上的重要人物立传，而且豆瓣评分都很高。
 - 回顾一下的话，最近我买的书看的书，跟我高中大学时期又完全不同了，确实每个人不同的人生阶段、不同的需求与状态下，想学习阅读的东西也会有很大变化。我高中时自己是半个文青 + 科幻迷，读了很多文学作品与科幻作品（以及网络小说）。而大学时我给自己的压力太大，失去了对文学作品的兴趣，但对计算机跟学习方法相关的书籍燃起了热情，我读了大量的计算机专业书籍（跟国内网络小说、日本轻小说）。再之后是大学毕业后这四年，前三年我对阅读燃不起任何兴趣，除了上网看计算机相关英文资料外，基本就只看网络小说。但最近一年感觉思想获得了解放，不仅在业余爱好上获得了一些成就，也重燃了涉猎各类书籍的热情。最近又收藏了好多想读的书啊，人物传记、中国政治、家庭教育、世界格局、纪实文学、心理学等等，而且我能感觉到的是我现在真的能读得下书了，不像以前那样买了也是吃灰。
 
-
 ### 2023-09-25
 
 - 这两天看到了许多不好的司法案例，又想起了以前见过的诸多不公平的事情，遂联想到了这样一点：在选择工作生活的城市时，除了城市的生活环境等因素外，司法公正（司法文明指数）、政府办事效率也是一个重要的因素。
-    - 比如湖南、河北这两个省份，过去一二十年就存在许多影响恶劣的司法案例，造成诸多悲剧。为了不让自己成为这些案例中的一员，选择城市时一定要考虑到这一点。
+  - 比如湖南、河北这两个省份，过去一二十年就存在许多影响恶劣的司法案例，造成诸多悲剧。为了不让自己成为这些案例中的一员，选择城市时一定要考虑到这一点。
 - 这也让我想到，自己是该学点法律知识。
-    - 首先查了下我国「依法治国」这一词的由来，这篇文章将其来龙去脉讲得比较清楚：[依法治国基本方略的提出和发展 - 万其刚 - 2014 年 11 月](http://www.npc.gov.cn/zgrdw/npc/xinwen/rdlt/fzjs/2014-11/14/content_1886222.htm)
-    - 以前为了考试学习政治，那真的是一点都不想学，纯靠死记硬背。现在为了自己的生活来学习这些，而且把握住这些条条框框的由来，就感觉还挺能看得下去的。
-    - 又进一步浏览了中央政府的各个网站、公众号、小程序。
-        - [中国政府网](https://www.gov.cn/)
-        - [中华人民共和国教育部](http://www.moe.gov.cn/)
-        - [中华人民共和国司法部](http://www.moj.gov.cn/)
+  - 首先查了下我国「依法治国」这一词的由来，这篇文章将其来龙去脉讲得比较清楚：[依法治国基本方略的提出和发展 - 万其刚 - 2014 年 11 月](http://www.npc.gov.cn/zgrdw/npc/xinwen/rdlt/fzjs/2014-11/14/content_1886222.htm)
+  - 以前为了考试学习政治，那真的是一点都不想学，纯靠死记硬背。现在为了自己的生活来学习这些，而且把握住这些条条框框的由来，就感觉还挺能看得下去的。
+  - 又进一步浏览了中央政府的各个网站、公众号、小程序。
+    - [中国政府网](https://www.gov.cn/)
+    - [中华人民共和国教育部](http://www.moe.gov.cn/)
+    - [中华人民共和国司法部](http://www.moj.gov.cn/)
 - 了解了下 [世界法治指数](https://worldjusticeproject.org/rule-of-law-index/country/2022/China) 与 [中国各省份司法文明指数](https://www.cnfin.com/hg-lb/detail/20230425/3851364_1.html)
-    - 湖南省貌似一直在倒数前二徘徊...很尴尬。
+  - 湖南省貌似一直在倒数前二徘徊...很尴尬。
 - 又在豆瓣上搜索收藏了一批讲中国的政府、政治、经济相关的高分书籍。
 
 > 总之，既然依法治国基本方略的提出很不容易，那么，这一基本方略的实施和实现，其难度也就可想而知，尤其是“我们国家缺少执法和守法的传统”，就使得法治的实行、法治目标的实现变成了极其艰巨、复杂、长期的任务。当前，我国已进入需要通过全面深化改革来增强发展内生动力的阶段，改革必然会触及既有利益格局和体制机制，一刻也离不开法治的规范、保障。在这种大背景下，党的十八届四中全会作出全面推进依法治国若干重大问题的决定，可谓正当时，宏伟蓝图已经绘就，关键是抓紧落实。
@@ -334,7 +329,7 @@ comment:
 ### 2023-09-22
 
 - 最近看了一周多的网络小说，权当休息了。
-- NixOS & Flakes Book 于 6/23 第一个提交，到今天  9/22 刚好三个月，实现了 512 stars 的小目标，而且还收到了累计三笔赞助 $30. 它是我目前 stars 最高的仓库、stars 涨得最快的仓库以及唯一收到了赞助的仓库，非常开心！
+- NixOS & Flakes Book 于 6/23 第一个提交，到今天 9/22 刚好三个月，实现了 512 stars 的小目标，而且还收到了累计三笔赞助 $30. 它是我目前 stars 最高的仓库、stars 涨得最快的仓库以及唯一收到了赞助的仓库，非常开心！
 
 {{<figure src="/images/now/2023-09-22_nixos-and-flakes-book-512-stars.webp" title="纪念首个 512 stars 仓库" width="80%">}}
 
@@ -355,16 +350,16 @@ comment:
 
 - 看英文字幕的动漫《勇者 Helck》，挺好看的，没啥阅读障碍，不过有时候语速快会需要暂停阅读一下。
 - HDLBits 学习进度
-    - 电路 - 组合逻辑部分（很多的习题都跟前面 verilog 语法部分重合了） - 75%
-    - 电路 - 时序逻辑部分 - 0% 
+  - 电路 - 组合逻辑部分（很多的习题都跟前面 verilog 语法部分重合了） - 75%
+  - 电路 - 时序逻辑部分 - 0%
 
 ### 2023-09-13
 
 - 看了记录片 [史蒂夫·乔布斯 Steve Jobs](https://movie.douban.com/subject/25850443/)，Jobs 简直是最差的丈夫、父亲跟同事，但他确实是最牛逼的设计天才（或许这两句都应该再加一个「之一」）。
 - 听了天依的新曲[《歌行四方 - 天依游学记》](https://www.bilibili.com/video/BV1Yp4y1j7jX/)，曲跟词都非常棒！完美融合了二次元跟三次元的各种传统音乐，天依的人物建模、服装设计跟渲染质量也提升了一个档次。 很多年前第一次听天依，感觉声音怪怪的，后来出了全息现场会，效果其实也挺差的，然后一步步地建模质量越来越好，人物越来越生动活泼，声音越来越自然，现在又走进了三次元，与传统音乐大师一起合奏。听下来真的很感动，有一种老父亲甚感欣慰的 feel.
 - HDLBits 学习进度
-    - 电路 - 组合逻辑部分（很多的习题都跟前面 verilog 语法部分重合了） - 50%
-    - 电路 - 时序逻辑部分 - 0%
+  - 电路 - 组合逻辑部分（很多的习题都跟前面 verilog 语法部分重合了） - 50%
+  - 电路 - 时序逻辑部分 - 0%
 
 ### 2023-09-12
 
@@ -381,22 +376,22 @@ comment:
 ### 2023-09-10
 
 - 今天读到一篇文章，认为最近在日本把自己饿死的王懿，是中国「失落的一代」，这给我一些新的感悟。
-    - 王懿，85 年生，16 岁上了吉林大学材料成型及控制工程专业，之后又读了武汉大学新闻与传播学院的硕士，2009 年硕士毕业，只论她这简历跟所处的年代，妥妥的天才模板。但可能因为早上了两年大学导致本身就有些错位感（她的 twitter 账号名 Akid 或能体现这一点），毕业后又在大象公会接触了一个「圈子」，沉溺其中，又骗了一波亲戚的钱款炒币，之后逃到日本，走向了自我毁灭。
-    - 美国当年「失落的一代」，是出生在了经济告诉增长后陷入停止的社会中，面临精神世界空虚与物质世界「毁灭」的处境中，他们会有抛弃社会关系的冲动，甚至自我毁灭的倾向。
-    - 前两天看的峰哥拍的「男女开放式关系」，其中女主人显然就是类似的处境，她拥有海外硕士学历，但却在三十多岁时选择了抛弃上海的高薪工作，转而与一个没学历的「农民工」在山林中隐居、生子。
-    - 另外我也有一个无法适应现代社会的朋友，网上认识的，与我同届。他找过很多份工作，但都没坚持多久，因为看了 B 站的流浪视频，他尝试过单车骑行中国，从广州一路骑到了拉萨，现在在自己租房家里蹲，考虑继续流浪事业。
-    - 中国社会流行过很多风潮，很多年前的公知不遗余力地宣传美国日本「自由民主」的高人一等，后来经济快速发展带来了各种新问题，又出现了 996、躺平、佛系，现在经济发展放缓，国内内卷加剧，又有了润学、隐居。
+  - 王懿，85 年生，16 岁上了吉林大学材料成型及控制工程专业，之后又读了武汉大学新闻与传播学院的硕士，2009 年硕士毕业，只论她这简历跟所处的年代，妥妥的天才模板。但可能因为早上了两年大学导致本身就有些错位感（她的 twitter 账号名 Akid 或能体现这一点），毕业后又在大象公会接触了一个「圈子」，沉溺其中，又骗了一波亲戚的钱款炒币，之后逃到日本，走向了自我毁灭。
+  - 美国当年「失落的一代」，是出生在了经济告诉增长后陷入停止的社会中，面临精神世界空虚与物质世界「毁灭」的处境中，他们会有抛弃社会关系的冲动，甚至自我毁灭的倾向。
+  - 前两天看的峰哥拍的「男女开放式关系」，其中女主人显然就是类似的处境，她拥有海外硕士学历，但却在三十多岁时选择了抛弃上海的高薪工作，转而与一个没学历的「农民工」在山林中隐居、生子。
+  - 另外我也有一个无法适应现代社会的朋友，网上认识的，与我同届。他找过很多份工作，但都没坚持多久，因为看了 B 站的流浪视频，他尝试过单车骑行中国，从广州一路骑到了拉萨，现在在自己租房家里蹲，考虑继续流浪事业。
+  - 中国社会流行过很多风潮，很多年前的公知不遗余力地宣传美国日本「自由民主」的高人一等，后来经济快速发展带来了各种新问题，又出现了 996、躺平、佛系，现在经济发展放缓，国内内卷加剧，又有了润学、隐居。
 - 下午参加了「佐玩」举办的深圳线下交流会，感觉其中讲教育的那位「教育极客」的演讲表达能力跟讲的内容都很有意思，但其他的分享并未给我带来很多收获。
 - HDLBits 学习进度
-    - verilog 语法部分 - 100%
-    - 电路 - 组合逻辑部分 - 0%
-    - 电路 - 时序逻辑部分 - 0%
+  - verilog 语法部分 - 100%
+  - 电路 - 组合逻辑部分 - 0%
+  - 电路 - 时序逻辑部分 - 0%
 
 ### 2023-09-09
 
 - 很累，睡了很多。
 - HDLBits 的语法学习进度 - 70%
-    - 语法后面还有组合逻辑 / 时序逻辑的电路练习，电路验证的练习，以及一些综合练习，都未记录在进度里。
+  - 语法后面还有组合逻辑 / 时序逻辑的电路练习，电路验证的练习，以及一些综合练习，都未记录在进度里。
 
 ### 2023-09-08
 
@@ -415,13 +410,13 @@ comment:
 - 花了一个多小时尝试将高云的 IDE 打包运行在 NixOS 上，发现没那么简单，先放弃了，直接重启进 Windows 开始折腾 FPGA。
 - 首先跑了荔枝糖 9K 官方的流水灯例子，然后对照第 14 章，学习了 verilog 的基本语法，将流水灯例子中的时钟信号替换成了引脚的按键信号，实现了按键控制切换流水灯的效果，很有意思！
 - 了解了 verilog 与 system verilog 的区别
-    - verilog 类似 C 语言，更贴近硬件，非常老牌，目前在国内还是主流的芯片设计语言（平头哥的 xuantie 系列都是 verilog）
-    - system verilog 根据我看的 《Digital Design and Computer Architecture RISC-V Edition》的说法，是 verilog 的超集，而且未来会取代掉 verilog 的地位。但国内目前貌似主要将它应用在芯片验证领域，用于设计的可能少一点。
-    - 此外还有新兴的基于 scala 语言平台的 chisel 等语言，还不太成熟，已经有一些公司在用了，但还没普及开来。写起来肯定是有一些优势，但总体而言属于可学可不学的东西，有兴趣可以玩玩。
+  - verilog 类似 C 语言，更贴近硬件，非常老牌，目前在国内还是主流的芯片设计语言（平头哥的 xuantie 系列都是 verilog）
+  - system verilog 根据我看的 《Digital Design and Computer Architecture RISC-V Edition》的说法，是 verilog 的超集，而且未来会取代掉 verilog 的地位。但国内目前貌似主要将它应用在芯片验证领域，用于设计的可能少一点。
+  - 此外还有新兴的基于 scala 语言平台的 chisel 等语言，还不太成熟，已经有一些公司在用了，但还没普及开来。写起来肯定是有一些优势，但总体而言属于可学可不学的东西，有兴趣可以玩玩。
 - 我学的电路书主要还是介绍电路，verilog 语言就简单介绍了几个例子。还是得找专门的教程学一学，这是两个 google 出来最好的教程：
-    - https://www.chipverify.com/tutorials/verilog
-    - （页面风格有点古早）https://www.asic-world.com/verilog/veritut.html
-    - 以及 system verilog 教程： https://www.chipverify.com/tutorials/systemverilog
+  - https://www.chipverify.com/tutorials/verilog
+  - （页面风格有点古早）https://www.asic-world.com/verilog/veritut.html
+  - 以及 system verilog 教程： https://www.chipverify.com/tutorials/systemverilog
 
 ### 2023-09-05
 
@@ -438,60 +433,58 @@ comment:
 - 看了篇讲贴吧「隐居吧」近两年火热的文章，其中有一句话让我印象深刻：「人活着，就不可能让所有人都赞同，我能跳出传统生活的框架，也做好了付出代价的准备，我已经不再焦虑，离主流的人生有多远。」嗯值得思考。
 - 看了深圳市慈善事业联合会在微信视频号「深小慈」上分享的《2023 年第二期慈善大讲堂》的视频（报道见 [“坚守初心，笃行致远”，深慈联举办2023年第二期慈善大讲堂](https://new.qq.com/rain/a/20230821A06QDX00)），分享者与与会者年龄段主要在 40+ 到 50+，他们看待问题的角度跟我们年轻人完全不同，干货满满。
 - 首先是陈行甲老师的分享，我之前就看过他的书嘛，也是奔着他的演讲来看的这个视频。大概列下笔记：
-    - 给钱是最简单的公益，每个月固定时间钱一划转，事情就结了。行甲做公益花在钱上的时间只占不到 5%.
-    - 做公益的初心：通过社会创新解决社会问题。
-    - 精准扶贫国策中的最大难点：因病致贫。中国 48% 的贫困是因病致贫。
-    - 中国的医疗做得还不够好，有很多的缺失。美国的医疗做得也不太行，但英国、澳大利亚、日本、台湾省等这些国家的医疗做得很好。
-    - 行甲推进的联爱工程就是以白血病为突破点，做到大病不出县就能治，从广东省河源市开始试点去解决这个问题。
-    - 联爱工程在河源已经做了六年，从试点到推广到更大范围，这是一个漫长的过程，得用时间跟事实说话。目前已经从几十万人的小县城的试点，逐步推广到青海省、甘肃等百万千万级别的省份。
-    - 跨界合作，共同受益。行甲的从政经历让他在政商各界拉动合作游刃有余，联合政府部门、医院、其他公益组织、企业、学校等各方力量，一起去推进他的公益项目，解决社会问题。
+  - 给钱是最简单的公益，每个月固定时间钱一划转，事情就结了。行甲做公益花在钱上的时间只占不到 5%.
+  - 做公益的初心：通过社会创新解决社会问题。
+  - 精准扶贫国策中的最大难点：因病致贫。中国 48% 的贫困是因病致贫。
+  - 中国的医疗做得还不够好，有很多的缺失。美国的医疗做得也不太行，但英国、澳大利亚、日本、台湾省等这些国家的医疗做得很好。
+  - 行甲推进的联爱工程就是以白血病为突破点，做到大病不出县就能治，从广东省河源市开始试点去解决这个问题。
+  - 联爱工程在河源已经做了六年，从试点到推广到更大范围，这是一个漫长的过程，得用时间跟事实说话。目前已经从几十万人的小县城的试点，逐步推广到青海省、甘肃等百万千万级别的省份。
+  - 跨界合作，共同受益。行甲的从政经历让他在政商各界拉动合作游刃有余，联合政府部门、医院、其他公益组织、企业、学校等各方力量，一起去推进他的公益项目，解决社会问题。
 - 然后是肖兴萍老师分享她投身公益事业20年的经历与思考，这是我意料之外的。我一开始只是想听陈行甲老师的分享而已，没想到整场分享全都这么有干货。
-    - 人生就像一个多维函数，有 N 个维度。
-    - 经济水平决定公益高度。
-        - 研究发现恩格尔系数（Engel's Coefficient，即食品支出占个人总消费支出的比重）小于 0.4 时，个人与社会投入到公益事业中的时间与金钱会明显增加。深圳的公益做得这么好，与它的经济腾飞分不开。
-        - 穷则独善其身，达则兼济天下。
-    - 公益跟自身的事业确实会有冲突，但总体上项目成就的成分会更大一些。
-        - 存在冲突的一个例子是肖老师说自己有段时间为了搞公益，项目上至少少赚了两千多万。因为一个人的时间只有这么多，你要是把时间花在公益上，事业上肯定就要受损。
-    - 肖老师做公益的各个阶段
-        - 2004 年决定投身公益：跟狮子会去西藏做慈善手术。做一场手术 500 块钱，是他们捐赠的，但昨晚手术第二天，藏民直接跪地感谢。这让她感到想到震撼。500 块钱对她自己而言可能只是一顿饭钱，但对藏民而言却能改变命运。从那一次开始，肖老师决定以后要做公益。
-        - 2005 年公益项目开局：修了很多学校，尤其是汶川大地震后，在四川修了三所学校。
-        - 2010 年优化组织管理：当选了狮子会国内的会长，她开始用自己在企业做了多年财务的知识，优化狮子会的整个财务体系，以及其他的品牌宣传、资质申请等等，反正都按照企业的标准去做，让狮子会的整个运营更加规范化。
-        - 公益跨界交流、理论学习
-        - ...
-    - 在做公益的时候认识了很多的行业头部的人，他们互相交流、互相学习、互相帮助，对肖老师自身的帮助非常大。
-    - 最后是关于生活与人生的两点感悟
-        - 生活如意与生命的意义取决于如何认知跟强化自己的智商、情商跟魂商。（智商是人与自然打交道，情商是人与人打交道，而魂商则是人与自己打交道）
-        - 生命的长度、宽度与深度，取决于你的生活与工作中的三个维度：方法、路径与取舍。（人的一生就这么长，你选择做什么、用什么方法做、走什么方向，日积月累下来就构成了你的人生）
-
+  - 人生就像一个多维函数，有 N 个维度。
+  - 经济水平决定公益高度。
+    - 研究发现恩格尔系数（Engel's Coefficient，即食品支出占个人总消费支出的比重）小于 0.4 时，个人与社会投入到公益事业中的时间与金钱会明显增加。深圳的公益做得这么好，与它的经济腾飞分不开。
+    - 穷则独善其身，达则兼济天下。
+  - 公益跟自身的事业确实会有冲突，但总体上项目成就的成分会更大一些。
+    - 存在冲突的一个例子是肖老师说自己有段时间为了搞公益，项目上至少少赚了两千多万。因为一个人的时间只有这么多，你要是把时间花在公益上，事业上肯定就要受损。
+  - 肖老师做公益的各个阶段
+    - 2004 年决定投身公益：跟狮子会去西藏做慈善手术。做一场手术 500 块钱，是他们捐赠的，但昨晚手术第二天，藏民直接跪地感谢。这让她感到想到震撼。500 块钱对她自己而言可能只是一顿饭钱，但对藏民而言却能改变命运。从那一次开始，肖老师决定以后要做公益。
+    - 2005 年公益项目开局：修了很多学校，尤其是汶川大地震后，在四川修了三所学校。
+    - 2010 年优化组织管理：当选了狮子会国内的会长，她开始用自己在企业做了多年财务的知识，优化狮子会的整个财务体系，以及其他的品牌宣传、资质申请等等，反正都按照企业的标准去做，让狮子会的整个运营更加规范化。
+    - 公益跨界交流、理论学习
+    - ...
+  - 在做公益的时候认识了很多的行业头部的人，他们互相交流、互相学习、互相帮助，对肖老师自身的帮助非常大。
+  - 最后是关于生活与人生的两点感悟
+    - 生活如意与生命的意义取决于如何认知跟强化自己的智商、情商跟魂商。（智商是人与自然打交道，情商是人与人打交道，而魂商则是人与自己打交道）
+    - 生命的长度、宽度与深度，取决于你的生活与工作中的三个维度：方法、路径与取舍。（人的一生就这么长，你选择做什么、用什么方法做、走什么方向，日积月累下来就构成了你的人生）
 
 别的东西：英国的社会企业做得很好，国内的扶贫攻坚战值得了解。
-
 
 ### 2023-09-02 - 2023-09-03
 
 - 用昨天买的菜做饭，好久没自己下厨了，感觉还挺好的。
 - 前几天跟妹妹聊时，她引用了我看的小说里的一句话，然后我看「仿生狮子」兄的荐书时发现，这一句就是《山月记》的摘抄，药哥说他也看过这书，挺好。当时就下单了，今天书到了，决定读一读。
-    - 读了第一个短篇，最知名的《山月记》，更类似一个寓言故事，最有韵味的就是那一句「深怕自己并非明珠而不敢刻苦琢磨，又自信有几分才华，不甘与瓦砾为伍。日渐避世离俗，心中自卑怯懦之自尊终在愤懑与羞怒中愈发张狂。世人皆为驯兽师，猛兽即个人性情。」
+  - 读了第一个短篇，最知名的《山月记》，更类似一个寓言故事，最有韵味的就是那一句「深怕自己并非明珠而不敢刻苦琢磨，又自信有几分才华，不甘与瓦砾为伍。日渐避世离俗，心中自卑怯懦之自尊终在愤懑与羞怒中愈发张狂。世人皆为驯兽师，猛兽即个人性情。」
 - 简单列了下周末打算干的活，不少啊，又要看书、又要填之前留下的坑，还想写写看了 How to Do Great Work 的读后感。
 - 逛了逛 twitter，收集了一些今天想深入读一读或者看一看的资料：
-    - [【收藏】让你受益匪浅的名家写作经验](https://docs.qq.com/aio/DWVRkZ1RUWHRsdU1J): 之前读过一点，老舍的写作经验很契合我的经历，今天打算再读读其他作家的经验分享。
-    - [诺贝尔经济奖得主保罗.克鲁格曼Paul Krugman大师课](https://www.bilibili.com/video/BV1rT4y1G7sp): 诺贝尔经济学得主的经济学入门课，2 个多小时，今天打算看一遍也入个门 —— 看完了，确实学到了挺多。
-    - [【大师课】[中英字幕]数学天才 陶哲轩Terence Tao 不再恐惧数学 学会新思维](https://www.bilibili.com/video/BV1wa41187Wf): 全球最牛逼的数学家，这个本周估计没时间看完，先随便看看，mark 下。
+  - [【收藏】让你受益匪浅的名家写作经验](https://docs.qq.com/aio/DWVRkZ1RUWHRsdU1J): 之前读过一点，老舍的写作经验很契合我的经历，今天打算再读读其他作家的经验分享。
+  - [诺贝尔经济奖得主保罗.克鲁格曼Paul Krugman大师课](https://www.bilibili.com/video/BV1rT4y1G7sp): 诺贝尔经济学得主的经济学入门课，2 个多小时，今天打算看一遍也入个门 —— 看完了，确实学到了挺多。
+  - [【大师课】[中英字幕]数学天才 陶哲轩Terence Tao 不再恐惧数学 学会新思维](https://www.bilibili.com/video/BV1wa41187Wf): 全球最牛逼的数学家，这个本周估计没时间看完，先随便看看，mark 下。
 - 临时起意看了个午夜场的《奥本海默》，IMAX 巨幕。给个 4 星没问题吧，演挺好的，原来美共曾经有这么多美国高级知识分子，这是我以前不了解的。
 - 总结下看诺奖得主的经济学大师课学到的东西：
-    - 经济学本质上是关于人的行为的科学。个人的行为难以预测，但群体的行为却可以预测，这就是经济学。
-    - 全球化经济是一个非常复杂的系统，没有任何人能够去规划它，但是它就通过我们一个个人的行为，逐渐演化出来了。
-    - 现代经济学的基础是货币，一开始我们是金本位，后来美元国际化、美元抛弃金本位、锚定石油。然而这套经济体系并不完美，正常运行时它很 OK，但一旦出问题，经济危机就会接踵而至。
-    - 一个国家最大的财富，是它的生产力。同样，一个国家的财富实际还与它的消费能力有关。
-    - 财富不平等：主要来自钱滚钱。有钱人可以大量购买优质资产，利滚利。财富不平等加剧的原因是，优质资产本身的增值速度超过了国民经济的增长速度，这导致有钱人不断蚕食整个社会的财富。
-    - 美国二战战后一代生活在一个分配相对平等的社会，原因就是社会飞速发展，经济增长速度超过了资产增值速度，整个社会都散发出一股朝气。
-    - 财富不平等很大程度上跟政治、社会规则有关，光靠经济学解决不了这个问题。
-    - 财富不平等也在扭曲整个社会的方方面面。美国的分配不平等导致了美国的政党两极分化，社会矛盾越发尖锐。
-    - 美国的工会被严重削弱，远没有欧洲的工会强大。这也是美国财富不平等的一个重要原因。如果你想要更平等，那你应该也会想要强化工会。
-    - 路径依赖：你的过去会限制你的未来。
-        - 人们总体上是倾向于保守的，不愿意对现有系统做大的改动，担心改动后会出现更糟糕的情况。愤世嫉俗点，就是既得利益者不愿意让自己的利益被削弱。
-        - 就像代码一样，一个系统一旦有了年代，就会变成程序员眼中的「legacy code（屎山）」，系统的维护成本会越来越高，但是又不敢轻易改动，因为不知道改动后会出现什么问题，没这个实力或魄力。
-        - 另一方面，如果某人决定要推动一项变革，那 TA 就必须实力、魄力、定力兼备，改革总是会有阵痛期，这个时间段各种非难、各种阻力都会接踵而至，没有这些能力的人，很难坚持下去。
+  - 经济学本质上是关于人的行为的科学。个人的行为难以预测，但群体的行为却可以预测，这就是经济学。
+  - 全球化经济是一个非常复杂的系统，没有任何人能够去规划它，但是它就通过我们一个个人的行为，逐渐演化出来了。
+  - 现代经济学的基础是货币，一开始我们是金本位，后来美元国际化、美元抛弃金本位、锚定石油。然而这套经济体系并不完美，正常运行时它很 OK，但一旦出问题，经济危机就会接踵而至。
+  - 一个国家最大的财富，是它的生产力。同样，一个国家的财富实际还与它的消费能力有关。
+  - 财富不平等：主要来自钱滚钱。有钱人可以大量购买优质资产，利滚利。财富不平等加剧的原因是，优质资产本身的增值速度超过了国民经济的增长速度，这导致有钱人不断蚕食整个社会的财富。
+  - 美国二战战后一代生活在一个分配相对平等的社会，原因就是社会飞速发展，经济增长速度超过了资产增值速度，整个社会都散发出一股朝气。
+  - 财富不平等很大程度上跟政治、社会规则有关，光靠经济学解决不了这个问题。
+  - 财富不平等也在扭曲整个社会的方方面面。美国的分配不平等导致了美国的政党两极分化，社会矛盾越发尖锐。
+  - 美国的工会被严重削弱，远没有欧洲的工会强大。这也是美国财富不平等的一个重要原因。如果你想要更平等，那你应该也会想要强化工会。
+  - 路径依赖：你的过去会限制你的未来。
+    - 人们总体上是倾向于保守的，不愿意对现有系统做大的改动，担心改动后会出现更糟糕的情况。愤世嫉俗点，就是既得利益者不愿意让自己的利益被削弱。
+    - 就像代码一样，一个系统一旦有了年代，就会变成程序员眼中的「legacy code（屎山）」，系统的维护成本会越来越高，但是又不敢轻易改动，因为不知道改动后会出现什么问题，没这个实力或魄力。
+    - 另一方面，如果某人决定要推动一项变革，那 TA 就必须实力、魄力、定力兼备，改革总是会有阵痛期，这个时间段各种非难、各种阻力都会接踵而至，没有这些能力的人，很难坚持下去。
 
 {{<figure src="/images/now/2023-09-02_midi-keyboard.webp" title="MIDI 键盘、山月记、以及凌乱的桌台..." width="80%">}}
 
@@ -507,13 +500,13 @@ comment:
 ### 2023-08-30
 
 - 前几天把 Docker 镜像（20G 的 AIGC 镜像）提前预置在了 EC2 基础镜像里，降了 10 分钟的环境启动时间。结果今天发现内部加载环境的脚本慢了 5 分钟...效果直接打了 5 折。
-    - 排查到原因是之前没预置的时候，`docker pull` 时底层数据就直接进了系统内存缓存起来了，我们的脚本就不需要从磁盘加载数据。而新的逻辑前面不会 `docker pull`，内存里没缓存，就需要从磁盘加载数据，导致慢了 5 分钟...
+  - 排查到原因是之前没预置的时候，`docker pull` 时底层数据就直接进了系统内存缓存起来了，我们的脚本就不需要从磁盘加载数据。而新的逻辑前面不会 `docker pull`，内存里没缓存，就需要从磁盘加载数据，导致慢了 5 分钟...
 - 参加了陈行甲的「恒晖公益月捐」项目，每月我自己捐 200 块，再以我妹妹的名义捐 100 块。
 - 昨天读到的这本小说《人生若有起跑线，有人出生在罗马》，我读完了，而且以此为契机跟妹妹深入交流了一次人生。这是非常有价值的一件事，为表感谢，我在起点读书给作者打赏了 100 块，觉得这有点少，又追加了 1000 块。
 - 根据小说的评论，我跑去看了做起跑线实验的综艺节目 [极限挑战第四季第二期](https://www.zhihu.com/question/276519499)，做得挺好的。起跑线固然重要，但已经落后也没必要妄自菲薄。
-    - 这应该是我第一次在起点上打赏超过 10 块钱，但对我而言，它真的值得这么多。
+  - 这应该是我第一次在起点上打赏超过 10 块钱，但对我而言，它真的值得这么多。
 - [2023-09-23 补充] 今天又拿起这本小说读了一读，在 QQ 阅读评论区有人评论「加入想看这类，去育儿类 APP 找找呗，一堆堆。」然后就搜索了一下家庭教育相关的书，在豆瓣上发现挺多非常好的书，打算最近读一读。
-    - 想起我父母是没学问的农民，只懂棍棒教育。我也用过许多方法试图激起我妹妹的学习热情，但都失败了，一度听之任之。但在看这本小说之前，我一直搞不明白为什么我会失败。在看到上面这条评论之前，我也完全没想过，还可以找些家庭教育的书来看看...真的是视野盲区了。
+  - 想起我父母是没学问的农民，只懂棍棒教育。我也用过许多方法试图激起我妹妹的学习热情，但都失败了，一度听之任之。但在看这本小说之前，我一直搞不明白为什么我会失败。在看到上面这条评论之前，我也完全没想过，还可以找些家庭教育的书来看看...真的是视野盲区了。
 
 ### 2023-08-29
 
@@ -522,59 +515,57 @@ comment:
 ### 2023-08-27
 
 - 我构建出的 uboot 死活跑不起来，跟 chainsx 沟通后，换成了 armbian 预编译好的 uboot，成功搞定 rock5a
-    - 至此，我从 6/2 开始整的 nixos-rk3588 预计支持的三块板子，都已经成功跑起 NixOS 来了！
-
+  - 至此，我从 6/2 开始整的 nixos-rk3588 预计支持的三块板子，都已经成功跑起 NixOS 来了！
 
 ### 2023-08-26
 
 - How to Do Great Work? 摘抄
-    - So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.
-    - When in doubt, optimize for interestingness. 
-    - If in the course of working on one thing you discover another that's more exciting, don't be afraid to switch.
-    - The best way to do this is to make something you yourself want. Write the story you want to read; build the tool you want to use.
-    - If you're interested, you're not astray.
-    - 跟随兴趣，就是「乘风而起（staying upwind）」，我们都知道一句话，「风口上的猪都能飞」！
-    - Following your interests may sound like a rather passive strategy, but in practice it usually means following them past all sorts of obstacles. You usually have to risk rejection and failure. So it does take a good deal of boldness.
-    - Am I working on what I most want to work on?" When you're young it's ok if the answer is sometimes no, but this gets increasingly dangerous as you get older.
-    - People who do great things don't get a lot done every day. They get something done, rather than nothing. If you do work that compounds, you'll get exponential growth.(Learning, for example, is an instance of this phenomenon: the more you learn about something, the easier it is to learn more.)
-    - The trouble with exponential growth is that the curve feels flat in the beginning. It isn't; it's still a wonderful exponential curve. 
-    - (灵光并不常在工作中出现)By letting your mind wander a little, you'll often solve problems you were unable to solve by frontal attack.
-    - The core of being earnest is being intellectually honest. We're taught as children to be honest as an unselfish virtue — as a kind of sacrifice. But in fact it's a source of power too.
-    - How can you have a sharp eye for the truth if you're intellectually dishonest?（真诚能帮人拥有真实之眼，这个眼睛可有用得很，比如说我觉得我药哥很会夸人，他之前就说，这是因为他真诚。）
-    - Nerds have a kind of innocent boldness that's exactly what you need in doing great work.
-    - Be the one who puts things out there rather than the one who sits back and offers sophisticated-sounding criticisms of them. "It's easy to criticize" is true in the most literal sense, and the route to great work is never easy.(这让我想起来昨天跟我对线的一个傻逼，我说的每一句话都要被他琢磨几番有没有问题，然后趾高气扬地说我这错了那得改。)
-    - The Old Testament says it's better to keep quiet lest you look like a fool. But that's advice for seeming smart. If you actually want to discover new things, it's better to take the risk of telling people your ideas.（使自己看起来很聪明很拉风，没啥意义，还是要多做多说，才能收获更多。不过也不是说乱做乱说...）
-    - Great work will often be tool-like in the sense of being something others build on. So it's a good sign if you're creating ideas that others could use, or exposing questions that others could answer. The best ideas have implications in many different areas.
-    - Original ideas don't come from trying to have original ideas. They come from trying to build or understand something slightly too difficult.
-    - Talking or writing about the things you're interested in is a good way to generate new ideas. When you try to put ideas into words, a missing idea creates a sort of vacuum that draws it out of you. Indeed, there's a kind of thinking that can only be done by writing.
-    - Curiosity is itself a kind of originality; it's roughly to questions what originality is to answers. And since questions at their best are a big component of answers, curiosity at its best is a creative force.
-    - 先看到这，阅读进度大约 50%
-    - 8/31 继续摘抄
-    - When you fix a broken model, new ideas become obvious. But noticing and fixing a broken model is hard. That's how new ideas can be both obvious and yet hard to discover: they're easy to see after you do something hard.
-    - （良药苦口，忠言逆耳）The other thing you need is a willingness to break rules. if you want to fix your model of the world, it helps to be the sort of person who's comfortable breaking rules.
-    - （正确而疯狂的想法，那就是你想要找寻的）a good new idea has to seem bad to most people, or someone would have already explored it. So what you're looking for is ideas that seem crazy, but the right kind of crazy. 
-    - People are often wrong about the problem that people think has been fully explored, it hasn't.
-    - （放纵自己，让自己跟随好奇心，随心所欲地探索，这是找到被大多数人忽略掉的问题的最简单有效的方式）By being self-indulgent — by letting your curiosity have its way, and tuning out, at least temporarily, the little voice in your head that says you should only be working on "important" problems.
-    - （最重要的就是，选择下一步要做什么。）the initial step — deciding what to work on — is in a sense the key to the whole game.
-    - People think big ideas are answers, but often the real insight was in the question. It's a great thing to be rich in unanswered questions. And this is one of those situations where the rich get richer, because the best way to acquire new questions is to try answering existing ones. Questions don't just lead to answers, but also to more questions.
-    - The initial versions of big things were often just experiments, or side projects, or talks, which then grew into something bigger. So start lots of small things.
-    - （只有找到过足够多的坏想法，你才能拥有足够多的好想法）Being prolific is underrated. The more different things you try, the greater the chance of discovering something new. Understand, though, that trying lots of things will mean trying lots of things that don't work. You can't have a lot of good ideas without also having a lot of bad ones.
-    - （尝试没人干过的新事物，可比重新造轮子有意思多了，而且能帮你更好的理解旧轮子）Though it sounds more responsible to begin by studying everything that's been done before, you'll learn faster and have more fun by trying stuff. And you'll understand previous work better when you do look at it. 
-    - （从最简单的例子开始做起）Begin by trying the simplest thing that could possibly work.
-    - 如果你想做创造性的工作，就不要做太多的计划，计划只会让你陷入困境。
-    - （多承担些风险，不要寻找确定性，要寻找可能性！如果你不经常遭遇失败，那你可能有点太保守了。）Take as much risk as you can afford. In an efficient market, risk is proportionate to reward, so don't look for certainty, but for a bet with high expected value. If you're not failing occasionally, you're probably being too conservative.
-    - 年轻人缺乏经验，这使他们害怕风险，但实际上年轻的时候才拥有最多可能性，可以尽情地探索。
-    - （年轻人不知道自己在时间上多么的富有。将这些时间转变成优势的最佳手段，就是遵循自己的好奇心，去做喜欢的事，觉得酷的事！）The young have no idea how rich they are in time. The best way to turn this time to advantage is to use it in slightly frivolous ways: to learn about something you don't need to know about, just out of curiosity, or to try building something just because it would be cool, or to become freakishly good at something.
-    - （无知也是一种财富，它使你能以最干净的眼睛看待所有新事物，不被任何规矩束缚）The most subtle advantage of youth, or more precisely of inexperience, is that you're seeing everything with fresh eyes. 
-    - （在没抛弃掉所有世俗带给你的废话、教条、坏习惯前，你无法做出什么牛逼的工作！）You arrive at adulthood with your head full of nonsense — bad habits you've acquired and false things you've been taught — and you won't be able to do great work till you clear away at least the nonsense in the way of whatever type of work you want to do.
-    - 对学生而言，不要把各种什么委员会之类的人的拒绝放在心上，他们的评价标准，跟做牛逼的工作的标准，是完全不同的。他们的拒绝代表不了什么。
-    - 明确地将挫折视为你的过程的一部分来避免被挫折打击到士气，毕竟解决难题总是需要一些回头路（Solving hard problems always involves some backtracking.）。
-    - （做牛逼工作就是一个深度优先搜索，不要钻牛角尖，如果失败了，可以重试，也可以回退几步，再重试。）Doing great work is a depth-first search whose root node is the desire to. So "If at first you don't succeed, try, try again" isn't quite right. It should be: If at first you don't succeed, either try again, or backtrack and then try again.
-    - （挫折难以避免，但不要惊慌失措。你可以在必要的时候走一点回头路，但不要因为一点点挫折，就否定掉自己的才能！永远不要放弃掉搜索树的根节点，或者叫你人生的锚点）
-    - 听众是使你保持士气的重要因素，如果你有一小批喜欢你的作品的人，那你就会有动力继续做下去。
-    - Curiosity is the best guide. Your curiosity never lies, and it knows more than you do about what's worth paying attention to.
-    - Curiosity is the key to all four steps in doing great work: it will choose the field for you, get you to the frontier, cause you to notice the gaps in it, and drive you to explore them. The whole process is a kind of dance with curiosity.
-
+  - So you need to make yourself a big target for luck, and the way to do that is to be curious. Try lots of things, meet lots of people, read lots of books, ask lots of questions.
+  - When in doubt, optimize for interestingness.
+  - If in the course of working on one thing you discover another that's more exciting, don't be afraid to switch.
+  - The best way to do this is to make something you yourself want. Write the story you want to read; build the tool you want to use.
+  - If you're interested, you're not astray.
+  - 跟随兴趣，就是「乘风而起（staying upwind）」，我们都知道一句话，「风口上的猪都能飞」！
+  - Following your interests may sound like a rather passive strategy, but in practice it usually means following them past all sorts of obstacles. You usually have to risk rejection and failure. So it does take a good deal of boldness.
+  - Am I working on what I most want to work on?" When you're young it's ok if the answer is sometimes no, but this gets increasingly dangerous as you get older.
+  - People who do great things don't get a lot done every day. They get something done, rather than nothing. If you do work that compounds, you'll get exponential growth.(Learning, for example, is an instance of this phenomenon: the more you learn about something, the easier it is to learn more.)
+  - The trouble with exponential growth is that the curve feels flat in the beginning. It isn't; it's still a wonderful exponential curve.
+  - (灵光并不常在工作中出现)By letting your mind wander a little, you'll often solve problems you were unable to solve by frontal attack.
+  - The core of being earnest is being intellectually honest. We're taught as children to be honest as an unselfish virtue — as a kind of sacrifice. But in fact it's a source of power too.
+  - How can you have a sharp eye for the truth if you're intellectually dishonest?（真诚能帮人拥有真实之眼，这个眼睛可有用得很，比如说我觉得我药哥很会夸人，他之前就说，这是因为他真诚。）
+  - Nerds have a kind of innocent boldness that's exactly what you need in doing great work.
+  - Be the one who puts things out there rather than the one who sits back and offers sophisticated-sounding criticisms of them. "It's easy to criticize" is true in the most literal sense, and the route to great work is never easy.(这让我想起来昨天跟我对线的一个傻逼，我说的每一句话都要被他琢磨几番有没有问题，然后趾高气扬地说我这错了那得改。)
+  - The Old Testament says it's better to keep quiet lest you look like a fool. But that's advice for seeming smart. If you actually want to discover new things, it's better to take the risk of telling people your ideas.（使自己看起来很聪明很拉风，没啥意义，还是要多做多说，才能收获更多。不过也不是说乱做乱说...）
+  - Great work will often be tool-like in the sense of being something others build on. So it's a good sign if you're creating ideas that others could use, or exposing questions that others could answer. The best ideas have implications in many different areas.
+  - Original ideas don't come from trying to have original ideas. They come from trying to build or understand something slightly too difficult.
+  - Talking or writing about the things you're interested in is a good way to generate new ideas. When you try to put ideas into words, a missing idea creates a sort of vacuum that draws it out of you. Indeed, there's a kind of thinking that can only be done by writing.
+  - Curiosity is itself a kind of originality; it's roughly to questions what originality is to answers. And since questions at their best are a big component of answers, curiosity at its best is a creative force.
+  - 先看到这，阅读进度大约 50%
+  - 8/31 继续摘抄
+  - When you fix a broken model, new ideas become obvious. But noticing and fixing a broken model is hard. That's how new ideas can be both obvious and yet hard to discover: they're easy to see after you do something hard.
+  - （良药苦口，忠言逆耳）The other thing you need is a willingness to break rules. if you want to fix your model of the world, it helps to be the sort of person who's comfortable breaking rules.
+  - （正确而疯狂的想法，那就是你想要找寻的）a good new idea has to seem bad to most people, or someone would have already explored it. So what you're looking for is ideas that seem crazy, but the right kind of crazy.
+  - People are often wrong about the problem that people think has been fully explored, it hasn't.
+  - （放纵自己，让自己跟随好奇心，随心所欲地探索，这是找到被大多数人忽略掉的问题的最简单有效的方式）By being self-indulgent — by letting your curiosity have its way, and tuning out, at least temporarily, the little voice in your head that says you should only be working on "important" problems.
+  - （最重要的就是，选择下一步要做什么。）the initial step — deciding what to work on — is in a sense the key to the whole game.
+  - People think big ideas are answers, but often the real insight was in the question. It's a great thing to be rich in unanswered questions. And this is one of those situations where the rich get richer, because the best way to acquire new questions is to try answering existing ones. Questions don't just lead to answers, but also to more questions.
+  - The initial versions of big things were often just experiments, or side projects, or talks, which then grew into something bigger. So start lots of small things.
+  - （只有找到过足够多的坏想法，你才能拥有足够多的好想法）Being prolific is underrated. The more different things you try, the greater the chance of discovering something new. Understand, though, that trying lots of things will mean trying lots of things that don't work. You can't have a lot of good ideas without also having a lot of bad ones.
+  - （尝试没人干过的新事物，可比重新造轮子有意思多了，而且能帮你更好的理解旧轮子）Though it sounds more responsible to begin by studying everything that's been done before, you'll learn faster and have more fun by trying stuff. And you'll understand previous work better when you do look at it.
+  - （从最简单的例子开始做起）Begin by trying the simplest thing that could possibly work.
+  - 如果你想做创造性的工作，就不要做太多的计划，计划只会让你陷入困境。
+  - （多承担些风险，不要寻找确定性，要寻找可能性！如果你不经常遭遇失败，那你可能有点太保守了。）Take as much risk as you can afford. In an efficient market, risk is proportionate to reward, so don't look for certainty, but for a bet with high expected value. If you're not failing occasionally, you're probably being too conservative.
+  - 年轻人缺乏经验，这使他们害怕风险，但实际上年轻的时候才拥有最多可能性，可以尽情地探索。
+  - （年轻人不知道自己在时间上多么的富有。将这些时间转变成优势的最佳手段，就是遵循自己的好奇心，去做喜欢的事，觉得酷的事！）The young have no idea how rich they are in time. The best way to turn this time to advantage is to use it in slightly frivolous ways: to learn about something you don't need to know about, just out of curiosity, or to try building something just because it would be cool, or to become freakishly good at something.
+  - （无知也是一种财富，它使你能以最干净的眼睛看待所有新事物，不被任何规矩束缚）The most subtle advantage of youth, or more precisely of inexperience, is that you're seeing everything with fresh eyes.
+  - （在没抛弃掉所有世俗带给你的废话、教条、坏习惯前，你无法做出什么牛逼的工作！）You arrive at adulthood with your head full of nonsense — bad habits you've acquired and false things you've been taught — and you won't be able to do great work till you clear away at least the nonsense in the way of whatever type of work you want to do.
+  - 对学生而言，不要把各种什么委员会之类的人的拒绝放在心上，他们的评价标准，跟做牛逼的工作的标准，是完全不同的。他们的拒绝代表不了什么。
+  - 明确地将挫折视为你的过程的一部分来避免被挫折打击到士气，毕竟解决难题总是需要一些回头路（Solving hard problems always involves some backtracking.）。
+  - （做牛逼工作就是一个深度优先搜索，不要钻牛角尖，如果失败了，可以重试，也可以回退几步，再重试。）Doing great work is a depth-first search whose root node is the desire to. So "If at first you don't succeed, try, try again" isn't quite right. It should be: If at first you don't succeed, either try again, or backtrack and then try again.
+  - （挫折难以避免，但不要惊慌失措。你可以在必要的时候走一点回头路，但不要因为一点点挫折，就否定掉自己的才能！永远不要放弃掉搜索树的根节点，或者叫你人生的锚点）
+  - 听众是使你保持士气的重要因素，如果你有一小批喜欢你的作品的人，那你就会有动力继续做下去。
+  - Curiosity is the best guide. Your curiosity never lies, and it knows more than you do about what's worth paying attention to.
+  - Curiosity is the key to all four steps in doing great work: it will choose the field for you, get you to the frontier, cause you to notice the gaps in it, and drive you to explore them. The whole process is a kind of dance with curiosity.
 
 ### 2023-08-25
 
@@ -584,20 +575,19 @@ comment:
 - 另外最近其实也在想，是不是该看点「中西哲学」、「古今历史」之类的书，希望自己的思想能够更加全面。比如说前 leader 推荐的鬼谷子，以及我一直想看的老子、庄子、易经、王阳明朱熹等等。
 - 另外发现我最近写东西，遇到打不出字的情况变多了，主要是小鹤形码的规则几乎全忘了，全靠肌肉记忆。一些打得少的字，就只能靠 Google 查...感觉还得找时间复习下小鹤形码。
 
-
 ### 2023-08-23
 
 - 努力工作一整天
 - 晚上继续看了看「一个村小」官方站点的各种资料
 - 还看了看《黑客与画家》作者的最近力作：How to do great work.
 - 整了一个新的邮箱地址 ryan4yin@linux.com，首先捐 \$99，然后再付 \$150 就能得到这个终身邮箱地址。一是用了这么久 Linux 也该捐点钱，二是感觉这个邮箱很酷！
-    - 关于如何使用 gmail 以 ryan4yin@linux.com （或任何你所有的邮箱地址）为发送者发出邮件。（Linux Foundation 页面只提供了邮件转发功能，不提供发送功能）
-    - 首先，进入 gmail 的「设置」-「账号与导入」-「用这个地址发送邮件」-「添加其他电子邮件地址」
-    - 然后，填入你的昵称与邮件地址「ryan4yin@linux.com」
-    - 接着，会提示你输入 SMTP 服务器地址，设为「smtp.gmail.com」
-    - smtp 服务器的密码，可以在 <https://myaccount.google.com/apppasswords> 中生成一个你 Google 账号的应用密码，然后填入即可
-    - 最后，点击「下一步」，会发送一封确认邮件到你的邮箱「ryan4yin@linux.com」，点击确认，即完成了设置。
-    - 如此设置后，你可以「ryan4yin@linux.com」为发件人发送邮件，但是接收方会额外看到一句「由 xxx@gmail.com 代发」这样的注释。
+  - 关于如何使用 gmail 以 ryan4yin@linux.com （或任何你所有的邮箱地址）为发送者发出邮件。（Linux Foundation 页面只提供了邮件转发功能，不提供发送功能）
+  - 首先，进入 gmail 的「设置」-「账号与导入」-「用这个地址发送邮件」-「添加其他电子邮件地址」
+  - 然后，填入你的昵称与邮件地址「ryan4yin@linux.com」
+  - 接着，会提示你输入 SMTP 服务器地址，设为「smtp.gmail.com」
+  - smtp 服务器的密码，可以在 <https://myaccount.google.com/apppasswords> 中生成一个你 Google 账号的应用密码，然后填入即可
+  - 最后，点击「下一步」，会发送一封确认邮件到你的邮箱「ryan4yin@linux.com」，点击确认，即完成了设置。
+  - 如此设置后，你可以「ryan4yin@linux.com」为发件人发送邮件，但是接收方会额外看到一句「由 xxx@gmail.com 代发」这样的注释。
 
 ### 2023-08-22
 
@@ -617,7 +607,7 @@ comment:
 > 我其实感觉到，在我自己的体系能够自洽后，看待这类评论时，我更像是一个旁观者。我甚至完全不觉得这些评论冒犯了我（
 > 而且作为一篇用来剖析自我、认知世界的文章，底下能有这么一条评论，我感到我的文章内容，其逻辑更加自洽了。
 > 如果仔细分析，从这条评论中真的能看出很多东西，我对世界的理解又更深了一点。
-> 
+>
 > 以上，再次感谢各位！
 
 另外再记录一则与上述 v2ex 帖子有点关联的小故事：
@@ -628,7 +618,6 @@ comment:
 > 我没跟乐队外的人聊过这个，很担心被同学揍...但它真的很有效（
 > 这很可能是我们乐队代代相传的方法...
 
-
 ### 2023-08-19 - 2023-08-20
 
 - 写下新文章《人生已过四分之一》，而且 20 号也持续优化了一天。
@@ -637,30 +626,29 @@ comment:
   - 业余时间也没学啥云原生跟 Linux 网络相关的东西，可以说主业完全在原地踏步。
   - 英语学习更是完全停滞了，过完年后就再也没找回过去年的学习状态。
   - 但另一方面，今年 4 月中旬我开始对 NixOS 感兴趣，开始折腾 NixOS，这是我今年上半年最正确的决定！因为它，如下目标有了突破性的进展：
-      - Linux: 通过尝试将 NixOS 移植到 Orange Pi 跟 LicheePi 4A 上，学到了不少 Linux 引导、init 程序、内核、交叉编译等等知识。
-      - 还认识了许多国内的 Linux 内核与引导开发者（Revy/chainsx）、Linux 极客（猴哥）、Nixpkgs 维护者（Nick Cao 等）
-      - 最初编写的 NixOS 新手笔记迭代了两个月后，现在已经是一本拥有 166 stars 的开源书籍，收到了大量国内外的好评。甚至已经有人在着手将它翻译成俄语！
-      - 通过 NixOS 的学习，我对 Linux 系统的理解更加深入，对 Linux 系统的各个组件也有了更深入的了解，这对我后续的 Linux 内核、网络、存储等方向的学习都有很大帮助。
+    - Linux: 通过尝试将 NixOS 移植到 Orange Pi 跟 LicheePi 4A 上，学到了不少 Linux 引导、init 程序、内核、交叉编译等等知识。
+    - 还认识了许多国内的 Linux 内核与引导开发者（Revy/chainsx）、Linux 极客（猴哥）、Nixpkgs 维护者（Nick Cao 等）
+    - 最初编写的 NixOS 新手笔记迭代了两个月后，现在已经是一本拥有 166 stars 的开源书籍，收到了大量国内外的好评。甚至已经有人在着手将它翻译成俄语！
+    - 通过 NixOS 的学习，我对 Linux 系统的理解更加深入，对 Linux 系统的各个组件也有了更深入的了解，这对我后续的 Linux 内核、网络、存储等方向的学习都有很大帮助。
   - 简单总结下去年的这些目标在上半年有较大进展：
-      - 「认识更多有趣的人，见识下更宽广的世界」：去年定的这个目标已经超额完成了！认识了好多有趣的人，见识了更宽广的世界，也帮助到了好多使用 NixOS 的人。
-      - Linux: 虽然学习的方向跟最初目标有点区别，不过进展很不错。
-      - 至少给三个开源项目提交一些代码贡献：7 月份给 AstroNvim 与 ESP-IDF 两个项目提交了代码贡献，已经完成了 1/3，到年底有望超额完成目标！
-
+    - 「认识更多有趣的人，见识下更宽广的世界」：去年定的这个目标已经超额完成了！认识了好多有趣的人，见识了更宽广的世界，也帮助到了好多使用 NixOS 的人。
+    - Linux: 虽然学习的方向跟最初目标有点区别，不过进展很不错。
+    - 至少给三个开源项目提交一些代码贡献：7 月份给 AstroNvim 与 ESP-IDF 两个项目提交了代码贡献，已经完成了 1/3，到年底有望超额完成目标！
 
 ### 2023-08-18
 
 - 最近的两笔赞助，让我可能有点异想天开？查了一波「如何通过开源项目养活自己」类似的信息。
 - 目前想到的，需要重点搞明白的东西：
-    - 了解 Patreon 与 GitHub Sponsoring 这类每月赞助的模式，搞明白如何让用户愿意持续赞助。
-        - 与我 Patreon 上的第一位赞助者做了一些沟通，我提了一些想法，比如说创建一个 discord server。然后他给出了非常有价值的建议！
+  - 了解 Patreon 与 GitHub Sponsoring 这类每月赞助的模式，搞明白如何让用户愿意持续赞助。
+    - 与我 Patreon 上的第一位赞助者做了一些沟通，我提了一些想法，比如说创建一个 discord server。然后他给出了非常有价值的建议！
 - 其他资料：
-    - https://zhuanlan.zhihu.com/p/150556033
-    - https://emacs-china.org/t/topic/20855
-    - https://unclecatmyself.github.io/2018/12/20/%E8%8B%A6%E4%BA%86%E6%88%91%E4%B8%80%E5%B9%B4%E7%9A%84%E9%80%89%E6%8B%A9-%E7%8E%B0%E5%9C%A8%E7%A1%AE%E5%AE%9E%E6%88%91%E6%9C%80%E5%9B%9E%E5%91%B3%E7%9A%84%E6%97%B6%E5%85%89/
+  - https://zhuanlan.zhihu.com/p/150556033
+  - https://emacs-china.org/t/topic/20855
+  - https://unclecatmyself.github.io/2018/12/20/%E8%8B%A6%E4%BA%86%E6%88%91%E4%B8%80%E5%B9%B4%E7%9A%84%E9%80%89%E6%8B%A9-%E7%8E%B0%E5%9C%A8%E7%A1%AE%E5%AE%9E%E6%88%91%E6%9C%80%E5%9B%9E%E5%91%B3%E7%9A%84%E6%97%B6%E5%85%89/
 - 其他 FAQ:
-    - 这种成功的开源项目盈利期能延续多久？
-        - 我觉得盈利期只能算考量点之一，真的去做了这件事，能获得的经验是很宝贵的。
-        就算后面失败了，技术能力在这，再回去找家公司上班，感觉也不是难事吧。
+  - 这种成功的开源项目盈利期能延续多久？
+    - 我觉得盈利期只能算考量点之一，真的去做了这件事，能获得的经验是很宝贵的。
+      就算后面失败了，技术能力在这，再回去找家公司上班，感觉也不是难事吧。
 
 {{<figure src="/images/now/technology-is-wealth_my-first-sponsor-on-patreon.webp" title="Technology is Wealth - From my first sponsor on Patreon" width="80%">}}
 
@@ -669,7 +657,6 @@ comment:
 - 发现才开没几天的 Patreon 收到了第一笔赞助！超级开心！
 
 {{<figure src="/images/now/nixos-patreon_the-first-member.jpg" width="80%">}}
-
 
 ### 2023-08-16
 
@@ -680,20 +667,20 @@ comment:
 
 - 因为最近一次证书自动更新失败导致的故障，吃了点教训，往 [Kubernetes 中的证书管理工具 - cert-manager](https://thiscute.world/posts/kubernetes-cert-management/) 添加了监控告警一节。
 - 测试并完善 licheepi4a 的自定义部署 [ryan4yin/nixos-licheepi4a/demo](https://github.com/ryan4yin/nixos-licheepi4a/tree/cfe7981/demo)
-    - 其实之前虽然搞定了 NixOS on LicheePi4A，但是一直没想好要怎么去更新、管理系统。之前试了 `nixos-rebuild` 的远程部署，但是踩了一晚上坑也没搞定，最后还是放弃了。前两天看到有个 NixOS 资深老哥拿我代码直接在他的 flake 里 import 进去了，从他这个思路出发，我也慢慢想明白了正确的使用姿势。
-    - 测了一圈发现 colmena 是最好用的远程部署工具之一，而 deploy-rs 在 riscv64 上则有点水土不服。但是感觉 colmena 的文档写得有点晦涩（主要是它结构跟 nixosConfiguration 差别有点大），不太好懂。
+  - 其实之前虽然搞定了 NixOS on LicheePi4A，但是一直没想好要怎么去更新、管理系统。之前试了 `nixos-rebuild` 的远程部署，但是踩了一晚上坑也没搞定，最后还是放弃了。前两天看到有个 NixOS 资深老哥拿我代码直接在他的 flake 里 import 进去了，从他这个思路出发，我也慢慢想明白了正确的使用姿势。
+  - 测了一圈发现 colmena 是最好用的远程部署工具之一，而 deploy-rs 在 riscv64 上则有点水土不服。但是感觉 colmena 的文档写得有点晦涩（主要是它结构跟 nixosConfiguration 差别有点大），不太好懂。
 - 将我两块 LicheePi4A 的配置添加到了我的 nix-config 中，并连好了线开始作为长期运行的服务器使用，现在可以直接通过 `make roll` 执行这两块小板子的远程部署。
 - 顺便在 nixos-and-flakes-book 跟 nixos-rk3588 中也更新/添加了远程部署相关的文档。
 - nixos-and-flakes-book 添加了对多 nixpkgs 实例这种玩法的介绍。
 - 出于对学一门新编程语言的兴趣，了解了一下 zig，读了这篇文章 [连 1.0 版本都没有，Uber 为什么会采用这样一项新技术？ - InfoQ](https://www.infoq.cn/article/q016nwr7ojhvoj3rkzc0)
-    - 总结下，Uber 只是将 Zig 用做 C/C++ 的交叉编译器，并未使用 Zig 语言。解决的痛点：
-        - Uber 有许多项目需要用到 CGO，但是 CGO 会依赖操作系统上发现的任何编译器（macOS 上是 Clang，Linux 上是 GCC），环境不一致会导致构建结果不一致。
-        - Go 官方提供的二进制文件，构建时使用的 GCC 版本比 Uber 的构建机 / 运行机更新，导致 CGO 运行出问题。Uber 不得不自己编译 Go 本身。
-        - 在使用 Zig 之前，Uber 一直借助 musl 实现项目的静态编译，从而不受操作系统环境的影响。但是这也存在许多问题。（未说明具体的细节）
-        - 而 Zig 是一个完全封闭的 C/C++ 编译器，体积很小，支持直接通过参数设置 GCC 版本（而传统的构建方法，CGO 在当前环境找到啥版本的 GCC 就会用啥版本...），还原生支持交叉编译。这能极大程度简化 Uber 的构建流程，不用担心构建出的程序因为各种环境不一致而出现问题。
-        - Zig 对 macOS 封闭式交叉编译的支持很完善，这是 Uber 选择 Zig 很重要的原因（互联网公司的员工基本都是配发 macOS）。
+  - 总结下，Uber 只是将 Zig 用做 C/C++ 的交叉编译器，并未使用 Zig 语言。解决的痛点：
+    - Uber 有许多项目需要用到 CGO，但是 CGO 会依赖操作系统上发现的任何编译器（macOS 上是 Clang，Linux 上是 GCC），环境不一致会导致构建结果不一致。
+    - Go 官方提供的二进制文件，构建时使用的 GCC 版本比 Uber 的构建机 / 运行机更新，导致 CGO 运行出问题。Uber 不得不自己编译 Go 本身。
+    - 在使用 Zig 之前，Uber 一直借助 musl 实现项目的静态编译，从而不受操作系统环境的影响。但是这也存在许多问题。（未说明具体的细节）
+    - 而 Zig 是一个完全封闭的 C/C++ 编译器，体积很小，支持直接通过参数设置 GCC 版本（而传统的构建方法，CGO 在当前环境找到啥版本的 GCC 就会用啥版本...），还原生支持交叉编译。这能极大程度简化 Uber 的构建流程，不用担心构建出的程序因为各种环境不一致而出现问题。
+    - Zig 对 macOS 封闭式交叉编译的支持很完善，这是 Uber 选择 Zig 很重要的原因（互联网公司的员工基本都是配发 macOS）。
 - 作为对比，我想到了 Nix 的 macOS 支持，它大量貌似大量依赖了 macOS 的 Clang，导致同一份 Nix 配置，在 Linux 上与在 macOS 上得到的环境是不一样的。我在之前测试 devbox 时发现同一个软件的版本，在 Linux 跟 macOS 上都可能会不一致...这是件比较尴尬的事。Zig 在这里或许大有可为？
-    - 补充：好像搞错了，我说的版本不一致是指在 macOS 上运行程序。交叉编译方面 Nix 本身也挺强的，配合 nix flake 特性或许也能实现与 zig cc 同样的封闭式交叉编译的效果。
+  - 补充：好像搞错了，我说的版本不一致是指在 macOS 上运行程序。交叉编译方面 Nix 本身也挺强的，配合 nix flake 特性或许也能实现与 zig cc 同样的封闭式交叉编译的效果。
 
 ### 2023-08-13
 
@@ -709,8 +696,8 @@ comment:
 ### 2023-08-09
 
 - 因为前几天有老外给我捐赠了 $50 美元，我意识到或许有更多的潜在读者会对赞助我的工作感兴趣，于是在我的 Blog, GitHub Profile 以及 GitHub 项目中加入了赞助链接。
-    - 添加了 buymeacoffe.com（国外）, afdian.net（国内）两个赞助链接。
-    - 好久以前也曾经在博客中添加过支付宝/微信的收款码，但是从来没收到过一分钱，所以就删掉了。所以这算是我第二次尝试获取赞助（从当前的反馈来看，或许很快就能收到第一笔赞助～）。
+  - 添加了 buymeacoffe.com（国外）, afdian.net（国内）两个赞助链接。
+  - 好久以前也曾经在博客中添加过支付宝/微信的收款码，但是从来没收到过一分钱，所以就删掉了。所以这算是我第二次尝试获取赞助（从当前的反馈来看，或许很快就能收到第一笔赞助～）。
 
 ### 2023-08-05 - 2023-08-06
 
@@ -718,7 +705,7 @@ comment:
   - [ryan4yin/nixos-licheepi4a](https://github.com/ryan4yin/nixos-licheepi4a)
 - 相当振奋人心，ping 我的老外也在第二天用我提供的镜像成功把 NixOS 跑起来了！他甚至表示要给我打 $50 美元以表感谢，因为这太有意思了！
 - 解决问题的流程
-  - 首先按照 [chainsx/fedora-riscv-builder](https://github.com/chainsx/fedora-riscv-builder)  的 README，在 Lichee Pi 4A 上成功地跑起来了 Fedora RISC-V 版本。
+  - 首先按照 [chainsx/fedora-riscv-builder](https://github.com/chainsx/fedora-riscv-builder) 的 README，在 Lichee Pi 4A 上成功地跑起来了 Fedora RISC-V 版本。
   - 这样就确认了 chainsx 这个方案是没问题的。但是我之前跑我构建的 NixOS 镜像却不行，怀疑是我生成的 NixOS 的 boot 分区有问题。
   - 于是打算使用 Fedora 镜像已经生成好的 boot/root 分区，将 NixOS 的东西塞进去，看看能不能跑起来。
     - 首先，因为打算直接使用 Fedora 现成的分区，我的 NixOS 镜像需要根据它的配置调整下 root 分区的 uuid 参数、root 分区的 label 名称。调整完成后构建出一个新 NixOS 镜像待用。
@@ -730,7 +717,7 @@ comment:
     - 首先，我尝试了使用 USB 转 TTL 线来连接 Lichee Pi 4A 的 0 号串口，发现确实可以在启动时看到详细的启动日志，这对后续排查问题起了非常大的帮助！
     - 然后就是不断调整我的配置，刷入 SD 卡尝试启动，然后看启动日志。再对比 Fedora SD 卡的文件系统结构以及启动日志，一步步排查问题。
     - 首先是发现 Fedora 用的是 GPT 分区表，而我之前生成的 NixOS 镜像用的是 MBR/DOS 分区表。启动日志报错说我的 NixOS 镜像根本找不到文件系统。于是我调整了我的配置，生成了一个 GPT 分区表的镜像。
-    - 文件系统问题解决后，启动日志跑到 OenSBI 时又报错 `init_clodboot: timer init failed(error -3)`，跟 chainsx 提了一嘴，他一针见血地指出这是因为我用了主线 OpenSBI.
+    - 文件系统问题解决后，启动日志跑到 OneSBI 时又报错 `init_clodboot: timer init failed(error -3)`，跟 chainsx 提了一嘴，他一针见血地指出这是因为我用了主线 OpenSBI.
     - 尝试在 NixOS 上源码构建 revyos 的 opensbi，失败。临时替换成 Fedora 镜像中已经构建好的的 opensbi，成功进入到 NixOS 系统，但是在 stage 3 阶段报错说找不到 `/nix/store/xx`，排查发现是我 rootfs 分区有问题，无法挂载。
     - 进一步定位到我生成的 NixOS 镜像的 size 不够，导致 rootfs 分区最后有大概 1MB 的内容被截断，导致分区无法挂载。
     - 又调试了半天，仍然没解决镜像 size 不够的问题。最后选择了在生成镜像后，手动调整镜像大小的方式来解决这个问题。
@@ -741,13 +728,13 @@ comment:
 ### 2023-07-29 - 2023-07-30
 
 - ryan4yin/nix-config 继续大量更新，并发布 v0.1.1
-    - 统一了所有 APP 的主题配色，在所有 APP 中都尽量使用 catppuccin-mocha 配色。
-    - 在子文件夹中添加了许多 README 介绍其中的内容。
-    - 试用了 ranger 命令行文件管理器，相当地开箱即用，图片预览功能非常爽，强烈推荐！
-    - 壁纸文件太大了，将它们拆分到单独的仓库中，方便管理。同时还添加了随机切换壁纸的功能。
-    - 使用 anyrun 替换掉之前用的 wofi，这个启动器很新，但是感觉很好用，有点 macOS 上 raycast 的感觉，能帮我做很多的事。
-    - README 迭代了一波，添加了一些截图，漂亮了不少。
-    - 一些其他的更新。
+  - 统一了所有 APP 的主题配色，在所有 APP 中都尽量使用 catppuccin-mocha 配色。
+  - 在子文件夹中添加了许多 README 介绍其中的内容。
+  - 试用了 ranger 命令行文件管理器，相当地开箱即用，图片预览功能非常爽，强烈推荐！
+  - 壁纸文件太大了，将它们拆分到单独的仓库中，方便管理。同时还添加了随机切换壁纸的功能。
+  - 使用 anyrun 替换掉之前用的 wofi，这个启动器很新，但是感觉很好用，有点 macOS 上 raycast 的感觉，能帮我做很多的事。
+  - README 迭代了一波，添加了一些截图，漂亮了不少。
+  - 一些其他的更新。
 - 在 Reddit 的 r/unixporn 上发布帖子 [[Hyprland + NixOS] Catppuccin for all apps](https://www.reddit.com/r/unixporn/comments/15co6ns/comment/jtyhrhv/)，体验不错。这个 subreddit 的人数要比 NixOS 大很多，感觉很轻易就能获得许多的赞。
 - 从 4 月份折腾 NixOS 到现在，GitHub 上开了五六个 Nix 项目，获得了接近 400 stars，也认识了许多朋友、收到了许多好评，在这个圈子里是有点混开了的 feel.
 
@@ -755,17 +742,17 @@ comment:
 
 - 更新 NixOS & Flakes Book，添加了「前言」一章，同时也补充了些 Flakes 相关的简单介绍。
 - 重构 ryan4yin/nix-config 的内容
-    - 发布了 v0.1.0，并记录了下自 6/9 发布 v0.5.0 以来的更新。
-    - 将 user/email 等信息提取到了 flake.nix 入口文件中，
-    - 通过提取出几个 helper 函数到 lib 中，简化了 flake.nix，提升了维护性。
-    - 更清晰的 README.
+  - 发布了 v0.1.0，并记录了下自 6/9 发布 v0.5.0 以来的更新。
+  - 将 user/email 等信息提取到了 flake.nix 入口文件中，
+  - 通过提取出几个 helper 函数到 lib 中，简化了 flake.nix，提升了维护性。
+  - 更清晰的 README.
 
 ### 2023-07-25
 
 - 终于在 NixOS 上完成了一次 ESP32 编译烧录 [ryan4yin/tft-esp32-auduino](https://github.com/ryan4yin/tft-esp32-auduino)，之前一直卡着的烧录报权限错误的问题终于解决了，参考了 <https://github.com/NixOS/nixpkgs/issues/224895>
 - 修改 ryan4yin/nix-config
-    - 支持通过参数来控制部署 i3 配置还是 hyprland，切换不同的桌面现在非常方便了。
-    - ssh 配置中添加 `AddKeysToAgent yes`，在连接远程主机时自动将私钥添加到 ssh-agent 中，这样就不用手动跑 `ssh-add` 命令了。
+  - 支持通过参数来控制部署 i3 配置还是 hyprland，切换不同的桌面现在非常方便了。
+  - ssh 配置中添加 `AddKeysToAgent yes`，在连接远程主机时自动将私钥添加到 ssh-agent 中，这样就不用手动跑 `ssh-add` 命令了。
 
 ### 2023-07-19 - 2023-07-20
 
@@ -773,12 +760,12 @@ comment:
 - 发现有老铁在将我的 NixOS 小书翻译成俄语！[fl42v/nixos-and-flakes-book-ru](https://github.com/fl42v/nixos-and-flakes-book-ru)，很有成就感！
 - 刚谈完上半年绩效，工作上只能说勉强合格吧，前面的 history 也提过，今年上半年工作上又有点迷茫。好在现在又找到了点脚踏实地的感觉，希望下半年工作上能沉稳些。
 - 回顾了下 2022 年年终总结，又看了看苏洋的 2023 年中总结。对照了下发现去年的有些目标已经实现了大半，当然也有些目标完全没进展。
-    - 发觉我可能也需要写个年中总结，重新梳理下过去的半年，也重新确定下下半年的目标。
+  - 发觉我可能也需要写个年中总结，重新梳理下过去的半年，也重新确定下下半年的目标。
 
 ### 2023-07-16 - 2023-07-17
 
 - 发现 alacritty 还是不太行了，图片显示分辨率太低，另外在 macOS 上也有些小问题。
-    - 研究后发现 kitty 可能是更好的选择，切换到 kitty 后体验很好，alacritty 现在沦为备胎。
+  - 研究后发现 kitty 可能是更好的选择，切换到 kitty 后体验很好，alacritty 现在沦为备胎。
 - 根据评论更新给 esp-idf 提的 PR [fix: create-project & create_component with proper file permission - esp-idf](https://github.com/espressif/esp-idf/pull/11836)
 - 修复我 nix-config 配置中的两个 bug:
   - [neovim: smartindent breaks indented comments](https://github.com/ryan4yin/nix-config/issues/4)
@@ -789,19 +776,17 @@ comment:
     - 问了有 wireguard 经验的同事，他之前就处理过这个问题，很快就帮我确认了问题是 wireguard 停掉后 DNS 解析没更新，导致 DNS 解析挂掉。
     - 解决方案：[wireguard: DNS stop to work after wg-quick down xxx on macOS](https://github.com/ryan4yin/nix-config/issues/5)
 - 发现 macOS 上的输入法用着很不顺手，macOS 百度输入法加载了小鹤挂接码后卡得没法用，macOS 官方的又只有双拼。
-    - 最后决定用 squirrel 输入法，体验下来是个很棒的想法！
-    - 现在我的 Linux 跟 macOS 都使用的同一份小鹤音形 rime 词库，macOS 使用 brew 自动安装 squirrel，Linux 使用 fcitx5-rime，使用体验也完全统一了，感觉非常好！
+  - 最后决定用 squirrel 输入法，体验下来是个很棒的想法！
+  - 现在我的 Linux 跟 macOS 都使用的同一份小鹤音形 rime 词库，macOS 使用 brew 自动安装 squirrel，Linux 使用 fcitx5-rime，使用体验也完全统一了，感觉非常好！
 - 开始看《无职转生》这部动漫，它对应的小说我大概在大三时看过，作者对涩涩的描写有点烦，不过故事真的很棒，当时看完小说就有点怅然若失。
   - 动漫看下来也很棒，感觉还是比较还原原著的。世界观很宏大，有很多不同的景色，人物也很有生命力，主角的成长也很有意思。
-
 
 ### 2023-07-15
 
 - 週六，在家把公司的 Macbook Pro 2020 重裝了一遍系統，新環境完全通過 nix-darwin 安裝，就連大部分的 macOS 系統配置，我也用 nix-darwin 配好了，感覺非常香！
-    - GUI APP 主要通過 nix-darwin 的 homebrew 功能安裝。
+  - GUI APP 主要通過 nix-darwin 的 homebrew 功能安裝。
 - 順便把之前一直沒做的 secrets 管理也搞定了，macOS 上的 agenix 比較坑，出了錯也沒打日誌，另外 nix-darwin 的參數跟 NixOS 也有些不一致。爲了解決 agenix 與 nix-darwin 的問題花了大半天的時間。
 - 現在感覺我的 nix-config 配置在當前階段很完美地 cover 了我所有的個人配置，包括一些存放在 nix-secrets 私有倉庫中的敏感信息。
-
 
 ### 2023-07-10 - 2023-10-13
 
@@ -812,8 +797,8 @@ comment:
   - 此外对 neovim 的组合快捷键还不太熟悉，也还从来没在 neovim 这类环境中尝试过调试代码、格式化代码，这都得研究研究。
   - 目前体验很丝滑，响应比 VSCode 快好多，插件生态也非常丰富，非常舒适。感觉把环境调好后，体验会非常好，这玩意儿就跟窗口管理器、NixOS 一样的，不折腾还好，一用上就再也接受不了旧的 IDE 了。
 - 最開始考慮到 NixOS 不遵循 FHS，neovim 插件可能會有坑，所以主要是在 GitHub 的各種 nix 配置中查找 neovim 的配置。抄了幾份裸寫的配置後發現太難整了，各種 bug，調得頭疼。
-    - 於是開始考慮在 neovim 社區找些現成的配置模板，這中間也[走了些彎路](https://github.com/ryan4yin/nix-config/commit/7cc49c29f1d85f62445eddb49e5d75f6a3865730)
-    - 最終發現 AstroNvim 很匹配我需求，但是它默認用 Mason.nvim 裝 lsp 等插件，這些插件在 NixOS 上都用不了，必須改成用 nix 安裝，爲了解決這個問題又折騰了好久。
+  - 於是開始考慮在 neovim 社區找些現成的配置模板，這中間也[走了些彎路](https://github.com/ryan4yin/nix-config/commit/7cc49c29f1d85f62445eddb49e5d75f6a3865730)
+  - 最終發現 AstroNvim 很匹配我需求，但是它默認用 Mason.nvim 裝 lsp 等插件，這些插件在 NixOS 上都用不了，必須改成用 nix 安裝，爲了解決這個問題又折騰了好久。
 - 初步配置完成後，發了條 Twitter [最近两天开始从 VSCode 迁移到 Neovim](https://twitter.com/ryan4yin/status/1679176508844445696) 結果意外受歡迎。
 
 {{<figure src="/images/now/2023-07-29_astronvim.webp" title="AstroNvim(Neovim)" width="80%">}}
@@ -997,8 +982,8 @@ comment:
 
 - 英语阅读
   - The Great Gatsby - 9/41
-  - 最近一个月有点迷茫，状态不对劲，没读啥英语...今天读了两篇 The Greate Gatsby，故事情节都要慢慢回忆...
-- 用 RTX4090 玩 Cyperpunk 2077，顶配光追画质（叫啥 onedrive）贼棒，真的非常还原真实环境，在 GeForece Experience 上调了个啥优化参数，帧率得到了很大提升，4K 差不多能稳定在 100 帧，看半天风景。
+  - 最近一个月有点迷茫，状态不对劲，没读啥英语...今天读了两篇 The Great Gatsby，故事情节都要慢慢回忆...
+- 用 RTX4090 玩 Cyperpunk 2077，顶配光追画质（叫啥 onedrive）贼棒，真的非常还原真实环境，在 GeForce Experience 上调了个啥优化参数，帧率得到了很大提升，4K 差不多能稳定在 100 帧，看半天风景。
   - 不过 2077 的碰撞检测还是有点 bug...游戏都出来快三年了还卡 bug...
 
 ### 2023-04-24
@@ -1337,4 +1322,3 @@ comment:
 哦还有连续三年蝉联我年度歌手的天依同学，截图放这里纪念一下：
 
 {{<figure src="/images/now/netease-cloud-music-2022-singer-of-ryan4yin.webp" title="我的网易云年度歌手" width="50%">}}
-

@@ -4,17 +4,17 @@ date: 2021-08-14T11:13:03+08:00
 draft: false
 
 resources:
-- name: "featured-image"
-  src: "linux-network.webp"
+  - name: "featured-image"
+    src: "linux-network.webp"
 
 tags: ["Linux", "网络", "虚拟化", "容器"]
 categories: ["tech"]
 series: ["计算机网络相关"]
 ---
 
->本文用到的字符画工具：[vscode-asciiflow2](https://github.com/zenghongtu/vscode-asciiflow2)
+> 本文用到的字符画工具：[vscode-asciiflow2](https://github.com/zenghongtu/vscode-asciiflow2)
 
->注意: 本文中使用 `ip` 命令创建或修改的任何网络配置，都是未持久化的，主机重启即消失。
+> 注意: 本文中使用 `ip` 命令创建或修改的任何网络配置，都是未持久化的，主机重启即消失。
 
 Linux 具有强大的虚拟网络能力，这也是 openstack 网络、docker 容器网络以及 kubernetes 网络等虚拟网络的基础。
 
@@ -46,7 +46,7 @@ description:    Universal TUN/TAP device driver
 一个 TUN 设备的示例图如下：
 
 ```
-             
+
 +----------------------------------------------------------------------+
 |                                                                      |
 |  +--------------------+      +--------------------+                  |
@@ -168,12 +168,13 @@ int main()
 接下来开启三个终端窗口来测试上述程序，分别运行上面的 tun 程序、tcpdump 和 iproute2 指令。
 
 首先通过编译运行上述 c 程序，程序会阻塞住，等待数据到达：
+
 ```
 # 编译，请忽略部分 warning
 > gcc mytun.c -o mytun
 
 # 创建并监听 tun 设备需要 root 权限
-> sudo mytun 
+> sudo mytun
 Open tun/tap device: tun0 for reading...
 ```
 
@@ -187,10 +188,10 @@ Open tun/tap device: tun0 for reading...
     link/ether c0:3c:59:36:a4:16 brd ff:ff:ff:ff:ff:ff
     inet 192.168.31.228/24 brd 192.168.31.255 scope global dynamic noprefixroute wlp4s0
        valid_lft 41010sec preferred_lft 41010sec
-    inet6 fe80::4ab0:130f:423b:5d37/64 scope link noprefixroute 
+    inet6 fe80::4ab0:130f:423b:5d37/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 7: tun0: <POINTOPOINT,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 500
-    link/none 
+    link/none
 
 # 为 tun0 设置 ip 地址，注意不要和其他接口在同一网段，会导致路由冲突
 > sudo ip addr add 172.21.22.23/24 dev tun0
@@ -198,19 +199,19 @@ Open tun/tap device: tun0 for reading...
 > sudo ip link set tun0 up
 #确认上一步添加的路由策略是否存在
 ❯ ip route ls
-default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600 
-172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
-172.21.22.0/24 dev tun0 proto kernel scope link src 172.21.22.23 
-192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600 
+default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
+172.21.22.0/24 dev tun0 proto kernel scope link src 172.21.22.23
+192.168.31.0/24 dev wlp4s0 proto kernel scope link src 192.168.31.228 metric 600
 
 # 此时再查看接口，发现 tun0 状态为 unknown
 > ip addr ls
 ......
 8: tun0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN group default qlen 500
-    link/none 
+    link/none
     inet 172.21.22.23/24 scope global tun0
        valid_lft forever preferred_lft forever
-    inet6 fe80::3d52:49b5:1cf3:38fd/64 scope link stable-privacy 
+    inet6 fe80::3d52:49b5:1cf3:38fd/64 scope link stable-privacy
        valid_lft forever preferred_lft forever
 
 # 使用 tcpdump 尝试抓下 tun0 的数据，会阻塞在这里，等待数据到达
@@ -218,6 +219,7 @@ default via 192.168.31.1 dev wlp4s0 proto dhcp metric 600
 ```
 
 现在再启动第三个窗口发点数据给 tun0，持续观察前面 `tcpdump` 和 `mytun` 的日志:
+
 ```
 # 直接 ping tun0 的地址，貌似有问题，数据没进 mytun 程序，而且还有响应
 ❯ ping -c 4 172.21.22.23
@@ -279,7 +281,6 @@ TUN/TAP 应用最多的场景是 VPN 代理，比如:
 1. [clash](https://github.com/ryan4yin/clash): 一个支持各种规则的隧道，也支持 TUN 模式
 2. [tun2socks](https://github.com/xjasonlyu/tun2socks/wiki): 一个全局透明代理，和 VPN 的工作模式一样，它通过创建虚拟网卡+修改路由表，在第三层网络层代理系统流量。
 
-
 ## 二、veth
 
 veth 接口总是成对出现，一对 veth 接口就类似一根网线，从一端进来的数据会从另一端出去。
@@ -293,7 +294,7 @@ veth 接口总是成对出现，一对 veth 接口就类似一根网线，从一
 
 ## 三、bridge
 
-Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `brige` 提供，它负责在所有连接到它的接口之间转发链路层数据包。
+Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `bridge` 提供，它负责在所有连接到它的接口之间转发链路层数据包。
 
 添加到 Bridge 上的设备被设置为只接受二层数据帧并且转发所有收到的数据包到 Bridge 中。
 在 Bridge 中会进行一个类似物理交换机的查MAC端口映射表、转发、更新MAC端口映射表这样的处理逻辑，从而数据包可以被转发到另一个接口/丢弃/广播/发往上层协议栈，由此 Bridge 实现了数据转发的功能。
@@ -304,8 +305,7 @@ Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `b
 
 但被添加到 Bridge 上的网卡是不能配置 IP 地址的，他们工作在数据链路层，对路由系统不可见。
 
-
-它常被用于在虚拟机、主机上不同的 namepsaces 之间转发数据。
+它常被用于在虚拟机、主机上不同的 namespaces 之间转发数据。
 
 ### 虚拟机场景（桥接模式）
 
@@ -353,7 +353,7 @@ Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `b
 
 ### 跨 namespace 通信场景（容器网络，NAT 模式）
 
->docker/podman 提供的 bridge 网络模式，就是使用 veth+bridge+iptalbes 实现的。我会在下一篇文章详细介绍「容器网络」。
+> docker/podman 提供的 bridge 网络模式，就是使用 veth+bridge+iptalbes 实现的。我会在下一篇文章详细介绍「容器网络」。
 
 由于容器运行在自己单独的 network namespace 里面，所以和虚拟机一样，它们也都有自己单独的协议栈。
 
@@ -401,12 +401,12 @@ Linux Bridge 是工作在链路层的网络交换机，由 Linux 内核模块 `b
 ❯ docker run -it --rm debian:buster bash
 root@5facbe4ddc1e:/# ip --details addr ls
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 minmtu 0 maxmtu 0 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-20: eth0@if21: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
-    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 65535 
-    veth numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+20: eth0@if21: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0 promiscuity 0 minmtu 68 maxmtu 65535
+    veth numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
     inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
        valid_lft forever preferred_lft forever
 ```
@@ -419,15 +419,13 @@ bridge name     bridge id               STP enabled     interfaces
 docker0         8000.0242fce99ef5       no              vethea4171a
 ```
 
-
-
 ## 四、macvlan
 
->目前 docker/podman 都支持创建基于 macvlan 的 Linux 容器网络。
+> 目前 docker/podman 都支持创建基于 macvlan 的 Linux 容器网络。
 
->注意 macvlan 和 WiFi 存在兼容问题，如果使用笔记本测试，可能会遇到麻烦。
+> 注意 macvlan 和 WiFi 存在兼容问题，如果使用笔记本测试，可能会遇到麻烦。
 
->参考文档：[linux 网络虚拟化： macvlan](https://cizixs.com/2017/02/14/network-virtualization-macvlan/)
+> 参考文档：[linux 网络虚拟化： macvlan](https://cizixs.com/2017/02/14/network-virtualization-macvlan/)
 
 macvlan 是比较新的 Linux 特性，需要内核版本 >= 3.9，它被用于在主机的网络接口（父接口）上配置多个虚拟子接口，这些子接口都拥有各自独立的 mac 地址，也可以配上 ip 地址进行通讯。
 
@@ -439,13 +437,13 @@ macvlan 下的虚拟机或者容器网络和主机在同一个网段中，共享
 
 ## 五、ipvlan
 
->[linux 网络虚拟化： ipvlan](https://cizixs.com/2017/02/17/network-virtualization-ipvlan/)
+> [linux 网络虚拟化： ipvlan](https://cizixs.com/2017/02/17/network-virtualization-ipvlan/)
 
->cilium 1.9 已经提供了基于 ipvlan 的网络（beta 特性），用于替换传统的 veth+bridge 容器网络。详见 [IPVLAN based Networking (beta) - Cilium 1.9 Docs](https://docs.cilium.io/en/v1.9/gettingstarted/ipvlan/)
+> cilium 1.9 已经提供了基于 ipvlan 的网络（beta 特性），用于替换传统的 veth+bridge 容器网络。详见 [IPVLAN based Networking (beta) - Cilium 1.9 Docs](https://docs.cilium.io/en/v1.9/gettingstarted/ipvlan/)
 
 ipvlan 和 macvlan 的功能很类似，也是用于在主机的网络接口（父接口）上配置出多个虚拟的子接口。但不同的是，ipvlan 的各子接口没有独立的 mac 地址，它们和主机的父接口共享 mac 地址。
 
->因为 mac 地址共享，所以如果使用 DHCP，就要注意不能使用 mac 地址做 DHCP，需要额外配置唯一的 clientID.
+> 因为 mac 地址共享，所以如果使用 DHCP，就要注意不能使用 mac 地址做 DHCP，需要额外配置唯一的 clientID.
 
 如果你遇到以下的情况，请考虑使用 ipvlan：
 
@@ -465,13 +463,11 @@ vlan 即虚拟局域网，是一个链路层的广播域隔离技术，可以用
 
 以太网数据包有一个专门的字段提供给 vlan 使用，vlan 数据包会在该位置记录它的 VLAN ID，交换机通过该 ID 来区分不同的 VLAN，只将该以太网报文广播到该 ID 对应的 VLAN 中。
 
-
 ## 七、vxlan/geneve {#vxlan-geneve}
 
->[rfc8926 - Geneve: Generic Network Virtualization Encapsulation](https://datatracker.ietf.org/doc/html/rfc8926)
->[rfc7348 - Virtual eXtensible Local Area Network (VXLAN)](https://datatracker.ietf.org/doc/html/rfc7348)
+> [rfc8926 - Geneve: Generic Network Virtualization Encapsulation](https://datatracker.ietf.org/doc/html/rfc8926) >[rfc7348 - Virtual eXtensible Local Area Network (VXLAN)](https://datatracker.ietf.org/doc/html/rfc7348)
 
->[linux 上实现 vxlan 网络](https://cizixs.com/2017/09/28/linux-vxlan/)
+> [linux 上实现 vxlan 网络](https://cizixs.com/2017/09/28/linux-vxlan/)
 
 在介绍 vxlan 前，先说明下两个名词的含义：
 
@@ -486,7 +482,7 @@ geneve 相对 vxlan 最大的变化，是它更灵活——它的 header 长度�
 
 目前所有 overlay 的跨主机容器网络方案，几乎都是基于 vxlan 实现的（例外：cilium 也支持 geneve）。
 
->我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如 flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。
+> 我们在学习单机的容器网络时，不需要接触到 vxlan，但是在学习跨主机容器网络方案如 flannel/calico/cilium 时，那 vxlan(overlay) 及 BGP(underlay) 就不可避免地要接触了。
 
 先介绍下 vxlan 的数据包结构：
 
@@ -547,7 +543,7 @@ ip link add vxlan0 type vxlan \
     id 42 \
     dstport 4789 \
     group 239.1.1.1 \
-    dev enp0s8 
+    dev enp0s8
 ip addr add 10.20.1.2/24 dev vxlan0
 ip link set vxlan0 up
 ```
@@ -631,7 +627,7 @@ Loopback 和本章讲到的其他虚拟网络接口一样，都是一种软件�
 接下来实际测试一下，受先给出测试机的配置：
 
 ```
-❯ cat /etc/os-release 
+❯ cat /etc/os-release
 NAME="openSUSE Tumbleweed"
 # VERSION="20210810"
 ...
@@ -665,16 +661,16 @@ iperf3 -s
 Connecting to host 127.0.0.1, port 5201
 [  5] local 127.0.0.1 port 48656 connected to 127.0.0.1 port 5201
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-[  5]   0.00-1.00   sec  4.46 GBytes  38.3 Gbits/sec    0   1.62 MBytes       
-[  5]   1.00-2.00   sec  4.61 GBytes  39.6 Gbits/sec    0   1.62 MBytes       
-[  5]   2.00-3.00   sec  5.69 GBytes  48.9 Gbits/sec    0   1.62 MBytes       
-[  5]   3.00-4.00   sec  6.11 GBytes  52.5 Gbits/sec    0   1.62 MBytes       
-[  5]   4.00-5.00   sec  6.04 GBytes  51.9 Gbits/sec    0   1.62 MBytes       
-[  5]   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    0   1.62 MBytes       
-[  5]   6.00-7.00   sec  6.01 GBytes  51.6 Gbits/sec    0   1.62 MBytes       
-[  5]   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    0   1.62 MBytes       
-[  5]   8.00-9.00   sec  6.34 GBytes  54.5 Gbits/sec    0   1.62 MBytes       
-[  5]   9.00-10.00  sec  5.91 GBytes  50.8 Gbits/sec    0   1.62 MBytes       
+[  5]   0.00-1.00   sec  4.46 GBytes  38.3 Gbits/sec    0   1.62 MBytes
+[  5]   1.00-2.00   sec  4.61 GBytes  39.6 Gbits/sec    0   1.62 MBytes
+[  5]   2.00-3.00   sec  5.69 GBytes  48.9 Gbits/sec    0   1.62 MBytes
+[  5]   3.00-4.00   sec  6.11 GBytes  52.5 Gbits/sec    0   1.62 MBytes
+[  5]   4.00-5.00   sec  6.04 GBytes  51.9 Gbits/sec    0   1.62 MBytes
+[  5]   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    0   1.62 MBytes
+[  5]   6.00-7.00   sec  6.01 GBytes  51.6 Gbits/sec    0   1.62 MBytes
+[  5]   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    0   1.62 MBytes
+[  5]   8.00-9.00   sec  6.34 GBytes  54.5 Gbits/sec    0   1.62 MBytes
+[  5]   9.00-10.00  sec  5.91 GBytes  50.8 Gbits/sec    0   1.62 MBytes
 - - - - - - - - - - - - - - - - - - - - - - - - -
 [ ID] Interval           Transfer     Bitrate         Retr
 [  5]   0.00-10.00  sec  57.3 GBytes  49.2 Gbits/sec    0             sender
@@ -685,16 +681,16 @@ Connecting to host 127.0.0.1, port 5201
 Connecting to host 192.168.31.228, port 5201
 [  5] local 192.168.31.228 port 43430 connected to 192.168.31.228 port 5201
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-[  5]   0.00-1.00   sec  5.12 GBytes  43.9 Gbits/sec    0   1.25 MBytes       
-[  5]   1.00-2.00   sec  5.29 GBytes  45.5 Gbits/sec    0   1.25 MBytes       
-[  5]   2.00-3.00   sec  5.92 GBytes  50.9 Gbits/sec    0   1.25 MBytes       
-[  5]   3.00-4.00   sec  6.00 GBytes  51.5 Gbits/sec    0   1.25 MBytes       
-[  5]   4.00-5.00   sec  5.98 GBytes  51.4 Gbits/sec    0   1.25 MBytes       
-[  5]   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    0   1.25 MBytes       
-[  5]   6.00-7.00   sec  6.16 GBytes  52.9 Gbits/sec    0   1.25 MBytes       
-[  5]   7.00-8.00   sec  6.08 GBytes  52.2 Gbits/sec    0   1.25 MBytes       
-[  5]   8.00-9.00   sec  6.00 GBytes  51.6 Gbits/sec    0   1.25 MBytes       
-[  5]   9.00-10.00  sec  6.01 GBytes  51.6 Gbits/sec    0   1.25 MBytes       
+[  5]   0.00-1.00   sec  5.12 GBytes  43.9 Gbits/sec    0   1.25 MBytes
+[  5]   1.00-2.00   sec  5.29 GBytes  45.5 Gbits/sec    0   1.25 MBytes
+[  5]   2.00-3.00   sec  5.92 GBytes  50.9 Gbits/sec    0   1.25 MBytes
+[  5]   3.00-4.00   sec  6.00 GBytes  51.5 Gbits/sec    0   1.25 MBytes
+[  5]   4.00-5.00   sec  5.98 GBytes  51.4 Gbits/sec    0   1.25 MBytes
+[  5]   5.00-6.00   sec  6.05 GBytes  52.0 Gbits/sec    0   1.25 MBytes
+[  5]   6.00-7.00   sec  6.16 GBytes  52.9 Gbits/sec    0   1.25 MBytes
+[  5]   7.00-8.00   sec  6.08 GBytes  52.2 Gbits/sec    0   1.25 MBytes
+[  5]   8.00-9.00   sec  6.00 GBytes  51.6 Gbits/sec    0   1.25 MBytes
+[  5]   9.00-10.00  sec  6.01 GBytes  51.6 Gbits/sec    0   1.25 MBytes
 - - - - - - - - - - - - - - - - - - - - - - - - -
 [ ID] Interval           Transfer     Bitrate         Retr
 [  5]   0.00-10.00  sec  58.6 GBytes  50.3 Gbits/sec    0             sender
@@ -705,16 +701,16 @@ Connecting to host 192.168.31.228, port 5201
 Connecting to host 192.168.31.228, port 5201
 [  5] local 172.17.0.2 port 43436 connected to 192.168.31.228 port 5201
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-[  5]   0.00-1.00   sec  4.49 GBytes  38.5 Gbits/sec    0    403 KBytes       
-[  5]   1.00-2.00   sec  5.31 GBytes  45.6 Gbits/sec    0    544 KBytes       
-[  5]   2.00-3.00   sec  6.14 GBytes  52.8 Gbits/sec    0    544 KBytes       
-[  5]   3.00-4.00   sec  5.85 GBytes  50.3 Gbits/sec    0    544 KBytes       
-[  5]   4.00-5.00   sec  6.14 GBytes  52.7 Gbits/sec    0    544 KBytes       
-[  5]   5.00-6.00   sec  5.99 GBytes  51.5 Gbits/sec    0    544 KBytes       
-[  5]   6.00-7.00   sec  5.86 GBytes  50.4 Gbits/sec    0    544 KBytes       
-[  5]   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    0    544 KBytes       
-[  5]   8.00-9.00   sec  5.99 GBytes  51.5 Gbits/sec    0    544 KBytes       
-[  5]   9.00-10.00  sec  6.12 GBytes  52.5 Gbits/sec    0    544 KBytes       
+[  5]   0.00-1.00   sec  4.49 GBytes  38.5 Gbits/sec    0    403 KBytes
+[  5]   1.00-2.00   sec  5.31 GBytes  45.6 Gbits/sec    0    544 KBytes
+[  5]   2.00-3.00   sec  6.14 GBytes  52.8 Gbits/sec    0    544 KBytes
+[  5]   3.00-4.00   sec  5.85 GBytes  50.3 Gbits/sec    0    544 KBytes
+[  5]   4.00-5.00   sec  6.14 GBytes  52.7 Gbits/sec    0    544 KBytes
+[  5]   5.00-6.00   sec  5.99 GBytes  51.5 Gbits/sec    0    544 KBytes
+[  5]   6.00-7.00   sec  5.86 GBytes  50.4 Gbits/sec    0    544 KBytes
+[  5]   7.00-8.00   sec  6.05 GBytes  52.0 Gbits/sec    0    544 KBytes
+[  5]   8.00-9.00   sec  5.99 GBytes  51.5 Gbits/sec    0    544 KBytes
+[  5]   9.00-10.00  sec  6.12 GBytes  52.5 Gbits/sec    0    544 KBytes
 - - - - - - - - - - - - - - - - - - - - - - - - -
 [ ID] Interval           Transfer     Bitrate         Retr
 [  5]   0.00-10.00  sec  58.0 GBytes  49.8 Gbits/sec    0             sender
@@ -735,16 +731,16 @@ Connecting to host 192.168.31.228, port 5201
 Connecting to host 172.17.0.2, port 5201
 [  5] local 172.17.0.3 port 40776 connected to 172.17.0.2 port 5201
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-[  5]   0.00-1.00   sec  4.74 GBytes  40.7 Gbits/sec    0    600 KBytes       
-[  5]   1.00-2.00   sec  4.48 GBytes  38.5 Gbits/sec    0    600 KBytes       
-[  5]   2.00-3.00   sec  5.38 GBytes  46.2 Gbits/sec    0    600 KBytes       
-[  5]   3.00-4.00   sec  5.39 GBytes  46.3 Gbits/sec    0    600 KBytes       
-[  5]   4.00-5.00   sec  5.42 GBytes  46.6 Gbits/sec    0    600 KBytes       
-[  5]   5.00-6.00   sec  5.39 GBytes  46.3 Gbits/sec    0    600 KBytes       
-[  5]   6.00-7.00   sec  5.38 GBytes  46.2 Gbits/sec    0    635 KBytes       
-[  5]   7.00-8.00   sec  5.37 GBytes  46.1 Gbits/sec    0    667 KBytes       
-[  5]   8.00-9.00   sec  6.01 GBytes  51.7 Gbits/sec    0    735 KBytes       
-[  5]   9.00-10.00  sec  5.74 GBytes  49.3 Gbits/sec    0    735 KBytes       
+[  5]   0.00-1.00   sec  4.74 GBytes  40.7 Gbits/sec    0    600 KBytes
+[  5]   1.00-2.00   sec  4.48 GBytes  38.5 Gbits/sec    0    600 KBytes
+[  5]   2.00-3.00   sec  5.38 GBytes  46.2 Gbits/sec    0    600 KBytes
+[  5]   3.00-4.00   sec  5.39 GBytes  46.3 Gbits/sec    0    600 KBytes
+[  5]   4.00-5.00   sec  5.42 GBytes  46.6 Gbits/sec    0    600 KBytes
+[  5]   5.00-6.00   sec  5.39 GBytes  46.3 Gbits/sec    0    600 KBytes
+[  5]   6.00-7.00   sec  5.38 GBytes  46.2 Gbits/sec    0    635 KBytes
+[  5]   7.00-8.00   sec  5.37 GBytes  46.1 Gbits/sec    0    667 KBytes
+[  5]   8.00-9.00   sec  6.01 GBytes  51.7 Gbits/sec    0    735 KBytes
+[  5]   9.00-10.00  sec  5.74 GBytes  49.3 Gbits/sec    0    735 KBytes
 - - - - - - - - - - - - - - - - - - - - - - - - -
 [ ID] Interval           Transfer     Bitrate         Retr
 [  5]   0.00-10.00  sec  53.3 GBytes  45.8 Gbits/sec    0             sender
@@ -755,16 +751,16 @@ Connecting to host 172.17.0.2, port 5201
 Connecting to host 172.17.0.2, port 5201
 [  5] local 172.17.0.1 port 56486 connected to 172.17.0.2 port 5201
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-[  5]   0.00-1.00   sec  5.01 GBytes  43.0 Gbits/sec    0    632 KBytes       
-[  5]   1.00-2.00   sec  5.19 GBytes  44.6 Gbits/sec    0    703 KBytes       
-[  5]   2.00-3.00   sec  6.46 GBytes  55.5 Gbits/sec    0    789 KBytes       
-[  5]   3.00-4.00   sec  6.80 GBytes  58.4 Gbits/sec    0    789 KBytes       
-[  5]   4.00-5.00   sec  6.82 GBytes  58.6 Gbits/sec    0    913 KBytes       
-[  5]   5.00-6.00   sec  6.79 GBytes  58.3 Gbits/sec    0   1007 KBytes       
-[  5]   6.00-7.00   sec  6.63 GBytes  56.9 Gbits/sec    0   1.04 MBytes       
-[  5]   7.00-8.00   sec  6.75 GBytes  58.0 Gbits/sec    0   1.04 MBytes       
-[  5]   8.00-9.00   sec  6.19 GBytes  53.2 Gbits/sec    0   1.04 MBytes       
-[  5]   9.00-10.00  sec  6.55 GBytes  56.3 Gbits/sec    0   1.04 MBytes       
+[  5]   0.00-1.00   sec  5.01 GBytes  43.0 Gbits/sec    0    632 KBytes
+[  5]   1.00-2.00   sec  5.19 GBytes  44.6 Gbits/sec    0    703 KBytes
+[  5]   2.00-3.00   sec  6.46 GBytes  55.5 Gbits/sec    0    789 KBytes
+[  5]   3.00-4.00   sec  6.80 GBytes  58.4 Gbits/sec    0    789 KBytes
+[  5]   4.00-5.00   sec  6.82 GBytes  58.6 Gbits/sec    0    913 KBytes
+[  5]   5.00-6.00   sec  6.79 GBytes  58.3 Gbits/sec    0   1007 KBytes
+[  5]   6.00-7.00   sec  6.63 GBytes  56.9 Gbits/sec    0   1.04 MBytes
+[  5]   7.00-8.00   sec  6.75 GBytes  58.0 Gbits/sec    0   1.04 MBytes
+[  5]   8.00-9.00   sec  6.19 GBytes  53.2 Gbits/sec    0   1.04 MBytes
+[  5]   9.00-10.00  sec  6.55 GBytes  56.3 Gbits/sec    0   1.04 MBytes
 - - - - - - - - - - - - - - - - - - - - - - - - -
 [ ID] Interval           Transfer     Bitrate         Retr
 [  5]   0.00-10.00  sec  63.2 GBytes  54.3 Gbits/sec    0             sender
@@ -776,16 +772,16 @@ Connecting to host 172.17.0.2, port 5201
 Connecting to host 127.0.0.1, port 6201
 [  5] local 127.0.0.1 port 48862 connected to 127.0.0.1 port 6201
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-[  5]   0.00-1.00   sec  2.71 GBytes  23.3 Gbits/sec    0   1.37 MBytes       
-[  5]   1.00-2.00   sec  3.64 GBytes  31.3 Gbits/sec    0   1.37 MBytes       
-[  5]   2.00-3.00   sec  4.08 GBytes  35.0 Gbits/sec    0   1.37 MBytes       
-[  5]   3.00-4.00   sec  3.49 GBytes  30.0 Gbits/sec    0   1.37 MBytes       
-[  5]   4.00-5.00   sec  5.50 GBytes  47.2 Gbits/sec    2   1.37 MBytes       
-[  5]   5.00-6.00   sec  4.06 GBytes  34.9 Gbits/sec    0   1.37 MBytes       
-[  5]   6.00-7.00   sec  4.12 GBytes  35.4 Gbits/sec    0   1.37 MBytes       
-[  5]   7.00-8.00   sec  3.99 GBytes  34.3 Gbits/sec    0   1.37 MBytes       
-[  5]   8.00-9.00   sec  3.49 GBytes  30.0 Gbits/sec    0   1.37 MBytes       
-[  5]   9.00-10.00  sec  5.51 GBytes  47.3 Gbits/sec    0   1.37 MBytes       
+[  5]   0.00-1.00   sec  2.71 GBytes  23.3 Gbits/sec    0   1.37 MBytes
+[  5]   1.00-2.00   sec  3.64 GBytes  31.3 Gbits/sec    0   1.37 MBytes
+[  5]   2.00-3.00   sec  4.08 GBytes  35.0 Gbits/sec    0   1.37 MBytes
+[  5]   3.00-4.00   sec  3.49 GBytes  30.0 Gbits/sec    0   1.37 MBytes
+[  5]   4.00-5.00   sec  5.50 GBytes  47.2 Gbits/sec    2   1.37 MBytes
+[  5]   5.00-6.00   sec  4.06 GBytes  34.9 Gbits/sec    0   1.37 MBytes
+[  5]   6.00-7.00   sec  4.12 GBytes  35.4 Gbits/sec    0   1.37 MBytes
+[  5]   7.00-8.00   sec  3.99 GBytes  34.3 Gbits/sec    0   1.37 MBytes
+[  5]   8.00-9.00   sec  3.49 GBytes  30.0 Gbits/sec    0   1.37 MBytes
+[  5]   9.00-10.00  sec  5.51 GBytes  47.3 Gbits/sec    0   1.37 MBytes
 - - - - - - - - - - - - - - - - - - - - - - - - -
 [ ID] Interval           Transfer     Bitrate         Retr
 [  5]   0.00-10.00  sec  40.6 GBytes  34.9 Gbits/sec    2             sender
@@ -796,16 +792,16 @@ Connecting to host 127.0.0.1, port 6201
 Connecting to host 192.168.31.228, port 6201
 [  5] local 192.168.31.228 port 54582 connected to 192.168.31.228 port 6201
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd
-[  5]   0.00-1.00   sec  4.34 GBytes  37.3 Gbits/sec    0    795 KBytes       
-[  5]   1.00-2.00   sec  4.78 GBytes  41.0 Gbits/sec    0    834 KBytes       
-[  5]   2.00-3.00   sec  6.26 GBytes  53.7 Gbits/sec    0    834 KBytes       
-[  5]   3.00-4.00   sec  6.30 GBytes  54.1 Gbits/sec    0    875 KBytes       
-[  5]   4.00-5.00   sec  6.26 GBytes  53.8 Gbits/sec    0    875 KBytes       
-[  5]   5.00-6.00   sec  5.75 GBytes  49.4 Gbits/sec    0    875 KBytes       
-[  5]   6.00-7.00   sec  5.49 GBytes  47.2 Gbits/sec    0    966 KBytes       
-[  5]   7.00-8.00   sec  5.72 GBytes  49.1 Gbits/sec    2    966 KBytes       
-[  5]   8.00-9.00   sec  4.81 GBytes  41.3 Gbits/sec    2    966 KBytes       
-[  5]   9.00-10.00  sec  5.98 GBytes  51.4 Gbits/sec    0    966 KBytes       
+[  5]   0.00-1.00   sec  4.34 GBytes  37.3 Gbits/sec    0    795 KBytes
+[  5]   1.00-2.00   sec  4.78 GBytes  41.0 Gbits/sec    0    834 KBytes
+[  5]   2.00-3.00   sec  6.26 GBytes  53.7 Gbits/sec    0    834 KBytes
+[  5]   3.00-4.00   sec  6.30 GBytes  54.1 Gbits/sec    0    875 KBytes
+[  5]   4.00-5.00   sec  6.26 GBytes  53.8 Gbits/sec    0    875 KBytes
+[  5]   5.00-6.00   sec  5.75 GBytes  49.4 Gbits/sec    0    875 KBytes
+[  5]   6.00-7.00   sec  5.49 GBytes  47.2 Gbits/sec    0    966 KBytes
+[  5]   7.00-8.00   sec  5.72 GBytes  49.1 Gbits/sec    2    966 KBytes
+[  5]   8.00-9.00   sec  4.81 GBytes  41.3 Gbits/sec    2    966 KBytes
+[  5]   9.00-10.00  sec  5.98 GBytes  51.4 Gbits/sec    0    966 KBytes
 - - - - - - - - - - - - - - - - - - - - - - - - -
 [ ID] Interval           Transfer     Bitrate         Retr
 [  5]   0.00-10.00  sec  55.7 GBytes  47.8 Gbits/sec    4             sender
@@ -830,6 +826,3 @@ Connecting to host 192.168.31.228, port 6201
 - [Universal TUN/TAP device driver - Kernel Docs](https://www.kernel.org/doc/Documentation/networking/tuntap.txt)
 - [Tun/Tap interface tutorial](https://backreference.org/2010/03/26/tuntap-interface-tutorial/)
 - [Linux Loopback performance with TCP_NODELAY enabled](https://stackoverflow.com/questions/5832308/linux-loopback-performance-with-tcp-nodelay-enabled)
-
-
-
