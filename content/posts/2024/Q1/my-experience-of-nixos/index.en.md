@@ -356,7 +356,9 @@ These are all selling points of NixOS, some of which can now also be achieved by
 traditional distributions with innovations like Fedora Silverblue.
 
 However, the system that can solve all these problems right now is only NixOS (and the
-more niche Guix, which also relies on the Nix package manager).
+more niche Guix. According to
+[Guix's README](https://git.savannah.gnu.org/cgit/guix.git/tree/README#n69), it's also
+based on the Nix package manager).
 
 ## NixOS's Disadvantages and Historical Debts {#nixos-disadvantages}
 

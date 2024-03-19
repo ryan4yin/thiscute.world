@@ -264,7 +264,9 @@ NixOS 的这些优势：
 
 这些都是 NixOS 的卖点，其中一些特性现在在传统发行版上也能实现，Fedora Silverblue 等新兴的
 不可变发行版也在这些方面有些不错的创新。但能解决所有这些问题的系统，目前只有 NixOS（以及更
-小众的 Guix——它同样基于 Nix 包管理器）。
+小众的 Guix. 据
+[Guix 的 README](https://git.savannah.gnu.org/cgit/guix.git/tree/README#n69) 所言，它同样
+基于 Nix 包管理器）。
 
 ## NixOS 的缺点与历史债务 {#nixos-disadvantages}
 
