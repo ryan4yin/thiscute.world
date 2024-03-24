@@ -25,22 +25,42 @@ comment:
 
 全部历史记录：[/history](/history/)
 
-### 2023-03-29 - 2023-03-21
+### 2023-03-23 - 2023-03-24
 
-- 持续迭代使用 NixOS + KubeVirt + FLux2 取代 Proxmox VE 的方案，方案基本调通了，时间主要用在了解决这些问题上：
-  - K8s 集群中部署的 Controller/Operator 删除非常麻烦，它们会创建各种 CRs 并添加 finalizer，
-    一旦删除顺序不对就会导致 CR 无法删除，这个问题在 Pulumi 时就遇到过，
-    当时以为 Flux2 可能自动能解决这个。但现在看是 K8s 自身的问题，必须通过手动在 Pulumi/Flux2 等
-    工具中声明好依赖关系，才能保证删除顺序正确。另外 victoria-metircs 等个别 operator，即使删除顺序是正确的，
-    也会因为它设置的许多保护策略导致无法删除，必须手动一个个确认并删除（繁琐，但我能理解这么做的目的，确保不丢数据）。
-  - KubeVirt 的 Multus-CNI 插件在 k3s 上无法正常工作，各种报错导致 Pod 都无法删除了（删除也要调用 CNI 插件，但插件不工作），
-    因为这个问题，以及上面提到的集群数据删除很麻烦的问题，我在测试 KubeVirt 的时候借助 Proxmox 的虚拟机快照重置了好多次集群状态。
-  - Flux2 的同步速度比较慢，每次改完配置再跑 `flux reconcile` 但是要等好久才能同步完成，这也严重拖慢了我的迭代速度。
-    但为了保证集群环境的可复现性，又没有太好的办法。好在配置调好后，内容基本不会有大的变动，所以这个问题也不是很大。
+- 尝试在 Orange Pi 5 上运行基于 eBPF 的某代理程序，遇到了许多问题
+  - 首先遇到的是，不存在 ksm 内核模块，因为这是一个基于 armbian/rockchip 的定制内核，它默
+    认关掉了许多内核模块。需要修改内核参数生成新的 .config 文件，然后重新编译内核。
+  - 恰好前两天有人给我的 [nixos-rk3589](https://github.com/ryan4yin/nixos-rk3588) 提 issue
+    说他将内核升级到了 6.1，发现在 UEFI 下无法启动。就决定直接在 6.1 的内核上添加一些缺失
+    的模块，新内核用着也更爽一点 emmmm 弄了挺久的，最终发现 EDK2 不支持 6.1 内核的 dtbs 设
+    备树，通过一些手段可以解决。此外内核模块列表也做了许多调整。
+  - 东西都解决后，为了隔离环境，我一开始尝试使用 microvm.nix 来运行此 ebpf 程序，遇到了
+    agenix 在 microvm.nix 中出莫名其妙的问题，原因大概率是 bash 脚本太脆弱了，microvm 的环
+    境可能有些不同。弄得有点心累，暂时放弃迁移了...
+  - 我虚拟机里跑的代理也出了点问题，不过好在有每日自动备份，restore 了一个旧版本，问题解
+    决。虚拟机的快照功能真香啊。
+
+### 2023-03-19 - 2023-03-21
+
+- 持续迭代使用 NixOS + KubeVirt + FLux2 取代 Proxmox VE 的方案，方案基本调通了，时间主要用
+  在了解决这些问题上：
+  - K8s 集群中部署的 Controller/Operator 删除非常麻烦，它们会创建各种 CRs 并添加
+    finalizer，一旦删除顺序不对就会导致 CR 无法删除，这个问题在 Pulumi 时就遇到过，当时以
+    为 Flux2 可能自动能解决这个。但现在看是 K8s 自身的问题，必须通过手动在 Pulumi/Flux2 等
+    工具中声明好依赖关系，才能保证删除顺序正确。另外 victoria-metircs 等个别 operator，即
+    使删除顺序是正确的，也会因为它设置的许多保护策略导致无法删除，必须手动一个个确认并删除
+    （繁琐，但我能理解这么做的目的，确保不丢数据）。
+  - KubeVirt 的 Multus-CNI 插件在 k3s 上无法正常工作，各种报错导致 Pod 都无法删除了（删除
+    也要调用 CNI 插件，但插件不工作），因为这个问题，以及上面提到的集群数据删除很麻烦的问
+    题，我在测试 KubeVirt 的时候借助 Proxmox 的虚拟机快照重置了好多次集群状态。
+  - Flux2 的同步速度比较慢，每次改完配置再跑 `flux reconcile` 但是要等好久才能同步完成，这
+    也严重拖慢了我的迭代速度。但为了保证集群环境的可复现性，又没有太好的办法。好在配置调好
+    后，内容基本不会有大的变动，所以这个问题也不是很大。
   - longhorn 的分布式存储倒是部署上就能用，UI 面板也挺友好，出问题能给出关键信息，好评。
-- 为 [nixos-cn.github.io](https://github.com/NixOS-CN/nixos-cn.github.io) 提了几个 PR 补充内容，
-  同时对完善该文档产生了兴趣，提了个 [Issue 18](https://github.com/NixOS-CN/nixos-cn.github.io/issues/18) 寻求项目 Owner 的意见。
-
+- 为 [nixos-cn.github.io](https://github.com/NixOS-CN/nixos-cn.github.io) 提了几个 PR 补充
+  内容，同时对完善该文档产生了兴趣，提了个
+  [Issue 18](https://github.com/NixOS-CN/nixos-cn.github.io/issues/18) 寻求项目 Owner 的意
+  见。
 
 当前的 Homelab 改造进展：
 
@@ -48,21 +68,21 @@ comment:
 - 监控系统迁移到 NixOS（Prometheus + Alertmanager + Grafana + Uptime-Kuma） - 100%
 - 网络设备迁移到 NixOS（dae 旁路网关 + tailscale 网关） - 100%
 - K8s 集群迁移到 NixOS - 100%
-- 将 Homelab 监控、Git 仓库、旁路网关都迁移到一块 Orange Pi 5 上，并启用 LUKS 加密 -
-100%
-- 这是 KubeVirt 改造的前置工作，这三项服务都需要最高的稳定性，也被 kubevirt 依赖，因此
-  需要放在 kubevirt 集群之外
+- 将 Homelab 监控、Git 仓库、旁路网关都迁移到一块 Orange Pi 5 上，并启用 LUKS 加密 - 100%
+- 这是 KubeVirt 改造的前置工作，这三项服务都需要最高的稳定性，也被 kubevirt 依赖，因此需要
+  放在 kubevirt 集群之外
 - K8s 集群使用 Flux2 进行 GitOps 式自动配置 - 100%
 - 两块 RK3588 板子启用 UEFI + NixOS + LUKS - 100%
 - 使用 kubevirt 全面替换 Proxmox VE 集群，并启用 LUKS 加密 + Secure Boot - 50%
 - 方案已经在 PVE 里的一个 k3s 集群上通过验证，接下来是替换工作。
 - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
-- 监控节点(hostname=ruby)性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS
-上进行 homelab 的管理与更新 - 100%
+- 监控节点(hostname=ruby)性能给得够高，将其同时用做 homelab 的控制节点，方便我在 macOS 上
+  进行 homelab 的管理与更新 - 100%
 
 ### 2023-03-18
 
-- 折腾这个[域名被加入到黑名单](https://twitter.com/ryan4yin/status/1769602470282744022)的问题，一整天心思一直被它拉住，活都没干好...
+- 折腾这个[域名被加入到黑名单](https://twitter.com/ryan4yin/status/1769602470282744022)的
+  问题，一整天心思一直被它拉住，活都没干好...
 
 ### 2024-03-16
 
