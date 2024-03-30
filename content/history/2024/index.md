@@ -25,16 +25,31 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-03-30
+
+- 小组团建，上午一起爬了深圳凤凰山，中午吃了福满楼的点心。
+- 晚上逛 B 站看到了这个
+  [在中国铁路再次上演《你的名字》名场面](https://www.bilibili.com/video/BV1CF4m1F7k7/)，拍
+  得太好了，哭得像个傻子。
+  - 它让我想起 2021 年我的一次高铁之旅，当时写下了
+    [月宫](https://thiscute.world/posts/moon-palace/)。车到了站，下来站在站台上，眼泪就那
+    样涌了出来。
+
 ### 2024-03-25 - 2024-03-28
 
-- 将 tailscale-gateway 跟 dae 软路由两台虚拟机迁移到了 Onrage Pi 5 上，使用 microvm.nix 运行它们
-  - 使用 microvm.nix 运行 NixOS 虚拟机，体验非常好！/nix/store 直接跟宿主机共用而且是只读，
-    根目录默认是 tmpfs，持久化数据需要额外挂载 img 镜像，同时还具有了完整的网络协议栈跟独立的内核，既轻量又不损失功能。
-- 将一台 PVE 主机彻底换成了 NixOS，并在上面跑了 K3s + Cilium + KubeVirt，打算后续就使用它做虚拟化了。
-  - 其实 MicroVM 就能满足我的大部分需求了，但 KubeVirt 功能还是强大很多，而且顺便也能学点技术。
-  - Server 比较轻量，不需要 bootstrap 的配置，直接部署完整的 NixOS 配置就行（secrets 与 LUKS key 目前通过一个单独的 U 盘提供）。
-- 对 NixOS-CN 文档站做了一些更新，将 sidebar 调整为默认展开，方便阅读，另外还补充了一些国内网络相关的解决方案。
-
+- 将 tailscale-gateway 跟 dae 软路由两台虚拟机迁移到了 Onrage Pi 5 上，使用 microvm.nix 运
+  行它们
+  - 使用 microvm.nix 运行 NixOS 虚拟机，体验非常好！/nix/store 直接跟宿主机共用而且是只
+    读，根目录默认是 tmpfs，持久化数据需要额外挂载 img 镜像，同时还具有了完整的网络协议栈
+    跟独立的内核，既轻量又不损失功能。
+- 将一台 PVE 主机彻底换成了 NixOS，并在上面跑了 K3s + Cilium + KubeVirt，打算后续就使用它
+  做虚拟化了。
+  - 其实 MicroVM 就能满足我的大部分需求了，但 KubeVirt 功能还是强大很多，而且顺便也能学点
+    技术。
+  - Server 比较轻量，不需要 bootstrap 的配置，直接部署完整的 NixOS 配置就行（secrets 与
+    LUKS key 目前通过一个单独的 U 盘提供）。
+- 对 NixOS-CN 文档站做了一些更新，将 sidebar 调整为默认展开，方便阅读，另外还补充了一些国
+  内网络相关的解决方案。
 
 ### 2024-03-23 - 2024-03-24
 
