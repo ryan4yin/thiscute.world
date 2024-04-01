@@ -25,6 +25,16 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-03-31 - 2024-04-01
+
+- 把 ruby/kana 上运行的所有服务都迁移到了 rakushun 这块 Orange Pi 5 Plus 上面。
+- 使用 kubevirt 替换 Proxmox VE 集群（三个节点），并启用 LUKS 加密 - 100%
+  - 搞定了在 KubeVirt 上运行 Windows 虚拟机，完成了整个替换工作，longhorn 跑分布式存储，非
+    常舒适，VM 可以在三台主机上无缝迁移。之前用 PVE 迁移的时候还会有个磁盘传输的过程，现在
+    是分布式存储，迁移更快更稳定了。
+  - 接下来还有一些工作，主要是在 KubeVirt 里运行 K3s 集群，以及 Windows Server 作为 NAS 服
+    务器，它们之前都是在我 PVE 上运行的，迁移后需要在 KubeVirt 里重新部署。
+
 ### 2024-03-30
 
 - 小组团建，上午一起爬了深圳凤凰山，中午吃了福满楼的点心。
