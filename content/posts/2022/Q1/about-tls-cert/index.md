@@ -464,38 +464,32 @@ HTTPS/QUIC 等协议。
 1. 编写证书签名请求的配置文件 `csr.conf`:
 
    ```conf
-   [ req ]
-   prompt = no
-   default_md = sha256  # 在签名算法中使用 SHA-256 计算哈希值
-   req_extensions = req_ext
-   distinguished_name = dn
+    [ req ]
+    prompt = no
+    req_extensions = v3_ext
+    distinguished_name = req_distinguished_name
 
-   [ dn ]
-   C = CN  # Contountry
-   ST = Guangdong
-   L = Shenzhen
-   O = Xxx
-   OU = Xxx-SRE
-   CN = *.svc.local  # 泛域名，这个字段已经被 chrome/apple 弃用了。
+    [ req_distinguished_name ]
+    countryName            = US
+    stateOrProvinceName    = NYK
+    localityName           = NYK
+    organizationName       = Ryan4Yin
+    organizationalUnitName = Ryan4Yin
+    commonName             = writefor.fun # deprecated, use subjectAltName(SAN) instead
+    emailAddress           = rayn4yin@linux.com
 
-   [ alt_names ]  # 备用名称，chrome/apple 目前只信任这里面的域名。
-   DNS.1 = *.svc.local  # 一级泛域名
-   DNS.2 = *.aaa.svc.local  # 二级泛域名
-   DNS.3 = *.bbb.svc.local  # 二级泛域名
+    [ alt_names ]
+    DNS.1 = writefor.fun
+    DNS.2 = *.writefor.fun
 
-   [ req_ext ]
-   subjectAltName = @alt_names
-
-   [ v3_ext ]
-   subjectAltName=@alt_names  # Chrome 要求必须要有 subjectAltName(SAN)
-   authorityKeyIdentifier=keyid,issuer:always
-   basicConstraints=CA:FALSE
-   keyUsage=keyEncipherment,dataEncipherment,digitalSignature
-   extendedKeyUsage=serverAuth,clientAuth
+    [ v3_ext ]
+    subjectAltName=@alt_names
+    basicConstraints       = CA:false
+    extendedKeyUsage       = serverAuth
    ```
 
    - **此文件的详细文档**:
-     [OpenSSL file formats and conventions](https://www.openssl.org/docs/man1.1.1/man5/)
+     [OpenSSL file formats and conventions - OpenSSL 3.3](https://www.openssl.org/docs/man3.3/man5/index.html)
 
 2. 生成证书链与服务端证书:
 
@@ -503,17 +497,22 @@ HTTPS/QUIC 等协议。
    # 1. 生成本地 CA 根证书的私钥
    openssl genrsa -out ca.key 2048
    # 2. 使用私钥签发出 CA 根证书
-   ## CA 根证书的有效期尽量设长一点，因为不方便更新换代，这里设了 100 年
-   openssl req -x509 -new -nodes -key ca.key -subj "/CN=MyLocalRootCA" -days 36500 -out ca.crt
+   ## CA 根证书的有效期尽量设长一点，因为不方便更新换代。但太长了也不合适，安全性比较差。
+   ## 这里设了 10 年
+   openssl req -x509 -new -SHA512 -key ca.key -subj "/CN=Ryan4Yin's Root CA 1" -days 3650 -out ca.crt
 
    # 3. 生成服务端证书的 RSA 私钥（2048 位）
    openssl genrsa -out server.key 2048
    # 4. 通过第一步编写的配置文件，生成证书签名请求（公钥+申请者信息）
-   openssl req -new -key server.key -out server.csr -config csr.conf
+   openssl req -new -SHA512 -key server.key -out server.csr -config csr.conf
    # 5. 使用 CA 根证书直接签发服务端证书，这里指定服务端证书的有效期为 3650 天
-   openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
+   openssl x509 -req -SHA512 -in server.csr -CA ca.crt -CAkey ca.key \
      -CAcreateserial -out server.crt -days 3650 \
      -extensions v3_ext -extfile csr.conf
+
+   # 6. 查看生成的证书链
+   openssl x509 -in ca.crt -noout -text
+   openssl x509 -in server.crt -noout -text
    ```
 
 简单起见这里没有生成中间证书，直接使用根证书签发了用于安全通信的服务端证书。
@@ -547,41 +546,35 @@ openssl ecparam -list_curves
 
 生成一个使用 `P-384` 曲线的 ECC 证书的示例如下:
 
-1. 编写证书签名请求的配置文件 `ecc-csr.conf`:
+1. 编写证书签名请求的配置文件 `ecc-csr.conf`（跟前面 RSA 使用的配置文件没任何区别）:
 
    ```conf
-   [ req ]
-   prompt = no
-   default_md = sha256 # 在签名算法中使用 SHA-256 计算哈希值
-   req_extensions = req_ext
-   distinguished_name = dn
+    [ req ]
+    prompt = no
+    req_extensions = v3_ext
+    distinguished_name = req_distinguished_name
 
-   [ dn ]
-   C = CN  # Contountry
-   ST = Guangdong
-   L = Shenzhen
-   O = Xxx
-   OU = Xxx-SRE
-   CN = *.svc.local  # 泛域名，这个字段已经被 chrome/apple 弃用了。
+    [ req_distinguished_name ]
+    countryName            = US
+    stateOrProvinceName    = NYK
+    localityName           = NYK
+    organizationName       = Ryan4Yin
+    organizationalUnitName = Ryan4Yin
+    commonName             = writefor.fun # deprecated, use subjectAltName(SAN) instead
+    emailAddress           = rayn4yin@linux.com
 
-   [ alt_names ]  # 备用名称，chrome/apple 目前只信任这里面的域名。
-   DNS.1 = *.svc.local  # 一级泛域名
-   DNS.2 = *.aaa.svc.local  # 二级泛域名
-   DNS.3 = *.bbb.svc.local  # 二级泛域名
+    [ alt_names ]
+    DNS.1 = writefor.fun
+    DNS.2 = *.writefor.fun
 
-   [ req_ext ]
-   subjectAltName = @alt_names
-
-   [ v3_ext ]
-   subjectAltName=@alt_names  # Chrome 要求必须要有 subjectAltName(SAN)
-   authorityKeyIdentifier=keyid,issuer:always
-   basicConstraints=CA:FALSE
-   keyUsage=keyEncipherment,dataEncipherment,digitalSignature
-   extendedKeyUsage=serverAuth,clientAuth
+    [ v3_ext ]
+    subjectAltName=@alt_names
+    basicConstraints       = CA:false
+    extendedKeyUsage       = serverAuth
    ```
 
    - **此文件的详细文档**:
-     [OpenSSL file formats and conventions](https://www.openssl.org/docs/man1.1.1/man5/)
+     [OpenSSL file formats and conventions - OpenSSL 3.3](https://www.openssl.org/docs/man3.3/man5/index.html)
 
 2. 生成证书链与服务端证书:
 
@@ -590,16 +583,20 @@ openssl ecparam -list_curves
    openssl ecparam -genkey -name secp384r1 -out ecc-ca.key
    # 2. 使用私钥签发出 CA 根证书
    ## CA 根证书的有效期尽量设长一点，因为不方便更新换代，这里设了 100 年
-   openssl req -x509 -new -nodes -key ecc-ca.key -subj "/CN=MyLocalRootCA" -days 36500 -out ecc-ca.crt
+   openssl req -x509 -new -SHA512 -key ecc-ca.key -subj "/CN=Ryan4Yin's Root CA 1" -days 36500 -out ecc-ca.crt
 
    # 3. 生成服务端证书的 EC 私钥，使用 P-384 曲线，密钥长度 384 位
    openssl ecparam -genkey -name secp384r1 -out ecc-server.key
    # 4. 通过第一步编写的配置文件，生成证书签名请求（公钥+申请者信息）
-   openssl req -new -key ecc-server.key -out ecc-server.csr -config ecc-csr.conf
+   openssl req -new -SHA512 -key ecc-server.key -out ecc-server.csr -config ecc-csr.conf
    # 5. 使用 CA 根证书直接签发 ECC 服务端证书，这里指定服务端证书的有效期为 3650 天
-   openssl x509 -req -in ecc-server.csr -CA ecc-ca.crt -CAkey ecc-ca.key \
+   openssl x509 -req -SHA512 -in ecc-server.csr -CA ecc-ca.crt -CAkey ecc-ca.key \
      -CAcreateserial -out ecc-server.crt -days 3650 \
      -extensions v3_ext -extfile ecc-csr.conf
+
+   # 6. 查看生成的证书链
+   openssl x509 -in ecc-ca.crt -noout -text
+   openssl x509 -in ecc-server.crt -noout -text
    ```
 
 简单起见这里没有生成中间证书，直接使用根证书签发了用于安全通信的服务端证书，而且根证书跟服
