@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议"><meta property="og:description" content="本文大致是一篇原创文章，但是参考了许多网络资料，都列在文末的「参考」中了。 更新记录 2021-01-17: 完成 TLS 协议简介、数字证书介绍、数字证书的申请或生成方法、"><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/posts/about-tls-cert/"><meta property="og:image" content="https://thiscute.world/posts/about-tls-cert/https-secure.webp"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-03-14T00:00:00+08:00"><meta property="article:modified_time" content="2022-03-14T00:00:00+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/about-tls-cert/https-secure.webp"><meta name=twitter:title content="写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议"><meta name=twitter:description content="本文大致是一篇原创文章，但是参考了许多网络资料，都列在文末的「参考」中了。 更新记录 2021-01-17: 完成 TLS 协议简介、数字证书介绍、数字证书的申请或生成方法、"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=next href=https://thiscute.world/posts/revolution-and-innovation/><link rel=stylesheet href=/css/main.css><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/color.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/about-tls-cert/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/about-tls-cert/https-secure.webp","width":1500,"height":450}],"genre":"posts","keywords":"Cryptography, 密码学, HTTPS, TLS, SSL, OpenSSL, PKI, 数字证书, 证书, SSH, QUIC, HTTP\/3, 安全","wordcount":19406,"url":"https://thiscute.world/posts/about-tls-cert/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:title" content="写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议"><meta property="og:description" content="本文大致是一篇原创文章，但是参考了许多网络资料，都列在文末的「参考」中了。 更新记录 2021-01-17: 完成 TLS 协议简介、数字证书介绍、数字证书的申请或生成方法、"><meta property="og:type" content="article"><meta property="og:url" content="https://thiscute.world/posts/about-tls-cert/"><meta property="og:image" content="https://thiscute.world/posts/about-tls-cert/https-secure.webp"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-03-14T00:00:00+08:00"><meta property="article:modified_time" content="2022-03-14T00:00:00+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/about-tls-cert/https-secure.webp"><meta name=twitter:title content="写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议"><meta name=twitter:description content="本文大致是一篇原创文章，但是参考了许多网络资料，都列在文末的「参考」中了。 更新记录 2021-01-17: 完成 TLS 协议简介、数字证书介绍、数字证书的申请或生成方法、"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/about-tls-cert/><link rel=prev href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=next href=https://thiscute.world/posts/revolution-and-innovation/><link rel=stylesheet href=/css/main.css><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/color.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/about-tls-cert/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/about-tls-cert/https-secure.webp","width":1500,"height":450}],"genre":"posts","keywords":"Cryptography, 密码学, HTTPS, TLS, SSL, OpenSSL, PKI, 数字证书, 证书, SSH, QUIC, HTTP\/3, 安全","wordcount":19324,"url":"https://thiscute.world/posts/about-tls-cert/","datePublished":"2022-03-14T00:00:00+08:00","dateModified":"2022-03-14T00:00:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
 <select class=language-select title=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/about-tls-cert/ selected>Simplified Chinese</option></select>
 </a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a>
@@ -11,7 +11,7 @@
 <i class="fas fa-adjust fa-fw"></i>
 </a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
 <select class=language-select title=选择语言 onchange="location=this.value"><option value=/posts/about-tls-cert/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#更新记录>更新记录</a></li><li><a href=#preface>零、前言</a></li><li><a href=#pki>一、数字证书与 PKI 公钥基础架构</a><ul><li><a href=#public-key-certificate>1. 公钥证书</a></li><li><a href=#a-chain-of-trust>2. 证书信任链</a><ul><li><a href=#交叉签名>交叉签名</a></li></ul></li><li><a href=#3-证书的存储格式与编码标准>3. 证书的存储格式与编码标准</a><ul><li><a href=#编码存储格式-der-与-pem>编码存储格式 DER 与 PEM</a></li><li><a href=#pkcs1>PKCS#1</a></li><li><a href=#pkcs7--cms>PKCS#7 / CMS</a></li><li><a href=#pkcs8>PKCS#8</a></li><li><a href=#pkcs12>PKCS#12</a></li></ul></li><li><a href=#4-证书支持保护的域名类型>4. 证书支持保护的域名类型</a></li><li><a href=#5-生成自己的证书链>5. 生成自己的证书链</a><ul><li><a href=#1-生成-rsa-证书链>1. 生成 RSA 证书链</a></li><li><a href=#2-生成-ecc-证书链>2. 生成 ECC 证书链</a></li></ul></li><li><a href=#6-证书的类型>6. 证书的类型</a></li><li><a href=#7-向权威-ca-机构申请公网受信任证书>7. 向权威 CA 机构申请「公网受信任证书」</a></li><li><a href=#8-证书的寿命>8. 证书的寿命</a></li><li><a href=#9-使用-openssl-验证证书查看证书信息>9. 使用 OpenSSL 验证证书、查看证书信息</a></li></ul></li><li><a href=#二tls-协议>二、TLS 协议</a><ul><li><a href=#1-密码套件与-tls-历史版本>1. 密码套件与 TLS 历史版本</a><ul><li><a href=#tls-11>TLS 1.1</a></li><li><a href=#tls-12>TLS 1.2</a></li><li><a href=#tls-13>TLS 1.3</a></li><li><a href=#如何设置-tls-协议的版本密码套件参数>如何设置 TLS 协议的版本、密码套件参数</a><ul><li><a href=#nginx-的-tls-协议配置>Nginx 的 TLS 协议配置</a></li></ul></li><li><a href=#ocsp-证书验证协议>OCSP 证书验证协议</a></li><li><a href=#alpn-应用层协议协商>ALPN 应用层协议协商</a></li></ul></li><li><a href=#2-mtls-双向认证>2. mTLS 双向认证</a><ul><li><a href=#mtls-的安全性>mTLS 的安全性</a></li></ul></li><li><a href=#3-其他加密通讯协议>3. 其他加密通讯协议</a><ul><li><a href=#ssh-协议>SSH 协议</a></li><li><a href=#http3-与-quic-协议>HTTP/3 与 QUIC 协议</a></li></ul></li><li><a href=#4-tls-协议攻防战>4. TLS 协议攻防战</a><ul><li><a href=#1-证书锁定certificate-pining技术>1. 证书锁定（Certificate Pining）技术</a></li><li><a href=#2-公钥锁定public-key-pining技术>2. 公钥锁定（Public Key Pining）技术</a></li><li><a href=#3-https-严格传输安全---hsts>3. HTTPS 严格传输安全 - HSTS</a></li><li><a href=#4-tls-协议的逆向手段>4. TLS 协议的逆向手段</a></li></ul></li><li><a href=#5-在边缘侧卸载-tls>5. 在边缘侧卸载 TLS</a></li></ul></li><li><a href=#三其他推荐读物>三、其他推荐读物</a></li><li><a href=#四参考>四、参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class="author fas fa-user-circle fa-fw"></span><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author>ryan4yin</a>
-</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>tech</a></span>&nbsp;<span class=post-category>和</span>&nbsp;<span class=post-series>系列 <a href=/series/%E5%86%99%E7%BB%99%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E7%9A%84%E5%AE%9E%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6/><i class="far fa-list-alt fa-fw"></i>写给开发人员的实用密码学</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 19406 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 39 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/about-tls-cert/https-secure.webp srcset="/posts/about-tls-cert/https-secure.webp, /posts/about-tls-cert/https-secure.webp 1.5x, /posts/about-tls-cert/https-secure.webp 2x" sizes=auto alt=/posts/about-tls-cert/https-secure.webp title=/posts/about-tls-cert/https-secure.webp height=450 width=1500></div><div class="details series-nav open"><div class="details-summary series-title"><span>系列 - 写给开发人员的实用密码学</span>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>tech</a></span>&nbsp;<span class=post-category>和</span>&nbsp;<span class=post-series>系列 <a href=/series/%E5%86%99%E7%BB%99%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E7%9A%84%E5%AE%9E%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6/><i class="far fa-list-alt fa-fw"></i>写给开发人员的实用密码学</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2022-03-14>2022-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 19324 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 39 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/about-tls-cert/https-secure.webp srcset="/posts/about-tls-cert/https-secure.webp, /posts/about-tls-cert/https-secure.webp 1.5x, /posts/about-tls-cert/https-secure.webp 2x" sizes=auto alt=/posts/about-tls-cert/https-secure.webp title=/posts/about-tls-cert/https-secure.webp height=450 width=1500></div><div class="details series-nav open"><div class="details-summary series-title"><span>系列 - 写给开发人员的实用密码学</span>
 <span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content series-content"><nav><ul><li><a href=/posts/practical-cryptography-basics-1/>写给开发人员的实用密码学（一）—— 概览</a></li><li><a href=/posts/practical-cryptography-basics-2-hash/>写给开发人员的实用密码学（二）—— 哈希函数</a></li><li><a href=/posts/practical-cryptography-basics-3-key-derivation-function/>写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li><li><a href=/posts/practical-cryptography-basics-4-secure-random-generators/>写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></li><li><a href=/posts/practical-cryptography-basics-5-key-exchange/>写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></li><li><a href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/>写给开发人员的实用密码学（六）—— 对称密钥加密算法</a></li><li><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/>写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></li><li><span class=active>写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</span></li><li><a href=/posts/experience-of-vault/>secrets 管理工具 Vault 的介绍、安装及使用</a></li><li><a href=/posts/kubernetes-cert-management/>Kubernetes 中的证书管理工具 - cert-manager</a></li><li><a href=/posts/an-incomplete-guide-to-data-security/>个人数据安全不完全指南</a></li></ul></nav></div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
 <span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#更新记录>更新记录</a></li><li><a href=#preface>零、前言</a></li><li><a href=#pki>一、数字证书与 PKI 公钥基础架构</a><ul><li><a href=#public-key-certificate>1. 公钥证书</a></li><li><a href=#a-chain-of-trust>2. 证书信任链</a><ul><li><a href=#交叉签名>交叉签名</a></li></ul></li><li><a href=#3-证书的存储格式与编码标准>3. 证书的存储格式与编码标准</a><ul><li><a href=#编码存储格式-der-与-pem>编码存储格式 DER 与 PEM</a></li><li><a href=#pkcs1>PKCS#1</a></li><li><a href=#pkcs7--cms>PKCS#7 / CMS</a></li><li><a href=#pkcs8>PKCS#8</a></li><li><a href=#pkcs12>PKCS#12</a></li></ul></li><li><a href=#4-证书支持保护的域名类型>4. 证书支持保护的域名类型</a></li><li><a href=#5-生成自己的证书链>5. 生成自己的证书链</a><ul><li><a href=#1-生成-rsa-证书链>1. 生成 RSA 证书链</a></li><li><a href=#2-生成-ecc-证书链>2. 生成 ECC 证书链</a></li></ul></li><li><a href=#6-证书的类型>6. 证书的类型</a></li><li><a href=#7-向权威-ca-机构申请公网受信任证书>7. 向权威 CA 机构申请「公网受信任证书」</a></li><li><a href=#8-证书的寿命>8. 证书的寿命</a></li><li><a href=#9-使用-openssl-验证证书查看证书信息>9. 使用 OpenSSL 验证证书、查看证书信息</a></li></ul></li><li><a href=#二tls-协议>二、TLS 协议</a><ul><li><a href=#1-密码套件与-tls-历史版本>1. 密码套件与 TLS 历史版本</a><ul><li><a href=#tls-11>TLS 1.1</a></li><li><a href=#tls-12>TLS 1.2</a></li><li><a href=#tls-13>TLS 1.3</a></li><li><a href=#如何设置-tls-协议的版本密码套件参数>如何设置 TLS 协议的版本、密码套件参数</a><ul><li><a href=#nginx-的-tls-协议配置>Nginx 的 TLS 协议配置</a></li></ul></li><li><a href=#ocsp-证书验证协议>OCSP 证书验证协议</a></li><li><a href=#alpn-应用层协议协商>ALPN 应用层协议协商</a></li></ul></li><li><a href=#2-mtls-双向认证>2. mTLS 双向认证</a><ul><li><a href=#mtls-的安全性>mTLS 的安全性</a></li></ul></li><li><a href=#3-其他加密通讯协议>3. 其他加密通讯协议</a><ul><li><a href=#ssh-协议>SSH 协议</a></li><li><a href=#http3-与-quic-协议>HTTP/3 与 QUIC 协议</a></li></ul></li><li><a href=#4-tls-协议攻防战>4. TLS 协议攻防战</a><ul><li><a href=#1-证书锁定certificate-pining技术>1. 证书锁定（Certificate Pining）技术</a></li><li><a href=#2-公钥锁定public-key-pining技术>2. 公钥锁定（Public Key Pining）技术</a></li><li><a href=#3-https-严格传输安全---hsts>3. HTTPS 严格传输安全 - HSTS</a></li><li><a href=#4-tls-协议的逆向手段>4. TLS 协议的逆向手段</a></li></ul></li><li><a href=#5-在边缘侧卸载-tls>5. 在边缘侧卸载 TLS</a></li></ul></li><li><a href=#三其他推荐读物>三、其他推荐读物</a></li><li><a href=#四参考>四、参考</a></li></ul></nav></div></div><div class=content id=content><blockquote><p>本文大致是一篇原创文章，但是参考了许多网络资料，都列在文末的「参考」中了。</p></blockquote><h2 id=更新记录 class=headerLink><a href=#%e6%9b%b4%e6%96%b0%e8%ae%b0%e5%bd%95 class=header-mark></a>更新记录</h2><ul><li><strong>2021-01-17</strong>: 完成 TLS 协议简介、数字证书介绍、数字证书的申请或生成方法、mTLS 介
 绍、TLS 协议的破解手段</li><li><strong>2022-03-13</strong> ~ <strong>2022-03-14</strong>: 重新整理补充，改写为《写给开发人员的实用密码学（八）——
@@ -218,42 +218,30 @@ HTTPS/QUIC 等协议。</p><h4 id=1-生成-rsa-证书链 class=headerLink><a hre
 </span><span class=lnt>20
 </span><span class=lnt>21
 </span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>[ req ]
-</span></span><span class=line><span class=cl>prompt = no
-</span></span><span class=line><span class=cl>default_md = sha256  # 在签名算法中使用 SHA-256 计算哈希值
-</span></span><span class=line><span class=cl>req_extensions = req_ext
-</span></span><span class=line><span class=cl>distinguished_name = dn
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl> [ req ]
+</span></span><span class=line><span class=cl> prompt = no
+</span></span><span class=line><span class=cl> req_extensions = v3_ext
+</span></span><span class=line><span class=cl> distinguished_name = req_distinguished_name
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ dn ]
-</span></span><span class=line><span class=cl>C = CN  # Contountry
-</span></span><span class=line><span class=cl>ST = Guangdong
-</span></span><span class=line><span class=cl>L = Shenzhen
-</span></span><span class=line><span class=cl>O = Xxx
-</span></span><span class=line><span class=cl>OU = Xxx-SRE
-</span></span><span class=line><span class=cl>CN = *.svc.local  # 泛域名，这个字段已经被 chrome/apple 弃用了。
+</span></span><span class=line><span class=cl> [ req_distinguished_name ]
+</span></span><span class=line><span class=cl> countryName            = US
+</span></span><span class=line><span class=cl> stateOrProvinceName    = NYK
+</span></span><span class=line><span class=cl> localityName           = NYK
+</span></span><span class=line><span class=cl> organizationName       = Ryan4Yin
+</span></span><span class=line><span class=cl> organizationalUnitName = Ryan4Yin
+</span></span><span class=line><span class=cl> commonName             = writefor.fun # deprecated, use subjectAltName(SAN) instead
+</span></span><span class=line><span class=cl> emailAddress           = rayn4yin@linux.com
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ alt_names ]  # 备用名称，chrome/apple 目前只信任这里面的域名。
-</span></span><span class=line><span class=cl>DNS.1 = *.svc.local  # 一级泛域名
-</span></span><span class=line><span class=cl>DNS.2 = *.aaa.svc.local  # 二级泛域名
-</span></span><span class=line><span class=cl>DNS.3 = *.bbb.svc.local  # 二级泛域名
+</span></span><span class=line><span class=cl> [ alt_names ]
+</span></span><span class=line><span class=cl> DNS.1 = writefor.fun
+</span></span><span class=line><span class=cl> DNS.2 = *.writefor.fun
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ req_ext ]
-</span></span><span class=line><span class=cl>subjectAltName = @alt_names
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ v3_ext ]
-</span></span><span class=line><span class=cl>subjectAltName=@alt_names  # Chrome 要求必须要有 subjectAltName(SAN)
-</span></span><span class=line><span class=cl>authorityKeyIdentifier=keyid,issuer:always
-</span></span><span class=line><span class=cl>basicConstraints=CA:FALSE
-</span></span><span class=line><span class=cl>keyUsage=keyEncipherment,dataEncipherment,digitalSignature
-</span></span><span class=line><span class=cl>extendedKeyUsage=serverAuth,clientAuth
+</span></span><span class=line><span class=cl> [ v3_ext ]
+</span></span><span class=line><span class=cl> subjectAltName=@alt_names
+</span></span><span class=line><span class=cl> basicConstraints       = CA:false
+</span></span><span class=line><span class=cl> extendedKeyUsage       = serverAuth
 </span></span></code></pre></td></tr></table></div></div><ul><li><strong>此文件的详细文档</strong>:
-<a href=https://www.openssl.org/docs/man1.1.1/man5/ target=_blank rel="noopener noreferrer">OpenSSL file formats and conventions</a></li></ul></li><li><p>生成证书链与服务端证书:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<a href=https://www.openssl.org/docs/man3.3/man5/index.html target=_blank rel="noopener noreferrer">OpenSSL file formats and conventions - OpenSSL 3.3</a></li></ul></li><li><p>生成证书链与服务端证书:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -267,27 +255,37 @@ HTTPS/QUIC 等协议。</p><h4 id=1-生成-rsa-证书链 class=headerLink><a hre
 </span><span class=lnt>12
 </span><span class=lnt>13
 </span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 1. 生成本地 CA 根证书的私钥</span>
 </span></span><span class=line><span class=cl>openssl genrsa -out ca.key <span class=m>2048</span>
 </span></span><span class=line><span class=cl><span class=c1># 2. 使用私钥签发出 CA 根证书</span>
-</span></span><span class=line><span class=cl><span class=c1>## CA 根证书的有效期尽量设长一点，因为不方便更新换代，这里设了 100 年</span>
-</span></span><span class=line><span class=cl>openssl req -x509 -new -nodes -key ca.key -subj <span class=s2>&#34;/CN=MyLocalRootCA&#34;</span> -days <span class=m>36500</span> -out ca.crt
+</span></span><span class=line><span class=cl><span class=c1>## CA 根证书的有效期尽量设长一点，因为不方便更新换代。但太长了也不合适，安全性比较差。</span>
+</span></span><span class=line><span class=cl><span class=c1>## 这里设了 10 年</span>
+</span></span><span class=line><span class=cl>openssl req -x509 -new -SHA512 -key ca.key -subj <span class=s2>&#34;/CN=Ryan4Yin&#39;s Root CA 1&#34;</span> -days <span class=m>3650</span> -out ca.crt
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 3. 生成服务端证书的 RSA 私钥（2048 位）</span>
 </span></span><span class=line><span class=cl>openssl genrsa -out server.key <span class=m>2048</span>
 </span></span><span class=line><span class=cl><span class=c1># 4. 通过第一步编写的配置文件，生成证书签名请求（公钥+申请者信息）</span>
-</span></span><span class=line><span class=cl>openssl req -new -key server.key -out server.csr -config csr.conf
+</span></span><span class=line><span class=cl>openssl req -new -SHA512 -key server.key -out server.csr -config csr.conf
 </span></span><span class=line><span class=cl><span class=c1># 5. 使用 CA 根证书直接签发服务端证书，这里指定服务端证书的有效期为 3650 天</span>
-</span></span><span class=line><span class=cl>openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key <span class=se>\
+</span></span><span class=line><span class=cl>openssl x509 -req -SHA512 -in server.csr -CA ca.crt -CAkey ca.key <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  -CAcreateserial -out server.crt -days <span class=m>3650</span> <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  -extensions v3_ext -extfile csr.conf
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 6. 查看生成的证书链</span>
+</span></span><span class=line><span class=cl>openssl x509 -in ca.crt -noout -text
+</span></span><span class=line><span class=cl>openssl x509 -in server.crt -noout -text
 </span></span></code></pre></td></tr></table></div></div></li></ol><p>简单起见这里没有生成中间证书，直接使用根证书签发了用于安全通信的服务端证书。</p><h4 id=2-生成-ecc-证书链 class=headerLink><a href=#2-%e7%94%9f%e6%88%90-ecc-%e8%af%81%e4%b9%a6%e9%93%be class=header-mark></a>2. 生成 ECC 证书链</h4><p>在上一篇文章中我们已经介绍过了，ECC 加密方案是新一代非对称加密算法，是 RSA 的继任者，在安
 全性相同的情况下，ECC 拥有比 RSA 更快的计算速度、更少的内存以及更短的密钥长度。</p><p>对于 ECC 加密方案而言，不同的椭圆曲线生成的密钥对提供了不同程度的安全性。各个组织（ANSI
 X9.62、NIST、SECG）命名了多种曲线，可通过如下命名查看 openssl 支持的所有椭圆曲线名称:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>openssl ecparam -list_curves
 </span></span></code></pre></td></tr></table></div></div><p>目前（2022 年）在 TLS 协议以及 JWT 签名算法中，应用最广泛的椭圆曲线仍然是 NIST 系列：</p><ul><li><code>P-256</code>: 目前仍然应用最为广泛的椭圆曲线<ul><li>在 openssl 中对应的名称为 <code>prime256v1</code></li></ul></li><li><code>P-384</code><ul><li>在 openssl 中对应的名称为 <code>secp384r1</code></li></ul></li><li><code>P-521</code><ul><li>在 openssl 中对应的名称为 <code>secp521r1</code></li></ul></li></ul><blockquote><p>但是我们也看到 X25519(<code>Curve25519</code>) 正在越来越流行，因为美国政府有前科（[NSA 在 RSA > ></p><blockquote><p>加密算法中安置后门是怎么一回事，有何影响？——知
 乎](<a href=https://www.zhihu.com/question/22343037 target=_blank rel="noopener noreferrer">https://www.zhihu.com/question/22343037</a>），NIST 标准被怀疑可能有后门，目前很多人都
-在推动使用 <code>Curve25519</code> 等社区方案取代掉 NIST 标准曲线。限于篇幅，感兴趣请自行了解。</p></blockquote></blockquote><p>生成一个使用 <code>P-384</code> 曲线的 ECC 证书的示例如下:</p><ol><li><p>编写证书签名请求的配置文件 <code>ecc-csr.conf</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+在推动使用 <code>Curve25519</code> 等社区方案取代掉 NIST 标准曲线。限于篇幅，感兴趣请自行了解。</p></blockquote></blockquote><p>生成一个使用 <code>P-384</code> 曲线的 ECC 证书的示例如下:</p><ol><li><p>编写证书签名请求的配置文件 <code>ecc-csr.conf</code>（跟前面 RSA 使用的配置文件没任何区别）:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -309,42 +307,30 @@ X9.62、NIST、SECG）命名了多种曲线，可通过如下命名查看 openss
 </span><span class=lnt>20
 </span><span class=lnt>21
 </span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>[ req ]
-</span></span><span class=line><span class=cl>prompt = no
-</span></span><span class=line><span class=cl>default_md = sha256 # 在签名算法中使用 SHA-256 计算哈希值
-</span></span><span class=line><span class=cl>req_extensions = req_ext
-</span></span><span class=line><span class=cl>distinguished_name = dn
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl> [ req ]
+</span></span><span class=line><span class=cl> prompt = no
+</span></span><span class=line><span class=cl> req_extensions = v3_ext
+</span></span><span class=line><span class=cl> distinguished_name = req_distinguished_name
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ dn ]
-</span></span><span class=line><span class=cl>C = CN  # Contountry
-</span></span><span class=line><span class=cl>ST = Guangdong
-</span></span><span class=line><span class=cl>L = Shenzhen
-</span></span><span class=line><span class=cl>O = Xxx
-</span></span><span class=line><span class=cl>OU = Xxx-SRE
-</span></span><span class=line><span class=cl>CN = *.svc.local  # 泛域名，这个字段已经被 chrome/apple 弃用了。
+</span></span><span class=line><span class=cl> [ req_distinguished_name ]
+</span></span><span class=line><span class=cl> countryName            = US
+</span></span><span class=line><span class=cl> stateOrProvinceName    = NYK
+</span></span><span class=line><span class=cl> localityName           = NYK
+</span></span><span class=line><span class=cl> organizationName       = Ryan4Yin
+</span></span><span class=line><span class=cl> organizationalUnitName = Ryan4Yin
+</span></span><span class=line><span class=cl> commonName             = writefor.fun # deprecated, use subjectAltName(SAN) instead
+</span></span><span class=line><span class=cl> emailAddress           = rayn4yin@linux.com
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ alt_names ]  # 备用名称，chrome/apple 目前只信任这里面的域名。
-</span></span><span class=line><span class=cl>DNS.1 = *.svc.local  # 一级泛域名
-</span></span><span class=line><span class=cl>DNS.2 = *.aaa.svc.local  # 二级泛域名
-</span></span><span class=line><span class=cl>DNS.3 = *.bbb.svc.local  # 二级泛域名
+</span></span><span class=line><span class=cl> [ alt_names ]
+</span></span><span class=line><span class=cl> DNS.1 = writefor.fun
+</span></span><span class=line><span class=cl> DNS.2 = *.writefor.fun
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ req_ext ]
-</span></span><span class=line><span class=cl>subjectAltName = @alt_names
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>[ v3_ext ]
-</span></span><span class=line><span class=cl>subjectAltName=@alt_names  # Chrome 要求必须要有 subjectAltName(SAN)
-</span></span><span class=line><span class=cl>authorityKeyIdentifier=keyid,issuer:always
-</span></span><span class=line><span class=cl>basicConstraints=CA:FALSE
-</span></span><span class=line><span class=cl>keyUsage=keyEncipherment,dataEncipherment,digitalSignature
-</span></span><span class=line><span class=cl>extendedKeyUsage=serverAuth,clientAuth
+</span></span><span class=line><span class=cl> [ v3_ext ]
+</span></span><span class=line><span class=cl> subjectAltName=@alt_names
+</span></span><span class=line><span class=cl> basicConstraints       = CA:false
+</span></span><span class=line><span class=cl> extendedKeyUsage       = serverAuth
 </span></span></code></pre></td></tr></table></div></div><ul><li><strong>此文件的详细文档</strong>:
-<a href=https://www.openssl.org/docs/man1.1.1/man5/ target=_blank rel="noopener noreferrer">OpenSSL file formats and conventions</a></li></ul></li><li><p>生成证书链与服务端证书:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<a href=https://www.openssl.org/docs/man3.3/man5/index.html target=_blank rel="noopener noreferrer">OpenSSL file formats and conventions - OpenSSL 3.3</a></li></ul></li><li><p>生成证书链与服务端证书:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -358,20 +344,28 @@ X9.62、NIST、SECG）命名了多种曲线，可通过如下命名查看 openss
 </span><span class=lnt>12
 </span><span class=lnt>13
 </span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 1. 生成本地 CA 根证书的私钥，使用 P-384 曲线，密钥长度 384 位</span>
 </span></span><span class=line><span class=cl>openssl ecparam -genkey -name secp384r1 -out ecc-ca.key
 </span></span><span class=line><span class=cl><span class=c1># 2. 使用私钥签发出 CA 根证书</span>
 </span></span><span class=line><span class=cl><span class=c1>## CA 根证书的有效期尽量设长一点，因为不方便更新换代，这里设了 100 年</span>
-</span></span><span class=line><span class=cl>openssl req -x509 -new -nodes -key ecc-ca.key -subj <span class=s2>&#34;/CN=MyLocalRootCA&#34;</span> -days <span class=m>36500</span> -out ecc-ca.crt
+</span></span><span class=line><span class=cl>openssl req -x509 -new -SHA512 -key ecc-ca.key -subj <span class=s2>&#34;/CN=Ryan4Yin&#39;s Root CA 1&#34;</span> -days <span class=m>36500</span> -out ecc-ca.crt
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 3. 生成服务端证书的 EC 私钥，使用 P-384 曲线，密钥长度 384 位</span>
 </span></span><span class=line><span class=cl>openssl ecparam -genkey -name secp384r1 -out ecc-server.key
 </span></span><span class=line><span class=cl><span class=c1># 4. 通过第一步编写的配置文件，生成证书签名请求（公钥+申请者信息）</span>
-</span></span><span class=line><span class=cl>openssl req -new -key ecc-server.key -out ecc-server.csr -config ecc-csr.conf
+</span></span><span class=line><span class=cl>openssl req -new -SHA512 -key ecc-server.key -out ecc-server.csr -config ecc-csr.conf
 </span></span><span class=line><span class=cl><span class=c1># 5. 使用 CA 根证书直接签发 ECC 服务端证书，这里指定服务端证书的有效期为 3650 天</span>
-</span></span><span class=line><span class=cl>openssl x509 -req -in ecc-server.csr -CA ecc-ca.crt -CAkey ecc-ca.key <span class=se>\
+</span></span><span class=line><span class=cl>openssl x509 -req -SHA512 -in ecc-server.csr -CA ecc-ca.crt -CAkey ecc-ca.key <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  -CAcreateserial -out ecc-server.crt -days <span class=m>3650</span> <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  -extensions v3_ext -extfile ecc-csr.conf
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 6. 查看生成的证书链</span>
+</span></span><span class=line><span class=cl>openssl x509 -in ecc-ca.crt -noout -text
+</span></span><span class=line><span class=cl>openssl x509 -in ecc-server.crt -noout -text
 </span></span></code></pre></td></tr></table></div></div></li></ol><p>简单起见这里没有生成中间证书，直接使用根证书签发了用于安全通信的服务端证书，而且根证书跟服
 务端证书都使用了 ECC 证书。现实中由于根证书更新缓慢，几乎所有的根证书都还是 RSA 证书，而中
 间证书与终端实体证书的迭代要快得多，目前已经有不少网站在使用 ECC 证书了。</p><h3 id=6-证书的类型 class=headerLink><a href=#6-%e8%af%81%e4%b9%a6%e7%9a%84%e7%b1%bb%e5%9e%8b class=header-mark></a>6. 证书的类型</h3><p>按照数字证书的生成方式进行分类，证书有三种类型:</p><ol><li><strong>公网受信任证书</strong> 或者叫 <strong>Web PKI 证书</strong>: 即由权威证书认证机构签名的的证书。<ul><li>几乎所有终端都预装了其的根证书，因此这类证书会被浏览器、小程序等第三方应用/服务商验证
