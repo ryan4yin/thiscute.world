@@ -26,7 +26,7 @@ comment:
 ## 前言
 
 我在去年的文章
-[「QEMU/KVM 虚拟化环境的搭建与使用」](https://thiscute.world/posts/QEMU/KVM-usage/) 中介绍
+[「QEMU/KVM 虚拟化环境的搭建与使用」](./qemu-kvm-usage/) 中介绍
 了如何使用 QEMU/KVM 作为桌面虚拟化软件，其功能对标开源免费的
 [Oracle VM VirtualBox](https://www.virtualbox.org/) 以及收费但是用户众多的
 [VMware Workstation Pro](https://www.vmware.com/products/workstation-pro.html).
