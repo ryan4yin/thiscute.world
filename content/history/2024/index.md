@@ -25,6 +25,11 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-04-07
+
+- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/):
+  花了二十来分钟快速过了一遍，基本都是我已经知道的内容，不过介绍得很全，很适合对安全不是很了解的工程师。
+
 ### 2024-04-04 - 2024-04-05
 
 - 带我妹复诊，她这次过来感觉又开朗了许多，但读书还是不太能集中精力，医生这次给她开了专注达，很期待效果。

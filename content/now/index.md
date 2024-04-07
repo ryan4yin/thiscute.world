@@ -259,9 +259,6 @@ toc:
   - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见
         balancer 算法
 
-- [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/):
-  花几个小时，快速学习开发人员需要了解的安全知识
-
 - Openresty 技术栈：（暂时感觉兴趣不大）
 
   - 阅读《自己动手实现 Lua》
