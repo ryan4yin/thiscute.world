@@ -857,14 +857,9 @@ key 的用时，默认 2s，安全起见咱设置成了 5s）
 </li>
 <li>Homelab
 <ul>
-<li>Homelab 的 PVE 物理机启用 LUKS 全盘加密与 btrfs + zstd 压缩，买几个便宜的 U 盘用于自动
-解密（注意解密密钥的离线加密备份）。</li>
-<li>Homelab 虚拟机统一使用一个 Homelab 专用 SSH 私钥，保存在我的 secrets 仓库中，在部署我
-的桌面电脑与 Homelab 中的专用跳板机时，agenix 会将其解密出来并存放到特定位置。
-<ul>
-<li>Homelab 虚拟机包含的重要数据相对少些，因此安全要求要弱于桌面主机。</li>
-</ul>
-</li>
+<li>Proxmox VE 物理机全部重装为 NixOS，启用 LUKS 全盘加密与 btrfs + zstd 压缩，买几个
+便宜的 U 盘用于自动解密（注意解密密钥的离线加密备份）。使用 K3s + KubeVirt 管理
+QEMU/KVM 虚拟机。</li>
 </ul>
 </li>
 <li>Secrets 說明
@@ -1009,9 +1004,9 @@ Joplin + OneDrive 上，Homelab 中設了通過 restic 定期自動加密備份 
 數據。</li>
 <li>比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动
 同步到国内 Gitee.</li>
-<li>All in NixOS，将 Homelab 中对我而言偏黑盒且可复现性差的 Ubuntu、Kubernetes 集群节
-点、OpenWRT 等 VM 全面替换成更白盒且可复现性强的 NixOS，提升我对内网环境的掌控度，进而
-提升内网安全性。</li>
+<li>All in NixOS，将 Homelab 中的 PVE 全部使用 NixOS + K3s + KubeVirt 替换。从偏黑盒且可复
+现性差的 Ubuntu、Debian, Proxmox VE, OpenWRT 等 VM 全面替换成更白盒且可复现性强的
+NixOS、KubeVirt，提升我对内网环境的掌控度，进而提升内网安全性。</li>
 </ol>
 <h2 id="十二灾难恢复预案" class="headerLink">
     <a href="#%e5%8d%81%e4%ba%8c%e7%81%be%e9%9a%be%e6%81%a2%e5%a4%8d%e9%a2%84%e6%a1%88" class="header-mark"></a>十二、灾难恢复预案</h2><p>这里考虑我的 GPG 子密钥泄漏了、pass 密码仓库泄漏了等各种情况下的灾难恢复流程。</p>
