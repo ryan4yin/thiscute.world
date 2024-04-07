@@ -1,4 +1,5 @@
 
 reset-theme:
-  git submodule foreach git reset --hard HEAD
+  git submodule foreach --recursive git clean -fxd
+  git submodule foreach --recursive git reset --hard HEAD
   git submodule update --init
