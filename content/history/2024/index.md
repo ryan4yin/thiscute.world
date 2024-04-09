@@ -25,6 +25,12 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-04-08
+
+- 阅读《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》半小时
+- 确认了复合维生素能缓解安非他酮等药物带来的恶心、反胃等副作用，打算持续吃了。
+
+
 ### 2024-04-07
 
 - [Security Training for Engineers - PagerDuty](https://sudo.pagerduty.com/for_engineers/):

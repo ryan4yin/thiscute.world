@@ -37,7 +37,6 @@ toc:
   - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
 - 安全性提升
   - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
-  - 自建 PKI 用于我 Homelab 内部的通信加密 - 0%
   - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
   - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
   - 学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
