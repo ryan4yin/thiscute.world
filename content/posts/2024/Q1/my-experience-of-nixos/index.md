@@ -353,6 +353,8 @@ NixOS 很特殊，很强大，但另一方面**它也有着相当多的历史债
      Overlays.
    - 关于实验特性的调查中，使用 Flakes 特性的用户占比已经达到了 59.1%.
 
+> 2024-04-12 更新：NixCon 2024 也有一个演讲提供了 Nix 社区的各种历史数据：[Nix, State of the Union - NixCon 2024](https://github.com/nixcon/NixConContent/blob/main/NixCon%20NA%202024%20-%20California/Day%202%20-%20Keynotes/Nix%2C%20State%20of%20the%20Union%20-%20%202024%20(LA).pdf)
+
 另外 GitHub 的
 [Octoverse 2023](https://github.blog/2023-11-08-the-state-of-open-source-and-ai/) 也难得地
 提了一嘴 Nixpkgs:
