@@ -1307,6 +1307,7 @@ Issue 区也有人提到了这个问题，Revy 老师也帮助补充了些相关
 
 ## 参考
 
+- [Systemd Stage 1 - NixCon NA 2024 - California](https://github.com/nixcon/NixConContent/blob/main/NixCon%20NA%202024%20-%20California/Day%202%20-%20Keynotes/systemd-stage-1.pdf)
 - [LicheePi 4A —— 这个小板有点意思（第一部分） - HougeLangley](https://litterhougelangley.club/blog/2023/05/27/licheepi-4a-%e8%bf%99%e4%b8%aa%e5%b0%8f%e6%9d%bf%e6%9c%89%e7%82%b9%e6%84%8f%e6%80%9d%ef%bc%88%e7%ac%ac%e4%b8%80%e9%83%a8%e5%88%86%ef%bc%89/)
 - [Analyzing the Linux boot process - By Alison Chaiken](https://opensource.com/article/18/1/analyzing-linux-boot-process)
 - [OpenSBI Platform Firmwares](https://github.com/riscv-software-src/opensbi/blob/master/docs/firmware/fw.md)
