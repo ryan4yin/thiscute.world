@@ -20,8 +20,10 @@ toc:
 ## 零、2024 年学习计划
 
 - 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
-- 技术上今年主要就是三个学习目标：**搞搞 AIGC、学学操作系统、尝试更深入地使用 NixOS 以及参
-  与社区贡献**。
+- 技术上今年主要就是三个学习目标：
+  - 搞搞 AIGC
+  - 学学操作系统
+  - 尝试更深入地使用 NixOS 以及参与社区贡献
 - [学习并强化个人的数据安全性](https://thiscute.world/posts/an-incomplete-guide-to-data-security/) -
   100%
   - 这是我 2023 年 5 月开始的一个长期计划，目前以及完成了大部分工作，也输出了一篇博客总结
@@ -35,14 +37,14 @@ toc:
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 结合工作需求，深入了解下当下火热的 AIGC 技术
   - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
+
+## 二、我今年还想搞搞这些
+
 - 安全性提升
   - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
   - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
   - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
   - 学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
-
-## 二、我今年还想搞搞这些
-
 - 操作系统
   - 课程
     [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
