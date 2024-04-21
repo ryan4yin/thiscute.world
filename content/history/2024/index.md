@@ -33,6 +33,7 @@ comment:
   容，效果很好。
   - 目前最大的麻烦是 fat containers 带来的健康检查难题，导致更新存在麻烦（不清楚新容器是否
     已经 ready）。
+- 这最近两周工作状态还不错，折腾 K8s GPU 集群进入状态了。
 - 周末本来想再去香港海边徒步，但是因为下大雨放弃了。宅在家边看动漫边折腾了下
   [nixos-rk3588 - PR 28](https://github.com/ryan4yin/nixos-rk3588/pull/28)，弄了一天没搞
   定。
