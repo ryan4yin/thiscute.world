@@ -21,9 +21,9 @@ toc:
 
 - 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
 - 技术上今年主要就是三个学习目标：
-  - 搞搞 AIGC
   - 学学操作系统
   - 尝试更深入地使用 NixOS 以及参与社区贡献
+  - 搞搞 AIGC
 - [学习并强化个人的数据安全性](https://thiscute.world/posts/an-incomplete-guide-to-data-security/) -
   100%
   - 这是我 2023 年 5 月开始的一个长期计划，目前以及完成了大部分工作，也输出了一篇博客总结
@@ -45,6 +45,7 @@ toc:
 
 > 按优先级排序
 
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 - 结合工作需求，深入了解下当下火热的 AIGC 技术
   - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
