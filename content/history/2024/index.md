@@ -131,7 +131,7 @@ comment:
   - 导航本来是说坐到麦理浩夫人度假村站，但我一下没注意就坐过了，然后下车时第一次「掀钟」不
     熟悉，又过了一站才按到 Stop，结果就是在「北潭凹管理站」才下车（16:34），然后往回走了半
     个小时才到「麦理浩径起点」（17:09）。
-- 从「麦理浩径起点」往西贡水库的路上（大网仔路）看到很多出租车来来往往，联想到之前查的攻
+- 从「麦理浩径起点」往万宜水库的路上（大网仔路）看到很多出租车来来往往，联想到之前查的攻
   略，就知道这些出租车是为了接送徒步的人。我为了省 150 的打车费，就选择了坐九巴到起点。
   - 根据攻略，这些出租车应该大都是直接把人送到了西湾亭，我错估了从「麦理浩径起点」到「西湾
     亭」的距离，一直走到 18:34 我才到西湾亭。也就是说为了省 150 的车费，我多走了 2 个小时
@@ -189,6 +189,68 @@ comment:
   登山杖之类的装备，立马就查资料整了一套，等着到货了。
 - 总的来说，香港西贡这块开发得更好，步道很多，原生态的同时路线也足够成熟，而且过来比深圳大
   鹏半岛更方便，期待下次再来。
+
+
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/maclehose-trail-google-earth-map.webp" title="我的路线（抄了近路） - Google Earth Map" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502140353.webp" title="香港地铁" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502141040.webp" title="深水埗（同埠）办八达通实体卡，因为计划常来香港玩" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502153957.webp" title="乘小巴到达西贡" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502154344.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502161004.webp" title="乘上九巴 94 路去往麦理浩径起点" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502161307.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502161418.webp" title="路边海湾" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502161715.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502163444.webp" title="坐过了站，在北潭凹管理处下车" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502164952.webp" title="路上几乎没人，风景很好，很安静" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502165030.webp" title="麦理浩夫人渡假村" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502165318.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502170229.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502170909.webp" title="多走了半个小时公路才到达麦径起点，路上体验很好，主要是几乎没遇到人" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502171507.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502172624.webp" title="到达万宜水库岔路口，往右是正经麦径，不过比较晚了，我抄近路走了左边。" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502173012.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502173914.webp" title="一路上依旧遇不到人，远离城市跟人群的感觉很奇妙" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502174350.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502174355.webp" title="风景很不错" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502180036.webp" title="瞅一眼路边地图看看我在哪" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502183404.webp" title="抄近路到达西湾亭，从麦径起点算用了一个半小时" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502183412.webp" title="走小路下山到西湾村" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502190323.webp" title="走到 M30 标距柱（每 500 米一个）时天已经黑了" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502190558.webp" title="快到西湾村了，路边开始出现路灯" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502191434.webp" title="终于到了，租了个帐篷露营，200 港币一晚，因为港币不够付了人民币" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502200824.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503073155.webp" title="第二天一早从西湾村出发，M31 标距柱" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503073304.webp" title="原来西湾村过来没几步就是西湾营地，垃圾好多..." width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503074336.webp" title="过了西湾营地开始上山，这张图漂亮" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503074443.webp" title="回望西湾营地" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503074903.webp" title="山上海景独好" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503075947.webp" title="这一段风景绝赞，全程最佳！" width="80%">}}
+
+{{< bilibili id=BV1ps421A7ai >}}
+
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503080234.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503080445.webp" title="这段山路也很有味道" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503081046.webp" title="看到了咸田湾" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503081143.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503081148.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503082510.webp" title="咸田湾的独木桥" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503101046.webp" title="到达赤径，这片海湾很美，在这里休息了挺久" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503103350.webp" title="赤径公厕，还有人画简笔画，可爱" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503104304.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503104444.webp" title="继续往北潭凹走，左侧指路牌" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503104509.webp" title="不知道是谁，在牛粪上插鲜花 emmm" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503104551.webp" title="到达 M044" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503104817.webp" title="柱子上的简笔画" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503113705.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503115615.webp" title="到达终点的公厕" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503115707.webp" title="终点的指示牌" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503120542.webp" title="又坐九巴 94 路回西贡市区" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503123150.webp" title="到达市区，饿得不行到处找吃的" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503131746.webp" title="发现麦当劳是最实惠的，跟深圳差不多价。顺便处理个 Oncall..." width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503135936.webp" title="这家店装修有点意思" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503135947.webp" title="理发店，香港物价..." width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503140002.webp" title="这几家店面比较有年代感" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503152110.webp" title="西贡码头" width="80%">}}
 
 ### 2024-05-01
 
