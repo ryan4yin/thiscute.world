@@ -42,6 +42,11 @@ comment:
 - 这周末开始在最近的山地公园进行体能训练，同时练习登山杖及其他各种装备的使用，争取下周末刷
   完麦理浩径三四段。
 
+
+{{<figure src="/images/travel/2024-05-hiking-systems/IMG20240512140548.webp" title="试用露营锅具、炉子以及食物" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-05-hiking-systems/dji_mimo_20240510_215750.webp" title="试用了好几天帐篷（室内露营 emmm）" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-05-hiking-systems/dji_mimo_20240512_125406.webp" title="目前的所有装备，算上没拍进来的衣物，总重量大概 14kg" width="80%">}}</figure>
+
 ### 2024-05-08
 
 - 给昨天的故障写 Post Mortem，事故回放、事故影响、事故原因、做对了什么、后续处理。
