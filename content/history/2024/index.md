@@ -227,9 +227,6 @@ comment:
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503074443.webp" title="回望西湾营地" width="80%">}}
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503074903.webp" title="山上海景独好" width="80%">}}
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503075947.webp" title="这一段风景绝赞，全程最佳！" width="80%">}}
-
-{{< bilibili id=BV1ps421A7ai >}}
-
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503080234.webp" title="" width="80%">}}
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503080445.webp" title="这段山路也很有味道" width="80%">}}
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240503081046.webp" title="看到了咸田湾" width="80%">}}
@@ -316,6 +313,35 @@ comment:
   非常低，很舒服。
 - 来回的地铁上都在看《这才是心理学》，看了大半了。
 
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414154425.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414154633.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414155041.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414155044.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414155256.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414155600.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414155611.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414160043.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414160204.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414160350.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414162228.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414164536.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414164653.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414165844.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414172136.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414173212.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414173226.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414175248.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414175336.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414180129.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414180146.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414180233.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414180552.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414183053.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414184305.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414184813.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414192732.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-hongkong-victoria-harbour-to-kennedy-town/IMG20240414193601.webp" title="" width="80%">}}
+
 ### 2024-04-08
 
 - 阅读《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》半小时
@@ -337,6 +363,16 @@ comment:
   因为是临时起意准备不足，玩到中午就饿了，至少返程，返程的导航给我们带到了梧桐山上，爬得好
   累。抱怨了一路，说为什么逛植物园还要爬山 emmm
 - 另外跟药哥约好了下周开始读心理学的书，每周五晚上一次读书会随便聊聊。得看书了！
+
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405113938.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405115256.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405115604.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405120855.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405121323.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405122028.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405122141.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405122909.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-04-shenzhen-fairy-lake-botanical-garden/IMG20240405131238.webp" title="" width="80%">}}
 
 ### 2024-04-02 - 2024-04-03
 
