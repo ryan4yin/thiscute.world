@@ -189,7 +189,9 @@ comment:
   登山杖之类的装备，立马就查资料整了一套，等着到货了。
 - 总的来说，香港西贡这块开发得更好，步道很多，原生态的同时路线也足够成熟，而且过来比深圳大
   鹏半岛更方便，期待下次再来。
-
+- 查攻略最有用的几个 APP：
+  - Bilibili - [香港麦理浩径 一二段最全攻略。支线破边洲，蚺蛇尖一并献上](https://www.bilibili.com/video/BV1Eu4y1w7Zc/) - 发现的最详细的攻略，相当用心
+  - 小红书 - 许多有用的信息
 
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/maclehose-trail-google-earth-map.webp" title="我的路线（抄了近路） - Google Earth Map" width="80%">}}
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502140353.webp" title="香港地铁" width="80%">}}
