@@ -28,7 +28,7 @@ comment:
 ### 2024-05-15 - 2024-05-16
 
 - 看网络小说
-- 读了点 RISC-V 官方文档，写得挺好读的。
+- 读了点 RISC-V 官方文档，读完了 RV32I/RV64I 基础指令集的内容，写得挺好读的。
   - [riscv/riscv-isa-manual](https://github.com/riscv/riscv-isa-manual)
   - [Processor-specific application binary interface document for RISC-V](https://github.com/riscv-non-isa/riscv-elf-psabi-doc)
 
