@@ -58,20 +58,13 @@ toc:
   - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
   - 学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
 - 操作系统
-  - 课程
-    [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
-  - 视
-    频：[操作系统：设计与实现 - 南大 jyy 老师的课程](https://www.bilibili.com/video/BV1Xx4y1V7JZ/)
-    - 课程资
-      料：[操作系统：设计与实现 (2023 春季学期)](https://jyywiki.cn/OS/2023/index.html)
+  - 课
+    程：[操作系统：设计与实现 - 南大 jyy 老师的课程](https://www.bilibili.com/video/BV1Xx4y1V7JZ/)
+  - 资料：
+    - [操作系统：设计与实现 (2024 春季学期)](https://jyywiki.cn/OS/2024/)
+    - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
-  - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
-- 从零开始造 OS
-  - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
-  - [rust-raspberrypi-OS-tutorials](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials):
-    rust 版
-  - [rpi4-osdev](https://github.com/isometimes/rpi4-osdev): c 语言版
 
 ## 三、今年的阅读进展
 
