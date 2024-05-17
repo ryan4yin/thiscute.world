@@ -60,6 +60,10 @@ toc:
 - 操作系统
   - 课程
     [MIT 6.S081: Operating System Engineering](https://csdiy.wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/MIT6.S081/)
+  - 视
+    频：[操作系统：设计与实现 - 南大 jyy 老师的课程](https://www.bilibili.com/video/BV1Xx4y1V7JZ/)
+    - 课程资
+      料：[操作系统：设计与实现 (2023 春季学期)](https://jyywiki.cn/OS/2023/index.html)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
   - 代码 [xv6-annotated](https://github.com/palladian1/xv6-annotated)
@@ -132,8 +136,9 @@ toc:
 
 - 核心课程：课程 [6.S081](https://pdos.csail.mit.edu/6.828/2020/schedule.html) + 书
   [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-  - 课程相关资
-    源：[0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
+  - 课程相关资源
+    - [0xFFFF - MIT6.S081 Operating System Engineering (Fall 2020)](https://0xffff.one/d/1085-mit6-s081-operating-system)
+    - [操作系统：设计与实现 - 南大 jyy 老师的课程](https://www.bilibili.com/video/BV1Xx4y1V7JZ/)
   - OSTEP 学习指
     南：<https://github.com/ryan4yin/computer-science/tree/master/coursepages/ostep>
 - 学到 xv6 时可结合这份资料啃源
