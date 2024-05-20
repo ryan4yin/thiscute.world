@@ -25,6 +25,12 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-05-20
+
+- 昨晚到货了 NixOS 项链，很漂亮，超喜欢！
+
+{{<figure src="/images/now/2024-05-20-nixos-necklack.webp" title="NixOS 项链到货了，很漂亮" width="80%">}}
+
 ### 2024-05-18 - 2024-05-19
 
 - 两日麦理浩径徒步，实际只 19 号走完麦径三段就精疲力尽了，第二日早上直接打道回府。
@@ -97,6 +103,34 @@ comment:
   - 再复习一遍登山杖使用方法，这次发现登山杖起了大用，而且经过一天的高强度使用，经验也丰富
     了，现在再回头补充下理论知识，应该会有更深的体会。
 - 已经爱上了徒步这种运动方式，花钱折磨自己毫不手软（
+
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518125113.webp" title="麦边站等九巴 94 路" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518135643.webp" title="麦径三段-开头的急攀路段" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518140340.webp" title="风景很不错" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518140649.webp" title="山路" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518141525.webp" title="继续急攀" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518141757.webp" title="开始下降" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518143118.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518155412.webp" title="到达嶂上营地跟士多店" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518174847.webp" title="麦径路标 - M61" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518181753.webp" title="上升，没有台阶的陡坡" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518182054.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518184552.webp" title="累得不行，寻个地坐下，顺便回头看看" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518185956.webp" title="继续走" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518190308.webp" title="晚上 7 点，天开始黑了" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518190958.webp" title="到达山顶，已经打开了头灯" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518191208.webp" title="山顶继续前行，远方城市灯火通明" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518195224.webp" title="遇到的轻装夜爬团，应该是香港学生，而重装徒步的我已经精疲力竭，一阶阶楼梯地蹒跚下降，被很快超越" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518202121.webp" title="到达 M68，离三段终点近了，全身无一处不疼，真真是行百里者半九十，最后这一公里路相当折磨人" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518214903.webp" title="到达三段终点，接水、自热米饭当晚餐，休息了一个多小时。" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518215148.webp" title="很想直接回家，但导航发现水浪窝营地只差 500 米了，内心天人交战后继续往营地进发" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518215441.webp" title="继续夜行" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518220004.webp" title="路标" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518221518.webp" title="500 米走了我 25 分钟，中间还有一段陡坡" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518224923.webp" title="慢吞吞搭帐篷，花了半小时才搞定" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240519055847.webp" title="第二日早上 6 点醒来" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240519071209.webp" title="7 点多，解决卫生问题，顺便随处走走，发现营地标牌" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240519083434.webp" title="回家路上，取水点" width="80%">}}
 
 ### 2024-05-17
 
