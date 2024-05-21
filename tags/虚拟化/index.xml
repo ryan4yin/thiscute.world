@@ -1,0 +1,26 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>虚拟化 - 标签 - This Cute World</title><link>https://thiscute.world/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/</link><description>虚拟化 - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 27 Nov 2022 22:38:03 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/" rel="self" type="application/rss+xml"/><item><title>Proxmox Virtual Environment 使用指南</title><link>https://thiscute.world/posts/proxmox-virtual-environment-instruction/</link><pubDate>Sun, 27 Nov 2022 22:38:03 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/proxmox-virtual-environment-instruction/</guid><description>&lt;div class="featured-image">
+&lt;img src="/posts/proxmox-virtual-environment-instruction/proxmox-logo.webp" referrerpolicy="no-referrer">
+&lt;/div>本文介绍我使用 PVE 的一些心得（不保证正确 emmmm），可能需要一定使用经验才能顺畅阅读。 前言我在去年的文章「QEMU/KVM 虚拟化环境的搭建与</description></item><item><title>iptables 及 docker 容器网络分析</title><link>https://thiscute.world/posts/iptables-and-container-networks/</link><pubDate>Sun, 15 Aug 2021 19:11:29 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/iptables-and-container-networks/</guid><description>&lt;div class="featured-image">
+&lt;img src="/posts/iptables-and-container-networks/docker-turtles-networking.webp" referrerpolicy="no-referrer">
+&lt;/div>本文仅针对 ipv4 网络 本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和 Linux 虚拟网络接口实现的单机容器网络。 一、iptablesiptabl</description></item><item><title>Linux 中的虚拟网络接口</title><link>https://thiscute.world/posts/linux-virtual-network-interfaces/</link><pubDate>Sat, 14 Aug 2021 11:13:03 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/linux-virtual-network-interfaces/</guid><description>&lt;div class="featured-image">
+&lt;img src="/posts/linux-virtual-network-interfaces/linux-network.webp" referrerpolicy="no-referrer">
+&lt;/div>本文用到的字符画工具：vscode-asciiflow2 注意: 本文中使用 ip 命令创建或修改的任何网络配置，都是未持久化的，主机重启即消失。 Linux 具</description></item><item><title>QEMU/KVM 虚拟化环境的搭建与使用</title><link>https://thiscute.world/posts/qemu-kvm-usage/</link><pubDate>Sun, 17 Jan 2021 21:34:04 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/qemu-kvm-usage/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/qemu-kvm-usage/qemu-kvm-libvirt-go.webp" referrerpolicy="no-referrer">
+            </div><h2 id="qemukvm-虚拟化" class="headerLink">
+    <a href="#qemukvm-%e8%99%9a%e6%8b%9f%e5%8c%96" class="header-mark"></a>QEMU/KVM 虚拟化</h2><blockquote>
+<p>QEMU/KVM 有一定的使用门槛，本文假设你已经拥有基础的虚拟化相关知识，最好是已经有
+virtualbox 或 vmware workstation 的使用经验。</p>
+</blockquote>
+<h2 id="前言" class="headerLink">
+    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>虚拟机（Virtual Machine）是指通过软件模拟的具有完整硬件系统功能的、运行在一个完全隔离环境中的完整计算机系统。它的主要用途有：</p>
+<ol>
+<li>测试、尝鲜新的操作系统。</li>
+<li>快速创建完全隔离的沙箱环境，用于运行某些不安全的或者敏感的文件/程序。</li>
+<li>云服务商或企业会通过服务器虚拟化，提升服务器的利用率。</li>
+<li>虚拟机可以创建快照跟备份，系统环境可以随时还原到旧的快照，也能方便地拷贝给他人。</li>
+</ol>
+<p>而 QEMU/KVM 则是目前最流行的企业级虚拟化技术，它基于 Linux 内核提供的 KVM 模块，结构精简，
+性能损失小，而且开源免费，因此成了大部分企业的首选虚拟化方案。</p>
+<p>目前各大云厂商的虚拟化方案，新的服务器实例基本都是用的 KVM 技术。即使是起步最早，一直重度使用 Xen 的 AWS，从 EC2 C5 开始就改用了基于 KVM 定制的 Nitro 虚拟化技术。</p>
+<p>但是 KVM 作为一个企业级的底层虚拟化技术，却没有对桌面使用做深入的优化，因此如果想把它当成桌面虚拟化软件来使用，替代掉<a href="https://www.virtualbox.org/" target="_blank" rel="noopener noreferrer">VirtualBox</a>/<a href="https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html" target="_blank" rel="noopener noreferrer">VMware Workstation</a>，
+有一定难度。</p>]]></description></item></channel></rss>
