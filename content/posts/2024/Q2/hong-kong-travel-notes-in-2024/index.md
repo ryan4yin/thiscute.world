@@ -209,7 +209,7 @@ comment:
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502165030.webp" title="麦理浩夫人渡假村" width="80%">}}
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502165318.webp" title="" width="80%">}}
 {{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502170229.webp" title="" width="80%">}}
-{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502170909.webp" title="多走了半个小时公路才到达麦径起点，路上体验很好，主要是几乎没遇到人" width="80%">}}
+{{<figure src="/images/travel/2024-05-02-hongkong-maclehose-trail/IMG20240502170909.webp" title="多走了半个小时公路才到达麦径起点，路上体验很好，主要是远离城市，很安静" width="80%">}}
 
 从「麦理浩径起点」往万宜水库的路上（大网仔路）看到很多出租车来来往往，联想到之前查的攻略，
 就知道这些出租车是为了接送徒步的人。我是单人徒步，为了省 150 的打车费，就选择了坐九巴到起
