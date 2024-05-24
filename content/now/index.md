@@ -80,20 +80,26 @@ toc:
 
 正在读：
 
+- 《户外旅行终极指南：基础装备、露营技能、交通方式、饮食、环境和急救》
 - The Great Gatsby - 10/41
-- [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition):
-  Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文
-  版，写的很好，对新手很友好。
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
-- 《复杂 - 梅拉尼 米歇尔》
-- Psychology and Life, 20th edition, by Richard J. Gerrig
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
+- 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 
 想读，但是没啥计划（大致按感兴趣程度排序）：
 
 - 第一梯队
+
   - 《界限：通往个人自由的实践指南》
   - 《置身事内：中国政府与经济发展》
+  - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition):
+    Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文
+    版，写的很好，对新手很友好。
+  - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
+  - 《复杂 - 梅拉尼 米歇尔》
+  - Psychology and Life, 20th edition, by Richard J. Gerrig
+
 - 第二梯队
+  - Mountaineering: The Freedom of the Hills（登山圣经）
   - 《分心也有好人生》
   - 《刘擎西方现代思想讲义》
   - 《五四运动史：现代中国的知识革命》
