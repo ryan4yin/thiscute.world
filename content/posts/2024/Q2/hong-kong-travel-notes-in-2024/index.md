@@ -405,6 +405,7 @@ comment:
 
 {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518140340.webp" title="风景很不错" width="80%">}}
 {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518140649.webp" title="山路" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518140702.webp" title="山路上美美自拍" width="80%">}}
 {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518141525.webp" title="继续急攀" width="80%">}}
 
 在山顶还解锁了一些隐藏支线，因为走的人少，灌木丛茂盛，登山杖几乎没法用，这时候就很庆幸我穿
@@ -413,7 +414,8 @@ comment:
 接着就是下降。
 
 {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518141757.webp" title="开始下降" width="80%">}}
-{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518143118.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518143118.webp" title="山水共长天一色" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518143413.webp" title="Me - 发现眼镜确实变色了欸" width="80%">}}
 
 下降路段走完，到达嶂上营地跟士多店。
 
@@ -424,7 +426,8 @@ comment:
 峭，几乎没有台阶的路段。
 
 {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518181753.webp" title="上升，没有台阶的陡坡" width="80%">}}
-{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518182054.webp" title="爬老半天终于到了山顶" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518182054.webp" title="一小段平路" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518183220.webp" title="坐下休息一会儿，顺便自拍一个" width="80%">}}
 
 又二十多分钟后，累得不行，寻个地坐下，顺便回头看看。
 
@@ -467,6 +470,7 @@ comment:
 或者把虫子收拾进了行李中。
 
 {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240519083434.webp" title="回家路上，取水点" width="80%">}}
+{{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240519085836.webp" title="在车站等车" width="80%">}}
 
 总的来说，计划两日麦理浩径徒步，实际只 18 号走完麦径三段就精疲力尽了，第二日早上直接打道回
 府。从二段起点走到终点，用时 12:45 - 20:30，在交界处吃晚饭、休息了 1 个小时。之后从
@@ -481,44 +485,163 @@ comment:
 
 ## 四、麦理浩径第四段
 
-坐九巴 299X 路到大浪窝站下车开始步行，在三段终点用直饮水机将 3L 水袋灌满，然后取出登山杖出
-发。
+徒步完第三段后，休息没一周，又是周末，周五下班后赶紧跑去续签了香港签证，精简了一番装备，周
+六上午就再次出发徒步第四段了。
 
-从起点出发的时间为 13:20，走到 14:15 的时候，就发现山下开始起雾。
+这次出发前根据上次的经验精简了装备，总总量应该轻了大概 1kg，但仍旧有 16kg。主要变化：
 
-TODO 待补充
+1. 去掉了折叠桌跟折叠凳：上次带了没用上，吃饭都是在营地或者烧烤点，路上补充能量都是直接拿
+   出零食或能量胶随便啃两口，都用不上它们。
+1. 自热米饭也从两盒改成了一盒：因为计划就徒步一天然后露营，第二天回家。只晚上休息的时候来
+   顿热乎的就 OK 了。
 
-20:30 到达基维尔营地。但确认了该营地为私人领地，不接受个人申请露营（一开始就有预期），麦径
-上的下一个露营点离得很远。于是又导航徒步到大老山隧道站乘九巴 74X 路到广福邨下车，再步行到
-地铁站乘车到罗湖口岸回家，到达车站时已经是 22:20。全程差不多 9 个小时，全程超过 21 公里，
-背的还是 16kg 的重装背包。
+四段是麦径难度最高的一段，而且终点基维尔营地不接受个人预约，只接受团体预约。但我还是抱着侥
+幸心理背着重装背包去了，想着路上总不会只有这一个营地吧（后面的经历证明我有点鲁莽了）。
 
-高德地图给的从基维尔营地导航去车站的路线有坑，公路没走多远就没了，后续的小路已经半荒废，灌
-木林立，几乎看不到路面，让人忍不住怀疑这条路真的能走吗？不会走到一半成断头路吧。还好这条灌
-木丛近期有人走过，还在沿途灌木上扎了飘带，这给我增加了一点对它的信心。钻灌木丛，中间还过了
-条溪流，接着又是上山，好走的山路没走多远，接着又是钻灌木丛。很担心被灌木遮挡的路面会有蛇，
-但回家心切的我没时间顾虑这些，一路急行，被灌木丛拌倒了好多跤也完全不管不顾了。后半段下山路
-几乎是钻灌木丛林直线下降，即使有登山杖的辅助，也摔了好多跤，还好灌木比较密，有效减缓了摔倒
-的冲击。下山路没走多久，发现腰包里的水杯跟夹着的折叠坐垫都不见了，显然是在前面几次摔跤的时
-候掉了，不过也就三四十块钱，不管了。
+早饭吃得饱饱的，又洗了澡、休息了会儿消消食，然后 10 点左右就从家里出发了。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525103340.webp" title="深圳地铁一号线上，我滴背包" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525121331.webp" title="12:13，香港沙田汽车站，排队上九巴 299X 路" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525125026.webp" title="到达大浪窝站，风景很好" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525125237.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525125303.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525125322.webp" title="去往四段起点路上，美美自拍" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525125837.webp" title="烧烤点与海湾，以及远方的城市" width="80%">}}
+
+走了约十分钟到达三段终点，在这里用直饮水机将 3L 水袋灌满，然后取出登山杖就出发了。
+
+首先是到达上次露营过的水浪窝营地，然后沿着大路继续上山，路上没人。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525141550.webp" title="开始登山不久，发现起雾了" width="80%">}}
+
+沿大路到达山顶后，是沿着黄泥小路下山。这两天下雨，路面泥泞湿滑，我又背着个 16kg 的重装背
+包，走起来有点难度。还好有登山杖，倒不用怕滑倒。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525142609.webp" title="黄泥路，这两天下雨，路面湿滑，还好有登山杖" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525143000.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525143020.webp" title="细竹林" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525143027.webp" title="岔路口" width="80%">}}
+
+走黄泥路下完山，接着又是沿着石阶路开始登山，石阶也有点湿滑。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525144007.webp" title="石阶，路面湿润" width="80%">}}
+
+登山没多久，就遇到了雾气，接着雾就越来越浓。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525145355.webp" title="登山路上也开始有雾了" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525145413.webp" title="跟山路上的雾来个合照" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525150832.webp" title="雾气加重" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525150851.webp" title="因为雾气跟汗水，头发已经湿了" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525154134.webp" title="" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525154317.webp" title="下完一座小山又开始登另一座，路边好多棕叶" width="80%">}}
+
+又到达一座山顶，在这里休息了一阵子，吃了点东西，接着突然想到我出发时没拉伸，想着补救一下，
+就在这里做了个拉伸。
+
+中间还遇到位外国女士背着个很小的跑步背包爬上来，也休息了一会儿喝了口水，往另一边去了，很快
+消失在了雾中。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525161658.webp" title="到达山顶，雾相当的重" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525161703.webp" title="在山顶休息了一会儿，吃了点东西" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525164637.webp" title="好重的雾啊，啥都看不清" width="80%">}}
+
+休息好了开始下山，没多久就到了四段风景最好的一段，因为浓雾没远景看没，如果没雾这里视野会是
+很开阔的。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525164837.webp" title="这应该是四段风景最好的一段" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525164858.webp" title="跟浓雾来个合照" width="80%">}}
+
+继续前行，到达昂平营地，这里是一块山顶平原草地，浓雾下也有点意境。走着走着旁边雾中出来一只
+狗跟一个人，说起来这路线上挺多人遛狗的，今天遇到两三波了。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525173135.webp" title="昂平，山顶平原草地" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525184434.webp" title="M88 标距柱" width="80%">}}
+
+因为阴天，下细雨，又这么大雾，天黑得很快，17 点后天就有点看不清路面了，开始需要灯光。头灯
+在包里懒得拿出来，就把背包背带上的手电夹到腰间别着的便携坐垫上照亮路面，还别说，效果不错。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525191244.webp" title="17:12 了，走树林路已经需要借助灯光" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525193941.webp" title="17:40，天黑差不多了，先休息一会儿" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525194517.webp" title="可能因为下雨，路上挺多癞蛤蟆" width="80%">}}
+
+到 20:10 左右，终于到达基维尔营地，听到了有人声，也看到了灯光。一番调查确认了跟之前了解到
+的一样，这里不接受个人露营。地图上往前看也没露营点，我有点慌了，但总之先到四段终点瞧瞧吧。
+走到终点发现就是基维尔营地下山的大水泥路面，既然有大路，那就能沿着它回到城市，这样想着终于
+有了一点安全感。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525202749.webp" title="20:27，沿着大马路下山" width="80%">}}
+
+下了个山坡后实在累得不行，把便携坐垫一铺就坐下休息了，尝试用高德地图导航，但信号有点差，一
+直转不出来。
+
+然后一辆车从山下开上来，看到我瘫坐在路边，停下来问我要去哪，了解清楚情况后又给我指路，还说
+这里徒步下去要一个多小时，路上没路灯，问我行不行，要不要他送我去车站。
+
+手机一直没信号，我一开始是有点心动的，但不想麻烦别人，刚好手机终于加载出了导航，我对照了下
+跟他指的路是同一个方向，就婉拒了他，并给他展示我的手电筒表示我不担心走夜路。
+
+高德地图给的教我先徒步到大老山隧道站乘九巴 74X 路至广福邨下车，再步行到地铁站乘车到罗湖口
+岸。
+
+但它给的徒步路线有坑，我跟着导航越走就越荒凉，公路路面开叉，长满荒草，接着就直接没公路了。
+我慌了，仔细确认才意识到它教我往草丛里钻，仔细看草丛里还真有条路... 但这条小路显然已经半荒
+废，草木林立，不仔细看几乎分辨不出路线，让人忍不住怀疑这条路真的能走吗？不会走到一半成断头
+路吧。
+
+还好这条灌木丛近期有人走过，沿途草木有明显被人趟过，沿途灌木上偶尔还扎了很干净显眼的飘带，
+明显才扎上去没多久，这给我增加了一点对它的信心。
+
+钻灌木丛，中间还过了条溪流，接着又是上山，好走的山路没走多远，接着又是在山上钻更深的灌木
+丛，我越来越慌——这真的是下山的路吗？同时我也有点担心被灌木遮挡的路面会有蛇，但现在已经很晚
+了，下山心切的我没时间顾虑这些，一路急行。
+
+灌木钻了没多久就开始下山路，而且能看到山下明亮的高速公路跟城市夜景了，这让我放心了一点——至
+少确实是在下山朝城市里去。但这下山路可不好走，几乎是钻着灌木丛林走直线下降，而且是原生地
+形，非常的陡，即使有登山杖的辅助，也摔了好多跤，还好草木灌木比较密，有效减缓了摔倒的冲击，
+也避免我滚下山。
+
+下山路没走多久，我突然发现腰包里的水杯跟夹着的折叠坐垫都不见了，显然是在前面几次摔跤的时候
+掉了，不过也就三四十块钱，不管了，继续向下。
 
 下山路仿佛没有尽头，万幸途中发现底下的山坳里有好几片亮光，一开始怀疑是山里废弃的房子，前面
 趟这条路的旅游队在房子里露营，这也给了我希望——或许能有人给点帮助跟一口吃的，一起露营也不
-错。到九点半左右终于下到山脚的时候，发现是个电站之类的建筑，周围还有监控警示。挺失望的。不
-过到这里就是大路了，在路边把身上汗湿且因为钻灌木、摔跤而脏乱臭的衣服都脱掉，换了身干净的。
-登山鞋里也湿透了，石子叶子小木棍进去了不少，也换了备用的沙滩鞋。换鞋时不知道哪跑出来只蚂蟥
-在我脚面上爬，赶紧给拔掉丢了（也很庆幸我一直穿运动紧身内衣裤，不然这一趟灌木丛徒步下来，小
-腿刮伤不说，还可能被蚂蟥等各种虫子叮咬）。
+错。
 
-衣服鞋子换好后又休息了挺久，然后沿着大路走了可能十多二十分钟，才终于走到了车站，但已经是
-22:20 了，乘公交、转地铁、过关、再乘一号线时已经 23:40，这个点居然还有一趟末班车。最后到家
-已经过了 0 点，饿得不行搞完夜宵、休息、再洗澡，搞到两三点才睡觉。
+到九点半左右终于下到山脚的时候，发现是个电站之类的建筑，周围还有监控警示，挺失望的。不过到
+这里又是大路了，也能很明显听到不远处车辆来往的声音，悬着的心总算放了下来。
+
+考虑到手表快没电了，先把登山记录停了，显示今天徒步了接近 21 公里，真是累到够呛。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/Screenshot_2024-0-22-38.webp" title="OPPO 健康 - 日行四万步" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/Screenshot_2024-0-22-41.webp" title="登山 21 公里" width="80%">}}
+
+在路边找了个地坐着休息，想到因为钻灌木林、摔跤、一路剧烈运动疯狂出汗，加之今天又下小雨，身
+上都是各种小叶子、木棍、汗水、沾了叶子上的雨水，这个样子可不好上车见人。见周围也没人，我直
+接把衣服都脱掉，换了身干净的。
+
+登山鞋里也湿透了，刚刚钻林子导致石子叶子小木棍雨水也进去了不少，也换了备用的沙滩鞋。换鞋时
+不知道哪跑出来只蚂蟥在我脚面上爬，赶紧给拔掉丢了（也很庆幸我一直穿运动紧身内衣裤，不然这一
+趟灌木丛徒步下来，小腿刮伤不说，还可能被蚂蟥等各种虫子叮咬）。
+
+衣服鞋子换好后又休息了挺久，然后沿着大路走了可能十多二十分钟，才终于到了山脚，远远看到不远
+处就有个公交站，再次导航一下，确认它就是大老山隧道站。
+
+到达车站已经是 22:20 了，乘九巴 74X 路到广福邨下车，再步行到地铁站乘车到罗湖口岸、过关、再
+乘一号线时已经 23:40，这个点居然还有一趟末班车。最后到家已经过了 0 点，饿得不行搞完夜宵、
+休息、再洗澡，搞到两三点才睡觉。
+
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525223704.webp" title="22:37，在乘九巴 74X 路往广福邨的路上，香港城市夜景" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525224649.webp" title="下车，步行前往地铁站" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525225236.webp" title="22:52，到达大埔墟地铁站" width="80%">}}
+{{<figure src="/images/travel/2024-05-25-hongkong-maclehose-trail-section-4/IMG20240525225744.webp" title="22:57，等地铁中" width="80%">}}
+
+总的来说这次徒步距离真的是到目前为止的人生巅峰了，另外这次下山路线也是我走过最险的一次，有
+点刺激跟后怕，高德地图坑我啊。
 
 ## 装备总结
 
 - 不应该带的装备：
-  - 折叠桌跟折叠凳：吃饭都是在营地或者烧烤点，根本用不上这俩。路上都是直接拿出零食或能量胶
-    随便啃两口，也不需要坐下来吃。
+  - 折叠桌跟折叠凳：
   - 沐浴露：许多营地没洗澡的地方，擦身体也用不上沐浴露，带这个不如带点湿巾。
   - 洗洁精：同理，就几天徒步，用纸巾擦一擦就行，回家后再用洗洁精清理一遍不迟。
   - 太阳能电板：三天以内，一个 30000 mah 的电源完全够用。如果 3-6 天，还不如带两个移动电
