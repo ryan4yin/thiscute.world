@@ -1,5 +1,5 @@
 ---
-title: "2024 年香港徒步游记（一）"
+title: "2024 年香港徒步旅行记录"
 subtitle: ""
 description: ""
 date: 2024-05-21T10:05:00+08:00
@@ -24,7 +24,7 @@ tags:
     "麦理浩径",
   ]
 categories: ["life"]
-series: ["游记"]
+series: ["徒步"]
 series_weight: 3
 hiddenFromHomePage: false
 hiddenFromSearch: false
