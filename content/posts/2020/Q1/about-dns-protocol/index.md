@@ -68,7 +68,7 @@ DNS 虽然说一般只用来查个 ip 地址，但是它提供的记录类型还
 名是从右往左读的（最右侧是根, `www.baidu.com.`），而 IP 的网段（如 `192.168.0.0/16`）刚好
 相反，是左边优先。因此 PTR 记录的“域名”必须将 IP 地址反着写，末尾再加上 `.in-addr.arpa.`
 表示这是一个反向解析的域名。（ipv6 使用 `ip6.arpa.`）拿 baidu.com 的邮件服务器测试一下：
-![](/images/about-dns-protocol/968138-20200207101308247-1165339332.webp "PTR 记录查询")
+{{<figure src="/images/about-dns-protocol/968138-20200207101308247-1165339332.webp" title="PTR 记录查询">}}
 
 其他还有些 `TXT`、`CAA` 等奇奇怪怪的记录，就用到的时候自己再查了。
 
@@ -117,7 +117,7 @@ DNS 虽然说一般只用来查个 ip 地址，但是它提供的记录类型还
 下面的图片拷贝自 Amazon Aws 文档，它展示了在不考虑任何 DNS 缓存的情况下，一次 Web 请求的经
 过，详细描绘了 DNS 解析的部分。
 
-![](/images/about-dns-protocol/968138-20200205165225054-57338322.webp "DNS 解析流程")
+{{<figure src="/images/about-dns-protocol/968138-20200205165225054-57338322.webp" title="DNS 解析流程" width="80%">}}
 
 其中的第 3 4 5 步按顺序向前面讲过的根域名服务器、顶级域名服务器、权威域名服务器发起请求，
 以获得下一个 DNS 服务器的信息。这很清晰。
@@ -135,12 +135,12 @@ DNS 虽然说一般只用来查个 ip 地址，但是它提供的记录类型还
 接下来使用 `dig +trace baidu.com` 复现一下上述的查询流程（这种情况下 dig 自己就是一个 DNS
 递归解析器）：
 
-![](/images/about-dns-protocol/968138-20200207101817456-1276700345.webp "dig +trace baidu.com")
+{{<figure src="/images/about-dns-protocol/968138-20200207101817456-1276700345.webp" title="dig +trace baidu.com">}}
 
 另外前面有讲过 DNS 的反向解析，也是同样的层级结构，是从根服务器开始往下查询的，下面拿
 baidu 的一个邮件服务器进行测试：
 
-![](/images/about-dns-protocol/968138-20200207102331250-71048478.webp "反向解析")
+{{<figure src="/images/about-dns-protocol/968138-20200207102331250-71048478.webp" title="反向解析">}}
 
 > dig 工具未来可能会被 drill 取代。
 
@@ -429,7 +429,7 @@ root@test-ubuntu:~/dns-server# tree
 ```
 
 然后通过 `./coredns` 启动 coredns。通过 dig 检验：
-![](/images/about-dns-protocol/968138-20200211182339141-1135337933.webp "DNS 测试")
+{{<figure src="/images/about-dns-protocol/968138-20200211182339141-1135337933.webp" title="DNS 测试">}}
 
 可以看到 `ftp.dev-env.local` 已经被成功解析了。
 
