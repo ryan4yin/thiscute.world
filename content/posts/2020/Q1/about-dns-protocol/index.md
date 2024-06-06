@@ -146,8 +146,10 @@ baidu 的一个邮件服务器进行测试：
 
 ### DNS 泛解析通配符 `*`
 
-DNS 记录允许使用通配符 `*`，并且该通配符可匹配任意级数的子域！！！比如 `*.example.com` 就
-可以匹配所有的一二三四级域名等等，**但是无法匹配 `example.com` 本身**！
+DNS 记录允许使用通配符 `*`，但仅支持同级匹配，也就是说 `*` 不能匹配域名中的 `.` 这个字符。
+
+举例来说，`*.aliyun.com` 能用于 `xx.aliyun.com` 和 `abc.aliyun.com`，但不能用于
+`aliyun.com`, `a.b.aliyun.com` 或 `bb.xx.aliyun.com`.
 
 ### TTL（Time To Live）
 
