@@ -119,6 +119,8 @@ toc:
   - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
   - 《为什么学生不喜欢上学》
   - 《享受孩子成长》
+  - [上海交通大学生存手册](https://survivesjtu.gitbook.io/survivesjtumanual)
+  - [0xFFFF Wiki - 写给 CS 专业大学生的学习导览与建议](https://wiki.0xffff.one/about)
 
 ## 四、备选学习路线
 
