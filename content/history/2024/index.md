@@ -25,6 +25,23 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-06-12
+
+- 网络漫游，从卡瓦邦噶的[珍藏资料](https://www.kawabangga.com/collection)意外发
+  现[Linux C 编程一站式学习](https://akaedu.github.io/book/index.html)居然有在线版，而且链
+  接是 GitHub Pages，进一步定位到了对应的代码仓库，也就找到了几位作者的 GitHub 账号。
+  - 从 GitHub 主页看，akaedu 也就是亚嵌教育，早就倒闭了，但他们还是很有情怀的在 GitHub 上
+    公开了一些非常有价值的资料。而作者宋劲杉至少在 2012 年就移居 New Zealand 了。
+  - 接着又搜到了
+    [亚嵌教育李明：一生的学习](https://blog.csdn.net/programmer_editor/article/details/122939670)
+    这篇文章，才知道它跟当年的新东方是类似的，是中国职业培训的先驱，其创立也挺具理想主义色
+    彩。诸多感慨吧。
+  - 从 akaedu 进一步发现了这个博客 [Peter's Corner](http://happypeter.github.io/)，作者在
+    这里分享了很多他的所思所想，读着挺有启发。他后来搞区块链去了，还梭哈比特币，而且看文章
+    他搞比特币之前就不咋缺钱了吧。
+- 跟 0xffff 分享了上述发现，站长觉得挺有价值，于是发了个小帖子分享
+  [倒闭的 akaedu 及相关的人与事](https://0xffff.one/d/1999)
+
 ### 2024-06-07 - 2024-06-09
 
 - 乐乐 6 号晚上到深圳，10 号早上回老家。
