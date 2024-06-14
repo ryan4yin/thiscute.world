@@ -741,3 +741,7 @@ TODOs:
   常用药指南，结合
   [户外背包打包与装备检查清单 - 1.22 医疗救援与防护用品](https://zhuanlan.zhihu.com/p/264925949)
   的内容选择药品，非常实用。
+- [一個人的麥理浩徑](https://bike-packing.cn/backpacking/maclehose-trail/): 包含详细的麦理
+  浩徑全程路线、政府营地、水源、交通等信息，非常实用。
+- [露營地點 - 香港渔农自然护理署](https://www.afcd.gov.hk/tc_chi/country/cou_vis/cou_vis_cam/cou_vis_cam_cam/cou_vis_cam_cam.html):
+  包含香港全部 41 个政府营地的介绍。
