@@ -83,11 +83,16 @@ toc:
 
 已读：
 
-- 暂无，今年读书的热情不高，躺平中...
+- 《户外旅行终极指南：基础装备、露营技能、交通方式、饮食、环境和急救》：内容很多，但都比较
+  入门级，好处是图很多，读着很轻松，几个小时就能走马观花全过一遍。
+- [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/):
+  2022 年开始读的书，但当时没啥兴趣。最近在照猫画虎写 karpenter provider，有了些编程经验后
+  又对它产生了兴趣。书不厚，花了三个小时走马观花全读了一遍，代码内容大都跳过了（不少也过时
+  了，譬如还在介绍 dep），做了些笔记。挺有帮助，帮我系统地梳理了最近折腾 karpenter 学到的
+  operator 编程相关知识。
 
 正在读：
 
-- 《户外旅行终极指南：基础装备、露营技能、交通方式、饮食、环境和急救》
 - The Great Gatsby - 10/41
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
@@ -246,10 +251,6 @@ toc:
     - 基于 go 1.10，详细分析 go 的实现机制：内存分配、垃圾回收、并发调度等等
   - [ ] [Go语言动手写Web框架](https://geektutu.com/post/gee.html) - 进度 20%
   - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
-
-- Kubernetes 原理、Kubernetes APIServer/Operator 编程
-
-  - [ ] [Programming Kubernetes - Developing Cloud Native Applications](https://programming-kubernetes.info/)
 
 - 英语
   - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美
