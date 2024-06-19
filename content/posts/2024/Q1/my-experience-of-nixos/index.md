@@ -55,26 +55,35 @@ GitHub 仓库与单独的文档站点以来，它已经获得了 1189 个 stars�
 
 ## Nixpkgs 中的包太少？ {#is-nixpkgs-lacking-packages}
 
-先澄清下一点，NixOS 的包非常的多，Nixpkgs 中的包在体量上跟 Arch Linux 的 AUR 是一个级别
-的。[Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total)
+先澄清下一点，NixOS 的包非常
+多，[Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total)
 的包仓库统计数据如下：
 
 ![Repository statistics](./repository-statistics.webp)
 
-虽然 Nixpkgs 因为还打了许多 npm 之类的包，包的总数有水分，但即使排除掉这部分包，它跟 AUR
-的包数量应该也是差不多的。
-
-而且因为 Nixpkgs 是官方包仓库，使用了 Monorepo 与 PR Review 机制，整体的包质量肯定是比 AUR
-要好的。上面截图也能看到 Nixpkgs 的包整体上比 AUR 更新、漏洞更少。
+不过上面这个 Nixpkgs 的包数量有挺多水分，因为其中还包含了许多编程语言的 Library 包（貌似挺
+多 Haskell 人用 nix 当语言包管理器用），比如
+[Haskell Packages(18000+)](https://search.nixos.org/packages?channel=unstable&query=haskell),
+[R Packages(27000+)](https://search.nixos.org/packages?channel=unstable&query=rpackages),
+[Emacs Packages(6000+)](https://search.nixos.org/packages?channel=unstable&query=emacspackages)
+，去掉它们后 Nixpkgs 中的包数量大约 40000+，比 AUR 逊色，跟第二名 Raspbian Testing 差不
+多。这个数量再怎么算也跟「包太少」没啥关系。
 
 包仓库这里也是 NixOS 跟 Arch 不太同的地方，Arch 的官方包仓库收录很严格，相对的 AUR 生态相
-当繁荣。但任何人都能往 AUR 上传内容，虽然有一个投票机制起到一定审核作用，但这个限制太松散
-了。
+当繁荣。但任何人都能往 AUR 上传内容，虽然有一个投票机制起到一定审核作用，但个人感觉这个限
+制太松散了。
 
 而 NixOS 就很不一样了，它的官方包仓库 Nixpkgs 很乐于接受新包，想为 Nixpkgs 提个 PR 加包或
-功能相对其他发行版而言要简单许多，这是导致 Nixpkgs 的体量接近 AUR 的直接原因（GitHub 显示
-Nixpkgs 有 5000+ 历史贡献者，这很夸张了）。NixOS 其实也有个与 AUR(Arch User Repository) 类
-似的 NUR（Nix User Repository），但因为 Nixpkgs 的宽松，NUR 反而没啥内容。
+功能相对其他发行版而言要简单许多，这是 Nixpkgs 的包数量这么多的重要原因（GitHub 显示
+Nixpkgs 有 5000+ 历史贡献者，这很夸张了）。
+
+Nixpkgs 仓库的更新流程相对 AUR 也严格许多，PR 通常都需要通过一系列的 GitHub Actions 测试 +
+Maintainer Review + [Ofborg](https://github.com/NixOS/ofborg) 检查与自动构建测试后才能被合
+并，Nixpkgs 也鼓励维护者为自己的包添加测试（包的 `doCheck` 默认为 `true`），这些举措都提升
+了 Nixpkgs 的包质量。
+
+NixOS 其实也有个与 AUR(Arch User Repository) 类似的 NUR（Nix User Repository），但因为
+Nixpkgs 的宽松，NUR 反而没啥内容。
 
 举例来说，QQ 能直接从 Nixpkgs 官方包仓库下载使用，而在 Arch 上你得用 AUR 或者
 archlinux-cn.
@@ -353,7 +362,8 @@ NixOS 很特殊，很强大，但另一方面**它也有着相当多的历史债
      Overlays.
    - 关于实验特性的调查中，使用 Flakes 特性的用户占比已经达到了 59.1%.
 
-> 2024-04-12 更新：NixCon 2024 也有一个演讲提供了 Nix 社区的各种历史数据：[Nix, State of the Union - NixCon 2024](https://github.com/nixcon/NixConContent/blob/main/NixCon%20NA%202024%20-%20California/Day%202%20-%20Keynotes/Nix%2C%20State%20of%20the%20Union%20-%20%202024%20(LA).pdf)
+> 2024-04-12 更新：NixCon 2024 也有一个演讲提供了 Nix 社区的各种历史数
+> 据：[Nix, State of the Union - NixCon 2024](<https://github.com/nixcon/NixConContent/blob/main/NixCon%20NA%202024%20-%20California/Day%202%20-%20Keynotes/Nix%2C%20State%20of%20the%20Union%20-%20%202024%20(LA).pdf>)
 
 另外 GitHub 的
 [Octoverse 2023](https://github.blog/2023-11-08-the-state-of-open-source-and-ai/) 也难得地

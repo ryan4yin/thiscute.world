@@ -56,33 +56,43 @@ please follow the link provided above.
 Some people(in China) say that NixOS has too few packages, and this is one of the reasons
 they don't use it. Is this true?
 
-Firstly, let's clarify that NixOS has a vast number of packages. In terms of size, Nixpkgs
-is on par with Arch Linux's AUR.
+To clarify, NixOS boasts a substantial number of packages. The
 [Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total)
-show that:
+illustrate this as follows:
 
 ![Repository statistics](./repository-statistics.webp)
 
-Although the total number of packages in Nixpkgs may include some "fake" packages due to
-the inclusion of npm packages and others, even excluding these, the number of packages
-should be roughly similar to that of AUR.
+However, the count of packages in Nixpkgs is somewhat inflated due to the inclusion of
+numerous language-specific libraries. It appears that many Haskell developers favor Nix as
+their package manager, which includes
+[Haskell Packages(18000+)](https://search.nixos.org/packages?channel=unstable&query=haskell),
+[R Packages(27000+)](https://search.nixos.org/packages?channel=unstable&query=rpackages),
+and
+[Emacs Packages(6000+)](https://search.nixos.org/packages?channel=unstable&query=emacspackages).
+After subtracting these, Nixpkgs still has over 40000 packages, which, while less than
+AUR, is on par with the second-place Raspbian Testing. This number hardly suggests a
+scarcity of Nix packages.
 
-Moreover, because Nixpkgs is the official package repository and uses a Monorepo and PR
-Review system, the overall package quality is undoubtedly better than that of AUR. As you
-can see from the screenshot, Nixpkgs packages are generally more up-to-date and have fewer
-vulnerabilities than AUR packages.
+The package repository is also a point of differentiation between NixOS and Arch. Arch's
+official repository has stringent inclusion criteria, while the AUR ecosystem is quite
+vibrant. The AUR allows anyone to upload content, and although a voting mechanism serves
+as a form of review, it feels rather lenient.
 
-This is also where NixOS differs from Arch: Arch's official package repository has strict
-inclusion criteria, while its AUR ecosystem is quite vibrant. Anyone can upload content to
-AUR, although there is a voting mechanism that serves as a certain level of review, the
-criteria are quite loose.
+NixOS takes a different approach. Its official package repository, Nixpkgs, is very
+receptive to new packages. Submitting a Pull Request to add a package or feature to
+Nixpkgs is significantly simpler compared to other distributions, which is a key reason
+for the large number of packages in Nixpkgs (GitHub shows that Nixpkgs has over 5000
+contributors, an impressive figure).
 
-NixOS, on the other hand, is quite different. Its official package repository, Nixpkgs, is
-quite open to new packages, and it's relatively easier to add a package or feature to
-Nixpkgs compared to other distributions. This is one of the direct reasons why Nixpkgs'
-size is close to AUR (GitHub shows that Nixpkgs has over 5000 historical contributors,
-which is quite astonishing). NixOS actually also has a NUR (Nix User Repository) similar
-to AUR, but because of Nixpkgs' lax attitude, NUR doesn't have much content.
+The update process for the Nixpkgs repository is also more rigorous than that of AUR. PRs
+generally need to pass a series of GitHub Actions, Maintainer's Review, and
+[Ofborg](https://github.com/NixOS/ofborg) check and automatic build tests before being
+merged. Nixpkgs encourages maintainers to add tests for their packages (the `doCheck` flag
+is set to `true` by default), all of which contribute to the overall quality of the
+packages.
+
+NixOS also has a counterpart to AUR, the NUR (Nix User Repository), but due to the
+permissive nature of Nixpkgs, NUR is not as populated.
 
 For example, you can directly download and use QQ(an IM App popular in China) from the
 Nixpkgs official package repository, while on Arch, you would need to use AUR or
