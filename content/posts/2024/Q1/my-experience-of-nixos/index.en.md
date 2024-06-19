@@ -62,16 +62,16 @@ illustrate this as follows:
 
 ![Repository statistics](./repository-statistics.webp)
 
-However, the count of packages in Nixpkgs is somewhat inflated due to the inclusion of
-numerous language-specific libraries. It appears that many Haskell developers favor Nix as
-their package manager, which includes
+The count of packages in Nixpkgs is indeed inflated by the inclusion of many programming
+language libraries — it seems that quite a few Haskell developers use Nix as their
+language package manager. For instance, there are
 [Haskell Packages(18000+)](https://search.nixos.org/packages?channel=unstable&query=haskell),
 [R Packages(27000+)](https://search.nixos.org/packages?channel=unstable&query=rpackages),
 and
 [Emacs Packages(6000+)](https://search.nixos.org/packages?channel=unstable&query=emacspackages).
-After subtracting these, Nixpkgs still has over 40000 packages, which, while less than
-AUR, is on par with the second-place Raspbian Testing. This number hardly suggests a
-scarcity of Nix packages.
+However, even after subtracting these, Nixpkgs still has over 40000 packages, which,
+although less than AUR, is hardly a number that corresponds to the description of "too few
+packages."
 
 The package repository is also a point of differentiation between NixOS and Arch. Arch's
 official repository has stringent inclusion criteria, while the AUR ecosystem is quite

@@ -61,13 +61,13 @@ GitHub 仓库与单独的文档站点以来，它已经获得了 1189 个 stars�
 
 ![Repository statistics](./repository-statistics.webp)
 
-不过上面这个 Nixpkgs 的包数量有挺多水分，因为其中还包含了许多编程语言的 Library 包（貌似挺
+上面这个 Nixpkgs 的包数量确实有挺多水分——Nixpkgs 还打包了许多编程语言的 Libraries（貌似挺
 多 Haskell 人用 nix 当语言包管理器用），比如
 [Haskell Packages(18000+)](https://search.nixos.org/packages?channel=unstable&query=haskell),
 [R Packages(27000+)](https://search.nixos.org/packages?channel=unstable&query=rpackages),
 [Emacs Packages(6000+)](https://search.nixos.org/packages?channel=unstable&query=emacspackages)
-，去掉它们后 Nixpkgs 中的包数量大约 40000+，比 AUR 逊色，跟第二名 Raspbian Testing 差不
-多。这个数量再怎么算也跟「包太少」没啥关系。
+，但即使把它们去掉后 Nixpkgs 的包数量也有大约 40000+，虽然逊色于 AUR，但这个数量再怎么算也
+跟「包太少」这个描述扯不上关系。
 
 包仓库这里也是 NixOS 跟 Arch 不太同的地方，Arch 的官方包仓库收录很严格，相对的 AUR 生态相
 当繁荣。但任何人都能往 AUR 上传内容，虽然有一个投票机制起到一定审核作用，但个人感觉这个限
