@@ -46,7 +46,7 @@ GitHub 仓库与单独的文档站点以来，它已经获得了 1189 个 stars�
 
 - [NixOS 与 Flakes - 一份非官方的新手指南](https://nixos-and-flakes.thiscute.world/zh/)
 
-{{<figure src="./nixos-and-flakes-book-202402.webp" title="NixOS & Flakes Book" width="80%">}}
+{{<figure src="/images/my-experience-of-nixos/nixos-and-flakes-book-202402.webp" title="NixOS & Flakes Book" width="80%">}}
 
 那么作为一名已经深度使用 NixOS 作为主力桌面系统接近 10 个月的熟手，我在这里也从另一个角度
 来分享下我的入坑体会。

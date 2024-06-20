@@ -1,5 +1,5 @@
 ---
-title: "Linux 上的 WireGuard 网络分析（一）"
+title: "WireGuard on Linux - Part I"
 date: 2023-03-28T22:19:25+08:00
 lastmod: 2023-03-28T22:19:25+08:00
 draft: true

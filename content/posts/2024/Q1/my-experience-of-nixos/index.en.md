@@ -42,7 +42,7 @@ garnered 1189 stars, and besides me, 37 other readers have submitted PRs:
 
 - [NixOS & Flakes - An Unofficial Beginner's Guide](https://nixos-and-flakes.thiscute.world/zh/)
 
-{{<figure src="./nixos-and-flakes-book-202402.webp" title="NixOS & Flakes Book" width="80%">}}
+{{<figure src="/images/my-experience-of-nixos/nixos-and-flakes-book-202402.webp" title="NixOS & Flakes Book" width="80%">}}
 
 From the perspective of a seasoned user who has been deeply using NixOS as a primary
 desktop system for nearly 10 months, I'd like to share my insights from a different angle
@@ -60,7 +60,7 @@ To clarify, NixOS boasts a substantial number of packages. The
 [Repository statistics](https://link.zhihu.com/?target=https%3A//repology.org/repositories/statistics/total)
 illustrate this as follows:
 
-![Repository statistics](./repository-statistics.webp)
+![Repository statistics](/images/my-experience-of-nixos/repository-statistics.webp)
 
 The count of packages in Nixpkgs is indeed inflated by the inclusion of many programming
 language libraries — it seems that quite a few Haskell developers use Nix as their
@@ -418,7 +418,7 @@ using some data.
 First, let's look at the Nixpkgs project, which stores all the software packages for NixOS
 and the implementation code for NixOS itself:
 
-[![](./nixpkgs-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
+[![](/images/my-experience-of-nixos/nixpkgs-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
 
 The graph shows that the activity of the Nixpkgs project has been continuously increasing
 since 2021. Among the Top 6 contributors, three began contributing code in large
@@ -429,14 +429,14 @@ and @figsoda.
 Now let's look at the commit history of the Nix package manager, which is the underlying
 technology of NixOS:
 
-[![](./nix-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
+[![](/images/my-experience-of-nixos/nix-contributors.webp)](https://github.com/NixOS/nixpkgs/graphs/contributors)
 
 The graph shows a significant increase in activity in the Nix project in 2020, five of the
 top 6 contributors beginning to contribute code in large quantities after 2020.
 
 Next, let's look at the Google Trends for the keyword "NixOS":
 
-[![](./nixos-google-trends.webp)](https://trends.google.com/trends/explore?cat=5&date=2014-01-23%202024-02-23&q=NixOS)
+[![](/images/my-experience-of-nixos/nixos-google-trends.webp)](https://trends.google.com/trends/explore?cat=5&date=2014-01-23%202024-02-23&q=NixOS)
 
 This graph shows several obvious upticks in the search trending for NixOS:
 
@@ -449,7 +449,7 @@ This graph shows several obvious upticks in the search trending for NixOS:
      YouTube launched several videos about NixOS around this time. As of 2024-02-23, the
      three NixOS-related videos with the highest views on YouTube were all released
      between June and July 2023, with a total view count exceeding 1.3 million.
-     ![](./nixos-youtube-videos.webp)
+     ![](/images/my-experience-of-nixos/nixos-youtube-videos.webp)
    - Interest in China peaked recently, which may be because the user base in China has
      always been small. Then in June, I released
      [NixOS and Flakes - An Unofficial Beginner's Guide](https://nixos-and-flakes.thiscute.world/zh/),

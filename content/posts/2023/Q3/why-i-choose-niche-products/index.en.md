@@ -118,8 +118,8 @@ Additionally, after mastering these technologies, I find them enjoyable to use. 
 keyboard-driven interaction provides a sense of control and smoothness(elegant, so
 elegant!).
 
-{{<figure src="./hyprland_2023-07-29_1.webp" title="My NixOS + Hyprland Desktop" width="85%">}}
-{{<figure src="./hyprland_2023-07-29_2.webp" title="My Neovim Editor" width="85%">}}
+{{<figure src="/images/why-i-choose-niche-products/hyprland_2023-07-29_1.webp" title="My NixOS + Hyprland Desktop" width="85%">}}
+{{<figure src="/images/why-i-choose-niche-products/hyprland_2023-07-29_2.webp" title="My Neovim Editor" width="85%">}}
 
 Similarly, my love for NixOS is based on similar reasons. NixOS with its declarative,
 reproducible (consistent runtime environment), OS as Code features aligns perfectly with
@@ -153,7 +153,7 @@ enter a state of flow? That is also difficult to say.
 If we look at it from a purely pragmatic perspective, there may not be many benefits; it's
 like playing games, just spending leisure time.
 
-{{<figure src="./useless-work.jpg" title="Why do you always delve into these things that are useless for the business? (teasing tone)" width="35%">}}
+{{<figure src="/images/why-i-choose-niche-products/useless-work.jpg" title="Why do you always delve into these things that are useless for the business? (teasing tone)" width="35%">}}
 
 However, compared to doing something boring for leisure, there are some useful takeaways.
 For instance, when I encounter a bug in AstroNvim , I provide a PR to the upstream
