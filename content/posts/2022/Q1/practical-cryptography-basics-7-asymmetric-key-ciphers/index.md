@@ -285,7 +285,7 @@ coefficient:
     ab:6c:39:4c:76:c5:15:66:83:cf:27:49:63:10:56:
     44:e5:b2:34
 
-# 查看私钥内容
+# 查看公钥内容
 ❯ cat rsa-public-key.pem
 -----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNE8QZLJZXREOeWZ2ilAzGC4Kj
