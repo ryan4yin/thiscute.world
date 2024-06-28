@@ -95,6 +95,7 @@ toc:
 
 正在读：
 
+- 走出荒野 - 70%
 - The Great Gatsby - 10/41
 - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
