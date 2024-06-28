@@ -30,6 +30,13 @@ comment:
 - 上班干活，专注达跟安非他酮每天都吃。这周工作状态都不错，之前有些 delay 的项目进度也在这
   周赶了上来。
 - 跟几个同事约好周六麦理浩径二段徒步，拉了群讨论行程、装备、食物等事宜。
+- 技术上最近可以做的一些 TODO
+  - 工作：逐步上线 Istio Ambient Mode，去掉 Sidecar 应该有比较明显的成本收益。
+  - 工作：K8s 网关架构逐步从自定义的 Nginx 迁移到 Istio Gateway + Gateway API
+    - 成本上收益不大，但换成标准的 Gateway API 有利于后续的维护管理。
+  - 工作：上线 containerd 社区的 image steaming 功能，或者所有容器镜像都改用 zstd 压缩。
+    - 上述两项工作都能提升容器启动速度，后者比较稳妥，前者可能导致 java 预热时间更慢。
+  - 业余：完善 karpenter-provider-proxmox 这个项目
 
 ### 2024-06-22 - 2024-02-23
 
