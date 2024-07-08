@@ -79,6 +79,11 @@ NAME                 STATUS    MESSAGE   ERROR
 scheduler            Healthy   ok
 controller-manager   Healthy   ok
 etcd-0               Healthy   ok
+
+# 类似这种错误
+$ kubectl events --types=Warning -n your-namespace
+LAST SEEN   TYPE      REASON                     OBJECT                                   MESSAGE
+56m         Warning   UpdateLoadBalancerFailed   Service/xxx-xxx   Error updating load balancer with new hosts [xxx-4-3dsiuh <1 more>], error: failed to update load-balancer with ID xxx: xxx error
 ```
 
 如果三个组件任一个显示 Unhealthy，就能确定是控制面出现了问题。
