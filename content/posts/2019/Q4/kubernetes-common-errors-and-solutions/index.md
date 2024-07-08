@@ -83,6 +83,9 @@ etcd-0               Healthy   ok
 
 如果三个组件任一个显示 Unhealthy，就能确定是控制面出现了问题。
 
+> 这个 API 已被废弃，有人建议使用 `kubectl get --raw='/readyz?verbose'` 来替代。但我实测发
+> 现即使这个命令返回全都 OK，但 controller-manager/scheduler 仍旧可能出问题。
+
 其他控制面异常的详细分析，参见
 [kubernetes 控制面故障现象及分析](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/kubernetes%20%E6%8E%A7%E5%88%B6%E9%9D%A2%E6%95%85%E9%9A%9C%E7%8E%B0%E8%B1%A1%E5%8F%8A%E5%88%86%E6%9E%90.md)
 
