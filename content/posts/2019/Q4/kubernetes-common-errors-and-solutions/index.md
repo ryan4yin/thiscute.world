@@ -70,8 +70,21 @@ series: ["云原生相关"]
 
 如果这些现象同时发生，就要怀疑是否是 kube-controller-manager 出问题了.
 
+最简单的排查命令：
+
+```bash
+$ kubectl get componentstatuses
+Warning: v1 ComponentStatus is deprecated in v1.19+
+NAME                 STATUS    MESSAGE   ERROR
+scheduler            Healthy   ok
+controller-manager   Healthy   ok
+etcd-0               Healthy   ok
+```
+
+如果三个组件任一个显示 Unhealthy，就能确定是控制面出现了问题。
+
 其他控制面异常的详细分析，参见
-[kubernetes 控制面故障现象及分析](./kubernetes%20控制面故障现象及分析.md)
+[kubernetes 控制面故障现象及分析](https://github.com/ryan4yin/knowledge/blob/master/kubernetes/kubernetes%20%E6%8E%A7%E5%88%B6%E9%9D%A2%E6%95%85%E9%9A%9C%E7%8E%B0%E8%B1%A1%E5%8F%8A%E5%88%86%E6%9E%90.md)
 
 ### Pod 无法删除
 
