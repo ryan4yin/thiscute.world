@@ -86,7 +86,7 @@ Karpenter 官方目前只有 AWS 与 Azure 两个云平台的实现，也就是�
 Karpenter 与 Cluster Autoscaler 的设计理念与实现方式有很大的不同。
 
 Cluster Autoscaler 是 Kubernetes 平台上早期的集群伸缩方案，也是目前最流行的方案。但它做的
-事情比较有限，最大的问题是它本身并不直接管理集群的节点，而是借助云厂商的伸缩组
+事情比较有限，**最大的问题是它本身并不直接管理集群的节点**，而是借助云厂商的伸缩组
 （AutoScaling Group）或节点池（Node Pool）来间接地控制节点（云服务器）的数量。这样的设计导
 致了一些问题：
 
@@ -98,8 +98,10 @@ Cluster Autoscaler 是 Kubernetes 平台上早期的集群伸缩方案，也是�
    - 举例来说，AWS EKS 的 Node Group 功能非常难用，毛病一大堆。但如果要用 Cluster
      Autoscaler，你就没得选，Node Group 再难用也只能忍着。
 
-而 Karpenter 则完全从零开始实现了一套节点管理系统，它直接管理节点（云服务器，如 AWS EC2）
-的创建、删除、修改等操作。相对于 Cluster Autoscaler 而言，其主要优势有：
+而 Karpenter 则完全从零开始实现了一套节点管理系统，它直接管理所有节点（云服务器，如 AWS
+EC2），负责节点的创建、删除、修改等操作。
+
+相较 Cluster Autoscaler, Karpenter 的优势主要体现在以下几个方面：
 
 1. **声明式地定义节点池**: Karpenter 提供了一套 CRD 来定义节点池，用户只需要编写好 Yaml 配
    置部署到集群中，Karpenter 就会根据配置自动申请与管理节点。这比 Cluster Autoscaler 的配
