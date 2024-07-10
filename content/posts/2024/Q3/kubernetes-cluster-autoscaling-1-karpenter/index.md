@@ -125,6 +125,10 @@ Cluster Autoscaler 是 Kubernetes 平台上早期的集群伸缩方案，也是�
    - **Pod 精细化调度**：Karpeneter 本身也是一个调度器，它能根据 Pod 的资源需求、优先
      级、Node Affinity、Topology Spread Constraints 等因素来申请节点并主动将 Pod 调度到该
      节点上。而 Cluster Autoscaler 只能控制节点的数量，并无调度能力。
+1. **快速、高效**：因为 Karpenter 直接创建、删除节点，并且主动调度 Pod，所以它的伸缩速度与
+   效率要比 Cluster Autoscaler 高很多。这是因为 Karpneter 能快速获知节点创建、删除、加入集
+   群是否成功，而 Cluster Autoscaler 只能被动地等待云厂商的伸缩组或节点池服务完成这些操
+   作，它无法主动感知节点的状态。
 
 总之，个人的使用体验上，Karpenter 吊打了 Cluster Autoscaler.
 
@@ -141,6 +145,46 @@ Kubernetes 发行版，那么你就需要自己适配 Karpenter 了。
 Proxmox VE + K3s 为例，介绍下如何适配 Karpenter。
 
 TODO
+
+## Karpenter 与 Cluster API
+
+如果你有了解过 [Cluster API (CAPI)](https://github.com/kubernetes-sigs/cluster-api) 的话，
+你可能会发现 Karpenter 与 CAPI 有一些功能上的重叠：
+
+1. CAPI 的 Infrastructure Provider 专门负责处理云厂商相关逻辑的组件。Karpenter 的标准实现
+   内也包含了 cloud provider 相关代码，还提供了 NodeClass 这个 CRD 用于设定云服务器相关的
+   参数。
+1. Cluster API Bootstrap Provider (CABP) 负责将云服务器初始化为 Kubernetes Node，实际上就
+   是生成对应的 cloud-init user data. Karpenter 的 NodeClass 实现中同样也包含了 user data
+   的生成逻辑。
+
+Cluster API 的目标是多集群管理，并且它的设计上将 Bootstrap, ControlPlane 跟 Infrastructure
+三个部分分离出来了，好处是方便各云厂商、各 Kubernetes 发行版的接入，但也导致了它的架构比较
+复杂、出问题排查起来会比较麻烦。
+
+> 历史案例：Istio 曾经就采用了微服务架构，结果因为性能差、维护难度高被不少人喷，后来才改成
+> 了单体结构。
+
+而 Karpenter 则是一个单体应用，它的核心功能被以 Go Library 的形式发布，用户需要基于这个库
+来实现自己的云平台适配。这样的设计使得 Karpenter 的架构简单、易于维护。但这也意味着
+Karpenter 的可扩展性、通用性不如 Cluster API.
+
+从结果来看，现在 Cluster API 的生态相当丰富，从
+[Provider Implementations - Cluster API Docs](https://cluster-api.sigs.k8s.io/reference/providers)
+能看到已经有了很多云厂商、发行版的适配. 而 Karpenter 2023 年底才捐给 CNCF，目前只有 AWS 与
+Azure 的实现，未来发展还有待观察。
+
+那么有没有可能结合两者的优势呢？Kubernetes 社区其实就有类似的尝试：
+
+- [Cluster API Karpenter Feature Group Notes](https://hackmd.io/@elmiko/ryR2VXR0n#Attendees)
+- [Karpenter Provider Cluster API Open Questions](https://hackmd.io/vpC0MQr0SqaHzI_uqadVwQ?view)
+- [elmiko/karpenter-provider-cluster-api](https://github.com/elmiko/karpenter-provider-cluster-api)
+
+上面这个实验性质的项目尝试使用 Karpenter 作为 Cluster API 的 Node Autoscaler，取代掉现在的
+Cluster Autoscaler.
+
+我目前对 Cluster API 有些兴趣，但感觉它还是复杂了点。我更想试试在 Karpenter 的实现中复用
+Cluster API 各个 Provider 的代码，快速适配其他云厂商与 Kubernetes 发行版。
 
 ## 参考资料
 
