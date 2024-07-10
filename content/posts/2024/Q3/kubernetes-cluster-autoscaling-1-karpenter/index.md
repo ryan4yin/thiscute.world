@@ -8,7 +8,7 @@ draft: true
 
 resources:
   - name: "featured-image"
-    src: "featured-image.webp"
+    src: "karpenter.png"
 
 tags:
   [
