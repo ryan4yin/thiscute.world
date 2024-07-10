@@ -1,6 +1,6 @@
 ---
-title: "Kubernetes 集群伸缩（一）：Karpenter"
-subtitle: "Karpenter 与 Cluster-Autoscaler"
+title: "Kubernetes 集群伸缩组件 - Karpenter"
+subtitle: ""
 description: ""
 date: 2024-07-10T09:17:31+08:00
 lastmod: 2024-07-10T09:17:31+08:00
@@ -134,19 +134,25 @@ EC2），负责节点的创建、删除、修改等操作。
 
 总之，个人的使用体验上，Karpenter 吊打了 Cluster Autoscaler.
 
-## Karpenter 的使用 - AWS 篇
+## Karpenter 的使用
 
-TODO
+这部分建议直接阅读官方文档
+[Karpenter - Just-in-time Nodes for Any Kubernetes Cluster](https://karpenter.sh/).
 
 ## 适配其他 Kubernetes 发行版与云服务商
 
 如果你使用的是 Proxmox VE, Aliyun 等其他云平台，或者使用的是 K3s, Kubeadm 等非托管
 Kubernetes 发行版，那么你就需要自己适配 Karpenter 了。
 
-对于个人 Homelab 玩家来说，使用 Proxmox VE + K3s 这个组合的用户应该会比较多。我在这里以
-Proxmox VE + K3s 为例，介绍下如何适配 Karpenter。
+Karpenter 官方目前并未提供详细的适配文档，社区建议以用于测试的
+[Kwok Provider](https://github.com/kubernetes-sigs/karpenter/tree/main/kwok) 为参考，自行
+实现。Kwok 是一个极简的 Karpenter Provider 实现，更复杂的功能也可以参考 AWS 与 Azure 的实
+现。
 
-TODO
+对于个人 Homelab 玩家来说，使用 Proxmox VE + K3s 这个组合的用户应该会比较多。我个人目前正
+在尝试为这个组合适配 Karpenter，希望能够在未来的文章中分享一些经验。项目地址如下：
+
+- [ryan4yin/karpenter-provider-proxmox](https://github.com/ryan4yin/karpenter-provider-proxmox)
 
 ## Karpenter 与 Cluster API
 
