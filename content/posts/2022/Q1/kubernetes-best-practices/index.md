@@ -7,7 +7,7 @@ resources:
   - name: "featured-image"
     src: "kubernetes-best-practices.webp"
 
-tags: ["Kubernetes", "最佳实践", "云原生"]
+tags: ["Kubernetes", "最佳实践", "云原生", "Cloud-Native"]
 categories: ["tech"]
 series: ["云原生相关"]
 ---

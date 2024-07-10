@@ -1,0 +1,147 @@
+---
+title: "Kubernetes 集群伸缩（一）：Karpenter"
+subtitle: "Karpenter 与 Cluster-Autoscaler"
+description: ""
+date: 2024-07-10T09:17:31+08:00
+lastmod: 2024-07-10T09:17:31+08:00
+draft: true
+
+resources:
+  - name: "featured-image"
+    src: "featured-image.webp"
+
+tags:
+  [
+    "云原生",
+    "Cloud-Native",
+    "Kubernetes",
+    "MultiCloud",
+    "多云",
+    "自动扩缩容",
+    "Karpenter",
+    "Cluster-Autoscaler",
+  ]
+
+categories: ["tech"]
+series: ["云原生相关"]
+hiddenFromHomePage: false
+hiddenFromSearch: false
+
+lightgallery: false
+
+# 否开启表格排序
+table:
+  sort: false
+
+toc:
+  enable: true
+
+comment:
+  utterances:
+    enable: true
+  waline:
+    enable: false
+  disqus:
+    enable: false
+---
+
+## 前言
+
+Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面：
+
+1. Workloads 的伸缩：通过 Horizontal Pod Autoscaler（HPA）和 Vertical Pod
+   Autoscaler（VPA）等资源，可以根据资源使用情况自动调整 Pod 的数量和资源配置。
+   - 相关项目：
+     - [metrics-server](https://github.com/kubernetes-sigs/metrics-server): 采集指标数据供
+       HPA 使用
+     - [KEDA](https://github.com/kedacore/keda): 用于支持更多的指标数据源与触发方式
+     - [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler): 提供 VPA 功能
+1. Nodes 的伸缩：根据集群的负载情况，可以自动增加或减少 Nodes 的数量，以适应负载的变化。
+   - 相关项目：
+     - [kubernetes/autoscaler](https://github.com/kubernetes/autoscaler): 目前最流行的
+       Node 伸缩方案，支持绝大多数云厂商。
+     - [karpenter](https://github.com/kubernetes-sigs/karpenter): AWS 捐给 CNCF 的一个新兴
+       Node 伸缩方案，目前仅支持 AWS/Azure，但基于其核心库可以很容易地扩展支持其他云厂商。
+
+本文主要介绍新兴 Node 伸缩与管理方案 Karpenter 的优势、应用场景及使用方法。
+
+## Karpenter 简介
+
+Karpenter 项目由 AWS 于 2020 年创建，其目标是解决 AWS 用户在 EKS 上使用 Cluster Autoscaler
+做集群伸缩时遇到的一些问题。在经历了几年发展后，Karnepnter 于 2023 年底被捐献给
+CNCF（[kubernetes/org#4258](https://github.com/kubernetes/org/issues/4258)），成为目前
+（2024/07/10）唯二的官方 Node 伸缩方案之一。
+
+我于 2022 年 4 月在做 Spark 离线计算平台改造的时候尝试了 Karpenter v0.8.2，发现它的确比
+Cluster Autoscaler 更好用，并在随后的两年中逐渐将它推广到了更多的项目中。目前我司在 AWS 云
+平台上所有的离线计算任务与大部分在线服务都是使用 Karpenter 进行的集群伸缩。另外我还为
+karpenter 适配了 K3s 与 DigitalOcean 云平台用于一些特殊业务，体验良好。
+
+Karpenter 官方目前只有 AWS 与 Azure 两个云平台的实现，也就是说只有在这两个平台上 karpenter
+才能开箱即用。但考虑到它在易用性与成本方面的优势以及在可拓展性、标准化方面的努力，我对它的
+未来发展持乐观态度。
+
+## Karpenter 与 Cluster Autoscaler 的对比
+
+Karpenter 与 Cluster Autoscaler 的设计理念与实现方式有很大的不同。
+
+Cluster Autoscaler 是 Kubernetes 平台上早期的集群伸缩方案，也是目前最流行的方案。但它做的
+事情比较有限，最大的问题是它本身并不直接管理集群的节点，而是借助云厂商的伸缩组
+（AutoScaling Group）或节点池（Node Pool）来间接地控制节点（云服务器）的数量。这样的设计导
+致了一些问题：
+
+1. **部署与维护比较繁琐**：需要先在云厂商的控制台上创建好伸缩组或节点池，然后再在
+   Kubernetes 集群上部署 Cluster Autoscaler，并将伸缩组或节点池的名称等信息填写到 Cluster
+   Autoscaler 的配置文件中。增删节点池时也需要走一遍这个流程。
+1. **能力受限于云厂商的伸缩组或节点池服务**：如果云厂商的伸缩组或节点池服务不支持某些功
+   能，那么 Cluster Autoscaler 也无法使用这些功能。
+   - 举例来说，AWS EKS 的 Node Group 功能非常难用，毛病一大堆。但如果要用 Cluster
+     Autoscaler，你就没得选，Node Group 再难用也只能忍着。
+
+而 Karpenter 则完全从零开始实现了一套节点管理系统，它直接管理节点（云服务器，如 AWS EC2）
+的创建、删除、修改等操作。相对于 Cluster Autoscaler 而言，其主要优势有：
+
+1. **声明式地定义节点池**: Karpenter 提供了一套 CRD 来定义节点池，用户只需要编写好 Yaml 配
+   置部署到集群中，Karpenter 就会根据配置自动申请与管理节点。这比 Cluster Autoscaler 的配
+   置要方便得多。
+   - 以 AWS 为例，你简单地改几行 Yaml 配置，就可以修改掉节点池的实例类型、AMI 镜像、数量上
+     下限、磁盘大小、节点 Labels 跟 Taints、EC2 Tags 等信息。
+   - 借助 Flux 或 ArgoCD 等 GitOps 工具，你还可以实现自动化的节点池管理以及配置的版本控
+     制。
+1. **成本感知的节点管理**：Karpenter 不仅负责节点数量的伸缩，它还能根据节点的规格、负载情
+   况、成本等因素来选择最优的节点类型，以达成成本、性能、稳定性之间的平衡。 - 具体而
+   言，Karpenter 在成本优化方面具有这些 Cluster Autoscaler 不具备的功能：
+   - **Spot/On-Demand 实例调整**: 在 AWS 上，Karpenter 可以设置为优先使用 Spot 实例，并在
+     申请不到 Spot 实例时自动切换到 On-Demand 实例，从而大大降低成本。
+   - **多节点类型支持**: Karpenter 支持在同一个集群中使用多种不同规格的节点，并且支持控制
+     不同实例类型的优先级、数量或占比，以满足不同的业务需求。
+   - **节点替换策略**：Karpenter 支持灵活的节点替换策略，可以通过 Yaml 控制每个节点池的节
+     点替换条件、频率、比例等参数，以避免因节点替换导致的服务不可用。
+   - **节点的生命周期管理**：Karpenter 支持定义节点的生命周期策略，可以根据节点的年龄、负
+     载、成本等因素来决定节点的续租、下线、销毁等操作。而 Cluster Autoscaler 只能控制节点
+     的数量，它不直接管理节点，也就做不到此类节点的精细管理。
+   - **主动优化**：Karpenter 支持主动根据负载情况使用不同实例类型的节点替换高风险节点，或
+     合并低负载节点，以节省成本。
+   - **Pod 精细化调度**：Karpeneter 本身也是一个调度器，它能根据 Pod 的资源需求、优先
+     级、Node Affinity、Topology Spread Constraints 等因素来申请节点并主动将 Pod 调度到该
+     节点上。而 Cluster Autoscaler 只能控制节点的数量，并无调度能力。
+
+总之，个人的使用体验上，Karpenter 吊打了 Cluster Autoscaler.
+
+## Karpenter 的使用 - AWS 篇
+
+TODO
+
+## 适配其他 Kubernetes 发行版与云服务商
+
+如果你使用的是 Proxmox VE, Aliyun 等其他云平台，或者使用的是 K3s, Kubeadm 等非托管
+Kubernetes 发行版，那么你就需要自己适配 Karpenter 了。
+
+对于个人 Homelab 玩家来说，使用 Proxmox VE + K3s 这个组合的用户应该会比较多。我在这里以
+Proxmox VE + K3s 为例，介绍下如何适配 Karpenter。
+
+TODO
+
+## 参考资料
+
+- [Cluster Autoscaling - Kubernetes Official Docs](https://kubernetes.io/docs/concepts/cluster-administration/cluster-autoscaling/)
