@@ -25,6 +25,34 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-07-21
+
+- 之前申请的
+  [KubeCon China 2024 最终用户门票](https://events.linuxfoundation.org/kubecon-cloudnativecon-open-source-summit-ai-dev-china/reg/end-user-ticket-program/)
+  通过了，今天用受到的优惠码免费注册了门票。看日常发现 Linus 会在第三天到场，挺期待。
+- 翻了一波 KubeCon China 2024 的日程，总结下主题主要有：
+  - AI/LLM/GPU: Kserve、Fluid、Volcano
+  - WASM: Kubernetes + WASI
+  - Service Mesh: Istio Ambient Mode、Sidecarless
+  - Multiple Cluster: karmada、cluster api
+  - Policy Management: Kyverno
+- 顺便又对最近的一些 CNCF Conf 起了兴趣，如下几个是我比较感兴趣的：
+  - [Istio Day Europe 2024](https://www.youtube.com/watch?v=cuMeEhpyH5s&list=PLj6h78yzYM2M3MubjXdYRsish04DcKKLT&index=2)
+  - [KubeCon + CloudNativeCon Europe 2024](https://www.youtube.com/watch?v=1u5LtsJqyrA&list=PLj6h78yzYM2N8nw1YcqqKveySH6_0VnI0)
+  - [Cloud Native AI Day Europe 2024](https://www.youtube.com/watch?v=Ek0eU_H9AoQ&list=PLj6h78yzYM2PWGv34W6w5ssq1b1meRmY7)
+  - [Cilium + eBPF Day Europe 2024](https://www.youtube.com/watch?v=O3VVHHmoauo&list=PLj6h78yzYM2PHDqy_nINY8-462uYzb18d)
+  - [Cloud Native Wasm Day Europe 2024](https://www.youtube.com/watch?v=D4BW9r6nQo8&list=PLj6h78yzYM2MQteKoXxICTWiUdZYEw6RI)
+
+### 2024-07-20
+
+- 上午终于打完了《星穹铁道》的最新主线——匹诺康尼，这部分的剧情跟音乐都很棒！
+  - 支线不是很感兴趣，新剧情也没开放，暂时不打算继续玩了。
+- 游戏打完，收了收心更新 PC 跟 Homelab 的 NixOS 配置，修复更新后的一些问题。
+  - Orange Pi 5 Plus 的 NixOS 系统在上次升级到 24.05 后就炸了，今天修了两小时仍旧没搞定，
+    累觉不爱。
+  - ARM 不能用主线内核真的太坑了，每次 `nix flake update` 都像是在赌博，出了问题就得花很多
+    时间修复。这次打算直接弃坑，把东西都搬到 x86 主机上。
+
 ### 2024-07-10 - 2024-07-19
 
 - 业余时间一直《星穹铁道》，打上瘾了，每天都在玩。
