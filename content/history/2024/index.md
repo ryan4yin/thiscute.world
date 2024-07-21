@@ -174,10 +174,20 @@ comment:
   - Policy Management: Kyverno
 - 顺便又对最近的一些 CNCF Conf 起了兴趣，如下几个是我比较感兴趣的：
   - [Istio Day Europe 2024](https://www.youtube.com/watch?v=cuMeEhpyH5s&list=PLj6h78yzYM2M3MubjXdYRsish04DcKKLT&index=2)
+    - Istio Ambient Mode 值得测试下效果，OK 的话考虑下迁移流程。
   - [KubeCon + CloudNativeCon Europe 2024](https://www.youtube.com/watch?v=1u5LtsJqyrA&list=PLj6h78yzYM2N8nw1YcqqKveySH6_0VnI0)
   - [Cloud Native AI Day Europe 2024](https://www.youtube.com/watch?v=Ek0eU_H9AoQ&list=PLj6h78yzYM2PWGv34W6w5ssq1b1meRmY7)
+    - 对 AI 在 K8s 上部署的各种方案比较感兴趣
   - [Cilium + eBPF Day Europe 2024](https://www.youtube.com/watch?v=O3VVHHmoauo&list=PLj6h78yzYM2PHDqy_nINY8-462uYzb18d)
+    - 网络，值得了解下吧。
   - [Cloud Native Wasm Day Europe 2024](https://www.youtube.com/watch?v=D4BW9r6nQo8&list=PLj6h78yzYM2MQteKoXxICTWiUdZYEw6RI)
+    - Wasm 在云原生方面最新的进展是
+      [WASI 0.2.0 and Why It Matters](https://news.ycombinator.com/item?id=39143054)
+    - 视频中把 WASI 0.2 介绍得天花乱坠，但我也看到有些人在喷它。实际效果如何可能还有待观
+      望，毕竟才出没几个月。
+    - Wasm 在浏览器之中是已经有不错的应用了，但在浏览器之外的应用充满想象空间（游戏脚
+      本、Serverless 服务、AI 推理、跨平台 APP 等），但目前才刚出个 0.2 草案，要走的路还很
+      远。业余有空倒可以折腾下试试。
 
 ### 2024-07-20
 
