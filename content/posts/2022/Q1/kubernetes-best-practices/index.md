@@ -1059,7 +1059,14 @@ seccomp 和 seccomp-bpf 允许对系统调用进行过滤，可以防止用户�
 
 - [Seccomp: What Can It Do For You? - Justin Cormack, Docker](https://www.youtube.com/watch?v=Ro4QRx7VPsY&list=PLj6h78yzYM2Pn8RxfLh2qrXBDftr6Qjut$index=22)
 
-## 六、隔离性
+## 七、业务服务的权限管控
+
+1. 基于 K8s RBAC 给予业务服务合适的云资源访问权限
+   - 给每个业务服务自动化地创建各自的云服务商 Role（如 AWS IAM Role）以及 Service
+     Account，实现细粒度的权限分配。
+1. 有条件可以上 vault 之类的工具，管理数据库密码等敏感信息
+
+## 八、隔离性
 
 这个我的了解暂时有限，不过有几个建议应该是值得参考的：
 
