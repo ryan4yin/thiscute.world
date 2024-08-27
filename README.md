@@ -11,10 +11,7 @@ Use the `new` command to create a new post:
 
 ```shell
 # new posts
-hugo new posts/my-first-post/index.md
-
-# new posts with special category name as a prefix
-hugo new posts/category/my-first-post/index.md
+hugo new posts/2024/Q3/my-first-post/index.md
 ```
 
 Launch a local Hugo server including live reload by running:
