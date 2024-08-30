@@ -33,6 +33,9 @@ comment:
     enable: false
 ---
 
+> 2024-08-30 更新：我已经用 [aerospace](https://github.com/nikitabobko/AeroSpace) 替代了
+> yabai + shkd，体验好了太多，而且也不用关掉 SIP 啥的，强烈推荐一用。
+
 > 2024-01-28 更新：换了新 Macbook Pro 之后，我又重新把 yabai 装上了，目前体验还不错，比 23
 > 年好了不少。另外我新的配置完全基于 nix-darwin 部署，内容也有些改动，有兴趣的可以看
 > 看：[ryan4yin/nix-config/darwin/wm](https://github.com/ryan4yin/nix-config/tree/main/modules/darwin/wm)
