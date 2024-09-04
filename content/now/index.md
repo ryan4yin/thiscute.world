@@ -68,8 +68,7 @@ toc:
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - 户外徒步、露营
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-- 结合工作需求，深入了解下当下火热的 AIGC 技术
-  - [动手学深度学习 - Pytorch 版](https://github.com/d2l-ai/d2l-zh) - 14.3%
+- 在 NixOS 上尝试 bubblewrap/apparmor 等安全限制方案
 
 ## 二、我今年还想搞搞这些
 
@@ -77,7 +76,6 @@ toc:
   - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
   - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
   - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
-  - 学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
 - 操作系统
   - 课
     程：[操作系统：设计与实现 - 南大 jyy 老师的课程](https://www.bilibili.com/video/BV1Xx4y1V7JZ/)
@@ -86,6 +84,7 @@ toc:
     - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
+- 使用 bcc/aya-rs/cilium/bpftrace 玩一玩 epbf 编程
 
 ## 三、今年的阅读进展
 
