@@ -37,6 +37,9 @@ comment:
       - k0s - 添加 package 以及 service module，参考
         [k3s 的模块实现](https://github.com/NixOS/nixpkgs/tree/nixpkgs-unstable/pkgs/applications/networking/cluster/k3s)
         - 看了下 k3s 的实现，感觉要照搬一套给 k0s，工作量不小...
+- 阅读
+  [BPF Performance Tools](https://www.brendangregg.com/bpf-performance-tools-book.html) 英
+  文原版，两年前跟《性能之巅 - 第二版中文版》买的，但一直吃灰...
 
 ### 2024-08-28 - 2024-09-01
 
