@@ -25,6 +25,19 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-09-04
+
+- 学习了下 eBPF 技术，尝试在 NixOS 上用跑 bcc 的 Python 示例代码时发现没法用，于是提交了
+  [nixpkgs#339505](https://github.com/NixOS/nixpkgs/pull/339505)
+  - 这是我给 nixpkgs 提的第一个 PR，合并得也很快。
+  - 其他看到的一些贡献机会：
+    - 可优化的 service 配置:
+      - victoriametrics - 太简陋
+      - homepage-dashboard, uptime-kuma 等 nodejs 应用 - run as non-root
+      - k0s - 添加 package 以及 service module，参考
+        [k3s 的模块实现](https://github.com/NixOS/nixpkgs/tree/nixpkgs-unstable/pkgs/applications/networking/cluster/k3s)
+        - 看了下 k3s 的实现，感觉要照搬一套给 k0s，工作量不小...
+
 ### 2024-08-28 - 2024-09-01
 
 - 黑神话：悟空 打到了第三章，空气墙仍旧很烦，但总体体验非常好！
