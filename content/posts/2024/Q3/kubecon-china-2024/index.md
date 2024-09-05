@@ -205,3 +205,9 @@ Ambient Mode 在最近 beta 了，是我关注的重点，总结下目前了解�
 另外朋友听了个 TiDB 的演讲，看 PPT 是有点意思的哈哈。
 
 {{<figure src="/images/kubecon-china-2024/20240823-tidb-your-next-mysql-is-not-a-mysql.webp" title="TiDB" width="80%">}}
+
+以及在项目展厅三天逛下来，我帆布袋领了四个，T恤领了三件，还有别的小礼品一堆，吃的喝的都不
+用说了，管够。另外看网上不少信息说香港的服务业态度很差，但这家公司可能星级比较高，体验还是
+相当到位的。
+
+总之，体验相当不错的，有机会的话明年还来！Love you, KubeCon China & Hong Kong！
