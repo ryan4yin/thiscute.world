@@ -142,7 +142,7 @@ Ambient Mode 在最近 beta 了，是我关注的重点，总结下目前了解�
 
 虽然提早定了住宿，做了点功课，但第一天就出了问题——深圳这边一直下雨导致 @Chever-John 的飞机
 直接被取消，改订了另一趟航班也晚点。虽然正点到达了会场，但他一晚上就睡了俩小时，在深圳定的
-前一晚的酒店也没住成。
+前一晚的酒店也没住成，第一天看他整个人都听得迷迷糊糊的。不过没事，~~至少我听了个爽~~
 
 说回正题，到了会场领完胸牌，我们就开始了为期三天的 KubeCon China 之旅。
 
@@ -155,7 +155,7 @@ Ambient Mode 在最近 beta 了，是我关注的重点，总结下目前了解�
 {{<figure src="/images/kubecon-china-2024/20240821-istio-and-modern-api-gateways-navigating-the-future-of-service-meshes.webp" title="几位大佬聊 Istio 与 Gateway API 的未来" width="80%">}}
 
 然后晚上@茗洛带着我们逛了香港的诚品书店，书店好几层，但感兴趣的书不多。后面又逛了好多电子
-商城、二次元周边店，我算是开了眼界，笑死。
+商城、二次元周边店，我算是开了眼界。
 
 {{<figure src="/images/kubecon-china-2024/IMG20240821192248_20240905145522.webp" title="《我推的孩子》" width="80%">}}
 {{<figure src="/images/kubecon-china-2024/IMG20240821192314_20240905145522.webp" title="另一本" width="80%">}}
