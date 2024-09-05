@@ -25,6 +25,13 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-09-05
+
+- 从 09-03 开始学习折腾 firejail/apparmor/bubblewrap 技术，今天晚上又整了一天还是没搞定
+  Firefox 的 Nvidia GPU 支持... 但至少 QQ 用着没问题了，先把 PR 给合了，其他功能后面再慢慢
+  整吧。
+  - https://github.com/ryan4yin/nix-config/pull/160
+
 ### 2024-09-04
 
 - 学习了下 eBPF 技术，尝试在 NixOS 上用跑 bcc 的 Python 示例代码时发现没法用，于是提交了
