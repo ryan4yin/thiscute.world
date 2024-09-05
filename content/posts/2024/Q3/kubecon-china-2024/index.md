@@ -72,9 +72,9 @@ comment:
 5. 蔚来汽车、中国移动等公司正在尝试将 K8s 应用在边缘计算场景（智能汽车、通信基站），但这些
    离普通互联网公司有点远。
 6. 云原生的未来十年会变成什么样？
-   - Kubernetes, service mesh 等过去十年的新兴技术，现在已经成为了「Boring but useful
-     infrastructrue」，它们将是其他云原生技术潮流的基石，被广泛应用，但自身不会再有太多的
-     变化。
+   - Kubernetes, service mesh 等过去十年的新兴技术，现在已经成为了「**Boring but useful
+     infrastructrue**」，它们将是其他云原生技术潮流的基石，被广泛应用，但自身不会再有太多
+     的变化。
    - AI, eBPF, WASM, Rust 等技术也将在未来十年走向成熟，取代 Kubernetes 当前的地位。
 
 KubeCon China 2024 的会议视频将会陆续被添加到如下这个 Youtube Playlist 中，有兴趣的朋友可
