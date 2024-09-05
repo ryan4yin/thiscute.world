@@ -21,7 +21,6 @@ tags:
   ]
 categories: ["tech"]
 series: ["EE 入门"]
-series_weight: 2
 
 lightgallery: false
 

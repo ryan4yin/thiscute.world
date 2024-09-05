@@ -11,7 +11,7 @@ tags: ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
-series_weight: 5
+
 seriesNavigation: true
 
 code:

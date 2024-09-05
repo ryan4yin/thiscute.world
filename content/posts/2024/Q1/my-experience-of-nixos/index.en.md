@@ -13,7 +13,7 @@ resources:
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps"]
 categories: ["tech"]
 series: ["NixOS & Nix Flakes"]
-series_weight: 3
+
 hiddenFromHomePage: false
 hiddenFromSearch: false
 

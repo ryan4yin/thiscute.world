@@ -10,7 +10,7 @@ tags: ["Cryptography", "Hash", "密码学", "哈希", "散列", "安全", "SHA-2
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
-series_weight: 2
+
 seriesNavigation: true
 
 code:

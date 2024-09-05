@@ -26,7 +26,7 @@ tags:
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
-series_weight: 8
+
 seriesNavigation: true
 ---
 

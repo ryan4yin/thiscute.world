@@ -10,7 +10,7 @@ tags: ["Cryptography", "Hash", "KDF", "密码学", "安全", "哈希", "加解�
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
-series_weight: 1
+
 seriesNavigation: true
 
 code:

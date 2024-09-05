@@ -10,7 +10,7 @@ tags: ["Cryptography", "密码学", "伪随机数", "安全", "PRNG", "CSPRNG"]
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
-series_weight: 4
+
 seriesNavigation: true
 
 code:

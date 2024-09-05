@@ -11,7 +11,6 @@ resources:
 tags: ["电子电路", "Electrical Engineering", "MCU"]
 categories: ["tech"]
 series: ["EE 入门"]
-series_weight: 1
 
 lightgallery: false
 

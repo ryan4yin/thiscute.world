@@ -11,7 +11,7 @@ tags: ["Cryptography", "密码学", "非对称加密", "安全", "RSA", "ECC"]
 categories: ["tech"]
 
 series: ["写给开发人员的实用密码学"]
-series_weight: 7
+
 seriesNavigation: true
 
 code:

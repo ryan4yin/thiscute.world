@@ -13,7 +13,7 @@ draft: true
 tags: ["NixOS", "Nix", "Linux", "Homelab", "Proxmox"]
 categories: ["tech"]
 series: ["NixOS 与 Nix Flakes"]
-series_weight: 3
+
 hiddenFromHomePage: false
 hiddenFromSearch: false
 

@@ -25,7 +25,7 @@ tags:
   ]
 categories: ["life"]
 series: ["徒步"]
-series_weight: 3
+
 hiddenFromHomePage: false
 hiddenFromSearch: false
 

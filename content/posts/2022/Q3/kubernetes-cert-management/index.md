@@ -11,7 +11,6 @@ resources:
 tags: ["数字证书", "证书", "TLS", "Kubernetes", "cert-manager"]
 categories: ["tech"]
 series: ["写给开发人员的实用密码学", "云原生相关"]
-series_weight: 10
 
 lightgallery: false
 
