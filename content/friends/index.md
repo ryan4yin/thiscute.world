@@ -46,7 +46,7 @@ comment:
 <script type="text/javascript">
 // 以下为样例内容，按照格式可以随意修改
 var myFriends = [
-    ["https://blog.z-xl-t.top/", "https://blog.z-xl-t.top/favicon.jpg", "@薯条流浪法师", "快走吧，趁风停止之前"], 
+    // ["https://blog.z-xl-t.top/", "https://blog.z-xl-t.top/favicon.jpg", "@薯条流浪法师", "快走吧，趁风停止之前"], 
     ["https://rea.ink/", "/avatar/rea.ink.webp", "@倾书", "清风皓月，光景常新 <= 前端"], 
     ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
     ["https://nopdan.com/", "https://nopdan.com/avatar.webp", "@单单", "但知行好事，莫要问前程"], 
