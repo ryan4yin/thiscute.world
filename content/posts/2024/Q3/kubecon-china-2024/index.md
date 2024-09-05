@@ -43,8 +43,8 @@ comment:
 有时候不得不相信运气的魔力，机缘巧合之下，我从朋友 @Kev 处得知了 KubeCon 的「最终用户门票
 计划」并借此 0 元购了门票，又邀上了 [0xFFFF 社区](https://0xffff.one/) 的
 [@Chever-John](https://0xffff.one/u/Chever-John)
-[@0xdeadbeef](https://0xffff.one/u/0xdeadbeef) @茗洛 三位朋友一起参加，在香港租了个 airbnb
-住宿，期间也逛了香港城市中的不少地方，收货颇丰。
+[@0xdeadbeef](https://0xffff.one/u/0xdeadbeef) [@茗洛](https://0xffff.one/u/MingLLuo) 三位
+朋友一起参加，在香港租了个 airbnb 住宿，期间也逛了香港城市中的不少地方，收货颇丰。
 
 > 其实本来也尝试过邀请其他认识的朋友同事，但都因为种种原因无法参加，略感遗憾。
 
