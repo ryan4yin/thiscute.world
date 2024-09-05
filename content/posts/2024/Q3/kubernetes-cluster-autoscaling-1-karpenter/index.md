@@ -83,6 +83,9 @@ Karpenter 官方目前只有 AWS 与 Azure 两个云平台的实现，也就是�
 
 ## Karpenter 与 Cluster Autoscaler 的对比
 
+Cluster Autoscaler 是目前社区最流行的 Node 伸缩方案，基本所有云厂商的 Kubernetes 服务默认
+都会集成它。
+
 Karpenter 与 Cluster Autoscaler 的设计理念与实现方式有很大的不同。
 
 Cluster Autoscaler 是 Kubernetes 平台上早期的集群伸缩方案，也是目前最流行的方案。但它做的
@@ -157,8 +160,9 @@ Karpenter 官方目前并未提供详细的适配文档，社区建议以用于�
 
 ## Karpenter 与 Cluster API
 
-如果你有了解过 [Cluster API (CAPI)](https://github.com/kubernetes-sigs/cluster-api) 的话，
-你可能会发现 Karpenter 与 CAPI 有一些功能上的重叠：
+[Cluster API (CAPI)](https://github.com/kubernetes-sigs/cluster-api) 是 Kubernetes 社区提
+供的一个用于管理多集群的项目，从介绍上看，它跟 Karpenter 好像没啥交集。但如果你有真正了解
+使用过 CAPI 的话，你会发现 Karpenter 与 CAPI 有一些功能上的重叠：
 
 1. CAPI 的 Infrastructure Provider 专门负责处理云厂商相关逻辑的组件。Karpenter 的标准实现
    内也包含了 cloud provider 相关代码，还提供了 NodeClass 这个 CRD 用于设定云服务器相关的
