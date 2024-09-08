@@ -65,10 +65,10 @@ toc:
 
 > 按优先级排序
 
+- 《BPF Performance Tools（英文版）》 - 35/740
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - 户外徒步、露营
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-- 在 NixOS 上尝试 bubblewrap/apparmor 等安全限制方案
 
 ## 二、我今年还想搞搞这些
 
