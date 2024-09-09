@@ -20,10 +20,9 @@ toc:
 ## 零、2024 年学习计划
 
 - 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
-- 技术上今年主要就是三个学习目标：
-  - 学学操作系统
+- 技术上今年的主要学习目标：
+  - 学学 eBPF、Linux 编程、操作系统
   - 尝试更深入地使用 NixOS 以及参与社区贡献
-  - 搞搞 AIGC
 - [学习并强化个人的数据安全性](https://thiscute.world/posts/an-incomplete-guide-to-data-security/) -
   100%
   - 这是我 2023 年 5 月开始的一个长期计划，目前以及完成了大部分工作，也输出了一篇博客总结
@@ -72,10 +71,6 @@ toc:
 
 ## 二、我今年还想搞搞这些
 
-- 安全性提升
-  - 基于 restic 与 rclone 做 Homelab 数据加密备份与版本控制 - 0%
-  - 数据全部到 Joplin + OneDrive 并启用 E2EE 加密 - 100%
-  - 使用 restic 做 OneDrive 中 Joplin 数据的备份与版本控制 - 0%
 - 操作系统
   - 课
     程：[操作系统：设计与实现 - 南大 jyy 老师的课程](https://www.bilibili.com/video/BV1Xx4y1V7JZ/)
@@ -84,7 +79,6 @@ toc:
     - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
   - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
-- 使用 bcc/aya-rs/cilium/bpftrace 玩一玩 epbf 编程
 
 ## 三、今年的阅读进展
 
@@ -192,6 +186,7 @@ toc:
 
 - Linux 性能调优与 Linux 网络技术
   - [ ] 《深入理解 Linux 网络 - 张彦飞》 - 14/320
+  - [ ] 《深入理解 Linux 进程与内存 - 张彦飞》
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
 
