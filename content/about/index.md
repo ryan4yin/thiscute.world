@@ -70,7 +70,7 @@ comment:
   - **Kubernetes**: SRE 的饭碗之一，云原生的基石
   - **Istio**: 最成熟的服务网格产品，也是饭碗之一
 - **联系方式**
-  - 邮件：`eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
+  - 邮件：`bXkgZW1haWw6IHJ5YW40eWluQGxpbnV4LmNvbQ==`
   - [豆瓣](https://www.douban.com/people/kirito_c)：本人是豆瓣书影音标记的重度使用者，从
     2015 年以来一直使用豆瓣标记读过的书看过的电影。
   - [Twitter](https://twitter.com/ryan4yin): 自 2021 年起在 Twitter 上发布一些生活动态与技

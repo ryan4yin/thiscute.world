@@ -77,7 +77,7 @@ comment:
     control cloud computing costs(AWS/GCP/...), to support the fast-growing business
     stably and efficiently.
 - Contact Me
-  - Email: `eWVzIG15IGVtYWlsIGlzIHhpYW95aW5fY0BxcS5jb20K`
+  - Email: `bXkgZW1haWw6IHJ5YW40eWluQGxpbnV4LmNvbQ==`
   - Twitter: <https://twitter.com/ryan4yin>
   - Github: <https://github.com/ryan4yin/thiscute.world/issues>
 
