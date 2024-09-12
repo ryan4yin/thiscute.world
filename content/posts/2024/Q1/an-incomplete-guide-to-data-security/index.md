@@ -676,7 +676,10 @@ TODO 后续再慢慢补充。
   于 restic 的加密备份方案。
 - 手机端的照片视频虽然已经在上面设计好了备份同步方案，但仍未实施。考虑使用 roundsync 加密
   备份到云端，实现多端访问。
-- 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC 上。
+- [x] 进一步学习下 appamor, bubblewrap 等 Linux 下的安全限制方案，尝试应用在我的 NixOS PC
+      上。
+  - 当前成果
+    [nix-config/hardening](https://github.com/ryan4yin/nix-config/tree/2b47447/hardening)
 - Git 提交是否可以使用 GnuPG 签名，目前没这么做主要是觉得 PGP 这个东西太重了，目前我也只在
   pass 上用了它，而且还在研究用 age 取代它。
 - 尝试通过 [hashcat](https://github.com/hashcat/hashcat),
