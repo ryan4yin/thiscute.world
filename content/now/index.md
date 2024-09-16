@@ -64,6 +64,7 @@ toc:
 
 > 按优先级排序
 
+- 折腾 Rust 编程
 - 《BPF Performance Tools（英文版）》 - 35/740
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - 户外徒步、露营
