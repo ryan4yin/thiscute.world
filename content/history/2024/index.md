@@ -25,6 +25,13 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-09-13 - 204-09-16
+
+- Kev 最近在学 Rust，聊下来我也被带起了好奇心，开始阅读 Rust 的官方 Book.
+- 进度：
+  - The Book - 新手教程，共 20 章，现在读到了第 11 章
+  - Rustlings - 新手&练习册，共 23 组练习，目前做到了第 7 组
+
 ### 2024-09-09
 
 - 结束了 Istio/Cilium/Linkerd2 的调研，目前 GAMMA、Istio Ambient Mode、Cilium Service Mesh
