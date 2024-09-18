@@ -25,6 +25,22 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-09-18
+
+- 又上班了
+- 读完了 The Book
+- 发现 [Rust Roadmap](https://roadmap.sh/rust) 列举了 Rust 的核心特性与常用库，值得参考。
+- 写 Rust 代码时能参考的实用代码片段：
+  - [Rust Cookbook](https://rust-lang-nursery.github.io/rust-cookbook/)
+  - [Rust by Example](https://doc.rust-lang.org/rust-by-example/)]
+- 基本上过完 The Book 就可以开始写一些项目了，
+- 一系列官方非官方的 Rust Books，还包含了一系列的项目开发教程:
+  <https://lborb.github.io/book/official.html>
+- 一个跟我目前的学习路线跟契合的学习指南： <https://rust-lang.guide/intro/index.html>
+  - 从这个教程看，Rust 最重要的一个非核心特性就是 Async
+  - 所以大概的推荐学习路线是：Rus -> 写个 CLI 与 Web 项目 -> 学 Async -> 写更复杂的其他应
+    用，但视需要，感觉可以先跳过 Async.
+
 ### 2024-09-17
 
 - The Book - 读到了第 19 章
