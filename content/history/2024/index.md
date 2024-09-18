@@ -31,7 +31,7 @@ comment:
 - 读完了 The Book
 - 写 Rust 代码时能参考的实用代码片段：
   - [Rust Cookbook](https://rust-lang-nursery.github.io/rust-cookbook/)
-  - [Rust by Example](https://doc.rust-lang.org/rust-by-example/)]
+  - [Rust by Example](https://doc.rust-lang.org/rust-by-example/)
 - 基本上过完 The Book 就可以开始写一些项目了，
 - 一系列官方非官方的 Rust Books，还包含了一系列的项目开发教程:
   <https://lborb.github.io/book/official.html>
