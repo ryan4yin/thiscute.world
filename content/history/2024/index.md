@@ -29,7 +29,6 @@ comment:
 
 - 又上班了
 - 读完了 The Book
-- 发现 [Rust Roadmap](https://roadmap.sh/rust) 列举了 Rust 的核心特性与常用库，值得参考。
 - 写 Rust 代码时能参考的实用代码片段：
   - [Rust Cookbook](https://rust-lang-nursery.github.io/rust-cookbook/)
   - [Rust by Example](https://doc.rust-lang.org/rust-by-example/)]
@@ -40,6 +39,26 @@ comment:
   - 从这个教程看，Rust 最重要的一个非核心特性就是 Async
   - 所以大概的推荐学习路线是：Rus -> 写个 CLI 与 Web 项目 -> 学 Async -> 写更复杂的其他应
     用，但视需要，感觉可以先跳过 Async.
+- 发现 [Rust Roadmap](https://roadmap.sh/rust) 列举了 Rust 的核心特性与常用库，值得参考。
+- 目前比较感兴趣的应用场景：
+  - STM32/ESP32 嵌入式开发
+    - https://github.com/stm32-rs
+    - https://github.com/esp-rs
+  - 游戏开发:
+    - <https://arewegameyet.rs/>
+    - 一些国人整的 demo: https://github.com/NightsWatchGames
+    - 要做生产级别的游戏的话，原生框架中最流行的是 bevy，非原生的主要是 godot-rust 的绑
+      定。还有个 Fyrox 也很强大，它跟 bevy 的主要区别是 bevy 用 ECS，更实验性，而 Fyrox 更
+      传统。
+    - 新手整些 2D 小游戏的话，也可以试试 macroquad
+  - GUI 开发：
+    - tauri: 最流行的方案，结合使用前端技术与 rust，但据说开发大项目坑比较多
+    - iced 最流行的原生 rust 方案，但它目前仍旧不支持中文输入法:
+      https://github.com/iced-rs/iced/issues/1801
+    - https://github.com/slint-ui/slint 是 QT 团队的人出来搞的，平台支持也全面对标 QT，甚
+      至支持嵌入式环境。
+  - Linux 系统编程、TUI 开发、内核模块开发、eBPF 开发
+  - 云原生应用开发
 
 ### 2024-09-17
 
