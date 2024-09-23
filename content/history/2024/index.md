@@ -25,10 +25,14 @@ comment:
 
 全部历史记录：[/history](/history/)
 
-### 2024-09-19 - 2024-09-21
+### 2024-09-19 - 2024-09-23
 
 - 学习使用 Rust Bevy 引擎，折腾 3D 游戏的时候文档有提到 Blender，转头就又玩上了 Blender.
   - 甚至因为想写游戏，对 C++ 也有了些兴趣，感觉明年可以学学 C++.
+  - Bevy 的主要学习材料是 Unofficial Bevy Cheat Book 跟官方的 examples.
+  - 学习时发现 nixpkgs 中的 rust-analyzer 无法推断大部分 bevy system function 的参数类型，
+    换成 rust-analyzer-nightly 后问题解决，看来至少写 bevy 还是得用 nightly 版本的
+    rust-analyzer 才行。
 - Blender 学完了一个 90 分钟的入门教程，但练习实际花了挺长时间的，学会了制作简单的小模型：
   椅子、书本、杯子，以及简单的材质、光照、渲染等。
 - 研究了小半天的 AIGC 3D 模型方案，在 2024 年 9 月的现在，几个头部厂商的图生 3D 模型及文生
@@ -59,6 +63,16 @@ comment:
       型还要多，这是最大的问题。
     - 大公司主攻的 Sora/可灵等视频大模型技术，从生成的内容上看，它明显具有空间感，或许视频
       大模型才是 AIGC 3D 的未来发展方向。
+    - 数据是 AI 的基础，但 3D 建模领域的公开数据太少了，大部分都是付费资产或者企业内部资
+      产。相对的符合真实物理规律的视频数据却有很多，这也使得视频大模型技术更有优势。
+  - 相关文章
+    - [VAST完成新一轮融资，3D是AIGC的最后一张船票吗？| 浪潮Wave](https://mp.weixin.qq.com/s/ihyB519HQssYYw97AhbMYg):
+      VAST 旗下的 https://tripoo3d.ai 目前是行业内效果最好的商业产品，是领头羊。
+    - [独家专访胡渊鸣：我不是天才，我是创业者](https://www.jazzyear.com/article_info.html?id=1142)：taichi
+      作者胡博士，换赛道做 AIGC 3D 的了，站点 - https://meshy.ai, 也是行业头部产品。
+    - [这家AI公司，做出了全球最大的原生3D大模型](https://mp.weixin.qq.com/s/cbA79YTsdUqW7z8eW7k9Ug)：
+      牛津大学高材生创建搞 AIGC 3D，2024 年初刚成立公司 DreamTech，站点 -
+      https://neural4d.com, 不过这个产品还比较粗糙，商业方面的落后了些。
 
 ### 2024-09-18
 
