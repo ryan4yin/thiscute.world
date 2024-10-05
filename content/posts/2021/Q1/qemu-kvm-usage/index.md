@@ -41,7 +41,7 @@ categories: ["tech"]
 
 本文是我个人学习 KVM 的一个总结性文档，其目标是使用 KVM 作为桌面虚拟化软件。
 
-## 一、安装 QUEU/KVM
+## 一、安装 QEMU/KVM
 
 QEMU/KVM 环境需要安装很多的组件，它们各司其职：
 
