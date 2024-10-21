@@ -60,8 +60,8 @@ comment:
   提到了 Istio 多集群方案的痛点，介绍了中国移动的解决方案。我一直有想尝试多集群方案，但一
   直担心 hold 不住而不敢下手，这个视频给了我一些启发。
 - [DRA in KubeVirt: Overcoming Challenges & Implementing Changes - KubeCon Europe 2024](https://www.youtube.com/watch?v=8JBwQ6T-ZKE&list=PLj6h78yzYM2NNl95W4Rtp0e0MX9FCw8RN&index=9):
-  DRA 也是 K8s 中的新 API，这里介绍如何在 kubnevirt 中使用 DRA 解决一些问题。从这里能感觉
-  到 K8s 这几年还是弄了不少新东西的。
+  DRA 也是 K8s 中的新 API，这里介绍如何在 kubevirt 中使用 DRA 解决一些问题。从这里能感觉到
+  K8s 这几年还是弄了不少新东西的。
 
 结合 KubeCon China 三天的经历，以及上面这些视频的内容，我大概的感觉是：
 
