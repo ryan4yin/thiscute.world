@@ -2,6 +2,7 @@
 title: "曾经的我 - 2023"
 date: 2023-01-01T14:14:35+08:00
 draft: false
+hiddenfromsearch: true
 
 toc:
   enable: false
