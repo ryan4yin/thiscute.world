@@ -26,6 +26,27 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-11-01
+
+- 从 10-23 开始一直在完成这个 PR: https://github.com/NixOS/nixpkgs/pull/350737
+- 重新把 Matrix 捡起来用，在 Nixpkgs review 群意外发现一些使用 rust 重构 perl/bash 脚本的
+  PR，打算这周末两天花时间学习下
+  - switch-to-configuration-ng
+    - https://github.com/jmbaur/nixpkgs/tree/master/pkgs/by-name/sw/switch-to-configuration-ng
+    - https://github.com/NixOS/nixpkgs/pull/339727
+  - buildFHSEnv
+    - https://github.com/NixOS/nixpkgs/pull/351928
+  - make-initrd-ng
+    - https://github.com/jmbaur/nixpkgs/tree/master/pkgs/build-support/kernel/make-initrd-ng
+- 另外也想试试用 esp32-rs 写点东西，又快一个月没整啥 Rust 了，再不写写又要生疏了。
+
+### 2024-10-26 - 2024-10-27
+
+- 跟同事武功山徒步，10/25 提前下班坐高铁到长沙休息，10/26 早上坐高铁到萍乡再叫车送到武功山
+  下开始徒步。我们是反穿，第一天徒步到云中峰客栈住宿，第二天上午继续徒步到武功山大门口，中
+  间乘了两段下山索道。两天武功山都起大雾，没看到日出，视野也差了许多，但云海也还算不错，在
+  山脊线上走，两边都是悬崖，而且还好大的风，还是有点刺激的。
+
 ### 2024-10-18 - 2024-10-19
 
 - 公司团建，在惠州东江玩了皮划艇，18 公里，挺愉快。
