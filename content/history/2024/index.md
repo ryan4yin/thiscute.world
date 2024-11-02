@@ -26,18 +26,28 @@ comment:
 
 全部历史记录：[/history](/history/)
 
-### 2024-11-01
+### 2024-11-01 - 2024-11-02
 
 - 从 10-23 开始一直在完成这个 PR: https://github.com/NixOS/nixpkgs/pull/350737
 - 重新把 Matrix 捡起来用，在 Nixpkgs review 群意外发现一些使用 rust 重构 perl/bash 脚本的
   PR，打算这周末两天花时间学习下
   - switch-to-configuration-ng
     - https://github.com/jmbaur/nixpkgs/tree/master/pkgs/by-name/sw/switch-to-configuration-ng
+    - https://github.com/NixOS/nixpkgs/pull/308801
     - https://github.com/NixOS/nixpkgs/pull/339727
   - buildFHSEnv
     - https://github.com/NixOS/nixpkgs/pull/351928
   - make-initrd-ng
     - https://github.com/jmbaur/nixpkgs/tree/master/pkgs/build-support/kernel/make-initrd-ng
+  - Perlless Activation
+    - Perlless Activation - Tracking Issue: https://github.com/NixOS/nixpkgs/issues/267982
+    - userborn PR: https://github.com/NixOS/nixpkgs/pull/332719
+    - userborn itself: https://github.com/nikstur/userborn
+  - NixOS 的最小 bootstrap 系统（未完成状态）:
+    - https://github.com/NixOS/nixpkgs/pull/227914
+    - https://github.com/NixOS/nixpkgs/issues/123095
+    - <https://github.com/NixOS/nixpkgs/tree/master/pkgs/os-specific/linux/minimal-bootstrap>
+    - bootstrap-from-tcc: https://github.com/ZilchOS/bootstrap-from-tcc
 - 另外也想试试用 esp32-rs 写点东西，又快一个月没整啥 Rust 了，再不写写又要生疏了。
 
 ### 2024-10-26 - 2024-10-27
