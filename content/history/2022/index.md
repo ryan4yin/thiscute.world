@@ -1094,7 +1094,7 @@ Twitter 上都有上万 followers.
      `new Pjax({` ，找到对应的代码块
   9. 找前端的朋友给了个 canonical link 的 CSS 选择语法，使用该语法修改主题，测试发现问题解
      决
-  10. 提 PR 给这个 Hugo 主题的 github 仓库: https://github.com/HEIGE-PCloud/DoIt/pull/709
+  10. 提 PR 给这个 Hugo 主题的 GitHub 仓库: https://github.com/HEIGE-PCloud/DoIt/pull/709
   11. 总共用时大约 1h
 - 逛 [@Bensz](https://blognas.hwb0307.com/me) 的友链时，发现
   [APISIX 高级路由之通过 Body 参数转发请求 - 张戈博客](https://zhangge.net/5157.html)这篇
@@ -1139,7 +1139,7 @@ RSS Feed 文件的大小降到了 700K，暂时应该不用担心 Vercel 流量�
 
 ### 2022-08-25
 
-- 有个 HTTP 请求失败后 fallback 到备份服务器的需求，想写个 lua 插件来支持它，在 Github 上
+- 有个 HTTP 请求失败后 fallback 到备份服务器的需求，想写个 lua 插件来支持它，在 GitHub 上
   咨询 APISIX，聊了两天官方一直建议我看看这个 `nginx_next_retry`，之前一直感觉不太合
   适，APISIX 的文档也语焉不详，但是今天研究了一波 Nginx/OpenResty 的官方文档，好像又有戏
   hhhh
@@ -1289,7 +1289,7 @@ RSS Feed 文件的大小降到了 700K，暂时应该不用担心 Vercel 流量�
   [为了追求速度，我们测试了全球所有的 CDN](https://www.infoq.cn/article/n5tefmdbuvdxkpf8f_hq)，
   测试了全球的 CDN 速度，画出了一张全球速度最快的 CDN 厂商分布图。其中显示 Azure 的确是中
   国区域最快的 CDN（仅比较了国际 CDN 服务商，不包含国内）。
-- 试用了通过 Github Action azcopy 将站点上传到 Azure Blob Storage，发现上传太慢了，居然跑
+- 试用了通过 GitHub Action azcopy 将站点上传到 Azure Blob Storage，发现上传太慢了，居然跑
   了 4mins+，权衡之下还是决定先使用 Vercel 作为 CDN 源站，免费而且部署比 Azure Blob
   Storage 快多了。
 
@@ -1459,7 +1459,7 @@ RSS Feed 文件的大小降到了 700K，暂时应该不用担心 Vercel 流量�
 - 折腾一晚上博客的 Hugo 跟 DoIt 主题
   - 发现本地生成出的站点，mermaid 跟 music 两个插件的问题莫名其妙修复了，怀疑跟今天跑了一
     波 `brew upgrade` 有关
-  - 但是云上 github action 跟 vercel 都还有问题，同样的命令同样的 hugo 版本，本地生成的静
+  - 但是云上 GitHub action 跟 vercel 都还有问题，同样的命令同样的 hugo 版本，本地生成的静
     态文件 mermaid 跟 aplay 正常加载，云上生成的就有问题，也是醉了...
 
 ### 2022-06-05 ~ 2022-06-06
@@ -1856,7 +1856,7 @@ RSS Feed 文件的大小降到了 700K，暂时应该不用担心 Vercel 流量�
     - 进度：100%
     - 跳过了智能合约代码相关的内容，因为代码比较老了，新版本的 solidity 有了许多新变化。
   - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
-    - 这个视频及相关的 Github 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论
+    - 这个视频及相关的 GitHub 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论
       后，实战合约编写
   - [区块链技术指南](https://github.com/yeasy/blockchain_guide): 《Docker - 从入门到实践》
     作者的新书，内容同样简洁易懂，侧重介绍原理及知识面，非常棒。
@@ -1868,7 +1868,7 @@ RSS Feed 文件的大小降到了 700K，暂时应该不用担心 Vercel 流量�
     - 进度：7/14
     - 这书适合用于学习理论，solidity 开发相关的内容可以跳过，即 7/8 两章
   - [Youtube - Solidity, Blockchain, and Smart Contract Course – Beginner to Expert Python Tutorial](https://www.youtube.com/watch?v=M576WGiDBdQ)
-    - 这个视频及相关的 Github 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论
+    - 这个视频及相关的 GitHub 仓库，包含一些区块链可视化以及相关的介绍，更适合学习完理论
       后，实战合约编写
 
 ### 2021-03-23 - 2021-3-25

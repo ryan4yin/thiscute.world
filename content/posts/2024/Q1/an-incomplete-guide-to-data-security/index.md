@@ -81,7 +81,7 @@ GitHub 上没啥数据也没啥 stars 当然无所谓，但现在我已经无法
 
 在 2022 年的时候我因为对区块链的兴趣顺便学习了一点应用密码学，了解了一些密码学的基础知识，
 然后年底又经历了几次可能的数据泄漏，这使我意识到我的个人数据安全已经是一个不可忽视的问题。
-因此，为了避免 Github 私钥泄漏、区块链钱包助记词泄漏、个人隐私泄漏等可能，我在 2023 年 5
+因此，为了避免 GitHub 私钥泄漏、区块链钱包助记词泄漏、个人隐私泄漏等可能，我在 2023 年 5
 月做了全面强化个人数据安全的决定，并在 0XFFFF 社区发了篇帖子征求意
 见——[学习并强化个人的数据安全性（持续更新）](https://0xffff.one/d/1528)。
 
@@ -656,7 +656,7 @@ passphrase 等少数几个密码，就能顺着整条链路解密出所有的数
 6. 注销印象笔记账号，使用 evernote-backup 跟 evernote2md 两个工具将个人的私密笔记遷移到了
    Joplin + OneDrive 上，Homelab 中設了通過 restic 定期自動加密備份 OneDrive 中的 Joplin
    數據。
-7. 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 github action 自动
+7. 比较有价值的 GitHub 仓库，都设置了禁止 force push 主分支，并且添加了 GitHub action 自动
    同步到国内 Gitee.
 8. All in NixOS，将 Homelab 中的 PVE 全部使用 NixOS + K3s + KubeVirt 替换。从偏黑盒且可复
    现性差的 Ubuntu、Debian, Proxmox VE, OpenWRT 等 VM 全面替换成更白盒且可复现性强的

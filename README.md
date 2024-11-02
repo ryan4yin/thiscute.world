@@ -31,7 +31,7 @@ caddy file-server --root public/ --listen 0.0.0.0:8881
 Now edit the newly created file under `content/posts`, and then you can view the live
 changes in the browser <http://localhost:1313/>
 
-## Github Action
+## GitHub Action
 
 Push updates to `main` branch will trigger a GitHub action to deploy the updates
 automatically.

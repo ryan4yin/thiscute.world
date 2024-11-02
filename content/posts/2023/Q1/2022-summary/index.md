@@ -146,7 +146,7 @@ comment:
 - 最后是连续三年蝉联我年度歌手的天依同学，截图放这里纪念一下：
   {{<figure src="/images/now/netease-cloud-music-2022-singer-of-ryan4yin.webp" title="我的网易云年度歌手" width="50%">}}
 
-## 2022 年 Highlight
+## 2022 年 Highlights
 
 ### 1. 英语
 

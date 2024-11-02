@@ -41,14 +41,14 @@ categories: ["tech"]
 - 在 Hugo 中创建一个「阅读排行」页面，通过自定义 shortcodes 将前面获取到的 json 数据渲染成
   html，插入到这个页面中。
 - 生成出静态网站并部署。
-- 编写一个 Github Action，定期（比如 1h）执行上面三个步骤。
+- 编写一个 GitHub Action，定期（比如 1h）执行上面三个步骤。
 
 主要使用到的技术有：
 
 - Google Analytics API
 - Python
 - Hugo 自定义 shortcodes
-- Github Action
+- GitHub Action
 
 如果你使用的是其他网站生成器或者网站统计工具，也大致可以参考这个流程。
 
@@ -113,7 +113,7 @@ hugo new statistics/index.md
 
 <https://github.com/ryan4yin/ryan4yin.space/blob/main/content/statistics/index.md>
 
-## 三、编写 Github Action
+## 三、编写 GitHub Action
 
 同样懒得介绍了，请直接看我的 action 配置：
 
