@@ -74,6 +74,11 @@ comment:
 
 - 公司团建，在惠州东江玩了皮划艇，18 公里，挺愉快。
 
+{{<figure src="/images/travel/2024-10-18-teambuilding-kayaking/AK0376.webp" title="跟同事划皮划艇" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-18-teambuilding-kayaking/IMG_20241107_163651.webp" title="跟同事划皮划艇" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-18-teambuilding-kayaking/AK1653.webp" title="江边放点烟花，不得不说公司是会玩的" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-18-teambuilding-kayaking/AK1678.webp" title="烟花" width="80%">}}</figure>
+
 ### 2024-10-10
 
 - 临近 Q 末，本 Q 工作上一直不在状态，注意力涣散。这周顶不住了开始服用专注达，工作效率明显
