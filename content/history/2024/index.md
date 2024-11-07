@@ -57,6 +57,19 @@ comment:
   间乘了两段下山索道。两天武功山都起大雾，没看到日出，视野也差了许多，但云海也还算不错，在
   山脊线上走，两边都是悬崖，而且还好大的风，还是有点刺激的。
 
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241026125955_20241107155625.webp" title="10/26 似曾相识的山径，像是回了老家" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/mmexport1730965892637.webp" title="10/26 终于到达云海之上" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/mmexport1730965923718.webp" title="10/27 铁蹄峰" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027053935_20241107155625.webp" title="10/27 喝着热水欣赏早晨四五点的山景" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027055431_20241107155625.webp" title="10/27 快清晨六点了，对面山上的早餐叫卖声隔这么远都听得到" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027070222_20241107155625.webp" title="10/27 从云中峰客栈再次出发" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/mmexport1730965884865.webp" title="10/27 从云中峰客栈再次出发" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027074804_20241107155626.webp" title="10/27 排队等待坐缆车~" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027073956_20241107155625.webp" title="10/27 排队等待坐缆车" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027083516_20241107155626.webp" title="10/27 坐缆车啦" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027085154_20241107155626.webp" title="10/27 悬崖峭壁上的栈道" width="80%">}}</figure>
+{{<figure src="/images/travel/2024-10-26-wugong-mountains/mmexport1730965873249.webp" title="10/27 云海中若隐若现的山峦" width="80%">}}</figure>
+
 ### 2024-10-18 - 2024-10-19
 
 - 公司团建，在惠州东江玩了皮划艇，18 公里，挺愉快。
