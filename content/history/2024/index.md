@@ -26,6 +26,16 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-11-09 - 2024-11-10
+
+- 有点无聊，尝试看网络小说但发现目前对它们没半点兴趣，于是决定看点技术书籍。
+- 阅读 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)，也就是 TLPI
+  - 去年跟今年上半年都一直折腾 NixOS 跟各种东西，对读正经书提不上兴趣。最近发现兴趣又上来
+    了点，捡起来一读。
+- 为 [learn-tlpi](https://github.com/ryan4yin/learn-tlpi) 添加 nix devShell，同时尝试将之
+  前的解答用 rust 重写一遍。
+  - 挺有意思，学着开始有点感觉了。
+
 ### 2024-11-01 - 2024-11-02
 
 - 从 10-23 开始一直在完成这个 PR: https://github.com/NixOS/nixpkgs/pull/350737
