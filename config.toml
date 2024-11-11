@@ -537,6 +537,13 @@ enableEmoji = true
   [privacy.youtube]
     privacyEnhanced = true
 
+# 用于分类的设置
+[taxonomies]
+author = "authors"
+category = "categories"
+tag = "tags"
+series = "series"
+
 # Atom feed
 # Add "ATOM" to the Page Kinds under [outputs] (in your site config) for which
 # you want to enable Atom feeds.
@@ -550,6 +557,8 @@ enableEmoji = true
   # https://validator.w3.org/feed/docs/atom.html#whatIsAtom
   name = "ATOM"
   mediaType = "application/atom+xml"
+  # index.xml is used by rss by default
+  # so we need to disable rss feed in [outputs] to make it work!
   baseName = "index" # generated file = <baseName>.<mediaType."application/atom+xml".suffixes[0]> = index.xml
   isPlainText = false
   rel = "alternate"
@@ -557,19 +566,13 @@ enableEmoji = true
   noUgly = true
   permalinkable = false
 
-# 用于分类的设置
-[taxonomies]
-author = "authors"
-category = "categories"
-tag = "tags"
-series = "series"
-
 # 用于 Hugo 输出文档的设置
 [outputs]
   # DoIt 更改 | 0.2.0
   # 为了支持搜索，需要在这里设定，输出 json 索引文件
-  # <domain>/atom.xml
-  home = ["HTML", "ATOM", "JSON", "RSS"]
-  page = ["HTML", "RSS"]
+  # 前面的 outputFormats.Atom 配置了，这里的 ATOM 将会输出到 <domain>/index.xml
+  home = ["HTML", "ATOM", "JSON"]
+  # ATOM 将会输出到 <domain>/posts/index.xml
+  page = ["HTML", "ATOM"]
   section = ["HTML"]
   taxonomy = ["HTML"]
