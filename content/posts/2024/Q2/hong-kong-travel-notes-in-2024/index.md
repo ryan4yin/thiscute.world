@@ -24,7 +24,7 @@ tags:
     "麦理浩径",
   ]
 categories: ["life"]
-series: ["徒步"]
+series: ["徒步旅行"]
 
 hiddenFromHomePage: false
 hiddenFromSearch: false
