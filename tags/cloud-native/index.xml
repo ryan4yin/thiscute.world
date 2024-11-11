@@ -1,7 +1,42 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Cloud-Native - 标签 - This Cute World</title><link>https://thiscute.world/tags/cloud-native/</link><description>Cloud-Native - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 27 Aug 2024 10:10:22 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/cloud-native/" rel="self" type="application/rss+xml"/><item><title>KubeCon China 2024 之旅</title><link>https://thiscute.world/posts/kubecon-china-2024/</link><pubDate>Tue, 27 Aug 2024 10:10:22 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/kubecon-china-2024/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/kubecon-china-2024/kubecon-china-2024-linus.webp" referrerpolicy="no-referrer">
-&lt;/div>前言很早就有了解到今年的 KubeCon China 会在香港举办，虽然有些兴趣，但我最初是有被 KubeCon 高昂的门票价格劝退了的。 有时候不得不相信运气的魔力，机缘巧合之下，我</description></item><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/kubernetes-cluster-autoscaling-1-karpenter/karpenter.png" referrerpolicy="no-referrer">
-&lt;/div>前言Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面： Workloads 的伸缩：通过 Horizontal Pod Autoscaler（HPA）和 Vertical Pod Autoscal</description></item><item><title>Kubernetes 微服务最佳实践</title><link>https://thiscute.world/posts/kubernetes-best-practices/</link><pubDate>Tue, 25 Jan 2022 00:13:00 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/kubernetes-best-practices/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/kubernetes-best-practices/kubernetes-best-practices.webp" referrerpolicy="no-referrer">
-&lt;/div>本文由个人笔记ryan4yin/knowledge 整理而来 本文主要介绍我个人在使用 Kubernetes 的过程中，总结出的一套「Kubernetes 配置」，是我</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Cloud-Native - 标签 - This Cute World</title><link>https://thiscute.world/tags/cloud-native/</link><description>Cloud-Native - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 27 Aug 2024 10:10:22 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/cloud-native/" rel="self" type="application/rss+xml"/><item><title>KubeCon China 2024 之旅</title><link>https://thiscute.world/posts/kubecon-china-2024/</link><pubDate>Tue, 27 Aug 2024 10:10:22 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubecon-china-2024/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/kubecon-china-2024/kubecon-china-2024-linus.webp" referrerpolicy="no-referrer">
+            </div><h2 id="前言" class="headerLink">
+    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>很早就有了解到今年的 KubeCon China 会在香港举办，虽然有些兴趣，但我最初是有被 KubeCon 高昂的门票价格劝退了的。</p>
+<p>有时候不得不相信运气的魔力，机缘巧合之下，我从朋友 @Kev 处得知了 KubeCon 的「最终用户门票计划」并借此 0 元购了门票，又邀上了 <a href="https://0xffff.one/" target="_blank" rel="noopener noreferrer">0xFFFF 社区</a> 的<a href="https://0xffff.one/u/Chever-John" target="_blank" rel="noopener noreferrer">@Chever-John</a>
+<a href="https://0xffff.one/u/0xdeadbeef" target="_blank" rel="noopener noreferrer">@0xdeadbeef</a> <a href="https://0xffff.one/u/MingLLuo" target="_blank" rel="noopener noreferrer">@茗洛</a> 三位朋友一起参加，在香港租了个 airbnb 住宿，期间也逛了香港城市中的不少地方，收货颇丰。</p>]]></description></item><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/kubernetes-cluster-autoscaling-1-karpenter/karpenter.png" referrerpolicy="no-referrer">
+            </div><h2 id="前言" class="headerLink">
+    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面：</p>
+<ol>
+<li>Workloads 的伸缩：通过 Horizontal Pod Autoscaler（HPA）和 Vertical Pod
+Autoscaler（VPA）等资源，可以根据资源使用情况自动调整 Pod 的数量和资源配置。
+<ul>
+<li>相关项目：
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">metrics-server</a>: 采集指标数据供
+HPA 使用</li>
+<li><a href="https://github.com/kedacore/keda" target="_blank" rel="noopener noreferrer">KEDA</a>: 用于支持更多的指标数据源与触发方式</li>
+<li><a href="https://github.com/kubernetes/autoscaler" target="_blank" rel="noopener noreferrer">kubernetes/autoscaler</a>: 提供 VPA 功能</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Nodes 的伸缩：根据集群的负载情况，可以自动增加或减少 Nodes 的数量，以适应负载的变化。
+<ul>
+<li>相关项目：
+<ul>
+<li><a href="https://github.com/kubernetes/autoscaler" target="_blank" rel="noopener noreferrer">kubernetes/autoscaler</a>: 目前最流行的
+Node 伸缩方案，支持绝大多数云厂商。</li>
+<li><a href="https://github.com/kubernetes-sigs/karpenter" target="_blank" rel="noopener noreferrer">karpenter</a>: AWS 捐给 CNCF 的一个新兴
+Node 伸缩方案，目前仅支持 AWS/Azure，但基于其核心库可以很容易地扩展支持其他云厂商。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>本文主要介绍新兴 Node 伸缩与管理方案 Karpenter 的优势、应用场景及使用方法。</p>]]></description></item><item><title>Kubernetes 微服务最佳实践</title><link>https://thiscute.world/posts/kubernetes-best-practices/</link><pubDate>Tue, 25 Jan 2022 00:13:00 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubernetes-best-practices/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/kubernetes-best-practices/kubernetes-best-practices.webp" referrerpolicy="no-referrer">
+            </div><blockquote>
+  <p>本文由个人笔记<a href="https://github.com/ryan4yin/knowledge/tree/master/kubernetes" target="_blank" rel="noopener noreferrer">ryan4yin/knowledge</a> 整理而来</p>
+
+</blockquote><p>本文主要介绍我个人在使用 Kubernetes 的过程中，总结出的一套「Kubernetes 配置」，是我个人的「最佳实践」。其中大部分内容都经历过线上环境的考验，但是也有少部分还只在我脑子里模拟过，请谨慎参考。</p>]]></description></item></channel></rss>

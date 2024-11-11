@@ -1,51 +1,139 @@
 <!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:url" content="https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/">
-<meta property="og:site_name" content="This Cute World"><meta property="og:title" content="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"><meta property="og:description" content="个人笔记，如有错误烦请指正。 SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-01-21T14:02:00+08:00"><meta property="article:modified_time" content="2019-01-21T14:02:00+08:00"><meta property="article:tag" content="SQLAlchemy"><meta property="article:tag" content="Python"><meta property="article:tag" content="ORM"><meta property="article:tag" content="后端"><meta property="article:tag" content="数据库"><meta property="article:tag" content="Database"><meta property="og:image" content="https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp"><meta name=twitter:title content="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"><meta name=twitter:description content="个人笔记，如有错误烦请指正。 SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/><link rel=prev href=https://thiscute.world/posts/sql-basics-3-restrict/><link rel=next href=https://thiscute.world/posts/systemd-basics/><link rel=alternate href=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/index.xml type=application/rss+xml title="This Cute World"><link rel=feed href=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/index.xml type=application/rss+xml title="This Cute World"><link rel=stylesheet href=/css/main.css><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/color.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp","width":1500,"height":864}],"genre":"posts","keywords":"SQLAlchemy, Python, ORM, 后端, 数据库, Database","wordcount":3325,"url":"https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/","datePublished":"2019-01-21T14:02:00+08:00","dateModified":"2019-01-21T14:02:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select title=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ selected>Simplified Chinese</option></select>
-</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i>
-</a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i>
-</span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i>
-</a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i>
-</a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select title=选择语言 onchange="location=this.value"><option value=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#一直接使用-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-和-connections>一、直接使用 <a href=https://docs.sqlalchemy.org/en/latest/core/engines.html#sqlalchemy.create_engine>Engine</a> 和 Connections</a><ul><li><a href=#1-使用-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-构建-sql>1. 使用 <a href=https://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.text>text()</a> 构建 SQL</a></li></ul></li><li><a href=#二sql-表达式语言>二、SQL 表达式语言</a><ul><li><a href=#1-定义并创建表>1. 定义并创建表</a><ul><li><a href=#表定义中的约束>表定义中的约束</a></li></ul></li><li><a href=#2-增删改查语句>2. 增删改查语句</a></li><li><a href=#where-进阶>where 进阶</a></li></ul></li><li><a href=#链接>链接</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class="author fas fa-user-circle fa-fw"></span><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author>ryan4yin</a>
-</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>Tech</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2019-01-21>2019-01-21</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2019-01-21>2019-01-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3325 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp srcset="/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp, /posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp 1.5x, /posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp 2x" sizes=auto alt=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp title=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp height=864 width=1500></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一直接使用-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-和-connections>一、直接使用 <a href=https://docs.sqlalchemy.org/en/latest/core/engines.html#sqlalchemy.create_engine>Engine</a> 和 Connections</a><ul><li><a href=#1-使用-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-构建-sql>1. 使用 <a href=https://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.text>text()</a> 构建 SQL</a></li></ul></li><li><a href=#二sql-表达式语言>二、SQL 表达式语言</a><ul><li><a href=#1-定义并创建表>1. 定义并创建表</a><ul><li><a href=#表定义中的约束>表定义中的约束</a></li></ul></li><li><a href=#2-增删改查语句>2. 增删改查语句</a></li><li><a href=#where-进阶>where 进阶</a></li></ul></li><li><a href=#链接>链接</a></li></ul></nav></div></div><div class=content id=content><blockquote><p>个人笔记，如有错误烦请指正。</p></blockquote><p>SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下：</p><figure><img src=/images/sqlalchemy-notes/sqlalchemy-arch.webp><figcaption><h4>SQLAlchemy 层次结构</h4></figcaption></figure><p>其中最常用的组件，应该是 <strong>ORM</strong> 和 <strong>SQL 表达式语言</strong>，这两者既可以独立使用，也能结合使用。</p><p><strong>ORM</strong> 的好处在于它</p><ol><li>自动处理了数据库和 Python 对象之间的映射关系，屏蔽了两套系统之间的差异。程序员不需要再编写复杂的 SQL 语句，直接操作 Python 对象就行。</li><li>屏蔽了各数据库之间的差异，更换底层数据库不需要修改 SQL 语句，改下配置就行。</li><li>使数据库结构文档化，models 定义很清晰地描述了数据库的结构。</li><li>避免了不规范、冗余、风格不统一的 SQL 语句，可以避免很多人为 Bug，也方便维护。</li></ol><p>但是 ORM 需要消耗额外的性能来处理对象关系映射，此外用 ORM 做多表关联查询或复杂 SQL 查询时，效率低下。因此它适用于场景不太复杂，性能要求不太苛刻的场景。</p><p>都说 ORM 学习成本高，我自己也更倾向于直接使用 SQL 语句（毕竟更熟悉），因此这一篇笔记不涉及
-ORM 部分，只记录 SQLAlchemy 的 Engine 与 SQL 表达式语言。</p><h2 id=一直接使用-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-和-connections class=headerLink><a href=#%e4%b8%80%e7%9b%b4%e6%8e%a5%e4%bd%bf%e7%94%a8-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-%e5%92%8c-connections class=header-mark></a>一、直接使用 <a href=https://docs.sqlalchemy.org/en/latest/core/engines.html#sqlalchemy.create_engine target=_blank rel="noopener noreferrer">Engine</a> 和 Connections</h2><p>第一步是创建数据库引擎实例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>create_engine</span>
+<meta property="og:site_name" content="This Cute World"><meta property="og:title" content="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"><meta property="og:description" content="个人笔记，如有错误烦请指正。
+SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下："><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-01-21T14:02:00+08:00"><meta property="article:modified_time" content="2019-01-21T14:02:00+08:00"><meta property="article:tag" content="SQLAlchemy"><meta property="article:tag" content="Python"><meta property="article:tag" content="ORM"><meta property="article:tag" content="后端"><meta property="article:tag" content="数据库"><meta property="article:tag" content="Database"><meta property="og:image" content="https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp"><meta name=twitter:title content="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"><meta name=twitter:description content="个人笔记，如有错误烦请指正。
+SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下："><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/><link rel=prev href=https://thiscute.world/posts/sql-basics-3-restrict/><link rel=next href=https://thiscute.world/posts/systemd-basics/><link rel=alternate href=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/index.xml type=application/rss+xml title="This Cute World"><link rel=feed href=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/index.xml type=application/rss+xml title="This Cute World"><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/sqlalchemy-intro.webp","width":1500,"height":864}],"genre":"posts","keywords":["SQLAlchemy","Python","ORM","后端","数据库","Database"],"wordcount":3161,"url":"https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/","datePublished":"2019-01-21T14:02:00+08:00","dateModified":"2019-01-21T14:02:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":{"@type":"Person","name":"作者","url":"/"},"description":""}</script></head><body data-instant-intensity=viewport><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+<select class=language-select aria-label=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ selected>Simplified Chinese</option></select>
+</button><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<button class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<svg class="icon" viewBox="0 0 512 512"><path d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</button>
+<button class="search-button search-clear" id=search-clear-desktop title=清空>
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3.0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3.0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3.0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3.0 17L312 256l65.6 65.1z"/></svg>
+</button>
+<span class="search-button search-loading tw-animate-spin" id=search-loading-desktop><svg class="icon" viewBox="0 0 512 512"><path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49.0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156.0c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/></svg>
+</span></span><button class="menu-item theme-switch" aria-label=切换主题><svg class="icon" viewBox="0 0 512 512"><path d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705.0 184 82.311 184 184 0 101.705-82.311 184-184 184z"/></svg></button></div></div></div></header><header class="mobile print:!tw-hidden" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<button class="search-button search-toggle tw-h-10" id=search-toggle-mobile title=搜索>
+<svg class="icon" viewBox="0 0 512 512"><path d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</button>
+<button class="search-button search-clear" id=search-clear-mobile title=清空>
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3.0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3.0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3.0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3.0 17L312 256l65.6 65.1z"/></svg>
+</button>
+<span class="search-button search-loading tw-animate-spin" id=search-loading-mobile><svg class="icon" viewBox="0 0 512 512"><path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49.0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156.0c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/></svg></span></div><button class=search-cancel id=search-cancel-mobile>
+取消</button></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><button class="menu-item theme-switch tw-w-full" aria-label=切换主题>
+<svg class="icon" viewBox="0 0 512 512"><path d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705.0 184 82.311 184 184 0 101.705-82.311 184-184 184z"/></svg>
+</button><button class="menu-item tw-w-full" title>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+<select class=language-select title onchange="location=this.value"><option value=/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#一直接使用-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-和-connections>一、直接使用 <a href=https://docs.sqlalchemy.org/en/latest/core/engines.html#sqlalchemy.create_engine>Engine</a> 和 Connections</a><ul><li><a href=#1-使用-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-构建-sql>1. 使用 <a href=https://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.text>text()</a> 构建 SQL</a></li></ul></li><li><a href=#二sql-表达式语言>二、SQL 表达式语言</a><ul><li><a href=#1-定义并创建表>1. 定义并创建表</a><ul><li><a href=#表定义中的约束>表定义中的约束</a></li></ul></li><li><a href=#2-增删改查语句>2. 增删改查语句</a></li><li><a href=#where-进阶>where 进阶</a></li></ul></li><li><a href=#链接>链接</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2019-01-21 data-pagefind-body>SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言</h1><div class=post-meta><div class=post-meta-line><span class=post-author><svg class="icon" viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6.0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7.0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4.0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9s28-2.7 40.9-6.9c2.3-.7 4.7-1.1 7.1-1.1 42.9.0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg><a href=/ title=Author rel=author class=author>作者</a>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><svg class="icon" viewBox="0 0 512 512"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>Tech</a></span></div><div class=post-meta-line><svg class="icon" viewBox="0 0 448 512"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;<time datetime=2019-01-21>2019-01-21</time>&nbsp;<svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime=2019-01-21>2019-01-21</time>&nbsp;<svg class="icon" viewBox="0 0 512 512"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 3161 字&nbsp;
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5.0-2e2-89.5-2e2-2e2S145.5 56 256 56s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2zm61.8-104.4-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6.0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 14 分钟&nbsp;</div></div><div class="details toc print:!tw-block" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一直接使用-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-和-connections>一、直接使用 <a href=https://docs.sqlalchemy.org/en/latest/core/engines.html#sqlalchemy.create_engine>Engine</a> 和 Connections</a><ul><li><a href=#1-使用-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-构建-sql>1. 使用 <a href=https://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.text>text()</a> 构建 SQL</a></li></ul></li><li><a href=#二sql-表达式语言>二、SQL 表达式语言</a><ul><li><a href=#1-定义并创建表>1. 定义并创建表</a><ul><li><a href=#表定义中的约束>表定义中的约束</a></li></ul></li><li><a href=#2-增删改查语句>2. 增删改查语句</a></li><li><a href=#where-进阶>where 进阶</a></li></ul></li><li><a href=#链接>链接</a></li></ul></nav></div></div><div class=content id=content data-pagefind-body><blockquote><p>个人笔记，如有错误烦请指正。</p></blockquote><p>SQLAlchemy 是一个用 Python 实现的 ORM （Object Relational Mapping）框架，它由多个组件构成，这些组件可以单独使用，也能独立使用。它的组件层次结构如下：</p><figure><img src=/images/sqlalchemy-notes/sqlalchemy-arch.webp><figcaption><h4>SQLAlchemy 层次结构</h4></figcaption></figure><p>其中最常用的组件，应该是 <strong>ORM</strong> 和 <strong>SQL 表达式语言</strong>，这两者既可以独立使用，也能结合使用。</p><p><strong>ORM</strong> 的好处在于它</p><ol><li>自动处理了数据库和 Python 对象之间的映射关系，屏蔽了两套系统之间的差异。程序员不需要再编写复杂的 SQL 语句，直接操作 Python 对象就行。</li><li>屏蔽了各数据库之间的差异，更换底层数据库不需要修改 SQL 语句，改下配置就行。</li><li>使数据库结构文档化，models 定义很清晰地描述了数据库的结构。</li><li>避免了不规范、冗余、风格不统一的 SQL 语句，可以避免很多人为 Bug，也方便维护。</li></ol><p>但是 ORM 需要消耗额外的性能来处理对象关系映射，此外用 ORM 做多表关联查询或复杂 SQL 查询时，效率低下。因此它适用于场景不太复杂，性能要求不太苛刻的场景。</p><p>都说 ORM 学习成本高，我自己也更倾向于直接使用 SQL 语句（毕竟更熟悉），因此这一篇笔记不涉及
+ORM 部分，只记录 SQLAlchemy 的 Engine 与 SQL 表达式语言。</p><h2 id=一直接使用-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-和-connections class=headerLink><a href=#%e4%b8%80%e7%9b%b4%e6%8e%a5%e4%bd%bf%e7%94%a8-enginehttpsdocssqlalchemyorgenlatestcoreengineshtmlsqlalchemycreate_engine-%e5%92%8c-connections class=header-mark></a>一、直接使用 <a href=https://docs.sqlalchemy.org/en/latest/core/engines.html#sqlalchemy.create_engine target=_blank rel="noopener noreferrer">Engine</a> 和 Connections</h2><p>第一步是创建数据库引擎实例：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-1 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>create_engine</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>engine</span> <span class=o>=</span> <span class=n>create_engine</span><span class=p>(</span><span class=s1>&#39;sqlite:///:memory:&#39;</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>                    <span class=n>echo</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span>  <span class=c1># echo=True 表示打印出自动生成的 SQL 语句（通过 logging）</span>
 </span></span><span class=line><span class=cl>                    <span class=n>pool_size</span><span class=o>=</span><span class=mi>5</span><span class=p>,</span>  <span class=c1># 连接池容量，默认为 5，生产环境下太小，需要修改。</span>
 </span></span><span class=line><span class=cl>                    <span class=c1># 下面是 connection 回收的时间限制，默认 -1 不回收</span>
-</span></span><span class=line><span class=cl>                    <span class=n>pool_recycle</span><span class=o>=</span><span class=mi>7200</span><span class=p>)</span>   <span class=c1># 超过 2 小时就重新连接（MySQL 默认的连接最大闲置时间为 8 小时）</span>
-</span></span></code></pre></td></tr></table></div></div><p><code>create_engine</code> 接受的第一个参数是数据库 URI，格式为<code>dialect+driver://username:password@host:port/database</code>，dialect 是具体的数据库名称，driver 是驱动名称。key-value 是可选的参数。举例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># PostgreSQL</span>
+</span></span><span class=line><span class=cl>                    <span class=n>pool_recycle</span><span class=o>=</span><span class=mi>7200</span><span class=p>)</span>   <span class=c1># 超过 2 小时就重新连接（MySQL 默认的连接最大闲置时间为 8 小时）</span></span></span></code></pre></div><p><code>create_engine</code> 接受的第一个参数是数据库 URI，格式为<code>dialect+driver://username:password@host:port/database</code>，dialect 是具体的数据库名称，driver 是驱动名称。key-value 是可选的参数。举例：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-2 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># PostgreSQL</span>
 </span></span><span class=line><span class=cl>postgresql+psycopg2://scott:tiger@localhost/dbtest
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># MySQL + PyMySQL（或者用更快的  mysqlclient）</span>
@@ -61,18 +149,58 @@ ORM 部分，只记录 SQLAlchemy 的 Engine 与 SQL 表达式语言。</p><h2 i
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># SQL Server + pyodbc</span>
 </span></span><span class=line><span class=cl><span class=c1># 首选基于 dsn 的连接，dsn 的配置请搜索hhh</span>
-</span></span><span class=line><span class=cl>mssql+pyodbc://scott:tiger@some_dsn
-</span></span></code></pre></td></tr></table></div></div><p>如果你的密码中含有 &lsquo;@&rsquo; 等特殊字符，就不能直接放入 URI 中，必须使用<code>urllib.parse.quote_plus</code> 编码，然后再插入 URI.</p><p>引擎创建后，我们就可以直接获取 connection，然后执行 SQL 语句了。这种用法相当于把
-SQLAlchemy 当成带 log 的数据库连接池使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span><span class=lnt>9
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>with</span> <span class=n>engine</span><span class=o>.</span><span class=n>connect</span><span class=p>()</span> <span class=k>as</span> <span class=n>conn</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>mssql+pyodbc://scott:tiger@some_dsn</span></span></code></pre></div><p>如果你的密码中含有 &lsquo;@&rsquo; 等特殊字符，就不能直接放入 URI 中，必须使用<code>urllib.parse.quote_plus</code> 编码，然后再插入 URI.</p><p>引擎创建后，我们就可以直接获取 connection，然后执行 SQL 语句了。这种用法相当于把
+SQLAlchemy 当成带 log 的数据库连接池使用：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-3 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=k>with</span> <span class=n>engine</span><span class=o>.</span><span class=n>connect</span><span class=p>()</span> <span class=k>as</span> <span class=n>conn</span><span class=p>:</span>
 </span></span><span class=line><span class=cl>    <span class=n>res</span> <span class=o>=</span> <span class=n>conn</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=s2>&#34;select username from users&#34;</span><span class=p>)</span>  <span class=c1># 无参直接使用</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=c1># 使用问号作占位符，前提是下层的 DBAPI 支持。更好的方式是使用 text()，这个后面说</span>
@@ -80,20 +208,57 @@ SQLAlchemy 当成带 log 的数据库连接池使用：</p><div class=highlight>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=c1># 查询返回的是 ResultProxy 对象，有和 dbapi 相同的 fetchone()、fetchall()、first() 等方法，还有一些拓展方法</span>
 </span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>row</span> <span class=ow>in</span> <span class=n>result</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;username:&#34;</span><span class=p>,</span> <span class=n>row</span><span class=p>[</span><span class=s1>&#39;username&#39;</span><span class=p>])</span>
-</span></span></code></pre></td></tr></table></div></div><p>但是要注意的是，connection 的 execute 是自动提交的（autocommit），这就像在 shell 里打开一个数据库客户端一样，分号结尾的 SQL 会被自动提交。只有在 <code>BEGIN TRANSACTION</code> 内部，<code>AUTOCOMMIT</code> 会被临时设置为 <code>FALSE</code>，可以通过如下方法开始一个内部事务：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>transaction_a</span><span class=p>(</span><span class=n>connection</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;username:&#34;</span><span class=p>,</span> <span class=n>row</span><span class=p>[</span><span class=s1>&#39;username&#39;</span><span class=p>])</span></span></span></code></pre></div><p>但是要注意的是，connection 的 execute 是自动提交的（autocommit），这就像在 shell 里打开一个数据库客户端一样，分号结尾的 SQL 会被自动提交。只有在 <code>BEGIN TRANSACTION</code> 内部，<code>AUTOCOMMIT</code> 会被临时设置为 <code>FALSE</code>，可以通过如下方法开始一个内部事务：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-4 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=k>def</span> <span class=nf>transaction_a</span><span class=p>(</span><span class=n>connection</span><span class=p>):</span>
 </span></span><span class=line><span class=cl>    <span class=n>trans</span> <span class=o>=</span> <span class=n>connection</span><span class=o>.</span><span class=n>begin</span><span class=p>()</span>  <span class=c1># 开启一个 transaction</span>
 </span></span><span class=line><span class=cl>    <span class=k>try</span><span class=p>:</span>
 </span></span><span class=line><span class=cl>        <span class=c1># do sthings</span>
@@ -104,25 +269,57 @@ SQLAlchemy 当成带 log 的数据库连接池使用：</p><div class=highlight>
 </span></span><span class=line><span class=cl><span class=c1># do other things</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=k>with</span> <span class=n>engine</span><span class=o>.</span><span class=n>connect</span><span class=p>()</span> <span class=k>as</span> <span class=n>conn</span><span class=p>:</span>
-</span></span><span class=line><span class=cl>    <span class=n>transaction_a</span><span class=p>(</span><span class=n>conn</span><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=1-使用-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-构建-sql class=headerLink><a href=#1-%e4%bd%bf%e7%94%a8-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-%e6%9e%84%e5%bb%ba-sql class=header-mark></a>1. 使用 <a href=https://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.text target=_blank rel="noopener noreferrer">text()</a> 构建 SQL</h3><p>相比直接使用 string，text() 的优势在于它：</p><ol><li>提供了统一的参数绑定语法，与具体的 DBAPI 无关。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 1. 参数绑定语法</span>
+</span></span><span class=line><span class=cl>    <span class=n>transaction_a</span><span class=p>(</span><span class=n>conn</span><span class=p>)</span></span></span></code></pre></div><h3 id=1-使用-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-构建-sql class=headerLink><a href=#1-%e4%bd%bf%e7%94%a8-texthttpsdocssqlalchemyorgenlatestcoresqlelementhtmlsqlalchemysqlexpressiontext-%e6%9e%84%e5%bb%ba-sql class=header-mark></a>1. 使用 <a href=https://docs.sqlalchemy.org/en/latest/core/sqlelement.html#sqlalchemy.sql.expression.text target=_blank rel="noopener noreferrer">text()</a> 构建 SQL</h3><p>相比直接使用 string，text() 的优势在于它：</p><ol><li>提供了统一的参数绑定语法，与具体的 DBAPI 无关。</li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-5 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 1. 参数绑定语法</span>
 </span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>text</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>result</span> <span class=o>=</span> <span class=n>connection</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span>
@@ -138,41 +335,115 @@ SQLAlchemy 当成带 log 的数据库连接池使用：</p><div class=highlight>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># bindparams 是 bindparam 的列表，bindparam 则提供参数的一些额外信息（类型、值、限制等）</span>
 </span></span><span class=line><span class=cl><span class=n>t</span><span class=o>=</span><span class=n>text</span><span class=p>(</span><span class=n>sql</span><span class=p>,</span> <span class=n>bindparams</span><span class=o>=</span><span class=p>[</span><span class=n>bindparam</span><span class=p>(</span><span class=s1>&#39;alarm_time_param&#39;</span><span class=p>,</span> <span class=n>type_</span><span class=o>=</span><span class=n>DateTime</span><span class=p>,</span> <span class=n>required</span><span class=o>=</span><span class=kc>True</span><span class=p>)])</span>
-</span></span><span class=line><span class=cl><span class=n>connection</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=n>t</span><span class=p>,</span> <span class=p>{</span><span class=s2>&#34;alarm_time_param&#34;</span><span class=p>:</span> <span class=n>date_param</span><span class=p>})</span>
-</span></span></code></pre></td></tr></table></div></div><ol><li>可以很方便地转换 Result 中列的类型</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>stmt</span> <span class=o>=</span> <span class=n>text</span><span class=p>(</span><span class=s2>&#34;SELECT * FROM table&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=n>connection</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=n>t</span><span class=p>,</span> <span class=p>{</span><span class=s2>&#34;alarm_time_param&#34;</span><span class=p>:</span> <span class=n>date_param</span><span class=p>})</span></span></span></code></pre></div><ol><li>可以很方便地转换 Result 中列的类型</li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-6 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=n>stmt</span> <span class=o>=</span> <span class=n>text</span><span class=p>(</span><span class=s2>&#34;SELECT * FROM table&#34;</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>            <span class=c1># 使用 typemap 指定将 id 列映射为 Integer 类型，name 映射为 String 类型</span>
 </span></span><span class=line><span class=cl>            <span class=n>typemap</span><span class=o>=</span><span class=p>{</span><span class=s1>&#39;id&#39;</span><span class=p>:</span> <span class=n>Integer</span><span class=p>,</span> <span class=s1>&#39;name&#39;</span><span class=p>:</span> <span class=n>String</span><span class=p>},</span>
 </span></span><span class=line><span class=cl>          <span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=n>result</span> <span class=o>=</span> <span class=n>connection</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=n>stmt</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=c1># 对多个查询结果，可以用 for obj in result 遍历</span>
-</span></span><span class=line><span class=cl><span class=c1># 也可用 fetchone() 只获取一个</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=二sql-表达式语言 class=headerLink><a href=#%e4%ba%8csql-%e8%a1%a8%e8%be%be%e5%bc%8f%e8%af%ad%e8%a8%80 class=header-mark></a>二、SQL 表达式语言</h2><blockquote><p>复杂的 SQL 查询可以直接用 raw sql 写，而增删改一般都是单表操作，用 SQL 表达式语言最方便。</p></blockquote><p>SQLAlchemy 表达式语言是一个使用 Python 结构表示关系数据库结构和表达式的系统。</p><h3 id=1-定义并创建表 class=headerLink><a href=#1-%e5%ae%9a%e4%b9%89%e5%b9%b6%e5%88%9b%e5%bb%ba%e8%a1%a8 class=header-mark></a>1. 定义并创建表</h3><p>SQL 表达式语言使用 Table 来定义表，而表的列则用 Column 定义。Column 总是关联到一个 Table
+</span></span><span class=line><span class=cl><span class=c1># 也可用 fetchone() 只获取一个</span></span></span></code></pre></div><h2 id=二sql-表达式语言 class=headerLink><a href=#%e4%ba%8csql-%e8%a1%a8%e8%be%be%e5%bc%8f%e8%af%ad%e8%a8%80 class=header-mark></a>二、SQL 表达式语言</h2><blockquote><p>复杂的 SQL 查询可以直接用 raw sql 写，而增删改一般都是单表操作，用 SQL 表达式语言最方便。</p></blockquote><p>SQLAlchemy 表达式语言是一个使用 Python 结构表示关系数据库结构和表达式的系统。</p><h3 id=1-定义并创建表 class=headerLink><a href=#1-%e5%ae%9a%e4%b9%89%e5%b9%b6%e5%88%9b%e5%bb%ba%e8%a1%a8 class=header-mark></a>1. 定义并创建表</h3><p>SQL 表达式语言使用 Table 来定义表，而表的列则用 Column 定义。Column 总是关联到一个 Table
 对象上。</p><p>一组 Table 对象以及它们的子对象的集合就被称作「数据库元数据（database
-metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table 放在一个 metadata 中。</p><p>下面是创建元数据（一组相关联的表）的例子，：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>Table</span><span class=p>,</span> <span class=n>Column</span><span class=p>,</span> <span class=n>Integer</span><span class=p>,</span> <span class=n>String</span><span class=p>,</span> <span class=n>MetaData</span><span class=p>,</span> <span class=n>ForeignKey</span>
+metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table 放在一个 metadata 中。</p><p>下面是创建元数据（一组相关联的表）的例子，：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-7 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>Table</span><span class=p>,</span> <span class=n>Column</span><span class=p>,</span> <span class=n>Integer</span><span class=p>,</span> <span class=n>String</span><span class=p>,</span> <span class=n>MetaData</span><span class=p>,</span> <span class=n>ForeignKey</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>metadata</span> <span class=o>=</span> <span class=n>MetaData</span><span class=p>()</span>  <span class=c1># 先创建元数据（收藏夹）</span>
 </span></span><span class=line><span class=cl>
@@ -188,63 +459,171 @@ metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table �
 </span></span><span class=line><span class=cl>                  <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;email_address&#39;</span><span class=p>,</span> <span class=n>String</span><span class=p>,</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>                 <span class=p>)</span>
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=n>metadata</span><span class=o>.</span><span class=n>create_all</span><span class=p>(</span><span class=n>engine</span><span class=p>)</span>  <span class=c1># 使用 engine 创建 metadata 内的所有 Tables（会检测表是否已经存在，所以可以重复调用）</span>
-</span></span></code></pre></td></tr></table></div></div><h4 id=表定义中的约束 class=headerLink><a href=#%e8%a1%a8%e5%ae%9a%e4%b9%89%e4%b8%ad%e7%9a%84%e7%ba%a6%e6%9d%9f class=header-mark></a>表定义中的约束</h4><blockquote><p>应该给所有的约束命名，即为 <code>name</code> 参数指定一个不冲突的列名。详见<a href=https://alembic.sqlalchemy.org/en/latest/naming.html target=_blank rel="noopener noreferrer">The Importance of Naming Constraints</a></p></blockquote><p>表还有一个属性：<a href=https://www.cnblogs.com/kirito-c/p/10295693.html target=_blank rel="noopener noreferrer">约束条件</a>。下面一一进行说明。</p><ol><li><strong>外键约束</strong>：用于在删除或更新某个值或行时，对主键/外键关系中一组数据列强制进行的操作限制。<ol><li>用法一：<code>Column('user_id', None, ForeignKey('user.id'))</code>，直接在 <code>Column</code> 中指定。这也是最常用的方法</li><li>用法二：通过 <code>ForeignKeyConstraint(columns, refcolumns)</code> 构建约束，作为参数传给<code>Table</code>.</li></ol></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>item</span> <span class=o>=</span> <span class=n>Table</span><span class=p>(</span><span class=s1>&#39;item&#39;</span><span class=p>,</span> <span class=n>metadata</span><span class=p>,</span>  <span class=c1># 商品 table</span>
+</span></span><span class=line><span class=cl><span class=n>metadata</span><span class=o>.</span><span class=n>create_all</span><span class=p>(</span><span class=n>engine</span><span class=p>)</span>  <span class=c1># 使用 engine 创建 metadata 内的所有 Tables（会检测表是否已经存在，所以可以重复调用）</span></span></span></code></pre></div><h4 id=表定义中的约束 class=headerLink><a href=#%e8%a1%a8%e5%ae%9a%e4%b9%89%e4%b8%ad%e7%9a%84%e7%ba%a6%e6%9d%9f class=header-mark></a>表定义中的约束</h4><blockquote><p>应该给所有的约束命名，即为 <code>name</code> 参数指定一个不冲突的列名。详见<a href=https://alembic.sqlalchemy.org/en/latest/naming.html target=_blank rel="noopener noreferrer">The Importance of Naming Constraints</a></p></blockquote><p>表还有一个属性：<a href=https://www.cnblogs.com/kirito-c/p/10295693.html target=_blank rel="noopener noreferrer">约束条件</a>。下面一一进行说明。</p><ol><li><strong>外键约束</strong>：用于在删除或更新某个值或行时，对主键/外键关系中一组数据列强制进行的操作限制。<ol><li>用法一：<code>Column('user_id', None, ForeignKey('user.id'))</code>，直接在 <code>Column</code> 中指定。这也是最常用的方法</li><li>用法二：通过 <code>ForeignKeyConstraint(columns, refcolumns)</code> 构建约束，作为参数传给<code>Table</code>.</li></ol></li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-8 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=n>item</span> <span class=o>=</span> <span class=n>Table</span><span class=p>(</span><span class=s1>&#39;item&#39;</span><span class=p>,</span> <span class=n>metadata</span><span class=p>,</span>  <span class=c1># 商品 table</span>
 </span></span><span class=line><span class=cl>    <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;id&#39;</span><span class=p>,</span> <span class=n>Integer</span><span class=p>,</span> <span class=n>primary_key</span><span class=o>=</span><span class=kc>True</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>    <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;name&#39;</span><span class=p>,</span> <span class=n>String</span><span class=p>(</span><span class=mi>60</span><span class=p>),</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>    <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;invoice_id&#39;</span><span class=p>,</span> <span class=n>Integer</span><span class=p>,</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>),</span>  <span class=c1># 发票 id，是外键</span>
 </span></span><span class=line><span class=cl>    <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;ref_num&#39;</span><span class=p>,</span> <span class=n>Integer</span><span class=p>,</span> <span class=n>nullable</span><span class=o>=</span><span class=kc>False</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>    <span class=n>ForeignKeyConstraint</span><span class=p>([</span><span class=s1>&#39;invoice_id&#39;</span><span class=p>,</span> <span class=s1>&#39;ref_num&#39;</span><span class=p>],</span>  <span class=c1># 当前表中的外键名称</span>
 </span></span><span class=line><span class=cl>                         <span class=p>[</span><span class=s1>&#39;invoice.id&#39;</span><span class=p>,</span> <span class=s1>&#39;invoice.ref_num&#39;</span><span class=p>])</span>  <span class=c1># 被引用的外键名称的序列（被引用的表）</span>
-</span></span><span class=line><span class=cl><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><ol><li><code>on delete</code> 与 <code>on update</code>：<strong>外键约束的两个约束条件</strong>，通过 <code>ForeignKey()</code> 或<code>ForeignKeyConstraint()</code> 的关键字参数 <code>ondelete/onupdate</code> 传入。可选值有：1. <strong>默认行为<code>NO ACTION</code></strong>：什么都不做，直接报错。1. <code>CASCADE</code>：删除/更新 父表数据时，<strong>从表数据会同时被 删除/更新</strong>。（无报错）1. <code>RESTRICT</code>：<strong>不允许直接 删除/更新 父表数据</strong>，直接报错。（和默认行为基本一致）1. <code>SET NULL</code> or <code>SET DEFAULT</code>：删除/更新 父表数据时，将对应的从表数据重置为 <code>NULL</code> 或者默认值。</li><li><strong>唯一性约束</strong>：<code>UniqueConstraint('col2', 'col3', name='uix_1')</code>，作为参数传给 <code>Table</code>.</li><li><strong>CHECK 约束</strong>：<code>CheckConstraint('col2 > col3 + 5', name='check1')</code>， 作为参数传给<code>Table</code>.</li><li>主键约束：不解释<ol><li>方法一：通过 <code>Column('id', Integer, primary_key=True)</code> 指定主键。（参数<code>primary_key</code> 可在多个 <code>Column</code> 上使用）</li><li>方法二：使用 <code>PrimaryKeyConstraint</code></li></ol></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>PrimaryKeyConstraint</span>
+</span></span><span class=line><span class=cl><span class=p>)</span></span></span></code></pre></div><ol><li><code>on delete</code> 与 <code>on update</code>：<strong>外键约束的两个约束条件</strong>，通过 <code>ForeignKey()</code> 或<code>ForeignKeyConstraint()</code> 的关键字参数 <code>ondelete/onupdate</code> 传入。可选值有：1. <strong>默认行为<code>NO ACTION</code></strong>：什么都不做，直接报错。1. <code>CASCADE</code>：删除/更新 父表数据时，<strong>从表数据会同时被 删除/更新</strong>。（无报错）1. <code>RESTRICT</code>：<strong>不允许直接 删除/更新 父表数据</strong>，直接报错。（和默认行为基本一致）1. <code>SET NULL</code> or <code>SET DEFAULT</code>：删除/更新 父表数据时，将对应的从表数据重置为 <code>NULL</code> 或者默认值。</li><li><strong>唯一性约束</strong>：<code>UniqueConstraint('col2', 'col3', name='uix_1')</code>，作为参数传给 <code>Table</code>.</li><li><strong>CHECK 约束</strong>：<code>CheckConstraint('col2 > col3 + 5', name='check1')</code>， 作为参数传给<code>Table</code>.</li><li>主键约束：不解释<ol><li>方法一：通过 <code>Column('id', Integer, primary_key=True)</code> 指定主键。（参数<code>primary_key</code> 可在多个 <code>Column</code> 上使用）</li><li>方法二：使用 <code>PrimaryKeyConstraint</code></li></ol></li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-9 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy</span> <span class=kn>import</span> <span class=n>PrimaryKeyConstraint</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>my_table</span> <span class=o>=</span> <span class=n>Table</span><span class=p>(</span><span class=s1>&#39;mytable&#39;</span><span class=p>,</span> <span class=n>metadata</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>            <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;id&#39;</span><span class=p>,</span> <span class=n>Integer</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>            <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;version_id&#39;</span><span class=p>,</span> <span class=n>Integer</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>            <span class=n>Column</span><span class=p>(</span><span class=s1>&#39;data&#39;</span><span class=p>,</span> <span class=n>String</span><span class=p>(</span><span class=mi>50</span><span class=p>)),</span>
 </span></span><span class=line><span class=cl>            <span class=n>PrimaryKeyConstraint</span><span class=p>(</span><span class=s1>&#39;id&#39;</span><span class=p>,</span> <span class=s1>&#39;version_id&#39;</span><span class=p>,</span> <span class=n>name</span><span class=o>=</span><span class=s1>&#39;mytable_pk&#39;</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>        <span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=2-增删改查语句 class=headerLink><a href=#2-%e5%a2%9e%e5%88%a0%e6%94%b9%e6%9f%a5%e8%af%ad%e5%8f%a5 class=header-mark></a>2. 增删改查语句</h3><ol><li><strong>增</strong>:</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 方法一，使用 values 传参</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span></span></span></code></pre></div><h3 id=2-增删改查语句 class=headerLink><a href=#2-%e5%a2%9e%e5%88%a0%e6%94%b9%e6%9f%a5%e8%af%ad%e5%8f%a5 class=header-mark></a>2. 增删改查语句</h3><ol><li><strong>增</strong>:</li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-10 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 方法一，使用 values 传参</span>
 </span></span><span class=line><span class=cl><span class=n>ins</span> <span class=o>=</span> <span class=n>users</span><span class=o>.</span><span class=n>insert</span><span class=p>()</span><span class=o>.</span><span class=n>values</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=s2>&#34;Jack&#34;</span><span class=p>,</span> <span class=n>fullname</span><span class=o>=</span><span class=s2>&#34;Jack Jones&#34;</span><span class=p>)</span>  <span class=c1># 可以通过 str(ins) 查看自动生成的 sql</span>
 </span></span><span class=line><span class=cl><span class=n>connection</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=n>ins</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>
@@ -266,29 +645,109 @@ metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table �
 </span></span><span class=line><span class=cl>        <span class=p>{</span><span class=s1>&#39;id&#39;</span><span class=p>:</span><span class=mi>4</span><span class=p>,</span> <span class=s1>&#39;_name&#39;</span><span class=p>:</span><span class=s1>&#39;name1&#39;</span><span class=p>},</span>
 </span></span><span class=line><span class=cl>        <span class=p>{</span><span class=s1>&#39;id&#39;</span><span class=p>:</span><span class=mi>5</span><span class=p>,</span> <span class=s1>&#39;_name&#39;</span><span class=p>:</span><span class=s1>&#39;name2&#39;</span><span class=p>},</span>
 </span></span><span class=line><span class=cl>        <span class=p>{</span><span class=s1>&#39;id&#39;</span><span class=p>:</span><span class=mi>6</span><span class=p>,</span> <span class=s1>&#39;_name&#39;</span><span class=p>:</span><span class=s1>&#39;name3&#39;</span><span class=p>},</span>
-</span></span><span class=line><span class=cl>     <span class=p>])</span>
-</span></span></code></pre></td></tr></table></div></div><ol start=2><li><strong>删</strong>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>_table</span><span class=o>.</span><span class=n>delete</span><span class=p>()</span> \
+</span></span><span class=line><span class=cl>     <span class=p>])</span></span></span></code></pre></div><ol start=2><li><strong>删</strong>：</li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-11 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=n>_table</span><span class=o>.</span><span class=n>delete</span><span class=p>()</span> \
 </span></span><span class=line><span class=cl>        <span class=o>.</span><span class=n>where</span><span class=p>(</span><span class=n>_table</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>f1</span><span class=o>==</span><span class=n>value1</span><span class=p>)</span> \
-</span></span><span class=line><span class=cl>        <span class=o>.</span><span class=n>where</span><span class=p>(</span><span class=n>_table</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>f2</span><span class=o>==</span><span class=n>value2</span><span class=p>)</span>  <span class=c1># where 指定条件</span>
-</span></span></code></pre></td></tr></table></div></div><ol start=3><li><strong>改</strong>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 举例</span>
+</span></span><span class=line><span class=cl>        <span class=o>.</span><span class=n>where</span><span class=p>(</span><span class=n>_table</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>f2</span><span class=o>==</span><span class=n>value2</span><span class=p>)</span>  <span class=c1># where 指定条件</span></span></span></code></pre></div><ol start=3><li><strong>改</strong>：</li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-12 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 举例</span>
 </span></span><span class=line><span class=cl><span class=n>stmt</span> <span class=o>=</span> <span class=n>users</span><span class=o>.</span><span class=n>update</span><span class=p>()</span> \
 </span></span><span class=line><span class=cl>             <span class=o>.</span><span class=n>where</span><span class=p>(</span><span class=n>users</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=s1>&#39;jack&#39;</span><span class=p>)</span> \
 </span></span><span class=line><span class=cl>             <span class=o>.</span><span class=n>values</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=s1>&#39;tom&#39;</span><span class=p>)</span>
@@ -302,21 +761,58 @@ metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table �
 </span></span><span class=line><span class=cl>     <span class=p>{</span><span class=s1>&#39;oldname&#39;</span><span class=p>:</span><span class=s1>&#39;jack&#39;</span><span class=p>,</span> <span class=s1>&#39;newname&#39;</span><span class=p>:</span><span class=s1>&#39;ed&#39;</span><span class=p>},</span>
 </span></span><span class=line><span class=cl>     <span class=p>{</span><span class=s1>&#39;oldname&#39;</span><span class=p>:</span><span class=s1>&#39;wendy&#39;</span><span class=p>,</span> <span class=s1>&#39;newname&#39;</span><span class=p>:</span><span class=s1>&#39;mary&#39;</span><span class=p>},</span>
 </span></span><span class=line><span class=cl>     <span class=p>{</span><span class=s1>&#39;oldname&#39;</span><span class=p>:</span><span class=s1>&#39;jim&#39;</span><span class=p>,</span> <span class=s1>&#39;newname&#39;</span><span class=p>:</span><span class=s1>&#39;jake&#39;</span><span class=p>},</span>
-</span></span><span class=line><span class=cl>     <span class=p>])</span>
-</span></span></code></pre></td></tr></table></div></div><p>可以看到，所有的条件都是通过 <code>where</code> 指定的，它和后面 ORM 的 filter 接受的参数是一样的。
-（详细的会在第二篇文章里讲）</p><ol start=4><li><strong>查</strong></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy.sql</span> <span class=kn>import</span> <span class=n>select</span>
+</span></span><span class=line><span class=cl>     <span class=p>])</span></span></span></code></pre></div><p>可以看到，所有的条件都是通过 <code>where</code> 指定的，它和后面 ORM 的 filter 接受的参数是一样的。
+（详细的会在第二篇文章里讲）</p><ol start=4><li><strong>查</strong></li></ol><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-13 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy.sql</span> <span class=kn>import</span> <span class=n>select</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 1. 字段选择</span>
 </span></span><span class=line><span class=cl><span class=n>s1</span> <span class=o>=</span> <span class=n>select</span><span class=p>([</span><span class=n>users</span><span class=p>])</span>  <span class=c1># 相当于 select * from users</span>
@@ -327,19 +823,57 @@ metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table �
 </span></span><span class=line><span class=cl>    <span class=o>.</span><span class=n>where</span><span class=p>(</span><span class=n>users</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>id</span> <span class=o>==</span> <span class=n>addresses</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>user_id</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>res</span> <span class=o>=</span> <span class=n>conn</span><span class=o>.</span><span class=n>execute</span><span class=p>(</span><span class=n>s1</span><span class=p>)</span>
-</span></span><span class=line><span class=cl><span class=c1># 可用 for row in res 遍历结果集，也可用 fetchone() 只获取一行</span>
-</span></span></code></pre></td></tr></table></div></div><p>查询返回的是 ResultProxy 对象，这是 SQLAlchemy 对 Python DB-API 的 cursor 的一个封装类，要从中获取结果行，主要有下列几个方法：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>row1</span> <span class=o>=</span> <span class=n>result</span><span class=o>.</span><span class=n>fetchone</span><span class=p>()</span>  <span class=c1># 对应 cursor.fetchone()</span>
+</span></span><span class=line><span class=cl><span class=c1># 可用 for row in res 遍历结果集，也可用 fetchone() 只获取一行</span></span></span></code></pre></div><p>查询返回的是 ResultProxy 对象，这是 SQLAlchemy 对 Python DB-API 的 cursor 的一个封装类，要从中获取结果行，主要有下列几个方法：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-14 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=n>row1</span> <span class=o>=</span> <span class=n>result</span><span class=o>.</span><span class=n>fetchone</span><span class=p>()</span>  <span class=c1># 对应 cursor.fetchone()</span>
 </span></span><span class=line><span class=cl><span class=n>row2</span> <span class=o>=</span> <span class=n>result</span><span class=o>.</span><span class=n>fetchall</span><span class=p>()</span>  <span class=c1># 对应 cursor.fetchall()</span>
 </span></span><span class=line><span class=cl><span class=n>row3</span> <span class=o>=</span> <span class=n>result</span><span class=o>.</span><span class=n>fetchmany</span><span class=p>(</span><span class=n>size</span><span class=o>=</span><span class=mi>3</span><span class=p>)</span>  <span class=c1># 对应 cursor.fetchmany(size=3)</span>
 </span></span><span class=line><span class=cl>
@@ -349,21 +883,57 @@ metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table �
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>result</span><span class=o>.</span><span class=n>rowcount</span>  <span class=c1># 结果集的行数</span>
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=n>同时</span><span class=err>，</span><span class=n>result</span> <span class=n>也实现了</span> <span class=nb>next</span> <span class=n>protocol</span><span class=err>，</span><span class=n>因此可以直接用</span> <span class=k>for</span> <span class=n>循环遍历</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=where-进阶 class=headerLink><a href=#where-%e8%bf%9b%e9%98%b6 class=header-mark></a>where 进阶</h3><p>通过使用 or*、and*、in_ model.join 等方法，where 可以构建更复杂的 SQL 语句。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy.sql</span> <span class=kn>import</span> <span class=n>and_</span><span class=p>,</span> <span class=n>or_</span><span class=p>,</span> <span class=n>not_</span>
+</span></span><span class=line><span class=cl><span class=n>同时</span><span class=err>，</span><span class=n>result</span> <span class=n>也实现了</span> <span class=nb>next</span> <span class=n>protocol</span><span class=err>，</span><span class=n>因此可以直接用</span> <span class=k>for</span> <span class=n>循环遍历</span></span></span></code></pre></div><h3 id=where-进阶 class=headerLink><a href=#where-%e8%bf%9b%e9%98%b6 class=header-mark></a>where 进阶</h3><p>通过使用 or*、and*、in_ model.join 等方法，where 可以构建更复杂的 SQL 语句。</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-15 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=kn>from</span> <span class=nn>sqlalchemy.sql</span> <span class=kn>import</span> <span class=n>and_</span><span class=p>,</span> <span class=n>or_</span><span class=p>,</span> <span class=n>not_</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>s</span> <span class=o>=</span> <span class=n>select</span><span class=p>([(</span><span class=n>users</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>fullname</span> <span class=o>+</span>
 </span></span><span class=line><span class=cl>               <span class=s2>&#34;, &#34;</span> <span class=o>+</span> <span class=n>addresses</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>email_address</span><span class=p>)</span><span class=o>.</span>
@@ -375,12 +945,20 @@ metadata）」。metadata 就像你的网页分类收藏夹，相关的 Table �
 </span></span><span class=line><span class=cl>                  <span class=n>addresses</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>email_address</span><span class=o>.</span><span class=n>like</span><span class=p>(</span><span class=s1>&#39;%@aol.com&#39;</span><span class=p>),</span>
 </span></span><span class=line><span class=cl>                  <span class=n>addresses</span><span class=o>.</span><span class=n>c</span><span class=o>.</span><span class=n>email_address</span><span class=o>.</span><span class=n>like</span><span class=p>(</span><span class=s1>&#39;%@msn.com&#39;</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>               <span class=p>)</span>
-</span></span><span class=line><span class=cl>        <span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=链接 class=headerLink><a href=#%e9%93%be%e6%8e%a5 class=header-mark></a>链接</h2><ul><li><a href=https://docs.sqlalchemy.org/en/latest/core/connections.html target=_blank rel="noopener noreferrer">使用 Engines 和 Connections</a></li><li><a href=https://docs.sqlalchemy.org/en/latest/core/tutorial.html target=_blank rel="noopener noreferrer">SQL 表达式语言入门</a></li><li><a href=https://docs.sqlalchemy.org/en/13/core/constraints.html target=_blank rel="noopener noreferrer">SQLAlchemy - 定义约束</a></li><li><a href=https://www.cnblogs.com/harrychinese/archive/2012/09/12/My_Own_Tutorial_For_SqlAlchemy.html target=_blank rel="noopener noreferrer">SQLAlchemy个人学习笔记完整汇总</a></li><li><a href=https://github.com/hackersandslackers/sqlalchemy-tutorial target=_blank rel="noopener noreferrer">hackersandslackers/sqlalchemy-tutorial</a></li></ul></div><h2>相关内容</h2><div class=related-container><div class=related-item-container><div class=related-image><a href=/posts/consistency-and-consensus-algorithm/><img loading=lazy src=/posts/consistency-and-consensus-algorithm/featured-image.webp srcset="/posts/consistency-and-consensus-algorithm/featured-image.webp, /posts/consistency-and-consensus-algorithm/featured-image.webp 1.5x, /posts/consistency-and-consensus-algorithm/featured-image.webp 2x" sizes=auto alt=/posts/consistency-and-consensus-algorithm/featured-image.webp title=/posts/consistency-and-consensus-algorithm/featured-image.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/consistency-and-consensus-algorithm/>分布式数据库的一致性问题与共识算法</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/python-tips-and-tricks/><img loading=lazy src=/posts/python-tips-and-tricks/python-tips-and-tricks.webp srcset="/posts/python-tips-and-tricks/python-tips-and-tricks.webp, /posts/python-tips-and-tricks/python-tips-and-tricks.webp 1.5x, /posts/python-tips-and-tricks/python-tips-and-tricks.webp 2x" sizes=auto alt=/posts/python-tips-and-tricks/python-tips-and-tricks.webp title=/posts/python-tips-and-tricks/python-tips-and-tricks.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/python-tips-and-tricks/>Python 实用技巧与常见错误集锦</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/><img loading=lazy src=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.webp srcset="/posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.webp, /posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.webp 1.5x, /posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.webp 2x" sizes=auto alt=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.webp title=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/>SQLAlchemy 学习笔记（三）：ORM 中的关系构建</a></h2></div></div><div class=sponsor><div class=sponsor-avatar><img loading=lazy src=https://thiscute.world/avatar/myself.webp srcset="https://thiscute.world/avatar/myself.webp, https://thiscute.world/avatar/myself.webp 1.5x, https://thiscute.world/avatar/myself.webp 2x" sizes=auto alt=https://thiscute.world/avatar/myself.webp title=https://thiscute.world/avatar/myself.webp></div><p class=sponsor-bio><em>如果你觉得这篇文章对你有所帮助，欢迎评论、分享、打赏~</em></p><a href=https://afdian.com/a/ryan4yin title=Sponsor target=_blank class=sponsor-button rel="noopener noreferrer"><i class="far fa-heart fa-fw icon" style=color:#ec6cb9></i>
-<span>赞赏</span></a></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2019-01-21</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><button title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ data-title="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言" data-via=ryan4yin data-hashtags=SQLAlchemy,Python,ORM,后端,数据库,Database><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Hacker News" data-sharer=hackernews data-url=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ data-title="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"><span class="fab fa-hacker-news fa-fw"></span></button><button title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/><span class="fab fa-reddit fa-fw"></span></button><script>function shareOnMastodon(e,t){const o="share_mastodon_domain",i=localStorage.getItem(o)??"mastodon.social",n=prompt("Enter your Mastodon domain",i);if(n===null)return;localStorage.setItem(o,n);const a=e+`
+</span></span><span class=line><span class=cl>        <span class=p>)</span></span></span></code></pre></div><h2 id=链接 class=headerLink><a href=#%e9%93%be%e6%8e%a5 class=header-mark></a>链接</h2><ul><li><a href=https://docs.sqlalchemy.org/en/latest/core/connections.html target=_blank rel="noopener noreferrer">使用 Engines 和 Connections</a></li><li><a href=https://docs.sqlalchemy.org/en/latest/core/tutorial.html target=_blank rel="noopener noreferrer">SQL 表达式语言入门</a></li><li><a href=https://docs.sqlalchemy.org/en/13/core/constraints.html target=_blank rel="noopener noreferrer">SQLAlchemy - 定义约束</a></li><li><a href=https://www.cnblogs.com/harrychinese/archive/2012/09/12/My_Own_Tutorial_For_SqlAlchemy.html target=_blank rel="noopener noreferrer">SQLAlchemy个人学习笔记完整汇总</a></li><li><a href=https://github.com/hackersandslackers/sqlalchemy-tutorial target=_blank rel="noopener noreferrer">hackersandslackers/sqlalchemy-tutorial</a></li></ul></div><h2>相关内容</h2><div class=related-container><div class=related-item-container><div class=related-image><a href=/posts/consistency-and-consensus-algorithm/><img src=/posts/consistency-and-consensus-algorithm/featured-image.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/consistency-and-consensus-algorithm/>分布式数据库的一致性问题与共识算法</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/python-tips-and-tricks/><img src=/posts/python-tips-and-tricks/python-tips-and-tricks.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/python-tips-and-tricks/>Python 实用技巧与常见错误集锦</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/><img src=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/sqlalchemy-relationships.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/sqlalchemy-notes-3-relationship-and-foreignkey/>SQLAlchemy 学习笔记（三）：ORM 中的关系构建</a></h2></div></div><div class="sponsor print:tw-hidden"><div class=sponsor-avatar></div><p class=sponsor-bio><em>如果你觉得这篇文章对你有所帮助，欢迎评论、分享、打赏~</em></p><a href=https://afdian.com/a/ryan4yin title=Sponsor target=_blank class=sponsor-button rel="noopener noreferrer"><span style=color:#ec6cb9><svg class="icon" viewBox="0 0 512 512"><path d="M458.4 64.3C400.6 15.7 311.3 23 256 79.3 200.7 23 111.4 15.6 53.6 64.3-21.6 127.6-10.6 230.8 43 285.5l175.4 178.7c10 10.2 23.4 15.9 37.6 15.9 14.3.0 27.6-5.6 37.6-15.8L469 285.6c53.5-54.7 64.7-157.9-10.6-221.3zm-23.6 187.5L259.4 430.5c-2.4 2.4-4.4 2.4-6.8.0L77.2 251.8c-36.5-37.2-43.9-107.6 7.3-150.7 38.9-32.7 98.9-27.8 136.5 10.5l35 35.7 35-35.7c37.8-38.5 97.8-43.2 136.5-10.6 51.1 43.1 43.5 113.9 7.3 150.8z"/></svg></span>
+<span>赞赏</span></a></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2019-01-21</span></div><div class=post-info-license></div></div><div class="post-info-line print:!tw-hidden"><div class=post-info-md></div><div class=post-info-share><button title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ data-title="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言" data-via=ryan4yin data-hashtags=SQLAlchemy,Python,ORM,后端,数据库,Database><svg class="icon" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645.0 138.72-105.583 298.558-298.558 298.558-59.452.0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055.0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421.0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391.0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04.0-57.828 46.782-104.934 104.934-104.934 30.213.0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg></button><button title="分享到 Hacker News" data-sharer=hackernews data-url=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/ data-title="SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"><svg class="icon" viewBox="0 0 448 512"><path d="M0 32v448h448V32H0zm21.2 197.2H21c.1-.1.2-.3.3-.4.0.1.0.3-.1.4zm218 53.9V384h-31.4V281.3L128 128h37.3c52.5 98.3 49.2 101.2 59.3 125.6 12.3-27 5.8-24.4 60.6-125.6H320l-80.8 155.1z"/></svg></button><button title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/><svg class="icon" viewBox="0 0 512 512"><path d="M201.5 305.5c-13.8.0-24.9-11.1-24.9-24.6.0-13.8 11.1-24.9 24.9-24.9 13.6.0 24.6 11.1 24.6 24.9.0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4.0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8.0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7.0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9.0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5.0 52.6 59.2 95.2 132 95.2 73.1.0 132.3-42.6 132.3-95.2.0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6.0-2.2-2.2-6.1-2.2-8.3.0-2.5 2.5-2.5 6.4.0 8.6 22.8 22.8 87.3 22.8 110.2.0 2.5-2.2 2.5-6.1.0-8.6-2.2-2.2-6.1-2.2-8.3.0zm7.7-75c-13.6.0-24.6 11.1-24.6 24.9.0 13.6 11.1 24.6 24.6 24.6 13.8.0 24.9-11.1 24.9-24.6.0-13.8-11-24.9-24.9-24.9z"/></svg></button><script>function shareOnMastodon(e,t){const o="share_mastodon_domain",i=localStorage.getItem(o)??"mastodon.social",n=prompt("Enter your Mastodon domain",i);if(n===null)return;localStorage.setItem(o,n);const a=e+`
 
 `+t,s=new URL("https://"+n);s.pathname="share",s.searchParams.append("text",a),window.open(s,"_blank","width=500,height=500,left=500,toolbar=0,status=0")}</script>
-<button title="分享到 Mastodon" onclick='shareOnMastodon("SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言","https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/")'><span class="fab fa-mastodon fa-fw"></span></button></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/sqlalchemy/>SQLAlchemy</a>,&nbsp;<a href=/tags/python/>Python</a>,&nbsp;<a href=/tags/orm/>ORM</a>,&nbsp;<a href=/tags/%E5%90%8E%E7%AB%AF/>后端</a>,&nbsp;<a href=/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库</a>,&nbsp;<a href=/tags/database/>Database</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/sql-basics-3-restrict/ class=prev rel=prev title="SQL 基础笔记（三）约束"><i class="fas fa-angle-left fa-fw"></i>SQL 基础笔记（三）约束</a>
-<a href=/posts/systemd-basics/ class=next rel=next title="通过 systemctl 设置自定义 Service">通过 systemctl 设置自定义 Service<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=display:inline-block;width:auto;height:20px>
-</a><a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=display:inline-block;width:auto;height:20px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.126.1">Hugo</a> 强力驱动&nbsp;|&nbsp;托管在 <a title=Vercel href=https://vercel.com/ target=_blank rel="noopener noreffer">Vercel</a> 上&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.4.0"><i class="far fa-edit fa-fw"></i> DoIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license> <a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i>
-</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><div class=assets><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:30},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js defer></script><script type=text/javascript src=/lib/katex/auto-render.min.js defer></script><script type=text/javascript src=/lib/katex/copy-tex.min.js defer></script><script type=text/javascript src=/lib/katex/mhchem.min.js defer></script><script type=text/javascript src=/js/katex.min.js defer></script><script type=text/javascript src=/js/theme.min.js defer></script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></div></body></html>
+<button title="分享到 Mastodon" onclick='shareOnMastodon("SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言","https://thiscute.world/posts/sqlalchemy-notes-1-engine-and-sql-expression-language/")'><svg class="icon" viewBox="0 0 448 512"><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48.0.0.0-63.72 28.5-63.72 125.7.0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54.0 01-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg></button></div></div></div><div class=post-info-more><section class=post-tags><svg class="icon" viewBox="0 0 640 512"><path d="M497.941 225.941 286.059 14.059A48 48 0 00252.118.0H48C21.49.0.0 21.49.0 48v204.118a48 48 0 0014.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882.0l204.118-204.118c18.745-18.745 18.745-49.137.0-67.882zM112 160c-26.51.0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882.0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397.0h48.721a48 48 0 0133.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137.0 67.882z"/></svg>&nbsp;<a href=/tags/sqlalchemy/>SQLAlchemy</a>,&nbsp;<a href=/tags/python/>Python</a>,&nbsp;<a href=/tags/orm/>ORM</a>,&nbsp;<a href=/tags/%E5%90%8E%E7%AB%AF/>后端</a>,&nbsp;<a href=/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库</a>,&nbsp;<a href=/tags/database/>Database</a></section><section class=print:!tw-hidden><span><button class="tw-text-fgColor-link-muted hover:tw-text-fgColor-link-muted-hover" onclick=window.history.back()>返回</button></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class="post-nav print:tw-hidden"><a href=/posts/sql-basics-3-restrict/ class=prev rel=prev title="SQL 基础笔记（三）约束"><svg class="icon" viewBox="0 0 256 512"><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9.0l22.6 22.6c9.4 9.4 9.4 24.6.0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6.0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9.0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>SQL 基础笔记（三）约束</a>
+<a href=/posts/systemd-basics/ class=next rel=next title="通过 systemctl 设置自定义 Service">通过 systemctl 设置自定义 Service<svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></a></div></div><div id=comments class="print:!tw-hidden tw-pt-32 tw-pb-8"><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=display:inline-block;width:auto;height:20px>
+</a><a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=display:inline-block;width:auto;height:20px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.136.5">Hugo</a> 强力驱动&nbsp;|&nbsp;托管在 <a title=Vercel href=https://vercel.com/ target=_blank rel="noopener noreffer">Vercel</a> 上&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.4.0"><svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg> DoIt</a></div><div class=footer-line><svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 448c-110.532.0-2e2-89.451-2e2-2e2.0-110.531 89.451-2e2 2e2-2e2 110.532.0 2e2 89.451 2e2 2e2.0 110.532-89.451 2e2-2e2 2e2zm107.351-101.064c-9.614 9.712-45.53 41.396-104.065 41.396-82.43.0-140.484-61.425-140.484-141.567.0-79.152 60.275-139.401 139.762-139.401 55.531.0 88.738 26.62 97.593 34.779a11.965 11.965.0 011.936 15.322l-18.155 28.113c-3.841 5.95-11.966 7.282-17.499 2.921-8.595-6.776-31.814-22.538-61.708-22.538-48.303.0-77.916 35.33-77.916 80.082.0 41.589 26.888 83.692 78.277 83.692 32.657.0 56.843-19.039 65.726-27.225 5.27-4.857 13.596-4.039 17.82 1.738l19.865 27.17a11.947 11.947.0 01-1.152 15.518z"/></svg>2021 - 2024<span class=author>&nbsp;<a href=/ target=_blank rel="noopener noreferrer"></a></span>&nbsp;|&nbsp;<span class=license> <a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons class=print:!tw-hidden><a href=#back-to-top id=back-to-top-button class="fixed-button tw-transition-opacity tw-opacity-0" title=回到顶部><svg class="icon" viewBox="0 0 448 512"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6.0-33.9L207 39c9.4-9.4 24.6-9.4 33.9.0l194.3 194.3c9.4 9.4 9.4 24.6.0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3.0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
+</a><a href=#comments id=view-comments class=fixed-button title=查看评论><svg class="icon" viewBox="0 0 512 512"><path d="M256 32C114.6 32 0 125.1.0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3.0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4.0 256-93.1 256-208S397.4 32 256 32z"/></svg></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><script>window.config={"algoliasearch.min.js":"/lib/algoliasearch/algoliasearch-lite.umd.min.js","autocomplete.min.js":"/lib/autocomplete/autocomplete.min.js",comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script src=/lib/sharer/sharer.min.js></script><script src=/lib/typeit/typeit.min.js></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/js/katex.min.js defer></script><script src=/js/theme.min.js defer></script><script src=/js/utterances.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script><script type=speculationrules>
+        {
+          "prerender": [
+            {
+              "where": { "href_matches": "/*" },
+              "eagerness": "moderate"
+            }
+          ]
+        }
+    </script></body></html>

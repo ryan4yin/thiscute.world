@@ -1,19 +1,31 @@
 <!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>写给开发人员的实用密码学（六）—— 对称密钥加密算法 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:url" content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/">
-<meta property="og:site_name" content="This Cute World"><meta property="og:title" content="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，笔者补充了部分代码示例。 零、术语介绍两个"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-03-06T18:44:00+08:00"><meta property="article:modified_time" content="2022-03-06T18:44:00+08:00"><meta property="article:tag" content="Cryptography"><meta property="article:tag" content="密码学"><meta property="article:tag" content="对称加密"><meta property="article:tag" content="安全"><meta property="article:tag" content="AES"><meta property="article:tag" content="ChaCha20"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp"><meta property="og:see_also" content="https://thiscute.world/posts/an-incomplete-guide-to-data-security/"><meta property="og:see_also" content="https://thiscute.world/posts/kubernetes-cert-management/"><meta property="og:see_also" content="https://thiscute.world/posts/about-tls-cert/"><meta property="og:see_also" content="https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/"><meta property="og:see_also" content="https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/"><meta property="og:see_also" content="https://thiscute.world/posts/practical-cryptography-basics-4-secure-random-generators/"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp"><meta name=twitter:title content="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，笔者补充了部分代码示例。 零、术语介绍两个"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=next href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=alternate href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/index.xml type=application/rss+xml title="This Cute World"><link rel=feed href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/index.xml type=application/rss+xml title="This Cute World"><link rel=stylesheet href=/css/main.css><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/color.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/fontawesome-free/all.min.css><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/animate/animate.min.css><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp","width":909,"height":287}],"genre":"posts","keywords":"Cryptography, 密码学, 对称加密, 安全, AES, ChaCha20","wordcount":8334,"url":"https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":{"@type":"Person","name":"ryan4yin"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"||e==="black"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"||"auto"==="black"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#252627",black:"#000000"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select title=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ selected>Simplified Chinese</option></select>
-</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i>
-</a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i>
-</span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i>
-</a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i>
-</a><a href=javascript:void(0); class=menu-item title=选择语言>Simplified Chinese<i class="fas fa-chevron-right fa-fw"></i>
-<select class=language-select title=选择语言 onchange="location=this.value"><option value=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ selected>Simplified Chinese</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#零术语介绍>零、术语介绍</a></li><li><a href=#一什么是对称加密>一、什么是对称加密</a><ul><li><a href=#量子安全性>量子安全性</a></li></ul></li><li><a href=#二对称加密方案的结构>二、对称加密方案的结构</a></li><li><a href=#三分组密码工作模式>三、分组密码工作模式</a><ul><li><a href=#0-初始向量-iv>0. 初始向量 IV</a></li><li><a href=#counter_mode>1. CTR (Counter) 分组模式</a></li><li><a href=#2-gcm-galoiscounter-分组模式>2. GCM (Galois/Counter) 分组模式</a></li><li><a href=#3-如何选用块模式>3. 如何选用块模式</a></li></ul></li><li><a href=#四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</a><ul><li><a href=#1-安全的对称加密算法>1. 安全的对称加密算法</a><ul><li><a href=#1-aes-rijndael>1. AES (Rijndael)</a></li><li><a href=#2-salsa20--chacha20>2. Salsa20 / ChaCha20</a><ul><li><a href=#chacha20-poly1305>ChaCha20-Poly1305</a></li></ul></li><li><a href=#3-其他流行的对称加密算法>3. 其他流行的对称加密算法</a></li></ul></li><li><a href=#2-不安全的对称加密算法>2. 不安全的对称加密算法</a></li><li><a href=#对称认证加密算法-ae--aead>对称认证加密算法 AE / AEAD</a></li></ul></li><li><a href=#五aes-算法案例以太坊钱包加密>五、AES 算法案例：以太坊钱包加密</a><ul><li><ul><li><a href=#以太坊-utc--json-钱包>以太坊 UTC / JSON 钱包</a></li></ul></li></ul></li><li><a href=#参考>参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class="author fas fa-user-circle fa-fw"></span><a href=https://thiscute.world/ title=Author target=_blank rel="noopener noreferrer author" class=author>ryan4yin</a>
-</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><i class="far fa-folder fa-fw"></i>Tech</a></span>&nbsp;<span class=post-category>和</span>&nbsp;<span class=post-series>系列 <a href=/series/%E5%86%99%E7%BB%99%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E7%9A%84%E5%AE%9E%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6/><i class="far fa-list-alt fa-fw"></i>写给开发人员的实用密码学</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8334 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 17 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp srcset="/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp 1.5x, /posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp 2x" sizes=auto alt=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp title=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp height=287 width=909></div><div class="details series-nav open"><div class="details-summary series-title"><span>系列 - </span><span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content series-content"><nav><ul><li><a href=/posts/an-incomplete-guide-to-data-security/>个人数据安全不完全指南</a></li><li><a href=/posts/kubernetes-cert-management/>Kubernetes 中的证书管理工具 - cert-manager</a></li><li><a href=/posts/about-tls-cert/>写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></li><li><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/>写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></li><li><span class=active>写给开发人员的实用密码学（六）—— 对称密钥加密算法</span></li><li><a href=/posts/practical-cryptography-basics-5-key-exchange/>写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></li><li><a href=/posts/practical-cryptography-basics-4-secure-random-generators/>写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></li><li><a href=/posts/practical-cryptography-basics-3-key-derivation-function/>写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li><li><a href=/posts/practical-cryptography-basics-2-hash/>写给开发人员的实用密码学（二）—— 哈希函数</a></li><li><a href=/posts/practical-cryptography-basics-1/>写给开发人员的实用密码学（一）—— 概览</a></li><li><a href=/posts/experience-of-vault/>secrets 管理工具 Vault 的介绍、安装及使用</a></li></ul></nav></div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#零术语介绍>零、术语介绍</a></li><li><a href=#一什么是对称加密>一、什么是对称加密</a><ul><li><a href=#量子安全性>量子安全性</a></li></ul></li><li><a href=#二对称加密方案的结构>二、对称加密方案的结构</a></li><li><a href=#三分组密码工作模式>三、分组密码工作模式</a><ul><li><a href=#0-初始向量-iv>0. 初始向量 IV</a></li><li><a href=#counter_mode>1. CTR (Counter) 分组模式</a></li><li><a href=#2-gcm-galoiscounter-分组模式>2. GCM (Galois/Counter) 分组模式</a></li><li><a href=#3-如何选用块模式>3. 如何选用块模式</a></li></ul></li><li><a href=#四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</a><ul><li><a href=#1-安全的对称加密算法>1. 安全的对称加密算法</a><ul><li><a href=#1-aes-rijndael>1. AES (Rijndael)</a></li><li><a href=#2-salsa20--chacha20>2. Salsa20 / ChaCha20</a><ul><li><a href=#chacha20-poly1305>ChaCha20-Poly1305</a></li></ul></li><li><a href=#3-其他流行的对称加密算法>3. 其他流行的对称加密算法</a></li></ul></li><li><a href=#2-不安全的对称加密算法>2. 不安全的对称加密算法</a></li><li><a href=#对称认证加密算法-ae--aead>对称认证加密算法 AE / AEAD</a></li></ul></li><li><a href=#五aes-算法案例以太坊钱包加密>五、AES 算法案例：以太坊钱包加密</a><ul><li><ul><li><a href=#以太坊-utc--json-钱包>以太坊 UTC / JSON 钱包</a></li></ul></li></ul></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content><blockquote><p>本文主要翻译自 <a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a>，笔者补充了部分代码示例。</p></blockquote><h2 id=零术语介绍 class=headerLink><a href=#%e9%9b%b6%e6%9c%af%e8%af%ad%e4%bb%8b%e7%bb%8d class=header-mark></a>零、术语介绍</h2><p>两个常用动词：</p><ul><li>加密：cipher 或者 encrypt</li><li>解密：decipher 或者 decrypt</li></ul><p>另外有几个名词有必要解释：</p><ul><li>cipher: 指用于加解密的「密码算法」，有时也被直接翻译成「密码」</li><li>cryptographic algorithm: 密码学算法，泛指密码学相关的各类算法</li><li>ciphertext: 密文，即加密后的信息。对应的词是明文 plaintext</li><li>password: 这个应该不需要解释，就是我们日常用的各种字符或者数字密码，也可称作口令，通常都比较短（绝大部分用户密码应该都只有 8 - 16 位）。<ul><li>因为站点太多，密码太难记，现代社会正在逐步推荐使用生物特征（指纹、面部识别等，如 pass
+<meta property="og:site_name" content="This Cute World"><meta property="og:title" content="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><meta property="og:description" content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，笔者补充了部分代码示例。"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-03-06T18:44:00+08:00"><meta property="article:modified_time" content="2022-03-06T18:44:00+08:00"><meta property="article:tag" content="Cryptography"><meta property="article:tag" content="密码学"><meta property="article:tag" content="对称加密"><meta property="article:tag" content="安全"><meta property="article:tag" content="AES"><meta property="article:tag" content="ChaCha20"><meta property="og:image" content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp"><meta property="og:see_also" content="https://thiscute.world/posts/an-incomplete-guide-to-data-security/"><meta property="og:see_also" content="https://thiscute.world/posts/kubernetes-cert-management/"><meta property="og:see_also" content="https://thiscute.world/posts/about-tls-cert/"><meta property="og:see_also" content="https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/"><meta property="og:see_also" content="https://thiscute.world/posts/practical-cryptography-basics-5-key-exchange/"><meta property="og:see_also" content="https://thiscute.world/posts/practical-cryptography-basics-4-secure-random-generators/"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp"><meta name=twitter:title content="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><meta name=twitter:description content="本文主要翻译自 Practical-Cryptography-for-Developers-Book，笔者补充了部分代码示例。"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><link rel=prev href=https://thiscute.world/posts/the-thoughtful-youth/><link rel=next href=https://thiscute.world/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><link rel=alternate href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/index.xml type=application/rss+xml title="This Cute World"><link rel=feed href=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/index.xml type=application/rss+xml title="This Cute World"><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"写给开发人员的实用密码学（六）—— 对称密钥加密算法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-vs-asymmetric.webp","width":909,"height":287}],"genre":"posts","keywords":["Cryptography","密码学","对称加密","安全","AES","ChaCha20"],"wordcount":8139,"url":"https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/","datePublished":"2022-03-06T18:44:00+08:00","dateModified":"2022-03-06T18:44:00+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":{"@type":"Person","name":"作者","url":"/"},"description":""}</script></head><body data-instant-intensity=viewport><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+<select class=language-select aria-label=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ selected>Simplified Chinese</option></select>
+</button><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<button class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<svg class="icon" viewBox="0 0 512 512"><path d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</button>
+<button class="search-button search-clear" id=search-clear-desktop title=清空>
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3.0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3.0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3.0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3.0 17L312 256l65.6 65.1z"/></svg>
+</button>
+<span class="search-button search-loading tw-animate-spin" id=search-loading-desktop><svg class="icon" viewBox="0 0 512 512"><path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49.0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156.0c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/></svg>
+</span></span><button class="menu-item theme-switch" aria-label=切换主题><svg class="icon" viewBox="0 0 512 512"><path d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705.0 184 82.311 184 184 0 101.705-82.311 184-184 184z"/></svg></button></div></div></div></header><header class="mobile print:!tw-hidden" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=mobile-header-typeit class=typeit></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<button class="search-button search-toggle tw-h-10" id=search-toggle-mobile title=搜索>
+<svg class="icon" viewBox="0 0 512 512"><path d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</button>
+<button class="search-button search-clear" id=search-clear-mobile title=清空>
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3.0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3.0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3.0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3.0 17L312 256l65.6 65.1z"/></svg>
+</button>
+<span class="search-button search-loading tw-animate-spin" id=search-loading-mobile><svg class="icon" viewBox="0 0 512 512"><path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49.0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156.0c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/></svg></span></div><button class=search-cancel id=search-cancel-mobile>
+取消</button></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><button class="menu-item theme-switch tw-w-full" aria-label=切换主题>
+<svg class="icon" viewBox="0 0 512 512"><path d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705.0 184 82.311 184 184 0 101.705-82.311 184-184 184z"/></svg>
+</button><button class="menu-item tw-w-full" title>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+<select class=language-select title onchange="location=this.value"><option value=/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#零术语介绍>零、术语介绍</a></li><li><a href=#一什么是对称加密>一、什么是对称加密</a><ul><li><a href=#量子安全性>量子安全性</a></li></ul></li><li><a href=#二对称加密方案的结构>二、对称加密方案的结构</a></li><li><a href=#三分组密码工作模式>三、分组密码工作模式</a><ul><li><a href=#0-初始向量-iv>0. 初始向量 IV</a></li><li><a href=#counter_mode>1. CTR (Counter) 分组模式</a></li><li><a href=#2-gcm-galoiscounter-分组模式>2. GCM (Galois/Counter) 分组模式</a></li><li><a href=#3-如何选用块模式>3. 如何选用块模式</a></li></ul></li><li><a href=#四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</a><ul><li><a href=#1-安全的对称加密算法>1. 安全的对称加密算法</a><ul><li><a href=#1-aes-rijndael>1. AES (Rijndael)</a></li><li><a href=#2-salsa20--chacha20>2. Salsa20 / ChaCha20</a><ul><li><a href=#chacha20-poly1305>ChaCha20-Poly1305</a></li></ul></li><li><a href=#3-其他流行的对称加密算法>3. 其他流行的对称加密算法</a></li></ul></li><li><a href=#2-不安全的对称加密算法>2. 不安全的对称加密算法</a></li><li><a href=#对称认证加密算法-ae--aead>对称认证加密算法 AE / AEAD</a></li></ul></li><li><a href=#五aes-算法案例以太坊钱包加密>五、AES 算法案例：以太坊钱包加密</a><ul><li><ul><li><a href=#以太坊-utc--json-钱包>以太坊 UTC / JSON 钱包</a></li></ul></li></ul></li><li><a href=#参考>参考</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2022-03-06 data-pagefind-body>写给开发人员的实用密码学（六）—— 对称密钥加密算法</h1><div class=post-meta><div class=post-meta-line><span class=post-author><svg class="icon" viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6.0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7.0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4.0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9s28-2.7 40.9-6.9c2.3-.7 4.7-1.1 7.1-1.1 42.9.0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg><a href=/ title=Author rel=author class=author>作者</a>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><svg class="icon" viewBox="0 0 512 512"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>Tech</a></span>&nbsp;<span class=post-category>和</span>&nbsp;<span class=post-series>系列 <a href=/series/%E5%86%99%E7%BB%99%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E7%9A%84%E5%AE%9E%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6/><svg class="icon" viewBox="0 0 512 512"><path d="M464 32H48C21.49 32 0 53.49.0 80v352c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm-6 4e2H54a6 6 0 01-6-6V86a6 6 0 016-6h404a6 6 0 016 6v340a6 6 0 01-6 6zm-42-92v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm-252 12c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36z"/></svg>写给开发人员的实用密码学</a></span></div><div class=post-meta-line><svg class="icon" viewBox="0 0 448 512"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime=2022-03-06>2022-03-06</time>&nbsp;<svg class="icon" viewBox="0 0 512 512"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 8139 字&nbsp;
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5.0-2e2-89.5-2e2-2e2S145.5 56 256 56s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2zm61.8-104.4-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6.0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 36 分钟&nbsp;</div></div><div class="details series-nav open"><div class="details-summary series-title"><span>系列 - 写给开发人员的实用密码学</span>
+<span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content series-content"><nav><ul><li><a href=/posts/an-incomplete-guide-to-data-security/>个人数据安全不完全指南</a></li><li><a href=/posts/kubernetes-cert-management/>Kubernetes 中的证书管理工具 - cert-manager</a></li><li><a href=/posts/about-tls-cert/>写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></li><li><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/>写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></li><li><span class=active>写给开发人员的实用密码学（六）—— 对称密钥加密算法</span></li><li><a href=/posts/practical-cryptography-basics-5-key-exchange/>写给开发人员的实用密码学（五）—— 密钥交换 DHKE 与完美前向保密 PFS</a></li><li><a href=/posts/practical-cryptography-basics-4-secure-random-generators/>写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG</a></li><li><a href=/posts/practical-cryptography-basics-3-key-derivation-function/>写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF</a></li><li><a href=/posts/practical-cryptography-basics-2-hash/>写给开发人员的实用密码学（二）—— 哈希函数</a></li><li><a href=/posts/practical-cryptography-basics-1/>写给开发人员的实用密码学（一）—— 概览</a></li><li><a href=/posts/experience-of-vault/>secrets 管理工具 Vault 的介绍、安装及使用</a></li></ul></nav></div></div><div class="details toc print:!tw-block" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#零术语介绍>零、术语介绍</a></li><li><a href=#一什么是对称加密>一、什么是对称加密</a><ul><li><a href=#量子安全性>量子安全性</a></li></ul></li><li><a href=#二对称加密方案的结构>二、对称加密方案的结构</a></li><li><a href=#三分组密码工作模式>三、分组密码工作模式</a><ul><li><a href=#0-初始向量-iv>0. 初始向量 IV</a></li><li><a href=#counter_mode>1. CTR (Counter) 分组模式</a></li><li><a href=#2-gcm-galoiscounter-分组模式>2. GCM (Galois/Counter) 分组模式</a></li><li><a href=#3-如何选用块模式>3. 如何选用块模式</a></li></ul></li><li><a href=#四对称加密算法与对称加密方案>四、对称加密算法与对称加密方案</a><ul><li><a href=#1-安全的对称加密算法>1. 安全的对称加密算法</a><ul><li><a href=#1-aes-rijndael>1. AES (Rijndael)</a></li><li><a href=#2-salsa20--chacha20>2. Salsa20 / ChaCha20</a><ul><li><a href=#chacha20-poly1305>ChaCha20-Poly1305</a></li></ul></li><li><a href=#3-其他流行的对称加密算法>3. 其他流行的对称加密算法</a></li></ul></li><li><a href=#2-不安全的对称加密算法>2. 不安全的对称加密算法</a></li><li><a href=#对称认证加密算法-ae--aead>对称认证加密算法 AE / AEAD</a></li></ul></li><li><a href=#五aes-算法案例以太坊钱包加密>五、AES 算法案例：以太坊钱包加密</a><ul><li><ul><li><a href=#以太坊-utc--json-钱包>以太坊 UTC / JSON 钱包</a></li></ul></li></ul></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content data-pagefind-body><blockquote><p>本文主要翻译自 <a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a>，笔者补充了部分代码示例。</p></blockquote><h2 id=零术语介绍 class=headerLink><a href=#%e9%9b%b6%e6%9c%af%e8%af%ad%e4%bb%8b%e7%bb%8d class=header-mark></a>零、术语介绍</h2><p>两个常用动词：</p><ul><li>加密：cipher 或者 encrypt</li><li>解密：decipher 或者 decrypt</li></ul><p>另外有几个名词有必要解释：</p><ul><li>cipher: 指用于加解密的「密码算法」，有时也被直接翻译成「密码」</li><li>cryptographic algorithm: 密码学算法，泛指密码学相关的各类算法</li><li>ciphertext: 密文，即加密后的信息。对应的词是明文 plaintext</li><li>password: 这个应该不需要解释，就是我们日常用的各种字符或者数字密码，也可称作口令，通常都比较短（绝大部分用户密码应该都只有 8 - 16 位）。<ul><li>因为站点太多，密码太难记，现代社会正在逐步推荐使用生物特征（指纹、面部识别等，如 pass
 key、手机指纹识别）或者硬件密钥（U2F）来替代传统的密码。</li></ul></li><li><a href=https://en.wikipedia.org/wiki/Passphrase target=_blank rel="noopener noreferrer">passphrase</a>: 翻译成「密码词组」，也就是用一个个单词组合而成的 Password，特点是长度比较长，而且比随机密码更容易记忆。<ul><li>如果你用 ssh/gnupg/openssl 等工具生成或使用过密钥，应该对它不陌生，它们的 passphrase
 长度不受限，因此可以使用类似 <code>you-are-not-my-enemy-but-I'm-your-father</code> 这样的词组方式作为其密码，强度高，而且好记。</li></ul></li></ul><p>在密码学里面，最容易搞混的词估计就是「密码」了，cipher/password/passphrase 都可以被翻译成「密码」，需要注意下其中区别。</p><h2 id=一什么是对称加密 class=headerLink><a href=#%e4%b8%80%e4%bb%80%e4%b9%88%e6%98%af%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86 class=header-mark></a>一、什么是对称加密</h2><p>在密码学中，有两种加密方案被广泛使用：「对称加密」与「非对称加密」。</p><p>对称加密是指，使用相同的密钥进行消息的加密与解密。因为这个特性，我们也称这个密钥为「共享密钥（Shared Secret Key）」，示意图如下：</p><figure><img src=/images/practical-cryptography-basics-6-symmetric-key-ciphers/symmetric-cryptography.webp></figure><p>现代密码学中广泛使用的对称加密算法（ciphers）
 有：AES（AES-128、AES-192、AES-256）、ChaCha20、Twofish、IDEA、Serpent、Camelia、RC6、CAST
@@ -33,35 +45,57 @@ C_{n} &= P_{n} \oplus {MSB_u}(O_n) \\
 P_{n} &= C_{n} \oplus {MSB_u}(O_n)\\
 O_n &= \text{CIPH}_{key}(\text{Nonce} + I_n)
 \end{alignedat}
-$$</p><p>可以看到，因为异或 XOR 的对称性，加密跟解密的算法是完全相同的，直接 XOR $O_i$ 即可。</p><p>Python 中最流行的密码学库是<a href=https://github.com/pyca/cryptography target=_blank rel="noopener noreferrer">cryptography</a>，<code>requests</code> 的底层曾经就使用了它（新版本已经换成使用标准库 ssl 了），下面我们使用这个库来演示下 AES-256-CTR 算法：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># pip install cryptography==36.0.1</span>
+$$</p><p>可以看到，因为异或 XOR 的对称性，加密跟解密的算法是完全相同的，直接 XOR $O_i$ 即可。</p><p>Python 中最流行的密码学库是<a href=https://github.com/pyca/cryptography target=_blank rel="noopener noreferrer">cryptography</a>，<code>requests</code> 的底层曾经就使用了它（新版本已经换成使用标准库 ssl 了），下面我们使用这个库来演示下 AES-256-CTR 算法：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-1 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># pip install cryptography==36.0.1</span>
 </span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
 </span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>cryptography.hazmat.primitives.ciphers</span> <span class=kn>import</span> <span class=n>Cipher</span><span class=p>,</span> <span class=n>algorithms</span><span class=p>,</span> <span class=n>modes</span>
 </span></span><span class=line><span class=cl>
@@ -88,51 +122,57 @@ $$</p><p>可以看到，因为异或 XOR 的对称性，加密跟解密的算法
 </span></span><span class=line><span class=cl><span class=c1># 接收方使用自己的 key + 接收到的 iv，构建 cipher，然后解密出原始数据</span>
 </span></span><span class=line><span class=cl><span class=n>cipher</span> <span class=o>=</span> <span class=n>Cipher</span><span class=p>(</span><span class=n>algorithms</span><span class=o>.</span><span class=n>AES</span><span class=p>(</span><span class=n>key</span><span class=p>),</span> <span class=n>modes</span><span class=o>.</span><span class=n>CTR</span><span class=p>(</span><span class=n>iv</span><span class=p>))</span>
 </span></span><span class=line><span class=cl><span class=n>decryptor</span> <span class=o>=</span> <span class=n>cipher</span><span class=o>.</span><span class=n>decryptor</span><span class=p>()</span>
-</span></span><span class=line><span class=cl><span class=n>decryptor</span><span class=o>.</span><span class=n>update</span><span class=p>(</span><span class=n>ciphertext</span><span class=p>)</span> <span class=o>+</span> <span class=n>decryptor</span><span class=o>.</span><span class=n>finalize</span><span class=p>()</span>
-</span></span></code></pre></td></tr></table></div></div><p>从上面的算法描述能感觉到，CTR 算法还蛮简单的。下面我使用 Python 写一个能够 work 的 CTR 实现：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>xor_bytes</span><span class=p>(</span><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>):</span>
+</span></span><span class=line><span class=cl><span class=n>decryptor</span><span class=o>.</span><span class=n>update</span><span class=p>(</span><span class=n>ciphertext</span><span class=p>)</span> <span class=o>+</span> <span class=n>decryptor</span><span class=o>.</span><span class=n>finalize</span><span class=p>()</span></span></span></code></pre></div><p>从上面的算法描述能感觉到，CTR 算法还蛮简单的。下面我使用 Python 写一个能够 work 的 CTR 实现：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-2 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=k>def</span> <span class=nf>xor_bytes</span><span class=p>(</span><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>):</span>
 </span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;Returns a new byte array with the elements xor&#39;ed.
 </span></span></span><span class=line><span class=cl><span class=s2>       if len(a) != len(b), extra parts are discard.
 </span></span></span><span class=line><span class=cl><span class=s2>    &#34;&#34;&#34;</span>
@@ -174,31 +214,57 @@ $$</p><p>可以看到，因为异或 XOR 的对称性，加密跟解密的算法
 </span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=sa>b</span><span class=s1>&#39;&#39;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>blocks</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 加密与解密的算法完全一致</span>
-</span></span><span class=line><span class=cl><span class=n>decrypt_ctr</span> <span class=o>=</span> <span class=n>encrypt_ctr</span>
-</span></span></code></pre></td></tr></table></div></div><p>接下来验证下算法的正确性：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># Python 官方库未提供 AES 实现，因此需要先装下这个库：</span>
+</span></span><span class=line><span class=cl><span class=n>decrypt_ctr</span> <span class=o>=</span> <span class=n>encrypt_ctr</span></span></span></code></pre></div><p>接下来验证下算法的正确性：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-3 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># Python 官方库未提供 AES 实现，因此需要先装下这个库：</span>
 </span></span><span class=line><span class=cl><span class=c1># pip install pyaes==1.6.1</span>
 </span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pyaes</span> <span class=kn>import</span> <span class=n>AES</span>
 </span></span><span class=line><span class=cl>
@@ -220,77 +286,59 @@ $$</p><p>可以看到，因为异或 XOR 的对称性，加密跟解密的算法
 </span></span><span class=line><span class=cl><span class=n>aes_cipher</span> <span class=o>=</span> <span class=n>AES</span><span class=p>(</span><span class=n>key</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=n>decrypted_bytes</span> <span class=o>=</span> <span class=n>decrypt_ctr</span><span class=p>(</span><span class=n>aes_cipher</span><span class=p>,</span> <span class=n>ciphertext</span><span class=p>,</span> <span class=n>iv</span><span class=p>)</span>
 </span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;decrypted_bytes =&gt;&#34;</span><span class=p>,</span> <span class=nb>bytes</span><span class=p>(</span><span class=n>decrypted_bytes</span><span class=p>))</span>
-</span></span><span class=line><span class=cl><span class=c1># decrypted_bytes =&gt; b&#34;this is a test message, hahahahahaha~&#34;</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=2-gcm-galoiscounter-分组模式 class=headerLink><a href=#2-gcm-galoiscounter-%e5%88%86%e7%bb%84%e6%a8%a1%e5%bc%8f class=header-mark></a>2. GCM (Galois/Counter) 分组模式</h3><p>GCM (Galois/Counter) 模式在 CTR 模式的基础上，添加了消息认证的功能，而且同时还具有与 CTR
+</span></span><span class=line><span class=cl><span class=c1># decrypted_bytes =&gt; b&#34;this is a test message, hahahahahaha~&#34;</span></span></span></code></pre></div><h3 id=2-gcm-galoiscounter-分组模式 class=headerLink><a href=#2-gcm-galoiscounter-%e5%88%86%e7%bb%84%e6%a8%a1%e5%bc%8f class=header-mark></a>2. GCM (Galois/Counter) 分组模式</h3><p>GCM (Galois/Counter) 模式在 CTR 模式的基础上，添加了消息认证的功能，而且同时还具有与 CTR
 模式相同的并行计算能力。因此相比 CTR 模式，GCM 不仅速度一样快，还能额外提供对消息完整性、真实性的验证能力。</p><p>下图直观地解释了 GCM 块模式（Galois/Counter 模式）的工作原理：</p><figure><img src=/images/practical-cryptography-basics-6-symmetric-key-ciphers/gcm-galois_counter_mode.webp></figure><p>GCM 模式新增的 Auth Tag，计算起来会有些复杂，我们就直接略过了，对原理感兴趣的可以看下<a href=https://en.wikipedia.org/wiki/Galois/Counter_Mode target=_blank rel="noopener noreferrer">Galois/Counter_Mode_wiki</a>.</p><h3 id=3-如何选用块模式 class=headerLink><a href=#3-%e5%a6%82%e4%bd%95%e9%80%89%e7%94%a8%e5%9d%97%e6%a8%a1%e5%bc%8f class=header-mark></a>3. 如何选用块模式</h3><p>一些 Tips:</p><ul><li>常用的安全块模式是 CBC（密码块链接）、CTR（计数器）和 GCM（伽罗瓦/计数器模式），它们需要一个随机（不可预测的）初始化向量 (IV)，也称为 <code>nonce</code> 或 <code>salt</code></li><li>「<strong>CTR</strong>（Counter）」块模式在大多数情况下是一个不错的选择，因为它具有很强的安全性和并行处理能力，允许任意输入数据长度（无填充）。但它不提供身份验证和完整性，只提供加密</li><li><strong>GCM</strong>（Galois/Counter Mode）块模式继承了 CTR 模式的所有优点，并增加了加密消息认证能力。GCM 是在对称密码中实现认证加密的快速有效的方法，<strong>强烈推荐</strong></li><li>CBC 模式在固定大小的分组上工作。因此，在将输入数据拆分为分组后，应使用填充算法使最后一个分组的长度一致。大多数应用程序使用 <strong>PKCS7</strong> 填充方案或 ANSI X.923. 在某些情况下，CBC 阻塞模式可能容易受到「padding oracle」攻击，因此<strong>最好避免使用 CBC 模式</strong></li><li>众所周知的不安全块模式是 <strong>ECB</strong>（电子密码本），它将相等的输入块加密为相等的输出块（无加密扩散能力）。<strong>不要使用 ECB 块模式</strong>！它可能会危及整个加密方案。</li><li>CBC、CTR 和 GCM 模式等大多数块都支持「随机访问」解密。比如在视频播放器中的任意时间偏移处寻找，播放加密的视频流</li></ul><p>总之，建议使用 CTR (Counter) 或 GCM (Galois/Counter) 分组模式。其他的分组在某些情况下可能会有所帮助，但很可能有安全隐患，因此除非你很清楚自己在做什么，否则不要使用其他分组模式！</p><p>CTR 和 GCM 加密模式有很多优点：它们是安全的（目前没有已知的重大缺陷），可以加密任意长度的数据而无需填充，可以并行加密和解密分组（在多核 CPU 中）并可以直接解密任意一个密文分组。因此它们适用于加密加密钱包、文档和流视频（用户可以按时间查找）。GCM 还提供消息认证，是一般情况下密码块模式的推荐选择。</p><p>请注意，GCM、CTR 和其他分组模式会泄漏原始消息的长度，因为它们生成的密文长度与明文消息的长度相同。如果您想避免泄露原始明文长度，可以在加密前向明文添加一些随机字节（额外的填充数据），并在解密后将其删除。</p><h2 id=四对称加密算法与对称加密方案 class=headerLink><a href=#%e5%9b%9b%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95%e4%b8%8e%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86%e6%96%b9%e6%a1%88 class=header-mark></a>四、对称加密算法与对称加密方案</h2><p>前面啰嗦了这么多，下面进入正题：对称加密算法</p><h3 id=1-安全的对称加密算法 class=headerLink><a href=#1-%e5%ae%89%e5%85%a8%e7%9a%84%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95 class=header-mark></a>1. 安全的对称加密算法</h3><p>目前应用最广泛的对称加密算法，是 AES 跟 Salsa20 / ChaCha20 这两个系列。</p><h4 id=1-aes-rijndael class=headerLink><a href=#1-aes-rijndael class=header-mark></a>1. AES (Rijndael)</h4><blockquote><p>wiki: <a href=https://en.wikipedia.org/wiki/Advanced_Encryption_Standard target=_blank rel="noopener noreferrer">https://en.wikipedia.org/wiki/Advanced_Encryption_Standard</a></p></blockquote><p>AES（高级加密标准，也称为 Rijndael）是现代 IT 行业中最流行和广泛使用的对称加密算法。AES 被证明是高度安全、快速且标准化的，到目前为止没有发现任何明显的弱点或攻击手段，而且几乎在所有平台上都得到了很好的支持。 AES 是 128 位分组密码，使用 128、192 或 256 位密钥。它通常与分组模式组合成分组加密方案（如 AES-CTR 或 AES-GCM）以处理流数据。在大多数分组模式中，AES 还需要一个随机的 128 位初始向量 IV。</p><p>Rijndael (AES) 算法可免费用于任何用途，而且非常流行。很多站点都选择 AES 作为 TLS 协议的一部分，以实现安全通信。现代 CPU 硬件基本都在微处理器级别实现了 AES 指令以加速 AES 加密解密操作。</p><p>这里有一个纯 Python 的 AES 实现可供参考: <a href=https://github.com/boppreh/aes/blob/master/aes.py target=_blank rel="noopener noreferrer">AES encryption in pure Python -
-boppreh</a></p><p>我们在前面的 <a href=#counter_mode rel>CTR 分组模式</a>中已经使用 Python 实践了 AES-256-CTR 加密方案。而实际上更常用的是支持集成身份验证加密（AEAD）的 AES-256-GCM 加密方案，它的优势我们前面已经介绍过了，这里我们使用 Python 演示下如何使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span><span class=lnt>44
-</span><span class=lnt>45
-</span><span class=lnt>46
-</span><span class=lnt>47
-</span><span class=lnt>48
-</span><span class=lnt>49
-</span><span class=lnt>50
-</span><span class=lnt>51
-</span><span class=lnt>52
-</span><span class=lnt>53
-</span><span class=lnt>54
-</span><span class=lnt>55
-</span><span class=lnt>56
-</span><span class=lnt>57
-</span><span class=lnt>58
-</span><span class=lnt>59
-</span><span class=lnt>60
-</span><span class=lnt>61
-</span><span class=lnt>62
-</span><span class=lnt>63
-</span><span class=lnt>64
-</span><span class=lnt>65
-</span><span class=lnt>66
-</span><span class=lnt>67
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># pip install cryptography==36.0.1</span>
+boppreh</a></p><p>我们在前面的 <a href=#counter_mode rel>CTR 分组模式</a>中已经使用 Python 实践了 AES-256-CTR 加密方案。而实际上更常用的是支持集成身份验证加密（AEAD）的 AES-256-GCM 加密方案，它的优势我们前面已经介绍过了，这里我们使用 Python 演示下如何使用：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-4 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># pip install cryptography==36.0.1</span>
 </span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
 </span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>cryptography.hazmat.primitives.ciphers</span> <span class=kn>import</span> <span class=p>(</span>
 </span></span><span class=line><span class=cl>    <span class=n>Cipher</span><span class=p>,</span> <span class=n>algorithms</span><span class=p>,</span> <span class=n>modes</span>
@@ -356,32 +404,62 @@ boppreh</a></p><p>我们在前面的 <a href=#counter_mode rel>CTR 分组模式<
 </span></span><span class=line><span class=cl>    <span class=n>iv</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>    <span class=n>ciphertext</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>    <span class=n>tag</span>
-</span></span><span class=line><span class=cl><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><h4 id=2-salsa20--chacha20 class=headerLink><a href=#2-salsa20--chacha20 class=header-mark></a>2. Salsa20 / ChaCha20</h4><blockquote><p>wiki: <a href=https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant target=_blank rel="noopener noreferrer">https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant</a></p></blockquote><p>Salsa20 及其改进的变体 ChaCha（ChaCha8、ChaCha12、ChaCha20）和 XSalsa20 是由密码学家
+</span></span><span class=line><span class=cl><span class=p>)</span></span></span></code></pre></div><h4 id=2-salsa20--chacha20 class=headerLink><a href=#2-salsa20--chacha20 class=header-mark></a>2. Salsa20 / ChaCha20</h4><blockquote><p>wiki: <a href=https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant target=_blank rel="noopener noreferrer">https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant</a></p></blockquote><p>Salsa20 及其改进的变体 ChaCha（ChaCha8、ChaCha12、ChaCha20）和 XSalsa20 是由密码学家
 Daniel Bernstein 设计的现代、快速的对称流密码家族。 Salsa20 密码是对称流密码设计竞赛
 eSTREAM（2004-2008）的决赛选手之一，它随后与相关的 BLAKE 哈希函数一起被广泛采用。 Salsa20
 及其变体是免版税的，没有专利。</p><p>Salsa20 密码将 128 位或 256 位对称密钥 + 随机生成的 64 位随机数（初始向量）和无限长度的数据流作为输入，并生成长度相同的加密数据流作为输出输入流。</p><h5 id=chacha20-poly1305 class=headerLink><a href=#chacha20-poly1305 class=header-mark></a>ChaCha20-Poly1305</h5><p>Salsa20 应用最为广泛的是认证加密方案：<a href=https://en.wikipedia.org/wiki/ChaCha20-Poly1305 target=_blank rel="noopener noreferrer">ChaCha20-Poly1305</a>，即组合使用
 ChaCha20 与消息认证算法 Poly1305，它们都由密码学家 Bernstein 设计。</p><p>ChaCha20-Poly1305 已被证明足够安全，不过跟 GCM 一样它的安全性也依赖于足够随机的初始向量
-IV，另外 ChaCha20-Poly1305 也不容易遭受计时攻击。</p><p>在没有硬件加速的情况下，ChaCha20 通常比 AES 要快得多（比如在旧的没有硬件加速的移动设备上），这是它最大的优势。</p><p>以下是一个 ChaCha20 的 Python 示例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># pip install cryptography==36.0.1</span>
+IV，另外 ChaCha20-Poly1305 也不容易遭受计时攻击。</p><p>在没有硬件加速的情况下，ChaCha20 通常比 AES 要快得多（比如在旧的没有硬件加速的移动设备上），这是它最大的优势。</p><p>以下是一个 ChaCha20 的 Python 示例：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">python</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-5 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># pip install cryptography==36.0.1</span>
 </span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
 </span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>cryptography.hazmat.primitives.ciphers</span> <span class=kn>import</span> <span class=n>Cipher</span><span class=p>,</span> <span class=n>algorithms</span><span class=p>,</span> <span class=n>modes</span>
 </span></span><span class=line><span class=cl>
@@ -399,8 +477,7 @@ IV，另外 ChaCha20-Poly1305 也不容易遭受计时攻击。</p><p>在没有�
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 2. 解密</span>
 </span></span><span class=line><span class=cl><span class=n>decryptor</span> <span class=o>=</span> <span class=n>cipher</span><span class=o>.</span><span class=n>decryptor</span><span class=p>()</span>
-</span></span><span class=line><span class=cl><span class=n>decryptor</span><span class=o>.</span><span class=n>update</span><span class=p>(</span><span class=n>ct</span><span class=p>)</span>
-</span></span></code></pre></td></tr></table></div></div><h4 id=3-其他流行的对称加密算法 class=headerLink><a href=#3-%e5%85%b6%e4%bb%96%e6%b5%81%e8%a1%8c%e7%9a%84%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95 class=header-mark></a>3. 其他流行的对称加密算法</h4><p>还有一些其他的现代安全对称密码，它们的应用不如 AES 和 ChaCha20 这么广泛，但在程序员和信息安全社区中仍然很流行：</p><ul><li><a href=https://en.wikipedia.org/wiki/Serpent_%28cipher%29 target=_blank rel="noopener noreferrer">Serpent</a> - 安全对称密钥分组密码（密钥大小：128、192 或 256 位），公众所有（Public Domain），完全免费</li><li><a href=https://en.wikipedia.org/wiki/Twofish target=_blank rel="noopener noreferrer">Twofish</a> - 安全对称密钥分组密码（密钥大小：128、192 或 256 位），公众所有（Public Domain），完全免费</li><li><a href=https://en.wikipedia.org/wiki/Camellia_%28cipher%29 target=_blank rel="noopener noreferrer">Camellia</a> - 安全对称密钥分组密码（分组大小：128 位；密钥大小：128、192 和 256 位），专利算法，但完全免费<ul><li>该算法由三菱和日本电信电话（NTT）在 2000 年共同发明</li></ul></li><li><a href=https://en.wikipedia.org/wiki/RC5 target=_blank rel="noopener noreferrer">RC5</a> - 安全对称密钥分组密码（密钥大小：128 到 2040
+</span></span><span class=line><span class=cl><span class=n>decryptor</span><span class=o>.</span><span class=n>update</span><span class=p>(</span><span class=n>ct</span><span class=p>)</span></span></span></code></pre></div><h4 id=3-其他流行的对称加密算法 class=headerLink><a href=#3-%e5%85%b6%e4%bb%96%e6%b5%81%e8%a1%8c%e7%9a%84%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95 class=header-mark></a>3. 其他流行的对称加密算法</h4><p>还有一些其他的现代安全对称密码，它们的应用不如 AES 和 ChaCha20 这么广泛，但在程序员和信息安全社区中仍然很流行：</p><ul><li><a href=https://en.wikipedia.org/wiki/Serpent_%28cipher%29 target=_blank rel="noopener noreferrer">Serpent</a> - 安全对称密钥分组密码（密钥大小：128、192 或 256 位），公众所有（Public Domain），完全免费</li><li><a href=https://en.wikipedia.org/wiki/Twofish target=_blank rel="noopener noreferrer">Twofish</a> - 安全对称密钥分组密码（密钥大小：128、192 或 256 位），公众所有（Public Domain），完全免费</li><li><a href=https://en.wikipedia.org/wiki/Camellia_%28cipher%29 target=_blank rel="noopener noreferrer">Camellia</a> - 安全对称密钥分组密码（分组大小：128 位；密钥大小：128、192 和 256 位），专利算法，但完全免费<ul><li>该算法由三菱和日本电信电话（NTT）在 2000 年共同发明</li></ul></li><li><a href=https://en.wikipedia.org/wiki/RC5 target=_blank rel="noopener noreferrer">RC5</a> - 安全对称密钥分组密码（密钥大小：128 到 2040
 位；分组大小：32、64 或 128 位；轮数：1 &mldr; 255），短密钥不安全（56 位密钥已被暴力破解）, 专利在 2015 年到期，现在完全免费</li><li><a href=https://en.wikipedia.org/wiki/RC6 target=_blank rel="noopener noreferrer">RC6</a> - 安全对称密钥分组密码，类似于 RC5，但更复杂
 （密钥大小：128 到 2040 位；分组大小：32、64 或 128 位；轮数：1 &mldr; 255），专利在 2017
 年到期，现在完全免费</li><li><a href=https://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm target=_blank rel="noopener noreferrer">IDEA</a> - 安全对称密钥分组密码（密钥大小：128 位），所有专利在均 2012 年前过期，完全免费</li><li><a href=https://en.wikipedia.org/wiki/CAST-256 target=_blank rel="noopener noreferrer">CAST (CAST-128 / CAST5, CAST-256 / CAST6)</a> - 安全对称密钥分组密码系列（密钥大小：40 &mldr; 256 位），免版税</li><li><a href=https://en.wikipedia.org/wiki/ARIA_%28cipher%29 target=_blank rel="noopener noreferrer">ARIA</a> - 安全对称密钥分组密码，类似于
@@ -408,28 +485,57 @@ AES（密钥大小：128、192 或 256 位），韩国官方标准，免费供�
 AES（密钥大小：128 位），中国官方标准，免费供公众使用<ul><li>由中国国家密码管理局于 2012 年 3 月 21 日发布</li></ul></li></ul><p>具体的算法内容这里就不介绍了，有兴趣或者用得到的时候，可以再去仔细了解。</p><h3 id=2-不安全的对称加密算法 class=headerLink><a href=#2-%e4%b8%8d%e5%ae%89%e5%85%a8%e7%9a%84%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95 class=header-mark></a>2. 不安全的对称加密算法</h3><p>如下这些对称加密算法曾经很流行，但现在被认为是不安全的或有争议的安全性，<strong>不建议再使用</strong>：</p><ul><li>DES - 56 位密钥大小，可以被暴力破解</li><li>3DES（三重 DES, TDES）- 64 位密码，被认为不安全，已在 2017 年被 NIST 弃用.</li><li>RC2 - 64 位密码，被认为不安全</li><li>RC4 - 流密码，已被破解，网上存在大量它的破解资料</li><li>Blowfish - 旧的 64 位密码，已被破坏<ul><li><a href=https://web.archive.org/web/20161009174028/https://sweet32.info/ target=_blank rel="noopener noreferrer">Sweet32: Birthday attacks on 64-bit block ciphers in TLS and OpenVPN</a></li></ul></li><li>GHOST - 俄罗斯 64 位分组密码，有争议的安全性，被认为有风险</li></ul><h3 id=对称认证加密算法-ae--aead class=headerLink><a href=#%e5%af%b9%e7%a7%b0%e8%ae%a4%e8%af%81%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95-ae--aead class=header-mark></a>对称认证加密算法 AE / AEAD</h3><p>我们在前面第三篇文章「MAC 与密钥派生函数 KDF」中介绍过 AE 认证加密及其变体 AEAD.</p><p>一些对称加密方案提供集成身份验证加密（AEAD），比如使用了 GCM 分组模式的加密方案 AES-GCM，
 而其他加密方案（如 AES-CBC 和 AES-CTR）自身不提供身份验证能力，需要额外添加。</p><p>最流行的认证加密（AEAD）方案有如下几个，我们在之前已经简单介绍过它们：</p><ul><li>ChaCha20-Poly1305<ul><li>具有集成 Poly1305 身份验证器的 ChaCha20 流密码（集成身份验证 AEAD 加密）</li><li>使用 256 位密钥和 96 位随机数（初始向量）</li><li>极高的性能</li><li>在硬件不支持 AES 加速指令时（如路由器、旧手机等硬件上），推荐使用此算法</li></ul></li><li>AES-256-GCM<ul><li>我们在前面的 GCM 模式一节，使用 Python 实现并验证了这个 AES-256-GCM 加密方案</li><li>使用 256 位密钥和 128 位随机数（初始向量）</li><li>较高的性能</li><li>在硬件支持 AES 加速时（如桌面、服务器等场景），更推荐使用此算法</li></ul></li><li>AES-128-GCM<ul><li>跟 AES-256-GCM 一样，区别在于它使用 128 位密钥，安全性弱于 ChaCha20-Poly1305 与
 AES-256-GCM.</li><li>目前被广泛应用在 HTTPS 等多种加密场景下，但是正在慢慢被前面两种方案取代</li></ul></li></ul><p>今天的大多数应用程序应该优先选用上面这些加密方案进行对称加密，而不是自己造轮子。上述方案是高度安全的、经过验证的、经过良好测试的，并且大多数加密库都已经提供了高效的实现，可以说是开箱即用。</p><p>目前应用最广泛的对称加密方案应该是 AES-128-GCM，而 ChaCha20-Poly1305 因为其极高的性能，也越来越多地被应用在 TLS1.2、TLS1.3、QUIC/HTTP3、Wireguard、SSH 等协议中。</p><h2 id=五aes-算法案例以太坊钱包加密 class=headerLink><a href=#%e4%ba%94aes-%e7%ae%97%e6%b3%95%e6%a1%88%e4%be%8b%e4%bb%a5%e5%a4%aa%e5%9d%8a%e9%92%b1%e5%8c%85%e5%8a%a0%e5%af%86 class=header-mark></a>五、AES 算法案例：以太坊钱包加密</h2><p>在这一小节我们研究一个现实中的 AES 应用场景：以太坊区块链的标准加密钱包文件格式。我们将看到 AES-128-CTR 密码方案如何与 Scrypt 和 MAC 相结合，通过字符密码安全地实现经过身份验证的对称密钥加密。</p><h4 id=以太坊-utc--json-钱包 class=headerLink><a href=#%e4%bb%a5%e5%a4%aa%e5%9d%8a-utc--json-%e9%92%b1%e5%8c%85 class=header-mark></a>以太坊 UTC / JSON 钱包</h4><p>在比特币和以太坊等区块链网络中，区块链资产持有者的私钥存储在称为<strong>加密钱包</strong>的特殊密钥库中。通常，这些加密钱包是本地硬盘上的文件，并使用字符密码加密。</p><p>在以太坊区块链中，<strong>加密钱包</strong>以一种特殊的加密格式在内部存储，称为「UTC / JSON 钱包（密钥库文件）」或「Web3 秘密存储定义」。这是一种加密钱包的文件格式，被广泛应用在 geth 和
-Parity（以太坊的主要协议实现）、MyEtherWallet（流行的在线客户端以太坊钱包）、MetaMask（广泛使用的浏览器内以太坊钱包）、ethers.js 和 Nethereum 库以及许多其他与以太坊相关的技术和工具中。</p><p>以太坊 UTC/JSON 密钥库将加密的私钥、加密数据、加密算法及其参数保存为 JSON 文本文档。</p><p>UTC / JSON 钱包的一个示例如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl>{<span class=w>
+Parity（以太坊的主要协议实现）、MyEtherWallet（流行的在线客户端以太坊钱包）、MetaMask（广泛使用的浏览器内以太坊钱包）、ethers.js 和 Nethereum 库以及许多其他与以太坊相关的技术和工具中。</p><p>以太坊 UTC/JSON 密钥库将加密的私钥、加密数据、加密算法及其参数保存为 JSON 文本文档。</p><p>UTC / JSON 钱包的一个示例如下：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-flex
+tw-flex-row
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-rotate-90
+tw-transition-[transform]
+tw-duration-500
+tw-ease-in-out
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">yaml</p></div><div class=tw-flex><button class="line-number-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-6 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl>{<span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>&#34;version&#34;: </span><span class=m>3</span><span class=p>,</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>&#34;id&#34;: </span><span class=s2>&#34;07a9f767-93c5-4842-9afd-b3b083659f04&#34;</span><span class=p>,</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>&#34;address&#34;: </span><span class=s2>&#34;aef8cad64d29fcc4ed07629b9e896ebc3160a8d0&#34;</span><span class=p>,</span><span class=w>
@@ -449,13 +555,21 @@ Parity（以太坊的主要协议实现）、MyEtherWallet（流行的在线客�
 </span></span></span><span class=line><span class=cl><span class=w>        </span>}<span class=p>,</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>&#34;mac&#34;: </span><span class=s2>&#34;06dcf1cc4bffe1616fafe94a2a7087fd79df444756bb17c93af588c3ab02a913&#34;</span><span class=p>,</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span>}<span class=p>,</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span>}<span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>上述 json 内容也是认证对称加密的一个典型示例，可以很容易分析出它的一些组成成分：</p><ul><li><code>kdf</code>: 用于从字符密码派生出密钥的 KDF 算法名称，这里用的是 <code>scrypt</code><ul><li><code>kdfparams</code>: KDF 算法的参数，如迭代参数、盐等&mldr;</li></ul></li><li><code>ciphertext</code>: 钱包内容的密文，通常这就是一个被加密的 256 位私钥</li><li><code>cipher</code> + <code>cipherparams</code>: 对称加密算法的名称及参数，这里使用了 AES-128-CTR，并给出了初始向量 IV</li><li><code>mac</code>: 由 MAC 算法生成的消息认证码，被用于验证解密密码的正确性<ul><li>以太坊使用截取派生密钥的一部分，拼接上完整密文，然后进行 keccak-256 哈希运算得到 MAC
-值</li></ul></li><li>其他钱包相关的信息</li></ul><p>默认情况下，密钥派生函数是 scrypt 并使用的是弱 scrypt 参数（n=8192 成本因子，r=8 块大小，p=1 并行化），因此建议使用长而复杂的密码以避免钱包被暴力解密。</p><h2 id=参考 class=headerLink><a href=#%e5%8f%82%e8%80%83 class=header-mark></a>参考</h2><ul><li><a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></li><li><a href=https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd target=_blank rel="noopener noreferrer">A complete overview of SSL/TLS and its cryptographic system</a></li><li><a href=https://github.com/boppreh/aes/blob/master/aes.py target=_blank rel="noopener noreferrer">AES encryption in pure Python - boppreh</a></li><li><a href=https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation target=_blank rel="noopener noreferrer">Block_cipher_mode_of_operation_wiki</a></li><li><a href=https://en.wikipedia.org/wiki/Galois/Counter_Mode target=_blank rel="noopener noreferrer">Galois/Counter_Mode_wiki</a></li></ul></div><h2>相关内容</h2><div class=related-container><div class=related-item-container><div class=related-image><a href=/posts/an-incomplete-guide-to-data-security/><img loading=lazy src=/posts/an-incomplete-guide-to-data-security/datasecurity.webp srcset="/posts/an-incomplete-guide-to-data-security/datasecurity.webp, /posts/an-incomplete-guide-to-data-security/datasecurity.webp 1.5x, /posts/an-incomplete-guide-to-data-security/datasecurity.webp 2x" sizes=auto alt=/posts/an-incomplete-guide-to-data-security/datasecurity.webp title=/posts/an-incomplete-guide-to-data-security/datasecurity.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/an-incomplete-guide-to-data-security/>个人数据安全不完全指南</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/about-tls-cert/><img loading=lazy src=/posts/about-tls-cert/https-secure.webp srcset="/posts/about-tls-cert/https-secure.webp, /posts/about-tls-cert/https-secure.webp 1.5x, /posts/about-tls-cert/https-secure.webp 2x" sizes=auto alt=/posts/about-tls-cert/https-secure.webp title=/posts/about-tls-cert/https-secure.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/about-tls-cert/>写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><img loading=lazy src=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.webp srcset="/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.webp, /posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.webp 1.5x, /posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.webp 2x" sizes=auto alt=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.webp title=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/>写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></h2></div></div><div class=sponsor><div class=sponsor-avatar><img loading=lazy src=https://thiscute.world/avatar/myself.webp srcset="https://thiscute.world/avatar/myself.webp, https://thiscute.world/avatar/myself.webp 1.5x, https://thiscute.world/avatar/myself.webp 2x" sizes=auto alt=https://thiscute.world/avatar/myself.webp title=https://thiscute.world/avatar/myself.webp></div><p class=sponsor-bio><em>如果你觉得这篇文章对你有所帮助，欢迎评论、分享、打赏~</em></p><a href=https://afdian.com/a/ryan4yin title=Sponsor target=_blank class=sponsor-button rel="noopener noreferrer"><i class="far fa-heart fa-fw icon" style=color:#ec6cb9></i>
-<span>赞赏</span></a></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2022-03-06</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><button title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-title="写给开发人员的实用密码学（六）—— 对称密钥加密算法" data-via=ryan4yin data-hashtags=Cryptography,密码学,对称加密,安全,AES,ChaCha20><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Hacker News" data-sharer=hackernews data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-title="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><span class="fab fa-hacker-news fa-fw"></span></button><button title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><span class="fab fa-reddit fa-fw"></span></button><script>function shareOnMastodon(e,t){const o="share_mastodon_domain",i=localStorage.getItem(o)??"mastodon.social",n=prompt("Enter your Mastodon domain",i);if(n===null)return;localStorage.setItem(o,n);const a=e+`
+</span></span></span><span class=line><span class=cl><span class=w></span>}</span></span></code></pre></div><p>上述 json 内容也是认证对称加密的一个典型示例，可以很容易分析出它的一些组成成分：</p><ul><li><code>kdf</code>: 用于从字符密码派生出密钥的 KDF 算法名称，这里用的是 <code>scrypt</code><ul><li><code>kdfparams</code>: KDF 算法的参数，如迭代参数、盐等&mldr;</li></ul></li><li><code>ciphertext</code>: 钱包内容的密文，通常这就是一个被加密的 256 位私钥</li><li><code>cipher</code> + <code>cipherparams</code>: 对称加密算法的名称及参数，这里使用了 AES-128-CTR，并给出了初始向量 IV</li><li><code>mac</code>: 由 MAC 算法生成的消息认证码，被用于验证解密密码的正确性<ul><li>以太坊使用截取派生密钥的一部分，拼接上完整密文，然后进行 keccak-256 哈希运算得到 MAC
+值</li></ul></li><li>其他钱包相关的信息</li></ul><p>默认情况下，密钥派生函数是 scrypt 并使用的是弱 scrypt 参数（n=8192 成本因子，r=8 块大小，p=1 并行化），因此建议使用长而复杂的密码以避免钱包被暴力解密。</p><h2 id=参考 class=headerLink><a href=#%e5%8f%82%e8%80%83 class=header-mark></a>参考</h2><ul><li><a href=https://github.com/nakov/Practical-Cryptography-for-Developers-Book target=_blank rel="noopener noreferrer">Practical-Cryptography-for-Developers-Book</a></li><li><a href=https://dev.to/techschoolguru/a-complete-overview-of-ssl-tls-and-its-cryptographic-system-36pd target=_blank rel="noopener noreferrer">A complete overview of SSL/TLS and its cryptographic system</a></li><li><a href=https://github.com/boppreh/aes/blob/master/aes.py target=_blank rel="noopener noreferrer">AES encryption in pure Python - boppreh</a></li><li><a href=https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation target=_blank rel="noopener noreferrer">Block_cipher_mode_of_operation_wiki</a></li><li><a href=https://en.wikipedia.org/wiki/Galois/Counter_Mode target=_blank rel="noopener noreferrer">Galois/Counter_Mode_wiki</a></li></ul></div><h2>相关内容</h2><div class=related-container><div class=related-item-container><div class=related-image><a href=/posts/an-incomplete-guide-to-data-security/><img src=/posts/an-incomplete-guide-to-data-security/datasecurity.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/an-incomplete-guide-to-data-security/>个人数据安全不完全指南</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/about-tls-cert/><img src=/posts/about-tls-cert/https-secure.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/about-tls-cert/>写给开发人员的实用密码学（八）—— 数字证书与 TLS 协议</a></h2></div><div class=related-item-container><div class=related-image><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/><img src=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/symmetric-vs-asymmetric.webp height=200 width=400></a></div><h2 class=related-title><a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/>写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC</a></h2></div></div><div class="sponsor print:tw-hidden"><div class=sponsor-avatar></div><p class=sponsor-bio><em>如果你觉得这篇文章对你有所帮助，欢迎评论、分享、打赏~</em></p><a href=https://afdian.com/a/ryan4yin title=Sponsor target=_blank class=sponsor-button rel="noopener noreferrer"><span style=color:#ec6cb9><svg class="icon" viewBox="0 0 512 512"><path d="M458.4 64.3C400.6 15.7 311.3 23 256 79.3 200.7 23 111.4 15.6 53.6 64.3-21.6 127.6-10.6 230.8 43 285.5l175.4 178.7c10 10.2 23.4 15.9 37.6 15.9 14.3.0 27.6-5.6 37.6-15.8L469 285.6c53.5-54.7 64.7-157.9-10.6-221.3zm-23.6 187.5L259.4 430.5c-2.4 2.4-4.4 2.4-6.8.0L77.2 251.8c-36.5-37.2-43.9-107.6 7.3-150.7 38.9-32.7 98.9-27.8 136.5 10.5l35 35.7 35-35.7c37.8-38.5 97.8-43.2 136.5-10.6 51.1 43.1 43.5 113.9 7.3 150.8z"/></svg></span>
+<span>赞赏</span></a></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2022-03-06</span></div><div class=post-info-license></div></div><div class="post-info-line print:!tw-hidden"><div class=post-info-md></div><div class=post-info-share><button title="分享到 Twitter" data-sharer=twitter data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-title="写给开发人员的实用密码学（六）—— 对称密钥加密算法" data-via=ryan4yin data-hashtags=Cryptography,密码学,对称加密,安全,AES,ChaCha20><svg class="icon" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645.0 138.72-105.583 298.558-298.558 298.558-59.452.0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055.0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421.0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391.0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04.0-57.828 46.782-104.934 104.934-104.934 30.213.0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg></button><button title="分享到 Hacker News" data-sharer=hackernews data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/ data-title="写给开发人员的实用密码学（六）—— 对称密钥加密算法"><svg class="icon" viewBox="0 0 448 512"><path d="M0 32v448h448V32H0zm21.2 197.2H21c.1-.1.2-.3.3-.4.0.1.0.3-.1.4zm218 53.9V384h-31.4V281.3L128 128h37.3c52.5 98.3 49.2 101.2 59.3 125.6 12.3-27 5.8-24.4 60.6-125.6H320l-80.8 155.1z"/></svg></button><button title="分享到 Reddit" data-sharer=reddit data-url=https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/><svg class="icon" viewBox="0 0 512 512"><path d="M201.5 305.5c-13.8.0-24.9-11.1-24.9-24.6.0-13.8 11.1-24.9 24.9-24.9 13.6.0 24.6 11.1 24.6 24.9.0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4.0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8.0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7.0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9.0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5.0 52.6 59.2 95.2 132 95.2 73.1.0 132.3-42.6 132.3-95.2.0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6.0-2.2-2.2-6.1-2.2-8.3.0-2.5 2.5-2.5 6.4.0 8.6 22.8 22.8 87.3 22.8 110.2.0 2.5-2.2 2.5-6.1.0-8.6-2.2-2.2-6.1-2.2-8.3.0zm7.7-75c-13.6.0-24.6 11.1-24.6 24.9.0 13.6 11.1 24.6 24.6 24.6 13.8.0 24.9-11.1 24.9-24.6.0-13.8-11-24.9-24.9-24.9z"/></svg></button><script>function shareOnMastodon(e,t){const o="share_mastodon_domain",i=localStorage.getItem(o)??"mastodon.social",n=prompt("Enter your Mastodon domain",i);if(n===null)return;localStorage.setItem(o,n);const a=e+`
 
 `+t,s=new URL("https://"+n);s.pathname="share",s.searchParams.append("text",a),window.open(s,"_blank","width=500,height=500,left=500,toolbar=0,status=0")}</script>
-<button title="分享到 Mastodon" onclick='shareOnMastodon("写给开发人员的实用密码学（六）—— 对称密钥加密算法","https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/")'><span class="fab fa-mastodon fa-fw"></span></button></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/cryptography/>Cryptography</a>,&nbsp;<a href=/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/>密码学</a>,&nbsp;<a href=/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/>对称加密</a>,&nbsp;<a href=/tags/%E5%AE%89%E5%85%A8/>安全</a>,&nbsp;<a href=/tags/aes/>AES</a>,&nbsp;<a href=/tags/chacha20/>ChaCha20</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/the-thoughtful-youth/ class=prev rel=prev title=「转」且看有思想的年轻人><i class="fas fa-angle-left fa-fw"></i>「转」且看有思想的年轻人</a>
-<a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/ class=next rel=next title="写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=display:inline-block;width:auto;height:20px>
-</a><a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=display:inline-block;width:auto;height:20px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.126.1">Hugo</a> 强力驱动&nbsp;|&nbsp;托管在 <a title=Vercel href=https://vercel.com/ target=_blank rel="noopener noreffer">Vercel</a> 上&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.4.0"><i class="far fa-edit fa-fw"></i> DoIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2024</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://thiscute.world/ target=_blank rel="noopener noreferrer">ryan4yin</a></span>&nbsp;|&nbsp;<span class=license> <a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i>
-</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><div class=assets><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><script type=text/javascript>window.config={code:{maxShownLines:100},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/typeit/typeit.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js defer></script><script type=text/javascript src=/lib/katex/auto-render.min.js defer></script><script type=text/javascript src=/lib/katex/copy-tex.min.js defer></script><script type=text/javascript src=/lib/katex/mhchem.min.js defer></script><script type=text/javascript src=/js/katex.min.js defer></script><script type=text/javascript src=/js/theme.min.js defer></script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script></div></body></html>
+<button title="分享到 Mastodon" onclick='shareOnMastodon("写给开发人员的实用密码学（六）—— 对称密钥加密算法","https://thiscute.world/posts/practical-cryptography-basics-6-symmetric-key-ciphers/")'><svg class="icon" viewBox="0 0 448 512"><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48.0.0.0-63.72 28.5-63.72 125.7.0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54.0 01-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg></button></div></div></div><div class=post-info-more><section class=post-tags><svg class="icon" viewBox="0 0 640 512"><path d="M497.941 225.941 286.059 14.059A48 48 0 00252.118.0H48C21.49.0.0 21.49.0 48v204.118a48 48 0 0014.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882.0l204.118-204.118c18.745-18.745 18.745-49.137.0-67.882zM112 160c-26.51.0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882.0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397.0h48.721a48 48 0 0133.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137.0 67.882z"/></svg>&nbsp;<a href=/tags/cryptography/>Cryptography</a>,&nbsp;<a href=/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/>密码学</a>,&nbsp;<a href=/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/>对称加密</a>,&nbsp;<a href=/tags/%E5%AE%89%E5%85%A8/>安全</a>,&nbsp;<a href=/tags/aes/>AES</a>,&nbsp;<a href=/tags/chacha20/>ChaCha20</a></section><section class=print:!tw-hidden><span><button class="tw-text-fgColor-link-muted hover:tw-text-fgColor-link-muted-hover" onclick=window.history.back()>返回</button></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class="post-nav print:tw-hidden"><a href=/posts/the-thoughtful-youth/ class=prev rel=prev title=「转」且看有思想的年轻人><svg class="icon" viewBox="0 0 256 512"><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9.0l22.6 22.6c9.4 9.4 9.4 24.6.0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6.0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9.0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>「转」且看有思想的年轻人</a>
+<a href=/posts/practical-cryptography-basics-7-asymmetric-key-ciphers/ class=next rel=next title="写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC">写给开发人员的实用密码学（七）—— 非对称密钥加密算法 RSA/ECC<svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></a></div></div><div id=comments class="print:!tw-hidden tw-pt-32 tw-pb-8"><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://img.foreverblog.cn/logo_en_default.png alt style=display:inline-block;width:auto;height:20px>
+</a><a href=https://www.foreverblog.cn/go.html target=_blank><img src=https://img.foreverblog.cn/wormhole_3.gif alt style=display:inline-block;width:auto;height:20px title=穿梭虫洞-随机访问十年之约友链博客></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.136.5">Hugo</a> 强力驱动&nbsp;|&nbsp;托管在 <a title=Vercel href=https://vercel.com/ target=_blank rel="noopener noreffer">Vercel</a> 上&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.4.0"><svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg> DoIt</a></div><div class=footer-line><svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 448c-110.532.0-2e2-89.451-2e2-2e2.0-110.531 89.451-2e2 2e2-2e2 110.532.0 2e2 89.451 2e2 2e2.0 110.532-89.451 2e2-2e2 2e2zm107.351-101.064c-9.614 9.712-45.53 41.396-104.065 41.396-82.43.0-140.484-61.425-140.484-141.567.0-79.152 60.275-139.401 139.762-139.401 55.531.0 88.738 26.62 97.593 34.779a11.965 11.965.0 011.936 15.322l-18.155 28.113c-3.841 5.95-11.966 7.282-17.499 2.921-8.595-6.776-31.814-22.538-61.708-22.538-48.303.0-77.916 35.33-77.916 80.082.0 41.589 26.888 83.692 78.277 83.692 32.657.0 56.843-19.039 65.726-27.225 5.27-4.857 13.596-4.039 17.82 1.738l19.865 27.17a11.947 11.947.0 01-1.152 15.518z"/></svg>2021 - 2024<span class=author>&nbsp;<a href=/ target=_blank rel="noopener noreferrer"></a></span>&nbsp;|&nbsp;<span class=license> <a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons class=print:!tw-hidden><a href=#back-to-top id=back-to-top-button class="fixed-button tw-transition-opacity tw-opacity-0" title=回到顶部><svg class="icon" viewBox="0 0 448 512"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6.0-33.9L207 39c9.4-9.4 24.6-9.4 33.9.0l194.3 194.3c9.4 9.4 9.4 24.6.0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3.0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
+</a><a href=#comments id=view-comments class=fixed-button title=查看评论><svg class="icon" viewBox="0 0 512 512"><path d="M256 32C114.6 32 0 125.1.0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3.0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4.0 256-93.1 256-208S397.4 32 256 32z"/></svg></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><script>window.config={"algoliasearch.min.js":"/lib/algoliasearch/algoliasearch-lite.umd.min.js","autocomplete.min.js":"/lib/autocomplete/autocomplete.min.js",comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script src=/lib/sharer/sharer.min.js></script><script src=/lib/typeit/typeit.min.js></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/js/katex.min.js defer></script><script src=/js/theme.min.js defer></script><script src=/js/utterances.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script><script type=speculationrules>
+        {
+          "prerender": [
+            {
+              "where": { "href_matches": "/*" },
+              "eagerness": "moderate"
+            }
+          ]
+        }
+    </script></body></html>

@@ -1,3 +1,14 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>JWT - 标签 - This Cute World</title><link>https://thiscute.world/tags/jwt/</link><description>JWT - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 03 Mar 2020 14:09:46 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/jwt/" rel="self" type="application/rss+xml"/><item><title>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</title><link>https://thiscute.world/posts/jwt-algorithm-key-generation/</link><pubDate>Tue, 03 Mar 2020 14:09:46 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/jwt-algorithm-key-generation/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/jwt-algorithm-key-generation/jwt.webp" referrerpolicy="no-referrer">
-&lt;/div>签名算法介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义： 数字签名(Digital Signature): 就和我们日常办理各种手续时需要在</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>JWT - 标签 - This Cute World</title><link>https://thiscute.world/tags/jwt/</link><description>JWT - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 03 Mar 2020 14:09:46 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/jwt/" rel="self" type="application/rss+xml"/><item><title>JWT 签名算法 HS256、RS256 及 ES256 及密钥生成</title><link>https://thiscute.world/posts/jwt-algorithm-key-generation/</link><pubDate>Tue, 03 Mar 2020 14:09:46 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/jwt-algorithm-key-generation/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/jwt-algorithm-key-generation/jwt.webp" referrerpolicy="no-referrer">
+            </div><h1 id="签名算法" class="headerLink">
+    <a href="#%e7%ad%be%e5%90%8d%e7%ae%97%e6%b3%95" class="header-mark"></a>签名算法</h1><p>介绍具体的 JWT 签名算法前，先解释一下签名、摘要/指纹、加密这几个名词的含义：</p>
+<ol>
+<li>数字签名(Digital Signature): 就和我们日常办理各种手续时需要在文件上签上你自己的名字一样，数字签名的主要用途也是用于身份认证。
+<ol>
+<li>更准确的讲，数字签名可保证数据的三个特性：真实性（未被伪造）、完整性（不存在缺失）、不可否认性（确实是由你本人认可并签名）</li>
+</ol>
+</li>
+<li>数字摘要(digest)/数字指纹(fingerprint): 指的是数据的 Hash 值。</li>
+<li>加密算法：这个应该不需要解释，就是对数据进行加密。。</li>
+</ol>
+<p>数字签名的具体实现，通常是先对数据进行一次 Hash 摘要(SHA1/SHA256/SHA512 等)，然后再使用非对称加密算法(RSA/ECDSA 等)的私钥对这个摘要进行加密，这样得到的结果就是原始数据的一个签名。</p>]]></description></item></channel></rss>

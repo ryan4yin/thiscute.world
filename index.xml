@@ -1,31 +1,465 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>This Cute World</title><link>https://thiscute.world/</link><description>This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 27 Aug 2024 10:10:22 +0800</lastBuildDate><atom:link href="https://thiscute.world/index.xml" rel="self" type="application/rss+xml"/><item><title>KubeCon China 2024 之旅</title><link>https://thiscute.world/posts/kubecon-china-2024/</link><pubDate>Tue, 27 Aug 2024 10:10:22 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/kubecon-china-2024/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/kubecon-china-2024/kubecon-china-2024-linus.webp" referrerpolicy="no-referrer">
-&lt;/div>前言很早就有了解到今年的 KubeCon China 会在香港举办，虽然有些兴趣，但我最初是有被 KubeCon 高昂的门票价格劝退了的。 有时候不得不相信运气的魔力，机缘巧合之下，我</description></item><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/kubernetes-cluster-autoscaling-1-karpenter/karpenter.png" referrerpolicy="no-referrer">
-&lt;/div>前言Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面： Workloads 的伸缩：通过 Horizontal Pod Autoscaler（HPA）和 Vertical Pod Autoscal</description></item><item><title>2024 年香港徒步旅行记录（一）</title><link>https://thiscute.world/posts/hong-kong-travel-notes-in-2024/</link><pubDate>Tue, 21 May 2024 10:05:00 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/hong-kong-travel-notes-in-2024/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/hong-kong-travel-notes-in-2024/IMG20240503080234.webp" referrerpolicy="no-referrer">
-&lt;/div>缘起在 2023 年年度总结中，我给 2024 年定下的目标是「工作与业余爱好上稳中求进，生活上锻炼好身体、多关心家人」，为此今年我做了许多旅行的准备。 在深圳呆</description></item><item><title>OS as Code - 我的 NixOS 使用体会</title><link>https://thiscute.world/posts/my-experience-of-nixos/</link><pubDate>Wed, 21 Feb 2024 16:26:21 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/my-experience-of-nixos/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/my-experience-of-nixos/nixos-and-flakes-book-202402.webp" referrerpolicy="no-referrer">
-&lt;/div>本文最初发表于 如何评价NixOS? - 知乎，觉得比较有价值所以再搬运到我的博客。 我 23 年 4 月开始用 NixOS 之前看过（如何评价NixOS? - 知乎） 这个问</description></item><item><title>个人数据安全不完全指南</title><link>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</link><pubDate>Tue, 30 Jan 2024 13:48:30 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" referrerpolicy="no-referrer">
-&lt;/div>零、前言在接触电脑以来很长的一段时间里，我都没怎么在意自己的数据安全。比如说： 长期使用一个没有 passphrase 保护的 SSH 密钥（RSA 2048 位），为了方便我还把它</description></item><item><title>NixOS 在 Lichee Pi 4A 上是如何启动的</title><link>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</link><pubDate>Mon, 29 Jan 2024 00:58:57 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</guid><description><![CDATA[<div class="featured-image">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>This Cute World</title><link>https://thiscute.world/</link><description>This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 27 Aug 2024 10:10:22 +0800</lastBuildDate><atom:link href="https://thiscute.world/index.xml" rel="self" type="application/rss+xml"/><item><title>KubeCon China 2024 之旅</title><link>https://thiscute.world/posts/kubecon-china-2024/</link><pubDate>Tue, 27 Aug 2024 10:10:22 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubecon-china-2024/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/kubecon-china-2024/kubecon-china-2024-linus.webp" referrerpolicy="no-referrer">
+            </div><h2 id="前言" class="headerLink">
+    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>很早就有了解到今年的 KubeCon China 会在香港举办，虽然有些兴趣，但我最初是有被 KubeCon 高昂的门票价格劝退了的。</p>
+<p>有时候不得不相信运气的魔力，机缘巧合之下，我从朋友 @Kev 处得知了 KubeCon 的「最终用户门票计划」并借此 0 元购了门票，又邀上了 <a href="https://0xffff.one/" target="_blank" rel="noopener noreferrer">0xFFFF 社区</a> 的<a href="https://0xffff.one/u/Chever-John" target="_blank" rel="noopener noreferrer">@Chever-John</a>
+<a href="https://0xffff.one/u/0xdeadbeef" target="_blank" rel="noopener noreferrer">@0xdeadbeef</a> <a href="https://0xffff.one/u/MingLLuo" target="_blank" rel="noopener noreferrer">@茗洛</a> 三位朋友一起参加，在香港租了个 airbnb 住宿，期间也逛了香港城市中的不少地方，收货颇丰。</p>]]></description></item><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/kubernetes-cluster-autoscaling-1-karpenter/karpenter.png" referrerpolicy="no-referrer">
+            </div><h2 id="前言" class="headerLink">
+    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面：</p>
+<ol>
+<li>Workloads 的伸缩：通过 Horizontal Pod Autoscaler（HPA）和 Vertical Pod
+Autoscaler（VPA）等资源，可以根据资源使用情况自动调整 Pod 的数量和资源配置。
+<ul>
+<li>相关项目：
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">metrics-server</a>: 采集指标数据供
+HPA 使用</li>
+<li><a href="https://github.com/kedacore/keda" target="_blank" rel="noopener noreferrer">KEDA</a>: 用于支持更多的指标数据源与触发方式</li>
+<li><a href="https://github.com/kubernetes/autoscaler" target="_blank" rel="noopener noreferrer">kubernetes/autoscaler</a>: 提供 VPA 功能</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Nodes 的伸缩：根据集群的负载情况，可以自动增加或减少 Nodes 的数量，以适应负载的变化。
+<ul>
+<li>相关项目：
+<ul>
+<li><a href="https://github.com/kubernetes/autoscaler" target="_blank" rel="noopener noreferrer">kubernetes/autoscaler</a>: 目前最流行的
+Node 伸缩方案，支持绝大多数云厂商。</li>
+<li><a href="https://github.com/kubernetes-sigs/karpenter" target="_blank" rel="noopener noreferrer">karpenter</a>: AWS 捐给 CNCF 的一个新兴
+Node 伸缩方案，目前仅支持 AWS/Azure，但基于其核心库可以很容易地扩展支持其他云厂商。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>本文主要介绍新兴 Node 伸缩与管理方案 Karpenter 的优势、应用场景及使用方法。</p>]]></description></item><item><title>2024 年香港徒步旅行记录（一）</title><link>https://thiscute.world/posts/hong-kong-travel-notes-in-2024/</link><pubDate>Tue, 21 May 2024 10:05:00 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/hong-kong-travel-notes-in-2024/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/hong-kong-travel-notes-in-2024/IMG20240503080234.webp" referrerpolicy="no-referrer">
+            </div><h2 id="缘起" class="headerLink">
+    <a href="#%e7%bc%98%e8%b5%b7" class="header-mark"></a>缘起</h2><p>在 <a href="/posts/2023-summary/" rel="">2023 年年度总结</a>中，我给 2024 年定下的目标是「工作与业余爱好上稳中求进，生活上锻炼好身体、多关心家人」，为此今年我做了许多旅行的准备。</p>
+<p>在深圳呆了快五年，挺长时间里一直将自己局限在技术与工作中，少有时间去关注周围的世界——生存已属不易，没有多余的精力去关心其他事情。2023 年是一个分界点，工作上越来越得心应手，手头也不再紧张，个人精力跟业余时间得以解放，我自然开始追求更多的生活体验。</p>]]></description></item><item><title>OS as Code - 我的 NixOS 使用体会</title><link>https://thiscute.world/posts/my-experience-of-nixos/</link><pubDate>Wed, 21 Feb 2024 16:26:21 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/my-experience-of-nixos/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/my-experience-of-nixos/nixos-and-flakes-book-202402.webp" referrerpolicy="no-referrer">
+            </div><blockquote>
+  <p>本文最初发表于 <a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer">如何评价NixOS? - 知乎</a>，觉得比较有价值所以再搬运到我的博客。</p>
+
+</blockquote><p>我 23 年 4 月开始用 NixOS 之前看过（<a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer">如何评价NixOS? - 知乎</a>） 这个问答，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。</p>]]></description></item><item><title>个人数据安全不完全指南</title><link>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</link><pubDate>Tue, 30 Jan 2024 13:48:30 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" referrerpolicy="no-referrer">
+            </div><h2 id="零前言" class="headerLink">
+    <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>在接触电脑以来很长的一段时间里，我都没怎么在意自己的数据安全。比如说：</p>
+<ol>
+<li>长期使用一个没有 passphrase 保护的 SSH 密钥（RSA 2048 位），为了方便我还把它存到了
+onedrive 里，而且在各种需要访问 GitHub/Gitee 或 SSH 权限的虚拟机跟 PC 上传来传去。</li>
+<li>Homelab 跟桌面 PC 都从来没开过全盘加密。</li>
+<li>在 2022 年我的 Homelab 坏掉了两块国产固态硬盘（阿斯加特跟光威弈 Pro 各一根），都是系统一启动就挂，没法手动磁盘格式化，走售后直接被京东换货了。因为我的数据是明文存储的，这很可能导致我的个人数据泄露&hellip;</li>
+<li>几个密码在各种站点上重复使用，其中重要账号的随机密码还是我在十多年前用 lastpass 生成的，到处用了这么多年，很难说这些密码有没有泄露（lastpass 近几年爆出的泄漏事故就不少&hellip;）</li>
+<li>GitHub, Google, Jetbrains 等账号的 Backup Code 被我明文存储到了百度云盘，中间发现百度云盘安全性太差又转存到了 OneDrive，但一直是明文存储，从来没加过密。</li>
+<li>一些银行账号之类的随机密码，因为担心遗忘，长期被我保存在一份印象笔记的笔记里，也是明文存储，仅做了些简单的内容替换，要猜出真正的密码感觉并不是很难。</li>
+<li>以前也有过因为对 Git 操作不熟悉或者粗心大意，在公开仓库中提交了一些包含敏感信息的
+commit，比如说 SSH 密钥、密码等等，有的甚至很长时间都没发现。</li>
+</ol>
+<p>现在在 IT 行业工作了几年，从我当下的经验来看，企业后台的管理员如果真有兴趣，查看用户的数据真的是很简单的一件事，至少国内大部分公司的用户数据，都不会做非常严格的数据加密与权限管控。就算真有加密，那也很少是用户级别的，对运维人员或开发人员而言这些数据仍旧与未加密无异。对系统做比较大的迭代时，把小部分用户数据导入到测试环境进行测试也是挺常见的做法&hellip;</p>]]></description></item><item><title>NixOS 在 Lichee Pi 4A 上是如何启动的</title><link>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</link><pubDate>Mon, 29 Jan 2024 00:58:57 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</guid><description><![CDATA[<div class="featured-image">
                 <img src="/posts/how-nixos-start-on-licheepi4a/lp4a-pinout-debuglog-1.webp" referrerpolicy="no-referrer">
-            </div>文章是 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要整理发布下&hellip;所以注意文章中的时间线是 2023 年 8 月。 零、前言我从今年 5 月]]></description></item><item><title>我的 2023 - 认识更多有趣的人，见识更宽广的世界</title><link>https://thiscute.world/posts/2023-summary/</link><pubDate>Sun, 31 Dec 2023 23:59:45 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/2023-summary/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/2023-summary/2023-ryan4yin-github-oss-insight.webp" referrerpolicy="no-referrer">
-&lt;/div>闲言碎语啊呀，又到了一年一度的传统节目——年终总结时间。 2023 年流水账还是跟去年一样，先简单过一下我 2023 年的流水账（基本都摘抄自我的 /histor</description></item><item><title>两岸猿声啼不住，轻舟已过万重山——我的四分之一人生</title><link>https://thiscute.world/posts/a-quarter-of-the-way-through-life/</link><pubDate>Sat, 19 Aug 2023 18:00:45 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/a-quarter-of-the-way-through-life/</guid><description><![CDATA[<div class="featured-image">
+            </div><blockquote>
+  <p>文章是 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要整理发布下&hellip;所以注意文章中的时间线是 2023 年 8 月。</p>
+
+</blockquote><h2 id="零前言" class="headerLink">
+    <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当时没怎么折腾。</p>]]></description></item><item><title>我的 2023 - 认识更多有趣的人，见识更宽广的世界</title><link>https://thiscute.world/posts/2023-summary/</link><pubDate>Sun, 31 Dec 2023 23:59:45 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/2023-summary/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/2023-summary/2023-ryan4yin-github-oss-insight.webp" referrerpolicy="no-referrer">
+            </div><h2 id="闲言碎语" class="headerLink">
+    <a href="#%e9%97%b2%e8%a8%80%e7%a2%8e%e8%af%ad" class="header-mark"></a>闲言碎语</h2><p>啊呀，又到了一年一度的传统节目——年终总结时间。</p>
+<h2 id="2023-年流水账" class="headerLink">
+    <a href="#2023-%e5%b9%b4%e6%b5%81%e6%b0%b4%e8%b4%a6" class="header-mark"></a>2023 年流水账</h2><p>还是跟去年一样，先简单过一下我 2023 年的流水账（基本都摘抄自我的 <code>/history</code>，类似日记？）：</p>
+<ul>
+<li>1 月
+<ul>
+<li>再一次完成了公司 K8s 集群一年一度的升级，虽然仍然有比较大的压力，但这次的过程相当顺利。</li>
+<li>然后就是朋友约饭，玩耍，回家过春节。</li>
+</ul>
+</li>
+<li>2 月
+<ul>
+<li>延续去年底开始对嵌入式硬件的兴趣，继续折腾 stm32 / orange pi 5 / esp32 等嵌入式硬件。
+<ul>
+<li>用 STM32 点亮了 TFT 液晶屏，以及搞定了使用 printf 打印日志到串口 -<a href="https://github.com/ryan4yin/learn-stm32f103c8t6" target="_blank" rel="noopener noreferrer">ryan4yin/learn-stm32f103c8t6</a></li>
+<li>研究在 orangepi5(rk3558s) 上用 npu 跑 AI 任务，写了点笔记<a href="https://github.com/ryan4yin/knowledge/tree/master/electrical-engineering/rk3588" target="_blank" rel="noopener noreferrer">demos_rk3588</a></li>
+</ul>
+</li>
+<li>折腾 Proxmox VE 集群
+<ul>
+<li>主力节点 UM560 固态翻车了，是才用了三个月的 Asgard 512G SSD，颗粒是长江存储的。走京东售后了。（上次翻车是 2022-11-02 炸了根光威弈 Pro 1T，这也没隔多久啊&hellip;）
+<figure><img src="/images/now/nvme-critial-medium-error.webp" width="100%"><figcaption>
+            <h4>2022-11-02 翻车记录 - 系统无法启动</h4>
+          </figcaption>
+      </figure>
+
+<figure><img src="/images/now/nvme-device-not-ready.webp" width="100%"><figcaption>
+            <h4>2023-02-03 翻车记录 - 系统能启动但是文件损坏</h4>
+          </figcaption>
+      </figure>
+</li>
+<li>研究 Homelab 备份与数据同步方案，写了点笔记<a href="https://github.com/ryan4yin/knowledge/blob/master/homelab/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%90%8C%E6%AD%A5.md" target="_blank" rel="noopener noreferrer">数据备份与同步策略</a></li>
+<li>发布文章<a href="https://thiscute.world/posts/ee-basics-2-esp32-display/" target="_blank" rel="noopener noreferrer">EE 入门（二） - 使用 ESP32 + SPI 显示屏绘图、显示图片、跑贪吃蛇</a>
+<figure><img src="/images/ee-basics-2-esp32-display/tft_esp32_show_image-2.webp" width="100%">
+      </figure>
+</li>
+</ul>
+</li>
+<li>简单玩了玩 Stable-Diffusion-WebUI 跟 sd-webui-controlnet，抄了些网上的提示词，效果确实很惊艳。不过玩了一波就没啥兴趣了，不太想花很多精力去折腾它。</li>
+</ul>
+</li>
+<li>3 月
+<ul>
+<li>生活上
+<ul>
+<li>读完了「The Moon and Sixpence」</li>
+<li>跟朋友到游泳馆游泳，算是开年以来最剧烈的一次运动&hellip;</li>
+<li>跟同事们约着一起穿越了东西冲海岸线，这是我第三次走这条线，风景仍旧很美，当然也走得挺累&hellip;</li>
+<li>买了块冲浪训练平衡板，练习了一段时间，挺有意思。</li>
+</ul>
+</li>
+<li>业余技术上
+<ul>
+<li>仍旧是折腾各种嵌入式设备，新入手了 Sipeed MAIX-III AXera-Pi AX620A（爱芯派）+ Maix
+M0s MCU, 野火鲁班猫 0，荔枝糖 Nano 9K、M1s Dock、Longan Nano 等一堆大小开发板，折腾各种 Linux 编译、嵌入式开发的内容。</li>
+<li>被 Copilot X 小小震撼了下，花了 100 美刀买了个 1 年的订阅，价格不贵，希望能切实帮我提升写代码的效率。</li>
+<li>发了篇新博客：<a href="https://thiscute.world/posts/wireguard-on-linux/" target="_blank" rel="noopener noreferrer">Linux 上的 WireGuard 网络分析（一）</a></li>
+<li>读了一点<a href="https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition" target="_blank" rel="noopener noreferrer">Linux Device Drivers Development 2nd Edition</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>4 月
+<ul>
+<li>在业余爱好上投入的精力越来越多，工作上相对的越来越懈怠，感觉碰到了瓶颈，但搞不明白该怎么解决。</li>
+<li>听了 <a href="https://github.com/wdvxdr1123" target="_blank" rel="noopener noreferrer">wd 佬</a>的建议整了个达尔优 A87Pro 天空轴 v3，一番体验这个天空轴 v3 手感确实贼爽、声音也小，感觉可能有点类似静电容了（虽然我没用过静电容
+emmm）。
+<ul>
+<li>我毕业以来就 19 年跟 20 年分别买过两把 IKBC 的茶轴跟红轴，茶轴放家里了，红轴一直放在公司用。当时国产轴感觉还不太出名，但是现在我聊键盘的朋友都看不上 cherry 轴了，网上搜了下 cheery 轴也有各种品控下降、轴心不稳、杂音大的诟病。</li>
+<li>结合朋友推荐，另外看到 v2ex 上聊键盘的朋友也有说天空轴 v3 好用的，还在知乎上也看到有人说这个轴不错，于是就按捺不住心思下单了。到手确实很惊艳，甚至让我再一次喜欢上了打字的感觉！打了几篇小鹤练习群的赛文享受这种飘逸的 feel~</li>
+</ul>
+</li>
+<li>搞了个 chatglm-6b int4 量化版，本地用我的拯救者笔记本（16G RAM + RTX3070 8G）玩了下，
+响应速度感觉可以，确实有一定的上下文联想能力，简单的问题也能解答，但是有点不聪明的样子，内容投毒比较严重。</li>
+<li>玩 AI 联想到淘垃圾显卡，看嗨了就直接整了套新主机新显示器（我的第一台 PC 主机，以前只买过笔记本电脑），<strong>玻璃侧透机箱，RTX 4090，双水冷，27 寸 4K 显示器</strong>。组装了大半夜，后面又折腾了好几天，机箱直接当手办展示柜了，效果相当惊艳！缺点一是套下来貌似花了两万多，
+罪魁祸首是 RTX4090&hellip;
+<figure><img src="/images/now/endeavour-rtx4090.webp" width="80%"><figcaption>
+          <h4>主机配置</h4>
+        </figcaption>
+    </figure>
+
+<figure><img src="/images/now/rtx4090-pc-1.webp" width="80%"><figcaption>
+          <h4>机箱展示</h4>
+        </figcaption>
+    </figure>
+
+<figure><img src="/images/now/rtx4090-pc-2.webp" width="80%"><figcaption>
+          <h4>机箱展示</h4>
+        </figcaption>
+    </figure>
+</li>
+<li>去听了个 Live House，乐队叫迎春归，青岛的乐队，不过前面许多歌我都觉得一般般，主唱唱功也差了点，全靠架子鼓贝斯烘托。不过末尾几首歌还挺好听的。</li>
+<li>天依手办到货，很飒～
+<figure><img src="/images/now/tianyi-vsinger.webp" width="80%"><figcaption>
+          <h4>洛天依 秘境花庭 常服手办</h4>
+        </figcaption>
+    </figure>
+</li>
+<li>新主机装了个 Endeavour OS 遇到些奇怪的问题，一怒之下决定换 OS，刚好朋友提到了 NixOS，
+听说过这玩意儿能做到「可复现」，直接就在 Homelab 里开了个 NixOS 虚拟机开始折腾，由此开始了我的 NixOS 之旅。</li>
+<li>用新主机试玩了米忽悠的新游戏「星穹铁道」，还是熟悉的画风跟 UI，制作质量也很高，回合式对战的玩法我本以为会枯燥，不过也还 OK。最重要是 4090 画质够高，很多可爱的角色，游戏的动画跟剧情也都很在线，总体很 Nice!</li>
+<li>用新主机连 Quest 2 打 VR 游戏，发现做过参数优化后，RTX4090 跑 beta saber，Quest 2 的画质参数全调到最高， 5K 120 帧无压力，相当流畅。</li>
+<li>用 RTX4090 玩 Cyperpunk 2077，顶配光追画质（叫啥 onedrive）贼棒，真的非常还原真实环境，在 GeForce Experience 上调了个啥优化参数后，4K 差不多能稳定在 100 帧，看半天风景。</li>
+</ul>
+</li>
+<li>5 月
+<ul>
+<li>月初，在虚拟机里折腾了大半个月 NixOS 后，成功地用几条简单的命令，在我的新主机上复现了整个 NixOS 环境，那一刻真的超级开心，半个月的努力终于得到了回报！
+<figure><img src="/images/2023-summary/i3_2023-07-29_1.webp" width="100%">
+    </figure>
+</li>
+<li>在新主机上成功复现出我的 NixOS 环境后，紧接着发布了我的系统配置<a href="https://github.com/ryan4yin/nix-config/releases/tag/v0.0.2" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/v0.0.2)</a>
+以及这大半个月的学习笔记<a href="https://thiscute.world/posts/nixos-and-flake-basics/" target="_blank" rel="noopener noreferrer">NixOS 与 Nix Flakes 新手入门</a>，
+然后事情就变得越来越有趣起来了！随着读者的反馈以及我对它的不断迭代，这份学习笔记逐渐膨胀成一篇一万多字的博文，并且有了中英双语，然后又转变成一本开源书藉<a href="https://nixos-and-flakes.thiscute.world/" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>，在 NixOS 国际社区获得了大量好评！它给我带来了巨大的成就感以及社区参与感。
+<figure><img src="/images/2023-summary/nixos-and-flakes-book-comments_reddit.webp" width="100%"><figcaption>
+          <h4>NixOS &amp; Flakes Book 的部分评论 - Reddit</h4>
+        </figcaption>
+    </figure>
+
+<figure><img src="/images/2023-summary/nixos-and-flakes-book-comments_discourse-github.webp" width="100%"><figcaption>
+          <h4>NixOS &amp; Flakes Book 的部分评论 - Discourse 与 GitHub</h4>
+        </figcaption>
+    </figure>
+
+<figure><img src="/images/2023-summary/nixos-and-flakes-book-comments_discord.webp" width="100%"><figcaption>
+          <h4>NixOS &amp; Flakes Book 的部分评论 - Discord</h4>
+        </figcaption>
+    </figure>
+</li>
+<li>在 NixOS 上尝试了 i3 与 Hyprland 两个窗口管理器，并且使用 agenix 管理了系统中的敏感信息，比如密码、私钥、wireguard 配置等。
+<ul>
+<li>agenix 确实 OK，但它纯 bash 脚本实现的核心功能，体验太差了，错误信息一团糟，解决错误全靠自己摸索。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>6 月
+<ul>
+<li>立了个 flag - 把 NixOS 移稙到我手上的两块开发版上跑起来，一块 ARM64 架构的 Orange Pi
+5，以及另一块 RISC-V 架构的 LicheePi 4A.
+<ul>
+<li>花了好几天时间研究，在俄罗斯网友的耐心帮助下，终于在 6/4 晚上在 Orange Pi 5 上把
+NixOS 跑起来了，还挺有成就感的（虽然现在也不知道拿这板子用来干啥&hellip;）</li>
+<li>之后断断续续折腾了一个月的 NixOS on LicheePi 4A，试了很多方案，还请教了<a href="https://github.com/HougeLangley" target="_blank" rel="noopener noreferrer">HougeLangley</a>、<a href="https://github.com/NickCao" target="_blank" rel="noopener noreferrer">@nickcao</a>、<a href="https://github.com/chainsx" target="_blank" rel="noopener noreferrer">@chainsx</a>
+等大佬，学会了很多 Linux 相关的东西，费尽千辛万苦终于成功把 rootfs 编译出来了，但死活引导不成功。感觉是 uboot-spl 跟 boot 分区这两个地方的内容有问题，但不知道怎么解决，累觉不爱。</li>
+</ul>
+</li>
+<li>收到一封来自 2018 年的我在 futureme.org 发送的邮件，回想起来，当时我是真迷茫哪。
+<figure><img src="/images/2023-summary/futureme-from-2018-to-2023.webp" width="80%"><figcaption>
+          <h4>2018 年写给 5 年后的我的邮件</h4>
+        </figcaption>
+    </figure>
+</li>
+<li>受读者评论启发，将之前的 NixOS 笔记做成了一个单独的文档站点 + GitHub 仓库，<a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>，也对其内容做了大量更新，用 ChatGPT 3.5 全面优化了英文内容，阅读体验大大提升（英文苦手默默路过&hellip;）
+<figure><img src="/images/now/2023-08-13-nixos-and-flakes-book.webp" width="100%"><figcaption>
+          <h4>NixOS &amp; Flakes Book</h4>
+        </figcaption>
+    </figure>
+</li>
+</ul>
+</li>
+<li>7 月
+<ul>
+<li>NixOS 系统配置 <a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a> 迭代：
+<ul>
+<li>把办公电脑 Macbook Pro 2020 重裝了一遍系統，新系统環境完全通過 nix-darwin 安裝管理，
+就連大部分的 macOS 系統配置也完全声明式管理了。至此，我的常用电脑环境（NixOS+macOS）
+全部都使用同一份 nix 配置管理起来了，感覺非常香！
+<ul>
+<li>Linux 与 macOS 都使用了同一份小鹤音形的 rime 配置，现在输入法的跨平台体验也完全一致了，非常棒！</li>
+<li>nixpkgs 对 macOS 的支持有限，因此常用的 GUI 程序都通过 nix-darwin 调用 homebrew 进行安装管理。</li>
+</ul>
+</li>
+<li>所有命令行工具的主题，全部统一为了<a href="https://github.com/catppuccin/catppuccin" target="_blank" rel="noopener noreferrer">catppuccin-mocha</a>.</li>
+<li>壁纸文件太大了，将它们拆分到单独的仓库中，方便管理。同时还添加了随机切换壁纸的功能。</li>
+<li>添加了三台在 Proxmox VE 上运行的 NixOS 虚拟机，并且尝试用它们组建 NixOS 的分布式构建集群，挺有意思。</li>
+<li>发现之前用的 alacritty 功能有限，于是将主力终端换成了 kitty，wezterm 作为备用选择，
+而 alacritty 就基本不使用了。</li>
+<li>主力编辑器从 VsCode 换成了 AstroNvim， 一个 Neovim 发行版，使用非常顺手，启动速度以及使用流畅度都比 VSCode 快很多，缺点就是花了挺长的时间完善我的 Neovim 配置（时间销金窟哪）。
+<figure><img src="/images/now/2023-07-29_astronvim.webp" width="100%"><figcaption>
+            <h4>AstroNvim(Neovim)</h4>
+          </figcaption>
+      </figure>
+</li>
+</ul>
+</li>
+<li>基于在 macOS 上折腾 nix-darwin 的经验，制作了一个<a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer">ryan4yin/nix-darwin-kickstarter</a>
+模板仓库，并且在 <a href="https://twitter.com/ryan4yin/status/1681639068957028352" target="_blank" rel="noopener noreferrer">Twitter</a> 等社区分享了一波，获得一波好评。</li>
+<li>从 4 月份折腾 NixOS 到现在，GitHub 上开了五六个 Nix 项目，获得了接近 400 stars，也认识了许多朋友、收到了许多好评，在这个圈子里是有点混开了的 feel.
+<ul>
+<li>甚至发现有俄罗斯的老铁在将我的 NixOS 小书翻译成俄语！<a href="https://github.com/fl42v/nixos-and-flakes-book-ru" target="_blank" rel="noopener noreferrer">fl42v/nixos-and-flakes-book-ru</a>，
+成就感又涨了一点。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>8 月
+<ul>
+<li>时隔一个多月，在 LicheePi 的 Telegram 群组被老外 ping NixOS 移植进展。又来了点动力再次接续之前 6 月份的移植工作，一番尝试后成功在 Lichee Pi 4A 上把 NixOS 跑起来了！离开始移植已经过去了两个月，迟来的成功，泪目！ping 我的老外也在第二天用我提供的镜像成功把
+NixOS 跑起来了！他甚至给我打了 $50 美元以表感谢，原因是「这太有意思了！」
+<ul>
+<li><a href="https://github.com/ryan4yin/nixos-licheepi4a" target="_blank" rel="noopener noreferrer">ryan4yin/nixos-licheepi4a</a>
+<figure><img src="/images/2023-summary/nixos-riscv-cluster.webp" width="100%"><figcaption>
+            <h4>NixOS on LicheePi4A</h4>
+          </figcaption>
+      </figure>
+</li>
+</ul>
+</li>
+<li>排查问题的方法：首先刷好一个可在 LicheePi 4A 上正常启动的 Fedora 系统，然后用我编译出的 NixOS 的 rootfs 与 initrd 等文件，替换掉 Fedora 的 rootfs 以及 boot 分区中对应的文件，结果发现就能正常启动了！进一步排查确认到，我 6 月份生成的 NixOS rootfs 无法启动的原因是：
+<ul>
+<li>我使用了 opensbi 的主线代码编译出的 opensbi，而 LicheePi 4A 的 TH1520 核心需要使用它
+fork 的分支</li>
+<li>此外我生成的 img 镜像，分区也存在问题，root 分区的大小不对劲。</li>
+</ul>
+</li>
+<li>有读者在 NixOS Discourse 上询问我是否会考虑在 Patreon 上创建一个赞助页面，再加上之前已经有老外赞助了我 $50 刀，我于是在 GitHub 个人页面以及项目中都新增了
+Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
+<ul>
+<li>截止 2023 年底，<a href="https://patreon.com/ryan4yin" target="_blank" rel="noopener noreferrer">Patreon</a> 共收到赞助 10
+刀，<a href="https://www.buymeacoffee.com/ryan4yin" target="_blank" rel="noopener noreferrer">buymeacoffee</a> 收到赞助 70 刀，爱发电收到赞助 ￥25 元，以及加密货币收到赞助 50 刀。
+<figure><img src="/images/now/nixos-patreon_the-first-member.jpg" width="80%"><figcaption>
+            <h4>Patreon Messages</h4>
+          </figcaption>
+      </figure>
+</li>
+</ul>
+</li>
+<li>写下新文章<a href="https://thiscute.world/posts/a-quarter-of-the-way-through-life/" target="_blank" rel="noopener noreferrer">人生已过四分之一</a>，
+回顾我到目前为止的人生，以及对未来的展望，挺多感想。</li>
+<li>在 <a href="https://twitter.com/Manjusaka_Lee" target="_blank" rel="noopener noreferrer">@Manjusaka_Lee</a> 的熏陶下，我也整了一个新的邮箱地址 <a href="mailto:ryan4yin@linux.com" rel="">ryan4yin@linux.com</a>。先给 Linux Foundation 捐 99 刀，然后再付 150 刀就能得到这个终身邮箱地址。
+<ul>
+<li>一是用了这么久 Linux 也该捐点钱，二是感觉这个邮箱很酷！</li>
+</ul>
+</li>
+<li>因为一些心态上的变化，开始参加一些公益活动，想在工作与业余爱好之外，再找到一些自我价值感，比如说加入了「恒晖公益月捐」活动，每月捐 300 块。</li>
+<li>在 <a href="https://github.com/chainsx" target="_blank" rel="noopener noreferrer">@chainsx</a> 的帮助下，成功在 rock 5a 跟 orange pi 5 plus
+两块板子上把 NixOS 跑了起来。</li>
+</ul>
+</li>
+<li>9 月
+<ul>
+<li>临时起意看了个午夜场的《奥本海默》，IMAX 巨幕。给个 4 星没问题吧，演挺好的，原来美共曾经有这么多美国高级知识分子，这是我以前不了解的。</li>
+<li>前几天跟老妹聊时，她引用了我看的小说里的一句话，然后我看<a href="https://www.lionad.art/" target="_blank" rel="noopener noreferrer">@仿生狮子</a>的荐书时发现，这一句就是《山月记》的摘抄，药哥说他也看过这书，挺好。当时就下单了，今天书到了，决定读一读。
+<ul>
+<li>读了第一个短篇，最知名的《山月记》，更类似一个寓言故事，最有韵味的就是那一句「<strong>深怕自己并非明珠而不敢刻苦琢磨，又自信有几分才华，不甘与瓦砾为伍。日渐避世离俗，心中自卑怯懦之自尊终在愤懑与羞怒中愈发张狂。世人皆为驯兽师，猛兽即个人性情</strong>。」
+<figure><img src="/images/now/2023-09-02_midi-keyboard.webp" width="100%"><figcaption>
+            <h4>MIDI 键盘、山月记、以及凌乱的桌台...</h4>
+          </figcaption>
+      </figure>
+</li>
+</ul>
+</li>
+<li>跟朋友聊到陈行甲老师，他给我分享了深慈联《2023 年第二期慈善大讲堂》（报道见<a href="https://new.qq.com/rain/a/20230821A06QDX00" target="_blank" rel="noopener noreferrer">“坚守初心，笃行致远”，深慈联举办2023年第二期慈善大讲堂</a>）
+的视频，看上去分享者与与会者年龄段主要在 40+ 到 50+，他们看待问题的角度跟我们年轻人完全不同，陈行甲老师以及肖兴萍老师的演讲都干货满满，很有收获。</li>
+<li>请半天假去看了中国国际光博会，看到了挺多新鲜的东西，像啥气动开关啊、光波导眼镜啊、高能量密度的锌空电池充电包啊、中科院光电所的两台小光刻机啊、长春光机所的空间站小机械臂啊、以及压电陶瓷驱动技术的各种应用，长了见识。</li>
+<li>看了些 NixCon 2023 的视频，挺有意思。而且发现所有视频都有一只招财猫在讲台上哈哈。</li>
+<li>最感兴趣的内容是这个 -<a href="https://www.youtube.com/watch?v=Gm8yrvbgY-Y" target="_blank" rel="noopener noreferrer">NixCon2023 Bootstrapping Nix and Linux from TinyCC</a></li>
+<li>看了记录片<a href="https://movie.douban.com/subject/25850443/" target="_blank" rel="noopener noreferrer">史蒂夫·乔布斯 Steve Jobs</a>，Jobs 简直是最差的丈夫、父亲跟同事，但他确实是最牛逼的设计天才（或许这两句都应该再加一个「之一」）。</li>
+<li>听了天依的新曲<a href="https://www.bilibili.com/video/BV1Yp4y1j7jX/" target="_blank" rel="noopener noreferrer">《歌行四方 - 天依游学记》</a>，曲跟词都非常棒！完美融合了二次元跟三次元的各种传统音乐，天依的人物建模、服装设计跟渲染质量也提升了一个档次。 很多年前第一次听天依，感觉声音怪怪的，后来出了全息现场会，效果其实也挺差的，然后一步步地建模质量越来越好，人物越来越生动活泼，声音越来越自然，现在又走进了三次元，与传统音乐大师一起合奏。听下来真的很感动，有一种老父亲甚感欣慰的 feel.</li>
+<li>了解了下<a href="https://worldjusticeproject.org/rule-of-law-index/country/2022/China" target="_blank" rel="noopener noreferrer">世界法治指数</a>
+与<a href="https://www.cnfin.com/hg-lb/detail/20230425/3851364_1.html" target="_blank" rel="noopener noreferrer">中国各省份司法文明指数</a>
+<ul>
+<li>湖南省貌似一直在倒数前二徘徊&hellip;很尴尬。</li>
+</ul>
+</li>
+<li>今天看到推上有 MTF 说自己双相情感障碍（躁郁症），突然就想百度一下，进一步找到了注意力缺失障碍（ADHD）这个病，联想到我自己好像有这个问题。
+<ul>
+<li>大学时曾经怀疑自己有这个注意力缺失症，还买了本《分心不是我的错》，但书买了一直没看
+（我整个大学期间都不太看得下书），也没去医院看过。</li>
+</ul>
+</li>
+<li>中秋国庆连休
+<ul>
+<li>看完了《被讨厌的勇气》，觉得它虽然缺乏科学依据，但这套理论得确实很有价值，给我很大启发。</li>
+<li>看了一点《这才是心理学》</li>
+<li>带我妹使用 ESP32 练习 C 语言，兴趣导向。玩了用 5x5 的 WS2812 彩灯模块写跑马灯、红绿灯之类的小程序，她还非要用 SSD1306 小屏幕显示个「原神启动」，搞得挺开心 emmm</li>
+</ul>
+</li>
+<li>突然对 FPGA 燃起了兴趣，在 HDLBits 上刷了许多 Verilog 入门题。</li>
+</ul>
+</li>
+<li>10 月
+<ul>
+<li>读完了《叫魂：1768 年中国妖术大恐慌》</li>
+<li>看了记录片《溥仪：末代皇帝》跟电影《末代皇帝》，两个片子的内容有些出入，不过这边的史料显然可信度更高，都好评。</li>
+<li>我的开源小书 NixOS &amp; Flakes Book 上了 Hacker News 热门，很开心：<a href="https://news.ycombinator.com/item?id=37818570" target="_blank" rel="noopener noreferrer">NixOS and Flakes Book: An unofficial book for beginners (free)</a></li>
+<li>之前跟朋友聊过我可能有注意力缺失障碍（ADHD），朋友提到可以去看看医生。国庆后经<a href="https://bleatingsheep.org/" target="_blank" rel="noopener noreferrer">@咩咩</a> 再次提醒，约了深圳康宁医院（深圳市精神卫生中心）的特需门诊，然后确诊，开始服药治疗&hellip;
+<ul>
+<li>跟 0xffff 群友辩论 ADHD 病症相关问题，讨论的内容逐渐发散 -<a href="https://0xffff.one/d/1643-cong-adhd-zhu-yi-li-que-shi-zheng" target="_blank" rel="noopener noreferrer">从 ADHD 注意力缺失症聊开去</a></li>
+</ul>
+</li>
+<li>遵医嘱，搜了些正念冥想的资料，看了点<a href="https://www.bilibili.com/video/BV19y4y1V7RU" target="_blank" rel="noopener noreferrer">正念减压疗法创始人-乔.卡巴金 教正念冥想大师课（中英字幕）</a>，
+尝试了下还有点意思。</li>
+<li>跟我妹沟通后感觉她也比较有可能有 ADHD，提前安排她来深圳看心理医生。我妹确诊了抑郁症 +
+ADHD，医生给开了安非他酮，先吃半个月看看效果再复诊，同时也建议多带我妹出去运动散心。
+<ul>
+<li>我妹确诊抑郁症这一点真的让我很意外，让我意识到我一直有些忽视她的心理健康问题。</li>
+</ul>
+</li>
+<li>我确诊 ADHD 并开始用药之后心态有很大的变化，我妹确诊抑郁症又给了我很大的触动。我完全放下了所有技术上的业余爱好，工作上专心工作，业余时间更多地花在了关心家人、运动、学习心理学等事情上。</li>
+</ul>
+</li>
+<li>11 月
+<ul>
+<li>我的 NixOS &amp; Flakes Book 被加进了 NixOS 官方文档的推荐阅读，挺开心的：<a href="https://github.com/NixOS/nix.dev/pull/781" target="_blank" rel="noopener noreferrer">nix.dev - PR 781</a></li>
+<li>持续服药治疗以及复诊，确诊后这段时间是我印象中工作效率最高的一段时间，治疗挺有成效。</li>
+<li>给我妹买往返火车票、学校请假、预约医生、带她在深圳到处玩。</li>
+<li>有挺长一阵没怎么碰电脑了，最近发现我的 NixOS 总是启动没多久网络就会卡死，为了解决问题，我重装了 NixOS 系统，顺便给系统添加了 LUKS 全盘加密 + Secure Boot + impermanence，
+根卷换成了 tmpfs，因此任何未显式声明持久化的数据，每次重启系统都会被清空。优雅，太优雅了！
+<ul>
+<li>重装好系统后网络问题就消失了，猜测是 home 目录有什么 X Server 相关的配置文件有毛病导致的。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>12 月
+<ul>
+<li>沉寂一个多月的对业余项目的兴趣回来了一点，对 NixOS 相关的几个项目做了一番更新。</li>
+<li>工作电脑用满三年换新了，新电脑是 Macbook Pro M2，终于用上了 M 系列的 CPU，体验显然比之前的 Intel 版本好很多，不发热了风扇也不响了，续航知道很牛但没啥机会测试。</li>
+<li>淘汰下的旧工作电脑给装了个 NixOS，体验还不错，有些小问题但勉强能忍受。
+<ul>
+<li>主要问题：Touchbar 跑着跑着会失灵，Touch ID 无法使用，盖上盖子会直接关机，触摸板比较容易误触。其他的体验都挺不错的，第一次在笔记本上用 NixOS，还挺新奇的。</li>
+</ul>
+</li>
+<li>折腾 Guix 系统、Scheme 语言、Emacs 编辑器以及 nushell.
+<ul>
+<li>打算后面多写写 Scheme 跟 nushell，Python 脚本有点写腻歪了，而且 Python 在 NixOS 上有点水土不服。</li>
+</ul>
+</li>
+<li>将 Zellij 设为了默认的终端环境，体验非常丝滑，而且新手引导做得简直绝了，极大地降低了上手难度。</li>
+<li>带我妹逛了深圳 AD01 动漫展。第一次逛漫展，体验挺不错的，玩得挺开心。
+<ul>
+<li>我妹对看到的各路原神、星穹铁道、魔道祖师、天依、芙莉莲等角色如数家珍，我变成了单纯的陪玩哈哈，已经变成跟不上时代的老东西了（不是</li>
+<li>原神角色是最多的，如果论单个角色的话 Miku 应该是 Top1，另外因为芙莉莲正在热播，所以她的角色也很多。</li>
+<li>感觉漫展真的相当年轻化，大都是 00 后，超有活力，是平常我接触不到的人群，混迹其中有找回一点我逝去的青春 emmmm</li>
+<li>明年再参加的话，或许该考虑下 Cos 个啥角色，更能融入这个圈子，玩得更开心。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><figure><img src="/images/2023-summary/anime-convention-1.webp" width="70%"><figcaption>
+      <h4>漫展刚入场</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/2023-summary/anime-convention_chinese-classical-dress-1.webp" width="70%"><figcaption>
+      <h4>古风 coser - 魔道祖师？</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/2023-summary/anime-convention_frieren-coser-1.webp" width="70%"><figcaption>
+      <h4>芙莉莲</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/2023-summary/anime-convention_Miku-cartoon-backpack-1.webp" width="70%"><figcaption>
+      <h4>Miku 卡通背包 - 我妹同款 emmm</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/2023-summary/anime-convention_Scenery-Fox-Spirit-Matchmaker.webp" width="70%"><figcaption>
+      <h4>狐妖小红娘布景</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/2023-summary/anime-convention_poster-Bocchi-the-Rock!-1.webp" width="70%"><figcaption>
+      <h4>卖海报的小店</h4>
+    </figcaption>
+</figure>
+</p>]]></description></item><item><title>两岸猿声啼不住，轻舟已过万重山——我的四分之一人生</title><link>https://thiscute.world/posts/a-quarter-of-the-way-through-life/</link><pubDate>Sat, 19 Aug 2023 18:00:45 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/a-quarter-of-the-way-through-life/</guid><description><![CDATA[<div class="featured-image">
                 <img src="/posts/a-quarter-of-the-way-through-life/2023-08-20_github-projects.webp" referrerpolicy="no-referrer">
             </div><blockquote>
-<p>本文稍有点长，推荐配合歌曲《夜空中最亮的星——逃跑计划》食用。我曾在无数个白天夜晚，听着这首歌，想着自己的人生，书写本文时也不例外。</p>
-</blockquote>
-<p>2023 年，按我能长命百岁来计算，我已经走过了四分之一的人生路。</p>
+  <p>本文稍有点长，推荐配合歌曲《夜空中最亮的星——逃跑计划》食用。我曾在无数个白天夜晚，听着这首歌，想着自己的人生，书写本文时也不例外。</p>
+
+</blockquote><p>2023 年，按我能长命百岁来计算，我已经走过了四分之一的人生路。</p>
 <p>如果要我用一句话总结我过去这四分之一的人生，我想用这句诗再合适不过了：</p>
 <blockquote>
-<p>两岸猿声啼不住，轻舟已过万重山。</p>
-</blockquote>]]></description></item><item><title>为什么我折腾这些小众技术？</title><link>https://thiscute.world/posts/why-i-choose-niche-products/</link><pubDate>Tue, 01 Aug 2023 11:40:57 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/why-i-choose-niche-products/</guid><description><![CDATA[<div class="featured-image">
+  <p>两岸猿声啼不住，轻舟已过万重山。</p>
+
+</blockquote>]]></description></item><item><title>为什么我折腾这些小众技术？</title><link>https://thiscute.world/posts/why-i-choose-niche-products/</link><pubDate>Tue, 01 Aug 2023 11:40:57 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/why-i-choose-niche-products/</guid><description><![CDATA[<div class="featured-image">
                 <img src="/posts/why-i-choose-niche-products/anime-girls-seagulls.webp" referrerpolicy="no-referrer">
             </div><p>我折腾过许多的小众技术，而今年新折腾的主要有 NixOS、窗口管理器 i3 / hyprland、以及
 Neovim，其中 NixOS 我甚至折腾到了一个新境界——出了一本帮助新手入门的中英双语开源书籍<a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>，还搞了好几个
 NixOS 相关的开源项目（比如<a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer">nix-darwin-kickstarter</a> 跟<a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>），都收到了许多好评。</p>
-<p>结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用<a href="nixos.org/" rel="">NixOS</a> / <a href="https://github.com/Neovim/Neovim" target="_blank" rel="noopener noreferrer">Neovim</a> /<a href="https://flypy.com/" target="_blank" rel="noopener noreferrer">小鹤音形中文输入法</a>？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。</p>]]></description></item><item><title>MacOS 窗口管理器 yabai 玩耍笔记</title><link>https://thiscute.world/posts/macos-window-manager-yabai-usage/</link><pubDate>Mon, 22 May 2023 12:24:57 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/macos-window-manager-yabai-usage/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/macos-window-manager-yabai-usage/yabai.png" referrerpolicy="no-referrer">
-&lt;/div>2024-08-30 更新：我已经用 aerospace 替代了 yabai + shkd，体验好了太多，而且也不用关掉 SIP 啥的，强烈推荐一用。 2024-01-28 更新：换了新 Macbook Pro 之后，我又重新把 yabai 装上了，目前体验</description></item></channel></rss>
+<p>结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用<a href="nixos.org/" rel="">NixOS</a> / <a href="https://github.com/Neovim/Neovim" target="_blank" rel="noopener noreferrer">Neovim</a> /<a href="https://flypy.com/" target="_blank" rel="noopener noreferrer">小鹤音形中文输入法</a>？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。</p>]]></description></item><item><title>MacOS 窗口管理器 yabai 玩耍笔记</title><link>https://thiscute.world/posts/macos-window-manager-yabai-usage/</link><pubDate>Mon, 22 May 2023 12:24:57 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/macos-window-manager-yabai-usage/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/macos-window-manager-yabai-usage/yabai.png" referrerpolicy="no-referrer">
+            </div><blockquote>
+  <p>2024-08-30 更新：我已经用 <a href="https://github.com/nikitabobko/AeroSpace" target="_blank" rel="noopener noreferrer">aerospace</a> 替代了
+yabai + shkd，体验好了太多，而且也不用关掉 SIP 啥的，强烈推荐一用。</p>
+
+</blockquote><blockquote>
+  <p>2024-01-28 更新：换了新 Macbook Pro 之后，我又重新把 yabai 装上了，目前体验还不错，比 23
+年好了不少。另外我新的配置完全基于 nix-darwin 部署，内容也有些改动，有兴趣的可以看看：<a href="https://github.com/ryan4yin/nix-config/tree/main/modules/darwin/wm" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config/darwin/wm</a>
+附上 nix-darwin 新手起步模板<a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer">ryan4yin/nix-darwin-kickstarter</a></p>]]></description></item></channel></rss>

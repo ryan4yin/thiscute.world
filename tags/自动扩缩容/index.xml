@@ -1,3 +1,32 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>自动扩缩容 - 标签 - This Cute World</title><link>https://thiscute.world/tags/%E8%87%AA%E5%8A%A8%E6%89%A9%E7%BC%A9%E5%AE%B9/</link><description>自动扩缩容 - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 10 Jul 2024 09:17:31 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/%E8%87%AA%E5%8A%A8%E6%89%A9%E7%BC%A9%E5%AE%B9/" rel="self" type="application/rss+xml"/><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/kubernetes-cluster-autoscaling-1-karpenter/karpenter.png" referrerpolicy="no-referrer">
-&lt;/div>前言Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面： Workloads 的伸缩：通过 Horizontal Pod Autoscaler（HPA）和 Vertical Pod Autoscal</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>自动扩缩容 - 标签 - This Cute World</title><link>https://thiscute.world/tags/%E8%87%AA%E5%8A%A8%E6%89%A9%E7%BC%A9%E5%AE%B9/</link><description>自动扩缩容 - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 10 Jul 2024 09:17:31 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/%E8%87%AA%E5%8A%A8%E6%89%A9%E7%BC%A9%E5%AE%B9/" rel="self" type="application/rss+xml"/><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/kubernetes-cluster-autoscaling-1-karpenter/karpenter.png" referrerpolicy="no-referrer">
+            </div><h2 id="前言" class="headerLink">
+    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面：</p>
+<ol>
+<li>Workloads 的伸缩：通过 Horizontal Pod Autoscaler（HPA）和 Vertical Pod
+Autoscaler（VPA）等资源，可以根据资源使用情况自动调整 Pod 的数量和资源配置。
+<ul>
+<li>相关项目：
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">metrics-server</a>: 采集指标数据供
+HPA 使用</li>
+<li><a href="https://github.com/kedacore/keda" target="_blank" rel="noopener noreferrer">KEDA</a>: 用于支持更多的指标数据源与触发方式</li>
+<li><a href="https://github.com/kubernetes/autoscaler" target="_blank" rel="noopener noreferrer">kubernetes/autoscaler</a>: 提供 VPA 功能</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Nodes 的伸缩：根据集群的负载情况，可以自动增加或减少 Nodes 的数量，以适应负载的变化。
+<ul>
+<li>相关项目：
+<ul>
+<li><a href="https://github.com/kubernetes/autoscaler" target="_blank" rel="noopener noreferrer">kubernetes/autoscaler</a>: 目前最流行的
+Node 伸缩方案，支持绝大多数云厂商。</li>
+<li><a href="https://github.com/kubernetes-sigs/karpenter" target="_blank" rel="noopener noreferrer">karpenter</a>: AWS 捐给 CNCF 的一个新兴
+Node 伸缩方案，目前仅支持 AWS/Azure，但基于其核心库可以很容易地扩展支持其他云厂商。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>本文主要介绍新兴 Node 伸缩与管理方案 Karpenter 的优势、应用场景及使用方法。</p>]]></description></item></channel></rss>

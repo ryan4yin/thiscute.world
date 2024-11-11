@@ -1,3 +1,16 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>LUKS - 标签 - This Cute World</title><link>https://thiscute.world/tags/luks/</link><description>LUKS - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 30 Jan 2024 13:48:30 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/luks/" rel="self" type="application/rss+xml"/><item><title>个人数据安全不完全指南</title><link>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</link><pubDate>Tue, 30 Jan 2024 13:48:30 +0800</pubDate><author><name>ryan4yin</name></author><guid>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</guid><description>&lt;div class="featured-image">
-&lt;img src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" referrerpolicy="no-referrer">
-&lt;/div>零、前言在接触电脑以来很长的一段时间里，我都没怎么在意自己的数据安全。比如说： 长期使用一个没有 passphrase 保护的 SSH 密钥（RSA 2048 位），为了方便我还把它</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>LUKS - 标签 - This Cute World</title><link>https://thiscute.world/tags/luks/</link><description>LUKS - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 30 Jan 2024 13:48:30 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/luks/" rel="self" type="application/rss+xml"/><item><title>个人数据安全不完全指南</title><link>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</link><pubDate>Tue, 30 Jan 2024 13:48:30 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</guid><description><![CDATA[<div class="featured-image">
+                <img src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" referrerpolicy="no-referrer">
+            </div><h2 id="零前言" class="headerLink">
+    <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>在接触电脑以来很长的一段时间里，我都没怎么在意自己的数据安全。比如说：</p>
+<ol>
+<li>长期使用一个没有 passphrase 保护的 SSH 密钥（RSA 2048 位），为了方便我还把它存到了
+onedrive 里，而且在各种需要访问 GitHub/Gitee 或 SSH 权限的虚拟机跟 PC 上传来传去。</li>
+<li>Homelab 跟桌面 PC 都从来没开过全盘加密。</li>
+<li>在 2022 年我的 Homelab 坏掉了两块国产固态硬盘（阿斯加特跟光威弈 Pro 各一根），都是系统一启动就挂，没法手动磁盘格式化，走售后直接被京东换货了。因为我的数据是明文存储的，这很可能导致我的个人数据泄露&hellip;</li>
+<li>几个密码在各种站点上重复使用，其中重要账号的随机密码还是我在十多年前用 lastpass 生成的，到处用了这么多年，很难说这些密码有没有泄露（lastpass 近几年爆出的泄漏事故就不少&hellip;）</li>
+<li>GitHub, Google, Jetbrains 等账号的 Backup Code 被我明文存储到了百度云盘，中间发现百度云盘安全性太差又转存到了 OneDrive，但一直是明文存储，从来没加过密。</li>
+<li>一些银行账号之类的随机密码，因为担心遗忘，长期被我保存在一份印象笔记的笔记里，也是明文存储，仅做了些简单的内容替换，要猜出真正的密码感觉并不是很难。</li>
+<li>以前也有过因为对 Git 操作不熟悉或者粗心大意，在公开仓库中提交了一些包含敏感信息的
+commit，比如说 SSH 密钥、密码等等，有的甚至很长时间都没发现。</li>
+</ol>
+<p>现在在 IT 行业工作了几年，从我当下的经验来看，企业后台的管理员如果真有兴趣，查看用户的数据真的是很简单的一件事，至少国内大部分公司的用户数据，都不会做非常严格的数据加密与权限管控。就算真有加密，那也很少是用户级别的，对运维人员或开发人员而言这些数据仍旧与未加密无异。对系统做比较大的迭代时，把小部分用户数据导入到测试环境进行测试也是挺常见的做法&hellip;</p>]]></description></item></channel></rss>
