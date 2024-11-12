@@ -2,7 +2,11 @@
 title: "Learn English Again"
 date: 2022-09-04T13:22:00+08:00
 draft: false
+
 featuredImage: "english-word.webp"
+resources:
+  - name: featured-image
+    src: "english-word.webp"
 authors: ["ryan4yin"]
 
 tags: ["英语", "语言学习"]

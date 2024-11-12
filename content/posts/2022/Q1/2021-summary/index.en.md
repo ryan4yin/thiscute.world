@@ -2,7 +2,11 @@
 title: "Summary of My 2021"
 date: 2022-01-23T01:40:00+08:00
 draft: false
+
 featuredImage: "wrapped_ryan4yin.webp"
+resources:
+  - name: featured-image
+    src: "wrapped_ryan4yin.webp"
 authors: ["ryan4yin"]
 
 tags: ["Summary"]

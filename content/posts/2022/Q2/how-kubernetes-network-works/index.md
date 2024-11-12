@@ -4,6 +4,9 @@ date: 2022-05-06T11:56:00+08:00
 draft: true
 
 featuredImage: "kubernetes-networking.webp"
+resources:
+  - name: featured-image
+    src: "kubernetes-networking.webp"
 authors: ["ryan4yin"]
 
 tags:

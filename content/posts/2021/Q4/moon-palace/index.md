@@ -4,7 +4,11 @@ date: 2021-12-27T17:23:00+08:00
 draft: false
 
 math: true
+
 featuredImage: "qudu-temple.webp"
+resources:
+  - name: featured-image
+    src: "qudu-temple.webp"
 authors: ["ryan4yin"]
 
 tags: ["生死"]

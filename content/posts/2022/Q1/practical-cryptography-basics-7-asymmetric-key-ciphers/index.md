@@ -3,7 +3,11 @@ title: "写给开发人员的实用密码学（七）—— 非对称密钥加�
 date: 2022-03-09T20:50:00+08:00
 lastmod: 2022-03-13T15:26:00+08:00
 draft: false
+
 featuredImage: "symmetric-vs-asymmetric.webp"
+resources:
+  - name: featured-image
+    src: "symmetric-vs-asymmetric.webp"
 authors: ["ryan4yin"]
 
 tags: ["Cryptography", "密码学", "非对称加密", "安全", "RSA", "ECC"]

@@ -7,6 +7,9 @@ lastmod: 2023-05-22T12:24:57+08:00
 draft: false
 
 featuredImage: "yabai.png"
+resources:
+  - name: featured-image
+    src: "yabai.png"
 authors: ["ryan4yin"]
 
 tags: ["MacOS", "窗口管理器", "Window Manager", "yabai"]

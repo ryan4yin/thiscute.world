@@ -4,6 +4,9 @@ date: 2021-01-17T21:34:04+08:00
 draft: false
 
 featuredImage: "qemu-kvm-libvirt-go.webp"
+resources:
+  - name: featured-image
+    src: "qemu-kvm-libvirt-go.webp"
 authors: ["ryan4yin"]
 
 tags: ["虚拟化", "Visualization", "KVM", "QEMU", "libvirt"]

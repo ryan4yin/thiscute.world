@@ -5,6 +5,9 @@ lastmod: 2023-08-08T07:23:51+08:00
 draft: false
 
 featuredImage: "8051-display-2023.webp"
+resources:
+  - name: featured-image
+    src: "8051-display-2023.webp"
 authors: ["ryan4yin"]
 
 tags: ["电子电路", "Electrical Engineering", "MCU"]

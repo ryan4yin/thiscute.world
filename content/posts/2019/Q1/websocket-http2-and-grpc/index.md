@@ -4,6 +4,9 @@ date: 2019-02-11T18:26:36+08:00
 draft: false
 
 featuredImage: "protocols-banner.webp"
+resources:
+  - name: featured-image
+    src: "protocols-banner.webp"
 authors: ["ryan4yin"]
 
 tags: ["WebSocket", "gRPC", "HTTP/2"]

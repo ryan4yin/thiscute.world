@@ -4,7 +4,11 @@ date: 2023-12-31T23:59:45+08:00
 lastmod: 2024-01-19T10:12:45+08:00
 
 draft: false
+
 featuredImage: "2023-ryan4yin-github-oss-insight.webp"
+resources:
+  - name: featured-image
+    src: "2023-ryan4yin-github-oss-insight.webp"
 authors: ["ryan4yin"]
 
 tags: ["总结"]

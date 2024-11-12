@@ -2,7 +2,11 @@
 title: "2020 年年终总结"
 date: 2020-12-12T23:45:00+08:00
 draft: false
+
 featuredImage: "featured-image.webp"
+resources:
+  - name: featured-image
+    src: "featured-image.webp"
 authors: ["ryan4yin"]
 
 tags: ["总结"]

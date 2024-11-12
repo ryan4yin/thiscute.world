@@ -4,6 +4,9 @@ date: 2021-02-13T10:32:56+08:00
 draft: false
 
 featuredImage: "stars.webp"
+resources:
+  - name: featured-image
+    src: "stars.webp"
 authors: ["ryan4yin"]
 
 tags: []

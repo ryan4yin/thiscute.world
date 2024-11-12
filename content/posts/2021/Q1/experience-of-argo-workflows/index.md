@@ -4,6 +4,9 @@ date: 2021-01-27T15:37:27+08:00
 draft: false
 
 featuredImage: "argo-workflows.webp"
+resources:
+  - name: featured-image
+    src: "argo-workflows.webp"
 authors: ["ryan4yin"]
 
 tags: ["云原生", "CI", "持续集成", "流水线", "Kubernetes"]

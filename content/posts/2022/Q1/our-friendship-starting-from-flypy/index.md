@@ -4,6 +4,9 @@ date: 2022-02-17T00:37:00+08:00
 draft: true
 
 featuredImage: "friendship-starting-from-flypy.webp"
+resources:
+  - name: featured-image
+    src: "friendship-starting-from-flypy.webp"
 authors: ["ryan4yin"]
 
 tags: ["友谊", "成长", "青春", "中文输入方案", "音乐", "编程"]

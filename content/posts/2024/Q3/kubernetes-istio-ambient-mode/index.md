@@ -7,6 +7,9 @@ lastmod: 2024-07-10T16:02:39+08:00
 draft: true
 
 featuredImage: "featured-image.webp"
+resources:
+  - name: featured-image
+    src: "featured-image.webp"
 authors: ["ryan4yin"]
 
 tags: []

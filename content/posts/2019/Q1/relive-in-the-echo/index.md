@@ -4,6 +4,9 @@ date: 2019-01-08T17:55:45+08:00
 draft: false
 
 featuredImage: "featured-image.webp"
+resources:
+  - name: featured-image
+    src: "featured-image.webp"
 authors: ["ryan4yin"]
 
 tags: ["闲言碎语", "初心", "歌声合成"]

@@ -4,7 +4,11 @@ date: 2023-01-02T18:00:45+08:00
 lastmod: 2023-01-02T18:00:45+08:00
 
 draft: false
+
 featuredImage: "github-profile-2022-ryan4yin.webp"
+resources:
+  - name: featured-image
+    src: "github-profile-2022-ryan4yin.webp"
 authors: ["ryan4yin"]
 
 tags: ["总结"]

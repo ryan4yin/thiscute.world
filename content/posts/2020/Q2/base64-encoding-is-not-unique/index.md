@@ -2,7 +2,11 @@
 title: "Base64 编码并不唯一"
 date: 2020-05-31T00:13:00+08:00
 draft: false
+
 featuredImage: "base64-encoding.webp"
+resources:
+  - name: featured-image
+    src: "base64-encoding.webp"
 authors: ["ryan4yin"]
 
 tags: ["Base64", "编码"]

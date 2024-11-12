@@ -5,6 +5,9 @@ lastmod: 2022-11-27T22:38:03+08:00
 draft: false
 
 featuredImage: "proxmox-logo.webp"
+resources:
+  - name: featured-image
+    src: "proxmox-logo.webp"
 authors: ["ryan4yin"]
 
 tags: ["虚拟化", "Visualization", "KVM", "QEMU", "libvirt", "Proxmox"]

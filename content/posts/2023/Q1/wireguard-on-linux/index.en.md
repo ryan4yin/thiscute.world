@@ -5,6 +5,9 @@ lastmod: 2023-03-28T22:19:25+08:00
 draft: true
 
 featuredImage: "wireguard.png"
+resources:
+  - name: featured-image
+    src: "wireguard.png"
 authors: ["ryan4yin"]
 
 tags: ["WireGuard", "VPN", "Linux", "网络", "iptables", "conntrack"]

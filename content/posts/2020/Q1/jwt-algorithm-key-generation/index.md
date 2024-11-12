@@ -4,6 +4,9 @@ date: 2020-03-03T14:09:46+08:00
 draft: false
 
 featuredImage: "jwt.webp"
+resources:
+  - name: featured-image
+    src: "jwt.webp"
 authors: ["ryan4yin"]
 
 tags: ["JWT", "算法", "OpenSSL"]

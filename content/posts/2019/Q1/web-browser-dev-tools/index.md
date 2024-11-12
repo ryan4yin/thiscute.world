@@ -4,6 +4,9 @@ date: 2019-02-11T16:53:26+08:00
 draft: false
 
 featuredImage: "featured-image.webp"
+resources:
+  - name: featured-image
+    src: "featured-image.webp"
 authors: ["ryan4yin"]
 
 tags: ["Chrome", "Firefox", "DevTools", "Browser"]

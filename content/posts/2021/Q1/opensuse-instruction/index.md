@@ -4,6 +4,9 @@ date: 2021-01-04T08:42:21+08:00
 draft: false
 
 featuredImage: "linux-opensuse.webp"
+resources:
+  - name: featured-image
+    src: "linux-opensuse.webp"
 authors: ["ryan4yin"]
 
 tags: ["openSUSE", "Linux"]

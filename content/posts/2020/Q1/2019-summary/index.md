@@ -2,7 +2,11 @@
 title: "2019 年年终总结"
 date: 2020-01-31T19:19:00+08:00
 draft: false
+
 featuredImage: "beginning-the-devops-journey.webp"
+resources:
+  - name: featured-image
+    src: "beginning-the-devops-journey.webp"
 authors: ["ryan4yin"]
 
 tags: ["总结"]

@@ -2,7 +2,11 @@
 title: "SQLAlchemy 学习笔记（三）：ORM 中的关系构建"
 date: 2019-05-21T22:19:00+08:00
 draft: false
+
 featuredImage: "sqlalchemy-relationships.webp"
+resources:
+  - name: featured-image
+    src: "sqlalchemy-relationships.webp"
 authors: ["ryan4yin"]
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]

@@ -7,6 +7,9 @@ lastmod: 2024-09-05T15:54:00+08:00
 draft: false
 
 featuredImage: "kubecon-china-2024-linus.webp"
+resources:
+  - name: featured-image
+    src: "kubecon-china-2024-linus.webp"
 authors: ["ryan4yin"]
 
 tags: ["云原生", "Cloud-Native", "Kubernetes", "MultiCloud", "多云", "服务网格", "Istio"]

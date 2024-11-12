@@ -2,7 +2,11 @@
 title: "Python 并发编程：PoolExecutor 篇"
 date: 2019-03-15T22:34:00+08:00
 draft: false
+
 featuredImage: "python-concurrency.webp"
+resources:
+  - name: featured-image
+    src: "python-concurrency.webp"
 authors: ["ryan4yin"]
 
 tags: ["Python", "Concurrency", "并发"]

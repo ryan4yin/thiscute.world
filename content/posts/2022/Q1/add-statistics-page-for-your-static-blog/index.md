@@ -4,6 +4,9 @@ date: 2022-02-13T19:22:19+08:00
 draft: true
 
 featuredImage: "website-statistics.webp"
+resources:
+  - name: featured-image
+    src: "website-statistics.webp"
 authors: ["ryan4yin"]
 
 tags: ["博客", "Google Analytics", "阅读统计"]

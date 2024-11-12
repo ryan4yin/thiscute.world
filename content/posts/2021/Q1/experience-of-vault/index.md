@@ -4,6 +4,9 @@ date: 2021-01-24T09:31:41+08:00
 draft: false
 
 featuredImage: "bankvault.webp"
+resources:
+  - name: featured-image
+    src: "bankvault.webp"
 authors: ["ryan4yin"]
 
 tags: ["Vault", "云原生", "Secrets", "配置", "配置管理"]

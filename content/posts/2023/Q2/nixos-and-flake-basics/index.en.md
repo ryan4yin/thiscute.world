@@ -5,6 +5,9 @@ lastmod: 2023-06-22T02:50:00+08:00
 draft: false
 
 featuredImage: "nixos-and-flakes-book.webp"
+resources:
+  - name: featured-image
+    src: "nixos-and-flakes-book.webp"
 authors: ["ryan4yin"]
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps", "Tutorial"]

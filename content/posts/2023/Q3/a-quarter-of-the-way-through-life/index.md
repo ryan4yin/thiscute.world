@@ -4,7 +4,11 @@ date: 2023-08-19T18:00:45+08:00
 lastmod: 2023-08-19T18:00:45+08:00
 
 draft: false
+
 featuredImage: "2023-08-20_github-projects.webp"
+resources:
+  - name: featured-image
+    src: "2023-08-20_github-projects.webp"
 authors: ["ryan4yin"]
 
 tags: ["总结"]

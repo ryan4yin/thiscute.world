@@ -4,6 +4,9 @@ date: 2022-02-13T16:09:00+08:00
 draft: false
 
 featuredImage: "terminal.webp"
+resources:
+  - name: featured-image
+    src: "terminal.webp"
 authors: ["ryan4yin"]
 
 tags:

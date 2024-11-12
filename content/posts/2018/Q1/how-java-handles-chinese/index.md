@@ -4,6 +4,9 @@ date: 2018-03-11T16:39:00+08:00
 draft: false
 
 featuredImage: "chinese_new_year.webp"
+resources:
+  - name: featured-image
+    src: "chinese_new_year.webp"
 authors: ["ryan4yin"]
 
 tags: ["Java", "字符集", "字符编码"]

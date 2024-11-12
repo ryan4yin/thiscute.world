@@ -4,6 +4,9 @@ date: 2018-04-27T10:49:14+08:00
 draft: false
 
 featuredImage: "featured-image.webp"
+resources:
+  - name: featured-image
+    src: "featured-image.webp"
 authors: ["ryan4yin"]
 
 tags: ["读后感", "观后感", "动漫"]

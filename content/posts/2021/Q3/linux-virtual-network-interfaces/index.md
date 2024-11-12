@@ -4,6 +4,9 @@ date: 2021-08-14T11:13:03+08:00
 draft: false
 
 featuredImage: "linux-network.webp"
+resources:
+  - name: featured-image
+    src: "linux-network.webp"
 authors: ["ryan4yin"]
 
 tags: ["Linux", "网络", "虚拟化", "容器"]

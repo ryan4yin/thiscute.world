@@ -4,6 +4,9 @@ date: 2017-06-27T01:28:45+08:00
 draft: false
 
 featuredImage: "5-centimeters-per-second.webp"
+resources:
+  - name: featured-image
+    src: "5-centimeters-per-second.webp"
 authors: ["ryan4yin"]
 
 tags: []

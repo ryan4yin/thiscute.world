@@ -4,6 +4,9 @@ date: 2022-01-25T01:37:00+08:00
 draft: false
 
 featuredImage: "adopt-kubernetes.webp"
+resources:
+  - name: featured-image
+    src: "adopt-kubernetes.webp"
 authors: ["ryan4yin"]
 
 tags: ["Kubernetes", "云原生"]

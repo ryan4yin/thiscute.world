@@ -4,6 +4,9 @@ date: 2018-05-16T20:00:02+08:00
 draft: false
 
 featuredImage: "grimgargroup.webp"
+resources:
+  - name: featured-image
+    src: "grimgargroup.webp"
 authors: ["ryan4yin"]
 
 tags: ["英语", "语言学习"]

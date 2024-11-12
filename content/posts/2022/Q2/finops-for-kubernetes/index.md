@@ -5,6 +5,9 @@ lastmod: 2022-05-05T19:31:00+08:00
 draft: false
 
 featuredImage: "finops-for-kubernetes.webp"
+resources:
+  - name: featured-image
+    src: "finops-for-kubernetes.webp"
 authors: ["ryan4yin"]
 
 tags:

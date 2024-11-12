@@ -2,7 +2,11 @@
 title: "写给开发人员的实用密码学（六）—— 对称密钥加密算法"
 date: 2022-03-06T18:44:00+08:00
 draft: false
+
 featuredImage: "symmetric-vs-asymmetric.webp"
+resources:
+  - name: featured-image
+    src: "symmetric-vs-asymmetric.webp"
 authors: ["ryan4yin"]
 
 tags: ["Cryptography", "密码学", "对称加密", "安全", "AES", "ChaCha20"]

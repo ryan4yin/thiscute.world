@@ -5,6 +5,9 @@ lastmod: 2021-11-16T02:14:37+08:00
 draft: false
 
 featuredImage: "白鸟过河滩.webp"
+resources:
+  - name: featured-image
+    src: "白鸟过河滩.webp"
 authors: ["ryan4yin"]
 
 tags: []

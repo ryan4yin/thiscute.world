@@ -4,6 +4,9 @@ date: 2019-06-20T22:32:31+08:00
 draft: false
 
 featuredImage: "hefei-to-shenzhen.webp"
+resources:
+  - name: featured-image
+    src: "hefei-to-shenzhen.webp"
 authors: ["ryan4yin"]
 
 tags: []

@@ -4,6 +4,9 @@ date: 2021-01-08T18:51:30+08:00
 draft: false
 
 featuredImage: "pulumi.webp"
+resources:
+  - name: featured-image
+    src: "pulumi.webp"
 authors: ["ryan4yin"]
 
 tags: ["基础设施即代码", "云原生", "Pulumi", "Terraform"]

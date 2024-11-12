@@ -4,6 +4,9 @@ date: 2020-03-29T15:49:23+08:00
 draft: false
 
 featuredImage: "dns.webp"
+resources:
+  - name: featured-image
+    src: "dns.webp"
 authors: ["ryan4yin"]
 
 tags: ["DNS", "CoreDNS", "网络"]

@@ -7,6 +7,9 @@ lastmod: 2023-08-01T11:40:57+08:00
 draft: false
 
 featuredImage: "anime-girls-seagulls.webp"
+resources:
+  - name: featured-image
+    src: "anime-girls-seagulls.webp"
 authors: ["ryan4yin"]
 
 tags: ["Vim", "Neovim", "VSCode", "Editor", "IDE", "Linux", "中文输入法"]

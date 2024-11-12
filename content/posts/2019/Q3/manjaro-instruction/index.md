@@ -4,6 +4,9 @@ date: 2019-07-13T20:38:24+08:00
 draft: false
 
 featuredImage: "manjaro.webp"
+resources:
+  - name: featured-image
+    src: "manjaro.webp"
 authors: ["ryan4yin"]
 
 tags: ["Manjaro", "Linux", "Arch Linux"]

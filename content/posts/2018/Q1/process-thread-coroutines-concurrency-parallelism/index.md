@@ -4,6 +4,9 @@ date: 2018-01-23T16:39:00+08:00
 draft: false
 
 featuredImage: "concurrency-vs-parallelism.webp"
+resources:
+  - name: featured-image
+    src: "concurrency-vs-parallelism.webp"
 authors: ["ryan4yin"]
 
 tags: ["进程", "线程", "协程", "并发", "并行", "Coroutines", "Concurrency"]

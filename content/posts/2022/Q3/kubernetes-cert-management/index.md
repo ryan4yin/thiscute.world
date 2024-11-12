@@ -5,6 +5,9 @@ lastmod: 2023-08-14T15:11:46+08:00
 draft: false
 
 featuredImage: "cert-manager.webp"
+resources:
+  - name: featured-image
+    src: "cert-manager.webp"
 authors: ["ryan4yin"]
 
 tags: ["数字证书", "证书", "TLS", "Kubernetes", "cert-manager"]

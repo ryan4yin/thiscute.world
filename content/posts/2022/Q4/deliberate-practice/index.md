@@ -2,7 +2,11 @@
 title: "刻意练习"
 date: 2022-10-05T13:31:00+08:00
 draft: false
+
 featuredImage: "deliberate-practice-achieve-mastery-in-anything.webp"
+resources:
+  - name: featured-image
+    src: "deliberate-practice-achieve-mastery-in-anything.webp"
 authors: ["ryan4yin"]
 
 tags: ["学习", "方法论", "舒适区", "延迟满足"]

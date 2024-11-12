@@ -7,6 +7,9 @@ lastmod: 2024-09-05T16:05:00+08:00
 draft: false
 
 featuredImage: "karpenter.png"
+resources:
+  - name: featured-image
+    src: "karpenter.png"
 authors: ["ryan4yin"]
 
 tags:

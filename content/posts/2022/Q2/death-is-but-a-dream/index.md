@@ -5,6 +5,9 @@ lastmod: 2022-05-24T02:17:00+08:00
 draft: false
 
 featuredImage: "death-is-but-a-dream.webp"
+resources:
+  - name: featured-image
+    src: "death-is-but-a-dream.webp"
 authors: ["ryan4yin"]
 
 tags: ["临终体验", "临终关怀", "死亡", "临终", "梦境", "哲学"]

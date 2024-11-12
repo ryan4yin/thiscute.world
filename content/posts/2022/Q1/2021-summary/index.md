@@ -2,7 +2,11 @@
 title: "2021 年年终总结"
 date: 2022-01-03T14:50:00+08:00
 draft: false
+
 featuredImage: "wrapped_ryan4yin.webp"
+resources:
+  - name: featured-image
+    src: "wrapped_ryan4yin.webp"
 authors: ["ryan4yin"]
 
 tags: ["总结"]

@@ -4,6 +4,9 @@ date: 2021-02-06T08:46:46+08:00
 draft: false
 
 featuredImage: "first-round.webp"
+resources:
+  - name: featured-image
+    src: "first-round.webp"
 authors: ["ryan4yin"]
 
 tags: ["总结", "心得"]

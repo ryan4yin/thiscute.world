@@ -4,6 +4,9 @@ date: 2020-05-28T16:20:26+08:00
 draft: false
 
 featuredImage: "wireshark.webp"
+resources:
+  - name: featured-image
+    src: "wireshark.webp"
 authors: ["ryan4yin"]
 
 tags: ["网络", "Wireshark", "tcpdump", "抓包分析"]

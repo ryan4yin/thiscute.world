@@ -2,7 +2,11 @@
 title: "「转」MIRT出征广马——首次摸到330的边儿"
 date: 2022-02-26T16:59:00+08:00
 draft: false
+
 featuredImage: "guangzhou-marathon-before-race.webp"
+resources:
+  - name: featured-image
+    src: "guangzhou-marathon-before-race.webp"
 authors: ["ryan4yin"]
 
 tags: ["长跑", "马拉松", "运动"]

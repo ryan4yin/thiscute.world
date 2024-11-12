@@ -4,6 +4,9 @@ date: 2021-04-11T16:38:13+08:00
 draft: false
 
 featuredImage: "yume_grimgar.webp"
+resources:
+  - name: featured-image
+    src: "yume_grimgar.webp"
 authors: ["ryan4yin"]
 
 tags: ["网络", "Linux", "网络调试"]

@@ -5,6 +5,9 @@ lastmod: 2017-06-14T16:41:51+08:00
 draft: false
 
 featuredImage: "inifity-ryvius.webp"
+resources:
+  - name: featured-image
+    src: "inifity-ryvius.webp"
 authors: ["ryan4yin"]
 
 tags: ["观后感", "动漫"]

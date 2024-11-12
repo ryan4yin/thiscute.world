@@ -4,6 +4,9 @@ date: 2020-04-06T21:48:26+08:00
 draft: false
 
 featuredImage: "istio.webp"
+resources:
+  - name: featured-image
+    src: "istio.webp"
 authors: ["ryan4yin"]
 
 tags: ["Kubernetes", "Istio", "服务网格"]
