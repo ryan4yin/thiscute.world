@@ -19,6 +19,9 @@ series: ["云原生相关"]
    很可能是由于内存限制导致容器被 OOMKilled，或者其他资源不足
    1. 如果是 OOM，容器通常会被重启，`kubectl describe` 能看到容器上次被重启的原因
       `State.Last State.Reason = OOMKilled, Exit Code=137`.
+
+<!--more-->
+
 3. Pod 不断被重启，`kubectl describe` 显示重启原因
    `State.Last State.Reason = Error, Exit Code=137`，137 对应 SIGKILL(`kill -9`) 信号，说
    明容器被强制重启。可能的原因：

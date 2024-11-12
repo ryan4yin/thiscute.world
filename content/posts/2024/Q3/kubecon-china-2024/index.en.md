@@ -51,6 +51,8 @@ explored quite a few places in the city, and had a fruitful trip.
 > I also tried to invite other friends and colleagues, but they couldn't make it for
 > various reasons, which was a bit of a bummer.
 
+<!--more-->
+
 ## TL;DR
 
 This post is heavy on images and some non-technical content. For friends who are more

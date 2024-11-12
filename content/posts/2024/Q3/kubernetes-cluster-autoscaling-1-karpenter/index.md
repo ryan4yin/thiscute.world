@@ -65,6 +65,8 @@ Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面：
 
 本文主要介绍新兴 Node 伸缩与管理方案 Karpenter 的优势、应用场景及使用方法。
 
+<!--more-->
+
 ## Karpenter 简介
 
 Karpenter 项目由 AWS 于 2020 年创建，其目标是解决 AWS 用户在 EKS 上使用 Cluster Autoscaler
