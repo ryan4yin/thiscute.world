@@ -3,7 +3,11 @@
             </div><h2 id="前言" class="headerLink">
     <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>很早就有了解到今年的 KubeCon China 会在香港举办，虽然有些兴趣，但我最初是有被 KubeCon 高昂的门票价格劝退了的。</p>
 <p>有时候不得不相信运气的魔力，机缘巧合之下，我从朋友 @Kev 处得知了 KubeCon 的「最终用户门票计划」并借此 0 元购了门票，又邀上了 <a href="https://0xffff.one/" target="_blank" rel="noopener noreferrer">0xFFFF 社区</a> 的<a href="https://0xffff.one/u/Chever-John" target="_blank" rel="noopener noreferrer">@Chever-John</a>
-<a href="https://0xffff.one/u/0xdeadbeef" target="_blank" rel="noopener noreferrer">@0xdeadbeef</a> <a href="https://0xffff.one/u/MingLLuo" target="_blank" rel="noopener noreferrer">@茗洛</a> 三位朋友一起参加，在香港租了个 airbnb 住宿，期间也逛了香港城市中的不少地方，收货颇丰。</p>]]></description></item><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description><![CDATA[<div class="featured-image">
+<a href="https://0xffff.one/u/0xdeadbeef" target="_blank" rel="noopener noreferrer">@0xdeadbeef</a> <a href="https://0xffff.one/u/MingLLuo" target="_blank" rel="noopener noreferrer">@茗洛</a> 三位朋友一起参加，在香港租了个 airbnb 住宿，期间也逛了香港城市中的不少地方，收货颇丰。</p>
+<blockquote>
+  <p>其实本来也尝试过邀请其他认识的朋友同事，但都因为种种原因无法参加，略感遗憾。</p>
+
+</blockquote>]]></description></item><item><title>Kubernetes 集群伸缩组件 - Karpenter</title><link>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</link><pubDate>Wed, 10 Jul 2024 09:17:31 +0800</pubDate><author><name>作者</name></author><guid>https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/</guid><description><![CDATA[<div class="featured-image">
                 <img src="/posts/kubernetes-cluster-autoscaling-1-karpenter/karpenter.png" referrerpolicy="no-referrer">
             </div><h2 id="前言" class="headerLink">
     <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面：</p>
@@ -80,38 +84,4 @@ Node 伸缩方案，目前仅支持 AWS/Azure，但基于其核心库可以很�
 <li>如果是 OOM，容器通常会被重启，<code>kubectl describe</code> 能看到容器上次被重启的原因<code>State.Last State.Reason = OOMKilled, Exit Code=137</code>.</li>
 </ol>
 </li>
-<li>Pod 不断被重启，<code>kubectl describe</code> 显示重启原因<code>State.Last State.Reason = Error, Exit Code=137</code>，137 对应 SIGKILL(<code>kill -9</code>) 信号，说明容器被强制重启。可能的原因：
-<ol>
-<li>最有可能的原因是，存活探针（livenessProbe）检查失败</li>
-<li>节点资源不足，内核强制关闭了进程以释放资源，这种情况可以通过 <code>journalctl -k</code> 查看详细的系统日志。</li>
-</ol>
-</li>
-<li>CrashLoopBackoff: Pod 进入 <strong>崩溃-重启</strong>循环，重启间隔时间从 10 20 40 80 一直翻倍到上限
-300 秒，然后以 300 秒为间隔无限重启。</li>
-<li>Pod 一直 Pending: 这说明没有任何节点能满足 Pod 的要求，容器无法被调度。比如端口被别的容器用 hostPort 占用，节点有污点等。</li>
-<li><a href="" rel="">FailedCreateSandBox: Failed create pod sandbox: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>：
-很可能是 CNI 网络插件的问题（比如 ip 地址溢出），</li>
-<li><a href="https://github.com/kubernetes/kubernetes/issues/55094" target="_blank" rel="noopener noreferrer">FailedSync: error determining status: rpc error: code = DeadlineExceeded desc = context deadline exceeded</a>:
-常和前两个错误先后出现，很可能是 CNI 网络插件的问题。</li>
-<li>开发集群，一次性部署所有服务时，各 Pod 互相争抢资源，导致 Pod 生存探针失败，不断重启，
-重启进一步加重资源使用。恶性循环。
-<ul>
-<li><strong>需要给每个 Pod 加上 resources.requests，这样资源不足时，后续 Pod 会停止调度，直到资源恢复正常</strong>。</li>
-</ul>
-</li>
-<li>Pod 出现大量的 Failed 记录，Deployment 一直重复建立 Pod: 通过<code>kubectl describe/edit pod &lt;pod-name&gt;</code> 查看 pod <code>Events</code> 和 <code>Status</code>，一般会看到失败信息，如节点异常导致 Pod 被驱逐。</li>
-<li><a href="https://zhuanlan.zhihu.com/p/70031676" target="_blank" rel="noopener noreferrer">Kubernetes 问题排查：Pod 状态一直 Terminating</a></li>
-<li>创建了 Deployment 后，却没有自动创建 Pod: 缺少某些创建 Pod 必要的东西，比如设定的
-ServiceAccount 不存在。</li>
-<li>Pod 运行失败，状态为 MatchNodeSelector: 对主节点进行关机、迁移等操作，导致主调度器下线时，会在一段时间内导致 Pod 调度失败，调度失败会报这个错。</li>
-<li>Pod 仍然存在，但是 <code>Service</code> 的 Endpoints 却为空，找不到对应的 Pod IPs: 遇到过一次，是因为时间跳变（从未来的时间改回了当前时间）导致的问题。</li>
-<li>Pod 无法调度，报错 <code>x node(s) had volume node affinity conflict</code>: 说明该 pod 所绑定的
-PV 有 nodeAffinity 无法满足，可以 check 对应的 PV yaml. 通常原因是 PV 所在的可用区，没有可用的节点，导致 Pod 无法调度。
-<ol>
-<li>最简单的解决方法是，在对应的可用区补充节点</li>
-<li>如果数据可以丢，也可以考虑直接删除重建 PV/PVC</li>
-</ol>
-</li>
-</ol>
-<h3 id="控制面故障可能会导致各类奇怪的异常现象" class="headerLink">
-    <a href="#%e6%8e%a7%e5%88%b6%e9%9d%a2%e6%95%85%e9%9a%9c%e5%8f%af%e8%83%bd%e4%bc%9a%e5%af%bc%e8%87%b4%e5%90%84%e7%b1%bb%e5%a5%87%e6%80%aa%e7%9a%84%e5%bc%82%e5%b8%b8%e7%8e%b0%e8%b1%a1" class="header-mark"></a>控制面故障可能会导致各类奇怪的异常现象</h3><p>对于生产环境的集群，因为有高可用，通常我们比较少遇到控制面故障问题。但是一旦控制面发生故障，就可能会导致各类奇怪的异常现象。如果能在排查问题时，把控制面异常考虑进来，在这种情况下，就能节约大量的排查时间，快速定位到问题。</p>]]></description></item></channel></rss>
+</ol>]]></description></item></channel></rss>
