@@ -3,9 +3,8 @@ title: "忽而假末"
 date: 2017-02-06T20:17:55+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["life"]

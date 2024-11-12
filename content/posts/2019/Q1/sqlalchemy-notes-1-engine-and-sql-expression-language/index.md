@@ -2,9 +2,8 @@
 title: "SQLAlchemy 学习笔记（一）：Engine 与 SQL 表达式语言"
 date: 2019-01-21T14:02:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "sqlalchemy-intro.webp"
+featuredImage: "sqlalchemy-intro.webp"
+authors: ["ryan4yin"]
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["tech"]

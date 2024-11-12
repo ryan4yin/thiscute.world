@@ -3,9 +3,8 @@ title: "Linux网络学习笔记（二）：域名解析(DNS)——以 CoreDNS �
 date: 2020-03-29T15:49:23+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "dns.webp"
+featuredImage: "dns.webp"
+authors: ["ryan4yin"]
 
 tags: ["DNS", "CoreDNS", "网络"]
 categories: ["tech"]

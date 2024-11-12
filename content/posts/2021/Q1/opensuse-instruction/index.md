@@ -3,9 +3,8 @@ title: "openSUSE 使用指南"
 date: 2021-01-04T08:42:21+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "linux-opensuse.webp"
+featuredImage: "linux-opensuse.webp"
+authors: ["ryan4yin"]
 
 tags: ["openSUSE", "Linux"]
 categories: ["tech"]

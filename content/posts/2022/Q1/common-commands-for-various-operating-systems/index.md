@@ -3,9 +3,8 @@ title: "Linux/Windows/MacOSX 系统常用命令集锦"
 date: 2022-02-13T16:09:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "terminal.webp"
+featuredImage: "terminal.webp"
+authors: ["ryan4yin"]
 
 tags:
   [

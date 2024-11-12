@@ -6,9 +6,8 @@ date: 2024-01-29T00:58:57+08:00
 lastmod: 2024-01-29T00:58:57+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "lp4a-pinout-debuglog-1.webp"
+featuredImage: "lp4a-pinout-debuglog-1.webp"
+authors: ["ryan4yin"]
 
 tags: ["Linux", "NixOS", "LicheePi4A", "Embedded", "U-Boot", "RISC-V"]
 categories: ["tech"]

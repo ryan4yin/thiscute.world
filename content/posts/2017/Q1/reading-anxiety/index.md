@@ -3,9 +3,8 @@ title: "我患上了阅读焦虑症"
 date: 2017-03-07T12:39:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: ["阅读", "焦虑"]
 categories: ["life"]

@@ -2,9 +2,8 @@
 title: "写给开发人员的实用密码学（三）—— MAC 与密钥派生函数 KDF"
 date: 2022-03-01T17:15:03+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "key.webp"
+featuredImage: "key.webp"
+authors: ["ryan4yin"]
 
 tags:
   [

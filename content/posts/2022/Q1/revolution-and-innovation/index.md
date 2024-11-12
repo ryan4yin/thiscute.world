@@ -2,9 +2,8 @@
 title: "变革与创新"
 date: 2022-03-28T00:40:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "rolling-girls.webp"
+featuredImage: "rolling-girls.webp"
+authors: ["ryan4yin"]
 
 tags: ["创新", "变革"]
 categories: ["life", "tech"]

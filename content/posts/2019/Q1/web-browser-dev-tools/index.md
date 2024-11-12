@@ -3,9 +3,8 @@ title: "Chrome 与 Firefox-Dev 的 DevTools"
 date: 2019-02-11T16:53:26+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: ["Chrome", "Firefox", "DevTools", "Browser"]
 categories: ["tech"]

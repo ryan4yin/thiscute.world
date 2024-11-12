@@ -4,9 +4,8 @@ date: 2023-01-31T22:33:51+08:00
 lastmod: 2023-08-08T07:23:51+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "8051-display-2023.webp"
+featuredImage: "8051-display-2023.webp"
+authors: ["ryan4yin"]
 
 tags: ["电子电路", "Electrical Engineering", "MCU"]
 categories: ["tech"]

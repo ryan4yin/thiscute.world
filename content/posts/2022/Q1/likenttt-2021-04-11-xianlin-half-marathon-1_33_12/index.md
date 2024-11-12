@@ -2,9 +2,8 @@
 title: "「转」仙马赛记——我又 PB 了"
 date: 2022-02-26T17:44:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "2021-0411-xianlin-half-marathon-route.webp"
+featuredImage: "2021-0411-xianlin-half-marathon-route.webp"
+authors: ["ryan4yin"]
 
 tags: ["长跑", "马拉松", "运动"]
 categories: ["life"]

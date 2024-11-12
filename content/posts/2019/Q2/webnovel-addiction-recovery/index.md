@@ -3,9 +3,8 @@ title: "瘾的退却"
 date: 2019-04-14T21:27:32+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "addction-vs-life.webp"
+featuredImage: "addction-vs-life.webp"
+authors: ["ryan4yin"]
 
 tags: ["Webnovel", "网络小说"]
 categories: ["life"]

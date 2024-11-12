@@ -4,9 +4,8 @@ date: 2017-06-14T13:05:38+08:00
 lastmod: 2017-06-14T16:41:51+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "inifity-ryvius.webp"
+featuredImage: "inifity-ryvius.webp"
+authors: ["ryan4yin"]
 
 tags: ["观后感", "动漫"]
 categories: ["影视", "life"]

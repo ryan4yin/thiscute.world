@@ -6,9 +6,8 @@ date: 2024-01-30T13:48:30+08:00
 lastmod: 2024-02-20T11:39:30+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "datasecurity.webp"
+featuredImage: "datasecurity.webp"
+authors: ["ryan4yin"]
 
 tags:
   [

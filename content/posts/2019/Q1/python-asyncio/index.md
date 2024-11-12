@@ -2,9 +2,8 @@
 title: "Python 异步编程笔记：asyncio"
 date: 2019-02-14T13:11:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "asyncio-banner.webp"
+featuredImage: "asyncio-banner.webp"
+authors: ["ryan4yin"]
 
 tags: ["Python", "asyncio"]
 categories: ["tech"]

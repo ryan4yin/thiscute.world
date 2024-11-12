@@ -3,9 +3,8 @@ title: "云原生流水线 Argo Workflows 的安装、使用以及个人体验"
 date: 2021-01-27T15:37:27+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "argo-workflows.webp"
+featuredImage: "argo-workflows.webp"
+authors: ["ryan4yin"]
 
 tags: ["云原生", "CI", "持续集成", "流水线", "Kubernetes"]
 categories: ["tech"]

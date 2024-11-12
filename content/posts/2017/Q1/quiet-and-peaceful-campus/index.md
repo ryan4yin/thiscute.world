@@ -3,9 +3,8 @@ title: "少有人迹的校园"
 date: 2017-02-18T06:03:09+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["life"]

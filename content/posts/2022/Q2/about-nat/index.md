@@ -3,9 +3,8 @@ title: "NAT 网关、NAT 穿越以及虚拟网络"
 date: 2022-05-13T11:46:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "nat.webp"
+featuredImage: "nat.webp"
+authors: ["ryan4yin"]
 
 tags: ["NAT", "网络", "NAT 穿越", "内网穿透", "虚拟网络", "P2P", "WebRTC"]
 categories: ["tech"]

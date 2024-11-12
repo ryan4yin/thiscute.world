@@ -3,9 +3,8 @@ title: "从小鹤输入法开始的友谊——我们的故事"
 date: 2022-02-17T00:37:00+08:00
 draft: true
 
-resources:
-  - name: "featured-image"
-    src: "friendship-starting-from-flypy.webp"
+featuredImage: "friendship-starting-from-flypy.webp"
+authors: ["ryan4yin"]
 
 tags: ["友谊", "成长", "青春", "中文输入方案", "音乐", "编程"]
 categories: ["life"]

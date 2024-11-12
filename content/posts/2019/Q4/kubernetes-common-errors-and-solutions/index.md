@@ -3,9 +3,8 @@ title: "Kubernetes 常见错误、原因及处理方法"
 date: 2019-11-24T19:26:54+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: ["Kubernetes"]
 categories: ["tech"]

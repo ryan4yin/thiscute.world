@@ -3,9 +3,8 @@ title: "WebSocket、HTTP/2 与 gRPC"
 date: 2019-02-11T18:26:36+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "protocols-banner.webp"
+featuredImage: "protocols-banner.webp"
+authors: ["ryan4yin"]
 
 tags: ["WebSocket", "gRPC", "HTTP/2"]
 categories: ["tech"]

@@ -2,9 +2,8 @@
 title: "常见压缩格式的区别，及 Linux 下的压缩相关指令"
 date: 2019-01-14T19:51:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "tar-compression.webp"
+featuredImage: "tar-compression.webp"
+authors: ["ryan4yin"]
 
 tags: ["Linux", "Compression", "压缩", "tar"]
 categories: ["tech"]

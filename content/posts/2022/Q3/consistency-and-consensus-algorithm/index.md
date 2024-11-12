@@ -4,9 +4,8 @@ date: 2022-08-07T04:11:23+08:00
 lastmod: 2022-08-07T04:11:23+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: ["共识", "一致性", "分布式", "数据库", "区块链"]
 categories: ["tech"]

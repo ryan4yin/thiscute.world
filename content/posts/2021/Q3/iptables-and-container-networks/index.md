@@ -3,9 +3,8 @@ title: "iptables 及 docker 容器网络分析"
 date: 2021-08-15T19:11:29+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "docker-turtles-networking.webp"
+featuredImage: "docker-turtles-networking.webp"
+authors: ["ryan4yin"]
 
 tags: ["Linux", "网络", "虚拟化", "容器", "iptables", "conntrack"]
 categories: ["tech"]

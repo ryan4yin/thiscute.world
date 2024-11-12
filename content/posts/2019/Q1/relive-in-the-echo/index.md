@@ -3,9 +3,8 @@ title: "在回声中重历"
 date: 2019-01-08T17:55:45+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: ["闲言碎语", "初心", "歌声合成"]
 categories: ["life"]

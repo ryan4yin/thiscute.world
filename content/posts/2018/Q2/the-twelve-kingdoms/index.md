@@ -3,9 +3,8 @@ title: "《十二国记》"
 date: 2018-04-27T10:49:14+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: ["读后感", "观后感", "动漫"]
 categories: ["书藉", "影视", "life"]

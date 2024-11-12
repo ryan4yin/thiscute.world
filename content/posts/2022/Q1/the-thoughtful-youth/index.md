@@ -2,9 +2,8 @@
 title: "「转」且看有思想的年轻人"
 date: 2022-03-04T22:58:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "魑魅魍魉.webp"
+featuredImage: "魑魅魍魉.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["life"]

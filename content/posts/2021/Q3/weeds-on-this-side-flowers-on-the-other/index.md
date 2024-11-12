@@ -3,9 +3,8 @@ title: "此岸弃草，彼岸繁花"
 date: 2021-08-28T12:24:20+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "IMG_20180404_160133.webp"
+featuredImage: "IMG_20180404_160133.webp"
+authors: ["ryan4yin"]
 
 tags: ["后摇"]
 categories: ["音乐", "life"]

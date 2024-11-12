@@ -3,9 +3,8 @@ title: "使用 Istio 进行 JWT 身份验证（充当 API 网关）"
 date: 2020-04-06T21:48:26+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "istio.webp"
+featuredImage: "istio.webp"
+authors: ["ryan4yin"]
 
 tags: ["Kubernetes", "Istio", "服务网格"]
 categories: ["tech"]

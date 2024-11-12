@@ -4,9 +4,8 @@ date: 2017-11-18T01:52:00+08:00
 lastmod: 2017-11-18T01:52:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "fate-of-mortals.webp"
+featuredImage: "fate-of-mortals.webp"
+authors: ["ryan4yin"]
 
 tags: ["读后感", "小说"]
 categories: ["书藉", "life"]

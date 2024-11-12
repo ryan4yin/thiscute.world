@@ -4,9 +4,8 @@ date: 2023-03-05T21:57:01+08:00
 lastmod: 2023-03-05T21:57:01+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "tft_esp32_show_image-2.webp"
+featuredImage: "tft_esp32_show_image-2.webp"
+authors: ["ryan4yin"]
 
 tags:
   [

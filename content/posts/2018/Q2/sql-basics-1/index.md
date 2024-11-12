@@ -3,9 +3,8 @@ title: "SQL 基础笔记（一）"
 date: 2018-06-15T16:27:46+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "sql.webp"
+featuredImage: "sql.webp"
+authors: ["ryan4yin"]
 
 tags: ["SQL", "数据库", "Database"]
 categories: ["tech"]

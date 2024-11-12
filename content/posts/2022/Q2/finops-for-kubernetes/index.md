@@ -4,9 +4,8 @@ date: 2022-05-04T23:15:00+08:00
 lastmod: 2022-05-05T19:31:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "finops-for-kubernetes.webp"
+featuredImage: "finops-for-kubernetes.webp"
+authors: ["ryan4yin"]
 
 tags:
   [

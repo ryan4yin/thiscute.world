@@ -2,9 +2,8 @@
 title: "Julia 学习笔记（一）：数组"
 date: 2019-01-14T19:51:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "julialang.webp"
+featuredImage: "julialang.webp"
+authors: ["ryan4yin"]
 
 tags: ["JuliaLang"]
 categories: ["tech"]

@@ -3,9 +3,8 @@ title: "Manjaro 使用指南"
 date: 2019-07-13T20:38:24+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "manjaro.webp"
+featuredImage: "manjaro.webp"
+authors: ["ryan4yin"]
 
 tags: ["Manjaro", "Linux", "Arch Linux"]
 categories: ["tech"]

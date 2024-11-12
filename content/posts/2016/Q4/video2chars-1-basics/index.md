@@ -4,9 +4,8 @@ date: 2016-10-18T08:37:02+08:00
 lastmod: 2022-08-13T14:16:02+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "video2chars-cli.webp"
+featuredImage: "video2chars-cli.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["tech"]

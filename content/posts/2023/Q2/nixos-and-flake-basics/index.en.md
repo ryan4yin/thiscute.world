@@ -4,9 +4,8 @@ date: 2023-05-10T21:23:28+08:00
 lastmod: 2023-06-22T02:50:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "nixos-and-flakes-book.webp"
+featuredImage: "nixos-and-flakes-book.webp"
+authors: ["ryan4yin"]
 
 tags: ["NixOS", "Nix", "Flakes", "Linux", "DevOps", "Tutorial"]
 categories: ["tech"]

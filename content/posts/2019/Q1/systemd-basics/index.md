@@ -2,9 +2,8 @@
 title: "通过 systemctl 设置自定义 Service"
 date: 2019-01-28T20:13:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "linux-systemd.webp"
+featuredImage: "linux-systemd.webp"
+authors: ["ryan4yin"]
 
 tags: ["Linux", "Systemd", "Init System"]
 categories: ["tech"]

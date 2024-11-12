@@ -4,9 +4,8 @@ date: 2017-05-26T23:58:53+08:00
 draft: false
 
 math: true
-resources:
-  - name: "featured-image"
-    src: "gcd.webp"
+featuredImage: "gcd.webp"
+authors: ["ryan4yin"]
 
 tags: ["算法"]
 categories: ["数学", "tech"]

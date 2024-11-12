@@ -4,9 +4,8 @@ date: 2021-11-16T02:07:39+08:00
 lastmod: 2021-11-16T02:14:37+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "白鸟过河滩.webp"
+featuredImage: "白鸟过河滩.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["life"]

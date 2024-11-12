@@ -3,9 +3,8 @@ title: "Kubernetes 微服务最佳实践"
 date: 2022-01-25T00:13:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "kubernetes-best-practices.webp"
+featuredImage: "kubernetes-best-practices.webp"
+authors: ["ryan4yin"]
 
 tags: ["Kubernetes", "最佳实践", "云原生", "Cloud-Native"]
 categories: ["tech"]

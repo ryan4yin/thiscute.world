@@ -3,9 +3,8 @@ title: "写给开发人员的实用密码学（五）—— 密钥交换 DHKE �
 date: 2022-03-01T17:15:05+08:00
 lastmod: 2022-03-13T15:26:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "dhke.webp"
+featuredImage: "dhke.webp"
+authors: ["ryan4yin"]
 
 tags: ["Cryptography", "密码学", "密钥交换", "安全", "DH", "DHE", "ECDH", "ECDHE"]
 categories: ["tech"]

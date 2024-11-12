@@ -3,9 +3,8 @@ title: "QEMU/KVM 虚拟化环境的搭建与使用"
 date: 2021-01-17T21:34:04+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "qemu-kvm-libvirt-go.webp"
+featuredImage: "qemu-kvm-libvirt-go.webp"
+authors: ["ryan4yin"]
 
 tags: ["虚拟化", "Visualization", "KVM", "QEMU", "libvirt"]
 categories: ["tech"]

@@ -3,9 +3,8 @@ title: "我在创业公司做技术一年多的一点体会"
 date: 2021-02-06T08:46:46+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "first-round.webp"
+featuredImage: "first-round.webp"
+authors: ["ryan4yin"]
 
 tags: ["总结", "心得"]
 categories: ["life"]

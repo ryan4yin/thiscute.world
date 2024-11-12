@@ -2,9 +2,8 @@
 title: "「小歌行」-景德镇文艺复兴-2020巡演-深圳"
 date: 2020-11-28T11:49:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: ["景德镇文艺复兴", "后摇"]
 categories: ["音乐", "life"]

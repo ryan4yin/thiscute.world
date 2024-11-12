@@ -3,9 +3,8 @@ title: "Kubernetes 网络是如何工作的"
 date: 2022-05-06T11:56:00+08:00
 draft: true
 
-resources:
-  - name: "featured-image"
-    src: "kubernetes-networking.webp"
+featuredImage: "kubernetes-networking.webp"
+authors: ["ryan4yin"]
 
 tags:
   [

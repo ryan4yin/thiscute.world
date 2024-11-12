@@ -2,9 +2,8 @@
 title: "写给开发人员的实用密码学（一）—— 概览"
 date: 2022-03-01T17:15:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "data-security.webp"
+featuredImage: "data-security.webp"
+authors: ["ryan4yin"]
 
 tags: ["Cryptography", "Hash", "KDF", "密码学", "安全", "哈希", "加解密", "签名"]
 categories: ["tech"]

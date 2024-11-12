@@ -3,9 +3,8 @@ title: "使用 Python 合成吉他音色"
 date: 2021-02-04T11:23:00+08:00
 draft: true
 
-resources:
-  - name: "featured-image"
-    src: "guitar.webp"
+featuredImage: "guitar.webp"
+authors: ["ryan4yin"]
 
 tags: ["乐理", "吉他", "synthesizer"]
 categories: ["tech", "音乐"]

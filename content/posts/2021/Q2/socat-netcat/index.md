@@ -3,9 +3,8 @@ title: "Linux 网络工具中的瑞士军刀 - socat & netcat"
 date: 2021-04-11T16:38:13+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "yume_grimgar.webp"
+featuredImage: "yume_grimgar.webp"
+authors: ["ryan4yin"]
 
 tags: ["网络", "Linux", "网络调试"]
 categories: ["tech"]

@@ -6,9 +6,8 @@ date: 2024-07-10T09:17:31+08:00
 lastmod: 2024-09-05T16:05:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "karpenter.png"
+featuredImage: "karpenter.png"
+authors: ["ryan4yin"]
 
 tags:
   [

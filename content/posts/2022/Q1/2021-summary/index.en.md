@@ -2,9 +2,8 @@
 title: "Summary of My 2021"
 date: 2022-01-23T01:40:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "wrapped_ryan4yin.webp"
+featuredImage: "wrapped_ryan4yin.webp"
+authors: ["ryan4yin"]
 
 tags: ["Summary"]
 categories: ["life", "tech"]

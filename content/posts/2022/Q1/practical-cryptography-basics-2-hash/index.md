@@ -2,9 +2,8 @@
 title: "写给开发人员的实用密码学（二）—— 哈希函数"
 date: 2022-03-01T17:15:01+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "cryptographic_hash_function.webp"
+featuredImage: "cryptographic_hash_function.webp"
+authors: ["ryan4yin"]
 
 tags: ["Cryptography", "Hash", "密码学", "哈希", "散列", "安全", "SHA-2", "SHA-3"]
 categories: ["tech"]

@@ -3,9 +3,8 @@ title: "Java 中文编码分析"
 date: 2018-03-11T16:39:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "chinese_new_year.webp"
+featuredImage: "chinese_new_year.webp"
+authors: ["ryan4yin"]
 
 tags: ["Java", "字符集", "字符编码"]
 categories: ["tech"]

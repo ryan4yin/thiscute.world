@@ -2,9 +2,8 @@
 title: "SQLAlchemy 学习笔记（二）：ORM 基础"
 date: 2019-02-11T19:52:00+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "sqlalchemy-models.webp"
+featuredImage: "sqlalchemy-models.webp"
+authors: ["ryan4yin"]
 
 tags: ["SQLAlchemy", "Python", "ORM", "后端", "数据库", "Database"]
 categories: ["tech"]

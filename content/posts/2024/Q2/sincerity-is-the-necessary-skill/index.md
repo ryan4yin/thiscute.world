@@ -6,9 +6,8 @@ date: 2024-06-12T17:27:02+08:00
 lastmod: 2024-06-12T17:27:02+08:00
 draft: true
 
-resources:
-  - name: "featured-image"
-    src: "featured-image.webp"
+featuredImage: "featured-image.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["tech"]

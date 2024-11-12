@@ -3,9 +3,8 @@ title: "Python 实用技巧与常见错误集锦"
 date: 2022-02-13T01:17:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "python-tips-and-tricks.webp"
+featuredImage: "python-tips-and-tricks.webp"
+authors: ["ryan4yin"]
 
 tags: ["Python", "Tips", "Tricks", "常见错误"]
 categories: ["tech"]

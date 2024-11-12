@@ -3,9 +3,8 @@ title: "The End of Another Semester"
 date: 2017-06-27T01:28:45+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "5-centimeters-per-second.webp"
+featuredImage: "5-centimeters-per-second.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["life"]

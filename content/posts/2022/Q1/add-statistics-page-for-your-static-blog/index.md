@@ -3,9 +3,8 @@ title: "为你的静态博客添加阅读排行页"
 date: 2022-02-13T19:22:19+08:00
 draft: true
 
-resources:
-  - name: "featured-image"
-    src: "website-statistics.webp"
+featuredImage: "website-statistics.webp"
+authors: ["ryan4yin"]
 
 tags: ["博客", "Google Analytics", "阅读统计"]
 categories: ["tech"]

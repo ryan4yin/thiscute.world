@@ -3,9 +3,8 @@ title: "部署一个 Kubernetes 集群"
 date: 2022-01-25T01:37:00+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "adopt-kubernetes.webp"
+featuredImage: "adopt-kubernetes.webp"
+authors: ["ryan4yin"]
 
 tags: ["Kubernetes", "云原生"]
 categories: ["tech"]

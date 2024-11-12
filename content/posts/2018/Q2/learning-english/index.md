@@ -3,9 +3,8 @@ title: "学英语啊学英语"
 date: 2018-05-16T20:00:02+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "grimgargroup.webp"
+featuredImage: "grimgargroup.webp"
+authors: ["ryan4yin"]
 
 tags: ["英语", "语言学习"]
 categories: ["life"]

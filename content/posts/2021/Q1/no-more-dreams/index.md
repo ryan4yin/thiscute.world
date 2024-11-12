@@ -3,9 +3,8 @@ title: "脚踏实地，仰望星空"
 date: 2021-02-13T10:32:56+08:00
 draft: false
 
-resources:
-  - name: "featured-image"
-    src: "stars.webp"
+featuredImage: "stars.webp"
+authors: ["ryan4yin"]
 
 tags: []
 categories: ["life"]

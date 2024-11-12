@@ -2,9 +2,8 @@
 title: "写给开发人员的实用密码学（四）—— 安全随机数生成器 CSPRNG"
 date: 2022-03-01T17:15:04+08:00
 draft: false
-resources:
-  - name: "featured-image"
-    src: "random-numbers.webp"
+featuredImage: "random-numbers.webp"
+authors: ["ryan4yin"]
 
 tags: ["Cryptography", "密码学", "伪随机数", "安全", "PRNG", "CSPRNG"]
 categories: ["tech"]
