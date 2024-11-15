@@ -11,9 +11,10 @@
   <generator>Hugo -- gohugo.io</generator>
 
   {{- $firstN := false -}}
-  {{- range $i, $e := (where .Site.RegularPages "Type" "posts") | first (.Site.Params.home.rss | default 15) -}}
-    {{- if lt $i 6 -}}
-      {{- /* only add content for the first 15 posts to reduce atom feed's size */ -}}
+  {{- /* only add the first 50 posts' index into atom feeds */ -}}
+  {{- range $i, $e := (where .Site.RegularPages "Type" "posts") | first (.Site.Params.home.rss | default 50) -}}
+    {{- if lt $i 20 -}}
+      {{- /* only add content for the first 20 posts to reduce atom feed's size */ -}}
       {{- $firstN = true -}}
     {{- else -}}
       {{- $firstN = false -}}
