@@ -68,7 +68,7 @@ toc:
 
 > 按优先级排序
 
-- 折腾 Rust 编程
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 230/572
 - 《BPF Performance Tools（英文版）》 - 35/740
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - 户外徒步、露营
@@ -180,6 +180,11 @@ toc:
 - 《BPF Performance Tools（英文版）》：进阶读物，Linux 内核技术，主要用于搞 Linux 网络数据
   包处理、性能分析、系统监控的。
 - Linux 系统
+  - Linux 经典书目(按阅读顺序排列)
+    - TLPI - 正在读
+    - APUE(Advanced Programming in the UNIX Environment)
+    - UNP(Unix Network Programming)
+    - Understanding the Linux Kernel, 3rd Edition
   - 极客时间 《Linux 内核技术实战课》
   - [flash-linux0.11-talk](https://github.com/sunym1993/flash-linux0.11-talk)
   - 极客时间《容器实战高手课》
