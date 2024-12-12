@@ -68,7 +68,7 @@ toc:
 
 > 按优先级排序
 
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 230/572
+- [Linux/Unix 系统编程手册（下册）](https://man7.org/tlpi/)
 - 《BPF Performance Tools（英文版）》 - 35/740
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - 户外徒步、露营
@@ -105,12 +105,13 @@ toc:
   - 2024 年 7 月重读评价：今年我爱上了徒步，重读此书，又有新知。我想徒步也类似跑步，也有徒
     步的蓝调。今年已经在香港麦理浩径上完成了 5 次徒步，越发上瘾。我想我也该带老妹体验下，
     见山见水见自我。
+- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
 
 正在读：
 
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - The Great Gatsby - 10/41
-- [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
+- [Linux/Unix 系统编程手册（下册）](https://man7.org/tlpi/)
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 
 想读，但是没啥计划（大致按感兴趣程度排序）：
