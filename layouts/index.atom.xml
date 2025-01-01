@@ -85,11 +85,15 @@
             <updated>{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</updated>
             <summary type="html">{{ .Summary | html }}</summary>
             {{- /* Featured image */ -}}
-            {{- $featuredImage := .Resources.GetMatch "featured-image" -}}
-            {{- $imageURL  := $featuredImage.RelPermalink -}}
-            {{- $width  := $featuredImage.Width -}}
-            {{- $height := $featuredImage.Height -}}
-            {{- $imageHtml := printf `<figure><img class="lazyload" src="%s" height="%d" width="%d"><figcaption></figcaption></figure>` $imageURL $height $width | safeHTML -}}
+
+            {{- $imageHtml := "" -}}
+            {{/* Skip the image if it's not present(implement via with) */}}
+            {{ with .Resources.GetMatch "featured-image" }}
+                {{- $imageURL  := .RelPermalink -}}
+                {{- $width  := .Width -}}
+                {{- $height := .Height -}}
+                {{- $imageHtml := printf `<figure><img class="lazyload" src="%s" height="%d" width="%d"><figcaption></figcaption></figure>` $imageURL $height $width | safeHTML -}}
+            {{ end }}
 
             {{ printf `<content type="html"><![CDATA[%s%s]]></content>` $imageHtml .Content | safeHTML }}
             {{ with site.Taxonomies }}

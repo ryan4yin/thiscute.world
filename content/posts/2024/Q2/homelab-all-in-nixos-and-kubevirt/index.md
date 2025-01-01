@@ -6,9 +6,9 @@ date: 2024-04-07T12:30:00+08:00
 lastmod: 2024-04-07T12:30:00+08:00
 draft: true
 
-# resources:
-#   - name: "featured-image"
-#     src: ""
+resources:
+  - name: "featured-image"
+    src: "featured-image.webp"
 
 tags: ["NixOS", "Nix", "Linux", "Homelab", "Proxmox"]
 categories: ["tech"]

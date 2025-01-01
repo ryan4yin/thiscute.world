@@ -6,7 +6,7 @@ lastmod: 2023-08-23T18:00:45+08:00
 draft: true
 resources:
   - name: "featured-image"
-    src: ""
+    src: "featured-image.webp"
 tags: ["总结"]
 categories: ["life"]
 series: ["年终总结"]
