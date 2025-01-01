@@ -39,6 +39,9 @@ comment:
 {{<figure src="/images/now-2024/photo_2025-01-01_22-52-19.jpg" title="我拍的烟花 - 3" width="80%">}}</figure>
 {{<figure src="/images/now-2024/photo_2025-01-01_22-52-25.jpg" title="马路上都是人，下午 6 点车就禁止通行了" width="80%">}}</figure>
 
+更清晰视角更佳的视
+频：[Hong Kong New Year 2025: fireworks at Victoria Harbour - B 站](https://www.bilibili.com/video/BV1hs6RY2EhR/)
+
 ### 2024-12-30
 
 2024 年 12 月是今年最魔幻的一个月, 先看看世界局势:
@@ -58,6 +61,20 @@ comment:
 在 Reddit 上被人喷, 相当水逆.
 
 山雨欲来风满楼, 25 年也不会是安宁的一年, 要早做准备.
+
+[韩国戒严]:
+  https://zh.wikipedia.org/zh-hans/2024%E5%B9%B4%E9%9F%93%E5%9C%8B%E6%88%92%E5%9A%B4
+[法国议会通过不信任案，巴尼耶上任仅三月后下台]:
+  https://theinitium.com/zh-hans/article/20241206-whatsnew-international-french-government-falls
+[叙利亚领导人阿萨德倒台：这对世界意味着什么]:
+  https://zh.wikipedia.org/wiki/%E5%8F%99%E5%88%A9%E4%BA%9A%E5%86%85%E6%88%98#2024%E5%B9%B4%E4%B8%BB%E8%A6%81%E8%BF%9B%E5%B1%95
+[深圳高端住宅爆炸起火 致一人遇难]: https://www.zaobao.com/news/china/story20241211-5570743
+[深江鐵路深圳地盤地面坍塌 13名工人失聯 附近居民疏散]:
+  https://www.hk01.com/%E5%8D%B3%E6%99%82%E4%B8%AD%E5%9C%8B/1082102/%E6%B7%B1%E6%B1%9F%E9%90%B5%E8%B7%AF%E6%B7%B1%E5%9C%B3%E5%9C%B0%E7%9B%A4%E5%9C%B0%E9%9D%A2%E5%9D%8D%E5%A1%8C-13%E5%90%8D%E5%B7%A5%E4%BA%BA%E5%A4%B1%E8%81%AF-%E9%99%84%E8%BF%91%E5%B1%85%E6%B0%91%E7%96%8F%E6%95%A3
+[28歲女深圳大梅沙海濱棧道墮海亡 疑因拍照打卡]:
+  https://www.hk01.com/%E5%A4%A7%E5%9C%8B%E5%B0%8F%E4%BA%8B/1085068/28%E6%AD%B2%E5%A5%B3%E6%B7%B1%E5%9C%B3%E5%A4%A7%E6%A2%85%E6%B2%99%E6%B5%B7%E6%BF%B1%E6%A3%A7%E9%81%93%E5%A2%AE%E6%B5%B7%E4%BA%A1-%E7%96%91%E5%9B%A0%E6%8B%8D%E7%85%A7%E6%89%93%E5%8D%A1-%E8%AD%A6%E6%96%B9-%E5%B0%8B%E7%8D%B2%E9%81%BA%E9%AB%94
+[美國「孤立主義」與中國「單邊開放」]:
+  https://www.bbc.com/zhongwen/articles/cze3261n245o/trad
 
 ### 2024-12-13
 
