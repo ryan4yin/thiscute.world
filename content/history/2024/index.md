@@ -26,6 +26,39 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2024-12-31
+
+- 在香港街头看了跨年烟花，然后喝了点啤酒，到处乱逛，第二天早上才回家。
+- 第一次在境外过年，又是这样盛大的烟花，算是给我的 2025 年讨个彩头吧，也为今年的出国旅行开
+  个好头。
+
+{{<figure src="/images/now-2024/Hong-Kong-New-Year-2025_fireworks-at-Victoria-Harbour.jpg" title="Hong Kong New Year 2025: Fireworks at Victoria Harbour" width="80%">}}</figure>
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-48-36.jpg" title="我拍的烟花，位置不好效果差挺多" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-17.jpg" title="我拍的烟花 - 2" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-19.jpg" title="我拍的烟花 - 3" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-25.jpg" title="马路上都是人，下午 6 点车就禁止通行了" width="80%">}}</figure>
+
+### 2024-12-30
+
+2024 年 12 月是今年最魔幻的一个月, 先看看世界局势:
+
+- 12 月 3 日 22 时: [韩国戒严], 这是自 1980 年以来韩国首次宣布戒严
+- 12 月 4 日晚间: [法国议会通过不信任案，巴尼耶上任仅三月后下台]
+- 12 月 8 日: 叙利亚反对派武装攻陷首都大马士革, 阿萨德家族对叙利亚长达 53 年的统治宣告终结
+
+甚至单就深圳市, 也发生了几件较大的负面事件:
+
+- 12 月 4 日 23 时 :[深江鐵路深圳地盤地面坍塌　13名工人失聯　附近居民疏散]
+- 12 月 11 日 14 时: [深圳高端住宅爆炸起火 致一人遇难], 深圳市南山区深圳湾悦府二期一栋发生
+  燃气爆炸，造成 1 人坠楼死亡, 网上流传现场视频，情况惨烈.
+- 12 月 13 日: [28歲女深圳大梅沙海濱棧道墮海亡　疑因拍照打卡]
+
+而对于我个人而言, 12 月也是一道明显的分界线, 三年多来第一次在工作中情绪失控骂人, 搞开源也
+在 Reddit 上被人喷, 相当水逆.
+
+山雨欲来风满楼, 25 年也不会是安宁的一年, 要早做准备.
+
 ### 2024-12-13
 
 - 因为一点小事情绪失控了. 仔细想了想, 感觉在这家公司继续干下去没什么意思, 也没什么意义了,
@@ -36,6 +69,9 @@ comment:
   本过年了.
 - 很多人不理解我, 但对我而言, 念头通达最重要, 快意人生是我几十年来养成的习惯. 至少到目前为
   止它带给我的好处大过坏处, 所以我选择继续践行它.
+- 中午吃麦当劳，发现它刚好在跟绝区零搞联名活动，于是就买了个绝区零套餐，还挺好吃的.
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-30.jpg" title="麦当劳绝区零套餐" width="80%">}}</figure>
 
 ### 2024-12-12
 
@@ -92,6 +128,16 @@ comment:
   - 算上这张新卡已经有 3 张双币信用卡了，跟朋友聊到这个，发现我大部分朋友都只有一两张信用
     卡，我 3 张已经算多了。确实存款多才是真有钱，信用卡多了难管理，不小心还可能逾期或者被
     扣年费。
+- 顺便去工商银行改手机号，工作人员拆机重启了三次自助终端才搞定... 这位业务员无奈地跟我说不
+  要点太快，屏幕上的按钮如果快速点击多次，就会导致系统卡死...
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-33.jpg" title="工作人员在拆机重启" width="80%">}}</figure>
+
+### 2024-12-03
+
+- Keep 奖牌到货
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-35.jpg" title="Keep 上跑的间谍过家家的奖牌" width="80%">}}</figure>
 
 ### 2024-12-02
 
@@ -113,6 +159,26 @@ comment:
 ### 2024-11-30
 
 - 陪朋友香港办卡, 顺便在皇后大道跟维多利亚港 City Walk.
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-37.jpg" title="K11 商场海边的圣诞树布景，好多人拍照" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-42.jpg" title="K11 瞎逛" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-45.jpg" title="这两只有意思" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-47.jpg" title="不知名建筑，挺漂亮的" width="80%">}}</figure>
+
+{{<figure src="/images/now-2024/photo_2025-01-02_00-32-15.jpg" title="维港夜乘天星小轮，缺点是开得快了点（" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-02_00-32-37.jpg" title="渡轮上回头，能看到标志性的摩天轮" width="80%">}}</figure>
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-53.jpg" title="中银香港旁边这栋楼，灯光做得挺漂亮" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-55.jpg" title="好像是渣打银行门口的圣诞树，挺漂亮的" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-57.jpg" title="沿着皇后大道走到了一条市集小街，节日氛围浓厚" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-52-59.jpg" title="" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-53-02.jpg" title="" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-53-04.jpg" title="貌似叫利源西街" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-53-08.jpg" title="我们从这里沿着皇后大道 City Walk" width="80%">}}</figure>
+
+### 2024-11-26
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-53-10.jpg" title="Keep 上跑的初音未来奖牌" width="80%">}}</figure>
 
 ### 2024-11-16
 
@@ -151,6 +217,10 @@ comment:
   输入 `*106*02#` 关掉 CMHK 的数据服务(漫游包括在这里面) 然后再过关回大陆. 否则就会被疯狂
   扣漫游费...
   - 回香港后想用这张卡再上网的话, 可以再输入 `*106*01#` 重新启用 CMHK 的数据服务.
+
+{{<figure src="/images/now-2024/photo_2025-01-01_22-53-13.jpg" title="" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-53-15.jpg" title="" width="80%">}}</figure>
+{{<figure src="/images/now-2024/photo_2025-01-01_22-53-18.jpg" title="" width="80%">}}</figure>
 
 ### 2024-11-18 - 2024-11-21
 

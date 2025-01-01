@@ -6,6 +6,8 @@ date: {{ .Date }}
 lastmod: {{ .Date }}
 draft: true
 
+authors: ["ryan4yin"]
+featuredImage: "featured-image.webp"
 resources:
 - name: "featured-image"
   src: "featured-image.webp"
@@ -15,6 +17,7 @@ categories: ["tech"]
 series: []
 hiddenFromHomePage: false
 hiddenFromSearch: false
+license: ""
 
 lightgallery: false
 
@@ -24,6 +27,8 @@ table:
 
 toc:
   enable: true
+math:
+  enable: false
 
 comment:
   utterances:
