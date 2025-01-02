@@ -106,18 +106,49 @@ Nixpkgs 提了一些 PR, 另外去年做的几个 Nix 相关开源项目的 star
   - 这是我 2023 年 5 月开始的一个长期计划，目前以及完成了大部分工作，也输出了一篇博客总结
     我当前的方案。
 
+对比下从 2024 年 12 月 31 日到现在，我的 GitHub Metrics 统计数据：
+
+{{<figure src="/images/2023-summary/2023-12-31-github-metrics.svg" attr="2023/12/31 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/master/metrics.classic.svg">}}
+
+{{<figure src="/images/now-2024/github-metrics-2025-01-01.svg" attr="2025/01/01 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/master/metrics.classic.svg">}}
+
+2024 年我没有开什么新的项目, 上述成绩基本都是 2023 年的旧项目 Stars 稳步增长带来的.
+
 ### 3. 工作
 
 今年工作上也仍然是按部就班的一年, 有做一些新技术的尝试, 也有一些小的成果, 但总体来说变化不
 多.
 
-与往年不同的是, 今年在工作上遇到更多技术之外的问题, 一些团队协作、沟通、管理等问题, 让我认
-识到了公司与各个团队的另一面, 人的复杂性.
+与往年不同的是, 今年在工作上遇到的更多是技术之外的问题, 一些团队协作、沟通、管理等问题, 让
+我认识到了公司与各个团队的另一面, 以及人的复杂性.
 
 总体上, 工作越来越稳定、乏味, 也越来越难以激发我的兴趣与动力, 对 ADHDer 而言要按部就班地把
 这类工作做好, 挑战很大.
 
-TODO
+所以结果是, 我在年底因为工作内容越发乏味, 又临时插入一些紧急需求导致加班, 还被个别糟糕的同
+事添堵, 遂向领导提出了辞职, 目前已经确定 last day 是 2025 年 1 月底, 正在交接工作中.
+
+我 2021 年入职这家公司, 到离开大概是 3 年零 10 个月.
+
+这是我从业生涯的第二份工作, 回过头看, 21 年的我刚入职时还是萌新一个, 做事情都很小心翼翼,
+当时对公司的评价是
+
+> 梦幻般的待遇，不限量的三餐供应，窗明几净的落地窗工位，这一切都像是在做梦 -
+> [浮生若梦，为欢几何？](https://thiscute.world/posts/life-is-just-like-a-dream/)
+
+还有 22 年初发过的推文也是相当正面的:
+
+<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">新办公区真好呐～<br><br>值此良辰美景，好想整个榻榻米坐垫，坐在角落的落地窗边工作🤣<br>那种使用公共设施工（mo）作（yu）的乐趣，以及平常工位见不到的景色交相辉映，是不太好表述的奇妙体验 <a href="https://t.co/FASffzw8N3">pic.twitter.com/FASffzw8N3</a></p>&mdash; ryan4yin | 於清樂 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1482891448731070466?ref_src=twsrc%5Etfw">January 17, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+可以说这份工作的一直到 24 年上半年, 我的工作体验一直都是很不错的. 但是在 24 年下半年, 一些
+问题逐渐暴露出来并且逐渐累积, 使得我的工作热情逐渐消退. 包括这次离职的流程中, 也见识了一些
+人情冷暖.
+
+只能说很感慨吧, 这家公司没有我当初感觉的那么好, 但大部分时候也没有我现在感觉的那么糟糕, 事
+物都是具有两面性的.
+
+我很感谢我的两任 leader, 他们都给我了很多机会, 让我能够在工作中不断成长. 也很感谢 SRE 的其
+他同事, 在我遇到困难时给予了我很多帮助. 后会有期!
 
 ### 4. 阅读
 
