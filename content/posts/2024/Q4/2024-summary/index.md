@@ -71,7 +71,7 @@ comment:
   14 公里，走走停停近 8 个小时（体力不够所以走得很慢），夜间在水浪窝营地露营了一晚上
   - 解锁成就 - 第一次重装徒步
     {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240518191208.webp" title="山顶继续前行，远方城市灯火通明" width="80%">}}
-    {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240519071209.webp" title="7 点多，解决卫生问题，顺便随处走走，发现营地标牌" width="80%">}}
+    {{<figure src="/images/travel/2024-05-18-hongkong-maclehose-trail-section-3/IMG20240519071209.webp" title="清晨 7 点多，解决卫生问题，顺便随处走走，发现营地标牌" width="80%">}}
 - 5/25 - 继续单人徒步麦径四段，坐九巴 299X 路到大浪窝站下车开始徒步，从四段起点出发的时间
   为 13:20，到达大老山隧道站时已经是 22:20, 全程差不多 9 个小时，超过 21 公里，背的还是
   16kg 的重装背包
@@ -93,7 +93,7 @@ comment:
   再叫车送到武功山下开始徒步。我们是反穿，第一天徒步到云中峰客栈住宿，第二天上午继续徒步到
   武功山大门口，中间乘了两段下山索道。两天武功山都起大雾，没看到日出，视野也差了许多，但云
   海也还算不错，在山脊线上走，两边都是悬崖，而且还好大的风，还是有点刺激的
-  {{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027053935_20241107155625.webp" title="10/27 喝着热水欣赏早晨四五点的山景" width="80%">}}</figure>
+  {{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027053935_20241107155625.webp" title="10/27 凌晨, 喝着热水欣赏早晨四五点的山景" width="80%">}}</figure>
   {{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027055431_20241107155625.webp" title="10/27 快清晨六点了，对面山上的早餐叫卖声隔这么远都听得到" width="80%">}}</figure>
   {{<figure src="/images/travel/2024-10-26-wugong-mountains/IMG20241027070222_20241107155625.webp" title="10/27 从云中峰客栈再次出发" width="80%">}}</figure>
 - 11/23 - SRE 小组深圳梅林登山徒步, 路程大概 14 公里, 早上 9 点 30 从梅林水库大坝出发，下
@@ -110,7 +110,6 @@ comment:
   {{<figure src="/images/now-2024/photo_2025-01-01_22-48-36.jpg" title="我拍的烟花，位置不好效果差挺多" width="80%">}}</figure>
   {{<figure src="/images/now-2024/photo_2025-01-01_22-52-17.jpg" title="我拍的烟花 - 2" width="80%">}}</figure>
   {{<figure src="/images/now-2024/photo_2025-01-01_22-52-19.jpg" title="我拍的烟花 - 3" width="80%">}}</figure>
-  {{<figure src="/images/now-2024/photo_2025-01-01_22-52-25.jpg" title="马路上都是人，下午 6 点车就禁止通行了" width="80%">}}</figure>
 
 关于香港徒步旅行的细节, 我之前专门写过篇文章, 有兴趣的可以看看:
 
