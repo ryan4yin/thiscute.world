@@ -2,9 +2,9 @@
 title: "我的 2024 - 稳中求进、热爱生活"
 subtitle: ""
 description: ""
-date: 2024-11-27T19:59:44+08:00
-lastmod: 2024-11-27T19:59:44+08:00
-draft: true
+date: 2025-01-07T17:43:44+08:00
+lastmod: 2025-01-07T17:43:44+08:00
+draft: false
 
 authors: ["ryan4yin"]
 featuredImage: "Hong-Kong-New-Year-2025_fireworks-at-Victoria-Harbour.jpg"
