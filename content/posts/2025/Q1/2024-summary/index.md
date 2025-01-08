@@ -88,6 +88,12 @@ comment:
 - 08/03 - 跟老妹一起在香港维多利亚港沿海漫步，人比之前五一假期少了太多，体验非常好！可以悠
   闲地慢慢走，拍照，聊天
 - 8/21 - 8/23 - 在香港参加为期三天的 KubeCon China 2024, 顺便跟着朋友逛香港
+  {{<figure src="/images/kubecon-china-2024/IMG20240821084905_20240905145523.webp" title="主会场过厅，海景不错的" width="80%">}}
+  {{<figure src="/images/kubecon-china-2024/IMG20240821181445_20240905145522.webp" title="冰镇饮料也可以随便喝，好哇" width="80%">}}
+  {{<figure src="/images/kubecon-china-2024/IMG20240822102713_20240905145521.webp" title="好多的 CNCF 贴纸，可以随便拿，我给同事也带了一些" width="80%">}}
+  {{<figure src="/images/kubecon-china-2024/IMG20240822213416_20240905145520.webp" title="香港夜景，相当繁华哪" width="80%">}}
+  {{<figure src="/images/kubecon-china-2024/IMG20240823093047_20240905145520.webp" title="Linus" width="80%">}}
+  {{<figure src="/images/kubecon-china-2024/our-selfie.webp" title="咱的合影" width="80%">}}
 - 10/18 - 10/19 - 公司团建，在惠州东江玩皮划艇，18 公里，挺愉快
   {{<figure src="/images/travel/2024-10-18-teambuilding-kayaking/IMG_20241107_163651.webp" title="跟同事划皮划艇" width="80%">}}</figure>
   {{<figure src="/images/travel/2024-10-18-teambuilding-kayaking/AK1653.webp" title="江边放点烟花，不得不说公司是会玩的" width="80%">}}</figure>
