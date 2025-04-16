@@ -17,7 +17,7 @@ toc:
 
 ![](/images/now/book-shelf-2.webp)
 
-## 零、2024 年学习计划
+## 零、2025 年学习计划
 
 - 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
 - 技术上今年的主要学习目标：
@@ -47,7 +47,6 @@ toc:
     - [操作系统：设计与实现 (2024 春季学期)](https://jyywiki.cn/OS/2024/)
     - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-  - 书 [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/) - 进度 296/572
 
 ## 三、今年的阅读进展
 
