@@ -36,6 +36,31 @@ comment:
   高级，很多时候找不到合适的单词或句子去表达我想说的，会卡壳。也正因为如此，预先设想可能的
   面试场景并提前做准备，就相当重要了。
 
+所以干脆就把相关内容记在这里吧：
+
+- **Question 1: Tell me about yourself** (focus on education & work history)
+  - I'm Changli Yin, 27 years old, a DevOps engineer with 6 years of experience building
+    resilient cloud infrastructure, robust cloud traffic flow and automation pipelines.
+  - I studied at Anhui Jianzhu University for 4 years and graduated in 2020. My major is
+    Acoustics, but I did not obtain a degree due to insufficient credits.
+  - I experienced in multi‑cloud environment, developed a multi‑cloud set‑ vice deployment
+    platform(which including Gitlab CI pipelines & some backend services written in
+    Python), skilled in cloud cost optimization, have managed Kubernetes clusters, Istio
+    service mesh, Nginx gateways, etc.
+  - At my free time, I'm passionate about open‑source contributions. I Authored several
+    popular NixOS projects (4,000+ GitHub stars) and maintain a technical blog.
+- **Question 2: Why you did not get a degree?**
+  - Honestly, I chose acoustics as my university major out of passion, but quickly
+    realized the curriculum was nothing like I had imagined. Acoustics wasn't the precise
+    science I expected - it was filled with complex empirical formulas that nobody could
+    properly explain, only acknowledge their practical effectiveness.
+  - This disillusionment led me to discover my true passion for computers and programming.
+    During my undergraduate years, I self-taught programming—from C to Python to Linux—and
+    focused intensely on practical CS skills.
+  - By the time I entered the workforce, I had built a solid foundation in computing. The
+    trade-off is, my academic performance in my major suffered severely, ultimately
+    resulting in insufficient credits to qualify for a degree certificate.
+
 ### 2025-04-17
 
 - BOSS 直聘上陆续出现了一些新岗位与岗位沟通，也有了一些面试邀请，今天线上面了一家公司，面
