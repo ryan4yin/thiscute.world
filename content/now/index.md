@@ -89,18 +89,6 @@ toc:
 
 ### 1. 高优先级
 
-#### AI infra 方向
-
-这是一个相当新的方向，因为近两年 AI 开始落地而兴起，它既要求熟悉 K8s/Istio 等传统 infra 组
-件，又要求对 AI 训练推理相关的技术有足够了解，例如：
-
-- Operator: training-operator
-- 调度：volcano
-- 框架：Kubeflow, RayTrain, Argo Workflows
-- 性能优化：Triton/BentoML/vLLM/PyTorch/CUDA
-
-感觉是一个转型的方向，业余可以看看。
-
 #### 操作系统
 
 理解 Linux 操作系统也是我继续精进技术必不可少的技能。
@@ -152,6 +140,22 @@ toc:
 - TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
 
 ### 2. 以后可能会感兴趣的
+
+#### AI infra 方向
+
+这是一个相当新的方向，因为近两年 AI 开始落地而兴起，它既要求熟悉 K8s/Istio 等传统 infra 组
+件，又要求对 AI 训练推理相关的技术有足够了解，例如：
+
+- Operator: training-operator
+- 调度：volcano
+- 框架：Kubeflow, RayTrain, Argo Workflows
+- 性能优化：Triton/BentoML/vLLM/PyTorch/CUDA
+
+感觉是一个转型的方向，业余可以看看。
+
+相关资料：
+
+- https://github.com/stas00/ml-engineering/
 
 #### 心理学与认知神经科学
 
