@@ -69,7 +69,6 @@ toc:
   - [Linux Device Driver Development - Second Edition](https://github.com/PacktPublishing/Linux-Device-Driver-Development-Second-Edition):
     Linux 驱动编程入门，2022 年出的新书，基于 Linux 5.10，amazon 上评价不错，目前只有英文
     版，写的很好，对新手很友好。
-  - [Linux/Unix 系统编程手册（上册）](https://man7.org/tlpi/)
   - 《复杂 - 梅拉尼 米歇尔》
   - Psychology and Life, 20th edition, by Richard J. Gerrig
 
@@ -85,29 +84,22 @@ toc:
   - 《党员、党权与党争：1924 - 1949 年中国国民党的组织形态》
   - 《我的前半生——爱新觉罗·溥仪》
   - 《为什么学生不喜欢上学》
-  - 《享受孩子成长》
-  - [上海交通大学生存手册](https://survivesjtu.gitbook.io/survivesjtumanual)
-  - [0xFFFF Wiki - 写给 CS 专业大学生的学习导览与建议](https://wiki.0xffff.one/about)
 
 ## 四、备选学习路线
 
 ### 1. 高优先级
 
-#### 心理学与认知神经科学
+#### AI infra 方向
 
-学习路线：
+这是一个相当新的方向，因为近两年 AI 开始落地而兴起，它既要求熟悉 K8s/Istio 等传统 infra 组
+件，又要求对 AI 训练推理相关的技术有足够了解，例如：
 
-- 入门：
-  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-  - Psychology and Life, 20th edition, by Richard J. Gerrig, 2012
-  - Educational Psychology, 14th Global Edition (Anita Woolfolk, 2021)
-  - Development Across the Life Span, 10th edition (Robert S. Feldman, 2023)
-- 进阶到认知神经科学
-  - Neuroscience: Exploring the Brain, 4th edition (2015)
-  - Cognitive Neuroscience: The Biology of the Mind, 5th edition (2019)
-- 其他方向
-  - 《Intimate Relationships》 - 进度 14/449
-  - 《Social Psychology, 14e, David Myers》
+- Operator: training-operator
+- 调度：volcano
+- 框架：Kubeflow, RayTrain, Argo Workflows
+- 性能优化：Triton/BentoML/vLLM/PyTorch/CUDA
+
+感觉是一个转型的方向，业余可以看看。
 
 #### 操作系统
 
@@ -146,6 +138,36 @@ toc:
   - [ ] 《深入理解 Linux 进程与内存 - 张彦飞》
   - [ ] 极客时间《网络排查案例课》
   - [ ] 极客时间 《Linux 性能优化实战》
+
+#### 计算机网络
+
+计算机网络可算是我的老本行了，用来吃饭的家伙事，技艺不能落下。
+
+- 计算机网络
+  - TCP/IP Illustrated, Volume 1, 2nd Edition - 进度 31/920
+- 课程
+  [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
+  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
+  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
+- TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
+
+### 2. 以后可能会感兴趣的
+
+#### 心理学与认知神经科学
+
+学习路线：
+
+- 入门：
+  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+  - Psychology and Life, 20th edition, by Richard J. Gerrig, 2012
+  - Educational Psychology, 14th Global Edition (Anita Woolfolk, 2021)
+  - Development Across the Life Span, 10th edition (Robert S. Feldman, 2023)
+- 进阶到认知神经科学
+  - Neuroscience: Exploring the Brain, 4th edition (2015)
+  - Cognitive Neuroscience: The Biology of the Mind, 5th edition (2019)
+- 其他方向
+  - 《Intimate Relationships》 - 进度 14/449
+  - 《Social Psychology, 14e, David Myers》
 
 #### 嵌入式/物联网
 
@@ -197,20 +219,6 @@ toc:
 - 目前的学习目标
   - DIY 无人机编队飞行！要达成这个目标需要学习的东西有点多，慢慢努力吧~
 
-### 2. 以后可能会感兴趣的
-
-#### 计算机网络
-
-计算机网络可算是我的老本行了，用来吃饭的家伙事，技艺不能落下。
-
-- 计算机网络
-  - TCP/IP Illustrated, Volume 1, 2nd Edition - 进度 31/920
-- 课程
-  [CS 144: Introduction to Computer Networking](https://www.youtube.com/watch?v=1CP6aF09OjI&list=PLEAYkSg4uSQ2dr0XO_Nwa5OcdEcaaELSG&index=1&t=14s)
-  - 以前学过一次《Computer Networking - A Top-Down Approach, 7e》，这次算是重学吧。
-  - 课程主要使用 C++，我或许可以考虑用 rust/go 实现下协议栈？
-- TCP/IP 协议栈的实现：可以参考 [google/gvisor](https://github.com/google/gvisor)
-
 #### 其他杂项
 
 - Go 语言进阶
@@ -221,10 +229,8 @@ toc:
   - [ ] [Go 语言高性能编程](https://github.com/geektutu/high-performance-go)
 
 - 英语
-  - [ ] [American Pronunciation Workshop](https://www.bilibili.com/video/BV1Ts411m7EU/) 美
-        语发音教程
-  - [ ] [Master Spoken English Feeling Phonics](https://www.bilibili.com/video/BV1k4411Q7iw/)
-        进阶发音教程
+  - 找外教练口语
+  - 再多背点单词，现在我技术英文能无障碍阅读，但是生活英语方面词汇量相当低。
   - [ ] 《英语语法新思维——初级教程》
   - [ ] 《English Grammar In Use》语法书
   - [ ] 《Key words for fluency》口语表达
@@ -259,21 +265,12 @@ toc:
   - [ ] [balancer](https://github.com/zehuamama/balancer): 源码阅读，如何使用 go 实现常见
         balancer 算法
 
-- Openresty 技术栈：（暂时感觉兴趣不大）
-
-  - 阅读《自己动手实现 Lua》
-  - 深入学习 Nginx 及 epoll
-
 - 容器与 Kubernetes（其实好像也没啥兴趣）
 
   - [Hacking Kubernetes: Threat-Driven Analysis and Defense](https://hacking-kubernetes.info/):
     Kubernetes 安全，威胁模型以及如何防护。
   - [Container Security: Fundamental Technology Concepts that Protect Containerized Applications](https://containersecurity.tech/):
     容器安全，这书在亚马逊上评价很好。
-
-- 检索技术
-  - [这就是搜索引擎](https://book.douban.com/subject/7006719/)
-  - 极客时间《检索技术 25 讲》
 
 分布式数据库：
 
@@ -287,19 +284,7 @@ toc:
 - 其他参考书籍
   - 《Distributed Systems, 3rd Edition, 2017》
   - 《Distributed Algorithms, 2nd Edition, 2018》
-  - [SQL进阶教程](https://book.douban.com/subject/27194738/)
-
-编程语言理论：
-
-- 《[Crafting Interpreters](http://craftinginterpreters.com)》：亚马逊销量第一的编译器设计
-  书籍，好评如潮。
-  - 之前挑战《编程语言实现模式》，很遗憾失败了，这次我决定拿此书再战。
-- [Essentials of Programming Languages, 3rd Edition](https://book.douban.com/subject/3136252/)
-- [The Little Schemer - 4th Edition ](https://book.douban.com/subject/1632977/)
-- 《WebAssembly 核心原理》
-- 用 Go 语言讲编程语言理论
-  - 《自己动手实现 Lua》
-  - 《自己动手实现 Java 虚拟机》
+  - [SQL 进阶教程](https://book.douban.com/subject/27194738/)
 
 ## 五、备选书单
 
