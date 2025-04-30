@@ -31,7 +31,7 @@ toc:
 
 > 按优先级排序
 
-- [Linux/Unix 系统编程手册（下册）](https://man7.org/tlpi/)
+- 《深入理解 Linux 网络》
 - 《BPF Performance Tools（英文版）》 - 35/740
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - 户外徒步、露营
@@ -54,12 +54,15 @@ toc:
 已读：
 
 - 《Go 高级编程》
+- [Linux/Unix 系统编程手册（下册）](https://man7.org/tlpi/)
 
 正在读：
 
+- 《深入理解 Linux 网络》
+- 《深入理解 Linux 进程与内存》
+- 《BPF Performance Tools（英文版）》 - 35/740
 - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
 - The Great Gatsby - 10/41
-- [Linux/Unix 系统编程手册（下册）](https://man7.org/tlpi/)
 - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
 
 想读，但是没啥计划（大致按感兴趣程度排序）：
