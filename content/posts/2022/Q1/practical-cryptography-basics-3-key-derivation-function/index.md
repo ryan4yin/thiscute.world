@@ -227,10 +227,15 @@ KDF 计算速度的「慢」是相对而言的，对于普通用户而言，KDF 
 
 1. PBKDF2：这是一个非常简单的加密 KDF 算法，目前已经不推荐使用。
 2. Bcrypt：安全性在下降，用得越来越少了。不建议使用。
-3. Scrypt：可以灵活地设定使用的内存大小，在 argon2 不可用时，可使用它。
-4. Argon2：目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。
+3. **Scrypt**：可以灵活地设定使用的内存大小，在 argon2 不可用时，可使用它。
+   - **Scrypt 是目前社区使用的主流算法**，知名案例如：
+     - [age](https://github.com/FiloSottile/age)
+     - [rclone](https://rclone.org/crypt/#key-derivation)
+     - [restic](https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac)
+4. **Argon2**：目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。
+   - Linux 的硬盘加密模块 LUKS2 就支持使用 argon2id 作为它的 KDF 算法。
 
-如果你正在开发一个新的程序，需要使用到 KDF，建议选用 argon2/scrypt.
+**如果你正在开发一个新的程序，需要使用到 KDF，建议选用 argon2/scrypt**.
 
 Python 中最流行的密码学库是
 [cryptography](https://github.com/pyca/cryptography)，`requests` 的底层曾经就使用了它（新
