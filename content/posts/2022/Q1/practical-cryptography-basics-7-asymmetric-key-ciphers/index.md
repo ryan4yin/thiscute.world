@@ -129,7 +129,7 @@ RSA、ECC、ElGamal、Diffie-Hellman、ECDH、ECDSA 和 EdDSA 等公钥密码算
 
 为了解决上面提到的这些困难并支持加密任意长度的消息，现代密码学使用「**非对称加密方案**」来
 实现消息加解密。又因为「对称加密方案」具有速度快、支持加密任意长度消息等特性，「非对称加密
-方案」通常直接直接组合使用**对称加密算法**与**非对称加密算法**。比如「密钥封装机制
+方案」通常组合使用**对称加密算法**与**非对称加密算法**。比如「密钥封装机制
 KEM（key encapsulation mechanisms)）」与「集成加密方案 IES（Integrated Encryption
 Scheme）」
 
