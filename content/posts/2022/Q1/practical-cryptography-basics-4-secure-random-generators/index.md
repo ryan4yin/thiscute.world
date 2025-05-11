@@ -102,7 +102,7 @@ Python 的 `random` 库默认会使用当前时间作为初始 seed，这显然�
 Cryptography Secure Random Number Generators(CSPRNG) 是一种适用于密码学领域的 PRNG，一个
 PRNG 如果能够具备如下两个条件，它就是一个 CSPRNG:
 
-- 能通过「下一比特测试 next-bit test」：即使有人获知了该 PRNG 的 k 位，他也无法使用合理的
+- 能通过「**下一比特测试 next-bit test**」：即使有人获知了该 PRNG 的 k 位，他也无法使用合理的
   资源预测第 k+1 位的值
 - 如果攻击者猜出了 PRNG 的内部状态或该状态因某种原因而泄漏，攻击者也无法重建出内部状态泄漏
   之前生成的所有随机数
@@ -111,7 +111,7 @@ PRNG 如果能够具备如下两个条件，它就是一个 CSPRNG:
 
 - 基于计数器(CTR)模式下的**安
   全[分组密码](https://zh.wikipedia.org/wiki/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81)**、**[流密码](https://zh.wikipedia.org/wiki/%E6%B5%81%E5%AF%86%E7%A0%81)**或**安
-  全散列函数**的 CSPRNG
+  全哈希函数**的 CSPRNG
 - 基于数论设计的 CSPRNG，它依靠整数分解问题（IFP）、离散对数问题（DLP）或椭圆曲线离散对数
   问题（ECDLP）的高难度来确保安全性
 - CSPRNG 基于加密安全随机性的特殊设计，例如 Yarrow algorithm 和 Fortuna，这俩分别被用于
