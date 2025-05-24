@@ -161,11 +161,11 @@ RSA 跟 ED25519 都是被广泛使用的密码学算法，其安全性都是经�
 
 那这个 passphrase 保护到底有多安全呢？
 
-有一些密码学知识的人应该知道，pssphrase 保护的实现原理通常是：通过 KDF 算法（或者叫慢哈希
+有一些密码学知识的人应该知道，passphrase 保护的实现原理通常是：通过 KDF 算法（或者叫慢哈希
 算法、密码哈希算法）将用户输入的 passphrase 字符串转换成一个二进制对称密钥，然后再用这个密
 钥加解密具体的数据。
 
-因此，使用 pssphrase 加密保护的 SSH Key 的安全性，取决于：
+因此，使用 passphrase 加密保护的 SSH Key 的安全性，取决于：
 
 1. passphrase 的复杂度，这对应其长度、字符集、是否包含特殊字符等。这由我们自己控制。
 2. 所使用的 KDF 算法的安全性。这由 OpenSSH 的实现决定。
@@ -358,9 +358,9 @@ OpenPGP 标准定义了
     Specify how many times the passphrases mangling for symmetric encryption is repeated. This value may range between 1024 and 65011712 inclusive. The default is inquired from gpg-agent. Note that not all values in the 1024-65011712 range are legal and if an illegal value is selected, GnuPG will round up to the nearest legal value. This option is only meaningful if --s2k-mode is set to the default of 3.
 ```
 
-默认仍旧使用 AES-128 做 pssphrase 场景下的对称加密，数据签名还是用的 SHA-1，这俩都已经不太
-安全了，尤其是 SHA-1，已经被证明存在安全问题。因此，使用默认参数生成的 GPG 密钥，其安全性
-是不够的。
+默认仍旧使用 AES-128 做 passphrase 场景下的对称加密，数据签名还是用的 SHA-1，这俩都已经不
+太安全了，尤其是 SHA-1，已经被证明存在安全问题。因此，使用默认参数生成的 GPG 密钥，其安全
+性是不够的。
 
 为了获得最佳安全性，我们需要：
 
@@ -601,7 +601,7 @@ passphrase 等少数几个密码，就能顺着整条链路解密出所有的数
 面我们已经做了分析，这三个 passphrase 的加密强度区别很大，设成一样的话，使用 bcrypt 的 SSH
 密钥将会成为整个方案的短板。
 
-而关于密码内容的设计，这个几核心 pssphrase 的长度都是不受限的，有两个思路（注意不要在密码
+而关于密码内容的设计，这个几核心 passphrase 的长度都是不受限的，有两个思路（注意不要在密码
 中包含任何个人信息）：
 
 1. 使用由一个个单词组成的较长的 passphrase，比如
