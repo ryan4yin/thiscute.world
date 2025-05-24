@@ -213,9 +213,9 @@ OpenSSH 6.5/6.5p1 (2014-01-30)
 | OpenSSH 9.x (约2022 - 至今)   | Ed25519 (自 9.5 起)       | 256 位 (Ed25519); 3072 位 (若选 RSA) | bcrypt_pbkdf                                           | PQC 混合 KEX: sntrup761x25519-sha512@openssh.com (自 9.0 默认); mlkem768x25519-sha256 (自 9.9 默认提供); Terrapin 缓解 (9.6) | chacha20-poly1305, AES-GCM                                                         |
 | OpenSSH 10.0 (预计 2025年4月) | Ed25519                   | 256 位 (Ed25519); 3072 位 (若选 RSA) | bcrypt_pbkdf                                           | mlkem768x25519-sha256 (PQC KEX 默认); 服务器端默认禁用有限域 DH (modp); DSA 完全移除                                         | chacha20-poly1305 (最优先), AES-GCM (优先于 AES-CTR)                               |
 
-所以从 2014 年发布的 OpenSSH 6.5 开始，才可使用 ed25519 密钥，它的 passphrase 默认使用
-bcrypt_pbkdf 生成的。而对于 RSA 类型的密钥，一直到 2018-08-24 发布的 OpenSSH 7.8 才从 MD5
-改到 bctypt_pbkdf.
+所以从 2014 年 1 月发布的 OpenSSH 6.5 开始，才可使用 ed25519 密钥，它的 passphrase 默认使
+用 bcrypt_pbkdf 生成的。而对于 RSA 类型的密钥，一直到 2018-08-24 发布的 OpenSSH 7.8 才从
+MD5 改到 bctypt_pbkdf.
 
 即使 2023-08-10 发布的 9.4 版本增加了默认的 bcrypt KDF rounds 次数，它的安全性仍然很值得怀
 疑。bcrypt 本身的安全性就越来越差，现代化的加密工具基本都已经升级到了 scrypt 甚至 argon2.
@@ -225,9 +225,7 @@ bcrypt_pbkdf 生成的。而对于 RSA 类型的密钥，一直到 2018-08-24 �
 我进一步看了 `man ssh-keygen` 的文档，没找到任何修改 KDF 算法的参数，不过能通过 `-a` 参数
 来修改 KDF 的 rounds 数量，OpeSSh 9.4 的 man 信息中写了默认使用 16 rounds.
 
-考虑到大部分人都使用默认参数生成 Key，而且绝大部分用户都没有密码学基础，大概率不知道
-KDF、Rounds 是什么意思，我们再了解下 `ssh-keygen` 默认参数。在 release note 中我进一步找到
-这个：
+我们再了解下 `ssh-keygen` 默认参数，在 release note 中我进一步找到这个：
 
 ```
 OpenSSH 9.5/9.5p1 (2023-10-04)
@@ -243,9 +241,41 @@ Potentially incompatible changes
 
 也就是说从 2023-10-04 发布的 9.5 开始，OpenSSH 才默认使用 ED25519。
 
-结合上面的分析可以推断出，目前绝大部分用户都是使用的 RSA 密钥，且其 passphrase 的安全性很
-差，不加 passphrase 就是裸奔，加了也很容易被破解。如果你使用的也这种比较老的密钥类型，那千
-万别觉得自己加了 passphrase 保护就很安全，这完全是错觉（
+再看下各主流操作系统与 OpenSSH 的对应关系：
+
+| OS Distro Version    | Year | 大致的 OpenSSH 版本           |
+| -------------------- | ---- | ----------------------------- |
+| Ubuntu (LTS)         |      |                               |
+| Ubuntu 18.04 LTS     | 2018 | OpenSSH 7.6p1                 |
+| Ubuntu 20.04 LTS     | 2020 | OpenSSH 8.2p1                 |
+| Ubuntu 22.04 LTS     | 2022 | OpenSSH 8.9p1                 |
+| Ubuntu 24.04 LTS     | 2024 | OpenSSH 9.6p1                 |
+| Debian (稳定版)      |      |                               |
+| Debian 9 (Stretch)   | 2017 | OpenSSH 7.4p1                 |
+| Debian 10 (Buster)   | 2019 | OpenSSH 7.9p1                 |
+| Debian 11 (Bullseye) | 2021 | OpenSSH 8.4p1                 |
+| Debian 12 (Bookworm) | 2023 | OpenSSH 9.2p1                 |
+| macOS (主要版本)     |      |                               |
+| macOS 10.14-10.15    | 2018 | OpenSSH 7.9p1, LibreSSL 2.7.3 |
+| macOS 11 (Big Sure)  | 2020 | OpenSSH 8.1p1+                |
+| macOS 12 (Monterey)  | 2021 | OpenSSH 8.6p1+                |
+| macOS 13 (Ventura)   | 2022 | OpenSSH 9.0p1+                |
+| macOS 14 (Sonoma)    | 2023 | OpenSSH 9.3p1+                |
+| macOS 15 (Sequoia)   | 2024 | OpenSSH 9.6p1+                |
+
+考虑到大部分 Linux 用户或 SysAdm 都没有密码学基础，大概率不知道 KDF、Rounds 是什么意思，有
+理由怀疑很多人会使用默认参数生成密钥，由此可以推断出：
+
+- 2023 年及之前发布的 Linux/macOS 使用的 OpenSSH 版本都低于 9.5
+  - **结论**：绝大部分用户都仍然在使用 RSA 密钥
+- 2020 年各主流 OS 才陆续升级到 OpenSSH 8.x
+  - **结论**：在这之前，绝大部分用户都仍然在使用 RSA 2048 位密钥
+- 2019 年之前各主流 OS 的 OpenSSH 发行版大都低于 7.8
+  - **结论**：在这些老系统上生成的密钥，几乎全部都仍然在使用 PEM 格式的 RSA 密钥，这种密钥
+    使用 MD5 派生密钥，加了密码也几乎等于裸奔。
+
+如果你使用的也这种比较老的密钥类型，那千万别觉得自己加了 passphrase 保护就很安全，这完全是
+错觉（
 
 即使是使用最新的 ssh-keygen 生成的 ED25519 密钥，其默认也是用的 bcrypt 16 rounds 生成加密
 密钥，其安全性在我看来也是不够的。
@@ -280,6 +310,9 @@ Key 都使用上述参数重新生成了一遍。
 
 我通过这种方式缩小了风险范围，即使某台机器的密钥泄漏，也只需要重新生成并替换这台机器上的密
 钥即可。
+
+最后再说明一点：**OpenSSH 密钥并不是生成一次然后就可以高枕无忧了，为了确保足够安全性，也必
+须隔几年更换一次新密钥**。
 
 ### 2.4 SSH CA - 更安全合理的 SSH 密钥管理方案？
 
