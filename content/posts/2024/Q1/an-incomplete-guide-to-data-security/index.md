@@ -203,12 +203,23 @@ OpenSSH 6.5/6.5p1 (2014-01-30)
    Details of the new format are in the PROTOCOL.key file.
 ```
 
-所以从 2014 年发布的 OpenSSH 6.5 开始，ed25519 密钥的 passphrase 才是使用 bcrypt KDF 生成
-的。而对于其他类型的密钥，仍旧长期使用基于 MD5 hash 的密钥格式，没啥安全性可言。
+| 时间阶段 (OpenSSH 版本)       | ssh-keygen 默认密钥类型   | ssh-keygen 默认密钥长度              | 私钥 KDF 算法 (带 passphrase 时)                       | 默认/主要 KEX 算法                                                                                                           | 默认/主要对称加密算法                                                              |
+| ----------------------------- | ------------------------- | ------------------------------------ | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| OpenSSH 4.x (约2005 - 2008)   | RSA                       | 2048 位 (RSA, 自 4.0 起)             | 基于 MD5 (OpenSSL PEM 格式)                            | diffie-hellman-group1-sha1, diffie-hellman-group-exchange-sha1                                                               | AES-CBC (更普遍), 3DES-CBC; HMAC-SHA1                                              |
+| OpenSSH 5.x (约2009 - 2013)   | RSA                       | 2048 位 (RSA)                        | 基于 MD5 (OpenSSL PEM 格式)                            | ecdh-sha2-nistp256 等 ECDH 系列引入 (自 5.7), DH 仍常见                                                                      | AES-CTR (自 5.2 起优先于 CBC), AES-CBC; HMAC-SHA1                                  |
+| OpenSSH 6.x (约2014 - 2015)   | RSA (Ed25519 于 6.5 引入) | 2048 位 (RSA)                        | bcrypt_pbkdf (新格式, 自 6.5; Ed25519 默认, RSA 需 -o) | curve25519-sha256 (自 6.5 起引入并优先), ECDH 系列                                                                           | chacha20-poly1305@openssh.com (自 6.5), AES-GCM (自 ~6.2); CBC 模式于 6.7 默认禁用 |
+| OpenSSH 7.x (约2015 - 2018)   | RSA                       | 2048 位 (RSA)                        | bcrypt_pbkdf (自 7.8 起所有新密钥默认)                 | curve25519-sha256, ECDH 系列; diffie-hellman-group1-sha1 于 7.0 禁用; rsa-sha2-256/512 签名 (自 7.2)                         | chacha20-poly1305, AES-GCM (AEAD 优先); 3DES-CBC 从客户端默认移除 (7.4)            |
+| OpenSSH 8.x (约2019 - 2021)   | RSA (Ed25519 逐渐流行)    | 3072 位 (RSA, 自 8.0 起)             | bcrypt_pbkdf                                           | curve25519-sha256, ECDH 系列; ssh-rsa (SHA1 签名) 于 8.8 禁用主机认证; Ed25519 签名优先 (自 8.5)                             | chacha20-poly1305, AES-GCM                                                         |
+| OpenSSH 9.x (约2022 - 至今)   | Ed25519 (自 9.5 起)       | 256 位 (Ed25519); 3072 位 (若选 RSA) | bcrypt_pbkdf                                           | PQC 混合 KEX: sntrup761x25519-sha512@openssh.com (自 9.0 默认); mlkem768x25519-sha256 (自 9.9 默认提供); Terrapin 缓解 (9.6) | chacha20-poly1305, AES-GCM                                                         |
+| OpenSSH 10.0 (预计 2025年4月) | Ed25519                   | 256 位 (Ed25519); 3072 位 (若选 RSA) | bcrypt_pbkdf                                           | mlkem768x25519-sha256 (PQC KEX 默认); 服务器端默认禁用有限域 DH (modp); DSA 完全移除                                         | chacha20-poly1305 (最优先), AES-GCM (优先于 AES-CTR)                               |
+
+所以从 2014 年发布的 OpenSSH 6.5 开始，才可使用 ed25519 密钥，它的 passphrase 默认使用
+bcrypt_pbkdf 生成的。而对于 RSA 类型的密钥，一直到 2018-08-24 发布的 OpenSSH 7.8 才从 MD5
+改到 bctypt_pbkdf.
 
 即使 2023-08-10 发布的 9.4 版本增加了默认的 bcrypt KDF rounds 次数，它的安全性仍然很值得怀
 疑。bcrypt 本身的安全性就越来越差，现代化的加密工具基本都已经升级到了 scrypt 甚至 argon2.
-因此要想提升安全性，最好是能更换更现代的 KDF 算法，或者至少增加 bcrypt KDF 的 rounds 数
+因此要想提升安全性，最好是能更换更现代的 KDF 算法，或者至少增加 bcrypt_pbkdf 的 rounds 数
 量。
 
 我进一步看了 `man ssh-keygen` 的文档，没找到任何修改 KDF 算法的参数，不过能通过 `-a` 参数
