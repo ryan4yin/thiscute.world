@@ -9,6 +9,8 @@ resources:
     src: "jwt.webp"
 authors: ["ryan4yin"]
 
+series: ["写给开发人员的实用密码学"]
+
 tags: ["JWT", "算法", "OpenSSL"]
 categories: ["tech"]
 ---

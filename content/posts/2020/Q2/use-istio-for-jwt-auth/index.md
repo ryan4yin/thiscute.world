@@ -25,6 +25,8 @@ Istio 支持使用 JWT 对终端用户进行身份验证（Istio End User Authen
 
 <!--more-->
 
+> 注意：Istio 仅负责身份验证，用户需要首先通过业务层的登录 API 获得 JWT 信息。
+
 ### 1. 介绍 JWK 与 JWKS
 
 Istio 要求提供 JWKS 格式的信息，用于 JWT 签名验证。因此这里得先介绍一下 JWK 和 JWKS.
