@@ -26,6 +26,10 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2025-05-27
+
+- 用豆包跟 Qwen3 学习了一波 IPv6，做了些笔记.
+
 ### 2025-05-26
 
 - 《Computer Networking - A Top-Down Approach, 8e》
