@@ -50,6 +50,15 @@ comment:
   - [Kube Intelligence - A Metric Based Insightful Remediation Recommender - Yash Bhatnagar, Google](https://kccncchn2025.sched.com/event/1x5jb/kube-intelligence-a-metric-based-insightful-remediation-recommender-yash-bhatnagar-google?iframe=no&w=100%&sidebar=yes&bg=no)
     - 跟下面 EU 那个讲异常检测的对照着看，挺有意思。
     - 这个主要提的是传统的玩法，只在最后一页提了句 AI. 而 EU 那个主要就是讲 AI.
+  - [Introducing AIBrix: Cost-Effective and Scalable Kubernetes Control Plane for VLLM - Jiaxin Shan & Liguang Xie, ByteDance](https://kccncchn2025.sched.com/event/1x5im/introducing-aibrix-cost-effective-and-scalable-kubernetes-control-plane-for-vllm-jiaxin-shan-liguang-xie-bytedance?iframe=no)
+    - 看了下这个 AIBrix 3.7k stars，确实可以研究下
+    - 看 issue AIBrix 还有跟 LWS 结合使用的可能性（甚至可能被官方支持）:
+      https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
+  - [Portrait Service: AI-Driven PB-Scale Data Mining for Cost Optimization and Stability Enhancement - Yuji Liu & Zhiheng Sun, Kuaishou](https://kccncchn2025.sched.com/event/1x5jD/portrait-service-ai-driven-pb-scale-data-mining-for-cost-optimization-and-stability-enhancement-yuji-liu-zhiheng-sun-kuaishou?iframe=no)
+    - 讲快手怎么在 20 万台机器的超大规模集群上做稳定性管理与性能优化。
+    - 介绍得比较浅，大概就是会收集集群中非常多的信息，用一套大数据系统持续处理，再丢给后面
+      训练专用模型，每个服务都可能有一个专门的资源优化模型，用它来做最终的资源优化。
+    - 这一套可能太重了，可以借鉴，但是在我目前的工作场景中不太有用（规模太小）。
 - KubeCon EU 2025
   - [From Logs To Insights: Real-time Conversational Troubleshooting for Kubernetes With GenAI - Tiago Reichert & Lucas Duarte, AWS](https://www.youtube.com/watch?v=7yhBBzVmPks)
     - 开场的 Oncall 就很真实... 不过 pod pending 1 分钟就电话告警有点夸张了，至少我接触过
