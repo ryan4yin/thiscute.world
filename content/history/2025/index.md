@@ -86,6 +86,9 @@ comment:
       点类似，但是能做到更精细的权限管理。
     - 朋友跟我 Argue 这种工具不是很有必要，应该用 GitOps 流程，然后将安全检查前置在 CICD
       流水线中。
+  - [Optimizing Metrics Collection & Serving When Autoscaling LLM Workloads](https://www.youtube.com/watch?v=lefjb4Vnd8k&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=326)
+    - 讲得挺风趣，不过可能我对这块比较熟悉，基本能猜到就是自定义业务 metrics + 用 KEDA 做
+      custom metrics based scaling. 所以就只是简单看了看。
 
 ### 2025-06-01 - 2025-06-09
 
