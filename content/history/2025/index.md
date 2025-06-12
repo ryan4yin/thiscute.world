@@ -26,6 +26,22 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2025-06-10 - 2025-06-11
+
+- 在香港参加 KubeCon China 2025, 这是我第二次参加 KubeCon China, 拉到了比去年更多的小伙伴
+  一起参加，还新认识了很多开发者，而且是公费出差（超级感谢新公司 leader!），玩得非常开心！
+- 今年的 KubeCon AI 内容超多，几乎可以改叫 CloudNative AI Con 了（
+
+### 2025-06-01 - 2025-06-09
+
+- 学习 IPv6，并在我的 Homelab 上测试 IPv6.
+- Homelab 的 k8s 集群上线 Loki+otel-collector 抓取日志的功能，部分支持了 IPv6，istio
+  ambient mode 也做了些调整。
+- 重构 NixOS PC 配置，Hyprland 配置大更新，添加 IPv6 相关配置。
+  - 重构完后 Zoom wayland 模式一直启动失败，测试了各种修复方法、回滚系统都没效果，更新之前
+    明明是正常的...
+- AI 方面 Gemini 用得很顺手，用来帮助处理工作与折腾 Homelab 时遇到的问题非常有用。
+
 ### 2025-05-28 - 2025-05-30
 
 - 学习玩陆地冲浪板，主要是发力技巧，三天下来已经能在家门口的水泥路上滑得比较流畅了。
