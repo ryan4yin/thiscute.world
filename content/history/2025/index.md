@@ -32,6 +32,52 @@ comment:
   一起参加，还新认识了很多开发者，而且是公费出差（超级感谢新公司 leader!），玩得非常开心！
 - 今年的 KubeCon AI 内容超多，几乎可以改叫 CloudNative AI Con 了（
 
+我看到的一些比较有意思的 Talks:
+
+- [KubeCon China 2025](https://events.linuxfoundation.org/kubecon-cloudnativecon-china/program/schedule/)
+  - [More Than Model Sharding: LWS & Distributed Inference - Peter Pan & Nicole Li, DaoCloud & Shane Wang, Intel ](https://kccncchn2025.sched.com/event/1x5i6/more-than-model-sharding-lws-distributed-inference-peter-pan-nicole-li-daocloud-shane-wang-intel?iframe=no&w=100%&sidebar=yes&bg=no)
+    - 全场最有意思的 Talks 之一，大概介绍了分布式推理的架构、优化点，以及 LWS 的优点与用
+      法。
+  - [Antipatterns in Observability: Lessons Learned and How OpenTelemetry Solves Them - Steve Flanders, Splunk ](https://kccncchn2025.sched.com/event/1x5i3/antipatterns-in-observability-lessons-learned-and-how-opentelemetry-solves-them-steve-flanders-splunk?iframe=no&w=100%&sidebar=yes&bg=no)
+    - 这位也讲得挺有意思，而且有干货。
+  - [Keynote: An Optimized Linux Stack for GenAI Workloads - Michael Yuan, WasmEdge](https://kccncchn2025.sched.com/event/1x5jJ/keynote-an-optimized-linux-stack-for-genai-workloads-michael-yuan-wasmedge?iframe=no&w=100%&sidebar=yes&bg=no)
+    - 怎么用 WasmEdge + LlamaEdge 在边缘设备上跑 LLM 小模型，还是挺有意思的。
+  - [AI Model Distribution Challenges and Best Practices](https://kccncchn2025.sched.com/event/1x5hl/ai-model-distribution-challenges-and-best-practices-wenbo-qi-xiaoya-xia-peng-tao-ant-group-wenpeng-li-alibaba-cloud-han-jiang-kuaishou?iframe=no&w=100%&sidebar=yes&bg=no)
+    - 几位开发者聊怎么在集群里分发数百 GB 大小的 LLM 模型。
+    - 业界目前的手段：dragonfly, juicefs, oci model spec + oci volume (k8s 1.33+)
+  - HuaWei 也来讲了 Istio ambient mode 与他们自家的 kmesh，不过跟去年内容几乎一样，所以听
+    下来没啥感觉。
+  - [Kube Intelligence - A Metric Based Insightful Remediation Recommender - Yash Bhatnagar, Google](https://kccncchn2025.sched.com/event/1x5jb/kube-intelligence-a-metric-based-insightful-remediation-recommender-yash-bhatnagar-google?iframe=no&w=100%&sidebar=yes&bg=no)
+    - 跟下面 EU 那个讲异常检测的对照着看，挺有意思。
+    - 这个主要提的是传统的玩法，只在最后一页提了句 AI. 而 EU 那个主要就是讲 AI.
+- KubeCon EU 2025
+  - [From Logs To Insights: Real-time Conversational Troubleshooting for Kubernetes With GenAI - Tiago Reichert & Lucas Duarte, AWS](https://www.youtube.com/watch?v=7yhBBzVmPks)
+    - 开场的 Oncall 就很真实... 不过 pod pending 1 分钟就电话告警有点夸张了，至少我接触过
+      的场景里，有时候 Nodes 扩容确实要慢一点... 感觉 5 分钟再打电话会合适很多。
+  - [Choosing a Service Mesh - Alex McMenemy & Dimple Thoomkuzhy, Compare the Market](https://www.youtube.com/watch?v=hegNjjatNTU)
+    - 虽然我接触过的基本都用的 Istio，不过看看别人怎么做选择总没坏处
+  - [Navigating the Maze of Multi-Cluster Istio: Lessons Learned at Scale - Pamela Hernandez, BlackRock](https://www.youtube.com/watch?v=WpEkfVGWmd8)
+    - Istio 多集群在挺多大公司有应用，之前面试就被问到过，可以玩玩看。
+  - [A Service Mesh Benchmark You Can Trust - Denis Jannot, solo.io ](https://www.youtube.com/watch?v=oi4TpxuIYXk)
+  - [Autonomous Al Agents for Cloud Cost Analysis - Ilya Lyamkin, Spotify](https://www.youtube.com/watch?v=sTbJ1-x3_yc&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=345)
+    - 跟我的工作比较有关系
+  - [Tutorial: Build, Operate, and Use a Multi-Tenant AI Cluster Based Entirely on Open Source](https://www.youtube.com/watch?v=Ab7mRoJYsMo&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=365)
+    - 长度超过一个小时的教程，IBM 出品。装了一堆东西，包括 Kueue, Kubeflow, PyTorch, Ray,
+      vLLM, and Autopilot
+  - [Keynote: LLM-Aware Load Balancing in Kubernetes: A New Era of Efficiency - Clayton Coleman, Distinguished Engineer, Google & Jiaxin Shan, Software Engineer, Bytedance](https://www.youtube.com/watch?v=BBqDpqATcI0&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=26)
+    - 很有意思，LLM 的请求跟传统的 API 请求区别非常大，主要点在于：
+      - input 长度区别就非常大，有的请求 input 很简单，相对就很轻量，而有的可能直接丢一份
+        PDF 或者别的超长文本输入。输出也同样如此，如果用户明确要求深度推理，可能会导致大量
+        性能消耗。
+      - 不同机器可能会使用不同的 GPU 类型，而这些 GPU 的性能各异。
+      - 在一个支持多模型的平台上，不同模型的高低峰期也存在比较明显的区别。
+    - 上面这些特征导致传统的负载均衡策略完全失效。
+  - [Keynote: Who Owns Your Pod? Observing and Blocking Unwanted Behavior at eBay With eBPF](https://kccncchn2025.sched.com/event/1x5jM/keynote-who-owns-your-pod-observing-and-blocking-unwanted-behavior-at-ebay-with-ebpf-jianlin-lv-ebay-liyi-huang-isovalent-at-cisco?iframe=no&w=100%&sidebar=yes&bg=no)
+    - 主要就介绍 cilium 家的 tetragon, 一个基于 eBPF 的 K8S 安全工具，跟 apparmor 感觉会有
+      点类似，但是能做到更精细的权限管理。
+    - 朋友跟我 Argue 这种工具不是很有必要，应该用 GitOps 流程，然后将安全检查前置在 CICD
+      流水线中。
+
 ### 2025-06-01 - 2025-06-09
 
 - 学习 IPv6，并在我的 Homelab 上测试 IPv6.
