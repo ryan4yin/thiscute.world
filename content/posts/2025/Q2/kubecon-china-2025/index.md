@@ -63,6 +63,8 @@ CloudNative AI Con 了。
   （
 - AI 让 CloudNative 社区焕发了新生，围绕 AI 在过去两年间涌现了许多新的 CloudNative 项
   目。AI 话题已经成为了 KubeCon 绝对的主旋律。
+  - AI 部分主要在讨论 AI 推理，关键技术点：分布式推理、扩缩容与 LLM-Aware 的负载均衡以及
+    AI 模型分发
 - OpenTelemetry 日渐成熟，已经成为了 Logs/Tracing 领域的事实标准，但是在 Metrics 领域的处
   境目前还有些尴尬。
   - 在 Metrcis 领域它不得不兼容 Prometheus 的标准与配置，并且需要由 otel collector 去 Pull
@@ -75,7 +77,7 @@ CloudNative AI Con 了。
 KubeCon China 2025 的会议视频将会陆续被添加到 Youtube 中，另外因为这次 KubeCon China 的内
 容相对较少，所以都列在下面了：
 
-- [KubeCon + CloudNativeCon China 2025 (Hong Kong) - Youtube](https://www.youtube.com/playlist?list=PLj6h78yzYM2Of6psbKjeZxZIHjycSYoYF)
+- [KubeCon + CloudNativeCon China 2025 (Hong Kong) - Youtube](https://www.youtube.com/playlist?list=PLj6h78yzYM2P1xtALqTcCmRAa6142uERl)
 - [KubeCon + CloudNativeCon Europe 2025(London) - Youtube](https://www.youtube.com/playlist?list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc)
 
 视频相关的 PPT 可以在这里下载（NOTE: 不是所有 Talks 都会上传 PDF）：
@@ -92,10 +94,20 @@ PPT 链接。
 
 - [More Than Model Sharding: LWS & Distributed Inference - Peter Pan & Nicole Li, DaoCloud & Shane Wang, Intel ](https://kccncchn2025.sched.com/event/1x5i6/more-than-model-sharding-lws-distributed-inference-peter-pan-nicole-li-daocloud-shane-wang-intel?iframe=no&w=100%&sidebar=yes&bg=no)
   - 全场最有意思的 Talks 之一，大概介绍了分布式推理的架构、优化点，以及 LWS 的优点与用法。
+  - 简单的说 LWS 是一个专门为 LLM 分布式推理设计的 CRD,
 - [Introducing AIBrix: Cost-Effective and Scalable Kubernetes Control Plane for VLLM - Jiaxin Shan & Liguang Xie, ByteDance](https://kccncchn2025.sched.com/event/1x5im/introducing-aibrix-cost-effective-and-scalable-kubernetes-control-plane-for-vllm-jiaxin-shan-liguang-xie-bytedance?iframe=no)
   - 看了下这个 AIBrix 3.7k stars，确实可以研究下
   - 看 issue AIBrix 还有跟 LWS 结合使用的可能性（甚至可能被官方支持）:
     https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
+
+第一个 Talk 介绍的 LWS 主要用做 LLM 任务的分组调度，而第二个 Talk 介绍的 AIBrix 则是一整套
+在 K8s 上跑 LLM 的解决方案，它包含了：
+
+- 分布式推理的部署
+- LLM 扩缩容
+- LLM 请求路由（负载均衡）
+- 分布式 KV 缓存
+- ...
 
 ### LLM 扩缩容与负载均衡
 
