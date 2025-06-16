@@ -90,24 +90,33 @@ PPT 链接。
 
 ## Talks
 
-### 分布式 LLM 推理
+### 大一统的 LLM 推理解决方案
 
-- [More Than Model Sharding: LWS & Distributed Inference - Peter Pan & Nicole Li, DaoCloud & Shane Wang, Intel ](https://kccncchn2025.sched.com/event/1x5i6/more-than-model-sharding-lws-distributed-inference-peter-pan-nicole-li-daocloud-shane-wang-intel?iframe=no&w=100%&sidebar=yes&bg=no)
-  - 全场最有意思的 Talks 之一，大概介绍了分布式推理的架构、优化点，以及 LWS 的优点与用法。
-  - 简单的说 LWS 是一个专门为 LLM 分布式推理设计的 CRD,
 - [Introducing AIBrix: Cost-Effective and Scalable Kubernetes Control Plane for VLLM - Jiaxin Shan & Liguang Xie, ByteDance](https://kccncchn2025.sched.com/event/1x5im/introducing-aibrix-cost-effective-and-scalable-kubernetes-control-plane-for-vllm-jiaxin-shan-liguang-xie-bytedance?iframe=no)
-  - 看了下这个 AIBrix 3.7k stars，确实可以研究下
-  - 看 issue AIBrix 还有跟 LWS 结合使用的可能性（甚至可能被官方支持）:
-    https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 
-第一个 Talk 介绍的 LWS 主要用做 LLM 任务的分组调度，而第二个 Talk 介绍的 AIBrix 则是一整套
-在 K8s 上跑 LLM 的解决方案，它包含了：
+AIBrix 则是一整套在 K8s 上跑 LLM 分布式推理的解决方案，它包含了：
 
 - 分布式推理的部署
 - LLM 扩缩容
 - LLM 请求路由（负载均衡）
 - 分布式 KV 缓存
+  - 主要是中心化存储这些数据，减少对 HMB 显存的使用，降低显存需求。
+- LoRa 的动态加载
 - ...
+
+AIBrix 目前放在了 vllm-project 项目下，stars 也不少，感觉项目还是挺健康的，值得关注。
+
+### 分布式 LLM 推理的部署
+
+[More Than Model Sharding: LWS & Distributed Inference - Peter Pan & Nicole Li, DaoCloud & Shane Wang, Intel ](https://kccncchn2025.sched.com/event/1x5i6/more-than-model-sharding-lws-distributed-inference-peter-pan-nicole-li-daocloud-shane-wang-intel?iframe=no&w=100%&sidebar=yes&bg=no)
+
+全场最有意思的 Talks 之一，大概介绍了分布式推理的架构、优化点，以及 LWS 的优点与用法。
+
+简单的说 LWS 是一个专门为 LLM 分布式推理的部署而设计的 CRD, 主要是支持了 LLM 任务的分组调
+度。
+
+NOTE: 看 issue AIBrix 还有跟 LWS 结合使用的可能性（甚至可能被官方支持）:
+https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 
 ### LLM 扩缩容与负载均衡
 
@@ -132,28 +141,58 @@ PPT 链接。
 ### 可观测性
 
 - [Antipatterns in Observability: Lessons Learned and How OpenTelemetry Solves Them - Steve Flanders, Splunk ](https://kccncchn2025.sched.com/event/1x5i3/antipatterns-in-observability-lessons-learned-and-how-opentelemetry-solves-them-steve-flanders-splunk?iframe=no&w=100%&sidebar=yes&bg=no)
-  - 这位也讲得挺有意思，而且有干货。
+  - 这位也讲得挺有意思，而且有干货。他列举的可观测性方面的 Antipatterns 有
+    - Telemetry Data
+      - Incomplete
+        [Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/) - 需要
+        引入
+        [zero-code](https://opentelemetry.io/docs/concepts/instrumentation/zero-code/) 的
+        otel sdk 实现自动数据采集
+        - metrcis/logs/metrics 三类 signals 不一定都默认启用，具体得看对应的 agent 实现情
+          况
+        - 在 k8s 中建议同时禁用将日志输出到 stdout 的功能以及传统的给 prometheus pull 的
+          /metrics 端点，由 otel agent 全权负责 App-level 三大信号的处理。daemonset 模式的
+          otel （或者 vector/fluentbit）则主要用于采集 sidecar/k8s 等 Infra-level 的日志。
+      - Over-Instrumentation - 需要在 otel-collector 层过滤精简指标，再发送到对应的后端存
+        储。
+      - Inconsistent Naming Conventions - 全盘替换为 OpenTelemetry 方案，即可享受统一的命
+        名。
+    - Observability Platform
+      - Vendor Lock-in - 只选用支持 OTel 标准的平台并使用 Otel 命名规范。
+      - Tool Sprawl - 使用大一统的观测平台，如 Uptrace, 支持自动关联 Logs 与 Traces.
+      - Underestimating Scalability Requirements - 使用 OTel 采集信号，并选用可拓展性好的
+        后端存储，如 VictoriaMetrics.
+    - Company Culture
+      - Silos and Lack of Collaboration
+      - Lack of Ownership & Accountability
 - [KubeCon EU 2025 - From Logs To Insights: Real-time Conversational Troubleshooting for Kubernetes With GenAI - Tiago Reichert & Lucas Duarte, AWS](https://www.youtube.com/watch?v=7yhBBzVmPks)
-  - 开场的 OnCall 就很真实... 不过 pod pending 1 分钟就电话告警有点夸张了，至少我接触过的
-    场景里，有时候 Nodes 扩容确实要慢一点... 感觉 5 分钟再打电话会合适很多。
+  - 开场的 OnCall 小品就很真实... 不过 pod pending 1 分钟就电话告警有点夸张了...
+  - 演完小品才开始讲正式内容，大体上就是把日志用 embed 模型编码后存在 OpenSearch 里做
+    RAG，还给了 ChatBot k8s readonly 的权限（ban 掉了 secrets access），然后通过
+    Deepseek/Claude 问答来解决问题。
+  - 代码: <https://github.com/aws-samples/sample-eks-troubleshooting-rag-chatbot>
 - [Portrait Service: AI-Driven PB-Scale Data Mining for Cost Optimization and Stability Enhancement - Yuji Liu & Zhiheng Sun, Kuaishou](https://kccncchn2025.sched.com/event/1x5jD/portrait-service-ai-driven-pb-scale-data-mining-for-cost-optimization-and-stability-enhancement-yuji-liu-zhiheng-sun-kuaishou?iframe=no)
   - 讲快手怎么在 20 万台机器的超大规模集群上做稳定性管理与性能优化。
   - 介绍得比较浅，大概就是会收集集群中非常多的信息，用一套大数据系统持续处理，再丢给后面训
     练专用模型，每个服务都可能有一个专门的资源优化模型，用它来做最终的资源优化。
   - 这一套可能太重了，可以借鉴，但是在我目前的工作场景中不太有用（规模太小）。
-- [Kube Intelligence - A Metric Based Insightful Remediation Recommender - Yash Bhatnagar, Google](https://kccncchn2025.sched.com/event/1x5jb/kube-intelligence-a-metric-based-insightful-remediation-recommender-yash-bhatnagar-google?iframe=no&w=100%&sidebar=yes&bg=no)
-  - 跟下面 EU 那个讲异常检测的对照着看，挺有意思。
-  - 这个主要提的是传统的玩法，只在最后一页提了句 AI. 而 EU 那个主要就是讲 AI.
 
 ### Service Mesh
 
-- HuaWei 也来讲了 Istio ambient mode 与他们自家的 kmesh，不过跟去年内容几乎一样，所以听下
-  来没啥感觉。
+- [Revolutionizing Sidecarless Service Mesh With eBPF - Zhonghu Xu & Muyang Tian, Huawei ](https://kccncchn2025.sched.com/event/1x5iI/revolutionizing-sidecarless-service-mesh-with-ebpf-zhonghu-xu-muyang-tian-huawei)
+  - 主要就讲 Huawei 自己搞的 Kmesh，有比较详细的讲底层的实现架构（其实跟去年 KubeCon 听过
+    的内容几乎一样）。
+  - 简单讲就是 Ambient Mode 通过 istio-cni（底层是 iptables）将流量拦截到用户态的 ztunnel
+    进行 L4 流量处理，而 Kmesh 使用 eBPF 在内核层实现了这些 L4 的功能。另外还简单介绍了
+    Cilium Service Mesh，是一个 Per-Node 的 Proxy，主要缺点是必须用 Cilium 网络插件，以及
+    它的 CRD 过于原始，使用复杂。
+  - Kmesh 也尝试用 eBPF 实现了 HTTP 协议的解析，但是这需要对内核打补丁，代价比较高。
 - [KubeCon EU 2025 - Choosing a Service Mesh - Alex McMenemy & Dimple Thoomkuzhy, Compare the Market](https://www.youtube.com/watch?v=hegNjjatNTU)
   - 虽然我接触过的基本都用的 Istio，不过看看别人怎么做选择总没坏处
 - [KubeCon EU 2025 - Navigating the Maze of Multi-Cluster Istio: Lessons Learned at Scale - Pamela Hernandez, BlackRock](https://www.youtube.com/watch?v=WpEkfVGWmd8)
   - Istio 多集群在挺多大公司有应用，之前面试就被问到过，可以玩玩看。
 - [KubeCon EU 2025 - A Service Mesh Benchmark You Can Trust - Denis Jannot, solo.io ](https://www.youtube.com/watch?v=oi4TpxuIYXk)
+  - 做一个好的 Benchmark 对比还挺费时间费精力的，还是直接看人家给的结果最方便（
 
 ### 安全性
 
@@ -166,7 +205,8 @@ PPT 链接。
 ### 云成本分析与优化
 
 - [KubeCon EU 2025 - Autonomous Al Agents for Cloud Cost Analysis - Ilya Lyamkin, Spotify](https://www.youtube.com/watch?v=sTbJ1-x3_yc&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=345)
-  - 跟我的工作比较有关系
+  - 实现一个会自动做 Plan，编写 SQL 与 Python 进行云生成分析的 Multi-Agent 系统，很有参考
+    价值。
 
 ### WASM 相关
 
