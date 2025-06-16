@@ -95,7 +95,7 @@ PPT 链接。
 
 ### 大一统的 LLM 推理解决方案
 
-- [Introducing AIBrix: Cost-Effective and Scalable Kubernetes Control Plane for VLLM - Jiaxin Shan & Liguang Xie, ByteDance](https://kccncchn2025.sched.com/event/1x5im/introducing-aibrix-cost-effective-and-scalable-kubernetes-control-plane-for-vllm-jiaxin-shan-liguang-xie-bytedance?iframe=no)
+[Introducing AIBrix: Cost-Effective and Scalable Kubernetes Control Plane for VLLM - Jiaxin Shan & Liguang Xie, ByteDance](https://kccncchn2025.sched.com/event/1x5im/introducing-aibrix-cost-effective-and-scalable-kubernetes-control-plane-for-vllm-jiaxin-shan-liguang-xie-bytedance?iframe=no)
 
 AIBrix 是一整套在 K8s 上跑 LLM 分布式推理的解决方案，它包含了：
 
@@ -137,9 +137,13 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 
 ### AI 模型分发
 
-- [AI Model Distribution Challenges and Best Practices](https://kccncchn2025.sched.com/event/1x5hl/ai-model-distribution-challenges-and-best-practices-wenbo-qi-xiaoya-xia-peng-tao-ant-group-wenpeng-li-alibaba-cloud-han-jiang-kuaishou?iframe=no&w=100%&sidebar=yes&bg=no)
-  - 几位开发者聊怎么在集群里分发数百 GB 大小的 LLM 模型。
-  - 业界目前的手段：dragonfly, juicefs, oci model spec + oci volume (k8s 1.33+)
+[AI Model Distribution Challenges and Best Practices](https://kccncchn2025.sched.com/event/1x5hl/ai-model-distribution-challenges-and-best-practices-wenbo-qi-xiaoya-xia-peng-tao-ant-group-wenpeng-li-alibaba-cloud-han-jiang-kuaishou?iframe=no&w=100%&sidebar=yes&bg=no)
+
+几位开发者聊怎么在集群里分发数百 GB 大小的 LLM 模型，业界目前的手段：
+
+- dragonfly
+- juicefs
+- oci model spec + oci volume (k8s 1.33+)
 
 ### 可观测性
 
@@ -199,28 +203,33 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 
 ### 安全性
 
-- [Keynote: Who Owns Your Pod? Observing and Blocking Unwanted Behavior at eBay With eBPF](https://kccncchn2025.sched.com/event/1x5jM/keynote-who-owns-your-pod-observing-and-blocking-unwanted-behavior-at-ebay-with-ebpf-jianlin-lv-ebay-liyi-huang-isovalent-at-cisco?iframe=no&w=100%&sidebar=yes&bg=no)
-  - 主要就介绍 cilium 家的 tetragon, 一个基于 eBPF 的 K8S 安全工具，跟 apparmor 感觉会有点
-    类似，但是能做到更精细的权限管理。
-  - 朋友跟我 Argue 这种工具不是很有必要，应该用 GitOps 流程，然后将安全检查前置在 CICD 流
-    水线中。
+[Keynote: Who Owns Your Pod? Observing and Blocking Unwanted Behavior at eBay With eBPF](https://kccncchn2025.sched.com/event/1x5jM/keynote-who-owns-your-pod-observing-and-blocking-unwanted-behavior-at-ebay-with-ebpf-jianlin-lv-ebay-liyi-huang-isovalent-at-cisco?iframe=no&w=100%&sidebar=yes&bg=no)
+
+主要就介绍 cilium 家的 tetragon, 一个基于 eBPF 的 K8S 安全工具，跟 apparmor 感觉会有点类
+似，但是能做到更精细的权限管理。
+
+朋友跟我 Argue 这种工具不是很有必要，应该用 GitOps 流程，然后将安全检查前置在 CICD 流水线
+中。
 
 ### 云成本分析与优化
 
-- [KubeCon EU 2025 - Autonomous Al Agents for Cloud Cost Analysis - Ilya Lyamkin, Spotify](https://www.youtube.com/watch?v=sTbJ1-x3_yc&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=345)
-  - 实现一个会自动做 Plan，编写 SQL 与 Python 进行云生成分析的 Multi-Agent 系统，很有参考
-    价值。
+[KubeCon EU 2025 - Autonomous Al Agents for Cloud Cost Analysis - Ilya Lyamkin, Spotify](https://www.youtube.com/watch?v=sTbJ1-x3_yc&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=345)
+
+实现一个会自动做 Plan，编写 SQL 与 Python 进行云生成分析的 Multi-Agent 系统，很有参考价
+值。
 
 ### WASM 相关
 
-- [Keynote: An Optimized Linux Stack for GenAI Workloads - Michael Yuan, WasmEdge](https://kccncchn2025.sched.com/event/1x5jJ/keynote-an-optimized-linux-stack-for-genai-workloads-michael-yuan-wasmedge?iframe=no&w=100%&sidebar=yes&bg=no)
-  - 怎么用 WasmEdge + LlamaEdge 在边缘设备上跑 LLM 小模型，还是挺有意思的。
+[Keynote: An Optimized Linux Stack for GenAI Workloads - Michael Yuan, WasmEdge](https://kccncchn2025.sched.com/event/1x5jJ/keynote-an-optimized-linux-stack-for-genai-workloads-michael-yuan-wasmedge?iframe=no&w=100%&sidebar=yes&bg=no)
+
+讲怎么用 WasmEdge + LlamaEdge 在边缘设备上跑 LLM 小模型，还是挺有意思的。
 
 ### 如何搭建一个 AI 工作流
 
-- [KubeCon EU 2025 - Tutorial: Build, Operate, and Use a Multi-Tenant AI Cluster Based Entirely on Open Source](https://www.youtube.com/watch?v=Ab7mRoJYsMo&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=365)
-  - 长度超过一个小时的教程，IBM 出品。装了一堆东西，包括 Kueue, Kubeflow, PyTorch, Ray,
-    vLLM, and Autopilot
+[KubeCon EU 2025 - Tutorial: Build, Operate, and Use a Multi-Tenant AI Cluster Based Entirely on Open Source](https://www.youtube.com/watch?v=Ab7mRoJYsMo&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=365)
+
+长度超过一个小时的教程，IBM 出品。装了一堆东西，包括 Kueue, Kubeflow, PyTorch, Ray, vLLM,
+and Autopilot
 
 ## Non-Tech
 
