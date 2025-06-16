@@ -12,7 +12,7 @@ resources:
     src: *featimg
 authors: ["ryan4yin"]
 
-tags: ["云原生", "Cloud-Native", "Kubernetes", "AI", "LLM", "Opemtelemetry"]
+tags: ["云原生", "Cloud-Native", "Kubernetes", "AI", "LLM", "OpenTelemetry"]
 
 categories: ["tech"]
 series: ["云原生相关"]
@@ -21,7 +21,7 @@ hiddenFromSearch: false
 
 lightgallery: false
 
-# 否开启表格排序
+# 是否开启表格排序
 table:
   sort: false
 
@@ -39,9 +39,9 @@ comment:
 
 ## 前言
 
-今年 1 月底辞职后，在家过了个年，接着上海、张家界、重庆、苏州、南京玩了一圈，4 月中旬才回
-深圳开始找工作。本来看到 6 月就是 KubeCon China 2025，还不太确定自己到时候会不会有时间去。
-不过很幸运，最后确定 offer 的公司非常 Tech，leader 在面试的时候就说看到我博客里写了
+今年 1 月底辞职后，在家过了个年，接着在上海、张家界、重庆、苏州、南京玩了一圈，4 月中旬才
+回深圳开始找工作。本来看到 6 月就是 KubeCon China 2025，还不太确定自己到时候会不会有时间
+去。不过很幸运，最后确定 offer 的公司非常重视技术，leader 在面试的时候就说看到我博客里写了
 KubeCon 的经历，公司非常鼓励参加这种技术交流活动，去报个 Talk 也完全可以，公司报销所有费
 用。
 
@@ -72,7 +72,7 @@ CloudNative AI Con 了。
 - OpenTelemetry 日渐成熟，已经很接近它统一 Logs/Traces/Metrics 三大 Signals 的目标了。
   - 目前已经出现了 Uptrace 之类的大一统观测平台，充分利用了 OTel 的标签来关联 Logs/Traces.
   - 当前的最佳实践是，在 Infra 层面仍然使用传统方式采集 Logs 与 Metrics，而在 APP 层面则改
-    由 OTel 统一采集所有 Logs, Traces 与 Metrcis，OTel 会通过 Span ID 把这些数据关联起来，
+    由 OTel 统一采集所有 Logs, Traces 与 Metrics，OTel 会通过 Span ID 把这些数据关联起来，
     而且标签语义完全一致。
 - WASM 仍在探寻自己的应用场景，今年介绍的场景主要是在边缘侧跑小模型。
 - 很多公司正在尝试将 AI 与可观测性结合去做云上的性能优化、成本分析、故障自愈等功能，目前已
@@ -97,13 +97,13 @@ PPT 链接。
 
 - [Introducing AIBrix: Cost-Effective and Scalable Kubernetes Control Plane for VLLM - Jiaxin Shan & Liguang Xie, ByteDance](https://kccncchn2025.sched.com/event/1x5im/introducing-aibrix-cost-effective-and-scalable-kubernetes-control-plane-for-vllm-jiaxin-shan-liguang-xie-bytedance?iframe=no)
 
-AIBrix 则是一整套在 K8s 上跑 LLM 分布式推理的解决方案，它包含了：
+AIBrix 是一整套在 K8s 上跑 LLM 分布式推理的解决方案，它包含了：
 
 - 分布式推理的部署
 - LLM 扩缩容
 - LLM 请求路由（负载均衡）
 - 分布式 KV 缓存
-  - 主要是中心化存储这些数据，减少对 HMB 显存的使用，降低显存需求。
+  - 主要是中心化存储这些数据，减少对 HBM 显存的使用，降低显存需求。
 - LoRa 的动态加载
 - ...
 
@@ -125,7 +125,7 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 
 - [KubeCon EU 2025 - Optimizing Metrics Collection & Serving When Autoscaling LLM Workloads](https://www.youtube.com/watch?v=lefjb4Vnd8k&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=326)
   - 讲得挺风趣，不过可能我对这块比较熟悉，基本能猜到就是自定义业务 metrics + 用 KEDA 做
-    custom metrics based scaling. 所以就只是简单看了看。
+    custom metrics based scaling，所以就只是简单看了看。
 - [KubeCon EU 2025 - Keynote: LLM-Aware Load Balancing in Kubernetes: A New Era of Efficiency - Clayton Coleman, Distinguished Engineer, Google & Jiaxin Shan, Software Engineer, Bytedance](https://www.youtube.com/watch?v=BBqDpqATcI0&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=26)
   - 很有意思，LLM 的请求跟传统的 API 请求区别非常大，主要点在于：
     - input 长度区别就非常大，有的请求 input 很简单，相对就很轻量，而有的可能直接丢一份
