@@ -215,7 +215,7 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 
 [KubeCon EU 2025 - Autonomous Al Agents for Cloud Cost Analysis - Ilya Lyamkin, Spotify](https://www.youtube.com/watch?v=sTbJ1-x3_yc&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=345)
 
-实现一个会自动做 Plan，编写 SQL 与 Python 进行云生成分析的 Multi-Agent 系统，很有参考价
+实现一个会自动做 Plan，编写 SQL 与 Python 进行云成本分析的 Multi-Agent 系统，很有参考价
 值。
 
 ### WASM 相关
