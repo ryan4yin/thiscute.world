@@ -78,8 +78,7 @@ CloudNative AI Con 了。
 - 很多公司正在尝试将 AI 与可观测性结合去做云上的性能优化、成本分析、故障自愈等功能，目前已
   经有了一定成果。
 
-KubeCon China 2025 的会议视频将会陆续被添加到 Youtube 中，另外因为这次 KubeCon China 的内
-容相对较少，所以都列在下面了：
+KubeCon China 2025 与 KubeCon Europe 2025 的视频列表如下：
 
 - [KubeCon + CloudNativeCon China 2025 (Hong Kong) - Youtube](https://www.youtube.com/playlist?list=PLj6h78yzYM2P1xtALqTcCmRAa6142uERl)
 - [KubeCon + CloudNativeCon Europe 2025(London) - Youtube](https://www.youtube.com/playlist?list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc)
