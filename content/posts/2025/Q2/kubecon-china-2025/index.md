@@ -65,8 +65,10 @@ CloudNative AI Con 了。
   （
 - AI 让 CloudNative 社区焕发了新生，围绕 AI 在过去两年间涌现了许多新的 CloudNative 项
   目。AI 话题已经成为了 KubeCon 绝对的主旋律。
-  - AI 部分主要在讨论 AI 推理，关键技术点：分布式推理、扩缩容与 LLM-Aware 的负载均衡以及
-    AI 模型分发
+  - AI 部署部分主要在讨论 AI 推理，关键技术点：分布式推理、扩缩容与 LLM-Aware 的负载均衡以
+    及 AI 模型分发
+  - AIOps 也有好几个讨论，简单的用法就是 ChatBot，复杂点的会尝试使用 Multi-Agent 完成更复
+    杂的任务（比如云成本分析优化）。
 - OpenTelemetry 日渐成熟，已经很接近它统一 Logs/Traces/Metrics 三大 Signals 的目标了。
   - 目前已经出现了 Uptrace 之类的大一统观测平台，充分利用了 OTel 的标签来关联 Logs/Traces.
   - 当前的最佳实践是，在 Infra 层面仍然使用传统方式采集 Logs 与 Metrics，而在 APP 层面则改
