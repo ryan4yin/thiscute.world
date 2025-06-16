@@ -69,14 +69,14 @@ CloudNative AI Con 了。
     及 AI 模型分发
   - AIOps 也有好几个讨论，简单的用法就是 ChatBot，复杂点的会尝试使用 Multi-Agent 完成更复
     杂的任务（比如云成本分析优化）。
+    - 快手尝试在超大规模集群中利用 Logs/Metrcis 为每个服务训练一个模型用于动态调整 HPA，实
+      现 SLA 与成本的平衡。
 - OpenTelemetry 日渐成熟，已经很接近它统一 Logs/Traces/Metrics 三大 Signals 的目标了。
   - 目前已经出现了 Uptrace 之类的大一统观测平台，充分利用了 OTel 的标签来关联 Logs/Traces.
   - 当前的最佳实践是，在 Infra 层面仍然使用传统方式采集 Logs 与 Metrics，而在 APP 层面则改
     由 OTel 统一采集所有 Logs, Traces 与 Metrics，OTel 会通过 Span ID 把这些数据关联起来，
     而且标签语义完全一致。
 - WASM 仍在探寻自己的应用场景，今年介绍的场景主要是在边缘侧跑小模型。
-- 很多公司正在尝试将 AI 与可观测性结合去做云上的性能优化、成本分析、故障自愈等功能，目前已
-  经有了一定成果。
 
 KubeCon China 2025 与 KubeCon Europe 2025 的视频列表如下：
 
