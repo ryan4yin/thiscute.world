@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.136.5">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-06-16T04:31:10+00:00</updated><id>https://thiscute.world/</id><entry><title type="html">KubeCon China 2025 见闻</title><link href="https://thiscute.world/posts/kubecon-china-2025/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/kubecon-china-2024/?utm_source=atom_feed" rel="related" type="text/html" title="KubeCon China 2024 之旅"/><link href="https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/?utm_source=atom_feed" rel="related" type="text/html" title="Kubernetes 集群伸缩组件 - Karpenter"/><link href="https://thiscute.world/posts/kubernetes-best-practices/?utm_source=atom_feed" rel="related" type="text/html" title="Kubernetes 微服务最佳实践"/><link href="https://thiscute.world/posts/finops-for-kubernetes/?utm_source=atom_feed" rel="related" type="text/html" title="FinOps for Kubernetes - 如何拆分 Kubernetes 成本"/><link href="https://thiscute.world/posts/kubernetes-deployment-using-kubeadm/?utm_source=atom_feed" rel="related" type="text/html" title="部署一个 Kubernetes 集群"/><id>https://thiscute.world/posts/kubecon-china-2025/</id><published>2025-06-15T17:43:44+08:00</published><updated>2025-06-15T17:43:44+08:00</updated><summary type="html">&lt;h2 id="前言" class="headerLink">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.136.5">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-06-16T04:46:21+00:00</updated><id>https://thiscute.world/</id><entry><title type="html">KubeCon China 2025 见闻</title><link href="https://thiscute.world/posts/kubecon-china-2025/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/kubecon-china-2024/?utm_source=atom_feed" rel="related" type="text/html" title="KubeCon China 2024 之旅"/><link href="https://thiscute.world/posts/kubernetes-cluster-autoscaling-1-karpenter/?utm_source=atom_feed" rel="related" type="text/html" title="Kubernetes 集群伸缩组件 - Karpenter"/><link href="https://thiscute.world/posts/kubernetes-best-practices/?utm_source=atom_feed" rel="related" type="text/html" title="Kubernetes 微服务最佳实践"/><link href="https://thiscute.world/posts/finops-for-kubernetes/?utm_source=atom_feed" rel="related" type="text/html" title="FinOps for Kubernetes - 如何拆分 Kubernetes 成本"/><link href="https://thiscute.world/posts/kubernetes-deployment-using-kubeadm/?utm_source=atom_feed" rel="related" type="text/html" title="部署一个 Kubernetes 集群"/><id>https://thiscute.world/posts/kubecon-china-2025/</id><published>2025-06-15T17:43:44+08:00</published><updated>2025-06-15T17:43:44+08:00</updated><summary type="html">&lt;h2 id="前言" class="headerLink">
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark">&lt;/a>前言&lt;/h2>&lt;p>今年 1 月底辞职后，在家过了个年，接着在上海、张家界、重庆、苏州、南京玩了一圈，4 月中旬才回深圳开始找工作。本来看到 6 月就是 KubeCon China 2025，还不太确定自己到时候会不会有时间去。不过很幸运，最后确定 offer 的公司非常重视技术，leader 在面试的时候就说看到我博客里写了
 KubeCon 的经历，公司非常鼓励参加这种技术交流活动，去报个 Talk 也完全可以，公司报销所有费用。&lt;/p>
 &lt;p>于是我在入职还没满一个月的时候，就直接公费出差去香港 KubeCon China 2025 玩了一圈（&lt;/p>
@@ -22,7 +22,11 @@ CloudNative AI Con 了。</p>
 <li>AI 让 CloudNative 社区焕发了新生，围绕 AI 在过去两年间涌现了许多新的 CloudNative 项目。AI 话题已经成为了 KubeCon 绝对的主旋律。
 <ul>
 <li>AI 部署部分主要在讨论 AI 推理，关键技术点：分布式推理、扩缩容与 LLM-Aware 的负载均衡以及 AI 模型分发</li>
-<li>AIOps 也有好几个讨论，简单的用法就是 ChatBot，复杂点的会尝试使用 Multi-Agent 完成更复杂的任务（比如云成本分析优化）。</li>
+<li>AIOps 也有好几个讨论，简单的用法就是 ChatBot，复杂点的会尝试使用 Multi-Agent 完成更复杂的任务（比如云成本分析优化）。
+<ul>
+<li>快手尝试在超大规模集群中利用 Logs/Metrcis 为每个服务训练一个模型用于动态调整 HPA，实现 SLA 与成本的平衡。</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>OpenTelemetry 日渐成熟，已经很接近它统一 Logs/Traces/Metrics 三大 Signals 的目标了。
@@ -33,7 +37,6 @@ CloudNative AI Con 了。</p>
 </ul>
 </li>
 <li>WASM 仍在探寻自己的应用场景，今年介绍的场景主要是在边缘侧跑小模型。</li>
-<li>很多公司正在尝试将 AI 与可观测性结合去做云上的性能优化、成本分析、故障自愈等功能，目前已经有了一定成果。</li>
 </ul>
 <p>KubeCon China 2025 与 KubeCon Europe 2025 的视频列表如下：</p>
 <ul>
@@ -187,7 +190,7 @@ Cilium Service Mesh，是一个 Per-Node 的 Proxy，主要缺点是必须用 Ci
 <p>朋友跟我 Argue 这种工具不是很有必要，应该用 GitOps 流程，然后将安全检查前置在 CICD 流水线中。</p>
 <h3 id="云成本分析与优化" class="headerLink">
     <a href="#%e4%ba%91%e6%88%90%e6%9c%ac%e5%88%86%e6%9e%90%e4%b8%8e%e4%bc%98%e5%8c%96" class="header-mark"></a>云成本分析与优化</h3><p><a href="https://www.youtube.com/watch?v=sTbJ1-x3_yc&amp;list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&amp;index=345" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - Autonomous Al Agents for Cloud Cost Analysis - Ilya Lyamkin, Spotify</a></p>
-<p>实现一个会自动做 Plan，编写 SQL 与 Python 进行云生成分析的 Multi-Agent 系统，很有参考价值。</p>
+<p>实现一个会自动做 Plan，编写 SQL 与 Python 进行云成本分析的 Multi-Agent 系统，很有参考价值。</p>
 <h3 id="wasm-相关" class="headerLink">
     <a href="#wasm-%e7%9b%b8%e5%85%b3" class="header-mark"></a>WASM 相关</h3><p><a href="https://kccncchn2025.sched.com/event/1x5jJ/keynote-an-optimized-linux-stack-for-genai-workloads-michael-yuan-wasmedge?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer">Keynote: An Optimized Linux Stack for GenAI Workloads - Michael Yuan, WasmEdge</a></p>
 <p>讲怎么用 WasmEdge + LlamaEdge 在边缘设备上跑 LLM 小模型，还是挺有意思的。</p>
