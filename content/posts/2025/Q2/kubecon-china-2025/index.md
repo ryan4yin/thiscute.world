@@ -67,11 +67,11 @@ CloudNative AI Con 了。
   目。AI 话题已经成为了 KubeCon 绝对的主旋律。
   - AI 部分主要在讨论 AI 推理，关键技术点：分布式推理、扩缩容与 LLM-Aware 的负载均衡以及
     AI 模型分发
-- OpenTelemetry 日渐成熟，已经成为了 Logs/Tracing 领域的事实标准，但是在 Metrics 领域的处
-  境目前还有些尴尬。
-  - 在 Metrcis 领域它不得不兼容 Prometheus 的标准与配置，并且需要由 otel collector 去 Pull
-    Metrics 数据，统一处理后再上传到 Prometheus/VictoriaMetrics, 这一角色与 prometheus
-    agent mode 以及 vmagent 很类似。
+- OpenTelemetry 日渐成熟，已经很接近它统一 Logs/Traces/Metrics 三大 Signals 的目标了。
+  - 目前已经出现了 Uptrace 之类的大一统观测平台，充分利用了 OTel 的标签来关联 Logs/Traces.
+  - 当前的最佳实践是，在 Infra 层面仍然使用传统方式采集 Logs 与 Metrics，而在 APP 层面则改
+    由 OTel 统一采集所有 Logs, Traces 与 Metrcis，OTel 会通过 Span ID 把这些数据关联起来，
+    而且标签语义完全一致。
 - WASM 仍在探寻自己的应用场景，今年介绍的场景主要是在边缘侧跑小模型。
 - 很多公司正在尝试将 AI 与可观测性结合去做云上的性能优化、成本分析、故障自愈等功能，目前已
   经有了一定成果。
