@@ -201,6 +201,14 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 - [KubeCon EU 2025 - A Service Mesh Benchmark You Can Trust - Denis Jannot, solo.io ](https://www.youtube.com/watch?v=oi4TpxuIYXk)
   - 做一个好的 Benchmark 对比还挺费时间费精力的，还是直接看人家给的结果最方便（
 
+### Ingress-Nginx
+
+[The Next Steps for Ingress-NGINX and the Ingate Project - Jintao Zhang, Kong Inc.](https://kccncchn2025.sched.com/event/1x5hW/the-next-steps-for-ingress-nginx-and-the-ingate-project-jintao-zhang-kong-inc?iframe=no)
+
+Ingress-NGINX 终于要寿终正寝了，它的继任者叫 InGate，不过 InGate 目前还几乎是个空壳（
+
+{{<figure src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" width="80%">}}
+
 ### 安全性
 
 [Keynote: Who Owns Your Pod? Observing and Blocking Unwanted Behavior at eBay With eBPF](https://kccncchn2025.sched.com/event/1x5jM/keynote-who-owns-your-pod-observing-and-blocking-unwanted-behavior-at-ebay-with-ebpf-jianlin-lv-ebay-liyi-huang-isovalent-at-cisco?iframe=no&w=100%&sidebar=yes&bg=no)
@@ -265,7 +273,6 @@ Cisico 的老哥也加入了进来。
 
 {{<figure src="/images/kubecon-china-2025/talk-tetragon-observibility.jpg" title="用 tetragon 限制文件访问" width="80%">}}
 {{<figure src="/images/kubecon-china-2025/llm-disaggregated-serving.jpg" title="LWS 的 Talk，在讲 PD 分离" width="80%">}}
-{{<figure src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" title="Ingress-NGINX 终于要寿终正寝了" width="80%">}}
 
 {{<figure src="/images/kubecon-china-2025/nitendo-switch-store-miku.jpg" title="Switch 店在宣传 Miku Boxing" width="80%">}}
 {{<figure src="/images/kubecon-china-2025/nitendo-switch-store.jpg" title="累计有三个朋友 KubeCon 期间在这里买了 Switch 2，它这波血赚" width="80%">}}
