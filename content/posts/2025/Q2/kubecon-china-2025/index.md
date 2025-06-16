@@ -1,18 +1,18 @@
 ---
-title: "KubeCon China 2025 之旅"
+title: "KubeCon China 2025 见闻"
 subtitle: "LLM, LLM, 还是 LLM"
 description: ""
 date: 2025-06-15T17:43:44+08:00
 lastmod: 2025-06-15T17:43:44+08:00
-draft: true
+draft: false
 
-featuredImage: "kubecon-china-2024-linus.webp"
+featuredImage: &featimg "featured-image.webp"
 resources:
   - name: featured-image
-    src: "kubecon-china-2024-linus.webp"
+    src: *featimg
 authors: ["ryan4yin"]
 
-tags: ["云原生", "Cloud-Native", "Kubernetes", "AI", "LLM"]
+tags: ["云原生", "Cloud-Native", "Kubernetes", "AI", "LLM", "Opemtelemetry"]
 
 categories: ["tech"]
 series: ["云原生相关"]
@@ -46,6 +46,8 @@ KubeCon 的经历，公司非常鼓励参加这种技术交流活动，去报个
 用。
 
 于是我在入职还没满一个月的时候，就直接公费出差去香港 KubeCon China 2025 玩了一圈（
+
+> 也问过同事们是否有想法，但种种原因最后还是只有我一个人参加了（悲
 
 <!--more-->
 
@@ -218,3 +220,58 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 - [KubeCon EU 2025 - Tutorial: Build, Operate, and Use a Multi-Tenant AI Cluster Based Entirely on Open Source](https://www.youtube.com/watch?v=Ab7mRoJYsMo&list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&index=365)
   - 长度超过一个小时的教程，IBM 出品。装了一堆东西，包括 Kueue, Kubeflow, PyTorch, Ray,
     vLLM, and Autopilot
+
+## Non-Tech
+
+参加 KubeCon 其实不仅仅是听一听过去一年技术方面的变化与进展，还有个很重要的目的是跟各个方
+向的开发者们 Social, 也可以说是某种大型网友见面会（
+
+今年拉到了 [@scruelt], [@ox-warrior] 等几位朋友一起去 KubeCon 玩，然后在会场又陆续跟
+[@cookie] [@ayakaneko] [@dotnetfx35] 见面闲聊瞎扯了一波，顺便传教了 NixOS（
+
+Day 2 上午发现没啥想听的，发现有个 Peer Group Meeting 参加，不过需要先 sign up. 跟
+[@scruelt] 一起去报了名，本来还担心只提前 20 分钟 sign up 会不会没机会了，结果到会议室发现
+只有 3 个 mentors 在场，于是就我们俩跟他们随便闲聊 emmm 三位 mentors 分别是 [Nate
+Waddington] （Head of Mentorship & Documentatio, Canada），[Kohei Ota]（CNCF Ambassador,
+Japan）以及 [Amit DSouza]（co-founder of Odyssey Cloud, Australia），另外聊到半途一位
+Cisico 的老哥也加入了进来。
+
+基本就是闲聊，[@scruelt] 口语比我好，而且刚辞职也有许多问题想问，绝大部分话题都是他提出来
+的。我因为最近诸事皆顺，反而没啥想问的。
+
+{{<figure src="/images/kubecon-china-2025/peer_group_meeting.jpg" title="进了 Peer Group Meeting 发现只有 Mentors hhh" width="80%">}}
+
+最后就放些图吧。
+
+{{<figure src="/images/kubecon-china-2025/kubecon-china-welcome.jpg" title="欢迎光临 KubeCon China 2025" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/kubecon-t-shirts.jpg" title="先领个 T 恤嘿嘿" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/kubecon-china-coffee-break.jpg" title="茶歇时间" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/suse-mascot-plush-doll-2.jpg" title="SUSE 的毛绒玩具好想要！" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/suse-mascot-plush-doll.jpg" title="大 SUSE 上一只小 SUSE" width="80%">}}
+
+{{<figure src="/images/kubecon-china-2025/talk-tetragon-observibility.jpg" title="用 tetragon 限制文件访问" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/llm-disaggregated-serving.jpg" title="LWS 的 Talk，在讲 PD 分离" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" title="Ingress-NGINX 终于要寿终正寝了" width="80%">}}
+
+{{<figure src="/images/kubecon-china-2025/nitendo-switch-store-miku.jpg" title="Switch 店在宣传 Miku Boxing" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/nitendo-switch-store.jpg" title="累计有三个朋友 KubeCon 期间在这里买了 Switch 2，它这波血赚" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/photo_friends.jpg" title="面基成功！顺便传教 NixOS" width="80%">}}
+
+{{<figure src="/images/kubecon-china-2025/istio-book-and-badge.jpg" title="拿到的 Istio/K8s 小饼干跟我的书很配啊" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/kubecon-china-2025-gifts.jpg" title="我的所有'战利品' hhh" width="80%">}}
+
+{{<figure src="/images/kubecon-china-2025/airplane-boarding.jpg" title="登机了，再见深圳" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/airplane-1.jpg" title="这是我第几次坐飞机来着？" width="80%">}}
+
+总之玩得很开心，明年再见！
+
+[@scruelt]: https://x.com/scruelt
+[@cookie]: https://x.com/nowaits1
+[@ox-warrior]: https://github.com/ox-warrior
+[@rizumu]: https://x.com/OikawaRizumu
+[@ayakaneko]: https://x.com/ayakaneko
+[@dotnetfx35]: https://x.com/dotnetfx35
+[Nate Waddington]: https://www.cncf.io/people/staff/?p=nate-waddington
+[Kohei Ota]: https://www.cncf.io/people/ambassadors/?_sft_lf-country=jp&p=kohei-ota
+[Amit DSouza]:
+  https://events.linuxfoundation.org/kubecon-cloudnativecon-china/?p=amit-dsouza
