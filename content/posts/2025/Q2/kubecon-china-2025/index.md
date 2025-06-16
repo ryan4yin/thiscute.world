@@ -237,7 +237,10 @@ and Autopilot
 向的开发者们 Social, 也可以说是某种大型网友见面会（
 
 今年拉到了 [@scruelt], [@ox-warrior] 等几位朋友一起去 KubeCon 玩，然后在会场又陆续跟
-[@cookie] [@ayakaneko] [@dotnetfx35] 见面闲聊瞎扯了一波，顺便传教了 NixOS（
+[@cookie], [@rizumu], [@ayakaneko] 以及 [@dotnetfx35] 见面闲聊瞎扯了一波，收获了 [@rizumu]
+跟 [@ayakaneko] 用 3D 打印机打印的 Kubernetes 跟 Go 小饼干各一枚，顺便传教了 NixOS（
+
+{{<figure src="/images/kubecon-china-2025/istio-book-and-badge.jpg" title="拿到的 K8s/Go 小饼干以及 Istio 冰箱贴" width="80%">}}
 
 Day 2 上午发现没啥想听的，发现有个 Peer Group Meeting 参加，不过需要先 sign up. 跟
 [@scruelt] 一起去报了名，本来还担心只提前 20 分钟 sign up 会不会没机会了，结果到会议室发现
@@ -267,7 +270,6 @@ Cisico 的老哥也加入了进来。
 {{<figure src="/images/kubecon-china-2025/nitendo-switch-store.jpg" title="累计有三个朋友 KubeCon 期间在这里买了 Switch 2，它这波血赚" width="80%">}}
 {{<figure src="/images/kubecon-china-2025/photo_friends.jpg" title="面基成功！顺便传教 NixOS" width="80%">}}
 
-{{<figure src="/images/kubecon-china-2025/istio-book-and-badge.jpg" title="拿到的 Istio/K8s 小饼干跟我的书很配啊" width="80%">}}
 {{<figure src="/images/kubecon-china-2025/kubecon-china-2025-gifts.jpg" title="我的所有'战利品' hhh" width="80%">}}
 
 {{<figure src="/images/kubecon-china-2025/airplane-boarding.jpg" title="登机了，再见深圳" width="80%">}}
