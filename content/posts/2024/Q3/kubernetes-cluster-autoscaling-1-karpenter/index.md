@@ -72,7 +72,7 @@ Kubernetes 具有非常丰富的动态伸缩能力，这体现在多个层面：
 ## Karpenter 简介
 
 Karpenter 项目由 AWS 于 2020 年创建，其目标是解决 AWS 用户在 EKS 上使用 Cluster Autoscaler
-做集群伸缩时遇到的一些问题。在经历了几年发展后，Karnepnter 于 2023 年底被捐献给
+做集群伸缩时遇到的一些问题。在经历了几年发展后，Karpenter 于 2023 年底被捐献给
 CNCF（[kubernetes/org#4258](https://github.com/kubernetes/org/issues/4258)），成为目前
 （2024/07/10）唯二的官方 Node 伸缩方案之一。
 
@@ -131,11 +131,11 @@ EC2），负责节点的创建、删除、修改等操作。
      的数量，它不直接管理节点，也就做不到此类节点的精细管理。
    - **主动优化**：Karpenter 支持主动根据负载情况使用不同实例类型的节点替换高风险节点，或
      合并低负载节点，以节省成本。
-   - **Pod 精细化调度**：Karpeneter 本身也是一个调度器，它能根据 Pod 的资源需求、优先
+   - **Pod 精细化调度**：Karpenter 本身也是一个调度器，它能根据 Pod 的资源需求、优先
      级、Node Affinity、Topology Spread Constraints 等因素来申请节点并主动将 Pod 调度到该
      节点上。而 Cluster Autoscaler 只能控制节点的数量，并无调度能力。
 1. **快速、高效**：因为 Karpenter 直接创建、删除节点，并且主动调度 Pod，所以它的伸缩速度与
-   效率要比 Cluster Autoscaler 高很多。这是因为 Karpneter 能快速获知节点创建、删除、加入集
+   效率要比 Cluster Autoscaler 高很多。这是因为 Karpenter 能快速获知节点创建、删除、加入集
    群是否成功，而 Cluster Autoscaler 只能被动地等待云厂商的伸缩组或节点池服务完成这些操
    作，它无法主动感知节点的状态。
 
