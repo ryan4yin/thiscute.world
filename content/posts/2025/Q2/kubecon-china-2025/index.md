@@ -107,6 +107,10 @@ AIBrix 是一整套在 K8s 上跑 LLM 分布式推理的解决方案，它包含
 - LoRa 的动态加载
 - ...
 
+代码：
+
+- https://github.com/vllm-project/aibrix
+
 AIBrix 目前放在了 vllm-project 项目下，stars 也不少，感觉项目还是挺健康的，值得关注。
 
 ### 分布式 LLM 推理的部署
@@ -114,6 +118,10 @@ AIBrix 目前放在了 vllm-project 项目下，stars 也不少，感觉项目�
 [More Than Model Sharding: LWS & Distributed Inference - Peter Pan & Nicole Li, DaoCloud & Shane Wang, Intel ](https://kccncchn2025.sched.com/event/1x5i6/more-than-model-sharding-lws-distributed-inference-peter-pan-nicole-li-daocloud-shane-wang-intel?iframe=no&w=100%&sidebar=yes&bg=no)
 
 全场最有意思的 Talks 之一，大概介绍了分布式推理的架构、优化点，以及 LWS 的优点与用法。
+
+代码：
+
+- https://github.com/kubernetes-sigs/lws
 
 简单的说 LWS 是一个专门为 LLM 分布式推理的部署而设计的 CRD, 主要是支持了 LLM 任务的分组调
 度。
@@ -134,6 +142,7 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
     - 不同机器可能会使用不同的 GPU 类型，而这些 GPU 的性能各异。
     - 在一个支持多模型的平台上，不同模型的高低峰期也存在比较明显的区别。
   - 上面这些特征导致传统的负载均衡策略完全失效。
+  - 解决方案: <https://github.com/kubernetes-sigs/gateway-api-inference-extension>
 
 ### AI 模型分发
 
@@ -206,6 +215,10 @@ https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020
 [The Next Steps for Ingress-NGINX and the Ingate Project - Jintao Zhang, Kong Inc.](https://kccncchn2025.sched.com/event/1x5hW/the-next-steps-for-ingress-nginx-and-the-ingate-project-jintao-zhang-kong-inc?iframe=no)
 
 Ingress-NGINX 终于要寿终正寝了，它的继任者叫 InGate，不过 InGate 目前还几乎是个空壳（
+
+代码
+
+- https://github.com/kubernetes-sigs/ingate
 
 {{<figure src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" width="80%">}}
 
