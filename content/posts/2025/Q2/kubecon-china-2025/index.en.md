@@ -15,7 +15,7 @@ authors: ["ryan4yin"]
 tags: ["Cloud-Native", "Kubernetes", "AI", "LLM", "OpenTelemetry"]
 
 categories: ["tech"]
-series: ["Cloud Native"]
+series: ["Cloud-Native Related"]
 hiddenFromHomePage: false
 hiddenFromSearch: false
 
