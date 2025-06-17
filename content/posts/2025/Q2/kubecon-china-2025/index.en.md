@@ -120,6 +120,10 @@ AIBrix is a complete solution for running distributed LLM inference on K8s, incl
 - Dynamic LoRa loading
 - ...
 
+Code:
+
+- https://github.com/vllm-project/aibrix
+
 AIBrix is currently under the vllm-project, with a good number of stars, suggesting the
 project is healthy and worth following.
 
@@ -129,6 +133,10 @@ project is healthy and worth following.
 
 One of the most interesting talks, covering distributed inference architecture,
 optimization points, and the advantages and usage of LWS.
+
+Code:
+
+- https://github.com/kubernetes-sigs/lws
 
 Simply put, LWS is a CRD specifically designed for LLM distributed inference deployment,
 mainly supporting group scheduling for LLM tasks.
@@ -152,6 +160,7 @@ support): https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305
     - In a multi-model platform, different models have distinct peak and off-peak periods
   - These characteristics make traditional load balancing strategies completely
     ineffective
+  - Solution: <https://github.com/kubernetes-sigs/gateway-api-inference-extension>
 
 ### AI Model Distribution
 
@@ -236,6 +245,10 @@ clusters. Current industry approaches:
 
 Ingress-NGINX is finally being retired, with its successor being InGate, though InGate is
 currently almost empty (:
+
+Code:
+
+- https://github.com/kubernetes-sigs/ingate
 
 {{<figure src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" width="80%">}}
 
