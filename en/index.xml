@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.136.5">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/en/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/en/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/en/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-06-17T09:30:31+00:00</updated><id>https://thiscute.world/en/</id><entry><title type="html">KubeCon China 2025 Experience</title><link href="https://thiscute.world/en/posts/kubecon-china-2025/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/en/posts/kubecon-china-2024/?utm_source=atom_feed" rel="related" type="text/html" title="KubeCon China 2024 Adventure"/><link href="https://thiscute.world/en/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - My Experience of NixOS"/><link href="https://thiscute.world/en/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="Why do I explore these niche technologies?"/><link href="https://thiscute.world/en/posts/nixos-and-flake-basics/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS &amp; Nix Flakes - A Guide for Beginners"/><link href="https://thiscute.world/en/posts/2021-summary/?utm_source=atom_feed" rel="related" type="text/html" title="Summary of My 2021"/><id>https://thiscute.world/en/posts/kubecon-china-2025/</id><published>2025-06-15T17:43:44+08:00</published><updated>2025-06-15T17:43:44+08:00</updated><summary type="html">&lt;h2 id="preface" class="headerLink">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.136.5">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/en/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/en/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/en/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-06-17T09:32:34+00:00</updated><id>https://thiscute.world/en/</id><entry><title type="html">KubeCon China 2025 Experience</title><link href="https://thiscute.world/en/posts/kubecon-china-2025/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/en/posts/kubecon-china-2024/?utm_source=atom_feed" rel="related" type="text/html" title="KubeCon China 2024 Adventure"/><link href="https://thiscute.world/en/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - My Experience of NixOS"/><link href="https://thiscute.world/en/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="Why do I explore these niche technologies?"/><link href="https://thiscute.world/en/posts/nixos-and-flake-basics/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS &amp; Nix Flakes - A Guide for Beginners"/><link href="https://thiscute.world/en/posts/2021-summary/?utm_source=atom_feed" rel="related" type="text/html" title="Summary of My 2021"/><id>https://thiscute.world/en/posts/kubecon-china-2025/</id><published>2025-06-15T17:43:44+08:00</published><updated>2025-06-15T17:43:44+08:00</updated><summary type="html">&lt;h2 id="preface" class="headerLink">
 &lt;a href="#preface" class="header-mark">&lt;/a>Preface&lt;/h2>&lt;p>After resigning at the end of January, I spent time at home for the Chinese New Year, then
 traveled around Shanghai, Zhangjiajie, Chongqing, Suzhou, and Nanjing. I didn&amp;rsquo;t return to
 Shenzhen to start job hunting until mid-April. Initially, I wasn&amp;rsquo;t sure if I would have
@@ -96,12 +96,20 @@ requirements</li>
 <li>Dynamic LoRa loading</li>
 <li>&hellip;</li>
 </ul>
+<p>Code:</p>
+<ul>
+<li><a href="https://github.com/vllm-project/aibrix" target="_blank" rel="noopener noreferrer">https://github.com/vllm-project/aibrix</a></li>
+</ul>
 <p>AIBrix is currently under the vllm-project, with a good number of stars, suggesting the
 project is healthy and worth following.</p>
 <h3 id="distributed-llm-inference-deployment" class="headerLink">
     <a href="#distributed-llm-inference-deployment" class="header-mark"></a>Distributed LLM Inference Deployment</h3><p><a href="https://kccncchn2025.sched.com/event/1x5i6/more-than-model-sharding-lws-distributed-inference-peter-pan-nicole-li-daocloud-shane-wang-intel?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer">More Than Model Sharding: LWS &amp; Distributed Inference - Peter Pan &amp; Nicole Li, DaoCloud &amp; Shane Wang, Intel</a></p>
 <p>One of the most interesting talks, covering distributed inference architecture,
 optimization points, and the advantages and usage of LWS.</p>
+<p>Code:</p>
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/lws" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/lws</a></li>
+</ul>
 <p>Simply put, LWS is a CRD specifically designed for LLM distributed inference deployment,
 mainly supporting group scheduling for LLM tasks.</p>
 <p>NOTE: According to an issue, AIBrix might integrate with LWS (possibly with official
@@ -129,6 +137,7 @@ significant performance consumption</li>
 </li>
 <li>These characteristics make traditional load balancing strategies completely
 ineffective</li>
+<li>Solution: <a href="https://github.com/kubernetes-sigs/gateway-api-inference-extension" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/gateway-api-inference-extension</a></li>
 </ul>
 </li>
 </ul>
@@ -247,6 +256,10 @@ convenient to just look at the results others provide (:</li>
     <a href="#ingress-nginx" class="header-mark"></a>Ingress-Nginx</h3><p><a href="https://kccncchn2025.sched.com/event/1x5hW/the-next-steps-for-ingress-nginx-and-the-ingate-project-jintao-zhang-kong-inc?iframe=no" target="_blank" rel="noopener noreferrer">The Next Steps for Ingress-NGINX and the Ingate Project - Jintao Zhang, Kong Inc.</a></p>
 <p>Ingress-NGINX is finally being retired, with its successor being InGate, though InGate is
 currently almost empty (:</p>
+<p>Code:</p>
+<ul>
+<li><a href="https://github.com/kubernetes-sigs/ingate" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes-sigs/ingate</a></li>
+</ul>
 <figure><img src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" width="80%">
 </figure>
 
