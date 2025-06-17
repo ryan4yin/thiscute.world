@@ -1,4 +1,367 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.136.5">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/en/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/en/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/en/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-06-16T05:40:02+00:00</updated><id>https://thiscute.world/en/</id><entry><title type="html">KubeCon China 2024 Adventure</title><link href="https://thiscute.world/en/posts/kubecon-china-2024/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/en/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - My Experience of NixOS"/><link href="https://thiscute.world/en/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="Why do I explore these niche technologies?"/><link href="https://thiscute.world/en/posts/nixos-and-flake-basics/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS &amp; Nix Flakes - A Guide for Beginners"/><link href="https://thiscute.world/en/posts/2021-summary/?utm_source=atom_feed" rel="related" type="text/html" title="Summary of My 2021"/><link href="https://thiscute.world/en/now/?utm_source=atom_feed" rel="related" type="text/html" title="Now"/><id>https://thiscute.world/en/posts/kubecon-china-2024/</id><published>2024-08-27T10:10:22+08:00</published><updated>2024-09-05T15:54:00+08:00</updated><summary type="html">&lt;h2 id="preface" class="headerLink">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.136.5">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/en/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/en/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/en/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-06-17T02:26:21+00:00</updated><id>https://thiscute.world/en/</id><entry><title type="html">KubeCon China 2025 Experience</title><link href="https://thiscute.world/en/posts/kubecon-china-2025/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/en/posts/kubecon-china-2024/?utm_source=atom_feed" rel="related" type="text/html" title="KubeCon China 2024 Adventure"/><link href="https://thiscute.world/en/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - My Experience of NixOS"/><link href="https://thiscute.world/en/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="Why do I explore these niche technologies?"/><link href="https://thiscute.world/en/posts/nixos-and-flake-basics/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS &amp; Nix Flakes - A Guide for Beginners"/><link href="https://thiscute.world/en/posts/2021-summary/?utm_source=atom_feed" rel="related" type="text/html" title="Summary of My 2021"/><id>https://thiscute.world/en/posts/kubecon-china-2025/</id><published>2025-06-15T17:43:44+08:00</published><updated>2025-06-15T17:43:44+08:00</updated><summary type="html">&lt;h2 id="preface" class="headerLink">
+&lt;a href="#preface" class="header-mark">&lt;/a>Preface&lt;/h2>&lt;p>After resigning at the end of January, I spent time at home for the Chinese New Year, then
+traveled around Shanghai, Zhangjiajie, Chongqing, Suzhou, and Nanjing. I didn&amp;rsquo;t return to
+Shenzhen to start job hunting until mid-April. Initially, I wasn&amp;rsquo;t sure if I would have
+time to attend KubeCon China 2025 in June. However, I was fortunate that the company I
+received an offer from highly values technology. During the interview, my leader mentioned
+seeing my KubeCon experiences in my blog and said the company strongly encourages
+participation in such technical exchange events, even supporting giving talks with full
+expense coverage.&lt;/p>
+&lt;p>So, less than a month after joining, I went on a company-funded trip to KubeCon China 2025
+in Hong Kong (:&lt;/p>
+&lt;blockquote>
+&lt;p>I asked my colleagues if they were interested, but for various reasons, I ended up being
+the only one attending (sad&lt;/p>
+&lt;/blockquote></summary><content type="html"><![CDATA[<h2 id="preface" class="headerLink">
+    <a href="#preface" class="header-mark"></a>Preface</h2><p>After resigning at the end of January, I spent time at home for the Chinese New Year, then
+traveled around Shanghai, Zhangjiajie, Chongqing, Suzhou, and Nanjing. I didn&rsquo;t return to
+Shenzhen to start job hunting until mid-April. Initially, I wasn&rsquo;t sure if I would have
+time to attend KubeCon China 2025 in June. However, I was fortunate that the company I
+received an offer from highly values technology. During the interview, my leader mentioned
+seeing my KubeCon experiences in my blog and said the company strongly encourages
+participation in such technical exchange events, even supporting giving talks with full
+expense coverage.</p>
+<p>So, less than a month after joining, I went on a company-funded trip to KubeCon China 2025
+in Hong Kong (:</p>
+<blockquote>
+  <p>I asked my colleagues if they were interested, but for various reasons, I ended up being
+the only one attending (sad</p>
+
+</blockquote><h2 id="tldr" class="headerLink">
+    <a href="#tldr" class="header-mark"></a>TL;DR</h2><p>In short, this year&rsquo;s KubeCon China was almost entirely focused on AI on Kubernetes - it
+could have been renamed to CloudNative AI Con.</p>
+<p>This year&rsquo;s KubeCon China was only two days long, with significantly fewer talks than last
+year - almost half as many. As a result, I also watched many KubeCon Europe 2025 talks
+online as a supplement.</p>
+<p>Overall, my impressions this year were:</p>
+<ul>
+<li>Kubernetes has become a mature foundation - anything that can run on K8s will eventually
+be moved to K8s</li>
+<li>AI has brought new life to the CloudNative community, with many new CloudNative projects
+emerging around AI in the past two years. AI topics have become the absolute main theme
+of KubeCon.
+<ul>
+<li>The AI deployment section mainly discussed AI inference, with key technical points:
+distributed inference, scaling, and LLM-Aware load balancing, as well as AI model
+distribution</li>
+<li>There were several discussions about AIOps, from simple ChatBot implementations to
+more complex Multi-Agent systems for tasks like cloud cost analysis and optimization
+<ul>
+<li>Kuaishou attempted to use Logs/Metrics to train a model for each service in their
+ultra-large-scale cluster to dynamically adjust HPA, achieving a balance between SLA
+and cost (if I remembered incorrectly, I take no responsibility hhh)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>OpenTelemetry is maturing and getting closer to its goal of unifying Logs/Traces/Metrics
+signals
+<ul>
+<li>Platforms like Uptrace have emerged as unified observability platforms, fully
+utilizing OTel&rsquo;s labels to correlate Logs/Traces</li>
+<li>Current best practice is to still use traditional methods for collecting Logs and
+Metrics at the Infra level, while at the APP level, OTel handles all Logs, Traces, and
+Metrics, correlating them through Span ID with consistent label semantics</li>
+</ul>
+</li>
+<li>WASM is still exploring its use cases, with this year&rsquo;s main focus being running small
+models at the edge</li>
+</ul>
+<p>KubeCon China 2025 and KubeCon Europe 2025 video playlists:</p>
+<ul>
+<li><a href="https://www.youtube.com/playlist?list=PLj6h78yzYM2P1xtALqTcCmRAa6142uERl" target="_blank" rel="noopener noreferrer">KubeCon + CloudNativeCon China 2025 (Hong Kong) - Youtube</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc" target="_blank" rel="noopener noreferrer">KubeCon + CloudNativeCon Europe 2025(London) - Youtube</a></li>
+</ul>
+<p>Presentation slides can be downloaded here (NOTE: not all talks will have PDFs uploaded):</p>
+<ul>
+<li><a href="https://kccncchn2025.sched.com/" target="_blank" rel="noopener noreferrer">KubeCon + CloudNativeCon China 2025 - Schedule</a></li>
+<li><a href="https://kccnceu2025.sched.com/" target="_blank" rel="noopener noreferrer">KubeCon + CloudNativeCon Europe 2025 - Schedule</a></li>
+</ul>
+<p>Next, I&rsquo;ll introduce some interesting content I heard, organized by topic, along with
+corresponding video links and possible PPT links.</p>
+<h2 id="talks" class="headerLink">
+    <a href="#talks" class="header-mark"></a>Talks</h2><h3 id="unified-llm-inference-solution" class="headerLink">
+    <a href="#unified-llm-inference-solution" class="header-mark"></a>Unified LLM Inference Solution</h3><p><a href="https://kccncchn2025.sched.com/event/1x5im/introducing-aibrix-cost-effective-and-scalable-kubernetes-control-plane-for-vllm-jiaxin-shan-liguang-xie-bytedance?iframe=no" target="_blank" rel="noopener noreferrer">Introducing AIBrix: Cost-Effective and Scalable Kubernetes Control Plane for VLLM - Jiaxin Shan &amp; Liguang Xie, ByteDance</a></p>
+<p>AIBrix is a complete solution for running distributed LLM inference on K8s, including:</p>
+<ul>
+<li>Distributed inference deployment</li>
+<li>LLM scaling</li>
+<li>LLM request routing (load balancing)</li>
+<li>Distributed KV cache
+<ul>
+<li>Mainly centralized storage of this data to reduce HBM memory usage and lower memory
+requirements</li>
+</ul>
+</li>
+<li>Dynamic LoRa loading</li>
+<li>&hellip;</li>
+</ul>
+<p>AIBrix is currently under the vllm-project, with a good number of stars, suggesting the
+project is healthy and worth following.</p>
+<h3 id="distributed-llm-inference-deployment" class="headerLink">
+    <a href="#distributed-llm-inference-deployment" class="header-mark"></a>Distributed LLM Inference Deployment</h3><p><a href="https://kccncchn2025.sched.com/event/1x5i6/more-than-model-sharding-lws-distributed-inference-peter-pan-nicole-li-daocloud-shane-wang-intel?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer">More Than Model Sharding: LWS &amp; Distributed Inference - Peter Pan &amp; Nicole Li, DaoCloud &amp; Shane Wang, Intel</a></p>
+<p>One of the most interesting talks, covering distributed inference architecture,
+optimization points, and the advantages and usage of LWS.</p>
+<p>Simply put, LWS is a CRD specifically designed for LLM distributed inference deployment,
+mainly supporting group scheduling for LLM tasks.</p>
+<p>NOTE: According to an issue, AIBrix might integrate with LWS (possibly with official
+support): <a href="https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020" target="_blank" rel="noopener noreferrer">https://github.com/vllm-project/aibrix/issues/843#issuecomment-2728305020</a></p>
+<h3 id="llm-scaling-and-load-balancing" class="headerLink">
+    <a href="#llm-scaling-and-load-balancing" class="header-mark"></a>LLM Scaling and Load Balancing</h3><ul>
+<li><a href="https://www.youtube.com/watch?v=lefjb4Vnd8k&amp;list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&amp;index=326" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - Optimizing Metrics Collection &amp; Serving When Autoscaling LLM Workloads</a>
+<ul>
+<li>Quite entertaining, but since I&rsquo;m familiar with this area, I could guess it was about
+custom business metrics + KEDA for custom metrics-based scaling, so I just skimmed
+through it</li>
+</ul>
+</li>
+<li><a href="https://www.youtube.com/watch?v=BBqDpqATcI0&amp;list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&amp;index=26" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - Keynote: LLM-Aware Load Balancing in Kubernetes: A New Era of Efficiency - Clayton Coleman, Distinguished Engineer, Google &amp; Jiaxin Shan, Software Engineer, Bytedance</a>
+<ul>
+<li>Very interesting - LLM requests are very different from traditional API requests:
+<ul>
+<li>Input length varies greatly - some requests have simple inputs and are relatively
+lightweight, while others might include entire PDFs or other long text inputs.
+Outputs are similarly variable - if users request deep reasoning, it could lead to
+significant performance consumption</li>
+<li>Different machines might use different GPU types with varying performance</li>
+<li>In a multi-model platform, different models have distinct peak and off-peak periods</li>
+</ul>
+</li>
+<li>These characteristics make traditional load balancing strategies completely
+ineffective</li>
+</ul>
+</li>
+</ul>
+<h3 id="ai-model-distribution" class="headerLink">
+    <a href="#ai-model-distribution" class="header-mark"></a>AI Model Distribution</h3><p><a href="https://kccncchn2025.sched.com/event/1x5hl/ai-model-distribution-challenges-and-best-practices-wenbo-qi-xiaoya-xia-peng-tao-ant-group-wenpeng-li-alibaba-cloud-han-jiang-kuaishou?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer">AI Model Distribution Challenges and Best Practices</a></p>
+<p>Developers discussing how to distribute LLM models of hundreds of GB in size within
+clusters. Current industry approaches:</p>
+<ul>
+<li>dragonfly</li>
+<li>juicefs</li>
+<li>oci model spec + oci volume (k8s 1.33+)</li>
+</ul>
+<h3 id="observability" class="headerLink">
+    <a href="#observability" class="header-mark"></a>Observability</h3><ul>
+<li><a href="https://kccncchn2025.sched.com/event/1x5i3/antipatterns-in-observability-lessons-learned-and-how-opentelemetry-solves-them-steve-flanders-splunk?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer">Antipatterns in Observability: Lessons Learned and How OpenTelemetry Solves Them - Steve Flanders, Splunk</a>
+<ul>
+<li>Very interesting and informative. The observability antipatterns he listed include:
+<ul>
+<li>Telemetry Data
+<ul>
+<li>Incomplete Instrumentation - need to introduce zero-code otel sdk for automatic
+data collection
+<ul>
+<li>metrics/logs/metrics signals aren&rsquo;t all enabled by default, depends on agent
+implementation</li>
+<li>In k8s, it&rsquo;s recommended to disable both stdout logging and traditional
+prometheus pull /metrics endpoints, letting otel agent handle all App-level
+signals. Daemonset mode otel (or vector/fluentbit) mainly handles Infra-level
+logs</li>
+</ul>
+</li>
+<li>Over-Instrumentation - need to filter and streamline metrics at the otel-collector
+level before sending to backend storage</li>
+<li>Inconsistent Naming Conventions - fully adopt OpenTelemetry solution for unified
+naming</li>
+</ul>
+</li>
+<li>Observability Platform
+<ul>
+<li>Vendor Lock-in - only choose platforms supporting OTel standards and use OTel
+naming conventions</li>
+<li>Tool Sprawl - use unified observability platforms like Uptrace that support
+automatic Log-Trace correlation</li>
+<li>Underestimating Scalability Requirements - use OTel for signal collection and
+choose scalable backend storage like VictoriaMetrics</li>
+</ul>
+</li>
+<li>Company Culture
+<ul>
+<li>Silos and Lack of Collaboration</li>
+<li>Lack of Ownership &amp; Accountability</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://www.youtube.com/watch?v=7yhBBzVmPks" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - From Logs To Insights: Real-time Conversational Troubleshooting for Kubernetes With GenAI - Tiago Reichert &amp; Lucas Duarte, AWS</a>
+<ul>
+<li>The opening OnCall skit was very realistic&hellip; though getting a phone alert after 1
+minute of pod pending seems exaggerated&hellip;</li>
+<li>After the skit, they covered the main content: encoding logs with embed models and
+storing in OpenSearch for RAG, giving the ChatBot k8s readonly permissions (banned
+secrets access), then using Deepseek/Claude for Q&amp;A to solve problems</li>
+<li>Code: <a href="https://github.com/aws-samples/sample-eks-troubleshooting-rag-chatbot" target="_blank" rel="noopener noreferrer">https://github.com/aws-samples/sample-eks-troubleshooting-rag-chatbot</a></li>
+</ul>
+</li>
+<li><a href="https://kccncchn2025.sched.com/event/1x5jD/portrait-service-ai-driven-pb-scale-data-mining-for-cost-optimization-and-stability-enhancement-yuji-liu-zhiheng-sun-kuaishou?iframe=no" target="_blank" rel="noopener noreferrer">Portrait Service: AI-Driven PB-Scale Data Mining for Cost Optimization and Stability Enhancement - Yuji Liu &amp; Zhiheng Sun, Kuaishou</a>
+<ul>
+<li>Discussed how Kuaishou manages stability and performance optimization in their
+ultra-large-scale cluster of 200,000 machines</li>
+<li>Covered relatively basic content - mainly collecting vast amounts of cluster
+information, processing through a big data system, then training dedicated models,
+with each service potentially having its own resource optimization model</li>
+<li>This approach might be too heavy - worth learning from but not very useful in my
+current work scenario (scale too small)</li>
+</ul>
+</li>
+</ul>
+<h3 id="service-mesh" class="headerLink">
+    <a href="#service-mesh" class="header-mark"></a>Service Mesh</h3><ul>
+<li><a href="https://kccncchn2025.sched.com/event/1x5iI/revolutionizing-sidecarless-service-mesh-with-ebpf-zhonghu-xu-muyang-tian-huawei" target="_blank" rel="noopener noreferrer">Revolutionizing Sidecarless Service Mesh With eBPF - Zhonghu Xu &amp; Muyang Tian, Huawei</a>
+<ul>
+<li>Mainly covered Huawei&rsquo;s Kmesh, with detailed explanation of the underlying
+implementation architecture (actually very similar to what I heard at last year&rsquo;s
+KubeCon)</li>
+<li>Simply put, Ambient Mode intercepts traffic to user-space ztunnel for L4 traffic
+processing through istio-cni (underlying iptables), while Kmesh implements these L4
+functions at the kernel level using eBPF. Also briefly introduced Cilium Service Mesh,
+a Per-Node Proxy, with main drawbacks being the requirement for Cilium network plugin
+and its primitive, complex CRDs</li>
+<li>Kmesh also attempted to implement HTTP protocol parsing with eBPF, but this requires
+kernel patching, which is costly</li>
+</ul>
+</li>
+<li><a href="https://www.youtube.com/watch?v=hegNjjatNTU" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - Choosing a Service Mesh - Alex McMenemy &amp; Dimple Thoomkuzhy, Compare the Market</a>
+<ul>
+<li>While most of what I&rsquo;ve encountered uses Istio, it&rsquo;s always good to see how others
+make their choices</li>
+</ul>
+</li>
+<li><a href="https://www.youtube.com/watch?v=WpEkfVGWmd8" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - Navigating the Maze of Multi-Cluster Istio: Lessons Learned at Scale - Pamela Hernandez, BlackRock</a>
+<ul>
+<li>Multi-cluster Istio is used in quite a few large companies - I was asked about it in
+interviews, worth trying out</li>
+</ul>
+</li>
+<li><a href="https://www.youtube.com/watch?v=oi4TpxuIYXk" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - A Service Mesh Benchmark You Can Trust - Denis Jannot, solo.io</a>
+<ul>
+<li>Creating a good benchmark comparison takes a lot of time and effort - it&rsquo;s most
+convenient to just look at the results others provide (:</li>
+</ul>
+</li>
+</ul>
+<h3 id="ingress-nginx" class="headerLink">
+    <a href="#ingress-nginx" class="header-mark"></a>Ingress-Nginx</h3><p><a href="https://kccncchn2025.sched.com/event/1x5hW/the-next-steps-for-ingress-nginx-and-the-ingate-project-jintao-zhang-kong-inc?iframe=no" target="_blank" rel="noopener noreferrer">The Next Steps for Ingress-NGINX and the Ingate Project - Jintao Zhang, Kong Inc.</a></p>
+<p>Ingress-NGINX is finally being retired, with its successor being InGate, though InGate is
+currently almost empty (:</p>
+<figure><img src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" width="80%">
+</figure>
+
+<h3 id="security" class="headerLink">
+    <a href="#security" class="header-mark"></a>Security</h3><p><a href="https://kccncchn2025.sched.com/event/1x5jM/keynote-who-owns-your-pod-observing-and-blocking-unwanted-behavior-at-ebay-with-ebpf-jianlin-lv-ebay-liyi-huang-isovalent-at-cisco?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer">Keynote: Who Owns Your Pod? Observing and Blocking Unwanted Behavior at eBay With eBPF</a></p>
+<p>Mainly introduced cilium&rsquo;s tetragon, an eBPF-based K8S security tool, somewhat similar to
+apparmor but capable of more fine-grained permission management.</p>
+<p>A friend argued that such tools aren&rsquo;t very necessary - we should use GitOps processes and
+move security checks to the CICD pipeline.</p>
+<h3 id="cloud-cost-analysis-and-optimization" class="headerLink">
+    <a href="#cloud-cost-analysis-and-optimization" class="header-mark"></a>Cloud Cost Analysis and Optimization</h3><p><a href="https://www.youtube.com/watch?v=sTbJ1-x3_yc&amp;list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&amp;index=345" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - Autonomous Al Agents for Cloud Cost Analysis - Ilya Lyamkin, Spotify</a></p>
+<p>Implementation of a Multi-Agent system that automatically creates plans, writes SQL and
+Python for cloud cost analysis - very valuable reference.</p>
+<h3 id="wasm-related" class="headerLink">
+    <a href="#wasm-related" class="header-mark"></a>WASM Related</h3><p><a href="https://kccncchn2025.sched.com/event/1x5jJ/keynote-an-optimized-linux-stack-for-genai-workloads-michael-yuan-wasmedge?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer">Keynote: An Optimized Linux Stack for GenAI Workloads - Michael Yuan, WasmEdge</a></p>
+<p>Discussed using WasmEdge + LlamaEdge to run small LLM models on edge devices - quite
+interesting.</p>
+<h3 id="how-to-build-an-ai-workflow" class="headerLink">
+    <a href="#how-to-build-an-ai-workflow" class="header-mark"></a>How to Build an AI Workflow</h3><p><a href="https://www.youtube.com/watch?v=Ab7mRoJYsMo&amp;list=PLj6h78yzYM2MP0QhYFK8HOb8UqgbIkLMc&amp;index=365" target="_blank" rel="noopener noreferrer">KubeCon EU 2025 - Tutorial: Build, Operate, and Use a Multi-Tenant AI Cluster Based Entirely on Open Source</a></p>
+<p>An hour-plus tutorial by IBM. Installed many components including Kueue, Kubeflow,
+PyTorch, Ray, vLLM, and Autopilot</p>
+<h2 id="non-tech" class="headerLink">
+    <a href="#non-tech" class="header-mark"></a>Non-Tech</h2><p>Attending KubeCon isn&rsquo;t just about listening to technical changes and progress from the
+past year - it&rsquo;s also an important opportunity to socialize with developers from various
+fields, kind of like a large-scale online friend meetup (:</p>
+<p>This year, I got <a href="https://x.com/scruelt" target="_blank" rel="noopener noreferrer">@scruelt</a>, <a href="https://github.com/ox-warrior" target="_blank" rel="noopener noreferrer">@ox-warrior</a>, and other friends to come to KubeCon, and at
+the venue, I met up with <a href="https://x.com/nowaits1" target="_blank" rel="noopener noreferrer">@cookie</a>, <a href="https://x.com/OikawaRizumu" target="_blank" rel="noopener noreferrer">@rizumu</a>, <a href="https://x.com/ayakaneko" target="_blank" rel="noopener noreferrer">@ayakaneko</a>, and <a href="https://x.com/dotnetfx35" target="_blank" rel="noopener noreferrer">@dotnetfx35</a> for casual
+chats. I received Kubernetes and Go cookies printed with 3D printers from <a href="https://x.com/OikawaRizumu" target="_blank" rel="noopener noreferrer">@rizumu</a> and<a href="https://x.com/ayakaneko" target="_blank" rel="noopener noreferrer">@ayakaneko</a>, and incidentally spread the word about NixOS (:</p>
+<p><figure><img src="/images/kubecon-china-2025/photo_friends.jpg" width="80%"><figcaption>
+      <h4>Meetup successful! Also spread the word about NixOS</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/istio-book-and-badge.jpg" width="80%"><figcaption>
+      <h4>K8s/Go cookies and Istio fridge magnets received</h4>
+    </figcaption>
+</figure>
+</p>
+<p>On Day 2 morning, I found there weren&rsquo;t many talks I wanted to attend, so I noticed there
+was a Peer Group Meeting to join, though it required signing up first. I went with<a href="https://x.com/scruelt" target="_blank" rel="noopener noreferrer">@scruelt</a> to sign up, and we were a bit worried that signing up just 20 minutes before
+might be too late, but when we got to the meeting room, we found only 3 mentors present,
+so we just chatted casually with them. The three mentors were <a href="https://www.cncf.io/people/staff/?p=nate-waddington" target="_blank" rel="noopener noreferrer">Nate Waddington</a> (Head of
+Mentorship &amp; Documentation, Canada), <a href="https://www.cncf.io/people/ambassadors/?_sft_lf-country=jp&amp;p=kohei-ota" target="_blank" rel="noopener noreferrer">Kohei Ota</a> (CNCF Ambassador, Japan), and <a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-china/?p=amit-dsouza" target="_blank" rel="noopener noreferrer">Amit
+DSouza</a> (co-founder of Odyssey Cloud, Australia). A Cisco engineer also joined in halfway
+through.</p>
+<p>It was mostly casual conversation. <a href="https://x.com/scruelt" target="_blank" rel="noopener noreferrer">@scruelt</a>&rsquo;s English is better than mine, and since he
+just resigned, he had many questions to ask - he initiated most of the topics. As for me,
+since everything has been going smoothly lately, I didn&rsquo;t have many questions to ask.</p>
+<figure><img src="/images/kubecon-china-2025/peer_group_meeting.jpg" width="80%"><figcaption>
+      <h4>Entered the Peer Group Meeting to find only Mentors hhh</h4>
+    </figcaption>
+</figure>
+
+<p>Let&rsquo;s end with some photos.</p>
+<p><figure><img src="/images/kubecon-china-2025/kubecon-china-welcome.jpg" width="80%"><figcaption>
+      <h4>Welcome to KubeCon China 2025</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/kubecon-t-shirts.jpg" width="80%"><figcaption>
+      <h4>Got a T-shirt first hehe</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/kubecon-china-coffee-break.jpg" width="80%"><figcaption>
+      <h4>Coffee break time</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/suse-mascot-plush-doll-2.jpg" width="80%"><figcaption>
+      <h4>Want that SUSE plush toy!</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/suse-mascot-plush-doll.jpg" width="80%"><figcaption>
+      <h4>A small SUSE on a big SUSE</h4>
+    </figcaption>
+</figure>
+</p>
+<p><figure><img src="/images/kubecon-china-2025/talk-tetragon-observibility.jpg" width="80%"><figcaption>
+      <h4>Using tetragon to restrict file access</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/llm-disaggregated-serving.jpg" width="80%"><figcaption>
+      <h4>LWS Talk, discussing PD separation</h4>
+    </figcaption>
+</figure>
+</p>
+<p><figure><img src="/images/kubecon-china-2025/nitendo-switch-store-miku.jpg" width="80%"><figcaption>
+      <h4>Switch store promoting Miku Boxing</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/nitendo-switch-store.jpg" width="80%"><figcaption>
+      <h4>Three friends bought Switch 2 here during KubeCon, they made a killing</h4>
+    </figcaption>
+</figure>
+</p>
+<figure><img src="/images/kubecon-china-2025/kubecon-china-2025-gifts.jpg" width="80%"><figcaption>
+      <h4>All my &#39;loot&#39; hhh</h4>
+    </figcaption>
+</figure>
+
+<p><figure><img src="/images/kubecon-china-2025/airplane-boarding.jpg" width="80%"><figcaption>
+      <h4>Boarding, goodbye Shenzhen</h4>
+    </figcaption>
+</figure>
+
+<figure><img src="/images/kubecon-china-2025/airplane-1.jpg" width="80%"><figcaption>
+      <h4>How many times have I flown now?</h4>
+    </figcaption>
+</figure>
+</p>
+<p>Had a great time, see you next year!</p>]]></content><category scheme="taxonomy:Authors" term="ryan4yin" label="ryan4yin"/><category scheme="taxonomy:Categories" term="tech" label="tech"/><category scheme="taxonomy:Series" term="cloud-native-related" label="Cloud-Native Related"/><category scheme="taxonomy:Tags" term="cloud-native" label="Cloud-Native"/><category scheme="taxonomy:Tags" term="kubernetes" label="Kubernetes"/><category scheme="taxonomy:Tags" term="ai" label="AI"/><category scheme="taxonomy:Tags" term="llm" label="LLM"/><category scheme="taxonomy:Tags" term="opentelemetry" label="OpenTelemetry"/></entry><entry><title type="html">KubeCon China 2024 Adventure</title><link href="https://thiscute.world/en/posts/kubecon-china-2024/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/en/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - My Experience of NixOS"/><link href="https://thiscute.world/en/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="Why do I explore these niche technologies?"/><link href="https://thiscute.world/en/posts/nixos-and-flake-basics/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS &amp; Nix Flakes - A Guide for Beginners"/><link href="https://thiscute.world/en/posts/2021-summary/?utm_source=atom_feed" rel="related" type="text/html" title="Summary of My 2021"/><link href="https://thiscute.world/en/now/?utm_source=atom_feed" rel="related" type="text/html" title="Now"/><id>https://thiscute.world/en/posts/kubecon-china-2024/</id><published>2024-08-27T10:10:22+08:00</published><updated>2024-09-05T15:54:00+08:00</updated><summary type="html">&lt;h2 id="preface" class="headerLink">
 &lt;a href="#preface" class="header-mark">&lt;/a>Preface&lt;/h2>&lt;p>I had known for a while that KubeCon China would be held in Hong Kong this year, and while
 I was interested, I initially got deterred by the steep price of KubeCon tickets.&lt;/p>
 &lt;p>Sometimes you just have to believe in the magic of luck. By a twist of fate, I learned
