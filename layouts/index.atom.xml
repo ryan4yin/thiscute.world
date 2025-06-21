@@ -50,6 +50,13 @@
     {{ else }}
         <id>{{ .Permalink }}</id>
     {{ end }}
+
+    {{/* Verify that this feed belongs to my follow.is account. */}}
+    <follow_challenge>
+        <feedId>52340201851637768</feedId>
+        <userId>80092458428908544</userId>
+    </follow_challenge>
+
     {{- $feed_sections := site.Params.feedSections | default site.Params.mainSections -}}
     {{/* Range through only the pages with a Type in $feed_sections. */}}
     {{- $pages := where .RegularPages "Type" "in" $feed_sections -}}
