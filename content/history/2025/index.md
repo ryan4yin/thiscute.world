@@ -43,6 +43,8 @@ comment:
 - 周日
   - 整理博客收藏夹时发现有位佬也开始玩 NixOS 了，记录了很多遇到的问题，顺便给他答了个疑（
     - https://github.com/Martins3/My-Linux-Config/issues/190
+    - 最近一直想学 Linux，这老哥的文章感觉讲得还不错
+      - https://martins3.github.io/kernel/learn-linux-kernel.html
   - 再次尝试给 NixOS 上游做些贡献，review 了一些 PR，并且一次性给自己加了 40 多个包的
     maintainer，都是我自己比较常用的。
   - 本来只打算拿 AI 解决下 Firefox/Chrome 把英文单引号渲染成中文弯引号的问题，结果就折腾了
