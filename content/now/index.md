@@ -17,36 +17,51 @@ toc:
 
 ![](/images/now/book-shelf-2.webp)
 
-## 零、2025 年学习计划
-
-- 首先仍然是每年固定的目标：每月读一本书、写一篇博客。
-- 技术上今年的主要学习目标：
-  - 学学 Go 语言、eBPF/istio ambient mode、Linux 系统编程与性能优化
-- 旅游与户外运动
-  - TODO
-- 心理学
-  - TODO
-
 ## 一、我正在研究这些
 
 > 按优先级排序
 
-- 《深入理解 Linux 进程与内存》
-- 《深入理解 Linux 网络》
-- 《BPF Performance Tools（英文版）》 - 35/740
-- 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
-- 户外徒步、露营
-- 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+- 运动
+  - 完成每天 500 卡路里的消耗量，目标是减肥+提升体力
+  - 方式：玩陆地冲浪板、跑步、登山
+- 驾照考试 - 科目一刷题
+- Linux 学习
+  - 参与 Nixpkgs 的 PR review, 熟悉社区的 PR 流程，改进一些我用到的 NixOS Module.
+  - 《深入理解 Linux 进程与内存》
 
 ## 二、我今年还想搞搞这些
 
+- 拿到驾照
+- 体重降到 55kg
+- Linux 学习
+  - 积极参与 NixOS 上游贡献
+  - 完成基础知识学习
+    - 《深入理解 Linux 进程与内存》
+    - 《深入理解 Linux 网络》
+    - 《BPF Performance Tools（英文版）》 - 35/740
+- 云原生
+  - 研究 Istio 的底层实现
+- RISC-V 与操作系统
+- 阅读
+  - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
+  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+- 旅游与户外运动
+
+  - 去日本、韩国跟新加坡玩
+
 - 操作系统
+
   - 课
     程：[操作系统：设计与实现 - 南大 jyy 老师的课程](https://www.bilibili.com/video/BV1Xx4y1V7JZ/)
   - 资料：
     - [操作系统：设计与实现 (2024 春季学期)](https://jyywiki.cn/OS/2024/)
     - [南京大学 计算机科学与技术系 计算机系统基础 课程实验 (PA)](https://nju-projectn.github.io/ics-pa-gitbook/)
   - 书 [Operating Systems - Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+- 部署学习各类数据中间件：
+  - Milvus 向量数据库
+  - ClickHouse - 存日志之类的时序数据貌似都挺合适，原生分布式、高性能
+  - TimescaleDB - 也是 PG 的插件，Scale 能力有限，但是好处是开发人员上手没难度。
 
 ## 三、今年的阅读进展
 
