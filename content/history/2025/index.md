@@ -56,6 +56,14 @@ Cursor Rules:
   - istioctl / kubectl / kubepug / fluxcd
   - go-containerregistry: provides `crane` & `gcrane`, it's similar to skopeo
 
+# 禁止事项
+
+> 主要针对 gemini-cli/claude-code 这类工具，其实采用容器会是更稳妥的方案。
+
+- 严禁读写目标项目文件夹之外的任何内容！
+- 严禁对远程 Git 仓库进行任何变更！
+- 严禁直接在当前 Git 分支进行任何提交，所有提交都应手工处理。
+
 # 项目通用规范
 
 ## 项目结构规则
