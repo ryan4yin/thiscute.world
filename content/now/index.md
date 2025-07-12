@@ -39,6 +39,7 @@ toc:
   - 完成基础知识学习
     - 《深入理解 Linux 进程与内存》
     - 《深入理解 Linux 网络》
+    - <https://deepwiki.com/torvalds/linux>
     - 《BPF Performance Tools（英文版）》 - 35/740
   - nftables: <https://wiki.nftables.org/wiki-nftables/index.php/Main_Page>
   - tproxy: <https://www.kernel.org/doc/Documentation/networking/tproxy.txt>
@@ -49,6 +50,9 @@ toc:
     - pipewire: <https://pipewire.org/>
 - 云原生
   - 研究 Istio 的底层实现
+  - <https://deepwiki.com/istio/istio>
+  - <https://deepwiki.com/istio/proxy>
+  - <https://deepwiki.com/kubernetes/kubernetes>
 - RISC-V 与操作系统
 - 阅读
   - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
