@@ -22,23 +22,31 @@ toc:
 > 按优先级排序
 
 - 运动
-  - 完成每天 500 卡路里的消耗量，目标是减肥+提升体力
-  - 方式：玩陆地冲浪板、跑步、登山
-- 驾照考试 - 科目一刷题
+  - 完成每天 800 卡路里的消耗量，目标是减肥+提升体力
+  - 方式：玩陆地冲浪板、跑步、登山、骑行
 - Linux 学习
   - 参与 Nixpkgs 的 PR review, 熟悉社区的 PR 流程，改进一些我用到的 NixOS Module.
+  - 《深入理解 Linux 内核》
   - 《深入理解 Linux 进程与内存》
+- 驾照考试 - 科目一刷题
 
 ## 二、我今年还想搞搞这些
 
 - 拿到驾照
-- 体重降到 55kg
+- 体重降到 58kg
 - Linux 学习
   - 积极参与 NixOS 上游贡献
   - 完成基础知识学习
     - 《深入理解 Linux 进程与内存》
     - 《深入理解 Linux 网络》
     - 《BPF Performance Tools（英文版）》 - 35/740
+  - nftables: <https://wiki.nftables.org/wiki-nftables/index.php/Main_Page>
+  - tproxy: <https://www.kernel.org/doc/Documentation/networking/tproxy.txt>
+  - ebpf: <https://ebpf.io/>
+  - systemd: <https://systemd.io/>
+  - 桌面系统相关:
+    - dbus: <https://www.freedesktop.org/wiki/Software/dbus/>
+    - pipewire: <https://pipewire.org/>
 - 云原生
   - 研究 Istio 的底层实现
 - RISC-V 与操作系统
