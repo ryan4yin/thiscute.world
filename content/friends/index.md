@@ -87,7 +87,7 @@ var myFriends = [
     ["https://raxcl.cn/", "https://raxcl.cn/img/avatar.jpg", "@raxcl", "剑未佩妥，出门已是江湖。"], 
     ["https://www.xuezhao.space/", "https://www.xuezhao.space/apple-touch-icon.png", "@碎冰冰", "挥剑破云迎星落，举酒高歌引凤游。"], 
 
-    ["https://blog.ny4.dev/", "/avatar/guanran928.png", "@Guanran928", ""], 
+    ["https://blog.ny4.dev/", "/avatar/guanran928.png", "@Guanran928", "&'a ::ny4::Blog"], 
     ["https://prince213.top/", "/avatar/prince213.png", "@prince213", "Ad astra abyssosque!"], 
 ];
 
