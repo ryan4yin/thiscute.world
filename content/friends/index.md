@@ -76,7 +76,7 @@ var myFriends = [
     ["https://wiki.eryajf.net/", "https://wiki.eryajf.net/img/logo.png", "@二丫讲梵", "💻学习📝记录🔗分享 <= 运维领域的前辈"], 
     [" https://zhsher.cn/", " https://q1.qlogo.cn/g?b=qq&nk=1310446718&s=5", "@张时贰", "环转码，爱敲代码的小张！<= 很有干劲的后辈"], 
     ["https://tftree.top/", "https://cdn.tftree.top//others/202212042117873.png", "@虚空裂隙", "心有猛虎,细嗅蔷薇"], 
-    ["https://zgq.ink/", "https://zgq.ink/favicon.png", "@zgq354", "多一些思考与记录 <= 0xffff 站长，前端佬"], 
+    ["https://zgq.me/", "https://zgq.me/favicon.png", "@zgq354", "多一些思考与记录 <= 0xffff 站长，前端佬"], 
     ["https://bleatingsheep.org/", "https://bleatingsheep.org/favicon.ico", "@bleatingsheep", "偶像咩咩"], 
     ["https://vian.top/", "https://www.vian.top/avatar.ico", "@Vian", "想要的都拥有，得不到的都释怀..."], 
     ["https://wangyunzi.com/", "https://blog.wangyunzi.com/avatar.png", "@王云子", "此行山高路远，我只剩口袋玫瑰一片 <= 法学在读的文艺少女"], 
