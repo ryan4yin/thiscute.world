@@ -26,6 +26,13 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2025-07-26 - 2025-07-27
+
+- 在上海参加安同 OS 举办的 AOSCC 2025，很多干货，而且整体技术氛围非常棒！线下见到了好多大
+  佬，第一次 NixOS 线下聚会，还听了许多硬核 Talks.
+  - <https://x.com/ryan4yin/status/1949486352460058962>
+  - <https://x.com/ryan4yin/status/1949361612965687574>
+
 ### 2025-06-30 - 2025-07-11
 
 - 工作上这两周都在折腾 tailscale 跟 tailscale-operator.
