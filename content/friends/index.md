@@ -49,7 +49,8 @@ comment:
 var myFriends = [
     // ["https://blog.z-xl-t.top/", "https://blog.z-xl-t.top/favicon.jpg", "@薯条流浪法师", "快走吧，趁风停止之前"], 
     ["https://rea.ink/", "/avatar/rea.ink.webp", "@倾书", "清风皓月，光景常新 <= 前端"], 
-    ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
+    // Not accessible
+    // ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
     ["https://nopdan.com/", "https://nopdan.com/avatar.webp", "@单单", "但知行好事，莫要问前程"], 
     ["https://farer.org/", "/avatar/farer.webp", "@Stray Episode", "Scientific Evocation"], 
     ["https://wasteland.touko.moe", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
@@ -67,14 +68,16 @@ var myFriends = [
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
-    ["https://blog.010sec.cn/", "/avatar/c4rt1y.webp", "@c4rt1y", "<= 运维搬砖人"], 
+    // TLS 证书过期
+    // ["https://blog.010sec.cn/", "/avatar/c4rt1y.webp", "@c4rt1y", "<= 运维搬砖人"], 
     ["https://ferryxie.com/", "/avatar/ferryxie.webp", "@Ferry", "金融科技与人文思考并存"], 
     ["https://imcbc.cn/", "https://imcbc.cn/apple-touch-icon.png", "@BBing", "自由 分享 合作 <= C/C++/Linux 高手"], 
     ["https://blognas.hwb0307.com/", "https://blognas.hwb0307.com/logo.jpg", "@Bensz", "浮云翩迁之间 <= Linux/Docker/R语言爱好者"], 
     ["https://lisenhui.cn", "https://lisenhui.cn/imgs/avatar.png", "@凡梦星尘", "再平凡的人也有属于他的梦想！"], 
     ["https://blog.li2niu.com/", "https://blog.li2niu.com/img/logo.png", "@李二牛", "Addicted to marathons <= Developer & Runner"], 
     ["https://wiki.eryajf.net/", "https://wiki.eryajf.net/img/logo.png", "@二丫讲梵", "💻学习📝记录🔗分享 <= 运维领域的前辈"], 
-    [" https://zhsher.cn/", " https://q1.qlogo.cn/g?b=qq&nk=1310446718&s=5", "@张时贰", "环转码，爱敲代码的小张！<= 很有干劲的后辈"], 
+    // Not accessible
+    // [" https://zhsher.cn/", " https://q1.qlogo.cn/g?b=qq&nk=1310446718&s=5", "@张时贰", "环转码，爱敲代码的小张！<= 很有干劲的后辈"], 
     ["https://tftree.top/", "https://cdn.tftree.top/i/wp-content/uploads/2022/07/TFTree_avatar.png", "@虚空裂隙", "心有猛虎,细嗅蔷薇"], 
     ["https://zgq.me/", "https://zgq.me/favicon.png", "@zgq354", "多一些思考与记录 <= 0xffff 站长，前端佬"], 
     ["https://bleatingsheep.org/", "https://bleatingsheep.org/favicon.ico", "@bleatingsheep", "偶像咩咩"], 
