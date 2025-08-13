@@ -26,6 +26,13 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2025-08-12
+
+- 在 Tailscale Subnet Router 的机器上跑了一个
+  [derper-docker](https://github.com/fredliang44/derper-docker)，改了 ACL 配置禁用了所有默
+  认的 derper，只留我新增的这一个。对网络性能的改善相当明显，就连之前根本无法使用
+  tailscale 的中国电信手机热点，也勉强能打开网页了（只是加载时间得 1 分钟）
+
 ### 2025-09-10
 
 - 在上海呆得有点腻歪了，乘高铁回家，路上云参会 NixOS CN Meetup day2.
