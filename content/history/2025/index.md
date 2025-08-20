@@ -36,6 +36,17 @@ comment:
 ### 2025-09-10
 
 - 在上海呆得有点腻歪了，乘高铁回家，路上云参会 NixOS CN Meetup day2.
+- 之前各种加班处理的安全事件算是基本解决，一些教训：
+  - 不要在除个人电脑之外的任何地方使用 `gcloud auth login` 或
+    `gcloud auth application-default login` 登录自己的个人 GCP 账号。
+  - GCP Organization 管理员应该在全局的 OAuth 认证上配置这些东西：
+    - Oauth 认证的过期策略：可以设为 1 天或 1 周，一直有效的 Oauth Token 是非常危险的，泄
+      漏了你都不一定知道。
+    - Oauth 对象的白名单，只允许 Google Cloud SDK, Google Auth Library 等少数已知用途的
+      Oauth 认证。
+  - GCP 的 Service Account Json 跟 AWS 的 Access Key / Secret Key 都是非常不可靠的认证手
+    段，因为这些 Key 一直有效，泄漏了会造成很大风险。应该尽量使用 GCP Workload Identity 之
+    类的手段进行动态授权。
 
 ### 2025-08-09
 
@@ -81,6 +92,9 @@ comment:
 - 公司给报销 Cursor Pro，买了一年的订阅。
 
 ### 2025-06-27
+
+考虑到安全问题， claude-code/gemini-cli 之类的东西最好都放在容器里跑，免得它不小心删掉或者
+扫描整个 Home 目录（
 
 Cursor Rules:
 
