@@ -4,8 +4,9 @@
 Update Website Statistics, fetch data from Google Analytics Data API
 
 service_account file:
-- 生成随机密码，保存到 GitHub action secrets 中，环境变量名称为 `SERVICE_ACCOUNT_DECRYPT_KEY`
-  - 注意密码不要包含插值符号 `$`，否则插值时会出各种问题
+- 生成随机 passphrase，保存到 GitHub action secrets 中，环境变量名称为 `SERVICE_ACCOUNT_DECRYPT_KEY`
+  - 注意 passphrase 不要包含插值符号 `$`，否则插值时会出各种问题
+  - command to generate the password: `openssl rand -base64 30`
 - encrypt command: `gpg --symmetric --cipher-algo AES256 google-service-account.json`
 - decrypt command: `gpg --quiet --batch --yes --decrypt --passphrase="$SERVICE_ACCOUNT_DECRYPT_KEY" --output google-service-account.json google-service-account.json.gpg`
 """
