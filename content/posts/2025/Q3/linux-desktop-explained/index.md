@@ -1,6 +1,6 @@
 ---
-title: "Linux 桌面系统解析"
-subtitle: ""
+title: "Linux 桌面系统解析（一）"
+subtitle: "概览"
 description: ""
 date: 2025-09-09T20:17:33+08:00
 lastmod: 2025-09-09T20:17:33+08:00
@@ -41,70 +41,29 @@ comment:
 
 ## 定位与目标
 
-Linux 桌面系统包含了相当多的系统组件，这些组建相互协作，形成了一个紧密协作的生态系统，共同
-管理着从硬件设备到用户会话的方方面面。这套系统精密且复杂，即使我已经有七八年的使用经验，在
-遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。
+Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设
+备到用户会话的方方面面。
 
-倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那
-解决起问题来自然也将游刃有余。而这就是这篇文章的目的——搭建起一幅 Linux 桌面系统的「解牛
-图」。
+即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟
+解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨
+节筋脉下刀，那解决起问题来自然也将游刃有余。
+
+而这就是这篇文章的目的——搭建起一幅 Linux 桌面系统的「解牛图」。
 
 本文面向已经有一定 Linux 桌面使用经验的读者。我们用一条从「开机」到「APP 运行」再到「关机/
 断电」的时间线为轴，讲清每一步发生了什么、哪里能看到证据（日志 / 设备节点 / D‑Bus 信号）、
 可通过哪些命令排查验证，以及常见问题的修复思路。
+
+一篇文章显然不可能涵盖太多细节，因此这篇文章主要还是起一个概览的作用。
 
 技术栈假定为：UEFI + systemd-boot + systemd + Wayland + PipeWire + iwd/NetworkManager +
 fcitx5.
 
 ---
 
-## 时间线概览
+## 1. 引导与 initramfs
 
-```mermaid
-sequenceDiagram
-  autonumber
-  participant Power as 电源键
-  participant UEFI as UEFI 固件
-  participant Boot as systemd-boot
-  participant Kernel as Linux 内核
-  participant Initram as initramfs
-  participant Systemd as systemd (PID 1)
-  participant Udev as udev
-  participant Logind as systemd-logind
-  participant Greet as Display Manager
-  participant Compositor as Wayland 合成器
-  participant User as GUI 应用 (client)
-  participant IM as 输入法 (fcitx5)
-  participant Net as NetworkManager/iwd
-  participant Pipe as PipeWire
-  participant Shutdown as systemd (shutdown)
-
-  Power->>UEFI: 上电并初始化硬件
-  UEFI->>Boot: 启动 loader
-  Boot->>Kernel: 加载内核与 initramfs
-  Kernel->>Initram: 执行 initramfs 并挂载 rootfs
-  Initram->>Systemd: switch_root, 启动 systemd
-  Systemd->>Udev: 启动 udev, 创建设备节点
-  Systemd->>Logind: 启动 logind, 管理会话/seat
-  Systemd->>Greet: 启动显示管理器
-  Greet->>Logind: 认证并请求创建会话
-  Logind->>Compositor: 分配设备 ACL 并启动 compositor
-  Compositor->>User: 启动桌面程序与通知器
-  User->>IM: 请求输入法服务
-  Compositor->>Net: 网络服务就绪
-  User->>Pipe: 音频/视频流通过 PipeWire 处理
-  User->>Compositor: 关闭应用/注销
-  Systemd->>Shutdown: 发起 shutdown.target
-  Shutdown->>Systemd: 停止各服务并关机
-```
-
-上面是高层路线图。下面沿着时间线逐段拆解：可观察点、常用命令、常见故障与实操实验建议。
-
----
-
-## 1. 引导与 initramfs（内核接管前后）
-
-### 1.1 UEFI 与 systemd-boot
+### 1.1 UEFI 与启动管理器
 
 现代系统普遍使用 **UEFI 固件** 代替 BIOS。UEFI 初始化硬件后，从 EFI System Partition (ESP)
 中加载启动管理器。NixOS 默认使用 **grub**，不过在启用 secure boot 时目前只能改用
@@ -126,7 +85,7 @@ boot.loader.efi.canTouchEfiVariables = true;
 
 ---
 
-### 1.2 内核早期职责
+### 1.2 内核启动
 
 当 systemd-boot 把控制权交给内核后，内核会：
 
@@ -146,7 +105,7 @@ journalctl -b
 
 ---
 
-### 1.3 initramfs 的关键工作
+### 1.3 initramfs 工作
 
 initramfs 提供一个最小用户空间，用于：
 
@@ -187,7 +146,7 @@ initramfs 手动检查挂载和驱动加载过程。
 
 ---
 
-## 2. systemd 接管：targets、units 与启动性能诊断
+## 2. systemd 接管
 
 systemd（PID 1）负责并行启动 units、维护依赖关系、处理 cgroups 与环境隔离，并托管 system
 与 user 的 lifecycle（包括 socket activation、timers、watchdog）。
@@ -215,7 +174,7 @@ systemd-analyze critical-chain
 问题或学习 NixOS 时可查看这些配置的内容，但如果需要修改，应修改对应的声明式配置，而不是直
 接修改这些文件。
 
-### 2.1 systemd-journald 日志收集
+### 2.1 日志收集
 
 `systemd-journald` 是 systemd 提供的日志收集守护进程（daemon），它的主要职责包括：
 
@@ -272,7 +231,7 @@ sudo journalctl --rotate
 sudo systemctl kill --kill-who=main --signal=SIGUSR1 systemd-journald
 ```
 
-### 2.2 日志轮转与清理逻辑
+### 2.2 日志管理
 
 - 如果使用 `Storage=persistent`，journal 会在 `/var/log/journal` 下以分块（.journal）文件
   存储日志。journald 会在后台根据
@@ -290,13 +249,13 @@ sudo systemctl kill --kill-who=main --signal=SIGUSR1 systemd-journald
 
 ---
 
-## 3. udev（设备发现与规则）
+## 3. udev 设备管理
 
 udev 是 Linux 用户空间的设备管理员：当内核发出 uevent（设备插拔）时，udev 根据规则加载模
 块、创建设备节点并设置权限。桌面系统中，udev 负责许多关键节点（/dev/input/event\*,
 /dev/dri/_, /dev/snd/_）。
 
-### 3.1 udev 的工作流与规则机制
+### 3.1 工作流与规则
 
 **工作流**：
 
@@ -315,7 +274,7 @@ SUBSYSTEM=="input", ATTRS{idVendor}=="abcd", ATTRS{idProduct}=="1234", MODE="660
 
 `TAG+="uaccess"` 是现代桌面用来让 logind 接管设备权限与 session ACL（由 logind 配置）。
 
-### 3.2 设备权限与 ACL（与 logind 的协作）
+### 3.2 设备权限与 ACL
 
 现代 systemd + logind 使用 udev tag `uaccess` 或 `seat` 标签来由 logind 把设备 ACL 授予当
 前的登录 session。具体流程：
@@ -339,7 +298,7 @@ $ loginctl seat-status seat0
 $ loginctl show-session <id> -p Remote -p Display -p Name
 ```
 
-### 3.3 udev 实验与故障排查（usb/输入设备失效示例）
+### 3.3 故障排查
 
 #### 场景：插入外接键盘后，Wayland 会话收不到键盘事件（键盘无效）
 
@@ -374,13 +333,13 @@ $ loginctl show-session <id> -p Remote -p Display -p Name
 
 ---
 
-## 4. logind（会话 / seat / 设备分配）
+## 4. logind 会话管理
 
 systemd-logind 是连接登录、会话、seat、设备权限与电源管理的关键服务。它通过 D-Bus 暴露
 API，管理登录会话并在用户登录/注销时分配/回收设备 ACL（例如音频、输入、GPU）。理解 logind
 对桌面问题的定位极其重要。
 
-### 4.1 logind 的职责与 API（D-Bus）
+### 4.1 职责与 API
 
 **职责**：
 
@@ -413,7 +372,7 @@ ACLs 或 device ACLs），从而让运行在会话内的合成器/应用访问�
 - D-Bus 名称：`org.freedesktop.login1`，对象路径：`/org/freedesktop/login1`，主要接
   口：`org.freedesktop.login1.Manager`。
 
-### 4.2 seats 概念与多座席实践
+### 4.2 seats 概念
 
 #### 4.2.1 什么是 seat？
 
@@ -459,7 +418,7 @@ ACLs 或 device ACLs），从而让运行在会话内的合成器/应用访问�
 - 这类配置较复杂，生产环境中最好在测试机上先验证 `loginctl seat-status` 输出与在线用户会话
   的行为。
 
-### 4.3 查看会话与设备分配（`loginctl`）
+### 4.3 会话与设备管理
 
 常用 `loginctl`：
 
@@ -477,7 +436,7 @@ $ loginctl seat-status seat0
 `loginctl` 也可触发会话管理动作（锁屏、终止会话）。例如
 `loginctl terminate-session <id>`。
 
-### 4.4 常见问题：设备权限、自动挂起、按键处理异常
+### 4.4 常见问题
 
 **问题例：Wayland compositor 启动但无法打开 `/dev/dri/card0`（GPU 权限问题）**
 
@@ -509,12 +468,12 @@ $ loginctl seat-status seat0
 
   这能观察到 session 创建、移除、seat 分配、锁屏请求等信号。
 
-## 5. 图形登录（greetd / SDDM / GDM 等）与会话启动
+## 5. 图形登录与会话启动
 
 图形登录（Display Manager）负责用户认证并启动用户会话（通常交给 systemd-logind 来创会
 话）。我这里使用了轻量的 greetd 作为我的 display manager。
 
-### 5.1 login manager 到会话的链路（PAM、systemd-user、D-Bus）
+### 5.1 登录链路
 
 典型流程：
 
@@ -534,7 +493,7 @@ $ loginctl seat-status seat0
 - `loginctl list-sessions` 查看是否新会话被创建
 - `journalctl --user -b`（在 user session 下）查看用户服务日志
 
-### 5.2 可观测点与调试方法
+### 5.2 调试方法
 
 #### 问题示例：用户登录后 compositor 未启动或权限错误
 
@@ -552,13 +511,13 @@ $ loginctl seat-status seat0
 
 ---
 
-## 6. 桌面运行（合成器 / Wayland / libinput / Mesa）
+## 6. 桌面运行
 
 合成器（compositor）是 Wayland 架构的核心。它直接管理输出（屏幕）、接收输入事件并将事件分
 发给客户端，同时合成各个客户端的缓冲区到最终帧。libinput 处理来自 /dev/input 的原始事件，
 并把处理后的事件给合成器；Mesa/EGL/GBM 负责渲染。
 
-### 6.1 Wayland 合成器与客户端通信（基本原理）
+### 6.1 Wayland 合成器
 
 - Wayland 使用客户端-服务器模型：合成器是服务器（wayland compositor），应用为客户端
   （wayland client）。
@@ -576,7 +535,7 @@ $ echo "$WAYLAND_DISPLAY"
 $ ls $XDG_RUNTIME_DIR
 ```
 
-#### 6.1.1 架构对比：X11（startx 模型） vs Wayland（合成器即服务器）
+#### 6.1.1 架构对比：X11 vs Wayland
 
 - **X11（传统）**：X Server（`Xorg`）是显示服务器，窗口管理器 / 桌面环境（例如 i3、GNOME）
   作为 X client 连接到 X Server。`startx` 的流程本质上是：_启动 X Server，然后在 X Server
@@ -590,7 +549,7 @@ $ ls $XDG_RUNTIME_DIR
   需要先运行一个独立的 display server 再启动 compositor —— 合成器本身就是 display server +
   window manager 的合体。
 
-#### 6.1.2 为什么 Hyprland / Sway / 等 Wayland 合成器能直接在 tty 启动？
+#### 6.1.2 为什么 Wayland 合成器能直接在 tty 启动？
 
 - 合成器通常以用户进程运行（在用户的 systemd-user 会话或由 display manager 启动），直接打
   开 `/dev/dri/card0`（DRM）和 `/dev/input/event*`（evdev），完成 KMS 设置与帧提交。因为合
@@ -627,16 +586,26 @@ $ ls $XDG_RUNTIME_DIR
 - **兼容性**：Xwayland 提供对 legacy X11 应用的兼容，合成器负责在启动时/按需启动 Xwayland
   以支持老应用。
 
-### 6.2 libinput、Mesa、EGL、DRM 的角色与验证
+### 6.2 合成器图形栈
+
+**输入处理组件**：
 
 - **libinput**：从 `/dev/input/*` 读取事件并做预处理（手势识别、触摸板边缘、键盘元键处理
-  等）。合成器通常使用 libinput 的 API 进行设备枚举与事件回调。可用
-  `libinput list-devices` 查看被 libinput 管理的设备（需 root 或在 session 中运行）。
-- **Mesa + EGL + GBM + DRM**：Mesa 提供 OpenGL/Vulkan 的实现；EGL/GBM 是与 DRM/KMS 协同管
-  理缓冲的接口。合成器使用 GBM 分配 GPU 可用的 buffer objects（BOs），并通过 DRM 将其排队
-  提交 framebuffer。
-- **DRM**：内核中的 Direct Rendering Manager 控制显示模式设置（KMS），负责最终页面翻转。合
-  成器通过 `/dev/dri/card0` 与内核交互。
+  等）
+- 合成器使用 libinput 的 API 进行设备枚举与事件回调
+- 可用 `libinput list-devices` 查看被 libinput 管理的设备（需 root 或在 session 中运行）
+
+**图形渲染组件**：
+
+- **Mesa**：提供 OpenGL/Vulkan 的开源实现
+- **EGL**：Khronos 组织定义的接口，将 OpenGL/Vulkan 与窗口系统连接
+- **GBM**：Mesa 的缓冲管理接口，用于分配图形缓冲区给 GPU
+- **DRM**：内核中的 Direct Rendering Manager，控制显示模式设置（KMS）和页面翻转
+
+**设备访问**：
+
+- 合成器通过 `/dev/dri/card0` 与内核 DRM 交互
+- 通过 `/dev/input/event*` 访问输入设备
 
 **常用调试命令**：
 
@@ -649,14 +618,14 @@ $ glxinfo | grep "OpenGL renderer"
 $ sudo libinput list-devices
 ```
 
-### 6.3 Hyprland / Sway / other 的差异化角度（以通用原理讲解）
+### 6.3 合成器对比
 
 虽然每个合成器的实现不同（如 Hyprland、Sway、Wayfire 等），但底层一致性高：都使用
 libinput、Mesa、EGL/GBM、DRM，并遵循 Wayland 协议。区别在于窗口布局、扩展协议支持、配置方
 式与插件生态。排查合成器问题时关键是关注底层资源：是否有 `/dev/dri` 权限、是否 libinput 列
 出了输入设备、合成器日志中是否有 EGL/GBM 错误。
 
-### 6.4 图形相关故障排查（黑屏、GPU 被占用、渲染卡顿）
+### 6.4 图形故障排查
 
 **黑屏但登录已成功**：
 
@@ -675,12 +644,12 @@ libinput、Mesa、EGL/GBM、DRM，并遵循 Wayland 协议。区别在于窗口�
 
 ---
 
-## 7. 网络联网（iwd / NetworkManager / systemd-networkd）
+## 7. 网络联网
 
 网络是很多桌面问题的根源（更新失败、认证错误、remote resource 无法挂载等）。现代桌面常用
 iwd + NetworkManager 的组合或 systemd-networkd。
 
-### 7.1 无线与有线的启动差异与日志点
+### 7.1 网络启动
 
 - 无线（Wi-Fi）需要硬件驱动、固件加载（firmware），然后由 iwd/wpa_supplicant 发起扫描/认
   证。
@@ -694,7 +663,7 @@ iwd + NetworkManager 的组合或 systemd-networkd。
 - DHCP 客户端日志：`journalctl -u systemd-networkd` 或 `journalctl -u dhclient`（取决于客
   户端）。
 
-### 7.2 iwd 与 NetworkManager 的协作（NixOS 配置片段）
+### 7.2 网络配置
 
 NixOS 配置示例（启用 NetworkManager + iwd 后端）：
 
@@ -709,7 +678,7 @@ services.iwd.enable = true;
 - 使用 `nmcli device wifi list` 与 `nmcli device wifi connect <SSID> password <PW>` 来连接
   并观察 `journalctl -u iwd` 的事件消息。
 
-### 7.3 网络故障排查（连接不上、DNS 问题）
+### 7.3 网络故障排查
 
 **连接不上（Wi-Fi）**：
 
@@ -728,32 +697,87 @@ services.iwd.enable = true;
 
 ---
 
-## 8. 音频与视频处理（PipeWire）
+## 8. 音频与视频处理
 
 PipeWire 是现代 Linux 桌面系统的音频和视频处理核心，它统一了音频、视频和屏幕共享的处理流
 程。PipeWire 替代了传统的 PulseAudio（音频）和 JACK（专业音频），同时提供了更好的低延迟和
 更灵活的架构。
 
-### 8.1 PipeWire 架构与核心概念
+### 8.1 PipeWire 架构概述
 
-**核心组件**：
+**核心优势**：
+
+- **统一架构**：同时处理音频、视频和屏幕共享
+- **低延迟**：相比 PulseAudio 提供更低的音频延迟
+- **向后兼容**：支持 ALSA、PulseAudio 和 JACK 客户端
+- **模块化设计**：通过插件系统支持各种音频处理功能
+
+**主要组件**：
 
 - **pipewire**：核心守护进程，管理音频/视频流
 - **wireplumber**：会话管理器，处理设备连接和路由策略
-- **pipewire-pulse**：PulseAudio 兼容层，让旧应用无缝工作
-- **pipewire-jack**：JACK 兼容层，支持专业音频应用
+- **pipewire-pulse**：PulseAudio 兼容层
+- **pipewire-jack**：JACK 兼容层
 - **pipewire-alsa**：ALSA 兼容层
 
-**关键概念**：
+### 8.2 音频处理流程
+
+当应用程序播放音频时，整个处理流程如下：
+
+**1. 音频 API 选择**：
+
+- 应用可以使用 ALSA、PulseAudio 或 JACK API
+- NixOS 中安装了 `pipewire-pulse` 和 `pipewire-alsa` 后，系统提供兼容层
+- 所有音频 API 最终都连接到 PipeWire 核心
+
+**2. 音频流创建**：
+
+- 每次应用播放声音时，在 PipeWire 中创建一个"流"（stream）
+- 流包含音频格式、采样率、通道数等元数据
+- 流被送入 PipeWire 的处理图（graph）
+
+**3. 设备路由**：
+
+- WirePlumber 根据用户配置和系统规则进行路由
+- 将音频流路由到合适的物理设备（扬声器、耳机等）
+- 支持自动切换（如插入耳机时自动切换输出）
+
+**4. 音频处理**：
+
+- PipeWire 混合多个应用的音频流
+- 执行格式转换（采样率转换、位深度转换）
+- 支持音量调节和音频效果（均衡器、回声等）
+
+**5. 硬件输出**：
+
+- 处理后的音频流通过 ALSA 驱动发送到物理硬件
+- 内核驱动将 PCM 数据发送给声卡 DAC
+- 最终转换为模拟声音输出
+
+**6. 蓝牙音频支持**：
+
+- PipeWire 管理蓝牙设备（A2DP 耳机、HFP 通话设备）
+- 使用 BlueZ 模块实现蓝牙音频协议
+- 支持 A2DP 流、HFP 通话等模式切换
+
+### 8.3 关键概念
+
+**核心概念**：
 
 - **Node**：音频/视频源或目标（如麦克风、扬声器、应用）
 - **Link**：节点间的连接，定义音频/视频流路径
 - **Session Manager**：管理节点连接和路由策略
 - **Graph**：描述当前所有节点和连接的拓扑结构
 
-### 8.2 PipeWire 启动与配置
+**多应用混音**：
 
-**systemd 服务**：
+- 多个应用同时发声时，PipeWire 将它们的流混合输出
+- 用户可以通过音量控制工具（如 pavucontrol 或 wpctl）独立调节每个应用的音量
+- 支持每个应用的独立音量控制和静音
+
+### 8.4 启动与配置
+
+**systemd 服务管理**：
 
 ```bash
 # 查看 PipeWire 相关服务状态
@@ -762,6 +786,9 @@ systemctl --user status pipewire pipewire-pulse wireplumber
 # 查看服务日志
 journalctl --user -u pipewire -f
 journalctl --user -u wireplumber -f
+
+# 重启 PipeWire 服务
+systemctl --user restart pipewire pipewire-pulse wireplumber
 ```
 
 **NixOS 配置示例**：
@@ -778,11 +805,11 @@ services.pipewire = {
 # 启用 WirePlumber 会话管理器
 services.pipewire.wireplumber.enable = true;
 
-# 可选：配置音频设备
-hardware.pulseaudio.enable = false;  # 禁用 PulseAudio
+# 禁用 PulseAudio（避免冲突）
+hardware.pulseaudio.enable = false;
 ```
 
-**环境变量**：
+**环境变量检查**：
 
 ```bash
 # 检查 PipeWire 环境
@@ -793,9 +820,9 @@ echo $XDG_RUNTIME_DIR
 ls $XDG_RUNTIME_DIR/pipewire-*
 ```
 
-### 8.3 音频设备管理与路由
+### 8.5 音频设备管理
 
-**设备查看与管理**：
+**设备查看与监控**：
 
 ```bash
 # 使用 pw-cli 查看音频设备
@@ -811,7 +838,7 @@ pw-top
 pavucontrol
 ```
 
-**音频路由示例**：
+**音频路由控制**：
 
 ```bash
 # 创建音频连接（应用输出到扬声器）
@@ -825,13 +852,26 @@ pactl set-default-sink <sink-name>
 pactl set-default-source <source-name>
 ```
 
-### 8.4 视频与屏幕共享
+**音频测试**：
 
-**屏幕共享支持**：
+```bash
+# 测试播放
+paplay /usr/share/sounds/alsa/Front_Left.wav
 
-- **X11**：通过 X11 扩展支持
-- **Wayland**：通过 PipeWire 的 screen-capture 协议
-- **应用支持**：OBS Studio、Discord、Zoom 等
+# 测试录音
+parecord --file-format=wav test.wav
+
+# 检查 PulseAudio 兼容层
+pactl info
+```
+
+### 8.6 视频与屏幕共享
+
+**屏幕共享架构**：
+
+- **X11**：通过 X11 扩展支持屏幕共享
+- **Wayland**：通过 PipeWire 的 screen-capture 协议实现
+- **应用支持**：OBS Studio、Discord、Zoom、Teams 等主流应用
 
 **视频设备管理**：
 
@@ -842,13 +882,29 @@ pw-cli list-objects | grep -i video
 # 使用 v4l2-ctl 管理摄像头
 v4l2-ctl --list-devices
 v4l2-ctl --device=/dev/video0 --list-formats
+
+# 检查摄像头权限
+ls -l /dev/video*
 ```
 
-### 8.5 常见问题与故障排查
+**屏幕共享配置**：
 
-#### 问题 1：音频设备无法识别
+```bash
+# 检查 Wayland 协议支持
+echo $WAYLAND_DISPLAY
 
-排查步骤：
+# 设置桌面环境标识
+export XDG_CURRENT_DESKTOP=sway  # 或其他合成器
+
+# 检查 PipeWire 屏幕共享服务
+systemctl --user status pipewire-session-manager
+```
+
+### 8.7 故障排查
+
+#### 8.7.1 音频设备无法识别
+
+**排查步骤**：
 
 1. 检查 ALSA 设备：
 
@@ -871,14 +927,19 @@ v4l2-ctl --device=/dev/video0 --list-formats
    ```
 
 4. 重启 PipeWire 服务：
-
    ```bash
    systemctl --user restart pipewire pipewire-pulse wireplumber
    ```
 
-#### 问题 2：音频延迟过高
+**常见修复**：
 
-解决方案：
+- 权限问题：`sudo usermod -a -G audio $USER`
+- 设备被占用：检查是否有其他音频服务运行
+- 配置错误：删除用户配置重新生成
+
+#### 8.7.2 音频延迟过高
+
+**解决方案**：
 
 1. 调整 PipeWire 配置（`~/.config/pipewire/pipewire.conf`）：
 
@@ -891,89 +952,56 @@ v4l2-ctl --device=/dev/video0 --list-formats
    }
    ```
 
-2. 使用低延迟音频驱动：
-
+2. 检查当前音频驱动：
    ```bash
-   # 检查当前音频驱动
    pw-cli info | grep -i driver
    ```
 
-#### 问题 3：应用无法播放音频
+#### 8.7.3 应用无法播放音频
 
-排查步骤：
+**排查步骤**：
 
-1. 检查应用是否使用 PulseAudio 兼容层：
+1. 检查 PulseAudio 兼容层：`pactl info`
+2. 查看音频流：`pw-top`
+3. 测试音频播放：`paplay /usr/share/sounds/alsa/Front_Left.wav`
 
-   ```bash
-   pactl info
-   ```
+#### 8.7.4 屏幕共享在 Wayland 下不工作
 
-2. 查看音频流：
+**解决方案**：
 
-   ```bash
-   pw-top
-   ```
+1. 确认合成器支持 PipeWire 屏幕共享
+2. 设置正确的环境变量：`export XDG_CURRENT_DESKTOP=sway`
+3. 检查 PipeWire 屏幕共享服务状态
 
-3. 测试音频：
+### 8.8 性能优化
 
-   ```bash
-   # 测试播放
-   paplay /usr/share/sounds/alsa/Front_Left.wav
+#### 8.8.1 低延迟配置
 
-   # 测试录音
-   parecord --file-format=wav test.wav
-   ```
+**PipeWire 配置优化**：
 
-#### 问题 4：屏幕共享在 Wayland 下不工作
+```ini
+# ~/.config/pipewire/pipewire.conf
+context.properties = {
+    default.clock.rate = 48000
+    default.clock.quantum = 64
+    default.clock.min-quantum = 32
+    default.clock.max-quantum = 1024
+}
+```
 
-解决方案：
+**CPU 使用优化**：
 
-1. 确认合成器支持 PipeWire 屏幕共享：
+```bash
+# 监控 CPU 使用
+pw-top
 
-   ```bash
-   # 检查 Wayland 协议支持
-   echo $WAYLAND_DISPLAY
-   ```
+# 调整线程优先级
+chrt -f 50 pipewire
+```
 
-2. 设置环境变量：
+#### 8.8.2 专业音频配置
 
-   ```bash
-   export XDG_CURRENT_DESKTOP=sway  # 或其他合成器
-   ```
-
-3. 检查 PipeWire 屏幕共享服务：
-
-   ```bash
-   systemctl --user status pipewire-session-manager
-   ```
-
-### 8.6 性能优化与高级配置
-
-#### 性能调优
-
-1. **低延迟配置**：
-
-   ```ini
-   # ~/.config/pipewire/pipewire.conf
-   context.properties = {
-       default.clock.rate = 48000
-       default.clock.quantum = 64
-       default.clock.min-quantum = 32
-       default.clock.max-quantum = 1024
-   }
-   ```
-
-2. **CPU 使用优化**：
-
-   ```bash
-   # 监控 CPU 使用
-   pw-top
-
-   # 调整线程优先级
-   chrt -f 50 pipewire
-   ```
-
-#### 专业音频配置
+**JACK 兼容模式**：
 
 ```bash
 # 启用 JACK 兼容模式
@@ -983,15 +1011,15 @@ export PIPEWIRE_LATENCY="32/48000"
 qjackctl  # JACK 控制面板
 ```
 
-### 8.7 与其他组件的集成
+### 8.9 组件集成
 
-#### 与合成器的集成
+#### 8.9.1 与合成器的集成
 
 - **Hyprland**：自动支持 PipeWire 屏幕共享
 - **Sway**：需要额外配置 `wlroots` 支持
 - **GNOME/KDE**：内置 PipeWire 支持
 
-#### 与应用的集成
+#### 8.9.2 与应用的集成
 
 - **浏览器**：Chrome/Firefox 通过 WebRTC 使用 PipeWire
 - **视频会议**：Discord、Zoom、Teams 等
@@ -999,14 +1027,163 @@ qjackctl  # JACK 控制面板
 
 ---
 
-## 9. GUI 应用启动与交互（Wayland 客户端生命周期）
+## 9. GUI 应用启动与交互
 
-### 9.1 应用启动链（env、systemd user services、Xwayland）
+在 Wayland 模型下，每个 GUI 应用是一个 Wayland 客户端，通过 Wayland 客户端库
+（libwayland-client）与合成器通信。现代 Linux 桌面应用通常使用高级图形工具包（如
+GTK、Qt、SDL）来简化开发，这些工具包内部处理与 Wayland 协议的对接。
 
-应用通常通过 shell/env 或 launcher（桌面快捷方式）启动。现代桌面鼓励把长期运行的用户服务放
-到 `systemd --user` 管理。优点：统一日志、自动重启、cgroups 管理。
+### 9.1 Wayland 应用架构
 
-**示例：在 `~/.config/systemd/user` 中添加 user service**
+**客户端-服务器模型**：
+
+- Wayland 使用客户端-服务器模型：合成器是服务器，应用为客户端
+- 合成器通过 Unix 域 Socket（通常路径在 `$XDG_RUNTIME_DIR/wayland-0`）与客户端通信
+- 协议由 `libwayland` 实现，支持各种扩展（如 `xdg-shell`、`ivi-surface` 等）
+
+**安全特性**：
+
+- Wayland 客户端只看到自己的窗口，无法窥视其他窗口
+- 所有输入输出都通过合成器安全地分发给各客户端
+- 没有像 X11 那样的全局屏幕、全局截屏等不安全功能
+
+### 9.2 应用启动流程
+
+**1. 建立连接**：
+
+- 应用启动时创建 Wayland 显示连接（wl_display）
+- 与合成器建立通信通道（Unix 域 Socket）
+- 协商支持的协议扩展
+
+**2. 窗口创建**：
+
+- 应用请求创建窗口（surface）
+- 合成器分配窗口 ID 和资源
+- 设置窗口属性和事件监听
+
+**3. 渲染上下文初始化**：
+
+- 应用使用 OpenGL/ES 创建渲染上下文
+- 通过 EGL 将渲染上下文与 Wayland 缓冲区关联
+- 初始化 Mesa 图形驱动
+
+### 9.3 应用渲染流程
+
+**1. 渲染上下文创建**：
+
+- 应用使用 OpenGL/ES 创建渲染上下文
+- 通过 EGL 将渲染上下文与 Wayland 缓冲区关联
+- 初始化 Mesa 图形驱动和硬件加速
+
+**2. 内容绘制**：
+
+- 应用调用 OpenGL/Vulkan API 绘制界面内容
+- Mesa 将 API 调用转换为 GPU 指令
+- 在 GPU 上执行渲染，生成帧缓冲数据
+
+**3. 缓冲区提交**：
+
+- 应用将渲染完成的缓冲区提交给合成器
+- 通过 DMA-BUF 机制在应用和合成器间共享缓冲区
+- 合成器接收缓冲区后进行最终合成和显示
+
+**4. 页面翻转**：
+
+- 合成器将多个应用的缓冲区组合成最终帧
+- 通过 DRM/KMS 将最终帧提交到显示设备
+- 完成页面翻转，用户看到更新后的画面
+
+### 9.4 图形驱动支持
+
+**主要驱动类型**：
+
+- **Intel**：i965/Iris 驱动
+- **AMD**：RADV/RadeonSI 驱动
+- **NVIDIA**：Nouveau（开源）或专有驱动
+- **ARM**：Mali、Broadcom 等驱动
+
+**驱动功能**：
+
+- 硬件加速渲染
+- 着色器编译（GLSL/Vulkan SPIR-V）
+- 缓冲区管理（通过 GBM 接口）
+- 内存管理（GPU 显存与系统内存交换）
+
+**检查驱动信息**：
+
+```bash
+# 查看 Mesa 版本和驱动信息
+glxinfo | grep "OpenGL renderer"
+
+# 输出示例：Mesa Intel® UHD Graphics 620 (LLVM ...)
+```
+
+### 9.5 图形工具包支持
+
+**GTK**：
+
+- GNOME 及许多应用使用的工具包
+- GTK3/4 原生支持 Wayland 后端
+- 在 Wayland 会话中默认使用 Wayland 后端
+- 强制使用 X11 后端：`GDK_BACKEND=x11`
+
+**Qt**：
+
+- Qt5/6 支持 Wayland 后端
+- 需要安装 `qt5-wayland` 或 `qt6-wayland` 包
+- 在 Wayland 会话下自动使用 Wayland 渲染
+
+**SDL**：
+
+- 游戏和多媒体应用常用库
+- SDL2 内部集成 Wayland 后端
+- 大部分 SDL 应用在 Wayland 环境下正常渲染
+
+### 9.6 输入事件处理
+
+**事件流程**：
+
+1. 用户输入（键盘、鼠标）→ 内核生成事件
+2. 合成器接收输入事件
+3. 根据窗口焦点分发给对应客户端
+4. 客户端监听 Wayland 事件回调
+
+**权限管理**：
+
+- systemd-logind 确保应用对输入设备的访问权限
+- 通过 ACL 机制控制设备访问
+- 用户会话只能访问自己会话范围的资源
+
+### 9.7 输入法集成
+
+**环境变量配置**：
+
+```bash
+# GTK 应用
+export GTK_IM_MODULE=fcitx
+
+# Qt 应用
+export QT_IM_MODULE=fcitx
+
+# X11 应用
+export XMODIFIERS=@im=fcitx
+```
+
+**集成机制**：
+
+- 图形工具包检查环境变量加载输入法模块
+- 使用 Wayland 文本输入协议处理键盘事件
+- 输入法通过 D-Bus 或 text-input 协议与客户端通信
+
+### 9.8 应用启动管理
+
+**启动方式**：
+
+- 通过 shell/env 或桌面快捷方式启动
+- 现代桌面鼓励使用 `systemd --user` 管理长期运行的用户服务
+- 优点：统一日志、自动重启、cgroups 管理
+
+**systemd 用户服务示例**：
 
 ```ini
 # ~/.config/systemd/user/my-app.service
@@ -1021,7 +1198,7 @@ Restart=on-failure
 WantedBy=default.target
 ```
 
-然后：
+**服务管理命令**：
 
 ```bash
 systemctl --user daemon-reload
@@ -1029,42 +1206,60 @@ systemctl --user enable --now my-app.service
 journalctl --user -u my-app -f
 ```
 
-**Xwayland**：一些 legacy app 仍然需要 X11，通过 Xwayland 在 Wayland 上兼容。若 Xwayland
-未启动或崩溃，旧应用会出现窗口或输入问题。合成器通常会自动管理 Xwayland 启动。
+**Xwayland 兼容**：
 
-### 9.2 输入事件从内核到应用的传递（libinput → compositor → client）
+- 一些 legacy 应用仍需要 X11，通过 Xwayland 在 Wayland 上兼容
+- 若 Xwayland 未启动或崩溃，旧应用会出现窗口或输入问题
+- 合成器通常会自动管理 Xwayland 启动
 
-1. 用户按键/移动鼠标 → 内核通过 evdev 生成事件并写入 `/dev/input/eventX`。
-2. udev 发现设备，device node 权限交给 logind 给当前 session。
-3. libinput（合成器或 compositor 通过 libinput）监听 `/dev/input/...` 并对事件进行滤波/手
-   势处理（如触控板两指滚动）。
-4. 合成器基于当前 focus 把事件发给对应客户端（Wayland protocol）。
-5. 客户端收到按键事件后，若应用启用了输入法插件，会把事件交给输入法。输入法（如 fcitx5）通
-   过 D-Bus 或 text-input 协议生成候选并把结果插入客户端。
+### 9.9 应用故障排查
 
-### 9.3 应用崩溃/卡死排查（`coredumpctl` / `strace` / `gdb`）
+**调试工具**：
 
-- `coredumpctl list` 查看 core dump 列表（若系统启用 coredump 存储）。
-- `coredumpctl info <PID>` / `coredumpctl debug <PID>` 可以直接打开 gdb。
-- `strace -f -p <pid>` 跟踪系统调用，定位阻塞（例如卡在 futex、poll、read）。
-- `gdb --pid <pid>` attach 到进程进行线程堆栈分析（需符号）。
+```bash
+# 查看 core dump 列表
+coredumpctl list
 
-**示例卡死诊断**：Electron 浏览器卡死 → `strace -p <pid>` 明确是否在大量 I/O（写日志）或在
-futex（线程死锁）。若是 GPU 导致卡顿，查看 `dmesg` 是否报 GPU 重置（GPU hang）。
+# 分析 core dump
+coredumpctl info <PID>
+coredumpctl debug <PID>
+
+# 跟踪系统调用
+strace -f -p <pid>
+
+# 进程调试
+gdb --pid <pid>
+```
+
+**常见问题诊断**：
+
+- **应用卡死**：使用 `strace -p <pid>` 检查是否卡在 I/O 或 futex
+- **GPU 问题**：查看 `dmesg` 是否报 GPU 重置（GPU hang）
+- **内存泄漏**：使用 `valgrind` 或 `heaptrack` 分析内存使用
+- **性能问题**：使用 `perf` 或 `htop` 分析 CPU 使用情况
 
 ---
 
-## 10. 中文输入（以 fcitx5 为例，但基于通用原理）
+## 10. 中文输入
 
 输入法是 GUI 体验的重心之一。理解它如何与 Wayland 合成器、GTK/Qt、D-Bus 协作非常重要。
 
-### 10.1 输入法框架的角色：进程、D-Bus、Wayland text protocol
+### 10.1 输入法框架
 
 **总体结构**：
 
 - 输入法通常以一个守护进程运行（例如 `fcitx5`），并通过插件/引擎（拼音、五笔等）处理候选
   词。
 - 客户端（应用）通过 GTK/Qt 的 IM module 或 Wayland 的 text-input 协议与输入法交互。
+- 候选词窗口：Fcitx5 负责在合适的屏幕位置显示中文候选词窗口。Wayland 约束应用只能绘制自己
+  的窗口，所以候选框通常由 Fcitx5 自身或通过 GTK 等工具绘制。用户可在输入框下方看到候选列
+  表，并选择想要的汉字词。
+- 权限协调：systemd-logind 确保输入法进程和应用进程能够相互通信。因为它们都属于同一用户会
+  话，所以可以共享一个 Wayland socket。logind 为整个会话分配了设备和通信权限。
+- 键盘事件处理：当用户敲键时，键盘事件首先由 Hyprland 接收，然后传给前台窗口。如果前台窗口
+  支持输入法，Hyprland 会把事件传给客户端应用的 Wayland 窗口；应用再交给 GTK/Qt 框架，由
+  Fcitx5 插件拦截并处理。这样，Fcitx5 获得原始按键，生成候选后通过应用的输入接口（Wayland
+  text protocol）插入文本。
 - 在 Wayland 下，text-input 协议与 D-Bus 协调：应用发起文本输入会话（text-input），然后输
   入法显示候选并把最终文本发送回应用。
 
@@ -1073,7 +1268,7 @@ futex（线程死锁）。若是 GPU 导致卡顿，查看 `dmesg` 是否报 GPU
 - `fcitx5-diagnose`（fcitx5 提供）检查配置。
 - `busctl monitor` 或 `dbus-monitor`（若输入法使用 D-Bus）来监听通信。
 
-### 10.2 环境变量 / 插件 / XWayland 兼容性
+### 10.2 环境配置
 
 在 Xwayland 程序或只支持 X11 的老程序上，需要以下环境变量或模块：
 
@@ -1093,7 +1288,7 @@ export XMODIFIERS=@im=fcitx
 NixOS 中在 `programs.fcitx5.enable = true;` 后，确保 `environment.sessionVariables` 或
 `programs.fcitx5.extraConfig` 配置正确。
 
-### 10.3 候选词显示与焦点问题排查（应用不弹候选框的常见原因）
+### 10.3 候选词显示问题
 
 **症状**：在某个应用中打拼音无候选词或候选框不显示。
 
@@ -1120,56 +1315,162 @@ NixOS 中在 `programs.fcitx5.enable = true;` 后，确保 `environment.sessionV
 
 ---
 
-## 11. GUI 应用退出到关机（退出/注销 → logind 清理 → systemd shutdown）
+## 11. 系统关机流程
 
-当用户关闭某应用或注销、关机时，会走一条清理链：应用停止 → desktop components 退出 →
-logind 回收 ACL → systemd 停止用户服务 → 若关机则 stop system services → sync → ACPI 电源
-关闭。
+当用户在图形界面执行关机（或运行 `systemctl poweroff`）时，systemd 会按照严格的顺序关闭系
+统。整个关机流程可以分为四个主要阶段：用户会话清理、系统服务停止、内核资源释放和硬件关机。
 
-### 11.1 注销流程与会话清理的观察点
+### 11.1 用户会话清理阶段
 
-**观察点**：
+当用户触发关机时，systemd 首先切换到 `shutdown.target`，开始清理用户会话：
 
-- `loginctl list-sessions`：用户注销会话会从列表移除。
-- `journalctl --user -b -u <service>`：观察用户服务停止日志。
-- `systemctl --user`：列出 user units 的 state。
+**用户应用退出**：
+
+- 桌面环境中的应用（如 Waybar、Dunst、浏览器等）首先收到退出信号
+- 用户可以通过 `journalctl --user -b` 查看用户服务的退出日志
+
+**会话管理**：
+
+- systemd-logind 终止所有用户会话，发送 SIGTERM 给用户进程
+- 等待用户进程正常退出，超时后发送 SIGKILL 强制终止
+- 日志中会显示 "Terminating user session XXX" 信息
+
+**设备权限回收**：
+
+- logind 回收分配给用户会话的设备访问权限（输入、音频、GPU 等）
+- 确保用户进程不再保持对设备的锁定
+
+### 11.2 系统服务停止阶段
+
+用户会话清理完成后，systemd 开始停止系统级服务：
+
+**图形服务停止**：
+
+- 合成器（Hyprland）进程退出，释放显卡控制权
+- Mesa 和 GPU 驱动清理上下文和分配的 GPU 内存
+- `/dev/dri/card0` 等设备被释放
+
+**音频服务停止**：
+
+- PipeWire 和 WirePlumber 被停止，所有音频流关闭
+- ALSA 驱动执行软重置，确保下次启动从干净状态开始
+
+**网络服务停止**：
+
+- NetworkManager、iwd、systemd-networkd 等网络管理器依次停止
+- DHCP 租约被撤销，Wi-Fi 连接断开
+- 网络接口最终被设置为下线状态
+
+**其他系统服务**：
+
+- udev 设备管理服务停止
+- 各种后台守护进程按依赖关系依次退出
+
+### 11.3 内核资源释放阶段
+
+当所有用户空间服务停止后，systemd 执行最终的系统清理：
+
+**文件系统操作**：
+
+- 调用 `sync()` 同步所有已挂载文件系统的数据到磁盘
+- 按照逆向挂载顺序卸载所有挂载点
+- 卸载外接硬盘分区等外部存储设备
+
+**进程管理**：
+
+- 向所有剩余进程发送 SIGTERM，给它们最后清理机会
+- 等待超时后，对顽固进程发送 SIGKILL 强制终止
+- 清理僵尸进程和孤儿进程
+
+**Watchdog 监控**：
+
+- systemd 的看门狗机制监控服务关闭进度
+- 如果服务停止超过 `TimeoutStopSec`，强制终止服务
+- 防止系统在关机过程中无限挂起
+
+**资源清理**：
+
+- GPU 驱动重置显卡状态，释放 VRAM
+- 网络设备完全断电
+- 音频设备硬件重置
+
+### 11.4 硬件关机阶段
+
+当所有用户空间和内核资源处理完毕后，系统进入硬件关机：
+
+**ACPI 操作**：
+
+- systemd 通过 ACPI 向固件发出关机指令
+- 进入 ACPI S5 状态，告诉固件关闭电源
+
+**固件接管**：
+
+- BIOS/UEFI 接管系统控制权
+- 执行电源关断，所有设备（CPU、内存、GPU、外部设备）断电
+- 固件执行最后的清理工作
+
+**强制关机保护**：
+
+- 如果系统未能正常关机，硬件看门狗可能强制切断电源
+- 用户长按电源键也会触发强制关机
+
+此时机器完全断电，关机过程结束。下次开机将重新开始完整的启动周期。
+
+### 11.5 关机流程观察与调试
+
+**查看关机日志**：
+
+```bash
+# 查看上一次关机的详细日志
+journalctl -b -1 -e
+
+# 查看关机过程中的服务停止情况
+journalctl -b -1 -p info | grep -E "(Stopping|Stopped)"
+```
+
+**关机故障排查**：
+
+```bash
+# 如果关机卡住，切换到另一终端查看
+journalctl -f
+
+# 查看未完成的任务
+systemctl list-jobs
+
+# 检查失败的单元
+systemctl --failed
+```
 
 **常见问题**：
 
-- 注销时某个应用阻塞（例如已保存的挂起任务）导致注销等待。`systemd` 会 send SIGTERM ->
-  wait Timeout -> SIGKILL。通过 `journalctl` 查看哪些 service 超时并导致 logout 延迟。
+- 某个服务超时未停止：检查该服务的 `TimeoutStopSec` 配置
+- 文件系统卸载失败：检查是否有进程仍在使用挂载点
+- 硬件设备未正确释放：查看内核日志中的设备相关错误
 
-### 11.2 关机流程（systemd → services stop → sync → ACPI）
+### 11.6 注销流程
 
-关机步骤已在前文总体描述，这里补充一些可操作的日志命令：
+注销是关机的简化版本，只涉及用户会话的清理：
 
-```bash
-# 查看上一次关机的详细日志（包括哪些服务在 stop 阶段出错）
-$ journalctl -b -1 -e
+**观察点**：
 
-# 强制关机并记录详细日志（在测试环境谨慎使用）
-$ sudo systemctl poweroff
-```
+- `loginctl list-sessions`：用户注销会话会从列表移除
+- `journalctl --user -b -u <service>`：观察用户服务停止日志
+- `systemctl --user`：列出 user units 的状态
 
-### 11.3 关机卡住 / 强制关机的排查
+**常见问题**：
 
-**如果关机卡住**：
-
-1. 切换到另一终端（Ctrl+Alt+F2），尝试查看 `journalctl -f` 是否仍在打印停滞信息。
-2. `systemctl list-jobs` 看哪些 job 未完成。
-3. `systemctl status` 查看是否有 unit 卡住（Timeout）。
-4. `systemctl --failed` 检查有无失败的 unit。
-5. 若是因某服务未响应，可设置 `DefaultTimeoutStopSec` 或临时 `systemctl kill` 杀死卡住服务
-   （最后手段）。
+- 注销时某个应用阻塞（例如未保存的文档）导致注销等待
+- systemd 会发送 SIGTERM → 等待超时 → SIGKILL
+- 通过 `journalctl` 查看哪些 service 超时并导致 logout 延迟
 
 ---
 
-## 12. 综合故障案例（逐步演示：日志→定位→修复）
+## 12. 综合故障案例
 
 下面给出 3 个常见但复杂的实战案例，逐步演示从日志读出信息到最终修复的全过程（以便学以致
 用）：
 
-### 12.1 案例 1：登录后输入法完全无响应（所有应用）
+### 12.1 案例 1：输入法无响应
 
 **症状**：桌面可用、键盘能打字但中文输入法无响应，按切换键也没有反应。
 
@@ -1191,7 +1492,7 @@ $ sudo systemctl poweroff
   中安装相应包并重建 NixOS 配置。
 - 确认 `XMODIFIERS` 的设置用于 Xwayland 程序。
 
-### 12.2 案例 2：系统启动慢，卡在 `graphical.target`（systemd-analyze 报某 unit 花费极长时间）
+### 12.2 案例 2：系统启动慢
 
 **定位**：
 
@@ -1206,7 +1507,7 @@ $ sudo systemctl poweroff
   为 `wantedBy=multi-user.target` 之外，或减少 `TimeoutStartSec`。
 - 对于磁盘检查（fsck）导致阻塞，检查硬盘 smart 状态并修复或跳过 fsck（风险自担）。
 
-### 12.3 案例 3：登录后黑屏，合成器崩溃（GPU hang）
+### 12.3 案例 3：合成器崩溃
 
 **定位**：
 
@@ -1224,7 +1525,7 @@ $ sudo systemctl poweroff
 - 永久：回退/更新 Mesa 或内核，或为合成器配置软件后端；参考驱动 vendor 的固件/driver 建
   议。
 
-### 12.4 案例 4：音频系统完全无声音（PipeWire 故障）
+### 12.4 案例 4：音频系统故障
 
 **症状**：系统启动正常，但所有应用都无法播放音频，系统音效也没有声音。
 
@@ -1268,9 +1569,9 @@ $ sudo systemctl poweroff
 
 ---
 
-## 13. 附录：常用命令速查表、NixOS 配置片段、Mermaid & ASCII 图
+## 13. 附录
 
-### 13.1 systemd unit 文件位置与覆盖机制
+### 13.1 systemd 配置
 
 - **路径**（优先级自高到低）：
 
@@ -1301,7 +1602,7 @@ $ sudo systemctl poweroff
   };
   ```
 
-### 13.2 journald 配置路径
+### 13.2 journald 配置
 
 - `/etc/systemd/journald.conf`（覆盖），`/usr/lib/systemd/journald.conf`（默认）
 - 常见字段：`Storage`, `Compress`, `SystemMaxUse`, `SystemKeepFree`, `RuntimeMaxUse`
