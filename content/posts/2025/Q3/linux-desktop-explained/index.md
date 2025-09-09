@@ -599,7 +599,7 @@ $ ls $XDG_RUNTIME_DIR
 
 - **Mesa**：提供 OpenGL/Vulkan 的开源实现
 - **EGL**：Khronos 组织定义的接口，将 OpenGL/Vulkan 与窗口系统连接
-- **GBM**：Mesa 的缓冲管理接口，用于分配图形缓冲区给 GPU
+- **GBM**(Generic Buffer Manager)：Mesa 的缓冲管理接口，用于分配图形缓冲区给 GPU
 - **DRM**：内核中的 Direct Rendering Manager，控制显示模式设置（KMS）和页面翻转
 
 **设备访问**：
@@ -1156,30 +1156,19 @@ glxinfo | grep "OpenGL renderer"
 
 ### 9.7 输入法集成
 
-**环境变量配置**：
-
-```bash
-# GTK 应用
-export GTK_IM_MODULE=fcitx
-
-# Qt 应用
-export QT_IM_MODULE=fcitx
-
-# X11 应用
-export XMODIFIERS=@im=fcitx
-```
+下一节将专门介绍输入法部分，这里仅做简单介绍。
 
 **集成机制**：
 
 - 图形工具包检查环境变量加载输入法模块
 - 使用 Wayland 文本输入协议处理键盘事件
-- 输入法通过 D-Bus 或 text-input 协议与客户端通信
+- 输入法通过 D-Bus（X11/Xwayland）或 text-input(wayland) 协议与客户端通信
 
 ### 9.8 应用启动管理
 
 **启动方式**：
 
-- 通过 shell/env 或桌面快捷方式启动
+- 通过 shell/env 或桌面快捷方式（launcher）启动
 - 现代桌面鼓励使用 `systemd --user` 管理长期运行的用户服务
 - 优点：统一日志、自动重启、cgroups 管理
 
