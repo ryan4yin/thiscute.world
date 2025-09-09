@@ -26,6 +26,17 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2025-09-09
+
+- 学习了一波 eSIM 虚拟卡跟 eSIM Adapter, eSIM Profile 的知识
+  - 国际版的 Android 手机有一部分原生支持 eSIM，可直接在设置中通过二维码导入 eSIM Profile.
+  - 所有国行手机的 eSIM 都是阉割的，国行 Android 手机只能通过自带的「国际上网」APP 使用
+    eSIM 功能。
+  - 国行手机可通过插入一张 eSIM Adapter 再配合一个 APP 或者 eSIM 读卡器，实现 eSIM Profile
+    的刷写与激活切换。
+  - eSIM Profile 可在 Trip 或厂家官网购买. 旅游相关的 eSIM 卡都是临时使用的纯流量卡，而
+    Giffgaff/Tello 之类的则是可收发短信电话的全功能 eSIM.
+
 ### 2025-08-12
 
 - 在 Tailscale Subnet Router 的机器上跑了一个
