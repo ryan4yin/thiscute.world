@@ -1733,6 +1733,37 @@ export QT_LOGGING_RULES="qt.qpa.*=true"
 - 主要用于游戏和多媒体应用
 - 自动适配运行环境
 
+**图形渲染问题排查**：
+
+当遇到应用闪退、渲染异常等问题时，可以尝试切换不同的渲染后端：
+
+```bash
+# GTK 应用渲染器选择
+export GSK_RENDERER=vulkan    # 使用 Vulkan 渲染
+export GSK_RENDERER=opengl    # 使用 OpenGL 渲染
+export GSK_RENDERER=cairo     # 使用软件渲染
+
+# Qt 应用渲染器选择
+export QT_OPENGL=desktop      # 使用桌面 OpenGL
+export QT_OPENGL=software     # 使用软件渲染
+export QT_OPENGL=angle        # 使用 ANGLE（Windows 兼容层）
+
+# Mesa 驱动选择
+export MESA_GL_VERSION_OVERRIDE=4.5
+export MESA_GLSL_VERSION_OVERRIDE=450
+
+# 调试信息
+export MESA_DEBUG=1           # 启用 Mesa 调试信息
+export LIBGL_DEBUG=verbose    # 启用 OpenGL 调试信息
+```
+
+**常见问题与解决方案**：
+
+- **应用闪退**：尝试 `GSK_RENDERER=cairo` 或 `QT_OPENGL=software`
+- **渲染异常**：检查 GPU 驱动，尝试不同的 `GSK_RENDERER` 值
+- **性能问题**：优先使用 `vulkan` 或 `opengl` 硬件加速
+- **兼容性问题**：某些老旧应用可能需要软件渲染模式
+
 ### 9.5 故障排查与调试
 
 **应用崩溃诊断**：
