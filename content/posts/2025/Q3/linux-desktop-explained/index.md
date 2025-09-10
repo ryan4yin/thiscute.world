@@ -355,6 +355,12 @@ journalctl --disk-usage                    # 日志占用空间
 **NixOS 特殊说明**：在 NixOS 中，`/etc/systemd/system` 下的配置文件都是通过声明式参数生成
 的软链接，指向 `/nix/store`。修改配置应通过 NixOS 配置系统，而非直接编辑这些文件。
 
+**配置文件路径**：
+
+- `/etc/systemd/system/`：系统级服务配置
+- `/usr/lib/systemd/system/`：软件包提供的默认配置（其他发行版）
+- `/etc/systemd/user/`：用户级服务配置
+
 ### 2.2 日志系统
 
 systemd-journald 是 systemd 的日志收集守护进程，它统一处理内核、系统服务和应用的日志。
@@ -496,6 +502,11 @@ $ loginctl show-session <id> -p Remote -p Display -p Name
 **注意**：NixOS 下直接编辑 `/etc/udev/rules.d` 可能是临时的（Nix 管理的文件会被系统重建覆
 盖），正确做法是在 `configuration.nix` 中配置 `services.udev.extraRules` 或把规则放在
 `environment.etc` 并由 Nix 管理。
+
+**配置文件路径**：
+
+- `/etc/udev/rules.d/`：系统管理员自定义规则（优先级最高）
+- `/usr/lib/udev/rules.d/`：软件包提供的默认规则（其他发行版）
 
 ---
 
@@ -1039,6 +1050,8 @@ systemd.oomd.extraConfig = ''
 '';
 ```
 
+**配置文件路径**：`/etc/systemd/oomd.conf`
+
 **监控与调试**：
 
 ```bash
@@ -1087,6 +1100,8 @@ services.resolved.extraConfig = ''
 '';
 ```
 
+**配置文件路径**：`/etc/systemd/resolved.conf`
+
 **使用命令**：
 
 ```bash
@@ -1129,6 +1144,8 @@ services.timesyncd.servers = [
   "ntp.aliyun.com"
 ];
 ```
+
+**配置文件路径**：`/etc/systemd/timesyncd.conf`
 
 **时间同步管理**：
 
@@ -1223,6 +1240,12 @@ services.pipewire.wireplumber.enable = true;
 # 禁用 PulseAudio 避免冲突
 hardware.pulseaudio.enable = false;
 ```
+
+**配置文件路径**：
+
+- `/etc/pipewire/pipewire.conf`：主配置文件
+- `/etc/pipewire/pipewire-pulse.conf`：PulseAudio 兼容配置
+- `/etc/wireplumber/`：WirePlumber 会话管理器配置
 
 ### 7.2 音频处理流程
 
@@ -1399,6 +1422,12 @@ environment.sessionVariables = {
   XMODIFIERS = "@im=fcitx";
 };
 ```
+
+**配置文件路径**：
+
+- `~/.config/fcitx5/config`：主配置文件
+- `~/.config/fcitx5/profile`：输入法引擎配置
+- `~/.config/fcitx5/conf/`：各输入法引擎的详细配置
 
 ### 8.2 输入法工作流程
 
@@ -1709,8 +1738,6 @@ export __GL_SHOW_GRAPHICS_OSD=1  # NVIDIA
 - 更新 Mesa 和 GPU 驱动
 - 检查合成器对必要 Wayland 扩展的支持
 - 对于顽固问题，可临时使用 X11 会话
-
----
 
 ---
 
