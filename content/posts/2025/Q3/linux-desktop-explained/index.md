@@ -1407,6 +1407,10 @@ context.properties = {
 5. **候选显示**：通过 Wayland 协议在光标位置显示候选窗口
 6. **文本提交**：用户选择后通过 text-input 协议提交最终文本
 
+text-input 协议有 v1 跟 v3 两个版本，目前（2025-09）Electron/Chrome 以及其他大部分程序框架
+都已经支持了 text-input-v3. 桌面环境方面所有主流 Compositor 也都支持 text-input-v3. 所以目
+前 wayland 下输入法的可用性已经很高了。
+
 ### 8.3 X11 / XWayland 输入法流程
 
 **XWayland 使用场景**：
@@ -1453,10 +1457,8 @@ export XMODIFIERS=@im=fcitx
 
 **输入法机制说明**：
 
-- **GTK IM 模块**：GTK 工具包的输入法模块，通过 `GTK_IM_MODULE` 环境变量配置
-- **Qt IM 模块**：Qt 工具包的输入法模块，通过 `QT_IM_MODULE` 环境变量配置
-- **XIM（X Input Method）**：X11 的原生输入法协议，通过 `XMODIFIERS` 环境变量配置
-- **Wayland text-input**：Wayland 的原生输入法协议，不需要环境变量配置
+GTK IM 模块、Qt IM 模块以及 XIM 协议，都是 X11 下的东西，在 wayland 下只需要 text-input 协
+议即可，不需要这些幺蛾子。
 
 ### 8.4 混合环境管理策略
 
