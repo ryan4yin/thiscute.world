@@ -1541,13 +1541,19 @@ systemd 本身就是一个 d-bus 服务，我们在使用 `systemctl` 命令与 
 D-bus 总线分为 system 跟 session 两个级别，大多数常见的系统组件都有创建对应的 D-Bus 对象，
 譬如：
 
-- 系统层 - system bus:
-  - `org.freedesktop.systemd1` - 即 systemd
-  - `org.freedesktop.login1` - systemd-logind
-  - `org.freedesktop.hostname1` - systemd-hostnamed
-  - `org.freedesktop.timedate1` - systemd-timedated
-- 桌面/会话层 - session bus:
-  - `org.freedesktop.portal.Desktop` - 由 `xdg-desktop-portal` 创建
+- 系统层 - system bus
+  - socket 路径: `/run/dbus/system_bus_socket`
+  - 常见的 D-Bus 对象
+    - `org.freedesktop.systemd1` - 即 systemd
+    - `org.freedesktop.login1` - systemd-logind
+    - `org.freedesktop.hostname1` - systemd-hostnamed
+    - ...
+- 桌面/会话层 - session bus
+  - socket 路径: `$XDG_RUNTIME_DIR/bus`
+  - 常见的 D-Bus 对象
+    - `org.freedesktop.portal.Desktop` - 由 `xdg-desktop-portal` 创建
+    - `org.fcitx.Fcitx5` - fcitx5 输入法
+    - ...
 
 可使用 `busctl list` 查看系统中的所有 D-Bus 对象：
 
@@ -1663,6 +1669,28 @@ gdbus monitor --system --dest org.freedesktop.systemd1
 # 监听 session bus 中发送给 fcitx5 的所有事件
 gdbus monitor --session --dest org.fcitx.Fcitx5
 ```
+
+### D-Bus 的权限管控
+
+D-Bus 本身没啥权限管控能力，一旦某个应用能够访问 D-Bus 的 socket，它就可以向任意 D-Bus 对
+象发送消息。
+
+但是在现代 Linux 桌面中，我们为了更高的安全性，可能会希望将一些商业软件运行在沙箱中，并对
+该软件的 D-Bus 总线权限做更细粒度的管控。
+
+目前最流行的 Linux 应用沙箱工具应该是 bubblewrap, 它提供了 namespace 级别的环境隔离能力，
+可用于控制 D-Bus socket 层面的可见性.
+
+Flatpak 通过 [bubblewrap](https://github.com/containers/bubblewrap) +
+[flatpak/xdg-dbus-proxy](https://man.archlinux.org/man/extra/xdg-dbus-proxy/xdg-dbus-proxy.1.en)
+来实现我们想要的针对 D-Bus 的细粒度权限管控：
+
+- bubblewrap 隔离文件系统环境，使沙箱中的程序无法访问宿主机的 D-Bus socket
+- xdg-dbus-proxy 作为一个中间代理，为沙箱中的程序提供 D-Bus 的访问能力，这个中间代理会根据
+  flatpak 的 d-bus 权限配置过滤沙箱程度发出的 D-Bus 消息，仅转发符合规则的消息。
+
+所以 Flatpak 能做到 “只允许访问 `org.freedesktop.portal.*`，禁止访问
+`org.freedesktop.systemd1`”，而裸的 bubblewrap 是做不到的。
 
 ---
 
