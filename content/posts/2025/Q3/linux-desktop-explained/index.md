@@ -65,8 +65,8 @@ Linux 桌面包含了相当多的系统组件，这些组件组合形成了一�
 技术栈假定为：UEFI + systemd-boot + systemd + Wayland + PipeWire + systemd-networkd +
 fcitx5, 使用的发行版为 NixOS.
 
-> **AI 创作声明**：本文主要由 ChatGPT, Kimi K2, Cursor 完成，笔者仅负责提供思路、校对内
-> 容、验证文中的各项实验流程与命令。
+> **AI 创作声明**：本文由笔者借助 ChatGPT, Kimi K2 和 Cursor 创作，有很大篇幅的内容完全由
+> AI 在我的指导下生成。
 
 ---
 
