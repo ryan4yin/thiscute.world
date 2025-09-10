@@ -1373,7 +1373,7 @@ context.properties = {
 
 ---
 
-## 8. 中文输入：本地化体验的核心
+## 8. 中文输入
 
 中文输入是中文用户桌面体验的重要组成部分，涉及输入法框架、图形工具包集成、Wayland 协议支持
 等多个层面。
@@ -1390,76 +1390,99 @@ context.properties = {
 - **图形前端**：负责候选词界面显示
 - **配置工具**：fcitx5-configtool 提供图形化配置
 
-**集成架构**：
-
-- **Wayland 协议**：通过 text-input 协议与客户端通信
-- **X11 兼容**：通过 XIM 协议支持传统 X11 应用
-- **GTK/Qt 集成**：通过 IM 模块实现深度集成
-- **D-Bus 通信**：内部组件间使用 D-Bus 进行消息传递
-
-**NixOS 配置**：
-
-```nix
-programs.fcitx5 = {
-  enable = true;
-
-  # 安装常用输入引擎
-  engines = with pkgs.fcitx5-engines; [
-    pinyin
-    rime
-    cloudpinyin
-  ];
-
-  # 图形界面支持
-  gtk = true;
-  qt = true;
-};
-
-# 环境变量配置
-environment.sessionVariables = {
-  GTK_IM_MODULE = "fcitx";
-  QT_IM_MODULE = "fcitx";
-  XMODIFIERS = "@im=fcitx";
-};
-```
-
 **配置文件路径**：
 
 - `~/.config/fcitx5/config`：主配置文件
 - `~/.config/fcitx5/profile`：输入法引擎配置
 - `~/.config/fcitx5/conf/`：各输入法引擎的详细配置
 
-### 8.2 输入法工作流程
+### 8.2 Wayland 原生输入法流程
 
-**用户输入处理流程**：
+**Wayland text-input 协议流程**：
 
-1. **按键捕获**：键盘事件首先到达合成器
-2. **事件转发**：合成器将事件转发给前台应用
-3. **框架拦截**：GTK/Qt IM 模块拦截按键事件
-4. **输入法处理**：fcitx5 接收按键并生成候选
-5. **候选显示**：在光标位置显示候选词窗口
-6. **文本插入**：用户选择后插入最终文本
+1. **按键捕获**：键盘事件首先到达 Wayland 合成器
+2. **协议通信**：合成器通过 text-input 协议与客户端应用通信
+3. **输入法服务**：fcitx5 作为 Wayland 输入法服务接收事件
+4. **候选生成**：fcitx5 处理按键并生成候选词
+5. **候选显示**：通过 Wayland 协议在光标位置显示候选窗口
+6. **文本提交**：用户选择后通过 text-input 协议提交最终文本
 
-**多协议支持**：
+### 8.3 X11 / XWayland 输入法流程
 
-- **Wayland text-input**：现代 Wayland 应用的标准协议
-- **XIM**：传统 X11 应用的输入方法
-- **ibus 协议**：兼容部分 ibus 应用
+**XWayland 使用场景**：
 
-**环境变量作用**：
+- 尚未支持 Wayland 的旧版应用
+- 需要特定 X11 功能的专业软件
+- 通过应用启动脚本单独设置环境变量
+
+**XWayland 应用输入流程**：
+
+1. **按键捕获**：键盘事件首先进入 **Wayland 合成器**（Hyprland、KWin 等）。
+2. **事件转发给 XWayland**（例如
+   [xwayland-satellite](https://github.com/Supreeeme/xwayland-satellite)）
+   - 如果目标是 X11 应用窗口，合成器会将事件交给 **XWayland**。
+   - **XWayland 将 Wayland 输入事件转换为 X11 协议事件**（如 `KeyPress/KeyRelease`），并交
+     付给目标应用。
+3. **应用侧的输入法模块拦截事件**
+   - X11 应用（GTK/Qt 程序）内部加载了 **fcitx5-gtk / fcitx5-qt 插件**（通常根据环境变量加
+     载，后面会介绍这些环境变量）。
+   - 这些插件拦截来自 XWayland 的键盘事件，并通过 **D-Bus** 将事件上报给 **fcitx5**。
+   - 此时应用相当于是「把键盘输入交给 fcitx5 代管」。
+4. **fcitx5 处理输入逻辑**
+   - fcitx5 收到键盘序列后，进入输入法逻辑：拼音解析、候选词生成。
+   - fcitx5 控制候选窗口的显示位置（通常跟随输入光标），候选窗口本身可能是 X11 窗口（由
+     fcitx5 自己创建，并通过 XWayland 显示）。
+5. **输入结果返回应用**
+   - 当用户选定候选词后，fcitx5 通过 **D-Bus 调用 IM 插件接口**直接把确认后的字符串传给应
+     用。
+   - 应用的 IM 插件收到字符串后，调用应用内的「输入上下文 API」插入文本。
+   - 在应用看来，它就像直接得到了「输入了一串中文」的事件。
+
+**XWayland 环境变量设置**：
 
 ```bash
-# GTK 应用使用 fcitx
+# GTK 应用使用 fcitx（通过 GTK IM 模块）
 export GTK_IM_MODULE=fcitx
 
-# Qt 应用使用 fcitx
+# Qt 应用使用 fcitx（通过 Qt IM 模块）
 export QT_IM_MODULE=fcitx
 
-# X11 应用使用 fcitx
+# X11 应用使用 fcitx（通过 XIM 协议）
 export XMODIFIERS=@im=fcitx
 ```
 
-### 8.3 故障排查与优化
+**输入法机制说明**：
+
+- **GTK IM 模块**：GTK 工具包的输入法模块，通过 `GTK_IM_MODULE` 环境变量配置
+- **Qt IM 模块**：Qt 工具包的输入法模块，通过 `QT_IM_MODULE` 环境变量配置
+- **XIM（X Input Method）**：X11 的原生输入法协议，通过 `XMODIFIERS` 环境变量配置
+- **Wayland text-input**：Wayland 的原生输入法协议，不需要环境变量配置
+
+### 8.4 混合环境管理策略
+
+**推荐配置策略**：
+
+1. **默认 Wayland 优先**：
+
+   - 让现代应用使用原生 Wayland text-input 协议
+
+2. **按需 XWayland**：
+
+   - 使用 `GDK_BACKEND=x11` 强制特定应用使用 XWayland
+   - 为特定应用创建启动脚本设置 IM_MODULE 相关环境变量
+
+3. **应用启动脚本示例**：
+
+```bash
+#!/bin/bash
+# 强制特定应用使用 XWayland
+export GTK_IM_MODULE=fcitx  # 使用 GTK IM 模块
+export QT_IM_MODULE=fcitx   # 使用 Qt IM 模块
+export GDK_BACKEND=x11      # 强制使用 X11 后端
+your-application
+```
+
+### 8.5 故障排查与优化
 
 **输入法无响应问题**：
 
@@ -1470,7 +1493,7 @@ export XMODIFIERS=@im=fcitx
    systemctl --user status fcitx5
    ```
 
-2. **环境变量验证**：
+2. **环境变量验证**（仅 xwayland 场景）：
 
    ```bash
    echo $GTK_IM_MODULE $QT_IM_MODULE $XMODIFIERS
@@ -1493,26 +1516,47 @@ export XMODIFIERS=@im=fcitx
 
 **候选框显示问题**：
 
-1. **Wayland 协议支持**：
+1. **Wayland 原生应用排查**：
 
    ```bash
-   # 检查合成器 text-input 支持
-   echo $WAYLAND_DISPLAY
+   # 检查 Wayland 环境
+   echo $WAYLAND_DISPLAY $XDG_RUNTIME_DIR
+
+   # 检查 text-input 协议支持
+   wayland-info | grep text-input
+
    # 查看合成器日志中 text-input 相关错误
+   journalctl --user -u fcitx5
    ```
 
-2. **权限和会话**：
+2. **XWayland 应用排查**：
+
+   ```bash
+   # 检查 XWayland 环境变量
+   echo $GTK_IM_MODULE $QT_IM_MODULE $XMODIFIERS
+
+   # 检查 XWayland 连接
+   echo $DISPLAY
+
+   # 验证 XIM 连接
+   xdpyinfo | grep -i input
+   ```
+
+3. **权限和会话检查**：
 
    ```bash
    # 确认 fcitx5 在正确的用户会话中运行
    loginctl show-session $(loginctl | grep $USER | awk '{print $1}')
+
+   # 检查 D-Bus 会话
+   echo $DBUS_SESSION_BUS_ADDRESS
    ```
 
-3. **应用兼容性**：
+4. **应用兼容性**：
 
-   - 部分应用需要重新启动才能识别输入法
-   - Xwayland 应用需要正确设置 XMODIFIERS
-   - 某些 Wayland 合成器可能需要额外配置
+   - **Wayland 应用**：部分应用需要重新启动才能识别输入法
+   - **XWayland 应用**：需要正确设置 XMODIFIERS 环境变量
+   - **混合环境**：某些应用可能在不同环境下表现不同
 
 **性能优化**：
 
@@ -1529,10 +1573,24 @@ vim ~/.config/fcitx5/conf/cloudpinyin.conf
 
 **特殊场景处理**：
 
-- **多显示器**：候选框可能在错误屏幕显示
-- **高分屏**：候选框大小和位置适配
-- **游戏模式**：部分全屏游戏需要特殊处理
-- **终端应用**：需要终端模拟器支持
+1. **多显示器环境**：
+
+   - **Wayland**：候选框通常能正确跟随光标位置
+   - **XWayland**：候选框可能在错误屏幕显示，需要调整 X11 配置
+
+2. **高分屏适配**：
+
+   - **Wayland**：自动适配系统缩放比例
+   - **XWayland**：可能需要手动设置 `GDK_SCALE` 或 `QT_SCALE_FACTOR`
+
+3. **游戏和全屏应用**：
+
+   - **Wayland**：部分游戏可能需要 `gamescope` 等工具
+   - **XWayland**：传统全屏游戏通常工作正常
+
+4. **终端应用**：
+   - **Wayland 终端**：需要终端模拟器支持 text-input 协议
+   - **XWayland 终端**：使用 X11 的 XIM 协议或 GTK/Qt IM 模块
 
 ---
 
