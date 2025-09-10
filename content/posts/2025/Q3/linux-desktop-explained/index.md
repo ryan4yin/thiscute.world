@@ -1290,11 +1290,10 @@ pw-cli create-link <source-node> <sink-node>
 
 ### 7.3 视频与屏幕共享
 
-**屏幕共享架构**：
+在 wayland 环境中，屏幕共享功能是通过 PipeWire 的 screen-capture 协议实现的。这与 X11 有很
+大的不同，后者是通过其自身的扩展（如 X11R6 的 XFIXES 扩展）实现的。
 
-- **Wayland 协议**：通过 PipeWire 的 screen-capture 协议
-- **X11 兼容**：通过 X11 扩展支持传统应用
-- **应用支持**：OBS、Discord、Zoom 等主流应用
+目前主流的 OBS、Discord、Zoom 等应用都已经支持了 wayland 下的 screen-capture 协议。
 
 **摄像头管理**：
 
