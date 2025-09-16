@@ -17,8 +17,8 @@ hugo new posts/2024/Q3/my-first-post/index.md
 Launch a local Hugo server including live reload by running:
 
 ```shell
-# serve in debug mode, with all drafts
-hugo server --debug --buildDrafts --disableFastRender
+# serve with all drafts
+hugo server --buildDrafts --disableFastRender
 
 # serve in production mode
 hugo serve -e production --disableFastRender

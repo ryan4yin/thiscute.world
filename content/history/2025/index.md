@@ -26,6 +26,47 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2025-09-16
+
+- 学习了下用 Kdenlive 剪辑视频，对之前 NixOS CN 我 Talk 的视频做了些处理。
+- 买的 Switch eSIM by Plan B 到货了，然后发现我的 Realme GT 7 Pro 无法正常识别到插入的
+  eSIM... 明明之前我按它教程安装了官方的 APP，APP 里没提示说 device not supported, 只提示
+  please insert eSIM 啥的，明显就是说支持这个设备，完了卡插进来却不支持...
+- 充分说明了 eSIM 目前还是个比较新的领域，坑有点多。目前折衷的解法是网上再买个 eSIM 读卡
+  器，用 PC 刷入 eSIM Profile...
+- 阅读 Asahi Linux 的官方博客，发现项目最近在将功能推送进上游项目上的进展还是很不错的，图
+  形这一块基本全都进上游了。另外学习了下如何在 Asahi Linux 上使用 muvm+fex 来运行 x64
+  app，以及再借助 proton（wine for gaming）来运行 windows 游戏。
+- 运动
+  - 本月时间过半，看 APP 有 8 天的游泳记录，共 5h, 出勤率 50%.
+  - 上个月总运动时长约 12h，出勤 12 天，差不多每天 1h.
+  - 体重方面最近两个月基本都维持在 65kg, 基本没下降。
+
+### 2025-09-15
+
+- 用通义的音频速读功能识别并导出了之前 NixOS CN 我 Talk 的字幕，通义的这个功能非常好用，虽
+  然英文识别准确率不高，但是编辑起来很方便，而且还能直接导出 srt 字幕文件，而且还是个免费
+  工具！
+
+### 2025-09-14
+
+- 修复 Homelab 的 Alert 功能，告警信息发送到 Telegram, 然后修复了一堆的告警。
+- 研究在 NixOS/Linux 上打游戏
+  - 发现的 Linux Gaming 最佳入门资料: <https://www.reddit.com/r/linux_gaming/wiki/faq/>
+  - 无限暖暖我先是搞定了 Steam 版，但是发现它是国际版，之后又改了下 lutris 网站上无限暖暖
+    的安装脚本，成功玩上了国服。
+  - 星穹铁道则有点曲折，protondb 上基本全是失败的记录，lutris 提供的安装脚本也都不 work.
+    最后通过 lutris 找到了一个开源的崩铁启动器，又折腾了好久这个启动器的 NixOS 版，才终于
+    玩上。
+  - 总结：虽然有点麻烦，但是无限暖暖、星穹铁道都能正常玩！这有点出乎我的意料。我的 Windows
+    系统或许可以考虑格式化掉了（
+
+### 2025-09-10 - 2025-09-11
+
+- 更新后发现 anyrun 炸掉了，排查发现是 anyrun 升级到 GTK4 导致 css 完全失效，程序也会卡
+  住。修复了 css 后发现卡住的问题无法解决，尝试通过修改代码解决了，提 PR 被作者提示这个卡
+  住的问题是 Nvidia 新驱动导致的...
+
 ### 2025-09-09
 
 - 学习了一波 eSIM 虚拟卡跟 eSIM Adapter, eSIM Profile 的知识
@@ -37,7 +78,7 @@ comment:
   - eSIM Profile 可在 Trip 或厂家官网购买. 旅游相关的 eSIM 卡都是临时使用的纯流量卡，而
     Giffgaff/Tello 之类的则是可收发短信电话的全功能 eSIM.
 
-### 2025-08-12
+### 2025-09-12
 
 - 在 Tailscale Subnet Router 的机器上跑了一个
   [derper-docker](https://github.com/fredliang44/derper-docker)，改了 ACL 配置禁用了所有默
@@ -45,6 +86,15 @@ comment:
   tailscale 的中国电信手机热点，也勉强能打开网页了（只是加载时间得 1 分钟）
 
 ### 2025-09-10
+
+- 借助 AI 编写 Linux 桌面系统的组成与故障排查的文档，同时学习相关知识。
+
+### 2025-08-20
+
+- 尝鲜添加了 Niri 桌面，发现配合 Macbook 触控版或者 Magic Trackpad，体验绝佳，触摸板的使用
+  体验吊打 Hyprland, 个人感觉跟 macOS 的触控体验不相上下。
+
+### 2025-08-10
 
 - 在上海呆得有点腻歪了，乘高铁回家，路上云参会 NixOS CN Meetup day2.
 - 之前各种加班处理的安全事件算是基本解决，一些教训：
