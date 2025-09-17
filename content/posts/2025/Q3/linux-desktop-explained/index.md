@@ -72,66 +72,67 @@ fcitx5, 使用的发行版为 NixOS.
 
 ## Linux 桌面系统生命周期概览
 
-```
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           Linux 桌面系统生命周期                                │
-└─────────────────────────────────────────────────────────────────────────────────┘
+```ascii
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                  Linux 桌面系统生命周期                                      │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 1. 系统启动阶段                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ UEFI固件 → Boot Loader → 内核启动 → initramfs → systemd                         │
-│ 硬件初始化   引导加载    硬件探测    根分区挂载   PID 1 服务管理                │
-│ 固件控制     启动配置    驱动加载    解密/LVM    依赖关系管理                   │
-└─────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 1. 系统启动阶段                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ UEFI → BootLoader → 内核映像 → initramfs → systemd (PID 1)                   │
+│ 固件    grub/systemd-boot  内核探测   临时根挂载   服务管理器                │
+│ TPM/SEC   EFI Stub         KMS启动   根fs解压挂载   Unit依赖树+并行启动      │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 2. 系统初始化阶段                                                               │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ systemd   →  D-Bus   →   udev    →   logind   →   oomd   →  timesyncd           │
-│ 服务管理    进程通信    设备管理    会话管理    内存管理    时间同步            │
-│ 依赖关系    消息总线    权限分配    设备ACL     OOM保护     NTP客户端           │
-└─────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 2. 内核 & 驱动层（硬件使能）                                                 │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ DRM/KMS  →   evdev    →    ALSA   →   网络固件   →   安全模块                │
+│ 显示模式   输入事件      声卡驱动   iwlwifi/ath9k   AppArmor/SELinux         │
+│ GPU初始化  权限过滤      PCM设备    Bluetooth       cgroups/Namespaces       │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 3. 网络连接阶段                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ networkd  →   iwd     →   resolved  → IPv4/IPv6  → 防火墙                       │
-│ 网络管理     无线管理     DNS解析     双栈支持     安全策略                     │
-│ DHCP配置     WPA认证     缓存管理     路由配置     访问控制                     │
-└─────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 3. 用户空间初始化阶段                                                        │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ systemd  →  udev  →  D-Bus  → timesyncd → resolved → networkd/iwd → oomd     │
+│ 服务树    设备节点   消息总线   NTP客户端   DNS缓存   网络管理   OOM守护     │
+│ ACL/权限  热插拔     激活机制   时钟同步   NSS查询   DHCP/路由   cgroup内存  │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 4. 用户会话阶段                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ 显示管理器 → 用户认证 → Wayland  →  会话管理                                    │
-│ 登录界面     密码验证   合成器     权限分配                                     │
-│ 图形环境     身份验证   窗口管理   设备访问                                     │
-└─────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 4. 图形会话阶段                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ 显示管理器 → logind → Wayland Compositor/X-Server → 窗口管理器               │
+│ GDM/SDDM     会话槽     i3/Niri/Hyprlland          GNOME/KDE WM+合成         │
+│ 身份认证     设备ACL    DRM fd传递+输入            OpenGL/Vulkan渲染         │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 5. 多媒体与输入阶段                                                             │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ PipeWire  →  音频处理 → 视频处理 → fcitx5  →  输入处理                          │
-│ 媒体服务器   设备路由   屏幕共享   输入法     键盘鼠标                          │
-│ 低延迟       格式转换   摄像头     中文输入   事件处理                          │
-└─────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 5. 多媒体 & 输入阶段                                                         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ PipeWire → PulseAudio/JACK兼容层 → V4L2 → fcitx5/ibus → libinput事件         │
+│ 音频/视频   兼容层路由          摄像头API   输入法框架   键盘/触摸/手势      │
+│ 屏幕共享    低延迟混音          DMA-BUF     中文输入     手写板/多点触控     │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 6. 应用程序运行阶段                                                             │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ GUI应用  →  图形驱动 → 工具包  → 渲染管线 → 性能监控                            │
-│ 窗口渲染    OpenGL     界面库     GPU加速    资源使用                           │
-│ 用户交互     Mesa       GTK/Qt    Vulkan     系统监控                           │
-└─────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 6. 应用程序运行阶段                                                          │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ GUI应用 → GTK/Qt → Mesa/OpenGL/Vulkan → GPU驱动                              │
+│ Flatpak   工具包   渲染管线           amdgpu/nouveau/intel(驱动层)           │
+│ 沙盒化    Cairo    DMA-Fence          ioctl调度(内核层)                      │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│ 7. 系统关机阶段                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│ 用户会话清理 → 服务停止 → 文件系统同步 → 进程终止 → 硬件断电                    │
-│ 应用关闭      依赖关系    卸载操作      信号处理    ACPI控制                    │
-│ 权限回收      优雅停止    数据保护      强制终止    固件接管                    │
-└─────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 7. 系统关机阶段                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ logind → systemd --user → 显示管理器 → systemd(PID1) → 内核 & 驱动           │
+│ 广播关机   停用户服务    关闭会话      停系统服务    卸载文件系统→断电       │
+│ 保存会话   PipeWire退出  释放DRM/KMS   卸载网络      同步磁盘→关声卡+屏幕    │
+└──────────────────────────────────────────────────────────────────────────────┘
+
 ```
 
 ---
@@ -512,30 +513,68 @@ $ loginctl show-session <id> -p Remote -p Display -p Name
 
 ## 3. D-Bus 系统总线 - 应用间通信的主要通道
 
-D-Bus (即 "Desktop Bus") 是一个为进程间通信提供简单方法的消息总线系统，其设计初衷是为
-Linux 桌面环境提供标准、统一的进程间通信功能。
+D-Bus 是 Linux 系统中主流的进程间通信（IPC）机制，旨在解决不同进程（尤其是桌面应用、系统服
+务）间的高效、安全通信问题，广泛用于 GNOME、KDE 等桌面环境及系统服务管理（如 systemd）。它
+本质是 “消息总线”，通过中心化的 “总线守护进程” 实现多进程间的消息路由。
 
-dbus 作为 systemd 的依赖被拉取和安装，并且用户会话总线会为每个用户自动启动。
+D-Bus 作为 systemd 的依赖被安装，并且 system bus 和 user/session bus 会在系统启动与用户登
+录时自动创建。
 
-systemd 本身就是一个 d-bus 服务，我们在使用 `systemctl` 命令与 systemd 交互时，实际就是在
-使用 d-bus 总线。
+systemd 本身就是一个 D-Bus 服务，我们在使用 `systemctl` 命令与 systemd 交互时，实际上就是
+通过 D-Bus 与 `org.freedesktop.systemd1` 通信。
 
-D-bus 总线分为 system 跟 session 两个级别，大多数常见的系统组件都有创建对应的 D-Bus 对象，
-譬如：
+### 2.1 两层总线（核心载体）
 
-- 系统层 - system bus
-  - socket 路径: `/run/dbus/system_bus_socket`
-  - 常见的 D-Bus 对象
-    - `org.freedesktop.systemd1` - 即 systemd
-    - `org.freedesktop.login1` - systemd-logind
-    - `org.freedesktop.hostname1` - systemd-hostnamed
-    - ...
-- 桌面/会话层 - session bus
-  - socket 路径: `$XDG_RUNTIME_DIR/bus`
-  - 常见的 D-Bus 对象
-    - `org.freedesktop.portal.Desktop` - 由 `xdg-desktop-portal` 创建
-    - `org.fcitx.Fcitx5` - fcitx5 输入法
-    - ...
+| 总线类型                | 作用场景                 | 典型用途                                                                             | 运行用户     |
+| ----------------------- | ------------------------ | ------------------------------------------------------------------------------------ | ------------ |
+| 系统总线（System Bus）  | 系统级服务通信           | `systemd1` 单元管理（启动 / 停止服务）、`logind1` 用户会话 / 电源控制（关机 / 重启） | root（特权） |
+| 会话总线（Session Bus） | 单个用户会话内的应用通信 | 桌面应用交互（如窗口切换、通知）                                                     | 当前登录用户 |
+
+### 2.2 三类角色（交互主体）
+
+1.  **总线守护进程（dbus-daemon）**
+
+    架构的 “中枢”，每个总线对应一个守护进程，核心职责：
+
+    - 管理进程的连接（如验证 `普通用户` 是否有权调用 `logind1` 的 `PowerOff` 方法）；
+
+    - 路由消息（将客户端请求的 “启动 `nginx` 服务” 转发给 `systemd1`）；
+
+    - 维护服务注册表（记录 `org.freedesktop.login1` 与 `logind` 进程的映射关系）。
+
+1.  **服务端（Service）**
+
+    提供功能的进程（如 `systemd` 进程、`logind` 进程），核心操作：
+
+    - 向总线注册 “服务名”（`systemd1` 注册 `org.freedesktop.systemd1`，`logind1` 注册
+      `org.freedesktop.login1`，均为唯一标识）；
+
+    - 暴露 “对象” 和 “接口”（如 `systemd1` 暴露 `/org/freedesktop/systemd1` 对象与
+      `org.freedesktop.systemd1.Manager` 接口），供客户端调用。
+
+1.  **客户端（Client）**
+
+    调用服务的进程（如 `systemctl` 命令、桌面电源菜单），核心操作：
+
+    - 连接系统总线后，通过服务名（如 `org.freedesktop.login1`）找到 `logind` 服务；
+
+    - 调用服务端暴露的方法（如通过 `logind1` 的 `ListSessions` 查询当前用户会话），或订阅
+      信号（如监听 `systemd1` 的 `UnitActiveChanged` 单元状态变化）。
+
+## 3. 关键概念（理解 D-Bus 的核心抽象）
+
+D-Bus 通过 “对象 - 接口” 模型封装功能，以下结合 `systemd1` 与 `logind1` 的真实定义，对应核
+心概念：
+
+| 概念              | 定义与作用                                    | 示例（systemd1/logind1）                                                                                                                   |
+| ----------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 总线（Bus）       | 消息传输的 “高速公路”，分系统 / 会话两类      | 系统总线 `/var/run/dbus/system_bus_socket`（`systemd1`/`logind1` 唯一使用的总线）                                                          |
+| 服务名（Name）    | 服务端在总线上的 “身份证”，唯一可请求         | `org.freedesktop.systemd1`（`systemd` 服务名）、`org.freedesktop.login1`（`logind` 服务名）                                                |
+| 对象（Object）    | 服务端功能的 “实例载体”，有唯一路径           | `/org/freedesktop/systemd1`（`systemd1` 根对象）、`/org/freedesktop/login1`（`logind1` 根对象）                                            |
+| 接口（Interface） | 定义对象的 “功能契约”（方法、信号、属性）     | `org.freedesktop.systemd1.Manager`（`systemd1` 核心接口）、`org.freedesktop.login1.Manager`（`logind1` 核心接口）                          |
+| 方法（Method）    | 客户端可主动调用的 “同步功能”（有请求有返回） | `systemd1` 的 `StartUnit`（启动系统单元，如 `nginx.service`）、`logind1` 的 `ListSessions`（查询所有活跃用户会话）                         |
+| 信号（Signal）    | 服务端主动发送的 “异步通知”（无返回）         | `systemd1` 的 `UnitActiveChanged`（单元状态变化，如 `nginx` 从 `inactive` 变为 `active`）、`logind1` 的 `SessionNew`（新用户登录创建会话） |
+| 属性（Property）  | 对象的 “状态数据”，支持读取 / 写入            | `systemd1` 的 `ActiveUnits`（所有活跃系统单元列表）、`logind1` 的 `CanPowerOff`（当前系统是否允许关机，布尔值）                            |
 
 可使用 `busctl list` 查看系统中的所有 D-Bus 对象：
 
@@ -591,24 +630,19 @@ org.freedesktop.portal.Flatpak                                                  
 org.freedesktop.portal.IBus                                                       76699 fcitx5          ryan :1.285        user@1000.service -       -
 org.freedesktop.secrets                                                            2161 .gnome-keyring- ryan :1.55         session-1.scope   1       -
 org.freedesktop.systemd1                                                           2127 systemd         ryan :1.1          user@1000.service -       -
-org.freedesktop.thumbnails.Cache1                                                     - -               -    (activatable) -                 -       -
-org.freedesktop.thumbnails.Manager1                                                   - -               -    (activatable) -                 -       -
-org.freedesktop.thumbnails.Thumbnailer1                                               - -               -    (activatable) -                 -       -
-org.gnome.Mutter.DisplayConfig                                                     2192 niri            ryan :1.8          user@1000.service -       -
-org.gnome.Mutter.ScreenCast                                                        2192 niri            ryan :1.12         user@1000.service -       -
-org.gnome.Mutter.ServiceChannel                                                    2192 niri            ryan :1.7          user@1000.service -       -
-org.gnome.Shell.Introspect                                                         2192 niri            ryan :1.11         user@1000.service -       -
-org.gnome.Shell.Screenshot                                                         2192 niri            ryan :1.10         user@1000.service -       -
-org.gnome.keyring                                                                  2161 .gnome-keyring- ryan :1.55         session-1.scope   1       -
-org.gnome.seahorse.Application                                                        - -               -    (activatable) -                 -       -
 ...
 ```
+
+### 常见操作示例
 
 下面我们通过一些命令来演示 D-Bus 总线的用途：
 
 ```bash
 # 模拟 `systemctl status dbus` 的功能
-busctl --system --json=pretty call org.freedesktop.systemd1 /org/freedesktop/systemd1/unit/dbus_2eservice org.freedesktop.DBus.Properties GetAll s org.freedesktop.systemd1.Unit
+busctl --system --json=pretty call \
+  org.freedesktop.systemd1 \
+  /org/freedesktop/systemd1/unit/dbus_2eservice \
+  org.freedesktop.DBus.Properties GetAll s org.freedesktop.systemd1.Unit
 
 # 模拟 `systemctl stop sshd`
 sudo gdbus call --system \
@@ -616,6 +650,7 @@ sudo gdbus call --system \
   --object-path /org/freedesktop/systemd1 \
   --method org.freedesktop.systemd1.Manager.StopUnit \
   "sshd.service" "replace"
+
 # 模拟 `systemctl start sshd`
 sudo gdbus call --system \
   --dest org.freedesktop.systemd1 \
@@ -623,14 +658,20 @@ sudo gdbus call --system \
   --method org.freedesktop.systemd1.Manager.StartUnit \
   "sshd.service" "replace"
 
-# 模拟 `notify-send "测试标题" "通知正文"`
+# 模拟 `notify-send "The Summary" "Here’s the body of the notification"`
 nix shell nixpkgs#glib
 gdbus call --session \
-  --dest org.freedesktop.Notifications \
-  --object-path /org/freedesktop/Notifications \
-  --method org.freedesktop.Notifications.Notify \
-  "my-app" 0 "dialog-information" \
-  "通知标题" "通知正文" '[]' '{}' 5000
+    --dest org.freedesktop.Notifications \
+    --object-path /org/freedesktop/Notifications \
+    --method org.freedesktop.Notifications.Notify \
+    my_app_name \
+    42 \
+    gtk-dialog-info \
+    "The Summary" \
+    "Here’s the body of the notification" \
+    [] \
+    {} \
+    5000
 
 # 获取当前时区
 busctl get-property org.freedesktop.timedate1 /org/freedesktop/timedate1 \
@@ -642,37 +683,110 @@ busctl get-property org.freedesktop.hostname1 /org/freedesktop/hostname1 \
 
 ```
 
-其他 D-Bus 相关的调试命令：
+### 3.4 调试与监控命令
 
-```bash
-# 监听发送给 systemd 的所有事件
-gdbus monitor --system --dest org.freedesktop.systemd1
+```
+# 看 systemctl 与 systemd 的完整交互（method-call + signal）
+sudo busctl monitor --system | grep 'org.freedesktop.systemd1'
+# 或者使用 --match 过滤，但这需要提前知道 interface 的全名
+sudo busctl monitor --match='interface=org.freedesktop.systemd1.Manager'
 
-# 监听 session bus 中发送给 fcitx5 的所有事件
-gdbus monitor --session --dest org.fcitx.Fcitx5
+# 跟 busctl monitor 功能几乎完全一致，也可通过 match rule 过滤
+sudo dbus-monitor --system "interface='org.freedesktop.systemd1.Manager'"
+
+# gdbus 只监听 signals，只能用来调试「服务有没有正确发出 signal」
+sudo gdbus monitor --system -d org.freedesktop.systemd1.Manager
 ```
 
 ### D-Bus 的权限管控
 
-D-Bus 本身没啥权限管控能力，一旦某个应用能够访问 D-Bus 的 socket，它就可以向任意 D-Bus 对
-象发送消息。
+#### D-Bus 的原生权限管控机制
 
-但是在现代 Linux 桌面中，我们为了更高的安全性，可能会希望将一些商业软件运行在沙箱中，并对
-该软件的 D-Bus 总线权限做更细粒度的管控。
+D-Bus 本身具备多层权限管控能力，从总线接入、消息路由到敏感操作授权，形成了系统级的基础安全
+保障，核心机制包括：
 
-目前最流行的 Linux 应用沙箱工具应该是 bubblewrap, 它提供了 namespace 级别的环境隔离能力，
-可用于控制 D-Bus socket 层面的可见性.
+1.  **总线配置文件（静态规则管控）**
 
-Flatpak 通过 [bubblewrap](https://github.com/containers/bubblewrap) +
-[flatpak/xdg-dbus-proxy](https://man.archlinux.org/man/extra/xdg-dbus-proxy/xdg-dbus-proxy.1.en)
-来实现我们想要的针对 D-Bus 的细粒度权限管控：
+    通过 XML 配置文件定义细粒度访问规则，实现对 “谁能访问哪些服务 / 方法” 的静态限制。例
+    如：
 
-- bubblewrap 隔离文件系统环境，使沙箱中的程序无法访问宿主机的 D-Bus socket
-- xdg-dbus-proxy 作为一个中间代理，为沙箱中的程序提供 D-Bus 的访问能力，这个中间代理会根据
-  flatpak 的 d-bus 权限配置过滤沙箱程度发出的 D-Bus 消息，仅转发符合规则的消息。
+    - 系统总线的服务级规则（如 `/etc/dbus-1/system.d/org.freedesktop.login1.conf`）可限制
+      普通用户调用 `org.freedesktop.login1.Manager.PowerOff`（关机方法）；
 
-所以 Flatpak 能做到 “只允许访问 `org.freedesktop.portal.*`，禁止访问
-`org.freedesktop.systemd1`”，而裸的 bubblewrap 是做不到的。
+    - 全局规则（如 `/etc/dbus-1/system.conf`）可限定仅 `root` 或 `dbus` 组用户访问
+      `org.freedesktop.systemd1`（systemd 服务）的核心接口。
+
+      规则遵循 “`deny` 优先级高于 `allow`、服务级规则高于全局规则” 的逻辑，从总线层面直接
+      拦截未授权请求。
+
+1.  **PolicyKit（动态授权管控）**
+
+    针对静态规则无法覆盖的动态场景（如普通用户临时需要执行敏感操作），D-Bus 集成
+    PolicyKit（现称 `polkit`）实现动态授权。系统服务（如 `logind1`、`systemd1`）会在
+    `/usr/share/polkit-1/actions/` 中定义 “可授权动作”，例如
+    `org.freedesktop.login1.power-off`（对应 `logind1` 的关机方法）：
+
+    - 普通用户调用时，会触发认证流程（如输入管理员密码），认证通过后临时获得授权；
+
+    - 活跃控制台用户可直接授权，无需额外验证，兼顾安全性与易用性。
+
+1.  **连接层基础隔离**
+
+    D-Bus 总线套接字（如系统总线 `/var/run/dbus/system_bus_socket`）默认仅开放 `root` 和
+    `dbus` 组用户的读写权限，普通进程需通过 `dbus-daemon` 认证后才能建立连接。同时，每个连
+    接会被分配唯一 ID（如 `:1.42`），并与进程的 PID/UID/GID 绑定，防止身份伪造与未授权接
+    入。
+
+#### Flatpak 对 D-Bus 权限的细粒度管控
+
+在现代 Linux 桌面中，若需将商业软件等非信任应用运行在沙箱中，同时保障 “必要 D-Bus 交互不中
+断、越权访问被阻断”，Flatpak 采用 **“底层沙箱隔离 + 上层代理过滤”** 的双层方案 —— 其中
+`bubblewrap` 是 Flatpak 依赖的底层沙箱工具，负责环境隔离；`xdg-dbus-proxy` 是上层过滤组
+件，负责 D-Bus 细粒度管控，两者协同实现完整安全隔离：
+
+##### 1. 底层基础隔离：bubblewrap 的 “socket 隐藏与代理挂载”
+
+Flatpak 以 `bubblewrap`（简称 bwrap）为底层沙箱基础，利用其 `bind mount` 和
+`user namespace` 能力完成环境初始化，核心目标是切断沙箱应用与宿主 D-Bus 总线的直接联系：
+
+- **隐藏宿主 socket**：`bubblewrap` 会屏蔽宿主的 D-Bus 总线套接字（如不将
+  `/var/run/dbus/system_bus_socket` 挂载进沙箱），避免应用绕过管控直接访问宿主总线；
+
+- **挂载代理 socket**：同时，`bubblewrap` 会将 `xdg-dbus-proxy` 在宿主侧预先创建的 **私有
+  代理 socket**，通过 `bind mount` 挂载到沙箱内的默认 D-Bus socket 路径（如沙箱内的
+  `/var/run/dbus/system_bus_socket`）。
+
+  此时沙箱应用感知到的 “D-Bus 总线”，实际是 `xdg-dbus-proxy` 提供的代理接口，无法直接接触
+  宿主真实总线。
+
+##### 2. 上层规则过滤：xdg-dbus-proxy 的 “白名单校验”
+
+`xdg-dbus-proxy` 作为 Flatpak 内置的 D-Bus 代理组件，会随沙箱应用启动，加载 Flatpak 根据应
+用权限声明自动生成的过滤规则（粒度远细于 D-Bus 原生静态配置），例如：
+
+```
+\--talk=org.freedesktop.portal.FileChooser  # 允许调用文件选择门户服务
+
+\--talk=org.freedesktop.Notifications       # 允许发送桌面通知
+
+\--deny=org.freedesktop.systemd1            # 拒绝访问 systemd 服务
+
+\--deny=org.freedesktop.login1.Manager.PowerOff  # 拒绝调用关机方法
+```
+
+这些规则可精确到 “服务名 + 接口 + 方法 + 对象路径”，弥补 D-Bus 原生配置在沙箱场景下 “动态
+性不足、粒度较粗” 的局限。
+
+##### 3. 消息流转：代理的 “校验 - 转发” 逻辑
+
+沙箱应用无需修改代码，会默认连接沙箱内的 “代理 socket”，所有 D-Bus 消息（方法调用、信号订
+阅）均需经过 `xdg-dbus-proxy` 的校验：
+
+- 若目标服务 / 方法在白名单内（如 `org.freedesktop.portal.FileChooser.OpenFile`），代理会
+  将消息转发至宿主 D-Bus 总线，并把返回结果回传应用；
+
+- 若目标不在白名单内（如 `org.freedesktop.login1.Manager.PowerOff`），代理直接返回
+  `AccessDenied` 错误，不向宿主总线转发任何消息，彻底阻断越权访问。
 
 ---
 
@@ -725,17 +839,26 @@ systemd-logind 是连接登录、会话、设备权限和电源管理的核心�
 - **电源管理**：处理电源键事件，根据策略触发 suspend / shutdown
 - **多座席支持**：支持 seat 概念，管理多用户场景
 
-#### 4.2.1 seats 概念
+#### 4.2.1 seat（座席）概念
 
-- **seat** 是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示器 + 一
-  套键盘和鼠标 + 音频设备），以及与之关联的会话（sessions）。
-- 一个现代桌面主机默认有 `seat0`（单座席系统）。在多座席（multi-seat）场景下，一台机器可以
-  物理上分配多个 seat（通过额外的显卡/USB 集线器/显示器/输入设备），每个 seat 可以登录不同
-  用户并同时本地使用系统（例如用于教学机、共享工作站等）。
-- seat 的好处：将设备（GPU、输入设备）按逻辑分组并分配给对应会话，避免会话间互相干扰与权限
-  混淆。
+> <https://www.freedesktop.org/wiki/Software/systemd/multiseat/>
 
-就我个人而言，接触过的绝大多数系统都是单 seat 的，所以先略过这一细节。
+- **seat**（座席）是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示
+  器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话（sessions）。
+- 所有设备默认都会被分配给 **seat0**, 想再搞一个 seat1 实现多人图形化登录，必须通过 udev
+  规则完成如下操作：
+  1. 必须拥有第二张显卡，这是硬性的前提！为了让 seat1 实际可用，还必须拥有第二套键鼠与声
+     卡：
+  1. 给第二块显卡写 udev 规则，打上 `TAG+="master-of-seat"` 并设置
+     `ENV{ID_SEAT}="seat1"`；
+  1. 把第二套键盘、鼠标、声卡等设备也写规则改成 `ENV{ID_SEAT}="seat1"`；
+  1. 重启系统
+- logind 会把 VT/图形会话绑定到具体 seat，从而按 seat 粒度做电源管理、设备访问控制、空闲检
+  测等策略。
+- **远程 SSH 登录不生成也不归属任何 seat**；logind 仅为其建立会话对象，seat 字段留空。因此
+  seat 概念对 SSH 完全透明。
+
+现代 Linux 桌面系统基本都是单用户使用，因此后续讨论默认聚焦单 seat 场景。
 
 #### **常用命令**
 
@@ -764,7 +887,8 @@ busctl --system call org.freedesktop.login1 \
 1. 确认 `ls -l /dev/dri/card0` 的 owner/group。通常应为 `root:video`，并且当前会话应被授予
    设备 ACL。
 2. `loginctl seat-status seat0` 查看是否列出 `/dev/dri/card0` 并显示 ACL 给当前 session。
-3. 若无，检查 udev 是否为 GPU 设备打上了 `TAG+="uaccess"` 或 `TAG+="seat"`。
+3. 若无，通过 `udevadm info /dev/dri/card0` 检查 udev 是否为 GPU 设备打上了
+   `TAG+="uaccess"` 或 `TAG+="seat"`。
 4. 查看 `journalctl -u systemd-logind`，看是否在用户登录时有关于设备分配的错误。
 5. 若服务是以 system user 的方式启动，确保 compositor 的进程是在用户 session 下，而不是
    systemd 服务或 root 启动的进程（起进程身份不同会导致权限问题）。
@@ -792,48 +916,24 @@ busctl --system call org.freedesktop.login1 \
 Wayland 采用客户端-服务器模型，合成器同时扮演显示服务器和窗口管理器的角色，直接与内核的DRM
 / KMS 和输入设备交互。
 
-#### 4.3.1 架构对比：X11 vs Wayland
+#### 架构对比：X11 vs Wayland
 
-- **X11（传统）**：X Server（`Xorg`）是显示服务器，窗口管理器 / 桌面环境（例如 i3、GNOME）
-  作为 X client 连接到 X Server。`startx` 的流程本质上是：_启动 X Server，然后在 X Server
-  中运行 window manager/compositor_。因此通常需要先启动 X Server，再通过 `exec i3` 启动窗
-  口管理器。Display Manager（GDM/SDDM）为 X Server 创建合适的环境（DISPLAY 等）并做认证。
-- **Wayland（现代）**：Wayland 的合成器（compositor）同时扮演**显示服务器 + 合成器**两职——
-  它直接与内核的 DRM/KMS、输入设备（evdev）交互，负责输出的 mode-setting（显示模式设置）和
-  输入事件采集/分发。客户端（wayland apps）通过 Wayland socket（通常在
-  `$XDG_RUNTIME_DIR/wayland-0`）连接到合成器。由于合成器本身就直接控制显示与输入设备，它可
-  以被**直接从一个登陆的 tty** 启动，成为该 tty 下的图形会话的 “display server”。因此并不
-  需要先运行一个独立的 display server 再启动 compositor —— 合成器本身就是 display server +
-  window manager 的合体。
+- **X11（传统）**：在 X11 架构中，**X Server**（例如 `Xorg`）是显示服务器，直接与显卡驱动
+  和输入设备交互； **窗口管理器 / 桌面环境**（例如 i3、GNOME）则作为 **X client** 连接到 X
+  Server，负责窗口摆放、装饰以及用户界面。使用 `startx`（实际上调用 `xinit`）启动图形会话
+  时，本质流程是：先启动 X Server，再在其中运行窗口管理器或桌面环境（如 `exec i3`）。
+  **Display Manager**（如 GDM、SDDM）在图形登录时会自动启动 X Server，并完成用户认证、设置
+  `DISPLAY` 等环境变量，然后再运行会话。
 
-#### 4.3.2 为什么 Wayland 合成器能直接在 tty 启动？
+- **Wayland（现代）**： **Wayland 合成器**本身既是显示服务器，又是窗口管理器和合成器的结合
+  体。它直接通过内核的 **DRM/KMS** 控制显示模式，通过 **evdev/libinput** 采集并分发输入事
+  件。Wayland 客户端应用通过 **Wayland socket**（通常位于 `$XDG_RUNTIME_DIR/wayland-0`，但
+  具体名字可变）与合成器通信。因为合成器本身直接控制显示和输入设备，所以它可以**直接从一个
+  已登录的 TTY 启动**，作为该 TTY 的图形会话的 “display server”，无需先用 `startx` 启动一
+  个独立的 X Server。如果使用 Display Manager 登录 Wayland 会话，则由 DM 在合适的 TTY 启动
+  合成器并准备会话环境。
 
-- 合成器通常以用户进程运行（在用户的 systemd-user 会话或由 display manager 启动），直接打
-  开 `/dev/dri/card0`（DRM）和 `/dev/input/event*`（evdev），完成 KMS 设置与帧提交。因为合
-  成器直接做了 X Server 在 X11 下做的事情，所以没有 `startx` 模式里的“先启动 server 再启动
-  client”的必要。
-- 启动方式可以是：
-
-  - 由 display manager（greetd/GDM/SDDM）在认证成功后通过 logind 创建 session 并把环境
-    （`XDG_RUNTIME_DIR`, `WAYLAND_DISPLAY` 等）传给 compositor；
-  - 或者从一个登录 shell（tty）直接 `exec Hyprland`（注意：需要在登录 shell 下具备访问
-    `/dev` 的权限，通常意味着要是登录到本地 console 的 session，这样 logind 会把会话与
-    seat 关联并分配设备 ACL）。
-
-- 因此常见的直接启动方式如下（在纯文本登录后的 `~/.profile` / `~/.bash_profile` 或
-  systemd-user unit）：
-
-  ```bash
-  # 直接从 tty 启动 Wayland 合成器（示例）
-  if [ -z "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ]; then
-    exec Hyprland
-  fi
-  ```
-
-  （在实际环境中推荐通过 display manager 或 systemd-user 管理会话，以便系统能正确分配 ACL
-  与处理 PAM）
-
-#### 4.3.3 架构差异带来的实际影响
+#### 架构差异带来的实际影响
 
 - **安全与权限**：Wayland 把合成器放在更核心的位置（它有直接设备访问），因此确保合成器运行
   在正确会话（由 logind 管理）下至关重要。错误地以 root 或 system service 启动合成器会导致
@@ -843,7 +943,7 @@ Wayland 采用客户端-服务器模型，合成器同时扮演显示服务器�
 - **兼容性**：Xwayland 提供对 legacy X11 应用的兼容，合成器负责在启动时/按需启动 Xwayland
   以支持老应用。
 
-#### **图形栈组件**
+#### 图形栈组件
 
 **输入处理组件**：
 
@@ -937,7 +1037,8 @@ resolvectl status
 
 ### 5.3 IPv4 / IPv6 双栈配置
 
-现代网络需要同时支持 IPv4 和 IPv6，systemd-networkd 提供完整的双栈支持。
+现代网络正在往 IPv6 迁移的过程中，目前仍有许多站点都只支持 IPv6，因此 IPv4+IPv6 双栈成为一
+个过渡方案，systemd-networkd 提供完整的双栈支持。
 
 **双栈特点**：
 
@@ -1023,7 +1124,9 @@ nslookup example.com
 ## 6. 系统服务：核心功能支持
 
 除了基本的服务管理外，systemd 还提供了多个专门化的系统服务来支持现代 Linux 桌面的核心功
-能，包括内存管理、DNS 解析和时间同步等。这些服务确保系统稳定运行并提供良好的用户体验。
+能，包括内存管理、DNS 解析和时间同步等。
+
+> systemd 全家桶，你值得拥有（
 
 ### 6.1 内存管理：systemd-oomd
 
@@ -2288,3 +2391,7 @@ Linux 桌面系统虽复杂，但每个组件都有明确作用和逻辑关系�
 
 _本文基于 NixOS 和 Wayland 技术栈撰写，但原理和方法同样适用于其他 Linux 发行版和桌面环境。
 由于技术发展迅速，建议结合实际环境和最新文档参考。_
+
+## 参考
+
+- [Understanding Linux Desktop Components: Display Servers, Compositors, Window Managers, and Desktop Environments](https://thamizhelango.medium.com/understanding-linux-desktop-components-display-servers-compositors-window-managers-and-desktop-e07c9c45dcce)
