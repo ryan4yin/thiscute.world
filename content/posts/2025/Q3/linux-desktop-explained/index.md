@@ -65,8 +65,8 @@ Linux 桌面包含了相当多的系统组件，这些组件组合形成了一�
 技术栈假定为：UEFI + systemd-boot + systemd + Wayland + PipeWire + systemd-networkd +
 fcitx5, 使用的发行版为 NixOS.
 
-> **AI 创作声明**：本文由笔者借助 ChatGPT, Kimi K2 和 Cursor 创作，有很大篇幅的内容完全由
-> AI 在我的指导下生成。
+> **AI 创作声明**：本文由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 创作，有很大篇幅的内容完
+> 全由 AI 在我的指导下生成。如有错误，还请指正。
 
 ---
 
@@ -364,66 +364,182 @@ journalctl --disk-usage                    # 日志占用空间
 
 ### 2.2 日志系统
 
-systemd-journald 是 systemd 的日志收集守护进程，它统一处理内核、系统服务和应用的日志。
+systemd-journald 是 systemd 内置的日志收集守护进程，统一处理内核、系统服务及应用的日志，是
+现代 Linux 系统日志管理的核心组件。
 
-**核心特性**：
+#### 2.2.1 核心特性
 
-- **统一收集**：整合内核、服务、应用的日志
-- **二进制格式**：高效的索引和查询
-- **字段索引**：支持按 PID、服务名、优先级等字段过滤
-- **自动轮转**：基于大小和时间的日志管理
-- 其他：支持日志压缩、签名（Seal）、转发，限制日志写入速率。
+| 特性               | 说明                                                                                           |
+| ------------------ | ---------------------------------------------------------------------------------------------- |
+| **统一收集**       | 内核日志、systemd 单元（stdout/stderr）、普通进程、容器、第三方 syslog 均汇总到同一日志流。    |
+| **二进制索引**     | 以 B+树（有序索引）+偏移量建立字段索引，支持精确查询与时间/优先级范围查询，速度远超文本 grep。 |
+| **字段化存储**     | 自动生成 `_PID`、`_UID`、`_SYSTEMD_UNIT` 等可信字段（不可伪造）；支持自定义 `FOO=bar` 字段。   |
+| **自动轮转与压缩** | 按“大小、时间、文件数”回收日志；轮转后默认用 LZ4 压缩，节省 60% 以上空间。                     |
+| **速率限制**       | 可通过 `RateLimitIntervalSec=`/`RateLimitBurst=` 调整。                                        |
+| **日志防篡改**     | 配置 `Seal=yes` 后，用 `journalctl --setup-keys` 生成密钥，之后可用该密钥验证日志完整性。      |
 
-**配置要点**：
+#### 2.2.2 日志的4个收集入口
 
-其配置文件位于 `/etc/systemd/journald.conf`，常见配置项包括：
+journald 仅通过标准化入口收集日志，确保来源可追溯：
 
-- `Storage=`：`persistent|volatile|auto|none`。
-  - `persistent`：写入 `/var/log/journal`（需要目录存在且有权限）。
-  - `volatile`：只写入 `/run/log/journal`（不持久化）。
-  - `auto`：若 `/var/log/journal` 存在则 persistent，否则 volatile（常用默认）。
-- `Compress=`：是否压缩旧的 journal 文件（`yes/no`）。
-- `SystemMaxUse=`：journal 在持久储存时允许占用的最大磁盘空间（例如 `1G`）。超过时会自动删
-  除最旧的 journal 文件以回收空间。
-- `SystemKeepFree=`：保留给系统的最小磁盘空间；journal 不会侵占超过该限制的空间。
-- `SystemMaxFileSize=`：单个 journal 文件的最大大小。
-- `SystemMaxFiles=`：保留的最大 journal 文件数（用于限制文件个数）。
-- `RuntimeMaxUse` / `RuntimeKeepFree` / `RuntimeMaxFileSize`：对应 volatile（/run）空间的
-  限制。
-- `MaxRetentionSec=`：以时间为准的保留上限（可选）。
-- unit 对 stdout/stderr 重定向：systemd unit 文件（`/etc/systemd/system/*.service` 或
-  `/usr/lib/systemd/system`）可通过 `StandardOutput`/`StandardError` 配置。
+1. **内核日志**：内核 `printk()` 输出 → `/dev/kmsg` → journald（会自动添加 `_PID`/`_COMM`
+   等字段）；
+2. **systemd 单元 stdout/stderr**：单元进程输出自动捕获，会附加
+   `_SYSTEMD_UNIT=xxx.service` 等 systemd 相关字段；
+3. **本地 Socket**：`/run/systemd/journal/socket` 等，接收 `logger`/`systemd-cat` 及旧
+   syslog 应用日志；
+4. **显式 API**：`sd_journal_send()`，仅需自定义复杂结构化日志时使用（譬如 Docker
+   daemon）, 一般直接 print 即可。
 
-示例：
+#### 2.2.3 日志优先级与核心配置
+
+##### 1. 日志优先级简述
+
+日志按严重程度分 8 级（数字越小，级别越高），常用级别：
+
+- `err`：错误（部分功能异常），级别 3
+- `warning`：警告（潜在风险），级别 4
+- `info`：信息（常规运行日志），级别 6
+- `debug`：调试（开发细节），级别 7
+
+可用于筛选关键日志。
+
+##### 2. journald 配置
+
+主配置文件：`/etc/systemd/journald.conf`，支持通过 `/etc/systemd/journald.conf.d/*.conf`
+覆盖配置，核心配置项如下：
+
+| 配置项             | 说明                 | 示例                                                             |
+| ------------------ | -------------------- | ---------------------------------------------------------------- |
+| `Storage=`         | 存储策略             | `persistent`（存 `/var/log/journal`，推荐）/`volatile`（存内存） |
+| `SystemMaxUse=`    | 持久存储最大占用     | `1G`                                                             |
+| `MaxRetentionSec=` | 日志最大保留时间     | `1month`                                                         |
+| `ForwardToSyslog=` | 是否转发到旧日志系统 | `yes`（兼容传统文本日志）                                        |
+| `Seal=`            | 是否启用日志防篡改   | `yes`                                                            |
+
+**生产配置示例**：
 
 ```ini
-# /etc/systemd/journald.conf
+# /etc/systemd/journald.conf.d/00-production.conf
 [Journal]
 Storage=persistent
-Compress=yes
-SystemMaxUse=1G
-SystemKeepFree=500M
-RuntimeMaxUse=100M
+SystemMaxUse=2G
+MaxRetentionSec=3month
+ForwardToSyslog=yes
+Seal=yes
 ```
 
-**实用查询技巧**：
+配置生效需重启服务：`sudo systemctl restart systemd-journald`
+
+#### 2.2.4 实验：用 logger 验证日志收集
+
+下面演示如何使用 `logger` 将**结构化日志**直接写进 journal，并立即用 journalctl 检索。
+
+首先写入日志：
 
 ```bash
-# 按服务过滤
-journalctl -u nginx.service -f           # 实时跟踪 nginx 日志
+logger --journald <<EOF
+SYSLOG_IDENTIFIER=myapp
+PRIORITY=3
+MESSAGE=用户登录失败
+USER_ID=alice
+LOGIN_RESULT=fail
+EOF
+```
 
-# 按优先级过滤
-journalctl -p err -b                     # 本次启动的错误日志
+其中的 `SYSLOG_IDENTIFIER`, `PRIORITY`, `MESSAGE` 在 journald 中都有属性对应，而后两个
+`USER_ID` 与 `LOGIN_RESULT` 则属于自定义的日志标签。
 
-# 按时间范围
-journalctl --since "2025-01-01 10:00:00" --until "2025-01-01 12:00:00"
+然后查询日志：
 
-# 按进程 ID
-journalctl _PID=1234
+```bash
+# 2. 按标识符过滤
+journalctl -t myapp
+# 等价于
+journalctl SYSLOG_IDENTIFIER=myapp
 
-# 日志维护
-sudo journalctl --vacuum-time=2weeks     # 清理两周前日志
-sudo journalctl --rotate                 # 手动轮转日志
+# 3. 按优先级+自定义字段精确定位
+journalctl -p err LOGIN_RESULT=fail
+```
+
+#### 2.2.5 旧日志系统与 /var/log/ 解析
+
+##### 旧日志系统：基于 syslog 的文本管理
+
+在 systemd 普及前，Linux 依赖 **syslog 协议+文本文件** 管理日志，核心组件是
+**rsyslog**（syslog 主流实现，功能强于早期 `syslogd`）。
+
+- **旧系统工作流**：应用通过 `syslog(3)` 接口输出日志 → rsyslog 接收 → 按“设施+优先级”写入
+  `/var/log/` 文本文件；
+- **现代系统中的角色**：rsyslog 不再是核心收集器，而是作为“兼容层”——接收 journald 转发的日
+  志，生成传统文本文件（如 `/var/log/auth.log`），或转发到远程日志服务器（支持 TCP/TLS 加
+  密）。
+
+##### /var/log/ 常见文件及功能
+
+现代系统中，这些文件由 rsyslog 生成（兼容旧习惯），不同发行版名称略有差异，但都为纯文本格
+式：
+
+| 文件（或目录）                                             | 主要发行版差异               | 功能说明                                                                   |
+| ---------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------- |
+| `/var/log/messages`                                        | RHEL/CentOS/SUSE             | 系统通用日志：服务启停、内核提示、非专项应用消息。                         |
+| `/var/log/syslog`                                          | Ubuntu/Debian                | 等价于 RHEL 的 `messages`，存储内核及一般系统日志。                        |
+| `/var/log/auth.log`（Ubuntu）<br>`/var/log/secure`（RHEL） | 名称不同                     | 认证与授权事件：SSH 登录、su/sudo、用户添加/删除、PAM 告警。安全审计必看。 |
+| `/var/log/kern.log`                                        | 通用                         | 仅内核环控输出：硬件故障、驱动加载、OOM、segfault。                        |
+| `/var/log/cron`                                            | 通用                         | crond 执行记录：任务启动/结束、错误输出、邮件发送结果。                    |
+| `/var/log/btmp`                                            | 通用                         | 二进制文件，记录**失败**登录（lastb 读取）；大小随暴力破解增长。           |
+| `/var/log/wtmp`                                            | 通用                         | 二进制文件，记录**成功**登录/注销/重启（last、who 读取）。                 |
+| `/var/log/lastlog`                                         | 通用                         | 二进制文件，记录每个用户最近一次登录时间（lastlog 读取）。                 |
+| `/var/log/journal/`                                        | 启用 systemd-journald 后可见 | **目录**；若 `Storage=persistent`，则二进制 journal 文件存于此。           |
+
+#### 2.2.6 日志写入最佳实践
+
+| 场景                  | 推荐做法                                                                                 |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| Shell脚本（独立运行） | `logger -t 脚本名 -p daemon.err "错误：$msg"`（如 `logger -t backup -p err "备份失败"`） |
+| 应用程序              | 优先考虑使用 systemd service, 少数场景可考虑直接调用 `sd_journal_send()` API             |
+| 容器                  | Docker/Podman 加 `--log-driver=journald`（容器内正常输出即可）                           |
+| 高频日志              | 设 `RateLimitIntervalSec=0` 关闭限制（需评估风险），或批量写入                           |
+| 敏感信息              | 脱敏处理（如 `PASSWORD=***`），避免明文存储                                              |
+
+#### 2.2.7 运维命令速查
+
+```bash
+# 一、日志查询（含优先级过滤）
+# 实时跟踪服务日志（仅看 err 及以上级别）
+journalctl -f -p err -u sshd.service
+# 等价于
+journalctl -f -p err _SYSTEMD_UNIT=sshd.service
+# 按时间+优先级过滤（过去1小时 warning 及以上）
+journalctl --since "1h ago" -p warning
+# -p 的参数既可使用名称，也可使用对应的数字，warning 对应 4
+journalctl --since "1h ago" -p 4
+# 内核日志（本次启动的 err 日志）
+journalctl -k -p err -b
+# 按自定义字段过滤（USER_ID=1001 + 优先级 err）
+journalctl USER_ID=1001 -p err
+# 通过 Perl 格式的正则表达式搜索日志
+journalctl --grep "Auth"
+
+# 二、日志管理
+# 查看 journal 占用空间
+sudo journalctl --disk-usage
+# 清理日志（保留最近2周/500M）
+sudo journalctl --vacuum-time=2weeks
+sudo journalctl --vacuum-size=500M
+# 手动轮转日志
+sudo journalctl --rotate
+
+# 三、旧日志文件操作
+# 实时查看认证日志（Ubuntu）
+tail -f /var/log/auth.log
+# 实时查看认证日志（CentOS）
+tail -f /var/log/secure
+
+# 四、日志防篡改验证
+sudo journalctl --setup-keys > /etc/journal-seal-key
+sudo chmod 600 /etc/journal-seal-key
+sudo journalctl --verify --verify-key=$(cat /etc/journal-seal-key)
 ```
 
 ### 2.3 设备管理：udev 的角色
@@ -1023,7 +1139,7 @@ $ sudo libinput list-devices
 ip link show
 ip addr show
 
-# 无线网络管理
+# 无线网络管理(iwd)
 iwctl station wlan0 scan
 iwctl station wlan0 connect "SSID"
 
@@ -1180,7 +1296,7 @@ systemd-resolved 提供统一的 DNS 解析服务，支持 DNSSEC 验证、DNS o
 - **统一接口**：为系统提供单一的 DNS 解析入口
 - **本地缓存**：缓存 DNS 查询结果，提高解析速度
 - **DNSSEC 支持**：验证 DNS 响应的真实性
-- **隐私保护**：支持 DNS over TLS 和 DNS over HTTPS
+- **隐私保护**：支持 DNS over TLS(DoT), 但截止目前（2025 年）尚未支持 DNS over HTTPS(DoH).
 
 **配置方法**：
 
@@ -1269,15 +1385,6 @@ chronyc tracking  # 如果安装了 chrony
 ```
 
 ### 6.4 服务集成与故障排查
-
-**服务依赖关系**：
-
-- **systemd-networkd** → **systemd-resolved**：提供网络连接
-- **systemd-resolved** → **所有需要 DNS 的服务**：提供域名解析
-- **systemd-timesyncd** → **需要准确时间的服务**：提供时间基准
-- **systemd-oomd** → **监控所有用户服务**：保护系统稳定性
-
-**综合故障排查**：
 
 ```bash
 # 检查所有核心服务状态
