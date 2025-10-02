@@ -1,76 +1,68 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Linux - 标签 - This Cute World</title><link>https://thiscute.world/tags/linux/</link><description>Linux - 标签 - This Cute World</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 21 Feb 2024 16:26:21 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/linux/" rel="self" type="application/rss+xml"/><item><title>OS as Code - 我的 NixOS 使用体会</title><link>https://thiscute.world/posts/my-experience-of-nixos/</link><pubDate>Wed, 21 Feb 2024 16:26:21 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/my-experience-of-nixos/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/my-experience-of-nixos/nixos-and-flakes-book-202402.webp" referrerpolicy="no-referrer">
-            </div><blockquote>
-  <p>本文最初发表于 <a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer">如何评价NixOS? - 知乎</a>，觉得比较有价值所以再搬运到我的博客。</p>
-
-</blockquote><p>我 23 年 4 月开始用 NixOS 之前看过（<a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer">如何评价NixOS? - 知乎</a>） 这个问答，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。</p>]]></description></item><item><title>个人数据安全不完全指南</title><link>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</link><pubDate>Tue, 30 Jan 2024 13:48:30 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/an-incomplete-guide-to-data-security/datasecurity.webp" referrerpolicy="no-referrer">
-            </div><h2 id="零前言" class="headerLink">
-    <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>在接触电脑以来很长的一段时间里，我都没怎么在意自己的数据安全。比如说：</p>
-<ol>
-<li>长期使用一个没有 passphrase 保护的 SSH 密钥（RSA 2048 位），为了方便我还把它存到了
-onedrive 里，而且在各种需要访问 GitHub/Gitee 或 SSH 权限的虚拟机跟 PC 上传来传去。</li>
-<li>Homelab 跟桌面 PC 都从来没开过全盘加密。</li>
-<li>在 2022 年我的 Homelab 坏掉了两块国产固态硬盘（阿斯加特跟光威弈 Pro 各一根），都是系统一启动就挂，没法手动磁盘格式化，走售后直接被京东换货了。因为我的数据是明文存储的，这很可能导致我的个人数据泄露&hellip;</li>
-<li>几个密码在各种站点上重复使用，其中重要账号的随机密码还是我在十多年前用 lastpass 生成的，到处用了这么多年，很难说这些密码有没有泄露（lastpass 近几年爆出的泄漏事故就不少&hellip;）</li>
-<li>GitHub, Google, Jetbrains 等账号的 Backup Code 被我明文存储到了百度云盘，中间发现百度云盘安全性太差又转存到了 OneDrive，但一直是明文存储，从来没加过密。</li>
-<li>一些银行账号之类的随机密码，因为担心遗忘，长期被我保存在一份印象笔记的笔记里，也是明文存储，仅做了些简单的内容替换，要猜出真正的密码感觉并不是很难。</li>
-<li>以前也有过因为对 Git 操作不熟悉或者粗心大意，在公开仓库中提交了一些包含敏感信息的
-commit，比如说 SSH 密钥、密码等等，有的甚至很长时间都没发现。</li>
-</ol>
-<p>现在在 IT 行业工作了几年，从我当下的经验来看，企业后台的管理员如果真有兴趣，查看用户的数据真的是很简单的一件事，至少国内大部分公司的用户数据，都不会做非常严格的数据加密与权限管控。就算真有加密，那也很少是用户级别的，对运维人员或开发人员而言这些数据仍旧与未加密无异。对系统做比较大的迭代时，把小部分用户数据导入到测试环境进行测试也是挺常见的做法&hellip;</p>]]></description></item><item><title>NixOS 在 Lichee Pi 4A 上是如何启动的</title><link>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</link><pubDate>Mon, 29 Jan 2024 00:58:57 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/how-nixos-start-on-licheepi4a/lp4a-pinout-debuglog-1.webp" referrerpolicy="no-referrer">
-            </div><blockquote>
-  <p>文章是 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要整理发布下&hellip;所以注意文章中的时间线是 2023 年 8 月。</p>
-
-</blockquote><h2 id="零前言" class="headerLink">
-    <a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"></a>零、前言</h2><p>我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当时没怎么折腾。</p>]]></description></item><item><title>为什么我折腾这些小众技术？</title><link>https://thiscute.world/posts/why-i-choose-niche-products/</link><pubDate>Tue, 01 Aug 2023 11:40:57 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/why-i-choose-niche-products/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/why-i-choose-niche-products/anime-girls-seagulls.webp" referrerpolicy="no-referrer">
-            </div><p>我折腾过许多的小众技术，而今年新折腾的主要有 NixOS、窗口管理器 i3 / hyprland、以及
-Neovim，其中 NixOS 我甚至折腾到了一个新境界——出了一本帮助新手入门的中英双语开源书籍<a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">nixos-and-flakes-book</a>，还搞了好几个
-NixOS 相关的开源项目（比如<a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer">nix-darwin-kickstarter</a> 跟<a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer">ryan4yin/nix-config</a>），都收到了许多好评。</p>
-<p>结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用<a href="nixos.org/" rel="">NixOS</a> / <a href="https://github.com/Neovim/Neovim" target="_blank" rel="noopener noreferrer">Neovim</a> /<a href="https://flypy.com/" target="_blank" rel="noopener noreferrer">小鹤音形中文输入法</a>？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。</p>]]></description></item><item><title>NixOS 与 Nix Flakes 新手入门</title><link>https://thiscute.world/posts/nixos-and-flake-basics/</link><pubDate>Thu, 04 May 2023 15:19:28 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/nixos-and-flake-basics/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/nixos-and-flake-basics/nixos-and-flakes-book.webp" referrerpolicy="no-referrer">
-            </div><p>随着文章的更新，文章内容逐渐增多，为了方便阅读，文章内容已经迁移到单独的站点:</p>
-<ul>
-<li>文档站: <a href="https://nixos-and-flakes.thiscute.world/zh/" target="_blank" rel="noopener noreferrer">https://nixos-and-flakes.thiscute.world/zh/</a></li>
-<li>GitHub: <a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer">https://github.com/ryan4yin/nixos-and-flakes-book</a></li>
-</ul>
-<p>非常感谢<a href="https://www.reddit.com/r/NixOS/comments/14fvz1q/comment/jp4xhj3/?context=3" target="_blank" rel="noopener noreferrer">Reddit</a>、文章评论区、<a href="https://www.v2ex.com/t/951190#reply9" target="_blank" rel="noopener noreferrer">V2EX</a> 以及<a href="https://0xffff.one/d/1521-nixos-yu-nix-flakes-xin-shou-ru-men/4" target="_blank" rel="noopener noreferrer">0xffff.one</a> 等平台上各位朋友的反馈、批评与建议 ❤️</p>]]></description></item><item><title>Linux 上的 WireGuard 网络分析（一）</title><link>https://thiscute.world/posts/wireguard-on-linux/</link><pubDate>Tue, 28 Mar 2023 22:19:25 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/wireguard-on-linux/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/wireguard-on-linux/wireguard.png" referrerpolicy="no-referrer">
-            </div><blockquote>
-  <p>阅读此文章需要前置知识：Linux 网络基础知识、iptables、conntrack</p>
-
-</blockquote><blockquote>
-  <p>本文内容部分采用了 Copilot 提示内容，也有部分内容用了 ChatGPT 免费版进行分析，确实都比较有帮助。</p>]]></description></item><item><title>Linux/Windows/MacOSX 系统常用命令集锦</title><link>https://thiscute.world/posts/common-commands-for-various-operating-systems/</link><pubDate>Sun, 13 Feb 2022 16:09:00 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/common-commands-for-various-operating-systems/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/common-commands-for-various-operating-systems/terminal.webp" referrerpolicy="no-referrer">
-            </div><blockquote>
-  <p>个人笔记，只会列出我自己容易忘掉的命令，方便查阅。</p>
-
-</blockquote><blockquote>
-  <p>内容比较多，适合当参考手册用。可能不太适合从头读到尾&hellip;</p>
-
-</blockquote><blockquote>
-  <p>本文主要介绍 Linux 命令，顺带介绍下 Windows/MacOSX.</p>]]></description></item><item><title>iptables 及 docker 容器网络分析</title><link>https://thiscute.world/posts/iptables-and-container-networks/</link><pubDate>Sun, 15 Aug 2021 19:11:29 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/iptables-and-container-networks/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/iptables-and-container-networks/docker-turtles-networking.webp" referrerpolicy="no-referrer">
-            </div><blockquote>
-  <p>本文仅针对 ipv4 网络</p>
-
-</blockquote><p>本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和
-Linux 虚拟网络接口实现的单机容器网络。</p>
-<h2 id="一iptables" class="headerLink">
-    <a href="#%e4%b8%80iptables" class="header-mark"></a>一、iptables</h2><p><a href="https://www.netfilter.org/projects/iptables/index.html" target="_blank" rel="noopener noreferrer">iptables</a> 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT</p>]]></description></item><item><title>Linux 中的虚拟网络接口</title><link>https://thiscute.world/posts/linux-virtual-network-interfaces/</link><pubDate>Sat, 14 Aug 2021 11:13:03 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/linux-virtual-network-interfaces/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/linux-virtual-network-interfaces/linux-network.webp" referrerpolicy="no-referrer">
-            </div><blockquote>
-  <p>本文用到的字符画工具：<a href="https://github.com/zenghongtu/vscode-asciiflow2" target="_blank" rel="noopener noreferrer">vscode-asciiflow2</a></p>
-
-</blockquote><blockquote>
-  <p>注意: 本文中使用 <code>ip</code> 命令创建或修改的任何网络配置，都是未持久化的，主机重启即消失。</p>
-
-</blockquote><p>Linux 具有强大的虚拟网络能力，这也是 openstack 网络、docker 容器网络以及 kubernetes 网络等虚拟网络的基础。</p>]]></description></item><item><title>Linux 网络工具中的瑞士军刀 - socat &amp; netcat</title><link>https://thiscute.world/posts/socat-netcat/</link><pubDate>Sun, 11 Apr 2021 16:38:13 +0800</pubDate><author><name>於清樂</name><uri>https://thiscute.world/authors/ryan4yin</uri></author><guid>https://thiscute.world/posts/socat-netcat/</guid><description><![CDATA[<div class="featured-image">
-                <img src="/posts/socat-netcat/yume_grimgar.webp" referrerpolicy="no-referrer">
-            </div><blockquote>
-  <p>文中的命令均在 macOS Big Sure 和 openSUSE Tumbleweed 上测试通过</p>
-
-</blockquote><h2 id="socat--netcat" class="headerLink">
-    <a href="#socat--netcat" class="header-mark"></a>socat &amp; netcat</h2><p>netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 <code>nc</code>.</p>]]></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on This Cute World</title><link>https://thiscute.world/tags/linux/</link><description>Recent content in Linux on This Cute World</description><generator>Hugo</generator><language>zh-CN</language><lastBuildDate>Fri, 03 Oct 2025 01:59:33 +0800</lastBuildDate><atom:link href="https://thiscute.world/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 桌面系统组件概览与故障排查指南</title><link>https://thiscute.world/posts/linux-desktop-explained/</link><pubDate>Tue, 09 Sep 2025 20:17:33 +0800</pubDate><guid>https://thiscute.world/posts/linux-desktop-explained/</guid><description>&lt;h2 id="定位与目标" class="headerLink"&gt;
+ &lt;a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"&gt;&lt;/a&gt;定位与目标&lt;/h2&gt;&lt;p&gt;Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。&lt;/p&gt;
+&lt;p&gt;即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。&lt;/p&gt;</description></item><item><title>OS as Code - 我的 NixOS 使用体会</title><link>https://thiscute.world/posts/my-experience-of-nixos/</link><pubDate>Wed, 21 Feb 2024 16:26:21 +0800</pubDate><guid>https://thiscute.world/posts/my-experience-of-nixos/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;本文最初发表于 &lt;a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer"&gt;如何评价NixOS? - 知乎&lt;/a&gt;，觉得比较有价值所以再搬运到我的博客。&lt;/p&gt;
+&lt;/blockquote&gt;&lt;p&gt;我 23 年 4 月开始用 NixOS 之前看过（&lt;a href="https://www.zhihu.com/question/56543855/answer/3403111768" target="_blank" rel="noopener noreferrer"&gt;如何评价NixOS? - 知乎&lt;/a&gt;） 这个问答，几个高赞回答都从不同方面给出了很有意义的评价，也是吸引我入坑的原因之一。&lt;/p&gt;</description></item><item><title>个人数据安全不完全指南</title><link>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</link><pubDate>Tue, 30 Jan 2024 13:48:30 +0800</pubDate><guid>https://thiscute.world/posts/an-incomplete-guide-to-data-security/</guid><description>&lt;h2 id="零前言" class="headerLink"&gt;
+ &lt;a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;零、前言&lt;/h2&gt;&lt;p&gt;在接触电脑以来很长的一段时间里，我都没怎么在意自己的数据安全。比如说：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;长期使用一个没有 passphrase 保护的 SSH 密钥（RSA 2048 位），为了方便我还把它存到了
+onedrive 里，而且在各种需要访问 GitHub/Gitee 或 SSH 权限的虚拟机跟 PC 上传来传去。&lt;/li&gt;
+&lt;li&gt;Homelab 跟桌面 PC 都从来没开过全盘加密。&lt;/li&gt;
+&lt;li&gt;在 2022 年我的 Homelab 坏掉了两块国产固态硬盘（阿斯加特跟光威弈 Pro 各一根），都是系统一启动就挂，没法手动磁盘格式化，走售后直接被京东换货了。因为我的数据是明文存储的，这很可能导致我的个人数据泄露&amp;hellip;&lt;/li&gt;
+&lt;li&gt;几个密码在各种站点上重复使用，其中重要账号的随机密码还是我在十多年前用 lastpass 生成的，到处用了这么多年，很难说这些密码有没有泄露（lastpass 近几年爆出的泄漏事故就不少&amp;hellip;）&lt;/li&gt;
+&lt;li&gt;GitHub, Google, Jetbrains 等账号的 Backup Code 被我明文存储到了百度云盘，中间发现百度云盘安全性太差又转存到了 OneDrive，但一直是明文存储，从来没加过密。&lt;/li&gt;
+&lt;li&gt;一些银行账号之类的随机密码，因为担心遗忘，长期被我保存在一份印象笔记的笔记里，也是明文存储，仅做了些简单的内容替换，要猜出真正的密码感觉并不是很难。&lt;/li&gt;
+&lt;li&gt;以前也有过因为对 Git 操作不熟悉或者粗心大意，在公开仓库中提交了一些包含敏感信息的
+commit，比如说 SSH 密钥、密码等等，有的甚至很长时间都没发现。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;现在在 IT 行业工作了几年，从我当下的经验来看，企业后台的管理员如果真有兴趣，查看用户的数据真的是很简单的一件事，至少国内大部分公司的用户数据，都不会做非常严格的数据加密与权限管控。就算真有加密，那也很少是用户级别的，对运维人员或开发人员而言这些数据仍旧与未加密无异。对系统做比较大的迭代时，把小部分用户数据导入到测试环境进行测试也是挺常见的做法&amp;hellip;&lt;/p&gt;</description></item><item><title>NixOS 在 Lichee Pi 4A 上是如何启动的</title><link>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</link><pubDate>Mon, 29 Jan 2024 00:58:57 +0800</pubDate><guid>https://thiscute.world/posts/how-nixos-start-on-licheepi4a/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;文章是 2023-08-07 写的，后面就完全忘掉这回事了，今天偶然翻到它才想起要整理发布下&amp;hellip;所以注意文章中的时间线是 2023 年 8 月。&lt;/p&gt;
+&lt;/blockquote&gt;&lt;h2 id="零前言" class="headerLink"&gt;
+ &lt;a href="#%e9%9b%b6%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;零、前言&lt;/h2&gt;&lt;p&gt;我从今年 5 月份初收到了内测板的 Lichee Pi 4A，这是当下性能最高的 RISC-V 开发板之一，不过当时没怎么折腾。&lt;/p&gt;</description></item><item><title>为什么我折腾这些小众技术？</title><link>https://thiscute.world/posts/why-i-choose-niche-products/</link><pubDate>Tue, 01 Aug 2023 11:40:57 +0800</pubDate><guid>https://thiscute.world/posts/why-i-choose-niche-products/</guid><description>&lt;p&gt;我折腾过许多的小众技术，而今年新折腾的主要有 NixOS、窗口管理器 i3 / hyprland、以及
+Neovim，其中 NixOS 我甚至折腾到了一个新境界——出了一本帮助新手入门的中英双语开源书籍&lt;a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer"&gt;nixos-and-flakes-book&lt;/a&gt;，还搞了好几个
+NixOS 相关的开源项目（比如&lt;a href="https://github.com/ryan4yin/nix-darwin-kickstarter" target="_blank" rel="noopener noreferrer"&gt;nix-darwin-kickstarter&lt;/a&gt; 跟&lt;a href="https://github.com/ryan4yin/nix-config" target="_blank" rel="noopener noreferrer"&gt;ryan4yin/nix-config&lt;/a&gt;），都收到了许多好评。&lt;/p&gt;
+&lt;p&gt;结合我自己折腾这些小众技术的经历，以及我经常被问到的问题（为什么你选择用&lt;a href="nixos.org/" rel=""&gt;NixOS&lt;/a&gt; / &lt;a href="https://github.com/Neovim/Neovim" target="_blank" rel="noopener noreferrer"&gt;Neovim&lt;/a&gt; /&lt;a href="https://flypy.com/" target="_blank" rel="noopener noreferrer"&gt;小鹤音形中文输入法&lt;/a&gt;？它有什么好处？它真的能提升效率吗？等等），我想在这里简单谈谈我对它们的看法。&lt;/p&gt;</description></item><item><title>NixOS 与 Nix Flakes 新手入门</title><link>https://thiscute.world/posts/nixos-and-flake-basics/</link><pubDate>Thu, 04 May 2023 15:19:28 +0800</pubDate><guid>https://thiscute.world/posts/nixos-and-flake-basics/</guid><description>&lt;p&gt;随着文章的更新，文章内容逐渐增多，为了方便阅读，文章内容已经迁移到单独的站点:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;文档站: &lt;a href="https://nixos-and-flakes.thiscute.world/zh/" target="_blank" rel="noopener noreferrer"&gt;https://nixos-and-flakes.thiscute.world/zh/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;GitHub: &lt;a href="https://github.com/ryan4yin/nixos-and-flakes-book" target="_blank" rel="noopener noreferrer"&gt;https://github.com/ryan4yin/nixos-and-flakes-book&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;非常感谢&lt;a href="https://www.reddit.com/r/NixOS/comments/14fvz1q/comment/jp4xhj3/?context=3" target="_blank" rel="noopener noreferrer"&gt;Reddit&lt;/a&gt;、文章评论区、&lt;a href="https://www.v2ex.com/t/951190#reply9" target="_blank" rel="noopener noreferrer"&gt;V2EX&lt;/a&gt; 以及&lt;a href="https://0xffff.one/d/1521-nixos-yu-nix-flakes-xin-shou-ru-men/4" target="_blank" rel="noopener noreferrer"&gt;0xffff.one&lt;/a&gt; 等平台上各位朋友的反馈、批评与建议 ❤️&lt;/p&gt;</description></item><item><title>Linux 上的 WireGuard 网络分析（一）</title><link>https://thiscute.world/posts/wireguard-on-linux/</link><pubDate>Tue, 28 Mar 2023 22:19:25 +0800</pubDate><guid>https://thiscute.world/posts/wireguard-on-linux/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;阅读此文章需要前置知识：Linux 网络基础知识、iptables、conntrack&lt;/p&gt;
+&lt;/blockquote&gt;&lt;blockquote&gt;
+ &lt;p&gt;本文内容部分采用了 Copilot 提示内容，也有部分内容用了 ChatGPT 免费版进行分析，确实都比较有帮助。&lt;/p&gt;</description></item><item><title>Linux/Windows/MacOSX 系统常用命令集锦</title><link>https://thiscute.world/posts/common-commands-for-various-operating-systems/</link><pubDate>Sun, 13 Feb 2022 16:09:00 +0800</pubDate><guid>https://thiscute.world/posts/common-commands-for-various-operating-systems/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;个人笔记，只会列出我自己容易忘掉的命令，方便查阅。&lt;/p&gt;
+&lt;/blockquote&gt;&lt;blockquote&gt;
+ &lt;p&gt;内容比较多，适合当参考手册用。可能不太适合从头读到尾&amp;hellip;&lt;/p&gt;
+&lt;/blockquote&gt;&lt;blockquote&gt;
+ &lt;p&gt;本文主要介绍 Linux 命令，顺带介绍下 Windows/MacOSX.&lt;/p&gt;</description></item><item><title>iptables 及 docker 容器网络分析</title><link>https://thiscute.world/posts/iptables-and-container-networks/</link><pubDate>Sun, 15 Aug 2021 19:11:29 +0800</pubDate><guid>https://thiscute.world/posts/iptables-and-container-networks/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;本文仅针对 ipv4 网络&lt;/p&gt;
+&lt;/blockquote&gt;&lt;p&gt;本文先介绍 iptables 的基本概念及常用命令，然后分析 docker/podman 是如何利用 iptables 和
+Linux 虚拟网络接口实现的单机容器网络。&lt;/p&gt;
+&lt;h2 id="一iptables" class="headerLink"&gt;
+ &lt;a href="#%e4%b8%80iptables" class="header-mark"&gt;&lt;/a&gt;一、iptables&lt;/h2&gt;&lt;p&gt;&lt;a href="https://www.netfilter.org/projects/iptables/index.html" target="_blank" rel="noopener noreferrer"&gt;iptables&lt;/a&gt; 提供了包过滤、NAT 以及其他的包处理能力，iptables 应用最多的两个场景是 firewall 和 NAT&lt;/p&gt;</description></item><item><title>Linux 中的虚拟网络接口</title><link>https://thiscute.world/posts/linux-virtual-network-interfaces/</link><pubDate>Sat, 14 Aug 2021 11:13:03 +0800</pubDate><guid>https://thiscute.world/posts/linux-virtual-network-interfaces/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;本文用到的字符画工具：&lt;a href="https://github.com/zenghongtu/vscode-asciiflow2" target="_blank" rel="noopener noreferrer"&gt;vscode-asciiflow2&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;&lt;blockquote&gt;
+ &lt;p&gt;注意: 本文中使用 &lt;code&gt;ip&lt;/code&gt; 命令创建或修改的任何网络配置，都是未持久化的，主机重启即消失。&lt;/p&gt;
+&lt;/blockquote&gt;&lt;p&gt;Linux 具有强大的虚拟网络能力，这也是 openstack 网络、docker 容器网络以及 kubernetes 网络等虚拟网络的基础。&lt;/p&gt;</description></item><item><title>Linux 网络工具中的瑞士军刀 - socat &amp; netcat</title><link>https://thiscute.world/posts/socat-netcat/</link><pubDate>Sun, 11 Apr 2021 16:38:13 +0800</pubDate><guid>https://thiscute.world/posts/socat-netcat/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;文中的命令均在 macOS Big Sure 和 openSUSE Tumbleweed 上测试通过&lt;/p&gt;
+&lt;/blockquote&gt;&lt;h2 id="socat--netcat" class="headerLink"&gt;
+ &lt;a href="#socat--netcat" class="header-mark"&gt;&lt;/a&gt;socat &amp;amp; netcat&lt;/h2&gt;&lt;p&gt;netcat(network cat) 是一个历史悠久的网络工具包，被称作 TCP/IP 的瑞士军刀，各大 Linux 发行版都有默认安装 openbsd 版本的 netcat，它的命令行名称为 &lt;code&gt;nc&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>openSUSE 使用指南</title><link>https://thiscute.world/posts/opensuse-instruction/</link><pubDate>Mon, 04 Jan 2021 08:42:21 +0800</pubDate><guid>https://thiscute.world/posts/opensuse-instruction/</guid><description>&lt;p&gt;openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。但是它的官方包管理器是专有的
+zypper，挺好用的，软件也很新。&lt;/p&gt;
+&lt;p&gt;我最近从 &lt;a href="https://thiscute.world/posts/manjaro-instruction/" rel=""&gt;Manjaro&lt;/a&gt; 切换到了 openSUSE，发现 KDE 桌面确实比
+Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。&lt;/p&gt;</description></item><item><title>Manjaro 使用指南</title><link>https://thiscute.world/posts/manjaro-instruction/</link><pubDate>Sat, 13 Jul 2019 20:38:24 +0800</pubDate><guid>https://thiscute.world/posts/manjaro-instruction/</guid><description>&lt;p&gt;Manjaro 是一个基于 Arch Linux 的 Linux 滚动发行版，用着挺舒服的。最大的特点，是包仓库很丰富，而且都很新。代价是偶尔会出些小毛病。&lt;/p&gt;</description></item><item><title>通过 systemctl 设置自定义 Service</title><link>https://thiscute.world/posts/systemd-basics/</link><pubDate>Mon, 28 Jan 2019 20:13:00 +0800</pubDate><guid>https://thiscute.world/posts/systemd-basics/</guid><description>&lt;h2 id="前言" class="headerLink"&gt;
+ &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;如果要在Linux 上设置一个开机自启，出现问题自动重启，并且有良好日志的程序，比较流行的方法有&lt;code&gt;supervisord&lt;/code&gt;、&lt;code&gt;systemd&lt;/code&gt;，除此之外，还有 upstart、runit 等类似的工具。但是自从 systemd 被
+ubuntu、centos 等主流 Linux 发行版应用以来，systemd 渐渐成为主流方案。&lt;/p&gt;</description></item><item><title>常见压缩格式的区别，及 Linux 下的压缩相关指令</title><link>https://thiscute.world/posts/compression-related-instructions-under-linux/</link><pubDate>Mon, 14 Jan 2019 19:51:00 +0800</pubDate><guid>https://thiscute.world/posts/compression-related-instructions-under-linux/</guid><description>&lt;blockquote&gt;
+ &lt;p&gt;可先浏览加粗部分&lt;/p&gt;
+&lt;/blockquote&gt;&lt;h2 id="一常见压缩档" class="headerLink"&gt;
+ &lt;a href="#%e4%b8%80%e5%b8%b8%e8%a7%81%e5%8e%8b%e7%bc%a9%e6%a1%a3" class="header-mark"&gt;&lt;/a&gt;一、常见压缩档&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;*.zip | zip 程序压缩打包的档案； （很常见，但是因为不包含文档名编码信息，跨平台可能会乱码）
+*.rar | rar 程序压缩打包的档案；（在windows上很常见，但是是商业软件。）
+*.gz | gzip 程序压缩的档案； （linux目前使用最广泛的压缩格式）
+*.bz2 | bzip2 程序压缩的档案；
+*.xz | xz 程序压缩的档案；
+*.tar | tar 程序打包的资料，并没有压缩过；
+*.tar.gz | tar 程序打包的档案，其中并且经过 gzip 的压缩 （最常见）
+*.tar.bz2 | tar 程序打包的档案，其中并且经过 bzip2 的压缩
+*.tar.xz | tar 程序打包的档案，其中并且经过 xz 的压缩 （新一代压缩选择）
+*.7z | 7zip 程序压缩打包的档案。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;目前最常见的是 &lt;code&gt;tar.gz&lt;/code&gt; &lt;code&gt;tar.xz&lt;/code&gt; &lt;code&gt;tar.7z&lt;/code&gt; 这三种格式。&lt;/p&gt;</description></item></channel></rss>
