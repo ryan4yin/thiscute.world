@@ -4,6 +4,9 @@ set shell := ["nu", "-c"]
 default:
     @just --list
 
+serve:
+  hugo server --buildDrafts --disableFastRender
+
 new name:
   hugo new posts/{{name}}/index.md
 

@@ -3,8 +3,8 @@ title: "Linux 桌面系统组件概览与故障排查指南"
 subtitle: ""
 description: ""
 date: 2025-09-09T20:17:33+08:00
-lastmod: 2025-09-09T20:17:33+08:00
-draft: true
+lastmod: 2025-10-03T01:59:33+08:00
+draft: false
 
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
