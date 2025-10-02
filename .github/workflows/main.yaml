@@ -12,16 +12,16 @@ jobs:
   update:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
         with:
           submodules: recursive # Fetch Hugo themes recursively
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
           lfs: true # download Git-LFS files
 
       - name: Use Python3
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: "3.13"
           architecture: "x64"
 
       - name: Update Posts Trending
@@ -47,14 +47,14 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "0.136.5"
+          hugo-version: "0.150.0"
           extended: true #  need extended version to support SASS/SCSS
 
       - name: Build
         run: hugo --minify --debug --printUnusedTemplates
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -62,9 +62,9 @@ jobs:
           cname: thiscte.world
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
-          node-version: "16.x"
+          node-version: "24.x"
       - name: Push Argolia Index
         run: |
           npm install algoliasearch@4.12.1
