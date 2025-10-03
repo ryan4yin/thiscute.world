@@ -1,6 +1,6 @@
 <!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>openSUSE 使用指南 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:url" content="https://thiscute.world/posts/opensuse-instruction/"><meta property="og:site_name" content="This Cute World"><meta property="og:title" content="openSUSE 使用指南"><meta property="og:description" content="openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。
 我最近从 Manjaro 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-01-04T08:42:21+08:00"><meta property="article:modified_time" content="2021-01-04T08:42:21+08:00"><meta property="article:tag" content="OpenSUSE"><meta property="article:tag" content="Linux"><meta property="og:image" content="https://thiscute.world/posts/opensuse-instruction/linux-opensuse.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/opensuse-instruction/linux-opensuse.webp"><meta name=twitter:title content="openSUSE 使用指南"><meta name=twitter:description content="openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。但是它的官方包管理器是专有的 zypper，挺好用的，软件也很新。
-我最近从 Manjaro 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/opensuse-instruction/><link rel=prev href=https://thiscute.world/posts/2020-summary/><link rel=next href=https://thiscute.world/posts/experience-of-pulumi/><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"openSUSE 使用指南","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/opensuse-instruction/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/opensuse-instruction/linux-opensuse.webp","width":850,"height":314}],"genre":"posts","keywords":["openSUSE","Linux"],"wordcount":4367,"url":"https://thiscute.world/posts/opensuse-instruction/","datePublished":"2021-01-04T08:42:21+08:00","dateModified":"2021-01-04T08:42:21+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":[{"@type":"Person","name":"於清樂","url":null}],"description":""}</script></head><body data-instant-intensity=viewport><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><div class=wrapper><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+我最近从 Manjaro 切换到了 openSUSE，发现 KDE 桌面确实比 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/opensuse-instruction/><link rel=prev href=https://thiscute.world/posts/2020-summary/><link rel=next href=https://thiscute.world/posts/experience-of-pulumi/><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"openSUSE 使用指南","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/opensuse-instruction/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/opensuse-instruction/linux-opensuse.webp","width":850,"height":314}],"genre":"posts","keywords":["openSUSE","Linux"],"wordcount":4367,"url":"https://thiscute.world/posts/opensuse-instruction/","datePublished":"2021-01-04T08:42:21+08:00","dateModified":"2021-01-04T08:42:21+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":[{"@type":"Person","name":"於清樂","url":null}],"description":""}</script></head><body data-instant-intensity=viewport class="tw-flex tw-min-h-screen tw-flex-col"><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
 <select class=language-select aria-label=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/opensuse-instruction/ selected>Simplified Chinese</option></select>
 </button><span class="menu-item search" id=search-desktop>
 <input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
@@ -16,32 +16,28 @@
 <button class="search-button search-toggle tw-h-10" id=search-toggle-mobile title=搜索>
 <svg class="icon" viewBox="0 0 512 512"><path d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
 </button>
-<button class="search-button search-clear" id=search-clear-mobile title=清空>
+<button class="search-button search-clear tw-h-fit" id=search-clear-mobile title=清空>
 <svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3.0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3.0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3.0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3.0 17L312 256l65.6 65.1z"/></svg>
 </button>
 <span class="search-button search-loading tw-animate-spin" id=search-loading-mobile><svg class="icon" viewBox="0 0 512 512"><path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49.0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156.0c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/></svg></span></div><button class=search-cancel id=search-cancel-mobile>
 取消</button></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><button class="menu-item theme-switch tw-w-full" aria-label=切换主题>
 <svg class="icon" viewBox="0 0 512 512"><path d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705.0 184 82.311 184 184 0 101.705-82.311 184-184 184z"/></svg>
 </button><button class="menu-item tw-w-full" title>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
-<select class=language-select title onchange="location=this.value"><option value=/posts/opensuse-instruction/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#一zypper-的基础命令>一、zypper 的基础命令</a></li><li><a href=#install-software>Install Software</a><ul><li><a href=#ide--编程语言>IDE + 编程语言</a></li><li><a href=#容器--kubernetes>容器 + Kubernetes</a></li><li><a href=#办公音乐聊天>办公、音乐、聊天</a></li><li><a href=#安装输入法>安装输入法</a></li><li><a href=#qemukvm>QEMU/KVM</a></li><li><a href=#vpn-连接与防火墙>VPN 连接与防火墙</a></li></ul></li><li><a href=#触摸板手势>触摸板手势</a></li><li><a href=#安装-nvidia-闭源驱动>安装 Nvidia 闭源驱动</a></li><li><a href=#设置代理工具>设置代理工具</a></li><li><a href=#设置-zypper-使用-proxy-下载更新>设置 zypper 使用 proxy 下载更新</a><ul><li><a href=#kde-connect>KDE Connect</a></li><li><a href=#vpn-连接与其他防火墙相关配置>VPN 连接与其他防火墙相关配置</a></li><li><a href=#openssh-服务>OpenSSH 服务</a><ul><li><a href=#2-设置使用密钥登录>2. 设置使用密钥登录</a></li><li><a href=#2-调整安全设置>2. 调整安全设置</a></li></ul></li><li><a href=#firewall-防火墙介绍>firewall 防火墙介绍</a></li></ul></li><li><a href=#其他设置>其他设置</a></li></ul></nav></div></div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2021-01-04 data-pagefind-body>openSUSE 使用指南</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><span class=screen-reader-text></span><a href=https://thiscute.world/authors/ryan4yin><img class="tw-inline-block tw-max-h-4 tw-rounded-full tw-translate-y-[-2px] tw-mr-1" src=/avatar/myself.webp alt="於清樂 avatar" height=16 width=16>於清樂</a></span>
+<select class=language-select title onchange="location=this.value"><option value=/posts/opensuse-instruction/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class="tw-mx-4 tw-flex-1"><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#一zypper-的基础命令>一、zypper 的基础命令</a></li><li><a href=#install-software>Install Software</a><ul><li><a href=#ide--编程语言>IDE + 编程语言</a></li><li><a href=#容器--kubernetes>容器 + Kubernetes</a></li><li><a href=#办公音乐聊天>办公、音乐、聊天</a></li><li><a href=#安装输入法>安装输入法</a></li><li><a href=#qemukvm>QEMU/KVM</a></li><li><a href=#vpn-连接与防火墙>VPN 连接与防火墙</a></li></ul></li><li><a href=#触摸板手势>触摸板手势</a></li><li><a href=#安装-nvidia-闭源驱动>安装 Nvidia 闭源驱动</a></li><li><a href=#设置代理工具>设置代理工具</a></li><li><a href=#设置-zypper-使用-proxy-下载更新>设置 zypper 使用 proxy 下载更新</a><ul><li><a href=#kde-connect>KDE Connect</a></li><li><a href=#vpn-连接与其他防火墙相关配置>VPN 连接与其他防火墙相关配置</a></li><li><a href=#openssh-服务>OpenSSH 服务</a><ul><li><a href=#2-设置使用密钥登录>2. 设置使用密钥登录</a></li><li><a href=#2-调整安全设置>2. 调整安全设置</a></li></ul></li><li><a href=#firewall-防火墙介绍>firewall 防火墙介绍</a></li></ul></li><li><a href=#其他设置>其他设置</a></li></ul></nav></div></div><dialog id=toc-dialog class="tw-max-w-full tw-w-full tw-max-h-full tw-h-full tw-ml-16"><div class="toc tw-mx-4 tw-max-w-full"><h2 class="tw-mx-0 tw-my-6 tw-uppercase tw-text-2xl">目录</h2><div class=toc-content><nav id=TableOfContents><ul><li><a href=#一zypper-的基础命令>一、zypper 的基础命令</a></li><li><a href=#install-software>Install Software</a><ul><li><a href=#ide--编程语言>IDE + 编程语言</a></li><li><a href=#容器--kubernetes>容器 + Kubernetes</a></li><li><a href=#办公音乐聊天>办公、音乐、聊天</a></li><li><a href=#安装输入法>安装输入法</a></li><li><a href=#qemukvm>QEMU/KVM</a></li><li><a href=#vpn-连接与防火墙>VPN 连接与防火墙</a></li></ul></li><li><a href=#触摸板手势>触摸板手势</a></li><li><a href=#安装-nvidia-闭源驱动>安装 Nvidia 闭源驱动</a></li><li><a href=#设置代理工具>设置代理工具</a></li><li><a href=#设置-zypper-使用-proxy-下载更新>设置 zypper 使用 proxy 下载更新</a><ul><li><a href=#kde-connect>KDE Connect</a></li><li><a href=#vpn-连接与其他防火墙相关配置>VPN 连接与其他防火墙相关配置</a></li><li><a href=#openssh-服务>OpenSSH 服务</a><ul><li><a href=#2-设置使用密钥登录>2. 设置使用密钥登录</a></li><li><a href=#2-调整安全设置>2. 调整安全设置</a></li></ul></li><li><a href=#firewall-防火墙介绍>firewall 防火墙介绍</a></li></ul></li><li><a href=#其他设置>其他设置</a></li></ul></nav></div></div></dialog><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2021-01-04 data-pagefind-body>openSUSE 使用指南</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><span class=screen-reader-text></span><a href=https://thiscute.world/authors/ryan4yin/><img class="tw-inline-block tw-max-h-4 tw-rounded-full tw-translate-y-[-2px] tw-mr-1" src=/avatar/myself.webp alt="於清樂 avatar" height=16 width=16>於清樂</a></span>
 </span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><svg class="icon" viewBox="0 0 512 512"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>Tech</a></span></div><div class=post-meta-line><svg class="icon" viewBox="0 0 448 512"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;<time datetime=2021-01-04>2021-01-04</time>&nbsp;<svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime=2021-01-04>2021-01-04</time>&nbsp;<svg class="icon" viewBox="0 0 512 512"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 4367 字&nbsp;
 <svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5.0-2e2-89.5-2e2-2e2S145.5 56 256 56s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2zm61.8-104.4-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6.0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 20 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/opensuse-instruction/linux-opensuse.webp height=314 width=850></div><div class="details toc print:!tw-block" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
 <span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一zypper-的基础命令>一、zypper 的基础命令</a></li><li><a href=#install-software>Install Software</a><ul><li><a href=#ide--编程语言>IDE + 编程语言</a></li><li><a href=#容器--kubernetes>容器 + Kubernetes</a></li><li><a href=#办公音乐聊天>办公、音乐、聊天</a></li><li><a href=#安装输入法>安装输入法</a></li><li><a href=#qemukvm>QEMU/KVM</a></li><li><a href=#vpn-连接与防火墙>VPN 连接与防火墙</a></li></ul></li><li><a href=#触摸板手势>触摸板手势</a></li><li><a href=#安装-nvidia-闭源驱动>安装 Nvidia 闭源驱动</a></li><li><a href=#设置代理工具>设置代理工具</a></li><li><a href=#设置-zypper-使用-proxy-下载更新>设置 zypper 使用 proxy 下载更新</a><ul><li><a href=#kde-connect>KDE Connect</a></li><li><a href=#vpn-连接与其他防火墙相关配置>VPN 连接与其他防火墙相关配置</a></li><li><a href=#openssh-服务>OpenSSH 服务</a><ul><li><a href=#2-设置使用密钥登录>2. 设置使用密钥登录</a></li><li><a href=#2-调整安全设置>2. 调整安全设置</a></li></ul></li><li><a href=#firewall-防火墙介绍>firewall 防火墙介绍</a></li></ul></li><li><a href=#其他设置>其他设置</a></li></ul></nav></div></div><div class=content id=content data-pagefind-body><p>openSUSE 是一个基于 RPM 的发行版，这和 RHEL/CentOS 一致。但是它的官方包管理器是专有的
 zypper，挺好用的，软件也很新。</p><p>我最近从 <a href=/posts/manjaro-instruction/ rel>Manjaro</a> 切换到了 openSUSE，发现 KDE 桌面确实比
 Manjaro 更丝滑，而且社区源 OBS 体验下来比 AUR 更舒服。</p><p>尤其是容器/Kubernetes 方面，源里面的东西比 AUR 更丰富，而且是官方维护的。本文算是对迁移流程做的一个总结。</p><blockquote><p>本文以 openSUSE Tumbleweed 为基础编写，这是一个和 Manjaro/Arch 一样的滚动发行版，软件源都很新。openSUSE 社区的大部分用户都是使用的 Tumbleweed. 它的硬件兼容性也要比 openSUSE
-Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。</p></blockquote><h2 id=一zypper-的基础命令 class=headerLink><a href=#%e4%b8%80zypper-%e7%9a%84%e5%9f%ba%e7%a1%80%e5%91%bd%e4%bb%a4 class=header-mark></a>一、zypper 的基础命令</h2><p>zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如国内的清华源等。</p><p>但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+Leap（稳定版）好——实测小米游戏本安装 Leap，休眠后 Touchpad 会失灵。</p></blockquote><h2 id=一zypper-的基础命令 class=headerLink><a href=#%e4%b8%80zypper-%e7%9a%84%e5%9f%ba%e7%a1%80%e5%91%bd%e4%bb%a4 class=header-mark></a>一、zypper 的基础命令</h2><p>zypper 的源在国内比较慢，但实际上下载的时候，zypper 会智能选择最快的镜像源下载软件包，比如国内的清华源等。</p><p>但是我发现官方的源索引更新太慢，甚至经常失败。因此没办法，还是得手动设置镜像源：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -83,19 +79,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 禁用原有
 </span></span><span class=line><span class=cl>sudo zypper mr --disable repo-oss repo-non-oss repo-update repo-update-non-oss repo-debug
 </span></span><span class=line><span class=cl><span class=c1># 添加北外镜像源</span>
 </span></span><span class=line><span class=cl>sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/oss/ bfsu-oss
-</span></span><span class=line><span class=cl>sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss/ bfsu-non-oss</span></span></code></pre></div><p>然后就是 zypper 的常用命令：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo zypper ar -fcg https://mirrors.bfsu.edu.cn/opensuse/tumbleweed/repo/non-oss/ bfsu-non-oss</span></span></code></pre></div><p>然后就是 zypper 的常用命令：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -143,19 +135,15 @@ tw-scrollbar-thin"><span class=line><span class=cl>sudo zypper refresh  <span cl
 </span></span><span class=line><span class=cl>sudo zypper remove --clean-deps &lt;package-name&gt;  <span class=c1># 卸载程序，注意添加 --clean-deps 或者 -u，否则不会卸载依赖项！</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>sudo zypper clean  <span class=c1># 清理本地的包缓存</span></span></span></code></pre></div><h2 id=install-software class=headerLink><a href=#install-software class=header-mark></a>Install Software</h2><blockquote><p>这里需要用到<a href=https://mirrors.openSUSE.org/list/bs.html target=_blank rel="noopener noreferrer">OBS(Open Build Service, 类似 arch 的 AUR，但是是预编译的包)</a>，
-因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。建议有条件可以在路由器上加智能代理提速。</p></blockquote><p>安装需要用到的各类软件:</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+因为 OBS 东西太多了，因此不存在完整的国内镜像，平均速度大概 300kb/s。建议有条件可以在路由器上加智能代理提速。</p></blockquote><p>安装需要用到的各类软件:</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -208,19 +196,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 启用 Packm
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># install wireshark</span>
 </span></span><span class=line><span class=cl>sudo zypper install wireshark
-</span></span><span class=line><span class=cl>sudo gpasswd --add <span class=nv>$USER</span> wireshark  <span class=c1>#  将你添加到 wireshark 用户组中</span></span></span></code></pre></div><h3 id=ide--编程语言 class=headerLink><a href=#ide--%e7%bc%96%e7%a8%8b%e8%af%ad%e8%a8%80 class=header-mark></a>IDE + 编程语言</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo gpasswd --add <span class=nv>$USER</span> wireshark  <span class=c1>#  将你添加到 wireshark 用户组中</span></span></span></code></pre></div><h3 id=ide--编程语言 class=headerLink><a href=#ide--%e7%bc%96%e7%a8%8b%e8%af%ad%e8%a8%80 class=header-mark></a>IDE + 编程语言</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -271,19 +255,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># install vsco
 </span></span><span class=line><span class=cl>sudo zypper install dotnet-sdk-5.0
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 安装新版本的 go（源中的版本比较低，更建议从 go 官网下载安装）</span>
-</span></span><span class=line><span class=cl>sudo zypper install go</span></span></code></pre></div><p>通过 tarball/script 安装：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo zypper install go</span></span></code></pre></div><p>通过 tarball/script 安装：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -337,19 +317,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># rustup，rus
 </span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;. /opt/conda/etc/profile.d/conda.sh&#34;</span> &gt;&gt; ~/.bashrc
 </span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;conda activate base&#34;</span> &gt;&gt; ~/.bashrc
 </span></span><span class=line><span class=cl><span class=c1># miniconda 的 entrypoint 默认安装在如下目录，添加到 PATH 中</span>
-</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;export PATH=\$PATH:\$HOME/.local/bin&#34;</span> &gt;&gt; ~/.bashrc</span></span></code></pre></div><p>接下来安装 VSCode 插件，下列是我的插件列表：</p><ol><li>语言：<ol><li>python/go/c#/julia/flutter</li><li>c/c++ extension pack</li><li>rust-analyzer</li><li>shellchecker</li><li>redhat xml & yaml</li><li>even-better-toml</li><li>edit-csv</li><li>vscode-proto3</li></ol></li><li>ansible/terraform</li><li>markdown all in one + Markdown Preview Enhanced</li><li>美化：<ol><li>community material theme</li><li>vscode icons</li><li>glasslt-vsc</li></ol></li><li>docker/kubernetes</li><li>IntelliJ IDEA Keybindings</li><li>gitlens</li><li>prettier</li><li>utils<ol><li>comment translate</li><li>path intellisense</li><li>svg</li><li>visual studio intellicode</li></ol></li><li>remote ssh + remote containers</li><li>rest client</li><li>vscode databases</li></ol><h3 id=容器--kubernetes class=headerLink><a href=#%e5%ae%b9%e5%99%a8--kubernetes class=header-mark></a>容器 + Kubernetes</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;export PATH=\$PATH:\$HOME/.local/bin&#34;</span> &gt;&gt; ~/.bashrc</span></span></code></pre></div><p>接下来安装 VSCode 插件，下列是我的插件列表：</p><ol><li>语言：<ol><li>python/go/c#/julia/flutter</li><li>c/c++ extension pack</li><li>rust-analyzer</li><li>shellchecker</li><li>redhat xml & yaml</li><li>even-better-toml</li><li>edit-csv</li><li>vscode-proto3</li></ol></li><li>ansible/terraform</li><li>markdown all in one + Markdown Preview Enhanced</li><li>美化：<ol><li>community material theme</li><li>vscode icons</li><li>glasslt-vsc</li></ol></li><li>docker/kubernetes</li><li>IntelliJ IDEA Keybindings</li><li>gitlens</li><li>prettier</li><li>utils<ol><li>comment translate</li><li>path intellisense</li><li>svg</li><li>visual studio intellicode</li></ol></li><li>remote ssh + remote containers</li><li>rest client</li><li>vscode databases</li></ol><h3 id=容器--kubernetes class=headerLink><a href=#%e5%ae%b9%e5%99%a8--kubernetes class=header-mark></a>容器 + Kubernetes</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -399,19 +375,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 时髦的新
 </span></span><span class=line><span class=cl>sudo systemctl start docker
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 简单起见，直接用 pip 安装 docker-compose 和 podman-compose</span>
-</span></span><span class=line><span class=cl>sudo pip install docker-compose podman-compose</span></span></code></pre></div><h3 id=办公音乐聊天 class=headerLink><a href=#%e5%8a%9e%e5%85%ac%e9%9f%b3%e4%b9%90%e8%81%8a%e5%a4%a9 class=header-mark></a>办公、音乐、聊天</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo pip install docker-compose podman-compose</span></span></code></pre></div><h3 id=办公音乐聊天 class=headerLink><a href=#%e5%8a%9e%e5%85%ac%e9%9f%b3%e4%b9%90%e8%81%8a%e5%a4%a9 class=header-mark></a>办公、音乐、聊天</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -456,19 +428,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 添加 openS
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># linux qq: https://im.qq.com/linuxqq/download.html</span>
 </span></span><span class=line><span class=cl><span class=c1># 虽然简陋但也够用，发送文件比 KDE Connect 要方便一些。</span>
-</span></span><span class=line><span class=cl>sudo rpm -ivh linux_qq.rpm</span></span></code></pre></div><h3 id=安装输入法 class=headerLink><a href=#%e5%ae%89%e8%a3%85%e8%be%93%e5%85%a5%e6%b3%95 class=header-mark></a>安装输入法</h3><p>我用的输入法是小鹤音形，首先安装 fcitx-rime:</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo rpm -ivh linux_qq.rpm</span></span></code></pre></div><h3 id=安装输入法 class=headerLink><a href=#%e5%ae%89%e8%a3%85%e8%be%93%e5%85%a5%e6%b3%95 class=header-mark></a>安装输入法</h3><p>我用的输入法是小鹤音形，首先安装 fcitx-rime:</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -509,19 +477,15 @@ tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 添加 m17n obs 源：https://build.openSUSE.org/repositories/M17N</span>
 </span></span><span class=line><span class=cl>sudo zypper addrepo <span class=s1>&#39;https://download.opensuse.org/repositories/M17N/openSUSE_Tumbleweed&#39;</span> m17n
 </span></span><span class=line><span class=cl>sudo zypper refresh
-</span></span><span class=line><span class=cl>sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime</span></span></code></pre></div><p>然后，从 <a href=http://flypy.ys168.com/ target=_blank rel="noopener noreferrer">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo zypper install fcitx5 fcitx5-configtool fcitx5-qt5 fcitx5-rime</span></span></code></pre></div><p>然后，从 <a href=http://flypy.ys168.com/ target=_blank rel="noopener noreferrer">http://flypy.ys168.com/</a> 下载最新的鼠须管（MacOS）配置文件，将解压得到的 rime 文件夹拷贝到 ~/.local/share/fcitx5/ 下：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -559,19 +523,15 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl>mv rime ~/.local/share/fcitx5/</span></span></code></pre></div><p>现在重启系统，在 fcitx5 配置里面添加 rime「中州韵」，就可以正常使用小鹤音形了。</p><h3 id=qemukvm class=headerLink><a href=#qemukvm class=header-mark></a>QEMU/KVM</h3><p>不得不说，openSUSE 安装 KVM 真的超方便，纯 GUI 操作：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+tw-scrollbar-thin"><span class=line><span class=cl>mv rime ~/.local/share/fcitx5/</span></span></code></pre></div><p>现在重启系统，在 fcitx5 配置里面添加 rime「中州韵」，就可以正常使用小鹤音形了。</p><h3 id=qemukvm class=headerLink><a href=#qemukvm class=header-mark></a>QEMU/KVM</h3><p>不得不说，openSUSE 安装 KVM 真的超方便，纯 GUI 操作：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -611,19 +571,15 @@ tw-overflow-y-hidden
 tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># see: https://doc.openSUSE.org/documentation/leap/virtualization/html/book-virt/cha-vt-installation.html</span>
 </span></span><span class=line><span class=cl>sudo yast2 virtualization
-</span></span><span class=line><span class=cl><span class=c1># enter to terminal ui, select kvm + kvm tools, and then install it.</span></span></span></code></pre></div><p>KVM 的详细文档参见 <a href=../../virtual%20machine/KVM/README.md rel>KVM/README.md</a></p><h3 id=vpn-连接与防火墙 class=headerLink><a href=#vpn-%e8%bf%9e%e6%8e%a5%e4%b8%8e%e9%98%b2%e7%81%ab%e5%a2%99 class=header-mark></a>VPN 连接与防火墙</h3><p>防火墙默认会禁用 pptp 等 vpn 协议的端口，需要手动打开.</p><p>允许使用 PPTP 协议：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl><span class=c1># enter to terminal ui, select kvm + kvm tools, and then install it.</span></span></span></code></pre></div><p>KVM 的详细文档参见 <a href=../../virtual%20machine/KVM/README.md rel>KVM/README.md</a></p><h3 id=vpn-连接与防火墙 class=headerLink><a href=#vpn-%e8%bf%9e%e6%8e%a5%e4%b8%8e%e9%98%b2%e7%81%ab%e5%a2%99 class=header-mark></a>VPN 连接与防火墙</h3><p>防火墙默认会禁用 pptp 等 vpn 协议的端口，需要手动打开.</p><p>允许使用 PPTP 协议：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -671,19 +627,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 允许 gre �
 </span></span><span class=line><span class=cl>firewall-cmd --add-port<span class=o>=</span>1723/tcp --permanent
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>sudo firewall-cmd --reload</span></span></code></pre></div><p>允许使用 wireguard 协议，此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard
-自身的配置文件 <code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p><h2 id=触摸板手势 class=headerLink><a href=#%e8%a7%a6%e6%91%b8%e6%9d%bf%e6%89%8b%e5%8a%bf class=header-mark></a>触摸板手势</h2><p>参考 <a href=https://github.com/bulletmark/libinput-gestures target=_blank rel="noopener noreferrer">libinput-gestures</a></p><h2 id=安装-nvidia-闭源驱动 class=headerLink><a href=#%e5%ae%89%e8%a3%85-nvidia-%e9%97%ad%e6%ba%90%e9%a9%b1%e5%8a%a8 class=header-mark></a>安装 Nvidia 闭源驱动</h2><blockquote><p>完全参考官方文档 <a href=https://en.opensuse.org/SDB:NVIDIA_drivers target=_blank rel="noopener noreferrer">https://en.opensuse.org/SDB:NVIDIA_drivers</a></p></blockquote><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+自身的配置文件 <code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p><h2 id=触摸板手势 class=headerLink><a href=#%e8%a7%a6%e6%91%b8%e6%9d%bf%e6%89%8b%e5%8a%bf class=header-mark></a>触摸板手势</h2><p>参考 <a href=https://github.com/bulletmark/libinput-gestures target=_blank rel="noopener noreferrer">libinput-gestures</a></p><h2 id=安装-nvidia-闭源驱动 class=headerLink><a href=#%e5%ae%89%e8%a3%85-nvidia-%e9%97%ad%e6%ba%90%e9%a9%b1%e5%8a%a8 class=header-mark></a>安装 Nvidia 闭源驱动</h2><blockquote><p>完全参考官方文档 <a href=https://en.opensuse.org/SDB:NVIDIA_drivers target=_blank rel="noopener noreferrer">https://en.opensuse.org/SDB:NVIDIA_drivers</a></p></blockquote><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -732,19 +684,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 添加 Nvidi
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 安装驱动</span>
 </span></span><span class=line><span class=cl>zypper in  x11-video-nvidiaG06 x11-video-nvidiaG06</span></span></code></pre></div><p>如果你还需要安装 CUDA 来本地炼丹，CUDA 的安装有两种方法：</p><ul><li>直接将 CUDA 安装在本机，可参考<a href=https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html target=_blank rel="noopener noreferrer">NVIDIA CUDA Installation Guide for Linux</a></li><li>使用 Docker 容器炼丹，可参考 <a href=https://github.com/NVIDIA/nvidia-docker target=_blank rel="noopener noreferrer">nvidia-docker</a></li></ul><h2 id=设置代理工具 class=headerLink><a href=#%e8%ae%be%e7%bd%ae%e4%bb%a3%e7%90%86%e5%b7%a5%e5%85%b7 class=header-mark></a>设置代理工具</h2><p>为了加速网络或者访问一些国内不存在的网站，网络代理是必不可少的工具。</p><p>我习惯使用 clash，极简安装方法如下：</p><ol><li>首先 <code>sudo zypper in clash</code> 安装好 clash</li><li>clash 环境配置（记不清是否得手动配置这个了&mldr;）<ol><li>下载好 <a href=https://github.com/Dreamacro/maxmind-geoip/releases target=_blank rel="noopener noreferrer">Country.mmdb</a> 放到<code>~/.config/clash</code> 中</li><li>好像还需要下载下 clash-dashboard 到 <code>~/.config/clash/ui</code></li></ol></li><li>找到你自己的 clash 配置订阅地址（各种机场都会提供的），写个小脚本内容为<code>curl "&lt;订阅地址>" > ~/.config/clash/config.yaml</code><ol><li>如果这个文件夹还没有就先创建一下</li><li>如果代理是自己搭建的，那就自己写这个配置咯</li></ol></li><li>把脚本放在 PATH 中的某个目录中，方便随时调用更新</li><li>使用 tmux 后台启动 clash，代理就设置完成了<ol><li>浏览器可以通过 swichomega 来设置细致的代理规则</li><li>命令行可以直接使用<code>export HTTP_PROXY=http://127.0.0.1; export HTTPS_PROXY=http://127.0.0.1</code> 来使用代理，大部分命令行程序都会使用这两个环境变量的配置。</li></ol></li><li>一般机场给的 clash 配置都会直接开启 clash Web 配置页，可以通过<a href=http://localhost:9090/ui/#/proxies target=_blank rel="noopener noreferrer">http://localhost:9090/ui/#/proxies</a> 直接访问</li></ol><h2 id=设置-zypper-使用-proxy-下载更新 class=headerLink><a href=#%e8%ae%be%e7%bd%ae-zypper-%e4%bd%bf%e7%94%a8-proxy-%e4%b8%8b%e8%bd%bd%e6%9b%b4%e6%96%b0 class=header-mark></a>设置 zypper 使用 proxy 下载更新</h2><p>zypper 默认不会读取 <code>HTTP_PROXY</code> 跟 <code>HTTPS_PROXY</code> 等环境变量，对于一些无国内镜像的源而言，
-可以通过如下方式配置走代理提升下载速度（这需要你已经有本地代理才行，比如说 clash）：</p><ul><li>进入 YaST GUI</li><li>在搜索框直接搜索 <code>proxy</code> 即可找到对应的配置项</li><li>配置好 http 以及 https 协议的代理地址，如果是本地的 clash，可以直接填<code>http://127.0.0.1:7890</code></li><li>在「No Proxy Domains」中添加国内镜像源地址，使它们不要走代理<ul><li>如果是跟我的教程走的，应该需要将这个值改成<code>localhost,127.0.0.1,mirrors.bfsu.edu.cn,mirrors.aliyun.com</code></li></ul></li></ul><h3 id=kde-connect class=headerLink><a href=#kde-connect class=header-mark></a>KDE Connect</h3><p>KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共享文件夹、通知同步等等。总而言之非常好用，只要手机和 PC 处于同一个局域网就行，不需要什么数据线。</p><p>如果安装系统时选择了打开防火墙，KDE Connect 是连不上的，需要手动开放端口号：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+可以通过如下方式配置走代理提升下载速度（这需要你已经有本地代理才行，比如说 clash）：</p><ul><li>进入 YaST GUI</li><li>在搜索框直接搜索 <code>proxy</code> 即可找到对应的配置项</li><li>配置好 http 以及 https 协议的代理地址，如果是本地的 clash，可以直接填<code>http://127.0.0.1:7890</code></li><li>在「No Proxy Domains」中添加国内镜像源地址，使它们不要走代理<ul><li>如果是跟我的教程走的，应该需要将这个值改成<code>localhost,127.0.0.1,mirrors.bfsu.edu.cn,mirrors.aliyun.com</code></li></ul></li></ul><h3 id=kde-connect class=headerLink><a href=#kde-connect class=header-mark></a>KDE Connect</h3><p>KDE Connect 是一个 PC 手机协同工具，可以在电脑和手机之间共享剪切版、远程输入、发送文件、共享文件夹、通知同步等等。总而言之非常好用，只要手机和 PC 处于同一个局域网就行，不需要什么数据线。</p><p>如果安装系统时选择了打开防火墙，KDE Connect 是连不上的，需要手动开放端口号：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -791,19 +739,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># see: https:/
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 确认下已经开放这些端口</span>
 </span></span><span class=line><span class=cl>sudo firewall-cmd --list-all</span></span></code></pre></div><p>然后手机（Android）安装好 KDE Connect，就能开始享受了。</p><p>目前存在的 Bug:</p><ul><li><svg class="icon" viewBox="0 0 448 512"><path d="M4e2 32H48C21.5 32 0 53.5.0 80v352c0 26.5 21.5 48 48 48h352c26.5.0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 4e2H54c-3.3.0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3.0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"/></svg> Android 10 禁止了后台应用读取剪切版，这导致 KDE Connect 只能从 PC 同步到手机，而无法反向同步。<ul><li>如果你有 ROOT 权限，可以参考<a href=https://szclsya.me/posts/android/fix-clipboard-android-10/ target=_blank rel="noopener noreferrer">Fix clipboard permission on Android 10</a>
-的方法，安装 ClipboardWhitelist 来打开权限。</li><li>否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。</li></ul></li></ul><h3 id=vpn-连接与其他防火墙相关配置 class=headerLink><a href=#vpn-%e8%bf%9e%e6%8e%a5%e4%b8%8e%e5%85%b6%e4%bb%96%e9%98%b2%e7%81%ab%e5%a2%99%e7%9b%b8%e5%85%b3%e9%85%8d%e7%bd%ae class=header-mark></a>VPN 连接与其他防火墙相关配置</h3><p>防火墙默认会禁用所有对外端口，需要手动打开。</p><p>允许使用 PPTP 协议：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+的方法，安装 ClipboardWhitelist 来打开权限。</li><li>否则，貌似就只能使用手机端的「远程输入」模块来手动传输文本了。</li></ul></li></ul><h3 id=vpn-连接与其他防火墙相关配置 class=headerLink><a href=#vpn-%e8%bf%9e%e6%8e%a5%e4%b8%8e%e5%85%b6%e4%bb%96%e9%98%b2%e7%81%ab%e5%a2%99%e7%9b%b8%e5%85%b3%e9%85%8d%e7%bd%ae class=header-mark></a>VPN 连接与其他防火墙相关配置</h3><p>防火墙默认会禁用所有对外端口，需要手动打开。</p><p>允许使用 PPTP 协议：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -853,19 +797,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 允许 gre �
 </span></span><span class=line><span class=cl>sudo firewall-cmd --reload
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 确认下已经开放这些端口</span>
-</span></span><span class=line><span class=cl>sudo firewall-cmd --list-all</span></span></code></pre></div><p>允许使用 wireguard 协议：</p><p>此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件<code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p><h3 id=openssh-服务 class=headerLink><a href=#openssh-%e6%9c%8d%e5%8a%a1 class=header-mark></a>OpenSSH 服务</h3><p>为了局域网数据传输方便，以及远程使用 PC，我一般都会给自己的 Linux 机器打开 OpenSSH 服务。</p><p>在 OpenSUSE 上启用 OpenSSH 服务的流程：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo firewall-cmd --list-all</span></span></code></pre></div><p>允许使用 wireguard 协议：</p><p>此协议只使用 tcp 协议，而且可以端口号可以自定义。不过 wireguard 自身的配置文件<code>/etc/wireguard/xxx.conf</code> 就能配置 iptables 参数放行相关端口，这里就不赘述了。</p><h3 id=openssh-服务 class=headerLink><a href=#openssh-%e6%9c%8d%e5%8a%a1 class=header-mark></a>OpenSSH 服务</h3><p>为了局域网数据传输方便，以及远程使用 PC，我一般都会给自己的 Linux 机器打开 OpenSSH 服务。</p><p>在 OpenSUSE 上启用 OpenSSH 服务的流程：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -905,19 +845,15 @@ tw-overflow-y-hidden
 tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl>sudo systemctl <span class=nb>enable</span> sshd
 </span></span><span class=line><span class=cl>sudo systemctl start sshd
-</span></span><span class=line><span class=cl>sudo systemctl status sshd</span></span></code></pre></div><h4 id=2-设置使用密钥登录 class=headerLink><a href=#2-%e8%ae%be%e7%bd%ae%e4%bd%bf%e7%94%a8%e5%af%86%e9%92%a5%e7%99%bb%e5%bd%95 class=header-mark></a>2. 设置使用密钥登录</h4><p>显然密钥登录才足够安全，这里介绍下我如何设置密钥登录。</p><p>先生成密钥对（如果你常用 github，本地应该已经有密钥对了，可以考虑直接使用同一个密钥对，这样就能跳过这一步）：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>sudo systemctl status sshd</span></span></code></pre></div><h4 id=2-设置使用密钥登录 class=headerLink><a href=#2-%e8%ae%be%e7%bd%ae%e4%bd%bf%e7%94%a8%e5%af%86%e9%92%a5%e7%99%bb%e5%bd%95 class=header-mark></a>2. 设置使用密钥登录</h4><p>显然密钥登录才足够安全，这里介绍下我如何设置密钥登录。</p><p>先生成密钥对（如果你常用 github，本地应该已经有密钥对了，可以考虑直接使用同一个密钥对，这样就能跳过这一步）：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -958,19 +894,15 @@ tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 或者直接命令行指定密钥算法类型(-t)、名称与路径(-f)、注释(-C)、密钥的保护密码(-P)。</span>
 </span></span><span class=line><span class=cl><span class=c1>## 当密钥较多时，注释可用于区分密钥的用途。</span>
 </span></span><span class=line><span class=cl><span class=c1>## 算法推荐使用 ed25519/ecdsa，默认的 rsa 算法目前已不推荐使用（需要很长的密钥和签名才能保证安全）。</span>
-</span></span><span class=line><span class=cl>ssh-keygen -t ed25519 -f id_rsa_for_xxx -C <span class=s2>&#34;ssh key for xxx&#34;</span> -P <span class=s1>&#39;&#39;</span></span></span></code></pre></div><p>接下来需要把公钥追加到主机的 <code>$HOME/.ssh/authorized_keys</code> 文件的末尾（<code>$HOME</code> 是 user 的家目录，不是 root 的家目录，请看清楚了）：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>ssh-keygen -t ed25519 -f id_rsa_for_xxx -C <span class=s2>&#34;ssh key for xxx&#34;</span> -P <span class=s1>&#39;&#39;</span></span></span></code></pre></div><p>接下来需要把公钥追加到主机的 <code>$HOME/.ssh/authorized_keys</code> 文件的末尾（<code>$HOME</code> 是 user 的家目录，不是 root 的家目录，请看清楚了）：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -1014,19 +946,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 方法一，
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 方法二：如果你的密钥对在其他主机上，可以直接在该主机上执行如下命令将公钥添加到 openSUSE 机器上，会有提示输入密码</span>
 </span></span><span class=line><span class=cl><span class=c1>#   -i 设定公钥位置，默认使用 ~/.ssh/id_rsa.pub</span>
-</span></span><span class=line><span class=cl>ssh-copy-id  -i path/to/key_name.pub user@host</span></span></code></pre></div><p>现在就完事了，可以使用密钥钥登录试试：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>ssh-copy-id  -i path/to/key_name.pub user@host</span></span></code></pre></div><p>现在就完事了，可以使用密钥钥登录试试：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -1068,19 +996,15 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1>#   -i 设定�
 </span></span><span class=line><span class=cl>ssh &lt;username&gt;@&lt;server-ip&gt; -i &lt;rsa_private_key&gt;
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 举例</span>
-</span></span><span class=line><span class=cl>ssh ubuntu@111.222.333.444 -i ~/.ssh/id_rsa_for_server</span></span></code></pre></div><h4 id=2-调整安全设置 class=headerLink><a href=#2-%e8%b0%83%e6%95%b4%e5%ae%89%e5%85%a8%e8%ae%be%e7%bd%ae class=header-mark></a>2. 调整安全设置</h4><p>openSUSE 的 OpenSSH 服务默认是允许密码登录的，虽然也有登录速率限制，还是会有点危险。</p><p>既然我们前面已经设置好了密钥登录，现在就可以把密码登录功能完全禁用掉，提升安全性。</p><p>请取消注释并修改 <code>/usr/etc/ssh/sshd_config</code> 中如下参数的值：</p><blockquote><p>注意 OpenSSH 的主配置文件是 <code>/usr/etc/ssh/sshd_config</code>，而不是大部分 Linux 发行版使用的<code>/etc/ssh/sshd_config</code>。</p></blockquote><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>ssh ubuntu@111.222.333.444 -i ~/.ssh/id_rsa_for_server</span></span></code></pre></div><h4 id=2-调整安全设置 class=headerLink><a href=#2-%e8%b0%83%e6%95%b4%e5%ae%89%e5%85%a8%e8%ae%be%e7%bd%ae class=header-mark></a>2. 调整安全设置</h4><p>openSUSE 的 OpenSSH 服务默认是允许密码登录的，虽然也有登录速率限制，还是会有点危险。</p><p>既然我们前面已经设置好了密钥登录，现在就可以把密码登录功能完全禁用掉，提升安全性。</p><p>请取消注释并修改 <code>/usr/etc/ssh/sshd_config</code> 中如下参数的值：</p><blockquote><p>注意 OpenSSH 的主配置文件是 <code>/usr/etc/ssh/sshd_config</code>，而不是大部分 Linux 发行版使用的<code>/etc/ssh/sshd_config</code>。</p></blockquote><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">conf</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">conf</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -1135,19 +1059,15 @@ tw-scrollbar-thin"><span class=line><span class=cl># 安全相关配置
 </span></span><span class=line><span class=cl># 禁用掉基于 password 的交互式认证
 </span></span><span class=line><span class=cl>KbdInteractiveAuthentication no
 </span></span><span class=line><span class=cl># 禁用 PAM 模块
-</span></span><span class=line><span class=cl>UsePAM no</span></span></code></pre></div><p>改完后再重启下 sshd 服务并用 ssh 命令登录测试确认功能已生效：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+</span></span><span class=line><span class=cl>UsePAM no</span></span></code></pre></div><p>改完后再重启下 sshd 服务并用 ssh 命令登录测试确认功能已生效：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">shell</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">shell</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -1188,19 +1108,15 @@ tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 尝试在使用「公钥验证」之外的其他方法登录</span>
 </span></span><span class=line><span class=cl><span class=c1># 如果 sshd 服务的设置正确，这行命令应该登录失败并报错「Permission Denied(publickey)」</span>
 </span></span><span class=line><span class=cl>ssh -o <span class=nv>PubkeyAuthentication</span><span class=o>=</span>no user@host</span></span></code></pre></div><h3 id=firewall-防火墙介绍 class=headerLink><a href=#firewall-%e9%98%b2%e7%81%ab%e5%a2%99%e4%bb%8b%e7%bb%8d class=header-mark></a>firewall 防火墙介绍</h3><p>firewall 是 SUSE/RedHat 等 RPM 发行版使用的防火墙程序，它底层使用的是 iptables/nftables，
-常用命令如下：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="code-block-title
+常用命令如下：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
 tw-flex
 tw-flex-row
-tw-justify-between
-tw-w-full tw-bg-bgColor-secondary"><button class="tw-select-none
-tw-mx-2
-tw-block
-group-[.is-open]:tw-rotate-90
-tw-transition-[transform]
-tw-duration-500
-tw-ease-in-out
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button><div class="code-block-title-bar tw-w-full"><p class="tw-select-none !tw-my-1">bash</p></div><div class=tw-flex><button class="line-number-button
-tw-select-none
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -1260,14 +1176,17 @@ tw-scrollbar-thin"><span class=line><span class=cl>systemctl <span class=nb>enab
 
 `+t,s=new URL("https://"+n);s.pathname="share",s.searchParams.append("text",a),window.open(s,"_blank","width=500,height=500,left=500,toolbar=0,status=0")}</script>
 <button title="分享到 Mastodon" onclick='shareOnMastodon("openSUSE 使用指南","https://thiscute.world/posts/opensuse-instruction/")'><svg class="icon" viewBox="0 0 448 512"><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48.0.0.0-63.72 28.5-63.72 125.7.0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54.0 01-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg></button></div></div></div><div class=post-info-more><section class=post-tags><svg class="icon" viewBox="0 0 640 512"><path d="M497.941 225.941 286.059 14.059A48 48 0 00252.118.0H48C21.49.0.0 21.49.0 48v204.118a48 48 0 0014.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882.0l204.118-204.118c18.745-18.745 18.745-49.137.0-67.882zM112 160c-26.51.0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882.0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397.0h48.721a48 48 0 0133.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137.0 67.882z"/></svg>&nbsp;<a href=/tags/opensuse/>OpenSUSE</a>,&nbsp;<a href=/tags/linux/>Linux</a></section><section class=print:!tw-hidden><span><button class="tw-text-fgColor-link-muted hover:tw-text-fgColor-link-muted-hover" onclick=window.history.back()>返回</button></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class="post-nav print:tw-hidden"><a href=/posts/2020-summary/ class=prev rel=prev title="2020 年年终总结"><svg class="icon" viewBox="0 0 256 512"><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9.0l22.6 22.6c9.4 9.4 9.4 24.6.0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6.0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9.0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>2020 年年终总结</a>
-<a href=/posts/experience-of-pulumi/ class=next rel=next title="Pulumi 使用体验 - 基础设施代码化">Pulumi 使用体验 - 基础设施代码化<svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></a></div></div><div id=comments class="print:!tw-hidden tw-pt-32 tw-pb-8"><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://foreverblog.cn/assets/logo/logo_en_default.png alt style=width:auto;height:16px></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.150.0">Hugo</a> 强力驱动&nbsp;|&nbsp;托管在 <a title=Vercel href=https://vercel.com/ target=_blank rel="noopener noreffer">Vercel</a> 上&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.4.0"><svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg> DoIt</a></div><div class=footer-line><svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 448c-110.532.0-2e2-89.451-2e2-2e2.0-110.531 89.451-2e2 2e2-2e2 110.532.0 2e2 89.451 2e2 2e2.0 110.532-89.451 2e2-2e2 2e2zm107.351-101.064c-9.614 9.712-45.53 41.396-104.065 41.396-82.43.0-140.484-61.425-140.484-141.567.0-79.152 60.275-139.401 139.762-139.401 55.531.0 88.738 26.62 97.593 34.779a11.965 11.965.0 011.936 15.322l-18.155 28.113c-3.841 5.95-11.966 7.282-17.499 2.921-8.595-6.776-31.814-22.538-61.708-22.538-48.303.0-77.916 35.33-77.916 80.082.0 41.589 26.888 83.692 78.277 83.692 32.657.0 56.843-19.039 65.726-27.225 5.27-4.857 13.596-4.039 17.82 1.738l19.865 27.17a11.947 11.947.0 01-1.152 15.518z"/></svg>2021 - 2025<span class=author>&nbsp;<a href=/ target=_blank rel="noopener noreferrer"></a></span>&nbsp;|&nbsp;<span class=license> <a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer></div><div id=fixed-buttons class=print:!tw-hidden><a href=#back-to-top id=back-to-top-button class="fixed-button tw-transition-opacity tw-opacity-0" title=回到顶部><svg class="icon" viewBox="0 0 448 512"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6.0-33.9L207 39c9.4-9.4 24.6-9.4 33.9.0l194.3 194.3c9.4 9.4 9.4 24.6.0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3.0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
-</a><a href=#comments id=view-comments class=fixed-button title=查看评论><svg class="icon" viewBox="0 0 512 512"><path d="M256 32C114.6 32 0 125.1.0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3.0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4.0 256-93.1 256-208S397.4 32 256 32z"/></svg></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><script>window.config={"algoliasearch.min.js":"/lib/algoliasearch/algoliasearch-lite.umd.min.js","autocomplete.min.js":"/lib/autocomplete/autocomplete.min.js",comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script src=/lib/sharer/sharer.min.js></script><script src=/lib/typeit/typeit.min.js></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/js/katex.min.js defer></script><script src=/js/theme.min.js defer></script><script src=/js/utterances.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script><script type=speculationrules>
-        {
-          "prerender": [
-            {
-              "where": { "href_matches": "/*" },
-              "eagerness": "moderate"
-            }
-          ]
-        }
-    </script></body></html>
+<a href=/posts/experience-of-pulumi/ class=next rel=next title="Pulumi 使用体验 - 基础设施代码化">Pulumi 使用体验 - 基础设施代码化<svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></a></div></div><div id=comments class="print:!tw-hidden tw-pt-32 tw-pb-8"><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://www.foreverblog.cn/ target=_blank><img src=https://foreverblog.cn/assets/logo/logo_en_default.png alt style=width:auto;height:16px></a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreferrer" title="Hugo 0.150.0">Hugo</a> 强力驱动&nbsp;|&nbsp;托管在 <a title=Vercel href=https://vercel.com/ target=_blank rel="noopener noreffer">Vercel</a> 上&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreferrer" title="DoIt 0.4.2"><svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg> DoIt</a></div><div class=footer-line><svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 448c-110.532.0-2e2-89.451-2e2-2e2.0-110.531 89.451-2e2 2e2-2e2 110.532.0 2e2 89.451 2e2 2e2.0 110.532-89.451 2e2-2e2 2e2zm107.351-101.064c-9.614 9.712-45.53 41.396-104.065 41.396-82.43.0-140.484-61.425-140.484-141.567.0-79.152 60.275-139.401 139.762-139.401 55.531.0 88.738 26.62 97.593 34.779a11.965 11.965.0 011.936 15.322l-18.155 28.113c-3.841 5.95-11.966 7.282-17.499 2.921-8.595-6.776-31.814-22.538-61.708-22.538-48.303.0-77.916 35.33-77.916 80.082.0 41.589 26.888 83.692 78.277 83.692 32.657.0 56.843-19.039 65.726-27.225 5.27-4.857 13.596-4.039 17.82 1.738l19.865 27.17a11.947 11.947.0 01-1.152 15.518z"/></svg>2021 - 2025<span class=author>&nbsp;<a href=/ target=_blank rel="noopener noreferrer"></a></span>&nbsp;|&nbsp;<span class=license> <a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class=footer-line></div><div class=footer-line></div></div></footer><div class="print:!tw-hidden tw-flex tw-flex-col tw-fixed tw-right-4 tw-bottom-4 tw-gap-2"><a href=#back-to-top id=back-to-top-button class="tw-transition-opacity tw-opacity-0 tw-block tw-bg-bgColor-secondary tw-rounded-full" style=padding:.6rem;line-height:1.3rem;font-size:1rem title=回到顶部><svg class="icon" viewBox="0 0 448 512"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6.0-33.9L207 39c9.4-9.4 24.6-9.4 33.9.0l194.3 194.3c9.4 9.4 9.4 24.6.0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3.0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
+</a><button id=toc-drawer-button class="tw-block tw-bg-bgColor-secondary tw-rounded-full md:tw-hidden" style=padding:.6rem;line-height:1.3rem;font-size:1rem>
+<svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>
+</button><a href=#comments id=view-comments class="tw-block tw-bg-bgColor-secondary tw-rounded-full" style=padding:.6rem;line-height:1.3rem;font-size:1rem title=查看评论>
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 32C114.6 32 0 125.1.0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3.0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4.0 256-93.1 256-208S397.4 32 256 32z"/></svg></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=preload as=style onload='this.onload=null,this.rel="stylesheet"' href=/lib/katex/copy-tex.min.css><noscript><link rel=stylesheet href=/lib/katex/copy-tex.min.css></noscript><script>window.config={"algoliasearch.min.js":"/lib/algoliasearch/algoliasearch-lite.umd.min.js","autocomplete.min.js":"/lib/autocomplete/autocomplete.min.js",comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"ryan4yin/thiscute.world"}},data:{"desktop-header-typeit":"This Cute World","mobile-header-typeit":"This Cute World"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{algoliaAppID:"747LJ10EI7",algoliaIndex:"ryan-space",algoliaSearchKey:"658db5f2bf056f83458cacf5dd58ec80",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:null,cursorSpeed:null,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:null,speed:null}}</script><script src=/lib/sharer/sharer.min.js></script><script src=/lib/typeit/typeit.min.js></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/js/katex.min.js defer></script><script src=/js/theme.min.js defer></script><script src=/js/utterances.min.js defer></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-4V93QVSNFW",{anonymize_ip:!0})</script><script src="https://www.googletagmanager.com/gtag/js?id=G-4V93QVSNFW" async></script><script type=speculationrules>
+  {
+    "prerender": [
+      {
+        "where": { "href_matches": "/*" },
+        "eagerness": "moderate"
+      }
+    ]
+  }
+</script></body></html>
