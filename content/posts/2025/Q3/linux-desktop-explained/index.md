@@ -1126,9 +1126,9 @@ nix shell nixpkgs#pamtester
 # 检查 PAM 配置
 pamtester login $USER authenticate
 
-# 检查密钥环状态
-gnome-keyring-daemon --list
-kwallet-query --list
+# Kwallet - 列出 Passwords 目录下的所有内容
+kwallet-query kdewallet --list-entries
+# Gnome Keyring - 通过 seahorse GUI 检查状态
 
 # 检查 PolicyKit 服务
 systemctl status polkit
