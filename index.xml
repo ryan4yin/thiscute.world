@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-18T14:36:54+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统组件概览与故障排查指南</title><link href="https://thiscute.world/posts/linux-desktop-explained/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/systemd-basics/?utm_source=atom_feed" rel="related" type="text/html" title="通过 systemctl 设置自定义 Service"/><link href="https://thiscute.world/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - 我的 NixOS 使用体会"/><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/?utm_source=atom_feed" rel="related" type="text/html" title="个人数据安全不完全指南"/><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 在 Lichee Pi 4A 上是如何启动的"/><link href="https://thiscute.world/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="为什么我折腾这些小众技术？"/><id>https://thiscute.world/posts/linux-desktop-explained/</id><published>2025-09-09T20:17:33+08:00</published><updated>2025-10-03T01:59:33+08:00</updated><summary type="html">&lt;h2 id="定位与目标" class="headerLink"&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-18T15:29:02+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统组件概览与故障排查指南</title><link href="https://thiscute.world/posts/linux-desktop-explained/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/systemd-basics/?utm_source=atom_feed" rel="related" type="text/html" title="通过 systemctl 设置自定义 Service"/><link href="https://thiscute.world/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - 我的 NixOS 使用体会"/><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/?utm_source=atom_feed" rel="related" type="text/html" title="个人数据安全不完全指南"/><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 在 Lichee Pi 4A 上是如何启动的"/><link href="https://thiscute.world/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="为什么我折腾这些小众技术？"/><id>https://thiscute.world/posts/linux-desktop-explained/</id><published>2025-09-09T20:17:33+08:00</published><updated>2025-10-03T01:59:33+08:00</updated><summary type="html">&lt;h2 id="定位与目标" class="headerLink"&gt;
 &lt;a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"&gt;&lt;/a&gt;定位与目标&lt;/h2&gt;&lt;p&gt;Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。&lt;/p&gt;
 &lt;p&gt;即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。&lt;/p&gt;</summary><content type="html"><![CDATA[<h2 id="定位与目标" class="headerLink">
     <a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"></a>定位与目标</h2><p>Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。</p>
@@ -88,7 +88,7 @@ fcitx5, 使用的发行版为 NixOS.</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-117" 
+    id="codeblock-id-111" 
     class="
       chroma 
       !tw-block 
@@ -259,7 +259,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-118" 
+    id="codeblock-id-112" 
     class="
       chroma 
       !tw-block 
@@ -394,7 +394,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-119" 
+    id="codeblock-id-113" 
     class="
       chroma 
       !tw-block 
@@ -568,7 +568,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-120" 
+    id="codeblock-id-114" 
     class="
       chroma 
       !tw-block 
@@ -700,7 +700,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-121" 
+    id="codeblock-id-115" 
     class="
       chroma 
       !tw-block 
@@ -909,7 +909,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-122" 
+    id="codeblock-id-116" 
     class="
       chroma 
       !tw-block 
@@ -1010,7 +1010,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-123" 
+    id="codeblock-id-117" 
     class="
       chroma 
       !tw-block 
@@ -1109,7 +1109,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-124" 
+    id="codeblock-id-118" 
     class="
       chroma 
       !tw-block 
@@ -1303,7 +1303,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-125" 
+    id="codeblock-id-119" 
     class="
       chroma 
       !tw-block 
@@ -1437,7 +1437,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-126" 
+    id="codeblock-id-120" 
     class="
       chroma 
       !tw-block 
@@ -1537,7 +1537,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-127" 
+    id="codeblock-id-121" 
     class="
       chroma 
       !tw-block 
@@ -1643,7 +1643,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-128" 
+    id="codeblock-id-122" 
     class="
       chroma 
       !tw-block 
@@ -1750,7 +1750,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-129" 
+    id="codeblock-id-123" 
     class="
       chroma 
       !tw-block 
@@ -1869,7 +1869,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-130" 
+    id="codeblock-id-124" 
     class="
       chroma 
       !tw-block 
@@ -2021,7 +2021,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-131" 
+    id="codeblock-id-125" 
     class="
       chroma 
       !tw-block 
@@ -2151,7 +2151,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-132" 
+    id="codeblock-id-126" 
     class="
       chroma 
       !tw-block 
@@ -2257,7 +2257,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-133" 
+    id="codeblock-id-127" 
     class="
       chroma 
       !tw-block 
@@ -2432,7 +2432,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-134" 
+    id="codeblock-id-128" 
     class="
       chroma 
       !tw-block 
@@ -2605,7 +2605,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-135" 
+    id="codeblock-id-129" 
     class="
       chroma 
       !tw-block 
@@ -2702,7 +2702,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-136" 
+    id="codeblock-id-130" 
     class="
       chroma 
       !tw-block 
@@ -2753,17 +2753,27 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
 </span></span><span class="line"><span class="cl"><span class="n">ls</span> <span class="err">-</span><span class="n">la</span> <span class="sr">/etc/polkit-1/rules.d</span><span class="err">/</span></span></span></code></pre>
 </div>
 <p><strong>NixOS 注意事项</strong>：在 NixOS 中，PolicyKit 的动作定义和系统级规则都存储在<code>/run/current-system/sw/share/polkit-1/</code> 目录下，这是当前系统配置的一部分。由于 NixOS 的纯函数式特性，这些路径是只读的，所有的配置都应该通过 NixOS 的配置文件（如<code>configuration.nix</code>）来管理，而不是直接修改这些目录。这种设计确保了系统配置的可重现性和原子性更新。</p>
-<h3 id="33-gnome-keyring---密码与密钥管理" class="headerLink">
-    <a href="#33-gnome-keyring---%e5%af%86%e7%a0%81%e4%b8%8e%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86" class="header-mark"></a>3.3 GNOME Keyring - 密码与密钥管理</h3><p>GNOME Keyring 是 GNOME 桌面环境提供的安全密钥存储服务，用于管理用户的密码、证书、密钥等敏感信息。它通过加密存储和自动解锁机制，为用户提供了便捷而安全的密码管理体验。</p>
-<h4 id="331-gnome-keyring-架构" class="headerLink">
-    <a href="#331-gnome-keyring-%e6%9e%b6%e6%9e%84" class="header-mark"></a>3.3.1 GNOME Keyring 架构</h4><p>GNOME Keyring 采用分层架构设计：</p>
+<h3 id="33-桌面密钥管理---gnome-keyring-与-kde-wallet" class="headerLink">
+    <a href="#33-%e6%a1%8c%e9%9d%a2%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86---gnome-keyring-%e4%b8%8e-kde-wallet" class="header-mark"></a>3.3 桌面密钥管理 - GNOME Keyring 与 KDE Wallet</h3><p>现代 Linux 桌面环境提供了统一的密钥管理服务，用于安全存储用户的密码、证书、密钥等敏感信息。</p>
+<p>GNOME Keyring 和 KDE Wallet 分别是 GNOME 和 KDE 桌面环境的密钥管理解决方案，它们通过加密存储和自动解锁机制，为用户提供了便捷而安全的密码管理体验。</p>
+<p>GNOME Keyring 和 KDE Wallet 都实现了标准的<a href="https://freedesktop.org/wiki/Specifications/secret-storage-spec/" target="_blank" rel="noopener noreferrer">Secrets API</a>, 可以根据需要任选一个使用。不过据我观察大部分窗口管理器的用户都是用的 GNOME Keyring.</p>
+<h4 id="331-密钥管理系统架构" class="headerLink">
+    <a href="#331-%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84" class="header-mark"></a>3.3.1 密钥管理系统架构</h4><p><strong>GNOME Keyring 架构</strong>：</p>
 <ul>
 <li><strong>密钥环（Keyring）</strong>：加密的存储容器，每个密钥环有独立的密码</li>
 <li><strong>密钥环守护进程（gnome-keyring-daemon）</strong>：管理密钥环的生命周期和访问控制</li>
-<li><strong>客户端库（libsecret）</strong>：为应用程序提供统一的密钥访问接口</li>
+<li><strong>API</strong>：Gnome 原生支持 <strong>org.freedesktop.secrets DBus API</strong>, 目前流行的 secrets 客户端库 libsecret 也是 gnome 开发的。</li>
 <li><strong>PAM 集成</strong>：通过 <code>pam_gnome_keyring.so</code> 实现登录时自动解锁</li>
 </ul>
-<p><strong>核心组件</strong>：</p>
+<p><strong>KDE Wallet 架构</strong>：</p>
+<ul>
+<li><strong>KWalletManager</strong>：图形界面管理工具</li>
+<li><strong>kwalletd</strong>：钱包守护进程</li>
+<li><strong>API</strong>：KDE Wallet 从 5.97.0 （2022 年 8 月）开始支持<a href="https://freedesktop.org/wiki/Specifications/secret-storage-spec/" target="_blank" rel="noopener noreferrer">org.freedesktop.secrets DBus API</a>,
+因此可以直接通过 libsecret 往 KDE Wallet 中存取 passwords 等 secret.</li>
+<li><strong>PAM 集成</strong>：通过 <code>pam_kwallet.so</code> 实现自动解锁</li>
+</ul>
+<p><strong>核心组件路径</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -2839,7 +2849,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-137" 
+    id="codeblock-id-131" 
     class="
       chroma 
       !tw-block 
@@ -2853,18 +2863,20 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 密钥环守护进程（NixOS 中位于 nix store）</span>
+      "><span class="line"><span class="cl"><span class="c1"># GNOME Keyring 组件（NixOS 中位于 nix store）</span>
 </span></span><span class="line"><span class="cl">/run/current-system/sw/bin/gnome-keyring-daemon
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 客户端库（NixOS 中位于 nix store）</span>
 </span></span><span class="line"><span class="cl">/run/current-system/sw/lib/libsecret-1.so
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># PAM 模块（NixOS 中位于 nix store）</span>
 </span></span><span class="line"><span class="cl">/run/current-system/sw/lib/security/pam_gnome_keyring.so
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 配置文件</span>
-</span></span><span class="line"><span class="cl">~/.config/keyrings/          <span class="c1"># 用户密钥环存储目录</span>
-</span></span><span class="line"><span class="cl">~/.local/share/keyrings/     <span class="c1"># 系统密钥环存储目录</span></span></span></code></pre>
+</span></span><span class="line"><span class="cl"><span class="c1"># KDE Wallet 组件（NixOS 中位于 nix store）</span>
+</span></span><span class="line"><span class="cl">/run/current-system/sw/bin/kwalletd5
+</span></span><span class="line"><span class="cl">/run/current-system/sw/bin/kwalletmanager5
+</span></span><span class="line"><span class="cl">/run/current-system/sw/lib/security/pam_kwallet.so
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 配置文件位置</span>
+</span></span><span class="line"><span class="cl">~/.local/share/keyrings/     <span class="c1"># GNOME 密钥环存储目录</span>
+</span></span><span class="line"><span class="cl">~/.local/share/kwalletd/     <span class="c1"># KDE 钱包文件存储目录</span>
+</span></span><span class="line"><span class="cl">~/.config/kwalletrc          <span class="c1"># KDE 钱包配置文件</span></span></span></code></pre>
 </div>
 <h4 id="332-密钥环类型与用途" class="headerLink">
     <a href="#332-%e5%af%86%e9%92%a5%e7%8e%af%e7%b1%bb%e5%9e%8b%e4%b8%8e%e7%94%a8%e9%80%94" class="header-mark"></a>3.3.2 密钥环类型与用途</h4><table>
@@ -2898,8 +2910,8 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
       </tr>
   </tbody>
 </table>
-<h4 id="333-密钥环管理" class="headerLink">
-    <a href="#333-%e5%af%86%e9%92%a5%e7%8e%af%e7%ae%a1%e7%90%86" class="header-mark"></a>3.3.3 密钥环管理</h4><p><strong>命令行工具</strong>：</p>
+<h4 id="333-钱包创建与管理" class="headerLink">
+    <a href="#333-%e9%92%b1%e5%8c%85%e5%88%9b%e5%bb%ba%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>3.3.3 钱包创建与管理</h4><p><strong>图形界面管理</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -2975,121 +2987,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-138" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 查看密钥环状态</span>
-</span></span><span class="line"><span class="cl">gnome-keyring-daemon --list
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 创建新密钥环</span>
-</span></span><span class="line"><span class="cl">gnome-keyring-daemon --create-keyring my-keyring
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 解锁密钥环</span>
-</span></span><span class="line"><span class="cl">gnome-keyring-daemon --unlock my-keyring
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 使用 secret-tool 管理密钥</span>
-</span></span><span class="line"><span class="cl">secret-tool store --label<span class="o">=</span><span class="s2">&#34;My Password&#34;</span> application myapp
-</span></span><span class="line"><span class="cl">secret-tool lookup application myapp
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 使用 libsecret 的 Python 接口</span>
-</span></span><span class="line"><span class="cl">python3 -c <span class="s2">&#34;
-</span></span></span><span class="line"><span class="cl"><span class="s2">import secretstorage
-</span></span></span><span class="line"><span class="cl"><span class="s2">bus = secretstorage.dbus_init()
-</span></span></span><span class="line"><span class="cl"><span class="s2">collection = secretstorage.get_default_collection(bus)
-</span></span></span><span class="line"><span class="cl"><span class="s2">items = list(collection.search_items({&#39;application&#39;: &#39;myapp&#39;}))
-</span></span></span><span class="line"><span class="cl"><span class="s2">for item in items:
-</span></span></span><span class="line"><span class="cl"><span class="s2">    print(f&#39;Label: {item.get_label()}&#39;)
-</span></span></span><span class="line"><span class="cl"><span class="s2">    print(f&#39;Secret: {item.get_secret().decode()}&#39;)
-</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;</span></span></span></code></pre>
-</div>
-<p><strong>图形界面工具</strong>：</p>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">bash</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-139" 
+    id="codeblock-id-132" 
     class="
       chroma 
       !tw-block 
@@ -3106,229 +3004,18 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
       "><span class="line"><span class="cl"><span class="c1"># GNOME 密钥环管理器</span>
 </span></span><span class="line"><span class="cl">seahorse
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 或通过设置应用</span>
-</span></span><span class="line"><span class="cl">gnome-control-center passwords</span></span></code></pre>
+</span></span><span class="line"><span class="cl"><span class="c1"># KDE 钱包管理器</span>
+</span></span><span class="line"><span class="cl">kwalletmanager5</span></span></code></pre>
 </div>
-<h4 id="334-应用程序集成" class="headerLink">
-    <a href="#334-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e9%9b%86%e6%88%90" class="header-mark"></a>3.3.4 应用程序集成</h4><p><strong>GTK 应用集成</strong>：</p>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">python</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-140" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># Python 应用使用 libsecret</span>
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">gi</span>
-</span></span><span class="line"><span class="cl"><span class="n">gi</span><span class="o">.</span><span class="n">require_version</span><span class="p">(</span><span class="s1">&#39;Secret&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">gi.repository</span> <span class="kn">import</span> <span class="n">Secret</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 存储密码</span>
-</span></span><span class="line"><span class="cl"><span class="n">schema</span> <span class="o">=</span> <span class="n">Secret</span><span class="o">.</span><span class="n">Schema</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&#34;com.example.app&#34;</span><span class="p">,</span> <span class="n">Secret</span><span class="o">.</span><span class="n">SchemaFlags</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Secret</span><span class="o">.</span><span class="n">SchemaAttribute</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&#34;application&#34;</span><span class="p">,</span> <span class="n">Secret</span><span class="o">.</span><span class="n">SchemaAttributeType</span><span class="o">.</span><span class="n">STRING</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Secret</span><span class="o">.</span><span class="n">SchemaAttribute</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&#34;username&#34;</span><span class="p">,</span> <span class="n">Secret</span><span class="o">.</span><span class="n">SchemaAttributeType</span><span class="o">.</span><span class="n">STRING</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">Secret</span><span class="o">.</span><span class="n">password_store_sync</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="p">{},</span> <span class="n">Secret</span><span class="o">.</span><span class="n">COLLECTION_DEFAULT</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;My App Password&#34;</span><span class="p">,</span> <span class="s2">&#34;secret_password&#34;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 检索密码</span>
-</span></span><span class="line"><span class="cl"><span class="n">password</span> <span class="o">=</span> <span class="n">Secret</span><span class="o">.</span><span class="n">password_lookup_sync</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;application&#34;</span><span class="p">:</span> <span class="s2">&#34;com.example.app&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;user@example.com&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">},</span> <span class="kc">None</span><span class="p">)</span></span></span></code></pre>
-</div>
-<p><strong>浏览器集成</strong>：</p>
-<p>现代浏览器（如 Firefox、Chrome）可以通过 GNOME Keyring 存储网站密码：</p>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">bash</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-141" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># Firefox 配置</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;user_pref(\&#34;signon.management.page.enabled\&#34;, true);&#34;</span> &gt;&gt; ~/.mozilla/firefox/*/prefs.js
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Chrome 配置（通过环境变量）</span>
-</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GOOGLE_API_KEY</span><span class="o">=</span><span class="s2">&#34;your-api-key&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GOOGLE_DEFAULT_CLIENT_ID</span><span class="o">=</span><span class="s2">&#34;your-client-id&#34;</span></span></span></code></pre>
-</div>
-<h3 id="34-kde-wallet---kde-密钥管理" class="headerLink">
-    <a href="#34-kde-wallet---kde-%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86" class="header-mark"></a>3.4 KDE Wallet - KDE 密钥管理</h3><p>KDE Wallet 是 KDE 桌面环境提供的密钥管理服务，功能类似于 GNOME Keyring，但专门为 KDE 应用程序优化。它支持多种加密算法和存储后端，提供了灵活的密钥管理解决方案。</p>
-<h4 id="341-kde-wallet-架构" class="headerLink">
-    <a href="#341-kde-wallet-%e6%9e%b6%e6%9e%84" class="header-mark"></a>3.4.1 KDE Wallet 架构</h4><p>KDE Wallet 采用模块化设计：</p>
+<p>通过图形界面可以：</p>
 <ul>
-<li><strong>KWalletManager</strong>：图形界面管理工具</li>
-<li><strong>kwalletd</strong>：钱包守护进程</li>
-<li><strong>KWallet API</strong>：为应用程序提供密钥访问接口</li>
-<li><strong>PAM 集成</strong>：通过 <code>pam_kwallet.so</code> 实现自动解锁</li>
+<li>创建新的密钥环/钱包</li>
+<li>设置密码和加密算法</li>
+<li>管理存储的密码和证书</li>
+<li>配置自动解锁策略</li>
+<li>备份和恢复密钥环</li>
 </ul>
-<p><strong>核心组件</strong>：</p>
+<p><strong>基本命令行操作</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -3404,7 +3091,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-142" 
+    id="codeblock-id-133" 
     class="
       chroma 
       !tw-block 
@@ -3418,154 +3105,23 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 钱包守护进程（NixOS 中位于 nix store）</span>
-</span></span><span class="line"><span class="cl">/run/current-system/sw/bin/kwalletd5
+      "><span class="line"><span class="cl"><span class="c1"># 使用 secret-tool 管理 GNOME Keyring</span>
+</span></span><span class="line"><span class="cl">secret-tool store --label<span class="o">=</span><span class="s2">&#34;My Password&#34;</span> application myapp
+</span></span><span class="line"><span class="cl">secret-tool lookup application myapp
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 管理工具（NixOS 中位于 nix store）</span>
-</span></span><span class="line"><span class="cl">/run/current-system/sw/bin/kwalletmanager5
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># PAM 模块（NixOS 中位于 nix store）</span>
-</span></span><span class="line"><span class="cl">/run/current-system/sw/lib/security/pam_kwallet.so
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 配置文件</span>
-</span></span><span class="line"><span class="cl">~/.local/share/kwalletd/      <span class="c1"># 钱包文件存储目录</span>
-</span></span><span class="line"><span class="cl">~/.config/kwalletrc           <span class="c1"># 钱包配置文件</span></span></span></code></pre>
-</div>
-<h4 id="342-钱包类型与加密" class="headerLink">
-    <a href="#342-%e9%92%b1%e5%8c%85%e7%b1%bb%e5%9e%8b%e4%b8%8e%e5%8a%a0%e5%af%86" class="header-mark"></a>3.4.2 钱包类型与加密</h4><p><strong>支持的钱包类型</strong>：</p>
-<table>
-  <thead>
-      <tr>
-          <th>钱包类型</th>
-          <th>加密算法</th>
-          <th>用途</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>Blowfish</strong></td>
-          <td>Blowfish</td>
-          <td>默认加密算法，兼容性好</td>
-      </tr>
-      <tr>
-          <td><strong>GPG</strong></td>
-          <td>GPG</td>
-          <td>使用 GPG 密钥加密，安全性更高</td>
-      </tr>
-      <tr>
-          <td><strong>AES</strong></td>
-          <td>AES-256</td>
-          <td>现代加密算法，性能优秀</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>钱包创建与管理</strong>：</p>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">bash</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-143" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 创建新钱包</span>
-</span></span><span class="line"><span class="cl">kwalletmanager5 --new-wallet
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 查看钱包状态</span>
-</span></span><span class="line"><span class="cl">kwallet-query --list
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 解锁钱包</span>
-</span></span><span class="line"><span class="cl">kwallet-query --unlock wallet_name
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 存储密钥</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用 kwallet-query 管理 KDE Wallet</span>
 </span></span><span class="line"><span class="cl">kwallet-query --write password <span class="s2">&#34;MyApp&#34;</span> <span class="s2">&#34;username&#34;</span> <span class="s2">&#34;password&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 读取密钥</span>
 </span></span><span class="line"><span class="cl">kwallet-query --read password <span class="s2">&#34;MyApp&#34;</span> <span class="s2">&#34;username&#34;</span></span></span></code></pre>
 </div>
-<h4 id="343-应用程序集成" class="headerLink">
-    <a href="#343-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e9%9b%86%e6%88%90" class="header-mark"></a>3.4.3 应用程序集成</h4><p><strong>Qt 应用集成</strong>：</p>
+<h4 id="334-应用程序集成" class="headerLink">
+    <a href="#334-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e9%9b%86%e6%88%90" class="header-mark"></a>3.3.4 应用程序集成</h4><p><strong>常见应用程序集成</strong>：</p>
+<p><strong>VSCode</strong>：</p>
+<ul>
+<li>自动集成系统密钥管理服务</li>
+<li>存储 Git 凭据、扩展设置等敏感信息</li>
+<li>通过 <code>git credential.helper</code> 配置自动使用</li>
+</ul>
+<p><strong>GitHub CLI</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -3585,7 +3141,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
       aria-hidden="true">
           <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">cpp</p>
+          <p class="tw-select-none !tw-my-1">bash</p>
       </button>
 
    <div class="tw-flex">
@@ -3641,7 +3197,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-144" 
+    id="codeblock-id-134" 
     class="
       chroma 
       !tw-block 
@@ -3655,132 +3211,22 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1">// C++ 应用使用 KWallet
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;KWallet/KWallet&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="cl"><span class="n">KWallet</span><span class="o">::</span><span class="n">Wallet</span> <span class="o">*</span><span class="n">wallet</span> <span class="o">=</span> <span class="n">KWallet</span><span class="o">::</span><span class="n">Wallet</span><span class="o">::</span><span class="n">openWallet</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="n">KWallet</span><span class="o">::</span><span class="n">Wallet</span><span class="o">::</span><span class="n">NetworkWallet</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">KWallet</span><span class="o">::</span><span class="n">Wallet</span><span class="o">::</span><span class="n">Synchronous</span>
-</span></span><span class="line"><span class="cl"><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">wallet</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 存储密码
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">wallet</span><span class="o">-&gt;</span><span class="n">writePassword</span><span class="p">(</span><span class="s">&#34;MyApp&#34;</span><span class="p">,</span> <span class="s">&#34;username&#34;</span><span class="p">,</span> <span class="s">&#34;password&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1">// 读取密码
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">QString</span> <span class="n">password</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">wallet</span><span class="o">-&gt;</span><span class="n">readPassword</span><span class="p">(</span><span class="s">&#34;MyApp&#34;</span><span class="p">,</span> <span class="s">&#34;username&#34;</span><span class="p">,</span> <span class="n">password</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">wallet</span><span class="o">-&gt;</span><span class="n">closeWallet</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre>
+      "><span class="line"><span class="cl"><span class="c1"># 配置 GitHub CLI 使用系统密钥管理</span>
+</span></span><span class="line"><span class="cl">gh auth login --web
+</span></span><span class="line"><span class="cl"><span class="c1"># 凭据会自动存储到系统密钥环中</span></span></span></code></pre>
 </div>
-<p><strong>Python 应用集成</strong>：</p>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">python</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-145" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 使用 PyKDE5 绑定</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">PyKDE5</span> <span class="kn">import</span> <span class="n">KWallet</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">wallet</span> <span class="o">=</span> <span class="n">KWallet</span><span class="o">.</span><span class="n">Wallet</span><span class="o">.</span><span class="n">openWallet</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="n">KWallet</span><span class="o">.</span><span class="n">Wallet</span><span class="o">.</span><span class="n">NetworkWallet</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">KWallet</span><span class="o">.</span><span class="n">Wallet</span><span class="o">.</span><span class="n">Synchronous</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">wallet</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 存储密码</span>
-</span></span><span class="line"><span class="cl">    <span class="n">wallet</span><span class="o">.</span><span class="n">writePassword</span><span class="p">(</span><span class="s2">&#34;MyApp&#34;</span><span class="p">,</span> <span class="s2">&#34;username&#34;</span><span class="p">,</span> <span class="s2">&#34;password&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1"># 读取密码</span>
-</span></span><span class="line"><span class="cl">    <span class="n">password</span> <span class="o">=</span> <span class="n">wallet</span><span class="o">.</span><span class="n">readPassword</span><span class="p">(</span><span class="s2">&#34;MyApp&#34;</span><span class="p">,</span> <span class="s2">&#34;username&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">wallet</span><span class="o">.</span><span class="n">closeWallet</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></span></span></code></pre>
-</div>
-<h4 id="344-配置与优化" class="headerLink">
-    <a href="#344-%e9%85%8d%e7%bd%ae%e4%b8%8e%e4%bc%98%e5%8c%96" class="header-mark"></a>3.4.4 配置与优化</h4><p><strong>NixOS 配置示例</strong>：</p>
+<p><strong>浏览器集成</strong>：</p>
+<ul>
+<li>Firefox、Chrome 等现代浏览器支持系统密钥管理</li>
+<li>网站密码自动保存到密钥环/钱包中</li>
+<li>跨设备同步（如果启用）</li>
+</ul>
+<p><strong>API 集成示例</strong>：</p>
+<ul>
+<li><a href="https://gnome.pages.gitlab.gnome.org/libsecret/" target="_blank" rel="noopener noreferrer">libsecret API</a></li>
+</ul>
+<h4 id="335-配置与优化" class="headerLink">
+    <a href="#335-%e9%85%8d%e7%bd%ae%e4%b8%8e%e4%bc%98%e5%8c%96" class="header-mark"></a>3.3.5 配置与优化</h4><p><strong>NixOS 配置示例</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -3856,7 +3302,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-146" 
+    id="codeblock-id-135" 
     class="
       chroma 
       !tw-block 
@@ -3871,115 +3317,12 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
       tw-overflow-x-auto
       tw-scrollbar-thin
       "><span class="line"><span class="cl"><span class="c1"># configuration.nix</span>
-</span></span><span class="line"><span class="cl"><span class="n">services</span><span class="o">.</span><span class="n">kdewallet</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">package</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">kwallet</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 启用 GNOME Keyring</span>
+</span></span><span class="line"><span class="cl"><span class="n">services</span><span class="o">.</span><span class="n">gnome</span><span class="o">.</span><span class="n">gnome-keyring</span><span class="o">.</span><span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># GNOME Keyring GUI 客户端</span>
+</span></span><span class="line"><span class="cl"><span class="n">programs</span><span class="o">.</span><span class="n">seahorse</span><span class="o">.</span><span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 启用 PAM 集成</span>
-</span></span><span class="line"><span class="cl"><span class="n">security</span><span class="o">.</span><span class="n">pam</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">kwallet</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="n">noPAM</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre>
-</div>
-<p><strong>性能优化</strong>：</p>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">bash</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-147" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 调整钱包超时时间</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Timeout=300&#34;</span> &gt;&gt; ~/.config/kwalletrc
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 启用自动锁定</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;AutoLock=true&#34;</span> &gt;&gt; ~/.config/kwalletrc
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 设置锁定超时</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;LockTimeout=600&#34;</span> &gt;&gt; ~/.config/kwalletrc</span></span></code></pre>
+</span></span><span class="line"><span class="cl"><span class="n">security</span><span class="o">.</span><span class="n">pam</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">enableGnomeKeyring</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span></span></span></code></pre>
 </div>
 <h3 id="35-安全组件集成与最佳实践" class="headerLink">
     <a href="#35-%e5%ae%89%e5%85%a8%e7%bb%84%e4%bb%b6%e9%9b%86%e6%88%90%e4%b8%8e%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5" class="header-mark"></a>3.5 安全组件集成与最佳实践</h3><h4 id="351-组件协作流程" class="headerLink">
@@ -4075,7 +3418,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-148" 
+    id="codeblock-id-136" 
     class="
       chroma 
       !tw-block 
@@ -4173,7 +3516,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-149" 
+    id="codeblock-id-137" 
     class="
       chroma 
       !tw-block 
@@ -4271,7 +3614,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-150" 
+    id="codeblock-id-138" 
     class="
       chroma 
       !tw-block 
@@ -4438,7 +3781,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-151" 
+    id="codeblock-id-139" 
     class="
       chroma 
       !tw-block 
@@ -4649,7 +3992,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-152" 
+    id="codeblock-id-140" 
     class="
       chroma 
       !tw-block 
@@ -4782,7 +4125,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-153" 
+    id="codeblock-id-141" 
     class="
       chroma 
       !tw-block 
@@ -4932,7 +4275,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-154" 
+    id="codeblock-id-142" 
     class="
       chroma 
       !tw-block 
@@ -5054,7 +4397,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-155" 
+    id="codeblock-id-143" 
     class="
       chroma 
       !tw-block 
@@ -5198,7 +4541,7 @@ seat 概念对 SSH 完全透明。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-156" 
+    id="codeblock-id-144" 
     class="
       chroma 
       !tw-block 
@@ -5325,7 +4668,7 @@ systemd 服务或 root 启动的进程（起进程身份不同会导致权限问
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-157" 
+    id="codeblock-id-145" 
     class="
       chroma 
       !tw-block 
@@ -5459,7 +4802,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-158" 
+    id="codeblock-id-146" 
     class="
       chroma 
       !tw-block 
@@ -5590,7 +4933,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-159" 
+    id="codeblock-id-147" 
     class="
       chroma 
       !tw-block 
@@ -5708,7 +5051,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-160" 
+    id="codeblock-id-148" 
     class="
       chroma 
       !tw-block 
@@ -5814,7 +5157,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-161" 
+    id="codeblock-id-149" 
     class="
       chroma 
       !tw-block 
@@ -5913,7 +5256,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-162" 
+    id="codeblock-id-150" 
     class="
       chroma 
       !tw-block 
@@ -6011,7 +5354,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-163" 
+    id="codeblock-id-151" 
     class="
       chroma 
       !tw-block 
@@ -6112,7 +5455,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-164" 
+    id="codeblock-id-152" 
     class="
       chroma 
       !tw-block 
@@ -6232,7 +5575,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-165" 
+    id="codeblock-id-153" 
     class="
       chroma 
       !tw-block 
@@ -6332,7 +5675,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-166" 
+    id="codeblock-id-154" 
     class="
       chroma 
       !tw-block 
@@ -6443,7 +5786,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-167" 
+    id="codeblock-id-155" 
     class="
       chroma 
       !tw-block 
@@ -6551,7 +5894,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-168" 
+    id="codeblock-id-156" 
     class="
       chroma 
       !tw-block 
@@ -6664,7 +6007,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-169" 
+    id="codeblock-id-157" 
     class="
       chroma 
       !tw-block 
@@ -6765,7 +6108,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-170" 
+    id="codeblock-id-158" 
     class="
       chroma 
       !tw-block 
@@ -6890,7 +6233,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-171" 
+    id="codeblock-id-159" 
     class="
       chroma 
       !tw-block 
@@ -7007,7 +6350,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-172" 
+    id="codeblock-id-160" 
     class="
       chroma 
       !tw-block 
@@ -7110,7 +6453,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-173" 
+    id="codeblock-id-161" 
     class="
       chroma 
       !tw-block 
@@ -7213,7 +6556,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-174" 
+    id="codeblock-id-162" 
     class="
       chroma 
       !tw-block 
@@ -7314,7 +6657,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-175" 
+    id="codeblock-id-163" 
     class="
       chroma 
       !tw-block 
@@ -7417,7 +6760,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-176" 
+    id="codeblock-id-164" 
     class="
       chroma 
       !tw-block 
@@ -7512,7 +6855,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-177" 
+    id="codeblock-id-165" 
     class="
       chroma 
       !tw-block 
@@ -7607,7 +6950,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-178" 
+    id="codeblock-id-166" 
     class="
       chroma 
       !tw-block 
@@ -7700,7 +7043,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-179" 
+    id="codeblock-id-167" 
     class="
       chroma 
       !tw-block 
@@ -7828,7 +7171,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-180" 
+    id="codeblock-id-168" 
     class="
       chroma 
       !tw-block 
@@ -7989,7 +7332,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-181" 
+    id="codeblock-id-169" 
     class="
       chroma 
       !tw-block 
@@ -8148,7 +7491,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-182" 
+    id="codeblock-id-170" 
     class="
       chroma 
       !tw-block 
@@ -8251,7 +7594,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-183" 
+    id="codeblock-id-171" 
     class="
       chroma 
       !tw-block 
@@ -8349,7 +7692,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-184" 
+    id="codeblock-id-172" 
     class="
       chroma 
       !tw-block 
@@ -8457,7 +7800,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-185" 
+    id="codeblock-id-173" 
     class="
       chroma 
       !tw-block 
@@ -8563,7 +7906,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-186" 
+    id="codeblock-id-174" 
     class="
       chroma 
       !tw-block 
@@ -8729,7 +8072,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-187" 
+    id="codeblock-id-175" 
     class="
       chroma 
       !tw-block 
@@ -8849,7 +8192,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-188" 
+    id="codeblock-id-176" 
     class="
       chroma 
       !tw-block 
@@ -8950,7 +8293,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-189" 
+    id="codeblock-id-177" 
     class="
       chroma 
       !tw-block 
@@ -9045,7 +8388,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-190" 
+    id="codeblock-id-178" 
     class="
       chroma 
       !tw-block 
@@ -9140,7 +8483,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-191" 
+    id="codeblock-id-179" 
     class="
       chroma 
       !tw-block 
@@ -9235,7 +8578,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-192" 
+    id="codeblock-id-180" 
     class="
       chroma 
       !tw-block 
@@ -9333,7 +8676,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-193" 
+    id="codeblock-id-181" 
     class="
       chroma 
       !tw-block 
@@ -9434,7 +8777,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-194" 
+    id="codeblock-id-182" 
     class="
       chroma 
       !tw-block 
@@ -9535,7 +8878,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-195" 
+    id="codeblock-id-183" 
     class="
       chroma 
       !tw-block 
@@ -9641,7 +8984,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-196" 
+    id="codeblock-id-184" 
     class="
       chroma 
       !tw-block 
@@ -9844,7 +9187,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-197" 
+    id="codeblock-id-185" 
     class="
       chroma 
       !tw-block 
@@ -9948,7 +9291,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-198" 
+    id="codeblock-id-186" 
     class="
       chroma 
       !tw-block 
@@ -10056,7 +9399,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-199" 
+    id="codeblock-id-187" 
     class="
       chroma 
       !tw-block 
@@ -10157,7 +9500,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-200" 
+    id="codeblock-id-188" 
     class="
       chroma 
       !tw-block 
@@ -10262,7 +9605,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-201" 
+    id="codeblock-id-189" 
     class="
       chroma 
       !tw-block 
@@ -10381,7 +9724,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-202" 
+    id="codeblock-id-190" 
     class="
       chroma 
       !tw-block 
@@ -10480,7 +9823,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-203" 
+    id="codeblock-id-191" 
     class="
       chroma 
       !tw-block 
@@ -10579,7 +9922,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-204" 
+    id="codeblock-id-192" 
     class="
       chroma 
       !tw-block 
@@ -10675,7 +10018,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-205" 
+    id="codeblock-id-193" 
     class="
       chroma 
       !tw-block 
@@ -10831,7 +10174,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-206" 
+    id="codeblock-id-194" 
     class="
       chroma 
       !tw-block 
@@ -10937,7 +10280,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-207" 
+    id="codeblock-id-195" 
     class="
       chroma 
       !tw-block 
@@ -11045,7 +10388,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-208" 
+    id="codeblock-id-196" 
     class="
       chroma 
       !tw-block 
@@ -11144,7 +10487,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-209" 
+    id="codeblock-id-197" 
     class="
       chroma 
       !tw-block 
@@ -11293,7 +10636,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-210" 
+    id="codeblock-id-198" 
     class="
       chroma 
       !tw-block 
@@ -11391,7 +10734,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-211" 
+    id="codeblock-id-199" 
     class="
       chroma 
       !tw-block 
@@ -11489,7 +10832,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-212" 
+    id="codeblock-id-200" 
     class="
       chroma 
       !tw-block 
@@ -11586,7 +10929,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-213" 
+    id="codeblock-id-201" 
     class="
       chroma 
       !tw-block 
@@ -11696,7 +11039,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-214" 
+    id="codeblock-id-202" 
     class="
       chroma 
       !tw-block 
@@ -11791,7 +11134,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-215" 
+    id="codeblock-id-203" 
     class="
       chroma 
       !tw-block 
@@ -11886,7 +11229,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-216" 
+    id="codeblock-id-204" 
     class="
       chroma 
       !tw-block 
@@ -11981,7 +11324,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-217" 
+    id="codeblock-id-205" 
     class="
       chroma 
       !tw-block 
@@ -12092,7 +11435,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-218" 
+    id="codeblock-id-206" 
     class="
       chroma 
       !tw-block 
@@ -12186,7 +11529,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-219" 
+    id="codeblock-id-207" 
     class="
       chroma 
       !tw-block 
@@ -12282,7 +11625,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-220" 
+    id="codeblock-id-208" 
     class="
       chroma 
       !tw-block 
@@ -12378,7 +11721,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-221" 
+    id="codeblock-id-209" 
     class="
       chroma 
       !tw-block 
@@ -12488,7 +11831,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-222" 
+    id="codeblock-id-210" 
     class="
       chroma 
       !tw-block 
@@ -12583,7 +11926,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-223" 
+    id="codeblock-id-211" 
     class="
       chroma 
       !tw-block 
@@ -12678,7 +12021,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-224" 
+    id="codeblock-id-212" 
     class="
       chroma 
       !tw-block 
@@ -12773,7 +12116,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-225" 
+    id="codeblock-id-213" 
     class="
       chroma 
       !tw-block 
@@ -12875,7 +12218,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-226" 
+    id="codeblock-id-214" 
     class="
       chroma 
       !tw-block 
@@ -12969,7 +12312,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-227" 
+    id="codeblock-id-215" 
     class="
       chroma 
       !tw-block 
@@ -13063,7 +12406,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-228" 
+    id="codeblock-id-216" 
     class="
       chroma 
       !tw-block 
@@ -13161,7 +12504,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-229" 
+    id="codeblock-id-217" 
     class="
       chroma 
       !tw-block 
@@ -13257,7 +12600,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-230" 
+    id="codeblock-id-218" 
     class="
       chroma 
       !tw-block 
@@ -13352,7 +12695,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-231" 
+    id="codeblock-id-219" 
     class="
       chroma 
       !tw-block 
@@ -13446,7 +12789,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-232" 
+    id="codeblock-id-220" 
     class="
       chroma 
       !tw-block 
