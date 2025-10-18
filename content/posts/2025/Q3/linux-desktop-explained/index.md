@@ -939,35 +939,54 @@ ls -la /etc/polkit-1/rules.d/
 `configuration.nix`）来管理，而不是直接修改这些目录。这种设计确保了系统配置的可重现性和原
 子性更新。
 
-### 3.3 GNOME Keyring - 密码与密钥管理
+### 3.3 桌面密钥管理 - GNOME Keyring 与 KDE Wallet
 
-GNOME Keyring 是 GNOME 桌面环境提供的安全密钥存储服务，用于管理用户的密码、证书、密钥等敏
-感信息。它通过加密存储和自动解锁机制，为用户提供了便捷而安全的密码管理体验。
+现代 Linux 桌面环境提供了统一的密钥管理服务，用于安全存储用户的密码、证书、密钥等敏感信
+息。
 
-#### 3.3.1 GNOME Keyring 架构
+GNOME Keyring 和 KDE Wallet 分别是 GNOME 和 KDE 桌面环境的密钥管理解决方案，它们通过加密存
+储和自动解锁机制，为用户提供了便捷而安全的密码管理体验。
 
-GNOME Keyring 采用分层架构设计：
+GNOME Keyring 和 KDE Wallet 都实现了标准的
+[Secrets API](https://freedesktop.org/wiki/Specifications/secret-storage-spec/), 可以根据
+需要任选一个使用。不过据我观察大部分窗口管理器的用户都是用的 GNOME Keyring.
+
+#### 3.3.1 密钥管理系统架构
+
+**GNOME Keyring 架构**：
 
 - **密钥环（Keyring）**：加密的存储容器，每个密钥环有独立的密码
 - **密钥环守护进程（gnome-keyring-daemon）**：管理密钥环的生命周期和访问控制
-- **客户端库（libsecret）**：为应用程序提供统一的密钥访问接口
+- **API**：Gnome 原生支持 **org.freedesktop.secrets DBus API**, 目前流行的 secrets 客户端
+  库 libsecret 也是 gnome 开发的。
 - **PAM 集成**：通过 `pam_gnome_keyring.so` 实现登录时自动解锁
 
-**核心组件**：
+**KDE Wallet 架构**：
+
+- **KWalletManager**：图形界面管理工具
+- **kwalletd**：钱包守护进程
+- **API**：KDE Wallet 从 5.97.0 （2022 年 8 月）开始支持
+  [org.freedesktop.secrets DBus API](https://freedesktop.org/wiki/Specifications/secret-storage-spec/),
+  因此可以直接通过 libsecret 往 KDE Wallet 中存取 passwords 等 secret.
+- **PAM 集成**：通过 `pam_kwallet.so` 实现自动解锁
+
+**核心组件路径**：
 
 ```bash
-# 密钥环守护进程（NixOS 中位于 nix store）
+# GNOME Keyring 组件（NixOS 中位于 nix store）
 /run/current-system/sw/bin/gnome-keyring-daemon
-
-# 客户端库（NixOS 中位于 nix store）
 /run/current-system/sw/lib/libsecret-1.so
-
-# PAM 模块（NixOS 中位于 nix store）
 /run/current-system/sw/lib/security/pam_gnome_keyring.so
 
-# 配置文件
-~/.config/keyrings/          # 用户密钥环存储目录
-~/.local/share/keyrings/     # 系统密钥环存储目录
+# KDE Wallet 组件（NixOS 中位于 nix store）
+/run/current-system/sw/bin/kwalletd5
+/run/current-system/sw/bin/kwalletmanager5
+/run/current-system/sw/lib/security/pam_kwallet.so
+
+# 配置文件位置
+~/.local/share/keyrings/     # GNOME 密钥环存储目录
+~/.local/share/kwalletd/     # KDE 钱包文件存储目录
+~/.config/kwalletrc          # KDE 钱包配置文件
 ```
 
 #### 3.3.2 密钥环类型与用途
@@ -979,218 +998,78 @@ GNOME Keyring 采用分层架构设计：
 | **session** | 会话密钥环，临时存储       | 会话开始时创建     |
 | **crypto**  | 加密密钥环，存储证书和私钥 | 按需解锁           |
 
-#### 3.3.3 密钥环管理
+#### 3.3.3 钱包创建与管理
 
-**命令行工具**：
-
-```bash
-# 查看密钥环状态
-gnome-keyring-daemon --list
-
-# 创建新密钥环
-gnome-keyring-daemon --create-keyring my-keyring
-
-# 解锁密钥环
-gnome-keyring-daemon --unlock my-keyring
-
-# 使用 secret-tool 管理密钥
-secret-tool store --label="My Password" application myapp
-secret-tool lookup application myapp
-
-# 使用 libsecret 的 Python 接口
-python3 -c "
-import secretstorage
-bus = secretstorage.dbus_init()
-collection = secretstorage.get_default_collection(bus)
-items = list(collection.search_items({'application': 'myapp'}))
-for item in items:
-    print(f'Label: {item.get_label()}')
-    print(f'Secret: {item.get_secret().decode()}')
-"
-```
-
-**图形界面工具**：
+**图形界面管理**：
 
 ```bash
 # GNOME 密钥环管理器
 seahorse
 
-# 或通过设置应用
-gnome-control-center passwords
+# KDE 钱包管理器
+kwalletmanager5
+```
+
+通过图形界面可以：
+
+- 创建新的密钥环/钱包
+- 设置密码和加密算法
+- 管理存储的密码和证书
+- 配置自动解锁策略
+- 备份和恢复密钥环
+
+**基本命令行操作**：
+
+```bash
+# 使用 secret-tool 管理 GNOME Keyring
+secret-tool store --label="My Password" application myapp
+secret-tool lookup application myapp
+
+# 使用 kwallet-query 管理 KDE Wallet
+kwallet-query --write password "MyApp" "username" "password"
+kwallet-query --read password "MyApp" "username"
 ```
 
 #### 3.3.4 应用程序集成
 
-**GTK 应用集成**：
+**常见应用程序集成**：
 
-```python
-# Python 应用使用 libsecret
-import gi
-gi.require_version('Secret', '1')
-from gi.repository import Secret
+**VSCode**：
 
-# 存储密码
-schema = Secret.Schema.new("com.example.app", Secret.SchemaFlags.NONE,
-    Secret.SchemaAttribute.new("application", Secret.SchemaAttributeType.STRING),
-    Secret.SchemaAttribute.new("username", Secret.SchemaAttributeType.STRING)
-)
+- 自动集成系统密钥管理服务
+- 存储 Git 凭据、扩展设置等敏感信息
+- 通过 `git credential.helper` 配置自动使用
 
-Secret.password_store_sync(schema, {}, Secret.COLLECTION_DEFAULT,
-    "My App Password", "secret_password", None)
+**GitHub CLI**：
 
-# 检索密码
-password = Secret.password_lookup_sync(schema, {
-    "application": "com.example.app",
-    "username": "user@example.com"
-}, None)
+```bash
+# 配置 GitHub CLI 使用系统密钥管理
+gh auth login --web
+# 凭据会自动存储到系统密钥环中
 ```
 
 **浏览器集成**：
 
-现代浏览器（如 Firefox、Chrome）可以通过 GNOME Keyring 存储网站密码：
+- Firefox、Chrome 等现代浏览器支持系统密钥管理
+- 网站密码自动保存到密钥环/钱包中
+- 跨设备同步（如果启用）
 
-```bash
-# Firefox 配置
-echo "user_pref(\"signon.management.page.enabled\", true);" >> ~/.mozilla/firefox/*/prefs.js
+**API 集成示例**：
 
-# Chrome 配置（通过环境变量）
-export GOOGLE_API_KEY="your-api-key"
-export GOOGLE_DEFAULT_CLIENT_ID="your-client-id"
-```
+- [libsecret API](https://gnome.pages.gitlab.gnome.org/libsecret/)
 
-### 3.4 KDE Wallet - KDE 密钥管理
-
-KDE Wallet 是 KDE 桌面环境提供的密钥管理服务，功能类似于 GNOME Keyring，但专门为 KDE 应用
-程序优化。它支持多种加密算法和存储后端，提供了灵活的密钥管理解决方案。
-
-#### 3.4.1 KDE Wallet 架构
-
-KDE Wallet 采用模块化设计：
-
-- **KWalletManager**：图形界面管理工具
-- **kwalletd**：钱包守护进程
-- **KWallet API**：为应用程序提供密钥访问接口
-- **PAM 集成**：通过 `pam_kwallet.so` 实现自动解锁
-
-**核心组件**：
-
-```bash
-# 钱包守护进程（NixOS 中位于 nix store）
-/run/current-system/sw/bin/kwalletd5
-
-# 管理工具（NixOS 中位于 nix store）
-/run/current-system/sw/bin/kwalletmanager5
-
-# PAM 模块（NixOS 中位于 nix store）
-/run/current-system/sw/lib/security/pam_kwallet.so
-
-# 配置文件
-~/.local/share/kwalletd/      # 钱包文件存储目录
-~/.config/kwalletrc           # 钱包配置文件
-```
-
-#### 3.4.2 钱包类型与加密
-
-**支持的钱包类型**：
-
-| 钱包类型     | 加密算法 | 用途                          |
-| ------------ | -------- | ----------------------------- |
-| **Blowfish** | Blowfish | 默认加密算法，兼容性好        |
-| **GPG**      | GPG      | 使用 GPG 密钥加密，安全性更高 |
-| **AES**      | AES-256  | 现代加密算法，性能优秀        |
-
-**钱包创建与管理**：
-
-```bash
-# 创建新钱包
-kwalletmanager5 --new-wallet
-
-# 查看钱包状态
-kwallet-query --list
-
-# 解锁钱包
-kwallet-query --unlock wallet_name
-
-# 存储密钥
-kwallet-query --write password "MyApp" "username" "password"
-
-# 读取密钥
-kwallet-query --read password "MyApp" "username"
-```
-
-#### 3.4.3 应用程序集成
-
-**Qt 应用集成**：
-
-```cpp
-// C++ 应用使用 KWallet
-#include <KWallet/KWallet>
-
-KWallet::Wallet *wallet = KWallet::Wallet::openWallet(
-    KWallet::Wallet::NetworkWallet(), 0, KWallet::Wallet::Synchronous
-);
-
-if (wallet) {
-    // 存储密码
-    wallet->writePassword("MyApp", "username", "password");
-
-    // 读取密码
-    QString password;
-    wallet->readPassword("MyApp", "username", password);
-
-    wallet->closeWallet(true);
-}
-```
-
-**Python 应用集成**：
-
-```python
-# 使用 PyKDE5 绑定
-from PyKDE5 import KWallet
-
-wallet = KWallet.Wallet.openWallet(
-    KWallet.Wallet.NetworkWallet(), 0, KWallet.Wallet.Synchronous
-)
-
-if wallet:
-    # 存储密码
-    wallet.writePassword("MyApp", "username", "password")
-
-    # 读取密码
-    password = wallet.readPassword("MyApp", "username")
-
-    wallet.closeWallet(True)
-```
-
-#### 3.4.4 配置与优化
+#### 3.3.5 配置与优化
 
 **NixOS 配置示例**：
 
 ```nix
 # configuration.nix
-services.kdewallet = {
-  enable = true;
-  package = pkgs.kwallet;
-};
-
+# 启用 GNOME Keyring
+services.gnome.gnome-keyring.enable = true;
+# GNOME Keyring GUI 客户端
+programs.seahorse.enable = true;
 # 启用 PAM 集成
-security.pam.services.login.kwallet = {
-  enable = true;
-  noPAM = false;
-};
-```
-
-**性能优化**：
-
-```bash
-# 调整钱包超时时间
-echo "Timeout=300" >> ~/.config/kwalletrc
-
-# 启用自动锁定
-echo "AutoLock=true" >> ~/.config/kwalletrc
-
-# 设置锁定超时
-echo "LockTimeout=600" >> ~/.config/kwalletrc
+security.pam.services.login.enableGnomeKeyring = true;
 ```
 
 ### 3.5 安全组件集成与最佳实践
