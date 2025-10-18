@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-18T12:18:59+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统组件概览与故障排查指南</title><link href="https://thiscute.world/posts/linux-desktop-explained/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/systemd-basics/?utm_source=atom_feed" rel="related" type="text/html" title="通过 systemctl 设置自定义 Service"/><link href="https://thiscute.world/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - 我的 NixOS 使用体会"/><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/?utm_source=atom_feed" rel="related" type="text/html" title="个人数据安全不完全指南"/><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 在 Lichee Pi 4A 上是如何启动的"/><link href="https://thiscute.world/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="为什么我折腾这些小众技术？"/><id>https://thiscute.world/posts/linux-desktop-explained/</id><published>2025-09-09T20:17:33+08:00</published><updated>2025-10-03T01:59:33+08:00</updated><summary type="html">&lt;h2 id="定位与目标" class="headerLink"&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-18T13:18:39+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统组件概览与故障排查指南</title><link href="https://thiscute.world/posts/linux-desktop-explained/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/systemd-basics/?utm_source=atom_feed" rel="related" type="text/html" title="通过 systemctl 设置自定义 Service"/><link href="https://thiscute.world/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - 我的 NixOS 使用体会"/><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/?utm_source=atom_feed" rel="related" type="text/html" title="个人数据安全不完全指南"/><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 在 Lichee Pi 4A 上是如何启动的"/><link href="https://thiscute.world/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="为什么我折腾这些小众技术？"/><id>https://thiscute.world/posts/linux-desktop-explained/</id><published>2025-09-09T20:17:33+08:00</published><updated>2025-10-03T01:59:33+08:00</updated><summary type="html">&lt;h2 id="定位与目标" class="headerLink"&gt;
 &lt;a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"&gt;&lt;/a&gt;定位与目标&lt;/h2&gt;&lt;p&gt;Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。&lt;/p&gt;
 &lt;p&gt;即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。&lt;/p&gt;</summary><content type="html"><![CDATA[<h2 id="定位与目标" class="headerLink">
     <a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"></a>定位与目标</h2><p>Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。</p>
@@ -88,7 +88,7 @@ fcitx5, 使用的发行版为 NixOS.</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-91" 
+    id="codeblock-id-98" 
     class="
       chroma 
       !tw-block 
@@ -259,7 +259,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-92" 
+    id="codeblock-id-99" 
     class="
       chroma 
       !tw-block 
@@ -394,7 +394,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-93" 
+    id="codeblock-id-100" 
     class="
       chroma 
       !tw-block 
@@ -568,7 +568,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-94" 
+    id="codeblock-id-101" 
     class="
       chroma 
       !tw-block 
@@ -700,7 +700,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-95" 
+    id="codeblock-id-102" 
     class="
       chroma 
       !tw-block 
@@ -733,7 +733,7 @@ Partition（XBOOTLDR）下</li>
 <p><strong>配置文件路径</strong>：</p>
 <ul>
 <li><code>/etc/systemd/system/</code>：系统级服务配置</li>
-<li><code>/usr/lib/systemd/system/</code>：软件包提供的默认配置（其他发行版）</li>
+<li><code>/run/current-system/sw/lib/systemd/system/</code>（NixOS）或 <code>/usr/lib/systemd/system/</code>（其他发行版）：软件包提供的默认配置</li>
 <li><code>/etc/systemd/user/</code>：用户级服务配置</li>
 </ul>
 <h3 id="22-日志系统" class="headerLink">
@@ -909,7 +909,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-96" 
+    id="codeblock-id-103" 
     class="
       chroma 
       !tw-block 
@@ -1010,7 +1010,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-97" 
+    id="codeblock-id-104" 
     class="
       chroma 
       !tw-block 
@@ -1109,7 +1109,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-98" 
+    id="codeblock-id-105" 
     class="
       chroma 
       !tw-block 
@@ -1303,7 +1303,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-99" 
+    id="codeblock-id-106" 
     class="
       chroma 
       !tw-block 
@@ -1358,7 +1358,7 @@ daemon）, 一般直接 print 即可。</li>
 <p><strong>工作流程</strong>：</p>
 <ol>
 <li>内核检测到硬件变化，发出 uevent</li>
-<li>udevd 接收事件，根据规则文件（<code>/usr/lib/udev/rules.d/</code>、<code>/etc/udev/rules.d/</code>）匹配并执行动作（<code>RUN</code> 脚本、设置 <code>OWNER</code>/<code>GROUP</code>/<code>MODE</code>、创建 symlink、设置权限）。</li>
+<li>udevd 接收事件，根据规则文件（<code>/run/current-system/sw/lib/udev/rules.d/</code>（NixOS）或<code>/usr/lib/udev/rules.d/</code>（其他发行版）、<code>/etc/udev/rules.d/</code>）匹配并执行动作（<code>RUN</code> 脚本、设置 <code>OWNER</code>/<code>GROUP</code>/<code>MODE</code>、创建 symlink、设置权限）。</li>
 <li>通知 systemd，可能触发 device units</li>
 </ol>
 <p><strong>规则示例</strong>：</p>
@@ -1437,7 +1437,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-100" 
+    id="codeblock-id-107" 
     class="
       chroma 
       !tw-block 
@@ -1537,7 +1537,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-101" 
+    id="codeblock-id-108" 
     class="
       chroma 
       !tw-block 
@@ -1643,7 +1643,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-102" 
+    id="codeblock-id-109" 
     class="
       chroma 
       !tw-block 
@@ -1750,7 +1750,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-103" 
+    id="codeblock-id-110" 
     class="
       chroma 
       !tw-block 
@@ -1897,7 +1897,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-104" 
+    id="codeblock-id-111" 
     class="
       chroma 
       !tw-block 
@@ -1994,7 +1994,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-105" 
+    id="codeblock-id-112" 
     class="
       chroma 
       !tw-block 
@@ -2174,7 +2174,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-106" 
+    id="codeblock-id-113" 
     class="
       chroma 
       !tw-block 
@@ -2385,7 +2385,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-107" 
+    id="codeblock-id-114" 
     class="
       chroma 
       !tw-block 
@@ -2518,7 +2518,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-108" 
+    id="codeblock-id-115" 
     class="
       chroma 
       !tw-block 
@@ -2563,7 +2563,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
 <li>
 <p><strong>PolicyKit（动态授权管控）</strong></p>
 <p>针对静态规则无法覆盖的动态场景（如普通用户临时需要执行敏感操作），D-Bus 集成
-PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如 <code>logind1</code>、<code>systemd1</code>）会在<code>/run/current-system/sw/share/polkit-1/actions/</code>（NixOS 中）或<code>/usr/share/polkit-1/actions/</code>（传统发行版中）定义 &ldquo;可授权动作&rdquo;，例如<code>org.freedesktop.login1.power-off</code>（对应 <code>logind1</code> 的关机方法）：</p>
+PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如 <code>logind1</code>、<code>systemd1</code>）会在<code>/run/current-system/sw/share/polkit-1/actions/</code>（NixOS 中）或<code>/run/current-system/sw/share/polkit-1/actions/</code>（NixOS）或<code>/usr/share/polkit-1/actions/</code>（传统发行版中）定义 &ldquo;可授权动作&rdquo;，例如<code>org.freedesktop.login1.power-off</code>（对应 <code>logind1</code> 的关机方法）：</p>
 <ul>
 <li>
 <p>普通用户调用时，会触发认证流程（如输入管理员密码），认证通过后临时获得授权；</p>
@@ -2668,7 +2668,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-109" 
+    id="codeblock-id-116" 
     class="
       chroma 
       !tw-block 
@@ -2790,7 +2790,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-110" 
+    id="codeblock-id-117" 
     class="
       chroma 
       !tw-block 
@@ -2834,9 +2834,12 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
     <a href="#seat%e5%ba%a7%e5%b8%ad%e6%a6%82%e5%bf%b5" class="header-mark"></a>seat（座席）概念</h4><blockquote>
   <p><a href="https://www.freedesktop.org/wiki/Software/systemd/multiseat/" target="_blank" rel="noopener noreferrer">https://www.freedesktop.org/wiki/Software/systemd/multiseat/</a></p>
 </blockquote><ul>
-<li><strong>seat</strong>（座席）是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话（sessions）。</li>
-<li>所有设备默认都会被分配给 <strong>seat0</strong>, 想再搞一个 seat1 实现多人图形化登录，必须通过 udev
-规则完成如下操作：
+<li>
+<p><strong>seat</strong>（座席）是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话（sessions）。</p>
+</li>
+<li>
+<p>所有设备默认都会被分配给 <strong>seat0</strong>, 想再搞一个 seat1 实现多人图形化登录，必须通过 udev
+规则完成如下操作：</p>
 <ol>
 <li>必须拥有第二张显卡，这是硬性的前提！为了让 seat1 实际可用，还必须拥有第二套键鼠与声卡：</li>
 <li>给第二块显卡写 udev 规则，打上 <code>TAG+=&quot;master-of-seat&quot;</code> 并设置<code>ENV{ID_SEAT}=&quot;seat1&quot;</code>；</li>
@@ -2844,9 +2847,15 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
 <li>重启系统</li>
 </ol>
 </li>
-<li>logind 会把 VT/图形会话绑定到具体 seat，从而按 seat 粒度做电源管理、设备访问控制、空闲检测等策略。</li>
-<li><strong>远程 SSH 登录不生成也不归属任何 seat</strong>；logind 仅为其建立会话对象，seat 字段留空。因此
-seat 概念对 SSH 完全透明。</li>
+<li>
+<p>logind 会把 VT/图形会话绑定到具体 seat，从而按 seat 粒度做电源管理、设备访问控制、空闲检测等策略。</p>
+</li>
+<li>
+<p><strong>远程 SSH 登录不生成也不归属任何 seat</strong>；logind 仅为其建立会话对象，seat 字段留空。因此
+seat 概念对 SSH 完全透明。</p>
+<blockquote>
+  <p><strong>注意</strong>：虽然 SSH 会话不归属任何 seat，但这不影响大多数设备的访问。设备权限管理有两套并行的机制：传统的 Unix 权限模型（基于用户组，如 <code>video</code>、<code>audio</code>、<code>input</code> 等）和现代的 systemd-logind ACL 机制（基于 seat 和会话）。SSH 会话主要依赖前者，因此只要用户具有相应的设备权限，仍可正常访问 GPU、声卡、存储设备等硬件资源。seat 机制主要影响的是需要图形界面交互的设备（如显示器、键盘鼠标）的访问控制。</p>
+</blockquote></li>
 </ul>
 <p>现代 Linux 桌面系统基本都是单用户使用，因此后续讨论默认聚焦单 seat 场景。</p>
 <h4 id="常用命令" class="headerLink">
@@ -2925,7 +2934,7 @@ seat 概念对 SSH 完全透明。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-111" 
+    id="codeblock-id-118" 
     class="
       chroma 
       !tw-block 
@@ -3052,7 +3061,7 @@ systemd 服务或 root 启动的进程（起进程身份不同会导致权限问
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-112" 
+    id="codeblock-id-119" 
     class="
       chroma 
       !tw-block 
@@ -3186,7 +3195,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-113" 
+    id="codeblock-id-120" 
     class="
       chroma 
       !tw-block 
@@ -3317,7 +3326,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-114" 
+    id="codeblock-id-121" 
     class="
       chroma 
       !tw-block 
@@ -3435,7 +3444,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-115" 
+    id="codeblock-id-122" 
     class="
       chroma 
       !tw-block 
@@ -3541,7 +3550,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-116" 
+    id="codeblock-id-123" 
     class="
       chroma 
       !tw-block 
@@ -3640,7 +3649,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-117" 
+    id="codeblock-id-124" 
     class="
       chroma 
       !tw-block 
@@ -3738,7 +3747,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-118" 
+    id="codeblock-id-125" 
     class="
       chroma 
       !tw-block 
@@ -3839,7 +3848,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-119" 
+    id="codeblock-id-126" 
     class="
       chroma 
       !tw-block 
@@ -3959,7 +3968,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-120" 
+    id="codeblock-id-127" 
     class="
       chroma 
       !tw-block 
@@ -4059,7 +4068,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-121" 
+    id="codeblock-id-128" 
     class="
       chroma 
       !tw-block 
@@ -4170,7 +4179,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-122" 
+    id="codeblock-id-129" 
     class="
       chroma 
       !tw-block 
@@ -4278,7 +4287,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-123" 
+    id="codeblock-id-130" 
     class="
       chroma 
       !tw-block 
@@ -4391,7 +4400,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-124" 
+    id="codeblock-id-131" 
     class="
       chroma 
       !tw-block 
@@ -4492,7 +4501,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-125" 
+    id="codeblock-id-132" 
     class="
       chroma 
       !tw-block 
@@ -4617,7 +4626,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-126" 
+    id="codeblock-id-133" 
     class="
       chroma 
       !tw-block 
@@ -4734,7 +4743,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-127" 
+    id="codeblock-id-134" 
     class="
       chroma 
       !tw-block 
@@ -4837,7 +4846,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-128" 
+    id="codeblock-id-135" 
     class="
       chroma 
       !tw-block 
@@ -4940,7 +4949,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-129" 
+    id="codeblock-id-136" 
     class="
       chroma 
       !tw-block 
@@ -5041,7 +5050,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-130" 
+    id="codeblock-id-137" 
     class="
       chroma 
       !tw-block 
@@ -5144,7 +5153,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-131" 
+    id="codeblock-id-138" 
     class="
       chroma 
       !tw-block 
@@ -5239,7 +5248,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-132" 
+    id="codeblock-id-139" 
     class="
       chroma 
       !tw-block 
@@ -5334,7 +5343,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-133" 
+    id="codeblock-id-140" 
     class="
       chroma 
       !tw-block 
@@ -5427,7 +5436,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-134" 
+    id="codeblock-id-141" 
     class="
       chroma 
       !tw-block 
@@ -5460,11 +5469,865 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
 <li><strong>应用兼容性</strong>：部分应用需要特定版本的 PipeWire</li>
 </ol>
 <hr>
-<h2 id="9-中文输入" class="headerLink">
-    <a href="#9-%e4%b8%ad%e6%96%87%e8%be%93%e5%85%a5" class="header-mark"></a>9. 中文输入</h2><p>中文输入是中文用户桌面体验的重要组成部分，涉及输入法框架、图形工具包集成、Wayland 协议支持等多个层面。</p>
-<h3 id="91-输入法框架架构" class="headerLink">
-    <a href="#91-%e8%be%93%e5%85%a5%e6%b3%95%e6%a1%86%e6%9e%b6%e6%9e%b6%e6%9e%84" class="header-mark"></a>9.1 输入法框架架构</h3><p>现代 Linux 桌面主要使用 fcitx5 作为中文输入解决方案，它通过插件系统支持多种输入引擎，并与图形环境深度集成。</p>
+<h2 id="9-中文支持字体渲染与输入法" class="headerLink">
+    <a href="#9-%e4%b8%ad%e6%96%87%e6%94%af%e6%8c%81%e5%ad%97%e4%bd%93%e6%b8%b2%e6%9f%93%e4%b8%8e%e8%be%93%e5%85%a5%e6%b3%95" class="header-mark"></a>9. 中文支持：字体渲染与输入法</h2><p>中文支持是中文用户桌面体验的核心组成部分，包括字体渲染配置和中文输入法设置。本章节将详细介绍如何在 Linux 桌面环境中正确配置中文字体和输入法，解决常见的显示和输入问题。</p>
+<h3 id="91-字体渲染与配置" class="headerLink">
+    <a href="#91-%e5%ad%97%e4%bd%93%e6%b8%b2%e6%9f%93%e4%b8%8e%e9%85%8d%e7%bd%ae" class="header-mark"></a>9.1 字体渲染与配置</h3><p>字体渲染是桌面应用显示质量的关键因素，特别是对于中文用户，CJK（中日韩）字体的正确配置直接影响阅读体验。Linux 桌面通过 fontconfig 系统统一管理字体配置，解决字体匹配、渲染和显示问题。</p>
+<h4 id="911-fontconfig-架构概览" class="headerLink">
+    <a href="#911-fontconfig-%e6%9e%b6%e6%9e%84%e6%a6%82%e8%a7%88" class="header-mark"></a>9.1.1 fontconfig 架构概览</h4><p>fontconfig 是 Linux 桌面系统的字体配置框架，负责：</p>
+<ul>
+<li><strong>字体发现</strong>：扫描系统字体目录，建立字体索引</li>
+<li><strong>字体匹配</strong>：根据应用请求的字体特征（族名、样式、语言等）选择最合适的字体</li>
+<li><strong>字体渲染</strong>：配置字体渲染参数（抗锯齿、子像素渲染、提示等）</li>
+<li><strong>字体替换</strong>：当请求的字体不存在时，提供合适的替代字体</li>
+</ul>
 <p><strong>核心组件</strong>：</p>
+<ul>
+<li><strong>fc-cache</strong>：字体缓存生成工具</li>
+<li><strong>fc-list</strong>：字体列表查询工具</li>
+<li><strong>fc-match</strong>：字体匹配测试工具</li>
+<li><strong>配置文件</strong>：XML 格式的字体配置规则</li>
+</ul>
+<p><strong>配置文件层次</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-142" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 系统级配置（优先级从高到低）</span>
+</span></span><span class="line"><span class="cl">/etc/fonts/fonts.conf                    <span class="c1"># 主配置文件</span>
+</span></span><span class="line"><span class="cl">/etc/fonts/conf.d/                       <span class="c1"># 配置片段目录</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 用户级配置</span>
+</span></span><span class="line"><span class="cl">~/.config/fontconfig/fonts.conf          <span class="c1"># 用户主配置</span>
+</span></span><span class="line"><span class="cl">~/.config/fontconfig/conf.d/             <span class="c1"># 用户配置片段</span></span></span></code></pre>
+</div>
+<h4 id="912-cjk-字体配置基础" class="headerLink">
+    <a href="#912-cjk-%e5%ad%97%e4%bd%93%e9%85%8d%e7%bd%ae%e5%9f%ba%e7%a1%80" class="header-mark"></a>9.1.2 CJK 字体配置基础</h4><p><strong>常见 CJK 字体族</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>字体族</th>
+          <th>特点</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Source Han Sans</strong></td>
+          <td>Adobe 开源，专业设计</td>
+          <td>现代应用，网页显示</td>
+      </tr>
+      <tr>
+          <td><strong>Source Han Serif</strong></td>
+          <td>Adobe 开源，衬线字体</td>
+          <td>设计软件，印刷</td>
+      </tr>
+      <tr>
+          <td><strong>Source Han Mono</strong></td>
+          <td>思源等宽字体</td>
+          <td>编程，代码显示</td>
+      </tr>
+      <tr>
+          <td><strong>Noto Sans CJK</strong></td>
+          <td>Google 开源，与 Source Han 为同一字体</td>
+          <td>系统界面，兼容性</td>
+      </tr>
+      <tr>
+          <td><strong>WenQuanYi</strong></td>
+          <td>文泉驿，轻量级</td>
+          <td>系统界面，终端</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+  <p><strong>说明</strong>：Source Han 系列和 Noto CJK 系列实际上是同一套字体，只是分别由 Adobe 和 Google
+以自己的品牌名发布。</p>
+</blockquote><p>以及一些新兴的开源字体：</p>
+<table>
+  <thead>
+      <tr>
+          <th>字体族</th>
+          <th>特点</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>LXGW WenKai Screen</strong></td>
+          <td>霞鹜文楷屏幕版</td>
+          <td>屏幕阅读，文档</td>
+      </tr>
+      <tr>
+          <td><strong>Maple Mono NF CN</strong></td>
+          <td>中英文等宽字体</td>
+          <td>编程，终端</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>NixOS 字体配置示例</strong>：</p>
+<div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">nix</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-143" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># configuration.nix</span>
+</span></span><span class="line"><span class="cl"><span class="n">fonts</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 禁用默认字体包，使用自定义配置</span>
+</span></span><span class="line"><span class="cl">  <span class="n">enableDefaultPackages</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">fontDir</span><span class="o">.</span><span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># 安装常用 CJK 字体和图标字体</span>
+</span></span><span class="line"><span class="cl">  <span class="n">packages</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 图标字体</span>
+</span></span><span class="line"><span class="cl">    <span class="n">material-design-icons</span>
+</span></span><span class="line"><span class="cl">    <span class="n">font-awesome</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nerd-fonts</span><span class="o">.</span><span class="n">symbols-only</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nerd-fonts</span><span class="o">.</span><span class="n">jetbrains-mono</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Noto 是 Google 开发的开源字体家族</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 名字的含义是「没有豆腐」（no tofu），因为缺字时显示的方框或者方框被叫作 tofu</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Noto 系列字族只支持西文，命名规则是 Noto + Sans 或 Serif + 文字名称。</span>
+</span></span><span class="line"><span class="cl">    <span class="n">noto-fonts</span> <span class="c1"># 大部分文字的常见样式，不包含汉字</span>
+</span></span><span class="line"><span class="cl">    <span class="n">noto-fonts-color-emoji</span> <span class="c1"># 彩色的表情符号字体</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Noto CJK 为「思源」系列汉字字体，由 Adobe + Google 共同开发</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Google 以 Noto Sans/Serif CJK SC/TC/HK/JP/KR 的名称发布该系列字体。</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 这俩跟 noto-fonts-cjk-sans/serif 实际为同一字体，只是分别由 Adobe/Google 以自己的品牌名发布</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># noto-fonts-cjk-sans # 思源黑体</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># noto-fonts-cjk-serif # 思源宋体</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Adobe 以 Source Han Sans/Serif 的名称发布此系列字体</span>
+</span></span><span class="line"><span class="cl">    <span class="n">source-sans</span> <span class="c1"># 无衬线字体，不含汉字。字族名叫 Source Sans 3，以及带字重的变体（VF）</span>
+</span></span><span class="line"><span class="cl">    <span class="n">source-serif</span> <span class="c1"># 衬线字体，不含汉字。字族名叫 Source Serif 4，以及带字重的变体</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Source Hans 系列汉字字体由 Adobe + Google 共同开发</span>
+</span></span><span class="line"><span class="cl">    <span class="n">source-han-sans</span> <span class="c1"># 思源黑体</span>
+</span></span><span class="line"><span class="cl">    <span class="n">source-han-serif</span> <span class="c1"># 思源宋体</span>
+</span></span><span class="line"><span class="cl">    <span class="n">source-han-mono</span> <span class="c1"># 思源等宽</span>
+</span></span><span class="line"><span class="cl">  <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># 字体渲染配置</span>
+</span></span><span class="line"><span class="cl">  <span class="n">fontconfig</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">antialias</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>        <span class="c1"># 启用抗锯齿</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hinting</span><span class="o">.</span><span class="n">enable</span> <span class="o">=</span> <span class="no">false</span><span class="p">;</span>  <span class="c1"># 高分辨率下禁用字体微调</span>
+</span></span><span class="line"><span class="cl">    <span class="n">subpixel</span><span class="o">.</span><span class="n">rgba</span> <span class="o">=</span> <span class="s2">&#34;rgb&#34;</span><span class="p">;</span>   <span class="c1"># IPS 屏幕使用 RGB 子像素排列</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 默认字体族配置</span>
+</span></span><span class="line"><span class="cl">    <span class="n">defaultFonts</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">serif</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Source Serif 4&#34;</span>        <span class="c1"># 西文衬线字体</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Source Han Serif SC&#34;</span>   <span class="c1"># 中文宋体</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Source Han Serif TC&#34;</span>   <span class="c1"># 繁体宋体</span>
+</span></span><span class="line"><span class="cl">      <span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="n">sansSerif</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Source Sans 3&#34;</span>         <span class="c1"># 西文无衬线字体</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Source Han Sans SC&#34;</span>    <span class="c1"># 中文黑体</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Source Han Sans TC&#34;</span>    <span class="c1"># 繁体黑体</span>
+</span></span><span class="line"><span class="cl">      <span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="n">monospace</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Maple Mono NF CN&#34;</span>      <span class="c1"># 中英文等宽字体</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Source Han Mono SC&#34;</span>    <span class="c1"># 中文等宽</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;JetBrainsMono Nerd Font&#34;</span>  <span class="c1"># 西文等宽</span>
+</span></span><span class="line"><span class="cl">      <span class="p">];</span>
+</span></span><span class="line"><span class="cl">      <span class="n">emoji</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;Noto Color Emoji&#34;</span> <span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre>
+</div>
+<blockquote>
+  <p><strong>重要说明</strong>：Source Han 系列（Adobe 发布）和 Noto CJK 系列（Google 发布）实际上是同一套字体，只是分别由 Adobe 和 Google 以自己的品牌名发布。在 NixOS 中，<code>source-han-sans</code> 和<code>noto-fonts-cjk-sans</code> 指向的是同一套字体文件。</p>
+</blockquote><h4 id="913-常见-cjk-字体问题与解决方案" class="headerLink">
+    <a href="#913-%e5%b8%b8%e8%a7%81-cjk-%e5%ad%97%e4%bd%93%e9%97%ae%e9%a2%98%e4%b8%8e%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88" class="header-mark"></a>9.1.3 常见 CJK 字体问题与解决方案</h4><p><strong>问题 1：中文字符显示为方块或问号</strong></p>
+<p><strong>原因</strong>：系统缺少中文字体或字体匹配规则不正确</p>
+<p><strong>排查步骤</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-144" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 1. 检查已安装的 CJK 字体</span>
+</span></span><span class="line"><span class="cl">fc-list :lang<span class="o">=</span>zh-cn
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 测试字体匹配</span>
+</span></span><span class="line"><span class="cl">fc-match <span class="s2">&#34;sans-serif:lang=zh-cn&#34;</span>
+</span></span><span class="line"><span class="cl">fc-match <span class="s2">&#34;serif:lang=zh-cn&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 查看字体详细信息</span>
+</span></span><span class="line"><span class="cl">fc-list <span class="p">|</span> grep -i <span class="s2">&#34;noto\|source\|wqy&#34;</span></span></span></code></pre>
+</div>
+<p>使用上面提供的示例配置通常可解决问题。</p>
+<p><strong>问题 2：中文字体中夹杂日语字体</strong></p>
+<p><strong>原因</strong>：CJK 字体通常包含中文、日文、韩文字符，当系统缺少专门的中文字体时，会使用包含日文字符的 CJK 字体，导致中文字符显示为日语字形。</p>
+<p><strong>排查步骤</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-145" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 检查当前使用的字体</span>
+</span></span><span class="line"><span class="cl">fc-match <span class="s2">&#34;sans-serif:lang=zh-cn&#34;</span>
+</span></span><span class="line"><span class="cl">fc-match <span class="s2">&#34;serif:lang=zh-cn&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看字体包含的语言支持</span>
+</span></span><span class="line"><span class="cl">fc-list :lang<span class="o">=</span>zh-cn
+</span></span><span class="line"><span class="cl">fc-list :lang<span class="o">=</span>ja</span></span></code></pre>
+</div>
+<p><strong>解决方案</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">nix</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-146" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># configuration.nix</span>
+</span></span><span class="line"><span class="cl"><span class="n">fonts</span><span class="o">.</span><span class="n">fontconfig</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">defaultFonts</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sansSerif</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Source Han Sans SC&#34;</span>    <span class="c1"># 简体中文优先</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Source Han Sans TC&#34;</span>    <span class="c1"># 繁体中文备选</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Source Sans 3&#34;</span>         <span class="c1"># 西文备选</span>
+</span></span><span class="line"><span class="cl">    <span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">serif</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Source Han Serif SC&#34;</span>   <span class="c1"># 简体中文优先</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Source Han Serif TC&#34;</span>   <span class="c1"># 繁体中文备选</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;Source Serif 4&#34;</span>        <span class="c1"># 西文备选</span>
+</span></span><span class="line"><span class="cl">    <span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre>
+</div>
+<h4 id="914-字体调试与优化工具" class="headerLink">
+    <a href="#914-%e5%ad%97%e4%bd%93%e8%b0%83%e8%af%95%e4%b8%8e%e4%bc%98%e5%8c%96%e5%b7%a5%e5%85%b7" class="header-mark"></a>9.1.4 字体调试与优化工具</h4><p><strong>字体信息查询</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-147" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 列出所有字体</span>
+</span></span><span class="line"><span class="cl">fc-list
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 按语言过滤字体</span>
+</span></span><span class="line"><span class="cl">fc-list :lang<span class="o">=</span>zh-cn
+</span></span><span class="line"><span class="cl">fc-list :lang<span class="o">=</span>en
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看字体详细信息</span>
+</span></span><span class="line"><span class="cl">fc-list -v <span class="s2">&#34;Source Han Sans SC&#34;</span>
+</span></span><span class="line"><span class="cl">fc-list -v <span class="s2">&#34;LXGW WenKai Screen&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试字体匹配</span>
+</span></span><span class="line"><span class="cl">fc-match -v <span class="s2">&#34;sans-serif:lang=zh-cn&#34;</span>
+</span></span><span class="line"><span class="cl">fc-match -v <span class="s2">&#34;serif:lang=zh-cn&#34;</span>
+</span></span><span class="line"><span class="cl">fc-match -v <span class="s2">&#34;monospace:lang=zh-cn&#34;</span></span></span></code></pre>
+</div>
+<p><strong>字体渲染测试</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-148" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 临时安装字体测试工具</span>
+</span></span><span class="line"><span class="cl">nix shell nixpkgs#pango
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建测试文本文件</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;中文测试 Chinese Test 123&#34;</span> &gt; test.txt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用不同字体渲染测试</span>
+</span></span><span class="line"><span class="cl">pango-view --font<span class="o">=</span><span class="s2">&#34;Source Han Sans SC 12&#34;</span> test.txt
+</span></span><span class="line"><span class="cl">pango-view --font<span class="o">=</span><span class="s2">&#34;LXGW WenKai Screen 12&#34;</span> test.txt
+</span></span><span class="line"><span class="cl">pango-view --font<span class="o">=</span><span class="s2">&#34;Maple Mono NF CN 12&#34;</span> test.txt</span></span></code></pre>
+</div>
+<h3 id="92-中文输入法配置" class="headerLink">
+    <a href="#92-%e4%b8%ad%e6%96%87%e8%be%93%e5%85%a5%e6%b3%95%e9%85%8d%e7%bd%ae" class="header-mark"></a>9.2 中文输入法配置</h3><p>现代 Linux 桌面主要使用 fcitx5 作为中文输入解决方案，它通过插件系统支持多种输入引擎，并与图形环境深度集成。</p>
+<h4 id="921-输入法框架架构" class="headerLink">
+    <a href="#921-%e8%be%93%e5%85%a5%e6%b3%95%e6%a1%86%e6%9e%b6%e6%9e%b6%e6%9e%84" class="header-mark"></a>9.2.1 输入法框架架构</h4><p><strong>核心组件</strong>：</p>
 <ul>
 <li><strong>fcitx5-daemon</strong>：主守护进程，管理输入法状态</li>
 <li><strong>输入引擎</strong>：拼音、五笔、仓颉等具体输入法实现</li>
@@ -5477,8 +6340,8 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
 <li><code>~/.config/fcitx5/profile</code>：输入法引擎配置</li>
 <li><code>~/.config/fcitx5/conf/</code>：各输入法引擎的详细配置</li>
 </ul>
-<h3 id="92-wayland-原生输入法流程" class="headerLink">
-    <a href="#92-wayland-%e5%8e%9f%e7%94%9f%e8%be%93%e5%85%a5%e6%b3%95%e6%b5%81%e7%a8%8b" class="header-mark"></a>9.2 Wayland 原生输入法流程</h3><p><strong>Wayland text-input 协议流程</strong>：</p>
+<h4 id="922-wayland-原生输入法流程" class="headerLink">
+    <a href="#922-wayland-%e5%8e%9f%e7%94%9f%e8%be%93%e5%85%a5%e6%b3%95%e6%b5%81%e7%a8%8b" class="header-mark"></a>9.2.2 Wayland 原生输入法流程</h4><p><strong>Wayland text-input 协议流程</strong>：</p>
 <ol>
 <li><strong>按键捕获</strong>：键盘事件首先到达 Wayland 合成器</li>
 <li><strong>协议通信</strong>：合成器通过 text-input 协议与客户端应用通信</li>
@@ -5488,8 +6351,8 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
 <li><strong>文本提交</strong>：用户选择后通过 text-input 协议提交最终文本</li>
 </ol>
 <p>text-input 协议有 v1 跟 v3 两个版本，目前（2025-09）Electron/Chrome 以及其他大部分程序框架都已经支持了 text-input-v3. 桌面环境方面所有主流 Compositor 也都支持 text-input-v3. 所以目前 wayland 下输入法的可用性已经很高了。</p>
-<h3 id="93-x11--xwayland-输入法流程" class="headerLink">
-    <a href="#93-x11--xwayland-%e8%be%93%e5%85%a5%e6%b3%95%e6%b5%81%e7%a8%8b" class="header-mark"></a>9.3 X11 / XWayland 输入法流程</h3><p><strong>XWayland 使用场景</strong>：</p>
+<h4 id="923-x11--xwayland-输入法流程" class="headerLink">
+    <a href="#923-x11--xwayland-%e8%be%93%e5%85%a5%e6%b3%95%e6%b5%81%e7%a8%8b" class="header-mark"></a>9.2.3 X11 / XWayland 输入法流程</h4><p><strong>XWayland 使用场景</strong>：</p>
 <ul>
 <li>尚未支持 Wayland 的旧版应用</li>
 <li>需要特定 X11 功能的专业软件</li>
@@ -5602,7 +6465,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-135" 
+    id="codeblock-id-149" 
     class="
       chroma 
       !tw-block 
@@ -5627,8 +6490,8 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
 </div>
 <p><strong>输入法机制说明</strong>：</p>
 <p>GTK IM 模块、Qt IM 模块以及 XIM 协议，都是 X11 下的东西，在 wayland 下只需要 text-input 协议即可，不需要这些幺蛾子。</p>
-<h3 id="94-混合环境管理策略" class="headerLink">
-    <a href="#94-%e6%b7%b7%e5%90%88%e7%8e%af%e5%a2%83%e7%ae%a1%e7%90%86%e7%ad%96%e7%95%a5" class="header-mark"></a>9.4 混合环境管理策略</h3><p><strong>推荐配置策略</strong>：</p>
+<h4 id="924-混合环境管理策略" class="headerLink">
+    <a href="#924-%e6%b7%b7%e5%90%88%e7%8e%af%e5%a2%83%e7%ae%a1%e7%90%86%e7%ad%96%e7%95%a5" class="header-mark"></a>9.2.4 混合环境管理策略</h4><p><strong>推荐配置策略</strong>：</p>
 <ol>
 <li>
 <p><strong>默认 Wayland 优先</strong>：</p>
@@ -5722,7 +6585,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-136" 
+    id="codeblock-id-150" 
     class="
       chroma 
       !tw-block 
@@ -5743,8 +6606,8 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
 </span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GDK_BACKEND</span><span class="o">=</span>x11      <span class="c1"># 强制使用 X11 后端</span>
 </span></span><span class="line"><span class="cl">your-application</span></span></code></pre>
 </div>
-<h3 id="95-故障排查与优化" class="headerLink">
-    <a href="#95-%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e4%b8%8e%e4%bc%98%e5%8c%96" class="header-mark"></a>9.5 故障排查与优化</h3><p><strong>输入法无响应问题</strong>：</p>
+<h4 id="925-故障排查与优化" class="headerLink">
+    <a href="#925-%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e4%b8%8e%e4%bc%98%e5%8c%96" class="header-mark"></a>9.2.5 故障排查与优化</h4><p><strong>输入法无响应问题</strong>：</p>
 <ol>
 <li>
 <p><strong>进程状态检查</strong>：</p>
@@ -5823,7 +6686,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-137" 
+    id="codeblock-id-151" 
     class="
       chroma 
       !tw-block 
@@ -5918,7 +6781,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-138" 
+    id="codeblock-id-152" 
     class="
       chroma 
       !tw-block 
@@ -6013,7 +6876,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-139" 
+    id="codeblock-id-153" 
     class="
       chroma 
       !tw-block 
@@ -6108,7 +6971,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-140" 
+    id="codeblock-id-154" 
     class="
       chroma 
       !tw-block 
@@ -6206,7 +7069,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-141" 
+    id="codeblock-id-155" 
     class="
       chroma 
       !tw-block 
@@ -6307,7 +7170,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-142" 
+    id="codeblock-id-156" 
     class="
       chroma 
       !tw-block 
@@ -6408,7 +7271,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-143" 
+    id="codeblock-id-157" 
     class="
       chroma 
       !tw-block 
@@ -6514,7 +7377,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-144" 
+    id="codeblock-id-158" 
     class="
       chroma 
       !tw-block 
@@ -6717,7 +7580,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-145" 
+    id="codeblock-id-159" 
     class="
       chroma 
       !tw-block 
@@ -6821,7 +7684,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-146" 
+    id="codeblock-id-160" 
     class="
       chroma 
       !tw-block 
@@ -6929,7 +7792,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-147" 
+    id="codeblock-id-161" 
     class="
       chroma 
       !tw-block 
@@ -7030,7 +7893,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-148" 
+    id="codeblock-id-162" 
     class="
       chroma 
       !tw-block 
@@ -7044,7 +7907,9 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 查看 Qt 平台插件</span>
+      "><span class="line"><span class="cl"><span class="c1"># 查看 Qt 平台插件（NixOS）</span>
+</span></span><span class="line"><span class="cl">ls /run/current-system/sw/lib/qt*/plugins/platforms/
+</span></span><span class="line"><span class="cl"><span class="c1"># 其他发行版</span>
 </span></span><span class="line"><span class="cl">ls /usr/lib/qt*/plugins/platforms/
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># Qt 调试信息</span>
@@ -7133,7 +7998,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-149" 
+    id="codeblock-id-163" 
     class="
       chroma 
       !tw-block 
@@ -7252,7 +8117,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-150" 
+    id="codeblock-id-164" 
     class="
       chroma 
       !tw-block 
@@ -7351,7 +8216,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-151" 
+    id="codeblock-id-165" 
     class="
       chroma 
       !tw-block 
@@ -7450,7 +8315,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-152" 
+    id="codeblock-id-166" 
     class="
       chroma 
       !tw-block 
@@ -7546,7 +8411,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-153" 
+    id="codeblock-id-167" 
     class="
       chroma 
       !tw-block 
@@ -7702,7 +8567,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-154" 
+    id="codeblock-id-168" 
     class="
       chroma 
       !tw-block 
@@ -7808,7 +8673,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-155" 
+    id="codeblock-id-169" 
     class="
       chroma 
       !tw-block 
@@ -7916,7 +8781,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-156" 
+    id="codeblock-id-170" 
     class="
       chroma 
       !tw-block 
@@ -8015,7 +8880,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-157" 
+    id="codeblock-id-171" 
     class="
       chroma 
       !tw-block 
@@ -8164,7 +9029,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-158" 
+    id="codeblock-id-172" 
     class="
       chroma 
       !tw-block 
@@ -8262,7 +9127,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-159" 
+    id="codeblock-id-173" 
     class="
       chroma 
       !tw-block 
@@ -8360,7 +9225,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-160" 
+    id="codeblock-id-174" 
     class="
       chroma 
       !tw-block 
@@ -8457,7 +9322,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-161" 
+    id="codeblock-id-175" 
     class="
       chroma 
       !tw-block 
@@ -8567,7 +9432,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-162" 
+    id="codeblock-id-176" 
     class="
       chroma 
       !tw-block 
@@ -8662,7 +9527,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-163" 
+    id="codeblock-id-177" 
     class="
       chroma 
       !tw-block 
@@ -8757,7 +9622,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-164" 
+    id="codeblock-id-178" 
     class="
       chroma 
       !tw-block 
@@ -8852,7 +9717,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-165" 
+    id="codeblock-id-179" 
     class="
       chroma 
       !tw-block 
@@ -8963,7 +9828,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-166" 
+    id="codeblock-id-180" 
     class="
       chroma 
       !tw-block 
@@ -9057,7 +9922,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-167" 
+    id="codeblock-id-181" 
     class="
       chroma 
       !tw-block 
@@ -9153,7 +10018,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-168" 
+    id="codeblock-id-182" 
     class="
       chroma 
       !tw-block 
@@ -9249,7 +10114,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-169" 
+    id="codeblock-id-183" 
     class="
       chroma 
       !tw-block 
@@ -9359,7 +10224,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-170" 
+    id="codeblock-id-184" 
     class="
       chroma 
       !tw-block 
@@ -9454,7 +10319,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-171" 
+    id="codeblock-id-185" 
     class="
       chroma 
       !tw-block 
@@ -9549,7 +10414,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-172" 
+    id="codeblock-id-186" 
     class="
       chroma 
       !tw-block 
@@ -9644,7 +10509,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-173" 
+    id="codeblock-id-187" 
     class="
       chroma 
       !tw-block 
@@ -9746,7 +10611,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-174" 
+    id="codeblock-id-188" 
     class="
       chroma 
       !tw-block 
@@ -9840,7 +10705,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-175" 
+    id="codeblock-id-189" 
     class="
       chroma 
       !tw-block 
@@ -9934,7 +10799,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-176" 
+    id="codeblock-id-190" 
     class="
       chroma 
       !tw-block 
@@ -10032,7 +10897,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-177" 
+    id="codeblock-id-191" 
     class="
       chroma 
       !tw-block 
@@ -10128,7 +10993,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-178" 
+    id="codeblock-id-192" 
     class="
       chroma 
       !tw-block 
@@ -10223,7 +11088,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-179" 
+    id="codeblock-id-193" 
     class="
       chroma 
       !tw-block 
@@ -10317,7 +11182,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-180" 
+    id="codeblock-id-194" 
     class="
       chroma 
       !tw-block 
