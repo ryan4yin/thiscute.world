@@ -1161,6 +1161,10 @@ resolvectl status
 - **IPv4**：通过 DHCP 获取配置，32 位地址
 - **IPv6**：通过 Router Advertisement 获取，128 位地址
 - **并行工作**：两个协议栈同时运行
+- **IPv6 优先**：通常有 IPv6 的会优先走 IPv6 网络，没有才走 IPv4.
+  - Linux 中通过 glibc 的 `getaddrinfo()` 来实现该逻辑，可通过 `/etc/gai.conf` 调整该函数
+    的地址排序算法。因为 APP 通常直接使用第一条记录发起连接，所以 `/etc/gai.conf` 通常能直
+    接决定系统中是 IPv6 优先还是 IPv4 优先。
 
 **双栈验证**：
 
@@ -1383,31 +1387,6 @@ journalctl -u systemd-timesyncd -f
 # 时间精度检查
 chronyc tracking  # 如果安装了 chrony
 ```
-
-### 6.4 服务集成与故障排查
-
-```bash
-# 检查所有核心服务状态
-systemctl status systemd-{oomd,resolved,timesyncd,networkd}
-
-# 查看服务依赖关系
-systemctl list-dependencies systemd-resolved
-
-# 日志综合分析
-journalctl -u systemd-resolved -u systemd-timesyncd \
-           -u systemd-oomd -u systemd-networkd
-
-# 系统资源检查
-systemctl --failed
-systemd-analyze blame
-```
-
-**性能优化建议**：
-
-- 选择地理位置接近的 NTP 服务器
-- 配置合理的 DNS 服务器顺序
-- 根据系统内存调整 oomd 阈值
-- 定期检查服务状态和日志
 
 ---
 
