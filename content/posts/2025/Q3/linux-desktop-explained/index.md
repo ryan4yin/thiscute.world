@@ -644,7 +644,7 @@ PAM（Pluggable Authentication Modules）是 Linux 系统的认证框架，为�
 口。它允许系统管理员灵活配置认证策略，支持多种认证方式（密码、指纹、智能卡等），是现代
 Linux 安全体系的基础组件。
 
-#### 3.1.1 PAM 架构概览
+#### 3.1.1 PAM 工作机制与配置对应关系
 
 PAM 采用模块化设计，将认证过程分解为四个独立的阶段：
 
@@ -653,23 +653,78 @@ PAM 采用模块化设计，将认证过程分解为四个独立的阶段：
 - **账户管理（Account Management）**：检查账户状态（是否过期、是否被锁定等）
 - **会话管理（Session Management）**：管理用户会话的建立和销毁
 
-**配置文件结构**：
+**程序与 PAM 配置的对应关系**：
 
-```bash
-# 系统级 PAM 配置
-/etc/pam.d/                    # 各服务的 PAM 配置
-/etc/pam.conf                  # 全局 PAM 配置（较少使用）
+程序与 PAM 配置的对应关系是通过**服务名（Service Name）**建立的。当程序调用 PAM 时，它需要
+指定一个服务名，这个服务名决定了使用哪个 PAM 配置文件。
 
-# 常用配置文件
-/etc/pam.d/login               # 控制台登录认证
-/etc/pam.d/gdm                 # 图形登录认证
-/etc/pam.d/sudo                # sudo 命令认证
-/etc/pam.d/sshd                # SSH 登录认证
+```c
+// 程序调用 pam_start 时指定服务名
+pam_start("login", username, &conv, &pamh);  // 使用 /etc/pam.d/login
+pam_start("sudo", username, &conv, &pamh);   // 使用 /etc/pam.d/sudo
+pam_start("sshd", username, &conv, &pamh);   // 使用 /etc/pam.d/sshd
 ```
 
-#### 3.1.2 PAM 配置语法
+**实际对应关系表**：
 
-PAM 配置文件采用以下语法：
+| 程序     | 服务名     | 配置文件            | 说明              |
+| -------- | ---------- | ------------------- | ----------------- |
+| `login`  | `"login"`  | `/etc/pam.d/login`  | 控制台登录程序    |
+| `gdm`    | `"gdm"`    | `/etc/pam.d/gdm`    | GNOME 显示管理器  |
+| `greetd` | `"greetd"` | `/etc/pam.d/greetd` | greetd 显示管理器 |
+| `sudo`   | `"sudo"`   | `/etc/pam.d/sudo`   | sudo 命令         |
+| `su`     | `"su"`     | `/etc/pam.d/su`     | su 命令           |
+| `sshd`   | `"sshd"`   | `/etc/pam.d/sshd`   | SSH 守护进程      |
+| `passwd` | `"passwd"` | `/etc/pam.d/passwd` | 密码修改程序      |
+
+**PAM 调用流程示例**：
+
+以用户登录为例，PAM 的调用流程如下：
+
+```c
+#include <security/pam_appl.h>
+#include <security/pam_misc.h>
+
+int main() {
+    pam_handle_t *pamh;
+    struct pam_conv conv = { misc_conv, NULL };
+
+    // 1. 初始化 PAM，指定服务名 "login"
+    if (pam_start("login", "username", &conv, &pamh) != PAM_SUCCESS) {
+        fprintf(stderr, "PAM 初始化失败\n");
+        return 1;
+    }
+
+    // 2. 认证用户 - 读取 /etc/pam.d/login 中的 auth 配置
+    if (pam_authenticate(pamh, 0) != PAM_SUCCESS) {
+        fprintf(stderr, "认证失败\n");
+        pam_end(pamh, PAM_AUTH_ERR);
+        return 1;
+    }
+
+    // 3. 检查账户状态 - 读取 /etc/pam.d/login 中的 account 配置
+    if (pam_acct_mgmt(pamh, 0) != PAM_SUCCESS) {
+        fprintf(stderr, "账户检查失败\n");
+        pam_end(pamh, PAM_AUTH_ERR);
+        return 1;
+    }
+
+    // 4. 开启会话 - 读取 /etc/pam.d/login 中的 session 配置
+    if (pam_open_session(pamh, 0) != PAM_SUCCESS) {
+        fprintf(stderr, "会话开启失败\n");
+        pam_end(pamh, PAM_SESSION_ERR);
+        return 1;
+    }
+
+    // 5. 清理资源
+    pam_end(pamh, PAM_SUCCESS);
+    return 0;
+}
+```
+
+#### 3.1.2 PAM 配置语法与模块
+
+**配置语法**：
 
 ```text
 <type> <control> <module> [arguments]
@@ -689,31 +744,48 @@ PAM 配置文件采用以下语法：
 - `sufficient`：成功即可通过，失败不影响最终结果
 - `optional`：可选模块，不影响认证结果
 
-**配置示例**：
+**NixOS 实际配置示例**：
 
 ```bash
-# /etc/pam.d/login 示例配置
-auth       required   pam_unix.so     nullok_secure
-auth       optional   pam_gnome_keyring.so
-account    required   pam_unix.so
-password   required   pam_unix.so     nullok obscure min=4 max=8 md5
-session    required   pam_unix.so
-session    optional   pam_gnome_keyring.so auto_start
+# /etc/pam.d/login 实际配置（NixOS 生成）
+# Account management.
+account required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
+
+# Authentication management.
+auth optional /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok
+auth optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so
+auth sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok try_first_pass
+auth required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_deny.so
+
+# Password management.
+password sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so nullok yescrypt
+password optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so use_authtok
+
+# Session management.
+session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
+session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
+session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_loginuid.so
+session optional /nix/store/xxx-systemd-257.8/lib/security/pam_systemd.so
+session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_limits.so conf=/nix/store/xxx-limits.conf
+session optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so auto_start
 ```
 
-#### 3.1.3 常用 PAM 模块
+**常用 PAM 模块**：
 
 | 模块名                        | 功能               | 用途                                       |
 | ----------------------------- | ------------------ | ------------------------------------------ |
 | `pam_unix.so`                 | Unix 标准认证      | 基于 `/etc/passwd` 和 `/etc/shadow` 的认证 |
-| `pam_ldap.so`                 | LDAP 认证          | 企业环境中的集中认证                       |
-| `pam_sss.so`                  | SSSD 认证          | 与 Active Directory 集成                   |
+| `pam_deny.so`                 | 拒绝访问           | 默认拒绝所有认证请求                       |
+| `pam_env.so`                  | 环境变量管理       | 设置用户会话环境变量                       |
+| `pam_loginuid.so`             | 登录 UID 管理      | 记录用户登录的 UID                         |
+| `pam_systemd.so`              | systemd 集成       | 与 systemd 用户会话集成                    |
+| `pam_limits.so`               | 资源限制           | 设置用户资源使用限制                       |
 | `pam_gnome_keyring.so`        | GNOME Keyring 集成 | 自动解锁用户密钥环                         |
-| `pam_kwallet.so`              | KDE Wallet 集成    | 自动解锁 KDE 钱包                          |
+| `pam_ldap.so`                 | LDAP 认证          | 企业环境中的集中认证                       |
 | `pam_fprintd.so`              | 指纹认证           | 生物识别认证                               |
 | `pam_google_authenticator.so` | 双因子认证         | TOTP 时间令牌认证                          |
 
-#### 3.1.4 PAM 调试与故障排查
+#### 3.1.3 PAM 调试与故障排查
 
 **调试命令**：
 
@@ -723,20 +795,40 @@ pamtester login ryan authenticate
 
 # 查看 PAM 配置
 cat /etc/pam.d/login
+cat /etc/pam.d/greetd
+cat /etc/pam.d/sudo
 
 # 检查 PAM 模块（NixOS 中位于 nix store）
 ldd /run/current-system/sw/lib/security/pam_unix.so
+ldd /run/current-system/sw/lib/security/pam_gnome_keyring.so
 
 # 查看认证日志
 journalctl -t login
+journalctl -t greetd
 journalctl -t sshd
+
+# 验证程序与配置的对应关系
+strace -e trace=pam_start login 2>&1 | grep pam_start
+strace -e trace=openat login 2>&1 | grep pam.d
+
+# 使用 PAM 测试工具验证配置
+pamtester login username authenticate
+pamtester sudo username authenticate
 ```
+
+**NixOS PAM 配置特点**：
+
+- **声明式配置**：PAM 配置通过 NixOS 配置系统生成，不直接编辑 `/etc/pam.d/` 文件
+- **模块路径**：所有 PAM 模块都使用完整的 `/nix/store` 路径，确保版本一致性
+- **自动集成**：GNOME Keyring 等组件会自动集成到 PAM 配置中
+- **可重现性**：配置变更通过 `nixos-rebuild` 应用，确保系统状态可重现
 
 **常见问题**：
 
 1. **认证失败**：检查 `/etc/passwd` 和 `/etc/shadow` 文件权限
 2. **模块加载失败**：确认 PAM 模块文件存在且可执行
 3. **配置语法错误**：使用 `pamtester` 验证配置
+4. **服务名不匹配**：如果程序指定的服务名与配置文件不匹配，会使用 `other` 配置
 
 ### 3.2 PolicyKit - 细粒度的系统权限管理
 
