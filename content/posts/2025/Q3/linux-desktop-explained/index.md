@@ -790,6 +790,8 @@ session optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyrin
 **调试命令**：
 
 ```bash
+nix shell nixpkgs#pamtester
+
 # 测试 PAM 配置
 pamtester login ryan authenticate
 
@@ -1240,6 +1242,8 @@ polkit.addRule(function (action, subject) {
 **常见问题诊断**：
 
 ```bash
+nix shell nixpkgs#pamtester
+
 # 检查 PAM 配置
 pamtester login $USER authenticate
 
