@@ -28,7 +28,7 @@ code:
 
 ## 一、什么是哈希函数
 
-**哈希函数**（Hash Function），或者叫**散列函数**，是一种为任何输入数据中创建一个**数字指
+**哈希函数**（Hash Function），或者叫**散列函数**，是一种从任何输入数据中创建一个**数字指
 纹**（也叫数字摘要）的方法，哈希函数把数据压缩（或者放大）成一个长度固定的字符串。
 
 哈希函数的输入空间（文本或者二进制数据）是无限大，但是输出空间（一个固定长度的摘要）却是有
@@ -212,21 +212,27 @@ text = 'hello'
 data = text.encode("utf8")
 
 sha3_256hash = hashlib.sha3_256(data).digest()
-print(f"SHA3-256({text}) = ", binascii.hexlify(sha3_256hash).decode("utf8"))
+print(f"SHA3-256('{text}') = ", binascii.hexlify(sha3_256hash).decode("utf8"))
 
 sha3_512hash = hashlib.sha3_512(data).digest()
-print(f"SHA3-512({text}) = ", binascii.hexlify(sha3_512hash).decode("utf8"))
+print(f"SHA3-512('{text}') = ", binascii.hexlify(sha3_512hash).decode("utf8"))
+
+# SHAKE-128 with 256-bit output
+shake128_hash = hashlib.shake_128(data).digest(32)  # 32 bytes = 256 bits
+print(f"SHAKE-128('{text}', 256) = ", binascii.hexlify(shake128_hash).decode("utf8"))
+
+# SHAKE-256 with 160-bit output
+shake256_hash = hashlib.shake_256(data).digest(20)  # 20 bytes = 160 bits
+print(f"SHAKE-256('{text}', 160) = ", binascii.hexlify(shake256_hash).decode("utf8"))
 ```
 
 输出：
 
 ```
-SHA3-256('hello') = 3338be694f50c5f338814986cdf0686453a888b84f424d792af4b9202398f392
-Keccak-256('hello') = 1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8
-SHA3-512('hello') = 75d527c368f2efe848ecf6b073a36767800805e9eef2b1857d5f984f036eb6df891d75f72d9b154518c1cd58835286d1da9a38deba3de98b5a53e5ed78a84976
-
-SHAKE-128('hello', 256) = 4a361de3a0e980a55388df742e9b314bd69d918260d9247768d0221df5262380
-SHAKE-256('hello', 160) = 1234075ae4a1e77316cf2d8000974581a343b9eb
+SHA3-256('hello') =  3338be694f50c5f338814986cdf0686453a888b84f424d792af4b9202398f392
+SHA3-512('hello') =  75d527c368f2efe848ecf6b073a36767800805e9eef2b1857d5f984f036eb6df891d75f72d9b154518c1cd58835286d1da9a38deba3de98b5a53e5ed78a84976
+SHAKE-128('hello', 256) =  8eb4b6a932f280335ee1a279f8c208a349e7bc65daf831d3021c213825292463
+SHAKE-256('hello', 160) =  1234075ae4a1e77316cf2d8000974581a343b9eb
 ```
 
 #### 4. BLAKE2 / BLAKE2s / BLAKE2b
@@ -385,21 +391,21 @@ Equihash 的工作流程：
 
 加密哈希函数非常看重「加密」，为了实现更高的安全强度，费了非常多的心思、也付出了很多代价。
 
-但是实际应用中很多场景是不需要这么高的安全性的，相反可能会对速度、随机均匀性等有更高的要
-求。这就催生出了很多「非加密哈希函数」。
+但是实际应用中很多场景并不需要这么高的安全性，但可能会对速度、随机均匀性等有更高的要求。这
+就催生出了很多「非加密哈希函数」。
 
 非加密哈希函数的应用场景有很多：
 
 - 哈希表 Hash Table: 在很多语言中也被称为 map/dict，它使用的算法很简单，通常就是把对象的各
   种属性不断乘个质数（比如 31）再相加，哈希空间会随着表的变化而变化。这里最希望的是数据的
-  分布足够均匀。
+  分布足够均匀、速度足够快。
 - 一致性哈希：目的是解决分布式缓存的问题。在移除或者添加一个服务器时，能够尽可能小地改变已
   存在的服务请求与处理请求服务器之间的映射关系。
 - 高性能哈希算法：SipHash MurMurHash3 等，使用它们的目的可能是对数据进行快速去重，要求就是
-  足够快。
+  足够快，能够容忍一定的碰撞。
 
 有时我们甚至可能不太在意哈希碰撞的概率。也有的场景输入是有限的，这时我们可能会希望哈希函数
-具有可逆性。
+具有一定可逆性。
 
 总之非加密哈希函数也有非常多的应用，但不是本文的主题。这里就不详细介绍了，有兴趣的朋友们可
 以自行寻找其他资源。

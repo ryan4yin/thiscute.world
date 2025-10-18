@@ -43,7 +43,7 @@ code:
 MAC 消息认证码，即 Message Authentication Code，是用于验证消息的一小段附加数据。换句话说，
 能用它确认消息的真实性——消息来自指定的发件人并且没有被篡改。
 
-MAC 值通过允许\*\*拥有密钥的验证者检测消息内容的任何更改来保护消息的数据完整性及其真实性。
+MAC 值通过允许拥有密钥的验证者检测消息内容的任何更改来保护消息的数据完整性及其真实性。
 
 一个安全的 MAC 函数，跟加密哈希函数非常类似，也拥有如下特性：
 
@@ -56,7 +56,7 @@ MAC 值通过允许\*\*拥有密钥的验证者检测消息内容的任何更改
 但是 MAC 算法比加密哈希函数多一个输入值：密钥，因此也被称为 **keyed hash functions**，即
 「**加密钥的哈希函数**」。
 
-如下 Python 代码使用 key 跟 消息计算出对应的 HMAC-SHA256 值：
+如下 Python 代码使用 key 跟消息计算出对应的 HMAC-SHA256 值：
 
 ```python
 import hashlib, hmac, binascii
@@ -131,12 +131,12 @@ print(f"HMAC-SHA256({key}, {msg})", binascii.hexlify(mac_).decode('utf8'))
 
 上一篇文章提到过，哈希函数只负责生成哈希值，不负责哈希值的可靠传递。
 
-而数字签名呢，跟 MAC 非常相似，但是数字签名使用的是非对称加密系统，更复杂，计算速度也更
-慢。
+而数字签名呢，跟 MAC 非常相似，但是数字签名使用的是密钥对（**非对称加密系统**），原理更复
+杂，计算速度也更慢。
 
 MAC 的功能跟数字签名一致，都是验证消息的真实性（authenticity）、完整性（integrity）、不可
-否认性（non-repudiation），但是 MAC 使用哈希函数或者对称密码系统来做这件事情，速度要更快，
-算法也更简单。
+否认性（non-repudiation），但是 MAC 使用哈希函数与预共享密钥（**对称密码系统**）来做这件事
+情，速度要更快，算法也更简单。
 
 ### MAC 的应用
 
@@ -241,10 +241,10 @@ KDF 计算速度的「慢」是相对而言的，对于 SSH 等本地应用而�
      加解密或签名用的 Key, 因此 OpenSSH 的实现是将 Bcrypt 的输出再用 BPKDF2 加盐处理一遍输
      出最终用于验证的二进制 Key，也即它的 bcrypt_pbkdf 算法。
 3. **Scrypt**：可以灵活地设定使用的内存大小，在 argon2 不可用时，可使用它。
-   - **Scrypt 是目前社区使用的主流算法**，知名案例如：
-     - [age](https://github.com/FiloSottile/age)
-     - [rclone](https://rclone.org/crypt/#key-derivation)
-     - [restic](https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac)
+   - **Scrypt 是目前社区使用的主流算法**，知名案例
+     如：[age](https://github.com/FiloSottile/age),
+     [rclone](https://rclone.org/crypt/#key-derivation),
+     [restic](https://restic.readthedocs.io/en/stable/100_references.html#keys-encryption-and-mac)
 4. **Argon2**：目前最强的密码 Hash 算法，在 2015 年赢得了密码 Hash 竞赛。
    - Linux 的硬盘加密模块 LUKS2 就支持使用 argon2id 作为它的 KDF 算法。
 
