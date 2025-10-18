@@ -1135,7 +1135,8 @@ systemctl status polkit
 
 # 查看安全相关日志
 journalctl -u polkit -f
-journalctl -t login
+journalctl -t sudo
+sudo journalctl -u systemd-logind
 ```
 
 **调试技巧**：
