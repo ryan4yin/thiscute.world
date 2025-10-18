@@ -623,11 +623,121 @@ $ loginctl show-session <id> -p Remote -p Display -p Name
 **配置文件路径**：
 
 - `/etc/udev/rules.d/`：系统管理员自定义规则（优先级最高）
-- `/usr/lib/udev/rules.d/`：软件包提供的默认规则（其他发行版）
+- `/run/current-system/sw/lib/udev/rules.d/`（NixOS）或 `/usr/lib/udev/rules.d/`（其他发行
+  版）：软件包提供的默认规则
 
 ---
 
-## 3. D-Bus 系统总线 - 应用间通信的主要通道
+## 3. PolicyKit - 细粒度的系统权限管理
+
+PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它提供了一种比传统 Unix 权限更细粒
+度的授权机制。在现代 Linux 桌面系统中，PolicyKit 允许非特权用户执行某些需要特权的系统操作
+（如关机、重启、挂载设备、修改系统时间等），而无需获取完整的 root 权限。
+
+### 3.1 PolicyKit 的核心概念
+
+**配置文件路径**：
+
+- `/etc/polkit-1/`：NixOS 声明式配置中定义的自定义规则（优先级最高）
+- `/run/current-system/sw/share/polkit-1/`（NixOS）或 `/usr/share/polkit-1/`（其他发行
+  版）：软件包提供的默认规则
+
+上述文件夹中又包含两类配置：
+
+- **动作（Actions）**
+  - 定义在配置文件夹的 `actions` 目录中的 XML 文件（如 `/etc/polkit-1/actions/`），描述可
+    授权的操作。每个动作都有唯一的标识符，如 `org.freedesktop.login1.power-off` 表示关机操
+    作。
+- **规则（Rules）**
+  - JavaScript 文件，定义授权决策逻辑，位于上述配置文件夹的 `rules.d/` 目录中（如
+    `/etc/polkit-1/rules.d/`）。规则决定了在特定条件下是否授权某个操作。在 NixOS 中，推荐
+    使用声明式配置而非直接修改 `/etc` 目录。
+
+**身份认证代理（Authentication Agents）**：桌面环境提供的图形界面组件，用于在用户需要身份
+验证时弹出认证对话框。例如，当普通用户尝试关机时，认证代理会提示输入管理员密码。
+
+> 举例来说，我使用的是 Niri 窗口管理器，它的 Nix Flake 启用了 pokit-kde-agent-1 作为其
+> Authentication Agent, 配置参见
+> [sodiboo/niri-flake](https://github.com/sodiboo/niri-flake/blob/27e012b4cd49e9ac438573ec7a6db3e5835828c3/flake.nix#L497-L509).
+
+### 3.2 PolicyKit 的工作原理
+
+当应用程序请求执行需要特权的操作时，系统服务会询问 PolicyKit 是否授权。PolicyKit 的评估过
+程如下：
+
+1. **身份识别**：确定请求者的身份（用户、组、会话等）
+2. **规则匹配**：检查是否有适用的规则文件
+3. **权限评估**：根据规则返回以下结果之一：
+   - `yes`：直接允许，无需认证
+   - `no`：直接拒绝
+   - `auth_self`：需要用户自己认证（输入当前用户密码）
+   - `auth_admin`：需要管理员认证（输入 root 密码）
+   - `auth_self_keep`/`auth_admin_keep`：认证后在一段时间内保持授权
+
+### 3.3 PolicyKit 的配置示例
+
+在传统的 Linux 发行版中，管理员可以通过创建自定义规则来修改默认行为。例如，允许 `wheel` 组
+的用户无需密码即可关机：
+
+```javascript
+// /etc/polkit-1/rules.d/10-shutdown.rules
+polkit.addRule(function (action, subject) {
+  if (action.id == "org.freedesktop.login1.power-off" && subject.isInGroup("wheel")) {
+    return polkit.Result.YES
+  }
+})
+```
+
+**NixOS 中的配置方法**：在 NixOS 中，推荐使用声明式配置而非直接修改 `/etc` 目录。可以通过
+`security.polkit` 配置项来管理 PolicyKit 规则：
+
+````nix
+# configuration.nix
+{
+  security.polkit.enable = true;
+
+  # 添加自定义规则
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (action.id == "org.freedesktop.login1.power-off" &&
+          subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
+}
+
+### 3.4 PolicyKit 与 D-Bus 的集成
+
+PolicyKit 与 D-Bus 深度集成，为 D-Bus 服务提供动态授权机制。许多系统服务（如 systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bus 接口的访问。当客户端通过 D-Bus 调用需要特权的方法时，服务会调用 PolicyKit 进行授权检查。
+
+**常用调试命令**：
+```bash
+# 查看 PolicyKit 服务状态
+systemctl status polkit
+
+# 检查特定动作的授权情况
+pkcheck --action-id org.freedesktop.login1.power-off --process $$ --allow-user-interaction
+
+# 查看 PolicyKit 日志
+journalctl -u polkit -f
+
+# 查看 NixOS 中的 PolicyKit 动作定义
+ls -la /run/current-system/sw/share/polkit-1/actions/
+
+# 查看当前生效的 PolicyKit 规则
+ls -la /etc/polkit-1/rules.d/
+````
+
+**NixOS 注意事项**：在 NixOS 中，PolicyKit 的动作定义和系统级规则都存储在
+`/run/current-system/sw/share/polkit-1/` 目录下，这是当前系统配置的一部分。由于 NixOS 的纯
+函数式特性，这些路径是只读的，所有的配置都应该通过 NixOS 的配置文件（如
+`configuration.nix`）来管理，而不是直接修改这些目录。这种设计确保了系统配置的可重现性和原
+子性更新。
+
+---
+
+## 4. D-Bus 系统总线 - 应用间通信的主要通道
 
 D-Bus 是 Linux 系统中主流的进程间通信（IPC）机制，旨在解决不同进程（尤其是桌面应用、系统服
 务）间的高效、安全通信问题，广泛用于 GNOME、KDE 等桌面环境及系统服务管理（如 systemd）。它
@@ -639,45 +749,7 @@ D-Bus 作为 systemd 的依赖被安装，并且 system bus 和 user/session bus
 systemd 本身就是一个 D-Bus 服务，我们在使用 `systemctl` 命令与 systemd 交互时，实际上就是
 通过 D-Bus 与 `org.freedesktop.systemd1` 通信。
 
-### 2.1 两层总线（核心载体）
-
-| 总线类型                | 作用场景                 | 典型用途                                                                             | 运行用户     |
-| ----------------------- | ------------------------ | ------------------------------------------------------------------------------------ | ------------ |
-| 系统总线（System Bus）  | 系统级服务通信           | `systemd1` 单元管理（启动 / 停止服务）、`logind1` 用户会话 / 电源控制（关机 / 重启） | root（特权） |
-| 会话总线（Session Bus） | 单个用户会话内的应用通信 | 桌面应用交互（如窗口切换、通知）                                                     | 当前登录用户 |
-
-### 2.2 三类角色（交互主体）
-
-1.  **总线守护进程（dbus-daemon）**
-
-    架构的 “中枢”，每个总线对应一个守护进程，核心职责：
-
-    - 管理进程的连接（如验证 `普通用户` 是否有权调用 `logind1` 的 `PowerOff` 方法）；
-
-    - 路由消息（将客户端请求的 “启动 `nginx` 服务” 转发给 `systemd1`）；
-
-    - 维护服务注册表（记录 `org.freedesktop.login1` 与 `logind` 进程的映射关系）。
-
-1.  **服务端（Service）**
-
-    提供功能的进程（如 `systemd` 进程、`logind` 进程），核心操作：
-
-    - 向总线注册 “服务名”（`systemd1` 注册 `org.freedesktop.systemd1`，`logind1` 注册
-      `org.freedesktop.login1`，均为唯一标识）；
-
-    - 暴露 “对象” 和 “接口”（如 `systemd1` 暴露 `/org/freedesktop/systemd1` 对象与
-      `org.freedesktop.systemd1.Manager` 接口），供客户端调用。
-
-1.  **客户端（Client）**
-
-    调用服务的进程（如 `systemctl` 命令、桌面电源菜单），核心操作：
-
-    - 连接系统总线后，通过服务名（如 `org.freedesktop.login1`）找到 `logind` 服务；
-
-    - 调用服务端暴露的方法（如通过 `logind1` 的 `ListSessions` 查询当前用户会话），或订阅
-      信号（如监听 `systemd1` 的 `UnitActiveChanged` 单元状态变化）。
-
-## 3. 关键概念（理解 D-Bus 的核心抽象）
+### 关键概念
 
 D-Bus 通过 “对象 - 接口” 模型封装功能，以下结合 `systemd1` 与 `logind1` 的真实定义，对应核
 心概念：
@@ -749,6 +821,44 @@ org.freedesktop.systemd1                                                        
 ...
 ```
 
+### 系统总线与会话总线
+
+| 总线类型                | 作用场景                 | 典型用途                                                                             | 运行用户     |
+| ----------------------- | ------------------------ | ------------------------------------------------------------------------------------ | ------------ |
+| 系统总线（System Bus）  | 系统级服务通信           | `systemd1` 单元管理（启动 / 停止服务）、`logind1` 用户会话 / 电源控制（关机 / 重启） | root（特权） |
+| 会话总线（Session Bus） | 单个用户会话内的应用通信 | 桌面应用交互（如窗口切换、通知）                                                     | 当前登录用户 |
+
+### D-Bus 的三类角色
+
+1.  **总线守护进程（dbus-daemon）**
+
+    架构的 “中枢”，每个总线对应一个守护进程，核心职责：
+
+    - 管理进程的连接（如验证 `普通用户` 是否有权调用 `logind1` 的 `PowerOff` 方法）；
+
+    - 路由消息（将客户端请求的 “启动 `nginx` 服务” 转发给 `systemd1`）；
+
+    - 维护服务注册表（记录 `org.freedesktop.login1` 与 `logind` 进程的映射关系）。
+
+1.  **服务端（Service）**
+
+    提供功能的进程（如 `systemd` 进程、`logind` 进程），核心操作：
+
+    - 向总线注册 “服务名”（`systemd1` 注册 `org.freedesktop.systemd1`，`logind1` 注册
+      `org.freedesktop.login1`，均为唯一标识）；
+
+    - 暴露 “对象” 和 “接口”（如 `systemd1` 暴露 `/org/freedesktop/systemd1` 对象与
+      `org.freedesktop.systemd1.Manager` 接口），供客户端调用。
+
+1.  **客户端（Client）**
+
+    调用服务的进程（如 `systemctl` 命令、桌面电源菜单），核心操作：
+
+    - 连接系统总线后，通过服务名（如 `org.freedesktop.login1`）找到 `logind` 服务；
+
+    - 调用服务端暴露的方法（如通过 `logind1` 的 `ListSessions` 查询当前用户会话），或订阅
+      信号（如监听 `systemd1` 的 `UnitActiveChanged` 单元状态变化）。
+
 ### 常见操作示例
 
 下面我们通过一些命令来演示 D-Bus 总线的用途：
@@ -799,7 +909,7 @@ busctl get-property org.freedesktop.hostname1 /org/freedesktop/hostname1 \
 
 ```
 
-### 3.4 调试与监控命令
+### 调试与监控命令
 
 ```
 # 看 systemctl 与 systemd 的完整交互（method-call + signal）
@@ -839,7 +949,8 @@ D-Bus 本身具备多层权限管控能力，从总线接入、消息路由到�
 
     针对静态规则无法覆盖的动态场景（如普通用户临时需要执行敏感操作），D-Bus 集成
     PolicyKit（现称 `polkit`）实现动态授权。系统服务（如 `logind1`、`systemd1`）会在
-    `/usr/share/polkit-1/actions/` 中定义 “可授权动作”，例如
+    `/run/current-system/sw/share/polkit-1/actions/`（NixOS 中）或
+    `/usr/share/polkit-1/actions/`（传统发行版中）定义 "可授权动作"，例如
     `org.freedesktop.login1.power-off`（对应 `logind1` 的关机方法）：
 
     - 普通用户调用时，会触发认证流程（如输入管理员密码），认证通过后临时获得授权；
@@ -906,13 +1017,13 @@ Flatpak 以 `bubblewrap`（简称 bwrap）为底层沙箱基础，利用其 `bin
 
 ---
 
-## 4. 用户会话：登录与桌面环境
+## 5. 用户会话：登录与桌面环境
 
 用户从登录到进入桌面环境的过程涉及多个组件的协调：display manager 负责认证，systemd-logind
 管理会话，window compositor 提供图形环境。这个阶段的故障往往表现为登录失败、权限错误或图形
 界面异常。
 
-### 4.1 登录流程解析
+### 5.1 登录流程解析
 
 典型的图形登录流程：
 
@@ -943,7 +1054,7 @@ journalctl --user -b
 2. 验证会话状态：`loginctl show-session <id> -p Active -p State`
 3. 查看 PAM 认证日志：`journalctl -t login`
 
-### 4.2 会话管理与 logind
+### 5.2 会话管理与 logind
 
 systemd-logind 是连接登录、会话、设备权限和电源管理的核心服务。它通过 D-Bus 暴露 API，管理
 用户会话并分配设备 ACL。
@@ -955,7 +1066,7 @@ systemd-logind 是连接登录、会话、设备权限和电源管理的核心�
 - **电源管理**：处理电源键事件，根据策略触发 suspend / shutdown
 - **多座席支持**：支持 seat 概念，管理多用户场景
 
-#### 4.2.1 seat（座席）概念
+#### seat（座席）概念
 
 > <https://www.freedesktop.org/wiki/Software/systemd/multiseat/>
 
@@ -1027,7 +1138,7 @@ busctl --system call org.freedesktop.login1 \
 
   这能观察到 session 创建、移除、seat 分配、锁屏请求等信号。
 
-### 4.3 Wayland 合成器架构
+### 5.3 Wayland 合成器架构
 
 Wayland 采用客户端-服务器模型，合成器同时扮演显示服务器和窗口管理器的角色，直接与内核的DRM
 / KMS 和输入设备交互。
@@ -1093,12 +1204,12 @@ $ sudo libinput list-devices
 
 ---
 
-## 5. 网络连接：从硬件到互联网
+## 6. 网络连接：从硬件到互联网
 
 网络连接是现代桌面的基础功能，涉及硬件驱动、固件加载、网络管理和 DNS 解析等多个环节。网络
 故障是最常见的桌面问题之一，理解其工作原理有助于快速定位和解决连接问题。
 
-### 5.1 网络架构概览
+### 6.1 网络架构概览
 
 现代 Linux 桌面使用 systemd-networkd 配合 iwd 进行网络管理，形成完整的网络解决方案。
 
@@ -1116,7 +1227,7 @@ $ sudo libinput list-devices
 - **iwd**：无线网络管理，支持 WPA2 / WPA3
 - **systemd-resolved**：DNS 解析和缓存
 
-### 5.2 网络连接流程
+### 6.2 网络连接流程
 
 **有线网络**：
 
@@ -1151,7 +1262,7 @@ resolvectl query example.com
 resolvectl status
 ```
 
-### 5.3 IPv4 / IPv6 双栈配置
+### 6.3 IPv4 / IPv6 双栈配置
 
 现代网络正在往 IPv6 迁移的过程中，目前仍有许多站点都只支持 IPv6，因此 IPv4+IPv6 双栈成为一
 个过渡方案，systemd-networkd 提供完整的双栈支持。
@@ -1182,7 +1293,7 @@ nslookup -type=A google.com
 nslookup -type=AAAA google.com
 ```
 
-### 5.4 网络故障排查
+### 6.4 网络故障排查
 
 **连接问题诊断流程**：
 
@@ -1241,14 +1352,14 @@ nslookup example.com
 
 ---
 
-## 6. 系统服务：核心功能支持
+## 7. 系统服务：核心功能支持
 
 除了基本的服务管理外，systemd 还提供了多个专门化的系统服务来支持现代 Linux 桌面的核心功
 能，包括内存管理、DNS 解析和时间同步等。
 
 > systemd 全家桶，你值得拥有（
 
-### 6.1 内存管理：systemd-oomd
+### 7.1 内存管理：systemd-oomd
 
 systemd-oomd 是 systemd 提供的内存不足（OOM）守护进程，用于在系统内存紧张时主动终止进程，
 防止系统完全卡死。
@@ -1291,7 +1402,7 @@ journalctl -u systemd-oomd -f
 systemctl status user@$(id -u).service
 ```
 
-### 6.2 DNS 解析：systemd-resolved
+### 7.2 DNS 解析：systemd-resolved
 
 systemd-resolved 提供统一的 DNS 解析服务，支持 DNSSEC 验证、DNS over TLS 等现代 DNS 特性。
 
@@ -1343,7 +1454,7 @@ resolvectl statistics
 resolvectl dns
 ```
 
-### 6.3 时间同步：systemd-timesyncd
+### 7.3 时间同步：systemd-timesyncd
 
 systemd-timesyncd 是轻量级 NTP 客户端，负责保持系统时间与网络时间服务器同步。
 
@@ -1390,12 +1501,12 @@ chronyc tracking  # 如果安装了 chrony
 
 ---
 
-## 7. 多媒体处理：音频与视频
+## 8. 多媒体处理：音频与视频
 
 现代 Linux 桌面使用 PipeWire 统一处理音频、视频和屏幕共享，取代了传统的 PulseAudio 和
 JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统一的媒体处理框架。
 
-### 7.1 PipeWire 架构概览
+### 8.1 PipeWire 架构概览
 
 PipeWire 作为媒体服务器的核心，连接应用程序和硬件设备，提供音频混合、视频处理和路由功能。
 
@@ -1436,7 +1547,7 @@ hardware.pulseaudio.enable = false;
 - `/etc/pipewire/pipewire-pulse.conf`：PulseAudio 兼容配置
 - `/etc/wireplumber/`：WirePlumber 会话管理器配置
 
-### 7.2 音频处理流程
+### 8.2 音频处理流程
 
 **应用播放音频的典型流程**：
 
@@ -1477,7 +1588,7 @@ pactl set-sink-input-volume 123 50%
 pw-cli create-link <source-node> <sink-node>
 ```
 
-### 7.3 视频与屏幕共享
+### 8.3 视频与屏幕共享
 
 在 wayland 环境中，屏幕共享功能是通过 PipeWire 的 screen-capture 协议实现的。这与 X11 有很
 大的不同，后者是通过其自身的扩展（如 X11R6 的 XFIXES 扩展）实现的。
@@ -1512,7 +1623,7 @@ export XDG_CURRENT_DESKTOP=sway
 systemctl --user status pipewire-session-manager
 ```
 
-### 7.4 故障排查与优化
+### 8.4 故障排查与优化
 
 **音频设备识别问题**：
 
@@ -1561,12 +1672,12 @@ context.properties = {
 
 ---
 
-## 8. 中文输入
+## 9. 中文输入
 
 中文输入是中文用户桌面体验的重要组成部分，涉及输入法框架、图形工具包集成、Wayland 协议支持
 等多个层面。
 
-### 8.1 输入法框架架构
+### 9.1 输入法框架架构
 
 现代 Linux 桌面主要使用 fcitx5 作为中文输入解决方案，它通过插件系统支持多种输入引擎，并与
 图形环境深度集成。
@@ -1584,7 +1695,7 @@ context.properties = {
 - `~/.config/fcitx5/profile`：输入法引擎配置
 - `~/.config/fcitx5/conf/`：各输入法引擎的详细配置
 
-### 8.2 Wayland 原生输入法流程
+### 9.2 Wayland 原生输入法流程
 
 **Wayland text-input 协议流程**：
 
@@ -1599,7 +1710,7 @@ text-input 协议有 v1 跟 v3 两个版本，目前（2025-09）Electron/Chrome
 都已经支持了 text-input-v3. 桌面环境方面所有主流 Compositor 也都支持 text-input-v3. 所以目
 前 wayland 下输入法的可用性已经很高了。
 
-### 8.3 X11 / XWayland 输入法流程
+### 9.3 X11 / XWayland 输入法流程
 
 **XWayland 使用场景**：
 
@@ -1648,7 +1759,7 @@ export XMODIFIERS=@im=fcitx
 GTK IM 模块、Qt IM 模块以及 XIM 协议，都是 X11 下的东西，在 wayland 下只需要 text-input 协
 议即可，不需要这些幺蛾子。
 
-### 8.4 混合环境管理策略
+### 9.4 混合环境管理策略
 
 **推荐配置策略**：
 
@@ -1672,7 +1783,7 @@ export GDK_BACKEND=x11      # 强制使用 X11 后端
 your-application
 ```
 
-### 8.5 故障排查与优化
+### 9.5 故障排查与优化
 
 **输入法无响应问题**：
 
@@ -1784,12 +1895,12 @@ vim ~/.config/fcitx5/conf/cloudpinyin.conf
 
 ---
 
-## 9. 应用程序：从启动到交互
+## 10. 应用程序：从启动到交互
 
 GUI 应用程序是用户与 Linux 桌面交互的主要方式。在 Wayland 环境下，应用通过标准化的协议与合
 成器通信，实现窗口管理、输入处理和图形渲染。
 
-### 9.1 应用架构概览
+### 10.1 应用架构概览
 
 现代 Linux 桌面应用采用分层架构，从底层的图形驱动到高层的用户界面，各层协同工作提供完整的
 用户体验。
@@ -1817,7 +1928,7 @@ GUI 应用程序是用户与 Linux 桌面交互的主要方式。在 Wayland 环
 4. 合成器组合多个应用的输出
 5. 通过 DRM/KMS 显示到屏幕
 
-### 9.2 应用启动流程
+### 10.2 应用启动流程
 
 **标准启动过程**：
 
@@ -1868,7 +1979,7 @@ export MESA_DEBUG=1
 strace -f -e trace=network,ipc <application>
 ```
 
-### 9.3 图形驱动与兼容性
+### 10.3 图形驱动与兼容性
 
 **驱动信息查询**：
 
@@ -1886,7 +1997,7 @@ ls -la /dev/dri/
 lspci -k | grep -A 3 -i vga
 ```
 
-### 9.4 工具包支持
+### 10.4 工具包支持
 
 **GTK 应用**：
 
@@ -1953,7 +2064,7 @@ export LIBGL_DEBUG=verbose    # 启用 OpenGL 调试信息
 - **性能问题**：优先使用 `vulkan` 或 `opengl` 硬件加速
 - **兼容性问题**：某些老旧应用可能需要软件渲染模式
 
-### 9.5 故障排查与调试
+### 10.5 故障排查与调试
 
 **应用崩溃诊断**：
 
@@ -2020,9 +2131,9 @@ export __GL_SHOW_GRAPHICS_OSD=1  # NVIDIA
 
 ---
 
-## 10. 系统关机：优雅的生命周期结束
+## 11. 系统关机：优雅的生命周期结束
 
-### 10.1 关机流程概览
+### 11.1 关机流程概览
 
 systemd 管理的关机过程分为四个主要阶段，每个阶段都有明确的目标和顺序，确保数据完整性和系统
 稳定性。
@@ -2053,7 +2164,7 @@ systemd 管理的关机过程分为四个主要阶段，每个阶段都有明确
    - 固件接管系统控制权
    - 所有硬件设备断电
 
-### 10.2 用户会话清理
+### 11.2 用户会话清理
 
 当用户发起关机时，systemd 首先处理用户会话的清理工作，确保用户数据得到妥善保存。
 
@@ -2090,7 +2201,7 @@ journalctl --user -b | grep -E "(Stopping|Stopped)"
 journalctl -u systemd-logind -b | grep -i "device"
 ```
 
-### 10.3 系统服务停止
+### 11.3 系统服务停止
 
 用户会话清理完成后，systemd 开始按依赖关系的逆向顺序停止系统服务。
 
@@ -2128,7 +2239,7 @@ echo 3 > /proc/sys/vm/drop_caches
 journalctl -b -1 | grep -i "unmount\|busy"
 ```
 
-### 10.4 内核资源释放
+### 11.4 内核资源释放
 
 当所有用户空间服务停止后，systemd 执行最终的系统清理：
 
@@ -2156,7 +2267,7 @@ journalctl -b -1 | grep -i "unmount\|busy"
 - 网络设备完全断电
 - 音频设备硬件重置
 
-### 10.5 硬件关机
+### 11.5 硬件关机
 
 当所有用户空间和内核资源处理完毕后，系统进入硬件关机：
 
@@ -2178,7 +2289,7 @@ journalctl -b -1 | grep -i "unmount\|busy"
 
 此时机器完全断电，关机过程结束。下次开机将重新开始完整的启动周期。
 
-### 10.6 关机问题排查
+### 11.6 关机问题排查
 
 **常见关机问题**：
 
@@ -2232,13 +2343,13 @@ echo o > /proc/sysrq-trigger
 
 ---
 
-## 11. 实战案例：综合故障排查
+## 12. 实战案例：综合故障排查
 
 在实际使用 Linux 桌面系统时，往往会遇到多层次、多组件交织的故障。通过系统化的排查方法，可
 以快速定位问题并制定解决方案。本章通过几个典型案例，讲解如何综合使用日志、调试工具和系统命
 令进行故障排查。
 
-### 11.1 案例一：桌面环境无法启动
+### 12.1 案例一：桌面环境无法启动
 
 **现象**：用户登录后，屏幕闪烁后回到登录界面，桌面无法显示。
 
@@ -2286,7 +2397,7 @@ dmesg | grep -i drm
 
 ---
 
-### 11.2 案例二：应用程序崩溃或无响应
+### 12.2 案例二：应用程序崩溃或无响应
 
 **现象**：某些应用程序启动后立即崩溃，或运行中无响应。
 
@@ -2334,7 +2445,7 @@ ldd $(which <application>)
 
 ---
 
-### 11.3 案例三：系统关机或重启异常
+### 12.3 案例三：系统关机或重启异常
 
 **现象**：系统关机卡住，服务停止超时，最终需要强制关机。
 
@@ -2396,7 +2507,7 @@ systemctl poweroff -ff
 
 ---
 
-### 11.4 案例四：网络异常导致应用无法访问
+### 12.4 案例四：网络异常导致应用无法访问
 
 **现象**：应用启动正常，但无法连接网络资源。
 
@@ -2444,7 +2555,7 @@ sudo nft list ruleset
 
 ---
 
-### 11.5 综合排查方法
+### 12.5 综合排查方法
 
 面对复杂问题，单靠经验可能难以定位故障，推荐遵循以下方法：
 
