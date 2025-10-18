@@ -354,12 +354,14 @@ journalctl --disk-usage                    # 日志占用空间
 ```
 
 **NixOS 特殊说明**：在 NixOS 中，`/etc/systemd/system` 下的配置文件都是通过声明式参数生成
-的软链接，指向 `/nix/store`。修改配置应通过 NixOS 配置系统，而非直接编辑这些文件。
+的软链接，指向 `/nix/store`。修改配置应通过 NixOS 配置系统，而非直接编辑这些文件。NixOS 没
+有传统的 `/usr` 和 `/lib` 等 FHS 目录，所有软件包都存储在 `/nix/store` 中，通过
+`/run/current-system/sw/` 等符号链接提供访问。
 
 **配置文件路径**：
 
 - `/etc/systemd/system/`：系统级服务配置
-- `/run/current-system/sw/lib/systemd/system/`（NixOS）或 `/usr/lib/systemd/system/`（其他
+- `/run/current-system/sw/lib/systemd/system/`（NixOS）或 `/usr/lib/systemd/system/`（传统
   发行版）：软件包提供的默认配置
 - `/etc/systemd/user/`：用户级服务配置
 
@@ -551,7 +553,7 @@ udev 是 Linux 用户空间的设备管理员，负责处理内核的设备事�
 
 1. 内核检测到硬件变化，发出 uevent
 2. udevd 接收事件，根据规则文件（`/run/current-system/sw/lib/udev/rules.d/`（NixOS）或
-   `/usr/lib/udev/rules.d/`（其他发行版）、`/etc/udev/rules.d/`）匹配并执行动作（`RUN` 脚
+   `/usr/lib/udev/rules.d/`（传统发行版）、`/etc/udev/rules.d/`）匹配并执行动作（`RUN` 脚
    本、设置 `OWNER`/`GROUP`/`MODE`、创建 symlink、设置权限）。
 3. 通知 systemd，可能触发 device units
 
@@ -625,23 +627,129 @@ $ loginctl show-session <id> -p Remote -p Display -p Name
 **配置文件路径**：
 
 - `/etc/udev/rules.d/`：系统管理员自定义规则（优先级最高）
-- `/run/current-system/sw/lib/udev/rules.d/`（NixOS）或 `/usr/lib/udev/rules.d/`（其他发行
+- `/run/current-system/sw/lib/udev/rules.d/`（NixOS）或 `/usr/lib/udev/rules.d/`（传统发行
   版）：软件包提供的默认规则
 
 ---
 
-## 3. PolicyKit - 细粒度的系统权限管理
+## 3. 系统安全框架：认证、授权与密钥管理
+
+现代 Linux 桌面系统的安全架构由多个相互协作的组件构成，包括 PAM（认证）、PolicyKit（授
+权）、以及桌面环境提供的密钥管理服务。这些组件共同构建了一个多层次的安全防护体系，既保证了
+系统的安全性，又提供了良好的用户体验。
+
+### 3.1 PAM - 可插拔认证模块
+
+PAM（Pluggable Authentication Modules）是 Linux 系统的认证框架，为应用程序提供统一的认证接
+口。它允许系统管理员灵活配置认证策略，支持多种认证方式（密码、指纹、智能卡等），是现代
+Linux 安全体系的基础组件。
+
+#### 3.1.1 PAM 架构概览
+
+PAM 采用模块化设计，将认证过程分解为四个独立的阶段：
+
+- **认证（Authentication）**：验证用户身份（用户名/密码、生物识别等）
+- **授权（Authorization）**：检查用户是否有权限访问特定资源
+- **账户管理（Account Management）**：检查账户状态（是否过期、是否被锁定等）
+- **会话管理（Session Management）**：管理用户会话的建立和销毁
+
+**配置文件结构**：
+
+```bash
+# 系统级 PAM 配置
+/etc/pam.d/                    # 各服务的 PAM 配置
+/etc/pam.conf                  # 全局 PAM 配置（较少使用）
+
+# 常用配置文件
+/etc/pam.d/login               # 控制台登录认证
+/etc/pam.d/gdm                 # 图形登录认证
+/etc/pam.d/sudo                # sudo 命令认证
+/etc/pam.d/sshd                # SSH 登录认证
+```
+
+#### 3.1.2 PAM 配置语法
+
+PAM 配置文件采用以下语法：
+
+```text
+<type> <control> <module> [arguments]
+```
+
+**类型（type）**：
+
+- `auth`：认证模块
+- `account`：账户管理模块
+- `password`：密码管理模块
+- `session`：会话管理模块
+
+**控制标志（control）**：
+
+- `required`：必须成功，失败后继续执行其他模块但最终失败
+- `requisite`：必须成功，失败后立即返回失败
+- `sufficient`：成功即可通过，失败不影响最终结果
+- `optional`：可选模块，不影响认证结果
+
+**配置示例**：
+
+```bash
+# /etc/pam.d/login 示例配置
+auth       required   pam_unix.so     nullok_secure
+auth       optional   pam_gnome_keyring.so
+account    required   pam_unix.so
+password   required   pam_unix.so     nullok obscure min=4 max=8 md5
+session    required   pam_unix.so
+session    optional   pam_gnome_keyring.so auto_start
+```
+
+#### 3.1.3 常用 PAM 模块
+
+| 模块名                        | 功能               | 用途                                       |
+| ----------------------------- | ------------------ | ------------------------------------------ |
+| `pam_unix.so`                 | Unix 标准认证      | 基于 `/etc/passwd` 和 `/etc/shadow` 的认证 |
+| `pam_ldap.so`                 | LDAP 认证          | 企业环境中的集中认证                       |
+| `pam_sss.so`                  | SSSD 认证          | 与 Active Directory 集成                   |
+| `pam_gnome_keyring.so`        | GNOME Keyring 集成 | 自动解锁用户密钥环                         |
+| `pam_kwallet.so`              | KDE Wallet 集成    | 自动解锁 KDE 钱包                          |
+| `pam_fprintd.so`              | 指纹认证           | 生物识别认证                               |
+| `pam_google_authenticator.so` | 双因子认证         | TOTP 时间令牌认证                          |
+
+#### 3.1.4 PAM 调试与故障排查
+
+**调试命令**：
+
+```bash
+# 测试 PAM 配置
+pamtester login ryan authenticate
+
+# 查看 PAM 配置
+cat /etc/pam.d/login
+
+# 检查 PAM 模块（NixOS 中位于 nix store）
+ldd /run/current-system/sw/lib/security/pam_unix.so
+
+# 查看认证日志
+journalctl -t login
+journalctl -t sshd
+```
+
+**常见问题**：
+
+1. **认证失败**：检查 `/etc/passwd` 和 `/etc/shadow` 文件权限
+2. **模块加载失败**：确认 PAM 模块文件存在且可执行
+3. **配置语法错误**：使用 `pamtester` 验证配置
+
+### 3.2 PolicyKit - 细粒度的系统权限管理
 
 PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它提供了一种比传统 Unix 权限更细粒
 度的授权机制。在现代 Linux 桌面系统中，PolicyKit 允许非特权用户执行某些需要特权的系统操作
 （如关机、重启、挂载设备、修改系统时间等），而无需获取完整的 root 权限。
 
-### 3.1 PolicyKit 的核心概念
+#### 3.2.1 PolicyKit 的核心概念
 
 **配置文件路径**：
 
 - `/etc/polkit-1/`：NixOS 声明式配置中定义的自定义规则（优先级最高）
-- `/run/current-system/sw/share/polkit-1/`（NixOS）或 `/usr/share/polkit-1/`（其他发行
+- `/run/current-system/sw/share/polkit-1/`（NixOS）或 `/usr/share/polkit-1/`（传统发行
   版）：软件包提供的默认规则
 
 上述文件夹中又包含两类配置：
@@ -662,7 +770,7 @@ PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它�
 > Authentication Agent, 配置参见
 > [sodiboo/niri-flake](https://github.com/sodiboo/niri-flake/blob/27e012b4cd49e9ac438573ec7a6db3e5835828c3/flake.nix#L497-L509).
 
-### 3.2 PolicyKit 的工作原理
+#### 3.2.2 PolicyKit 的工作原理
 
 当应用程序请求执行需要特权的操作时，系统服务会询问 PolicyKit 是否授权。PolicyKit 的评估过
 程如下：
@@ -676,7 +784,7 @@ PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它�
    - `auth_admin`：需要管理员认证（输入 root 密码）
    - `auth_self_keep`/`auth_admin_keep`：认证后在一段时间内保持授权
 
-### 3.3 PolicyKit 的配置示例
+#### 3.2.3 PolicyKit 的配置示例
 
 在传统的 Linux 发行版中，管理员可以通过创建自定义规则来修改默认行为。例如，允许 `wheel` 组
 的用户无需密码即可关机：
@@ -709,7 +817,7 @@ polkit.addRule(function (action, subject) {
   '';
 }
 
-### 3.4 PolicyKit 与 D-Bus 的集成
+#### 3.2.4 PolicyKit 与 D-Bus 的集成
 
 PolicyKit 与 D-Bus 深度集成，为 D-Bus 服务提供动态授权机制。许多系统服务（如 systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bus 接口的访问。当客户端通过 D-Bus 调用需要特权的方法时，服务会调用 PolicyKit 进行授权检查。
 
@@ -736,6 +844,334 @@ ls -la /etc/polkit-1/rules.d/
 函数式特性，这些路径是只读的，所有的配置都应该通过 NixOS 的配置文件（如
 `configuration.nix`）来管理，而不是直接修改这些目录。这种设计确保了系统配置的可重现性和原
 子性更新。
+
+### 3.3 GNOME Keyring - 密码与密钥管理
+
+GNOME Keyring 是 GNOME 桌面环境提供的安全密钥存储服务，用于管理用户的密码、证书、密钥等敏
+感信息。它通过加密存储和自动解锁机制，为用户提供了便捷而安全的密码管理体验。
+
+#### 3.3.1 GNOME Keyring 架构
+
+GNOME Keyring 采用分层架构设计：
+
+- **密钥环（Keyring）**：加密的存储容器，每个密钥环有独立的密码
+- **密钥环守护进程（gnome-keyring-daemon）**：管理密钥环的生命周期和访问控制
+- **客户端库（libsecret）**：为应用程序提供统一的密钥访问接口
+- **PAM 集成**：通过 `pam_gnome_keyring.so` 实现登录时自动解锁
+
+**核心组件**：
+
+```bash
+# 密钥环守护进程（NixOS 中位于 nix store）
+/run/current-system/sw/bin/gnome-keyring-daemon
+
+# 客户端库（NixOS 中位于 nix store）
+/run/current-system/sw/lib/libsecret-1.so
+
+# PAM 模块（NixOS 中位于 nix store）
+/run/current-system/sw/lib/security/pam_gnome_keyring.so
+
+# 配置文件
+~/.config/keyrings/          # 用户密钥环存储目录
+~/.local/share/keyrings/     # 系统密钥环存储目录
+```
+
+#### 3.3.2 密钥环类型与用途
+
+| 密钥环类型  | 用途                       | 解锁时机           |
+| ----------- | -------------------------- | ------------------ |
+| **login**   | 登录密钥环，存储用户密码   | 用户登录时自动解锁 |
+| **default** | 默认密钥环，存储应用密码   | 首次访问时解锁     |
+| **session** | 会话密钥环，临时存储       | 会话开始时创建     |
+| **crypto**  | 加密密钥环，存储证书和私钥 | 按需解锁           |
+
+#### 3.3.3 密钥环管理
+
+**命令行工具**：
+
+```bash
+# 查看密钥环状态
+gnome-keyring-daemon --list
+
+# 创建新密钥环
+gnome-keyring-daemon --create-keyring my-keyring
+
+# 解锁密钥环
+gnome-keyring-daemon --unlock my-keyring
+
+# 使用 secret-tool 管理密钥
+secret-tool store --label="My Password" application myapp
+secret-tool lookup application myapp
+
+# 使用 libsecret 的 Python 接口
+python3 -c "
+import secretstorage
+bus = secretstorage.dbus_init()
+collection = secretstorage.get_default_collection(bus)
+items = list(collection.search_items({'application': 'myapp'}))
+for item in items:
+    print(f'Label: {item.get_label()}')
+    print(f'Secret: {item.get_secret().decode()}')
+"
+```
+
+**图形界面工具**：
+
+```bash
+# GNOME 密钥环管理器
+seahorse
+
+# 或通过设置应用
+gnome-control-center passwords
+```
+
+#### 3.3.4 应用程序集成
+
+**GTK 应用集成**：
+
+```python
+# Python 应用使用 libsecret
+import gi
+gi.require_version('Secret', '1')
+from gi.repository import Secret
+
+# 存储密码
+schema = Secret.Schema.new("com.example.app", Secret.SchemaFlags.NONE,
+    Secret.SchemaAttribute.new("application", Secret.SchemaAttributeType.STRING),
+    Secret.SchemaAttribute.new("username", Secret.SchemaAttributeType.STRING)
+)
+
+Secret.password_store_sync(schema, {}, Secret.COLLECTION_DEFAULT,
+    "My App Password", "secret_password", None)
+
+# 检索密码
+password = Secret.password_lookup_sync(schema, {
+    "application": "com.example.app",
+    "username": "user@example.com"
+}, None)
+```
+
+**浏览器集成**：
+
+现代浏览器（如 Firefox、Chrome）可以通过 GNOME Keyring 存储网站密码：
+
+```bash
+# Firefox 配置
+echo "user_pref(\"signon.management.page.enabled\", true);" >> ~/.mozilla/firefox/*/prefs.js
+
+# Chrome 配置（通过环境变量）
+export GOOGLE_API_KEY="your-api-key"
+export GOOGLE_DEFAULT_CLIENT_ID="your-client-id"
+```
+
+### 3.4 KDE Wallet - KDE 密钥管理
+
+KDE Wallet 是 KDE 桌面环境提供的密钥管理服务，功能类似于 GNOME Keyring，但专门为 KDE 应用
+程序优化。它支持多种加密算法和存储后端，提供了灵活的密钥管理解决方案。
+
+#### 3.4.1 KDE Wallet 架构
+
+KDE Wallet 采用模块化设计：
+
+- **KWalletManager**：图形界面管理工具
+- **kwalletd**：钱包守护进程
+- **KWallet API**：为应用程序提供密钥访问接口
+- **PAM 集成**：通过 `pam_kwallet.so` 实现自动解锁
+
+**核心组件**：
+
+```bash
+# 钱包守护进程（NixOS 中位于 nix store）
+/run/current-system/sw/bin/kwalletd5
+
+# 管理工具（NixOS 中位于 nix store）
+/run/current-system/sw/bin/kwalletmanager5
+
+# PAM 模块（NixOS 中位于 nix store）
+/run/current-system/sw/lib/security/pam_kwallet.so
+
+# 配置文件
+~/.local/share/kwalletd/      # 钱包文件存储目录
+~/.config/kwalletrc           # 钱包配置文件
+```
+
+#### 3.4.2 钱包类型与加密
+
+**支持的钱包类型**：
+
+| 钱包类型     | 加密算法 | 用途                          |
+| ------------ | -------- | ----------------------------- |
+| **Blowfish** | Blowfish | 默认加密算法，兼容性好        |
+| **GPG**      | GPG      | 使用 GPG 密钥加密，安全性更高 |
+| **AES**      | AES-256  | 现代加密算法，性能优秀        |
+
+**钱包创建与管理**：
+
+```bash
+# 创建新钱包
+kwalletmanager5 --new-wallet
+
+# 查看钱包状态
+kwallet-query --list
+
+# 解锁钱包
+kwallet-query --unlock wallet_name
+
+# 存储密钥
+kwallet-query --write password "MyApp" "username" "password"
+
+# 读取密钥
+kwallet-query --read password "MyApp" "username"
+```
+
+#### 3.4.3 应用程序集成
+
+**Qt 应用集成**：
+
+```cpp
+// C++ 应用使用 KWallet
+#include <KWallet/KWallet>
+
+KWallet::Wallet *wallet = KWallet::Wallet::openWallet(
+    KWallet::Wallet::NetworkWallet(), 0, KWallet::Wallet::Synchronous
+);
+
+if (wallet) {
+    // 存储密码
+    wallet->writePassword("MyApp", "username", "password");
+
+    // 读取密码
+    QString password;
+    wallet->readPassword("MyApp", "username", password);
+
+    wallet->closeWallet(true);
+}
+```
+
+**Python 应用集成**：
+
+```python
+# 使用 PyKDE5 绑定
+from PyKDE5 import KWallet
+
+wallet = KWallet.Wallet.openWallet(
+    KWallet.Wallet.NetworkWallet(), 0, KWallet.Wallet.Synchronous
+)
+
+if wallet:
+    # 存储密码
+    wallet.writePassword("MyApp", "username", "password")
+
+    # 读取密码
+    password = wallet.readPassword("MyApp", "username")
+
+    wallet.closeWallet(True)
+```
+
+#### 3.4.4 配置与优化
+
+**NixOS 配置示例**：
+
+```nix
+# configuration.nix
+services.kdewallet = {
+  enable = true;
+  package = pkgs.kwallet;
+};
+
+# 启用 PAM 集成
+security.pam.services.login.kwallet = {
+  enable = true;
+  noPAM = false;
+};
+```
+
+**性能优化**：
+
+```bash
+# 调整钱包超时时间
+echo "Timeout=300" >> ~/.config/kwalletrc
+
+# 启用自动锁定
+echo "AutoLock=true" >> ~/.config/kwalletrc
+
+# 设置锁定超时
+echo "LockTimeout=600" >> ~/.config/kwalletrc
+```
+
+### 3.5 安全组件集成与最佳实践
+
+#### 3.5.1 组件协作流程
+
+现代 Linux 桌面的安全组件协作流程：
+
+1. **用户登录**：PAM 验证用户身份
+2. **密钥环解锁**：PAM 模块自动解锁用户密钥环/钱包
+3. **应用启动**：应用程序通过 libsecret/KWallet API 访问存储的密码
+4. **特权操作**：PolicyKit 控制需要特权的系统操作
+5. **会话结束**：密钥环/钱包自动锁定
+
+#### 3.5.2 安全最佳实践
+
+**密钥管理**：
+
+- 使用强密码保护密钥环/钱包
+- 定期备份密钥环文件
+- 避免在脚本中硬编码密码
+- 使用应用程序专用的密钥环
+
+**认证配置**：
+
+```bash
+# 启用双因子认证
+auth required pam_google_authenticator.so
+auth required pam_unix.so
+
+# 配置密码策略
+password required pam_cracklib.so retry=3 minlen=8 difok=3
+password required pam_unix.so use_authtok
+```
+
+**权限管理**：
+
+```javascript
+// PolicyKit 规则示例：限制特定操作
+polkit.addRule(function (action, subject) {
+  if (action.id == "org.freedesktop.login1.power-off" && subject.user == "guest") {
+    return polkit.Result.NO
+  }
+})
+```
+
+#### 3.5.3 故障排查
+
+**常见问题诊断**：
+
+```bash
+# 检查 PAM 配置
+pamtester login $USER authenticate
+
+# 检查密钥环状态
+gnome-keyring-daemon --list
+kwallet-query --list
+
+# 检查 PolicyKit 服务
+systemctl status polkit
+
+# 查看安全相关日志
+journalctl -u polkit -f
+journalctl -t login
+```
+
+**调试技巧**：
+
+- 使用 `strace` 跟踪应用程序的密钥访问
+- 通过 `journalctl` 查看认证和授权日志
+- 使用 `pamtester` 测试 PAM 配置
+- 通过 `pkcheck` 测试 PolicyKit 权限
+
+通过理解这些安全组件的协作机制，用户可以更好地配置和管理 Linux 桌面的安全策略，在保证安全
+性的同时提供良好的用户体验。
 
 ---
 
@@ -2258,7 +2694,7 @@ GDK_BACKEND=x11 gtk-application
 ```bash
 # 查看 Qt 平台插件（NixOS）
 ls /run/current-system/sw/lib/qt*/plugins/platforms/
-# 其他发行版
+# 传统发行版
 ls /usr/lib/qt*/plugins/platforms/
 
 # Qt 调试信息
