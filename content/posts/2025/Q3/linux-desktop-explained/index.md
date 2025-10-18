@@ -679,47 +679,105 @@ pam_start("sshd", username, &conv, &pamh);   // 使用 /etc/pam.d/sshd
 
 **PAM 调用流程示例**：
 
-以用户登录为例，PAM 的调用流程如下：
+如下是一个用户登录流程的 PAM 调用示例：
 
 ```c
+#include <stdio.h>
+#include <stdlib.h>
 #include <security/pam_appl.h>
 #include <security/pam_misc.h>
 
-int main() {
-    pam_handle_t *pamh;
+static void log_result(pam_handle_t *pamh, int ret, const char *step)
+{
+    if (ret == PAM_SUCCESS) {
+        printf("[✓] %s 成功\n", step);
+    } else {
+        fprintf(stderr, "[✗] %s 失败: %s（返回码 %d）\n",
+                step, pam_strerror(pamh, ret), ret);
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    pam_handle_t *pamh = NULL;
     struct pam_conv conv = { misc_conv, NULL };
+    const char *user;
+    int ret;
 
-    // 1. 初始化 PAM，指定服务名 "login"
-    if (pam_start("login", "username", &conv, &pamh) != PAM_SUCCESS) {
-        fprintf(stderr, "PAM 初始化失败\n");
+    if (argc != 2) {
+        fprintf(stderr, "用法: %s 用户名\n", argv[0]);
+        return 1;
+    }
+    user = argv[1];
+
+    /* 1. 初始化 */
+    ret = pam_start("login", user, &conv, &pamh);
+    if (ret != PAM_SUCCESS) {
+        log_result(pamh, ret, "pam_start");
         return 1;
     }
 
-    // 2. 认证用户 - 读取 /etc/pam.d/login 中的 auth 配置
-    if (pam_authenticate(pamh, 0) != PAM_SUCCESS) {
-        fprintf(stderr, "认证失败\n");
-        pam_end(pamh, PAM_AUTH_ERR);
+    /* 2. 认证 */
+    ret = pam_authenticate(pamh, 0);
+    log_result(pamh, ret, "pam_authenticate");
+    if (ret != PAM_SUCCESS) {
+        pam_end(pamh, ret);
         return 1;
     }
 
-    // 3. 检查账户状态 - 读取 /etc/pam.d/login 中的 account 配置
-    if (pam_acct_mgmt(pamh, 0) != PAM_SUCCESS) {
-        fprintf(stderr, "账户检查失败\n");
-        pam_end(pamh, PAM_AUTH_ERR);
+    /* 3. 帐户检查 */
+    ret = pam_acct_mgmt(pamh, 0);
+    log_result(pamh, ret, "pam_acct_mgmt");
+    if (ret != PAM_SUCCESS) {
+        pam_end(pamh, ret);
         return 1;
     }
 
-    // 4. 开启会话 - 读取 /etc/pam.d/login 中的 session 配置
-    if (pam_open_session(pamh, 0) != PAM_SUCCESS) {
-        fprintf(stderr, "会话开启失败\n");
-        pam_end(pamh, PAM_SESSION_ERR);
+    /* 4. 打开会话 */
+    ret = pam_open_session(pamh, 0);
+    log_result(pamh, ret, "pam_open_session");
+    if (ret != PAM_SUCCESS) {
+        /* 常见原因提示 */
+        fprintf(stderr,
+                "\n提示：\n"
+                "  1. 若您以普通用户运行，失败通常是权限不足（写 /var/run/utmp 等）。\n"
+                "  2. 以 root 再次运行即可验证会话模块能否通过：sudo %s %s\n",
+                argv[0], user);
+        pam_end(pamh, ret);
         return 1;
     }
 
-    // 5. 清理资源
+    printf("\n全部 PAM 阶段通过！\n");
+
+    /* 5. 关闭会话并清理 */
+    pam_close_session(pamh, 0);
     pam_end(pamh, PAM_SUCCESS);
     return 0;
 }
+```
+
+将上述配置保存为 `pam_test.c`, 再创建一个 `shell.nix` 内容如下：
+
+```nix
+{ pkgs ? import <nixpkgs> {} }:
+
+pkgs.mkShell {
+  buildInputs = with pkgs; [
+    pam
+    gcc
+  ];
+}
+```
+
+最后编译运行：
+
+```bash
+# 进入引入了 pam 链接库的环境
+nix-shell
+# 编译
+gcc pam_test.c -o pam_test -lpam -lpam_misc
+# 测试
+./pam_test ryan
 ```
 
 #### 3.1.2 PAM 配置语法与模块
