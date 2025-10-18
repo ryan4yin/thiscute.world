@@ -1,6 +1,6 @@
 <!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Linux 桌面系统组件概览与故障排查指南 - This Cute World</title><meta name=Description content="This Cute World"><meta property="og:url" content="https://thiscute.world/posts/linux-desktop-explained/"><meta property="og:site_name" content="This Cute World"><meta property="og:title" content="Linux 桌面系统组件概览与故障排查指南"><meta property="og:description" content="定位与目标Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。
 即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-09-09T20:17:33+08:00"><meta property="article:modified_time" content="2025-10-03T01:59:33+08:00"><meta property="article:tag" content="Linux"><meta property="article:tag" content="Desktop"><meta property="article:tag" content="Systemd"><meta property="article:tag" content="D-Bus"><meta property="og:image" content="https://thiscute.world/posts/linux-desktop-explained/featured-image.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/linux-desktop-explained/featured-image.webp"><meta name=twitter:title content="Linux 桌面系统组件概览与故障排查指南"><meta name=twitter:description content="定位与目标Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。
-即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/linux-desktop-explained/><link rel=prev href=https://thiscute.world/posts/kubecon-china-2025/><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux 桌面系统组件概览与故障排查指南","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/linux-desktop-explained/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/linux-desktop-explained/featured-image.webp","width":2e3,"height":1115}],"genre":"posts","keywords":["Linux","Desktop","Systemd","D-Bus"],"wordcount":29855,"url":"https://thiscute.world/posts/linux-desktop-explained/","datePublished":"2025-09-09T20:17:33+08:00","dateModified":"2025-10-03T01:59:33+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":[{"@type":"Person","name":"於清樂","url":null}],"description":""}</script></head><body data-instant-intensity=viewport class="tw-flex tw-min-h-screen tw-flex-col"><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/linux-desktop-explained/><link rel=prev href=https://thiscute.world/posts/kubecon-china-2025/><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux 桌面系统组件概览与故障排查指南","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/linux-desktop-explained/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/linux-desktop-explained/featured-image.webp","width":2e3,"height":1115}],"genre":"posts","keywords":["Linux","Desktop","Systemd","D-Bus"],"wordcount":30523,"url":"https://thiscute.world/posts/linux-desktop-explained/","datePublished":"2025-09-09T20:17:33+08:00","dateModified":"2025-10-03T01:59:33+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":[{"@type":"Person","name":"於清樂","url":null}],"description":""}</script></head><body data-instant-intensity=viewport class="tw-flex tw-min-h-screen tw-flex-col"><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
 <select class=language-select aria-label=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/linux-desktop-explained/ selected>Simplified Chinese</option></select>
 </button><span class="menu-item search" id=search-desktop>
 <input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
@@ -23,10 +23,10 @@
 取消</button></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><button class="menu-item theme-switch tw-w-full" aria-label=切换主题>
 <svg class="icon" viewBox="0 0 512 512"><path d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705.0 184 82.311 184 184 0 101.705-82.311 184-184 184z"/></svg>
 </button><button class="menu-item tw-w-full" title>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
-<select class=language-select title onchange="location=this.value"><option value=/posts/linux-desktop-explained/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class="tw-mx-4 tw-flex-1"><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#定位与目标>定位与目标</a></li><li><a href=#linux-桌面系统生命周期概览>Linux 桌面系统生命周期概览</a></li><li><a href=#1-系统启动从固件到用户空间>1. 系统启动：从固件到用户空间</a><ul><li><a href=#11-uefi-引导与内核加载>1.1 UEFI 引导与内核加载</a></li><li><a href=#12-initramfs-阶段>1.2 initramfs 阶段</a></li></ul></li><li><a href=#2-系统初始化systemd-的核心角色>2. 系统初始化：systemd 的核心角色</a><ul><li><a href=#21-systemd-概览与基本操作>2.1 systemd 概览与基本操作</a></li><li><a href=#22-日志系统>2.2 日志系统</a><ul><li><a href=#221-核心特性>2.2.1 核心特性</a></li><li><a href=#222-日志的4个收集入口>2.2.2 日志的4个收集入口</a></li><li><a href=#223-日志优先级与核心配置>2.2.3 日志优先级与核心配置</a><ul><li><a href=#1-日志优先级简述>1. 日志优先级简述</a></li><li><a href=#2-journald-配置>2. journald 配置</a></li></ul></li><li><a href=#224-实验用-logger-验证日志收集>2.2.4 实验：用 logger 验证日志收集</a></li><li><a href=#225-旧日志系统与-varlog-解析>2.2.5 旧日志系统与 /var/log/ 解析</a><ul><li><a href=#旧日志系统基于-syslog-的文本管理>旧日志系统：基于 syslog 的文本管理</a></li><li><a href=#varlog-常见文件及功能>/var/log/ 常见文件及功能</a></li></ul></li><li><a href=#226-日志写入最佳实践>2.2.6 日志写入最佳实践</a></li><li><a href=#227-运维命令速查>2.2.7 运维命令速查</a></li></ul></li><li><a href=#23-设备管理udev-的角色>2.3 设备管理：udev 的角色</a><ul><li><a href=#设备权限与-acl>设备权限与 ACL</a></li><li><a href=#故障排查>故障排查</a></li></ul></li></ul></li><li><a href=#3-系统安全框架认证授权与密钥管理>3. 系统安全框架：认证、授权与密钥管理</a><ul><li><a href=#31-pam---可插拔认证模块>3.1 PAM - 可插拔认证模块</a><ul><li><a href=#311-pam-架构概览>3.1.1 PAM 架构概览</a></li><li><a href=#312-pam-配置语法>3.1.2 PAM 配置语法</a></li><li><a href=#313-常用-pam-模块>3.1.3 常用 PAM 模块</a></li><li><a href=#314-pam-调试与故障排查>3.1.4 PAM 调试与故障排查</a></li></ul></li><li><a href=#32-policykit---细粒度的系统权限管理>3.2 PolicyKit - 细粒度的系统权限管理</a><ul><li><a href=#321-policykit-的核心概念>3.2.1 PolicyKit 的核心概念</a></li><li><a href=#322-policykit-的工作原理>3.2.2 PolicyKit 的工作原理</a></li><li><a href=#323-policykit-的配置示例>3.2.3 PolicyKit 的配置示例</a></li></ul></li><li><a href=#33-gnome-keyring---密码与密钥管理>3.3 GNOME Keyring - 密码与密钥管理</a><ul><li><a href=#331-gnome-keyring-架构>3.3.1 GNOME Keyring 架构</a></li><li><a href=#332-密钥环类型与用途>3.3.2 密钥环类型与用途</a></li><li><a href=#333-密钥环管理>3.3.3 密钥环管理</a></li><li><a href=#334-应用程序集成>3.3.4 应用程序集成</a></li></ul></li><li><a href=#34-kde-wallet---kde-密钥管理>3.4 KDE Wallet - KDE 密钥管理</a><ul><li><a href=#341-kde-wallet-架构>3.4.1 KDE Wallet 架构</a></li><li><a href=#342-钱包类型与加密>3.4.2 钱包类型与加密</a></li><li><a href=#343-应用程序集成>3.4.3 应用程序集成</a></li><li><a href=#344-配置与优化>3.4.4 配置与优化</a></li></ul></li><li><a href=#35-安全组件集成与最佳实践>3.5 安全组件集成与最佳实践</a><ul><li><a href=#351-组件协作流程>3.5.1 组件协作流程</a></li><li><a href=#352-安全最佳实践>3.5.2 安全最佳实践</a></li><li><a href=#353-故障排查>3.5.3 故障排查</a></li></ul></li></ul></li><li><a href=#4-d-bus-系统总线---应用间通信的主要通道>4. D-Bus 系统总线 - 应用间通信的主要通道</a><ul><li><a href=#关键概念>关键概念</a></li><li><a href=#系统总线与会话总线>系统总线与会话总线</a></li><li><a href=#d-bus-的三类角色>D-Bus 的三类角色</a></li><li><a href=#常见操作示例>常见操作示例</a></li><li><a href=#调试与监控命令>调试与监控命令</a></li><li><a href=#d-bus-的权限管控>D-Bus 的权限管控</a><ul><li><a href=#d-bus-的原生权限管控机制>D-Bus 的原生权限管控机制</a></li><li><a href=#flatpak-对-d-bus-权限的细粒度管控>Flatpak 对 D-Bus 权限的细粒度管控</a><ul><li><a href=#1-底层基础隔离bubblewrap-的-socket-隐藏与代理挂载>1. 底层基础隔离：bubblewrap 的 “socket 隐藏与代理挂载”</a></li><li><a href=#2-上层规则过滤xdg-dbus-proxy-的-白名单校验>2. 上层规则过滤：xdg-dbus-proxy 的 “白名单校验”</a></li><li><a href=#3-消息流转代理的-校验---转发-逻辑>3. 消息流转：代理的 “校验 - 转发” 逻辑</a></li></ul></li></ul></li></ul></li><li><a href=#5-用户会话登录与桌面环境>5. 用户会话：登录与桌面环境</a><ul><li><a href=#51-登录流程解析>5.1 登录流程解析</a></li><li><a href=#52-会话管理与-logind>5.2 会话管理与 logind</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li><li><a href=#53-wayland-合成器架构>5.3 Wayland 合成器架构</a><ul><li><a href=#架构对比x11-vs-wayland>架构对比：X11 vs Wayland</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li><li><a href=#图形栈组件>图形栈组件</a></li></ul></li></ul></li><li><a href=#6-网络连接从硬件到互联网>6. 网络连接：从硬件到互联网</a><ul><li><a href=#61-网络架构概览>6.1 网络架构概览</a></li><li><a href=#62-网络连接流程>6.2 网络连接流程</a></li><li><a href=#63-ipv4--ipv6-双栈配置>6.3 IPv4 / IPv6 双栈配置</a></li><li><a href=#64-网络故障排查>6.4 网络故障排查</a></li></ul></li><li><a href=#7-系统服务核心功能支持>7. 系统服务：核心功能支持</a><ul><li><a href=#71-内存管理systemd-oomd>7.1 内存管理：systemd-oomd</a></li><li><a href=#72-dns-解析systemd-resolved>7.2 DNS 解析：systemd-resolved</a></li><li><a href=#73-时间同步systemd-timesyncd>7.3 时间同步：systemd-timesyncd</a></li></ul></li><li><a href=#8-多媒体处理音频与视频>8. 多媒体处理：音频与视频</a><ul><li><a href=#81-pipewire-架构概览>8.1 PipeWire 架构概览</a></li><li><a href=#82-音频处理流程>8.2 音频处理流程</a></li><li><a href=#83-视频与屏幕共享>8.3 视频与屏幕共享</a></li><li><a href=#84-故障排查与优化>8.4 故障排查与优化</a></li></ul></li><li><a href=#9-中文支持字体渲染与输入法>9. 中文支持：字体渲染与输入法</a><ul><li><a href=#91-字体渲染与配置>9.1 字体渲染与配置</a><ul><li><a href=#911-fontconfig-架构概览>9.1.1 fontconfig 架构概览</a></li><li><a href=#912-cjk-字体配置基础>9.1.2 CJK 字体配置基础</a></li><li><a href=#913-常见-cjk-字体问题与解决方案>9.1.3 常见 CJK 字体问题与解决方案</a></li><li><a href=#914-字体调试与优化工具>9.1.4 字体调试与优化工具</a></li></ul></li><li><a href=#92-中文输入法配置>9.2 中文输入法配置</a><ul><li><a href=#921-输入法框架架构>9.2.1 输入法框架架构</a></li><li><a href=#922-wayland-原生输入法流程>9.2.2 Wayland 原生输入法流程</a></li><li><a href=#923-x11--xwayland-输入法流程>9.2.3 X11 / XWayland 输入法流程</a></li><li><a href=#924-混合环境管理策略>9.2.4 混合环境管理策略</a></li><li><a href=#925-故障排查与优化>9.2.5 故障排查与优化</a></li></ul></li></ul></li><li><a href=#10-应用程序从启动到交互>10. 应用程序：从启动到交互</a><ul><li><a href=#101-应用架构概览>10.1 应用架构概览</a></li><li><a href=#102-应用启动流程>10.2 应用启动流程</a></li><li><a href=#103-图形驱动与兼容性>10.3 图形驱动与兼容性</a></li><li><a href=#104-工具包支持>10.4 工具包支持</a></li><li><a href=#105-故障排查与调试>10.5 故障排查与调试</a></li></ul></li><li><a href=#11-系统关机优雅的生命周期结束>11. 系统关机：优雅的生命周期结束</a><ul><li><a href=#111-关机流程概览>11.1 关机流程概览</a></li><li><a href=#112-用户会话清理>11.2 用户会话清理</a></li><li><a href=#113-系统服务停止>11.3 系统服务停止</a></li><li><a href=#114-内核资源释放>11.4 内核资源释放</a></li><li><a href=#115-硬件关机>11.5 硬件关机</a></li><li><a href=#116-关机问题排查>11.6 关机问题排查</a></li></ul></li><li><a href=#12-实战案例综合故障排查>12. 实战案例：综合故障排查</a><ul><li><a href=#121-案例一桌面环境无法启动>12.1 案例一：桌面环境无法启动</a></li><li><a href=#122-案例二应用程序崩溃或无响应>12.2 案例二：应用程序崩溃或无响应</a></li><li><a href=#123-案例三系统关机或重启异常>12.3 案例三：系统关机或重启异常</a></li><li><a href=#124-案例四网络异常导致应用无法访问>12.4 案例四：网络异常导致应用无法访问</a></li><li><a href=#125-综合排查方法>12.5 综合排查方法</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><dialog id=toc-dialog class="tw-max-w-full tw-w-full tw-max-h-full tw-h-full tw-ml-16"><div class="toc tw-mx-4 tw-max-w-full"><h2 class="tw-mx-0 tw-my-6 tw-uppercase tw-text-2xl">目录</h2><div class=toc-content><nav id=TableOfContents><ul><li><a href=#定位与目标>定位与目标</a></li><li><a href=#linux-桌面系统生命周期概览>Linux 桌面系统生命周期概览</a></li><li><a href=#1-系统启动从固件到用户空间>1. 系统启动：从固件到用户空间</a><ul><li><a href=#11-uefi-引导与内核加载>1.1 UEFI 引导与内核加载</a></li><li><a href=#12-initramfs-阶段>1.2 initramfs 阶段</a></li></ul></li><li><a href=#2-系统初始化systemd-的核心角色>2. 系统初始化：systemd 的核心角色</a><ul><li><a href=#21-systemd-概览与基本操作>2.1 systemd 概览与基本操作</a></li><li><a href=#22-日志系统>2.2 日志系统</a><ul><li><a href=#221-核心特性>2.2.1 核心特性</a></li><li><a href=#222-日志的4个收集入口>2.2.2 日志的4个收集入口</a></li><li><a href=#223-日志优先级与核心配置>2.2.3 日志优先级与核心配置</a><ul><li><a href=#1-日志优先级简述>1. 日志优先级简述</a></li><li><a href=#2-journald-配置>2. journald 配置</a></li></ul></li><li><a href=#224-实验用-logger-验证日志收集>2.2.4 实验：用 logger 验证日志收集</a></li><li><a href=#225-旧日志系统与-varlog-解析>2.2.5 旧日志系统与 /var/log/ 解析</a><ul><li><a href=#旧日志系统基于-syslog-的文本管理>旧日志系统：基于 syslog 的文本管理</a></li><li><a href=#varlog-常见文件及功能>/var/log/ 常见文件及功能</a></li></ul></li><li><a href=#226-日志写入最佳实践>2.2.6 日志写入最佳实践</a></li><li><a href=#227-运维命令速查>2.2.7 运维命令速查</a></li></ul></li><li><a href=#23-设备管理udev-的角色>2.3 设备管理：udev 的角色</a><ul><li><a href=#设备权限与-acl>设备权限与 ACL</a></li><li><a href=#故障排查>故障排查</a></li></ul></li></ul></li><li><a href=#3-系统安全框架认证授权与密钥管理>3. 系统安全框架：认证、授权与密钥管理</a><ul><li><a href=#31-pam---可插拔认证模块>3.1 PAM - 可插拔认证模块</a><ul><li><a href=#311-pam-架构概览>3.1.1 PAM 架构概览</a></li><li><a href=#312-pam-配置语法>3.1.2 PAM 配置语法</a></li><li><a href=#313-常用-pam-模块>3.1.3 常用 PAM 模块</a></li><li><a href=#314-pam-调试与故障排查>3.1.4 PAM 调试与故障排查</a></li></ul></li><li><a href=#32-policykit---细粒度的系统权限管理>3.2 PolicyKit - 细粒度的系统权限管理</a><ul><li><a href=#321-policykit-的核心概念>3.2.1 PolicyKit 的核心概念</a></li><li><a href=#322-policykit-的工作原理>3.2.2 PolicyKit 的工作原理</a></li><li><a href=#323-policykit-的配置示例>3.2.3 PolicyKit 的配置示例</a></li></ul></li><li><a href=#33-gnome-keyring---密码与密钥管理>3.3 GNOME Keyring - 密码与密钥管理</a><ul><li><a href=#331-gnome-keyring-架构>3.3.1 GNOME Keyring 架构</a></li><li><a href=#332-密钥环类型与用途>3.3.2 密钥环类型与用途</a></li><li><a href=#333-密钥环管理>3.3.3 密钥环管理</a></li><li><a href=#334-应用程序集成>3.3.4 应用程序集成</a></li></ul></li><li><a href=#34-kde-wallet---kde-密钥管理>3.4 KDE Wallet - KDE 密钥管理</a><ul><li><a href=#341-kde-wallet-架构>3.4.1 KDE Wallet 架构</a></li><li><a href=#342-钱包类型与加密>3.4.2 钱包类型与加密</a></li><li><a href=#343-应用程序集成>3.4.3 应用程序集成</a></li><li><a href=#344-配置与优化>3.4.4 配置与优化</a></li></ul></li><li><a href=#35-安全组件集成与最佳实践>3.5 安全组件集成与最佳实践</a><ul><li><a href=#351-组件协作流程>3.5.1 组件协作流程</a></li><li><a href=#352-安全最佳实践>3.5.2 安全最佳实践</a></li><li><a href=#353-故障排查>3.5.3 故障排查</a></li></ul></li></ul></li><li><a href=#4-d-bus-系统总线---应用间通信的主要通道>4. D-Bus 系统总线 - 应用间通信的主要通道</a><ul><li><a href=#关键概念>关键概念</a></li><li><a href=#系统总线与会话总线>系统总线与会话总线</a></li><li><a href=#d-bus-的三类角色>D-Bus 的三类角色</a></li><li><a href=#常见操作示例>常见操作示例</a></li><li><a href=#调试与监控命令>调试与监控命令</a></li><li><a href=#d-bus-的权限管控>D-Bus 的权限管控</a><ul><li><a href=#d-bus-的原生权限管控机制>D-Bus 的原生权限管控机制</a></li><li><a href=#flatpak-对-d-bus-权限的细粒度管控>Flatpak 对 D-Bus 权限的细粒度管控</a><ul><li><a href=#1-底层基础隔离bubblewrap-的-socket-隐藏与代理挂载>1. 底层基础隔离：bubblewrap 的 “socket 隐藏与代理挂载”</a></li><li><a href=#2-上层规则过滤xdg-dbus-proxy-的-白名单校验>2. 上层规则过滤：xdg-dbus-proxy 的 “白名单校验”</a></li><li><a href=#3-消息流转代理的-校验---转发-逻辑>3. 消息流转：代理的 “校验 - 转发” 逻辑</a></li></ul></li></ul></li></ul></li><li><a href=#5-用户会话登录与桌面环境>5. 用户会话：登录与桌面环境</a><ul><li><a href=#51-登录流程解析>5.1 登录流程解析</a></li><li><a href=#52-会话管理与-logind>5.2 会话管理与 logind</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li><li><a href=#53-wayland-合成器架构>5.3 Wayland 合成器架构</a><ul><li><a href=#架构对比x11-vs-wayland>架构对比：X11 vs Wayland</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li><li><a href=#图形栈组件>图形栈组件</a></li></ul></li></ul></li><li><a href=#6-网络连接从硬件到互联网>6. 网络连接：从硬件到互联网</a><ul><li><a href=#61-网络架构概览>6.1 网络架构概览</a></li><li><a href=#62-网络连接流程>6.2 网络连接流程</a></li><li><a href=#63-ipv4--ipv6-双栈配置>6.3 IPv4 / IPv6 双栈配置</a></li><li><a href=#64-网络故障排查>6.4 网络故障排查</a></li></ul></li><li><a href=#7-系统服务核心功能支持>7. 系统服务：核心功能支持</a><ul><li><a href=#71-内存管理systemd-oomd>7.1 内存管理：systemd-oomd</a></li><li><a href=#72-dns-解析systemd-resolved>7.2 DNS 解析：systemd-resolved</a></li><li><a href=#73-时间同步systemd-timesyncd>7.3 时间同步：systemd-timesyncd</a></li></ul></li><li><a href=#8-多媒体处理音频与视频>8. 多媒体处理：音频与视频</a><ul><li><a href=#81-pipewire-架构概览>8.1 PipeWire 架构概览</a></li><li><a href=#82-音频处理流程>8.2 音频处理流程</a></li><li><a href=#83-视频与屏幕共享>8.3 视频与屏幕共享</a></li><li><a href=#84-故障排查与优化>8.4 故障排查与优化</a></li></ul></li><li><a href=#9-中文支持字体渲染与输入法>9. 中文支持：字体渲染与输入法</a><ul><li><a href=#91-字体渲染与配置>9.1 字体渲染与配置</a><ul><li><a href=#911-fontconfig-架构概览>9.1.1 fontconfig 架构概览</a></li><li><a href=#912-cjk-字体配置基础>9.1.2 CJK 字体配置基础</a></li><li><a href=#913-常见-cjk-字体问题与解决方案>9.1.3 常见 CJK 字体问题与解决方案</a></li><li><a href=#914-字体调试与优化工具>9.1.4 字体调试与优化工具</a></li></ul></li><li><a href=#92-中文输入法配置>9.2 中文输入法配置</a><ul><li><a href=#921-输入法框架架构>9.2.1 输入法框架架构</a></li><li><a href=#922-wayland-原生输入法流程>9.2.2 Wayland 原生输入法流程</a></li><li><a href=#923-x11--xwayland-输入法流程>9.2.3 X11 / XWayland 输入法流程</a></li><li><a href=#924-混合环境管理策略>9.2.4 混合环境管理策略</a></li><li><a href=#925-故障排查与优化>9.2.5 故障排查与优化</a></li></ul></li></ul></li><li><a href=#10-应用程序从启动到交互>10. 应用程序：从启动到交互</a><ul><li><a href=#101-应用架构概览>10.1 应用架构概览</a></li><li><a href=#102-应用启动流程>10.2 应用启动流程</a></li><li><a href=#103-图形驱动与兼容性>10.3 图形驱动与兼容性</a></li><li><a href=#104-工具包支持>10.4 工具包支持</a></li><li><a href=#105-故障排查与调试>10.5 故障排查与调试</a></li></ul></li><li><a href=#11-系统关机优雅的生命周期结束>11. 系统关机：优雅的生命周期结束</a><ul><li><a href=#111-关机流程概览>11.1 关机流程概览</a></li><li><a href=#112-用户会话清理>11.2 用户会话清理</a></li><li><a href=#113-系统服务停止>11.3 系统服务停止</a></li><li><a href=#114-内核资源释放>11.4 内核资源释放</a></li><li><a href=#115-硬件关机>11.5 硬件关机</a></li><li><a href=#116-关机问题排查>11.6 关机问题排查</a></li></ul></li><li><a href=#12-实战案例综合故障排查>12. 实战案例：综合故障排查</a><ul><li><a href=#121-案例一桌面环境无法启动>12.1 案例一：桌面环境无法启动</a></li><li><a href=#122-案例二应用程序崩溃或无响应>12.2 案例二：应用程序崩溃或无响应</a></li><li><a href=#123-案例三系统关机或重启异常>12.3 案例三：系统关机或重启异常</a></li><li><a href=#124-案例四网络异常导致应用无法访问>12.4 案例四：网络异常导致应用无法访问</a></li><li><a href=#125-综合排查方法>12.5 综合排查方法</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div></dialog><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2025-09-09 data-pagefind-body>Linux 桌面系统组件概览与故障排查指南</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><span class=screen-reader-text></span><a href=https://thiscute.world/authors/ryan4yin/><img class="tw-inline-block tw-max-h-4 tw-rounded-full tw-translate-y-[-2px] tw-mr-1" src=/avatar/myself.webp alt="於清樂 avatar" height=16 width=16>於清樂</a></span>
-</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><svg class="icon" viewBox="0 0 512 512"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>Tech</a></span></div><div class=post-meta-line><svg class="icon" viewBox="0 0 448 512"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;<time datetime=2025-09-09>2025-09-09</time>&nbsp;<svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime=2025-10-03>2025-10-03</time>&nbsp;<svg class="icon" viewBox="0 0 512 512"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 29855 字&nbsp;
-<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5.0-2e2-89.5-2e2-2e2S145.5 56 256 56s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2zm61.8-104.4-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6.0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 131 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/linux-desktop-explained/featured-image.webp height=1115 width=2000></div><div class="details toc print:!tw-block" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#定位与目标>定位与目标</a></li><li><a href=#linux-桌面系统生命周期概览>Linux 桌面系统生命周期概览</a></li><li><a href=#1-系统启动从固件到用户空间>1. 系统启动：从固件到用户空间</a><ul><li><a href=#11-uefi-引导与内核加载>1.1 UEFI 引导与内核加载</a></li><li><a href=#12-initramfs-阶段>1.2 initramfs 阶段</a></li></ul></li><li><a href=#2-系统初始化systemd-的核心角色>2. 系统初始化：systemd 的核心角色</a><ul><li><a href=#21-systemd-概览与基本操作>2.1 systemd 概览与基本操作</a></li><li><a href=#22-日志系统>2.2 日志系统</a><ul><li><a href=#221-核心特性>2.2.1 核心特性</a></li><li><a href=#222-日志的4个收集入口>2.2.2 日志的4个收集入口</a></li><li><a href=#223-日志优先级与核心配置>2.2.3 日志优先级与核心配置</a><ul><li><a href=#1-日志优先级简述>1. 日志优先级简述</a></li><li><a href=#2-journald-配置>2. journald 配置</a></li></ul></li><li><a href=#224-实验用-logger-验证日志收集>2.2.4 实验：用 logger 验证日志收集</a></li><li><a href=#225-旧日志系统与-varlog-解析>2.2.5 旧日志系统与 /var/log/ 解析</a><ul><li><a href=#旧日志系统基于-syslog-的文本管理>旧日志系统：基于 syslog 的文本管理</a></li><li><a href=#varlog-常见文件及功能>/var/log/ 常见文件及功能</a></li></ul></li><li><a href=#226-日志写入最佳实践>2.2.6 日志写入最佳实践</a></li><li><a href=#227-运维命令速查>2.2.7 运维命令速查</a></li></ul></li><li><a href=#23-设备管理udev-的角色>2.3 设备管理：udev 的角色</a><ul><li><a href=#设备权限与-acl>设备权限与 ACL</a></li><li><a href=#故障排查>故障排查</a></li></ul></li></ul></li><li><a href=#3-系统安全框架认证授权与密钥管理>3. 系统安全框架：认证、授权与密钥管理</a><ul><li><a href=#31-pam---可插拔认证模块>3.1 PAM - 可插拔认证模块</a><ul><li><a href=#311-pam-架构概览>3.1.1 PAM 架构概览</a></li><li><a href=#312-pam-配置语法>3.1.2 PAM 配置语法</a></li><li><a href=#313-常用-pam-模块>3.1.3 常用 PAM 模块</a></li><li><a href=#314-pam-调试与故障排查>3.1.4 PAM 调试与故障排查</a></li></ul></li><li><a href=#32-policykit---细粒度的系统权限管理>3.2 PolicyKit - 细粒度的系统权限管理</a><ul><li><a href=#321-policykit-的核心概念>3.2.1 PolicyKit 的核心概念</a></li><li><a href=#322-policykit-的工作原理>3.2.2 PolicyKit 的工作原理</a></li><li><a href=#323-policykit-的配置示例>3.2.3 PolicyKit 的配置示例</a></li></ul></li><li><a href=#33-gnome-keyring---密码与密钥管理>3.3 GNOME Keyring - 密码与密钥管理</a><ul><li><a href=#331-gnome-keyring-架构>3.3.1 GNOME Keyring 架构</a></li><li><a href=#332-密钥环类型与用途>3.3.2 密钥环类型与用途</a></li><li><a href=#333-密钥环管理>3.3.3 密钥环管理</a></li><li><a href=#334-应用程序集成>3.3.4 应用程序集成</a></li></ul></li><li><a href=#34-kde-wallet---kde-密钥管理>3.4 KDE Wallet - KDE 密钥管理</a><ul><li><a href=#341-kde-wallet-架构>3.4.1 KDE Wallet 架构</a></li><li><a href=#342-钱包类型与加密>3.4.2 钱包类型与加密</a></li><li><a href=#343-应用程序集成>3.4.3 应用程序集成</a></li><li><a href=#344-配置与优化>3.4.4 配置与优化</a></li></ul></li><li><a href=#35-安全组件集成与最佳实践>3.5 安全组件集成与最佳实践</a><ul><li><a href=#351-组件协作流程>3.5.1 组件协作流程</a></li><li><a href=#352-安全最佳实践>3.5.2 安全最佳实践</a></li><li><a href=#353-故障排查>3.5.3 故障排查</a></li></ul></li></ul></li><li><a href=#4-d-bus-系统总线---应用间通信的主要通道>4. D-Bus 系统总线 - 应用间通信的主要通道</a><ul><li><a href=#关键概念>关键概念</a></li><li><a href=#系统总线与会话总线>系统总线与会话总线</a></li><li><a href=#d-bus-的三类角色>D-Bus 的三类角色</a></li><li><a href=#常见操作示例>常见操作示例</a></li><li><a href=#调试与监控命令>调试与监控命令</a></li><li><a href=#d-bus-的权限管控>D-Bus 的权限管控</a><ul><li><a href=#d-bus-的原生权限管控机制>D-Bus 的原生权限管控机制</a></li><li><a href=#flatpak-对-d-bus-权限的细粒度管控>Flatpak 对 D-Bus 权限的细粒度管控</a><ul><li><a href=#1-底层基础隔离bubblewrap-的-socket-隐藏与代理挂载>1. 底层基础隔离：bubblewrap 的 “socket 隐藏与代理挂载”</a></li><li><a href=#2-上层规则过滤xdg-dbus-proxy-的-白名单校验>2. 上层规则过滤：xdg-dbus-proxy 的 “白名单校验”</a></li><li><a href=#3-消息流转代理的-校验---转发-逻辑>3. 消息流转：代理的 “校验 - 转发” 逻辑</a></li></ul></li></ul></li></ul></li><li><a href=#5-用户会话登录与桌面环境>5. 用户会话：登录与桌面环境</a><ul><li><a href=#51-登录流程解析>5.1 登录流程解析</a></li><li><a href=#52-会话管理与-logind>5.2 会话管理与 logind</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li><li><a href=#53-wayland-合成器架构>5.3 Wayland 合成器架构</a><ul><li><a href=#架构对比x11-vs-wayland>架构对比：X11 vs Wayland</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li><li><a href=#图形栈组件>图形栈组件</a></li></ul></li></ul></li><li><a href=#6-网络连接从硬件到互联网>6. 网络连接：从硬件到互联网</a><ul><li><a href=#61-网络架构概览>6.1 网络架构概览</a></li><li><a href=#62-网络连接流程>6.2 网络连接流程</a></li><li><a href=#63-ipv4--ipv6-双栈配置>6.3 IPv4 / IPv6 双栈配置</a></li><li><a href=#64-网络故障排查>6.4 网络故障排查</a></li></ul></li><li><a href=#7-系统服务核心功能支持>7. 系统服务：核心功能支持</a><ul><li><a href=#71-内存管理systemd-oomd>7.1 内存管理：systemd-oomd</a></li><li><a href=#72-dns-解析systemd-resolved>7.2 DNS 解析：systemd-resolved</a></li><li><a href=#73-时间同步systemd-timesyncd>7.3 时间同步：systemd-timesyncd</a></li></ul></li><li><a href=#8-多媒体处理音频与视频>8. 多媒体处理：音频与视频</a><ul><li><a href=#81-pipewire-架构概览>8.1 PipeWire 架构概览</a></li><li><a href=#82-音频处理流程>8.2 音频处理流程</a></li><li><a href=#83-视频与屏幕共享>8.3 视频与屏幕共享</a></li><li><a href=#84-故障排查与优化>8.4 故障排查与优化</a></li></ul></li><li><a href=#9-中文支持字体渲染与输入法>9. 中文支持：字体渲染与输入法</a><ul><li><a href=#91-字体渲染与配置>9.1 字体渲染与配置</a><ul><li><a href=#911-fontconfig-架构概览>9.1.1 fontconfig 架构概览</a></li><li><a href=#912-cjk-字体配置基础>9.1.2 CJK 字体配置基础</a></li><li><a href=#913-常见-cjk-字体问题与解决方案>9.1.3 常见 CJK 字体问题与解决方案</a></li><li><a href=#914-字体调试与优化工具>9.1.4 字体调试与优化工具</a></li></ul></li><li><a href=#92-中文输入法配置>9.2 中文输入法配置</a><ul><li><a href=#921-输入法框架架构>9.2.1 输入法框架架构</a></li><li><a href=#922-wayland-原生输入法流程>9.2.2 Wayland 原生输入法流程</a></li><li><a href=#923-x11--xwayland-输入法流程>9.2.3 X11 / XWayland 输入法流程</a></li><li><a href=#924-混合环境管理策略>9.2.4 混合环境管理策略</a></li><li><a href=#925-故障排查与优化>9.2.5 故障排查与优化</a></li></ul></li></ul></li><li><a href=#10-应用程序从启动到交互>10. 应用程序：从启动到交互</a><ul><li><a href=#101-应用架构概览>10.1 应用架构概览</a></li><li><a href=#102-应用启动流程>10.2 应用启动流程</a></li><li><a href=#103-图形驱动与兼容性>10.3 图形驱动与兼容性</a></li><li><a href=#104-工具包支持>10.4 工具包支持</a></li><li><a href=#105-故障排查与调试>10.5 故障排查与调试</a></li></ul></li><li><a href=#11-系统关机优雅的生命周期结束>11. 系统关机：优雅的生命周期结束</a><ul><li><a href=#111-关机流程概览>11.1 关机流程概览</a></li><li><a href=#112-用户会话清理>11.2 用户会话清理</a></li><li><a href=#113-系统服务停止>11.3 系统服务停止</a></li><li><a href=#114-内核资源释放>11.4 内核资源释放</a></li><li><a href=#115-硬件关机>11.5 硬件关机</a></li><li><a href=#116-关机问题排查>11.6 关机问题排查</a></li></ul></li><li><a href=#12-实战案例综合故障排查>12. 实战案例：综合故障排查</a><ul><li><a href=#121-案例一桌面环境无法启动>12.1 案例一：桌面环境无法启动</a></li><li><a href=#122-案例二应用程序崩溃或无响应>12.2 案例二：应用程序崩溃或无响应</a></li><li><a href=#123-案例三系统关机或重启异常>12.3 案例三：系统关机或重启异常</a></li><li><a href=#124-案例四网络异常导致应用无法访问>12.4 案例四：网络异常导致应用无法访问</a></li><li><a href=#125-综合排查方法>12.5 综合排查方法</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content data-pagefind-body><h2 id=定位与目标 class=headerLink><a href=#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87 class=header-mark></a>定位与目标</h2><p>Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。</p><p>即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。</p><p>而这就是这篇文章的目的——搭建起一幅 Linux 桌面系统的「解牛图」。</p><p>本文面向已经有一定 Linux 桌面使用经验的读者。我们用一条从「开机」到「APP 运行」再到「关机/
+<select class=language-select title onchange="location=this.value"><option value=/posts/linux-desktop-explained/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class="tw-mx-4 tw-flex-1"><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#定位与目标>定位与目标</a></li><li><a href=#linux-桌面系统生命周期概览>Linux 桌面系统生命周期概览</a></li><li><a href=#1-系统启动从固件到用户空间>1. 系统启动：从固件到用户空间</a><ul><li><a href=#11-uefi-引导与内核加载>1.1 UEFI 引导与内核加载</a></li><li><a href=#12-initramfs-阶段>1.2 initramfs 阶段</a></li></ul></li><li><a href=#2-系统初始化systemd-的核心角色>2. 系统初始化：systemd 的核心角色</a><ul><li><a href=#21-systemd-概览与基本操作>2.1 systemd 概览与基本操作</a></li><li><a href=#22-日志系统>2.2 日志系统</a><ul><li><a href=#221-核心特性>2.2.1 核心特性</a></li><li><a href=#222-日志的4个收集入口>2.2.2 日志的4个收集入口</a></li><li><a href=#223-日志优先级与核心配置>2.2.3 日志优先级与核心配置</a><ul><li><a href=#1-日志优先级简述>1. 日志优先级简述</a></li><li><a href=#2-journald-配置>2. journald 配置</a></li></ul></li><li><a href=#224-实验用-logger-验证日志收集>2.2.4 实验：用 logger 验证日志收集</a></li><li><a href=#225-旧日志系统与-varlog-解析>2.2.5 旧日志系统与 /var/log/ 解析</a><ul><li><a href=#旧日志系统基于-syslog-的文本管理>旧日志系统：基于 syslog 的文本管理</a></li><li><a href=#varlog-常见文件及功能>/var/log/ 常见文件及功能</a></li></ul></li><li><a href=#226-日志写入最佳实践>2.2.6 日志写入最佳实践</a></li><li><a href=#227-运维命令速查>2.2.7 运维命令速查</a></li></ul></li><li><a href=#23-设备管理udev-的角色>2.3 设备管理：udev 的角色</a><ul><li><a href=#设备权限与-acl>设备权限与 ACL</a></li><li><a href=#故障排查>故障排查</a></li></ul></li></ul></li><li><a href=#3-系统安全框架认证授权与密钥管理>3. 系统安全框架：认证、授权与密钥管理</a><ul><li><a href=#31-pam---可插拔认证模块>3.1 PAM - 可插拔认证模块</a><ul><li><a href=#311-pam-工作机制与配置对应关系>3.1.1 PAM 工作机制与配置对应关系</a></li><li><a href=#312-pam-配置语法与模块>3.1.2 PAM 配置语法与模块</a></li><li><a href=#313-pam-调试与故障排查>3.1.3 PAM 调试与故障排查</a></li></ul></li><li><a href=#32-policykit---细粒度的系统权限管理>3.2 PolicyKit - 细粒度的系统权限管理</a><ul><li><a href=#321-policykit-的核心概念>3.2.1 PolicyKit 的核心概念</a></li><li><a href=#322-policykit-的工作原理>3.2.2 PolicyKit 的工作原理</a></li><li><a href=#323-policykit-的配置示例>3.2.3 PolicyKit 的配置示例</a></li></ul></li><li><a href=#33-gnome-keyring---密码与密钥管理>3.3 GNOME Keyring - 密码与密钥管理</a><ul><li><a href=#331-gnome-keyring-架构>3.3.1 GNOME Keyring 架构</a></li><li><a href=#332-密钥环类型与用途>3.3.2 密钥环类型与用途</a></li><li><a href=#333-密钥环管理>3.3.3 密钥环管理</a></li><li><a href=#334-应用程序集成>3.3.4 应用程序集成</a></li></ul></li><li><a href=#34-kde-wallet---kde-密钥管理>3.4 KDE Wallet - KDE 密钥管理</a><ul><li><a href=#341-kde-wallet-架构>3.4.1 KDE Wallet 架构</a></li><li><a href=#342-钱包类型与加密>3.4.2 钱包类型与加密</a></li><li><a href=#343-应用程序集成>3.4.3 应用程序集成</a></li><li><a href=#344-配置与优化>3.4.4 配置与优化</a></li></ul></li><li><a href=#35-安全组件集成与最佳实践>3.5 安全组件集成与最佳实践</a><ul><li><a href=#351-组件协作流程>3.5.1 组件协作流程</a></li><li><a href=#352-安全最佳实践>3.5.2 安全最佳实践</a></li><li><a href=#353-故障排查>3.5.3 故障排查</a></li></ul></li></ul></li><li><a href=#4-d-bus-系统总线---应用间通信的主要通道>4. D-Bus 系统总线 - 应用间通信的主要通道</a><ul><li><a href=#关键概念>关键概念</a></li><li><a href=#系统总线与会话总线>系统总线与会话总线</a></li><li><a href=#d-bus-的三类角色>D-Bus 的三类角色</a></li><li><a href=#常见操作示例>常见操作示例</a></li><li><a href=#调试与监控命令>调试与监控命令</a></li><li><a href=#d-bus-的权限管控>D-Bus 的权限管控</a><ul><li><a href=#d-bus-的原生权限管控机制>D-Bus 的原生权限管控机制</a></li><li><a href=#flatpak-对-d-bus-权限的细粒度管控>Flatpak 对 D-Bus 权限的细粒度管控</a><ul><li><a href=#1-底层基础隔离bubblewrap-的-socket-隐藏与代理挂载>1. 底层基础隔离：bubblewrap 的 “socket 隐藏与代理挂载”</a></li><li><a href=#2-上层规则过滤xdg-dbus-proxy-的-白名单校验>2. 上层规则过滤：xdg-dbus-proxy 的 “白名单校验”</a></li><li><a href=#3-消息流转代理的-校验---转发-逻辑>3. 消息流转：代理的 “校验 - 转发” 逻辑</a></li></ul></li></ul></li></ul></li><li><a href=#5-用户会话登录与桌面环境>5. 用户会话：登录与桌面环境</a><ul><li><a href=#51-登录流程解析>5.1 登录流程解析</a></li><li><a href=#52-会话管理与-logind>5.2 会话管理与 logind</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li><li><a href=#53-wayland-合成器架构>5.3 Wayland 合成器架构</a><ul><li><a href=#架构对比x11-vs-wayland>架构对比：X11 vs Wayland</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li><li><a href=#图形栈组件>图形栈组件</a></li></ul></li></ul></li><li><a href=#6-网络连接从硬件到互联网>6. 网络连接：从硬件到互联网</a><ul><li><a href=#61-网络架构概览>6.1 网络架构概览</a></li><li><a href=#62-网络连接流程>6.2 网络连接流程</a></li><li><a href=#63-ipv4--ipv6-双栈配置>6.3 IPv4 / IPv6 双栈配置</a></li><li><a href=#64-网络故障排查>6.4 网络故障排查</a></li></ul></li><li><a href=#7-系统服务核心功能支持>7. 系统服务：核心功能支持</a><ul><li><a href=#71-内存管理systemd-oomd>7.1 内存管理：systemd-oomd</a></li><li><a href=#72-dns-解析systemd-resolved>7.2 DNS 解析：systemd-resolved</a></li><li><a href=#73-时间同步systemd-timesyncd>7.3 时间同步：systemd-timesyncd</a></li></ul></li><li><a href=#8-多媒体处理音频与视频>8. 多媒体处理：音频与视频</a><ul><li><a href=#81-pipewire-架构概览>8.1 PipeWire 架构概览</a></li><li><a href=#82-音频处理流程>8.2 音频处理流程</a></li><li><a href=#83-视频与屏幕共享>8.3 视频与屏幕共享</a></li><li><a href=#84-故障排查与优化>8.4 故障排查与优化</a></li></ul></li><li><a href=#9-中文支持字体渲染与输入法>9. 中文支持：字体渲染与输入法</a><ul><li><a href=#91-字体渲染与配置>9.1 字体渲染与配置</a><ul><li><a href=#911-fontconfig-架构概览>9.1.1 fontconfig 架构概览</a></li><li><a href=#912-cjk-字体配置基础>9.1.2 CJK 字体配置基础</a></li><li><a href=#913-常见-cjk-字体问题与解决方案>9.1.3 常见 CJK 字体问题与解决方案</a></li><li><a href=#914-字体调试与优化工具>9.1.4 字体调试与优化工具</a></li></ul></li><li><a href=#92-中文输入法配置>9.2 中文输入法配置</a><ul><li><a href=#921-输入法框架架构>9.2.1 输入法框架架构</a></li><li><a href=#922-wayland-原生输入法流程>9.2.2 Wayland 原生输入法流程</a></li><li><a href=#923-x11--xwayland-输入法流程>9.2.3 X11 / XWayland 输入法流程</a></li><li><a href=#924-混合环境管理策略>9.2.4 混合环境管理策略</a></li><li><a href=#925-故障排查与优化>9.2.5 故障排查与优化</a></li></ul></li></ul></li><li><a href=#10-应用程序从启动到交互>10. 应用程序：从启动到交互</a><ul><li><a href=#101-应用架构概览>10.1 应用架构概览</a></li><li><a href=#102-应用启动流程>10.2 应用启动流程</a></li><li><a href=#103-图形驱动与兼容性>10.3 图形驱动与兼容性</a></li><li><a href=#104-工具包支持>10.4 工具包支持</a></li><li><a href=#105-故障排查与调试>10.5 故障排查与调试</a></li></ul></li><li><a href=#11-系统关机优雅的生命周期结束>11. 系统关机：优雅的生命周期结束</a><ul><li><a href=#111-关机流程概览>11.1 关机流程概览</a></li><li><a href=#112-用户会话清理>11.2 用户会话清理</a></li><li><a href=#113-系统服务停止>11.3 系统服务停止</a></li><li><a href=#114-内核资源释放>11.4 内核资源释放</a></li><li><a href=#115-硬件关机>11.5 硬件关机</a></li><li><a href=#116-关机问题排查>11.6 关机问题排查</a></li></ul></li><li><a href=#12-实战案例综合故障排查>12. 实战案例：综合故障排查</a><ul><li><a href=#121-案例一桌面环境无法启动>12.1 案例一：桌面环境无法启动</a></li><li><a href=#122-案例二应用程序崩溃或无响应>12.2 案例二：应用程序崩溃或无响应</a></li><li><a href=#123-案例三系统关机或重启异常>12.3 案例三：系统关机或重启异常</a></li><li><a href=#124-案例四网络异常导致应用无法访问>12.4 案例四：网络异常导致应用无法访问</a></li><li><a href=#125-综合排查方法>12.5 综合排查方法</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><dialog id=toc-dialog class="tw-max-w-full tw-w-full tw-max-h-full tw-h-full tw-ml-16"><div class="toc tw-mx-4 tw-max-w-full"><h2 class="tw-mx-0 tw-my-6 tw-uppercase tw-text-2xl">目录</h2><div class=toc-content><nav id=TableOfContents><ul><li><a href=#定位与目标>定位与目标</a></li><li><a href=#linux-桌面系统生命周期概览>Linux 桌面系统生命周期概览</a></li><li><a href=#1-系统启动从固件到用户空间>1. 系统启动：从固件到用户空间</a><ul><li><a href=#11-uefi-引导与内核加载>1.1 UEFI 引导与内核加载</a></li><li><a href=#12-initramfs-阶段>1.2 initramfs 阶段</a></li></ul></li><li><a href=#2-系统初始化systemd-的核心角色>2. 系统初始化：systemd 的核心角色</a><ul><li><a href=#21-systemd-概览与基本操作>2.1 systemd 概览与基本操作</a></li><li><a href=#22-日志系统>2.2 日志系统</a><ul><li><a href=#221-核心特性>2.2.1 核心特性</a></li><li><a href=#222-日志的4个收集入口>2.2.2 日志的4个收集入口</a></li><li><a href=#223-日志优先级与核心配置>2.2.3 日志优先级与核心配置</a><ul><li><a href=#1-日志优先级简述>1. 日志优先级简述</a></li><li><a href=#2-journald-配置>2. journald 配置</a></li></ul></li><li><a href=#224-实验用-logger-验证日志收集>2.2.4 实验：用 logger 验证日志收集</a></li><li><a href=#225-旧日志系统与-varlog-解析>2.2.5 旧日志系统与 /var/log/ 解析</a><ul><li><a href=#旧日志系统基于-syslog-的文本管理>旧日志系统：基于 syslog 的文本管理</a></li><li><a href=#varlog-常见文件及功能>/var/log/ 常见文件及功能</a></li></ul></li><li><a href=#226-日志写入最佳实践>2.2.6 日志写入最佳实践</a></li><li><a href=#227-运维命令速查>2.2.7 运维命令速查</a></li></ul></li><li><a href=#23-设备管理udev-的角色>2.3 设备管理：udev 的角色</a><ul><li><a href=#设备权限与-acl>设备权限与 ACL</a></li><li><a href=#故障排查>故障排查</a></li></ul></li></ul></li><li><a href=#3-系统安全框架认证授权与密钥管理>3. 系统安全框架：认证、授权与密钥管理</a><ul><li><a href=#31-pam---可插拔认证模块>3.1 PAM - 可插拔认证模块</a><ul><li><a href=#311-pam-工作机制与配置对应关系>3.1.1 PAM 工作机制与配置对应关系</a></li><li><a href=#312-pam-配置语法与模块>3.1.2 PAM 配置语法与模块</a></li><li><a href=#313-pam-调试与故障排查>3.1.3 PAM 调试与故障排查</a></li></ul></li><li><a href=#32-policykit---细粒度的系统权限管理>3.2 PolicyKit - 细粒度的系统权限管理</a><ul><li><a href=#321-policykit-的核心概念>3.2.1 PolicyKit 的核心概念</a></li><li><a href=#322-policykit-的工作原理>3.2.2 PolicyKit 的工作原理</a></li><li><a href=#323-policykit-的配置示例>3.2.3 PolicyKit 的配置示例</a></li></ul></li><li><a href=#33-gnome-keyring---密码与密钥管理>3.3 GNOME Keyring - 密码与密钥管理</a><ul><li><a href=#331-gnome-keyring-架构>3.3.1 GNOME Keyring 架构</a></li><li><a href=#332-密钥环类型与用途>3.3.2 密钥环类型与用途</a></li><li><a href=#333-密钥环管理>3.3.3 密钥环管理</a></li><li><a href=#334-应用程序集成>3.3.4 应用程序集成</a></li></ul></li><li><a href=#34-kde-wallet---kde-密钥管理>3.4 KDE Wallet - KDE 密钥管理</a><ul><li><a href=#341-kde-wallet-架构>3.4.1 KDE Wallet 架构</a></li><li><a href=#342-钱包类型与加密>3.4.2 钱包类型与加密</a></li><li><a href=#343-应用程序集成>3.4.3 应用程序集成</a></li><li><a href=#344-配置与优化>3.4.4 配置与优化</a></li></ul></li><li><a href=#35-安全组件集成与最佳实践>3.5 安全组件集成与最佳实践</a><ul><li><a href=#351-组件协作流程>3.5.1 组件协作流程</a></li><li><a href=#352-安全最佳实践>3.5.2 安全最佳实践</a></li><li><a href=#353-故障排查>3.5.3 故障排查</a></li></ul></li></ul></li><li><a href=#4-d-bus-系统总线---应用间通信的主要通道>4. D-Bus 系统总线 - 应用间通信的主要通道</a><ul><li><a href=#关键概念>关键概念</a></li><li><a href=#系统总线与会话总线>系统总线与会话总线</a></li><li><a href=#d-bus-的三类角色>D-Bus 的三类角色</a></li><li><a href=#常见操作示例>常见操作示例</a></li><li><a href=#调试与监控命令>调试与监控命令</a></li><li><a href=#d-bus-的权限管控>D-Bus 的权限管控</a><ul><li><a href=#d-bus-的原生权限管控机制>D-Bus 的原生权限管控机制</a></li><li><a href=#flatpak-对-d-bus-权限的细粒度管控>Flatpak 对 D-Bus 权限的细粒度管控</a><ul><li><a href=#1-底层基础隔离bubblewrap-的-socket-隐藏与代理挂载>1. 底层基础隔离：bubblewrap 的 “socket 隐藏与代理挂载”</a></li><li><a href=#2-上层规则过滤xdg-dbus-proxy-的-白名单校验>2. 上层规则过滤：xdg-dbus-proxy 的 “白名单校验”</a></li><li><a href=#3-消息流转代理的-校验---转发-逻辑>3. 消息流转：代理的 “校验 - 转发” 逻辑</a></li></ul></li></ul></li></ul></li><li><a href=#5-用户会话登录与桌面环境>5. 用户会话：登录与桌面环境</a><ul><li><a href=#51-登录流程解析>5.1 登录流程解析</a></li><li><a href=#52-会话管理与-logind>5.2 会话管理与 logind</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li><li><a href=#53-wayland-合成器架构>5.3 Wayland 合成器架构</a><ul><li><a href=#架构对比x11-vs-wayland>架构对比：X11 vs Wayland</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li><li><a href=#图形栈组件>图形栈组件</a></li></ul></li></ul></li><li><a href=#6-网络连接从硬件到互联网>6. 网络连接：从硬件到互联网</a><ul><li><a href=#61-网络架构概览>6.1 网络架构概览</a></li><li><a href=#62-网络连接流程>6.2 网络连接流程</a></li><li><a href=#63-ipv4--ipv6-双栈配置>6.3 IPv4 / IPv6 双栈配置</a></li><li><a href=#64-网络故障排查>6.4 网络故障排查</a></li></ul></li><li><a href=#7-系统服务核心功能支持>7. 系统服务：核心功能支持</a><ul><li><a href=#71-内存管理systemd-oomd>7.1 内存管理：systemd-oomd</a></li><li><a href=#72-dns-解析systemd-resolved>7.2 DNS 解析：systemd-resolved</a></li><li><a href=#73-时间同步systemd-timesyncd>7.3 时间同步：systemd-timesyncd</a></li></ul></li><li><a href=#8-多媒体处理音频与视频>8. 多媒体处理：音频与视频</a><ul><li><a href=#81-pipewire-架构概览>8.1 PipeWire 架构概览</a></li><li><a href=#82-音频处理流程>8.2 音频处理流程</a></li><li><a href=#83-视频与屏幕共享>8.3 视频与屏幕共享</a></li><li><a href=#84-故障排查与优化>8.4 故障排查与优化</a></li></ul></li><li><a href=#9-中文支持字体渲染与输入法>9. 中文支持：字体渲染与输入法</a><ul><li><a href=#91-字体渲染与配置>9.1 字体渲染与配置</a><ul><li><a href=#911-fontconfig-架构概览>9.1.1 fontconfig 架构概览</a></li><li><a href=#912-cjk-字体配置基础>9.1.2 CJK 字体配置基础</a></li><li><a href=#913-常见-cjk-字体问题与解决方案>9.1.3 常见 CJK 字体问题与解决方案</a></li><li><a href=#914-字体调试与优化工具>9.1.4 字体调试与优化工具</a></li></ul></li><li><a href=#92-中文输入法配置>9.2 中文输入法配置</a><ul><li><a href=#921-输入法框架架构>9.2.1 输入法框架架构</a></li><li><a href=#922-wayland-原生输入法流程>9.2.2 Wayland 原生输入法流程</a></li><li><a href=#923-x11--xwayland-输入法流程>9.2.3 X11 / XWayland 输入法流程</a></li><li><a href=#924-混合环境管理策略>9.2.4 混合环境管理策略</a></li><li><a href=#925-故障排查与优化>9.2.5 故障排查与优化</a></li></ul></li></ul></li><li><a href=#10-应用程序从启动到交互>10. 应用程序：从启动到交互</a><ul><li><a href=#101-应用架构概览>10.1 应用架构概览</a></li><li><a href=#102-应用启动流程>10.2 应用启动流程</a></li><li><a href=#103-图形驱动与兼容性>10.3 图形驱动与兼容性</a></li><li><a href=#104-工具包支持>10.4 工具包支持</a></li><li><a href=#105-故障排查与调试>10.5 故障排查与调试</a></li></ul></li><li><a href=#11-系统关机优雅的生命周期结束>11. 系统关机：优雅的生命周期结束</a><ul><li><a href=#111-关机流程概览>11.1 关机流程概览</a></li><li><a href=#112-用户会话清理>11.2 用户会话清理</a></li><li><a href=#113-系统服务停止>11.3 系统服务停止</a></li><li><a href=#114-内核资源释放>11.4 内核资源释放</a></li><li><a href=#115-硬件关机>11.5 硬件关机</a></li><li><a href=#116-关机问题排查>11.6 关机问题排查</a></li></ul></li><li><a href=#12-实战案例综合故障排查>12. 实战案例：综合故障排查</a><ul><li><a href=#121-案例一桌面环境无法启动>12.1 案例一：桌面环境无法启动</a></li><li><a href=#122-案例二应用程序崩溃或无响应>12.2 案例二：应用程序崩溃或无响应</a></li><li><a href=#123-案例三系统关机或重启异常>12.3 案例三：系统关机或重启异常</a></li><li><a href=#124-案例四网络异常导致应用无法访问>12.4 案例四：网络异常导致应用无法访问</a></li><li><a href=#125-综合排查方法>12.5 综合排查方法</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div></dialog><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2025-09-09 data-pagefind-body>Linux 桌面系统组件概览与故障排查指南</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><span class=screen-reader-text></span><a href=https://thiscute.world/authors/ryan4yin/><img class="tw-inline-block tw-max-h-4 tw-rounded-full tw-translate-y-[-2px] tw-mr-1" src=/avatar/myself.webp alt="於清樂 avatar" height=16 width=16>於清樂</a></span>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><svg class="icon" viewBox="0 0 512 512"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>Tech</a></span></div><div class=post-meta-line><svg class="icon" viewBox="0 0 448 512"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;<time datetime=2025-09-09>2025-09-09</time>&nbsp;<svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime=2025-10-03>2025-10-03</time>&nbsp;<svg class="icon" viewBox="0 0 512 512"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 30523 字&nbsp;
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5.0-2e2-89.5-2e2-2e2S145.5 56 256 56s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2zm61.8-104.4-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6.0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 134 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/linux-desktop-explained/featured-image.webp height=1115 width=2000></div><div class="details toc print:!tw-block" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#定位与目标>定位与目标</a></li><li><a href=#linux-桌面系统生命周期概览>Linux 桌面系统生命周期概览</a></li><li><a href=#1-系统启动从固件到用户空间>1. 系统启动：从固件到用户空间</a><ul><li><a href=#11-uefi-引导与内核加载>1.1 UEFI 引导与内核加载</a></li><li><a href=#12-initramfs-阶段>1.2 initramfs 阶段</a></li></ul></li><li><a href=#2-系统初始化systemd-的核心角色>2. 系统初始化：systemd 的核心角色</a><ul><li><a href=#21-systemd-概览与基本操作>2.1 systemd 概览与基本操作</a></li><li><a href=#22-日志系统>2.2 日志系统</a><ul><li><a href=#221-核心特性>2.2.1 核心特性</a></li><li><a href=#222-日志的4个收集入口>2.2.2 日志的4个收集入口</a></li><li><a href=#223-日志优先级与核心配置>2.2.3 日志优先级与核心配置</a><ul><li><a href=#1-日志优先级简述>1. 日志优先级简述</a></li><li><a href=#2-journald-配置>2. journald 配置</a></li></ul></li><li><a href=#224-实验用-logger-验证日志收集>2.2.4 实验：用 logger 验证日志收集</a></li><li><a href=#225-旧日志系统与-varlog-解析>2.2.5 旧日志系统与 /var/log/ 解析</a><ul><li><a href=#旧日志系统基于-syslog-的文本管理>旧日志系统：基于 syslog 的文本管理</a></li><li><a href=#varlog-常见文件及功能>/var/log/ 常见文件及功能</a></li></ul></li><li><a href=#226-日志写入最佳实践>2.2.6 日志写入最佳实践</a></li><li><a href=#227-运维命令速查>2.2.7 运维命令速查</a></li></ul></li><li><a href=#23-设备管理udev-的角色>2.3 设备管理：udev 的角色</a><ul><li><a href=#设备权限与-acl>设备权限与 ACL</a></li><li><a href=#故障排查>故障排查</a></li></ul></li></ul></li><li><a href=#3-系统安全框架认证授权与密钥管理>3. 系统安全框架：认证、授权与密钥管理</a><ul><li><a href=#31-pam---可插拔认证模块>3.1 PAM - 可插拔认证模块</a><ul><li><a href=#311-pam-工作机制与配置对应关系>3.1.1 PAM 工作机制与配置对应关系</a></li><li><a href=#312-pam-配置语法与模块>3.1.2 PAM 配置语法与模块</a></li><li><a href=#313-pam-调试与故障排查>3.1.3 PAM 调试与故障排查</a></li></ul></li><li><a href=#32-policykit---细粒度的系统权限管理>3.2 PolicyKit - 细粒度的系统权限管理</a><ul><li><a href=#321-policykit-的核心概念>3.2.1 PolicyKit 的核心概念</a></li><li><a href=#322-policykit-的工作原理>3.2.2 PolicyKit 的工作原理</a></li><li><a href=#323-policykit-的配置示例>3.2.3 PolicyKit 的配置示例</a></li></ul></li><li><a href=#33-gnome-keyring---密码与密钥管理>3.3 GNOME Keyring - 密码与密钥管理</a><ul><li><a href=#331-gnome-keyring-架构>3.3.1 GNOME Keyring 架构</a></li><li><a href=#332-密钥环类型与用途>3.3.2 密钥环类型与用途</a></li><li><a href=#333-密钥环管理>3.3.3 密钥环管理</a></li><li><a href=#334-应用程序集成>3.3.4 应用程序集成</a></li></ul></li><li><a href=#34-kde-wallet---kde-密钥管理>3.4 KDE Wallet - KDE 密钥管理</a><ul><li><a href=#341-kde-wallet-架构>3.4.1 KDE Wallet 架构</a></li><li><a href=#342-钱包类型与加密>3.4.2 钱包类型与加密</a></li><li><a href=#343-应用程序集成>3.4.3 应用程序集成</a></li><li><a href=#344-配置与优化>3.4.4 配置与优化</a></li></ul></li><li><a href=#35-安全组件集成与最佳实践>3.5 安全组件集成与最佳实践</a><ul><li><a href=#351-组件协作流程>3.5.1 组件协作流程</a></li><li><a href=#352-安全最佳实践>3.5.2 安全最佳实践</a></li><li><a href=#353-故障排查>3.5.3 故障排查</a></li></ul></li></ul></li><li><a href=#4-d-bus-系统总线---应用间通信的主要通道>4. D-Bus 系统总线 - 应用间通信的主要通道</a><ul><li><a href=#关键概念>关键概念</a></li><li><a href=#系统总线与会话总线>系统总线与会话总线</a></li><li><a href=#d-bus-的三类角色>D-Bus 的三类角色</a></li><li><a href=#常见操作示例>常见操作示例</a></li><li><a href=#调试与监控命令>调试与监控命令</a></li><li><a href=#d-bus-的权限管控>D-Bus 的权限管控</a><ul><li><a href=#d-bus-的原生权限管控机制>D-Bus 的原生权限管控机制</a></li><li><a href=#flatpak-对-d-bus-权限的细粒度管控>Flatpak 对 D-Bus 权限的细粒度管控</a><ul><li><a href=#1-底层基础隔离bubblewrap-的-socket-隐藏与代理挂载>1. 底层基础隔离：bubblewrap 的 “socket 隐藏与代理挂载”</a></li><li><a href=#2-上层规则过滤xdg-dbus-proxy-的-白名单校验>2. 上层规则过滤：xdg-dbus-proxy 的 “白名单校验”</a></li><li><a href=#3-消息流转代理的-校验---转发-逻辑>3. 消息流转：代理的 “校验 - 转发” 逻辑</a></li></ul></li></ul></li></ul></li><li><a href=#5-用户会话登录与桌面环境>5. 用户会话：登录与桌面环境</a><ul><li><a href=#51-登录流程解析>5.1 登录流程解析</a></li><li><a href=#52-会话管理与-logind>5.2 会话管理与 logind</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li><li><a href=#53-wayland-合成器架构>5.3 Wayland 合成器架构</a><ul><li><a href=#架构对比x11-vs-wayland>架构对比：X11 vs Wayland</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li><li><a href=#图形栈组件>图形栈组件</a></li></ul></li></ul></li><li><a href=#6-网络连接从硬件到互联网>6. 网络连接：从硬件到互联网</a><ul><li><a href=#61-网络架构概览>6.1 网络架构概览</a></li><li><a href=#62-网络连接流程>6.2 网络连接流程</a></li><li><a href=#63-ipv4--ipv6-双栈配置>6.3 IPv4 / IPv6 双栈配置</a></li><li><a href=#64-网络故障排查>6.4 网络故障排查</a></li></ul></li><li><a href=#7-系统服务核心功能支持>7. 系统服务：核心功能支持</a><ul><li><a href=#71-内存管理systemd-oomd>7.1 内存管理：systemd-oomd</a></li><li><a href=#72-dns-解析systemd-resolved>7.2 DNS 解析：systemd-resolved</a></li><li><a href=#73-时间同步systemd-timesyncd>7.3 时间同步：systemd-timesyncd</a></li></ul></li><li><a href=#8-多媒体处理音频与视频>8. 多媒体处理：音频与视频</a><ul><li><a href=#81-pipewire-架构概览>8.1 PipeWire 架构概览</a></li><li><a href=#82-音频处理流程>8.2 音频处理流程</a></li><li><a href=#83-视频与屏幕共享>8.3 视频与屏幕共享</a></li><li><a href=#84-故障排查与优化>8.4 故障排查与优化</a></li></ul></li><li><a href=#9-中文支持字体渲染与输入法>9. 中文支持：字体渲染与输入法</a><ul><li><a href=#91-字体渲染与配置>9.1 字体渲染与配置</a><ul><li><a href=#911-fontconfig-架构概览>9.1.1 fontconfig 架构概览</a></li><li><a href=#912-cjk-字体配置基础>9.1.2 CJK 字体配置基础</a></li><li><a href=#913-常见-cjk-字体问题与解决方案>9.1.3 常见 CJK 字体问题与解决方案</a></li><li><a href=#914-字体调试与优化工具>9.1.4 字体调试与优化工具</a></li></ul></li><li><a href=#92-中文输入法配置>9.2 中文输入法配置</a><ul><li><a href=#921-输入法框架架构>9.2.1 输入法框架架构</a></li><li><a href=#922-wayland-原生输入法流程>9.2.2 Wayland 原生输入法流程</a></li><li><a href=#923-x11--xwayland-输入法流程>9.2.3 X11 / XWayland 输入法流程</a></li><li><a href=#924-混合环境管理策略>9.2.4 混合环境管理策略</a></li><li><a href=#925-故障排查与优化>9.2.5 故障排查与优化</a></li></ul></li></ul></li><li><a href=#10-应用程序从启动到交互>10. 应用程序：从启动到交互</a><ul><li><a href=#101-应用架构概览>10.1 应用架构概览</a></li><li><a href=#102-应用启动流程>10.2 应用启动流程</a></li><li><a href=#103-图形驱动与兼容性>10.3 图形驱动与兼容性</a></li><li><a href=#104-工具包支持>10.4 工具包支持</a></li><li><a href=#105-故障排查与调试>10.5 故障排查与调试</a></li></ul></li><li><a href=#11-系统关机优雅的生命周期结束>11. 系统关机：优雅的生命周期结束</a><ul><li><a href=#111-关机流程概览>11.1 关机流程概览</a></li><li><a href=#112-用户会话清理>11.2 用户会话清理</a></li><li><a href=#113-系统服务停止>11.3 系统服务停止</a></li><li><a href=#114-内核资源释放>11.4 内核资源释放</a></li><li><a href=#115-硬件关机>11.5 硬件关机</a></li><li><a href=#116-关机问题排查>11.6 关机问题排查</a></li></ul></li><li><a href=#12-实战案例综合故障排查>12. 实战案例：综合故障排查</a><ul><li><a href=#121-案例一桌面环境无法启动>12.1 案例一：桌面环境无法启动</a></li><li><a href=#122-案例二应用程序崩溃或无响应>12.2 案例二：应用程序崩溃或无响应</a></li><li><a href=#123-案例三系统关机或重启异常>12.3 案例三：系统关机或重启异常</a></li><li><a href=#124-案例四网络异常导致应用无法访问>12.4 案例四：网络异常导致应用无法访问</a></li><li><a href=#125-综合排查方法>12.5 综合排查方法</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=content id=content data-pagefind-body><h2 id=定位与目标 class=headerLink><a href=#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87 class=header-mark></a>定位与目标</h2><p>Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。</p><p>即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。</p><p>而这就是这篇文章的目的——搭建起一幅 Linux 桌面系统的「解牛图」。</p><p>本文面向已经有一定 Linux 桌面使用经验的读者。我们用一条从「开机」到「APP 运行」再到「关机/
 断电」的时间线为轴，讲清每一步发生了什么、哪里能看到证据（日志 / 设备节点 / D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修复思路。</p><p>一篇文章显然不可能涵盖太多细节，因此这篇文章主要还是起一个概览的作用。</p><p>技术栈假定为：UEFI + systemd-boot + systemd + Wayland + PipeWire + systemd-networkd +
 fcitx5, 使用的发行版为 NixOS.</p><blockquote><p><strong>AI 创作声明</strong>：本文由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。</p></blockquote><hr><h2 id=linux-桌面系统生命周期概览 class=headerLink><a href=#linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f%e6%a6%82%e8%a7%88 class=header-mark></a>Linux 桌面系统生命周期概览</h2><div class="code-block highlight is-closed show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
@@ -859,7 +859,7 @@ tw-overflow-y-hidden
 tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl>sudo chown root:input /dev/input/eventX
 </span></span><span class=line><span class=cl>sudo chmod <span class=m>660</span> /dev/input/eventX</span></span></code></pre></div></li><li><p>永久修复：在 <code>/etc/udev/rules.d/</code> 中添加规则确保 <code>TAG+="uaccess"</code> 或正确的OWNER/GROUP。然后 <code>udevadm control --reload-rules && sudo udevadm trigger</code>。</p></li></ol><p><strong>注意</strong>：NixOS 下直接编辑 <code>/etc/udev/rules.d</code> 可能是临时的（Nix 管理的文件会被系统重建覆盖），正确做法是在 <code>configuration.nix</code> 中配置 <code>services.udev.extraRules</code> 或把规则放在<code>environment.etc</code> 并由 Nix 管理。</p><p><strong>配置文件路径</strong>：</p><ul><li><code>/etc/udev/rules.d/</code>：系统管理员自定义规则（优先级最高）</li><li><code>/run/current-system/sw/lib/udev/rules.d/</code>（NixOS）或 <code>/usr/lib/udev/rules.d/</code>（传统发行版）：软件包提供的默认规则</li></ul><hr><h2 id=3-系统安全框架认证授权与密钥管理 class=headerLink><a href=#3-%e7%b3%bb%e7%bb%9f%e5%ae%89%e5%85%a8%e6%a1%86%e6%9e%b6%e8%ae%a4%e8%af%81%e6%8e%88%e6%9d%83%e4%b8%8e%e5%af%86%e9%92%a5%e7%ae%a1%e7%90%86 class=header-mark></a>3. 系统安全框架：认证、授权与密钥管理</h2><p>现代 Linux 桌面系统的安全架构由多个相互协作的组件构成，包括 PAM（认证）、PolicyKit（授权）、以及桌面环境提供的密钥管理服务。这些组件共同构建了一个多层次的安全防护体系，既保证了系统的安全性，又提供了良好的用户体验。</p><h3 id=31-pam---可插拔认证模块 class=headerLink><a href=#31-pam---%e5%8f%af%e6%8f%92%e6%8b%94%e8%ae%a4%e8%af%81%e6%a8%a1%e5%9d%97 class=header-mark></a>3.1 PAM - 可插拔认证模块</h3><p>PAM（Pluggable Authentication Modules）是 Linux 系统的认证框架，为应用程序提供统一的认证接口。它允许系统管理员灵活配置认证策略，支持多种认证方式（密码、指纹、智能卡等），是现代
-Linux 安全体系的基础组件。</p><h4 id=311-pam-架构概览 class=headerLink><a href=#311-pam-%e6%9e%b6%e6%9e%84%e6%a6%82%e8%a7%88 class=header-mark></a>3.1.1 PAM 架构概览</h4><p>PAM 采用模块化设计，将认证过程分解为四个独立的阶段：</p><ul><li><strong>认证（Authentication）</strong>：验证用户身份（用户名/密码、生物识别等）</li><li><strong>授权（Authorization）</strong>：检查用户是否有权限访问特定资源</li><li><strong>账户管理（Account Management）</strong>：检查账户状态（是否过期、是否被锁定等）</li><li><strong>会话管理（Session Management）</strong>：管理用户会话的建立和销毁</li></ul><p><strong>配置文件结构</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+Linux 安全体系的基础组件。</p><h4 id=311-pam-工作机制与配置对应关系 class=headerLink><a href=#311-pam-%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6%e4%b8%8e%e9%85%8d%e7%bd%ae%e5%af%b9%e5%ba%94%e5%85%b3%e7%b3%bb class=header-mark></a>3.1.1 PAM 工作机制与配置对应关系</h4><p>PAM 采用模块化设计，将认证过程分解为四个独立的阶段：</p><ul><li><strong>认证（Authentication）</strong>：验证用户身份（用户名/密码、生物识别等）</li><li><strong>授权（Authorization）</strong>：检查用户是否有权限访问特定资源</li><li><strong>账户管理（Account Management）</strong>：检查账户状态（是否过期、是否被锁定等）</li><li><strong>会话管理（Session Management）</strong>：管理用户会话的建立和销毁</li></ul><p><strong>程序与 PAM 配置的对应关系</strong>：</p><p>程序与 PAM 配置的对应关系是通过**服务名（Service Name）**建立的。当程序调用 PAM 时，它需要指定一个服务名，这个服务名决定了使用哪个 PAM 配置文件。</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -867,7 +867,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">c</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -905,15 +905,11 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 系统级 PAM 配置</span>
-</span></span><span class=line><span class=cl>/etc/pam.d/                    <span class=c1># 各服务的 PAM 配置</span>
-</span></span><span class=line><span class=cl>/etc/pam.conf                  <span class=c1># 全局 PAM 配置（较少使用）</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 常用配置文件</span>
-</span></span><span class=line><span class=cl>/etc/pam.d/login               <span class=c1># 控制台登录认证</span>
-</span></span><span class=line><span class=cl>/etc/pam.d/gdm                 <span class=c1># 图形登录认证</span>
-</span></span><span class=line><span class=cl>/etc/pam.d/sudo                <span class=c1># sudo 命令认证</span>
-</span></span><span class=line><span class=cl>/etc/pam.d/sshd                <span class=c1># SSH 登录认证</span></span></span></code></pre></div><h4 id=312-pam-配置语法 class=headerLink><a href=#312-pam-%e9%85%8d%e7%bd%ae%e8%af%ad%e6%b3%95 class=header-mark></a>3.1.2 PAM 配置语法</h4><p>PAM 配置文件采用以下语法：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1>// 程序调用 pam_start 时指定服务名
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nf>pam_start</span><span class=p>(</span><span class=s>&#34;login&#34;</span><span class=p>,</span> <span class=n>username</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>conv</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>pamh</span><span class=p>);</span>  <span class=c1>// 使用 /etc/pam.d/login
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nf>pam_start</span><span class=p>(</span><span class=s>&#34;sudo&#34;</span><span class=p>,</span> <span class=n>username</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>conv</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>pamh</span><span class=p>);</span>   <span class=c1>// 使用 /etc/pam.d/sudo
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nf>pam_start</span><span class=p>(</span><span class=s>&#34;sshd&#34;</span><span class=p>,</span> <span class=n>username</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>conv</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>pamh</span><span class=p>);</span>   <span class=c1>// 使用 /etc/pam.d/sshd
+</span></span></span></code></pre></div><p><strong>实际对应关系表</strong>：</p><div class=table-wrapper><table><thead><tr><th style=text-align:>程序</th><th style=text-align:>服务名</th><th style=text-align:>配置文件</th><th style=text-align:>说明</th></tr></thead><tbody><tr><td style=text-align:><code>login</code></td><td style=text-align:><code>"login"</code></td><td style=text-align:><code>/etc/pam.d/login</code></td><td style=text-align:>控制台登录程序</td></tr><tr><td style=text-align:><code>gdm</code></td><td style=text-align:><code>"gdm"</code></td><td style=text-align:><code>/etc/pam.d/gdm</code></td><td style=text-align:>GNOME 显示管理器</td></tr><tr><td style=text-align:><code>greetd</code></td><td style=text-align:><code>"greetd"</code></td><td style=text-align:><code>/etc/pam.d/greetd</code></td><td style=text-align:>greetd 显示管理器</td></tr><tr><td style=text-align:><code>sudo</code></td><td style=text-align:><code>"sudo"</code></td><td style=text-align:><code>/etc/pam.d/sudo</code></td><td style=text-align:>sudo 命令</td></tr><tr><td style=text-align:><code>su</code></td><td style=text-align:><code>"su"</code></td><td style=text-align:><code>/etc/pam.d/su</code></td><td style=text-align:>su 命令</td></tr><tr><td style=text-align:><code>sshd</code></td><td style=text-align:><code>"sshd"</code></td><td style=text-align:><code>/etc/pam.d/sshd</code></td><td style=text-align:>SSH 守护进程</td></tr><tr><td style=text-align:><code>passwd</code></td><td style=text-align:><code>"passwd"</code></td><td style=text-align:><code>/etc/pam.d/passwd</code></td><td style=text-align:>密码修改程序</td></tr></tbody></table></div><p><strong>PAM 调用流程示例</strong>：</p><p>以用户登录为例，PAM 的调用流程如下：</p><div class="code-block highlight is-closed show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -921,7 +917,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">text</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">c</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -959,7 +955,44 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl>&lt;type&gt; &lt;control&gt; &lt;module&gt; [arguments]</span></span></code></pre></div><p><strong>类型（type）</strong>：</p><ul><li><code>auth</code>：认证模块</li><li><code>account</code>：账户管理模块</li><li><code>password</code>：密码管理模块</li><li><code>session</code>：会话管理模块</li></ul><p><strong>控制标志（control）</strong>：</p><ul><li><code>required</code>：必须成功，失败后继续执行其他模块但最终失败</li><li><code>requisite</code>：必须成功，失败后立即返回失败</li><li><code>sufficient</code>：成功即可通过，失败不影响最终结果</li><li><code>optional</code>：可选模块，不影响认证结果</li></ul><p><strong>配置示例</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;security/pam_appl.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;security/pam_misc.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>pam_handle_t</span> <span class=o>*</span><span class=n>pamh</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>struct</span> <span class=n>pam_conv</span> <span class=n>conv</span> <span class=o>=</span> <span class=p>{</span> <span class=n>misc_conv</span><span class=p>,</span> <span class=nb>NULL</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 1. 初始化 PAM，指定服务名 &#34;login&#34;
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=nf>pam_start</span><span class=p>(</span><span class=s>&#34;login&#34;</span><span class=p>,</span> <span class=s>&#34;username&#34;</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>conv</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>pamh</span><span class=p>)</span> <span class=o>!=</span> <span class=n>PAM_SUCCESS</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=s>&#34;PAM 初始化失败</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 2. 认证用户 - 读取 /etc/pam.d/login 中的 auth 配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=nf>pam_authenticate</span><span class=p>(</span><span class=n>pamh</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>!=</span> <span class=n>PAM_SUCCESS</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=s>&#34;认证失败</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>pam_end</span><span class=p>(</span><span class=n>pamh</span><span class=p>,</span> <span class=n>PAM_AUTH_ERR</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 3. 检查账户状态 - 读取 /etc/pam.d/login 中的 account 配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=nf>pam_acct_mgmt</span><span class=p>(</span><span class=n>pamh</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>!=</span> <span class=n>PAM_SUCCESS</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=s>&#34;账户检查失败</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>pam_end</span><span class=p>(</span><span class=n>pamh</span><span class=p>,</span> <span class=n>PAM_AUTH_ERR</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 4. 开启会话 - 读取 /etc/pam.d/login 中的 session 配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>(</span><span class=nf>pam_open_session</span><span class=p>(</span><span class=n>pamh</span><span class=p>,</span> <span class=mi>0</span><span class=p>)</span> <span class=o>!=</span> <span class=n>PAM_SUCCESS</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=s>&#34;会话开启失败</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>pam_end</span><span class=p>(</span><span class=n>pamh</span><span class=p>,</span> <span class=n>PAM_SESSION_ERR</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 5. 清理资源
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>pam_end</span><span class=p>(</span><span class=n>pamh</span><span class=p>,</span> <span class=n>PAM_SUCCESS</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></div><h4 id=312-pam-配置语法与模块 class=headerLink><a href=#312-pam-%e9%85%8d%e7%bd%ae%e8%af%ad%e6%b3%95%e4%b8%8e%e6%a8%a1%e5%9d%97 class=header-mark></a>3.1.2 PAM 配置语法与模块</h4><p><strong>配置语法</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -967,7 +1000,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">text</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -1005,13 +1038,7 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># /etc/pam.d/login 示例配置</span>
-</span></span><span class=line><span class=cl>auth       required   pam_unix.so     nullok_secure
-</span></span><span class=line><span class=cl>auth       optional   pam_gnome_keyring.so
-</span></span><span class=line><span class=cl>account    required   pam_unix.so
-</span></span><span class=line><span class=cl>password   required   pam_unix.so     nullok obscure <span class=nv>min</span><span class=o>=</span><span class=m>4</span> <span class=nv>max</span><span class=o>=</span><span class=m>8</span> md5
-</span></span><span class=line><span class=cl>session    required   pam_unix.so
-</span></span><span class=line><span class=cl>session    optional   pam_gnome_keyring.so auto_start</span></span></code></pre></div><h4 id=313-常用-pam-模块 class=headerLink><a href=#313-%e5%b8%b8%e7%94%a8-pam-%e6%a8%a1%e5%9d%97 class=header-mark></a>3.1.3 常用 PAM 模块</h4><div class=table-wrapper><table><thead><tr><th style=text-align:>模块名</th><th style=text-align:>功能</th><th style=text-align:>用途</th></tr></thead><tbody><tr><td style=text-align:><code>pam_unix.so</code></td><td style=text-align:>Unix 标准认证</td><td style=text-align:>基于 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 的认证</td></tr><tr><td style=text-align:><code>pam_ldap.so</code></td><td style=text-align:>LDAP 认证</td><td style=text-align:>企业环境中的集中认证</td></tr><tr><td style=text-align:><code>pam_sss.so</code></td><td style=text-align:>SSSD 认证</td><td style=text-align:>与 Active Directory 集成</td></tr><tr><td style=text-align:><code>pam_gnome_keyring.so</code></td><td style=text-align:>GNOME Keyring 集成</td><td style=text-align:>自动解锁用户密钥环</td></tr><tr><td style=text-align:><code>pam_kwallet.so</code></td><td style=text-align:>KDE Wallet 集成</td><td style=text-align:>自动解锁 KDE 钱包</td></tr><tr><td style=text-align:><code>pam_fprintd.so</code></td><td style=text-align:>指纹认证</td><td style=text-align:>生物识别认证</td></tr><tr><td style=text-align:><code>pam_google_authenticator.so</code></td><td style=text-align:>双因子认证</td><td style=text-align:>TOTP 时间令牌认证</td></tr></tbody></table></div><h4 id=314-pam-调试与故障排查 class=headerLink><a href=#314-pam-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5 class=header-mark></a>3.1.4 PAM 调试与故障排查</h4><p><strong>调试命令</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>&lt;type&gt; &lt;control&gt; &lt;module&gt; [arguments]</span></span></code></pre></div><p><strong>类型（type）</strong>：</p><ul><li><code>auth</code>：认证模块</li><li><code>account</code>：账户管理模块</li><li><code>password</code>：密码管理模块</li><li><code>session</code>：会话管理模块</li></ul><p><strong>控制标志（control）</strong>：</p><ul><li><code>required</code>：必须成功，失败后继续执行其他模块但最终失败</li><li><code>requisite</code>：必须成功，失败后立即返回失败</li><li><code>sufficient</code>：成功即可通过，失败不影响最终结果</li><li><code>optional</code>：可选模块，不影响认证结果</li></ul><p><strong>NixOS 实际配置示例</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -1057,18 +1084,96 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># /etc/pam.d/login 实际配置（NixOS 生成）</span>
+</span></span><span class=line><span class=cl><span class=c1># Account management.</span>
+</span></span><span class=line><span class=cl>account required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Authentication management.</span>
+</span></span><span class=line><span class=cl>auth optional /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok
+</span></span><span class=line><span class=cl>auth optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so
+</span></span><span class=line><span class=cl>auth sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok try_first_pass
+</span></span><span class=line><span class=cl>auth required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_deny.so
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Password management.</span>
+</span></span><span class=line><span class=cl>password sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so nullok yescrypt
+</span></span><span class=line><span class=cl>password optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so use_authtok
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Session management.</span>
+</span></span><span class=line><span class=cl>session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_env.so <span class=nv>conffile</span><span class=o>=</span>/etc/pam/environment <span class=nv>readenv</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl>session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
+</span></span><span class=line><span class=cl>session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_loginuid.so
+</span></span><span class=line><span class=cl>session optional /nix/store/xxx-systemd-257.8/lib/security/pam_systemd.so
+</span></span><span class=line><span class=cl>session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_limits.so <span class=nv>conf</span><span class=o>=</span>/nix/store/xxx-limits.conf
+</span></span><span class=line><span class=cl>session optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so auto_start</span></span></code></pre></div><p><strong>常用 PAM 模块</strong>：</p><div class=table-wrapper><table><thead><tr><th style=text-align:>模块名</th><th style=text-align:>功能</th><th style=text-align:>用途</th></tr></thead><tbody><tr><td style=text-align:><code>pam_unix.so</code></td><td style=text-align:>Unix 标准认证</td><td style=text-align:>基于 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 的认证</td></tr><tr><td style=text-align:><code>pam_deny.so</code></td><td style=text-align:>拒绝访问</td><td style=text-align:>默认拒绝所有认证请求</td></tr><tr><td style=text-align:><code>pam_env.so</code></td><td style=text-align:>环境变量管理</td><td style=text-align:>设置用户会话环境变量</td></tr><tr><td style=text-align:><code>pam_loginuid.so</code></td><td style=text-align:>登录 UID 管理</td><td style=text-align:>记录用户登录的 UID</td></tr><tr><td style=text-align:><code>pam_systemd.so</code></td><td style=text-align:>systemd 集成</td><td style=text-align:>与 systemd 用户会话集成</td></tr><tr><td style=text-align:><code>pam_limits.so</code></td><td style=text-align:>资源限制</td><td style=text-align:>设置用户资源使用限制</td></tr><tr><td style=text-align:><code>pam_gnome_keyring.so</code></td><td style=text-align:>GNOME Keyring 集成</td><td style=text-align:>自动解锁用户密钥环</td></tr><tr><td style=text-align:><code>pam_ldap.so</code></td><td style=text-align:>LDAP 认证</td><td style=text-align:>企业环境中的集中认证</td></tr><tr><td style=text-align:><code>pam_fprintd.so</code></td><td style=text-align:>指纹认证</td><td style=text-align:>生物识别认证</td></tr><tr><td style=text-align:><code>pam_google_authenticator.so</code></td><td style=text-align:>双因子认证</td><td style=text-align:>TOTP 时间令牌认证</td></tr></tbody></table></div><h4 id=313-pam-调试与故障排查 class=headerLink><a href=#313-pam-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5 class=header-mark></a>3.1.3 PAM 调试与故障排查</h4><p><strong>调试命令</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
+tw-flex
+tw-flex-row
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-18 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 测试 PAM 配置</span>
 </span></span><span class=line><span class=cl>pamtester login ryan authenticate
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 查看 PAM 配置</span>
 </span></span><span class=line><span class=cl>cat /etc/pam.d/login
+</span></span><span class=line><span class=cl>cat /etc/pam.d/greetd
+</span></span><span class=line><span class=cl>cat /etc/pam.d/sudo
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 检查 PAM 模块（NixOS 中位于 nix store）</span>
 </span></span><span class=line><span class=cl>ldd /run/current-system/sw/lib/security/pam_unix.so
+</span></span><span class=line><span class=cl>ldd /run/current-system/sw/lib/security/pam_gnome_keyring.so
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 查看认证日志</span>
 </span></span><span class=line><span class=cl>journalctl -t login
-</span></span><span class=line><span class=cl>journalctl -t sshd</span></span></code></pre></div><p><strong>常见问题</strong>：</p><ol><li><strong>认证失败</strong>：检查 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 文件权限</li><li><strong>模块加载失败</strong>：确认 PAM 模块文件存在且可执行</li><li><strong>配置语法错误</strong>：使用 <code>pamtester</code> 验证配置</li></ol><h3 id=32-policykit---细粒度的系统权限管理 class=headerLink><a href=#32-policykit---%e7%bb%86%e7%b2%92%e5%ba%a6%e7%9a%84%e7%b3%bb%e7%bb%9f%e6%9d%83%e9%99%90%e7%ae%a1%e7%90%86 class=header-mark></a>3.2 PolicyKit - 细粒度的系统权限管理</h3><p>PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它提供了一种比传统 Unix 权限更细粒度的授权机制。在现代 Linux 桌面系统中，PolicyKit 允许非特权用户执行某些需要特权的系统操作
+</span></span><span class=line><span class=cl>journalctl -t greetd
+</span></span><span class=line><span class=cl>journalctl -t sshd
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 验证程序与配置的对应关系</span>
+</span></span><span class=line><span class=cl>strace -e <span class=nv>trace</span><span class=o>=</span>pam_start login 2&gt;<span class=p>&amp;</span><span class=m>1</span> <span class=p>|</span> grep pam_start
+</span></span><span class=line><span class=cl>strace -e <span class=nv>trace</span><span class=o>=</span>openat login 2&gt;<span class=p>&amp;</span><span class=m>1</span> <span class=p>|</span> grep pam.d
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 PAM 测试工具验证配置</span>
+</span></span><span class=line><span class=cl>pamtester login username authenticate
+</span></span><span class=line><span class=cl>pamtester sudo username authenticate</span></span></code></pre></div><p><strong>NixOS PAM 配置特点</strong>：</p><ul><li><strong>声明式配置</strong>：PAM 配置通过 NixOS 配置系统生成，不直接编辑 <code>/etc/pam.d/</code> 文件</li><li><strong>模块路径</strong>：所有 PAM 模块都使用完整的 <code>/nix/store</code> 路径，确保版本一致性</li><li><strong>自动集成</strong>：GNOME Keyring 等组件会自动集成到 PAM 配置中</li><li><strong>可重现性</strong>：配置变更通过 <code>nixos-rebuild</code> 应用，确保系统状态可重现</li></ul><p><strong>常见问题</strong>：</p><ol><li><strong>认证失败</strong>：检查 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 文件权限</li><li><strong>模块加载失败</strong>：确认 PAM 模块文件存在且可执行</li><li><strong>配置语法错误</strong>：使用 <code>pamtester</code> 验证配置</li><li><strong>服务名不匹配</strong>：如果程序指定的服务名与配置文件不匹配，会使用 <code>other</code> 配置</li></ol><h3 id=32-policykit---细粒度的系统权限管理 class=headerLink><a href=#32-policykit---%e7%bb%86%e7%b2%92%e5%ba%a6%e7%9a%84%e7%b3%bb%e7%bb%9f%e6%9d%83%e9%99%90%e7%ae%a1%e7%90%86 class=header-mark></a>3.2 PolicyKit - 细粒度的系统权限管理</h3><p>PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它提供了一种比传统 Unix 权限更细粒度的授权机制。在现代 Linux 桌面系统中，PolicyKit 允许非特权用户执行某些需要特权的系统操作
 （如关机、重启、挂载设备、修改系统时间等），而无需获取完整的 root 权限。</p><h4 id=321-policykit-的核心概念 class=headerLink><a href=#321-policykit-%e7%9a%84%e6%a0%b8%e5%bf%83%e6%a6%82%e5%bf%b5 class=header-mark></a>3.2.1 PolicyKit 的核心概念</h4><p><strong>配置文件路径</strong>：</p><ul><li><code>/etc/polkit-1/</code>：NixOS 声明式配置中定义的自定义规则（优先级最高）</li><li><code>/run/current-system/sw/share/polkit-1/</code>（NixOS）或 <code>/usr/share/polkit-1/</code>（传统发行版）：软件包提供的默认规则</li></ul><p>上述文件夹中又包含两类配置：</p><ul><li><strong>动作（Actions）</strong><ul><li>定义在配置文件夹的 <code>actions</code> 目录中的 XML 文件（如 <code>/etc/polkit-1/actions/</code>），描述可授权的操作。每个动作都有唯一的标识符，如 <code>org.freedesktop.login1.power-off</code> 表示关机操作。</li></ul></li><li><strong>规则（Rules）</strong><ul><li>JavaScript 文件，定义授权决策逻辑，位于上述配置文件夹的 <code>rules.d/</code> 目录中（如<code>/etc/polkit-1/rules.d/</code>）。规则决定了在特定条件下是否授权某个操作。在 NixOS 中，推荐使用声明式配置而非直接修改 <code>/etc</code> 目录。</li></ul></li></ul><p><strong>身份认证代理（Authentication Agents）</strong>：桌面环境提供的图形界面组件，用于在用户需要身份验证时弹出认证对话框。例如，当普通用户尝试关机时，认证代理会提示输入管理员密码。</p><blockquote><p>举例来说，我使用的是 Niri 窗口管理器，它的 Nix Flake 启用了 pokit-kde-agent-1 作为其
 Authentication Agent, 配置参见<a href=https://github.com/sodiboo/niri-flake/blob/27e012b4cd49e9ac438573ec7a6db3e5835828c3/flake.nix#L497-L509 target=_blank rel="noopener noreferrer">sodiboo/niri-flake</a>.</p></blockquote><h4 id=322-policykit-的工作原理 class=headerLink><a href=#322-policykit-%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86 class=header-mark></a>3.2.2 PolicyKit 的工作原理</h4><p>当应用程序请求执行需要特权的操作时，系统服务会询问 PolicyKit 是否授权。PolicyKit 的评估过程如下：</p><ol><li><strong>身份识别</strong>：确定请求者的身份（用户、组、会话等）</li><li><strong>规则匹配</strong>：检查是否有适用的规则文件</li><li><strong>权限评估</strong>：根据规则返回以下结果之一：<ul><li><code>yes</code>：直接允许，无需认证</li><li><code>no</code>：直接拒绝</li><li><code>auth_self</code>：需要用户自己认证（输入当前用户密码）</li><li><code>auth_admin</code>：需要管理员认证（输入 root 密码）</li><li><code>auth_self_keep</code>/<code>auth_admin_keep</code>：认证后在一段时间内保持授权</li></ul></li></ol><h4 id=323-policykit-的配置示例 class=headerLink><a href=#323-policykit-%e7%9a%84%e9%85%8d%e7%bd%ae%e7%a4%ba%e4%be%8b class=header-mark></a>3.2.3 PolicyKit 的配置示例</h4><p>在传统的 Linux 发行版中，管理员可以通过创建自定义规则来修改默认行为。例如，允许 <code>wheel</code> 组的用户无需密码即可关机：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
@@ -1105,7 +1210,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-18 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-19 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1156,7 +1261,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-19 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-20 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1236,7 +1341,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-20 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-21 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1293,7 +1398,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-21 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-22 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1361,7 +1466,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-22 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-23 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1411,7 +1516,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-23 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-24 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1475,7 +1580,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-24 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-25 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1526,7 +1631,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-25 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-26 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1583,7 +1688,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-26 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-27 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1642,7 +1747,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-27 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-28 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1704,7 +1809,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-28 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-29 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1764,7 +1869,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-29 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-30 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1820,7 +1925,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-30 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-31 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1873,7 +1978,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-31 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-32 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1925,7 +2030,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-32 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-33 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -1976,7 +2081,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-33 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-34 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2034,7 +2139,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-34 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-35 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2131,7 +2236,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-35 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-36 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2218,7 +2323,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-36 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-37 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2274,7 +2379,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-37 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-38 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2327,7 +2432,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-38 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-39 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2384,7 +2489,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-39 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-40 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2443,7 +2548,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-40 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-41 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2492,7 +2597,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-41 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-42 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2543,7 +2648,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-42 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-43 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2602,7 +2707,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-43 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-44 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2658,7 +2763,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-44 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-45 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2709,7 +2814,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-45 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-46 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2759,7 +2864,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-46 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-47 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2812,7 +2917,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-47 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-48 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2865,7 +2970,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-48 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-49 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2918,7 +3023,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-49 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-50 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -2974,7 +3079,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-50 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-51 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3035,7 +3140,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-51 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-52 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3093,7 +3198,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-52 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-53 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3147,7 +3252,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-53 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-54 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3206,7 +3311,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-54 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-55 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3262,7 +3367,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-55 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-56 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3319,7 +3424,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-56 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-57 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3373,7 +3478,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-57 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-58 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3428,7 +3533,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-58 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-59 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3481,7 +3586,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-59 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-60 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3528,7 +3633,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-60 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-61 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3575,7 +3680,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-61 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-62 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3622,7 +3727,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-62 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-63 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3677,7 +3782,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-63 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-64 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3730,7 +3835,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-64 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-65 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3838,7 +3943,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-65 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-66 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3892,7 +3997,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-66 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-67 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -3944,7 +4049,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-67 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-68 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4005,7 +4110,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-68 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-69 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4065,7 +4170,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-69 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-70 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4121,7 +4226,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-70 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-71 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4174,7 +4279,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-71 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-72 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4225,7 +4330,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-72 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-73 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4272,7 +4377,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-73 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-74 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4319,7 +4424,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-74 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-75 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4366,7 +4471,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-75 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-76 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4413,7 +4518,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-76 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-77 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4466,7 +4571,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-77 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-78 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4519,7 +4624,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-78 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-79 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4569,7 +4674,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-79 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-80 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4622,7 +4727,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-80 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-81 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4679,7 +4784,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-81 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-82 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4735,7 +4840,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-82 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-83 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4785,7 +4890,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-83 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-84 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4837,7 +4942,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-84 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-85 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4899,7 +5004,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-85 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-86 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -4950,7 +5055,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-86 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-87 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5001,7 +5106,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-87 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-88 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5051,7 +5156,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-88 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-89 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5108,7 +5213,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-89 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-90 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5161,7 +5266,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-90 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-91 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5214,7 +5319,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-91 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-92 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5267,7 +5372,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-92 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-93 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5321,7 +5426,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-93 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-94 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5371,7 +5476,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-94 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-95 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5421,7 +5526,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-95 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-96 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5471,7 +5576,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-96 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-97 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5527,7 +5632,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-97 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-98 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5574,7 +5679,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-98 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-99 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5621,7 +5726,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-99 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-100 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5668,7 +5773,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-100 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-101 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5715,7 +5820,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-101 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-102 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5761,7 +5866,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-102 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-103 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5809,7 +5914,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-103 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-104 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5857,7 +5962,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-104 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-105 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5903,7 +6008,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-105 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-106 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5950,7 +6055,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-106 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-107 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -5997,7 +6102,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-107 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-108 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6044,7 +6149,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-108 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-109 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6091,7 +6196,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-109 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-110 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6137,7 +6242,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-110 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-111 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6183,7 +6288,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-111 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-112 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6229,7 +6334,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-112 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-113 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6277,7 +6382,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-113 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-114 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6324,7 +6429,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-114 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-115 class="chroma
 !tw-block
 tw-p-0
 tw-m-0
@@ -6370,7 +6475,7 @@ print:!tw-hidden" title="Copy code">
 tw-mx-2
 tw-block
 group-[.is-open]:tw-hidden
-print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-115 class="chroma
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-116 class="chroma
 !tw-block
 tw-p-0
 tw-m-0

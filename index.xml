@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-18T13:34:24+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统组件概览与故障排查指南</title><link href="https://thiscute.world/posts/linux-desktop-explained/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/systemd-basics/?utm_source=atom_feed" rel="related" type="text/html" title="通过 systemctl 设置自定义 Service"/><link href="https://thiscute.world/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - 我的 NixOS 使用体会"/><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/?utm_source=atom_feed" rel="related" type="text/html" title="个人数据安全不完全指南"/><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 在 Lichee Pi 4A 上是如何启动的"/><link href="https://thiscute.world/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="为什么我折腾这些小众技术？"/><id>https://thiscute.world/posts/linux-desktop-explained/</id><published>2025-09-09T20:17:33+08:00</published><updated>2025-10-03T01:59:33+08:00</updated><summary type="html">&lt;h2 id="定位与目标" class="headerLink"&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-18T14:05:18+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统组件概览与故障排查指南</title><link href="https://thiscute.world/posts/linux-desktop-explained/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/systemd-basics/?utm_source=atom_feed" rel="related" type="text/html" title="通过 systemctl 设置自定义 Service"/><link href="https://thiscute.world/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - 我的 NixOS 使用体会"/><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/?utm_source=atom_feed" rel="related" type="text/html" title="个人数据安全不完全指南"/><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 在 Lichee Pi 4A 上是如何启动的"/><link href="https://thiscute.world/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="为什么我折腾这些小众技术？"/><id>https://thiscute.world/posts/linux-desktop-explained/</id><published>2025-09-09T20:17:33+08:00</published><updated>2025-10-03T01:59:33+08:00</updated><summary type="html">&lt;h2 id="定位与目标" class="headerLink"&gt;
 &lt;a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"&gt;&lt;/a&gt;定位与目标&lt;/h2&gt;&lt;p&gt;Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。&lt;/p&gt;
 &lt;p&gt;即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。&lt;/p&gt;</summary><content type="html"><![CDATA[<h2 id="定位与目标" class="headerLink">
     <a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"></a>定位与目标</h2><p>Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。</p>
@@ -88,7 +88,7 @@ fcitx5, 使用的发行版为 NixOS.</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-116" 
+    id="codeblock-id-117" 
     class="
       chroma 
       !tw-block 
@@ -259,7 +259,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-117" 
+    id="codeblock-id-118" 
     class="
       chroma 
       !tw-block 
@@ -394,7 +394,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-118" 
+    id="codeblock-id-119" 
     class="
       chroma 
       !tw-block 
@@ -568,7 +568,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-119" 
+    id="codeblock-id-120" 
     class="
       chroma 
       !tw-block 
@@ -700,7 +700,7 @@ Partition（XBOOTLDR）下</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-120" 
+    id="codeblock-id-121" 
     class="
       chroma 
       !tw-block 
@@ -909,7 +909,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-121" 
+    id="codeblock-id-122" 
     class="
       chroma 
       !tw-block 
@@ -1010,7 +1010,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-122" 
+    id="codeblock-id-123" 
     class="
       chroma 
       !tw-block 
@@ -1109,7 +1109,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-123" 
+    id="codeblock-id-124" 
     class="
       chroma 
       !tw-block 
@@ -1303,7 +1303,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-124" 
+    id="codeblock-id-125" 
     class="
       chroma 
       !tw-block 
@@ -1437,7 +1437,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-125" 
+    id="codeblock-id-126" 
     class="
       chroma 
       !tw-block 
@@ -1537,7 +1537,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-126" 
+    id="codeblock-id-127" 
     class="
       chroma 
       !tw-block 
@@ -1643,7 +1643,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-127" 
+    id="codeblock-id-128" 
     class="
       chroma 
       !tw-block 
@@ -1750,7 +1750,7 @@ daemon）, 一般直接 print 即可。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-128" 
+    id="codeblock-id-129" 
     class="
       chroma 
       !tw-block 
@@ -1784,15 +1784,16 @@ daemon）, 一般直接 print 即可。</li>
 <h3 id="31-pam---可插拔认证模块" class="headerLink">
     <a href="#31-pam---%e5%8f%af%e6%8f%92%e6%8b%94%e8%ae%a4%e8%af%81%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1 PAM - 可插拔认证模块</h3><p>PAM（Pluggable Authentication Modules）是 Linux 系统的认证框架，为应用程序提供统一的认证接口。它允许系统管理员灵活配置认证策略，支持多种认证方式（密码、指纹、智能卡等），是现代
 Linux 安全体系的基础组件。</p>
-<h4 id="311-pam-架构概览" class="headerLink">
-    <a href="#311-pam-%e6%9e%b6%e6%9e%84%e6%a6%82%e8%a7%88" class="header-mark"></a>3.1.1 PAM 架构概览</h4><p>PAM 采用模块化设计，将认证过程分解为四个独立的阶段：</p>
+<h4 id="311-pam-工作机制与配置对应关系" class="headerLink">
+    <a href="#311-pam-%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6%e4%b8%8e%e9%85%8d%e7%bd%ae%e5%af%b9%e5%ba%94%e5%85%b3%e7%b3%bb" class="header-mark"></a>3.1.1 PAM 工作机制与配置对应关系</h4><p>PAM 采用模块化设计，将认证过程分解为四个独立的阶段：</p>
 <ul>
 <li><strong>认证（Authentication）</strong>：验证用户身份（用户名/密码、生物识别等）</li>
 <li><strong>授权（Authorization）</strong>：检查用户是否有权限访问特定资源</li>
 <li><strong>账户管理（Account Management）</strong>：检查账户状态（是否过期、是否被锁定等）</li>
 <li><strong>会话管理（Session Management）</strong>：管理用户会话的建立和销毁</li>
 </ul>
-<p><strong>配置文件结构</strong>：</p>
+<p><strong>程序与 PAM 配置的对应关系</strong>：</p>
+<p>程序与 PAM 配置的对应关系是通过**服务名（Service Name）**建立的。当程序调用 PAM 时，它需要指定一个服务名，这个服务名决定了使用哪个 PAM 配置文件。</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -1812,7 +1813,7 @@ Linux 安全体系的基础组件。</p>
       aria-hidden="true">
           <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">bash</p>
+          <p class="tw-select-none !tw-my-1">c</p>
       </button>
 
    <div class="tw-flex">
@@ -1868,7 +1869,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-129" 
+    id="codeblock-id-130" 
     class="
       chroma 
       !tw-block 
@@ -1882,18 +1883,199 @@ Linux 安全体系的基础组件。</p>
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 系统级 PAM 配置</span>
-</span></span><span class="line"><span class="cl">/etc/pam.d/                    <span class="c1"># 各服务的 PAM 配置</span>
-</span></span><span class="line"><span class="cl">/etc/pam.conf                  <span class="c1"># 全局 PAM 配置（较少使用）</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 常用配置文件</span>
-</span></span><span class="line"><span class="cl">/etc/pam.d/login               <span class="c1"># 控制台登录认证</span>
-</span></span><span class="line"><span class="cl">/etc/pam.d/gdm                 <span class="c1"># 图形登录认证</span>
-</span></span><span class="line"><span class="cl">/etc/pam.d/sudo                <span class="c1"># sudo 命令认证</span>
-</span></span><span class="line"><span class="cl">/etc/pam.d/sshd                <span class="c1"># SSH 登录认证</span></span></span></code></pre>
+      "><span class="line"><span class="cl"><span class="c1">// 程序调用 pam_start 时指定服务名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>  <span class="c1">// 使用 /etc/pam.d/login
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;sudo&#34;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>   <span class="c1">// 使用 /etc/pam.d/sudo
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;sshd&#34;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>   <span class="c1">// 使用 /etc/pam.d/sshd
+</span></span></span></code></pre>
 </div>
-<h4 id="312-pam-配置语法" class="headerLink">
-    <a href="#312-pam-%e9%85%8d%e7%bd%ae%e8%af%ad%e6%b3%95" class="header-mark"></a>3.1.2 PAM 配置语法</h4><p>PAM 配置文件采用以下语法：</p>
+<p><strong>实际对应关系表</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>程序</th>
+          <th>服务名</th>
+          <th>配置文件</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>login</code></td>
+          <td><code>&quot;login&quot;</code></td>
+          <td><code>/etc/pam.d/login</code></td>
+          <td>控制台登录程序</td>
+      </tr>
+      <tr>
+          <td><code>gdm</code></td>
+          <td><code>&quot;gdm&quot;</code></td>
+          <td><code>/etc/pam.d/gdm</code></td>
+          <td>GNOME 显示管理器</td>
+      </tr>
+      <tr>
+          <td><code>greetd</code></td>
+          <td><code>&quot;greetd&quot;</code></td>
+          <td><code>/etc/pam.d/greetd</code></td>
+          <td>greetd 显示管理器</td>
+      </tr>
+      <tr>
+          <td><code>sudo</code></td>
+          <td><code>&quot;sudo&quot;</code></td>
+          <td><code>/etc/pam.d/sudo</code></td>
+          <td>sudo 命令</td>
+      </tr>
+      <tr>
+          <td><code>su</code></td>
+          <td><code>&quot;su&quot;</code></td>
+          <td><code>/etc/pam.d/su</code></td>
+          <td>su 命令</td>
+      </tr>
+      <tr>
+          <td><code>sshd</code></td>
+          <td><code>&quot;sshd&quot;</code></td>
+          <td><code>/etc/pam.d/sshd</code></td>
+          <td>SSH 守护进程</td>
+      </tr>
+      <tr>
+          <td><code>passwd</code></td>
+          <td><code>&quot;passwd&quot;</code></td>
+          <td><code>/etc/pam.d/passwd</code></td>
+          <td>密码修改程序</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>PAM 调用流程示例</strong>：</p>
+<p>以用户登录为例，PAM 的调用流程如下：</p>
+<div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">c</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-131" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;security/pam_appl.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;security/pam_misc.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">pam_handle_t</span> <span class="o">*</span><span class="n">pamh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">pam_conv</span> <span class="n">conv</span> <span class="o">=</span> <span class="p">{</span> <span class="n">misc_conv</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 初始化 PAM，指定服务名 &#34;login&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="s">&#34;username&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">)</span> <span class="o">!=</span> <span class="n">PAM_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;PAM 初始化失败</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 认证用户 - 读取 /etc/pam.d/login 中的 auth 配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nf">pam_authenticate</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">PAM_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;认证失败</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">PAM_AUTH_ERR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 检查账户状态 - 读取 /etc/pam.d/login 中的 account 配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nf">pam_acct_mgmt</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">PAM_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;账户检查失败</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">PAM_AUTH_ERR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4. 开启会话 - 读取 /etc/pam.d/login 中的 session 配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nf">pam_open_session</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">PAM_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;会话开启失败</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">PAM_SESSION_ERR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 5. 清理资源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">PAM_SUCCESS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre>
+</div>
+<h4 id="312-pam-配置语法与模块" class="headerLink">
+    <a href="#312-pam-%e9%85%8d%e7%bd%ae%e8%af%ad%e6%b3%95%e4%b8%8e%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1.2 PAM 配置语法与模块</h4><p><strong>配置语法</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -1969,7 +2151,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-130" 
+    id="codeblock-id-132" 
     class="
       chroma 
       !tw-block 
@@ -1999,7 +2181,7 @@ Linux 安全体系的基础组件。</p>
 <li><code>sufficient</code>：成功即可通过，失败不影响最终结果</li>
 <li><code>optional</code>：可选模块，不影响认证结果</li>
 </ul>
-<p><strong>配置示例</strong>：</p>
+<p><strong>NixOS 实际配置示例</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -2075,7 +2257,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-131" 
+    id="codeblock-id-133" 
     class="
       chroma 
       !tw-block 
@@ -2089,16 +2271,30 @@ Linux 安全体系的基础组件。</p>
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># /etc/pam.d/login 示例配置</span>
-</span></span><span class="line"><span class="cl">auth       required   pam_unix.so     nullok_secure
-</span></span><span class="line"><span class="cl">auth       optional   pam_gnome_keyring.so
-</span></span><span class="line"><span class="cl">account    required   pam_unix.so
-</span></span><span class="line"><span class="cl">password   required   pam_unix.so     nullok obscure <span class="nv">min</span><span class="o">=</span><span class="m">4</span> <span class="nv">max</span><span class="o">=</span><span class="m">8</span> md5
-</span></span><span class="line"><span class="cl">session    required   pam_unix.so
-</span></span><span class="line"><span class="cl">session    optional   pam_gnome_keyring.so auto_start</span></span></code></pre>
+      "><span class="line"><span class="cl"><span class="c1"># /etc/pam.d/login 实际配置（NixOS 生成）</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Account management.</span>
+</span></span><span class="line"><span class="cl">account required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Authentication management.</span>
+</span></span><span class="line"><span class="cl">auth optional /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok
+</span></span><span class="line"><span class="cl">auth optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so
+</span></span><span class="line"><span class="cl">auth sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok try_first_pass
+</span></span><span class="line"><span class="cl">auth required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_deny.so
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Password management.</span>
+</span></span><span class="line"><span class="cl">password sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so nullok yescrypt
+</span></span><span class="line"><span class="cl">password optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so use_authtok
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Session management.</span>
+</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_env.so <span class="nv">conffile</span><span class="o">=</span>/etc/pam/environment <span class="nv">readenv</span><span class="o">=</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
+</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_loginuid.so
+</span></span><span class="line"><span class="cl">session optional /nix/store/xxx-systemd-257.8/lib/security/pam_systemd.so
+</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_limits.so <span class="nv">conf</span><span class="o">=</span>/nix/store/xxx-limits.conf
+</span></span><span class="line"><span class="cl">session optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so auto_start</span></span></code></pre>
 </div>
-<h4 id="313-常用-pam-模块" class="headerLink">
-    <a href="#313-%e5%b8%b8%e7%94%a8-pam-%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1.3 常用 PAM 模块</h4><table>
+<p><strong>常用 PAM 模块</strong>：</p>
+<table>
   <thead>
       <tr>
           <th>模块名</th>
@@ -2113,14 +2309,29 @@ Linux 安全体系的基础组件。</p>
           <td>基于 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 的认证</td>
       </tr>
       <tr>
-          <td><code>pam_ldap.so</code></td>
-          <td>LDAP 认证</td>
-          <td>企业环境中的集中认证</td>
+          <td><code>pam_deny.so</code></td>
+          <td>拒绝访问</td>
+          <td>默认拒绝所有认证请求</td>
       </tr>
       <tr>
-          <td><code>pam_sss.so</code></td>
-          <td>SSSD 认证</td>
-          <td>与 Active Directory 集成</td>
+          <td><code>pam_env.so</code></td>
+          <td>环境变量管理</td>
+          <td>设置用户会话环境变量</td>
+      </tr>
+      <tr>
+          <td><code>pam_loginuid.so</code></td>
+          <td>登录 UID 管理</td>
+          <td>记录用户登录的 UID</td>
+      </tr>
+      <tr>
+          <td><code>pam_systemd.so</code></td>
+          <td>systemd 集成</td>
+          <td>与 systemd 用户会话集成</td>
+      </tr>
+      <tr>
+          <td><code>pam_limits.so</code></td>
+          <td>资源限制</td>
+          <td>设置用户资源使用限制</td>
       </tr>
       <tr>
           <td><code>pam_gnome_keyring.so</code></td>
@@ -2128,9 +2339,9 @@ Linux 安全体系的基础组件。</p>
           <td>自动解锁用户密钥环</td>
       </tr>
       <tr>
-          <td><code>pam_kwallet.so</code></td>
-          <td>KDE Wallet 集成</td>
-          <td>自动解锁 KDE 钱包</td>
+          <td><code>pam_ldap.so</code></td>
+          <td>LDAP 认证</td>
+          <td>企业环境中的集中认证</td>
       </tr>
       <tr>
           <td><code>pam_fprintd.so</code></td>
@@ -2144,8 +2355,8 @@ Linux 安全体系的基础组件。</p>
       </tr>
   </tbody>
 </table>
-<h4 id="314-pam-调试与故障排查" class="headerLink">
-    <a href="#314-pam-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>3.1.4 PAM 调试与故障排查</h4><p><strong>调试命令</strong>：</p>
+<h4 id="313-pam-调试与故障排查" class="headerLink">
+    <a href="#313-pam-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>3.1.3 PAM 调试与故障排查</h4><p><strong>调试命令</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -2221,7 +2432,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-132" 
+    id="codeblock-id-134" 
     class="
       chroma 
       !tw-block 
@@ -2240,19 +2451,39 @@ Linux 安全体系的基础组件。</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 查看 PAM 配置</span>
 </span></span><span class="line"><span class="cl">cat /etc/pam.d/login
+</span></span><span class="line"><span class="cl">cat /etc/pam.d/greetd
+</span></span><span class="line"><span class="cl">cat /etc/pam.d/sudo
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 检查 PAM 模块（NixOS 中位于 nix store）</span>
 </span></span><span class="line"><span class="cl">ldd /run/current-system/sw/lib/security/pam_unix.so
+</span></span><span class="line"><span class="cl">ldd /run/current-system/sw/lib/security/pam_gnome_keyring.so
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 查看认证日志</span>
 </span></span><span class="line"><span class="cl">journalctl -t login
-</span></span><span class="line"><span class="cl">journalctl -t sshd</span></span></code></pre>
+</span></span><span class="line"><span class="cl">journalctl -t greetd
+</span></span><span class="line"><span class="cl">journalctl -t sshd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 验证程序与配置的对应关系</span>
+</span></span><span class="line"><span class="cl">strace -e <span class="nv">trace</span><span class="o">=</span>pam_start login 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> grep pam_start
+</span></span><span class="line"><span class="cl">strace -e <span class="nv">trace</span><span class="o">=</span>openat login 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> grep pam.d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用 PAM 测试工具验证配置</span>
+</span></span><span class="line"><span class="cl">pamtester login username authenticate
+</span></span><span class="line"><span class="cl">pamtester sudo username authenticate</span></span></code></pre>
 </div>
+<p><strong>NixOS PAM 配置特点</strong>：</p>
+<ul>
+<li><strong>声明式配置</strong>：PAM 配置通过 NixOS 配置系统生成，不直接编辑 <code>/etc/pam.d/</code> 文件</li>
+<li><strong>模块路径</strong>：所有 PAM 模块都使用完整的 <code>/nix/store</code> 路径，确保版本一致性</li>
+<li><strong>自动集成</strong>：GNOME Keyring 等组件会自动集成到 PAM 配置中</li>
+<li><strong>可重现性</strong>：配置变更通过 <code>nixos-rebuild</code> 应用，确保系统状态可重现</li>
+</ul>
 <p><strong>常见问题</strong>：</p>
 <ol>
 <li><strong>认证失败</strong>：检查 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 文件权限</li>
 <li><strong>模块加载失败</strong>：确认 PAM 模块文件存在且可执行</li>
 <li><strong>配置语法错误</strong>：使用 <code>pamtester</code> 验证配置</li>
+<li><strong>服务名不匹配</strong>：如果程序指定的服务名与配置文件不匹配，会使用 <code>other</code> 配置</li>
 </ol>
 <h3 id="32-policykit---细粒度的系统权限管理" class="headerLink">
     <a href="#32-policykit---%e7%bb%86%e7%b2%92%e5%ba%a6%e7%9a%84%e7%b3%bb%e7%bb%9f%e6%9d%83%e9%99%90%e7%ae%a1%e7%90%86" class="header-mark"></a>3.2 PolicyKit - 细粒度的系统权限管理</h3><p>PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它提供了一种比传统 Unix 权限更细粒度的授权机制。在现代 Linux 桌面系统中，PolicyKit 允许非特权用户执行某些需要特权的系统操作
@@ -2372,7 +2603,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-133" 
+    id="codeblock-id-135" 
     class="
       chroma 
       !tw-block 
@@ -2469,7 +2700,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-134" 
+    id="codeblock-id-136" 
     class="
       chroma 
       !tw-block 
@@ -2606,7 +2837,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-135" 
+    id="codeblock-id-137" 
     class="
       chroma 
       !tw-block 
@@ -2742,7 +2973,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-136" 
+    id="codeblock-id-138" 
     class="
       chroma 
       !tw-block 
@@ -2856,7 +3087,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-137" 
+    id="codeblock-id-139" 
     class="
       chroma 
       !tw-block 
@@ -2953,7 +3184,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-138" 
+    id="codeblock-id-140" 
     class="
       chroma 
       !tw-block 
@@ -3064,7 +3295,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-139" 
+    id="codeblock-id-141" 
     class="
       chroma 
       !tw-block 
@@ -3171,7 +3402,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-140" 
+    id="codeblock-id-142" 
     class="
       chroma 
       !tw-block 
@@ -3302,7 +3533,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-141" 
+    id="codeblock-id-143" 
     class="
       chroma 
       !tw-block 
@@ -3408,7 +3639,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-142" 
+    id="codeblock-id-144" 
     class="
       chroma 
       !tw-block 
@@ -3516,7 +3747,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-143" 
+    id="codeblock-id-145" 
     class="
       chroma 
       !tw-block 
@@ -3623,7 +3854,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-144" 
+    id="codeblock-id-146" 
     class="
       chroma 
       !tw-block 
@@ -3725,7 +3956,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-145" 
+    id="codeblock-id-147" 
     class="
       chroma 
       !tw-block 
@@ -3842,7 +4073,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-146" 
+    id="codeblock-id-148" 
     class="
       chroma 
       !tw-block 
@@ -3940,7 +4171,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-147" 
+    id="codeblock-id-149" 
     class="
       chroma 
       !tw-block 
@@ -4038,7 +4269,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-148" 
+    id="codeblock-id-150" 
     class="
       chroma 
       !tw-block 
@@ -4203,7 +4434,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-149" 
+    id="codeblock-id-151" 
     class="
       chroma 
       !tw-block 
@@ -4414,7 +4645,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-150" 
+    id="codeblock-id-152" 
     class="
       chroma 
       !tw-block 
@@ -4547,7 +4778,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-151" 
+    id="codeblock-id-153" 
     class="
       chroma 
       !tw-block 
@@ -4697,7 +4928,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-152" 
+    id="codeblock-id-154" 
     class="
       chroma 
       !tw-block 
@@ -4819,7 +5050,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-153" 
+    id="codeblock-id-155" 
     class="
       chroma 
       !tw-block 
@@ -4963,7 +5194,7 @@ seat 概念对 SSH 完全透明。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-154" 
+    id="codeblock-id-156" 
     class="
       chroma 
       !tw-block 
@@ -5090,7 +5321,7 @@ systemd 服务或 root 启动的进程（起进程身份不同会导致权限问
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-155" 
+    id="codeblock-id-157" 
     class="
       chroma 
       !tw-block 
@@ -5224,7 +5455,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-156" 
+    id="codeblock-id-158" 
     class="
       chroma 
       !tw-block 
@@ -5355,7 +5586,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-157" 
+    id="codeblock-id-159" 
     class="
       chroma 
       !tw-block 
@@ -5473,7 +5704,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-158" 
+    id="codeblock-id-160" 
     class="
       chroma 
       !tw-block 
@@ -5579,7 +5810,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-159" 
+    id="codeblock-id-161" 
     class="
       chroma 
       !tw-block 
@@ -5678,7 +5909,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-160" 
+    id="codeblock-id-162" 
     class="
       chroma 
       !tw-block 
@@ -5776,7 +6007,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-161" 
+    id="codeblock-id-163" 
     class="
       chroma 
       !tw-block 
@@ -5877,7 +6108,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-162" 
+    id="codeblock-id-164" 
     class="
       chroma 
       !tw-block 
@@ -5997,7 +6228,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-163" 
+    id="codeblock-id-165" 
     class="
       chroma 
       !tw-block 
@@ -6097,7 +6328,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-164" 
+    id="codeblock-id-166" 
     class="
       chroma 
       !tw-block 
@@ -6208,7 +6439,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-165" 
+    id="codeblock-id-167" 
     class="
       chroma 
       !tw-block 
@@ -6316,7 +6547,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-166" 
+    id="codeblock-id-168" 
     class="
       chroma 
       !tw-block 
@@ -6429,7 +6660,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-167" 
+    id="codeblock-id-169" 
     class="
       chroma 
       !tw-block 
@@ -6530,7 +6761,7 @@ Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</co
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-168" 
+    id="codeblock-id-170" 
     class="
       chroma 
       !tw-block 
@@ -6655,7 +6886,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-169" 
+    id="codeblock-id-171" 
     class="
       chroma 
       !tw-block 
@@ -6772,7 +7003,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-170" 
+    id="codeblock-id-172" 
     class="
       chroma 
       !tw-block 
@@ -6875,7 +7106,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-171" 
+    id="codeblock-id-173" 
     class="
       chroma 
       !tw-block 
@@ -6978,7 +7209,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-172" 
+    id="codeblock-id-174" 
     class="
       chroma 
       !tw-block 
@@ -7079,7 +7310,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-173" 
+    id="codeblock-id-175" 
     class="
       chroma 
       !tw-block 
@@ -7182,7 +7413,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-174" 
+    id="codeblock-id-176" 
     class="
       chroma 
       !tw-block 
@@ -7277,7 +7508,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-175" 
+    id="codeblock-id-177" 
     class="
       chroma 
       !tw-block 
@@ -7372,7 +7603,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-176" 
+    id="codeblock-id-178" 
     class="
       chroma 
       !tw-block 
@@ -7465,7 +7696,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-177" 
+    id="codeblock-id-179" 
     class="
       chroma 
       !tw-block 
@@ -7593,7 +7824,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-178" 
+    id="codeblock-id-180" 
     class="
       chroma 
       !tw-block 
@@ -7754,7 +7985,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-179" 
+    id="codeblock-id-181" 
     class="
       chroma 
       !tw-block 
@@ -7913,7 +8144,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-180" 
+    id="codeblock-id-182" 
     class="
       chroma 
       !tw-block 
@@ -8016,7 +8247,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-181" 
+    id="codeblock-id-183" 
     class="
       chroma 
       !tw-block 
@@ -8114,7 +8345,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-182" 
+    id="codeblock-id-184" 
     class="
       chroma 
       !tw-block 
@@ -8222,7 +8453,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-183" 
+    id="codeblock-id-185" 
     class="
       chroma 
       !tw-block 
@@ -8328,7 +8559,7 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-184" 
+    id="codeblock-id-186" 
     class="
       chroma 
       !tw-block 
@@ -8494,7 +8725,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-185" 
+    id="codeblock-id-187" 
     class="
       chroma 
       !tw-block 
@@ -8614,7 +8845,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-186" 
+    id="codeblock-id-188" 
     class="
       chroma 
       !tw-block 
@@ -8715,7 +8946,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-187" 
+    id="codeblock-id-189" 
     class="
       chroma 
       !tw-block 
@@ -8810,7 +9041,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-188" 
+    id="codeblock-id-190" 
     class="
       chroma 
       !tw-block 
@@ -8905,7 +9136,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-189" 
+    id="codeblock-id-191" 
     class="
       chroma 
       !tw-block 
@@ -9000,7 +9231,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-190" 
+    id="codeblock-id-192" 
     class="
       chroma 
       !tw-block 
@@ -9098,7 +9329,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-191" 
+    id="codeblock-id-193" 
     class="
       chroma 
       !tw-block 
@@ -9199,7 +9430,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-192" 
+    id="codeblock-id-194" 
     class="
       chroma 
       !tw-block 
@@ -9300,7 +9531,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-193" 
+    id="codeblock-id-195" 
     class="
       chroma 
       !tw-block 
@@ -9406,7 +9637,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-194" 
+    id="codeblock-id-196" 
     class="
       chroma 
       !tw-block 
@@ -9609,7 +9840,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-195" 
+    id="codeblock-id-197" 
     class="
       chroma 
       !tw-block 
@@ -9713,7 +9944,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-196" 
+    id="codeblock-id-198" 
     class="
       chroma 
       !tw-block 
@@ -9821,7 +10052,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-197" 
+    id="codeblock-id-199" 
     class="
       chroma 
       !tw-block 
@@ -9922,7 +10153,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-198" 
+    id="codeblock-id-200" 
     class="
       chroma 
       !tw-block 
@@ -10027,7 +10258,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-199" 
+    id="codeblock-id-201" 
     class="
       chroma 
       !tw-block 
@@ -10146,7 +10377,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-200" 
+    id="codeblock-id-202" 
     class="
       chroma 
       !tw-block 
@@ -10245,7 +10476,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-201" 
+    id="codeblock-id-203" 
     class="
       chroma 
       !tw-block 
@@ -10344,7 +10575,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-202" 
+    id="codeblock-id-204" 
     class="
       chroma 
       !tw-block 
@@ -10440,7 +10671,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-203" 
+    id="codeblock-id-205" 
     class="
       chroma 
       !tw-block 
@@ -10596,7 +10827,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-204" 
+    id="codeblock-id-206" 
     class="
       chroma 
       !tw-block 
@@ -10702,7 +10933,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-205" 
+    id="codeblock-id-207" 
     class="
       chroma 
       !tw-block 
@@ -10810,7 +11041,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-206" 
+    id="codeblock-id-208" 
     class="
       chroma 
       !tw-block 
@@ -10909,7 +11140,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-207" 
+    id="codeblock-id-209" 
     class="
       chroma 
       !tw-block 
@@ -11058,7 +11289,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-208" 
+    id="codeblock-id-210" 
     class="
       chroma 
       !tw-block 
@@ -11156,7 +11387,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-209" 
+    id="codeblock-id-211" 
     class="
       chroma 
       !tw-block 
@@ -11254,7 +11485,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-210" 
+    id="codeblock-id-212" 
     class="
       chroma 
       !tw-block 
@@ -11351,7 +11582,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-211" 
+    id="codeblock-id-213" 
     class="
       chroma 
       !tw-block 
@@ -11461,7 +11692,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-212" 
+    id="codeblock-id-214" 
     class="
       chroma 
       !tw-block 
@@ -11556,7 +11787,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-213" 
+    id="codeblock-id-215" 
     class="
       chroma 
       !tw-block 
@@ -11651,7 +11882,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-214" 
+    id="codeblock-id-216" 
     class="
       chroma 
       !tw-block 
@@ -11746,7 +11977,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-215" 
+    id="codeblock-id-217" 
     class="
       chroma 
       !tw-block 
@@ -11857,7 +12088,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-216" 
+    id="codeblock-id-218" 
     class="
       chroma 
       !tw-block 
@@ -11951,7 +12182,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-217" 
+    id="codeblock-id-219" 
     class="
       chroma 
       !tw-block 
@@ -12047,7 +12278,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-218" 
+    id="codeblock-id-220" 
     class="
       chroma 
       !tw-block 
@@ -12143,7 +12374,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-219" 
+    id="codeblock-id-221" 
     class="
       chroma 
       !tw-block 
@@ -12253,7 +12484,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-220" 
+    id="codeblock-id-222" 
     class="
       chroma 
       !tw-block 
@@ -12348,7 +12579,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-221" 
+    id="codeblock-id-223" 
     class="
       chroma 
       !tw-block 
@@ -12443,7 +12674,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-222" 
+    id="codeblock-id-224" 
     class="
       chroma 
       !tw-block 
@@ -12538,7 +12769,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-223" 
+    id="codeblock-id-225" 
     class="
       chroma 
       !tw-block 
@@ -12640,7 +12871,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-224" 
+    id="codeblock-id-226" 
     class="
       chroma 
       !tw-block 
@@ -12734,7 +12965,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-225" 
+    id="codeblock-id-227" 
     class="
       chroma 
       !tw-block 
@@ -12828,7 +13059,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-226" 
+    id="codeblock-id-228" 
     class="
       chroma 
       !tw-block 
@@ -12926,7 +13157,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-227" 
+    id="codeblock-id-229" 
     class="
       chroma 
       !tw-block 
@@ -13022,7 +13253,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-228" 
+    id="codeblock-id-230" 
     class="
       chroma 
       !tw-block 
@@ -13117,7 +13348,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-229" 
+    id="codeblock-id-231" 
     class="
       chroma 
       !tw-block 
@@ -13211,7 +13442,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-230" 
+    id="codeblock-id-232" 
     class="
       chroma 
       !tw-block 
