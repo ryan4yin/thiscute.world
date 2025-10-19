@@ -1,7 +1,9 @@
 ---
 title: "Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"
 subtitle: ""
-description: ""
+description:
+  "深入探讨 Linux
+  桌面系统的多媒体处理、中文输入法、音频视频架构和输入设备管理，解决常见多媒体问题"
 date: 2025-10-19T10:20:33+08:00
 lastmod: 2025-10-19T10:20:33+08:00
 draft: false
@@ -12,7 +14,7 @@ resources:
   - name: "featured-image"
     src: "featured-image.webp"
 
-tags: ["Linux", "Desktop", "Systemd", "D-Bus"]
+tags: ["Linux", "Desktop", "Multimedia", "Audio", "Video", "Input Method"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
 hiddenFromHomePage: false

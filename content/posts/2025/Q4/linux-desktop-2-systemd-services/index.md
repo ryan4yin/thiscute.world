@@ -1,7 +1,9 @@
 ---
 title: "Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"
 subtitle: ""
-description: ""
+description:
+  "全面介绍 systemd 服务管理、用户服务、D-Bus 通信机制和桌面环境集成，掌握现代 Linux
+  系统的服务架构"
 date: 2025-10-19T10:18:33+08:00
 lastmod: 2025-10-19T10:18:33+08:00
 draft: false

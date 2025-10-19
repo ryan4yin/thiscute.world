@@ -1,7 +1,9 @@
 ---
 title: "Linux 桌面系统故障排查指南（五） - 网络"
 subtitle: ""
-description: ""
+description:
+  "全面解析 Linux 桌面系统的网络配置、NetworkManager、DNS
+  解析、防火墙设置和网络故障排查方法"
 date: 2025-10-19T10:21:33+08:00
 lastmod: 2025-10-19T10:21:33+08:00
 draft: false
@@ -12,7 +14,7 @@ resources:
   - name: "featured-image"
     src: "featured-image.webp"
 
-tags: ["Linux", "Desktop", "Systemd", "D-Bus"]
+tags: ["Linux", "Desktop", "Network", "NetworkManager", "DNS", "Firewall"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
 hiddenFromHomePage: false

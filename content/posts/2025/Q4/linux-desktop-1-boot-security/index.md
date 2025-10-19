@@ -1,7 +1,9 @@
 ---
 title: "Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"
 subtitle: ""
-description: ""
+description:
+  "深入解析 Linux 桌面系统的启动流程、安全框架和故障排查方法，包括 UEFI、GRUB、systemd
+  等关键组件"
 date: 2025-10-19T10:17:33+08:00
 lastmod: 2025-10-19T10:17:33+08:00
 draft: false
@@ -12,7 +14,7 @@ resources:
   - name: "featured-image"
     src: "featured-image.webp"
 
-tags: ["Linux", "Desktop", "Systemd", "D-Bus"]
+tags: ["Linux", "Desktop", "Boot", "Security", "UEFI", "GRUB", "Systemd"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
 hiddenFromHomePage: false

@@ -1,7 +1,9 @@
 ---
 title: "Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"
 subtitle: ""
-description: ""
+description:
+  "详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11
+  协议，以及显示驱动和合成器的故障排查"
 date: 2025-10-19T10:19:33+08:00
 lastmod: 2025-10-19T10:19:33+08:00
 draft: false
@@ -12,7 +14,7 @@ resources:
   - name: "featured-image"
     src: "featured-image.webp"
 
-tags: ["Linux", "Desktop", "Systemd", "D-Bus"]
+tags: ["Linux", "Desktop", "Graphics", "Wayland", "X11"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
 hiddenFromHomePage: false

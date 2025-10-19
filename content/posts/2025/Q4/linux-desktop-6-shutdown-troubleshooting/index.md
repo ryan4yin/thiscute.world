@@ -13,7 +13,7 @@ resources:
   - name: "featured-image"
     src: "featured-image.webp"
 
-tags: ["Linux", "Desktop", "Systemd", "D-Bus"]
+tags: ["Linux", "Desktop", "Systemd", "D-Bus", "Power Management", "Hibernate", "Suspend"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
 hiddenFromHomePage: false
