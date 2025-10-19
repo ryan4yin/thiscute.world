@@ -178,6 +178,8 @@ WantedBy=multi-user.target
 除了基本的服务管理外，systemd 还提供了多个专门化的系统服务来支持现代 Linux 桌面的核心功
 能，包括日志管理、内存管理、DNS 解析和时间同步等。
 
+本节内容仅介绍最核心的几个 systemd 服务。
+
 > systemd 全家桶，你值得拥有（
 
 ### 2.1 日志系统：systemd-journald
