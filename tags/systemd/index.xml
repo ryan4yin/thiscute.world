@@ -7,8 +7,8 @@
 &lt;/blockquote&gt;&lt;h2 id="概述" class="headerLink"&gt;
  &lt;a href="#%e6%a6%82%e8%bf%b0" class="header-mark"&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;p&gt;本文是《Linux 桌面系统故障排查指南》系列的第二篇，专注于 systemd 生态系统与服务管理。在上一篇中，我们了解了系统启动与安全框架，现在让我们深入探讨 systemd 核心功能以及 systemd 生态系统中的各个专门化组件。&lt;/p&gt;</description></item><item><title>Linux 桌面系统故障排查指南（一） - 系统启动与安全框架</title><link>https://thiscute.world/posts/linux-desktop-1-boot-security/</link><pubDate>Sun, 19 Oct 2025 10:17:33 +0800</pubDate><guid>https://thiscute.world/posts/linux-desktop-1-boot-security/</guid><description>&lt;blockquote&gt;
  &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
-&lt;/blockquote&gt;&lt;h2 id="系统启动与安全框架" class="headerLink"&gt;
- &lt;a href="#%e7%b3%bb%e7%bb%9f%e5%90%af%e5%8a%a8%e4%b8%8e%e5%ae%89%e5%85%a8%e6%a1%86%e6%9e%b6" class="header-mark"&gt;&lt;/a&gt;系统启动与安全框架&lt;/h2&gt;&lt;p&gt;本文将简要介绍 Linux 桌面系统的启动机制，从 UEFI 引导到内核加载，从 initramfs 到 systemd
+&lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
+ &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;本文将简要介绍 Linux 桌面系统的启动机制，从 UEFI 引导到内核加载，从 initramfs 到 systemd
 服务启动，再到桌面环境加载。同时还会探讨系统的安全框架，了解 PAM、PolicyKit 等组件如何保护系统安全。&lt;/p&gt;</description></item><item><title>通过 systemctl 设置自定义 Service</title><link>https://thiscute.world/posts/systemd-basics/</link><pubDate>Mon, 28 Jan 2019 20:13:00 +0800</pubDate><guid>https://thiscute.world/posts/systemd-basics/</guid><description>&lt;h2 id="前言" class="headerLink"&gt;
  &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;如果要在Linux 上设置一个开机自启，出现问题自动重启，并且有良好日志的程序，比较流行的方法有&lt;code&gt;supervisord&lt;/code&gt;、&lt;code&gt;systemd&lt;/code&gt;，除此之外，还有 upstart、runit 等类似的工具。但是自从 systemd 被
 ubuntu、centos 等主流 Linux 发行版应用以来，systemd 渐渐成为主流方案。&lt;/p&gt;</description></item></channel></rss>
