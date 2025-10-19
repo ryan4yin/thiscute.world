@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-19T08:32:47+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-19T08:48:35+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;系统关机看似简单，但背后涉及了繁杂的资源清理和状态管理过程。当你点击关机按钮，系统却卡在那里不动，或者出现各种奇怪的错误信息时，理解关机流程和故障排查方法就显得尤为重要。&lt;/p&gt;
@@ -15732,7 +15732,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-28" 
+    id="codeblock-id-27" 
     class="
       chroma 
       !tw-block 
@@ -15867,7 +15867,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-29" 
+    id="codeblock-id-28" 
     class="
       chroma 
       !tw-block 
@@ -16041,7 +16041,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-30" 
+    id="codeblock-id-29" 
     class="
       chroma 
       !tw-block 
@@ -16216,7 +16216,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-31" 
+    id="codeblock-id-30" 
     class="
       chroma 
       !tw-block 
@@ -16322,7 +16322,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-32" 
+    id="codeblock-id-31" 
     class="
       chroma 
       !tw-block 
@@ -16426,7 +16426,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-33" 
+    id="codeblock-id-32" 
     class="
       chroma 
       !tw-block 
@@ -16561,7 +16561,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-34" 
+    id="codeblock-id-33" 
     class="
       chroma 
       !tw-block 
@@ -16713,7 +16713,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-35" 
+    id="codeblock-id-34" 
     class="
       chroma 
       !tw-block 
@@ -16876,7 +16876,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-36" 
+    id="codeblock-id-35" 
     class="
       chroma 
       !tw-block 
@@ -16975,7 +16975,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-37" 
+    id="codeblock-id-36" 
     class="
       chroma 
       !tw-block 
@@ -17073,7 +17073,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-38" 
+    id="codeblock-id-37" 
     class="
       chroma 
       !tw-block 
@@ -17179,7 +17179,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-39" 
+    id="codeblock-id-38" 
     class="
       chroma 
       !tw-block 
@@ -17418,7 +17418,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-40" 
+    id="codeblock-id-39" 
     class="
       chroma 
       !tw-block 
@@ -17515,7 +17515,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-41" 
+    id="codeblock-id-40" 
     class="
       chroma 
       !tw-block 
@@ -17651,7 +17651,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-42" 
+    id="codeblock-id-41" 
     class="
       chroma 
       !tw-block 
@@ -17789,7 +17789,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-43" 
+    id="codeblock-id-42" 
     class="
       chroma 
       !tw-block 
@@ -17893,7 +17893,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-44" 
+    id="codeblock-id-43" 
     class="
       chroma 
       !tw-block 
@@ -17999,7 +17999,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-45" 
+    id="codeblock-id-44" 
     class="
       chroma 
       !tw-block 
@@ -18104,7 +18104,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-46" 
+    id="codeblock-id-45" 
     class="
       chroma 
       !tw-block 
@@ -18270,7 +18270,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-47" 
+    id="codeblock-id-46" 
     class="
       chroma 
       !tw-block 
@@ -18368,7 +18368,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-48" 
+    id="codeblock-id-47" 
     class="
       chroma 
       !tw-block 
@@ -18466,7 +18466,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-49" 
+    id="codeblock-id-48" 
     class="
       chroma 
       !tw-block 
@@ -18582,7 +18582,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-50" 
+    id="codeblock-id-49" 
     class="
       chroma 
       !tw-block 
@@ -18687,7 +18687,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-51" 
+    id="codeblock-id-50" 
     class="
       chroma 
       !tw-block 
@@ -18801,7 +18801,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-52" 
+    id="codeblock-id-51" 
     class="
       chroma 
       !tw-block 
@@ -18913,7 +18913,7 @@ PAM、PolicyKit 和密钥管理调试命令。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-53" 
+    id="codeblock-id-52" 
     class="
       chroma 
       !tw-block 
@@ -18939,97 +18939,6 @@ PAM、PolicyKit 和密钥管理调试命令。</p>
 </span></span><span class="line"><span class="cl">~/.config/kwalletrc               <span class="c1"># KDE Wallet 配置</span></span></span></code></pre>
 </div>
 <hr>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">text</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-54" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "></code></pre>
-</div>
 ]]></content><category scheme="taxonomy:Authors" term="ryan4yin" label="ryan4yin"/><category scheme="taxonomy:Categories" term="tech" label="tech"/><category scheme="taxonomy:Series" term="linux-%E6%A1%8C%E9%9D%A2%E7%B3%BB%E7%BB%9F" label="Linux 桌面系统"/><category scheme="taxonomy:Tags" term="linux" label="Linux"/><category scheme="taxonomy:Tags" term="desktop" label="Desktop"/><category scheme="taxonomy:Tags" term="boot" label="Boot"/><category scheme="taxonomy:Tags" term="security" label="Security"/><category scheme="taxonomy:Tags" term="uefi" label="UEFI"/><category scheme="taxonomy:Tags" term="grub" label="GRUB"/><category scheme="taxonomy:Tags" term="systemd" label="Systemd"/></entry><entry><title type="html">Linux 桌面系统故障排查指南（零） - 组件概览</title><link href="https://thiscute.world/posts/linux-desktop-explained/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/my-experience-of-nixos/?utm_source=atom_feed" rel="related" type="text/html" title="OS as Code - 我的 NixOS 使用体会"/><link href="https://thiscute.world/posts/an-incomplete-guide-to-data-security/?utm_source=atom_feed" rel="related" type="text/html" title="个人数据安全不完全指南"/><link href="https://thiscute.world/posts/how-nixos-start-on-licheepi4a/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 在 Lichee Pi 4A 上是如何启动的"/><link href="https://thiscute.world/posts/why-i-choose-niche-products/?utm_source=atom_feed" rel="related" type="text/html" title="为什么我折腾这些小众技术？"/><link href="https://thiscute.world/posts/nixos-and-flake-basics/?utm_source=atom_feed" rel="related" type="text/html" title="NixOS 与 Nix Flakes 新手入门"/><id>https://thiscute.world/posts/linux-desktop-explained/</id><published>2025-09-09T20:17:33+08:00</published><updated>2025-10-19T10:17:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="定位与目标" class="headerLink"&gt;
@@ -19037,264 +18946,101 @@ PAM、PolicyKit 和密钥管理调试命令。</p>
   <p><strong>AI 创作声明</strong>：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。</p>
 </blockquote><h2 id="定位与目标" class="headerLink">
     <a href="#%e5%ae%9a%e4%bd%8d%e4%b8%8e%e7%9b%ae%e6%a0%87" class="header-mark"></a>定位与目标</h2><p>Linux 桌面包含了相当多的系统组件，这些组件组合形成了一个精密的系统，它们共同管理着从硬件设备到用户会话的方方面面。</p>
-<p>即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样“目无全牛”，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。</p>
-<p>而这就是这篇文章的目的——搭建起一幅 Linux 桌面系统的「解牛图」。</p>
-<p>本文面向已经有一定 Linux 桌面使用经验的读者。我们用一条从「开机」到「APP 运行」再到「关机/
-断电」的时间线为轴，讲清每一步发生了什么、哪里能看到证据（日志 / 设备节点 / D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修复思路。</p>
-<p>一篇文章显然不可能涵盖太多细节，因此这篇文章主要还是起一个概览的作用。</p>
-<hr>
-<h2 id="linux-桌面系统生命周期概览" class="headerLink">
-    <a href="#linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f%e6%a6%82%e8%a7%88" class="header-mark"></a>Linux 桌面系统生命周期概览</h2><div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
-  <div class="
-    
-    tw-flex 
-    tw-flex-row
-    tw-flex-1 
-    tw-justify-between 
-    tw-w-full tw-bg-bgColor-secondary
-    ">      
-    <button 
-      class="
-        code-block-button
-        tw-mx-2 
-        tw-flex
-        tw-flex-row
-        tw-flex-1"
-      aria-hidden="true">
-          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">ascii</p>
-      </button>
-
-   <div class="tw-flex">
-      <button 
-        class="
-          line-number-button
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.show-line-numbers]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle line numbers"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
-
-      <button 
-        class="
-          wrap-code-button
-          tw-select-none 
-          tw-mx-2 
-          tw-hidden 
-          group-[.is-open]:tw-block 
-          group-[.is-wrap]:tw-text-fgColor-link 
-          print:!tw-hidden" 
-        title="Toggle code wrap"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
-      
-      <button 
-        class="
-          copy-code-button
-          tw-select-none
-          tw-mx-2 
-          tw-hidden
-          group-[.is-open]:tw-block
-          hover:tw-text-fgColor-link 
-          print:!tw-hidden"
-        title="Copy code">
-          <span class="copy-icon tw-block"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
-          <span class="check-icon tw-hidden"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
-      </button>
-        
-      <button 
-        class="
-          tw-select-none 
-          tw-mx-2 
-          tw-block 
-          group-[.is-open]:tw-hidden 
-          print:!tw-hidden" 
-        disabled
-        aria-hidden="true"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
-    </div>
-  </div>
-  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-1" 
-    class="
-      chroma 
-      !tw-block 
-      tw-p-0
-      tw-m-0
-      tw-transition-[max-height] 
-      tw-duration-500 
-      tw-ease-in-out 
-      group-[.is-closed]:!tw-max-h-0 
-      group-[.is-wrap]:tw-text-wrap
-      tw-overflow-y-hidden
-      tw-overflow-x-auto
-      tw-scrollbar-thin
-      "><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────────────────────┐
-</span></span><span class="line"><span class="cl">│                  Linux 桌面系统架构全景图                                    │
-</span></span><span class="line"><span class="cl">└──────────────────────────────────────────────────────────────────────────────┘
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────────────────────┐
-</span></span><span class="line"><span class="cl">│ 📋 1. 系统启动与安全框架                                                     │
-</span></span><span class="line"><span class="cl">├──────────────────────────────────────────────────────────────────────────────┤
-</span></span><span class="line"><span class="cl">│ UEFI固件 → BootLoader → 内核映像 → initramfs → systemd(PID1)                 │
-</span></span><span class="line"><span class="cl">│ TPM/SEC   grub/systemd-boot  内核探测   临时根挂载   服务管理器              │
-</span></span><span class="line"><span class="cl">│ 安全启动   EFI Stub         KMS启动   根fs解压挂载   Unit依赖树+并行启动    │
-</span></span><span class="line"><span class="cl">│                                                                              │
-</span></span><span class="line"><span class="cl">│ PAM认证 | PolicyKit权限 | GNOME Keyring | AppArmor/SELinux                   │
-</span></span><span class="line"><span class="cl">│ 身份验证   权限管理      密钥管理      强制访问控制                          │
-</span></span><span class="line"><span class="cl">└──────────────────────────────────────────────────────────────────────────────┘
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────────────────────┐
-</span></span><span class="line"><span class="cl">│ ⚙️ 2. systemd 全家桶与服务管理                                               │
-</span></span><span class="line"><span class="cl">├──────────────────────────────────────────────────────────────────────────────┤
-</span></span><span class="line"><span class="cl">│ systemd核心 → D-Bus系统总线 → journald日志 → udev设备管理                    │
-</span></span><span class="line"><span class="cl">│ 服务管理     进程间通信     日志系统     设备节点+热插拔                     │
-</span></span><span class="line"><span class="cl">│ 依赖关系     权限管控       配置管理     设备权限分配                        │
-</span></span><span class="line"><span class="cl">│                                                                              │
-</span></span><span class="line"><span class="cl">│ timesyncd | resolved | networkd/iwd | oomd | 其他系统服务                    │
-</span></span><span class="line"><span class="cl">│ NTP客户端   DNS缓存   网络管理      OOM守护   内存管理+其他                  │
-</span></span><span class="line"><span class="cl">│ 时钟同步    NSS查询   DHCP/路由     cgroup内存  系统级服务                   │
-</span></span><span class="line"><span class="cl">└──────────────────────────────────────────────────────────────────────────────┘
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────────────────────┐
-</span></span><span class="line"><span class="cl">│ 🖥️ 3. 桌面会话与图形渲染                                                     │
-</span></span><span class="line"><span class="cl">├──────────────────────────────────────────────────────────────────────────────┤
-</span></span><span class="line"><span class="cl">│ 显示管理器 → systemd-logind → Wayland合成器 → 窗口管理器                     │
-</span></span><span class="line"><span class="cl">│ GDM/SDDM     会话管理        i3/Niri/Hyprland   GNOME/KDE WM+合成            │
-</span></span><span class="line"><span class="cl">│ 身份认证     设备ACL         DRM fd传递+输入    OpenGL/Vulkan渲染            │
-</span></span><span class="line"><span class="cl">│                                                                              │
-</span></span><span class="line"><span class="cl">│ DRM/KMS → Mesa驱动 → EGL/GBM → OpenGL/Vulkan → GPU驱动                       │
-</span></span><span class="line"><span class="cl">│ 显示模式   图形栈    渲染接口   渲染API       amdgpu/nouveau/intel           │
-</span></span><span class="line"><span class="cl">│ GPU初始化  硬件抽象  缓冲区管理  渲染管线      ioctl调度(内核层)             │
-</span></span><span class="line"><span class="cl">│                                                                              │
-</span></span><span class="line"><span class="cl">│ libinput → evdev → 输入处理 | 设备访问控制 | 应用程序架构                    │
-</span></span><span class="line"><span class="cl">│ 输入事件   内核接口  手势识别   ACL权限分配   GTK/Qt/SDL工具包               │
-</span></span><span class="line"><span class="cl">│ 多点触控   权限过滤  手写板     GPU设备管理   Flatpak沙盒化                  │
-</span></span><span class="line"><span class="cl">└──────────────────────────────────────────────────────────────────────────────┘
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────────────────────┐
-</span></span><span class="line"><span class="cl">│ 🎵 4. 多媒体处理与中文支持                                                   │
-</span></span><span class="line"><span class="cl">├──────────────────────────────────────────────────────────────────────────────┤
-</span></span><span class="line"><span class="cl">│ PipeWire → PulseAudio/JACK兼容层 → V4L2摄像头  | 屏幕共享                    │
-</span></span><span class="line"><span class="cl">│ 音频/视频   兼容层路由          摄像头API      DMA-BUF传递                   │
-</span></span><span class="line"><span class="cl">│ 低延迟混音  音频路由            DMA-BUF       Wayland协议扩展                │
-</span></span><span class="line"><span class="cl">│                                                                              │
-</span></span><span class="line"><span class="cl">│ fontconfig | CJK字体管理 | fcitx5输入法 |  中文输入支持                      │
-</span></span><span class="line"><span class="cl">│ 字体系统    字体渲染配置   输入法框架     Wayland/XWayland兼容               │
-</span></span><span class="line"><span class="cl">│ 字体缓存    字体回退       中文输入        IME协议支持                       │
-</span></span><span class="line"><span class="cl">└──────────────────────────────────────────────────────────────────────────────┘
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────────────────────┐
-</span></span><span class="line"><span class="cl">│ 🌐 5. 网络架构与管理                                                         │
-</span></span><span class="line"><span class="cl">├──────────────────────────────────────────────────────────────────────────────┤
-</span></span><span class="line"><span class="cl">│ 网络硬件驱动 → 网络协议栈 → systemd-networkd | iwd无线管理                   │
-</span></span><span class="line"><span class="cl">│ iwlwifi/ath9k  TCP/UDP/IP   网络配置管理       无线连接管理                  │
-</span></span><span class="line"><span class="cl">│ 以太网驱动     IPv4/IPv6     DHCP/静态IP       WPA/WPA2认证                  │
-</span></span><span class="line"><span class="cl">│                                                                              │
-</span></span><span class="line"><span class="cl">│ nftables/iptables | 虚拟网络技术 | 路由与转发 |  网络故障诊断                │
-</span></span><span class="line"><span class="cl">│ 防火墙规则        TUN/TAP接口    静态/动态路由   连接问题排查                │
-</span></span><span class="line"><span class="cl">│ QoS流量控制       VPN隧道         NAT转换        DNS 解析问题                │
-</span></span><span class="line"><span class="cl">│ 端口转发          虚拟交换机      端口转发       性能优化                    │
-</span></span><span class="line"><span class="cl">└──────────────────────────────────────────────────────────────────────────────┘
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────────────────────┐
-</span></span><span class="line"><span class="cl">│ 🔄 6. 系统关机与资源清理                                                     │
-</span></span><span class="line"><span class="cl">├──────────────────────────────────────────────────────────────────────────────┤
-</span></span><span class="line"><span class="cl">│ systemd-logind → systemd --user → 显示管理器 → systemd(PID1) → 内核&amp;驱动     │
-</span></span><span class="line"><span class="cl">│ 广播关机信号   停用户服务     关闭会话      停系统服务      卸载文件系统     │
-</span></span><span class="line"><span class="cl">│ 保存会话状态   PipeWire退出   释放DRM/KMS   卸载网络        同步磁盘→断电    │
-</span></span><span class="line"><span class="cl">│                                                                              │
-</span></span><span class="line"><span class="cl">│ 资源清理 → 设备释放 → 文件系统卸载 → 硬件关机 →  断电完成                    │
-</span></span><span class="line"><span class="cl">│ 内存清理   声卡+屏幕   根文件系统    硬件断电    系统完全关闭                │
-</span></span><span class="line"><span class="cl">│ 进程终止   输入设备    网络接口      设备驱动     电源管理                   │
-</span></span><span class="line"><span class="cl">└──────────────────────────────────────────────────────────────────────────────┘</span></span></code></pre>
-</div>
+<p>即使我已经有七八年的 Linux 使用经验，在遇到系统的各种大小毛病时，还是常常觉得问题的定位跟解决很是艰难。倘若我们能像庖丁那样&quot;目无全牛&quot;，对整个系统的架构了如指掌，在定位问题时顺着骨节筋脉下刀，那解决起问题来自然也将游刃有余。</p>
+<p>而这就是这个系列文章的目的——搭建起一幅 Linux 桌面系统的完整「解牛图」。</p>
+<p>本系列面向已经有一定 Linux 桌面使用经验的读者。我们用一条从「开机」到「APP 运行」再到「关机/ 断电」的完整时间线为轴，深入讲解每一步发生了什么、哪里能看到证据（日志 / 设备节点 /
+D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修复思路。</p>
+<p>本文作为系列概览，主要起导航和架构梳理的作用，帮助读者建立整体认知框架。</p>
 <hr>
 <h2 id="文章系列导航" class="headerLink">
     <a href="#%e6%96%87%e7%ab%a0%e7%b3%bb%e5%88%97%e5%af%bc%e8%88%aa" class="header-mark"></a>文章系列导航</h2><h3 id="-系统启动与安全框架" class="headerLink">
     <a href="#-%e7%b3%bb%e7%bb%9f%e5%90%af%e5%8a%a8%e4%b8%8e%e5%ae%89%e5%85%a8%e6%a1%86%e6%9e%b6" class="header-mark"></a>📋 <a href="/posts/2025/Q4/linux-desktop-1-boot-security/" rel="">系统启动与安全框架</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
-<li><strong>系统启动流程</strong>：从 UEFI 固件到 systemd 用户空间的完整启动过程</li>
-<li><strong>initramfs 阶段</strong>：临时根文件系统的作用和故障排查</li>
-<li><strong>安全框架</strong>：PAM 认证、PolicyKit 权限管理、GNOME Keyring 密钥管理</li>
-<li><strong>启动故障排查</strong>：常见启动问题的诊断和解决方法</li>
+<li><strong>系统启动流程</strong>：从 UEFI 固件到 systemd 用户空间的完整启动过程，包括 systemd-boot 配置、UKI 统一内核镜像、initramfs 阶段详解</li>
+<li><strong>安全框架深度解析</strong>：PAM 认证机制、PolicyKit 权限管理、GNOME Keyring 密钥管理，以及各组件间的协作关系</li>
+<li><strong>启动故障排查</strong>：系统化的问题诊断流程，从固件到用户空间的逐层排查方法</li>
+<li><strong>启动性能优化</strong>：硬件、内核、服务层面的优化策略，包括 UKI 使用和启动时间分析</li>
 </ul>
 <h3 id="-systemd-全家桶与服务管理" class="headerLink">
     <a href="#-systemd-%e5%85%a8%e5%ae%b6%e6%a1%b6%e4%b8%8e%e6%9c%8d%e5%8a%a1%e7%ae%a1%e7%90%86" class="header-mark"></a>⚙️ <a href="/posts/2025/Q4/linux-desktop-2-systemd-services/" rel="">systemd 全家桶与服务管理</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
-<li><strong>systemd 核心功能</strong>：服务管理、依赖关系、并行启动</li>
-<li><strong>D-Bus 系统总线</strong>：进程间通信机制、权限管控、调试方法</li>
-<li><strong>日志系统</strong>：systemd-journald 的配置和使用</li>
-<li><strong>设备管理</strong>：udev 规则和设备权限分配</li>
-<li><strong>系统服务</strong>：systemd 全家桶提供的其他核心服务，如内存管理、DNS 解析、时间同步</li>
+<li><strong>systemd 核心功能</strong>：服务管理、依赖关系、并行启动、单元类型配置和生命周期管理</li>
+<li><strong>systemd 生态系统服务</strong>：systemd-journald 日志系统、systemd-oomd 内存管理、systemd-resolved DNS 解析、systemd-timesyncd 时间同步</li>
+<li><strong>设备管理</strong>：udev 规则系统、systemd-udevd 实现、设备权限分配和故障排查</li>
+<li><strong>D-Bus 系统总线</strong>：进程间通信机制、权限管控、Flatpak 沙盒环境下的 D-Bus 代理过滤</li>
+<li><strong>服务管理最佳实践</strong>：服务配置优化、依赖关系管理、性能调优</li>
 </ul>
 <h3 id="-桌面会话与图形渲染" class="headerLink">
     <a href="#-%e6%a1%8c%e9%9d%a2%e4%bc%9a%e8%af%9d%e4%b8%8e%e5%9b%be%e5%bd%a2%e6%b8%b2%e6%9f%93" class="header-mark"></a>🖥️ <a href="/posts/2025/Q4/linux-desktop-3-session-graphics/" rel="">桌面会话与图形渲染</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
-<li><strong>用户会话管理</strong>：登录流程、systemd-logind 会话控制、seat 概念</li>
-<li><strong>Wayland 合成器架构</strong>：与 X11 的对比、客户端-服务器模型、协议扩展</li>
-<li><strong>图形渲染栈</strong>：DRM/KMS、Mesa、EGL、GBM、OpenGL/Vulkan 渲染管线</li>
-<li><strong>输入处理系统</strong>：libinput、evdev、手势识别、多点触控</li>
-<li><strong>设备访问控制</strong>：ACL 权限分配、GPU 设备管理、输入设备权限</li>
-<li><strong>应用程序架构</strong>：启动流程、图形驱动、工具包支持（GTK/Qt/SDL）</li>
-<li><strong>图形渲染与性能</strong>：OpenGL/Vulkan 渲染、Mesa 驱动、性能优化</li>
-<li><strong>应用兼容性</strong>：Wayland/XWayland 兼容性、沙盒化应用（Flatpak）</li>
-<li><strong>会话故障排查</strong>：登录失败、权限错误、图形界面异常、渲染问题</li>
+<li><strong>用户会话管理</strong>：登录流程详解、systemd-logind 会话控制、seat 概念和多用户场景</li>
+<li><strong>Wayland 图形架构</strong>：与 X11 的深度对比、客户端-服务器模型、协议扩展和安全性优势</li>
+<li><strong>图形渲染栈</strong>：DRM/KMS 显示管理、Mesa 驱动、EGL/GBM 接口、OpenGL/Vulkan 渲染管线</li>
+<li><strong>输入处理系统</strong>：libinput 事件处理、evdev 内核接口、手势识别、多点触控支持</li>
+<li><strong>设备访问控制</strong>：ACL 权限分配、GPU 设备管理、输入设备权限、systemd-logind 集成</li>
+<li><strong>应用程序架构</strong>：启动流程、图形驱动选择、工具包支持（GTK/Qt/SDL）、渲染器优化</li>
+<li><strong>应用兼容性</strong>：Wayland/XWayland 兼容性、沙盒化应用（Flatpak）、性能调优</li>
+<li><strong>会话故障排查</strong>：登录失败、权限错误、图形界面异常、渲染问题的系统化诊断</li>
 </ul>
 <h3 id="-多媒体处理与中文支持" class="headerLink">
     <a href="#-%e5%a4%9a%e5%aa%92%e4%bd%93%e5%a4%84%e7%90%86%e4%b8%8e%e4%b8%ad%e6%96%87%e6%94%af%e6%8c%81" class="header-mark"></a>🎵 <a href="/posts/2025/Q4/linux-desktop-4-multimedia-input/" rel="">多媒体处理与中文支持</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
-<li><strong>PipeWire 架构</strong>：音频视频处理、屏幕共享、兼容层</li>
-<li><strong>字体渲染配置</strong>：fontconfig 系统、CJK 字体管理</li>
-<li><strong>中文输入法</strong>：fcitx5 配置、Wayland/XWayland 兼容性</li>
-<li><strong>故障排查</strong>：音频延迟优化、输入法无响应等问题解决</li>
+<li><strong>PipeWire 统一多媒体架构</strong>：音频视频处理、屏幕共享、兼容层（PulseAudio/JACK/ALSA）</li>
+<li><strong>视频处理与屏幕共享</strong>：Wayland screen-capture 协议、硬件加速、DMA-BUF 传递、权限管理</li>
+<li><strong>音频处理流程</strong>：低延迟配置、音频路由控制、设备管理和性能优化</li>
+<li><strong>字体渲染系统</strong>：fontconfig 配置、CJK 字体管理、渲染参数优化、字体匹配规则</li>
+<li><strong>中文输入法</strong>：fcitx5 框架、Wayland text-input 协议、XWayland 兼容性、混合环境管理</li>
+<li><strong>故障排查与优化</strong>：音频延迟优化、输入法无响应、字体显示问题、屏幕共享故障</li>
 </ul>
-<h3 id="-网络" class="headerLink">
-    <a href="#-%e7%bd%91%e7%bb%9c" class="header-mark"></a>🌐 <a href="/posts/2025/Q4/linux-desktop-5-network/" rel="">网络</a></h3><p><strong>涵盖内容</strong>：</p>
+<h3 id="-网络架构与管理" class="headerLink">
+    <a href="#-%e7%bd%91%e7%bb%9c%e6%9e%b6%e6%9e%84%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>🌐 <a href="/posts/2025/Q4/linux-desktop-5-network/" rel="">网络架构与管理</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
-<li><strong>网络架构深度解析</strong>：从硬件驱动到应用层的完整协议栈</li>
-<li><strong>网络连接管理</strong>：systemd-networkd 和 iwd 的配置与原理</li>
-<li><strong>IPv4/IPv6 双栈技术</strong>：地址分配、路由表管理、协议优先级</li>
-<li><strong>防火墙与流量控制</strong>：nftables/iptables 规则配置、QoS 流量整形</li>
-<li><strong>虚拟网络技术</strong>：TUN/TAP 接口、VPN 隧道、虚拟交换机</li>
-<li><strong>路由与转发</strong>：静态路由、动态路由协议、NAT 转换、端口转发</li>
-<li><strong>网络故障诊断</strong>：连接问题、DNS 解析、性能优化、延迟分析</li>
+<li><strong>网络架构深度解析</strong>：从硬件驱动到应用层的完整协议栈，systemd-networkd 和 iwd 的现代网络管理</li>
+<li><strong>IPv4/IPv6 双栈技术</strong>：地址分配机制、路由表管理、协议优先级配置、双栈验证方法</li>
+<li><strong>防火墙与网络安全</strong>：nftables 现代防火墙、NAT 配置、端口转发、流量控制规则</li>
+<li><strong>虚拟网络技术</strong>：TUN/TAP 接口、VPN 连接管理（WireGuard）、桥接网络、容器网络</li>
+<li><strong>网络性能优化</strong>：内核参数调优、TCP 拥塞控制（BBR）、连接跟踪优化、网络监控分析</li>
+<li><strong>高级网络配置</strong>：多网卡绑定、VLAN 配置、网络命名空间、网络故障诊断</li>
 </ul>
-<h3 id="-系统关机与常见故障排查" class="headerLink">
-    <a href="#-%e7%b3%bb%e7%bb%9f%e5%85%b3%e6%9c%ba%e4%b8%8e%e5%b8%b8%e8%a7%81%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>🔄 <a href="/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/" rel="">系统关机与常见故障排查</a></h3><p><strong>涵盖内容</strong>：</p>
+<h3 id="-系统关机与电源管理" class="headerLink">
+    <a href="#-%e7%b3%bb%e7%bb%9f%e5%85%b3%e6%9c%ba%e4%b8%8e%e7%94%b5%e6%ba%90%e7%ae%a1%e7%90%86" class="header-mark"></a>🔄 <a href="/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/" rel="">系统关机与电源管理</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
-<li><strong>系统关机流程</strong>：优雅关闭、资源清理、硬件关机</li>
-<li><strong>关机阶段详解</strong>：用户会话清理、系统服务停止、内核资源释放</li>
-<li><strong>关机故障排查</strong>：服务停止超时、文件系统卸载失败、设备繁忙</li>
-<li><strong>实战故障案例</strong>：桌面环境启动失败、应用崩溃、网络异常等综合问题</li>
-<li><strong>系统化排查方法</strong>：日志分析、逐层排查、工具使用技巧</li>
+<li><strong>系统关机流程详解</strong>：四个阶段的完整关机过程，从用户会话清理到硬件关机的每个步骤</li>
+<li><strong>电源管理功能</strong>：休眠（Hibernate）和挂起（Suspend）的配置、工作原理和故障排查</li>
+<li><strong>关机故障排查</strong>：服务停止超时、文件系统卸载失败、设备繁忙等问题的诊断和解决</li>
+<li><strong>实战故障案例</strong>：桌面环境启动失败、应用崩溃、网络异常、系统关机卡住等综合问题</li>
+<li><strong>系统化排查方法</strong>：日志分析、逐层排查、工具使用技巧、最佳实践总结</li>
+<li><strong>电源管理优化</strong>：自动挂起配置、定时休眠设置、功耗优化、硬件兼容性处理</li>
 </ul>
 <hr>
 <h2 id="技术栈说明" class="headerLink">
-    <a href="#%e6%8a%80%e6%9c%af%e6%a0%88%e8%af%b4%e6%98%8e" class="header-mark"></a>技术栈说明</h2><p>本系列文章基于以下技术栈：</p>
+    <a href="#%e6%8a%80%e6%9c%af%e6%a0%88%e8%af%b4%e6%98%8e" class="header-mark"></a>技术栈说明</h2><p>本系列文章基于以下现代 Linux 桌面技术栈：</p>
 <ul>
 <li><strong>引导系统</strong>：UEFI + systemd-boot</li>
 <li><strong>初始化系统</strong>：systemd</li>
 <li><strong>显示协议</strong>：Wayland</li>
 <li><strong>音频系统</strong>：PipeWire</li>
 <li><strong>网络管理</strong>：systemd-networkd + iwd</li>
+<li><strong>防火墙</strong>：nftables</li>
 <li><strong>输入法</strong>：fcitx5</li>
-<li><strong>发行版</strong>：主要考虑 NixOS，但也会补充说明与传统发行版的差别。</li>
+<li><strong>字体系统</strong>：fontconfig</li>
+<li><strong>发行版</strong>：主要基于 NixOS，同时补充说明与传统发行版的差异</li>
 </ul>
-<p>虽然以 NixOS 为例，但涉及的核心概念和排查方法同样适用于其他现代 Linux 发行版。</p>
+<p><strong>技术选择说明</strong>：</p>
+<ul>
+<li><strong>systemd-boot</strong>：相比 GRUB 更简洁，支持 UKI 和 Secure Boot，启动速度更快</li>
+<li><strong>Wayland</strong>：相比 X11 更安全、性能更好</li>
+<li><strong>PipeWire</strong>：统一的多媒体处理框架，相比 PulseAudio 延迟更低，支持统一处理音频跟视频</li>
+<li><strong>systemd-networkd + iwd</strong>：相比 NetworkManager + wpa_supplicant 更现代、更轻量</li>
+<li><strong>nftables</strong>：相比 iptables 语法更简洁，性能更好</li>
+<li><strong>fcitx5</strong>：相比 ibus 对 Wayland 支持更好，配置更灵活</li>
+</ul>
+<p>虽然以 NixOS 为例，但涉及的核心概念、配置方法和故障排查技巧同样适用于其他现代 Linux 发行版
+（如 Arch Linux、Fedora、Ubuntu 等）。</p>
 <hr>
 <h2 id="总结" class="headerLink">
-    <a href="#%e6%80%bb%e7%bb%93" class="header-mark"></a>总结</h2><p>Linux 桌面系统虽复杂，但每个组件都有明确作用和逻辑关系。这个系列文章的目标是帮助我们：</p>
-<ol>
-<li><strong>深入理解 Linux</strong>：建立完整的桌面系统知识体系</li>
-<li><strong>解决复杂问题</strong>：面对棘手系统问题时，能够有条不紊地分析和解决</li>
-<li><strong>优化系统性能</strong>：通过合理配置各组件，获得更流畅的体验</li>
-</ol>
-<p>希望这份&quot;解牛图&quot;能成为你探索 Linux 桌面世界的有力工具，让你的 Linux 之旅更加顺畅与愉快。</p>
+    <a href="#%e6%80%bb%e7%bb%93" class="header-mark"></a>总结</h2><p>Linux 桌面系统虽复杂，但每个组件都有明确作用和逻辑关系。</p>
+<p>希望这份完整的&quot;解牛图&quot;能成为你探索 Linux 桌面世界的有力工具，让你的 Linux 之旅更加顺畅与愉快。</p>
 <h2 id="参考" class="headerLink">
     <a href="#%e5%8f%82%e8%80%83" class="header-mark"></a>参考</h2><ul>
 <li><a href="https://thamizhelango.medium.com/understanding-linux-desktop-components-display-servers-compositors-window-managers-and-desktop-e07c9c45dcce" target="_blank" rel="noopener noreferrer">Understanding Linux Desktop Components: Display Servers, Compositors, Window Managers, and Desktop Environments</a></li>
