@@ -113,8 +113,8 @@ systemd-logind 是连接登录、会话、设备权限和电源管理的核心�
 
 > <https://www.freedesktop.org/wiki/Software/systemd/multiseat/>
 
-- **seat**（座席）是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示
-  器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话。
+- **seat**（座席）是 systemd/logind 引入的术语，用来表示「一组物理设备的集合」（例如一个显
+  示器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话。
 - 所有设备默认都会被分配给 **seat0**, 想再搞一个 seat1 实现多人图形化登录，必须通过 udev
   规则完成如下操作：
   1.  必须拥有第二张显卡，这是硬性的前提！为了让 seat1 实际可用，还必须拥有第二套键鼠与声
@@ -237,8 +237,8 @@ fbcon 基于 **fbdev（framebuffer device）** 框架工作，通过 `/dev/fb0` 
 件提供的标准化接口**：
 
 1.  **VESA BIOS Extensions (VBE)**：在传统 BIOS 系统上，内核的 `vesafb` 驱动通过 VBE 接口
-    （由显卡 BIOS 实现）请求一个标准的显示模式（如 1024x768），并获取一个指向显存的“线性帧
-    缓冲区”（LFB）地址。
+    （由显卡 BIOS 实现）请求一个标准的显示模式（如 1024x768），并获取一个指向显存的「线性
+    帧缓冲区」（LFB）地址。
 2.  **UEFI Graphics Output Protocol (GOP)**：在现代 UEFI 系统上，内核的 `efifb` 驱动通过
     GOP 接口实现相同的功能。
 
@@ -286,27 +286,24 @@ fbcon 基于 **fbdev（framebuffer device）** 框架工作，通过 `/dev/fb0` 
 
 - **DRM（Direct Rendering Manager）**：内核中的图形驱动框架，是现代 Linux 图形栈的基石。它
   将 GPU 硬件抽象为 `/dev/dri/card0` 等设备文件，并提供两大核心功能：
-  - **KMS（Kernel Mode Setting）**：内核显示模式设置。这是 DRM 的革命性特性。它将设置显示
-    器分辨率、刷新率等模式（Modesetting）的*职责*，从用户空间程序（如旧的 X Server）**收归
-    到 Linux 内核**。
-    - **KMS 之前的时代 (UMS)**：用户空间的 X Server 必须以 root 权限直接操作硬件来设置分辨
-      率。这导致启动时会“闪屏”（从低分率 tty 切到高分辨率 X），且 `Ctrl+Alt+F1` 切换 tty
-      极易崩溃。
-    - **KMS 时代**：内核在启动*极早期*就通过 KMS 接管显卡，将 `tty` 设置到原生分辨率，实
-      现**无闪烁启动**。Wayland 合成器（或现代 Xorg）也无需 root，只需以普通用户身份向内
-      核**请求**设置模式，内核会安全地完成切换，这使得 **VT 切换瞬时且稳定**，并能可靠处理
-      显示器**热插拔**。
-  - **GEM（Graphics Execution Manager）**：图形执行管理器。DRM 提供的缓冲区管理框架
-    （NVIDIA 对应有 `NVRM`，AMD 对应有 `AMDGPU` 内核驱动），负责分配和管理 GPU 显存，并控
-    制 2D/3D 引擎的执行。
+  - **KMS（Kernel Mode Setting）**：Linux 内核中专门负责控制显卡输出、设置显示器分辨率和刷
+    新率等模式（Modesetting）的子系统。主要特点：
+    - **内核级控制**：由内核直接管理显示模式，避免用户空间程序直接操作硬件
+    - **无闪烁启动**：系统启动时直接设置到显示器原生分辨率，避免分辨率切换时的闪烁
+    - **热插拔支持**：可以动态检测和配置新连接的显示器
+    - **多显示器支持**：支持多显示器配置和扩展桌面
+    - **稳定切换**：VT 切换（Ctrl+Alt+F1 等）瞬时且稳定
+    - **权限安全**：用户空间程序无需 root 权限即可请求显示模式切换
+  - **GEM（Graphics Execution Manager）**：图形执行管理器。DRM 提供的缓冲区管理框架，负责
+    分配和管理 GPU 显存，并控制 2D/3D 引擎的执行。
 - **DRM-Master**：设备主控权限。这是内核 DRM 提供的一种独占锁，用于仲裁哪个进程有权*请求*
-  KMS 操作（即设置显示模式）。`systemd-logind` 会将这个权限授予“活动”的图形会话（如Wayland
-  合成器或 X Server），确保同一时间只有一个“主宰者”能控制屏幕输出。
+  KMS 操作（即设置显示模式）。`systemd-logind` 会将这个权限授予「活动」的图形会话（如
+  Wayland合成器或 X Server），确保同一时间只有一个「主宰者」能控制屏幕输出。
 - **Mesa**：用户空间的 3D 图形驱动库，提供了 OpenGL 和 Vulkan 等图形 API 的开源实现。
-- **EGL**：Khronos 组织定义的接口，是 Mesa 和 Wayland（或 X11）之间的“胶水”，负责将
+- **EGL**：Khronos 组织定义的接口，是 Mesa 和 Wayland（或 X11）之间的「胶水」，负责将
   OpenGL/Vulkan 渲染 API 与本地窗口系统连接起来。
 - **GBM（Generic Buffer Manager）**：Mesa 提供的一个 API，允许合成器（Compositor）通过
-  DRM/KMS 框架，以“非 EGL”的方式直接分配和管理图形缓冲区（Buffers）。
+  DRM/KMS 框架，以「非 EGL」的方式直接分配和管理图形缓冲区（Buffers）。
 - **libdrm**：一个用户空间库，封装了与内核 DRM 驱动进行 `ioctl` 通信的复杂细节，简化了
   Mesa 和合成器对 DRM/KMS/GEM 的调用。
 
@@ -349,7 +346,7 @@ Wayland 是现代 Linux 桌面系统的图形协议，采用客户端-服务器�
   核的 **DRM/KMS** 控制显示模式，通过 **evdev/libinput** 采集并分发输入事件。Wayland 客户
   端应用通过 **Wayland socket**（通常位于 `$XDG_RUNTIME_DIR/wayland-0`，但具体名字可变）与
   合成器通信。因为合成器本身直接控制显示和输入设备，所以它可以**直接从一个已登录的 TTY 启
-  动**，作为该 TTY 的图形会话的 "display server"，无需先用 `startx` 启动一个独立的 X
+  动**，作为该 TTY 的图形会话的「display server」，无需先用 `startx` 启动一个独立的 X
   Server。如果使用 Display Manager 登录 Wayland 会话，则由 DM 在合适的 TTY 启动合成器并准
   备\_会话\_环境。
 
