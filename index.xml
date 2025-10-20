@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-19T12:13:24+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-20T03:08:24+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;系统关机看似简单，但背后涉及了繁杂的资源清理和状态管理过程。当你点击关机按钮，系统却卡在那里不动，或者出现各种奇怪的错误信息时，理解关机流程和故障排查方法就显得尤为重要。&lt;/p&gt;
@@ -18953,16 +18953,16 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <p>本文作为系列概览，主要起导航和架构梳理的作用，帮助读者建立整体认知框架。</p>
 <hr>
 <h2 id="文章系列导航" class="headerLink">
-    <a href="#%e6%96%87%e7%ab%a0%e7%b3%bb%e5%88%97%e5%af%bc%e8%88%aa" class="header-mark"></a>文章系列导航</h2><h3 id="-系统启动与安全框架" class="headerLink">
-    <a href="#-%e7%b3%bb%e7%bb%9f%e5%90%af%e5%8a%a8%e4%b8%8e%e5%ae%89%e5%85%a8%e6%a1%86%e6%9e%b6" class="header-mark"></a>📋 <a href="/posts/2025/Q4/linux-desktop-1-boot-security/" rel="">系统启动与安全框架</a></h3><p><strong>涵盖内容</strong>：</p>
+    <a href="#%e6%96%87%e7%ab%a0%e7%b3%bb%e5%88%97%e5%af%bc%e8%88%aa" class="header-mark"></a>文章系列导航</h2><h3 id="-linux-桌面系统故障排查指南一---系统启动与安全框架" class="headerLink">
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%b8%80---%e7%b3%bb%e7%bb%9f%e5%90%af%e5%8a%a8%e4%b8%8e%e5%ae%89%e5%85%a8%e6%a1%86%e6%9e%b6" class="header-mark"></a>📋 <a href="/posts/2025/Q4/linux-desktop-1-boot-security/" rel="">Linux 桌面系统故障排查指南（一） - 系统启动与安全框架</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>系统启动流程</strong>：从 UEFI 固件到 systemd 用户空间的完整启动过程，包括 systemd-boot 配置、UKI 统一内核镜像、initramfs 阶段详解</li>
 <li><strong>安全框架深度解析</strong>：PAM 认证机制、PolicyKit 权限管理、GNOME Keyring 密钥管理，以及各组件间的协作关系</li>
 <li><strong>启动故障排查</strong>：系统化的问题诊断流程，从固件到用户空间的逐层排查方法</li>
 <li><strong>启动性能优化</strong>：硬件、内核、服务层面的优化策略，包括 UKI 使用和启动时间分析</li>
 </ul>
-<h3 id="-systemd-全家桶与服务管理" class="headerLink">
-    <a href="#-systemd-%e5%85%a8%e5%ae%b6%e6%a1%b6%e4%b8%8e%e6%9c%8d%e5%8a%a1%e7%ae%a1%e7%90%86" class="header-mark"></a>⚙️ <a href="/posts/2025/Q4/linux-desktop-2-systemd-services/" rel="">systemd 全家桶与服务管理</a></h3><p><strong>涵盖内容</strong>：</p>
+<h3 id="-linux-桌面系统故障排查指南二---systemd-全家桶与服务管理" class="headerLink">
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%ba%8c---systemd-%e5%85%a8%e5%ae%b6%e6%a1%b6%e4%b8%8e%e6%9c%8d%e5%8a%a1%e7%ae%a1%e7%90%86" class="header-mark"></a>⚙️ <a href="/posts/2025/Q4/linux-desktop-2-systemd-services/" rel="">Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>systemd 核心功能</strong>：服务管理、依赖关系、并行启动、单元类型配置和生命周期管理</li>
 <li><strong>systemd 生态系统服务</strong>：着重介绍 systemd-journald 日志系统、systemd-oomd 内存管理、systemd-resolved DNS 解析、systemd-timesyncd 时间同步</li>
@@ -18970,8 +18970,8 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <li><strong>D-Bus 系统总线</strong>：进程间通信机制、权限管控、Flatpak 沙盒环境下的 D-Bus 代理过滤</li>
 <li><strong>服务管理最佳实践</strong>：服务配置优化、依赖关系管理、性能调优</li>
 </ul>
-<h3 id="-桌面会话与图形渲染" class="headerLink">
-    <a href="#-%e6%a1%8c%e9%9d%a2%e4%bc%9a%e8%af%9d%e4%b8%8e%e5%9b%be%e5%bd%a2%e6%b8%b2%e6%9f%93" class="header-mark"></a>🖥️ <a href="/posts/2025/Q4/linux-desktop-3-session-graphics/" rel="">桌面会话与图形渲染</a></h3><p><strong>涵盖内容</strong>：</p>
+<h3 id="-linux-桌面系统故障排查指南三---桌面会话与图形渲染" class="headerLink">
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%b8%89---%e6%a1%8c%e9%9d%a2%e4%bc%9a%e8%af%9d%e4%b8%8e%e5%9b%be%e5%bd%a2%e6%b8%b2%e6%9f%93" class="header-mark"></a>🖥️ <a href="/posts/2025/Q4/linux-desktop-3-session-graphics/" rel="">Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>用户会话管理</strong>：登录流程详解、systemd-logind 会话控制、seat 概念和多用户场景</li>
 <li><strong>Wayland 图形架构</strong>：与 X11 的深度对比、客户端-服务器模型、协议扩展和安全性优势</li>
@@ -18982,8 +18982,8 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <li><strong>应用兼容性</strong>：Wayland/XWayland 兼容性、沙盒化应用（Flatpak）、性能调优</li>
 <li><strong>会话故障排查</strong>：登录失败、权限错误、图形界面异常、渲染问题的系统化诊断</li>
 </ul>
-<h3 id="-多媒体处理与中文支持" class="headerLink">
-    <a href="#-%e5%a4%9a%e5%aa%92%e4%bd%93%e5%a4%84%e7%90%86%e4%b8%8e%e4%b8%ad%e6%96%87%e6%94%af%e6%8c%81" class="header-mark"></a>🎵 <a href="/posts/2025/Q4/linux-desktop-4-multimedia-input/" rel="">多媒体处理与中文支持</a></h3><p><strong>涵盖内容</strong>：</p>
+<h3 id="-linux-桌面系统故障排查指南四---多媒体处理与中文支持" class="headerLink">
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e5%9b%9b---%e5%a4%9a%e5%aa%92%e4%bd%93%e5%a4%84%e7%90%86%e4%b8%8e%e4%b8%ad%e6%96%87%e6%94%af%e6%8c%81" class="header-mark"></a>🎵 <a href="/posts/2025/Q4/linux-desktop-4-multimedia-input/" rel="">Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>PipeWire 统一多媒体架构</strong>：音频视频处理、屏幕共享、兼容层（PulseAudio/JACK/ALSA）</li>
 <li><strong>视频处理与屏幕共享</strong>：Wayland screen-capture 协议、硬件加速、DMA-BUF 传递、权限管理</li>
@@ -18992,18 +18992,18 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <li><strong>中文输入法</strong>：fcitx5 框架、Wayland text-input 协议、XWayland 兼容性、混合环境管理</li>
 <li><strong>故障排查与优化</strong>：音频延迟优化、输入法无响应、字体显示问题、屏幕共享故障</li>
 </ul>
-<h3 id="-网络架构与管理" class="headerLink">
-    <a href="#-%e7%bd%91%e7%bb%9c%e6%9e%b6%e6%9e%84%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>🌐 <a href="/posts/2025/Q4/linux-desktop-5-network/" rel="">网络架构与管理</a></h3><p><strong>涵盖内容</strong>：</p>
+<h3 id="-linux-桌面系统故障排查指南五---网络" class="headerLink">
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%ba%94---%e7%bd%91%e7%bb%9c" class="header-mark"></a>🌐 <a href="/posts/2025/Q4/linux-desktop-5-network/" rel="">Linux 桌面系统故障排查指南（五） - 网络</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
-<li><strong>网络架构深度解析</strong>：从硬件驱动到应用层的完整协议栈，systemd-networkd 和 iwd 的现代网络管理</li>
+<li><strong>网络连接与管理</strong>：从硬件驱动到应用层的完整协议栈，systemd-networkd 和 iwd 的现代网络管理</li>
 <li><strong>IPv4/IPv6 双栈技术</strong>：地址分配机制、路由表管理、协议优先级配置、双栈验证方法</li>
 <li><strong>防火墙与网络安全</strong>：nftables 现代防火墙、NAT 配置、端口转发、流量控制规则</li>
 <li><strong>虚拟网络技术</strong>：TUN/TAP 接口、VPN 连接管理（WireGuard）、桥接网络、容器网络</li>
 <li><strong>网络性能优化</strong>：内核参数调优、TCP 拥塞控制（BBR）、连接跟踪优化、网络监控分析</li>
 <li><strong>高级网络配置</strong>：多网卡绑定、VLAN 配置、网络命名空间、网络故障诊断</li>
 </ul>
-<h3 id="-系统关机与电源管理" class="headerLink">
-    <a href="#-%e7%b3%bb%e7%bb%9f%e5%85%b3%e6%9c%ba%e4%b8%8e%e7%94%b5%e6%ba%90%e7%ae%a1%e7%90%86" class="header-mark"></a>🔄 <a href="/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/" rel="">系统关机与电源管理</a></h3><p><strong>涵盖内容</strong>：</p>
+<h3 id="-linux-桌面系统故障排查指南六---系统关机与电源管理" class="headerLink">
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e5%85%ad---%e7%b3%bb%e7%bb%9f%e5%85%b3%e6%9c%ba%e4%b8%8e%e7%94%b5%e6%ba%90%e7%ae%a1%e7%90%86" class="header-mark"></a>🔄 <a href="/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/" rel="">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>系统关机流程详解</strong>：介绍完整关机过程，从用户会话清理到硬件关机的每个步骤</li>
 <li><strong>电源管理功能</strong>：休眠（Hibernate）和挂起（Suspend）的配置、工作原理和故障排查</li>
