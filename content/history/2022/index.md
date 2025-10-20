@@ -617,9 +617,9 @@ comment:
   - 在 raspberrypi 上遇到
     [Fail running on Raspberry Pi Ubuntu 21.10](https://github.com/k3s-io/k3s/issues/4234#issuecomment-947954002)
     这个问题，跑了下 `sudo apt install linux-modules-extra-raspi` 再重启问题就解决了。
-  - 新版本 k8s 需要指定 ingressClassName，但是 k3s 默认没有创建 ingressClass : [Create by
-    default traefik ingressClass when creating a
-    cluster](https://github.com/k3s-io/k3s/issues/556
+  - 新版本 k8s 需要指定 ingressClassName，但是 k3s 默认没有创建 ingressClass : [Create
+    by default traefik ingressClass when creating
+    a cluster](https://github.com/k3s-io/k3s/issues/556
   - 在 1.25 版的 k3s 集群上安装 victoria-metrics-k8s-stack 时，operator 一直报错，排查日志
     发现是 `policy/v1beta1` 被废弃导致的，顺手提了个 PR
     [fix: bump victoria-metrics-operator's version to 0.15.\*](https://github.com/VictoriaMetrics/helm-charts/pull/401)
@@ -1575,8 +1575,8 @@ RSS Feed 文件的大小降到了 700K，暂时应该不用担心 Vercel 流量�
       管理等），使得其上的 PaaS 可以专注于应用服务和发布流程管理这两个最核心的功能，开始向
       更轻、更薄、更以应用为中心的方向进行演进。从而 Serverless 开始蓬勃发展
     - Serverless 的本质：高可扩展性、工作流驱动、按用量计费
-    - 「云原生」是一个使用户能低心智负担的、敏捷的，以可扩展、可复制的方式，最大化利用“云”
-      的能力、发挥“云”的价值的一条最佳路径。
+    - 「云原生」是一个使用户能低心智负担的、敏捷的，以可扩展、可复制的方式，最大化利用
+      「云」的能力、发挥「云」的价值的一条最佳路径。
 - 学
   习[分布式系统的一致性问题与共识算法](https://thiscute.world/posts/consistency-and-consensus-algorithm/)
   并记录笔记

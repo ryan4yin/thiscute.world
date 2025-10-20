@@ -265,8 +265,8 @@ qm resize 9000 scsi0 32G
 了，请自行查阅相关文档吧。
 
 > 因为这个方便的特性，也为了减少虚拟化的开销，Cloud 镜像默认是不使用 LVM 逻辑分区的。LVM逻
-> 辑分区虽然方便，但是它对物理机的作用更大些。虚拟机因为本身就能动态扩容“物理硬盘”的大小，
-> 基本不用不到 LVM。
+> 辑分区虽然方便，但是它对物理机的作用更大些。虚拟机因为本身就能动态扩容「物理硬盘」的大
+> 小，基本不用不到 LVM。
 
 > 还有一点，就是虚拟机通常只需要一个根分区就行，尤其是归 openstack/kubernetes 管的虚拟机。
 > 只有在使用分布式存储之类的场景下，数据需要独立存储，才需要用到额外的分区(`/data` 之类
@@ -768,7 +768,7 @@ cloudinit 配置模板，然后重启节点（重启才能重新加载对应的 
 
 监控告警：
 
-- [prometheus pve expoter](https://github.com/prometheus-pve/prometheus-pve-exporter): 通
+- [prometheus pve exporter](https://github.com/prometheus-pve/prometheus-pve-exporter): 通
   过 prometheus+grafana 监控 PVE 集群
 
 ## 拓展 - PVE 运行在 ARM 开发版上

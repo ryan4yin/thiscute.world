@@ -166,7 +166,7 @@ MAC 的功能跟数字签名一致，都是验证消息的真实性（authentici
 AE 有一种更安全的变体——**带有关联数据的认证加密** (authenticated encryption with
 associated data，**AEAD**)。AEAD 将「关联数据(Associated Data, AD)」——也称为「附加验证数据
 （Additional Authenticated Data, AAD）」——绑定到密文和它应该出现的上下文，以便可以检测和拒
-绝将有效密文“剪切并粘贴”到不同上下文的尝试。 AEAD 用于加密和未加密数据一起使用的场景（例
+绝将有效密文「剪切并粘贴」到不同上下文的尝试。 AEAD 用于加密和未加密数据一起使用的场景（例
 如，在加密的网络协议中），并确保整个数据流经过身份验证和完整性保护。换句话说，AEAD 增加了
 检查某些内容的完整性和真实性的能力。
 

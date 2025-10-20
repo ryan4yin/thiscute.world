@@ -172,7 +172,7 @@ Sources 右侧的 Debugger 支持各种断点调试。
    {{< figure src="/images/web-browser-dev-tools/968138-20190211154841386-1840257581.webp" >}}
 1. XHR 断点：在右侧 Debugger 中，可以添加 XHR 断点。
    - 如果条件留空，一旦有 XHR 发起，就会无条件进入调试。
-   - 条件是 “Break When URL Contaions <your string>”
+   - 条件是 「Break When URL Contaions <your string>」
 1. Watch Expressions：表达式审查
    - 双击选中 JS 代码中的任意变量，然后右键它，可以将该变量添加到 Watch 中，这样就可以随时
      观察它的值。
@@ -192,8 +192,8 @@ Chrome 的断点功能比 Firefox-Dev 的更丰富。
 
 方法二：先进 dev tools，点击 左上角的设备图标（toggle device toolbar），然后页面顶部就会出
 现一个导航栏，在这里好选择设备或者自定义图像尺寸，然后点击该导航栏右侧（不是 dev tools 右
-侧）的 options 图标，会有两个选项：“截图（capture screenshot）”和“截网页全图（capture full
-size screenshot）”，如下：
+侧）的 options 图标，会有两个选项：「截图（capture screenshot）」和「截网页全图（capture
+full size screenshot）」，如下：
 
 {{< figure src="/images/web-browser-dev-tools/968138-20190211102530072-2093584274.webp" >}}
 

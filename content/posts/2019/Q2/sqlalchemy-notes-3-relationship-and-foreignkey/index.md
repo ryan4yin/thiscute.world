@@ -228,7 +228,7 @@ class User(UserMixin, db.Model):
 2. secondaryjoin：（多对多中）用于从父对象查询其所有子对象的condition（parent.children），
    同样的，默认情况下只考虑外键。
 
-## 三、ORM 层 的 “delete” cascade vs. FOREIGN KEY 层的 “ON DELETE” cascade
+## 三、ORM 层 的 「delete」 cascade vs. FOREIGN KEY 层的 「ON DELETE」 cascade
 
 之前有讲过 Table 定义中的级联操作：`ON DELETE` 和 `ON UPDATE`，可以通过 `ForeignKey` 的参
 数指定为 `CASCADE`.

@@ -196,7 +196,7 @@ systemd-journald 是 systemd 内置的日志收集守护进程，统一处理内
 | **统一收集**       | 内核日志、systemd 单元（stdout/stderr）、普通进程、容器、第三方 syslog 均汇总到同一日志流。    |
 | **二进制索引**     | 以 B+树（有序索引）+偏移量建立字段索引，支持精确查询与时间/优先级范围查询，速度远超文本 grep。 |
 | **字段化存储**     | 自动生成 `_PID`、`_UID`、`_SYSTEMD_UNIT` 等可信字段（不可伪造）；支持自定义 `FOO=bar` 字段。   |
-| **自动轮转与压缩** | 按“大小、时间、文件数”回收日志；轮转后默认用 LZ4 压缩，节省 60% 以上空间。                     |
+| **自动轮转与压缩** | 按「大小、时间、文件数」回收日志；轮转后默认用 LZ4 压缩，节省 60% 以上空间。                   |
 | **速率限制**       | 可通过 `RateLimitIntervalSec=`/`RateLimitBurst=` 调整。                                        |
 | **日志防篡改**     | 配置 `Seal=yes` 后，用 `journalctl --setup-keys` 生成密钥，之后可用该密钥验证日志完整性。      |
 
@@ -291,11 +291,11 @@ journalctl -p err LOGIN_RESULT=fail
 在 systemd 普及前，Linux 依赖 **syslog 协议+文本文件** 管理日志，核心组件是
 **rsyslog**（syslog 主流实现，功能强于早期 `syslogd`）。
 
-- **旧系统工作流**：应用通过 `syslog(3)` 接口输出日志 → rsyslog 接收 → 按“设施+优先级”写入
-  `/var/log/` 文本文件；
-- **现代系统中的角色**：rsyslog 不再是核心收集器，而是作为“兼容层”——接收 journald 转发的日
-  志，生成传统文本文件（如 `/var/log/auth.log`），或转发到远程日志服务器（支持 TCP/TLS 加
-  密）。
+- **旧系统工作流**：应用通过 `syslog(3)` 接口输出日志 → rsyslog 接收 → 按「设施+优先级」写
+  入 `/var/log/` 文本文件；
+- **现代系统中的角色**：rsyslog 不再是核心收集器，而是作为「兼容层」——接收 journald 转发的
+  日志，生成传统文本文件（如 `/var/log/auth.log`），或转发到远程日志服务器（支持 TCP/TLS
+  加密）。
 
 ##### /var/log/ 常见文件及功能
 
@@ -704,18 +704,18 @@ D-Bus 并非 systemd 社区的项目，而是 **freedesktop.org** 的独立项�
 
 ### 4.2 关键概念
 
-D-Bus 通过 “对象 - 接口” 模型封装功能，以下结合 `systemd1` 与 `logind1` 的真实定义，对应核
-心概念：
+D-Bus 通过 「对象 - 接口」 模型封装功能，以下结合 `systemd1` 与 `logind1` 的真实定义，对应
+核心概念：
 
-| 概念              | 定义与作用                                    | 示例（systemd1/logind1）                                                                                                                   |
-| ----------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| 总线（Bus）       | 消息传输的 “高速公路”，分系统 / 会话两类      | 系统总线 `/var/run/dbus/system_bus_socket`（`systemd1`/`logind1` 唯一使用的总线）                                                          |
-| 服务名（Name）    | 服务端在总线上的 “身份证”，唯一可请求         | `org.freedesktop.systemd1`（`systemd` 服务名）、`org.freedesktop.login1`（`logind` 服务名）                                                |
-| 对象（Object）    | 服务端功能的 “实例载体”，有唯一路径           | `/org/freedesktop/systemd1`（`systemd1` 根对象）、`/org/freedesktop/login1`（`logind1` 根对象）                                            |
-| 接口（Interface） | 定义对象的 “功能契约”（方法、信号、属性）     | `org.freedesktop.systemd1.Manager`（`systemd1` 核心接口）、`org.freedesktop.login1.Manager`（`logind1` 核心接口）                          |
-| 方法（Method）    | 客户端可主动调用的 “同步功能”（有请求有返回） | `systemd1` 的 `StartUnit`（启动系统单元，如 `nginx.service`）、`logind1` 的 `ListSessions`（查询所有活跃用户会话）                         |
-| 信号（Signal）    | 服务端主动发送的 “异步通知”（无返回）         | `systemd1` 的 `UnitActiveChanged`（单元状态变化，如 `nginx` 从 `inactive` 变为 `active`）、`logind1` 的 `SessionNew`（新用户登录创建会话） |
-| 属性（Property）  | 对象的 “状态数据”，支持读取 / 写入            | `systemd1` 的 `ActiveUnits`（所有活跃系统单元列表）、`logind1` 的 `CanPowerOff`（当前系统是否允许关机，布尔值）                            |
+| 概念              | 定义与作用                                      | 示例（systemd1/logind1）                                                                                                                   |
+| ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 总线（Bus）       | 消息传输的 「高速公路」，分系统 / 会话两类      | 系统总线 `/var/run/dbus/system_bus_socket`（`systemd1`/`logind1` 唯一使用的总线）                                                          |
+| 服务名（Name）    | 服务端在总线上的 「身份证」，唯一可请求         | `org.freedesktop.systemd1`（`systemd` 服务名）、`org.freedesktop.login1`（`logind` 服务名）                                                |
+| 对象（Object）    | 服务端功能的 「实例载体」，有唯一路径           | `/org/freedesktop/systemd1`（`systemd1` 根对象）、`/org/freedesktop/login1`（`logind1` 根对象）                                            |
+| 接口（Interface） | 定义对象的 「功能契约」（方法、信号、属性）     | `org.freedesktop.systemd1.Manager`（`systemd1` 核心接口）、`org.freedesktop.login1.Manager`（`logind1` 核心接口）                          |
+| 方法（Method）    | 客户端可主动调用的 「同步功能」（有请求有返回） | `systemd1` 的 `StartUnit`（启动系统单元，如 `nginx.service`）、`logind1` 的 `ListSessions`（查询所有活跃用户会话）                         |
+| 信号（Signal）    | 服务端主动发送的 「异步通知」（无返回）         | `systemd1` 的 `UnitActiveChanged`（单元状态变化，如 `nginx` 从 `inactive` 变为 `active`）、`logind1` 的 `SessionNew`（新用户登录创建会话） |
+| 属性（Property）  | 对象的 「状态数据」，支持读取 / 写入            | `systemd1` 的 `ActiveUnits`（所有活跃系统单元列表）、`logind1` 的 `CanPowerOff`（当前系统是否允许关机，布尔值）                            |
 
 可使用 `busctl list` 查看系统中的所有 D-Bus 对象：
 
@@ -785,11 +785,11 @@ org.freedesktop.systemd1                                                        
 
 1. **总线守护进程（dbus-daemon）**
 
-   架构的 “中枢”，每个总线对应一个守护进程，核心职责：
+   架构的 「中枢」，每个总线对应一个守护进程，核心职责：
 
    - 管理进程的连接（如验证 `普通用户` 是否有权调用 `logind1` 的 `PowerOff` 方法）；
 
-   - 路由消息（将客户端请求的 “启动 `nginx` 服务” 转发给 `systemd1`）；
+   - 路由消息（将客户端请求的 「启动 `nginx` 服务」 转发给 `systemd1`）；
 
    - 维护服务注册表（记录 `org.freedesktop.login1` 与 `logind` 进程的映射关系）。
 
@@ -797,10 +797,10 @@ org.freedesktop.systemd1                                                        
 
    提供功能的进程（如 `systemd` 进程、`logind` 进程），核心操作：
 
-   - 向总线注册 “服务名”（`systemd1` 注册 `org.freedesktop.systemd1`，`logind1` 注册
+   - 向总线注册 「服务名」（`systemd1` 注册 `org.freedesktop.systemd1`，`logind1` 注册
      `org.freedesktop.login1`，均为唯一标识）；
 
-   - 暴露 “对象” 和 “接口”（如 `systemd1` 暴露 `/org/freedesktop/systemd1` 对象与
+   - 暴露 「对象」 和 「接口」（如 `systemd1` 暴露 `/org/freedesktop/systemd1` 对象与
      `org.freedesktop.systemd1.Manager` 接口），供客户端调用。
 
 1. **客户端（Client）**
@@ -886,7 +886,7 @@ D-Bus 本身具备多层权限管控能力，从总线接入、消息路由到�
 
 1. **总线配置文件（静态规则管控）**
 
-   通过 XML 配置文件定义细粒度访问规则，实现对 “谁能访问哪些服务 / 方法” 的静态限制。例
+   通过 XML 配置文件定义细粒度访问规则，实现对 「谁能访问哪些服务 / 方法」 的静态限制。例
    如：
 
    - 系统总线的服务级规则（如 `/etc/dbus-1/system.d/org.freedesktop.login1.conf`）可限制普
@@ -895,8 +895,8 @@ D-Bus 本身具备多层权限管控能力，从总线接入、消息路由到�
    - 全局规则（如 `/etc/dbus-1/system.conf`）可限定仅 `root` 或 `dbus` 组用户访问
      `org.freedesktop.systemd1`（systemd 服务）的核心接口。
 
-     规则遵循 “`deny` 优先级高于 `allow`、服务级规则高于全局规则” 的逻辑，从总线层面直接拦
-     截未授权请求。
+     规则遵循 「`deny` 优先级高于 `allow`、服务级规则高于全局规则」 的逻辑，从总线层面直接
+     拦截未授权请求。
 
 1. **PolicyKit（动态授权管控）**
 
@@ -920,9 +920,9 @@ D-Bus 本身具备多层权限管控能力，从总线接入、消息路由到�
 
 #### 4.7.2 Flatpak 对 D-Bus 权限的细粒度管控
 
-在现代 Linux 桌面中，若需将商业软件等非信任应用运行在沙箱中，同时保障 “必要 D-Bus 交互不中
-断、越权访问被阻断”，Flatpak 采用 **“底层沙箱隔离 + 上层代理过滤”** 的双层方案 —— 其中
-`bubblewrap` 是 Flatpak 依赖的底层沙箱工具，负责环境隔离；`xdg-dbus-proxy` 是上层过滤组
+在现代 Linux 桌面中，若需将商业软件等非信任应用运行在沙箱中，同时保障 「必要 D-Bus 交互不
+中断、越权访问被阻断」，Flatpak 采用 **「底层沙箱隔离 + 上层代理过滤」** 的双层方案 —— 其
+中 `bubblewrap` 是 Flatpak 依赖的底层沙箱工具，负责环境隔离；`xdg-dbus-proxy` 是上层过滤组
 件，负责 D-Bus 细粒度管控，两者协同实现完整安全隔离：
 
 ##### 4.7.2.1 底层基础隔离：bubblewrap 的 "socket 隐藏与代理挂载"
@@ -937,8 +937,8 @@ Flatpak 以 `bubblewrap`（简称 bwrap）为底层沙箱基础，利用其 `bin
   代理 socket**，通过 `bind mount` 挂载到沙箱内的默认 D-Bus socket 路径（如沙箱内的
   `/var/run/dbus/system_bus_socket`）。
 
-  此时沙箱应用感知到的 “D-Bus 总线”，实际是 `xdg-dbus-proxy` 提供的代理接口，无法直接接触
-  宿主真实总线。
+  此时沙箱应用感知到的 「D-Bus 总线」，实际是 `xdg-dbus-proxy` 提供的代理接口，无法直接接
+  触宿主真实总线。
 
 ##### 4.7.2.2 上层规则过滤：xdg-dbus-proxy 的 "白名单校验"
 
@@ -952,13 +952,13 @@ Flatpak 以 `bubblewrap`（简称 bwrap）为底层沙箱基础，利用其 `bin
 --deny=org.freedesktop.login1.Manager.PowerOff  # 拒绝调用关机方法
 ```
 
-这些规则可精确到 “服务名 + 接口 + 方法 + 对象路径”，弥补 D-Bus 原生配置在沙箱场景下 “动态
-性不足、粒度较粗” 的局限。
+这些规则可精确到 「服务名 + 接口 + 方法 + 对象路径」，弥补 D-Bus 原生配置在沙箱场景下 「动
+态性不足、粒度较粗」 的局限。
 
 ##### 4.7.2.3 消息流转：代理的 "校验 - 转发" 逻辑
 
-沙箱应用无需修改代码，会默认连接沙箱内的 “代理 socket”，所有 D-Bus 消息（方法调用、信号订
-阅）均需经过 `xdg-dbus-proxy` 的校验：
+沙箱应用无需修改代码，会默认连接沙箱内的 「代理 socket」，所有 D-Bus 消息（方法调用、信号
+订阅）均需经过 `xdg-dbus-proxy` 的校验：
 
 - 若目标服务 / 方法在白名单内（如 `org.freedesktop.portal.FileChooser.OpenFile`），代理会
   将消息转发至宿主 D-Bus 总线，并把返回结果回传应用；

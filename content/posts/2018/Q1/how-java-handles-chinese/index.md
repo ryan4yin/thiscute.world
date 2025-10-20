@@ -176,8 +176,8 @@ python3 在字符串表示上，做了大刀阔斧的改革，python3 的 len(st
 encode 为特定字符集的 byte 类型。
 
 > Encoding pertains mostly to files and transfers. Once loaded into a Python string, text
-> in memory has no notion of an “encoding,” and is simply a sequence of Unicode characters
-> (a.k.a. code points) stored generically.
+> in memory has no notion of an 「encoding,」 and is simply a sequence of Unicode
+> characters (a.k.a. code points) stored generically.
 
                                                                                     -- Learning Python 5th
 

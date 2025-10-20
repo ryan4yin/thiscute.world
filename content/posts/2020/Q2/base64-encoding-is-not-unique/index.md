@@ -170,7 +170,7 @@ Out[3]: 8
 
 ## 参考
 
-- [Remove trailing “=” when base64 encoding](https://stackoverflow.com/questions/4492426/remove-trailing-when-base64-encoding)
+- [Remove trailing 「=」 when base64 encoding](https://stackoverflow.com/questions/4492426/remove-trailing-when-base64-encoding)
 - [RFC4648 - base64 定义][RFC4648 - base64 定义]
 - [Difference between RFC 3548 and RFC 4648](https://stackoverflow.com/questions/37893325/difference-betweeen-rfc-3548-and-rfc-4648)
 - [Base64 隐写原理和提取脚本](https://www.jianshu.com/p/f1f4e10ad10e)
