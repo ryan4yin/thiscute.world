@@ -69,7 +69,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 
 ## 文章系列导航
 
-### 📋 [系统启动与安全框架](/posts/2025/Q4/linux-desktop-1-boot-security/)
+### 📋 [Linux 桌面系统故障排查指南（一） - 系统启动与安全框架](/posts/2025/Q4/linux-desktop-1-boot-security/)
 
 **涵盖内容**：
 
@@ -80,7 +80,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **启动故障排查**：系统化的问题诊断流程，从固件到用户空间的逐层排查方法
 - **启动性能优化**：硬件、内核、服务层面的优化策略，包括 UKI 使用和启动时间分析
 
-### ⚙️ [systemd 全家桶与服务管理](/posts/2025/Q4/linux-desktop-2-systemd-services/)
+### ⚙️ [Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理](/posts/2025/Q4/linux-desktop-2-systemd-services/)
 
 **涵盖内容**：
 
@@ -91,7 +91,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **D-Bus 系统总线**：进程间通信机制、权限管控、Flatpak 沙盒环境下的 D-Bus 代理过滤
 - **服务管理最佳实践**：服务配置优化、依赖关系管理、性能调优
 
-### 🖥️ [桌面会话与图形渲染](/posts/2025/Q4/linux-desktop-3-session-graphics/)
+### 🖥️ [Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染](/posts/2025/Q4/linux-desktop-3-session-graphics/)
 
 **涵盖内容**：
 
@@ -104,7 +104,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **应用兼容性**：Wayland/XWayland 兼容性、沙盒化应用（Flatpak）、性能调优
 - **会话故障排查**：登录失败、权限错误、图形界面异常、渲染问题的系统化诊断
 
-### 🎵 [多媒体处理与中文支持](/posts/2025/Q4/linux-desktop-4-multimedia-input/)
+### 🎵 [Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持](/posts/2025/Q4/linux-desktop-4-multimedia-input/)
 
 **涵盖内容**：
 
@@ -115,19 +115,19 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **中文输入法**：fcitx5 框架、Wayland text-input 协议、XWayland 兼容性、混合环境管理
 - **故障排查与优化**：音频延迟优化、输入法无响应、字体显示问题、屏幕共享故障
 
-### 🌐 [网络架构与管理](/posts/2025/Q4/linux-desktop-5-network/)
+### 🌐 [Linux 桌面系统故障排查指南（五） - 网络](/posts/2025/Q4/linux-desktop-5-network/)
 
 **涵盖内容**：
 
-- **网络架构深度解析**：从硬件驱动到应用层的完整协议栈，systemd-networkd 和 iwd 的现代网络
-  管理
+- **网络连接与管理**：从硬件驱动到应用层的完整协议栈，systemd-networkd 和 iwd 的现代网络管
+  理
 - **IPv4/IPv6 双栈技术**：地址分配机制、路由表管理、协议优先级配置、双栈验证方法
 - **防火墙与网络安全**：nftables 现代防火墙、NAT 配置、端口转发、流量控制规则
 - **虚拟网络技术**：TUN/TAP 接口、VPN 连接管理（WireGuard）、桥接网络、容器网络
 - **网络性能优化**：内核参数调优、TCP 拥塞控制（BBR）、连接跟踪优化、网络监控分析
 - **高级网络配置**：多网卡绑定、VLAN 配置、网络命名空间、网络故障诊断
 
-### 🔄 [系统关机与电源管理](/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/)
+### 🔄 [Linux 桌面系统故障排查指南（六） - 系统关机与电源管理](/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/)
 
 **涵盖内容**：
 
