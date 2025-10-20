@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染 - This Cute World</title><meta name=Description content="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"><meta property="og:url" content="https://thiscute.world/posts/linux-desktop-3-session-graphics/"><meta property="og:site_name" content="This Cute World"><meta property="og:title" content="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"><meta property="og:description" content="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-10-19T10:19:33+08:00"><meta property="article:modified_time" content="2025-10-19T10:19:33+08:00"><meta property="article:tag" content="Linux"><meta property="article:tag" content="Desktop"><meta property="article:tag" content="Graphics"><meta property="article:tag" content="Wayland"><meta property="article:tag" content="X11"><meta property="og:image" content="https://thiscute.world/posts/linux-desktop-3-session-graphics/featured-image.webp"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-5-network/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-4-multimedia-input/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-2-systemd-services/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-1-boot-security/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-explained/"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/linux-desktop-3-session-graphics/featured-image.webp"><meta name=twitter:title content="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"><meta name=twitter:description content="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/linux-desktop-3-session-graphics/><link rel=prev href=https://thiscute.world/posts/linux-desktop-2-systemd-services/><link rel=next href=https://thiscute.world/posts/linux-desktop-4-multimedia-input/><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/linux-desktop-3-session-graphics/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/linux-desktop-3-session-graphics/featured-image.webp","width":2e3,"height":1115}],"genre":"posts","keywords":["Linux","Desktop","Graphics","Wayland","X11"],"wordcount":6033,"url":"https://thiscute.world/posts/linux-desktop-3-session-graphics/","datePublished":"2025-10-19T10:19:33+08:00","dateModified":"2025-10-19T10:19:33+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":[{"@type":"Person","name":"於清樂","url":null}],"description":"详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"}</script></head><body data-instant-intensity=viewport class="tw-flex tw-min-h-screen tw-flex-col"><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染 - This Cute World</title><meta name=Description content="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"><meta property="og:url" content="https://thiscute.world/posts/linux-desktop-3-session-graphics/"><meta property="og:site_name" content="This Cute World"><meta property="og:title" content="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"><meta property="og:description" content="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-10-19T10:19:33+08:00"><meta property="article:modified_time" content="2025-10-19T10:19:33+08:00"><meta property="article:tag" content="Linux"><meta property="article:tag" content="Desktop"><meta property="article:tag" content="Graphics"><meta property="article:tag" content="Wayland"><meta property="article:tag" content="X11"><meta property="og:image" content="https://thiscute.world/posts/linux-desktop-3-session-graphics/featured-image.webp"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-5-network/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-4-multimedia-input/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-2-systemd-services/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-1-boot-security/"><meta property="og:see_also" content="https://thiscute.world/posts/linux-desktop-explained/"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://thiscute.world/posts/linux-desktop-3-session-graphics/featured-image.webp"><meta name=twitter:title content="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"><meta name=twitter:description content="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"><meta name=twitter:site content="@ryan4yin"><meta name=application-name content="This Cute World"><meta name=apple-mobile-web-app-title content="This Cute World"><meta name=theme-color content="#f8f8f8"><meta name=twitter:creator content="@ryan4yin"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thiscute.world/posts/linux-desktop-3-session-graphics/><link rel=prev href=https://thiscute.world/posts/linux-desktop-2-systemd-services/><link rel=next href=https://thiscute.world/posts/linux-desktop-4-multimedia-input/><link rel=stylesheet href=/css/main.min.css><link rel=stylesheet href=/css/style.min.css><meta name=google-site-verification content="E8bpp1lVVlb9YnSJcUzPL1dLAG17Nl_sp5Ru9a8tUDQ"><meta name=baidu-site-verification content="code-ZZtDruAnX1"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://thiscute.world/posts/linux-desktop-3-session-graphics/"},"image":[{"@type":"ImageObject","url":"https://thiscute.world/posts/linux-desktop-3-session-graphics/featured-image.webp","width":2e3,"height":1115}],"genre":"posts","keywords":["Linux","Desktop","Graphics","Wayland","X11"],"wordcount":8851,"url":"https://thiscute.world/posts/linux-desktop-3-session-graphics/","datePublished":"2025-10-19T10:19:33+08:00","dateModified":"2025-10-19T10:19:33+08:00","publisher":{"@type":"Organization","name":"ryan4yin","logo":"https://thiscute.world/avatar/myself.png"},"author":[{"@type":"Person","name":"於清樂","url":null}],"description":"详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查"}</script></head><body data-instant-intensity=viewport class="tw-flex tw-min-h-screen tw-flex-col"><script type=text/javascript>function setTheme(e){document.body.setAttribute("theme",e),document.documentElement.className=e,document.documentElement.style.setProperty("color-scheme",e==="light"?"light":"dark"),e==="light"?document.documentElement.classList.remove("tw-dark"):document.documentElement.classList.add("tw-dark"),window.theme=e,window.isDark=window.theme!=="light"}function saveTheme(e){window.localStorage&&localStorage.setItem("theme",e)}function getMeta(e){const t=document.getElementsByTagName("meta");for(let n=0;n<t.length;n++)if(t[n].getAttribute("name")===e)return t[n];return""}if(window.localStorage&&localStorage.getItem("theme")){let e=localStorage.getItem("theme");e==="light"||e==="dark"?setTheme(e):setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}else"auto"==="light"||"auto"==="dark"?(setTheme("auto"),saveTheme("auto")):(saveTheme("auto"),setTheme(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));let metaColors={light:"#f8f8f8",dark:"#161b22"};getMeta("theme-color").content=metaColors[document.body.getAttribute("theme")],window.switchThemeEventSet=new Set</script><div id=back-to-top></div><div id=mask></div><header class="desktop print:!tw-hidden" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="This Cute World"><span id=desktop-header-typeit class=typeit></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/statistics/>阅读排行 </a><a class=menu-item href=/series/>系列 </a><a class=menu-item href=/categories/tech/>技术 </a><a class=menu-item href=/categories/life/>生活 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/friends/>朋友们 </a><a class=menu-item href=/now/>此刻 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><button class="menu-item language" aria-label=选择语言>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
 <select class=language-select aria-label=选择语言 id=language-select-desktop onchange="location=this.value"><option value=/posts/linux-desktop-3-session-graphics/ selected>Simplified Chinese</option></select>
 </button><span class="menu-item search" id=search-desktop>
 <input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
@@ -21,11 +21,11 @@
 取消</button></div><a class=menu-item href=/statistics/ title>阅读排行</a><a class=menu-item href=/series/ title>系列</a><a class=menu-item href=/categories/tech/ title>技术</a><a class=menu-item href=/categories/life/ title>生活</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/friends/ title>朋友们</a><a class=menu-item href=/now/ title>此刻</a><a class=menu-item href=/about/ title>关于</a><button class="menu-item theme-switch tw-w-full" aria-label=切换主题>
 <svg class="icon" viewBox="0 0 512 512"><path d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705.0 184 82.311 184 184 0 101.705-82.311 184-184 184z"/></svg>
 </button><button class="menu-item tw-w-full" title>Simplified Chinese<svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
-<select class=language-select title onchange="location=this.value"><option value=/posts/linux-desktop-3-session-graphics/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class="tw-mx-4 tw-flex-1"><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#用户会话从登录到桌面>用户会话：从登录到桌面</a><ul><li><a href=#11-登录流程>1.1 登录流程</a></li><li><a href=#12-会话管理>1.2 会话管理</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li></ul></li><li><a href=#wayland-图形架构>Wayland 图形架构</a><ul><li><a href=#21-架构对比x11-vs-wayland>2.1 架构对比：X11 vs Wayland</a><ul><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li></ul></li><li><a href=#22-wayland-协议与通信>2.2 Wayland 协议与通信</a></li><li><a href=#23-合成器架构>2.3 合成器架构</a></li></ul></li><li><a href=#图形驱动与渲染>图形驱动与渲染</a><ul><li><a href=#31-图形栈架构>3.1 图形栈架构</a></li><li><a href=#32-渲染管线>3.2 渲染管线</a></li><li><a href=#33-驱动信息查询>3.3 驱动信息查询</a></li><li><a href=#34-渲染器选择与优化>3.4 渲染器选择与优化</a></li></ul></li><li><a href=#应用程序与工具包>应用程序与工具包</a><ul><li><a href=#41-应用启动流程>4.1 应用启动流程</a></li><li><a href=#42-工具包支持>4.2 工具包支持</a></li></ul></li><li><a href=#故障排查>故障排查</a><ul><li><a href=#51-会话管理问题>5.1 会话管理问题</a></li><li><a href=#52-图形渲染问题>5.2 图形渲染问题</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#快速参考>快速参考</a><ul><li><a href=#常用会话管理命令>常用会话管理命令</a></li><li><a href=#常用图形调试命令>常用图形调试命令</a></li><li><a href=#重要配置文件位置>重要配置文件位置</a></li></ul></li></ul></nav></div></div><dialog id=toc-dialog class="tw-max-w-full tw-w-full tw-max-h-full tw-h-full tw-ml-16"><div class="toc tw-mx-4 tw-max-w-full"><h2 class="tw-mx-0 tw-my-6 tw-uppercase tw-text-2xl">目录</h2><div class=toc-content><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#用户会话从登录到桌面>用户会话：从登录到桌面</a><ul><li><a href=#11-登录流程>1.1 登录流程</a></li><li><a href=#12-会话管理>1.2 会话管理</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li></ul></li><li><a href=#wayland-图形架构>Wayland 图形架构</a><ul><li><a href=#21-架构对比x11-vs-wayland>2.1 架构对比：X11 vs Wayland</a><ul><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li></ul></li><li><a href=#22-wayland-协议与通信>2.2 Wayland 协议与通信</a></li><li><a href=#23-合成器架构>2.3 合成器架构</a></li></ul></li><li><a href=#图形驱动与渲染>图形驱动与渲染</a><ul><li><a href=#31-图形栈架构>3.1 图形栈架构</a></li><li><a href=#32-渲染管线>3.2 渲染管线</a></li><li><a href=#33-驱动信息查询>3.3 驱动信息查询</a></li><li><a href=#34-渲染器选择与优化>3.4 渲染器选择与优化</a></li></ul></li><li><a href=#应用程序与工具包>应用程序与工具包</a><ul><li><a href=#41-应用启动流程>4.1 应用启动流程</a></li><li><a href=#42-工具包支持>4.2 工具包支持</a></li></ul></li><li><a href=#故障排查>故障排查</a><ul><li><a href=#51-会话管理问题>5.1 会话管理问题</a></li><li><a href=#52-图形渲染问题>5.2 图形渲染问题</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#快速参考>快速参考</a><ul><li><a href=#常用会话管理命令>常用会话管理命令</a></li><li><a href=#常用图形调试命令>常用图形调试命令</a></li><li><a href=#重要配置文件位置>重要配置文件位置</a></li></ul></li></ul></nav></div></div></dialog><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2025-10-19 data-pagefind-body>Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><span class=screen-reader-text></span><a href=https://thiscute.world/authors/ryan4yin/><img class="tw-inline-block tw-max-h-4 tw-rounded-full tw-translate-y-[-2px] tw-mr-1" src=/avatar/myself.webp alt="於清樂 avatar" height=16 width=16>於清樂</a></span>
-</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><svg class="icon" viewBox="0 0 512 512"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>Tech</a></span>&nbsp;<span class=post-category>和</span>&nbsp;<span class=post-series>系列 <a href=/series/linux-%E6%A1%8C%E9%9D%A2%E7%B3%BB%E7%BB%9F/><svg class="icon" viewBox="0 0 512 512"><path d="M464 32H48C21.49 32 0 53.49.0 80v352c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm-6 4e2H54a6 6 0 01-6-6V86a6 6 0 016-6h404a6 6 0 016 6v340a6 6 0 01-6 6zm-42-92v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm-252 12c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36z"/></svg>Linux 桌面系统</a></span></div><div class=post-meta-line><svg class="icon" viewBox="0 0 448 512"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;<time datetime=2025-10-19>2025-10-19</time>&nbsp;<svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime=2025-10-19>2025-10-19</time>&nbsp;<svg class="icon" viewBox="0 0 512 512"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 6033 字&nbsp;
-<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5.0-2e2-89.5-2e2-2e2S145.5 56 256 56s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2zm61.8-104.4-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6.0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 27 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/linux-desktop-3-session-graphics/featured-image.webp alt="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查" height=1115 width=2000></div><div class="details series-nav open"><div class="details-summary series-title"><span>系列 - Linux 桌面系统</span>
+<select class=language-select title onchange="location=this.value"><option value=/posts/linux-desktop-3-session-graphics/ selected>Simplified Chinese</option></select></button></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class="tw-mx-4 tw-flex-1"><div class="toc print:!tw-hidden" id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#用户会话从登录到桌面>用户会话：从登录到桌面</a><ul><li><a href=#11-登录流程>1.1 登录流程</a></li><li><a href=#12-会话管理>1.2 会话管理</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作><strong>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</strong></a></li></ul></li></ul></li></ul></li><li><a href=#linux-图形系统基础概念>Linux 图形系统基础概念</a><ul><li><a href=#21-tty-与-vtvirtual-terminal>2.1 TTY 与 VT（Virtual Terminal）</a></li><li><a href=#22-内核显示模式切换>2.2 内核显示模式切换</a></li><li><a href=#23-输入设备处理>2.3 输入设备处理</a></li></ul></li><li><a href=#第三部分-图形驱动与渲染栈>第三部分 图形驱动与渲染栈</a><ul><li><a href=#31-图形栈架构>3.1 图形栈架构</a></li><li><a href=#32-渲染管线>3.2 渲染管线</a></li></ul></li><li><a href=#wayland-图形架构>Wayland 图形架构</a><ul><li><a href=#41-架构对比x11-vs-wayland>4.1 架构对比：X11 vs Wayland</a><ul><li><a href=#tty-到图形界面的切换机制>TTY 到图形界面的切换机制</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li></ul></li><li><a href=#42-wayland-协议与通信>4.2 Wayland 协议与通信</a></li><li><a href=#43-合成器架构>4.3 合成器架构</a></li></ul></li><li><a href=#应用程序与工具包>应用程序与工具包</a><ul><li><a href=#51-应用启动流程>5.1 应用启动流程</a></li><li><a href=#52-工具包支持>5.2 工具包支持</a></li></ul></li><li><a href=#图形栈调试与优化>图形栈调试与优化</a><ul><li><a href=#61-图形驱动信息查询>6.1 图形驱动信息查询</a><ul><li><a href=#1-判断图形会话-pts-驱动>1. 判断图形会话 (pts) 驱动</a></li><li><a href=#2-判断文本控制台-tty-驱动>2. 判断文本控制台 (tty) 驱动</a></li><li><a href=#3-其他驱动信息查询>3. 其他驱动信息查询</a></li></ul></li><li><a href=#62-渲染器选择与参数优化>6.2 渲染器选择与参数优化</a><ul><li><a href=#gtk-应用渲染器选择>GTK 应用渲染器选择</a></li><li><a href=#qt-应用渲染器选择>Qt 应用渲染器选择</a></li><li><a href=#mesa-驱动优化参数>Mesa 驱动优化参数</a></li></ul></li><li><a href=#63-调试-wayland-通信>6.3 调试 Wayland 通信</a></li></ul></li><li><a href=#故障排查>故障排查</a><ul><li><a href=#71-会话管理问题>7.1 会话管理问题</a></li><li><a href=#72-图形渲染问题>7.2 图形渲染问题</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#快速参考>快速参考</a><ul><li><a href=#常用会话管理命令>常用会话管理命令</a></li><li><a href=#常用图形调试命令>常用图形调试命令</a></li><li><a href=#重要配置文件位置>重要配置文件位置</a></li></ul></li></ul></nav></div></div><dialog id=toc-dialog class="tw-max-w-full tw-w-full tw-max-h-full tw-h-full tw-ml-16"><div class="toc tw-mx-4 tw-max-w-full"><h2 class="tw-mx-0 tw-my-6 tw-uppercase tw-text-2xl">目录</h2><div class=toc-content><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#用户会话从登录到桌面>用户会话：从登录到桌面</a><ul><li><a href=#11-登录流程>1.1 登录流程</a></li><li><a href=#12-会话管理>1.2 会话管理</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作><strong>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</strong></a></li></ul></li></ul></li></ul></li><li><a href=#linux-图形系统基础概念>Linux 图形系统基础概念</a><ul><li><a href=#21-tty-与-vtvirtual-terminal>2.1 TTY 与 VT（Virtual Terminal）</a></li><li><a href=#22-内核显示模式切换>2.2 内核显示模式切换</a></li><li><a href=#23-输入设备处理>2.3 输入设备处理</a></li></ul></li><li><a href=#第三部分-图形驱动与渲染栈>第三部分 图形驱动与渲染栈</a><ul><li><a href=#31-图形栈架构>3.1 图形栈架构</a></li><li><a href=#32-渲染管线>3.2 渲染管线</a></li></ul></li><li><a href=#wayland-图形架构>Wayland 图形架构</a><ul><li><a href=#41-架构对比x11-vs-wayland>4.1 架构对比：X11 vs Wayland</a><ul><li><a href=#tty-到图形界面的切换机制>TTY 到图形界面的切换机制</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li></ul></li><li><a href=#42-wayland-协议与通信>4.2 Wayland 协议与通信</a></li><li><a href=#43-合成器架构>4.3 合成器架构</a></li></ul></li><li><a href=#应用程序与工具包>应用程序与工具包</a><ul><li><a href=#51-应用启动流程>5.1 应用启动流程</a></li><li><a href=#52-工具包支持>5.2 工具包支持</a></li></ul></li><li><a href=#图形栈调试与优化>图形栈调试与优化</a><ul><li><a href=#61-图形驱动信息查询>6.1 图形驱动信息查询</a><ul><li><a href=#1-判断图形会话-pts-驱动>1. 判断图形会话 (pts) 驱动</a></li><li><a href=#2-判断文本控制台-tty-驱动>2. 判断文本控制台 (tty) 驱动</a></li><li><a href=#3-其他驱动信息查询>3. 其他驱动信息查询</a></li></ul></li><li><a href=#62-渲染器选择与参数优化>6.2 渲染器选择与参数优化</a><ul><li><a href=#gtk-应用渲染器选择>GTK 应用渲染器选择</a></li><li><a href=#qt-应用渲染器选择>Qt 应用渲染器选择</a></li><li><a href=#mesa-驱动优化参数>Mesa 驱动优化参数</a></li></ul></li><li><a href=#63-调试-wayland-通信>6.3 调试 Wayland 通信</a></li></ul></li><li><a href=#故障排查>故障排查</a><ul><li><a href=#71-会话管理问题>7.1 会话管理问题</a></li><li><a href=#72-图形渲染问题>7.2 图形渲染问题</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#快速参考>快速参考</a><ul><li><a href=#常用会话管理命令>常用会话管理命令</a></li><li><a href=#常用图形调试命令>常用图形调试命令</a></li><li><a href=#重要配置文件位置>重要配置文件位置</a></li></ul></li></ul></nav></div></div></dialog><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class=single-title data-pagefind-meta=date:2025-10-19 data-pagefind-body>Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染</h1><div class=post-meta><div class=post-meta-line><span class=post-author><span class=author><span class=screen-reader-text></span><a href=https://thiscute.world/authors/ryan4yin/><img class="tw-inline-block tw-max-h-4 tw-rounded-full tw-translate-y-[-2px] tw-mr-1" src=/avatar/myself.webp alt="於清樂 avatar" height=16 width=16>於清樂</a></span>
+</span>&nbsp;<span class=post-category>收录于 </span>&nbsp;<span class=post-category>类别 <a href=/categories/tech/><svg class="icon" viewBox="0 0 512 512"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>Tech</a></span>&nbsp;<span class=post-category>和</span>&nbsp;<span class=post-series>系列 <a href=/series/linux-%E6%A1%8C%E9%9D%A2%E7%B3%BB%E7%BB%9F/><svg class="icon" viewBox="0 0 512 512"><path d="M464 32H48C21.49 32 0 53.49.0 80v352c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm-6 4e2H54a6 6 0 01-6-6V86a6 6 0 016-6h404a6 6 0 016 6v340a6 6 0 01-6 6zm-42-92v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627.0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h2e2c6.627.0 12 5.373 12 12zm-252 12c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36z"/></svg>Linux 桌面系统</a></span></div><div class=post-meta-line><svg class="icon" viewBox="0 0 448 512"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;<time datetime=2025-10-19>2025-10-19</time>&nbsp;<svg class="icon" viewBox="0 0 576 512"><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1.0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7.0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174 402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7-43.2-43.2c-4.1-4.1-10.8-4.1-14.8.0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime=2025-10-19>2025-10-19</time>&nbsp;<svg class="icon" viewBox="0 0 512 512"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 8851 字&nbsp;
+<svg class="icon" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5.0-2e2-89.5-2e2-2e2S145.5 56 256 56s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2zm61.8-104.4-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6.0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 39 分钟&nbsp;</div></div><div class=featured-image><img loading=eager src=/posts/linux-desktop-3-session-graphics/featured-image.webp alt="详解 Linux 桌面会话管理、图形渲染架构、Wayland 与 X11 协议，以及显示驱动和合成器的故障排查" height=1115 width=2000></div><div class="details series-nav open"><div class="details-summary series-title"><span>系列 - Linux 桌面系统</span>
 <span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content series-content"><nav><ul><li><a href=/posts/linux-desktop-6-shutdown-troubleshooting/>Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</a></li><li><a href=/posts/linux-desktop-5-network/>Linux 桌面系统故障排查指南（五） - 网络</a></li><li><a href=/posts/linux-desktop-4-multimedia-input/>Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持</a></li><li><span class=active>Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染</span></li><li><a href=/posts/linux-desktop-2-systemd-services/>Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理</a></li><li><a href=/posts/linux-desktop-1-boot-security/>Linux 桌面系统故障排查指南（一） - 系统启动与安全框架</a></li><li><a href=/posts/linux-desktop-explained/>Linux 桌面系统故障排查指南（零） - 组件概览</a></li></ul></nav></div></div><div class="details toc print:!tw-block" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#用户会话从登录到桌面>用户会话：从登录到桌面</a><ul><li><a href=#11-登录流程>1.1 登录流程</a></li><li><a href=#12-会话管理>1.2 会话管理</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</a></li></ul></li></ul></li></ul></li><li><a href=#wayland-图形架构>Wayland 图形架构</a><ul><li><a href=#21-架构对比x11-vs-wayland>2.1 架构对比：X11 vs Wayland</a><ul><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li></ul></li><li><a href=#22-wayland-协议与通信>2.2 Wayland 协议与通信</a></li><li><a href=#23-合成器架构>2.3 合成器架构</a></li></ul></li><li><a href=#图形驱动与渲染>图形驱动与渲染</a><ul><li><a href=#31-图形栈架构>3.1 图形栈架构</a></li><li><a href=#32-渲染管线>3.2 渲染管线</a></li><li><a href=#33-驱动信息查询>3.3 驱动信息查询</a></li><li><a href=#34-渲染器选择与优化>3.4 渲染器选择与优化</a></li></ul></li><li><a href=#应用程序与工具包>应用程序与工具包</a><ul><li><a href=#41-应用启动流程>4.1 应用启动流程</a></li><li><a href=#42-工具包支持>4.2 工具包支持</a></li></ul></li><li><a href=#故障排查>故障排查</a><ul><li><a href=#51-会话管理问题>5.1 会话管理问题</a></li><li><a href=#52-图形渲染问题>5.2 图形渲染问题</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#快速参考>快速参考</a><ul><li><a href=#常用会话管理命令>常用会话管理命令</a></li><li><a href=#常用图形调试命令>常用图形调试命令</a></li><li><a href=#重要配置文件位置>重要配置文件位置</a></li></ul></li></ul></nav></div></div><div class=content id=content data-pagefind-body><blockquote><p><strong>AI 创作声明</strong>：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。</p></blockquote><h2 id=前言 class=headerLink><a href=#%e5%89%8d%e8%a8%80 class=header-mark></a>前言</h2><p>Systemd 及各项系统服务启动后会进入登录页面，从这一捕开始的 Linux 桌面使用过程涉及会话管理、窗口合成、图形渲染和输入处理等多个组件。</p><p>本文将探讨 Linux 桌面系统的图形架构，从用户登录到应用渲染的完整流程，包括 Wayland 和 X11
+<span class=details-icon><svg class="icon" viewBox="0 0 256 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9.0l-22.6-22.6c-9.4-9.4-9.4-24.6.0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6.0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9.0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#用户会话从登录到桌面>用户会话：从登录到桌面</a><ul><li><a href=#11-登录流程>1.1 登录流程</a></li><li><a href=#12-会话管理>1.2 会话管理</a><ul><li><a href=#seat座席概念>seat（座席）概念</a></li><li><a href=#常用命令><strong>常用命令</strong></a></li><li><a href=#设备权限问题排查><strong>设备权限问题排查</strong></a><ul><li><a href=#wayland-compositor-启动但无法打开><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></a></li><li><a href=#意外挂起关机电源键睡眠按钮不按用户设置工作><strong>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</strong></a></li></ul></li></ul></li></ul></li><li><a href=#linux-图形系统基础概念>Linux 图形系统基础概念</a><ul><li><a href=#21-tty-与-vtvirtual-terminal>2.1 TTY 与 VT（Virtual Terminal）</a></li><li><a href=#22-内核显示模式切换>2.2 内核显示模式切换</a></li><li><a href=#23-输入设备处理>2.3 输入设备处理</a></li></ul></li><li><a href=#第三部分-图形驱动与渲染栈>第三部分 图形驱动与渲染栈</a><ul><li><a href=#31-图形栈架构>3.1 图形栈架构</a></li><li><a href=#32-渲染管线>3.2 渲染管线</a></li></ul></li><li><a href=#wayland-图形架构>Wayland 图形架构</a><ul><li><a href=#41-架构对比x11-vs-wayland>4.1 架构对比：X11 vs Wayland</a><ul><li><a href=#tty-到图形界面的切换机制>TTY 到图形界面的切换机制</a></li><li><a href=#架构差异带来的实际影响>架构差异带来的实际影响</a></li></ul></li><li><a href=#42-wayland-协议与通信>4.2 Wayland 协议与通信</a></li><li><a href=#43-合成器架构>4.3 合成器架构</a></li></ul></li><li><a href=#应用程序与工具包>应用程序与工具包</a><ul><li><a href=#51-应用启动流程>5.1 应用启动流程</a></li><li><a href=#52-工具包支持>5.2 工具包支持</a></li></ul></li><li><a href=#图形栈调试与优化>图形栈调试与优化</a><ul><li><a href=#61-图形驱动信息查询>6.1 图形驱动信息查询</a><ul><li><a href=#1-判断图形会话-pts-驱动>1. 判断图形会话 (pts) 驱动</a></li><li><a href=#2-判断文本控制台-tty-驱动>2. 判断文本控制台 (tty) 驱动</a></li><li><a href=#3-其他驱动信息查询>3. 其他驱动信息查询</a></li></ul></li><li><a href=#62-渲染器选择与参数优化>6.2 渲染器选择与参数优化</a><ul><li><a href=#gtk-应用渲染器选择>GTK 应用渲染器选择</a></li><li><a href=#qt-应用渲染器选择>Qt 应用渲染器选择</a></li><li><a href=#mesa-驱动优化参数>Mesa 驱动优化参数</a></li></ul></li><li><a href=#63-调试-wayland-通信>6.3 调试 Wayland 通信</a></li></ul></li><li><a href=#故障排查>故障排查</a><ul><li><a href=#71-会话管理问题>7.1 会话管理问题</a></li><li><a href=#72-图形渲染问题>7.2 图形渲染问题</a></li></ul></li><li><a href=#总结>总结</a></li><li><a href=#快速参考>快速参考</a><ul><li><a href=#常用会话管理命令>常用会话管理命令</a></li><li><a href=#常用图形调试命令>常用图形调试命令</a></li><li><a href=#重要配置文件位置>重要配置文件位置</a></li></ul></li></ul></nav></div></div><div class=content id=content data-pagefind-body><blockquote><p><strong>AI 创作声明</strong>：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。</p></blockquote><hr><h2 id=前言 class=headerLink><a href=#%e5%89%8d%e8%a8%80 class=header-mark></a>前言</h2><p>Systemd 及各项系统服务启动后会进入登录页面，从这一刻开始的 Linux 桌面使用过程涉及会话管理、窗口合成、图形渲染和输入处理等多个组件。</p><p>本文将探讨 Linux 桌面系统的图形架构，从用户登录到应用渲染的完整流程，包括 Wayland 和 X11
 的区别，图形驱动的工作原理，以及如何诊断和解决各种图形问题。</p><hr><h2 id=用户会话从登录到桌面 class=headerLink><a href=#%e7%94%a8%e6%88%b7%e4%bc%9a%e8%af%9d%e4%bb%8e%e7%99%bb%e5%bd%95%e5%88%b0%e6%a1%8c%e9%9d%a2 class=header-mark></a>用户会话：从登录到桌面</h2><p>用户从登录到进入桌面环境的过程涉及多个组件的协调：display manager 负责认证，systemd-logind
 管理会话，window compositor 提供图形环境。这个阶段的故障往往表现为登录失败、权限错误或图形界面异常。</p><h3 id=11-登录流程 class=headerLink><a href=#11-%e7%99%bb%e5%bd%95%e6%b5%81%e7%a8%8b class=header-mark></a>1.1 登录流程</h3><p>典型的图形登录流程：</p><ol><li><strong>显示管理器启动</strong>：greetd / GDM 等显示管理器显示登录界面</li><li><strong>用户认证</strong>：通过 PAM 验证用户名 / 密码</li><li><strong>会话创建</strong>：Display Manager 请求 logind 创建 session</li><li><strong>用户服务启动</strong>：systemd 用户实例启动，运行用户配置的服务</li><li><strong>合成器启动</strong>：获得环境变量和设备访问权限</li></ol><p><strong>关键观察点</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
@@ -76,15 +76,14 @@ tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看显示管理器日志</span>
 </span></span><span class=line><span class=cl>journalctl -u greetd
 </span></span><span class=line><span class=cl>journalctl -b <span class=nv>_COMM</span><span class=o>=</span>greetd
-</span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 检查会话状态</span>
 </span></span><span class=line><span class=cl>loginctl list-sessions
 </span></span><span class=line><span class=cl>loginctl show-session &lt;id&gt; --property<span class=o>=</span>Name,UID,State
-</span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 查看用户服务日志</span>
-</span></span><span class=line><span class=cl>journalctl --user -b</span></span></code></pre></div><p><strong>故障排查示例</strong>：用户登录后合成器未启动</p><ol><li>检查用户服务日志：<code>journalctl --user -u hyprland.service</code></li><li>验证会话状态：<code>loginctl show-session &lt;id> -p Active -p State</code></li><li>查看 PAM 认证日志：<code>journalctl -t login</code></li></ol><h3 id=12-会话管理 class=headerLink><a href=#12-%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86 class=header-mark></a>1.2 会话管理</h3><p>systemd-logind 是连接登录、会话、设备权限和电源管理的核心服务。它通过 D-Bus 暴露 API，管理用户会话并分配设备 ACL。</p><p><strong>核心职责</strong>：</p><ul><li><strong>会话管理</strong>：创建和维护用户会话，映射 session -> UID -> TTY / seat</li><li><strong>设备访问</strong>：基于 udev 标签分配设备 ACL 给当前会话</li><li><strong>电源管理</strong>：处理电源键事件，根据策略触发 suspend / shutdown</li><li><strong>多座席支持</strong>：支持 seat 概念，管理多用户场景</li></ul><h4 id=seat座席概念 class=headerLink><a href=#seat%e5%ba%a7%e5%b8%ad%e6%a6%82%e5%bf%b5 class=header-mark></a>seat（座席）概念</h4><blockquote><p><a href=https://www.freedesktop.org/wiki/Software/systemd/multiseat/ target=_blank rel="noopener noreferrer">https://www.freedesktop.org/wiki/Software/systemd/multiseat/</a></p></blockquote><ul><li><p><strong>seat</strong>（座席）是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话（sessions）。</p></li><li><p>所有设备默认都会被分配给 <strong>seat0</strong>, 想再搞一个 seat1 实现多人图形化登录，必须通过 udev
-规则完成如下操作：</p><ol><li>必须拥有第二张显卡，这是硬性的前提！为了让 seat1 实际可用，还必须拥有第二套键鼠与声卡：</li><li>给第二块显卡写 udev 规则，打上 <code>TAG+="master-of-seat"</code> 并设置<code>ENV{ID_SEAT}="seat1"</code>；</li><li>把第二套键盘、鼠标、声卡等设备也写规则改成 <code>ENV{ID_SEAT}="seat1"</code>；</li><li>重启系统</li></ol></li><li><p>logind 会把 VT/图形会话绑定到具体 seat，从而按 seat 粒度做电源管理、设备访问控制、空闲检测等策略。</p></li><li><p><strong>远程 SSH 登录不生成也不归属任何 seat</strong>；logind 仅为其建立会话对象，seat 字段留空。因此
-seat 概念对 SSH 完全透明。</p><blockquote><p><strong>注意</strong>：虽然 SSH 会话不归属任何 seat，但这不影响大多数设备的访问。设备权限管理有两套并行的机制：传统的 Unix 权限模型（基于用户组，如 <code>video</code>、<code>audio</code>、<code>input</code> 等）和现代的 systemd-logind ACL 机制（基于 seat 和会话）。SSH 会话主要依赖前者，因此只要用户具有相应的设备权限，仍可正常访问 GPU、声卡、存储设备等硬件资源。seat 机制主要影响的是需要图形界面交互的设备（如显示器、键盘鼠标）的访问控制。</p></blockquote></li></ul><p>现代 Linux 桌面系统基本都是单用户使用，因此后续讨论默认聚焦单 seat 场景。</p><h4 id=常用命令 class=headerLink><a href=#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4 class=header-mark></a><strong>常用命令</strong></h4><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+</span></span><span class=line><span class=cl>journalctl --user -b</span></span></code></pre></div><p><strong>故障排查示例</strong>：用户登录后合成器未启动</p><ol><li>检查用户服务日志：<code>journalctl --user -u hyprland.service</code></li><li>验证会话状态：<code>loginctl show-session &lt;id> -p Active -p State</code></li><li>查看 PAM 认证日志：<code>journalctl -t login</code></li></ol><h3 id=12-会话管理 class=headerLink><a href=#12-%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86 class=header-mark></a>1.2 会话管理</h3><p>systemd-logind 是连接登录、会话、设备权限和电源管理的核心服务。它通过 D-Bus 暴露 API，管理用户会话并分配设备 ACL。</p><p><strong>核心职责</strong>：</p><ul><li><strong>会话管理</strong>：创建和维护用户会话，映射 session -> UID -> TTY / seat</li><li><strong>设备访问</strong>：基于 udev 标签分配设备 ACL 给当前会话</li><li><strong>电源管理</strong>：处理电源键事件，根据策略触发 suspend / shutdown</li><li><strong>多座席支持</strong>：支持 seat 概念，管理多用户场景</li></ul><h4 id=seat座席概念 class=headerLink><a href=#seat%e5%ba%a7%e5%b8%ad%e6%a6%82%e5%bf%b5 class=header-mark></a>seat（座席）概念</h4><blockquote><p><a href=https://www.freedesktop.org/wiki/Software/systemd/multiseat/ target=_blank rel="noopener noreferrer">https://www.freedesktop.org/wiki/Software/systemd/multiseat/</a></p></blockquote><ul><li><strong>seat</strong>（座席）是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话。</li><li>所有设备默认都会被分配给 <strong>seat0</strong>, 想再搞一个 seat1 实现多人图形化登录，必须通过 udev
+规则完成如下操作：<ol><li>必须拥有第二张显卡，这是硬性的前提！为了让 seat1 实际可用，还必须拥有第二套键鼠与声卡。</li><li>给第二块显卡写 udev 规则，打上 <code>TAG+="master-of-seat"</code> 并设置<code>ENV{ID_SEAT}="seat1"</code>。</li><li>把第二套键盘、鼠标、声卡等设备也写规则改成 <code>ENV{ID_SEAT}="seat1"</code>。</li><li>重启系统。</li></ol></li><li>logind 会把 VT/图形会话绑定到具体 seat，从而按 seat 粒度做电源管理、设备访问控制、空闲检测等策略。</li><li><strong>远程 SSH 登录不生成也不归属任何 seat</strong>；logind 仅为其建立会话对象，seat 字段留空。因此
+seat 概念对 SSH 完全透明。</li></ul><blockquote><p><strong>注意</strong>：虽然 SSH 会话不归属任何 seat，但这不影响大多数设备的访问。设备权限管理有两套并行的机制：传统的 Unix 权限模型（基于用户组，如 <code>video</code>、<code>audio</code>、<code>input</code> 等）和现代的
+systemd-logind ACL 机制（基于 seat 和会话）。SSH 会话主要依赖前者，因此只要用户具有相应的设备权限，仍可正常访问 GPU、声卡、存储设备等硬件资源。seat 机制主要影响的是需要图形界面交互的设备（如显示器、键盘鼠标）的访问控制。</p></blockquote><p>现代 Linux 桌面系统基本都是单用户使用，因此后续讨论默认聚焦单 seat 场景。</p><h4 id=常用命令 class=headerLink><a href=#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4 class=header-mark></a><strong>常用命令</strong></h4><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -134,16 +133,14 @@ tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 会话管理
 </span></span><span class=line><span class=cl>loginctl list-sessions                    <span class=c1># 列出所有会话</span>
 </span></span><span class=line><span class=cl>loginctl show-session &lt;id&gt; -p Name -p UID -p Seat  <span class=c1># 会话详情</span>
 </span></span><span class=line><span class=cl>loginctl terminate-session &lt;id&gt;           <span class=c1># 终止会话</span>
-</span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># seat 管理</span>
 </span></span><span class=line><span class=cl>loginctl seat-status                      <span class=c1># 查看 seat 状态</span>
 </span></span><span class=line><span class=cl>loginctl seat-status seat0                <span class=c1># 特定 seat 详情</span>
-</span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># D-Bus 接口调试</span>
 </span></span><span class=line><span class=cl>busctl --system call org.freedesktop.login1 <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  /org/freedesktop/login1 org.freedesktop.login1.Manager <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  ListSessions</span></span></code></pre></div><h4 id=设备权限问题排查 class=headerLink><a href=#%e8%ae%be%e5%a4%87%e6%9d%83%e9%99%90%e9%97%ae%e9%a2%98%e6%8e%92%e6%9f%a5 class=header-mark></a><strong>设备权限问题排查</strong></h4><h5 id=wayland-compositor-启动但无法打开 class=headerLink><a href=#wayland-compositor-%e5%90%af%e5%8a%a8%e4%bd%86%e6%97%a0%e6%b3%95%e6%89%93%e5%bc%80 class=header-mark></a><strong>Wayland compositor 启动但无法打开 <code>/dev/dri/card0</code>（GPU 权限问题）</strong></h5><p>排查：</p><ol><li>确认 <code>ls -l /dev/dri/card0</code> 的 owner/group。通常应为 <code>root:video</code>，并且当前会话应被授予设备 ACL。</li><li><code>loginctl seat-status seat0</code> 查看是否列出 <code>/dev/dri/card0</code> 并显示 ACL 给当前 session。</li><li>若无，通过 <code>udevadm info /dev/dri/card0</code> 检查 udev 是否为 GPU 设备打上了<code>TAG+="uaccess"</code> 或 <code>TAG+="seat"</code>。</li><li>查看 <code>journalctl -u systemd-logind</code>，看是否在用户登录时有关于设备分配的错误。</li><li>若服务是以 system user 的方式启动，确保 compositor 的进程是在用户 session 下，而不是
-systemd 服务或 root 启动的进程（起进程身份不同会导致权限问题）。</li></ol><h5 id=意外挂起关机电源键睡眠按钮不按用户设置工作 class=headerLink><a href=#%e6%84%8f%e5%a4%96%e6%8c%82%e8%b5%b7%e5%85%b3%e6%9c%ba%e7%94%b5%e6%ba%90%e9%94%ae%e7%9d%a1%e7%9c%a0%e6%8c%89%e9%92%ae%e4%b8%8d%e6%8c%89%e7%94%a8%e6%88%b7%e8%ae%be%e7%bd%ae%e5%b7%a5%e4%bd%9c class=header-mark></a>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</h5><ul><li><p>检查 <code>logind.conf</code>（NixOS 对应位置请用 NixOS config 来覆写）中 <code>HandlePowerKey</code>,<code>HandleLidSwitch</code> 的配置。</p></li><li><p><code>journalctl -u systemd-logind</code> 查看触发事件时间点；通常按键会以 D-Bus 事件或 ACPI 事件入日志。</p></li><li><p>若某桌面环境或应用拦截了按键，会阻止 logind 行为。可以通过 <code>busctl monitor</code> 监听<code>org.freedesktop.login1</code> 的消息，看是否收到请求。</p></li><li><p>若需要监控 logind 在登录/登出时做了什么，可以用<code>busctl monitor --system org.freedesktop.login1</code> 或：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+systemd 服务或 root 启动的进程（起进程身份不同会导致权限问题）。</li></ol><h5 id=意外挂起关机电源键睡眠按钮不按用户设置工作 class=headerLink><a href=#%e6%84%8f%e5%a4%96%e6%8c%82%e8%b5%b7%e5%85%b3%e6%9c%ba%e7%94%b5%e6%ba%90%e9%94%ae%e7%9d%a1%e7%9c%a0%e6%8c%89%e9%92%ae%e4%b8%8d%e6%8c%89%e7%94%a8%e6%88%b7%e8%ae%be%e7%bd%ae%e5%b7%a5%e4%bd%9c class=header-mark></a><strong>意外挂起/关机（电源键/睡眠按钮不按用户设置工作）</strong></h5><ul><li>检查 <code>logind.conf</code>（NixOS 对应位置请用 NixOS config 来覆写）中 <code>HandlePowerKey</code>,<code>HandleLidSwitch</code> 的配置。</li><li><code>journalctl -u systemd-logind</code> 查看触发事件时间点；通常按键会以 D-Bus 事件或 ACPI 事件入日志。</li><li>若某桌面环境或应用拦截了按键，会阻止 logind 行为。可以通过 <code>busctl monitor</code> 监听<code>org.freedesktop.login1</code> 的消息，看是否收到请求。</li><li>若需要监控 logind 在登录/登出时做了什么，可以用<code>busctl monitor --system org.freedesktop.login1</code> 或：<div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -189,10 +186,27 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl>sudo dbus-monitor --system <span class=s2>&#34;interface=&#39;org.freedesktop.login1.Manager&#39;&#34;</span></span></span></code></pre></div><p>这能观察到 session 创建、移除、seat 分配、锁屏请求等信号。</p></li></ul><h2 id=wayland-图形架构 class=headerLink><a href=#wayland-%e5%9b%be%e5%bd%a2%e6%9e%b6%e6%9e%84 class=header-mark></a>Wayland 图形架构</h2><p>Wayland 是现代 Linux 桌面系统的图形协议，采用客户端-服务器模型，合成器同时扮演显示服务器和窗口管理器的角色，直接与内核的 DRM/KMS 和输入设备交互。</p><h3 id=21-架构对比x11-vs-wayland class=headerLink><a href=#21-%e6%9e%b6%e6%9e%84%e5%af%b9%e6%af%94x11-vs-wayland class=header-mark></a>2.1 架构对比：X11 vs Wayland</h3><ul><li><p><strong>X11（传统）</strong>：在 X11 架构中，<strong>X Server</strong>（例如 <code>Xorg</code>）是显示服务器，直接与显卡驱动和输入设备交互； <strong>窗口管理器 / 桌面环境</strong>（例如 i3、GNOME）则作为 <strong>X client</strong> 连接到 X
-Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</code>（实际上调用 <code>xinit</code>）启动图形会话时，本质流程是：先启动 X Server，再在其中运行窗口管理器或桌面环境（如 <code>exec i3</code>）。<strong>Display Manager</strong>（如 GDM、SDDM）在图形登录时会自动启动 X Server，并完成用户认证、设置<code>DISPLAY</code> 等环境变量，然后再运行会话。</p></li><li><p><strong>Wayland（现代）</strong>： <strong>Wayland 合成器</strong>本身既是显示服务器，又是窗口管理器。它直接通过内核的 <strong>DRM/KMS</strong> 控制显示模式，通过 <strong>evdev/libinput</strong> 采集并分发输入事件。Wayland 客户端应用通过 <strong>Wayland socket</strong>（通常位于 <code>$XDG_RUNTIME_DIR/wayland-0</code>，但具体名字可变）与合成器通信。因为合成器本身直接控制显示和输入设备，所以它可以<strong>直接从一个已登录的 TTY 启动</strong>，作为该 TTY 的图形会话的 &ldquo;display server&rdquo;，无需先用 <code>startx</code> 启动一个独立的 X
-Server。如果使用 Display Manager 登录 Wayland 会话，则由 DM 在合适的 TTY 启动合成器并准备会话环境。</p></li></ul><h4 id=架构差异带来的实际影响 class=headerLink><a href=#%e6%9e%b6%e6%9e%84%e5%b7%ae%e5%bc%82%e5%b8%a6%e6%9d%a5%e7%9a%84%e5%ae%9e%e9%99%85%e5%bd%b1%e5%93%8d class=header-mark></a>架构差异带来的实际影响</h4><ul><li><strong>安全与权限</strong>：Wayland 把合成器放在更核心的位置（它有直接设备访问），因此确保合成器运行在正确会话（由 logind 管理）下至关重要。错误地以 root 或 system service 启动合成器会导致权限/ACL 不一致（compositor 无法访问设备或安全级别问题）。</li><li><strong>简化流程</strong>：Wayland 把多个角色合并到合成器进程，消除了 X11 时代客户端/窗口管理器与服务器的分离复杂度，令直接从 tty 启动合成器成为可行且常见的做法。</li><li><strong>兼容性</strong>：Xwayland 提供对 legacy X11 应用的兼容，合成器负责在启动时/按需启动 Xwayland
-以支持老应用。</li></ul><h3 id=22-wayland-协议与通信 class=headerLink><a href=#22-wayland-%e5%8d%8f%e8%ae%ae%e4%b8%8e%e9%80%9a%e4%bf%a1 class=header-mark></a>2.2 Wayland 协议与通信</h3><p><strong>客户端-服务器架构</strong>：</p><ul><li><strong>客户端-服务器模型</strong>：应用作为客户端，合成器作为服务器</li><li><strong>Unix 域套接字</strong>：通过 <code>$XDG_RUNTIME_DIR/wayland-0</code> 进行通信</li><li><strong>协议扩展</strong>：支持 xdg-shell、text-input 等扩展协议</li><li><strong>安全隔离</strong>：应用只能访问自己的窗口和输入事件</li></ul><p><strong>核心协议</strong>：</p><ul><li><strong>wayland-core</strong>：基础协议，定义 surface、buffer 等核心对象</li><li><strong>xdg-shell</strong>：窗口管理协议，定义窗口、对话框等</li><li><strong>wl_seat</strong>：输入设备协议，处理键盘、鼠标、触摸板</li><li><strong>wl_output</strong>：显示输出协议，管理显示器配置</li></ul><p><strong>调试 Wayland 通信</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>sudo dbus-monitor --system <span class=s2>&#34;interface=&#39;org.freedesktop.login1.Manager&#39;&#34;</span></span></span></code></pre></div>这能观察到 session 创建、移除、seat 分配、锁屏请求等信号。</li></ul><hr><h2 id=linux-图形系统基础概念 class=headerLink><a href=#linux-%e5%9b%be%e5%bd%a2%e7%b3%bb%e7%bb%9f%e5%9f%ba%e7%a1%80%e6%a6%82%e5%bf%b5 class=header-mark></a>Linux 图形系统基础概念</h2><p>在深入讨论桌面会话和图形渲染之前，需要先理解 Linux 图形系统的基础组件和概念。</p><h3 id=21-tty-与-vtvirtual-terminal class=headerLink><a href=#21-tty-%e4%b8%8e-vtvirtual-terminal class=header-mark></a>2.1 TTY 与 VT（Virtual Terminal）</h3><p><strong>TTY（Teletype）</strong> 是 Linux 系统中终端设备的抽象概念，源于早期计算机的终端设备。在现代
+Linux 系统中：</p><ul><li><p><strong>物理 TTY</strong>：通过串口连接的终端设备（多用于嵌入式或服务器调试）。</p></li><li><p><strong>虚拟 TTY</strong>：通过键盘和显示器模拟的终端，通常有 63 个（tty1-tty63）。在许多经典发行版中，tty1-tty6 默认为文本 VT，图形会话（如 X11 或 Wayland 合成器）通常在 tty7 或
+tty1/tty2 启动。</p></li><li><p><strong>伪 TTY（PTY）</strong>：用于网络连接（如 SSH）或终端模拟器（如 GNOME Terminal）的虚拟终端。</p><p><strong>VT（Virtual Terminal）</strong> 是内核中的虚拟终端子系统（<code>drivers/tty/vt/</code>），负责管理多个虚拟终端：</p><ul><li>每个 VT 对应一个 <code>struct vc_data</code> 结构体。</li><li>维护字符矩阵、光标位置、字体等信息。</li><li>支持两种显示模式：<strong>KD_TEXT</strong>（文本模式）和 <strong>KD_GRAPHICS</strong>（图形模式）。</li><li>只有前台 VT 接收键盘输入。</li></ul></li></ul><h3 id=22-内核显示模式切换 class=headerLink><a href=#22-%e5%86%85%e6%a0%b8%e6%98%be%e7%a4%ba%e6%a8%a1%e5%bc%8f%e5%88%87%e6%8d%a2 class=header-mark></a>2.2 内核显示模式切换</h3><p>Linux 内核 VT 子系统支持两种显示模式，通过 <code>KDSETMODE</code> ioctl 进行切换：</p><p><strong>KD_TEXT 模式</strong>（默认）：</p><ul><li>内核 VT 子系统负责字符到像素的转换和刷新。</li><li>使用 <strong>fbcon（framebuffer console）</strong> 将字符矩阵渲染到显存。</li><li>支持光标闪烁、滚动、字体切换等文本终端功能。</li><li>典型的黑底白字文本界面。</li></ul><p><strong>KD_GRAPHICS 模式</strong>：</p><ul><li>内核停止字符刷新，fbcon 不再更新显存。</li><li>用户空间进程（如图形服务器）获得显存控制权，直接进行像素级操作。</li><li>图形界面（X11、Wayland）的基础模式。</li></ul><p><strong>fbcon（framebuffer console）</strong> 是内核中的帧缓冲控制台驱动，负责在 KD_TEXT 模式下将字符矩阵渲染到显存：</p><ul><li>将字符矩阵转换为像素数据</li><li>管理字体渲染、光标显示、屏幕滚动</li><li>在 KD_TEXT 模式下持续刷新显存</li><li>在 KD_GRAPHICS 模式下停止工作</li></ul><p>fbcon 基于 <strong>fbdev（framebuffer device）</strong> 框架工作，通过 <code>/dev/fb0</code> 等设备文件访问显存。<code>fbcon</code> 可以在不安装专用显卡驱动（如 NVIDIA/AMD 驱动）时工作，这是因为它依赖于<strong>显卡固件提供的标准化接口</strong>：</p><ol><li><strong>VESA BIOS Extensions (VBE)</strong>：在传统 BIOS 系统上，内核的 <code>vesafb</code> 驱动通过 VBE 接口
+（由显卡 BIOS 实现）请求一个标准的显示模式（如 1024x768），并获取一个指向显存的“线性帧缓冲区”（LFB）地址。</li><li><strong>UEFI Graphics Output Protocol (GOP)</strong>：在现代 UEFI 系统上，内核的 <code>efifb</code> 驱动通过
+GOP 接口实现相同的功能。</li></ol><p><strong>关键点在于：</strong> 无论是 VBE 还是 GOP，它们都只提供最基本的功能——设置模式并返回一块内存（帧缓冲区）地址。<code>fbcon</code> 驱动（运行在 CPU 上）负责向这块内存中写入像素数据来显示文本。这种方式非常可靠（因为它是固件标准，总能工作），但<strong>不提供任何硬件加速</strong>。这就是为什么文本界面
+（KD_TEXT）总是能显示，而图形界面（KD_GRAPHICS）则必须加载专用的 DRM/KMS 驱动，以利用 GPU
+的 2D/3D 加速、高级显示设置和电源管理功能。</p><h3 id=23-输入设备处理 class=headerLink><a href=#23-%e8%be%93%e5%85%a5%e8%ae%be%e5%a4%87%e5%a4%84%e7%90%86 class=header-mark></a>2.3 输入设备处理</h3><p><strong>evdev</strong> 是 Linux 输入子系统的事件接口：</p><ul><li>提供统一的输入事件格式。</li><li>支持键盘、鼠标、触摸板等设备。</li><li>通过 <code>/dev/input/event*</code> 设备文件访问。</li><li><strong>注意</strong>：在 KD_TEXT 模式下，键盘输入由内核 VT 子系统<strong>直接处理</strong>，绕过了 evdev；只有在
+KD_GRAPHICS 模式下，图形服务器才会接管 evdev 设备。</li></ul><p><strong>libinput</strong> 是用户空间的输入处理库：</p><ul><li>提供设备枚举和事件回调。</li><li>处理手势识别、边缘滚动、指针加速等高级功能。</li><li>被 X11（通过 <code>xf86-input-libinput</code> 驱动）和 Wayland 合成器（原生）广泛使用。</li><li><strong>图形界面专用</strong>：需要 evdev 支持，因此只在图形模式下工作。</li></ul><hr><h2 id=第三部分-图形驱动与渲染栈 class=headerLink><a href=#%e7%ac%ac%e4%b8%89%e9%83%a8%e5%88%86-%e5%9b%be%e5%bd%a2%e9%a9%b1%e5%8a%a8%e4%b8%8e%e6%b8%b2%e6%9f%93%e6%a0%88 class=header-mark></a>第三部分 图形驱动与渲染栈</h2><p>现代 Linux 桌面系统的图形渲染涉及多个层次的组件，从底层的硬件驱动到高层的图形 API，各层协同工作实现高效的图形渲染。</p><h3 id=31-图形栈架构 class=headerLink><a href=#31-%e5%9b%be%e5%bd%a2%e6%a0%88%e6%9e%b6%e6%9e%84 class=header-mark></a>3.1 图形栈架构</h3><p><strong>架构层次</strong>：</p><ul><li><strong>硬件层</strong>：GPU 和显示设备</li><li><strong>驱动层</strong>：Mesa 图形驱动和内核 DRM</li><li><strong>系统层</strong>：Wayland 协议和合成器 / X Server</li><li><strong>工具包层</strong>：GTK、Qt 等图形界面库</li><li><strong>应用层</strong>：具体的桌面应用程序</li></ul><p><strong>核心组件</strong>：</p><ul><li><strong>DRM（Direct Rendering Manager）</strong>：内核中的图形驱动框架，是现代 Linux 图形栈的基石。它将 GPU 硬件抽象为 <code>/dev/dri/card0</code> 等设备文件，并提供两大核心功能：<ul><li><strong>KMS（Kernel Mode Setting）</strong>：内核显示模式设置。这是 DRM 的革命性特性。它将设置显示器分辨率、刷新率等模式（Modesetting）的<em>职责</em>，从用户空间程序（如旧的 X Server）<strong>收归到 Linux 内核</strong>。<ul><li><strong>KMS 之前的时代 (UMS)</strong>：用户空间的 X Server 必须以 root 权限直接操作硬件来设置分辨率。这导致启动时会“闪屏”（从低分率 tty 切到高分辨率 X），且 <code>Ctrl+Alt+F1</code> 切换 tty
+极易崩溃。</li><li><strong>KMS 时代</strong>：内核在启动<em>极早期</em>就通过 KMS 接管显卡，将 <code>tty</code> 设置到原生分辨率，实现<strong>无闪烁启动</strong>。Wayland 合成器（或现代 Xorg）也无需 root，只需以普通用户身份向内核<strong>请求</strong>设置模式，内核会安全地完成切换，这使得 <strong>VT 切换瞬时且稳定</strong>，并能可靠处理显示器<strong>热插拔</strong>。</li></ul></li><li><strong>GEM（Graphics Execution Manager）</strong>：图形执行管理器。DRM 提供的缓冲区管理框架
+（NVIDIA 对应有 <code>NVRM</code>，AMD 对应有 <code>AMDGPU</code> 内核驱动），负责分配和管理 GPU 显存，并控制 2D/3D 引擎的执行。</li></ul></li><li><strong>DRM-Master</strong>：设备主控权限。这是内核 DRM 提供的一种独占锁，用于仲裁哪个进程有权<em>请求</em>
+KMS 操作（即设置显示模式）。<code>systemd-logind</code> 会将这个权限授予“活动”的图形会话（如Wayland
+合成器或 X Server），确保同一时间只有一个“主宰者”能控制屏幕输出。</li><li><strong>Mesa</strong>：用户空间的 3D 图形驱动库，提供了 OpenGL 和 Vulkan 等图形 API 的开源实现。</li><li><strong>EGL</strong>：Khronos 组织定义的接口，是 Mesa 和 Wayland（或 X11）之间的“胶水”，负责将
+OpenGL/Vulkan 渲染 API 与本地窗口系统连接起来。</li><li><strong>GBM（Generic Buffer Manager）</strong>：Mesa 提供的一个 API，允许合成器（Compositor）通过
+DRM/KMS 框架，以“非 EGL”的方式直接分配和管理图形缓冲区（Buffers）。</li><li><strong>libdrm</strong>：一个用户空间库，封装了与内核 DRM 驱动进行 <code>ioctl</code> 通信的复杂细节，简化了
+Mesa 和合成器对 DRM/KMS/GEM 的调用。</li></ul><h3 id=32-渲染管线 class=headerLink><a href=#32-%e6%b8%b2%e6%9f%93%e7%ae%a1%e7%ba%bf class=header-mark></a>3.2 渲染管线</h3><p><strong>完整渲染流程</strong>：</p><ol><li><strong>应用创建渲染上下文</strong>：<ul><li>应用（如 Firefox）调用 OpenGL/Vulkan API 创建渲染上下文。</li><li>EGL 负责将图形 API 与 Wayland 窗口系统连接。</li><li>Mesa 驱动加载并初始化 GPU 上下文。</li></ul></li><li><strong>GPU 渲染执行</strong>：<ul><li>应用调用 API 绘制界面内容（如网页）。</li><li>Mesa 将 API 调用转换为 GPU 指令。</li><li>GPU 执行渲染，将结果写入一个<strong>图形缓冲区（Buffer）</strong>。</li></ul></li><li><strong>缓冲区管理</strong>：<ul><li>GBM 负责为应用分配这个缓冲区。</li><li>应用将渲染完成的缓冲区（通过 Wayland 协议）提交给<strong>合成器（Compositor）</strong>。</li></ul></li><li><strong>合成与展示</strong>：<ul><li>合成器收集所有应用的缓冲区（如 Firefox 的、终端的、输入法的）。</li><li>合成器将这些缓冲区组合成一个最终帧。</li><li>合成器通过<strong>DRM/KMS</strong>接口，请求内核将这个最终帧显示到屏幕上。</li></ul></li></ol><hr><h2 id=wayland-图形架构 class=headerLink><a href=#wayland-%e5%9b%be%e5%bd%a2%e6%9e%b6%e6%9e%84 class=header-mark></a>Wayland 图形架构</h2><p>Wayland 是现代 Linux 桌面系统的图形协议，采用客户端-服务器模型。合成器同时扮演显示服务器和窗口管理器的角色，直接与内核的 DRM/KMS 和输入设备交互。</p><h3 id=41-架构对比x11-vs-wayland class=headerLink><a href=#41-%e6%9e%b6%e6%9e%84%e5%af%b9%e6%af%94x11-vs-wayland class=header-mark></a>4.1 架构对比：X11 vs Wayland</h3><ul><li><strong>X11（传统）</strong>：在 X11 架构中，<strong>X Server</strong>（例如 <code>Xorg</code>）是显示服务器，直接与显卡驱动和输入设备交互； <strong>窗口管理器 / 桌面环境</strong>（例如 i3、GNOME）则作为 <strong>X client</strong> 连接到 X
+Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</code>（实际上调用 <code>xinit</code>）启动图形会话时，本质流程是：先启动 X Server，再在其中运行窗口管理器或桌面环境（如<code>exec i3</code>）。<strong>Display Manager</strong>（如 GDM、SDDM）在图形登录时会自动启动 X Server，并完成用户认证、设置 <code>DISPLAY</code> 等环境变量，然后再运行会话。</li><li><strong>Wayland（现代）</strong>： <strong>Wayland 合成器</strong>本身既是显示服务器，又是窗口管理器。它直接通过内核的 <strong>DRM/KMS</strong> 控制显示模式，通过 <strong>evdev/libinput</strong> 采集并分发输入事件。Wayland 客户端应用通过 <strong>Wayland socket</strong>（通常位于 <code>$XDG_RUNTIME_DIR/wayland-0</code>，但具体名字可变）与合成器通信。因为合成器本身直接控制显示和输入设备，所以它可以<strong>直接从一个已登录的 TTY 启动</strong>，作为该 TTY 的图形会话的 &ldquo;display server&rdquo;，无需先用 <code>startx</code> 启动一个独立的 X
+Server。如果使用 Display Manager 登录 Wayland 会话，则由 DM 在合适的 TTY 启动合成器并准备_会话_环境。</li></ul><h4 id=tty-到图形界面的切换机制 class=headerLink><a href=#tty-%e5%88%b0%e5%9b%be%e5%bd%a2%e7%95%8c%e9%9d%a2%e7%9a%84%e5%88%87%e6%8d%a2%e6%9c%ba%e5%88%b6 class=header-mark></a>TTY 到图形界面的切换机制</h4><p>当从 TTY 启动 Wayland 合成器时，涉及以下关键步骤：</p><ol><li><strong>设备权限获取</strong>：合成器通过 systemd-logind 获得 seat 和 GPU 的 DRM-Master 权限。</li><li><strong>显示模式切换</strong>：调用 <code>KDSETMODE</code> ioctl 将 VT 从 KD_TEXT 切换到 KD_GRAPHICS，内核停止
+fbcon 刷新。</li><li><strong>输入设备接管</strong>：打开 <code>/dev/input/event*</code> 并执行 <code>EVIOCGRAB</code>，或通过 logind 的<code>TakeControl()</code> 获得输入控制权。完成后，合成器通过 libdrm/EGL/GBM 直接渲染到
+framebuffer，通常首帧显示黑屏和鼠标指针。</li></ol><p><strong>退出/切换 VT</strong>（Ctrl+Alt+F⟂）时：</p><ul><li>释放 DRM-Master：<code>drmDropMaster()</code></li><li>恢复文本模式：<code>KDSETMODE</code> 切回 KD_TEXT</li><li>释放输入控制：关闭 evdev fd，logind 收回设备控制权</li></ul><p>fbcon 重新开始刷新，文本界面恢复显示。若合成器异常退出，logind 的 <code>PauseDevice()</code> 会收回
+DRM-Master，系统可恢复文本模式。</p><h4 id=架构差异带来的实际影响 class=headerLink><a href=#%e6%9e%b6%e6%9e%84%e5%b7%ae%e5%bc%82%e5%b8%a6%e6%9d%a5%e7%9a%84%e5%ae%9e%e9%99%85%e5%bd%b1%e5%93%8d class=header-mark></a>架构差异带来的实际影响</h4><ul><li><strong>安全与权限</strong>：Wayland 把合成器放在更核心的位置（它有直接设备访问），因此确保合成器运行在正确会话（由 logind 管理）下至关重要。错误地以 root 或 system service 启动合成器会导致权限/ACL 不一致（compositor 无法访问设备或安全级别问题）。</li><li><strong>简化流程</strong>：Wayland 把多个角色合并到合成器进程，消除了 X11 时代客户端/窗口管理器与服务器的分离复杂度，令直接从 tty 启动合成器成为可行且常见的做法。</li><li><strong>兼容性</strong>：Xwayland 提供对 legacy X11 应用的兼容，合成器负责在启动时/按需启动 Xwayland
+以支持老应用。</li></ul><h3 id=42-wayland-协议与通信 class=headerLink><a href=#42-wayland-%e5%8d%8f%e8%ae%ae%e4%b8%8e%e9%80%9a%e4%bf%a1 class=header-mark></a>4.2 Wayland 协议与通信</h3><p><strong>客户端-服务器架构</strong>：</p><ul><li><strong>客户端-服务器模型</strong>：应用作为客户端，合成器作为服务器。</li><li><strong>Unix 域套接字</strong>：通过 <code>$XDG_RUNTIME_DIR/wayland-0</code> 进行通信。</li><li><strong>协议扩展</strong>：支持 xdg-shell、text-input 等扩展协议。</li><li><strong>安全隔离</strong>：应用只能访问自己的窗口和输入事件。</li></ul><p><strong>核心协议</strong>：</p><ul><li><strong>wayland-core</strong>：基础协议，定义 surface、buffer 等核心对象。</li><li><strong>xdg-shell</strong>：窗口管理协议，定义窗口、对话框等。</li><li><strong>wl_seat</strong>：输入设备协议，处理键盘、鼠标、触摸板。</li><li><strong>wl_output</strong>：显示输出协议，管理显示器配置。</li></ul><h3 id=43-合成器架构 class=headerLink><a href=#43-%e5%90%88%e6%88%90%e5%99%a8%e6%9e%b6%e6%9e%84 class=header-mark></a>4.3 合成器架构</h3><p><strong>输入处理组件</strong>：</p><ul><li><strong>libinput</strong>：从 <code>/dev/input/*</code> 读取事件并做预处理（手势识别、触摸板边缘、键盘元键处理等）。</li><li>合成器使用 libinput 的 API 进行设备枚举与事件回调。</li></ul><p><strong>设备访问</strong>：</p><ul><li>合成器通过 <code>/dev/dri/card0</code> 与内核 DRM 交互。</li><li>通过 <code>/dev/input/event*</code> 访问输入设备。</li><li>通过 PipeWire 处理音频、视频和屏幕共享（详见后续多媒体章节）。</li></ul><hr><h2 id=应用程序与工具包 class=headerLink><a href=#%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e4%b8%8e%e5%b7%a5%e5%85%b7%e5%8c%85 class=header-mark></a>应用程序与工具包</h2><p>GUI 应用程序是用户与 Linux 桌面交互的主要方式。在 Wayland 环境下，应用通过标准化的协议与合成器通信，实现窗口管理、输入处理和图形渲染。</p><h3 id=51-应用启动流程 class=headerLink><a href=#51-%e5%ba%94%e7%94%a8%e5%90%af%e5%8a%a8%e6%b5%81%e7%a8%8b class=header-mark></a>5.1 应用启动流程</h3><p><strong>标准启动过程</strong>：</p><ol><li><strong>环境准备</strong>：<ul><li>设置 <code>WAYLAND_DISPLAY</code> 和 <code>XDG_RUNTIME_DIR</code></li><li>加载图形工具包库（GTK/Qt）</li><li>初始化 Wayland 连接</li></ul></li><li><strong>窗口创建</strong>：<ul><li>创建 Wayland 表面</li><li>设置窗口属性和装饰</li><li>注册事件监听器</li></ul></li><li><strong>渲染初始化</strong>：<ul><li>创建 EGL 上下文</li><li>加载 Mesa 驱动</li><li>配置图形缓冲区</li></ul></li><li><strong>内容绘制</strong>：<ul><li>应用调用 OpenGL/Vulkan API 绘制界面内容</li><li>Mesa 将 API 调用转换为 GPU 指令</li><li>在 GPU 上执行渲染，生成帧缓冲数据</li><li>应用将渲染完成的缓冲区提交给合成器</li></ul></li><li><strong>合成与展示</strong>：<ul><li>合成器接收缓冲区后进行最终合成和显示</li><li>合成器将多个应用的缓冲区组合成最终帧</li><li>通过 DRM/KMS 将最终帧提交到显示设备</li></ul></li></ol><p><strong>调试启动问题</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -240,15 +254,13 @@ tw-overflow-y-hidden
 tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看 Wayland 环境</span>
 </span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$WAYLAND_DISPLAY</span> <span class=nv>$XDG_RUNTIME_DIR</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># Wayland 调试输出</span>
+</span></span><span class=line><span class=cl><span class=c1># 检查应用日志</span>
+</span></span><span class=line><span class=cl>journalctl --user -u &lt;application&gt;.service
+</span></span><span class=line><span class=cl><span class=c1># Wayland 调试变量</span>
 </span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>WAYLAND_DEBUG</span><span class=o>=</span><span class=m>1</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 检查协议支持</span>
-</span></span><span class=line><span class=cl>wayland-info <span class=p>|</span> grep text-input
-</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>
 </span></span><span class=line><span class=cl><span class=c1># 跟踪系统调用</span>
-</span></span><span class=line><span class=cl>strace -f -e <span class=nv>trace</span><span class=o>=</span>network,ipc &lt;application&gt;</span></span></code></pre></div><h3 id=23-合成器架构 class=headerLink><a href=#23-%e5%90%88%e6%88%90%e5%99%a8%e6%9e%b6%e6%9e%84 class=header-mark></a>2.3 合成器架构</h3><p><strong>输入处理组件</strong>：</p><ul><li><strong>libinput</strong>：从 <code>/dev/input/*</code> 读取事件并做预处理（手势识别、触摸板边缘、键盘元键处理等）</li><li>合成器使用 libinput 的 API 进行设备枚举与事件回调</li><li>可用 <code>libinput list-devices</code> 查看被 libinput 管理的设备（需 root 或在 session 中运行）</li></ul><p><strong>设备访问</strong>：</p><ul><li>合成器通过 <code>/dev/dri/card0</code> 与内核 DRM 交互</li><li>通过 <code>/dev/input/event*</code> 访问输入设备</li><li>通过 PipeWire 处理音频、视频和屏幕共享（详见后续多媒体章节）</li></ul><p><strong>常用调试命令</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+</span></span><span class=line><span class=cl>strace -f -e <span class=nv>trace</span><span class=o>=</span>network,ipc &lt;application&gt;</span></span></code></pre></div><h3 id=52-工具包支持 class=headerLink><a href=#52-%e5%b7%a5%e5%85%b7%e5%8c%85%e6%94%af%e6%8c%81 class=header-mark></a>5.2 工具包支持</h3><p><strong>GTK 应用</strong>：</p><ul><li>GTK3/4 原生支持 Wayland</li><li>自动检测运行环境</li><li>可通过 <code>GDK_BACKEND</code> 强制指定后端</li></ul><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -294,11 +306,10 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 列出 libinput 管理设备（需要 root）</span>
-</span></span><span class=line><span class=cl>$ sudo libinput list-devices
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 检查输入设备权限</span>
-</span></span><span class=line><span class=cl>ls -la /dev/input/event*</span></span></code></pre></div><h2 id=图形驱动与渲染 class=headerLink><a href=#%e5%9b%be%e5%bd%a2%e9%a9%b1%e5%8a%a8%e4%b8%8e%e6%b8%b2%e6%9f%93 class=header-mark></a>图形驱动与渲染</h2><p>现代 Linux 桌面系统的图形渲染涉及多个层次的组件，从底层的硬件驱动到高层的图形 API，各层协同工作实现高效的图形渲染。</p><h3 id=31-图形栈架构 class=headerLink><a href=#31-%e5%9b%be%e5%bd%a2%e6%a0%88%e6%9e%b6%e6%9e%84 class=header-mark></a>3.1 图形栈架构</h3><p><strong>架构层次</strong>：</p><ul><li><strong>硬件层</strong>：GPU 和显示设备</li><li><strong>驱动层</strong>：Mesa 图形驱动和内核 DRM</li><li><strong>系统层</strong>：Wayland 协议和合成器</li><li><strong>工具包层</strong>：GTK、Qt 等图形界面库</li><li><strong>应用层</strong>：具体的桌面应用程序</li></ul><p><strong>核心组件</strong>：</p><ul><li><strong>Mesa</strong>：提供 OpenGL/Vulkan 的开源实现</li><li><strong>EGL</strong>：Khronos 组织定义的接口，将 OpenGL/Vulkan 与窗口系统连接</li><li><strong>GBM</strong>(Generic Buffer Manager)：Mesa 的缓冲管理接口，用于分配图形缓冲区给 GPU</li><li><strong>DRM</strong>：内核中的 Direct Rendering Manager，控制显示模式设置（KMS）和页面翻转</li></ul><h3 id=32-渲染管线 class=headerLink><a href=#32-%e6%b8%b2%e6%9f%93%e7%ae%a1%e7%ba%bf class=header-mark></a>3.2 渲染管线</h3><p><strong>完整渲染流程</strong>：</p><ol><li><p><strong>应用创建渲染上下文</strong>：</p><ul><li>应用调用 OpenGL/Vulkan API 创建渲染上下文</li><li>EGL 负责将图形 API 与窗口系统连接</li><li>Mesa 驱动加载并初始化 GPU 上下文</li></ul></li><li><p><strong>GPU 渲染执行</strong>：</p><ul><li>应用调用 OpenGL/Vulkan API 绘制界面内容</li><li>Mesa 将 API 调用转换为 GPU 指令</li><li>在 GPU 上执行渲染，生成帧缓冲数据</li></ul></li><li><p><strong>缓冲区管理</strong>：</p><ul><li>GBM 负责分配和管理图形缓冲区</li><li>应用将渲染完成的缓冲区提交给合成器</li><li>合成器接收缓冲区后进行最终合成和显示</li></ul></li><li><p><strong>合成与展示</strong>：</p><ul><li>合成器将多个应用的缓冲区组合成最终帧</li><li>通过 DRM/KMS 将最终帧提交到显示设备</li></ul></li></ol><h3 id=33-驱动信息查询 class=headerLink><a href=#33-%e9%a9%b1%e5%8a%a8%e4%bf%a1%e6%81%af%e6%9f%a5%e8%af%a2 class=header-mark></a>3.3 驱动信息查询</h3><p><strong>驱动信息查询</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 强制使用 Wayland</span>
+</span></span><span class=line><span class=cl><span class=nv>GDK_BACKEND</span><span class=o>=</span>wayland gtk-application
+</span></span><span class=line><span class=cl><span class=c1># 强制使用 X11（通过 Xwayland）</span>
+</span></span><span class=line><span class=cl><span class=nv>GDK_BACKEND</span><span class=o>=</span>x11 gtk-application</span></span></code></pre></div><p><strong>Qt 应用</strong>：</p><ul><li>Qt5/6 支持 Wayland</li><li>需要安装 Wayland 平台插件</li><li>自动选择最佳后端</li></ul><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -344,23 +355,12 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># GPU device</span>
-</span></span><span class=line><span class=cl>$ ls /dev/dri
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 查看 Mesa/OpenGL renderer</span>
-</span></span><span class=line><span class=cl>$ glxinfo <span class=p>|</span> grep <span class=s2>&#34;OpenGL renderer&#34;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># OpenGL 信息</span>
-</span></span><span class=line><span class=cl>glxinfo <span class=p>|</span> grep <span class=s2>&#34;OpenGL renderer&#34;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># Vulkan 信息</span>
-</span></span><span class=line><span class=cl>vulkaninfo <span class=p>|</span> grep <span class=s2>&#34;GPU id&#34;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># DRM 设备</span>
-</span></span><span class=line><span class=cl>ls -la /dev/dri/
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 内核驱动</span>
-</span></span><span class=line><span class=cl>lspci -k <span class=p>|</span> grep -A <span class=m>3</span> -i vga</span></span></code></pre></div><h3 id=34-渲染器选择与优化 class=headerLink><a href=#34-%e6%b8%b2%e6%9f%93%e5%99%a8%e9%80%89%e6%8b%a9%e4%b8%8e%e4%bc%98%e5%8c%96 class=header-mark></a>3.4 渲染器选择与优化</h3><p><strong>GTK 应用渲染器选择</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看 Qt 平台插件（NixOS）</span>
+</span></span><span class=line><span class=cl>ls /run/current-system/sw/lib/qt*/plugins/platforms/
+</span></span><span class=line><span class=cl><span class=c1># 传统发行版</span>
+</span></span><span class=line><span class=cl>ls /usr/lib/qt*/plugins/platforms/
+</span></span><span class=line><span class=cl><span class=c1># Qt 调试信息</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_LOGGING_RULES</span><span class=o>=</span><span class=s2>&#34;qt.qpa.*=true&#34;</span></span></span></code></pre></div><p><strong>SDL 应用</strong>：</p><ul><li>SDL2 内置 Wayland 支持</li><li>主要用于游戏和多媒体应用</li><li>自动适配运行环境</li></ul><hr><h2 id=图形栈调试与优化 class=headerLink><a href=#%e5%9b%be%e5%bd%a2%e6%a0%88%e8%b0%83%e8%af%95%e4%b8%8e%e4%bc%98%e5%8c%96 class=header-mark></a>图形栈调试与优化</h2><h3 id=61-图形驱动信息查询 class=headerLink><a href=#61-%e5%9b%be%e5%bd%a2%e9%a9%b1%e5%8a%a8%e4%bf%a1%e6%81%af%e6%9f%a5%e8%af%a2 class=header-mark></a>6.1 图形驱动信息查询</h3><p>首先，需要判断您当前所处的环境。在终端中运行 <code>tty</code> 命令：</p><ul><li>输出 <code>/dev/pts/0</code> 等：您在图形界面下的<strong>伪 TTY (pts)</strong> 中。</li><li>输出 <code>/dev/tty1</code> 等：您在 <code>Ctrl+Alt+F1</code> 切换的<strong>虚拟 TTY (tty)</strong> 文本控制台中。</li></ul><h4 id=1-判断图形会话-pts-驱动 class=headerLink><a href=#1-%e5%88%a4%e6%96%ad%e5%9b%be%e5%bd%a2%e4%bc%9a%e8%af%9d-pts-%e9%a9%b1%e5%8a%a8 class=header-mark></a>1. 判断图形会话 (pts) 驱动</h4><p>在伪 TTY 中，您查询的是整个图形界面的<strong>内核 DRM 驱动</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -406,11 +406,7 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># GTK 应用渲染器选择</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>vulkan    <span class=c1># 使用 Vulkan 渲染</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>opengl    <span class=c1># 使用 OpenGL 渲染</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>cairo     <span class=c1># 使用软件渲染</span></span></span></code></pre></div><ul><li><p><code>GSK_RENDERER=vulkan</code>：使用现代低级别图形 API Vulkan，提供更好的多线程支持和更低的 CPU
-开销。性能最佳，支持现代 GPU 特性，多线程渲染效率高，适用于现代 GPU 和需要最佳性能的应用，但需要支持 Vulkan 的 GPU 驱动。</p></li><li><p><code>GSK_RENDERER=opengl</code>：使用传统硬件加速渲染 OpenGL，兼容性好，性能稳定。兼容性最佳，支持广泛的硬件和驱动，适用于大多数现代 GPU 和需要稳定兼容性的应用，特点是单线程渲染，CPU 开销相对较高。</p></li><li><p><code>GSK_RENDERER=cairo</code>：使用 CPU 软件渲染，不依赖 GPU 硬件加速。兼容性最好，不依赖 GPU 驱动，适用于 GPU 驱动问题时的备选方案，或对性能要求不高的应用，缺点是性能最低，CPU 占用高。</p></li></ul><p><strong>Qt 应用渲染器选择</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>lspci -k <span class=p>|</span> grep -A <span class=m>3</span> -i vga</span></span></code></pre></div><p><strong>示例输出：</strong></p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -418,7 +414,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">text</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -456,11 +452,11 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># Qt 应用渲染器选择</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>desktop      <span class=c1># 使用桌面 OpenGL</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>software     <span class=c1># 使用软件渲染</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>angle        <span class=c1># 使用 ANGLE（Windows 兼容层）</span></span></span></code></pre></div><ul><li><p><code>QT_OPENGL=desktop</code>：使用桌面版 OpenGL，支持完整的 OpenGL 功能集。功能完整，性能良好，适用于大多数桌面应用，需要完整 OpenGL 支持。</p></li><li><p><code>QT_OPENGL=software</code>：使用 CPU 软件渲染，完全绕过 GPU。兼容性最好，不依赖 GPU，适用于
-GPU 驱动问题，或需要确保兼容性的场景。</p></li><li><p><code>QT_OPENGL=angle</code>：使用 ANGLE 将 OpenGL ES 转换为 DirectX，主要用于 Windows 兼容性。在某些 Windows 兼容层环境下性能更好，适用于 Wine 等 Windows 兼容层环境。</p></li></ul><p><strong>Mesa 驱动优化参数</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>01:00.0 VGA compatible controller: NVIDIA Corporation GP107 [GeForce GTX 1050 Ti] (rev a1)
+</span></span><span class=line><span class=cl>	Subsystem: ZOTAC International (MCO) Ltd. GP107 [GeForce GTX 1050 Ti]
+</span></span><span class=line><span class=cl>	Kernel driver in use: nvidia
+</span></span><span class=line><span class=cl>	Kernel modules: nvidiafb, nouveau, nvidia_drm, nvidia</span></span></code></pre></div><ul><li><code>Kernel driver in use: nvidia</code>：表明 NVIDIA 专有驱动正在使用。</li><li>常见的驱动有：<code>i915</code> (Intel), <code>amdgpu</code> (AMD), <code>nouveau</code> (NVIDIA 开源), <code>nvidia</code> (NVIDIA
+专有)。</li></ul><h4 id=2-判断文本控制台-tty-驱动 class=headerLink><a href=#2-%e5%88%a4%e6%96%ad%e6%96%87%e6%9c%ac%e6%8e%a7%e5%88%b6%e5%8f%b0-tty-%e9%a9%b1%e5%8a%a8 class=header-mark></a>2. 判断文本控制台 (tty) 驱动</h4><p>在虚拟 TTY 中（或在 pts 中查询 TTY 的日志），您查询的是<strong>帧缓冲 驱动</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -506,13 +502,7 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># Mesa 驱动选择</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_GL_VERSION_OVERRIDE</span><span class=o>=</span>4.5
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_GLSL_VERSION_OVERRIDE</span><span class=o>=</span><span class=m>450</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 调试信息</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>           <span class=c1># 启用 Mesa 调试信息</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>LIBGL_DEBUG</span><span class=o>=</span>verbose    <span class=c1># 启用 OpenGL 调试信息</span></span></span></code></pre></div><ul><li><p><code>MESA_GL_VERSION_OVERRIDE=4.5</code>：强制使用指定版本的 OpenGL，解决某些应用的兼容性问题。覆盖应用请求的 OpenGL 版本，强制使用指定版本，适用于应用要求过高 OpenGL 版本导致无法启动时。</p></li><li><p><code>MESA_GLSL_VERSION_OVERRIDE=450</code>：强制使用指定版本的 GLSL 着色器语言，确保着色器兼容性。覆盖着色器编译器版本，避免版本不匹配问题，适用于着色器编译错误或版本不匹配时。</p></li><li><p><code>MESA_DEBUG=1</code>：启用详细的 Mesa 调试信息，帮助诊断图形问题。显示详细的 OpenGL 调用信息和错误，用于开发调试和图形问题排查。</p></li><li><p><code>LIBGL_DEBUG=verbose</code>：启用 OpenGL 库的详细调试输出。显示 OpenGL 函数调用和参数，用于深入分析 OpenGL 调用问题。</p></li></ul><p><strong>常见问题与解决方法</strong>：</p><ul><li><strong>应用闪退</strong>：尝试 <code>GSK_RENDERER=cairo</code> 或 <code>QT_OPENGL=software</code></li><li><strong>渲染异常</strong>：检查 GPU 驱动，尝试不同的 <code>GSK_RENDERER</code> 值</li><li><strong>性能问题</strong>：优先使用 <code>vulkan</code> 或 <code>opengl</code> 硬件加速</li><li><strong>兼容性问题</strong>：某些老旧应用可能需要软件渲染模式</li></ul><h2 id=应用程序与工具包 class=headerLink><a href=#%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e4%b8%8e%e5%b7%a5%e5%85%b7%e5%8c%85 class=header-mark></a>应用程序与工具包</h2><p>GUI 应用程序是用户与 Linux 桌面交互的主要方式。在 Wayland 环境下，应用通过标准化的协议与合成器通信，实现窗口管理、输入处理和图形渲染。</p><h3 id=41-应用启动流程 class=headerLink><a href=#41-%e5%ba%94%e7%94%a8%e5%90%af%e5%8a%a8%e6%b5%81%e7%a8%8b class=header-mark></a>4.1 应用启动流程</h3><p><strong>标准启动过程</strong>：</p><ol><li><p><strong>环境准备</strong>：</p><ul><li>设置 <code>WAYLAND_DISPLAY</code> 和 <code>XDG_RUNTIME_DIR</code></li><li>加载图形工具包库（GTK/Qt）</li><li>初始化 Wayland 连接</li></ul></li><li><p><strong>窗口创建</strong>：</p><ul><li>创建 Wayland 表面（surface）</li><li>设置窗口属性和装饰</li><li>注册事件监听器</li></ul></li><li><p><strong>渲染初始化</strong>：</p><ul><li>创建 EGL 上下文</li><li>加载 Mesa 驱动</li><li>配置图形缓冲区</li></ul></li><li><p><strong>内容绘制</strong>：</p><ul><li>应用调用 OpenGL/Vulkan API 绘制界面内容</li><li>Mesa 将 API 调用转换为 GPU 指令</li><li>在 GPU 上执行渲染，生成帧缓冲数据</li><li>应用将渲染完成的缓冲区提交给合成器</li></ul></li><li><p><strong>合成与展示</strong>：</p><ul><li>合成器接收缓冲区后进行最终合成和显示</li><li>合成器将多个应用的缓冲区组合成最终帧</li><li>通过 DRM/KMS 将最终帧提交到显示设备</li></ul></li></ol><p><strong>调试启动问题</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>dmesg <span class=p>|</span> grep -i fbcon</span></span></code></pre></div><p><strong>常见的输出及含义：</strong></p><ol><li><strong>现代 DRM 驱动 (最优情况):</strong><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -520,7 +510,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">text</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -558,18 +548,7 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看 Wayland 环境</span>
-</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$WAYLAND_DISPLAY</span> <span class=nv>$XDG_RUNTIME_DIR</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 检查应用日志</span>
-</span></span><span class=line><span class=cl>journalctl --user -u &lt;application&gt;.service
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># Wayland 调试变量</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>WAYLAND_DEBUG</span><span class=o>=</span><span class=m>1</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 跟踪系统调用</span>
-</span></span><span class=line><span class=cl>strace -f -e <span class=nv>trace</span><span class=o>=</span>network,ipc &lt;application&gt;</span></span></code></pre></div><h3 id=42-工具包支持 class=headerLink><a href=#42-%e5%b7%a5%e5%85%b7%e5%8c%85%e6%94%af%e6%8c%81 class=header-mark></a>4.2 工具包支持</h3><p><strong>GTK 应用</strong>：</p><ul><li>GTK3/4 原生支持 Wayland</li><li>自动检测运行环境</li><li>可通过 <code>GDK_BACKEND</code> 强制指定后端</li></ul><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>[   20.709925] fbcon: nvidia-drmdrmfb (fb0) is primary device</span></span></code></pre></div>或<div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -577,7 +556,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">text</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -615,11 +594,9 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 强制使用 Wayland</span>
-</span></span><span class=line><span class=cl><span class=nv>GDK_BACKEND</span><span class=o>=</span>wayland gtk-application
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 强制使用 X11（通过 Xwayland）</span>
-</span></span><span class=line><span class=cl><span class=nv>GDK_BACKEND</span><span class=o>=</span>x11 gtk-application</span></span></code></pre></div><p><strong>Qt 应用</strong>：</p><ul><li>Qt5/6 支持 Wayland</li><li>需要安装 Wayland 平台插件</li><li>自动选择最佳后端</li></ul><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>[    1.512345] fbcon: i915drmfb (fb0) is primary device</span></span></code></pre></div><strong>含义</strong>：<code>fbcon</code> 已绑定到主内核图形驱动（<code>nvidia-drm</code> 或 <code>i915</code>）提供的帧缓冲区
+（<code>drmfb</code>）上。这表明 KMS 已正常启动，文本控制台将使用显示器原生分辨率，且 TTY 切换
+（<code>Ctrl+Alt+F...</code>）会非常平滑。</li><li><strong>UEFI 固件驱动 (UEFI 回退情况):</strong><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -627,7 +604,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">text</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -665,13 +642,8 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看 Qt 平台插件（NixOS）</span>
-</span></span><span class=line><span class=cl>ls /run/current-system/sw/lib/qt*/plugins/platforms/
-</span></span><span class=line><span class=cl><span class=c1># 传统发行版</span>
-</span></span><span class=line><span class=cl>ls /usr/lib/qt*/plugins/platforms/
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># Qt 调试信息</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_LOGGING_RULES</span><span class=o>=</span><span class=s2>&#34;qt.qpa.*=true&#34;</span></span></span></code></pre></div><p><strong>SDL 应用</strong>：</p><ul><li>SDL2 内置 Wayland 支持</li><li>主要用于游戏和多媒体应用</li><li>自动适配运行环境</li></ul><h2 id=故障排查 class=headerLink><a href=#%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5 class=header-mark></a>故障排查</h2><h3 id=51-会话管理问题 class=headerLink><a href=#51-%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86%e9%97%ae%e9%a2%98 class=header-mark></a>5.1 会话管理问题</h3><p><strong>登录失败排查</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>[    1.234567] fbcon: efifb (fb0) is primary device</span></span></code></pre></div><strong>含义</strong>：<code>fbcon</code> 正在使用 UEFI 固件提供的帧缓冲区（<code>efifb</code>）。这通常发生在内核的 DRM
+驱动尚未加载或被 <code>nomodeset</code> 参数禁用时。</li><li><strong>传统 VESA 驱动 (legacyBIOS 回退情况):</strong><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -679,7 +651,7 @@ tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
 tw-mx-2
 tw-flex
 tw-flex-row
-tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">text</p></button><div class=tw-flex><button class="line-number-button
 tw-mx-2
 tw-hidden
 group-[.is-open]:tw-block
@@ -717,16 +689,7 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 检查显示管理器状态</span>
-</span></span><span class=line><span class=cl>systemctl status display-manager
-</span></span><span class=line><span class=cl>journalctl -u display-manager -b
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 查看用户会话</span>
-</span></span><span class=line><span class=cl>loginctl list-sessions
-</span></span><span class=line><span class=cl>loginctl show-session &lt;session_id&gt;
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 检查 PAM 认证</span>
-</span></span><span class=line><span class=cl>journalctl -t login -f</span></span></code></pre></div><p><strong>权限问题排查</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl>[    1.345678] fbcon: vesafb (fb0) is primary device</span></span></code></pre></div><strong>含义</strong>：<code>fbcon</code> 正在使用 <code>vesafb</code> 驱动，通过 VBE 接口工作。</li></ol><h4 id=3-其他驱动信息查询 class=headerLink><a href=#3-%e5%85%b6%e4%bb%96%e9%a9%b1%e5%8a%a8%e4%bf%a1%e6%81%af%e6%9f%a5%e8%af%a2 class=header-mark></a>3. 其他驱动信息查询</h4><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -772,12 +735,12 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 检查设备权限</span>
-</span></span><span class=line><span class=cl>loginctl seat-status seat0
-</span></span><span class=line><span class=cl>ls -la /dev/dri/card0
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 查看 ACL 分配</span>
-</span></span><span class=line><span class=cl>getfacl /dev/dri/card0</span></span></code></pre></div><h3 id=52-图形渲染问题 class=headerLink><a href=#52-%e5%9b%be%e5%bd%a2%e6%b8%b2%e6%9f%93%e9%97%ae%e9%a2%98 class=header-mark></a>5.2 图形渲染问题</h3><p><strong>应用崩溃诊断</strong>：</p><ul><li><strong>核心转储分析</strong>：</li></ul><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看 DRM 设备文件</span>
+</span></span><span class=line><span class=cl>ls -la /dev/dri/
+</span></span><span class=line><span class=cl><span class=c1># 查看 Mesa/OpenGL renderer 信息</span>
+</span></span><span class=line><span class=cl>glxinfo <span class=p>|</span> grep <span class=s2>&#34;OpenGL renderer&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># 查看 Vulkan GPU 信息</span>
+</span></span><span class=line><span class=cl>vulkaninfo <span class=p>|</span> grep <span class=s2>&#34;GPU id&#34;</span></span></span></code></pre></div><h3 id=62-渲染器选择与参数优化 class=headerLink><a href=#62-%e6%b8%b2%e6%9f%93%e5%99%a8%e9%80%89%e6%8b%a9%e4%b8%8e%e5%8f%82%e6%95%b0%e4%bc%98%e5%8c%96 class=header-mark></a>6.2 渲染器选择与参数优化</h3><h4 id=gtk-应用渲染器选择 class=headerLink><a href=#gtk-%e5%ba%94%e7%94%a8%e6%b8%b2%e6%9f%93%e5%99%a8%e9%80%89%e6%8b%a9 class=header-mark></a>GTK 应用渲染器选择</h4><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -823,12 +786,12 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看核心转储</span>
-</span></span><span class=line><span class=cl>coredumpctl list
-</span></span><span class=line><span class=cl>coredumpctl info &lt;pid&gt;
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 调试核心文件</span>
-</span></span><span class=line><span class=cl>coredumpctl debug &lt;pid&gt;</span></span></code></pre></div><ul><li><strong>GPU 问题诊断</strong>：</li></ul><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># GTK 应用渲染器选择</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>vulkan     <span class=c1># 使用 Vulkan 渲染</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>opengl     <span class=c1># 使用 OpenGL 渲染</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>cairo      <span class=c1># 使用软件渲染</span></span></span></code></pre></div><ul><li><code>GSK_RENDERER=vulkan</code>：使用现代低级别图形 API Vulkan，提供更好的多线程支持和更低的 CPU
+开销。性能最佳，支持现代 GPU 特性，适用于现代 GPU 和需要最佳性能的应用，但需要支持
+Vulkan 的 GPU 驱动。</li><li><code>GSK_RENDERER=opengl</code>：使用传统硬件加速渲染 OpenGL，兼容性好，性能稳定。支持广泛的硬件和驱动，适用于大多数现代 GPU 和需要稳定兼容性的应用，特点是单线程渲染，CPU 开销相对较高。</li><li><code>GSK_RENDERER=cairo</code>：使用 CPU 软件渲染，不依赖 GPU 硬件加速。兼容性最好，不依赖 GPU 驱动，适用于 GPU 驱动问题时的备选方案，或对性能要求不高的应用，缺点是性能最低，CPU 占用高。</li></ul><h4 id=qt-应用渲染器选择 class=headerLink><a href=#qt-%e5%ba%94%e7%94%a8%e6%b8%b2%e6%9f%93%e5%99%a8%e9%80%89%e6%8b%a9 class=header-mark></a>Qt 应用渲染器选择</h4><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -874,12 +837,11 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 检查 GPU 重置</span>
-</span></span><span class=line><span class=cl>dmesg <span class=p>|</span> grep -i <span class=s2>&#34;gpu hang\|reset&#34;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># Mesa 调试信息</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>LIBGL_DEBUG</span><span class=o>=</span>verbose</span></span></code></pre></div><ul><li><strong>Wayland 协议错误</strong>：</li></ul><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># Qt 应用渲染器选择</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>desktop     <span class=c1># 使用桌面 OpenGL</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>software    <span class=c1># 使用软件渲染</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>angle       <span class=c1># 使用 ANGLE（Windows 兼容层）</span></span></span></code></pre></div><ul><li><code>QT_OPENGL=desktop</code>：使用桌面版 OpenGL，支持完整的 OpenGL 功能集。功能完整，性能良好，适用于大多数桌面应用，需要完整 OpenGL 支持。</li><li><code>QT_OPENGL=software</code>：使用 CPU 软件渲染，完全绕过 GPU。兼容性最好，不依赖 GPU，适用于
+GPU 驱动问题，或需要确保兼容性的场景。</li><li><code>QT_OPENGL=angle</code>：使用 ANGLE 将 OpenGL ES 转换为 DirectX，主要用于 Windows 兼容性。在某些 Windows 兼容层环境下性能更好，适用于 Wine 等 Windows 兼容层环境。</li></ul><h4 id=mesa-驱动优化参数 class=headerLink><a href=#mesa-%e9%a9%b1%e5%8a%a8%e4%bc%98%e5%8c%96%e5%8f%82%e6%95%b0 class=header-mark></a>Mesa 驱动优化参数</h4><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -925,11 +887,12 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># Wayland 调试输出</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>WAYLAND_DEBUG</span><span class=o>=</span><span class=m>1</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 合成器日志</span>
-</span></span><span class=line><span class=cl>journalctl --user -u &lt;compositor&gt; -f</span></span></code></pre></div><p><strong>性能问题分析</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># Mesa 驱动版本覆盖</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_GL_VERSION_OVERRIDE</span><span class=o>=</span>4.5
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_GLSL_VERSION_OVERRIDE</span><span class=o>=</span><span class=m>450</span>
+</span></span><span class=line><span class=cl><span class=c1># 调试信息</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>            <span class=c1># 启用 Mesa 调试信息</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>LIBGL_DEBUG</span><span class=o>=</span>verbose     <span class=c1># 启用 OpenGL 调试信息</span></span></span></code></pre></div><ul><li><code>MESA_GL_VERSION_OVERRIDE=4.5</code>：强制使用指定版本的 OpenGL，解决某些应用的兼容性问题。覆盖应用请求的 OpenGL 版本，适用于应用要求过高 OpenGL 版本导致无法启动时。</li><li><code>MESA_GLSL_VERSION_OVERRIDE=450</code>：强制使用指定版本的 GLSL 着色器语言，确保着色器兼容性。覆盖着色器编译器版本，避免版本不匹配问题，适用于着色器编译错误或版本不匹配时。</li><li><code>MESA_DEBUG=1</code>：启用详细的 Mesa 调试信息，帮助诊断图形问题。</li><li><code>LIBGL_DEBUG=verbose</code>：启用 OpenGL 库的详细调试输出，用于深入分析 OpenGL 调用问题。</li></ul><h3 id=63-调试-wayland-通信 class=headerLink><a href=#63-%e8%b0%83%e8%af%95-wayland-%e9%80%9a%e4%bf%a1 class=header-mark></a>6.3 调试 Wayland 通信</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -975,19 +938,14 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># GPU 使用率</span>
-</span></span><span class=line><span class=cl>nvidia-smi  <span class=c1># NVIDIA</span>
-</span></span><span class=line><span class=cl>radeontop   <span class=c1># AMD</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># CPU 使用率分析</span>
-</span></span><span class=line><span class=cl>perf top -p &lt;pid&gt;
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 内存使用</span>
-</span></span><span class=line><span class=cl>smem -p <span class=p>|</span> grep &lt;application&gt;
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 帧率监控</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>__GL_SHOW_GRAPHICS_OSD</span><span class=o>=</span><span class=m>1</span>  <span class=c1># NVIDIA</span></span></span></code></pre></div><p><strong>兼容性问题</strong>：</p><ul><li><strong>Xwayland 问题</strong>：部分 X11 应用在 Xwayland 下运行异常</li><li><strong>Wayland 协议缺失</strong>：某些功能需要特定的 Wayland 扩展</li><li><strong>驱动兼容性</strong>：GPU 驱动可能不完全支持某些 Wayland 特性</li></ul><p><strong>解决方法</strong>：</p><ul><li>更新 Mesa 和 GPU 驱动</li><li>检查合成器对必要 Wayland 扩展的支持</li><li>对于顽固问题，可临时使用 X11 会话</li></ul><h2 id=总结 class=headerLink><a href=#%e6%80%bb%e7%bb%93 class=header-mark></a>总结</h2><p>从用户登录到画面显示，这一整套流程确实挺复杂的，展开说那可能得好几本大部头了。</p><p>Wayland 虽然还在发展中，但确实比 X11 要现代化很多，性能和安全性的提升是实实在在的，而且在
-2025 年的今天 Wayland 生态的可用性已经很不错了。</p><p>下一篇文章我们会聊聊多媒体和中文支持，看看系统是如何处理音频视频和中文显示的。</p><h2 id=快速参考 class=headerLink><a href=#%e5%bf%ab%e9%80%9f%e5%8f%82%e8%80%83 class=header-mark></a>快速参考</h2><h3 id=常用会话管理命令 class=headerLink><a href=#%e5%b8%b8%e7%94%a8%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86%e5%91%bd%e4%bb%a4 class=header-mark></a>常用会话管理命令</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看 Wayland 环境变量</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$WAYLAND_DISPLAY</span> <span class=nv>$XDG_RUNTIME_DIR</span>
+</span></span><span class=line><span class=cl><span class=c1># 启用 Wayland 调试输出（客户端）</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>WAYLAND_DEBUG</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=c1># 检查合成器支持的协议</span>
+</span></span><span class=line><span class=cl>wayland-info <span class=p>|</span> grep text-input
+</span></span><span class=line><span class=cl><span class=c1># 跟踪系统调用（查看 socket 通信）</span>
+</span></span><span class=line><span class=cl>strace -f -e <span class=nv>trace</span><span class=o>=</span>network,ipc &lt;application&gt;</span></span></code></pre></div><hr><h2 id=故障排查 class=headerLink><a href=#%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5 class=header-mark></a>故障排查</h2><h3 id=71-会话管理问题 class=headerLink><a href=#71-%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86%e9%97%ae%e9%a2%98 class=header-mark></a>7.1 会话管理问题</h3><p><strong>登录失败排查</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -1033,18 +991,14 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 会话管理</span>
-</span></span><span class=line><span class=cl>loginctl list-sessions                    <span class=c1># 列出所有会话</span>
-</span></span><span class=line><span class=cl>loginctl show-session &lt;id&gt; -p Name -p UID -p Seat  <span class=c1># 会话详情</span>
-</span></span><span class=line><span class=cl>loginctl terminate-session &lt;id&gt;           <span class=c1># 终止会话</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># seat 管理</span>
-</span></span><span class=line><span class=cl>loginctl seat-status                      <span class=c1># 查看 seat 状态</span>
-</span></span><span class=line><span class=cl>loginctl seat-status seat0                <span class=c1># 特定 seat 详情</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 设备权限检查</span>
-</span></span><span class=line><span class=cl>ls -la /dev/dri/card0                     <span class=c1># GPU 设备权限</span>
-</span></span><span class=line><span class=cl>ls -la /dev/input/event*                  <span class=c1># 输入设备权限</span></span></span></code></pre></div><h3 id=常用图形调试命令 class=headerLink><a href=#%e5%b8%b8%e7%94%a8%e5%9b%be%e5%bd%a2%e8%b0%83%e8%af%95%e5%91%bd%e4%bb%a4 class=header-mark></a>常用图形调试命令</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 检查显示管理器状态</span>
+</span></span><span class=line><span class=cl>systemctl status display-manager
+</span></span><span class=line><span class=cl>journalctl -u display-manager -b
+</span></span><span class=line><span class=cl><span class=c1># 查看用户会话</span>
+</span></span><span class=line><span class=cl>loginctl list-sessions
+</span></span><span class=line><span class=cl>loginctl show-session &lt;session_id&gt;
+</span></span><span class=line><span class=cl><span class=c1># 检查 PAM 认证</span>
+</span></span><span class=line><span class=cl>journalctl -t login -f</span></span></code></pre></div><p><strong>权限问题排查</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -1090,21 +1044,11 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
-tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 图形驱动信息</span>
-</span></span><span class=line><span class=cl>glxinfo <span class=p>|</span> grep <span class=s2>&#34;OpenGL renderer&#34;</span>          <span class=c1># OpenGL 信息</span>
-</span></span><span class=line><span class=cl>vulkaninfo <span class=p>|</span> grep <span class=s2>&#34;GPU id&#34;</span>                <span class=c1># Vulkan 信息</span>
-</span></span><span class=line><span class=cl>lspci -k <span class=p>|</span> grep -A <span class=m>3</span> -i vga               <span class=c1># 显卡驱动</span>
-</span></span><span class=line><span class=cl>ls -la /dev/dri/                          <span class=c1># DRM 设备</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># Wayland 环境</span>
-</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$WAYLAND_DISPLAY</span> <span class=nv>$XDG_RUNTIME_DIR</span>    <span class=c1># 环境变量</span>
-</span></span><span class=line><span class=cl>wayland-info <span class=p>|</span> grep text-input            <span class=c1># 协议支持</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1># 调试变量</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>WAYLAND_DEBUG</span><span class=o>=</span><span class=m>1</span>                    <span class=c1># Wayland 调试</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>                       <span class=c1># Mesa 调试</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>vulkan                <span class=c1># GTK 渲染器</span>
-</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>desktop                  <span class=c1># Qt 渲染器</span></span></span></code></pre></div><h3 id=重要配置文件位置 class=headerLink><a href=#%e9%87%8d%e8%a6%81%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e4%bd%8d%e7%bd%ae class=header-mark></a>重要配置文件位置</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 检查设备权限</span>
+</span></span><span class=line><span class=cl>loginctl seat-status seat0
+</span></span><span class=line><span class=cl>ls -la /dev/dri/card0
+</span></span><span class=line><span class=cl><span class=c1># 查看 ACL 分配</span>
+</span></span><span class=line><span class=cl>getfacl /dev/dri/card0</span></span></code></pre></div><h3 id=72-图形渲染问题 class=headerLink><a href=#72-%e5%9b%be%e5%bd%a2%e6%b8%b2%e6%9f%93%e9%97%ae%e9%a2%98 class=header-mark></a>7.2 图形渲染问题</h3><p><strong>应用崩溃诊断</strong>：</p><ul><li><strong>核心转储分析</strong>：<div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
 tw-flex-row
 tw-flex-1
 tw-justify-between
@@ -1150,21 +1094,335 @@ group-[.is-closed]:!tw-max-h-0
 group-[.is-wrap]:tw-text-wrap
 tw-overflow-y-hidden
 tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 查看核心转储</span>
+</span></span><span class=line><span class=cl>coredumpctl list
+</span></span><span class=line><span class=cl>coredumpctl info &lt;pid&gt;
+</span></span><span class=line><span class=cl><span class=c1># 调试核心文件</span>
+</span></span><span class=line><span class=cl>coredumpctl debug &lt;pid&gt;</span></span></code></pre></div></li><li><strong>GPU 问题诊断</strong>：<div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
+tw-flex
+tw-flex-row
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-22 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 检查 GPU 重置</span>
+</span></span><span class=line><span class=cl>dmesg <span class=p>|</span> grep -i <span class=s2>&#34;gpu hang\|reset&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># Mesa 调试信息</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>LIBGL_DEBUG</span><span class=o>=</span>verbose</span></span></code></pre></div></li><li><strong>Wayland 协议错误</strong>：<div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
+tw-flex
+tw-flex-row
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-23 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># Wayland 调试输出</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>WAYLAND_DEBUG</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=c1># 合成器日志</span>
+</span></span><span class=line><span class=cl>journalctl --user -u &lt;compositor&gt; -f</span></span></code></pre></div></li></ul><p><strong>性能问题分析</strong>：</p><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
+tw-flex
+tw-flex-row
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-24 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># GPU 使用率</span>
+</span></span><span class=line><span class=cl>nvidia-smi  <span class=c1># NVIDIA</span>
+</span></span><span class=line><span class=cl>radeontop   <span class=c1># AMD</span>
+</span></span><span class=line><span class=cl><span class=c1># CPU 使用率分析</span>
+</span></span><span class=line><span class=cl>perf top -p &lt;pid&gt;
+</span></span><span class=line><span class=cl><span class=c1># 内存使用</span>
+</span></span><span class=line><span class=cl>smem -p <span class=p>|</span> grep &lt;application&gt;
+</span></span><span class=line><span class=cl><span class=c1># 帧率监控</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>__GL_SHOW_GRAPHICS_OSD</span><span class=o>=</span><span class=m>1</span>  <span class=c1># NVIDIA</span></span></span></code></pre></div><p><strong>兼容性问题</strong>：</p><ul><li><strong>Xwayland 问题</strong>：部分 X11 应用在 Xwayland 下运行异常</li><li><strong>Wayland 协议缺失</strong>：某些功能需要特定的 Wayland 扩展</li><li><strong>驱动兼容性</strong>：GPU 驱动可能不完全支持某些 Wayland 特性</li></ul><p><strong>解决方法</strong>：</p><ul><li>更新 Mesa 和 GPU 驱动</li><li>检查合成器对必要 Wayland 扩展的支持</li><li>对于顽固问题，可临时使用 X11 会话</li></ul><hr><h2 id=总结 class=headerLink><a href=#%e6%80%bb%e7%bb%93 class=header-mark></a>总结</h2><p>从用户登录到画面显示，这一整套流程确实挺复杂的，展开说那可能得好几本大部头了。</p><p>Wayland 虽然还在发展中，但确实比 X11 要现代化很多，性能和安全性的提升是实实在在的，而且在
+2025 年的今天 Wayland 生态的可用性已经很不错了。</p><p>下一篇文章我们会聊聊多媒体和中文支持，看看系统是如何处理音频视频和中文显示的。</p><hr><h2 id=快速参考 class=headerLink><a href=#%e5%bf%ab%e9%80%9f%e5%8f%82%e8%80%83 class=header-mark></a>快速参考</h2><h3 id=常用会话管理命令 class=headerLink><a href=#%e5%b8%b8%e7%94%a8%e4%bc%9a%e8%af%9d%e7%ae%a1%e7%90%86%e5%91%bd%e4%bb%a4 class=header-mark></a>常用会话管理命令</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
+tw-flex
+tw-flex-row
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-25 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 会话管理</span>
+</span></span><span class=line><span class=cl>loginctl list-sessions                    <span class=c1># 列出所有会话</span>
+</span></span><span class=line><span class=cl>loginctl show-session &lt;id&gt; -p Name -p UID -p Seat  <span class=c1># 会话详情</span>
+</span></span><span class=line><span class=cl>loginctl terminate-session &lt;id&gt;           <span class=c1># 终止会话</span>
+</span></span><span class=line><span class=cl><span class=c1># seat 管理</span>
+</span></span><span class=line><span class=cl>loginctl seat-status                      <span class=c1># 查看 seat 状态</span>
+</span></span><span class=line><span class=cl>loginctl seat-status seat0                <span class=c1># 特定 seat 详情</span>
+</span></span><span class=line><span class=cl><span class=c1># 设备权限检查</span>
+</span></span><span class=line><span class=cl>ls -la /dev/dri/card0                     <span class=c1># GPU 设备权限</span>
+</span></span><span class=line><span class=cl>ls -la /dev/input/event*                  <span class=c1># 输入设备权限</span></span></span></code></pre></div><h3 id=常用图形调试命令 class=headerLink><a href=#%e5%b8%b8%e7%94%a8%e5%9b%be%e5%bd%a2%e8%b0%83%e8%af%95%e5%91%bd%e4%bb%a4 class=header-mark></a>常用图形调试命令</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
+tw-flex
+tw-flex-row
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-26 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
+tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 图形驱动信息</span>
+</span></span><span class=line><span class=cl>glxinfo <span class=p>|</span> grep <span class=s2>&#34;OpenGL renderer&#34;</span>          <span class=c1># OpenGL 信息</span>
+</span></span><span class=line><span class=cl>vulkaninfo <span class=p>|</span> grep <span class=s2>&#34;GPU id&#34;</span>                <span class=c1># Vulkan 信息</span>
+</span></span><span class=line><span class=cl>lspci -k <span class=p>|</span> grep -A <span class=m>3</span> -i vga               <span class=c1># 显卡驱动</span>
+</span></span><span class=line><span class=cl>ls -la /dev/dri/                          <span class=c1># DRM 设备</span>
+</span></span><span class=line><span class=cl><span class=c1># Wayland 环境</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$WAYLAND_DISPLAY</span> <span class=nv>$XDG_RUNTIME_DIR</span>    <span class=c1># 环境变量</span>
+</span></span><span class=line><span class=cl>wayland-info <span class=p>|</span> grep text-input            <span class=c1># 协议支持</span>
+</span></span><span class=line><span class=cl><span class=c1># 调试变量</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>WAYLAND_DEBUG</span><span class=o>=</span><span class=m>1</span>                    <span class=c1># Wayland 调试</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>MESA_DEBUG</span><span class=o>=</span><span class=m>1</span>                       <span class=c1># Mesa 调试</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GSK_RENDERER</span><span class=o>=</span>vulkan                <span class=c1># GTK 渲染器</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>QT_OPENGL</span><span class=o>=</span>desktop                  <span class=c1># Qt 渲染器</span></span></span></code></pre></div><h3 id=重要配置文件位置 class=headerLink><a href=#%e9%87%8d%e8%a6%81%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e4%bd%8d%e7%bd%ae class=header-mark></a>重要配置文件位置</h3><div class="code-block highlight is-open show-line-numbers tw-group tw-my-2"><div class="tw-flex
+tw-flex-row
+tw-flex-1
+tw-justify-between
+tw-w-full tw-bg-bgColor-secondary"><button class="code-block-button
+tw-mx-2
+tw-flex
+tw-flex-row
+tw-flex-1" aria-hidden=true><div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon" viewBox="0 0 320 512"><path d="M285.476 272.971 91.132 467.314c-9.373 9.373-24.569 9.373-33.941.0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941.0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div><p class="tw-select-none !tw-my-1">bash</p></button><div class=tw-flex><button class="line-number-button
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.show-line-numbers]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle line numbers"><svg class="icon" viewBox="0 0 512 512"><path d="M61.77 401l17.5-20.15a19.92 19.92.0 005.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 00-8 8v16a8 8 0 008 8h22.83a157.41 157.41.0 00-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33.0 15.94 2.44 15.94 9.09.0 4.72-4.2 8.22-14.36 8.22a41.54 41.54.0 01-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16.0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zm0-160H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16V80a16 16 0 00-16-16zm0 320H176a16 16 0 00-16 16v32a16 16 0 0016 16h320a16 16 0 0016-16v-32a16 16 0 00-16-16zM16 160h64a8 8 0 008-8v-16a8 8 0 00-8-8H64V40a8 8 0 00-8-8H32a8 8 0 00-7.14 4.42l-8 16A8 8 0 0024 64h8v64H16a8 8 0 00-8 8v16a8 8 0 008 8zm-3.91 160H80a8 8 0 008-8v-16a8 8 0 00-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44.0-29.06-25-39.56-44.47-39.56-21.36.0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44.0 019.46-3.84c3.33.0 9.28 1.56 9.28 8.75C51 248.19.0 257.31.0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+<button class="wrap-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+group-[.is-wrap]:tw-text-fgColor-link
+print:!tw-hidden" title="Toggle code wrap"><svg class="icon" viewBox="0 0 448 512"><path d="M16 132h416c8.837.0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163.0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837.0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837.0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+<button class="copy-code-button
+tw-select-none
+tw-mx-2
+tw-hidden
+group-[.is-open]:tw-block
+hover:tw-text-fgColor-link
+print:!tw-hidden" title="Copy code">
+<span class="copy-icon tw-block"><svg class="icon" viewBox="0 0 448 512"><path d="M433.941 65.941l-51.882-51.882A48 48 0 00348.118.0H176c-26.51.0-48 21.49-48 48v48H48c-26.51.0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51.0 48-21.49 48-48v-48h80c26.51.0 48-21.49 48-48V99.882a48 48 0 00-14.059-33.941zM266 464H54a6 6 0 01-6-6V150a6 6 0 016-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 01-6 6zm128-96H182a6 6 0 01-6-6V54a6 6 0 016-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 01-6 6zm6-256h-64V48h9.632c1.591.0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 011.757 4.243V112z"/></svg></span>
+<span class="check-icon tw-hidden"><svg class="icon" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206.0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204.0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204.0l36.203 36.204c9.997 9.997 9.997 26.206.0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+</button>
+<button class="tw-select-none
+tw-mx-2
+tw-block
+group-[.is-open]:tw-hidden
+print:!tw-hidden" disabled aria-hidden=true><svg class="icon" viewBox="0 0 512 512"><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8.0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button></div></div><pre style=counter-reset:codeblock class="tw-block tw-m-0 tw-p-0"><code id=codeblock-id-27 class="chroma
+!tw-block
+tw-p-0
+tw-m-0
+tw-transition-[max-height]
+tw-duration-500
+tw-ease-in-out
+group-[.is-closed]:!tw-max-h-0
+group-[.is-wrap]:tw-text-wrap
+tw-overflow-y-hidden
+tw-overflow-x-auto
 tw-scrollbar-thin"><span class=line><span class=cl><span class=c1># 会话相关</span>
 </span></span><span class=line><span class=cl>/etc/systemd/logind.conf                  <span class=c1># logind 配置</span>
 </span></span><span class=line><span class=cl>~/.config/systemd/user/                   <span class=c1># 用户服务配置</span>
-</span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 图形相关</span>
 </span></span><span class=line><span class=cl>~/.config/wayland/                        <span class=c1># Wayland 配置</span>
 </span></span><span class=line><span class=cl>~/.config/gtk-3.0/                        <span class=c1># GTK 配置</span>
 </span></span><span class=line><span class=cl>~/.config/qt5ct/                          <span class=c1># Qt 配置</span>
 </span></span><span class=line><span class=cl>~/.config/mesa/                           <span class=c1># Mesa 配置</span>
-</span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 设备权限</span>
 </span></span><span class=line><span class=cl>/etc/udev/rules.d/                        <span class=c1># udev 规则</span>
 </span></span><span class=line><span class=cl>/dev/dri/                                 <span class=c1># GPU 设备</span>
 </span></span><span class=line><span class=cl>/dev/input/                               <span class=c1># 输入设备</span>
-</span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 显示管理器</span>
 </span></span><span class=line><span class=cl>/etc/gdm/                                 <span class=c1># GDM 配置</span>
 </span></span><span class=line><span class=cl>/etc/lightdm/                             <span class=c1># LightDM 配置</span>
