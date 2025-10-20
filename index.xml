@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-20T16:02:28+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-20T16:19:55+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;系统关机看似简单，但背后涉及了繁杂的资源清理和状态管理过程。当你点击关机按钮，系统却卡在那里不动，或者出现各种奇怪的错误信息时，理解关机流程和故障排查方法就显得尤为重要。&lt;/p&gt;
@@ -10159,7 +10159,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     <a href="#seat%e5%ba%a7%e5%b8%ad%e6%a6%82%e5%bf%b5" class="header-mark"></a>seat（座席）概念</h4><blockquote>
   <p><a href="https://www.freedesktop.org/wiki/Software/systemd/multiseat/" target="_blank" rel="noopener noreferrer">https://www.freedesktop.org/wiki/Software/systemd/multiseat/</a></p>
 </blockquote><ul>
-<li><strong>seat</strong>（座席）是 systemd/logind 引入的术语，用来表示“一组物理设备的集合”（例如一个显示器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话。</li>
+<li><strong>seat</strong>（座席）是 systemd/logind 引入的术语，用来表示「一组物理设备的集合」（例如一个显示器 + 一套键盘和鼠标 + 音频设备），以及与之关联的会话。</li>
 <li>所有设备默认都会被分配给 <strong>seat0</strong>, 想再搞一个 seat1 实现多人图形化登录，必须通过 udev
 规则完成如下操作：
 <ol>
@@ -10439,7 +10439,7 @@ tty1/tty2 启动。</p>
 <p>fbcon 基于 <strong>fbdev（framebuffer device）</strong> 框架工作，通过 <code>/dev/fb0</code> 等设备文件访问显存。<code>fbcon</code> 可以在不安装专用显卡驱动（如 NVIDIA/AMD 驱动）时工作，这是因为它依赖于<strong>显卡固件提供的标准化接口</strong>：</p>
 <ol>
 <li><strong>VESA BIOS Extensions (VBE)</strong>：在传统 BIOS 系统上，内核的 <code>vesafb</code> 驱动通过 VBE 接口
-（由显卡 BIOS 实现）请求一个标准的显示模式（如 1024x768），并获取一个指向显存的“线性帧缓冲区”（LFB）地址。</li>
+（由显卡 BIOS 实现）请求一个标准的显示模式（如 1024x768），并获取一个指向显存的「线性帧缓冲区」（LFB）地址。</li>
 <li><strong>UEFI Graphics Output Protocol (GOP)</strong>：在现代 UEFI 系统上，内核的 <code>efifb</code> 驱动通过
 GOP 接口实现相同的功能。</li>
 </ol>
@@ -10478,25 +10478,27 @@ KD_GRAPHICS 模式下，图形服务器才会接管 evdev 设备。</li>
 <ul>
 <li><strong>DRM（Direct Rendering Manager）</strong>：内核中的图形驱动框架，是现代 Linux 图形栈的基石。它将 GPU 硬件抽象为 <code>/dev/dri/card0</code> 等设备文件，并提供两大核心功能：
 <ul>
-<li><strong>KMS（Kernel Mode Setting）</strong>：内核显示模式设置。这是 DRM 的革命性特性。它将设置显示器分辨率、刷新率等模式（Modesetting）的<em>职责</em>，从用户空间程序（如旧的 X Server）<strong>收归到 Linux 内核</strong>。
+<li><strong>KMS（Kernel Mode Setting）</strong>：Linux 内核中专门负责控制显卡输出、设置显示器分辨率和刷新率等模式（Modesetting）的子系统。主要特点：
 <ul>
-<li><strong>KMS 之前的时代 (UMS)</strong>：用户空间的 X Server 必须以 root 权限直接操作硬件来设置分辨率。这导致启动时会“闪屏”（从低分率 tty 切到高分辨率 X），且 <code>Ctrl+Alt+F1</code> 切换 tty
-极易崩溃。</li>
-<li><strong>KMS 时代</strong>：内核在启动<em>极早期</em>就通过 KMS 接管显卡，将 <code>tty</code> 设置到原生分辨率，实现<strong>无闪烁启动</strong>。Wayland 合成器（或现代 Xorg）也无需 root，只需以普通用户身份向内核<strong>请求</strong>设置模式，内核会安全地完成切换，这使得 <strong>VT 切换瞬时且稳定</strong>，并能可靠处理显示器<strong>热插拔</strong>。</li>
+<li><strong>内核级控制</strong>：由内核直接管理显示模式，避免用户空间程序直接操作硬件</li>
+<li><strong>无闪烁启动</strong>：系统启动时直接设置到显示器原生分辨率，避免分辨率切换时的闪烁</li>
+<li><strong>热插拔支持</strong>：可以动态检测和配置新连接的显示器</li>
+<li><strong>多显示器支持</strong>：支持多显示器配置和扩展桌面</li>
+<li><strong>稳定切换</strong>：VT 切换（Ctrl+Alt+F1 等）瞬时且稳定</li>
+<li><strong>权限安全</strong>：用户空间程序无需 root 权限即可请求显示模式切换</li>
 </ul>
 </li>
-<li><strong>GEM（Graphics Execution Manager）</strong>：图形执行管理器。DRM 提供的缓冲区管理框架
-（NVIDIA 对应有 <code>NVRM</code>，AMD 对应有 <code>AMDGPU</code> 内核驱动），负责分配和管理 GPU 显存，并控制 2D/3D 引擎的执行。</li>
+<li><strong>GEM（Graphics Execution Manager）</strong>：图形执行管理器。DRM 提供的缓冲区管理框架，负责分配和管理 GPU 显存，并控制 2D/3D 引擎的执行。</li>
 </ul>
 </li>
 <li><strong>DRM-Master</strong>：设备主控权限。这是内核 DRM 提供的一种独占锁，用于仲裁哪个进程有权<em>请求</em>
-KMS 操作（即设置显示模式）。<code>systemd-logind</code> 会将这个权限授予“活动”的图形会话（如Wayland
-合成器或 X Server），确保同一时间只有一个“主宰者”能控制屏幕输出。</li>
+KMS 操作（即设置显示模式）。<code>systemd-logind</code> 会将这个权限授予「活动」的图形会话（如
+Wayland合成器或 X Server），确保同一时间只有一个「主宰者」能控制屏幕输出。</li>
 <li><strong>Mesa</strong>：用户空间的 3D 图形驱动库，提供了 OpenGL 和 Vulkan 等图形 API 的开源实现。</li>
-<li><strong>EGL</strong>：Khronos 组织定义的接口，是 Mesa 和 Wayland（或 X11）之间的“胶水”，负责将
+<li><strong>EGL</strong>：Khronos 组织定义的接口，是 Mesa 和 Wayland（或 X11）之间的「胶水」，负责将
 OpenGL/Vulkan 渲染 API 与本地窗口系统连接起来。</li>
 <li><strong>GBM（Generic Buffer Manager）</strong>：Mesa 提供的一个 API，允许合成器（Compositor）通过
-DRM/KMS 框架，以“非 EGL”的方式直接分配和管理图形缓冲区（Buffers）。</li>
+DRM/KMS 框架，以「非 EGL」的方式直接分配和管理图形缓冲区（Buffers）。</li>
 <li><strong>libdrm</strong>：一个用户空间库，封装了与内核 DRM 驱动进行 <code>ioctl</code> 通信的复杂细节，简化了
 Mesa 和合成器对 DRM/KMS/GEM 的调用。</li>
 </ul>
@@ -10538,7 +10540,7 @@ Mesa 和合成器对 DRM/KMS/GEM 的调用。</li>
     <a href="#41-%e6%9e%b6%e6%9e%84%e5%af%b9%e6%af%94x11-vs-wayland" class="header-mark"></a>4.1 架构对比：X11 vs Wayland</h3><ul>
 <li><strong>X11（传统）</strong>：在 X11 架构中，<strong>X Server</strong>（例如 <code>Xorg</code>）是显示服务器，直接与显卡驱动和输入设备交互； <strong>窗口管理器 / 桌面环境</strong>（例如 i3、GNOME）则作为 <strong>X client</strong> 连接到 X
 Server，负责窗口摆放、装饰以及用户界面。使用 <code>startx</code>（实际上调用 <code>xinit</code>）启动图形会话时，本质流程是：先启动 X Server，再在其中运行窗口管理器或桌面环境（如<code>exec i3</code>）。<strong>Display Manager</strong>（如 GDM、SDDM）在图形登录时会自动启动 X Server，并完成用户认证、设置 <code>DISPLAY</code> 等环境变量，然后再运行会话。</li>
-<li><strong>Wayland（现代）</strong>： <strong>Wayland 合成器</strong>本身既是显示服务器，又是窗口管理器。它直接通过内核的 <strong>DRM/KMS</strong> 控制显示模式，通过 <strong>evdev/libinput</strong> 采集并分发输入事件。Wayland 客户端应用通过 <strong>Wayland socket</strong>（通常位于 <code>$XDG_RUNTIME_DIR/wayland-0</code>，但具体名字可变）与合成器通信。因为合成器本身直接控制显示和输入设备，所以它可以<strong>直接从一个已登录的 TTY 启动</strong>，作为该 TTY 的图形会话的 &ldquo;display server&rdquo;，无需先用 <code>startx</code> 启动一个独立的 X
+<li><strong>Wayland（现代）</strong>： <strong>Wayland 合成器</strong>本身既是显示服务器，又是窗口管理器。它直接通过内核的 <strong>DRM/KMS</strong> 控制显示模式，通过 <strong>evdev/libinput</strong> 采集并分发输入事件。Wayland 客户端应用通过 <strong>Wayland socket</strong>（通常位于 <code>$XDG_RUNTIME_DIR/wayland-0</code>，但具体名字可变）与合成器通信。因为合成器本身直接控制显示和输入设备，所以它可以<strong>直接从一个已登录的 TTY 启动</strong>，作为该 TTY 的图形会话的「display server」，无需先用 <code>startx</code> 启动一个独立的 X
 Server。如果使用 Display Manager 登录 Wayland 会话，则由 DM 在合适的 TTY 启动合成器并准备_会话_环境。</li>
 </ul>
 <h4 id="tty-到图形界面的切换机制" class="headerLink">
@@ -13440,7 +13442,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
       </tr>
       <tr>
           <td><strong>自动轮转与压缩</strong></td>
-          <td>按“大小、时间、文件数”回收日志；轮转后默认用 LZ4 压缩，节省 60% 以上空间。</td>
+          <td>按「大小、时间、文件数」回收日志；轮转后默认用 LZ4 压缩，节省 60% 以上空间。</td>
       </tr>
       <tr>
           <td><strong>速率限制</strong></td>
@@ -13814,8 +13816,9 @@ daemon）, 一般直接 print 即可。</li>
     <a href="#215-%e6%97%a7%e6%97%a5%e5%bf%97%e7%b3%bb%e7%bb%9f%e4%b8%8e-varlog-%e8%a7%a3%e6%9e%90" class="header-mark"></a>2.1.5 旧日志系统与 /var/log/ 解析</h4><h5 id="旧日志系统基于-syslog-的文本管理" class="headerLink">
     <a href="#%e6%97%a7%e6%97%a5%e5%bf%97%e7%b3%bb%e7%bb%9f%e5%9f%ba%e4%ba%8e-syslog-%e7%9a%84%e6%96%87%e6%9c%ac%e7%ae%a1%e7%90%86" class="header-mark"></a>旧日志系统：基于 syslog 的文本管理</h5><p>在 systemd 普及前，Linux 依赖 <strong>syslog 协议+文本文件</strong> 管理日志，核心组件是<strong>rsyslog</strong>（syslog 主流实现，功能强于早期 <code>syslogd</code>）。</p>
 <ul>
-<li><strong>旧系统工作流</strong>：应用通过 <code>syslog(3)</code> 接口输出日志 → rsyslog 接收 → 按“设施+优先级”写入<code>/var/log/</code> 文本文件；</li>
-<li><strong>现代系统中的角色</strong>：rsyslog 不再是核心收集器，而是作为“兼容层”——接收 journald 转发的日志，生成传统文本文件（如 <code>/var/log/auth.log</code>），或转发到远程日志服务器（支持 TCP/TLS 加密）。</li>
+<li><strong>旧系统工作流</strong>：应用通过 <code>syslog(3)</code> 接口输出日志 → rsyslog 接收 → 按「设施+优先级」写入 <code>/var/log/</code> 文本文件；</li>
+<li><strong>现代系统中的角色</strong>：rsyslog 不再是核心收集器，而是作为「兼容层」——接收 journald 转发的日志，生成传统文本文件（如 <code>/var/log/auth.log</code>），或转发到远程日志服务器（支持 TCP/TLS
+加密）。</li>
 </ul>
 <h5 id="varlog-常见文件及功能" class="headerLink">
     <a href="#varlog-%e5%b8%b8%e8%a7%81%e6%96%87%e4%bb%b6%e5%8f%8a%e5%8a%9f%e8%83%bd" class="header-mark"></a>/var/log/ 常见文件及功能</h5><p>现代系统中，这些文件由 rsyslog 生成（兼容旧习惯），不同发行版名称略有差异，但都为纯文本格式：</p>
@@ -15548,7 +15551,7 @@ symlink、设置权限）</li>
 </li>
 </ul>
 <h3 id="42-关键概念" class="headerLink">
-    <a href="#42-%e5%85%b3%e9%94%ae%e6%a6%82%e5%bf%b5" class="header-mark"></a>4.2 关键概念</h3><p>D-Bus 通过 “对象 - 接口” 模型封装功能，以下结合 <code>systemd1</code> 与 <code>logind1</code> 的真实定义，对应核心概念：</p>
+    <a href="#42-%e5%85%b3%e9%94%ae%e6%a6%82%e5%bf%b5" class="header-mark"></a>4.2 关键概念</h3><p>D-Bus 通过 「对象 - 接口」 模型封装功能，以下结合 <code>systemd1</code> 与 <code>logind1</code> 的真实定义，对应核心概念：</p>
 <table>
   <thead>
       <tr>
@@ -15560,37 +15563,37 @@ symlink、设置权限）</li>
   <tbody>
       <tr>
           <td>总线（Bus）</td>
-          <td>消息传输的 “高速公路”，分系统 / 会话两类</td>
+          <td>消息传输的 「高速公路」，分系统 / 会话两类</td>
           <td>系统总线 <code>/var/run/dbus/system_bus_socket</code>（<code>systemd1</code>/<code>logind1</code> 唯一使用的总线）</td>
       </tr>
       <tr>
           <td>服务名（Name）</td>
-          <td>服务端在总线上的 “身份证”，唯一可请求</td>
+          <td>服务端在总线上的 「身份证」，唯一可请求</td>
           <td><code>org.freedesktop.systemd1</code>（<code>systemd</code> 服务名）、<code>org.freedesktop.login1</code>（<code>logind</code> 服务名）</td>
       </tr>
       <tr>
           <td>对象（Object）</td>
-          <td>服务端功能的 “实例载体”，有唯一路径</td>
+          <td>服务端功能的 「实例载体」，有唯一路径</td>
           <td><code>/org/freedesktop/systemd1</code>（<code>systemd1</code> 根对象）、<code>/org/freedesktop/login1</code>（<code>logind1</code> 根对象）</td>
       </tr>
       <tr>
           <td>接口（Interface）</td>
-          <td>定义对象的 “功能契约”（方法、信号、属性）</td>
+          <td>定义对象的 「功能契约」（方法、信号、属性）</td>
           <td><code>org.freedesktop.systemd1.Manager</code>（<code>systemd1</code> 核心接口）、<code>org.freedesktop.login1.Manager</code>（<code>logind1</code> 核心接口）</td>
       </tr>
       <tr>
           <td>方法（Method）</td>
-          <td>客户端可主动调用的 “同步功能”（有请求有返回）</td>
+          <td>客户端可主动调用的 「同步功能」（有请求有返回）</td>
           <td><code>systemd1</code> 的 <code>StartUnit</code>（启动系统单元，如 <code>nginx.service</code>）、<code>logind1</code> 的 <code>ListSessions</code>（查询所有活跃用户会话）</td>
       </tr>
       <tr>
           <td>信号（Signal）</td>
-          <td>服务端主动发送的 “异步通知”（无返回）</td>
+          <td>服务端主动发送的 「异步通知」（无返回）</td>
           <td><code>systemd1</code> 的 <code>UnitActiveChanged</code>（单元状态变化，如 <code>nginx</code> 从 <code>inactive</code> 变为 <code>active</code>）、<code>logind1</code> 的 <code>SessionNew</code>（新用户登录创建会话）</td>
       </tr>
       <tr>
           <td>属性（Property）</td>
-          <td>对象的 “状态数据”，支持读取 / 写入</td>
+          <td>对象的 「状态数据」，支持读取 / 写入</td>
           <td><code>systemd1</code> 的 <code>ActiveUnits</code>（所有活跃系统单元列表）、<code>logind1</code> 的 <code>CanPowerOff</code>（当前系统是否允许关机，布尔值）</td>
       </tr>
   </tbody>
@@ -15767,13 +15770,13 @@ symlink、设置权限）</li>
     <a href="#44-d-bus-%e7%9a%84%e4%b8%89%e7%b1%bb%e8%a7%92%e8%89%b2" class="header-mark"></a>4.4 D-Bus 的三类角色</h3><ol>
 <li>
 <p><strong>总线守护进程（dbus-daemon）</strong></p>
-<p>架构的 “中枢”，每个总线对应一个守护进程，核心职责：</p>
+<p>架构的 「中枢」，每个总线对应一个守护进程，核心职责：</p>
 <ul>
 <li>
 <p>管理进程的连接（如验证 <code>普通用户</code> 是否有权调用 <code>logind1</code> 的 <code>PowerOff</code> 方法）；</p>
 </li>
 <li>
-<p>路由消息（将客户端请求的 “启动 <code>nginx</code> 服务” 转发给 <code>systemd1</code>）；</p>
+<p>路由消息（将客户端请求的 「启动 <code>nginx</code> 服务」 转发给 <code>systemd1</code>）；</p>
 </li>
 <li>
 <p>维护服务注册表（记录 <code>org.freedesktop.login1</code> 与 <code>logind</code> 进程的映射关系）。</p>
@@ -15785,10 +15788,10 @@ symlink、设置权限）</li>
 <p>提供功能的进程（如 <code>systemd</code> 进程、<code>logind</code> 进程），核心操作：</p>
 <ul>
 <li>
-<p>向总线注册 “服务名”（<code>systemd1</code> 注册 <code>org.freedesktop.systemd1</code>，<code>logind1</code> 注册<code>org.freedesktop.login1</code>，均为唯一标识）；</p>
+<p>向总线注册 「服务名」（<code>systemd1</code> 注册 <code>org.freedesktop.systemd1</code>，<code>logind1</code> 注册<code>org.freedesktop.login1</code>，均为唯一标识）；</p>
 </li>
 <li>
-<p>暴露 “对象” 和 “接口”（如 <code>systemd1</code> 暴露 <code>/org/freedesktop/systemd1</code> 对象与<code>org.freedesktop.systemd1.Manager</code> 接口），供客户端调用。</p>
+<p>暴露 「对象」 和 「接口」（如 <code>systemd1</code> 暴露 <code>/org/freedesktop/systemd1</code> 对象与<code>org.freedesktop.systemd1.Manager</code> 接口），供客户端调用。</p>
 </li>
 </ul>
 </li>
@@ -16046,14 +16049,14 @@ symlink、设置权限）</li>
 <ol>
 <li>
 <p><strong>总线配置文件（静态规则管控）</strong></p>
-<p>通过 XML 配置文件定义细粒度访问规则，实现对 “谁能访问哪些服务 / 方法” 的静态限制。例如：</p>
+<p>通过 XML 配置文件定义细粒度访问规则，实现对 「谁能访问哪些服务 / 方法」 的静态限制。例如：</p>
 <ul>
 <li>
 <p>系统总线的服务级规则（如 <code>/etc/dbus-1/system.d/org.freedesktop.login1.conf</code>）可限制普通用户调用 <code>org.freedesktop.login1.Manager.PowerOff</code>（关机方法）；</p>
 </li>
 <li>
 <p>全局规则（如 <code>/etc/dbus-1/system.conf</code>）可限定仅 <code>root</code> 或 <code>dbus</code> 组用户访问<code>org.freedesktop.systemd1</code>（systemd 服务）的核心接口。</p>
-<p>规则遵循 “<code>deny</code> 优先级高于 <code>allow</code>、服务级规则高于全局规则” 的逻辑，从总线层面直接拦截未授权请求。</p>
+<p>规则遵循 「<code>deny</code> 优先级高于 <code>allow</code>、服务级规则高于全局规则」 的逻辑，从总线层面直接拦截未授权请求。</p>
 </li>
 </ul>
 </li>
@@ -16076,7 +16079,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
 </li>
 </ol>
 <h4 id="472-flatpak-对-d-bus-权限的细粒度管控" class="headerLink">
-    <a href="#472-flatpak-%e5%af%b9-d-bus-%e6%9d%83%e9%99%90%e7%9a%84%e7%bb%86%e7%b2%92%e5%ba%a6%e7%ae%a1%e6%8e%a7" class="header-mark"></a>4.7.2 Flatpak 对 D-Bus 权限的细粒度管控</h4><p>在现代 Linux 桌面中，若需将商业软件等非信任应用运行在沙箱中，同时保障 “必要 D-Bus 交互不中断、越权访问被阻断”，Flatpak 采用 <strong>“底层沙箱隔离 + 上层代理过滤”</strong> 的双层方案 —— 其中<code>bubblewrap</code> 是 Flatpak 依赖的底层沙箱工具，负责环境隔离；<code>xdg-dbus-proxy</code> 是上层过滤组件，负责 D-Bus 细粒度管控，两者协同实现完整安全隔离：</p>
+    <a href="#472-flatpak-%e5%af%b9-d-bus-%e6%9d%83%e9%99%90%e7%9a%84%e7%bb%86%e7%b2%92%e5%ba%a6%e7%ae%a1%e6%8e%a7" class="header-mark"></a>4.7.2 Flatpak 对 D-Bus 权限的细粒度管控</h4><p>在现代 Linux 桌面中，若需将商业软件等非信任应用运行在沙箱中，同时保障 「必要 D-Bus 交互不中断、越权访问被阻断」，Flatpak 采用 <strong>「底层沙箱隔离 + 上层代理过滤」</strong> 的双层方案 —— 其中 <code>bubblewrap</code> 是 Flatpak 依赖的底层沙箱工具，负责环境隔离；<code>xdg-dbus-proxy</code> 是上层过滤组件，负责 D-Bus 细粒度管控，两者协同实现完整安全隔离：</p>
 <h5 id="4721-底层基础隔离bubblewrap-的-socket-隐藏与代理挂载" class="headerLink">
     <a href="#4721-%e5%ba%95%e5%b1%82%e5%9f%ba%e7%a1%80%e9%9a%94%e7%a6%bbbubblewrap-%e7%9a%84-socket-%e9%9a%90%e8%97%8f%e4%b8%8e%e4%bb%a3%e7%90%86%e6%8c%82%e8%bd%bd" class="header-mark"></a>4.7.2.1 底层基础隔离：bubblewrap 的 &ldquo;socket 隐藏与代理挂载&rdquo;</h5><p>Flatpak 以 <code>bubblewrap</code>（简称 bwrap）为底层沙箱基础，利用其 <code>bind mount</code> 和<code>user namespace</code> 能力完成环境初始化，核心目标是切断沙箱应用与宿主 D-Bus 总线的直接联系：</p>
 <ul>
@@ -16085,7 +16088,7 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
 </li>
 <li>
 <p><strong>挂载代理 socket</strong>：同时，<code>bubblewrap</code> 会将 <code>xdg-dbus-proxy</code> 在宿主侧预先创建的 <strong>私有代理 socket</strong>，通过 <code>bind mount</code> 挂载到沙箱内的默认 D-Bus socket 路径（如沙箱内的<code>/var/run/dbus/system_bus_socket</code>）。</p>
-<p>此时沙箱应用感知到的 “D-Bus 总线”，实际是 <code>xdg-dbus-proxy</code> 提供的代理接口，无法直接接触宿主真实总线。</p>
+<p>此时沙箱应用感知到的 「D-Bus 总线」，实际是 <code>xdg-dbus-proxy</code> 提供的代理接口，无法直接接触宿主真实总线。</p>
 </li>
 </ul>
 <h5 id="4722-上层规则过滤xdg-dbus-proxy-的-白名单校验" class="headerLink">
@@ -16184,9 +16187,9 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
 </span></span><span class="line"><span class="cl">--deny<span class="o">=</span>org.freedesktop.systemd1            <span class="c1"># 拒绝访问 systemd 服务</span>
 </span></span><span class="line"><span class="cl">--deny<span class="o">=</span>org.freedesktop.login1.Manager.PowerOff  <span class="c1"># 拒绝调用关机方法</span></span></span></code></pre>
 </div>
-<p>这些规则可精确到 “服务名 + 接口 + 方法 + 对象路径”，弥补 D-Bus 原生配置在沙箱场景下 “动态性不足、粒度较粗” 的局限。</p>
+<p>这些规则可精确到 「服务名 + 接口 + 方法 + 对象路径」，弥补 D-Bus 原生配置在沙箱场景下 「动态性不足、粒度较粗」 的局限。</p>
 <h5 id="4723-消息流转代理的-校验---转发-逻辑" class="headerLink">
-    <a href="#4723-%e6%b6%88%e6%81%af%e6%b5%81%e8%bd%ac%e4%bb%a3%e7%90%86%e7%9a%84-%e6%a0%a1%e9%aa%8c---%e8%bd%ac%e5%8f%91-%e9%80%bb%e8%be%91" class="header-mark"></a>4.7.2.3 消息流转：代理的 &ldquo;校验 - 转发&rdquo; 逻辑</h5><p>沙箱应用无需修改代码，会默认连接沙箱内的 “代理 socket”，所有 D-Bus 消息（方法调用、信号订阅）均需经过 <code>xdg-dbus-proxy</code> 的校验：</p>
+    <a href="#4723-%e6%b6%88%e6%81%af%e6%b5%81%e8%bd%ac%e4%bb%a3%e7%90%86%e7%9a%84-%e6%a0%a1%e9%aa%8c---%e8%bd%ac%e5%8f%91-%e9%80%bb%e8%be%91" class="header-mark"></a>4.7.2.3 消息流转：代理的 &ldquo;校验 - 转发&rdquo; 逻辑</h5><p>沙箱应用无需修改代码，会默认连接沙箱内的 「代理 socket」，所有 D-Bus 消息（方法调用、信号订阅）均需经过 <code>xdg-dbus-proxy</code> 的校验：</p>
 <ul>
 <li>
 <p>若目标服务 / 方法在白名单内（如 <code>org.freedesktop.portal.FileChooser.OpenFile</code>），代理会将消息转发至宿主 D-Bus 总线，并把返回结果回传应用；</p>
@@ -25236,7 +25239,7 @@ Patreon、buymeacoffee、爱发电与 Ethereum Address 等赞助链接。
 </li>
 </ul>
 </li>
-<li>跟朋友聊到陈行甲老师，他给我分享了深慈联《2023 年第二期慈善大讲堂》（报道见<a href="https://new.qq.com/rain/a/20230821A06QDX00" target="_blank" rel="noopener noreferrer">“坚守初心，笃行致远”，深慈联举办2023年第二期慈善大讲堂</a>）
+<li>跟朋友聊到陈行甲老师，他给我分享了深慈联《2023 年第二期慈善大讲堂》（报道见<a href="https://new.qq.com/rain/a/20230821A06QDX00" target="_blank" rel="noopener noreferrer">「坚守初心，笃行致远」，深慈联举办2023年第二期慈善大讲堂</a>）
 的视频，看上去分享者与与会者年龄段主要在 40+ 到 50+，他们看待问题的角度跟我们年轻人完全不同，陈行甲老师以及肖兴萍老师的演讲都干货满满，很有收获。</li>
 <li>请半天假去看了中国国际光博会，看到了挺多新鲜的东西，像啥气动开关啊、光波导眼镜啊、高能量密度的锌空电池充电包啊、中科院光电所的两台小光刻机啊、长春光机所的空间站小机械臂啊、以及压电陶瓷驱动技术的各种应用，长了见识。</li>
 <li>看了些 NixCon 2023 的视频，挺有意思。而且发现所有视频都有一只招财猫在讲台上哈哈。</li>
@@ -25629,7 +25632,7 @@ NixOS 以及参与社区贡献。</li>
 <p>然后是浑浑噩噩地等待高考成绩，中间也胡思乱想过一些要不要考虑复读的问题，但最终还是决定不复读了，因为我觉得我不可能再坚持一年了。</p>
 <p>或许是因为我心态很平稳（心如死灰），考试时发挥得很好，成绩出来居然超过了一本线十多分。</p>
 <p>之后就是填报志愿了，我不知道自己想学什么，可能是电子信息？毕竟我小时候挺喜欢捣鼓各种电子设备。</p>
-<p>偶然想起在学校阅览室读杂志时，曾被<a href="https://read.douban.com/ebook/3088216/" target="_blank" rel="noopener noreferrer">科幻世界 2013 年 12 期</a>里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵“看见”世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
+<p>偶然想起在学校阅览室读杂志时，曾被<a href="https://read.douban.com/ebook/3088216/" target="_blank" rel="noopener noreferrer">科幻世界 2013 年 12 期</a>里沖氏武彦的《<strong>在回声中重历</strong>》给打动——用耳朵「看见」世界实在是太奇妙了，我当时痴痴地幻想了好几天。</p>
 <p>这样我开始考虑选择声学。</p>
 <p>我从高中同桌推荐的《刀剑神域》开始接触日本的 ACG 文化，后来接触到初音未来和洛天依，就对歌声合成(singing synthesis)产生了很大的兴趣，仔细一想发现这也应该是声学的范畴，这使我坚定了我选择声学的想法。</p>
 <p>家里父母都没学问，他们的意见就是听我的，于是我的第一志愿就填了安徽建筑大学的声学专业。</p>
@@ -31192,8 +31195,7 @@ user-data/meta-data/network-config 配置，PVE 就是使用的这种模式。�
 </div>
 <p>而其他非 Cloud 镜像，则需要在扩容磁盘后再进入虚拟机手动扩容分区跟磁盘，具体命令就不介绍了，请自行查阅相关文档吧。</p>
 <blockquote>
-  <p>因为这个方便的特性，也为了减少虚拟化的开销，Cloud 镜像默认是不使用 LVM 逻辑分区的。LVM逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟机因为本身就能动态扩容“物理硬盘”的大小，
-基本不用不到 LVM。</p>
+  <p>因为这个方便的特性，也为了减少虚拟化的开销，Cloud 镜像默认是不使用 LVM 逻辑分区的。LVM逻辑分区虽然方便，但是它对物理机的作用更大些。虚拟机因为本身就能动态扩容「物理硬盘」的大小，基本不用不到 LVM。</p>
 </blockquote><blockquote>
   <p>还有一点，就是虚拟机通常只需要一个根分区就行，尤其是归 openstack/kubernetes 管的虚拟机。只有在使用分布式存储之类的场景下，数据需要独立存储，才需要用到额外的分区(<code>/data</code> 之类的)。一般只有物理机，才需要像网上很多文章提的那样，为 <code>/boot</code> <code>/</code> <code>/home</code> 去单独分区。而且现在大家都用 SSD 了，物理机这样做分区的都少了，比如我个人电脑，就是一个 <code>/</code> 分区打天下。。。</p>
 </blockquote><h2 id="三常见问题" class="headerLink">
@@ -32533,7 +32535,7 @@ proxmox 自动配置工具（很久没更新了&hellip;）</li>
 </ol>
 <p>监控告警：</p>
 <ul>
-<li><a href="https://github.com/prometheus-pve/prometheus-pve-exporter" target="_blank" rel="noopener noreferrer">prometheus pve expoter</a>: 通过 prometheus+grafana 监控 PVE 集群</li>
+<li><a href="https://github.com/prometheus-pve/prometheus-pve-exporter" target="_blank" rel="noopener noreferrer">prometheus pve exporter</a>: 通过 prometheus+grafana 监控 PVE 集群</li>
 </ul>
 <h2 id="拓展---pve-运行在-arm-开发版上" class="headerLink">
     <a href="#%e6%8b%93%e5%b1%95---pve-%e8%bf%90%e8%a1%8c%e5%9c%a8-arm-%e5%bc%80%e5%8f%91%e7%89%88%e4%b8%8a" class="header-mark"></a>拓展 - PVE 运行在 ARM 开发版上</h2><p>PVE 官方目前还未推出 ARM 支持，但是社区已有方案：</p>
@@ -33249,11 +33251,10 @@ Raft 算法，但是允许读取集群的任何节点，只能得到数据的最
     <a href="#%e6%8b%9c%e5%8d%a0%e5%ba%ad%e5%b0%86%e5%86%9b%e9%97%ae%e9%a2%98%e4%b8%8e%e6%8b%9c%e5%8d%a0%e5%ba%ad%e5%ae%b9%e9%94%99" class="header-mark"></a>拜占庭将军问题与拜占庭容错</h3><p>拜占庭错误是 1982 年兰伯特在《拜占庭将军问题》中提出的一个错误模型，描述了在少数节点不仅存在故障，还存在恶意行为的场景下，能否达成共识这样一个问题，论文描述如下：</p>
 <blockquote>
   <p>9 位拜占庭将军分别率领一支军队要共同围困一座城市，因为这座城市很强大，如果不协调统一将军们的行动策略，部分军队进攻、部分军队撤退会造成围困失败，因此各位将军必须通过投票来达成一致策略，要么一起进攻，要么一起撤退。</p>
-<p>因为各位将军分别占据城市的一角，他们只能通过信使互相联系。在协调过程中每位将军都将自己投票“进攻”还是“撤退”的消息通过信使分别通知其他所有将军，这样一来每位将军根据自己的投票和其他将军送过来的投票，就可以知道投票结果，从而决定是进攻还是撤退。</p>
-<p>而问题的复杂性就在于：将军中可能出现叛徒，他们不仅可以投票给错误的决策，还可能会选择性地发送投票。假设 9 位将军中有 1 名叛徒，8 位忠诚的将军中出现了 4 人投“进攻”，4 人投“撤退
-”，这时候叛徒可能故意给 4 名投“进攻”的将军投“进攻”，而给另外 4 名投“撤退”的将军投“撤退
-”。这样在 4 名投“进攻”的将军看来，投票是 5 人投“进攻”，从而发动进攻；而另外 4 名将军看来是 5 人投“撤退”，从而撤退。这样，一致性就遭到了破坏。</p>
-<p>还有一种情况，因为将军之间需要通过信使交流，即便所有的将军都是忠诚的，派出去的信使也可能被敌军截杀，甚至被间谍替换，也就是说将军之间进行交流的信息通道是不能保证可靠性的。所以在没有收到对应将军消息的时候，将军们会默认投一个票，例如“进攻”。</p>
+<p>因为各位将军分别占据城市的一角，他们只能通过信使互相联系。在协调过程中每位将军都将自己投票「进攻」还是「撤退」的消息通过信使分别通知其他所有将军，这样一来每位将军根据自己的投票和其他将军送过来的投票，就可以知道投票结果，从而决定是进攻还是撤退。</p>
+<p>而问题的复杂性就在于：将军中可能出现叛徒，他们不仅可以投票给错误的决策，还可能会选择性地发送投票。假设 9 位将军中有 1 名叛徒，8 位忠诚的将军中出现了 4 人投「进攻」，4 人投「撤退」，这时候叛徒可能故意给 4 名投「进攻」的将军投「进攻」，而给另外 4 名投「撤退」的将军投「撤退」。这样在 4 名投「进攻」的将军看来，投票是 5 人投「进攻」，从而发动进攻；而另外
+4 名将军看来是 5 人投「撤退」，从而撤退。这样，一致性就遭到了破坏。</p>
+<p>还有一种情况，因为将军之间需要通过信使交流，即便所有的将军都是忠诚的，派出去的信使也可能被敌军截杀，甚至被间谍替换，也就是说将军之间进行交流的信息通道是不能保证可靠性的。所以在没有收到对应将军消息的时候，将军们会默认投一个票，例如「进攻」。</p>
 </blockquote><p>更一般地，在已知有 N 个将军谋反的情况下，其余 M 个忠诚的将军在不受叛徒的影响下能否达成共识？有什么样的前提条件，该如何达成共识？这就是拜占庭将军问题。</p>
 <p>如果一个共识算法在一定条件下能够解决拜占庭将军问题，那我们就称这个算法是「<strong>拜占庭容错
 Byzantine Fault Tolerance（BFT）</strong>」算法。反之如果一个共识算法无法接受任何一个节点作恶，那它就被称为「<strong>非拜占庭容错 Crash Fault Tolerance (CFT)</strong>」算法。</p>
