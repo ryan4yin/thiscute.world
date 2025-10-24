@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-24T04:30:31+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-24T04:40:12+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;系统关机看似简单，但背后涉及了繁杂的资源清理和状态管理过程。当你点击关机按钮，系统却卡在那里不动，或者出现各种奇怪的错误信息时，理解关机流程和故障排查方法就显得尤为重要。&lt;/p&gt;
@@ -17073,15 +17073,15 @@ Partition（XBOOTLDR）下</p>
   <p><strong>NOTE</strong>: 注意 PAM 与 PolicyKit 的设计目的都是为普通用户提供权限提升手段。对 root 用户而言，这些框架的限制很少或几乎不存在。如果你希望限制整个系统全局的权限（包括 root 用户），
 应该考虑 SELinux/AppArmor 等强制访问控制框架。</p>
 </blockquote><hr>
-<h2 id="31-pam---可插拔认证模块" class="headerLink">
-    <a href="#31-pam---%e5%8f%af%e6%8f%92%e6%8b%94%e8%ae%a4%e8%af%81%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1 PAM - 可插拔认证模块</h2><p><strong>PAM（Pluggable Authentication Modules）</strong> 是 Linux 的统一认证框架，为系统中的各种程序
+<h3 id="31-pam---可插拔认证模块" class="headerLink">
+    <a href="#31-pam---%e5%8f%af%e6%8f%92%e6%8b%94%e8%ae%a4%e8%af%81%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1 PAM - 可插拔认证模块</h3><p><strong>PAM（Pluggable Authentication Modules）</strong> 是 Linux 的统一认证框架，为系统中的各种程序
 （如 <code>login</code>、<code>sudo</code>、<code>sshd</code>、<code>gdm</code> 等）提供标准化的认证接口。借助 PAM，系统管理员可以通过配置文件灵活控制认证策略，而无需修改应用程序本身。它支持多种认证方式（密码、指纹、智能卡、双因子验证等），是现代 Linux 安全体系的核心组件之一。</p>
 <hr>
-<h3 id="311-工作原理与配置结构" class="headerLink">
-    <a href="#311-%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86%e4%b8%8e%e9%85%8d%e7%bd%ae%e7%bb%93%e6%9e%84" class="header-mark"></a>3.1.1 工作原理与配置结构</h3><p>PAM 采用模块化设计，将认证流程分为四个阶段。应用程序通过调用相应的 PAM 接口触发这些阶段，
+<h4 id="311-工作原理与配置结构" class="headerLink">
+    <a href="#311-%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86%e4%b8%8e%e9%85%8d%e7%bd%ae%e7%bb%93%e6%9e%84" class="header-mark"></a>3.1.1 工作原理与配置结构</h4><p>PAM 采用模块化设计，将认证流程分为四个阶段。应用程序通过调用相应的 PAM 接口触发这些阶段，
 系统根据 <code>/etc/pam.d/</code> 下的配置文件执行相应的模块（<code>.so</code> 文件）。</p>
-<h4 id="1配置文件语法" class="headerLink">
-    <a href="#1%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e8%af%ad%e6%b3%95" class="header-mark"></a>（1）配置文件语法</h4><blockquote>
+<h5 id="1配置文件语法" class="headerLink">
+    <a href="#1%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e8%af%ad%e6%b3%95" class="header-mark"></a>（1）配置文件语法</h5><blockquote>
   <p><a href="https://linux.die.net/man/5/pam.d" target="_blank" rel="noopener noreferrer">https://linux.die.net/man/5/pam.d</a></p>
 </blockquote><p>每行的基本格式如下：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
@@ -17181,8 +17181,8 @@ Partition（XBOOTLDR）下</p>
 <li><strong>module</strong>：具体的 PAM 模块路径（或名称）</li>
 <li><strong>arguments</strong>：传递给模块的参数</li>
 </ul>
-<h4 id="2四个认证阶段" class="headerLink">
-    <a href="#2%e5%9b%9b%e4%b8%aa%e8%ae%a4%e8%af%81%e9%98%b6%e6%ae%b5" class="header-mark"></a>（2）四个认证阶段</h4><table>
+<h5 id="2四个认证阶段" class="headerLink">
+    <a href="#2%e5%9b%9b%e4%b8%aa%e8%ae%a4%e8%af%81%e9%98%b6%e6%ae%b5" class="header-mark"></a>（2）四个认证阶段</h5><table>
   <thead>
       <tr>
           <th>阶段类型</th>
@@ -17213,8 +17213,8 @@ Partition（XBOOTLDR）下</p>
       </tr>
   </tbody>
 </table>
-<h4 id="3控制标志control" class="headerLink">
-    <a href="#3%e6%8e%a7%e5%88%b6%e6%a0%87%e5%bf%97control" class="header-mark"></a>（3）控制标志（control）</h4><table>
+<h5 id="3控制标志control" class="headerLink">
+    <a href="#3%e6%8e%a7%e5%88%b6%e6%a0%87%e5%bf%97control" class="header-mark"></a>（3）控制标志（control）</h5><table>
   <thead>
       <tr>
           <th>标志</th>
@@ -17255,8 +17255,8 @@ Partition（XBOOTLDR）下</p>
       </tr>
   </tbody>
 </table>
-<h4 id="4常用模块示例" class="headerLink">
-    <a href="#4%e5%b8%b8%e7%94%a8%e6%a8%a1%e5%9d%97%e7%a4%ba%e4%be%8b" class="header-mark"></a>（4）常用模块示例</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+<h5 id="4常用模块示例" class="headerLink">
+    <a href="#4%e5%b8%b8%e7%94%a8%e6%a8%a1%e5%9d%97%e7%a4%ba%e4%be%8b" class="header-mark"></a>（4）常用模块示例</h5><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
     tw-flex 
@@ -17354,8 +17354,8 @@ Partition（XBOOTLDR）下</p>
 </span></span><span class="line"><span class="cl">pam_deny.so                 <span class="c1"># 拒绝所有认证请求</span></span></span></code></pre>
 </div>
 <hr>
-<h3 id="312-执行流程示例" class="headerLink">
-    <a href="#312-%e6%89%a7%e8%a1%8c%e6%b5%81%e7%a8%8b%e7%a4%ba%e4%be%8b" class="header-mark"></a>3.1.2 执行流程示例</h3><p>以 <code>/etc/pam.d/sudo</code> 为例：</p>
+<h4 id="312-执行流程示例" class="headerLink">
+    <a href="#312-%e6%89%a7%e8%a1%8c%e6%b5%81%e7%a8%8b%e7%a4%ba%e4%be%8b" class="header-mark"></a>3.1.2 执行流程示例</h4><p>以 <code>/etc/pam.d/sudo</code> 为例：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -17615,8 +17615,8 @@ sudo 权限。</li>
 </li>
 </ol>
 <hr>
-<h3 id="313-应用程序与-pam-的交互" class="headerLink">
-    <a href="#313-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e4%b8%8e-pam-%e7%9a%84%e4%ba%a4%e4%ba%92" class="header-mark"></a>3.1.3 应用程序与 PAM 的交互</h3><p>程序通过 <code>pam_start()</code> 指定服务名，系统据此加载对应的配置文件。</p>
+<h4 id="313-应用程序与-pam-的交互" class="headerLink">
+    <a href="#313-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e4%b8%8e-pam-%e7%9a%84%e4%ba%a4%e4%ba%92" class="header-mark"></a>3.1.3 应用程序与 PAM 的交互</h4><p>程序通过 <code>pam_start()</code> 指定服务名，系统据此加载对应的配置文件。</p>
 <table>
   <thead>
       <tr>
@@ -18111,8 +18111,8 @@ sudo 权限。</li>
 </span></span><span class="line"><span class="cl">./pam_test ryan</span></span></code></pre>
 </div>
 <hr>
-<h3 id="314-模块间的数据传递" class="headerLink">
-    <a href="#314-%e6%a8%a1%e5%9d%97%e9%97%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e4%bc%a0%e9%80%92" class="header-mark"></a>3.1.4 模块间的数据传递</h3><p>PAM 模块可通过 <code>pam_set_data()</code> 与 <code>pam_get_data()</code> 共享状态。例如：</p>
+<h4 id="314-模块间的数据传递" class="headerLink">
+    <a href="#314-%e6%a8%a1%e5%9d%97%e9%97%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e4%bc%a0%e9%80%92" class="header-mark"></a>3.1.4 模块间的数据传递</h4><p>PAM 模块可通过 <code>pam_set_data()</code> 与 <code>pam_get_data()</code> 共享状态。例如：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -18208,10 +18208,10 @@ sudo 权限。</li>
 </div>
 <p>这使多个模块在同一认证过程中共享信息。</p>
 <hr>
-<h3 id="315-调试与故障排查" class="headerLink">
-    <a href="#315-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>3.1.5 调试与故障排查</h3><p>PAM 的问题通常来源于配置错误或模块加载失败，可按以下思路排查：</p>
-<h4 id="1测试与验证" class="headerLink">
-    <a href="#1%e6%b5%8b%e8%af%95%e4%b8%8e%e9%aa%8c%e8%af%81" class="header-mark"></a>（1）测试与验证</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+<h4 id="315-调试与故障排查" class="headerLink">
+    <a href="#315-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>3.1.5 调试与故障排查</h4><p>PAM 的问题通常来源于配置错误或模块加载失败，可按以下思路排查：</p>
+<h5 id="1测试与验证" class="headerLink">
+    <a href="#1%e6%b5%8b%e8%af%95%e4%b8%8e%e9%aa%8c%e8%af%81" class="header-mark"></a>（1）测试与验证</h5><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
     tw-flex 
@@ -18300,12 +18300,13 @@ sudo 权限。</li>
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 模拟特定服务的认证流程</span>
+      "><span class="line"><span class="cl">nix shell nixpkgs#pamtester
+</span></span><span class="line"><span class="cl"><span class="c1"># 模拟特定服务的认证流程</span>
 </span></span><span class="line"><span class="cl">pamtester sudo <span class="nv">$USER</span> authenticate
 </span></span><span class="line"><span class="cl">pamtester login <span class="nv">$USER</span> open_session</span></span></code></pre>
 </div>
-<h4 id="2检查模块与依赖" class="headerLink">
-    <a href="#2%e6%a3%80%e6%9f%a5%e6%a8%a1%e5%9d%97%e4%b8%8e%e4%be%9d%e8%b5%96" class="header-mark"></a>（2）检查模块与依赖</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+<h5 id="2检查模块与依赖" class="headerLink">
+    <a href="#2%e6%a3%80%e6%9f%a5%e6%a8%a1%e5%9d%97%e4%b8%8e%e4%be%9d%e8%b5%96" class="header-mark"></a>（2）检查模块与依赖</h5><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
     tw-flex 
@@ -18398,8 +18399,8 @@ sudo 权限。</li>
 </span></span><span class="line"><span class="cl">ls /run/current-system/sw/lib/security/pam_unix.so
 </span></span><span class="line"><span class="cl">ldd /run/current-system/sw/lib/security/pam_unix.so</span></span></code></pre>
 </div>
-<h4 id="3查看系统日志" class="headerLink">
-    <a href="#3%e6%9f%a5%e7%9c%8b%e7%b3%bb%e7%bb%9f%e6%97%a5%e5%bf%97" class="header-mark"></a>（3）查看系统日志</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+<h5 id="3查看系统日志" class="headerLink">
+    <a href="#3%e6%9f%a5%e7%9c%8b%e7%b3%bb%e7%bb%9f%e6%97%a5%e5%bf%97" class="header-mark"></a>（3）查看系统日志</h5><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
     tw-flex 
@@ -18490,8 +18491,8 @@ sudo 权限。</li>
       tw-scrollbar-thin
       "><span class="line"><span class="cl">journalctl -b <span class="p">|</span> grep -i pam</span></span></code></pre>
 </div>
-<h4 id="4跟踪调用行为" class="headerLink">
-    <a href="#4%e8%b7%9f%e8%b8%aa%e8%b0%83%e7%94%a8%e8%a1%8c%e4%b8%ba" class="header-mark"></a>（4）跟踪调用行为</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+<h5 id="4跟踪调用行为" class="headerLink">
+    <a href="#4%e8%b7%9f%e8%b8%aa%e8%b0%83%e7%94%a8%e8%a1%8c%e4%b8%ba" class="header-mark"></a>（4）跟踪调用行为</h5><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
     tw-flex 
@@ -18583,8 +18584,8 @@ sudo 权限。</li>
       "><span class="line"><span class="cl">strace -f -e <span class="nv">trace</span><span class="o">=</span>openat,read,write -o sudo_trace.log sudo <span class="nb">true</span>
 </span></span><span class="line"><span class="cl">grep pam sudo_trace.log</span></span></code></pre>
 </div>
-<h4 id="5常见问题" class="headerLink">
-    <a href="#5%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" class="header-mark"></a>（5）常见问题</h4><table>
+<h5 id="5常见问题" class="headerLink">
+    <a href="#5%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" class="header-mark"></a>（5）常见问题</h5><table>
   <thead>
       <tr>
           <th>问题</th>
@@ -19791,8 +19792,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 安装 PAM 测试工具</span>
-</span></span><span class="line"><span class="cl">nix shell nixpkgs#pamtester
+      "><span class="line"><span class="cl">nix shell nixpkgs#pamtester
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 测试 PAM 配置</span>
 </span></span><span class="line"><span class="cl">pamtester login <span class="nv">$USER</span> authenticate
@@ -20265,15 +20265,13 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <hr>
 <h2 id="文章系列导航" class="headerLink">
     <a href="#%e6%96%87%e7%ab%a0%e7%b3%bb%e5%88%97%e5%af%bc%e8%88%aa" class="header-mark"></a>文章系列导航</h2><h3 id="-linux-桌面系统故障排查指南一---系统启动与安全框架" class="headerLink">
-    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%b8%80---%e7%b3%bb%e7%bb%9f%e5%90%af%e5%8a%a8%e4%b8%8e%e5%ae%89%e5%85%a8%e6%a1%86%e6%9e%b6" class="header-mark"></a>📋 <a href="/posts/2025/Q4/linux-desktop-1-boot-security/" rel="">Linux 桌面系统故障排查指南（一） - 系统启动与安全框架</a></h3><p><strong>涵盖内容</strong>：</p>
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%b8%80---%e7%b3%bb%e7%bb%9f%e5%90%af%e5%8a%a8%e4%b8%8e%e5%ae%89%e5%85%a8%e6%a1%86%e6%9e%b6" class="header-mark"></a>📋 <a href="/posts/linux-desktop-1-boot-security/" rel="">Linux 桌面系统故障排查指南（一） - 系统启动与安全框架</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>系统启动流程</strong>：从 UEFI 固件到 systemd 用户空间的完整启动过程，包括 systemd-boot 配置、UKI 统一内核镜像、initramfs 阶段详解</li>
 <li><strong>安全框架深度解析</strong>：PAM 认证机制、PolicyKit 权限管理、GNOME Keyring 密钥管理，以及各组件间的协作关系</li>
-<li><strong>启动故障排查</strong>：系统化的问题诊断流程，从固件到用户空间的逐层排查方法</li>
-<li><strong>启动性能优化</strong>：硬件、内核、服务层面的优化策略，包括 UKI 使用和启动时间分析</li>
 </ul>
 <h3 id="-linux-桌面系统故障排查指南二---systemd-全家桶与服务管理" class="headerLink">
-    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%ba%8c---systemd-%e5%85%a8%e5%ae%b6%e6%a1%b6%e4%b8%8e%e6%9c%8d%e5%8a%a1%e7%ae%a1%e7%90%86" class="header-mark"></a>⚙️ <a href="/posts/2025/Q4/linux-desktop-2-systemd-services/" rel="">Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理</a></h3><p><strong>涵盖内容</strong>：</p>
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%ba%8c---systemd-%e5%85%a8%e5%ae%b6%e6%a1%b6%e4%b8%8e%e6%9c%8d%e5%8a%a1%e7%ae%a1%e7%90%86" class="header-mark"></a>⚙️ <a href="/posts/linux-desktop-2-systemd-services/" rel="">Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>systemd 核心功能</strong>：服务管理、依赖关系、并行启动、单元类型配置和生命周期管理</li>
 <li><strong>systemd 生态系统服务</strong>：着重介绍 systemd-journald 日志系统、systemd-oomd 内存管理、systemd-resolved DNS 解析、systemd-timesyncd 时间同步</li>
@@ -20282,7 +20280,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <li><strong>服务管理最佳实践</strong>：服务配置优化、依赖关系管理、性能调优</li>
 </ul>
 <h3 id="-linux-桌面系统故障排查指南三---桌面会话与图形渲染" class="headerLink">
-    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%b8%89---%e6%a1%8c%e9%9d%a2%e4%bc%9a%e8%af%9d%e4%b8%8e%e5%9b%be%e5%bd%a2%e6%b8%b2%e6%9f%93" class="header-mark"></a>🖥️ <a href="/posts/2025/Q4/linux-desktop-3-session-graphics/" rel="">Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染</a></h3><p><strong>涵盖内容</strong>：</p>
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%b8%89---%e6%a1%8c%e9%9d%a2%e4%bc%9a%e8%af%9d%e4%b8%8e%e5%9b%be%e5%bd%a2%e6%b8%b2%e6%9f%93" class="header-mark"></a>🖥️ <a href="/posts/linux-desktop-3-session-graphics/" rel="">Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>用户会话管理</strong>：登录流程详解、systemd-logind 会话控制、seat 概念和多用户场景</li>
 <li><strong>Wayland 图形架构</strong>：与 X11 的深度对比、客户端-服务器模型、协议扩展和安全性优势</li>
@@ -20291,20 +20289,18 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <li><strong>设备访问控制</strong>：ACL 权限分配、GPU 设备管理、输入设备权限、systemd-logind 集成</li>
 <li><strong>应用程序架构</strong>：启动流程、图形驱动选择、工具包支持（GTK/Qt/SDL）、渲染器优化</li>
 <li><strong>应用兼容性</strong>：Wayland/XWayland 兼容性、沙盒化应用（Flatpak）、性能调优</li>
-<li><strong>会话故障排查</strong>：登录失败、权限错误、图形界面异常、渲染问题的系统化诊断</li>
 </ul>
 <h3 id="-linux-桌面系统故障排查指南四---多媒体处理与中文支持" class="headerLink">
-    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e5%9b%9b---%e5%a4%9a%e5%aa%92%e4%bd%93%e5%a4%84%e7%90%86%e4%b8%8e%e4%b8%ad%e6%96%87%e6%94%af%e6%8c%81" class="header-mark"></a>🎵 <a href="/posts/2025/Q4/linux-desktop-4-multimedia-input/" rel="">Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持</a></h3><p><strong>涵盖内容</strong>：</p>
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e5%9b%9b---%e5%a4%9a%e5%aa%92%e4%bd%93%e5%a4%84%e7%90%86%e4%b8%8e%e4%b8%ad%e6%96%87%e6%94%af%e6%8c%81" class="header-mark"></a>🎵 <a href="/posts/linux-desktop-4-multimedia-input/" rel="">Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>PipeWire 统一多媒体架构</strong>：音频视频处理、屏幕共享、兼容层（PulseAudio/JACK/ALSA）</li>
 <li><strong>视频处理与屏幕共享</strong>：Wayland screen-capture 协议、硬件加速、DMA-BUF 传递、权限管理</li>
 <li><strong>音频处理流程</strong>：低延迟配置、音频路由控制、设备管理和性能优化</li>
 <li><strong>字体渲染系统</strong>：fontconfig 配置、CJK 字体管理、渲染参数优化、字体匹配规则</li>
 <li><strong>中文输入法</strong>：fcitx5 框架、Wayland text-input 协议、XWayland 兼容性、混合环境管理</li>
-<li><strong>故障排查与优化</strong>：音频延迟优化、输入法无响应、字体显示问题、屏幕共享故障</li>
 </ul>
 <h3 id="-linux-桌面系统故障排查指南五---网络" class="headerLink">
-    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%ba%94---%e7%bd%91%e7%bb%9c" class="header-mark"></a>🌐 <a href="/posts/2025/Q4/linux-desktop-5-network/" rel="">Linux 桌面系统故障排查指南（五） - 网络</a></h3><p><strong>涵盖内容</strong>：</p>
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e4%ba%94---%e7%bd%91%e7%bb%9c" class="header-mark"></a>🌐 <a href="/posts/linux-desktop-5-network/" rel="">Linux 桌面系统故障排查指南（五） - 网络</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>网络连接与管理</strong>：从硬件驱动到应用层的完整协议栈，systemd-networkd 和 iwd 的现代网络管理</li>
 <li><strong>IPv4/IPv6 双栈技术</strong>：地址分配机制、路由表管理、协议优先级配置、双栈验证方法</li>
@@ -20314,7 +20310,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 <li><strong>高级网络配置</strong>：多网卡绑定、VLAN 配置、网络命名空间、网络故障诊断</li>
 </ul>
 <h3 id="-linux-桌面系统故障排查指南六---系统关机与电源管理" class="headerLink">
-    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e5%85%ad---%e7%b3%bb%e7%bb%9f%e5%85%b3%e6%9c%ba%e4%b8%8e%e7%94%b5%e6%ba%90%e7%ae%a1%e7%90%86" class="header-mark"></a>🔄 <a href="/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/" rel="">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</a></h3><p><strong>涵盖内容</strong>：</p>
+    <a href="#-linux-%e6%a1%8c%e9%9d%a2%e7%b3%bb%e7%bb%9f%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5%e6%8c%87%e5%8d%97%e5%85%ad---%e7%b3%bb%e7%bb%9f%e5%85%b3%e6%9c%ba%e4%b8%8e%e7%94%b5%e6%ba%90%e7%ae%a1%e7%90%86" class="header-mark"></a>🔄 <a href="/posts/linux-desktop-6-shutdown-troubleshooting/" rel="">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</a></h3><p><strong>涵盖内容</strong>：</p>
 <ul>
 <li><strong>系统关机流程详解</strong>：介绍完整关机过程，从用户会话清理到硬件关机的每个步骤</li>
 <li><strong>电源管理功能</strong>：休眠（Hibernate）和挂起（Suspend）的配置、工作原理和故障排查</li>
