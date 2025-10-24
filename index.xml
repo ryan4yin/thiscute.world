@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-20T16:23:26+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-24T04:30:31+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;系统关机看似简单，但背后涉及了繁杂的资源清理和状态管理过程。当你点击关机按钮，系统却卡在那里不动，或者出现各种奇怪的错误信息时，理解关机流程和故障排查方法就显得尤为重要。&lt;/p&gt;
@@ -16331,7 +16331,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-27" 
+    id="codeblock-id-34" 
     class="
       chroma 
       !tw-block 
@@ -16466,7 +16466,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-28" 
+    id="codeblock-id-35" 
     class="
       chroma 
       !tw-block 
@@ -16640,7 +16640,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-29" 
+    id="codeblock-id-36" 
     class="
       chroma 
       !tw-block 
@@ -16815,7 +16815,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-30" 
+    id="codeblock-id-37" 
     class="
       chroma 
       !tw-block 
@@ -16921,7 +16921,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-31" 
+    id="codeblock-id-38" 
     class="
       chroma 
       !tw-block 
@@ -17025,7 +17025,7 @@ Partition（XBOOTLDR）下</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-32" 
+    id="codeblock-id-39" 
     class="
       chroma 
       !tw-block 
@@ -17072,19 +17072,594 @@ Partition（XBOOTLDR）下</p>
 <blockquote>
   <p><strong>NOTE</strong>: 注意 PAM 与 PolicyKit 的设计目的都是为普通用户提供权限提升手段。对 root 用户而言，这些框架的限制很少或几乎不存在。如果你希望限制整个系统全局的权限（包括 root 用户），
 应该考虑 SELinux/AppArmor 等强制访问控制框架。</p>
-</blockquote><h3 id="31-pam---可插拔认证模块" class="headerLink">
-    <a href="#31-pam---%e5%8f%af%e6%8f%92%e6%8b%94%e8%ae%a4%e8%af%81%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1 PAM - 可插拔认证模块</h3><p>PAM（Pluggable Authentication Modules）是 Linux 系统的认证框架，为应用程序提供统一的认证接口。它允许系统管理员灵活配置认证策略，支持多种认证方式（密码、指纹、智能卡等），是现代
-Linux 安全体系的基础组件。</p>
-<h4 id="311-pam-工作机制与配置对应关系" class="headerLink">
-    <a href="#311-pam-%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6%e4%b8%8e%e9%85%8d%e7%bd%ae%e5%af%b9%e5%ba%94%e5%85%b3%e7%b3%bb" class="header-mark"></a>3.1.1 PAM 工作机制与配置对应关系</h4><p>PAM 采用模块化设计，将认证过程分解为四个独立的阶段：</p>
+</blockquote><hr>
+<h2 id="31-pam---可插拔认证模块" class="headerLink">
+    <a href="#31-pam---%e5%8f%af%e6%8f%92%e6%8b%94%e8%ae%a4%e8%af%81%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1 PAM - 可插拔认证模块</h2><p><strong>PAM（Pluggable Authentication Modules）</strong> 是 Linux 的统一认证框架，为系统中的各种程序
+（如 <code>login</code>、<code>sudo</code>、<code>sshd</code>、<code>gdm</code> 等）提供标准化的认证接口。借助 PAM，系统管理员可以通过配置文件灵活控制认证策略，而无需修改应用程序本身。它支持多种认证方式（密码、指纹、智能卡、双因子验证等），是现代 Linux 安全体系的核心组件之一。</p>
+<hr>
+<h3 id="311-工作原理与配置结构" class="headerLink">
+    <a href="#311-%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86%e4%b8%8e%e9%85%8d%e7%bd%ae%e7%bb%93%e6%9e%84" class="header-mark"></a>3.1.1 工作原理与配置结构</h3><p>PAM 采用模块化设计，将认证流程分为四个阶段。应用程序通过调用相应的 PAM 接口触发这些阶段，
+系统根据 <code>/etc/pam.d/</code> 下的配置文件执行相应的模块（<code>.so</code> 文件）。</p>
+<h4 id="1配置文件语法" class="headerLink">
+    <a href="#1%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e8%af%ad%e6%b3%95" class="header-mark"></a>（1）配置文件语法</h4><blockquote>
+  <p><a href="https://linux.die.net/man/5/pam.d" target="_blank" rel="noopener noreferrer">https://linux.die.net/man/5/pam.d</a></p>
+</blockquote><p>每行的基本格式如下：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">text</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-40" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl">&lt;type&gt;  &lt;control&gt;  &lt;module&gt;  [arguments]</span></span></code></pre>
+</div>
 <ul>
-<li><strong>认证（Authentication）</strong>：验证用户身份（用户名/密码、生物识别等）</li>
-<li><strong>授权（Authorization）</strong>：检查用户是否有权限访问特定资源</li>
-<li><strong>账户管理（Account Management）</strong>：检查账户状态（是否过期、是否被锁定等）</li>
-<li><strong>会话管理（Session Management）</strong>：管理用户会话的建立和销毁</li>
+<li><strong>type</strong>：表示阶段类型</li>
+<li><strong>control</strong>：定义该模块的执行策略</li>
+<li><strong>module</strong>：具体的 PAM 模块路径（或名称）</li>
+<li><strong>arguments</strong>：传递给模块的参数</li>
 </ul>
-<p><strong>程序与 PAM 配置的对应关系</strong>：</p>
-<p>程序与 PAM 配置的对应关系是通过**服务名（Service Name）**建立的。当程序调用 PAM 时，它需要指定一个服务名，这个服务名决定了使用哪个 PAM 配置文件。</p>
+<h4 id="2四个认证阶段" class="headerLink">
+    <a href="#2%e5%9b%9b%e4%b8%aa%e8%ae%a4%e8%af%81%e9%98%b6%e6%ae%b5" class="header-mark"></a>（2）四个认证阶段</h4><table>
+  <thead>
+      <tr>
+          <th>阶段类型</th>
+          <th>调用函数</th>
+          <th>主要作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>auth</code></td>
+          <td><code>pam_authenticate()</code></td>
+          <td>验证用户身份，通常会提示用户输出密码或指纹以完成验证</td>
+      </tr>
+      <tr>
+          <td><code>account</code></td>
+          <td><code>pam_acct_mgmt()</code></td>
+          <td>检查账户状态（过期、锁定等）</td>
+      </tr>
+      <tr>
+          <td><code>password</code></td>
+          <td><code>pam_chauthtok()</code></td>
+          <td>处理密码修改</td>
+      </tr>
+      <tr>
+          <td><code>session</code></td>
+          <td><code>pam_open_session()</code> / <code>pam_close_session()</code></td>
+          <td>建立和清理用户会话</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="3控制标志control" class="headerLink">
+    <a href="#3%e6%8e%a7%e5%88%b6%e6%a0%87%e5%bf%97control" class="header-mark"></a>（3）控制标志（control）</h4><table>
+  <thead>
+      <tr>
+          <th>标志</th>
+          <th>含义</th>
+          <th>行为说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>required</code></td>
+          <td>必须成功，失败不会立即终止，但最终结果会失败</td>
+          <td>无论成功失败，都会继续执行后续模块。最终只要有一个 required 失败，整个认证就失败。</td>
+      </tr>
+      <tr>
+          <td><code>requisite</code></td>
+          <td>必须成功，失败立即终止并返回失败</td>
+          <td>失败立即返回，不再执行后续模块。</td>
+      </tr>
+      <tr>
+          <td><code>sufficient</code></td>
+          <td>成功则立即通过认证（跳过所有后续模块）；失败则继续由后续模块进行认证</td>
+          <td>若前面没有 required 失败，则成功直接通过；否则失败不影响后续。</td>
+      </tr>
+      <tr>
+          <td><code>optional</code></td>
+          <td>可选模块，结果通常被忽略</td>
+          <td>无论成功失败，对最终结果无直接影响，除非是栈中唯一的模块。</td>
+      </tr>
+      <tr>
+          <td><code>include</code></td>
+          <td>包含另一个文件的配置</td>
+          <td>将指定文件的配置内容包含进来，通常用于复用通用配置（如 <code>system-auth</code>）。</td>
+      </tr>
+      <tr>
+          <td><code>substack</code></td>
+          <td>调用子栈</td>
+          <td>类似 <code>include</code>，但子栈的失败不影响主栈（即子栈只能跳过其自身的后续步骤），除非主栈中另有设置。</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="4常用模块示例" class="headerLink">
+    <a href="#4%e5%b8%b8%e7%94%a8%e6%a8%a1%e5%9d%97%e7%a4%ba%e4%be%8b" class="header-mark"></a>（4）常用模块示例</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-41" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl">pam_unix.so                 <span class="c1"># 基于 /etc/passwd 与 /etc/shadow 的标准密码认证</span>
+</span></span><span class="line"><span class="cl">pam_google_authenticator.so <span class="c1"># 双因子认证（TOTP）</span>
+</span></span><span class="line"><span class="cl">pam_fprintd.so              <span class="c1"># 指纹认证</span>
+</span></span><span class="line"><span class="cl">pam_ldap.so                 <span class="c1"># LDAP 集中式认证</span>
+</span></span><span class="line"><span class="cl">pam_gnome_keyring.so        <span class="c1"># GNOME 密钥环集成</span>
+</span></span><span class="line"><span class="cl">pam_limits.so               <span class="c1"># 用户资源限制</span>
+</span></span><span class="line"><span class="cl">pam_deny.so                 <span class="c1"># 拒绝所有认证请求</span></span></span></code></pre>
+</div>
+<hr>
+<h3 id="312-执行流程示例" class="headerLink">
+    <a href="#312-%e6%89%a7%e8%a1%8c%e6%b5%81%e7%a8%8b%e7%a4%ba%e4%be%8b" class="header-mark"></a>3.1.2 执行流程示例</h3><p>以 <code>/etc/pam.d/sudo</code> 为例：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-42" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1">#%PAM-1.0</span>
+</span></span><span class="line"><span class="cl">auth       sufficient   pam_rootok.so
+</span></span><span class="line"><span class="cl">auth       sufficient   pam_timestamp.so
+</span></span><span class="line"><span class="cl">auth       required     pam_wheel.so use_uid
+</span></span><span class="line"><span class="cl">auth       required     pam_unix.so nullok try_first_pass</span></span></code></pre>
+</div>
+<p><strong>各模块的执行顺序如下：</strong></p>
+<ol>
+<li><strong>执行 <code>pam_rootok.so</code> (sufficient)</strong>：
+<ul>
+<li>检查当前用户是否为 root。</li>
+<li><strong>如果成功</strong>：PAM 认证流程<strong>立即成功</strong>，并<strong>跳过后续所有 <code>auth</code> 模块</strong>。用户直接获得
+sudo 权限。</li>
+<li><strong>如果失败</strong>：继续执行下一个模块。</li>
+</ul>
+</li>
+<li><strong>执行 <code>pam_timestamp.so</code> (sufficient)</strong>：
+<ul>
+<li>检查是否存在有效的时间戳文件（默认为 5 分钟内）。</li>
+<li><strong>如果成功</strong>：PAM 认证流程<strong>立即成功</strong>，并<strong>跳过后续所有 <code>auth</code> 模块</strong>。用户免密码获得 sudo 权限。</li>
+<li><strong>如果失败</strong>：继续执行下一个模块。</li>
+</ul>
+</li>
+<li><strong>执行 <code>pam_wheel.so</code> (required)</strong>：
+<ul>
+<li>检查当前用户是否在 <code>wheel</code> 组（或 <code>sudo</code> 组，取决于配置）中。</li>
+<li><strong>无论成功还是失败</strong>，都必须继续执行下一个 <code>required</code> 模块。但其结果会被记录下来。</li>
+</ul>
+</li>
+<li><strong>执行 <code>pam_unix.so</code> (required)</strong>：
+<ul>
+<li>使用 <code>nullok</code> 和 <code>try_first_pass</code> 参数进行密码验证。</li>
+<li><code>nullok</code>：允许空密码账户登录。</li>
+<li><code>try_first_pass</code>：尝试使用前面模块（如果有的话）提供的密码。对于 <code>sudo</code>，这通常指之前 <code>sudo</code> 成功时缓存的密码。</li>
+<li><strong>如果密码正确</strong>：此模块成功。</li>
+<li><strong>如果密码错误</strong>：此模块失败。</li>
+</ul>
+</li>
+<li><strong>最终结果判定</strong>：
+<ul>
+<li>在所有 <code>required</code> 模块执行完毕后，PAM 会检查它们的结果。</li>
+<li><strong>如果任何一个 <code>required</code> 模块（<code>pam_wheel.so</code> 或 <code>pam_unix.so</code>）失败</strong>，整个认证流程失败。</li>
+<li><strong>只有当所有 <code>required</code> 模块都成功时</strong>，认证才最终成功。</li>
+</ul>
+</li>
+</ol>
+<p><strong>常用模块及其参数说明</strong>：</p>
+<ol>
+<li><a href="https://linux.die.net/man/8/pam_unix" target="_blank" rel="noopener noreferrer"><code>pam_unix.so</code> 参数</a> (用于密码验证) 这是最核心的密码认证模块，常见于 <code>auth</code> 和 <code>password</code> 类型。
+<ul>
+<li><code>nullok</code>：允许空密码账户通过认证。如果不加此参数，空密码账户将无法登录。</li>
+<li><code>try_first_pass</code>：在提示用户输入密码前，先尝试使用之前栈中已缓存的密码（例如，由<code>pam_timestamp.so</code> 或 <code>pam_kwallet.so</code> 提供的）。</li>
+<li><code>use_authtok</code>：<strong>强制</strong>使用之前栈中已缓存的密码，如果不存在缓存密码，则直接失败。它比<code>try_first_pass</code> 更严格，通常用在修改密码的 <code>password</code> 模块栈中，以确保用户输入的是旧密码。</li>
+<li><code>shadow</code>：使用 <code>/etc/shadow</code> 文件进行密码验证（现代系统默认启用）。</li>
+</ul>
+</li>
+<li><a href="https://linux.die.net/man/8/pam_timestamp" target="_blank" rel="noopener noreferrer"><code>pam_timestamp.so</code> 参数</a> (用于时间戳认证)
+常用于 <code>sudo</code>，实现免密码操作。
+<ul>
+<li><code>timestamp_timeout=600</code>：设置时间戳的有效期，单位为秒。默认是 300 (5分钟)。</li>
+</ul>
+</li>
+<li><a href="https://linux.die.net/man/8/pam_wheel" target="_blank" rel="noopener noreferrer"><code>pam_wheel.so</code> 参数</a> (用于组成员资格检查) 用于限制只有特定组的用户才能使用 <code>su</code> 或 <code>sudo</code>。
+<ul>
+<li><code>use_uid</code>：检查发起请求的原始用户 ID，而不是当前用户 ID（在 <code>sudo</code> 场景下很重要）。</li>
+<li><code>group=admins</code>：指定检查的组名，默认是 <code>wheel</code>。</li>
+</ul>
+</li>
+<li><a href="" rel=""><code>pam_gnome_keyring.so</code></a> 参数 (用于会话管理) 这个模块与 <code>sudo</code> 的认证流程无关，主要用于用户登录时解锁密钥环。
+<ul>
+<li><code>auto_start</code>：在会话启动时，如果用户密码与密钥环密码相同，则自动解锁密钥环。</li>
+<li><strong>典型应用场景</strong>：在 <code>/etc/pam.d/gdm-password</code> 或 <code>/etc/pam.d/login</code> 的 <code>auth</code> 和<code>session</code> 部分。
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-43" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 在 /etc/pam.d/gdm-password 中</span>
+</span></span><span class="line"><span class="cl">auth       optional    pam_gnome_keyring.so
+</span></span><span class="line"><span class="cl">session    optional    pam_gnome_keyring.so auto_start</span></span></code></pre>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="313-应用程序与-pam-的交互" class="headerLink">
+    <a href="#313-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e4%b8%8e-pam-%e7%9a%84%e4%ba%a4%e4%ba%92" class="header-mark"></a>3.1.3 应用程序与 PAM 的交互</h3><p>程序通过 <code>pam_start()</code> 指定服务名，系统据此加载对应的配置文件。</p>
+<table>
+  <thead>
+      <tr>
+          <th>程序</th>
+          <th>服务名</th>
+          <th>配置文件</th>
+          <th>功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>login</code></td>
+          <td><code>&quot;login&quot;</code></td>
+          <td><code>/etc/pam.d/login</code></td>
+          <td>控制台登录</td>
+      </tr>
+      <tr>
+          <td><code>gdm</code></td>
+          <td><code>&quot;gdm&quot;</code></td>
+          <td><code>/etc/pam.d/gdm</code></td>
+          <td>GNOME 登录界面</td>
+      </tr>
+      <tr>
+          <td><code>sudo</code></td>
+          <td><code>&quot;sudo&quot;</code></td>
+          <td><code>/etc/pam.d/sudo</code></td>
+          <td>提权命令</td>
+      </tr>
+      <tr>
+          <td><code>sshd</code></td>
+          <td><code>&quot;sshd&quot;</code></td>
+          <td><code>/etc/pam.d/sshd</code></td>
+          <td>SSH 登录</td>
+      </tr>
+      <tr>
+          <td><code>greetd</code></td>
+          <td><code>&quot;greetd&quot;</code></td>
+          <td><code>/etc/pam.d/greetd</code></td>
+          <td>轻量显示管理器</td>
+      </tr>
+  </tbody>
+</table>
+<p>一个典型的调用顺序如下（以 <code>sudo</code> 为例）：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -17160,7 +17735,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-33" 
+    id="codeblock-id-44" 
     class="
       chroma 
       !tw-block 
@@ -17174,68 +17749,15 @@ Linux 安全体系的基础组件。</p>
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1">// 程序调用 pam_start 时指定服务名
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>  <span class="c1">// 使用 /etc/pam.d/login
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;sudo&#34;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>   <span class="c1">// 使用 /etc/pam.d/sudo
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;sshd&#34;</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>   <span class="c1">// 使用 /etc/pam.d/sshd
+      "><span class="line"><span class="cl"><span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;sudo&#34;</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>     <span class="c1">// 初始化 PAM
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_authenticate</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>                 <span class="c1">// 身份验证
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_acct_mgmt</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>                    <span class="c1">// 账户检查
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_open_session</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>                 <span class="c1">// 打开会话
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 执行用户命令
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_close_session</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>                <span class="c1">// 关闭会话
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">PAM_SUCCESS</span><span class="p">);</span>                <span class="c1">// 释放资源
 </span></span></span></code></pre>
 </div>
-<p><strong>实际对应关系表</strong>：</p>
-<table>
-  <thead>
-      <tr>
-          <th>程序</th>
-          <th>服务名</th>
-          <th>配置文件</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>login</code></td>
-          <td><code>&quot;login&quot;</code></td>
-          <td><code>/etc/pam.d/login</code></td>
-          <td>控制台登录程序</td>
-      </tr>
-      <tr>
-          <td><code>gdm</code></td>
-          <td><code>&quot;gdm&quot;</code></td>
-          <td><code>/etc/pam.d/gdm</code></td>
-          <td>GNOME 显示管理器</td>
-      </tr>
-      <tr>
-          <td><code>greetd</code></td>
-          <td><code>&quot;greetd&quot;</code></td>
-          <td><code>/etc/pam.d/greetd</code></td>
-          <td>greetd 显示管理器</td>
-      </tr>
-      <tr>
-          <td><code>sudo</code></td>
-          <td><code>&quot;sudo&quot;</code></td>
-          <td><code>/etc/pam.d/sudo</code></td>
-          <td>sudo 命令</td>
-      </tr>
-      <tr>
-          <td><code>su</code></td>
-          <td><code>&quot;su&quot;</code></td>
-          <td><code>/etc/pam.d/su</code></td>
-          <td>su 命令</td>
-      </tr>
-      <tr>
-          <td><code>sshd</code></td>
-          <td><code>&quot;sshd&quot;</code></td>
-          <td><code>/etc/pam.d/sshd</code></td>
-          <td>SSH 守护进程</td>
-      </tr>
-      <tr>
-          <td><code>passwd</code></td>
-          <td><code>&quot;passwd&quot;</code></td>
-          <td><code>/etc/pam.d/passwd</code></td>
-          <td>密码修改程序</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>PAM 调用流程示例</strong>：</p>
 <p>如下是一个用户登录流程的 PAM 调用示例：</p>
 <div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
   <div class="
@@ -17312,7 +17834,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-34" 
+    id="codeblock-id-45" 
     class="
       chroma 
       !tw-block 
@@ -17347,20 +17869,17 @@ Linux 安全体系的基础组件。</p>
 </span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">pam_conv</span> <span class="n">conv</span> <span class="o">=</span> <span class="p">{</span> <span class="n">misc_conv</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
 </span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">user</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;用法: %s 用户名</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="n">user</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* 1. 初始化 */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">ret</span> <span class="o">=</span> <span class="nf">pam_start</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">conv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pamh</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">PAM_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">log_result</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">ret</span><span class="p">,</span> <span class="s">&#34;pam_start&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* 2. 认证 */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">ret</span> <span class="o">=</span> <span class="nf">pam_authenticate</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">log_result</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">ret</span><span class="p">,</span> <span class="s">&#34;pam_authenticate&#34;</span><span class="p">);</span>
@@ -17368,7 +17887,6 @@ Linux 安全体系的基础组件。</p>
 </span></span><span class="line"><span class="cl">        <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* 3. 帐户检查 */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">ret</span> <span class="o">=</span> <span class="nf">pam_acct_mgmt</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">log_result</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">ret</span><span class="p">,</span> <span class="s">&#34;pam_acct_mgmt&#34;</span><span class="p">);</span>
@@ -17376,7 +17894,6 @@ Linux 安全体系的基础组件。</p>
 </span></span><span class="line"><span class="cl">        <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* 4. 打开会话 */</span>
 </span></span><span class="line"><span class="cl">    <span class="n">ret</span> <span class="o">=</span> <span class="nf">pam_open_session</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">log_result</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">ret</span><span class="p">,</span> <span class="s">&#34;pam_open_session&#34;</span><span class="p">);</span>
@@ -17390,9 +17907,7 @@ Linux 安全体系的基础组件。</p>
 </span></span><span class="line"><span class="cl">        <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">全部 PAM 阶段通过！</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* 5. 关闭会话并清理 */</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">pam_close_session</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">pam_end</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="n">PAM_SUCCESS</span><span class="p">);</span>
@@ -17475,7 +17990,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-35" 
+    id="codeblock-id-46" 
     class="
       chroma 
       !tw-block 
@@ -17574,7 +18089,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-36" 
+    id="codeblock-id-47" 
     class="
       chroma 
       !tw-block 
@@ -17595,8 +18110,9 @@ Linux 安全体系的基础组件。</p>
 </span></span><span class="line"><span class="cl"><span class="c1"># 测试</span>
 </span></span><span class="line"><span class="cl">./pam_test ryan</span></span></code></pre>
 </div>
-<h4 id="312-pam-配置语法与模块" class="headerLink">
-    <a href="#312-pam-%e9%85%8d%e7%bd%ae%e8%af%ad%e6%b3%95%e4%b8%8e%e6%a8%a1%e5%9d%97" class="header-mark"></a>3.1.2 PAM 配置语法与模块</h4><p><strong>配置语法</strong>：</p>
+<hr>
+<h3 id="314-模块间的数据传递" class="headerLink">
+    <a href="#314-%e6%a8%a1%e5%9d%97%e9%97%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e4%bc%a0%e9%80%92" class="header-mark"></a>3.1.4 模块间的数据传递</h3><p>PAM 模块可通过 <code>pam_set_data()</code> 与 <code>pam_get_data()</code> 共享状态。例如：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
@@ -17616,7 +18132,7 @@ Linux 安全体系的基础组件。</p>
       aria-hidden="true">
           <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
-          <p class="tw-select-none !tw-my-1">text</p>
+          <p class="tw-select-none !tw-my-1">c</p>
       </button>
 
    <div class="tw-flex">
@@ -17672,7 +18188,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-37" 
+    id="codeblock-id-48" 
     class="
       chroma 
       !tw-block 
@@ -17686,24 +18202,16 @@ Linux 安全体系的基础组件。</p>
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl">&lt;type&gt; &lt;control&gt; &lt;module&gt; [arguments]</span></span></code></pre>
+      "><span class="line"><span class="cl"><span class="nf">pam_set_data</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="s">&#34;authenticated&#34;</span><span class="p">,</span> <span class="s">&#34;true&#34;</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ok</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">pam_get_data</span><span class="p">(</span><span class="n">pamh</span><span class="p">,</span> <span class="s">&#34;authenticated&#34;</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">ok</span><span class="p">);</span></span></span></code></pre>
 </div>
-<p><strong>类型（type）</strong>：</p>
-<ul>
-<li><code>auth</code>：认证模块</li>
-<li><code>account</code>：账户管理模块</li>
-<li><code>password</code>：密码管理模块</li>
-<li><code>session</code>：会话管理模块</li>
-</ul>
-<p><strong>控制标志（control）</strong>：</p>
-<ul>
-<li><code>required</code>：必须成功，失败后继续执行其他模块但最终失败</li>
-<li><code>requisite</code>：必须成功，失败后立即返回失败</li>
-<li><code>sufficient</code>：成功即可通过，失败不影响最终结果</li>
-<li><code>optional</code>：可选模块，不影响认证结果</li>
-</ul>
-<p><strong>NixOS 实际配置示例</strong>：</p>
-<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+<p>这使多个模块在同一认证过程中共享信息。</p>
+<hr>
+<h3 id="315-调试与故障排查" class="headerLink">
+    <a href="#315-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>3.1.5 调试与故障排查</h3><p>PAM 的问题通常来源于配置错误或模块加载失败，可按以下思路排查：</p>
+<h4 id="1测试与验证" class="headerLink">
+    <a href="#1%e6%b5%8b%e8%af%95%e4%b8%8e%e9%aa%8c%e8%af%81" class="header-mark"></a>（1）测试与验证</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     
     tw-flex 
@@ -17778,7 +18286,7 @@ Linux 安全体系的基础组件。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-38" 
+    id="codeblock-id-49" 
     class="
       chroma 
       !tw-block 
@@ -17792,113 +18300,317 @@ Linux 安全体系的基础组件。</p>
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># /etc/pam.d/login 实际配置（NixOS 生成）</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># Account management.</span>
-</span></span><span class="line"><span class="cl">account required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Authentication management.</span>
-</span></span><span class="line"><span class="cl">auth optional /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok
-</span></span><span class="line"><span class="cl">auth optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so
-</span></span><span class="line"><span class="cl">auth sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok try_first_pass
-</span></span><span class="line"><span class="cl">auth required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_deny.so
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Password management.</span>
-</span></span><span class="line"><span class="cl">password sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so nullok yescrypt
-</span></span><span class="line"><span class="cl">password optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so use_authtok
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># Session management.</span>
-</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_env.so <span class="nv">conffile</span><span class="o">=</span>/etc/pam/environment <span class="nv">readenv</span><span class="o">=</span><span class="m">0</span>
-</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
-</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_loginuid.so
-</span></span><span class="line"><span class="cl">session optional /nix/store/xxx-systemd-257.8/lib/security/pam_systemd.so
-</span></span><span class="line"><span class="cl">session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_limits.so <span class="nv">conf</span><span class="o">=</span>/nix/store/xxx-limits.conf
-</span></span><span class="line"><span class="cl">session optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so auto_start</span></span></code></pre>
+      "><span class="line"><span class="cl"><span class="c1"># 模拟特定服务的认证流程</span>
+</span></span><span class="line"><span class="cl">pamtester sudo <span class="nv">$USER</span> authenticate
+</span></span><span class="line"><span class="cl">pamtester login <span class="nv">$USER</span> open_session</span></span></code></pre>
 </div>
-<p><strong>常用 PAM 模块</strong>：</p>
-<table>
+<h4 id="2检查模块与依赖" class="headerLink">
+    <a href="#2%e6%a3%80%e6%9f%a5%e6%a8%a1%e5%9d%97%e4%b8%8e%e4%be%9d%e8%b5%96" class="header-mark"></a>（2）检查模块与依赖</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-50" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 验证模块存在与架构匹配</span>
+</span></span><span class="line"><span class="cl">ls /run/current-system/sw/lib/security/pam_unix.so
+</span></span><span class="line"><span class="cl">ldd /run/current-system/sw/lib/security/pam_unix.so</span></span></code></pre>
+</div>
+<h4 id="3查看系统日志" class="headerLink">
+    <a href="#3%e6%9f%a5%e7%9c%8b%e7%b3%bb%e7%bb%9f%e6%97%a5%e5%bf%97" class="header-mark"></a>（3）查看系统日志</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-51" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl">journalctl -b <span class="p">|</span> grep -i pam</span></span></code></pre>
+</div>
+<h4 id="4跟踪调用行为" class="headerLink">
+    <a href="#4%e8%b7%9f%e8%b8%aa%e8%b0%83%e7%94%a8%e8%a1%8c%e4%b8%ba" class="header-mark"></a>（4）跟踪调用行为</h4><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-52" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl">strace -f -e <span class="nv">trace</span><span class="o">=</span>openat,read,write -o sudo_trace.log sudo <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">grep pam sudo_trace.log</span></span></code></pre>
+</div>
+<h4 id="5常见问题" class="headerLink">
+    <a href="#5%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" class="header-mark"></a>（5）常见问题</h4><table>
   <thead>
       <tr>
-          <th>模块名</th>
-          <th>功能</th>
-          <th>用途</th>
+          <th>问题</th>
+          <th>可能原因</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td><code>pam_unix.so</code></td>
-          <td>Unix 标准认证</td>
-          <td>基于 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 的认证</td>
+          <td>模块加载失败</td>
+          <td>模块路径错误或权限不足</td>
       </tr>
       <tr>
-          <td><code>pam_deny.so</code></td>
-          <td>拒绝访问</td>
-          <td>默认拒绝所有认证请求</td>
+          <td>认证成功但无法建立会话</td>
+          <td>会话模块执行失败（如无法写入 <code>/var/run/utmp</code>）</td>
       </tr>
       <tr>
-          <td><code>pam_env.so</code></td>
-          <td>环境变量管理</td>
-          <td>设置用户会话环境变量</td>
+          <td>GNOME Keyring 不自动解锁</td>
+          <td><code>pam_gnome_keyring.so</code> 未启用或未配置 <code>auto_start</code></td>
       </tr>
       <tr>
-          <td><code>pam_loginuid.so</code></td>
-          <td>登录 UID 管理</td>
-          <td>记录用户登录的 UID</td>
-      </tr>
-      <tr>
-          <td><code>pam_systemd.so</code></td>
-          <td>systemd 集成</td>
-          <td>与 systemd 用户会话集成</td>
-      </tr>
-      <tr>
-          <td><code>pam_limits.so</code></td>
-          <td>资源限制</td>
-          <td>设置用户资源使用限制</td>
-      </tr>
-      <tr>
-          <td><code>pam_gnome_keyring.so</code></td>
-          <td>GNOME Keyring 集成</td>
-          <td>自动解锁用户密钥环</td>
-      </tr>
-      <tr>
-          <td><code>pam_ldap.so</code></td>
-          <td>LDAP 认证</td>
-          <td>企业环境中的集中认证</td>
-      </tr>
-      <tr>
-          <td><code>pam_fprintd.so</code></td>
-          <td>指纹认证</td>
-          <td>生物识别认证</td>
-      </tr>
-      <tr>
-          <td><code>pam_google_authenticator.so</code></td>
-          <td>双因子认证</td>
-          <td>TOTP 时间令牌认证</td>
+          <td>PAM 配置无效</td>
+          <td>程序服务名与配置文件不匹配，默认使用 <code>other</code></td>
       </tr>
   </tbody>
 </table>
-<h4 id="313-pam-调试与故障排查" class="headerLink">
-    <a href="#313-pam-%e8%b0%83%e8%af%95%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>3.1.3 PAM 调试与故障排查</h4><p>PAM 调试主要涉及配置验证、模块检查和日志分析。常用的调试方法包括：</p>
-<ul>
-<li><strong>配置验证</strong>：使用 <code>pamtester</code> 工具测试特定服务的认证流程</li>
-<li><strong>模块检查</strong>：验证 PAM 模块的依赖关系和加载状态</li>
-<li><strong>日志分析</strong>：通过 <code>journalctl</code> 查看认证相关的系统日志</li>
-<li><strong>程序跟踪</strong>：使用 <code>strace</code> 验证程序与 PAM 配置的对应关系</li>
-</ul>
-<p>具体的调试命令请参考 <a href="#353-%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" rel="">3.5.3 故障排查</a> 章节。</p>
-<p><strong>NixOS PAM 配置特点</strong>：</p>
-<ul>
-<li><strong>声明式配置</strong>：PAM 配置通过 NixOS 配置系统生成，不直接编辑 <code>/etc/pam.d/</code> 文件</li>
-<li><strong>模块路径</strong>：所有 PAM 模块都使用完整的 <code>/nix/store</code> 路径，确保版本一致性</li>
-<li><strong>自动集成</strong>：GNOME Keyring 等组件会自动集成到 PAM 配置中</li>
-<li><strong>可重现性</strong>：配置变更通过 <code>nixos-rebuild</code> 应用，确保系统状态可重现</li>
-</ul>
-<p><strong>常见问题</strong>：</p>
-<ol>
-<li><strong>认证失败</strong>：检查 <code>/etc/passwd</code> 和 <code>/etc/shadow</code> 文件权限</li>
-<li><strong>模块加载失败</strong>：确认 PAM 模块文件存在且可执行</li>
-<li><strong>配置语法错误</strong>：使用 <code>pamtester</code> 验证配置</li>
-<li><strong>服务名不匹配</strong>：如果程序指定的服务名与配置文件不匹配，会使用 <code>other</code> 配置</li>
-</ol>
+<hr>
 <h3 id="32-policykit---细粒度的系统权限管理" class="headerLink">
     <a href="#32-policykit---%e7%bb%86%e7%b2%92%e5%ba%a6%e7%9a%84%e7%b3%bb%e7%bb%9f%e6%9d%83%e9%99%90%e7%ae%a1%e7%90%86" class="header-mark"></a>3.2 PolicyKit - 细粒度的系统权限管理</h3><p>PolicyKit（现称 polkit）是一个用于控制系统级权限的框架，它提供了一种比传统 Unix 权限更细粒度的授权机制。在现代 Linux 桌面系统中，PolicyKit 允许非特权用户执行某些需要特权的系统操作
 （如关机、重启、挂载设备、修改系统时间等），而无需获取完整的 root 权限。</p>
@@ -18017,7 +18729,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-39" 
+    id="codeblock-id-53" 
     class="
       chroma 
       !tw-block 
@@ -18114,7 +18826,7 @@ Authentication Agent, 配置参见<a href="https://github.com/sodiboo/niri-flake
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-40" 
+    id="codeblock-id-54" 
     class="
       chroma 
       !tw-block 
@@ -18250,7 +18962,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-41" 
+    id="codeblock-id-55" 
     class="
       chroma 
       !tw-block 
@@ -18388,7 +19100,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-42" 
+    id="codeblock-id-56" 
     class="
       chroma 
       !tw-block 
@@ -18492,7 +19204,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-43" 
+    id="codeblock-id-57" 
     class="
       chroma 
       !tw-block 
@@ -18598,7 +19310,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-44" 
+    id="codeblock-id-58" 
     class="
       chroma 
       !tw-block 
@@ -18703,7 +19415,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-45" 
+    id="codeblock-id-59" 
     class="
       chroma 
       !tw-block 
@@ -18869,7 +19581,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-46" 
+    id="codeblock-id-60" 
     class="
       chroma 
       !tw-block 
@@ -18967,7 +19679,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-47" 
+    id="codeblock-id-61" 
     class="
       chroma 
       !tw-block 
@@ -19065,7 +19777,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-48" 
+    id="codeblock-id-62" 
     class="
       chroma 
       !tw-block 
@@ -19181,7 +19893,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-49" 
+    id="codeblock-id-63" 
     class="
       chroma 
       !tw-block 
@@ -19286,7 +19998,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-50" 
+    id="codeblock-id-64" 
     class="
       chroma 
       !tw-block 
@@ -19400,7 +20112,7 @@ systemd、NetworkManager、udisks 等）都使用 PolicyKit 来控制对其 D-Bu
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-51" 
+    id="codeblock-id-65" 
     class="
       chroma 
       !tw-block 
@@ -19512,7 +20224,7 @@ PAM、PolicyKit 和密钥管理调试命令。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-52" 
+    id="codeblock-id-66" 
     class="
       chroma 
       !tw-block 
