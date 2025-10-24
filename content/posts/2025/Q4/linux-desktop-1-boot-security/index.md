@@ -406,46 +406,165 @@ systemd-analyze plot > boot-time.svg
 > 言，这些框架的限制很少或几乎不存在。如果你希望限制整个系统全局的权限（包括 root 用户），
 > 应该考虑 SELinux/AppArmor 等强制访问控制框架。
 
-### 3.1 PAM - 可插拔认证模块
+---
 
-PAM（Pluggable Authentication Modules）是 Linux 系统的认证框架，为应用程序提供统一的认证接
-口。它允许系统管理员灵活配置认证策略，支持多种认证方式（密码、指纹、智能卡等），是现代
-Linux 安全体系的基础组件。
+## 3.1 PAM - 可插拔认证模块
 
-#### 3.1.1 PAM 工作机制与配置对应关系
+**PAM（Pluggable Authentication Modules）** 是 Linux 的统一认证框架，为系统中的各种程序
+（如 `login`、`sudo`、`sshd`、`gdm` 等）提供标准化的认证接口。借助 PAM，系统管理员可以通过
+配置文件灵活控制认证策略，而无需修改应用程序本身。它支持多种认证方式（密码、指纹、智能卡、
+双因子验证等），是现代 Linux 安全体系的核心组件之一。
 
-PAM 采用模块化设计，将认证过程分解为四个独立的阶段：
+---
 
-- **认证（Authentication）**：验证用户身份（用户名/密码、生物识别等）
-- **授权（Authorization）**：检查用户是否有权限访问特定资源
-- **账户管理（Account Management）**：检查账户状态（是否过期、是否被锁定等）
-- **会话管理（Session Management）**：管理用户会话的建立和销毁
+### 3.1.1 工作原理与配置结构
 
-**程序与 PAM 配置的对应关系**：
+PAM 采用模块化设计，将认证流程分为四个阶段。应用程序通过调用相应的 PAM 接口触发这些阶段，
+系统根据 `/etc/pam.d/` 下的配置文件执行相应的模块（`.so` 文件）。
 
-程序与 PAM 配置的对应关系是通过**服务名（Service Name）**建立的。当程序调用 PAM 时，它需要
-指定一个服务名，这个服务名决定了使用哪个 PAM 配置文件。
+#### （1）配置文件语法
 
-```c
-// 程序调用 pam_start 时指定服务名
-pam_start("login", username, &conv, &pamh);  // 使用 /etc/pam.d/login
-pam_start("sudo", username, &conv, &pamh);   // 使用 /etc/pam.d/sudo
-pam_start("sshd", username, &conv, &pamh);   // 使用 /etc/pam.d/sshd
+> https://linux.die.net/man/5/pam.d
+
+每行的基本格式如下：
+
+```text
+<type>  <control>  <module>  [arguments]
 ```
 
-**实际对应关系表**：
+- **type**：表示阶段类型
+- **control**：定义该模块的执行策略
+- **module**：具体的 PAM 模块路径（或名称）
+- **arguments**：传递给模块的参数
 
-| 程序     | 服务名     | 配置文件            | 说明              |
-| -------- | ---------- | ------------------- | ----------------- |
-| `login`  | `"login"`  | `/etc/pam.d/login`  | 控制台登录程序    |
-| `gdm`    | `"gdm"`    | `/etc/pam.d/gdm`    | GNOME 显示管理器  |
-| `greetd` | `"greetd"` | `/etc/pam.d/greetd` | greetd 显示管理器 |
-| `sudo`   | `"sudo"`   | `/etc/pam.d/sudo`   | sudo 命令         |
-| `su`     | `"su"`     | `/etc/pam.d/su`     | su 命令           |
-| `sshd`   | `"sshd"`   | `/etc/pam.d/sshd`   | SSH 守护进程      |
-| `passwd` | `"passwd"` | `/etc/pam.d/passwd` | 密码修改程序      |
+#### （2）四个认证阶段
 
-**PAM 调用流程示例**：
+| 阶段类型   | 调用函数                                     | 主要作用                                             |
+| ---------- | -------------------------------------------- | ---------------------------------------------------- |
+| `auth`     | `pam_authenticate()`                         | 验证用户身份，通常会提示用户输出密码或指纹以完成验证 |
+| `account`  | `pam_acct_mgmt()`                            | 检查账户状态（过期、锁定等）                         |
+| `password` | `pam_chauthtok()`                            | 处理密码修改                                         |
+| `session`  | `pam_open_session()` / `pam_close_session()` | 建立和清理用户会话                                   |
+
+#### （3）控制标志（control）
+
+| 标志         | 含义                                                                 | 行为说明                                                                                       |
+| ------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `required`   | 必须成功，失败不会立即终止，但最终结果会失败                         | 无论成功失败，都会继续执行后续模块。最终只要有一个 required 失败，整个认证就失败。             |
+| `requisite`  | 必须成功，失败立即终止并返回失败                                     | 失败立即返回，不再执行后续模块。                                                               |
+| `sufficient` | 成功则立即通过认证（跳过所有后续模块）；失败则继续由后续模块进行认证 | 若前面没有 required 失败，则成功直接通过；否则失败不影响后续。                                 |
+| `optional`   | 可选模块，结果通常被忽略                                             | 无论成功失败，对最终结果无直接影响，除非是栈中唯一的模块。                                     |
+| `include`    | 包含另一个文件的配置                                                 | 将指定文件的配置内容包含进来，通常用于复用通用配置（如 `system-auth`）。                       |
+| `substack`   | 调用子栈                                                             | 类似 `include`，但子栈的失败不影响主栈（即子栈只能跳过其自身的后续步骤），除非主栈中另有设置。 |
+
+#### （4）常用模块示例
+
+```bash
+pam_unix.so                 # 基于 /etc/passwd 与 /etc/shadow 的标准密码认证
+pam_google_authenticator.so # 双因子认证（TOTP）
+pam_fprintd.so              # 指纹认证
+pam_ldap.so                 # LDAP 集中式认证
+pam_gnome_keyring.so        # GNOME 密钥环集成
+pam_limits.so               # 用户资源限制
+pam_deny.so                 # 拒绝所有认证请求
+```
+
+---
+
+### 3.1.2 执行流程示例
+
+以 `/etc/pam.d/sudo` 为例：
+
+```bash
+#%PAM-1.0
+auth       sufficient   pam_rootok.so
+auth       sufficient   pam_timestamp.so
+auth       required     pam_wheel.so use_uid
+auth       required     pam_unix.so nullok try_first_pass
+```
+
+**各模块的执行顺序如下：**
+
+1.  **执行 `pam_rootok.so` (sufficient)**：
+    - 检查当前用户是否为 root。
+    - **如果成功**：PAM 认证流程**立即成功**，并**跳过后续所有 `auth` 模块**。用户直接获得
+      sudo 权限。
+    - **如果失败**：继续执行下一个模块。
+2.  **执行 `pam_timestamp.so` (sufficient)**：
+    - 检查是否存在有效的时间戳文件（默认为 5 分钟内）。
+    - **如果成功**：PAM 认证流程**立即成功**，并**跳过后续所有 `auth` 模块**。用户免密码获
+      得 sudo 权限。
+    - **如果失败**：继续执行下一个模块。
+3.  **执行 `pam_wheel.so` (required)**：
+    - 检查当前用户是否在 `wheel` 组（或 `sudo` 组，取决于配置）中。
+    - **无论成功还是失败**，都必须继续执行下一个 `required` 模块。但其结果会被记录下来。
+4.  **执行 `pam_unix.so` (required)**：
+    - 使用 `nullok` 和 `try_first_pass` 参数进行密码验证。
+    - `nullok`：允许空密码账户登录。
+    - `try_first_pass`：尝试使用前面模块（如果有的话）提供的密码。对于 `sudo`，这通常指之
+      前 `sudo` 成功时缓存的密码。
+    - **如果密码正确**：此模块成功。
+    - **如果密码错误**：此模块失败。
+5.  **最终结果判定**：
+    - 在所有 `required` 模块执行完毕后，PAM 会检查它们的结果。
+    - **如果任何一个 `required` 模块（`pam_wheel.so` 或 `pam_unix.so`）失败**，整个认证流
+      程失败。
+    - **只有当所有 `required` 模块都成功时**，认证才最终成功。
+
+**常用模块及其参数说明**：
+
+1. [`pam_unix.so` 参数](https://linux.die.net/man/8/pam_unix) (用于密码验证) 这是最核心的
+   密码认证模块，常见于 `auth` 和 `password` 类型。
+   - `nullok`：允许空密码账户通过认证。如果不加此参数，空密码账户将无法登录。
+   - `try_first_pass`：在提示用户输入密码前，先尝试使用之前栈中已缓存的密码（例如，由
+     `pam_timestamp.so` 或 `pam_kwallet.so` 提供的）。
+   - `use_authtok`：**强制**使用之前栈中已缓存的密码，如果不存在缓存密码，则直接失败。它比
+     `try_first_pass` 更严格，通常用在修改密码的 `password` 模块栈中，以确保用户输入的是旧
+     密码。
+   - `shadow`：使用 `/etc/shadow` 文件进行密码验证（现代系统默认启用）。
+2. [`pam_timestamp.so` 参数](https://linux.die.net/man/8/pam_timestamp) (用于时间戳认证)
+   常用于 `sudo`，实现免密码操作。
+   - `timestamp_timeout=600`：设置时间戳的有效期，单位为秒。默认是 300 (5分钟)。
+3. [`pam_wheel.so` 参数](https://linux.die.net/man/8/pam_wheel) (用于组成员资格检查) 用于
+   限制只有特定组的用户才能使用 `su` 或 `sudo`。
+   - `use_uid`：检查发起请求的原始用户 ID，而不是当前用户 ID（在 `sudo` 场景下很重要）。
+   - `group=admins`：指定检查的组名，默认是 `wheel`。
+4. [`pam_gnome_keyring.so`]() 参数 (用于会话管理) 这个模块与 `sudo` 的认证流程无关，主要用
+   于用户登录时解锁密钥环。
+   - `auto_start`：在会话启动时，如果用户密码与密钥环密码相同，则自动解锁密钥环。
+   - **典型应用场景**：在 `/etc/pam.d/gdm-password` 或 `/etc/pam.d/login` 的 `auth` 和
+     `session` 部分。
+     ```bash
+     # 在 /etc/pam.d/gdm-password 中
+     auth       optional    pam_gnome_keyring.so
+     session    optional    pam_gnome_keyring.so auto_start
+     ```
+
+---
+
+### 3.1.3 应用程序与 PAM 的交互
+
+程序通过 `pam_start()` 指定服务名，系统据此加载对应的配置文件。
+
+| 程序     | 服务名     | 配置文件            | 功能           |
+| -------- | ---------- | ------------------- | -------------- |
+| `login`  | `"login"`  | `/etc/pam.d/login`  | 控制台登录     |
+| `gdm`    | `"gdm"`    | `/etc/pam.d/gdm`    | GNOME 登录界面 |
+| `sudo`   | `"sudo"`   | `/etc/pam.d/sudo`   | 提权命令       |
+| `sshd`   | `"sshd"`   | `/etc/pam.d/sshd`   | SSH 登录       |
+| `greetd` | `"greetd"` | `/etc/pam.d/greetd` | 轻量显示管理器 |
+
+一个典型的调用顺序如下（以 `sudo` 为例）：
+
+```c
+pam_start("sudo", user, &conv, &pamh);     // 初始化 PAM
+pam_authenticate(pamh, 0);                 // 身份验证
+pam_acct_mgmt(pamh, 0);                    // 账户检查
+pam_open_session(pamh, 0);                 // 打开会话
+// 执行用户命令
+pam_close_session(pamh, 0);                // 关闭会话
+pam_end(pamh, PAM_SUCCESS);                // 释放资源
+```
 
 如下是一个用户登录流程的 PAM 调用示例：
 
@@ -471,20 +590,17 @@ int main(int argc, char *argv[])
     struct pam_conv conv = { misc_conv, NULL };
     const char *user;
     int ret;
-
     if (argc != 2) {
         fprintf(stderr, "用法: %s 用户名\n", argv[0]);
         return 1;
     }
     user = argv[1];
-
     /* 1. 初始化 */
     ret = pam_start("login", user, &conv, &pamh);
     if (ret != PAM_SUCCESS) {
         log_result(pamh, ret, "pam_start");
         return 1;
     }
-
     /* 2. 认证 */
     ret = pam_authenticate(pamh, 0);
     log_result(pamh, ret, "pam_authenticate");
@@ -492,7 +608,6 @@ int main(int argc, char *argv[])
         pam_end(pamh, ret);
         return 1;
     }
-
     /* 3. 帐户检查 */
     ret = pam_acct_mgmt(pamh, 0);
     log_result(pamh, ret, "pam_acct_mgmt");
@@ -500,7 +615,6 @@ int main(int argc, char *argv[])
         pam_end(pamh, ret);
         return 1;
     }
-
     /* 4. 打开会话 */
     ret = pam_open_session(pamh, 0);
     log_result(pamh, ret, "pam_open_session");
@@ -514,9 +628,7 @@ int main(int argc, char *argv[])
         pam_end(pamh, ret);
         return 1;
     }
-
     printf("\n全部 PAM 阶段通过！\n");
-
     /* 5. 关闭会话并清理 */
     pam_close_session(pamh, 0);
     pam_end(pamh, PAM_SUCCESS);
@@ -548,93 +660,65 @@ gcc pam_test.c -o pam_test -lpam -lpam_misc
 ./pam_test ryan
 ```
 
-#### 3.1.2 PAM 配置语法与模块
+---
 
-**配置语法**：
+### 3.1.4 模块间的数据传递
 
-```text
-<type> <control> <module> [arguments]
+PAM 模块可通过 `pam_set_data()` 与 `pam_get_data()` 共享状态。例如：
+
+```c
+pam_set_data(pamh, "authenticated", "true", NULL);
+const char *ok;
+pam_get_data(pamh, "authenticated", (const void **)&ok);
 ```
 
-**类型（type）**：
+这使多个模块在同一认证过程中共享信息。
 
-- `auth`：认证模块
-- `account`：账户管理模块
-- `password`：密码管理模块
-- `session`：会话管理模块
+---
 
-**控制标志（control）**：
+### 3.1.5 调试与故障排查
 
-- `required`：必须成功，失败后继续执行其他模块但最终失败
-- `requisite`：必须成功，失败后立即返回失败
-- `sufficient`：成功即可通过，失败不影响最终结果
-- `optional`：可选模块，不影响认证结果
+PAM 的问题通常来源于配置错误或模块加载失败，可按以下思路排查：
 
-**NixOS 实际配置示例**：
+#### （1）测试与验证
 
 ```bash
-# /etc/pam.d/login 实际配置（NixOS 生成）
-# Account management.
-account required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
-
-# Authentication management.
-auth optional /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok
-auth optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so
-auth sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so likeauth nullok try_first_pass
-auth required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_deny.so
-
-# Password management.
-password sufficient /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so nullok yescrypt
-password optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so use_authtok
-
-# Session management.
-session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
-session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_unix.so
-session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_loginuid.so
-session optional /nix/store/xxx-systemd-257.8/lib/security/pam_systemd.so
-session required /nix/store/xxx-linux-pam-1.7.1/lib/security/pam_limits.so conf=/nix/store/xxx-limits.conf
-session optional /nix/store/xxx-gnome-keyring-48.0/lib/security/pam_gnome_keyring.so auto_start
+# 模拟特定服务的认证流程
+pamtester sudo $USER authenticate
+pamtester login $USER open_session
 ```
 
-**常用 PAM 模块**：
+#### （2）检查模块与依赖
 
-| 模块名                        | 功能               | 用途                                       |
-| ----------------------------- | ------------------ | ------------------------------------------ |
-| `pam_unix.so`                 | Unix 标准认证      | 基于 `/etc/passwd` 和 `/etc/shadow` 的认证 |
-| `pam_deny.so`                 | 拒绝访问           | 默认拒绝所有认证请求                       |
-| `pam_env.so`                  | 环境变量管理       | 设置用户会话环境变量                       |
-| `pam_loginuid.so`             | 登录 UID 管理      | 记录用户登录的 UID                         |
-| `pam_systemd.so`              | systemd 集成       | 与 systemd 用户会话集成                    |
-| `pam_limits.so`               | 资源限制           | 设置用户资源使用限制                       |
-| `pam_gnome_keyring.so`        | GNOME Keyring 集成 | 自动解锁用户密钥环                         |
-| `pam_ldap.so`                 | LDAP 认证          | 企业环境中的集中认证                       |
-| `pam_fprintd.so`              | 指纹认证           | 生物识别认证                               |
-| `pam_google_authenticator.so` | 双因子认证         | TOTP 时间令牌认证                          |
+```bash
+# 验证模块存在与架构匹配
+ls /run/current-system/sw/lib/security/pam_unix.so
+ldd /run/current-system/sw/lib/security/pam_unix.so
+```
 
-#### 3.1.3 PAM 调试与故障排查
+#### （3）查看系统日志
 
-PAM 调试主要涉及配置验证、模块检查和日志分析。常用的调试方法包括：
+```bash
+journalctl -b | grep -i pam
+```
 
-- **配置验证**：使用 `pamtester` 工具测试特定服务的认证流程
-- **模块检查**：验证 PAM 模块的依赖关系和加载状态
-- **日志分析**：通过 `journalctl` 查看认证相关的系统日志
-- **程序跟踪**：使用 `strace` 验证程序与 PAM 配置的对应关系
+#### （4）跟踪调用行为
 
-具体的调试命令请参考 [3.5.3 故障排查](#353-故障排查) 章节。
+```bash
+strace -f -e trace=openat,read,write -o sudo_trace.log sudo true
+grep pam sudo_trace.log
+```
 
-**NixOS PAM 配置特点**：
+#### （5）常见问题
 
-- **声明式配置**：PAM 配置通过 NixOS 配置系统生成，不直接编辑 `/etc/pam.d/` 文件
-- **模块路径**：所有 PAM 模块都使用完整的 `/nix/store` 路径，确保版本一致性
-- **自动集成**：GNOME Keyring 等组件会自动集成到 PAM 配置中
-- **可重现性**：配置变更通过 `nixos-rebuild` 应用，确保系统状态可重现
+| 问题                     | 可能原因                                           |
+| ------------------------ | -------------------------------------------------- |
+| 模块加载失败             | 模块路径错误或权限不足                             |
+| 认证成功但无法建立会话   | 会话模块执行失败（如无法写入 `/var/run/utmp`）     |
+| GNOME Keyring 不自动解锁 | `pam_gnome_keyring.so` 未启用或未配置 `auto_start` |
+| PAM 配置无效             | 程序服务名与配置文件不匹配，默认使用 `other`       |
 
-**常见问题**：
-
-1. **认证失败**：检查 `/etc/passwd` 和 `/etc/shadow` 文件权限
-2. **模块加载失败**：确认 PAM 模块文件存在且可执行
-3. **配置语法错误**：使用 `pamtester` 验证配置
-4. **服务名不匹配**：如果程序指定的服务名与配置文件不匹配，会使用 `other` 配置
+---
 
 ### 3.2 PolicyKit - 细粒度的系统权限管理
 
