@@ -410,6 +410,154 @@ DRM-Master，系统可恢复文本模式。
 - 通过 `/dev/input/event*` 访问输入设备。
 - 通过 PipeWire 处理音频、视频和屏幕共享（详见后续多媒体章节）。
 
+### 4.4 xdg-desktop-portal：Wayland 桌面访问控制
+
+XDG Desktop Portal 是一套用于在 Linux 桌面环境下提供统一安全接口的框架，最初为 Flatpak 等
+沙盒应用访问沙箱外部资源而设计。它通过 D-Bus 暴露一系列「门户（Portal）」接口，让沙箱化或
+受限应用能够安全地请求**文件选择、截图、屏幕共享、打开 URI** 等操作。
+
+在 Wayland 环境下，每个应用程序只能访问自己的窗口、键盘鼠标事件等等，无法随意截屏或访问全
+局资源。在 Wayland 发展过程中，早期各 DE 与 WM 各自为战，实现了许多私有协议去完成这些工
+作，碎片化严重、客户端程序兼容困难。之后社区逐渐形成了使用 XDG Desktop Portal 作为桌面访问
+控制框架的共识，如今几乎所有的 DE/WM 与客户端应用都广泛采用了这一框架，它已成为 Wayland 中
+资源访问控制的事实标准。
+
+如今绝大部分应用在 X11 环境下仍然会使用 X11 原生接口（如 XShm、XRecord、XSelectInput 等）
+实现屏幕共享、文件选择、打开 URI 等功能，而在 Wayland 下则必须使用 xdg-desktop-portal.
+
+> **NOTE**: 许多命令行截图/录屏工具（如
+> [wl-screenrec](https://github.com/russelltg/wl-screenrec),
+> [wf-recorder](https://github.com/ammen99/wf-recorder)）选择了使用
+> wlr-screencopy-unstable-v1 / ext-image-copy-capture-v1 等 Wayland 原生的协议来实现截图功
+> 能，这些工具完全绕过了 XDG Desktop Portal, 通常只在 wlroots-based compositors 上能正常使
+> 用，Gnome/KDE 目前都要求走 Portal 接口、不支持此类协议。
+
+#### 核心门户服务
+
+> https://flatpak.github.io/xdg-desktop-portal/docs/api-reference.html
+
+**文件操作**：
+
+- **文件选择器**：`org.freedesktop.portal.FileChooser` 统一的文件选择对话框
+- **文件传输**：`org.freedesktop.portal.FileTransfer` 通过拖拽或复制粘贴等方式在 Apps 之间
+  传输文件
+
+**屏幕与媒体访问**：
+
+- **截屏**：`org.freedesktop.portal.Screenshot` 安全截屏功能
+- **录屏**：`org.freedesktop.portal.ScreenCast` 屏幕录制和窗口共享，视频会议应用的核心依赖
+- **摄像头**：`org.freedesktop.portal.Camera` 摄像头访问控制
+
+**系统访问**：
+
+- **打印机**：`org.freedesktop.portal.Print` 统一的打印接口
+- **通知**：`org.freedesktop.portal.Notification` 跨桌面环境的通知发送
+- **位置服务**：`org.freedesktop.portal.Location` 地理位置信息访问
+
+**账户与权限**：
+
+- **账户信息**：`org.freedesktop.portal.Account` 获取用户基本信息
+- **密码管理**：`org.freedesktop.portal.Secret` 与系统密钥环集成
+- **设备授权**：`org.freedesktop.portal.Usb` USB 设备等外设访问控制
+
+#### 门户实现：不同桌面环境的适配器
+
+xdg-desktop-portal 是框架本身，具体的功能实现由各个桌面环境提供：
+
+- **xdg-desktop-portal-gtk**：实现了 Portal 最基础的功能，是 Niri/Hyprland 等大部分
+  Compositors 的默认 Portal.
+- **xdg-desktop-portal-wlr**：wlroots 的通用 portal 组件，实现了通用的屏幕共享与截图两项功
+  能，所有基于 wlroots 的 Compositors 都可使用它。
+- **xdg-desktop-portal-gnome**：被 Niri 等部分 Compositor 用于实现屏幕共享与截图功能。
+- **gnome-keyring**: 实现了 Portal 的密码管理 API, Niri/Hyprland 等 Compositor 都使用它作
+  为密码管理组件。
+
+#### 与多媒体和 PipeWire 的关系
+
+在后续的多媒体章节中会详细介绍，**PipeWire 的屏幕共享功能完全依赖 xdg-desktop-portal**：
+
+- **屏幕捕获流程**：视频会议软件 → PipeWire → xdg-desktop-portal → 用户授权 → 合成器提供屏
+  幕内容
+- **权限管理**：用户可以精细控制哪些应用可以访问屏幕，以及访问的范围
+- **安全保证**：即使应用获得了屏幕访问权限，也只能在用户授权的范围内工作
+
+这种设计解决了 Wayland 隔离原则与实际功能需求的矛盾，是典型的"安全与便利的平衡"方案。
+
+#### 工作原理与通信流程
+
+**典型交互流程**：
+
+1. **应用发起请求**：应用通过 D-Bus 调用相应的门户接口
+2. **门户服务转发**：xdg-desktop-portal 根据配置将请求转发给对应的实现
+3. **用户界面显示**：具体实现显示原生对话框，请求用户授权
+4. **权限授予**：用户确认后，门户服务返回授权令牌或结果
+5. **资源访问**：应用使用令牌通过受限接口访问资源
+
+**D-Bus 架构**：
+
+```bash
+# 查看已安装的门户实现
+ls /usr/share/xdg-desktop-portal/portals/
+# 或在 NixOS 上
+ls /run/current-system/sw/share/xdg-desktop-portal/portals/
+
+# 查看当前激活的门户
+busctl --user list-units | grep portal
+
+# 监控门户活动
+busctl monitor --user org.freedesktop.portal.*
+```
+
+#### 配置与故障排查
+
+**优先级配置**：
+
+系统按优先级选择门户实现，优先级文件通常位于：
+
+```bash
+# 系统级配置
+/etc/xdg-desktop-portal/*-portals.conf
+# 用户级配置
+~/.config/xdg-desktop-portal/*-portals.conf
+```
+
+**常见问题排查**：
+
+```bash
+# 检查门户服务状态
+systemctl --user status xdg-desktop-portal
+systemctl --user status xdg-desktop-portal-gtk
+systemctl --user status xdg-desktop-portal-gnome
+
+# 查看门户日志
+journalctl --user -u xdg-desktop-portal -f
+
+# 测试门户功能
+gdbus introspect --session --dest org.freedesktop.portal.Desktop \
+  --object-path /org/freedesktop/portal/desktop
+
+# 检查特定门户支持
+gdbus call --session --dest org.freedesktop.portal.Desktop \
+  --object-path /org/freedesktop/portal/desktop \
+  --method org.freedesktop.portal.Request.Response
+```
+
+**NixOS 配置示例**：
+
+```nix
+{
+  # 启用 xdg-desktop-portal 服务
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk  # GTK 门户
+      xdg-desktop-portal-wlr  # Wayland 合成器门户
+    ];
+    xdgOpenUsePortal = true;  # 使用门户处理 xdg-open
+  };
+}
+```
+
 ---
 
 ## 应用程序与工具包

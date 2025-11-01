@@ -186,8 +186,9 @@ PipeWire 作为现代 Linux 桌面系统的多媒体框架，相比传统方案�
 **原生适配现代桌面协议**：
 
 - 作为 Wayland 官方推荐的多媒体中间层
-- 通过与 `xdg-desktop-portal` 深度集成，实现"授权式"屏幕共享
+- 通过与 **xdg-desktop-portal** 框架协同工作，实现标准化的"授权式"屏幕共享
 - 支持 HDR 视频和高分辨率流传输，性能损耗远低于传统 X11 截图
+- 遵循 Wayland 安全隔离原则，所有跨应用资源访问都通过用户授权的门户接口
 
 **简化沙盒应用权限**：
 
@@ -207,20 +208,42 @@ PipeWire 作为现代 Linux 桌面系统的多媒体框架，相比传统方案�
 - 用户可通过图形工具拖拽节点实现流的动态切换
 - 支持自动故障恢复和流的动态转换
 
-#### 1.3.3 Wayland 屏幕共享协议
+#### 1.3.3 Wayland 屏幕共享与 xdg-desktop-portal
 
-在 Wayland 环境中，屏幕共享功能是通过 PipeWire 的 `screen-capture` 协议实现的。这与 X11 有
-很大的不同，后者是通过其自身的扩展（如 X11R6 的 XFIXES 扩展）实现的。
+在 Wayland 环境中，屏幕共享功能是通过 **xdg-desktop-portal** 和 PipeWire 协同工作实现的。
+这与 X11 有很大的不同，后者通过其自身的扩展（如 X11R6 的 XFIXES 扩展）直接访问屏幕内容。
+
+**工作原理**：
+
+在 Wayland 下，每个应用程序只能访问自己的窗口、键盘鼠标事件等，无法随意截屏或访问全局资
+源。屏幕共享的完整流程是：
+
+1. **应用发起请求**：视频会议软件调用 `org.freedesktop.portal.ScreenCast` 接口，请求屏幕共
+   享
+2. **用户授权**：xdg-desktop-portal 显示原生对话框，请求用户确认共享范围（整个屏幕/特定窗
+   口/区域）
+3. **合成器提供数据**：获得授权后，xdg-desktop-portal 通知合成器，合成器将相应的屏幕内容通
+   过 PipeWire 流返回给 xdg-desktop-portal.
+4. **PipeWire 流传输**：xdg-desktop-portal 将流信息返回给应用，应用程序通过 PipeWire 接收
+   屏幕数据进行处理和传输
+
+可以看到应用程序只需要先与 xdg-desktop-portal 交互获得 PipeWire 流信息，然后直接访问
+PipeWire, 全程都不直接与合成器交互。
 
 **协议优势**：
 
-- **安全性**：需要用户明确授权才能进行屏幕共享
+- **安全性**：基于 xdg-desktop-portal 的授权机制，需要用户明确同意
+- **隐私保护**：用户可以精确控制共享范围，只共享特定窗口而非整个屏幕
 - **性能**：直接访问合成器缓冲区，避免额外的内存拷贝
 - **兼容性**：支持多显示器、不同分辨率和刷新率
-- **隐私保护**：可以只共享特定窗口而非整个屏幕
+- **标准化**：所有应用都使用相同的 portal 接口，确保跨桌面环境的一致体验
 
-**主流应用支持**：目前主流的 OBS、Discord、Zoom、Teams、Chrome/Chromium 等应用都已经支持了
-Wayland 下的 screen-capture 协议。
+**门户实现要求**：
+
+要使用 Wayland 屏幕共享，系统需要安装 DE/WM 所支持的 xdg-desktop-portal 实现。
+
+**主流应用支持**：目前主流的 OBS、Discord、Zoom、Chrome/Chromium 等应用都已经支持基于
+xdg-desktop-portal 的 Wayland 屏幕共享机制。
 
 #### 1.3.4 视频设备管理
 
@@ -336,10 +359,12 @@ context.properties = {
 
 **屏幕共享问题**：
 
-1. **Wayland 协议支持**：确认合成器支持 screen-capture 协议
-2. **环境变量设置**：正确设置 `XDG_CURRENT_DESKTOP`
-3. **权限配置**：检查摄像头和屏幕录制权限
-4. **应用兼容性**：部分应用需要特定版本的 PipeWire
+1. **xdg-desktop-portal 服务状态**：确认门户服务正常运行
+2. **门户实现安装**：检查是否安装了适合的 portal 实现
+3. **环境变量设置**：正确设置 `XDG_CURRENT_DESKTOP`
+4. **权限配置**：检查摄像头和屏幕录制权限
+5. **合成器支持**：确认合成器支持相应的 portal 接口
+6. **应用兼容性**：部分应用需要特定版本的 PipeWire 和 portal 支持
 
 **音频设备识别问题**：
 
