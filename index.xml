@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-10-24T04:40:12+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-11-01T07:41:32+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;系统关机看似简单，但背后涉及了繁杂的资源清理和状态管理过程。当你点击关机按钮，系统却卡在那里不动，或者出现各种奇怪的错误信息时，理解关机流程和故障排查方法就显得尤为重要。&lt;/p&gt;
@@ -6982,8 +6982,9 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
 <p><strong>原生适配现代桌面协议</strong>：</p>
 <ul>
 <li>作为 Wayland 官方推荐的多媒体中间层</li>
-<li>通过与 <code>xdg-desktop-portal</code> 深度集成，实现&quot;授权式&quot;屏幕共享</li>
+<li>通过与 <strong>xdg-desktop-portal</strong> 框架协同工作，实现标准化的&quot;授权式&quot;屏幕共享</li>
 <li>支持 HDR 视频和高分辨率流传输，性能损耗远低于传统 X11 截图</li>
+<li>遵循 Wayland 安全隔离原则，所有跨应用资源访问都通过用户授权的门户接口</li>
 </ul>
 <p><strong>简化沙盒应用权限</strong>：</p>
 <ul>
@@ -7003,17 +7004,30 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
 <li>用户可通过图形工具拖拽节点实现流的动态切换</li>
 <li>支持自动故障恢复和流的动态转换</li>
 </ul>
-<h4 id="133-wayland-屏幕共享协议" class="headerLink">
-    <a href="#133-wayland-%e5%b1%8f%e5%b9%95%e5%85%b1%e4%ba%ab%e5%8d%8f%e8%ae%ae" class="header-mark"></a>1.3.3 Wayland 屏幕共享协议</h4><p>在 Wayland 环境中，屏幕共享功能是通过 PipeWire 的 <code>screen-capture</code> 协议实现的。这与 X11 有很大的不同，后者是通过其自身的扩展（如 X11R6 的 XFIXES 扩展）实现的。</p>
+<h4 id="133-wayland-屏幕共享与-xdg-desktop-portal" class="headerLink">
+    <a href="#133-wayland-%e5%b1%8f%e5%b9%95%e5%85%b1%e4%ba%ab%e4%b8%8e-xdg-desktop-portal" class="header-mark"></a>1.3.3 Wayland 屏幕共享与 xdg-desktop-portal</h4><p>在 Wayland 环境中，屏幕共享功能是通过 <strong>xdg-desktop-portal</strong> 和 PipeWire 协同工作实现的。这与 X11 有很大的不同，后者通过其自身的扩展（如 X11R6 的 XFIXES 扩展）直接访问屏幕内容。</p>
+<p><strong>工作原理</strong>：</p>
+<p>在 Wayland 下，每个应用程序只能访问自己的窗口、键盘鼠标事件等，无法随意截屏或访问全局资源。屏幕共享的完整流程是：</p>
+<ol>
+<li><strong>应用发起请求</strong>：视频会议软件调用 <code>org.freedesktop.portal.ScreenCast</code> 接口，请求屏幕共享</li>
+<li><strong>用户授权</strong>：xdg-desktop-portal 显示原生对话框，请求用户确认共享范围（整个屏幕/特定窗口/区域）</li>
+<li><strong>合成器提供数据</strong>：获得授权后，xdg-desktop-portal 通知合成器，合成器将相应的屏幕内容通过 PipeWire 流返回给 xdg-desktop-portal.</li>
+<li><strong>PipeWire 流传输</strong>：xdg-desktop-portal 将流信息返回给应用，应用程序通过 PipeWire 接收屏幕数据进行处理和传输</li>
+</ol>
+<p>可以看到应用程序只需要先与 xdg-desktop-portal 交互获得 PipeWire 流信息，然后直接访问
+PipeWire, 全程都不直接与合成器交互。</p>
 <p><strong>协议优势</strong>：</p>
 <ul>
-<li><strong>安全性</strong>：需要用户明确授权才能进行屏幕共享</li>
+<li><strong>安全性</strong>：基于 xdg-desktop-portal 的授权机制，需要用户明确同意</li>
+<li><strong>隐私保护</strong>：用户可以精确控制共享范围，只共享特定窗口而非整个屏幕</li>
 <li><strong>性能</strong>：直接访问合成器缓冲区，避免额外的内存拷贝</li>
 <li><strong>兼容性</strong>：支持多显示器、不同分辨率和刷新率</li>
-<li><strong>隐私保护</strong>：可以只共享特定窗口而非整个屏幕</li>
+<li><strong>标准化</strong>：所有应用都使用相同的 portal 接口，确保跨桌面环境的一致体验</li>
 </ul>
-<p><strong>主流应用支持</strong>：目前主流的 OBS、Discord、Zoom、Teams、Chrome/Chromium 等应用都已经支持了
-Wayland 下的 screen-capture 协议。</p>
+<p><strong>门户实现要求</strong>：</p>
+<p>要使用 Wayland 屏幕共享，系统需要安装 DE/WM 所支持的 xdg-desktop-portal 实现。</p>
+<p><strong>主流应用支持</strong>：目前主流的 OBS、Discord、Zoom、Chrome/Chromium 等应用都已经支持基于
+xdg-desktop-portal 的 Wayland 屏幕共享机制。</p>
 <h4 id="134-视频设备管理" class="headerLink">
     <a href="#134-%e8%a7%86%e9%a2%91%e8%ae%be%e5%a4%87%e7%ae%a1%e7%90%86" class="header-mark"></a>1.3.4 视频设备管理</h4><p><strong>摄像头设备管理</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
@@ -7640,10 +7654,12 @@ Wayland 下的 screen-capture 协议。</p>
 <h3 id="14-故障排查" class="headerLink">
     <a href="#14-%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>1.4 故障排查</h3><p><strong>屏幕共享问题</strong>：</p>
 <ol>
-<li><strong>Wayland 协议支持</strong>：确认合成器支持 screen-capture 协议</li>
+<li><strong>xdg-desktop-portal 服务状态</strong>：确认门户服务正常运行</li>
+<li><strong>门户实现安装</strong>：检查是否安装了适合的 portal 实现</li>
 <li><strong>环境变量设置</strong>：正确设置 <code>XDG_CURRENT_DESKTOP</code></li>
 <li><strong>权限配置</strong>：检查摄像头和屏幕录制权限</li>
-<li><strong>应用兼容性</strong>：部分应用需要特定版本的 PipeWire</li>
+<li><strong>合成器支持</strong>：确认合成器支持相应的 portal 接口</li>
+<li><strong>应用兼容性</strong>：部分应用需要特定版本的 PipeWire 和 portal 支持</li>
 </ol>
 <p><strong>音频设备识别问题</strong>：</p>
 <ul>
@@ -10117,7 +10133,7 @@ fcitx5 自己创建，并通过 XWayland 显示）。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-28" 
+    id="codeblock-id-32" 
     class="
       chroma 
       !tw-block 
@@ -10253,7 +10269,7 @@ systemd-logind ACL 机制（基于 seat 和会话）。SSH 会话主要依赖前
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-29" 
+    id="codeblock-id-33" 
     class="
       chroma 
       !tw-block 
@@ -10371,7 +10387,7 @@ systemd 服务或 root 启动的进程（起进程身份不同会导致权限问
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-30" 
+    id="codeblock-id-34" 
     class="
       chroma 
       !tw-block 
@@ -10594,6 +10610,473 @@ DRM-Master，系统可恢复文本模式。</p>
 <li>通过 <code>/dev/input/event*</code> 访问输入设备。</li>
 <li>通过 PipeWire 处理音频、视频和屏幕共享（详见后续多媒体章节）。</li>
 </ul>
+<h3 id="44-xdg-desktop-portalwayland-桌面访问控制" class="headerLink">
+    <a href="#44-xdg-desktop-portalwayland-%e6%a1%8c%e9%9d%a2%e8%ae%bf%e9%97%ae%e6%8e%a7%e5%88%b6" class="header-mark"></a>4.4 xdg-desktop-portal：Wayland 桌面访问控制</h3><p>XDG Desktop Portal 是一套用于在 Linux 桌面环境下提供统一安全接口的框架，最初为 Flatpak 等沙盒应用访问沙箱外部资源而设计。它通过 D-Bus 暴露一系列「门户（Portal）」接口，让沙箱化或受限应用能够安全地请求<strong>文件选择、截图、屏幕共享、打开 URI</strong> 等操作。</p>
+<p>在 Wayland 环境下，每个应用程序只能访问自己的窗口、键盘鼠标事件等等，无法随意截屏或访问全局资源。在 Wayland 发展过程中，早期各 DE 与 WM 各自为战，实现了许多私有协议去完成这些工作，碎片化严重、客户端程序兼容困难。之后社区逐渐形成了使用 XDG Desktop Portal 作为桌面访问控制框架的共识，如今几乎所有的 DE/WM 与客户端应用都广泛采用了这一框架，它已成为 Wayland 中资源访问控制的事实标准。</p>
+<p>如今绝大部分应用在 X11 环境下仍然会使用 X11 原生接口（如 XShm、XRecord、XSelectInput 等）
+实现屏幕共享、文件选择、打开 URI 等功能，而在 Wayland 下则必须使用 xdg-desktop-portal.</p>
+<blockquote>
+  <p><strong>NOTE</strong>: 许多命令行截图/录屏工具（如<a href="https://github.com/russelltg/wl-screenrec" target="_blank" rel="noopener noreferrer">wl-screenrec</a>,<a href="https://github.com/ammen99/wf-recorder" target="_blank" rel="noopener noreferrer">wf-recorder</a>）选择了使用
+wlr-screencopy-unstable-v1 / ext-image-copy-capture-v1 等 Wayland 原生的协议来实现截图功能，这些工具完全绕过了 XDG Desktop Portal, 通常只在 wlroots-based compositors 上能正常使用，Gnome/KDE 目前都要求走 Portal 接口、不支持此类协议。</p>
+</blockquote><h4 id="核心门户服务" class="headerLink">
+    <a href="#%e6%a0%b8%e5%bf%83%e9%97%a8%e6%88%b7%e6%9c%8d%e5%8a%a1" class="header-mark"></a>核心门户服务</h4><blockquote>
+  <p><a href="https://flatpak.github.io/xdg-desktop-portal/docs/api-reference.html" target="_blank" rel="noopener noreferrer">https://flatpak.github.io/xdg-desktop-portal/docs/api-reference.html</a></p>
+</blockquote><p><strong>文件操作</strong>：</p>
+<ul>
+<li><strong>文件选择器</strong>：<code>org.freedesktop.portal.FileChooser</code> 统一的文件选择对话框</li>
+<li><strong>文件传输</strong>：<code>org.freedesktop.portal.FileTransfer</code> 通过拖拽或复制粘贴等方式在 Apps 之间传输文件</li>
+</ul>
+<p><strong>屏幕与媒体访问</strong>：</p>
+<ul>
+<li><strong>截屏</strong>：<code>org.freedesktop.portal.Screenshot</code> 安全截屏功能</li>
+<li><strong>录屏</strong>：<code>org.freedesktop.portal.ScreenCast</code> 屏幕录制和窗口共享，视频会议应用的核心依赖</li>
+<li><strong>摄像头</strong>：<code>org.freedesktop.portal.Camera</code> 摄像头访问控制</li>
+</ul>
+<p><strong>系统访问</strong>：</p>
+<ul>
+<li><strong>打印机</strong>：<code>org.freedesktop.portal.Print</code> 统一的打印接口</li>
+<li><strong>通知</strong>：<code>org.freedesktop.portal.Notification</code> 跨桌面环境的通知发送</li>
+<li><strong>位置服务</strong>：<code>org.freedesktop.portal.Location</code> 地理位置信息访问</li>
+</ul>
+<p><strong>账户与权限</strong>：</p>
+<ul>
+<li><strong>账户信息</strong>：<code>org.freedesktop.portal.Account</code> 获取用户基本信息</li>
+<li><strong>密码管理</strong>：<code>org.freedesktop.portal.Secret</code> 与系统密钥环集成</li>
+<li><strong>设备授权</strong>：<code>org.freedesktop.portal.Usb</code> USB 设备等外设访问控制</li>
+</ul>
+<h4 id="门户实现不同桌面环境的适配器" class="headerLink">
+    <a href="#%e9%97%a8%e6%88%b7%e5%ae%9e%e7%8e%b0%e4%b8%8d%e5%90%8c%e6%a1%8c%e9%9d%a2%e7%8e%af%e5%a2%83%e7%9a%84%e9%80%82%e9%85%8d%e5%99%a8" class="header-mark"></a>门户实现：不同桌面环境的适配器</h4><p>xdg-desktop-portal 是框架本身，具体的功能实现由各个桌面环境提供：</p>
+<ul>
+<li><strong>xdg-desktop-portal-gtk</strong>：实现了 Portal 最基础的功能，是 Niri/Hyprland 等大部分
+Compositors 的默认 Portal.</li>
+<li><strong>xdg-desktop-portal-wlr</strong>：wlroots 的通用 portal 组件，实现了通用的屏幕共享与截图两项功能，所有基于 wlroots 的 Compositors 都可使用它。</li>
+<li><strong>xdg-desktop-portal-gnome</strong>：被 Niri 等部分 Compositor 用于实现屏幕共享与截图功能。</li>
+<li><strong>gnome-keyring</strong>: 实现了 Portal 的密码管理 API, Niri/Hyprland 等 Compositor 都使用它作为密码管理组件。</li>
+</ul>
+<h4 id="与多媒体和-pipewire-的关系" class="headerLink">
+    <a href="#%e4%b8%8e%e5%a4%9a%e5%aa%92%e4%bd%93%e5%92%8c-pipewire-%e7%9a%84%e5%85%b3%e7%b3%bb" class="header-mark"></a>与多媒体和 PipeWire 的关系</h4><p>在后续的多媒体章节中会详细介绍，<strong>PipeWire 的屏幕共享功能完全依赖 xdg-desktop-portal</strong>：</p>
+<ul>
+<li><strong>屏幕捕获流程</strong>：视频会议软件 → PipeWire → xdg-desktop-portal → 用户授权 → 合成器提供屏幕内容</li>
+<li><strong>权限管理</strong>：用户可以精细控制哪些应用可以访问屏幕，以及访问的范围</li>
+<li><strong>安全保证</strong>：即使应用获得了屏幕访问权限，也只能在用户授权的范围内工作</li>
+</ul>
+<p>这种设计解决了 Wayland 隔离原则与实际功能需求的矛盾，是典型的&quot;安全与便利的平衡&quot;方案。</p>
+<h4 id="工作原理与通信流程" class="headerLink">
+    <a href="#%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86%e4%b8%8e%e9%80%9a%e4%bf%a1%e6%b5%81%e7%a8%8b" class="header-mark"></a>工作原理与通信流程</h4><p><strong>典型交互流程</strong>：</p>
+<ol>
+<li><strong>应用发起请求</strong>：应用通过 D-Bus 调用相应的门户接口</li>
+<li><strong>门户服务转发</strong>：xdg-desktop-portal 根据配置将请求转发给对应的实现</li>
+<li><strong>用户界面显示</strong>：具体实现显示原生对话框，请求用户授权</li>
+<li><strong>权限授予</strong>：用户确认后，门户服务返回授权令牌或结果</li>
+<li><strong>资源访问</strong>：应用使用令牌通过受限接口访问资源</li>
+</ol>
+<p><strong>D-Bus 架构</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-35" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 查看已安装的门户实现</span>
+</span></span><span class="line"><span class="cl">ls /usr/share/xdg-desktop-portal/portals/
+</span></span><span class="line"><span class="cl"><span class="c1"># 或在 NixOS 上</span>
+</span></span><span class="line"><span class="cl">ls /run/current-system/sw/share/xdg-desktop-portal/portals/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看当前激活的门户</span>
+</span></span><span class="line"><span class="cl">busctl --user list-units <span class="p">|</span> grep portal
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 监控门户活动</span>
+</span></span><span class="line"><span class="cl">busctl monitor --user org.freedesktop.portal.*</span></span></code></pre>
+</div>
+<h4 id="配置与故障排查" class="headerLink">
+    <a href="#%e9%85%8d%e7%bd%ae%e4%b8%8e%e6%95%85%e9%9a%9c%e6%8e%92%e6%9f%a5" class="header-mark"></a>配置与故障排查</h4><p><strong>优先级配置</strong>：</p>
+<p>系统按优先级选择门户实现，优先级文件通常位于：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-36" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 系统级配置</span>
+</span></span><span class="line"><span class="cl">/etc/xdg-desktop-portal/*-portals.conf
+</span></span><span class="line"><span class="cl"><span class="c1"># 用户级配置</span>
+</span></span><span class="line"><span class="cl">~/.config/xdg-desktop-portal/*-portals.conf</span></span></code></pre>
+</div>
+<p><strong>常见问题排查</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">bash</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-37" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="c1"># 检查门户服务状态</span>
+</span></span><span class="line"><span class="cl">systemctl --user status xdg-desktop-portal
+</span></span><span class="line"><span class="cl">systemctl --user status xdg-desktop-portal-gtk
+</span></span><span class="line"><span class="cl">systemctl --user status xdg-desktop-portal-gnome
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看门户日志</span>
+</span></span><span class="line"><span class="cl">journalctl --user -u xdg-desktop-portal -f
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 测试门户功能</span>
+</span></span><span class="line"><span class="cl">gdbus introspect --session --dest org.freedesktop.portal.Desktop <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --object-path /org/freedesktop/portal/desktop
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 检查特定门户支持</span>
+</span></span><span class="line"><span class="cl">gdbus call --session --dest org.freedesktop.portal.Desktop <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --object-path /org/freedesktop/portal/desktop <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --method org.freedesktop.portal.Request.Response</span></span></code></pre>
+</div>
+<p><strong>NixOS 配置示例</strong>：</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    
+    tw-flex 
+    tw-flex-row
+    tw-flex-1 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        code-block-button
+        tw-mx-2 
+        tw-flex
+        tw-flex-row
+        tw-flex-1"
+      aria-hidden="true">
+          <div class="group-[.is-open]:tw-rotate-90 tw-transition-[transform] tw-duration-500 tw-ease-in-out print:!tw-hidden tw-w-min tw-h-min tw-my-1 tw-mx-1"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></div>
+          <p class="tw-select-none !tw-my-1">nix</p>
+      </button>
+
+   <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-38" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto
+      tw-scrollbar-thin
+      "><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 启用 xdg-desktop-portal 服务</span>
+</span></span><span class="line"><span class="cl">  <span class="n">xdg</span><span class="o">.</span><span class="n">portal</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">extraPortals</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="n">xdg-desktop-portal-gtk</span>  <span class="c1"># GTK 门户</span>
+</span></span><span class="line"><span class="cl">      <span class="n">xdg-desktop-portal-wlr</span>  <span class="c1"># Wayland 合成器门户</span>
+</span></span><span class="line"><span class="cl">    <span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xdgOpenUsePortal</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>  <span class="c1"># 使用门户处理 xdg-open</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre>
+</div>
 <hr>
 <h2 id="应用程序与工具包" class="headerLink">
     <a href="#%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e4%b8%8e%e5%b7%a5%e5%85%b7%e5%8c%85" class="header-mark"></a>应用程序与工具包</h2><p>GUI 应用程序是用户与 Linux 桌面交互的主要方式。在 Wayland 环境下，应用通过标准化的协议与合成器通信，实现窗口管理、输入处理和图形渲染。</p>
@@ -10713,7 +11196,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-31" 
+    id="codeblock-id-39" 
     class="
       chroma 
       !tw-block 
@@ -10819,7 +11302,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-32" 
+    id="codeblock-id-40" 
     class="
       chroma 
       !tw-block 
@@ -10919,7 +11402,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-33" 
+    id="codeblock-id-41" 
     class="
       chroma 
       !tw-block 
@@ -11031,7 +11514,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-34" 
+    id="codeblock-id-42" 
     class="
       chroma 
       !tw-block 
@@ -11123,7 +11606,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-35" 
+    id="codeblock-id-43" 
     class="
       chroma 
       !tw-block 
@@ -11224,7 +11707,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-36" 
+    id="codeblock-id-44" 
     class="
       chroma 
       !tw-block 
@@ -11318,7 +11801,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-37" 
+    id="codeblock-id-45" 
     class="
       chroma 
       !tw-block 
@@ -11410,7 +11893,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-38" 
+    id="codeblock-id-46" 
     class="
       chroma 
       !tw-block 
@@ -11505,7 +11988,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-39" 
+    id="codeblock-id-47" 
     class="
       chroma 
       !tw-block 
@@ -11599,7 +12082,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-40" 
+    id="codeblock-id-48" 
     class="
       chroma 
       !tw-block 
@@ -11693,7 +12176,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-41" 
+    id="codeblock-id-49" 
     class="
       chroma 
       !tw-block 
@@ -11791,7 +12274,7 @@ DRM-Master，系统可恢复文本模式。</p>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-42" 
+    id="codeblock-id-50" 
     class="
       chroma 
       !tw-block 
@@ -11893,7 +12376,7 @@ Vulkan 的 GPU 驱动。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-43" 
+    id="codeblock-id-51" 
     class="
       chroma 
       !tw-block 
@@ -11994,7 +12477,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-44" 
+    id="codeblock-id-52" 
     class="
       chroma 
       !tw-block 
@@ -12097,7 +12580,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-45" 
+    id="codeblock-id-53" 
     class="
       chroma 
       !tw-block 
@@ -12199,7 +12682,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-46" 
+    id="codeblock-id-54" 
     class="
       chroma 
       !tw-block 
@@ -12298,7 +12781,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-47" 
+    id="codeblock-id-55" 
     class="
       chroma 
       !tw-block 
@@ -12397,7 +12880,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-48" 
+    id="codeblock-id-56" 
     class="
       chroma 
       !tw-block 
@@ -12494,7 +12977,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-49" 
+    id="codeblock-id-57" 
     class="
       chroma 
       !tw-block 
@@ -12591,7 +13074,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-50" 
+    id="codeblock-id-58" 
     class="
       chroma 
       !tw-block 
@@ -12688,7 +13171,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-51" 
+    id="codeblock-id-59" 
     class="
       chroma 
       !tw-block 
@@ -12808,7 +13291,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-52" 
+    id="codeblock-id-60" 
     class="
       chroma 
       !tw-block 
@@ -12909,7 +13392,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-53" 
+    id="codeblock-id-61" 
     class="
       chroma 
       !tw-block 
@@ -13013,7 +13496,7 @@ GPU 驱动问题，或需要确保兼容性的场景。</li>
     </div>
   </div>
   <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
-    id="codeblock-id-54" 
+    id="codeblock-id-62" 
     class="
       chroma 
       !tw-block 
