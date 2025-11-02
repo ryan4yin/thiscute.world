@@ -704,18 +704,18 @@ D-Bus 并非 systemd 社区的项目，而是 **freedesktop.org** 的独立项�
 
 ### 4.2 关键概念
 
-D-Bus 通过 「对象 - 接口」 模型封装功能，以下结合 `systemd1` 与 `logind1` 的真实定义，对应
-核心概念：
+D-Bus 通过 「对象 - 接口」 模型（跟面向对象编程（OOP）中的概念有些类似）封装功能，以下结合
+`systemd1` 与 `logind1` 的真实定义，对应核心概念：
 
-| 概念              | 定义与作用                                      | 示例（systemd1/logind1）                                                                                                                   |
-| ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| 总线（Bus）       | 消息传输的 「高速公路」，分系统 / 会话两类      | 系统总线 `/var/run/dbus/system_bus_socket`（`systemd1`/`logind1` 唯一使用的总线）                                                          |
-| 服务名（Name）    | 服务端在总线上的 「身份证」，唯一可请求         | `org.freedesktop.systemd1`（`systemd` 服务名）、`org.freedesktop.login1`（`logind` 服务名）                                                |
-| 对象（Object）    | 服务端功能的 「实例载体」，有唯一路径           | `/org/freedesktop/systemd1`（`systemd1` 根对象）、`/org/freedesktop/login1`（`logind1` 根对象）                                            |
-| 接口（Interface） | 定义对象的 「功能契约」（方法、信号、属性）     | `org.freedesktop.systemd1.Manager`（`systemd1` 核心接口）、`org.freedesktop.login1.Manager`（`logind1` 核心接口）                          |
-| 方法（Method）    | 客户端可主动调用的 「同步功能」（有请求有返回） | `systemd1` 的 `StartUnit`（启动系统单元，如 `nginx.service`）、`logind1` 的 `ListSessions`（查询所有活跃用户会话）                         |
-| 信号（Signal）    | 服务端主动发送的 「异步通知」（无返回）         | `systemd1` 的 `UnitActiveChanged`（单元状态变化，如 `nginx` 从 `inactive` 变为 `active`）、`logind1` 的 `SessionNew`（新用户登录创建会话） |
-| 属性（Property）  | 对象的 「状态数据」，支持读取 / 写入            | `systemd1` 的 `ActiveUnits`（所有活跃系统单元列表）、`logind1` 的 `CanPowerOff`（当前系统是否允许关机，布尔值）                            |
+| 概念              | 定义与作用                                                                                       | 示例（systemd1/logind1）                                                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 总线（Bus）       | D-Bus 消息传输的基础通道，分系统 / 会话两大类                                                    | 系统总线 `/var/run/dbus/system_bus_socket`（`systemd1`/`logind1` 唯一使用的总线）                                                          |
+| 服务名（Name）    | 服务端在总线上的 ID，通常每个应用程序一个                                                        | `org.freedesktop.systemd1`（`systemd` 服务名）、`org.freedesktop.login1`（`logind` 服务名）                                                |
+| 对象（Object）    | 服务内部的功能组织单元，通过对象路径进行标识。每个对象可以代表不同的资源。                       | `/org/freedesktop/systemd1`（`systemd1` 根对象）、`/org/freedesktop/login1`（`logind1` 根对象）                                            |
+| 接口（Interface） | 每个接口定义了一组方法和信号                                                                     | `org.freedesktop.systemd1.Manager`（`systemd1` 核心接口）、`org.freedesktop.login1.Manager`（`logind1` 核心接口）                          |
+| 方法（Method）    | 方法是对象接口中定义的函数，可以被远程调用。方法属于某个接口，而接口由对象实现。（有请求有返回） | `systemd1` 的 `StartUnit`（启动系统单元，如 `nginx.service`）、`logind1` 的 `ListSessions`（查询所有活跃用户会话）                         |
+| 信号（Signal）    | 对象发出的单向事件通知，支持多播（无返回值）                                                     | `systemd1` 的 `UnitActiveChanged`（单元状态变化，如 `nginx` 从 `inactive` 变为 `active`）、`logind1` 的 `SessionNew`（新用户登录创建会话） |
+| 属性（Property）  | 对象的 「状态数据」，支持读取 / 写入 / 变更通知                                                  | `systemd1` 的 `ActiveUnits`（所有活跃系统单元列表）、`logind1` 的 `CanPowerOff`（当前系统是否允许关机，布尔值）                            |
 
 可使用 `busctl list` 查看系统中的所有 D-Bus 对象：
 
@@ -946,11 +946,14 @@ Flatpak 以 `bubblewrap`（简称 bwrap）为底层沙箱基础，利用其 `bin
 用权限声明自动生成的过滤规则（粒度远细于 D-Bus 原生静态配置），例如：
 
 ```bash
---talk=org.freedesktop.portal.FileChooser  # 允许调用文件选择门户服务
---talk=org.freedesktop.Notifications       # 允许发送桌面通知
---deny=org.freedesktop.systemd1            # 拒绝访问 systemd 服务
---deny=org.freedesktop.login1.Manager.PowerOff  # 拒绝调用关机方法
+    --see=NAME                   Set 'see' policy for NAME
+    --talk=NAME                  Set 'talk' policy for NAME
+    --own=NAME                   Set 'own' policy for NAME
+    --call=NAME=RULE             Set RULE for calls on NAME
+    --broadcast=NAME=RULE        Set RULE for broadcasts from NAME
 ```
+
+TODO
 
 这些规则可精确到 「服务名 + 接口 + 方法 + 对象路径」，弥补 D-Bus 原生配置在沙箱场景下 「动
 态性不足、粒度较粗」 的局限。
