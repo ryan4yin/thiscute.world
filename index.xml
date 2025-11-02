@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-11-01T07:41:32+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.150.0">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2025-11-02T09:05:43+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">Linux 桌面系统故障排查指南（六） - 系统关机与电源管理</title><link href="https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://thiscute.world/posts/linux-desktop-2-systemd-services/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理"/><link href="https://thiscute.world/posts/linux-desktop-1-boot-security/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（一） - 系统启动与安全框架"/><link href="https://thiscute.world/posts/linux-desktop-5-network/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（五） - 网络"/><link href="https://thiscute.world/posts/linux-desktop-4-multimedia-input/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持"/><link href="https://thiscute.world/posts/linux-desktop-3-session-graphics/?utm_source=atom_feed" rel="related" type="text/html" title="Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染"/><id>https://thiscute.world/posts/linux-desktop-6-shutdown-troubleshooting/</id><published>2025-10-19T10:22:33+08:00</published><updated>2025-10-19T10:22:33+08:00</updated><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;AI 创作声明&lt;/strong&gt;：本系列文章由笔者借助 ChatGPT, Kimi K2, 豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。如有错误，还请指正。&lt;/p&gt;
 &lt;/blockquote&gt;&lt;h2 id="前言" class="headerLink"&gt;
 &lt;a href="#%e5%89%8d%e8%a8%80" class="header-mark"&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;系统关机看似简单，但背后涉及了繁杂的资源清理和状态管理过程。当你点击关机按钮，系统却卡在那里不动，或者出现各种奇怪的错误信息时，理解关机流程和故障排查方法就显得尤为重要。&lt;/p&gt;
@@ -16034,7 +16034,7 @@ symlink、设置权限）</li>
 </li>
 </ul>
 <h3 id="42-关键概念" class="headerLink">
-    <a href="#42-%e5%85%b3%e9%94%ae%e6%a6%82%e5%bf%b5" class="header-mark"></a>4.2 关键概念</h3><p>D-Bus 通过 「对象 - 接口」 模型封装功能，以下结合 <code>systemd1</code> 与 <code>logind1</code> 的真实定义，对应核心概念：</p>
+    <a href="#42-%e5%85%b3%e9%94%ae%e6%a6%82%e5%bf%b5" class="header-mark"></a>4.2 关键概念</h3><p>D-Bus 通过 「对象 - 接口」 模型（跟面向对象编程（OOP）中的概念有些类似）封装功能，以下结合<code>systemd1</code> 与 <code>logind1</code> 的真实定义，对应核心概念：</p>
 <table>
   <thead>
       <tr>
@@ -16046,37 +16046,37 @@ symlink、设置权限）</li>
   <tbody>
       <tr>
           <td>总线（Bus）</td>
-          <td>消息传输的 「高速公路」，分系统 / 会话两类</td>
+          <td>D-Bus 消息传输的基础通道，分系统 / 会话两大类</td>
           <td>系统总线 <code>/var/run/dbus/system_bus_socket</code>（<code>systemd1</code>/<code>logind1</code> 唯一使用的总线）</td>
       </tr>
       <tr>
           <td>服务名（Name）</td>
-          <td>服务端在总线上的 「身份证」，唯一可请求</td>
+          <td>服务端在总线上的 ID，通常每个应用程序一个</td>
           <td><code>org.freedesktop.systemd1</code>（<code>systemd</code> 服务名）、<code>org.freedesktop.login1</code>（<code>logind</code> 服务名）</td>
       </tr>
       <tr>
           <td>对象（Object）</td>
-          <td>服务端功能的 「实例载体」，有唯一路径</td>
+          <td>服务内部的功能组织单元，通过对象路径进行标识。每个对象可以代表不同的资源。</td>
           <td><code>/org/freedesktop/systemd1</code>（<code>systemd1</code> 根对象）、<code>/org/freedesktop/login1</code>（<code>logind1</code> 根对象）</td>
       </tr>
       <tr>
           <td>接口（Interface）</td>
-          <td>定义对象的 「功能契约」（方法、信号、属性）</td>
+          <td>每个接口定义了一组方法和信号</td>
           <td><code>org.freedesktop.systemd1.Manager</code>（<code>systemd1</code> 核心接口）、<code>org.freedesktop.login1.Manager</code>（<code>logind1</code> 核心接口）</td>
       </tr>
       <tr>
           <td>方法（Method）</td>
-          <td>客户端可主动调用的 「同步功能」（有请求有返回）</td>
+          <td>方法是对象接口中定义的函数，可以被远程调用。方法属于某个接口，而接口由对象实现。（有请求有返回）</td>
           <td><code>systemd1</code> 的 <code>StartUnit</code>（启动系统单元，如 <code>nginx.service</code>）、<code>logind1</code> 的 <code>ListSessions</code>（查询所有活跃用户会话）</td>
       </tr>
       <tr>
           <td>信号（Signal）</td>
-          <td>服务端主动发送的 「异步通知」（无返回）</td>
+          <td>对象发出的单向事件通知，支持多播（无返回值）</td>
           <td><code>systemd1</code> 的 <code>UnitActiveChanged</code>（单元状态变化，如 <code>nginx</code> 从 <code>inactive</code> 变为 <code>active</code>）、<code>logind1</code> 的 <code>SessionNew</code>（新用户登录创建会话）</td>
       </tr>
       <tr>
           <td>属性（Property）</td>
-          <td>对象的 「状态数据」，支持读取 / 写入</td>
+          <td>对象的 「状态数据」，支持读取 / 写入 / 变更通知</td>
           <td><code>systemd1</code> 的 <code>ActiveUnits</code>（所有活跃系统单元列表）、<code>logind1</code> 的 <code>CanPowerOff</code>（当前系统是否允许关机，布尔值）</td>
       </tr>
   </tbody>
@@ -16665,11 +16665,13 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
       tw-overflow-y-hidden
       tw-overflow-x-auto
       tw-scrollbar-thin
-      "><span class="line"><span class="cl">--talk<span class="o">=</span>org.freedesktop.portal.FileChooser  <span class="c1"># 允许调用文件选择门户服务</span>
-</span></span><span class="line"><span class="cl">--talk<span class="o">=</span>org.freedesktop.Notifications       <span class="c1"># 允许发送桌面通知</span>
-</span></span><span class="line"><span class="cl">--deny<span class="o">=</span>org.freedesktop.systemd1            <span class="c1"># 拒绝访问 systemd 服务</span>
-</span></span><span class="line"><span class="cl">--deny<span class="o">=</span>org.freedesktop.login1.Manager.PowerOff  <span class="c1"># 拒绝调用关机方法</span></span></span></code></pre>
+      "><span class="line"><span class="cl">    --see<span class="o">=</span>NAME                   Set <span class="s1">&#39;see&#39;</span> policy <span class="k">for</span> NAME
+</span></span><span class="line"><span class="cl">    --talk<span class="o">=</span>NAME                  Set <span class="s1">&#39;talk&#39;</span> policy <span class="k">for</span> NAME
+</span></span><span class="line"><span class="cl">    --own<span class="o">=</span>NAME                   Set <span class="s1">&#39;own&#39;</span> policy <span class="k">for</span> NAME
+</span></span><span class="line"><span class="cl">    --call<span class="o">=</span><span class="nv">NAME</span><span class="o">=</span>RULE             Set RULE <span class="k">for</span> calls on NAME
+</span></span><span class="line"><span class="cl">    --broadcast<span class="o">=</span><span class="nv">NAME</span><span class="o">=</span>RULE        Set RULE <span class="k">for</span> broadcasts from NAME</span></span></code></pre>
 </div>
+<p>TODO</p>
 <p>这些规则可精确到 「服务名 + 接口 + 方法 + 对象路径」，弥补 D-Bus 原生配置在沙箱场景下 「动态性不足、粒度较粗」 的局限。</p>
 <h5 id="4723-消息流转代理的-校验---转发-逻辑" class="headerLink">
     <a href="#4723-%e6%b6%88%e6%81%af%e6%b5%81%e8%bd%ac%e4%bb%a3%e7%90%86%e7%9a%84-%e6%a0%a1%e9%aa%8c---%e8%bd%ac%e5%8f%91-%e9%80%bb%e8%be%91" class="header-mark"></a>4.7.2.3 消息流转：代理的 &ldquo;校验 - 转发&rdquo; 逻辑</h5><p>沙箱应用无需修改代码，会默认连接沙箱内的 「代理 socket」，所有 D-Bus 消息（方法调用、信号订阅）均需经过 <code>xdg-dbus-proxy</code> 的校验：</p>
