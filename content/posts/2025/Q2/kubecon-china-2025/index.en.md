@@ -14,7 +14,7 @@ authors: ["ryan4yin"]
 
 tags: ["Cloud-Native", "Kubernetes", "AI", "LLM", "OpenTelemetry"]
 
-categories: ["tech"]
+categories: ["tech", "life"]
 series: ["Cloud-Native Related"]
 hiddenFromHomePage: false
 hiddenFromSearch: false
@@ -301,10 +301,9 @@ On Day 2 morning, I found there weren't many talks I wanted to attend, so I noti
 was a Peer Group Meeting to join, though it required signing up first. I went with
 [@scruelt] to sign up, and we were a bit worried that signing up just 20 minutes before
 might be too late, but when we got to the meeting room, we found only 3 mentors present,
-so we just chatted casually with them. The three mentors were [Nate Waddington] (Head of
-Mentorship & Documentation, Canada), [Kohei Ota] (CNCF Ambassador, Japan), and [Amit
-DSouza] (co-founder of Odyssey Cloud, Australia). A Cisco engineer also joined in halfway
-through.
+so we just chatted casually with them. The three mentors were [Nate Waddington] (Head of Mentorship
+& Documentation, Canada), [Kohei Ota] (CNCF Ambassador, Japan), and [Amit DSouza] (co-founder
+of Odyssey Cloud, Australia). A Cisco engineer also joined in halfway through.
 
 It was mostly casual conversation. [@scruelt]'s English is better than mine, and since he
 just resigned, he had many questions to ask - he initiated most of the topics. As for me,

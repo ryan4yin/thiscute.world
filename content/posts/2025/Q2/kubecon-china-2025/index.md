@@ -14,7 +14,7 @@ authors: ["ryan4yin"]
 
 tags: ["云原生", "Cloud-Native", "Kubernetes", "AI", "LLM", "OpenTelemetry"]
 
-categories: ["tech"]
+categories: ["tech", "life"]
 series: ["云原生相关"]
 hiddenFromHomePage: false
 hiddenFromSearch: false
@@ -268,8 +268,8 @@ Day 2 上午发现没啥想听的，发现有个 Peer Group Meeting 参加，不
 [@scruelt] 一起去报了名，本来还担心只提前 20 分钟 sign up 会不会没机会了，结果到会议室发现
 只有 3 个 mentors 在场，于是就我们俩跟他们随便闲聊 emmm 三位 mentors 分别是 [Nate
 Waddington] （Head of Mentorship & Documentatio, Canada），[Kohei Ota]（CNCF Ambassador,
-Japan）以及 [Amit DSouza]（co-founder of Odyssey Cloud, Australia），另外聊到半途一位
-Cisico 的老哥也加入了进来。
+Japan）以及 [Amit DSouza]（co-founder of Odyssey Cloud, Australia），另外聊到半途一位 Cisico
+的老哥也加入了进来。
 
 基本就是闲聊，[@scruelt] 口语比我好，而且刚辞职也有许多问题想问，绝大部分话题都是他提出来
 的。我因为最近诸事皆顺，反而没啥想问的。
