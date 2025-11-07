@@ -15,7 +15,7 @@ resources:
 tags: []
 categories: ["life"]
 series: []
-hiddenFromHomePage: true
+hiddenFromHomePage: false
 hiddenFromSearch: false
 license: ""
 
