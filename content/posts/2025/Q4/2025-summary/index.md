@@ -38,11 +38,21 @@ comment:
 
 今年不论是生活上还是工作上都变化颇多。
 
-如同我 11 月份写的 [大梦一场](https://thiscute.world/posts/job-and-life/)，今天我大部分时
-间都在老家上班。新工作很自由，工作之余在国内逛了不少地方，参加了不少技术会议，也请了一周假
-跟朋友到日本玩了一圈。
-
 ## 2025 年 Highlights
+
+### 工作
+
+如同我 11 月份写的 [大梦一场](https://thiscute.world/posts/job-and-life/)，我在今年 1 月份
+辞职后，在 5 月入职了新公司。新工作是远程，很自由，我大部分时间都在老家上班，工作之余又在
+国内逛了不少地方，参加了不少技术会议，年底又请了一周假跟朋友到日本玩了一圈。
+
+新工作是通过在 X 上发找工作的推文找到的：
+
+<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">更新下进展，真的通过 X 找到了挺满意的工作，在走入职流程了，感谢各位推友们的转发评论！🥰<br><br>新工作是 remote，已经退租深圳租房、暂时搬回老家了，后面也可能去杭州住几个月顺便跟大佬们交流。<br>顺利的话我下半年能自由不少，也更有机会去实现我 2025 年「精进技术、徒步世界」的目标🥳 <a href="https://t.co/VdooZ1UUhr">https://t.co/VdooZ1UUhr</a></p>&mdash; ryan4yin | 二花 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1920769639421775989?ref_src=twsrc%5Etfw">May 9, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+在老家刚工作两周的时候也发过条 X 推文：
+
+<blockquote class="twitter-tweet"><p lang="zh" dir="ltr">Remote 工作第三周，置办了升降桌工学椅、显示器、千兆宽带等一堆物件，几周下来办公环境基本稳定了。<br>刚好到插秧季，家门口田一天比一天绿，赏心悦目。<br>业余没事就去山里转转，或者在村广场玩玩轮滑，或者在家折腾点技术，很自在。<br><br>另外也拿到了 KubeCon China 2025 的最终用户门票，下个月香港见（ <a href="https://t.co/e77MD2o0Av">pic.twitter.com/e77MD2o0Av</a></p>&mdash; ryan4yin | 二花 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1927577478756995099?ref_src=twsrc%5Etfw">May 28, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ### 坐飞机
 
@@ -125,6 +135,7 @@ TODO
 
 - 日语入门，达到 N4 或 N3 级别
 - 英语口语进阶，综合水平达到 C1 级别
-- 自由泳跟蛙泳都达到二级银海豚级别（基本相当于百米 2 分钟）
+- 游泳达到金海豚级别（蛙泳百米 1m50s, 自由泳百米 1m40s），不间断游一千米的配速，自由泳能到
+  20 分钟，蛙泳能到 25 分钟。
 - 技术上继续搞搞 Linux/NixOS, 工作上按部就班吧
 - 旅游方面，拓宽中国跟亚洲地图的足迹，解锁澳洲跟新西兰，去欧洲参加一次 NixCon
