@@ -226,8 +226,6 @@ Gap 期间：
 
 年底的日本游：
 
-{{<figure src="/images/now-2025/photo_59_2025-12-23_15-23-56.jpg" title="穿传统服装来祈福的日本家庭" width="70%">}}
-
 {{<figure src="/images/now-2025/photo_2_2025-12-23_19-07-18.jpg" title="12/7 秋叶原的魔禁广告牌" width="70%">}}
 {{<figure src="/images/now-2025/photo_3_2025-12-23_19-07-18.jpg" title="12/7 秋叶原" width="70%">}}
 {{<figure src="/images/now-2025/photo_4_2025-12-23_19-07-18.jpg" title="12/7 台場的 Telecom Center 展望台" width="70%">}}
@@ -237,6 +235,7 @@ Gap 期间：
 {{<figure src="/images/now-2025/photo_67_2025-12-23_15-23-56.jpg" title="12/9 12 月份的岚山挺好看的" width="70%">}}
 {{<figure src="/images/now-2025/photo_70_2025-12-23_15-23-56.jpg" title="12/9 岚山" width="70%">}}
 {{<figure src="/images/now-2025/photo_71_2025-12-23_15-23-56.jpg" title="12/9 岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_59_2025-12-23_15-23-56.jpg" title="12/10 生田神社 穿传统服装来祈福的日本家庭" width="70%">}}
 {{<figure src="/images/now-2025/photo_56_2025-12-23_15-23-56.jpg" title="12/10 神户 生牛肉丼" width="70%">}}
 {{<figure src="/images/now-2025/photo_57_2025-12-23_15-23-56.jpg" title="12/10 神户 JR 舞子站" width="70%">}}
 {{<figure src="/images/now-2025/photo_58_2025-12-23_15-23-56.jpg" title="12/10 神户 舞子海上散步道" width="70%">}}
