@@ -7,10 +7,10 @@ lastmod: 2025-12-18T23:59:59+08:00
 draft: true
 
 authors: ["ryan4yin"]
-featuredImage: "featured-image.webp"
+featuredImage: "featured-image.jpg"
 resources:
   - name: "featured-image"
-    src: "featured-image.webp"
+    src: "featured-image.jpg"
 
 tags: ["总结"]
 categories: ["life", "tech"]
@@ -156,4 +156,4 @@ comment:
 界」，一年过去，勉强感觉算是达成了一半。我读完了《Linux/Unix 系统编程手册》，徒步走过了中
 国的多个城市，在日本 city walk 了一周，学了小半年的游泳，相比 2024 年，生活又丰富了许多。
 
-接下来的 2026 年，我的目标是「英语 C1、游泳技术进阶，深入 Linux/NixOS，探索世界」。
+接下来的 2026 年，我的目标是「精进英语、泳技与 Linux，探索世界」。
