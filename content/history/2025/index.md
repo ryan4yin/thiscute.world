@@ -26,8 +26,6 @@ comment:
 
 全部历史记录：[/history](/history/)
 
-/images/now-2024/2023-01-17_buy-usb-keys-for-security.webp
-
 {{<figure src="/images/now-2025/photo_2025-12-23_15-23-19.jpg" title="航旅纵横 - 飞行里程统计" width="70%">}}
 
 ### 2025-12-21
