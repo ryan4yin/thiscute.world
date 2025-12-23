@@ -21,19 +21,21 @@ toc:
 
 > 按优先级排序
 
-- 运动
-  - 完成每天 800 卡路里的消耗量，目标是减肥+提升体力
-  - 方式：玩陆地冲浪板、跑步、登山、骑行
+- 游泳：每天 45-60 分钟
 - Linux 学习
-  - 参与 Nixpkgs 的 PR review, 熟悉社区的 PR 流程，改进一些我用到的 NixOS Module.
   - 《深入理解 Linux 内核》
   - 《深入理解 Linux 进程与内存》
-- 驾照考试 - 科目一刷题
+- 驾照考试
 
 ## 二、我今年还想搞搞这些
 
+**核心目标**：
+
 - 拿到驾照
-- 体重降到 58kg
+- 英语：口语进阶，综合水平达到 C1 级别，满足我旅游及全英文工作的需求
+- 日语：入门，达到 N4 或 N3 级别，方便去日本玩
+- 游泳：蛙泳百米 1m50s、千米 25mins，潜泳（动态闭气） 50 米
+- 旅游：拓宽中国跟亚洲地图的足迹，去欧洲参加一次 NixCon
 - Linux 学习
   - 积极参与 NixOS 上游贡献
   - 完成基础知识学习
@@ -41,13 +43,9 @@ toc:
     - 《深入理解 Linux 网络》
     - <https://deepwiki.com/torvalds/linux>
     - 《BPF Performance Tools（英文版）》 - 35/740
-  - nftables: <https://wiki.nftables.org/wiki-nftables/index.php/Main_Page>
-  - tproxy: <https://www.kernel.org/doc/Documentation/networking/tproxy.txt>
-  - ebpf: <https://ebpf.io/>
-  - systemd: <https://systemd.io/>
-  - 桌面系统相关:
-    - dbus: <https://www.freedesktop.org/wiki/Software/dbus/>
-    - pipewire: <https://pipewire.org/>
+
+**其他备选项**：
+
 - 云原生
   - 研究 Istio 的底层实现
   - <https://deepwiki.com/istio/istio>
@@ -55,11 +53,9 @@ toc:
   - <https://deepwiki.com/kubernetes/kubernetes>
 - RISC-V 与操作系统
 - 阅读
+
   - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
   - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-- 旅游与户外运动
-
-  - 去日本、韩国跟新加坡玩
 
 - 操作系统
 
@@ -141,7 +137,7 @@ toc:
   包处理、性能分析、系统监控的。
 - Linux 系统
   - Linux 经典书目(按阅读顺序排列)
-    - TLPI - 正在读
+    - TLPI - Done
     - APUE(Advanced Programming in the UNIX Environment)
     - UNP(Unix Network Programming)
     - Understanding the Linux Kernel, 3rd Edition

@@ -26,6 +26,10 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+/images/now-2024/2023-01-17_buy-usb-keys-for-security.webp
+
+{{<figure src="/images/now-2025/photo_2025-12-23_15-23-19.jpg" title="航旅纵横 - 飞行里程统计" width="70%">}}
+
 ### 2025-12-21
 
 - 早餐是预制菜——酸菜鱼，10 块钱一包，放了两卷龙口粉丝，配上米饭够两个人吃。
@@ -61,6 +65,9 @@ comment:
   巴，打算配合手机用。
 - 为了跟乐乐一起听碟，又买了个新的入耳式有线耳机，原道新出的 Tears, 价格跟水月雨竹 2 一
   样，也是 89 块钱。
+
+{{<figure src="/images/now-2025/photo_48_2025-12-23_15-23-56.jpg" title="新爱好 - 听 CD" width="70%">}}
+{{<figure src="/images/now-2025/photo_49_2025-12-23_15-23-56.jpg" title="新爱好 - 听 CD - MyGo" width="70%">}}
 
 ### 2025-12-16
 
@@ -130,6 +137,29 @@ comment:
   - 总费用：10139 CNY
   - 排除签证跟购物：8617 CNY
   - 再排除掉长沙上海往返费用：7587 CNY
+
+{{<figure src="/images/now-2025/photo_50_2025-12-23_15-23-56.jpg" title="老太太童心未泯" width="70%">}}
+{{<figure src="/images/now-2025/photo_51_2025-12-23_15-23-56.jpg" title="回程了 - 在等去关西机场的电车" width="70%">}}
+{{<figure src="/images/now-2025/photo_52_2025-12-23_15-23-56.jpg" title="卖冰激凌的自动售货机" width="70%">}}
+{{<figure src="/images/now-2025/photo_53_2025-12-23_15-23-56.jpg" title="食其家的牛・胡麻麻辣湯鍋定食" width="70%">}}
+{{<figure src="/images/now-2025/photo_54_2025-12-23_15-23-56.jpg" title="奈良大华严寺（东大寺）" width="70%">}}
+{{<figure src="/images/now-2025/photo_55_2025-12-23_15-23-56.jpg" title="大阪烧" width="70%">}}
+{{<figure src="/images/now-2025/photo_56_2025-12-23_15-23-56.jpg" title="生牛肉丼" width="70%">}}
+{{<figure src="/images/now-2025/photo_57_2025-12-23_15-23-56.jpg" title="JR 舞子站" width="70%">}}
+{{<figure src="/images/now-2025/photo_58_2025-12-23_15-23-56.jpg" title="舞子海上散步道" width="70%">}}
+{{<figure src="/images/now-2025/photo_59_2025-12-23_15-23-56.jpg" title="穿传统服装来祈福的日本家庭" width="70%">}}
+{{<figure src="/images/now-2025/photo_60_2025-12-23_15-23-56.jpg" title="牛肉寿喜锅" width="70%">}}
+{{<figure src="/images/now-2025/photo_61_2025-12-23_15-23-56.jpg" title="人超多的戎桥筋，以及茅台广告" width="70%">}}
+{{<figure src="/images/now-2025/photo_62_2025-12-23_15-23-56.jpg" title="梦屋 - 它家的面比较符合我的口味，但量有点少" width="70%">}}
+{{<figure src="/images/now-2025/photo_63_2025-12-23_15-23-56.jpg" title="日本人超爱骑自行车，送娃也是自行车" width="70%">}}
+{{<figure src="/images/now-2025/photo_64_2025-12-23_15-23-56.jpg" title="JR 嵯峨岚山站" width="70%">}}
+{{<figure src="/images/now-2025/photo_65_2025-12-23_15-23-56.jpg" title="JR 嵯峨岚山站 - 另一个视角" width="70%">}}
+{{<figure src="/images/now-2025/photo_66_2025-12-23_15-23-56.jpg" title="人形工房" width="70%">}}
+{{<figure src="/images/now-2025/photo_68_2025-12-23_15-23-56.jpg" title="周恩来总理写的雨中岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_69_2025-12-23_15-23-56.jpg" title="周恩来总理写的雨中岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_67_2025-12-23_15-23-56.jpg" title="12 月份的岚山挺好看的" width="70%">}}
+{{<figure src="/images/now-2025/photo_70_2025-12-23_15-23-56.jpg" title="岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_71_2025-12-23_15-23-56.jpg" title="岚山" width="70%">}}
 
 ### 2025-12-05
 
@@ -723,11 +753,22 @@ comment:
 - 在重庆也呆了很多天，天天吃红油抄手跟泡椒牛肉丝面，参观了很火的洪崖洞，还跟乐乐逛了非常多
   的谷子店（时代天街+观音桥的方圆Live）。
 
+{{<figure src="/images/now-2025/photo_24_2025-12-23_16-35-23.jpg" title="重庆" width="70%">}}
+{{<figure src="/images/now-2025/photo_25_2025-12-23_16-35-23.jpg" title="对面就是洪崖洞，到了晚上简直人山人海" width="70%">}}
+{{<figure src="/images/now-2025/photo_26_2025-12-23_16-35-23.jpg" title="重庆独特的轻轨" width="70%">}}
+{{<figure src="/images/now-2025/photo_27_2025-12-23_16-35-23.jpg" title="层层叠叠的轨道跟车道" width="70%">}}
+{{<figure src="/images/now-2025/photo_28_2025-12-23_16-35-23.jpg" title="观音桥好吃街" width="70%">}}
+{{<figure src="/images/now-2025/photo_29_2025-12-23_16-35-23.jpg" title="回深圳了" width="70%">}}
+
 ### 2025-03-31 - 2025-04-03
 
 - 我临时起意，去重庆的路上先在涪陵下了车，计划去白鹤梁水下博物馆+816地下核工程+大裂谷玩。
   不过各种原因吧，我们只去了白鹤梁水下博物馆，并且在涪陵吃了顿很便宜很好吃的火锅，以及好几
   天的豆花饭，然后就出发去重庆了。
+
+{{<figure src="/images/now-2025/photo_21_2025-12-23_16-35-23.jpg" title="到重庆了" width="70%">}}
+{{<figure src="/images/now-2025/photo_22_2025-12-23_16-35-23.jpg" title="涪陵火锅" width="70%">}}
+{{<figure src="/images/now-2025/photo_23_2025-12-23_16-35-23.jpg" title="涪陵豆花饭" width="70%">}}
 
 ### 2025-03-26 - 2025-03-30
 
@@ -753,6 +794,18 @@ comment:
     看。
 - 本来张家界还有挺多可玩的，不过乐乐不想爬山，对溶洞也没啥兴趣，我们就直接买票去重庆了。
 
+{{<figure src="/images/now-2025/photo_10_2025-12-23_16-35-23.jpg" title="凤凰古城" width="70%">}}
+{{<figure src="/images/now-2025/photo_11_2025-12-23_16-35-23.jpg" title="张家界 - 武陵源" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_16-35-23.jpg" title="张家界 - 袁家界天下第一桥" width="70%">}}
+{{<figure src="/images/now-2025/photo_19_2025-12-23_16-35-23.jpg" title="" width="70%">}}
+{{<figure src="/images/now-2025/photo_13_2025-12-23_16-35-23.jpg" title="胜似仙境" width="70%">}}
+{{<figure src="/images/now-2025/photo_15_2025-12-23_16-35-23.jpg" title="" width="70%">}}
+{{<figure src="/images/now-2025/photo_16_2025-12-23_16-35-23.jpg" title="" width="70%">}}
+{{<figure src="/images/now-2025/photo_18_2025-12-23_16-35-23.jpg" title="" width="70%">}}
+{{<figure src="/images/now-2025/photo_17_2025-12-23_16-35-23.jpg" title="" width="70%">}}
+{{<figure src="/images/now-2025/photo_14_2025-12-23_16-35-23.jpg" title="花都结冰了" width="70%">}}
+{{<figure src="/images/now-2025/photo_20_2025-12-23_16-35-23.jpg" title="小猴子是真不怕冷" width="70%">}}
+
 ### 2025-03-16 - 2025-03-25
 
 - 看网络小说，把《诡秘之主》从头看了一遍，躺平了一周多。
@@ -770,6 +823,20 @@ comment:
   成...
 - 3/14 参观了中山陵
 - 3/15 打道回了深圳
+
+{{<figure src="/images/now-2025/photo_45_2025-12-23_15-23-56.jpg" title="南京矿坑公园 这个通道有点意思" width="70%">}}
+{{<figure src="/images/now-2025/photo_46_2025-12-23_15-23-56.jpg" title="南京矿坑公园 " width="70%">}}
+{{<figure src="/images/now-2025/photo_47_2025-12-23_15-23-56.jpg" title="南京中山陵" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_2_2025-12-23_16-35-23.jpg" title="宁邦寺的卧佛" width="70%">}}
+{{<figure src="/images/now-2025/photo_6_2025-12-23_16-35-23.jpg" title="宁邦寺" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_3_2025-12-23_16-35-23.jpg" title="穹窿山 上真观 三清阁" width="70%">}}
+{{<figure src="/images/now-2025/photo_4_2025-12-23_16-35-23.jpg" title="穹窿胜迹" width="70%">}}
+{{<figure src="/images/now-2025/photo_5_2025-12-23_16-35-23.jpg" title="御道 门牌" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_7_2025-12-23_16-35-23.jpg" title="蛇年吉祥物？" width="70%">}}
+{{<figure src="/images/now-2025/photo_8_2025-12-23_16-35-23.jpg" title="栖霞山" width="70%">}}
 
 ### 2025-03-01 - 2025-03-07
 
@@ -791,6 +858,29 @@ comment:
   里逛了接近 4 个小时，体验吊打苏州博物馆！文物也非常有意思，里面的战国编钟甚至还有个可以
   用锤子敲的仿制品，声音非常好听。还有一条民国时代布景的老街，也非常棒！
 
+{{<figure src="/images/now-2025/photo_27_2025-12-23_15-23-56.jpg" title="周庄古镇 - 门口" width="70%">}}
+{{<figure src="/images/now-2025/photo_28_2025-12-23_15-23-56.jpg" title="周庄古镇 - 下雨了" width="70%">}}
+{{<figure src="/images/now-2025/photo_29_2025-12-23_15-23-56.jpg" title="周庄古镇 - 澄虚道院" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_30_2025-12-23_15-23-56.jpg" title="周庄古镇 - 水道" width="70%">}}
+{{<figure src="/images/now-2025/photo_31_2025-12-23_15-23-56.jpg" title="周庄古镇 - 深宅大院 玉燕堂" width="70%">}}
+{{<figure src="/images/now-2025/photo_32_2025-12-23_15-23-56.jpg" title="周庄古镇 - 戏曲" width="70%">}}
+{{<figure src="/images/now-2025/photo_33_2025-12-23_15-23-56.jpg" title="周庄古镇 - 小巷灯影" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_35_2025-12-23_15-23-56.jpg" title="嘉荫堂" width="70%">}}
+{{<figure src="/images/now-2025/photo_36_2025-12-23_15-23-56.jpg" title="园林" width="70%">}}
+{{<figure src="/images/now-2025/photo_37_2025-12-23_15-23-56.jpg" title="姑苏古运河夜游" width="70%">}}
+{{<figure src="/images/now-2025/photo_38_2025-12-23_15-23-56.jpg" title="姑苏 瑞光塔内部" width="70%">}}
+{{<figure src="/images/now-2025/photo_1_2025-12-23_16-35-23.jpg" title="姑苏 瑞光塔" width="70%">}}
+{{<figure src="/images/now-2025/photo_39_2025-12-23_15-23-56.jpg" title="" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_40_2025-12-23_15-23-56.jpg" title="苏博周边 - 眼睛超大的小树" width="70%">}}
+{{<figure src="/images/now-2025/photo_41_2025-12-23_15-23-56.jpg" title="苏博 古编钟" width="70%">}}
+{{<figure src="/images/now-2025/photo_42_2025-12-23_15-23-56.jpg" title="苏博 近代影院 告示牌" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_43_2025-12-23_15-23-56.jpg" title="小园林" width="70%">}}
+{{<figure src="/images/now-2025/photo_44_2025-12-23_15-23-56.jpg" title="门牌 画心" width="70%">}}
+
 ### 2025-02-23 - 2025-02-28
 
 - 回深圳了, 在家躺平. 大学同学过来出差, 在家又搞了顿火锅.
@@ -800,6 +890,25 @@ comment:
 - 去上海玩了, 借住朋友家的次卧. 一起唱了一整天的 K, 组队逛了上海植物园, 看了《哪吒之魔童闹
   海》. 然后工作日我自己又逛了一波南京东路步行街, 上海外滩, 以及逛了百联 ZX 跟静安大悦城的
   二次元周边店, 买了好几个初音跟洛天依的周边, 还拍了好多照片.
+
+{{<figure src="/images/now-2025/photo_13_2025-12-23_15-23-56.jpg" title="跟朋友们在上海K歌，瓜哥在唱 MyGo" width="70%">}}
+{{<figure src="/images/now-2025/photo_4_2025-12-23_15-23-56.jpg" title="玩桌游 - 还挺复杂" width="70%">}}
+{{<figure src="/images/now-2025/photo_18_2025-12-23_15-23-56.jpg" title="瓜哥的 fufu" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_14_2025-12-23_15-23-56.jpg" title="上海植物园，这盆有意思" width="70%">}}
+{{<figure src="/images/now-2025/photo_15_2025-12-23_15-23-56.jpg" title="花不错" width="70%">}}
+{{<figure src="/images/now-2025/photo_16_2025-12-23_15-23-56.jpg" title="还有中国结" width="70%">}}
+{{<figure src="/images/now-2025/photo_17_2025-12-23_15-23-56.jpg" title="梅花" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_19_2025-12-23_15-23-56.jpg" title="百联ZX - miku 好可爱" width="70%">}}
+{{<figure src="/images/now-2025/photo_20_2025-12-23_15-23-56.jpg" title="百联ZX - 天依" width="70%">}}
+{{<figure src="/images/now-2025/photo_21_2025-12-23_15-23-56.jpg" title="百联ZX - 超天酱" width="70%">}}
+{{<figure src="/images/now-2025/photo_22_2025-12-23_15-23-56.jpg" title="百联ZX - 好多 miku" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_23_2025-12-23_15-23-56.jpg" title="上海外滩夜景，很经典了" width="70%">}}
+{{<figure src="/images/now-2025/photo_24_2025-12-23_15-23-56.jpg" title="这店叫景德镇..." width="70%">}}
+{{<figure src="/images/now-2025/photo_25_2025-12-23_15-23-56.jpg" title="静安寺" width="70%">}}
+{{<figure src="/images/now-2025/photo_26_2025-12-23_15-23-56.jpg" title="在上海听 Live House - Lillies and Remains" width="70%">}}
 
 ### 2025-02-01 - 2025-02-13
 
@@ -811,6 +920,11 @@ comment:
   时间. 一是很多东西不能带, 安检又要把很多东西提前拿出来. 二是从进站到登机口要走好远的路,
   三是终于验票进了登记口之后，居然又要再坐 20 多分钟摆渡车才能到飞机面前, 上了飞机后又过了
   大概半小时才起飞. 这个准备时间几乎跟飞机飞行时间一样长了.
+
+{{<figure src="/images/now-2025/photo_9_2025-12-23_15-23-56.jpg" title="第一次坐飞机 - 坐了 20 分钟摆渡车才找到飞机..." width="70%">}}
+{{<figure src="/images/now-2025/photo_10_2025-12-23_15-23-56.jpg" title="在云彩上了" width="70%">}}
+{{<figure src="/images/now-2025/photo_2_2025-12-23_15-23-56.jpg" title="目的地机场" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_15-23-56.jpg" title="就是坐的这小胖飞机" width="70%">}}
 
 ### 2025-01-26 - 2025-01-29
 
