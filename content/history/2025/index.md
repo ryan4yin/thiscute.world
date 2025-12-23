@@ -210,6 +210,9 @@ comment:
 - 入住的酒店有健身房跟泳池，泳池长度大概 30 米，跟两位同事在这里游了两个晚上的泳，应该是
   10 月 3 号之后第一次游泳，很尽兴。有个同事不太会游，我还教了他几次。
 
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-50-13.jpg" title="西双版纳 千年绞杀滕" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_17-50-13.jpg" title="星光夜市 - 好看 但是东西贼贵" width="70%">}}
+
 ### 2025-11-15
 
 - 翻出了高中的时候在贴吧天文吧里下载的《天文爱好者观测入门手册 V1.4》，跑到天文吧想找个新
@@ -307,6 +310,12 @@ comment:
   - Remote 工作 4 个多月了，一个人一直在家呆着，久了也挺无聊，还真挺需要出来到处见见朋友，
     聊聊技术跟人生的。
 
+{{<figure src="/images/now-2025/photo_1_2025-12-23_17-21-08.jpg" title="9/20 PyCon China 2025 跟 nonebot 的朋友们合影" width="70%">}}
+{{<figure src="/images/now-2025/photo_10_2025-12-23_17-21-08.jpg" title="ASOCC 纪念墙" width="70%">}}
+{{<figure src="/images/now-2025/photo_9_2025-12-23_17-21-08.jpg" title="ASOCC 纪念墙 - 最终效果" width="70%">}}
+{{<figure src="/images/now-2025/photo_2_2025-12-23_17-21-08.jpg" title="9/20 ddl 送给我的 nonebot 纪念品，以及方块送我的 NixOS 挂坠" width="70%">}}
+{{<figure src="/images/now-2025/photo_3_2025-12-23_17-21-08.jpg" title="9/19 上海的民主自由" width="70%">}}
+
 ### 2025-09-16
 
 - 学习了下用 Kdenlive 剪辑视频，对之前 NixOS CN 我 Talk 的视频做了些处理。
@@ -382,6 +391,8 @@ comment:
 - 尝鲜添加了 Niri 桌面，发现配合 Macbook 触控版或者 Magic Trackpad，体验绝佳，触摸板的使用
   体验吊打 Hyprland, 个人感觉跟 macOS 的触控体验不相上下。
 
+{{<figure src="/images/now-2025/photo_4_2025-12-23_17-21-08.jpg" title="8/13 我的各种参会证以及 keep 跑步纪念奖牌" width="70%">}}
+
 ### 2025-08-10
 
 - 在上海呆得有点腻歪了，乘高铁回家，路上云参会 NixOS CN Meetup day2.
@@ -403,6 +414,10 @@ comment:
   的、NixOS & Flakes Book 是怎么一步步迭代到现在的状态的，以及我如何在社区里收到约 $600 刀
   的赞赏。
 
+{{<figure src="/images/now-2025/photo_5_2025-12-23_17-21-08.jpg" title="给 Nix Meetup 来个特写" width="70%">}}
+{{<figure src="/images/now-2025/photo_6_2025-12-23_17-21-08.jpg" title="NixOS on Macbook Pro M2" width="70%">}}
+{{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="I use NixOS btw" width="70%">}}
+
 ### 2025-08-03 - 2025-08-08
 
 - 在上海找了个 130 一晚的民宿，没想到居然还带泳池，当即续定了这 5 天另一个 140 一晚的房
@@ -416,6 +431,8 @@ comment:
   另一位室友的婚礼现场，吃了个午饭，又一起开 7 个半小时回苏州。
 - 8/2 又马不停蹄赶路回了上海跟 ddl 以及 nobody 约饭
 - 这一路真的相当特种兵了，连续熬夜加班、疯狂赶路去参加婚礼、朋友约饭，事情全闯一起了。
+
+{{<figure src="/images/now-2025/photo_8_2025-12-23_17-21-08.jpg" title="8/1 室友在大别山山坳坳里结婚，寝室 6 个人到了 5 个" width="70%">}}
 
 ### 2025-07-28 - 2025-07-30
 
@@ -439,6 +456,8 @@ comment:
   痛。
 - 新买的山地车到货了，买的喜德胜英雄 300，开始跟朋友一起骑车锻炼。
 - 公司给报销 Cursor Pro，买了一年的订阅。
+
+{{<figure src="/images/now-2025/photo_10_2025-12-23_17-50-13.jpg" title="7/23 在后山骑行" width="70%">}}
 
 ### 2025-06-27
 
@@ -477,6 +496,9 @@ comment:
     maintainer，都是我自己比较常用的。
   - 本来只打算拿 AI 解决下 Firefox/Chrome 把英文单引号渲染成中文弯引号的问题，结果就折腾了
     一天的字体...
+
+{{<figure src="/images/now-2025/photo_8_2025-12-23_17-50-13.jpg" title="6/17 家门口的奇特天气 - 局部降雨" width="70%">}}
+{{<figure src="/images/now-2025/photo_9_2025-12-23_17-50-13.jpg" title="6/20 后山超美的瞬间" width="70%">}}
 
 ### 2025-06-16
 
@@ -574,6 +596,23 @@ comment:
     - 讲得挺风趣，不过可能我对这块比较熟悉，基本能猜到就是自定义业务 metrics + 用 KEDA 做
       custom metrics based scaling. 所以就只是简单看了看。
 
+{{<figure src="/images/kubecon-china-2025/status-of-ingress-nginx.jpg" title="Ingress-Nginx 现状" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/photo_friends.jpg" title="面基成功！顺便传教 NixOS" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/istio-book-and-badge.jpg" title="拿到的 K8s/Go 小饼干以及 Istio 冰箱贴" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/peer_group_meeting.jpg" title="进了 Peer Group Meeting 发现只有 Mentors hhh" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/kubecon-china-welcome.jpg" title="欢迎光临 KubeCon China 2025" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/kubecon-t-shirts.jpg" title="先领个 T 恤嘿嘿" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/kubecon-china-coffee-break.jpg" title="茶歇时间" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/suse-mascot-plush-doll-2.jpg" title="SUSE 的毛绒玩具好想要！" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/suse-mascot-plush-doll.jpg" title="大 SUSE 上一只小 SUSE" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/talk-tetragon-observibility.jpg" title="用 tetragon 限制文件访问" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/llm-disaggregated-serving.jpg" title="LWS 的 Talk，在讲 PD 分离" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/nitendo-switch-store-miku.jpg" title="Switch 店在宣传 Miku Boxing" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/nitendo-switch-store.jpg" title="累计有三个朋友 KubeCon 期间在这里买了 Switch 2，它这波血赚" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/kubecon-china-2025-gifts.jpg" title="我的所有'战利品' hhh" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/airplane-boarding.jpg" title="登机了，再见深圳" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/airplane-1.jpg" title="这是我第几次坐飞机来着？" width="80%">}}
+
 ### 2025-06-01 - 2025-06-09
 
 - 学习 IPv6，并在我的 Homelab 上测试 IPv6.
@@ -589,6 +628,8 @@ comment:
 - 学习玩陆地冲浪板，主要是发力技巧，三天下来已经能在家门口的水泥路上滑得比较流畅了。
 - 30 号收到 Remote 工作的第一笔工资（社保跟公积金已经提前交好多天了），挺开心。
 
+{{<figure src="/images/now-2025/photo_19_2025-12-23_17-21-08.jpg" title="5/28 在老家新置办了升降桌跟双显示器" width="70%">}}
+
 ### 2025-05-27
 
 - 用豆包跟 Qwen3 学习了一波 IPv6，做了些笔记.
@@ -601,6 +642,12 @@ comment:
   - 我暂时想补习的主要是 IPv6 部分的内容，但是这书里很简单就带过了 IPv6，感觉还是得网上查
     资料，再看看 TCP/IP 详解，这样研究一下。
 - Remote 第三周了，目前体验良好。
+
+{{<figure src="/images/now-2025/photo_14_2025-12-23_17-21-08.jpg" title="5/23 山里的蒲公英" width="70%">}}
+{{<figure src="/images/now-2025/photo_15_2025-12-23_17-21-08.jpg" title="林间小路" width="70%">}}
+{{<figure src="/images/now-2025/photo_16_2025-12-23_17-21-08.jpg" title="" width="70%">}}
+{{<figure src="/images/now-2025/photo_17_2025-12-23_17-21-08.jpg" title="5/24 山里的覆盆子/树莓" width="70%">}}
+{{<figure src="/images/now-2025/photo_18_2025-12-23_17-21-08.jpg" title="5/27 插秧季" width="70%">}}
 
 ### 2025-05-13 - 2025-05-14
 
@@ -631,8 +678,14 @@ comment:
 
 - 深圳的租房快到期了，网上买了纸箱跟搬家大袋子，劳动节在家把东西都打包好了。等确定新工作后
   再确定搬到哪儿去。
-- 过完五一后继续面试，确定了新工作，新工作是 remote，所以接着就请开货拉拉的朋友把东西都送
-  回了湖南老家。
+- 过完五一后继续面试，确定了新工作，新工作是 remote，所以接着就叫货拉拉把东西都送回了湖南
+  老家。
+- 叫了认识很多年的朋友帮忙把东西打包送回家，他在深圳开了很多年货拉拉，5/3 一起到东莞松山湖
+  玩了一圈。5/8 正式退租，5/9 上午就到家了，朋友开了一个通宵的车，我也跟车一起熬了一晚上。
+
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 回家第一天" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_17-21-08.jpg" title="5/5 东西都打好包了" width="70%">}}
+{{<figure src="/images/now-2025/photo_13_2025-12-23_17-21-08.jpg" title="5/3 东莞松山湖小火车" width="70%">}}
 
 ### 2025-04-27 - 2025-04-30
 
@@ -940,7 +993,12 @@ comment:
 - 陪乐乐香港逛街, 但利源东西街这些小商品市场都没之前圣诞热闹, 圣诞树, 川普之类的搞笑玩意都
   没了, 有点失望.
 
-### 2025-01-03 - 2025-01-12
+{{<figure src="/images/now-2025/photo_1_2025-12-23_17-50-13.jpg" title="香港 街道" width="70%">}}
+{{<figure src="/images/now-2025/photo_2_2025-12-23_17-50-13.jpg" title="香港 利源东西街" width="70%">}}
+{{<figure src="/images/now-2025/photo_4_2025-12-23_17-50-13.jpg" title="香港 利源东西街" width="70%">}}
+{{<figure src="/images/now-2025/photo_5_2025-12-23_17-50-13.jpg" title="香港 利源东西街" width="70%">}}
+
+### 2025-01-07 - 2025-01-12
 
 - 2025-01-07 发布了 [2025 年年终总结](/posts/2025-summary/)
 - 2025-01-08 上次办日本三年签证的旅社服务很好，材料要求也简单些，又在它家下单了韩国五年签
@@ -968,6 +1026,13 @@ comment:
 - 其他值得一去的东亚国家（出行前慎重考虑安全问题）
   - 尼泊尔（免签 - 徒步爱好者的圣地 + 低价学英语的好去处）
   - 马来西亚（价格便宜、也有徒步路线） + 新加坡（东亚新兴的科技中心）
+
+### 2025-01-04
+
+- 跟两个要好的同事一起去爬了七娘山
+
+{{<figure src="/images/now-2025/photo_6_2025-12-23_17-50-13.jpg" title="1/4 七娘山" width="70%">}}
+{{<figure src="/images/now-2025/photo_7_2025-12-23_17-50-13.jpg" title="1/4 七娘山" width="70%">}}
 
 ### 2025-01-01
 
