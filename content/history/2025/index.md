@@ -214,8 +214,8 @@ comment:
 - 入住的酒店有健身房跟泳池，泳池长度大概 30 米，跟两位同事在这里游了两个晚上的泳，应该是
   10 月 3 号之后第一次游泳，很尽兴。有个同事不太会游，我还教了他几次。
 
-{{<figure src="/images/now-2025/photo_11_2025-12-23_17-50-13.jpg" title="西双版纳 千年绞杀滕" width="70%">}}
-{{<figure src="/images/now-2025/photo_12_2025-12-23_17-50-13.jpg" title="星光夜市 - 好看 但是东西贼贵" width="70%">}}
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-50-13.jpg" title="11/21 西双版纳 千年绞杀滕" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_17-50-13.jpg" title="11/21 西双版纳 星光夜市 - 好看 但是东西贼贵" width="70%">}}
 
 ### 2025-11-15
 
@@ -315,8 +315,6 @@ comment:
     聊聊技术跟人生的。
 
 {{<figure src="/images/now-2025/photo_1_2025-12-23_17-21-08.jpg" title="9/20 PyCon China 2025 跟 nonebot 的朋友们合影" width="70%">}}
-{{<figure src="/images/now-2025/photo_10_2025-12-23_17-21-08.jpg" title="ASOCC 纪念墙" width="70%">}}
-{{<figure src="/images/now-2025/photo_9_2025-12-23_17-21-08.jpg" title="ASOCC 纪念墙 - 最终效果" width="70%">}}
 {{<figure src="/images/now-2025/photo_2_2025-12-23_17-21-08.jpg" title="9/20 ddl 送给我的 nonebot 纪念品，以及方块送我的 NixOS 挂坠" width="70%">}}
 {{<figure src="/images/now-2025/photo_3_2025-12-23_17-21-08.jpg" title="9/19 上海的民主自由" width="70%">}}
 
@@ -420,7 +418,7 @@ comment:
 
 {{<figure src="/images/now-2025/photo_5_2025-12-23_17-21-08.jpg" title="给 Nix Meetup 来个特写" width="70%">}}
 {{<figure src="/images/now-2025/photo_6_2025-12-23_17-21-08.jpg" title="NixOS on Macbook Pro M2" width="70%">}}
-{{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="I use NixOS btw" width="70%">}}
+{{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="来参加 Nix Meetup 了" width="70%">}}
 
 ### 2025-08-03 - 2025-08-08
 
@@ -449,6 +447,9 @@ comment:
   佬，第一次 NixOS 线下聚会，还听了许多硬核 Talks.
   - <https://x.com/ryan4yin/status/1949486352460058962>
   - <https://x.com/ryan4yin/status/1949361612965687574>
+
+{{<figure src="/images/now-2025/photo_10_2025-12-23_17-21-08.jpg" title="7/27 AOSCC 纪念墙" width="70%">}}
+{{<figure src="/images/now-2025/photo_9_2025-12-23_17-21-08.jpg" title="7/27 AOSCC 纪念墙 - 最终效果" width="70%">}}
 
 ### 2025-06-30 - 2025-07-11
 
@@ -687,9 +688,9 @@ comment:
 - 叫了认识很多年的朋友帮忙把东西打包送回家，他在深圳开了很多年货拉拉，5/3 一起到东莞松山湖
   玩了一圈。5/8 正式退租，5/9 上午就到家了，朋友开了一个通宵的车，我也跟车一起熬了一晚上。
 
-{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 回家第一天" width="70%">}}
-{{<figure src="/images/now-2025/photo_12_2025-12-23_17-21-08.jpg" title="5/5 东西都打好包了" width="70%">}}
 {{<figure src="/images/now-2025/photo_13_2025-12-23_17-21-08.jpg" title="5/3 东莞松山湖小火车" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_17-21-08.jpg" title="5/5 东西都打好包了" width="70%">}}
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 回家第一天" width="70%">}}
 
 ### 2025-04-27 - 2025-04-30
 
@@ -810,12 +811,12 @@ comment:
 - 在重庆也呆了很多天，天天吃红油抄手跟泡椒牛肉丝面，参观了很火的洪崖洞，还跟乐乐逛了非常多
   的谷子店（时代天街+观音桥的方圆Live）。
 
-{{<figure src="/images/now-2025/photo_24_2025-12-23_16-35-23.jpg" title="重庆" width="70%">}}
-{{<figure src="/images/now-2025/photo_25_2025-12-23_16-35-23.jpg" title="对面就是洪崖洞，到了晚上简直人山人海" width="70%">}}
-{{<figure src="/images/now-2025/photo_26_2025-12-23_16-35-23.jpg" title="重庆独特的轻轨" width="70%">}}
-{{<figure src="/images/now-2025/photo_27_2025-12-23_16-35-23.jpg" title="层层叠叠的轨道跟车道" width="70%">}}
-{{<figure src="/images/now-2025/photo_28_2025-12-23_16-35-23.jpg" title="观音桥好吃街" width="70%">}}
-{{<figure src="/images/now-2025/photo_29_2025-12-23_16-35-23.jpg" title="回深圳了" width="70%">}}
+{{<figure src="/images/now-2025/photo_24_2025-12-23_16-35-23.jpg" title="4/3 重庆" width="70%">}}
+{{<figure src="/images/now-2025/photo_25_2025-12-23_16-35-23.jpg" title="4/4 对面就是洪崖洞，到了晚上简直人山人海" width="70%">}}
+{{<figure src="/images/now-2025/photo_26_2025-12-23_16-35-23.jpg" title="4/8 重庆独特的轻轨" width="70%">}}
+{{<figure src="/images/now-2025/photo_27_2025-12-23_16-35-23.jpg" title="4/8 层层叠叠的轨道跟车道" width="70%">}}
+{{<figure src="/images/now-2025/photo_28_2025-12-23_16-35-23.jpg" title="4/8 观音桥好吃街" width="70%">}}
+{{<figure src="/images/now-2025/photo_29_2025-12-23_16-35-23.jpg" title="4/9 回深圳了" width="70%">}}
 
 ### 2025-03-31 - 2025-04-03
 
@@ -851,9 +852,9 @@ comment:
     看。
 - 本来张家界还有挺多可玩的，不过乐乐不想爬山，对溶洞也没啥兴趣，我们就直接买票去重庆了。
 
-{{<figure src="/images/now-2025/photo_10_2025-12-23_16-35-23.jpg" title="凤凰古城" width="70%">}}
-{{<figure src="/images/now-2025/photo_11_2025-12-23_16-35-23.jpg" title="张家界 - 武陵源" width="70%">}}
-{{<figure src="/images/now-2025/photo_12_2025-12-23_16-35-23.jpg" title="张家界 - 袁家界天下第一桥" width="70%">}}
+{{<figure src="/images/now-2025/photo_10_2025-12-23_16-35-23.jpg" title="3/26 凤凰古城" width="70%">}}
+{{<figure src="/images/now-2025/photo_11_2025-12-23_16-35-23.jpg" title="3/27 张家界 - 武陵源" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_16-35-23.jpg" title="3/27 张家界 - 袁家界天下第一桥" width="70%">}}
 {{<figure src="/images/now-2025/photo_19_2025-12-23_16-35-23.jpg" title="" width="70%">}}
 {{<figure src="/images/now-2025/photo_13_2025-12-23_16-35-23.jpg" title="胜似仙境" width="70%">}}
 {{<figure src="/images/now-2025/photo_15_2025-12-23_16-35-23.jpg" title="" width="70%">}}
@@ -883,17 +884,17 @@ comment:
 
 {{<figure src="/images/now-2025/photo_45_2025-12-23_15-23-56.jpg" title="南京矿坑公园 这个通道有点意思" width="70%">}}
 {{<figure src="/images/now-2025/photo_46_2025-12-23_15-23-56.jpg" title="南京矿坑公园 " width="70%">}}
-{{<figure src="/images/now-2025/photo_47_2025-12-23_15-23-56.jpg" title="南京中山陵" width="70%">}}
+{{<figure src="/images/now-2025/photo_47_2025-12-23_15-23-56.jpg" title="3/14 南京中山陵" width="70%">}}
 
-{{<figure src="/images/now-2025/photo_2_2025-12-23_16-35-23.jpg" title="宁邦寺的卧佛" width="70%">}}
-{{<figure src="/images/now-2025/photo_6_2025-12-23_16-35-23.jpg" title="宁邦寺" width="70%">}}
+{{<figure src="/images/now-2025/photo_2_2025-12-23_16-35-23.jpg" title="3/5 穹窿山 宁邦寺的卧佛" width="70%">}}
+{{<figure src="/images/now-2025/photo_6_2025-12-23_16-35-23.jpg" title="3/5 穹窿山 宁邦寺" width="70%">}}
 
-{{<figure src="/images/now-2025/photo_3_2025-12-23_16-35-23.jpg" title="穹窿山 上真观 三清阁" width="70%">}}
+{{<figure src="/images/now-2025/photo_3_2025-12-23_16-35-23.jpg" title="3/5 穹窿山 上真观 三清阁" width="70%">}}
 {{<figure src="/images/now-2025/photo_4_2025-12-23_16-35-23.jpg" title="穹窿胜迹" width="70%">}}
 {{<figure src="/images/now-2025/photo_5_2025-12-23_16-35-23.jpg" title="御道 门牌" width="70%">}}
 
 {{<figure src="/images/now-2025/photo_7_2025-12-23_16-35-23.jpg" title="蛇年吉祥物？" width="70%">}}
-{{<figure src="/images/now-2025/photo_8_2025-12-23_16-35-23.jpg" title="栖霞山" width="70%">}}
+{{<figure src="/images/now-2025/photo_8_2025-12-23_16-35-23.jpg" title="3/9 栖霞山" width="70%">}}
 
 ### 2025-03-01 - 2025-03-07
 
@@ -931,9 +932,9 @@ comment:
 {{<figure src="/images/now-2025/photo_1_2025-12-23_16-35-23.jpg" title="姑苏 瑞光塔" width="70%">}}
 {{<figure src="/images/now-2025/photo_39_2025-12-23_15-23-56.jpg" title="" width="70%">}}
 
-{{<figure src="/images/now-2025/photo_40_2025-12-23_15-23-56.jpg" title="苏博周边 - 眼睛超大的小树" width="70%">}}
-{{<figure src="/images/now-2025/photo_41_2025-12-23_15-23-56.jpg" title="苏博 古编钟" width="70%">}}
-{{<figure src="/images/now-2025/photo_42_2025-12-23_15-23-56.jpg" title="苏博 近代影院 告示牌" width="70%">}}
+{{<figure src="/images/now-2025/photo_40_2025-12-23_15-23-56.jpg" title="苏州湾博物馆周边 - 眼睛超大的小树" width="70%">}}
+{{<figure src="/images/now-2025/photo_41_2025-12-23_15-23-56.jpg" title="苏州湾博物馆 古编钟" width="70%">}}
+{{<figure src="/images/now-2025/photo_42_2025-12-23_15-23-56.jpg" title="苏州湾博物馆 近代影院 告示牌" width="70%">}}
 
 {{<figure src="/images/now-2025/photo_43_2025-12-23_15-23-56.jpg" title="小园林" width="70%">}}
 {{<figure src="/images/now-2025/photo_44_2025-12-23_15-23-56.jpg" title="门牌 画心" width="70%">}}
@@ -948,24 +949,24 @@ comment:
   海》. 然后工作日我自己又逛了一波南京东路步行街, 上海外滩, 以及逛了百联 ZX 跟静安大悦城的
   二次元周边店, 买了好几个初音跟洛天依的周边, 还拍了好多照片.
 
-{{<figure src="/images/now-2025/photo_13_2025-12-23_15-23-56.jpg" title="跟朋友们在上海K歌，瓜哥在唱 MyGo" width="70%">}}
-{{<figure src="/images/now-2025/photo_4_2025-12-23_15-23-56.jpg" title="玩桌游 - 还挺复杂" width="70%">}}
+{{<figure src="/images/now-2025/photo_13_2025-12-23_15-23-56.jpg" title="2/15 跟朋友们在上海K歌，瓜哥在唱 MyGo" width="70%">}}
 {{<figure src="/images/now-2025/photo_18_2025-12-23_15-23-56.jpg" title="瓜哥的 fufu" width="70%">}}
 
-{{<figure src="/images/now-2025/photo_14_2025-12-23_15-23-56.jpg" title="上海植物园，这盆有意思" width="70%">}}
+{{<figure src="/images/now-2025/photo_14_2025-12-23_15-23-56.jpg" title="2/16 上海植物园，这盆有意思" width="70%">}}
 {{<figure src="/images/now-2025/photo_15_2025-12-23_15-23-56.jpg" title="花不错" width="70%">}}
 {{<figure src="/images/now-2025/photo_16_2025-12-23_15-23-56.jpg" title="还有中国结" width="70%">}}
 {{<figure src="/images/now-2025/photo_17_2025-12-23_15-23-56.jpg" title="梅花" width="70%">}}
+{{<figure src="/images/now-2025/photo_4_2025-12-23_15-23-56.jpg" title="2/16 玩桌游 - 还挺复杂" width="70%">}}
 
-{{<figure src="/images/now-2025/photo_19_2025-12-23_15-23-56.jpg" title="百联ZX - miku 好可爱" width="70%">}}
+{{<figure src="/images/now-2025/photo_19_2025-12-23_15-23-56.jpg" title="2/17 百联ZX - miku 好可爱" width="70%">}}
 {{<figure src="/images/now-2025/photo_20_2025-12-23_15-23-56.jpg" title="百联ZX - 天依" width="70%">}}
 {{<figure src="/images/now-2025/photo_21_2025-12-23_15-23-56.jpg" title="百联ZX - 超天酱" width="70%">}}
 {{<figure src="/images/now-2025/photo_22_2025-12-23_15-23-56.jpg" title="百联ZX - 好多 miku" width="70%">}}
 
 {{<figure src="/images/now-2025/photo_23_2025-12-23_15-23-56.jpg" title="上海外滩夜景，很经典了" width="70%">}}
 {{<figure src="/images/now-2025/photo_24_2025-12-23_15-23-56.jpg" title="这店叫景德镇..." width="70%">}}
-{{<figure src="/images/now-2025/photo_25_2025-12-23_15-23-56.jpg" title="静安寺" width="70%">}}
-{{<figure src="/images/now-2025/photo_26_2025-12-23_15-23-56.jpg" title="在上海听 Live House - Lillies and Remains" width="70%">}}
+{{<figure src="/images/now-2025/photo_25_2025-12-23_15-23-56.jpg" title="2/18 静安寺" width="70%">}}
+{{<figure src="/images/now-2025/photo_26_2025-12-23_15-23-56.jpg" title="2/21 在上海听 Live House - Lillies and Remains" width="70%">}}
 
 ### 2025-02-01 - 2025-02-13
 
@@ -998,7 +999,7 @@ comment:
   没了, 有点失望.
 
 {{<figure src="/images/now-2025/photo_1_2025-12-23_17-50-13.jpg" title="香港 街道" width="70%">}}
-{{<figure src="/images/now-2025/photo_2_2025-12-23_17-50-13.jpg" title="香港 利源东西街" width="70%">}}
+{{<figure src="/images/now-2025/photo_2_2025-12-23_17-50-13.jpg" title="1/19 香港 利源东西街" width="70%">}}
 {{<figure src="/images/now-2025/photo_4_2025-12-23_17-50-13.jpg" title="香港 利源东西街" width="70%">}}
 {{<figure src="/images/now-2025/photo_5_2025-12-23_17-50-13.jpg" title="香港 利源东西街" width="70%">}}
 

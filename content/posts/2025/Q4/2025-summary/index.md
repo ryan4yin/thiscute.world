@@ -58,6 +58,9 @@ comment:
 
 2025 年是我的飞行元年，1 月 30 号（大年初二）是我第一次坐飞机，从深圳飞回老家邵阳。
 
+{{<figure src="/images/now-2025/photo_9_2025-12-23_15-23-56.jpg" title="第一次坐飞机 - 坐了 20 分钟摆渡车才找到飞机..." width="70%">}}
+{{<figure src="/images/now-2025/photo_10_2025-12-23_15-23-56.jpg" title="在云彩上了" width="70%">}}
+
 一月份辞职了嘛，然后我一直 gap 到 4 月中旬才开始找工作，这期间全国到处旅游跟找同学朋友玩又
 坐了四五次飞机跟几次高铁。6 月份的时候又去香港参加 KubeCon China, 坐了高铁去深圳，回来是飞
 机。然后 11 月份公司在云南西双版纳团建飞了个来回，再加上 12 月我跟 @Aspirin 去日本玩了一
@@ -65,6 +68,8 @@ comment:
 
 航旅纵横 APP 显示我累计飞行 12 次，总共 22h19min, 累计里程 15225km. 算是一个从 0 到 1 的突
 破。
+
+{{<figure src="/images/now-2025/photo_2025-12-23_15-23-19.jpg" title="航旅纵横 - 飞行里程统计" width="70%">}}
 
 ### 旅行
 
@@ -157,3 +162,85 @@ comment:
 国的多个城市，在日本 city walk 了一周，学了小半年的游泳，相比 2024 年，生活又丰富了许多。
 
 接下来的 2026 年，我的目标是「精进英语、泳技与 Linux，探索世界」。
+
+## 图集
+
+最后，附上我今年的精选照片吧，大致按时间顺序排列：
+
+{{<figure src="/images/now-2025/photo_2_2025-12-23_17-50-13.jpg" title="1/19 香港 利源东西街" width="70%">}}
+
+Gap 期间：
+
+{{<figure src="/images/now-2025/photo_13_2025-12-23_15-23-56.jpg" title="2/15 跟朋友们在上海K歌，瓜哥在唱 MyGo" width="70%">}}
+{{<figure src="/images/now-2025/photo_19_2025-12-23_15-23-56.jpg" title="2/17 上海百联ZX - miku 好可爱" width="70%">}}
+{{<figure src="/images/now-2025/photo_28_2025-12-23_15-23-56.jpg" title="3/3 周庄古镇 - 下雨了" width="70%">}}
+{{<figure src="/images/now-2025/photo_33_2025-12-23_15-23-56.jpg" title="3/3 周庄古镇 - 小巷灯影" width="70%">}}
+{{<figure src="/images/now-2025/photo_3_2025-12-23_16-35-23.jpg" title="3/5 南京穹窿山 上真观 三清阁" width="70%">}}
+{{<figure src="/images/now-2025/photo_8_2025-12-23_16-35-23.jpg" title="3/9 南京栖霞山" width="70%">}}
+{{<figure src="/images/now-2025/photo_47_2025-12-23_15-23-56.jpg" title="3/14 南京中山陵" width="70%">}}
+{{<figure src="/images/now-2025/photo_10_2025-12-23_16-35-23.jpg" title="3/26 凤凰古城" width="70%">}}
+{{<figure src="/images/now-2025/photo_11_2025-12-23_16-35-23.jpg" title="3/27 张家界 - 武陵源" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_16-35-23.jpg" title="3/27 张家界 - 袁家界天下第一桥" width="70%">}}
+{{<figure src="/images/now-2025/photo_13_2025-12-23_16-35-23.jpg" title="3/28 张家界 胜似仙境" width="70%">}}
+{{<figure src="/images/now-2025/photo_14_2025-12-23_16-35-23.jpg" title="3/28 张家界 花都结冰了" width="70%">}}
+{{<figure src="/images/now-2025/photo_20_2025-12-23_16-35-23.jpg" title="3/29 张家界 小猴子是真不怕冷" width="70%">}}
+{{<figure src="/images/now-2025/photo_22_2025-12-23_16-35-23.jpg" title="3/30 涪陵火锅" width="70%">}}
+{{<figure src="/images/now-2025/photo_23_2025-12-23_16-35-23.jpg" title="3/31 涪陵豆花饭" width="70%">}}
+{{<figure src="/images/now-2025/photo_24_2025-12-23_16-35-23.jpg" title="4/3 重庆" width="70%">}}
+{{<figure src="/images/now-2025/photo_25_2025-12-23_16-35-23.jpg" title="4/4 对面就是洪崖洞，到了晚上简直人山人海" width="70%">}}
+{{<figure src="/images/now-2025/photo_26_2025-12-23_16-35-23.jpg" title="4/8 重庆独特的轻轨" width="70%">}}
+{{<figure src="/images/now-2025/photo_13_2025-12-23_17-21-08.jpg" title="5/3 东莞松山湖小火车" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_17-21-08.jpg" title="5/5 东西都打好包了，就等着运回老家了" width="70%">}}
+
+在老家的工作状态记录：
+
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 回老家第一天" width="70%">}}
+{{<figure src="/images/now-2025/photo_14_2025-12-23_17-21-08.jpg" title="5/23 山里的蒲公英" width="70%">}}
+{{<figure src="/images/now-2025/photo_15_2025-12-23_17-21-08.jpg" title="林间小路" width="70%">}}
+{{<figure src="/images/now-2025/photo_16_2025-12-23_17-21-08.jpg" title="" width="70%">}}
+{{<figure src="/images/now-2025/photo_17_2025-12-23_17-21-08.jpg" title="5/24 山里的覆盆子/树莓" width="70%">}}
+{{<figure src="/images/now-2025/photo_18_2025-12-23_17-21-08.jpg" title="5/27 插秧季" width="70%">}}
+{{<figure src="/images/now-2025/photo_19_2025-12-23_17-21-08.jpg" title="5/28 新置办了升降桌跟双显示器用于工作" width="70%">}}
+
+然后就上海、老家两头跑：
+
+{{<figure src="/images/kubecon-china-2025/kubecon-china-welcome.jpg" title="6/10 欢迎光临 KubeCon China 2025" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/suse-mascot-plush-doll.jpg" title="大 SUSE 上一只小 SUSE" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/nitendo-switch-store-miku.jpg" title="Switch 店在宣传 Miku Boxing" width="80%">}}
+{{<figure src="/images/kubecon-china-2025/nitendo-switch-store.jpg" title="累计有三个朋友 KubeCon 期间在这里买了 Switch 2，它这波血赚" width="80%">}}
+{{<figure src="/images/now-2025/photo_8_2025-12-23_17-50-13.jpg" title="6/17 家门口的奇特天气 - 局部降雨" width="70%">}}
+{{<figure src="/images/now-2025/photo_9_2025-12-23_17-50-13.jpg" title="6/20 后山超美的瞬间" width="70%">}}
+{{<figure src="/images/now-2025/photo_10_2025-12-23_17-50-13.jpg" title="7/23 在后山骑行" width="70%">}}
+{{<figure src="/images/now-2025/photo_10_2025-12-23_17-21-08.jpg" title="7/27 上海 AOSCC 纪念墙" width="70%">}}
+{{<figure src="/images/now-2025/photo_9_2025-12-23_17-21-08.jpg" title="7/27 上海 AOSCC 纪念墙 - 最终效果" width="70%">}}
+{{<figure src="/images/now-2025/photo_8_2025-12-23_17-21-08.jpg" title="8/1 室友在安徽大别山山坳坳里结婚，寝室 6 个人到了 5 个" width="70%">}}
+{{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="8/9 又回上海参加 Nix Meetup 了" width="70%">}}
+{{<figure src="/images/now-2025/photo_4_2025-12-23_17-21-08.jpg" title="8/13 我的各种参会证以及 keep 跑步纪念奖牌" width="70%">}}
+{{<figure src="/images/now-2025/photo_1_2025-12-23_17-21-08.jpg" title="9/20 PyCon China 2025 跟 nonebot 的朋友们合影" width="70%">}}
+{{<figure src="/images/now-2025/photo_2_2025-12-23_17-21-08.jpg" title="9/20 ddl 送给我的 nonebot 纪念品，以及方块送我的 NixOS 挂坠" width="70%">}}
+
+在西双版纳团建两天：
+
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-50-13.jpg" title="11/21 西双版纳 千年绞杀滕" width="70%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_17-50-13.jpg" title="11/21 西双版纳 星光夜市 - 好看 但是东西贼贵" width="70%">}}
+
+年底的日本游：
+
+{{<figure src="/images/now-2025/photo_59_2025-12-23_15-23-56.jpg" title="穿传统服装来祈福的日本家庭" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_2_2025-12-23_19-07-18.jpg" title="12/7 秋叶原的魔禁广告牌" width="70%">}}
+{{<figure src="/images/now-2025/photo_3_2025-12-23_19-07-18.jpg" title="12/7 秋叶原" width="70%">}}
+{{<figure src="/images/now-2025/photo_4_2025-12-23_19-07-18.jpg" title="12/7 台場的 Telecom Center 展望台" width="70%">}}
+{{<figure src="/images/now-2025/photo_1_2025-12-23_19-07-18.jpg" title="12/8 京都 我在日本吃过最贵的一顿饭 鳗鱼饭" width="70%">}}
+{{<figure src="/images/now-2025/photo_68_2025-12-23_15-23-56.jpg" title="12/9 周恩来总理写的雨中岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_69_2025-12-23_15-23-56.jpg" title="12/9 周恩来总理写的雨中岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_67_2025-12-23_15-23-56.jpg" title="12/9 12 月份的岚山挺好看的" width="70%">}}
+{{<figure src="/images/now-2025/photo_70_2025-12-23_15-23-56.jpg" title="12/9 岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_71_2025-12-23_15-23-56.jpg" title="12/9 岚山" width="70%">}}
+{{<figure src="/images/now-2025/photo_56_2025-12-23_15-23-56.jpg" title="12/10 神户 生牛肉丼" width="70%">}}
+{{<figure src="/images/now-2025/photo_57_2025-12-23_15-23-56.jpg" title="12/10 神户 JR 舞子站" width="70%">}}
+{{<figure src="/images/now-2025/photo_58_2025-12-23_15-23-56.jpg" title="12/10 神户 舞子海上散步道" width="70%">}}
+{{<figure src="/images/now-2025/photo_55_2025-12-23_15-23-56.jpg" title="12/12 大阪烧" width="70%">}}
+
+{{<figure src="/images/now-2025/photo_50_2025-12-23_15-23-56.jpg" title="12/13 日本 老太太童心未泯" width="70%">}}
+{{<figure src="/images/now-2025/photo_51_2025-12-23_15-23-56.jpg" title="12/13 日本 准备返回上海了 - 在等去关西机场的电车" width="70%">}}
