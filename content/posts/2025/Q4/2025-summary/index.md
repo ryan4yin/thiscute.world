@@ -172,7 +172,16 @@ AI 沟通。我今年写「Linux 桌面系统」也是考虑到网上的信息�
 界」，一年过去，勉强感觉算是达成了一半。我读完了《Linux/Unix 系统编程手册》，徒步走过了中
 国的多个城市，在日本 city walk 了一周，学了小半年的游泳，相比 2024 年，生活又丰富了许多。
 
-接下来的 2026 年，我对自己的期望是「精进英语、泳技与 Linux，探索世界」。
+接下来的 2026 年，我对自己的期望是「**精进英语、泳技与 Linux，探索世界**」，用 OKR 类比的
+话，这个 Object 对应了如下 Key Results:
+
+- 英语：口语进阶，综合水平达到 C1 级别，满足我旅游及全英文工作的需求
+- 日语：学完标日初级，达到 N4 级别。要求不高，主要方便去日本玩
+- 游泳（25m 短池）：蛙泳百米 1m50s、千米 20mins，潜泳（动态闭气） 50 米
+- 旅游：拿到驾照，自驾游中国，以及拓展亚洲跟欧洲地图的足迹
+- Linux 学习
+  - 积极参与 NixOS 上游贡献
+  - 尝试写几个 Linux 小工具，或者参与相关项目的开发，避免手艺生疏。
 
 ## 图集
 
@@ -205,7 +214,7 @@ Gap 期间：
 
 在老家的工作状态记录：
 
-{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 回老家第一天" width="100%">}}
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 回老家第一天，家门口的景色" width="100%">}}
 {{<figure src="/images/now-2025/photo_14_2025-12-23_17-21-08.jpg" title="5/23 山里的蒲公英" width="100%">}}
 {{<figure src="/images/now-2025/photo_15_2025-12-23_17-21-08.jpg" title="林间小路" width="100%">}}
 {{<figure src="/images/now-2025/photo_16_2025-12-23_17-21-08.jpg" title="" width="100%">}}
@@ -228,7 +237,7 @@ Gap 期间：
 {{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="8/9 又回上海参加 Nix Meetup 了" width="100%">}}
 {{<figure src="/images/now-2025/photo_4_2025-12-23_17-21-08.jpg" title="8/13 我的各种参会证以及 keep 跑步纪念奖牌" width="100%">}}
 {{<figure src="/images/now-2025/photo_1_2025-12-23_17-21-08.jpg" title="9/20 PyCon China 2025 跟 nonebot 的朋友们合影" width="100%">}}
-{{<figure src="/images/now-2025/photo_2_2025-12-23_17-21-08.jpg" title="9/20 ddl 送给我的 nonebot 纪念品，以及方块送我的 NixOS 挂坠" width="100%">}}
+{{<figure src="/images/now-2025/photo_2_2025-12-23_17-21-08.jpg" title="9/20 ddl 送给我的 nonebot 纪念品，以及从方块那批发的 NixOS 挂坠" width="100%">}}
 
 在西双版纳团建两天：
 
