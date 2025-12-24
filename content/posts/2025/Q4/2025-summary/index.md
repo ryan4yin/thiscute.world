@@ -69,7 +69,7 @@ comment:
 航旅纵横 APP 显示我累计飞行 12 次，总共 22h19min, 累计里程 15225km. 算是一个从 0 到 1 的突
 破。
 
-{{<figure src="/images/now-2025/photo_2025-12-23_15-23-19.jpg" title="航旅纵横 - 飞行里程统计" width="70%">}}
+{{<figure src="/images/now-2025/photo_2025-12-23_15-23-19.jpg" title="航旅纵横 - 飞行里程统计" width="90%">}}
 
 ### 旅行
 
@@ -132,13 +132,17 @@ comment:
 
 - 6 月份的时候去香港参加了 KubeCon China，内容基本都是 AI, 也写了一篇
   [KubeCon China 2025 见闻](https://thiscute.world/posts/kubecon-china-2025/)
+  {{<figure src="/images/kubecon-china-2025/kubecon-china-welcome.jpg" title="6/10 欢迎光临 KubeCon China 2025" width="70%">}}
 - 7 月底的时候到上海参加了 AOSCC 2025, 技术氛围真好，还感受了一波大学生们的青春气息
+  {{<figure src="/images/now-2025/photo_10_2025-12-23_17-21-08.jpg" title="7/27 上海 AOSCC 纪念墙" width="70%">}}
 - 8 月份又在上海参加了 Nix Meetup, 一起干了好几顿饭。我还在台上讲了下自己的入坑经历，被大
   家叫 Ryan 老师有点受宠若惊（
+  {{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="8/9 又回上海参加 Nix Meetup 了" width="70%">}}
   - 从打算搞到最终举办就十来天的时间，结果群友们还搞到了 NixOS 基金会的赞助，整了很多精美
     小礼物，很有爱了
 - 9 月份又到上海参加 PyCon China 2025, 见到了很多 X 上认识很久的 saka yihong 等大佬，领了
   许多小礼物，还跟上海 nonebot 群友们一起干了顿饭，顺便给他们安利了 NixOS（
+  {{<figure src="/images/now-2025/photo_1_2025-12-23_17-21-08.jpg" title="9/20 PyCon China 2025 跟 nonebot 的朋友们合影" width="90%">}}
 
 以及 GitHub 上 followers 终于突破了 1000, 获得的 stars 也超过了 6000, 不过这仍然基本都来自
 我 2023 年创建的几个 Nix 项目。
