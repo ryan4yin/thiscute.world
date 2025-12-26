@@ -29,9 +29,9 @@ toc:
 
 comment:
   utterances:
-    enable: true
-  waline:
     enable: false
+  waline:
+    enable: true
   disqus:
     enable: false
 ---
