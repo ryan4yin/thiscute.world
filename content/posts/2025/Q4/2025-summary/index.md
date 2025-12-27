@@ -54,8 +54,8 @@ comment:
 
 <blockquote class="twitter-tweet"><p lang="zh" dir="ltr">Remote 工作第三周，置办了升降桌工学椅、显示器、千兆宽带等一堆物件，几周下来办公环境基本稳定了。<br>刚好到插秧季，家门口田一天比一天绿，赏心悦目。<br>业余没事就去山里转转，或者在村广场玩玩轮滑，或者在家折腾点技术，很自在。<br><br>另外也拿到了 KubeCon China 2025 的最终用户门票，下个月香港见（ <a href="https://t.co/e77MD2o0Av">pic.twitter.com/e77MD2o0Av</a></p>&mdash; ryan4yin | 二花 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1927577478756995099?ref_src=twsrc%5Etfw">May 28, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-全年做出的工作成果还不错，也得到了同事领导的高度认可，但是更多是吃以前的技术老本，并没有做
-出什么值得称道的技术探索。
+全年做出的工作成果还不错，拿到了很不错的绩效，但是更多是吃以前的技术老本，并没有做出什么值
+得称道的技术探索。
 
 ### 坐飞机
 
