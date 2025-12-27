@@ -54,6 +54,9 @@ comment:
 
 <blockquote class="twitter-tweet"><p lang="zh" dir="ltr">Remote 工作第三周，置办了升降桌工学椅、显示器、千兆宽带等一堆物件，几周下来办公环境基本稳定了。<br>刚好到插秧季，家门口田一天比一天绿，赏心悦目。<br>业余没事就去山里转转，或者在村广场玩玩轮滑，或者在家折腾点技术，很自在。<br><br>另外也拿到了 KubeCon China 2025 的最终用户门票，下个月香港见（ <a href="https://t.co/e77MD2o0Av">pic.twitter.com/e77MD2o0Av</a></p>&mdash; ryan4yin | 二花 (@ryan4yin) <a href="https://twitter.com/ryan4yin/status/1927577478756995099?ref_src=twsrc%5Etfw">May 28, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+全年做出的工作成果还不错，也得到了同事领导的高度认可，但是更多是吃以前的技术老本，并没有做
+出什么值得称道的技术探索。
+
 ### 坐飞机
 
 2025 年是我的飞行元年，1 月 30 号（大年初二）是我第一次坐飞机，从深圳飞回老家邵阳。
@@ -158,8 +161,6 @@ Z 的家里，鞭炮作响锣鼓震天，合影、随礼、举杯一条龙。下
 下两册，借助 AI 写了一个
 [Linux 桌面系统](https://thiscute.world/series/linux-%E6%A1%8C%E9%9D%A2%E7%B3%BB%E7%BB%9F/)
 系列，但是没怎么实践这方面的知识，现在又忘得差不多了 2333
-
-工作上今年做出的成果还不错，但是更多是吃以前的技术老本，并没有做出什么值得称道的技术探索。
 
 在现在 AI 发展这么快的当下，技术博客的受众是越来越少了，常见的技术问题跟细节基本都能直接跟
 AI 沟通。我今年写「Linux 桌面系统」也主要是让 AI 生成，我主要负责验证相关内容的正确性，顺
