@@ -188,6 +188,9 @@ AI 沟通。我今年写「Linux 桌面系统」也主要是让 AI 生成，我�
 以及 GitHub 上 followers 终于突破了 1000, 获得的 stars 也超过了 6000, 不过这仍然基本都来自
 我 2023 年创建的几个 Nix 项目。
 
+{{<figure src="/images/now-2024/github-metrics-2025-01-01.svg" attr="2025/01/01 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/master/metrics.classic.svg">}}
+{{<figure src="/images/now-2025/github-metrics-2025-12-27.svg" attr="2025/12/27 GitHub 统计数据" attrlink="https://github.com/ryan4yin/ryan4yin/blob/4a82e484e33965efcdbf612a01ac0004722b0107/metrics.classic.svg">}}
+
 ### AI
 
 今年开始把 AI 应用到各个方面，公司给整了 Cursor Pro 年费会员，我自己也给阿里千问、智谱 GLM
