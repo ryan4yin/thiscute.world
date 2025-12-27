@@ -13,7 +13,7 @@ authors: ["ryan4yin"]
 
 tags: ["总结"]
 categories: ["life"]
-series: ["年终总结"]
+series: ["总结回顾"]
 
 lightgallery: false
 

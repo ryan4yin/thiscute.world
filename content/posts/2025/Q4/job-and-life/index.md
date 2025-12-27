@@ -12,9 +12,9 @@ resources:
   - name: "featured-image"
     src: "featured-image.jpeg"
 
-tags: []
+tags: ["总结"]
 categories: ["life"]
-series: []
+series: ["总结回顾"]
 hiddenFromHomePage: false
 hiddenFromSearch: false
 license: ""

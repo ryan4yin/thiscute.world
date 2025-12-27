@@ -13,7 +13,7 @@ authors: ["ryan4yin"]
 
 tags: ["总结"]
 categories: ["life", "tech"]
-series: ["年终总结"]
+series: ["总结回顾"]
 
 lightgallery: true
 
