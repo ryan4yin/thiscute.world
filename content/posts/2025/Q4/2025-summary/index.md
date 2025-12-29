@@ -205,9 +205,12 @@ AI 沟通。我今年写「Linux 桌面系统」也主要是让 AI 生成，我�
 **总的来说，AI 方面我今年的感想是：能做的越来越多了，但是绝对不能全盘信任它！人工审查仍然
 是必不可少的，尤其是对自身权限极高的 infra/SRE 同学而言**！
 
+**再次强调，infra/SRE 绝对不应该在 prd 环境中使用 Cursor Auto-Run Mode 这种自动驾驶模
+式**！
+
 年底组里就有 infra team 的同事在使用 Cursor 的 Auto-Run Mode 为某数据中间件添加备份功能
 时，备份功能还没搞好，就把重要数据删掉了。直接原因是 Cursor AI 自动执行了
-`kbectl replace -f xxx.yaml --force` 导致一个 StatefulSet 被 Delete 再重新 Create，进而导
+`kubectl replace -f xxx.yaml --force` 导致一个 StatefulSet 被 Delete 再重新 Create，进而导
 致该数据中间件挂掉。次要原因是用了默认的 StorageClass, ReclaimPolicy 是 Delete，这导致前述
 流程中 PV 也被级联删除，数据完全丢失。还好其他地方还有一个最近一段时间的备份，勉强救回了大
 部分数据，不然都不知道这个事该怎么收场。
