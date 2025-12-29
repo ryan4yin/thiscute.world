@@ -279,11 +279,11 @@ Gap 期间：
 {{<figure src="/images/now-2025/photo_25_2025-12-23_16-35-23.jpg" title="4/4 对面就是洪崖洞，到了晚上简直人山人海" width="100%">}}
 {{<figure src="/images/now-2025/photo_26_2025-12-23_16-35-23.jpg" title="4/8 重庆独特的轻轨" width="100%">}}
 {{<figure src="/images/now-2025/photo_13_2025-12-23_17-21-08.jpg" title="5/3 东莞松山湖小火车" width="100%">}}
-{{<figure src="/images/now-2025/photo_12_2025-12-23_17-21-08.jpg" title="5/5 东西都打好包了，就等着运回老家了" width="100%">}}
+{{<figure src="/images/now-2025/photo_12_2025-12-23_17-21-08.jpg" title="5/5 深圳 东西都打好包了，就等着运回老家了" width="100%">}}
 
 在老家的工作状态记录：
 
-{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 回老家第一天，家门口的景色" width="100%">}}
+{{<figure src="/images/now-2025/photo_11_2025-12-23_17-21-08.jpg" title="5/9 邵阳 回老家第一天，家门口的景色" width="100%">}}
 {{<figure src="/images/now-2025/photo_14_2025-12-23_17-21-08.jpg" title="5/23 山里的蒲公英" width="100%">}}
 {{<figure src="/images/now-2025/photo_15_2025-12-23_17-21-08.jpg" title="林间小路" width="100%">}}
 {{<figure src="/images/now-2025/photo_16_2025-12-23_17-21-08.jpg" title="" width="100%">}}
@@ -297,7 +297,7 @@ Gap 期间：
 {{<figure src="/images/kubecon-china-2025/suse-mascot-plush-doll.jpg" title="香港 大 SUSE 上一只小 SUSE" width="100%">}}
 {{<figure src="/images/kubecon-china-2025/nitendo-switch-store-miku.jpg" title="香港 Switch 店在宣传 Miku Boxing" width="100%">}}
 {{<figure src="/images/kubecon-china-2025/nitendo-switch-store.jpg" title="香港 累计有三个朋友 KubeCon 期间在这里买了 Switch 2，它这波血赚" width="100%">}}
-{{<figure src="/images/now-2025/photo_8_2025-12-23_17-50-13.jpg" title="6/17 家门口的奇特天气 - 局部降雨" width="100%">}}
+{{<figure src="/images/now-2025/photo_8_2025-12-23_17-50-13.jpg" title="6/17 邵阳 家门口的奇特天气 - 局部降雨" width="100%">}}
 {{<figure src="/images/now-2025/photo_9_2025-12-23_17-50-13.jpg" title="6/20 后山超美的瞬间" width="100%">}}
 {{<figure src="/images/now-2025/photo_10_2025-12-23_17-50-13.jpg" title="7/23 在后山骑行" width="100%">}}
 {{<figure src="/images/now-2025/photo_10_2025-12-23_17-21-08.jpg" title="7/27 上海 AOSCC 纪念墙" width="100%">}}
