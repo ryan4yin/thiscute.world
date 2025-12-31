@@ -32,7 +32,7 @@ comment:
 
 - 游泳卡第 12 次，2025 最后一游，也刚好是今年的最佳成绩
 
-{{<figure src="/images/now-2025/swimming-record_2025-12-31_22-03-38.jpg" title="2025 年最后一次游泳记录" width="100%">}}
+{{<figure src="/images/now-2025/swimming-record_2025-12-31_22-03-38.jpg" title="2025 年最后一次游泳记录" width="60%">}}
 
 ### 2025-12-30
 
