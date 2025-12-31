@@ -200,9 +200,9 @@ AI 沟通。我今年写「Linux 桌面系统」系列也主要是让 AI 生成�
   {{<figure src="/images/now-2025/photo_10_2025-12-23_17-21-08.jpg" title="7/27 上海 AOSCC 纪念墙" width="70%">}}
 - 8 月份又在上海参加了 Nix Meetup, 一起干了好几顿饭。我还在台上讲了下自己的入坑经历，被大
   家叫 Ryan 老师有点受宠若惊（
-  {{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="8/9 又回上海参加 Nix Meetup 了" width="70%">}}
   - 从打算搞到最终举办就十来天的时间，结果群友们还搞到了 NixOS 基金会的赞助，整了很多精美
     小礼物，很有爱了
+    {{<figure src="/images/now-2025/photo_7_2025-12-23_17-21-08.jpg" title="8/9 又回上海参加 Nix Meetup 了" width="70%">}}
 - 9 月份又到上海参加 PyCon China 2025, 见到了很多 X 上认识很久的 saka yihong 等大佬，领了
   许多小礼物，还跟上海 nonebot 群友们一起干了顿饭，顺便给他们安利了 NixOS（
   {{<figure src="/images/now-2025/photo_1_2025-12-23_17-21-08.jpg" title="9/20 PyCon China 2025 跟 nonebot 的朋友们合影" width="100%">}}
