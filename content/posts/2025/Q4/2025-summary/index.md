@@ -180,7 +180,7 @@ Z 的家里，鞭炮作响锣鼓震天，合影、随礼、举杯一条龙。下
 
 ### 技术
 
-技术方面今年有点乏善可陈，今天读完了 [Linux/Unix 系统编程手册](https://man7.org/tlpi/) 上
+技术方面今年有点乏善可陈，今年读完了 [Linux/Unix 系统编程手册](https://man7.org/tlpi/) 上
 下两册，借助 AI 写了一个
 [Linux 桌面系统](https://thiscute.world/series/linux-%E6%A1%8C%E9%9D%A2%E7%B3%BB%E7%BB%9F/)
 系列，但是没怎么实践这方面的知识，现在又忘得差不多了 2333
