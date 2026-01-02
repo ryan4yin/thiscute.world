@@ -34,7 +34,8 @@ comment:
   - [x] 日语 2st - 完成了 50 音平假名的学习，还穿插了一点声调知识
     - 笔记:
       <https://github.com/ryan4yin/knowledge/blob/master/languages/japanese/characters/hiragana.md>
-  - [] 游泳 14th
+  - [x] 游泳 14th
+    - 饭前游的，可能有点饿没啥力气，1000 米花了 24 分钟
 
 ### 2026-01-01
 
