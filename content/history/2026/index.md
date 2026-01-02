@@ -31,7 +31,9 @@ comment:
 - 打卡
   - [] 英语单词 2st
   - [] 英语口语练习 2st - 跟豆包聊
-  - [] 日语 2st - 继续学 50 音假名...
+  - [x] 日语 2st - 完成了 50 音平假名的学习，还穿插了一点声调知识
+    - 笔记:
+      <https://github.com/ryan4yin/knowledge/blob/master/languages/japanese/characters/hiragana.md>
   - [] 游泳 14th
 
 ### 2026-01-01
