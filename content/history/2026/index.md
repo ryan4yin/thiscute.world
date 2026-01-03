@@ -26,6 +26,14 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2026-01-03
+
+- 英语日语都没来得及打卡
+- 乘高铁到安徽宿州砀山县来了，主要是为了参加 1/7 室友 H 婚礼，顺便出来玩玩。
+- 晚上在酒店给我 NixOS 整上了 noctalia-shell, 把一堆旧的
+  swaylock/anyrun/waybar/mako/gammastep/wlogout 跟自己写的 wallpapaer-switcher 全都删掉
+  了，感觉清爽多了。
+
 ### 2026-01-02
 
 - 打卡
