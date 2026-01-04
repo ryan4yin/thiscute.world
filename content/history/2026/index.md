@@ -26,6 +26,12 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2026-01-04
+
+- 打卡
+  - [x] 英语单词 2nd
+  - [x] 日语 3rd - 把片假名也过了一遍，又记了一波假名。
+
 ### 2026-01-03
 
 - 英语日语都没来得及打卡
@@ -37,8 +43,6 @@ comment:
 ### 2026-01-02
 
 - 打卡
-  - [] 英语单词 2st
-  - [] 英语口语练习 2st - 跟豆包聊
   - [x] 日语 2st - 完成了 50 音平假名的学习，还穿插了一点声调知识
     - 笔记:
       <https://github.com/ryan4yin/knowledge/blob/master/languages/japanese/characters/hiragana.md>
