@@ -3,7 +3,7 @@ title: "我的 2025 - 步履不停"
 subtitle: ""
 description: ""
 date: 2025-12-27T01:01:00+08:00
-lastmod: 2025-12-31T22:38:00+08:00
+lastmod: 2026-01-07T22:08:00+08:00
 draft: false
 
 authors: ["ryan4yin"]
@@ -103,8 +103,8 @@ comment:
 从日本淘了几本 CD 回来，都很有纪念意义：
 
 - **Supercell**: 初音未来早期非常经典的专辑，所有歌曲都很好听。
-- **Greatest Hits 2011-2017「Alter Ego」**：罪恶王冠是我的日漫入坑作，当时看完后一直单曲循
-  环「エウテルペ」
+- **Greatest Hits 2011-2017「Alter Ego」**：罪恶王冠是我的日漫入坑作之一，当时看完后一直单
+  曲循环「エウテルペ」
 - **シングルコレクション 2002-2008**：Humbert Humbert 是一个日本民谣组合，我从 16 年一直听
   到现在。
 - **Frieren: Beyond Journey's End (Original Soundtrack)**：最近两年看过的印象最深刻的一部
