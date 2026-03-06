@@ -64,6 +64,7 @@ comment:
 - 在本地跑了个 moltis(openclaw replacement), 感觉比 openclaw 稳定很多，设计也更合我口味。
   尝试对接了下本地（M4Pro + 48G）运行的 qwen3.5-35b-a3b q4-k-m, 很多任务也能正常跑，把上下
   文窗口拉满速度也有 32 tokens/s, 本地模型的春天来了哈哈。
+  - 后续发现换成 mlx 4bits 量化版，速度能提升到 77 tok/sec, 这个成绩就真的很可用了！看来 Macbook 使用 mlx 格式才是正确姿势。
 
 ### 2026-02-22
 
