@@ -417,7 +417,8 @@ systemd-resolved 提供统一的 DNS 解析服务，支持 DNSSEC 验证、DNS o
 - **统一接口**：为系统提供单一的 DNS 解析入口
 - **本地缓存**：缓存 DNS 查询结果，提高解析速度
 - **DNSSEC 支持**：验证 DNS 响应的真实性
-- **隐私保护**：支持 DNS over TLS(DoT), 但截止目前（2025 年）尚未支持 DNS over HTTPS(DoH).
+- **隐私保护**：支持 DNS over TLS (DoT)，但截止目前（2025 年）尚未支持 DNS over HTTPS
+  (DoH)。
 
 **配置方法**：
 

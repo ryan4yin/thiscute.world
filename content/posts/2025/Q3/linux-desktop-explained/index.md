@@ -69,7 +69,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 
 ## 文章系列导航
 
-### 📋 [Linux 桌面系统故障排查指南（一） - 系统启动与安全框架](/posts/linux-desktop-1-boot-security/)
+### 📋 [Linux 桌面系统故障排查指南（一） - 系统启动与安全框架](/posts/2025/Q4/linux-desktop-1-boot-security/)
 
 **涵盖内容**：
 
@@ -78,7 +78,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **安全框架深度解析**：PAM 认证机制、PolicyKit 权限管理、GNOME Keyring 密钥管理，以及各组
   件间的协作关系
 
-### ⚙️ [Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理](/posts/linux-desktop-2-systemd-services/)
+### ⚙️ [Linux 桌面系统故障排查指南（二） - systemd 全家桶与服务管理](/posts/2025/Q4/linux-desktop-2-systemd-services/)
 
 **涵盖内容**：
 
@@ -89,7 +89,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **D-Bus 系统总线**：进程间通信机制、权限管控、Flatpak 沙盒环境下的 D-Bus 代理过滤
 - **服务管理最佳实践**：服务配置优化、依赖关系管理、性能调优
 
-### 🖥️ [Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染](/posts/linux-desktop-3-session-graphics/)
+### 🖥️ [Linux 桌面系统故障排查指南（三） - 桌面会话与图形渲染](/posts/2025/Q4/linux-desktop-3-session-graphics/)
 
 **涵盖内容**：
 
@@ -101,7 +101,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **应用程序架构**：启动流程、图形驱动选择、工具包支持（GTK/Qt/SDL）、渲染器优化
 - **应用兼容性**：Wayland/XWayland 兼容性、沙盒化应用（Flatpak）、性能调优
 
-### 🎵 [Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持](/posts/linux-desktop-4-multimedia-input/)
+### 🎵 [Linux 桌面系统故障排查指南（四） - 多媒体处理与中文支持](/posts/2025/Q4/linux-desktop-4-multimedia-input/)
 
 **涵盖内容**：
 
@@ -111,7 +111,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **字体渲染系统**：fontconfig 配置、CJK 字体管理、渲染参数优化、字体匹配规则
 - **中文输入法**：fcitx5 框架、Wayland text-input 协议、XWayland 兼容性、混合环境管理
 
-### 🌐 [Linux 桌面系统故障排查指南（五） - 网络](/posts/linux-desktop-5-network/)
+### 🌐 [Linux 桌面系统故障排查指南（五） - 网络](/posts/2025/Q4/linux-desktop-5-network/)
 
 **涵盖内容**：
 
@@ -123,7 +123,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 - **网络性能优化**：内核参数调优、TCP 拥塞控制（BBR）、连接跟踪优化、网络监控分析
 - **高级网络配置**：多网卡绑定、VLAN 配置、网络命名空间、网络故障诊断
 
-### 🔄 [Linux 桌面系统故障排查指南（六） - 系统关机与电源管理](/posts/linux-desktop-6-shutdown-troubleshooting/)
+### 🔄 [Linux 桌面系统故障排查指南（六） - 系统关机与电源管理](/posts/2025/Q4/linux-desktop-6-shutdown-troubleshooting/)
 
 **涵盖内容**：
 
@@ -154,7 +154,7 @@ D‑Bus 信号）、可通过哪些命令排查验证，以及常见问题的修
 
 - **systemd-boot**：相比 GRUB 更简洁，支持 UKI 和 Secure Boot，启动速度更快
 - **Wayland**：相比 X11 更安全、性能更好
-- **PipeWire**：统一的多媒体处理框架，相比 PulseAudio 延迟更低，支持统一处理音频跟视频
+- **PipeWire**：统一的多媒体处理框架，相比 PulseAudio 延迟更低，支持统一处理音频和视频
 - **systemd-networkd + iwd**：相比 NetworkManager + wpa_supplicant 更现代、更轻量
 - **nftables**：相比 iptables 语法更简洁，性能更好
 - **fcitx5**：相比 ibus 对 Wayland 支持更好，配置更灵活
