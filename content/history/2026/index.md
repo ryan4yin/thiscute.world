@@ -33,7 +33,10 @@ comment:
 - 打卡
   - [x] 游泳卡 20th
 - picoclaw 又跑了个 wd 的修改版，加了更长的 context window, 代码配置也有些重构，QQ Bot 插件重写了。
-
+- 前阵子拿 Qwen3.5-35B-A3B 4bits 量化版跑 moltis, 让它读我博客了解我，结果它把「於清樂」记成了「于清扬」，「洛天依」被它写到 memory 里就成了「游天依」。
+  - 跟朋友聊到这个话题后，确认问题大概率是量化太过了导致的。4bits 还是太低了。
+- 根据 [inferencerlabs](https://huggingface.co/inferencerlabs/Qwen3.5-35B-A3B-MLX-6.5bit) README 的数据，6bits/8bits 量化版效果会好很多。
+  - 因此在条件允许的前提下，感觉可以优先选 8bits, 其次 6bits, 最差也得 5bits. 4bits 从上述结论上还是差了 5bits 不少。
 
 ### 2026-03-09
 
