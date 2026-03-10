@@ -26,7 +26,20 @@ comment:
 
 全部历史记录：[/history](/history/)
 
-### 2026-03-07
+
+
+### 2026-03-10
+
+- 打卡
+  - [x] 游泳卡 20th
+- picoclaw 又跑了个 wd 的修改版，加了更长的 context window, 代码配置也有些重构，QQ Bot 插件重写了。
+
+
+### 2026-03-09
+
+- 继续玩 xxclaw, 试用了 zeroclaw, picoclaw, 发现 zeroclaw 更新慢，最后选择了 picoclaw, 用着还行，但是上下文限制感觉有点严重。
+
+### 2026-03-08
 
 - 打卡
   - [x] 游泳卡 19th
