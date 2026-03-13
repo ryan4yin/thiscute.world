@@ -26,21 +26,47 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2026-03-12
 
+- 打卡
+  - [x] 游泳卡 22th
+- 看了一圈目前能用上 Claude/OpenAI 最强编程模型，而且付款简单、不会被封号的选择里，GitHub
+  Copilot 是性价比之王，Cursor 则其次。
+  - 而且 GitHub Copilot 还支持接入 OpenCode 使用，这一点比 Cursor 更强，打算等 Cursor 过期
+    就充这个了。
+
+### 2026-03-12
+
+- 给我的小拆 claw 接入了 qwen3-tts，用 mlx-audio 跑在我 M4Pro 电脑上，效果还挺不错。想接
+  qwen3-asr 但是 picoclaw 太垃了，不支持接受语音信息。
+- 也试了用 mlx-audio 跑 fish-s2-pro, 用了还没 merge 的 pr, 不知道是啥问题我生成出来的声音
+  很怪，先放弃了。
+
+### 2026-03-11
+
+- 打卡
+  - [x] 游泳卡 21th
+    - 跟别人一个泳道游，把别人拉爆了
 
 ### 2026-03-10
 
 - 打卡
   - [x] 游泳卡 20th
-- picoclaw 又跑了个 wd 的修改版，加了更长的 context window, 代码配置也有些重构，QQ Bot 插件重写了。
-- 前阵子拿 Qwen3.5-35B-A3B 4bits 量化版跑 moltis, 让它读我博客了解我，结果它把「於清樂」记成了「于清扬」，「洛天依」被它写到 memory 里就成了「游天依」。
+    - 教练下到我的泳道游，被他拉爆了
+- picoclaw 又跑了个 wd 的修改版，加了更长的 context window, 代码配置也有些重构，QQ Bot 插
+  件重写了。
+- 前阵子拿 Qwen3.5-35B-A3B 4bits 量化版跑 moltis, 让它读我博客了解我，结果它把「於清樂」记
+  成了「于清扬」，「洛天依」被它写到 memory 里就成了「游天依」。
   - 跟朋友聊到这个话题后，确认问题大概率是量化太过了导致的。4bits 还是太低了。
-- 根据 [inferencerlabs](https://huggingface.co/inferencerlabs/Qwen3.5-35B-A3B-MLX-6.5bit) README 的数据，6bits 量化版效果会好很多。
-  - 因此在条件允许的前提下, 6bits 是个比较甜点的位置, 最差也得 5bits. 4bits 从上述结论上还是差了 5bits 不少。
+- 根据 [inferencerlabs](https://huggingface.co/inferencerlabs/Qwen3.5-35B-A3B-MLX-6.5bit)
+  README 的数据，6bits 量化版效果会好很多。
+  - 因此在条件允许的前提下, 6bits 是个比较甜点的位置, 最差也得 5bits. 4bits 从上述结论上还
+    是差了 5bits 不少。
 
 ### 2026-03-09
 
-- 继续玩 xxclaw, 试用了 zeroclaw, picoclaw, 发现 zeroclaw 更新慢，最后选择了 picoclaw, 用着还行，但是上下文限制感觉有点严重。
+- 继续玩 xxclaw, 试用了 zeroclaw, picoclaw, 发现 zeroclaw 更新慢，最后选择了 picoclaw, 用
+  着还行，但是上下文限制感觉有点严重。
 
 ### 2026-03-08
 
