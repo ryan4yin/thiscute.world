@@ -59,6 +59,8 @@ Skills：
 - **核心优势**：
   - **零适配成本**：无需修改代码，现有工具（如 `terraform`, `gcloud`）通过文档即刻接入 AI
     Agent。
+  - **Tokens 开销低**：只用在 prompts 中包含每个 skill 的 description, 按需加载要用的
+    skill. tokens 开销比 mcp 低一个数量级。
   - **极度灵活**：理论上是 MCP 的执行力超集，能用 Shell 解决的都能转化为 Skill。
 - **局限**：
   - 稳定性依赖模型的推理能力，缺乏协议级的参数强校验
