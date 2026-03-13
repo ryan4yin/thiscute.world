@@ -30,6 +30,8 @@ comment:
 
 - 打卡
   - [x] 游泳卡 22th
+    - 蛙泳再次破了记录，1km 只花了 25mins，比去年底的成绩已经快了 10mins, 离年度目标
+      22mins 非常近了。
 - 看了一圈目前能用上 Claude/OpenAI 最强编程模型，而且付款简单、不会被封号的选择里，GitHub
   Copilot 是性价比之王，Cursor 则其次。
   - 而且 GitHub Copilot 还支持接入 OpenCode 使用，这一点比 Cursor 更强，打算等 Cursor 过期
