@@ -28,23 +28,29 @@ comment:
 
 ### 2026-03-22
 
-- 最近 AI 发展太快，有点 fomo.
-- 下单了一个月的 Minimax Coding Plan Starter，简单体验还不错。
-- 目前买过的套餐评价
-  - Cursor Pro($20/mo)
-    - Auto Model: 不限量，不太聪明，但也足以对付大部分 Infra 的 yaml/terrform 更新工作。
-    - 选模型: Claude/GPT 速度偏慢，聪明一些，但半天就能轻松用完每月 $20 的额度...
-  - Claude Pro Team Standard($25/mo): 
-    - 还没怎么用，TODO
-  - GPT Codex:
-    - 还在用免费版的 GPT5.3-codex, 感觉效果还不错，速度也可以
-  - **Minimax Coding Plan Starter** (CNY 30/mon):
-    - Minimax M2.7 目前简单使用体验很好，用来写文档感觉比 Kimi 2.5 跟 GLM 更强。
-  - 智谱 GLM Coding Plan Lite(CNY 49/mon):
-    - 体验很差，速度很慢，而且这个 Coding Plan 续费策略相当坑人。
-  - 阿里云 Coding Plan(CNY 200/mo):
-    - 买了个首月 39.9 的试了下，速度太慢了，而且还这么贵...
-- 综合来讲，国产里现在 Minimax M2.7 套餐性价比最高，效果也不错。国外的话 Codex 貌似便宜而且不封号，Claude 偏贵但是能力最强。
+- AI
+  - 最近 AI 发展太快，有点 fomo.
+  - 下单了一个月的 Minimax Coding Plan Starter，简单体验还不错。
+  - 目前买过的套餐评价
+    - Cursor Pro($20/mo)
+      - Auto Model: 不限量，不太聪明，但也足以对付大部分 Infra 的 yaml/terrform 更新工作。
+      - 选模型: Claude/GPT 速度偏慢，聪明一些，但半天就能轻松用完每月 $20 的额度...
+    - Claude Pro Team Standard($25/mo): 
+      - 还没怎么用，TODO
+    - GPT Codex:
+      - 还在用免费版的 GPT5.3-codex, 感觉效果还不错，速度也可以
+    - **Minimax Coding Plan Starter** (CNY 30/mon):
+      - Minimax M2.7 目前简单使用体验很好，用来写文档感觉比 Kimi 2.5 跟 GLM 更强。
+    - 智谱 GLM Coding Plan Lite(CNY 49/mon):
+      - 体验很差，速度很慢，而且这个 Coding Plan 续费策略相当坑人。
+    - 阿里云 Coding Plan(CNY 200/mo):
+      - 买了个首月 39.9 的试了下，速度太慢了，而且还这么贵...
+  - 综合来讲，国产里现在 Minimax M2.7 套餐性价比最高，效果也不错。国外的话 Codex 貌似便宜而且不封号，Claude 偏贵但是能力最强。
+- 安全
+  - 之前用 Claude 发现我本地的 GitHub CLI 权限很高，查了发现它用的 token, 但是几个 token 我在 developer settings 中根本找不到...
+  - 研究半天才发现 GitHub CLI 得在 <https://github.com/settings/applications> 里找，
+    在 <https://github.com/settings/apps> 跟 <https://github.com/settings/tokens> 都是没有的...
+  - 于是删掉了 GitHub CLI 的权限，同时排查了一遍我授权的其他所有 OAuth Apps, 把 VSCode / ModelScope / GitHub.dev / Gitee 这些权限比较高的 APPs 也一并删除了。
 - 以及在家里呆着还是比长沙舒服多了，环境也好。加上最近 AI 发展太快，有点 FOMO，也不太敢花钱了。
   感觉去杭州定居的打算还是先放一放，多存点钱可能更要紧些。
 - 担心乐乐的情况又找她嘘寒问暖，结果被嫌多管闲事，打电话也不接，也是时候让她自立了。
@@ -56,7 +62,7 @@ comment:
 - 我可能也是应该相个亲试试了，但一想到结婚恋爱的恐怖花销，以及怕碰到不好的人，又有点望而却步。
 
 
-### 2026-03-18
+### 2026-03-18 - 2026-03-19
 
 - +1 找公司申请了一个 Claude Team，我闲鱼花 2.8 通过了下手机号验证，但是怕风控，只敢放 macOS 上用固定代理 IP 跑，还没想好能用来干啥...
 
