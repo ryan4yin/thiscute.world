@@ -2,7 +2,7 @@
   description = "A Nix-flake-based Python development environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   };
@@ -25,7 +25,10 @@
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
-              alejandra.enable = true; # Nix linter
+              nixfmt-rfc-style = {
+                enable = true;
+                settings.width = 100;
+              };
               typos = {
                 enable = true; # Source code spell checker
                 settings = {
