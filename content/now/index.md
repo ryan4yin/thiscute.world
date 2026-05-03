@@ -41,6 +41,7 @@ toc:
 
 - RISC-V + 操作系统
 - RISC-V for AI Inference
+- 日语
 
 ## 三、今年的阅读进展
 
