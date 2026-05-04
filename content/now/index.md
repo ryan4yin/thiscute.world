@@ -39,6 +39,7 @@ toc:
 
 优先级相对低的：
 
+- PostgreSQL 深入学习
 - RISC-V + 操作系统
 - RISC-V for AI Inference
 - 日语
@@ -57,6 +58,8 @@ toc:
 
 待读或未读完：
 
+- 《Agentic Design Patterns》
+- [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/zh/)
 - 《科学革命的结构》
 - 《复杂》
 - 《深入理解 Linux 网络》
