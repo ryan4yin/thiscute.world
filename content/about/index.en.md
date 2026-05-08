@@ -21,10 +21,7 @@ comment:
 > are only available in [Chinese](https://thiscute.world/zh-cn/) or
 > [English](https://thiscute.world/en/). Please read them as needed.
 
-> 本站的文章可能
-> 以[中文](https://thiscute.world/zh-cn/)或[英文](https://thiscute.world/en/)两种语言书
-> 写，其中部分文章可能是双语，也有部分文章只有[中文](https://thiscute.world/zh-cn/)或
-> 者[英文](https://thiscute.world/en/)版本，请读者按需阅读。
+> 本站的文章可能以[中文](https://thiscute.world/zh-cn/)或[英文](https://thiscute.world/en/)两种语言书写，其中部分文章可能是双语，也有部分文章只有[中文](https://thiscute.world/zh-cn/)或者[英文](https://thiscute.world/en/)版本，请读者按需阅读。
 
 ## About Me
 
@@ -59,19 +56,11 @@ comment:
 - **Technologies of Interest**:
   - **Linux**: I'm an enthusiast for Linux, and I earn my livelihood through it. The
     distribution I like the most and have invested the most effort into is NixOS.
-  - **Neovim**: My primary text editor and my personal favorite. It provides me with a
-    smooth input experience akin to stenography input methods, making it hard for me to
-    put down.
-  - **Window Manager**: I use both i3 and hyprland as window managers. Similar to Neovim,
-    they allow me to perform most operations without leaving the keyboard, resulting in a
-    very fluid experience.
   - **Embedded**: Referring to embedded systems, I find the realm of hardware to be
     intriguing. In my free time, I've dabbled quite a bit and invested a fair amount of
     money in this field.
   - **Kubernetes**: One of the cornerstones of SRE (Site Reliability Engineering), a
     foundation of cloud-native technologies.
-  - **Istio**: Among the most mature service mesh products, and also a crucial part of my
-    professional toolkit.
 - **Experience**: **Site Reliability Engineer**
   - Maintain and optimize cloud computing platform and cloud networking, analyze and
     control cloud computing costs(AWS/GCP/...), to support the fast-growing business
