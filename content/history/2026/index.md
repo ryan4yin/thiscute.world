@@ -27,13 +27,16 @@ comment:
 ### 2026-05-10
 
 - 终于休息一天
-- 跟休学的初三小伙一起去游了个泳，气温 25 度，水温可能只有 12 度，反正挺冷的。
-- 想试试转型 AI Infra, 晚上看了点 GPU 编程的资料
+- 跟休学的初三小伙（游泳认识的）一起去游了个泳，气温 25 度，水温可能只有 12 度，反正挺冷的。
+- 最近对本地跑 AI 模型的热情消退的差不多了。但又对转型 AI
+  Infra 产生了兴趣，晚上看了点 GPU 编程的资料
   - <https://cvw.cac.cornell.edu/gpu-architecture>
+  - <https://cvw.cac.cornell.edu/cuda-intro>
+  - <https://docs.nvidia.com/cuda/cutile-python/quickstart.html>
+- 很有意思的是 TileLang，以及 Nvidia 去年底推出的竞品 cuTile，确实用起来简单，但文档实在都太简陋，可参考的资料很少。还是得先学学 CUDA.
 - 以及搜到的一些其他下一步可能看的资料
   - <https://github.com/AdepojuJeremy/CUDA-120-DAYS--CHALLENGE>
   - <https://cvw.cac.cornell.edu/parallel>
-  - <https://cvw.cac.cornell.edu/cuda-intro>
 - AI 相关的资料
   - [ml-engineering](https://github.com/stas00/ml-engineering)
   - 训练流程与原理学习：
@@ -41,12 +44,22 @@ comment:
       与 [动手深度学习](https://zh.d2l.ai/chapter_preface/index.html)
     - [minimind](https://github.com/jingyaogong/minimind)
 
+### 2026-05-03 - 2026-05-06
+
+- 跟公司洽谈后报名了 KubeCon China 2026,
+  9 月在上海举行，公司给报销往返路费、门票以及一天的酒店费用。
+- NixCon
+  2026 会于 9 月底在波兰举行，于是计划将两个会议串起来，顺便请几天假去欧洲玩玩，让 Kimi 给我做了个初步计划。
+- 本地拿 4090 跑通了这个项目
+  <https://github.com/jingyaogong/minimind>, 但是跑完并看了一遍代码，还是感觉一知半解...
+
 ### 2026-05-03
 
 - B 站刷到了
   [从985到流浪汉，从顶尖人才到离经叛道，他却活成了所有人憧憬的样子](https://www.bilibili.com/video/BV1u2EqzHErn/)，这老哥跟我同龄，但活得实在太酷了！很能给人启发。
 - 给园园姐推荐的对 AI 很感兴趣的学弟分享了这个视频，然后以此为契机聊了很多意料之外的话题：宗教、哲学、书籍、GEB，他推荐我看略萨的书，我推荐他看山田正纪的《艾达》，他还决定寄几本他推荐的书给我看。
 - 今天新的感悟：其实以前看很多外国作品，但都觉得离自己太遥远。现在可能因为经济上宽裕了，去日韩旅游了两趟，以及又刚看了李飞飞的自传帮我搭建起了一个中西之间的桥梁，突然觉得「外国」这个概念有点触手可及，读起来感觉又不一样了。
+- 对 AI Infra 产生了一些兴趣，又把 d2l.ai 翻了出来，还翻了下 tilelang 的文档
 
 ### 2026-04-29 - 2026-05-02
 
