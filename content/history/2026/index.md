@@ -24,6 +24,23 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2026-05-10
+
+- 终于休息一天
+- 跟休学的初三小伙一起去游了个泳，气温 25 度，水温可能只有 12 度，反正挺冷的。
+- 想试试转型 AI Infra, 晚上看了点 GPU 编程的资料
+  - <https://cvw.cac.cornell.edu/gpu-architecture>
+- 以及搜到的一些其他下一步可能看的资料
+  - <https://github.com/AdepojuJeremy/CUDA-120-DAYS--CHALLENGE>
+  - <https://cvw.cac.cornell.edu/parallel>
+  - <https://cvw.cac.cornell.edu/cuda-intro>
+- AI 相关的资料
+  - [ml-engineering](https://github.com/stas00/ml-engineering)
+  - 训练流程与原理学习：
+    - [Hands-on Morden RL](https://walkinglabs.github.io/hands-on-modern-rl/preface/intro)
+      与 [动手深度学习](https://zh.d2l.ai/chapter_preface/index.html)
+    - [minimind](https://github.com/jingyaogong/minimind)
+
 ### 2026-05-03
 
 - B 站刷到了

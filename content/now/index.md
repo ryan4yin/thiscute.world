@@ -28,14 +28,8 @@ toc:
 
 - Linux 网络、进程与内存、BPF
 - AI Infra
-  - 阅读 [ml-engineering](https://github.com/stas00/ml-engineering)
-  - 训练流程与原理学习：
-    - 阅读
-      [Hands-on Morden RL](https://walkinglabs.github.io/hands-on-modern-rl/preface/intro)
-      与 [动手深度学习](https://zh.d2l.ai/chapter_preface/index.html)
-    - 跑通 [minimind](https://github.com/jingyaogong/minimind)
   - 推理解剖：vLLM/SGLang/llama.cpp 学习
-  - 底层算子学习：TileLang 学习写 Kernel, 了解其原理
+  - 底层算子学习：CUDA/TileLang 学习写 Kernel, 了解其原理
 
 优先级相对低的：
 
