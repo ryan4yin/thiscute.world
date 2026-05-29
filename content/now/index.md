@@ -35,7 +35,6 @@ toc:
 
 - PostgreSQL 深入学习
 - RISC-V + 操作系统
-- RISC-V for AI Inference
 - 日语
 
 ## 三、今年的阅读进展
@@ -48,21 +47,39 @@ toc:
 
 正在读：
 
+- 《艾达》山田正纪
 - 《枪炮、病菌与钢铁》
 
 待读或未读完：
 
-- 《Agentic Design Patterns》
-- [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/zh/)
-- 《科学革命的结构》
-- 《复杂》
-- 《深入理解 Linux 网络》
-- 《深入理解 Linux 进程与内存》
-- 《BPF Performance Tools（英文版）》 - 35/740
-- 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
-- The Great Gatsby - 10/41
-- 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
-- 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
+- AI
+  - 《Agentic Design Patterns》
+  - [Learn Harness Engineering](https://walkinglabs.github.io/learn-harness-engineering/zh/)
+- 计算机科学
+  - 《深入理解 Linux 网络》
+  - 《深入理解 Linux 进程与内存》
+  - 《BPF Performance Tools（英文版）》 - 35/740
+- 泛科学
+  - 《科学革命的结构》
+  - 《复杂》
+  - 《医生，你在想什么》
+  - 《寄生虫星球》
+  - 《打开一颗心 - 一位心外科医生手术台前的生死故事》
+- 心理学
+  - 《界限 - 通往个人自由的实践指南》
+  - 《我们何以不同 - 人格心理学 40 讲》: 心理学科普
+  - 《这才是心理学 - 看穿伪科学的批判性思维 第 11 版》
+  - 《心理学与生活》
+  - 《不确定世界的理性选择》
+  - 《了不起的我 - 自我发展的心理学》
+- 文学或纪实
+  - 《银河系搭车客指南》：宇宙的终极答案是 42？
+  - 《Educated - A Memoir（中文名：你当像鸟飞往你的山）》
+  - The Great Gatsby - 10/41
+  - 《西线无战事》
+- 中国历史政治经济文化等
+  - 《晚期帝制中国的科举文化》
+  - 《置身事内 - 中国政府与经济发展》
 
 ---
 
