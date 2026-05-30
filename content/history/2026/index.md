@@ -48,6 +48,7 @@ comment:
     memory（联想记忆），能够reason（推理）、能够plan（规划），能够做counterfactual（对未发生可能性的推演）或者causal的inference（因果推理）。最后一点是，它得足够的controllable
     and safe（可控与安全）。
   - 从宇宙或者造物主的视角去看，从零造出一只松鼠的智能，要比从零造出一个会写 code 能上月球火星的智能要伟大的多。从这个角度看，现在的 AI 要比松鼠简单太多了。
+  - 电视剧推荐：POI、万神殿、同乐者、no other choice, total pixel space.
 
 ### 2026-05-24 - 2026-05-28
 
