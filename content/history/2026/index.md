@@ -82,6 +82,8 @@ AI 的关键优势：
 
 - 基于特定目标找到局部最优结果并完成任务的能力 - 最强实习生、最强执行者、最强知识库
 
+{{<figure src="/images/now-2026/photo_2_2026-05-30_15-11-32.webp" title="家门口" width="80%">}}
+
 ### 2026-05-12
 
 - 人和人之间的差异实在太大，指望互相理解往往徒劳。
@@ -170,6 +172,7 @@ AI 的关键优势：
 {{<figure src="/images/now-2026/photo_31_2026-05-30_14-11-06.webp" title="桂林象鼻山" width="80%">}}
 {{<figure src="/images/now-2026/photo_32_2026-05-30_14-11-06.webp" title="桂林象鼻山" width="80%">}}
 {{<figure src="/images/now-2026/photo_33_2026-05-30_14-11-06.webp" title="桂林山水" width="80%">}}
+{{<figure src="/images/now-2026/photo_1_2026-05-30_15-11-32.webp" title="桂林 日月双塔" width="80%">}}
 
 ### 2026-04-24
 
@@ -227,8 +230,10 @@ AI 的关键优势：
 
 {{<figure src="/images/now-2026/photo_17_2026-05-30_14-11-06.webp" title="到达西安了" width="80%">}}
 {{<figure src="/images/now-2026/photo_18_2026-05-30_14-11-06.webp" title="西安 大唐不夜城" width="80%">}}
+{{<figure src="/images/now-2026/photo_3_2026-05-30_15-11-32.webp" title="西安钟楼 夜景" width="80%">}}
 {{<figure src="/images/now-2026/photo_19_2026-05-30_14-11-06.webp" title="西安 好大一只洛天依" width="80%">}}
 {{<figure src="/images/now-2026/photo_20_2026-05-30_14-11-06.webp" title="西安 跟书书一起逛城墙" width="80%">}}
+{{<figure src="/images/now-2026/photo_4_2026-05-30_15-11-32.webp" title="跟书书吃了顿西安菜" width="80%">}}
 
 ### 2026-04-13
 
@@ -360,6 +365,8 @@ AI 的关键优势：
 - 改了点 NixOS 配置后测试发现仍然有同样的问题，怀疑是 SSD 的锅所以走了京东售后。
 
 {{<figure src="/images/now-2026/photo_6_2026-05-30_14-11-06.webp" title="寄了一根 SSD 1" width="80%">}}
+
+{{<figure src="/images/now-2026/photo_5_2026-05-30_15-11-32.webp" title="我的办公桌" width="80%">}}
 
 ### 2026-03-15
 
