@@ -53,6 +53,8 @@ comment:
 - 这两天工作不在状态，有点精神内耗没动力干活，又嗑了两三天专注达跟安非他酮。效果还行，不过也导致失眠，以及经常完全感觉不到饿导致饮食规律也被打乱了。
 - 今天是疯狂工作的一天
 
+{{<figure src="/images/now-2026/photo_35_2026-05-30_14-11-06.webp" title="家门口育秧苗了" width="80%">}}
+
 ### 2026-05-18
 
 对 AI 缺陷的一点观察：
@@ -134,6 +136,8 @@ AI 的关键优势：
   AI，一直紧追着最新 AI 模型的发布，买了好多套餐，但实际上买完却一直放着吃灰。突然意识到我的这些 AI 焦虑很可能无法在计算机跟网络世界里找到答案，于是又燃起了看书的兴趣。扫了一圈书架，《我看见的世界——李飞飞自传》映入眼帘。去年买的，但是过去一年了甚至还没拆封。一翻开兴趣就越来越浓，工作之余花了三天时间看完了它。
 - 李飞飞的《我看见的世界》充满诚意，它既是李飞飞作为一个贫困移民一步步走上科学舞台并摘下桂冠的自传，也通俗易懂地讲述了 AI 在过去 30 年的发展史。
 
+{{<figure src="/images/now-2026/photo_34_2026-05-30_14-11-06.webp" title="我看见的世界 - 李飞飞" width="50%">}}
+
 ### 2026-04-27
 
 - 今天给 BIOS 更新到了最新版，默认主频来到了 4800Hz, 然后就一直各种问题，折腾到晚上才完全解决。
@@ -159,6 +163,14 @@ AI 的关键优势：
 
 - 从兰州飞桂林，逛了桂林象鼻山，看了日月塔，吃了桂林米粉。
 
+{{<figure src="/images/now-2026/photo_28_2026-05-30_14-11-06.webp" title="离开兰州了" width="80%">}}
+
+{{<figure src="/images/now-2026/photo_29_2026-05-30_14-11-06.webp" title="桂林山水" width="80%">}}
+{{<figure src="/images/now-2026/photo_30_2026-05-30_14-11-06.webp" title="桂林象鼻山" width="80%">}}
+{{<figure src="/images/now-2026/photo_31_2026-05-30_14-11-06.webp" title="桂林象鼻山" width="80%">}}
+{{<figure src="/images/now-2026/photo_32_2026-05-30_14-11-06.webp" title="桂林象鼻山" width="80%">}}
+{{<figure src="/images/now-2026/photo_33_2026-05-30_14-11-06.webp" title="桂林山水" width="80%">}}
+
 ### 2026-04-24
 
 - Staff
@@ -168,6 +180,11 @@ AI 的关键优势：
 
 - 近两周工作状态都不太好，典型的 ADHD 症状。今天干了不少活，状态好了挺多。
 - 晚上到中山桥玩了玩，原来白塔山公园就在这个桥旁边，晚上挺好看，也简单逛了逛公园。沿着黄河散了散步，然后打道回府。
+
+{{<figure src="/images/now-2026/photo_24_2026-05-30_14-11-06.webp" title="到兰州了" width="80%">}}
+{{<figure src="/images/now-2026/photo_25_2026-05-30_14-11-06.webp" title="西安去兰州的路上 - 好荒凉" width="80%">}}
+{{<figure src="/images/now-2026/photo_26_2026-05-30_14-11-06.webp" title="白塔寺？" width="80%">}}
+{{<figure src="/images/now-2026/photo_27_2026-05-30_14-11-06.webp" title="兰州中山桥" width="80%">}}
 
 ### 2026-04-19
 
@@ -180,6 +197,10 @@ AI 的关键优势：
   - 体验不佳的主要两个地方
     - 一是西安市区到帝陵没有公共交通，拿高德地图导航结果上的车也是旅游公司的，回程买票找队伍也麻烦挺多。
     - 二是人太多了，嘈杂。
+
+{{<figure src="/images/now-2026/photo_21_2026-05-30_14-11-06.webp" title="西安 兵马俑 - 往返市区好麻烦" width="80%">}}
+{{<figure src="/images/now-2026/photo_22_2026-05-30_14-11-06.webp" title="西安 兵马俑" width="80%">}}
+{{<figure src="/images/now-2026/photo_23_2026-05-30_14-11-06.webp" title="西安 兵马俑" width="80%">}}
 
 ### 2026-04-17
 
@@ -204,15 +225,28 @@ AI 的关键优势：
   - 职场领域的话，一句话总结就是，你能拿多少工资，主要看你的综合能力。技术能力只是一部分，还有的人「钻营」的能力很强也能获得远高于他技术能力的工资，还有技术菜得不行的但是有领导罩着，照样能在公司天天混日子。
 - 在西安钟楼碰面，边聊边逛，逛了个二次元商城，中间好大一只洛天依塑像，整整两层楼高，得七八米了。吃了陕西当地菜，味道还不错。吃完饭后一起从永宁门登上城墙逛了半个小时，然后踩单车到大差门逛了逛本地人吃的夜市，结束了这一天。
 
+{{<figure src="/images/now-2026/photo_17_2026-05-30_14-11-06.webp" title="到达西安了" width="80%">}}
+{{<figure src="/images/now-2026/photo_18_2026-05-30_14-11-06.webp" title="西安 大唐不夜城" width="80%">}}
+{{<figure src="/images/now-2026/photo_19_2026-05-30_14-11-06.webp" title="西安 好大一只洛天依" width="80%">}}
+{{<figure src="/images/now-2026/photo_20_2026-05-30_14-11-06.webp" title="西安 跟书书一起逛城墙" width="80%">}}
+
 ### 2026-04-13
 
 - 参加了 @星辰 的婚礼，发现他是个隐藏的矿二代，婚礼相当豪华，玩得开心了，长了见识。衷心祝愿他们两口子~
 - 下午直接赶路到了西安
 
+{{<figure src="/images/now-2026/photo_15_2026-05-30_14-11-06.webp" title="山西晋城 晨哥婚礼" width="80%">}}
+{{<figure src="/images/now-2026/photo_16_2026-05-30_14-11-06.webp" title="山西晋城 晨哥婚礼" width="80%">}}
+
 ### 2026-04-11 - 2024-04-12
 
 - 跟 @nobody
   @aspirin 赶到山西晋城参加 @星辰 4/13 的婚礼，下榻他给我们订的酒店，4/12 又给我们买了当地娱乐场所「司徒小镇」的门票，我们到玩了一天，它的最大卖点就是晚上的超大规模「打铁花」表演，第一次看打铁花，确实非常震撼！
+
+{{<figure src="/images/now-2026/photo_11_2026-05-30_14-11-06.webp" title="山西晋城 晨哥婚礼" width="80%">}}
+{{<figure src="/images/now-2026/photo_12_2026-05-30_14-11-06.webp" title="山西晋城 司徒小镇 盛大的打铁花表演" width="80%">}}
+{{<figure src="/images/now-2026/photo_13_2026-05-30_14-11-06.webp" title="山西晋城 司徒小镇 盛大的打铁花表演" width="80%">}}
+{{<figure src="/images/now-2026/photo_14_2026-05-30_14-11-06.webp" title="山西晋城 司徒小镇 散场也搞得很有意思" width="80%">}}
 
 ### 2026-04-07
 
@@ -224,6 +258,10 @@ AI 的关键优势：
 - 小黄瓜、Aspirin、羊咩羊来长沙玩，订了个民宿，我陪玩儿
 - 逛了坡子街、杜甫江阁、长沙博物馆，最后一天逛了岳麓山跟橘子洲，吃了很多本地特色美食。
 - 最后一天连逛俩地方，被羊咩羊拉爆了。
+
+{{<figure src="/images/now-2026/photo_8_2026-05-30_14-11-06.webp" title="长沙文和友文化街" width="80%">}}
+{{<figure src="/images/now-2026/photo_9_2026-05-30_14-11-06.webp" title="长沙坡子街 - 派出所很有名" width="80%">}}
+{{<figure src="/images/now-2026/photo_10_2026-05-30_14-11-06.webp" title="橘子洲头" width="80%">}}
 
 ### 2026-03-31
 
@@ -320,6 +358,8 @@ AI 的关键优势：
   send 数据的时候遇到 nvme
   timeout, 换了 rsync 也仍然存在同样的问题，删了好多游戏跟不重要的数据，然后一点点 rsync 才把数据迁移完成。
 - 改了点 NixOS 配置后测试发现仍然有同样的问题，怀疑是 SSD 的锅所以走了京东售后。
+
+{{<figure src="/images/now-2026/photo_6_2026-05-30_14-11-06.webp" title="寄了一根 SSD 1" width="80%">}}
 
 ### 2026-03-15
 
@@ -477,6 +517,8 @@ Skills：
 
 - 在家被我爸催婚，出去拜年被各路亲戚催婚，在楼上躺着都有人在楼下找我妈打听我的消息，实在受不了了，直接跑路到城里住，买了明天的汽车票回长沙。
 
+{{<figure src="/images/now-2026/photo_5_2026-05-30_14-11-06.webp" title="老家后山" width="80%">}}
+
 ### 2026-02-19
 
 - 这两天去哪拜年，过着哪家亲戚过来拜年，老一辈的基本都要催婚，跟 TM 唐僧念经一样没完没了的输出他们的婚姻价值观人生观，不胜其烦。本来上半年回家办公我给我爸说了狠话，他已经不提这事了，一到年底跟这些亲戚一聊他可能又觉得有机会了，又是念叨个没完。今天晚上直接没给他们面子中途离场了，也跟我爸说了明天他自己一个人去拜年，我不去。
@@ -499,6 +541,10 @@ Skills：
 ### 2026-02-15
 
 - 回老家过年，乐乐不回家，自己一个人在长沙跨年
+
+### 2026-02-13
+
+{{<figure src="/images/now-2026/photo_4_2026-05-30_14-11-06.webp" title="长沙租房 - 窗户被鸟筑巢了" width="80%">}}
 
 ### 2026-02-10
 
@@ -547,6 +593,34 @@ Skills：
     - 总消费：CNY 11582
     - 韩国消费（不包含机票）：CNY 2566
 
+{{<figure src="/images/now-2026/photo_20_2026-05-30_13-52-12.webp" title="抵达济州岛" width="80%">}}
+{{<figure src="/images/now-2026/photo_21_2026-05-30_13-52-12.webp" title="吃正宗的紫菜包饭" width="80%">}}
+{{<figure src="/images/now-2026/photo_22_2026-05-30_13-52-12.webp" title="韩国也有小黄车哈哈" width="80%">}}
+{{<figure src="/images/now-2026/photo_23_2026-05-30_13-52-12.webp" title="济州海景" width="80%">}}
+{{<figure src="/images/now-2026/photo_24_2026-05-30_13-52-12.webp" title="济州岛到处都是橘子礼品店" width="80%">}}
+{{<figure src="/images/now-2026/photo_25_2026-05-30_13-52-12.webp" title="" width="80%">}}
+{{<figure src="/images/now-2026/photo_26_2026-05-30_13-52-12.webp" title="在海边吃醒酒汤" width="80%">}}
+{{<figure src="/images/now-2026/photo_27_2026-05-30_13-52-12.webp" title="" width="80%">}}
+{{<figure src="/images/now-2026/photo_28_2026-05-30_13-52-12.webp" title="参鸡汤" width="80%">}}
+{{<figure src="/images/now-2026/photo_29_2026-05-30_13-52-12.webp" title="" width="80%">}}
+{{<figure src="/images/now-2026/photo_30_2026-05-30_13-52-12.webp" title="门口是两株人参吗？" width="80%">}}
+{{<figure src="/images/now-2026/photo_31_2026-05-30_13-52-12.webp" title="韩国的警察局" width="80%">}}
+{{<figure src="/images/now-2026/photo_32_2026-05-30_13-52-12.webp" title="AirBnb 民宿窗外景色很好啊" width="80%">}}
+{{<figure src="/images/now-2026/photo_33_2026-05-30_13-52-12.webp" title="鸡妈妈鸡宝宝" width="80%">}}
+{{<figure src="/images/now-2026/photo_34_2026-05-30_13-52-12.webp" title="好大一只 Hello Kitty" width="80%">}}
+{{<figure src="/images/now-2026/photo_35_2026-05-30_13-52-12.webp" title="乐乐" width="80%">}}
+{{<figure src="/images/now-2026/photo_36_2026-05-30_13-52-12.webp" title="离开济州岛了，地勤人员向我们招手再见" width="80%">}}
+
+{{<figure src="/images/now-2026/photo_37_2026-05-30_13-52-12.webp" title="洛天依演唱会 - 场外应援区" width="80%">}}
+{{<figure src="/images/now-2026/photo_38_2026-05-30_13-52-12.webp" title="洛天依演唱会 - 这个做得好精致" width="80%">}}
+{{<figure src="/images/now-2026/photo_39_2026-05-30_13-52-12.webp" title="进场了" width="80%">}}
+{{<figure src="/images/now-2026/photo_40_2026-05-30_13-52-12.webp" title="开始了！" width="80%">}}
+
+{{<figure src="/images/now-2026/photo_1_2026-05-30_14-11-06.webp" title="上山岗" width="80%">}}
+{{<figure src="/images/now-2026/photo_2_2026-05-30_14-11-06.webp" title="马年再见！" width="80%">}}
+
+{{<figure src="/images/now-2026/photo_3_2026-05-30_14-11-06.webp" title="行程圆满，回长沙了" width="80%">}}
+
 ### 2026-01-24 —— 2026-01-30
 
 - 1/24 回老家
@@ -569,12 +643,17 @@ Skills：
 ### 2026-01-18
 
 - 早上飞回了长沙
+- 拿到了小黄瓜寄来的跨年贺卡，因为出去玩去了，一直寄存在小区门卫室。
 - 乐乐发现 2/7 在无锡有个洛天依「无限共鸣 流光协奏」全息演唱会，下单了两张 980 看台票，打算从韩国济州岛回来后就去看这个。
+
+{{<figure src="/images/now-2026/photo_19_2026-05-30_13-52-12.webp" title="收到了小黄瓜寄来的跨年贺卡" width="80%">}}
 
 ### 2026-01-17
 
 - 下午到游泳，人更少了游得更爽，仍然是游了 1500 米。但是到后面右脚踝明显有点不对劲的感觉，这也算是老毛病了，以前徒步登山也是右脚踝会疼，可能是最近连续游 3 天，有点过度运动了导致老毛病复发。
-- 晚上跟另一位朋友在南京东路约饭，吃了个傣妹火锅，人均 64，性价比爆棚。吃完又一起逛了 2 小时百联 ZX，买了点天依周边跟推子（爱）大鼠标垫，然后看了看上海夜滩就散伙了。
+- 晚上跟暴躁哥在南京东路约饭，吃了个傣妹火锅，人均 64，性价比爆棚。吃完又一起逛了 2 小时百联 ZX，买了点天依周边跟推子（爱）大鼠标垫，然后看了看上海夜滩就散伙了。
+
+{{<figure src="/images/now-2026/photo_18_2026-05-30_13-52-12.webp" title="傣妹火锅" width="80%">}}
 
 ### 2026-01-16
 
@@ -582,6 +661,9 @@ Skills：
 - 跟 @chever-john 约了晚上在上海游泳馆深水区游泳，去之前他很肯定的说自己游过 2 米的深水区，我就让他在池边先游一游试试。结果 chever 还是高估了自己体力跟技术，深水区游了 100 米，上岸后差点低血糖晕倒，还好门口的小姐姐直接掏出了备用的葡萄糖。我们后面复盘，他才说自己上次游深水区是六七年前高中毕业的时候 2333
   - 这事对我也算个提醒，以后如果带没下过深水池的朋友游泳，还是得先在浅水池试试情况，一口气 50 米都游不完的话还是先练练再说。
   - 不过有一说一上海游泳馆安全措施还是很到位的，一是有备用的葡萄糖，二是配备了 4 个瞭望台 + 池边 2 个救生员巡逻，chever 说在池边趴着休息的时候巡逻的救生员就一直问他要不要上岸休息下，他一开始还奇怪，后面游不动上岸了才发现就他一个人这么休息 hhh 要是来个不客气的救生员，可能就直接让他回去练两年再来下深水池了。
+
+{{<figure src="/images/now-2026/photo_16_2026-05-30_13-52-12.webp" title="上海游泳馆 贵但是深水区游着非常爽！" width="80%">}}
+{{<figure src="/images/now-2026/photo_17_2026-05-30_13-52-12.webp" title="吃了正宗的上海面（不合我口味）" width="80%">}}
 
 ### 2026-01-15
 
@@ -597,6 +679,9 @@ Skills：
 
 - 跟 @AkiraXie 用它家的大电视重温了下《葬送的芙莉莲 第一季》
 
+{{<figure src="/images/now-2026/photo_14_2026-05-30_13-52-12.webp" title="药哥好多 MyGO 的碟" width="80%">}}
+{{<figure src="/images/now-2026/photo_15_2026-05-30_13-52-12.webp" title="看芙莉莲" width="80%">}}
+
 ### 2026-01-12
 
 - 继续在 @AkiraXie 的大 House 里上班，折腾了点 juicefs
@@ -610,6 +695,10 @@ Skills：
 - 打卡
   - [x] 英语单词 7th
 
+{{<figure src="/images/now-2026/photo_11_2026-05-30_13-52-12.webp" title="跟 Aspirin Mix 一起爬径山 1" width="80%">}}
+{{<figure src="/images/now-2026/photo_12_2026-05-30_13-52-12.webp" title="径山寺" width="80%">}}
+{{<figure src="/images/now-2026/photo_13_2026-05-30_13-52-12.webp" title="出寺庙时还派送春联" width="80%">}}
+
 ### 2026-01-10
 
 - 坐一天火车软卧到杭州、跟 @AkiraXie 以及 @wdvxdr1123 一起吃了顿羊肉烧烤
@@ -618,6 +707,13 @@ Skills：
   - [x] 英语单词 6th
   - [x] 日语 6th - 记假名
   - [x] 韩语 2nd - 用 claude-code 写了下韩语入门文档 - 音节篇
+
+{{<figure src="/images/now-2026/photo_8_2026-05-30_13-52-12.webp" title="砀山-杭州 绿皮火车上有七猫小说的广告" width="80%">}}
+
+{{<figure src="/images/now-2026/photo_7_2026-05-30_13-52-12.webp" title="杭州 - 跟 Aspirin Mix 一起撸串" width="80%">}}
+
+{{<figure src="/images/now-2026/photo_9_2026-05-30_13-52-12.webp" title="药哥的 MyGo 乐队" width="80%">}}
+{{<figure src="/images/now-2026/photo_10_2026-05-30_13-52-12.webp" title="药哥冰箱上也是 MyGo" width="80%">}}
 
 ### 2026-01-09
 
@@ -640,6 +736,11 @@ Skills：
 
 - 参加同学婚礼，玩得挺开心
 
+{{<figure src="/images/now-2026/photo_3_2026-05-30_13-52-12.webp" title="达叔婚礼现场" width="80%">}}
+{{<figure src="/images/now-2026/photo_4_2026-05-30_13-52-12.webp" title="砀山县 梨王阁" width="80%">}}
+{{<figure src="/images/now-2026/photo_5_2026-05-30_13-52-12.webp" title="砀山古城" width="80%">}}
+{{<figure src="/images/now-2026/photo_6_2026-05-30_13-52-12.webp" title="砀山古城" width="80%">}}
+
 ### 2026-01-06
 
 - 打卡
@@ -657,6 +758,9 @@ Skills：
 - 英语日语都没来得及打卡
 - 乘高铁到安徽宿州砀山县来了，主要是为了参加 1/7 室友 H 婚礼，顺便出来玩玩。
 - 晚上在酒店给我 NixOS 整上了 noctalia-shell, 把一堆旧的 swaylock/anyrun/waybar/mako/gammastep/wlogout 跟自己写的 wallpapaer-switcher 全都删掉了，感觉清爽多了。
+
+{{<figure src="/images/now-2026/photo_1_2026-05-30_13-52-12.webp" title="砀山县 狗肉店" width="80%">}}
+{{<figure src="/images/now-2026/photo_2_2026-05-30_13-52-12.webp" title="砀山县 随处可见的电动三轮车" width="80%">}}
 
 ### 2026-01-02
 
@@ -683,80 +787,3 @@ Skills：
     - 最重要的还是驾照，对旅游上班是极大的加成！考虑到考完驾照还有一年实习期，今年上半年必须把驾照拿下。
 
 {{<figure src="/images/now-2026/swimming-record_2026-01-01.jpg" title="千米蛙泳新记录" width="50%">}}
-
-{{<figure src="/images/now-2026/photo_1_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_2_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_3_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_4_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_5_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_6_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_7_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_8_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_9_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_10_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_11_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_12_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_13_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_14_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_15_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_16_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_17_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_18_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_19_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_20_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_21_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_22_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_23_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_24_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_25_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_26_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_27_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_28_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_29_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_30_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_31_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_32_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_33_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_34_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_35_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_36_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_37_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_38_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_39_2026-05-30_13-52-12.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_40_2026-05-30_13-52-12.webp" title="" width="80%">}}
-
-{{<figure src="/images/now-2026/photo_1_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_2_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_3_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_4_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_5_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_6_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_7_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_8_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_9_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_10_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_11_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_12_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_13_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_14_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_15_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_16_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_17_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_18_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_19_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_20_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_21_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_22_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_23_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_24_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_25_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_26_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_27_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_28_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_29_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_30_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_31_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_32_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_33_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_34_2026-05-30_14-11-06.webp" title="" width="80%">}}
-{{<figure src="/images/now-2026/photo_35_2026-05-30_14-11-06.webp" title="" width="80%">}}
