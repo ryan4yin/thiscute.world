@@ -361,7 +361,7 @@ tail -f /var/log/secure
 # 四、日志防篡改验证
 sudo journalctl --setup-keys | sudo tee /etc/journal-seal-key >/dev/null
 sudo chmod 600 /etc/journal-seal-key
-sudo journalctl --verify --verify-key=$(cat /etc/journal-seal-key)
+sudo journalctl --verify --verify-key="$(sudo cat /etc/journal-seal-key)"
 ```
 
 ### 2.2 内存管理：systemd-oomd
