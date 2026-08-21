@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.161.1">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2026-08-14T03:51:50+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">我看见的世界</title><link href="https://thiscute.world/posts/the-worlds-i-see/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://thiscute.world/posts/the-worlds-i-see/</id><published>2026-05-01T20:33:30+08:00</published><updated>2026-05-30T15:22:30+08:00</updated><summary type="html">&lt;h2 id="ai-与纺织女工" class="headerLink"&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.161.1">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2026-08-21T05:01:30+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">我看见的世界</title><link href="https://thiscute.world/posts/the-worlds-i-see/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://thiscute.world/posts/the-worlds-i-see/</id><published>2026-05-01T20:33:30+08:00</published><updated>2026-05-30T15:22:30+08:00</updated><summary type="html">&lt;h2 id="ai-与纺织女工" class="headerLink"&gt;
 &lt;a href="#ai-%e4%b8%8e%e7%ba%ba%e7%bb%87%e5%a5%b3%e5%b7%a5" class="header-mark"&gt;&lt;/a&gt;AI 与纺织女工&lt;/h2&gt;&lt;p&gt;2026 年 2 月 16 日，除夕夜。&lt;/p&gt;
 &lt;p&gt;0 点 11 分，窗外鞭炮声还没停，我在本地跑起了 Qwen3.5-397B-A17B 的 2bits 量化版，尝试发了一张经典的 NixOS 天线宝宝 meme 图给它分析，它分析地相当到位！我激动万分，跑去跟很多朋友分享，「也是在本地用上多模态 LLM 了」。&lt;/p&gt;</summary><content type="html"><![CDATA[<h2 id="ai-与纺织女工" class="headerLink">
     <a href="#ai-%e4%b8%8e%e7%ba%ba%e7%bb%87%e5%a5%b3%e5%b7%a5" class="header-mark"></a>AI 与纺织女工</h2><p>2026 年 2 月 16 日，除夕夜。</p>
@@ -1470,10 +1470,10 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
       tw:overflow-y-hidden
       tw:overflow-x-auto
       tw:scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 安全强制关机</span>
+      "><span class="line"><span class="cl"><span class="c1"># 强制关机（会跳过部分正常清理流程，可能导致数据丢失）</span>
 </span></span><span class="line"><span class="cl">systemctl poweroff -f
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 紧急关机（立即执行）</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 更强制的紧急关机（仅在极端情况下使用）</span>
 </span></span><span class="line"><span class="cl">systemctl poweroff -ff
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 内核强制重启</span>
@@ -1483,10 +1483,10 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> o &gt; /proc/sysrq-trigger</span></span></code></pre>
 </div>
 <p>强制关机方法：</p>
-<p><code>systemctl poweroff -f</code> 强制关机，跳过某些检查和服务停止。强制终止所有进程，直接进入关机流程，可能导致数据丢失，应谨慎使用，适用于系统响应缓慢但仍有基本功能时。</p>
-<p><code>systemctl poweroff -ff</code> 紧急关机，立即执行，不等待任何操作完成。立即终止所有进程，强制关机，高数据丢失风险，仅在紧急情况下使用，适用于系统完全无响应，需要立即关机。</p>
+<p><code>systemctl poweroff -f</code> 会跳过部分 systemd 的正常关机流程。不要把它理解为可靠地完成所有进程终止和资源清理；它可能导致数据丢失，应谨慎使用。</p>
+<p><code>systemctl poweroff -ff</code> 会进一步绕过 systemd 的关机流程。它具有很高的数据损坏风险，仅在常规关机和单次 <code>-f</code> 都无法使用时考虑。</p>
 <p><code>echo b &gt; /proc/sysrq-trigger</code> 内核级别的强制重启。直接调用内核重启功能，绕过用户空间，即使系统完全无响应也能执行，适用于系统完全卡死，无法响应用户命令。</p>
-<p><code>echo o &gt; /proc/sysrq-trigger</code> 内核级别的强制关机。直接调用内核关机功能，立即断电，最高数据丢失风险，适用于极端紧急情况，需要立即断电。</p>
+<p><code>echo o &gt; /proc/sysrq-trigger</code> 在支持该 SysRq 操作的内核上可尝试触发关机，但并非所有内核或平台都实现它；即使可用，也会绕过用户空间清理并带来最高的数据丢失风险。</p>
 <p>关机优化最佳实践：</p>
 <p>预防措施：定期检查服务配置，确保服务能正常停止；监控文件系统状态，及时处理问题；避免在关机前进行大量 I/O 操作。</p>
 <p>优雅关机：优先使用正常的关机命令；给系统足够时间完成清理工作；避免频繁使用强制关机。</p>
@@ -1606,7 +1606,7 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 </span></span><span class="line"><span class="cl">ls -lh /swapfile</span></span></code></pre>
 </div>
 <p><strong>启用休眠功能</strong>：</p>
-<div class="code-block highlight is-open show-line-numbers  tw:group tw:my-2">
+<div class="code-block highlight is-closed show-line-numbers  tw:group tw:my-2">
   <div class="
     
     tw:flex 
@@ -1695,14 +1695,16 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
       tw:overflow-y-hidden
       tw:overflow-x-auto
       tw:scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 方法一：使用交换分区</span>
+      "><span class="line"><span class="cl"><span class="c1"># 以下命令适用于 Debian/Ubuntu 等使用 GRUB 和 initramfs-tools 的发行版；NixOS 应通过</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># configuration.nix 配置 resume/initrd，不要直接修改这些文件。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 方法一：使用交换分区</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 1. 确保有足够大的交换分区（建议为内存大小的 1.5-2 倍）</span>
 </span></span><span class="line"><span class="cl">sudo swapon --show
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 2. 获取交换分区的 UUID</span>
 </span></span><span class="line"><span class="cl">sudo blkid <span class="p">|</span> grep swap
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 3. 更新 GRUB 配置</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 更新 GRUB 配置（Debian/Ubuntu）</span>
 </span></span><span class="line"><span class="cl">sudo nano /etc/default/grub
 </span></span><span class="line"><span class="cl"><span class="c1"># 添加：GRUB_CMDLINE_LINUX_DEFAULT=&#34;resume=UUID=your-swap-uuid&#34;</span>
 </span></span><span class="line"><span class="cl">
@@ -1723,7 +1725,8 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;/swapfile none swap sw 0 0&#39;</span> <span class="p">|</span> sudo tee -a /etc/fstab
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 3. 配置休眠到交换文件</span>
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;RESUME=UUID=$(findmnt -no UUID -T /swapfile)&#39;</span> <span class="p">|</span> sudo tee /etc/initramfs-tools/conf.d/resume
+</span></span><span class="line"><span class="cl"><span class="c1"># 交换文件需要使用承载分区的 resume= 以及 swap 文件的 resume_offset=；不能直接使用</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># findmnt 得到的文件系统 UUID 代替。请按照发行版文档计算 offset 后配置内核参数/initramfs。</span>
 </span></span><span class="line"><span class="cl">sudo update-initramfs -u</span></span></code></pre>
 </div>
 <p><strong>休眠故障排查</strong>：</p>
@@ -2235,10 +2238,12 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
       tw:overflow-y-hidden
       tw:overflow-x-auto
       tw:scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 设置自动挂起（当系统空闲时）</span>
+      "><span class="line"><span class="cl"><span class="c1"># 设置自动挂起（当系统空闲时；先确认该 timer 存在）</span>
+</span></span><span class="line"><span class="cl">systemctl list-unit-files systemd-suspend.timer
 </span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> systemd-suspend.timer
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 设置定时休眠（夜间自动休眠）</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置定时休眠（仅当系统提供该 timer 时）</span>
+</span></span><span class="line"><span class="cl">systemctl list-unit-files systemd-hibernate.timer
 </span></span><span class="line"><span class="cl">sudo systemctl edit systemd-hibernate.timer
 </span></span><span class="line"><span class="cl"><span class="c1"># 添加：</span>
 </span></span><span class="line"><span class="cl"><span class="o">[</span>Timer<span class="o">]</span>
@@ -4917,7 +4922,9 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 <li><strong>规则（Rule）</strong>：匹配条件和动作</li>
 <li><strong>集合（Set）</strong>：用于批量匹配的地址或端口列表</li>
 </ul>
-<p>nftables 的四表五链、规则等概念跟 iptables 是完全一致的，这一部分可以参考我之前的文章<a href="/posts/iptables-and-container-networks/" rel="">iptables 及 docker 容器网络分析</a>, 这里不再赘述。</p>
+<p>nftables 的表、链和规则可以实现类似 iptables 的包过滤与 NAT 功能，但它没有固定的“四表五链”
+结构；表和链的数量、类型及挂载点都可以按需定义。关于 nftables 规则中表和链的实际示例，
+可以参考之前的 <a href="/posts/wireguard-on-linux/" rel="">WireGuard 文章</a>，本文继续结合桌面网络场景展开。</p>
 <p><strong>NixOS 配置示例</strong>：</p>
 <div class="code-block highlight is-closed show-line-numbers  tw:group tw:my-2">
   <div class="
@@ -5019,7 +5026,7 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 </span></span></span><span class="line"><span class="cl"><span class="s1">        type filter hook input priority 0; policy drop;
 </span></span></span><span class="line"><span class="cl"><span class="s1">
 </span></span></span><span class="line"><span class="cl"><span class="s1">        # 允许回环接口
-</span></span></span><span class="line"><span class="cl"><span class="s1">        if lo accept
+</span></span></span><span class="line"><span class="cl"><span class="s1">        iifname &#34;lo&#34; accept
 </span></span></span><span class="line"><span class="cl"><span class="s1">
 </span></span></span><span class="line"><span class="cl"><span class="s1">        # 允许已建立的连接
 </span></span></span><span class="line"><span class="cl"><span class="s1">        ct state established,related accept
@@ -7801,9 +7808,8 @@ xdg-desktop-portal 的 Wayland 屏幕共享机制。</p>
 </span></span><span class="line"><span class="cl"><span class="c1"># 设置桌面环境标识（重要！）</span>
 </span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">XDG_CURRENT_DESKTOP</span><span class="o">=</span>sway  <span class="c1"># 或 gnome, kde, xfce 等</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 检查 PipeWire 服务状态</span>
-</span></span><span class="line"><span class="cl">systemctl --user status pipewire-session-manager
-</span></span><span class="line"><span class="cl">systemctl --user status pipewire
+</span></span><span class="line"><span class="cl"><span class="c1"># 检查 PipeWire 服务状态（多数现代系统使用 WirePlumber）</span>
+</span></span><span class="line"><span class="cl">systemctl --user status pipewire wireplumber
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 检查桌面门户服务</span>
 </span></span><span class="line"><span class="cl">systemctl --user status xdg-desktop-portal
@@ -15093,9 +15099,9 @@ daemon）, 一般直接 print 即可。</li>
 </span></span><span class="line"><span class="cl">tail -f /var/log/secure
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 四、日志防篡改验证</span>
-</span></span><span class="line"><span class="cl">sudo journalctl --setup-keys &gt; /etc/journal-seal-key
+</span></span><span class="line"><span class="cl">sudo journalctl --setup-keys <span class="p">|</span> sudo tee /etc/journal-seal-key &gt;/dev/null
 </span></span><span class="line"><span class="cl">sudo chmod <span class="m">600</span> /etc/journal-seal-key
-</span></span><span class="line"><span class="cl">sudo journalctl --verify --verify-key<span class="o">=</span><span class="k">$(</span>cat /etc/journal-seal-key<span class="k">)</span></span></span></code></pre>
+</span></span><span class="line"><span class="cl">sudo journalctl --verify --verify-key<span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>sudo cat /etc/journal-seal-key<span class="k">)</span><span class="s2">&#34;</span></span></span></code></pre>
 </div>
 <h3 id="22-内存管理systemd-oomd" class="headerLink">
     <a href="#22-%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86systemd-oomd" class="header-mark"></a>2.2 内存管理：systemd-oomd</h3><p>systemd-oomd 是 systemd 提供的内存不足（OOM）守护进程，用于在系统内存紧张时主动终止进程，
@@ -17299,8 +17305,8 @@ PolicyKit（现称 <code>polkit</code>）实现动态授权。系统服务（如
 <h3 id="uefi系统启动的起点" class="headerLink">
     <a href="#uefi%e7%b3%bb%e7%bb%9f%e5%90%af%e5%8a%a8%e7%9a%84%e8%b5%b7%e7%82%b9" class="header-mark"></a>UEFI：系统启动的起点</h3><p>现代系统普遍使用 <strong>UEFI 固件</strong> 代替 BIOS。UEFI 初始化硬件后，从 EFI System Partition (ESP)
 中加载启动管理器。</p>
-<p>NixOS 在 UEFI 系统上支持多种引导加载器。默认使用 GRUB；启用 Secure Boot 时通常使用<a href="https://www.freedesktop.org/software/systemd/man/latest/systemd-boot.html" target="_blank" rel="noopener noreferrer">systemd-boot</a>
-配合 <a href="https://github.com/nix-community/lanzaboote" target="_blank" rel="noopener noreferrer">lanzaboote</a>。</p>
+<p>NixOS 在 UEFI 系统上支持多种引导加载器。常见选择是<a href="https://www.freedesktop.org/software/systemd/man/latest/systemd-boot.html" target="_blank" rel="noopener noreferrer">systemd-boot</a>
+或 GRUB；具体使用哪一个取决于 <code>configuration.nix</code> 中的配置。启用 Secure Boot 时，常见做法是使用 systemd-boot 配合 <a href="https://github.com/nix-community/lanzaboote" target="_blank" rel="noopener noreferrer">lanzaboote</a>。</p>
 <p>systemd-boot 的全局配置是 <code>/boot/loader/loader.conf</code>，具体的启动项配置需要分类讨论：</p>
 <ul>
 <li>
