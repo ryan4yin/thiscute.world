@@ -285,10 +285,10 @@ lsblk -f
 当正常关机失败时，可以使用以下方法：
 
 ```bash
-# 安全强制关机
+# 强制关机（会跳过部分正常清理流程，可能导致数据丢失）
 systemctl poweroff -f
 
-# 紧急关机（立即执行）
+# 更强制的紧急关机（仅在极端情况下使用）
 systemctl poweroff -ff
 
 # 内核强制重启
@@ -300,17 +300,17 @@ echo o > /proc/sysrq-trigger
 
 强制关机方法：
 
-`systemctl poweroff -f` 强制关机，跳过某些检查和服务停止。强制终止所有进程，直接进入关机流
-程，可能导致数据丢失，应谨慎使用，适用于系统响应缓慢但仍有基本功能时。
+`systemctl poweroff -f` 会跳过部分 systemd 的正常关机流程。不要把它理解为可靠地完成所有进程
+终止和资源清理；它可能导致数据丢失，应谨慎使用。
 
-`systemctl poweroff -ff` 紧急关机，立即执行，不等待任何操作完成。立即终止所有进程，强制关
-机，高数据丢失风险，仅在紧急情况下使用，适用于系统完全无响应，需要立即关机。
+`systemctl poweroff -ff` 会进一步绕过 systemd 的关机流程。它具有很高的数据损坏风险，仅在常规
+关机和单次 `-f` 都无法使用时考虑。
 
 `echo b > /proc/sysrq-trigger` 内核级别的强制重启。直接调用内核重启功能，绕过用户空间，即
 使系统完全无响应也能执行，适用于系统完全卡死，无法响应用户命令。
 
-`echo o > /proc/sysrq-trigger` 内核级别的强制关机。直接调用内核关机功能，立即断电，最高数
-据丢失风险，适用于极端紧急情况，需要立即断电。
+`echo o > /proc/sysrq-trigger` 在支持该 SysRq 操作的内核上可尝试触发关机，但并非所有内核或平
+台都实现它；即使可用，也会绕过用户空间清理并带来最高的数据丢失风险。
 
 关机优化最佳实践：
 
@@ -359,6 +359,8 @@ ls -lh /swapfile
 **启用休眠功能**：
 
 ```bash
+# 以下命令适用于 Debian/Ubuntu 等使用 GRUB 和 initramfs-tools 的发行版；NixOS 应通过
+# configuration.nix 配置 resume/initrd，不要直接修改这些文件。
 # 方法一：使用交换分区
 # 1. 确保有足够大的交换分区（建议为内存大小的 1.5-2 倍）
 sudo swapon --show
@@ -366,7 +368,7 @@ sudo swapon --show
 # 2. 获取交换分区的 UUID
 sudo blkid | grep swap
 
-# 3. 更新 GRUB 配置
+# 3. 更新 GRUB 配置（Debian/Ubuntu）
 sudo nano /etc/default/grub
 # 添加：GRUB_CMDLINE_LINUX_DEFAULT="resume=UUID=your-swap-uuid"
 
@@ -386,8 +388,8 @@ sudo swapon /swapfile
 # 2. 永久挂载交换文件
 echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
-# 3. 配置休眠到交换文件
-echo 'RESUME=UUID=$(findmnt -no UUID -T /swapfile)' | sudo tee /etc/initramfs-tools/conf.d/resume
+# 3. 配置休眠到交换文件（双引号用于展开 UUID）
+echo "RESUME=UUID=$(findmnt -no UUID -T /swapfile)" | sudo tee /etc/initramfs-tools/conf.d/resume
 sudo update-initramfs -u
 ```
 
@@ -515,10 +517,12 @@ ls -la /usr/lib/systemd/system-sleep/
 **混合使用策略**：
 
 ```bash
-# 设置自动挂起（当系统空闲时）
+# 设置自动挂起（当系统空闲时；先确认该 timer 存在）
+systemctl list-unit-files systemd-suspend.timer
 sudo systemctl enable systemd-suspend.timer
 
-# 设置定时休眠（夜间自动休眠）
+# 设置定时休眠（仅当系统提供该 timer 时）
+systemctl list-unit-files systemd-hibernate.timer
 sudo systemctl edit systemd-hibernate.timer
 # 添加：
 [Timer]
