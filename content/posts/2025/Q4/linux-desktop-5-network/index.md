@@ -222,8 +222,8 @@ nftables 是现代 Linux 的防火墙解决方案，它提供比 iptables 更简
 - **集合（Set）**：用于批量匹配的地址或端口列表
 
 nftables 的表、链和规则可以实现类似 iptables 的包过滤与 NAT 功能，但它没有固定的“四表五链”
-结构；表和链的数量、类型及挂载点都可以按需定义。这一部分可以参考我之前的文章
-[iptables 及 docker 容器网络分析](/posts/iptables-and-container-networks/), 这里不再赘述。
+结构；表和链的数量、类型及挂载点都可以按需定义。关于 nftables 规则中表和链的实际示例，
+可以参考之前的 [WireGuard 文章](/posts/wireguard-on-linux/)，本文继续结合桌面网络场景展开。
 
 **NixOS 配置示例**：
 
