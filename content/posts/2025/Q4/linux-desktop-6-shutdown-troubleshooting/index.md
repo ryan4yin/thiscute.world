@@ -388,8 +388,9 @@ sudo swapon /swapfile
 # 2. 永久挂载交换文件
 echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
-# 3. 配置休眠到交换文件（双引号用于展开 UUID）
-echo "RESUME=UUID=$(findmnt -no UUID -T /swapfile)" | sudo tee /etc/initramfs-tools/conf.d/resume
+# 3. 配置休眠到交换文件
+# 交换文件需要使用承载分区的 resume= 以及 swap 文件的 resume_offset=；不能直接使用
+# findmnt 得到的文件系统 UUID 代替。请按照发行版文档计算 offset 后配置内核参数/initramfs。
 sudo update-initramfs -u
 ```
 
