@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.161.1">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2026-08-21T05:01:30+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">我看见的世界</title><link href="https://thiscute.world/posts/the-worlds-i-see/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://thiscute.world/posts/the-worlds-i-see/</id><published>2026-05-01T20:33:30+08:00</published><updated>2026-05-30T15:22:30+08:00</updated><summary type="html">&lt;h2 id="ai-与纺织女工" class="headerLink"&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://gohugo.io/" version="0.161.1">Hugo</generator><title type="html">This Cute World</title><link href="https://thiscute.world/" rel="alternate" type="text/html" title="html"/><link href="https://thiscute.world/index.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://thiscute.world/index.json" rel="alternate" type="application/json" title="json"/><updated>2026-08-21T05:07:32+00:00</updated><id>https://thiscute.world/</id><follow_challenge><feedId>52340201851637768</feedId><userId>80092458428908544</userId></follow_challenge><entry><title type="html">我看见的世界</title><link href="https://thiscute.world/posts/the-worlds-i-see/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://thiscute.world/posts/the-worlds-i-see/</id><published>2026-05-01T20:33:30+08:00</published><updated>2026-05-30T15:22:30+08:00</updated><summary type="html">&lt;h2 id="ai-与纺织女工" class="headerLink"&gt;
 &lt;a href="#ai-%e4%b8%8e%e7%ba%ba%e7%bb%87%e5%a5%b3%e5%b7%a5" class="header-mark"&gt;&lt;/a&gt;AI 与纺织女工&lt;/h2&gt;&lt;p&gt;2026 年 2 月 16 日，除夕夜。&lt;/p&gt;
 &lt;p&gt;0 点 11 分，窗外鞭炮声还没停，我在本地跑起了 Qwen3.5-397B-A17B 的 2bits 量化版，尝试发了一张经典的 NixOS 天线宝宝 meme 图给它分析，它分析地相当到位！我激动万分，跑去跟很多朋友分享，「也是在本地用上多模态 LLM 了」。&lt;/p&gt;</summary><content type="html"><![CDATA[<h2 id="ai-与纺织女工" class="headerLink">
     <a href="#ai-%e4%b8%8e%e7%ba%ba%e7%bb%87%e5%a5%b3%e5%b7%a5" class="header-mark"></a>AI 与纺织女工</h2><p>2026 年 2 月 16 日，除夕夜。</p>
@@ -1063,7 +1063,7 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 <p><strong>固件接管</strong>：</p>
 <ul>
 <li>BIOS/UEFI 接管系统控制权</li>
-<li>执行电源关断，所有设备（CPU、内存、GPU、外部设备）断电</li>
+<li>进入平台关机电源状态；大部分设备停止工作，但待机供电、USB 供电或网络唤醒等功能可能仍保持</li>
 <li>固件执行最后的清理工作</li>
 </ul>
 <p><strong>强制关机保护</strong>：</p>
@@ -1975,9 +1975,10 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 </span></span><span class="line"><span class="cl"><span class="c1"># 设置挂起模式（deep 为 S3，s2idle 为 S2）</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> deep <span class="p">|</span> sudo tee /sys/power/mem_sleep
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 永久设置挂起模式</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 永久设置挂起模式（Debian/Ubuntu 等使用 GRUB 的发行版）</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;mem_sleep_default=deep&#39;</span> <span class="p">|</span> sudo tee -a /etc/default/grub
-</span></span><span class="line"><span class="cl">sudo update-grub</span></span></code></pre>
+</span></span><span class="line"><span class="cl">sudo update-grub
+</span></span><span class="line"><span class="cl"><span class="c1"># NixOS 可在 configuration.nix 中使用 boot.kernelParams = [ &#34;mem_sleep_default=deep&#34; ];</span></span></span></code></pre>
 </div>
 <p><strong>挂起故障排查</strong>：</p>
 <div class="code-block highlight is-open show-line-numbers  tw:group tw:my-2">
@@ -2238,14 +2239,11 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
       tw:overflow-y-hidden
       tw:overflow-x-auto
       tw:scrollbar-thin
-      "><span class="line"><span class="cl"><span class="c1"># 设置自动挂起（当系统空闲时；先确认该 timer 存在）</span>
-</span></span><span class="line"><span class="cl">systemctl list-unit-files systemd-suspend.timer
-</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> systemd-suspend.timer
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 设置定时休眠（仅当系统提供该 timer 时）</span>
-</span></span><span class="line"><span class="cl">systemctl list-unit-files systemd-hibernate.timer
-</span></span><span class="line"><span class="cl">sudo systemctl edit systemd-hibernate.timer
-</span></span><span class="line"><span class="cl"><span class="c1"># 添加：</span>
+      "><span class="line"><span class="cl"><span class="c1"># systemd 默认不一定提供以下 timer；先检查现有 unit</span>
+</span></span><span class="line"><span class="cl">systemctl list-unit-files <span class="s1">&#39;systemd-*.timer&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 如果系统提供对应 timer，可使用 systemctl edit 配置；否则需要自行创建</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 一个 .timer 和对应的 .service 单元，或使用桌面环境的电源管理设置。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 例如自定义 timer 的 [Timer] 部分：</span>
 </span></span><span class="line"><span class="cl"><span class="o">[</span>Timer<span class="o">]</span>
 </span></span><span class="line"><span class="cl"><span class="nv">OnCalendar</span><span class="o">=</span>*-*-* 02:00:00
 </span></span><span class="line"><span class="cl"><span class="nv">Persistent</span><span class="o">=</span>true</span></span></code></pre>
@@ -4252,11 +4250,8 @@ Linux 桌面系统相关的文章，徒步走过了中国的多个城市，在�
 <h2 id="网络连接与管理" class="headerLink">
     <a href="#%e7%bd%91%e7%bb%9c%e8%bf%9e%e6%8e%a5%e4%b8%8e%e7%ae%a1%e7%90%86" class="header-mark"></a>网络连接与管理</h2><p>网络连接是现代桌面的基础功能，涉及硬件驱动、固件加载、网络管理和 DNS 解析等多个环节。网络故障是最常见的桌面问题之一，理解其工作原理有助于快速定位和解决连接问题。</p>
 <h3 id="11-网络架构概览" class="headerLink">
-    <a href="#11-%e7%bd%91%e7%bb%9c%e6%9e%b6%e6%9e%84%e6%a6%82%e8%a7%88" class="header-mark"></a>1.1 网络架构概览</h3><p>现代 Linux 桌面大多使用 systemd-networkd 配合 iwd 进行网络管理，形成完整的网络解决方案。</p>
-<blockquote>
-  <p>虽然目前仍有部分系统默认使用 NetworkManager 管理网络，用 wpa_supplicant 管理 WiFi, 但这已经不够「现代」了（逃</p>
-
-</blockquote><p><strong>网络协议栈</strong>：</p>
+    <a href="#11-%e7%bd%91%e7%bb%9c%e6%9e%b6%e6%9e%84%e6%a6%82%e8%a7%88" class="header-mark"></a>1.1 网络架构概览</h3><p>本文以 systemd-networkd 配合 iwd 作为示例，二者可以组合成完整的网络管理方案。许多桌面发行版则默认使用 NetworkManager（通常配合 wpa_supplicant 或 iwd）；具体选择取决于发行版和桌面环境。</p>
+<p><strong>网络协议栈</strong>：</p>
 <ul>
 <li><strong>硬件层</strong>：网卡驱动和固件</li>
 <li><strong>链路层</strong>：MAC 地址管理和链路检测</li>
@@ -7194,8 +7189,8 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
     <a href="#11-pipewire-%e6%9e%b6%e6%9e%84%e6%a6%82%e8%a7%88" class="header-mark"></a>1.1 PipeWire 架构概览</h3><blockquote>
   <p><a href="https://docs.pipewire.org/page_overview.html" target="_blank" rel="noopener noreferrer">https://docs.pipewire.org/page_overview.html</a></p>
 
-</blockquote><p>PipeWire 作为媒体服务器的核心，连接应用程序和硬件设备，提供音频混合、视频处理和路由功能。<strong>它从一开始就定位为&quot;通用多媒体处理框架&quot;</strong>，而非仅局限于音频，这种设计源于现代多媒体场景（如视频会议、屏幕共享、直播、跨应用媒体协作等）对&quot;音频+视频&quot;统一处理的强需求。Pipewire
-支持所有接入 PulseAudio，JACK，ALSA 和 GStreamer 的程序。</p>
+</blockquote><p>PipeWire 作为媒体服务器的核心，连接应用程序和硬件设备，提供音频混合、视频处理和路由功能。<strong>它从一开始就定位为&quot;通用多媒体处理框架&quot;</strong>，而非仅局限于音频，这种设计源于现代多媒体场景（如视频会议、屏幕共享、直播、跨应用媒体协作等）对&quot;音频+视频&quot;统一处理的强需求。PipeWire
+为使用 PulseAudio、JACK 和 ALSA 接口的应用提供兼容层，并可与 GStreamer 集成；具体兼容性仍取决于应用、接口和版本。</p>
 <p><strong>核心组件</strong>：</p>
 <ul>
 <li><strong>pipewire</strong>：核心守护进程，管理媒体流图</li>
@@ -9521,7 +9516,8 @@ xdg-desktop-portal 的 Wayland 屏幕共享机制。</p>
 <li><strong>候选显示</strong>：通过 Wayland 协议在光标位置显示候选窗口</li>
 <li><strong>文本提交</strong>：用户选择后通过 text-input 协议提交最终文本</li>
 </ol>
-<p>text-input 协议有 v1 跟 v3 两个版本，目前（2025-09）Electron/Chrome 以及其他大部分程序框架都已经支持了 text-input-v3. 桌面环境方面所有主流 Compositor 也都支持 text-input-v3. 所以目前 wayland 下输入法的可用性已经很高了。</p>
+<p>text-input 协议有 v1 和 v3 两个版本。许多现代 Toolkit、浏览器和 compositor 已支持
+text-input-v3，但实际可用性仍取决于 compositor、输入法框架、Toolkit 和应用版本。</p>
 <h4 id="223-x11--xwayland-输入法流程" class="headerLink">
     <a href="#223-x11--xwayland-%e8%be%93%e5%85%a5%e6%b3%95%e6%b5%81%e7%a8%8b" class="header-mark"></a>2.2.3 X11 / XWayland 输入法流程</h4><p><strong>XWayland 使用场景</strong>：</p>
 <ul>
