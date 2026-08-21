@@ -277,9 +277,8 @@ echo $XDG_SESSION_TYPE
 # 设置桌面环境标识（重要！）
 export XDG_CURRENT_DESKTOP=sway  # 或 gnome, kde, xfce 等
 
-# 检查 PipeWire 服务状态
-systemctl --user status pipewire-session-manager
-systemctl --user status pipewire
+# 检查 PipeWire 服务状态（多数现代系统使用 WirePlumber）
+systemctl --user status pipewire wireplumber
 
 # 检查桌面门户服务
 systemctl --user status xdg-desktop-portal

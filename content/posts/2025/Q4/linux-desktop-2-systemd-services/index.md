@@ -359,7 +359,7 @@ tail -f /var/log/auth.log
 tail -f /var/log/secure
 
 # 四、日志防篡改验证
-sudo journalctl --setup-keys > /etc/journal-seal-key
+sudo journalctl --setup-keys | sudo tee /etc/journal-seal-key >/dev/null
 sudo chmod 600 /etc/journal-seal-key
 sudo journalctl --verify --verify-key=$(cat /etc/journal-seal-key)
 ```

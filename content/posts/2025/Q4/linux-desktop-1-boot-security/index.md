@@ -75,9 +75,10 @@ Linux 桌面系统的启动过程可以分为以下几个主要阶段：
 现代系统普遍使用 **UEFI 固件** 代替 BIOS。UEFI 初始化硬件后，从 EFI System Partition (ESP)
 中加载启动管理器。
 
-NixOS 在 UEFI 系统上支持多种引导加载器。默认使用 GRUB；启用 Secure Boot 时通常使用
+NixOS 在 UEFI 系统上支持多种引导加载器。常见选择是
 [systemd-boot](https://www.freedesktop.org/software/systemd/man/latest/systemd-boot.html)
-配合 [lanzaboote](https://github.com/nix-community/lanzaboote)。
+或 GRUB；具体使用哪一个取决于 `configuration.nix` 中的配置。启用 Secure Boot 时，常见做法是
+使用 systemd-boot 配合 [lanzaboote](https://github.com/nix-community/lanzaboote)。
 
 systemd-boot 的全局配置是 `/boot/loader/loader.conf`，具体的启动项配置需要分类讨论：
 
