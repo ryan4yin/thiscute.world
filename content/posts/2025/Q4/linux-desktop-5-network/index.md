@@ -66,10 +66,8 @@ code:
 
 ### 1.1 网络架构概览
 
-现代 Linux 桌面大多使用 systemd-networkd 配合 iwd 进行网络管理，形成完整的网络解决方案。
-
-> 虽然目前仍有部分系统默认使用 NetworkManager 管理网络，用 wpa_supplicant 管理 WiFi, 但这
-> 已经不够「现代」了（逃
+本文以 systemd-networkd 配合 iwd 作为示例，二者可以组合成完整的网络管理方案。许多桌面发行版
+则默认使用 NetworkManager（通常配合 wpa_supplicant 或 iwd）；具体选择取决于发行版和桌面环境。
 
 **网络协议栈**：
 

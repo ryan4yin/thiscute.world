@@ -211,7 +211,7 @@ journalctl -b -1 | grep -i "unmount\|busy"
 **固件接管**：
 
 - BIOS/UEFI 接管系统控制权
-- 执行电源关断，所有设备（CPU、内存、GPU、外部设备）断电
+- 进入平台关机电源状态；大部分设备停止工作，但待机供电、USB 供电或网络唤醒等功能可能仍保持
 - 固件执行最后的清理工作
 
 **强制关机保护**：
@@ -462,9 +462,10 @@ cat /sys/power/mem_sleep
 # 设置挂起模式（deep 为 S3，s2idle 为 S2）
 echo deep | sudo tee /sys/power/mem_sleep
 
-# 永久设置挂起模式
+# 永久设置挂起模式（Debian/Ubuntu 等使用 GRUB 的发行版）
 echo 'mem_sleep_default=deep' | sudo tee -a /etc/default/grub
 sudo update-grub
+# NixOS 可在 configuration.nix 中使用 boot.kernelParams = [ "mem_sleep_default=deep" ];
 ```
 
 **挂起故障排查**：
@@ -518,14 +519,11 @@ ls -la /usr/lib/systemd/system-sleep/
 **混合使用策略**：
 
 ```bash
-# 设置自动挂起（当系统空闲时；先确认该 timer 存在）
-systemctl list-unit-files systemd-suspend.timer
-sudo systemctl enable systemd-suspend.timer
-
-# 设置定时休眠（仅当系统提供该 timer 时）
-systemctl list-unit-files systemd-hibernate.timer
-sudo systemctl edit systemd-hibernate.timer
-# 添加：
+# systemd 默认不一定提供以下 timer；先检查现有 unit
+systemctl list-unit-files 'systemd-*.timer'
+# 如果系统提供对应 timer，可使用 systemctl edit 配置；否则需要自行创建
+# 一个 .timer 和对应的 .service 单元，或使用桌面环境的电源管理设置。
+# 例如自定义 timer 的 [Timer] 部分：
 [Timer]
 OnCalendar=*-*-* 02:00:00
 Persistent=true

@@ -71,8 +71,9 @@ JACK。PipeWire 提供了更低的延迟、更好的硬件兼容性，以及统�
 
 PipeWire 作为媒体服务器的核心，连接应用程序和硬件设备，提供音频混合、视频处理和路由功
 能。**它从一开始就定位为"通用多媒体处理框架"**，而非仅局限于音频，这种设计源于现代多媒体场
-景（如视频会议、屏幕共享、直播、跨应用媒体协作等）对"音频+视频"统一处理的强需求。Pipewire
-支持所有接入 PulseAudio，JACK，ALSA 和 GStreamer 的程序。
+景（如视频会议、屏幕共享、直播、跨应用媒体协作等）对"音频+视频"统一处理的强需求。PipeWire
+为使用 PulseAudio、JACK 和 ALSA 接口的应用提供兼容层，并可与 GStreamer 集成；具体兼容性仍取
+决于应用、接口和版本。
 
 **核心组件**：
 
@@ -708,9 +709,8 @@ pango-view --font="Maple Mono NF CN 12" test.txt
 5. **候选显示**：通过 Wayland 协议在光标位置显示候选窗口
 6. **文本提交**：用户选择后通过 text-input 协议提交最终文本
 
-text-input 协议有 v1 跟 v3 两个版本，目前（2025-09）Electron/Chrome 以及其他大部分程序框架
-都已经支持了 text-input-v3. 桌面环境方面所有主流 Compositor 也都支持 text-input-v3. 所以目
-前 wayland 下输入法的可用性已经很高了。
+text-input 协议有 v1 和 v3 两个版本。许多现代 Toolkit、浏览器和 compositor 已支持
+text-input-v3，但实际可用性仍取决于 compositor、输入法框架、Toolkit 和应用版本。
 
 #### 2.2.3 X11 / XWayland 输入法流程
 
