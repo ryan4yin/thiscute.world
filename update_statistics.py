@@ -242,7 +242,7 @@ def process_data(data):
             result[""] = page
 
     items = []
-    for p in result.values():
+    for page_path, p in result.items():
         if "userEngagementDuration" not in p:
             continue
         reading_duration = int(p['userEngagementDuration'])
@@ -260,7 +260,7 @@ def process_data(data):
             # 跳过人均阅读时常低于 20s 或阅读人数低于 5 的文章（文章的质量偏低或者受众偏小，没必要列出来）
             continue
 
-        if p['pagePath'] in LEGACY_POST_PATHS:
+        if page_path in LEGACY_POST_PATHS:
             p['legacyPage'] = True
         items.append(p)
 

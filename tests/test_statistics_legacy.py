@@ -50,6 +50,34 @@ class LegacyStatisticsTest(unittest.TestCase):
         self.assertEqual(items[0]["pagePath"], "/posts/sql-basics-1/")
         self.assertEqual(items[0]["screenPageViews"], 18)
 
+    def test_total_metrics_without_a_page_path_are_preserved(self):
+        process_data = importlib.import_module("update_statistics").process_data
+        data = report([])
+        data["dimensionHeaders"] = []
+        data["rows"] = [{
+            "dimensionValues": [],
+            "metricValues": [
+                {"value": "6"}, {"value": "8"}, {"value": "180"},
+            ],
+        }]
+        items = process_data(data)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["screenPageViews"], 8)
+        self.assertNotIn("legacyPage", items[0])
+
+    def test_legacy_without_trailing_slash_is_marked_in_both_row_orders(self):
+        process_data = importlib.import_module("update_statistics").process_data
+        paths = ["/posts/linux-desktop-explained", "/posts/linux-desktop-explained/"]
+        for order in (paths, list(reversed(paths))):
+            with self.subTest(paths=order):
+                items = process_data(report([
+                    ("旧稿", path, 6, 8, 180) for path in order
+                ]))
+                self.assertEqual(len(items), 1)
+                self.assertEqual(items[0]["pagePath"], order[0])
+                self.assertEqual(items[0]["screenPageViews"], 16)
+                self.assertTrue(items[0]["legacyPage"])
+
 
 if __name__ == "__main__":
     unittest.main()
