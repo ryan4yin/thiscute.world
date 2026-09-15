@@ -38,7 +38,8 @@ path 移到对应的新 bundle。
 
 - 图形篇：`2026-09-16T01:14:00+08:00`，Task 7 写作时实际执行 `date --iso-8601=seconds`
   取得；为本地新稿日期，不表示已经部署发布。
-- 桌面应用篇：`pending; use actual authoring/publication date at Tasks 7/8`
+- 桌面应用篇：`2026-09-16T01:27:11+08:00`，Task 8 写作时实际执行 `date --iso-8601=seconds`
+  取得；为本地新稿日期，不表示已经部署发布。
 
 ## Alias 与 front matter 契约
 
