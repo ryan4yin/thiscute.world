@@ -213,3 +213,23 @@ URL 由新篇的 alias 生成。
 - Hugo 0.165.0 隔离构建退出 0；已检查规范页、旧址 canonical/meta
   refresh、原日期、封面字节与可用站内链接。电源篇仍待 Task 11，完整导航检查归 Task
   12。没有网络重配、防火墙修改、挂起、服务停启或远端写入。
+
+## 电源篇的核查补充
+
+Task 11 保留原发布日期 `2025-10-19T10:22:33+08:00` 与封面字节，实际修订时间为
+`2026-09-16T02:11:28+08:00`。规范路径为 `/posts/linux-desktop-power/`，旧 shutdown
+URL 由新篇 alias 生成。
+
+- 先查内核睡眠状态、设备恢复、swsusp 与交换文件文档，systemd 的 logind、inhibitor、睡眠与关机手册，以及 NixOS
+  26.05 模块和 Arch mkinitcpio 源码。Arch
+  Wiki 被反爬页面阻挡，对照改用 Arch 项目源码及其发布的上游手册；未消耗 Context7。
+- 案例回链网络篇，提交 `77e31bd4`
+  只支持已有注释中的恢复解释和两项配置改动，没有独立恢复验证；未增加作者经历、功耗或耗时测量。
+- `cat /sys/power/state`、`cat /sys/power/mem_sleep` 均实际运行，退出 0，分别得到
+  `freeze mem disk` 与
+  `s2idle [deep]`。这些是内核入口与当时选择，不是休眠配置或设备恢复成功证明。
+- `journalctl -b -u systemd-suspend --no-pager`
+  在评估单元范围后以进程内捕获运行，退出 0；仅检查固定消息标记，不输出或保存原始日志。识别到既有的进入睡眠与返回消息，不能推断当时全部设备和网络均恢复正常。
+- 没有实际挂起、休眠、关机、SysRq、服务停启、交换空间修改或运行系统配置变更。Hugo
+  0.165.0 隔离构建退出 0；规范页、旧址 canonical/meta
+  refresh、原日期、封面字节、全部本文站内链接及网络案例锚点已核对。
