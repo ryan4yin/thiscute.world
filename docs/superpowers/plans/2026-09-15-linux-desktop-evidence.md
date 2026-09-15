@@ -165,3 +165,28 @@ topology, or power behavior.
 - No unsupported first-person observation is asserted: local results are labeled as
   command observations; repository claims are limited to commits/diffs; all other items
   are future verification work.
+
+## 音频、字体与输入法篇的核查补充
+
+Task 9 保留原发布日期与封面，实际修订时间为 `2026-09-16T01:44:50+08:00`。旧 multimedia
+URL 由新篇的 alias 生成，规范路径为
+`/posts/linux-desktop-media-input/`。屏幕共享主解释仍由桌面应用篇负责。
+
+- 精确检查 `9d00eb39`：标题记录 `pipewire-pulse.service`
+  启动失败；diff 仅注释包覆盖，ALSA 与 PulseAudio 兼容选项保留。没有启动日志或恢复测试。
+- 精确检查 `fb0f89d9`：已经启用 Fcitx 5 的 Home Manager 配置增加
+  `fcitx5.waylandFrontend = true;`。没有某个应用的失败或恢复记录。文中另以 Home Manager
+  26.05 源码解释当前选项实现，不用当前实现倒推历史生成文件。
+- `wpctl status`
+  实际运行，退出 2，提示连接失败与权限拒绝；没有取得设备图，未发布原始设备描述。
+- 三个 `fc-match` 查询实际运行，退出 0。`sans` 与 `sans-serif:lang=zh-cn` 返回
+  `Source Sans 3`，`monospace:lang=zh-cn` 返回
+  `Maple Mono NF CN`。这不证明实际字符回退和渲染结果；未遍历字体清单。
+- [Fcitx 上游 remote.cpp](https://github.com/fcitx/fcitx5/blob/master/src/tools/remote.cpp)
+  表明 `-n` 单独使用可能触发 D-Bus 激活，因此练习采用
+  `--check -n`。本机帮助与带保护的查询均异常退出，未取得输入法名称；没有启动、切换、重载或停止输入法。
+- fontconfig 旧 freedesktop URL 被拒绝，改用可读的
+  [项目文档站](https://fontconfig.pages.freedesktop.org/fontconfig/fontconfig-user.html)。text-input-v3 的 freedesktop 托管原文不可读，正文明确标记使用 XML 镜像，并另查 Fcitx 官方输入法侧实现。
+- Hugo 0.165.0 隔离构建、旧址 canonical/meta
+  refresh、规范页与封面字节一致性已核对；已有图形、应用、登录会话篇链接可达。网络篇目标等待 Task
+  10，完整导航检查仍归 Task 12。
