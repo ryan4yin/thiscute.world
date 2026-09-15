@@ -190,3 +190,26 @@ URL 由新篇的 alias 生成，规范路径为
 - Hugo 0.165.0 隔离构建、旧址 canonical/meta
   refresh、规范页与封面字节一致性已核对；已有图形、应用、登录会话篇链接可达。网络篇目标等待 Task
   10，完整导航检查仍归 Task 12。
+
+## 网络篇的核查补充
+
+Task 10 保留原发布日期 `2025-10-19T10:21:33+08:00` 与封面字节，实际修订时间为
+`2026-09-16T01:59:13+08:00`。规范路径为 `/posts/linux-desktop-network/`，旧 network
+URL 由新篇的 alias 生成。
+
+- `4098b028` 的精确差异只替换一个接口变量的值，没有恢复结果；不公开接口名。
+- `77e31bd4`
+  的提交与配置注释记录 S3 恢复时 carrier 变化、networkd 重配置及外部 VPN/TUN 策略规则丢失的解释。差异增加
+  `ManageForeignRoutingPolicyRules = false` 与
+  `IgnoreCarrierLoss = "10s"`，分别调整规则清理边界与短暂断链处理时间。没有路由快照或独立恢复验证。
+- 已先查 Linux 网络运行状态与 TUN/TAP 文档、iproute2 手册、systemd 上游 XML、nftables 官方手册、NixOS 文档及 26.05 模块、Arch 提供的 networkd/iwd 手册。freedesktop 手册页被拒绝或超时，Arch
+  Wiki 返回反爬页面，改用上述一手来源；未消耗 Context7。
+- `ip -brief link`、`ip -brief address`、IPv4/IPv6 的 `rule show` 与
+  `route show table all`、`ip route get 1.1.1.1`
+  均实际运行，退出 1，权限拒绝。预先设计了进程内输出脱敏，没有接口、地址、规则或拓扑进入报告。最后一条仅查询路由，不发包。
+- 没有可用的 `nft`；`systemctl is-active systemd-resolved.service`
+  也被权限拒绝，未能确认服务正在运行，因此未继续调用
+  `resolvectl status`。未实际查询 DNS、抓包或向第三方发起连通性测试。
+- Hugo 0.165.0 隔离构建退出 0；已检查规范页、旧址 canonical/meta
+  refresh、原日期、封面字节与可用站内链接。电源篇仍待 Task 11，完整导航检查归 Task
+  12。没有网络重配、防火墙修改、挂起、服务停启或远端写入。
