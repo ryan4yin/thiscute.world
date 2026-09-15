@@ -188,11 +188,15 @@ udevadm info --query=property --property=SUBSYSTEM --name=/dev/null
 再向系统总线自身请求标准接口描述，并明确禁止自动启动服务：
 
 ```console
-busctl --system --auto-start=no introspect org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.Introspectable
+busctl --system --auto-start=no call org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.Introspectable Introspect
 ```
 
-`introspect` 与 `--auto-start=no` 的语义见
-[busctl 手册](https://github.com/systemd/systemd/blob/main/man/busctl.xml)。本次同样因
+这里用 `call` 显式调用 `Introspect`，`--auto-start=no`
+对这次调用禁用自动激活。这个选项适用于 `call` 或 `emit`，不能用它给 `busctl introspect`
+禁用激活，见
+[busctl 手册](https://github.com/systemd/systemd/blob/main/man/busctl.xml)。`Introspect`
+没有输入参数，因此命令末尾不需要类型签名或参数值；它返回包含对象接口描述的字符串，见
+[D-Bus 的 Introspectable 规范](https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-introspectable)。本次执行这条命令同样因
 `Operation not permitted`
 退出，退出码为 1，没有取得接口结果；上面的名称来自规范，不能冒充本机查询结果。
 
