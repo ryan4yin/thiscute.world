@@ -19,8 +19,7 @@ comment:
 
 在友链形成的网络中漫游，是一件很有意思的事情。
 
-**以前的人们通过信笺交流，而我们通过友链串联起一个「世界」。希望你我都能在这个「世界」中有
-所收获**
+**以前的人们通过信笺交流，而我们通过友链串联起一个「世界」。希望你我都能在这个「世界」中有所收获**
 
 **注：** <span style="color:red;">下方友链次序每次刷新页面随机排列。<span>
 
@@ -59,7 +58,7 @@ var myFriends = [
     ["https://tianheg.co/", "/avatar/tianheg.webp", "@一大加贝", "学习技术，热爱生活"], 
     ["https://guanqr.com/", "https://cdn.jsdelivr.net/gh/guanqr/blog/static/icons/android-chrome-512x512.png", "@荷戟独彷徨", "爱光学，爱生活，爱创造"], 
     // 无法访问 SSL_ERROR_RX_RECORD_TOO_LONG ["https://exploro.one", "https://avatars.githubusercontent.com/u/4038871?s=460&u=d2f1c2eea96acb15578f2e513ba5fa673aa3d250&v=4", "@探索子", "Learn by doing. <= 硬核数学"], 
-    ["https://panqiincs.me/", "https://panqiincs.me/images/avatar.jpg", "@辛未羊", "人生如逆旅，我亦是行人 <= 信号系统"], 
+    ["https://numden.com/", "https://numden.com/images/avatar.jpg", "@北州店子", "记录生活和学习 <= 信号系统"], 
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
     ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.webp", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。"], 
     ["https://stdrc.cc/", "/avatar/richardchien.webp", "@Richard Chien", "一只腊鸡的技术成长 <= Nonebot作者/OS大佬"], 
