@@ -34,9 +34,10 @@ path 移到对应的新 bundle。
 | `/posts/linux-desktop-network/`            | `/posts/linux-desktop-5-network/`                  |
 | `/posts/linux-desktop-power/`              | `/posts/linux-desktop-6-shutdown-troubleshooting/` |
 
-映射是一对一，旧 URL 不同时指向多个目标。七篇由旧稿重写而来的目标页必须保留各自原来的日期。两个新增页面尚未写入仓库，发布日期不得预填：
+映射是一对一，旧 URL 不同时指向多个目标。七篇由旧稿重写而来的目标页必须保留各自原来的日期。新增页面使用实际写作时间，未写入的页面不得预填：
 
-- 图形篇：`pending; use actual authoring/publication date at Tasks 7/8`
+- 图形篇：`2026-09-16T01:14:00+08:00`，Task 7 写作时实际执行 `date --iso-8601=seconds`
+  取得；为本地新稿日期，不表示已经部署发布。
 - 桌面应用篇：`pending; use actual authoring/publication date at Tasks 7/8`
 
 ## Alias 与 front matter 契约
