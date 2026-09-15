@@ -46,10 +46,7 @@ comment:
 <script type="text/javascript">
 // 以下为样例内容，按照格式可以随意修改
 var myFriends = [
-    // ["https://blog.z-xl-t.top/", "https://blog.z-xl-t.top/favicon.jpg", "@薯条流浪法师", "快走吧，趁风停止之前"], 
     ["https://rea.ink/", "/avatar/rea.ink.webp", "@倾书", "清风皓月，光景常新 <= 前端"], 
-    // Not accessible
-    // ["https://jdragon.club/", "/avatar/jdragon.webp", "@谭宇", "Hello world! <= Java"], 
     ["https://nopdan.com/", "https://nopdan.com/avatar.webp", "@单单", "但知行好事，莫要问前程"], 
     ["https://farer.org/", "/avatar/farer.webp", "@Stray Episode", "Scientific Evocation"], 
     ["https://wasteland.touko.moe", "https://wasteland.touko.moe/images/avatar.png", "@Touko Hoshino", "My Exploration, My Whisper"], 
@@ -57,7 +54,6 @@ var myFriends = [
     ["https://www.addesp.com", "https://www.addesp.com/avatar", "@ADD-SP", "记录 & 分享 & 感受 <= 网络协议"], 
     ["https://tianheg.co/", "/avatar/tianheg.webp", "@一大加贝", "学习技术，热爱生活"], 
     ["https://guanqr.com/", "https://cdn.jsdelivr.net/gh/guanqr/blog/static/icons/android-chrome-512x512.png", "@荷戟独彷徨", "爱光学，爱生活，爱创造"], 
-    // 无法访问 SSL_ERROR_RX_RECORD_TOO_LONG ["https://exploro.one", "https://avatars.githubusercontent.com/u/4038871?s=460&u=d2f1c2eea96acb15578f2e513ba5fa673aa3d250&v=4", "@探索子", "Learn by doing. <= 硬核数学"], 
     ["https://numden.com/", "https://numden.com/images/avatar.jpg", "@北州店子", "记录生活和学习 <= 信号系统"], 
     ["https://a-wing.top/", "https://a-wing.top/assets/avatar.png", "@新一", "Hi! 上天不? <= 无人机大佬来卷互联网了"], 
     ["https://www.cnblogs.com/hellxz/", "/avatar/hellxz.webp", "@东北小狐狸", "若你不能簡單解釋一件事，那麼你就是不夠了解它。"], 
@@ -67,15 +63,11 @@ var myFriends = [
     ["https://naccl.top/", "https://naccl.top/img/avatar.jpg", "@Naccl", "游龙当归海，海不迎我自来也。"], 
     ["https://ilimeng.cn/", "https://ilimeng.cn/SLiMan.png", "@离梦", "一个记性不好的00后博主"], 
     ["https://www.eatrice.cn", "/avatar/eatrice.jpg", "@吃白饭的休伯利安号", "非专业搬砖的土木工程师"], 
-    // TLS 证书过期
-    // ["https://blog.010sec.cn/", "/avatar/c4rt1y.webp", "@c4rt1y", "<= 运维搬砖人"], 
     ["https://imcbc.cn/", "https://imcbc.cn/apple-touch-icon.png", "@BBing", "自由 分享 合作 <= C/C++/Linux 高手"], 
     ["https://blognas.hwb0307.com/", "https://blognas.hwb0307.com/logo.jpg", "@Bensz", "浮云翩迁之间 <= Linux/Docker/R语言爱好者"], 
     ["https://lisenhui.cn", "https://lisenhui.cn/imgs/avatar.png", "@凡梦星尘", "再平凡的人也有属于他的梦想！"], 
     ["https://blog.li2niu.com/", "https://blog.li2niu.com/img/logo.png", "@李二牛", "Addicted to marathons <= Developer & Runner"], 
     ["https://wiki.eryajf.net/", "https://wiki.eryajf.net/img/logo.png", "@二丫讲梵", "💻学习📝记录🔗分享 <= 运维领域的前辈"], 
-    // Not accessible
-    // [" https://zhsher.cn/", " https://q1.qlogo.cn/g?b=qq&nk=1310446718&s=5", "@张时贰", "环转码，爱敲代码的小张！<= 很有干劲的后辈"], 
     ["https://tftree.top/", "https://cdn.tftree.top/i/wp-content/uploads/2022/07/TFTree_avatar.png", "@虚空裂隙", "心有猛虎,细嗅蔷薇"], 
     ["https://zgq.me/", "https://zgq.me/favicon.png", "@zgq354", "多一些思考与记录 <= 0xffff 站长，前端佬"], 
     ["https://bleatingsheep.org/", "https://bleatingsheep.org/favicon.ico", "@bleatingsheep", "偶像咩咩"], 
