@@ -5,7 +5,7 @@ description:
   "沿着声音路由、字体匹配和文字输入，理解 PipeWire、WirePlumber、fontconfig 与 Fcitx 5
   如何接入桌面应用。"
 date: 2025-10-19T10:20:33+08:00
-lastmod: 2026-09-16T01:44:50+08:00
+lastmod: 2026-09-16T02:23:46+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -74,7 +74,7 @@ PipeWire 用 node 表示处理音视频的节点，port 是节点的数据端口
           WirePlumber 发现设备、配置节点、选择连接目标
 ```
 
-这里的 sink 是接收播放数据的节点，source 是提供采集数据的节点。WirePlumber 是 PipeWire 的会话与策略管理器：它发现设备，管理 profile 和 route，配置节点的格式与端口，再创建和维护连接。设备拔出时，它还需要重新评估连接关系。这些工作持续发生，不只在登录时做一次。上图中的角色对应
+这里的 sink 是接收播放数据的节点，source 是提供采集数据的节点。WirePlumber 是 PipeWire 的会话与策略管理器：它发现设备，选择 profile（设备的工作模式，如模拟输出）和 route（该模式下使用的端口，如耳机或扬声器），配置节点的格式与端口，再创建和维护连接。设备拔出时，它还需要重新评估连接关系。这些工作持续发生，不只在登录时做一次。上图中的角色对应
 [PipeWire 对象模型](https://docs.pipewire.org/page_overview.html)和
 [WirePlumber 的会话管理职责](https://pipewire.pages.freedesktop.org/wireplumber/design/understanding_session_management.html)。
 

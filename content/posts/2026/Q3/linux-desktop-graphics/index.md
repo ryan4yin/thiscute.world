@@ -5,7 +5,7 @@ description:
   "沿着一次输入到画面更新的过程，理解 evdev、libinput、Wayland 合成器、Mesa 与 DRM/KMS
   的分工。"
 date: 2026-09-16T01:14:00+08:00
-lastmod: 2026-09-16T01:14:00+08:00
+lastmod: 2026-09-16T02:23:46+08:00
 draft: false
 authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS"]
@@ -78,7 +78,7 @@ Wayland 是客户端与合成器之间的协议。在这个模型中，合成器
 应用创建的 `wl_surface`
 可以关联图像内容和输入区域，但单独创建 surface 还没有表达「这是一个普通桌面窗口」。`xdg-shell`
 在它上面建立桌面窗口语义，例如 `xdg_toplevel` 和弹出菜单使用的 `xdg_popup`。参见
-[xdg-shell 协议原文](https://raw.githubusercontent.com/wayland-mirror/wayland-protocols/main/stable/xdg-shell/xdg-shell.xml)。
+[xdg-shell 协议 XML（镜像）](https://raw.githubusercontent.com/wayland-mirror/wayland-protocols/main/stable/xdg-shell/xdg-shell.xml)。
 
 buffer 保存要显示的像素，surface 保存与展示有关的状态。客户端将 buffer 附到 surface，标记哪些区域发生变化，再提交状态。`wl_surface.commit`
 将待提交状态组成一次内容更新，合成器按协议约束应用它；这一请求不等于显示器已经显示了这一帧。`wl_buffer.release`

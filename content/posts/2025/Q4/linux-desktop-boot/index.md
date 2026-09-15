@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "理解固件、引导程序、内核与 initramfs 的交接，以及系统如何找到要挂载的文件系统。"
 date: 2025-10-19T10:17:33+08:00
-lastmod: 2026-09-16T00:00:00+08:00
+lastmod: 2026-09-16T02:23:46+08:00
 draft: false
 
 authors: ["ryan4yin"]

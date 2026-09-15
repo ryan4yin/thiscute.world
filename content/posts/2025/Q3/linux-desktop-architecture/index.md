@@ -3,7 +3,7 @@ title: "Linux 桌面系统：系统全景与阅读路径"
 subtitle: ""
 description: "沿开机、登录、应用运行到关机的时间线，理解 Linux 桌面组件之间的职责与接口。"
 date: 2025-09-09T20:17:33+08:00
-lastmod: 2026-09-16T00:00:00+08:00
+lastmod: 2026-09-16T02:23:46+08:00
 draft: false
 
 authors: ["ryan4yin"]

@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "从桌面应用的启动入口，理解 session D-Bus、portal 后端、屏幕共享与沙盒文件访问。"
 date: 2026-09-16T01:27:11+08:00
-lastmod: 2026-09-16T01:27:11+08:00
+lastmod: 2026-09-16T02:23:46+08:00
 draft: false
 authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS", "Flatpak"]
