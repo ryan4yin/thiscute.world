@@ -228,12 +228,13 @@ NixOS 的 `services.greetd.settings`
 
 ```console
 loginctl list-sessions
-loginctl show-session self --property=Type,Class,Active,Remote,State
+loginctl show-session self -p Type -p Class -p Active -p Remote -p State
 systemctl --user is-system-running
 systemctl --system show greetd.service --property=LoadState,ActiveState,SubState
 ```
 
-第一条用于理解一台机器可以同时有哪些 session，会包含用户及会话标识。第二条只选择少量状态字段；`self`
+第一条用于理解一台机器可以同时有哪些 session，会包含用户及会话标识。第二条用重复的 `-p`
+分别选择状态字段；`self`
 指调用进程所属的会话，从 SSH 或其他启动方式执行时，并不一定是正在显示的图形桌面。能看到
 `Active=yes`
 也不能证明合成器或密钥环工作正常。[loginctl 的 show-session 说明](https://github.com/systemd/systemd/blob/main/man/loginctl.xml)定义了
