@@ -48,6 +48,37 @@ modified_page_titles = {
     "/posts/nixos-and-flake-basics/": "NixOS 与 Nix Flakes 新手入门",
 }
 
+# 本站使用过的所有域名（含历史域名与别名），只统计这些域名下的访问数据。
+# 有其它站点误用了本站的 GA Measurement ID，把它们的流量也上报到了同一个 GA Property，
+# 这里通过 hostName 白名单把非本站的流量过滤掉。
+# 如需排查还有哪些 hostName，可在 GA 后台 Reports -> Tech details -> Hostname 查看。
+MY_HOSTNAMES = [
+    "thiscute.world",
+    "writefor.fun",
+    "ryan4yin.space",
+]
+
+
+def build_hostname_filter():
+    """构造只保留本站域名的 hostName 过滤表达式。
+
+    同时包含裸域名与其 www 子域名。
+    """
+    values = []
+    for host in MY_HOSTNAMES:
+        values.append(host)
+        values.append(f"www.{host}")
+
+    return {
+        "filter": {
+            "fieldName": "hostName",
+            "inListFilter": {
+                "values": values,
+                "caseSensitive": False,
+            },
+        }
+    }
+
 
 def initialize_analyticsreporting():
     """Initializes an Analytics Data API service object.
@@ -244,6 +275,7 @@ def get_report_last_n_days(analytics, n: int):
             {'name': 'pageTitle'},
             {'name': 'pagePath'},
         ],
+        "dimensionFilter": build_hostname_filter(),  # 过滤掉非本站域名的流量
         "metricFilter": {
             "filter": {
                 # https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/FilterExpression#Filter
@@ -287,7 +319,8 @@ def get_report_from_start(analytics):
             {'name': 'activeUsers'},
             {'name': 'screenPageViews'},
             {'name': 'userEngagementDuration'},
-        ]
+        ],
+        "dimensionFilter": build_hostname_filter(),  # 过滤掉非本站域名的流量
     }
     data = analytics.properties().runReport(property=PROPERTY, body=body).execute()
     return process_data(data)[0]
