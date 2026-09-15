@@ -187,14 +187,17 @@ Store 可以保存资源、应用与权限字符串的对应关系，但它自�
 负责排序；等待启动作业结束，并不等于检查每个 portal 功能都已可用。这些语义见
 [systemd.unit 手册](https://github.com/systemd/systemd/blob/main/man/systemd.unit.xml)，基础区别也在[系统基础篇](/posts/linux-desktop-system-foundations/)讲过。
 
-不过，这段历史配置的注释还不能直接当成通用做法。上游生成器把文件名转换成
-`app-名称@autostart.service`；按 systemd 的模板规则，`@` 后的 `autostart`
-是实例部分，`app-@autostart.service` 是具体实例，对应模板名为
-`app-@.service`，并不是「匹配所有应用」的模板。生成单元自己的模板名则是
-`app-名称@.service`。模板 drop-in 与按连字符截断的前缀 drop-in 又有不同的查找规则。见[生成器源码](https://github.com/systemd/systemd/blob/main/src/xdg-autostart-generator/xdg-autostart-service.c)和
-[systemd 的 drop-in 规则](https://github.com/systemd/systemd/blob/main/man/systemd.unit.xml)。
+这里用到的是保留实例名的前缀 drop-in 查找。上游生成器把文件名转换成
+`app-名称@autostart.service`，systemd 查找 drop-in 时会把前缀截短为 `app-`，同时保留
+`autostart` 实例名，因此会查找
+`app-@autostart.service.d/`。这让该目录下的配置可以作用于这类自动启动单元。见[生成器源码](https://github.com/systemd/systemd/blob/main/src/xdg-autostart-generator/xdg-autostart-service.c)以及
+[systemd v257 的查找实现](https://github.com/systemd/systemd/blob/v257/src/shared/dropin.c)；[当前实现](https://github.com/systemd/systemd/blob/main/src/shared/dropin.c)也保留了这一规则。
 
-因此，这条提交能证明作者尝试调整启动顺序；它是否覆盖了目标应用，还要核对生成后的单元及其实际加载的 drop-in。本文没有这样的运行证据，不把注释中的「全部应用都等待 portal」写成已验证结果，也不提供照搬该片段的配置建议。
+提交注释把它叫作「模板 drop-in」，名称不够准确：`app-@autostart.service`
+是实例名，模板名才是
+`app-@.service`。这里的共享范围来自前缀查找。[systemd.unit 手册](https://github.com/systemd/systemd/blob/main/man/systemd.unit.xml)分别说明了实例、模板和前缀 drop-in。
+
+这些规则能解释配置为何可以覆盖对应的生成单元。作者机器上最终生成了哪些单元、加载了哪些 drop-in，以及调整后首次启动的 FileChooser/OpenURI 是否恢复，仍须运行证据确认。本文没有取得这些结果，不把提交意图写成已经验证的竞态修复，也不把它推广到未使用这套生成器的启动路径。
 
 从机制上看，观察方向已经很明确：入口由谁启动、实际单元是什么、依赖有没有加载，以及激活环境是否包含当前桌面所需信息。只看到应用和 portal 同时处于运行状态，无法还原登录时的先后关系。
 
