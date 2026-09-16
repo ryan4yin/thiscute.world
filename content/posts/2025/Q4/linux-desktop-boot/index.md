@@ -1,10 +1,10 @@
 ---
-title: "Linux 桌面系统：从固件到根文件系统"
+title: "Linux 桌面系统（二）：从固件到根文件系统"
 subtitle: ""
 description:
   "理解固件、引导程序、内核与 initramfs 的交接，以及系统如何找到要挂载的文件系统。"
 date: 2025-10-19T10:17:33+08:00
-lastmod: 2026-09-16T02:23:46+08:00
+lastmod: 2026-09-16T13:32:17+08:00
 draft: false
 
 authors: ["ryan4yin"]
@@ -42,7 +42,7 @@ code:
 ---
 
 > AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 系统还没启动的时候，磁盘上的程序是谁读出来的？读出了内核，为什么又要准备一个 initramfs？等到屏幕上出现 systemd 的日志，是不是就说明根文件系统已经挂载好了？
 

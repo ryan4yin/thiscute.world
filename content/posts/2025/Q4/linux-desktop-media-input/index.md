@@ -1,11 +1,11 @@
 ---
-title: "Linux 桌面系统：音频、字体与输入法"
+title: "Linux 桌面系统（七）：音频、字体与输入法"
 subtitle: ""
 description:
   "沿着声音路由、字体匹配和文字输入，理解 PipeWire、WirePlumber、fontconfig 与 Fcitx 5
   如何接入桌面应用。"
 date: 2025-10-19T10:20:33+08:00
-lastmod: 2026-09-16T02:23:46+08:00
+lastmod: 2026-09-16T13:32:17+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -39,11 +39,11 @@ code:
 ---
 
 > AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 桌面能显示窗口后，还得能听歌、看中文、打中文。这几件事用起来很自然，配置入口却散落在系统服务、用户会话和应用内部。以我的 NixOS +
 Wayland 桌面为例，声音交给 PipeWire 和 WirePlumber，字体通过 fontconfig 匹配，中文输入使用 Fcitx
-5。它们各管哪一段，应用又怎样接进来？
+5。它们分别负责什么，应用又怎样使用这些服务？
 
 本文沿这三条路径展开。[图形篇](/posts/linux-desktop-graphics/)已经讲过键盘事件和画面的传递，[桌面应用篇](/posts/linux-desktop-app-integration/)负责解释 portal 与屏幕共享。这里从音频流进入桌面开始。
 
@@ -81,9 +81,9 @@ PipeWire 用 node 表示处理音视频的节点，port 是节点的数据端口
 普通播放流通常连接到默认输出；如果没有可用的默认输出，WirePlumber 的默认策略会考虑可用节点的会话优先级和设备 route。应用也可以请求特定目标，流的属性还可以限制移动或回退。因此，默认输出与某个应用的实际去向需要分别观察。具体规则见
 [Linking Policy](https://pipewire.pages.freedesktop.org/wireplumber/policies/linking.html)。
 
-这也给「没有声音」分出了几个不同的问题：应用有没有成功接入，图里有没有它的流，流连接到了哪个 sink，sink 对应的设备 route 是否可用？只看到设备名字，证据还没走到应用这一端。
+这样一来，「没有声音」就可以拆成几个问题：应用有没有成功接入，图里有没有它的流，流连接到了哪个 sink，sink 对应的设备 route 是否可用？只看到设备名字，还不能确认应用的音频流已经正确连接。
 
-### NixOS 的声明接在哪一层
+### NixOS 怎样启用这些组件
 
 在 NixOS 26.05 的模块中，`services.pipewire.enable`
 启用服务集成，`alsa.enable`、`pulse.enable`、`jack.enable`
@@ -179,7 +179,7 @@ grab，接收按键并交给内部输入上下文处理；生成的文字再经�
 [text-input-v3 协议 XML（镜像）](https://github.com/wayland-mirror/wayland-protocols/blob/main/unstable/text-input/text-input-unstable-v3.xml)。此次无法读取 freedesktop 的托管原文，协议细节核对使用了这份镜像；输入法侧另外核对了上述 Fcitx 上游实现。这里有两个容易混淆的 commit：应用的
 `commit` 提交协议状态，输入法方向的 `commit_string` 才是提交文字。
 
-候选框又涉及显示位置。输入光标矩形属于应用的状态，合成器需要有相应接口来定位输入法弹窗；采用工具包输入模块时，也可能由应用内的 UI 显示候选框。于是，「能选词但候选框位置不对」与「按键完全没进入输入法」有不同的观察方向，前者要继续看光标状态与弹窗路径。Fcitx 文档的
+候选框还涉及显示位置。输入光标矩形属于应用的状态，合成器需要有相应接口来定位输入法弹窗；采用工具包输入模块时，也可能由应用内的 UI 显示候选框。因此，「能选词但候选框位置不对」与「按键完全没进入输入法」应从不同方向排查，前者要继续检查光标状态和候选框的显示方式。Fcitx 文档的
 [Popup candidate window](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Popup_candidate_window)专门解释了这些差异。
 
 ### 原生 Wayland 应用也可能使用输入模块
@@ -202,7 +202,7 @@ IM 模块。Qt 的选择还受版本、工具包插件和合成器支持影响�
 [Home Manager Fcitx 5 模块](https://github.com/nix-community/home-manager/blob/release-26.05/modules/i18n/input-method/fcitx5.nix)。这是当前模块的实现说明，不能据此倒推历史提交当时生成的全部文件，更不能认为一个选项为合成器补齐了协议支持。
 
 Arch 的 [fcitx5](https://archlinux.org/packages/extra/x86_64/fcitx5/)与
-[fcitx5-qt](https://archlinux.org/packages/extra/x86_64/fcitx5-qt/)等包分别提供框架和集成组件；启动方式仍要对照所用桌面。例如 Fcitx 上游要求 KWin 的原生输入法路径由其虚拟键盘设置启动，以取得合成器传入的连接。换成另一种自动启动方式，并不能保证连接等价。这也把输入法接回了[登录会话篇](/posts/linux-desktop-login-session/)讨论的进程与会话环境。
+[fcitx5-qt](https://archlinux.org/packages/extra/x86_64/fcitx5-qt/)等包分别提供框架和集成组件；启动方式仍要对照所用桌面。例如 Fcitx 上游要求 KWin 的原生输入法路径由其虚拟键盘设置启动，以取得合成器传入的连接。换成另一种自动启动方式，并不能保证连接等价。输入法的启动方式也与[登录会话篇](/posts/linux-desktop-login-session/)讨论的进程和会话环境有关。
 
 ## 几个只读观察练习
 
@@ -245,4 +245,4 @@ fcitx5-remote --check -n
 
 本次环境中，该程序连帮助查询也异常退出，未得到输入法名称。即使查询成功，它也只说明控制接口可达；某个应用是否建立输入上下文、是否送出光标状态、是否收到确认文字，还需要在那个应用里分别验证。本文没有触发输入法重启、切换或文本输入测试。
 
-理解了这些边界，再看日常配置就有了顺序：声音沿图中的连接流动，字体由应用请求与匹配规则共同选择，中文输入则随焦点建立和结束。下一篇[网络如何到达应用](/posts/linux-desktop-network/)继续沿应用向外走，看看数据包如何离开这台桌面。
+按这个顺序检查日常配置会更清楚：声音沿图中的连接流动，字体由应用请求与匹配规则共同选择，中文输入则随焦点建立和结束。下一篇[网络如何到达应用](/posts/linux-desktop-network/)从应用继续向外看，说明数据包怎样离开这台桌面。

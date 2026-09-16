@@ -1,10 +1,10 @@
 ---
-title: "Linux 桌面系统：桌面应用、portal 与沙盒"
+title: "Linux 桌面系统（六）：桌面应用、portal 与沙盒"
 subtitle: ""
 description:
   "从桌面应用的启动入口，理解 session D-Bus、portal 后端、屏幕共享与沙盒文件访问。"
 date: 2026-09-16T01:27:11+08:00
-lastmod: 2026-09-16T02:23:46+08:00
+lastmod: 2026-09-16T13:32:17+08:00
 draft: false
 authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS", "Flatpak"]
@@ -33,11 +33,11 @@ code:
 ---
 
 > AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 [图形篇](/posts/linux-desktop-graphics/)讲了应用怎样把画面交给合成器。但在日常使用中，一个能显示窗口的程序还需要打开文件、调用其他应用，或者把某个窗口共享给视频会议。这些请求会经过哪些组件？沙盒又在哪一步限制它？
 
-本文从应用启动说起。D-Bus 的名称、对象与接口可回看[系统基础篇](/posts/linux-desktop-system-foundations/)，用户服务与图形会话的关系见[登录会话篇](/posts/linux-desktop-login-session/)。这里沿着一次应用请求，继续往桌面内部走。
+本文从应用启动说起。D-Bus 的名称、对象与接口可回看[系统基础篇](/posts/linux-desktop-system-foundations/)，用户服务与图形会话的关系见[登录会话篇](/posts/linux-desktop-login-session/)。下面以一次应用请求为线索，看看桌面内部的组件怎样配合。
 
 ## 点下应用图标之后
 
@@ -88,7 +88,7 @@ Portal 向应用提供一组 D-Bus 接口，文件选择、屏幕共享等各有
 `portal`
 的包。同一份[配置手册](https://flatpak.github.io/xdg-desktop-portal/docs/portals.conf.html)列出了完整的查找顺序。
 
-### NixOS 与 Arch 接在哪里
+### NixOS 与 Arch 怎样配置 portal
 
 在 NixOS 26.05 中，`xdg.portal.enable` 启用相关集成，`extraPortals`
 提供后端软件包；模块会把这些包加入 D-Bus 与 systemd 的包集合。`config`
@@ -123,11 +123,11 @@ remote。[ScreenCast API](https://flatpak.github.io/xdg-desktop-portal/docs/doc-
 用来请求保存与恢复选择；恢复失败时仍可能重新询问用户。不能把上次点过「允许」理解成以后永远能读到同一窗口。具体取决于接口版本、后端支持和授权状态，见
 [ScreenCast 的会话持久化说明](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html#session-persistence)。
 
-因此，看到选择窗口已经弹出，只能说明请求走到了部分桌面交互流程。它还不能证明应用随后建立了正确的 PipeWire 连接，更不能证明视频已经传到会议另一端。
+因此，选择窗口能够弹出，只能说明 portal 已经进入用户选择共享对象的阶段。它还不能证明应用随后建立了正确的 PipeWire 连接，更不能证明视频已经传到会议另一端。
 
 ## 文件选择与真正写入文件
 
-文件对话框走的是另一条路径。`FileChooser.OpenFile` 请求打开文件，`SaveFile`
+文件选择使用另一组 portal 接口。`FileChooser.OpenFile` 请求打开文件，`SaveFile`
 请求一个保存位置。后端负责呈现选择器，返回的 URI 让应用继续访问文件；为沙盒应用提供访问时，还可能涉及 Documents
 portal。`SaveFile`
 自身并不替应用写完文档内容。[FileChooser API](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.FileChooser.html)说明了方法和返回值。
@@ -199,7 +199,7 @@ Store 可以保存资源、应用与权限字符串的对应关系，但它自�
 
 这些规则能解释配置为何可以覆盖对应的生成单元。作者机器上最终生成了哪些单元、加载了哪些 drop-in，以及调整后首次启动的 FileChooser/OpenURI 是否恢复，仍须运行证据确认。本文没有取得这些结果，不把提交意图写成已经验证的竞态修复，也不把它推广到未使用这套生成器的启动路径。
 
-从机制上看，观察方向已经很明确：入口由谁启动、实际单元是什么、依赖有没有加载，以及激活环境是否包含当前桌面所需信息。只看到应用和 portal 同时处于运行状态，无法还原登录时的先后关系。
+排查这类问题时，可以依次确认入口由谁启动、实际单元是什么、依赖有没有加载，以及激活环境是否包含当前桌面所需信息。只看到应用和 portal 同时处于运行状态，无法还原登录时的先后关系。
 
 ## 在自己的会话中观察
 
@@ -218,4 +218,4 @@ busctl --user list --no-pager
 本次写作实际运行了这两条命令，两者都以退出码 1 返回
 `Operation not permitted`。因此没有取得用户服务或总线名称的运行证据，也没有实际验证屏幕共享和文档保存。为观察机制而启动屏幕采集、修改沙盒权限或重启桌面服务，都不属于这组练习。
 
-应用发出请求以后，文件访问与视频流各自有后续路径。PipeWire 的音频图、字体选择和输入法连接，则放在[音频、字体与输入法篇](/posts/linux-desktop-media-input/)继续讲。
+应用发出请求后，文件选择还要处理沙盒中的访问权限，屏幕共享还要建立 PipeWire 连接。PipeWire 的音频图、字体选择和输入法连接，则放在[音频、字体与输入法篇](/posts/linux-desktop-media-input/)继续讲。

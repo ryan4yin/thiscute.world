@@ -1,10 +1,10 @@
 ---
-title: "Linux 桌面系统：系统服务、设备与通信"
+title: "Linux 桌面系统（三）：系统服务、设备与通信"
 subtitle: ""
 description:
   "理解 systemd 的依赖与启动顺序、journal 日志、udev 设备事件，以及 D-Bus 服务接口。"
 date: 2025-10-19T10:18:33+08:00
-lastmod: 2026-09-16T00:43:48+08:00
+lastmod: 2026-09-16T13:32:17+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -38,7 +38,20 @@ code:
 ---
 
 > AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+
+这一篇会反复遇到四组对象。它们不在同一层，却经常出现在同一次排查中：systemd 安排服务，journal 保存日志，udev 处理设备事件，D-Bus 让进程互相调用。
+
+```mermaid
+flowchart LR
+    K[内核事件] --> U[udev 规则与设备属性]
+    U --> S[systemd 单元]
+    S --> P[服务进程]
+    P <--> B[D-Bus]
+    P --> J[journal]
+    U --> J
+    S --> J
+```
 
 [上一篇](/posts/linux-desktop-boot/)讲到，早期用户空间准备好根文件系统后，会把启动工作交给正式系统。接下来，挂载和后台服务怎样组织起来？设备插上以后，程序又怎样知道它出现了？
 
@@ -86,7 +99,7 @@ NixOS 把这层配置放进声明里：`systemd.services` 下的 `after`、`requ
 等字段参与生成服务定义。排查时既要读声明，也要确认运行中的状态，不能把修改了 Nix 文件当作已经应用。[NixOS 手册的 Defining custom services](https://nixos.org/manual/nixos/stable/)给出了这些字段。Arch 使用同一个上游单元格式，包提供的单元与管理员的 drop-in 则按加载路径和优先级合并，参见
 [Arch 的 systemd.unit(5)](https://man.archlinux.org/man/systemd.unit.5.en)。
 
-## journal 留下了哪一段证据
+## journal 能告诉我们什么
 
 服务启动失败时，需要把「管理器认为发生了什么」和「程序自己输出了什么」放在一起看。systemd-journald 收集内核消息、syslog 消息、原生 journal 消息，以及服务的标准输出和标准错误，保存为带字段的日志。服务输出默认连接到 journal，但配置可以改变这个去向，所以不能假定每个程序的全部输出都在这里。[journald 手册](https://github.com/systemd/systemd/blob/main/man/systemd-journald.service.xml)列出了入口和默认连接方式。
 

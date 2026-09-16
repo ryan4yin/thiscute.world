@@ -1,11 +1,11 @@
 ---
-title: "Linux 桌面系统：登录、身份与用户会话"
+title: "Linux 桌面系统（四）：登录、身份与用户会话"
 subtitle: ""
 description:
   "理解 greeter、PAM、systemd 用户实例、logind、密钥环与 polkit
   怎样衔接，以及登录之后各自保留的权限边界。"
 date: 2025-10-19T10:19:33+08:00
-lastmod: 2026-09-16T00:57:08+08:00
+lastmod: 2026-09-16T13:32:17+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -39,13 +39,13 @@ code:
 ---
 
 > AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
-[系统基础篇](/posts/linux-desktop-system-foundations/)讲了系统服务如何启动、设备事件如何处理，以及 D-Bus 怎样连接进程。到了登录界面，系统还要完成另一组工作：确认用户身份，建立会话，再让这个用户的桌面和后台服务运行起来。
+[系统基础篇](/posts/linux-desktop-system-foundations/)讲了系统服务如何启动、设备事件如何处理，以及进程怎样通过 D-Bus 通信。到了登录界面，系统还要完成另一组工作：确认用户身份，建立会话，再让这个用户的桌面和后台服务运行起来。
 
 同样是弹出一个密码框，背后的要求可能完全不同。登录时确认身份，密钥环解锁时打开保存凭据的容器，polkit 则判断某个操作能不能做。弄清它们分别在问什么，比记住几条「密码不对怎么办」的命令更有用。
 
-本文继续以 NixOS、systemd 和 greetd 为例。通过旧「桌面会话与图形渲染」链接进入的读者，可以在读完会话部分后接着看[显示、输入与图形渲染](/posts/linux-desktop-graphics/)。合成器怎样画出窗口，放在那一篇展开。
+本文继续以 NixOS、systemd 和 greetd 为例。通过旧「桌面会话与图形渲染」链接进入的读者，可以在读完会话部分后接着看[显示、输入与图形渲染](/posts/linux-desktop-graphics/)。合成器怎样画出窗口，留到那一篇说明。
 
 ## 登录界面只是入口
 
@@ -222,7 +222,7 @@ NixOS 的 `services.greetd.settings`
 `default_session` 到了另一发行版就变成一次性自动登录。NixOS 的生成逻辑见
 [greetd 模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/services/display-managers/greetd.nix)。
 
-## 在自己的桌面上观察这些边界
+## 在自己的桌面上查看会话状态
 
 下面只查询状态。先在自己的交互会话中执行，不要把完整会话清单、进程参数或日志直接贴到公开场合。
 
@@ -251,4 +251,4 @@ systemctl --system show greetd.service --property=LoadState,ActiveState,SubState
 确认本地工具为 systemd
 261。因而这里保留的是经过手册核对的观察方法，没有宣称已经验证当前机器的登录、密钥环或锁屏行为，也没有为验证文章而退出会话、改密码或重启登录服务。
 
-从这些对象的关系出发，定位方向就有了依据：身份确认看 PAM 服务与规则，会话建立看 logind，用户后台服务看用户管理器，设备访问接着看会话控制器与 seat，凭据提示则区分密钥环解锁和 polkit 授权。下一篇进入[显示、输入与图形渲染](/posts/linux-desktop-graphics/)，继续追踪这个用户的程序怎样把画面送到显示器上。
+排查时可以把这些对象分开看：身份确认检查 PAM 服务与规则，会话建立检查 logind，用户后台服务检查用户管理器，设备访问再看会话控制器与 seat；遇到凭据提示，则要区分密钥环解锁和 polkit 授权。下一篇进入[显示、输入与图形渲染](/posts/linux-desktop-graphics/)，继续追踪这个用户的程序怎样把画面送到显示器上。

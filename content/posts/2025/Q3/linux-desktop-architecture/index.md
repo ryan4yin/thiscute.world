@@ -1,9 +1,9 @@
 ---
-title: "Linux 桌面系统：系统全景与阅读路径"
+title: "Linux 桌面系统（一）：系统全景与阅读路径"
 subtitle: ""
 description: "沿开机、登录、应用运行到关机的时间线，理解 Linux 桌面组件之间的职责与接口。"
 date: 2025-09-09T20:17:33+08:00
-lastmod: 2026-09-16T02:23:46+08:00
+lastmod: 2026-09-16T13:32:17+08:00
 draft: false
 
 authors: ["ryan4yin"]
@@ -47,11 +47,26 @@ code:
 ---
 
 > AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 写这个系列时，我已经用了七八年 Linux，但遇到系统的各种大小毛病，还是常常觉得定位跟解决很艰难。知道一堆组件的名字，跟知道它们如何一起工作，中间还差着不少东西。
 
-我想画一幅 Linux 桌面的「解牛图」。就像庖丁解牛那样，能看清骨节筋脉，遇到问题时才知道该从哪里下刀。这个系列面向已经有一定 Linux 桌面使用经验、想继续往下挖的读者，顺着开机、登录、应用运行到关机的过程，解释每一步是谁在做事，它要等什么，又把什么交给下一位。
+我想画一幅 Linux 桌面的「解牛图」。就像庖丁解牛那样，能看清骨节筋脉，遇到问题时才知道该从哪里下刀。这个系列面向已经有一定 Linux 桌面使用经验、想继续往下挖的读者，顺着开机、登录、应用运行到关机的过程，解释每一步由谁负责、依赖什么，以及完成后交给谁。
+
+下面这张图先把九篇文章放回同一条生命周期里。箭头表示阅读时最值得追踪的交接关系，并不表示所有工作都严格串行执行。
+
+```mermaid
+flowchart LR
+    A[固件与引导] --> B[内核与 initramfs]
+    B --> C[系统服务与设备]
+    C --> D[登录与用户会话]
+    D --> E[图形、输入与应用]
+    E --> F[音频、字体与输入法]
+    E --> G[网络通信]
+    D --> H[挂起、恢复与关机]
+    F --> H
+    G --> H
+```
 
 ## 按下电源之后，桌面是怎样出现的
 
@@ -64,32 +79,32 @@ code:
 [bootup 中的系统管理器启动过程](https://github.com/systemd/systemd/blob/main/man/bootup.xml)
 给出了这些 target 的关系。
 
-登录又跨过了一层边界：系统要为特定用户建立会话。在使用 `pam_systemd`
+接下来，系统要为特定用户建立登录会话。在使用 `pam_systemd`
 的登录流程中，这个 PAM 模块把会话登记到 systemd-logind，并参与准备用户的运行时目录和 systemd 用户实例。用户实例与某一次图形登录不是一回事，同一用户的多个会话可以共用它。这也解释了为什么讨论桌面服务时，经常需要分清「系统实例」和「用户实例」。具体的会话类别和生命周期由
 [pam_systemd 手册](https://github.com/systemd/systemd/blob/main/man/pam_systemd.xml)
 说明，认证和会话的区别留到登录篇展开。
 
-接着，Wayland 合成器与图形应用建立连接。应用通过 Wayland 协议提交显示内容、接收用户输入，合成器承担显示服务器的角色。Wayland 本身没有一个所有桌面共用的服务器程序，不同桌面使用不同的合成器实现。因此，遇到显示或输入问题，光知道「我用的是 Wayland」还不够，还要知道连接的是哪个合成器、应用用了哪条图形路径。
+接着，Wayland 合成器与图形应用建立连接。应用通过 Wayland 协议提交显示内容、接收用户输入，合成器承担显示服务器的角色。Wayland 本身没有一个所有桌面共用的服务器程序，不同桌面使用不同的合成器实现。因此，遇到显示或输入问题，光知道「我用的是 Wayland」还不够，还要知道连接的是哪个合成器、应用实际使用了哪套图形接口。
 [Wayland 官方介绍](https://wayland.freedesktop.org/)明确区分了协议、库和具体实现。
 
-窗口出现后，应用的工作还会越过其他接口。比如一次通过 portal 发起的屏幕共享：应用请求 ScreenCast
+窗口显示出来以后，应用还会调用桌面的其他接口。比如一次通过 portal 发起的屏幕共享：应用请求 ScreenCast
 portal，桌面对应的后端参与处理请求，随后应用通过 portal 返回的连接读取 PipeWire 中的屏幕流。这个过程同时涉及应用、portal、桌面后端和 PipeWire，只看应用窗口能否显示，自然不足以判断共享链路是否可用。参见
 [portal 后端说明](https://flatpak.github.io/xdg-desktop-portal/docs/#backends)和
 [ScreenCast 接口](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html)。
 
 音频也有自己的路径。在 PipeWire 中，可以把应用和设备对应的节点想成一组输入口、输出口，声音沿节点之间的连接流动。WirePlumber 这类会话管理器负责设备发现、连接策略等工作，PipeWire 负责运行这张处理图。这里的「会话管理器」是多媒体系统里的角色，不要跟刚才的登录会话管理混淆。[PipeWire 概览](https://docs.pipewire.org/page_overview.html)对两者职责作了区分。
 
-网络则横跨这条时间线。systemd-networkd 是系统服务，会在网络设备出现时识别并配置它们；NetworkManager 也是网络管理实现，负责连接和接口配置，并向应用提供 D-Bus 接口。它们做的工作不需要以「用户已经打开浏览器」为起点。读网络篇时，我们会顺着设备、地址、路由和名称解析检查应用的通信条件，不把某一个网络管理程序的运行状态等同于整个网络可用。参见
+网络从开机时就开始参与其中。systemd-networkd 是系统服务，会在网络设备出现时识别并配置它们；NetworkManager 也是网络管理实现，负责连接和接口配置，并向应用提供 D-Bus 接口。它们做的工作不需要等用户打开浏览器才开始。读网络篇时，我们会顺着设备、地址、路由和名称解析检查应用的通信条件，不把某一个网络管理程序的运行状态等同于整个网络可用。参见
 [systemd-networkd 手册](https://github.com/systemd/systemd/blob/main/man/systemd-networkd.service.xml)和
 [NetworkManager 手册](https://www.networkmanager.dev/docs/api/latest/NetworkManager.html)。
 
-最后是退出。关机时系统管理器停止服务、卸载文件系统，再完成系统断电；挂起和恢复走的是另一条状态转换路径，在 systemd 中有对应的睡眠服务协调。把它们都叫作「关闭桌面」会漏掉后半段的工作。启动时关心某个依赖有没有准备好，退出时则要关心使用它的进程有没有结束、资源能否释放。这两条路径分别见
+最后是退出。关机时系统管理器停止服务、卸载文件系统，再完成系统断电；挂起和恢复则由 systemd 的睡眠服务协调。把它们都叫作「关闭桌面」会漏掉后半段的工作。启动时关心某个依赖有没有准备好，退出时则要关心使用它的进程有没有结束、资源能否释放。相关机制分别见
 [bootup 的关机说明](https://github.com/systemd/systemd/blob/main/man/bootup.xml)与
 [systemd 睡眠服务手册](https://github.com/systemd/systemd/blob/main/man/systemd-suspend.service.xml)。
 
 ## 这幅图里，哪些是我的选择
 
-本系列以我的 NixOS 桌面为连续例子，沿用 systemd、Wayland、PipeWire 等组件；网络案例会涉及 systemd-networkd 和 iwd。这些是案例环境的选择，不能当作 NixOS 或 Linux 桌面的统一默认值。
+后文会以我日常使用的 NixOS 桌面为例，其中用到了 systemd、Wayland 和 PipeWire；网络部分还会涉及 systemd-networkd 与 iwd。这些只是这台机器上的选择，不能当作 NixOS 或 Linux 桌面的统一默认值。
 
 NixOS 比较特别的地方是配置入口：先用 NixOS 配置描述期望的系统，再由模块落实成软件包、服务及配置文件。读到一段 Nix 配置时，我建议继续追问它最后影响的是哪一个组件。例如启用某项服务之后，仍要区分声明的配置与正在运行的服务状态。
 [NixOS 手册的配置说明](https://nixos.org/manual/nixos/stable/#sec-changing-config)
@@ -104,17 +119,17 @@ NixOS 比较特别的地方是配置入口：先用 NixOS 配置描述期望的�
 
 九篇文章按系统的生命周期安排。第一次读可以从启动篇往后走；以后只查某个组件，也可以从下面直接进入。D-Bus 等基础概念在系统基础篇集中解释，后续文章再说明具体服务如何使用它。
 
-| 文章                                                             | 沿着哪一段看                                             |
-| ---------------------------------------------------------------- | -------------------------------------------------------- |
-| [系统全景与阅读路径](/posts/linux-desktop-architecture/)（本文） | 把启动、会话、应用和退出连起来                           |
-| [从固件到根文件系统](/posts/linux-desktop-boot/)                 | 固件怎样交给内核，系统怎样找到根文件系统                 |
-| [系统服务、设备与通信](/posts/linux-desktop-system-foundations/) | systemd 单元、journal、udev 和 D-Bus 怎样支撑后面的桌面  |
-| [登录、身份与用户会话](/posts/linux-desktop-login-session/)      | 认证之后怎样建立会话，密钥环、用户实例和设备访问如何衔接 |
-| [显示、输入与图形渲染](/posts/linux-desktop-graphics/)           | 输入事件怎样到达应用，应用画面怎样到达屏幕               |
-| [桌面应用、portal 与沙盒](/posts/linux-desktop-app-integration/) | 应用如何启动，文件访问和屏幕共享如何跨越桌面接口         |
-| [音频、字体与输入法](/posts/linux-desktop-media-input/)          | 声音怎样流动，文字怎样显示，输入法怎样把文字交给应用     |
-| [网络如何到达应用](/posts/linux-desktop-network/)                | 设备、地址、路由、DNS 和 VPN/TUN 怎样影响应用通信        |
-| [挂起、恢复与关机](/posts/linux-desktop-power/)                  | 系统怎样暂停、回来或退出，哪些资源需要重新准备或释放     |
+| 文章                                                                   | 沿着哪一段看                                             |
+| ---------------------------------------------------------------------- | -------------------------------------------------------- |
+| [（一）系统全景与阅读路径](/posts/linux-desktop-architecture/)（本文） | 把启动、会话、应用和退出连起来                           |
+| [（二）从固件到根文件系统](/posts/linux-desktop-boot/)                 | 固件怎样交给内核，系统怎样找到根文件系统                 |
+| [（三）系统服务、设备与通信](/posts/linux-desktop-system-foundations/) | systemd 单元、journal、udev 和 D-Bus 怎样支撑后面的桌面  |
+| [（四）登录、身份与用户会话](/posts/linux-desktop-login-session/)      | 认证之后怎样建立会话，密钥环、用户实例和设备访问如何衔接 |
+| [（五）显示、输入与图形渲染](/posts/linux-desktop-graphics/)           | 输入事件怎样到达应用，应用画面怎样到达屏幕               |
+| [（六）桌面应用、portal 与沙盒](/posts/linux-desktop-app-integration/) | 应用如何启动，文件访问和屏幕共享如何跨越桌面接口         |
+| [（七）音频、字体与输入法](/posts/linux-desktop-media-input/)          | 声音怎样流动，文字怎样显示，输入法怎样把文字交给应用     |
+| [（八）网络如何到达应用](/posts/linux-desktop-network/)                | 设备、地址、路由、DNS 和 VPN/TUN 怎样影响应用通信        |
+| [（九）挂起、恢复与关机](/posts/linux-desktop-power/)                  | 系统怎样暂停、回来或退出，哪些资源需要重新准备或释放     |
 
 ## 先认清自己正在观察什么
 
