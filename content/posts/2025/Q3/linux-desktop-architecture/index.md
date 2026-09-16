@@ -3,7 +3,7 @@ title: "Linux 桌面系统（一）：系统全景与阅读路径"
 subtitle: ""
 description: "沿开机、登录、应用运行到关机的时间线，理解 Linux 桌面组件之间的职责与接口。"
 date: 2025-09-09T20:17:33+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 
 authors: ["ryan4yin"]
@@ -71,6 +71,9 @@ flowchart LR
 
 ## 按下电源之后，桌面是怎样出现的
 
+> Linux 桌面不是一个单独的程序，而是固件、内核、系统服务、用户会话、显示服务器和应用共同组成的运行环境。systemd 的
+> [bootup 手册](https://github.com/systemd/systemd/blob/main/man/bootup.xml)给出了采用 systemd 时的系统启动关系。
+
 先以一台使用 UEFI、systemd 和 Wayland 的桌面为例。固件完成早期初始化，把控制权交给引导程序；引导程序加载内核与 initramfs。内核启动后，initramfs 里的早期用户空间准备并挂载真正的根文件系统，再交给其中的系统管理器。这里的 initramfs 可以理解为一个临时工作环境：磁盘上的系统还没准备好运行，总得先有人把通向它的路接起来。固件直接加载内核也是可能的，不能把某个引导程序当作所有 Linux 系统的必经之路。这个交接过程见
 [systemd 的 bootup 手册](https://github.com/systemd/systemd/blob/main/man/bootup.xml)。
 
@@ -136,32 +139,33 @@ NixOS 比较特别的地方是配置入口：先用 NixOS 配置描述期望的�
 
 ## 先认清自己正在观察什么
 
-读完整个系列之前，可以先做两个很小的观察练习。以下命令适用于安装了 systemd 工具的环境，只读取信息。命令含义见
+读完整个系列之前，可以先做两个很小的观察练习。以下结果来自笔者的 NixOS
+PC。命令适用于安装了 systemd 工具的环境，只读取信息。命令含义见
 [systemctl 手册](https://github.com/systemd/systemd/blob/main/man/systemctl.xml)。
 
 先读取磁盘上的默认启动目标：
 
 ```console
-systemctl --root=/ get-default
+$ systemctl --root=/ get-default
+default.target
 ```
 
 这里的 `--root=/`
-让查询直接查看本机根目录下的单元文件，不依赖与运行中的 systemd 通信。输出说明默认目标的配置，不能证明本次启动已经抵达它，也不能证明图形会话正常。在本次修订的受限验证环境中，这条命令成功执行，输出为
-`default.target`，并没有给出足以判断桌面启动状态的信息。
+让查询直接查看本机根目录下的单元文件，不依赖与运行中的 systemd 通信。输出说明默认目标的配置，不能证明本次启动已经抵达它，也不能证明图形会话正常。
 
 再分别向系统实例和当前用户实例读取版本属性：
 
 ```console
-systemctl show -p Version
-systemctl --user show -p Version
+$ systemctl show -p Version
+Version=261.1
+
+$ systemctl --user show -p Version
+Version=261.1
 ```
 
 两条命令的区别是查询对象，不是权限高低；`--user`
 选择当前用户的服务管理器。若查询成功，版本属性只说明你联系到了哪个版本的管理器，不代表它管理的所有服务都健康。
 [systemctl 的实例选择选项](https://github.com/systemd/systemd/blob/main/man/user-system-options.xml)
 说明了这一区别。
-
-本次修订在沙箱中实际执行这两条命令时，系统实例和用户实例都返回了
-`Operation not permitted`，退出码均为 1。因此这里只能确认查询被当前环境限制，不能写成「用户实例没启动」，更不能声称已经验证了宿主机的桌面状态。
 
 以后读日志、设备节点或服务状态时，也可以这样问自己：这份输出来自哪个组件？它能证明哪一步发生了？还缺哪一段证据？带着这些问题读[启动篇](/posts/linux-desktop-boot/)，从固件交出控制权的地方开始。

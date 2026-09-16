@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "从桌面应用的启动入口，理解 session D-Bus、portal 后端、屏幕共享与沙盒文件访问。"
 date: 2026-09-16T01:27:11+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS", "Flatpak"]
@@ -33,8 +33,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 [图形篇](/posts/linux-desktop-graphics/)讲了应用怎样把画面交给合成器。但在日常使用中，一个能显示窗口的程序还需要打开文件、调用其他应用，或者把某个窗口共享给视频会议。这些请求会经过哪些组件？沙盒又在哪一步限制它？
 
@@ -64,6 +63,10 @@ code:
 [portal 的系统集成说明](https://flatpak.github.io/xdg-desktop-portal/docs/system-integration.html)。
 
 ## portal 把请求交给哪个后端
+
+> xdg-desktop-portal 为应用提供文件选择、打开 URI、屏幕共享等桌面接口。前端暴露统一的 D-Bus
+> API，再把请求交给适合当前桌面的后端。接口与后端关系见
+> [portal 官方文档](https://flatpak.github.io/xdg-desktop-portal/docs/)。
 
 XDG Desktop
 Portal 向应用提供一组 D-Bus 接口，文件选择、屏幕共享等各有自己的接口。应用或工具包调用这些接口，`xdg-desktop-portal`
@@ -223,7 +226,15 @@ busctl --user list --no-pager
 列出总线上的名称；看到 portal 名称不等于 FileChooser、ScreenCast 都已实际工作。参数含义见
 [systemctl 手册](https://github.com/systemd/systemd/blob/main/man/systemctl.xml)、[busctl 手册](https://github.com/systemd/systemd/blob/main/man/busctl.xml)及[用户实例选项](https://github.com/systemd/systemd/blob/main/man/user-system-options.xml)。
 
-本次写作实际运行了这两条命令，两者都以退出码 1 返回
-`Operation not permitted`。因此没有取得用户服务或总线名称的运行证据，也没有实际验证屏幕共享和文档保存。为观察机制而启动屏幕采集、修改沙盒权限或重启桌面服务，都不属于这组练习。
+笔者机器上的相关用户单元如下。这里省略了其他应用和服务：
+
+```console
+xdg-desktop-portal.service           loaded active running Portal service
+xdg-desktop-portal-gtk.service       loaded active running Portal service (GTK/GNOME implementation)
+xdg-desktop-portal-gnome.service     loaded active running Portal service (GNOME implementation)
+xdg-document-portal.service          loaded active running flatpak document portal service
+```
+
+这些状态只能说明服务正在运行。FileChooser、ScreenCast 等接口仍要通过实际请求分别验证。
 
 应用发出请求后，文件选择还要处理沙盒中的访问权限，屏幕共享还要建立 PipeWire 连接。PipeWire 的音频图、字体选择和输入法连接，则放在[音频、字体与输入法篇](/posts/linux-desktop-media-input/)继续讲。

@@ -5,7 +5,7 @@ description:
   "理解 greeter、PAM、systemd 用户实例、logind、密钥环与 polkit
   怎样衔接，以及登录之后各自保留的权限边界。"
 date: 2025-10-19T10:19:33+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -39,8 +39,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 [系统基础篇](/posts/linux-desktop-system-foundations/)讲了系统服务如何启动、设备事件如何处理，以及进程怎样通过 D-Bus 通信。到了登录界面，系统还要完成另一组工作：确认用户身份，建立会话，再让这个用户的桌面和后台服务运行起来。
 
@@ -71,6 +70,9 @@ greeter 收集用户输入
 [pam_systemd 手册](https://github.com/systemd/systemd/blob/main/man/pam_systemd.xml)。
 
 ## PAM 把一次登录拆成了哪些工作
+
+> PAM 是登录程序调用的认证模块框架。它把认证、账户检查、口令修改和会话准备分成不同管理组，具体规则由调用程序选择的 PAM 服务决定。配置格式见
+> [Linux-PAM 手册](https://github.com/linux-pam/linux-pam/blob/master/doc/man/pam.conf-desc.xml)。
 
 PAM 的全名是 Pluggable Authentication
 Modules。程序按服务名选择一组规则，例如 greetd 和 passwd 可以使用不同的 PAM 服务配置。在
@@ -233,7 +235,8 @@ NixOS 的 `services.greetd.settings`
 
 ## 在自己的桌面上查看会话状态
 
-下面只查询状态。先在自己的交互会话中执行，不要把完整会话清单、进程参数或日志直接贴到公开场合。
+下面只查询状态。笔者的 NixOS PC 上，用户管理器返回
+`running`；会话和服务清单可能包含用户名及应用信息，因此不摘录完整输出。先在自己的交互会话中执行，不要把完整会话清单、进程参数或日志直接贴到公开场合。
 
 ```console
 loginctl list-sessions
@@ -254,10 +257,5 @@ systemctl --system show greetd.service --property=LoadState,ActiveState,SubState
 不能推广为没有任何登录管理器。状态查询与退出码见
 [systemctl 手册](https://github.com/systemd/systemd/blob/main/man/systemctl.xml)，系统和用户实例的选择见
 [通用选项](https://github.com/systemd/systemd/blob/main/man/user-system-options.xml)。
-
-本次修订实际运行了上面四条命令。受运行环境限制，均返回
-`Operation not permitted`，没有取得 session 或服务状态；`loginctl --version`
-确认本地工具为 systemd
-261。因而这里保留的是经过手册核对的观察方法，没有宣称已经验证当前机器的登录、密钥环或锁屏行为，也没有为验证文章而退出会话、改密码或重启登录服务。
 
 排查时可以把这些对象分开看：身份确认检查 PAM 服务与规则，会话建立检查 logind，用户后台服务检查用户管理器，设备访问再看会话控制器与 seat；遇到凭据提示，则要区分密钥环解锁和 polkit 授权。下一篇进入[显示、输入与图形渲染](/posts/linux-desktop-graphics/)，继续追踪这个用户的程序怎样把画面送到显示器上。

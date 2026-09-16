@@ -5,7 +5,7 @@ description:
   "沿着一次输入到画面更新的过程，理解 evdev、libinput、Wayland 合成器、Mesa 与 DRM/KMS
   的分工。"
 date: 2026-09-16T01:14:00+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS"]
@@ -34,14 +34,16 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 [登录会话篇](/posts/linux-desktop-login-session/)讲到，合成器需要在合适的会话中取得设备访问权。拿到设备之后，窗口还没有凭空出现：键鼠事件要交给应用，应用要画出内容，合成器再安排这些内容怎样出现在显示器上。
 
 平时说「显卡驱动出问题了」，往往把好几层东西混在了一起。应用使用的图形库、内核驱动和合成器各有自己的工作。本文以普通本地 Wayland 桌面为主，从一次点击怎样变成画面更新讲起，说明这些接口怎样配合。
 
 ## 合成器怎样取得设备访问权
+
+> Wayland 合成器既接收客户端提交的窗口内容，也负责把画面组合后送往显示设备，并把输入事件分发给客户端。Wayland 官方文档区分了协议、客户端库与具体合成器实现，见
+> [Wayland architecture](https://wayland.freedesktop.org/docs/html/ch03.html)。
 
 在直接控制显示设备的桌面会话中，合成器需要访问输入设备及 DRM/KMS 设备。使用 logind 的实现可以通过
 `TakeDevice()`
@@ -169,9 +171,12 @@ server，对外则作为 Wayland 客户端连接合成器。于是同一个 Wayl
 
 下面两条只查询信息，应在自己的图形会话中执行。完整输出可能包含显示设备或驱动信息，公开分享前先筛选必要字段。
 
+笔者的 NixOS PC 没有预装 `wayland-info`，因此通过 Nix 临时运行。结果确认当前连接公布了
+`xdg_wm_base` version 7：
+
 ```console
-wayland-info -i xdg_wm_base
-glxinfo -B
+$ nix run nixpkgs#wayland-utils -- --interface xdg_wm_base
+interface: 'xdg_wm_base', version: 7, name: 3
 ```
 
 第一条向所连接的合成器查询已公布的 Wayland globals，并只显示名称包含 `xdg_wm_base`
@@ -183,11 +188,18 @@ glxinfo -B
 `glxinfo -h` 也确认了 `-B`
 的含义。显示连接失败时，先检查这个进程能否访问目标显示服务，不能直接判断 GPU 驱动损坏。
 
-若还需要对照会话层，先按[登录会话篇](/posts/linux-desktop-login-session/)确认目标 session，再查询它的
-`Type`、`Active` 等属性。本次写作在已有明确 session ID 的前提下执行了带独立 `-p` 选项的
-`loginctl show-session`，返回 `Operation not permitted`；没有读到会话状态。
+笔者机器同样通过 Nix 临时运行 `glxinfo`，这里只摘取与判断渲染路径有关的字段：
 
-本次环境没有安装 `wayland-info`，因此未执行协议查询；`glxinfo -B`
-实际返回无法打开 display，退出码为 255。这些结果只说明本文的运行环境没有完成相应观察，没有验证当前桌面的 GPU、协议支持或显示输出。也没有为补齐结果而安装软件、切换会话或重启合成器。
+```console
+$ nix shell nixpkgs#mesa-demos -c glxinfo -B
+name of display: :0
+direct rendering: Yes
+OpenGL vendor string: Intel
+OpenGL renderer string: Mesa Intel(R) Graphics (ARL)
+```
+
+若还需要对照会话层，先按[登录会话篇](/posts/linux-desktop-login-session/)确认目标 session，再查询它的
+`Type`、`Active`
+等属性。观察命令应从目标图形会话中运行，否则查询到的显示连接可能与正在使用的桌面无关。
 
 至此，输入事件、客户端内容和显示输出之间的关系已经理清。接下来还要解释，桌面如何找到并启动应用，以及应用怎样请求文件选择、屏幕共享等服务。这部分在[桌面应用篇](/posts/linux-desktop-app-integration/)继续；设备事件与进程通信的基础可回看[系统基础篇](/posts/linux-desktop-system-foundations/)。

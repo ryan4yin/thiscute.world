@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "理解固件、引导程序、内核与 initramfs 的交接，以及系统如何找到要挂载的文件系统。"
 date: 2025-10-19T10:17:33+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 
 authors: ["ryan4yin"]
@@ -42,14 +42,17 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 系统还没启动的时候，磁盘上的程序是谁读出来的？读出了内核，为什么又要准备一个 initramfs？等到屏幕上出现 systemd 的日志，是不是就说明根文件系统已经挂载好了？
 
 这几个问题对应的是启动过程中不同的交接点。[全景篇](/posts/linux-desktop-architecture/)把它们串在了一起，这篇从按下电源讲到磁盘上的系统接手。认证、PAM 与密钥环放在[登录、身份与用户会话](/posts/linux-desktop-login-session/)中讨论。
 
 ## 固件先找到一个能执行的程序
+
+> 固件负责完成早期硬件初始化，并选择下一阶段要执行的启动程序。采用 UEFI 的机器通常从 EFI
+> System Partition 读取 EFI 程序，具体启动方式见
+> [UEFI 规范](https://uefi.org/specifications)。
 
 开机后，固件先做早期硬件初始化，再把控制权交出去。本文以 UEFI 机器为例：常见路径是固件启动 systemd-boot 或 GRUB，再由它们选择并加载 Linux 内核。这里没有 Linux 进程，也没有 systemd 服务，磁盘上安装了 systemd 并不代表它已经开始工作。[systemd 的 bootup 手册](https://github.com/systemd/systemd/blob/main/man/bootup.xml)从固件开始说明了这条路径。
 
@@ -126,9 +129,9 @@ flowchart TD
 下的配置参与决定。比如 `boot.initrd.kernelModules`
 用于把指定模块及其依赖加入 initrd。需要对照的是声明最终生成的启动环境，而不只是安装后的系统里有没有那个模块。[NixOS 手册的 Manual Installation 与 Linux Kernel 章节](https://nixos.org/manual/nixos/stable/)说明了这两个入口。
 
-还要留意版本。本次修订核对的是 NixOS 26.05 手册，其中脚本式 stage
-1 已被标为默认关闭、弃用，启用与否受 `boot.initrd.systemd.enable`
-控制。查老配置或旧教程时，不能把脚本式 stage 1 的调试参数直接套到 systemd
+还要留意版本。NixOS 26.05 手册中，脚本式 stage 1 已被标为默认关闭、弃用，启用与否受
+`boot.initrd.systemd.enable` 控制。查老配置或旧教程时，不能把脚本式 stage
+1 的调试参数直接套到 systemd
 initrd 上。[NixOS 手册的 Boot Problems 章节](https://nixos.org/manual/nixos/stable/)把两种实现分开列出。
 
 如果使用 Arch，并选择 mkinitcpio 生成 initramfs，则主要看 `/etc/mkinitcpio.conf`
@@ -165,41 +168,42 @@ fileSystems."/boot" = {
 
 回到一台正在排查的机器，可以先把问题拆开：是设备没出现，还是配置指向了错误的设备？设备正确时，文件系统有没有成功挂载？挂载成功之后，等待的是不是另一个挂载或服务？这些问题对应的证据不同，不宜看到「启动失败」就直接做文件系统修复。
 
-## 在当前环境里做几个小观察
+## 在笔者的 NixOS PC 上做几个小观察
 
 先查正在运行的内核版本：
 
 ```console
-uname -r
+$ uname -r
+7.2.0
 ```
 
 `-r` 只输出内核 release，含义可见
-[GNU Coreutils 的 uname 实现与帮助文本](https://github.com/coreutils/coreutils/blob/master/src/uname.c)。本次修订的验证环境返回
-`7.2.0`，退出码为 0。这能确认当前进程看到的内核版本；它不能证明下一次启动会选择同一个内核，也不能验证磁盘上的 initramfs 是否正确。
+[GNU Coreutils 的 uname 实现与帮助文本](https://github.com/coreutils/coreutils/blob/master/src/uname.c)。这能确认当前进程看到的内核版本；它不能证明下一次启动会选择同一个内核，也不能验证磁盘上的 initramfs 是否正确。
 
 再看当前根目录的挂载类型，只选取需要的列：
 
 ```console
-findmnt -n -o TARGET,FSTYPE /
+$ findmnt -n -o TARGET,FSTYPE /
+/ tmpfs
 ```
 
-本次实际输出是 `/ tmpfs`，退出码为 0。`findmnt`
-默认读取当前进程的挂载信息，因此这个沙箱里的根目录并不能代表宿主机的磁盘布局。[findmnt 手册](https://github.com/util-linux/util-linux/blob/master/misc-utils/findmnt.8.adoc)说明了默认数据来源及列选择方式。若要在自己的机器上继续核对挂载来源，可以查询
-`SOURCE` 列；分享结果前应隐藏设备标识和私有路径。本次也执行了
-`findmnt -n -o SOURCE,TARGET /`，退出码为 0，来源字段未公开。
+`findmnt`
+默认读取当前挂载命名空间的信息。这里的根目录使用 tmpfs，是笔者机器当前配置的结果，并不是 NixOS 的统一默认值。[findmnt 手册](https://github.com/util-linux/util-linux/blob/master/misc-utils/findmnt.8.adoc)说明了默认数据来源及列选择方式。若要继续核对挂载来源，可以查询
+`SOURCE` 列；分享结果前应隐藏设备标识和私有路径。
 
 最后，向 systemd 查询本次启动的计时：
 
 ```console
-systemd-analyze
+$ systemd-analyze
+Startup finished in 9.474s (firmware) + 10.727s (loader) + 751ms (kernel) + 3.000s (initrd) + 8.751s (userspace) = 32.705s
+graphical.target reached after 3.815s in userspace.
 ```
 
 不带子命令时，它查询的是
-`time`。成功时可以看到内核、initrd 与正式用户空间等阶段的计时，但这些时间不表示所有服务都已完成初始化，更不表示用户桌面已经可用。[systemd-analyze 手册](https://github.com/systemd/systemd/blob/main/man/systemd-analyze.xml)专门说明了这个限制。本次在沙箱里执行时返回
-`Operation not permitted`，退出码为 1，因此没有取得可用的启动耗时，不能据此评判宿主机的启动状态。
+`time`。输出把固件、引导程序、内核、initrd 与正式用户空间分开计时，但这些时间不表示所有服务都已完成初始化，更不表示用户桌面已经可用。[systemd-analyze 手册](https://github.com/systemd/systemd/blob/main/man/systemd-analyze.xml)专门说明了这个限制。
 
 固件与引导程序的信息可以进一步由 `bootctl status`
 查询。它会展示固件、当前引导程序、ESP 中的启动文件和默认启动项，输出也可能包含分区标识、机器标识及启动参数。依据
-[bootctl 手册的输出范围](https://github.com/systemd/systemd/blob/main/man/bootctl.xml)，本次没有读取这份完整输出，也没有声称验证过宿主机的引导配置。
+[bootctl 手册的输出范围](https://github.com/systemd/systemd/blob/main/man/bootctl.xml)。
 
 到这里，已经能区分「内核开始执行」「早期用户空间准备存储」「切换到正式系统」几个状态了。接下来读[系统服务、设备与通信](/posts/linux-desktop-system-foundations/)，看 systemd 如何把挂载、设备与服务之间的依赖落实成启动过程。

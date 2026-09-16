@@ -5,7 +5,7 @@ description:
   "理解
   logind、电源管理服务与内核如何协作，区分挂起、休眠和关机保留的状态，以及恢复时设备与网络需要重新完成的工作。"
 date: 2025-10-19T10:22:33+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -39,8 +39,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 前几篇依次讲了开机、登录和应用运行。离开桌面时，系统还要决定怎样保存或结束这些工作：挂起让进程暂停，关机让它们退出；休眠则把可恢复的内存状态写入持久存储。三种操作会用到部分相同的组件，最终保留的状态却不同。
 
@@ -83,6 +82,8 @@ inhibitor，在收到通知后完成工作并释放锁；延迟受超时限制�
 这也解释了锁屏与挂起的分工：锁屏程序负责准备用户界面的访问限制，电源管理流程负责暂停系统。内核不会替桌面程序保存编辑器里尚未写入文件的内容。
 
 ## 挂起时，内核保留了什么
+
+> Linux 把 suspend-to-idle、suspend-to-RAM 和休眠视为不同的睡眠状态。它们保留的状态、设备处理方式与恢复入口不同，完整定义见[内核睡眠状态文档](https://docs.kernel.org/admin-guide/pm/sleep-states.html)。
 
 `suspend.target` 会拉入 `systemd-suspend.service`，后者根据睡眠配置，通过 `/sys/power/`
 接口请求内核转换状态。当前 systemd 的睡眠服务默认在进入和离开睡眠期间冻结
@@ -178,17 +179,19 @@ Wiki 的相关页面无法读取，这里的对照依据 Arch 项目源码与其
 先在自己的机器上读取内核公开的状态。文件不存在或无读取权限时，停在这一步即可：
 
 ```console
-cat /sys/power/state
-cat /sys/power/mem_sleep
+$ cat /sys/power/state
+freeze mem disk
+
+$ cat /sys/power/mem_sleep
+s2idle [deep]
 ```
 
 `state` 中的 `freeze` 表示 suspend-to-idle，`disk` 表示内核支持的休眠入口；`mem`
 具体使用哪种挂起方式，要结合 `mem_sleep` 看。后者列出支持的模式，方括号标记当前与 `mem`
 关联的选择。这些字段的定义见[内核 sysfs 接口](https://docs.kernel.org/admin-guide/pm/sleep-states.html#basic-sysfs-interfaces-for-system-suspend-and-hibernation)。读取不会切换状态；向这些文件写入则可能改变选择或触发睡眠，不是本节的练习。
 
-此次修订实际读取到 `freeze mem disk` 与
-`s2idle [deep]`。它们证明当前内核提供这些入口，且当时选择了
-`deep`；不能据此证明 swap、恢复路径、唤醒设备已经配置正确，也不能代替一次实际恢复的验证。
+这说明笔者机器的内核提供这些入口，且 `mem` 当前对应
+`deep`。它不能证明 swap、恢复路径、唤醒设备已经配置正确，也不能代替一次实际恢复的验证。
 
 若有读取系统 journal 的权限，可只查看本次启动里挂起服务的记录：
 
@@ -200,6 +203,6 @@ journalctl -b -u systemd-suspend --no-pager
 关闭分页。输出仍可能含主机名、时间与本地钩子的消息，分享前需删去私人信息；它也不会包含所有驱动或网络服务的日志。选项见
 [journalctl](https://man.archlinux.org/man/journalctl.1.en)。
 
-本次查询退出正常，在不输出原始日志的检查中，识别到了已有的进入睡眠和从睡眠返回消息。这里没有新发起任何电源操作；既有服务消息也不足以验证显示、网卡或应用连接在那些事件后都恢复正常。
+笔者机器的日志中可以找到进入睡眠和从睡眠返回的记录。既有服务消息仍不足以证明显示、网卡或应用连接在那些事件后都恢复正常。
 
 结合这些信息回看[系列全景](/posts/linux-desktop-architecture/)，就能按时间梳理一台桌面的运行过程：启动时建立系统状态，应用随后使用设备与服务；挂起会暂停执行，恢复后要重新确认设备和网络状态，关机则结束进程并清理资源。

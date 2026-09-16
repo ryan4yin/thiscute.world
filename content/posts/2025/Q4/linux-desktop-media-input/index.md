@@ -5,7 +5,7 @@ description:
   "沿着声音路由、字体匹配和文字输入，理解 PipeWire、WirePlumber、fontconfig 与 Fcitx 5
   如何接入桌面应用。"
 date: 2025-10-19T10:20:33+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -39,8 +39,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 桌面能显示窗口后，还得能听歌、看中文、打中文。这几件事用起来很自然，配置入口却散落在系统服务、用户会话和应用内部。以我的 NixOS +
 Wayland 桌面为例，声音交给 PipeWire 和 WirePlumber，字体通过 fontconfig 匹配，中文输入使用 Fcitx
@@ -49,6 +48,9 @@ Wayland 桌面为例，声音交给 PipeWire 和 WirePlumber，字体通过 font
 本文沿这三条路径展开。[图形篇](/posts/linux-desktop-graphics/)已经讲过键盘事件和画面的传递，[桌面应用篇](/posts/linux-desktop-app-integration/)负责解释 portal 与屏幕共享。这里从音频流进入桌面开始。
 
 ## 一段声音怎样到达耳机
+
+> PipeWire 用图来表示媒体处理过程，应用流、设备和过滤器都是图中的节点；WirePlumber 根据设备与策略决定节点怎样连接。两者的职责见
+> [PipeWire 概览](https://docs.pipewire.org/page_overview.html)。
 
 ### 应用接入的是哪种接口
 
@@ -111,6 +113,9 @@ ms。这是该处理块对应的时间，不能直接当成从应用到耳机的
 [Latency support](https://docs.pipewire.org/page_latency.html)。因此，本文不把固定 quantum 的个人参数作为通用音频配置；能解释一个参数的单位，还不等于测过整条链路。
 
 ## 一串文字怎样选到字体
+
+> fontconfig 根据应用提交的字体族、语言、样式等条件匹配已安装字体，并按规则进行替换和排序。配置模型见
+> [fontconfig user documentation](https://fontconfig.pages.freedesktop.org/fontconfig/fontconfig-user.html)。
 
 音频是持续传递的数据流，字体匹配则发生在应用准备显示文字时。应用通常先提出一个请求：希望使用哪个字体族、字重、尺寸和语言。fontconfig 读取 XML 配置与字体信息，把这些条件组成的 pattern 匹配到可用字体。
 
@@ -223,18 +228,22 @@ Arch 的 [fcitx5](https://archlinux.org/packages/extra/x86_64/fcitx5/)与
 wpctl status
 ```
 
-[wpctl 手册](https://pipewire.pages.freedesktop.org/wireplumber/man/wpctl.html)说明，这会列出设备、sink、source 和 stream。可以沿正在使用的应用流查看它与输出的关系。输出会含设备描述、应用名等本机信息，分享前应脱敏。此次本地验证返回连接失败和权限拒绝，未取得音频图；这只能说明验证环境无法完成查询，不能证明宿主机 PipeWire 已经停止。
+[wpctl 手册](https://pipewire.pages.freedesktop.org/wireplumber/man/wpctl.html)说明，这会列出设备、sink、source 和 stream。可以沿正在使用的应用流查看它与输出的关系。输出会含设备描述、应用名等本机信息，分享前应脱敏，因此这里不摘录笔者机器上的完整媒体图。
 
 ### 对比请求与匹配结果
 
 ```console
-fc-match sans
-fc-match 'sans-serif:lang=zh-cn'
-fc-match 'monospace:lang=zh-cn'
+$ fc-match sans
+SourceSans3-Regular.otf: "Source Sans 3" "Regular"
+
+$ fc-match 'sans-serif:lang=zh-cn'
+SourceSans3-Regular.otf: "Source Sans 3" "Regular"
+
+$ fc-match 'monospace:lang=zh-cn'
+MapleMono-NF-CN-Regular.ttf: "Maple Mono NF CN" "Regular"
 ```
 
-[fc-match 手册](https://man.archlinux.org/man/fc-match.1.en)说明，默认输出最佳匹配的文件短名、字体族和样式。本次三个查询均成功：前两个返回
-`Source Sans 3`，等宽请求返回 `Maple Mono NF CN`。同样带
+[fc-match 手册](https://man.archlinux.org/man/fc-match.1.en)说明，默认输出最佳匹配的文件短名、字体族和样式。同样带
 `lang=zh-cn`，请求的族名不同，匹配就可能不同。
 
 还应注意，fontconfig 寻找的是最接近的匹配，返回一个结果并不保证满足所有条件。要确认某个中文字符最终用了什么字形，还需要观察目标应用的回退和渲染行为。本次没有用 GUI 渲染测试验证这一步，也没有遍历并发布整机字体清单。
@@ -244,12 +253,15 @@ fc-match 'monospace:lang=zh-cn'
 支持 `--check` 的版本可以这样查询已经运行的 Fcitx 5：
 
 ```console
-fcitx5-remote --check -n
+$ fcitx5-remote --check -n
+rime
 ```
 
 `-n` 查询当前输入法名称；`--check` 先查服务的现有 owner，避免查询触发 D-Bus 激活。实现见
 [fcitx5-remote 源码](https://github.com/fcitx/fcitx5/blob/master/src/tools/remote.cpp)。若版本没有该选项，就跳过这个练习，不把启动输入法混入观察过程。
 
-本次环境中，该程序连帮助查询也异常退出，未得到输入法名称。即使查询成功，它也只说明控制接口可达；某个应用是否建立输入上下文、是否送出光标状态、是否收到确认文字，还需要在那个应用里分别验证。本文没有触发输入法重启、切换或文本输入测试。
+这里的 `rime` 只说明笔者机器上当前输入法的名称。它不表示每个应用都已经建立输入上下文。
+
+即使查询成功，它也只说明控制接口可达；某个应用是否建立输入上下文、是否送出光标状态、是否收到确认文字，还需要在那个应用里分别验证。
 
 按这个顺序检查日常配置会更清楚：声音沿图中的连接流动，字体由应用请求与匹配规则共同选择，中文输入则随焦点建立和结束。下一篇[网络如何到达应用](/posts/linux-desktop-network/)从应用继续向外看，说明数据包怎样离开这台桌面。

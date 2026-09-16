@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "理解 systemd 的依赖与启动顺序、journal 日志、udev 设备事件，以及 D-Bus 服务接口。"
 date: 2025-10-19T10:18:33+08:00
-lastmod: 2026-09-16T13:32:17+08:00
+lastmod: 2026-09-16T22:41:13+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -38,8 +38,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
-> Flash 辅助创作。写作时先查阅上游官方文档，再在本机运行可以安全执行的命令，并结合[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 这一篇会反复遇到四组对象。它们不在同一层，却经常出现在同一次排查中：systemd 安排服务，journal 保存日志，udev 处理设备事件，D-Bus 让进程互相调用。
 
@@ -63,6 +62,9 @@ flowchart LR
 与 [udev 手册](https://github.com/systemd/systemd/blob/main/man/udev.xml)。
 
 ## systemd 等待的到底是什么
+
+> systemd 用 unit 表示服务、挂载点、设备和启动目标等对象。依赖关系决定事务中需要包含什么，顺序关系决定任务先后；两者不是同一回事。完整定义见
+> [systemd.unit](https://github.com/systemd/systemd/blob/main/man/systemd.unit.xml)。
 
 systemd 把要管理的对象称为 unit（单元）。`.service` 描述服务进程，`.mount`
 对应挂载点，`.device` 表示设备，`.socket` 可以参与按需启动服务；`.target`
@@ -140,6 +142,9 @@ NixOS 的 `services.udev.packages`
 
 ## D-Bus 把请求交给谁
 
+> D-Bus 是进程间通信协议。服务通过总线名称、对象路径和接口公开功能，调用方发送方法调用并接收回复或信号。完整模型见
+> [D-Bus specification](https://dbus.freedesktop.org/doc/dbus-specification.html)。
+
 进程需要协作时，可以通过 D-Bus 发送方法调用、接收回复或订阅信号。总线根据名称把消息送到对应连接，具体工作由接收请求的服务完成。规范区分系统总线与会话总线，前者供系统范围的服务通信，后者供用户环境中的应用协作。两者是不同的总线，找到一个服务之前先要选对它所在的总线。[D-Bus 规范](https://dbus.freedesktop.org/doc/dbus-specification.html)的 Message
 Bus 与 Well-known Message Bus Instances 部分定义了这些概念。
 
@@ -160,20 +165,22 @@ Bus 与 Well-known Message Bus Instances 部分定义了这些概念。
 总线还支持按需激活：名字尚无拥有者时，符合条件的请求可以启动提供该名字的程序。因此，观察命令也要留意是否会触发激活。[D-Bus 的服务激活规范](https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-starting-services)解释了这个过程。后续应用篇会用到这些概念，但
 [portal 与沙盒的具体调用](/posts/linux-desktop-app-integration/)放在那里展开。
 
-## 在本机做几个小观察
+## 在笔者的 NixOS PC 上做几个小观察
 
 先确认工具版本。下面三个命令只报告客户端版本，不证明相应服务已运行；语义见
 [systemd 的通用选项](https://github.com/systemd/systemd/blob/main/man/standard-options.xml)与
 [udevadm 手册](https://github.com/systemd/systemd/blob/main/man/udevadm.xml)。
 
 ```console
-systemctl --version
-udevadm --version
-busctl --version
-```
+$ systemctl --version
+systemd 261 (261.1)
 
-本次修订的验证环境中，systemctl 和 busctl 返回 `systemd 261 (261.1)`，udevadm 返回
-`261`，退出码均为 0。
+$ udevadm --version
+261
+
+$ busctl --version
+systemd 261 (261.1)
+```
 
 接着分别向系统实例与当前用户实例查询运行中的服务。`list-units` 观察已加载单元，`--type` 与
 `--state` 限定结果；`--user`
@@ -184,17 +191,17 @@ systemctl list-units --type=service --state=running
 systemctl --user list-units --type=service --state=running
 ```
 
-这两条在当前沙箱都返回
-`Operation not permitted`，退出码为 1，没有取得服务列表。权限或连接失败不能解释成「系统没有运行服务」。在自己的桌面运行时，名单可以帮助确定下一步应查哪个单元，但 running 仍不是应用功能测试的结果。
+名单可以帮助确定下一步应查哪个单元，但 `running`
+仍不是应用功能测试的结果。完整输出通常很长，因此这里不摘录笔者机器上的服务清单。
 
 设备观察可以先选一个不含硬件标识的例子，只查 `/dev/null` 的子系统属性：
 
 ```console
-udevadm info --query=property --property=SUBSYSTEM --name=/dev/null
+$ udevadm info --query=property --property=SUBSYSTEM --name=/dev/null
+SUBSYSTEM=mem
 ```
 
-本次输出 `SUBSYSTEM=mem`，退出码为 0。`info` 查询设备信息，`--property`
-限定输出字段，这个选项从 systemd 250 起提供，见
+`info` 查询设备信息，`--property` 限定输出字段，这个选项从 systemd 250 起提供，见
 [udevadm 手册](https://github.com/systemd/systemd/blob/main/man/udevadm.xml)。这个练习只验证查询路径，不能用来证明 USB 插拔事件正常。换成真实设备时，完整属性可能包含序列号等标识，分享前需要检查。
 
 再向系统总线自身请求标准接口描述，并明确禁止自动启动服务：
@@ -208,12 +215,10 @@ busctl --system --auto-start=no call org.freedesktop.DBus /org/freedesktop/DBus 
 禁用激活，见
 [busctl 手册](https://github.com/systemd/systemd/blob/main/man/busctl.xml)。`Introspect`
 没有输入参数，因此命令末尾不需要类型签名或参数值；它返回包含对象接口描述的字符串，见
-[D-Bus 的 Introspectable 规范](https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-introspectable)。本次执行这条命令同样因
-`Operation not permitted`
-退出，退出码为 1，没有取得接口结果；上面的名称来自规范，不能冒充本机查询结果。
+[D-Bus 的 Introspectable 规范](https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-introspectable)。返回的 XML 较长，适合按接口名检索，不适合整段贴进文章。
 
-日志则需要先考虑内容。本次没有执行
-`journalctl -b -n 10 --no-pager`，因为当前系统最近十条日志的内容未知，可能涉及用户活动或私有信息。在自己的机器上确认可以读取后，这条命令会选择本次启动的最后十条记录并关闭分页，参数见
+日志则需要先考虑内容。`journalctl -b -n 10 --no-pager`
+会选择本次启动的最后十条记录并关闭分页，输出可能涉及用户活动或私有信息。参数见
 [journalctl 手册](https://github.com/systemd/systemd/blob/main/man/journalctl.xml)。条数限制不是脱敏，十条记录也不足以重建整个启动过程。
 
 这些观察分别对应管理器状态、设备属性和进程通信。下一篇进入[登录、身份与用户会话](/posts/linux-desktop-login-session/)，继续看系统怎样为一个具体用户建立工作环境。
