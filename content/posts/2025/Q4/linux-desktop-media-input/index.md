@@ -38,7 +38,8 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
+> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 桌面能显示窗口后，还得能听歌、看中文、打中文。这几件事用起来很自然，配置入口却散落在系统服务、用户会话和应用内部。以我的 NixOS +
 Wayland 桌面为例，声音交给 PipeWire 和 WirePlumber，字体通过 fontconfig 匹配，中文输入使用 Fcitx

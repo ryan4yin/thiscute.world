@@ -32,7 +32,8 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
+> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 [图形篇](/posts/linux-desktop-graphics/)讲了应用怎样把画面交给合成器。但在日常使用中，一个能显示窗口的程序还需要打开文件、调用其他应用，或者把某个窗口共享给视频会议。这些请求会经过哪些组件？沙盒又在哪一步限制它？
 

@@ -37,7 +37,8 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
+> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 [上一篇](/posts/linux-desktop-boot/)讲到，早期用户空间准备好根文件系统后，会把启动工作交给正式系统。接下来，挂载和后台服务怎样组织起来？设备插上以后，程序又怎样知道它出现了？
 

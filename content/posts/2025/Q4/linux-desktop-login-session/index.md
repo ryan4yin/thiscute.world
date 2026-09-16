@@ -38,7 +38,8 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1
+> Flash 辅助创作。写作时先查阅上游官方文档，再结合安全命令的本机实测、[作者的 Nix 配置仓库](https://github.com/ryan4yin/nix-config)中的实际案例和独立技术审查交叉核对；无法在当前环境验证的部分会明确注明。
 
 [系统基础篇](/posts/linux-desktop-system-foundations/)讲了系统服务如何启动、设备事件如何处理，以及 D-Bus 怎样连接进程。到了登录界面，系统还要完成另一组工作：确认用户身份，建立会话，再让这个用户的桌面和后台服务运行起来。
 
