@@ -15,6 +15,7 @@ resources:
 tags: ["Linux", "Desktop", "Network", "systemd", "DNS", "Firewall"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 8
 aliases: ["/posts/linux-desktop-5-network/"]
 hiddenFromHomePage: false
 hiddenFromSearch: false

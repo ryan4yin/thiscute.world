@@ -14,6 +14,7 @@ resources:
 tags: ["Linux", "Desktop", "Systemd", "D-Bus"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 3
 aliases: ["/posts/linux-desktop-2-systemd-services/"]
 hiddenFromHomePage: false
 hiddenFromSearch: false

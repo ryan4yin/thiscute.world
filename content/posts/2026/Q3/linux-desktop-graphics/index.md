@@ -11,6 +11,7 @@ authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 5
 hiddenFromHomePage: false
 hiddenFromSearch: false
 license: ""

@@ -16,6 +16,7 @@ resources:
 tags: ["Linux", "Desktop", "Boot", "UEFI", "GRUB", "Systemd", "NixOS"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 2
 aliases: ["/posts/linux-desktop-1-boot-security/"]
 hiddenFromHomePage: false
 hiddenFromSearch: false

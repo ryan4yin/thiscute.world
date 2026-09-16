@@ -15,6 +15,7 @@ resources:
 tags: ["Linux", "Desktop", "Audio", "Fonts", "Input Method", "Wayland"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 7
 aliases: ["/posts/linux-desktop-4-multimedia-input/"]
 hiddenFromHomePage: false
 hiddenFromSearch: false

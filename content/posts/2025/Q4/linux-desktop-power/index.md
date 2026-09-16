@@ -15,6 +15,7 @@ resources:
 tags: ["Linux", "Desktop", "systemd", "Power Management", "Hibernate", "Suspend"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 9
 aliases: ["/posts/linux-desktop-6-shutdown-troubleshooting/"]
 hiddenFromHomePage: false
 hiddenFromSearch: false

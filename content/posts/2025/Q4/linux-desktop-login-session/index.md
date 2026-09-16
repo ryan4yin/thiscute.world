@@ -15,6 +15,7 @@ resources:
 tags: ["Linux", "Desktop", "PAM", "Systemd"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 4
 aliases: ["/posts/linux-desktop-3-session-graphics/"]
 hiddenFromHomePage: false
 hiddenFromSearch: false

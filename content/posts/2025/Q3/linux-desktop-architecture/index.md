@@ -15,6 +15,7 @@ resources:
 tags: ["Linux", "Desktop"]
 categories: ["tech"]
 series: ["Linux 桌面系统"]
+series_weight: 1
 aliases: ["/posts/linux-desktop-explained/"]
 hiddenFromHomePage: false
 hiddenFromSearch: false
