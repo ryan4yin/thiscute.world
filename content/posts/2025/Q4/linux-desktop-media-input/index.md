@@ -5,7 +5,7 @@ description:
   "沿着声音路由、字体匹配和文字输入，理解 PipeWire、WirePlumber、fontconfig 与 Fcitx 5
   如何接入桌面应用。"
 date: 2025-10-19T10:20:33+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -230,6 +230,31 @@ wpctl status
 
 [wpctl 手册](https://pipewire.pages.freedesktop.org/wireplumber/man/wpctl.html)说明，这会列出设备、sink、source 和 stream。可以沿正在使用的应用流查看它与输出的关系。输出会含设备描述、应用名等本机信息，分享前应脱敏，因此这里不摘录笔者机器上的完整媒体图。
 
+从 `wpctl status` 记下一个对象 ID 后，可以继续查看属性：
+
+```console
+wpctl inspect <对象ID>
+```
+
+关注 `media.class`、`node.name`、`device.id`
+和默认目标等字段。ID 只在当前 PipeWire 实例中有效，重启服务或插拔设备后可能变化，不要把它写进长期配置。
+
+如果需要从对象模型的角度核对节点，可使用：
+
+```console
+$ pw-cli ls Node
+id 51, type PipeWire:Interface:Node/3
+        device.id = "59"
+        media.class = "Audio/Sink"
+id 91, type PipeWire:Interface:Node/3
+        client.api = "pipewire-pulse"
+        media.class = "Stream/Output/Audio"
+```
+
+这是从笔者机器输出中删除设备名、应用名和路径后的两个节点。`Audio/Sink`
+是可接收播放流的目标，`Stream/Output/Audio`
+是应用输出流；两者同时存在仍不代表已经连在一起。连接关系要继续看 link，策略选择则要结合 WirePlumber 日志与规则。
+
 ### 对比请求与匹配结果
 
 ```console
@@ -245,6 +270,22 @@ MapleMono-NF-CN-Regular.ttf: "Maple Mono NF CN" "Regular"
 
 [fc-match 手册](https://man.archlinux.org/man/fc-match.1.en)说明，默认输出最佳匹配的文件短名、字体族和样式。同样带
 `lang=zh-cn`，请求的族名不同，匹配就可能不同。
+
+需要知道“为什么匹配到它”时，再看详细 pattern：
+
+```console
+$ fc-match -v 'sans-serif:lang=zh-cn'
+Pattern has 45 elts
+        family: "Source Sans 3"
+        style: "Regular"
+        file: "/nix/store/.../SourceSans3-Regular.otf"
+        lang: ...
+```
+
+`family`、`file` 和 `lang`
+能帮助核对匹配结果及字体覆盖范围。详细输出很长，不宜把整个字符集位图贴进求助帖。若想确认字体是否已被 fontconfig 发现，可用
+`fc-list : family file` 搜索族名；更新字体后再用 `fc-cache -v`
+观察缓存目录，但不要把“缓存成功”当作目标应用一定重新加载了字体。
 
 还应注意，fontconfig 寻找的是最接近的匹配，返回一个结果并不保证满足所有条件。要确认某个中文字符最终用了什么字形，还需要观察目标应用的回退和渲染行为。本次没有用 GUI 渲染测试验证这一步，也没有遍历并发布整机字体清单。
 
@@ -263,5 +304,23 @@ rime
 这里的 `rime` 只说明笔者机器上当前输入法的名称。它不表示每个应用都已经建立输入上下文。
 
 即使查询成功，它也只说明控制接口可达；某个应用是否建立输入上下文、是否送出光标状态、是否收到确认文字，还需要在那个应用里分别验证。
+
+环境变量只反映当前进程继承到的设置，可以先限定字段查看：
+
+```console
+printenv GTK_IM_MODULE QT_IM_MODULE XMODIFIERS WAYLAND_DISPLAY
+```
+
+某个变量为空并不自动等于配置错误：原生 Wayland text-input 路径可能不依赖 `GTK_IM_MODULE`
+或
+`QT_IM_MODULE`。反过来，变量存在也不能证明工具包插件已安装、输入法服务可达或合成器支持相应协议。
+
+`fcitx5-diagnose` 会汇总环境、进程、前端与插件信息，适合在前面几步之后使用：
+
+```console
+fcitx5-diagnose
+```
+
+输出可能包含用户名、路径、locale、正在运行的桌面组件和配置内容。公开时只摘录相关小节，并先检查隐私；不要把整份报告直接上传。
 
 按这个顺序检查日常配置会更清楚：声音沿图中的连接流动，字体由应用请求与匹配规则共同选择，中文输入则随焦点建立和结束。下一篇[网络如何到达应用](/posts/linux-desktop-network/)从应用继续向外看，说明数据包怎样离开这台桌面。

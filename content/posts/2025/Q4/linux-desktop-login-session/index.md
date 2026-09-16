@@ -5,7 +5,7 @@ description:
   "理解 greeter、PAM、systemd 用户实例、logind、密钥环与 polkit
   怎样衔接，以及登录之后各自保留的权限边界。"
 date: 2025-10-19T10:19:33+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -233,29 +233,106 @@ NixOS 的 `services.greetd.settings`
 `default_session` 到了另一发行版就变成一次性自动登录。NixOS 的生成逻辑见
 [greetd 模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/services/display-managers/greetd.nix)。
 
-## 在自己的桌面上查看会话状态
+## 从登录入口查到桌面服务
 
-下面只查询状态。笔者的 NixOS PC 上，用户管理器返回
-`running`；会话和服务清单可能包含用户名及应用信息，因此不摘录完整输出。先在自己的交互会话中执行，不要把完整会话清单、进程参数或日志直接贴到公开场合。
+下面的观察都不会读取口令或密钥内容。会话列表、总线 owner 和进程参数仍可能暴露用户名或正在运行的应用，因此示例只保留判断机制所需的字段。
+
+### 当前进程属于哪个会话和 seat
+
+在图形终端中执行：
 
 ```console
-loginctl list-sessions
-loginctl show-session self -p Type -p Class -p Active -p Remote -p State
-systemctl --user is-system-running
-systemctl --system show greetd.service --property=LoadState,ActiveState,SubState
+$ loginctl show-session auto \
+    -p Id -p Type -p Class -p Active -p Remote -p State -p Seat
+Id=5
+Seat=seat0
+Remote=no
+Type=wayland
+Class=user
+Active=yes
+State=active
 ```
 
-第一条用于理解一台机器可以同时有哪些 session，会包含用户及会话标识。第二条用重复的 `-p`
-分别选择状态字段；`self`
-指调用进程所属的会话，从 SSH 或其他启动方式执行时，并不一定是正在显示的图形桌面。能看到
-`Active=yes`
-也不能证明合成器或密钥环工作正常。[loginctl 的 show-session 说明](https://github.com/systemd/systemd/blob/main/man/loginctl.xml)定义了
-`self`、`auto` 和属性筛选。
+`auto` 会根据调用进程选择会话，比复制一个固定 session
+ID 更适合日常检查。这里能确认终端属于本地、活动的 Wayland 用户会话；它不能证明每个 Wayland 客户端都健康。从 SSH、容器或编辑器后台任务里执行时，`auto`
+可能选到另一个会话，甚至找不到会话。
 
-第三条查询用户管理器的整体状态，`degraded`
-等返回值能提示继续检查用户 units，但不等于登录失败。第四条查询系统管理器中的 greetd 单元，只适用于使用 greetd 的配置；`LoadState=not-found`
-不能推广为没有任何登录管理器。状态查询与退出码见
-[systemctl 手册](https://github.com/systemd/systemd/blob/main/man/systemctl.xml)，系统和用户实例的选择见
-[通用选项](https://github.com/systemd/systemd/blob/main/man/user-system-options.xml)。
+再从 seat 方向反查活动会话：
 
-排查时可以把这些对象分开看：身份确认检查 PAM 服务与规则，会话建立检查 logind，用户后台服务检查用户管理器，设备访问再看会话控制器与 seat；遇到凭据提示，则要区分密钥环解锁和 polkit 授权。下一篇进入[显示、输入与图形渲染](/posts/linux-desktop-graphics/)，继续追踪这个用户的程序怎样把画面送到显示器上。
+```console
+$ loginctl show-seat seat0 \
+    -p Id -p ActiveSession -p CanGraphical -p CanTTY -p Sessions
+Id=seat0
+ActiveSession=5
+CanTTY=yes
+CanGraphical=yes
+Sessions=5
+```
+
+两边的 session ID 对上，说明 logind 认为该图形会话占用 `seat0`。`CanGraphical=yes`
+表示 seat 具备图形能力，不等于显示器当前一定有画面；设备 ACL、合成器和 DRM 状态还要分别检查。
+
+### 登录管理器和用户管理器各自是否正常
+
+笔者使用 greetd，因此从系统实例查询它：
+
+```console
+$ systemctl show greetd.service \
+    -p Id -p LoadState -p ActiveState -p SubState
+Id=greetd.service
+LoadState=loaded
+ActiveState=active
+SubState=running
+
+$ systemctl --user is-system-running
+running
+```
+
+第一组字段说明 greetd 单元已加载且进程正在运行；第二条说明当前用户管理器没有已知的 failed
+unit。它们仍不能替代登录测试。使用 GDM、SDDM 等登录管理器时，先用
+`systemctl status display-manager.service` 找到实际单元，不要照抄 `greetd.service`。
+
+### PAM 配置最终长什么样
+
+NixOS 会生成 `/etc/pam.d/`
+下的文件，Arch 等发行版通常由软件包和管理员直接维护同一路径。笔者机器上的 greetd 配置把四个管理组继续交给公共的
+`login` 栈：
+
+```console
+$ sed -n '1,160p' /etc/pam.d/greetd
+account include login
+auth substack login
+password substack login
+session include login
+```
+
+这段输出适合用来追入口，却不能证明 `pam_systemd` 或 GNOME
+Keyring 一定执行了；下一步要继续展开被 `include`、`substack`
+引用的文件，并按控制字段判断实际路径。检查时只读配置，不要为了试验随手改 PAM 栈：语法或顺序错误可能让所有登录入口失效。
+
+### 谁在提供密钥环和授权对话框
+
+Secret Service 使用固定的总线名称
+`org.freedesktop.secrets`。先看当前用户总线上有没有 owner：
+
+```console
+busctl --user list --no-pager
+busctl --user status org.freedesktop.secrets
+```
+
+`list` 用于确认名称是否存在，`status`
+可把名称映射到提供服务的进程。输出会包含 PID、可执行文件和进程信息，公开求助时只保留服务名与实现名称。即使该名称已有 owner，collection 仍可能处于锁定状态；不要用“服务存在”替代一次实际的凭据读取测试，更不要为了观察而导出秘密。
+
+polkit agent 没有统一的服务名，可以先从用户单元中找描述含 `PolicyKit Authentication Agent`
+的服务，再读取其状态：
+
+```console
+systemctl --user list-units --type=service --all --no-pager
+systemctl --user status <找到的-agent.service> --no-pager
+```
+
+在笔者机器上，对应的是
+`niri-flake-polkit.service`；GNOME、KDE 或其他合成器环境会使用不同实现。agent 正在运行只说明交互端存在，某项操作最终允许、拒绝或要求认证，仍由调用服务、polkit
+action 和规则共同决定。
+
+排查时可以把对象继续分开：身份确认检查 PAM 服务与规则，会话建立检查 logind，用户后台服务检查用户管理器，设备访问再看会话控制器与 seat；遇到凭据提示，则区分密钥环解锁和 polkit 授权。下一篇进入[显示、输入与图形渲染](/posts/linux-desktop-graphics/)，继续追踪这个用户的程序怎样把画面送到显示器上。

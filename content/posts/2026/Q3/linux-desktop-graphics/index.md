@@ -5,7 +5,7 @@ description:
   "沿着一次输入到画面更新的过程，理解 evdev、libinput、Wayland 合成器、Mesa 与 DRM/KMS
   的分工。"
 date: 2026-09-16T01:14:00+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS"]
@@ -167,9 +167,63 @@ server，对外则作为 Wayland 客户端连接合成器。于是同一个 Wayl
 
 这种兼容不会把 X11 客户端之间的访问模型自动改造成 Wayland 的模型；共享同一个 XWayland 实例的 X11 应用仍保留相互通信的能力。Wayland 本身也不等于应用沙盒。应用要请求屏幕共享或其他桌面资源时，还会涉及专门接口与权限策略，接着看[桌面应用、portal 与沙盒](/posts/linux-desktop-app-integration/)。
 
-## 在自己的桌面上观察两条连接
+## 在自己的桌面上逐层观察
 
-下面两条只查询信息，应在自己的图形会话中执行。完整输出可能包含显示设备或驱动信息，公开分享前先筛选必要字段。
+下面的命令只查询信息，应在自己的图形会话中执行。完整输出可能包含显示设备、驱动、进程参数和应用名称，公开分享前先筛选必要字段。
+
+### 先确认内核绑定了哪个驱动
+
+`lspci -k` 同时显示 PCI 设备、正在使用的内核驱动和可选模块。笔者机器没有把 `pciutils`
+装进系统环境，因此通过 Nix 临时运行；Arch 可直接使用 `pciutils` 软件包中的命令。
+
+```console
+$ nix shell nixpkgs#pciutils -c lspci -k
+00:02.0 VGA compatible controller: Intel Corporation Arrow Lake-S [Intel Graphics]
+        Kernel driver in use: i915
+        Kernel modules: i915, xe
+02:00.0 VGA compatible controller: NVIDIA Corporation AD102 [GeForce RTX 4090]
+        Kernel driver in use: nvidia
+        Kernel modules: nvidiafb, nouveau, nvidia_drm, nvidia
+```
+
+`Kernel driver in use` 才是当前绑定结果，`Kernel modules`
+只是可处理该设备的模块候选。这里能确认两块 GPU 分别绑定到 i915 和 nvidia，不能说明某个应用选中了哪一块 GPU，也不能说明显示器接在哪一块卡上。
+
+内核日志可继续回答驱动和固件在本次启动中做了什么：
+
+```console
+journalctl -b -k --grep='drm\|i915\|amdgpu\|nvidia' --no-pager
+```
+
+先从固件加载失败、GPU reset、connector 或 modeset 等关键词附近读上下文。不要只截一行
+`error`：有些驱动会记录已经降级处理的错误，有些故障则只在前后几行说明原因。
+
+### connector 是否被内核识别
+
+`/sys/class/drm/` 中的 `cardN-*` 项对应 DRM connector。下面的循环只读取状态文件：
+
+```bash
+for status in /sys/class/drm/card*-*/status; do
+  printf '%s: ' "${status%/status}"
+  cat "$status"
+done
+```
+
+笔者机器上选取几个结果如下：
+
+```text
+card1-Virtual-1: connected
+card2-DP-1: connected
+card2-HDMI-A-1: disconnected
+card2-HDMI-A-2: connected
+```
+
+`connected`
+表示内核认为 connector 上有连接，不等于合成器已经启用它，也不等于模式、缩放和画面都正确。编号也不稳定，重启或驱动变化后不能假定
+`card2`
+永远是同一块 GPU。若 connector 根本没有出现，优先回到驱动和内核日志；若它已连接而桌面未启用，再查合成器的输出配置。
+
+### 合成器公开了哪些协议
 
 笔者的 NixOS PC 没有预装 `wayland-info`，因此通过 Nix 临时运行。结果确认当前连接公布了
 `xdg_wm_base` version 7：
@@ -182,6 +236,8 @@ interface: 'xdg_wm_base', version: 7, name: 3
 第一条向所连接的合成器查询已公布的 Wayland globals，并只显示名称包含 `xdg_wm_base`
 的项。它能帮助确认这一连接上公布的协议及版本，不能证明每个扩展功能都正常，也不能证明另一个应用连接了同一个合成器。[Arch 提供的 wayland-info 手册](https://man.archlinux.org/man/wayland-info.1.en)说明了过滤选项；Arch 中工具来自
 `wayland-utils` 包。
+
+### 应用实际用了哪个渲染器
 
 第二条查看当前 X display 上的 OpenGL/GLX 实现，`-B`
 请求简要输出。在 Wayland 桌面中，它通常观察 XWayland 提供的 GLX 路径，不能替原生 Wayland 或 Vulkan 程序报告渲染器。[glxinfo 手册](https://manpages.debian.org/testing/mesa-utils/glxinfo.1.en.html)解释了查询对象；本地
@@ -197,6 +253,41 @@ direct rendering: Yes
 OpenGL vendor string: Intel
 OpenGL renderer string: Mesa Intel(R) Graphics (ARL)
 ```
+
+结果说明这次 GLX 查询使用 Intel 的 Mesa 驱动，并且 direct rendering 为 `Yes`。它观察的是
+`DISPLAY=:0` 上的 GLX 路径；原生 Wayland
+EGL、Vulkan、视频解码和另一块 GPU 都要用相应工具另查。多 GPU 环境尤其不能把这一结果推广到所有应用。
+
+### X11 应用是否经过 XWayland
+
+```console
+$ pgrep -a Xwayland
+259318 Xwayland :0 -listenfd ... -rootless ...
+```
+
+这里确认桌面中有一个监听 `:0` 的 rootless
+XWayland。PID 和文件描述符每次都会变化，所以示例省略了后半段参数。进程存在不能证明某个窗口一定是 X11 客户端；可以结合应用的调试信息、工具包后端设置或合成器提供的窗口信息判断。
+
+### 只给一个应用打开协议跟踪
+
+Wayland 客户端库支持用 `WAYLAND_DEBUG=1`
+输出客户端发送和接收的协议消息。应把它只加在待测程序前面，而不是写进整个桌面的环境变量：
+
+```console
+WAYLAND_DEBUG=1 <应用命令> 2>wayland-debug.log
+```
+
+日志可能包含窗口标题、剪贴板 MIME 类型、输入事件和对象生命周期，体积也会快速增长。复现一次后立即退出应用，再围绕报错前后的对象 ID、接口和请求阅读；公开前先脱敏。它能说明客户端与合成器交换了哪些协议消息，不能直接解释 GPU 内核错误。
+
+如果程序直接崩溃，可以先只看 coredump 索引和元数据：
+
+```console
+coredumpctl list --no-pager --since today
+coredumpctl info <PID或可执行文件> --no-pager
+```
+
+`info`
+可能包含命令行、环境摘要和堆栈，不要原样公开；也不必一开始就导出 core 文件。当天没有记录只说明当前 journal/coredump 存储中没有匹配项，不代表程序从未崩溃。
 
 若还需要对照会话层，先按[登录会话篇](/posts/linux-desktop-login-session/)确认目标 session，再查询它的
 `Type`、`Active`

@@ -5,7 +5,7 @@ description:
   "从网卡、carrier、地址和策略路由，到 DNS、TUN
   与应用连接，理解桌面网络各层的职责，以及恢复后网络异常的配置案例。"
 date: 2025-10-19T10:21:33+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -211,6 +211,29 @@ ip -brief address
 只是压缩输出，并不脱敏，选项见
 [ip 手册](https://man7.org/linux/man-pages/man8/ip.8.html)。
 
+接口存在但没有 carrier 时，再向下看驱动和链路：
+
+```console
+ip -details link show dev <接口名>
+ethtool -i <有线接口名>
+ethtool <有线接口名>
+```
+
+`ethtool -i` 关注 driver、version 和 firmware-version，普通 `ethtool` 关注
+`Link detected`、协商速率和双工模式。Wi-Fi 则应使用 `iw dev`、`iw dev <接口名> link`
+查看关联状态，不要把有线 carrier 的判断照搬过去。驱动已绑定、链路已建立，仍不代表网络管理器已给接口配置地址。
+
+接着确认到底是谁管理接口。systemd-networkd 环境可用：
+
+```console
+networkctl list
+networkctl status <接口名>
+systemctl status systemd-networkd.service --no-pager
+```
+
+NetworkManager 环境则用 `nmcli device status` 和
+`nmcli connection show --active`。同一接口不应由两套管理器同时争用；服务 active 也不能证明目标接口被它接管，要看接口状态中的 setup/managed 信息。
+
 再看规则与路由表，分别保留 IPv4 和 IPv6 的视角：
 
 ```console
@@ -234,6 +257,28 @@ resolvectl status
 `DefaultRoute`，判断预期的查询去向。这条命令展示配置状态，不证明一次真实解析成功，见
 [resolvectl 手册](https://github.com/systemd/systemd/blob/main/man/resolvectl.xml)。
 
+再做一次明确的解析请求，把“配置存在”和“查询得到结果”分开：
+
+```console
+$ resolvectl query localhost
+localhost: 127.0.0.1 -- link: lo
+           ::1       -- link: lo
+-- Data from: synthetic
+```
+
+`localhost`
+不依赖外部网络，适合确认 resolved 的查询接口可达；它不能验证上游 DNS。调查真实域名时，记录返回地址、使用的协议和接口，但不要公开内部域名或搜索域。随后用
+`ip route get <返回地址>` 检查内核会选择哪条路径。
+
+应用已经发起连接时，可以从 socket 反查它实际选了谁：
+
+```console
+ss -tpn
+ss -upn
+```
+
+TCP 输出关注本地/远端地址、状态和进程，UDP 没有同样的连接状态语义。完整结果会暴露正在使用的服务与远端地址，应只摘取目标进程的一行。socket 建立成功证明的是传输层状态，不保证 TLS、HTTP 或应用协议成功。
+
 已经安装 nft、具有读取规则权限且能妥善保管输出时，还可以查看规则集：
 
 ```console
@@ -241,5 +286,24 @@ nft list ruleset
 ```
 
 先找基础链的 hook、优先级与默认策略，再沿引用关系看规则。缺少权限时停在这一步，不必为了练习修改权限或清空规则。
+
+规则很多时，先从结构入手：
+
+```console
+nft list tables
+nft list table inet <表名>
+```
+
+基础链会标出 `hook input`、`output`、`forward`
+等位置以及 priority、policy。TUN/VPN 问题还要把虚拟接口和策略路由放在一起看：
+
+```console
+ip -details link show type tun
+ip rule show
+ip route show table all
+```
+
+TUN 接口为 `UP`
+只说明虚拟设备状态，不说明流量已被规则导入、VPN 进程会转发，或外层连接仍然可用。整个观察过程都不需要 flush 规则、删除路由或重启网络服务。
 
 网络会随着设备与电源状态继续变化。[下一篇](/posts/linux-desktop-power/)讨论挂起、恢复与关机时哪些状态被保留、哪些组件需要重新工作；涉及网络恢复时，可以回到这里对照接口、地址、规则和应用出口。

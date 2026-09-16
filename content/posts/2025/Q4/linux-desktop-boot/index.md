@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "理解固件、引导程序、内核与 initramfs 的交接，以及系统如何找到要挂载的文件系统。"
 date: 2025-10-19T10:17:33+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 
 authors: ["ryan4yin"]
@@ -168,30 +168,80 @@ fileSystems."/boot" = {
 
 回到一台正在排查的机器，可以先把问题拆开：是设备没出现，还是配置指向了错误的设备？设备正确时，文件系统有没有成功挂载？挂载成功之后，等待的是不是另一个挂载或服务？这些问题对应的证据不同，不宜看到「启动失败」就直接做文件系统修复。
 
-## 在笔者的 NixOS PC 上做几个小观察
+## 从正在运行的系统反查启动路径
 
-先查正在运行的内核版本：
+下面的命令都只读取状态。它们观察的是这一次已经成功运行起来的系统，适合核对启动输入和交接结果；如果机器根本无法启动，则要在引导界面、救援系统或另一台机器上检查相同的文件和分区。
 
-```console
-$ uname -r
-7.2.0
-```
+### 固件把控制权交给了谁
 
-`-r` 只输出内核 release，含义可见
-[GNU Coreutils 的 uname 实现与帮助文本](https://github.com/coreutils/coreutils/blob/master/src/uname.c)。这能确认当前进程看到的内核版本；它不能证明下一次启动会选择同一个内核，也不能验证磁盘上的 initramfs 是否正确。
-
-再看当前根目录的挂载类型，只选取需要的列：
+先让 `bootctl` 汇总固件和当前引导程序信息：
 
 ```console
-$ findmnt -n -o TARGET,FSTYPE /
-/ tmpfs
+$ bootctl status
+System:
+      Firmware: UEFI 2.90
+   Secure Boot: enabled (user)
+  TPM2 Support: yes
+
+Current Boot Loader:
+        Product: systemd-boot 261.1
 ```
 
-`findmnt`
-默认读取当前挂载命名空间的信息。这里的根目录使用 tmpfs，是笔者机器当前配置的结果，并不是 NixOS 的统一默认值。[findmnt 手册](https://github.com/util-linux/util-linux/blob/master/misc-utils/findmnt.8.adoc)说明了默认数据来源及列选择方式。若要继续核对挂载来源，可以查询
-`SOURCE` 列；分享结果前应隐藏设备标识和私有路径。
+这里只摘取不含分区标识和启动项文件名的字段。它们说明笔者的机器以 UEFI 启动、Secure
+Boot 已启用，当前引导程序报告自己是 systemd-boot。`bootctl status`
+还可能打印 ESP、PARTUUID、机器标识和完整启动项，分享输出前应先检查。命令能证明本次启动留下的状态，不能单独证明 ESP 中的每一个文件都完整。
 
-最后，向 systemd 查询本次启动的计时：
+接着可以列出引导程序发现的启动项：
+
+```console
+bootctl list --no-pager
+```
+
+重点看默认项、选中项、启动项类型以及它引用的内核或 UKI。读取 ESP 中的文件通常需要相应权限；不要为了“修复”而直接删除旧启动项。若列表中的默认项与本次实际启动项不同，先分清是在查看下次启动的默认选择，还是本次启动留下的记录。
+
+### 内核和早期用户空间收到了什么
+
+`/proc/cmdline` 给出本次启动实际传给内核及早期用户空间的命令行：
+
+```console
+$ cat /proc/cmdline
+init=/nix/store/.../init nvidia-drm.fbdev=1 root=<已隐藏> loglevel=4 lsm=landlock,yama,apparmor,bpf
+```
+
+这里隐藏了根文件系统标识，并缩短了 Nix store 路径。检查时可以先找
+`root=`、`resume=`、`rd.luks.*`、`init=`
+等参数，再到相应组件的手册确认是谁解释它们。不要把所有参数都称为“内核参数”：例如 `root=`
+也可能由 initrd 中的生成器读取。
+
+然后比较块设备、文件系统与实际挂载。`lsblk` 展示块设备之间的关系，`findmnt`
+展示当前挂载命名空间中的结果：
+
+```console
+$ lsblk -o NAME,TYPE,FSTYPE
+NAME           TYPE  FSTYPE
+nvme1n1        disk
+├─nvme1n1p1    part  vfat
+└─nvme1n1p2    part  crypto_LUKS
+  └─nixos-luks crypt btrfs
+
+$ findmnt -n -o TARGET,SOURCE,FSTYPE /
+/ tmpfs tmpfs
+```
+
+这台机器的输出能看到“磁盘分区 → LUKS 映射 →
+Btrfs”的存储层次；根目录当前显示为 tmpfs，则是笔者所用 NixOS 配置的结果，不是通用默认值。需要核对稳定标识时，可运行：
+
+```console
+lsblk -o NAME,FSTYPE,UUID,PARTUUID,MOUNTPOINTS
+blkid
+```
+
+`UUID` 标识文件系统，`PARTUUID`
+标识分区。两条命令的完整输出包含本机标识，不适合原样贴到公开求助帖。它们能帮助核对配置指向了谁，但不能证明解密口令、驱动或文件系统内容没有问题。
+
+### 时间花在了哪一段
+
+先看各阶段总计：
 
 ```console
 $ systemd-analyze
@@ -199,11 +249,26 @@ Startup finished in 9.474s (firmware) + 10.727s (loader) + 751ms (kernel) + 3.00
 graphical.target reached after 3.815s in userspace.
 ```
 
-不带子命令时，它查询的是
-`time`。输出把固件、引导程序、内核、initrd 与正式用户空间分开计时，但这些时间不表示所有服务都已完成初始化，更不表示用户桌面已经可用。[systemd-analyze 手册](https://github.com/systemd/systemd/blob/main/man/systemd-analyze.xml)专门说明了这个限制。
+不带子命令时，`systemd-analyze` 查询的是
+`time`。输出把固件、引导程序、内核、initrd 与正式用户空间分开计时，但不表示所有服务都已完成初始化，更不表示桌面已经可用。
 
-固件与引导程序的信息可以进一步由 `bootctl status`
-查询。它会展示固件、当前引导程序、ESP 中的启动文件和默认启动项，输出也可能包含分区标识、机器标识及启动参数。依据
-[bootctl 手册的输出范围](https://github.com/systemd/systemd/blob/main/man/bootctl.xml)。
+如果用户空间阶段较慢，再沿目标的时间关键链往回看：
 
-到这里，已经能区分「内核开始执行」「早期用户空间准备存储」「切换到正式系统」几个状态了。接下来读[系统服务、设备与通信](/posts/linux-desktop-system-foundations/)，看 systemd 如何把挂载、设备与服务之间的依赖落实成启动过程。
+```console
+$ systemd-analyze critical-chain graphical.target
+
+graphical.target @3.815s
+└─greetd.service @3.815s
+  └─systemd-user-sessions.service @3.796s +15ms
+    └─basic.target @2.966s
+      └─dbus-broker.service @2.890s +62ms
+        └─dbus.socket @2.884s
+```
+
+`@` 后面是单元进入 active 或开始的时间，`+` 后面是启动耗时。这里说明抵达
+`graphical.target`
+的这条链经过 greetd、用户登录开关和 D-Bus；它不是“最慢服务排行榜”，也不会显示没有落在这条关键链上的并行工作。若要调查某个单元，应继续用
+`systemctl show`、`systemctl status`
+和该单元的 journal 验证，而不是仅凭一张耗时表禁用服务。
+
+这些观察把引导状态、启动输入、存储层次和 systemd 的接手结果连了起来。接下来读[系统服务、设备与通信](/posts/linux-desktop-system-foundations/)，看挂载、设备与服务之间的关系怎样落实成单元和事件。

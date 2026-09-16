@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "从桌面应用的启动入口，理解 session D-Bus、portal 后端、屏幕共享与沙盒文件访问。"
 date: 2026-09-16T01:27:11+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 authors: ["ryan4yin"]
 tags: ["Linux", "Desktop", "Wayland", "NixOS", "Flatpak"]
@@ -212,9 +212,38 @@ Wants=xdg-desktop-portal.service xdg-desktop-portal-gtk.service
 
 排查这类问题时，可以依次确认入口由谁启动、实际单元是什么、依赖有没有加载，以及激活环境是否包含当前桌面所需信息。只看到应用和 portal 同时处于运行状态，无法还原登录时的先后关系。
 
-## 在自己的会话中观察
+## 从桌面入口追到 portal
 
-下面两条只读命令，分别观察用户服务和用户总线。输出可能包含应用、进程和用户名；公开分享前只保留相关服务名称与状态，不要直接贴完整清单。
+下面的命令只读文件和运行状态。输出可能包含应用、进程和用户名；公开分享前只保留相关服务名称与状态，不要直接贴完整清单。
+
+### 桌面图标最后执行了什么
+
+桌面入口通常来自
+`/usr/share/applications/`、`~/.local/share/applications/`，NixOS 还可能把它们汇总到当前系统和用户 profile。先用应用 ID 或文件名找到
+`.desktop` 文件，再读取关键字段：
+
+```console
+grep -E '^(Name|Exec|TryExec|DBusActivatable)=' \
+  /path/to/example.desktop
+```
+
+`Exec=` 是启动命令模板，其中的 `%f`、`%u` 等是 desktop
+entry 字段码，不是 shell 变量；`DBusActivatable=true`
+则表示桌面可以通过应用的 D-Bus 名称请求激活。实际启动失败时，应先确认桌面读到的是哪一份同名文件，再核对可执行文件和总线名称，不要只在终端里运行一个看似相同的命令。
+
+应用启动后，现代桌面常把它放进用户 scope 或 service。可以从相关单元反查 cgroup、启动来源和依赖：
+
+```console
+systemctl --user list-units 'app-*' --all --no-pager
+systemctl --user show <应用单元> \
+  -p Id -p ActiveState -p SubState -p FragmentPath -p ControlGroup
+systemctl --user list-dependencies <应用单元> --plain --no-pager
+```
+
+完整列表会暴露正在运行的应用。`FragmentPath`
+为空也不一定异常：scope 和生成器产生的单元未必来自一份持久单元文件。
+
+### portal 前端和后端是否都在
 
 ```console
 systemctl --user list-units --type=service --no-pager
@@ -236,5 +265,43 @@ xdg-document-portal.service          loaded active running flatpak document port
 ```
 
 这些状态只能说明服务正在运行。FileChooser、ScreenCast 等接口仍要通过实际请求分别验证。
+
+如果只想核对状态字段，不必贴出整个用户服务列表：
+
+```console
+$ systemctl --user show \
+    xdg-desktop-portal.service \
+    xdg-desktop-portal-gtk.service \
+    xdg-desktop-portal-gnome.service \
+    xdg-document-portal.service \
+    -p Id -p LoadState -p ActiveState -p SubState
+Id=xdg-desktop-portal.service
+LoadState=loaded
+ActiveState=active
+SubState=running
+
+Id=xdg-desktop-portal-gtk.service
+LoadState=loaded
+ActiveState=active
+SubState=running
+```
+
+笔者机器同时运行 GTK 与 GNOME 后端；实际选择还取决于 portal 配置和请求的接口，不能从“两个后端都 active”推断请求会随机交给其中一个。配置通常可在
+`/usr/share/xdg-desktop-portal/`、`/etc/xdg/xdg-desktop-portal/`
+或用户配置目录中找到，先读 `portals.conf` 的桌面与接口映射，再查对应后端日志。
+
+### 文件授权是否进入 Documents portal
+
+Documents portal 会通过 FUSE 暴露获准访问的文档。只查看挂载本身：
+
+```console
+$ findmnt -t fuse.portal -o TARGET,SOURCE,FSTYPE
+TARGET             SOURCE FSTYPE
+/run/user/1000/doc portal fuse.portal
+```
+
+UID 会因用户而异。挂载存在说明 Documents
+portal 的文件系统入口已经建立，不能证明某个应用拥有某个文件的授权；不要为了测试去枚举或公开挂载中的文档名。需要调查实际授权时，应从触发文件选择的应用、portal 请求结果和 permission
+store 三边核对。
 
 应用发出请求后，文件选择还要处理沙盒中的访问权限，屏幕共享还要建立 PipeWire 连接。PipeWire 的音频图、字体选择和输入法连接，则放在[音频、字体与输入法篇](/posts/linux-desktop-media-input/)继续讲。

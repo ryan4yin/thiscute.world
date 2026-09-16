@@ -3,7 +3,7 @@ title: "Linux 桌面系统（一）：系统全景与阅读路径"
 subtitle: ""
 description: "沿开机、登录、应用运行到关机的时间线，理解 Linux 桌面组件之间的职责与接口。"
 date: 2025-09-09T20:17:33+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 
 authors: ["ryan4yin"]
@@ -169,3 +169,52 @@ Version=261.1
 说明了这一区别。
 
 以后读日志、设备节点或服务状态时，也可以这样问自己：这份输出来自哪个组件？它能证明哪一步发生了？还缺哪一段证据？带着这些问题读[启动篇](/posts/linux-desktop-boot/)，从固件交出控制权的地方开始。
+
+### 顺着交接点继续查
+
+只确认“服务正在运行”，通常还不够。更实用的做法是沿组件之间的交接点走四步：
+
+1. 先确定正在观察哪个组件，以及它属于系统实例还是用户实例。
+2. 读取少量、明确的状态字段，不急着翻完整日志。
+3. 找到它依赖的上游，或接手工作的下游。
+4. 写清当前证据能证明什么，尚未验证什么。
+
+下面以 `graphical.target` 为例。先看目标本身的状态字段：
+
+```console
+$ systemctl show graphical.target \
+    -p Id -p LoadState -p ActiveState -p SubState
+Id=graphical.target
+LoadState=loaded
+ActiveState=active
+SubState=active
+```
+
+再看它直接或间接拉入了哪些单元。实际列表可能很长，先用目标名和树形层级判断方向，不必一上来逐个展开：
+
+```console
+$ systemctl list-dependencies graphical.target --plain --no-pager
+graphical.target
+  greetd.service
+  multi-user.target
+  systemd-user-sessions.service
+```
+
+这段经过删减的输出说明笔者的机器用 greetd 提供登录界面，也说明 `graphical.target`
+的事务包含哪些依赖，但不能证明登录界面已经可操作，更不能证明某个用户的桌面会话已经建立。其他机器可能使用 GDM、SDDM 等 display
+manager，应以本机列表为准。若登录界面有问题，下一步应查看实际的 display
+manager 单元；若登录成功后桌面有问题，则应转向用户会话和用户实例。
+
+用户实例也能用同一套方法观察。例如查询自己的默认目标：
+
+```console
+$ systemctl --user show default.target \
+    -p Id -p LoadState -p ActiveState -p SubState
+Id=default.target
+LoadState=loaded
+ActiveState=active
+SubState=active
+```
+
+这里的 `default.target`
+属于当前用户管理器，和系统实例里的同名目标不是同一个对象。以后遇到“系统服务正常、桌面功能却不可用”的情况，先分清应该查询哪一个管理器，往往能少走很多弯路。

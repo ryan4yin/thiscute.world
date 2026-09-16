@@ -4,7 +4,7 @@ subtitle: ""
 description:
   "理解 systemd 的依赖与启动顺序、journal 日志、udev 设备事件，以及 D-Bus 服务接口。"
 date: 2025-10-19T10:18:33+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -165,60 +165,148 @@ Bus 与 Well-known Message Bus Instances 部分定义了这些概念。
 总线还支持按需激活：名字尚无拥有者时，符合条件的请求可以启动提供该名字的程序。因此，观察命令也要留意是否会触发激活。[D-Bus 的服务激活规范](https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-starting-services)解释了这个过程。后续应用篇会用到这些概念，但
 [portal 与沙盒的具体调用](/posts/linux-desktop-app-integration/)放在那里展开。
 
-## 在笔者的 NixOS PC 上做几个小观察
+## 动手观察这四组对象
 
-先确认工具版本。下面三个命令只报告客户端版本，不证明相应服务已运行；语义见
-[systemd 的通用选项](https://github.com/systemd/systemd/blob/main/man/standard-options.xml)与
-[udevadm 手册](https://github.com/systemd/systemd/blob/main/man/udevadm.xml)。
+下面选用 journald、`/dev/null`
+和系统总线自身做练习，避免碰真实业务服务和带序列号的硬件。换成你要排查的对象时，仍然沿用同一组问题：配置从哪里来，运行状态是什么，依赖谁，留下了哪些日志，又通过什么接口与其他进程通信？
+
+### 从单元文件追到运行状态
+
+先看 systemd 最终加载的单元内容。`systemctl cat`
+会按加载顺序显示主文件和 drop-in，比只打开某一个目录里的文件更可靠：
 
 ```console
-$ systemctl --version
-systemd 261 (261.1)
+$ systemctl cat systemd-journald.service --no-pager
+# /etc/systemd/system/systemd-journald.service -> /nix/store/.../systemd-journald.service
+[Unit]
+Requires=systemd-journald.socket
+After=systemd-journald.socket systemd-journald-dev-log.socket
 
-$ udevadm --version
-261
-
-$ busctl --version
-systemd 261 (261.1)
+[Service]
+Type=notify-reload
 ```
 
-接着分别向系统实例与当前用户实例查询运行中的服务。`list-units` 观察已加载单元，`--type` 与
-`--state` 限定结果；`--user`
-切换到用户管理器。[systemctl 手册](https://github.com/systemd/systemd/blob/main/man/systemctl.xml)及其[实例选择选项](https://github.com/systemd/systemd/blob/main/man/user-system-options.xml)说明了这些参数。
+这是笔者 NixOS PC 上删减后的输出。NixOS 生成的单元通常指向 Nix
+store；Arch 上包提供的主文件通常位于 `/usr/lib/systemd/system/`，管理员覆盖则放在
+`/etc/systemd/system/`。路径不同，`systemctl cat` 展示“最终合并结果”的用途相同。
+
+再从运行中的管理器读取少量属性：
 
 ```console
-systemctl list-units --type=service --state=running
-systemctl --user list-units --type=service --state=running
+$ systemctl show systemd-journald.service \
+    -p Id -p LoadState -p ActiveState -p SubState -p Type
+Id=systemd-journald.service
+LoadState=loaded
+ActiveState=active
+SubState=running
+Type=notify-reload
 ```
 
-名单可以帮助确定下一步应查哪个单元，但 `running`
-仍不是应用功能测试的结果。完整输出通常很长，因此这里不摘录笔者机器上的服务清单。
-
-设备观察可以先选一个不含硬件标识的例子，只查 `/dev/null` 的子系统属性：
+`LoadState=loaded` 说明单元定义已加载，`ActiveState` 和 `SubState` 描述当前状态，`Type`
+来自服务配置。它们不能证明 journal 中每条记录都已持久保存。需要继续看依赖时，再展开单元树：
 
 ```console
-$ udevadm info --query=property --property=SUBSYSTEM --name=/dev/null
+$ systemctl list-dependencies systemd-journald.service --plain --no-pager
+systemd-journald.service
+  -.mount
+  system.slice
+  systemd-journald-audit.socket
+  systemd-journald-dev-log.socket
+  systemd-journald.socket
+```
+
+这能解释 journald 从哪些 socket 接收数据，也说明依赖树里不只有 `.service`。不过
+`list-dependencies` 展示的是依赖关系，不是实际启动时间线；时间问题要另看
+`systemd-analyze critical-chain` 和日志时间戳。
+
+### 写一条日志，再按字段把它找回来
+
+与其拿一段未知来源的系统日志猜字段，不如先写一条没有敏感信息的测试消息：
+
+```console
+$ logger -t linux-desktop-lab -- \
+    "boundary-check component=journal result=ok"
+
+$ journalctl -t linux-desktop-lab -n 1 \
+    -o json-pretty --no-pager
+{
+    "SYSLOG_IDENTIFIER" : "linux-desktop-lab",
+    "MESSAGE" : "boundary-check component=journal result=ok",
+    "PRIORITY" : "5",
+    "_TRANSPORT" : "syslog"
+}
+```
+
+`-t`
+按 syslog 标识筛选，JSON 输出则让字段边界清楚可见。实际记录还包含时间、UID、PID、主机和启动批次等字段，这里没有贴出。下一步可以按问题增加过滤条件，例如：
+
+```console
+journalctl -b -u systemd-journald.service --no-pager
+journalctl _BOOT_ID=<某次启动的 ID> PRIORITY=0..3 --no-pager
+```
+
+第一条把范围限制在本次启动和一个单元，第二条把范围限制在某次启动的 error 及以上优先级。过滤能缩小证据范围，但“没有匹配记录”仍不能证明故障没有发生。
+
+### 从设备属性反推规则怎样匹配
+
+先读取 udev 数据库中一个明确的属性：
+
+```console
+$ udevadm info --query=property \
+    --property=SUBSYSTEM --name=/dev/null
 SUBSYSTEM=mem
 ```
 
-`info` 查询设备信息，`--property` 限定输出字段，这个选项从 systemd 250 起提供，见
-[udevadm 手册](https://github.com/systemd/systemd/blob/main/man/udevadm.xml)。这个练习只验证查询路径，不能用来证明 USB 插拔事件正常。换成真实设备时，完整属性可能包含序列号等标识，分享前需要检查。
-
-再向系统总线自身请求标准接口描述，并明确禁止自动启动服务：
+如果要写或核对规则，再查看设备及其父设备的可匹配属性：
 
 ```console
-busctl --system --auto-start=no call org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.Introspectable Introspect
+$ udevadm info --attribute-walk --name=/dev/null
+looking at device '/devices/virtual/mem/null':
+  KERNEL=="null"
+  SUBSYSTEM=="mem"
+  DRIVER==""
 ```
 
-这里用 `call` 显式调用 `Introspect`，`--auto-start=no`
-对这次调用禁用自动激活。这个选项适用于 `call` 或 `emit`，不能用它给 `busctl introspect`
-禁用激活，见
-[busctl 手册](https://github.com/systemd/systemd/blob/main/man/busctl.xml)。`Introspect`
-没有输入参数，因此命令末尾不需要类型签名或参数值；它返回包含对象接口描述的字符串，见
-[D-Bus 的 Introspectable 规范](https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-introspectable)。返回的 XML 较长，适合按接口名检索，不适合整段贴进文章。
+一条规则可以匹配设备自身的多个属性，也可以匹配同一个父设备的属性；不能随意把不同父层级的条件拼在一起。换成 USB、摄像头或输入设备时，输出可能含厂商、型号和序列号，公开前要删去不必要的标识。
 
-日志则需要先考虑内容。`journalctl -b -n 10 --no-pager`
-会选择本次启动的最后十条记录并关闭分页，输出可能涉及用户活动或私有信息。参数见
-[journalctl 手册](https://github.com/systemd/systemd/blob/main/man/journalctl.xml)。条数限制不是脱敏，十条记录也不足以重建整个启动过程。
+`udevadm test-builtin` 可以在测试模式中运行某个内置处理器。例如下面的命令验证 `uaccess`
+对该 sysfs 路径的计算流程，不会真的改写 `/dev/null`：
 
-这些观察分别对应管理器状态、设备属性和进程通信。下一篇进入[登录、身份与用户会话](/posts/linux-desktop-login-session/)，继续看系统怎样为一个具体用户建立工作环境。
+```console
+$ udevadm test-builtin uaccess /sys/class/mem/null
+null: Running in test mode, skipping execution of 'uaccess' builtin command.
+```
+
+测试结果只针对给定设备和当前加载的规则。调查真实设备时，还要用
+`udevadm monitor --kernel --udev --property`
+观察一次插拔事件，并在分享输出前检查设备标识；不要仅凭静态测试断言事件链正常。
+
+### 从总线名称走到方法签名
+
+先看一个服务在 D-Bus 上导出了哪些对象。系统总线自身只有一个根对象：
+
+```console
+$ busctl --system tree org.freedesktop.DBus --no-pager
+└─ /org/freedesktop/DBus
+```
+
+再查看该对象公开的接口。下面只摘取三个标准接口和少量成员：
+
+```console
+$ busctl --system introspect org.freedesktop.DBus \
+    /org/freedesktop/DBus --no-pager
+NAME                                TYPE      SIGNATURE RESULT/VALUE
+org.freedesktop.DBus                interface -         -
+.ListNames                          method    -         as
+.NameOwnerChanged                   signal    sss       -
+org.freedesktop.DBus.Introspectable interface -         -
+.Introspect                         method    -         s
+org.freedesktop.DBus.Properties     interface -         -
+.Get                                method    ss        v
+```
+
+现在可以把调用拆开理解：总线名称选择服务，对象路径选择对象，接口选择约定，方法签名说明参数和返回值。`introspect`
+本身可能触发服务激活；如果不希望观察动作启动目标服务，可先用 `busctl --system list`
+检查名字是否已有 owner，或用带 `--auto-start=no` 的显式 `call` 查询稳定对象。
+
+这些实验分别观察了单元、结构化日志、设备属性和进程接口。下一篇进入[登录、身份与用户会话](/posts/linux-desktop-login-session/)，继续看系统怎样把这些基础设施交给一个具体用户。

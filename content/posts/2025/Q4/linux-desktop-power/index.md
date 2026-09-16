@@ -5,7 +5,7 @@ description:
   "理解
   logind、电源管理服务与内核如何协作，区分挂起、休眠和关机保留的状态，以及恢复时设备与网络需要重新完成的工作。"
 date: 2025-10-19T10:22:33+08:00
-lastmod: 2026-09-16T22:41:13+08:00
+lastmod: 2026-09-16T23:55:00+08:00
 draft: false
 authors: ["ryan4yin"]
 featuredImage: "featured-image.webp"
@@ -174,7 +174,22 @@ Wiki 的相关页面无法读取，这里的对照依据 Arch 项目源码与其
 
 由此判断关机卡住的位置，比套一份耗时表更有用：是某个服务仍在停止，还是已经进入最后的文件系统与存储清理？下一次启动会[重新建立系统状态](/posts/linux-desktop-boot/)，判断方法与挂起后继续运行原进程并不相同。
 
-## 只读查看支持的状态和历史事件
+## 只读查看阻塞者、能力和历史事件
+
+先看当前有哪些程序请求延迟或阻止睡眠、关机：
+
+```console
+$ systemd-inhibit --list --no-pager
+WHO          WHAT              WHY                              MODE
+Realtime Kit sleep             Demote realtime scheduling ...  delay
+UPower       sleep             Pause device polling            delay
+niri         handle-power-key  Power key handling               block
+```
+
+这里删去了 UID、PID 和用户应用。`delay` inhibitor 让程序在动作前获得短暂清理时间，`block`
+则会阻止对应动作，直到 inhibitor 释放或请求被显式忽略。列表中的 `WHY`
+是申请者提供的说明，不是 systemd 对故障原因的诊断。若合盖没有进入睡眠，先看 `WHAT`
+是否包含 `sleep`、模式是什么，再确认 logind 的合盖策略和桌面是否接管了按键。
 
 先在自己的机器上读取内核公开的状态。文件不存在或无读取权限时，停在这一步即可：
 
@@ -184,6 +199,9 @@ freeze mem disk
 
 $ cat /sys/power/mem_sleep
 s2idle [deep]
+
+$ cat /sys/power/disk
+[platform] shutdown reboot suspend test_resume
 ```
 
 `state` 中的 `freeze` 表示 suspend-to-idle，`disk` 表示内核支持的休眠入口；`mem`
@@ -192,6 +210,26 @@ s2idle [deep]
 
 这说明笔者机器的内核提供这些入口，且 `mem` 当前对应
 `deep`。它不能证明 swap、恢复路径、唤醒设备已经配置正确，也不能代替一次实际恢复的验证。
+
+休眠还需要足够且可恢复的交换空间。先只读查看当前 swap：
+
+```console
+$ swapon --show=NAME,TYPE,SIZE,USED,PRIO
+NAME           TYPE SIZE USED PRIO
+/swap/swapfile file  20G   0B   -1
+```
+
+这只能说明笔者机器当前启用了一个 20 GiB
+swapfile。能否休眠还取决于需要保存的内存页、resume 参数、initramfs、加密与文件系统配置；不能只比较物理内存总量和 swap 标称大小。使用 swapfile 时，恢复所需的物理偏移也不能从普通文件路径直接推断。
+
+设备是否允许唤醒可以从 sysfs 读取，但不要在观察练习里写入：
+
+```console
+find /sys/devices -path '*/power/wakeup' -readable -print
+```
+
+再针对可疑设备读取对应文件的 `enabled` 或
+`disabled`。完整列表很长，设备路径也会随硬件变化。它只表示内核的当前开关，不保证固件、驱动和物理设备一定能完成唤醒。
 
 若有读取系统 journal 的权限，可只查看本次启动里挂起服务的记录：
 
@@ -204,5 +242,32 @@ journalctl -b -u systemd-suspend --no-pager
 [journalctl](https://man.archlinux.org/man/journalctl.1.en)。
 
 笔者机器的日志中可以找到进入睡眠和从睡眠返回的记录。既有服务消息仍不足以证明显示、网卡或应用连接在那些事件后都恢复正常。
+
+若恢复后某个设备失效，应把同一时间段的内核与相关用户服务日志放在一起看：
+
+```console
+journalctl -b -k --since '10 minutes ago' --no-pager
+journalctl --user -b -u pipewire -u wireplumber --since '10 minutes ago' --no-pager
+```
+
+时间范围只是示例，要覆盖实际的睡眠与恢复时刻。内核日志适合找驱动 reset、firmware 与设备重新枚举；用户日志适合找 PipeWire、portal、网络托盘等会话服务怎样重连。
+
+调查上一次关机时，先确认 journal 中有哪些启动批次，再选上一批：
+
+```console
+journalctl --list-boots --no-pager
+journalctl -b -1 -r --no-pager
+```
+
+倒序查看能更快找到最后一条正常日志，但上一次启动未必就是那次故障，持久 journal 也可能没有保留完整结尾。关机卡住而当前仍能操作时，可只读查看正在停止的单元和仍占用挂载点的进程：
+
+```console
+systemctl list-units --state=deactivating --no-pager
+findmnt -R /目标挂载点
+fuser -vm /目标挂载点
+```
+
+`fuser`
+输出包含用户和进程，不要原样公开。找到占用者之后先判断它是否仍在写数据、由哪个服务管理，再决定如何正常退出；本系列不把强制关机、SysRq 或杀死进程当作默认处理方法。
 
 结合这些信息回看[系列全景](/posts/linux-desktop-architecture/)，就能按时间梳理一台桌面的运行过程：启动时建立系统状态，应用随后使用设备与服务；挂起会暂停执行，恢复后要重新确认设备和网络状态，关机则结束进程并清理资源。
