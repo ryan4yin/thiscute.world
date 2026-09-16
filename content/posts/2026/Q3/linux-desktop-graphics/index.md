@@ -33,8 +33,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章由笔者借助 ChatGPT、Kimi
-> K2、豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。本次重写也使用了 AI 辅助。如有错误，还请指正。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 [登录会话篇](/posts/linux-desktop-login-session/)讲到，合成器需要在合适的会话中取得设备访问权。拿到设备之后，窗口还没有凭空出现：键鼠事件要交给应用，应用要画出内容，合成器再安排这些内容怎样出现在显示器上。
 

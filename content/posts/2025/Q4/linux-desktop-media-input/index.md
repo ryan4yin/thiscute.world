@@ -38,8 +38,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章由笔者借助 ChatGPT、Kimi
-> K2、豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。本次重写也使用了 AI 辅助。如有错误，还请指正。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 桌面能显示窗口后，还得能听歌、看中文、打中文。这几件事用起来很自然，配置入口却散落在系统服务、用户会话和应用内部。以我的 NixOS +
 Wayland 桌面为例，声音交给 PipeWire 和 WirePlumber，字体通过 fontconfig 匹配，中文输入使用 Fcitx

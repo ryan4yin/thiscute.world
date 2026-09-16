@@ -38,8 +38,7 @@ code:
   maxShownLines: 30
 ---
 
-> AI 创作声明：本系列文章由笔者借助 ChatGPT、Kimi
-> K2、豆包和 Cursor 等 AI 工具创作，有很大篇幅的内容完全由 AI 在我的指导下生成。本次重写也使用了 AI 辅助。如有错误，还请指正。
+> AI 创作声明：本系列文章使用 gpt-5.6-sol 与 DeepSeek 4.1 Flash 辅助创作。
 
 [系统基础篇](/posts/linux-desktop-system-foundations/)讲了系统服务如何启动、设备事件如何处理，以及 D-Bus 怎样连接进程。到了登录界面，系统还要完成另一组工作：确认用户身份，建立会话，再让这个用户的桌面和后台服务运行起来。
 
