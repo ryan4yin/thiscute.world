@@ -143,12 +143,15 @@ bits 上。见
 
 这就解释了一个容易忽略的地方：应用能看到宿主机某个目录，并不意味着文件选择器返回的一定是那个直接映射路径。如果返回的是文档导出路径，应用还得能经由该路径访问文件。
 
-### 一次保存权限改动
+### 沙盒看得到文件，却不一定能保存
 
-作者的 nix-config 提交 `7826934b`，提交说明是允许 document
-portal 保存。实际差异是：在 nixpak 的公共配置中，把运行时目录下的 `/doc` 从 `bind.ro`
-移到可写映射列表，并删除 GUI 基础配置里重复的只读映射。新增注释还指出，FileChooser 即使面对直接映射的 XDG 目录，也可能返回 Document
-Portal 路径。
+一个自定义 nixpak 沙盒曾把 Documents portal 的导出目录只读映射进应用：
+
+```nix
+bind.ro = [ (sloth.concat' sloth.runtimeDir "/doc") ];
+```
+
+文件选择器可以正常返回路径，但应用仍无法写入。修复方式是把同一路径放进可写映射，而不是绕过 portal 授予更宽泛的宿主机访问。完整配置差异见[作者的修改记录](https://github.com/ryan4yin/nix-config/commit/7826934b23ae947eba4dfc98a4a170a0fa8bbd9d)。
 
 这条记录适合说明文件访问的两重约束：Documents
 portal 决定应用能访问哪个导出文档，沙盒的挂载方式又决定这条访问路径是否可写。把路径只读挂进去，会额外挡住写入；把映射改为可写，也不等于取消 Documents
@@ -156,7 +159,7 @@ portal 对文档的授权。挂载范围与只读设置的含义见
 [bubblewrap 上游说明](https://github.com/containers/bubblewrap#sandboxing)，文档授权见前面的 Documents
 API。
 
-提交没有附上保存后的文件校验或应用日志，所以这里能确认的是配置改动及其意图，不能补写「测试后所有应用保存都恢复正常」。这也是为什么文件对话框成功返回与最终保存成功要分别验证。
+这也是为什么文件对话框成功返回与最终保存成功要分别验证。这个例子来自自定义 nixpak 配置，不代表 Flatpak 默认采用相同的挂载方式。
 
 ## 沙盒、总线过滤和 portal 权限分别限制什么
 
@@ -176,15 +179,21 @@ namespace、目录映射以及可选的其他 namespace 和 seccomp 限制；具
 允许消息到达 portal，只解决了通信这一段。接收服务仍然要处理请求和授权，屏幕共享还要经过相应的来源选择与流访问控制。Permission
 Store 可以保存资源、应用与权限字符串的对应关系，但它自己不解释这些字符串，也不会仅因数据库有一条记录就替应用打开文件或采集画面。[Permission Store API](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.impl.portal.PermissionStore.html)说明了这个存储接口。
 
-作者的 nixpak 文件保存案例属于自定义沙盒配置，不能把它当成 Flatpak 默认挂载方式。比较不同方案时，要分别看它们怎样建立文件系统视图、过滤总线，以及把应用身份交给 portal。
+比较不同沙盒方案时，要分别看它们怎样建立文件系统视图、过滤总线，以及把应用身份交给 portal。
 
 ## 自动启动为什么会牵涉 portal
 
-作者另一个提交 `495c3669` 的说明是把 autostart 应用排到 `xdg-desktop-portal`
-之后。提交中的注释记录了一个线索：沙盒应用在登录时与 portal 竞争启动，可能导致 FileChooser/OpenURI 首次启动不可用，需要重启应用。这里的现象来自配置注释，没有独立的运行日志。
+登录时，自动启动的沙盒应用可能与 portal 用户服务同时启动。如果应用第一次调用 FileChooser 或 OpenURI 时 portal 还没有准备好，重启应用后才恢复，就应该检查用户单元的启动关系，而不是只检查两个进程最后是否都在运行。
 
-差异在 `systemd.user.units."app-@autostart.service"` 下添加 drop-in，使用 `After=` 和
-`Wants=` 指向前端、GTK 后端与 GNOME 后端。`Wants` 负责把服务拉入启动事务，`After`
+作者的 NixOS 配置为自动启动单元添加了下面的 drop-in，完整版本见[配置修改](https://github.com/ryan4yin/nix-config/commit/495c36693809a0f97205f17b241a5575dbfb3709)：
+
+```ini
+[Unit]
+After=xdg-desktop-portal.service xdg-desktop-portal-gtk.service
+Wants=xdg-desktop-portal.service xdg-desktop-portal-gtk.service
+```
+
+`Wants` 负责把服务拉入启动事务，`After`
 负责排序；等待启动作业结束，并不等于检查每个 portal 功能都已可用。这些语义见
 [systemd.unit 手册](https://github.com/systemd/systemd/blob/main/man/systemd.unit.xml)，基础区别也在[系统基础篇](/posts/linux-desktop-system-foundations/)讲过。
 
@@ -194,11 +203,9 @@ Store 可以保存资源、应用与权限字符串的对应关系，但它自�
 `app-@autostart.service.d/`。这让该目录下的配置可以作用于这类自动启动单元。见[生成器源码](https://github.com/systemd/systemd/blob/main/src/xdg-autostart-generator/xdg-autostart-service.c)以及
 [systemd v257 的查找实现](https://github.com/systemd/systemd/blob/v257/src/shared/dropin.c)；[当前实现](https://github.com/systemd/systemd/blob/main/src/shared/dropin.c)也保留了这一规则。
 
-提交注释把它叫作「模板 drop-in」，名称不够准确：`app-@autostart.service`
+原配置注释把它叫作「模板 drop-in」，名称不够准确：`app-@autostart.service`
 是实例名，模板名才是
 `app-@.service`。这里的共享范围来自前缀查找。[systemd.unit 手册](https://github.com/systemd/systemd/blob/main/man/systemd.unit.xml)分别说明了实例、模板和前缀 drop-in。
-
-这些规则能解释配置为何可以覆盖对应的生成单元。作者机器上最终生成了哪些单元、加载了哪些 drop-in，以及调整后首次启动的 FileChooser/OpenURI 是否恢复，仍须运行证据确认。本文没有取得这些结果，不把提交意图写成已经验证的竞态修复，也不把它推广到未使用这套生成器的启动路径。
 
 排查这类问题时，可以依次确认入口由谁启动、实际单元是什么、依赖有没有加载，以及激活环境是否包含当前桌面所需信息。只看到应用和 portal 同时处于运行状态，无法还原登录时的先后关系。
 

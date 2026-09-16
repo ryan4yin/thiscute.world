@@ -137,23 +137,29 @@ initrd 上。[NixOS 手册的 Boot Problems 章节](https://nixos.org/manual/nix
 [mkinitcpio(8)](https://man.archlinux.org/man/mkinitcpio.8) 与
 [mkinitcpio.conf(5)](https://man.archlinux.org/man/mkinitcpio.conf.5)。
 
-## 一次设备名改成 UUID 的记录
+## 用稳定标识挂载文件系统
 
 配置里怎样描述「我要挂载的那个文件系统」很有讲究。`/dev/sda1`
 这类名称描述内核当前给出的设备节点；增加、移除或重新配置硬件后，名称可能变化。文件系统 UUID 则标识文件系统本身，不跟着设备枚举名称一起变化。`UUID`
 与 `PARTUUID`
 也要分开：后者标识分区，独立于里面的文件系统。[util-linux 的 mount 手册](https://github.com/util-linux/util-linux/blob/master/sys-utils/mount.8.adoc)解释了这些标识及设备名不稳定的问题。
 
-我自己的 nix-config 历史里，提交 `0504d050` 的标题记录了一次启动失败，并写明将 device
-name 换成 UUID。核对实际 diff，变更的是
-`fileSystems."/boot".device`：原来的内核设备路径被换成 `/dev/disk/by-uuid/`
-下的文件系统标识路径。同一次提交还改了 CIFS 挂载选项、移除了挂载依赖，因此单凭这个提交，无法确定每项改动对故障结果的影响。
+例如，一份 NixOS 配置曾把 `/boot` 从易受设备枚举顺序影响的路径改成文件系统 UUID：
+
+```nix
+fileSystems."/boot" = {
+  device = "/dev/disk/by-uuid/90FB-9F88";
+  fsType = "vfat";
+};
+```
+
+完整改动见[作者的配置记录](https://github.com/ryan4yin/nix-config/commit/0504d0503ba7d62882f47798ff77c2449d2da4ff)。这里值得借鉴的是使用稳定标识，而不是照抄示例中的 UUID；每台机器都要以自己的文件系统信息为准。
 
 这个例子尤其容易读错：改的是 `/boot`，不是根目录
 `/`。固件或引导程序读取启动文件，与 Linux 启动后把 ESP 挂载到
 `/boot`，处于不同阶段。NixOS 还要求 ESP 的实际挂载点与引导配置相符，参见[手册安装部分的 ESP 挂载说明](https://nixos.org/manual/nixos/stable/)。因而
 `/boot`
-的配置错误可以成为启动调查的线索，但仅凭这个 diff，无法确定当时卡在了哪一步，更不能补写成「initramfs 找不到根分区」。提交标题保留了作者当时的故障记录，diff 则证明了上述配置改动；这里没有那次启动的完整日志或复现实验。
+的配置错误可以成为启动调查的线索，但不能据此直接推断成「initramfs 找不到根分区」。两者涉及的挂载目标和启动阶段都不同。
 
 从机制上说，稳定标识能避免因设备枚举名称变化而选错目标，但它仍要跟实际文件系统对应。尤其是复制磁盘之后，UUID 也可能重复；使用 UUID 并不自动保证唯一，更不能解决驱动缺失、解密失败或文件系统损坏。[mount 手册](https://github.com/util-linux/util-linux/blob/master/sys-utils/mount.8.adoc)明确提醒过 UUID 重复的情况。
 

@@ -96,12 +96,8 @@ PipeWire 用 node 表示处理音视频的节点，port 是节点的数据端口
 Arch 把这些角色拆成软件包。例如
 [pipewire-pulse](https://archlinux.org/packages/extra/x86_64/pipewire-pulse/)提供 PulseAudio 兼容服务，其依赖包含 PipeWire 和会话管理器的虚拟依赖。包名与 NixOS 选项的组织不同，但客户端入口、媒体图和策略管理的边界仍然相同。安装了兼容包，也还需要核对对应的用户服务是否能工作。
 
-我的配置历史中，提交 `9d00eb39` 的标题记录了 `pipewire-pulse.service`
-启动失败。相关 diff 只做了一处改动：注释掉 `package = pkgs-unstable.pipewire;`，同时保留
-`alsa.enable`、`alsa.support32Bit` 和
-`pulse.enable`。这说明当时调整的是包的选择，兼容接口并没有被关闭。
-
-这个例子适合用来理解「启用选项」和「实际采用哪个实现」是两回事。不过，提交没有给出启动日志、具体报错或修复后的音频测试，不能继续推断是某个 ABI 不兼容，也不能把它写成一条普遍适用的降级建议。若遇到类似现象，应先把失败单元、实际软件包和对应配置联系起来，再考虑设备路由；调音量无法解释一个兼容服务为什么启动失败。
+「启用兼容接口」和「实际采用哪个 PipeWire 软件包」是两件事。若 `pipewire-pulse.service`
+本身启动失败，应先检查失败单元、软件包版本和生成的用户单元，再去看设备路由；调音量无法解释兼容服务为什么没有启动。
 
 ### quantum 不能直接当成耳机延迟
 
@@ -194,8 +190,18 @@ IM 模块。Qt 的选择还受版本、工具包插件和合成器支持影响�
 用于 X11/XWayland 的 XIM 路径。它们不是每个应用都必须同时设置的一组开关。全局指定 IM 模块也可能使原本能用 text-input 的应用改走模块路径，候选框的实现随之变化。各工具包的条件见
 [Fcitx Wayland 应用说明](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Applications)。
 
-我的 Home Manager 配置中，提交 `fb0f89d9` 在已经启用 Fcitx 5 的位置增加了
-`fcitx5.waylandFrontend = true;`。这是一条启用 Wayland 支持的配置记录，提交没有描述某个应用的失败现象，也没有附上输入成功的验证。
+Home Manager 提供了 `fcitx5.waylandFrontend` 选项。例如：
+
+```nix
+i18n.inputMethod = {
+  enable = true;
+  type = "fcitx5";
+  fcitx5.waylandFrontend = true;
+};
+```
+
+完整配置变化见[作者的修改记录](https://github.com/ryan4yin/nix-config/commit/fb0f89d975221f330f2562b11f13faa0f659b79c)。这项设置调整 Home
+Manager 怎样集成 Fcitx，不能替合成器或应用补上它们不支持的协议。
 
 对照 Home Manager 26.05 的实现，这个选项会影响模块生成的环境：启用后，模块不再自动设置全局
 `GTK_IM_MODULE`、`QT_IM_MODULE`，同时为 X11 GTK 应用保留 GTK 配置入口；`XMODIFIERS`

@@ -126,19 +126,17 @@ NixOS 把这层配置放进声明里：`systemd.services` 下的 `after`、`requ
 systemd 也可以把带有 `systemd` 标签的 udev 设备表示为 `.device`
 单元，让其他单元依赖设备状态。它并不会为所有设备无条件创建同样的服务。[systemd.device 手册](https://github.com/systemd/systemd/blob/main/man/systemd.device.xml)解释了标签和设备单元的关系。具体到谁能使用当前座席的设备，还涉及登录会话，留到[登录、身份与用户会话](/posts/linux-desktop-login-session/)再说。
 
-### 一次 Android 设备规则的调整
+### 同一条规则可能来自不同地方
 
-我的 nix-config 中有个很小的提交
-`d0035905`，标题记录的是 adb 和 fastboot 的 udev 规则已经并入 systemd。实际 diff 只从
-`services.udev.packages` 列表里移除了
-`android-udev-rules`，旁边原有的注释说明它用于 adb。这里能证明的是规则包声明被移除了，没有当时设备连接失败或修复成功的日志。
-
-为什么这个改动有意义？NixOS 的 `services.udev.packages`
-用来收集软件包提供的规则，删除其中一个包，改变的是规则来源。[NixOS 26.05 的 udev 模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/services/hardware/udev.nix)定义了这个选项。当前 systemd 上游的
+以 Android 设备为例，当前 systemd 上游的
 [70-uaccess.rules.in](https://github.com/systemd/systemd/blob/main/rules.d/70-uaccess.rules.in)确实有针对 Android
-ADB、Fastboot 接口的匹配规则。这支持标题所说的调整方向，但不能反过来证明那个历史版本生成的规则与当前上游完全相同。
+ADB、Fastboot 接口的匹配规则。有些发行版还会通过单独的软件包提供额外规则，本地管理员也可以在
+`/etc/udev/rules.d/` 中覆盖或补充规则。
 
-因此，遇到设备访问问题时，除了确认设备有没有出现，还可以继续追规则从哪个包来、有没有被覆盖、是否匹配到了当前设备。不能单凭额外的规则包已卸载，就认定系统里没有对应规则；也不能把这个提交照抄成所有机器都应删除该包的建议。
+NixOS 的 `services.udev.packages`
+用来收集软件包提供的规则，Arch 软件包也可以把规则安装到系统 udev 目录。配置入口不同，真正要检查的都是最终加载了哪些规则、哪一条匹配了当前设备。[NixOS 26.05 的 udev 模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/services/hardware/udev.nix)定义了前一种入口。
+
+因此，遇到设备访问问题时，除了确认设备有没有出现，还要继续追规则从哪里来、有没有被覆盖、是否匹配到了当前设备。不能因为某个额外规则包没有安装，就认定系统里缺少对应规则。
 
 ## D-Bus 把请求交给谁
 

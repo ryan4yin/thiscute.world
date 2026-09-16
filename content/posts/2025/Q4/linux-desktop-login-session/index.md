@@ -155,10 +155,11 @@ PAM 集成针对的密钥环，后者在 Secret
 Service 中是指向默认 collection 的别名。默认 collection 可以指向别处，改了 `login`
 密钥环的口令，不代表其他 collection 都跟着改。[Secret Service 的 alias 定义](https://specifications.freedesktop.org/secret-service/latest/aliases.html)解释了这个间接关系。
 
-### 一次 passwd 集成的修改
+### 改登录密码时同步密钥环
 
-作者的 nix-config 提交 `d0cd0006`
-保留了 greetd 的密钥环集成，并新增 passwd 的集成。去掉与本节无关的配置后，是下面两项：
+如果用户通过 `passwd` 修改登录密码，但 `passwd` 对应的 PAM 流程没有调用 GNOME
+Keyring，登录密码与 `login` 密钥环的密码就可能不同步。NixOS 中可以分别为登录程序和
+`passwd` 启用集成：
 
 ```nix
 {
@@ -167,7 +168,8 @@ Service 中是指向默认 collection 的别名。默认 collection 可以指向
 }
 ```
 
-提交说明与注释记录了修改口令后密钥环不同步、再次请求解锁的现象。diff 能直接证明的是新增了 passwd 这一行；没有随提交保存的运行日志，不能据此补写一次完整复现或宣称每一种解锁提示都由它造成。
+这段配置摘自[作者的完整修改](https://github.com/ryan4yin/nix-config/commit/d0cd00069d0c9113bb2607921912f3b8f2e23bf6)。它只适用于使用 GNOME
+Keyring 且通过这些 PAM 服务登录、改密码的环境；其他密钥环或登录方式要检查各自的 PAM 配置。
 
 这项改动为什么合理？NixOS 的 PAM 模块在启用 `enableGnomeKeyring`
 后，会为相应服务生成 GNOME Keyring 规则，其中 `password` 组使用 `use_authtok`，`session`
@@ -201,9 +203,15 @@ agent 则在需要认证时提供交互界面。策略可以允许、拒绝，�
 锁屏是在已有会话中限制交互，退出登录则结束会话。logind 提供锁定请求信号与锁定状态提示，实际桌面需要响应请求、完成锁屏；一条状态提示本身不能证明屏幕上的保护已经生效。参见
 [logind 的 Lock 信号与 SetLockedHint](https://github.com/systemd/systemd/blob/main/man/org.freedesktop.login1.xml)。
 
-这也解释了作者配置中的另一个历史修改。提交 `099752e8` 删除了一项
-`services.greetd.settings.default_session.command`
-的强制覆盖。被删除的命令直接启动桌面会话脚本，新增注释要求保留公共配置中的 tuigreet，并记录了桌面会话退出后无认证重入的问题。
+一个常见误配是让 `default_session`
+直接启动桌面，而不是启动 greeter。桌面会话退出后，greetd 会再次执行默认命令；如果这个命令仍然直接进入桌面，新会话前就没有认证步骤。作者曾删除下面这样的覆盖，恢复由 tuigreet 负责认证：
+
+```nix
+# 不要让 default_session 直接执行桌面会话：
+# services.greetd.settings.default_session.command = "$HOME/.wayland-session";
+```
+
+完整上下文见[这次配置修改](https://github.com/ryan4yin/nix-config/commit/099752e89faf9fb8472ce576bbc1273335a71392)。
 
 关键在 greetd 的两个配置项：
 
@@ -215,7 +223,7 @@ agent 则在需要认证时提供交互界面。策略可以允许、拒绝，�
 [greetd(5)](https://man.archlinux.org/man/greetd.5.en)明确区分了它们。`default_session`
 里的命令如果直接进入桌面，就改变了会话结束后的去向。原先的锁屏随着旧会话结束，下一次直接启动的桌面并不会因此自动具备一次新的用户认证。
 
-这个提交证明了覆盖被移除，也保存了作者对风险的描述。当前手册能解释该配置为何会产生这种风险；但没有当时的有效配置、运行日志与操作记录，不能把它写成本次已经演示成功的锁屏绕过。它与上一节的密码不同步也不同：前者要检查密钥环的口令更新链，后者要检查会话退出后的启动链。
+这与上一节的密码不同步不是同一个问题：前者要检查密钥环的口令更新链，这里要检查会话退出后 greetd 会启动什么。
 
 NixOS 的 `services.greetd.settings`
 生成 greetd 的 TOML 配置。Arch 使用同一个上游配置格式与字段语义，可直接对照

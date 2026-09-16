@@ -125,20 +125,18 @@ modesetting 的路径把相关变更作为一组检查和提交，避免用户�
 
 ## NixOS 怎样配置这些组件
 
-作者当前的 nix-config 用 Home Manager 管理 niri 的 `config.kdl`
-等配置，并在桌面会话入口中调用
-`niri-session`。配置文件决定合成器怎样工作，会话入口负责把它带进用户会话；这两件事在配置仓库中有各自的位置。这里仅描述读到的实现，不把配置存在当成当前服务已经运行的证据。
+以 niri 为例，配置文件决定合成器怎样工作，会话入口则负责把 `niri-session`
+带进用户会话。这两件事属于不同层次：前者设置布局、输入和输出，后者决定桌面怎样启动。
 
 对照 NixOS 26.05，`programs.niri.enable`
 对应的模块会提供 niri 软件包、会话入口、systemd 集成及相关桌面服务默认配置；它还引用公共 Wayland
 session 模块，启用图形桌面支持及 polkit 等集成。只安装一个 niri 可执行文件，不会自动等价于这些模块的完整结果。参见
-[NixOS niri 模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/programs/wayland/niri.nix)及[公共会话模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/programs/wayland/wayland-session.nix)。作者配置与发行版模块要分别阅读，具体结果还取决于使用的 Nixpkgs 版本和覆盖值。
+[NixOS niri 模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/programs/wayland/niri.nix)及[公共会话模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/programs/wayland/wayland-session.nix)。具体结果还取决于使用的 Nixpkgs 版本和覆盖值。Arch 用户则需要从 niri 软件包、会话文件和自己启用的用户服务中确认同样的几层是否齐全。
 
-### 一次图形选项改名留下的线索
+### NixOS 的图形运行环境
 
-作者配置历史中的提交 `385bcd2d` 把一台机器上的 `hardware.opengl` 改成了
-`hardware.graphics`，同时把 `driSupport32Bit` 改成
-`enable32Bit`，保留了启用值。去掉其他配置后，新写法是：
+NixOS 26.05 使用 `hardware.graphics`
+配置系统图形运行环境。例如需要 32 位图形库时，可以写成：
 
 ```nix
 {
@@ -148,8 +146,6 @@ session 模块，启用图形桌面支持及 polkit 等集成。只安装一个 
   };
 }
 ```
-
-这是一条配置迁移记录，没有附带黑屏、崩溃或性能测试日志，不应把它包装成一次显卡故障修复。它适合说明另一件事：选项的名字与它提供的运行环境要分开理解。
 
 NixOS 26.05 的
 [graphics 模块](https://github.com/NixOS/nixpkgs/blob/nixos-26.05/nixos/modules/hardware/graphics.nix)仍保留上述旧名到新名的映射。模块默认使用 Mesa 驱动包，并建立驱动查找路径；`enable32Bit`
