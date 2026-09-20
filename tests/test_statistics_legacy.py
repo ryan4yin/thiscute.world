@@ -24,21 +24,29 @@ def report(rows):
     }
 
 
-class LegacyStatisticsTest(unittest.TestCase):
+RETIRED_PATHS = (
+    "/posts/linux-desktop-explained/",
+    "/posts/linux-desktop-1-boot-security/",
+    "/posts/linux-desktop-2-systemd-services/",
+    "/posts/linux-desktop-3-session-graphics/",
+    "/posts/linux-desktop-4-multimedia-input/",
+    "/posts/linux-desktop-5-network/",
+    "/posts/linux-desktop-6-shutdown-troubleshooting/",
+)
+
+
+class RetiredStatisticsTest(unittest.TestCase):
     def test_data_conversion_import_does_not_require_analytics_client(self):
         self.assertTrue(callable(importlib.import_module("update_statistics").process_data))
 
-    def test_legacy_and_current_posts_do_not_merge(self):
+    def test_retired_posts_are_excluded_but_unpublished_path_is_unchanged(self):
         process_data = importlib.import_module("update_statistics").process_data
         items = process_data(report([
             ("旧版标题", "/posts/linux-desktop-explained/", 6, 8, 180),
             ("新稿标题", "/posts/linux-desktop-architecture/", 7, 10, 210),
         ]))
         by_path = {row["pagePath"]: row for row in items}
-        self.assertEqual(len(by_path), 2)
-        self.assertEqual(by_path["/posts/linux-desktop-explained/"]["screenPageViews"], 8)
-        self.assertTrue(by_path["/posts/linux-desktop-explained/"]["legacyPage"])
-        self.assertNotIn("legacyPage", by_path["/posts/linux-desktop-architecture/"])
+        self.assertEqual(set(by_path), {"/posts/linux-desktop-architecture/"})
 
     def test_existing_sql_path_remap_still_merges(self):
         process_data = importlib.import_module("update_statistics").process_data
@@ -63,20 +71,16 @@ class LegacyStatisticsTest(unittest.TestCase):
         items = process_data(data)
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0]["screenPageViews"], 8)
-        self.assertNotIn("legacyPage", items[0])
 
-    def test_legacy_without_trailing_slash_is_marked_in_both_row_orders(self):
+    def test_all_retired_paths_are_excluded_with_or_without_trailing_slash(self):
         process_data = importlib.import_module("update_statistics").process_data
-        paths = ["/posts/linux-desktop-explained", "/posts/linux-desktop-explained/"]
-        for order in (paths, list(reversed(paths))):
-            with self.subTest(paths=order):
-                items = process_data(report([
-                    ("旧稿", path, 6, 8, 180) for path in order
-                ]))
-                self.assertEqual(len(items), 1)
-                self.assertEqual(items[0]["pagePath"], order[0])
-                self.assertEqual(items[0]["screenPageViews"], 16)
-                self.assertTrue(items[0]["legacyPage"])
+        for path in RETIRED_PATHS:
+            for candidate in (path, path.rstrip("/")):
+                with self.subTest(path=candidate):
+                    items = process_data(report([
+                        ("已下架文章", candidate, 6, 8, 180),
+                    ]))
+                    self.assertEqual(items, [])
 
 
 if __name__ == "__main__":

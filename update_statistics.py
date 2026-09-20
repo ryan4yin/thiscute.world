@@ -37,7 +37,7 @@ modified_page_paths = {
     "/posts/expirence-of-vault/": "/posts/experience-of-vault/",
 }
 
-LEGACY_POST_PATHS = {
+RETIRED_POST_PATHS = {
     "/posts/linux-desktop-explained/",
     "/posts/linux-desktop-1-boot-security/",
     "/posts/linux-desktop-2-systemd-services/",
@@ -209,6 +209,8 @@ def process_data(data):
             if not page_path.endswith("/"):
                 # path 统一以 / 结尾
                 page_path += "/"
+            if page_path in RETIRED_POST_PATHS:
+                continue
             if page_path in modified_page_paths:
                 page_path = modified_page_paths[page_path]  # 替换成新的 pagePath
                 page['pagePath'] = page_path
@@ -260,8 +262,6 @@ def process_data(data):
             # 跳过人均阅读时常低于 20s 或阅读人数低于 5 的文章（文章的质量偏低或者受众偏小，没必要列出来）
             continue
 
-        if page_path in LEGACY_POST_PATHS:
-            p['legacyPage'] = True
         items.append(p)
 
     return sorted(items, key=itemgetter("readingDurationPerUser"), reverse=True)
