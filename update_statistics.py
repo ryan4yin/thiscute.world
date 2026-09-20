@@ -17,9 +17,6 @@ import re
 import datetime as dt
 from pathlib import Path
 
-from googleapiclient.discovery import build
-from google.oauth2.service_account import Credentials
-
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 PROPERTY = 'properties/259164768'  # my site's google analytics property
 
@@ -38,6 +35,16 @@ modified_page_paths = {
     "/posts/expirence-of-argo-workflow/": "/posts/experience-of-argo-workflows/",
     "/posts/expirence-of-pulumi/": "/posts/experience-of-pulumi/",
     "/posts/expirence-of-vault/": "/posts/experience-of-vault/",
+}
+
+RETIRED_POST_PATHS = {
+    "/posts/linux-desktop-explained/",
+    "/posts/linux-desktop-1-boot-security/",
+    "/posts/linux-desktop-2-systemd-services/",
+    "/posts/linux-desktop-3-session-graphics/",
+    "/posts/linux-desktop-4-multimedia-input/",
+    "/posts/linux-desktop-5-network/",
+    "/posts/linux-desktop-6-shutdown-troubleshooting/",
 }
 
 # 有些文章的标题有更新，这里使用最新的标题替换掉旧标题
@@ -86,6 +93,9 @@ def initialize_analyticsreporting():
     Returns:
       An authorized Analytics Data API service object.
     """
+    from googleapiclient.discovery import build
+    from google.oauth2.service_account import Credentials
+
     credentials = Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES
     )
@@ -199,6 +209,8 @@ def process_data(data):
             if not page_path.endswith("/"):
                 # path 统一以 / 结尾
                 page_path += "/"
+            if page_path in RETIRED_POST_PATHS:
+                continue
             if page_path in modified_page_paths:
                 page_path = modified_page_paths[page_path]  # 替换成新的 pagePath
                 page['pagePath'] = page_path
@@ -232,7 +244,7 @@ def process_data(data):
             result[""] = page
 
     items = []
-    for p in result.values():
+    for page_path, p in result.items():
         if "userEngagementDuration" not in p:
             continue
         reading_duration = int(p['userEngagementDuration'])

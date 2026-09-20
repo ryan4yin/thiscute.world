@@ -14,7 +14,7 @@
         {{ range $index, $page := index $.Site.Data.website_statistics "trendingThisMonth" }}
         <tr>
             <td sort_key="{{ add $index 1 }}">{{ add $index 1 }}</td>
-            <td sort_key="{{ $page.pagePath }}"><a href="{{ $page.pagePath }}">{{ $page.pageTitle }}</a></td>
+            <td sort_key="{{ $page.pagePath }}"><a href="{{ $page.pagePath }}">{{ $page.pageTitle }}{{ if $page.legacyPage }}（旧版文章）{{ end }}</a></td>
             <td sort_key="{{ $page.readingDurationPerUser }}">{{ $page.humanizedReadingDurationPerUser }}</td>
             <td sort_key="{{ $page.activeUsers }}">{{ $page.activeUsers }}</td>
             <td sort_key="{{ $page.screenPageViews }}">{{ $page.screenPageViews }}</td>
