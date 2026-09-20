@@ -305,7 +305,9 @@ def get_report_last_n_days(analytics, n: int):
         ],
         # "limit": "15",
     }
-    data = analytics.properties().runReport(property=PROPERTY, body=body).execute()
+    data = analytics.properties().runReport(
+        property=PROPERTY, body=body
+    ).execute(num_retries=3)
     return process_data(data)
 
 
@@ -334,7 +336,9 @@ def get_report_from_start(analytics):
         ],
         "dimensionFilter": build_hostname_filter(),  # 过滤掉非本站域名的流量
     }
-    data = analytics.properties().runReport(property=PROPERTY, body=body).execute()
+    data = analytics.properties().runReport(
+        property=PROPERTY, body=body
+    ).execute(num_retries=3)
     return process_data(data)[0]
 
 
