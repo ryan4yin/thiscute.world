@@ -8,33 +8,41 @@ on:
   # schedule:
   # - cron: "36 5 * * *"  # 分 时 日 月 周
 
+permissions:
+  contents: write
+
 jobs:
   update:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           submodules: recursive # Fetch Hugo themes recursively
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
           lfs: true # download Git-LFS files
 
       - name: Use Python3
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.13"
           architecture: "x64"
 
-      - name: Update Posts Trending
+      - name: Install Python dependencies
+        run: python3 -m pip install --no-cache-dir -r requirements.txt
+
+      - name: Decrypt service account
         run: |
-          # decrypt service-account.json
-          gpg --quiet --batch --yes --decrypt --passphrase="$SERVICE_ACCOUNT_DECRYPT_KEY" --output google-service-account.json google-service-account.json.gpg
-          pip3 install "google-api-python-client==2.36.0" "google-auth==2.4.0" "pyyaml"
-          # generate website_statistics.json
-          python3 update_statistics.py
-          python3 process_posts.py
-          # commit changes
+          gpg --quiet --batch --yes --decrypt \
+            --passphrase="$SERVICE_ACCOUNT_DECRYPT_KEY" \
+            --output google-service-account.json google-service-account.json.gpg
         env:
           SERVICE_ACCOUNT_DECRYPT_KEY: ${{ secrets.SERVICE_ACCOUNT_DECRYPT_KEY }}
+
+      - name: Update Posts Trending
+        run: |
+          python3 update_statistics.py
+          python3 process_posts.py
+
       - name: Commit Changes
         run: |
           git config --local user.email "ryan4yin[bot]@users.noreply.github.com"
@@ -45,7 +53,7 @@ jobs:
           git clean -fxd
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+        uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3
         with:
           hugo-version: "0.165.0"
           extended: true #  need extended version to support SASS/SCSS
@@ -54,7 +62,7 @@ jobs:
         run: hugo --minify --printUnusedTemplates --logLevel=debug
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -62,12 +70,15 @@ jobs:
           cname: thiscute.world
 
       - name: Use Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: "24.x"
-      - name: Push Argolia Index
-        run: |
-          npm install algoliasearch@4.12.1
-          node push_argolia_index.js
+          cache: "npm"
+
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Push Algolia Index
+        run: node push_argolia_index.js
         env:
           ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
