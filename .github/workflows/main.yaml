@@ -8,6 +8,10 @@ on:
   # schedule:
   # - cron: "36 5 * * *"  # 分 时 日 月 周
 
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -31,6 +35,7 @@ jobs:
         run: python3 -m pip install --no-cache-dir -r requirements.txt
 
       - name: Decrypt service account
+        continue-on-error: true
         run: |
           gpg --quiet --batch --yes --decrypt \
             --passphrase="$SERVICE_ACCOUNT_DECRYPT_KEY" \
@@ -38,19 +43,31 @@ jobs:
         env:
           SERVICE_ACCOUNT_DECRYPT_KEY: ${{ secrets.SERVICE_ACCOUNT_DECRYPT_KEY }}
 
-      - name: Update Posts Trending
-        run: |
-          python3 update_statistics.py
-          python3 process_posts.py
+      - name: Update website statistics
+        continue-on-error: true
+        run: python3 update_statistics.py
+
+      - name: Update post counts
+        continue-on-error: true
+        run: python3 process_posts.py --stats-only
 
       - name: Commit Changes
+        continue-on-error: true
         run: |
           git config --local user.email "ryan4yin[bot]@users.noreply.github.com"
           git config --local user.name "ryan4yin[bot]"
           git add data/
-          git commit -m "feat: update data/"
-          git push
-          git clean -fxd
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "feat: update data/"
+            git pull --rebase origin main
+            git push origin main
+          fi
+
+      - name: Clean temporary credentials
+        if: always()
+        run: git clean -fxd
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3

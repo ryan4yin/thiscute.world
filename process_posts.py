@@ -1,3 +1,4 @@
+import argparse
 from collections import defaultdict
 import json
 from math import ceil
@@ -98,7 +99,7 @@ def yearmonth_range(start_year, start_month, end_year, end_month):
 
 def gen_posts_count_by_month(posts):
     data = defaultdict(int)
-    utcnow = dt.datetime.utcnow().replace(tzinfo=TZ_UTC)
+    utcnow = dt.datetime.now(tz=TZ_UTC)
     earliest = utcnow
     for p in posts:
         post_metadata = parse_post_metadata(p)
@@ -134,9 +135,20 @@ def gen_posts_count_by_month(posts):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Regenerate post counts and optionally move posts into year/quarter folders."
+    )
+    parser.add_argument(
+        "--stats-only",
+        action="store_true",
+        help="only regenerate data/posts_count.json; do not move post directories",
+    )
+    args = parser.parse_args()
+
     posts = get_all_posts()
-    # 调整 posts 文件夹结构
-    restructure_posts(posts)
+    if not args.stats_only:
+        # 调整 posts 文件夹结构
+        restructure_posts(posts)
 
     # 生成按月计数的文章统计数据，用于绘制图表
     gen_posts_count_by_month(posts)
