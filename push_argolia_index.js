@@ -25,6 +25,19 @@ function normalizeRecords(records) {
   })
 }
 
+async function waitForCount(index, expected, attempts = 30, delayMs = 2000) {
+  let nbHits = 0
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const result = await index.search("", { hitsPerPage: 0 })
+    nbHits = result.nbHits
+    if (nbHits === expected) return nbHits
+    if (attempt < attempts) {
+      await new Promise((resolve) => setTimeout(resolve, delayMs))
+    }
+  }
+  return nbHits
+}
+
 async function main() {
   const adminKey = process.env.ALGOLIA_ADMIN_KEY
   if (!adminKey) {
@@ -40,10 +53,11 @@ async function main() {
 
   await index.replaceAllObjects(records, { safe: true })
 
-  const after = await index.search("", { hitsPerPage: 0 })
-  console.log(`After: ${after.nbHits} records (expected ${records.length})`)
-  if (after.nbHits !== records.length) {
-    throw new Error(`Algolia record count mismatch: ${after.nbHits} != ${records.length}`)
+  // Replicas can lag behind the primary index after replaceAllObjects.
+  const after = await waitForCount(index, records.length)
+  console.log(`After: ${after} records (expected ${records.length})`)
+  if (after !== records.length) {
+    throw new Error(`Algolia record count mismatch: ${after} != ${records.length}`)
   }
 }
 
@@ -54,4 +68,4 @@ if (require.main === module) {
   })
 }
 
-module.exports = { normalizeRecords }
+module.exports = { normalizeRecords, waitForCount }
