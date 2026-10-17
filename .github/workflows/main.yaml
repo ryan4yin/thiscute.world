@@ -61,8 +61,9 @@ jobs:
             echo "No data changes to commit."
           else
             git commit -m "feat: update data/"
-            git pull --rebase origin main
-            git push origin main
+            if ! git push origin main; then
+              echo "::warning::Could not push data commit; continuing with local data."
+            fi
           fi
 
       - name: Clean temporary credentials
