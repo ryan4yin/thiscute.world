@@ -1,5 +1,5 @@
 {
-  description = "A Nix-flake-based Python development environment";
+  description = "A Nix-flake-based Hugo blog development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -54,6 +54,10 @@
               # Python development
               python3
               virtualenv
+
+              # Hugo blog
+              hugo
+              nodejs
 
               # Nix-related
               alejandra

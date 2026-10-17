@@ -6,7 +6,7 @@ repository.
 ## Project Overview
 
 This is Ryan4Yin's personal blog, "This Cute World," built with Hugo static site generator
-using the DoIt theme. The blog is hosted on Vercel and GitHub Pages.
+using the DoIt theme. The blog is hosted on GitHub Pages behind Cloudflare.
 
 ## Development Commands
 
@@ -65,7 +65,6 @@ The project uses pre-commit hooks configured in flake.nix:
 ### Static Assets
 
 - `static/`: Images, avatars, favicons
-- `static/_redirects`: Redirect rules for Vercel
 
 ### Data Files
 
@@ -83,11 +82,14 @@ The project uses pre-commit hooks configured in flake.nix:
 
 ### Deployment
 
+- Production is GitHub Pages behind Cloudflare.
 - GitHub Actions workflow (`main.yaml`) handles:
   - Google Analytics data fetching
   - GitHub Pages deployment (gh-pages branch)
   - Algolia search index updates
-- Vercel configuration in `vercel.json` (sets Hugo version)
+- Cloudflare edge rules (outside the repo) handle legacy-domain redirects and security
+  headers. See [docs/cloudflare-edge-rules.md](docs/cloudflare-edge-rules.md).
+- `vercel.json` is retained for a fallback Vercel deployment.
 
 ## Key Configuration Details
 
