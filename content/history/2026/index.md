@@ -21,6 +21,21 @@ comment:
 
 全部历史记录：[/history](/history/)
 
+### 2025-10-30
+
+- 最近又是各种安全事故频发，再记录下当前认识到的一些安全手段
+  - 首先当然是，时刻保持安全意识。干啥都别嫌麻烦，安全第一
+  - Agent Global Rules 强调安全，让 Agent 具备安全意识。日常使用也一定要开 auto
+    review 之类的审查模式。
+  - 去年 8 月遇到的一些坑的教训：
+    - 不要在除个人电脑之外的任何地方使用个人的 GCP/GitHub 账号 token. 尤其是各种跳板机、虚拟机啥的
+    - GCP OAuth 认证的过期策略：可以设为 1 天或 1 周，一直有效的 Oauth
+      Token 是非常危险的，泄漏了你都不一定知道。
+    - GitHub Org 一定要禁用所有 personal tokens, 包括 classic 与 fine grained 两种类型。
+    - GitHub PAT, GCP 的 Service Account Json, AWS 的 Access Key / Secret
+      Key 都是非常不可靠的认证手段，因为这些 Key 一直有效，泄漏了会造成很大风险。尽量采用 GitHub
+      App, AWS IAM Role 等更安全的手段。
+
 ### 2026-10-25
 
 - 因为 Kimi 的 K3.1
