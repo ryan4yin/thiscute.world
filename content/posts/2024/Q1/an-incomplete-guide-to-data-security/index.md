@@ -3,7 +3,7 @@ title: "个人数据安全不完全指南"
 subtitle: ""
 description: ""
 date: 2024-01-30T13:48:30+08:00
-lastmod: 2024-02-20T11:39:30+08:00
+lastmod: 2026-11-04T22:05:30+08:00
 draft: false
 
 featuredImage: "datasecurity.webp"
@@ -24,6 +24,8 @@ tags:
     "全盘加密",
     "零信任",
     "rclone",
+    "TPM",
+    "FIDO",
   ]
 categories: ["tech"]
 series: ["写给开发人员的实用密码学"]
@@ -109,11 +111,17 @@ Google 上的活动越来越多、银行卡里 Money 的增加（狗头），这
 
 ## 二、是否需要使用 YubiKey 等硬件密钥？
 
-硬件密钥的好处是可以防止密钥泄漏，但 YubiKey 在国内无官方购买渠道，而且价格不菲，只买一个 YubiKey 的话还存在丢失的风险。
+~~硬件密钥的好处是可以防止密钥泄漏，但 YubiKey 在国内无官方购买渠道，而且价格不菲，只买一个 YubiKey 的话还存在丢失的风险。另一方面其实基于现代密码学算法的软件密钥安全性对我而言是足够的，而且软件密钥的使用更加方便~~
 
-另一方面其实基于现代密码学算法的软件密钥安全性对我而言是足够的，而且软件密钥的使用更加方便。或许在未来，我会考虑使用
-[canokey-core](https://github.com/canokeys/canokey-core)、[OpenSK](https://github.com/google/OpenSK)、[solokey](https://github.com/solokeys/solo1)
-等开源方案 DIY 几个硬件密钥，但目前我并不觉得有这必要。
+2026-11-06 更新：近期因为 AI 能力跃升导致各类黑客事件频发，尤其是以供应链投毒、面试题代码中暗藏病毒等针对个人电脑的攻击愈演愈烈，我感觉到硬件密钥确实有其必要性。
+
+恰逢今年 NixOS Meetup 期间，[@moeleak](https://github.com/moeleak) 送了我一个 CanoKey
+Canary，于是决定将它用上，目前已经广泛应用在了我的 SSH Key, LUKS, web passkey,
+pass 等各个场景中了。计划后续再买一两个 CanoKey 跟 YubiKey 作为备份，确保万无一失。
+
+之前对此有疑虑，主要是觉得无法确定买到手的 Key 有没有被动过手脚，但查阅发现这些 Key 有标准手段验证真伪，以及无论在物理层在是固件层，往 CanoKey/YubiKey 中加点私货的难度都很大。
+
+而硬件密钥只提供签名能力，Key 永远是安全的。不会像软件密钥那样即使加了 passphrase, 解密后 Key 仍然是放在内存里，有机会被捞走，也就能很大程度上防范本地电脑被黑导致的 Key 泄露。
 
 ## 三、SSH 密钥管理
 
@@ -479,8 +487,8 @@ NixOS，另外我目前没有任何云上服务器。
 
 - 桌面主机
   - 启用 LUKS2 全盘加密 + Secure
-    Boot，在系统启动阶段需要输入 passphrase 解密 NixOS 系统盘才能正常进入系统。
-    - LUKS2 的 passphrase 为一个比较长的密码学随机字符串。
+    Boot，启动后由 TPM2 自动解密，进入正常的 Greeter 用户登录页面。
+    - LUKS2 也设置了一个兜底的 passphrase，为一个比较长的密码学随机字符串。
     - LUKS2 的所有安全设置全拉到能接受的最高（比较重要的是 `--iter-time`，计算出 unlock
       key 的用时，默认 2s，安全起见咱设置成了 5s）
       ```
