@@ -42,12 +42,14 @@ comment:
     review 之类的审查模式。
   - 去年 8 月遇到的一些坑的教训：
     - 不要在除个人电脑之外的任何地方使用个人的 GCP/GitHub 账号 token. 尤其是各种跳板机、虚拟机啥的
-    - GCP OAuth 认证的过期策略：可以设为 1 天或 1 周，一直有效的 Oauth
-      Token 是非常危险的，泄漏了你都不一定知道。
+    - GCP
+      OAuth 认证的过期策略（得在 Admin 层面设置）：建议设为 1 天，要求每天重新登录，一直有效的 Oauth
+    - GCP 新出的 PAM 功能建议用起来，它类似 Linux 的 Sudo, 让普通用户默认没有高级别权限，需要的时候走这个 PAM 申请一个临时有效的提权，时间过了自动失效。Token 是非常危险的，泄漏了你都不一定知道。
     - GitHub Org 一定要禁用所有 personal tokens, 包括 classic 与 fine grained 两种类型。
     - GitHub PAT, GCP 的 Service Account Json, AWS 的 Access Key / Secret
       Key 都是非常不可靠的认证手段，因为这些 Key 一直有效，泄漏了会造成很大风险。尽量采用 GitHub
       App, AWS IAM Role 等更安全的手段。
+    - SSH Key 啥的其实也是，有条件最好是采用硬件密钥（一主一备）。
 
 ### 2026-10-25
 
