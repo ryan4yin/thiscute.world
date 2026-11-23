@@ -81,7 +81,7 @@ var myFriends = [
 
     ["https://blog.ny4.dev/", "/avatar/guanran928.png", "@Guanran928", "&'a ::ny4::Blog"], 
     ["https://prince213.top/", "/avatar/prince213.png", "@prince213", "Ad astra abyssosque!"], 
-    ["https://aoi-blog.pages.dev/", "https://aoi-blog.pages.dev/favicon.ico", "@Aoi Komiya", "In Niemend"], 
+    ["https://aoi-blog.pages.dev/", "/avatar/Alizestl.jpg", "@Aoi Komiya", "In Niemend"], 
 ];
 
 // 以下为核心功能内容，修改前请确保理解您的行为内容与可能造成的结果
